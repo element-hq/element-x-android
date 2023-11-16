@@ -212,6 +212,10 @@ fun MessagesView(
                 onReactionClicked = ::onEmojiReactionClicked,
                 onReactionLongClicked = ::onEmojiReactionLongClicked,
                 onMoreReactionsClicked = ::onMoreReactionsClicked,
+                onReadReceiptClick = { // targetEvent ->
+                    // TODO Open bottom sheet with read receipts
+                    // state.eventSink(MessagesEvents.HandleAction(TimelineItemAction.ShowReadReceipts, targetEvent))
+                },
                 onSendLocationClicked = onSendLocationClicked,
                 onCreatePollClicked = onCreatePollClicked,
                 onSwipeToReply = { targetEvent ->
@@ -310,6 +314,7 @@ private fun MessagesViewContent(
     onReactionClicked: (key: String, TimelineItem.Event) -> Unit,
     onReactionLongClicked: (key: String, TimelineItem.Event) -> Unit,
     onMoreReactionsClicked: (TimelineItem.Event) -> Unit,
+    onReadReceiptClick: (TimelineItem.Event) -> Unit,
     onMessageLongClicked: (TimelineItem.Event) -> Unit,
     onTimestampClicked: (TimelineItem.Event) -> Unit,
     onSendLocationClicked: () -> Unit,
@@ -381,6 +386,7 @@ private fun MessagesViewContent(
                     onReactionClicked = onReactionClicked,
                     onReactionLongClicked = onReactionLongClicked,
                     onMoreReactionsClicked = onMoreReactionsClicked,
+                    onReadReceiptClick = onReadReceiptClick,
                     onSwipeToReply = onSwipeToReply,
                 )
             },

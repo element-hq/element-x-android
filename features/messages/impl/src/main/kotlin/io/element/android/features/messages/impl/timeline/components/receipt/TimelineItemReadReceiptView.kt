@@ -1,0 +1,186 @@
+/*
+ * Copyright (c) 2023 New Vector Ltd
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package io.element.android.features.messages.impl.timeline.components.receipt
+
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
+import io.element.android.appconfig.TimelineConfig
+import io.element.android.features.messages.impl.timeline.model.ReadReceiptData
+import io.element.android.libraries.designsystem.components.avatar.Avatar
+import io.element.android.libraries.designsystem.components.avatar.AvatarSize
+import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.theme.components.Icon
+import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.designsystem.utils.CommonDrawables
+import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
+import io.element.android.libraries.theme.ElementTheme
+import kotlinx.collections.immutable.ImmutableList
+
+@Composable
+fun TimelineItemReadReceiptView(
+    state: ReadReceiptViewState,
+    onReadReceiptsClicked: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    when (state.sendState) {
+        LocalEventSendState.Canceled -> Unit
+        LocalEventSendState.NotSentYet -> {
+            ReadReceiptsRow(modifier) {
+                Icon(
+                    modifier = Modifier.padding(2.dp),
+                    resourceId = CommonDrawables.ic_sending,
+                    contentDescription = null,
+                    tint = ElementTheme.colors.iconSecondary
+                )
+            }
+        }
+        is LocalEventSendState.SendingFailed -> {
+            // Error? The timestamp is already displayed in red
+        }
+        is LocalEventSendState.Sent -> {
+            if (state.receipts.isEmpty()) {
+                ReadReceiptsRow(modifier = modifier) {
+                    Icon(
+                        modifier = Modifier.padding(2.dp),
+                        resourceId = CommonDrawables.ic_sent,
+                        contentDescription = null,
+                        tint = ElementTheme.colors.iconSecondary
+                    )
+                }
+            } else {
+                ReadReceiptsRow(modifier = modifier) {
+                    ReadReceiptsAvatars(
+                        receipts = state.receipts,
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(4.dp))
+                            .clickable { onReadReceiptsClicked() }
+                            .padding(2.dp)
+                    )
+                }
+            }
+        }
+        null -> {
+            if (state.receipts.isNotEmpty()) {
+                ReadReceiptsRow(modifier = modifier) {
+                    ReadReceiptsAvatars(
+                        receipts = state.receipts,
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(4.dp))
+                            .clickable { onReadReceiptsClicked() }
+                            .padding(2.dp)
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun ReadReceiptsRow(
+    modifier: Modifier = Modifier,
+    content: @Composable () -> Unit = {},
+) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .height(AvatarSize.TimelineReadReceipt.dp + 8.dp)
+            .padding(horizontal = 18.dp),
+        horizontalArrangement = Arrangement.End,
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Box(
+            modifier = Modifier
+                .padding(horizontal = 4.dp)
+        ) {
+            content()
+        }
+    }
+}
+
+@Composable
+private fun ReadReceiptsAvatars(
+    receipts: ImmutableList<ReadReceiptData>,
+    modifier: Modifier = Modifier
+) {
+    val avatarSize = AvatarSize.TimelineReadReceipt.dp
+    val avatarStrokeSize = 1.dp
+    val avatarStrokeColor = MaterialTheme.colorScheme.background
+    Row(
+        modifier = modifier,
+        horizontalArrangement = Arrangement.spacedBy(4.dp - avatarStrokeSize),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Box(
+            contentAlignment = Alignment.CenterEnd,
+        ) {
+            receipts
+                .take(TimelineConfig.maxReadReceiptToDisplay)
+                .reversed()
+                .forEachIndexed { index, it ->
+                    Box(
+                        modifier = Modifier
+                            .padding(end = (12.dp + avatarStrokeSize * 2) * index)
+                            .size(size = avatarSize + avatarStrokeSize * 2)
+                            .clip(CircleShape)
+                            .background(avatarStrokeColor)
+                            .zIndex(index.toFloat()),
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        Avatar(
+                            avatarData = it.avatarData,
+                        )
+                    }
+                }
+        }
+        if (receipts.size > 3) {
+            Text(
+                text = "+" + (receipts.size - TimelineConfig.maxReadReceiptToDisplay),
+                style = ElementTheme.typography.fontBodyXsRegular,
+                color = ElementTheme.colors.textSecondary,
+            )
+        }
+    }
+}
+
+@PreviewsDayNight
+@Composable
+internal fun TimelineItemReactionsViewPreview(
+    @PreviewParameter(ReadReceiptViewStateProvider::class) state: ReadReceiptViewState,
+) = ElementPreview {
+    TimelineItemReadReceiptView(
+        state = state,
+        onReadReceiptsClicked = {},
+    )
+}

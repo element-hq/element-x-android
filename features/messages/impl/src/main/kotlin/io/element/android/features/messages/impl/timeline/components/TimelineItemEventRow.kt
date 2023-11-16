@@ -66,6 +66,8 @@ import io.element.android.features.messages.impl.timeline.aTimelineItemEvent
 import io.element.android.features.messages.impl.timeline.aTimelineItemReactions
 import io.element.android.features.messages.impl.timeline.components.event.TimelineItemEventContentView
 import io.element.android.features.messages.impl.timeline.components.event.toExtraPadding
+import io.element.android.features.messages.impl.timeline.components.receipt.ReadReceiptViewState
+import io.element.android.features.messages.impl.timeline.components.receipt.TimelineItemReadReceiptView
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.TimelineItemGroupPosition
 import io.element.android.features.messages.impl.timeline.model.bubble.BubbleState
@@ -77,6 +79,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemPollContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
+import io.element.android.features.messages.impl.timeline.model.receipts
 import io.element.android.libraries.designsystem.colors.AvatarColorsProvider
 import io.element.android.libraries.designsystem.components.EqualWidthColumn
 import io.element.android.libraries.designsystem.components.avatar.Avatar
@@ -124,6 +127,7 @@ fun TimelineItemEventRow(
     onReactionClick: (emoji: String, eventId: TimelineItem.Event) -> Unit,
     onReactionLongClick: (emoji: String, eventId: TimelineItem.Event) -> Unit,
     onMoreReactionsClick: (eventId: TimelineItem.Event) -> Unit,
+    onReadReceiptClick: (event: TimelineItem.Event) -> Unit,
     onSwipeToReply: () -> Unit,
     eventSink: (TimelineEvents) -> Unit,
     modifier: Modifier = Modifier
@@ -183,6 +187,7 @@ fun TimelineItemEventRow(
                         onReactionClicked = { emoji -> onReactionClick(emoji, event) },
                         onReactionLongClicked = { emoji -> onReactionLongClick(emoji, event) },
                         onMoreReactionsClicked = { onMoreReactionsClick(event) },
+                        onReadReceiptsClicked = { onReadReceiptClick(event) },
                         eventSink = eventSink,
                     )
                 }
@@ -200,6 +205,7 @@ fun TimelineItemEventRow(
                 onReactionClicked = { emoji -> onReactionClick(emoji, event) },
                 onReactionLongClicked = { emoji -> onReactionLongClick(emoji, event) },
                 onMoreReactionsClicked = { onMoreReactionsClick(event) },
+                onReadReceiptsClicked = { onReadReceiptClick(event) },
                 eventSink = eventSink,
             )
         }
@@ -240,6 +246,7 @@ private fun TimelineItemEventRowContent(
     inReplyToClicked: () -> Unit,
     onUserDataClicked: () -> Unit,
     onReactionClicked: (emoji: String) -> Unit,
+    onReadReceiptsClicked: () -> Unit,
     onReactionLongClicked: (emoji: String) -> Unit,
     onMoreReactionsClicked: (event: TimelineItem.Event) -> Unit,
     eventSink: (TimelineEvents) -> Unit,
@@ -256,7 +263,12 @@ private fun TimelineItemEventRowContent(
             .wrapContentHeight()
             .fillMaxWidth(),
     ) {
-        val (sender, message, reactions) = createRefs()
+        val (
+            sender,
+            message,
+            reactions,
+            readReceipts,
+        ) = createRefs()
 
         // Sender
         val avatarStrokeSize = 3.dp
@@ -322,6 +334,23 @@ private fun TimelineItemEventRowContent(
                     .padding(start = if (event.isMine) 16.dp else 36.dp, end = 16.dp)
             )
         }
+
+        // Read receipts / Send state
+        TimelineItemReadReceiptView(
+            state = ReadReceiptViewState(
+                sendState = event.localSendState,
+                receipts = event.readReceiptState.receipts(),
+            ),
+            onReadReceiptsClicked = onReadReceiptsClicked,
+            modifier = Modifier
+                .constrainAs(readReceipts) {
+                    if (event.reactionsState.reactions.isNotEmpty()) {
+                        top.linkTo(reactions.bottom, margin = 4.dp)
+                    } else {
+                        top.linkTo(message.bottom, margin = 4.dp)
+                    }
+                }
+        )
     }
 }
 
@@ -659,6 +688,7 @@ internal fun TimelineItemEventRowPreview() = ElementPreview {
                 onReactionClick = { _, _ -> },
                 onReactionLongClick = { _, _ -> },
                 onMoreReactionsClick = {},
+                onReadReceiptClick = {},
                 onTimestampClicked = {},
                 onSwipeToReply = {},
                 eventSink = {},
@@ -680,6 +710,7 @@ internal fun TimelineItemEventRowPreview() = ElementPreview {
                 onReactionClick = { _, _ -> },
                 onReactionLongClick = { _, _ -> },
                 onMoreReactionsClick = {},
+                onReadReceiptClick = {},
                 onTimestampClicked = {},
                 onSwipeToReply = {},
                 eventSink = {},
@@ -719,6 +750,7 @@ internal fun TimelineItemEventRowWithReplyPreview() = ElementPreview {
                 onReactionClick = { _, _ -> },
                 onReactionLongClick = { _, _ -> },
                 onMoreReactionsClick = {},
+                onReadReceiptClick = {},
                 onTimestampClicked = {},
                 onSwipeToReply = {},
                 eventSink = {},
@@ -742,6 +774,7 @@ internal fun TimelineItemEventRowWithReplyPreview() = ElementPreview {
                 onReactionClick = { _, _ -> },
                 onReactionLongClick = { _, _ -> },
                 onMoreReactionsClick = {},
+                onReadReceiptClick = {},
                 onTimestampClicked = {},
                 onSwipeToReply = {},
                 eventSink = {},
@@ -793,6 +826,7 @@ internal fun TimelineItemEventRowTimestampPreview(
                     onReactionClick = { _, _ -> },
                     onReactionLongClick = { _, _ -> },
                     onMoreReactionsClick = {},
+                    onReadReceiptClick = {},
                     onTimestampClicked = {},
                     onSwipeToReply = {},
                     eventSink = {},
@@ -825,6 +859,7 @@ internal fun TimelineItemEventRowWithManyReactionsPreview() = ElementPreview {
                 onReactionClick = { _, _ -> },
                 onReactionLongClick = { _, _ -> },
                 onMoreReactionsClick = {},
+                onReadReceiptClick = {},
                 onSwipeToReply = {},
                 onTimestampClicked = {},
                 eventSink = {},
@@ -850,6 +885,7 @@ internal fun TimelineItemEventRowLongSenderNamePreview() = ElementPreviewLight {
         onReactionClick = { _, _ -> },
         onReactionLongClick = { _, _ -> },
         onMoreReactionsClick = {},
+        onReadReceiptClick = {},
         onSwipeToReply = {},
         onTimestampClicked = {},
         eventSink = {},
@@ -871,6 +907,7 @@ internal fun TimelineItemEventTimestampBelowPreview() = ElementPreviewLight {
         onReactionClick = { _, _ -> },
         onReactionLongClick = { _, _ -> },
         onMoreReactionsClick = {},
+        onReadReceiptClick = {},
         onSwipeToReply = {},
         onTimestampClicked = {},
         eventSink = {},

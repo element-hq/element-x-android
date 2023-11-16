@@ -65,6 +65,7 @@ sealed interface TimelineItem {
         val isMine: Boolean = false,
         val groupPosition: TimelineItemGroupPosition = TimelineItemGroupPosition.None,
         val reactionsState: TimelineItemReactions,
+        val readReceiptState: TimelineItemReadReceipts,
         val localSendState: LocalEventSendState?,
         val inReplyTo: InReplyTo?,
         val isThreaded: Boolean,

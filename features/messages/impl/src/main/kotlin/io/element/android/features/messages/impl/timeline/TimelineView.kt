@@ -92,6 +92,7 @@ fun TimelineView(
     onReactionClicked: (emoji: String, TimelineItem.Event) -> Unit,
     onReactionLongClicked: (emoji: String, TimelineItem.Event) -> Unit,
     onMoreReactionsClicked: (TimelineItem.Event) -> Unit,
+    onReadReceiptClick: (TimelineItem.Event) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     fun onReachedLoadMore() {
@@ -135,6 +136,7 @@ fun TimelineView(
                     onReactionClick = onReactionClicked,
                     onReactionLongClick = onReactionLongClicked,
                     onMoreReactionsClick = onMoreReactionsClicked,
+                    onReadReceiptClick = onReadReceiptClick,
                     onTimestampClicked = onTimestampClicked,
                     sessionState = state.sessionState,
                     eventSink = state.eventSink,
@@ -179,6 +181,7 @@ private fun TimelineItemRow(
     onReactionClick: (key: String, TimelineItem.Event) -> Unit,
     onReactionLongClick: (key: String, TimelineItem.Event) -> Unit,
     onMoreReactionsClick: (TimelineItem.Event) -> Unit,
+    onReadReceiptClick: (TimelineItem.Event) -> Unit,
     onTimestampClicked: (TimelineItem.Event) -> Unit,
     onSwipeToReply: (TimelineItem.Event) -> Unit,
     eventSink: (TimelineEvents) -> Unit,
@@ -214,6 +217,7 @@ private fun TimelineItemRow(
                     onReactionClick = onReactionClick,
                     onReactionLongClick = onReactionLongClick,
                     onMoreReactionsClick = onMoreReactionsClick,
+                    onReadReceiptClick = onReadReceiptClick,
                     onTimestampClicked = onTimestampClicked,
                     onSwipeToReply = { onSwipeToReply(timelineItem) },
                     eventSink = eventSink,
@@ -255,6 +259,7 @@ private fun TimelineItemRow(
                                 onReactionClick = onReactionClick,
                                 onReactionLongClick = onReactionLongClick,
                                 onMoreReactionsClick = onMoreReactionsClick,
+                                onReadReceiptClick = onReadReceiptClick,
                                 eventSink = eventSink,
                                 onSwipeToReply = {},
                             )
@@ -362,6 +367,7 @@ internal fun TimelineViewPreview(
             onReactionLongClicked = { _, _ -> },
             onMoreReactionsClicked = {},
             onSwipeToReply = {},
+            onReadReceiptClick = {},
         )
     }
 }

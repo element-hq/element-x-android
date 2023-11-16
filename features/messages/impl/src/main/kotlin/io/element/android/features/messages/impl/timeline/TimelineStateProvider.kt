@@ -19,6 +19,7 @@ package io.element.android.features.messages.impl.timeline
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.TimelineItemGroupPosition
 import io.element.android.features.messages.impl.timeline.model.TimelineItemReactions
+import io.element.android.features.messages.impl.timeline.model.TimelineItemReadReceipts
 import io.element.android.features.messages.impl.timeline.model.anAggregatedReaction
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemStateEventContent
@@ -118,11 +119,12 @@ internal fun aTimelineItemEvent(
     senderDisplayName: String = "Sender",
     content: TimelineItemEventContent = aTimelineItemTextContent(),
     groupPosition: TimelineItemGroupPosition = TimelineItemGroupPosition.None,
-    sendState: LocalEventSendState = LocalEventSendState.Sent(eventId),
+    sendState: LocalEventSendState? = if (isMine) LocalEventSendState.Sent(eventId) else null,
     inReplyTo: InReplyTo? = null,
     isThreaded: Boolean = false,
     debugInfo: TimelineItemDebugInfo = aTimelineItemDebugInfo(),
     timelineItemReactions: TimelineItemReactions = aTimelineItemReactions(),
+    readReceiptState: TimelineItemReadReceipts = TimelineItemReadReceipts.Hidden,
 ): TimelineItem.Event {
     return TimelineItem.Event(
         id = UUID.randomUUID().toString(),
@@ -132,6 +134,7 @@ internal fun aTimelineItemEvent(
         senderAvatar = AvatarData("@senderId:domain", "sender", size = AvatarSize.TimelineSender),
         content = content,
         reactionsState = timelineItemReactions,
+        readReceiptState = readReceiptState,
         sentTime = "12:34",
         isMine = isMine,
         senderDisplayName = senderDisplayName,
