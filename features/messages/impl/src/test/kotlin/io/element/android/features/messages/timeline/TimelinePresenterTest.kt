@@ -24,11 +24,12 @@ import im.vector.app.features.analytics.plan.PollEnd
 import im.vector.app.features.analytics.plan.PollVote
 import io.element.android.features.messages.fixtures.aMessageEvent
 import io.element.android.features.messages.fixtures.aTimelineItemsFactory
-import io.element.android.features.messages.impl.timeline.session.SessionState
 import io.element.android.features.messages.impl.timeline.TimelineEvents
 import io.element.android.features.messages.impl.timeline.TimelinePresenter
 import io.element.android.features.messages.impl.timeline.factories.TimelineItemsFactory
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
+import io.element.android.features.messages.impl.timeline.session.SessionState
+import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
@@ -322,6 +323,7 @@ class TimelinePresenterTest {
             analyticsService = FakeAnalyticsService(),
             encryptionService = FakeEncryptionService(),
             verificationService = FakeSessionVerificationService(),
+            featureFlagService = FakeFeatureFlagService(),
         )
     }
 
@@ -337,6 +339,7 @@ class TimelinePresenterTest {
             analyticsService = analyticsService,
             encryptionService = FakeEncryptionService(),
             verificationService = FakeSessionVerificationService(),
+            featureFlagService = FakeFeatureFlagService(),
         )
     }
 }

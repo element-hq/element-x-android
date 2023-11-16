@@ -35,6 +35,7 @@ import io.element.android.features.messages.impl.messagecomposer.MessageComposer
 import io.element.android.features.messages.impl.timeline.TimelinePresenter
 import io.element.android.features.messages.impl.timeline.components.customreaction.CustomReactionPresenter
 import io.element.android.features.messages.impl.timeline.components.reactionsummary.ReactionSummaryPresenter
+import io.element.android.features.messages.impl.timeline.components.receipt.bottomsheet.ReadReceiptBottomSheetPresenter
 import io.element.android.features.messages.impl.timeline.components.retrysendmenu.RetrySendMenuPresenter
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemFileContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
@@ -653,9 +654,11 @@ class MessagesPresenterTest {
             analyticsService = analyticsService,
             encryptionService = FakeEncryptionService(),
             verificationService = FakeSessionVerificationService(),
+            featureFlagService = FakeFeatureFlagService(),
         )
         val preferencesStore = InMemoryPreferencesStore(isRichTextEditorEnabled = true)
         val actionListPresenter = ActionListPresenter(preferencesStore = preferencesStore)
+        val readReceiptBottomSheetPresenter = ReadReceiptBottomSheetPresenter()
         val customReactionPresenter = CustomReactionPresenter(emojibaseProvider = FakeEmojibaseProvider())
         val reactionSummaryPresenter = ReactionSummaryPresenter(room = matrixRoom)
         val retrySendMenuPresenter = RetrySendMenuPresenter(room = matrixRoom)
@@ -668,6 +671,7 @@ class MessagesPresenterTest {
             customReactionPresenter = customReactionPresenter,
             reactionSummaryPresenter = reactionSummaryPresenter,
             retrySendMenuPresenter = retrySendMenuPresenter,
+            readReceiptBottomSheetPresenter = readReceiptBottomSheetPresenter,
             networkMonitor = FakeNetworkMonitor(),
             snackbarDispatcher = SnackbarDispatcher(),
             messageSummaryFormatter = FakeMessageSummaryFormatter(),
