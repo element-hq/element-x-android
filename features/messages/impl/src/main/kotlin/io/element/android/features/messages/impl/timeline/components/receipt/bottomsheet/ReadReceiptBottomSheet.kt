@@ -16,6 +16,7 @@
 
 package io.element.android.features.messages.impl.timeline.components.receipt.bottomsheet
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Spacer
@@ -43,6 +44,7 @@ import kotlinx.coroutines.launch
 @Composable
 internal fun ReadReceiptBottomSheet(
     state: ReadReceiptBottomSheetState,
+    onUserDataClicked: (UserId) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val isVisible = state.selectedEvent != null
@@ -64,6 +66,13 @@ internal fun ReadReceiptBottomSheet(
         ) {
             ReadReceiptBottomSheetContent(
                 state = state,
+                onUserDataClicked = {
+                    coroutineScope.launch {
+                        sheetState.hide()
+                        state.eventSink(ReadReceiptBottomSheetEvents.Dismiss)
+                        onUserDataClicked.invoke(it)
+                    }
+                },
             )
             // FIXME remove after https://issuetracker.google.com/issues/275849044
             Spacer(modifier = Modifier.height(32.dp))
@@ -74,14 +83,17 @@ internal fun ReadReceiptBottomSheet(
 @Composable
 private fun ColumnScope.ReadReceiptBottomSheetContent(
     state: ReadReceiptBottomSheetState,
+    onUserDataClicked: (UserId) -> Unit,
 ) {
     val receipts = state.selectedEvent?.readReceiptState?.receipts().orEmpty()
     receipts.forEach {
+        val userId = UserId(it.avatarData.id)
         MatrixUserRow(
+            modifier = Modifier.clickable { onUserDataClicked(userId) },
             matrixUser = MatrixUser(
-                UserId(it.avatarData.id),
-                it.avatarData.name,
-                it.avatarData.url,
+                userId = userId,
+                displayName = it.avatarData.name,
+                avatarUrl = it.avatarData.url,
             ),
             avatarSize = AvatarSize.ReadReceiptList,
             trailingContent = {
@@ -101,7 +113,8 @@ internal fun ReadReceiptBottomSheetPreview(@PreviewParameter(ReadReceiptBottomSh
     // TODO restore RetrySendMessageMenuBottomSheet once the issue with bottom sheet not being previewable is fixed
     Column {
         ReadReceiptBottomSheetContent(
-            state = state
+            state = state,
+            onUserDataClicked = {},
         )
     }
 }
