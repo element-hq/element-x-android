@@ -48,7 +48,6 @@ data class MessagesState(
     val inviteProgress: Async<Unit>,
     val showReinvitePrompt: Boolean,
     val enableTextFormatting: Boolean,
-    val enableVoiceMessages: Boolean,
     val enableInRoomCalls: Boolean,
     val isCallOngoing: Boolean,
     val appName: String,

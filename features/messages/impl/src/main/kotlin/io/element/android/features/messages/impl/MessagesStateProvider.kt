@@ -51,7 +51,6 @@ open class MessagesStateProvider : PreviewParameterProvider<MessagesState> {
             ),
             aMessagesState().copy(composerState = aMessageComposerState().copy(showTextFormatting = true)),
             aMessagesState().copy(
-                enableVoiceMessages = true,
                 voiceMessageComposerState = aVoiceMessageComposerState(showPermissionRationaleDialog = true),
             ),
             aMessagesState().copy(
@@ -68,7 +67,6 @@ open class MessagesStateProvider : PreviewParameterProvider<MessagesState> {
                 isCallOngoing = true,
             ),
             aMessagesState().copy(
-                enableVoiceMessages = true,
                 voiceMessageComposerState = aVoiceMessageComposerState(
                     voiceMessageState = aVoiceMessagePreviewState(),
                     showSendFailureDialog = true
@@ -111,7 +109,6 @@ fun aMessagesState() = MessagesState(
     inviteProgress = Async.Uninitialized,
     showReinvitePrompt = false,
     enableTextFormatting = true,
-    enableVoiceMessages = true,
     enableInRoomCalls = true,
     isCallOngoing = false,
     appName = "Element",

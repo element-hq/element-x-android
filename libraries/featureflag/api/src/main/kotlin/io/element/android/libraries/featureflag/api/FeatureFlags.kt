@@ -43,12 +43,6 @@ enum class FeatureFlags(
         title = "Show notification settings",
         defaultValue = true,
     ),
-    VoiceMessages(
-        key = "feature.voicemessages",
-        title = "Voice messages",
-        description = "Send and receive voice messages",
-        defaultValue = true,
-    ),
     PinUnlock(
         key = "feature.pinunlock",
         title = "Pin unlock",

@@ -43,7 +43,6 @@ internal fun MessageComposerView(
     voiceMessageState: VoiceMessageComposerState,
     subcomposing: Boolean,
     enableTextFormatting: Boolean,
-    enableVoiceMessages: Boolean,
     modifier: Modifier = Modifier,
 ) {
     fun sendMessage(message: Message) {
@@ -106,7 +105,6 @@ internal fun MessageComposerView(
         onAddAttachment = ::onAddAttachment,
         onDismissTextFormatting = ::onDismissTextFormatting,
         enableTextFormatting = enableTextFormatting,
-        enableVoiceMessages = enableVoiceMessages,
         onVoiceRecorderEvent = onVoiceRecorderEvent,
         onVoicePlayerEvent = onVoicePlayerEvent,
         onSendVoiceMessage = onSendVoiceMessage,
@@ -127,7 +125,6 @@ internal fun MessageComposerViewPreview(
             state = state,
             voiceMessageState = aVoiceMessageComposerState(),
             enableTextFormatting = true,
-            enableVoiceMessages = true,
             subcomposing = false,
         )
         MessageComposerView(
@@ -135,7 +132,6 @@ internal fun MessageComposerViewPreview(
             state = state,
             voiceMessageState = aVoiceMessageComposerState(),
             enableTextFormatting = true,
-            enableVoiceMessages = true,
             subcomposing = false,
         )
     }
@@ -152,7 +148,6 @@ internal fun MessageComposerViewVoicePreview(
             state = aMessageComposerState(),
             voiceMessageState = state,
             enableTextFormatting = true,
-            enableVoiceMessages = true,
             subcomposing = false,
         )
     }

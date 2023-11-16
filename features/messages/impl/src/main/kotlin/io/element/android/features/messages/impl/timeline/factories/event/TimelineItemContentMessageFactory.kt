@@ -31,8 +31,6 @@ import io.element.android.features.messages.impl.timeline.util.FileExtensionExtr
 import io.element.android.features.messages.impl.timeline.util.toHtmlDocument
 import io.element.android.libraries.androidutils.filesize.FileSizeFormatter
 import io.element.android.libraries.core.mimetype.MimeTypes
-import io.element.android.libraries.featureflag.api.FeatureFlagService
-import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.timeline.item.event.AudioMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.EmoteMessageType
@@ -54,7 +52,6 @@ import javax.inject.Inject
 class TimelineItemContentMessageFactory @Inject constructor(
     private val fileSizeFormatter: FileSizeFormatter,
     private val fileExtensionExtractor: FileExtensionExtractor,
-    private val featureFlagService: FeatureFlagService,
 ) {
 
     suspend fun create(content: MessageContent, senderDisplayName: String, eventId: EventId?): TimelineItemEventContent {
@@ -122,28 +119,14 @@ class TimelineItemContentMessageFactory @Inject constructor(
                 )
             }
             is VoiceMessageType -> {
-                when (featureFlagService.isFeatureEnabled(FeatureFlags.VoiceMessages)) {
-                    true -> {
-                        TimelineItemVoiceContent(
-                            eventId = eventId,
-                            body = messageType.body,
-                            mediaSource = messageType.source,
-                            duration = messageType.info?.duration ?: Duration.ZERO,
-                            mimeType = messageType.info?.mimetype ?: MimeTypes.OctetStream,
-                            waveform = messageType.details?.waveform?.toImmutableList() ?: persistentListOf(),
-                        )
-                    }
-                    false -> {
-                        TimelineItemAudioContent(
-                            body = messageType.body,
-                            mediaSource = messageType.source,
-                            duration = messageType.info?.duration ?: Duration.ZERO,
-                            mimeType = messageType.info?.mimetype ?: MimeTypes.OctetStream,
-                            formattedFileSize = fileSizeFormatter.format(messageType.info?.size ?: 0),
-                            fileExtension = fileExtensionExtractor.extractFromName(messageType.body),
-                        )
-                    }
-                }
+                TimelineItemVoiceContent(
+                    eventId = eventId,
+                    body = messageType.body,
+                    mediaSource = messageType.source,
+                    duration = messageType.info?.duration ?: Duration.ZERO,
+                    mimeType = messageType.info?.mimetype ?: MimeTypes.OctetStream,
+                    waveform = messageType.details?.waveform?.toImmutableList() ?: persistentListOf(),
+                )
             }
             is FileMessageType -> {
                 val fileExtension = fileExtensionExtractor.extractFromName(messageType.body)

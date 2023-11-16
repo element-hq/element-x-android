@@ -52,7 +52,6 @@ internal fun TestScope.aTimelineItemsFactory(): TimelineItemsFactory {
                 messageFactory = TimelineItemContentMessageFactory(
                     fileSizeFormatter = FakeFileSizeFormatter(),
                     fileExtensionExtractor = FileExtensionExtractorWithoutValidation(),
-                    featureFlagService = FakeFeatureFlagService(),
                 ),
                 redactedMessageFactory = TimelineItemContentRedactedFactory(),
                 stickerFactory = TimelineItemContentStickerFactory(),

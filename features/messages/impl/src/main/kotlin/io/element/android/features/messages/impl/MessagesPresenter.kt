@@ -71,8 +71,6 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
 import io.element.android.libraries.designsystem.utils.snackbar.collectSnackbarMessageAsState
-import io.element.android.libraries.featureflag.api.FeatureFlagService
-import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomInfo
@@ -103,7 +101,6 @@ class MessagesPresenter @AssistedInject constructor(
     private val dispatchers: CoroutineDispatchers,
     private val clipboardHelper: ClipboardHelper,
     private val preferencesStore: PreferencesStore,
-    private val featureFlagsService: FeatureFlagService,
     @Assisted private val navigator: MessagesNavigator,
     private val buildMeta: BuildMeta,
 ) : Presenter<MessagesState> {
@@ -156,12 +153,8 @@ class MessagesPresenter @AssistedInject constructor(
 
         val enableTextFormatting by preferencesStore.isRichTextEditorEnabledFlow().collectAsState(initial = true)
 
-        var enableVoiceMessages by remember { mutableStateOf(false) }
         // TODO add min power level to use this feature in the future?
         val enableInRoomCalls = true
-        LaunchedEffect(featureFlagsService) {
-            enableVoiceMessages = featureFlagsService.isFeatureEnabled(FeatureFlags.VoiceMessages)
-        }
 
         fun handleEvents(event: MessagesEvents) {
             when (event) {
@@ -206,7 +199,6 @@ class MessagesPresenter @AssistedInject constructor(
             showReinvitePrompt = showReinvitePrompt,
             inviteProgress = inviteProgress.value,
             enableTextFormatting = enableTextFormatting,
-            enableVoiceMessages = enableVoiceMessages,
             enableInRoomCalls = enableInRoomCalls,
             appName = buildMeta.applicationName,
             isCallOngoing = roomInfo?.hasRoomCall ?: false,

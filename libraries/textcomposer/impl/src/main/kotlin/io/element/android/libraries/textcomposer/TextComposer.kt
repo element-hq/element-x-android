@@ -94,7 +94,6 @@ fun TextComposer(
     voiceMessageState: VoiceMessageState,
     composerMode: MessageComposerMode,
     enableTextFormatting: Boolean,
-    enableVoiceMessages: Boolean,
     modifier: Modifier = Modifier,
     showTextFormatting: Boolean = false,
     subcomposing: Boolean = false,
@@ -188,7 +187,7 @@ fun TextComposer(
     val textFormattingOptions = @Composable { TextFormatting(state = state) }
 
     val sendOrRecordButton = when {
-        enableVoiceMessages && !canSendMessage ->
+        !canSendMessage ->
             when (voiceMessageState) {
                 VoiceMessageState.Idle,
                 is VoiceMessageState.Recording -> recordVoiceButton
@@ -244,7 +243,6 @@ fun TextComposer(
     } else {
         StandardLayout(
             voiceMessageState = voiceMessageState,
-            enableVoiceMessages = enableVoiceMessages,
             modifier = layoutModifier,
             composerOptionsButton = composerOptionsButton,
             textInput = textInput,
@@ -276,7 +274,6 @@ fun TextComposer(
 @Composable
 private fun StandardLayout(
     voiceMessageState: VoiceMessageState,
-    enableVoiceMessages: Boolean,
     textInput: @Composable () -> Unit,
     composerOptionsButton: @Composable () -> Unit,
     voiceRecording: @Composable () -> Unit,
@@ -288,7 +285,7 @@ private fun StandardLayout(
         modifier = modifier,
         verticalAlignment = Alignment.Bottom,
     ) {
-        if (enableVoiceMessages && voiceMessageState !is VoiceMessageState.Idle) {
+        if (voiceMessageState !is VoiceMessageState.Idle) {
             if (voiceMessageState is VoiceMessageState.Preview || voiceMessageState is VoiceMessageState.Recording) {
                 Box(
                     modifier = Modifier
@@ -583,7 +580,6 @@ internal fun TextComposerSimplePreview() = ElementPreview {
                 composerMode = MessageComposerMode.Normal,
                 onResetComposerMode = {},
                 enableTextFormatting = true,
-                enableVoiceMessages = true,
             )
         }, {
         TextComposer(
@@ -593,7 +589,6 @@ internal fun TextComposerSimplePreview() = ElementPreview {
             composerMode = MessageComposerMode.Normal,
             onResetComposerMode = {},
             enableTextFormatting = true,
-            enableVoiceMessages = true,
         )
     }, {
         TextComposer(
@@ -606,7 +601,6 @@ internal fun TextComposerSimplePreview() = ElementPreview {
             composerMode = MessageComposerMode.Normal,
             onResetComposerMode = {},
             enableTextFormatting = true,
-            enableVoiceMessages = true,
         )
     }, {
         TextComposer(
@@ -616,7 +610,6 @@ internal fun TextComposerSimplePreview() = ElementPreview {
             composerMode = MessageComposerMode.Normal,
             onResetComposerMode = {},
             enableTextFormatting = true,
-            enableVoiceMessages = true,
         )
     })
     )
@@ -632,7 +625,6 @@ internal fun TextComposerFormattingPreview() = ElementPreview {
             showTextFormatting = true,
             composerMode = MessageComposerMode.Normal,
             enableTextFormatting = true,
-            enableVoiceMessages = true,
         )
     }, {
         TextComposer(
@@ -641,7 +633,6 @@ internal fun TextComposerFormattingPreview() = ElementPreview {
             showTextFormatting = true,
             composerMode = MessageComposerMode.Normal,
             enableTextFormatting = true,
-            enableVoiceMessages = true,
         )
     }, {
         TextComposer(
@@ -650,7 +641,6 @@ internal fun TextComposerFormattingPreview() = ElementPreview {
             showTextFormatting = true,
             composerMode = MessageComposerMode.Normal,
             enableTextFormatting = true,
-            enableVoiceMessages = true,
         )
     }))
 }
@@ -666,7 +656,6 @@ internal fun TextComposerEditPreview() = ElementPreview {
             composerMode = MessageComposerMode.Edit(EventId("$1234"), "Some text", TransactionId("1234")),
             onResetComposerMode = {},
             enableTextFormatting = true,
-            enableVoiceMessages = true,
         )
     }))
 }
@@ -690,7 +679,6 @@ internal fun TextComposerReplyPreview() = ElementPreview {
             ),
             onResetComposerMode = {},
             enableTextFormatting = true,
-            enableVoiceMessages = true,
         )
     },
         {
@@ -709,7 +697,6 @@ internal fun TextComposerReplyPreview() = ElementPreview {
                 ),
                 onResetComposerMode = {},
                 enableTextFormatting = true,
-                enableVoiceMessages = true,
             )
         }, {
         TextComposer(
@@ -730,7 +717,6 @@ internal fun TextComposerReplyPreview() = ElementPreview {
             ),
             onResetComposerMode = {},
             enableTextFormatting = true,
-            enableVoiceMessages = true,
         )
     }, {
         TextComposer(
@@ -751,7 +737,6 @@ internal fun TextComposerReplyPreview() = ElementPreview {
             ),
             onResetComposerMode = {},
             enableTextFormatting = true,
-            enableVoiceMessages = true,
         )
     }, {
         TextComposer(
@@ -772,7 +757,6 @@ internal fun TextComposerReplyPreview() = ElementPreview {
             ),
             onResetComposerMode = {},
             enableTextFormatting = true,
-            enableVoiceMessages = true,
         )
     }, {
         TextComposer(
@@ -793,7 +777,6 @@ internal fun TextComposerReplyPreview() = ElementPreview {
             ),
             onResetComposerMode = {},
             enableTextFormatting = true,
-            enableVoiceMessages = true,
         )
     })
     )
@@ -812,7 +795,6 @@ internal fun TextComposerVoicePreview() = ElementPreview {
         composerMode = MessageComposerMode.Normal,
         onResetComposerMode = {},
         enableTextFormatting = true,
-        enableVoiceMessages = true,
     )
     PreviewColumn(items = persistentListOf({
         VoicePreview(voiceMessageState = VoiceMessageState.Recording(61.seconds, createFakeWaveform()))

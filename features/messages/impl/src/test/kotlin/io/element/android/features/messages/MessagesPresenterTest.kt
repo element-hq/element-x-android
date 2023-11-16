@@ -674,7 +674,6 @@ class MessagesPresenterTest {
             navigator = navigator,
             clipboardHelper = clipboardHelper,
             preferencesStore = preferencesStore,
-            featureFlagsService = FakeFeatureFlagService(),
             buildMeta = aBuildMeta(),
             dispatchers = coroutineDispatchers,
         )
