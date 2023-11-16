@@ -31,6 +31,9 @@ style:
     active: false
   UnusedPrivateMember:
     active: true
+  DestructuringDeclarationWithTooManyEntries:
+    active: true
+    maxDestructuringEntries: 5
   UnusedParameter:
     active: true
   UnnecessaryInnerClass:

@@ -21,7 +21,9 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
 sealed interface TimelineItemReadReceipts {
-    /** Value when the feature is disabled */
+    /**
+     *  Value when the feature is disabled.
+     */
     data object Hidden : TimelineItemReadReceipts
 
     data class ReadReceipts(

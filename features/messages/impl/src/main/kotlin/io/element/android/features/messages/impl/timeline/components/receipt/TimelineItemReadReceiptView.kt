@@ -148,7 +148,7 @@ private fun ReadReceiptsAvatars(
             receipts
                 .take(TimelineConfig.maxReadReceiptToDisplay)
                 .reversed()
-                .forEachIndexed { index, it ->
+                .forEachIndexed { index, readReceiptData ->
                     Box(
                         modifier = Modifier
                             .padding(end = (12.dp + avatarStrokeSize * 2) * index)
@@ -159,7 +159,7 @@ private fun ReadReceiptsAvatars(
                         contentAlignment = Alignment.Center,
                     ) {
                         Avatar(
-                            avatarData = it.avatarData,
+                            avatarData = readReceiptData.avatarData,
                         )
                     }
                 }

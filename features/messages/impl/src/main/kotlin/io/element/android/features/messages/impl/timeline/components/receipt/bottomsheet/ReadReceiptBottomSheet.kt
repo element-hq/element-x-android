@@ -41,7 +41,7 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun ReadReceiptBottomSheetView(
+internal fun ReadReceiptBottomSheet(
     state: ReadReceiptBottomSheetState,
     modifier: Modifier = Modifier,
 ) {
@@ -62,7 +62,7 @@ internal fun ReadReceiptBottomSheetView(
                 }
             }
         ) {
-            ReadReceiptBottomSheetContents(
+            ReadReceiptBottomSheetContent(
                 state = state,
             )
             // FIXME remove after https://issuetracker.google.com/issues/275849044
@@ -72,7 +72,7 @@ internal fun ReadReceiptBottomSheetView(
 }
 
 @Composable
-private fun ColumnScope.ReadReceiptBottomSheetContents(
+private fun ColumnScope.ReadReceiptBottomSheetContent(
     state: ReadReceiptBottomSheetState,
 ) {
     val receipts = state.selectedEvent?.readReceiptState?.receipts().orEmpty()
@@ -97,10 +97,10 @@ private fun ColumnScope.ReadReceiptBottomSheetContents(
 
 @PreviewsDayNight
 @Composable
-internal fun ReadReceiptBottomSheetViewPreview(@PreviewParameter(ReadReceiptBottomSheetStateProvider::class) state: ReadReceiptBottomSheetState) = ElementPreview {
+internal fun ReadReceiptBottomSheetPreview(@PreviewParameter(ReadReceiptBottomSheetStateProvider::class) state: ReadReceiptBottomSheetState) = ElementPreview {
     // TODO restore RetrySendMessageMenuBottomSheet once the issue with bottom sheet not being previewable is fixed
     Column {
-        ReadReceiptBottomSheetContents(
+        ReadReceiptBottomSheetContent(
             state = state
         )
     }

@@ -71,7 +71,7 @@ import io.element.android.features.messages.impl.timeline.components.customreact
 import io.element.android.features.messages.impl.timeline.components.reactionsummary.ReactionSummaryEvents
 import io.element.android.features.messages.impl.timeline.components.reactionsummary.ReactionSummaryView
 import io.element.android.features.messages.impl.timeline.components.receipt.bottomsheet.ReadReceiptBottomSheetEvents
-import io.element.android.features.messages.impl.timeline.components.receipt.bottomsheet.ReadReceiptBottomSheetView
+import io.element.android.features.messages.impl.timeline.components.receipt.bottomsheet.ReadReceiptBottomSheet
 import io.element.android.features.messages.impl.timeline.components.retrysendmenu.RetrySendMenuEvents
 import io.element.android.features.messages.impl.timeline.components.retrysendmenu.RetrySendMessageMenu
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
@@ -252,7 +252,7 @@ fun MessagesView(
 
     ReactionSummaryView(state = state.reactionSummaryState)
     RetrySendMessageMenu(state = state.retrySendMenuState)
-    ReadReceiptBottomSheetView(state = state.readReceiptBottomSheetState)
+    ReadReceiptBottomSheet(state = state.readReceiptBottomSheetState)
     ReinviteDialog(state = state)
 
     // Since the textfield is now based on an Android view, this is no longer done automatically.
