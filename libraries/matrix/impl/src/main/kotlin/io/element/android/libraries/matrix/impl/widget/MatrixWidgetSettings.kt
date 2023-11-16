@@ -42,7 +42,7 @@ suspend fun MatrixWidgetSettings.generateWidgetWebViewUrl(
     theme: String? = null
 ) = generateWebviewUrl(
     widgetSettings = this.toRustWidgetSettings(),
-    room = (room as Room) /* TODO SDK Change */,
+    room = room as Room, /* TODO SDK Change */
     props = ClientProperties(
         clientId = clientId,
         languageTag = languageTag,
