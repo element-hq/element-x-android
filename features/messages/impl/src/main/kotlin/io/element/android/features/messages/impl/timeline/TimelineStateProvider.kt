@@ -119,7 +119,7 @@ internal fun aTimelineItemEvent(
     senderDisplayName: String = "Sender",
     content: TimelineItemEventContent = aTimelineItemTextContent(),
     groupPosition: TimelineItemGroupPosition = TimelineItemGroupPosition.None,
-    sendState: LocalEventSendState? = if (isMine) LocalEventSendState.Sent(eventId) else null,
+    sendState: LocalEventSendState? = null,
     inReplyTo: InReplyTo? = null,
     isThreaded: Boolean = false,
     debugInfo: TimelineItemDebugInfo = aTimelineItemDebugInfo(),
