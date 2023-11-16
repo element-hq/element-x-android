@@ -20,9 +20,11 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.impl.timeline.item.event.EventTimelineItemMapper
 import io.element.android.libraries.matrix.impl.timeline.item.virtual.VirtualTimelineItemMapper
+import io.element.android.libraries.matrix.impl.util.useAny
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.matrix.rustcomponents.sdk.TimelineItem
+import org.matrix.rustcomponents.sdk.TimelineItemInterface
 
 class MatrixTimelineItemMapper(
     private val fetchDetailsForEvent: suspend (EventId) -> Result<Unit>,
@@ -31,7 +33,7 @@ class MatrixTimelineItemMapper(
     private val eventTimelineItemMapper: EventTimelineItemMapper = EventTimelineItemMapper(),
 ) {
 
-    fun map(timelineItem: TimelineItem): MatrixTimelineItem = timelineItem.use {
+    fun map(timelineItem: TimelineItemInterface): MatrixTimelineItem = timelineItem.useAny {
         val uniqueId = timelineItem.uniqueId().toLong()
         val asEvent = it.asEvent()
         if (asEvent != null) {

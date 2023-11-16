@@ -21,13 +21,15 @@ import io.element.android.libraries.matrix.api.roomlist.RoomSummaryDetails
 import io.element.android.libraries.matrix.impl.notificationsettings.RoomNotificationSettingsMapper
 import io.element.android.libraries.matrix.impl.room.RoomMemberMapper
 import io.element.android.libraries.matrix.impl.room.message.RoomMessageFactory
+import io.element.android.libraries.matrix.impl.util.useAny
+import org.matrix.rustcomponents.sdk.EventTimelineItemInterface
 import org.matrix.rustcomponents.sdk.RoomInfo
-import org.matrix.rustcomponents.sdk.use
+import org.matrix.rustcomponents.sdk.RoomMemberInterface
 
 class RoomSummaryDetailsFactory(private val roomMessageFactory: RoomMessageFactory = RoomMessageFactory()) {
 
     fun create(roomInfo: RoomInfo): RoomSummaryDetails {
-        val latestRoomMessage = roomInfo.latestEvent?.use {
+        val latestRoomMessage = (roomInfo.latestEvent as? EventTimelineItemInterface)?.useAny {
             roomMessageFactory.create(it)
         }
         return RoomSummaryDetails(
@@ -39,7 +41,7 @@ class RoomSummaryDetailsFactory(private val roomMessageFactory: RoomMessageFacto
             unreadNotificationCount = roomInfo.notificationCount.toInt(),
             lastMessage = latestRoomMessage,
             lastMessageTimestamp = latestRoomMessage?.originServerTs,
-            inviter = roomInfo.inviter?.let(RoomMemberMapper::map),
+            inviter = (roomInfo.inviter as? RoomMemberInterface)?.let(RoomMemberMapper::map),
             notificationMode = roomInfo.userDefinedNotificationMode?.let(RoomNotificationSettingsMapper::mapMode),
             hasOngoingCall = roomInfo.hasRoomCall,
         )

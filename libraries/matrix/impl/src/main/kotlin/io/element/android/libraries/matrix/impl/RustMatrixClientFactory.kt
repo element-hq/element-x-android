@@ -18,6 +18,7 @@ package io.element.android.libraries.matrix.impl
 
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.di.CacheDirectory
+import io.element.android.libraries.matrix.impl.util.useAny
 import io.element.android.libraries.network.useragent.UserAgentProvider
 import io.element.android.libraries.sessionstorage.api.SessionData
 import io.element.android.libraries.sessionstorage.api.SessionStore
@@ -25,8 +26,9 @@ import io.element.android.services.toolbox.api.systemclock.SystemClock
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.ClientBuilder
+import org.matrix.rustcomponents.sdk.ClientBuilderInterface
+import org.matrix.rustcomponents.sdk.ClientInterface
 import org.matrix.rustcomponents.sdk.Session
-import org.matrix.rustcomponents.sdk.use
 import java.io.File
 import javax.inject.Inject
 
@@ -41,14 +43,17 @@ class RustMatrixClientFactory @Inject constructor(
 ) {
 
     suspend fun create(sessionData: SessionData): RustMatrixClient = withContext(coroutineDispatchers.io) {
-        val client = ClientBuilder()
+        val client: ClientInterface = (ClientBuilder() as ClientBuilderInterface)
             .basePath(baseDirectory.absolutePath)
             .homeserverUrl(sessionData.homeserverUrl)
             .username(sessionData.userId)
             .userAgent(userAgentProvider.provide())
             // FIXME Quick and dirty fix for stopping version requests on startup https://github.com/matrix-org/matrix-rust-sdk/pull/1376
             .serverVersions(listOf("v1.0", "v1.1", "v1.2", "v1.3", "v1.4", "v1.5"))
-            .use { it.build() }
+            .useAny {
+                // Note: build() should return ClientInterface instead of Client
+                it.build()
+            }
 
         client.restoreSession(sessionData.toSession())
 

@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.matrix.impl.auth
+package io.element.android.libraries.matrix.impl.util
 
-import io.element.android.libraries.matrix.api.auth.MatrixHomeServerDetails
-import io.element.android.libraries.matrix.impl.util.useAny
-import org.matrix.rustcomponents.sdk.HomeserverLoginDetailsInterface
+import org.matrix.rustcomponents.sdk.Disposable
+import org.matrix.rustcomponents.sdk.use
 
-fun HomeserverLoginDetailsInterface.map(): MatrixHomeServerDetails = useAny {
-    MatrixHomeServerDetails(
-        url = url(),
-        supportsPasswordLogin = supportsPasswordLogin(),
-        supportsOidcLogin = supportsOidcLogin(),
-    )
+// `use` extension function but for any object
+inline fun <T, R> T.useAny(block: (T) -> R): R {
+    return if (this is Disposable) {
+        use(block)
+    } else {
+        block(this)
+    }
 }

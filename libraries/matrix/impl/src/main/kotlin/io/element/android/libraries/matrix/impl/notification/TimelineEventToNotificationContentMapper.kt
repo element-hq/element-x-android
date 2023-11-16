@@ -20,19 +20,20 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.notification.NotificationContent
 import io.element.android.libraries.matrix.impl.room.RoomMemberMapper
 import io.element.android.libraries.matrix.impl.timeline.item.event.EventMessageMapper
+import io.element.android.libraries.matrix.impl.util.useAny
 import org.matrix.rustcomponents.sdk.MessageLikeEventContent
 import org.matrix.rustcomponents.sdk.StateEventContent
-import org.matrix.rustcomponents.sdk.TimelineEvent
+import org.matrix.rustcomponents.sdk.TimelineEventInterface
 import org.matrix.rustcomponents.sdk.TimelineEventType
 import org.matrix.rustcomponents.sdk.use
 import javax.inject.Inject
 
 class TimelineEventToNotificationContentMapper @Inject constructor() {
 
-    fun map(timelineEvent: TimelineEvent): NotificationContent {
-        return timelineEvent.use {
+    fun map(timelineEvent: TimelineEventInterface): NotificationContent {
+        return timelineEvent.useAny {
             timelineEvent.eventType().use { eventType ->
-                eventType.toContent(senderId = UserId(timelineEvent.senderId()))
+                eventType.toContent(senderId = UserId(it.senderId()))
             }
         }
     }

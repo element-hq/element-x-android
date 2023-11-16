@@ -35,9 +35,10 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.BackupStateListener
 import org.matrix.rustcomponents.sdk.BackupSteadyStateListener
-import org.matrix.rustcomponents.sdk.Client
+import org.matrix.rustcomponents.sdk.ClientInterface
+import org.matrix.rustcomponents.sdk.Disposable.Companion.destroy
 import org.matrix.rustcomponents.sdk.EnableRecoveryProgressListener
-import org.matrix.rustcomponents.sdk.Encryption
+import org.matrix.rustcomponents.sdk.EncryptionInterface
 import org.matrix.rustcomponents.sdk.RecoveryStateListener
 import org.matrix.rustcomponents.sdk.BackupState as RustBackupState
 import org.matrix.rustcomponents.sdk.BackupUploadState as RustBackupUploadState
@@ -46,13 +47,13 @@ import org.matrix.rustcomponents.sdk.RecoveryState as RustRecoveryState
 import org.matrix.rustcomponents.sdk.SteadyStateException as RustSteadyStateException
 
 internal class RustEncryptionService(
-    client: Client,
+    client: ClientInterface,
     syncService: RustSyncService,
     sessionCoroutineScope: CoroutineScope,
     private val dispatchers: CoroutineDispatchers,
 ) : EncryptionService {
 
-    private val service: Encryption = client.encryption()
+    private val service: EncryptionInterface = client.encryption()
 
     private val backupStateMapper = BackupStateMapper()
     private val recoveryStateMapper = RecoveryStateMapper()
@@ -104,7 +105,7 @@ internal class RustEncryptionService(
 
     fun destroy() {
         // No way to remove the listeners...
-        service.destroy()
+        destroy(service)
     }
 
     override suspend fun enableBackups(): Result<Unit> = withContext(dispatchers.io) {

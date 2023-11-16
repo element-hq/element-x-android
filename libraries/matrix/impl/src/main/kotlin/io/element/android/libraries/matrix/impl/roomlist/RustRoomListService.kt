@@ -37,13 +37,13 @@ import org.matrix.rustcomponents.sdk.RoomListException
 import org.matrix.rustcomponents.sdk.RoomListInput
 import org.matrix.rustcomponents.sdk.RoomListLoadingState
 import org.matrix.rustcomponents.sdk.RoomListRange
+import org.matrix.rustcomponents.sdk.RoomListServiceInterface
 import org.matrix.rustcomponents.sdk.RoomListServiceState
 import org.matrix.rustcomponents.sdk.RoomListServiceSyncIndicator
 import timber.log.Timber
-import org.matrix.rustcomponents.sdk.RoomListService as InnerRustRoomListService
 
 class RustRoomListService(
-    private val innerRoomListService: InnerRustRoomListService,
+    private val innerRoomListService: RoomListServiceInterface,
     private val sessionCoroutineScope: CoroutineScope,
     private val dispatcher: CoroutineDispatcher,
     roomSummaryDetailsFactory: RoomSummaryDetailsFactory = RoomSummaryDetailsFactory(),

@@ -26,13 +26,13 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.withContext
-import org.matrix.rustcomponents.sdk.NotificationSettings
 import org.matrix.rustcomponents.sdk.NotificationSettingsDelegate
 import org.matrix.rustcomponents.sdk.NotificationSettingsException
+import org.matrix.rustcomponents.sdk.NotificationSettingsInterface
 import timber.log.Timber
 
 class RustNotificationSettingsService(
-    private val notificationSettings: NotificationSettings,
+    private val notificationSettings: NotificationSettingsInterface,
     private val dispatchers: CoroutineDispatchers,
 ) : NotificationSettingsService {
 

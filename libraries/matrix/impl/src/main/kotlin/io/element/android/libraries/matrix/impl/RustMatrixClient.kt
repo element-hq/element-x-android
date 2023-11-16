@@ -59,6 +59,7 @@ import io.element.android.libraries.matrix.impl.sync.RustSyncService
 import io.element.android.libraries.matrix.impl.usersearch.UserProfileMapper
 import io.element.android.libraries.matrix.impl.usersearch.UserSearchResultMapper
 import io.element.android.libraries.matrix.impl.util.cancelAndDestroy
+import io.element.android.libraries.matrix.impl.util.useAny
 import io.element.android.libraries.matrix.impl.verification.RustSessionVerificationService
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import io.element.android.services.toolbox.api.systemclock.SystemClock
@@ -73,13 +74,18 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeout
 import org.matrix.rustcomponents.sdk.BackupState
-import org.matrix.rustcomponents.sdk.Client
 import org.matrix.rustcomponents.sdk.ClientDelegate
+import org.matrix.rustcomponents.sdk.ClientInterface
+import org.matrix.rustcomponents.sdk.Disposable.Companion.destroy
+import org.matrix.rustcomponents.sdk.NotificationClientBuilderInterface
+import org.matrix.rustcomponents.sdk.NotificationClientInterface
 import org.matrix.rustcomponents.sdk.NotificationProcessSetup
-import org.matrix.rustcomponents.sdk.Room
-import org.matrix.rustcomponents.sdk.RoomListItem
+import org.matrix.rustcomponents.sdk.NotificationSettingsInterface
+import org.matrix.rustcomponents.sdk.RoomInterface
+import org.matrix.rustcomponents.sdk.RoomListItemInterface
+import org.matrix.rustcomponents.sdk.RoomListServiceInterface
+import org.matrix.rustcomponents.sdk.SyncServiceInterface
 import org.matrix.rustcomponents.sdk.TaskHandle
-import org.matrix.rustcomponents.sdk.use
 import timber.log.Timber
 import java.io.File
 import java.util.concurrent.atomic.AtomicBoolean
@@ -90,8 +96,8 @@ import org.matrix.rustcomponents.sdk.SyncService as ClientSyncService
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class RustMatrixClient constructor(
-    private val client: Client,
-    private val syncService: ClientSyncService,
+    private val client: ClientInterface,
+    private val syncService: SyncServiceInterface,
     private val sessionStore: SessionStore,
     private val appCoroutineScope: CoroutineScope,
     private val dispatchers: CoroutineDispatchers,
@@ -101,7 +107,7 @@ class RustMatrixClient constructor(
 ) : MatrixClient {
 
     override val sessionId: UserId = UserId(client.userId())
-    private val innerRoomListService = syncService.roomListService()
+    private val innerRoomListService: RoomListServiceInterface = syncService.roomListService()
     private val sessionDispatcher = dispatchers.io.limitedParallelism(64)
     private val sessionCoroutineScope = appCoroutineScope.childScope(dispatchers.main, "Session-${sessionId}")
     private val rustSyncService = RustSyncService(syncService, sessionCoroutineScope)
@@ -110,14 +116,16 @@ class RustMatrixClient constructor(
         client = client,
         dispatchers = dispatchers,
     )
-    private val notificationProcessSetup = NotificationProcessSetup.SingleProcess(syncService)
-    private val notificationClient = client.notificationClient(notificationProcessSetup)
-        .use { builder ->
-            builder
-                .filterByPushRules()
-                .finish()
-        }
-    private val notificationSettings = client.getNotificationSettings()
+    private val notificationProcessSetup: NotificationProcessSetup =
+        NotificationProcessSetup.SingleProcess(syncService as ClientSyncService /* SDK Change needed */)
+    private val notificationClient: NotificationClientInterface =
+        (client.notificationClient(notificationProcessSetup) as NotificationClientBuilderInterface  /* SDK Change needed */)
+            .useAny { builder ->
+                builder
+                    .filterByPushRules()
+                    .finish()
+            }
+    private val notificationSettings: NotificationSettingsInterface = client.getNotificationSettings()
 
     private val notificationService = RustNotificationService(sessionId, notificationClient, dispatchers, clock)
     private val notificationSettingsService = RustNotificationSettingsService(notificationSettings, dispatchers)
@@ -221,10 +229,10 @@ class RustMatrixClient constructor(
         }
     }
 
-    private fun pairOfRoom(roomId: RoomId): Pair<RoomListItem, Room>? {
+    private fun pairOfRoom(roomId: RoomId): Pair<RoomListItemInterface, RoomInterface>? {
         val cachedRoomListItem = innerRoomListService.roomOrNull(roomId.value)
         // Keep using fullRoomBlocking for now as it's faster.
-        val fullRoom = cachedRoomListItem?.fullRoomBlocking()
+        val fullRoom: RoomInterface? = cachedRoomListItem?.fullRoomBlocking()
         return if (cachedRoomListItem == null || fullRoom == null) {
             Timber.d("No room cached for $roomId")
             null
@@ -235,7 +243,7 @@ class RustMatrixClient constructor(
     }
 
     override suspend fun findDM(userId: UserId): MatrixRoom? {
-        val roomId = client.getDmRoom(userId.value)?.use { RoomId(it.id()) }
+        val roomId = (client.getDmRoom(userId.value) as? RoomInterface)?.useAny { RoomId(it.id()) }
         return roomId?.let { getRoom(it) }
     }
 
@@ -340,14 +348,16 @@ class RustMatrixClient constructor(
         sessionCoroutineScope.cancel()
         clientDelegateTaskHandle?.cancelAndDestroy()
         notificationSettings.setDelegate(null)
-        notificationSettings.destroy()
-        verificationService.destroy()
-        syncService.destroy()
-        innerRoomListService.destroy()
-        notificationClient.destroy()
-        notificationProcessSetup.destroy()
+        destroy(
+            notificationSettings,
+            verificationService,
+            syncService,
+            innerRoomListService,
+            notificationClient,
+            notificationProcessSetup,
+            client,
+        )
         encryptionService.destroy()
-        client.destroy()
     }
 
     override suspend fun getCacheSize(): Long {

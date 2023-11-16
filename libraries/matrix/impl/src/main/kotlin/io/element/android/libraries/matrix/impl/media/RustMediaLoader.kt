@@ -21,18 +21,19 @@ import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.matrix.api.media.MatrixMediaLoader
 import io.element.android.libraries.matrix.api.media.MediaFile
 import io.element.android.libraries.matrix.api.media.MediaSource
+import io.element.android.libraries.matrix.impl.util.useAny
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.withContext
-import org.matrix.rustcomponents.sdk.Client
+import org.matrix.rustcomponents.sdk.ClientInterface
+import org.matrix.rustcomponents.sdk.MediaSourceInterface
 import org.matrix.rustcomponents.sdk.mediaSourceFromUrl
-import org.matrix.rustcomponents.sdk.use
 import java.io.File
 import org.matrix.rustcomponents.sdk.MediaSource as RustMediaSource
 
 class RustMediaLoader(
     private val baseCacheDirectory: File,
     dispatchers: CoroutineDispatchers,
-    private val innerClient: Client,
+    private val innerClient: ClientInterface,
 ) : MatrixMediaLoader {
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -46,8 +47,8 @@ class RustMediaLoader(
     override suspend fun loadMediaContent(source: MediaSource): Result<ByteArray> =
         withContext(mediaDispatcher) {
             runCatching {
-                source.toRustMediaSource().use { source ->
-                    innerClient.getMediaContent(source).toUByteArray().toByteArray()
+                source.toRustMediaSource().useAny { source ->
+                    innerClient.getMediaContent(source as RustMediaSource /* TODO Fix in Rust SDK */).toUByteArray().toByteArray()
                 }
             }
         }
@@ -60,9 +61,9 @@ class RustMediaLoader(
     ): Result<ByteArray> =
         withContext(mediaDispatcher) {
             runCatching {
-                source.toRustMediaSource().use { mediaSource ->
+                source.toRustMediaSource().useAny { mediaSource ->
                     innerClient.getMediaThumbnail(
-                        mediaSource = mediaSource,
+                        mediaSource = mediaSource as RustMediaSource /* TODO Fix in Rust SDK */,
                         width = width.toULong(),
                         height = height.toULong()
                     ).toUByteArray().toByteArray()
@@ -78,9 +79,9 @@ class RustMediaLoader(
     ): Result<MediaFile> =
         withContext(mediaDispatcher) {
             runCatching {
-                source.toRustMediaSource().use { mediaSource ->
+                source.toRustMediaSource().useAny { mediaSource ->
                     val mediaFile = innerClient.getMediaFile(
-                        mediaSource = mediaSource,
+                        mediaSource = mediaSource as RustMediaSource, /* SDK CHANGE NEEDED */
                         body = body,
                         mimeType = mimeType ?: MimeTypes.OctetStream,
                         useCache = useCache,
@@ -91,7 +92,7 @@ class RustMediaLoader(
             }
         }
 
-    private fun MediaSource.toRustMediaSource(): RustMediaSource {
+    private fun MediaSource.toRustMediaSource(): MediaSourceInterface {
         val json = this.json
         return if (json != null) {
             RustMediaSource.fromJson(json)

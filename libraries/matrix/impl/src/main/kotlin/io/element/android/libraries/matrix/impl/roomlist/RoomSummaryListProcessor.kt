@@ -18,6 +18,7 @@ package io.element.android.libraries.matrix.impl.roomlist
 
 import io.element.android.libraries.core.coroutine.parallelMap
 import io.element.android.libraries.matrix.api.roomlist.RoomSummary
+import io.element.android.libraries.matrix.impl.util.useAny
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -134,7 +135,7 @@ class RoomSummaryListProcessor(
     }
 
     private suspend fun buildAndCacheRoomSummaryForIdentifier(identifier: String): RoomSummary {
-        val builtRoomSummary = roomListService.roomOrNull(identifier)?.use { roomListItem ->
+        val builtRoomSummary = roomListService.roomOrNull(identifier)?.useAny { roomListItem ->
             roomListItem.roomInfo().use { roomInfo ->
                 RoomSummary.Filled(
                     details = roomSummaryDetailsFactory.create(roomInfo)

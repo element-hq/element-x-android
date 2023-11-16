@@ -27,7 +27,7 @@ import org.matrix.rustcomponents.sdk.RoomListEntriesListener
 import org.matrix.rustcomponents.sdk.RoomListEntriesUpdate
 import org.matrix.rustcomponents.sdk.RoomListEntry
 import org.matrix.rustcomponents.sdk.RoomListInterface
-import org.matrix.rustcomponents.sdk.RoomListItem
+import org.matrix.rustcomponents.sdk.RoomListItemInterface
 import org.matrix.rustcomponents.sdk.RoomListLoadingState
 import org.matrix.rustcomponents.sdk.RoomListLoadingStateListener
 import org.matrix.rustcomponents.sdk.RoomListServiceInterface
@@ -104,7 +104,7 @@ fun RoomListServiceInterface.syncIndicator(): Flow<RoomListServiceSyncIndicator>
         }
     }.buffer(Channel.UNLIMITED)
 
-fun RoomListServiceInterface.roomOrNull(roomId: String): RoomListItem? {
+fun RoomListServiceInterface.roomOrNull(roomId: String): RoomListItemInterface? {
     return try {
         room(roomId)
     } catch (exception: Exception) {

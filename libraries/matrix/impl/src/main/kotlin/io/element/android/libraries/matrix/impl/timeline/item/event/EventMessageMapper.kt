@@ -34,7 +34,8 @@ import io.element.android.libraries.matrix.api.timeline.item.event.UnknownMessag
 import io.element.android.libraries.matrix.api.timeline.item.event.VideoMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.VoiceMessageType
 import io.element.android.libraries.matrix.impl.media.map
-import org.matrix.rustcomponents.sdk.Message
+import io.element.android.libraries.matrix.impl.util.useAny
+import org.matrix.rustcomponents.sdk.MessageInterface
 import org.matrix.rustcomponents.sdk.MessageType
 import org.matrix.rustcomponents.sdk.ProfileDetails
 import org.matrix.rustcomponents.sdk.RepliedToEventDetails
@@ -47,7 +48,7 @@ class EventMessageMapper {
 
     private val timelineEventContentMapper by lazy { TimelineEventContentMapper() }
 
-    fun map(message: Message): MessageContent = message.use {
+    fun map(message: MessageInterface): MessageContent = message.useAny {
         val type = it.msgtype().use(this::mapMessageType)
         val inReplyToEvent: InReplyTo? = it.inReplyTo()?.use { details ->
             val inReplyToId = EventId(details.eventId)

@@ -20,6 +20,9 @@ import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.room.MatrixRoomInfo
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.impl.timeline.item.event.EventTimelineItemMapper
+import io.element.android.libraries.matrix.impl.util.useAny
+import org.matrix.rustcomponents.sdk.EventTimelineItemInterface
+import org.matrix.rustcomponents.sdk.RoomMemberInterface
 import org.matrix.rustcomponents.sdk.use
 import org.matrix.rustcomponents.sdk.Membership as RustMembership
 import org.matrix.rustcomponents.sdk.RoomInfo as RustRoomInfo
@@ -42,8 +45,8 @@ class MatrixRoomInfoMapper(
             canonicalAlias = it.canonicalAlias,
             alternativeAliases = it.alternativeAliases,
             currentUserMembership = it.membership.map(),
-            latestEvent = it.latestEvent?.use (timelineItemMapper::map),
-            inviter = it.inviter?.use(RoomMemberMapper::map),
+            latestEvent = (it.latestEvent as? EventTimelineItemInterface)?.useAny(timelineItemMapper::map),
+            inviter = (it.inviter as? RoomMemberInterface)?.useAny(RoomMemberMapper::map),
             activeMembersCount = it.activeMembersCount.toLong(),
             invitedMembersCount = it.invitedMembersCount.toLong(),
             joinedMembersCount = it.joinedMembersCount.toLong(),
@@ -56,13 +59,13 @@ class MatrixRoomInfoMapper(
     }
 }
 
-fun RustMembership.map(): CurrentUserMembership = when(this) {
+fun RustMembership.map(): CurrentUserMembership = when (this) {
     RustMembership.INVITED -> CurrentUserMembership.INVITED
     RustMembership.JOINED -> CurrentUserMembership.JOINED
     RustMembership.LEFT -> CurrentUserMembership.LEFT
 }
 
-fun RustRoomNotificationMode.map(): RoomNotificationMode = when(this) {
+fun RustRoomNotificationMode.map(): RoomNotificationMode = when (this) {
     RustRoomNotificationMode.ALL_MESSAGES -> RoomNotificationMode.ALL_MESSAGES
     RustRoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY -> RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY
     RustRoomNotificationMode.MUTE -> RoomNotificationMode.MUTE

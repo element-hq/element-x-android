@@ -19,16 +19,18 @@ package io.element.android.libraries.matrix.impl.room
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.timeline.item.event.EventType
+import io.element.android.libraries.matrix.impl.util.useAny
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.RequiredState
-import org.matrix.rustcomponents.sdk.RoomListService
+import org.matrix.rustcomponents.sdk.RoomListItemInterface
+import org.matrix.rustcomponents.sdk.RoomListServiceInterface
 import org.matrix.rustcomponents.sdk.RoomSubscription
 import timber.log.Timber
 
 class RoomSyncSubscriber(
-    private val roomListService: RoomListService,
+    private val roomListService: RoomListServiceInterface,
     private val dispatchers: CoroutineDispatchers,
 ) {
 
@@ -51,7 +53,7 @@ class RoomSyncSubscriber(
                 val currentSubscription = subscriptionCounts.getOrElse(roomId) { 0 }
                 if (currentSubscription == 0) {
                     Timber.d("Subscribing to room $roomId}")
-                    roomListService.room(roomId.value).use { roomListItem ->
+                    (roomListService.room(roomId.value) as RoomListItemInterface).useAny { roomListItem ->
                         roomListItem.subscribe(settings)
                     }
                 }
@@ -70,7 +72,7 @@ class RoomSyncSubscriber(
                     0 -> return@withContext
                     1 -> {
                         Timber.d("Unsubscribe from room $roomId")
-                        roomListService.room(roomId.value).use { roomListItem ->
+                        (roomListService.room(roomId.value) as RoomListItemInterface).useAny { roomListItem ->
                             roomListItem.unsubscribe()
                         }
                     }

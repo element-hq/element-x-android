@@ -46,7 +46,7 @@ import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.BackPaginationStatus
 import org.matrix.rustcomponents.sdk.EventItemOrigin
 import org.matrix.rustcomponents.sdk.PaginationOptions
-import org.matrix.rustcomponents.sdk.Room
+import org.matrix.rustcomponents.sdk.RoomInterface
 import org.matrix.rustcomponents.sdk.TimelineDiff
 import org.matrix.rustcomponents.sdk.TimelineItem
 import timber.log.Timber
@@ -59,7 +59,7 @@ class RustMatrixTimeline(
     roomCoroutineScope: CoroutineScope,
     isKeyBackupEnabled: Boolean,
     private val matrixRoom: MatrixRoom,
-    private val innerRoom: Room,
+    private val innerRoom: RoomInterface,
     private val dispatcher: CoroutineDispatcher,
     private val lastLoginTimestamp: Date?,
     private val onNewSyncedEvent: () -> Unit,

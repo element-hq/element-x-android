@@ -29,13 +29,13 @@ import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.catch
 import org.matrix.rustcomponents.sdk.BackPaginationStatus
 import org.matrix.rustcomponents.sdk.BackPaginationStatusListener
-import org.matrix.rustcomponents.sdk.Room
+import org.matrix.rustcomponents.sdk.RoomInterface
 import org.matrix.rustcomponents.sdk.TimelineDiff
 import org.matrix.rustcomponents.sdk.TimelineItem
 import org.matrix.rustcomponents.sdk.TimelineListener
 import timber.log.Timber
 
-internal fun Room.timelineDiffFlow(onInitialList: suspend (List<TimelineItem>) -> Unit): Flow<List<TimelineDiff>> =
+internal fun RoomInterface.timelineDiffFlow(onInitialList: suspend (List<TimelineItem>) -> Unit): Flow<List<TimelineDiff>> =
     callbackFlow {
         val listener = object : TimelineListener {
             override fun onUpdate(diff: List<TimelineDiff>) {
@@ -59,7 +59,7 @@ internal fun Room.timelineDiffFlow(onInitialList: suspend (List<TimelineItem>) -
         Timber.d(it, "timelineDiffFlow() failed")
     }.buffer(Channel.UNLIMITED)
 
-internal fun Room.backPaginationStatusFlow(): Flow<BackPaginationStatus> =
+internal fun RoomInterface.backPaginationStatusFlow(): Flow<BackPaginationStatus> =
     mxCallbackFlow {
         val listener = object : BackPaginationStatusListener {
             override fun onUpdate(status: BackPaginationStatus) {
@@ -71,7 +71,7 @@ internal fun Room.backPaginationStatusFlow(): Flow<BackPaginationStatus> =
         }
     }.buffer(Channel.UNLIMITED)
 
-internal suspend fun Room.runWithTimelineListenerRegistered(action: suspend () -> Unit) {
+internal suspend fun RoomInterface.runWithTimelineListenerRegistered(action: suspend () -> Unit) {
     val result = addTimelineListener(NoOpTimelineListener)
     try {
         action()

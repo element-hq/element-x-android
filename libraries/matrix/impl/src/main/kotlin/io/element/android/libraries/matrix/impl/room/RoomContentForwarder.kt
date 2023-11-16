@@ -22,18 +22,19 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.ForwardEventException
 import io.element.android.libraries.matrix.impl.roomlist.roomOrNull
 import io.element.android.libraries.matrix.impl.timeline.runWithTimelineListenerRegistered
+import io.element.android.libraries.matrix.impl.util.useAny
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.withTimeout
-import org.matrix.rustcomponents.sdk.Room
-import org.matrix.rustcomponents.sdk.RoomListService
+import org.matrix.rustcomponents.sdk.RoomInterface
+import org.matrix.rustcomponents.sdk.RoomListServiceInterface
 import kotlin.time.Duration.Companion.milliseconds
 
 /**
  * Helper to forward event contents from a room to a set of other rooms.
- * @param roomListService the [RoomListService] to fetch room instances to forward the event to
+ * @param roomListService the [RoomListServiceInterface] to fetch room instances to forward the event to
  */
 class RoomContentForwarder(
-    private val roomListService: RoomListService,
+    private val roomListService: RoomListServiceInterface,
 ) {
 
     /**
@@ -44,17 +45,19 @@ class RoomContentForwarder(
      * @param timeoutMs the maximum time in milliseconds to wait for the event to be sent to a room
      */
     suspend fun forward(
-        fromRoom: Room,
+        fromRoom: RoomInterface,
         eventId: EventId,
         toRoomIds: List<RoomId>,
         timeoutMs: Long = 5000L
     ) {
         val content = fromRoom.getTimelineEventContentByEventId(eventId.value)
         val targetSlidingSyncRooms = toRoomIds.mapNotNull { roomId -> roomListService.roomOrNull(roomId.value) }
-        val targetRooms = targetSlidingSyncRooms.mapNotNull { slidingSyncRoom -> slidingSyncRoom.use { it.fullRoom() } }
+        val targetRooms: List<RoomInterface> = targetSlidingSyncRooms.mapNotNull { slidingSyncRoom ->
+            slidingSyncRoom.useAny { it.fullRoom() }
+        }
         val failedForwardingTo = mutableSetOf<RoomId>()
         targetRooms.parallelMap { room ->
-            room.use { targetRoom ->
+            room.useAny { targetRoom ->
                 runCatching {
                     // Sending a message requires a registered timeline listener
                     targetRoom.runWithTimelineListenerRegistered {

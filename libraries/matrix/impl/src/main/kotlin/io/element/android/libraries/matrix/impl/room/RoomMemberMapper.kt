@@ -19,12 +19,13 @@ package io.element.android.libraries.matrix.impl.room
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
+import io.element.android.libraries.matrix.impl.util.useAny
+import org.matrix.rustcomponents.sdk.RoomMemberInterface
 import org.matrix.rustcomponents.sdk.MembershipState as RustMembershipState
-import org.matrix.rustcomponents.sdk.RoomMember as RustRoomMember
 
 object RoomMemberMapper {
 
-    fun map(roomMember: RustRoomMember): RoomMember = roomMember.use {
+    fun map(roomMember: RoomMemberInterface): RoomMember = roomMember.useAny {
         RoomMember(
             UserId(it.userId()),
             it.displayName(),

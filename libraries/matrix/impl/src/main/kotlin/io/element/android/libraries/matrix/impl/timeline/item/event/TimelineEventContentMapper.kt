@@ -32,7 +32,8 @@ import io.element.android.libraries.matrix.api.timeline.item.event.UnableToDecry
 import io.element.android.libraries.matrix.api.timeline.item.event.UnknownContent
 import io.element.android.libraries.matrix.impl.media.map
 import io.element.android.libraries.matrix.impl.poll.map
-import org.matrix.rustcomponents.sdk.TimelineItemContent
+import io.element.android.libraries.matrix.impl.util.useAny
+import org.matrix.rustcomponents.sdk.TimelineItemContentInterface
 import org.matrix.rustcomponents.sdk.TimelineItemContentKind
 import org.matrix.rustcomponents.sdk.use
 import org.matrix.rustcomponents.sdk.EncryptedMessage as RustEncryptedMessage
@@ -41,15 +42,15 @@ import org.matrix.rustcomponents.sdk.OtherState as RustOtherState
 
 class TimelineEventContentMapper(private val eventMessageMapper: EventMessageMapper = EventMessageMapper()) {
 
-    fun map(content: TimelineItemContent): EventContent {
-        return content.use {
+    fun map(content: TimelineItemContentInterface): EventContent {
+        return content.useAny {
             content.kind().use { kind ->
                 map(content, kind)
             }
         }
     }
 
-    private fun map(content: TimelineItemContent, kind: TimelineItemContentKind) = when (kind) {
+    private fun map(content: TimelineItemContentInterface, kind: TimelineItemContentKind) = when (kind) {
         is TimelineItemContentKind.FailedToParseMessageLike -> {
             FailedToParseMessageLikeContent(
                 eventType = kind.eventType,

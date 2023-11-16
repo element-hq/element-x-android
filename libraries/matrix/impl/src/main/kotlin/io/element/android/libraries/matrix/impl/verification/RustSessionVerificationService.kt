@@ -23,6 +23,7 @@ import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatu
 import io.element.android.libraries.matrix.api.verification.VerificationEmoji
 import io.element.android.libraries.matrix.api.verification.VerificationFlowState
 import io.element.android.libraries.matrix.impl.sync.RustSyncService
+import io.element.android.libraries.matrix.impl.util.useAny
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -33,6 +34,7 @@ import org.matrix.rustcomponents.sdk.SessionVerificationController
 import org.matrix.rustcomponents.sdk.SessionVerificationControllerDelegate
 import org.matrix.rustcomponents.sdk.SessionVerificationControllerInterface
 import org.matrix.rustcomponents.sdk.SessionVerificationEmoji
+import org.matrix.rustcomponents.sdk.SessionVerificationEmojiInterface
 
 class RustSessionVerificationService(
     private val syncService: RustSyncService,
@@ -104,9 +106,10 @@ class RustSessionVerificationService(
         updateVerificationStatus(isVerified = true)
     }
 
+    // TODO Should be SessionVerificationEmojiInterface
     override fun didReceiveVerificationData(data: List<SessionVerificationEmoji>) {
         val emojis = data.map { emoji ->
-            emoji.use { VerificationEmoji(it.symbol(), it.description()) }
+            (emoji as SessionVerificationEmojiInterface).useAny { VerificationEmoji(it.symbol(), it.description()) }
         }
         _verificationFlowState.value = VerificationFlowState.ReceivedVerificationData(emojis)
     }

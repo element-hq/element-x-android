@@ -29,6 +29,7 @@ import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.impl.RustMatrixClientFactory
 import io.element.android.libraries.matrix.impl.exception.mapClientException
 import io.element.android.libraries.matrix.impl.mapper.toSessionData
+import io.element.android.libraries.matrix.impl.util.useAny
 import io.element.android.libraries.network.useragent.UserAgentProvider
 import io.element.android.libraries.sessionstorage.api.LoggedInState
 import io.element.android.libraries.sessionstorage.api.LoginType
@@ -37,8 +38,9 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.withContext
+import org.matrix.rustcomponents.sdk.AuthenticationServiceInterface
+import org.matrix.rustcomponents.sdk.ClientInterface
 import org.matrix.rustcomponents.sdk.OidcAuthenticationData
-import org.matrix.rustcomponents.sdk.use
 import java.io.File
 import javax.inject.Inject
 import org.matrix.rustcomponents.sdk.AuthenticationService as RustAuthenticationService
@@ -53,7 +55,7 @@ class RustMatrixAuthenticationService @Inject constructor(
     private val rustMatrixClientFactory: RustMatrixClientFactory,
 ) : MatrixAuthenticationService {
 
-    private val authService: RustAuthenticationService = RustAuthenticationService(
+    private val authService: AuthenticationServiceInterface = RustAuthenticationService(
         basePath = baseDirectory.absolutePath,
         passphrase = null,
         userAgent = userAgentProvider.provide(),
@@ -107,8 +109,8 @@ class RustMatrixAuthenticationService @Inject constructor(
     override suspend fun login(username: String, password: String): Result<SessionId> =
         withContext(coroutineDispatchers.io) {
             runCatching {
-                val client = authService.login(username, password, "Element X Android", null)
-                val sessionData = client.use {
+                val client = authService.login(username, password, "Element X Android", null) as ClientInterface
+                val sessionData = client.useAny {
                     it.session().toSessionData(
                         isTokenValid = true,
                         loginType = LoginType.PASSWORD,
@@ -154,8 +156,8 @@ class RustMatrixAuthenticationService @Inject constructor(
         return withContext(coroutineDispatchers.io) {
             runCatching {
                 val urlForOidcLogin = pendingOidcAuthenticationData ?: error("You need to call `getOidcUrl()` first")
-                val client = authService.loginWithOidcCallback(urlForOidcLogin, callbackUrl)
-                val sessionData = client.use {
+                val client = authService.loginWithOidcCallback(urlForOidcLogin, callbackUrl) as ClientInterface
+                val sessionData = client.useAny {
                     it.session().toSessionData(
                         isTokenValid = true,
                         loginType = LoginType.OIDC,

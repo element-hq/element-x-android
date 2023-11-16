@@ -52,6 +52,7 @@ import io.element.android.libraries.matrix.impl.room.location.toInner
 import io.element.android.libraries.matrix.impl.timeline.RustMatrixTimeline
 import io.element.android.libraries.matrix.impl.util.destroyAll
 import io.element.android.libraries.matrix.impl.util.mxCallbackFlow
+import io.element.android.libraries.matrix.impl.util.useAny
 import io.element.android.libraries.matrix.impl.widget.RustWidgetDriver
 import io.element.android.libraries.matrix.impl.widget.generateWidgetWebViewUrl
 import io.element.android.libraries.sessionstorage.api.SessionData
@@ -67,13 +68,18 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.matrix.rustcomponents.sdk.Disposable.Companion.destroy
 import org.matrix.rustcomponents.sdk.EventTimelineItem
-import org.matrix.rustcomponents.sdk.Room
+import org.matrix.rustcomponents.sdk.EventTimelineItemInterface
 import org.matrix.rustcomponents.sdk.RoomInfo
 import org.matrix.rustcomponents.sdk.RoomInfoListener
-import org.matrix.rustcomponents.sdk.RoomListItem
+import org.matrix.rustcomponents.sdk.RoomInterface
+import org.matrix.rustcomponents.sdk.RoomListItemInterface
 import org.matrix.rustcomponents.sdk.RoomMember
+import org.matrix.rustcomponents.sdk.RoomMemberInterface
+import org.matrix.rustcomponents.sdk.RoomMembersIteratorInterface
 import org.matrix.rustcomponents.sdk.RoomMessageEventContentWithoutRelation
+import org.matrix.rustcomponents.sdk.RoomMessageEventContentWithoutRelationInterface
 import org.matrix.rustcomponents.sdk.SendAttachmentJoinHandle
 import org.matrix.rustcomponents.sdk.WidgetCapabilities
 import org.matrix.rustcomponents.sdk.WidgetCapabilitiesProvider
@@ -87,8 +93,8 @@ import java.io.File
 class RustMatrixRoom(
     override val sessionId: SessionId,
     isKeyBackupEnabled: Boolean,
-    private val roomListItem: RoomListItem,
-    private val innerRoom: Room,
+    private val roomListItem: RoomListItemInterface,
+    private val innerRoom: RoomInterface,
     private val roomNotificationSettingsService: RustNotificationSettingsService,
     sessionCoroutineScope: CoroutineScope,
     private val coroutineDispatchers: CoroutineDispatchers,
@@ -146,9 +152,11 @@ class RustMatrixRoom(
 
     override fun destroy() {
         roomCoroutineScope.cancel()
-        innerRoom.destroy()
-        roomListItem.destroy()
-        specialModeEventTimelineItem?.destroy()
+        destroy(
+            innerRoom,
+            roomListItem,
+            specialModeEventTimelineItem,
+        )
     }
 
     override val name: String?
@@ -196,9 +204,9 @@ class RustMatrixRoom(
         val currentState = _membersStateFlow.value
         val currentMembers = currentState.roomMembers()
         _membersStateFlow.value = MatrixRoomMembersState.Pending(prevRoomMembers = currentMembers)
-        var rustMembers: List<RoomMember>? = null
+        var rustMembers: List<RoomMemberInterface>? = null
         try {
-            rustMembers = innerRoom.members().use { membersIterator ->
+            rustMembers = innerRoom.members().use { membersIterator: RoomMembersIteratorInterface ->
                 buildList {
                     while (true) {
                         // Loading the whole membersIterator as a stop-gap measure.
@@ -218,7 +226,8 @@ class RustMatrixRoom(
             _membersStateFlow.value = MatrixRoomMembersState.Error(prevRoomMembers = currentMembers, failure = exception)
             Result.failure(exception)
         } finally {
-            rustMembers?.destroyAll()
+            @Suppress("UNCHECKED_CAST")
+            (rustMembers as? List<RoomMember>)?.destroyAll()
         }
     }
 
@@ -251,9 +260,9 @@ class RustMatrixRoom(
     }
 
     override suspend fun sendMessage(body: String, htmlBody: String?): Result<Unit> = withContext(roomDispatcher) {
-        messageEventContentFromParts(body, htmlBody).use { content ->
+        messageEventContentFromParts(body, htmlBody).useAny { content ->
             runCatching {
-                innerRoom.send(content)
+                innerRoom.send(content as RoomMessageEventContentWithoutRelation /* TODO SDK fix */)
             }
         }
     }
@@ -262,11 +271,11 @@ class RustMatrixRoom(
         withContext(roomDispatcher) {
             if (originalEventId != null) {
                 runCatching {
-                    val editedEvent = specialModeEventTimelineItem ?: innerRoom.getEventTimelineItemByEventId(originalEventId.value)
-                    editedEvent.use {
+                    val editedEvent: EventTimelineItemInterface = specialModeEventTimelineItem ?: innerRoom.getEventTimelineItemByEventId(originalEventId.value)
+                    editedEvent.useAny {
                         innerRoom.edit(
-                            newContent = messageEventContentFromParts(body, htmlBody),
-                            editItem = it,
+                            newContent = messageEventContentFromParts(body, htmlBody) as RoomMessageEventContentWithoutRelation, /* TODO SDK fix */
+                            editItem = it as EventTimelineItem, /* TODO SDK fix */
                         )
                     }
                     specialModeEventTimelineItem = null
@@ -274,16 +283,16 @@ class RustMatrixRoom(
             } else {
                 runCatching {
                     transactionId?.let { cancelSend(it) }
-                    innerRoom.send(messageEventContentFromParts(body, htmlBody))
+                    innerRoom.send(messageEventContentFromParts(body, htmlBody) as RoomMessageEventContentWithoutRelation /* TODO SDK fix */)
                 }
             }
         }
 
-    private var specialModeEventTimelineItem: EventTimelineItem? = null
+    private var specialModeEventTimelineItem: EventTimelineItemInterface? = null
 
     override suspend fun enterSpecialMode(eventId: EventId?): Result<Unit> = withContext(roomDispatcher) {
         runCatching {
-            specialModeEventTimelineItem?.destroy()
+            destroy(specialModeEventTimelineItem)
             specialModeEventTimelineItem = null
             specialModeEventTimelineItem = eventId?.let { innerRoom.getEventTimelineItemByEventId(it.value) }
         }
@@ -292,8 +301,11 @@ class RustMatrixRoom(
     override suspend fun replyMessage(eventId: EventId, body: String, htmlBody: String?): Result<Unit> = withContext(roomDispatcher) {
         runCatching {
             val inReplyTo = specialModeEventTimelineItem ?: innerRoom.getEventTimelineItemByEventId(eventId.value)
-            inReplyTo.use { eventTimelineItem ->
-                innerRoom.sendReply(messageEventContentFromParts(body, htmlBody), eventTimelineItem)
+            inReplyTo.useAny { eventTimelineItem ->
+                innerRoom.sendReply(
+                    messageEventContentFromParts(body, htmlBody) as RoomMessageEventContentWithoutRelation, /* TODO SDK fix */
+                    eventTimelineItem as EventTimelineItem, /* TODO SDK fix */
+                )
             }
             specialModeEventTimelineItem = null
         }
@@ -535,7 +547,7 @@ class RustMatrixRoom(
         }
     }
 
-    private fun messageEventContentFromParts(body: String, htmlBody: String?): RoomMessageEventContentWithoutRelation =
+    private fun messageEventContentFromParts(body: String, htmlBody: String?): RoomMessageEventContentWithoutRelationInterface =
         if (htmlBody != null) {
             messageEventContentFromHtml(body, htmlBody)
         } else {

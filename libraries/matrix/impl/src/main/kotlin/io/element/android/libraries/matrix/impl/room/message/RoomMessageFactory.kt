@@ -18,10 +18,10 @@ package io.element.android.libraries.matrix.impl.room.message
 
 import io.element.android.libraries.matrix.api.room.message.RoomMessage
 import io.element.android.libraries.matrix.impl.timeline.item.event.EventTimelineItemMapper
-import org.matrix.rustcomponents.sdk.EventTimelineItem as RustEventTimelineItem
+import org.matrix.rustcomponents.sdk.EventTimelineItemInterface
 
 class RoomMessageFactory {
-    fun create(eventTimelineItem: RustEventTimelineItem?): RoomMessage? {
+    fun create(eventTimelineItem: EventTimelineItemInterface?): RoomMessage? {
         eventTimelineItem ?: return null
         val mappedTimelineItem = EventTimelineItemMapper().map(eventTimelineItem)
         return RoomMessage(
