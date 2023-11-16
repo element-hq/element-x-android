@@ -19,7 +19,7 @@ package io.element.android.libraries.matrix.impl.timeline
 import org.matrix.rustcomponents.sdk.EventItemOrigin
 import org.matrix.rustcomponents.sdk.TimelineChange
 import org.matrix.rustcomponents.sdk.TimelineDiff
-import org.matrix.rustcomponents.sdk.TimelineItem
+import org.matrix.rustcomponents.sdk.TimelineItemInterface
 
 /**
  * Tries to get an event origin from the TimelineDiff.
@@ -49,6 +49,6 @@ internal fun TimelineDiff.eventOrigin(): EventItemOrigin? {
     }
 }
 
-private fun TimelineItem.eventOrigin(): EventItemOrigin? {
+private fun TimelineItemInterface.eventOrigin(): EventItemOrigin? {
     return asEvent()?.origin()
 }

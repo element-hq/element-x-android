@@ -48,7 +48,7 @@ import org.matrix.rustcomponents.sdk.EventItemOrigin
 import org.matrix.rustcomponents.sdk.PaginationOptions
 import org.matrix.rustcomponents.sdk.RoomInterface
 import org.matrix.rustcomponents.sdk.TimelineDiff
-import org.matrix.rustcomponents.sdk.TimelineItem
+import org.matrix.rustcomponents.sdk.TimelineItemInterface
 import timber.log.Timber
 import java.util.Date
 import java.util.concurrent.atomic.AtomicBoolean
@@ -138,7 +138,7 @@ class RustMatrixTimeline(
         encryptedHistoryPostProcessor.process(items)
     }
 
-    private suspend fun postItems(items: List<TimelineItem>) = coroutineScope {
+    private suspend fun postItems(items: List<TimelineItemInterface>) = coroutineScope {
         // Split the initial items in multiple list as there is no pagination in the cached data, so we can post timelineItems asap.
         items.chunked(INITIAL_MAX_SIZE).reversed().forEach {
             ensureActive()

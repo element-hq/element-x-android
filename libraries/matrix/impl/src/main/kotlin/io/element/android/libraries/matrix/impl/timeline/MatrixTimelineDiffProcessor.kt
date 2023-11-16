@@ -22,7 +22,7 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import org.matrix.rustcomponents.sdk.TimelineChange
 import org.matrix.rustcomponents.sdk.TimelineDiff
-import org.matrix.rustcomponents.sdk.TimelineItem
+import org.matrix.rustcomponents.sdk.TimelineItemInterface
 import timber.log.Timber
 
 internal class MatrixTimelineDiffProcessor(
@@ -32,7 +32,7 @@ internal class MatrixTimelineDiffProcessor(
 
     private val mutex = Mutex()
 
-    suspend fun postItems(items: List<TimelineItem>) {
+    suspend fun postItems(items: List<TimelineItemInterface>) {
         updateTimelineItems {
             Timber.v("Update timeline items from postItems (with ${items.size} items) on ${Thread.currentThread()}")
             val mappedItems = items.map { it.asMatrixTimelineItem() }
@@ -104,7 +104,7 @@ internal class MatrixTimelineDiffProcessor(
         }
     }
 
-    private fun TimelineItem.asMatrixTimelineItem(): MatrixTimelineItem {
+    private fun TimelineItemInterface.asMatrixTimelineItem(): MatrixTimelineItem {
         return timelineItemFactory.map(this)
     }
 }

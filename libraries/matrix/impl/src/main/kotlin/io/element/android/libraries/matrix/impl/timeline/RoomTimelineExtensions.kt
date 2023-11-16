@@ -31,11 +31,11 @@ import org.matrix.rustcomponents.sdk.BackPaginationStatus
 import org.matrix.rustcomponents.sdk.BackPaginationStatusListener
 import org.matrix.rustcomponents.sdk.RoomInterface
 import org.matrix.rustcomponents.sdk.TimelineDiff
-import org.matrix.rustcomponents.sdk.TimelineItem
+import org.matrix.rustcomponents.sdk.TimelineItemInterface
 import org.matrix.rustcomponents.sdk.TimelineListener
 import timber.log.Timber
 
-internal fun RoomInterface.timelineDiffFlow(onInitialList: suspend (List<TimelineItem>) -> Unit): Flow<List<TimelineDiff>> =
+internal fun RoomInterface.timelineDiffFlow(onInitialList: suspend (List<TimelineItemInterface>) -> Unit): Flow<List<TimelineDiff>> =
     callbackFlow {
         val listener = object : TimelineListener {
             override fun onUpdate(diff: List<TimelineDiff>) {
