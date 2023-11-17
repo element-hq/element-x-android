@@ -17,8 +17,6 @@
 plugins {
     id("io.element.android-compose-library")
     alias(libs.plugins.anvil)
-    alias(libs.plugins.ksp)
-    id("kotlin-parcelize")
 }
 
 android {
@@ -35,17 +33,9 @@ dependencies {
     api(projects.features.cachecleaner.api)
     implementation(projects.libraries.core)
     implementation(projects.libraries.architecture)
-    implementation(projects.libraries.matrix.api)
-    implementation(projects.libraries.matrixui)
-    implementation(projects.libraries.designsystem)
 
     testImplementation(libs.test.junit)
     testImplementation(libs.coroutines.test)
-    testImplementation(libs.molecule.runtime)
     testImplementation(libs.test.truth)
-    testImplementation(libs.test.turbine)
-    testImplementation(projects.libraries.matrix.test)
     testImplementation(projects.tests.testutils)
-
-    ksp(libs.showkase.processor)
 }
