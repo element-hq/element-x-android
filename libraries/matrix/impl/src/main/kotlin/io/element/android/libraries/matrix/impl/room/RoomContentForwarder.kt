@@ -72,7 +72,7 @@ class RoomContentForwarder(
         }
 
         if (failedForwardingTo.isNotEmpty()) {
-            throw ForwardEventException(toRoomIds.toList())
+            throw ForwardEventException(failedForwardingTo.toList())
         }
     }
 }
