@@ -175,7 +175,7 @@ private fun ReadReceiptsAvatars(
                     }
                 }
         }
-        if (receipts.size > 3) {
+        if (receipts.size > TimelineConfig.maxReadReceiptToDisplay) {
             Text(
                 text = "+" + (receipts.size - TimelineConfig.maxReadReceiptToDisplay),
                 style = ElementTheme.typography.fontBodyXsRegular,
