@@ -59,7 +59,7 @@ android_desugar = "com.android.tools:desugar_jdk_libs:2.0.4"
 kotlin_gradle_plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 gms_google_services = "com.google.gms:google-services:4.4.0"
 # https://firebase.google.com/docs/android/setup#available-libraries
-google_firebase_bom = "com.google.firebase:firebase-bom:32.5.0"
+google_firebase_bom = "com.google.firebase:firebase-bom:32.6.0"
 firebase_appdistribution_gradle = { module = "com.google.firebase:firebase-appdistribution-gradle", version.ref = "firebaseAppDistribution" }
 
 # AndroidX
