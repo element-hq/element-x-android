@@ -34,7 +34,7 @@ data class MessageComposerState(
     val canShareLocation: Boolean,
     val canCreatePoll: Boolean,
     val attachmentsState: AttachmentsState,
-    val memberSuggestions: ImmutableList<RoomMemberSuggestion>,
+    val memberSuggestions: ImmutableList<MentionSuggestion>,
     val currentUserId: UserId,
     val eventSink: (MessageComposerEvents) -> Unit,
 ) {

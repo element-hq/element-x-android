@@ -174,7 +174,7 @@ class MessageComposerPresenter @Inject constructor(
             }
         }
 
-        val memberSuggestions = remember { mutableStateListOf<RoomMemberSuggestion>() }
+        val memberSuggestions = remember { mutableStateListOf<MentionSuggestion>() }
         LaunchedEffect(isMentionsEnabled) {
             if (!isMentionsEnabled) return@LaunchedEffect
             val currentUserId = currentSessionIdHolder.current
@@ -288,10 +288,10 @@ class MessageComposerPresenter @Inject constructor(
                 is MessageComposerEvents.InsertMention -> {
                     localCoroutineScope.launch {
                         when (val mention = event.mention) {
-                            is RoomMemberSuggestion.Room -> {
+                            is MentionSuggestion.Room -> {
                                 richTextEditorState.insertAtRoomMentionAtSuggestion()
                             }
-                            is RoomMemberSuggestion.Member -> {
+                            is MentionSuggestion.Member -> {
                                 val text = mention.roomMember.displayName?.prependIndent("@") ?: mention.roomMember.userId.value
                                 val link = PermalinkBuilder.permalinkForUser(mention.roomMember.userId).getOrNull() ?: return@launch
                                 richTextEditorState.insertMentionAtSuggestion(text = text, link = link)
@@ -427,7 +427,7 @@ class MessageComposerPresenter @Inject constructor(
 }
 
 @Immutable
-sealed interface RoomMemberSuggestion {
-    data object Room : RoomMemberSuggestion
-    data class Member(val roomMember: RoomMember) : RoomMemberSuggestion
+sealed interface MentionSuggestion {
+    data object Room : MentionSuggestion
+    data class Member(val roomMember: RoomMember) : MentionSuggestion
 }

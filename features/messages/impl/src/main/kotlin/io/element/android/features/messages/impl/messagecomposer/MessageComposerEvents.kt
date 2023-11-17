@@ -41,5 +41,5 @@ sealed interface MessageComposerEvents {
     data object CancelSendAttachment : MessageComposerEvents
     data class Error(val error: Throwable) : MessageComposerEvents
     data class SuggestionReceived(val suggestion: Suggestion?) : MessageComposerEvents
-    data class InsertMention(val mention: RoomMemberSuggestion) : MessageComposerEvents
+    data class InsertMention(val mention: MentionSuggestion) : MessageComposerEvents
 }

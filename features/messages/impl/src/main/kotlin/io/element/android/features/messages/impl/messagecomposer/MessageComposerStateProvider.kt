@@ -39,7 +39,7 @@ fun aMessageComposerState(
     canShareLocation: Boolean = true,
     canCreatePoll: Boolean = true,
     attachmentsState: AttachmentsState = AttachmentsState.None,
-    memberSuggestions: ImmutableList<RoomMemberSuggestion> = persistentListOf(),
+    memberSuggestions: ImmutableList<MentionSuggestion> = persistentListOf(),
 ) = MessageComposerState(
     richTextEditorState = composerState,
     isFullScreen = isFullScreen,

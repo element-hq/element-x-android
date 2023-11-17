@@ -16,7 +16,7 @@
 
 package io.element.android.features.messages.impl.mentions
 
-import io.element.android.features.messages.impl.messagecomposer.RoomMemberSuggestion
+import io.element.android.features.messages.impl.messagecomposer.MentionSuggestion
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.api.room.RoomMember
@@ -46,7 +46,7 @@ object MentionSuggestionsProcessor {
         roomMembersState: MatrixRoomMembersState,
         currentUserId: UserId,
         canSendRoomMention: suspend () -> Boolean,
-    ): List<RoomMemberSuggestion> {
+    ): List<MentionSuggestion> {
         val members = roomMembersState.roomMembers()
             // Take the first MAX_BATCH_ITEMS only
             ?.take(MAX_BATCH_ITEMS)
@@ -81,7 +81,7 @@ object MentionSuggestionsProcessor {
         roomMembers: List<RoomMember>?,
         currentUserId: UserId,
         canSendRoomMention: Boolean,
-    ): List<RoomMemberSuggestion> {
+    ): List<MentionSuggestion> {
         return if (roomMembers.isNullOrEmpty()) {
             emptyList()
         } else {
@@ -99,10 +99,10 @@ object MentionSuggestionsProcessor {
                 .filter { member ->
                     isJoinedMemberAndNotSelf(member) && memberMatchesQuery(member, query)
                 }
-                .map(RoomMemberSuggestion::Member)
+                .map(MentionSuggestion::Member)
 
             if ("room".contains(query) && canSendRoomMention) {
-                listOf(RoomMemberSuggestion.Room) + matchingMembers
+                listOf(MentionSuggestion.Room) + matchingMembers
             } else {
                 matchingMembers
             }
