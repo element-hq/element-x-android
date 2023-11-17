@@ -36,14 +36,15 @@ class DefaultRedactedVoiceMessageManager @Inject constructor(
 ) : RedactedVoiceMessageManager {
     override suspend fun onEachMatrixTimelineItem(timelineItems: List<MatrixTimelineItem>) {
         withContext(dispatchers.computation) {
-            timelineItems.forEach { matrixTimelineItem ->
-                if (matrixTimelineItem is MatrixTimelineItem.Event && matrixTimelineItem.event.content is RedactedContent) {
-                    matrixTimelineItem.eventId?.value?.let { eventId ->
-                        mediaPlayer.state.value.let { playerState ->
-                            if (playerState.mediaId == eventId && playerState.isPlaying) {
-                                withContext(dispatchers.main) { mediaPlayer.pause() }
-                            }
-                        }
+            mediaPlayer.state.value.let { playerState ->
+                if (playerState.isPlaying && playerState.mediaId != null) {
+                    val needsToPausePlayer = timelineItems.any {
+                        it is MatrixTimelineItem.Event &&
+                            playerState.mediaId == it.eventId?.value &&
+                            it.event.content is RedactedContent
+                    }
+                    if (needsToPausePlayer) {
+                        withContext(dispatchers.main) { mediaPlayer.pause() }
                     }
                 }
             }
