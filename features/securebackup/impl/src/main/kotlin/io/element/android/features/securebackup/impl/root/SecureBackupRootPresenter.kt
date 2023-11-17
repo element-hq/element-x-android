@@ -17,13 +17,18 @@
 package io.element.android.features.securebackup.impl.root
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import io.element.android.features.securebackup.impl.loggerTagRoot
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.designsystem.utils.snackbar.collectSnackbarMessageAsState
+import io.element.android.libraries.matrix.api.encryption.BackupState
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import timber.log.Timber
 import javax.inject.Inject
@@ -44,8 +49,20 @@ class SecureBackupRootPresenter @Inject constructor(
         Timber.tag(loggerTagRoot.value).d("backupState: $backupState")
         Timber.tag(loggerTagRoot.value).d("recoveryState: $recoveryState")
 
+        var doesBackupExistOnServer: Boolean? by remember { mutableStateOf(null) }
+
+        LaunchedEffect(backupState) {
+            doesBackupExistOnServer = if (backupState == BackupState.UNKNOWN) {
+                encryptionService.doesBackupExistOnServer().getOrNull() == true
+            } else {
+                // The value will not be used when the backupState is not UNKNOWN.
+                false
+            }
+        }
+
         return SecureBackupRootState(
             backupState = backupState,
+            doesBackupExistOnServer = doesBackupExistOnServer,
             recoveryState = recoveryState,
             appName = buildMeta.applicationName,
             snackbarMessage = snackbarMessage,

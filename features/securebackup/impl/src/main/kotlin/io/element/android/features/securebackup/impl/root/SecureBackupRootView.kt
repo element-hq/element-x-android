@@ -70,13 +70,27 @@ fun SecureBackupRootView(
 
         // Disable / Enable backup
         when (state.backupState) {
-            BackupState.WAITING_FOR_SYNC,
-            BackupState.UNKNOWN -> Unit
-            BackupState.DISABLED -> {
-                PreferenceText(
-                    title = stringResource(id = R.string.screen_chat_backup_key_backup_action_enable),
-                    onClick = onEnableClicked,
-                )
+            BackupState.WAITING_FOR_SYNC -> Unit
+            BackupState.UNKNOWN -> {
+                when (state.doesBackupExistOnServer) {
+                    true -> {
+                        // Should not happen, we will have the state BackupState.ENABLED
+                        PreferenceText(
+                            title = stringResource(id = R.string.screen_chat_backup_key_backup_action_disable),
+                            tintColor = ElementTheme.colors.textCriticalPrimary,
+                            onClick = onDisableClicked,
+                        )
+                    }
+                    false -> {
+                        PreferenceText(
+                            title = stringResource(id = R.string.screen_chat_backup_key_backup_action_enable),
+                            onClick = onEnableClicked,
+                        )
+                    }
+                    null -> {
+                        AsyncLoading()
+                    }
+                }
             }
             BackupState.CREATING,
             BackupState.ENABLING,

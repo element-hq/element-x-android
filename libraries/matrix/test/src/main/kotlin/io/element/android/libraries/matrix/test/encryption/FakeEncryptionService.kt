@@ -52,6 +52,10 @@ class FakeEncryptionService : EncryptionService {
         return Result.success(Unit)
     }
 
+    override suspend fun doesBackupExistOnServer(): Result<Boolean> = simulateLongTask {
+        return Result.success(true)
+    }
+
     override suspend fun fixRecoveryIssues(recoveryKey: String): Result<Unit> = simulateLongTask {
         fixRecoveryIssuesFailure?.let { return Result.failure(it) }
         return Result.success(Unit)

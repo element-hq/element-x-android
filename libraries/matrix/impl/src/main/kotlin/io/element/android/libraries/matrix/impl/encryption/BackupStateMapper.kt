@@ -29,7 +29,6 @@ class BackupStateMapper {
             RustBackupState.ENABLED -> BackupState.ENABLED
             RustBackupState.DOWNLOADING -> BackupState.DOWNLOADING
             RustBackupState.DISABLING -> BackupState.DISABLING
-            RustBackupState.DISABLED -> BackupState.DISABLED
         }
     }
 }

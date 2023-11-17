@@ -40,6 +40,8 @@ interface EncryptionService {
 
     suspend fun disableRecovery(): Result<Unit>
 
+    suspend fun doesBackupExistOnServer(): Result<Boolean>
+
     /**
      * Note: accept bot recoveryKey and passphrase.
      */

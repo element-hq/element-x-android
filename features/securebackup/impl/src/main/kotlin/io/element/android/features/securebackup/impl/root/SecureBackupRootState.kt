@@ -22,6 +22,7 @@ import io.element.android.libraries.matrix.api.encryption.RecoveryState
 
 data class SecureBackupRootState(
     val backupState: BackupState,
+    val doesBackupExistOnServer: Boolean?,
     val recoveryState: RecoveryState,
     val appName: String,
     val snackbarMessage: SnackbarMessage?,

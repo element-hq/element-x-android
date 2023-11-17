@@ -24,9 +24,10 @@ import io.element.android.libraries.matrix.api.encryption.RecoveryState
 open class SecureBackupRootStateProvider : PreviewParameterProvider<SecureBackupRootState> {
     override val values: Sequence<SecureBackupRootState>
         get() = sequenceOf(
-            aSecureBackupRootState(backupState = BackupState.UNKNOWN),
+            aSecureBackupRootState(backupState = BackupState.UNKNOWN, doesBackupExistOnServer = null),
+            aSecureBackupRootState(backupState = BackupState.UNKNOWN, doesBackupExistOnServer = true),
+            aSecureBackupRootState(backupState = BackupState.UNKNOWN, doesBackupExistOnServer = false),
             aSecureBackupRootState(backupState = BackupState.ENABLED),
-            aSecureBackupRootState(backupState = BackupState.DISABLED),
             aSecureBackupRootState(recoveryState = RecoveryState.UNKNOWN),
             aSecureBackupRootState(recoveryState = RecoveryState.ENABLED),
             aSecureBackupRootState(recoveryState = RecoveryState.DISABLED),
@@ -37,10 +38,12 @@ open class SecureBackupRootStateProvider : PreviewParameterProvider<SecureBackup
 
 fun aSecureBackupRootState(
     backupState: BackupState = BackupState.UNKNOWN,
+    doesBackupExistOnServer: Boolean? = true,
     recoveryState: RecoveryState = RecoveryState.UNKNOWN,
     snackbarMessage: SnackbarMessage? = null,
 ) = SecureBackupRootState(
     backupState = backupState,
+    doesBackupExistOnServer = doesBackupExistOnServer,
     recoveryState = recoveryState,
     appName = "Element",
     snackbarMessage = snackbarMessage,
