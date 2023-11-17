@@ -35,6 +35,7 @@ import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomInfo
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.api.room.MatrixRoomNotificationSettingsState
+import io.element.android.libraries.matrix.api.room.Mention
 import io.element.android.libraries.matrix.api.room.MessageEventType
 import io.element.android.libraries.matrix.api.room.StateEventType
 import io.element.android.libraries.matrix.api.room.location.AssetType
@@ -250,22 +251,28 @@ class RustMatrixRoom(
         }
     }
 
-    override suspend fun sendMessage(body: String, htmlBody: String?): Result<Unit> = withContext(roomDispatcher) {
-        messageEventContentFromParts(body, htmlBody).use { content ->
+    override suspend fun sendMessage(body: String, htmlBody: String?, mentions: List<Mention>): Result<Unit> = withContext(roomDispatcher) {
+        messageEventContentFromParts(body, htmlBody).withMentions(mentions.map()).use { content ->
             runCatching {
                 innerRoom.send(content)
             }
         }
     }
 
-    override suspend fun editMessage(originalEventId: EventId?, transactionId: TransactionId?, body: String, htmlBody: String?): Result<Unit> =
+    override suspend fun editMessage(
+        originalEventId: EventId?,
+        transactionId: TransactionId?,
+        body: String,
+        htmlBody: String?,
+        mentions: List<Mention>,
+    ): Result<Unit> =
         withContext(roomDispatcher) {
             if (originalEventId != null) {
                 runCatching {
                     val editedEvent = specialModeEventTimelineItem ?: innerRoom.getEventTimelineItemByEventId(originalEventId.value)
                     editedEvent.use {
                         innerRoom.edit(
-                            newContent = messageEventContentFromParts(body, htmlBody),
+                            newContent = messageEventContentFromParts(body, htmlBody).withMentions(mentions.map()),
                             editItem = it,
                         )
                     }
@@ -289,11 +296,11 @@ class RustMatrixRoom(
         }
     }
 
-    override suspend fun replyMessage(eventId: EventId, body: String, htmlBody: String?): Result<Unit> = withContext(roomDispatcher) {
+    override suspend fun replyMessage(eventId: EventId, body: String, htmlBody: String?, mentions: List<Mention>): Result<Unit> = withContext(roomDispatcher) {
         runCatching {
             val inReplyTo = specialModeEventTimelineItem ?: innerRoom.getEventTimelineItemByEventId(eventId.value)
             inReplyTo.use { eventTimelineItem ->
-                innerRoom.sendReply(messageEventContentFromParts(body, htmlBody), eventTimelineItem)
+                innerRoom.sendReply(messageEventContentFromParts(body, htmlBody).withMentions(mentions.map()), eventTimelineItem)
             }
             specialModeEventTimelineItem = null
         }

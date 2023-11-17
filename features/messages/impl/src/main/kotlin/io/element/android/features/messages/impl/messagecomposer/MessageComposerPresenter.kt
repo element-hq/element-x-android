@@ -47,6 +47,7 @@ import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.permalink.PermalinkBuilder
 import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.Mention
 import io.element.android.libraries.matrix.api.user.CurrentSessionIdHolder
 import io.element.android.libraries.mediapickers.api.PickerProvider
 import io.element.android.libraries.mediaupload.api.MediaSender
@@ -327,15 +328,25 @@ class MessageComposerPresenter @Inject constructor(
         richTextEditorState: RichTextEditorState,
     ) = launch {
         val capturedMode = messageComposerContext.composerMode
+        val mentions = richTextEditorState.mentionsState?.let { state ->
+            buildList {
+                if (state.hasAtRoomMention) {
+                    add(Mention.AtRoom)
+                }
+                for (userId in state.userIds) {
+                    add(Mention.User(userId))
+                }
+            }
+        }.orEmpty()
         // Reset composer right away
         richTextEditorState.setHtml("")
         updateComposerMode(MessageComposerMode.Normal)
         when (capturedMode) {
-            is MessageComposerMode.Normal -> room.sendMessage(body = message.markdown, htmlBody = message.html)
+            is MessageComposerMode.Normal -> room.sendMessage(body = message.markdown, htmlBody = message.html, mentions = mentions)
             is MessageComposerMode.Edit -> {
                 val eventId = capturedMode.eventId
                 val transactionId = capturedMode.transactionId
-                room.editMessage(eventId, transactionId, message.markdown, message.html)
+                room.editMessage(eventId, transactionId, message.markdown, message.html, mentions)
             }
 
             is MessageComposerMode.Quote -> TODO()
@@ -343,6 +354,7 @@ class MessageComposerPresenter @Inject constructor(
                 capturedMode.eventId,
                 message.markdown,
                 message.html,
+                mentions
             )
         }
         analyticsService.capture(
