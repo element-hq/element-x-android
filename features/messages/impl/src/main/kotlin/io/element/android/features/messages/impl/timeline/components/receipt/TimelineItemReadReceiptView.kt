@@ -32,6 +32,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.pluralStringResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.clearAndSetSemantics
+import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
@@ -39,6 +43,7 @@ import io.element.android.appconfig.TimelineConfig
 import io.element.android.features.messages.impl.timeline.model.ReadReceiptData
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
+import io.element.android.libraries.designsystem.components.avatar.getBestName
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Icon
@@ -46,6 +51,8 @@ import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
 import io.element.android.libraries.theme.ElementTheme
+import io.element.android.libraries.ui.strings.CommonPlurals
+import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
 
 @Composable
@@ -137,8 +144,12 @@ private fun ReadReceiptsAvatars(
     val avatarSize = AvatarSize.TimelineReadReceipt.dp
     val avatarStrokeSize = 1.dp
     val avatarStrokeColor = MaterialTheme.colorScheme.background
+    val receiptDescription = computeReceiptDescription(receipts)
     Row(
-        modifier = modifier,
+        modifier = modifier
+            .clearAndSetSemantics {
+                stateDescription = receiptDescription
+            },
         horizontalArrangement = Arrangement.spacedBy(4.dp - avatarStrokeSize),
         verticalAlignment = Alignment.CenterVertically,
     ) {
@@ -171,6 +182,28 @@ private fun ReadReceiptsAvatars(
                 color = ElementTheme.colors.textSecondary,
             )
         }
+    }
+}
+
+@Composable
+private fun computeReceiptDescription(receipts: ImmutableList<ReadReceiptData>): String {
+    return when (receipts.size) {
+        0 -> "" // Cannot happen
+        1 -> stringResource(
+            id = CommonStrings.a11y_read_receipts_single,
+            receipts[0].avatarData.getBestName()
+        )
+        2 -> stringResource(
+            id = CommonStrings.a11y_read_receipts_multiple,
+            receipts[0].avatarData.getBestName(),
+            receipts[1].avatarData.getBestName(),
+        )
+        else -> pluralStringResource(
+            id = CommonPlurals.a11y_read_receipts_multiple_with_others,
+            count = receipts.size - 1,
+            receipts[0].avatarData.getBestName(),
+            receipts.size - 1
+        )
     }
 }
 
