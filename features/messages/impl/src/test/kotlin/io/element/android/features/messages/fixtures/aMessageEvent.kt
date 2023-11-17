@@ -53,7 +53,7 @@ internal fun aMessageEvent(
     sentTime = "",
     isMine = isMine,
     reactionsState = aTimelineItemReactions(count = 0),
-    readReceiptState = TimelineItemReadReceipts.ReadReceipts(emptyList<ReadReceiptData>().toImmutableList()),
+    readReceiptState = TimelineItemReadReceipts(emptyList<ReadReceiptData>().toImmutableList()),
     localSendState = sendState,
     inReplyTo = inReplyTo,
     debugInfo = debugInfo,

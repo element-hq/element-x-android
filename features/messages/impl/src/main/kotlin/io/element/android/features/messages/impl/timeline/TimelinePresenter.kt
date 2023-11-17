@@ -147,9 +147,10 @@ class TimelinePresenter @Inject constructor(
                     timelineItemsFactory.replaceWith(
                         timelineItems = it,
                         roomMembers = if (readReceiptsEnabled) {
-                            membersState.roomMembers()
+                            membersState.roomMembers().orEmpty()
                         } else {
-                            null
+                            // Give an empty list to not affect performance
+                            emptyList()
                         }
                     )
                 }
@@ -166,6 +167,7 @@ class TimelinePresenter @Inject constructor(
             userHasPermissionToSendMessage = userHasPermissionToSendMessage,
             paginationState = paginationState,
             timelineItems = timelineItems,
+            showReadReceipts = readReceiptsEnabled,
             hasNewItems = hasNewItems.value,
             sessionState = sessionState,
             eventSink = ::handleEvents

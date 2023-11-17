@@ -67,7 +67,7 @@ class TimelineItemsFactory @Inject constructor(
 
     suspend fun replaceWith(
         timelineItems: List<MatrixTimelineItem>,
-        roomMembers: List<RoomMember>?,
+        roomMembers: List<RoomMember>,
     ) = withContext(dispatchers.computation) {
         lock.withLock {
             diffCacheUpdater.updateWith(timelineItems)
@@ -77,7 +77,7 @@ class TimelineItemsFactory @Inject constructor(
 
     private suspend fun buildAndEmitTimelineItemStates(
         timelineItems: List<MatrixTimelineItem>,
-        roomMembers: List<RoomMember>?,
+        roomMembers: List<RoomMember>,
     ) {
         val newTimelineItemStates = ArrayList<TimelineItem>()
         for (index in diffCache.indices().reversed()) {
@@ -97,7 +97,7 @@ class TimelineItemsFactory @Inject constructor(
     private suspend fun buildAndCacheItem(
         timelineItems: List<MatrixTimelineItem>,
         index: Int,
-        roomMembers: List<RoomMember>?,
+        roomMembers: List<RoomMember>,
     ): TimelineItem? {
         val timelineItemState =
             when (val currentTimelineItem = timelineItems[index]) {

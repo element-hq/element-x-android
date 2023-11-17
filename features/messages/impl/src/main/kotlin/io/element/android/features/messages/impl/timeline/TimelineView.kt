@@ -127,6 +127,7 @@ fun TimelineView(
             ) { timelineItem ->
                 TimelineItemRow(
                     timelineItem = timelineItem,
+                    showReadReceipts = state.showReadReceipts,
                     highlightedItem = state.highlightedEventId?.value,
                     userHasPermissionToSendMessage = state.userHasPermissionToSendMessage,
                     onClick = onMessageClicked,
@@ -171,6 +172,7 @@ fun TimelineView(
 @Composable
 private fun TimelineItemRow(
     timelineItem: TimelineItem,
+    showReadReceipts: Boolean,
     highlightedItem: String?,
     userHasPermissionToSendMessage: Boolean,
     sessionState: SessionState,
@@ -208,6 +210,7 @@ private fun TimelineItemRow(
             } else {
                 TimelineItemEventRow(
                     event = timelineItem,
+                    showReadReceipts = showReadReceipts,
                     isHighlighted = highlightedItem == timelineItem.identifier(),
                     canReply = userHasPermissionToSendMessage && timelineItem.content.canBeRepliedTo(),
                     onClick = { onClick(timelineItem) },
@@ -248,6 +251,7 @@ private fun TimelineItemRow(
                         timelineItem.events.forEach { subGroupEvent ->
                             TimelineItemRow(
                                 timelineItem = subGroupEvent,
+                                showReadReceipts = showReadReceipts,
                                 highlightedItem = highlightedItem,
                                 sessionState = sessionState,
                                 userHasPermissionToSendMessage = false,

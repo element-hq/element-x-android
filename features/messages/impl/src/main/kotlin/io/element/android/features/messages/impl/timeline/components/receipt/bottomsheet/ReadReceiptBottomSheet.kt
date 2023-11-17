@@ -29,7 +29,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import io.element.android.features.messages.impl.timeline.model.receipts
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -93,7 +92,7 @@ private fun ColumnScope.ReadReceiptBottomSheetContent(
             Text(text = stringResource(id = CommonStrings.common_seen_by))
         }
     )
-    val receipts = state.selectedEvent?.readReceiptState?.receipts().orEmpty()
+    val receipts = state.selectedEvent?.readReceiptState?.receipts.orEmpty()
     receipts.forEach {
         val userId = UserId(it.avatarData.id)
         MatrixUserRow(

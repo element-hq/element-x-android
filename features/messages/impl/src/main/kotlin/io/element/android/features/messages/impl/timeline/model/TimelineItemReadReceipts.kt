@@ -18,25 +18,12 @@ package io.element.android.features.messages.impl.timeline.model
 
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.persistentListOf
 
-sealed interface TimelineItemReadReceipts {
-    /**
-     *  Value when the feature is disabled.
-     */
-    data object Hidden : TimelineItemReadReceipts
-
-    data class ReadReceipts(
-        val receipts: ImmutableList<ReadReceiptData>,
-    ) : TimelineItemReadReceipts
-}
+data class TimelineItemReadReceipts(
+    val receipts: ImmutableList<ReadReceiptData>,
+)
 
 data class ReadReceiptData(
     val avatarData: AvatarData,
     val formattedDate: String,
 )
-
-fun TimelineItemReadReceipts.receipts(): ImmutableList<ReadReceiptData> = when (this) {
-    TimelineItemReadReceipts.Hidden -> persistentListOf()
-    is TimelineItemReadReceipts.ReadReceipts -> receipts
-}

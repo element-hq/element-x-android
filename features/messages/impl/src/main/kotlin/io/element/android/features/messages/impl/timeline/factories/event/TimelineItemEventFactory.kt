@@ -47,7 +47,7 @@ class TimelineItemEventFactory @Inject constructor(
         currentTimelineItem: MatrixTimelineItem.Event,
         index: Int,
         timelineItems: List<MatrixTimelineItem>,
-        roomMembers: List<RoomMember>?,
+        roomMembers: List<RoomMember>,
     ): TimelineItem.Event {
         val currentSender = currentTimelineItem.event.sender
         val groupPosition =
@@ -132,10 +132,9 @@ class TimelineItemEventFactory @Inject constructor(
     }
 
     private fun MatrixTimelineItem.Event.computeReadReceiptState(
-        roomMembers: List<RoomMember>?,
+        roomMembers: List<RoomMember>,
     ): TimelineItemReadReceipts {
-        if (roomMembers == null) return TimelineItemReadReceipts.Hidden
-        return TimelineItemReadReceipts.ReadReceipts(
+        return TimelineItemReadReceipts(
             receipts = event.receipts
                 .map { receipt ->
                     val roomMember = roomMembers.find { it.userId == receipt.userId }

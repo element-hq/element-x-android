@@ -31,7 +31,7 @@ class ReadReceiptBottomSheetStateProvider : PreviewParameterProvider<ReadReceipt
         .map { readReceiptViewState ->
             ReadReceiptBottomSheetState(
                 selectedEvent = aTimelineItemEvent(
-                    readReceiptState = TimelineItemReadReceipts.ReadReceipts(
+                    readReceiptState = TimelineItemReadReceipts(
                         receipts = readReceiptViewState.receipts.map { readReceiptData ->
                             readReceiptData
                                 .copy(avatarData = readReceiptData.avatarData.copy(id = "@${readReceiptData.avatarData.id}:localhost"))

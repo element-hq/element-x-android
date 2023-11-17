@@ -16,6 +16,7 @@
 
 package io.element.android.features.messages.impl.timeline
 
+import io.element.android.features.messages.impl.timeline.model.ReadReceiptData
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.TimelineItemGroupPosition
 import io.element.android.features.messages.impl.timeline.model.TimelineItemReactions
@@ -44,6 +45,7 @@ import kotlin.random.Random
 
 fun aTimelineState(timelineItems: ImmutableList<TimelineItem> = persistentListOf()) = TimelineState(
     timelineItems = timelineItems,
+    showReadReceipts = false,
     paginationState = MatrixTimeline.PaginationState(
         isBackPaginating = false,
         hasMoreToLoadBackwards = true,
@@ -124,7 +126,7 @@ internal fun aTimelineItemEvent(
     isThreaded: Boolean = false,
     debugInfo: TimelineItemDebugInfo = aTimelineItemDebugInfo(),
     timelineItemReactions: TimelineItemReactions = aTimelineItemReactions(),
-    readReceiptState: TimelineItemReadReceipts = TimelineItemReadReceipts.Hidden,
+    readReceiptState: TimelineItemReadReceipts = aTimelineItemReadReceipts(),
 ): TimelineItem.Event {
     return TimelineItem.Event(
         id = UUID.randomUUID().toString(),
@@ -175,6 +177,12 @@ internal fun aTimelineItemDebugInfo(
 ) = TimelineItemDebugInfo(
     model, originalJson, latestEditedJson
 )
+
+internal fun aTimelineItemReadReceipts(): TimelineItemReadReceipts {
+    return TimelineItemReadReceipts(
+        receipts = emptyList<ReadReceiptData>().toImmutableList(),
+    )
+}
 
 fun aGroupedEvents(id: Long = 0): TimelineItem.GroupedEvents {
     val event = aTimelineItemEvent(

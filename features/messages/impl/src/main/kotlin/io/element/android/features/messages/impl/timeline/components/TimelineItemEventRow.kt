@@ -79,7 +79,6 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemPollContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
-import io.element.android.features.messages.impl.timeline.model.receipts
 import io.element.android.libraries.designsystem.colors.AvatarColorsProvider
 import io.element.android.libraries.designsystem.components.EqualWidthColumn
 import io.element.android.libraries.designsystem.components.avatar.Avatar
@@ -117,6 +116,7 @@ import kotlin.math.roundToInt
 @Composable
 fun TimelineItemEventRow(
     event: TimelineItem.Event,
+    showReadReceipts: Boolean,
     isHighlighted: Boolean,
     canReply: Boolean,
     onClick: () -> Unit,
@@ -177,6 +177,7 @@ fun TimelineItemEventRow(
                                 state = state.draggableState,
                             ),
                         event = event,
+                        showReadReceipts = showReadReceipts,
                         isHighlighted = isHighlighted,
                         interactionSource = interactionSource,
                         onClick = onClick,
@@ -195,6 +196,7 @@ fun TimelineItemEventRow(
         } else {
             TimelineItemEventRowContent(
                 event = event,
+                showReadReceipts = showReadReceipts,
                 isHighlighted = isHighlighted,
                 interactionSource = interactionSource,
                 onClick = onClick,
@@ -238,6 +240,7 @@ private fun SwipeSensitivity(
 @Composable
 private fun TimelineItemEventRowContent(
     event: TimelineItem.Event,
+    showReadReceipts: Boolean,
     isHighlighted: Boolean,
     interactionSource: MutableInteractionSource,
     onClick: () -> Unit,
@@ -336,21 +339,23 @@ private fun TimelineItemEventRowContent(
         }
 
         // Read receipts / Send state
-        TimelineItemReadReceiptView(
-            state = ReadReceiptViewState(
-                sendState = event.localSendState,
-                receipts = event.readReceiptState.receipts(),
-            ),
-            onReadReceiptsClicked = onReadReceiptsClicked,
-            modifier = Modifier
-                .constrainAs(readReceipts) {
-                    if (event.reactionsState.reactions.isNotEmpty()) {
-                        top.linkTo(reactions.bottom, margin = 4.dp)
-                    } else {
-                        top.linkTo(message.bottom, margin = 4.dp)
+        if (showReadReceipts) {
+            TimelineItemReadReceiptView(
+                state = ReadReceiptViewState(
+                    sendState = event.localSendState,
+                    receipts = event.readReceiptState.receipts,
+                ),
+                onReadReceiptsClicked = onReadReceiptsClicked,
+                modifier = Modifier
+                    .constrainAs(readReceipts) {
+                        if (event.reactionsState.reactions.isNotEmpty()) {
+                            top.linkTo(reactions.bottom, margin = 4.dp)
+                        } else {
+                            top.linkTo(message.bottom, margin = 4.dp)
+                        }
                     }
-                }
-        )
+            )
+        }
     }
 }
 
@@ -679,6 +684,7 @@ internal fun TimelineItemEventRowPreview() = ElementPreview {
                     ),
                     groupPosition = TimelineItemGroupPosition.First,
                 ),
+                showReadReceipts = false,
                 isHighlighted = false,
                 canReply = true,
                 onClick = {},
@@ -701,6 +707,7 @@ internal fun TimelineItemEventRowPreview() = ElementPreview {
                     ),
                     groupPosition = TimelineItemGroupPosition.Last,
                 ),
+                showReadReceipts = false,
                 isHighlighted = false,
                 canReply = true,
                 onClick = {},
@@ -741,6 +748,7 @@ internal fun TimelineItemEventRowWithReplyPreview() = ElementPreview {
                     inReplyTo = aInReplyToReady(replyContent),
                     groupPosition = TimelineItemGroupPosition.First,
                 ),
+                showReadReceipts = false,
                 isHighlighted = false,
                 canReply = true,
                 onClick = {},
@@ -765,6 +773,7 @@ internal fun TimelineItemEventRowWithReplyPreview() = ElementPreview {
                     isThreaded = true,
                     groupPosition = TimelineItemGroupPosition.Last,
                 ),
+                showReadReceipts = false,
                 isHighlighted = false,
                 canReply = true,
                 onClick = {},
@@ -817,6 +826,7 @@ internal fun TimelineItemEventRowTimestampPreview(
                         reactionsState = aTimelineItemReactions(count = 0),
                         senderDisplayName = if (useDocument) "Document case" else "Text case",
                     ),
+                    showReadReceipts = false,
                     isHighlighted = false,
                     canReply = true,
                     onClick = {},
@@ -850,6 +860,7 @@ internal fun TimelineItemEventRowWithManyReactionsPreview() = ElementPreview {
                     ),
                     timelineItemReactions = aTimelineItemReactions(count = 20),
                 ),
+                showReadReceipts = false,
                 isHighlighted = false,
                 canReply = true,
                 onClick = {},
@@ -876,6 +887,7 @@ internal fun TimelineItemEventRowLongSenderNamePreview() = ElementPreviewLight {
         event = aTimelineItemEvent(
             senderDisplayName = "a long sender display name to test single line and ellipsis at the end of the line",
         ),
+        showReadReceipts = false,
         isHighlighted = false,
         canReply = true,
         onClick = {},
@@ -898,6 +910,7 @@ internal fun TimelineItemEventRowLongSenderNamePreview() = ElementPreviewLight {
 internal fun TimelineItemEventTimestampBelowPreview() = ElementPreviewLight {
     TimelineItemEventRow(
         event = aTimelineItemEvent(content = aTimelineItemPollContent()),
+        showReadReceipts = false,
         isHighlighted = false,
         canReply = true,
         onClick = {},
