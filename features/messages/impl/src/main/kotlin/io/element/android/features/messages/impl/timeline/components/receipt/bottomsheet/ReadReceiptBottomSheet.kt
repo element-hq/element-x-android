@@ -26,18 +26,21 @@ import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.features.messages.impl.timeline.model.receipts
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.theme.components.ListItem
 import io.element.android.libraries.designsystem.theme.components.ModalBottomSheet
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.components.MatrixUserRow
 import io.element.android.libraries.theme.ElementTheme
+import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -85,6 +88,11 @@ private fun ColumnScope.ReadReceiptBottomSheetContent(
     state: ReadReceiptBottomSheetState,
     onUserDataClicked: (UserId) -> Unit,
 ) {
+    ListItem(
+        headlineContent = {
+            Text(text = stringResource(id = CommonStrings.common_seen_by))
+        }
+    )
     val receipts = state.selectedEvent?.readReceiptState?.receipts().orEmpty()
     receipts.forEach {
         val userId = UserId(it.avatarData.id)
