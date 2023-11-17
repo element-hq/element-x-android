@@ -22,5 +22,6 @@ import kotlinx.collections.immutable.ImmutableList
 
 data class ReadReceiptViewState(
     val sendState: LocalEventSendState?,
+    val isLastOutgoingMessage: Boolean,
     val receipts: ImmutableList<ReadReceiptData>,
 )

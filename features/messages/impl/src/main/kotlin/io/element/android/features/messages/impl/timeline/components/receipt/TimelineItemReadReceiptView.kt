@@ -58,11 +58,23 @@ import kotlinx.collections.immutable.ImmutableList
 @Composable
 fun TimelineItemReadReceiptView(
     state: ReadReceiptViewState,
+    showReadReceipts: Boolean,
     onReadReceiptsClicked: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    when (state.sendState) {
-        LocalEventSendState.Canceled -> Unit
+    if (state.receipts.isNotEmpty()) {
+        if (showReadReceipts) {
+            ReadReceiptsRow(modifier = modifier) {
+                ReadReceiptsAvatars(
+                    receipts = state.receipts,
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(4.dp))
+                        .clickable { onReadReceiptsClicked() }
+                        .padding(2.dp)
+                )
+            }
+        }
+    } else when (state.sendState) {
         LocalEventSendState.NotSentYet -> {
             ReadReceiptsRow(modifier) {
                 Icon(
@@ -73,40 +85,19 @@ fun TimelineItemReadReceiptView(
                 )
             }
         }
+        LocalEventSendState.Canceled -> Unit
         is LocalEventSendState.SendingFailed -> {
             // Error? The timestamp is already displayed in red
         }
+        null,
         is LocalEventSendState.Sent -> {
-            if (state.receipts.isEmpty()) {
+            if (state.isLastOutgoingMessage) {
                 ReadReceiptsRow(modifier = modifier) {
                     Icon(
                         modifier = Modifier.padding(2.dp),
                         resourceId = CommonDrawables.ic_sent,
                         contentDescription = null,
                         tint = ElementTheme.colors.iconSecondary
-                    )
-                }
-            } else {
-                ReadReceiptsRow(modifier = modifier) {
-                    ReadReceiptsAvatars(
-                        receipts = state.receipts,
-                        modifier = Modifier
-                            .clip(RoundedCornerShape(4.dp))
-                            .clickable { onReadReceiptsClicked() }
-                            .padding(2.dp)
-                    )
-                }
-            }
-        }
-        null -> {
-            if (state.receipts.isNotEmpty()) {
-                ReadReceiptsRow(modifier = modifier) {
-                    ReadReceiptsAvatars(
-                        receipts = state.receipts,
-                        modifier = Modifier
-                            .clip(RoundedCornerShape(4.dp))
-                            .clickable { onReadReceiptsClicked() }
-                            .padding(2.dp)
                     )
                 }
             }
@@ -214,6 +205,7 @@ internal fun TimelineItemReactionsViewPreview(
 ) = ElementPreview {
     TimelineItemReadReceiptView(
         state = state,
+        showReadReceipts = true,
         onReadReceiptsClicked = {},
     )
 }

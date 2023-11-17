@@ -128,6 +128,8 @@ fun TimelineView(
                 TimelineItemRow(
                     timelineItem = timelineItem,
                     showReadReceipts = state.showReadReceipts,
+                    isLastOutgoingMessage = (timelineItem as? TimelineItem.Event)?.isMine == true
+                        && state.timelineItems.first().identifier() == timelineItem.identifier(),
                     highlightedItem = state.highlightedEventId?.value,
                     userHasPermissionToSendMessage = state.userHasPermissionToSendMessage,
                     onClick = onMessageClicked,
@@ -173,6 +175,7 @@ fun TimelineView(
 private fun TimelineItemRow(
     timelineItem: TimelineItem,
     showReadReceipts: Boolean,
+    isLastOutgoingMessage: Boolean,
     highlightedItem: String?,
     userHasPermissionToSendMessage: Boolean,
     sessionState: SessionState,
@@ -211,6 +214,7 @@ private fun TimelineItemRow(
                 TimelineItemEventRow(
                     event = timelineItem,
                     showReadReceipts = showReadReceipts,
+                    isLastOutgoingMessage = isLastOutgoingMessage,
                     isHighlighted = highlightedItem == timelineItem.identifier(),
                     canReply = userHasPermissionToSendMessage && timelineItem.content.canBeRepliedTo(),
                     onClick = { onClick(timelineItem) },
@@ -252,6 +256,7 @@ private fun TimelineItemRow(
                             TimelineItemRow(
                                 timelineItem = subGroupEvent,
                                 showReadReceipts = showReadReceipts,
+                                isLastOutgoingMessage = isLastOutgoingMessage,
                                 highlightedItem = highlightedItem,
                                 sessionState = sessionState,
                                 userHasPermissionToSendMessage = false,

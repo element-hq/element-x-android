@@ -56,9 +56,11 @@ class ReadReceiptViewStateProvider : PreviewParameterProvider<ReadReceiptViewSta
 
 private fun aReadReceiptViewState(
     sendState: LocalEventSendState? = null,
+    isLastOutgoingMessage: Boolean = true,
     receipts: List<ReadReceiptData> = emptyList(),
 ) = ReadReceiptViewState(
     sendState = sendState,
+    isLastOutgoingMessage = isLastOutgoingMessage,
     receipts = receipts.toImmutableList(),
 )
 
