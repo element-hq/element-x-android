@@ -70,3 +70,17 @@ internal fun Room.backPaginationStatusFlow(): Flow<BackPaginationStatus> =
             subscribeToBackPaginationStatus(listener)
         }
     }.buffer(Channel.UNLIMITED)
+
+internal suspend fun Room.runWithTimelineListenerRegistered(action: suspend () -> Unit) {
+    val result = addTimelineListener(NoOpTimelineListener)
+    try {
+        action()
+    } finally {
+        result.itemsStream.cancelAndDestroy()
+        result.items.destroyAll()
+    }
+}
+
+private object NoOpTimelineListener : TimelineListener {
+    override fun onUpdate(diff: List<TimelineDiff>) = Unit
+}
