@@ -17,10 +17,16 @@
 package io.element.android.libraries.textcomposer.mentions
 
 import android.graphics.Color
+import android.view.ViewGroup
+import android.widget.TextView
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.viewinterop.AndroidView
+import androidx.core.text.buildSpannedString
+import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.currentUserMentionPillBackground
 import io.element.android.libraries.designsystem.theme.currentUserMentionPillText
 import io.element.android.libraries.designsystem.theme.mentionPillBackground
@@ -81,4 +87,31 @@ fun rememberMentionSpanProvider(currentUserId: SessionId): MentionSpanProvider {
     }
     provider.setup()
     return provider
+}
+
+@PreviewsDayNight
+@Composable
+internal fun MentionSpanPreview() {
+    val provider = rememberMentionSpanProvider(SessionId("@me:matrix.org"))
+    ElementPreview {
+        provider.setup()
+
+        val textColor = ElementTheme.colors.textPrimary.toArgb()
+        
+        val mentionSpan = provider.getMentionSpanFor("me", "https://matrix.to/#/@me:matrix.org")
+        val mentionSpan2 = provider.getMentionSpanFor("other", "https://matrix.to/#/@other:matrix.org")
+        AndroidView(factory = { context ->
+            TextView(context).apply {
+                layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+                text = buildSpannedString {
+                    append("This is a ")
+                    append("mention", mentionSpan, 0)
+                    append(" to the current user and this is a ")
+                    append("mention", mentionSpan2, 0)
+                    append("to other user")
+                }
+                setTextColor(textColor)
+            }
+        })
+    }
 }

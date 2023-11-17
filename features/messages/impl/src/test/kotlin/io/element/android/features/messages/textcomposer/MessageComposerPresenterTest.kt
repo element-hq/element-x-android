@@ -826,9 +826,11 @@ class MessageComposerPresenterTest {
         }.test {
             skipItems(1)
             val initialState = awaitItem()
+            initialState.richTextEditorState.setHtml("Hey @bo")
             initialState.eventSink(MessageComposerEvents.InsertMention(RoomMemberSuggestion.Member(aRoomMember(userId = A_USER_ID_2))))
 
-            assertThat(awaitItem().richTextEditorState.messageHtml).contains("href=\"${A_USER_ID_2.value}\"")
+            assertThat(initialState.richTextEditorState.messageHtml)
+                .isEqualTo("Hey <a href='https://matrix.to/#/${A_USER_ID_2.value}'>${A_USER_ID_2.value}</a>")
         }
     }
 
