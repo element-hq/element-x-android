@@ -30,7 +30,7 @@ class DefaultCacheCleanerTest {
     val temporaryFolder = TemporaryFolder()
 
     @Test
-    fun clearCache() = runTest {
+    fun `calling clearCache actually removes file in the SUBDIRS_TO_CLEANUP list`() = runTest {
         // Create temp subdirs and fill with 2 files each
         DefaultCacheCleaner.SUBDIRS_TO_CLEANUP.forEach {
             File(temporaryFolder.root, it).apply {
@@ -51,6 +51,16 @@ class DefaultCacheCleanerTest {
                 Truth.assertThat(listFiles()).isEmpty()
             }
         }
+    }
+
+    @Test
+    fun `clear cache fails silently`() = runTest {
+        // Set cache dir as unreadable, unwritable and unexecutable so that the deletion fails.
+        check(temporaryFolder.root.setReadable(false))
+        check(temporaryFolder.root.setWritable(false))
+        check(temporaryFolder.root.setExecutable(false))
+
+        aCacheCleaner().clearCache()
     }
 
     private fun TestScope.aCacheCleaner() = DefaultCacheCleaner(

@@ -23,6 +23,7 @@ import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.CacheDirectory
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import java.io.File
 import javax.inject.Inject
 
@@ -44,10 +45,14 @@ class DefaultCacheCleaner @Inject constructor(
             runCatching {
                 SUBDIRS_TO_CLEANUP.forEach {
                     File(cacheDir.path, it).apply {
-                        if (exists()) deleteRecursively()
-                        mkdirs()
+                        if (exists()) {
+                            if (!deleteRecursively()) error("Failed to delete recursively cache directory $this")
+                        }
+                        if (!mkdirs()) error("Failed to create cache directory $this")
                     }
                 }
+            }.onFailure {
+                Timber.e(it, "Failed to clear cache")
             }
         }
     }
