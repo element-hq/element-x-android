@@ -14,16 +14,12 @@
  * limitations under the License.
  */
 
-plugins {
-    id("io.element.android-library")
-    alias(libs.plugins.anvil)
-}
+package io.element.android.features.cachecleaner.api
 
-android {
-    namespace = "io.element.android.features.cachecleaner.api"
-}
+import com.squareup.anvil.annotations.ContributesTo
+import io.element.android.libraries.di.AppScope
 
-dependencies {
-    implementation(projects.libraries.architecture)
-    implementation(libs.androidx.startup)
+@ContributesTo(AppScope::class)
+interface CacheCleanerBindings {
+    fun cacheCleaner(): CacheCleaner
 }

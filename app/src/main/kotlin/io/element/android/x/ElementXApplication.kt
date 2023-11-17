@@ -18,9 +18,8 @@ package io.element.android.x
 
 import android.app.Application
 import androidx.startup.AppInitializer
-import io.element.android.libraries.architecture.bindings
+import io.element.android.features.cachecleaner.api.CacheCleanerInitializer
 import io.element.android.libraries.di.DaggerComponentOwner
-import io.element.android.x.di.AppBindings
 import io.element.android.x.di.AppComponent
 import io.element.android.x.di.DaggerAppComponent
 import io.element.android.x.info.logApplicationInfo
@@ -36,8 +35,8 @@ class ElementXApplication : Application(), DaggerComponentOwner {
         AppInitializer.getInstance(this).apply {
             initializeComponent(CrashInitializer::class.java)
             initializeComponent(TracingInitializer::class.java)
+            initializeComponent(CacheCleanerInitializer::class.java)
         }
         logApplicationInfo()
-        bindings<AppBindings>().cacheCleaner().clearCache()
     }
 }

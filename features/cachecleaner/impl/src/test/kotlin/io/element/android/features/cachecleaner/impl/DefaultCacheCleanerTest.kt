@@ -24,13 +24,11 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
 import java.io.File
-import kotlin.io.path.ExperimentalPathApi
 
 class DefaultCacheCleanerTest {
     @get:Rule
     val temporaryFolder = TemporaryFolder()
 
-    @OptIn(ExperimentalPathApi::class)
     @Test
     fun clearCache() = runTest {
         // Create temp subdirs and fill with 2 files each

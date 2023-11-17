@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright (c) 2022 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
-plugins {
-    id("io.element.android-library")
-    alias(libs.plugins.anvil)
-}
+package io.element.android.features.cachecleaner.api
 
-android {
-    namespace = "io.element.android.features.cachecleaner.api"
-}
+import android.content.Context
+import androidx.startup.Initializer
+import io.element.android.libraries.architecture.bindings
 
-dependencies {
-    implementation(projects.libraries.architecture)
-    implementation(libs.androidx.startup)
+class CacheCleanerInitializer : Initializer<Unit> {
+    override fun create(context: Context) {
+        context.bindings<CacheCleanerBindings>().cacheCleaner().clearCache()
+    }
+
+    override fun dependencies(): List<Class<out Initializer<*>>> = emptyList()
 }
