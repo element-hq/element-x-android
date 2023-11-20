@@ -96,7 +96,7 @@ fun TimelineItemVoiceView(
         Spacer(Modifier.width(8.dp))
         val context = LocalContext.current
         WaveformPlaybackView(
-            showCursor = state.button == VoiceMessageState.Button.Pause,
+            showCursor = state.showCursor,
             playbackProgress = state.progress,
             waveform = content.waveform,
             modifier = Modifier

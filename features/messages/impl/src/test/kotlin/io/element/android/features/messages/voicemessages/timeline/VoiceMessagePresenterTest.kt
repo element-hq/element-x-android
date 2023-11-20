@@ -53,6 +53,7 @@ class VoiceMessagePresenterTest {
     @Test
     fun `pressing play downloads and plays`() = runTest {
         val presenter = createVoiceMessagePresenter(
+            mediaPlayer = FakeMediaPlayer(fakeTotalDurationMs = 2_000),
             content = aTimelineItemVoiceContent(durationMs = 2_000),
         )
         moleculeFlow(RecompositionMode.Immediate) {
@@ -88,6 +89,7 @@ class VoiceMessagePresenterTest {
     fun `pressing play downloads and fails`() = runTest {
         val analyticsService = FakeAnalyticsService()
         val presenter = createVoiceMessagePresenter(
+            mediaPlayer = FakeMediaPlayer(fakeTotalDurationMs = 2_000),
             voiceMessageMediaRepo = FakeVoiceMessageMediaRepo().apply { shouldFail = true },
             analyticsService = analyticsService,
             content = aTimelineItemVoiceContent(durationMs = 2_000),
@@ -125,6 +127,7 @@ class VoiceMessagePresenterTest {
     @Test
     fun `pressing pause while playing pauses`() = runTest {
         val presenter = createVoiceMessagePresenter(
+            mediaPlayer = FakeMediaPlayer(fakeTotalDurationMs = 2_000),
             content = aTimelineItemVoiceContent(durationMs = 2_000),
         )
         moleculeFlow(RecompositionMode.Immediate) {
@@ -171,8 +174,9 @@ class VoiceMessagePresenterTest {
     }
 
     @Test
-    fun `seeking downloads and seeks`() = runTest {
+    fun `seeking before play`() = runTest {
         val presenter = createVoiceMessagePresenter(
+            mediaPlayer = FakeMediaPlayer(fakeTotalDurationMs = 2_000),
             content = aTimelineItemVoiceContent(durationMs = 10_000),
         )
         moleculeFlow(RecompositionMode.Immediate) {
@@ -187,21 +191,6 @@ class VoiceMessagePresenterTest {
             initialState.eventSink(VoiceMessageEvents.Seek(0.5f))
 
             awaitItem().also {
-                Truth.assertThat(it.button).isEqualTo(VoiceMessageState.Button.Downloading)
-                Truth.assertThat(it.progress).isEqualTo(0f)
-                Truth.assertThat(it.time).isEqualTo("0:10")
-            }
-            awaitItem().also {
-                Truth.assertThat(it.button).isEqualTo(VoiceMessageState.Button.Downloading)
-                Truth.assertThat(it.progress).isEqualTo(0f)
-                Truth.assertThat(it.time).isEqualTo("0:00")
-            }
-            awaitItem().also {
-                Truth.assertThat(it.button).isEqualTo(VoiceMessageState.Button.Downloading)
-                Truth.assertThat(it.progress).isEqualTo(0.5f)
-                Truth.assertThat(it.time).isEqualTo("0:05")
-            }
-            awaitItem().also {
                 Truth.assertThat(it.button).isEqualTo(VoiceMessageState.Button.Play)
                 Truth.assertThat(it.progress).isEqualTo(0.5f)
                 Truth.assertThat(it.time).isEqualTo("0:05")
@@ -210,45 +199,7 @@ class VoiceMessagePresenterTest {
     }
 
     @Test
-    fun `seeking downloads and fails`() = runTest {
-        val analyticsService = FakeAnalyticsService()
-        val presenter = createVoiceMessagePresenter(
-            voiceMessageMediaRepo = FakeVoiceMessageMediaRepo().apply { shouldFail = true },
-            analyticsService = analyticsService,
-            content = aTimelineItemVoiceContent(durationMs = 10_000),
-        )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
-            val initialState = awaitItem().also {
-                Truth.assertThat(it.button).isEqualTo(VoiceMessageState.Button.Play)
-                Truth.assertThat(it.progress).isEqualTo(0f)
-                Truth.assertThat(it.time).isEqualTo("0:10")
-            }
-
-            initialState.eventSink(VoiceMessageEvents.Seek(0.5f))
-
-            awaitItem().also {
-                Truth.assertThat(it.button).isEqualTo(VoiceMessageState.Button.Downloading)
-                Truth.assertThat(it.progress).isEqualTo(0f)
-                Truth.assertThat(it.time).isEqualTo("0:10")
-            }
-            awaitItem().also {
-                Truth.assertThat(it.button).isEqualTo(VoiceMessageState.Button.Retry)
-                Truth.assertThat(it.progress).isEqualTo(0f)
-                Truth.assertThat(it.time).isEqualTo("0:10")
-            }
-            analyticsService.trackedErrors.first().also {
-                Truth.assertThat(it).apply {
-                    isInstanceOf(VoiceMessageException.PlayMessageError::class.java)
-                    hasMessageThat().isEqualTo("Error while trying to seek voice message")
-                }
-            }
-        }
-    }
-
-    @Test
-    fun `seeking seeks`() = runTest {
+    fun `seeking after play`() = runTest {
         val presenter = createVoiceMessagePresenter(
             content = aTimelineItemVoiceContent(durationMs = 10_000),
         )
@@ -283,13 +234,14 @@ class VoiceMessagePresenterTest {
 }
 
 fun TestScope.createVoiceMessagePresenter(
+    mediaPlayer: FakeMediaPlayer = FakeMediaPlayer(),
     voiceMessageMediaRepo: VoiceMessageMediaRepo = FakeVoiceMessageMediaRepo(),
     analyticsService: AnalyticsService = FakeAnalyticsService(),
     content: TimelineItemVoiceContent = aTimelineItemVoiceContent(),
 ) = VoiceMessagePresenter(
     voiceMessagePlayerFactory = { eventId, mediaSource, mimeType, body ->
         DefaultVoiceMessagePlayer(
-            mediaPlayer = FakeMediaPlayer(),
+            mediaPlayer = mediaPlayer,
             voiceMessageMediaRepoFactory = { _, _, _ -> voiceMessageMediaRepo },
             eventId = eventId,
             mediaSource = mediaSource,
