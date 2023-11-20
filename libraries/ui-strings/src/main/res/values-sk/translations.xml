@@ -9,12 +9,14 @@
   <string name="a11y_play">"Prehrať"</string>
   <string name="a11y_poll">"Anketa"</string>
   <string name="a11y_poll_end">"Ukončená anketa"</string>
+  <string name="a11y_read_receipts_single">"Prečítal/a %1$s"</string>
   <string name="a11y_send_files">"Odoslať súbory"</string>
   <string name="a11y_show_password">"Zobraziť heslo"</string>
   <string name="a11y_start_call">"Začať hovor"</string>
   <string name="a11y_user_menu">"Používateľské menu"</string>
   <string name="a11y_voice_message_record">"Nahrať hlasovú správu."</string>
   <string name="a11y_voice_message_stop_recording">"Zastaviť nahrávanie"</string>
+  <string name="a11y_read_receipts_multiple">"Prečítal/a %1$s a %2$s"</string>
   <string name="action_accept">"Prijať"</string>
   <string name="action_add_to_timeline">"Pridať na časovú os"</string>
   <string name="action_back">"Späť"</string>
@@ -81,6 +83,7 @@
   <string name="action_start_verification">"Spustiť overovanie"</string>
   <string name="action_static_map_load">"Ťuknutím načítate mapu"</string>
   <string name="action_take_photo">"Urobiť fotku"</string>
+  <string name="action_tap_for_options">"Klepnutím získate možnosti"</string>
   <string name="action_try_again">"Skúste to znova"</string>
   <string name="action_view_source">"Zobraziť zdroj"</string>
   <string name="action_yes">"Áno"</string>
@@ -89,12 +92,14 @@
   <string name="common_acceptable_use_policy">"Zásady prijateľného používania"</string>
   <string name="common_advanced_settings">"Pokročilé nastavenia"</string>
   <string name="common_analytics">"Analytika"</string>
+  <string name="common_appearance">"Vzhľad"</string>
   <string name="common_audio">"Zvuk"</string>
   <string name="common_bubbles">"Bubliny"</string>
   <string name="common_chat_backup">"Záloha konverzácie"</string>
   <string name="common_copyright">"Autorské práva"</string>
   <string name="common_creating_room">"Vytváranie miestnosti…"</string>
   <string name="common_current_user_left_room">"Opustil/a miestnosť"</string>
+  <string name="common_dark">"Tmavý"</string>
   <string name="common_decryption_error">"Chyba dešifrovania"</string>
   <string name="common_developer_options">"Možnosti pre vývojárov"</string>
   <string name="common_edited_suffix">"(upravené)"</string>
@@ -113,6 +118,7 @@
   <string name="common_install_apk_android">"Inštalovať APK"</string>
   <string name="common_invite_unknown_profile">"Toto Matrix ID sa nedá nájsť, takže pozvánka nemusí byť prijatá."</string>
   <string name="common_leaving_room">"Opustenie miestnosti"</string>
+  <string name="common_light">"Svetlý"</string>
   <string name="common_link_copied_to_clipboard">"Odkaz bol skopírovaný do schránky"</string>
   <string name="common_loading">"Načítava sa…"</string>
   <string name="common_message">"Správa"</string>
@@ -146,7 +152,10 @@
   <string name="common_search_for_someone">"Vyhľadať niekoho"</string>
   <string name="common_search_results">"Výsledky hľadania"</string>
   <string name="common_security">"Bezpečnosť"</string>
+  <string name="common_seen_by">"Videné"</string>
   <string name="common_sending">"Odosiela sa…"</string>
+  <string name="common_sending_failed">"Odoslanie zlyhalo"</string>
+  <string name="common_sent">"Odoslané"</string>
   <string name="common_server_not_supported">"Server nie je podporovaný"</string>
   <string name="common_server_url">"URL adresa servera"</string>
   <string name="common_settings">"Nastavenia"</string>
@@ -157,6 +166,7 @@
   <string name="common_success">"Úspech"</string>
   <string name="common_suggestions">"Návrhy"</string>
   <string name="common_syncing">"Synchronizuje sa"</string>
+  <string name="common_system">"Systém"</string>
   <string name="common_text">"Text"</string>
   <string name="common_third_party_notices">"Oznámenia tretích strán"</string>
   <string name="common_thread">"Vlákno"</string>
@@ -197,6 +207,11 @@
     <item quantity="one">"%1$d zadaná číslica"</item>
     <item quantity="few">"%1$d zadané číslice"</item>
     <item quantity="other">"%1$d zadaných číslic"</item>
+  </plurals>
+  <plurals name="a11y_read_receipts_multiple_with_others">
+    <item quantity="one">"Prečítal/a %1$s a %2$d ďalší"</item>
+    <item quantity="few">"Prečítal/a %1$s a %2$d ďalší"</item>
+    <item quantity="other">"Prečítal/a %1$s a %2$d ďalších"</item>
   </plurals>
   <plurals name="common_member_count">
     <item quantity="one">"%1$d člen"</item>
