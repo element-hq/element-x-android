@@ -29,6 +29,8 @@ import com.bumble.appyx.navmodel.backstack.operation.push
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
+import io.element.android.features.lockscreen.api.LockScreenEntryPoint
+import io.element.android.features.logout.api.LogoutEntryPoint
 import io.element.android.features.preferences.api.PreferencesEntryPoint
 import io.element.android.features.preferences.impl.about.AboutNode
 import io.element.android.features.preferences.impl.advanced.AdvancedSettingsNode
@@ -43,6 +45,7 @@ import io.element.android.libraries.architecture.BackstackNode
 import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.di.SessionScope
+import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import kotlinx.parcelize.Parcelize
 
@@ -50,9 +53,11 @@ import kotlinx.parcelize.Parcelize
 class PreferencesFlowNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
+    private val lockScreenEntryPoint: LockScreenEntryPoint,
+    private val logoutEntryPoint: LogoutEntryPoint,
 ) : BackstackNode<PreferencesFlowNode.NavTarget>(
     backstack = BackStack(
-        initialElement = NavTarget.Root,
+        initialElement = plugins.filterIsInstance<PreferencesEntryPoint.Params>().first().initialElement.toNavTarget(),
         savedStateMap = buildContext.savedStateMap,
     ),
     buildContext = buildContext,
@@ -82,10 +87,16 @@ class PreferencesFlowNode @AssistedInject constructor(
         data object NotificationSettings : NavTarget
 
         @Parcelize
+        data object LockScreenSettings : NavTarget
+
+        @Parcelize
         data class EditDefaultNotificationSetting(val isOneToOne: Boolean) : NavTarget
 
         @Parcelize
         data class UserProfile(val matrixUser: MatrixUser) : NavTarget
+
+        @Parcelize
+        data object SignOut : NavTarget
     }
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
@@ -98,6 +109,10 @@ class PreferencesFlowNode @AssistedInject constructor(
 
                     override fun onVerifyClicked() {
                         plugins<PreferencesEntryPoint.Callback>().forEach { it.onVerifyClicked() }
+                    }
+
+                    override fun onSecureBackupClicked() {
+                        plugins<PreferencesEntryPoint.Callback>().forEach { it.onSecureBackupClicked() }
                     }
 
                     override fun onOpenAnalytics() {
@@ -116,12 +131,20 @@ class PreferencesFlowNode @AssistedInject constructor(
                         backstack.push(NavTarget.NotificationSettings)
                     }
 
+                    override fun onOpenLockScreenSettings() {
+                        backstack.push(NavTarget.LockScreenSettings)
+                    }
+
                     override fun onOpenAdvancedSettings() {
                         backstack.push(NavTarget.AdvancedSettings)
                     }
 
                     override fun onOpenUserProfile(matrixUser: MatrixUser) {
                         backstack.push(NavTarget.UserProfile(matrixUser))
+                    }
+
+                    override fun onSignOutClicked() {
+                        backstack.push(NavTarget.SignOut)
                     }
                 }
                 createNode<PreferencesRootNode>(buildContext, plugins = listOf(callback))
@@ -152,8 +175,13 @@ class PreferencesFlowNode @AssistedInject constructor(
                 createNode<NotificationSettingsNode>(buildContext, listOf(notificationSettingsCallback))
             }
             is NavTarget.EditDefaultNotificationSetting -> {
+                val callback = object : EditDefaultNotificationSettingNode.Callback {
+                    override fun openRoomNotificationSettings(roomId: RoomId) {
+                        plugins<PreferencesEntryPoint.Callback>().forEach { it.onOpenRoomNotificationSettings(roomId) }
+                    }
+                }
                 val input = EditDefaultNotificationSettingNode.Inputs(navTarget.isOneToOne)
-                createNode<EditDefaultNotificationSettingNode>(buildContext, plugins = listOf(input))
+                createNode<EditDefaultNotificationSettingNode>(buildContext, plugins = listOf(input, callback))
             }
             NavTarget.AdvancedSettings -> {
                 createNode<AdvancedSettingsNode>(buildContext)
@@ -161,6 +189,21 @@ class PreferencesFlowNode @AssistedInject constructor(
             is NavTarget.UserProfile -> {
                 val inputs = EditUserProfileNode.Inputs(navTarget.matrixUser)
                 createNode<EditUserProfileNode>(buildContext, listOf(inputs))
+            }
+            NavTarget.LockScreenSettings -> {
+                lockScreenEntryPoint.nodeBuilder(this, buildContext)
+                    .target(LockScreenEntryPoint.Target.Settings)
+                    .build()
+            }
+            NavTarget.SignOut -> {
+                val callBack: LogoutEntryPoint.Callback = object : LogoutEntryPoint.Callback {
+                    override fun onChangeRecoveryKeyClicked() {
+                        plugins<PreferencesEntryPoint.Callback>().forEach { it.onSecureBackupClicked() }
+                    }
+                }
+                logoutEntryPoint.nodeBuilder(this, buildContext)
+                    .callback(callBack)
+                    .build()
             }
         }
     }

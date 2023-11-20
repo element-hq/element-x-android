@@ -53,7 +53,7 @@ class AdvancedSettingsPresenter @Inject constructor(
         return AdvancedSettingsState(
             isRichTextEditorEnabled = isRichTextEditorEnabled,
             isDeveloperModeEnabled = isDeveloperModeEnabled,
-            eventSink = ::handleEvents
+            eventSink = { handleEvents(it) }
         )
     }
 }

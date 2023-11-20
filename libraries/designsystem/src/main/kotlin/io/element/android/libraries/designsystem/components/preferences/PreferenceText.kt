@@ -31,10 +31,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import io.element.android.libraries.designsystem.atomic.atoms.RedIndicatorAtom
 import io.element.android.libraries.designsystem.components.preferences.components.PreferenceIcon
-import io.element.android.libraries.designsystem.preview.ElementThemedPreview
+import io.element.android.libraries.designsystem.preview.ElementPreviewDark
+import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.preview.PreviewGroup
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.Text
@@ -52,15 +55,18 @@ fun PreferenceText(
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     subtitle: String? = null,
+    subtitleAnnotated: AnnotatedString? = null,
     currentValue: String? = null,
     loadingCurrentValue: Boolean = false,
     icon: ImageVector? = null,
     @DrawableRes iconResourceId: Int? = null,
     showIconAreaIfNoIcon: Boolean = false,
+    showIconBadge: Boolean = false,
+    showEndBadge: Boolean = false,
     tintColor: Color? = null,
     onClick: () -> Unit = {},
 ) {
-    val minHeight = if (subtitle == null) preferenceMinHeightOnlyTitle else preferenceMinHeight
+    val minHeight = if (subtitle == null && subtitleAnnotated == null) preferenceMinHeightOnlyTitle else preferenceMinHeight
 
     Row(
         modifier = modifier
@@ -73,6 +79,7 @@ fun PreferenceText(
         PreferenceIcon(
             icon = icon,
             iconResourceId = iconResourceId,
+            showIconBadge = showIconBadge,
             enabled = enabled,
             isVisible = showIconAreaIfNoIcon,
             tintColor = tintColor ?: enabled.toSecondaryEnabledColor(),
@@ -91,6 +98,12 @@ fun PreferenceText(
                 Text(
                     style = ElementTheme.typography.fontBodyMdRegular,
                     text = subtitle,
+                    color = tintColor ?: enabled.toSecondaryEnabledColor(),
+                )
+            } else if (subtitleAnnotated != null) {
+                Text(
+                    style = ElementTheme.typography.fontBodyMdRegular,
+                    text = subtitleAnnotated,
                     color = tintColor ?: enabled.toSecondaryEnabledColor(),
                 )
             }
@@ -114,32 +127,63 @@ fun PreferenceText(
                 strokeWidth = 2.dp
             )
         }
+        if (showEndBadge) {
+            val endBadgeStartPadding = if (currentValue != null || loadingCurrentValue) 8.dp else 16.dp
+            RedIndicatorAtom(
+                modifier = Modifier
+                    .align(Alignment.CenterVertically)
+                    .padding(start = endBadgeStartPadding)
+            )
+        }
     }
 }
 
 @Preview(group = PreviewGroup.Preferences)
 @Composable
-internal fun PreferenceTextPreview() = ElementThemedPreview { ContentToPreview() }
+internal fun PreferenceTextLightPreview() = ElementPreviewLight {
+    ContentToPreview(showEndBadge = false)
+}
+
+@Preview(group = PreviewGroup.Preferences)
+@Composable
+internal fun PreferenceTextDarkPreview() = ElementPreviewDark {
+    ContentToPreview(showEndBadge = false)
+}
+
+@Preview(group = PreviewGroup.Preferences)
+@Composable
+internal fun PreferenceTextWithEndBadgeLightPreview() = ElementPreviewLight {
+    ContentToPreview(showEndBadge = true)
+}
+
+@Preview(group = PreviewGroup.Preferences)
+@Composable
+internal fun PreferenceTextWithEndBadgeDarkPreview() = ElementPreviewDark {
+    ContentToPreview(showEndBadge = true)
+}
 
 @Composable
-private fun ContentToPreview() {
+private fun ContentToPreview(showEndBadge: Boolean) {
     Column(
         verticalArrangement = Arrangement.spacedBy(2.dp)
     ) {
         PreferenceText(
             title = "Title",
             iconResourceId = CommonDrawables.ic_compound_chat_problem,
+            showEndBadge = showEndBadge,
         )
         PreferenceText(
             title = "Title",
             subtitle = "Some content",
             iconResourceId = CommonDrawables.ic_compound_chat_problem,
+            showEndBadge = showEndBadge,
         )
         PreferenceText(
             title = "Title",
             subtitle = "Some content",
             iconResourceId = CommonDrawables.ic_compound_chat_problem,
             currentValue = "123",
+            showEndBadge = showEndBadge,
         )
         PreferenceText(
             title = "Title",
@@ -147,31 +191,37 @@ private fun ContentToPreview() {
             iconResourceId = CommonDrawables.ic_compound_chat_problem,
             currentValue = "123",
             enabled = false,
+            showEndBadge = showEndBadge,
         )
         PreferenceText(
             title = "Title",
             subtitle = "Some content",
             iconResourceId = CommonDrawables.ic_compound_chat_problem,
             loadingCurrentValue = true,
+            showEndBadge = showEndBadge,
         )
         PreferenceText(
             title = "Title",
             iconResourceId = CommonDrawables.ic_compound_chat_problem,
             currentValue = "123",
+            showEndBadge = showEndBadge,
         )
         PreferenceText(
             title = "Title",
             iconResourceId = CommonDrawables.ic_compound_chat_problem,
             loadingCurrentValue = true,
+            showEndBadge = showEndBadge,
         )
         PreferenceText(
             title = "Title no icon with icon area",
             showIconAreaIfNoIcon = true,
             loadingCurrentValue = true,
+            showEndBadge = showEndBadge,
         )
         PreferenceText(
             title = "Title no icon",
             loadingCurrentValue = true,
+            showEndBadge = showEndBadge,
         )
     }
 }

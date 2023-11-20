@@ -27,6 +27,7 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.createroom.CreateRoomParameters
 import io.element.android.libraries.matrix.api.createroom.RoomPreset
 import io.element.android.libraries.matrix.api.createroom.RoomVisibility
+import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import io.element.android.libraries.matrix.api.media.MatrixMediaLoader
 import io.element.android.libraries.matrix.api.notification.NotificationService
 import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsService
@@ -41,13 +42,16 @@ import io.element.android.libraries.matrix.api.user.MatrixSearchUserResults
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import io.element.android.libraries.matrix.impl.core.toProgressWatcher
+import io.element.android.libraries.matrix.impl.encryption.RustEncryptionService
 import io.element.android.libraries.matrix.impl.mapper.toSessionData
 import io.element.android.libraries.matrix.impl.media.RustMediaLoader
 import io.element.android.libraries.matrix.impl.notification.RustNotificationService
 import io.element.android.libraries.matrix.impl.notificationsettings.RustNotificationSettingsService
 import io.element.android.libraries.matrix.impl.oidc.toRustAction
 import io.element.android.libraries.matrix.impl.pushers.RustPushersService
+import io.element.android.libraries.matrix.impl.room.MatrixRoomInfoMapper
 import io.element.android.libraries.matrix.impl.room.RoomContentForwarder
+import io.element.android.libraries.matrix.impl.room.RoomSyncSubscriber
 import io.element.android.libraries.matrix.impl.room.RustMatrixRoom
 import io.element.android.libraries.matrix.impl.roomlist.RoomListFactory
 import io.element.android.libraries.matrix.impl.roomlist.RustRoomListService
@@ -55,6 +59,7 @@ import io.element.android.libraries.matrix.impl.roomlist.roomOrNull
 import io.element.android.libraries.matrix.impl.sync.RustSyncService
 import io.element.android.libraries.matrix.impl.usersearch.UserProfileMapper
 import io.element.android.libraries.matrix.impl.usersearch.UserSearchResultMapper
+import io.element.android.libraries.matrix.impl.util.cancelAndDestroy
 import io.element.android.libraries.matrix.impl.verification.RustSessionVerificationService
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import io.element.android.services.toolbox.api.systemclock.SystemClock
@@ -68,11 +73,13 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeout
+import org.matrix.rustcomponents.sdk.BackupState
 import org.matrix.rustcomponents.sdk.Client
 import org.matrix.rustcomponents.sdk.ClientDelegate
 import org.matrix.rustcomponents.sdk.NotificationProcessSetup
 import org.matrix.rustcomponents.sdk.Room
 import org.matrix.rustcomponents.sdk.RoomListItem
+import org.matrix.rustcomponents.sdk.TaskHandle
 import org.matrix.rustcomponents.sdk.use
 import timber.log.Timber
 import java.io.File
@@ -98,8 +105,8 @@ class RustMatrixClient constructor(
     private val innerRoomListService = syncService.roomListService()
     private val sessionDispatcher = dispatchers.io.limitedParallelism(64)
     private val sessionCoroutineScope = appCoroutineScope.childScope(dispatchers.main, "Session-${sessionId}")
-    private val rustSyncService = RustSyncService(syncService, dispatchers, sessionCoroutineScope)
-    private val verificationService = RustSessionVerificationService(rustSyncService, dispatchers)
+    private val rustSyncService = RustSyncService(syncService, sessionCoroutineScope)
+    private val verificationService = RustSessionVerificationService(rustSyncService, sessionCoroutineScope)
     private val pushersService = RustPushersService(
         client = client,
         dispatchers = dispatchers,
@@ -115,6 +122,13 @@ class RustMatrixClient constructor(
 
     private val notificationService = RustNotificationService(sessionId, notificationClient, dispatchers, clock)
     private val notificationSettingsService = RustNotificationSettingsService(notificationSettings, dispatchers)
+    private val roomSyncSubscriber = RoomSyncSubscriber(innerRoomListService, dispatchers)
+    private val encryptionService = RustEncryptionService(
+        client = client,
+        syncService = rustSyncService,
+        sessionCoroutineScope = sessionCoroutineScope,
+        dispatchers = dispatchers,
+    ).apply { start() }
 
     private val isLoggingOut = AtomicBoolean(false)
 
@@ -125,7 +139,16 @@ class RustMatrixClient constructor(
                 Timber.v("didReceiveAuthError -> do the cleanup")
                 //TODO handle isSoftLogout parameter.
                 appCoroutineScope.launch {
-                    doLogout(doRequest = false)
+                    val existingData = sessionStore.getSession(client.userId())
+                    if (existingData != null) {
+                        // Set isTokenValid to false
+                        val newData = client.session().toSessionData(
+                            isTokenValid = false,
+                            loginType = existingData.loginType,
+                        )
+                        sessionStore.updateData(newData)
+                    }
+                    doLogout(doRequest = false, removeSession = false, ignoreSdkError = false)
                 }
             } else {
                 Timber.v("didReceiveAuthError -> already cleaning up")
@@ -135,7 +158,12 @@ class RustMatrixClient constructor(
         override fun didRefreshTokens() {
             Timber.w("didRefreshTokens()")
             appCoroutineScope.launch {
-                sessionStore.updateData(client.session().toSessionData())
+                val existingData = sessionStore.getSession(client.userId()) ?: return@launch
+                val newData = client.session().toSessionData(
+                    isTokenValid = existingData.isTokenValid,
+                    loginType = existingData.loginType,
+                )
+                sessionStore.updateData(newData)
             }
         }
     }
@@ -162,8 +190,9 @@ class RustMatrixClient constructor(
 
     private val roomContentForwarder = RoomContentForwarder(innerRoomListService)
 
+    private val clientDelegateTaskHandle: TaskHandle? = client.setDelegate(clientDelegate)
+
     init {
-        client.setDelegate(clientDelegate)
         roomListService.state.onEach { state ->
             if (state == RoomListService.State.Running) {
                 setupVerificationControllerIfNeeded()
@@ -182,6 +211,7 @@ class RustMatrixClient constructor(
         cachedPairOfRoom?.let { (roomListItem, fullRoom) ->
             RustMatrixRoom(
                 sessionId = sessionId,
+                isKeyBackupEnabled = client.encryption().backupState() == BackupState.ENABLED,
                 roomListItem = roomListItem,
                 innerRoom = fullRoom,
                 roomNotificationSettingsService = notificationSettingsService,
@@ -190,12 +220,15 @@ class RustMatrixClient constructor(
                 systemClock = clock,
                 roomContentForwarder = roomContentForwarder,
                 sessionData = sessionStore.getSession(sessionId.value)!!,
+                roomSyncSubscriber = roomSyncSubscriber,
+                matrixRoomInfoMapper = MatrixRoomInfoMapper(),
             )
         }
     }
 
     private fun pairOfRoom(roomId: RoomId): Pair<RoomListItem, Room>? {
         val cachedRoomListItem = innerRoomListService.roomOrNull(roomId.value)
+        // Keep using fullRoomBlocking for now as it's faster.
         val fullRoom = cachedRoomListItem?.fullRoomBlocking()
         return if (cachedRoomListItem == null || fullRoom == null) {
             Timber.d("No room cached for $roomId")
@@ -286,10 +319,9 @@ class RustMatrixClient constructor(
             runCatching { client.setDisplayName(displayName) }
         }
 
-    @OptIn(ExperimentalUnsignedTypes::class)
     override suspend fun uploadAvatar(mimeType: String, data: ByteArray): Result<Unit> =
         withContext(sessionDispatcher) {
-            runCatching { client.uploadAvatar(mimeType, data.toUByteArray().toList()) }
+            runCatching { client.uploadAvatar(mimeType, data) }
         }
 
     override suspend fun removeAvatar(): Result<Unit> =
@@ -305,11 +337,13 @@ class RustMatrixClient constructor(
 
     override fun notificationService(): NotificationService = notificationService
 
+    override fun encryptionService(): EncryptionService = encryptionService
+
     override fun notificationSettingsService(): NotificationSettingsService = notificationSettingsService
 
     override fun close() {
         sessionCoroutineScope.cancel()
-        client.setDelegate(null)
+        clientDelegateTaskHandle?.cancelAndDestroy()
         notificationSettings.setDelegate(null)
         notificationSettings.destroy()
         verificationService.destroy()
@@ -317,6 +351,7 @@ class RustMatrixClient constructor(
         innerRoomListService.destroy()
         notificationClient.destroy()
         notificationProcessSetup.destroy()
+        encryptionService.destroy()
         client.destroy()
     }
 
@@ -330,21 +365,36 @@ class RustMatrixClient constructor(
         baseDirectory.deleteSessionDirectory(userID = sessionId.value, deleteCryptoDb = false)
     }
 
-    override suspend fun logout(): String? = doLogout(doRequest = true)
+    override suspend fun logout(ignoreSdkError: Boolean): String? = doLogout(
+        doRequest = true,
+        removeSession = true,
+        ignoreSdkError = ignoreSdkError,
+    )
 
-    private suspend fun doLogout(doRequest: Boolean): String? {
+    private suspend fun doLogout(
+        doRequest: Boolean,
+        removeSession: Boolean,
+        ignoreSdkError: Boolean,
+    ): String? {
         var result: String? = null
         withContext(sessionDispatcher) {
             if (doRequest) {
                 try {
                     result = client.logout()
                 } catch (failure: Throwable) {
-                    Timber.e(failure, "Fail to call logout on HS. Still delete local files.")
+                    if (ignoreSdkError) {
+                        Timber.e(failure, "Fail to call logout on HS. Still delete local files.")
+                    } else {
+                        Timber.e(failure, "Fail to call logout on HS.")
+                        throw failure
+                    }
                 }
             }
             close()
             baseDirectory.deleteSessionDirectory(userID = sessionId.value, deleteCryptoDb = true)
-            sessionStore.removeSession(sessionId.value)
+            if (removeSession) {
+                sessionStore.removeSession(sessionId.value)
+            }
         }
         return result
     }
@@ -368,10 +418,9 @@ class RustMatrixClient constructor(
         }
     }
 
-    @OptIn(ExperimentalUnsignedTypes::class)
     override suspend fun uploadMedia(mimeType: String, data: ByteArray, progressCallback: ProgressCallback?): Result<String> = withContext(sessionDispatcher) {
         runCatching {
-            client.uploadMedia(mimeType, data.toUByteArray().toList(), progressCallback?.toProgressWatcher())
+            client.uploadMedia(mimeType, data, progressCallback?.toProgressWatcher())
         }
     }
 

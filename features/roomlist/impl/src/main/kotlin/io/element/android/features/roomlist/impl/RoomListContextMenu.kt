@@ -18,20 +18,18 @@ package io.element.android.features.roomlist.impl
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.size
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
-import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.components.list.ListItemContent
 import io.element.android.libraries.designsystem.preview.ElementPreview
-import io.element.android.libraries.designsystem.theme.components.Icon
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.theme.components.IconSource
+import io.element.android.libraries.designsystem.theme.components.ListItem
+import io.element.android.libraries.designsystem.theme.components.ListItemStyle
 import io.element.android.libraries.designsystem.theme.components.ModalBottomSheet
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.utils.CommonDrawables
@@ -88,34 +86,25 @@ private fun RoomListModalBottomSheetContent(
                 )
             },
             modifier = Modifier.clickable { onRoomSettingsClicked(contextMenu.roomId) },
-            leadingContent = {
-                Icon(
-                    resourceId = CommonDrawables.ic_compound_settings,
-                    contentDescription = stringResource(id = CommonStrings.common_settings),
-                    modifier = Modifier.size(20.dp),
-                    tint = MaterialTheme.colorScheme.onSurface,
+            leadingContent = ListItemContent.Icon(
+                iconSource = IconSource.Resource(
+                    CommonDrawables.ic_compound_settings,
+                    contentDescription = stringResource(id = CommonStrings.common_settings)
                 )
-            }
+            ),
+            style = ListItemStyle.Primary,
         )
         ListItem(
-            headlineContent = {
-                Text(
-                    text = stringResource(id = CommonStrings.action_leave_room),
-                    color = MaterialTheme.colorScheme.error,
-                    style = MaterialTheme.typography.bodyLarge,
-                )
-            },
+            headlineContent = { Text(text = stringResource(id = CommonStrings.action_leave_room)) },
             modifier = Modifier.clickable { onLeaveRoomClicked(contextMenu.roomId) },
-            leadingContent = {
-                Icon(
-                    resourceId = CommonDrawables.ic_compound_leave,
-                    contentDescription = stringResource(id = CommonStrings.action_leave_room),
-                    modifier = Modifier.size(20.dp),
-                    tint = MaterialTheme.colorScheme.error,
+            leadingContent = ListItemContent.Icon(
+                iconSource = IconSource.Resource(
+                    CommonDrawables.ic_compound_leave,
+                    contentDescription = stringResource(id = CommonStrings.action_leave_room)
                 )
-            }
+            ),
+            style = ListItemStyle.Destructive,
         )
-        Spacer(modifier = Modifier.height(32.dp))
     }
 }
 

@@ -37,6 +37,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.LocationMessa
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageContent
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.NoticeMessageType
+import io.element.android.libraries.matrix.api.timeline.item.event.OtherMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.PollContent
 import io.element.android.libraries.matrix.api.timeline.item.event.ProfileChangeContent
 import io.element.android.libraries.matrix.api.timeline.item.event.ProfileTimelineDetails
@@ -49,6 +50,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.UnableToDecry
 import io.element.android.libraries.matrix.api.timeline.item.event.UnknownContent
 import io.element.android.libraries.matrix.api.timeline.item.event.UnknownMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.VideoMessageType
+import io.element.android.libraries.matrix.api.timeline.item.event.VoiceMessageType
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.services.toolbox.api.strings.StringProvider
 import javax.inject.Inject
@@ -79,7 +81,7 @@ class DefaultRoomLastMessageFormatter @Inject constructor(
                 content.body
             }
             is UnableToDecryptContent -> {
-                val message = sp.getString(CommonStrings.common_decryption_error)
+                val message = sp.getString(CommonStrings.common_waiting_for_decryption_key)
                 if (!isDmRoom) {
                     prefix(message, senderDisplayName)
                 } else {
@@ -106,12 +108,10 @@ class DefaultRoomLastMessageFormatter @Inject constructor(
     }
 
     private fun processMessageContents(messageContent: MessageContent, senderDisplayName: String, isDmRoom: Boolean): CharSequence? {
-        val messageType: MessageType = messageContent.type ?: return null
-
-        val internalMessage = when (messageType) {
+        val internalMessage = when (val messageType: MessageType = messageContent.type) {
             // Doesn't need a prefix
             is EmoteMessageType -> {
-                return "- $senderDisplayName ${messageType.body}"
+                return "* $senderDisplayName ${messageType.body}"
             }
             is TextMessageType -> {
                 messageType.body
@@ -131,8 +131,16 @@ class DefaultRoomLastMessageFormatter @Inject constructor(
             is AudioMessageType -> {
                 sp.getString(CommonStrings.common_audio)
             }
+            is VoiceMessageType -> {
+                sp.getString(CommonStrings.common_voice_message)
+            }
+            is OtherMessageType -> {
+                messageType.body
+            }
             UnknownMessageType -> {
-                sp.getString(CommonStrings.common_unsupported_event)
+                // Display the body as a fallback, but should not happen anymore
+                // (we have `OtherMessageType` now)
+                messageContent.body
             }
             is NoticeMessageType -> {
                 messageType.body

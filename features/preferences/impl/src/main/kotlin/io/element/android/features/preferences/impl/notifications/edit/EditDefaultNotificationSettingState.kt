@@ -16,10 +16,14 @@
 
 package io.element.android.features.preferences.impl.notifications.edit
 
+import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
+import io.element.android.libraries.matrix.api.roomlist.RoomSummary
 
 data class EditDefaultNotificationSettingState(
     val isOneToOne: Boolean,
     val mode: RoomNotificationMode?,
+    val roomsWithUserDefinedMode: List<RoomSummary.Filled>,
+    val changeNotificationSettingAction: Async<Unit>,
     val eventSink: (EditDefaultNotificationSettingStateEvents) -> Unit,
 )

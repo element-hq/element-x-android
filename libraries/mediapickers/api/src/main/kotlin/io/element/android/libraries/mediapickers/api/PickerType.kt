@@ -20,8 +20,10 @@ import android.net.Uri
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.runtime.Immutable
 import io.element.android.libraries.core.mimetype.MimeTypes
 
+@Immutable
 sealed interface PickerType<Input, Output> {
     fun getContract(): ActivityResultContract<Input, Output>
     fun getDefaultRequest(): Input

@@ -16,7 +16,6 @@
 
 package io.element.android.libraries.matrix.impl.verification
 
-import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.data.tryOrNull
 import io.element.android.libraries.matrix.api.sync.SyncState
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
@@ -24,20 +23,20 @@ import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatu
 import io.element.android.libraries.matrix.api.verification.VerificationEmoji
 import io.element.android.libraries.matrix.api.verification.VerificationFlowState
 import io.element.android.libraries.matrix.impl.sync.RustSyncService
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.launch
 import org.matrix.rustcomponents.sdk.SessionVerificationController
 import org.matrix.rustcomponents.sdk.SessionVerificationControllerDelegate
 import org.matrix.rustcomponents.sdk.SessionVerificationControllerInterface
 import org.matrix.rustcomponents.sdk.SessionVerificationEmoji
-import javax.inject.Inject
 
-class RustSessionVerificationService @Inject constructor(
+class RustSessionVerificationService(
     private val syncService: RustSyncService,
-    private val dispatchers: CoroutineDispatchers,
+    private val sessionCoroutineScope: CoroutineScope,
 ) : SessionVerificationService, SessionVerificationControllerDelegate {
 
     var verificationController: SessionVerificationControllerInterface? = null
@@ -47,7 +46,7 @@ class RustSessionVerificationService @Inject constructor(
             // If status was 'Unknown', move it to either 'Verified' or 'NotVerified'
             if (value != null) {
                 value.setDelegate(this)
-                updateVerificationStatus(value.isVerified())
+                sessionCoroutineScope.launch { updateVerificationStatus(value.isVerified()) }
             }
         }
 
@@ -64,31 +63,21 @@ class RustSessionVerificationService @Inject constructor(
         syncState == SyncState.Running && verificationStatus == SessionVerifiedStatus.NotVerified
     }
 
-    override suspend fun requestVerification() {
-        tryOrFail {
-            verificationController?.requestVerificationBlocking()
-        }
+    override suspend fun requestVerification() = tryOrFail {
+        verificationController?.requestVerification()
     }
 
-    override suspend fun cancelVerification() {
-        tryOrFail { verificationController?.cancelVerificationBlocking() }
+    override suspend fun cancelVerification() = tryOrFail { verificationController?.cancelVerification() }
+
+    override suspend fun approveVerification() = tryOrFail { verificationController?.approveVerification() }
+
+    override suspend fun declineVerification() = tryOrFail { verificationController?.declineVerification() }
+
+    override suspend fun startVerification() = tryOrFail {
+        verificationController?.startSasVerification()
     }
 
-    override suspend fun approveVerification() {
-        tryOrFail { verificationController?.approveVerificationBlocking() }
-    }
-
-    override suspend fun declineVerification() {
-        tryOrFail { verificationController?.declineVerificationBlocking() }
-    }
-
-    override suspend fun startVerification() {
-        tryOrFail {
-            verificationController?.startSasVerificationBlocking()
-        }
-    }
-
-    private suspend fun tryOrFail(block: suspend () -> Unit) = withContext(dispatchers.io) {
+    private suspend fun tryOrFail(block: suspend () -> Unit) {
         runCatching {
             block()
         }.onFailure { didFail() }

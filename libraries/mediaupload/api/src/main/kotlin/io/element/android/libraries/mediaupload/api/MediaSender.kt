@@ -50,16 +50,43 @@ class MediaSender @Inject constructor(
             .flatMapCatching { info ->
                 room.sendMedia(info, progressCallback)
             }
-            .onFailure { error ->
-                val job = ongoingUploadJobs.remove(Job)
-                if (error !is CancellationException) {
-                    job?.cancel()
-                }
-            }
-            .onSuccess {
-                ongoingUploadJobs.remove(Job)
-            }
+            .handleSendResult()
     }
+    suspend fun sendVoiceMessage(
+        uri: Uri,
+        mimeType: String,
+        waveForm: List<Float>,
+        progressCallback: ProgressCallback? = null
+    ): Result<Unit> {
+        return preProcessor
+            .process(
+                uri = uri,
+                mimeType = mimeType,
+                deleteOriginal = true,
+                compressIfPossible = false
+            )
+            .flatMapCatching { info ->
+                val audioInfo = (info as MediaUploadInfo.Audio).audioInfo
+                val newInfo = MediaUploadInfo.VoiceMessage(
+                    file = info.file,
+                    audioInfo = audioInfo,
+                    waveform = waveForm,
+                )
+                room.sendMedia(newInfo, progressCallback)
+            }
+            .handleSendResult()
+    }
+
+    private fun Result<Unit>.handleSendResult() = this
+        .onFailure { error ->
+            val job = ongoingUploadJobs.remove(Job)
+            if (error !is CancellationException) {
+                job?.cancel()
+            }
+        }
+        .onSuccess {
+            ongoingUploadJobs.remove(Job)
+        }
 
     private suspend fun MatrixRoom.sendMedia(
         uploadInfo: MediaUploadInfo,
@@ -90,7 +117,14 @@ class MediaSender @Inject constructor(
                     progressCallback = progressCallback
                 )
             }
-
+            is MediaUploadInfo.VoiceMessage -> {
+                sendVoiceMessage(
+                    file = uploadInfo.file,
+                    audioInfo = uploadInfo.audioInfo,
+                    waveform = uploadInfo.waveform,
+                    progressCallback = progressCallback
+                )
+            }
             is MediaUploadInfo.AnyFile -> {
                 sendFile(
                     file = uploadInfo.file,

@@ -18,12 +18,13 @@ package io.element.android.features.poll.impl.create
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.matrix.api.poll.PollKind
+import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.persistentListOf
 
 class CreatePollStateProvider : PreviewParameterProvider<CreatePollState> {
     override val values: Sequence<CreatePollState>
         get() = sequenceOf(
-            CreatePollState(
+            aCreatePollState(
                 canCreate = false,
                 canAddAnswer = true,
                 question = "",
@@ -34,7 +35,7 @@ class CreatePollStateProvider : PreviewParameterProvider<CreatePollState> {
                 pollKind = PollKind.Disclosed,
                 showConfirmation = false,
             ),
-            CreatePollState(
+            aCreatePollState(
                 canCreate = true,
                 canAddAnswer = true,
                 question = "What type of food should we have?",
@@ -45,7 +46,7 @@ class CreatePollStateProvider : PreviewParameterProvider<CreatePollState> {
                 showConfirmation = false,
                 pollKind = PollKind.Undisclosed,
             ),
-            CreatePollState(
+            aCreatePollState(
                 canCreate = true,
                 canAddAnswer = true,
                 question = "What type of food should we have?",
@@ -56,7 +57,7 @@ class CreatePollStateProvider : PreviewParameterProvider<CreatePollState> {
                 showConfirmation = true,
                 pollKind = PollKind.Undisclosed,
             ),
-            CreatePollState(
+            aCreatePollState(
                 canCreate = true,
                 canAddAnswer = true,
                 question = "What type of food should we have?",
@@ -69,7 +70,7 @@ class CreatePollStateProvider : PreviewParameterProvider<CreatePollState> {
                 showConfirmation = false,
                 pollKind = PollKind.Undisclosed,
             ),
-            CreatePollState(
+            aCreatePollState(
                 canCreate = true,
                 canAddAnswer = false,
                 question = "Should there be more than 20 answers?",
@@ -98,7 +99,7 @@ class CreatePollStateProvider : PreviewParameterProvider<CreatePollState> {
                 showConfirmation = false,
                 pollKind = PollKind.Undisclosed,
             ),
-            CreatePollState(
+            aCreatePollState(
                 canCreate = true,
                 canAddAnswer = true,
                 question = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua." +
@@ -121,4 +122,23 @@ class CreatePollStateProvider : PreviewParameterProvider<CreatePollState> {
                 pollKind = PollKind.Undisclosed,
             )
         )
+}
+
+private fun aCreatePollState(
+    canCreate: Boolean,
+    canAddAnswer: Boolean,
+    question: String,
+    answers: PersistentList<Answer>,
+    showConfirmation: Boolean,
+    pollKind: PollKind
+): CreatePollState {
+    return CreatePollState(
+        canCreate = canCreate,
+        canAddAnswer = canAddAnswer,
+        question = question,
+        answers = answers,
+        showConfirmation = showConfirmation,
+        pollKind = pollKind,
+        eventSink = {}
+    )
 }

@@ -22,32 +22,32 @@ import io.element.android.libraries.matrix.api.core.RoomId
 class LeaveRoomStateProvider : PreviewParameterProvider<LeaveRoomState> {
     override val values: Sequence<LeaveRoomState>
         get() = sequenceOf(
-            LeaveRoomState(
+            aLeaveRoomState(
                 confirmation = LeaveRoomState.Confirmation.Hidden,
                 progress = LeaveRoomState.Progress.Hidden,
                 error = LeaveRoomState.Error.Hidden,
             ),
-            LeaveRoomState(
+            aLeaveRoomState(
                 confirmation = LeaveRoomState.Confirmation.Generic(A_ROOM_ID),
                 progress = LeaveRoomState.Progress.Hidden,
                 error = LeaveRoomState.Error.Hidden,
             ),
-            LeaveRoomState(
+            aLeaveRoomState(
                 confirmation = LeaveRoomState.Confirmation.PrivateRoom(A_ROOM_ID),
                 progress = LeaveRoomState.Progress.Hidden,
                 error = LeaveRoomState.Error.Hidden,
             ),
-            LeaveRoomState(
+            aLeaveRoomState(
                 confirmation = LeaveRoomState.Confirmation.LastUserInRoom(A_ROOM_ID),
                 progress = LeaveRoomState.Progress.Hidden,
                 error = LeaveRoomState.Error.Hidden,
             ),
-            LeaveRoomState(
+            aLeaveRoomState(
                 confirmation = LeaveRoomState.Confirmation.Hidden,
                 progress = LeaveRoomState.Progress.Shown,
                 error = LeaveRoomState.Error.Hidden,
             ),
-            LeaveRoomState(
+            aLeaveRoomState(
                 confirmation = LeaveRoomState.Confirmation.Hidden,
                 progress = LeaveRoomState.Progress.Hidden,
                 error = LeaveRoomState.Error.Shown,
@@ -56,3 +56,14 @@ class LeaveRoomStateProvider : PreviewParameterProvider<LeaveRoomState> {
 }
 
 private val A_ROOM_ID = RoomId("!aRoomId:aDomain")
+
+fun aLeaveRoomState(
+    confirmation: LeaveRoomState.Confirmation = LeaveRoomState.Confirmation.Hidden,
+    progress: LeaveRoomState.Progress = LeaveRoomState.Progress.Hidden,
+    error: LeaveRoomState.Error = LeaveRoomState.Error.Hidden,
+) = LeaveRoomState(
+    confirmation = confirmation,
+    progress = progress,
+    error = error,
+    eventSink = {},
+)

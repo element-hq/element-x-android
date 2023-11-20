@@ -27,9 +27,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.airbnb.android.showkase.annotation.ShowkaseComposable
 import io.element.android.libraries.designsystem.components.list.TextFieldListItem
-import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.DialogPreview
 import io.element.android.libraries.designsystem.theme.components.ListSupportingText
 import io.element.android.libraries.designsystem.theme.components.SimpleAlertDialogContent
@@ -38,13 +38,14 @@ import io.element.android.libraries.ui.strings.CommonStrings
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ListDialog(
-    onDismissRequest: () -> Unit,
     onSubmit: () -> Unit,
+    onDismissRequest: () -> Unit,
     modifier: Modifier = Modifier,
     title: String? = null,
     subtitle: String? = null,
     cancelText: String = stringResource(CommonStrings.action_cancel),
     submitText: String = stringResource(CommonStrings.action_ok),
+    enabled: Boolean = true,
     listItems: LazyListScope.() -> Unit,
 ) {
     val decoratedSubtitle: @Composable (() -> Unit)? = subtitle?.let {
@@ -66,13 +67,14 @@ fun ListDialog(
             submitText = submitText,
             onDismissRequest = onDismissRequest,
             onSubmitClicked = onSubmit,
+            enabled = enabled,
             listItems = listItems,
         )
     }
 }
 
 @Composable
-internal fun ListDialogContent(
+private fun ListDialogContent(
     listItems: LazyListScope.() -> Unit,
     onDismissRequest: () -> Unit,
     onSubmitClicked: () -> Unit,
@@ -80,6 +82,7 @@ internal fun ListDialogContent(
     submitText: String,
     modifier: Modifier = Modifier,
     title: String? = null,
+    enabled: Boolean = true,
     subtitle: @Composable (() -> Unit)? = null,
 ) {
     SimpleAlertDialogContent(
@@ -90,6 +93,7 @@ internal fun ListDialogContent(
         submitText = submitText,
         onCancelClicked = onDismissRequest,
         onSubmitClicked = onSubmitClicked,
+        enabled = enabled,
         applyPaddingToContents = false,
     ) {
         LazyColumn(

@@ -76,7 +76,7 @@ internal fun RoomList.entriesFlow(
             }
         }
         val result = entriesWithDynamicAdapters(pageSize.toUInt(), listener)
-            val controller = result.controller
+        val controller = result.controller
         controller.setFilter(initialFilterKind)
         roomListDynamicEvents.onEach { controllerEvents ->
             when (controllerEvents) {

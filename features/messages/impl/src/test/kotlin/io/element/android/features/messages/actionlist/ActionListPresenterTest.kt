@@ -31,6 +31,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemPollContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemStateEventContent
+import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemVoiceContent
 import io.element.android.libraries.featureflag.test.InMemoryPreferencesStore
 import io.element.android.libraries.matrix.test.A_MESSAGE
 import io.element.android.tests.testutils.WarmUpRule
@@ -46,7 +47,7 @@ class ActionListPresenterTest {
 
     @Test
     fun `present - initial state`() = runTest {
-        val presenter = anActionListPresenter(isDeveloperModeEnabled = true)
+        val presenter = createActionListPresenter(isDeveloperModeEnabled = true)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -57,7 +58,7 @@ class ActionListPresenterTest {
 
     @Test
     fun `present - compute for message from me redacted`() = runTest {
-        val presenter = anActionListPresenter(isDeveloperModeEnabled = true)
+        val presenter = createActionListPresenter(isDeveloperModeEnabled = true)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -82,7 +83,7 @@ class ActionListPresenterTest {
 
     @Test
     fun `present - compute for message from others redacted`() = runTest {
-        val presenter = anActionListPresenter(isDeveloperModeEnabled = true)
+        val presenter = createActionListPresenter(isDeveloperModeEnabled = true)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -107,7 +108,7 @@ class ActionListPresenterTest {
 
     @Test
     fun `present - compute for others message`() = runTest {
-        val presenter = anActionListPresenter(isDeveloperModeEnabled = true)
+        val presenter = createActionListPresenter(isDeveloperModeEnabled = true)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -139,7 +140,7 @@ class ActionListPresenterTest {
 
     @Test
     fun `present - compute for others message cannot sent message`() = runTest {
-        val presenter = anActionListPresenter(isDeveloperModeEnabled = true)
+        val presenter = createActionListPresenter(isDeveloperModeEnabled = true)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -170,7 +171,7 @@ class ActionListPresenterTest {
 
     @Test
     fun `present - compute for others message and can redact`() = runTest {
-        val presenter = anActionListPresenter(isDeveloperModeEnabled = true)
+        val presenter = createActionListPresenter(isDeveloperModeEnabled = true)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -201,7 +202,7 @@ class ActionListPresenterTest {
 
     @Test
     fun `present - compute for my message`() = runTest {
-        val presenter = anActionListPresenter(isDeveloperModeEnabled = true)
+        val presenter = createActionListPresenter(isDeveloperModeEnabled = true)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -234,7 +235,7 @@ class ActionListPresenterTest {
 
     @Test
     fun `present - compute for a media item`() = runTest {
-        val presenter = anActionListPresenter(isDeveloperModeEnabled = true)
+        val presenter = createActionListPresenter(isDeveloperModeEnabled = true)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -265,7 +266,7 @@ class ActionListPresenterTest {
 
     @Test
     fun `present - compute for a state item in debug build`() = runTest {
-        val presenter = anActionListPresenter(isDeveloperModeEnabled = true)
+        val presenter = createActionListPresenter(isDeveloperModeEnabled = true)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -294,7 +295,7 @@ class ActionListPresenterTest {
 
     @Test
     fun `present - compute for a state item in non-debuggable build`() = runTest {
-        val presenter = anActionListPresenter(isDeveloperModeEnabled = false)
+        val presenter = createActionListPresenter(isDeveloperModeEnabled = false)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -322,7 +323,7 @@ class ActionListPresenterTest {
 
     @Test
     fun `present - compute message in non-debuggable build`() = runTest {
-        val presenter = anActionListPresenter(isDeveloperModeEnabled = false)
+        val presenter = createActionListPresenter(isDeveloperModeEnabled = false)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -354,7 +355,7 @@ class ActionListPresenterTest {
 
     @Test
     fun `present - compute message with no actions`() = runTest {
-        val presenter = anActionListPresenter(isDeveloperModeEnabled = false)
+        val presenter = createActionListPresenter(isDeveloperModeEnabled = false)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -381,7 +382,7 @@ class ActionListPresenterTest {
 
     @Test
     fun `present - compute not sent message`() = runTest {
-        val presenter = anActionListPresenter(isDeveloperModeEnabled = false)
+        val presenter = createActionListPresenter(isDeveloperModeEnabled = false)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -410,7 +411,7 @@ class ActionListPresenterTest {
 
     @Test
     fun `present - compute for poll message`() = runTest {
-        val presenter = anActionListPresenter(isDeveloperModeEnabled = false)
+        val presenter = createActionListPresenter(isDeveloperModeEnabled = false)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -436,7 +437,7 @@ class ActionListPresenterTest {
 
     @Test
     fun `present - compute for ended poll message`() = runTest {
-        val presenter = anActionListPresenter(isDeveloperModeEnabled = false)
+        val presenter = createActionListPresenter(isDeveloperModeEnabled = false)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -458,9 +459,36 @@ class ActionListPresenterTest {
             assertThat(successState.displayEmojiReactions).isTrue()
         }
     }
+
+    @Test
+    fun `present - compute for voice message`() = runTest {
+        val presenter = createActionListPresenter(isDeveloperModeEnabled = false)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            val messageEvent = aMessageEvent(
+                isMine = true,
+                content = aTimelineItemVoiceContent(),
+            )
+            initialState.eventSink.invoke(ActionListEvents.ComputeForMessage(messageEvent, canRedact = false, canSendMessage = true))
+            val successState = awaitItem()
+            assertThat(successState.target).isEqualTo(
+                ActionListState.Target.Success(
+                    messageEvent,
+                    persistentListOf(
+                        TimelineItemAction.Reply,
+                        TimelineItemAction.Forward,
+                        TimelineItemAction.Redact,
+                    )
+                )
+            )
+            assertThat(successState.displayEmojiReactions).isTrue()
+        }
+    }
 }
 
-private fun anActionListPresenter(isDeveloperModeEnabled: Boolean): ActionListPresenter {
+private fun createActionListPresenter(isDeveloperModeEnabled: Boolean): ActionListPresenter {
     val preferencesStore = InMemoryPreferencesStore(isDeveloperModeEnabled = isDeveloperModeEnabled)
     return ActionListPresenter(preferencesStore = preferencesStore)
 }

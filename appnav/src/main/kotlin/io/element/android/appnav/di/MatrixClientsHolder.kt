@@ -49,7 +49,7 @@ class MatrixClientsHolder @Inject constructor(private val authenticationService:
         sessionIdsToMatrixClient.remove(sessionId)
     }
 
-    fun getOrNull(sessionId: SessionId): MatrixClient? {
+    override fun getOrNull(sessionId: SessionId): MatrixClient? {
         return sessionIdsToMatrixClient[sessionId]
     }
 
@@ -92,7 +92,7 @@ class MatrixClientsHolder @Inject constructor(private val authenticationService:
                 sessionIdsToMatrixClient[matrixClient.sessionId] = matrixClient
             }
             .onFailure {
-                Timber.e("Fail to restore session")
+                Timber.e(it, "Fail to restore session")
             }
     }
 }

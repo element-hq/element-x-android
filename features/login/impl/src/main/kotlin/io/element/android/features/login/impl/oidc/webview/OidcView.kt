@@ -25,17 +25,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.viewinterop.AndroidView
 import io.element.android.features.login.impl.oidc.OidcUrlParser
-import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.core.bool.orFalse
-import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
-import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.components.async.AsyncView
 import io.element.android.libraries.designsystem.preview.ElementPreview
-import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 
 @Composable
 fun OidcView(
@@ -79,21 +76,11 @@ fun OidcView(
             }
         )
 
-        when (state.requestState) {
-            Async.Uninitialized -> Unit
-            is Async.Failure -> {
-                ErrorDialog(
-                    content = state.requestState.error.toString(),
-                    onDismiss = { state.eventSink(OidcEvents.ClearError) }
-                )
-            }
-            is Async.Loading -> {
-                CircularProgressIndicator(
-                    modifier = Modifier.align(Alignment.Center)
-                )
-            }
-            is Async.Success -> onNavigateBack()
-        }
+        AsyncView(
+            async = state.requestState,
+            onSuccess = { onNavigateBack() },
+            onErrorDismiss = { state.eventSink(OidcEvents.ClearError) }
+        )
     }
 }
 

@@ -38,6 +38,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -58,12 +59,16 @@ import io.element.android.features.messages.impl.timeline.components.TimelineIte
 import io.element.android.features.messages.impl.timeline.components.TimelineItemStateEventRow
 import io.element.android.features.messages.impl.timeline.components.TimelineItemVirtualRow
 import io.element.android.features.messages.impl.timeline.components.group.GroupHeaderView
+import io.element.android.features.messages.impl.timeline.components.virtual.TimelineItemRoomBeginningView
 import io.element.android.features.messages.impl.timeline.components.virtual.TimelineLoadingMoreIndicator
+import io.element.android.features.messages.impl.timeline.di.LocalTimelineItemPresenterFactories
+import io.element.android.features.messages.impl.timeline.di.aFakeTimelineItemPresenterFactories
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContentProvider
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStateContent
 import io.element.android.features.messages.impl.timeline.model.event.canBeRepliedTo
+import io.element.android.features.messages.impl.timeline.session.SessionState
 import io.element.android.libraries.designsystem.animation.alphaAnimation
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -78,6 +83,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun TimelineView(
     state: TimelineState,
+    roomName: String?,
     onUserDataClicked: (UserId) -> Unit,
     onMessageClicked: (TimelineItem.Event) -> Unit,
     onMessageLongClicked: (TimelineItem.Event) -> Unit,
@@ -86,6 +92,7 @@ fun TimelineView(
     onReactionClicked: (emoji: String, TimelineItem.Event) -> Unit,
     onReactionLongClicked: (emoji: String, TimelineItem.Event) -> Unit,
     onMoreReactionsClicked: (TimelineItem.Event) -> Unit,
+    onReadReceiptClick: (TimelineItem.Event) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     fun onReachedLoadMore() {
@@ -120,6 +127,9 @@ fun TimelineView(
             ) { timelineItem ->
                 TimelineItemRow(
                     timelineItem = timelineItem,
+                    showReadReceipts = state.showReadReceipts,
+                    isLastOutgoingMessage = (timelineItem as? TimelineItem.Event)?.isMine == true
+                        && state.timelineItems.first().identifier() == timelineItem.identifier(),
                     highlightedItem = state.highlightedEventId?.value,
                     userHasPermissionToSendMessage = state.userHasPermissionToSendMessage,
                     onClick = onMessageClicked,
@@ -129,7 +139,9 @@ fun TimelineView(
                     onReactionClick = onReactionClicked,
                     onReactionLongClick = onReactionLongClicked,
                     onMoreReactionsClick = onMoreReactionsClicked,
+                    onReadReceiptClick = onReadReceiptClick,
                     onTimestampClicked = onTimestampClicked,
+                    sessionState = state.sessionState,
                     eventSink = state.eventSink,
                     onSwipeToReply = onSwipeToReply,
                 )
@@ -141,6 +153,11 @@ fun TimelineView(
                     LaunchedEffect(Unit) {
                         onReachedLoadMore()
                     }
+                }
+            }
+            if (state.paginationState.beginningOfRoomReached) {
+                item(contentType = "BeginningOfRoomReached") {
+                    TimelineItemRoomBeginningView(roomName = roomName)
                 }
             }
         }
@@ -155,10 +172,13 @@ fun TimelineView(
 }
 
 @Composable
-fun TimelineItemRow(
+private fun TimelineItemRow(
     timelineItem: TimelineItem,
+    showReadReceipts: Boolean,
+    isLastOutgoingMessage: Boolean,
     highlightedItem: String?,
     userHasPermissionToSendMessage: Boolean,
+    sessionState: SessionState,
     onUserDataClick: (UserId) -> Unit,
     onClick: (TimelineItem.Event) -> Unit,
     onLongClick: (TimelineItem.Event) -> Unit,
@@ -166,6 +186,7 @@ fun TimelineItemRow(
     onReactionClick: (key: String, TimelineItem.Event) -> Unit,
     onReactionLongClick: (key: String, TimelineItem.Event) -> Unit,
     onMoreReactionsClick: (TimelineItem.Event) -> Unit,
+    onReadReceiptClick: (TimelineItem.Event) -> Unit,
     onTimestampClicked: (TimelineItem.Event) -> Unit,
     onSwipeToReply: (TimelineItem.Event) -> Unit,
     eventSink: (TimelineEvents) -> Unit,
@@ -175,6 +196,7 @@ fun TimelineItemRow(
         is TimelineItem.Virtual -> {
             TimelineItemVirtualRow(
                 virtual = timelineItem,
+                sessionState = sessionState,
                 modifier = modifier,
             )
         }
@@ -191,6 +213,8 @@ fun TimelineItemRow(
             } else {
                 TimelineItemEventRow(
                     event = timelineItem,
+                    showReadReceipts = showReadReceipts,
+                    isLastOutgoingMessage = isLastOutgoingMessage,
                     isHighlighted = highlightedItem == timelineItem.identifier(),
                     canReply = userHasPermissionToSendMessage && timelineItem.content.canBeRepliedTo(),
                     onClick = { onClick(timelineItem) },
@@ -200,6 +224,7 @@ fun TimelineItemRow(
                     onReactionClick = onReactionClick,
                     onReactionLongClick = onReactionLongClick,
                     onMoreReactionsClick = onMoreReactionsClick,
+                    onReadReceiptClick = onReadReceiptClick,
                     onTimestampClicked = onTimestampClicked,
                     onSwipeToReply = { onSwipeToReply(timelineItem) },
                     eventSink = eventSink,
@@ -230,7 +255,10 @@ fun TimelineItemRow(
                         timelineItem.events.forEach { subGroupEvent ->
                             TimelineItemRow(
                                 timelineItem = subGroupEvent,
+                                showReadReceipts = showReadReceipts,
+                                isLastOutgoingMessage = isLastOutgoingMessage,
                                 highlightedItem = highlightedItem,
+                                sessionState = sessionState,
                                 userHasPermissionToSendMessage = false,
                                 onClick = onClick,
                                 onLongClick = onLongClick,
@@ -240,6 +268,7 @@ fun TimelineItemRow(
                                 onReactionClick = onReactionClick,
                                 onReactionLongClick = onReactionLongClick,
                                 onMoreReactionsClick = onMoreReactionsClick,
+                                onReadReceiptClick = onReadReceiptClick,
                                 eventSink = eventSink,
                                 onSwipeToReply = {},
                             )
@@ -333,15 +362,21 @@ internal fun TimelineViewPreview(
     @PreviewParameter(TimelineItemEventContentProvider::class) content: TimelineItemEventContent
 ) = ElementPreview {
     val timelineItems = aTimelineItemList(content)
-    TimelineView(
-        state = aTimelineState(timelineItems),
-        onMessageClicked = {},
-        onTimestampClicked = {},
-        onUserDataClicked = {},
-        onMessageLongClicked = {},
-        onReactionClicked = { _, _ -> },
-        onReactionLongClicked = { _, _ -> },
-        onMoreReactionsClicked = {},
-        onSwipeToReply = {},
-    )
+    CompositionLocalProvider(
+        LocalTimelineItemPresenterFactories provides aFakeTimelineItemPresenterFactories(),
+    ) {
+        TimelineView(
+            state = aTimelineState(timelineItems),
+            roomName = null,
+            onMessageClicked = {},
+            onTimestampClicked = {},
+            onUserDataClicked = {},
+            onMessageLongClicked = {},
+            onReactionClicked = { _, _ -> },
+            onReactionLongClicked = { _, _ -> },
+            onMoreReactionsClicked = {},
+            onSwipeToReply = {},
+            onReadReceiptClick = {},
+        )
+    }
 }

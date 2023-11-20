@@ -17,12 +17,15 @@
 package io.element.android.features.messages.impl.messagecomposer
 
 import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.Stable
 import io.element.android.features.messages.impl.attachments.Attachment
-import io.element.android.libraries.textcomposer.MessageComposerMode
+import io.element.android.features.messages.impl.mentions.MentionSuggestion
+import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.textcomposer.model.MessageComposerMode
 import io.element.android.wysiwyg.compose.RichTextEditorState
 import kotlinx.collections.immutable.ImmutableList
 
-@Immutable
+@Stable
 data class MessageComposerState(
     val richTextEditorState: RichTextEditorState,
     val isFullScreen: Boolean,
@@ -32,9 +35,10 @@ data class MessageComposerState(
     val canShareLocation: Boolean,
     val canCreatePoll: Boolean,
     val attachmentsState: AttachmentsState,
+    val memberSuggestions: ImmutableList<MentionSuggestion>,
+    val currentUserId: UserId,
     val eventSink: (MessageComposerEvents) -> Unit,
 ) {
-    val canSendMessage: Boolean = richTextEditorState.messageHtml.isNotEmpty()
     val hasFocus: Boolean = richTextEditorState.hasFocus
 }
 

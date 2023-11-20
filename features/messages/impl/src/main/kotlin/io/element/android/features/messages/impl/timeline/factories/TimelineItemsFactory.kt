@@ -27,6 +27,7 @@ import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.libraries.androidutils.diff.DiffCacheUpdater
 import io.element.android.libraries.androidutils.diff.MutableListDiffCache
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -66,19 +67,23 @@ class TimelineItemsFactory @Inject constructor(
 
     suspend fun replaceWith(
         timelineItems: List<MatrixTimelineItem>,
+        roomMembers: List<RoomMember>,
     ) = withContext(dispatchers.computation) {
         lock.withLock {
             diffCacheUpdater.updateWith(timelineItems)
-            buildAndEmitTimelineItemStates(timelineItems)
+            buildAndEmitTimelineItemStates(timelineItems, roomMembers)
         }
     }
 
-    private suspend fun buildAndEmitTimelineItemStates(timelineItems: List<MatrixTimelineItem>) {
+    private suspend fun buildAndEmitTimelineItemStates(
+        timelineItems: List<MatrixTimelineItem>,
+        roomMembers: List<RoomMember>,
+    ) {
         val newTimelineItemStates = ArrayList<TimelineItem>()
         for (index in diffCache.indices().reversed()) {
             val cacheItem = diffCache.get(index)
             if (cacheItem == null) {
-                buildAndCacheItem(timelineItems, index)?.also { timelineItemState ->
+                buildAndCacheItem(timelineItems, index, roomMembers)?.also { timelineItemState ->
                     newTimelineItemStates.add(timelineItemState)
                 }
             } else {
@@ -91,11 +96,12 @@ class TimelineItemsFactory @Inject constructor(
 
     private suspend fun buildAndCacheItem(
         timelineItems: List<MatrixTimelineItem>,
-        index: Int
+        index: Int,
+        roomMembers: List<RoomMember>,
     ): TimelineItem? {
         val timelineItemState =
             when (val currentTimelineItem = timelineItems[index]) {
-                is MatrixTimelineItem.Event -> eventItemFactory.create(currentTimelineItem, index, timelineItems)
+                is MatrixTimelineItem.Event -> eventItemFactory.create(currentTimelineItem, index, timelineItems, roomMembers)
                 is MatrixTimelineItem.Virtual -> virtualItemFactory.create(currentTimelineItem)
                 MatrixTimelineItem.Other -> null
             }

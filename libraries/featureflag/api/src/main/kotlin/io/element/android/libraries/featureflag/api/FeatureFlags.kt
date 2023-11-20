@@ -43,4 +43,34 @@ enum class FeatureFlags(
         title = "Show notification settings",
         defaultValue = true,
     ),
+    VoiceMessages(
+        key = "feature.voicemessages",
+        title = "Voice messages",
+        description = "Send and receive voice messages",
+        defaultValue = true,
+    ),
+    PinUnlock(
+        key = "feature.pinunlock",
+        title = "Pin unlock",
+        description = "Allow user to lock/unlock the app with a pin code or biometrics",
+        defaultValue = true,
+    ),
+    Mentions(
+        key = "feature.mentions",
+        title = "Mentions",
+        description = "Type `@` to get mention suggestions and insert them",
+        defaultValue = false,
+    ),
+    SecureStorage(
+        key = "feature.securestorage",
+        title = "Chat backup",
+        description = "Allow access to backup and restore chat history settings",
+        defaultValue = false,
+    ),
+    ReadReceipts(
+        key = "feature.readreceipts",
+        title = "Show read receipts",
+        description = null,
+        defaultValue = false,
+    ),
 }

@@ -16,6 +16,7 @@
 
 package io.element.android.libraries.sessionstorage.impl
 
+import io.element.android.libraries.sessionstorage.api.LoginType
 import io.element.android.libraries.sessionstorage.api.SessionData
 import java.util.Date
 import io.element.android.libraries.matrix.session.SessionData as DbSessionData
@@ -30,6 +31,8 @@ internal fun SessionData.toDbModel(): DbSessionData {
         oidcData = oidcData,
         slidingSyncProxy = slidingSyncProxy,
         loginTimestamp = loginTimestamp?.time,
+        isTokenValid = if (isTokenValid) 1L else 0L,
+        loginType = loginType.name,
     )
 }
 
@@ -42,6 +45,8 @@ internal fun DbSessionData.toApiModel(): SessionData {
         homeserverUrl = homeserverUrl,
         oidcData = oidcData,
         slidingSyncProxy = slidingSyncProxy,
-        loginTimestamp = loginTimestamp?.let { Date(it) }
+        loginTimestamp = loginTimestamp?.let { Date(it) },
+        isTokenValid = isTokenValid == 1L,
+        loginType = LoginType.fromName(loginType ?: LoginType.UNKNOWN.name),
     )
 }

@@ -16,6 +16,8 @@
 
 package io.element.android.appnav.root
 
+import io.element.android.libraries.sessionstorage.api.LoggedInState
+
 /**
  * [RootNavState] produced by [RootNavStateFlowFactory].
  */
@@ -26,7 +28,7 @@ data class RootNavState(
      */
     val cacheIndex: Int,
     /**
-     * true if we are currently loggedIn.
+     * LoggedInState.
      */
-    val isLoggedIn: Boolean
+    val loggedInState: LoggedInState,
 )

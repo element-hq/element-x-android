@@ -30,6 +30,7 @@ data class EventTimelineItem(
     val isRemote: Boolean,
     val localSendState: LocalEventSendState?,
     val reactions: List<EventReaction>,
+    val receipts: List<Receipt>,
     val sender: UserId,
     val senderProfile: ProfileTimelineDetails,
     val timestamp: Long,

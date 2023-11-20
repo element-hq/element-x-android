@@ -98,6 +98,46 @@ val SemanticColors.bgSubtleTertiary
 val SemanticColors.temporaryColorBgSpecial
     get() = if (isLight) Color(0xFFE4E8F0) else Color(0xFF3A4048)
 
+// This color is not present in Semantic color, so put hard-coded value for now
+val SemanticColors.pinDigitBg
+    get() = if (isLight) {
+        // We want LightDesignTokens.colorGray300
+        Color(0xFFF0F2F5)
+    } else {
+        // We want DarkDesignTokens.colorGray400
+        Color(0xFF26282D)
+    }
+
+val SemanticColors.currentUserMentionPillText
+    get() =  if (isLight) {
+        // We want LightDesignTokens.colorGreen1100
+        Color(0xff005c45)
+    } else {
+        // We want DarkDesignTokens.colorGreen1100
+        Color(0xff1fc090)
+    }
+
+val SemanticColors.currentUserMentionPillBackground
+    get() =  if (isLight) {
+        // We want LightDesignTokens.colorGreenAlpha400
+        Color(0x3b07b661)
+    } else {
+        // We want DarkDesignTokens.colorGreenAlpha500
+        Color(0xff003d29)
+    }
+
+val SemanticColors.mentionPillText
+    get() = textPrimary
+
+val SemanticColors.mentionPillBackground
+    get() =  if (isLight) {
+        // We want LightDesignTokens.colorGray400
+        Color(0x1f052e61)
+    } else {
+        // We want DarkDesignTokens.colorGray500
+        Color(0x26f4f7fa)
+    }
+
 @PreviewsDayNight
 @Composable
 internal fun ColorAliasesPreview() = ElementPreview {

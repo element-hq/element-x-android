@@ -63,7 +63,7 @@ class ChangeServerPresenterTest {
             val initialState = awaitItem()
             assertThat(initialState.changeServerAction).isEqualTo(Async.Uninitialized)
             authenticationService.givenHomeserver(A_HOMESERVER)
-            initialState.eventSink.invoke(ChangeServerEvents.ChangeServer(AccountProvider(A_HOMESERVER_URL)))
+            initialState.eventSink.invoke(ChangeServerEvents.ChangeServer(AccountProvider(url = A_HOMESERVER_URL)))
             val loadingState = awaitItem()
             assertThat(loadingState.changeServerAction).isInstanceOf(Async.Loading::class.java)
             val successState = awaitItem()
@@ -83,7 +83,7 @@ class ChangeServerPresenterTest {
         }.test {
             val initialState = awaitItem()
             assertThat(initialState.changeServerAction).isEqualTo(Async.Uninitialized)
-            initialState.eventSink.invoke(ChangeServerEvents.ChangeServer(AccountProvider(A_HOMESERVER_URL)))
+            initialState.eventSink.invoke(ChangeServerEvents.ChangeServer(AccountProvider(url = A_HOMESERVER_URL)))
             val loadingState = awaitItem()
             assertThat(loadingState.changeServerAction).isInstanceOf(Async.Loading::class.java)
             val failureState = awaitItem()

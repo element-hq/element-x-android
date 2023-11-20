@@ -26,7 +26,7 @@ import androidx.compose.ui.tooling.preview.Preview
  *
  * NB: Length of this constant is kept to a minimum to avoid screenshot file names being too long.
  */
-const val NIGHT_MODE_NAME = "N"
+const val NIGHT_MODE_NAME = "Night"
 
 /**
  * Marker for a day mode preview.
@@ -35,7 +35,7 @@ const val NIGHT_MODE_NAME = "N"
  *
  * NB: Length of this constant is kept to a minimum to avoid screenshot file names being too long.
  */
-const val DAY_MODE_NAME = "D"
+const val DAY_MODE_NAME = "Day"
 
 /**
  * Generates 2 previews of the composable it is applied to: day and night mode.

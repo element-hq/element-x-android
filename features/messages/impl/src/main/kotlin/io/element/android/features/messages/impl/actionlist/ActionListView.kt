@@ -26,6 +26,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -33,9 +35,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.ListItem
-import androidx.compose.material.Text
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -66,15 +65,21 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextBasedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemUnknownContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVoiceContent
 import io.element.android.features.messages.impl.utils.messagesummary.MessageSummaryFormatterImpl
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
-import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.components.list.ListItemContent
 import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.text.toSp
 import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
 import io.element.android.libraries.designsystem.theme.components.Icon
+import io.element.android.libraries.designsystem.theme.components.IconSource
+import io.element.android.libraries.designsystem.theme.components.ListItem
+import io.element.android.libraries.designsystem.theme.components.ListItemStyle
 import io.element.android.libraries.designsystem.theme.components.ModalBottomSheet
+import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.hide
 import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnail
@@ -139,15 +144,13 @@ fun ActionListView(
                 onEmojiReactionClicked = ::onEmojiReactionClicked,
                 onCustomReactionClicked = ::onCustomReactionClicked,
                 modifier = Modifier
-                    .padding(bottom = 32.dp)
-//                    .navigationBarsPadding() - FIXME after https://issuetracker.google.com/issues/275849044
-//                    .imePadding()
+                    .navigationBarsPadding()
+                    .imePadding()
             )
         }
     }
 }
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 private fun SheetContent(
     state: ActionListState,
@@ -197,18 +200,13 @@ private fun SheetContent(
                         modifier = Modifier.clickable {
                             onActionClicked(action)
                         },
-                        text = {
-                            Text(
-                                text = stringResource(id = action.titleRes),
-                                color = if (action.destructive) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary,
-                            )
+                        headlineContent = {
+                            Text(text = stringResource(id = action.titleRes))
                         },
-                        icon = {
-                            Icon(
-                                resourceId = action.icon,
-                                contentDescription = "",
-                                tint = if (action.destructive) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary,
-                            )
+                        leadingContent = ListItemContent.Icon(IconSource.Resource(action.icon)),
+                        style = when {
+                            action.destructive -> ListItemStyle.Destructive
+                            else -> ListItemStyle.Primary
                         }
                     )
                 }
@@ -259,7 +257,7 @@ private fun MessageSummary(event: TimelineItem.Event, modifier: Modifier = Modif
                 AttachmentThumbnail(
                     modifier = imageModifier,
                     info = AttachmentThumbnailInfo(
-                        thumbnailSource = event.content.mediaSource,
+                        thumbnailSource = event.content.thumbnailSource ?: event.content.mediaSource,
                         textContent = textContent,
                         type = AttachmentThumbnailType.Image,
                         blurHash = event.content.blurhash,
@@ -307,6 +305,18 @@ private fun MessageSummary(event: TimelineItem.Event, modifier: Modifier = Modif
             }
             content = { ContentForBody(event.content.body) }
         }
+        is TimelineItemVoiceContent -> {
+            icon = {
+                AttachmentThumbnail(
+                    modifier = imageModifier,
+                    info = AttachmentThumbnailInfo(
+                        textContent = textContent,
+                        type = AttachmentThumbnailType.Voice,
+                    )
+                )
+            }
+            content = { ContentForBody(textContent) }
+        }
     }
     Row(modifier = modifier) {
         icon()
@@ -336,7 +346,7 @@ private fun MessageSummary(event: TimelineItem.Event, modifier: Modifier = Modif
 private val emojiRippleRadius = 24.dp
 
 @Composable
-internal fun EmojiReactionsRow(
+private fun EmojiReactionsRow(
     highlightedEmojis: ImmutableList<String>,
     onEmojiReactionClicked: (String) -> Unit,
     onCustomReactionClicked: () -> Unit,
@@ -348,7 +358,7 @@ internal fun EmojiReactionsRow(
     ) {
         // TODO use most recently used emojis here when available from the Rust SDK
         val defaultEmojis = sequenceOf(
-            "👍", "👎", "🔥", "❤️", "👏"
+            "👍️", "👎️", "🔥", "❤️", "👏"
         )
         for (emoji in defaultEmojis) {
             val isHighlighted = highlightedEmojis.contains(emoji)
@@ -360,7 +370,7 @@ internal fun EmojiReactionsRow(
             contentAlignment = Alignment.Center
         ) {
             Icon(
-                resourceId = CommonDrawables.ic_september_add_reaction,
+                resourceId = CommonDrawables.ic_add_reaction,
                 contentDescription = "Emojis",
                 tint = MaterialTheme.colorScheme.secondary,
                 modifier = Modifier
@@ -397,8 +407,7 @@ private fun EmojiButton(
     ) {
         Text(
             emoji,
-            fontSize = 24.dp.toSp(),
-            color = Color.White,
+            style = ElementTheme.typography.fontBodyLgRegular.copy(fontSize = 24.dp.toSp(), color = Color.White),
             modifier = Modifier
                 .clickable(
                     enabled = true,

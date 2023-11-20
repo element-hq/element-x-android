@@ -16,10 +16,15 @@
 
 package io.element.android.libraries.sessionstorage.impl
 
+import app.cash.sqldelight.driver.jdbc.sqlite.JdbcSqliteDriver
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import com.squareup.sqldelight.sqlite.driver.JdbcSqliteDriver
+import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.session.SessionData
+import io.element.android.libraries.sessionstorage.api.LoggedInState
+import io.element.android.libraries.sessionstorage.api.LoginType
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
@@ -38,8 +43,11 @@ class DatabaseSessionStoreTests {
         slidingSyncProxy = null,
         loginTimestamp = null,
         oidcData = "aOidcData",
+        isTokenValid = 1,
+        loginType = LoginType.UNKNOWN.name,
     )
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Before
     fun setup() {
         // Initialise in memory SQLite driver
@@ -47,7 +55,14 @@ class DatabaseSessionStoreTests {
         SessionDatabase.Schema.create(driver)
 
         database = SessionDatabase(driver)
-        databaseSessionStore = DatabaseSessionStore(database)
+        databaseSessionStore = DatabaseSessionStore(
+            database = database,
+            dispatchers = CoroutineDispatchers(
+                io = UnconfinedTestDispatcher(),
+                computation = UnconfinedTestDispatcher(),
+                main = UnconfinedTestDispatcher(),
+            )
+        )
     }
 
     @Test
@@ -63,11 +78,11 @@ class DatabaseSessionStoreTests {
     @Test
     fun `isLoggedIn emits true while there are sessions in the DB`() = runTest {
         databaseSessionStore.isLoggedIn().test {
-            assertThat(awaitItem()).isFalse()
+            assertThat(awaitItem()).isEqualTo(LoggedInState.NotLoggedIn)
             database.sessionDataQueries.insertSessionData(aSessionData)
-            assertThat(awaitItem()).isTrue()
+            assertThat(awaitItem()).isEqualTo(LoggedInState.LoggedIn(sessionId = aSessionData.userId, isTokenValid = true))
             database.sessionDataQueries.removeSession(aSessionData.userId)
-            assertThat(awaitItem()).isFalse()
+            assertThat(awaitItem()).isEqualTo(LoggedInState.NotLoggedIn)
         }
     }
 
@@ -121,6 +136,8 @@ class DatabaseSessionStoreTests {
             slidingSyncProxy = "slidingSyncProxy",
             loginTimestamp = 1,
             oidcData = "aOidcData",
+            isTokenValid = 1,
+            loginType = null,
         )
         val secondSessionData = SessionData(
             userId = "userId",
@@ -131,6 +148,8 @@ class DatabaseSessionStoreTests {
             slidingSyncProxy = "slidingSyncProxyAltered",
             loginTimestamp = 2,
             oidcData = "aOidcDataAltered",
+            isTokenValid = 1,
+            loginType = null,
         )
         assertThat(firstSessionData.userId).isEqualTo(secondSessionData.userId)
         assertThat(firstSessionData.loginTimestamp).isNotEqualTo(secondSessionData.loginTimestamp)

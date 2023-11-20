@@ -39,6 +39,7 @@ import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.theme.components.ModalBottomSheet
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.theme.ElementTheme
+import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.coroutines.launch
 
 @Composable
@@ -71,7 +72,7 @@ internal fun RetrySendMessageMenu(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun RetrySendMessageMenuBottomSheet(
+private fun RetrySendMessageMenuBottomSheet(
     isVisible: Boolean,
     onRetry: () -> Unit,
     onRemoveFailed: () -> Unit,
@@ -133,7 +134,7 @@ private fun ColumnScope.RetrySendMenuContents(
     ListItem(
         headlineContent = {
             Text(
-                text = stringResource(R.string.screen_room_retry_send_menu_remove_action),
+                text = stringResource(CommonStrings.action_remove),
                 style = ElementTheme.typography.fontBodyLgRegular,
             )
         },

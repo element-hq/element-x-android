@@ -23,6 +23,7 @@ import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -134,6 +135,7 @@ fun ListItem(
 /**
  * The style to use for a [ListItem].
  */
+@Immutable
 sealed interface ListItemStyle {
     data object Default : ListItemStyle
     data object Primary : ListItemStyle

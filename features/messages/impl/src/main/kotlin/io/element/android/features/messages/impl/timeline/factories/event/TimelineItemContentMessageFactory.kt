@@ -25,12 +25,15 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemLocationContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemNoticeContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextContent
-import io.element.android.features.messages.impl.timeline.model.event.TimelineItemUnknownContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVoiceContent
 import io.element.android.features.messages.impl.timeline.util.FileExtensionExtractor
 import io.element.android.features.messages.impl.timeline.util.toHtmlDocument
 import io.element.android.libraries.androidutils.filesize.FileSizeFormatter
 import io.element.android.libraries.core.mimetype.MimeTypes
+import io.element.android.libraries.featureflag.api.FeatureFlagService
+import io.element.android.libraries.featureflag.api.FeatureFlags
+import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.timeline.item.event.AudioMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.EmoteMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.FileMessageType
@@ -38,20 +41,27 @@ import io.element.android.libraries.matrix.api.timeline.item.event.ImageMessageT
 import io.element.android.libraries.matrix.api.timeline.item.event.LocationMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageContent
 import io.element.android.libraries.matrix.api.timeline.item.event.NoticeMessageType
+import io.element.android.libraries.matrix.api.timeline.item.event.OtherMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageType
+import io.element.android.libraries.matrix.api.timeline.item.event.UnknownMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.VideoMessageType
+import io.element.android.libraries.matrix.api.timeline.item.event.VoiceMessageType
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
+import java.time.Duration
 import javax.inject.Inject
 
 class TimelineItemContentMessageFactory @Inject constructor(
     private val fileSizeFormatter: FileSizeFormatter,
     private val fileExtensionExtractor: FileExtensionExtractor,
+    private val featureFlagService: FeatureFlagService,
 ) {
 
-    fun create(content: MessageContent): TimelineItemEventContent {
+    suspend fun create(content: MessageContent, senderDisplayName: String, eventId: EventId?): TimelineItemEventContent {
         return when (val messageType = content.type) {
             is EmoteMessageType -> TimelineItemEmoteContent(
-                body = messageType.body,
-                htmlDocument = messageType.formatted?.toHtmlDocument(),
+                body = "* $senderDisplayName ${messageType.body}",
+                htmlDocument = messageType.formatted?.toHtmlDocument(prefix = "* $senderDisplayName"),
                 isEdited = content.isEdited,
             )
             is ImageMessageType -> {
@@ -101,14 +111,40 @@ class TimelineItemContentMessageFactory @Inject constructor(
                     fileExtension = fileExtensionExtractor.extractFromName(messageType.body)
                 )
             }
-            is AudioMessageType -> TimelineItemAudioContent(
-                body = messageType.body,
-                audioSource = messageType.source,
-                duration = messageType.info?.duration?.toMillis() ?: 0L,
-                mimeType = messageType.info?.mimetype ?: MimeTypes.OctetStream,
-                formattedFileSize = fileSizeFormatter.format(messageType.info?.size ?: 0),
-                fileExtension = fileExtensionExtractor.extractFromName(messageType.body)
-            )
+            is AudioMessageType -> {
+                TimelineItemAudioContent(
+                    body = messageType.body,
+                    mediaSource = messageType.source,
+                    duration = messageType.info?.duration ?: Duration.ZERO,
+                    mimeType = messageType.info?.mimetype ?: MimeTypes.OctetStream,
+                    formattedFileSize = fileSizeFormatter.format(messageType.info?.size ?: 0),
+                    fileExtension = fileExtensionExtractor.extractFromName(messageType.body),
+                )
+            }
+            is VoiceMessageType -> {
+                when (featureFlagService.isFeatureEnabled(FeatureFlags.VoiceMessages)) {
+                    true -> {
+                        TimelineItemVoiceContent(
+                            eventId = eventId,
+                            body = messageType.body,
+                            mediaSource = messageType.source,
+                            duration = messageType.info?.duration ?: Duration.ZERO,
+                            mimeType = messageType.info?.mimetype ?: MimeTypes.OctetStream,
+                            waveform = messageType.details?.waveform?.toImmutableList() ?: persistentListOf(),
+                        )
+                    }
+                    false -> {
+                        TimelineItemAudioContent(
+                            body = messageType.body,
+                            mediaSource = messageType.source,
+                            duration = messageType.info?.duration ?: Duration.ZERO,
+                            mimeType = messageType.info?.mimetype ?: MimeTypes.OctetStream,
+                            formattedFileSize = fileSizeFormatter.format(messageType.info?.size ?: 0),
+                            fileExtension = fileExtensionExtractor.extractFromName(messageType.body),
+                        )
+                    }
+                }
+            }
             is FileMessageType -> {
                 val fileExtension = fileExtensionExtractor.extractFromName(messageType.body)
                 TimelineItemFileContent(
@@ -130,7 +166,18 @@ class TimelineItemContentMessageFactory @Inject constructor(
                 htmlDocument = messageType.formatted?.toHtmlDocument(),
                 isEdited = content.isEdited,
             )
-            else -> TimelineItemUnknownContent
+            is OtherMessageType -> TimelineItemTextContent(
+                body = messageType.body,
+                htmlDocument = null,
+                isEdited = content.isEdited,
+            )
+            UnknownMessageType -> TimelineItemTextContent(
+                // Display the body as a fallback, but should not happen anymore
+                // (we have `OtherMessageType` now)
+                body = content.body,
+                htmlDocument = null,
+                isEdited = content.isEdited,
+            )
         }
     }
 

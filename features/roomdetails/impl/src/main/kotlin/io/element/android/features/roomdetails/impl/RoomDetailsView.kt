@@ -19,7 +19,6 @@ package io.element.android.features.roomdetails.impl
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.consumeWindowInsets
@@ -33,7 +32,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.outlined.Add
-import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -58,6 +56,7 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.button.MainActionButton
+import io.element.android.libraries.designsystem.components.list.ListItemContent
 import io.element.android.libraries.designsystem.components.preferences.PreferenceCategory
 import io.element.android.libraries.designsystem.components.preferences.PreferenceText
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
@@ -67,6 +66,9 @@ import io.element.android.libraries.designsystem.theme.components.DropdownMenu
 import io.element.android.libraries.designsystem.theme.components.DropdownMenuItem
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
+import io.element.android.libraries.designsystem.theme.components.IconSource
+import io.element.android.libraries.designsystem.theme.components.ListItem
+import io.element.android.libraries.designsystem.theme.components.ListItemStyle
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
@@ -76,7 +78,6 @@ import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
 
-@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun RoomDetailsView(
     state: RoomDetailsState,
@@ -183,7 +184,7 @@ fun RoomDetailsView(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun RoomDetailsTopBar(
+private fun RoomDetailsTopBar(
     goBack: () -> Unit,
     onActionClicked: (RoomDetailsAction) -> Unit,
     showEdit: Boolean,
@@ -220,7 +221,7 @@ internal fun RoomDetailsTopBar(
 }
 
 @Composable
-internal fun MainActionsSection(state: RoomDetailsState, onShareRoom: () -> Unit, modifier: Modifier = Modifier) {
+private fun MainActionsSection(state: RoomDetailsState, onShareRoom: () -> Unit, modifier: Modifier = Modifier) {
     Row(modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
         val roomNotificationSettings = state.roomNotificationSettings
         if (state.canShowNotificationSettings && roomNotificationSettings != null) {
@@ -252,7 +253,7 @@ internal fun MainActionsSection(state: RoomDetailsState, onShareRoom: () -> Unit
 }
 
 @Composable
-internal fun RoomHeaderSection(
+private fun RoomHeaderSection(
     avatarUrl: String?,
     roomId: String,
     roomName: String,
@@ -289,7 +290,7 @@ internal fun RoomHeaderSection(
 }
 
 @Composable
-internal fun TopicSection(
+private fun TopicSection(
     roomTopic: RoomTopicState,
     onActionClicked: (RoomDetailsAction) -> Unit,
     modifier: Modifier = Modifier
@@ -315,7 +316,7 @@ internal fun TopicSection(
 }
 
 @Composable
-internal fun NotificationSection(
+private fun NotificationSection(
     isDefaultMode: Boolean,
     openRoomNotificationSettings: () -> Unit,
     modifier: Modifier = Modifier
@@ -326,63 +327,63 @@ internal fun NotificationSection(
         stringResource(R.string.screen_room_details_notification_mode_custom)
     }
     PreferenceCategory(modifier = modifier) {
-        PreferenceText(
-            title = stringResource(R.string.screen_room_details_notification_title),
-            subtitle = subtitle,
-            iconResourceId = CommonDrawables.ic_compound_notifications,
+        ListItem(
+            headlineContent = { Text(text = stringResource(R.string.screen_room_details_notification_title)) },
+            supportingContent = { Text(text = subtitle) },
+            leadingContent = ListItemContent.Icon(IconSource.Resource(CommonDrawables.ic_compound_notifications)),
             onClick = openRoomNotificationSettings,
         )
     }
 }
 
 @Composable
-internal fun MembersSection(
+private fun MembersSection(
     memberCount: Long,
     openRoomMemberList: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     PreferenceCategory(modifier = modifier) {
-        PreferenceText(
-            title = stringResource(R.string.screen_room_details_people_title),
-            icon = Icons.Outlined.Person,
-            currentValue = memberCount.toString(),
+        ListItem(
+            headlineContent = { Text(stringResource(CommonStrings.common_people)) },
+            leadingContent = ListItemContent.Icon(IconSource.Resource(CommonDrawables.ic_user)),
+            trailingContent = ListItemContent.Text(memberCount.toString()),
             onClick = openRoomMemberList,
         )
     }
 }
 
 @Composable
-internal fun InviteSection(
+private fun InviteSection(
     invitePeople: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     PreferenceCategory(modifier = modifier) {
-        PreferenceText(
-            title = stringResource(R.string.screen_room_details_invite_people_title),
-            iconResourceId = CommonDrawables.ic_compound_user_add,
+        ListItem(
+            headlineContent = { Text(stringResource(R.string.screen_room_details_invite_people_title)) },
+            leadingContent = ListItemContent.Icon(IconSource.Resource(CommonDrawables.ic_user_add)),
             onClick = invitePeople,
         )
     }
 }
 
 @Composable
-internal fun SecuritySection(modifier: Modifier = Modifier) {
+private fun SecuritySection(modifier: Modifier = Modifier) {
     PreferenceCategory(title = stringResource(R.string.screen_room_details_security_title), modifier = modifier) {
-        PreferenceText(
-            title = stringResource(R.string.screen_room_details_encryption_enabled_title),
-            subtitle = stringResource(R.string.screen_room_details_encryption_enabled_subtitle),
-            iconResourceId = CommonDrawables.ic_compound_lock,
+        ListItem(
+            headlineContent = { Text(stringResource(R.string.screen_room_details_encryption_enabled_title)) },
+            supportingContent = { Text(stringResource(R.string.screen_room_details_encryption_enabled_subtitle)) },
+            leadingContent = ListItemContent.Icon(IconSource.Resource(CommonDrawables.ic_encryption_enabled)),
         )
     }
 }
 
 @Composable
-internal fun OtherActionsSection(onLeaveRoom: () -> Unit, modifier: Modifier = Modifier) {
+private fun OtherActionsSection(onLeaveRoom: () -> Unit, modifier: Modifier = Modifier) {
     PreferenceCategory(showDivider = false, modifier = modifier) {
-        PreferenceText(
-            title = stringResource(R.string.screen_room_details_leave_room_title),
-            iconResourceId = CommonDrawables.ic_compound_leave,
-            tintColor = MaterialTheme.colorScheme.error,
+        ListItem(
+            headlineContent = { Text(stringResource(R.string.screen_room_details_leave_room_title)) },
+            leadingContent = ListItemContent.Icon(IconSource.Resource(CommonDrawables.ic_compound_leave)),
+            style = ListItemStyle.Destructive,
             onClick = onLeaveRoom,
         )
     }

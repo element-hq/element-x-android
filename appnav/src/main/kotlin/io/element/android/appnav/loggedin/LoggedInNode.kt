@@ -31,7 +31,10 @@ class LoggedInNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     private val loggedInPresenter: LoggedInPresenter,
-) : Node(buildContext, plugins = plugins) {
+) : Node(
+    buildContext = buildContext,
+    plugins = plugins
+) {
 
     @Composable
     override fun View(modifier: Modifier) {

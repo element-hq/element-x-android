@@ -16,7 +16,7 @@
 
 package io.element.android.features.preferences.impl.advanced
 
-data class AdvancedSettingsState constructor(
+data class AdvancedSettingsState(
     val isRichTextEditorEnabled: Boolean,
     val isDeveloperModeEnabled: Boolean,
     val eventSink: (AdvancedSettingsEvents) -> Unit

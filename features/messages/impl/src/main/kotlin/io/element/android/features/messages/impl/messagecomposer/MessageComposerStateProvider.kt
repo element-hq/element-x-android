@@ -17,8 +17,12 @@
 package io.element.android.features.messages.impl.messagecomposer
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import io.element.android.libraries.textcomposer.MessageComposerMode
+import io.element.android.features.messages.impl.mentions.MentionSuggestion
+import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.textcomposer.model.MessageComposerMode
 import io.element.android.wysiwyg.compose.RichTextEditorState
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 
 open class MessageComposerStateProvider : PreviewParameterProvider<MessageComposerState> {
     override val values: Sequence<MessageComposerState>
@@ -28,17 +32,17 @@ open class MessageComposerStateProvider : PreviewParameterProvider<MessageCompos
 }
 
 fun aMessageComposerState(
-    requestFocus: Boolean = true,
-    composerState: RichTextEditorState = RichTextEditorState("", fake = true),
+    composerState: RichTextEditorState = RichTextEditorState(""),
     isFullScreen: Boolean = false,
-    mode: MessageComposerMode = MessageComposerMode.Normal(content = ""),
+    mode: MessageComposerMode = MessageComposerMode.Normal,
     showTextFormatting: Boolean = false,
     showAttachmentSourcePicker: Boolean = false,
     canShareLocation: Boolean = true,
     canCreatePoll: Boolean = true,
     attachmentsState: AttachmentsState = AttachmentsState.None,
+    memberSuggestions: ImmutableList<MentionSuggestion> = persistentListOf(),
 ) = MessageComposerState(
-    richTextEditorState = composerState.apply { if(requestFocus) requestFocus() },
+    richTextEditorState = composerState,
     isFullScreen = isFullScreen,
     mode = mode,
     showTextFormatting = showTextFormatting,
@@ -46,5 +50,7 @@ fun aMessageComposerState(
     canShareLocation = canShareLocation,
     canCreatePoll = canCreatePoll,
     attachmentsState = attachmentsState,
+    memberSuggestions = memberSuggestions,
+    currentUserId = UserId("@alice:localhost"),
     eventSink = {},
 )

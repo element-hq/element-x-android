@@ -35,15 +35,20 @@ import io.element.android.features.messages.impl.messagecomposer.MessageComposer
 import io.element.android.features.messages.impl.timeline.TimelinePresenter
 import io.element.android.features.messages.impl.timeline.components.customreaction.CustomReactionPresenter
 import io.element.android.features.messages.impl.timeline.components.reactionsummary.ReactionSummaryPresenter
+import io.element.android.features.messages.impl.timeline.components.receipt.bottomsheet.ReadReceiptBottomSheetPresenter
 import io.element.android.features.messages.impl.timeline.components.retrysendmenu.RetrySendMenuPresenter
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemFileContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
+import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessageComposerPlayer
+import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessageComposerPresenter
 import io.element.android.features.messages.media.FakeLocalMediaFactory
+import io.element.android.features.messages.test.FakeMessageComposerContext
 import io.element.android.features.messages.textcomposer.TestRichTextEditorStateFactory
 import io.element.android.features.messages.timeline.components.customreaction.FakeEmojibaseProvider
 import io.element.android.features.messages.utils.messagesummary.FakeMessageSummaryFormatter
+import io.element.android.features.messages.voicemessages.timeline.FakeRedactedVoiceMessageManager
 import io.element.android.features.networkmonitor.test.FakeNetworkMonitor
 import io.element.android.libraries.androidutils.clipboard.FakeClipboardHelper
 import io.element.android.libraries.architecture.Async
@@ -51,7 +56,7 @@ import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
-import io.element.android.libraries.designsystem.utils.SnackbarDispatcher
+import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.featureflag.test.InMemoryPreferencesStore
@@ -60,20 +65,28 @@ import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.api.room.MessageEventType
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
+import io.element.android.libraries.matrix.api.user.CurrentSessionIdHolder
 import io.element.android.libraries.matrix.test.AN_AVATAR_URL
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID_2
+import io.element.android.libraries.matrix.test.FakeMatrixClient
+import io.element.android.libraries.matrix.test.core.aBuildMeta
+import io.element.android.libraries.matrix.test.encryption.FakeEncryptionService
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
+import io.element.android.libraries.matrix.test.room.aRoomInfo
 import io.element.android.libraries.matrix.test.room.aRoomMember
+import io.element.android.libraries.matrix.test.verification.FakeSessionVerificationService
 import io.element.android.libraries.mediapickers.test.FakePickerProvider
+import io.element.android.libraries.mediaplayer.test.FakeMediaPlayer
 import io.element.android.libraries.mediaupload.api.MediaSender
 import io.element.android.libraries.mediaupload.test.FakeMediaPreProcessor
 import io.element.android.libraries.permissions.api.PermissionsPresenter
 import io.element.android.libraries.permissions.test.FakePermissionsPresenter
 import io.element.android.libraries.permissions.test.FakePermissionsPresenterFactory
-import io.element.android.libraries.textcomposer.MessageComposerMode
+import io.element.android.libraries.textcomposer.model.MessageComposerMode
+import io.element.android.libraries.voicerecorder.test.FakeVoiceRecorder
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.consumeItemsUntilPredicate
@@ -96,14 +109,15 @@ class MessagesPresenterTest {
 
     @Test
     fun `present - initial state`() = runTest {
-        val presenter = createMessagePresenter()
+        val presenter = createMessagesPresenter()
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = consumeItemsUntilTimeout().last()
             assertThat(initialState.roomId).isEqualTo(A_ROOM_ID)
             assertThat(initialState.roomName).isEqualTo(Async.Success(""))
-            assertThat(initialState.roomAvatar).isEqualTo(Async.Success(AvatarData(id = A_ROOM_ID.value, name = "", size = AvatarSize.TimelineRoom)))
+            assertThat(initialState.roomAvatar)
+                .isEqualTo(Async.Success(AvatarData(id = A_ROOM_ID.value, name = "", url = AN_AVATAR_URL, size = AvatarSize.TimelineRoom)))
             assertThat(initialState.userHasPermissionToSendMessage).isTrue()
             assertThat(initialState.userHasPermissionToRedact).isFalse()
             assertThat(initialState.hasNetworkConnection).isTrue()
@@ -117,7 +131,7 @@ class MessagesPresenterTest {
     fun `present - handle toggling a reaction`() = runTest {
         val coroutineDispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true)
         val room = FakeMatrixRoom()
-        val presenter = createMessagePresenter(matrixRoom = room, coroutineDispatchers = coroutineDispatchers)
+        val presenter = createMessagesPresenter(matrixRoom = room, coroutineDispatchers = coroutineDispatchers)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -137,7 +151,7 @@ class MessagesPresenterTest {
     fun `present - handle toggling a reaction twice`() = runTest {
         val coroutineDispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true)
         val room = FakeMatrixRoom()
-        val presenter = createMessagePresenter(matrixRoom = room, coroutineDispatchers = coroutineDispatchers)
+        val presenter = createMessagesPresenter(matrixRoom = room, coroutineDispatchers = coroutineDispatchers)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -154,7 +168,7 @@ class MessagesPresenterTest {
     @Test
     fun `present - handle action forward`() = runTest {
         val navigator = FakeMessagesNavigator()
-        val presenter = createMessagePresenter(navigator = navigator)
+        val presenter = createMessagesPresenter(navigator = navigator)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -169,7 +183,7 @@ class MessagesPresenterTest {
     fun `present - handle action copy`() = runTest {
         val clipboardHelper = FakeClipboardHelper()
         val event = aMessageEvent()
-        val presenter = createMessagePresenter(clipboardHelper = clipboardHelper)
+        val presenter = createMessagesPresenter(clipboardHelper = clipboardHelper)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -183,7 +197,7 @@ class MessagesPresenterTest {
 
     @Test
     fun `present - handle action reply`() = runTest {
-        val presenter = createMessagePresenter()
+        val presenter = createMessagesPresenter()
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -198,7 +212,7 @@ class MessagesPresenterTest {
 
     @Test
     fun `present - handle action reply to an event with no id does nothing`() = runTest {
-        val presenter = createMessagePresenter()
+        val presenter = createMessagesPresenter()
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -212,7 +226,7 @@ class MessagesPresenterTest {
 
     @Test
     fun `present - handle action reply to an image media message`() = runTest {
-        val presenter = createMessagePresenter()
+        val presenter = createMessagesPresenter()
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -243,7 +257,7 @@ class MessagesPresenterTest {
 
     @Test
     fun `present - handle action reply to a video media message`() = runTest {
-        val presenter = createMessagePresenter()
+        val presenter = createMessagesPresenter()
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -275,7 +289,7 @@ class MessagesPresenterTest {
 
     @Test
     fun `present - handle action reply to a file media message`() = runTest {
-        val presenter = createMessagePresenter()
+        val presenter = createMessagesPresenter()
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -302,7 +316,7 @@ class MessagesPresenterTest {
 
     @Test
     fun `present - handle action edit`() = runTest {
-        val presenter = createMessagePresenter()
+        val presenter = createMessagesPresenter()
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -319,7 +333,7 @@ class MessagesPresenterTest {
     fun `present - handle action redact`() = runTest {
         val coroutineDispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true)
         val matrixRoom = FakeMatrixRoom()
-        val presenter = createMessagePresenter(matrixRoom = matrixRoom, coroutineDispatchers = coroutineDispatchers)
+        val presenter = createMessagesPresenter(matrixRoom = matrixRoom, coroutineDispatchers = coroutineDispatchers)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -335,7 +349,7 @@ class MessagesPresenterTest {
     @Test
     fun `present - handle action report content`() = runTest {
         val navigator = FakeMessagesNavigator()
-        val presenter = createMessagePresenter(navigator = navigator)
+        val presenter = createMessagesPresenter(navigator = navigator)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -348,7 +362,7 @@ class MessagesPresenterTest {
 
     @Test
     fun `present - handle dismiss action`() = runTest {
-        val presenter = createMessagePresenter()
+        val presenter = createMessagesPresenter()
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -362,7 +376,7 @@ class MessagesPresenterTest {
     @Test
     fun `present - handle action show developer info`() = runTest {
         val navigator = FakeMessagesNavigator()
-        val presenter = createMessagePresenter(navigator = navigator)
+        val presenter = createMessagesPresenter(navigator = navigator)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -376,7 +390,7 @@ class MessagesPresenterTest {
     @Test
     fun `present - shows prompt to reinvite users in DM`() = runTest {
         val room = FakeMatrixRoom(sessionId = A_SESSION_ID, isDirect = true, activeMemberCount = 1L)
-        val presenter = createMessagePresenter(matrixRoom = room)
+        val presenter = createMessagesPresenter(matrixRoom = room)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -402,7 +416,7 @@ class MessagesPresenterTest {
     @Test
     fun `present - doesn't show reinvite prompt in non-direct room`() = runTest {
         val room = FakeMatrixRoom(sessionId = A_SESSION_ID, isDirect = false, activeMemberCount = 1L)
-        val presenter = createMessagePresenter(matrixRoom = room)
+        val presenter = createMessagesPresenter(matrixRoom = room)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -418,7 +432,7 @@ class MessagesPresenterTest {
     @Test
     fun `present - doesn't show reinvite prompt if other party is present`() = runTest {
         val room = FakeMatrixRoom(sessionId = A_SESSION_ID, isDirect = true, activeMemberCount = 2L)
-        val presenter = createMessagePresenter(matrixRoom = room)
+        val presenter = createMessagesPresenter(matrixRoom = room)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -442,7 +456,7 @@ class MessagesPresenterTest {
                 )
             )
         )
-        val presenter = createMessagePresenter(matrixRoom = room)
+        val presenter = createMessagesPresenter(matrixRoom = room)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -469,7 +483,7 @@ class MessagesPresenterTest {
                 )
             )
         )
-        val presenter = createMessagePresenter(matrixRoom = room)
+        val presenter = createMessagesPresenter(matrixRoom = room)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -490,7 +504,7 @@ class MessagesPresenterTest {
     fun `present - handle reinviting other user when memberlist is not ready`() = runTest {
         val room = FakeMatrixRoom(sessionId = A_SESSION_ID)
         room.givenRoomMembersState(MatrixRoomMembersState.Unknown)
-        val presenter = createMessagePresenter(matrixRoom = room)
+        val presenter = createMessagesPresenter(matrixRoom = room)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -516,7 +530,7 @@ class MessagesPresenterTest {
             )
         )
         room.givenInviteUserResult(Result.failure(Throwable("Oops!")))
-        val presenter = createMessagePresenter(matrixRoom = room)
+        val presenter = createMessagesPresenter(matrixRoom = room)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -537,7 +551,7 @@ class MessagesPresenterTest {
     fun `present - permission to post`() = runTest {
         val matrixRoom = FakeMatrixRoom()
         matrixRoom.givenCanSendEventResult(MessageEventType.ROOM_MESSAGE, Result.success(true))
-        val presenter = createMessagePresenter(matrixRoom = matrixRoom)
+        val presenter = createMessagesPresenter(matrixRoom = matrixRoom)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -550,7 +564,7 @@ class MessagesPresenterTest {
     fun `present - no permission to post`() = runTest {
         val matrixRoom = FakeMatrixRoom()
         matrixRoom.givenCanSendEventResult(MessageEventType.ROOM_MESSAGE, Result.success(false))
-        val presenter = createMessagePresenter(matrixRoom = matrixRoom)
+        val presenter = createMessagesPresenter(matrixRoom = matrixRoom)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -565,7 +579,7 @@ class MessagesPresenterTest {
     @Test
     fun `present - permission to redact`() = runTest {
         val matrixRoom = FakeMatrixRoom(canRedact = true)
-        val presenter = createMessagePresenter(matrixRoom = matrixRoom)
+        val presenter = createMessagesPresenter(matrixRoom = matrixRoom)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -579,7 +593,7 @@ class MessagesPresenterTest {
     fun `present - handle poll end`() = runTest {
         val room = FakeMatrixRoom()
         val analyticsService = FakeAnalyticsService()
-        val presenter = createMessagePresenter(
+        val presenter = createMessagesPresenter(
             matrixRoom = room,
             analyticsService = analyticsService,
         )
@@ -598,26 +612,40 @@ class MessagesPresenterTest {
         }
     }
 
-    private fun TestScope.createMessagePresenter(
+    private fun TestScope.createMessagesPresenter(
         coroutineDispatchers: CoroutineDispatchers = testCoroutineDispatchers(),
-        matrixRoom: MatrixRoom = FakeMatrixRoom(),
+        matrixRoom: MatrixRoom = FakeMatrixRoom().apply {
+            givenRoomInfo(aRoomInfo(id = roomId.value, name = ""))
+        },
         navigator: FakeMessagesNavigator = FakeMessagesNavigator(),
         clipboardHelper: FakeClipboardHelper = FakeClipboardHelper(),
         analyticsService: FakeAnalyticsService = FakeAnalyticsService(),
         permissionsPresenter: PermissionsPresenter = FakePermissionsPresenter(),
     ): MessagesPresenter {
+        val mediaSender = MediaSender(FakeMediaPreProcessor(), matrixRoom)
+        val permissionsPresenterFactory = FakePermissionsPresenterFactory(permissionsPresenter)
         val messageComposerPresenter = MessageComposerPresenter(
             appCoroutineScope = this,
             room = matrixRoom,
             mediaPickerProvider = FakePickerProvider(),
             featureFlagService = FakeFeatureFlagService(mapOf(FeatureFlags.NotificationSettings.key to true)),
             localMediaFactory = FakeLocalMediaFactory(mockMediaUrl),
-            mediaSender = MediaSender(FakeMediaPreProcessor(), matrixRoom),
+            mediaSender = mediaSender,
             snackbarDispatcher = SnackbarDispatcher(),
             analyticsService = analyticsService,
             messageComposerContext = MessageComposerContextImpl(),
             richTextEditorStateFactory = TestRichTextEditorStateFactory(),
-            permissionsPresenterFactory = FakePermissionsPresenterFactory(permissionsPresenter),
+            permissionsPresenterFactory = permissionsPresenterFactory,
+            currentSessionIdHolder = CurrentSessionIdHolder(FakeMatrixClient(A_SESSION_ID)),
+        )
+        val voiceMessageComposerPresenter = VoiceMessageComposerPresenter(
+            this,
+            FakeVoiceRecorder(),
+            analyticsService,
+            mediaSender,
+            player = VoiceMessageComposerPlayer(FakeMediaPlayer(), this),
+            messageComposerContext = FakeMessageComposerContext(),
+            permissionsPresenterFactory,
         )
         val timelinePresenter = TimelinePresenter(
             timelineItemsFactory = aTimelineItemsFactory(),
@@ -625,26 +653,35 @@ class MessagesPresenterTest {
             dispatchers = coroutineDispatchers,
             appScope = this,
             analyticsService = analyticsService,
+            encryptionService = FakeEncryptionService(),
+            verificationService = FakeSessionVerificationService(),
+            featureFlagService = FakeFeatureFlagService(),
+            redactedVoiceMessageManager = FakeRedactedVoiceMessageManager(),
         )
         val preferencesStore = InMemoryPreferencesStore(isRichTextEditorEnabled = true)
         val actionListPresenter = ActionListPresenter(preferencesStore = preferencesStore)
+        val readReceiptBottomSheetPresenter = ReadReceiptBottomSheetPresenter()
         val customReactionPresenter = CustomReactionPresenter(emojibaseProvider = FakeEmojibaseProvider())
         val reactionSummaryPresenter = ReactionSummaryPresenter(room = matrixRoom)
         val retrySendMenuPresenter = RetrySendMenuPresenter(room = matrixRoom)
         return MessagesPresenter(
             room = matrixRoom,
             composerPresenter = messageComposerPresenter,
+            voiceMessageComposerPresenter = voiceMessageComposerPresenter,
             timelinePresenter = timelinePresenter,
             actionListPresenter = actionListPresenter,
             customReactionPresenter = customReactionPresenter,
             reactionSummaryPresenter = reactionSummaryPresenter,
             retrySendMenuPresenter = retrySendMenuPresenter,
+            readReceiptBottomSheetPresenter = readReceiptBottomSheetPresenter,
             networkMonitor = FakeNetworkMonitor(),
             snackbarDispatcher = SnackbarDispatcher(),
             messageSummaryFormatter = FakeMessageSummaryFormatter(),
             navigator = navigator,
             clipboardHelper = clipboardHelper,
             preferencesStore = preferencesStore,
+            featureFlagsService = FakeFeatureFlagService(),
+            buildMeta = aBuildMeta(),
             dispatchers = coroutineDispatchers,
         )
     }

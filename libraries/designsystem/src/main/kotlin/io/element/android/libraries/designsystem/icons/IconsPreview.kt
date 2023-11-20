@@ -27,21 +27,51 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
-import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.theme.ElementTheme
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toPersistentList
 
+internal class CompoundIconListPreviewProvider : PreviewParameterProvider<IconChunk> {
+    override val values: Sequence<IconChunk>
+        get() {
+            val chunks = iconsCompound.chunked(36)
+            return chunks.mapIndexed { index, chunk ->
+                IconChunk(index = index+1, total =  chunks.size, icons = chunk.toPersistentList())
+            }
+                .asSequence()
+        }
+}
+
+internal class OtherIconListPreviewProvider : PreviewParameterProvider<IconChunk> {
+    override val values: Sequence<IconChunk>
+        get() {
+            val chunks = iconsOther.chunked(36)
+            return chunks.mapIndexed { index, chunk ->
+                IconChunk(index = index+1, total =  chunks.size, icons = chunk.toPersistentList())
+            }
+                .asSequence()
+        }
+}
+
+internal data class IconChunk(
+    val index: Int,
+    val total: Int,
+    val icons: ImmutableList<Int>,
+)
+
 @PreviewsDayNight
 @Composable
-internal fun IconsCompoundPart1Preview() = ElementPreview {
+internal fun IconsCompoundPreview(@PreviewParameter(CompoundIconListPreviewProvider::class) chunk: IconChunk) = ElementPreview {
     IconsPreview(
-        title = "R.drawable.ic_compound_* 1 / 2",
-        iconsList = iconsCompound.take(36).toPersistentList(),
+        title = "R.drawable.ic_compound_* ${chunk.index}/${chunk.total}",
+        iconsList = chunk.icons,
         iconNameTransform = { name ->
             name.removePrefix("ic_compound_")
                 .replace("_", " ")
@@ -50,34 +80,10 @@ internal fun IconsCompoundPart1Preview() = ElementPreview {
 
 @PreviewsDayNight
 @Composable
-internal fun IconsCompoundPart2Preview() = ElementPreview {
+internal fun IconsOtherPreview(@PreviewParameter(OtherIconListPreviewProvider::class) iconChunk: IconChunk) = ElementPreview {
     IconsPreview(
-        title = "R.drawable.ic_compound_* 2 / 2",
-        iconsList = iconsCompound.drop(36).toPersistentList(),
-        iconNameTransform = { name ->
-            name.removePrefix("ic_compound_")
-                .replace("_", " ")
-        })
-}
-
-@PreviewsDayNight
-@Composable
-internal fun IconsSeptemberPreview() = ElementPreview {
-    IconsPreview(
-        title = "R.drawable.ic_september_*",
-        iconsList = iconsSeptember.toPersistentList(),
-        iconNameTransform = { name ->
-            name.removePrefix("ic_september_")
-                .replace("_", " ")
-        })
-}
-
-@PreviewsDayNight
-@Composable
-internal fun IconsOtherPreview() = ElementPreview {
-    IconsPreview(
-        title = "R.drawable.ic_*",
-        iconsList = iconsOther.toPersistentList(),
+        title = "R.drawable.ic_*  ${iconChunk.index}/${iconChunk.total}",
+        iconsList = iconChunk.icons,
         iconNameTransform = { name ->
             name.removePrefix("ic_")
                 .replace("_", " ")

@@ -5,8 +5,8 @@ import org.jetbrains.kotlin.cli.common.toBooleanLenient
 
 buildscript {
     dependencies {
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.10")
-        classpath("com.google.gms:google-services:4.4.0")
+        classpath(libs.kotlin.gradle.plugin)
+        classpath(libs.gms.google.services)
     }
 }
 
@@ -45,7 +45,7 @@ plugins {
 }
 
 tasks.register<Delete>("clean").configure {
-    delete(rootProject.buildDir)
+    delete(rootProject.layout.buildDirectory)
 }
 
 allprojects {
@@ -62,7 +62,7 @@ allprojects {
         config.from(files("$rootDir/tools/detekt/detekt.yml"))
     }
     dependencies {
-        detektPlugins("io.nlopez.compose.rules:detekt:0.3.0")
+        detektPlugins("io.nlopez.compose.rules:detekt:0.3.3")
     }
 
     // KtLint
@@ -86,7 +86,7 @@ allprojects {
             reporter(org.jlleitschuh.gradle.ktlint.reporter.ReporterType.CHECKSTYLE)
         }
         filter {
-            exclude { element -> element.file.path.contains("$buildDir/generated/") }
+            exclude { element -> element.file.path.contains("${layout.buildDirectory.asFile.get()}/generated/") }
         }
     }
     // Dependency check
@@ -176,10 +176,13 @@ koverMerged {
                     "*_ModuleKt",
                     "anvil.hint.binding.io.element.*",
                     "anvil.hint.merge.*",
+                    "anvil.hint.multibinding.io.element.*",
                     "anvil.module.*",
                     "com.airbnb.android.showkase*",
                     "io.element.android.libraries.designsystem.showkase.*",
+                    "io.element.android.x.di.DaggerAppComponent*",
                     "*_Factory",
+                    "*_Factory_Impl",
                     "*_Factory$*",
                     "*_Module",
                     "*_Module$*",
@@ -195,6 +198,11 @@ koverMerged {
                     // We do not cover Nodes (normally covered by maestro, but code coverage is not computed with maestro)
                     "*Node",
                     "*Node$*",
+                    // Exclude `:libraries:matrix:impl` module, it contains only wrappers to access the Rust Matrix SDK api, so it is not really relevant to unit test it: there is no logic to test.
+                    "io.element.android.libraries.matrix.impl.*",
+                    "*Presenter\$present\$*",
+                    // Forked from compose
+                    "io.element.android.libraries.designsystem.theme.components.bottomsheet.*",
                 )
             )
         }
@@ -228,11 +236,11 @@ koverMerged {
             name = "Global minimum code coverage."
             target = kotlinx.kover.api.VerificationTarget.ALL
             bound {
-                minValue = 55
+                minValue = 60
                 // Setting a max value, so that if coverage is bigger, it means that we have to change minValue.
                 // For instance if we have minValue = 20 and maxValue = 30, and current code coverage is now 31.32%, update
                 // minValue to 25 and maxValue to 35.
-                maxValue = 65
+                maxValue = 70
                 counter = kotlinx.kover.api.CounterType.INSTRUCTION
                 valueType = kotlinx.kover.api.VerificationValueType.COVERED_PERCENTAGE
             }
@@ -247,6 +255,7 @@ koverMerged {
                 excludes += "io.element.android.appnav.loggedin.LoggedInPresenter$*"
                 // Some options can't be tested at the moment
                 excludes += "io.element.android.features.preferences.impl.developer.DeveloperSettingsPresenter$*"
+                excludes += "*Presenter\$present\$*"
             }
             bound {
                 minValue = 85
@@ -354,7 +363,7 @@ subprojects {
 subprojects {
     tasks.withType<KspTask>() {
         doLast {
-            fileTree(buildDir).apply { include("**/*ShowkaseExtension*.kt") }.files.forEach { file ->
+            fileTree(layout.buildDirectory).apply { include("**/*ShowkaseExtension*.kt") }.files.forEach { file ->
                 ReplaceRegExp().apply {
                     setMatch("^public fun Showkase.getMetadata")
                     setReplace("@Suppress(\"DEPRECATION\") public fun Showkase.getMetadata")

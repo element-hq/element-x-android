@@ -30,7 +30,7 @@ import io.element.android.features.messages.impl.media.viewer.MediaViewerPresent
 import io.element.android.features.messages.media.FakeLocalMediaActions
 import io.element.android.features.messages.media.FakeLocalMediaFactory
 import io.element.android.libraries.architecture.Async
-import io.element.android.libraries.designsystem.utils.SnackbarDispatcher
+import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.matrix.test.media.FakeMediaLoader
 import io.element.android.libraries.matrix.test.media.aMediaSource
 import io.element.android.tests.testutils.WarmUpRule
@@ -55,7 +55,7 @@ class MediaViewerPresenterTest {
     fun `present - download media success scenario`() = runTest {
         val mediaLoader = FakeMediaLoader()
         val mediaActions = FakeLocalMediaActions()
-        val presenter = aMediaViewerPresenter(mediaLoader, mediaActions)
+        val presenter = createMediaViewerPresenter(mediaLoader, mediaActions)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -76,7 +76,7 @@ class MediaViewerPresenterTest {
         val mediaLoader = FakeMediaLoader()
         val mediaActions = FakeLocalMediaActions()
         val snackbarDispatcher = SnackbarDispatcher()
-        val presenter = aMediaViewerPresenter(mediaLoader, mediaActions, snackbarDispatcher)
+        val presenter = createMediaViewerPresenter(mediaLoader, mediaActions, snackbarDispatcher)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -122,7 +122,7 @@ class MediaViewerPresenterTest {
     fun `present - download media failure then retry with success scenario`() = runTest {
         val mediaLoader = FakeMediaLoader()
         val mediaActions = FakeLocalMediaActions()
-        val presenter = aMediaViewerPresenter(mediaLoader, mediaActions)
+        val presenter = createMediaViewerPresenter(mediaLoader, mediaActions)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -147,7 +147,7 @@ class MediaViewerPresenterTest {
         }
     }
 
-    private fun aMediaViewerPresenter(
+    private fun createMediaViewerPresenter(
         mediaLoader: FakeMediaLoader,
         localMediaActions: FakeLocalMediaActions,
         snackbarDispatcher: SnackbarDispatcher = SnackbarDispatcher(),

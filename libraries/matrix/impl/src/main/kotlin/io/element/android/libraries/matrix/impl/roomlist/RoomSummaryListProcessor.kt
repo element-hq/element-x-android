@@ -25,6 +25,7 @@ import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.RoomListEntriesUpdate
 import org.matrix.rustcomponents.sdk.RoomListEntry
 import org.matrix.rustcomponents.sdk.RoomListService
+import org.matrix.rustcomponents.sdk.RoomListServiceInterface
 import org.matrix.rustcomponents.sdk.use
 import timber.log.Timber
 import java.util.UUID
@@ -59,7 +60,7 @@ class RoomSummaryListProcessor(
         }
     }
 
-    private fun MutableList<RoomSummary>.applyUpdate(update: RoomListEntriesUpdate) {
+    private suspend fun MutableList<RoomSummary>.applyUpdate(update: RoomListEntriesUpdate) {
         when (update) {
             is RoomListEntriesUpdate.Append -> {
                 val roomSummaries = update.values.map {
@@ -105,7 +106,7 @@ class RoomSummaryListProcessor(
         }
     }
 
-    private fun buildSummaryForRoomListEntry(entry: RoomListEntry): RoomSummary {
+    private suspend fun buildSummaryForRoomListEntry(entry: RoomListEntry): RoomSummary {
         return when (entry) {
             RoomListEntry.Empty -> buildEmptyRoomSummary()
             is RoomListEntry.Filled -> buildAndCacheRoomSummaryForIdentifier(entry.roomId)
@@ -119,9 +120,9 @@ class RoomSummaryListProcessor(
         return RoomSummary.Empty(UUID.randomUUID().toString())
     }
 
-    private fun buildAndCacheRoomSummaryForIdentifier(identifier: String): RoomSummary {
+    private suspend fun buildAndCacheRoomSummaryForIdentifier(identifier: String): RoomSummary {
         val builtRoomSummary = roomListService.roomOrNull(identifier)?.use { roomListItem ->
-            roomListItem.roomInfoBlocking().use { roomInfo ->
+            roomListItem.roomInfo().use { roomInfo ->
                 RoomSummary.Filled(
                     details = roomSummaryDetailsFactory.create(roomInfo)
                 )

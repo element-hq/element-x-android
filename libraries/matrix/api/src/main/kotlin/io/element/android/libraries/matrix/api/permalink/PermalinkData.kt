@@ -22,14 +22,14 @@ import android.net.Uri
  * This sealed class represents all the permalink cases.
  * You don't have to instantiate yourself but should use [PermalinkParser] instead.
  */
-sealed class PermalinkData {
+sealed interface PermalinkData {
 
     data class RoomLink(
         val roomIdOrAlias: String,
         val isRoomAlias: Boolean,
         val eventId: String?,
         val viaParameters: List<String>
-    ) : PermalinkData()
+    ) : PermalinkData
 
     /*
      * &room_name=Team2
@@ -47,9 +47,9 @@ sealed class PermalinkData {
         val token: String,
         val privateKey: String,
         val roomType: String?
-    ) : PermalinkData()
+    ) : PermalinkData
 
-    data class UserLink(val userId: String) : PermalinkData()
+    data class UserLink(val userId: String) : PermalinkData
 
-    data class FallbackLink(val uri: Uri, val isLegacyGroupLink: Boolean = false) : PermalinkData()
+    data class FallbackLink(val uri: Uri, val isLegacyGroupLink: Boolean = false) : PermalinkData
 }

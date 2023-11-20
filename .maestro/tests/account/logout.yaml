@@ -3,11 +3,15 @@ appId: ${APP_ID}
 - tapOn:
     id: "home_screen-settings"
 - tapOn: "Sign out"
-- takeScreenshot: build/maestro/900-SignOutDialg
-# Ensure cancel cancels
-- tapOn: "Cancel"
+- takeScreenshot: build/maestro/900-SignOutScreen
+- back
 - tapOn: "Sign out"
 - tapOn:
-    text: "Sign out"
-    index: 1
+    id: "sign-out-submit"
+# Ensure cancel cancels
+- tapOn: "Cancel"
+- tapOn:
+    id: "sign-out-submit"
+- tapOn:
+    id: "dialog-positive"
 - runFlow: ../assertions/assertInitDisplayed.yaml

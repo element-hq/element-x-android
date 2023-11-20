@@ -22,6 +22,7 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.featureflag.test.InMemoryPreferencesStore
 import io.element.android.tests.testutils.WarmUpRule
+import io.element.android.tests.testutils.awaitLastSequentialItem
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
@@ -38,7 +39,7 @@ class AdvancedSettingsPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            val initialState = awaitItem()
+            val initialState = awaitLastSequentialItem()
             assertThat(initialState.isDeveloperModeEnabled).isFalse()
             assertThat(initialState.isRichTextEditorEnabled).isFalse()
         }
@@ -51,7 +52,7 @@ class AdvancedSettingsPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            val initialState = awaitItem()
+            val initialState = awaitLastSequentialItem()
             assertThat(initialState.isDeveloperModeEnabled).isFalse()
             initialState.eventSink.invoke(AdvancedSettingsEvents.SetDeveloperModeEnabled(true))
             assertThat(awaitItem().isDeveloperModeEnabled).isTrue()
@@ -67,7 +68,7 @@ class AdvancedSettingsPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            val initialState = awaitItem()
+            val initialState = awaitLastSequentialItem()
             assertThat(initialState.isRichTextEditorEnabled).isFalse()
             initialState.eventSink.invoke(AdvancedSettingsEvents.SetRichTextEditorEnabled(true))
             assertThat(awaitItem().isRichTextEditorEnabled).isTrue()

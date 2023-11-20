@@ -36,7 +36,6 @@ import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -49,13 +48,11 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.features.createroom.impl.R
 import io.element.android.features.createroom.impl.components.RoomPrivacyOption
-import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.designsystem.components.LabelledTextField
-import io.element.android.libraries.designsystem.components.ProgressDialog
+import io.element.android.libraries.designsystem.components.async.AsyncView
 import io.element.android.libraries.designsystem.components.button.BackButton
-import io.element.android.libraries.designsystem.components.dialogs.RetryDialog
-import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.aliasScreenTitle
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
@@ -83,12 +80,6 @@ fun ConfigureRoomView(
     val itemActionsBottomSheetState = rememberModalBottomSheetState(
         initialValue = ModalBottomSheetValue.Hidden,
     )
-
-    if (state.createRoomAction is Async.Success) {
-        LaunchedEffect(state.createRoomAction) {
-            onRoomCreated(state.createRoomAction.data)
-        }
-    }
 
     fun onAvatarClicked() {
         focusManager.clearFocus()
@@ -158,21 +149,14 @@ fun ConfigureRoomView(
         onActionSelected = { state.eventSink(ConfigureRoomEvents.HandleAvatarAction(it)) }
     )
 
-    when (state.createRoomAction) {
-        is Async.Loading -> {
-            ProgressDialog(text = stringResource(CommonStrings.common_creating_room))
-        }
-
-        is Async.Failure -> {
-            RetryDialog(
-                content = stringResource(R.string.screen_create_room_error_creating_room),
-                onDismiss = { state.eventSink(ConfigureRoomEvents.CancelCreateRoom) },
-                onRetry = { state.eventSink(ConfigureRoomEvents.CreateRoom(state.config)) },
-            )
-        }
-
-        else -> Unit
-    }
+    AsyncView(
+        async = state.createRoomAction,
+        progressText = stringResource(CommonStrings.common_creating_room),
+        onSuccess = { onRoomCreated(it) },
+        errorMessage = {  stringResource(R.string.screen_create_room_error_creating_room) },
+        onRetry = { state.eventSink(ConfigureRoomEvents.CreateRoom(state.config)) },
+        onErrorDismiss = { state.eventSink(ConfigureRoomEvents.CancelCreateRoom) },
+    )
 
     PermissionsView(
         state = state.cameraPermissionState,
@@ -181,7 +165,7 @@ fun ConfigureRoomView(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ConfigureRoomToolbar(
+private fun ConfigureRoomToolbar(
     isNextActionEnabled: Boolean,
     modifier: Modifier = Modifier,
     onBackPressed: () -> Unit = {},
@@ -207,7 +191,7 @@ fun ConfigureRoomToolbar(
 }
 
 @Composable
-fun RoomNameWithAvatar(
+private fun RoomNameWithAvatar(
     avatarUri: Uri?,
     roomName: String,
     modifier: Modifier = Modifier,
@@ -235,7 +219,7 @@ fun RoomNameWithAvatar(
 }
 
 @Composable
-fun RoomTopic(
+private fun RoomTopic(
     topic: String,
     modifier: Modifier = Modifier,
     onTopicChanged: (String) -> Unit = {},
@@ -254,7 +238,7 @@ fun RoomTopic(
 }
 
 @Composable
-fun RoomPrivacyOptions(
+private fun RoomPrivacyOptions(
     selected: RoomPrivacy?,
     modifier: Modifier = Modifier,
     onOptionSelected: (RoomPrivacyItem) -> Unit = {},

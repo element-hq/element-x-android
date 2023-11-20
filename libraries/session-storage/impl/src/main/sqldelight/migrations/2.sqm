@@ -1,1 +1,3 @@
+-- Migrate DB from version 2
+
 ALTER TABLE SessionData ADD COLUMN oidcData TEXT;

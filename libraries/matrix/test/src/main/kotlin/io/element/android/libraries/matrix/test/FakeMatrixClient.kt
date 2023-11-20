@@ -22,6 +22,7 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.createroom.CreateRoomParameters
+import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import io.element.android.libraries.matrix.api.media.MatrixMediaLoader
 import io.element.android.libraries.matrix.api.notification.NotificationService
 import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsService
@@ -33,6 +34,7 @@ import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.api.user.MatrixSearchUserResults
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
+import io.element.android.libraries.matrix.test.encryption.FakeEncryptionService
 import io.element.android.libraries.matrix.test.media.FakeMediaLoader
 import io.element.android.libraries.matrix.test.notification.FakeNotificationService
 import io.element.android.libraries.matrix.test.notificationsettings.FakeNotificationSettingsService
@@ -55,6 +57,7 @@ class FakeMatrixClient(
     private val notificationService: FakeNotificationService = FakeNotificationService(),
     private val notificationSettingsService: FakeNotificationSettingsService = FakeNotificationSettingsService(),
     private val syncService: FakeSyncService = FakeSyncService(),
+    private val encryptionService: FakeEncryptionService = FakeEncryptionService(),
     private val accountManagementUrlString: Result<String?> = Result.success(null),
 ) : MatrixClient {
 
@@ -124,9 +127,11 @@ class FakeMatrixClient(
     override suspend fun clearCache() {
     }
 
-    override suspend fun logout(): String? {
+    override suspend fun logout(ignoreSdkError: Boolean): String? {
         delay(100)
-        logoutFailure?.let { throw it }
+        if (ignoreSdkError.not()) {
+            logoutFailure?.let { throw it }
+        }
         return null
     }
 
@@ -173,6 +178,7 @@ class FakeMatrixClient(
 
     override fun notificationService(): NotificationService = notificationService
     override fun notificationSettingsService(): NotificationSettingsService = notificationSettingsService
+    override fun encryptionService(): EncryptionService = encryptionService
 
     override fun roomMembershipObserver(): RoomMembershipObserver {
         return RoomMembershipObserver()
@@ -208,8 +214,12 @@ class FakeMatrixClient(
         findDmResult = result
     }
 
-    fun givenGetRoomResult(roomId: RoomId, result: MatrixRoom) {
-        getRoomResults[roomId] = result
+    fun givenGetRoomResult(roomId: RoomId, result: MatrixRoom?) {
+        if (result == null) {
+            getRoomResults.remove(roomId)
+        } else {
+            getRoomResults[roomId] = result
+        }
     }
 
     fun givenSearchUsersResult(searchTerm: String, result: Result<MatrixSearchUserResults>) {

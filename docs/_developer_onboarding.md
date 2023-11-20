@@ -117,6 +117,10 @@ You can also have access to the aars through the [release](https://github.com/ma
 
 #### Build the SDK locally
 
+Easiest way: run the script [./tools/sdk/build_rust_sdk.sh](./tools/sdk/build_rust_sdk.sh) and just answer the questions.
+
+Legacy way:
+
 If you need to locally build the sdk-android you can use
 the [build](https://github.com/matrix-org/matrix-rust-components-kotlin/blob/main/scripts/build.sh) script.
 
@@ -142,14 +146,10 @@ So for example to build the sdk against aarch64-linux-android target and copy th
 ./scripts/build.sh -p [YOUR MATRIX RUST SDK PATH] -t aarch64-linux-android -o [YOUR element-x-android PATH]/libraries/rustsdk/matrix-rust-sdk.aar
 ```
 
-Finally let the `matrix/impl` module use this aar by changing the dependencies from `libs.matrix.sdk` to `projects.libraries.rustsdk`:
-
-```groovy
-dependencies {
-    api(projects.libraries.rustsdk)    // <- use the local version of the sdk. Uncomment this line.
-    //implementation(libs.matrix.sdk)  // <- use the released version. Comment this line.
-}
-```
+Troubleshooting:
+ - You may need to set `ANDROID_NDK_HOME` e.g `export ANDROID_NDK_HOME=~/Library/Android/sdk/ndk`.
+ - If you get the error `thread 'main' panicked at 'called `Option::unwrap()` on a `None` value', .cargo/registry/src/index.crates.io-6f17d22bba15001f/cargo-ndk-2.11.0/src/cli.rs:345:18` try updating your Cargo NDK version. In this case, 2.11.0 is too old so `cargo install cargo-ndk` to install a newer version.
+ - If you get the error `Unsupported class file major version 64` try changing your JVM version. In this case, Java 20 is not supported in Gradle yet, so downgrade to an earlier version (Java 17 worked in this case).
 
 You are good to test your local rust development now!
 
@@ -271,11 +271,12 @@ Follow these steps to install and configure the plugin and templates:
 
 1. Install the AS plugin for generating modules :
    [Generate Module from Template](https://plugins.jetbrains.com/plugin/13586-generate-module-from-template)
-2. Import file templates in AS :
+2. Run the script `tools/templates/generate_templates.sh` to generate the template zip file
+3. Import file templates in AS :
    - Navigate to File/Manage IDE Settings/Import Settings
-   - Pick the `tools/templates/file_templates.zip` files
+   - Pick the `tmp/file_templates.zip` files
    - Click on OK
-3. Configure generate-module-from-template plugin : 
+4. Configure generate-module-from-template plugin : 
    - Navigate to AS/Settings/Tools/Module Template Settings
    - Click on + / Import From File
    - Pick the `tools/templates/FeatureModule.json`

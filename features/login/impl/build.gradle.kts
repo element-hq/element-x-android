@@ -19,7 +19,7 @@ plugins {
     alias(libs.plugins.anvil)
     alias(libs.plugins.ksp)
     id("kotlin-parcelize")
-    kotlin("plugin.serialization") version "1.9.10"
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -38,6 +38,7 @@ anvil {
 
 dependencies {
     implementation(projects.anvilannotations)
+    implementation(projects.appconfig)
     anvil(projects.anvilcodegen)
     implementation(projects.libraries.core)
     implementation(projects.libraries.androidutils)

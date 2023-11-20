@@ -19,13 +19,17 @@ package io.element.android.features.messages.impl.timeline.factories.event
 import io.element.android.features.messages.impl.timeline.groups.canBeDisplayedInBubbleBlock
 import io.element.android.features.messages.impl.timeline.model.AggregatedReaction
 import io.element.android.features.messages.impl.timeline.model.AggregatedReactionSender
+import io.element.android.features.messages.impl.timeline.model.ReadReceiptData
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.TimelineItemGroupPosition
 import io.element.android.features.messages.impl.timeline.model.TimelineItemReactions
+import io.element.android.features.messages.impl.timeline.model.TimelineItemReadReceipts
 import io.element.android.libraries.core.bool.orTrue
+import io.element.android.libraries.dateformatter.api.LastMessageTimestampFormatter
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.item.event.ProfileTimelineDetails
 import kotlinx.collections.immutable.toImmutableList
@@ -36,12 +40,14 @@ import javax.inject.Inject
 class TimelineItemEventFactory @Inject constructor(
     private val contentFactory: TimelineItemContentFactory,
     private val matrixClient: MatrixClient,
+    private val lastMessageTimestampFormatter: LastMessageTimestampFormatter,
 ) {
 
     suspend fun create(
         currentTimelineItem: MatrixTimelineItem.Event,
         index: Int,
         timelineItems: List<MatrixTimelineItem>,
+        roomMembers: List<RoomMember>,
     ): TimelineItem.Event {
         val currentSender = currentTimelineItem.event.sender
         val groupPosition =
@@ -84,6 +90,7 @@ class TimelineItemEventFactory @Inject constructor(
             sentTime = sentTime,
             groupPosition = groupPosition,
             reactionsState = currentTimelineItem.computeReactionsState(),
+            readReceiptState = currentTimelineItem.computeReadReceiptState(roomMembers),
             localSendState = currentTimelineItem.event.localSendState,
             inReplyTo = currentTimelineItem.event.inReplyTo(),
             isThreaded = currentTimelineItem.event.isThreaded(),
@@ -102,7 +109,7 @@ class TimelineItemEventFactory @Inject constructor(
                 key = reaction.key,
                 currentUserId = matrixClient.sessionId,
                 senders = reaction.senders
-                    .sortedByDescending{ it.timestamp }
+                    .sortedByDescending { it.timestamp }
                     .map {
                         val date = Date(it.timestamp)
                         AggregatedReactionSender(
@@ -122,6 +129,27 @@ class TimelineItemEventFactory @Inject constructor(
                     .thenBy { it.senders[0].timestamp }
             )
         return TimelineItemReactions(aggregatedReactions.toImmutableList())
+    }
+
+    private fun MatrixTimelineItem.Event.computeReadReceiptState(
+        roomMembers: List<RoomMember>,
+    ): TimelineItemReadReceipts {
+        return TimelineItemReadReceipts(
+            receipts = event.receipts
+                .map { receipt ->
+                    val roomMember = roomMembers.find { it.userId == receipt.userId }
+                    ReadReceiptData(
+                        avatarData = AvatarData(
+                            id = receipt.userId.value,
+                            name = roomMember?.displayName,
+                            url = roomMember?.avatarUrl,
+                            size = AvatarSize.TimelineReadReceipt,
+                        ),
+                        formattedDate = lastMessageTimestampFormatter.format(receipt.timestamp)
+                    )
+                }
+                .toImmutableList()
+        )
     }
 
     private fun computeGroupPosition(

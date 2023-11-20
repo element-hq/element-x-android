@@ -21,12 +21,11 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.ForwardEventException
 import io.element.android.libraries.matrix.impl.roomlist.roomOrNull
+import io.element.android.libraries.matrix.impl.timeline.runWithTimelineListenerRegistered
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.withTimeout
 import org.matrix.rustcomponents.sdk.Room
 import org.matrix.rustcomponents.sdk.RoomListService
-import org.matrix.rustcomponents.sdk.TimelineDiff
-import org.matrix.rustcomponents.sdk.TimelineListener
 import kotlin.time.Duration.Companion.milliseconds
 
 /**
@@ -56,16 +55,14 @@ class RoomContentForwarder(
         val failedForwardingTo = mutableSetOf<RoomId>()
         targetRooms.parallelMap { room ->
             room.use { targetRoom ->
-                val result = runCatching {
+                runCatching {
                     // Sending a message requires a registered timeline listener
-                    targetRoom.addTimelineListener(NoOpTimelineListener)
-                    withTimeout(timeoutMs.milliseconds) {
-                        targetRoom.send(content)
+                    targetRoom.runWithTimelineListenerRegistered {
+                        withTimeout(timeoutMs.milliseconds) {
+                            targetRoom.send(content)
+                        }
                     }
                 }
-                // After sending, we remove the timeline
-                targetRoom.removeTimeline()
-                result
             }.onFailure {
                 failedForwardingTo.add(RoomId(room.id()))
                 if (it is CancellationException) {
@@ -75,11 +72,7 @@ class RoomContentForwarder(
         }
 
         if (failedForwardingTo.isNotEmpty()) {
-            throw ForwardEventException(toRoomIds.toList())
+            throw ForwardEventException(failedForwardingTo.toList())
         }
-    }
-
-    private object NoOpTimelineListener : TimelineListener {
-        override fun onUpdate(diff: List<TimelineDiff>) = Unit
     }
 }

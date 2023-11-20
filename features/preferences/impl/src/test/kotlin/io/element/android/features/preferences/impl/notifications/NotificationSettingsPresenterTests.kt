@@ -22,6 +22,7 @@ import app.cash.turbine.test
 import com.element.android.libraries.pushstore.test.userpushstore.FakeUserPushStoreFactory
 import com.google.common.truth.Truth
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
+import io.element.android.libraries.matrix.test.A_THROWABLE
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.notificationsettings.FakeNotificationSettingsService
 import io.element.android.tests.testutils.consumeItemsUntilPredicate
@@ -32,7 +33,7 @@ import kotlin.time.Duration.Companion.milliseconds
 class NotificationSettingsPresenterTests {
     @Test
     fun `present - ensures initial state is correct`() = runTest {
-        val presenter = aNotificationPresenter()
+        val presenter = createNotificationSettingsPresenter()
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -58,7 +59,7 @@ class NotificationSettingsPresenterTests {
     @Test
     fun `present - default group notification mode changed`() = runTest {
         val notificationSettingsService = FakeNotificationSettingsService()
-        val presenter = aNotificationPresenter(notificationSettingsService)
+        val presenter = createNotificationSettingsPresenter(notificationSettingsService)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -77,7 +78,7 @@ class NotificationSettingsPresenterTests {
     @Test
     fun `present - notification settings mismatched`() = runTest {
         val notificationSettingsService = FakeNotificationSettingsService()
-        val presenter = aNotificationPresenter(notificationSettingsService)
+        val presenter = createNotificationSettingsPresenter(notificationSettingsService)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -108,7 +109,7 @@ class NotificationSettingsPresenterTests {
             initialEncryptedOneToOneDefaultMode = RoomNotificationMode.ALL_MESSAGES,
             initialOneToOneDefaultMode = RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY
         )
-        val presenter = aNotificationPresenter(notificationSettingsService)
+        val presenter = createNotificationSettingsPresenter(notificationSettingsService)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -125,7 +126,7 @@ class NotificationSettingsPresenterTests {
 
     @Test
     fun `present - set notifications enabled`() = runTest {
-        val presenter = aNotificationPresenter()
+        val presenter = createNotificationSettingsPresenter()
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -145,7 +146,7 @@ class NotificationSettingsPresenterTests {
 
     @Test
     fun `present - set call notifications enabled`() = runTest {
-        val presenter = aNotificationPresenter()
+        val presenter = createNotificationSettingsPresenter()
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -167,7 +168,7 @@ class NotificationSettingsPresenterTests {
 
     @Test
     fun `present - set atRoom notifications enabled`() = runTest {
-        val presenter = aNotificationPresenter()
+        val presenter = createNotificationSettingsPresenter()
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -187,7 +188,36 @@ class NotificationSettingsPresenterTests {
         }
     }
 
-    private fun aNotificationPresenter(
+    @Test
+    fun `present - clear notification settings change error`() = runTest {
+        val notificationSettingsService = FakeNotificationSettingsService()
+        val presenter = createNotificationSettingsPresenter(notificationSettingsService)
+        notificationSettingsService.givenSetAtRoomError(A_THROWABLE)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val loadedState = consumeItemsUntilPredicate {
+                (it.matrixSettings as? NotificationSettingsState.MatrixSettings.Valid)?.atRoomNotificationsEnabled == false
+            }.last()
+            val validMatrixState = loadedState.matrixSettings as? NotificationSettingsState.MatrixSettings.Valid
+            Truth.assertThat(validMatrixState?.atRoomNotificationsEnabled).isFalse()
+
+            loadedState.eventSink(NotificationSettingsEvents.SetAtRoomNotificationsEnabled(true))
+            val errorState = consumeItemsUntilPredicate {
+                it.changeNotificationSettingAction.isFailure()
+            }.last()
+            Truth.assertThat(errorState.changeNotificationSettingAction.isFailure()).isTrue()
+            errorState.eventSink(NotificationSettingsEvents.ClearNotificationChangeError)
+
+            val clearErrorState = consumeItemsUntilPredicate {
+                it.changeNotificationSettingAction.isUninitialized()
+            }.last()
+            Truth.assertThat(clearErrorState.changeNotificationSettingAction.isUninitialized()).isTrue()
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    private fun createNotificationSettingsPresenter(
         notificationSettingsService: FakeNotificationSettingsService = FakeNotificationSettingsService()
     ) : NotificationSettingsPresenter {
         val matrixClient = FakeMatrixClient(notificationSettingsService = notificationSettingsService)

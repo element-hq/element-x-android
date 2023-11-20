@@ -17,17 +17,20 @@
 package io.element.android.libraries.featureflag.impl
 
 import io.element.android.libraries.featureflag.api.Feature
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 
 class FakeMutableFeatureFlagProvider(override val priority: Int) : MutableFeatureFlagProvider {
 
-    private val enabledFeatures = HashMap<String, Boolean>()
+    private val enabledFeatures = mutableMapOf<String, MutableStateFlow<Boolean>>()
 
     override suspend fun setFeatureEnabled(feature: Feature, enabled: Boolean) {
-        enabledFeatures[feature.key] = enabled
+        val flow = enabledFeatures.getOrPut(feature.key) { MutableStateFlow(enabled) }
+        flow.emit(enabled)
     }
 
-    override suspend fun isFeatureEnabled(feature: Feature): Boolean {
-        return enabledFeatures[feature.key] ?: feature.defaultValue
+    override fun isFeatureEnabledFlow(feature: Feature): Flow<Boolean> {
+        return enabledFeatures.getOrPut(feature.key) { MutableStateFlow(feature.defaultValue) }
     }
 
     override fun hasFeature(feature: Feature): Boolean = true

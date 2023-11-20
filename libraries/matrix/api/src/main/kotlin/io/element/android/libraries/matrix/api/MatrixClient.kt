@@ -21,6 +21,7 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.createroom.CreateRoomParameters
+import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import io.element.android.libraries.matrix.api.media.MatrixMediaLoader
 import io.element.android.libraries.matrix.api.notification.NotificationService
 import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsService
@@ -55,6 +56,7 @@ interface MatrixClient : Closeable {
     fun pushersService(): PushersService
     fun notificationService(): NotificationService
     fun notificationSettingsService(): NotificationSettingsService
+    fun encryptionService(): EncryptionService
     suspend fun getCacheSize(): Long
 
     /**
@@ -66,8 +68,9 @@ interface MatrixClient : Closeable {
      * Logout the user.
      * Returns an optional URL. When the URL is there, it should be presented to the user after logout for
      * Relying Party (RP) initiated logout on their account page.
+     * @param ignoreSdkError if true, the SDK will ignore any error and delete the session data anyway.
      */
-    suspend fun logout(): String?
+    suspend fun logout(ignoreSdkError: Boolean): String?
     suspend fun loadUserDisplayName(): Result<String>
     suspend fun loadUserAvatarURLString(): Result<String?>
     suspend fun getAccountManagementUrl(action: AccountManagementAction?): Result<String?>

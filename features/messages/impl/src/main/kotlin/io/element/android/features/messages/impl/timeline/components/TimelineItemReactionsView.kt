@@ -37,7 +37,7 @@ import io.element.android.libraries.designsystem.utils.CommonDrawables
 import kotlinx.collections.immutable.ImmutableList
 
 @Composable
-fun TimelineItemReactions(
+fun TimelineItemReactionsView(
     reactionsState: TimelineItemReactions,
     isOutgoing: Boolean,
     onReactionClicked: (emoji: String) -> Unit,
@@ -46,16 +46,16 @@ fun TimelineItemReactions(
     modifier: Modifier = Modifier,
 ) {
     var expanded: Boolean by rememberSaveable { mutableStateOf(false) }
-        TimelineItemReactionsView(
-            modifier = modifier,
-            reactions = reactionsState.reactions,
-            expanded = expanded,
-            isOutgoing = isOutgoing,
-            onReactionClick = onReactionClicked,
-            onReactionLongClick = onReactionLongClicked,
-            onMoreReactionsClick = onMoreReactionsClicked,
-            onToggleExpandClick = { expanded = !expanded },
-        )
+    TimelineItemReactionsView(
+        modifier = modifier,
+        reactions = reactionsState.reactions,
+        expanded = expanded,
+        isOutgoing = isOutgoing,
+        onReactionClick = onReactionClicked,
+        onReactionLongClick = onReactionLongClicked,
+        onMoreReactionsClick = onMoreReactionsClicked,
+        onToggleExpandClick = { expanded = !expanded },
+    )
 }
 
 @Composable
@@ -69,7 +69,7 @@ private fun TimelineItemReactionsView(
     onToggleExpandClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    // In LTR languages we want an incoming message's reactions to be LRT and outgoing to be RTL.
+    // In LTR languages we want an incoming message's reactions to be LTR and outgoing to be RTL.
     // For RTL languages it should be the opposite.
     val currentLayout = LocalLayoutDirection.current
     val reactionsLayoutDirection = if (!isOutgoing) currentLayout
@@ -95,7 +95,7 @@ private fun TimelineItemReactionsView(
             },
             addMoreButton = {
                 MessagesReactionButton(
-                    content = MessagesReactionsButtonContent.Icon(CommonDrawables.ic_september_add_reaction),
+                    content = MessagesReactionsButtonContent.Icon(CommonDrawables.ic_add_reaction),
                     onClick = onMoreReactionsClick,
                     onLongClick = {}
                 )
@@ -153,7 +153,7 @@ private fun ContentToPreview(
     reactions: ImmutableList<AggregatedReaction>,
     isOutgoing: Boolean = false
 ) {
-    TimelineItemReactions(
+    TimelineItemReactionsView(
         reactionsState = TimelineItemReactions(
             reactions
         ),

@@ -27,8 +27,8 @@ plugins {
     alias(libs.plugins.anvil)
     alias(libs.plugins.ksp)
     alias(libs.plugins.kapt)
-    id("com.google.firebase.appdistribution") version "4.0.0"
-    id("org.jetbrains.kotlinx.knit") version "0.4.0"
+    alias(libs.plugins.firebaseAppDistribution)
+    alias(libs.plugins.knit)
     id("kotlin-parcelize")
     // To be able to update the firebase.xml files, uncomment and build the project
     // id("com.google.gms.google-services")
@@ -201,9 +201,9 @@ dependencies {
     implementation(projects.features.call)
     implementation(projects.anvilannotations)
     implementation(projects.appnav)
+    implementation(projects.appconfig)
     anvil(projects.anvilcodegen)
 
-    coreLibraryDesugaring(libs.android.desugar)
     implementation(libs.appyx.core)
     implementation(libs.androidx.splash)
     implementation(libs.androidx.core)

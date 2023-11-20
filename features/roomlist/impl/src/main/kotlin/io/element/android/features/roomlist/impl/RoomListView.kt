@@ -40,6 +40,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.features.leaveroom.api.LeaveRoomView
 import io.element.android.features.networkmonitor.api.ui.ConnectivityIndicatorContainer
+import io.element.android.features.roomlist.impl.components.ConfirmRecoveryKeyBanner
 import io.element.android.features.roomlist.impl.components.RequestVerificationHeader
 import io.element.android.features.roomlist.impl.components.RoomListMenuAction
 import io.element.android.features.roomlist.impl.components.RoomListTopBar
@@ -55,8 +56,8 @@ import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.designsystem.utils.LazyListVisibleRangeHelper
 import io.element.android.libraries.designsystem.utils.LogCompositions
-import io.element.android.libraries.designsystem.utils.SnackbarHost
-import io.element.android.libraries.designsystem.utils.rememberSnackbarHostState
+import io.element.android.libraries.designsystem.utils.snackbar.SnackbarHost
+import io.element.android.libraries.designsystem.utils.snackbar.rememberSnackbarHostState
 import io.element.android.libraries.matrix.api.core.RoomId
 
 @Composable
@@ -119,7 +120,7 @@ fun RoomListView(
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
-fun RoomListContent(
+private fun RoomListContent(
     state: RoomListState,
     onVerifyClicked: () -> Unit,
     onRoomClicked: (RoomId) -> Unit,
@@ -151,6 +152,7 @@ fun RoomListContent(
         topBar = {
             RoomListTopBar(
                 matrixUser = state.matrixUser,
+                showAvatarIndicator = state.showAvatarIndicator,
                 areSearchResultsDisplayed = state.displaySearchResults,
                 onFilterChanged = { state.eventSink(RoomListEvents.UpdateFilter(it)) },
                 onToggleSearch = { state.eventSink(RoomListEvents.ToggleSearchResults) },
@@ -166,12 +168,22 @@ fun RoomListContent(
                     .consumeWindowInsets(padding),
                 state = lazyListState,
             ) {
-                if (state.displayVerificationPrompt) {
-                    item {
-                        RequestVerificationHeader(
-                            onVerifyClicked = onVerifyClicked,
-                            onDismissClicked = { state.eventSink(RoomListEvents.DismissRequestVerificationPrompt) }
-                        )
+                when {
+                    state.displayVerificationPrompt -> {
+                        item {
+                            RequestVerificationHeader(
+                                onVerifyClicked = onVerifyClicked,
+                                onDismissClicked = { state.eventSink(RoomListEvents.DismissRequestVerificationPrompt) }
+                            )
+                        }
+                    }
+                    state.displayRecoveryKeyPrompt -> {
+                        item {
+                            ConfirmRecoveryKeyBanner(
+                                onContinueClicked = onOpenSettings,
+                                onDismissClicked = { state.eventSink(RoomListEvents.DismissRecoveryKeyPrompt) }
+                            )
+                        }
                     }
                 }
 
@@ -213,7 +225,7 @@ fun RoomListContent(
             ) {
                 Icon(
                     // Note cannot use Icons.Outlined.EditSquare, it does not exist :/
-                    resourceId = CommonDrawables.ic_september_compose_button,
+                    resourceId = CommonDrawables.ic_new_message,
                     contentDescription = stringResource(id = R.string.screen_roomlist_a11y_create_message)
                 )
             }

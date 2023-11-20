@@ -63,7 +63,7 @@ class ChangeServerPresenter @Inject constructor(
         changeServerAction: MutableState<Async<Unit>>,
     ) = launch {
         suspend {
-            authenticationService.setHomeserver(data.title).map {
+            authenticationService.setHomeserver(data.url).map {
                 authenticationService.getHomeserverDetails().value!!
                 // Valid, remember user choice
                 accountProviderDataSource.userSelection(data)

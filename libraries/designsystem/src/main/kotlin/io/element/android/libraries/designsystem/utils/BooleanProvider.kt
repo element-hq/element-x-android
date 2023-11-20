@@ -20,5 +20,5 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 
 open class BooleanProvider : PreviewParameterProvider<Boolean> {
     override val values: Sequence<Boolean>
-        get() = sequenceOf(false, true)
+        get() = sequenceOf(true, false)
 }

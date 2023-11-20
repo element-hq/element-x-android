@@ -66,6 +66,7 @@ import io.element.android.libraries.core.mimetype.MimeTypes.isMimeTypeVideo
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.utils.CommonDrawables
+import io.element.android.libraries.designsystem.utils.KeepScreenOn
 import io.element.android.libraries.designsystem.utils.OnLifecycleEvent
 import io.element.android.libraries.theme.ElementTheme
 import me.saket.telephoto.zoomable.ZoomSpec
@@ -142,7 +143,7 @@ private fun MediaImageView(
 
 @UnstableApi
 @Composable
-fun MediaVideoView(
+private fun MediaVideoView(
     localMediaViewState: LocalMediaViewState,
     localMedia: LocalMedia?,
     modifier: Modifier = Modifier,
@@ -151,6 +152,10 @@ fun MediaVideoView(
     val playerListener = object : Player.Listener {
         override fun onRenderedFirstFrame() {
             localMediaViewState.isReady = true
+        }
+
+        override fun onIsPlayingChanged(isPlaying: Boolean) {
+            localMediaViewState.isPlaying = isPlaying
         }
     }
     val exoPlayer = remember {
@@ -168,6 +173,7 @@ fun MediaVideoView(
     } else {
         exoPlayer.setMediaItems(emptyList())
     }
+    KeepScreenOn(localMediaViewState.isPlaying)
     AndroidView(
         factory = {
             PlayerView(context).apply {
@@ -196,7 +202,7 @@ fun MediaVideoView(
 }
 
 @Composable
-fun MediaPDFView(
+private fun MediaPDFView(
     localMediaViewState: LocalMediaViewState,
     localMedia: LocalMedia?,
     zoomableState: ZoomableState,
@@ -211,7 +217,7 @@ fun MediaPDFView(
 }
 
 @Composable
-fun MediaFileView(
+private fun MediaFileView(
     localMediaViewState: LocalMediaViewState,
     uri: Uri?,
     info: MediaInfo?,
@@ -230,7 +236,7 @@ fun MediaFileView(
             ) {
                 Icon(
                     imageVector = if (isAudio) Icons.Outlined.GraphicEq else null,
-                    resourceId = if (isAudio) null else CommonDrawables.ic_september_attachment,
+                    resourceId = if (isAudio) null else CommonDrawables.ic_attachment,
                     contentDescription = null,
                     tint = MaterialTheme.colorScheme.background,
                     modifier = Modifier

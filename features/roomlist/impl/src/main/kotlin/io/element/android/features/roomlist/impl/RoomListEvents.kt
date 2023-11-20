@@ -24,6 +24,7 @@ sealed interface RoomListEvents {
     data class UpdateVisibleRange(val range: IntRange) : RoomListEvents
     data object LoadMoreSearchResults : RoomListEvents
     data object DismissRequestVerificationPrompt : RoomListEvents
+    data object DismissRecoveryKeyPrompt : RoomListEvents
     data object ToggleSearchResults : RoomListEvents
     data class ShowContextMenu(val roomListRoomSummary: RoomListRoomSummary) : RoomListEvents
     data object HideContextMenu : RoomListEvents

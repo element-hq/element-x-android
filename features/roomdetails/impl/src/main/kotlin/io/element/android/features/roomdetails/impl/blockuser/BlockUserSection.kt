@@ -16,21 +16,26 @@
 
 package io.element.android.features.roomdetails.impl.blockuser
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Block
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.progressSemantics
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import io.element.android.features.roomdetails.impl.R
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsEvents
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsState
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.core.bool.orFalse
-import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
 import io.element.android.libraries.designsystem.components.dialogs.RetryDialog
+import io.element.android.libraries.designsystem.components.list.ListItemContent
 import io.element.android.libraries.designsystem.components.preferences.PreferenceCategory
-import io.element.android.libraries.designsystem.components.preferences.PreferenceText
+import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
+import io.element.android.libraries.designsystem.theme.components.IconSource
+import io.element.android.libraries.designsystem.theme.components.ListItem
+import io.element.android.libraries.designsystem.theme.components.ListItemStyle
+import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
@@ -66,63 +71,30 @@ private fun PreferenceBlockUser(
     eventSink: (RoomMemberDetailsEvents) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val loadingCurrentValue = @Composable {
+        CircularProgressIndicator(
+            modifier = Modifier
+                .progressSemantics()
+                .size(20.dp),
+            strokeWidth = 2.dp
+        )
+    }
     if (isBlocked.orFalse()) {
-        PreferenceText(
-            title = stringResource(R.string.screen_dm_details_unblock_user),
-            icon = Icons.Outlined.Block,
+        ListItem(
+            headlineContent = { Text(stringResource(R.string.screen_dm_details_unblock_user)) },
+            leadingContent = ListItemContent.Icon(IconSource.Resource(CommonDrawables.ic_compound_block)),
             onClick = { if (!isLoading) eventSink(RoomMemberDetailsEvents.UnblockUser(needsConfirmation = true)) },
-            loadingCurrentValue = isLoading,
+            trailingContent = if (isLoading) ListItemContent.Custom(loadingCurrentValue) else null,
             modifier = modifier,
         )
     } else {
-        PreferenceText(
-            title = stringResource(R.string.screen_dm_details_block_user),
-            icon = Icons.Outlined.Block,
-            tintColor = MaterialTheme.colorScheme.error,
+        ListItem(
+            headlineContent = { Text(stringResource(R.string.screen_dm_details_block_user)) },
+            leadingContent = ListItemContent.Icon(IconSource.Resource(CommonDrawables.ic_compound_block)),
+            style = ListItemStyle.Destructive,
             onClick = { if (!isLoading) eventSink(RoomMemberDetailsEvents.BlockUser(needsConfirmation = true)) },
-            loadingCurrentValue = isLoading,
+            trailingContent = if (isLoading) ListItemContent.Custom(loadingCurrentValue) else null,
             modifier = modifier,
         )
     }
-}
-
-@Composable
-internal fun BlockUserDialogs(state: RoomMemberDetailsState) {
-    when (state.displayConfirmationDialog) {
-        null -> Unit
-        RoomMemberDetailsState.ConfirmationDialog.Block -> {
-            BlockConfirmationDialog(
-                onBlockAction = { state.eventSink(RoomMemberDetailsEvents.BlockUser(needsConfirmation = false)) },
-                onDismiss = { state.eventSink(RoomMemberDetailsEvents.ClearConfirmationDialog) }
-            )
-        }
-        RoomMemberDetailsState.ConfirmationDialog.Unblock -> {
-            UnblockConfirmationDialog(
-                onUnblockAction = { state.eventSink(RoomMemberDetailsEvents.UnblockUser(needsConfirmation = false)) },
-                onDismiss = { state.eventSink(RoomMemberDetailsEvents.ClearConfirmationDialog) }
-            )
-        }
-    }
-}
-
-@Composable
-internal fun BlockConfirmationDialog(onBlockAction: () -> Unit, onDismiss: () -> Unit) {
-    ConfirmationDialog(
-        title = stringResource(R.string.screen_dm_details_block_user),
-        content = stringResource(R.string.screen_dm_details_block_alert_description),
-        submitText = stringResource(R.string.screen_dm_details_block_alert_action),
-        onSubmitClicked = onBlockAction,
-        onDismiss = onDismiss
-    )
-}
-
-@Composable
-internal fun UnblockConfirmationDialog(onUnblockAction: () -> Unit, onDismiss: () -> Unit) {
-    ConfirmationDialog(
-        title = stringResource(R.string.screen_dm_details_unblock_user),
-        content = stringResource(R.string.screen_dm_details_unblock_alert_description),
-        submitText = stringResource(R.string.screen_dm_details_unblock_alert_action),
-        onSubmitClicked = onUnblockAction,
-        onDismiss = onDismiss
-    )
 }

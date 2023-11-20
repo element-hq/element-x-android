@@ -19,6 +19,11 @@ package io.element.android.libraries.matrix.api.core
 import io.element.android.libraries.matrix.api.BuildConfig
 import java.io.Serializable
 
+/**
+ * A [String] holding a valid Matrix user ID.
+ *
+ * https://spec.matrix.org/v1.8/appendices/#user-identifiers
+ */
 @JvmInline
 value class UserId(val value: String) : Serializable {
 

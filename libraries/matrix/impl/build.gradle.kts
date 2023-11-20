@@ -17,7 +17,7 @@
 plugins {
     id("io.element.android-library")
     alias(libs.plugins.anvil)
-    kotlin("plugin.serialization") version "1.9.10"
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -29,8 +29,13 @@ anvil {
 }
 
 dependencies {
-    // implementation(projects.libraries.rustsdk)
-    implementation(libs.matrix.sdk)
+    releaseImplementation(libs.matrix.sdk)
+    if (file("${rootDir.path}/libraries/rustsdk/matrix-rust-sdk.aar").exists()) {
+        println("\nNote: Using local binary of the Rust SDK.\n")
+        debugImplementation(projects.libraries.rustsdk)
+    } else {
+        debugImplementation(libs.matrix.sdk)
+    }
     implementation(projects.libraries.di)
     implementation(projects.libraries.androidutils)
     implementation(projects.libraries.network)

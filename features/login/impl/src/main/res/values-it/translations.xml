@@ -11,10 +11,4 @@
   <string name="screen_login_error_unsupported_authentication">"L\'homeserver selezionato non supporta la password o l\'accesso OIDC. Contatta il tuo amministratore o scegli un altro homeserver."</string>
   <string name="screen_login_form_header">"Inserisci i tuoi dati"</string>
   <string name="screen_login_title">"Bentornato!"</string>
-  <string name="screen_account_provider_continue">"Continua"</string>
-  <string name="screen_change_server_submit">"Continua"</string>
-  <string name="screen_change_server_title">"Seleziona il tuo server"</string>
-  <string name="screen_login_password_hint">"Password"</string>
-  <string name="screen_login_submit">"Continua"</string>
-  <string name="screen_login_username_hint">"Nome utente"</string>
 </resources>

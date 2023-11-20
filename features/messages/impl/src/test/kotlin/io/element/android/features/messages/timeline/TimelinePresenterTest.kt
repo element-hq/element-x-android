@@ -28,6 +28,11 @@ import io.element.android.features.messages.impl.timeline.TimelineEvents
 import io.element.android.features.messages.impl.timeline.TimelinePresenter
 import io.element.android.features.messages.impl.timeline.factories.TimelineItemsFactory
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
+import io.element.android.features.messages.impl.timeline.session.SessionState
+import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
+import io.element.android.features.messages.impl.voicemessages.timeline.RedactedVoiceMessageManager
+import io.element.android.features.messages.voicemessages.timeline.FakeRedactedVoiceMessageManager
+import io.element.android.features.messages.voicemessages.timeline.aRedactedMatrixTimeline
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
@@ -35,10 +40,12 @@ import io.element.android.libraries.matrix.api.timeline.item.event.EventReaction
 import io.element.android.libraries.matrix.api.timeline.item.event.ReactionSender
 import io.element.android.libraries.matrix.api.timeline.item.virtual.VirtualTimelineItem
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
+import io.element.android.libraries.matrix.test.encryption.FakeEncryptionService
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.matrix.test.room.aMessageContent
 import io.element.android.libraries.matrix.test.room.anEventTimelineItem
 import io.element.android.libraries.matrix.test.timeline.FakeMatrixTimeline
+import io.element.android.libraries.matrix.test.verification.FakeSessionVerificationService
 import io.element.android.libraries.matrix.ui.components.aMatrixUserList
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.tests.testutils.WarmUpRule
@@ -67,6 +74,7 @@ class TimelinePresenterTest {
             assertThat(initialState.timelineItems).isEmpty()
             val loadedNoTimelineState = awaitItem()
             assertThat(loadedNoTimelineState.timelineItems).isEmpty()
+            assertThat(loadedNoTimelineState.sessionState).isEqualTo(SessionState(isSessionVerified = false, isKeyBackupEnabled = false))
         }
     }
 
@@ -228,8 +236,8 @@ class TimelinePresenterTest {
                     senders = listOf(alice, charlie)
                 ),
                 EventReaction(
-                key = "👍",
-                senders = listOf(alice, bob)
+                    key = "👍",
+                    senders = listOf(alice, bob)
                 ),
                 EventReaction(
                     key = "🐶",
@@ -306,9 +314,31 @@ class TimelinePresenterTest {
         }
     }
 
+    @Test
+    fun `present - side effect on redacted items is invoked`() = runTest {
+        val redactedVoiceMessageManager = FakeRedactedVoiceMessageManager()
+        val presenter = createTimelinePresenter(
+            timeline = FakeMatrixTimeline(
+                initialTimelineItems = aRedactedMatrixTimeline(AN_EVENT_ID),
+            ),
+            redactedVoiceMessageManager = redactedVoiceMessageManager,
+        )
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            skipItems(1) // skip initial state
+            assertThat(redactedVoiceMessageManager.invocations.size).isEqualTo(0)
+            awaitItem().let {
+                assertThat(it.timelineItems).isNotEmpty()
+                assertThat(redactedVoiceMessageManager.invocations.size).isEqualTo(1)
+            }
+        }
+    }
+
     private fun TestScope.createTimelinePresenter(
         timeline: MatrixTimeline = FakeMatrixTimeline(),
-        timelineItemsFactory: TimelineItemsFactory = aTimelineItemsFactory()
+        timelineItemsFactory: TimelineItemsFactory = aTimelineItemsFactory(),
+        redactedVoiceMessageManager: RedactedVoiceMessageManager = FakeRedactedVoiceMessageManager(),
     ): TimelinePresenter {
         return TimelinePresenter(
             timelineItemsFactory = timelineItemsFactory,
@@ -316,6 +346,10 @@ class TimelinePresenterTest {
             dispatchers = testCoroutineDispatchers(),
             appScope = this,
             analyticsService = FakeAnalyticsService(),
+            encryptionService = FakeEncryptionService(),
+            verificationService = FakeSessionVerificationService(),
+            featureFlagService = FakeFeatureFlagService(),
+            redactedVoiceMessageManager = redactedVoiceMessageManager,
         )
     }
 
@@ -329,6 +363,10 @@ class TimelinePresenterTest {
             dispatchers = testCoroutineDispatchers(),
             appScope = this,
             analyticsService = analyticsService,
+            encryptionService = FakeEncryptionService(),
+            verificationService = FakeSessionVerificationService(),
+            featureFlagService = FakeFeatureFlagService(),
+            redactedVoiceMessageManager = FakeRedactedVoiceMessageManager(),
         )
     }
 }

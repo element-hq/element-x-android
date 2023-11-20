@@ -22,7 +22,7 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth
 import im.vector.app.features.analytics.plan.Composer
 import im.vector.app.features.analytics.plan.PollCreation
-import io.element.android.features.messages.test.MessageComposerContextFake
+import io.element.android.features.messages.test.FakeMessageComposerContext
 import io.element.android.libraries.matrix.api.poll.PollKind
 import io.element.android.libraries.matrix.test.room.CreatePollInvocation
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
@@ -41,12 +41,12 @@ class CreatePollPresenterTest {
     private var navUpInvocationsCount = 0
     private val fakeMatrixRoom = FakeMatrixRoom()
     private val fakeAnalyticsService = FakeAnalyticsService()
-    private val messageComposerContextFake = MessageComposerContextFake()
+    private val fakeMessageComposerContext = FakeMessageComposerContext()
 
     private val presenter = CreatePollPresenter(
         room = fakeMatrixRoom,
         analyticsService = fakeAnalyticsService,
-        messageComposerContext = messageComposerContextFake,
+        messageComposerContext = fakeMessageComposerContext,
         navigateUp = { navUpInvocationsCount++ },
     )
 

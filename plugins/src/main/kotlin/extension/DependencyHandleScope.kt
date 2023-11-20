@@ -42,16 +42,16 @@ fun DependencyHandlerScope.composeDependencies(libs: LibrariesForLibs) {
     val composeBom = platform(libs.androidx.compose.bom)
     implementation(composeBom)
     androidTestImplementation(composeBom)
-    implementation("androidx.compose.ui:ui")
-    implementation("androidx.compose.material:material")
-    implementation("androidx.compose.material3:material3")
-    implementation("androidx.compose.material:material-icons-extended")
-    implementation("androidx.compose.ui:ui-tooling-preview")
+    implementation(libs.androidx.compose.ui)
+    implementation(libs.androidx.compose.material)
+    implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.compose.material.icons)
+    implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.activity.compose)
-    debugImplementation("androidx.compose.ui:ui-tooling")
-    debugImplementation("androidx.compose.ui:ui-test-manifest")
+    debugImplementation(libs.androidx.compose.ui.tooling)
+    debugImplementation(libs.androidx.compose.ui.test.manifest)
     implementation(libs.showkase)
-    implementation("org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.5")
+    implementation(libs.kotlinx.collections.immutable)
 }
 
 private fun DependencyHandlerScope.addImplementationProjects(
@@ -83,6 +83,7 @@ fun DependencyHandlerScope.allLibrariesImpl() {
     implementation(project(":libraries:network"))
     implementation(project(":libraries:core"))
     implementation(project(":libraries:eventformatter:impl"))
+    implementation(project(":libraries:indicator:impl"))
     implementation(project(":libraries:permissions:impl"))
     implementation(project(":libraries:push:impl"))
     implementation(project(":libraries:push:impl"))
@@ -101,6 +102,9 @@ fun DependencyHandlerScope.allLibrariesImpl() {
     implementation(project(":libraries:mediaupload:impl"))
     implementation(project(":libraries:usersearch:impl"))
     implementation(project(":libraries:textcomposer:impl"))
+    implementation(project(":libraries:cryptography:impl"))
+    implementation(project(":libraries:voicerecorder:impl"))
+    implementation(project(":libraries:mediaplayer:impl"))
 }
 
 fun DependencyHandlerScope.allServicesImpl() {

@@ -30,6 +30,7 @@ import androidx.compose.material3.SearchBarColors
 import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -180,6 +181,7 @@ object ElementSearchBarDefaults {
     )
 }
 
+@Immutable
 sealed interface SearchBarResultState<in T> {
     /** No search results are available yet (e.g. because the user hasn't entered a search term). */
     class NotSearching<T> : SearchBarResultState<T>
@@ -193,11 +195,11 @@ sealed interface SearchBarResultState<in T> {
 
 @Preview(group = PreviewGroup.Search)
 @Composable
-internal fun SearchBarPreviewInactive() = ElementThemedPreview { ContentToPreview() }
+internal fun SearchBarInactivePreview() = ElementThemedPreview { ContentToPreview() }
 
 @Preview(group = PreviewGroup.Search)
 @Composable
-internal fun SearchBarPreviewActiveEmptyQuery() = ElementThemedPreview {
+internal fun SearchBarActiveEmptyQueryPreview() = ElementThemedPreview {
     ContentToPreview(
         query = "",
         active = true,
@@ -206,7 +208,7 @@ internal fun SearchBarPreviewActiveEmptyQuery() = ElementThemedPreview {
 
 @Preview(group = PreviewGroup.Search)
 @Composable
-internal fun SearchBarPreviewActiveWithQuery() = ElementThemedPreview {
+internal fun SearchBarActiveWithQueryPreview() = ElementThemedPreview {
     ContentToPreview(
         query = "search term",
         active = true,
@@ -215,7 +217,7 @@ internal fun SearchBarPreviewActiveWithQuery() = ElementThemedPreview {
 
 @Preview(group = PreviewGroup.Search)
 @Composable
-internal fun SearchBarPreviewActiveWithQueryNoBackButton() = ElementThemedPreview {
+internal fun SearchBarActiveWithQueryNoBackButtonPreview() = ElementThemedPreview {
     ContentToPreview(
         query = "search term",
         active = true,
@@ -225,7 +227,7 @@ internal fun SearchBarPreviewActiveWithQueryNoBackButton() = ElementThemedPrevie
 
 @Preview(group = PreviewGroup.Search)
 @Composable
-internal fun SearchBarPreviewActiveWithNoResults() = ElementThemedPreview {
+internal fun SearchBarActiveWithNoResultsPreview() = ElementThemedPreview {
     ContentToPreview(
         query = "search term",
         active = true,
@@ -235,7 +237,7 @@ internal fun SearchBarPreviewActiveWithNoResults() = ElementThemedPreview {
 
 @Preview(group = PreviewGroup.Search)
 @Composable
-internal fun SearchBarPreviewActiveWithContent() = ElementThemedPreview {
+internal fun SearchBarActiveWithContentPreview() = ElementThemedPreview {
     ContentToPreview(
         query = "search term",
         active = true,

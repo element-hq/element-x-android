@@ -84,7 +84,7 @@ fun AddPeopleView(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddPeopleViewTopBar(
+private fun AddPeopleViewTopBar(
     hasSelectedUsers: Boolean,
     modifier: Modifier = Modifier,
     onBackPressed: () -> Unit = {},

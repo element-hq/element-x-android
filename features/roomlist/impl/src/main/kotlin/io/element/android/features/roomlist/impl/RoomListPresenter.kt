@@ -36,9 +36,14 @@ import io.element.android.features.networkmonitor.api.NetworkStatus
 import io.element.android.features.roomlist.impl.datasource.InviteStateDataSource
 import io.element.android.features.roomlist.impl.datasource.RoomListDataSource
 import io.element.android.libraries.architecture.Presenter
-import io.element.android.libraries.designsystem.utils.SnackbarDispatcher
-import io.element.android.libraries.designsystem.utils.collectSnackbarMessageAsState
+import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
+import io.element.android.libraries.designsystem.utils.snackbar.collectSnackbarMessageAsState
+import io.element.android.libraries.featureflag.api.FeatureFlagService
+import io.element.android.libraries.featureflag.api.FeatureFlags
+import io.element.android.libraries.indicator.api.IndicatorService
 import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.encryption.EncryptionService
+import io.element.android.libraries.matrix.api.encryption.RecoveryState
 import io.element.android.libraries.matrix.api.roomlist.PagedRoomList
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.api.user.getCurrentUser
@@ -58,6 +63,9 @@ class RoomListPresenter @Inject constructor(
     private val inviteStateDataSource: InviteStateDataSource,
     private val leaveRoomPresenter: LeaveRoomPresenter,
     private val roomListDataSource: RoomListDataSource,
+    private val encryptionService: EncryptionService,
+    private val featureFlagService: FeatureFlagService,
+    private val indicatorService: IndicatorService,
 ) : Presenter<RoomListState> {
 
     @Composable
@@ -86,6 +94,20 @@ class RoomListPresenter @Inject constructor(
         val displayVerificationPrompt by remember {
             derivedStateOf { canVerifySession && !verificationPromptDismissed }
         }
+        val recoveryState by encryptionService.recoveryStateStateFlow.collectAsState()
+        val secureStorageFlag by featureFlagService.isFeatureEnabledFlow(FeatureFlags.SecureStorage)
+            .collectAsState(initial = null)
+        var recoveryKeyPromptDismissed by rememberSaveable { mutableStateOf(false) }
+        val displayRecoveryKeyPrompt by remember {
+            derivedStateOf {
+                secureStorageFlag == true &&
+                    recoveryState == RecoveryState.INCOMPLETE &&
+                    !recoveryKeyPromptDismissed
+            }
+        }
+
+        // Avatar indicator
+        val showAvatarIndicator by indicatorService.showRoomListTopBarIndicator()
 
         var contextMenu by remember { mutableStateOf<RoomListState.ContextMenu>(RoomListState.ContextMenu.Hidden) }
         val coroutineScope = rememberCoroutineScope()
@@ -94,6 +116,7 @@ class RoomListPresenter @Inject constructor(
                 is RoomListEvents.UpdateFilter -> coroutineScope.updateFilter(event.newFilter)
                 is RoomListEvents.UpdateVisibleRange -> visibleRange.value = event.range
                 RoomListEvents.DismissRequestVerificationPrompt -> verificationPromptDismissed = true
+                RoomListEvents.DismissRecoveryKeyPrompt -> recoveryKeyPromptDismissed = true
                 RoomListEvents.ToggleSearchResults -> {
                     coroutineScope.updateFilter("")
                     displaySearchResults = !displaySearchResults
@@ -113,10 +136,12 @@ class RoomListPresenter @Inject constructor(
         val snackbarMessage by snackbarDispatcher.collectSnackbarMessageAsState()
         return RoomListState(
             matrixUser = matrixUser.value,
+            showAvatarIndicator = showAvatarIndicator,
             roomList = roomList,
             filter = filter,
             filteredRoomList = filteredRoomList,
             displayVerificationPrompt = displayVerificationPrompt,
+            displayRecoveryKeyPrompt = displayRecoveryKeyPrompt,
             snackbarMessage = snackbarMessage,
             hasNetworkConnection = networkConnectionStatus == NetworkStatus.Online,
             invitesState = inviteStateDataSource.inviteState(),

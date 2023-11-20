@@ -133,13 +133,15 @@ object PermalinkParser {
         }
 
     private fun String.getViaParameters(): List<String> {
-        return UrlQuerySanitizer(this)
-            .parameterList
-            .filter {
-                it.mParameter == "via"
-            }
-            .map {
-                URLDecoder.decode(it.mValue, "UTF-8")
-            }
+        return runCatching {
+            UrlQuerySanitizer(this)
+                .parameterList
+                .filter {
+                    it.mParameter == "via"
+                }
+                .map {
+                    URLDecoder.decode(it.mValue, "UTF-8")
+                }
+        }.getOrDefault(emptyList())
     }
 }

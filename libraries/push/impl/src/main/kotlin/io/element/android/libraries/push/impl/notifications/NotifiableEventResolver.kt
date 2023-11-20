@@ -32,9 +32,11 @@ import io.element.android.libraries.matrix.api.timeline.item.event.FileMessageTy
 import io.element.android.libraries.matrix.api.timeline.item.event.ImageMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.LocationMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.NoticeMessageType
+import io.element.android.libraries.matrix.api.timeline.item.event.OtherMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.UnknownMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.VideoMessageType
+import io.element.android.libraries.matrix.api.timeline.item.event.VoiceMessageType
 import io.element.android.libraries.push.impl.R
 import io.element.android.libraries.push.impl.notifications.model.FallbackNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.InviteNotifiableEvent
@@ -87,7 +89,7 @@ class NotifiableEventResolver @Inject constructor(
                     noisy = isNoisy,
                     timestamp = this.timestamp,
                     senderName = senderDisplayName,
-                    body = descriptionFromMessageContent(content),
+                    body = descriptionFromMessageContent(content, senderDisplayName ?: content.senderId.value),
                     imageUriString = this.contentUrl,
                     roomName = roomDisplayName,
                     roomIsDirect = isDirect,
@@ -133,9 +135,22 @@ class NotifiableEventResolver @Inject constructor(
             NotificationContent.MessageLike.KeyVerificationStart -> null.also {
                 Timber.tag(loggerTag.value).d("Ignoring notification for verification ${content.javaClass.simpleName}")
             }
-            is NotificationContent.MessageLike.Poll -> null.also {
-                // TODO Polls: handle notification rendering
-                Timber.tag(loggerTag.value).d("Ignoring notification for poll")
+            is NotificationContent.MessageLike.Poll -> {
+                buildNotifiableMessageEvent(
+                    sessionId = userId,
+                    senderId = content.senderId,
+                    roomId = roomId,
+                    eventId = eventId,
+                    noisy = isNoisy,
+                    timestamp = this.timestamp,
+                    senderName = senderDisplayName,
+                    body = stringProvider.getString(CommonStrings.common_poll_summary, content.question),
+                    imageUriString = null,
+                    roomName = roomDisplayName,
+                    roomIsDirect = isDirect,
+                    roomAvatarPath = roomAvatarUrl,
+                    senderAvatarPath = senderAvatarUrl,
+                )
             }
             is NotificationContent.MessageLike.ReactionContent -> null.also {
                 Timber.tag(loggerTag.value).d("Ignoring notification for reaction")
@@ -192,16 +207,19 @@ class NotifiableEventResolver @Inject constructor(
 
     private fun descriptionFromMessageContent(
         content: NotificationContent.MessageLike.RoomMessage,
+        senderDisplayName: String,
     ): String {
         return when (val messageType = content.messageType) {
             is AudioMessageType -> messageType.body
-            is EmoteMessageType -> messageType.body
+            is VoiceMessageType -> stringProvider.getString(CommonStrings.common_voice_message)
+            is EmoteMessageType -> "* $senderDisplayName ${messageType.body}"
             is FileMessageType -> messageType.body
             is ImageMessageType -> messageType.body
             is NoticeMessageType -> messageType.body
             is TextMessageType -> messageType.body
             is VideoMessageType -> messageType.body
             is LocationMessageType -> messageType.body
+            is OtherMessageType -> messageType.body
             is UnknownMessageType -> stringProvider.getString(CommonStrings.common_unsupported_event)
         }
     }

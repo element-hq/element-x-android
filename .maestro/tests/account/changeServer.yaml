@@ -10,9 +10,9 @@ appId: ${APP_ID}
 - tapOn:
     id: "change_server-server"
 # Test server that does not support sliding sync.
-- inputText: "gnuradio"
+- inputText: "https://kieranml.ems-support.element.dev"
 - hideKeyboard
-- tapOn: "gnuradio.org"
+- tapOn: "kieranml.ems-support.element.dev"
 - extendedWaitUntil:
     visible: "This server currently doesn’t support sliding sync."
     timeout: 10000

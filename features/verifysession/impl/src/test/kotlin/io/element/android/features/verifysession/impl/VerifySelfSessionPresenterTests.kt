@@ -40,7 +40,7 @@ class VerifySelfSessionPresenterTests {
 
     @Test
     fun `present - Initial state is received`() = runTest {
-        val presenter = createPresenter()
+        val presenter = createVerifySelfSessionPresenter()
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -51,7 +51,7 @@ class VerifySelfSessionPresenterTests {
     @Test
     fun `present - Handles requestVerification`() = runTest {
         val service = FakeSessionVerificationService()
-        val presenter = createPresenter(service)
+        val presenter = createVerifySelfSessionPresenter(service)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -62,7 +62,7 @@ class VerifySelfSessionPresenterTests {
     @Test
     fun `present - Handles startSasVerification`() = runTest {
         val service = FakeSessionVerificationService()
-        val presenter = createPresenter(service)
+        val presenter = createVerifySelfSessionPresenter(service)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -81,7 +81,7 @@ class VerifySelfSessionPresenterTests {
 
     @Test
     fun `present - Cancelation on initial state does nothing`() = runTest {
-        val presenter = createPresenter()
+        val presenter = createVerifySelfSessionPresenter()
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -96,7 +96,7 @@ class VerifySelfSessionPresenterTests {
     @Test
     fun `present - A fail in the flow cancels it`() = runTest {
         val service = FakeSessionVerificationService()
-        val presenter = createPresenter(service)
+        val presenter = createVerifySelfSessionPresenter(service)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -113,7 +113,7 @@ class VerifySelfSessionPresenterTests {
     @Test
     fun `present - Canceling the flow once it's verifying cancels it`() = runTest {
         val service = FakeSessionVerificationService()
-        val presenter = createPresenter(service)
+        val presenter = createVerifySelfSessionPresenter(service)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -127,7 +127,7 @@ class VerifySelfSessionPresenterTests {
     @Test
     fun `present - When verifying, if we receive another challenge we ignore it`() = runTest {
         val service = FakeSessionVerificationService()
-        val presenter = createPresenter(service)
+        val presenter = createVerifySelfSessionPresenter(service)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -140,7 +140,7 @@ class VerifySelfSessionPresenterTests {
     @Test
     fun `present - Restart after cancelation returns to requesting verification`() = runTest {
         val service = FakeSessionVerificationService()
-        val presenter = createPresenter(service)
+        val presenter = createVerifySelfSessionPresenter(service)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -162,7 +162,7 @@ class VerifySelfSessionPresenterTests {
         val service = FakeSessionVerificationService().apply {
             givenEmojiList(emojis)
         }
-        val presenter = createPresenter(service)
+        val presenter = createVerifySelfSessionPresenter(service)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -176,7 +176,7 @@ class VerifySelfSessionPresenterTests {
     @Test
     fun `present - When verification is declined, the flow is canceled`() = runTest {
         val service = FakeSessionVerificationService()
-        val presenter = createPresenter(service)
+        val presenter = createVerifySelfSessionPresenter(service)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -210,7 +210,9 @@ class VerifySelfSessionPresenterTests {
         return state
     }
 
-    private fun createPresenter(service: FakeSessionVerificationService = FakeSessionVerificationService()): VerifySelfSessionPresenter {
+    private fun createVerifySelfSessionPresenter(
+        service: FakeSessionVerificationService = FakeSessionVerificationService()
+    ): VerifySelfSessionPresenter {
         return VerifySelfSessionPresenter(service, VerifySelfSessionStateMachine(service))
     }
 }

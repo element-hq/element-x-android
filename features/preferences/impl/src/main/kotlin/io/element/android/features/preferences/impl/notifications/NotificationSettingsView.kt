@@ -16,39 +16,27 @@
 
 package io.element.android.features.preferences.impl.notifications
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewParameter
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
+import io.element.android.features.preferences.impl.R
 import io.element.android.libraries.androidutils.system.startNotificationSettingsIntent
+import io.element.android.libraries.designsystem.atomic.molecules.DialogLikeBannerMolecule
+import io.element.android.libraries.designsystem.components.async.AsyncView
 import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
 import io.element.android.libraries.designsystem.components.preferences.PreferenceCategory
+import io.element.android.libraries.designsystem.components.preferences.PreferencePage
 import io.element.android.libraries.designsystem.components.preferences.PreferenceSwitch
 import io.element.android.libraries.designsystem.components.preferences.PreferenceText
-import io.element.android.libraries.designsystem.components.preferences.PreferenceView
-import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
-import io.element.android.libraries.designsystem.theme.components.Button
-import io.element.android.libraries.designsystem.theme.components.ButtonSize
-import io.element.android.libraries.designsystem.theme.components.Surface
-import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.designsystem.utils.OnLifecycleEvent
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
-import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
 
 /**
@@ -67,10 +55,10 @@ fun NotificationSettingsView(
             else -> Unit
         }
     }
-    PreferenceView(
+    PreferencePage(
         modifier = modifier,
         onBackPressed = onBackPressed,
-        title = stringResource(id = CommonStrings.screen_notification_settings_title)
+        title = stringResource(id = R.string.screen_notification_settings_title)
     ) {
 
         when (state.matrixSettings) {
@@ -79,7 +67,7 @@ fun NotificationSettingsView(
                 onContinueClicked = { state.eventSink(NotificationSettingsEvents.FixConfigurationMismatch) },
                 onDismissError = { state.eventSink(NotificationSettingsEvents.ClearConfigurationMismatchError) },
             )
-            NotificationSettingsState.MatrixSettings.Uninitialized -> return@PreferenceView
+            NotificationSettingsState.MatrixSettings.Uninitialized -> return@PreferencePage
             is NotificationSettingsState.MatrixSettings.Valid -> NotificationSettingsContentView(
                 matrixSettings = state.matrixSettings,
                 systemSettings = state.appSettings,
@@ -87,9 +75,16 @@ fun NotificationSettingsView(
                 onGroupChatsClicked = { onOpenEditDefault(false) },
                 onDirectChatsClicked = { onOpenEditDefault(true) },
                 onMentionNotificationsChanged = { state.eventSink(NotificationSettingsEvents.SetAtRoomNotificationsEnabled(it)) },
+                // TODO We are removing the call notification toggle until support for call notifications has been added
 //                onCallsNotificationsChanged = { state.eventSink(NotificationSettingsEvents.SetCallNotificationsEnabled(it)) },
             )
         }
+        AsyncView(
+            async = state.changeNotificationSettingAction,
+            errorMessage = { stringResource(R.string.screen_notification_settings_edit_failed_updating_default_mode) },
+            onErrorDismiss = { state.eventSink(NotificationSettingsEvents.ClearNotificationChangeError) },
+            onSuccess = {},
+        )
     }
 }
 
@@ -101,6 +96,7 @@ private fun NotificationSettingsContentView(
     onGroupChatsClicked: () -> Unit,
     onDirectChatsClicked: () -> Unit,
     onMentionNotificationsChanged: (Boolean) -> Unit,
+    // TODO We are removing the call notification toggle until support for call notifications has been added
 //    onCallsNotificationsChanged: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -108,10 +104,10 @@ private fun NotificationSettingsContentView(
     if (systemSettings.appNotificationsEnabled && !systemSettings.systemNotificationsEnabled) {
         PreferenceText(
             iconResourceId = CommonDrawables.ic_compound_notifications_solid_off,
-            title = stringResource(id = CommonStrings.screen_notification_settings_system_notifications_turned_off),
+            title = stringResource(id = R.string.screen_notification_settings_system_notifications_turned_off),
             subtitle = stringResource(
-                id = CommonStrings.screen_notification_settings_system_notifications_action_required,
-                stringResource(id = CommonStrings.screen_notification_settings_system_notifications_action_required_content_link)
+                id = R.string.screen_notification_settings_system_notifications_action_required,
+                stringResource(id = R.string.screen_notification_settings_system_notifications_action_required_content_link)
             ),
             onClick = {
                 context.startNotificationSettingsIntent()
@@ -121,37 +117,37 @@ private fun NotificationSettingsContentView(
 
     PreferenceSwitch(
         modifier = modifier,
-        title = stringResource(id = CommonStrings.screen_notification_settings_enable_notifications),
+        title = stringResource(id = R.string.screen_notification_settings_enable_notifications),
         isChecked = systemSettings.appNotificationsEnabled,
         switchAlignment = Alignment.Top,
         onCheckedChange = onNotificationsEnabledChanged
     )
 
     if (systemSettings.appNotificationsEnabled) {
-        PreferenceCategory(title = stringResource(id = CommonStrings.screen_notification_settings_notification_section_title)) {
+        PreferenceCategory(title = stringResource(id = R.string.screen_notification_settings_notification_section_title)) {
             PreferenceText(
-                title = stringResource(id = CommonStrings.screen_notification_settings_group_chats),
+                title = stringResource(id = R.string.screen_notification_settings_group_chats),
                 subtitle = getTitleForRoomNotificationMode(mode = matrixSettings.defaultGroupNotificationMode),
                 onClick = onGroupChatsClicked
             )
 
             PreferenceText(
-                title = stringResource(id = CommonStrings.screen_notification_settings_direct_chats),
+                title = stringResource(id = R.string.screen_notification_settings_direct_chats),
                 subtitle = getTitleForRoomNotificationMode(mode = matrixSettings.defaultOneToOneNotificationMode),
                 onClick = onDirectChatsClicked
             )
         }
 
-        PreferenceCategory(title = stringResource(id = CommonStrings.screen_notification_settings_mode_mentions)) {
+        PreferenceCategory(title = stringResource(id = R.string.screen_notification_settings_mode_mentions)) {
             PreferenceSwitch(
                 modifier = Modifier,
-                title = stringResource(id = CommonStrings.screen_notification_settings_room_mention_label),
+                title = stringResource(id = R.string.screen_notification_settings_room_mention_label),
                 isChecked = matrixSettings.atRoomNotificationsEnabled,
                 switchAlignment = Alignment.Top,
                 onCheckedChange = onMentionNotificationsChanged
             )
         }
-        // We are removing the call notification toggle until call support has been added
+        // TODO We are removing the call notification toggle until support for call notifications has been added
 //            PreferenceCategory(title = stringResource(id = CommonStrings.screen_notification_settings_additional_settings_section_title)) {
 //                PreferenceSwitch(
 //                    modifier = Modifier,
@@ -167,8 +163,8 @@ private fun NotificationSettingsContentView(
 @Composable
 private fun getTitleForRoomNotificationMode(mode: RoomNotificationMode?) =
     when (mode) {
-        RoomNotificationMode.ALL_MESSAGES -> stringResource(id = CommonStrings.screen_notification_settings_edit_mode_all_messages)
-        RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY -> stringResource(id = CommonStrings.screen_notification_settings_edit_mode_mentions_and_keywords)
+        RoomNotificationMode.ALL_MESSAGES -> stringResource(id = R.string.screen_notification_settings_edit_mode_all_messages)
+        RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY -> stringResource(id = R.string.screen_notification_settings_edit_mode_mentions_and_keywords)
         RoomNotificationMode.MUTE -> stringResource(id = CommonStrings.common_mute)
         null -> ""
     }
@@ -180,45 +176,18 @@ private fun InvalidNotificationSettingsView(
     onDismissError: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Box(modifier = modifier.padding(horizontal = 16.dp, vertical = 8.dp)) {
-        Surface(
-            Modifier.fillMaxWidth(),
-            shape = MaterialTheme.shapes.small,
-            color = MaterialTheme.colorScheme.surfaceVariant
-        ) {
-            Column(
-                Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 12.dp)
-            ) {
-                Row {
-                    Text(
-                        stringResource(CommonStrings.screen_notification_settings_configuration_mismatch),
-                        modifier = Modifier.weight(1f),
-                        style = ElementTheme.typography.fontBodyLgMedium,
-                        color = MaterialTheme.colorScheme.primary,
-                        textAlign = TextAlign.Start,
-                    )
-                }
-                Spacer(modifier = Modifier.height(4.dp))
-                Text(
-                    stringResource(CommonStrings.screen_notification_settings_configuration_mismatch_description),
-                    style = ElementTheme.typography.fontBodyMdRegular,
-                )
-                Spacer(modifier = Modifier.height(12.dp))
-                Button(
-                    text = stringResource(CommonStrings.action_continue),
-                    size = ButtonSize.Medium,
-                    modifier = Modifier.fillMaxWidth(),
-                    onClick = onContinueClicked,
-                )
-            }
-        }
-    }
+    DialogLikeBannerMolecule(
+        modifier = modifier,
+        title = stringResource(R.string.screen_notification_settings_configuration_mismatch),
+        content = stringResource(R.string.screen_notification_settings_configuration_mismatch_description),
+        onSubmitClicked = onContinueClicked,
+        onDismissClicked = null,
+    )
+
     if (showError) {
         ErrorDialog(
             title = stringResource(id = CommonStrings.dialog_title_error),
-            content = stringResource(id = CommonStrings.screen_notification_settings_failed_fixing_configuration),
+            content = stringResource(id = R.string.screen_notification_settings_failed_fixing_configuration),
             onDismiss = onDismissError
         )
     }

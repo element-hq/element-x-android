@@ -16,13 +16,17 @@
 
 package io.element.android.libraries.designsystem.components.list
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
+import io.element.android.libraries.designsystem.atomic.atoms.RedIndicatorAtom
 import io.element.android.libraries.designsystem.theme.components.IconSource
 import io.element.android.libraries.designsystem.theme.components.ListItem
 import io.element.android.libraries.designsystem.theme.components.Checkbox as CheckboxComponent
@@ -34,6 +38,7 @@ import io.element.android.libraries.designsystem.theme.components.Text as TextCo
 /**
  * This is a helper to set default leading and trailing content for [ListItem]s.
  */
+@Immutable
 sealed interface ListItemContent {
     /**
      * Default Switch content for [ListItem].
@@ -92,6 +97,9 @@ sealed interface ListItemContent {
     /** Displays any custom content. */
     data class Custom(val content: @Composable () -> Unit) : ListItemContent
 
+    /** Displays a badge. */
+    data object Badge : ListItemContent
+
     @Composable
     fun View() {
         when (this) {
@@ -112,12 +120,20 @@ sealed interface ListItemContent {
                 onClick = onClick,
                 enabled = enabled
             )
-            is Icon -> IconComponent(
-                modifier = Modifier.size(maxCompactSize),
-                painter = iconSource.getPainter(),
-                contentDescription = iconSource.contentDescription
-            )
+            is Icon -> {
+                IconComponent(
+                    modifier = Modifier.size(maxCompactSize),
+                    painter = iconSource.getPainter(),
+                    contentDescription = iconSource.contentDescription
+                )
+            }
             is Text -> TextComponent(modifier = Modifier.widthIn(max = 128.dp), text = text, maxLines = 1, overflow = TextOverflow.Ellipsis)
+            is Badge -> Box(
+                modifier = Modifier.size(maxCompactSize),
+                contentAlignment = Alignment.Center,
+            ) {
+                RedIndicatorAtom()
+            }
             is Custom -> content()
         }
     }

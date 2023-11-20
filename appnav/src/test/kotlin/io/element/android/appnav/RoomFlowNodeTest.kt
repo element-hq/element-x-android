@@ -35,6 +35,8 @@ import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.services.appnavstate.test.FakeAppNavigationStateService
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
 
@@ -69,14 +71,22 @@ class RoomFlowNodeTest {
 
         var nodeId: String? = null
 
-        override fun createNode(
-            parentNode: Node,
-            buildContext: BuildContext,
-            inputs: RoomDetailsEntryPoint.Inputs,
-            plugins: List<Plugin>
-        ): Node {
-            return node(buildContext) {}.also {
-                nodeId = it.id
+        override fun nodeBuilder(parentNode: Node, buildContext: BuildContext): RoomDetailsEntryPoint.NodeBuilder {
+            return object : RoomDetailsEntryPoint.NodeBuilder {
+
+                override fun params(params: RoomDetailsEntryPoint.Params): RoomDetailsEntryPoint.NodeBuilder {
+                    return this
+                }
+
+                override fun callback(callback: RoomDetailsEntryPoint.Callback): RoomDetailsEntryPoint.NodeBuilder {
+                    return this
+                }
+
+                override fun build(): Node {
+                    return  node(buildContext) {}.also {
+                        nodeId = it.id
+                    }
+                }
             }
         }
     }
@@ -85,6 +95,7 @@ class RoomFlowNodeTest {
         plugins: List<Plugin>,
         messagesEntryPoint: MessagesEntryPoint = FakeMessagesEntryPoint(),
         roomDetailsEntryPoint: RoomDetailsEntryPoint = FakeRoomDetailsEntryPoint(),
+        coroutineScope: CoroutineScope,
     ) = RoomLoadedFlowNode(
         buildContext = BuildContext.root(savedStateMap = null),
         plugins = plugins,
@@ -92,16 +103,21 @@ class RoomFlowNodeTest {
         roomDetailsEntryPoint = roomDetailsEntryPoint,
         appNavigationStateService = FakeAppNavigationStateService(),
         roomMembershipObserver = RoomMembershipObserver(),
+        appCoroutineScope = coroutineScope,
         roomComponentFactory = FakeRoomComponentFactory(),
     )
 
     @Test
-    fun `given a room flow node when initialized then it loads messages entry point`() {
+    fun `given a room flow node when initialized then it loads messages entry point`() = runTest {
         // GIVEN
         val room = FakeMatrixRoom()
         val fakeMessagesEntryPoint = FakeMessagesEntryPoint()
         val inputs = RoomLoadedFlowNode.Inputs(room)
-        val roomFlowNode = aRoomFlowNode(listOf(inputs), fakeMessagesEntryPoint)
+        val roomFlowNode = aRoomFlowNode(
+            plugins = listOf(inputs),
+            messagesEntryPoint = fakeMessagesEntryPoint,
+            coroutineScope = this
+        )
         // WHEN
         val roomFlowNodeTestHelper = roomFlowNode.parentNodeTestHelper()
 
@@ -113,13 +129,18 @@ class RoomFlowNodeTest {
     }
 
     @Test
-    fun `given a room flow node when callback on room details is triggered then it loads room details entry point`() {
+    fun `given a room flow node when callback on room details is triggered then it loads room details entry point`() = runTest {
         // GIVEN
         val room = FakeMatrixRoom()
         val fakeMessagesEntryPoint = FakeMessagesEntryPoint()
         val fakeRoomDetailsEntryPoint = FakeRoomDetailsEntryPoint()
         val inputs = RoomLoadedFlowNode.Inputs(room)
-        val roomFlowNode = aRoomFlowNode(listOf(inputs), fakeMessagesEntryPoint, fakeRoomDetailsEntryPoint)
+        val roomFlowNode = aRoomFlowNode(
+            plugins = listOf(inputs),
+            messagesEntryPoint = fakeMessagesEntryPoint,
+            roomDetailsEntryPoint = fakeRoomDetailsEntryPoint,
+            coroutineScope = this
+        )
         val roomFlowNodeTestHelper = roomFlowNode.parentNodeTestHelper()
         // WHEN
         fakeMessagesEntryPoint.callback?.onRoomDetailsClicked()
