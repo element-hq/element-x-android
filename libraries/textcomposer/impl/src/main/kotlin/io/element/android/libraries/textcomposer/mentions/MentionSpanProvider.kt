@@ -47,7 +47,7 @@ class MentionSpanProvider(
 
     @Suppress("ComposableNaming")
     @Composable
-    fun setup() {
+    internal fun setup() {
         currentUserTextColor = ElementTheme.colors.currentUserMentionPillText.toArgb()
         currentUserBackgroundColor = ElementTheme.colors.currentUserMentionPillBackground.toArgb()
         otherTextColor = ElementTheme.colors.mentionPillText.toArgb()
@@ -104,10 +104,10 @@ internal fun MentionSpanPreview() {
                 layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
                 text = buildSpannedString {
                     append("This is a ")
-                    append("mention", mentionSpan, 0)
+                    append("@mention", mentionSpan, 0)
                     append(" to the current user and this is a ")
-                    append("mention", mentionSpan2, 0)
-                    append("to other user")
+                    append("@mention", mentionSpan2, 0)
+                    append(" to other user")
                 }
                 setTextColor(textColor)
             }

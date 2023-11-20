@@ -16,7 +16,6 @@
 
 package io.element.android.features.messages.impl.mentions
 
-import io.element.android.features.messages.impl.messagecomposer.MentionSuggestion
 import io.element.android.libraries.core.data.filterUpTo
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState

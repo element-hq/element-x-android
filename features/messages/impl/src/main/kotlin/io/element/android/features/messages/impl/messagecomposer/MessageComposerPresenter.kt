@@ -20,7 +20,6 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.net.Uri
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
@@ -36,6 +35,7 @@ import im.vector.app.features.analytics.plan.Composer
 import io.element.android.features.messages.impl.attachments.Attachment
 import io.element.android.features.messages.impl.attachments.preview.error.sendAttachmentError
 import io.element.android.features.messages.impl.media.local.LocalMediaFactory
+import io.element.android.features.messages.impl.mentions.MentionSuggestion
 import io.element.android.features.messages.impl.mentions.MentionSuggestionsProcessor
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
@@ -47,7 +47,6 @@ import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.permalink.PermalinkBuilder
 import io.element.android.libraries.matrix.api.room.MatrixRoom
-import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.user.CurrentSessionIdHolder
 import io.element.android.libraries.mediapickers.api.PickerProvider
 import io.element.android.libraries.mediaupload.api.MediaSender
@@ -426,8 +425,3 @@ class MessageComposerPresenter @Inject constructor(
         }
 }
 
-@Immutable
-sealed interface MentionSuggestion {
-    data object Room : MentionSuggestion
-    data class Member(val roomMember: RoomMember) : MentionSuggestion
-}

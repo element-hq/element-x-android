@@ -19,6 +19,7 @@ package io.element.android.features.messages.impl.messagecomposer
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
 import io.element.android.features.messages.impl.attachments.Attachment
+import io.element.android.features.messages.impl.mentions.MentionSuggestion
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
 import io.element.android.wysiwyg.compose.RichTextEditorState

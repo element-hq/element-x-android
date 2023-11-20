@@ -17,6 +17,7 @@
 package io.element.android.features.messages.impl.messagecomposer
 
 import androidx.compose.runtime.Immutable
+import io.element.android.features.messages.impl.mentions.MentionSuggestion
 import io.element.android.libraries.textcomposer.model.Message
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
 import io.element.android.libraries.textcomposer.model.Suggestion

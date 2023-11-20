@@ -31,7 +31,7 @@ import io.element.android.features.messages.impl.messagecomposer.MessageComposer
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerEvents
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerPresenter
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerState
-import io.element.android.features.messages.impl.messagecomposer.MentionSuggestion
+import io.element.android.features.messages.impl.mentions.MentionSuggestion
 import io.element.android.features.messages.media.FakeLocalMediaFactory
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher

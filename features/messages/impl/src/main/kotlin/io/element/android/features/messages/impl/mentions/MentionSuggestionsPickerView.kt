@@ -31,7 +31,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import io.element.android.features.messages.impl.R
-import io.element.android.features.messages.impl.messagecomposer.MentionSuggestion
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
