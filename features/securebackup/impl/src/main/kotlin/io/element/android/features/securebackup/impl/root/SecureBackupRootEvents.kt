@@ -14,22 +14,8 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.matrix.api.encryption
+package io.element.android.features.securebackup.impl.root
 
-enum class BackupState {
-    /**
-     * Special value, when the SDK is waiting for the first sync to be done.
-     */
-    WAITING_FOR_SYNC,
-
-    /**
-     * Values mapped from the SDK.
-     */
-    UNKNOWN,
-    CREATING,
-    ENABLING,
-    RESUMING,
-    ENABLED,
-    DOWNLOADING,
-    DISABLING;
+sealed interface SecureBackupRootEvents {
+    data object RetryKeyBackupState : SecureBackupRootEvents
 }

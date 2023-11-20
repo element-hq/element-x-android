@@ -16,13 +16,16 @@
 
 package io.element.android.features.securebackup.impl.root
 
+import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
 import io.element.android.libraries.matrix.api.encryption.BackupState
 import io.element.android.libraries.matrix.api.encryption.RecoveryState
 
 data class SecureBackupRootState(
     val backupState: BackupState,
+    val doesBackupExistOnServer: Async<Boolean>,
     val recoveryState: RecoveryState,
     val appName: String,
     val snackbarMessage: SnackbarMessage?,
+    val eventSink: (SecureBackupRootEvents) -> Unit,
 )
