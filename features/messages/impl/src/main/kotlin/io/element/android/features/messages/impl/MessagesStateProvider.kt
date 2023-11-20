@@ -24,6 +24,7 @@ import io.element.android.features.messages.impl.timeline.aTimelineItemList
 import io.element.android.features.messages.impl.timeline.aTimelineState
 import io.element.android.features.messages.impl.timeline.components.customreaction.CustomReactionState
 import io.element.android.features.messages.impl.timeline.components.reactionsummary.ReactionSummaryState
+import io.element.android.features.messages.impl.timeline.components.receipt.bottomsheet.ReadReceiptBottomSheetState
 import io.element.android.features.messages.impl.timeline.components.retrysendmenu.RetrySendMenuState
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
 import io.element.android.features.messages.impl.voicemessages.composer.aVoiceMessageComposerState
@@ -93,6 +94,10 @@ fun aMessagesState() = MessagesState(
         timelineItems = aTimelineItemList(aTimelineItemTextContent()),
     ),
     retrySendMenuState = RetrySendMenuState(
+        selectedEvent = null,
+        eventSink = {},
+    ),
+    readReceiptBottomSheetState = ReadReceiptBottomSheetState(
         selectedEvent = null,
         eventSink = {},
     ),

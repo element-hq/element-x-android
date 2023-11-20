@@ -58,3 +58,7 @@ data class AvatarData(
             .uppercase()
     }
 }
+
+fun AvatarData.getBestName(): String {
+    return name?.takeIf { it.isNotEmpty() } ?: id
+}

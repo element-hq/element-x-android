@@ -20,18 +20,20 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.TransactionId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
-import io.element.android.libraries.matrix.api.timeline.item.event.TimelineItemEventOrigin
 import io.element.android.libraries.matrix.api.timeline.item.event.EventReaction
 import io.element.android.libraries.matrix.api.timeline.item.event.EventTimelineItem
 import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
 import io.element.android.libraries.matrix.api.timeline.item.event.ProfileTimelineDetails
 import io.element.android.libraries.matrix.api.timeline.item.event.ReactionSender
+import io.element.android.libraries.matrix.api.timeline.item.event.Receipt
+import io.element.android.libraries.matrix.api.timeline.item.event.TimelineItemEventOrigin
 import org.matrix.rustcomponents.sdk.Reaction
 import org.matrix.rustcomponents.sdk.EventItemOrigin as RustEventItemOrigin
 import org.matrix.rustcomponents.sdk.EventSendState as RustEventSendState
 import org.matrix.rustcomponents.sdk.EventTimelineItem as RustEventTimelineItem
 import org.matrix.rustcomponents.sdk.EventTimelineItemDebugInfo as RustEventTimelineItemDebugInfo
 import org.matrix.rustcomponents.sdk.ProfileDetails as RustProfileDetails
+import org.matrix.rustcomponents.sdk.Receipt as RustReceipt
 
 class EventTimelineItemMapper(private val contentMapper: TimelineEventContentMapper = TimelineEventContentMapper()) {
 
@@ -45,6 +47,7 @@ class EventTimelineItemMapper(private val contentMapper: TimelineEventContentMap
             isRemote = it.isRemote(),
             localSendState = it.localSendState()?.map(),
             reactions = it.reactions().map(),
+            receipts = it.readReceipts().map(),
             sender = UserId(it.sender()),
             senderProfile = it.senderProfile().map(),
             timestamp = it.timestamp().toLong(),
@@ -90,6 +93,15 @@ private fun List<Reaction>?.map(): List<EventReaction> {
             }
         )
     } ?: emptyList()
+}
+
+private fun Map<String, RustReceipt>.map(): List<Receipt> {
+    return map {
+        Receipt(
+            userId = UserId(it.key),
+            timestamp = it.value.timestamp?.toLong() ?: 0
+        )
+    }.sortedByDescending { it.timestamp }
 }
 
 private fun RustEventTimelineItemDebugInfo.map(): TimelineItemDebugInfo {

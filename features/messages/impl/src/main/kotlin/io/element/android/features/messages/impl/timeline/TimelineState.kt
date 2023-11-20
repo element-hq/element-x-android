@@ -26,6 +26,7 @@ import kotlinx.collections.immutable.ImmutableList
 @Immutable
 data class TimelineState(
     val timelineItems: ImmutableList<TimelineItem>,
+    val showReadReceipts: Boolean,
     val highlightedEventId: EventId?,
     val userHasPermissionToSendMessage: Boolean,
     val paginationState: MatrixTimeline.PaginationState,

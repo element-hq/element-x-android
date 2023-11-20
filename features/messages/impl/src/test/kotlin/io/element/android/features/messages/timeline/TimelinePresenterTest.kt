@@ -29,6 +29,7 @@ import io.element.android.features.messages.impl.timeline.TimelinePresenter
 import io.element.android.features.messages.impl.timeline.factories.TimelineItemsFactory
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.session.SessionState
+import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.features.messages.impl.voicemessages.timeline.RedactedVoiceMessageManager
 import io.element.android.features.messages.voicemessages.timeline.FakeRedactedVoiceMessageManager
 import io.element.android.features.messages.voicemessages.timeline.aRedactedMatrixTimeline
@@ -347,6 +348,7 @@ class TimelinePresenterTest {
             analyticsService = FakeAnalyticsService(),
             encryptionService = FakeEncryptionService(),
             verificationService = FakeSessionVerificationService(),
+            featureFlagService = FakeFeatureFlagService(),
             redactedVoiceMessageManager = redactedVoiceMessageManager,
         )
     }
@@ -363,6 +365,7 @@ class TimelinePresenterTest {
             analyticsService = analyticsService,
             encryptionService = FakeEncryptionService(),
             verificationService = FakeSessionVerificationService(),
+            featureFlagService = FakeFeatureFlagService(),
             redactedVoiceMessageManager = FakeRedactedVoiceMessageManager(),
         )
     }

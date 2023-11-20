@@ -37,6 +37,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.MessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.PollContent
 import io.element.android.libraries.matrix.api.timeline.item.event.ProfileChangeContent
 import io.element.android.libraries.matrix.api.timeline.item.event.ProfileTimelineDetails
+import io.element.android.libraries.matrix.api.timeline.item.event.Receipt
 import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageType
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID
@@ -107,6 +108,7 @@ fun anEventTimelineItem(
     isRemote: Boolean = false,
     localSendState: LocalEventSendState? = null,
     reactions: List<EventReaction> = emptyList(),
+    receipts: List<Receipt> = emptyList(),
     sender: UserId = A_USER_ID,
     senderProfile: ProfileTimelineDetails = aProfileTimelineDetails(),
     timestamp: Long = 0L,
@@ -121,6 +123,7 @@ fun anEventTimelineItem(
     isRemote = isRemote,
     localSendState = localSendState,
     reactions = reactions,
+    receipts = receipts,
     sender = sender,
     senderProfile = senderProfile,
     timestamp = timestamp,

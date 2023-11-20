@@ -69,7 +69,7 @@ private fun TimelineItemReactionsView(
     onToggleExpandClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    // In LTR languages we want an incoming message's reactions to be LRT and outgoing to be RTL.
+    // In LTR languages we want an incoming message's reactions to be LTR and outgoing to be RTL.
     // For RTL languages it should be the opposite.
     val currentLayout = LocalLayoutDirection.current
     val reactionsLayoutDirection = if (!isOutgoing) currentLayout
