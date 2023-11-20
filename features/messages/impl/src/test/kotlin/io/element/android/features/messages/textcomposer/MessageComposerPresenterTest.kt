@@ -813,6 +813,7 @@ class MessageComposerPresenterTest {
 
             // An empty suggestion returns the joined members that are not the current user, but not the room
             initialState.eventSink(MessageComposerEvents.SuggestionReceived(Suggestion(0, 0, SuggestionType.Mention, "")))
+            skipItems(1)
             assertThat(awaitItem().memberSuggestions)
                 .containsExactly(MentionSuggestion.Member(bob), MentionSuggestion.Member(david))
         }
