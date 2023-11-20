@@ -84,7 +84,6 @@ fun SecureBackupRootView(
                 when (state.doesBackupExistOnServer) {
                     is Async.Success -> when (state.doesBackupExistOnServer.data) {
                         true -> {
-                            // Should not happen, we will have the state BackupState.ENABLED
                             PreferenceText(
                                 title = stringResource(id = R.string.screen_chat_backup_key_backup_action_disable),
                                 tintColor = ElementTheme.colors.textCriticalPrimary,
