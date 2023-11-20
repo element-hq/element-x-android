@@ -64,7 +64,7 @@ fun BugReportView(
 
     Box(modifier = modifier) {
         PreferencePage(
-            title = stringResource(id = CommonStrings.common_report_a_bug),
+            title = stringResource(id = CommonStrings.common_report_a_problem),
             onBackPressed = onBackPressed
         ) {
             val isFormEnabled = state.sending !is Async.Loading

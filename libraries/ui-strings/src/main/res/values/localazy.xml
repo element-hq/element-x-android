@@ -9,12 +9,14 @@
   <string name="a11y_play">"Play"</string>
   <string name="a11y_poll">"Poll"</string>
   <string name="a11y_poll_end">"Ended poll"</string>
+  <string name="a11y_read_receipts_single">"Read by %1$s"</string>
   <string name="a11y_send_files">"Send files"</string>
   <string name="a11y_show_password">"Show password"</string>
   <string name="a11y_start_call">"Start a call"</string>
   <string name="a11y_user_menu">"User menu"</string>
   <string name="a11y_voice_message_record">"Record voice message."</string>
   <string name="a11y_voice_message_stop_recording">"Stop recording"</string>
+  <string name="a11y_read_receipts_multiple">"Read by %1$s and %2$s"</string>
   <string name="action_accept">"Accept"</string>
   <string name="action_add_to_timeline">"Add to timeline"</string>
   <string name="action_back">"Back"</string>
@@ -81,6 +83,7 @@
   <string name="action_start_verification">"Start verification"</string>
   <string name="action_static_map_load">"Tap to load map"</string>
   <string name="action_take_photo">"Take photo"</string>
+  <string name="action_tap_for_options">"Tap for options"</string>
   <string name="action_try_again">"Try again"</string>
   <string name="action_view_source">"View source"</string>
   <string name="action_yes">"Yes"</string>
@@ -89,12 +92,14 @@
   <string name="common_acceptable_use_policy">"Acceptable use policy"</string>
   <string name="common_advanced_settings">"Advanced settings"</string>
   <string name="common_analytics">"Analytics"</string>
+  <string name="common_appearance">"Appearance"</string>
   <string name="common_audio">"Audio"</string>
   <string name="common_bubbles">"Bubbles"</string>
   <string name="common_chat_backup">"Chat backup"</string>
   <string name="common_copyright">"Copyright"</string>
   <string name="common_creating_room">"Creating room…"</string>
   <string name="common_current_user_left_room">"Left room"</string>
+  <string name="common_dark">"Dark"</string>
   <string name="common_decryption_error">"Decryption error"</string>
   <string name="common_developer_options">"Developer options"</string>
   <string name="common_edited_suffix">"(edited)"</string>
@@ -113,6 +118,7 @@
   <string name="common_install_apk_android">"Install APK"</string>
   <string name="common_invite_unknown_profile">"This Matrix ID can\'t be found, so the invite might not be received."</string>
   <string name="common_leaving_room">"Leaving room"</string>
+  <string name="common_light">"Light"</string>
   <string name="common_link_copied_to_clipboard">"Link copied to clipboard"</string>
   <string name="common_loading">"Loading…"</string>
   <string name="common_message">"Message"</string>
@@ -146,7 +152,10 @@
   <string name="common_search_for_someone">"Search for someone"</string>
   <string name="common_search_results">"Search results"</string>
   <string name="common_security">"Security"</string>
+  <string name="common_seen_by">"Seen by"</string>
   <string name="common_sending">"Sending…"</string>
+  <string name="common_sending_failed">"Sending failed"</string>
+  <string name="common_sent">"Sent"</string>
   <string name="common_server_not_supported">"Server not supported"</string>
   <string name="common_server_url">"Server URL"</string>
   <string name="common_settings">"Settings"</string>
@@ -157,6 +166,7 @@
   <string name="common_success">"Success"</string>
   <string name="common_suggestions">"Suggestions"</string>
   <string name="common_syncing">"Syncing"</string>
+  <string name="common_system">"System"</string>
   <string name="common_text">"Text"</string>
   <string name="common_third_party_notices">"Third-party notices"</string>
   <string name="common_thread">"Thread"</string>
@@ -196,6 +206,10 @@
   <plurals name="a11y_digits_entered">
     <item quantity="one">"%1$d digit entered"</item>
     <item quantity="other">"%1$d digits entered"</item>
+  </plurals>
+  <plurals name="a11y_read_receipts_multiple_with_others">
+    <item quantity="one">"Read by %1$s and %2$d other"</item>
+    <item quantity="other">"Read by %1$s and %2$d others"</item>
   </plurals>
   <plurals name="common_member_count">
     <item quantity="one">"%1$d member"</item>
