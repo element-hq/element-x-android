@@ -20,6 +20,7 @@ package io.element.android.libraries.core.data
  * Returns a list containing first [count] elements matching the given [predicate].
  * If the list contains less elements matching the [predicate], then all of them are returned.
  *
+ * @param T the type of elements contained in the list.
  * @param count the maximum number of elements to take.
  * @param predicate the predicate used to match elements.
  * @return a list containing first [count] elements matching the given [predicate].
