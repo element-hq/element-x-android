@@ -17,6 +17,7 @@
 package io.element.android.features.messages.impl.mentions
 
 import io.element.android.features.messages.impl.messagecomposer.MentionSuggestion
+import io.element.android.libraries.core.data.filterUpTo
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.api.room.RoomMember
@@ -48,8 +49,6 @@ object MentionSuggestionsProcessor {
         canSendRoomMention: suspend () -> Boolean,
     ): List<MentionSuggestion> {
         val members = roomMembersState.roomMembers()
-            // Take the first MAX_BATCH_ITEMS only
-            ?.take(MAX_BATCH_ITEMS)
         return when {
             members.isNullOrEmpty() || suggestion == null -> {
                 // Clear suggestions
@@ -61,7 +60,7 @@ object MentionSuggestionsProcessor {
                         // Replace suggestions
                         val matchingMembers = getMemberSuggestions(
                             query = suggestion.text,
-                            roomMembers = roomMembersState.roomMembers(),
+                            roomMembers = members,
                             currentUserId = currentUserId,
                             canSendRoomMention = canSendRoomMention()
                         )
@@ -95,8 +94,8 @@ object MentionSuggestionsProcessor {
             }
 
             val matchingMembers = roomMembers
-                // Search only in joined members, exclude the current user
-                .filter { member ->
+                // Search only in joined members, up to MAX_BATCH_ITEMS, exclude the current user
+                .filterUpTo(MAX_BATCH_ITEMS) { member ->
                     isJoinedMemberAndNotSelf(member) && memberMatchesQuery(member, query)
                 }
                 .map(MentionSuggestion::Member)
