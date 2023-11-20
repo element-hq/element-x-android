@@ -34,6 +34,7 @@ import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomInfo
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.api.room.MatrixRoomNotificationSettingsState
+import io.element.android.libraries.matrix.api.room.Mention
 import io.element.android.libraries.matrix.api.room.MessageEventType
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
@@ -108,6 +109,7 @@ class FakeMatrixRoom(
     private var generateWidgetWebViewUrlResult = Result.success("https://call.element.io")
     private var getWidgetDriverResult: Result<MatrixWidgetDriver> = Result.success(FakeWidgetDriver())
     private var canUserTriggerRoomNotificationResult: Result<Boolean> = Result.success(true)
+    var sendMessageMentions = emptyList<Mention>()
     val editMessageCalls = mutableListOf<Pair<String, String?>>()
 
     var sendMediaCount = 0
@@ -190,7 +192,8 @@ class FakeMatrixRoom(
         userAvatarUrlResult
     }
 
-    override suspend fun sendMessage(body: String, htmlBody: String?) = simulateLongTask {
+    override suspend fun sendMessage(body: String, htmlBody: String?, mentions: List<Mention>) = simulateLongTask {
+        sendMessageMentions = mentions
         Result.success(Unit)
     }
 
@@ -219,7 +222,14 @@ class FakeMatrixRoom(
         return cancelSendResult
     }
 
-    override suspend fun editMessage(originalEventId: EventId?, transactionId: TransactionId?, body: String, htmlBody: String?): Result<Unit> {
+    override suspend fun editMessage(
+        originalEventId: EventId?,
+        transactionId: TransactionId?,
+        body: String,
+        htmlBody: String?,
+        mentions: List<Mention>
+    ): Result<Unit> {
+        sendMessageMentions = mentions
         editMessageCalls += body to htmlBody
         return Result.success(Unit)
     }
@@ -231,7 +241,8 @@ class FakeMatrixRoom(
         return Result.success(Unit)
     }
 
-    override suspend fun replyMessage(eventId: EventId, body: String, htmlBody: String?): Result<Unit> {
+    override suspend fun replyMessage(eventId: EventId, body: String, htmlBody: String?, mentions: List<Mention>): Result<Unit> {
+        sendMessageMentions = mentions
         replyMessageParameter = body to htmlBody
         return Result.success(Unit)
     }
