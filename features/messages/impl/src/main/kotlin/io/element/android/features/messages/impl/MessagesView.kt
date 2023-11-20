@@ -41,6 +41,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -354,12 +355,12 @@ private fun MessagesViewContent(
 
         // This key is used to force the sheet to be remeasured when the content changes.
         // Any state change that should trigger a height size should be added to the list of remembered values here.
-        val sheetResizeContentKey = remember(
-            state.composerState.mode.relatedEventId,
+        val sheetResizeContentKey = remember { mutableIntStateOf(0) }
+        LaunchedEffect(
             state.composerState.richTextEditorState.lineCount,
-            state.composerState.memberSuggestions.size
+            state.composerState.showTextFormatting,
         ) {
-            Random.nextInt()
+            sheetResizeContentKey.intValue = Random.nextInt()
         }
 
         ExpandableBottomSheetScaffold(
@@ -396,7 +397,7 @@ private fun MessagesViewContent(
                     state = state,
                 )
             },
-            sheetContentKey = sheetResizeContentKey,
+            sheetContentKey = sheetResizeContentKey.intValue,
             sheetTonalElevation = 0.dp,
             sheetShadowElevation = if (state.composerState.memberSuggestions.isNotEmpty()) 16.dp else 0.dp,
         )
@@ -425,7 +426,7 @@ private fun MessagesViewComposerBottomSheetContents(
                 roomAvatarData = state.roomAvatar.dataOrNull(),
                 memberSuggestions = state.composerState.memberSuggestions,
                 onSuggestionSelected = {
-                    // TODO pass the selected suggestion to the RTE so it can be inserted as a pill
+                    state.composerState.eventSink(MessageComposerEvents.InsertMention(it))
                 }
             )
             MessageComposerView(
