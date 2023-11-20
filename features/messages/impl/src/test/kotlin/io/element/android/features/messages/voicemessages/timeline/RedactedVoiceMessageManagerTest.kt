@@ -89,6 +89,7 @@ fun aRedactedMatrixTimeline(eventId: EventId) = listOf<MatrixTimelineItem>(
             isRemote = false,
             localSendState = null,
             reactions = listOf(),
+            receipts = listOf(),
             sender = A_USER_ID,
             senderProfile = ProfileTimelineDetails.Unavailable,
             timestamp = 9442,
