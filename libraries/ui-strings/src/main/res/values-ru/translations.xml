@@ -9,12 +9,14 @@
   <string name="a11y_play">"Воспроизвести"</string>
   <string name="a11y_poll">"Опрос"</string>
   <string name="a11y_poll_end">"Опрос завершен"</string>
+  <string name="a11y_read_receipts_single">"Прочитано %1$s"</string>
   <string name="a11y_send_files">"Отправить файлы"</string>
   <string name="a11y_show_password">"Показать пароль"</string>
   <string name="a11y_start_call">"Начать звонок"</string>
   <string name="a11y_user_menu">"Меню пользователя"</string>
   <string name="a11y_voice_message_record">"Записать голосовое сообщение."</string>
   <string name="a11y_voice_message_stop_recording">"Остановить запись"</string>
+  <string name="a11y_read_receipts_multiple">"Прочитано %1$s и %2$s"</string>
   <string name="action_accept">"Разрешить"</string>
   <string name="action_add_to_timeline">"Добавить в хронологию"</string>
   <string name="action_back">"Назад"</string>
@@ -81,6 +83,7 @@
   <string name="action_start_verification">"Начать подтверждение"</string>
   <string name="action_static_map_load">"Нажмите, чтобы загрузить карту"</string>
   <string name="action_take_photo">"Сделать фото"</string>
+  <string name="action_tap_for_options">"Нажмите для просмотра вариантов"</string>
   <string name="action_try_again">"Повторить попытку"</string>
   <string name="action_view_source">"Показать источник"</string>
   <string name="action_yes">"Да"</string>
@@ -89,12 +92,14 @@
   <string name="common_acceptable_use_policy">"Политика допустимого использования"</string>
   <string name="common_advanced_settings">"Дополнительные параметры"</string>
   <string name="common_analytics">"Аналитика"</string>
+  <string name="common_appearance">"Оформление"</string>
   <string name="common_audio">"Аудио"</string>
   <string name="common_bubbles">"Пузыри"</string>
   <string name="common_chat_backup">"Резервная копия чатов"</string>
   <string name="common_copyright">"Авторское право"</string>
   <string name="common_creating_room">"Создание комнаты…"</string>
   <string name="common_current_user_left_room">"Покинул комнату"</string>
+  <string name="common_dark">"Темная"</string>
   <string name="common_decryption_error">"Ошибка расшифровки"</string>
   <string name="common_developer_options">"Для разработчика"</string>
   <string name="common_edited_suffix">"(изменено)"</string>
@@ -113,6 +118,7 @@
   <string name="common_install_apk_android">"Установить APK"</string>
   <string name="common_invite_unknown_profile">"Идентификатор Matrix ID не найден, приглашение может быть не получено."</string>
   <string name="common_leaving_room">"Покинуть комнату"</string>
+  <string name="common_light">"Светлая"</string>
   <string name="common_link_copied_to_clipboard">"Ссылка скопирована в буфер обмена"</string>
   <string name="common_loading">"Загрузка…"</string>
   <string name="common_message">"Сообщение"</string>
@@ -146,7 +152,10 @@
   <string name="common_search_for_someone">"Поиск человека"</string>
   <string name="common_search_results">"Результаты поиска"</string>
   <string name="common_security">"Безопасность"</string>
+  <string name="common_seen_by">"Просмотрено"</string>
   <string name="common_sending">"Отправка…"</string>
+  <string name="common_sending_failed">"Сбой отправки"</string>
+  <string name="common_sent">"Отправлено"</string>
   <string name="common_server_not_supported">"Сервер не поддерживается"</string>
   <string name="common_server_url">"Адрес сервера"</string>
   <string name="common_settings">"Настройки"</string>
@@ -157,6 +166,7 @@
   <string name="common_success">"Успешно"</string>
   <string name="common_suggestions">"Рекомендации"</string>
   <string name="common_syncing">"Синхронизация"</string>
+  <string name="common_system">"Системная"</string>
   <string name="common_text">"Текст"</string>
   <string name="common_third_party_notices">"Уведомление о третьей стороне"</string>
   <string name="common_thread">"Обсуждение"</string>
@@ -197,6 +207,11 @@
     <item quantity="one">"Введена цифра %1$d"</item>
     <item quantity="few">"Ведено %1$d цифр"</item>
     <item quantity="many">"Введено много цифр"</item>
+  </plurals>
+  <plurals name="a11y_read_receipts_multiple_with_others">
+    <item quantity="one">"Прочитано %1$s и %2$d другим"</item>
+    <item quantity="few">"Прочитано %1$s и %2$d другими"</item>
+    <item quantity="many">"Прочитано %1$s и %2$d другими"</item>
   </plurals>
   <plurals name="common_member_count">
     <item quantity="one">"%1$d участник"</item>

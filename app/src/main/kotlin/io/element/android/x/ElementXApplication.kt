@@ -18,6 +18,7 @@ package io.element.android.x
 
 import android.app.Application
 import androidx.startup.AppInitializer
+import io.element.android.features.cachecleaner.api.CacheCleanerInitializer
 import io.element.android.libraries.di.DaggerComponentOwner
 import io.element.android.x.di.AppComponent
 import io.element.android.x.di.DaggerAppComponent
@@ -34,6 +35,7 @@ class ElementXApplication : Application(), DaggerComponentOwner {
         AppInitializer.getInstance(this).apply {
             initializeComponent(CrashInitializer::class.java)
             initializeComponent(TracingInitializer::class.java)
+            initializeComponent(CacheCleanerInitializer::class.java)
         }
         logApplicationInfo()
     }

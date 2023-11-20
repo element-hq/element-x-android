@@ -36,6 +36,7 @@
   <string name="screen_room_notification_settings_error_loading_settings">"Произошла ошибка при загрузке настроек уведомлений."</string>
   <string name="screen_room_notification_settings_error_restoring_default">"Не удалось восстановить режим по умолчанию, попробуйте еще раз."</string>
   <string name="screen_room_notification_settings_error_setting_mode">"Не удалось настроить режим, попробуйте еще раз."</string>
+  <string name="screen_room_notification_settings_mentions_only_disclaimer">"Ваш домашний сервер не поддерживает эту опцию в зашифрованных комнатах, вы не будете получать уведомления в этой комнате."</string>
   <string name="screen_room_notification_settings_mode_all_messages">"Все сообщения"</string>
   <string name="screen_room_notification_settings_room_custom_settings_title">"В этой комнате уведомить меня о"</string>
   <string name="screen_dm_details_block_alert_action">"Заблокировать"</string>

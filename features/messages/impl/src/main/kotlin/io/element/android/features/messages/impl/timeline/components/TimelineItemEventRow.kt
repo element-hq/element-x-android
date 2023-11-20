@@ -422,22 +422,6 @@ private fun MessageEventBubbleContent(
     fun onTimestampLongClick() = onMessageLongClick()
 
     @Composable
-    fun ContentView(
-        modifier: Modifier = Modifier
-    ) {
-        TimelineItemEventContentView(
-            content = event.content,
-            isMine = event.isMine,
-            interactionSource = interactionSource,
-            onClick = onMessageClick,
-            onLongClick = onMessageLongClick,
-            extraPadding = event.toExtraPadding(),
-            eventSink = eventSink,
-            modifier = modifier,
-        )
-    }
-
-    @Composable
     fun ThreadDecoration(
         modifier: Modifier = Modifier
     ) {
@@ -460,21 +444,20 @@ private fun MessageEventBubbleContent(
     }
 
     @Composable
-    fun ContentAndTimestampView(
+    fun WithTimestampLayout(
         timestampPosition: TimestampPosition,
         modifier: Modifier = Modifier,
-        contentModifier: Modifier = Modifier,
-        timestampModifier: Modifier = Modifier,
+        content: @Composable () -> Unit,
     ) {
         when (timestampPosition) {
             TimestampPosition.Overlay ->
                 Box(modifier) {
-                    ContentView(modifier = contentModifier)
+                    content()
                     TimelineEventTimestampView(
                         event = event,
                         onClick = onTimestampClicked,
                         onLongClick = ::onTimestampLongClick,
-                        modifier = timestampModifier
+                        modifier = Modifier
                             .padding(horizontal = 4.dp, vertical = 4.dp) // Outer padding
                             .background(ElementTheme.colors.bgSubtleSecondary, RoundedCornerShape(10.0.dp))
                             .align(Alignment.BottomEnd)
@@ -483,24 +466,24 @@ private fun MessageEventBubbleContent(
                 }
             TimestampPosition.Aligned ->
                 Box(modifier) {
-                    ContentView(modifier = contentModifier)
+                    content()
                     TimelineEventTimestampView(
                         event = event,
                         onClick = onTimestampClicked,
                         onLongClick = ::onTimestampLongClick,
-                        modifier = timestampModifier
+                        modifier = Modifier
                             .align(Alignment.BottomEnd)
                             .padding(horizontal = 8.dp, vertical = 4.dp)
                     )
                 }
             TimestampPosition.Below ->
                 Column(modifier) {
-                    ContentView(modifier = contentModifier)
+                    content()
                     TimelineEventTimestampView(
                         event = event,
                         onClick = onTimestampClicked,
                         onLongClick = ::onTimestampLongClick,
-                        modifier = timestampModifier
+                        modifier = Modifier
                             .align(Alignment.End)
                             .padding(horizontal = 8.dp, vertical = 4.dp)
                     )
@@ -516,52 +499,77 @@ private fun MessageEventBubbleContent(
         inReplyToDetails: InReplyTo.Ready?,
         modifier: Modifier = Modifier
     ) {
-        val modifierWithPadding: Modifier
+        val timestampLayoutModifier: Modifier
         val contentModifier: Modifier
         when {
             inReplyToDetails != null -> {
                 if (timestampPosition == TimestampPosition.Overlay) {
-                    modifierWithPadding = Modifier.padding(start = 8.dp, end = 8.dp, bottom = 8.dp)
+                    timestampLayoutModifier = Modifier.padding(start = 8.dp, end = 8.dp, bottom = 8.dp)
                     contentModifier = Modifier.clip(RoundedCornerShape(12.dp))
                 } else {
                     contentModifier = Modifier.padding(start = 12.dp, end = 12.dp, top = 0.dp, bottom = 8.dp)
-                    modifierWithPadding = Modifier
+                    timestampLayoutModifier = Modifier
                 }
             }
             timestampPosition != TimestampPosition.Overlay -> {
-                modifierWithPadding = Modifier
+                timestampLayoutModifier = Modifier
                 contentModifier = Modifier.padding(start = 12.dp, end = 12.dp, top = 8.dp, bottom = 8.dp)
             }
             else -> {
-                modifierWithPadding = Modifier
+                timestampLayoutModifier = Modifier
                 contentModifier = Modifier
             }
         }
-
-        EqualWidthColumn(modifier = modifier, spacing = 8.dp) {
+        val threadDecoration = @Composable {
             if (showThreadDecoration) {
                 ThreadDecoration(modifier = Modifier.padding(top = 8.dp, start = 12.dp, end = 12.dp))
             }
-            if (inReplyToDetails != null) {
-                val senderName = inReplyToDetails.senderDisplayName ?: inReplyToDetails.senderId.value
-                val attachmentThumbnailInfo = attachmentThumbnailInfoForInReplyTo(inReplyToDetails)
-                val text = textForInReplyTo(inReplyToDetails)
-                val topPadding = if (showThreadDecoration) 0.dp else 8.dp
-                ReplyToContent(
-                    senderName = senderName,
-                    text = text,
-                    attachmentThumbnailInfo = attachmentThumbnailInfo,
-                    modifier = Modifier
-                        .padding(top = topPadding, start = 8.dp, end = 8.dp)
-                        .clip(RoundedCornerShape(6.dp))
-                        .clickable(enabled = true, onClick = inReplyToClick),
+        }
+        val contentWithTimestamp = @Composable {
+            WithTimestampLayout(
+                timestampPosition = timestampPosition,
+                modifier = timestampLayoutModifier,
+            ) {
+                TimelineItemEventContentView(
+                    content = event.content,
+                    isMine = event.isMine,
+                    interactionSource = interactionSource,
+                    onClick = onMessageClick,
+                    onLongClick = onMessageLongClick,
+                    extraPadding = event.toExtraPadding(),
+                    eventSink = eventSink,
+                    modifier = contentModifier,
                 )
             }
-            ContentAndTimestampView(
-                timestampPosition = timestampPosition,
-                modifier = modifierWithPadding,
-                contentModifier = contentModifier,
+        }
+        val inReplyTo = @Composable { inReplyToReady: InReplyTo.Ready ->
+            val senderName = inReplyToReady.senderDisplayName ?: inReplyToReady.senderId.value
+            val attachmentThumbnailInfo = attachmentThumbnailInfoForInReplyTo(inReplyToReady)
+            val text = textForInReplyTo(inReplyToReady)
+            val topPadding = if (showThreadDecoration) 0.dp else 8.dp
+            ReplyToContent(
+                senderName = senderName,
+                text = text,
+                attachmentThumbnailInfo = attachmentThumbnailInfo,
+                modifier = Modifier
+                    .padding(top = topPadding, start = 8.dp, end = 8.dp)
+                    .clip(RoundedCornerShape(6.dp))
+                    .clickable(enabled = true, onClick = inReplyToClick),
             )
+
+        }
+        if (inReplyToDetails != null) {
+            // Use SubComposeLayout only if necessary as it can have consequences on the performance.
+            EqualWidthColumn(modifier = modifier, spacing = 8.dp) {
+                threadDecoration()
+                inReplyTo(inReplyToDetails)
+                contentWithTimestamp()
+            }
+        } else {
+            Column(modifier = modifier, verticalArrangement = spacedBy(8.dp)) {
+                threadDecoration()
+                contentWithTimestamp()
+            }
         }
     }
 
