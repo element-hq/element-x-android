@@ -79,7 +79,7 @@ fun UnresolvedUserRow(
             ) {
                 Icon(
                     resourceId = CommonDrawables.ic_compound_error,
-                    contentDescription = "",
+                    contentDescription = null,
                     modifier = Modifier
                         .size(18.dp)
                         .align(Alignment.Top)

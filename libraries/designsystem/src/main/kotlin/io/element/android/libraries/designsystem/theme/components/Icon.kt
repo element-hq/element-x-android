@@ -145,5 +145,5 @@ internal fun IconImageVectorPreview() =
 
 @Composable
 private fun ContentToPreview() {
-    Icon(resourceId = CommonDrawables.ic_compound_close, contentDescription = "")
+    Icon(resourceId = CommonDrawables.ic_compound_close, contentDescription = null)
 }

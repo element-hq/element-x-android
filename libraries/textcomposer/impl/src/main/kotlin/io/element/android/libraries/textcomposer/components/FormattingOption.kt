@@ -98,19 +98,19 @@ internal fun FormattingButtonPreview() = ElementPreview {
             state = FormattingOptionState.Default,
             onClick = { },
             imageVector = ImageVector.vectorResource(CommonDrawables.ic_bold),
-            contentDescription = "",
+            contentDescription = null,
         )
         FormattingOption(
             state = FormattingOptionState.Selected,
             onClick = { },
             imageVector = ImageVector.vectorResource(CommonDrawables.ic_italic),
-            contentDescription = "",
+            contentDescription = null,
         )
         FormattingOption(
             state = FormattingOptionState.Disabled,
             onClick = { },
             imageVector = ImageVector.vectorResource(CommonDrawables.ic_underline),
-            contentDescription = "",
+            contentDescription = null,
         )
     }
 }

@@ -70,7 +70,7 @@ fun RoundedIconAtom(
             tint = tint,
             resourceId = resourceId,
             imageVector = imageVector,
-            contentDescription = "",
+            contentDescription = null,
         )
     }
 }
