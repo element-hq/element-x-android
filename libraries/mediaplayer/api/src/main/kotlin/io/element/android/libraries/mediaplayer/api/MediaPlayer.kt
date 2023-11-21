@@ -38,6 +38,7 @@ interface MediaPlayer : AutoCloseable {
         uri: String,
         mediaId: String,
         mimeType: String,
+        startPositionMs: Long = 0,
     ): State
 
     /**
@@ -69,6 +70,10 @@ interface MediaPlayer : AutoCloseable {
          * Whether the player is currently playing.
          */
         val isPlaying: Boolean,
+        /**
+         * Whether the player has reached the end of the current media.
+         */
+        val isEnded: Boolean,
         /**
          * The id of the media which is currently playing.
          *

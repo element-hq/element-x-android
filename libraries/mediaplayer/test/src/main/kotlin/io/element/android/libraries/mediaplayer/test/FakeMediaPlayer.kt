@@ -26,31 +26,37 @@ import kotlinx.coroutines.flow.update
 /**
  * Fake implementation of [MediaPlayer] for testing purposes.
  */
-class FakeMediaPlayer : MediaPlayer {
-    companion object {
-        private const val FAKE_TOTAL_DURATION_MS = 10_000L
-        private const val FAKE_PLAYED_DURATION_MS = 1000L
-    }
+class FakeMediaPlayer(
+    private val fakeTotalDurationMs: Long = 10_000L,
+    private val fakePlayedDurationMs: Long = 1000L,
+) : MediaPlayer {
 
     private val _state = MutableStateFlow(
         MediaPlayer.State(
             isReady = false,
             isPlaying = false,
+            isEnded = false,
             mediaId = null,
             currentPosition = 0L,
-            duration = 0L
+            duration = null
         )
     )
 
     override val state: StateFlow<MediaPlayer.State> = _state.asStateFlow()
 
-    override suspend fun setMedia(uri: String, mediaId: String, mimeType: String): MediaPlayer.State {
+    override suspend fun setMedia(
+        uri: String,
+        mediaId: String,
+        mimeType: String,
+        startPositionMs: Long,
+    ): MediaPlayer.State {
         _state.update {
             it.copy(
                 isReady = false,
                 isPlaying = false,
+                isEnded = false,
                 mediaId = mediaId,
-                currentPosition = 0,
+                currentPosition = startPositionMs,
                 duration = null,
             )
         }
@@ -58,7 +64,7 @@ class FakeMediaPlayer : MediaPlayer {
         _state.update {
             it.copy(
                 isReady = true,
-                duration = FAKE_TOTAL_DURATION_MS,
+                duration = fakeTotalDurationMs,
             )
         }
         return _state.value
@@ -66,10 +72,20 @@ class FakeMediaPlayer : MediaPlayer {
 
     override fun play() {
         _state.update {
-            it.copy(
-                isPlaying = true,
-                currentPosition = it.currentPosition + FAKE_PLAYED_DURATION_MS,
-            )
+            val newPosition = it.currentPosition + fakePlayedDurationMs
+            if (newPosition < fakeTotalDurationMs) {
+                it.copy(
+                    isPlaying = true,
+                    currentPosition = newPosition,
+                )
+            } else {
+                it.copy(
+                    isReady = false,
+                    isPlaying = false,
+                    isEnded = true,
+                    currentPosition = fakeTotalDurationMs,
+                )
+            }
         }
     }
 

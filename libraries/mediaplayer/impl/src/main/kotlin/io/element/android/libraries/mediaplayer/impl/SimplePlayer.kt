@@ -35,7 +35,7 @@ interface SimplePlayer {
     val playbackState: Int
     val duration: Long
     fun clearMediaItems()
-    fun setMediaItem(mediaItem: MediaItem)
+    fun setMediaItem(mediaItem: MediaItem, startPositionMs: Long)
     fun getCurrentMediaItem(): MediaItem?
     fun prepare()
     fun play()
@@ -81,7 +81,7 @@ class SimplePlayerImpl(
 
     override fun clearMediaItems() = p.clearMediaItems()
 
-    override fun setMediaItem(mediaItem: MediaItem) = p.setMediaItem(mediaItem)
+    override fun setMediaItem(mediaItem: MediaItem, startPositionMs: Long) = p.setMediaItem(mediaItem, startPositionMs)
 
     override fun getCurrentMediaItem(): MediaItem? = p.currentMediaItem
 
