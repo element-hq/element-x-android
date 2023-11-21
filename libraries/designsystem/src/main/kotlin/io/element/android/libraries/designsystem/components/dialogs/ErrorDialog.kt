@@ -16,7 +16,7 @@
 
 package io.element.android.libraries.designsystem.components.dialogs
 
-import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -37,7 +37,7 @@ fun ErrorDialog(
     title: String = ErrorDialogDefaults.title,
     submitText: String = ErrorDialogDefaults.submitText,
 ) {
-    AlertDialog(modifier = modifier, onDismissRequest = onDismiss) {
+    BasicAlertDialog(modifier = modifier, onDismissRequest = onDismiss) {
         ErrorDialogContent(
             title = title,
             content = content,
