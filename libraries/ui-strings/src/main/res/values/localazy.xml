@@ -2,6 +2,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="a11y_delete">"Delete"</string>
   <string name="a11y_hide_password">"Hide password"</string>
+  <string name="a11y_jump_to_bottom">"Jump to bottom"</string>
   <string name="a11y_notifications_mentions_only">"Mentions only"</string>
   <string name="a11y_notifications_muted">"Muted"</string>
   <string name="a11y_page_n">"Page %1$d"</string>

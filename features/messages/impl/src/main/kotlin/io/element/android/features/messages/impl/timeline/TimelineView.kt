@@ -52,6 +52,7 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.pluralStringResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.features.messages.impl.R
@@ -78,6 +79,7 @@ import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.theme.ElementTheme
+import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.coroutines.launch
 
 @Composable
@@ -350,7 +352,7 @@ private fun JumpToBottomButton(
                     .size(24.dp)
                     .rotate(90f),
                 resourceId = CommonDrawables.ic_compound_arrow_right,
-                contentDescription = "",
+                contentDescription = stringResource(id = CommonStrings.a11y_jump_to_bottom)
             )
         }
     }
