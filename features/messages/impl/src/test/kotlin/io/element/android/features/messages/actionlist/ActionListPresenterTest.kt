@@ -426,6 +426,7 @@ class ActionListPresenterTest {
                 ActionListState.Target.Success(
                     messageEvent,
                     persistentListOf(
+                        TimelineItemAction.Reply,
                         TimelineItemAction.EndPoll,
                         TimelineItemAction.Redact,
                     )
@@ -452,6 +453,7 @@ class ActionListPresenterTest {
                 ActionListState.Target.Success(
                     messageEvent,
                     persistentListOf(
+                        TimelineItemAction.Reply,
                         TimelineItemAction.Redact,
                     )
                 )
