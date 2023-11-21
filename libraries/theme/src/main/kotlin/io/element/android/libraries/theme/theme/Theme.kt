@@ -14,22 +14,33 @@
  * limitations under the License.
  */
 
-package io.element.android.features.preferences.api.store
+package io.element.android.libraries.theme.theme
 
+import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.runtime.Composable
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
-interface PreferencesStore {
-    suspend fun setRichTextEditorEnabled(enabled: Boolean)
-    fun isRichTextEditorEnabledFlow(): Flow<Boolean>
+enum class Theme {
+    System,
+    Dark,
+    Light;
+}
 
-    suspend fun setDeveloperModeEnabled(enabled: Boolean)
-    fun isDeveloperModeEnabledFlow(): Flow<Boolean>
+val themes = listOf(Theme.System, Theme.Dark, Theme.Light)
 
-    suspend fun setCustomElementCallBaseUrl(string: String?)
-    fun getCustomElementCallBaseUrlFlow(): Flow<String?>
+@Composable
+fun Theme.isDark(): Boolean {
+    return when (this) {
+        Theme.System -> isSystemInDarkTheme()
+        Theme.Dark -> true
+        Theme.Light -> false
+    }
+}
 
-    suspend fun setTheme(theme: String)
-    fun getThemeFlow(): Flow<String?>
-
-    suspend fun reset()
+fun Flow<String?>.mapToTheme(): Flow<Theme> = map {
+    when (it) {
+        null -> Theme.System
+        else -> Theme.valueOf(it)
+    }
 }

@@ -39,6 +39,7 @@ private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(na
 private val richTextEditorKey = booleanPreferencesKey("richTextEditor")
 private val developerModeKey = booleanPreferencesKey("developerMode")
 private val customElementCallBaseUrlKey = stringPreferencesKey("elementCallBaseUrl")
+private val themeKey = stringPreferencesKey("theme")
 
 @ContributesBinding(AppScope::class)
 class DefaultPreferencesStore @Inject constructor(
@@ -86,6 +87,18 @@ class DefaultPreferencesStore @Inject constructor(
     override fun getCustomElementCallBaseUrlFlow(): Flow<String?> {
         return store.data.map { prefs ->
             prefs[customElementCallBaseUrlKey]
+        }
+    }
+
+    override suspend fun setTheme(theme: String) {
+        store.edit { prefs ->
+            prefs[themeKey] = theme
+        }
+    }
+
+    override fun getThemeFlow(): Flow<String?> {
+        return store.data.map { prefs ->
+            prefs[themeKey]
         }
     }
 

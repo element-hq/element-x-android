@@ -31,15 +31,22 @@ import android.webkit.PermissionRequest
 import androidx.activity.compose.setContent
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.core.content.IntentCompat
 import com.bumble.appyx.core.integrationpoint.NodeComponentActivity
 import io.element.android.features.call.CallForegroundService
 import io.element.android.features.call.CallType
 import io.element.android.features.call.di.CallBindings
 import io.element.android.features.call.utils.CallIntentDataParser
+import io.element.android.features.preferences.api.store.PreferencesStore
 import io.element.android.libraries.architecture.bindings
 import io.element.android.libraries.theme.ElementTheme
+import io.element.android.libraries.theme.theme.Theme
+import io.element.android.libraries.theme.theme.isDark
+import io.element.android.libraries.theme.theme.mapToTheme
 import javax.inject.Inject
 
 class ElementCallActivity : NodeComponentActivity(), CallScreenNavigator {
@@ -60,6 +67,7 @@ class ElementCallActivity : NodeComponentActivity(), CallScreenNavigator {
 
     @Inject lateinit var callIntentDataParser: CallIntentDataParser
     @Inject lateinit var presenterFactory: CallScreenPresenter.Factory
+    @Inject lateinit var preferencesStore: PreferencesStore
 
     private lateinit var presenter: CallScreenPresenter
 
@@ -92,8 +100,14 @@ class ElementCallActivity : NodeComponentActivity(), CallScreenNavigator {
         requestAudioFocus()
 
         setContent {
+            val theme by remember {
+                preferencesStore.getThemeFlow().mapToTheme()
+            }
+                .collectAsState(initial = Theme.System)
             val state = presenter.present()
-            ElementTheme {
+            ElementTheme(
+                darkTheme = theme.isDark()
+            ) {
                 CallScreenView(
                     state = state,
                     requestPermissions = { permissions, callback ->

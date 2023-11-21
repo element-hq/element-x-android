@@ -19,9 +19,14 @@ package io.element.android.features.preferences.impl.advanced
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import io.element.android.features.preferences.api.store.PreferencesStore
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.theme.theme.Theme
+import io.element.android.libraries.theme.theme.mapToTheme
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -38,7 +43,11 @@ class AdvancedSettingsPresenter @Inject constructor(
         val isDeveloperModeEnabled by preferencesStore
             .isDeveloperModeEnabledFlow()
             .collectAsState(initial = false)
-
+        val theme by remember {
+            preferencesStore.getThemeFlow().mapToTheme()
+        }
+            .collectAsState(initial = Theme.System)
+        var showChangeThemeDialog by remember { mutableStateOf(false) }
         fun handleEvents(event: AdvancedSettingsEvents) {
             when (event) {
                 is AdvancedSettingsEvents.SetRichTextEditorEnabled -> localCoroutineScope.launch {
@@ -47,12 +56,20 @@ class AdvancedSettingsPresenter @Inject constructor(
                 is AdvancedSettingsEvents.SetDeveloperModeEnabled -> localCoroutineScope.launch {
                     preferencesStore.setDeveloperModeEnabled(event.enabled)
                 }
+                AdvancedSettingsEvents.CancelChangeTheme -> showChangeThemeDialog = false
+                AdvancedSettingsEvents.ChangeTheme -> showChangeThemeDialog = true
+                is AdvancedSettingsEvents.SetTheme -> localCoroutineScope.launch {
+                    preferencesStore.setTheme(event.theme.name)
+                    showChangeThemeDialog = false
+                }
             }
         }
 
         return AdvancedSettingsState(
             isRichTextEditorEnabled = isRichTextEditorEnabled,
             isDeveloperModeEnabled = isDeveloperModeEnabled,
+            theme = theme,
+            showChangeThemeDialog = showChangeThemeDialog,
             eventSink = { handleEvents(it) }
         )
     }

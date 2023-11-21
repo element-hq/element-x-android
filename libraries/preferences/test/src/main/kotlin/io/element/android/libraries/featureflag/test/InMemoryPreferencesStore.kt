@@ -24,10 +24,12 @@ class InMemoryPreferencesStore(
     isRichTextEditorEnabled: Boolean = false,
     isDeveloperModeEnabled: Boolean = false,
     customElementCallBaseUrl: String? = null,
+    theme: String? = null,
 ) : PreferencesStore {
     private var _isRichTextEditorEnabled = MutableStateFlow(isRichTextEditorEnabled)
     private var _isDeveloperModeEnabled = MutableStateFlow(isDeveloperModeEnabled)
     private var _customElementCallBaseUrl = MutableStateFlow(customElementCallBaseUrl)
+    private var _theme = MutableStateFlow(theme)
 
     override suspend fun setRichTextEditorEnabled(enabled: Boolean) {
         _isRichTextEditorEnabled.value = enabled
@@ -51,6 +53,14 @@ class InMemoryPreferencesStore(
 
     override fun getCustomElementCallBaseUrlFlow(): Flow<String?> {
         return _customElementCallBaseUrl
+    }
+
+    override suspend fun setTheme(theme: String) {
+        _theme.value = theme
+    }
+
+    override fun getThemeFlow(): Flow<String?> {
+        return _theme
     }
 
     override suspend fun reset() {

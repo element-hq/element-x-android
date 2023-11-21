@@ -16,8 +16,12 @@
 
 package io.element.android.features.preferences.impl.advanced
 
+import io.element.android.libraries.theme.theme.Theme
+
 data class AdvancedSettingsState(
     val isRichTextEditorEnabled: Boolean,
     val isDeveloperModeEnabled: Boolean,
+    val theme: Theme,
+    val showChangeThemeDialog: Boolean,
     val eventSink: (AdvancedSettingsEvents) -> Unit
 )
