@@ -80,7 +80,7 @@ fun TimelineItemReadReceiptView(
                 Icon(
                     modifier = Modifier.padding(2.dp),
                     resourceId = CommonDrawables.ic_sending,
-                    contentDescription = null,
+                    contentDescription = stringResource(id = CommonStrings.common_sending),
                     tint = ElementTheme.colors.iconSecondary
                 )
             }
@@ -96,7 +96,7 @@ fun TimelineItemReadReceiptView(
                     Icon(
                         modifier = Modifier.padding(2.dp),
                         resourceId = CommonDrawables.ic_sent,
-                        contentDescription = null,
+                        contentDescription = stringResource(id = CommonStrings.common_sent),
                         tint = ElementTheme.colors.iconSecondary
                     )
                 }
