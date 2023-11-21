@@ -165,7 +165,7 @@ kotlinpoet = "com.squareup:kotlinpoet:1.14.2"
 
 # Analytics
 posthog = "com.posthog.android:posthog:2.0.3"
-sentry = "io.sentry:sentry-android:6.33.1"
+sentry = "io.sentry:sentry-android:6.34.0"
 matrix_analytics_events = "com.github.matrix-org:matrix-analytics-events:aa14cbcdf81af2746d20a71779ec751f971e1d7f"
 
 # Emojibase
