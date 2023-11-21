@@ -26,6 +26,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContentProvider
@@ -34,6 +35,7 @@ import io.element.android.libraries.designsystem.modifiers.roundedBackground
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.matrix.ui.media.MediaRequestData
+import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
 fun TimelineItemVideoView(
@@ -56,7 +58,7 @@ fun TimelineItemVideoView(
         ) {
             Image(
                 Icons.Default.PlayArrow,
-                contentDescription = "Play",
+                contentDescription = stringResource(id = CommonStrings.a11y_play),
                 colorFilter = ColorFilter.tint(Color.White),
             )
         }

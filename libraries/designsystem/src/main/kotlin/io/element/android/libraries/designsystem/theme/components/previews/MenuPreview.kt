@@ -43,7 +43,10 @@ internal fun MenuPreview() {
             for (i in 0..5) {
                 val leadingIcon: @Composable (() -> Unit)? = if (i in 2..3) {
                     @Composable {
-                        Icon(Icons.Filled.Favorite, contentDescription = "Favorite")
+                        Icon(
+                            imageVector = Icons.Filled.Favorite,
+                            contentDescription = null
+                        )
                     }
                 } else {
                     null
@@ -53,7 +56,7 @@ internal fun MenuPreview() {
                     @Composable {
                         Icon(
                             resourceId = CommonDrawables.ic_compound_chevron_right,
-                            contentDescription = "Favorite",
+                            contentDescription = null,
                         )
                     }
                 } else {
