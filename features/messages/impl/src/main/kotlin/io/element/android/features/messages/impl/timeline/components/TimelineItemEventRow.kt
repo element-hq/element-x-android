@@ -100,6 +100,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.ImageMessageT
 import io.element.android.libraries.matrix.api.timeline.item.event.InReplyTo
 import io.element.android.libraries.matrix.api.timeline.item.event.LocationMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageContent
+import io.element.android.libraries.matrix.api.timeline.item.event.PollContent
 import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.VideoMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.VoiceMessageType
@@ -638,35 +639,41 @@ private fun ReplyToContent(
 }
 
 private fun attachmentThumbnailInfoForInReplyTo(inReplyTo: InReplyTo.Ready): AttachmentThumbnailInfo? {
-    val messageContent = inReplyTo.content as? MessageContent ?: return null
-    return when (val type = messageContent.type) {
-        is ImageMessageType -> AttachmentThumbnailInfo(
-            thumbnailSource = type.info?.thumbnailSource ?: type.source,
-            textContent = messageContent.body,
-            type = AttachmentThumbnailType.Image,
-            blurHash = type.info?.blurhash,
-        )
-        is VideoMessageType -> AttachmentThumbnailInfo(
-            thumbnailSource = type.info?.thumbnailSource,
-            textContent = messageContent.body,
-            type = AttachmentThumbnailType.Video,
-            blurHash = type.info?.blurhash,
-        )
-        is FileMessageType -> AttachmentThumbnailInfo(
-            thumbnailSource = type.info?.thumbnailSource,
-            textContent = messageContent.body,
-            type = AttachmentThumbnailType.File,
-        )
-        is LocationMessageType -> AttachmentThumbnailInfo(
-            textContent = messageContent.body,
-            type = AttachmentThumbnailType.Location,
-        )
-        is AudioMessageType -> AttachmentThumbnailInfo(
-            textContent = messageContent.body,
-            type = AttachmentThumbnailType.Audio,
-        )
-        is VoiceMessageType -> AttachmentThumbnailInfo(
-            type = AttachmentThumbnailType.Voice,
+    return when (val eventContent = inReplyTo.content) {
+        is MessageContent -> when (val type = eventContent.type) {
+            is ImageMessageType -> AttachmentThumbnailInfo(
+                thumbnailSource = type.info?.thumbnailSource ?: type.source,
+                textContent = eventContent.body,
+                type = AttachmentThumbnailType.Image,
+                blurHash = type.info?.blurhash,
+            )
+            is VideoMessageType -> AttachmentThumbnailInfo(
+                thumbnailSource = type.info?.thumbnailSource,
+                textContent = eventContent.body,
+                type = AttachmentThumbnailType.Video,
+                blurHash = type.info?.blurhash,
+            )
+            is FileMessageType -> AttachmentThumbnailInfo(
+                thumbnailSource = type.info?.thumbnailSource,
+                textContent = eventContent.body,
+                type = AttachmentThumbnailType.File,
+            )
+            is LocationMessageType -> AttachmentThumbnailInfo(
+                textContent = eventContent.body,
+                type = AttachmentThumbnailType.Location,
+            )
+            is AudioMessageType -> AttachmentThumbnailInfo(
+                textContent = eventContent.body,
+                type = AttachmentThumbnailType.Audio,
+            )
+            is VoiceMessageType -> AttachmentThumbnailInfo(
+                type = AttachmentThumbnailType.Voice,
+            )
+            else -> null
+        }
+        is PollContent -> AttachmentThumbnailInfo(
+            textContent = eventContent.question,
+            type = AttachmentThumbnailType.Poll,
         )
         else -> null
     }
