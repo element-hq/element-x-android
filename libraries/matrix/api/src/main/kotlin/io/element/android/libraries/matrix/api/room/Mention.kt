@@ -16,8 +16,6 @@
 
 package io.element.android.libraries.matrix.api.room
 
-import io.element.android.libraries.matrix.api.core.UserId
-
 interface Mention {
     data class User(val userId: String): Mention
     data object AtRoom: Mention
