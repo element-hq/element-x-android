@@ -38,7 +38,6 @@ import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.iconSuccessPrimaryBackground
 import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.theme.ElementTheme
-import io.element.android.libraries.theme.compound.generated.SemanticColors
 
 @Composable
 internal fun FormattingOption(
@@ -47,18 +46,17 @@ internal fun FormattingOption(
     imageVector: ImageVector,
     contentDescription: String?,
     modifier: Modifier = Modifier,
-    colors: SemanticColors = ElementTheme.colors,
 ) {
     val backgroundColor = when (state) {
-        FormattingOptionState.Selected -> colors.iconSuccessPrimaryBackground
+        FormattingOptionState.Selected -> ElementTheme.colors.iconSuccessPrimaryBackground
         FormattingOptionState.Default,
         FormattingOptionState.Disabled -> Color.Transparent
     }
 
     val foregroundColor = when (state) {
-        FormattingOptionState.Selected -> colors.iconSuccessPrimary
-        FormattingOptionState.Default -> colors.iconSecondary
-        FormattingOptionState.Disabled -> colors.iconDisabled
+        FormattingOptionState.Selected -> ElementTheme.colors.iconSuccessPrimary
+        FormattingOptionState.Default -> ElementTheme.colors.iconSecondary
+        FormattingOptionState.Disabled -> ElementTheme.colors.iconDisabled
     }
     Box(
         modifier = modifier
