@@ -35,7 +35,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
-import androidx.compose.ui.semantics.stateDescription
+import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
@@ -69,7 +69,9 @@ fun TimelineItemReadReceiptView(
                     receipts = state.receipts,
                     modifier = Modifier
                         .clip(RoundedCornerShape(4.dp))
-                        .clickable { onReadReceiptsClicked() }
+                        .clickable {
+                            onReadReceiptsClicked()
+                        }
                         .padding(2.dp)
                 )
             }
@@ -139,7 +141,7 @@ private fun ReadReceiptsAvatars(
     Row(
         modifier = modifier
             .clearAndSetSemantics {
-                stateDescription = receiptDescription
+                contentDescription = receiptDescription
             },
         horizontalArrangement = Arrangement.spacedBy(4.dp - avatarStrokeSize),
         verticalAlignment = Alignment.CenterVertically,
