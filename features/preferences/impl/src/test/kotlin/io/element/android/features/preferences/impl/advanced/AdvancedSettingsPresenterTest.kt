@@ -21,6 +21,7 @@ import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.featureflag.test.InMemoryPreferencesStore
+import io.element.android.libraries.theme.theme.Theme
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.awaitLastSequentialItem
 import kotlinx.coroutines.test.runTest
@@ -42,6 +43,8 @@ class AdvancedSettingsPresenterTest {
             val initialState = awaitLastSequentialItem()
             assertThat(initialState.isDeveloperModeEnabled).isFalse()
             assertThat(initialState.isRichTextEditorEnabled).isFalse()
+            assertThat(initialState.showChangeThemeDialog).isFalse()
+            assertThat(initialState.theme).isEqualTo(Theme.System)
         }
     }
 
@@ -74,6 +77,30 @@ class AdvancedSettingsPresenterTest {
             assertThat(awaitItem().isRichTextEditorEnabled).isTrue()
             initialState.eventSink.invoke(AdvancedSettingsEvents.SetRichTextEditorEnabled(false))
             assertThat(awaitItem().isRichTextEditorEnabled).isFalse()
+        }
+    }
+
+    @Test
+    fun `present - change theme`() = runTest {
+        val store = InMemoryPreferencesStore()
+        val presenter = AdvancedSettingsPresenter(store)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitLastSequentialItem()
+            initialState.eventSink.invoke(AdvancedSettingsEvents.ChangeTheme)
+            val withDialog = awaitItem()
+            assertThat(withDialog.showChangeThemeDialog).isTrue()
+            // Cancel
+            withDialog.eventSink(AdvancedSettingsEvents.CancelChangeTheme)
+            val withoutDialog = awaitItem()
+            assertThat(withoutDialog.showChangeThemeDialog).isFalse()
+            withDialog.eventSink.invoke(AdvancedSettingsEvents.ChangeTheme)
+            assertThat(awaitItem().showChangeThemeDialog).isTrue()
+            withDialog.eventSink(AdvancedSettingsEvents.SetTheme(Theme.Light))
+            val withNewTheme = awaitItem()
+            assertThat(withNewTheme.showChangeThemeDialog).isFalse()
+            assertThat(withNewTheme.theme).isEqualTo(Theme.Light)
         }
     }
 }

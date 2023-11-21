@@ -25,6 +25,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
@@ -38,6 +41,9 @@ import io.element.android.libraries.architecture.bindings
 import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.designsystem.utils.snackbar.LocalSnackbarDispatcher
 import io.element.android.libraries.theme.ElementTheme
+import io.element.android.libraries.theme.theme.Theme
+import io.element.android.libraries.theme.theme.isDark
+import io.element.android.libraries.theme.theme.mapToTheme
 import io.element.android.x.di.AppBindings
 import io.element.android.x.intent.SafeUriHandler
 import timber.log.Timber
@@ -77,7 +83,13 @@ class MainActivity : NodeActivity() {
 
     @Composable
     private fun MainContent(appBindings: AppBindings) {
-        ElementTheme {
+        val theme by remember {
+            appBindings.preferencesStore().getThemeFlow().mapToTheme()
+        }
+            .collectAsState(initial = Theme.System)
+        ElementTheme(
+            darkTheme = theme.isDark()
+        ) {
             CompositionLocalProvider(
                 LocalSnackbarDispatcher provides appBindings.snackbarDispatcher(),
                 LocalUriHandler provides SafeUriHandler(this),

@@ -17,6 +17,7 @@
 package io.element.android.features.preferences.impl.advanced
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import io.element.android.libraries.theme.theme.Theme
 
 open class AdvancedSettingsStateProvider : PreviewParameterProvider<AdvancedSettingsState> {
     override val values: Sequence<AdvancedSettingsState>
@@ -24,14 +25,18 @@ open class AdvancedSettingsStateProvider : PreviewParameterProvider<AdvancedSett
             aAdvancedSettingsState(),
             aAdvancedSettingsState(isRichTextEditorEnabled = true),
             aAdvancedSettingsState(isDeveloperModeEnabled = true),
+            aAdvancedSettingsState(showChangeThemeDialog = true),
         )
 }
 
 fun aAdvancedSettingsState(
     isRichTextEditorEnabled: Boolean = false,
     isDeveloperModeEnabled: Boolean = false,
+    showChangeThemeDialog: Boolean = false,
 ) = AdvancedSettingsState(
     isRichTextEditorEnabled = isRichTextEditorEnabled,
     isDeveloperModeEnabled = isDeveloperModeEnabled,
+    theme = Theme.System,
+    showChangeThemeDialog = showChangeThemeDialog,
     eventSink = {}
 )
