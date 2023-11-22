@@ -1,11 +1,10 @@
 name: Maestro
 
-# Run this flow only on pull request, and only when the pull request has been approved, to limit our usage of maestro cloud.
-# https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#running-a-workflow-when-a-pull-request-is-approved
+# Run this flow only on pull request, and only when the pull request has the Run-Maestro label, to limit our usage of maestro cloud.
 on:
   workflow_dispatch:
-  pull_request_review:
-    types: [submitted]
+  pull_request:
+    types: [labeled]
 
 # Enrich gradle.properties for CI/CD
 env:
@@ -16,7 +15,7 @@ jobs:
   maestro-cloud:
     name: Maestro test suite
     runs-on: ubuntu-latest
-    if: github.event.review.state == 'approved' || github.event_name == 'workflow_dispatch'
+    if: github.event_name == 'workflow_dispatch' || github.event.label.name == 'Run-Maestro'
     strategy:
       fail-fast: false
     # Allow one per PR.
@@ -53,3 +52,13 @@ jobs:
             INVITEE1_MXID=@maestroelement2:matrix.org
             INVITEE2_MXID=@maestroelement3:matrix.org
             APP_ID=io.element.android.x.debug
+
+  remove_label:
+    if: ${{ github.event.label.name == 'Run-Maestro' }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Remove Run-Maestro label
+        uses: actions-ecosystem/action-remove-labels@v1
+        with:
+          labels: Run-Maestro
