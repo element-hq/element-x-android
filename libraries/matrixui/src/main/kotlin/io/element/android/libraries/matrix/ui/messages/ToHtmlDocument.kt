@@ -14,8 +14,10 @@
  * limitations under the License.
  */
 
-package io.element.android.features.messages.impl.timeline.util
+package io.element.android.libraries.matrix.ui.messages
 
+import io.element.android.libraries.matrix.api.permalink.PermalinkData
+import io.element.android.libraries.matrix.api.permalink.PermalinkParser
 import io.element.android.libraries.matrix.api.timeline.item.event.FormattedBody
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageFormat
 import org.jsoup.Jsoup
@@ -23,10 +25,27 @@ import org.jsoup.nodes.Document
 
 fun FormattedBody.toHtmlDocument(prefix: String? = null): Document? {
     return takeIf { it.format == MessageFormat.HTML }?.body?.let { formattedBody ->
-        if (prefix != null) {
+        val dom = if (prefix != null) {
             Jsoup.parse("$prefix $formattedBody")
         } else {
             Jsoup.parse(formattedBody)
+        }
+
+        // Prepend `@` to mentions
+        fixMentions(dom)
+
+        dom
+    }
+}
+
+private fun fixMentions(dom: Document) {
+    val links = dom.getElementsByTag("a")
+    links.forEach {
+        if (it.hasAttr("href")) {
+            val link = PermalinkParser.parse(it.attr("href"))
+            if (link is PermalinkData.UserLink && !it.text().startsWith("@")) {
+                it.prependText("@")
+            }
         }
     }
 }

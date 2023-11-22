@@ -68,6 +68,7 @@ import io.element.android.features.messages.impl.timeline.components.event.Timel
 import io.element.android.features.messages.impl.timeline.components.event.toExtraPadding
 import io.element.android.features.messages.impl.timeline.components.receipt.ReadReceiptViewState
 import io.element.android.features.messages.impl.timeline.components.receipt.TimelineItemReadReceiptView
+import io.element.android.features.messages.impl.timeline.model.InReplyToDetails
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.TimelineItemGroupPosition
 import io.element.android.features.messages.impl.timeline.model.bubble.BubbleState
@@ -141,7 +142,7 @@ fun TimelineItemEventRow(
     }
 
     fun inReplyToClicked() {
-        val inReplyToEventId = (event.inReplyTo as? InReplyTo.Ready)?.eventId ?: return
+        val inReplyToEventId = event.inReplyTo?.eventId ?: return
         inReplyToClick(inReplyToEventId)
     }
 
@@ -496,7 +497,7 @@ private fun MessageEventBubbleContent(
     fun CommonLayout(
         timestampPosition: TimestampPosition,
         showThreadDecoration: Boolean,
-        inReplyToDetails: InReplyTo.Ready?,
+        inReplyToDetails: InReplyToDetails?,
         modifier: Modifier = Modifier
     ) {
         val timestampLayoutModifier: Modifier
@@ -542,10 +543,10 @@ private fun MessageEventBubbleContent(
                 )
             }
         }
-        val inReplyTo = @Composable { inReplyToReady: InReplyTo.Ready ->
-            val senderName = inReplyToReady.senderDisplayName ?: inReplyToReady.senderId.value
-            val attachmentThumbnailInfo = attachmentThumbnailInfoForInReplyTo(inReplyToReady)
-            val text = textForInReplyTo(inReplyToReady)
+        val inReplyTo = @Composable { inReplyTo: InReplyToDetails ->
+            val senderName = inReplyTo.senderDisplayName ?: inReplyTo.senderId.value
+            val attachmentThumbnailInfo = attachmentThumbnailInfoForInReplyTo(inReplyTo)
+            val text = textForInReplyTo(inReplyTo)
             val topPadding = if (showThreadDecoration) 0.dp else 8.dp
             ReplyToContent(
                 senderName = senderName,
@@ -580,11 +581,10 @@ private fun MessageEventBubbleContent(
         is TimelineItemPollContent -> TimestampPosition.Below
         else -> TimestampPosition.Default
     }
-    val replyToDetails = event.inReplyTo as? InReplyTo.Ready
     CommonLayout(
         showThreadDecoration = event.isThreaded,
         timestampPosition = timestampPosition,
-        inReplyToDetails = replyToDetails,
+        inReplyToDetails = event.inReplyTo,
         modifier = bubbleModifier
     )
 }
@@ -637,8 +637,8 @@ private fun ReplyToContent(
     }
 }
 
-private fun attachmentThumbnailInfoForInReplyTo(inReplyTo: InReplyTo.Ready): AttachmentThumbnailInfo? {
-    val messageContent = inReplyTo.content as? MessageContent ?: return null
+private fun attachmentThumbnailInfoForInReplyTo(inReplyToDetails: InReplyToDetails): AttachmentThumbnailInfo? {
+    val messageContent = inReplyToDetails.messageContent ?: return null
     return when (val type = messageContent.type) {
         is ImageMessageType -> AttachmentThumbnailInfo(
             thumbnailSource = type.info?.thumbnailSource ?: type.source,
@@ -673,12 +673,12 @@ private fun attachmentThumbnailInfoForInReplyTo(inReplyTo: InReplyTo.Ready): Att
 }
 
 @Composable
-private fun textForInReplyTo(inReplyTo: InReplyTo.Ready): String {
-    val messageContent = inReplyTo.content as? MessageContent ?: return ""
+private fun textForInReplyTo(inReplyTo: InReplyToDetails): String {
+    val messageContent = inReplyTo.messageContent ?: return ""
     return when (messageContent.type) {
         is LocationMessageType -> stringResource(CommonStrings.common_shared_location)
         is VoiceMessageType -> stringResource(CommonStrings.common_voice_message)
-        else -> messageContent.body
+        else -> inReplyTo.textContent.orEmpty()
     }
 }
 
@@ -759,7 +759,7 @@ internal fun TimelineItemEventRowWithReplyPreview() = ElementPreview {
                         body = "A long text which will be displayed on several lines and" +
                             " hopefully can be manually adjusted to test different behaviors."
                     ),
-                    inReplyTo = aInReplyToReady(replyContent),
+                    inReplyTo = aInReplyToInfo(replyContent),
                     groupPosition = TimelineItemGroupPosition.First,
                 ),
                 showReadReceipts = false,
@@ -784,7 +784,7 @@ internal fun TimelineItemEventRowWithReplyPreview() = ElementPreview {
                     content = aTimelineItemImageContent().copy(
                         aspectRatio = 5f
                     ),
-                    inReplyTo = aInReplyToReady(replyContent),
+                    inReplyTo = aInReplyToInfo(replyContent),
                     isThreaded = true,
                     groupPosition = TimelineItemGroupPosition.Last,
                 ),
@@ -808,15 +808,16 @@ internal fun TimelineItemEventRowWithReplyPreview() = ElementPreview {
     }
 }
 
-private fun aInReplyToReady(
+private fun aInReplyToInfo(
     replyContent: String,
-): InReplyTo.Ready {
-    return InReplyTo.Ready(
+): InReplyToDetails {
+    return InReplyToDetails(
         eventId = EventId("\$event"),
-        content = MessageContent(replyContent, null, false, false, TextMessageType(replyContent, null)),
+        messageContent = MessageContent(replyContent, null, false, false, TextMessageType(replyContent, null)),
         senderId = UserId("@Sender:domain"),
         senderDisplayName = "Sender",
         senderAvatarUrl = null,
+        textContent = replyContent,
     )
 }
 

@@ -37,6 +37,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageTy
 import io.element.android.libraries.matrix.api.timeline.item.event.UnknownMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.VideoMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.VoiceMessageType
+import io.element.android.libraries.matrix.ui.messages.toPlainText
 import io.element.android.libraries.push.impl.R
 import io.element.android.libraries.push.impl.notifications.model.FallbackNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.InviteNotifiableEvent
@@ -81,6 +82,7 @@ class NotifiableEventResolver @Inject constructor(
     private fun NotificationData.asNotifiableEvent(userId: SessionId): NotifiableEvent? {
         return when (val content = this.content) {
             is NotificationContent.MessageLike.RoomMessage -> {
+                val messageBody = descriptionFromMessageContent(content, senderDisplayName ?: content.senderId.value)
                 buildNotifiableMessageEvent(
                     sessionId = userId,
                     senderId = content.senderId,
@@ -89,7 +91,7 @@ class NotifiableEventResolver @Inject constructor(
                     noisy = isNoisy,
                     timestamp = this.timestamp,
                     senderName = senderDisplayName,
-                    body = descriptionFromMessageContent(content, senderDisplayName ?: content.senderId.value),
+                    body = messageBody,
                     imageUriString = this.contentUrl,
                     roomName = roomDisplayName,
                     roomIsDirect = isDirect,
@@ -216,7 +218,7 @@ class NotifiableEventResolver @Inject constructor(
             is FileMessageType -> messageType.body
             is ImageMessageType -> messageType.body
             is NoticeMessageType -> messageType.body
-            is TextMessageType -> messageType.body
+            is TextMessageType -> messageType.toPlainText()
             is VideoMessageType -> messageType.body
             is LocationMessageType -> messageType.body
             is OtherMessageType -> messageType.body
