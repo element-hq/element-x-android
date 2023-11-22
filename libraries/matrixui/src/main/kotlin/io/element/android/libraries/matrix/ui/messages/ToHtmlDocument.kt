@@ -23,6 +23,14 @@ import io.element.android.libraries.matrix.api.timeline.item.event.MessageFormat
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 
+/**
+ * Converts the HTML string [FormattedBody.body] to a [Document] by parsing it.
+ * If the message is not formatted or the format is not [MessageFormat.HTML] we return `null`.
+ *
+ * This will also make sure mentions are prefixed with `@`.
+ *
+ * @param prefix if not null, the prefix will be inserted at the beginning of the message.
+ */
 fun FormattedBody.toHtmlDocument(prefix: String? = null): Document? {
     return takeIf { it.format == MessageFormat.HTML }?.body?.let { formattedBody ->
         val dom = if (prefix != null) {
