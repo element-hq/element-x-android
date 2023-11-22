@@ -17,6 +17,7 @@
 package io.element.android.features.poll.impl.create
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -32,12 +33,18 @@ import dagger.assisted.AssistedInject
 import im.vector.app.features.analytics.plan.Composer
 import im.vector.app.features.analytics.plan.PollCreation
 import io.element.android.features.messages.api.MessageComposerContext
+import io.element.android.features.poll.api.create.CreatePollMode
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.poll.PollAnswer
 import io.element.android.libraries.matrix.api.poll.PollKind
 import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
+import io.element.android.libraries.matrix.api.timeline.item.event.PollContent
 import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
@@ -51,22 +58,36 @@ class CreatePollPresenter @AssistedInject constructor(
     private val analyticsService: AnalyticsService,
     private val messageComposerContext: MessageComposerContext,
     @Assisted private val navigateUp: () -> Unit,
+    @Assisted private val mode: CreatePollMode,
 ) : Presenter<CreatePollState> {
 
     @AssistedFactory
     interface Factory {
-        fun create(backNavigator: () -> Unit): CreatePollPresenter
+        fun create(backNavigator: () -> Unit, mode: CreatePollMode): CreatePollPresenter
     }
 
     @Composable
     override fun present(): CreatePollState {
-
         var question: String by rememberSaveable { mutableStateOf("") }
-        var answers: List<String> by rememberSaveable() { mutableStateOf(listOf("", "")) }
+        var answers: List<String> by rememberSaveable { mutableStateOf(listOf("", "")) }
         var pollKind: PollKind by rememberSaveable(saver = pollKindSaver) { mutableStateOf(PollKind.Disclosed) }
         var showConfirmation: Boolean by rememberSaveable { mutableStateOf(false) }
 
-        val canCreate: Boolean by remember { derivedStateOf { canCreate(question, answers) } }
+        LaunchedEffect(Unit) {
+            if (mode is CreatePollMode.EditPoll) {
+                room.getPoll(mode.eventId).onSuccess {
+                    question = it.question
+                    answers = it.answers.map(PollAnswer::text)
+                    pollKind = it.kind
+                }.onFailure {
+                    Timber.e(it)
+                    analyticsService.trackGetPollFailed(it)
+                    navigateUp()
+                }
+            }
+        }
+
+        val canSave: Boolean by remember { derivedStateOf { canSave(question, answers) } }
         val canAddAnswer: Boolean by remember { derivedStateOf { canAddAnswer(answers) } }
         val immutableAnswers: ImmutableList<Answer> by remember { derivedStateOf { answers.toAnswers() } }
 
@@ -75,7 +96,7 @@ class CreatePollPresenter @AssistedInject constructor(
         fun handleEvents(event: CreatePollEvents) {
             when (event) {
                 is CreatePollEvents.Create -> scope.launch {
-                    if (canCreate) {
+                    if (canSave) {
                         room.createPoll(
                             question = question,
                             answers = answers,
@@ -135,7 +156,7 @@ class CreatePollPresenter @AssistedInject constructor(
         }
 
         return CreatePollState(
-            canCreate = canCreate,
+            canSave = canSave,
             canAddAnswer = canAddAnswer,
             question = question,
             answers = immutableAnswers,
@@ -144,16 +165,35 @@ class CreatePollPresenter @AssistedInject constructor(
             eventSink = ::handleEvents,
         )
     }
+
+    private suspend fun MatrixRoom.getPoll(eventId: EventId): Result<PollContent> = runCatching {
+        timeline
+            .timelineItems
+            .first()
+            .asSequence()
+            .filterIsInstance<MatrixTimelineItem.Event>()
+            .first { it.eventId == eventId }
+            .event
+            .content as PollContent
+    }
 }
 
-private fun canCreate(
+private fun AnalyticsService.trackGetPollFailed(cause: Throwable) =
+    trackError(
+        CreatePollException.GetPollFailed(
+            message = "Tried to edit poll but couldn't get poll",
+            cause = cause,
+        )
+    )
+
+private fun canSave(
     question: String,
     answers: List<String>
 ) = question.isNotBlank() && answers.size >= MIN_ANSWERS && answers.all { it.isNotBlank() }
 
 private fun canAddAnswer(answers: List<String>) = answers.size < MAX_ANSWERS
 
-private fun List<String>.toAnswers(): ImmutableList<Answer> {
+fun List<String>.toAnswers(): ImmutableList<Answer> {
     return map { answer ->
         Answer(
             text = answer,

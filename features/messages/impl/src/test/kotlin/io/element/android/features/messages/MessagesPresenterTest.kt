@@ -340,7 +340,7 @@ class MessagesPresenterTest {
             skipItems(1)
             val initialState = awaitItem()
             initialState.eventSink.invoke(MessagesEvents.HandleAction(TimelineItemAction.Edit, aMessageEvent(content = aTimelineItemPollContent())))
-            // assertThat(navigator.onEditPollClickedCount).isEqualTo(1)
+            assertThat(navigator.onEditPollClickedCount).isEqualTo(1)
         }
     }
 

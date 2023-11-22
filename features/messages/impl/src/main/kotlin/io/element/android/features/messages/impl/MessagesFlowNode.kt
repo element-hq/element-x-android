@@ -50,6 +50,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemLocationContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
 import io.element.android.features.poll.api.create.CreatePollEntryPoint
+import io.element.android.features.poll.api.create.CreatePollMode
 import io.element.android.libraries.architecture.BackstackNode
 import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
 import io.element.android.libraries.architecture.createNode
@@ -113,6 +114,9 @@ class MessagesFlowNode @AssistedInject constructor(
 
         @Parcelize
         data object CreatePoll : NavTarget
+
+        @Parcelize
+        data class EditPoll(val eventId: EventId) : NavTarget
     }
 
     private val callback = plugins<MessagesEntryPoint.Callback>().firstOrNull()
@@ -155,6 +159,10 @@ class MessagesFlowNode @AssistedInject constructor(
 
                     override fun onCreatePollClicked() {
                         backstack.push(NavTarget.CreatePoll)
+                    }
+
+                    override fun onEditPollClicked(eventId: EventId) {
+                        backstack.push(NavTarget.EditPoll(eventId))
                     }
 
                     override fun onJoinCallClicked(roomId: RoomId) {
@@ -204,7 +212,14 @@ class MessagesFlowNode @AssistedInject constructor(
                 sendLocationEntryPoint.createNode(this, buildContext)
             }
             NavTarget.CreatePoll -> {
-                createPollEntryPoint.createNode(this, buildContext)
+                createPollEntryPoint.nodeBuilder(this, buildContext)
+                    .params(CreatePollEntryPoint.Params(mode = CreatePollMode.NewPoll))
+                    .build()
+            }
+            is NavTarget.EditPoll -> {
+                createPollEntryPoint.nodeBuilder(this, buildContext)
+                    .params(CreatePollEntryPoint.Params(mode = CreatePollMode.EditPoll(eventId = navTarget.eventId)))
+                    .build()
             }
         }
     }

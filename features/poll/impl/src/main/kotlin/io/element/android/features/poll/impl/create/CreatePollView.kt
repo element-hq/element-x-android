@@ -104,7 +104,7 @@ fun CreatePollView(
                     TextButton(
                         text = stringResource(id = CommonStrings.action_create),
                         onClick = { state.eventSink(CreatePollEvents.Create) },
-                        enabled = state.canCreate,
+                        enabled = state.canSave,
                     )
                 }
             )

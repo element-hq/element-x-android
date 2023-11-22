@@ -133,7 +133,7 @@ private fun aCreatePollState(
     pollKind: PollKind
 ): CreatePollState {
     return CreatePollState(
-        canCreate = canCreate,
+        canSave = canCreate,
         canAddAnswer = canAddAnswer,
         question = question,
         answers = answers,
