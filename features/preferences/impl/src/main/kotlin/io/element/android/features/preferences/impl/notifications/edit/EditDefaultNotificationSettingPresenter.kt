@@ -105,7 +105,7 @@ class EditDefaultNotificationSettingPresenter @AssistedInject constructor(
     }
 
     private fun CoroutineScope.observeRoomSummaries(roomsWithUserDefinedMode: MutableState<List<RoomSummary.Filled>>) {
-        roomListService.allRooms()
+        roomListService.allRooms
             .summaries
             .onEach {
                 updateRoomsWithUserDefinedMode(it, roomsWithUserDefinedMode)

@@ -16,9 +16,7 @@
 
 package io.element.android.libraries.matrix.impl.roomlist
 
-import io.element.android.libraries.core.coroutine.parallelMap
 import io.element.android.libraries.matrix.api.roomlist.RoomSummary
-import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.sync.Mutex
@@ -39,21 +37,9 @@ class RoomSummaryListProcessor(
 ) {
 
     private val roomSummariesByIdentifier = HashMap<String, RoomSummary>()
-    private val initLatch = CompletableDeferred<Unit>()
     private val mutex = Mutex()
 
-    suspend fun postEntries(entries: List<RoomListEntry>) {
-        updateRoomSummaries {
-            Timber.v("Update rooms from postEntries (with ${entries.size} items) on ${Thread.currentThread()}")
-            val roomSummaries = entries.parallelMap(::buildSummaryForRoomListEntry)
-            addAll(roomSummaries)
-        }
-        initLatch.complete(Unit)
-    }
-
     suspend fun postUpdate(updates: List<RoomListEntriesUpdate>) {
-        // Makes sure to process first entries before update.
-        initLatch.await()
         updateRoomSummaries {
             Timber.v("Update rooms from postUpdates (with ${updates.size} items) on ${Thread.currentThread()}")
             updates.forEach { update ->
@@ -65,7 +51,7 @@ class RoomSummaryListProcessor(
     suspend fun rebuildRoomSummaries() {
         updateRoomSummaries {
             forEachIndexed { i, summary ->
-                this[i] = when(summary) {
+                this[i] = when (summary) {
                     is RoomSummary.Empty -> summary
                     is RoomSummary.Filled -> buildAndCacheRoomSummaryForIdentifier(summary.identifier())
                 }

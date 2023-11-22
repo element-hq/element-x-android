@@ -54,26 +54,18 @@ class FakeRoomListService : RoomListService {
     var latestSlidingSyncRange: IntRange? = null
         private set
 
+    override val allRooms: RoomList = SimplePagedRoomList(
+        allRoomSummariesFlow,
+        allRoomsLoadingStateFlow,
+    )
+
+    override val invites: RoomList = SimplePagedRoomList(
+        inviteRoomSummariesFlow,
+        inviteRoomsLoadingStateFlow,
+    )
+
     override fun updateAllRoomsVisibleRange(range: IntRange) {
         latestSlidingSyncRange = range
-    }
-
-    override fun rebuildRoomSummaries() {
-
-    }
-
-    override fun allRooms(): RoomList {
-        return SimpleRoomList(
-            summaries = allRoomSummariesFlow,
-            loadingState = allRoomsLoadingStateFlow
-        )
-    }
-
-    override fun invites(): RoomList {
-        return SimpleRoomList(
-            summaries = inviteRoomSummariesFlow,
-            loadingState = inviteRoomsLoadingStateFlow
-        )
     }
 
     override val state: StateFlow<RoomListService.State> = roomListStateFlow

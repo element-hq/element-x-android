@@ -71,7 +71,7 @@ class RoomListDataSource @Inject constructor(
 
     fun launchIn(coroutineScope: CoroutineScope) {
         roomListService
-            .allRooms()
+            .allRooms
             .summaries
             .onEach { roomSummaries ->
                 replaceWith(roomSummaries)
@@ -106,7 +106,7 @@ class RoomListDataSource @Inject constructor(
         notificationSettingsService.notificationSettingsChangeFlow
             .debounce(0.5.seconds)
             .onEach {
-                roomListService.rebuildRoomSummaries()
+                roomListService.allRooms.rebuildSummaries()
             }
             .launchIn(appScope)
     }

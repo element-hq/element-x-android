@@ -41,23 +41,18 @@ interface RoomListService {
      * returns a [RoomList] object of all rooms we want to display.
      * This will exclude some rooms like the invites, or spaces.
      */
-    fun allRooms(): RoomList
+    val allRooms: RoomList
 
     /**
      * returns a [RoomList] object of all invites.
      */
-    fun invites(): RoomList
+    val invites: RoomList
 
     /**
      * Will set the visible range of all rooms.
      * This is useful to load more data when the user scrolls down.
      */
     fun updateAllRoomsVisibleRange(range: IntRange)
-
-    /**
-     * Rebuild the room summaries, required when we know some data may have changed. (E.g. room notification settings)
-     */
-    fun rebuildRoomSummaries()
 
     /**
      * The sync indicator as a flow.
