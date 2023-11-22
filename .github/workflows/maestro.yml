@@ -23,6 +23,11 @@ jobs:
       group: ${{ format('maestro-{0}', github.ref) }}
       cancel-in-progress: true
     steps:
+      - name: Remove Run-Maestro label
+        if: ${{ github.event.label.name == 'Run-Maestro' }}
+        uses: actions-ecosystem/action-remove-labels@v1
+        with:
+          labels: Run-Maestro
       - uses: actions/checkout@v4
         with:
           # Ensure we are building the branch and not the branch after being merged on develop
@@ -52,13 +57,3 @@ jobs:
             INVITEE1_MXID=@maestroelement2:matrix.org
             INVITEE2_MXID=@maestroelement3:matrix.org
             APP_ID=io.element.android.x.debug
-
-  remove_label:
-    if: ${{ github.event.label.name == 'Run-Maestro' }}
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Remove Run-Maestro label
-        uses: actions-ecosystem/action-remove-labels@v1
-        with:
-          labels: Run-Maestro
