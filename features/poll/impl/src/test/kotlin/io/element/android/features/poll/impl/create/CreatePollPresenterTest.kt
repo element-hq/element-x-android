@@ -31,7 +31,7 @@ import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.item.event.PollContent
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
-import io.element.android.libraries.matrix.test.room.CreatePollInvocation
+import io.element.android.libraries.matrix.test.room.SavePollInvocation
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.matrix.test.room.aPollContent
 import io.element.android.libraries.matrix.test.room.anEventTimelineItem
@@ -113,7 +113,7 @@ class CreatePollPresenterTest {
     }
 
     @Test
-    fun `create polls sends a poll start event`() = runTest {
+    fun `create poll sends a poll start event`() = runTest {
         val presenter = createCreatePollPresenter(mode = CreatePollMode.NewPoll)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -127,7 +127,7 @@ class CreatePollPresenterTest {
             delay(1) // Wait for the coroutine to finish
             Truth.assertThat(fakeMatrixRoom.createPollInvocations.size).isEqualTo(1)
             Truth.assertThat(fakeMatrixRoom.createPollInvocations.last()).isEqualTo(
-                CreatePollInvocation(
+                SavePollInvocation(
                     question = "A question?",
                     answers = listOf("Answer 1", "Answer 2"),
                     maxSelections = 1,
@@ -149,6 +149,101 @@ class CreatePollPresenterTest {
                     isUndisclosed = false,
                     numberOfAnswers = 2,
                 )
+            )
+        }
+    }
+
+    @Test
+    fun `when poll creation fails, error is tracked`() = runTest {
+        val error = Exception("cause")
+        fakeMatrixRoom.givenCreatePollResult(Result.failure(error))
+        val presenter = createCreatePollPresenter(mode = CreatePollMode.NewPoll)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            awaitDefaultItem().eventSink(CreatePollEvents.SetQuestion("A question?"))
+            awaitItem().eventSink(CreatePollEvents.SetAnswer(0, "Answer 1"))
+            awaitItem().eventSink(CreatePollEvents.SetAnswer(1, "Answer 2"))
+            awaitItem().eventSink(CreatePollEvents.Save)
+            delay(1) // Wait for the coroutine to finish
+            Truth.assertThat(fakeMatrixRoom.createPollInvocations).hasSize(1)
+            Truth.assertThat(fakeAnalyticsService.capturedEvents).isEmpty()
+            Truth.assertThat(fakeAnalyticsService.trackedErrors).hasSize(1)
+            Truth.assertThat(fakeAnalyticsService.trackedErrors).containsExactly(
+                CreatePollException.SavePollFailed("Failed to create poll", error)
+            )
+        }
+    }
+
+    @Test
+    fun `edit poll sends a poll edit event`() = runTest {
+        val presenter = createCreatePollPresenter(mode = CreatePollMode.EditPoll(pollEventId))
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            awaitDefaultItem()
+            awaitPollLoaded().apply {
+                eventSink(CreatePollEvents.SetQuestion("Changed question"))
+            }
+            awaitItem().apply {
+                eventSink(CreatePollEvents.SetAnswer(0, "Changed answer 1"))
+            }
+            awaitItem().apply {
+                eventSink(CreatePollEvents.SetAnswer(1, "Changed answer 2"))
+            }
+            awaitPollLoaded(
+                newQuestion = "Changed question",
+                newAnswer1 = "Changed answer 1",
+                newAnswer2 = "Changed answer 2",
+            ).apply {
+                eventSink(CreatePollEvents.Save)
+            }
+            delay(1) // Wait for the coroutine to finish
+            Truth.assertThat(fakeMatrixRoom.editPollInvocations.size).isEqualTo(1)
+            Truth.assertThat(fakeMatrixRoom.editPollInvocations.last()).isEqualTo(
+                SavePollInvocation(
+                    question = "Changed question",
+                    answers = listOf("Changed answer 1", "Changed answer 2", "Maybe"),
+                    maxSelections = 1,
+                    pollKind = PollKind.Disclosed
+                )
+            )
+            Truth.assertThat(fakeAnalyticsService.capturedEvents.size).isEqualTo(2)
+            Truth.assertThat(fakeAnalyticsService.capturedEvents[0]).isEqualTo(
+                Composer(
+                    inThread = false,
+                    isEditing = true,
+                    isReply = false,
+                    messageType = Composer.MessageType.Poll,
+                )
+            )
+            Truth.assertThat(fakeAnalyticsService.capturedEvents[1]).isEqualTo(
+                PollCreation(
+                    action = PollCreation.Action.Edit,
+                    isUndisclosed = false,
+                    numberOfAnswers = 3,
+                )
+            )
+        }
+    }
+
+    @Test
+    fun `when edit poll fails, error is tracked`() = runTest {
+        val error = Exception("cause")
+        fakeMatrixRoom.givenEditPollResult(Result.failure(error))
+        val presenter = createCreatePollPresenter(mode = CreatePollMode.EditPoll(pollEventId))
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            awaitDefaultItem()
+            awaitPollLoaded().eventSink(CreatePollEvents.SetAnswer(0, "A"))
+            awaitPollLoaded(newAnswer1 = "A").eventSink(CreatePollEvents.Save)
+            delay(1) // Wait for the coroutine to finish
+            Truth.assertThat(fakeMatrixRoom.editPollInvocations).hasSize(1)
+            Truth.assertThat(fakeAnalyticsService.capturedEvents).isEmpty()
+            Truth.assertThat(fakeAnalyticsService.trackedErrors).hasSize(1)
+            Truth.assertThat(fakeAnalyticsService.trackedErrors).containsExactly(
+                CreatePollException.SavePollFailed("Failed to edit poll", error)
             )
         }
     }
@@ -300,22 +395,29 @@ class CreatePollPresenterTest {
     }
 
     private suspend fun TurbineTestContext<CreatePollState>.awaitDefaultItem() =
-        awaitItem().let {
-            Truth.assertThat(it.canSave).isEqualTo(false)
-            Truth.assertThat(it.canAddAnswer).isEqualTo(true)
-            Truth.assertThat(it.question).isEqualTo("")
-            Truth.assertThat(it.answers).isEqualTo(listOf(Answer("", false), Answer("", false)))
-            Truth.assertThat(it.pollKind).isEqualTo(PollKind.Disclosed)
-            Truth.assertThat(it.showConfirmation).isEqualTo(false)
+        awaitItem().apply {
+            Truth.assertThat(canSave).isEqualTo(false)
+            Truth.assertThat(canAddAnswer).isEqualTo(true)
+            Truth.assertThat(question).isEqualTo("")
+            Truth.assertThat(answers).isEqualTo(listOf(Answer("", false), Answer("", false)))
+            Truth.assertThat(pollKind).isEqualTo(PollKind.Disclosed)
+            Truth.assertThat(showConfirmation).isEqualTo(false)
         }
 
-    private suspend fun TurbineTestContext<CreatePollState>.awaitPollLoaded() =
-        awaitItem().let {
-            Truth.assertThat(it.canSave).isEqualTo(true)
-            Truth.assertThat(it.canAddAnswer).isEqualTo(true)
-            Truth.assertThat(it.question).isEqualTo(existingPoll.question)
-            Truth.assertThat(it.answers).isEqualTo(existingPoll.expectedAnswersState())
-            Truth.assertThat(it.pollKind).isEqualTo(existingPoll.kind)
+    private suspend fun TurbineTestContext<CreatePollState>.awaitPollLoaded(
+        newQuestion: String? = null,
+        newAnswer1: String? = null,
+        newAnswer2: String? = null,
+    ) =
+        awaitItem().apply {
+            Truth.assertThat(canSave).isEqualTo(true)
+            Truth.assertThat(canAddAnswer).isEqualTo(true)
+            Truth.assertThat(question).isEqualTo(newQuestion ?: existingPoll.question)
+            Truth.assertThat(answers).isEqualTo(existingPoll.expectedAnswersState().toMutableList().apply {
+                newAnswer1?.let { this[0] = Answer(it, true) }
+                newAnswer2?.let { this[1] = Answer(it, true) }
+            })
+            Truth.assertThat(pollKind).isEqualTo(existingPoll.kind)
         }
 
     private fun createCreatePollPresenter(

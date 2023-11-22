@@ -20,4 +20,8 @@ internal sealed class CreatePollException : Exception() {
     data class GetPollFailed(
         override val message: String?, override val cause: Throwable?
     ) : CreatePollException()
+
+    data class SavePollFailed(
+        override val message: String?, override val cause: Throwable?
+    ) : CreatePollException()
 }

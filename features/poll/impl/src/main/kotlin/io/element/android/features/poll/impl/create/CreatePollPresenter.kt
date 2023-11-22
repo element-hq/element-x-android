@@ -80,7 +80,6 @@ class CreatePollPresenter @AssistedInject constructor(
                     answers = it.answers.map(PollAnswer::text)
                     pollKind = it.kind
                 }.onFailure {
-                    Timber.e(it)
                     analyticsService.trackGetPollFailed(it)
                     navigateUp()
                 }
@@ -97,27 +96,18 @@ class CreatePollPresenter @AssistedInject constructor(
             when (event) {
                 is CreatePollEvents.Save -> scope.launch {
                     if (canSave) {
-                        room.createPoll(
+                        room.savePoll(
                             question = question,
                             answers = answers,
-                            maxSelections = MAX_SELECTIONS,
-                            pollKind = pollKind,
-                        )
-                        analyticsService.capture(
-                            Composer(
-                                inThread = messageComposerContext.composerMode.inThread,
-                                isEditing = messageComposerContext.composerMode.isEditing,
-                                isReply = messageComposerContext.composerMode.isReply,
-                                messageType = Composer.MessageType.Poll,
-                            )
-                        )
-                        analyticsService.capture(
-                            PollCreation(
-                                action = PollCreation.Action.Create,
+                            pollKind = pollKind
+                        ).onSuccess {
+                            analyticsService.capturePollSaved(
                                 isUndisclosed = pollKind == PollKind.Undisclosed,
                                 numberOfAnswers = answers.size,
                             )
-                        )
+                        }.onFailure {
+                            analyticsService.trackSavePollFailed(it, mode)
+                        }
                         navigateUp()
                     } else {
                         Timber.d("Cannot create poll")
@@ -156,7 +146,7 @@ class CreatePollPresenter @AssistedInject constructor(
         }
 
         return CreatePollState(
-            mode = when(mode) {
+            mode = when (mode) {
                 is CreatePollMode.NewPoll -> CreatePollState.Mode.New
                 is CreatePollMode.EditPoll -> CreatePollState.Mode.Edit
             },
@@ -180,15 +170,72 @@ class CreatePollPresenter @AssistedInject constructor(
             .event
             .content as PollContent
     }
+
+    private suspend fun MatrixRoom.savePoll(
+        question: String,
+        answers: List<String>,
+        pollKind: PollKind,
+    ) = when (mode) {
+        is CreatePollMode.EditPoll -> editPoll(
+            pollStartId = mode.eventId,
+            question = question,
+            answers = answers,
+            maxSelections = MAX_SELECTIONS,
+            pollKind = pollKind,
+        )
+        is CreatePollMode.NewPoll -> createPoll(
+            question = question,
+            answers = answers,
+            maxSelections = MAX_SELECTIONS,
+            pollKind = pollKind,
+        )
+    }
+
+    private fun AnalyticsService.capturePollSaved(
+        isUndisclosed: Boolean,
+        numberOfAnswers: Int,
+    ) {
+        capture(
+            Composer(
+                inThread = messageComposerContext.composerMode.inThread,
+                isEditing = mode is CreatePollMode.EditPoll,
+                isReply = messageComposerContext.composerMode.isReply,
+                messageType = Composer.MessageType.Poll,
+            )
+        )
+        capture(
+            PollCreation(
+                action = when (mode) {
+                    is CreatePollMode.EditPoll -> PollCreation.Action.Edit
+                    is CreatePollMode.NewPoll -> PollCreation.Action.Create
+                },
+                isUndisclosed = isUndisclosed,
+                numberOfAnswers = numberOfAnswers,
+            )
+        )
+    }
 }
 
-private fun AnalyticsService.trackGetPollFailed(cause: Throwable) =
-    trackError(
-        CreatePollException.GetPollFailed(
-            message = "Tried to edit poll but couldn't get poll",
-            cause = cause,
-        )
+private fun AnalyticsService.trackGetPollFailed(cause: Throwable) {
+    val exception = CreatePollException.GetPollFailed(
+        message = "Tried to edit poll but couldn't get poll",
+        cause = cause,
     )
+    Timber.e(exception)
+    trackError(exception)
+}
+
+private fun AnalyticsService.trackSavePollFailed(cause: Throwable, mode: CreatePollMode) {
+    val exception = CreatePollException.SavePollFailed(
+        message = when (mode) {
+            CreatePollMode.NewPoll -> "Failed to create poll"
+            is CreatePollMode.EditPoll -> "Failed to edit poll"
+        },
+        cause = cause,
+    )
+    Timber.e(exception)
+    trackError(exception)
+}
 
 private fun canSave(
     question: String,
