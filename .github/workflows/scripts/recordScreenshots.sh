@@ -23,7 +23,7 @@ REPO=$GITHUB_REPOSITORY
 
 SHORT=t:,r:,b:
 LONG=token:,repo:,branch:
-OPTS=$(ggetopt -a -n recordScreenshots --options $SHORT --longoptions $LONG -- "$@")
+OPTS=$(getopt -a -n recordScreenshots --options $SHORT --longoptions $LONG -- "$@")
 BRANCH=$(git rev-parse --abbrev-ref HEAD)
 
 eval set -- "$OPTS"

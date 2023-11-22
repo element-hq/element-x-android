@@ -36,7 +36,11 @@ jobs:
         with:
           cache-read-only: ${{ github.ref != 'refs/heads/develop' }}
       - name: Record screenshots
-        run: "./.github/workflows/scripts/recordScreenshots.sh -b ${{ github.event.pull_request.base.ref }}"
+        run: |
+          if [ -z "${{ github.event.pull_request.head.ref }}" ]; then
+            export GITHUB_REF_NAME=${{ github.event.pull_request.head.ref }}
+          fi
+          ./.github/workflows/scripts/recordScreenshots.sh -b $GITHUB_REF_NAME
         env:
           GITHUB_TOKEN: ${{ secrets.DANGER_GITHUB_API_TOKEN }}
           GITHUB_REPOSITORY: ${{ secrets.GITHUB_REPOSITORY }}
