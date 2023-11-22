@@ -681,11 +681,14 @@ private fun attachmentThumbnailInfoForInReplyTo(inReplyTo: InReplyTo.Ready): Att
 
 @Composable
 private fun textForInReplyTo(inReplyTo: InReplyTo.Ready): String {
-    val messageContent = inReplyTo.content as? MessageContent ?: return ""
-    return when (messageContent.type) {
-        is LocationMessageType -> stringResource(CommonStrings.common_shared_location)
-        is VoiceMessageType -> stringResource(CommonStrings.common_voice_message)
-        else -> messageContent.body
+    return when (val eventContent = inReplyTo.content) {
+        is MessageContent -> when (eventContent.type) {
+            is LocationMessageType -> stringResource(CommonStrings.common_shared_location)
+            is VoiceMessageType -> stringResource(CommonStrings.common_voice_message)
+            else -> eventContent.body
+        }
+        is PollContent -> eventContent.question
+        else -> ""
     }
 }
 
