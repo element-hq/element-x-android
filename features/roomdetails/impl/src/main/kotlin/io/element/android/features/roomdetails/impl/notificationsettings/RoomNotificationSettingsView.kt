@@ -51,9 +51,9 @@ import io.element.android.libraries.ui.strings.CommonStrings
 @Composable
 fun RoomNotificationSettingsView(
     state: RoomNotificationSettingsState,
+    onShowGlobalNotifications: () -> Unit,
+    onBackPressed: () -> Unit,
     modifier: Modifier = Modifier,
-    onShowGlobalNotifications: () -> Unit = {},
-    onBackPressed: () -> Unit = {},
 ) {
     if (state.showUserDefinedSettingStyle) {
         UserDefinedRoomNotificationSettingsView(
@@ -193,5 +193,9 @@ private fun RoomNotificationSettingsTopBar(
 internal fun RoomNotificationSettingsPreview(
     @PreviewParameter(RoomNotificationSettingsStateProvider::class) state: RoomNotificationSettingsState
 ) = ElementPreview {
-    RoomNotificationSettingsView(state)
+    RoomNotificationSettingsView(
+        state = state,
+        onShowGlobalNotifications = {},
+        onBackPressed = {},
+    )
 }

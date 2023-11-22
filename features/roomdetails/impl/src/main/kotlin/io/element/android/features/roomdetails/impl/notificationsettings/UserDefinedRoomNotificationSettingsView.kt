@@ -42,8 +42,8 @@ import io.element.android.libraries.designsystem.theme.components.TopAppBar
 @Composable
 fun UserDefinedRoomNotificationSettingsView(
     state: RoomNotificationSettingsState,
+    onBackPressed: () -> Unit,
     modifier: Modifier = Modifier,
-    onBackPressed: () -> Unit = {},
 ) {
     Scaffold(
         modifier = modifier,
@@ -120,5 +120,8 @@ private fun UserDefinedRoomNotificationSettingsTopBar(
 internal fun UserDefinedRoomNotificationSettingsPreview(
     @PreviewParameter(UserDefinedRoomNotificationSettingsStateProvider::class) state: RoomNotificationSettingsState
 ) = ElementPreview {
-    UserDefinedRoomNotificationSettingsView(state)
+    UserDefinedRoomNotificationSettingsView(
+        state = state,
+        onBackPressed = {},
+    )
 }
