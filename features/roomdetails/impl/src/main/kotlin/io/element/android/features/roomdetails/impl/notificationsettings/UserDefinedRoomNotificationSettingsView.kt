@@ -101,8 +101,8 @@ fun UserDefinedRoomNotificationSettingsView(
 @Composable
 private fun UserDefinedRoomNotificationSettingsTopBar(
     roomName: String,
+    onBackPressed: () -> Unit,
     modifier: Modifier = Modifier,
-    onBackPressed: () -> Unit = {},
 ) {
     TopAppBar(
         modifier = modifier,

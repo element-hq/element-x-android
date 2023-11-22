@@ -450,10 +450,10 @@ private fun MessagesViewTopBar(
     roomAvatar: AvatarData?,
     inRoomCallsEnabled: Boolean,
     isCallOngoing: Boolean,
+    onRoomDetailsClicked: () -> Unit,
+    onJoinCallClicked: () -> Unit,
+    onBackPressed: () -> Unit,
     modifier: Modifier = Modifier,
-    onRoomDetailsClicked: () -> Unit = {},
-    onJoinCallClicked: () -> Unit = {},
-    onBackPressed: () -> Unit = {},
 ) {
     TopAppBar(
         modifier = modifier,

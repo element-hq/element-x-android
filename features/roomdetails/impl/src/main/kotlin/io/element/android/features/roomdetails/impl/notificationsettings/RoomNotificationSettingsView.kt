@@ -74,9 +74,9 @@ fun RoomNotificationSettingsView(
 @Composable
 private fun RoomSpecificNotificationSettingsView(
     state: RoomNotificationSettingsState,
+    onShowGlobalNotifications: () -> Unit,
+    onBackPressed: () -> Unit,
     modifier: Modifier = Modifier,
-    onShowGlobalNotifications: () -> Unit = {},
-    onBackPressed: () -> Unit = {},
 ) {
     Scaffold(
         modifier = modifier,
@@ -173,8 +173,8 @@ private fun RoomSpecificNotificationSettingsView(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun RoomNotificationSettingsTopBar(
+    onBackPressed: () -> Unit,
     modifier: Modifier = Modifier,
-    onBackPressed: () -> Unit = {},
 ) {
     TopAppBar(
         modifier = modifier,

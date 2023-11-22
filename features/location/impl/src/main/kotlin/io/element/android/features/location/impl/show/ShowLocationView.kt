@@ -67,8 +67,8 @@ import kotlinx.collections.immutable.toImmutableMap
 @Composable
 fun ShowLocationView(
     state: ShowLocationState,
+    onBackPressed: () -> Unit,
     modifier: Modifier = Modifier,
-    onBackPressed: () -> Unit = {},
 ) {
     when (state.permissionDialog) {
         ShowLocationState.Dialog.None -> Unit

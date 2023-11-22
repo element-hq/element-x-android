@@ -21,8 +21,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
-import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.model.getAvatarData
 import io.element.android.libraries.matrix.ui.model.getBestName
@@ -31,9 +31,9 @@ import io.element.android.libraries.matrix.ui.model.getBestName
 fun CheckableMatrixUserRow(
     checked: Boolean,
     matrixUser: MatrixUser,
+    onCheckedChange: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
     avatarSize: AvatarSize = AvatarSize.UserListItem,
-    onCheckedChange: (Boolean) -> Unit = {},
     enabled: Boolean = true,
 ) = CheckableUserRow(
     checked = checked,
@@ -49,9 +49,27 @@ fun CheckableMatrixUserRow(
 @Composable
 internal fun CheckableMatrixUserRowPreview(@PreviewParameter(MatrixUserProvider::class) matrixUser: MatrixUser) = ElementPreview {
     Column {
-        CheckableMatrixUserRow(checked = true, matrixUser)
-        CheckableMatrixUserRow(checked = false, matrixUser)
-        CheckableMatrixUserRow(checked = true, matrixUser, enabled = false)
-        CheckableMatrixUserRow(checked = false, matrixUser, enabled = false)
+        CheckableMatrixUserRow(
+            checked = true,
+            onCheckedChange = { },
+            matrixUser = matrixUser,
+        )
+        CheckableMatrixUserRow(
+            checked = false,
+            onCheckedChange = { },
+            matrixUser = matrixUser,
+        )
+        CheckableMatrixUserRow(
+            checked = true,
+            onCheckedChange = { },
+            matrixUser = matrixUser,
+            enabled = false,
+        )
+        CheckableMatrixUserRow(
+            checked = false,
+            onCheckedChange = { },
+            matrixUser = matrixUser,
+            enabled = false,
+        )
     }
 }

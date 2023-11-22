@@ -39,9 +39,9 @@ fun TimelineItemTextView(
     content: TimelineItemTextBasedContent,
     interactionSource: MutableInteractionSource,
     extraPadding: ExtraPadding,
+    onTextClicked: () -> Unit,
+    onTextLongClicked: () -> Unit,
     modifier: Modifier = Modifier,
-    onTextClicked: () -> Unit = {},
-    onTextLongClicked: () -> Unit = {},
 ) {
     CompositionLocalProvider(LocalContentColor provides ElementTheme.colors.textPrimary) {
         val htmlDocument = content.htmlDocument
@@ -79,5 +79,7 @@ internal fun TimelineItemTextViewPreview(
         content = content,
         interactionSource = remember { MutableInteractionSource() },
         extraPadding = ExtraPadding(nbChars = 8),
+        onTextClicked = {},
+        onTextLongClicked = {},
     )
 }

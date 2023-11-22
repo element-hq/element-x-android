@@ -52,8 +52,8 @@ import kotlinx.coroutines.launch
 fun AvatarActionBottomSheet(
     actions: ImmutableList<AvatarAction>,
     modalBottomSheetState: ModalBottomSheetState,
+    onActionSelected: (action: AvatarAction) -> Unit,
     modifier: Modifier = Modifier,
-    onActionSelected: (action: AvatarAction) -> Unit = {},
 ) {
     val coroutineScope = rememberCoroutineScope()
     fun onItemActionClicked(itemAction: AvatarAction) {
@@ -119,5 +119,6 @@ internal fun AvatarActionBottomSheetPreview() = ElementPreview {
             initialValue = ModalBottomSheetValue.Expanded,
             density = LocalDensity.current,
         ),
+        onActionSelected = { },
     )
 }

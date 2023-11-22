@@ -43,7 +43,7 @@ fun MatrixUserHeader(
     matrixUser: MatrixUser?,
     modifier: Modifier = Modifier,
     // TODO handle click on this item, to let the user be able to update their profile.
-    // onClick: () -> Unit = {},
+    // onClick: () -> Unit,
 ) {
     if (matrixUser == null) {
         MatrixUserHeaderPlaceholder(modifier = modifier)
@@ -60,7 +60,7 @@ fun MatrixUserHeader(
 private fun MatrixUserHeaderContent(
     matrixUser: MatrixUser,
     modifier: Modifier = Modifier,
-    // onClick: () -> Unit = {},
+    // onClick: () -> Unit,
 ) {
     Row(
         modifier = modifier

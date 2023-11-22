@@ -177,8 +177,8 @@ private fun LazyListScope.roomMemberListSection(
 @Composable
 private fun RoomMemberListItem(
     roomMember: RoomMember,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    onClick: () -> Unit = {},
 ) {
     MatrixUserRow(
         modifier = modifier.clickable(onClick = onClick),
@@ -195,9 +195,9 @@ private fun RoomMemberListItem(
 @Composable
 private fun RoomMemberListTopBar(
     canInvite: Boolean,
+    onBackPressed: () -> Unit,
+    onInvitePressed: () -> Unit,
     modifier: Modifier = Modifier,
-    onBackPressed: () -> Unit = {},
-    onInvitePressed: () -> Unit = {},
 ) {
     TopAppBar(
         modifier = modifier,

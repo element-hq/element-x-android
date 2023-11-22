@@ -46,13 +46,13 @@ import io.element.android.libraries.theme.ElementTheme
 fun PreferenceSwitch(
     title: String,
     isChecked: Boolean,
+    onCheckedChange: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
     subtitle: String? = null,
     enabled: Boolean = true,
     icon: ImageVector? = null,
     @DrawableRes iconResourceId: Int? = null,
     showIconAreaIfNoIcon: Boolean = false,
-    onCheckedChange: (Boolean) -> Unit = {},
     switchAlignment: Alignment.Vertical = Alignment.CenterVertically
 ) {
     Row(
@@ -111,6 +111,7 @@ private fun ContentToPreview() {
         subtitle = "Subtitle Switch",
         iconResourceId = CommonDrawables.ic_compound_threads,
         enabled = true,
-        isChecked = true
+        isChecked = true,
+        onCheckedChange = {},
     )
 }

@@ -35,12 +35,12 @@ import io.element.android.libraries.theme.ElementTheme
 fun LabelledTextField(
     label: String,
     value: String,
+    onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
     placeholder: String? = null,
     singleLine: Boolean = false,
     maxLines: Int = if (singleLine) 1 else Int.MAX_VALUE,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
-    onValueChange: (String) -> Unit = {},
 ) {
     Column(
         modifier = modifier,
@@ -72,11 +72,13 @@ internal fun LabelledTextFieldPreview() = ElementPreview {
         LabelledTextField(
             label = "Room name",
             value = "",
+            onValueChange = {},
             placeholder = "e.g. Product Sprint",
         )
         LabelledTextField(
             label = "Room name",
             value = "a room name",
+            onValueChange = {},
             placeholder = "e.g. Product Sprint",
         )
     }
