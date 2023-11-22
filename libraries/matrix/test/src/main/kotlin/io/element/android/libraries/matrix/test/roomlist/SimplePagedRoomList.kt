@@ -16,11 +16,29 @@
 
 package io.element.android.libraries.matrix.test.roomlist
 
+import io.element.android.libraries.matrix.api.roomlist.DynamicRoomList
 import io.element.android.libraries.matrix.api.roomlist.RoomList
 import io.element.android.libraries.matrix.api.roomlist.RoomSummary
 import kotlinx.coroutines.flow.StateFlow
 
-data class SimpleRoomList(
+data class SimplePagedRoomList(
     override val summaries: StateFlow<List<RoomSummary>>,
     override val loadingState: StateFlow<RoomList.LoadingState>
-) : RoomList
+) : DynamicRoomList {
+
+    override suspend fun loadMore() {
+        //No-op
+    }
+
+    override suspend fun reset() {
+        //No-op
+    }
+
+    override suspend fun updateFilter(filter: DynamicRoomList.Filter) {
+        //No-op
+    }
+
+    override suspend fun rebuildSummaries() {
+        //No-op
+    }
+}

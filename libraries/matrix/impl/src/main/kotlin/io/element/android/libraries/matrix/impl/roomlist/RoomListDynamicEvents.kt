@@ -16,14 +16,10 @@
 
 package io.element.android.libraries.matrix.impl.roomlist
 
-import io.element.android.libraries.matrix.api.roomlist.RoomList
-import io.element.android.libraries.matrix.api.roomlist.RoomSummary
-import kotlinx.coroutines.flow.StateFlow
+import org.matrix.rustcomponents.sdk.RoomListEntriesDynamicFilterKind
 
-/**
- * Simple implementation of [RoomList] where state flows are provided through constructor.
- */
-class RustRoomList(
-    override val summaries: StateFlow<List<RoomSummary>>,
-    override val loadingState: StateFlow<RoomList.LoadingState>
-) : RoomList
+internal sealed interface RoomListDynamicEvents {
+    data object Reset : RoomListDynamicEvents
+    data object LoadMore : RoomListDynamicEvents
+    data class SetFilter(val filter: RoomListEntriesDynamicFilterKind) : RoomListDynamicEvents
+}
