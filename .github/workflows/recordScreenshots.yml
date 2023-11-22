@@ -11,7 +11,7 @@ env:
 
 jobs:
   record:
-    name: Record screenshots on branch ${{ github.ref_name }}
+    name: Record screenshots on branch ${{ github.event.pull_request.head.ref || github.ref_name }}
     runs-on: ubuntu-latest
     if: github.event_name == 'workflow_dispatch' || github.event.label.name == 'Record-Screenshots'
 
@@ -21,7 +21,14 @@ jobs:
         uses: actions-ecosystem/action-remove-labels@v1
         with:
           labels: Record-Screenshots
-      - name: ⏬ Checkout with LFS
+      - name: ⏬ Checkout with LFS (PR)
+        if: github.event.label.name == 'Record-Screenshots'
+        uses: nschloe/action-cached-lfs-checkout@v1.2.2
+        with:
+          persist-credentials: false
+          ref: ${{ github.event.pull_request.head.ref }}
+      - name: ⏬ Checkout with LFS (Branch)
+        if: github.event_name == 'workflow_dispatch'
         uses: nschloe/action-cached-lfs-checkout@v1.2.2
         with:
           persist-credentials: false
@@ -36,11 +43,7 @@ jobs:
         with:
           cache-read-only: ${{ github.ref != 'refs/heads/develop' }}
       - name: Record screenshots
-        run: |
-          if [ -z "${{ github.event.pull_request.head.ref }}" ]; then
-            export GITHUB_REF_NAME=${{ github.event.pull_request.head.ref }}
-          fi
-          ./.github/workflows/scripts/recordScreenshots.sh -b $GITHUB_REF_NAME
+        run: ./.github/workflows/scripts/recordScreenshots.sh
         env:
           GITHUB_TOKEN: ${{ secrets.DANGER_GITHUB_API_TOKEN }}
           GITHUB_REPOSITORY: ${{ secrets.GITHUB_REPOSITORY }}
