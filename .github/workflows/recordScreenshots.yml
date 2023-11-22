@@ -2,6 +2,8 @@ name: Record screenshots
 
 on:
   workflow_dispatch:
+  pull_request:
+    types: [ labeled ]
 
 # Enrich gradle.properties for CI/CD
 env:
@@ -11,8 +13,14 @@ jobs:
   record:
     name: Record screenshots on branch ${{ github.ref_name }}
     runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch' || github.event.label.name == 'Record-Screenshots'
 
     steps:
+      - name: Remove Record-Screenshots label
+        if: github.event.label.name == 'Record-Screenshots'
+        uses: actions-ecosystem/action-remove-labels@v1
+        with:
+          labels: Record-Screenshots
       - name: ⏬ Checkout with LFS
         uses: nschloe/action-cached-lfs-checkout@v1.2.2
         with:
