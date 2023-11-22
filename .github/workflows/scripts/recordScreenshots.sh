@@ -21,10 +21,9 @@ set -e
 TOKEN=$GITHUB_TOKEN
 REPO=$GITHUB_REPOSITORY
 
-SHORT=t:,r:,b:
-LONG=token:,repo:,branch:
+SHORT=t:,r:
+LONG=token:,repo:
 OPTS=$(getopt -a -n recordScreenshots --options $SHORT --longoptions $LONG -- "$@")
-BRANCH=$(git rev-parse --abbrev-ref HEAD)
 
 eval set -- "$OPTS"
 while :
@@ -38,10 +37,6 @@ do
       REPO="$2"
       shift 2
       ;;
-    -b | --branch )
-      BRANCH="$2"
-      shift 2
-      ;;
     --)
       shift;
       break
@@ -53,6 +48,7 @@ do
   esac
 done
 
+BRANCH=$(git rev-parse --abbrev-ref HEAD)
 echo Branch used: $BRANCH
 
 if [[ -z ${TOKEN} ]]; then
