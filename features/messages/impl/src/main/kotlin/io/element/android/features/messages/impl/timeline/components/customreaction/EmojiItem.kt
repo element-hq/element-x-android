@@ -30,12 +30,16 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.clearAndSetSemantics
+import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.unit.dp
 import io.element.android.emojibasebindings.Emoji
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.theme.ElementTheme
+import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
 fun EmojiItem(
@@ -49,7 +53,11 @@ fun EmojiItem(
     } else {
         Color.Transparent
     }
-
+    val description = if (isSelected) {
+        stringResource(id = CommonStrings.a11y_remove_reaction_with, item.unicode)
+    } else {
+        stringResource(id = CommonStrings.a11y_react_with, item.unicode)
+    }
     Box(
         modifier = modifier
             .size(40.dp)
@@ -59,7 +67,10 @@ fun EmojiItem(
                 onClick = { onEmojiSelected(item) },
                 indication = rememberRipple(bounded = false, radius = 20.dp),
                 interactionSource = remember { MutableInteractionSource() }
-            ),
+            )
+            .clearAndSetSemantics {
+                contentDescription = description
+            },
         contentAlignment = Alignment.Center
     ) {
         Text(

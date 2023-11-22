@@ -67,20 +67,20 @@ private fun ContentToPreview() {
         CompositionLocalProvider(LocalContentColor provides ElementTheme.colors.iconPrimary) {
             Row {
                 IconButton(onClick = {}) {
-                    Icon(resourceId = CommonDrawables.ic_compound_close, contentDescription = "")
+                    Icon(resourceId = CommonDrawables.ic_compound_close, contentDescription = null)
                 }
                 IconButton(enabled = false, onClick = {}) {
-                    Icon(resourceId = CommonDrawables.ic_compound_close, contentDescription = "")
+                    Icon(resourceId = CommonDrawables.ic_compound_close, contentDescription = null)
                 }
             }
         }
         CompositionLocalProvider(LocalContentColor provides ElementTheme.colors.iconSecondary) {
             Row {
                 IconButton(onClick = {}) {
-                    Icon(resourceId = CommonDrawables.ic_compound_close, contentDescription = "")
+                    Icon(resourceId = CommonDrawables.ic_compound_close, contentDescription = null)
                 }
                 IconButton(enabled = false, onClick = {}) {
-                    Icon(resourceId = CommonDrawables.ic_compound_close, contentDescription = "")
+                    Icon(resourceId = CommonDrawables.ic_compound_close, contentDescription = null)
                 }
             }
         }

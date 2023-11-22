@@ -300,7 +300,7 @@ private fun PinUnlockHeader(
                     .size(32.dp),
                 tint = ElementTheme.colors.iconPrimary,
                 imageVector = Icons.Filled.Lock,
-                contentDescription = "",
+                contentDescription = null,
             )
         }
         Spacer(modifier = Modifier.height(16.dp))

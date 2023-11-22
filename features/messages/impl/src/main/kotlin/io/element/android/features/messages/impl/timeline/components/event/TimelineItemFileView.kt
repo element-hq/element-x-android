@@ -60,7 +60,7 @@ fun TimelineItemFileView(
         ) {
             Icon(
                 resourceId = CommonDrawables.ic_attachment,
-                contentDescription = "OpenFile",
+                contentDescription = null,
                 tint = ElementTheme.materialColors.primary,
                 modifier = Modifier
                     .size(16.dp)
