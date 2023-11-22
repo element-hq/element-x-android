@@ -47,8 +47,8 @@ import io.element.android.features.poll.impl.R
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
 import io.element.android.libraries.designsystem.components.list.ListItemContent
-import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.aliasScreenTitle
 import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
 import io.element.android.libraries.designsystem.theme.components.Icon
@@ -67,7 +67,6 @@ import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CreatePollView(
     state: CreatePollState,
@@ -90,23 +89,11 @@ fun CreatePollView(
     Scaffold(
         modifier = modifier,
         topBar = {
-            TopAppBar(
-                title = {
-                    Text(
-                        text = stringResource(id = R.string.screen_create_poll_title),
-                        style = ElementTheme.typography.aliasScreenTitle,
-                    )
-                },
-                navigationIcon = {
-                    BackButton(onClick = navBack)
-                },
-                actions = {
-                    TextButton(
-                        text = stringResource(id = CommonStrings.action_create),
-                        onClick = { state.eventSink(CreatePollEvents.Create) },
-                        enabled = state.canSave,
-                    )
-                }
+            CreatePollTopAppBar(
+                mode = state.mode,
+                saveEnabled = state.canSave,
+                onBackPress = navBack,
+                onSaveClicked = { state.eventSink(CreatePollEvents.Save) }
             )
         },
     ) { paddingValues ->
@@ -208,6 +195,40 @@ fun CreatePollView(
             }
         }
     }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun CreatePollTopAppBar(
+    mode: CreatePollState.Mode,
+    saveEnabled: Boolean,
+    onBackPress: () -> Unit = {},
+    onSaveClicked: () -> Unit = {},
+) {
+    TopAppBar(
+        title = {
+            Text(
+                text = when (mode) {
+                    CreatePollState.Mode.New -> stringResource(id = R.string.screen_create_poll_title)
+                    CreatePollState.Mode.Edit -> stringResource(id = R.string.screen_edit_poll_title)
+                },
+                style = ElementTheme.typography.aliasScreenTitle,
+            )
+        },
+        navigationIcon = {
+            BackButton(onClick = onBackPress)
+        },
+        actions = {
+            TextButton(
+                text = when (mode) {
+                    CreatePollState.Mode.New -> stringResource(id = CommonStrings.action_create)
+                    CreatePollState.Mode.Edit -> stringResource(id = CommonStrings.action_done)
+                },
+                onClick = onSaveClicked,
+                enabled = saveEnabled,
+            )
+        }
+    )
 }
 
 @PreviewsDayNight

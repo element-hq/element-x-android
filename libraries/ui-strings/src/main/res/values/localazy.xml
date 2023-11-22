@@ -39,9 +39,11 @@
   <string name="action_create">"Create"</string>
   <string name="action_create_a_room">"Create a room"</string>
   <string name="action_decline">"Decline"</string>
+  <string name="action_delete_poll">"Delete Poll"</string>
   <string name="action_disable">"Disable"</string>
   <string name="action_done">"Done"</string>
   <string name="action_edit">"Edit"</string>
+  <string name="action_edit_poll">"Edit poll"</string>
   <string name="action_enable">"Enable"</string>
   <string name="action_end_poll">"End poll"</string>
   <string name="action_enter_pin">"Enter PIN"</string>
@@ -93,7 +95,6 @@
   <string name="action_try_again">"Try again"</string>
   <string name="action_view_source">"View source"</string>
   <string name="action_yes">"Yes"</string>
-  <string name="action_edit_poll">"Edit poll"</string>
   <string name="common_about">"About"</string>
   <string name="common_acceptable_use_policy">"Acceptable use policy"</string>
   <string name="common_advanced_settings">"Advanced settings"</string>

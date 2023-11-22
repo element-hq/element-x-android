@@ -123,7 +123,7 @@ class CreatePollPresenterTest {
             initial.eventSink(CreatePollEvents.SetAnswer(0, "Answer 1"))
             initial.eventSink(CreatePollEvents.SetAnswer(1, "Answer 2"))
             skipItems(3)
-            initial.eventSink(CreatePollEvents.Create)
+            initial.eventSink(CreatePollEvents.Save)
             delay(1) // Wait for the coroutine to finish
             Truth.assertThat(fakeMatrixRoom.createPollInvocations.size).isEqualTo(1)
             Truth.assertThat(fakeMatrixRoom.createPollInvocations.last()).isEqualTo(

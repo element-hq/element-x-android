@@ -95,7 +95,7 @@ class CreatePollPresenter @AssistedInject constructor(
 
         fun handleEvents(event: CreatePollEvents) {
             when (event) {
-                is CreatePollEvents.Create -> scope.launch {
+                is CreatePollEvents.Save -> scope.launch {
                     if (canSave) {
                         room.createPoll(
                             question = question,
@@ -156,6 +156,10 @@ class CreatePollPresenter @AssistedInject constructor(
         }
 
         return CreatePollState(
+            mode = when(mode) {
+                is CreatePollMode.NewPoll -> CreatePollState.Mode.New
+                is CreatePollMode.EditPoll -> CreatePollState.Mode.Edit
+            },
             canSave = canSave,
             canAddAnswer = canAddAnswer,
             question = question,
