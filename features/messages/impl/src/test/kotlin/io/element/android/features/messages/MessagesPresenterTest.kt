@@ -41,6 +41,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
+import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemPollContent
 import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessageComposerPlayer
 import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessageComposerPresenter
 import io.element.android.features.messages.media.FakeLocalMediaFactory
@@ -609,6 +610,28 @@ class MessagesPresenterTest {
             assertThat(room.endPollInvocations.first().text).isEqualTo("The poll with event id: \$anEventId has ended.")
             assertThat(analyticsService.capturedEvents.size).isEqualTo(1)
             assertThat(analyticsService.capturedEvents.last()).isEqualTo(PollEnd())
+        }
+    }
+
+    @Test
+    fun `present - handle action reply to a poll`() = runTest {
+        val presenter = createMessagesPresenter()
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            skipItems(1)
+            val initialState = awaitItem()
+            val poll = aMessageEvent(
+                content = aTimelineItemPollContent()
+            )
+            initialState.eventSink.invoke(MessagesEvents.HandleAction(TimelineItemAction.Reply, poll))
+            val finalState = awaitItem()
+            assertThat(finalState.composerState.mode).isInstanceOf(MessageComposerMode.Reply::class.java)
+            val replyMode = finalState.composerState.mode as MessageComposerMode.Reply
+            assertThat(replyMode.attachmentThumbnailInfo).isNotNull()
+            assertThat(replyMode.attachmentThumbnailInfo?.textContent)
+                .isEqualTo("What type of food should we have at the party?")
+            assertThat(awaitItem().actionListState.target).isEqualTo(ActionListState.Target.None)
         }
     }
 

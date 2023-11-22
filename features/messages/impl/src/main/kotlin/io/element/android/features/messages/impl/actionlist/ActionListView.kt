@@ -234,7 +234,6 @@ private fun MessageSummary(event: TimelineItem.Event, modifier: Modifier = Modif
     val textContent = remember(event.content) { formatter.format(event) }
 
     when (event.content) {
-        is TimelineItemPollContent, // TODO Polls: handle summary
         is TimelineItemTextBasedContent,
         is TimelineItemStateContent,
         is TimelineItemEncryptedContent,
@@ -312,6 +311,18 @@ private fun MessageSummary(event: TimelineItem.Event, modifier: Modifier = Modif
                     info = AttachmentThumbnailInfo(
                         textContent = textContent,
                         type = AttachmentThumbnailType.Voice,
+                    )
+                )
+            }
+            content = { ContentForBody(textContent) }
+        }
+        is TimelineItemPollContent -> {
+            icon = {
+                AttachmentThumbnail(
+                    modifier = imageModifier,
+                    info = AttachmentThumbnailInfo(
+                        textContent = textContent,
+                        type = AttachmentThumbnailType.Poll,
                     )
                 )
             }
