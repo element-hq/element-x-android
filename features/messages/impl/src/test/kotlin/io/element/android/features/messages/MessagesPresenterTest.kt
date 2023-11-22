@@ -331,6 +331,20 @@ class MessagesPresenterTest {
     }
 
     @Test
+    fun `present - handle action edit poll`() = runTest {
+        val navigator = FakeMessagesNavigator()
+        val presenter = createMessagesPresenter(navigator = navigator)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            skipItems(1)
+            val initialState = awaitItem()
+            initialState.eventSink.invoke(MessagesEvents.HandleAction(TimelineItemAction.Edit, aMessageEvent(content = aTimelineItemPollContent())))
+            // assertThat(navigator.onEditPollClickedCount).isEqualTo(1)
+        }
+    }
+
+    @Test
     fun `present - handle action redact`() = runTest {
         val coroutineDispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true)
         val matrixRoom = FakeMatrixRoom()

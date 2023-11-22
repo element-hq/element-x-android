@@ -19,6 +19,8 @@ package io.element.android.features.poll.api
 import io.element.android.libraries.matrix.api.poll.PollAnswer
 import kotlinx.collections.immutable.persistentListOf
 
+fun aPollQuestion() = "What type of food should we have at the party?"
+
 fun aPollAnswerItemList(
     hasVotes: Boolean = true,
     isEnded: Boolean = false,
@@ -30,7 +32,7 @@ fun aPollAnswerItemList(
         isEnabled = !isEnded,
         isWinner = isEnded,
         votesCount = if (hasVotes) 5 else 0,
-        percentage = 0.5f
+        percentage = if (hasVotes) 0.5f else 0f
     ),
     aPollAnswerItem(
         answer = PollAnswer("option_2", "Chinese \uD83C\uDDE8\uD83C\uDDF3"),
@@ -47,9 +49,14 @@ fun aPollAnswerItemList(
         isWinner = false,
         isSelected = true,
         votesCount = if (hasVotes) 1 else 0,
-        percentage = 0.1f
+        percentage = if (hasVotes) 0.1f else 0f
     ),
-    aPollAnswerItem(isDisclosed = isDisclosed, isEnabled = !isEnded),
+    aPollAnswerItem(
+        isDisclosed = isDisclosed,
+        isEnabled = !isEnded,
+        votesCount = if (hasVotes) 4 else 0,
+        percentage = if (hasVotes) 0.4f else 0f,
+    ),
 )
 
 fun aPollAnswerItem(

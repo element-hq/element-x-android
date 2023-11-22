@@ -28,4 +28,6 @@ data class TimelineItemPollContent(
     val isEnded: Boolean,
 ) : TimelineItemEventContent {
     override val type: String = "TimelineItemPollContent"
+    val hasVotes: Boolean
+        get() = answerItems.any { it.votesCount > 0 }
 }

@@ -113,7 +113,11 @@ class ActionListPresenter @Inject constructor(
                             add(TimelineItemAction.Reply)
                         }
                         if (!timelineItem.content.isEnded && timelineItem.isRemote && isMineOrCanRedact) {
-                            add(TimelineItemAction.EndPoll)
+                            if (timelineItem.content.hasVotes) {
+                                add(TimelineItemAction.EndPoll)
+                            } else {
+                                add(TimelineItemAction.Edit)
+                            }
                         }
                         if (timelineItem.content.canBeCopied()) {
                             add(TimelineItemAction.Copy)
