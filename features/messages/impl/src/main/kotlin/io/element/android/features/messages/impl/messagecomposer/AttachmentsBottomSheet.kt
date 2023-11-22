@@ -19,9 +19,8 @@ package io.element.android.features.messages.impl.messagecomposer
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.ListItem
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -33,12 +32,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import io.element.android.features.messages.impl.R
 import io.element.android.libraries.androidutils.ui.hideKeyboard
-import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.components.list.ListItemContent
 import io.element.android.libraries.designsystem.preview.ElementPreview
-import io.element.android.libraries.designsystem.theme.components.Icon
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.theme.components.IconSource
+import io.element.android.libraries.designsystem.theme.components.ListItem
+import io.element.android.libraries.designsystem.theme.components.ListItemStyle
 import io.element.android.libraries.designsystem.theme.components.ModalBottomSheet
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.utils.CommonDrawables
@@ -93,7 +94,6 @@ internal fun AttachmentsBottomSheet(
     }
 }
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 private fun AttachmentSourcePickerMenu(
     state: MessageComposerState,
@@ -103,28 +103,33 @@ private fun AttachmentSourcePickerMenu(
     modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier.padding(bottom = 32.dp)
-//        .navigationBarsPadding() - FIXME after https://issuetracker.google.com/issues/275849044
+        modifier = modifier
+            .navigationBarsPadding()
+            .imePadding()
     ) {
         ListItem(
             modifier = Modifier.clickable { state.eventSink(MessageComposerEvents.PickAttachmentSource.FromGallery) },
-            icon = { Icon(CommonDrawables.ic_september_photo_video_library, null) },
-            text = { Text(stringResource(R.string.screen_room_attachment_source_gallery)) },
+            leadingContent = ListItemContent.Icon(IconSource.Resource(CommonDrawables.ic_image)),
+            headlineContent = { Text(stringResource(R.string.screen_room_attachment_source_gallery)) },
+            style = ListItemStyle.Primary,
         )
         ListItem(
             modifier = Modifier.clickable { state.eventSink(MessageComposerEvents.PickAttachmentSource.FromFiles) },
-            icon = { Icon(CommonDrawables.ic_september_attachment, null) },
-            text = { Text(stringResource(R.string.screen_room_attachment_source_files)) },
+            leadingContent = ListItemContent.Icon(IconSource.Resource(CommonDrawables.ic_attachment)),
+            headlineContent = { Text(stringResource(R.string.screen_room_attachment_source_files)) },
+            style = ListItemStyle.Primary,
         )
         ListItem(
             modifier = Modifier.clickable { state.eventSink(MessageComposerEvents.PickAttachmentSource.PhotoFromCamera) },
-            icon = { Icon(CommonDrawables.ic_september_take_photo_camera, null) },
-            text = { Text(stringResource(R.string.screen_room_attachment_source_camera_photo)) },
+            leadingContent = ListItemContent.Icon(IconSource.Resource(CommonDrawables.ic_take_photo_camera, )),
+            headlineContent = { Text(stringResource(R.string.screen_room_attachment_source_camera_photo)) },
+            style = ListItemStyle.Primary,
         )
         ListItem(
             modifier = Modifier.clickable { state.eventSink(MessageComposerEvents.PickAttachmentSource.VideoFromCamera) },
-            icon = { Icon(CommonDrawables.ic_september_video_call, null) },
-            text = { Text(stringResource(R.string.screen_room_attachment_source_camera_video)) },
+            leadingContent = ListItemContent.Icon(IconSource.Resource(CommonDrawables.ic_video_call)),
+            headlineContent = { Text(stringResource(R.string.screen_room_attachment_source_camera_video)) },
+            style = ListItemStyle.Primary,
         )
         if (state.canShareLocation) {
             ListItem(
@@ -132,8 +137,9 @@ private fun AttachmentSourcePickerMenu(
                     state.eventSink(MessageComposerEvents.PickAttachmentSource.Location)
                     onSendLocationClicked()
                 },
-                icon = { Icon(CommonDrawables.ic_september_location, null) },
-                text = { Text(stringResource(R.string.screen_room_attachment_source_location)) },
+                leadingContent = ListItemContent.Icon(IconSource.Resource(CommonDrawables.ic_location_pin) ),
+                headlineContent = { Text(stringResource(R.string.screen_room_attachment_source_location)) },
+                style = ListItemStyle.Primary,
             )
         }
         if (state.canCreatePoll) {
@@ -142,15 +148,17 @@ private fun AttachmentSourcePickerMenu(
                     state.eventSink(MessageComposerEvents.PickAttachmentSource.Poll)
                     onCreatePollClicked()
                 },
-                icon = { Icon(CommonDrawables.ic_compound_polls, null) },
-                text = { Text(stringResource(R.string.screen_room_attachment_source_poll)) },
+                leadingContent = ListItemContent.Icon(IconSource.Resource(CommonDrawables.ic_compound_polls)),
+                headlineContent = { Text(stringResource(R.string.screen_room_attachment_source_poll)) },
+                style = ListItemStyle.Primary,
             )
         }
         if (enableTextFormatting) {
             ListItem(
                 modifier = Modifier.clickable { state.eventSink(MessageComposerEvents.ToggleTextFormatting(enabled = true)) },
-                icon = { Icon(CommonDrawables.ic_september_text_formatting, null) },
-                text = { Text(stringResource(R.string.screen_room_attachment_text_formatting)) },
+                leadingContent = ListItemContent.Icon(IconSource.Resource(CommonDrawables.ic_text_formatting, null)),
+                headlineContent = { Text(stringResource(R.string.screen_room_attachment_text_formatting)) },
+                style = ListItemStyle.Primary,
             )
         }
     }

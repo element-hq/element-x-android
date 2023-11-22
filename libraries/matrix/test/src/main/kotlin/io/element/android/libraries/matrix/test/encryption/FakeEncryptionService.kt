@@ -34,6 +34,7 @@ class FakeEncryptionService : EncryptionService {
     private var waitForBackupUploadSteadyStateFlow: Flow<BackupUploadState> = flowOf()
 
     private var fixRecoveryIssuesFailure: Exception? = null
+    private var doesBackupExistOnServerResult: Result<Boolean> = Result.success(true)
 
     override suspend fun enableBackups(): Result<Unit> = simulateLongTask {
         return Result.success(Unit)
@@ -50,6 +51,14 @@ class FakeEncryptionService : EncryptionService {
     override suspend fun disableRecovery(): Result<Unit> = simulateLongTask {
         disableRecoveryFailure?.let { return Result.failure(it) }
         return Result.success(Unit)
+    }
+
+    fun givenDoesBackupExistOnServerResult(result: Result<Boolean>) {
+        doesBackupExistOnServerResult = result
+    }
+
+    override suspend fun doesBackupExistOnServer(): Result<Boolean> = simulateLongTask {
+        return doesBackupExistOnServerResult
     }
 
     override suspend fun fixRecoveryIssues(recoveryKey: String): Result<Unit> = simulateLongTask {

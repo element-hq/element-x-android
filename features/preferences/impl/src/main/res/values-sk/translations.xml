@@ -12,4 +12,32 @@
   <string name="screen_edit_profile_error_title">"Nepodarilo sa aktualizovať profil"</string>
   <string name="screen_edit_profile_title">"Upraviť profil"</string>
   <string name="screen_edit_profile_updating_details">"Aktualizácia profilu…"</string>
+  <string name="screen_notification_settings_additional_settings_section_title">"Ďalšie nastavenia"</string>
+  <string name="screen_notification_settings_calls_label">"Audio a video hovory"</string>
+  <string name="screen_notification_settings_configuration_mismatch">"Nezhoda konfigurácie"</string>
+  <string name="screen_notification_settings_configuration_mismatch_description">"Zjednodušili sme Nastavenia oznámení, aby ste ľahšie našli možnosti.
+
+Niektoré vlastné nastavenia, ktoré ste si nastavili v minulosti, sa tu nezobrazujú, ale sú stále aktívne.
+
+Ak budete pokračovať, niektoré z vašich nastavení sa môžu zmeniť."</string>
+  <string name="screen_notification_settings_direct_chats">"Priame konverzácie"</string>
+  <string name="screen_notification_settings_edit_custom_settings_section_title">"Vlastné nastavenie pre konverzácie"</string>
+  <string name="screen_notification_settings_edit_failed_updating_default_mode">"Pri aktualizácii nastavenia oznámenia došlo k chybe."</string>
+  <string name="screen_notification_settings_edit_mode_all_messages">"Všetky správy"</string>
+  <string name="screen_notification_settings_edit_mode_mentions_and_keywords">"Iba zmienky a kľúčové slová"</string>
+  <string name="screen_notification_settings_edit_screen_direct_section_header">"Pri priamych rozhovoroch ma upozorniť na"</string>
+  <string name="screen_notification_settings_edit_screen_group_section_header">"Pri skupinových rozhovoroch ma upozorniť na"</string>
+  <string name="screen_notification_settings_enable_notifications">"Povoliť oznámenia na tomto zariadení"</string>
+  <string name="screen_notification_settings_failed_fixing_configuration">"Konfigurácia nebola opravená, skúste to prosím znova."</string>
+  <string name="screen_notification_settings_group_chats">"Skupinové rozhovory"</string>
+  <string name="screen_notification_settings_mentions_only_disclaimer">"Váš domovský server nepodporuje túto možnosť v šifrovaných miestnostiach, v niektorých miestnostiach nemusíte dostať upozornenie."</string>
+  <string name="screen_notification_settings_mentions_section_title">"Zmienky"</string>
+  <string name="screen_notification_settings_mode_all">"Všetky"</string>
+  <string name="screen_notification_settings_mode_mentions">"Zmienky"</string>
+  <string name="screen_notification_settings_notification_section_title">"Upozorniť ma na"</string>
+  <string name="screen_notification_settings_room_mention_label">"Upozorniť ma na @miestnosť"</string>
+  <string name="screen_notification_settings_system_notifications_action_required">"Ak chcete dostávať oznámenia, zmeňte prosím svoje %1$s."</string>
+  <string name="screen_notification_settings_system_notifications_action_required_content_link">"nastavenia systému"</string>
+  <string name="screen_notification_settings_system_notifications_turned_off">"Systémové oznámenia sú vypnuté"</string>
+  <string name="screen_notification_settings_title">"Oznámenia"</string>
 </resources>

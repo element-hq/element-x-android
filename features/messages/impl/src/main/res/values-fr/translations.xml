@@ -1,10 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="emoji_picker_category_activity">"Activités"</string>
+  <string name="emoji_picker_category_flags">"Drapeaux"</string>
+  <string name="emoji_picker_category_foods">"Nourriture et boissons"</string>
+  <string name="emoji_picker_category_nature">"Animaux et nature"</string>
+  <string name="emoji_picker_category_objects">"Objets"</string>
+  <string name="emoji_picker_category_people">"Émoticônes et personnes"</string>
+  <string name="emoji_picker_category_places">"Voyages &amp; lieux"</string>
+  <string name="emoji_picker_category_symbols">"Symboles"</string>
   <plurals name="room_timeline_state_changes">
     <item quantity="one">"%1$d changement dans le salon"</item>
     <item quantity="other">"%1$d changements dans le salon"</item>
   </plurals>
+  <string name="report_content_explanation">"Ce message sera signalé à l’administrateur de votre serveur d’accueil. Il ne pourra lire aucun message chiffré."</string>
+  <string name="report_content_hint">"Raison du signalement de ce contenu"</string>
+  <string name="room_timeline_beginning_of_room">"Ceci est le début de %1$s."</string>
+  <string name="room_timeline_beginning_of_room_no_name">"Ceci est le début de cette conversation."</string>
+  <string name="room_timeline_read_marker_title">"Nouveau"</string>
   <string name="screen_room_mentions_at_room_subtitle">"Notifier tout le salon"</string>
+  <string name="screen_report_content_block_user_hint">"Cochez si vous souhaitez masquer tous les messages actuels et futurs de cet utilisateur."</string>
   <string name="screen_room_attachment_source_camera">"Appareil photo"</string>
   <string name="screen_room_attachment_source_camera_photo">"Prendre une photo"</string>
   <string name="screen_room_attachment_source_camera_video">"Enregistrer une vidéo"</string>
@@ -40,6 +54,7 @@
   <string name="screen_room_timeline_less_reactions">"Afficher moins"</string>
   <string name="screen_room_voice_message_tooltip">"Maintenir pour enregistrer"</string>
   <string name="screen_room_mentions_at_room_title">"Tout le monde"</string>
+  <string name="screen_report_content_block_user">"Bloquer l’utilisateur"</string>
   <string name="screen_room_error_failed_processing_media">"Échec du traitement des médias à télécharger, veuillez réessayer."</string>
   <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Mentions et mots clés uniquement"</string>
 </resources>

@@ -105,7 +105,7 @@ fun AttachmentThumbnail(
                 }
                 AttachmentThumbnailType.File -> {
                     Icon(
-                        resourceId = CommonDrawables.ic_september_attachment,
+                        resourceId = CommonDrawables.ic_attachment,
                         contentDescription = info.textContent,
                         modifier = Modifier.rotate(-45f)
                     )

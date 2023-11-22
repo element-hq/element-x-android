@@ -44,6 +44,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -57,6 +58,7 @@ import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.TransactionId
+import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.ui.components.A_BLUR_HASH
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnail
@@ -66,23 +68,26 @@ import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
 import io.element.android.libraries.textcomposer.components.ComposerOptionsButton
 import io.element.android.libraries.textcomposer.components.DismissTextFormattingButton
-import io.element.android.libraries.textcomposer.components.RecordButton
+import io.element.android.libraries.textcomposer.components.VoiceMessageRecorderButton
 import io.element.android.libraries.textcomposer.components.SendButton
 import io.element.android.libraries.textcomposer.components.TextFormatting
 import io.element.android.libraries.textcomposer.components.VoiceMessageDeleteButton
 import io.element.android.libraries.textcomposer.components.VoiceMessagePreview
 import io.element.android.libraries.textcomposer.components.VoiceMessageRecording
 import io.element.android.libraries.textcomposer.components.textInputRoundedCornerShape
+import io.element.android.libraries.textcomposer.mentions.rememberMentionSpanProvider
 import io.element.android.libraries.textcomposer.model.Message
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
-import io.element.android.libraries.textcomposer.model.PressEvent
+import io.element.android.libraries.textcomposer.model.VoiceMessageRecorderEvent
 import io.element.android.libraries.textcomposer.model.Suggestion
 import io.element.android.libraries.textcomposer.model.VoiceMessagePlayerEvent
 import io.element.android.libraries.textcomposer.model.VoiceMessageState
 import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
+import io.element.android.wysiwyg.compose.PillStyle
 import io.element.android.wysiwyg.compose.RichTextEditor
 import io.element.android.wysiwyg.compose.RichTextEditorState
+import io.element.android.wysiwyg.display.TextDisplay
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import uniffi.wysiwyg_composer.MenuAction
@@ -95,6 +100,7 @@ fun TextComposer(
     composerMode: MessageComposerMode,
     enableTextFormatting: Boolean,
     enableVoiceMessages: Boolean,
+    currentUserId: UserId,
     modifier: Modifier = Modifier,
     showTextFormatting: Boolean = false,
     subcomposing: Boolean = false,
@@ -103,7 +109,7 @@ fun TextComposer(
     onResetComposerMode: () -> Unit = {},
     onAddAttachment: () -> Unit = {},
     onDismissTextFormatting: () -> Unit = {},
-    onVoiceRecordButtonEvent: (PressEvent) -> Unit = {},
+    onVoiceRecorderEvent: (VoiceMessageRecorderEvent) -> Unit = {},
     onVoicePlayerEvent: (VoiceMessagePlayerEvent) -> Unit = {},
     onSendVoiceMessage: () -> Unit = {},
     onDeleteVoiceMessage: () -> Unit = {},
@@ -143,6 +149,7 @@ fun TextComposer(
 
     val textInput: @Composable () -> Unit = remember(state, subcomposing, composerMode, onResetComposerMode, onError) {
         @Composable {
+            val mentionSpanProvider = rememberMentionSpanProvider(currentUserId)
             TextInput(
                 state = state,
                 subcomposing = subcomposing,
@@ -153,6 +160,8 @@ fun TextComposer(
                 },
                 composerMode = composerMode,
                 onResetComposerMode = onResetComposerMode,
+                resolveMentionDisplay = { text, url -> TextDisplay.Custom(mentionSpanProvider.getMentionSpanFor(text, url)) },
+                resolveRoomMentionDisplay = { TextDisplay.Custom(mentionSpanProvider.getMentionSpanFor("@room", "#")) },
                 onError = onError,
             )
         }
@@ -167,16 +176,15 @@ fun TextComposer(
         )
     }
     val recordVoiceButton = @Composable {
-        RecordButton(
-            onPressStart = { onVoiceRecordButtonEvent(PressEvent.PressStart) },
-            onLongPressEnd = { onVoiceRecordButtonEvent(PressEvent.LongPressEnd) },
-            onTap = { onVoiceRecordButtonEvent(PressEvent.Tapped) },
+        VoiceMessageRecorderButton(
+            isRecording = voiceMessageState is VoiceMessageState.Recording,
+            onEvent = onVoiceRecorderEvent,
         )
     }
     val sendVoiceButton = @Composable {
         SendButton(
             canSendMessage = voiceMessageState is VoiceMessageState.Preview,
-            onClick = { onSendVoiceMessage() },
+            onClick = onSendVoiceMessage,
             composerMode = composerMode,
         )
     }
@@ -223,8 +231,12 @@ fun TextComposer(
     }
 
     val voiceDeleteButton = @Composable {
-        if (voiceMessageState is VoiceMessageState.Preview) {
-            VoiceMessageDeleteButton(enabled = !voiceMessageState.isSending, onClick = onDeleteVoiceMessage)
+        when (voiceMessageState) {
+            is VoiceMessageState.Preview ->
+                VoiceMessageDeleteButton(enabled = !voiceMessageState.isSending, onClick = onDeleteVoiceMessage)
+            is VoiceMessageState.Recording ->
+                VoiceMessageDeleteButton(enabled = true, onClick = { onVoiceRecorderEvent(VoiceMessageRecorderEvent.Cancel) })
+            else -> {}
         }
     }
 
@@ -286,7 +298,7 @@ private fun StandardLayout(
         verticalAlignment = Alignment.Bottom,
     ) {
         if (enableVoiceMessages && voiceMessageState !is VoiceMessageState.Idle) {
-            if (voiceMessageState is VoiceMessageState.Preview) {
+            if (voiceMessageState is VoiceMessageState.Preview || voiceMessageState is VoiceMessageState.Recording) {
                 Box(
                     modifier = Modifier
                         .padding(bottom = 5.dp, top = 5.dp, end = 3.dp, start = 3.dp)
@@ -382,6 +394,8 @@ private fun TextInput(
     placeholder: String,
     composerMode: MessageComposerMode,
     onResetComposerMode: () -> Unit,
+    resolveRoomMentionDisplay: () -> TextDisplay,
+    resolveMentionDisplay: (text: String, url: String) -> TextDisplay,
     modifier: Modifier = Modifier,
     onError: (Throwable) -> Unit = {},
 ) {
@@ -429,7 +443,11 @@ private fun TextInput(
                     .fillMaxWidth(),
                 style = ElementRichTextEditorStyle.create(
                     hasFocus = state.hasFocus
+                ).copy(
+                    pill = PillStyle(Color.Red)
                 ),
+                resolveMentionDisplay = resolveMentionDisplay,
+                resolveRoomMentionDisplay = resolveRoomMentionDisplay,
                 onError = onError
             )
         }
@@ -472,7 +490,7 @@ private fun EditingModeView(
             .padding(start = 12.dp)
     ) {
         Icon(
-            resourceId = CommonDrawables.ic_september_edit_solid_16,
+            resourceId = CommonDrawables.ic_edit_solid,
             contentDescription = stringResource(CommonStrings.common_editing),
             tint = ElementTheme.materialColors.secondary,
             modifier = Modifier
@@ -581,6 +599,7 @@ internal fun TextComposerSimplePreview() = ElementPreview {
                 onResetComposerMode = {},
                 enableTextFormatting = true,
                 enableVoiceMessages = true,
+                currentUserId = UserId("@alice:localhost"),
             )
         }, {
         TextComposer(
@@ -591,6 +610,7 @@ internal fun TextComposerSimplePreview() = ElementPreview {
             onResetComposerMode = {},
             enableTextFormatting = true,
             enableVoiceMessages = true,
+            currentUserId = UserId("@alice:localhost")
         )
     }, {
         TextComposer(
@@ -604,6 +624,7 @@ internal fun TextComposerSimplePreview() = ElementPreview {
             onResetComposerMode = {},
             enableTextFormatting = true,
             enableVoiceMessages = true,
+            currentUserId = UserId("@alice:localhost")
         )
     }, {
         TextComposer(
@@ -614,6 +635,7 @@ internal fun TextComposerSimplePreview() = ElementPreview {
             onResetComposerMode = {},
             enableTextFormatting = true,
             enableVoiceMessages = true,
+            currentUserId = UserId("@alice:localhost")
         )
     })
     )
@@ -630,6 +652,7 @@ internal fun TextComposerFormattingPreview() = ElementPreview {
             composerMode = MessageComposerMode.Normal,
             enableTextFormatting = true,
             enableVoiceMessages = true,
+            currentUserId = UserId("@alice:localhost")
         )
     }, {
         TextComposer(
@@ -639,6 +662,7 @@ internal fun TextComposerFormattingPreview() = ElementPreview {
             composerMode = MessageComposerMode.Normal,
             enableTextFormatting = true,
             enableVoiceMessages = true,
+            currentUserId = UserId("@alice:localhost")
         )
     }, {
         TextComposer(
@@ -648,6 +672,7 @@ internal fun TextComposerFormattingPreview() = ElementPreview {
             composerMode = MessageComposerMode.Normal,
             enableTextFormatting = true,
             enableVoiceMessages = true,
+            currentUserId = UserId("@alice:localhost")
         )
     }))
 }
@@ -664,6 +689,7 @@ internal fun TextComposerEditPreview() = ElementPreview {
             onResetComposerMode = {},
             enableTextFormatting = true,
             enableVoiceMessages = true,
+            currentUserId = UserId("@alice:localhost")
         )
     }))
 }
@@ -688,6 +714,7 @@ internal fun TextComposerReplyPreview() = ElementPreview {
             onResetComposerMode = {},
             enableTextFormatting = true,
             enableVoiceMessages = true,
+            currentUserId = UserId("@alice:localhost")
         )
     },
         {
@@ -707,6 +734,7 @@ internal fun TextComposerReplyPreview() = ElementPreview {
                 onResetComposerMode = {},
                 enableTextFormatting = true,
                 enableVoiceMessages = true,
+                currentUserId = UserId("@alice:localhost")
             )
         }, {
         TextComposer(
@@ -728,6 +756,7 @@ internal fun TextComposerReplyPreview() = ElementPreview {
             onResetComposerMode = {},
             enableTextFormatting = true,
             enableVoiceMessages = true,
+            currentUserId = UserId("@alice:localhost")
         )
     }, {
         TextComposer(
@@ -749,6 +778,7 @@ internal fun TextComposerReplyPreview() = ElementPreview {
             onResetComposerMode = {},
             enableTextFormatting = true,
             enableVoiceMessages = true,
+            currentUserId = UserId("@alice:localhost")
         )
     }, {
         TextComposer(
@@ -770,6 +800,7 @@ internal fun TextComposerReplyPreview() = ElementPreview {
             onResetComposerMode = {},
             enableTextFormatting = true,
             enableVoiceMessages = true,
+            currentUserId = UserId("@alice:localhost")
         )
     }, {
         TextComposer(
@@ -791,6 +822,7 @@ internal fun TextComposerReplyPreview() = ElementPreview {
             onResetComposerMode = {},
             enableTextFormatting = true,
             enableVoiceMessages = true,
+            currentUserId = UserId("@alice:localhost")
         )
     })
     )
@@ -810,6 +842,7 @@ internal fun TextComposerVoicePreview() = ElementPreview {
         onResetComposerMode = {},
         enableTextFormatting = true,
         enableVoiceMessages = true,
+        currentUserId = UserId("@alice:localhost")
     )
     PreviewColumn(items = persistentListOf({
         VoicePreview(voiceMessageState = VoiceMessageState.Recording(61.seconds, createFakeWaveform()))

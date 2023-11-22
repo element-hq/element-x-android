@@ -130,6 +130,12 @@ internal class RustEncryptionService(
         }
     }
 
+    override suspend fun doesBackupExistOnServer(): Result<Boolean> = withContext(dispatchers.io) {
+        runCatching {
+            service.backupExistsOnServer()
+        }
+    }
+
     override fun waitForBackupUploadSteadyState(): Flow<BackupUploadState> {
         return callbackFlow {
             runCatching {

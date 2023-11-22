@@ -28,5 +28,8 @@ interface PreferencesStore {
     suspend fun setCustomElementCallBaseUrl(string: String?)
     fun getCustomElementCallBaseUrlFlow(): Flow<String?>
 
+    suspend fun setTheme(theme: String)
+    fun getThemeFlow(): Flow<String?>
+
     suspend fun reset()
 }

@@ -16,18 +16,27 @@
 
 package io.element.android.features.securebackup.impl.root
 
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import io.element.android.features.securebackup.impl.R
+import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.designsystem.components.async.AsyncLoading
+import io.element.android.libraries.designsystem.components.list.ListItemContent
 import io.element.android.libraries.designsystem.components.preferences.PreferenceDivider
 import io.element.android.libraries.designsystem.components.preferences.PreferencePage
 import io.element.android.libraries.designsystem.components.preferences.PreferenceText
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.text.buildAnnotatedStringWithStyledPart
+import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
+import io.element.android.libraries.designsystem.theme.components.ListItem
+import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarHost
 import io.element.android.libraries.designsystem.utils.snackbar.rememberSnackbarHostState
 import io.element.android.libraries.matrix.api.encryption.BackupState
@@ -70,13 +79,58 @@ fun SecureBackupRootView(
 
         // Disable / Enable backup
         when (state.backupState) {
-            BackupState.WAITING_FOR_SYNC,
-            BackupState.UNKNOWN -> Unit
-            BackupState.DISABLED -> {
-                PreferenceText(
-                    title = stringResource(id = R.string.screen_chat_backup_key_backup_action_enable),
-                    onClick = onEnableClicked,
-                )
+            BackupState.WAITING_FOR_SYNC -> Unit
+            BackupState.UNKNOWN -> {
+                when (state.doesBackupExistOnServer) {
+                    is Async.Success -> when (state.doesBackupExistOnServer.data) {
+                        true -> {
+                            PreferenceText(
+                                title = stringResource(id = R.string.screen_chat_backup_key_backup_action_disable),
+                                tintColor = ElementTheme.colors.textCriticalPrimary,
+                                onClick = onDisableClicked,
+                            )
+                        }
+                        false -> {
+                            PreferenceText(
+                                title = stringResource(id = R.string.screen_chat_backup_key_backup_action_enable),
+                                onClick = onEnableClicked,
+                            )
+                        }
+                    }
+                    is Async.Loading,
+                    Async.Uninitialized -> {
+                        ListItem(headlineContent = {
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.Center,
+                            ) {
+                                CircularProgressIndicator()
+                            }
+                        })
+                    }
+                    is Async.Failure -> {
+                        ListItem(
+                            headlineContent = {
+                                Text(
+                                    text = stringResource(id = CommonStrings.error_unknown),
+                                )
+                            },
+                            trailingContent = ListItemContent.Custom {
+                                TextButton(
+                                    text = stringResource(
+                                        id = CommonStrings.action_retry
+                                    ),
+                                    onClick = { state.eventSink.invoke(SecureBackupRootEvents.RetryKeyBackupState) }
+                                )
+                            }
+                        )
+
+                        PreferenceText(
+                            title = stringResource(id = R.string.screen_chat_backup_key_backup_action_enable),
+                            onClick = onEnableClicked,
+                        )
+                    }
+                }
             }
             BackupState.CREATING,
             BackupState.ENABLING,

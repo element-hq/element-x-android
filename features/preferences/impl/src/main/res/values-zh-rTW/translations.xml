@@ -6,4 +6,16 @@
   <string name="screen_edit_profile_error_title">"無法更新個人檔案"</string>
   <string name="screen_edit_profile_title">"編輯個人檔案"</string>
   <string name="screen_edit_profile_updating_details">"正在更新個人檔案…"</string>
+  <string name="screen_notification_settings_additional_settings_section_title">"其他設定"</string>
+  <string name="screen_notification_settings_direct_chats">"私訊"</string>
+  <string name="screen_notification_settings_edit_failed_updating_default_mode">"更新通知設定時發生錯誤。"</string>
+  <string name="screen_notification_settings_edit_mode_all_messages">"所有訊息"</string>
+  <string name="screen_notification_settings_edit_mode_mentions_and_keywords">"僅限提及與關鍵字"</string>
+  <string name="screen_notification_settings_enable_notifications">"在這個裝置上開啟通知"</string>
+  <string name="screen_notification_settings_group_chats">"群組聊天"</string>
+  <string name="screen_notification_settings_mentions_section_title">"提及"</string>
+  <string name="screen_notification_settings_mode_mentions">"提及"</string>
+  <string name="screen_notification_settings_system_notifications_action_required_content_link">"系統設定"</string>
+  <string name="screen_notification_settings_system_notifications_turned_off">"已關閉系統通知"</string>
+  <string name="screen_notification_settings_title">"通知"</string>
 </resources>

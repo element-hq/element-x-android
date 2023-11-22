@@ -9,11 +9,14 @@
   <string name="a11y_play">"Play"</string>
   <string name="a11y_poll">"Poll"</string>
   <string name="a11y_poll_end">"Ended poll"</string>
+  <string name="a11y_read_receipts_single">"Read by %1$s"</string>
   <string name="a11y_send_files">"Send files"</string>
   <string name="a11y_show_password">"Show password"</string>
   <string name="a11y_start_call">"Start a call"</string>
   <string name="a11y_user_menu">"User menu"</string>
-  <string name="a11y_voice_message_record">"Record voice message. Double tap and hold to record. Release to end recording."</string>
+  <string name="a11y_voice_message_record">"Record voice message."</string>
+  <string name="a11y_voice_message_stop_recording">"Stop recording"</string>
+  <string name="a11y_read_receipts_multiple">"Read by %1$s and %2$s"</string>
   <string name="action_accept">"Accept"</string>
   <string name="action_add_to_timeline">"Add to timeline"</string>
   <string name="action_back">"Back"</string>
@@ -80,6 +83,7 @@
   <string name="action_start_verification">"Start verification"</string>
   <string name="action_static_map_load">"Tap to load map"</string>
   <string name="action_take_photo">"Take photo"</string>
+  <string name="action_tap_for_options">"Tap for options"</string>
   <string name="action_try_again">"Try again"</string>
   <string name="action_view_source">"View source"</string>
   <string name="action_yes">"Yes"</string>
@@ -88,12 +92,14 @@
   <string name="common_acceptable_use_policy">"Acceptable use policy"</string>
   <string name="common_advanced_settings">"Advanced settings"</string>
   <string name="common_analytics">"Analytics"</string>
+  <string name="common_appearance">"Appearance"</string>
   <string name="common_audio">"Audio"</string>
   <string name="common_bubbles">"Bubbles"</string>
   <string name="common_chat_backup">"Chat backup"</string>
   <string name="common_copyright">"Copyright"</string>
   <string name="common_creating_room">"Creating room…"</string>
   <string name="common_current_user_left_room">"Left room"</string>
+  <string name="common_dark">"Dark"</string>
   <string name="common_decryption_error">"Decryption error"</string>
   <string name="common_developer_options">"Developer options"</string>
   <string name="common_edited_suffix">"(edited)"</string>
@@ -112,9 +118,11 @@
   <string name="common_install_apk_android">"Install APK"</string>
   <string name="common_invite_unknown_profile">"This Matrix ID can\'t be found, so the invite might not be received."</string>
   <string name="common_leaving_room">"Leaving room"</string>
+  <string name="common_light">"Light"</string>
   <string name="common_link_copied_to_clipboard">"Link copied to clipboard"</string>
   <string name="common_loading">"Loading…"</string>
   <string name="common_message">"Message"</string>
+  <string name="common_message_actions">"Message actions"</string>
   <string name="common_message_layout">"Message layout"</string>
   <string name="common_message_removed">"Message removed"</string>
   <string name="common_modern">"Modern"</string>
@@ -134,6 +142,7 @@
   <string name="common_refreshing">"Refreshing…"</string>
   <string name="common_replying_to">"Replying to %1$s"</string>
   <string name="common_report_a_bug">"Report a bug"</string>
+  <string name="common_report_a_problem">"Report a problem"</string>
   <string name="common_report_submitted">"Report submitted"</string>
   <string name="common_rich_text_editor">"Rich text editor"</string>
   <string name="common_room">"Room"</string>
@@ -143,7 +152,10 @@
   <string name="common_search_for_someone">"Search for someone"</string>
   <string name="common_search_results">"Search results"</string>
   <string name="common_security">"Security"</string>
+  <string name="common_seen_by">"Seen by"</string>
   <string name="common_sending">"Sending…"</string>
+  <string name="common_sending_failed">"Sending failed"</string>
+  <string name="common_sent">"Sent"</string>
   <string name="common_server_not_supported">"Server not supported"</string>
   <string name="common_server_url">"Server URL"</string>
   <string name="common_settings">"Settings"</string>
@@ -154,6 +166,7 @@
   <string name="common_success">"Success"</string>
   <string name="common_suggestions">"Suggestions"</string>
   <string name="common_syncing">"Syncing"</string>
+  <string name="common_system">"System"</string>
   <string name="common_text">"Text"</string>
   <string name="common_third_party_notices">"Third-party notices"</string>
   <string name="common_thread">"Thread"</string>
@@ -172,20 +185,11 @@
   <string name="common_voice_message">"Voice message"</string>
   <string name="common_waiting">"Waiting…"</string>
   <string name="common_waiting_for_decryption_key">"Waiting for this message"</string>
-  <string name="common_report_a_problem">"Report a problem"</string>
   <string name="common_poll_end_confirmation">"Are you sure you want to end this poll?"</string>
   <string name="common_poll_summary">"Poll: %1$s"</string>
   <string name="common_verify_device">"Verify device"</string>
   <string name="dialog_title_confirmation">"Confirmation"</string>
   <string name="dialog_title_warning">"Warning"</string>
-  <string name="emoji_picker_category_activity">"Activities"</string>
-  <string name="emoji_picker_category_flags">"Flags"</string>
-  <string name="emoji_picker_category_foods">"Food &amp; Drink"</string>
-  <string name="emoji_picker_category_nature">"Animals &amp; Nature"</string>
-  <string name="emoji_picker_category_objects">"Objects"</string>
-  <string name="emoji_picker_category_people">"Smileys &amp; People"</string>
-  <string name="emoji_picker_category_places">"Travel &amp; Places"</string>
-  <string name="emoji_picker_category_symbols">"Symbols"</string>
   <string name="error_failed_creating_the_permalink">"Failed creating the permalink"</string>
   <string name="error_failed_loading_map">"%1$s could not load the map. Please try again later."</string>
   <string name="error_failed_loading_messages">"Failed loading messages"</string>
@@ -198,13 +202,14 @@
   <string name="error_unknown">"Sorry, an error occurred"</string>
   <string name="invite_friends_rich_title">"🔐️ Join me on %1$s"</string>
   <string name="invite_friends_text">"Hey, talk to me on %1$s: %2$s"</string>
-  <string name="leave_room_alert_empty_subtitle">"Are you sure that you want to leave this room? You\'re the only person here. If you leave, no one will be able to join in the future, including you."</string>
-  <string name="leave_room_alert_private_subtitle">"Are you sure that you want to leave this room? This room is not public and you won\'t be able to rejoin without an invite."</string>
-  <string name="leave_room_alert_subtitle">"Are you sure that you want to leave the room?"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <plurals name="a11y_digits_entered">
     <item quantity="one">"%1$d digit entered"</item>
     <item quantity="other">"%1$d digits entered"</item>
+  </plurals>
+  <plurals name="a11y_read_receipts_multiple_with_others">
+    <item quantity="one">"Read by %1$s and %2$d other"</item>
+    <item quantity="other">"Read by %1$s and %2$d others"</item>
   </plurals>
   <plurals name="common_member_count">
     <item quantity="one">"%1$d member"</item>
@@ -215,41 +220,9 @@
     <item quantity="other">"%d votes"</item>
   </plurals>
   <string name="preference_rageshake">"Rageshake to report bug"</string>
-  <string name="report_content_explanation">"This message will be reported to your homeserver’s administrator. They will not be able to read any encrypted messages."</string>
-  <string name="report_content_hint">"Reason for reporting this content"</string>
-  <string name="room_timeline_beginning_of_room">"This is the beginning of %1$s."</string>
-  <string name="room_timeline_beginning_of_room_no_name">"This is the beginning of this conversation."</string>
-  <string name="room_timeline_read_marker_title">"New"</string>
-  <string name="screen_analytics_settings_share_data">"Share analytics data"</string>
   <string name="screen_media_picker_error_failed_selection">"Failed selecting media, please try again."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Failed processing media to upload, please try again."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Failed uploading media, please try again."</string>
-  <string name="screen_notification_settings_additional_settings_section_title">"Additional settings"</string>
-  <string name="screen_notification_settings_calls_label">"Audio and video calls"</string>
-  <string name="screen_notification_settings_configuration_mismatch">"Configuration mismatch"</string>
-  <string name="screen_notification_settings_configuration_mismatch_description">"We’ve simplified Notifications Settings to make options easier to find. Some custom settings you’ve chosen in the past are not shown here, but they’re still active.
-
-If you proceed, some of your settings may change."</string>
-  <string name="screen_notification_settings_direct_chats">"Direct chats"</string>
-  <string name="screen_notification_settings_edit_custom_settings_section_title">"Custom setting per chat"</string>
-  <string name="screen_notification_settings_edit_failed_updating_default_mode">"An error occurred while updating the notification setting."</string>
-  <string name="screen_notification_settings_edit_mode_all_messages">"All messages"</string>
-  <string name="screen_notification_settings_edit_mode_mentions_and_keywords">"Mentions and Keywords only"</string>
-  <string name="screen_notification_settings_edit_screen_direct_section_header">"On direct chats, notify me for"</string>
-  <string name="screen_notification_settings_edit_screen_group_section_header">"On group chats, notify me for"</string>
-  <string name="screen_notification_settings_enable_notifications">"Enable notifications on this device"</string>
-  <string name="screen_notification_settings_failed_fixing_configuration">"The configuration has not been corrected, please try again."</string>
-  <string name="screen_notification_settings_group_chats">"Group chats"</string>
-  <string name="screen_notification_settings_mentions_section_title">"Mentions"</string>
-  <string name="screen_notification_settings_mode_all">"All"</string>
-  <string name="screen_notification_settings_mode_mentions">"Mentions"</string>
-  <string name="screen_notification_settings_notification_section_title">"Notify me for"</string>
-  <string name="screen_notification_settings_room_mention_label">"Notify me on @room"</string>
-  <string name="screen_notification_settings_system_notifications_action_required">"To receive notifications, please change your %1$s."</string>
-  <string name="screen_notification_settings_system_notifications_action_required_content_link">"system settings"</string>
-  <string name="screen_notification_settings_system_notifications_turned_off">"System notifications turned off"</string>
-  <string name="screen_notification_settings_title">"Notifications"</string>
-  <string name="screen_report_content_block_user_hint">"Check if you want to hide all current and future messages from this user"</string>
   <string name="screen_share_location_title">"Share location"</string>
   <string name="screen_share_my_location_action">"Share my location"</string>
   <string name="screen_share_open_apple_maps">"Open in Apple Maps"</string>
@@ -257,15 +230,9 @@ If you proceed, some of your settings may change."</string>
   <string name="screen_share_open_osm_maps">"Open in OpenStreetMap"</string>
   <string name="screen_share_this_location_action">"Share this location"</string>
   <string name="screen_view_location_title">"Location"</string>
-  <string name="settings_rageshake">"Rageshake"</string>
-  <string name="settings_rageshake_detection_threshold">"Detection threshold"</string>
   <string name="settings_version_number">"Version: %1$s (%2$s)"</string>
   <string name="test_language_identifier">"en"</string>
   <string name="test_untranslated_default_language_identifier">"en"</string>
   <string name="dialog_title_error">"Error"</string>
   <string name="dialog_title_success">"Success"</string>
-  <string name="screen_analytics_settings_help_us_improve">"Share anonymous usage data to help us identify issues."</string>
-  <string name="screen_analytics_settings_read_terms">"You can read all our terms %1$s."</string>
-  <string name="screen_analytics_settings_read_terms_content_link">"here"</string>
-  <string name="screen_report_content_block_user">"Block user"</string>
 </resources>

@@ -21,10 +21,17 @@ import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.featureflag.ui.model.FeatureUiModel
 import kotlinx.collections.immutable.ImmutableList
 
-data class DeveloperSettingsState constructor(
+data class DeveloperSettingsState(
     val features: ImmutableList<FeatureUiModel>,
     val cacheSize: Async<String>,
     val rageshakeState: RageshakePreferencesState,
     val clearCacheAction: Async<Unit>,
+    val customElementCallBaseUrlState: CustomElementCallBaseUrlState,
     val eventSink: (DeveloperSettingsEvents) -> Unit
+)
+
+data class CustomElementCallBaseUrlState(
+    val baseUrl: String?,
+    val defaultUrl: String,
+    val validator: (String?) -> Boolean,
 )

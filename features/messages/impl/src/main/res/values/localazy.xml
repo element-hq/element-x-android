@@ -1,10 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="emoji_picker_category_activity">"Activities"</string>
+  <string name="emoji_picker_category_flags">"Flags"</string>
+  <string name="emoji_picker_category_foods">"Food &amp; Drink"</string>
+  <string name="emoji_picker_category_nature">"Animals &amp; Nature"</string>
+  <string name="emoji_picker_category_objects">"Objects"</string>
+  <string name="emoji_picker_category_people">"Smileys &amp; People"</string>
+  <string name="emoji_picker_category_places">"Travel &amp; Places"</string>
+  <string name="emoji_picker_category_symbols">"Symbols"</string>
   <plurals name="room_timeline_state_changes">
     <item quantity="one">"%1$d room change"</item>
     <item quantity="other">"%1$d room changes"</item>
   </plurals>
+  <string name="report_content_explanation">"This message will be reported to your homeserver’s administrator. They will not be able to read any encrypted messages."</string>
+  <string name="report_content_hint">"Reason for reporting this content"</string>
+  <string name="room_timeline_beginning_of_room">"This is the beginning of %1$s."</string>
+  <string name="room_timeline_beginning_of_room_no_name">"This is the beginning of this conversation."</string>
+  <string name="room_timeline_read_marker_title">"New"</string>
   <string name="screen_room_mentions_at_room_subtitle">"Notify the whole room"</string>
+  <string name="screen_report_content_block_user_hint">"Check if you want to hide all current and future messages from this user"</string>
   <string name="screen_room_attachment_source_camera">"Camera"</string>
   <string name="screen_room_attachment_source_camera_photo">"Take photo"</string>
   <string name="screen_room_attachment_source_camera_video">"Record video"</string>
@@ -30,6 +44,7 @@
   <string name="screen_room_notification_settings_error_loading_settings">"An error occurred while loading notification settings."</string>
   <string name="screen_room_notification_settings_error_restoring_default">"Failed restoring the default mode, please try again."</string>
   <string name="screen_room_notification_settings_error_setting_mode">"Failed setting the mode, please try again."</string>
+  <string name="screen_room_notification_settings_mentions_only_disclaimer">"Your homeserver does not support this option in encrypted rooms, you won\'t get notified in this room."</string>
   <string name="screen_room_notification_settings_mode_all_messages">"All messages"</string>
   <string name="screen_room_notification_settings_room_custom_settings_title">"In this room, notify me for"</string>
   <string name="screen_room_reactions_show_less">"Show less"</string>
@@ -40,6 +55,7 @@
   <string name="screen_room_timeline_less_reactions">"Show less"</string>
   <string name="screen_room_voice_message_tooltip">"Hold to record"</string>
   <string name="screen_room_mentions_at_room_title">"Everyone"</string>
+  <string name="screen_report_content_block_user">"Block user"</string>
   <string name="screen_room_error_failed_processing_media">"Failed processing media to upload, please try again."</string>
   <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Mentions and Keywords only"</string>
 </resources>

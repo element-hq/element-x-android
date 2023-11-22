@@ -16,7 +16,7 @@
 
 package io.element.android.libraries.designsystem.components.dialogs
 
-import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -39,7 +39,7 @@ fun RetryDialog(
     onRetry: () -> Unit = {},
     onDismiss: () -> Unit = {},
 ) {
-    AlertDialog(modifier = modifier, onDismissRequest = onDismiss) {
+    BasicAlertDialog(modifier = modifier, onDismissRequest = onDismiss) {
         RetryDialogContent(
             title = title,
             content = content,

@@ -24,7 +24,8 @@ interface MatrixTimeline {
 
     data class PaginationState(
         val isBackPaginating: Boolean,
-        val hasMoreToLoadBackwards: Boolean
+        val hasMoreToLoadBackwards: Boolean,
+        val beginningOfRoomReached: Boolean,
     ) {
         val canBackPaginate = !isBackPaginating && hasMoreToLoadBackwards
     }

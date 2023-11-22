@@ -4,6 +4,7 @@
     <item quantity="one">"%1$d person"</item>
     <item quantity="other">"%1$d people"</item>
   </plurals>
+  <string name="screen_notification_settings_edit_failed_updating_default_mode">"An error occurred while updating the notification setting."</string>
   <string name="screen_room_details_add_topic_title">"Add topic"</string>
   <string name="screen_room_details_already_a_member">"Already a member"</string>
   <string name="screen_room_details_already_invited">"Already invited"</string>
@@ -34,6 +35,7 @@
   <string name="screen_room_notification_settings_error_loading_settings">"An error occurred while loading notification settings."</string>
   <string name="screen_room_notification_settings_error_restoring_default">"Failed restoring the default mode, please try again."</string>
   <string name="screen_room_notification_settings_error_setting_mode">"Failed setting the mode, please try again."</string>
+  <string name="screen_room_notification_settings_mentions_only_disclaimer">"Your homeserver does not support this option in encrypted rooms, you won\'t get notified in this room."</string>
   <string name="screen_room_notification_settings_mode_all_messages">"All messages"</string>
   <string name="screen_room_notification_settings_room_custom_settings_title">"In this room, notify me for"</string>
   <string name="screen_dm_details_block_alert_action">"Block"</string>

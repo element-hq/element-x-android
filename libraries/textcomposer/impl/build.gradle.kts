@@ -34,7 +34,7 @@ dependencies {
     implementation(projects.libraries.testtags)
     implementation(projects.libraries.uiUtils)
 
-    implementation(libs.matrix.richtexteditor)
+    api(libs.matrix.richtexteditor)
     api(libs.matrix.richtexteditor.compose)
 
     ksp(libs.showkase.processor)
@@ -42,4 +42,7 @@ dependencies {
     testImplementation(libs.test.junit)
     testImplementation(libs.test.truth)
     testImplementation(libs.coroutines.test)
+    testImplementation(libs.test.robolectric)
+    testImplementation(projects.libraries.matrix.test)
+    testImplementation(projects.tests.testutils)
 }

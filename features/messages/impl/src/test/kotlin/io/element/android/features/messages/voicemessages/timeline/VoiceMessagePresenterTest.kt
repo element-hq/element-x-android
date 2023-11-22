@@ -31,6 +31,7 @@ import io.element.android.features.messages.impl.voicemessages.timeline.VoiceMes
 import io.element.android.libraries.mediaplayer.test.FakeMediaPlayer
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analytics.test.FakeAnalyticsService
+import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
@@ -52,6 +53,7 @@ class VoiceMessagePresenterTest {
     @Test
     fun `pressing play downloads and plays`() = runTest {
         val presenter = createVoiceMessagePresenter(
+            mediaPlayer = FakeMediaPlayer(fakeTotalDurationMs = 2_000),
             content = aTimelineItemVoiceContent(durationMs = 2_000),
         )
         moleculeFlow(RecompositionMode.Immediate) {
@@ -87,6 +89,7 @@ class VoiceMessagePresenterTest {
     fun `pressing play downloads and fails`() = runTest {
         val analyticsService = FakeAnalyticsService()
         val presenter = createVoiceMessagePresenter(
+            mediaPlayer = FakeMediaPlayer(fakeTotalDurationMs = 2_000),
             voiceMessageMediaRepo = FakeVoiceMessageMediaRepo().apply { shouldFail = true },
             analyticsService = analyticsService,
             content = aTimelineItemVoiceContent(durationMs = 2_000),
@@ -113,7 +116,10 @@ class VoiceMessagePresenterTest {
                 Truth.assertThat(it.time).isEqualTo("0:02")
             }
             analyticsService.trackedErrors.first().also {
-                Truth.assertThat(it).isInstanceOf(VoiceMessageException.PlayMessageError::class.java)
+                Truth.assertThat(it).apply {
+                    isInstanceOf(VoiceMessageException.PlayMessageError::class.java)
+                    hasMessageThat().isEqualTo("Error while trying to play voice message")
+                }
             }
         }
     }
@@ -121,6 +127,7 @@ class VoiceMessagePresenterTest {
     @Test
     fun `pressing pause while playing pauses`() = runTest {
         val presenter = createVoiceMessagePresenter(
+            mediaPlayer = FakeMediaPlayer(fakeTotalDurationMs = 2_000),
             content = aTimelineItemVoiceContent(durationMs = 2_000),
         )
         moleculeFlow(RecompositionMode.Immediate) {
@@ -167,7 +174,32 @@ class VoiceMessagePresenterTest {
     }
 
     @Test
-    fun `seeking seeks`() = runTest {
+    fun `seeking before play`() = runTest {
+        val presenter = createVoiceMessagePresenter(
+            mediaPlayer = FakeMediaPlayer(fakeTotalDurationMs = 2_000),
+            content = aTimelineItemVoiceContent(durationMs = 10_000),
+        )
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem().also {
+                Truth.assertThat(it.button).isEqualTo(VoiceMessageState.Button.Play)
+                Truth.assertThat(it.progress).isEqualTo(0f)
+                Truth.assertThat(it.time).isEqualTo("0:10")
+            }
+
+            initialState.eventSink(VoiceMessageEvents.Seek(0.5f))
+
+            awaitItem().also {
+                Truth.assertThat(it.button).isEqualTo(VoiceMessageState.Button.Play)
+                Truth.assertThat(it.progress).isEqualTo(0.5f)
+                Truth.assertThat(it.time).isEqualTo("0:05")
+            }
+        }
+    }
+
+    @Test
+    fun `seeking after play`() = runTest {
         val presenter = createVoiceMessagePresenter(
             content = aTimelineItemVoiceContent(durationMs = 10_000),
         )
@@ -201,14 +233,15 @@ class VoiceMessagePresenterTest {
     }
 }
 
-fun createVoiceMessagePresenter(
+fun TestScope.createVoiceMessagePresenter(
+    mediaPlayer: FakeMediaPlayer = FakeMediaPlayer(),
     voiceMessageMediaRepo: VoiceMessageMediaRepo = FakeVoiceMessageMediaRepo(),
     analyticsService: AnalyticsService = FakeAnalyticsService(),
     content: TimelineItemVoiceContent = aTimelineItemVoiceContent(),
 ) = VoiceMessagePresenter(
     voiceMessagePlayerFactory = { eventId, mediaSource, mimeType, body ->
         DefaultVoiceMessagePlayer(
-            mediaPlayer = FakeMediaPlayer(),
+            mediaPlayer = mediaPlayer,
             voiceMessageMediaRepoFactory = { _, _, _ -> voiceMessageMediaRepo },
             eventId = eventId,
             mediaSource = mediaSource,
@@ -217,5 +250,6 @@ fun createVoiceMessagePresenter(
         )
     },
     analyticsService = analyticsService,
+    scope = this,
     content = content,
 )

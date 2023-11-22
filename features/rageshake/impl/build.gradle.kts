@@ -44,7 +44,7 @@ dependencies {
     api(projects.features.rageshake.api)
     implementation(libs.androidx.datastore.preferences)
     implementation(platform(libs.network.okhttp.bom))
-    implementation("com.squareup.okhttp3:okhttp")
+    implementation(libs.network.okhttp.okhttp)
     implementation(libs.coil)
     implementation(libs.coil.compose)
     ksp(libs.showkase.processor)

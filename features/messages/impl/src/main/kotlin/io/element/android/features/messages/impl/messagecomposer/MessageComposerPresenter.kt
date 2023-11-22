@@ -20,7 +20,6 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.net.Uri
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
@@ -36,6 +35,7 @@ import im.vector.app.features.analytics.plan.Composer
 import io.element.android.features.messages.impl.attachments.Attachment
 import io.element.android.features.messages.impl.attachments.preview.error.sendAttachmentError
 import io.element.android.features.messages.impl.media.local.LocalMediaFactory
+import io.element.android.features.messages.impl.mentions.MentionSuggestion
 import io.element.android.features.messages.impl.mentions.MentionSuggestionsProcessor
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
@@ -45,8 +45,9 @@ import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.core.ProgressCallback
+import io.element.android.libraries.matrix.api.permalink.PermalinkBuilder
 import io.element.android.libraries.matrix.api.room.MatrixRoom
-import io.element.android.libraries.matrix.api.room.RoomMember
+import io.element.android.libraries.matrix.api.room.Mention
 import io.element.android.libraries.matrix.api.user.CurrentSessionIdHolder
 import io.element.android.libraries.mediapickers.api.PickerProvider
 import io.element.android.libraries.mediaupload.api.MediaSender
@@ -67,6 +68,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -87,7 +90,7 @@ class MessageComposerPresenter @Inject constructor(
     private val messageComposerContext: MessageComposerContextImpl,
     private val richTextEditorStateFactory: RichTextEditorStateFactory,
     private val currentSessionIdHolder: CurrentSessionIdHolder,
-    permissionsPresenterFactory: PermissionsPresenter.Factory
+    permissionsPresenterFactory: PermissionsPresenter.Factory,
 ) : Presenter<MessageComposerState> {
 
     private val cameraPermissionPresenter = permissionsPresenterFactory.create(Manifest.permission.CAMERA)
@@ -173,7 +176,7 @@ class MessageComposerPresenter @Inject constructor(
             }
         }
 
-        val memberSuggestions = remember { mutableStateListOf<RoomMemberSuggestion>() }
+        val memberSuggestions = remember { mutableStateListOf<MentionSuggestion>() }
         LaunchedEffect(isMentionsEnabled) {
             if (!isMentionsEnabled) return@LaunchedEffect
             val currentUserId = currentSessionIdHolder.current
@@ -184,8 +187,11 @@ class MessageComposerPresenter @Inject constructor(
                 return !roomIsDm && userCanSendAtRoom
             }
 
-            suggestionSearchTrigger
-                .debounce(0.5.seconds)
+            // This will trigger a search immediately when `@` is typed
+            val mentionStartTrigger = suggestionSearchTrigger.filter { it?.text.isNullOrEmpty() }
+            // This will start a search when the user changes the text after the `@` with a debounce to prevent too much wasted work
+            val mentionCompletionTrigger = suggestionSearchTrigger.filter { !it?.text.isNullOrEmpty() }.debounce(0.3.seconds)
+            merge(mentionStartTrigger, mentionCompletionTrigger)
                 .combine(room.membersStateFlow) { suggestion, roomMembersState ->
                     memberSuggestions.clear()
                     val result = MentionSuggestionsProcessor.process(
@@ -284,6 +290,20 @@ class MessageComposerPresenter @Inject constructor(
                 is MessageComposerEvents.SuggestionReceived -> {
                     suggestionSearchTrigger.value = event.suggestion
                 }
+                is MessageComposerEvents.InsertMention -> {
+                    localCoroutineScope.launch {
+                        when (val mention = event.mention) {
+                            is MentionSuggestion.Room -> {
+                                richTextEditorState.insertAtRoomMentionAtSuggestion()
+                            }
+                            is MentionSuggestion.Member -> {
+                                val text = mention.roomMember.displayName?.prependIndent("@") ?: mention.roomMember.userId.value
+                                val link = PermalinkBuilder.permalinkForUser(mention.roomMember.userId).getOrNull() ?: return@launch
+                                richTextEditorState.insertMentionAtSuggestion(text = text, link = link)
+                            }
+                        }
+                    }
+                }
             }
         }
 
@@ -297,6 +317,7 @@ class MessageComposerPresenter @Inject constructor(
             canCreatePoll = canCreatePoll.value,
             attachmentsState = attachmentsState.value,
             memberSuggestions = memberSuggestions.toPersistentList(),
+            currentUserId = currentSessionIdHolder.current,
             eventSink = { handleEvents(it) }
         )
     }
@@ -307,15 +328,25 @@ class MessageComposerPresenter @Inject constructor(
         richTextEditorState: RichTextEditorState,
     ) = launch {
         val capturedMode = messageComposerContext.composerMode
+        val mentions = richTextEditorState.mentionsState?.let { state ->
+            buildList {
+                if (state.hasAtRoomMention) {
+                    add(Mention.AtRoom)
+                }
+                for (userId in state.userIds) {
+                    add(Mention.User(userId))
+                }
+            }
+        }.orEmpty()
         // Reset composer right away
         richTextEditorState.setHtml("")
         updateComposerMode(MessageComposerMode.Normal)
         when (capturedMode) {
-            is MessageComposerMode.Normal -> room.sendMessage(body = message.markdown, htmlBody = message.html)
+            is MessageComposerMode.Normal -> room.sendMessage(body = message.markdown, htmlBody = message.html, mentions = mentions)
             is MessageComposerMode.Edit -> {
                 val eventId = capturedMode.eventId
                 val transactionId = capturedMode.transactionId
-                room.editMessage(eventId, transactionId, message.markdown, message.html)
+                room.editMessage(eventId, transactionId, message.markdown, message.html, mentions)
             }
 
             is MessageComposerMode.Quote -> TODO()
@@ -323,6 +354,7 @@ class MessageComposerPresenter @Inject constructor(
                 capturedMode.eventId,
                 message.markdown,
                 message.html,
+                mentions
             )
         }
         analyticsService.capture(
@@ -410,8 +442,3 @@ class MessageComposerPresenter @Inject constructor(
         }
 }
 
-@Immutable
-sealed interface RoomMemberSuggestion {
-    data object Room : RoomMemberSuggestion
-    data class Member(val roomMember: RoomMember) : RoomMemberSuggestion
-}

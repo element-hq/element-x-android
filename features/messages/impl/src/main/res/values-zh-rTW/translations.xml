@@ -1,8 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="emoji_picker_category_activity">"活動"</string>
+  <string name="emoji_picker_category_flags">"旗幟"</string>
+  <string name="emoji_picker_category_foods">"食物與飲料"</string>
+  <string name="emoji_picker_category_nature">"動物與大自然"</string>
+  <string name="emoji_picker_category_objects">"物品"</string>
+  <string name="emoji_picker_category_people">"表情與人物"</string>
+  <string name="emoji_picker_category_places">"旅行與景點"</string>
+  <string name="emoji_picker_category_symbols">"標誌"</string>
   <plurals name="room_timeline_state_changes">
     <item quantity="other">"%1$d 個聊天室變更"</item>
   </plurals>
+  <string name="report_content_hint">"檢舉這個內容的原因"</string>
+  <string name="room_timeline_read_marker_title">"新訊息"</string>
   <string name="screen_room_attachment_source_camera">"照相機"</string>
   <string name="screen_room_attachment_source_camera_photo">"拍照"</string>
   <string name="screen_room_attachment_source_camera_video">"錄影"</string>
@@ -25,5 +35,6 @@
   <string name="screen_room_retry_send_menu_title">"無法傳送您的訊息"</string>
   <string name="screen_room_timeline_add_reaction">"新增表情符號"</string>
   <string name="screen_room_timeline_less_reactions">"較少"</string>
+  <string name="screen_report_content_block_user">"封鎖使用者"</string>
   <string name="screen_room_notification_settings_mode_mentions_and_keywords">"僅限提及與關鍵字"</string>
 </resources>

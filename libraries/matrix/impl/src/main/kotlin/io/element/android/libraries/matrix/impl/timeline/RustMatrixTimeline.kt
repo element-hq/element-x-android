@@ -72,7 +72,11 @@ class RustMatrixTimeline(
         MutableStateFlow(emptyList())
 
     private val _paginationState = MutableStateFlow(
-        MatrixTimeline.PaginationState(hasMoreToLoadBackwards = true, isBackPaginating = false)
+        MatrixTimeline.PaginationState(
+            hasMoreToLoadBackwards = true,
+            isBackPaginating = false,
+            beginningOfRoomReached = false,
+        )
     )
 
     private val encryptedHistoryPostProcessor = TimelineEncryptedHistoryPostProcessor(
@@ -155,6 +159,7 @@ class RustMatrixTimeline(
                 return@getAndUpdate currentPaginationState.copy(
                     isBackPaginating = false,
                     hasMoreToLoadBackwards = false,
+                    beginningOfRoomReached = false,
                 )
             }
             when (status) {
@@ -173,7 +178,8 @@ class RustMatrixTimeline(
                 BackPaginationStatus.TIMELINE_START_REACHED -> {
                     currentPaginationState.copy(
                         isBackPaginating = false,
-                        hasMoreToLoadBackwards = false
+                        hasMoreToLoadBackwards = false,
+                        beginningOfRoomReached = true,
                     )
                 }
             }

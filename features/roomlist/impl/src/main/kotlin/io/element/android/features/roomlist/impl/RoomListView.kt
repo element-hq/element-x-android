@@ -243,7 +243,7 @@ private fun RoomListContent(
             ) {
                 Icon(
                     // Note cannot use Icons.Outlined.EditSquare, it does not exist :/
-                    resourceId = CommonDrawables.ic_september_compose_button,
+                    resourceId = CommonDrawables.ic_new_message,
                     contentDescription = stringResource(id = R.string.screen_roomlist_a11y_create_message)
                 )
             }

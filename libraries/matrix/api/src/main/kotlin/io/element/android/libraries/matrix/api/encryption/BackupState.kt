@@ -31,6 +31,5 @@ enum class BackupState {
     RESUMING,
     ENABLED,
     DOWNLOADING,
-    DISABLING,
-    DISABLED;
+    DISABLING;
 }

@@ -26,12 +26,12 @@ import app.cash.turbine.ReceiveTurbine
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import im.vector.app.features.analytics.plan.Composer
+import io.element.android.features.messages.impl.mentions.MentionSuggestion
 import io.element.android.features.messages.impl.messagecomposer.AttachmentsState
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerContextImpl
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerEvents
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerPresenter
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerState
-import io.element.android.features.messages.impl.messagecomposer.RoomMemberSuggestion
 import io.element.android.features.messages.media.FakeLocalMediaFactory
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
@@ -44,6 +44,7 @@ import io.element.android.libraries.matrix.api.media.ImageInfo
 import io.element.android.libraries.matrix.api.media.VideoInfo
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
+import io.element.android.libraries.matrix.api.room.Mention
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
 import io.element.android.libraries.matrix.api.user.CurrentSessionIdHolder
 import io.element.android.libraries.matrix.test.ANOTHER_MESSAGE
@@ -79,10 +80,12 @@ import io.element.android.tests.testutils.waitForPredicate
 import io.mockk.mockk
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import okhttp3.internal.immutableListOf
 import org.junit.Rule
 import org.junit.Test
+import uniffi.wysiwyg_composer.MentionsState
 import java.io.File
 
 @Suppress("LargeClass")
@@ -754,19 +757,19 @@ class MessageComposerPresenterTest {
             // An empty suggestion returns the room and joined members that are not the current user
             initialState.eventSink(MessageComposerEvents.SuggestionReceived(Suggestion(0, 0, SuggestionType.Mention, "")))
             assertThat(awaitItem().memberSuggestions)
-                .containsExactly(RoomMemberSuggestion.Room, RoomMemberSuggestion.Member(bob), RoomMemberSuggestion.Member(david))
+                .containsExactly(MentionSuggestion.Room, MentionSuggestion.Member(bob), MentionSuggestion.Member(david))
 
             // A suggestion containing a part of "room" will also return the room mention
             initialState.eventSink(MessageComposerEvents.SuggestionReceived(Suggestion(0, 0, SuggestionType.Mention, "roo")))
-            assertThat(awaitItem().memberSuggestions).containsExactly(RoomMemberSuggestion.Room)
+            assertThat(awaitItem().memberSuggestions).containsExactly(MentionSuggestion.Room)
 
             // A non-empty suggestion will return those joined members whose user id matches it
             initialState.eventSink(MessageComposerEvents.SuggestionReceived(Suggestion(0, 0, SuggestionType.Mention, "bob")))
-            assertThat(awaitItem().memberSuggestions).containsExactly(RoomMemberSuggestion.Member(bob))
+            assertThat(awaitItem().memberSuggestions).containsExactly(MentionSuggestion.Member(bob))
 
             // A non-empty suggestion will return those joined members whose display name matches it
             initialState.eventSink(MessageComposerEvents.SuggestionReceived(Suggestion(0, 0, SuggestionType.Mention, "dave")))
-            assertThat(awaitItem().memberSuggestions).containsExactly(RoomMemberSuggestion.Member(david))
+            assertThat(awaitItem().memberSuggestions).containsExactly(MentionSuggestion.Member(david))
 
             // If the suggestion isn't a mention, no suggestions are returned
             initialState.eventSink(MessageComposerEvents.SuggestionReceived(Suggestion(0, 0, SuggestionType.Command, "")))
@@ -776,7 +779,7 @@ class MessageComposerPresenterTest {
             room.givenCanTriggerRoomNotification(Result.success(false))
             initialState.eventSink(MessageComposerEvents.SuggestionReceived(Suggestion(0, 0, SuggestionType.Mention, "")))
             assertThat(awaitItem().memberSuggestions)
-                .containsExactly(RoomMemberSuggestion.Member(bob), RoomMemberSuggestion.Member(david))
+                .containsExactly(MentionSuggestion.Member(bob), MentionSuggestion.Member(david))
 
             // If room is a DM, `RoomMemberSuggestion.Room` is not returned
             room.givenCanTriggerRoomNotification(Result.success(true))
@@ -813,8 +816,86 @@ class MessageComposerPresenterTest {
 
             // An empty suggestion returns the joined members that are not the current user, but not the room
             initialState.eventSink(MessageComposerEvents.SuggestionReceived(Suggestion(0, 0, SuggestionType.Mention, "")))
+            skipItems(1)
             assertThat(awaitItem().memberSuggestions)
-                .containsExactly(RoomMemberSuggestion.Member(bob), RoomMemberSuggestion.Member(david))
+                .containsExactly(MentionSuggestion.Member(bob), MentionSuggestion.Member(david))
+        }
+    }
+
+    @Test
+    fun `present - insertMention`() = runTest {
+        val presenter = createPresenter(this)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            skipItems(1)
+            val initialState = awaitItem()
+            initialState.richTextEditorState.setHtml("Hey @bo")
+            initialState.eventSink(MessageComposerEvents.InsertMention(MentionSuggestion.Member(aRoomMember(userId = A_USER_ID_2))))
+
+            assertThat(initialState.richTextEditorState.messageHtml)
+                .isEqualTo("Hey <a href='https://matrix.to/#/${A_USER_ID_2.value}'>${A_USER_ID_2.value}</a>")
+        }
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun `present - send messages with intentional mentions`() = runTest {
+        val room = FakeMatrixRoom()
+        val presenter = createPresenter(room = room, coroutineScope = this)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            skipItems(1)
+            val initialState = awaitItem()
+
+            // Check intentional mentions on message sent
+            val mentionUser1 = listOf(A_USER_ID.value)
+            initialState.richTextEditorState.mentionsState = MentionsState(
+                userIds = mentionUser1,
+                roomIds = emptyList(),
+                roomAliases = emptyList(),
+                hasAtRoomMention = false
+            )
+            initialState.richTextEditorState.setHtml(A_MESSAGE)
+            initialState.eventSink(MessageComposerEvents.SendMessage(A_MESSAGE.toMessage()))
+
+            advanceUntilIdle()
+
+            assertThat(room.sendMessageMentions).isEqualTo(listOf(Mention.User(A_USER_ID.value)))
+
+            // Check intentional mentions on reply sent
+            initialState.eventSink(MessageComposerEvents.SetMode(aReplyMode()))
+            val mentionUser2 = listOf(A_USER_ID_2.value)
+            awaitItem().richTextEditorState.mentionsState = MentionsState(
+                userIds = mentionUser2,
+                roomIds = emptyList(),
+                roomAliases = emptyList(),
+                hasAtRoomMention = false
+            )
+
+            initialState.eventSink(MessageComposerEvents.SendMessage(A_MESSAGE.toMessage()))
+            advanceUntilIdle()
+
+            assertThat(room.sendMessageMentions).isEqualTo(listOf(Mention.User(A_USER_ID_2.value)))
+
+            // Check intentional mentions on edit message
+            skipItems(1)
+            initialState.eventSink(MessageComposerEvents.SetMode(anEditMode()))
+            val mentionUser3 = listOf(A_USER_ID_3.value)
+            awaitItem().richTextEditorState.mentionsState = MentionsState(
+                userIds = mentionUser3,
+                roomIds = emptyList(),
+                roomAliases = emptyList(),
+                hasAtRoomMention = false
+            )
+
+            initialState.eventSink(MessageComposerEvents.SendMessage(A_MESSAGE.toMessage()))
+            advanceUntilIdle()
+
+            assertThat(room.sendMessageMentions).isEqualTo(listOf(Mention.User(A_USER_ID_3.value)))
+
+            skipItems(1)
         }
     }
 

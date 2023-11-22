@@ -42,6 +42,7 @@ import io.element.android.features.messages.impl.timeline.TimelinePresenter
 import io.element.android.features.messages.impl.timeline.TimelineState
 import io.element.android.features.messages.impl.timeline.components.customreaction.CustomReactionPresenter
 import io.element.android.features.messages.impl.timeline.components.reactionsummary.ReactionSummaryPresenter
+import io.element.android.features.messages.impl.timeline.components.receipt.bottomsheet.ReadReceiptBottomSheetPresenter
 import io.element.android.features.messages.impl.timeline.components.retrysendmenu.RetrySendMenuPresenter
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemAudioContent
@@ -97,6 +98,7 @@ class MessagesPresenter @AssistedInject constructor(
     private val customReactionPresenter: CustomReactionPresenter,
     private val reactionSummaryPresenter: ReactionSummaryPresenter,
     private val retrySendMenuPresenter: RetrySendMenuPresenter,
+    private val readReceiptBottomSheetPresenter: ReadReceiptBottomSheetPresenter,
     private val networkMonitor: NetworkMonitor,
     private val snackbarDispatcher: SnackbarDispatcher,
     private val messageSummaryFormatter: MessageSummaryFormatter,
@@ -124,6 +126,7 @@ class MessagesPresenter @AssistedInject constructor(
         val customReactionState = customReactionPresenter.present()
         val reactionSummaryState = reactionSummaryPresenter.present()
         val retryState = retrySendMenuPresenter.present()
+        val readReceiptBottomSheetState = readReceiptBottomSheetPresenter.present()
 
         val syncUpdateFlow = room.syncUpdateFlow.collectAsState()
         val userHasPermissionToSendMessage by room.canSendMessageAsState(type = MessageEventType.ROOM_MESSAGE, updateKey = syncUpdateFlow.value)
@@ -157,10 +160,10 @@ class MessagesPresenter @AssistedInject constructor(
         val enableTextFormatting by preferencesStore.isRichTextEditorEnabledFlow().collectAsState(initial = true)
 
         var enableVoiceMessages by remember { mutableStateOf(false) }
-        var enableInRoomCalls by remember { mutableStateOf(false) }
+        // TODO add min power level to use this feature in the future?
+        val enableInRoomCalls = true
         LaunchedEffect(featureFlagsService) {
             enableVoiceMessages = featureFlagsService.isFeatureEnabled(FeatureFlags.VoiceMessages)
-            enableInRoomCalls = featureFlagsService.isFeatureEnabled(FeatureFlags.InRoomCalls)
         }
 
         fun handleEvents(event: MessagesEvents) {
@@ -201,6 +204,7 @@ class MessagesPresenter @AssistedInject constructor(
             customReactionState = customReactionState,
             reactionSummaryState = reactionSummaryState,
             retrySendMenuState = retryState,
+            readReceiptBottomSheetState = readReceiptBottomSheetState,
             hasNetworkConnection = networkConnectionStatus == NetworkStatus.Online,
             snackbarMessage = snackbarMessage,
             showReinvitePrompt = showReinvitePrompt,

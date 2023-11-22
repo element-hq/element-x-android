@@ -2,13 +2,14 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_session_verification_cancelled_subtitle">"Кажется, что-то не так. Время ожидания запроса истекло, либо запрос был отклонен."</string>
   <string name="screen_session_verification_compare_emojis_subtitle">"Убедитесь, что приведенные ниже смайлики совпадают со смайликами, показанными во время другого сеанса."</string>
-  <string name="screen_session_verification_compare_emojis_title">"Сравните смайлики"</string>
+  <string name="screen_session_verification_compare_emojis_title">"Сравните емодзи"</string>
   <string name="screen_session_verification_complete_subtitle">"Ваш новый сеанс подтвержден. У него есть доступ к вашим зашифрованным сообщениям, и другие пользователи увидят его как доверенное."</string>
   <string name="screen_session_verification_open_existing_session_subtitle">"Чтобы получить доступ к зашифрованной истории сообщений, докажите, что это вы."</string>
   <string name="screen_session_verification_open_existing_session_title">"Открыть существующий сеанс"</string>
   <string name="screen_session_verification_positive_button_canceled">"Повторить проверку"</string>
   <string name="screen_session_verification_positive_button_initial">"Я готов"</string>
   <string name="screen_session_verification_positive_button_verifying_ongoing">"Ожидание соответствия"</string>
+  <string name="screen_session_verification_ready_subtitle">"Сравните уникальный набор эмодзи."</string>
   <string name="screen_session_verification_request_accepted_subtitle">"Сравните уникальные смайлики, убедившись, что они расположены в том же порядке."</string>
   <string name="screen_session_verification_they_dont_match">"Они не совпадают"</string>
   <string name="screen_session_verification_they_match">"Они совпадают"</string>

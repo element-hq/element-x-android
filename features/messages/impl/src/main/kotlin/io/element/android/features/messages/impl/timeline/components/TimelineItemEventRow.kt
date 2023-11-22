@@ -66,6 +66,8 @@ import io.element.android.features.messages.impl.timeline.aTimelineItemEvent
 import io.element.android.features.messages.impl.timeline.aTimelineItemReactions
 import io.element.android.features.messages.impl.timeline.components.event.TimelineItemEventContentView
 import io.element.android.features.messages.impl.timeline.components.event.toExtraPadding
+import io.element.android.features.messages.impl.timeline.components.receipt.ReadReceiptViewState
+import io.element.android.features.messages.impl.timeline.components.receipt.TimelineItemReadReceiptView
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.TimelineItemGroupPosition
 import io.element.android.features.messages.impl.timeline.model.bubble.BubbleState
@@ -114,6 +116,8 @@ import kotlin.math.roundToInt
 @Composable
 fun TimelineItemEventRow(
     event: TimelineItem.Event,
+    showReadReceipts: Boolean,
+    isLastOutgoingMessage: Boolean,
     isHighlighted: Boolean,
     canReply: Boolean,
     onClick: () -> Unit,
@@ -124,6 +128,7 @@ fun TimelineItemEventRow(
     onReactionClick: (emoji: String, eventId: TimelineItem.Event) -> Unit,
     onReactionLongClick: (emoji: String, eventId: TimelineItem.Event) -> Unit,
     onMoreReactionsClick: (eventId: TimelineItem.Event) -> Unit,
+    onReadReceiptClick: (event: TimelineItem.Event) -> Unit,
     onSwipeToReply: () -> Unit,
     eventSink: (TimelineEvents) -> Unit,
     modifier: Modifier = Modifier
@@ -173,6 +178,8 @@ fun TimelineItemEventRow(
                                 state = state.draggableState,
                             ),
                         event = event,
+                        showReadReceipts = showReadReceipts,
+                        isLastOutgoingMessage = isLastOutgoingMessage,
                         isHighlighted = isHighlighted,
                         interactionSource = interactionSource,
                         onClick = onClick,
@@ -183,6 +190,7 @@ fun TimelineItemEventRow(
                         onReactionClicked = { emoji -> onReactionClick(emoji, event) },
                         onReactionLongClicked = { emoji -> onReactionLongClick(emoji, event) },
                         onMoreReactionsClicked = { onMoreReactionsClick(event) },
+                        onReadReceiptsClicked = { onReadReceiptClick(event) },
                         eventSink = eventSink,
                     )
                 }
@@ -190,6 +198,8 @@ fun TimelineItemEventRow(
         } else {
             TimelineItemEventRowContent(
                 event = event,
+                showReadReceipts = showReadReceipts,
+                isLastOutgoingMessage = isLastOutgoingMessage,
                 isHighlighted = isHighlighted,
                 interactionSource = interactionSource,
                 onClick = onClick,
@@ -200,6 +210,7 @@ fun TimelineItemEventRow(
                 onReactionClicked = { emoji -> onReactionClick(emoji, event) },
                 onReactionLongClicked = { emoji -> onReactionLongClick(emoji, event) },
                 onMoreReactionsClicked = { onMoreReactionsClick(event) },
+                onReadReceiptsClicked = { onReadReceiptClick(event) },
                 eventSink = eventSink,
             )
         }
@@ -232,6 +243,8 @@ private fun SwipeSensitivity(
 @Composable
 private fun TimelineItemEventRowContent(
     event: TimelineItem.Event,
+    showReadReceipts: Boolean,
+    isLastOutgoingMessage: Boolean,
     isHighlighted: Boolean,
     interactionSource: MutableInteractionSource,
     onClick: () -> Unit,
@@ -240,6 +253,7 @@ private fun TimelineItemEventRowContent(
     inReplyToClicked: () -> Unit,
     onUserDataClicked: () -> Unit,
     onReactionClicked: (emoji: String) -> Unit,
+    onReadReceiptsClicked: () -> Unit,
     onReactionLongClicked: (emoji: String) -> Unit,
     onMoreReactionsClicked: (event: TimelineItem.Event) -> Unit,
     eventSink: (TimelineEvents) -> Unit,
@@ -256,7 +270,12 @@ private fun TimelineItemEventRowContent(
             .wrapContentHeight()
             .fillMaxWidth(),
     ) {
-        val (sender, message, reactions) = createRefs()
+        val (
+            sender,
+            message,
+            reactions,
+            readReceipts,
+        ) = createRefs()
 
         // Sender
         val avatarStrokeSize = 3.dp
@@ -322,6 +341,25 @@ private fun TimelineItemEventRowContent(
                     .padding(start = if (event.isMine) 16.dp else 36.dp, end = 16.dp)
             )
         }
+
+        // Read receipts / Send state
+        TimelineItemReadReceiptView(
+            state = ReadReceiptViewState(
+                sendState = event.localSendState,
+                isLastOutgoingMessage = isLastOutgoingMessage,
+                receipts = event.readReceiptState.receipts,
+            ),
+            showReadReceipts = showReadReceipts,
+            onReadReceiptsClicked = onReadReceiptsClicked,
+            modifier = Modifier
+                .constrainAs(readReceipts) {
+                    if (event.reactionsState.reactions.isNotEmpty()) {
+                        top.linkTo(reactions.bottom, margin = 4.dp)
+                    } else {
+                        top.linkTo(message.bottom, margin = 4.dp)
+                    }
+                }
+        )
     }
 }
 
@@ -384,22 +422,6 @@ private fun MessageEventBubbleContent(
     fun onTimestampLongClick() = onMessageLongClick()
 
     @Composable
-    fun ContentView(
-        modifier: Modifier = Modifier
-    ) {
-        TimelineItemEventContentView(
-            content = event.content,
-            isMine = event.isMine,
-            interactionSource = interactionSource,
-            onClick = onMessageClick,
-            onLongClick = onMessageLongClick,
-            extraPadding = event.toExtraPadding(),
-            eventSink = eventSink,
-            modifier = modifier,
-        )
-    }
-
-    @Composable
     fun ThreadDecoration(
         modifier: Modifier = Modifier
     ) {
@@ -422,21 +444,20 @@ private fun MessageEventBubbleContent(
     }
 
     @Composable
-    fun ContentAndTimestampView(
+    fun WithTimestampLayout(
         timestampPosition: TimestampPosition,
         modifier: Modifier = Modifier,
-        contentModifier: Modifier = Modifier,
-        timestampModifier: Modifier = Modifier,
+        content: @Composable () -> Unit,
     ) {
         when (timestampPosition) {
             TimestampPosition.Overlay ->
                 Box(modifier) {
-                    ContentView(modifier = contentModifier)
+                    content()
                     TimelineEventTimestampView(
                         event = event,
                         onClick = onTimestampClicked,
                         onLongClick = ::onTimestampLongClick,
-                        modifier = timestampModifier
+                        modifier = Modifier
                             .padding(horizontal = 4.dp, vertical = 4.dp) // Outer padding
                             .background(ElementTheme.colors.bgSubtleSecondary, RoundedCornerShape(10.0.dp))
                             .align(Alignment.BottomEnd)
@@ -445,24 +466,24 @@ private fun MessageEventBubbleContent(
                 }
             TimestampPosition.Aligned ->
                 Box(modifier) {
-                    ContentView(modifier = contentModifier)
+                    content()
                     TimelineEventTimestampView(
                         event = event,
                         onClick = onTimestampClicked,
                         onLongClick = ::onTimestampLongClick,
-                        modifier = timestampModifier
+                        modifier = Modifier
                             .align(Alignment.BottomEnd)
                             .padding(horizontal = 8.dp, vertical = 4.dp)
                     )
                 }
             TimestampPosition.Below ->
                 Column(modifier) {
-                    ContentView(modifier = contentModifier)
+                    content()
                     TimelineEventTimestampView(
                         event = event,
                         onClick = onTimestampClicked,
                         onLongClick = ::onTimestampLongClick,
-                        modifier = timestampModifier
+                        modifier = Modifier
                             .align(Alignment.End)
                             .padding(horizontal = 8.dp, vertical = 4.dp)
                     )
@@ -478,52 +499,77 @@ private fun MessageEventBubbleContent(
         inReplyToDetails: InReplyTo.Ready?,
         modifier: Modifier = Modifier
     ) {
-        val modifierWithPadding: Modifier
+        val timestampLayoutModifier: Modifier
         val contentModifier: Modifier
         when {
             inReplyToDetails != null -> {
                 if (timestampPosition == TimestampPosition.Overlay) {
-                    modifierWithPadding = Modifier.padding(start = 8.dp, end = 8.dp, bottom = 8.dp)
+                    timestampLayoutModifier = Modifier.padding(start = 8.dp, end = 8.dp, bottom = 8.dp)
                     contentModifier = Modifier.clip(RoundedCornerShape(12.dp))
                 } else {
                     contentModifier = Modifier.padding(start = 12.dp, end = 12.dp, top = 0.dp, bottom = 8.dp)
-                    modifierWithPadding = Modifier
+                    timestampLayoutModifier = Modifier
                 }
             }
             timestampPosition != TimestampPosition.Overlay -> {
-                modifierWithPadding = Modifier
+                timestampLayoutModifier = Modifier
                 contentModifier = Modifier.padding(start = 12.dp, end = 12.dp, top = 8.dp, bottom = 8.dp)
             }
             else -> {
-                modifierWithPadding = Modifier
+                timestampLayoutModifier = Modifier
                 contentModifier = Modifier
             }
         }
-
-        EqualWidthColumn(modifier = modifier, spacing = 8.dp) {
+        val threadDecoration = @Composable {
             if (showThreadDecoration) {
                 ThreadDecoration(modifier = Modifier.padding(top = 8.dp, start = 12.dp, end = 12.dp))
             }
-            if (inReplyToDetails != null) {
-                val senderName = inReplyToDetails.senderDisplayName ?: inReplyToDetails.senderId.value
-                val attachmentThumbnailInfo = attachmentThumbnailInfoForInReplyTo(inReplyToDetails)
-                val text = textForInReplyTo(inReplyToDetails)
-                val topPadding = if (showThreadDecoration) 0.dp else 8.dp
-                ReplyToContent(
-                    senderName = senderName,
-                    text = text,
-                    attachmentThumbnailInfo = attachmentThumbnailInfo,
-                    modifier = Modifier
-                        .padding(top = topPadding, start = 8.dp, end = 8.dp)
-                        .clip(RoundedCornerShape(6.dp))
-                        .clickable(enabled = true, onClick = inReplyToClick),
+        }
+        val contentWithTimestamp = @Composable {
+            WithTimestampLayout(
+                timestampPosition = timestampPosition,
+                modifier = timestampLayoutModifier,
+            ) {
+                TimelineItemEventContentView(
+                    content = event.content,
+                    isMine = event.isMine,
+                    interactionSource = interactionSource,
+                    onClick = onMessageClick,
+                    onLongClick = onMessageLongClick,
+                    extraPadding = event.toExtraPadding(),
+                    eventSink = eventSink,
+                    modifier = contentModifier,
                 )
             }
-            ContentAndTimestampView(
-                timestampPosition = timestampPosition,
-                modifier = modifierWithPadding,
-                contentModifier = contentModifier,
+        }
+        val inReplyTo = @Composable { inReplyToReady: InReplyTo.Ready ->
+            val senderName = inReplyToReady.senderDisplayName ?: inReplyToReady.senderId.value
+            val attachmentThumbnailInfo = attachmentThumbnailInfoForInReplyTo(inReplyToReady)
+            val text = textForInReplyTo(inReplyToReady)
+            val topPadding = if (showThreadDecoration) 0.dp else 8.dp
+            ReplyToContent(
+                senderName = senderName,
+                text = text,
+                attachmentThumbnailInfo = attachmentThumbnailInfo,
+                modifier = Modifier
+                    .padding(top = topPadding, start = 8.dp, end = 8.dp)
+                    .clip(RoundedCornerShape(6.dp))
+                    .clickable(enabled = true, onClick = inReplyToClick),
             )
+
+        }
+        if (inReplyToDetails != null) {
+            // Use SubComposeLayout only if necessary as it can have consequences on the performance.
+            EqualWidthColumn(modifier = modifier, spacing = 8.dp) {
+                threadDecoration()
+                inReplyTo(inReplyToDetails)
+                contentWithTimestamp()
+            }
+        } else {
+            Column(modifier = modifier, verticalArrangement = spacedBy(8.dp)) {
+                threadDecoration()
+                contentWithTimestamp()
+            }
         }
     }
 
@@ -650,6 +696,8 @@ internal fun TimelineItemEventRowPreview() = ElementPreview {
                     ),
                     groupPosition = TimelineItemGroupPosition.First,
                 ),
+                showReadReceipts = false,
+                isLastOutgoingMessage = false,
                 isHighlighted = false,
                 canReply = true,
                 onClick = {},
@@ -659,6 +707,7 @@ internal fun TimelineItemEventRowPreview() = ElementPreview {
                 onReactionClick = { _, _ -> },
                 onReactionLongClick = { _, _ -> },
                 onMoreReactionsClick = {},
+                onReadReceiptClick = {},
                 onTimestampClicked = {},
                 onSwipeToReply = {},
                 eventSink = {},
@@ -671,6 +720,8 @@ internal fun TimelineItemEventRowPreview() = ElementPreview {
                     ),
                     groupPosition = TimelineItemGroupPosition.Last,
                 ),
+                showReadReceipts = false,
+                isLastOutgoingMessage = false,
                 isHighlighted = false,
                 canReply = true,
                 onClick = {},
@@ -680,6 +731,7 @@ internal fun TimelineItemEventRowPreview() = ElementPreview {
                 onReactionClick = { _, _ -> },
                 onReactionLongClick = { _, _ -> },
                 onMoreReactionsClick = {},
+                onReadReceiptClick = {},
                 onTimestampClicked = {},
                 onSwipeToReply = {},
                 eventSink = {},
@@ -710,6 +762,8 @@ internal fun TimelineItemEventRowWithReplyPreview() = ElementPreview {
                     inReplyTo = aInReplyToReady(replyContent),
                     groupPosition = TimelineItemGroupPosition.First,
                 ),
+                showReadReceipts = false,
+                isLastOutgoingMessage = false,
                 isHighlighted = false,
                 canReply = true,
                 onClick = {},
@@ -719,6 +773,7 @@ internal fun TimelineItemEventRowWithReplyPreview() = ElementPreview {
                 onReactionClick = { _, _ -> },
                 onReactionLongClick = { _, _ -> },
                 onMoreReactionsClick = {},
+                onReadReceiptClick = {},
                 onTimestampClicked = {},
                 onSwipeToReply = {},
                 eventSink = {},
@@ -733,6 +788,8 @@ internal fun TimelineItemEventRowWithReplyPreview() = ElementPreview {
                     isThreaded = true,
                     groupPosition = TimelineItemGroupPosition.Last,
                 ),
+                showReadReceipts = false,
+                isLastOutgoingMessage = false,
                 isHighlighted = false,
                 canReply = true,
                 onClick = {},
@@ -742,6 +799,7 @@ internal fun TimelineItemEventRowWithReplyPreview() = ElementPreview {
                 onReactionClick = { _, _ -> },
                 onReactionLongClick = { _, _ -> },
                 onMoreReactionsClick = {},
+                onReadReceiptClick = {},
                 onTimestampClicked = {},
                 onSwipeToReply = {},
                 eventSink = {},
@@ -784,6 +842,8 @@ internal fun TimelineItemEventRowTimestampPreview(
                         reactionsState = aTimelineItemReactions(count = 0),
                         senderDisplayName = if (useDocument) "Document case" else "Text case",
                     ),
+                    showReadReceipts = false,
+                    isLastOutgoingMessage = false,
                     isHighlighted = false,
                     canReply = true,
                     onClick = {},
@@ -793,6 +853,7 @@ internal fun TimelineItemEventRowTimestampPreview(
                     onReactionClick = { _, _ -> },
                     onReactionLongClick = { _, _ -> },
                     onMoreReactionsClick = {},
+                    onReadReceiptClick = {},
                     onTimestampClicked = {},
                     onSwipeToReply = {},
                     eventSink = {},
@@ -816,6 +877,8 @@ internal fun TimelineItemEventRowWithManyReactionsPreview() = ElementPreview {
                     ),
                     timelineItemReactions = aTimelineItemReactions(count = 20),
                 ),
+                showReadReceipts = false,
+                isLastOutgoingMessage = false,
                 isHighlighted = false,
                 canReply = true,
                 onClick = {},
@@ -825,6 +888,7 @@ internal fun TimelineItemEventRowWithManyReactionsPreview() = ElementPreview {
                 onReactionClick = { _, _ -> },
                 onReactionLongClick = { _, _ -> },
                 onMoreReactionsClick = {},
+                onReadReceiptClick = {},
                 onSwipeToReply = {},
                 onTimestampClicked = {},
                 eventSink = {},
@@ -841,6 +905,8 @@ internal fun TimelineItemEventRowLongSenderNamePreview() = ElementPreviewLight {
         event = aTimelineItemEvent(
             senderDisplayName = "a long sender display name to test single line and ellipsis at the end of the line",
         ),
+        showReadReceipts = false,
+        isLastOutgoingMessage = false,
         isHighlighted = false,
         canReply = true,
         onClick = {},
@@ -850,6 +916,7 @@ internal fun TimelineItemEventRowLongSenderNamePreview() = ElementPreviewLight {
         onReactionClick = { _, _ -> },
         onReactionLongClick = { _, _ -> },
         onMoreReactionsClick = {},
+        onReadReceiptClick = {},
         onSwipeToReply = {},
         onTimestampClicked = {},
         eventSink = {},
@@ -862,6 +929,8 @@ internal fun TimelineItemEventRowLongSenderNamePreview() = ElementPreviewLight {
 internal fun TimelineItemEventTimestampBelowPreview() = ElementPreviewLight {
     TimelineItemEventRow(
         event = aTimelineItemEvent(content = aTimelineItemPollContent()),
+        showReadReceipts = false,
+        isLastOutgoingMessage = false,
         isHighlighted = false,
         canReply = true,
         onClick = {},
@@ -871,6 +940,7 @@ internal fun TimelineItemEventTimestampBelowPreview() = ElementPreviewLight {
         onReactionClick = { _, _ -> },
         onReactionLongClick = { _, _ -> },
         onMoreReactionsClick = {},
+        onReadReceiptClick = {},
         onSwipeToReply = {},
         onTimestampClicked = {},
         eventSink = {},

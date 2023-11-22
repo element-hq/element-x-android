@@ -12,4 +12,30 @@
   <string name="screen_edit_profile_error_title">"Unable to update profile"</string>
   <string name="screen_edit_profile_title">"Edit profile"</string>
   <string name="screen_edit_profile_updating_details">"Updating profile…"</string>
+  <string name="screen_notification_settings_additional_settings_section_title">"Additional settings"</string>
+  <string name="screen_notification_settings_calls_label">"Audio and video calls"</string>
+  <string name="screen_notification_settings_configuration_mismatch">"Configuration mismatch"</string>
+  <string name="screen_notification_settings_configuration_mismatch_description">"We’ve simplified Notifications Settings to make options easier to find. Some custom settings you’ve chosen in the past are not shown here, but they’re still active.
+
+If you proceed, some of your settings may change."</string>
+  <string name="screen_notification_settings_direct_chats">"Direct chats"</string>
+  <string name="screen_notification_settings_edit_custom_settings_section_title">"Custom setting per chat"</string>
+  <string name="screen_notification_settings_edit_failed_updating_default_mode">"An error occurred while updating the notification setting."</string>
+  <string name="screen_notification_settings_edit_mode_all_messages">"All messages"</string>
+  <string name="screen_notification_settings_edit_mode_mentions_and_keywords">"Mentions and Keywords only"</string>
+  <string name="screen_notification_settings_edit_screen_direct_section_header">"On direct chats, notify me for"</string>
+  <string name="screen_notification_settings_edit_screen_group_section_header">"On group chats, notify me for"</string>
+  <string name="screen_notification_settings_enable_notifications">"Enable notifications on this device"</string>
+  <string name="screen_notification_settings_failed_fixing_configuration">"The configuration has not been corrected, please try again."</string>
+  <string name="screen_notification_settings_group_chats">"Group chats"</string>
+  <string name="screen_notification_settings_mentions_only_disclaimer">"Your homeserver does not support this option in encrypted rooms, you may not get notified in some rooms."</string>
+  <string name="screen_notification_settings_mentions_section_title">"Mentions"</string>
+  <string name="screen_notification_settings_mode_all">"All"</string>
+  <string name="screen_notification_settings_mode_mentions">"Mentions"</string>
+  <string name="screen_notification_settings_notification_section_title">"Notify me for"</string>
+  <string name="screen_notification_settings_room_mention_label">"Notify me on @room"</string>
+  <string name="screen_notification_settings_system_notifications_action_required">"To receive notifications, please change your %1$s."</string>
+  <string name="screen_notification_settings_system_notifications_action_required_content_link">"system settings"</string>
+  <string name="screen_notification_settings_system_notifications_turned_off">"System notifications turned off"</string>
+  <string name="screen_notification_settings_title">"Notifications"</string>
 </resources>

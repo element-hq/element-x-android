@@ -20,7 +20,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.outlined.InsertChart
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -28,6 +27,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import io.element.android.features.preferences.impl.R
 import io.element.android.features.preferences.impl.user.UserPreferences
 import io.element.android.libraries.designsystem.components.list.ListItemContent
 import io.element.android.libraries.designsystem.components.preferences.PreferencePage
@@ -116,7 +116,7 @@ fun PreferencesRootView(
         }
         if (state.showNotificationSettings) {
             ListItem(
-                headlineContent = { Text(stringResource(id = CommonStrings.screen_notification_settings_title)) },
+                headlineContent = { Text(stringResource(id = R.string.screen_notification_settings_title)) },
                 leadingContent = ListItemContent.Icon(IconSource.Resource(CommonDrawables.ic_compound_notifications)),
                 onClick = onOpenNotificationSettings,
             )
@@ -134,7 +134,7 @@ fun PreferencesRootView(
         if (state.showLockScreenSettings) {
             ListItem(
                 headlineContent = { Text(stringResource(id = CommonStrings.common_screen_lock)) },
-                leadingContent = ListItemContent.Icon(IconSource.Vector(Icons.Default.Lock)),
+                leadingContent = ListItemContent.Icon(IconSource.Resource(CommonDrawables.ic_lock_outline)),
                 onClick = onOpenLockScreenSettings,
             )
         }

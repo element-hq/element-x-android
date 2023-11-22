@@ -18,6 +18,7 @@ package io.element.android.features.messages.impl.voicemessages.composer
 
 import android.Manifest
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -36,7 +37,7 @@ import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.mediaupload.api.MediaSender
 import io.element.android.libraries.permissions.api.PermissionsEvents
 import io.element.android.libraries.permissions.api.PermissionsPresenter
-import io.element.android.libraries.textcomposer.model.PressEvent
+import io.element.android.libraries.textcomposer.model.VoiceMessageRecorderEvent
 import io.element.android.libraries.textcomposer.model.VoiceMessagePlayerEvent
 import io.element.android.libraries.textcomposer.model.VoiceMessageState
 import io.element.android.libraries.voicerecorder.api.VoiceRecorder
@@ -69,13 +70,18 @@ class VoiceMessageComposerPresenter @Inject constructor(
     override fun present(): VoiceMessageComposerState {
         val localCoroutineScope = rememberCoroutineScope()
         val recorderState by voiceRecorder.state.collectAsState(initial = VoiceRecorderState.Idle)
+        val playerState by player.state.collectAsState(initial = VoiceMessageComposerPlayer.State.Initial)
         val keepScreenOn by remember { derivedStateOf { recorderState is VoiceRecorderState.Recording } }
 
         val permissionState = permissionsPresenter.present()
         var isSending by remember { mutableStateOf(false) }
-        val playerState by player.state.collectAsState(initial = VoiceMessageComposerPlayer.State.NotLoaded)
-        val playerTime by remember(playerState, recorderState) { derivedStateOf { displayTime(playerState, recorderState) } }
-        val waveform by remember(recorderState) { derivedStateOf { recorderState.finishedWaveform() } }
+        var showSendFailureDialog by remember { mutableStateOf(false) }
+
+        LaunchedEffect(recorderState) {
+            val recording = recorderState as? VoiceRecorderState.Finished
+                ?: return@LaunchedEffect
+            player.setMedia(recording.file.path)
+        }
 
         val onLifecycleEvent = { event: Lifecycle.Event ->
             when (event) {
@@ -90,10 +96,10 @@ class VoiceMessageComposerPresenter @Inject constructor(
             }
         }
 
-        val onRecordButtonPress = { event: VoiceMessageComposerEvents.RecordButtonEvent ->
+        val onVoiceMessageRecorderEvent = { event: VoiceMessageComposerEvents.RecorderEvent ->
             val permissionGranted = permissionState.permissionGranted
-            when (event.pressEvent) {
-                PressEvent.PressStart -> {
+            when (event.recorderEvent) {
+                VoiceMessageRecorderEvent.Start -> {
                     Timber.v("Voice message record button pressed")
                     when {
                         permissionGranted -> {
@@ -105,37 +111,25 @@ class VoiceMessageComposerPresenter @Inject constructor(
                         }
                     }
                 }
-                PressEvent.LongPressEnd -> {
-                    Timber.v("Voice message record button released")
+                VoiceMessageRecorderEvent.Stop -> {
+                    Timber.v("Voice message stop button pressed")
                     localCoroutineScope.finishRecording()
                 }
-                PressEvent.Tapped -> {
-                    Timber.v("Voice message record button tapped")
+                VoiceMessageRecorderEvent.Cancel -> {
+                    Timber.v("Voice message cancel button tapped")
                     localCoroutineScope.cancelRecording()
                 }
             }
         }
-        val onPlayerEvent = { event: VoiceMessagePlayerEvent ->
-            when (event) {
-                VoiceMessagePlayerEvent.Play ->
-                    when (val recording = recorderState) {
-                        is VoiceRecorderState.Finished ->
-                            localCoroutineScope.launch {
-                                player.play(
-                                    mediaPath = recording.file.path,
-                                    mimeType = recording.mimeType,
-                                )
-                            }
-                        else -> Timber.e("Voice message player event received but no file to play")
-                    }
-                VoiceMessagePlayerEvent.Pause -> {
-                    player.pause()
-                }
-                is VoiceMessagePlayerEvent.Seek -> {
-                    // TODO implement seeking
+        val onPlayerEvent = { event: VoiceMessagePlayerEvent -> localCoroutineScope.launch {
+            localCoroutineScope.launch {
+                when (event) {
+                    VoiceMessagePlayerEvent.Play -> player.play()
+                    VoiceMessagePlayerEvent.Pause -> player.pause()
+                    is VoiceMessagePlayerEvent.Seek -> player.seek(event.position)
                 }
             }
-        }
+        } }
 
         val onAcceptPermissionsRationale = {
             permissionState.eventSink(PermissionsEvents.OpenSystemSettingAndCloseDialog)
@@ -143,6 +137,10 @@ class VoiceMessageComposerPresenter @Inject constructor(
 
         val onDismissPermissionsRationale = {
             permissionState.eventSink(PermissionsEvents.CloseDialog)
+        }
+
+        val onDismissSendFailureDialog = {
+            showSendFailureDialog = false
         }
 
         val onSendButtonPress = lambda@{
@@ -159,18 +157,23 @@ class VoiceMessageComposerPresenter @Inject constructor(
             isSending = true
             player.pause()
             analyticsService.captureComposerEvent()
-            appCoroutineScope.sendMessage(
-                file = finishedState.file,
-                mimeType = finishedState.mimeType,
-                waveform = finishedState.waveform,
-            ).invokeOnCompletion {
+            appCoroutineScope.launch {
+                val result = sendMessage(
+                    file = finishedState.file,
+                    mimeType = finishedState.mimeType,
+                    waveform = finishedState.waveform,
+                )
+                if (result.isFailure) {
+                    showSendFailureDialog = true
+                }
+            }.invokeOnCompletion {
                 isSending = false
             }
         }
 
         val handleEvents: (VoiceMessageComposerEvents) -> Unit = { event ->
             when (event) {
-                is VoiceMessageComposerEvents.RecordButtonEvent -> onRecordButtonPress(event)
+                is VoiceMessageComposerEvents.RecorderEvent -> onVoiceMessageRecorderEvent(event)
                 is VoiceMessageComposerEvents.PlayerEvent -> onPlayerEvent(event.playerEvent)
                 is VoiceMessageComposerEvents.SendVoiceMessage -> localCoroutineScope.launch {
                     onSendButtonPress()
@@ -182,6 +185,7 @@ class VoiceMessageComposerPresenter @Inject constructor(
                 VoiceMessageComposerEvents.DismissPermissionsRationale -> onDismissPermissionsRationale()
                 VoiceMessageComposerEvents.AcceptPermissionRationale -> onAcceptPermissionsRationale()
                 is VoiceMessageComposerEvents.LifecycleEvent -> onLifecycleEvent(event.event)
+                VoiceMessageComposerEvents.DismissSendFailureDialog -> onDismissSendFailureDialog()
             }
         }
 
@@ -189,21 +193,40 @@ class VoiceMessageComposerPresenter @Inject constructor(
             voiceMessageState = when (val state = recorderState) {
                 is VoiceRecorderState.Recording -> VoiceMessageState.Recording(
                     duration = state.elapsedTime,
-                    levels = state.levels.toPersistentList()
+                    levels = state.levels.toPersistentList(),
                 )
-                is VoiceRecorderState.Finished -> VoiceMessageState.Preview(
-                    isSending = isSending,
-                    isPlaying = playerState.isPlaying,
-                    showCursor = playerState.isLoaded && !isSending,
-                    playbackProgress = playerState.progress,
-                    time = playerTime,
-                    waveform = waveform,
-                )
+                is VoiceRecorderState.Finished ->
+                    previewState(
+                        playerState = playerState,
+                        recorderState = recorderState,
+                        isSending = isSending
+                    )
                 else -> VoiceMessageState.Idle
             },
             showPermissionRationaleDialog = permissionState.showDialog,
+            showSendFailureDialog = showSendFailureDialog,
             keepScreenOn = keepScreenOn,
             eventSink = handleEvents,
+        )
+    }
+
+    @Composable
+    private fun previewState(
+        playerState: VoiceMessageComposerPlayer.State,
+        recorderState: VoiceRecorderState,
+        isSending: Boolean,
+    ): VoiceMessageState {
+        val showCursor by remember(playerState.isStopped, isSending) { derivedStateOf { !playerState.isStopped && !isSending }}
+        val playerTime by remember(playerState, recorderState) { derivedStateOf { displayTime(playerState, recorderState) } }
+        val waveform by remember(recorderState) { derivedStateOf { recorderState.finishedWaveform() } }
+
+        return VoiceMessageState.Preview(
+            isSending = isSending,
+            isPlaying = playerState.isPlaying,
+            showCursor = showCursor,
+            playbackProgress = playerState.progress,
+            time = playerTime,
+            waveform = waveform,
         )
     }
 
@@ -228,11 +251,11 @@ class VoiceMessageComposerPresenter @Inject constructor(
         voiceRecorder.deleteRecording()
     }
 
-    private fun CoroutineScope.sendMessage(
+    private suspend fun sendMessage(
         file: File,
         mimeType: String,
-        waveform: List<Float>
-    ) = launch {
+        waveform: List<Float>,
+    ): Result<Unit> {
         val result = mediaSender.sendVoiceMessage(
             uri = file.toUri(),
             mimeType = mimeType,
@@ -241,14 +264,16 @@ class VoiceMessageComposerPresenter @Inject constructor(
 
         if (result.isFailure) {
             Timber.e(result.exceptionOrNull(), "Voice message error")
-            return@launch
+            return result
         }
 
         voiceRecorder.deleteRecording()
+
+        return result
     }
 
     private fun AnalyticsService.captureComposerEvent() =
-        analyticsService.capture(
+        capture(
             Composer(
                 inThread = messageComposerContext.composerMode.inThread,
                 isEditing = messageComposerContext.composerMode.isEditing,
@@ -273,7 +298,7 @@ private fun displayTime(
     playerState: VoiceMessageComposerPlayer.State,
     recording: VoiceRecorderState
 ): Duration = when {
-    playerState.isLoaded ->
+    !playerState.isStopped ->
         playerState.currentPosition.milliseconds
     recording is VoiceRecorderState.Finished ->
         recording.duration

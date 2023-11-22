@@ -27,6 +27,11 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -53,6 +58,7 @@ import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
+import kotlinx.coroutines.delay
 
 @Composable
 fun TimelineItemVoiceView(
@@ -90,7 +96,7 @@ fun TimelineItemVoiceView(
         Spacer(Modifier.width(8.dp))
         val context = LocalContext.current
         WaveformPlaybackView(
-            showCursor = state.button == VoiceMessageState.Button.Pause,
+            showCursor = state.showCursor,
             playbackProgress = state.progress,
             waveform = content.waveform,
             modifier = Modifier
@@ -147,19 +153,40 @@ private fun RetryButton(
     }
 }
 
+/**
+ * Progress button is shown when the voice message is being downloaded.
+ *
+ * The progress indicator is optimistic and displays a pause button (which
+ * indicates the audio is playing) for 2 seconds before revealing the
+ * actual progress indicator.
+ */
 @Composable
-private fun ProgressButton() {
+private fun ProgressButton(
+    displayImmediately: Boolean = false,
+) {
+    var canDisplay by remember { mutableStateOf(displayImmediately) }
+    LaunchedEffect(Unit) {
+        delay(2000L)
+        canDisplay = true
+    }
     CustomIconButton(
         onClick = {},
         enabled = false,
     ) {
-        CircularProgressIndicator(
-            modifier = Modifier
-                .padding(2.dp)
-                .size(16.dp),
-            color = ElementTheme.colors.iconSecondary,
-            strokeWidth = 2.dp,
-        )
+        if (canDisplay) {
+            CircularProgressIndicator(
+                modifier = Modifier
+                    .padding(2.dp)
+                    .size(16.dp),
+                color = ElementTheme.colors.iconSecondary,
+                strokeWidth = 2.dp,
+            )
+        } else {
+            Icon(
+                resourceId = R.drawable.pause,
+                contentDescription = stringResource(id = CommonStrings.a11y_pause),
+            )
+        }
     }
 }
 
@@ -226,5 +253,14 @@ internal fun TimelineItemVoiceViewUnifiedPreview() = ElementPreview {
                 extraPadding = noExtraPadding,
             )
         }
+    }
+}
+
+@PreviewsDayNight
+@Composable
+internal fun ProgressButtonPreview() = ElementPreview {
+    Row {
+        ProgressButton(displayImmediately = true)
+        ProgressButton(displayImmediately = false)
     }
 }

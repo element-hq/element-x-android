@@ -43,7 +43,7 @@ import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.textcomposer.R
+import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.libraries.ui.utils.time.formatShort
@@ -108,7 +108,7 @@ internal fun VoiceMessagePreview(
             playbackProgress = playbackProgress,
             showCursor = showCursor,
             waveform = waveform,
-            seekEnabled = false, // TODO enable seeking
+            seekEnabled = true,
             onSeek = onSeek,
         )
     }
@@ -145,14 +145,14 @@ private fun PlayerButton(
 
 @Composable
 private fun PauseIcon() = Icon(
-    resourceId = R.drawable.ic_pause,
+    resourceId = CommonDrawables.ic_pause,
     contentDescription = stringResource(id = CommonStrings.a11y_pause),
     modifier = Modifier.size(20.dp),
 )
 
 @Composable
 private fun PlayIcon() = Icon(
-    resourceId = R.drawable.ic_play,
+    resourceId = CommonDrawables.ic_play,
     contentDescription = stringResource(id = CommonStrings.a11y_play),
     modifier = Modifier.size(20.dp),
 )

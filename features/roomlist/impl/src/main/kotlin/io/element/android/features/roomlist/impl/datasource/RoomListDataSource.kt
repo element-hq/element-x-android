@@ -161,6 +161,7 @@ class RoomListDataSource @Inject constructor(
                     }.orEmpty(),
                     avatarData = avatarData,
                     notificationMode = roomSummary.details.notificationMode,
+                    hasOngoingCall = roomSummary.details.hasOngoingCall,
                 )
             }
             null -> null

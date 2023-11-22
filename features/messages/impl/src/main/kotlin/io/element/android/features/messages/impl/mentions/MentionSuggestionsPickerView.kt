@@ -31,7 +31,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import io.element.android.features.messages.impl.R
-import io.element.android.features.messages.impl.messagecomposer.RoomMemberSuggestion
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
@@ -52,8 +51,8 @@ fun MentionSuggestionsPickerView(
     roomId: RoomId,
     roomName: String?,
     roomAvatarData: AvatarData?,
-    memberSuggestions: ImmutableList<RoomMemberSuggestion>,
-    onSuggestionSelected: (RoomMemberSuggestion) -> Unit,
+    memberSuggestions: ImmutableList<MentionSuggestion>,
+    onSuggestionSelected: (MentionSuggestion) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     LazyColumn(
@@ -63,8 +62,8 @@ fun MentionSuggestionsPickerView(
             memberSuggestions,
             key = { suggestion ->
                 when (suggestion) {
-                    is RoomMemberSuggestion.Room -> "@room"
-                    is RoomMemberSuggestion.Member -> suggestion.roomMember.userId.value
+                    is MentionSuggestion.Room -> "@room"
+                    is MentionSuggestion.Member -> suggestion.roomMember.userId.value
                 }
             }
         ) {
@@ -85,18 +84,18 @@ fun MentionSuggestionsPickerView(
 
 @Composable
 private fun RoomMemberSuggestionItemView(
-    memberSuggestion: RoomMemberSuggestion,
+    memberSuggestion: MentionSuggestion,
     roomId: String,
     roomName: String?,
     roomAvatar: AvatarData?,
-    onSuggestionSelected: (RoomMemberSuggestion) -> Unit,
+    onSuggestionSelected: (MentionSuggestion) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Row(modifier = modifier.clickable { onSuggestionSelected(memberSuggestion) }, horizontalArrangement = Arrangement.spacedBy(16.dp)) {
         val avatarSize = AvatarSize.TimelineRoom
         val avatarData = when (memberSuggestion) {
-            is RoomMemberSuggestion.Room -> roomAvatar?.copy(size = avatarSize) ?: AvatarData(roomId, roomName, null, avatarSize)
-            is RoomMemberSuggestion.Member -> AvatarData(
+            is MentionSuggestion.Room -> roomAvatar?.copy(size = avatarSize) ?: AvatarData(roomId, roomName, null, avatarSize)
+            is MentionSuggestion.Member -> AvatarData(
                 memberSuggestion.roomMember.userId.value,
                 memberSuggestion.roomMember.displayName,
                 memberSuggestion.roomMember.avatarUrl,
@@ -104,13 +103,13 @@ private fun RoomMemberSuggestionItemView(
             )
         }
         val title = when (memberSuggestion) {
-            is RoomMemberSuggestion.Room -> stringResource(R.string.screen_room_mentions_at_room_title)
-            is RoomMemberSuggestion.Member -> memberSuggestion.roomMember.displayName
+            is MentionSuggestion.Room -> stringResource(R.string.screen_room_mentions_at_room_title)
+            is MentionSuggestion.Member -> memberSuggestion.roomMember.displayName
         }
 
         val subtitle = when (memberSuggestion) {
-            is RoomMemberSuggestion.Room -> "@room"
-            is RoomMemberSuggestion.Member -> memberSuggestion.roomMember.userId.value
+            is MentionSuggestion.Room -> "@room"
+            is MentionSuggestion.Member -> memberSuggestion.roomMember.userId.value
         }
 
         Avatar(avatarData = avatarData, modifier = Modifier.padding(start = 16.dp, top = 12.dp, bottom = 12.dp))
@@ -159,9 +158,9 @@ internal fun MentionSuggestionsPickerView_Preview() {
             roomName = "Room",
             roomAvatarData = null,
             memberSuggestions = persistentListOf(
-                RoomMemberSuggestion.Room,
-                RoomMemberSuggestion.Member(roomMember),
-                RoomMemberSuggestion.Member(roomMember.copy(userId = UserId("@bob:server.org"), displayName = "Bob")),
+                MentionSuggestion.Room,
+                MentionSuggestion.Member(roomMember),
+                MentionSuggestion.Member(roomMember.copy(userId = UserId("@bob:server.org"), displayName = "Bob")),
             ),
             onSuggestionSelected = {}
         )

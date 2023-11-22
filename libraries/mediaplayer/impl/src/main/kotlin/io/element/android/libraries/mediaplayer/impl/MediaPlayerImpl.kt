@@ -77,6 +77,7 @@ class MediaPlayerImpl @Inject constructor(
             _state.update {
                 it.copy(
                     isReady = playbackState == Player.STATE_READY,
+                    isEnded = playbackState == Player.STATE_ENDED,
                     currentPosition = player.currentPosition,
                     duration = duration,
                 )
@@ -95,16 +96,22 @@ class MediaPlayerImpl @Inject constructor(
         MediaPlayer.State(
             isReady = false,
             isPlaying = false,
+            isEnded = false,
             mediaId = null,
             currentPosition = 0L,
-            duration = 0L
+            duration = null,
         )
     )
 
     override val state: StateFlow<MediaPlayer.State> = _state.asStateFlow()
 
     @OptIn(FlowPreview::class)
-    override suspend fun setMedia(uri: String, mediaId: String, mimeType: String): MediaPlayer.State {
+    override suspend fun setMedia(
+        uri: String,
+        mediaId: String,
+        mimeType: String,
+        startPositionMs: Long,
+    ): MediaPlayer.State {
         player.pause() // Must pause here otherwise if the player was playing it would keep on playing the new media item.
         player.clearMediaItems()
         player.setMediaItem(
@@ -112,11 +119,12 @@ class MediaPlayerImpl @Inject constructor(
                 .setUri(uri)
                 .setMediaId(mediaId)
                 .setMimeType(mimeType)
-                .build()
+                .build(),
+            startPositionMs,
         )
         player.prepare()
         // Will throw TimeoutCancellationException if the player is not ready after 1 second.
-        return state.timeout(1.seconds).first { it.isReady }
+        return state.timeout(1.seconds).first { it.isReady && it.mediaId == mediaId }
     }
 
     override fun play() {
@@ -129,7 +137,7 @@ class MediaPlayerImpl @Inject constructor(
             // playing no sound.
             // This is a workaround which will reload the media file.
             player.getCurrentMediaItem()?.let {
-                player.setMediaItem(it)
+                player.setMediaItem(it, 0)
                 player.prepare()
                 player.play()
             }

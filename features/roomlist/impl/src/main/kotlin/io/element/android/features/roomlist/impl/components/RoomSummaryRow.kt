@@ -36,7 +36,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.style.TextOverflow
@@ -47,8 +46,8 @@ import io.element.android.features.roomlist.impl.model.RoomListRoomSummaryProvid
 import io.element.android.libraries.core.extensions.orEmpty
 import io.element.android.libraries.designsystem.atomic.atoms.UnreadIndicatorAtom
 import io.element.android.libraries.designsystem.components.avatar.Avatar
-import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.roomListRoomMessage
@@ -58,7 +57,6 @@ import io.element.android.libraries.designsystem.theme.unreadIndicator
 import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.theme.ElementTheme
-import io.element.android.libraries.ui.strings.CommonStrings
 
 internal val minHeight = 84.dp
 
@@ -172,14 +170,22 @@ private fun RowScope.LastMessageAndIndicatorRow(room: RoomListRoomSummary) {
 
     // Unread
     Row(
+        modifier = Modifier.height(16.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
+        // Video call
+        if (room.hasOngoingCall) {
+            Icon(
+                modifier = Modifier.size(16.dp),
+                resourceId = CommonDrawables.ic_compound_video_call,
+                contentDescription = null,
+                tint = ElementTheme.colors.unreadIndicator,
+            )
+        }
         NotificationIcon(room)
         if (room.hasUnread) {
-            UnreadIndicatorAtom(
-                modifier = Modifier.padding(vertical = 3.dp),
-            )
+            UnreadIndicatorAtom()
         }
     }
 }
@@ -192,14 +198,14 @@ private fun NotificationIcon(room: RoomListRoomSummary) {
         RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY ->
             Icon(
                 modifier = Modifier.size(16.dp),
-                contentDescription = stringResource(CommonStrings.screen_notification_settings_mode_mentions),
+                contentDescription = null,
                 imageVector = ImageVector.vectorResource(CommonDrawables.ic_compound_mention),
                 tint = tint,
             )
         RoomNotificationMode.MUTE ->
             Icon(
                 modifier = Modifier.size(16.dp),
-                contentDescription = stringResource(CommonStrings.common_mute),
+                contentDescription = null,
                 imageVector = ImageVector.vectorResource(CommonDrawables.ic_compound_notifications_solid_off),
                 tint = tint,
             )

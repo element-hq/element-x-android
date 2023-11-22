@@ -5,6 +5,7 @@
     <item quantity="few">"%1$d osoby"</item>
     <item quantity="other">"%1$d osôb"</item>
   </plurals>
+  <string name="screen_notification_settings_edit_failed_updating_default_mode">"Pri aktualizácii nastavenia oznámenia došlo k chybe."</string>
   <string name="screen_room_details_add_topic_title">"Pridať tému"</string>
   <string name="screen_room_details_already_a_member">"Už ste členom"</string>
   <string name="screen_room_details_already_invited">"Už ste pozvaní"</string>
@@ -35,6 +36,7 @@
   <string name="screen_room_notification_settings_error_loading_settings">"Pri načítavaní nastavení oznámení došlo k chybe."</string>
   <string name="screen_room_notification_settings_error_restoring_default">"Nepodarilo sa obnoviť predvolený režim, skúste to prosím znova."</string>
   <string name="screen_room_notification_settings_error_setting_mode">"Nepodarilo sa nastaviť režim, skúste to prosím znova."</string>
+  <string name="screen_room_notification_settings_mentions_only_disclaimer">"Váš domovský server nepodporuje túto možnosť v šifrovaných miestnostiach, v tejto miestnosti nedostanete upozornenie."</string>
   <string name="screen_room_notification_settings_mode_all_messages">"Všetky správy"</string>
   <string name="screen_room_notification_settings_room_custom_settings_title">"V tejto miestnosti ma upozorniť na"</string>
   <string name="screen_dm_details_block_alert_action">"Zablokovať"</string>

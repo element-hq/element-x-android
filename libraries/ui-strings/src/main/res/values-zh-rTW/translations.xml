@@ -152,14 +152,6 @@
   <string name="common_poll_summary">"投票：%1$s"</string>
   <string name="dialog_title_confirmation">"確認"</string>
   <string name="dialog_title_warning">"警告"</string>
-  <string name="emoji_picker_category_activity">"活動"</string>
-  <string name="emoji_picker_category_flags">"旗幟"</string>
-  <string name="emoji_picker_category_foods">"食物與飲料"</string>
-  <string name="emoji_picker_category_nature">"動物與大自然"</string>
-  <string name="emoji_picker_category_objects">"物品"</string>
-  <string name="emoji_picker_category_people">"表情與人物"</string>
-  <string name="emoji_picker_category_places">"旅行與景點"</string>
-  <string name="emoji_picker_category_symbols">"標誌"</string>
   <string name="error_failed_creating_the_permalink">"無法建立永久連結"</string>
   <string name="error_failed_loading_map">"%1$s無法載入地圖。請稍後再試。"</string>
   <string name="error_failed_loading_messages">"無法載入訊息"</string>
@@ -168,9 +160,6 @@
   <string name="error_missing_location_rationale_android">"%1$s 沒有權限存取您的位置。請在下方開啟權限。"</string>
   <string name="error_some_messages_have_not_been_sent">"有些訊息尚未傳送"</string>
   <string name="invite_friends_text">"嘿，來 %1$s 和我聊天：%2$s"</string>
-  <string name="leave_room_alert_empty_subtitle">"您確定要離開聊天室嗎？這裡只有您一個人。如果您離開了，包含您在內的所有人都無法再進入此聊天室。"</string>
-  <string name="leave_room_alert_private_subtitle">"您確定要離開聊天室嗎？此聊天室不是公開的，如果沒有收到邀請，您無法重新加入。"</string>
-  <string name="leave_room_alert_subtitle">"您確定要離開聊天室嗎？"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <plurals name="common_member_count">
     <item quantity="other">"%1$d 位成員"</item>
@@ -178,22 +167,7 @@
   <plurals name="common_poll_votes_count">
     <item quantity="other">"%d 票"</item>
   </plurals>
-  <string name="report_content_hint">"檢舉這個內容的原因"</string>
-  <string name="room_timeline_read_marker_title">"新訊息"</string>
-  <string name="screen_analytics_settings_share_data">"分享分析數據"</string>
   <string name="screen_media_upload_preview_error_failed_sending">"無法上傳媒體檔案，請稍後再試。"</string>
-  <string name="screen_notification_settings_additional_settings_section_title">"其他設定"</string>
-  <string name="screen_notification_settings_direct_chats">"私訊"</string>
-  <string name="screen_notification_settings_edit_failed_updating_default_mode">"更新通知設定時發生錯誤。"</string>
-  <string name="screen_notification_settings_edit_mode_all_messages">"所有訊息"</string>
-  <string name="screen_notification_settings_edit_mode_mentions_and_keywords">"僅限提及與關鍵字"</string>
-  <string name="screen_notification_settings_enable_notifications">"在這個裝置上開啟通知"</string>
-  <string name="screen_notification_settings_group_chats">"群組聊天"</string>
-  <string name="screen_notification_settings_mentions_section_title">"提及"</string>
-  <string name="screen_notification_settings_mode_mentions">"提及"</string>
-  <string name="screen_notification_settings_system_notifications_action_required_content_link">"系統設定"</string>
-  <string name="screen_notification_settings_system_notifications_turned_off">"已關閉系統通知"</string>
-  <string name="screen_notification_settings_title">"通知"</string>
   <string name="screen_share_location_title">"分享位置"</string>
   <string name="screen_share_my_location_action">"分享我的位置"</string>
   <string name="screen_share_open_apple_maps">"在 Apple Maps 中開啟"</string>
@@ -205,8 +179,4 @@
   <string name="test_language_identifier">"zh-tw"</string>
   <string name="dialog_title_error">"錯誤"</string>
   <string name="dialog_title_success">"成功"</string>
-  <string name="screen_analytics_settings_help_us_improve">"分享匿名的使用數據以協助我們釐清問題。"</string>
-  <string name="screen_analytics_settings_read_terms">"您可以到%1$s閱讀我們的條款。"</string>
-  <string name="screen_analytics_settings_read_terms_content_link">"這裡"</string>
-  <string name="screen_report_content_block_user">"封鎖使用者"</string>
 </resources>

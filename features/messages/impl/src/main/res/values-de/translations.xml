@@ -1,9 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="emoji_picker_category_activity">"Aktivitäten"</string>
+  <string name="emoji_picker_category_flags">"Flaggen"</string>
+  <string name="emoji_picker_category_foods">"Essen &amp; Trinken"</string>
+  <string name="emoji_picker_category_nature">"Tiere &amp; Natur"</string>
+  <string name="emoji_picker_category_objects">"Objekte"</string>
+  <string name="emoji_picker_category_people">"Smileys &amp; Menschen"</string>
+  <string name="emoji_picker_category_places">"Reisen &amp; Orte"</string>
+  <string name="emoji_picker_category_symbols">"Symbole"</string>
   <plurals name="room_timeline_state_changes">
     <item quantity="one">"%1$d Raumänderung"</item>
     <item quantity="other">"%1$d Raumänderungen"</item>
   </plurals>
+  <string name="report_content_explanation">"Diese Meldung wird an den Administrator deines Homeservers weitergeleitet. Dieser kann keine verschlüsselten Nachrichten lesen."</string>
+  <string name="report_content_hint">"Grund für die Meldung dieses Inhalts"</string>
+  <string name="room_timeline_beginning_of_room">"Dies ist der Anfang von %1$s."</string>
+  <string name="room_timeline_beginning_of_room_no_name">"Dies ist der Anfang dieses Gesprächs."</string>
+  <string name="room_timeline_read_marker_title">"Neu"</string>
+  <string name="screen_report_content_block_user_hint">"Prüfe, ob du alle aktuellen und zukünftigen Nachrichten dieses Benutzers ausblenden möchtest"</string>
   <string name="screen_room_attachment_source_camera">"Kamera"</string>
   <string name="screen_room_attachment_source_camera_photo">"Foto machen"</string>
   <string name="screen_room_attachment_source_camera_video">"Video aufnehmen"</string>
@@ -36,6 +50,7 @@
   <string name="screen_room_retry_send_menu_title">"Deine Nachricht konnte nicht gesendet werden"</string>
   <string name="screen_room_timeline_add_reaction">"Emoji hinzufügen"</string>
   <string name="screen_room_timeline_less_reactions">"Weniger anzeigen"</string>
+  <string name="screen_report_content_block_user">"Benutzer sperren"</string>
   <string name="screen_room_error_failed_processing_media">"Fehler beim Verarbeiten des hochgeladenen Mediums. Bitte versuche es erneut."</string>
   <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Nur Erwähnungen und Schlüsselwörter"</string>
 </resources>

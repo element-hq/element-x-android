@@ -23,6 +23,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.lifecycle.Lifecycle
+import io.element.android.features.preferences.impl.R
 import io.element.android.libraries.androidutils.system.startNotificationSettingsIntent
 import io.element.android.libraries.designsystem.atomic.molecules.DialogLikeBannerMolecule
 import io.element.android.libraries.designsystem.components.async.AsyncView
@@ -57,7 +58,7 @@ fun NotificationSettingsView(
     PreferencePage(
         modifier = modifier,
         onBackPressed = onBackPressed,
-        title = stringResource(id = CommonStrings.screen_notification_settings_title)
+        title = stringResource(id = R.string.screen_notification_settings_title)
     ) {
 
         when (state.matrixSettings) {
@@ -80,7 +81,7 @@ fun NotificationSettingsView(
         }
         AsyncView(
             async = state.changeNotificationSettingAction,
-            errorMessage = { stringResource(CommonStrings.screen_notification_settings_edit_failed_updating_default_mode) },
+            errorMessage = { stringResource(R.string.screen_notification_settings_edit_failed_updating_default_mode) },
             onErrorDismiss = { state.eventSink(NotificationSettingsEvents.ClearNotificationChangeError) },
             onSuccess = {},
         )
@@ -103,10 +104,10 @@ private fun NotificationSettingsContentView(
     if (systemSettings.appNotificationsEnabled && !systemSettings.systemNotificationsEnabled) {
         PreferenceText(
             iconResourceId = CommonDrawables.ic_compound_notifications_solid_off,
-            title = stringResource(id = CommonStrings.screen_notification_settings_system_notifications_turned_off),
+            title = stringResource(id = R.string.screen_notification_settings_system_notifications_turned_off),
             subtitle = stringResource(
-                id = CommonStrings.screen_notification_settings_system_notifications_action_required,
-                stringResource(id = CommonStrings.screen_notification_settings_system_notifications_action_required_content_link)
+                id = R.string.screen_notification_settings_system_notifications_action_required,
+                stringResource(id = R.string.screen_notification_settings_system_notifications_action_required_content_link)
             ),
             onClick = {
                 context.startNotificationSettingsIntent()
@@ -116,31 +117,31 @@ private fun NotificationSettingsContentView(
 
     PreferenceSwitch(
         modifier = modifier,
-        title = stringResource(id = CommonStrings.screen_notification_settings_enable_notifications),
+        title = stringResource(id = R.string.screen_notification_settings_enable_notifications),
         isChecked = systemSettings.appNotificationsEnabled,
         switchAlignment = Alignment.Top,
         onCheckedChange = onNotificationsEnabledChanged
     )
 
     if (systemSettings.appNotificationsEnabled) {
-        PreferenceCategory(title = stringResource(id = CommonStrings.screen_notification_settings_notification_section_title)) {
+        PreferenceCategory(title = stringResource(id = R.string.screen_notification_settings_notification_section_title)) {
             PreferenceText(
-                title = stringResource(id = CommonStrings.screen_notification_settings_group_chats),
+                title = stringResource(id = R.string.screen_notification_settings_group_chats),
                 subtitle = getTitleForRoomNotificationMode(mode = matrixSettings.defaultGroupNotificationMode),
                 onClick = onGroupChatsClicked
             )
 
             PreferenceText(
-                title = stringResource(id = CommonStrings.screen_notification_settings_direct_chats),
+                title = stringResource(id = R.string.screen_notification_settings_direct_chats),
                 subtitle = getTitleForRoomNotificationMode(mode = matrixSettings.defaultOneToOneNotificationMode),
                 onClick = onDirectChatsClicked
             )
         }
 
-        PreferenceCategory(title = stringResource(id = CommonStrings.screen_notification_settings_mode_mentions)) {
+        PreferenceCategory(title = stringResource(id = R.string.screen_notification_settings_mode_mentions)) {
             PreferenceSwitch(
                 modifier = Modifier,
-                title = stringResource(id = CommonStrings.screen_notification_settings_room_mention_label),
+                title = stringResource(id = R.string.screen_notification_settings_room_mention_label),
                 isChecked = matrixSettings.atRoomNotificationsEnabled,
                 switchAlignment = Alignment.Top,
                 onCheckedChange = onMentionNotificationsChanged
@@ -162,8 +163,8 @@ private fun NotificationSettingsContentView(
 @Composable
 private fun getTitleForRoomNotificationMode(mode: RoomNotificationMode?) =
     when (mode) {
-        RoomNotificationMode.ALL_MESSAGES -> stringResource(id = CommonStrings.screen_notification_settings_edit_mode_all_messages)
-        RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY -> stringResource(id = CommonStrings.screen_notification_settings_edit_mode_mentions_and_keywords)
+        RoomNotificationMode.ALL_MESSAGES -> stringResource(id = R.string.screen_notification_settings_edit_mode_all_messages)
+        RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY -> stringResource(id = R.string.screen_notification_settings_edit_mode_mentions_and_keywords)
         RoomNotificationMode.MUTE -> stringResource(id = CommonStrings.common_mute)
         null -> ""
     }
@@ -177,8 +178,8 @@ private fun InvalidNotificationSettingsView(
 ) {
     DialogLikeBannerMolecule(
         modifier = modifier,
-        title = stringResource(CommonStrings.screen_notification_settings_configuration_mismatch),
-        content = stringResource(CommonStrings.screen_notification_settings_configuration_mismatch_description),
+        title = stringResource(R.string.screen_notification_settings_configuration_mismatch),
+        content = stringResource(R.string.screen_notification_settings_configuration_mismatch_description),
         onSubmitClicked = onContinueClicked,
         onDismissClicked = null,
     )
@@ -186,7 +187,7 @@ private fun InvalidNotificationSettingsView(
     if (showError) {
         ErrorDialog(
             title = stringResource(id = CommonStrings.dialog_title_error),
-            content = stringResource(id = CommonStrings.screen_notification_settings_failed_fixing_configuration),
+            content = stringResource(id = R.string.screen_notification_settings_failed_fixing_configuration),
             onDismiss = onDismissError
         )
     }

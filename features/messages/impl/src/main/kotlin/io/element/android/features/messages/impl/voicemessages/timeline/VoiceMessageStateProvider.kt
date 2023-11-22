@@ -35,11 +35,13 @@ open class VoiceMessageStateProvider : PreviewParameterProvider<VoiceMessageStat
                 VoiceMessageState.Button.Play,
                 progress = 1f,
                 time = "1:00",
+                showCursor = true,
             ),
             aVoiceMessageState(
                 VoiceMessageState.Button.Pause,
                 progress = 0.2f,
                 time = "10:00",
+                showCursor = true,
             ),
             aVoiceMessageState(
                 VoiceMessageState.Button.Disabled,
@@ -53,9 +55,11 @@ fun aVoiceMessageState(
     button: VoiceMessageState.Button = VoiceMessageState.Button.Play,
     progress: Float = 0f,
     time: String = "1:00",
+    showCursor: Boolean = false,
 ) = VoiceMessageState(
     button = button,
     progress = progress,
     time = time,
+    showCursor = showCursor,
     eventSink = {},
 )

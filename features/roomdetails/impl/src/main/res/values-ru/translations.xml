@@ -5,6 +5,7 @@
     <item quantity="few">"%1$d пользователя"</item>
     <item quantity="many">"%1$d пользователей"</item>
   </plurals>
+  <string name="screen_notification_settings_edit_failed_updating_default_mode">"При обновлении настроек уведомления произошла ошибка."</string>
   <string name="screen_room_details_add_topic_title">"Добавить тему"</string>
   <string name="screen_room_details_already_a_member">"Уже зарегистрирован"</string>
   <string name="screen_room_details_already_invited">"Уже приглашены"</string>
@@ -29,12 +30,13 @@
   <string name="screen_room_notification_settings_allow_custom_footnote">"Включение этого параметра отменяет настройки по умолчанию"</string>
   <string name="screen_room_notification_settings_custom_settings_title">"Уведомить меня в этом чате"</string>
   <string name="screen_room_notification_settings_default_setting_footnote">"Вы можете изменить его в своем %1$s."</string>
-  <string name="screen_room_notification_settings_default_setting_footnote_content_link">"Основные Настройки"</string>
+  <string name="screen_room_notification_settings_default_setting_footnote_content_link">"основные настройки"</string>
   <string name="screen_room_notification_settings_default_setting_title">"Настройка по умолчанию"</string>
   <string name="screen_room_notification_settings_edit_remove_setting">"Удалить пользовательскую настройку"</string>
   <string name="screen_room_notification_settings_error_loading_settings">"Произошла ошибка при загрузке настроек уведомлений."</string>
   <string name="screen_room_notification_settings_error_restoring_default">"Не удалось восстановить режим по умолчанию, попробуйте еще раз."</string>
   <string name="screen_room_notification_settings_error_setting_mode">"Не удалось настроить режим, попробуйте еще раз."</string>
+  <string name="screen_room_notification_settings_mentions_only_disclaimer">"Ваш домашний сервер не поддерживает эту опцию в зашифрованных комнатах, вы не будете получать уведомления в этой комнате."</string>
   <string name="screen_room_notification_settings_mode_all_messages">"Все сообщения"</string>
   <string name="screen_room_notification_settings_room_custom_settings_title">"В этой комнате уведомить меня о"</string>
   <string name="screen_dm_details_block_alert_action">"Заблокировать"</string>

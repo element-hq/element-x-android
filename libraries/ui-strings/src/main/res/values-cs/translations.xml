@@ -13,7 +13,8 @@
   <string name="a11y_show_password">"Zobrazit heslo"</string>
   <string name="a11y_start_call">"Zahájit hovor"</string>
   <string name="a11y_user_menu">"Uživatelské menu"</string>
-  <string name="a11y_voice_message_record">"Nahrajte hlasovou zprávu. Dvojitě klepněte a podržte pro záznam. Uvolněním ukončíte nahrávání."</string>
+  <string name="a11y_voice_message_record">"Nahrajte hlasovou zprávu."</string>
+  <string name="a11y_voice_message_stop_recording">"Zastavit nahrávání"</string>
   <string name="action_accept">"Přijmout"</string>
   <string name="action_add_to_timeline">"Přidat na časovou osu"</string>
   <string name="action_back">"Zpět"</string>
@@ -115,6 +116,7 @@
   <string name="common_link_copied_to_clipboard">"Odkaz zkopírován do schránky"</string>
   <string name="common_loading">"Načítání…"</string>
   <string name="common_message">"Zpráva"</string>
+  <string name="common_message_actions">"Akce zprávy"</string>
   <string name="common_message_layout">"Rozložení zprávy"</string>
   <string name="common_message_removed">"Zpráva byla odstraněna"</string>
   <string name="common_modern">"Moderní"</string>
@@ -134,6 +136,7 @@
   <string name="common_refreshing">"Obnovování…"</string>
   <string name="common_replying_to">"Odpověď na %1$s"</string>
   <string name="common_report_a_bug">"Nahlásit chybu"</string>
+  <string name="common_report_a_problem">"Nahlásit problém"</string>
   <string name="common_report_submitted">"Zpráva odeslána"</string>
   <string name="common_rich_text_editor">"Editor formátovaného textu"</string>
   <string name="common_room">"Místnost"</string>
@@ -174,16 +177,9 @@
   <string name="common_waiting_for_decryption_key">"Čekání na dešifrovací klíč"</string>
   <string name="common_poll_end_confirmation">"Opravdu chcete ukončit toto hlasování?"</string>
   <string name="common_poll_summary">"Hlasování: %1$s"</string>
+  <string name="common_verify_device">"Ověřit zařízení"</string>
   <string name="dialog_title_confirmation">"Potvrzení"</string>
   <string name="dialog_title_warning">"Upozornění"</string>
-  <string name="emoji_picker_category_activity">"Aktivity"</string>
-  <string name="emoji_picker_category_flags">"Vlajky"</string>
-  <string name="emoji_picker_category_foods">"Jídlo a nápoje"</string>
-  <string name="emoji_picker_category_nature">"Zvířata a příroda"</string>
-  <string name="emoji_picker_category_objects">"Předměty"</string>
-  <string name="emoji_picker_category_people">"Smajlíci a lidé"</string>
-  <string name="emoji_picker_category_places">"Cestování a místa"</string>
-  <string name="emoji_picker_category_symbols">"Symboly"</string>
   <string name="error_failed_creating_the_permalink">"Vytvoření trvalého odkazu se nezdařilo"</string>
   <string name="error_failed_loading_map">"%1$s nemohl načíst mapu. Zkuste to prosím později."</string>
   <string name="error_failed_loading_messages">"Načítání zpráv se nezdařilo"</string>
@@ -196,9 +192,6 @@
   <string name="error_unknown">"Omlouváme se, došlo k chybě"</string>
   <string name="invite_friends_rich_title">"🔐️ Připojte se ke mně na %1$s"</string>
   <string name="invite_friends_text">"Ahoj, ozvi se mi na %1$s: %2$s"</string>
-  <string name="leave_room_alert_empty_subtitle">"Opravdu chcete opustit tuto místnost? Jste tu jediná osoba. Pokud odejdete, nikdo se v budoucnu nebude moci připojit, včetně vás."</string>
-  <string name="leave_room_alert_private_subtitle">"Opravdu chcete opustit tuto místnost? Tato místnost není veřejná a bez pozvánky se nebudete moci znovu připojit."</string>
-  <string name="leave_room_alert_subtitle">"Opravdu chcete opustit místnost?"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <plurals name="a11y_digits_entered">
     <item quantity="one">"zadána %1$d číslice"</item>
@@ -216,43 +209,9 @@
     <item quantity="other">"%d hlasů"</item>
   </plurals>
   <string name="preference_rageshake">"Zatřeste zařízením pro nahlášení chyby"</string>
-  <string name="report_content_explanation">"Tato zpráva bude nahlášena správci vašeho domovského serveru. Nebude si moci přečíst žádné šifrované zprávy."</string>
-  <string name="report_content_hint">"Důvod nahlášení tohoto obsahu"</string>
-  <string name="room_timeline_beginning_of_room">"Toto je začátek %1$s."</string>
-  <string name="room_timeline_beginning_of_room_no_name">"Toto je začátek této konverzace."</string>
-  <string name="room_timeline_read_marker_title">"Nové"</string>
-  <string name="screen_analytics_settings_share_data">"Sdílet analytická data"</string>
   <string name="screen_media_picker_error_failed_selection">"Výběr média se nezdařil, zkuste to prosím znovu."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Nahrání média se nezdařilo, zkuste to prosím znovu."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Nahrání média se nezdařilo, zkuste to prosím znovu."</string>
-  <string name="screen_notification_settings_additional_settings_section_title">"Další nastavení"</string>
-  <string name="screen_notification_settings_calls_label">"Halsové a video hovory"</string>
-  <string name="screen_notification_settings_configuration_mismatch">"Neshoda konfigurace"</string>
-  <string name="screen_notification_settings_configuration_mismatch_description">"Zjednodušili jsme nastavení oznámení, abychom usnadnili hledání možností. 
-
-Některá vlastní nastavení, která jste si vybrali v minulosti, se zde nezobrazují, ale jsou stále aktivní. 
-
-Pokud budete pokračovat, některá nastavení se mohou změnit."</string>
-  <string name="screen_notification_settings_direct_chats">"Přímé zprávy"</string>
-  <string name="screen_notification_settings_edit_custom_settings_section_title">"Vlastní nastavení pro chat"</string>
-  <string name="screen_notification_settings_edit_failed_updating_default_mode">"Při aktualizaci nastavení oznámení došlo k chybě."</string>
-  <string name="screen_notification_settings_edit_mode_all_messages">"Všechny zprávy"</string>
-  <string name="screen_notification_settings_edit_mode_mentions_and_keywords">"Pouze zmínky a klíčová slova"</string>
-  <string name="screen_notification_settings_edit_screen_direct_section_header">"V přímých zprávách mě upozornit na"</string>
-  <string name="screen_notification_settings_edit_screen_group_section_header">"Ve skupinových chatech mě upozornit na"</string>
-  <string name="screen_notification_settings_enable_notifications">"Povolit oznámení na tomto zařízení"</string>
-  <string name="screen_notification_settings_failed_fixing_configuration">"Konfigurace nebyla opravena, zkuste to prosím znovu."</string>
-  <string name="screen_notification_settings_group_chats">"Skupinové chaty"</string>
-  <string name="screen_notification_settings_mentions_section_title">"Zmínky"</string>
-  <string name="screen_notification_settings_mode_all">"Vše"</string>
-  <string name="screen_notification_settings_mode_mentions">"Zmínky"</string>
-  <string name="screen_notification_settings_notification_section_title">"Upozornit mě na"</string>
-  <string name="screen_notification_settings_room_mention_label">"Upozornit mě na @room"</string>
-  <string name="screen_notification_settings_system_notifications_action_required">"Chcete-li dostávat oznámení, změňte prosím svůj %1$s."</string>
-  <string name="screen_notification_settings_system_notifications_action_required_content_link">"systémová nastavení"</string>
-  <string name="screen_notification_settings_system_notifications_turned_off">"Systémová oznámení byla vypnuta"</string>
-  <string name="screen_notification_settings_title">"Oznámení"</string>
-  <string name="screen_report_content_block_user_hint">"Zaškrtněte, pokud chcete skrýt všechny aktuální a budoucí zprávy od tohoto uživatele"</string>
   <string name="screen_share_location_title">"Sdílet polohu"</string>
   <string name="screen_share_my_location_action">"Sdílet moji polohu"</string>
   <string name="screen_share_open_apple_maps">"Otevřít v Mapách Apple"</string>
@@ -260,14 +219,8 @@ Pokud budete pokračovat, některá nastavení se mohou změnit."</string>
   <string name="screen_share_open_osm_maps">"Otevřít v OpenStreetMap"</string>
   <string name="screen_share_this_location_action">"Sdílet tuto polohu"</string>
   <string name="screen_view_location_title">"Poloha"</string>
-  <string name="settings_rageshake">"Rageshake"</string>
-  <string name="settings_rageshake_detection_threshold">"Práh detekce"</string>
   <string name="settings_version_number">"Verze: %1$s (%2$s)"</string>
   <string name="test_language_identifier">"en"</string>
   <string name="dialog_title_error">"Chyba"</string>
   <string name="dialog_title_success">"Úspěch"</string>
-  <string name="screen_analytics_settings_help_us_improve">"Sdílejte anonymní údaje o používání, které nám pomohou identifikovat problémy."</string>
-  <string name="screen_analytics_settings_read_terms">"Můžete si přečíst všechny naše podmínky %1$s."</string>
-  <string name="screen_analytics_settings_read_terms_content_link">"zde"</string>
-  <string name="screen_report_content_block_user">"Zablokovat uživatele"</string>
 </resources>

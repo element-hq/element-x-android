@@ -38,6 +38,7 @@ internal fun UserRow(
     name: String,
     subtext: String?,
     modifier: Modifier = Modifier,
+    trailingContent: @Composable (() -> Unit)? = null,
 ) {
     Row(
         modifier = modifier
@@ -49,7 +50,8 @@ internal fun UserRow(
         Avatar(avatarData)
         Column(
             modifier = Modifier
-                .padding(start = 12.dp),
+                .padding(start = 12.dp)
+                .weight(1f),
         ) {
             // Name
             Text(
@@ -70,5 +72,6 @@ internal fun UserRow(
                 )
             }
         }
+        trailingContent?.invoke()
     }
 }

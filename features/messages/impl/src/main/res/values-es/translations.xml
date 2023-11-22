@@ -1,7 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="emoji_picker_category_activity">"Actividades"</string>
+  <string name="emoji_picker_category_flags">"Banderas"</string>
+  <string name="emoji_picker_category_foods">"Comida y bebida"</string>
+  <string name="emoji_picker_category_nature">"Animales y naturaleza"</string>
+  <string name="emoji_picker_category_objects">"Objetos"</string>
+  <string name="emoji_picker_category_people">"Emojis y personas"</string>
+  <string name="emoji_picker_category_places">"Viajes y lugares"</string>
+  <string name="emoji_picker_category_symbols">"Símbolos"</string>
   <plurals name="room_timeline_state_changes">
     <item quantity="one">"%1$d cambio en la sala"</item>
     <item quantity="other">"%1$d cambios en la sala"</item>
   </plurals>
+  <string name="report_content_explanation">"Este mensaje se notificará al administrador de su homeserver. No podrán leer ningún mensaje cifrado."</string>
+  <string name="report_content_hint">"Motivo para denunciar este contenido"</string>
+  <string name="room_timeline_beginning_of_room">"Este es el principio de %1$s."</string>
+  <string name="room_timeline_beginning_of_room_no_name">"Este es el principio de esta conversación."</string>
+  <string name="room_timeline_read_marker_title">"Nuevos"</string>
+  <string name="screen_report_content_block_user_hint">"Marque si quieres ocultar todos los mensajes actuales y futuros de este usuario"</string>
+  <string name="screen_report_content_block_user">"Bloquear usuario"</string>
 </resources>

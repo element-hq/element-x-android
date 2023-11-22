@@ -2,4 +2,6 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="crash_detection_dialog_content">"%1$s havaroval při posledním použití. Chcete se s námi podělit o zprávu o selhání?"</string>
   <string name="rageshake_detection_dialog_content">"Zdá se, že frustrovaně třesete telefonem. Chcete nahlásit chybu?"</string>
+  <string name="settings_rageshake">"Rageshake"</string>
+  <string name="settings_rageshake_detection_threshold">"Práh detekce"</string>
 </resources>

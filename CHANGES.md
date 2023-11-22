@@ -1,3 +1,28 @@
+Changes in Element X v0.3.2 (2023-11-22)
+========================================
+
+Features ✨
+----------
+ - Add ongoing call indicator to rooms lists items. ([#1158](https://github.com/vector-im/element-x-android/issues/1158))
+ - Add support for typing mentions in the message composer. ([#1453](https://github.com/vector-im/element-x-android/issues/1453))
+ - Add intentional mentions to messages. This needs to be enabled in developer options since it's disabled by default. ([#1591](https://github.com/vector-im/element-x-android/issues/1591))
+ - Update voice message recording behaviour. Instead of holding the record button, users can now tap the record button to start recording and tap again to stop recording. ([#1784](https://github.com/vector-im/element-x-android/issues/1784))
+
+Bugfixes 🐛
+----------
+ - Always ensure media temp dir exists ([#1790](https://github.com/vector-im/element-x-android/issues/1790))
+
+Other changes
+-------------
+ - Update icons and move away from `PreferenceText` components. ([#1718](https://github.com/vector-im/element-x-android/issues/1718))
+ - Add item "This is the beginning of..." at the beginning of the timeline. ([#1801](https://github.com/vector-im/element-x-android/issues/1801))
+ - LockScreen : rework LoggedInFlowNode and back management when locked. ([#1806](https://github.com/vector-im/element-x-android/issues/1806))
+ - Suppress usage of removeTimeline method. ([#1824](https://github.com/vector-im/element-x-android/issues/1824))
+ - Remove Element Call feature flag, it's now always enabled.
+  - Reverted the EC base URL to `https://call.element.io`.
+  - Moved the option to override this URL to developer settings from advanced settings.
+
+
 Changes in Element X v0.3.1 (2023-11-09)
 ========================================
 

@@ -16,16 +16,20 @@
 
 package io.element.android.features.preferences.impl.developer
 
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import io.element.android.features.preferences.impl.R
 import io.element.android.features.rageshake.api.preferences.RageshakePreferencesView
 import io.element.android.libraries.designsystem.components.preferences.PreferenceCategory
-import io.element.android.libraries.designsystem.components.preferences.PreferenceText
 import io.element.android.libraries.designsystem.components.preferences.PreferencePage
-import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.components.preferences.PreferenceText
+import io.element.android.libraries.designsystem.components.preferences.PreferenceTextField
 import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.featureflag.ui.FeatureListView
 import io.element.android.libraries.featureflag.ui.model.FeatureUiModel
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -47,6 +51,7 @@ fun DeveloperSettingsView(
         PreferenceCategory(title = "Feature flags") {
             FeatureListContent(state)
         }
+        ElementCallCategory(state = state)
         PreferenceCategory(title = "Rust SDK") {
             PreferenceText(
                 title = "Configure tracing",
@@ -81,6 +86,34 @@ fun DeveloperSettingsView(
                 }
             )
         }
+    }
+}
+
+@Composable
+private fun ElementCallCategory(
+    state: DeveloperSettingsState,
+    modifier: Modifier = Modifier,
+) {
+    PreferenceCategory(modifier = modifier, title = "Element Call", showDivider = true) {
+        val callUrlState = state.customElementCallBaseUrlState
+        fun isUsingDefaultUrl(value: String?): Boolean {
+            return value.isNullOrEmpty() || value == callUrlState.defaultUrl
+        }
+        val supportingText = if (isUsingDefaultUrl(callUrlState.baseUrl)) {
+            stringResource(R.string.screen_advanced_settings_element_call_base_url_description)
+        } else {
+            callUrlState.baseUrl
+        }
+        PreferenceTextField(
+            headline = stringResource(R.string.screen_advanced_settings_element_call_base_url),
+            value = callUrlState.baseUrl ?: callUrlState.defaultUrl,
+            supportingText = supportingText,
+            validation = callUrlState.validator,
+            onValidationErrorMessage = stringResource(R.string.screen_advanced_settings_element_call_base_url_validation_error),
+            displayValue = { value -> !isUsingDefaultUrl(value) },
+            keyboardOptions = KeyboardOptions.Default.copy(autoCorrect = false, keyboardType = KeyboardType.Uri),
+            onChange = { state.eventSink(DeveloperSettingsEvents.SetCustomElementCallBaseUrl(it)) }
+        )
     }
 }
 

@@ -176,14 +176,6 @@
   <string name="common_poll_summary">"Sondage : %1$s"</string>
   <string name="dialog_title_confirmation">"Confirmation"</string>
   <string name="dialog_title_warning">"Attention"</string>
-  <string name="emoji_picker_category_activity">"Activités"</string>
-  <string name="emoji_picker_category_flags">"Drapeaux"</string>
-  <string name="emoji_picker_category_foods">"Nourriture et boissons"</string>
-  <string name="emoji_picker_category_nature">"Animaux et nature"</string>
-  <string name="emoji_picker_category_objects">"Objets"</string>
-  <string name="emoji_picker_category_people">"Émoticônes et personnes"</string>
-  <string name="emoji_picker_category_places">"Voyages &amp; lieux"</string>
-  <string name="emoji_picker_category_symbols">"Symboles"</string>
   <string name="error_failed_creating_the_permalink">"Échec de la création du permalien"</string>
   <string name="error_failed_loading_map">"%1$s n’a pas pu charger la carte. Veuillez réessayer ultérieurement."</string>
   <string name="error_failed_loading_messages">"Échec du chargement des messages"</string>
@@ -196,9 +188,6 @@
   <string name="error_unknown">"Désolé, une erreur s’est produite"</string>
   <string name="invite_friends_rich_title">"🔐️ Rejoignez-moi sur %1$s"</string>
   <string name="invite_friends_text">"Salut, parle-moi sur %1$s : %2$s"</string>
-  <string name="leave_room_alert_empty_subtitle">"Êtes-vous sûr de vouloir quitter ce salon ? Vous êtes la seule personne ici. Si vous partez, personne ne pourra rejoindre le salon à l’avenir, y compris vous."</string>
-  <string name="leave_room_alert_private_subtitle">"Êtes-vous sûr de vouloir quitter ce salon ? Ce salon n’est pas public et vous ne pourrez pas le rejoindre sans invitation."</string>
-  <string name="leave_room_alert_subtitle">"Êtes-vous sûr de vouloir quitter le salon ?"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <plurals name="a11y_digits_entered">
     <item quantity="one">"%1$d chiffre saisi"</item>
@@ -213,43 +202,9 @@
     <item quantity="other">"%d votes"</item>
   </plurals>
   <string name="preference_rageshake">"Rageshake pour signaler un problème"</string>
-  <string name="report_content_explanation">"Ce message sera signalé à l’administrateur de votre serveur d’accueil. Il ne pourra lire aucun message chiffré."</string>
-  <string name="report_content_hint">"Raison du signalement de ce contenu"</string>
-  <string name="room_timeline_beginning_of_room">"Ceci est le début de %1$s."</string>
-  <string name="room_timeline_beginning_of_room_no_name">"Ceci est le début de cette conversation."</string>
-  <string name="room_timeline_read_marker_title">"Nouveau"</string>
-  <string name="screen_analytics_settings_share_data">"Partagez des données de statistiques d’utilisation"</string>
   <string name="screen_media_picker_error_failed_selection">"Échec de la sélection du média, veuillez réessayer."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Échec du traitement des médias à télécharger, veuillez réessayer."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Échec du téléchargement du média, veuillez réessayer."</string>
-  <string name="screen_notification_settings_additional_settings_section_title">"Réglages supplémentaires"</string>
-  <string name="screen_notification_settings_calls_label">"Appels audio et vidéo"</string>
-  <string name="screen_notification_settings_configuration_mismatch">"Incompatibilité de configuration"</string>
-  <string name="screen_notification_settings_configuration_mismatch_description">"Nous avons simplifié les paramètres des notifications pour que les options soient plus faciles à trouver.
-
-Certains paramètres personnalisés que vous avez choisis par le passé ne sont pas affichés ici, mais ils sont toujours actifs.
-
-Si vous continuez, il est possible que certains de vos paramètres soient modifiés."</string>
-  <string name="screen_notification_settings_direct_chats">"Discussions directes"</string>
-  <string name="screen_notification_settings_edit_custom_settings_section_title">"Paramétrage personnalisé par salon"</string>
-  <string name="screen_notification_settings_edit_failed_updating_default_mode">"Une erreur s’est produite lors de la mise à jour du paramètre de notification."</string>
-  <string name="screen_notification_settings_edit_mode_all_messages">"Tous les messages"</string>
-  <string name="screen_notification_settings_edit_mode_mentions_and_keywords">"Mentions et mots clés uniquement"</string>
-  <string name="screen_notification_settings_edit_screen_direct_section_header">"Sur les discussions directes, prévenez-moi pour"</string>
-  <string name="screen_notification_settings_edit_screen_group_section_header">"Lors de discussions de groupe, prévenez-moi pour"</string>
-  <string name="screen_notification_settings_enable_notifications">"Activer les notifications sur cet appareil"</string>
-  <string name="screen_notification_settings_failed_fixing_configuration">"La configuration n’a pas été corrigée, veuillez réessayer."</string>
-  <string name="screen_notification_settings_group_chats">"Discussions de groupe"</string>
-  <string name="screen_notification_settings_mentions_section_title">"Mentions"</string>
-  <string name="screen_notification_settings_mode_all">"Tous"</string>
-  <string name="screen_notification_settings_mode_mentions">"Mentions"</string>
-  <string name="screen_notification_settings_notification_section_title">"Prévenez-moi pour"</string>
-  <string name="screen_notification_settings_room_mention_label">"Prévenez-moi si un message contient \"@room\""</string>
-  <string name="screen_notification_settings_system_notifications_action_required">"Pour recevoir des notifications, veuillez modifier votre %1$s."</string>
-  <string name="screen_notification_settings_system_notifications_action_required_content_link">"paramètres du système"</string>
-  <string name="screen_notification_settings_system_notifications_turned_off">"Les notifications du système sont désactivées"</string>
-  <string name="screen_notification_settings_title">"Notifications"</string>
-  <string name="screen_report_content_block_user_hint">"Cochez si vous souhaitez masquer tous les messages actuels et futurs de cet utilisateur."</string>
   <string name="screen_share_location_title">"Partage de position"</string>
   <string name="screen_share_my_location_action">"Partager ma position"</string>
   <string name="screen_share_open_apple_maps">"Ouvrir dans Apple Maps"</string>
@@ -257,14 +212,8 @@ Si vous continuez, il est possible que certains de vos paramètres soient modifi
   <string name="screen_share_open_osm_maps">"Ouvrir dans OpenStreetMap"</string>
   <string name="screen_share_this_location_action">"Partager cet position"</string>
   <string name="screen_view_location_title">"Position"</string>
-  <string name="settings_rageshake">"Rageshake"</string>
-  <string name="settings_rageshake_detection_threshold">"Seuil de détection"</string>
   <string name="settings_version_number">"Version : %1$s ( %2$s )"</string>
   <string name="test_language_identifier">"Ang."</string>
   <string name="dialog_title_error">"Erreur"</string>
   <string name="dialog_title_success">"Succès"</string>
-  <string name="screen_analytics_settings_help_us_improve">"Partagez des données d’utilisation anonymes pour nous aider à identifier les problèmes."</string>
-  <string name="screen_analytics_settings_read_terms">"Vous pouvez lire toutes nos conditions %1$s."</string>
-  <string name="screen_analytics_settings_read_terms_content_link">"ici"</string>
-  <string name="screen_report_content_block_user">"Bloquer l’utilisateur"</string>
 </resources>

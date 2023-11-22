@@ -16,7 +16,7 @@
 plugins {
     id("io.element.android-library")
     alias(libs.plugins.anvil)
-    kotlin("plugin.serialization") version "1.9.20"
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -36,6 +36,7 @@ dependencies {
     implementation(libs.serialization.json)
     implementation(libs.coil)
 
+    implementation(projects.appconfig)
     implementation(projects.libraries.architecture)
     implementation(projects.libraries.core)
     implementation(projects.libraries.designsystem)

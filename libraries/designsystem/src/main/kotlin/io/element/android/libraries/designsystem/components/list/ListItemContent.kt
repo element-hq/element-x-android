@@ -16,10 +16,12 @@
 
 package io.element.android.libraries.designsystem.components.list
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.DpSize
@@ -126,7 +128,12 @@ sealed interface ListItemContent {
                 )
             }
             is Text -> TextComponent(modifier = Modifier.widthIn(max = 128.dp), text = text, maxLines = 1, overflow = TextOverflow.Ellipsis)
-            is Badge -> RedIndicatorAtom()
+            is Badge -> Box(
+                modifier = Modifier.size(maxCompactSize),
+                contentAlignment = Alignment.Center,
+            ) {
+                RedIndicatorAtom()
+            }
             is Custom -> content()
         }
     }

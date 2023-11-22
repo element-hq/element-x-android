@@ -41,6 +41,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -70,11 +71,14 @@ import io.element.android.features.messages.impl.timeline.components.customreact
 import io.element.android.features.messages.impl.timeline.components.customreaction.CustomReactionEvents
 import io.element.android.features.messages.impl.timeline.components.reactionsummary.ReactionSummaryEvents
 import io.element.android.features.messages.impl.timeline.components.reactionsummary.ReactionSummaryView
+import io.element.android.features.messages.impl.timeline.components.receipt.bottomsheet.ReadReceiptBottomSheet
+import io.element.android.features.messages.impl.timeline.components.receipt.bottomsheet.ReadReceiptBottomSheetEvents
 import io.element.android.features.messages.impl.timeline.components.retrysendmenu.RetrySendMenuEvents
 import io.element.android.features.messages.impl.timeline.components.retrysendmenu.RetrySendMessageMenu
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessageComposerEvents
 import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessagePermissionRationaleDialog
+import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessageSendingFailedDialog
 import io.element.android.features.networkmonitor.api.ui.ConnectivityIndicatorView
 import io.element.android.libraries.androidutils.ui.hideKeyboard
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitlePlaceholdersRowMolecule
@@ -211,6 +215,9 @@ fun MessagesView(
                 onReactionClicked = ::onEmojiReactionClicked,
                 onReactionLongClicked = ::onEmojiReactionLongClicked,
                 onMoreReactionsClicked = ::onMoreReactionsClicked,
+                onReadReceiptClick = { event ->
+                    state.readReceiptBottomSheetState.eventSink(ReadReceiptBottomSheetEvents.EventSelected(event))
+                },
                 onSendLocationClicked = onSendLocationClicked,
                 onCreatePollClicked = onCreatePollClicked,
                 onSwipeToReply = { targetEvent ->
@@ -245,13 +252,12 @@ fun MessagesView(
     )
 
     ReactionSummaryView(state = state.reactionSummaryState)
-    RetrySendMessageMenu(
-        state = state.retrySendMenuState
+    RetrySendMessageMenu(state = state.retrySendMenuState)
+    ReadReceiptBottomSheet(
+        state = state.readReceiptBottomSheetState,
+        onUserDataClicked = onUserDataClicked,
     )
-
-    ReinviteDialog(
-        state = state
-    )
+    ReinviteDialog(state = state)
 
     // Since the textfield is now based on an Android view, this is no longer done automatically.
     // We need to hide the keyboard automatically when navigating out of this screen.
@@ -309,6 +315,7 @@ private fun MessagesViewContent(
     onReactionClicked: (key: String, TimelineItem.Event) -> Unit,
     onReactionLongClicked: (key: String, TimelineItem.Event) -> Unit,
     onMoreReactionsClicked: (TimelineItem.Event) -> Unit,
+    onReadReceiptClick: (TimelineItem.Event) -> Unit,
     onMessageLongClicked: (TimelineItem.Event) -> Unit,
     onTimestampClicked: (TimelineItem.Event) -> Unit,
     onSendLocationClicked: () -> Unit,
@@ -340,15 +347,20 @@ private fun MessagesViewContent(
                 appName = state.appName
             )
         }
+        if (state.enableVoiceMessages && state.voiceMessageComposerState.showSendFailureDialog) {
+            VoiceMessageSendingFailedDialog(
+                onDismiss = { state.voiceMessageComposerState.eventSink(VoiceMessageComposerEvents.DismissSendFailureDialog) },
+            )
+        }
 
         // This key is used to force the sheet to be remeasured when the content changes.
         // Any state change that should trigger a height size should be added to the list of remembered values here.
-        val sheetResizeContentKey = remember(
-            state.composerState.mode.relatedEventId,
+        val sheetResizeContentKey = remember { mutableIntStateOf(0) }
+        LaunchedEffect(
             state.composerState.richTextEditorState.lineCount,
-            state.composerState.memberSuggestions.size
+            state.composerState.showTextFormatting,
         ) {
-            Random.nextInt()
+            sheetResizeContentKey.intValue = Random.nextInt()
         }
 
         ExpandableBottomSheetScaffold(
@@ -367,6 +379,7 @@ private fun MessagesViewContent(
                 TimelineView(
                     modifier = Modifier.padding(paddingValues),
                     state = state.timelineState,
+                    roomName = state.roomName.dataOrNull(),
                     onMessageClicked = onMessageClicked,
                     onMessageLongClicked = onMessageLongClicked,
                     onUserDataClicked = onUserDataClicked,
@@ -374,6 +387,7 @@ private fun MessagesViewContent(
                     onReactionClicked = onReactionClicked,
                     onReactionLongClicked = onReactionLongClicked,
                     onMoreReactionsClicked = onMoreReactionsClicked,
+                    onReadReceiptClick = onReadReceiptClick,
                     onSwipeToReply = onSwipeToReply,
                 )
             },
@@ -383,7 +397,7 @@ private fun MessagesViewContent(
                     state = state,
                 )
             },
-            sheetContentKey = sheetResizeContentKey,
+            sheetContentKey = sheetResizeContentKey.intValue,
             sheetTonalElevation = 0.dp,
             sheetShadowElevation = if (state.composerState.memberSuggestions.isNotEmpty()) 16.dp else 0.dp,
         )
@@ -399,7 +413,8 @@ private fun MessagesViewComposerBottomSheetContents(
     if (state.userHasPermissionToSendMessage) {
         Column(modifier = modifier.fillMaxWidth()) {
             MentionSuggestionsPickerView(
-                modifier = Modifier.heightIn(max = 230.dp)
+                modifier = Modifier
+                    .heightIn(max = 230.dp)
                     // Consume all scrolling, preventing the bottom sheet from being dragged when interacting with the list of suggestions
                     .nestedScroll(object : NestedScrollConnection {
                         override fun onPostScroll(consumed: Offset, available: Offset, source: NestedScrollSource): Offset {
@@ -411,7 +426,7 @@ private fun MessagesViewComposerBottomSheetContents(
                 roomAvatarData = state.roomAvatar.dataOrNull(),
                 memberSuggestions = state.composerState.memberSuggestions,
                 onSuggestionSelected = {
-                    // TODO pass the selected suggestion to the RTE so it can be inserted as a pill
+                    state.composerState.eventSink(MessageComposerEvents.InsertMention(it))
                 }
             )
             MessageComposerView(

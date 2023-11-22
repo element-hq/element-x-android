@@ -22,7 +22,6 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import com.squareup.anvil.annotations.ContributesTo
 import dagger.Binds
 import dagger.Module
@@ -40,6 +39,7 @@ import io.element.android.libraries.architecture.runUpdatingState
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.ui.utils.time.formatShort
 import io.element.android.services.analytics.api.AnalyticsService
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlin.time.Duration.Companion.milliseconds
 
@@ -55,6 +55,7 @@ interface VoiceMessagePresenterModule {
 class VoiceMessagePresenter @AssistedInject constructor(
     voiceMessagePlayerFactory: VoiceMessagePlayer.Factory,
     private val analyticsService: AnalyticsService,
+    private val scope: CoroutineScope,
     @Assisted private val content: TimelineItemVoiceContent,
 ) : Presenter<VoiceMessageState> {
 
@@ -70,13 +71,20 @@ class VoiceMessagePresenter @AssistedInject constructor(
         body = content.body,
     )
 
+    private val play = mutableStateOf<Async<Unit>>(Async.Uninitialized)
+
     @Composable
     override fun present(): VoiceMessageState {
 
-        val scope = rememberCoroutineScope()
-
-        val playerState by player.state.collectAsState(VoiceMessagePlayer.State(isPlaying = false, isMyMedia = false, currentPosition = 0L))
-        val play = remember { mutableStateOf<Async<Unit>>(Async.Uninitialized) }
+        val playerState by player.state.collectAsState(
+            VoiceMessagePlayer.State(
+                isReady = false,
+                isPlaying = false,
+                isEnded = false,
+                currentPosition = 0L,
+                duration = null
+            )
+        )
 
         val button by remember {
             derivedStateOf {
@@ -89,13 +97,26 @@ class VoiceMessagePresenter @AssistedInject constructor(
                 }
             }
         }
+        val duration by remember {
+            derivedStateOf { playerState.duration ?: content.duration.toMillis() }
+        }
         val progress by remember {
-            derivedStateOf { if (playerState.isMyMedia) playerState.currentPosition / content.duration.toMillis().toFloat() else 0f }
+            derivedStateOf {
+                playerState.currentPosition / duration.toFloat()
+            }
         }
         val time by remember {
             derivedStateOf {
-                val time = if (playerState.isMyMedia) playerState.currentPosition else content.duration.toMillis()
-                time.milliseconds.formatShort()
+                when {
+                    playerState.isReady && !playerState.isEnded -> playerState.currentPosition
+                    playerState.currentPosition > 0 -> playerState.currentPosition
+                    else -> duration
+                }.milliseconds.formatShort()
+            }
+        }
+        val showCursor by remember {
+            derivedStateOf {
+                !play.value.isUninitialized() && !playerState.isEnded
             }
         }
 
@@ -104,6 +125,8 @@ class VoiceMessagePresenter @AssistedInject constructor(
                 is VoiceMessageEvents.PlayPause -> {
                     if (playerState.isPlaying) {
                         player.pause()
+                    } else if (playerState.isReady) {
+                        player.play()
                     } else {
                         scope.launch {
                             play.runUpdatingState(
@@ -114,13 +137,15 @@ class VoiceMessagePresenter @AssistedInject constructor(
                                     it
                                 },
                             ) {
-                                player.play()
+                                player.prepare().apply {
+                                    player.play()
+                                }
                             }
                         }
                     }
                 }
                 is VoiceMessageEvents.Seek -> {
-                    player.seekTo((event.percentage * content.duration.toMillis()).toLong())
+                    player.seekTo((event.percentage * duration).toLong())
                 }
             }
         }
@@ -129,6 +154,7 @@ class VoiceMessagePresenter @AssistedInject constructor(
             button = button,
             progress = progress,
             time = time,
+            showCursor = showCursor,
             eventSink = { eventSink(it) },
         )
     }

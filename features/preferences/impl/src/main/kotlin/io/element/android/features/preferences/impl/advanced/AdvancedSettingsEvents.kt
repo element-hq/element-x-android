@@ -16,8 +16,12 @@
 
 package io.element.android.features.preferences.impl.advanced
 
+import io.element.android.libraries.theme.theme.Theme
+
 sealed interface AdvancedSettingsEvents {
     data class SetRichTextEditorEnabled(val enabled: Boolean) : AdvancedSettingsEvents
     data class SetDeveloperModeEnabled(val enabled: Boolean) : AdvancedSettingsEvents
-    data class SetCustomElementCallBaseUrl(val baseUrl: String?) : AdvancedSettingsEvents
+    data object ChangeTheme : AdvancedSettingsEvents
+    data object CancelChangeTheme : AdvancedSettingsEvents
+    data class SetTheme(val theme: Theme) : AdvancedSettingsEvents
 }

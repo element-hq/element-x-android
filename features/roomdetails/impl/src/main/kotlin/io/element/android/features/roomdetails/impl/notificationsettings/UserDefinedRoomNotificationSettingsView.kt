@@ -22,26 +22,22 @@ import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.features.roomdetails.impl.R
 import io.element.android.libraries.core.bool.orTrue
 import io.element.android.libraries.designsystem.components.async.AsyncView
 import io.element.android.libraries.designsystem.components.button.BackButton
-import io.element.android.libraries.designsystem.components.preferences.PreferenceText
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.theme.components.ListItem
+import io.element.android.libraries.designsystem.theme.components.ListItemStyle
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
-import io.element.android.libraries.designsystem.utils.CommonDrawables
-import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
 fun UserDefinedRoomNotificationSettingsView(
@@ -76,10 +72,9 @@ fun UserDefinedRoomNotificationSettingsView(
                 )
             }
 
-            PreferenceText(
-                title = stringResource(R.string.screen_room_notification_settings_edit_remove_setting),
-                icon = ImageVector.vectorResource(CommonDrawables.ic_compound_delete),
-                tintColor = MaterialTheme.colorScheme.error,
+            ListItem(
+                headlineContent = { Text(stringResource(R.string.screen_room_notification_settings_edit_remove_setting)) },
+                style = ListItemStyle.Destructive,
                 onClick = {
                     state.eventSink(RoomNotificationSettingsEvents.DeleteCustomNotification)
                 }
@@ -88,14 +83,14 @@ fun UserDefinedRoomNotificationSettingsView(
             AsyncView(
                 async = state.setNotificationSettingAction,
                 onSuccess = {},
-                errorMessage = { stringResource(CommonStrings.screen_notification_settings_edit_failed_updating_default_mode) },
+                errorMessage = { stringResource(R.string.screen_notification_settings_edit_failed_updating_default_mode) },
                 onErrorDismiss = { state.eventSink(RoomNotificationSettingsEvents.ClearSetNotificationError) },
             )
 
             AsyncView(
                 async = state.restoreDefaultAction,
                 onSuccess = { onBackPressed() },
-                errorMessage = { stringResource(CommonStrings.screen_notification_settings_edit_failed_updating_default_mode) },
+                errorMessage = { stringResource(R.string.screen_notification_settings_edit_failed_updating_default_mode) },
                 onErrorDismiss = { state.eventSink(RoomNotificationSettingsEvents.ClearRestoreDefaultError) },
             )
         }

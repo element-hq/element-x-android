@@ -156,14 +156,14 @@ private fun RoomSpecificNotificationSettingsView(
             AsyncView(
                 async = state.setNotificationSettingAction,
                 onSuccess = {},
-                errorMessage = { stringResource(CommonStrings.screen_notification_settings_edit_failed_updating_default_mode) },
+                errorMessage = { stringResource(R.string.screen_notification_settings_edit_failed_updating_default_mode) },
                 onErrorDismiss = { state.eventSink(RoomNotificationSettingsEvents.ClearSetNotificationError) },
             )
 
             AsyncView(
                 async = state.restoreDefaultAction,
                 onSuccess = {},
-                errorMessage = { stringResource(CommonStrings.screen_notification_settings_edit_failed_updating_default_mode) },
+                errorMessage = { stringResource(R.string.screen_notification_settings_edit_failed_updating_default_mode) },
                 onErrorDismiss = { state.eventSink(RoomNotificationSettingsEvents.ClearRestoreDefaultError) },
             )
         }

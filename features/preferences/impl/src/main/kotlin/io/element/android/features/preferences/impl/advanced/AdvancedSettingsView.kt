@@ -16,19 +16,25 @@
 
 package io.element.android.features.preferences.impl.advanced
 
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import io.element.android.features.preferences.impl.R
+import io.element.android.libraries.designsystem.components.dialogs.ListOption
+import io.element.android.libraries.designsystem.components.dialogs.SingleSelectionDialog
+import io.element.android.libraries.designsystem.components.list.ListItemContent
 import io.element.android.libraries.designsystem.components.preferences.PreferencePage
 import io.element.android.libraries.designsystem.components.preferences.PreferenceSwitch
-import io.element.android.libraries.designsystem.components.preferences.PreferenceTextField
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.theme.components.ListItem
+import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.theme.theme.Theme
+import io.element.android.libraries.theme.theme.themes
 import io.element.android.libraries.ui.strings.CommonStrings
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 
 @Composable
 fun AdvancedSettingsView(
@@ -36,16 +42,24 @@ fun AdvancedSettingsView(
     onBackPressed: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    fun isUsingDefaultUrl(value: String?): Boolean {
-        val defaultUrl = state.customElementCallBaseUrlState?.defaultUrl ?: return false
-        return value.isNullOrEmpty() || value == defaultUrl
-    }
-
     PreferencePage(
         modifier = modifier,
         onBackPressed = onBackPressed,
         title = stringResource(id = CommonStrings.common_advanced_settings)
     ) {
+        ListItem(
+            headlineContent = {
+                Text(
+                    text = stringResource(id = CommonStrings.common_appearance)
+                )
+            },
+            trailingContent = ListItemContent.Text(
+                state.theme.toHumanReadable()
+            ),
+            onClick = {
+                state.eventSink(AdvancedSettingsEvents.ChangeTheme)
+            }
+        )
         PreferenceSwitch(
             title = stringResource(id = CommonStrings.common_rich_text_editor),
             subtitle = stringResource(id = R.string.screen_advanced_settings_rich_text_editor_description),
@@ -58,24 +72,40 @@ fun AdvancedSettingsView(
             isChecked = state.isDeveloperModeEnabled,
             onCheckedChange = { state.eventSink(AdvancedSettingsEvents.SetDeveloperModeEnabled(it)) },
         )
-        state.customElementCallBaseUrlState?.let { callUrlState ->
-            val supportingText = if (isUsingDefaultUrl(callUrlState.baseUrl)) {
-                stringResource(R.string.screen_advanced_settings_element_call_base_url_description)
-            } else {
-                callUrlState.baseUrl
-            }
-            PreferenceTextField(
-                headline = stringResource(R.string.screen_advanced_settings_element_call_base_url),
-                value = callUrlState.baseUrl ?: callUrlState.defaultUrl,
-                supportingText = supportingText,
-                validation = callUrlState.validator,
-                onValidationErrorMessage = stringResource(R.string.screen_advanced_settings_element_call_base_url_validation_error),
-                displayValue = { value -> !isUsingDefaultUrl(value) },
-                keyboardOptions = KeyboardOptions.Default.copy(autoCorrect = false, keyboardType = KeyboardType.Uri),
-                onChange = { state.eventSink(AdvancedSettingsEvents.SetCustomElementCallBaseUrl(it)) }
-            )
-        }
     }
+
+    if (state.showChangeThemeDialog) {
+        SingleSelectionDialog(
+            options = getOptions(),
+            initialSelection = themes.indexOf(state.theme),
+            onOptionSelected = {
+                state.eventSink(
+                    AdvancedSettingsEvents.SetTheme(
+                        themes[it]
+                    )
+                )
+            },
+            onDismissRequest = { state.eventSink(AdvancedSettingsEvents.CancelChangeTheme) },
+        )
+    }
+}
+
+@Composable
+private fun getOptions(): ImmutableList<ListOption> {
+    return themes.map {
+        ListOption(title = it.toHumanReadable())
+    }.toImmutableList()
+}
+
+@Composable
+private fun Theme.toHumanReadable(): String {
+    return stringResource(
+        id = when (this) {
+            Theme.System -> CommonStrings.common_system
+            Theme.Dark -> CommonStrings.common_dark
+            Theme.Light -> CommonStrings.common_light
+        }
+    )
 }
 
 @PreviewsDayNight

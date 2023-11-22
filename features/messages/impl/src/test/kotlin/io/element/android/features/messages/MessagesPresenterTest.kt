@@ -35,6 +35,7 @@ import io.element.android.features.messages.impl.messagecomposer.MessageComposer
 import io.element.android.features.messages.impl.timeline.TimelinePresenter
 import io.element.android.features.messages.impl.timeline.components.customreaction.CustomReactionPresenter
 import io.element.android.features.messages.impl.timeline.components.reactionsummary.ReactionSummaryPresenter
+import io.element.android.features.messages.impl.timeline.components.receipt.bottomsheet.ReadReceiptBottomSheetPresenter
 import io.element.android.features.messages.impl.timeline.components.retrysendmenu.RetrySendMenuPresenter
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemFileContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
@@ -47,6 +48,7 @@ import io.element.android.features.messages.test.FakeMessageComposerContext
 import io.element.android.features.messages.textcomposer.TestRichTextEditorStateFactory
 import io.element.android.features.messages.timeline.components.customreaction.FakeEmojibaseProvider
 import io.element.android.features.messages.utils.messagesummary.FakeMessageSummaryFormatter
+import io.element.android.features.messages.voicemessages.timeline.FakeRedactedVoiceMessageManager
 import io.element.android.features.networkmonitor.test.FakeNetworkMonitor
 import io.element.android.libraries.androidutils.clipboard.FakeClipboardHelper
 import io.element.android.libraries.architecture.Async
@@ -641,7 +643,7 @@ class MessagesPresenterTest {
             FakeVoiceRecorder(),
             analyticsService,
             mediaSender,
-            player = VoiceMessageComposerPlayer(FakeMediaPlayer()),
+            player = VoiceMessageComposerPlayer(FakeMediaPlayer(), this),
             messageComposerContext = FakeMessageComposerContext(),
             permissionsPresenterFactory,
         )
@@ -653,9 +655,12 @@ class MessagesPresenterTest {
             analyticsService = analyticsService,
             encryptionService = FakeEncryptionService(),
             verificationService = FakeSessionVerificationService(),
+            featureFlagService = FakeFeatureFlagService(),
+            redactedVoiceMessageManager = FakeRedactedVoiceMessageManager(),
         )
         val preferencesStore = InMemoryPreferencesStore(isRichTextEditorEnabled = true)
         val actionListPresenter = ActionListPresenter(preferencesStore = preferencesStore)
+        val readReceiptBottomSheetPresenter = ReadReceiptBottomSheetPresenter()
         val customReactionPresenter = CustomReactionPresenter(emojibaseProvider = FakeEmojibaseProvider())
         val reactionSummaryPresenter = ReactionSummaryPresenter(room = matrixRoom)
         val retrySendMenuPresenter = RetrySendMenuPresenter(room = matrixRoom)
@@ -668,6 +673,7 @@ class MessagesPresenterTest {
             customReactionPresenter = customReactionPresenter,
             reactionSummaryPresenter = reactionSummaryPresenter,
             retrySendMenuPresenter = retrySendMenuPresenter,
+            readReceiptBottomSheetPresenter = readReceiptBottomSheetPresenter,
             networkMonitor = FakeNetworkMonitor(),
             snackbarDispatcher = SnackbarDispatcher(),
             messageSummaryFormatter = FakeMessageSummaryFormatter(),

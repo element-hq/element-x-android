@@ -16,9 +16,11 @@
 
 package io.element.android.features.messages.impl.timeline
 
+import io.element.android.features.messages.impl.timeline.model.ReadReceiptData
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.TimelineItemGroupPosition
 import io.element.android.features.messages.impl.timeline.model.TimelineItemReactions
+import io.element.android.features.messages.impl.timeline.model.TimelineItemReadReceipts
 import io.element.android.features.messages.impl.timeline.model.anAggregatedReaction
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemStateEventContent
@@ -43,7 +45,12 @@ import kotlin.random.Random
 
 fun aTimelineState(timelineItems: ImmutableList<TimelineItem> = persistentListOf()) = TimelineState(
     timelineItems = timelineItems,
-    paginationState = MatrixTimeline.PaginationState(isBackPaginating = false, hasMoreToLoadBackwards = true),
+    showReadReceipts = false,
+    paginationState = MatrixTimeline.PaginationState(
+        isBackPaginating = false,
+        hasMoreToLoadBackwards = true,
+        beginningOfRoomReached = false,
+    ),
     highlightedEventId = null,
     userHasPermissionToSendMessage = true,
     hasNewItems = false,
@@ -114,11 +121,12 @@ internal fun aTimelineItemEvent(
     senderDisplayName: String = "Sender",
     content: TimelineItemEventContent = aTimelineItemTextContent(),
     groupPosition: TimelineItemGroupPosition = TimelineItemGroupPosition.None,
-    sendState: LocalEventSendState = LocalEventSendState.Sent(eventId),
+    sendState: LocalEventSendState? = null,
     inReplyTo: InReplyTo? = null,
     isThreaded: Boolean = false,
     debugInfo: TimelineItemDebugInfo = aTimelineItemDebugInfo(),
     timelineItemReactions: TimelineItemReactions = aTimelineItemReactions(),
+    readReceiptState: TimelineItemReadReceipts = aTimelineItemReadReceipts(),
 ): TimelineItem.Event {
     return TimelineItem.Event(
         id = UUID.randomUUID().toString(),
@@ -128,6 +136,7 @@ internal fun aTimelineItemEvent(
         senderAvatar = AvatarData("@senderId:domain", "sender", size = AvatarSize.TimelineSender),
         content = content,
         reactionsState = timelineItemReactions,
+        readReceiptState = readReceiptState,
         sentTime = "12:34",
         isMine = isMine,
         senderDisplayName = senderDisplayName,
@@ -168,6 +177,12 @@ internal fun aTimelineItemDebugInfo(
 ) = TimelineItemDebugInfo(
     model, originalJson, latestEditedJson
 )
+
+internal fun aTimelineItemReadReceipts(): TimelineItemReadReceipts {
+    return TimelineItemReadReceipts(
+        receipts = emptyList<ReadReceiptData>().toImmutableList(),
+    )
+}
 
 fun aGroupedEvents(id: Long = 0): TimelineItem.GroupedEvents {
     val event = aTimelineItemEvent(

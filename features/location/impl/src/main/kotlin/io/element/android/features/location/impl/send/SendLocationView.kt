@@ -18,7 +18,6 @@ package io.element.android.features.location.impl.send
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
@@ -27,9 +26,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.LocationSearching
-import androidx.compose.material.icons.filled.MyLocation
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.SheetValue
@@ -68,7 +64,7 @@ import io.element.android.libraries.maplibre.compose.rememberCameraPositionState
 import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SendLocationView(
     state: SendLocationState,
@@ -215,8 +211,8 @@ fun SendLocationView(
                     .padding(end = 16.dp, bottom = 72.dp + navBarPadding),
             ) {
                 when (state.mode) {
-                    SendLocationState.Mode.PinLocation -> Icon(imageVector = Icons.Default.LocationSearching, contentDescription = null)
-                    SendLocationState.Mode.SenderLocation -> Icon(imageVector = Icons.Default.MyLocation, contentDescription = null)
+                    SendLocationState.Mode.PinLocation -> Icon(resourceId = CommonDrawables.ic_location_navigator, contentDescription = null)
+                    SendLocationState.Mode.SenderLocation -> Icon(resourceId = CommonDrawables.ic_location_navigator_centered, contentDescription = null)
                 }
             }
         }

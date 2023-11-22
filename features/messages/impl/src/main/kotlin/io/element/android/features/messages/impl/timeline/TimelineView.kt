@@ -59,6 +59,7 @@ import io.element.android.features.messages.impl.timeline.components.TimelineIte
 import io.element.android.features.messages.impl.timeline.components.TimelineItemStateEventRow
 import io.element.android.features.messages.impl.timeline.components.TimelineItemVirtualRow
 import io.element.android.features.messages.impl.timeline.components.group.GroupHeaderView
+import io.element.android.features.messages.impl.timeline.components.virtual.TimelineItemRoomBeginningView
 import io.element.android.features.messages.impl.timeline.components.virtual.TimelineLoadingMoreIndicator
 import io.element.android.features.messages.impl.timeline.di.LocalTimelineItemPresenterFactories
 import io.element.android.features.messages.impl.timeline.di.aFakeTimelineItemPresenterFactories
@@ -82,6 +83,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun TimelineView(
     state: TimelineState,
+    roomName: String?,
     onUserDataClicked: (UserId) -> Unit,
     onMessageClicked: (TimelineItem.Event) -> Unit,
     onMessageLongClicked: (TimelineItem.Event) -> Unit,
@@ -90,6 +92,7 @@ fun TimelineView(
     onReactionClicked: (emoji: String, TimelineItem.Event) -> Unit,
     onReactionLongClicked: (emoji: String, TimelineItem.Event) -> Unit,
     onMoreReactionsClicked: (TimelineItem.Event) -> Unit,
+    onReadReceiptClick: (TimelineItem.Event) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     fun onReachedLoadMore() {
@@ -124,6 +127,9 @@ fun TimelineView(
             ) { timelineItem ->
                 TimelineItemRow(
                     timelineItem = timelineItem,
+                    showReadReceipts = state.showReadReceipts,
+                    isLastOutgoingMessage = (timelineItem as? TimelineItem.Event)?.isMine == true
+                        && state.timelineItems.first().identifier() == timelineItem.identifier(),
                     highlightedItem = state.highlightedEventId?.value,
                     userHasPermissionToSendMessage = state.userHasPermissionToSendMessage,
                     onClick = onMessageClicked,
@@ -133,6 +139,7 @@ fun TimelineView(
                     onReactionClick = onReactionClicked,
                     onReactionLongClick = onReactionLongClicked,
                     onMoreReactionsClick = onMoreReactionsClicked,
+                    onReadReceiptClick = onReadReceiptClick,
                     onTimestampClicked = onTimestampClicked,
                     sessionState = state.sessionState,
                     eventSink = state.eventSink,
@@ -146,6 +153,11 @@ fun TimelineView(
                     LaunchedEffect(Unit) {
                         onReachedLoadMore()
                     }
+                }
+            }
+            if (state.paginationState.beginningOfRoomReached) {
+                item(contentType = "BeginningOfRoomReached") {
+                    TimelineItemRoomBeginningView(roomName = roomName)
                 }
             }
         }
@@ -162,6 +174,8 @@ fun TimelineView(
 @Composable
 private fun TimelineItemRow(
     timelineItem: TimelineItem,
+    showReadReceipts: Boolean,
+    isLastOutgoingMessage: Boolean,
     highlightedItem: String?,
     userHasPermissionToSendMessage: Boolean,
     sessionState: SessionState,
@@ -172,6 +186,7 @@ private fun TimelineItemRow(
     onReactionClick: (key: String, TimelineItem.Event) -> Unit,
     onReactionLongClick: (key: String, TimelineItem.Event) -> Unit,
     onMoreReactionsClick: (TimelineItem.Event) -> Unit,
+    onReadReceiptClick: (TimelineItem.Event) -> Unit,
     onTimestampClicked: (TimelineItem.Event) -> Unit,
     onSwipeToReply: (TimelineItem.Event) -> Unit,
     eventSink: (TimelineEvents) -> Unit,
@@ -198,6 +213,8 @@ private fun TimelineItemRow(
             } else {
                 TimelineItemEventRow(
                     event = timelineItem,
+                    showReadReceipts = showReadReceipts,
+                    isLastOutgoingMessage = isLastOutgoingMessage,
                     isHighlighted = highlightedItem == timelineItem.identifier(),
                     canReply = userHasPermissionToSendMessage && timelineItem.content.canBeRepliedTo(),
                     onClick = { onClick(timelineItem) },
@@ -207,6 +224,7 @@ private fun TimelineItemRow(
                     onReactionClick = onReactionClick,
                     onReactionLongClick = onReactionLongClick,
                     onMoreReactionsClick = onMoreReactionsClick,
+                    onReadReceiptClick = onReadReceiptClick,
                     onTimestampClicked = onTimestampClicked,
                     onSwipeToReply = { onSwipeToReply(timelineItem) },
                     eventSink = eventSink,
@@ -237,6 +255,8 @@ private fun TimelineItemRow(
                         timelineItem.events.forEach { subGroupEvent ->
                             TimelineItemRow(
                                 timelineItem = subGroupEvent,
+                                showReadReceipts = showReadReceipts,
+                                isLastOutgoingMessage = isLastOutgoingMessage,
                                 highlightedItem = highlightedItem,
                                 sessionState = sessionState,
                                 userHasPermissionToSendMessage = false,
@@ -248,6 +268,7 @@ private fun TimelineItemRow(
                                 onReactionClick = onReactionClick,
                                 onReactionLongClick = onReactionLongClick,
                                 onMoreReactionsClick = onMoreReactionsClick,
+                                onReadReceiptClick = onReadReceiptClick,
                                 eventSink = eventSink,
                                 onSwipeToReply = {},
                             )
@@ -346,6 +367,7 @@ internal fun TimelineViewPreview(
     ) {
         TimelineView(
             state = aTimelineState(timelineItems),
+            roomName = null,
             onMessageClicked = {},
             onTimestampClicked = {},
             onUserDataClicked = {},
@@ -354,6 +376,7 @@ internal fun TimelineViewPreview(
             onReactionLongClicked = { _, _ -> },
             onMoreReactionsClicked = {},
             onSwipeToReply = {},
+            onReadReceiptClick = {},
         )
     }
 }

@@ -25,6 +25,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
@@ -33,10 +36,14 @@ import com.bumble.appyx.core.integration.NodeHost
 import com.bumble.appyx.core.integrationpoint.NodeActivity
 import com.bumble.appyx.core.plugin.NodeReadyObserver
 import io.element.android.features.lockscreen.api.handleSecureFlag
+import io.element.android.features.lockscreen.api.isLocked
 import io.element.android.libraries.architecture.bindings
 import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.designsystem.utils.snackbar.LocalSnackbarDispatcher
 import io.element.android.libraries.theme.ElementTheme
+import io.element.android.libraries.theme.theme.Theme
+import io.element.android.libraries.theme.theme.isDark
+import io.element.android.libraries.theme.theme.mapToTheme
 import io.element.android.x.di.AppBindings
 import io.element.android.x.intent.SafeUriHandler
 import timber.log.Timber
@@ -46,7 +53,6 @@ private val loggerTag = LoggerTag("MainActivity")
 class MainActivity : NodeActivity() {
 
     private lateinit var mainNode: MainNode
-
     private lateinit var appBindings: AppBindings
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -61,9 +67,29 @@ class MainActivity : NodeActivity() {
         }
     }
 
+    @Deprecated("")
+    override fun onBackPressed() {
+        // If the app is locked, we need to intercept onBackPressed before it goes to OnBackPressedDispatcher.
+        // Indeed, otherwise we would need to trick Appyx backstack management everywhere.
+        // Without this trick, we would get pop operations on the hidden backstack.
+        if (appBindings.lockScreenService().isLocked) {
+            // Do not kill the app in this case, just go to background.
+            moveTaskToBack(false)
+        } else {
+            @Suppress("DEPRECATION")
+            super.onBackPressed()
+        }
+    }
+
     @Composable
     private fun MainContent(appBindings: AppBindings) {
-        ElementTheme {
+        val theme by remember {
+            appBindings.preferencesStore().getThemeFlow().mapToTheme()
+        }
+            .collectAsState(initial = Theme.System)
+        ElementTheme(
+            darkTheme = theme.isDark()
+        ) {
             CompositionLocalProvider(
                 LocalSnackbarDispatcher provides appBindings.snackbarDispatcher(),
                 LocalUriHandler provides SafeUriHandler(this),

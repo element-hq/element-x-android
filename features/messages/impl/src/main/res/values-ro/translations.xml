@@ -1,10 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="emoji_picker_category_activity">"Activități"</string>
+  <string name="emoji_picker_category_flags">"Steaguri"</string>
+  <string name="emoji_picker_category_foods">"Mâncare &amp; Băutură"</string>
+  <string name="emoji_picker_category_nature">"Animale și Natură"</string>
+  <string name="emoji_picker_category_objects">"Obiecte"</string>
+  <string name="emoji_picker_category_people">"Fețe zâmbitoare &amp; Oameni"</string>
+  <string name="emoji_picker_category_places">"Călătorii &amp; Locuri"</string>
+  <string name="emoji_picker_category_symbols">"Simboluri"</string>
   <plurals name="room_timeline_state_changes">
     <item quantity="one">"%1$d schimbare a camerii"</item>
     <item quantity="few">"%1$d schimbări ale camerei"</item>
     <item quantity="other">"%1$d schimbări ale camerei"</item>
   </plurals>
+  <string name="report_content_explanation">"Acest mesaj va fi raportat administratorilor homeserver-ului tau. Ei nu vor putea citi niciun mesaj criptat."</string>
+  <string name="report_content_hint">"Motivul raportării acestui conținut"</string>
+  <string name="room_timeline_beginning_of_room">"Acesta este începutul conversației %1$s."</string>
+  <string name="room_timeline_beginning_of_room_no_name">"Acesta este începutul acestei conversații."</string>
+  <string name="room_timeline_read_marker_title">"Nou"</string>
+  <string name="screen_report_content_block_user_hint">"Confirmați că doriți să ascundeți toate mesajele curente și viitoare de la acest utilizator"</string>
   <string name="screen_room_attachment_source_camera">"Cameră foto"</string>
   <string name="screen_room_attachment_source_camera_photo">"Faceți o fotografie"</string>
   <string name="screen_room_attachment_source_camera_video">"Înregistrați un videoclip"</string>
@@ -37,6 +51,7 @@
   <string name="screen_room_retry_send_menu_title">"Mesajul dvs. nu a putut fi trimis"</string>
   <string name="screen_room_timeline_add_reaction">"Adăugați emoji"</string>
   <string name="screen_room_timeline_less_reactions">"Afișați mai puțin"</string>
+  <string name="screen_report_content_block_user">"Blocați utilizatorul"</string>
   <string name="screen_room_error_failed_processing_media">"Procesarea datelor media a eșuat, vă rugăm să încercați din nou."</string>
   <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Numai mențiuni și cuvinte cheie"</string>
 </resources>

@@ -17,6 +17,7 @@
 package io.element.android.features.messages.impl.messagecomposer
 
 import androidx.compose.runtime.Immutable
+import io.element.android.features.messages.impl.mentions.MentionSuggestion
 import io.element.android.libraries.textcomposer.model.Message
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
 import io.element.android.libraries.textcomposer.model.Suggestion
@@ -41,4 +42,5 @@ sealed interface MessageComposerEvents {
     data object CancelSendAttachment : MessageComposerEvents
     data class Error(val error: Throwable) : MessageComposerEvents
     data class SuggestionReceived(val suggestion: Suggestion?) : MessageComposerEvents
+    data class InsertMention(val mention: MentionSuggestion) : MessageComposerEvents
 }

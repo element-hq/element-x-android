@@ -20,6 +20,7 @@ import android.media.AudioFormat
 import android.media.MediaRecorder
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import io.element.android.appconfig.VoiceMessageConfig
 import io.element.android.libraries.voicerecorder.api.VoiceRecorderState
 import io.element.android.libraries.voicerecorder.impl.audio.Audio
 import io.element.android.libraries.voicerecorder.impl.audio.AudioConfig
@@ -77,8 +78,8 @@ class VoiceRecorderImplTest {
 
             voiceRecorder.startRecord()
             assertThat(awaitItem()).isEqualTo(VoiceRecorderState.Recording(0.minutes, listOf(1.0f)))
-            timeSource += 30.minutes
-            assertThat(awaitItem()).isEqualTo(VoiceRecorderState.Recording(30.minutes, listOf()))
+            timeSource += VoiceMessageConfig.maxVoiceMessageDuration
+            assertThat(awaitItem()).isEqualTo(VoiceRecorderState.Recording(VoiceMessageConfig.maxVoiceMessageDuration, listOf()))
             timeSource += 1.milliseconds
 
             assertThat(awaitItem()).isEqualTo(
@@ -86,7 +87,7 @@ class VoiceRecorderImplTest {
                     file = File(FILE_PATH),
                     mimeType = "audio/ogg",
                     waveform = List(100) { 1f },
-                    duration = 30.minutes,
+                    duration = VoiceMessageConfig.maxVoiceMessageDuration,
                 )
             )
         }

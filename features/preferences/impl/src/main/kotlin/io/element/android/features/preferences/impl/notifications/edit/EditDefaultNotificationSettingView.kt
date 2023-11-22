@@ -22,6 +22,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import io.element.android.features.preferences.impl.R
 import io.element.android.libraries.designsystem.components.async.AsyncView
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
@@ -49,9 +50,9 @@ fun EditDefaultNotificationSettingView(
     modifier: Modifier = Modifier,
 ) {
     val title = if (state.isOneToOne) {
-        CommonStrings.screen_notification_settings_direct_chats
+        R.string.screen_notification_settings_direct_chats
     } else {
-        CommonStrings.screen_notification_settings_group_chats
+        R.string.screen_notification_settings_group_chats
     }
     PreferencePage(
         modifier = modifier,
@@ -63,9 +64,9 @@ fun EditDefaultNotificationSettingView(
         val validModes = listOf(RoomNotificationMode.ALL_MESSAGES, RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY)
 
         val categoryTitle = if (state.isOneToOne) {
-            CommonStrings.screen_notification_settings_edit_screen_direct_section_header
+            R.string.screen_notification_settings_edit_screen_direct_section_header
         } else {
-            CommonStrings.screen_notification_settings_edit_screen_group_section_header
+            R.string.screen_notification_settings_edit_screen_group_section_header
         }
         PreferenceCategory(title = stringResource(id = categoryTitle)) {
 
@@ -82,12 +83,12 @@ fun EditDefaultNotificationSettingView(
             }
         }
         if (state.roomsWithUserDefinedMode.isNotEmpty()) {
-            PreferenceCategory(title = stringResource(id = CommonStrings.screen_notification_settings_edit_custom_settings_section_title)) {
+            PreferenceCategory(title = stringResource(id = R.string.screen_notification_settings_edit_custom_settings_section_title)) {
                 state.roomsWithUserDefinedMode.forEach { summary ->
                     val subtitle = when (summary.details.notificationMode) {
-                        RoomNotificationMode.ALL_MESSAGES -> stringResource(id = CommonStrings.screen_notification_settings_edit_mode_all_messages)
+                        RoomNotificationMode.ALL_MESSAGES -> stringResource(id = R.string.screen_notification_settings_edit_mode_all_messages)
                         RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY -> {
-                            stringResource(id = CommonStrings.screen_notification_settings_edit_mode_mentions_and_keywords)
+                            stringResource(id = R.string.screen_notification_settings_edit_mode_mentions_and_keywords)
                         }
                         RoomNotificationMode.MUTE -> stringResource(id = CommonStrings.common_mute)
                         null -> ""
@@ -117,7 +118,7 @@ fun EditDefaultNotificationSettingView(
         }
         AsyncView(
             async = state.changeNotificationSettingAction,
-            errorMessage = { stringResource(CommonStrings.screen_notification_settings_edit_failed_updating_default_mode) },
+            errorMessage = { stringResource(R.string.screen_notification_settings_edit_failed_updating_default_mode) },
             onErrorDismiss = { state.eventSink(EditDefaultNotificationSettingStateEvents.ClearError) },
             onSuccess = {},
         )

@@ -89,7 +89,6 @@ class DefaultVoiceMessageMediaRepo @AssistedInject constructor(
             source = mediaSource,
             mimeType = mimeType,
             body = body,
-            useCache = false,
         ).mapCatching {
             it.use { mediaFile ->
                 val dest = cachedFile.apply { parentFile?.mkdirs() }
