@@ -25,7 +25,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.GraphicEq
 import androidx.compose.material.icons.outlined.Image
-import androidx.compose.material.icons.outlined.Poll
 import androidx.compose.material.icons.outlined.VideoCameraBack
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -125,7 +124,7 @@ fun AttachmentThumbnail(
                 }
                 AttachmentThumbnailType.Poll -> {
                     Icon(
-                        imageVector = Icons.Outlined.Poll,
+                        resourceId = CommonDrawables.ic_compound_polls,
                         contentDescription = info.textContent,
                     )
                 }
