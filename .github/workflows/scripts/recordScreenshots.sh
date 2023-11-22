@@ -21,9 +21,10 @@ set -e
 TOKEN=$GITHUB_TOKEN
 REPO=$GITHUB_REPOSITORY
 
-SHORT=t:,r:
-LONG=token:,repo:
-OPTS=$(getopt -a -n recordScreenshots --options $SHORT --longoptions $LONG -- "$@")
+SHORT=t:,r:,b:
+LONG=token:,repo:,branch:
+OPTS=$(ggetopt -a -n recordScreenshots --options $SHORT --longoptions $LONG -- "$@")
+BRANCH=$(git rev-parse --abbrev-ref HEAD)
 
 eval set -- "$OPTS"
 while :
@@ -37,6 +38,10 @@ do
       REPO="$2"
       shift 2
       ;;
+    -b | --branch )
+      BRANCH="$2"
+      shift 2
+      ;;
     --)
       shift;
       break
@@ -47,6 +52,8 @@ do
       ;;
   esac
 done
+
+echo Branch used: $BRANCH
 
 if [[ -z ${TOKEN} ]]; then
   echo "No token specified, either set the env var GITHUB_TOKEN or use the --token option"
@@ -70,8 +77,6 @@ git config user.email "benoitm+elementbot@element.io"
 git add -A
 git commit -m "Update screenshots"
 
-BRANCH=$(git rev-parse --abbrev-ref HEAD)
-
 echo "Pushing changes"
-git push "https://$TOKEN@github.com/$REPO.git" $BRANCH:refs/heads/$BRANCH
+git push "https://$TOKEN@github.com/$REPO.git" $BRANCH
 echo "Done!"
