@@ -35,6 +35,7 @@ import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.api.roomlist.RoomSummary
 import io.element.android.libraries.matrix.api.roomlist.RoomSummaryDetails
 import kotlinx.collections.immutable.ImmutableList
@@ -65,7 +66,9 @@ class ForwardMessagesPresenter @AssistedInject constructor(
         var results: SearchBarResultState<ImmutableList<RoomSummaryDetails>> by remember { mutableStateOf(SearchBarResultState.NotSearching()) }
         val forwardingActionState: MutableState<Async<ImmutableList<RoomId>>> = remember { mutableStateOf(Async.Uninitialized) }
 
-        val summaries by client.roomListService.allRooms.summaries.collectAsState()
+        val summaries by remember {
+            client.roomListService.createRoomList(RoomListService.Source.ALL).summaries
+        }.collectAsState()
 
         LaunchedEffect(query, summaries) {
             val filteredSummaries = summaries.filterIsInstance<RoomSummary.Filled>()

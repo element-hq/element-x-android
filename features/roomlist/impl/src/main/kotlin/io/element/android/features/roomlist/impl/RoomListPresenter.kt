@@ -44,7 +44,7 @@ import io.element.android.libraries.indicator.api.IndicatorService
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import io.element.android.libraries.matrix.api.encryption.RecoveryState
-import io.element.android.libraries.matrix.api.roomlist.PagedRoomList
+import io.element.android.libraries.matrix.api.roomlist.DynamicRoomList
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.api.user.getCurrentUser
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
@@ -156,7 +156,7 @@ class RoomListPresenter @Inject constructor(
     private fun VisibleRangeHandler(visibleRange: State<IntRange>) {
         val hasReachEndThreshold = remember {
             derivedStateOf {
-                visibleRange.value.last > roomListDataSource.allRooms.value.size - PagedRoomList.DEFAULT_PAGE_SIZE
+                visibleRange.value.last > roomListDataSource.allRooms.value.size - DynamicRoomList.DEFAULT_PAGE_SIZE
             }
         }
         val hasReachedStart = remember {

@@ -38,22 +38,19 @@ interface RoomListService {
         data object Hide : SyncIndicator
     }
 
-    /**
-     * returns a [PagedRoomList] object of all rooms we want to display.
-     * This will exclude some rooms like the invites, or spaces.
-     */
-    val allRooms: PagedRoomList
+    enum class Source {
+        ALL,
+        INVITES,
+    }
 
-    /**
-     * returns a [PagedFilterableRoomList] object of all rooms we want to display.
-     * This will exclude some rooms like the invites, or spaces.
-     */
-    val allRoomsFilterable: PagedFilterableRoomList
+    fun createRoomList(source: Source): RoomList
 
-    /**
-     * returns a [PagedRoomList] object of all invites.
-     */
-    val invites: PagedRoomList
+    fun createDynamicRoomList(
+        source: Source,
+        pageSize: Int = DynamicRoomList.DEFAULT_PAGE_SIZE,
+        pagesToLoad: Int = DynamicRoomList.DEFAULT_PAGES_TO_LOAD,
+        initialFilter: DynamicRoomList.Filter = DynamicRoomList.Filter.All,
+    ): DynamicRoomList
 
     /**
      * Will set the visible range of all rooms.

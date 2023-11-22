@@ -16,7 +16,6 @@
 
 package io.element.android.libraries.matrix.test.roomlist
 
-import io.element.android.libraries.matrix.api.roomlist.PagedRoomList
 import io.element.android.libraries.matrix.api.roomlist.RoomList
 import io.element.android.libraries.matrix.api.roomlist.RoomSummary
 import kotlinx.coroutines.flow.StateFlow
@@ -31,6 +30,10 @@ data class SimplePagedRoomList(
     }
 
     override suspend fun reset() {
+        //No-op
+    }
+
+    override suspend fun rebuildSummaries() {
         //No-op
     }
 }

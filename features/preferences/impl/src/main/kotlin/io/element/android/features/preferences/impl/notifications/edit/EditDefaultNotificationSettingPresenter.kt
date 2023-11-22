@@ -105,8 +105,7 @@ class EditDefaultNotificationSettingPresenter @AssistedInject constructor(
     }
 
     private fun CoroutineScope.observeRoomSummaries(roomsWithUserDefinedMode: MutableState<List<RoomSummary.Filled>>) {
-        //FIXME handle pagination
-        roomListService.allRooms
+        roomListService.createRoomList(RoomListService.Source.ALL)
             .summaries
             .onEach {
                 updateRoomsWithUserDefinedMode(it, roomsWithUserDefinedMode)

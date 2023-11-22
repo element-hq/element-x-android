@@ -93,7 +93,6 @@ internal fun RoomList.entriesFlow(
                 }
             }
         }.launchIn(this)
-
         awaitClose {
             result.entriesStream.cancelAndDestroy()
             result.destroy()

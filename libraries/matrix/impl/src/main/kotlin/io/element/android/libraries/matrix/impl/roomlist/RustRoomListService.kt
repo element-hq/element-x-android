@@ -16,6 +16,8 @@
 
 package io.element.android.libraries.matrix.impl.roomlist
 
+import io.element.android.libraries.matrix.api.roomlist.DynamicRoomList
+import io.element.android.libraries.matrix.api.roomlist.RoomList
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.SharingStarted
@@ -35,17 +37,29 @@ import org.matrix.rustcomponents.sdk.RoomListService as InnerRustRoomListService
 internal class RustRoomListService(
     private val innerRoomListService: InnerRustRoomListService,
     private val sessionCoroutineScope: CoroutineScope,
-    roomListFactory: RoomListFactory,
+    private val roomListFactory: RoomListFactory,
 ) : RoomListService {
 
-    override val allRooms = roomListFactory.createPaged {
-        innerRoomListService.allRooms()
+    override fun createRoomList(source: RoomListService.Source): RoomList {
+        return roomListFactory.createRoomList {
+            innerRoomListService.fromSource(source)
+        }
     }
-    override val allRoomsFilterable = roomListFactory.createPagedFilterable(pageSize = 50, pagesToLoad = 1) {
-        innerRoomListService.allRooms()
-    }
-    override val invites = roomListFactory.createPaged {
-        innerRoomListService.invites()
+
+    override fun createDynamicRoomList(
+        source: RoomListService.Source,
+        pageSize: Int,
+        pagesToLoad: Int,
+        initialFilter: DynamicRoomList.Filter,
+    ): DynamicRoomList {
+        return roomListFactory.createDynamicRoomList(
+            pageSize = pageSize,
+            pagesToLoad = pagesToLoad,
+            initialFilter = initialFilter,
+            innerProvider = {
+                innerRoomListService.fromSource(source)
+            }
+        )
     }
 
     override suspend fun updateAllRoomsVisibleRange(range: IntRange) {
@@ -77,6 +91,11 @@ internal class RustRoomListService(
             }
             .distinctUntilChanged()
             .stateIn(sessionCoroutineScope, SharingStarted.Eagerly, RoomListService.State.Idle)
+}
+
+private suspend fun InnerRustRoomListService.fromSource(source: RoomListService.Source) = when (source) {
+    RoomListService.Source.ALL -> allRooms()
+    RoomListService.Source.INVITES -> invites()
 }
 
 private fun RoomListServiceState.toRoomListState(): RoomListService.State {

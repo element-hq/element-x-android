@@ -38,7 +38,7 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
-import io.element.android.libraries.matrix.api.roomlist.PagedRoomList
+import io.element.android.libraries.matrix.api.roomlist.DynamicRoomList
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.api.roomlist.RoomSummary
 import io.element.android.libraries.push.api.notifications.NotificationDrawerManager
@@ -61,7 +61,9 @@ class InviteListPresenter @Inject constructor(
 
     @Composable
     override fun present(): InviteListState {
-        val invitesRoomList = client.roomListService.invites
+        val invitesRoomList = remember {
+            client.roomListService.createRoomList(RoomListService.Source.INVITES)
+        }
         val invites by invitesRoomList.summaries.collectAsState()
 
         var visibleRange: IntRange by remember { mutableStateOf(IntRange.EMPTY) }
@@ -85,20 +87,6 @@ class InviteListPresenter @Inject constructor(
         val acceptedAction: MutableState<Async<RoomId>> = remember { mutableStateOf(Async.Uninitialized) }
         val declinedAction: MutableState<Async<Unit>> = remember { mutableStateOf(Async.Uninitialized) }
         val decliningInvite: MutableState<InviteListInviteSummary?> = remember { mutableStateOf(null) }
-
-        val hasReachEndThreshold = remember {
-            derivedStateOf {
-                visibleRange.last > invites.size - PagedRoomList.DEFAULT_PAGE_SIZE
-            }
-        }
-        LaunchedEffect(Unit) {
-            snapshotFlow { hasReachEndThreshold.value }
-                .onEach { shouldLoadMore ->
-                    if (shouldLoadMore) {
-                        invitesRoomList.loadMore()
-                    }
-                }.launchIn(this)
-        }
 
         fun handleEvent(event: InviteListEvents) {
             when (event) {

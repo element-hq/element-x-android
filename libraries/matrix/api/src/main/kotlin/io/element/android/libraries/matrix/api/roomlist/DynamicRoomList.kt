@@ -16,22 +16,43 @@
 
 package io.element.android.libraries.matrix.api.roomlist
 
-/**
- * Specific interface for a room list that can be filtered.
- */
-interface FilterableRoomList : RoomList {
+interface DynamicRoomList : RoomList {
 
-    sealed interface Filter {
-        data object None : Filter
-        data class NormalizedMatchRoomName(val pattern: String) : Filter
-
-        fun value(): String? {
-            return when (this) {
-                is None -> ""
-                is NormalizedMatchRoomName -> pattern
-            }
-        }
+    companion object {
+        const val DEFAULT_PAGE_SIZE = 20
+        const val DEFAULT_PAGES_TO_LOAD = 10
     }
 
+    sealed interface Filter {
+        /**
+         * No filter applied.
+         */
+        data object All : Filter
+
+        /**
+         * Filter all rooms.
+         */
+        data object None : Filter
+
+        /**
+         * Filter rooms by normalized room name.
+         */
+        data class NormalizedMatchRoomName(val pattern: String) : Filter
+    }
+
+    /**
+     * Load more rooms into the list if possible.
+     */
+    suspend fun loadMore()
+
+    /**
+     * Reset the list to its initial size.
+     */
+    suspend fun reset()
+
+    /**
+     * Update the filter to apply to the list.
+     * @param filter the filter to apply.
+     */
     suspend fun updateFilter(filter: Filter)
 }

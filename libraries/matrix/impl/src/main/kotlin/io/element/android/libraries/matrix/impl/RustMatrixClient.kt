@@ -205,7 +205,7 @@ class RustMatrixClient constructor(
         var cachedPairOfRoom = pairOfRoom(roomId)
         if (cachedPairOfRoom == null) {
             //... otherwise, lets wait for the SS to load all rooms and check again.
-            roomListService.allRooms.awaitLoaded()
+            roomListService.createRoomList(RoomListService.Source.ALL).awaitLoaded()
             cachedPairOfRoom = pairOfRoom(roomId)
         }
         cachedPairOfRoom?.let { (roomListItem, fullRoom) ->
@@ -279,7 +279,7 @@ class RustMatrixClient constructor(
 
             // Wait to receive the room back from the sync
             withTimeout(30_000L) {
-                roomListService.allRooms.summaries
+                roomListService.createRoomList(RoomListService.Source.ALL).summaries
                     .filter { roomSummaries ->
                         roomSummaries.map { it.identifier() }.contains(roomId.value)
                     }

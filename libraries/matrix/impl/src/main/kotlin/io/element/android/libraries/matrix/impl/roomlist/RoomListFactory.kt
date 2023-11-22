@@ -16,9 +16,7 @@
 
 package io.element.android.libraries.matrix.impl.roomlist
 
-import io.element.android.libraries.matrix.api.roomlist.FilterableRoomList
-import io.element.android.libraries.matrix.api.roomlist.PagedFilterableRoomList
-import io.element.android.libraries.matrix.api.roomlist.PagedRoomList
+import io.element.android.libraries.matrix.api.roomlist.DynamicRoomList
 import io.element.android.libraries.matrix.api.roomlist.RoomList
 import io.element.android.libraries.matrix.api.roomlist.RoomSummary
 import kotlinx.coroutines.CoroutineDispatcher
@@ -41,38 +39,37 @@ internal class RoomListFactory(
     private val roomSummaryDetailsFactory: RoomSummaryDetailsFactory = RoomSummaryDetailsFactory(),
 ) {
 
-    fun createPaged(
-        pageSize: Int = PagedRoomList.DEFAULT_PAGE_SIZE,
-        pagesToLoad: Int = PagedRoomList.DEFAULT_PAGES_TO_LOAD,
+    fun createRoomList(
         innerProvider: suspend () -> InnerRoomList
-    ): PagedRoomList {
-        return createRoomList(
-            pageSize = pageSize,
-            numberOfPages = pagesToLoad,
+    ): RoomList {
+        return createRustRoomList(
+            pageSize = Int.MAX_VALUE,
+            numberOfPages = 1,
             initialFilterKind = RoomListEntriesDynamicFilterKind.All,
             innerRoomListProvider = innerProvider
         )
     }
 
-    fun createPagedFilterable(
-        pageSize: Int = PagedRoomList.DEFAULT_PAGE_SIZE,
-        pagesToLoad: Int = PagedRoomList.DEFAULT_PAGES_TO_LOAD,
+    fun createDynamicRoomList(
+        pageSize: Int = DynamicRoomList.DEFAULT_PAGE_SIZE,
+        pagesToLoad: Int = DynamicRoomList.DEFAULT_PAGES_TO_LOAD,
+        initialFilter: DynamicRoomList.Filter = DynamicRoomList.Filter.None,
         innerProvider: suspend () -> InnerRoomList
-    ): PagedFilterableRoomList {
-        return createRoomList(
+    ): DynamicRoomList {
+        return createRustRoomList(
             pageSize = pageSize,
             numberOfPages = pagesToLoad,
-            initialFilterKind = RoomListEntriesDynamicFilterKind.None,
+            initialFilterKind = initialFilter.toRustFilter(),
             innerRoomListProvider = innerProvider
         )
     }
 
-    private fun createRoomList(
+    private fun createRustRoomList(
         pageSize: Int,
         numberOfPages: Int,
         initialFilterKind: RoomListEntriesDynamicFilterKind,
         innerRoomListProvider: suspend () -> InnerRoomList
-    ): RustRoomList {
+    ): RustDynamicRoomList {
         val loadingStateFlow: MutableStateFlow<RoomList.LoadingState> = MutableStateFlow(RoomList.LoadingState.NotLoaded)
         val summariesFlow = MutableStateFlow<List<RoomSummary>>(emptyList())
         val processor = RoomSummaryListProcessor(summariesFlow, innerRoomListService, dispatcher, roomSummaryDetailsFactory)
@@ -82,7 +79,6 @@ internal class RoomListFactory(
         coroutineScope.launch(dispatcher) {
             innerRoomList = innerRoomListProvider()
             innerRoomList?.let { innerRoomList ->
-
                 innerRoomList.entriesFlow(
                     pageSize = pageSize,
                     numberOfPages = numberOfPages,
@@ -102,22 +98,22 @@ internal class RoomListFactory(
         }.invokeOnCompletion {
             innerRoomList?.destroy()
         }
-        return RustRoomList(summariesFlow, loadingStateFlow, dynamicEvents, processor)
+        return RustDynamicRoomList(summariesFlow, loadingStateFlow, dynamicEvents, processor)
     }
 }
 
-private class RustRoomList(
+private class RustDynamicRoomList(
     override val summaries: MutableStateFlow<List<RoomSummary>>,
     override val loadingState: MutableStateFlow<RoomList.LoadingState>,
     private val dynamicEvents: MutableSharedFlow<RoomListDynamicEvents>,
     private val processor: RoomSummaryListProcessor,
-) : PagedFilterableRoomList {
+) : DynamicRoomList {
 
     override suspend fun rebuildSummaries() {
         processor.rebuildRoomSummaries()
     }
 
-    override suspend fun updateFilter(filter: FilterableRoomList.Filter) {
+    override suspend fun updateFilter(filter: DynamicRoomList.Filter) {
         val filterEvent = RoomListDynamicEvents.SetFilter(filter.toRustFilter())
         dynamicEvents.emit(filterEvent)
     }
@@ -138,10 +134,11 @@ private fun RoomListLoadingState.toLoadingState(): RoomList.LoadingState {
     }
 }
 
-private fun FilterableRoomList.Filter.toRustFilter(): RoomListEntriesDynamicFilterKind {
+private fun DynamicRoomList.Filter.toRustFilter(): RoomListEntriesDynamicFilterKind {
     return when (this) {
-        FilterableRoomList.Filter.None -> RoomListEntriesDynamicFilterKind.None
-        is FilterableRoomList.Filter.NormalizedMatchRoomName -> RoomListEntriesDynamicFilterKind.NormalizedMatchRoomName(this.pattern)
+        DynamicRoomList.Filter.All -> RoomListEntriesDynamicFilterKind.All
+        is DynamicRoomList.Filter.NormalizedMatchRoomName -> RoomListEntriesDynamicFilterKind.NormalizedMatchRoomName(this.pattern)
+        DynamicRoomList.Filter.None -> RoomListEntriesDynamicFilterKind.None
     }
 }
 

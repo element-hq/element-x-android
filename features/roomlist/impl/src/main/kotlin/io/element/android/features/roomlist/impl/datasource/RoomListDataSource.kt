@@ -29,7 +29,7 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.eventformatter.api.RoomLastMessageFormatter
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsService
-import io.element.android.libraries.matrix.api.roomlist.FilterableRoomList
+import io.element.android.libraries.matrix.api.roomlist.DynamicRoomList
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.api.roomlist.RoomSummary
 import kotlinx.collections.immutable.ImmutableList
@@ -39,7 +39,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -71,8 +70,15 @@ class RoomListDataSource @Inject constructor(
         old?.identifier() == new?.identifier()
     }
 
-    private val allRoomsList = roomListService.allRooms
-    private val allRoomsFilterableList = roomListService.allRoomsFilterable
+    private val allRoomsList = roomListService.createDynamicRoomList(
+        source = RoomListService.Source.ALL,
+        initialFilter = DynamicRoomList.Filter.All
+    )
+    private val allRoomsFilterableList = roomListService.createDynamicRoomList(
+        source = RoomListService.Source.ALL,
+        pageSize = 50,
+        pagesToLoad = 1
+    )
 
     fun launchIn(coroutineScope: CoroutineScope) {
         allRoomsList.summaries
@@ -80,26 +86,19 @@ class RoomListDataSource @Inject constructor(
                 replaceCacheWith(roomSummaries)
             }.launchIn(coroutineScope)
 
-        combine(
-            _filter,
-            allRoomsFilterableList.summaries
-        ) { filter, roomSummaries ->
-            if (filter.isBlank()) {
-                persistentListOf()
-            } else {
-                mapRoomSummaries(roomSummaries)
-            }
-        }.onEach { filteredRooms ->
-            _filteredRooms.emit(filteredRooms)
-        }.launchIn(coroutineScope)
+        allRoomsFilterableList.summaries
+            .onEach { filteredRooms ->
+                val mapFilteredRooms = mapRoomSummaries(filteredRooms)
+                _filteredRooms.emit(mapFilteredRooms)
+            }.launchIn(coroutineScope)
 
         _filter
-            .debounce(100)
+            .debounce(0.5.seconds)
             .onEach { filter ->
                 val filter = if (filter.isBlank()) {
-                    FilterableRoomList.Filter.None
+                    DynamicRoomList.Filter.None
                 } else {
-                    FilterableRoomList.Filter.NormalizedMatchRoomName(filter)
+                    DynamicRoomList.Filter.NormalizedMatchRoomName(filter)
                 }
                 allRoomsFilterableList.updateFilter(filter)
             }.launchIn(coroutineScope)
