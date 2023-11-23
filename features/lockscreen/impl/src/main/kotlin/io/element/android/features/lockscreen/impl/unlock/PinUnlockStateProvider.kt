@@ -16,8 +16,10 @@
 
 package io.element.android.features.lockscreen.impl.unlock
 
+import androidx.biometric.BiometricPrompt
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.lockscreen.impl.biometric.BiometricUnlock
+import io.element.android.features.lockscreen.impl.biometric.BiometricUnlockError
 import io.element.android.features.lockscreen.impl.pin.model.PinEntry
 import io.element.android.libraries.architecture.Async
 
@@ -31,6 +33,14 @@ open class PinUnlockStateProvider : PreviewParameterProvider<PinUnlockState> {
             aPinUnlockState(showBiometricUnlock = false),
             aPinUnlockState(showSignOutPrompt = true, remainingAttempts = 0),
             aPinUnlockState(signOutAction = Async.Loading()),
+            aPinUnlockState(
+                biometricUnlockResult = BiometricUnlock.AuthenticationResult.Failure(
+                    error = BiometricUnlockError(
+                        code = BiometricPrompt.ERROR_LOCKOUT,
+                        message = "A biometric error message",
+                    )
+                )
+            ),
         )
 }
 
