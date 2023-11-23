@@ -18,6 +18,8 @@ package io.element.android.features.messages.impl.timeline.components
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.messages.impl.timeline.aTimelineItemEvent
 import io.element.android.features.messages.impl.timeline.aTimelineItemReactions
 import io.element.android.features.messages.impl.timeline.model.InReplyToDetails
@@ -28,21 +30,29 @@ import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.media.MediaSource
+import io.element.android.libraries.matrix.api.poll.PollKind
+import io.element.android.libraries.matrix.api.timeline.item.event.AudioMessageType
+import io.element.android.libraries.matrix.api.timeline.item.event.EmoteMessageType
+import io.element.android.libraries.matrix.api.timeline.item.event.EventContent
+import io.element.android.libraries.matrix.api.timeline.item.event.FileMessageType
+import io.element.android.libraries.matrix.api.timeline.item.event.ImageMessageType
+import io.element.android.libraries.matrix.api.timeline.item.event.LocationMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageContent
+import io.element.android.libraries.matrix.api.timeline.item.event.MessageType
+import io.element.android.libraries.matrix.api.timeline.item.event.NoticeMessageType
+import io.element.android.libraries.matrix.api.timeline.item.event.PollContent
 import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageType
+import io.element.android.libraries.matrix.api.timeline.item.event.VideoMessageType
+import io.element.android.libraries.matrix.api.timeline.item.event.VoiceMessageType
 
 @PreviewsDayNight
 @Composable
-internal fun TimelineItemEventRowWithReplyPreview() = ElementPreview {
+internal fun TimelineItemEventRowWithReplyPreview(
+    @PreviewParameter(InReplyToDetailsProvider::class) inReplyToDetails: InReplyToDetails,
+) = ElementPreview {
     Column {
         sequenceOf(false, true).forEach {
-            val replyContent = if (it) {
-                // Short
-                "Message which are being replied."
-            } else {
-                // Long, to test 2 lines and ellipsis)
-                "Message which are being replied, and which was long enough to be displayed on two lines (only!)."
-            }
             TimelineItemEventRow(
                 event = aTimelineItemEvent(
                     isMine = it,
@@ -50,7 +60,7 @@ internal fun TimelineItemEventRowWithReplyPreview() = ElementPreview {
                     content = aTimelineItemTextContent().copy(
                         body = "A reply."
                     ),
-                    inReplyTo = aInReplyToDetails(replyContent),
+                    inReplyTo = inReplyToDetails,
                     groupPosition = TimelineItemGroupPosition.First,
                 ),
                 showReadReceipts = false,
@@ -76,7 +86,7 @@ internal fun TimelineItemEventRowWithReplyPreview() = ElementPreview {
                     content = aTimelineItemImageContent().copy(
                         aspectRatio = 5f
                     ),
-                    inReplyTo = aInReplyToDetails(replyContent),
+                    inReplyTo = inReplyToDetails,
                     isThreaded = true,
                     groupPosition = TimelineItemGroupPosition.Last,
                 ),
@@ -100,15 +110,82 @@ internal fun TimelineItemEventRowWithReplyPreview() = ElementPreview {
     }
 }
 
-private fun aInReplyToDetails(
-    replyContent: String,
-): InReplyToDetails {
-    return InReplyToDetails(
+class InReplyToDetailsProvider : PreviewParameterProvider<InReplyToDetails> {
+    override val values: Sequence<InReplyToDetails>
+        get() = sequenceOf(
+            aMessageContent(
+                body = "Message which are being replied.",
+                type = TextMessageType("Message which are being replied.", null)
+            ),
+            aMessageContent(
+                body = "Message which are being replied, and which was long enough to be displayed on two lines (only!).",
+                type = TextMessageType("Message which are being replied, and which was long enough to be displayed on two lines (only!).", null)
+            ),
+            aMessageContent(
+                body = "Video",
+                type = VideoMessageType("Video", MediaSource("url"), null),
+            ),
+            aMessageContent(
+                body = "Audio",
+                type = AudioMessageType("Audio", MediaSource("url"), null),
+            ),
+            aMessageContent(
+                body = "Voice",
+                type = VoiceMessageType("Voice", MediaSource("url"), null, null),
+            ),
+            aMessageContent(
+                body = "Image",
+                type = ImageMessageType("Image", MediaSource("url"), null),
+            ),
+            aMessageContent(
+                body = "File",
+                type = FileMessageType("File", MediaSource("url"), null),
+            ),
+            aMessageContent(
+                body = "Location",
+                type = LocationMessageType("Location", "geo:1,2", null),
+            ),
+            aMessageContent(
+                body = "Notice",
+                type = NoticeMessageType("Notice", null),
+            ),
+            aMessageContent(
+                body = "Emote",
+                type = EmoteMessageType("Emote", null),
+            ),
+            PollContent(
+                question = "Poll which are being replied.",
+                kind = PollKind.Disclosed,
+                maxSelections = 1u,
+                answers = emptyList(),
+                votes = emptyMap(),
+                endTime = null
+            ),
+        ).map {
+            aInReplyToDetails(
+                eventContent = it,
+            )
+        }
+
+    private fun aMessageContent(
+        body: String,
+        type: MessageType,
+    ) = MessageContent(
+        body = body,
+        inReplyTo = null,
+        isEdited = false,
+        isThreaded = false,
+        type = type,
+    )
+
+    private fun aInReplyToDetails(
+        eventContent: EventContent,
+    ) = InReplyToDetails(
         eventId = EventId("\$event"),
-        eventContent = MessageContent(replyContent, null, false, false, TextMessageType(replyContent, null)),
+        eventContent = eventContent,
         senderId = UserId("@Sender:domain"),
         senderDisplayName = "Sender",
         senderAvatarUrl = null,
-        textContent = replyContent,
+        textContent = (eventContent as? MessageContent)?.body.orEmpty(),
     )
 }
