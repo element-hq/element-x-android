@@ -28,7 +28,6 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVoiceContent
 import io.element.android.features.messages.impl.timeline.util.FileExtensionExtractor
-import io.element.android.features.messages.impl.timeline.util.toHtmlDocument
 import io.element.android.libraries.androidutils.filesize.FileSizeFormatter
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.featureflag.api.FeatureFlagService
@@ -46,6 +45,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageTy
 import io.element.android.libraries.matrix.api.timeline.item.event.UnknownMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.VideoMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.VoiceMessageType
+import io.element.android.libraries.matrix.ui.messages.toHtmlDocument
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import java.time.Duration
@@ -85,6 +85,7 @@ class TimelineItemContentMessageFactory @Inject constructor(
                     TimelineItemTextContent(
                         body = messageType.body,
                         htmlDocument = null,
+                        plainText = messageType.body,
                         isEdited = content.isEdited,
                     )
                 } else {
@@ -161,11 +162,13 @@ class TimelineItemContentMessageFactory @Inject constructor(
                 htmlDocument = messageType.formatted?.toHtmlDocument(),
                 isEdited = content.isEdited,
             )
-            is TextMessageType -> TimelineItemTextContent(
-                body = messageType.body,
-                htmlDocument = messageType.formatted?.toHtmlDocument(),
-                isEdited = content.isEdited,
-            )
+            is TextMessageType -> {
+                TimelineItemTextContent(
+                    body = messageType.body,
+                    htmlDocument = messageType.formatted?.toHtmlDocument(),
+                    isEdited = content.isEdited,
+                )
+            }
             is OtherMessageType -> TimelineItemTextContent(
                 body = messageType.body,
                 htmlDocument = null,

@@ -40,6 +40,11 @@ dependencies {
     implementation(projects.libraries.uiStrings)
     implementation(libs.coil.compose)
     implementation(libs.coil.gif)
+    implementation(libs.jsoup)
 
     ksp(libs.showkase.processor)
+
+    testImplementation(libs.test.junit)
+    testImplementation(libs.test.truth)
+    testImplementation(libs.test.robolectric)
 }

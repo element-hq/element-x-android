@@ -24,6 +24,7 @@ import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.TimelineItemGroupPosition
 import io.element.android.features.messages.impl.timeline.model.TimelineItemReactions
 import io.element.android.features.messages.impl.timeline.model.TimelineItemReadReceipts
+import io.element.android.features.messages.impl.timeline.model.map
 import io.element.android.libraries.core.bool.orTrue
 import io.element.android.libraries.dateformatter.api.LastMessageTimestampFormatter
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
@@ -92,7 +93,7 @@ class TimelineItemEventFactory @Inject constructor(
             reactionsState = currentTimelineItem.computeReactionsState(),
             readReceiptState = currentTimelineItem.computeReadReceiptState(roomMembers),
             localSendState = currentTimelineItem.event.localSendState,
-            inReplyTo = currentTimelineItem.event.inReplyTo(),
+            inReplyTo = currentTimelineItem.event.inReplyTo()?.map(),
             isThreaded = currentTimelineItem.event.isThreaded(),
             debugInfo = currentTimelineItem.event.debugInfo,
             origin = currentTimelineItem.event.origin,

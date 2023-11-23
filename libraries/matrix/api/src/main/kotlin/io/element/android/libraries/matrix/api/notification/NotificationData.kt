@@ -36,6 +36,7 @@ data class NotificationData(
     val content: NotificationContent,
     // For images for instance
     val contentUrl: String?,
+    val hasMention: Boolean,
 )
 
 sealed interface NotificationContent {
