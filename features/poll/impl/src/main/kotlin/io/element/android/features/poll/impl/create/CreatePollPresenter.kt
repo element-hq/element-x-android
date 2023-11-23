@@ -34,17 +34,13 @@ import im.vector.app.features.analytics.plan.Composer
 import im.vector.app.features.analytics.plan.PollCreation
 import io.element.android.features.messages.api.MessageComposerContext
 import io.element.android.features.poll.api.create.CreatePollMode
+import io.element.android.features.poll.impl.data.PollRepository
 import io.element.android.libraries.architecture.Presenter
-import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.poll.PollAnswer
 import io.element.android.libraries.matrix.api.poll.PollKind
-import io.element.android.libraries.matrix.api.room.MatrixRoom
-import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
-import io.element.android.libraries.matrix.api.timeline.item.event.PollContent
 import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
@@ -54,7 +50,7 @@ private const val MAX_ANSWER_LENGTH = 240
 private const val MAX_SELECTIONS = 1
 
 class CreatePollPresenter @AssistedInject constructor(
-    private val room: MatrixRoom,
+    private val repository: PollRepository,
     private val analyticsService: AnalyticsService,
     private val messageComposerContext: MessageComposerContext,
     @Assisted private val navigateUp: () -> Unit,
@@ -75,7 +71,7 @@ class CreatePollPresenter @AssistedInject constructor(
 
         LaunchedEffect(Unit) {
             if (mode is CreatePollMode.EditPoll) {
-                room.getPoll(mode.eventId).onSuccess {
+                repository.getPoll(mode.eventId).onSuccess {
                     question = it.question
                     answers = it.answers.map(PollAnswer::text)
                     pollKind = it.kind
@@ -96,10 +92,15 @@ class CreatePollPresenter @AssistedInject constructor(
             when (event) {
                 is CreatePollEvents.Save -> scope.launch {
                     if (canSave) {
-                        room.savePoll(
+                        repository.savePoll(
+                            existingPollId = when (mode) {
+                                is CreatePollMode.EditPoll -> mode.eventId
+                                is CreatePollMode.NewPoll -> null
+                            },
                             question = question,
                             answers = answers,
-                            pollKind = pollKind
+                            pollKind = pollKind,
+                            maxSelections = MAX_SELECTIONS,
                         ).onSuccess {
                             analyticsService.capturePollSaved(
                                 isUndisclosed = pollKind == PollKind.Undisclosed,
@@ -157,37 +158,6 @@ class CreatePollPresenter @AssistedInject constructor(
             pollKind = pollKind,
             showConfirmation = showConfirmation,
             eventSink = ::handleEvents,
-        )
-    }
-
-    private suspend fun MatrixRoom.getPoll(eventId: EventId): Result<PollContent> = runCatching {
-        timeline
-            .timelineItems
-            .first()
-            .asSequence()
-            .filterIsInstance<MatrixTimelineItem.Event>()
-            .first { it.eventId == eventId }
-            .event
-            .content as PollContent
-    }
-
-    private suspend fun MatrixRoom.savePoll(
-        question: String,
-        answers: List<String>,
-        pollKind: PollKind,
-    ) = when (mode) {
-        is CreatePollMode.EditPoll -> editPoll(
-            pollStartId = mode.eventId,
-            question = question,
-            answers = answers,
-            maxSelections = MAX_SELECTIONS,
-            pollKind = pollKind,
-        )
-        is CreatePollMode.NewPoll -> createPoll(
-            question = question,
-            answers = answers,
-            maxSelections = MAX_SELECTIONS,
-            pollKind = pollKind,
         )
     }
 

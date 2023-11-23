@@ -25,6 +25,7 @@ import im.vector.app.features.analytics.plan.Composer
 import im.vector.app.features.analytics.plan.PollCreation
 import io.element.android.features.messages.test.FakeMessageComposerContext
 import io.element.android.features.poll.api.create.CreatePollMode
+import io.element.android.features.poll.impl.data.PollRepository
 import io.element.android.libraries.matrix.api.poll.PollAnswer
 import io.element.android.libraries.matrix.api.poll.PollKind
 import io.element.android.libraries.matrix.api.room.MatrixRoom
@@ -424,7 +425,7 @@ class CreatePollPresenterTest {
         mode: CreatePollMode = CreatePollMode.NewPoll,
         room: MatrixRoom = fakeMatrixRoom,
     ): CreatePollPresenter = CreatePollPresenter(
-        room = room,
+        repository = PollRepository(room),
         analyticsService = fakeAnalyticsService,
         messageComposerContext = fakeMessageComposerContext,
         navigateUp = { navUpInvocationsCount++ },
