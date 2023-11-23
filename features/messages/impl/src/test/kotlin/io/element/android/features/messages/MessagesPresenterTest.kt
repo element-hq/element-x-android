@@ -26,6 +26,7 @@ import io.element.android.features.messages.fixtures.aMessageEvent
 import io.element.android.features.messages.fixtures.aTimelineItemsFactory
 import io.element.android.features.messages.impl.InviteDialogAction
 import io.element.android.features.messages.impl.MessagesEvents
+import io.element.android.features.messages.impl.MessagesNavigator
 import io.element.android.features.messages.impl.MessagesPresenter
 import io.element.android.features.messages.impl.actionlist.ActionListPresenter
 import io.element.android.features.messages.impl.actionlist.ActionListState
@@ -689,12 +690,18 @@ class MessagesPresenterTest {
             room = matrixRoom,
             dispatchers = coroutineDispatchers,
             appScope = this,
+            navigator = navigator,
             analyticsService = analyticsService,
             encryptionService = FakeEncryptionService(),
             verificationService = FakeSessionVerificationService(),
             featureFlagService = FakeFeatureFlagService(),
             redactedVoiceMessageManager = FakeRedactedVoiceMessageManager(),
         )
+        val timelinePresenterFactory = object: TimelinePresenter.Factory {
+            override fun create(navigator: MessagesNavigator): TimelinePresenter {
+                return timelinePresenter
+            }
+        }
         val preferencesStore = InMemoryPreferencesStore(isRichTextEditorEnabled = true)
         val actionListPresenter = ActionListPresenter(preferencesStore = preferencesStore)
         val readReceiptBottomSheetPresenter = ReadReceiptBottomSheetPresenter()
@@ -705,7 +712,7 @@ class MessagesPresenterTest {
             room = matrixRoom,
             composerPresenter = messageComposerPresenter,
             voiceMessageComposerPresenter = voiceMessageComposerPresenter,
-            timelinePresenter = timelinePresenter,
+            timelinePresenterFactory = timelinePresenterFactory,
             actionListPresenter = actionListPresenter,
             customReactionPresenter = customReactionPresenter,
             reactionSummaryPresenter = reactionSummaryPresenter,

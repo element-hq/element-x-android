@@ -22,6 +22,7 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import im.vector.app.features.analytics.plan.PollEnd
 import im.vector.app.features.analytics.plan.PollVote
+import io.element.android.features.messages.FakeMessagesNavigator
 import io.element.android.features.messages.fixtures.aMessageEvent
 import io.element.android.features.messages.fixtures.aTimelineItemsFactory
 import io.element.android.features.messages.impl.timeline.TimelineEvents
@@ -315,6 +316,20 @@ class TimelinePresenterTest {
     }
 
     @Test
+    fun `present - PollEditClicked event navigates`() = runTest {
+        val navigator = FakeMessagesNavigator()
+        val presenter = createTimelinePresenter(
+            messagesNavigator = navigator,
+        )
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            awaitItem().eventSink(TimelineEvents.PollEditClicked(AN_EVENT_ID))
+            assertThat(navigator.onEditPollClickedCount).isEqualTo(1)
+        }
+    }
+
+    @Test
     fun `present - side effect on redacted items is invoked`() = runTest {
         val redactedVoiceMessageManager = FakeRedactedVoiceMessageManager()
         val presenter = createTimelinePresenter(
@@ -339,12 +354,14 @@ class TimelinePresenterTest {
         timeline: MatrixTimeline = FakeMatrixTimeline(),
         timelineItemsFactory: TimelineItemsFactory = aTimelineItemsFactory(),
         redactedVoiceMessageManager: RedactedVoiceMessageManager = FakeRedactedVoiceMessageManager(),
+        messagesNavigator: FakeMessagesNavigator = FakeMessagesNavigator(),
     ): TimelinePresenter {
         return TimelinePresenter(
             timelineItemsFactory = timelineItemsFactory,
             room = FakeMatrixRoom(matrixTimeline = timeline),
             dispatchers = testCoroutineDispatchers(),
             appScope = this,
+            navigator = messagesNavigator,
             analyticsService = FakeAnalyticsService(),
             encryptionService = FakeEncryptionService(),
             verificationService = FakeSessionVerificationService(),
@@ -362,6 +379,7 @@ class TimelinePresenterTest {
             room = room,
             dispatchers = testCoroutineDispatchers(),
             appScope = this,
+            navigator = FakeMessagesNavigator(),
             analyticsService = analyticsService,
             encryptionService = FakeEncryptionService(),
             verificationService = FakeSessionVerificationService(),

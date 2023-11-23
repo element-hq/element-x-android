@@ -32,6 +32,7 @@ import kotlinx.collections.immutable.toImmutableList
 fun TimelineItemPollView(
     content: TimelineItemPollContent,
     isMine: Boolean,
+    isEditable: Boolean,
     eventSink: (TimelineEvents) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -43,15 +44,20 @@ fun TimelineItemPollView(
         eventSink(TimelineEvents.PollEndClicked(pollStartId))
     }
 
+    fun onPollEdit(pollStartId: EventId) {
+        eventSink(TimelineEvents.PollEditClicked(pollStartId))
+    }
+
     PollContentView(
         eventId = content.eventId,
         question = content.question,
         answerItems = content.answerItems.toImmutableList(),
         pollKind = content.pollKind,
         isPollEnded = content.isEnded,
+        isPollEditable = isEditable,
         isMine = isMine,
         onAnswerSelected = ::onAnswerSelected,
-        onPollEdit = {}, // TODO Polls: Wire up this callback once poll edit screen is done.
+        onPollEdit = ::onPollEdit,
         onPollEnd = ::onPollEnd,
         modifier = modifier,
     )
@@ -64,6 +70,7 @@ internal fun TimelineItemPollViewPreview(@PreviewParameter(TimelineItemPollConte
         TimelineItemPollView(
             content = content,
             isMine = false,
+            isEditable = false,
             eventSink = {},
         )
     }
@@ -75,6 +82,7 @@ internal fun TimelineItemPollCreatorViewPreview(@PreviewParameter(TimelineItemPo
         TimelineItemPollView(
             content = content,
             isMine = true,
+            isEditable = false,
             eventSink = {},
         )
     }

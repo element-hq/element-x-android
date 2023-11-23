@@ -27,8 +27,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import im.vector.app.features.analytics.plan.PollEnd
 import im.vector.app.features.analytics.plan.PollVote
+import io.element.android.features.messages.impl.MessagesNavigator
 import io.element.android.features.messages.impl.timeline.factories.TimelineItemsFactory
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.session.SessionState
@@ -54,22 +58,27 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import javax.inject.Inject
 
 private const val BACK_PAGINATION_EVENT_LIMIT = 20
 private const val BACK_PAGINATION_PAGE_SIZE = 50
 
-class TimelinePresenter @Inject constructor(
+class TimelinePresenter @AssistedInject constructor(
     private val timelineItemsFactory: TimelineItemsFactory,
     private val room: MatrixRoom,
     private val dispatchers: CoroutineDispatchers,
     private val appScope: CoroutineScope,
+    @Assisted private val navigator: MessagesNavigator,
     private val analyticsService: AnalyticsService,
     private val verificationService: SessionVerificationService,
     private val encryptionService: EncryptionService,
     private val featureFlagService: FeatureFlagService,
     private val redactedVoiceMessageManager: RedactedVoiceMessageManager,
 ) : Presenter<TimelineState> {
+
+    @AssistedFactory
+    interface Factory {
+        fun create(navigator: MessagesNavigator): TimelinePresenter
+    }
 
     private val timeline = room.timeline
 
@@ -135,6 +144,8 @@ class TimelinePresenter @Inject constructor(
                     )
                     analyticsService.capture(PollEnd())
                 }
+                is TimelineEvents.PollEditClicked ->
+                    navigator.onEditPollClicked(event.pollStartId)
             }
         }
 

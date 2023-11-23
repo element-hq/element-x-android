@@ -93,7 +93,7 @@ class MessagesPresenter @AssistedInject constructor(
     private val room: MatrixRoom,
     private val composerPresenter: MessageComposerPresenter,
     private val voiceMessageComposerPresenter: VoiceMessageComposerPresenter,
-    private val timelinePresenter: TimelinePresenter,
+    timelinePresenterFactory: TimelinePresenter.Factory,
     private val actionListPresenter: ActionListPresenter,
     private val customReactionPresenter: CustomReactionPresenter,
     private val reactionSummaryPresenter: ReactionSummaryPresenter,
@@ -109,6 +109,8 @@ class MessagesPresenter @AssistedInject constructor(
     @Assisted private val navigator: MessagesNavigator,
     private val buildMeta: BuildMeta,
 ) : Presenter<MessagesState> {
+
+    private val timelinePresenter = timelinePresenterFactory.create(navigator = navigator)
 
     @AssistedFactory
     interface Factory {
