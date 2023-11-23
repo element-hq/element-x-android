@@ -88,6 +88,7 @@ class TimelineItemEventFactory @Inject constructor(
             senderAvatar = senderAvatarData,
             content = contentFactory.create(currentTimelineItem.event),
             isMine = currentTimelineItem.event.isOwn,
+            isEditable = currentTimelineItem.event.isEditable,
             sentTime = sentTime,
             groupPosition = groupPosition,
             reactionsState = currentTimelineItem.computeReactionsState(),

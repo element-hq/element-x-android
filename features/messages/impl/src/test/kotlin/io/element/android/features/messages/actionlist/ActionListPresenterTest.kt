@@ -411,7 +411,7 @@ class ActionListPresenterTest {
     }
 
     @Test
-    fun `present - compute for poll message without votes`() = runTest {
+    fun `present - compute for editable poll message`() = runTest {
         val presenter = createActionListPresenter(isDeveloperModeEnabled = false)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -419,6 +419,7 @@ class ActionListPresenterTest {
             val initialState = awaitItem()
             val messageEvent = aMessageEvent(
                 isMine = true,
+                isEditable = true,
                 content = aTimelineItemPollContent(answerItems = aPollAnswerItemList(hasVotes = false)),
             )
             initialState.eventSink.invoke(ActionListEvents.ComputeForMessage(messageEvent, canRedact = false, canSendMessage = true))
@@ -427,7 +428,9 @@ class ActionListPresenterTest {
                 ActionListState.Target.Success(
                     messageEvent,
                     persistentListOf(
+                        TimelineItemAction.Reply,
                         TimelineItemAction.Edit,
+                        TimelineItemAction.EndPoll,
                         TimelineItemAction.Redact,
                     )
                 )
@@ -436,7 +439,7 @@ class ActionListPresenterTest {
         }
     }
     @Test
-    fun `present - compute for poll message with votes`() = runTest {
+    fun `present - compute for non-editable poll message`() = runTest {
         val presenter = createActionListPresenter(isDeveloperModeEnabled = false)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -444,6 +447,7 @@ class ActionListPresenterTest {
             val initialState = awaitItem()
             val messageEvent = aMessageEvent(
                 isMine = true,
+                isEditable = false,
                 content = aTimelineItemPollContent(answerItems = aPollAnswerItemList(hasVotes = true)),
             )
             initialState.eventSink.invoke(ActionListEvents.ComputeForMessage(messageEvent, canRedact = false, canSendMessage = true))
@@ -471,6 +475,7 @@ class ActionListPresenterTest {
             val initialState = awaitItem()
             val messageEvent = aMessageEvent(
                 isMine = true,
+                isEditable = false,
                 content = aTimelineItemPollContent(isEnded = true),
             )
             initialState.eventSink.invoke(ActionListEvents.ComputeForMessage(messageEvent, canRedact = false, canSendMessage = true))

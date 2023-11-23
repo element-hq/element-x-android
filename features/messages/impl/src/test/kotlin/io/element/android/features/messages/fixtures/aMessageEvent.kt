@@ -38,6 +38,7 @@ import kotlinx.collections.immutable.toImmutableList
 internal fun aMessageEvent(
     eventId: EventId? = AN_EVENT_ID,
     isMine: Boolean = true,
+    isEditable: Boolean = true,
     content: TimelineItemEventContent = TimelineItemTextContent(body = A_MESSAGE, htmlDocument = null, isEdited = false),
     inReplyTo: InReplyToDetails? = null,
     isThreaded: Boolean = false,
@@ -52,6 +53,7 @@ internal fun aMessageEvent(
     content = content,
     sentTime = "",
     isMine = isMine,
+    isEditable = isEditable,
     reactionsState = aTimelineItemReactions(count = 0),
     readReceiptState = TimelineItemReadReceipts(emptyList<ReadReceiptData>().toImmutableList()),
     localSendState = sendState,
