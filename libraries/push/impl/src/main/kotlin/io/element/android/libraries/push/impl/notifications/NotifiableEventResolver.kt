@@ -113,7 +113,7 @@ class NotifiableEventResolver @Inject constructor(
                         soundName = null,
                         isRedacted = false,
                         isUpdated = false,
-                        description = descriptionFromRoomMembershipContent(content, isDirect) ?: return null,
+                        description = descriptionFromRoomMembershipInvite(isDirect),
                         type = null, // TODO check if type is needed anymore
                         title = null, // TODO check if title is needed anymore
                     )
@@ -226,19 +226,13 @@ class NotifiableEventResolver @Inject constructor(
         }
     }
 
-    private fun descriptionFromRoomMembershipContent(
-        content: NotificationContent.StateEvent.RoomMemberContent,
+    private fun descriptionFromRoomMembershipInvite(
         isDirectRoom: Boolean
-    ): String? {
-        return when (content.membershipState) {
-            RoomMembershipState.INVITE -> {
-                if (isDirectRoom) {
-                    stringProvider.getString(R.string.notification_invite_body)
-                } else {
-                    stringProvider.getString(R.string.notification_room_invite_body)
-                }
-            }
-            else -> null
+    ): String {
+        return if (isDirectRoom) {
+            stringProvider.getString(R.string.notification_invite_body)
+        } else {
+            stringProvider.getString(R.string.notification_room_invite_body)
         }
     }
 }
