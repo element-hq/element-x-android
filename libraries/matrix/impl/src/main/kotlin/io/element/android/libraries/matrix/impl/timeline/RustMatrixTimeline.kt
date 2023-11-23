@@ -46,7 +46,7 @@ import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.BackPaginationStatus
 import org.matrix.rustcomponents.sdk.EventItemOrigin
 import org.matrix.rustcomponents.sdk.PaginationOptions
-import org.matrix.rustcomponents.sdk.Room
+import org.matrix.rustcomponents.sdk.Timeline
 import org.matrix.rustcomponents.sdk.TimelineDiff
 import org.matrix.rustcomponents.sdk.TimelineItem
 import timber.log.Timber
@@ -59,9 +59,9 @@ class RustMatrixTimeline(
     roomCoroutineScope: CoroutineScope,
     isKeyBackupEnabled: Boolean,
     private val matrixRoom: MatrixRoom,
-    private val innerRoom: Room,
+    private val innerTimeline: Timeline,
     private val dispatcher: CoroutineDispatcher,
-    private val lastLoginTimestamp: Date?,
+    lastLoginTimestamp: Date?,
     private val onNewSyncedEvent: () -> Unit,
 ) : MatrixTimeline {
 
@@ -109,7 +109,7 @@ class RustMatrixTimeline(
         Timber.d("Initialize timeline for room ${matrixRoom.roomId}")
 
         roomCoroutineScope.launch(dispatcher) {
-            innerRoom.timelineDiffFlow { initialList ->
+            innerTimeline.timelineDiffFlow { initialList ->
                 postItems(initialList)
             }.onEach { diffs ->
                 if (diffs.any { diff -> diff.eventOrigin() == EventItemOrigin.SYNC }) {
@@ -118,7 +118,7 @@ class RustMatrixTimeline(
                 postDiffs(diffs)
             }.launchIn(this)
 
-            innerRoom.backPaginationStatusFlow()
+            innerTimeline.backPaginationStatusFlow()
                 .onEach {
                     postPaginationStatus(it)
                 }
@@ -130,7 +130,7 @@ class RustMatrixTimeline(
 
     private suspend fun fetchMembers() = withContext(dispatcher) {
         initLatch.await()
-        innerRoom.fetchMembers()
+        innerTimeline.fetchMembers()
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -188,7 +188,7 @@ class RustMatrixTimeline(
 
     override suspend fun fetchDetailsForEvent(eventId: EventId): Result<Unit> = withContext(dispatcher) {
         runCatching {
-            innerRoom.fetchDetailsForEvent(eventId.value)
+            innerTimeline.fetchDetailsForEvent(eventId.value)
         }
     }
 
@@ -201,7 +201,7 @@ class RustMatrixTimeline(
                 items = untilNumberOfItems.toUShort(),
                 waitForToken = true,
             )
-            innerRoom.paginateBackwards(paginationOptions)
+            innerTimeline.paginateBackwards(paginationOptions)
         }.onFailure { error ->
             if (error is TimelineException.CannotPaginate) {
                 Timber.d("Can't paginate backwards on room ${matrixRoom.roomId}, we're already at the start")
@@ -219,8 +219,12 @@ class RustMatrixTimeline(
 
     override suspend fun sendReadReceipt(eventId: EventId) = withContext(dispatcher) {
         runCatching {
-            innerRoom.sendReadReceipt(eventId = eventId.value)
+            innerTimeline.sendReadReceipt(eventId = eventId.value)
         }
+    }
+
+    override fun close() {
+        innerTimeline.close()
     }
 
     fun getItemById(eventId: EventId): MatrixTimelineItem.Event? {
