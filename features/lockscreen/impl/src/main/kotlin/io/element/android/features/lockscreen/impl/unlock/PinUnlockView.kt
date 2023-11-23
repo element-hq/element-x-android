@@ -48,6 +48,7 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
@@ -379,3 +380,24 @@ internal fun PinUnlockDefaultViewPreview(@PreviewParameter(PinUnlockStateProvide
     }
 }
 
+@Composable
+@Preview(widthDp = 800, heightDp = 480)
+internal fun PinUnlockInAppViewLandscapePreview() {
+    ElementPreview {
+        PinUnlockView(
+            state = aPinUnlockState(),
+            isInAppUnlock = true,
+        )
+    }
+}
+
+@Composable
+@Preview(widthDp = 800, heightDp = 480)
+internal fun PinUnlockDefaultViewLandscapePreview() {
+    ElementPreview {
+        PinUnlockView(
+            state = aPinUnlockState(),
+            isInAppUnlock = false,
+        )
+    }
+}
