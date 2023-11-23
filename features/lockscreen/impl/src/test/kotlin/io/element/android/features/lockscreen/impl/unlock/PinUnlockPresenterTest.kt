@@ -20,11 +20,13 @@ import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import io.element.android.features.lockscreen.impl.biometric.BiometricUnlock
 import io.element.android.features.lockscreen.impl.biometric.BiometricUnlockManager
 import io.element.android.features.lockscreen.impl.biometric.FakeBiometricUnlockManager
 import io.element.android.features.lockscreen.impl.fixtures.aPinCodeManager
 import io.element.android.features.lockscreen.impl.pin.DefaultPinCodeManagerCallback
 import io.element.android.features.lockscreen.impl.pin.PinCodeManager
+import io.element.android.features.lockscreen.impl.pin.model.PinDigit
 import io.element.android.features.lockscreen.impl.pin.model.PinEntry
 import io.element.android.features.lockscreen.impl.pin.model.assertText
 import io.element.android.features.lockscreen.impl.unlock.keypad.PinKeypadModel
@@ -32,6 +34,7 @@ import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.tests.testutils.awaitLastSequentialItem
 import io.element.android.tests.testutils.consumeItemsUntilPredicate
+import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -51,6 +54,10 @@ class PinUnlockPresenterTest {
                 assertThat(state.pinEntry).isInstanceOf(Async.Uninitialized::class.java)
                 assertThat(state.showWrongPinTitle).isFalse()
                 assertThat(state.showSignOutPrompt).isFalse()
+                assertThat(state.showBiometricUnlock).isTrue()
+                assertThat(state.showBiometricUnlockError).isFalse()
+                assertThat(state.biometricUnlockErrorMessage).isNull()
+                assertThat(state.isSignOutPromptCancellable).isTrue()
                 assertThat(state.isUnlocked).isFalse()
                 assertThat(state.signOutAction).isInstanceOf(Async.Uninitialized::class.java)
                 assertThat(state.remainingAttempts).isInstanceOf(Async.Uninitialized::class.java)
@@ -126,6 +133,91 @@ class PinUnlockPresenterTest {
             }
             consumeItemsUntilPredicate { state ->
                 state.signOutAction is Async.Success
+            }
+        }
+    }
+
+    @Test
+    fun `present - biometric success`() = runTest {
+        val biometricUnlockManager = FakeBiometricUnlockManager(
+            hasAvailableAuthenticator = true,
+        )
+        val presenter = createPinUnlockPresenter(
+            scope = this,
+            biometricUnlockManager = biometricUnlockManager,
+        )
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitLastSequentialItem().also { state ->
+                assertThat(state.showBiometricUnlock).isTrue()
+                assertThat(state.biometricUnlockResult).isNull()
+            }
+            initialState.eventSink(PinUnlockEvents.OnUseBiometric)
+            awaitLastSequentialItem().also { state ->
+                assertThat(state.biometricUnlockResult).isEqualTo(BiometricUnlock.AuthenticationResult.Success)
+            }
+        }
+    }
+
+    @Test
+    fun `present - biometric failure`() = runTest {
+        val biometricUnlockManager = FakeBiometricUnlockManager(
+            hasAvailableAuthenticator = true,
+        )
+        biometricUnlockManager.givenAuthenticateResult(BiometricUnlock.AuthenticationResult.Failure())
+        val presenter = createPinUnlockPresenter(
+            scope = this,
+            biometricUnlockManager = biometricUnlockManager,
+        )
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitLastSequentialItem().also { state ->
+                assertThat(state.showBiometricUnlock).isTrue()
+                assertThat(state.biometricUnlockResult).isNull()
+            }
+            initialState.eventSink(PinUnlockEvents.OnUseBiometric)
+            awaitLastSequentialItem().also { state ->
+                assertThat(state.biometricUnlockResult).isInstanceOf(BiometricUnlock.AuthenticationResult.Failure::class.java)
+            }
+            initialState.eventSink(PinUnlockEvents.ClearBiometricError)
+            awaitLastSequentialItem().also { state ->
+                assertThat(state.biometricUnlockResult).isNull()
+            }
+        }
+    }
+
+    @Test
+    fun `present - pin entry change`() = runTest {
+        val presenter = createPinUnlockPresenter(scope = this)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitLastSequentialItem().also { state ->
+                assertThat(state.pinEntry.dataOrNull()).isEqualTo(
+                    PinEntry(
+                        digits = listOf(
+                            PinDigit.Empty,
+                            PinDigit.Empty,
+                            PinDigit.Empty,
+                            PinDigit.Empty,
+                        ).toPersistentList()
+                    )
+                )
+            }
+            initialState.eventSink(PinUnlockEvents.OnPinEntryChanged(entryAsText = "123"))
+            awaitLastSequentialItem().also { state ->
+                assertThat(state.pinEntry.dataOrNull()).isEqualTo(
+                    PinEntry(
+                        digits = listOf(
+                            PinDigit.Filled('1'),
+                            PinDigit.Filled('2'),
+                            PinDigit.Filled('3'),
+                            PinDigit.Empty,
+                        ).toPersistentList()
+                    )
+                )
             }
         }
     }

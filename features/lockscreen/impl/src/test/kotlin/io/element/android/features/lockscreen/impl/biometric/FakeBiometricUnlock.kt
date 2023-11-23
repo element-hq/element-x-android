@@ -16,32 +16,18 @@
 
 package io.element.android.features.lockscreen.impl.biometric
 
-import androidx.compose.runtime.Composable
+class FakeBiometricUnlock : BiometricUnlock {
+    override val isActive = true
 
-class FakeBiometricUnlockManager(
-    override var hasAvailableAuthenticator: Boolean = false,
-) : BiometricUnlockManager {
+    override fun setup() = Unit
 
-    override var isDeviceSecured: Boolean = true
-
-    private var _callback: BiometricUnlock.Callback? = null
-
-    private val fakeBiometricUnlock = FakeBiometricUnlock()
+    private var authenticateResult: BiometricUnlock.AuthenticationResult = BiometricUnlock.AuthenticationResult.Success
 
     fun givenAuthenticateResult(result: BiometricUnlock.AuthenticationResult) {
-        fakeBiometricUnlock.givenAuthenticateResult(result)
+        authenticateResult = result
     }
 
-    override fun addCallback(callback: BiometricUnlock.Callback) {
-        _callback = callback
-    }
-
-    override fun removeCallback(callback: BiometricUnlock.Callback) {
-        _callback = null
-    }
-
-    @Composable
-    override fun rememberBiometricUnlock(): BiometricUnlock {
-        return fakeBiometricUnlock
+    override suspend fun authenticate(): BiometricUnlock.AuthenticationResult {
+        return authenticateResult
     }
 }
