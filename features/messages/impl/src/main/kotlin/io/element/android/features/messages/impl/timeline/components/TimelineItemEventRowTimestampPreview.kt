@@ -39,7 +39,7 @@ internal fun TimelineItemEventRowTimestampPreview(
             "Text which should be rendered on several lines",
         ).forEach { str ->
             listOf(false, true).forEach { useDocument ->
-                TimelineItemEventRow(
+                ATimelineItemEventRow(
                     event = event.copy(
                         content = oldContent.copy(
                             body = str,
@@ -48,21 +48,6 @@ internal fun TimelineItemEventRowTimestampPreview(
                         reactionsState = aTimelineItemReactions(count = 0),
                         senderDisplayName = if (useDocument) "Document case" else "Text case",
                     ),
-                    showReadReceipts = false,
-                    isLastOutgoingMessage = false,
-                    isHighlighted = false,
-                    canReply = true,
-                    onClick = {},
-                    onLongClick = {},
-                    onUserDataClick = {},
-                    inReplyToClick = {},
-                    onReactionClick = { _, _ -> },
-                    onReactionLongClick = { _, _ -> },
-                    onMoreReactionsClick = {},
-                    onReadReceiptClick = {},
-                    onTimestampClicked = {},
-                    onSwipeToReply = {},
-                    eventSink = {},
                 )
             }
         }

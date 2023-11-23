@@ -29,7 +29,7 @@ import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 internal fun TimelineItemEventRowWithManyReactionsPreview() = ElementPreview {
     Column {
         listOf(false, true).forEach { isMine ->
-            TimelineItemEventRow(
+            ATimelineItemEventRow(
                 event = aTimelineItemEvent(
                     isMine = isMine,
                     content = aTimelineItemTextContent().copy(
@@ -38,21 +38,6 @@ internal fun TimelineItemEventRowWithManyReactionsPreview() = ElementPreview {
                     ),
                     timelineItemReactions = aTimelineItemReactions(count = 20),
                 ),
-                showReadReceipts = false,
-                isLastOutgoingMessage = false,
-                isHighlighted = false,
-                canReply = true,
-                onClick = {},
-                onLongClick = {},
-                onUserDataClick = {},
-                inReplyToClick = {},
-                onReactionClick = { _, _ -> },
-                onReactionLongClick = { _, _ -> },
-                onMoreReactionsClick = {},
-                onReadReceiptClick = {},
-                onSwipeToReply = {},
-                onTimestampClicked = {},
-                eventSink = {},
             )
         }
     }

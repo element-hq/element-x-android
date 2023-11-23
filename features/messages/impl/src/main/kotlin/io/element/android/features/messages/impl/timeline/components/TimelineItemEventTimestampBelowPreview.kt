@@ -26,22 +26,7 @@ import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 @Preview
 @Composable
 internal fun TimelineItemEventTimestampBelowPreview() = ElementPreviewLight {
-    TimelineItemEventRow(
+    ATimelineItemEventRow(
         event = aTimelineItemEvent(content = aTimelineItemPollContent()),
-        showReadReceipts = false,
-        isLastOutgoingMessage = false,
-        isHighlighted = false,
-        canReply = true,
-        onClick = {},
-        onLongClick = {},
-        onUserDataClick = {},
-        inReplyToClick = {},
-        onReactionClick = { _, _ -> },
-        onReactionLongClick = { _, _ -> },
-        onMoreReactionsClick = {},
-        onReadReceiptClick = {},
-        onSwipeToReply = {},
-        onTimestampClicked = {},
-        eventSink = {},
     )
 }

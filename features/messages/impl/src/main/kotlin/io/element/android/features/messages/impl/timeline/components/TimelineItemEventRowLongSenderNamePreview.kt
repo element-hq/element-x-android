@@ -25,24 +25,9 @@ import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 @Preview
 @Composable
 internal fun TimelineItemEventRowLongSenderNamePreview() = ElementPreviewLight {
-    TimelineItemEventRow(
+    ATimelineItemEventRow(
         event = aTimelineItemEvent(
             senderDisplayName = "a long sender display name to test single line and ellipsis at the end of the line",
         ),
-        showReadReceipts = false,
-        isLastOutgoingMessage = false,
-        isHighlighted = false,
-        canReply = true,
-        onClick = {},
-        onLongClick = {},
-        onUserDataClick = {},
-        inReplyToClick = {},
-        onReactionClick = { _, _ -> },
-        onReactionLongClick = { _, _ -> },
-        onMoreReactionsClick = {},
-        onReadReceiptClick = {},
-        onSwipeToReply = {},
-        onTimestampClicked = {},
-        eventSink = {},
     )
 }

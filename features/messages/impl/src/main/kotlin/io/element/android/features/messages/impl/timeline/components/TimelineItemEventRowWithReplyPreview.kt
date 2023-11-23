@@ -53,7 +53,7 @@ internal fun TimelineItemEventRowWithReplyPreview(
 ) = ElementPreview {
     Column {
         sequenceOf(false, true).forEach {
-            TimelineItemEventRow(
+            ATimelineItemEventRow(
                 event = aTimelineItemEvent(
                     isMine = it,
                     timelineItemReactions = aTimelineItemReactions(count = 0),
@@ -63,23 +63,8 @@ internal fun TimelineItemEventRowWithReplyPreview(
                     inReplyTo = inReplyToDetails,
                     groupPosition = TimelineItemGroupPosition.First,
                 ),
-                showReadReceipts = false,
-                isLastOutgoingMessage = false,
-                isHighlighted = false,
-                canReply = true,
-                onClick = {},
-                onLongClick = {},
-                onUserDataClick = {},
-                inReplyToClick = {},
-                onReactionClick = { _, _ -> },
-                onReactionLongClick = { _, _ -> },
-                onMoreReactionsClick = {},
-                onReadReceiptClick = {},
-                onTimestampClicked = {},
-                onSwipeToReply = {},
-                eventSink = {},
             )
-            TimelineItemEventRow(
+            ATimelineItemEventRow(
                 event = aTimelineItemEvent(
                     isMine = it,
                     timelineItemReactions = aTimelineItemReactions(count = 0),
@@ -90,21 +75,6 @@ internal fun TimelineItemEventRowWithReplyPreview(
                     isThreaded = true,
                     groupPosition = TimelineItemGroupPosition.Last,
                 ),
-                showReadReceipts = false,
-                isLastOutgoingMessage = false,
-                isHighlighted = false,
-                canReply = true,
-                onClick = {},
-                onLongClick = {},
-                onUserDataClick = {},
-                inReplyToClick = {},
-                onReactionClick = { _, _ -> },
-                onReactionLongClick = { _, _ -> },
-                onMoreReactionsClick = {},
-                onReadReceiptClick = {},
-                onTimestampClicked = {},
-                onSwipeToReply = {},
-                eventSink = {},
             )
         }
     }
