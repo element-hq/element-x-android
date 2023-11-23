@@ -66,7 +66,7 @@ internal fun FloatingActionButtonPreview() =
 private fun ContentToPreview() {
     Box(modifier = Modifier.padding(8.dp)) {
         FloatingActionButton(onClick = {}) {
-            Icon(resourceId = CommonDrawables.ic_compound_close, contentDescription = "")
+            Icon(resourceId = CommonDrawables.ic_compound_close, contentDescription = null)
         }
     }
 }

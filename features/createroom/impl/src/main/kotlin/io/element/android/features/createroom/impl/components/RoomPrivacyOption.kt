@@ -58,7 +58,7 @@ fun RoomPrivacyOption(
         Icon(
             modifier = Modifier.padding(horizontal = 8.dp),
             resourceId = roomPrivacyItem.icon,
-            contentDescription = "",
+            contentDescription = null,
             tint = MaterialTheme.colorScheme.secondary,
         )
 

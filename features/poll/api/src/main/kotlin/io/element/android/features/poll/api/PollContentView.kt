@@ -125,7 +125,7 @@ private fun PollTitle(
     ) {
         if (isPollEnded) {
             Icon(
-                resourceId = CommonDrawables.ic_poll_end,
+                resourceId = CommonDrawables.ic_compound_polls_end,
                 contentDescription = stringResource(id = CommonStrings.a11y_poll_end),
                 modifier = Modifier.size(22.dp)
             )

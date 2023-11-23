@@ -18,6 +18,7 @@ package io.element.android.features.messages.impl.timeline.model
 
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.timeline.item.event.EventContent
 import io.element.android.libraries.matrix.api.timeline.item.event.InReplyTo
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageContent
 import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageType
@@ -28,7 +29,7 @@ data class InReplyToDetails(
     val senderId: UserId,
     val senderDisplayName: String?,
     val senderAvatarUrl: String?,
-    val messageContent: MessageContent?,
+    val eventContent: EventContent?,
     val textContent: String?,
 )
 
@@ -38,7 +39,7 @@ fun InReplyTo.map() = when (this) {
         senderId = senderId,
         senderDisplayName = senderDisplayName,
         senderAvatarUrl = senderAvatarUrl,
-        messageContent = content as? MessageContent,
+        eventContent = content,
         textContent = when (content) {
             is MessageContent -> {
                 val messageContent = content as MessageContent

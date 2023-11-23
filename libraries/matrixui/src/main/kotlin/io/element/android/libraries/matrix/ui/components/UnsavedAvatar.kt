@@ -72,7 +72,7 @@ fun UnsavedAvatar(
         Box(modifier = commonModifier.background(ElementTheme.colors.temporaryColorBgSpecial)) {
             Icon(
                 imageVector = Icons.Outlined.AddAPhoto,
-                contentDescription = "",
+                contentDescription = null,
                 modifier = Modifier
                     .align(Alignment.Center)
                     .size(40.dp),

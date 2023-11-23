@@ -51,7 +51,7 @@ fun BackButton(
 @Composable
 internal fun BackButtonPreview() = ElementThemedPreview {
     Column {
-        BackButton(onClick = { }, enabled = true, contentDescription = "Back")
-        BackButton(onClick = { }, enabled = false, contentDescription = "Back")
+        BackButton(onClick = { }, enabled = true)
+        BackButton(onClick = { }, enabled = false)
     }
 }

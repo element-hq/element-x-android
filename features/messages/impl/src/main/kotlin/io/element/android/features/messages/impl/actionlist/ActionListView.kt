@@ -48,6 +48,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.clearAndSetSemantics
+import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -234,7 +236,6 @@ private fun MessageSummary(event: TimelineItem.Event, modifier: Modifier = Modif
     val textContent = remember(event.content) { formatter.format(event) }
 
     when (event.content) {
-        is TimelineItemPollContent, // TODO Polls: handle summary
         is TimelineItemTextBasedContent,
         is TimelineItemStateContent,
         is TimelineItemEncryptedContent,
@@ -317,6 +318,18 @@ private fun MessageSummary(event: TimelineItem.Event, modifier: Modifier = Modif
             }
             content = { ContentForBody(textContent) }
         }
+        is TimelineItemPollContent -> {
+            icon = {
+                AttachmentThumbnail(
+                    modifier = imageModifier,
+                    info = AttachmentThumbnailInfo(
+                        textContent = textContent,
+                        type = AttachmentThumbnailType.Poll,
+                    )
+                )
+            }
+            content = { ContentForBody(textContent) }
+        }
     }
     Row(modifier = modifier) {
         icon()
@@ -371,7 +384,7 @@ private fun EmojiReactionsRow(
         ) {
             Icon(
                 resourceId = CommonDrawables.ic_add_reaction,
-                contentDescription = "Emojis",
+                contentDescription = stringResource(id = CommonStrings.a11y_react_with_other_emojis),
                 tint = MaterialTheme.colorScheme.secondary,
                 modifier = Modifier
                     .size(24.dp)
@@ -398,11 +411,18 @@ private fun EmojiButton(
     } else {
         Color.Transparent
     }
+    val description = if (isHighlighted) {
+        stringResource(id = CommonStrings.a11y_remove_reaction_with, emoji)
+    } else {
+        stringResource(id = CommonStrings.a11y_react_with, emoji)
+    }
     Box(
         modifier = modifier
             .size(48.dp)
-            .background(backgroundColor, CircleShape),
-
+            .background(backgroundColor, CircleShape)
+            .clearAndSetSemantics {
+                contentDescription = description
+            },
         contentAlignment = Alignment.Center
     ) {
         Text(

@@ -39,7 +39,7 @@ class InReplyToDetailTest {
     }
 
     @Test
-    fun `map - with something other than a MessageContent has no message content`() {
+    fun `map - with something other than a MessageContent has no textContent`() {
         val inReplyTo = InReplyTo.Ready(
             eventId = AN_EVENT_ID,
             senderId = A_USER_ID,
@@ -52,7 +52,7 @@ class InReplyToDetailTest {
         )
         val inReplyToDetails = inReplyTo.map()
         assertThat(inReplyToDetails).isNotNull()
-        assertThat(inReplyToDetails?.messageContent).isNull()
+        assertThat(inReplyToDetails?.textContent).isNull()
     }
 
     @Test

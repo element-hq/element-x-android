@@ -100,6 +100,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.FileMessageTy
 import io.element.android.libraries.matrix.api.timeline.item.event.ImageMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.LocationMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageContent
+import io.element.android.libraries.matrix.api.timeline.item.event.PollContent
 import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.VideoMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.VoiceMessageType
@@ -636,36 +637,42 @@ private fun ReplyToContent(
     }
 }
 
-private fun attachmentThumbnailInfoForInReplyTo(inReplyToDetails: InReplyToDetails): AttachmentThumbnailInfo? {
-    val messageContent = inReplyToDetails.messageContent ?: return null
-    return when (val type = messageContent.type) {
-        is ImageMessageType -> AttachmentThumbnailInfo(
-            thumbnailSource = type.info?.thumbnailSource ?: type.source,
-            textContent = messageContent.body,
-            type = AttachmentThumbnailType.Image,
-            blurHash = type.info?.blurhash,
-        )
-        is VideoMessageType -> AttachmentThumbnailInfo(
-            thumbnailSource = type.info?.thumbnailSource,
-            textContent = messageContent.body,
-            type = AttachmentThumbnailType.Video,
-            blurHash = type.info?.blurhash,
-        )
-        is FileMessageType -> AttachmentThumbnailInfo(
-            thumbnailSource = type.info?.thumbnailSource,
-            textContent = messageContent.body,
-            type = AttachmentThumbnailType.File,
-        )
-        is LocationMessageType -> AttachmentThumbnailInfo(
-            textContent = messageContent.body,
-            type = AttachmentThumbnailType.Location,
-        )
-        is AudioMessageType -> AttachmentThumbnailInfo(
-            textContent = messageContent.body,
-            type = AttachmentThumbnailType.Audio,
-        )
-        is VoiceMessageType -> AttachmentThumbnailInfo(
-            type = AttachmentThumbnailType.Voice,
+private fun attachmentThumbnailInfoForInReplyTo(inReplyTo: InReplyToDetails): AttachmentThumbnailInfo? {
+    return when (val eventContent = inReplyTo.eventContent) {
+        is MessageContent -> when (val type = eventContent.type) {
+            is ImageMessageType -> AttachmentThumbnailInfo(
+                thumbnailSource = type.info?.thumbnailSource ?: type.source,
+                textContent = eventContent.body,
+                type = AttachmentThumbnailType.Image,
+                blurHash = type.info?.blurhash,
+            )
+            is VideoMessageType -> AttachmentThumbnailInfo(
+                thumbnailSource = type.info?.thumbnailSource,
+                textContent = eventContent.body,
+                type = AttachmentThumbnailType.Video,
+                blurHash = type.info?.blurhash,
+            )
+            is FileMessageType -> AttachmentThumbnailInfo(
+                thumbnailSource = type.info?.thumbnailSource,
+                textContent = eventContent.body,
+                type = AttachmentThumbnailType.File,
+            )
+            is LocationMessageType -> AttachmentThumbnailInfo(
+                textContent = eventContent.body,
+                type = AttachmentThumbnailType.Location,
+            )
+            is AudioMessageType -> AttachmentThumbnailInfo(
+                textContent = eventContent.body,
+                type = AttachmentThumbnailType.Audio,
+            )
+            is VoiceMessageType -> AttachmentThumbnailInfo(
+                type = AttachmentThumbnailType.Voice,
+            )
+            else -> null
+        }
+        is PollContent -> AttachmentThumbnailInfo(
+            textContent = eventContent.question,
+            type = AttachmentThumbnailType.Poll,
         )
         else -> null
     }
@@ -673,11 +680,14 @@ private fun attachmentThumbnailInfoForInReplyTo(inReplyToDetails: InReplyToDetai
 
 @Composable
 private fun textForInReplyTo(inReplyTo: InReplyToDetails): String {
-    val messageContent = inReplyTo.messageContent ?: return ""
-    return when (messageContent.type) {
-        is LocationMessageType -> stringResource(CommonStrings.common_shared_location)
-        is VoiceMessageType -> stringResource(CommonStrings.common_voice_message)
-        else -> inReplyTo.textContent.orEmpty()
+    return when (val eventContent = inReplyTo.eventContent) {
+        is MessageContent -> when (eventContent.type) {
+            is LocationMessageType -> stringResource(CommonStrings.common_shared_location)
+            is VoiceMessageType -> stringResource(CommonStrings.common_voice_message)
+            else -> inReplyTo.textContent ?: eventContent.body
+        }
+        is PollContent -> eventContent.question
+        else -> ""
     }
 }
 
@@ -758,7 +768,7 @@ internal fun TimelineItemEventRowWithReplyPreview() = ElementPreview {
                         body = "A long text which will be displayed on several lines and" +
                             " hopefully can be manually adjusted to test different behaviors."
                     ),
-                    inReplyTo = aInReplyToInfo(replyContent),
+                    inReplyTo = aInReplyToDetails(replyContent),
                     groupPosition = TimelineItemGroupPosition.First,
                 ),
                 showReadReceipts = false,
@@ -783,7 +793,7 @@ internal fun TimelineItemEventRowWithReplyPreview() = ElementPreview {
                     content = aTimelineItemImageContent().copy(
                         aspectRatio = 5f
                     ),
-                    inReplyTo = aInReplyToInfo(replyContent),
+                    inReplyTo = aInReplyToDetails(replyContent),
                     isThreaded = true,
                     groupPosition = TimelineItemGroupPosition.Last,
                 ),
@@ -807,12 +817,12 @@ internal fun TimelineItemEventRowWithReplyPreview() = ElementPreview {
     }
 }
 
-private fun aInReplyToInfo(
+private fun aInReplyToDetails(
     replyContent: String,
 ): InReplyToDetails {
     return InReplyToDetails(
         eventId = EventId("\$event"),
-        messageContent = MessageContent(replyContent, null, false, false, TextMessageType(replyContent, null)),
+        eventContent = MessageContent(replyContent, null, false, false, TextMessageType(replyContent, null)),
         senderId = UserId("@Sender:domain"),
         senderDisplayName = "Sender",
         senderAvatarUrl = null,

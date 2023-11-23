@@ -122,6 +122,12 @@ fun AttachmentThumbnail(
                     )
                      */
                 }
+                AttachmentThumbnailType.Poll -> {
+                    Icon(
+                        resourceId = CommonDrawables.ic_compound_polls,
+                        contentDescription = info.textContent,
+                    )
+                }
             }
         }
     }
@@ -129,7 +135,7 @@ fun AttachmentThumbnail(
 
 @Parcelize
 enum class AttachmentThumbnailType : Parcelable {
-    Image, Video, File, Audio, Location, Voice
+    Image, Video, File, Audio, Location, Voice, Poll
 }
 
 @Parcelize

@@ -35,9 +35,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.text.roundToPx
 import io.element.android.libraries.designsystem.text.toDp
+import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import me.saket.telephoto.zoomable.zoomable
@@ -98,7 +100,7 @@ private fun PdfPageView(
         is PdfPage.State.Loaded -> {
             Image(
                 bitmap = state.bitmap.asImageBitmap(),
-                contentDescription = "Page ${pdfPage.pageIndex}",
+                contentDescription = stringResource(id = CommonStrings.a11y_page_n, pdfPage.pageIndex),
                 contentScale = ContentScale.FillWidth,
                 modifier = modifier.fillMaxWidth()
             )

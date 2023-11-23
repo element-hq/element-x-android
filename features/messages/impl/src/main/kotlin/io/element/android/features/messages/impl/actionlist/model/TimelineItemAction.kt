@@ -36,5 +36,5 @@ sealed class TimelineItemAction(
     data object Edit : TimelineItemAction(CommonStrings.action_edit, CommonDrawables.ic_edit_outline)
     data object ViewSource : TimelineItemAction(CommonStrings.action_view_source, CommonDrawables.ic_developer_options)
     data object ReportContent : TimelineItemAction(CommonStrings.action_report_content, CommonDrawables.ic_compound_chat_problem, destructive = true)
-    data object EndPoll : TimelineItemAction(CommonStrings.action_end_poll, CommonDrawables.ic_poll_end)
+    data object EndPoll : TimelineItemAction(CommonStrings.action_end_poll, CommonDrawables.ic_compound_polls_end)
 }

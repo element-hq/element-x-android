@@ -51,7 +51,7 @@ fun PreferenceIcon(
             Icon(
                 imageVector = icon,
                 resourceId = iconResourceId,
-                contentDescription = "",
+                contentDescription = null,
                 tint = tintColor ?: enabled.toSecondaryEnabledColor(),
                 modifier = Modifier
                     .padding(end = 16.dp)
