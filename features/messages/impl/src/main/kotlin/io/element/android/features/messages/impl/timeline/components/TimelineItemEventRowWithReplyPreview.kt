@@ -19,6 +19,7 @@ package io.element.android.features.messages.impl.timeline.components
 import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import io.element.android.features.messages.impl.timeline.aTimelineItemEvent
+import io.element.android.features.messages.impl.timeline.aTimelineItemReactions
 import io.element.android.features.messages.impl.timeline.model.InReplyToDetails
 import io.element.android.features.messages.impl.timeline.model.TimelineItemGroupPosition
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemImageContent
@@ -45,9 +46,9 @@ internal fun TimelineItemEventRowWithReplyPreview() = ElementPreview {
             TimelineItemEventRow(
                 event = aTimelineItemEvent(
                     isMine = it,
+                    timelineItemReactions = aTimelineItemReactions(count = 0),
                     content = aTimelineItemTextContent().copy(
-                        body = "A long text which will be displayed on several lines and" +
-                            " hopefully can be manually adjusted to test different behaviors."
+                        body = "A reply."
                     ),
                     inReplyTo = aInReplyToDetails(replyContent),
                     groupPosition = TimelineItemGroupPosition.First,
@@ -71,6 +72,7 @@ internal fun TimelineItemEventRowWithReplyPreview() = ElementPreview {
             TimelineItemEventRow(
                 event = aTimelineItemEvent(
                     isMine = it,
+                    timelineItemReactions = aTimelineItemReactions(count = 0),
                     content = aTimelineItemImageContent().copy(
                         aspectRatio = 5f
                     ),
