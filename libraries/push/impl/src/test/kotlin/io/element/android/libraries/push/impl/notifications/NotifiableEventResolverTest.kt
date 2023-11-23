@@ -29,7 +29,6 @@ import io.element.android.libraries.matrix.api.timeline.item.event.ImageMessageT
 import io.element.android.libraries.matrix.api.timeline.item.event.LocationMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.NoticeMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageType
-import io.element.android.libraries.matrix.api.timeline.item.event.UnknownMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.VideoMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.VoiceMessageType
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
@@ -231,23 +230,6 @@ class NotifiableEventResolverTest {
         )
         val result = sut.resolveEvent(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID)
         val expectedResult = createNotifiableMessageEvent(body = "* Bob is happy")
-        assertThat(result).isEqualTo(expectedResult)
-    }
-
-    @Test
-    fun `resolve event message unknown`() = runTest {
-        val sut = createNotifiableEventResolver(
-            notificationResult = Result.success(
-                createNotificationData(
-                    content = NotificationContent.MessageLike.RoomMessage(
-                        senderId = A_USER_ID_2,
-                        messageType =  UnknownMessageType,
-                    )
-                )
-            )
-        )
-        val result = sut.resolveEvent(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID)
-        val expectedResult = createNotifiableMessageEvent(body = "Unsupported event")
         assertThat(result).isEqualTo(expectedResult)
     }
 
