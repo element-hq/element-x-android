@@ -82,6 +82,11 @@ class NotifiableEventResolver @Inject constructor(
         return when (val content = this.content) {
             is NotificationContent.MessageLike.RoomMessage -> {
                 val messageBody = descriptionFromMessageContent(content, senderDisplayName ?: content.senderId.value)
+                val notificationBody = if (hasMention) {
+                    stringProvider.getString(R.string.notification_mentioned_you_body, messageBody)
+                } else {
+                    messageBody
+                }
                 buildNotifiableMessageEvent(
                     sessionId = userId,
                     senderId = content.senderId,
@@ -90,7 +95,7 @@ class NotifiableEventResolver @Inject constructor(
                     noisy = isNoisy,
                     timestamp = this.timestamp,
                     senderName = senderDisplayName,
-                    body = messageBody,
+                    body = notificationBody,
                     imageUriString = this.contentUrl,
                     roomName = roomDisplayName,
                     roomIsDirect = isDirect,
