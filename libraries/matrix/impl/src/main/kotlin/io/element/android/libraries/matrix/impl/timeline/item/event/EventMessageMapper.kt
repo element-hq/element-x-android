@@ -30,7 +30,6 @@ import io.element.android.libraries.matrix.api.timeline.item.event.MessageFormat
 import io.element.android.libraries.matrix.api.timeline.item.event.NoticeMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.OtherMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageType
-import io.element.android.libraries.matrix.api.timeline.item.event.UnknownMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.VideoMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.VoiceMessageType
 import io.element.android.libraries.matrix.impl.media.map
@@ -76,7 +75,7 @@ class EventMessageMapper {
         )
     }
 
-    fun mapMessageType(type: RustMessageType?) = when (type) {
+    fun mapMessageType(type: RustMessageType) = when (type) {
         is RustMessageType.Audio -> {
             when (type.content.voice) {
                 null -> {
@@ -120,7 +119,6 @@ class EventMessageMapper {
         is MessageType.Other -> {
             OtherMessageType(type.msgtype, type.body)
         }
-        null -> UnknownMessageType
     }
 }
 

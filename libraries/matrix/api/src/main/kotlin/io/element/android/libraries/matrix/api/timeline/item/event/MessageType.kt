@@ -25,8 +25,6 @@ import io.element.android.libraries.matrix.api.media.VideoInfo
 
 sealed interface MessageType
 
-data object UnknownMessageType : MessageType
-
 data class EmoteMessageType(
     val body: String,
     val formatted: FormattedBody?
