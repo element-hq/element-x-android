@@ -57,7 +57,7 @@ class InviteListPresenter @Inject constructor(
     override fun present(): InviteListState {
         val invites by client
             .roomListService
-            .invites()
+            .invites
             .summaries
             .collectAsState()
 

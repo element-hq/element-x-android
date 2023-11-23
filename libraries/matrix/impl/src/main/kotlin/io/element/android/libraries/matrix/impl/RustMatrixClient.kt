@@ -53,6 +53,7 @@ import io.element.android.libraries.matrix.impl.room.MatrixRoomInfoMapper
 import io.element.android.libraries.matrix.impl.room.RoomContentForwarder
 import io.element.android.libraries.matrix.impl.room.RoomSyncSubscriber
 import io.element.android.libraries.matrix.impl.room.RustMatrixRoom
+import io.element.android.libraries.matrix.impl.roomlist.RoomListFactory
 import io.element.android.libraries.matrix.impl.roomlist.RustRoomListService
 import io.element.android.libraries.matrix.impl.roomlist.roomOrNull
 import io.element.android.libraries.matrix.impl.sync.RustSyncService
@@ -171,7 +172,11 @@ class RustMatrixClient constructor(
         RustRoomListService(
             innerRoomListService = innerRoomListService,
             sessionCoroutineScope = sessionCoroutineScope,
-            dispatcher = sessionDispatcher,
+            roomListFactory = RoomListFactory(
+                innerRoomListService = innerRoomListService,
+                coroutineScope = sessionCoroutineScope,
+                dispatcher = sessionDispatcher,
+            ),
         )
 
     override val roomListService: RoomListService
@@ -200,7 +205,7 @@ class RustMatrixClient constructor(
         var cachedPairOfRoom = pairOfRoom(roomId)
         if (cachedPairOfRoom == null) {
             //... otherwise, lets wait for the SS to load all rooms and check again.
-            roomListService.allRooms().awaitLoaded()
+            roomListService.allRooms.awaitLoaded()
             cachedPairOfRoom = pairOfRoom(roomId)
         }
         cachedPairOfRoom?.let { (roomListItem, fullRoom) ->
@@ -274,7 +279,7 @@ class RustMatrixClient constructor(
 
             // Wait to receive the room back from the sync
             withTimeout(30_000L) {
-                roomListService.allRooms().summaries
+                roomListService.allRooms.summaries
                     .filter { roomSummaries ->
                         roomSummaries.map { it.identifier() }.contains(roomId.value)
                     }

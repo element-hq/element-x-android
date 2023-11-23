@@ -18,79 +18,34 @@ package io.element.android.libraries.matrix.impl.roomlist
 
 import io.element.android.libraries.matrix.api.roomlist.RoomList
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
-import io.element.android.libraries.matrix.api.roomlist.RoomSummary
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import org.matrix.rustcomponents.sdk.RoomListEntriesUpdate
 import org.matrix.rustcomponents.sdk.RoomListException
 import org.matrix.rustcomponents.sdk.RoomListInput
-import org.matrix.rustcomponents.sdk.RoomListLoadingState
 import org.matrix.rustcomponents.sdk.RoomListRange
 import org.matrix.rustcomponents.sdk.RoomListServiceState
 import org.matrix.rustcomponents.sdk.RoomListServiceSyncIndicator
 import timber.log.Timber
 import org.matrix.rustcomponents.sdk.RoomListService as InnerRustRoomListService
 
-class RustRoomListService(
+internal class RustRoomListService(
     private val innerRoomListService: InnerRustRoomListService,
     private val sessionCoroutineScope: CoroutineScope,
-    private val dispatcher: CoroutineDispatcher,
-    roomSummaryDetailsFactory: RoomSummaryDetailsFactory = RoomSummaryDetailsFactory(),
+    private val roomListFactory: RoomListFactory,
 ) : RoomListService {
 
-    private val allRooms = MutableStateFlow<List<RoomSummary>>(emptyList())
-    private val inviteRooms = MutableStateFlow<List<RoomSummary>>(emptyList())
-
-    private val allRoomsLoadingState: MutableStateFlow<RoomList.LoadingState> = MutableStateFlow(RoomList.LoadingState.NotLoaded)
-    private val allRoomsListProcessor = RoomSummaryListProcessor(allRooms, innerRoomListService, dispatcher, roomSummaryDetailsFactory)
-    private val invitesLoadingState: MutableStateFlow<RoomList.LoadingState> = MutableStateFlow(RoomList.LoadingState.NotLoaded)
-    private val inviteRoomsListProcessor = RoomSummaryListProcessor(inviteRooms, innerRoomListService, dispatcher, roomSummaryDetailsFactory)
-
-    init {
-        sessionCoroutineScope.launch(dispatcher) {
-            val allRooms = innerRoomListService.allRooms()
-            allRooms
-                .observeEntriesWithProcessor(allRoomsListProcessor)
-                .launchIn(this)
-            allRooms
-                .observeLoadingState(allRoomsLoadingState)
-                .launchIn(this)
-
-
-            launch {
-                // Wait until running, as invites is only available after that
-                innerRoomListService.stateFlow().first {
-                    it == RoomListServiceState.RUNNING
-                }
-                val invites = innerRoomListService.invites()
-                invites
-                    .observeEntriesWithProcessor(inviteRoomsListProcessor)
-                    .launchIn(this)
-                invites
-                    .observeLoadingState(invitesLoadingState)
-                    .launchIn(this)
-
-            }
-        }
+    override val allRooms: RoomList = roomListFactory.createRoomList {
+        innerRoomListService.allRooms()
     }
 
-    override fun allRooms(): RoomList {
-        return RustRoomList(allRooms, allRoomsLoadingState)
-    }
-
-    override fun invites(): RoomList {
-        return RustRoomList(inviteRooms, invitesLoadingState)
+    override val invites: RoomList = roomListFactory.createRoomList {
+        innerRoomListService.invites()
     }
 
     override fun updateAllRoomsVisibleRange(range: IntRange) {
@@ -104,12 +59,6 @@ class RustRoomListService(
             } catch (exception: RoomListException) {
                 Timber.e(exception, "Failed updating visible range")
             }
-        }
-    }
-
-    override fun rebuildRoomSummaries() {
-        sessionCoroutineScope.launch {
-            allRoomsListProcessor.rebuildRoomSummaries()
         }
     }
 
@@ -132,13 +81,6 @@ class RustRoomListService(
             .stateIn(sessionCoroutineScope, SharingStarted.Eagerly, RoomListService.State.Idle)
 }
 
-private fun RoomListLoadingState.toLoadingState(): RoomList.LoadingState {
-    return when (this) {
-        is RoomListLoadingState.Loaded -> RoomList.LoadingState.Loaded(maximumNumberOfRooms?.toInt() ?: 0)
-        RoomListLoadingState.NotLoaded -> RoomList.LoadingState.NotLoaded
-    }
-}
-
 private fun RoomListServiceState.toRoomListState(): RoomListService.State {
     return when (this) {
         RoomListServiceState.INITIAL,
@@ -156,20 +98,3 @@ private fun RoomListServiceSyncIndicator.toSyncIndicator(): RoomListService.Sync
         RoomListServiceSyncIndicator.HIDE -> RoomListService.SyncIndicator.Hide
     }
 }
-
-private fun org.matrix.rustcomponents.sdk.RoomList.observeEntriesWithProcessor(processor: RoomSummaryListProcessor): Flow<List<RoomListEntriesUpdate>> {
-    return entriesFlow { roomListEntries ->
-        processor.postEntries(roomListEntries)
-    }.onEach { update ->
-        processor.postUpdate(update)
-    }
-}
-
-private fun org.matrix.rustcomponents.sdk.RoomList.observeLoadingState(stateFlow: MutableStateFlow<RoomList.LoadingState>): Flow<RoomList.LoadingState> {
-    return loadingStateFlow()
-        .map { it.toLoadingState() }
-        .onEach {
-            stateFlow.value = it
-        }
-}
-
