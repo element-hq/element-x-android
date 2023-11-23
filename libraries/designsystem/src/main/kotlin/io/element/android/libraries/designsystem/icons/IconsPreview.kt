@@ -109,7 +109,7 @@ private fun IconsPreview(
             textAlign = TextAlign.Center,
         )
         iconsList.chunked(6).forEach { iconsRow ->
-            Row(horizontalArrangement = Arrangement.spacedBy(1.dp)) {
+            Row(horizontalArrangement = Arrangement.spacedBy(2.dp)) {
                 iconsRow.forEach { icon ->
                     Column(
                         modifier = Modifier.width(48.dp),
