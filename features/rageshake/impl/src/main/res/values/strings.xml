@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright (c) 2022 New Vector Ltd
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,7 +18,12 @@
 
     <!-- Rageshake configuration -->
     <string name="bug_report_url" translatable="false">https://riot.im/bugreports/submit</string>
+    <!--
+      As per https://github.com/matrix-org/rageshake
+      bug_report_app_name: Identifier for the application (eg 'riot-web').
+      Should correspond to a mapping configured in the configuration file for github issue reporting to work.
+    -->
     <string name="bug_report_app_name" translatable="false">element-x-android</string>
-    <string name="bug_report_auto_uisi_app_name" translatable="false">element-auto-uisi</string>
+
 
 </resources>
