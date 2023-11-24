@@ -30,6 +30,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import im.vector.app.features.analytics.plan.PollEnd
 import im.vector.app.features.analytics.plan.PollVote
 import io.element.android.features.messages.impl.timeline.factories.TimelineItemsFactory
+import io.element.android.features.messages.impl.timeline.model.NewEventState
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.session.SessionState
 import io.element.android.features.messages.impl.voicemessages.timeline.RedactedVoiceMessageManager
@@ -89,7 +90,7 @@ class TimelinePresenter @Inject constructor(
         val userHasPermissionToSendMessage by room.canSendMessageAsState(type = MessageEventType.ROOM_MESSAGE, updateKey = syncUpdateFlow.value)
 
         val prevMostRecentItemId = rememberSaveable { mutableStateOf<String?>(null) }
-        val hasNewItems = remember { mutableStateOf(false) }
+        val newItemState = remember { mutableStateOf(NewEventState.None) }
 
         val sessionVerifiedStatus by verificationService.sessionVerifiedStatus.collectAsState()
         val keyBackupState by encryptionService.backupStateStateFlow.collectAsState()
@@ -112,7 +113,7 @@ class TimelinePresenter @Inject constructor(
                 is TimelineEvents.SetHighlightedEvent -> highlightedEventId.value = event.eventId
                 is TimelineEvents.OnScrollFinished -> {
                     if (event.firstIndex == 0) {
-                        hasNewItems.value = false
+                        newItemState.value = NewEventState.None
                     }
                     appScope.sendReadReceiptIfNeeded(
                         firstVisibleIndex = event.firstIndex,
@@ -139,7 +140,7 @@ class TimelinePresenter @Inject constructor(
         }
 
         LaunchedEffect(timelineItems.size) {
-            computeHasNewItems(timelineItems, prevMostRecentItemId, hasNewItems)
+            computeNewItemState(timelineItems, prevMostRecentItemId, newItemState)
         }
 
         LaunchedEffect(Unit) {
@@ -171,7 +172,7 @@ class TimelinePresenter @Inject constructor(
             paginationState = paginationState,
             timelineItems = timelineItems,
             showReadReceipts = readReceiptsEnabled,
-            hasNewItems = hasNewItems.value,
+            newEventState = newItemState.value,
             sessionState = sessionState,
             eventSink = ::handleEvents
         )
@@ -180,22 +181,32 @@ class TimelinePresenter @Inject constructor(
     /**
      * This method compute the hasNewItem state passed as a [MutableState] each time the timeline items size changes.
      * Basically, if we got new timeline event from sync or local, either from us or another user, we update the state so we tell we have new items.
-     * The state never goes back to false from this method, but need to be reset from somewhere else.
+     * The state never goes back to None from this method, but need to be reset from somewhere else.
      */
-    private suspend fun computeHasNewItems(
+    private suspend fun computeNewItemState(
         timelineItems: ImmutableList<TimelineItem>,
         prevMostRecentItemId: MutableState<String?>,
-        hasNewItemsState: MutableState<Boolean>
+        newEventState: MutableState<NewEventState>
     ) = withContext(dispatchers.computation) {
+        // FromMe is prioritized over FromOther, so skip if we already have a FromMe
+        if (newEventState.value == NewEventState.FromMe) {
+            return@withContext
+        }
         val newMostRecentItem = timelineItems.firstOrNull()
         val prevMostRecentItemIdValue = prevMostRecentItemId.value
         val newMostRecentItemId = newMostRecentItem?.identifier()
-        val hasNewItems = prevMostRecentItemIdValue != null &&
+        val hasNewEvent = prevMostRecentItemIdValue != null &&
             newMostRecentItem is TimelineItem.Event &&
             newMostRecentItem.origin != TimelineItemEventOrigin.PAGINATION &&
             newMostRecentItemId != prevMostRecentItemIdValue
-        if (hasNewItems) {
-            hasNewItemsState.value = true
+        if (hasNewEvent) {
+            val newMostRecentEvent = newMostRecentItem as? TimelineItem.Event
+            val fromMe = newMostRecentEvent?.localSendState != null
+            newEventState.value = if (fromMe) {
+                NewEventState.FromMe
+            } else {
+                NewEventState.FromOther
+            }
         }
         prevMostRecentItemId.value = newMostRecentItemId
     }

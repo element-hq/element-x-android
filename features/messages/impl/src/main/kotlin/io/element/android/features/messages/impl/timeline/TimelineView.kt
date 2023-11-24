@@ -64,6 +64,7 @@ import io.element.android.features.messages.impl.timeline.components.virtual.Tim
 import io.element.android.features.messages.impl.timeline.components.virtual.TimelineLoadingMoreIndicator
 import io.element.android.features.messages.impl.timeline.di.LocalTimelineItemPresenterFactories
 import io.element.android.features.messages.impl.timeline.di.aFakeTimelineItemPresenterFactories
+import io.element.android.features.messages.impl.timeline.model.NewEventState
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContentProvider
@@ -167,7 +168,7 @@ fun TimelineView(
         TimelineScrollHelper(
             isTimelineEmpty = state.timelineItems.isEmpty(),
             lazyListState = lazyListState,
-            hasNewItems = state.hasNewItems,
+            newEventState = state.newEventState,
             onScrollFinishedAt = ::onScrollFinishedAt
         )
     }
@@ -286,19 +287,31 @@ private fun TimelineItemRow(
 private fun BoxScope.TimelineScrollHelper(
     isTimelineEmpty: Boolean,
     lazyListState: LazyListState,
-    hasNewItems: Boolean,
+    newEventState: NewEventState,
     onScrollFinishedAt: (Int) -> Unit,
 ) {
     val coroutineScope = rememberCoroutineScope()
     val isScrollFinished by remember { derivedStateOf { !lazyListState.isScrollInProgress } }
-    val canAutoScroll by remember { derivedStateOf { lazyListState.firstVisibleItemIndex < 3 } }
+    val canAutoScroll by remember {
+        derivedStateOf {
+            lazyListState.firstVisibleItemIndex < 3
+        }
+    }
 
-    LaunchedEffect(canAutoScroll, hasNewItems) {
-        val shouldAutoScroll = isScrollFinished && canAutoScroll && hasNewItems
-        if (shouldAutoScroll) {
-            coroutineScope.launch {
+    fun scrollToBottom() {
+        coroutineScope.launch {
+            if (lazyListState.firstVisibleItemIndex > 10) {
+                lazyListState.scrollToItem(0)
+            } else {
                 lazyListState.animateScrollToItem(0)
             }
+        }
+    }
+
+    LaunchedEffect(canAutoScroll, newEventState) {
+        val shouldAutoScroll = isScrollFinished && (canAutoScroll || newEventState == NewEventState.FromMe)
+        if (shouldAutoScroll) {
+            scrollToBottom()
         }
     }
 
@@ -315,15 +328,7 @@ private fun BoxScope.TimelineScrollHelper(
         modifier = Modifier
             .align(Alignment.BottomEnd)
             .padding(end = 24.dp, bottom = 12.dp),
-        onClick = {
-            coroutineScope.launch {
-                if (lazyListState.firstVisibleItemIndex > 10) {
-                    lazyListState.scrollToItem(0)
-                } else {
-                    lazyListState.animateScrollToItem(0)
-                }
-            }
-        }
+        onClick = ::scrollToBottom,
     )
 }
 
