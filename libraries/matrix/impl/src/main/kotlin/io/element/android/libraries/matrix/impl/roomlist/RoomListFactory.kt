@@ -44,12 +44,12 @@ internal class RoomListFactory(
      * It mimics the usage of the old api.
      */
     fun createRoomList(
-        innerProvider: suspend () -> InnerRoomList
+        innerProvider: suspend () -> InnerRoomList,
     ): RoomList {
         return createRustRoomList(
             pageSize = Int.MAX_VALUE,
             numberOfPages = 1,
-            initialFilterKind = RoomListEntriesDynamicFilterKind.All,
+            initialFilterKind = RoomListEntriesDynamicFilterKind.AllNonLeft,
             innerRoomListProvider = innerProvider
         )
     }

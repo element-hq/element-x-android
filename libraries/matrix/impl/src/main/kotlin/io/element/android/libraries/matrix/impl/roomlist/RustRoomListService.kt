@@ -37,7 +37,7 @@ import org.matrix.rustcomponents.sdk.RoomListService as InnerRustRoomListService
 internal class RustRoomListService(
     private val innerRoomListService: InnerRustRoomListService,
     private val sessionCoroutineScope: CoroutineScope,
-    private val roomListFactory: RoomListFactory,
+    roomListFactory: RoomListFactory,
 ) : RoomListService {
 
     override val allRooms: RoomList = roomListFactory.createRoomList {
