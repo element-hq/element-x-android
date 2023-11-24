@@ -18,12 +18,6 @@ package io.element.android.libraries.androidutils.uri
 
 import android.net.Uri
 
-const val ASSET_FILE_PATH_ROOT = "android_asset"
 const val IGNORED_SCHEMA = "ignored"
 
-fun Uri.isIgnored() = scheme == IGNORED_SCHEMA
-
 fun createIgnoredUri(path: String): Uri = Uri.parse("$IGNORED_SCHEMA://$path")
-
-val Uri.firstPathSegment: String?
-    get() = pathSegments.firstOrNull()
