@@ -563,6 +563,16 @@ class RustMatrixRoom(
         )
     }
 
+    override suspend fun pollHistory() = RustMatrixTimeline(
+        isKeyBackupEnabled = isKeyBackupEnabled,
+        matrixRoom = this,
+        innerTimeline = innerRoom.pollHistory(),
+        roomCoroutineScope = roomCoroutineScope,
+        dispatcher = roomDispatcher,
+        lastLoginTimestamp = sessionData.loginTimestamp,
+        onNewSyncedEvent = { _syncUpdateFlow.value = systemClock.epochMillis() }
+    )
+
     private suspend fun sendAttachment(files: List<File>, handle: () -> SendAttachmentJoinHandle): Result<MediaUploadHandler> {
         return runCatching {
             MediaUploadHandlerImpl(files, handle())
