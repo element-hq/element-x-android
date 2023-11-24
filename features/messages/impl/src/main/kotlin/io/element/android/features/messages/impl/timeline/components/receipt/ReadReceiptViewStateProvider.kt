@@ -54,7 +54,7 @@ class ReadReceiptViewStateProvider : PreviewParameterProvider<ReadReceiptViewSta
         )
 }
 
-private fun aReadReceiptViewState(
+internal fun aReadReceiptViewState(
     sendState: LocalEventSendState? = null,
     isLastOutgoingMessage: Boolean = true,
     receipts: List<ReadReceiptData> = emptyList(),
@@ -64,7 +64,7 @@ private fun aReadReceiptViewState(
     receipts = receipts.toImmutableList(),
 )
 
-private fun aReadReceiptData(
+internal fun aReadReceiptData(
     index: Int,
     avatarData: AvatarData = anAvatarData(
         id = "$index",

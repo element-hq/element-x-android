@@ -14,11 +14,18 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.androidutils.extensions
+package io.element.android.features.rageshake.impl.reporter
 
-import android.util.Patterns
+import com.google.common.truth.Truth.assertThat
+import io.element.android.services.toolbox.test.strings.FakeStringProvider
+import okhttp3.HttpUrl.Companion.toHttpUrl
+import org.junit.Test
 
-/**
- * Check if a CharSequence is an email.
- */
-fun CharSequence.isEmail() = Patterns.EMAIL_ADDRESS.matcher(this).matches()
+class DefaultBugReporterUrlProviderTest {
+    @Test
+    fun `test DefaultBugReporterUrlProvider`() {
+        val sut = DefaultBugReporterUrlProvider(FakeStringProvider("https://example.org"))
+        val result = sut.provide()
+        assertThat(result).isEqualTo("https://example.org".toHttpUrl())
+    }
+}
