@@ -27,7 +27,7 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.push.impl.R
 import io.element.android.libraries.push.impl.notifications.debug.annotateForDebug
-import io.element.android.libraries.push.impl.notifications.factories.NotificationFactory
+import io.element.android.libraries.push.impl.notifications.factories.NotificationCreator
 import io.element.android.libraries.push.impl.notifications.model.NotifiableMessageEvent
 import io.element.android.services.toolbox.api.strings.StringProvider
 import timber.log.Timber
@@ -36,7 +36,7 @@ import javax.inject.Inject
 class RoomGroupMessageCreator @Inject constructor(
     private val bitmapLoader: NotificationBitmapLoader,
     private val stringProvider: StringProvider,
-    private val notificationFactory: NotificationFactory
+    private val notificationCreator: NotificationCreator
 ) {
 
     suspend fun createRoomMessage(
@@ -78,7 +78,7 @@ class RoomGroupMessageCreator @Inject constructor(
             shouldBing = events.any { it.noisy }
         )
         return RoomNotification.Message(
-            notificationFactory.createMessagesListNotification(
+            notificationCreator.createMessagesListNotification(
                 style,
                 RoomEventGroupInfo(
                     sessionId = currentUser.userId,

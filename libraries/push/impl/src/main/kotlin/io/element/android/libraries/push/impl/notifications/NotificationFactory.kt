@@ -19,7 +19,7 @@ package io.element.android.libraries.push.impl.notifications
 import android.app.Notification
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.user.MatrixUser
-import io.element.android.libraries.push.impl.notifications.factories.NotificationFactory
+import io.element.android.libraries.push.impl.notifications.factories.NotificationCreator
 import io.element.android.libraries.push.impl.notifications.model.FallbackNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.InviteNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.NotifiableMessageEvent
@@ -28,9 +28,8 @@ import javax.inject.Inject
 
 private typealias ProcessedMessageEvents = List<ProcessedEvent<NotifiableMessageEvent>>
 
-// TODO Find a better name, it clashes with io.element.android.libraries.push.impl.notifications.factories.NotificationFactory
 class NotificationFactory @Inject constructor(
-    private val notificationFactory: NotificationFactory,
+    private val notificationCreator: NotificationCreator,
     private val roomGroupMessageCreator: RoomGroupMessageCreator,
     private val summaryGroupMessageCreator: SummaryGroupMessageCreator
 ) {
@@ -65,7 +64,7 @@ class NotificationFactory @Inject constructor(
             when (processed) {
                 ProcessedEvent.Type.REMOVE -> OneShotNotification.Removed(key = event.roomId.value)
                 ProcessedEvent.Type.KEEP -> OneShotNotification.Append(
-                    notificationFactory.createRoomInvitationNotification(event),
+                    notificationCreator.createRoomInvitationNotification(event),
                     OneShotNotification.Append.Meta(
                         key = event.roomId.value,
                         summaryLine = event.description,
@@ -83,7 +82,7 @@ class NotificationFactory @Inject constructor(
             when (processed) {
                 ProcessedEvent.Type.REMOVE -> OneShotNotification.Removed(key = event.eventId.value)
                 ProcessedEvent.Type.KEEP -> OneShotNotification.Append(
-                    notificationFactory.createSimpleEventNotification(event),
+                    notificationCreator.createSimpleEventNotification(event),
                     OneShotNotification.Append.Meta(
                         key = event.eventId.value,
                         summaryLine = event.description,
@@ -100,7 +99,7 @@ class NotificationFactory @Inject constructor(
             when (processed) {
                 ProcessedEvent.Type.REMOVE -> OneShotNotification.Removed(key = event.eventId.value)
                 ProcessedEvent.Type.KEEP -> OneShotNotification.Append(
-                    notificationFactory.createFallbackNotification(event),
+                    notificationCreator.createFallbackNotification(event),
                     OneShotNotification.Append.Meta(
                         key = event.eventId.value,
                         summaryLine = event.description.orEmpty(),
