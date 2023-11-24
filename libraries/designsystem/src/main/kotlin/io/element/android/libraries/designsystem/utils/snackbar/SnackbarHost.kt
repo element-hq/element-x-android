@@ -25,7 +25,6 @@ import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.designsystem.components.button.ButtonVisuals
 import io.element.android.libraries.designsystem.theme.components.IconSource
 import io.element.android.libraries.designsystem.theme.components.Snackbar
-import io.element.android.libraries.designsystem.utils.CommonDrawables
 
 @Composable
 fun SnackbarHost(hostState: SnackbarHostState, modifier: Modifier = Modifier) {

@@ -40,14 +40,12 @@ import androidx.compose.ui.layout.Placeable
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import io.element.android.libraries.designsystem.preview.ElementThemedPreview
-import io.element.android.libraries.designsystem.preview.PreviewGroup
-import io.element.android.libraries.designsystem.utils.CommonDrawables
-import io.element.android.libraries.testtags.TestTags
-import io.element.android.libraries.testtags.testTag
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
-import io.element.android.libraries.designsystem.icons.CompoundDrawables
+import io.element.android.libraries.designsystem.preview.ElementThemedPreview
+import io.element.android.libraries.designsystem.preview.PreviewGroup
+import io.element.android.libraries.testtags.TestTags
+import io.element.android.libraries.testtags.testTag
 import kotlin.math.max
 
 // Figma designs: https://www.figma.com/file/G1xy0HDZKJf5TCRFmKb5d5/Compound-Android-Components?type=design&node-id=911%3A343492&mode=design&t=jeyd1bXKOOx8y10r-1

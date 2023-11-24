@@ -55,6 +55,7 @@ import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.ui.AspectRatioFrameLayout
 import androidx.media3.ui.PlayerView
+import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.messages.impl.media.helper.formatFileExtensionAndSize
 import io.element.android.features.messages.impl.media.local.exoplayer.ExoPlayerWrapper
 import io.element.android.features.messages.impl.media.local.pdf.PdfViewer
@@ -69,7 +70,6 @@ import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.designsystem.utils.KeepScreenOn
 import io.element.android.libraries.designsystem.utils.OnLifecycleEvent
-import io.element.android.compound.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
 import me.saket.telephoto.zoomable.ZoomSpec
 import me.saket.telephoto.zoomable.ZoomableState
