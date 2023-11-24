@@ -67,8 +67,8 @@ fun AdvancedSettingsView(
             onCheckedChange = { state.eventSink(AdvancedSettingsEvents.SetRichTextEditorEnabled(it)) },
         )
         PreferenceSwitch(
-            title = stringResource(id = R.string.screen_advanced_settings_developer_mode),
-            subtitle = stringResource(id = R.string.screen_advanced_settings_developer_mode_description),
+            title = stringResource(id = CommonStrings.action_view_source),
+            subtitle = stringResource(id = R.string.screen_advanced_settings_view_source_description),
             isChecked = state.isDeveloperModeEnabled,
             onCheckedChange = { state.eventSink(AdvancedSettingsEvents.SetDeveloperModeEnabled(it)) },
         )
