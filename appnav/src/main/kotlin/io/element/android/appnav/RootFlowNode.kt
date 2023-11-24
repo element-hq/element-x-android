@@ -134,8 +134,8 @@ class RootFlowNode @AssistedInject constructor(
 
     private suspend fun restoreSessionIfNeeded(
         sessionId: SessionId,
-        onFailure: () -> Unit = {},
-        onSuccess: (SessionId) -> Unit = {},
+        onFailure: () -> Unit,
+        onSuccess: (SessionId) -> Unit,
     ) {
         matrixClientsHolder.getOrRestore(sessionId)
             .onSuccess {
@@ -149,8 +149,8 @@ class RootFlowNode @AssistedInject constructor(
     }
 
     private suspend fun tryToRestoreLatestSession(
-        onSuccess: (SessionId) -> Unit = {},
-        onFailure: () -> Unit = {}
+        onSuccess: (SessionId) -> Unit,
+        onFailure: () -> Unit
     ) {
         val latestSessionId = authenticationService.getLatestSessionId()
         if (latestSessionId == null) {

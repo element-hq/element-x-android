@@ -38,9 +38,9 @@ import io.element.android.libraries.theme.ElementTheme
 @Composable
 fun DefaultNotificationSettingOption(
     mode: RoomNotificationMode,
+    onOptionSelected: (RoomNotificationMode) -> Unit,
     modifier: Modifier = Modifier,
     isSelected: Boolean = false,
-    onOptionSelected: (RoomNotificationMode) -> Unit = {},
 ) {
     val subtitle = when(mode) {
         RoomNotificationMode.ALL_MESSAGES -> stringResource(id = R.string.screen_notification_settings_edit_mode_all_messages)
@@ -86,10 +86,12 @@ internal fun DefaultNotificationSettingOptionPreview() = ElementPreview {
         DefaultNotificationSettingOption(
             mode = RoomNotificationMode.ALL_MESSAGES,
             isSelected = true,
+            onOptionSelected = {},
         )
         DefaultNotificationSettingOption(
             mode = RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY,
             isSelected = false,
+            onOptionSelected = {},
         )
     }
 }

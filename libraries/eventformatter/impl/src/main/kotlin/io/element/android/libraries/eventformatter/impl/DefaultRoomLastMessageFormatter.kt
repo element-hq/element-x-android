@@ -48,7 +48,6 @@ import io.element.android.libraries.matrix.api.timeline.item.event.StickerConten
 import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.UnableToDecryptContent
 import io.element.android.libraries.matrix.api.timeline.item.event.UnknownContent
-import io.element.android.libraries.matrix.api.timeline.item.event.UnknownMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.VideoMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.VoiceMessageType
 import io.element.android.libraries.matrix.ui.messages.toPlainText
@@ -137,11 +136,6 @@ class DefaultRoomLastMessageFormatter @Inject constructor(
             }
             is OtherMessageType -> {
                 messageType.body
-            }
-            UnknownMessageType -> {
-                // Display the body as a fallback, but should not happen anymore
-                // (we have `OtherMessageType` now)
-                messageContent.body
             }
             is NoticeMessageType -> {
                 messageType.body

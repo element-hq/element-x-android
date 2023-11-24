@@ -68,8 +68,8 @@ import io.element.android.libraries.ui.strings.CommonStrings
 @Composable
 fun SendLocationView(
     state: SendLocationState,
+    navigateUp: () -> Unit,
     modifier: Modifier = Modifier,
-    navigateUp: () -> Unit = {},
 ) {
     LaunchedEffect(Unit) {
         state.eventSink(SendLocationEvents.RequestPermissions)

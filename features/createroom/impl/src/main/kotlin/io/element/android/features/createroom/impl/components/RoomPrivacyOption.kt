@@ -41,9 +41,9 @@ import io.element.android.libraries.theme.ElementTheme
 @Composable
 fun RoomPrivacyOption(
     roomPrivacyItem: RoomPrivacyItem,
+    onOptionSelected: (RoomPrivacyItem) -> Unit,
     modifier: Modifier = Modifier,
     isSelected: Boolean = false,
-    onOptionSelected: (RoomPrivacyItem) -> Unit = {},
 ) {
     Row(
         modifier
@@ -97,10 +97,12 @@ internal fun RoomPrivacyOptionPreview() = ElementPreview {
     Column {
         RoomPrivacyOption(
             roomPrivacyItem = aRoomPrivacyItem,
+            onOptionSelected = {},
             isSelected = true,
         )
         RoomPrivacyOption(
             roomPrivacyItem = aRoomPrivacyItem,
+            onOptionSelected = {},
             isSelected = false,
         )
     }

@@ -34,7 +34,6 @@ import io.element.android.libraries.matrix.api.timeline.item.event.LocationMessa
 import io.element.android.libraries.matrix.api.timeline.item.event.NoticeMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.OtherMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageType
-import io.element.android.libraries.matrix.api.timeline.item.event.UnknownMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.VideoMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.VoiceMessageType
 import io.element.android.libraries.matrix.ui.messages.toPlainText
@@ -113,7 +112,7 @@ class NotifiableEventResolver @Inject constructor(
                         soundName = null,
                         isRedacted = false,
                         isUpdated = false,
-                        description = descriptionFromRoomMembershipContent(content, isDirect) ?: return null,
+                        description = descriptionFromRoomMembershipInvite(isDirect),
                         type = null, // TODO check if type is needed anymore
                         title = null, // TODO check if title is needed anymore
                     )
@@ -222,23 +221,16 @@ class NotifiableEventResolver @Inject constructor(
             is VideoMessageType -> messageType.body
             is LocationMessageType -> messageType.body
             is OtherMessageType -> messageType.body
-            is UnknownMessageType -> stringProvider.getString(CommonStrings.common_unsupported_event)
         }
     }
 
-    private fun descriptionFromRoomMembershipContent(
-        content: NotificationContent.StateEvent.RoomMemberContent,
+    private fun descriptionFromRoomMembershipInvite(
         isDirectRoom: Boolean
-    ): String? {
-        return when (content.membershipState) {
-            RoomMembershipState.INVITE -> {
-                if (isDirectRoom) {
-                    stringProvider.getString(R.string.notification_invite_body)
-                } else {
-                    stringProvider.getString(R.string.notification_room_invite_body)
-                }
-            }
-            else -> null
+    ): String {
+        return if (isDirectRoom) {
+            stringProvider.getString(R.string.notification_invite_body)
+        } else {
+            stringProvider.getString(R.string.notification_room_invite_body)
         }
     }
 }

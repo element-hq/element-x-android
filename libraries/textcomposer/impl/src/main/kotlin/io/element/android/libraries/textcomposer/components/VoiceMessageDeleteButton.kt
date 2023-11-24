@@ -33,8 +33,8 @@ import io.element.android.libraries.ui.strings.CommonStrings
 @Composable
 fun VoiceMessageDeleteButton(
     enabled: Boolean,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    onClick: () -> Unit = {},
 ) {
     IconButton(
         modifier = modifier
@@ -59,7 +59,13 @@ fun VoiceMessageDeleteButton(
 @Composable
 internal fun VoiceMessageDeleteButtonPreview() = ElementPreview {
     Row {
-        VoiceMessageDeleteButton(enabled = true)
-        VoiceMessageDeleteButton(enabled = false)
+        VoiceMessageDeleteButton(
+            enabled = true,
+            onClick = {},
+        )
+        VoiceMessageDeleteButton(
+            enabled = false,
+            onClick = {},
+        )
     }
 }

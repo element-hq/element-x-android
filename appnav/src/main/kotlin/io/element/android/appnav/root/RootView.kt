@@ -35,8 +35,8 @@ import io.element.android.services.apperror.impl.AppErrorView
 @Composable
 fun RootView(
     state: RootState,
+    onOpenBugReport: () -> Unit,
     modifier: Modifier = Modifier,
-    onOpenBugReport: () -> Unit = {},
     children: @Composable BoxScope.() -> Unit,
 ) {
     Box(
@@ -69,7 +69,10 @@ fun RootView(
 @PreviewsDayNight
 @Composable
 internal fun RootPreview(@PreviewParameter(RootStateProvider::class) rootState: RootState) = ElementPreview {
-    RootView(rootState) {
+    RootView(
+        state = rootState,
+        onOpenBugReport = {},
+    ) {
         Text("Children")
     }
 }

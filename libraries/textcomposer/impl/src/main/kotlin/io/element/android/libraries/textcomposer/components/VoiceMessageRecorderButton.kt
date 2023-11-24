@@ -40,8 +40,8 @@ import io.element.android.libraries.ui.strings.CommonStrings
 @Composable
 internal fun VoiceMessageRecorderButton(
     isRecording: Boolean,
+    onEvent: (VoiceMessageRecorderEvent) -> Unit,
     modifier: Modifier = Modifier,
-    onEvent: (VoiceMessageRecorderEvent) -> Unit = {},
 ) {
     val hapticFeedback = LocalHapticFeedback.current
 
@@ -113,7 +113,13 @@ private fun StopButton(
 @Composable
 internal fun VoiceMessageRecorderButtonPreview() = ElementPreview {
     Row {
-        VoiceMessageRecorderButton(isRecording = false)
-        VoiceMessageRecorderButton(isRecording = true)
+        VoiceMessageRecorderButton(
+            isRecording = false,
+            onEvent = {},
+        )
+        VoiceMessageRecorderButton(
+            isRecording = true,
+            onEvent = {},
+        )
     }
 }

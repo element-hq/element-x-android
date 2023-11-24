@@ -33,8 +33,8 @@ import io.element.android.libraries.usersearch.api.UserSearchResult
 fun SearchMultipleUsersResultItem(
     searchResult: UserSearchResult,
     isUserSelected: Boolean,
+    onCheckedChange: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
-    onCheckedChange: (Boolean) -> Unit = {},
 ) {
     if (searchResult.isUnresolved) {
         CheckableUnresolvedUserRow(
@@ -62,12 +62,40 @@ internal fun SearchMultipleUsersResultItemPreview() = ElementThemedPreview { Con
 @Composable
 private fun ContentToPreview() {
     Column {
-        SearchMultipleUsersResultItem(searchResult = UserSearchResult(aMatrixUser(), isUnresolved = false), isUserSelected = false)
+        SearchMultipleUsersResultItem(
+            searchResult = UserSearchResult(
+                aMatrixUser(),
+                isUnresolved = false
+            ),
+            isUserSelected = false,
+            onCheckedChange = {}
+        )
         HorizontalDivider()
-        SearchMultipleUsersResultItem(searchResult = UserSearchResult(aMatrixUser(), isUnresolved = false), isUserSelected = true)
+        SearchMultipleUsersResultItem(
+            searchResult = UserSearchResult(
+                aMatrixUser(),
+                isUnresolved = false
+            ),
+            isUserSelected = true,
+            onCheckedChange = {}
+        )
         HorizontalDivider()
-        SearchMultipleUsersResultItem(searchResult = UserSearchResult(aMatrixUser(), isUnresolved = true), isUserSelected = false)
+        SearchMultipleUsersResultItem(
+            searchResult = UserSearchResult(
+                aMatrixUser(),
+                isUnresolved = true
+            ),
+            isUserSelected = false,
+            onCheckedChange = {}
+        )
         HorizontalDivider()
-        SearchMultipleUsersResultItem(searchResult = UserSearchResult(aMatrixUser(), isUnresolved = true), isUserSelected = true)
+        SearchMultipleUsersResultItem(
+            searchResult = UserSearchResult(
+                aMatrixUser(),
+                isUnresolved = true
+            ),
+            isUserSelected = true,
+            onCheckedChange = {}
+        )
     }
 }

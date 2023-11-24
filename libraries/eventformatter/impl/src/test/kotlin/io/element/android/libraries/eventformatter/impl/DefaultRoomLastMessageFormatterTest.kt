@@ -45,7 +45,6 @@ import io.element.android.libraries.matrix.api.timeline.item.event.StickerConten
 import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.UnableToDecryptContent
 import io.element.android.libraries.matrix.api.timeline.item.event.UnknownContent
-import io.element.android.libraries.matrix.api.timeline.item.event.UnknownMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.VideoMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.VoiceMessageType
 import io.element.android.libraries.matrix.test.A_USER_ID
@@ -170,6 +169,7 @@ class DefaultRoomLastMessageFormatterTest {
             LocationMessageType(body, "geo:1,2", null),
             NoticeMessageType(body, null),
             EmoteMessageType(body, null),
+            OtherMessageType(msgType = "a_type", body = body),
         )
         val senderName = "Someone"
         val resultsInRoom = mutableListOf<Pair<MessageType, CharSequence?>>()
@@ -187,13 +187,6 @@ class DefaultRoomLastMessageFormatterTest {
                     resultsInRoom.add(type to result)
                 }
             }
-            val unknownMessage = createRoomEvent(sentByYou = false, senderDisplayName = "Someone", content = createMessageContent(UnknownMessageType))
-            val result = UnknownMessageType to formatter.format(unknownMessage, isDmRoom = isDm)
-            if (isDm) {
-                resultsInDm.add(result)
-            } else {
-                resultsInRoom.add(result)
-            }
         }
 
         // Verify results of DM mode
@@ -208,8 +201,7 @@ class DefaultRoomLastMessageFormatterTest {
                 is EmoteMessageType -> "* $senderName ${type.body}"
                 is TextMessageType,
                 is NoticeMessageType,
-                is OtherMessageType,
-                UnknownMessageType -> body
+                is OtherMessageType -> body
             }
             Truth.assertWithMessage("$type was not properly handled for DM").that(result).isEqualTo(expectedResult)
         }
@@ -226,8 +218,7 @@ class DefaultRoomLastMessageFormatterTest {
                 is LocationMessageType -> "$senderName: Shared location"
                 is TextMessageType,
                 is NoticeMessageType,
-                is OtherMessageType,
-                UnknownMessageType -> "$senderName: $body"
+                is OtherMessageType -> "$senderName: $body"
                 is EmoteMessageType -> "* $senderName ${type.body}"
             }
             val shouldCreateAnnotatedString = when (type) {
@@ -240,7 +231,6 @@ class DefaultRoomLastMessageFormatterTest {
                 is EmoteMessageType -> false
                 is TextMessageType, is NoticeMessageType -> true
                 is OtherMessageType -> true
-                UnknownMessageType -> true
             }
             if (shouldCreateAnnotatedString) {
                 Truth.assertWithMessage("$type doesn't produce an AnnotatedString")

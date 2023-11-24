@@ -46,8 +46,8 @@ import io.element.android.libraries.theme.ElementTheme
 @Composable
 fun PreferencePage(
     title: String,
+    onBackPressed: () -> Unit,
     modifier: Modifier = Modifier,
-    onBackPressed: () -> Unit = {},
     snackbarHost: @Composable () -> Unit = {},
     content: @Composable ColumnScope.() -> Unit,
 ) {
@@ -81,8 +81,8 @@ fun PreferencePage(
 @Composable
 private fun PreferenceTopAppBar(
     title: String,
+    onBackPressed: () -> Unit,
     modifier: Modifier = Modifier,
-    onBackPressed: () -> Unit = {},
 ) {
     TopAppBar(
         modifier = modifier,
@@ -105,7 +105,8 @@ private fun PreferenceTopAppBar(
 @Composable
 internal fun PreferenceViewPreview() = ElementPreview {
     PreferencePage(
-        title = "Preference screen"
+        title = "Preference screen",
+        onBackPressed = {},
     ) {
         PreferenceCategory(
             title = "Category title",
@@ -120,12 +121,14 @@ internal fun PreferenceViewPreview() = ElementPreview {
                 title = "Switch",
                 iconResourceId = CommonDrawables.ic_compound_threads,
                 isChecked = true,
+                onCheckedChange = {},
             )
             PreferenceDivider()
             PreferenceCheckbox(
                 title = "Checkbox",
                 iconResourceId = CommonDrawables.ic_compound_notifications,
                 isChecked = true,
+                onCheckedChange = {},
             )
             PreferenceDivider()
             PreferenceSlide(
@@ -133,6 +136,7 @@ internal fun PreferenceViewPreview() = ElementPreview {
                 summary = "Summary",
                 value = 0.75F,
                 showIconAreaIfNoIcon = true,
+                onValueChange = {},
             )
         }
     }

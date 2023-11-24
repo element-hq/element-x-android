@@ -42,6 +42,7 @@ fun PreferenceSlide(
     title: String,
     @FloatRange(0.0, 1.0)
     value: Float,
+    onValueChange: (Float) -> Unit,
     modifier: Modifier = Modifier,
     icon: ImageVector? = null,
     @DrawableRes iconResourceId: Int? = null,
@@ -49,7 +50,6 @@ fun PreferenceSlide(
     enabled: Boolean = true,
     summary: String? = null,
     steps: Int = 0,
-    onValueChange: (Float) -> Unit = {},
 ) {
     Row(
         modifier = modifier
@@ -98,6 +98,7 @@ private fun ContentToPreview() {
         iconResourceId = CommonDrawables.ic_compound_user_profile,
         title = "Slide",
         summary = "Summary",
-        value = 0.75F
+        value = 0.75F,
+        onValueChange = {},
     )
 }

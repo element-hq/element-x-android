@@ -167,9 +167,9 @@ fun ConfigureRoomView(
 @Composable
 private fun ConfigureRoomToolbar(
     isNextActionEnabled: Boolean,
+    onBackPressed: () -> Unit,
+    onNextPressed: () -> Unit,
     modifier: Modifier = Modifier,
-    onBackPressed: () -> Unit = {},
-    onNextPressed: () -> Unit = {},
 ) {
     TopAppBar(
         modifier = modifier,
@@ -194,9 +194,9 @@ private fun ConfigureRoomToolbar(
 private fun RoomNameWithAvatar(
     avatarUri: Uri?,
     roomName: String,
+    onAvatarClick: () -> Unit,
+    onRoomNameChanged: (String) -> Unit,
     modifier: Modifier = Modifier,
-    onAvatarClick: () -> Unit = {},
-    onRoomNameChanged: (String) -> Unit = {},
 ) {
     Row(
         modifier = modifier,
@@ -221,8 +221,8 @@ private fun RoomNameWithAvatar(
 @Composable
 private fun RoomTopic(
     topic: String,
+    onTopicChanged: (String) -> Unit,
     modifier: Modifier = Modifier,
-    onTopicChanged: (String) -> Unit = {},
 ) {
     LabelledTextField(
         modifier = modifier,
@@ -240,8 +240,8 @@ private fun RoomTopic(
 @Composable
 private fun RoomPrivacyOptions(
     selected: RoomPrivacy?,
+    onOptionSelected: (RoomPrivacyItem) -> Unit,
     modifier: Modifier = Modifier,
-    onOptionSelected: (RoomPrivacyItem) -> Unit = {},
 ) {
     val items = roomPrivacyItems()
     Column(modifier = modifier.selectableGroup()) {
