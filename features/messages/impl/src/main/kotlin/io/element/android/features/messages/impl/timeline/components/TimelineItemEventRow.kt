@@ -538,13 +538,12 @@ private fun MessageEventBubbleContent(
         }
         val inReplyTo = @Composable { inReplyTo: InReplyToDetails ->
             val senderName = inReplyTo.senderDisplayName ?: inReplyTo.senderId.value
-            val attachmentThumbnailInfo = attachmentThumbnailInfoForInReplyTo(inReplyTo)
-            val text = textForInReplyTo(inReplyTo)
             val topPadding = if (showThreadDecoration) 0.dp else 8.dp
+            val metadata = inReplyTo.metadata()
             ReplyToContent(
                 senderName = senderName,
-                text = text,
-                attachmentThumbnailInfo = attachmentThumbnailInfo,
+                text = if (metadata is InReplyToMetadata.Text) metadata.text else null,
+                attachmentThumbnailInfo = if (metadata is InReplyToMetadata.Thumbnail) metadata.attachmentThumbnailInfo else null,
                 modifier = Modifier
                     .padding(top = topPadding, start = 8.dp, end = 8.dp)
                     .clip(RoundedCornerShape(6.dp))
@@ -630,58 +629,74 @@ private fun ReplyToContent(
     }
 }
 
-private fun attachmentThumbnailInfoForInReplyTo(inReplyTo: InReplyToDetails): AttachmentThumbnailInfo? {
-    return when (val eventContent = inReplyTo.eventContent) {
-        is MessageContent -> when (val type = eventContent.type) {
-            is ImageMessageType -> AttachmentThumbnailInfo(
+/**
+ * Computes metadata for the in reply to message.
+ *
+ * Metadata can be either a thumbnail with a text OR just a text.
+ */
+@Composable
+private fun InReplyToDetails.metadata(): InReplyToMetadata? = when (eventContent) {
+    is MessageContent -> when (val type = eventContent.type) {
+        is ImageMessageType -> InReplyToMetadata.Thumbnail(
+            AttachmentThumbnailInfo(
                 thumbnailSource = type.info?.thumbnailSource ?: type.source,
                 textContent = eventContent.body,
                 type = AttachmentThumbnailType.Image,
                 blurHash = type.info?.blurhash,
             )
-            is VideoMessageType -> AttachmentThumbnailInfo(
+        )
+        is VideoMessageType -> InReplyToMetadata.Thumbnail(
+            AttachmentThumbnailInfo(
                 thumbnailSource = type.info?.thumbnailSource,
                 textContent = eventContent.body,
                 type = AttachmentThumbnailType.Video,
                 blurHash = type.info?.blurhash,
             )
-            is FileMessageType -> AttachmentThumbnailInfo(
+        )
+        is FileMessageType -> InReplyToMetadata.Thumbnail(
+            AttachmentThumbnailInfo(
                 thumbnailSource = type.info?.thumbnailSource,
                 textContent = eventContent.body,
                 type = AttachmentThumbnailType.File,
             )
-            is LocationMessageType -> AttachmentThumbnailInfo(
-                textContent = eventContent.body,
+        )
+        is LocationMessageType -> InReplyToMetadata.Thumbnail(
+            AttachmentThumbnailInfo(
+                textContent = stringResource(CommonStrings.common_shared_location),
                 type = AttachmentThumbnailType.Location,
             )
-            is AudioMessageType -> AttachmentThumbnailInfo(
+        )
+        is AudioMessageType -> InReplyToMetadata.Thumbnail(
+            AttachmentThumbnailInfo(
                 textContent = eventContent.body,
                 type = AttachmentThumbnailType.Audio,
             )
-            is VoiceMessageType -> AttachmentThumbnailInfo(
+        )
+        is VoiceMessageType -> InReplyToMetadata.Thumbnail(
+            AttachmentThumbnailInfo(
+                textContent = stringResource(CommonStrings.common_voice_message),
                 type = AttachmentThumbnailType.Voice,
             )
-            else -> null
-        }
-        is PollContent -> AttachmentThumbnailInfo(
+        )
+        else -> InReplyToMetadata.Text(textContent ?: eventContent.body)
+    }
+    is PollContent -> InReplyToMetadata.Thumbnail(
+        AttachmentThumbnailInfo(
             textContent = eventContent.question,
             type = AttachmentThumbnailType.Poll,
         )
-        else -> null
-    }
+    )
+    else -> null
 }
 
-@Composable
-private fun textForInReplyTo(inReplyTo: InReplyToDetails): String {
-    return when (val eventContent = inReplyTo.eventContent) {
-        is MessageContent -> when (eventContent.type) {
-            is LocationMessageType -> stringResource(CommonStrings.common_shared_location)
-            is VoiceMessageType -> stringResource(CommonStrings.common_voice_message)
-            else -> inReplyTo.textContent ?: eventContent.body
-        }
-        is PollContent -> eventContent.question
-        else -> ""
-    }
+private sealed interface InReplyToMetadata {
+    data class Thumbnail(val attachmentThumbnailInfo: AttachmentThumbnailInfo) : InReplyToMetadata
+    data class Text(val text: String) : InReplyToMetadata
+
+    val isThumbnail: Boolean
+        get() = this is Thumbnail
+    val isText: Boolean
+        get() = this is Text
 }
 
 @PreviewsDayNight
