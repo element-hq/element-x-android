@@ -14,33 +14,22 @@
  * limitations under the License.
  */
 
-package io.element.android.features.rageshake.api.reporter
+package io.element.android.services.toolbox.test.strings
 
-/**
- * Bug report upload listener.
- */
-interface BugReporterListener {
-    /**
-     * The bug report has been cancelled.
-     */
-    fun onUploadCancelled()
+import io.element.android.services.toolbox.api.strings.StringProvider
 
-    /**
-     * The bug report upload failed.
-     *
-     * @param reason the failure reason
-     */
-    fun onUploadFailed(reason: String?)
+class FakeStringProvider(
+    private val defaultResult: String = "A string"
+) : StringProvider {
+    override fun getString(resId: Int): String {
+        return defaultResult
+    }
 
-    /**
-     * The upload progress (in percent).
-     *
-     * @param progress the upload progress
-     */
-    fun onProgress(progress: Int)
+    override fun getString(resId: Int, vararg formatArgs: Any?): String {
+        return defaultResult
+    }
 
-    /**
-     * The bug report upload succeeded.
-     */
-    fun onUploadSucceed()
+    override fun getQuantityString(resId: Int, quantity: Int, vararg formatArgs: Any?): String {
+        return defaultResult
+    }
 }

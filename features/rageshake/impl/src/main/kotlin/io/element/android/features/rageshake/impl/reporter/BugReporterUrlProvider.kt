@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright (c) 2023 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,13 +14,10 @@
  * limitations under the License.
  */
 
-package io.element.android.features.rageshake.api.reporter
+package io.element.android.features.rageshake.impl.reporter
 
-enum class ReportType {
-    BUG_REPORT,
-    SUGGESTION,
-    SPACE_BETA_FEEDBACK,
-    THREADS_BETA_FEEDBACK,
-    AUTO_UISI,
-    AUTO_UISI_SENDER,
+import okhttp3.HttpUrl
+
+fun interface BugReporterUrlProvider {
+    fun provide(): HttpUrl
 }

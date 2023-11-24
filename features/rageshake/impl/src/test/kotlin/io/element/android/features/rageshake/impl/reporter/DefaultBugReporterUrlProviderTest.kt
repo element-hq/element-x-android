@@ -14,33 +14,18 @@
  * limitations under the License.
  */
 
-package io.element.android.features.rageshake.api.reporter
+package io.element.android.features.rageshake.impl.reporter
 
-/**
- * Bug report upload listener.
- */
-interface BugReporterListener {
-    /**
-     * The bug report has been cancelled.
-     */
-    fun onUploadCancelled()
+import com.google.common.truth.Truth.assertThat
+import io.element.android.services.toolbox.test.strings.FakeStringProvider
+import okhttp3.HttpUrl.Companion.toHttpUrl
+import org.junit.Test
 
-    /**
-     * The bug report upload failed.
-     *
-     * @param reason the failure reason
-     */
-    fun onUploadFailed(reason: String?)
-
-    /**
-     * The upload progress (in percent).
-     *
-     * @param progress the upload progress
-     */
-    fun onProgress(progress: Int)
-
-    /**
-     * The bug report upload succeeded.
-     */
-    fun onUploadSucceed()
+class DefaultBugReporterUrlProviderTest {
+    @Test
+    fun `test DefaultBugReporterUrlProvider`() {
+        val sut = DefaultBugReporterUrlProvider(FakeStringProvider("https://example.org"))
+        val result = sut.provide()
+        assertThat(result).isEqualTo("https://example.org".toHttpUrl())
+    }
 }
