@@ -23,6 +23,12 @@ plugins {
 
 android {
     namespace = "io.element.android.features.rageshake.impl"
+
+    testOptions {
+        unitTests {
+            isIncludeAndroidResources = true
+        }
+    }
 }
 
 anvil {
@@ -57,6 +63,9 @@ dependencies {
     testImplementation(libs.test.turbine)
     testImplementation(libs.test.mockk)
     testImplementation(projects.libraries.matrix.test)
+    testImplementation(projects.libraries.sessionStorage.implMemory)
     testImplementation(projects.features.rageshake.test)
     testImplementation(projects.tests.testutils)
+    testImplementation(projects.services.toolbox.test)
+    testImplementation(libs.network.mockwebserver)
 }

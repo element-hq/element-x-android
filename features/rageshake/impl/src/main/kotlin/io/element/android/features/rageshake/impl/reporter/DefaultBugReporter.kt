@@ -75,6 +75,7 @@ class DefaultBugReporter @Inject constructor(
     private val userAgentProvider: UserAgentProvider,
     private val sessionStore: SessionStore,
     private val buildMeta: BuildMeta,
+    private val bugReporterUrlProvider: BugReporterUrlProvider,
 ) : BugReporter {
     companion object {
         // filenames
@@ -223,7 +224,7 @@ class DefaultBugReporter @Inject constructor(
 
                     // build the request
                     val request = Request.Builder()
-                        .url(context.getString(R.string.bug_report_url))
+                        .url(bugReporterUrlProvider.provide())
                         .post(requestBody)
                         .build()
 
