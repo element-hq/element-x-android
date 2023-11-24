@@ -48,6 +48,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Velocity
 import androidx.compose.ui.unit.dp
+import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.roomlist.impl.RoomListEvents
 import io.element.android.features.roomlist.impl.RoomListState
 import io.element.android.features.roomlist.impl.aRoomListState
@@ -153,7 +154,7 @@ private fun RoomListSearchResultContent(
                                     state.eventSink(RoomListEvents.UpdateFilter(""))
                                 }) {
                                     Icon(
-                                        resourceId = CommonDrawables.ic_compound_close,
+                                        imageVector = CompoundIcons.Close,
                                         contentDescription = stringResource(CommonStrings.action_cancel)
                                     )
                                 }

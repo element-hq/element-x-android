@@ -14,14 +14,6 @@
  * limitations under the License.
  */
 
-package io.element.android.features.preferences.impl.advanced
+package io.element.android.libraries.designsystem.icons
 
-import io.element.android.compound.theme.Theme
-
-data class AdvancedSettingsState(
-    val isRichTextEditorEnabled: Boolean,
-    val isDeveloperModeEnabled: Boolean,
-    val theme: Theme,
-    val showChangeThemeDialog: Boolean,
-    val eventSink: (AdvancedSettingsEvents) -> Unit
-)
+typealias CompoundDrawables = io.element.android.compound.R.drawable

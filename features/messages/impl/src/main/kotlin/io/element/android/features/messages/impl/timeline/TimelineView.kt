@@ -55,6 +55,8 @@ import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import io.element.android.compound.theme.ElementTheme
+import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.messages.impl.R
 import io.element.android.features.messages.impl.timeline.components.TimelineItemEventRow
 import io.element.android.features.messages.impl.timeline.components.TimelineItemStateEventRow
@@ -75,10 +77,8 @@ import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.FloatingActionButton
 import io.element.android.libraries.designsystem.theme.components.Icon
-import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
-import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.coroutines.launch
 
@@ -351,7 +351,7 @@ private fun JumpToBottomButton(
                 modifier = Modifier
                     .size(24.dp)
                     .rotate(90f),
-                resourceId = CommonDrawables.ic_compound_arrow_right,
+                imageVector = CompoundIcons.ArrowRight,
                 contentDescription = stringResource(id = CommonStrings.a11y_jump_to_bottom)
             )
         }

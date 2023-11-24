@@ -21,10 +21,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.securebackup.impl.R
 import io.element.android.features.securebackup.impl.setup.views.RecoveryKeyView
 import io.element.android.libraries.androidutils.system.copyToClipboard
@@ -51,7 +54,7 @@ fun SecureBackupSetupView(
         onBackClicked = onBackClicked.takeIf { state.canGoBack() },
         title = title(state),
         subTitle = subtitle(state),
-        iconResourceId = CommonDrawables.ic_key,
+        iconVector = ImageVector.vectorResource(CommonDrawables.ic_key),
         content = { Content(state) },
         buttons = { Buttons(state, onDone = onDone) },
     )
@@ -154,7 +157,7 @@ private fun ColumnScope.Buttons(
         is SetupState.CreatedAndSaved -> {
             OutlinedButton(
                 text = stringResource(id = R.string.screen_recovery_key_save_action),
-                leadingIcon = IconSource.Resource(CommonDrawables.ic_compound_download),
+                leadingIcon = IconSource.Vector(CompoundIcons.Download),
                 modifier = Modifier.fillMaxWidth(),
                 onClick = {
                     context.startSharePlainTextIntent(

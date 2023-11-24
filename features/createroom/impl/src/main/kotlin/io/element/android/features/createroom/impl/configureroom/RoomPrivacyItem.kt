@@ -19,8 +19,8 @@ package io.element.android.features.createroom.impl.configureroom
 import androidx.annotation.DrawableRes
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
+import io.element.android.libraries.designsystem.icons.CompoundDrawables
 import io.element.android.features.createroom.impl.R
-import io.element.android.libraries.designsystem.utils.CommonDrawables
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 
@@ -38,13 +38,13 @@ fun roomPrivacyItems(): ImmutableList<RoomPrivacyItem> {
             when (it) {
                 RoomPrivacy.Private -> RoomPrivacyItem(
                     privacy = it,
-                    icon = CommonDrawables.ic_compound_lock,
+                    icon = CompoundDrawables.ic_lock,
                     title = stringResource(R.string.screen_create_room_private_option_title),
                     description = stringResource(R.string.screen_create_room_private_option_description),
                 )
                 RoomPrivacy.Public -> RoomPrivacyItem(
                     privacy = it,
-                    icon = CommonDrawables.ic_compound_public,
+                    icon = CompoundDrawables.ic_public,
                     title = stringResource(R.string.screen_create_room_public_option_title),
                     description = stringResource(R.string.screen_create_room_public_option_description),
                 )

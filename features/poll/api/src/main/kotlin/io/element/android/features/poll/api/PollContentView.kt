@@ -35,17 +35,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
+import io.element.android.compound.theme.ElementTheme
+import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.poll.PollAnswer
 import io.element.android.libraries.matrix.api.poll.PollKind
-import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
 
@@ -126,13 +126,13 @@ private fun PollTitle(
     ) {
         if (isPollEnded) {
             Icon(
-                resourceId = CommonDrawables.ic_compound_polls_end,
+                imageVector = CompoundIcons.PollsEnd,
                 contentDescription = stringResource(id = CommonStrings.a11y_poll_end),
                 modifier = Modifier.size(22.dp)
             )
         } else {
             Icon(
-                resourceId = CommonDrawables.ic_compound_polls,
+                imageVector = CompoundIcons.Polls,
                 contentDescription = stringResource(id = CommonStrings.a11y_poll),
                 modifier = Modifier.size(22.dp)
             )

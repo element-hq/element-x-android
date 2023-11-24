@@ -35,6 +35,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import io.element.android.compound.theme.ElementTheme
+import io.element.android.compound.tokens.generated.CompoundIcons
+import io.element.android.libraries.designsystem.icons.CompoundDrawables
 import io.element.android.features.createroom.impl.R
 import io.element.android.features.createroom.impl.components.UserListView
 import io.element.android.libraries.designsystem.components.async.AsyncView
@@ -46,9 +49,7 @@ import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
-import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.matrix.api.core.RoomId
-import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @OptIn(ExperimentalLayoutApi::class)
@@ -125,7 +126,7 @@ private fun CreateRoomRootViewTopBar(
         },
         navigationIcon = {
             BackButton(
-                resourceId = CommonDrawables.ic_compound_close,
+                imageVector = CompoundIcons.Close,
                 onClick = onClosePressed,
             )
         }
@@ -141,12 +142,12 @@ private fun CreateRoomActionButtonsList(
 ) {
     Column(modifier = modifier) {
         CreateRoomActionButton(
-            iconRes = CommonDrawables.ic_compound_plus,
+            iconRes = CompoundDrawables.ic_plus,
             text = stringResource(id = R.string.screen_create_room_action_create_room),
             onClick = onNewRoomClicked,
         )
         CreateRoomActionButton(
-            iconRes = CommonDrawables.ic_compound_share_android,
+            iconRes = CompoundDrawables.ic_share_android,
             text = stringResource(id = CommonStrings.action_invite_friends_to_app, state.applicationName),
             onClick = onInvitePeopleClicked,
         )

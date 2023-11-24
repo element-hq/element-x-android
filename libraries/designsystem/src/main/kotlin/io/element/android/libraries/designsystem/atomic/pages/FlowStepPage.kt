@@ -25,6 +25,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.R
 import io.element.android.libraries.designsystem.atomic.molecules.ButtonColumnMolecule
@@ -36,7 +37,8 @@ import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
-import io.element.android.libraries.theme.ElementTheme
+import io.element.android.compound.theme.ElementTheme
+import io.element.android.compound.tokens.generated.CompoundIcons
 
 /**
  * A Page with:
@@ -48,7 +50,7 @@ import io.element.android.libraries.theme.ElementTheme
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FlowStepPage(
-    iconResourceId: Int?,
+    iconVector: ImageVector?,
     title: String,
     modifier: Modifier = Modifier,
     onBackClicked: (() -> Unit)? = null,
@@ -73,7 +75,7 @@ fun FlowStepPage(
         },
         header = {
             IconTitleSubtitleMolecule(
-                iconResourceId = iconResourceId,
+                iconImageVector = iconVector,
                 title = title,
                 subTitle = subTitle,
             )
@@ -96,7 +98,7 @@ internal fun FlowStepPagePreview() = ElementPreview {
         onBackClicked = {},
         title = "Title",
         subTitle = "Subtitle",
-        iconResourceId = R.drawable.ic_compound_computer,
+        iconVector = CompoundIcons.Computer,
         content = {
             Box(
                 Modifier

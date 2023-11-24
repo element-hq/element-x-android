@@ -35,7 +35,8 @@ import io.element.android.libraries.designsystem.theme.components.Slider
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.toEnabledColor
 import io.element.android.libraries.designsystem.utils.CommonDrawables
-import io.element.android.libraries.theme.ElementTheme
+import io.element.android.compound.theme.ElementTheme
+import io.element.android.libraries.designsystem.icons.CompoundDrawables
 
 @Composable
 fun PreferenceSlide(
@@ -95,7 +96,7 @@ internal fun PreferenceSlidePreview() = ElementThemedPreview { ContentToPreview(
 @Composable
 private fun ContentToPreview() {
     PreferenceSlide(
-        iconResourceId = CommonDrawables.ic_compound_user_profile,
+        iconResourceId = CompoundDrawables.ic_user_profile,
         title = "Slide",
         summary = "Summary",
         value = 0.75F,

@@ -20,8 +20,11 @@ import androidx.annotation.DrawableRes
 import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import io.element.android.compound.icons.CompoundIcons
+import io.element.android.compound.icons.compoundicons.ArrowLeft
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
 import io.element.android.libraries.designsystem.theme.components.Icon
@@ -34,7 +37,7 @@ fun BackButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     // TODO Handle RTL languages
-    @DrawableRes resourceId: Int = CommonDrawables.ic_compound_arrow_left,
+    imageVector: ImageVector = CompoundIcons.ArrowLeft,
     contentDescription: String = stringResource(CommonStrings.action_back),
     enabled: Boolean = true,
 ) {
@@ -43,7 +46,7 @@ fun BackButton(
         onClick = onClick,
         enabled = enabled,
     ) {
-        Icon(resourceId = resourceId, contentDescription = contentDescription)
+        Icon(imageVector, contentDescription = contentDescription)
     }
 }
 

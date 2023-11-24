@@ -61,7 +61,7 @@ import io.element.android.libraries.maplibre.compose.CameraMode
 import io.element.android.libraries.maplibre.compose.CameraMoveStartedReason
 import io.element.android.libraries.maplibre.compose.MapboxMap
 import io.element.android.libraries.maplibre.compose.rememberCameraPositionState
-import io.element.android.libraries.theme.ElementTheme
+import io.element.android.compound.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @OptIn(ExperimentalMaterial3Api::class)

@@ -19,6 +19,7 @@ package io.element.android.libraries.matrix.ui.media
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.runtime.Immutable
+import io.element.android.libraries.designsystem.icons.CompoundDrawables
 import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.ui.strings.CommonStrings
 
@@ -40,7 +41,7 @@ sealed class AvatarAction(
 
     data object Remove : AvatarAction(
         titleResId = CommonStrings.action_remove,
-        iconResourceId = CommonDrawables.ic_compound_delete,
+        iconResourceId = CompoundDrawables.ic_delete,
         destructive = true
     )
 }

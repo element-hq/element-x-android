@@ -21,7 +21,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.features.securebackup.impl.R
@@ -53,7 +55,7 @@ fun SecureBackupEnterRecoveryKeyView(
     FlowStepPage(
         modifier = modifier,
         onBackClicked = onBackClicked,
-        iconResourceId = CommonDrawables.ic_key,
+        iconVector = ImageVector.vectorResource(CommonDrawables.ic_key),
         title = stringResource(id = R.string.screen_recovery_key_confirm_title),
         subTitle = stringResource(id = R.string.screen_recovery_key_confirm_description),
         content = { Content(state = state) },

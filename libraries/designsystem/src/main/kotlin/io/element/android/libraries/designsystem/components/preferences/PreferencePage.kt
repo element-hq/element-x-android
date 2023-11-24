@@ -40,7 +40,8 @@ import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.designsystem.utils.CommonDrawables
-import io.element.android.libraries.theme.ElementTheme
+import io.element.android.compound.theme.ElementTheme
+import io.element.android.libraries.designsystem.icons.CompoundDrawables
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -114,19 +115,19 @@ internal fun PreferenceViewPreview() = ElementPreview {
             PreferenceText(
                 title = "Title",
                 subtitle = "Some other text",
-                iconResourceId = CommonDrawables.ic_compound_chat_problem,
+                iconResourceId = CompoundDrawables.ic_chat_problem,
             )
             PreferenceDivider()
             PreferenceSwitch(
                 title = "Switch",
-                iconResourceId = CommonDrawables.ic_compound_threads,
+                iconResourceId = CompoundDrawables.ic_threads,
                 isChecked = true,
                 onCheckedChange = {},
             )
             PreferenceDivider()
             PreferenceCheckbox(
                 title = "Checkbox",
-                iconResourceId = CommonDrawables.ic_compound_notifications,
+                iconResourceId = CompoundDrawables.ic_notifications,
                 isChecked = true,
                 onCheckedChange = {},
             )

@@ -55,7 +55,8 @@ import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.matrix.api.tracing.LogLevel
 import io.element.android.libraries.matrix.api.tracing.Target
-import io.element.android.libraries.theme.ElementTheme
+import io.element.android.compound.theme.ElementTheme
+import io.element.android.compound.tokens.generated.CompoundIcons
 import kotlinx.collections.immutable.ImmutableMap
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -90,7 +91,7 @@ fun ConfigureTracingView(
                         onClick = { showMenu = !showMenu }
                     ) {
                         Icon(
-                            resourceId = CommonDrawables.ic_compound_overflow_vertical,
+                            imageVector = CompoundIcons.OverflowVertical,
                             tint = ElementTheme.materialColors.secondary,
                             contentDescription = null,
                         )
@@ -107,7 +108,7 @@ fun ConfigureTracingView(
                             text = { Text("Reset to default") },
                             leadingIcon = {
                                 Icon(
-                                    resourceId = CommonDrawables.ic_compound_delete,
+                                    imageVector = CompoundIcons.Delete,
                                     tint = ElementTheme.materialColors.secondary,
                                     contentDescription = null,
                                 )
@@ -211,7 +212,7 @@ private fun LogLevelDropdownMenu(
             trailingIcon = {
                 Icon(
                     modifier = Modifier.rotate(if (expanded) 180f else 0f),
-                    resourceId = CommonDrawables.ic_compound_chevron_down,
+                    imageVector = CompoundIcons.ChevronDown,
                     contentDescription = null,
                 )
             },

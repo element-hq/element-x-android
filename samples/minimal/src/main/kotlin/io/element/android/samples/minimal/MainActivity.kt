@@ -32,7 +32,7 @@ import io.element.android.libraries.matrix.impl.auth.RustMatrixAuthenticationSer
 import io.element.android.libraries.network.useragent.SimpleUserAgentProvider
 import io.element.android.libraries.sessionstorage.api.LoggedInState
 import io.element.android.libraries.sessionstorage.impl.memory.InMemorySessionStore
-import io.element.android.libraries.theme.ElementTheme
+import io.element.android.compound.theme.ElementTheme
 import io.element.android.services.toolbox.impl.systemclock.DefaultSystemClock
 import kotlinx.coroutines.runBlocking
 import java.io.File

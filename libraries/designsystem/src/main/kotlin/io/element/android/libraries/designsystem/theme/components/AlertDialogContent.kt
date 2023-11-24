@@ -45,7 +45,9 @@ import io.element.android.libraries.designsystem.preview.PreviewGroup
 import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
-import io.element.android.libraries.theme.ElementTheme
+import io.element.android.compound.theme.ElementTheme
+import io.element.android.compound.tokens.generated.CompoundIcons
+import io.element.android.libraries.designsystem.icons.CompoundDrawables
 import kotlin.math.max
 
 // Figma designs: https://www.figma.com/file/G1xy0HDZKJf5TCRFmKb5d5/Compound-Android-Components?type=design&node-id=911%3A343492&mode=design&t=jeyd1bXKOOx8y10r-1
@@ -439,7 +441,7 @@ internal fun DialogWithTitleIconAndOkButtonPreview() {
             SimpleAlertDialogContent(
                 icon = {
                     Icon(
-                        resourceId = CommonDrawables.ic_compound_notifications_solid,
+                        imageVector = CompoundIcons.NotificationsSolid,
                         contentDescription = null
                     )
                 },

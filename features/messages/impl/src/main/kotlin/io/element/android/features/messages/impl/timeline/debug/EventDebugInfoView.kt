@@ -59,13 +59,14 @@ import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.matrix.api.core.EventId
-import io.element.android.libraries.theme.ElementTheme
+import io.element.android.compound.theme.ElementTheme
+import io.element.android.compound.tokens.generated.CompoundIcons
 
 /**
  * Screen used to display debug info for events.
  * It will only be available in debug builds.
  */
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EventDebugInfoView(
     eventId: EventId?,
@@ -140,7 +141,7 @@ private fun CollapsibleSection(
             Text(title, modifier = Modifier.weight(1f))
             Icon(
                 modifier = Modifier.rotate(if (isExpanded) 180f else 0f),
-                resourceId = CommonDrawables.ic_compound_chevron_down,
+                imageVector = CompoundIcons.ChevronDown,
                 contentDescription = null
             )
         }

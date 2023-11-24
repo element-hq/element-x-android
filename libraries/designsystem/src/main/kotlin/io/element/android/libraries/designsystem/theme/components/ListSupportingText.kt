@@ -32,7 +32,8 @@ import io.element.android.libraries.designsystem.components.list.ListItemContent
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
 import io.element.android.libraries.designsystem.utils.CommonDrawables
-import io.element.android.libraries.theme.ElementTheme
+import io.element.android.compound.theme.ElementTheme
+import io.element.android.compound.tokens.generated.CompoundIcons
 
 // Designs: https://www.figma.com/file/G1xy0HDZKJf5TCRFmKb5d5/Compound-Android-Components?type=design&node-id=425%3A24208&mode=design&t=G5hCfkLB6GgXDuWe-1
 
@@ -159,7 +160,7 @@ internal fun ListSupportingTextSmallPaddingPreview() {
         Column {
             ListItem(
                 headlineContent = { Text("A title") },
-                leadingContent = ListItemContent.Icon(IconSource.Resource(CommonDrawables.ic_compound_share_android))
+                leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.ShareAndroid))
             )
             ListSupportingText(
                 text = "Supporting line text lorem ipsum dolor sit amet, consectetur. Read more",

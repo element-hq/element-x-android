@@ -26,9 +26,13 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import io.element.android.compound.theme.ElementTheme
+import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.securebackup.impl.R
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.designsystem.atomic.pages.FlowStepPage
@@ -40,7 +44,6 @@ import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.utils.CommonDrawables
-import io.element.android.libraries.theme.ElementTheme
 
 @Composable
 fun SecureBackupDisableView(
@@ -59,7 +62,7 @@ fun SecureBackupDisableView(
         onBackClicked = onBackClicked,
         title = stringResource(id = R.string.screen_key_backup_disable_title),
         subTitle = stringResource(id = R.string.screen_key_backup_disable_description),
-        iconResourceId = CommonDrawables.ic_key_off,
+        iconVector = ImageVector.vectorResource(CommonDrawables.ic_key_off),
         content = { Content(state = state) },
         buttons = { Buttons(state = state) },
     )
@@ -119,7 +122,7 @@ private fun Content(state: SecureBackupDisableState) {
 private fun SecureBackupDisableItem(text: String) {
     Row(modifier = Modifier.fillMaxWidth()) {
         Icon(
-            resourceId = CommonDrawables.ic_compound_close,
+            imageVector = CompoundIcons.Close,
             contentDescription = null,
             tint = ElementTheme.colors.iconCriticalPrimary,
             modifier = Modifier.size(20.dp)

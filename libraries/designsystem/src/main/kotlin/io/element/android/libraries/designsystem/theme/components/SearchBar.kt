@@ -45,7 +45,8 @@ import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
 import io.element.android.libraries.designsystem.utils.CommonDrawables
-import io.element.android.libraries.theme.ElementTheme
+import io.element.android.compound.theme.ElementTheme
+import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -98,7 +99,7 @@ fun <T> SearchBar(
                 {
                     IconButton(onClick = { onQueryChange("") }) {
                         Icon(
-                            resourceId = CommonDrawables.ic_compound_close,
+                            imageVector = CompoundIcons.Close,
                             contentDescription = stringResource(CommonStrings.action_clear),
                         )
                     }
@@ -108,7 +109,7 @@ fun <T> SearchBar(
             !active -> {
                 {
                     Icon(
-                        resourceId = CommonDrawables.ic_compound_search,
+                        imageVector = CompoundIcons.Search,
                         contentDescription = stringResource(CommonStrings.action_search),
                         tint = MaterialTheme.colorScheme.tertiary,
                     )
