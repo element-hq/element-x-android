@@ -74,6 +74,9 @@ class DefaultBugReporterTest {
                 }
             },
         )
+        val request = server.takeRequest()
+        assertThat(request.path).isEqualTo("/")
+        assertThat(request.method).isEqualTo("POST")
         server.shutdown()
         assertThat(onUploadCancelledCalled).isFalse()
         assertThat(onUploadFailedCalled).isFalse()
@@ -121,6 +124,9 @@ class DefaultBugReporterTest {
                 }
             },
         )
+        val request = server.takeRequest()
+        assertThat(request.path).isEqualTo("/")
+        assertThat(request.method).isEqualTo("POST")
         server.shutdown()
         assertThat(onUploadCancelledCalled).isFalse()
         assertThat(onUploadFailedCalled).isTrue()
