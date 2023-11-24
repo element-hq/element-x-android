@@ -53,6 +53,7 @@ class RoomDetailsNode @AssistedInject constructor(
         fun editRoomDetails()
         fun openRoomNotificationSettings()
         fun openAvatarPreview(username: String, url: String)
+        fun openPollHistory()
     }
 
     private val callbacks = plugins<Callback>()
@@ -75,6 +76,10 @@ class RoomDetailsNode @AssistedInject constructor(
 
     private fun invitePeople() {
         callbacks.forEach { it.openInviteMembers() }
+    }
+
+    private fun openPollHistory() {
+        callbacks.forEach { it.openPollHistory() }
     }
 
     private fun onShareRoom(context: Context) {
@@ -146,6 +151,7 @@ class RoomDetailsNode @AssistedInject constructor(
             openRoomNotificationSettings = ::openRoomNotificationSettings,
             invitePeople = ::invitePeople,
             openAvatarPreview = ::openAvatarPreview,
+            openPollHistory = ::openPollHistory,
         )
     }
 }
