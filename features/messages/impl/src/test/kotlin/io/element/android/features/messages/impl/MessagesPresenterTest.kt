@@ -328,6 +328,20 @@ class MessagesPresenterTest {
     }
 
     @Test
+    fun `present - handle action edit poll`() = runTest {
+        val navigator = FakeMessagesNavigator()
+        val presenter = createMessagesPresenter(navigator = navigator)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            skipItems(1)
+            val initialState = awaitItem()
+            initialState.eventSink.invoke(MessagesEvents.HandleAction(TimelineItemAction.Edit, aMessageEvent(content = aTimelineItemPollContent())))
+            assertThat(navigator.onEditPollClickedCount).isEqualTo(1)
+        }
+    }
+
+    @Test
     fun `present - handle action redact`() = runTest {
         val coroutineDispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true)
         val matrixRoom = FakeMatrixRoom()
@@ -672,12 +686,18 @@ class MessagesPresenterTest {
             room = matrixRoom,
             dispatchers = coroutineDispatchers,
             appScope = this,
+            navigator = navigator,
             analyticsService = analyticsService,
             encryptionService = FakeEncryptionService(),
             verificationService = FakeSessionVerificationService(),
             featureFlagService = FakeFeatureFlagService(),
             redactedVoiceMessageManager = FakeRedactedVoiceMessageManager(),
         )
+        val timelinePresenterFactory = object: TimelinePresenter.Factory {
+            override fun create(navigator: MessagesNavigator): TimelinePresenter {
+                return timelinePresenter
+            }
+        }
         val preferencesStore = InMemoryPreferencesStore(isRichTextEditorEnabled = true)
         val actionListPresenter = ActionListPresenter(preferencesStore = preferencesStore)
         val readReceiptBottomSheetPresenter = ReadReceiptBottomSheetPresenter()
@@ -688,7 +708,7 @@ class MessagesPresenterTest {
             room = matrixRoom,
             composerPresenter = messageComposerPresenter,
             voiceMessageComposerPresenter = voiceMessageComposerPresenter,
-            timelinePresenter = timelinePresenter,
+            timelinePresenterFactory = timelinePresenterFactory,
             actionListPresenter = actionListPresenter,
             customReactionPresenter = customReactionPresenter,
             reactionSummaryPresenter = reactionSummaryPresenter,

@@ -20,14 +20,20 @@ import io.element.android.libraries.matrix.api.poll.PollKind
 import kotlinx.collections.immutable.ImmutableList
 
 data class CreatePollState(
-    val canCreate: Boolean,
+    val mode: Mode,
+    val canSave: Boolean,
     val canAddAnswer: Boolean,
     val question: String,
     val answers: ImmutableList<Answer>,
     val pollKind: PollKind,
     val showConfirmation: Boolean,
     val eventSink: (CreatePollEvents) -> Unit,
-)
+) {
+    enum class Mode {
+        New,
+        Edit,
+    }
+}
 
 data class Answer(
     val text: String,

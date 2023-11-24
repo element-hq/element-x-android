@@ -477,6 +477,30 @@ class RustMatrixRoom(
         }
     }
 
+    override suspend fun editPoll(
+        pollStartId: EventId,
+        question: String,
+        answers: List<String>,
+        maxSelections: Int,
+        pollKind: PollKind,
+    ): Result<Unit> = withContext(roomDispatcher) {
+        runCatching {
+            val pollStartEvent =
+                innerRoom.getEventTimelineItemByEventId(
+                    eventId = pollStartId.value
+                )
+            pollStartEvent.use {
+                innerRoom.editPoll(
+                    question = question,
+                    answers = answers,
+                    maxSelections = maxSelections.toUByte(),
+                    pollKind = pollKind.toInner(),
+                    editItem = pollStartEvent,
+                )
+            }
+        }
+    }
+
     override suspend fun sendPollResponse(
         pollStartId: EventId,
         answers: List<String>

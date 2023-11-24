@@ -29,6 +29,7 @@ import io.element.android.features.messages.impl.timeline.model.event.aTimelineI
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemPollContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemStateEventContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemVoiceContent
+import io.element.android.features.poll.api.aPollAnswerItemList
 import io.element.android.libraries.featureflag.test.InMemoryPreferencesStore
 import io.element.android.libraries.matrix.test.A_MESSAGE
 import io.element.android.tests.testutils.WarmUpRule
@@ -407,7 +408,7 @@ class ActionListPresenterTest {
     }
 
     @Test
-    fun `present - compute for poll message`() = runTest {
+    fun `present - compute for editable poll message`() = runTest {
         val presenter = createActionListPresenter(isDeveloperModeEnabled = false)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -415,7 +416,36 @@ class ActionListPresenterTest {
             val initialState = awaitItem()
             val messageEvent = aMessageEvent(
                 isMine = true,
-                content = aTimelineItemPollContent(),
+                isEditable = true,
+                content = aTimelineItemPollContent(answerItems = aPollAnswerItemList(hasVotes = false)),
+            )
+            initialState.eventSink.invoke(ActionListEvents.ComputeForMessage(messageEvent, canRedact = false, canSendMessage = true))
+            val successState = awaitItem()
+            assertThat(successState.target).isEqualTo(
+                ActionListState.Target.Success(
+                    messageEvent,
+                    persistentListOf(
+                        TimelineItemAction.Reply,
+                        TimelineItemAction.Edit,
+                        TimelineItemAction.EndPoll,
+                        TimelineItemAction.Redact,
+                    )
+                )
+            )
+            assertThat(successState.displayEmojiReactions).isTrue()
+        }
+    }
+    @Test
+    fun `present - compute for non-editable poll message`() = runTest {
+        val presenter = createActionListPresenter(isDeveloperModeEnabled = false)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            val messageEvent = aMessageEvent(
+                isMine = true,
+                isEditable = false,
+                content = aTimelineItemPollContent(answerItems = aPollAnswerItemList(hasVotes = true)),
             )
             initialState.eventSink.invoke(ActionListEvents.ComputeForMessage(messageEvent, canRedact = false, canSendMessage = true))
             val successState = awaitItem()
@@ -442,6 +472,7 @@ class ActionListPresenterTest {
             val initialState = awaitItem()
             val messageEvent = aMessageEvent(
                 isMine = true,
+                isEditable = false,
                 content = aTimelineItemPollContent(isEnded = true),
             )
             initialState.eventSink.invoke(ActionListEvents.ComputeForMessage(messageEvent, canRedact = false, canSendMessage = true))

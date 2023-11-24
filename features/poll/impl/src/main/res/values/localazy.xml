@@ -9,4 +9,5 @@
   <string name="screen_create_poll_question_desc">"Question or topic"</string>
   <string name="screen_create_poll_question_hint">"What is the poll about?"</string>
   <string name="screen_create_poll_title">"Create Poll"</string>
+  <string name="screen_edit_poll_title">"Edit poll"</string>
 </resources>

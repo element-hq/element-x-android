@@ -103,6 +103,7 @@ class FakeMatrixRoom(
     private var reportContentResult = Result.success(Unit)
     private var sendLocationResult = Result.success(Unit)
     private var createPollResult = Result.success(Unit)
+    private var editPollResult = Result.success(Unit)
     private var sendPollResponseResult = Result.success(Unit)
     private var endPollResult = Result.success(Unit)
     private var progressCallbackValues = emptyList<Pair<Long, Long>>()
@@ -130,8 +131,11 @@ class FakeMatrixRoom(
     private val _sentLocations = mutableListOf<SendLocationInvocation>()
     val sentLocations: List<SendLocationInvocation> = _sentLocations
 
-    private val _createPollInvocations = mutableListOf<CreatePollInvocation>()
-    val createPollInvocations: List<CreatePollInvocation> = _createPollInvocations
+    private val _createPollInvocations = mutableListOf<SavePollInvocation>()
+    val createPollInvocations: List<SavePollInvocation> = _createPollInvocations
+
+    private val _editPollInvocations = mutableListOf<SavePollInvocation>()
+    val editPollInvocations: List<SavePollInvocation> = _editPollInvocations
 
     private val _sendPollResponseInvocations = mutableListOf<SendPollResponseInvocation>()
     val sendPollResponseInvocations: List<SendPollResponseInvocation> = _sendPollResponseInvocations
@@ -375,8 +379,19 @@ class FakeMatrixRoom(
         maxSelections: Int,
         pollKind: PollKind
     ): Result<Unit> = simulateLongTask {
-        _createPollInvocations.add(CreatePollInvocation(question, answers, maxSelections, pollKind))
+        _createPollInvocations.add(SavePollInvocation(question, answers, maxSelections, pollKind))
         return createPollResult
+    }
+
+    override suspend fun editPoll(
+        pollStartId: EventId,
+        question: String,
+        answers: List<String>,
+        maxSelections: Int,
+        pollKind: PollKind
+    ): Result<Unit> = simulateLongTask {
+        _editPollInvocations.add(SavePollInvocation(question, answers, maxSelections, pollKind))
+        return editPollResult
     }
 
     override suspend fun sendPollResponse(
@@ -511,6 +526,10 @@ class FakeMatrixRoom(
         createPollResult = result
     }
 
+    fun givenEditPollResult(result: Result<Unit>) {
+        editPollResult = result
+    }
+
     fun givenSendPollResponseResult(result: Result<Unit>) {
         sendPollResponseResult = result
     }
@@ -544,7 +563,7 @@ data class SendLocationInvocation(
     val assetType: AssetType?,
 )
 
-data class CreatePollInvocation(
+data class SavePollInvocation(
     val question: String,
     val answers: List<String>,
     val maxSelections: Int,

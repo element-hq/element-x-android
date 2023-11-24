@@ -177,6 +177,23 @@ interface MatrixRoom : Closeable {
     ): Result<Unit>
 
     /**
+     * Edit a poll in the room.
+     *
+     * @param pollStartId The event ID of the poll start event.
+     * @param question The question to ask.
+     * @param answers The list of answers.
+     * @param maxSelections The maximum number of answers that can be selected.
+     * @param pollKind The kind of poll to create.
+     */
+    suspend fun editPoll(
+        pollStartId: EventId,
+        question: String,
+        answers: List<String>,
+        maxSelections: Int,
+        pollKind: PollKind,
+    ): Result<Unit>
+
+    /**
      * Send a response to a poll.
      *
      * @param pollStartId The event ID of the poll start event.

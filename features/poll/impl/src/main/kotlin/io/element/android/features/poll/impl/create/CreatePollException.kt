@@ -14,21 +14,14 @@
  * limitations under the License.
  */
 
-package io.element.android.features.poll.api.create
+package io.element.android.features.poll.impl.create
 
-import com.bumble.appyx.core.modality.BuildContext
-import com.bumble.appyx.core.node.Node
-import io.element.android.libraries.architecture.FeatureEntryPoint
+internal sealed class CreatePollException : Exception() {
+    data class GetPollFailed(
+        override val message: String?, override val cause: Throwable?
+    ) : CreatePollException()
 
-interface CreatePollEntryPoint : FeatureEntryPoint {
-    data class Params(
-        val mode: CreatePollMode,
-    )
-
-    fun nodeBuilder(parentNode: Node, buildContext: BuildContext): NodeBuilder
-
-    interface NodeBuilder {
-        fun params(params: Params): NodeBuilder
-        fun build(): Node
-    }
+    data class SavePollFailed(
+        override val message: String?, override val cause: Throwable?
+    ) : CreatePollException()
 }

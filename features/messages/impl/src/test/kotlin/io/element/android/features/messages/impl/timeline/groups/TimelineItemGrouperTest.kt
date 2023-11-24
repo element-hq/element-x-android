@@ -44,6 +44,7 @@ class TimelineItemGrouperTest {
         reactionsState = aTimelineItemReactions(count = 0),
         readReceiptState = TimelineItemReadReceipts(emptyList<ReadReceiptData>().toImmutableList()),
         localSendState = LocalEventSendState.Sent(AN_EVENT_ID),
+        isEditable = false,
         inReplyTo = null,
         isThreaded = false,
         debugInfo = aTimelineItemDebugInfo(),
