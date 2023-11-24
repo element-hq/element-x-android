@@ -157,7 +157,7 @@ private fun aCreatePollState(
         canAddAnswer = canAddAnswer,
         question = question,
         answers = answers,
-        showConfirmation = showConfirmation,
+        showBackConfirmation = showConfirmation,
         pollKind = pollKind,
         eventSink = {}
     )

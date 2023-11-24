@@ -364,34 +364,66 @@ class CreatePollPresenterTest {
     }
 
     @Test
-    fun `confirm nav back with blank fields calls nav back lambda`() = runTest {
+    fun `confirm nav back from new poll with blank fields calls nav back lambda`() = runTest {
         val presenter = createCreatePollPresenter(mode = CreatePollMode.NewPoll)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initial = awaitItem()
             Truth.assertThat(navUpInvocationsCount).isEqualTo(0)
-            Truth.assertThat(initial.showConfirmation).isFalse()
+            Truth.assertThat(initial.showBackConfirmation).isFalse()
             initial.eventSink(CreatePollEvents.ConfirmNavBack)
             Truth.assertThat(navUpInvocationsCount).isEqualTo(1)
         }
     }
 
     @Test
-    fun `confirm nav back with non blank fields shows confirmation dialog and sending hides it`() = runTest {
+    fun `confirm nav back from new poll with non blank fields shows confirmation dialog and cancelling hides it`() = runTest {
         val presenter = createCreatePollPresenter(mode = CreatePollMode.NewPoll)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initial = awaitItem()
             initial.eventSink(CreatePollEvents.SetQuestion("Non blank"))
-            Truth.assertThat(navUpInvocationsCount).isEqualTo(0)
-            Truth.assertThat(awaitItem().showConfirmation).isFalse()
+            Truth.assertThat(awaitItem().showBackConfirmation).isFalse()
             initial.eventSink(CreatePollEvents.ConfirmNavBack)
-            Truth.assertThat(navUpInvocationsCount).isEqualTo(0)
-            Truth.assertThat(awaitItem().showConfirmation).isTrue()
+            Truth.assertThat(awaitItem().showBackConfirmation).isTrue()
             initial.eventSink(CreatePollEvents.HideConfirmation)
-            Truth.assertThat(awaitItem().showConfirmation).isFalse()
+            Truth.assertThat(awaitItem().showBackConfirmation).isFalse()
+            Truth.assertThat(navUpInvocationsCount).isEqualTo(0)
+        }
+    }
+
+    @Test
+    fun `confirm nav back from existing poll with unchanged fields calls nav back lambda`() = runTest {
+        val presenter = createCreatePollPresenter(mode = CreatePollMode.EditPoll(pollEventId))
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            awaitDefaultItem()
+            val loaded = awaitPollLoaded()
+            Truth.assertThat(navUpInvocationsCount).isEqualTo(0)
+            Truth.assertThat(loaded.showBackConfirmation).isFalse()
+            loaded.eventSink(CreatePollEvents.ConfirmNavBack)
+            Truth.assertThat(navUpInvocationsCount).isEqualTo(1)
+        }
+    }
+
+    @Test
+    fun `confirm nav back from existing poll with changed fields shows confirmation dialog and cancelling hides it`() = runTest {
+        val presenter = createCreatePollPresenter(mode = CreatePollMode.EditPoll(pollEventId))
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            awaitDefaultItem()
+            val loaded = awaitPollLoaded()
+            loaded.eventSink(CreatePollEvents.SetQuestion("CHANGED"))
+            Truth.assertThat(awaitItem().showBackConfirmation).isFalse()
+            loaded.eventSink(CreatePollEvents.ConfirmNavBack)
+            Truth.assertThat(awaitItem().showBackConfirmation).isTrue()
+            loaded.eventSink(CreatePollEvents.HideConfirmation)
+            Truth.assertThat(awaitItem().showBackConfirmation).isFalse()
+            Truth.assertThat(navUpInvocationsCount).isEqualTo(0)
         }
     }
 
@@ -402,7 +434,7 @@ class CreatePollPresenterTest {
             Truth.assertThat(question).isEmpty()
             Truth.assertThat(answers).isEqualTo(listOf(Answer("", false), Answer("", false)))
             Truth.assertThat(pollKind).isEqualTo(PollKind.Disclosed)
-            Truth.assertThat(showConfirmation).isFalse()
+            Truth.assertThat(showBackConfirmation).isFalse()
         }
 
     private suspend fun TurbineTestContext<CreatePollState>.awaitPollLoaded(
