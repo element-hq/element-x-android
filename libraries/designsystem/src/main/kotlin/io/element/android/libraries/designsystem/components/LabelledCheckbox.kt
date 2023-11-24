@@ -32,8 +32,8 @@ import io.element.android.libraries.designsystem.theme.components.Text
 fun LabelledCheckbox(
     checked: Boolean,
     text: String,
+    onCheckedChange: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
-    onCheckedChange: (Boolean) -> Unit = {},
     enabled: Boolean = true,
 ) {
     Row(
@@ -60,6 +60,7 @@ internal fun LabelledCheckboxPreview() = ElementThemedPreview { ContentToPreview
 private fun ContentToPreview() {
     LabelledCheckbox(
         checked = true,
+        onCheckedChange = {},
         text = "Some text",
     )
 }

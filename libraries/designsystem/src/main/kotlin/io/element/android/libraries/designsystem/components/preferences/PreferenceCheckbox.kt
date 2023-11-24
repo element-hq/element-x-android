@@ -44,13 +44,13 @@ import io.element.android.libraries.theme.ElementTheme
 fun PreferenceCheckbox(
     title: String,
     isChecked: Boolean,
+    onCheckedChange: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
     supportingText: String? = null,
     enabled: Boolean = true,
     icon: ImageVector? = null,
     @DrawableRes iconResourceId: Int? = null,
     showIconAreaIfNoIcon: Boolean = false,
-    onCheckedChange: (Boolean) -> Unit = {},
 ) {
     Row(
         modifier = modifier
@@ -104,14 +104,16 @@ private fun ContentToPreview() {
             title = "Checkbox",
             iconResourceId = CommonDrawables.ic_compound_threads,
             enabled = true,
-            isChecked = true
+            isChecked = true,
+            onCheckedChange = {},
         )
         PreferenceCheckbox(
             title = "Checkbox with supporting text",
             supportingText = "Supporting text",
             iconResourceId = CommonDrawables.ic_compound_threads,
             enabled = true,
-            isChecked = true
+            isChecked = true,
+            onCheckedChange = {},
         )
     }
 }

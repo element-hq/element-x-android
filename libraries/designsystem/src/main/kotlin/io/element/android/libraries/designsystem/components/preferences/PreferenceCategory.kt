@@ -82,13 +82,15 @@ private fun ContentToPreview() {
         PreferenceSwitch(
             title = "Switch",
             iconResourceId = CommonDrawables.ic_compound_threads,
-            isChecked = true
+            isChecked = true,
+            onCheckedChange = {},
         )
         PreferenceSlide(
             title = "Slide",
             summary = "Summary",
             value = 0.75F,
             showIconAreaIfNoIcon = true,
+            onValueChange = {},
         )
     }
 }

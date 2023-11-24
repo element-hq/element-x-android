@@ -58,9 +58,9 @@ private const val BUBBLE_WIDTH_RATIO = 0.85f
 fun MessageEventBubble(
     state: BubbleState,
     interactionSource: MutableInteractionSource,
+    onClick: () -> Unit,
+    onLongClick: () -> Unit,
     modifier: Modifier = Modifier,
-    onClick: () -> Unit = {},
-    onLongClick: () -> Unit = {},
     content: @Composable () -> Unit = {},
 ) {
     fun bubbleShape(): Shape {
@@ -144,6 +144,8 @@ internal fun MessageEventBubblePreview(@PreviewParameter(BubbleStateProvider::cl
         MessageEventBubble(
             state = state,
             interactionSource = remember { MutableInteractionSource() },
+            onClick = {},
+            onLongClick = {},
         ) {
             // Render the state as a text to better understand the previews
             Box(

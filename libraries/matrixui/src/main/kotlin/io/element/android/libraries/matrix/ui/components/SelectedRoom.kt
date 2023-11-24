@@ -50,8 +50,8 @@ import io.element.android.libraries.ui.strings.CommonStrings
 @Composable
 fun SelectedRoom(
     roomSummary: RoomSummaryDetails,
+    onRoomRemoved: (RoomSummaryDetails) -> Unit,
     modifier: Modifier = Modifier,
-    onRoomRemoved: (RoomSummaryDetails) -> Unit = {},
 ) {
     Box(
         modifier = modifier
@@ -104,6 +104,7 @@ internal fun SelectedRoomPreview() = ElementPreview {
             lastMessageTimestamp = null,
             unreadNotificationCount = 0,
             inviter = null,
-        )
+        ),
+        onRoomRemoved = {},
     )
 }

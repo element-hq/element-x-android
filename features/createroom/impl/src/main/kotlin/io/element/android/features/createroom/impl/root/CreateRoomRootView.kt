@@ -55,11 +55,11 @@ import io.element.android.libraries.ui.strings.CommonStrings
 @Composable
 fun CreateRoomRootView(
     state: CreateRoomRootState,
+    onClosePressed: () -> Unit,
+    onNewRoomClicked: () -> Unit,
+    onOpenDM: (RoomId) -> Unit,
+    onInviteFriendsClicked: () -> Unit,
     modifier: Modifier = Modifier,
-    onClosePressed: () -> Unit = {},
-    onNewRoomClicked: () -> Unit = {},
-    onOpenDM: (RoomId) -> Unit = {},
-    onInviteFriendsClicked: () -> Unit = {},
 ) {
     Scaffold(
         modifier = modifier.fillMaxWidth(),
@@ -81,6 +81,7 @@ fun CreateRoomRootView(
                 onUserSelected = {
                     state.eventSink(CreateRoomRootEvents.StartDM(it))
                 },
+                onUserDeselected = { },
             )
 
             if (!state.userListState.isSearchActive) {
@@ -111,8 +112,8 @@ fun CreateRoomRootView(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun CreateRoomRootViewTopBar(
+    onClosePressed: () -> Unit,
     modifier: Modifier = Modifier,
-    onClosePressed: () -> Unit = {},
 ) {
     TopAppBar(
         modifier = modifier,
@@ -134,9 +135,9 @@ private fun CreateRoomRootViewTopBar(
 @Composable
 private fun CreateRoomActionButtonsList(
     state: CreateRoomRootState,
+    onNewRoomClicked: () -> Unit,
+    onInvitePeopleClicked: () -> Unit,
     modifier: Modifier = Modifier,
-    onNewRoomClicked: () -> Unit = {},
-    onInvitePeopleClicked: () -> Unit = {},
 ) {
     Column(modifier = modifier) {
         CreateRoomActionButton(
@@ -156,8 +157,8 @@ private fun CreateRoomActionButtonsList(
 private fun CreateRoomActionButton(
     @DrawableRes iconRes: Int,
     text: String,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    onClick: () -> Unit = {},
 ) {
     Row(
         modifier = modifier
@@ -187,5 +188,9 @@ internal fun CreateRoomRootViewPreview(@PreviewParameter(CreateRoomRootStateProv
     ElementPreview {
         CreateRoomRootView(
             state = state,
+            onClosePressed = {},
+            onNewRoomClicked = {},
+            onOpenDM = {},
+            onInviteFriendsClicked = {},
         )
     }

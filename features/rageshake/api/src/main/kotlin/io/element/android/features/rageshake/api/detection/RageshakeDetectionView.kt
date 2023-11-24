@@ -70,7 +70,7 @@ fun RageshakeDetectionView(
 
 @Composable
 private fun TakeScreenshot(
-    onScreenshotTaken: (ImageResult) -> Unit = {}
+    onScreenshotTaken: (ImageResult) -> Unit
 ) {
     val view = LocalView.current
     LaunchedEffect(Unit) {
