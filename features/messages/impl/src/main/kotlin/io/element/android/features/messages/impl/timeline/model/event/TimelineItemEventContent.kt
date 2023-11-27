@@ -63,3 +63,13 @@ fun TimelineItemEventContent.canReact(): Boolean =
         is TimelineItemRedactedContent,
         TimelineItemUnknownContent -> false
     }
+
+/**
+ * Whether the event content has been edited.
+ */
+fun TimelineItemEventContent.isEdited(): Boolean =
+    when (this) {
+        is TimelineItemTextBasedContent -> isEdited
+        is TimelineItemPollContent -> isEdited
+        else -> false
+    }

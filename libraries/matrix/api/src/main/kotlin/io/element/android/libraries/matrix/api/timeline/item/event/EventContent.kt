@@ -45,7 +45,8 @@ data class PollContent(
     val maxSelections: ULong,
     val answers: List<PollAnswer>,
     val votes: Map<String, List<UserId>>,
-    val endTime: ULong?
+    val endTime: ULong?,
+    val isEdited: Boolean,
 ) : EventContent
 
 data class UnableToDecryptContent(

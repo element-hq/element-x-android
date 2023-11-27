@@ -129,7 +129,8 @@ class InReplyToDetailsProvider : PreviewParameterProvider<InReplyToDetails> {
                 maxSelections = 1u,
                 answers = emptyList(),
                 votes = emptyMap(),
-                endTime = null
+                endTime = null,
+                isEdited = false,
             ),
         ).map {
             aInReplyToDetails(
