@@ -489,11 +489,11 @@ class RustMatrixRoom(
     ): Result<Unit> = withContext(roomDispatcher) {
         runCatching {
             val pollStartEvent =
-                innerRoom.getEventTimelineItemByEventId(
+                innerTimeline.getEventTimelineItemByEventId(
                     eventId = pollStartId.value
                 )
             pollStartEvent.use {
-                innerRoom.editPoll(
+                innerTimeline.editPoll(
                     question = question,
                     answers = answers,
                     maxSelections = maxSelections.toUByte(),
