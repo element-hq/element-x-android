@@ -18,7 +18,16 @@ package io.element.android.libraries.push.impl.notifications
 
 import io.element.android.libraries.push.impl.notifications.model.NotifiableEvent
 
-interface NotificationEventPersistence {
-    fun loadEvents(factory: (List<NotifiableEvent>) -> NotificationEventQueue): NotificationEventQueue
-    fun persistEvents(queuedEvents: NotificationEventQueue)
+class InMemoryNotificationEventPersistence(
+    initialData: List<NotifiableEvent> = emptyList()
+) : NotificationEventPersistence {
+    private var data: List<NotifiableEvent> = initialData
+
+    override fun loadEvents(factory: (List<NotifiableEvent>) -> NotificationEventQueue): NotificationEventQueue {
+        return factory(data)
+    }
+
+    override fun persistEvents(queuedEvents: NotificationEventQueue) {
+        data = queuedEvents.rawEvents()
+    }
 }

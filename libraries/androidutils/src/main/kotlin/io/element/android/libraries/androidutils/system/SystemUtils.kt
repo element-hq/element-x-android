@@ -16,8 +16,6 @@
 
 package io.element.android.libraries.androidutils.system
 
-import android.annotation.TargetApi
-import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
@@ -102,19 +100,6 @@ fun Context.openAppSettingsPage(
     } catch (activityNotFoundException: ActivityNotFoundException) {
         toast(noActivityFoundMessage)
     }
-}
-
-/**
- * Shows notification system settings for the given channel id.
- */
-@TargetApi(Build.VERSION_CODES.O)
-fun Activity.startNotificationChannelSettingsIntent(channelID: String) {
-    if (!supportNotificationChannels()) return
-    val intent = Intent(Settings.ACTION_CHANNEL_NOTIFICATION_SETTINGS).apply {
-        putExtra(Settings.EXTRA_APP_PACKAGE, packageName)
-        putExtra(Settings.EXTRA_CHANNEL_ID, channelID)
-    }
-    startActivity(intent)
 }
 
 @RequiresApi(Build.VERSION_CODES.O)

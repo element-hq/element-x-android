@@ -14,11 +14,16 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.push.impl.notifications
+package io.element.android.libraries.push.impl.notifications.factories
 
-import io.element.android.libraries.push.impl.notifications.model.NotifiableEvent
+import android.content.Intent
+import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.matrix.api.core.ThreadId
+import io.element.android.libraries.push.impl.intent.IntentProvider
 
-interface NotificationEventPersistence {
-    fun loadEvents(factory: (List<NotifiableEvent>) -> NotificationEventQueue): NotificationEventQueue
-    fun persistEvents(queuedEvents: NotificationEventQueue)
+class FakeIntentProvider : IntentProvider {
+    override fun getViewRoomIntent(sessionId: SessionId, roomId: RoomId?, threadId: ThreadId?) = Intent()
+
+    override fun getInviteListIntent(sessionId: SessionId) = Intent()
 }
