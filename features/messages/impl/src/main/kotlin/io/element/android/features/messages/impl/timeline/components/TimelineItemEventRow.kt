@@ -41,7 +41,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -60,6 +59,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.constraintlayout.compose.ConstrainScope
 import androidx.constraintlayout.compose.ConstraintLayout
+import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.messages.impl.timeline.TimelineEvents
 import io.element.android.features.messages.impl.timeline.aTimelineItemEvent
 import io.element.android.features.messages.impl.timeline.components.event.TimelineItemEventContentView
@@ -67,6 +67,7 @@ import io.element.android.features.messages.impl.timeline.components.event.toExt
 import io.element.android.features.messages.impl.timeline.components.receipt.ReadReceiptViewState
 import io.element.android.features.messages.impl.timeline.components.receipt.TimelineItemReadReceiptView
 import io.element.android.features.messages.impl.timeline.model.InReplyToDetails
+import io.element.android.features.messages.impl.timeline.model.InReplyToMetadata
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.TimelineItemGroupPosition
 import io.element.android.features.messages.impl.timeline.model.bubble.BubbleState
@@ -76,6 +77,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
+import io.element.android.features.messages.impl.timeline.model.metadata
 import io.element.android.libraries.designsystem.colors.AvatarColorsProvider
 import io.element.android.libraries.designsystem.components.EqualWidthColumn
 import io.element.android.libraries.designsystem.components.avatar.Avatar
@@ -90,18 +92,8 @@ import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
-import io.element.android.libraries.matrix.api.timeline.item.event.AudioMessageType
-import io.element.android.libraries.matrix.api.timeline.item.event.FileMessageType
-import io.element.android.libraries.matrix.api.timeline.item.event.ImageMessageType
-import io.element.android.libraries.matrix.api.timeline.item.event.LocationMessageType
-import io.element.android.libraries.matrix.api.timeline.item.event.MessageContent
-import io.element.android.libraries.matrix.api.timeline.item.event.PollContent
-import io.element.android.libraries.matrix.api.timeline.item.event.VideoMessageType
-import io.element.android.libraries.matrix.api.timeline.item.event.VoiceMessageType
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnail
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailInfo
-import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailType
-import io.element.android.compound.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.coroutines.launch
 import kotlin.math.abs
@@ -628,77 +620,6 @@ private fun ReplyToContent(
             )
         }
     }
-}
-
-/**
- * Computes metadata for the in reply to message.
- *
- * Metadata can be either a thumbnail with a text OR just a text.
- */
-@Composable
-private fun InReplyToDetails.metadata(): InReplyToMetadata? = when (eventContent) {
-    is MessageContent -> when (val type = eventContent.type) {
-        is ImageMessageType -> InReplyToMetadata.Thumbnail(
-            AttachmentThumbnailInfo(
-                thumbnailSource = type.info?.thumbnailSource ?: type.source,
-                textContent = eventContent.body,
-                type = AttachmentThumbnailType.Image,
-                blurHash = type.info?.blurhash,
-            )
-        )
-        is VideoMessageType -> InReplyToMetadata.Thumbnail(
-            AttachmentThumbnailInfo(
-                thumbnailSource = type.info?.thumbnailSource,
-                textContent = eventContent.body,
-                type = AttachmentThumbnailType.Video,
-                blurHash = type.info?.blurhash,
-            )
-        )
-        is FileMessageType -> InReplyToMetadata.Thumbnail(
-            AttachmentThumbnailInfo(
-                thumbnailSource = type.info?.thumbnailSource,
-                textContent = eventContent.body,
-                type = AttachmentThumbnailType.File,
-            )
-        )
-        is LocationMessageType -> InReplyToMetadata.Thumbnail(
-            AttachmentThumbnailInfo(
-                textContent = stringResource(CommonStrings.common_shared_location),
-                type = AttachmentThumbnailType.Location,
-            )
-        )
-        is AudioMessageType -> InReplyToMetadata.Thumbnail(
-            AttachmentThumbnailInfo(
-                textContent = eventContent.body,
-                type = AttachmentThumbnailType.Audio,
-            )
-        )
-        is VoiceMessageType -> InReplyToMetadata.Thumbnail(
-            AttachmentThumbnailInfo(
-                textContent = stringResource(CommonStrings.common_voice_message),
-                type = AttachmentThumbnailType.Voice,
-            )
-        )
-        else -> InReplyToMetadata.Text(textContent ?: eventContent.body)
-    }
-    is PollContent -> InReplyToMetadata.Thumbnail(
-        AttachmentThumbnailInfo(
-            textContent = eventContent.question,
-            type = AttachmentThumbnailType.Poll,
-        )
-    )
-    else -> null
-}
-
-@Immutable
-private sealed interface InReplyToMetadata {
-    data class Thumbnail(val attachmentThumbnailInfo: AttachmentThumbnailInfo) : InReplyToMetadata
-    data class Text(val text: String) : InReplyToMetadata
-
-    val isThumbnail: Boolean
-        get() = this is Thumbnail
-    val isText: Boolean
-        get() = this is Text
 }
 
 @PreviewsDayNight
