@@ -25,10 +25,10 @@ import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 
 @RunWith(RobolectricTestRunner::class)
-class NotificationEventPersistenceTest {
+class DefaultNotificationEventPersistenceTest {
     @Test
     fun `loadEvents should return empty NotificationEventQueue`() {
-        val sut = createNotificationEventPersistence()
+        val sut = createDefaultNotificationEventPersistence()
         val result = sut.loadEvents(
             factory = { rawEvents ->
                 NotificationEventQueue(rawEvents.toMutableList(), seenEventIds = CircularCache.create(cacheSize = 25))
@@ -39,7 +39,7 @@ class NotificationEventPersistenceTest {
 
     @Test
     fun `after persisting NotificationEventQueue, loadEvents should return non-empty NotificationEventQueue`() {
-        val sut = createNotificationEventPersistence()
+        val sut = createDefaultNotificationEventPersistence()
         val notificationEventQueue = NotificationEventQueue(mutableListOf(), seenEventIds = CircularCache.create(cacheSize = 25))
         // First persist an empty queue
         sut.persistEvents(notificationEventQueue)
@@ -57,8 +57,8 @@ class NotificationEventPersistenceTest {
         // assertThat(result.isEmpty()).isFalse()
     }
 
-    private fun createNotificationEventPersistence(): NotificationEventPersistence {
+    private fun createDefaultNotificationEventPersistence(): DefaultNotificationEventPersistence {
         val context = RuntimeEnvironment.getApplication()
-        return NotificationEventPersistence(context)
+        return DefaultNotificationEventPersistence(context)
     }
 }
