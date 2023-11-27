@@ -30,7 +30,6 @@ import io.element.android.libraries.push.impl.notifications.debug.annotateForDeb
 import io.element.android.libraries.push.impl.notifications.factories.NotificationCreator
 import io.element.android.libraries.push.impl.notifications.model.NotifiableMessageEvent
 import io.element.android.services.toolbox.api.strings.StringProvider
-import timber.log.Timber
 import javax.inject.Inject
 
 class RoomGroupMessageCreator @Inject constructor(
@@ -133,22 +132,16 @@ class RoomGroupMessageCreator @Inject constructor(
     }
 
     private fun createRoomMessagesGroupSummaryLine(events: List<NotifiableMessageEvent>, roomName: String, roomIsDirect: Boolean): CharSequence {
-        return try {
-            when (events.size) {
-                1 -> createFirstMessageSummaryLine(events.first(), roomName, roomIsDirect)
-                else -> {
-                    stringProvider.getQuantityString(
-                        R.plurals.notification_compat_summary_line_for_room,
-                        events.size,
-                        roomName,
-                        events.size
-                    )
-                }
+        return when (events.size) {
+            1 -> createFirstMessageSummaryLine(events.first(), roomName, roomIsDirect)
+            else -> {
+                stringProvider.getQuantityString(
+                    R.plurals.notification_compat_summary_line_for_room,
+                    events.size,
+                    roomName,
+                    events.size
+                )
             }
-        } catch (e: Throwable) {
-            // String not found or bad format
-            Timber.v("%%%%%%%% REFRESH NOTIFICATION DRAWER failed to resolve string")
-            roomName
         }
     }
 
