@@ -267,42 +267,6 @@ class NotificationCreatorTest {
         result.commonAssertions()
     }
 
-    private fun createNotificationCreator(
-        context: Context = RuntimeEnvironment.getApplication(),
-        buildMeta: BuildMeta = aBuildMeta(),
-        notificationChannels: NotificationChannels = createNotificationChannels()
-    ): NotificationCreator {
-        return NotificationCreator(
-            context = context,
-            notificationChannels = notificationChannels,
-            stringProvider = FakeStringProvider("test"),
-            buildMeta = buildMeta,
-            pendingIntentFactory = PendingIntentFactory(
-                context,
-                FakeIntentProvider(),
-                FakeSystemClock(),
-                NotificationActionIds(buildMeta),
-            ),
-            markAsReadActionFactory = MarkAsReadActionFactory(
-                context = context,
-                actionIds = NotificationActionIds(buildMeta),
-                stringProvider = FakeStringProvider("MarkAsReadActionFactory"),
-                clock = FakeSystemClock(),
-            ),
-            quickReplyActionFactory = QuickReplyActionFactory(
-                context = context,
-                actionIds = NotificationActionIds(buildMeta),
-                stringProvider = FakeStringProvider("QuickReplyActionFactory"),
-                clock = FakeSystemClock(),
-            ),
-        )
-    }
-
-    private fun createNotificationChannels(): NotificationChannels {
-        val context = RuntimeEnvironment.getApplication()
-        return NotificationChannels(context, FakeStringProvider(""))
-    }
-
     private fun Notification.commonAssertions(
         expectedGroup: String? = A_SESSION_ID.value,
         expectedCategory: String? = NotificationCompat.CATEGORY_MESSAGE,
@@ -311,4 +275,40 @@ class NotificationCreatorTest {
         assertThat(group).isEqualTo(expectedGroup)
         assertThat(category).isEqualTo(expectedCategory)
     }
+}
+
+fun createNotificationCreator(
+    context: Context = RuntimeEnvironment.getApplication(),
+    buildMeta: BuildMeta = aBuildMeta(),
+    notificationChannels: NotificationChannels = createNotificationChannels()
+): NotificationCreator {
+    return NotificationCreator(
+        context = context,
+        notificationChannels = notificationChannels,
+        stringProvider = FakeStringProvider("test"),
+        buildMeta = buildMeta,
+        pendingIntentFactory = PendingIntentFactory(
+            context,
+            FakeIntentProvider(),
+            FakeSystemClock(),
+            NotificationActionIds(buildMeta),
+        ),
+        markAsReadActionFactory = MarkAsReadActionFactory(
+            context = context,
+            actionIds = NotificationActionIds(buildMeta),
+            stringProvider = FakeStringProvider("MarkAsReadActionFactory"),
+            clock = FakeSystemClock(),
+        ),
+        quickReplyActionFactory = QuickReplyActionFactory(
+            context = context,
+            actionIds = NotificationActionIds(buildMeta),
+            stringProvider = FakeStringProvider("QuickReplyActionFactory"),
+            clock = FakeSystemClock(),
+        ),
+    )
+}
+
+fun createNotificationChannels(): NotificationChannels {
+    val context = RuntimeEnvironment.getApplication()
+    return NotificationChannels(context, FakeStringProvider(""))
 }

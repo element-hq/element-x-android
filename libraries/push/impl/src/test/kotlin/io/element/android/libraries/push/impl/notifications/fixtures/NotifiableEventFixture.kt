@@ -77,13 +77,14 @@ fun aNotifiableMessageEvent(
     roomId: RoomId = A_ROOM_ID,
     eventId: EventId = AN_EVENT_ID,
     threadId: ThreadId? = null,
-    isRedacted: Boolean = false
+    isRedacted: Boolean = false,
+    timestamp: Long = 0,
 ) = NotifiableMessageEvent(
     sessionId = sessionId,
     eventId = eventId,
     editedEventId = null,
     noisy = false,
-    timestamp = 0,
+    timestamp = timestamp,
     senderName = "sender-name",
     senderId = UserId("@sending-id:domain.com"),
     body = "message-body",
