@@ -24,6 +24,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.tooling.preview.Preview
+import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
 import io.element.android.libraries.designsystem.theme.components.Button
@@ -31,7 +32,6 @@ import io.element.android.libraries.designsystem.theme.components.DropdownMenu
 import io.element.android.libraries.designsystem.theme.components.DropdownMenuItem
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.designsystem.utils.CommonDrawables
 
 @Preview(group = PreviewGroup.Menus)
 @Composable
@@ -55,7 +55,7 @@ internal fun MenuPreview() {
                 val trailingIcon: @Composable (() -> Unit)? = if (i in 3..4) {
                     @Composable {
                         Icon(
-                            resourceId = CommonDrawables.ic_compound_chevron_right,
+                            imageVector = CompoundIcons.ChevronRight,
                             contentDescription = null,
                         )
                     }

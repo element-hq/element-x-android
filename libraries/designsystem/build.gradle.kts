@@ -35,7 +35,7 @@ android {
     }
 
     dependencies {
-        api(projects.libraries.theme)
+        api(libs.compound)
         // Should not be there, but this is a POC
         implementation(libs.coil.compose)
         implementation(libs.vanniktech.blurhash)

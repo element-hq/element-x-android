@@ -45,7 +45,7 @@ import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.text.toSp
 import io.element.android.libraries.designsystem.theme.components.Icon
-import io.element.android.libraries.theme.ElementTheme
+import io.element.android.compound.theme.ElementTheme
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 

@@ -32,13 +32,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.compound.theme.ElementTheme
+import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Surface
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.designsystem.utils.CommonDrawables
-import io.element.android.libraries.theme.ElementTheme
 
 private val CORNER_RADIUS = 8.dp
 
@@ -78,7 +78,7 @@ fun GroupHeaderView(
                 )
                 Icon(
                     modifier = Modifier.rotate(if (isExpanded) 180f else 0f),
-                    resourceId = CommonDrawables.ic_compound_chevron_down,
+                    imageVector = CompoundIcons.ChevronDown,
                     contentDescription = null,
                     tint = MaterialTheme.colorScheme.secondary
                 )

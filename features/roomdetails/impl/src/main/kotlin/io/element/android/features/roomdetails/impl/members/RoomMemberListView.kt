@@ -56,7 +56,7 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.components.MatrixUserRow
-import io.element.android.libraries.theme.ElementTheme
+import io.element.android.compound.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
 

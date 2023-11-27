@@ -47,14 +47,14 @@ import androidx.compose.ui.graphics.isSpecified
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import io.element.android.compound.theme.ElementTheme
+import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
-import io.element.android.libraries.designsystem.utils.CommonDrawables
-import io.element.android.libraries.theme.ElementTheme
 
 // Designs: https://www.figma.com/file/G1xy0HDZKJf5TCRFmKb5d5/Compound-Android-Components?type=design&mode=design&t=U03tOFZz5FSLVUMa-1
 
@@ -248,7 +248,7 @@ sealed interface IconSource {
 
     @Composable
     fun getPainter(): Painter = when (this) {
-        is Resource -> painterResource(id)
+        is Resource -> rememberVectorPainter(image = ImageVector.vectorResource(id))
         is Vector -> rememberVectorPainter(image = vector)
     }
 }
@@ -395,7 +395,7 @@ private fun ColumnScope.ButtonMatrixPreview(
     )
     // With icon
     ButtonRowPreview(
-        leadingIcon = IconSource.Resource(CommonDrawables.ic_compound_share_android),
+        leadingIcon = IconSource.Vector(CompoundIcons.ShareAndroid),
         style = style,
         size = size,
         destructive = destructive,

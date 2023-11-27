@@ -40,6 +40,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import io.element.android.compound.theme.ElementTheme
+import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.analytics.api.AnalyticsOptInEvents
 import io.element.android.features.analytics.api.Config
 import io.element.android.libraries.designsystem.atomic.molecules.ButtonColumnMolecule
@@ -47,17 +49,15 @@ import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubti
 import io.element.android.libraries.designsystem.atomic.organisms.InfoListItem
 import io.element.android.libraries.designsystem.atomic.organisms.InfoListOrganism
 import io.element.android.libraries.designsystem.atomic.pages.HeaderFooterPage
-import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.text.buildAnnotatedStringWithStyledPart
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.ButtonSize
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.designsystem.theme.temporaryColorBgSpecial
-import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.designsystem.utils.LogCompositions
-import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.persistentListOf
 
@@ -147,7 +147,7 @@ private fun CheckIcon(modifier: Modifier = Modifier) {
             .size(20.dp)
             .background(color = MaterialTheme.colorScheme.background, shape = CircleShape)
             .padding(2.dp),
-        resourceId = CommonDrawables.ic_compound_check,
+        imageVector = CompoundIcons.Check,
         contentDescription = null,
         tint = ElementTheme.colors.textActionAccent,
     )

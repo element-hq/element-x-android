@@ -25,9 +25,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import io.element.android.compound.theme.ElementTheme
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.designsystem.atomic.pages.FlowStepPage
 import io.element.android.libraries.designsystem.components.ProgressDialog
@@ -44,7 +47,6 @@ import io.element.android.libraries.matrix.api.encryption.BackupUploadState
 import io.element.android.libraries.matrix.api.encryption.SteadyStateException
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
-import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
@@ -61,7 +63,7 @@ fun LogoutView(
         onBackClicked = onBackClicked,
         title = title(state),
         subTitle = subtitle(state),
-        iconResourceId = CommonDrawables.ic_key,
+        iconVector = ImageVector.vectorResource(CommonDrawables.ic_key),
         modifier = modifier,
         content = { Content(state) },
         buttons = {

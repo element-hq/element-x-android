@@ -100,7 +100,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.VoiceMessageT
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnail
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailInfo
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailType
-import io.element.android.libraries.theme.ElementTheme
+import io.element.android.compound.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.coroutines.launch
 import kotlin.math.abs

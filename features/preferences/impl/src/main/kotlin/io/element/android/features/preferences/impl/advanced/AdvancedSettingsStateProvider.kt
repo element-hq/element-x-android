@@ -17,7 +17,7 @@
 package io.element.android.features.preferences.impl.advanced
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import io.element.android.libraries.theme.theme.Theme
+import io.element.android.compound.theme.Theme
 
 open class AdvancedSettingsStateProvider : PreviewParameterProvider<AdvancedSettingsState> {
     override val values: Sequence<AdvancedSettingsState>

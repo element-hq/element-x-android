@@ -38,7 +38,7 @@ import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.preview.PreviewGroup
 import io.element.android.libraries.designsystem.preview.sheetStateForPreview
-import io.element.android.libraries.theme.ElementTheme
+import io.element.android.compound.theme.ElementTheme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 

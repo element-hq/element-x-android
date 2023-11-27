@@ -22,8 +22,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import io.element.android.features.ftue.impl.R
 import io.element.android.libraries.designsystem.atomic.pages.SunsetPage
-import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 
 @Composable
 fun MigrationScreenView(

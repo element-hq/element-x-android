@@ -24,6 +24,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import io.element.android.compound.theme.ElementTheme
+import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.designsystem.components.list.ListItemContent
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -32,9 +34,7 @@ import io.element.android.libraries.designsystem.theme.components.ListItem
 import io.element.android.libraries.designsystem.theme.components.ListItemStyle
 import io.element.android.libraries.designsystem.theme.components.ModalBottomSheet
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.matrix.api.core.RoomId
-import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -87,8 +87,8 @@ private fun RoomListModalBottomSheetContent(
             },
             modifier = Modifier.clickable { onRoomSettingsClicked(contextMenu.roomId) },
             leadingContent = ListItemContent.Icon(
-                iconSource = IconSource.Resource(
-                    CommonDrawables.ic_compound_settings,
+                iconSource = IconSource.Vector(
+                    CompoundIcons.Settings,
                     contentDescription = stringResource(id = CommonStrings.common_settings)
                 )
             ),
@@ -98,8 +98,8 @@ private fun RoomListModalBottomSheetContent(
             headlineContent = { Text(text = stringResource(id = CommonStrings.action_leave_room)) },
             modifier = Modifier.clickable { onLeaveRoomClicked(contextMenu.roomId) },
             leadingContent = ListItemContent.Icon(
-                iconSource = IconSource.Resource(
-                    CommonDrawables.ic_compound_leave,
+                iconSource = IconSource.Vector(
+                    CompoundIcons.Leave,
                     contentDescription = stringResource(id = CommonStrings.action_leave_room)
                 )
             ),

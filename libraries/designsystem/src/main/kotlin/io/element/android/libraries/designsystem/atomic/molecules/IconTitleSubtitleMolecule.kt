@@ -28,13 +28,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import io.element.android.libraries.designsystem.R
+import io.element.android.compound.theme.ElementTheme
+import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.designsystem.atomic.atoms.RoundedIconAtom
 import io.element.android.libraries.designsystem.atomic.atoms.RoundedIconAtomSize
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.theme.ElementTheme
 
 /**
  * IconTitleSubtitleMolecule is a molecule which displays an icon, a title and a subtitle.
@@ -90,7 +90,7 @@ fun IconTitleSubtitleMolecule(
 @Composable
 internal fun IconTitleSubtitleMoleculePreview() = ElementPreview {
     IconTitleSubtitleMolecule(
-        iconResourceId = R.drawable.ic_compound_chat,
+        iconImageVector = CompoundIcons.Chat,
         title = "Title",
         subTitle = "Subtitle",
     )

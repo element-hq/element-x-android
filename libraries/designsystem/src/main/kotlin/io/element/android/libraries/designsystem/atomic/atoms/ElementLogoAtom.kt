@@ -33,13 +33,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import io.element.android.compound.theme.ElementTheme
 import io.element.android.libraries.designsystem.R
 import io.element.android.libraries.designsystem.modifiers.blurCompat
 import io.element.android.libraries.designsystem.modifiers.blurredShapeShadow
 import io.element.android.libraries.designsystem.modifiers.canUseBlurMaskFilter
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
-import io.element.android.libraries.theme.ElementTheme
 
 @Composable
 fun ElementLogoAtom(

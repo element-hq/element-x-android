@@ -35,6 +35,7 @@ import com.bumble.appyx.navmodel.backstack.operation.singleTop
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
+import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.login.api.oidc.OidcAction
 import io.element.android.features.login.api.oidc.OidcActionFlow
 import io.element.android.features.login.impl.accountprovider.AccountProviderDataSource
@@ -54,7 +55,6 @@ import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.matrix.api.auth.OidcDetails
-import io.element.android.libraries.theme.ElementTheme
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize

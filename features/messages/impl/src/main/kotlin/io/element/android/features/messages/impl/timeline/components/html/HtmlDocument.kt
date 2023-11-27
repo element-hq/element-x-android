@@ -65,8 +65,8 @@ import io.element.android.libraries.designsystem.theme.components.Surface
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
-import io.element.android.libraries.theme.ElementTheme
-import io.element.android.libraries.theme.LinkColor
+import io.element.android.compound.theme.ElementTheme
+import io.element.android.compound.theme.LinkColor
 import kotlinx.collections.immutable.persistentMapOf
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
