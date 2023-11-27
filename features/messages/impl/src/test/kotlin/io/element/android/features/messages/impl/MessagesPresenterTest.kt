@@ -264,7 +264,7 @@ class MessagesPresenterTest {
             val mediaMessage = aMessageEvent(
                 content = TimelineItemVideoContent(
                     body = "video.mp4",
-                    duration = 10L,
+                    duration = 10.milliseconds,
                     videoSource = MediaSource(AN_AVATAR_URL),
                     thumbnailSource = MediaSource(AN_AVATAR_URL),
                     mimeType = MimeTypes.Mp4,

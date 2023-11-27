@@ -16,7 +16,7 @@
 
 package io.element.android.libraries.matrix.api.media
 
-import java.time.Duration
+import kotlin.time.Duration
 
 data class AudioInfo(
     val duration: Duration?,

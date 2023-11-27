@@ -201,6 +201,7 @@ class VoiceMessageComposerPlayer @Inject constructor(
                 progress = 0f,
             )
         }
+
         /**
          * Whether this player is currently playing.
          */
@@ -211,7 +212,6 @@ class VoiceMessageComposerPlayer @Inject constructor(
          */
         val isStopped get() = this.playState == PlayState.Stopped
     }
-
 
     enum class PlayState {
         /**

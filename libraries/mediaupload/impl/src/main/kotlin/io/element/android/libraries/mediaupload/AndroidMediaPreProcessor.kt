@@ -47,8 +47,9 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.InputStream
-import java.time.Duration
 import javax.inject.Inject
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.milliseconds
 
 @ContributesBinding(AppScope::class)
 class AndroidMediaPreProcessor @Inject constructor(
@@ -269,6 +270,6 @@ fun ImageCompressionResult.toImageInfo(mimeType: String, thumbnailResult: Thumbn
 
 private fun MediaMetadataRetriever.extractDuration(): Duration {
     val durationInMs = extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)?.toLong() ?: 0L
-    return Duration.ofMillis(durationInMs)
+    return durationInMs.milliseconds
 }
 
