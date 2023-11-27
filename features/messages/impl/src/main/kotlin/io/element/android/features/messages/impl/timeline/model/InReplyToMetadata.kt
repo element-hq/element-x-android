@@ -35,11 +35,6 @@ import io.element.android.libraries.ui.strings.CommonStrings
 internal sealed interface InReplyToMetadata {
     data class Thumbnail(val attachmentThumbnailInfo: AttachmentThumbnailInfo) : InReplyToMetadata
     data class Text(val text: String) : InReplyToMetadata
-
-    val isThumbnail: Boolean
-        get() = this is Thumbnail
-    val isText: Boolean
-        get() = this is Text
 }
 
 /**
