@@ -65,6 +65,7 @@ dependencies {
     testImplementation(libs.test.mockk)
     testImplementation(libs.test.truth)
     testImplementation(libs.test.turbine)
+    testImplementation(libs.coil.test)
     testImplementation(libs.coroutines.test)
     testImplementation(projects.libraries.matrix.test)
     testImplementation(projects.services.appnavstate.test)
