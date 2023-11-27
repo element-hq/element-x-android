@@ -17,6 +17,7 @@
 package io.element.android.libraries.mediaupload.test
 
 import android.net.Uri
+import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.matrix.api.media.AudioInfo
 import io.element.android.libraries.matrix.api.media.FileInfo
 import io.element.android.libraries.mediaupload.api.MediaPreProcessor
@@ -34,7 +35,7 @@ class FakeMediaPreProcessor : MediaPreProcessor {
         MediaUploadInfo.AnyFile(
             File("test"),
             FileInfo(
-                mimetype = "*/*",
+                mimetype = MimeTypes.Any,
                 size = 999L,
                 thumbnailInfo = null,
                 thumbnailSource = null,
@@ -64,7 +65,7 @@ class FakeMediaPreProcessor : MediaPreProcessor {
                     audioInfo = AudioInfo(
                         duration = 1000.seconds,
                         size = 1000,
-                        mimetype = "audio/ogg",
+                        mimetype = MimeTypes.Ogg,
                     ),
                 )
             )

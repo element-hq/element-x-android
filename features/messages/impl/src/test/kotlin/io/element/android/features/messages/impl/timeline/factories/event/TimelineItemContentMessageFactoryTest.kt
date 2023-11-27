@@ -147,7 +147,7 @@ class TimelineItemContentMessageFactoryTest {
             blurHash = null,
             height = null,
             width = null,
-            mimeType = "application/octet-stream",
+            mimeType = MimeTypes.OctetStream,
             formattedFileSize = "0 Bytes",
             fileExtension = "",
         )
@@ -210,7 +210,7 @@ class TimelineItemContentMessageFactoryTest {
             body = "body",
             duration = Duration.ZERO,
             mediaSource = MediaSource(url = "url", json = null),
-            mimeType = "application/octet-stream",
+            mimeType = MimeTypes.OctetStream,
             formattedFileSize = "0 Bytes",
             fileExtension = "",
         )
@@ -259,7 +259,7 @@ class TimelineItemContentMessageFactoryTest {
             body = "body",
             duration = Duration.ZERO,
             mediaSource = MediaSource(url = "url", json = null),
-            mimeType = "application/octet-stream",
+            mimeType = MimeTypes.OctetStream,
             waveform = emptyList<Float>().toImmutableList()
         )
         assertThat(result).isEqualTo(expected)
@@ -316,7 +316,7 @@ class TimelineItemContentMessageFactoryTest {
             body = "body",
             duration = Duration.ZERO,
             mediaSource = MediaSource(url = "url", json = null),
-            mimeType = "application/octet-stream",
+            mimeType = MimeTypes.OctetStream,
             formattedFileSize = "0 Bytes",
             fileExtension = ""
         )
@@ -337,7 +337,7 @@ class TimelineItemContentMessageFactoryTest {
             thumbnailSource = null,
             formattedFileSize = "0 Bytes",
             fileExtension = "",
-            mimeType = "application/octet-stream",
+            mimeType = MimeTypes.OctetStream,
             blurhash = null,
             width = null,
             height = null,
@@ -402,7 +402,7 @@ class TimelineItemContentMessageFactoryTest {
             thumbnailSource = null,
             formattedFileSize = "0 Bytes",
             fileExtension = "",
-            mimeType = "application/octet-stream"
+            mimeType = MimeTypes.OctetStream
         )
         assertThat(result).isEqualTo(expected)
     }
