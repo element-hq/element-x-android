@@ -166,7 +166,7 @@ class RoomGroupMessageCreator @Inject constructor(
                 inSpans(StyleSpan(Typeface.BOLD)) {
                     append(roomName)
                     append(": ")
-                    event.senderName
+                    append(event.senderName)
                     append(" ")
                 }
                 append(event.description)

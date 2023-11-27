@@ -51,7 +51,7 @@ class RoomGroupMessageCreatorTest {
         assertThat(resultMetaWithoutFormatting).isEqualTo(
             RoomNotification.Message.Meta(
                 roomId = A_ROOM_ID,
-                summaryLine = "room-name:  message-body",
+                summaryLine = "room-name: sender-name message-body",
                 messageCount = 1,
                 latestTimestamp = A_TIMESTAMP,
                 shouldBing = false,
@@ -77,7 +77,7 @@ class RoomGroupMessageCreatorTest {
         assertThat(resultMetaWithoutFormatting).isEqualTo(
             RoomNotification.Message.Meta(
                 roomId = A_ROOM_ID,
-                summaryLine = "room-name:  message-body",
+                summaryLine = "room-name: sender-name message-body",
                 messageCount = 1,
                 latestTimestamp = A_TIMESTAMP,
                 shouldBing = true,
@@ -129,7 +129,7 @@ class RoomGroupMessageCreatorTest {
         assertThat(resultMetaWithoutFormatting).isEqualTo(
             RoomNotification.Message.Meta(
                 roomId = A_ROOM_ID,
-                summaryLine = "room-name:  message-body",
+                summaryLine = "room-name: sender-name message-body",
                 messageCount = 0,
                 latestTimestamp = A_TIMESTAMP,
                 shouldBing = false,
