@@ -188,7 +188,7 @@ class NotificationCreatorTest {
             style = null,
             compatSummary = "compatSummary",
             noisy = false,
-            lastMessageTimestamp = 123456L,
+            lastMessageTimestamp = 123_456L,
         )
         result.commonAssertions(
             expectedGroup = matrixUser.userId.value,
@@ -204,7 +204,7 @@ class NotificationCreatorTest {
             style = null,
             compatSummary = "compatSummary",
             noisy = true,
-            lastMessageTimestamp = 123456L,
+            lastMessageTimestamp = 123_456L,
         )
         result.commonAssertions(
             expectedGroup = matrixUser.userId.value,
@@ -233,7 +233,7 @@ class NotificationCreatorTest {
             ),
             threadId = null,
             largeIcon = null,
-            lastMessageTimestamp = 123456L,
+            lastMessageTimestamp = 123_456L,
             tickerText = "tickerText",
         )
         result.commonAssertions()
@@ -261,7 +261,7 @@ class NotificationCreatorTest {
             ),
             threadId = A_THREAD_ID,
             largeIcon = null,
-            lastMessageTimestamp = 123456L,
+            lastMessageTimestamp = 123_456L,
             tickerText = "tickerText",
         )
         result.commonAssertions()
