@@ -18,13 +18,11 @@ package io.element.android.features.poll.impl.create
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import dagger.assisted.Assisted
@@ -34,20 +32,18 @@ import im.vector.app.features.analytics.plan.Composer
 import im.vector.app.features.analytics.plan.PollCreation
 import io.element.android.features.messages.api.MessageComposerContext
 import io.element.android.features.poll.api.create.CreatePollMode
+import io.element.android.features.poll.impl.PollConstants.MAX_SELECTIONS
 import io.element.android.features.poll.impl.data.PollRepository
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.api.poll.PollAnswer
 import io.element.android.libraries.matrix.api.poll.PollKind
+import io.element.android.libraries.matrix.api.poll.isDisclosed
 import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.launch
 import timber.log.Timber
-
-private const val MIN_ANSWERS = 2
-private const val MAX_ANSWERS = 20
-private const val MAX_ANSWER_LENGTH = 240
-private const val MAX_SELECTIONS = 1
 
 class CreatePollPresenter @AssistedInject constructor(
     private val repository: PollRepository,
@@ -64,18 +60,31 @@ class CreatePollPresenter @AssistedInject constructor(
 
     @Composable
     override fun present(): CreatePollState {
-        var question: String by rememberSaveable { mutableStateOf("") }
-        var answers: List<String> by rememberSaveable { mutableStateOf(listOf("", "")) }
-        var pollKind: PollKind by rememberSaveable(saver = pollKindSaver) { mutableStateOf(PollKind.Disclosed) }
+        // The initial state of the form. In edit mode this will be populated with the poll being edited.
+        var initialPoll: PollFormState by rememberSaveable(stateSaver = pollFormStateSaver) {
+            mutableStateOf(PollFormState.Empty)
+        }
+        // The current state of the form.
+        var poll: PollFormState by rememberSaveable(stateSaver = pollFormStateSaver) {
+            mutableStateOf(initialPoll)
+        }
+
+        // Whether the form has been changed from the initial state
+        val isDirty: Boolean by remember { derivedStateOf { poll != initialPoll } }
+
         var showBackConfirmation: Boolean by rememberSaveable { mutableStateOf(false) }
         var showDeleteConfirmation: Boolean by rememberSaveable { mutableStateOf(false) }
 
         LaunchedEffect(Unit) {
             if (mode is CreatePollMode.EditPoll) {
                 repository.getPoll(mode.eventId).onSuccess {
-                    question = it.question
-                    answers = it.answers.map(PollAnswer::text)
-                    pollKind = it.kind
+                    val loadedPoll = PollFormState(
+                        question = it.question,
+                        answers = it.answers.map(PollAnswer::text).toPersistentList(),
+                        isDisclosed = it.kind.isDisclosed,
+                    )
+                    initialPoll = loadedPoll
+                    poll = loadedPoll
                 }.onFailure {
                     analyticsService.trackGetPollFailed(it)
                     navigateUp()
@@ -83,9 +92,9 @@ class CreatePollPresenter @AssistedInject constructor(
             }
         }
 
-        val canSave: Boolean by remember { derivedStateOf { canSave(question, answers) } }
-        val canAddAnswer: Boolean by remember { derivedStateOf { canAddAnswer(answers) } }
-        val immutableAnswers: ImmutableList<Answer> by remember { derivedStateOf { answers.toAnswers() } }
+        val canSave: Boolean by remember { derivedStateOf { poll.isValid } }
+        val canAddAnswer: Boolean by remember { derivedStateOf { poll.canAddAnswer } }
+        val immutableAnswers: ImmutableList<Answer> by remember { derivedStateOf { poll.toUiAnswers() } }
 
         val scope = rememberCoroutineScope()
 
@@ -98,14 +107,14 @@ class CreatePollPresenter @AssistedInject constructor(
                                 is CreatePollMode.EditPoll -> mode.eventId
                                 is CreatePollMode.NewPoll -> null
                             },
-                            question = question,
-                            answers = answers,
-                            pollKind = pollKind,
+                            question = poll.question,
+                            answers = poll.answers,
+                            pollKind = poll.pollKind,
                             maxSelections = MAX_SELECTIONS,
                         ).onSuccess {
                             analyticsService.capturePollSaved(
-                                isUndisclosed = pollKind == PollKind.Undisclosed,
-                                numberOfAnswers = answers.size,
+                                isUndisclosed = poll.pollKind == PollKind.Undisclosed,
+                                numberOfAnswers = poll.answers.size,
                             )
                         }.onFailure {
                             analyticsService.trackSavePollFailed(it, mode)
@@ -132,27 +141,25 @@ class CreatePollPresenter @AssistedInject constructor(
                     }
                 }
                 is CreatePollEvents.AddAnswer -> {
-                    answers = answers + ""
+                    poll = poll.withNewAnswer()
                 }
                 is CreatePollEvents.RemoveAnswer -> {
-                    answers = answers.filterIndexed { index, _ -> index != event.index }
+                    poll= poll.withAnswerRemoved(event.index)
                 }
                 is CreatePollEvents.SetAnswer -> {
-                    answers = answers.toMutableList().apply {
-                        this[event.index] = event.text.take(MAX_ANSWER_LENGTH)
-                    }
+                    poll = poll.withAnswerChanged(event.index, event.text)
                 }
                 is CreatePollEvents.SetPollKind -> {
-                    pollKind = event.pollKind
+                    poll = poll.copy(isDisclosed = event.pollKind.isDisclosed)
                 }
                 is CreatePollEvents.SetQuestion -> {
-                    question = event.question
+                    poll = poll.copy(question = event.question)
                 }
                 is CreatePollEvents.NavBack -> {
                     navigateUp()
                 }
                 CreatePollEvents.ConfirmNavBack -> {
-                    val shouldConfirm = question.isNotBlank() || answers.any { it.isNotBlank() }
+                    val shouldConfirm = isDirty
                     if (shouldConfirm) {
                         showBackConfirmation = true
                     } else {
@@ -173,9 +180,9 @@ class CreatePollPresenter @AssistedInject constructor(
             },
             canSave = canSave,
             canAddAnswer = canAddAnswer,
-            question = question,
+            question = poll.question,
             answers = immutableAnswers,
-            pollKind = pollKind,
+            pollKind = poll.pollKind,
             showBackConfirmation = showBackConfirmation,
             showDeleteConfirmation = showDeleteConfirmation,
             eventSink = ::handleEvents,
@@ -228,35 +235,12 @@ private fun AnalyticsService.trackSavePollFailed(cause: Throwable, mode: CreateP
     trackError(exception)
 }
 
-private fun canSave(
-    question: String,
-    answers: List<String>
-) = question.isNotBlank() && answers.size >= MIN_ANSWERS && answers.all { it.isNotBlank() }
-
-private fun canAddAnswer(answers: List<String>) = answers.size < MAX_ANSWERS
-
-fun List<String>.toAnswers(): ImmutableList<Answer> {
-    return map { answer ->
+fun PollFormState.toUiAnswers(): ImmutableList<Answer> {
+    return answers.map { answer ->
         Answer(
             text = answer,
-            canDelete = this.size > MIN_ANSWERS,
+            canDelete = canDeleteAnswer,
         )
     }.toImmutableList()
 }
 
-private val pollKindSaver: Saver<MutableState<PollKind>, Boolean> = Saver(
-    save = {
-        when (it.value) {
-            PollKind.Disclosed -> false
-            PollKind.Undisclosed -> true
-        }
-    },
-    restore = {
-        mutableStateOf(
-            when (it) {
-                true -> PollKind.Undisclosed
-                else -> PollKind.Disclosed
-            }
-        )
-    }
-)

@@ -76,11 +76,13 @@ fun CreatePollView(
 
     val navBack = { state.eventSink(CreatePollEvents.ConfirmNavBack) }
     BackHandler(onBack = navBack)
-    if (state.showBackConfirmation) ConfirmationDialog(
-        content = stringResource(id = R.string.screen_create_poll_cancel_confirmation_content_android),
-        onSubmitClicked = { state.eventSink(CreatePollEvents.NavBack) },
-        onDismiss = { state.eventSink(CreatePollEvents.HideConfirmation) }
-    )
+    if (state.showBackConfirmation) {
+        ConfirmationDialog(
+            content = stringResource(id = R.string.screen_create_poll_cancel_confirmation_content_android),
+            onSubmitClicked = { state.eventSink(CreatePollEvents.NavBack) },
+            onDismiss = { state.eventSink(CreatePollEvents.HideConfirmation) }
+        )
+    }
     if (state.showDeleteConfirmation) {
         ConfirmationDialog(
             title = stringResource(id = R.string.screen_edit_poll_delete_confirmation_title),
