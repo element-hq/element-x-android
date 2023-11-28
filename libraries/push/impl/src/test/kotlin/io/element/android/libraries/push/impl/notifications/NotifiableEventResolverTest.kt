@@ -53,6 +53,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
+import org.robolectric.annotation.Config
 
 @RunWith(RobolectricTestRunner::class)
 class NotifiableEventResolverTest {
@@ -96,6 +97,25 @@ class NotifiableEventResolverTest {
         )
         val result = sut.resolveEvent(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID)
         val expectedResult = createNotifiableMessageEvent(body = "Hello world")
+        assertThat(result).isEqualTo(expectedResult)
+    }
+
+    @Test
+    @Config(qualifiers = "en")
+    fun `resolve event message with mention`() = runTest {
+        val sut = createNotifiableEventResolver(
+            notificationResult = Result.success(
+                createNotificationData(
+                    content = NotificationContent.MessageLike.RoomMessage(
+                        senderId = A_USER_ID_2,
+                        messageType = TextMessageType(body = "Hello world", formatted = null)
+                    ),
+                    hasMention = true,
+                )
+            )
+        )
+        val result = sut.resolveEvent(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID)
+        val expectedResult = createNotifiableMessageEvent(body = "Mentioned you: Hello world")
         assertThat(result).isEqualTo(expectedResult)
     }
 
@@ -478,6 +498,7 @@ class NotifiableEventResolverTest {
     private fun createNotificationData(
         content: NotificationContent,
         isDirect: Boolean = false,
+        hasMention: Boolean = false,
     ): NotificationData {
         return NotificationData(
             eventId = AN_EVENT_ID,
@@ -492,7 +513,7 @@ class NotifiableEventResolverTest {
             timestamp = A_TIMESTAMP,
             content = content,
             contentUrl = null,
-            hasMention = false,
+            hasMention = hasMention,
         )
     }
 
