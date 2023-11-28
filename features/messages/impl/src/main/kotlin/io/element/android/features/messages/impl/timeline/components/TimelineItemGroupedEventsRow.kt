@@ -57,6 +57,49 @@ fun TimelineItemGroupedEventsRow(
         isExpanded.value = !isExpanded.value
     }
 
+    TimelineItemGroupedEventsRowContent(
+        isExpanded = isExpanded.value,
+        onExpandGroupClick = ::onExpandGroupClick,
+        timelineItem = timelineItem,
+        highlightedItem = highlightedItem,
+        showReadReceipts = showReadReceipts,
+        isLastOutgoingMessage = isLastOutgoingMessage,
+        sessionState = sessionState,
+        onClick = onClick,
+        onLongClick = onLongClick,
+        inReplyToClick = inReplyToClick,
+        onUserDataClick = onUserDataClick,
+        onTimestampClicked = onTimestampClicked,
+        onReactionClick = onReactionClick,
+        onReactionLongClick = onReactionLongClick,
+        onMoreReactionsClick = onMoreReactionsClick,
+        onReadReceiptClick = onReadReceiptClick,
+        eventSink = eventSink,
+        modifier = modifier,
+    )
+}
+
+@Composable
+private fun TimelineItemGroupedEventsRowContent(
+    isExpanded: Boolean,
+    onExpandGroupClick: () -> Unit,
+    timelineItem: TimelineItem.GroupedEvents,
+    highlightedItem: String?,
+    showReadReceipts: Boolean,
+    isLastOutgoingMessage: Boolean,
+    sessionState: SessionState,
+    onClick: (TimelineItem.Event) -> Unit,
+    onLongClick: (TimelineItem.Event) -> Unit,
+    inReplyToClick: (EventId) -> Unit,
+    onUserDataClick: (UserId) -> Unit,
+    onTimestampClicked: (TimelineItem.Event) -> Unit,
+    onReactionClick: (key: String, TimelineItem.Event) -> Unit,
+    onReactionLongClick: (key: String, TimelineItem.Event) -> Unit,
+    onMoreReactionsClick: (TimelineItem.Event) -> Unit,
+    onReadReceiptClick: (TimelineItem.Event) -> Unit,
+    eventSink: (TimelineEvents) -> Unit,
+    modifier: Modifier = Modifier,
+) {
     Column(modifier = modifier.animateContentSize()) {
         GroupHeaderView(
             text = pluralStringResource(
@@ -64,11 +107,11 @@ fun TimelineItemGroupedEventsRow(
                 count = timelineItem.events.size,
                 timelineItem.events.size
             ),
-            isExpanded = isExpanded.value,
-            isHighlighted = !isExpanded.value && timelineItem.events.any { it.identifier() == highlightedItem },
-            onClick = ::onExpandGroupClick,
+            isExpanded = isExpanded,
+            isHighlighted = !isExpanded && timelineItem.events.any { it.identifier() == highlightedItem },
+            onClick = onExpandGroupClick,
         )
-        if (isExpanded.value) {
+        if (isExpanded) {
             Column {
                 timelineItem.events.forEach { subGroupEvent ->
                     TimelineItemRow(
