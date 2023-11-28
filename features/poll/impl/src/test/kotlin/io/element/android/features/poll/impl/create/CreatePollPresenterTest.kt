@@ -427,6 +427,54 @@ class CreatePollPresenterTest {
         }
     }
 
+    @Test
+    fun `delete confirms`() = runTest {
+        val presenter = createCreatePollPresenter(mode = CreatePollMode.EditPoll(pollEventId))
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            awaitDefaultItem()
+            awaitPollLoaded().eventSink(CreatePollEvents.Delete(confirmed = false))
+            awaitDeleteConfirmation()
+            Truth.assertThat(fakeMatrixRoom.redactEventEventIdParam).isNull()
+        }
+    }
+
+    @Test
+    fun `delete can be cancelled`() = runTest {
+        val presenter = createCreatePollPresenter(mode = CreatePollMode.EditPoll(pollEventId))
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            awaitDefaultItem()
+            awaitPollLoaded().eventSink(CreatePollEvents.Delete(confirmed = false))
+            Truth.assertThat(fakeMatrixRoom.redactEventEventIdParam).isNull()
+            awaitDeleteConfirmation().eventSink(CreatePollEvents.HideConfirmation)
+            awaitPollLoaded().apply {
+                Truth.assertThat(showDeleteConfirmation).isFalse()
+            }
+            Truth.assertThat(fakeMatrixRoom.redactEventEventIdParam).isNull()
+        }
+    }
+
+    @Test
+    fun `delete can be confirmed`() = runTest {
+        val presenter = createCreatePollPresenter(mode = CreatePollMode.EditPoll(pollEventId))
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            awaitDefaultItem()
+            awaitPollLoaded().eventSink(CreatePollEvents.Delete(confirmed = false))
+            Truth.assertThat(fakeMatrixRoom.redactEventEventIdParam).isNull()
+            awaitDeleteConfirmation().eventSink(CreatePollEvents.Delete(confirmed = true))
+            awaitPollLoaded().apply {
+                Truth.assertThat(showDeleteConfirmation).isFalse()
+            }
+            Truth.assertThat(fakeMatrixRoom.redactEventEventIdParam).isEqualTo(pollEventId)
+        }
+    }
+
+
     private suspend fun TurbineTestContext<CreatePollState>.awaitDefaultItem() =
         awaitItem().apply {
             Truth.assertThat(canSave).isFalse()
@@ -435,6 +483,12 @@ class CreatePollPresenterTest {
             Truth.assertThat(answers).isEqualTo(listOf(Answer("", false), Answer("", false)))
             Truth.assertThat(pollKind).isEqualTo(PollKind.Disclosed)
             Truth.assertThat(showBackConfirmation).isFalse()
+            Truth.assertThat(showDeleteConfirmation).isFalse()
+        }
+
+    private suspend fun TurbineTestContext<CreatePollState>.awaitDeleteConfirmation() =
+        awaitItem().apply {
+            Truth.assertThat(showDeleteConfirmation).isTrue()
         }
 
     private suspend fun TurbineTestContext<CreatePollState>.awaitPollLoaded(

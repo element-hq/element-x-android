@@ -27,12 +27,15 @@ data class CreatePollState(
     val answers: ImmutableList<Answer>,
     val pollKind: PollKind,
     val showBackConfirmation: Boolean,
+    val showDeleteConfirmation: Boolean,
     val eventSink: (CreatePollEvents) -> Unit,
 ) {
     enum class Mode {
         New,
         Edit,
     }
+
+    val canDelete: Boolean = mode == Mode.Edit
 }
 
 data class Answer(

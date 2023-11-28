@@ -59,4 +59,11 @@ class PollRepository @Inject constructor(
             pollKind = pollKind,
         )
     }
+
+    suspend fun deletePoll(
+        pollStartId: EventId,
+    ): Result<Unit> =
+        room.redactEvent(
+            eventId = pollStartId,
+        )
 }

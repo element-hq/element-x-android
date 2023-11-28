@@ -73,6 +73,7 @@ class CreatePollPresenter @AssistedInject constructor(
         val isDirty: Boolean by remember { derivedStateOf { poll != initialPoll } }
 
         var showBackConfirmation: Boolean by rememberSaveable { mutableStateOf(false) }
+        var showDeleteConfirmation: Boolean by rememberSaveable { mutableStateOf(false) }
 
         LaunchedEffect(Unit) {
             if (mode is CreatePollMode.EditPoll) {
@@ -123,6 +124,22 @@ class CreatePollPresenter @AssistedInject constructor(
                         Timber.d("Cannot create poll")
                     }
                 }
+                is CreatePollEvents.Delete -> {
+                    if (mode !is CreatePollMode.EditPoll) {
+                        return
+                    }
+
+                    if (!event.confirmed) {
+                        showDeleteConfirmation = true
+                        return
+                    }
+
+                    scope.launch {
+                        showDeleteConfirmation = false
+                        repository.deletePoll(mode.eventId)
+                        navigateUp()
+                    }
+                }
                 is CreatePollEvents.AddAnswer -> {
                     poll = poll.withNewAnswer()
                 }
@@ -149,7 +166,10 @@ class CreatePollPresenter @AssistedInject constructor(
                         navigateUp()
                     }
                 }
-                is CreatePollEvents.HideConfirmation -> showBackConfirmation = false
+                is CreatePollEvents.HideConfirmation -> {
+                    showBackConfirmation = false
+                    showDeleteConfirmation = false
+                }
             }
         }
 
@@ -164,6 +184,7 @@ class CreatePollPresenter @AssistedInject constructor(
             answers = immutableAnswers,
             pollKind = poll.pollKind,
             showBackConfirmation = showBackConfirmation,
+            showDeleteConfirmation = showDeleteConfirmation,
             eventSink = ::handleEvents,
         )
     }
