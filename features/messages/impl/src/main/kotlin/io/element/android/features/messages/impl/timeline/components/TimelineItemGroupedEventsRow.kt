@@ -26,9 +26,13 @@ import androidx.compose.ui.res.pluralStringResource
 import io.element.android.features.messages.impl.R
 import io.element.android.features.messages.impl.timeline.TimelineEvents
 import io.element.android.features.messages.impl.timeline.TimelineItemRow
+import io.element.android.features.messages.impl.timeline.aGroupedEvents
 import io.element.android.features.messages.impl.timeline.components.group.GroupHeaderView
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.session.SessionState
+import io.element.android.features.messages.impl.timeline.session.aSessionState
+import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
 
@@ -137,4 +141,52 @@ private fun TimelineItemGroupedEventsRowContent(
             }
         }
     }
+}
+
+@PreviewsDayNight
+@Composable
+fun TimelineItemGroupedEventsRowContentExpandedPreview() = ElementPreview {
+    TimelineItemGroupedEventsRowContent(
+        isExpanded = true,
+        onExpandGroupClick = {},
+        timelineItem = aGroupedEvents(),
+        highlightedItem = null,
+        showReadReceipts = true,
+        isLastOutgoingMessage = false,
+        sessionState = aSessionState(),
+        onClick = {},
+        onLongClick = {},
+        inReplyToClick = {},
+        onUserDataClick = {},
+        onTimestampClicked = {},
+        onReactionClick = { _, _ -> },
+        onReactionLongClick = { _, _ -> },
+        onMoreReactionsClick = {},
+        onReadReceiptClick = {},
+        eventSink = {},
+    )
+}
+
+@PreviewsDayNight
+@Composable
+fun TimelineItemGroupedEventsRowContentCollapsePreview() = ElementPreview {
+    TimelineItemGroupedEventsRowContent(
+        isExpanded = false,
+        onExpandGroupClick = {},
+        timelineItem = aGroupedEvents(),
+        highlightedItem = null,
+        showReadReceipts = true,
+        isLastOutgoingMessage = false,
+        sessionState = aSessionState(),
+        onClick = {},
+        onLongClick = {},
+        inReplyToClick = {},
+        onUserDataClick = {},
+        onTimestampClicked = {},
+        onReactionClick = { _, _ -> },
+        onReactionLongClick = { _, _ -> },
+        onMoreReactionsClick = {},
+        onReadReceiptClick = {},
+        eventSink = {},
+    )
 }

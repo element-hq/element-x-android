@@ -187,16 +187,21 @@ internal fun aTimelineItemReadReceipts(): TimelineItemReadReceipts {
 }
 
 fun aGroupedEvents(id: Long = 0): TimelineItem.GroupedEvents {
-    val event = aTimelineItemEvent(
+    val event1 = aTimelineItemEvent(
         isMine = true,
         content = aTimelineItemStateEventContent(),
+        groupPosition = TimelineItemGroupPosition.None
+    )
+    val event2 = aTimelineItemEvent(
+        isMine = true,
+        content = aTimelineItemStateEventContent(body = "Another state event"),
         groupPosition = TimelineItemGroupPosition.None
     )
     return TimelineItem.GroupedEvents(
         id = id.toString(),
         events = listOf(
-            event,
-            event,
+            event1,
+            event2,
         ).toImmutableList()
     )
 }
