@@ -200,8 +200,11 @@ fun TimelineItemRow(
             if (timelineItem.content is TimelineItemStateContent) {
                 TimelineItemStateEventRow(
                     event = timelineItem,
+                    showReadReceipts = showReadReceipts,
+                    isLastOutgoingMessage = isLastOutgoingMessage,
                     isHighlighted = highlightedItem == timelineItem.identifier(),
                     onClick = { onClick(timelineItem) },
+                    onReadReceiptsClick = onReadReceiptClick,
                     onLongClick = { onLongClick(timelineItem) },
                     eventSink = eventSink,
                     modifier = modifier,
