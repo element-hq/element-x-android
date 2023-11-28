@@ -20,13 +20,11 @@ package io.element.android.features.messages.impl.timeline
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -42,26 +40,22 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.platform.LocalInspectionMode
-import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
-import io.element.android.features.messages.impl.R
 import io.element.android.features.messages.impl.timeline.components.TimelineItemEventRow
+import io.element.android.features.messages.impl.timeline.components.TimelineItemGroupedEventRow
 import io.element.android.features.messages.impl.timeline.components.TimelineItemStateEventRow
 import io.element.android.features.messages.impl.timeline.components.TimelineItemVirtualRow
-import io.element.android.features.messages.impl.timeline.components.group.GroupHeaderView
 import io.element.android.features.messages.impl.timeline.components.virtual.TimelineItemRoomBeginningView
 import io.element.android.features.messages.impl.timeline.components.virtual.TimelineLoadingMoreIndicator
 import io.element.android.features.messages.impl.timeline.di.LocalTimelineItemPresenterFactories
@@ -174,7 +168,7 @@ fun TimelineView(
 }
 
 @Composable
-private fun TimelineItemRow(
+fun TimelineItemRow(
     timelineItem: TimelineItem,
     showReadReceipts: Boolean,
     isLastOutgoingMessage: Boolean,
@@ -235,49 +229,24 @@ private fun TimelineItemRow(
             }
         }
         is TimelineItem.GroupedEvents -> {
-            val isExpanded = rememberSaveable(key = timelineItem.identifier()) { mutableStateOf(false) }
-
-            fun onExpandGroupClick() {
-                isExpanded.value = !isExpanded.value
-            }
-
-            Column(modifier = modifier.animateContentSize()) {
-                GroupHeaderView(
-                    text = pluralStringResource(
-                        id = R.plurals.room_timeline_state_changes,
-                        count = timelineItem.events.size,
-                        timelineItem.events.size
-                    ),
-                    isExpanded = isExpanded.value,
-                    isHighlighted = !isExpanded.value && timelineItem.events.any { it.identifier() == highlightedItem },
-                    onClick = ::onExpandGroupClick,
-                )
-                if (isExpanded.value) {
-                    Column {
-                        timelineItem.events.forEach { subGroupEvent ->
-                            TimelineItemRow(
-                                timelineItem = subGroupEvent,
-                                showReadReceipts = showReadReceipts,
-                                isLastOutgoingMessage = isLastOutgoingMessage,
-                                highlightedItem = highlightedItem,
-                                sessionState = sessionState,
-                                userHasPermissionToSendMessage = false,
-                                onClick = onClick,
-                                onLongClick = onLongClick,
-                                inReplyToClick = inReplyToClick,
-                                onUserDataClick = onUserDataClick,
-                                onTimestampClicked = onTimestampClicked,
-                                onReactionClick = onReactionClick,
-                                onReactionLongClick = onReactionLongClick,
-                                onMoreReactionsClick = onMoreReactionsClick,
-                                onReadReceiptClick = onReadReceiptClick,
-                                eventSink = eventSink,
-                                onSwipeToReply = {},
-                            )
-                        }
-                    }
-                }
-            }
+            TimelineItemGroupedEventRow(
+                timelineItem = timelineItem,
+                showReadReceipts = showReadReceipts,
+                isLastOutgoingMessage = isLastOutgoingMessage,
+                highlightedItem = highlightedItem,
+                sessionState = sessionState,
+                onClick = onClick,
+                onLongClick = onLongClick,
+                inReplyToClick = inReplyToClick,
+                onUserDataClick = onUserDataClick,
+                onTimestampClicked = onTimestampClicked,
+                onReactionClick = onReactionClick,
+                onReactionLongClick = onReactionLongClick,
+                onMoreReactionsClick = onMoreReactionsClick,
+                onReadReceiptClick = onReadReceiptClick,
+                eventSink = eventSink,
+                modifier = modifier,
+            )
         }
     }
 }
