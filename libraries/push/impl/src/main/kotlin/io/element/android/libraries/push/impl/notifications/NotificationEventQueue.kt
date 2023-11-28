@@ -28,7 +28,7 @@ import io.element.android.libraries.push.impl.notifications.model.NotifiableMess
 import io.element.android.libraries.push.impl.notifications.model.SimpleNotifiableEvent
 import timber.log.Timber
 
-data class NotificationEventQueue constructor(
+data class NotificationEventQueue(
     private val queue: MutableList<NotifiableEvent>,
     /**
      * An in memory FIFO cache of the seen events.

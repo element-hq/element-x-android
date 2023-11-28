@@ -17,8 +17,8 @@
 package io.element.android.libraries.designsystem.colors
 
 import com.google.common.truth.Truth.assertThat
-import io.element.android.libraries.theme.colors.avatarColorsDark
-import io.element.android.libraries.theme.colors.avatarColorsLight
+import io.element.android.compound.theme.avatarColorsDark
+import io.element.android.compound.theme.avatarColorsLight
 import org.junit.Test
 
 class AvatarColorsTest {

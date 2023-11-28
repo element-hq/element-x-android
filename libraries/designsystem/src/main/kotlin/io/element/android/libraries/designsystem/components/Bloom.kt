@@ -100,6 +100,8 @@ import coil.request.DefaultRequestOptions
 import coil.request.ImageRequest
 import com.airbnb.android.showkase.annotation.ShowkaseComposable
 import com.vanniktech.blurhash.BlurHash
+import io.element.android.compound.theme.ElementTheme
+import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.designsystem.R
 import io.element.android.libraries.designsystem.colors.AvatarColorsProvider
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
@@ -111,8 +113,6 @@ import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.MediumTopAppBar
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.designsystem.utils.CommonDrawables
-import io.element.android.libraries.theme.ElementTheme
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.Dispatchers
@@ -509,7 +509,7 @@ internal fun BloomPreview() {
                         actions = {
                             IconButton(onClick = {}) {
                                 Icon(
-                                    resourceId = CommonDrawables.ic_compound_share_android,
+                                    imageVector = CompoundIcons.ShareAndroid,
                                     contentDescription = null,
                                 )
                             }

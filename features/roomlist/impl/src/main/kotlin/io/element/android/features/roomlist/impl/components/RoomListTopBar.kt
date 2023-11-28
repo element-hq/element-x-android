@@ -46,6 +46,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
+import io.element.android.compound.theme.ElementTheme
+import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.roomlist.impl.R
 import io.element.android.libraries.designsystem.atomic.atoms.RedIndicatorAtom
 import io.element.android.libraries.designsystem.components.avatar.Avatar
@@ -65,14 +67,12 @@ import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.MediumTopAppBar
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.designsystem.utils.LogCompositions
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.model.getAvatarData
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
-import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
 
 private val avatarBloomSize = 430.dp
@@ -218,7 +218,7 @@ private fun DefaultRoomListTopBar(
                     onClick = onSearchClicked,
                 ) {
                     Icon(
-                        resourceId = CommonDrawables.ic_compound_search,
+                        imageVector = CompoundIcons.Search,
                         contentDescription = stringResource(CommonStrings.action_search),
                     )
                 }
@@ -226,7 +226,7 @@ private fun DefaultRoomListTopBar(
                     onClick = { showMenu = !showMenu }
                 ) {
                     Icon(
-                        resourceId = CommonDrawables.ic_compound_overflow_vertical,
+                        imageVector = CompoundIcons.OverflowVertical,
                         contentDescription = null,
                     )
                 }
@@ -242,7 +242,7 @@ private fun DefaultRoomListTopBar(
                         text = { Text(stringResource(id = CommonStrings.action_invite)) },
                         leadingIcon = {
                             Icon(
-                                resourceId = CommonDrawables.ic_compound_share_android,
+                                imageVector = CompoundIcons.ShareAndroid,
                                 tint = ElementTheme.materialColors.secondary,
                                 contentDescription = null,
                             )
@@ -256,7 +256,7 @@ private fun DefaultRoomListTopBar(
                         text = { Text(stringResource(id = CommonStrings.common_report_a_problem)) },
                         leadingIcon = {
                             Icon(
-                                resourceId = CommonDrawables.ic_compound_chat_problem,
+                                imageVector = CompoundIcons.ChatProblem,
                                 tint = ElementTheme.materialColors.secondary,
                                 contentDescription = null,
                             )

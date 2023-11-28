@@ -49,6 +49,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import io.element.android.compound.theme.ElementTheme
+import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.designsystem.components.media.createFakeWaveform
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -82,7 +84,6 @@ import io.element.android.libraries.textcomposer.model.Suggestion
 import io.element.android.libraries.textcomposer.model.VoiceMessagePlayerEvent
 import io.element.android.libraries.textcomposer.model.VoiceMessageRecorderEvent
 import io.element.android.libraries.textcomposer.model.VoiceMessageState
-import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.wysiwyg.compose.PillStyle
 import io.element.android.wysiwyg.compose.RichTextEditor
@@ -507,7 +508,7 @@ private fun EditingModeView(
                 .weight(1f)
         )
         Icon(
-            resourceId = CommonDrawables.ic_compound_close,
+            imageVector = CompoundIcons.Close,
             contentDescription = stringResource(CommonStrings.action_close),
             tint = ElementTheme.materialColors.secondary,
             modifier = Modifier
@@ -570,7 +571,7 @@ private fun ReplyToModeView(
             )
         }
         Icon(
-            resourceId = CommonDrawables.ic_compound_close,
+            imageVector = CompoundIcons.Close,
             contentDescription = stringResource(CommonStrings.action_close),
             tint = MaterialTheme.colorScheme.secondary,
             modifier = Modifier

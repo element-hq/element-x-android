@@ -39,10 +39,12 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import io.element.android.compound.theme.ElementTheme
+import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.list.ListItemContent
-import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.aliasScreenTitle
 import io.element.android.libraries.designsystem.theme.components.DropdownMenu
 import io.element.android.libraries.designsystem.theme.components.DropdownMenuItem
@@ -52,10 +54,8 @@ import io.element.android.libraries.designsystem.theme.components.ListItem
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
-import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.matrix.api.tracing.LogLevel
 import io.element.android.libraries.matrix.api.tracing.Target
-import io.element.android.libraries.theme.ElementTheme
 import kotlinx.collections.immutable.ImmutableMap
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -90,7 +90,7 @@ fun ConfigureTracingView(
                         onClick = { showMenu = !showMenu }
                     ) {
                         Icon(
-                            resourceId = CommonDrawables.ic_compound_overflow_vertical,
+                            imageVector = CompoundIcons.OverflowVertical,
                             tint = ElementTheme.materialColors.secondary,
                             contentDescription = null,
                         )
@@ -107,7 +107,7 @@ fun ConfigureTracingView(
                             text = { Text("Reset to default") },
                             leadingIcon = {
                                 Icon(
-                                    resourceId = CommonDrawables.ic_compound_delete,
+                                    imageVector = CompoundIcons.Delete,
                                     tint = ElementTheme.materialColors.secondary,
                                     contentDescription = null,
                                 )
@@ -211,7 +211,7 @@ private fun LogLevelDropdownMenu(
             trailingIcon = {
                 Icon(
                     modifier = Modifier.rotate(if (expanded) 180f else 0f),
-                    resourceId = CommonDrawables.ic_compound_chevron_down,
+                    imageVector = CompoundIcons.ChevronDown,
                     contentDescription = null,
                 )
             },

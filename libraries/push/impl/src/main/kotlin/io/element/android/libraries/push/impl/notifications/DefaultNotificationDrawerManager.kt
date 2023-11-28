@@ -36,6 +36,7 @@ import io.element.android.services.appnavstate.api.AppNavigationStateService
 import io.element.android.services.appnavstate.api.NavigationState
 import io.element.android.services.appnavstate.api.currentSessionId
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -61,6 +62,8 @@ class DefaultNotificationDrawerManager @Inject constructor(
     private val buildMeta: BuildMeta,
     private val matrixClientProvider: MatrixClientProvider,
 ) : NotificationDrawerManager {
+    private var appNavigationStateObserver: Job? = null
+
     /**
      * Lazily initializes the NotificationState as we rely on having a current session in order to fetch the persisted queue of events.
      */
@@ -72,10 +75,15 @@ class DefaultNotificationDrawerManager @Inject constructor(
 
     init {
         // Observe application state
-        coroutineScope.launch {
+        appNavigationStateObserver = coroutineScope.launch {
             appNavigationStateService.appNavigationState
                 .collect { onAppNavigationStateChange(it.navigationState) }
         }
+    }
+
+    // For test only
+    fun destroy() {
+        appNavigationStateObserver?.cancel()
     }
 
     private var currentAppNavigationState: NavigationState? = null

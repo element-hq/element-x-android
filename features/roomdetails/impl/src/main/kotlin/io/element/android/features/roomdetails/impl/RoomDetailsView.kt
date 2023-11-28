@@ -45,6 +45,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import io.element.android.compound.theme.ElementTheme
+import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.leaveroom.api.LeaveRoomView
 import io.element.android.features.roomdetails.impl.blockuser.BlockUserDialogs
 import io.element.android.features.roomdetails.impl.blockuser.BlockUserSection
@@ -75,7 +77,6 @@ import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
-import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
@@ -228,7 +229,7 @@ private fun MainActionsSection(state: RoomDetailsState, onShareRoom: () -> Unit,
             if (roomNotificationSettings.mode == RoomNotificationMode.MUTE) {
                 MainActionButton(
                     title = stringResource(CommonStrings.common_unmute),
-                    iconResourceId = CommonDrawables.ic_compound_notifications_off,
+                    imageVector = CompoundIcons.NotificationsOff,
                     onClick = {
                         state.eventSink(RoomDetailsEvent.UnmuteNotification)
                     },
@@ -236,7 +237,7 @@ private fun MainActionsSection(state: RoomDetailsState, onShareRoom: () -> Unit,
             } else {
                 MainActionButton(
                     title = stringResource(CommonStrings.common_mute),
-                    iconResourceId = CommonDrawables.ic_compound_notifications,
+                    imageVector = CompoundIcons.Notifications,
                     onClick = {
                         state.eventSink(RoomDetailsEvent.MuteNotification)
                     },
@@ -246,7 +247,7 @@ private fun MainActionsSection(state: RoomDetailsState, onShareRoom: () -> Unit,
         Spacer(modifier = Modifier.width(20.dp))
         MainActionButton(
             title = stringResource(R.string.screen_room_details_share_room_title),
-            iconResourceId = CommonDrawables.ic_compound_share_android,
+            imageVector = CompoundIcons.ShareAndroid,
             onClick = onShareRoom
         )
     }
@@ -330,7 +331,7 @@ private fun NotificationSection(
         ListItem(
             headlineContent = { Text(text = stringResource(R.string.screen_room_details_notification_title)) },
             supportingContent = { Text(text = subtitle) },
-            leadingContent = ListItemContent.Icon(IconSource.Resource(CommonDrawables.ic_compound_notifications)),
+            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Notifications)),
             onClick = openRoomNotificationSettings,
         )
     }
@@ -382,7 +383,7 @@ private fun OtherActionsSection(onLeaveRoom: () -> Unit, modifier: Modifier = Mo
     PreferenceCategory(showDivider = false, modifier = modifier) {
         ListItem(
             headlineContent = { Text(stringResource(R.string.screen_room_details_leave_room_title)) },
-            leadingContent = ListItemContent.Icon(IconSource.Resource(CommonDrawables.ic_compound_leave)),
+            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Leave)),
             style = ListItemStyle.Destructive,
             onClick = onLeaveRoom,
         )
