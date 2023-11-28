@@ -17,6 +17,7 @@
 package io.element.android.features.messages.impl.timeline
 
 import androidx.compose.runtime.Immutable
+import io.element.android.features.messages.impl.timeline.model.NewEventState
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.session.SessionState
 import io.element.android.libraries.matrix.api.core.EventId
@@ -30,7 +31,7 @@ data class TimelineState(
     val highlightedEventId: EventId?,
     val userHasPermissionToSendMessage: Boolean,
     val paginationState: MatrixTimeline.PaginationState,
-    val hasNewItems: Boolean,
+    val newEventState: NewEventState,
     val sessionState: SessionState,
     val eventSink: (TimelineEvents) -> Unit
 )
