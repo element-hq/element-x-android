@@ -109,8 +109,8 @@ class RoomDetailsFlowNode @AssistedInject constructor(
                         backstack.push(NavTarget.RoomNotificationSettings(showUserDefinedSettingStyle = false))
                     }
 
-                    override fun openAvatarPreview(userName: String, url: String) {
-                        backstack.push(NavTarget.MemberAvatarPreview(userName, url))
+                    override fun openAvatarPreview(username: String, url: String) {
+                        backstack.push(NavTarget.MemberAvatarPreview(username, url))
                     }
                 }
                 createNode<RoomDetailsNode>(buildContext, listOf(roomDetailsCallback))
