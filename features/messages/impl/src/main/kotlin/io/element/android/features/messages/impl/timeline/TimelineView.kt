@@ -52,10 +52,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
-import io.element.android.features.messages.impl.timeline.components.TimelineItemEventRow
-import io.element.android.features.messages.impl.timeline.components.TimelineItemGroupedEventsRow
-import io.element.android.features.messages.impl.timeline.components.TimelineItemStateEventRow
-import io.element.android.features.messages.impl.timeline.components.TimelineItemVirtualRow
+import io.element.android.features.messages.impl.timeline.components.TimelineItemRow
 import io.element.android.features.messages.impl.timeline.components.virtual.TimelineItemRoomBeginningView
 import io.element.android.features.messages.impl.timeline.components.virtual.TimelineLoadingMoreIndicator
 import io.element.android.features.messages.impl.timeline.di.LocalTimelineItemPresenterFactories
@@ -63,9 +60,6 @@ import io.element.android.features.messages.impl.timeline.di.aFakeTimelineItemPr
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContentProvider
-import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStateContent
-import io.element.android.features.messages.impl.timeline.model.event.canBeRepliedTo
-import io.element.android.features.messages.impl.timeline.session.SessionState
 import io.element.android.libraries.designsystem.animation.alphaAnimation
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -164,93 +158,6 @@ fun TimelineView(
             hasNewItems = state.hasNewItems,
             onScrollFinishedAt = ::onScrollFinishedAt
         )
-    }
-}
-
-@Composable
-internal fun TimelineItemRow(
-    timelineItem: TimelineItem,
-    showReadReceipts: Boolean,
-    isLastOutgoingMessage: Boolean,
-    highlightedItem: String?,
-    userHasPermissionToSendMessage: Boolean,
-    sessionState: SessionState,
-    onUserDataClick: (UserId) -> Unit,
-    onClick: (TimelineItem.Event) -> Unit,
-    onLongClick: (TimelineItem.Event) -> Unit,
-    inReplyToClick: (EventId) -> Unit,
-    onReactionClick: (key: String, TimelineItem.Event) -> Unit,
-    onReactionLongClick: (key: String, TimelineItem.Event) -> Unit,
-    onMoreReactionsClick: (TimelineItem.Event) -> Unit,
-    onReadReceiptClick: (TimelineItem.Event) -> Unit,
-    onTimestampClicked: (TimelineItem.Event) -> Unit,
-    onSwipeToReply: (TimelineItem.Event) -> Unit,
-    eventSink: (TimelineEvents) -> Unit,
-    modifier: Modifier = Modifier
-) {
-    when (timelineItem) {
-        is TimelineItem.Virtual -> {
-            TimelineItemVirtualRow(
-                virtual = timelineItem,
-                sessionState = sessionState,
-                modifier = modifier,
-            )
-        }
-        is TimelineItem.Event -> {
-            if (timelineItem.content is TimelineItemStateContent) {
-                TimelineItemStateEventRow(
-                    event = timelineItem,
-                    showReadReceipts = showReadReceipts,
-                    isLastOutgoingMessage = isLastOutgoingMessage,
-                    isHighlighted = highlightedItem == timelineItem.identifier(),
-                    onClick = { onClick(timelineItem) },
-                    onReadReceiptsClick = onReadReceiptClick,
-                    onLongClick = { onLongClick(timelineItem) },
-                    eventSink = eventSink,
-                    modifier = modifier,
-                )
-            } else {
-                TimelineItemEventRow(
-                    event = timelineItem,
-                    showReadReceipts = showReadReceipts,
-                    isLastOutgoingMessage = isLastOutgoingMessage,
-                    isHighlighted = highlightedItem == timelineItem.identifier(),
-                    canReply = userHasPermissionToSendMessage && timelineItem.content.canBeRepliedTo(),
-                    onClick = { onClick(timelineItem) },
-                    onLongClick = { onLongClick(timelineItem) },
-                    onUserDataClick = onUserDataClick,
-                    inReplyToClick = inReplyToClick,
-                    onReactionClick = onReactionClick,
-                    onReactionLongClick = onReactionLongClick,
-                    onMoreReactionsClick = onMoreReactionsClick,
-                    onReadReceiptClick = onReadReceiptClick,
-                    onTimestampClicked = onTimestampClicked,
-                    onSwipeToReply = { onSwipeToReply(timelineItem) },
-                    eventSink = eventSink,
-                    modifier = modifier,
-                )
-            }
-        }
-        is TimelineItem.GroupedEvents -> {
-            TimelineItemGroupedEventsRow(
-                timelineItem = timelineItem,
-                showReadReceipts = showReadReceipts,
-                isLastOutgoingMessage = isLastOutgoingMessage,
-                highlightedItem = highlightedItem,
-                sessionState = sessionState,
-                onClick = onClick,
-                onLongClick = onLongClick,
-                inReplyToClick = inReplyToClick,
-                onUserDataClick = onUserDataClick,
-                onTimestampClicked = onTimestampClicked,
-                onReactionClick = onReactionClick,
-                onReactionLongClick = onReactionLongClick,
-                onMoreReactionsClick = onMoreReactionsClick,
-                onReadReceiptClick = onReadReceiptClick,
-                eventSink = eventSink,
-                modifier = modifier,
-            )
-        }
     }
 }
 
