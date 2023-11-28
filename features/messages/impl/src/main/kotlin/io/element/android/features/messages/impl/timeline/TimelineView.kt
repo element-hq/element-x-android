@@ -168,7 +168,7 @@ fun TimelineView(
 }
 
 @Composable
-fun TimelineItemRow(
+internal fun TimelineItemRow(
     timelineItem: TimelineItem,
     showReadReceipts: Boolean,
     isLastOutgoingMessage: Boolean,

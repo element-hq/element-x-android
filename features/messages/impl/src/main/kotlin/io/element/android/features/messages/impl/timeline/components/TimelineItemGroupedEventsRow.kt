@@ -156,7 +156,7 @@ private fun TimelineItemGroupedEventsRowContent(
 
 @PreviewsDayNight
 @Composable
-fun TimelineItemGroupedEventsRowContentExpandedPreview() = ElementPreview {
+internal fun TimelineItemGroupedEventsRowContentExpandedPreview() = ElementPreview {
     TimelineItemGroupedEventsRowContent(
         isExpanded = true,
         onExpandGroupClick = {},
@@ -180,7 +180,7 @@ fun TimelineItemGroupedEventsRowContentExpandedPreview() = ElementPreview {
 
 @PreviewsDayNight
 @Composable
-fun TimelineItemGroupedEventsRowContentCollapsePreview() = ElementPreview {
+internal fun TimelineItemGroupedEventsRowContentCollapsePreview() = ElementPreview {
     TimelineItemGroupedEventsRowContent(
         isExpanded = false,
         onExpandGroupClick = {},
