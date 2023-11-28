@@ -42,6 +42,7 @@ dependencies {
     implementation(projects.libraries.androidutils)
     implementation(projects.libraries.mediapickers.api)
     implementation(projects.libraries.mediaupload.api)
+    implementation(projects.libraries.mediaviewer.api)
     implementation(projects.libraries.featureflag.api)
     implementation(projects.libraries.permissions.api)
     implementation(projects.libraries.preferences.api)

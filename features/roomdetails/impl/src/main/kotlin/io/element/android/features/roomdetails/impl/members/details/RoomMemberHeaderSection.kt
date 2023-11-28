@@ -16,6 +16,7 @@
 
 package io.element.android.features.roomdetails.impl.members.details
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -41,13 +42,14 @@ fun RoomMemberHeaderSection(
     avatarUrl: String?,
     userId: String,
     userName: String?,
+    openAvatarPreview: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
         Box(modifier = Modifier.size(70.dp)) {
             Avatar(
                 avatarData = AvatarData(userId, userName, avatarUrl, AvatarSize.UserHeader),
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier.clickable { openAvatarPreview() }.fillMaxSize()
             )
         }
         Spacer(modifier = Modifier.height(24.dp))

@@ -89,6 +89,7 @@ fun RoomDetailsView(
     openRoomMemberList: () -> Unit,
     openRoomNotificationSettings: () -> Unit,
     invitePeople: () -> Unit,
+    openAvatarPreview: (username: String, url: String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     fun onShareMember() {
@@ -132,7 +133,12 @@ fun RoomDetailsView(
                     RoomMemberHeaderSection(
                         avatarUrl = state.roomAvatarUrl ?: member.avatarUrl,
                         userId = member.userId.value,
-                        userName = state.roomName
+                        userName = state.roomName,
+                        openAvatarPreview = {
+                            if (member.avatarUrl != null) {
+                                openAvatarPreview(member.displayName ?: member.userId.value, member.avatarUrl!!)
+                            }
+                        },
                     )
                     RoomMemberMainActionsSection(onShareUser = ::onShareMember)
                 }
@@ -411,5 +417,6 @@ private fun ContentToPreview(state: RoomDetailsState) {
         openRoomMemberList = {},
         openRoomNotificationSettings = {},
         invitePeople = {},
+        openAvatarPreview = { _, _ -> },
     )
 }

@@ -46,11 +46,16 @@ class RoomMemberDetailsNode @AssistedInject constructor(
     presenterFactory: RoomMemberDetailsPresenter.Factory,
 ) : Node(buildContext, plugins = plugins) {
 
+    interface Callback: NodeInputs {
+        fun openAvatarPreview(username: String, avatarUrl: String)
+    }
+
     data class RoomMemberDetailsInput(
         val roomMemberId: UserId
     ) : NodeInputs
 
     private val inputs = inputs<RoomMemberDetailsInput>()
+    private val callback = inputs<Callback>()
     private val presenter = presenterFactory.create(inputs.roomMemberId)
 
     init {
@@ -84,7 +89,8 @@ class RoomMemberDetailsNode @AssistedInject constructor(
             state = state,
             modifier = modifier,
             goBack = this::navigateUp,
-            onShareUser = ::onShareUser
+            onShareUser = ::onShareUser,
+            openAvatarPreview = callback::openAvatarPreview,
         )
     }
 }

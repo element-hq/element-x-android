@@ -18,7 +18,7 @@ package io.element.android.features.messages.impl.attachments
 
 import android.os.Parcelable
 import androidx.compose.runtime.Immutable
-import io.element.android.features.messages.impl.media.local.LocalMedia
+import io.element.android.libraries.mediaviewer.api.local.LocalMedia
 import kotlinx.parcelize.Parcelize
 
 @Immutable
