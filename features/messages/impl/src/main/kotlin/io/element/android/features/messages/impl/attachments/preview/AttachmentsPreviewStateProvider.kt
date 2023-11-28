@@ -19,10 +19,10 @@ package io.element.android.features.messages.impl.attachments.preview
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.core.net.toUri
 import io.element.android.features.messages.impl.attachments.Attachment
-import io.element.android.features.messages.impl.media.local.LocalMedia
-import io.element.android.features.messages.impl.media.local.MediaInfo
-import io.element.android.features.messages.impl.media.local.aFileInfo
-import io.element.android.features.messages.impl.media.local.anImageInfo
+import io.element.android.libraries.mediaviewer.api.local.LocalMedia
+import io.element.android.libraries.mediaviewer.api.local.MediaInfo
+import io.element.android.libraries.mediaviewer.api.local.aFileInfo
+import io.element.android.libraries.mediaviewer.api.local.anImageInfo
 
 open class AttachmentsPreviewStateProvider : PreviewParameterProvider<AttachmentsPreviewState> {
     override val values: Sequence<AttachmentsPreviewState>

@@ -17,7 +17,6 @@
 package io.element.android.features.roomdetails.impl.members.details
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.height
@@ -38,12 +37,13 @@ import io.element.android.libraries.designsystem.preview.PreviewWithLargeHeight
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RoomMemberDetailsView(
     state: RoomMemberDetailsState,
     onShareUser: () -> Unit,
     goBack: () -> Unit,
+    openAvatarPreview: (username: String, url: String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Scaffold(
@@ -62,6 +62,9 @@ fun RoomMemberDetailsView(
                 avatarUrl = state.avatarUrl,
                 userId = state.userId,
                 userName = state.userName,
+                openAvatarPreview = { avatarUrl ->
+                    openAvatarPreview(state.userName ?: state.userId, avatarUrl)
+                },
             )
 
             RoomMemberMainActionsSection(onShareUser = onShareUser)
@@ -110,5 +113,6 @@ private fun ContentToPreview(state: RoomMemberDetailsState) {
         state = state,
         onShareUser = {},
         goBack = {},
+        openAvatarPreview = { _, _ -> }
     )
 }

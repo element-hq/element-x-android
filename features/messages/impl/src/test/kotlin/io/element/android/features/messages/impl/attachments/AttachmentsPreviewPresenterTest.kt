@@ -26,13 +26,13 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.features.messages.impl.attachments.preview.AttachmentsPreviewEvents
 import io.element.android.features.messages.impl.attachments.preview.AttachmentsPreviewPresenter
 import io.element.android.features.messages.impl.attachments.preview.SendActionState
-import io.element.android.features.messages.impl.fixtures.aLocalMedia
-import io.element.android.features.messages.impl.media.local.LocalMedia
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.mediaupload.api.MediaPreProcessor
 import io.element.android.libraries.mediaupload.api.MediaSender
 import io.element.android.libraries.mediaupload.test.FakeMediaPreProcessor
+import io.element.android.libraries.mediaviewer.api.local.LocalMedia
+import io.element.android.libraries.mediaviewer.test.viewer.aLocalMedia
 import io.element.android.tests.testutils.WarmUpRule
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi

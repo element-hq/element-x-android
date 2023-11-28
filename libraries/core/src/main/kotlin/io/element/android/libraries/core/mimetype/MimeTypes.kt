@@ -60,4 +60,11 @@ object MimeTypes {
             else -> OctetStream
         }
     }
+
+    fun hasSubtype(mimeType: String): Boolean {
+        val components = mimeType.split("/")
+        if (components.size != 2) return false
+        val subType = components.last()
+        return subType.isNotBlank() && subType != "*"
+    }
 }
