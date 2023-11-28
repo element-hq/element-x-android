@@ -65,7 +65,7 @@ fun TimelineItemStateEventRow(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 8.dp)
+                .padding(top = 8.dp, bottom = 2.dp)
                 .wrapContentHeight(),
             contentAlignment = Alignment.Center
         ) {
