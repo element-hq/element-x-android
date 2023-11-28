@@ -33,7 +33,7 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
 
 @Composable
-fun TimelineItemGroupedEventRow(
+fun TimelineItemGroupedEventsRow(
     timelineItem: TimelineItem.GroupedEvents,
     showReadReceipts: Boolean,
     isLastOutgoingMessage: Boolean,

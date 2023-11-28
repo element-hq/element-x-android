@@ -53,7 +53,7 @@ import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.messages.impl.timeline.components.TimelineItemEventRow
-import io.element.android.features.messages.impl.timeline.components.TimelineItemGroupedEventRow
+import io.element.android.features.messages.impl.timeline.components.TimelineItemGroupedEventsRow
 import io.element.android.features.messages.impl.timeline.components.TimelineItemStateEventRow
 import io.element.android.features.messages.impl.timeline.components.TimelineItemVirtualRow
 import io.element.android.features.messages.impl.timeline.components.virtual.TimelineItemRoomBeginningView
@@ -229,7 +229,7 @@ fun TimelineItemRow(
             }
         }
         is TimelineItem.GroupedEvents -> {
-            TimelineItemGroupedEventRow(
+            TimelineItemGroupedEventsRow(
                 timelineItem = timelineItem,
                 showReadReceipts = showReadReceipts,
                 isLastOutgoingMessage = isLastOutgoingMessage,
