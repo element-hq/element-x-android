@@ -32,6 +32,7 @@ import im.vector.app.features.analytics.plan.Composer
 import im.vector.app.features.analytics.plan.PollCreation
 import io.element.android.features.messages.api.MessageComposerContext
 import io.element.android.features.poll.api.create.CreatePollMode
+import io.element.android.features.poll.impl.PollConstants.MAX_SELECTIONS
 import io.element.android.features.poll.impl.data.PollRepository
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.api.poll.PollAnswer
@@ -43,11 +44,6 @@ import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.launch
 import timber.log.Timber
-
-private const val MIN_ANSWERS = 2
-private const val MAX_ANSWERS = 20
-private const val MAX_ANSWER_LENGTH = 240
-private const val MAX_SELECTIONS = 1
 
 class CreatePollPresenter @AssistedInject constructor(
     private val repository: PollRepository,
@@ -66,13 +62,7 @@ class CreatePollPresenter @AssistedInject constructor(
     override fun present(): CreatePollState {
         // The initial state of the form. In edit mode this will be populated with the poll being edited.
         var initialPoll: PollFormState by rememberSaveable(stateSaver = pollFormStateSaver) {
-            mutableStateOf(
-                PollFormState(
-                    question = "",
-                    answers = MutableList(MIN_ANSWERS) { "" }.toPersistentList(),
-                    isDisclosed = true,
-                )
-            )
+            mutableStateOf(PollFormState.Empty)
         }
         // The current state of the form.
         var poll: PollFormState by rememberSaveable(stateSaver = pollFormStateSaver) {
@@ -101,9 +91,9 @@ class CreatePollPresenter @AssistedInject constructor(
             }
         }
 
-        val canSave: Boolean by remember { derivedStateOf { canSave(poll.question, poll.answers) } }
-        val canAddAnswer: Boolean by remember { derivedStateOf { canAddAnswer(poll.answers) } }
-        val immutableAnswers: ImmutableList<Answer> by remember { derivedStateOf { poll.answers.toAnswers() } }
+        val canSave: Boolean by remember { derivedStateOf { poll.isValid } }
+        val canAddAnswer: Boolean by remember { derivedStateOf { poll.canAddAnswer } }
+        val immutableAnswers: ImmutableList<Answer> by remember { derivedStateOf { poll.toUiAnswers() } }
 
         val scope = rememberCoroutineScope()
 
@@ -134,15 +124,13 @@ class CreatePollPresenter @AssistedInject constructor(
                     }
                 }
                 is CreatePollEvents.AddAnswer -> {
-                    poll = poll.copy(answers = (poll.answers  + "").toPersistentList())
+                    poll = poll.withNewAnswer()
                 }
                 is CreatePollEvents.RemoveAnswer -> {
-                    poll= poll.copy(answers = poll.answers.filterIndexed { index, _ -> index != event.index }.toPersistentList())
+                    poll= poll.withAnswerRemoved(event.index)
                 }
                 is CreatePollEvents.SetAnswer -> {
-                    poll = poll.copy(answers = poll.answers.toMutableList().apply {
-                        this[event.index] = event.text.take(MAX_ANSWER_LENGTH)
-                    }.toPersistentList())
+                    poll = poll.withAnswerChanged(event.index, event.text)
                 }
                 is CreatePollEvents.SetPollKind -> {
                     poll = poll.copy(isDisclosed = event.pollKind.isDisclosed)
@@ -226,18 +214,11 @@ private fun AnalyticsService.trackSavePollFailed(cause: Throwable, mode: CreateP
     trackError(exception)
 }
 
-private fun canSave(
-    question: String,
-    answers: List<String>
-) = question.isNotBlank() && answers.size >= MIN_ANSWERS && answers.all { it.isNotBlank() }
-
-private fun canAddAnswer(answers: List<String>) = answers.size < MAX_ANSWERS
-
-fun List<String>.toAnswers(): ImmutableList<Answer> {
-    return map { answer ->
+fun PollFormState.toUiAnswers(): ImmutableList<Answer> {
+    return answers.map { answer ->
         Answer(
             text = answer,
-            canDelete = this.size > MIN_ANSWERS,
+            canDelete = canDeleteAnswer,
         )
     }.toImmutableList()
 }
