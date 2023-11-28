@@ -8,10 +8,7 @@
   <string name="notification_invitation_action_join">"Vstoupit"</string>
   <string name="notification_invitation_action_reject">"Odmítnout"</string>
   <string name="notification_invite_body">"Vás pozval(a) do chatu"</string>
-  <string name="notification_mentioned_you_body">"%1$s vás zmínil(a).
-%2$s"</string>
-  <string name="notification_mentioned_you_fallback_body">"Byli jste zmíněni.
-%1$s"</string>
+  <string name="notification_mentioned_you_body">"Zmínili vás: %1$s"</string>
   <string name="notification_new_messages">"Nové zprávy"</string>
   <string name="notification_reaction_body">"Reagoval(a) s %1$s"</string>
   <string name="notification_room_action_mark_as_read">"Označit jako přečtené"</string>

@@ -16,6 +16,7 @@
 
 package io.element.android.features.messages.impl.voicemessages.composer
 
+import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.mediaplayer.api.MediaPlayer
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
@@ -41,7 +42,7 @@ class VoiceMessageComposerPlayer @Inject constructor(
     private val coroutineScope: CoroutineScope,
 ) {
     companion object {
-        const val MIME_TYPE = "audio/ogg"
+        const val MIME_TYPE = MimeTypes.Ogg
     }
 
     private var mediaPath: String? = null
@@ -201,6 +202,7 @@ class VoiceMessageComposerPlayer @Inject constructor(
                 progress = 0f,
             )
         }
+
         /**
          * Whether this player is currently playing.
          */
@@ -211,7 +213,6 @@ class VoiceMessageComposerPlayer @Inject constructor(
          */
         val isStopped get() = this.playState == PlayState.Stopped
     }
-
 
     enum class PlayState {
         /**

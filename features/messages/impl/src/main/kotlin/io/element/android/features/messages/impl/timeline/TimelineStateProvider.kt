@@ -17,6 +17,7 @@
 package io.element.android.features.messages.impl.timeline
 
 import io.element.android.features.messages.impl.timeline.model.InReplyToDetails
+import io.element.android.features.messages.impl.timeline.model.NewEventState
 import io.element.android.features.messages.impl.timeline.model.ReadReceiptData
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.TimelineItemGroupPosition
@@ -53,7 +54,7 @@ fun aTimelineState(timelineItems: ImmutableList<TimelineItem> = persistentListOf
     ),
     highlightedEventId = null,
     userHasPermissionToSendMessage = true,
-    hasNewItems = false,
+    newEventState = NewEventState.None,
     sessionState = aSessionState(
         isSessionVerified = true,
         isKeyBackupEnabled = true,

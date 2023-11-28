@@ -23,6 +23,11 @@ plugins {
 
 android {
     namespace = "io.element.android.features.messages.impl"
+    testOptions {
+        unitTests {
+            isIncludeAndroidResources = true
+        }
+    }
 }
 
 anvil {
@@ -88,6 +93,8 @@ dependencies {
     testImplementation(projects.libraries.voicerecorder.test)
     testImplementation(projects.libraries.mediaplayer.test)
     testImplementation(libs.test.mockk)
+    testImplementation(libs.test.junitext)
+    testImplementation(libs.test.robolectric)
 
     ksp(libs.showkase.processor)
 }

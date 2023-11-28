@@ -41,7 +41,7 @@ import io.element.android.libraries.push.impl.notifications.model.SimpleNotifiab
 import io.element.android.services.toolbox.api.strings.StringProvider
 import javax.inject.Inject
 
-class NotificationFactory @Inject constructor(
+class NotificationCreator @Inject constructor(
     @ApplicationContext private val context: Context,
     private val notificationChannels: NotificationChannels,
     private val stringProvider: StringProvider,

@@ -27,8 +27,10 @@
   <string name="action_disable">"Deaktivieren"</string>
   <string name="action_done">"Erledigt"</string>
   <string name="action_edit">"Bearbeiten"</string>
+  <string name="action_edit_poll">"Umfrage bearbeiten"</string>
   <string name="action_enable">"Aktivieren"</string>
   <string name="action_end_poll">"Umfrage beenden"</string>
+  <string name="action_enter_pin">"PIN eingeben"</string>
   <string name="action_forgot_password">"Passwort vergessen?"</string>
   <string name="action_forward">"Weiter"</string>
   <string name="action_invite">"Einladen"</string>
@@ -72,7 +74,6 @@
   <string name="action_take_photo">"Foto machen"</string>
   <string name="action_view_source">"Quelle anzeigen"</string>
   <string name="action_yes">"Ja"</string>
-  <string name="action_edit_poll">"Umfrage bearbeiten"</string>
   <string name="common_about">"Über"</string>
   <string name="common_acceptable_use_policy">"Nutzungsrichtlinie"</string>
   <string name="common_advanced_settings">"Erweiterte Einstellungen"</string>
@@ -88,6 +89,7 @@
   <string name="common_editing">"Bearbeitung"</string>
   <string name="common_emote">"* %1$s %2$s"</string>
   <string name="common_encryption_enabled">"Verschlüsselung aktiviert"</string>
+  <string name="common_enter_your_pin">"PIN eingeben"</string>
   <string name="common_error">"Fehler"</string>
   <string name="common_file">"Datei"</string>
   <string name="common_file_saved_on_disk_android">"Datei wurde unter Downloads gespeichert"</string>

@@ -18,7 +18,7 @@ package io.element.android.features.messages.impl.timeline.model.event
 
 import io.element.android.features.messages.impl.media.helper.formatFileExtensionAndSize
 import io.element.android.libraries.matrix.api.media.MediaSource
-import java.time.Duration
+import kotlin.time.Duration
 
 data class TimelineItemAudioContent(
     val body: String,
