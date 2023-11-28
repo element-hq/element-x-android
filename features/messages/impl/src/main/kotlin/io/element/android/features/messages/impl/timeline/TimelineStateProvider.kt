@@ -204,11 +204,10 @@ internal fun aGroupedEvents(id: Long = 0): TimelineItem.GroupedEvents {
             receipts = listOf(aReadReceiptData(1)).toPersistentList(),
         ),
     )
+    val events = listOf(event1, event2)
     return TimelineItem.GroupedEvents(
         id = id.toString(),
-        events = listOf(
-            event1,
-            event2,
-        ).toImmutableList()
+        events = events.toImmutableList(),
+        aggregatedReadReceipts = events.flatMap { it.readReceiptState.receipts }.toImmutableList(),
     )
 }

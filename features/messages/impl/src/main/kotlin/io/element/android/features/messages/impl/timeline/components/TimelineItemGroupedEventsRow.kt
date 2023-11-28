@@ -37,7 +37,6 @@ import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
-import kotlinx.collections.immutable.toImmutableList
 
 @Composable
 fun TimelineItemGroupedEventsRow(
@@ -147,7 +146,7 @@ private fun TimelineItemGroupedEventsRowContent(
                 state = ReadReceiptViewState(
                     sendState = null,
                     isLastOutgoingMessage = false,
-                    receipts = timelineItem.events.flatMap { it.readReceiptState.receipts }.toImmutableList(),
+                    receipts = timelineItem.aggregatedReadReceipts,
                 ),
                 showReadReceipts = true,
                 onReadReceiptsClicked = { /* No op for group event */ })
