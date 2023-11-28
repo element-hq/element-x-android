@@ -28,6 +28,8 @@ import io.element.android.features.messages.impl.timeline.TimelineEvents
 import io.element.android.features.messages.impl.timeline.TimelineItemRow
 import io.element.android.features.messages.impl.timeline.aGroupedEvents
 import io.element.android.features.messages.impl.timeline.components.group.GroupHeaderView
+import io.element.android.features.messages.impl.timeline.components.receipt.ReadReceiptViewState
+import io.element.android.features.messages.impl.timeline.components.receipt.TimelineItemReadReceiptView
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.session.SessionState
 import io.element.android.features.messages.impl.timeline.session.aSessionState
@@ -35,6 +37,7 @@ import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
+import kotlinx.collections.immutable.toImmutableList
 
 @Composable
 fun TimelineItemGroupedEventsRow(
@@ -139,6 +142,15 @@ private fun TimelineItemGroupedEventsRowContent(
                     )
                 }
             }
+        } else if (showReadReceipts) {
+            TimelineItemReadReceiptView(
+                state = ReadReceiptViewState(
+                    sendState = null,
+                    isLastOutgoingMessage = false,
+                    receipts = timelineItem.events.flatMap { it.readReceiptState.receipts }.toImmutableList(),
+                ),
+                showReadReceipts = true,
+                onReadReceiptsClicked = { /* No op for group event */ })
         }
     }
 }

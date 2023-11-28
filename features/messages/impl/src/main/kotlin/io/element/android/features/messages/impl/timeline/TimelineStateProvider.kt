@@ -16,6 +16,7 @@
 
 package io.element.android.features.messages.impl.timeline
 
+import io.element.android.features.messages.impl.timeline.components.receipt.aReadReceiptData
 import io.element.android.features.messages.impl.timeline.model.InReplyToDetails
 import io.element.android.features.messages.impl.timeline.model.ReadReceiptData
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
@@ -186,16 +187,22 @@ internal fun aTimelineItemReadReceipts(): TimelineItemReadReceipts {
     )
 }
 
-fun aGroupedEvents(id: Long = 0): TimelineItem.GroupedEvents {
+internal fun aGroupedEvents(id: Long = 0): TimelineItem.GroupedEvents {
     val event1 = aTimelineItemEvent(
         isMine = true,
         content = aTimelineItemStateEventContent(),
-        groupPosition = TimelineItemGroupPosition.None
+        groupPosition = TimelineItemGroupPosition.None,
+        readReceiptState = TimelineItemReadReceipts(
+            receipts = listOf(aReadReceiptData(0)).toPersistentList(),
+        ),
     )
     val event2 = aTimelineItemEvent(
         isMine = true,
         content = aTimelineItemStateEventContent(body = "Another state event"),
-        groupPosition = TimelineItemGroupPosition.None
+        groupPosition = TimelineItemGroupPosition.None,
+        readReceiptState = TimelineItemReadReceipts(
+            receipts = listOf(aReadReceiptData(1)).toPersistentList(),
+        ),
     )
     return TimelineItem.GroupedEvents(
         id = id.toString(),
