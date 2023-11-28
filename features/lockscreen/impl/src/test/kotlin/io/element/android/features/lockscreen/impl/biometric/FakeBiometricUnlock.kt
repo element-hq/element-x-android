@@ -16,6 +16,8 @@
 
 package io.element.android.features.lockscreen.impl.biometric
 
+import io.element.android.tests.testutils.simulateLongTask
+
 class FakeBiometricUnlock : BiometricUnlock {
     override val isActive = true
 
@@ -27,7 +29,7 @@ class FakeBiometricUnlock : BiometricUnlock {
         authenticateResult = result
     }
 
-    override suspend fun authenticate(): BiometricUnlock.AuthenticationResult {
+    override suspend fun authenticate(): BiometricUnlock.AuthenticationResult = simulateLongTask {
         return authenticateResult
     }
 }

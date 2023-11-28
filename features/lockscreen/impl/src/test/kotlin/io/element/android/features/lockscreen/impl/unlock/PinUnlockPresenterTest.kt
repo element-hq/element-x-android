@@ -149,10 +149,11 @@ class PinUnlockPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            val initialState = awaitLastSequentialItem().also { state ->
-                assertThat(state.showBiometricUnlock).isTrue()
-                assertThat(state.biometricUnlockResult).isNull()
-            }
+            val initialState = consumeItemsUntilPredicate {
+                it.pinEntry is Async.Success && it.remainingAttempts is Async.Success
+            }.last()
+            assertThat(initialState.showBiometricUnlock).isTrue()
+            assertThat(initialState.biometricUnlockResult).isNull()
             initialState.eventSink(PinUnlockEvents.OnUseBiometric)
             awaitLastSequentialItem().also { state ->
                 assertThat(state.biometricUnlockResult).isEqualTo(BiometricUnlock.AuthenticationResult.Success)
@@ -173,10 +174,11 @@ class PinUnlockPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            val initialState = awaitLastSequentialItem().also { state ->
-                assertThat(state.showBiometricUnlock).isTrue()
-                assertThat(state.biometricUnlockResult).isNull()
-            }
+            val initialState = consumeItemsUntilPredicate {
+                it.pinEntry is Async.Success && it.remainingAttempts is Async.Success
+            }.last()
+            assertThat(initialState.showBiometricUnlock).isTrue()
+            assertThat(initialState.biometricUnlockResult).isNull()
             initialState.eventSink(PinUnlockEvents.OnUseBiometric)
             awaitLastSequentialItem().also { state ->
                 assertThat(state.biometricUnlockResult).isInstanceOf(BiometricUnlock.AuthenticationResult.Failure::class.java)
@@ -197,12 +199,7 @@ class PinUnlockPresenterTest {
             val initialState = awaitLastSequentialItem().also { state ->
                 assertThat(state.pinEntry.dataOrNull()).isEqualTo(
                     PinEntry(
-                        digits = listOf(
-                            PinDigit.Empty,
-                            PinDigit.Empty,
-                            PinDigit.Empty,
-                            PinDigit.Empty,
-                        ).toPersistentList()
+                        digits = List(4) { PinDigit.Empty }.toPersistentList()
                     )
                 )
             }
