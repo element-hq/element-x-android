@@ -20,6 +20,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.ui.components.A_BLUR_HASH
+import kotlin.time.Duration.Companion.milliseconds
 
 open class TimelineItemVideoContentProvider : PreviewParameterProvider<TimelineItemVideoContent> {
     override val values: Sequence<TimelineItemVideoContent>
@@ -35,7 +36,7 @@ fun aTimelineItemVideoContent() = TimelineItemVideoContent(
     thumbnailSource = null,
     blurHash = A_BLUR_HASH,
     aspectRatio = 0.5f,
-    duration = 100,
+    duration = 100.milliseconds,
     videoSource = MediaSource(""),
     height = 300,
     width = 150,

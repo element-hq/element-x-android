@@ -19,6 +19,7 @@ package io.element.android.features.messages.impl.voicemessages.timeline
 import app.cash.turbine.TurbineTestContext
 import app.cash.turbine.test
 import com.google.common.truth.Truth
+import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
@@ -287,7 +288,7 @@ private fun createDefaultVoiceMessagePlayer(
         url = MXC_URI,
         json = null
     ),
-    mimeType = "audio/ogg",
+    mimeType = MimeTypes.Ogg,
     body = "someBody.ogg"
 )
 

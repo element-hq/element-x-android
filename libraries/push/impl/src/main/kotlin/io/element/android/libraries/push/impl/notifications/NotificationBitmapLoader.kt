@@ -27,11 +27,13 @@ import coil.transform.CircleCropTransformation
 import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.ui.media.MediaRequestData
+import io.element.android.services.toolbox.api.sdk.BuildVersionSdkIntProvider
 import timber.log.Timber
 import javax.inject.Inject
 
 class NotificationBitmapLoader @Inject constructor(
-    @ApplicationContext private val context: Context
+    @ApplicationContext private val context: Context,
+    private val sdkIntProvider: BuildVersionSdkIntProvider,
 ) {
 
     /**
@@ -65,7 +67,7 @@ class NotificationBitmapLoader @Inject constructor(
      * @param path mxc url
      */
     suspend fun getUserIcon(path: String?): IconCompat? {
-        if (path == null || Build.VERSION.SDK_INT < Build.VERSION_CODES.P) {
+        if (path == null || sdkIntProvider.get() < Build.VERSION_CODES.P) {
             return null
         }
 

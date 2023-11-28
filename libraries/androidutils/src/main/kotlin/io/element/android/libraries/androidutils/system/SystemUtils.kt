@@ -16,8 +16,6 @@
 
 package io.element.android.libraries.androidutils.system
 
-import android.annotation.TargetApi
-import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
@@ -31,6 +29,7 @@ import androidx.annotation.ChecksSdkIntAtLeast
 import androidx.annotation.RequiresApi
 import io.element.android.libraries.androidutils.R
 import io.element.android.libraries.androidutils.compat.getApplicationInfoCompat
+import io.element.android.libraries.core.mimetype.MimeTypes
 
 @ChecksSdkIntAtLeast(api = Build.VERSION_CODES.O)
 fun supportNotificationChannels() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
@@ -104,19 +103,6 @@ fun Context.openAppSettingsPage(
     }
 }
 
-/**
- * Shows notification system settings for the given channel id.
- */
-@TargetApi(Build.VERSION_CODES.O)
-fun Activity.startNotificationChannelSettingsIntent(channelID: String) {
-    if (!supportNotificationChannels()) return
-    val intent = Intent(Settings.ACTION_CHANNEL_NOTIFICATION_SETTINGS).apply {
-        putExtra(Settings.EXTRA_APP_PACKAGE, packageName)
-        putExtra(Settings.EXTRA_CHANNEL_ID, channelID)
-    }
-    startActivity(intent)
-}
-
 @RequiresApi(Build.VERSION_CODES.O)
 fun Context.startInstallFromSourceIntent(
     activityResultLauncher: ActivityResultLauncher<Intent>,
@@ -140,7 +126,7 @@ fun Context.startSharePlainTextIntent(
     noActivityFoundMessage: String = getString(R.string.error_no_compatible_app_found),
 ) {
     val share = Intent(Intent.ACTION_SEND)
-    share.type = "text/plain"
+    share.type = MimeTypes.PlainText
     share.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT)
     // Add data to the intent, the receiving app will decide what to do with it.
     share.putExtra(Intent.EXTRA_SUBJECT, subject)

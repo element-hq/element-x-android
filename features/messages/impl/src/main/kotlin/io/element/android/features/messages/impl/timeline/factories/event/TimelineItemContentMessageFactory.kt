@@ -47,8 +47,8 @@ import io.element.android.libraries.matrix.api.timeline.item.event.VoiceMessageT
 import io.element.android.libraries.matrix.ui.messages.toHtmlDocument
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
-import java.time.Duration
 import javax.inject.Inject
+import kotlin.time.Duration
 
 class TimelineItemContentMessageFactory @Inject constructor(
     private val fileSizeFormatter: FileSizeFormatter,
@@ -104,7 +104,7 @@ class TimelineItemContentMessageFactory @Inject constructor(
                     mimeType = messageType.info?.mimetype ?: MimeTypes.OctetStream,
                     width = messageType.info?.width?.toInt(),
                     height = messageType.info?.height?.toInt(),
-                    duration = messageType.info?.duration?.toMillis() ?: 0L,
+                    duration = messageType.info?.duration ?: Duration.ZERO,
                     blurHash = messageType.info?.blurhash,
                     aspectRatio = aspectRatio,
                     formattedFileSize = fileSizeFormatter.format(messageType.info?.size ?: 0),

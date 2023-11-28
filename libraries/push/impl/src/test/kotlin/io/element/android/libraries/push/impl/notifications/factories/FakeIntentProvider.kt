@@ -14,19 +14,16 @@
  * limitations under the License.
  */
 
-plugins {
-    id("io.element.android-library")
-}
+package io.element.android.libraries.push.impl.notifications.factories
 
-android {
-    namespace = "io.element.android.libraries.voicerecorder.test"
-}
+import android.content.Intent
+import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.matrix.api.core.ThreadId
+import io.element.android.libraries.push.impl.intent.IntentProvider
 
-dependencies {
-    api(projects.libraries.voicerecorder.api)
-    implementation(projects.tests.testutils)
+class FakeIntentProvider : IntentProvider {
+    override fun getViewRoomIntent(sessionId: SessionId, roomId: RoomId?, threadId: ThreadId?) = Intent()
 
-    implementation(libs.coroutines.test)
-    implementation(libs.test.truth)
-    implementation(projects.libraries.core)
+    override fun getInviteListIntent(sessionId: SessionId) = Intent()
 }

@@ -17,6 +17,7 @@
 package io.element.android.features.messages.impl.voicemessages.timeline
 
 import com.google.common.truth.Truth
+import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
@@ -37,7 +38,7 @@ class RedactedVoiceMessageManagerTest {
     @Test
     fun `redacted event - no playing related media`() = runTest {
         val mediaPlayer = FakeMediaPlayer().apply {
-            setMedia(uri = "someUri", mediaId = AN_EVENT_ID.value, mimeType = "audio/ogg")
+            setMedia(uri = "someUri", mediaId = AN_EVENT_ID.value, mimeType = MimeTypes.Ogg)
             play()
         }
         val manager = aDefaultRedactedVoiceMessageManager(mediaPlayer = mediaPlayer)
@@ -54,7 +55,7 @@ class RedactedVoiceMessageManagerTest {
     @Test
     fun `redacted event - playing related media is paused`() = runTest {
         val mediaPlayer = FakeMediaPlayer().apply {
-            setMedia(uri = "someUri", mediaId = AN_EVENT_ID.value, mimeType = "audio/ogg")
+            setMedia(uri = "someUri", mediaId = AN_EVENT_ID.value, mimeType = MimeTypes.Ogg)
             play()
         }
         val manager = aDefaultRedactedVoiceMessageManager(mediaPlayer = mediaPlayer)

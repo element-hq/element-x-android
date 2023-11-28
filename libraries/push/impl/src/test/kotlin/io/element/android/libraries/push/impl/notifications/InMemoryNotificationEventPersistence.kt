@@ -14,15 +14,20 @@
  * limitations under the License.
  */
 
-package io.element.android.features.messages.impl.timeline.model
+package io.element.android.libraries.push.impl.notifications
 
-import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import io.element.android.libraries.push.impl.notifications.model.NotifiableEvent
 
-internal class TimelineItemGroupPositionProvider : PreviewParameterProvider<TimelineItemGroupPosition> {
-    override val values = sequenceOf(
-        TimelineItemGroupPosition.First,
-        TimelineItemGroupPosition.Middle,
-        TimelineItemGroupPosition.Last,
-        TimelineItemGroupPosition.None,
-    )
+class InMemoryNotificationEventPersistence(
+    initialData: List<NotifiableEvent> = emptyList()
+) : NotificationEventPersistence {
+    private var data: List<NotifiableEvent> = initialData
+
+    override fun loadEvents(factory: (List<NotifiableEvent>) -> NotificationEventQueue): NotificationEventQueue {
+        return factory(data)
+    }
+
+    override fun persistEvents(queuedEvents: NotificationEventQueue) {
+        data = queuedEvents.rawEvents()
+    }
 }
