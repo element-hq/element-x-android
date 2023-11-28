@@ -62,10 +62,8 @@ fun RoomMemberDetailsView(
                 avatarUrl = state.avatarUrl,
                 userId = state.userId,
                 userName = state.userName,
-                openAvatarPreview = {
-                    if(state.avatarUrl != null) {
-                        openAvatarPreview(state.userName ?: state.userId, state.avatarUrl)
-                    }
+                openAvatarPreview = { avatarUrl ->
+                    openAvatarPreview(state.userName ?: state.userId, avatarUrl)
                 },
             )
 

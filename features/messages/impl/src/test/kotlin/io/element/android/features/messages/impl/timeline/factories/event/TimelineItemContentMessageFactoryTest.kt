@@ -496,7 +496,7 @@ class TimelineItemContentMessageFactoryTest {
         featureFlagService: FeatureFlagService = FakeFeatureFlagService()
     ) = TimelineItemContentMessageFactory(
         fileSizeFormatter = FakeFileSizeFormatter(),
-        fileExtensionExtractor = io.element.android.libraries.mediaviewer.api.util.FileExtensionExtractorWithoutValidation(),
+        fileExtensionExtractor = FileExtensionExtractorWithoutValidation(),
         featureFlagService = featureFlagService,
     )
 }

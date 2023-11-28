@@ -22,10 +22,12 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.libraries.di.RoomScope
+import io.element.android.libraries.mediaviewer.api.viewer.MediaViewerNode
+import io.element.android.libraries.mediaviewer.api.viewer.MediaViewerPresenter
 
 @ContributesNode(RoomScope::class)
 class RoomMemberAvatarPreviewNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
-    presenterFactory: io.element.android.libraries.mediaviewer.api.viewer.MediaViewerPresenter.Factory,
-) : io.element.android.libraries.mediaviewer.api.viewer.MediaViewerNode(buildContext, plugins, presenterFactory)
+    presenterFactory: MediaViewerPresenter.Factory,
+) : MediaViewerNode(buildContext, plugins, presenterFactory)

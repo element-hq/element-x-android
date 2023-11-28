@@ -42,14 +42,16 @@ fun RoomMemberHeaderSection(
     avatarUrl: String?,
     userId: String,
     userName: String?,
-    openAvatarPreview: () -> Unit,
+    openAvatarPreview: (url: String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
         Box(modifier = Modifier.size(70.dp)) {
             Avatar(
                 avatarData = AvatarData(userId, userName, avatarUrl, AvatarSize.UserHeader),
-                modifier = Modifier.clickable { openAvatarPreview() }.fillMaxSize()
+                modifier = Modifier
+                    .clickable(enabled = avatarUrl != null) { openAvatarPreview(avatarUrl!!) }
+                    .fillMaxSize()
             )
         }
         Spacer(modifier = Modifier.height(24.dp))
