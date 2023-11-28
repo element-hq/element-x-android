@@ -17,6 +17,7 @@
 package io.element.android.features.messages.impl.voicemessages.timeline
 
 import com.google.common.truth.Truth
+import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.matrix.api.media.MatrixMediaLoader
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.test.media.FakeMediaLoader
@@ -143,7 +144,7 @@ private fun createDefaultVoiceMessageMediaRepo(
         url = mxcUri,
         json = null
     ),
-    mimeType = "audio/ogg",
+    mimeType = MimeTypes.Ogg,
     body = "someBody.ogg"
 )
 

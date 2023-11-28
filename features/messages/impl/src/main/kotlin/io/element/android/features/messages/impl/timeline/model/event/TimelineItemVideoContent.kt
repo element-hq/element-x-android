@@ -17,10 +17,11 @@
 package io.element.android.features.messages.impl.timeline.model.event
 
 import io.element.android.libraries.matrix.api.media.MediaSource
+import kotlin.time.Duration
 
 data class TimelineItemVideoContent(
     val body: String,
-    val duration: Long,
+    val duration: Duration,
     val videoSource: MediaSource,
     val thumbnailSource: MediaSource?,
     val aspectRatio: Float?,

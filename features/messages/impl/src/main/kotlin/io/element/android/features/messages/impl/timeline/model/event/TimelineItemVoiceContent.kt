@@ -19,7 +19,7 @@ package io.element.android.features.messages.impl.timeline.model.event
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.media.MediaSource
 import kotlinx.collections.immutable.ImmutableList
-import java.time.Duration
+import kotlin.time.Duration
 
 data class TimelineItemVoiceContent(
     val eventId: EventId?,

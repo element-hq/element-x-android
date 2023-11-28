@@ -21,21 +21,23 @@ import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.media.MediaSource
 import kotlinx.collections.immutable.toPersistentList
-import java.time.Duration
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Duration.Companion.minutes
 
 open class TimelineItemVoiceContentProvider : PreviewParameterProvider<TimelineItemVoiceContent> {
     override val values: Sequence<TimelineItemVoiceContent>
         get() = sequenceOf(
             aTimelineItemVoiceContent(
-                durationMs = 1,
+                duration = 1.milliseconds,
                 waveform = listOf(),
             ),
             aTimelineItemVoiceContent(
-                durationMs = 10_000,
+                duration = 10_000.milliseconds,
                 waveform = listOf(0f, 1f, 2f, 3f, 4f, 5f, 6f, 7f, 8f, 9f, 8f, 7f, 6f, 5f, 4f, 3f, 2f, 1f, 0f),
             ),
             aTimelineItemVoiceContent(
-                durationMs = 1_800_000, // 30 minutes
+                duration = 30.minutes,
                 waveform = List(1024) { it / 1024f },
             ),
         )
@@ -44,14 +46,14 @@ open class TimelineItemVoiceContentProvider : PreviewParameterProvider<TimelineI
 fun aTimelineItemVoiceContent(
     eventId: String? = "\$anEventId",
     body: String = "body doesn't really matter for a voice message",
-    durationMs: Long = 61_000,
+    duration: Duration = 61_000.milliseconds,
     contentUri: String = "mxc://matrix.org/1234567890abcdefg",
     mimeType: String = MimeTypes.Ogg,
     waveform: List<Float> = listOf(0f, 1f, 2f, 3f, 4f, 5f, 6f, 7f, 8f, 9f, 8f, 7f, 6f, 5f, 4f, 3f, 2f, 1f, 0f),
 ) = TimelineItemVoiceContent(
     eventId = eventId?.let { EventId(it) },
     body = body,
-    duration = Duration.ofMillis(durationMs),
+    duration = duration,
     mediaSource = MediaSource(contentUri),
     mimeType = mimeType,
     waveform = waveform.toPersistentList(),

@@ -17,16 +17,18 @@
 package io.element.android.libraries.matrix.impl.media
 
 import io.element.android.libraries.matrix.api.media.AudioInfo
+import kotlin.time.toJavaDuration
+import kotlin.time.toKotlinDuration
 import org.matrix.rustcomponents.sdk.AudioInfo as RustAudioInfo
 
 fun RustAudioInfo.map(): AudioInfo = AudioInfo(
-    duration = duration,
+    duration = duration?.toKotlinDuration(),
     size = size?.toLong(),
     mimetype = mimetype
 )
 
 fun AudioInfo.map(): RustAudioInfo = RustAudioInfo(
-    duration = duration,
+    duration = duration?.toJavaDuration(),
     size = size?.toULong(),
     mimetype = mimetype,
 )

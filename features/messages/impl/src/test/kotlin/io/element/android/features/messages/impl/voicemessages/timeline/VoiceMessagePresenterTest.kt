@@ -29,6 +29,7 @@ import io.element.android.services.analytics.test.FakeAnalyticsService
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
+import kotlin.time.Duration.Companion.milliseconds
 
 class VoiceMessagePresenterTest {
     @Test
@@ -49,7 +50,7 @@ class VoiceMessagePresenterTest {
     fun `pressing play downloads and plays`() = runTest {
         val presenter = createVoiceMessagePresenter(
             mediaPlayer = FakeMediaPlayer(fakeTotalDurationMs = 2_000),
-            content = aTimelineItemVoiceContent(durationMs = 2_000),
+            content = aTimelineItemVoiceContent(duration = 2_000.milliseconds),
         )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -87,7 +88,7 @@ class VoiceMessagePresenterTest {
             mediaPlayer = FakeMediaPlayer(fakeTotalDurationMs = 2_000),
             voiceMessageMediaRepo = FakeVoiceMessageMediaRepo().apply { shouldFail = true },
             analyticsService = analyticsService,
-            content = aTimelineItemVoiceContent(durationMs = 2_000),
+            content = aTimelineItemVoiceContent(duration = 2_000.milliseconds),
         )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -123,7 +124,7 @@ class VoiceMessagePresenterTest {
     fun `pressing pause while playing pauses`() = runTest {
         val presenter = createVoiceMessagePresenter(
             mediaPlayer = FakeMediaPlayer(fakeTotalDurationMs = 2_000),
-            content = aTimelineItemVoiceContent(durationMs = 2_000),
+            content = aTimelineItemVoiceContent(duration = 2_000.milliseconds),
         )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -172,7 +173,7 @@ class VoiceMessagePresenterTest {
     fun `seeking before play`() = runTest {
         val presenter = createVoiceMessagePresenter(
             mediaPlayer = FakeMediaPlayer(fakeTotalDurationMs = 2_000),
-            content = aTimelineItemVoiceContent(durationMs = 10_000),
+            content = aTimelineItemVoiceContent(duration = 10_000.milliseconds),
         )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -196,7 +197,7 @@ class VoiceMessagePresenterTest {
     @Test
     fun `seeking after play`() = runTest {
         val presenter = createVoiceMessagePresenter(
-            content = aTimelineItemVoiceContent(durationMs = 10_000),
+            content = aTimelineItemVoiceContent(duration = 10_000.milliseconds),
         )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
