@@ -371,7 +371,7 @@ class CreatePollPresenterTest {
         }.test {
             val initial = awaitItem()
             Truth.assertThat(navUpInvocationsCount).isEqualTo(0)
-            Truth.assertThat(initial.showConfirmation).isFalse()
+            Truth.assertThat(initial.showBackConfirmation).isFalse()
             initial.eventSink(CreatePollEvents.ConfirmNavBack)
             Truth.assertThat(navUpInvocationsCount).isEqualTo(1)
         }
@@ -386,12 +386,59 @@ class CreatePollPresenterTest {
             val initial = awaitItem()
             initial.eventSink(CreatePollEvents.SetQuestion("Non blank"))
             Truth.assertThat(navUpInvocationsCount).isEqualTo(0)
-            Truth.assertThat(awaitItem().showConfirmation).isFalse()
+            Truth.assertThat(awaitItem().showBackConfirmation).isFalse()
             initial.eventSink(CreatePollEvents.ConfirmNavBack)
             Truth.assertThat(navUpInvocationsCount).isEqualTo(0)
-            Truth.assertThat(awaitItem().showConfirmation).isTrue()
+            Truth.assertThat(awaitItem().showBackConfirmation).isTrue()
             initial.eventSink(CreatePollEvents.HideConfirmation)
-            Truth.assertThat(awaitItem().showConfirmation).isFalse()
+            Truth.assertThat(awaitItem().showBackConfirmation).isFalse()
+        }
+    }
+
+    @Test
+    fun `delete confirms`() = runTest {
+        val presenter = createCreatePollPresenter(mode = CreatePollMode.EditPoll(pollEventId))
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            awaitDefaultItem()
+            awaitPollLoaded().eventSink(CreatePollEvents.Delete(confirmed = false))
+            awaitDeleteConfirmation()
+            Truth.assertThat(fakeMatrixRoom.redactEventEventIdParam).isNull()
+        }
+    }
+
+    @Test
+    fun `delete can be cancelled`() = runTest {
+        val presenter = createCreatePollPresenter(mode = CreatePollMode.EditPoll(pollEventId))
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            awaitDefaultItem()
+            awaitPollLoaded().eventSink(CreatePollEvents.Delete(confirmed = false))
+            Truth.assertThat(fakeMatrixRoom.redactEventEventIdParam).isNull()
+            awaitDeleteConfirmation().eventSink(CreatePollEvents.HideConfirmation)
+            awaitPollLoaded().apply {
+                Truth.assertThat(showDeleteConfirmation).isFalse()
+            }
+            Truth.assertThat(fakeMatrixRoom.redactEventEventIdParam).isNull()
+        }
+    }
+
+    @Test
+    fun `delete can be confirmed`() = runTest {
+        val presenter = createCreatePollPresenter(mode = CreatePollMode.EditPoll(pollEventId))
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            awaitDefaultItem()
+            awaitPollLoaded().eventSink(CreatePollEvents.Delete(confirmed = false))
+            Truth.assertThat(fakeMatrixRoom.redactEventEventIdParam).isNull()
+            awaitDeleteConfirmation().eventSink(CreatePollEvents.Delete(confirmed = true))
+            awaitPollLoaded().apply {
+                Truth.assertThat(showDeleteConfirmation).isFalse()
+            }
+            Truth.assertThat(fakeMatrixRoom.redactEventEventIdParam).isEqualTo(pollEventId)
         }
     }
 
@@ -402,7 +449,13 @@ class CreatePollPresenterTest {
             Truth.assertThat(question).isEmpty()
             Truth.assertThat(answers).isEqualTo(listOf(Answer("", false), Answer("", false)))
             Truth.assertThat(pollKind).isEqualTo(PollKind.Disclosed)
-            Truth.assertThat(showConfirmation).isFalse()
+            Truth.assertThat(showBackConfirmation).isFalse()
+            Truth.assertThat(showDeleteConfirmation).isFalse()
+        }
+
+    private suspend fun TurbineTestContext<CreatePollState>.awaitDeleteConfirmation() =
+        awaitItem().apply {
+            Truth.assertThat(showDeleteConfirmation).isTrue()
         }
 
     private suspend fun TurbineTestContext<CreatePollState>.awaitPollLoaded(

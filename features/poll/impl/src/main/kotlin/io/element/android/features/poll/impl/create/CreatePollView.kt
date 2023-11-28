@@ -76,11 +76,19 @@ fun CreatePollView(
 
     val navBack = { state.eventSink(CreatePollEvents.ConfirmNavBack) }
     BackHandler(onBack = navBack)
-    if (state.showConfirmation) ConfirmationDialog(
+    if (state.showBackConfirmation) ConfirmationDialog(
         content = stringResource(id = R.string.screen_create_poll_cancel_confirmation_content_android),
         onSubmitClicked = { state.eventSink(CreatePollEvents.NavBack) },
         onDismiss = { state.eventSink(CreatePollEvents.HideConfirmation) }
     )
+    if (state.showDeleteConfirmation) {
+        ConfirmationDialog(
+            title = stringResource(id = R.string.screen_edit_poll_delete_confirmation_title),
+            content = stringResource(id = R.string.screen_edit_poll_delete_confirmation),
+            onSubmitClicked = { state.eventSink(CreatePollEvents.Delete(confirmed = true)) },
+            onDismiss = { state.eventSink(CreatePollEvents.HideConfirmation) }
+        )
+    }
     val questionFocusRequester = remember { FocusRequester() }
     val answerFocusRequester = remember { FocusRequester() }
     LaunchedEffect(Unit) {
@@ -191,6 +199,13 @@ fun CreatePollView(
                             onChange = { state.eventSink(CreatePollEvents.SetPollKind(if (it) PollKind.Undisclosed else PollKind.Disclosed)) },
                         ),
                     )
+                    if (state.canDelete) {
+                        ListItem(
+                            headlineContent = { Text(text = stringResource(id = CommonStrings.action_delete_poll)) },
+                            style = ListItemStyle.Destructive,
+                            onClick = { state.eventSink(CreatePollEvents.Delete(confirmed = false)) },
+                        )
+                    }
                 }
             }
         }

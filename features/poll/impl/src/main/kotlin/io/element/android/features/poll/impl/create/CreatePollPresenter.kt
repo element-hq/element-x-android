@@ -67,7 +67,8 @@ class CreatePollPresenter @AssistedInject constructor(
         var question: String by rememberSaveable { mutableStateOf("") }
         var answers: List<String> by rememberSaveable { mutableStateOf(listOf("", "")) }
         var pollKind: PollKind by rememberSaveable(saver = pollKindSaver) { mutableStateOf(PollKind.Disclosed) }
-        var showConfirmation: Boolean by rememberSaveable { mutableStateOf(false) }
+        var showBackConfirmation: Boolean by rememberSaveable { mutableStateOf(false) }
+        var showDeleteConfirmation: Boolean by rememberSaveable { mutableStateOf(false) }
 
         LaunchedEffect(Unit) {
             if (mode is CreatePollMode.EditPoll) {
@@ -114,6 +115,22 @@ class CreatePollPresenter @AssistedInject constructor(
                         Timber.d("Cannot create poll")
                     }
                 }
+                is CreatePollEvents.Delete -> {
+                    if (mode !is CreatePollMode.EditPoll) {
+                        return
+                    }
+
+                    if (!event.confirmed) {
+                        showDeleteConfirmation = true
+                        return
+                    }
+
+                    scope.launch {
+                        showDeleteConfirmation = false
+                        repository.deletePoll(mode.eventId)
+                        navigateUp()
+                    }
+                }
                 is CreatePollEvents.AddAnswer -> {
                     answers = answers + ""
                 }
@@ -137,12 +154,15 @@ class CreatePollPresenter @AssistedInject constructor(
                 CreatePollEvents.ConfirmNavBack -> {
                     val shouldConfirm = question.isNotBlank() || answers.any { it.isNotBlank() }
                     if (shouldConfirm) {
-                        showConfirmation = true
+                        showBackConfirmation = true
                     } else {
                         navigateUp()
                     }
                 }
-                is CreatePollEvents.HideConfirmation -> showConfirmation = false
+                is CreatePollEvents.HideConfirmation -> {
+                    showBackConfirmation = false
+                    showDeleteConfirmation = false
+                }
             }
         }
 
@@ -156,7 +176,8 @@ class CreatePollPresenter @AssistedInject constructor(
             question = question,
             answers = immutableAnswers,
             pollKind = pollKind,
-            showConfirmation = showConfirmation,
+            showBackConfirmation = showBackConfirmation,
+            showDeleteConfirmation = showDeleteConfirmation,
             eventSink = ::handleEvents,
         )
     }

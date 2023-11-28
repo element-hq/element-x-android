@@ -34,7 +34,8 @@ class CreatePollStateProvider : PreviewParameterProvider<CreatePollState> {
                     Answer("", false)
                 ),
                 pollKind = PollKind.Disclosed,
-                showConfirmation = false,
+                showBackConfirmation = false,
+                showDeleteConfirmation = false,
             ),
             aCreatePollState(
                 mode = CreatePollState.Mode.New,
@@ -45,7 +46,8 @@ class CreatePollStateProvider : PreviewParameterProvider<CreatePollState> {
                     Answer("Italian \uD83C\uDDEE\uD83C\uDDF9", false),
                     Answer("Chinese \uD83C\uDDE8\uD83C\uDDF3", false),
                 ),
-                showConfirmation = false,
+                showBackConfirmation = false,
+                showDeleteConfirmation = false,
                 pollKind = PollKind.Undisclosed,
             ),
             aCreatePollState(
@@ -57,7 +59,8 @@ class CreatePollStateProvider : PreviewParameterProvider<CreatePollState> {
                     Answer("Italian \uD83C\uDDEE\uD83C\uDDF9", false),
                     Answer("Chinese \uD83C\uDDE8\uD83C\uDDF3", false),
                 ),
-                showConfirmation = true,
+                showBackConfirmation = true,
+                showDeleteConfirmation = false,
                 pollKind = PollKind.Undisclosed,
             ),
             aCreatePollState(
@@ -71,7 +74,8 @@ class CreatePollStateProvider : PreviewParameterProvider<CreatePollState> {
                     Answer("Brazilian \uD83C\uDDE7\uD83C\uDDF7", true),
                     Answer("French \uD83C\uDDEB\uD83C\uDDF7", true),
                 ),
-                showConfirmation = false,
+                showBackConfirmation = false,
+                showDeleteConfirmation = false,
                 pollKind = PollKind.Undisclosed,
             ),
             aCreatePollState(
@@ -101,7 +105,8 @@ class CreatePollStateProvider : PreviewParameterProvider<CreatePollState> {
                     Answer("19", true),
                     Answer("20", true),
                 ),
-                showConfirmation = false,
+                showBackConfirmation = false,
+                showDeleteConfirmation = false,
                 pollKind = PollKind.Undisclosed,
             ),
             aCreatePollState(
@@ -124,7 +129,8 @@ class CreatePollStateProvider : PreviewParameterProvider<CreatePollState> {
                         false
                     ),
                 ),
-                showConfirmation = false,
+                showBackConfirmation = false,
+                showDeleteConfirmation = false,
                 pollKind = PollKind.Undisclosed,
             ),
             aCreatePollState(
@@ -137,7 +143,21 @@ class CreatePollStateProvider : PreviewParameterProvider<CreatePollState> {
                     Answer("", false)
                 ),
                 pollKind = PollKind.Disclosed,
-                showConfirmation = false,
+                showDeleteConfirmation = false,
+                showBackConfirmation = false,
+            ),
+            aCreatePollState(
+                mode = CreatePollState.Mode.Edit,
+                canCreate = false,
+                canAddAnswer = true,
+                question = "",
+                answers = persistentListOf(
+                    Answer("", false),
+                    Answer("", false)
+                ),
+                pollKind = PollKind.Disclosed,
+                showDeleteConfirmation = true,
+                showBackConfirmation = false,
             ),
         )
 }
@@ -148,7 +168,8 @@ private fun aCreatePollState(
     canAddAnswer: Boolean,
     question: String,
     answers: PersistentList<Answer>,
-    showConfirmation: Boolean,
+    showBackConfirmation: Boolean,
+    showDeleteConfirmation: Boolean,
     pollKind: PollKind
 ): CreatePollState {
     return CreatePollState(
@@ -157,7 +178,8 @@ private fun aCreatePollState(
         canAddAnswer = canAddAnswer,
         question = question,
         answers = answers,
-        showConfirmation = showConfirmation,
+        showBackConfirmation = showBackConfirmation,
+        showDeleteConfirmation = showDeleteConfirmation,
         pollKind = pollKind,
         eventSink = {}
     )
