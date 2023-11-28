@@ -86,7 +86,7 @@ internal class RustEncryptionService(
         }
     }.stateIn(sessionCoroutineScope, SharingStarted.Eagerly, RecoveryState.WAITING_FOR_SYNC)
 
-    override val enableRecoveryProgressStateFlow: MutableStateFlow<EnableRecoveryProgress> = MutableStateFlow(EnableRecoveryProgress.Unknown)
+    override val enableRecoveryProgressStateFlow: MutableStateFlow<EnableRecoveryProgress> = MutableStateFlow(EnableRecoveryProgress.Starting)
 
     fun start() {
         service.backupStateListener(object : BackupStateListener {
@@ -181,7 +181,7 @@ internal class RustEncryptionService(
 
     override suspend fun fixRecoveryIssues(recoveryKey: String): Result<Unit> = withContext(dispatchers.io) {
         runCatching {
-            service.fixRecoveryIssues(recoveryKey)
+            service.recover(recoveryKey)
         }
     }
 }

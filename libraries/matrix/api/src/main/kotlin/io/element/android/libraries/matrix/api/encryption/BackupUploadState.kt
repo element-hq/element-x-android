@@ -19,11 +19,6 @@ package io.element.android.libraries.matrix.api.encryption
 sealed interface BackupUploadState {
     data object Unknown : BackupUploadState
 
-    data class CheckingIfUploadNeeded(
-        val backedUpCount: Int,
-        val totalCount: Int,
-    ) : BackupUploadState
-
     data object Waiting : BackupUploadState
 
     data class Uploading(
