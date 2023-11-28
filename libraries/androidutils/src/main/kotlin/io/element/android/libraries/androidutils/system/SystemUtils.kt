@@ -16,47 +16,20 @@
 
 package io.element.android.libraries.androidutils.system
 
-import android.annotation.SuppressLint
-import android.annotation.TargetApi
-import android.app.Activity
-import android.app.NotificationManager
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
-import android.os.PowerManager
 import android.provider.Settings
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.annotation.ChecksSdkIntAtLeast
 import androidx.annotation.RequiresApi
-import androidx.core.content.getSystemService
 import io.element.android.libraries.androidutils.R
 import io.element.android.libraries.androidutils.compat.getApplicationInfoCompat
-
-/**
- * Tells if the application ignores battery optimizations.
- *
- * Ignoring them allows the app to run in background to make background sync with the homeserver.
- * This user option appears on Android M but Android O enforces its usage and kills apps not
- * authorised by the user to run in background.
- *
- * @return true if battery optimisations are ignored
- */
-fun Context.isIgnoringBatteryOptimizations(): Boolean {
-    // no issue before Android M, battery optimisations did not exist
-    return getSystemService<PowerManager>()?.isIgnoringBatteryOptimizations(packageName) == true
-}
-
-fun Context.isAirplaneModeOn(): Boolean {
-    return Settings.Global.getInt(contentResolver, Settings.Global.AIRPLANE_MODE_ON, 0) != 0
-}
-
-fun Context.isAnimationEnabled(): Boolean {
-    return Settings.Global.getFloat(contentResolver, Settings.Global.ANIMATOR_DURATION_SCALE, 1f) != 0f
-}
+import io.element.android.libraries.core.mimetype.MimeTypes
 
 @ChecksSdkIntAtLeast(api = Build.VERSION_CODES.O)
 fun supportNotificationChannels() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
@@ -71,32 +44,6 @@ fun Context.getApplicationLabel(packageName: String): String {
     } catch (e: PackageManager.NameNotFoundException) {
         packageName
     }
-}
-
-/**
- * Return true it the user has enabled the do not disturb mode.
- */
-fun Context.isDoNotDisturbModeOn(): Boolean {
-    // We cannot use NotificationManagerCompat here.
-    val setting = getSystemService<NotificationManager>()!!.currentInterruptionFilter
-
-    return setting == NotificationManager.INTERRUPTION_FILTER_NONE ||
-        setting == NotificationManager.INTERRUPTION_FILTER_ALARMS
-}
-
-/**
- * display the system dialog for granting this permission. If previously granted, the
- * system will not show it (so you should call this method).
- *
- * Note: If the user finally does not grant the permission, PushManager.isBackgroundSyncAllowed()
- * will return false and the notification privacy will fallback to "LOW_DETAIL".
- */
-@SuppressLint("BatteryLife")
-fun Context.requestDisablingBatteryOptimization(activityResultLauncher: ActivityResultLauncher<Intent>) {
-    val intent = Intent()
-    intent.action = Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS
-    intent.data = Uri.parse("package:$packageName")
-    activityResultLauncher.launch(intent)
 }
 
 // ==============================================================================================================
@@ -156,32 +103,6 @@ fun Context.openAppSettingsPage(
     }
 }
 
-/**
- * Shows notification system settings for the given channel id.
- */
-@TargetApi(Build.VERSION_CODES.O)
-fun Activity.startNotificationChannelSettingsIntent(channelID: String) {
-    if (!supportNotificationChannels()) return
-    val intent = Intent(Settings.ACTION_CHANNEL_NOTIFICATION_SETTINGS).apply {
-        putExtra(Settings.EXTRA_APP_PACKAGE, packageName)
-        putExtra(Settings.EXTRA_CHANNEL_ID, channelID)
-    }
-    startActivity(intent)
-}
-
-fun Context.startAddGoogleAccountIntent(
-    activityResultLauncher: ActivityResultLauncher<Intent>,
-    noActivityFoundMessage: String = getString(R.string.error_no_compatible_app_found),
-) {
-    val intent = Intent(Settings.ACTION_ADD_ACCOUNT)
-    intent.putExtra(Settings.EXTRA_ACCOUNT_TYPES, arrayOf("com.google"))
-    try {
-        activityResultLauncher.launch(intent)
-    } catch (activityNotFoundException: ActivityNotFoundException) {
-        toast(noActivityFoundMessage)
-    }
-}
-
 @RequiresApi(Build.VERSION_CODES.O)
 fun Context.startInstallFromSourceIntent(
     activityResultLauncher: ActivityResultLauncher<Intent>,
@@ -205,7 +126,7 @@ fun Context.startSharePlainTextIntent(
     noActivityFoundMessage: String = getString(R.string.error_no_compatible_app_found),
 ) {
     val share = Intent(Intent.ACTION_SEND)
-    share.type = "text/plain"
+    share.type = MimeTypes.PlainText
     share.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT)
     // Add data to the intent, the receiving app will decide what to do with it.
     share.putExtra(Intent.EXTRA_SUBJECT, subject)
@@ -222,20 +143,6 @@ fun Context.startSharePlainTextIntent(
         } else {
             startActivity(intent)
         }
-    } catch (activityNotFoundException: ActivityNotFoundException) {
-        toast(noActivityFoundMessage)
-    }
-}
-
-fun Context.startImportTextFromFileIntent(
-    activityResultLauncher: ActivityResultLauncher<Intent>,
-    noActivityFoundMessage: String = getString(R.string.error_no_compatible_app_found),
-) {
-    val intent = Intent(Intent.ACTION_GET_CONTENT).apply {
-        type = "text/plain"
-    }
-    try {
-        activityResultLauncher.launch(intent)
     } catch (activityNotFoundException: ActivityNotFoundException) {
         toast(noActivityFoundMessage)
     }

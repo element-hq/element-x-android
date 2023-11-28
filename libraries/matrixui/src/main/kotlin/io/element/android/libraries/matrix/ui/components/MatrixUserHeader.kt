@@ -36,14 +36,14 @@ import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.model.getAvatarData
 import io.element.android.libraries.matrix.ui.model.getBestName
-import io.element.android.libraries.theme.ElementTheme
+import io.element.android.compound.theme.ElementTheme
 
 @Composable
 fun MatrixUserHeader(
     matrixUser: MatrixUser?,
     modifier: Modifier = Modifier,
     // TODO handle click on this item, to let the user be able to update their profile.
-    // onClick: () -> Unit = {},
+    // onClick: () -> Unit,
 ) {
     if (matrixUser == null) {
         MatrixUserHeaderPlaceholder(modifier = modifier)
@@ -60,7 +60,7 @@ fun MatrixUserHeader(
 private fun MatrixUserHeaderContent(
     matrixUser: MatrixUser,
     modifier: Modifier = Modifier,
-    // onClick: () -> Unit = {},
+    // onClick: () -> Unit,
 ) {
     Row(
         modifier = modifier

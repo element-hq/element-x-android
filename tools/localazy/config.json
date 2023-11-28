@@ -157,7 +157,8 @@
     {
       "name": ":features:poll:impl",
       "includeRegex": [
-        "screen_create_poll_.*"
+        "screen_create_poll_.*",
+        "screen_edit_poll_.*"
       ]
     },
     {

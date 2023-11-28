@@ -93,7 +93,7 @@ class MessagesPresenter @AssistedInject constructor(
     private val room: MatrixRoom,
     private val composerPresenter: MessageComposerPresenter,
     private val voiceMessageComposerPresenter: VoiceMessageComposerPresenter,
-    private val timelinePresenter: TimelinePresenter,
+    timelinePresenterFactory: TimelinePresenter.Factory,
     private val actionListPresenter: ActionListPresenter,
     private val customReactionPresenter: CustomReactionPresenter,
     private val reactionSummaryPresenter: ReactionSummaryPresenter,
@@ -109,6 +109,8 @@ class MessagesPresenter @AssistedInject constructor(
     @Assisted private val navigator: MessagesNavigator,
     private val buildMeta: BuildMeta,
 ) : Presenter<MessagesState> {
+
+    private val timelinePresenter = timelinePresenterFactory.create(navigator = navigator)
 
     @AssistedFactory
     interface Factory {
@@ -294,20 +296,28 @@ class MessagesPresenter @AssistedInject constructor(
         composerState: MessageComposerState,
         enableTextFormatting: Boolean,
     ) {
-        val composerMode = MessageComposerMode.Edit(
-            targetEvent.eventId,
-            (targetEvent.content as? TimelineItemTextBasedContent)?.let {
-                if (enableTextFormatting) {
-                    it.htmlBody ?: it.body
-                } else {
-                    it.body
-                }
-            }.orEmpty(),
-            targetEvent.transactionId,
-        )
-        composerState.eventSink(
-            MessageComposerEvents.SetMode(composerMode)
-        )
+        when (targetEvent.content) {
+            is TimelineItemPollContent -> {
+                if (targetEvent.eventId == null) return
+                navigator.onEditPollClicked(targetEvent.eventId)
+            }
+            else -> {
+                val composerMode = MessageComposerMode.Edit(
+                    targetEvent.eventId,
+                    (targetEvent.content as? TimelineItemTextBasedContent)?.let {
+                        if (enableTextFormatting) {
+                            it.htmlBody ?: it.body
+                        } else {
+                            it.body
+                        }
+                    }.orEmpty(),
+                    targetEvent.transactionId,
+                )
+                composerState.eventSink(
+                    MessageComposerEvents.SetMode(composerMode)
+                )
+            }
+        }
     }
 
     private fun handleActionReply(targetEvent: TimelineItem.Event, composerState: MessageComposerState) {

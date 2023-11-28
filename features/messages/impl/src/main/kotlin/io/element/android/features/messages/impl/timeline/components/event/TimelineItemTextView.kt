@@ -32,16 +32,16 @@ import io.element.android.libraries.designsystem.components.ClickableLinkText
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.text.toAnnotatedString
-import io.element.android.libraries.theme.ElementTheme
+import io.element.android.compound.theme.ElementTheme
 
 @Composable
 fun TimelineItemTextView(
     content: TimelineItemTextBasedContent,
     interactionSource: MutableInteractionSource,
     extraPadding: ExtraPadding,
+    onTextClicked: () -> Unit,
+    onTextLongClicked: () -> Unit,
     modifier: Modifier = Modifier,
-    onTextClicked: () -> Unit = {},
-    onTextLongClicked: () -> Unit = {},
 ) {
     CompositionLocalProvider(LocalContentColor provides ElementTheme.colors.textPrimary) {
         val htmlDocument = content.htmlDocument
@@ -79,5 +79,7 @@ internal fun TimelineItemTextViewPreview(
         content = content,
         interactionSource = remember { MutableInteractionSource() },
         extraPadding = ExtraPadding(nbChars = 8),
+        onTextClicked = {},
+        onTextLongClicked = {},
     )
 }

@@ -31,11 +31,11 @@ import io.element.android.libraries.designsystem.theme.components.Checkbox
 @Composable
 fun CheckableUserRow(
     checked: Boolean,
+    onCheckedChange: (Boolean) -> Unit,
     avatarData: AvatarData,
     name: String,
     subtext: String?,
     modifier: Modifier = Modifier,
-    onCheckedChange: (Boolean) -> Unit = {},
     enabled: Boolean = true,
 ) {
     Row(

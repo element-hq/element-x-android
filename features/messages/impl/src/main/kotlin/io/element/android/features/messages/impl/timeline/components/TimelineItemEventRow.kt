@@ -53,39 +53,36 @@ import androidx.compose.ui.platform.ViewConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.constraintlayout.compose.ConstrainScope
 import androidx.constraintlayout.compose.ConstraintLayout
+import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.messages.impl.timeline.TimelineEvents
 import io.element.android.features.messages.impl.timeline.aTimelineItemEvent
-import io.element.android.features.messages.impl.timeline.aTimelineItemReactions
 import io.element.android.features.messages.impl.timeline.components.event.TimelineItemEventContentView
 import io.element.android.features.messages.impl.timeline.components.event.toExtraPadding
 import io.element.android.features.messages.impl.timeline.components.receipt.ReadReceiptViewState
 import io.element.android.features.messages.impl.timeline.components.receipt.TimelineItemReadReceiptView
 import io.element.android.features.messages.impl.timeline.model.InReplyToDetails
+import io.element.android.features.messages.impl.timeline.model.InReplyToMetadata
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.TimelineItemGroupPosition
 import io.element.android.features.messages.impl.timeline.model.bubble.BubbleState
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemLocationContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemPollContent
-import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemImageContent
-import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemPollContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
+import io.element.android.features.messages.impl.timeline.model.metadata
 import io.element.android.libraries.designsystem.colors.AvatarColorsProvider
 import io.element.android.libraries.designsystem.components.EqualWidthColumn
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.preview.ElementPreview
-import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.swipe.SwipeableActionsState
 import io.element.android.libraries.designsystem.swipe.rememberSwipeableActionsState
@@ -95,22 +92,9 @@ import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
-import io.element.android.libraries.matrix.api.timeline.item.event.AudioMessageType
-import io.element.android.libraries.matrix.api.timeline.item.event.FileMessageType
-import io.element.android.libraries.matrix.api.timeline.item.event.ImageMessageType
-import io.element.android.libraries.matrix.api.timeline.item.event.LocationMessageType
-import io.element.android.libraries.matrix.api.timeline.item.event.MessageContent
-import io.element.android.libraries.matrix.api.timeline.item.event.PollContent
-import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageType
-import io.element.android.libraries.matrix.api.timeline.item.event.VideoMessageType
-import io.element.android.libraries.matrix.api.timeline.item.event.VoiceMessageType
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnail
-import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailInfo
-import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailType
-import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.coroutines.launch
-import org.jsoup.Jsoup
 import kotlin.math.abs
 import kotlin.math.roundToInt
 
@@ -534,6 +518,7 @@ private fun MessageEventBubbleContent(
                 TimelineItemEventContentView(
                     content = event.content,
                     isMine = event.isMine,
+                    isEditable = event.isEditable,
                     interactionSource = interactionSource,
                     onClick = onMessageClick,
                     onLongClick = onMessageLongClick,
@@ -545,13 +530,10 @@ private fun MessageEventBubbleContent(
         }
         val inReplyTo = @Composable { inReplyTo: InReplyToDetails ->
             val senderName = inReplyTo.senderDisplayName ?: inReplyTo.senderId.value
-            val attachmentThumbnailInfo = attachmentThumbnailInfoForInReplyTo(inReplyTo)
-            val text = textForInReplyTo(inReplyTo)
             val topPadding = if (showThreadDecoration) 0.dp else 8.dp
             ReplyToContent(
                 senderName = senderName,
-                text = text,
-                attachmentThumbnailInfo = attachmentThumbnailInfo,
+                metadata = inReplyTo.metadata(),
                 modifier = Modifier
                     .padding(top = topPadding, start = 8.dp, end = 8.dp)
                     .clip(RoundedCornerShape(6.dp))
@@ -592,11 +574,10 @@ private fun MessageEventBubbleContent(
 @Composable
 private fun ReplyToContent(
     senderName: String,
-    text: String?,
-    attachmentThumbnailInfo: AttachmentThumbnailInfo?,
+    metadata: InReplyToMetadata?,
     modifier: Modifier = Modifier,
 ) {
-    val paddings = if (attachmentThumbnailInfo != null) {
+    val paddings = if (metadata is InReplyToMetadata.Thumbnail) {
         PaddingValues(start = 4.dp, end = 12.dp, top = 4.dp, bottom = 4.dp)
     } else {
         PaddingValues(horizontal = 12.dp, vertical = 4.dp)
@@ -606,9 +587,9 @@ private fun ReplyToContent(
             .background(MaterialTheme.colorScheme.surface)
             .padding(paddings)
     ) {
-        if (attachmentThumbnailInfo != null) {
+        if (metadata is InReplyToMetadata.Thumbnail) {
             AttachmentThumbnail(
-                info = attachmentThumbnailInfo,
+                info = metadata.attachmentThumbnailInfo,
                 backgroundColor = MaterialTheme.colorScheme.surfaceVariant,
                 modifier = Modifier
                     .size(36.dp)
@@ -626,7 +607,7 @@ private fun ReplyToContent(
                 overflow = TextOverflow.Ellipsis,
             )
             Text(
-                text = text.orEmpty(),
+                text = metadata?.text.orEmpty(),
                 style = ElementTheme.typography.fontBodyMdRegular,
                 textAlign = TextAlign.Start,
                 color = ElementTheme.materialColors.secondary,
@@ -637,66 +618,12 @@ private fun ReplyToContent(
     }
 }
 
-private fun attachmentThumbnailInfoForInReplyTo(inReplyTo: InReplyToDetails): AttachmentThumbnailInfo? {
-    return when (val eventContent = inReplyTo.eventContent) {
-        is MessageContent -> when (val type = eventContent.type) {
-            is ImageMessageType -> AttachmentThumbnailInfo(
-                thumbnailSource = type.info?.thumbnailSource ?: type.source,
-                textContent = eventContent.body,
-                type = AttachmentThumbnailType.Image,
-                blurHash = type.info?.blurhash,
-            )
-            is VideoMessageType -> AttachmentThumbnailInfo(
-                thumbnailSource = type.info?.thumbnailSource,
-                textContent = eventContent.body,
-                type = AttachmentThumbnailType.Video,
-                blurHash = type.info?.blurhash,
-            )
-            is FileMessageType -> AttachmentThumbnailInfo(
-                thumbnailSource = type.info?.thumbnailSource,
-                textContent = eventContent.body,
-                type = AttachmentThumbnailType.File,
-            )
-            is LocationMessageType -> AttachmentThumbnailInfo(
-                textContent = eventContent.body,
-                type = AttachmentThumbnailType.Location,
-            )
-            is AudioMessageType -> AttachmentThumbnailInfo(
-                textContent = eventContent.body,
-                type = AttachmentThumbnailType.Audio,
-            )
-            is VoiceMessageType -> AttachmentThumbnailInfo(
-                type = AttachmentThumbnailType.Voice,
-            )
-            else -> null
-        }
-        is PollContent -> AttachmentThumbnailInfo(
-            textContent = eventContent.question,
-            type = AttachmentThumbnailType.Poll,
-        )
-        else -> null
-    }
-}
-
-@Composable
-private fun textForInReplyTo(inReplyTo: InReplyToDetails): String {
-    return when (val eventContent = inReplyTo.eventContent) {
-        is MessageContent -> when (eventContent.type) {
-            is LocationMessageType -> stringResource(CommonStrings.common_shared_location)
-            is VoiceMessageType -> stringResource(CommonStrings.common_voice_message)
-            else -> inReplyTo.textContent ?: eventContent.body
-        }
-        is PollContent -> eventContent.question
-        else -> ""
-    }
-}
-
 @PreviewsDayNight
 @Composable
 internal fun TimelineItemEventRowPreview() = ElementPreview {
     Column {
         sequenceOf(false, true).forEach {
-            TimelineItemEventRow(
+            ATimelineItemEventRow(
                 event = aTimelineItemEvent(
                     isMine = it,
                     content = aTimelineItemTextContent().copy(
@@ -705,23 +632,8 @@ internal fun TimelineItemEventRowPreview() = ElementPreview {
                     ),
                     groupPosition = TimelineItemGroupPosition.First,
                 ),
-                showReadReceipts = false,
-                isLastOutgoingMessage = false,
-                isHighlighted = false,
-                canReply = true,
-                onClick = {},
-                onLongClick = {},
-                onUserDataClick = {},
-                inReplyToClick = {},
-                onReactionClick = { _, _ -> },
-                onReactionLongClick = { _, _ -> },
-                onMoreReactionsClick = {},
-                onReadReceiptClick = {},
-                onTimestampClicked = {},
-                onSwipeToReply = {},
-                eventSink = {},
             )
-            TimelineItemEventRow(
+            ATimelineItemEventRow(
                 event = aTimelineItemEvent(
                     isMine = it,
                     content = aTimelineItemImageContent().copy(
@@ -729,230 +641,7 @@ internal fun TimelineItemEventRowPreview() = ElementPreview {
                     ),
                     groupPosition = TimelineItemGroupPosition.Last,
                 ),
-                showReadReceipts = false,
-                isLastOutgoingMessage = false,
-                isHighlighted = false,
-                canReply = true,
-                onClick = {},
-                onLongClick = {},
-                onUserDataClick = {},
-                inReplyToClick = {},
-                onReactionClick = { _, _ -> },
-                onReactionLongClick = { _, _ -> },
-                onMoreReactionsClick = {},
-                onReadReceiptClick = {},
-                onTimestampClicked = {},
-                onSwipeToReply = {},
-                eventSink = {},
             )
         }
     }
-}
-
-@PreviewsDayNight
-@Composable
-internal fun TimelineItemEventRowWithReplyPreview() = ElementPreview {
-    Column {
-        sequenceOf(false, true).forEach {
-            val replyContent = if (it) {
-                // Short
-                "Message which are being replied."
-            } else {
-                // Long, to test 2 lines and ellipsis)
-                "Message which are being replied, and which was long enough to be displayed on two lines (only!)."
-            }
-            TimelineItemEventRow(
-                event = aTimelineItemEvent(
-                    isMine = it,
-                    content = aTimelineItemTextContent().copy(
-                        body = "A long text which will be displayed on several lines and" +
-                            " hopefully can be manually adjusted to test different behaviors."
-                    ),
-                    inReplyTo = aInReplyToDetails(replyContent),
-                    groupPosition = TimelineItemGroupPosition.First,
-                ),
-                showReadReceipts = false,
-                isLastOutgoingMessage = false,
-                isHighlighted = false,
-                canReply = true,
-                onClick = {},
-                onLongClick = {},
-                onUserDataClick = {},
-                inReplyToClick = {},
-                onReactionClick = { _, _ -> },
-                onReactionLongClick = { _, _ -> },
-                onMoreReactionsClick = {},
-                onReadReceiptClick = {},
-                onTimestampClicked = {},
-                onSwipeToReply = {},
-                eventSink = {},
-            )
-            TimelineItemEventRow(
-                event = aTimelineItemEvent(
-                    isMine = it,
-                    content = aTimelineItemImageContent().copy(
-                        aspectRatio = 5f
-                    ),
-                    inReplyTo = aInReplyToDetails(replyContent),
-                    isThreaded = true,
-                    groupPosition = TimelineItemGroupPosition.Last,
-                ),
-                showReadReceipts = false,
-                isLastOutgoingMessage = false,
-                isHighlighted = false,
-                canReply = true,
-                onClick = {},
-                onLongClick = {},
-                onUserDataClick = {},
-                inReplyToClick = {},
-                onReactionClick = { _, _ -> },
-                onReactionLongClick = { _, _ -> },
-                onMoreReactionsClick = {},
-                onReadReceiptClick = {},
-                onTimestampClicked = {},
-                onSwipeToReply = {},
-                eventSink = {},
-            )
-        }
-    }
-}
-
-private fun aInReplyToDetails(
-    replyContent: String,
-): InReplyToDetails {
-    return InReplyToDetails(
-        eventId = EventId("\$event"),
-        eventContent = MessageContent(replyContent, null, false, false, TextMessageType(replyContent, null)),
-        senderId = UserId("@Sender:domain"),
-        senderDisplayName = "Sender",
-        senderAvatarUrl = null,
-        textContent = replyContent,
-    )
-}
-
-@PreviewsDayNight
-@Composable
-internal fun TimelineItemEventRowTimestampPreview(
-    @PreviewParameter(TimelineItemEventForTimestampViewProvider::class) event: TimelineItem.Event
-) = ElementPreview {
-    Column {
-        val oldContent = event.content as TimelineItemTextContent
-        listOf(
-            "Text",
-            "Text longer, displayed on 1 line",
-            "Text which should be rendered on several lines",
-        ).forEach { str ->
-            listOf(false, true).forEach { useDocument ->
-                TimelineItemEventRow(
-                    event = event.copy(
-                        content = oldContent.copy(
-                            body = str,
-                            htmlDocument = if (useDocument) Jsoup.parse(str) else null,
-                        ),
-                        reactionsState = aTimelineItemReactions(count = 0),
-                        senderDisplayName = if (useDocument) "Document case" else "Text case",
-                    ),
-                    showReadReceipts = false,
-                    isLastOutgoingMessage = false,
-                    isHighlighted = false,
-                    canReply = true,
-                    onClick = {},
-                    onLongClick = {},
-                    onUserDataClick = {},
-                    inReplyToClick = {},
-                    onReactionClick = { _, _ -> },
-                    onReactionLongClick = { _, _ -> },
-                    onMoreReactionsClick = {},
-                    onReadReceiptClick = {},
-                    onTimestampClicked = {},
-                    onSwipeToReply = {},
-                    eventSink = {},
-                )
-            }
-        }
-    }
-}
-
-@PreviewsDayNight
-@Composable
-internal fun TimelineItemEventRowWithManyReactionsPreview() = ElementPreview {
-    Column {
-        listOf(false, true).forEach { isMine ->
-            TimelineItemEventRow(
-                event = aTimelineItemEvent(
-                    isMine = isMine,
-                    content = aTimelineItemTextContent().copy(
-                        body = "A couple of multi-line messages with many reactions attached." +
-                            " One sent by me and another from someone else."
-                    ),
-                    timelineItemReactions = aTimelineItemReactions(count = 20),
-                ),
-                showReadReceipts = false,
-                isLastOutgoingMessage = false,
-                isHighlighted = false,
-                canReply = true,
-                onClick = {},
-                onLongClick = {},
-                onUserDataClick = {},
-                inReplyToClick = {},
-                onReactionClick = { _, _ -> },
-                onReactionLongClick = { _, _ -> },
-                onMoreReactionsClick = {},
-                onReadReceiptClick = {},
-                onSwipeToReply = {},
-                onTimestampClicked = {},
-                eventSink = {},
-            )
-        }
-    }
-}
-
-// Note: no need for light/dark variant for this preview
-@Preview
-@Composable
-internal fun TimelineItemEventRowLongSenderNamePreview() = ElementPreviewLight {
-    TimelineItemEventRow(
-        event = aTimelineItemEvent(
-            senderDisplayName = "a long sender display name to test single line and ellipsis at the end of the line",
-        ),
-        showReadReceipts = false,
-        isLastOutgoingMessage = false,
-        isHighlighted = false,
-        canReply = true,
-        onClick = {},
-        onLongClick = {},
-        onUserDataClick = {},
-        inReplyToClick = {},
-        onReactionClick = { _, _ -> },
-        onReactionLongClick = { _, _ -> },
-        onMoreReactionsClick = {},
-        onReadReceiptClick = {},
-        onSwipeToReply = {},
-        onTimestampClicked = {},
-        eventSink = {},
-    )
-}
-
-// Note: no need for light/dark variant for this preview, we only look at the timestamp position
-@Preview
-@Composable
-internal fun TimelineItemEventTimestampBelowPreview() = ElementPreviewLight {
-    TimelineItemEventRow(
-        event = aTimelineItemEvent(content = aTimelineItemPollContent()),
-        showReadReceipts = false,
-        isLastOutgoingMessage = false,
-        isHighlighted = false,
-        canReply = true,
-        onClick = {},
-        onLongClick = {},
-        onUserDataClick = {},
-        inReplyToClick = {},
-        onReactionClick = { _, _ -> },
-        onReactionLongClick = { _, _ -> },
-        onMoreReactionsClick = {},
-        onReadReceiptClick = {},
-        onSwipeToReply = {},
-        onTimestampClicked = {},
-        eventSink = {},
-    )
 }

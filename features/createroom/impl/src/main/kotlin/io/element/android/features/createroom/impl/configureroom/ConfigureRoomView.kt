@@ -63,7 +63,7 @@ import io.element.android.libraries.matrix.ui.components.AvatarActionBottomSheet
 import io.element.android.libraries.matrix.ui.components.SelectedUsersList
 import io.element.android.libraries.matrix.ui.components.UnsavedAvatar
 import io.element.android.libraries.permissions.api.PermissionsView
-import io.element.android.libraries.theme.ElementTheme
+import io.element.android.compound.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.coroutines.launch
 
@@ -167,9 +167,9 @@ fun ConfigureRoomView(
 @Composable
 private fun ConfigureRoomToolbar(
     isNextActionEnabled: Boolean,
+    onBackPressed: () -> Unit,
+    onNextPressed: () -> Unit,
     modifier: Modifier = Modifier,
-    onBackPressed: () -> Unit = {},
-    onNextPressed: () -> Unit = {},
 ) {
     TopAppBar(
         modifier = modifier,
@@ -194,9 +194,9 @@ private fun ConfigureRoomToolbar(
 private fun RoomNameWithAvatar(
     avatarUri: Uri?,
     roomName: String,
+    onAvatarClick: () -> Unit,
+    onRoomNameChanged: (String) -> Unit,
     modifier: Modifier = Modifier,
-    onAvatarClick: () -> Unit = {},
-    onRoomNameChanged: (String) -> Unit = {},
 ) {
     Row(
         modifier = modifier,
@@ -221,8 +221,8 @@ private fun RoomNameWithAvatar(
 @Composable
 private fun RoomTopic(
     topic: String,
+    onTopicChanged: (String) -> Unit,
     modifier: Modifier = Modifier,
-    onTopicChanged: (String) -> Unit = {},
 ) {
     LabelledTextField(
         modifier = modifier,
@@ -240,8 +240,8 @@ private fun RoomTopic(
 @Composable
 private fun RoomPrivacyOptions(
     selected: RoomPrivacy?,
+    onOptionSelected: (RoomPrivacyItem) -> Unit,
     modifier: Modifier = Modifier,
-    onOptionSelected: (RoomPrivacyItem) -> Unit = {},
 ) {
     val items = roomPrivacyItems()
     Column(modifier = modifier.selectableGroup()) {

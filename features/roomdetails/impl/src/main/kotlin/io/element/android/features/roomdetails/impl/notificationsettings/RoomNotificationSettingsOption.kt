@@ -32,15 +32,15 @@ import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.theme.components.RadioButton
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.toEnabledColor
-import io.element.android.libraries.theme.ElementTheme
+import io.element.android.compound.theme.ElementTheme
 
 @Composable
 fun RoomNotificationSettingsOption(
     roomNotificationSettingsItem: RoomNotificationSettingsItem,
+    onOptionSelected: (RoomNotificationSettingsItem) -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     isSelected: Boolean = false,
-    onOptionSelected: (RoomNotificationSettingsItem) -> Unit = {},
 ) {
     Row(
         modifier
@@ -83,10 +83,12 @@ internal fun RoomPrivacyOptionPreview() = ElementPreview {
     Column {
         RoomNotificationSettingsOption(
             roomNotificationSettingsItem = roomNotificationSettingsItems().first(),
+            onOptionSelected = {},
             isSelected = true,
         )
         RoomNotificationSettingsOption(
             roomNotificationSettingsItem = roomNotificationSettingsItems().last(),
+            onOptionSelected = {},
             isSelected = false,
             enabled = false,
         )

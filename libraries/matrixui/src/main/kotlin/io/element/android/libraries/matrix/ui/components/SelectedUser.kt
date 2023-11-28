@@ -34,14 +34,14 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
-import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Surface
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.model.getAvatarData
 import io.element.android.libraries.matrix.ui.model.getBestName
@@ -50,8 +50,8 @@ import io.element.android.libraries.ui.strings.CommonStrings
 @Composable
 fun SelectedUser(
     matrixUser: MatrixUser,
+    onUserRemoved: (MatrixUser) -> Unit,
     modifier: Modifier = Modifier,
-    onUserRemoved: (MatrixUser) -> Unit = {},
 ) {
     Box(
         modifier = modifier
@@ -81,7 +81,7 @@ fun SelectedUser(
                 ),
         ) {
             Icon(
-                resourceId = CommonDrawables.ic_compound_close,
+                imageVector = CompoundIcons.Close,
                 contentDescription = stringResource(id = CommonStrings.action_remove),
                 tint = MaterialTheme.colorScheme.onPrimary,
                 modifier = Modifier.padding(2.dp)
@@ -93,5 +93,8 @@ fun SelectedUser(
 @PreviewsDayNight
 @Composable
 internal fun SelectedUserPreview() = ElementPreview {
-    SelectedUser(aMatrixUser())
+    SelectedUser(
+        aMatrixUser(),
+        onUserRemoved = {},
+    )
 }

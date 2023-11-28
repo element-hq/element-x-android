@@ -68,6 +68,7 @@ fun TimelineItemStateEventRow(
             TimelineItemEventContentView(
                 content = event.content,
                 isMine = event.isMine,
+                isEditable = event.isEditable,
                 interactionSource = interactionSource,
                 onClick = onClick,
                 onLongClick = onLongClick,

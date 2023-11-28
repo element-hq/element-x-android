@@ -17,15 +17,17 @@
 package io.element.android.libraries.matrix.impl.media
 
 import io.element.android.libraries.matrix.api.media.AudioDetails
+import kotlin.time.toJavaDuration
+import kotlin.time.toKotlinDuration
 import org.matrix.rustcomponents.sdk.UnstableAudioDetailsContent as RustAudioDetails
 
 fun RustAudioDetails.map(): AudioDetails = AudioDetails(
-    duration = duration,
+    duration = duration.toKotlinDuration(),
     waveform = waveform.fromMSC3246range(),
 )
 
 fun AudioDetails.map(): RustAudioDetails = RustAudioDetails(
-    duration = duration,
+    duration = duration.toJavaDuration(),
     waveform = waveform.toMSC3246range()
 )
 

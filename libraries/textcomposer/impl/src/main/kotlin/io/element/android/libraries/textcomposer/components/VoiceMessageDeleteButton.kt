@@ -22,19 +22,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import io.element.android.compound.theme.ElementTheme
+import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
-import io.element.android.libraries.designsystem.utils.CommonDrawables
-import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
 fun VoiceMessageDeleteButton(
     enabled: Boolean,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    onClick: () -> Unit = {},
 ) {
     IconButton(
         modifier = modifier
@@ -44,7 +44,7 @@ fun VoiceMessageDeleteButton(
     ) {
         Icon(
             modifier = Modifier.size(24.dp),
-            resourceId = CommonDrawables.ic_compound_delete,
+            imageVector = CompoundIcons.Delete,
             contentDescription = stringResource(CommonStrings.a11y_delete),
             tint = if (enabled) {
                 ElementTheme.colors.iconCriticalPrimary
@@ -59,7 +59,13 @@ fun VoiceMessageDeleteButton(
 @Composable
 internal fun VoiceMessageDeleteButtonPreview() = ElementPreview {
     Row {
-        VoiceMessageDeleteButton(enabled = true)
-        VoiceMessageDeleteButton(enabled = false)
+        VoiceMessageDeleteButton(
+            enabled = true,
+            onClick = {},
+        )
+        VoiceMessageDeleteButton(
+            enabled = false,
+            onClick = {},
+        )
     }
 }

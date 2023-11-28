@@ -27,6 +27,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import io.element.android.compound.theme.ElementTheme
+import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.preferences.impl.R
 import io.element.android.features.preferences.impl.user.UserPreferences
 import io.element.android.libraries.designsystem.components.list.ListItemContent
@@ -44,7 +46,6 @@ import io.element.android.libraries.designsystem.utils.snackbar.SnackbarHost
 import io.element.android.libraries.designsystem.utils.snackbar.rememberSnackbarHostState
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.components.MatrixUserProvider
-import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
@@ -83,7 +84,7 @@ fun PreferencesRootView(
         if (state.showCompleteVerification) {
             ListItem(
                 headlineContent = { Text(text = stringResource(CommonStrings.common_verify_device)) },
-                leadingContent = ListItemContent.Icon(IconSource.Resource(CommonDrawables.ic_compound_check_circle)),
+                leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.CheckCircle)),
                 onClick = onVerifyClicked
             )
         }
@@ -101,8 +102,8 @@ fun PreferencesRootView(
         if (state.accountManagementUrl != null) {
             ListItem(
                 headlineContent = { Text(stringResource(id = CommonStrings.action_manage_account)) },
-                leadingContent = ListItemContent.Icon(IconSource.Resource(CommonDrawables.ic_compound_user)),
-                trailingContent = ListItemContent.Icon(IconSource.Resource(CommonDrawables.ic_compound_pop_out)),
+                leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.UserProfile)),
+                trailingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.PopOut)),
                 onClick = { onManageAccountClicked(state.accountManagementUrl) },
             )
             HorizontalDivider()
@@ -117,18 +118,18 @@ fun PreferencesRootView(
         if (state.showNotificationSettings) {
             ListItem(
                 headlineContent = { Text(stringResource(id = R.string.screen_notification_settings_title)) },
-                leadingContent = ListItemContent.Icon(IconSource.Resource(CommonDrawables.ic_compound_notifications)),
+                leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Notifications)),
                 onClick = onOpenNotificationSettings,
             )
         }
         ListItem(
             headlineContent = { Text(stringResource(id = CommonStrings.common_report_a_problem)) },
-            leadingContent = ListItemContent.Icon(IconSource.Resource(CommonDrawables.ic_compound_chat_problem)),
+            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.ChatProblem)),
             onClick = onOpenRageShake
         )
         ListItem(
             headlineContent = { Text(stringResource(id = CommonStrings.common_about)) },
-            leadingContent = ListItemContent.Icon(IconSource.Resource(CommonDrawables.ic_compound_info)),
+            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Info)),
             onClick = onOpenAbout,
         )
         if (state.showLockScreenSettings) {
@@ -143,14 +144,14 @@ fun PreferencesRootView(
             ListItem(
                 headlineContent = { Text(stringResource(id = CommonStrings.action_manage_devices)) },
                 leadingContent = ListItemContent.Icon(IconSource.Resource(CommonDrawables.ic_devices)),
-                trailingContent = ListItemContent.Icon(IconSource.Resource(CommonDrawables.ic_compound_pop_out)),
+                trailingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.PopOut)),
                 onClick = { onManageAccountClicked(state.devicesManagementUrl) },
             )
             HorizontalDivider()
         }
         ListItem(
             headlineContent = { Text(stringResource(id = CommonStrings.common_advanced_settings)) },
-            leadingContent = ListItemContent.Icon(IconSource.Resource(CommonDrawables.ic_compound_settings)),
+            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Settings)),
             onClick = onOpenAdvancedSettings,
         )
         if (state.showDeveloperSettings) {

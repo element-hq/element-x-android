@@ -23,10 +23,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import io.element.android.compound.theme.Theme
+import io.element.android.compound.theme.mapToTheme
 import io.element.android.features.preferences.api.store.PreferencesStore
 import io.element.android.libraries.architecture.Presenter
-import io.element.android.libraries.theme.theme.Theme
-import io.element.android.libraries.theme.theme.mapToTheme
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 

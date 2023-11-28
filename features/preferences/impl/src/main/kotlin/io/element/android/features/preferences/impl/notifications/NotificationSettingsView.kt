@@ -23,6 +23,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.lifecycle.Lifecycle
+import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.preferences.impl.R
 import io.element.android.libraries.androidutils.system.startNotificationSettingsIntent
 import io.element.android.libraries.designsystem.atomic.molecules.DialogLikeBannerMolecule
@@ -34,7 +35,6 @@ import io.element.android.libraries.designsystem.components.preferences.Preferen
 import io.element.android.libraries.designsystem.components.preferences.PreferenceText
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.designsystem.utils.OnLifecycleEvent
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -103,7 +103,7 @@ private fun NotificationSettingsContentView(
     val context = LocalContext.current
     if (systemSettings.appNotificationsEnabled && !systemSettings.systemNotificationsEnabled) {
         PreferenceText(
-            iconResourceId = CommonDrawables.ic_compound_notifications_solid_off,
+            icon = CompoundIcons.NotificationsSolidOff,
             title = stringResource(id = R.string.screen_notification_settings_system_notifications_turned_off),
             subtitle = stringResource(
                 id = R.string.screen_notification_settings_system_notifications_action_required,

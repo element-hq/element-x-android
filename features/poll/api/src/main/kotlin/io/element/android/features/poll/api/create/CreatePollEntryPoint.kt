@@ -21,5 +21,14 @@ import com.bumble.appyx.core.node.Node
 import io.element.android.libraries.architecture.FeatureEntryPoint
 
 interface CreatePollEntryPoint : FeatureEntryPoint {
-    fun createNode(parentNode: Node, buildContext: BuildContext): Node
+    data class Params(
+        val mode: CreatePollMode,
+    )
+
+    fun nodeBuilder(parentNode: Node, buildContext: BuildContext): NodeBuilder
+
+    interface NodeBuilder {
+        fun params(params: Params): NodeBuilder
+        fun build(): Node
+    }
 }

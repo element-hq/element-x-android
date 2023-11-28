@@ -45,7 +45,7 @@ import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.theme.ElementTheme
+import io.element.android.compound.theme.ElementTheme
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
@@ -59,9 +59,9 @@ private const val DEFAULT_GRAPHICS_LAYER_ALPHA: Float = 0.99F
  * @param playbackProgress The current playback progress, between 0 and 1.
  * @param showCursor Whether to show the cursor or not.
  * @param waveform The waveform to display. Use [FakeWaveformFactory] to generate a fake waveform.
+ * @param onSeek Callback when the user seeks the waveform. Called with a value between 0 and 1.
  * @param modifier The modifier to be applied to the view.
  * @param seekEnabled Whether the user can seek the waveform or not.
- * @param onSeek Callback when the user seeks the waveform. Called with a value between 0 and 1.
  * @param brush The brush to use to draw the waveform.
  * @param progressBrush The brush to use to draw the progress.
  * @param cursorBrush The brush to use to draw the cursor.
@@ -74,9 +74,9 @@ fun WaveformPlaybackView(
     playbackProgress: Float,
     showCursor: Boolean,
     waveform: ImmutableList<Float>,
+    onSeek: (progress: Float) -> Unit,
     modifier: Modifier = Modifier,
     seekEnabled: Boolean = true,
-    onSeek: (progress: Float) -> Unit = {},
     brush: Brush = SolidColor(ElementTheme.colors.iconQuaternary),
     progressBrush: Brush = SolidColor(ElementTheme.colors.iconSecondary),
     cursorBrush: Brush = SolidColor(ElementTheme.colors.iconAccentTertiary),
@@ -183,18 +183,21 @@ internal fun WaveformPlaybackViewPreview() = ElementPreview {
             modifier = Modifier.height(34.dp),
             showCursor = false,
             playbackProgress = 0.5f,
+            onSeek = {},
             waveform = persistentListOf(),
         )
         WaveformPlaybackView(
             modifier = Modifier.height(34.dp),
             showCursor = false,
             playbackProgress = 0.5f,
+            onSeek = {},
             waveform = persistentListOf(0f, 1f, 2f, 3f, 4f, 5f, 6f, 7f, 8f, 9f, 8f, 7f, 6f, 5f, 4f, 3f, 2f, 1f, 0f),
         )
         WaveformPlaybackView(
             modifier = Modifier.height(34.dp),
             showCursor = true,
             playbackProgress = 0.5f,
+            onSeek = {},
             waveform = List(1024) { it / 1024f }.toPersistentList(),
         )
     }

@@ -30,27 +30,27 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import io.element.android.compound.theme.ElementTheme
 import io.element.android.libraries.designsystem.components.preferences.components.PreferenceIcon
+import io.element.android.libraries.designsystem.icons.CompoundDrawables
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
 import io.element.android.libraries.designsystem.theme.components.Checkbox
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.toEnabledColor
 import io.element.android.libraries.designsystem.toSecondaryEnabledColor
-import io.element.android.libraries.designsystem.utils.CommonDrawables
-import io.element.android.libraries.theme.ElementTheme
 
 @Composable
 fun PreferenceCheckbox(
     title: String,
     isChecked: Boolean,
+    onCheckedChange: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
     supportingText: String? = null,
     enabled: Boolean = true,
     icon: ImageVector? = null,
     @DrawableRes iconResourceId: Int? = null,
     showIconAreaIfNoIcon: Boolean = false,
-    onCheckedChange: (Boolean) -> Unit = {},
 ) {
     Row(
         modifier = modifier
@@ -102,16 +102,18 @@ private fun ContentToPreview() {
     Column {
         PreferenceCheckbox(
             title = "Checkbox",
-            iconResourceId = CommonDrawables.ic_compound_threads,
+            iconResourceId = CompoundDrawables.ic_threads,
             enabled = true,
-            isChecked = true
+            isChecked = true,
+            onCheckedChange = {},
         )
         PreferenceCheckbox(
             title = "Checkbox with supporting text",
             supportingText = "Supporting text",
-            iconResourceId = CommonDrawables.ic_compound_threads,
+            iconResourceId = CompoundDrawables.ic_threads,
             enabled = true,
-            isChecked = true
+            isChecked = true,
+            onCheckedChange = {},
         )
     }
 }

@@ -112,7 +112,10 @@ class ActionListPresenter @Inject constructor(
                             // Can only reply or forward messages already uploaded to the server
                             add(TimelineItemAction.Reply)
                         }
-                        if (!timelineItem.content.isEnded && timelineItem.isRemote && isMineOrCanRedact) {
+                        if (timelineItem.isRemote && timelineItem.isEditable) {
+                            add(TimelineItemAction.Edit)
+                        }
+                        if (timelineItem.isRemote && !timelineItem.content.isEnded && isMineOrCanRedact) {
                             add(TimelineItemAction.EndPoll)
                         }
                         if (timelineItem.content.canBeCopied()) {

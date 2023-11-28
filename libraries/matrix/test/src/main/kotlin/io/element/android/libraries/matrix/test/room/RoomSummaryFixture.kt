@@ -181,11 +181,12 @@ fun aTimelineItemDebugInfo(
 
 fun aPollContent(
     question: String = "Do you like polls?",
+    answers: List<PollAnswer> = listOf(PollAnswer("1", "Yes"), PollAnswer("2", "No")),
 ) = PollContent(
     question = question,
     kind = PollKind.Disclosed,
     maxSelections = 1u,
-    answers = listOf(PollAnswer("1", "Yes"), PollAnswer("2", "No")),
+    answers = answers,
     votes = mapOf(),
     endTime = null
 )

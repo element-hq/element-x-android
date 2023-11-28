@@ -31,7 +31,7 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
-import io.element.android.libraries.theme.LinkColor
+import io.element.android.compound.theme.LinkColor
 
 fun String.toAnnotatedString(): AnnotatedString = buildAnnotatedString {
     append(this@toAnnotatedString)

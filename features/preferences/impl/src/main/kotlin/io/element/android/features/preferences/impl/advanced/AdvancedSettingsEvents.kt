@@ -16,7 +16,7 @@
 
 package io.element.android.features.preferences.impl.advanced
 
-import io.element.android.libraries.theme.theme.Theme
+import io.element.android.compound.theme.Theme
 
 sealed interface AdvancedSettingsEvents {
     data class SetRichTextEditorEnabled(val enabled: Boolean) : AdvancedSettingsEvents

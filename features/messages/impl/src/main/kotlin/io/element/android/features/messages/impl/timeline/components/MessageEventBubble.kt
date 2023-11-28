@@ -45,7 +45,7 @@ import io.element.android.libraries.designsystem.theme.components.Surface
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.messageFromMeBackground
 import io.element.android.libraries.designsystem.theme.messageFromOtherBackground
-import io.element.android.libraries.theme.ElementTheme
+import io.element.android.compound.theme.ElementTheme
 
 private val BUBBLE_RADIUS = 12.dp
 private val BUBBLE_INCOMING_OFFSET = 16.dp
@@ -58,9 +58,9 @@ private const val BUBBLE_WIDTH_RATIO = 0.85f
 fun MessageEventBubble(
     state: BubbleState,
     interactionSource: MutableInteractionSource,
+    onClick: () -> Unit,
+    onLongClick: () -> Unit,
     modifier: Modifier = Modifier,
-    onClick: () -> Unit = {},
-    onLongClick: () -> Unit = {},
     content: @Composable () -> Unit = {},
 ) {
     fun bubbleShape(): Shape {
@@ -144,6 +144,8 @@ internal fun MessageEventBubblePreview(@PreviewParameter(BubbleStateProvider::cl
         MessageEventBubble(
             state = state,
             interactionSource = remember { MutableInteractionSource() },
+            onClick = {},
+            onLongClick = {},
         ) {
             // Render the state as a text to better understand the previews
             Box(

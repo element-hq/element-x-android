@@ -48,6 +48,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.appconfig.AuthenticationConfig
+import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.login.impl.R
 import io.element.android.features.login.impl.accountprovider.AccountProvider
 import io.element.android.features.login.impl.accountprovider.AccountProviderView
@@ -66,7 +67,6 @@ import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.OutlinedTextField
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.onTabOrEnterKeyFocusNext
-import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -103,7 +103,7 @@ fun SearchAccountProviderView(
                 item {
                     IconTitleSubtitleMolecule(
                         modifier = Modifier.padding(top = 16.dp, bottom = 40.dp, start = 16.dp, end = 16.dp),
-                        iconResourceId = CommonDrawables.ic_compound_search,
+                        iconImageVector = CompoundIcons.Search,
                         title = stringResource(id = R.string.screen_account_provider_form_title),
                         subTitle = stringResource(id = R.string.screen_account_provider_form_subtitle),
                     )
@@ -139,7 +139,7 @@ fun SearchAccountProviderView(
                                     eventSink(SearchAccountProviderEvents.UserInput(""))
                                 }) {
                                     Icon(
-                                        resourceId = CommonDrawables.ic_compound_close,
+                                        imageVector = CompoundIcons.Close,
                                         contentDescription = stringResource(CommonStrings.action_clear)
                                     )
                                 }

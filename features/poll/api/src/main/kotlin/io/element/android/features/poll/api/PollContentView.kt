@@ -35,17 +35,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
+import io.element.android.compound.theme.ElementTheme
+import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.poll.PollAnswer
 import io.element.android.libraries.matrix.api.poll.PollKind
-import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
 
@@ -55,6 +55,7 @@ fun PollContentView(
     question: String,
     answerItems: ImmutableList<PollAnswerItem>,
     pollKind: PollKind,
+    isPollEditable: Boolean,
     isPollEnded: Boolean,
     isMine: Boolean,
     onAnswerSelected: (pollStartId: EventId, answerId: String) -> Unit,
@@ -103,8 +104,8 @@ fun PollContentView(
 
         if (isMine) {
             CreatorView(
-                votesCount = 1, // TODO Polls: set to `votesCount` when edit poll screen is implemented.
                 isPollEnded = isPollEnded,
+                isPollEditable = isPollEditable,
                 onPollEdit = ::onPollEdit,
                 onPollEnd = { showConfirmation = true },
                 modifier = Modifier.fillMaxWidth(),
@@ -125,13 +126,13 @@ private fun PollTitle(
     ) {
         if (isPollEnded) {
             Icon(
-                resourceId = CommonDrawables.ic_compound_polls_end,
+                imageVector = CompoundIcons.PollsEnd,
                 contentDescription = stringResource(id = CommonStrings.a11y_poll_end),
                 modifier = Modifier.size(22.dp)
             )
         } else {
             Icon(
-                resourceId = CommonDrawables.ic_compound_polls,
+                imageVector = CompoundIcons.Polls,
                 contentDescription = stringResource(id = CommonStrings.a11y_poll),
                 modifier = Modifier.size(22.dp)
             )
@@ -197,26 +198,25 @@ private fun ColumnScope.UndisclosedPollBottomNotice(
 
 @Composable
 private fun CreatorView(
-    @Suppress("SameParameterValue") votesCount: Int, // TODO Polls: remove @Suppress when edit poll screen is implemented.
     isPollEnded: Boolean,
+    isPollEditable: Boolean,
     onPollEdit: () -> Unit,
     onPollEnd: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    if (!isPollEnded) {
-        if (votesCount == 0) {
+    when {
+        isPollEditable ->
             Button(
                 text = stringResource(id = CommonStrings.action_edit_poll),
                 onClick = onPollEdit,
                 modifier = modifier,
             )
-        } else {
+        !isPollEnded ->
             Button(
                 text = stringResource(id = CommonStrings.action_end_poll),
                 onClick = onPollEnd,
                 modifier = modifier,
             )
-        }
     }
 }
 
@@ -229,6 +229,7 @@ internal fun PollContentUndisclosedPreview() = ElementPreview {
         answerItems = aPollAnswerItemList(isDisclosed = false),
         pollKind = PollKind.Undisclosed,
         isPollEnded = false,
+        isPollEditable = false,
         isMine = false,
         onAnswerSelected = { _, _ -> },
         onPollEdit = {},
@@ -245,6 +246,7 @@ internal fun PollContentDisclosedPreview() = ElementPreview {
         answerItems = aPollAnswerItemList(),
         pollKind = PollKind.Disclosed,
         isPollEnded = false,
+        isPollEditable = false,
         isMine = false,
         onAnswerSelected = { _, _ -> },
         onPollEdit = {},
@@ -261,6 +263,7 @@ internal fun PollContentEndedPreview() = ElementPreview {
         answerItems = aPollAnswerItemList(isEnded = true),
         pollKind = PollKind.Disclosed,
         isPollEnded = true,
+        isPollEditable = false,
         isMine = false,
         onAnswerSelected = { _, _ -> },
         onPollEdit = {},
@@ -270,13 +273,14 @@ internal fun PollContentEndedPreview() = ElementPreview {
 
 @PreviewsDayNight
 @Composable
-internal fun PollContentCreatorNoVotesPreview() = ElementPreview {
+internal fun PollContentCreatorEditablePreview() = ElementPreview {
     PollContentView(
         eventId = EventId("\$anEventId"),
         question = "What type of food should we have at the party?",
         answerItems = aPollAnswerItemList(hasVotes = false, isEnded = false),
         pollKind = PollKind.Disclosed,
         isPollEnded = false,
+        isPollEditable = true,
         isMine = true,
         onAnswerSelected = { _, _ -> },
         onPollEdit = {},
@@ -293,6 +297,7 @@ internal fun PollContentCreatorPreview() = ElementPreview {
         answerItems = aPollAnswerItemList(isEnded = false),
         pollKind = PollKind.Disclosed,
         isPollEnded = false,
+        isPollEditable = false,
         isMine = true,
         onAnswerSelected = { _, _ -> },
         onPollEdit = {},
@@ -309,6 +314,7 @@ internal fun PollContentCreatorEndedPreview() = ElementPreview {
         answerItems = aPollAnswerItemList(isEnded = true),
         pollKind = PollKind.Disclosed,
         isPollEnded = true,
+        isPollEditable = false,
         isMine = true,
         onAnswerSelected = { _, _ -> },
         onPollEdit = {},

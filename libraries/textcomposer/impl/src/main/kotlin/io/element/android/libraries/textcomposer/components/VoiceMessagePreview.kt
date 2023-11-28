@@ -44,7 +44,7 @@ import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.utils.CommonDrawables
-import io.element.android.libraries.theme.ElementTheme
+import io.element.android.compound.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.libraries.ui.utils.time.formatShort
 import kotlinx.collections.immutable.ImmutableList
@@ -58,11 +58,11 @@ internal fun VoiceMessagePreview(
     showCursor: Boolean,
     waveform: ImmutableList<Float>,
     time: Duration,
+    onPlayClick: () -> Unit,
+    onPauseClick: () -> Unit,
+    onSeek: (Float) -> Unit,
     modifier: Modifier = Modifier,
     playbackProgress: Float = 0f,
-    onPlayClick: () -> Unit = {},
-    onPauseClick: () -> Unit = {},
-    onSeek: (Float) -> Unit = {},
 ) {
     Row(
         modifier = modifier
@@ -163,7 +163,7 @@ internal fun VoiceMessagePreviewPreview() = ElementPreview {
     Column(
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        VoiceMessagePreview(
+        AVoiceMessagePreview(
             isInteractive = true,
             isPlaying = true,
             time = 2.seconds,
@@ -171,7 +171,7 @@ internal fun VoiceMessagePreviewPreview() = ElementPreview {
             showCursor = true,
             waveform = createFakeWaveform()
         )
-        VoiceMessagePreview(
+        AVoiceMessagePreview(
             isInteractive = true,
             isPlaying = false,
             time = 0.seconds,
@@ -179,7 +179,7 @@ internal fun VoiceMessagePreviewPreview() = ElementPreview {
             showCursor = true,
             waveform = createFakeWaveform()
         )
-        VoiceMessagePreview(
+        AVoiceMessagePreview(
             isInteractive = false,
             isPlaying = false,
             time = 789.seconds,
@@ -188,4 +188,26 @@ internal fun VoiceMessagePreviewPreview() = ElementPreview {
             waveform = createFakeWaveform()
         )
     }
+}
+
+@Composable
+private fun AVoiceMessagePreview(
+    isInteractive: Boolean,
+    isPlaying: Boolean,
+    time: Duration,
+    playbackProgress: Float,
+    showCursor: Boolean,
+    waveform: ImmutableList<Float>,
+) {
+    VoiceMessagePreview(
+        isInteractive = isInteractive,
+        isPlaying = isPlaying,
+        time = time,
+        playbackProgress = playbackProgress,
+        showCursor = showCursor,
+        waveform = waveform,
+        onPlayClick = {},
+        onPauseClick = {},
+        onSeek = {},
+    )
 }

@@ -31,8 +31,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Surface
 
 private val CORNER_RADIUS = 8.dp
@@ -42,9 +42,9 @@ private val CORNER_RADIUS = 8.dp
 fun MessageStateEventContainer(
     @Suppress("UNUSED_PARAMETER") isHighlighted: Boolean,
     interactionSource: MutableInteractionSource,
+    onClick: () -> Unit,
+    onLongClick: () -> Unit,
     modifier: Modifier = Modifier,
-    onClick: () -> Unit = {},
-    onLongClick: () -> Unit = {},
     content: @Composable () -> Unit = {},
 ) {
     // Ignore isHighlighted for now, we need a design decision on it.
@@ -73,12 +73,16 @@ internal fun MessageStateEventContainerPreview() = ElementPreview {
         MessageStateEventContainer(
             isHighlighted = false,
             interactionSource = remember { MutableInteractionSource() },
+            onClick = {},
+            onLongClick = {},
         ) {
             Spacer(modifier = Modifier.size(width = 120.dp, height = 32.dp))
         }
         MessageStateEventContainer(
             isHighlighted = true,
             interactionSource = remember { MutableInteractionSource() },
+            onClick = {},
+            onLongClick = {},
         ) {
             Spacer(modifier = Modifier.size(width = 120.dp, height = 32.dp))
         }

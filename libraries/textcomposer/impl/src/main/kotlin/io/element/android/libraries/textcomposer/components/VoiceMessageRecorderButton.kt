@@ -34,14 +34,15 @@ import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.textcomposer.model.VoiceMessageRecorderEvent
-import io.element.android.libraries.theme.ElementTheme
+import io.element.android.compound.theme.ElementTheme
+import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
 internal fun VoiceMessageRecorderButton(
     isRecording: Boolean,
+    onEvent: (VoiceMessageRecorderEvent) -> Unit,
     modifier: Modifier = Modifier,
-    onEvent: (VoiceMessageRecorderEvent) -> Unit = {},
 ) {
     val hapticFeedback = LocalHapticFeedback.current
 
@@ -78,7 +79,7 @@ private fun StartButton(
 ) {
     Icon(
         modifier = Modifier.size(24.dp),
-        resourceId = CommonDrawables.ic_compound_mic_on_outline,
+        imageVector = CompoundIcons.MicOnOutline,
         contentDescription = stringResource(CommonStrings.a11y_voice_message_record),
         tint = ElementTheme.colors.iconSecondary,
     )
@@ -113,7 +114,13 @@ private fun StopButton(
 @Composable
 internal fun VoiceMessageRecorderButtonPreview() = ElementPreview {
     Row {
-        VoiceMessageRecorderButton(isRecording = false)
-        VoiceMessageRecorderButton(isRecording = true)
+        VoiceMessageRecorderButton(
+            isRecording = false,
+            onEvent = {},
+        )
+        VoiceMessageRecorderButton(
+            isRecording = true,
+            onEvent = {},
+        )
     }
 }

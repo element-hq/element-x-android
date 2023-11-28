@@ -34,7 +34,7 @@ import io.element.android.libraries.designsystem.theme.mentionPillText
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
-import io.element.android.libraries.theme.ElementTheme
+import io.element.android.compound.theme.ElementTheme
 
 @Stable
 class MentionSpanProvider(

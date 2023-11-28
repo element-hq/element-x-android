@@ -27,16 +27,16 @@ import io.element.android.features.rageshake.api.crash.CrashDetectionEvents
 import io.element.android.features.rageshake.api.crash.CrashDetectionView
 import io.element.android.features.rageshake.api.detection.RageshakeDetectionEvents
 import io.element.android.features.rageshake.api.detection.RageshakeDetectionView
-import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.services.apperror.impl.AppErrorView
 
 @Composable
 fun RootView(
     state: RootState,
+    onOpenBugReport: () -> Unit,
     modifier: Modifier = Modifier,
-    onOpenBugReport: () -> Unit = {},
     children: @Composable BoxScope.() -> Unit,
 ) {
     Box(
@@ -69,7 +69,10 @@ fun RootView(
 @PreviewsDayNight
 @Composable
 internal fun RootPreview(@PreviewParameter(RootStateProvider::class) rootState: RootState) = ElementPreview {
-    RootView(rootState) {
+    RootView(
+        state = rootState,
+        onOpenBugReport = {},
+    ) {
         Text("Children")
     }
 }

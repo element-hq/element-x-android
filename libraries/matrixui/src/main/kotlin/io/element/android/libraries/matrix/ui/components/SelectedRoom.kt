@@ -34,15 +34,15 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
-import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Surface
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.roomlist.RoomSummaryDetails
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -50,8 +50,8 @@ import io.element.android.libraries.ui.strings.CommonStrings
 @Composable
 fun SelectedRoom(
     roomSummary: RoomSummaryDetails,
+    onRoomRemoved: (RoomSummaryDetails) -> Unit,
     modifier: Modifier = Modifier,
-    onRoomRemoved: (RoomSummaryDetails) -> Unit = {},
 ) {
     Box(
         modifier = modifier
@@ -81,7 +81,7 @@ fun SelectedRoom(
                 ),
         ) {
             Icon(
-                resourceId = CommonDrawables.ic_compound_close,
+                imageVector = CompoundIcons.Close,
                 contentDescription = stringResource(id = CommonStrings.action_remove),
                 tint = MaterialTheme.colorScheme.onPrimary,
                 modifier = Modifier.padding(2.dp)
@@ -104,6 +104,7 @@ internal fun SelectedRoomPreview() = ElementPreview {
             lastMessageTimestamp = null,
             unreadNotificationCount = 0,
             inviter = null,
-        )
+        ),
+        onRoomRemoved = {},
     )
 }

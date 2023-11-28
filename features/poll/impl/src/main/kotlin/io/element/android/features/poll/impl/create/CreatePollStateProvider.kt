@@ -25,6 +25,7 @@ class CreatePollStateProvider : PreviewParameterProvider<CreatePollState> {
     override val values: Sequence<CreatePollState>
         get() = sequenceOf(
             aCreatePollState(
+                mode = CreatePollState.Mode.New,
                 canCreate = false,
                 canAddAnswer = true,
                 question = "",
@@ -36,6 +37,7 @@ class CreatePollStateProvider : PreviewParameterProvider<CreatePollState> {
                 showConfirmation = false,
             ),
             aCreatePollState(
+                mode = CreatePollState.Mode.New,
                 canCreate = true,
                 canAddAnswer = true,
                 question = "What type of food should we have?",
@@ -47,6 +49,7 @@ class CreatePollStateProvider : PreviewParameterProvider<CreatePollState> {
                 pollKind = PollKind.Undisclosed,
             ),
             aCreatePollState(
+                mode = CreatePollState.Mode.New,
                 canCreate = true,
                 canAddAnswer = true,
                 question = "What type of food should we have?",
@@ -58,6 +61,7 @@ class CreatePollStateProvider : PreviewParameterProvider<CreatePollState> {
                 pollKind = PollKind.Undisclosed,
             ),
             aCreatePollState(
+                mode = CreatePollState.Mode.New,
                 canCreate = true,
                 canAddAnswer = true,
                 question = "What type of food should we have?",
@@ -71,6 +75,7 @@ class CreatePollStateProvider : PreviewParameterProvider<CreatePollState> {
                 pollKind = PollKind.Undisclosed,
             ),
             aCreatePollState(
+                mode = CreatePollState.Mode.New,
                 canCreate = true,
                 canAddAnswer = false,
                 question = "Should there be more than 20 answers?",
@@ -100,6 +105,7 @@ class CreatePollStateProvider : PreviewParameterProvider<CreatePollState> {
                 pollKind = PollKind.Undisclosed,
             ),
             aCreatePollState(
+                mode = CreatePollState.Mode.New,
                 canCreate = true,
                 canAddAnswer = true,
                 question = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua." +
@@ -120,11 +126,24 @@ class CreatePollStateProvider : PreviewParameterProvider<CreatePollState> {
                 ),
                 showConfirmation = false,
                 pollKind = PollKind.Undisclosed,
-            )
+            ),
+            aCreatePollState(
+                mode = CreatePollState.Mode.Edit,
+                canCreate = false,
+                canAddAnswer = true,
+                question = "",
+                answers = persistentListOf(
+                    Answer("", false),
+                    Answer("", false)
+                ),
+                pollKind = PollKind.Disclosed,
+                showConfirmation = false,
+            ),
         )
 }
 
 private fun aCreatePollState(
+    mode: CreatePollState.Mode,
     canCreate: Boolean,
     canAddAnswer: Boolean,
     question: String,
@@ -133,7 +152,8 @@ private fun aCreatePollState(
     pollKind: PollKind
 ): CreatePollState {
     return CreatePollState(
-        canCreate = canCreate,
+        mode = mode,
+        canSave = canCreate,
         canAddAnswer = canAddAnswer,
         question = question,
         answers = answers,

@@ -58,8 +58,8 @@ import io.element.android.libraries.matrix.ui.components.A_BLUR_HASH
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
-import java.time.Duration
-import java.time.Duration.ofMinutes
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.minutes
 
 class TimelineItemContentMessageFactoryTest {
 
@@ -140,14 +140,14 @@ class TimelineItemContentMessageFactoryTest {
         )
         val expected = TimelineItemVideoContent(
             body = "body",
-            duration = 0,
+            duration = Duration.ZERO,
             videoSource = MediaSource(url = "url", json = null),
             thumbnailSource = null,
             aspectRatio = null,
             blurHash = null,
             height = null,
             width = null,
-            mimeType = "application/octet-stream",
+            mimeType = MimeTypes.OctetStream,
             formattedFileSize = "0 Bytes",
             fileExtension = "",
         )
@@ -163,7 +163,7 @@ class TimelineItemContentMessageFactoryTest {
                     body = "body.mp4",
                     source = MediaSource("url"),
                     info = VideoInfo(
-                        duration = ofMinutes(1),
+                        duration = 1.minutes,
                         height = 100,
                         width = 300,
                         mimetype = MimeTypes.Mp4,
@@ -184,7 +184,7 @@ class TimelineItemContentMessageFactoryTest {
         )
         val expected = TimelineItemVideoContent(
             body = "body.mp4",
-            duration = 60_000,
+            duration = 1.minutes,
             videoSource = MediaSource(url = "url", json = null),
             thumbnailSource = MediaSource("url_thumbnail"),
             aspectRatio = 3f,
@@ -210,7 +210,7 @@ class TimelineItemContentMessageFactoryTest {
             body = "body",
             duration = Duration.ZERO,
             mediaSource = MediaSource(url = "url", json = null),
-            mimeType = "application/octet-stream",
+            mimeType = MimeTypes.OctetStream,
             formattedFileSize = "0 Bytes",
             fileExtension = "",
         )
@@ -226,7 +226,7 @@ class TimelineItemContentMessageFactoryTest {
                     body = "body.mp3",
                     source = MediaSource("url"),
                     info = AudioInfo(
-                        duration = ofMinutes(1),
+                        duration = 1.minutes,
                         size = 123L,
                         mimetype = MimeTypes.Mp3,
                     )
@@ -237,7 +237,7 @@ class TimelineItemContentMessageFactoryTest {
         )
         val expected = TimelineItemAudioContent(
             body = "body.mp3",
-            duration = ofMinutes(1),
+            duration = 1.minutes,
             mediaSource = MediaSource(url = "url", json = null),
             mimeType = MimeTypes.Mp3,
             formattedFileSize = "123 Bytes",
@@ -259,7 +259,7 @@ class TimelineItemContentMessageFactoryTest {
             body = "body",
             duration = Duration.ZERO,
             mediaSource = MediaSource(url = "url", json = null),
-            mimeType = "application/octet-stream",
+            mimeType = MimeTypes.OctetStream,
             waveform = emptyList<Float>().toImmutableList()
         )
         assertThat(result).isEqualTo(expected)
@@ -274,12 +274,13 @@ class TimelineItemContentMessageFactoryTest {
                     body = "body.ogg",
                     source = MediaSource("url"),
                     info = AudioInfo(
-                        duration = ofMinutes(1),
+                        duration = 1.minutes,
                         size = 123L,
                         mimetype = MimeTypes.Ogg,
                     ),
                     details = AudioDetails(
-                        duration = ofMinutes(1), waveform = listOf(1f, 2f)
+                        duration = 1.minutes,
+                        waveform = listOf(1f, 2f),
                     ),
                 )
             ),
@@ -289,7 +290,7 @@ class TimelineItemContentMessageFactoryTest {
         val expected = TimelineItemVoiceContent(
             eventId = AN_EVENT_ID,
             body = "body.ogg",
-            duration = ofMinutes(1),
+            duration = 1.minutes,
             mediaSource = MediaSource(url = "url", json = null),
             mimeType = MimeTypes.Ogg,
             waveform = listOf(1f, 2f).toImmutableList()
@@ -315,7 +316,7 @@ class TimelineItemContentMessageFactoryTest {
             body = "body",
             duration = Duration.ZERO,
             mediaSource = MediaSource(url = "url", json = null),
-            mimeType = "application/octet-stream",
+            mimeType = MimeTypes.OctetStream,
             formattedFileSize = "0 Bytes",
             fileExtension = ""
         )
@@ -336,7 +337,7 @@ class TimelineItemContentMessageFactoryTest {
             thumbnailSource = null,
             formattedFileSize = "0 Bytes",
             fileExtension = "",
-            mimeType = "application/octet-stream",
+            mimeType = MimeTypes.OctetStream,
             blurhash = null,
             width = null,
             height = null,
@@ -401,7 +402,7 @@ class TimelineItemContentMessageFactoryTest {
             thumbnailSource = null,
             formattedFileSize = "0 Bytes",
             fileExtension = "",
-            mimeType = "application/octet-stream"
+            mimeType = MimeTypes.OctetStream
         )
         assertThat(result).isEqualTo(expected)
     }

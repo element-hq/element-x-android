@@ -37,10 +37,10 @@ import io.element.android.libraries.matrix.ui.model.getAvatarData
 @Composable
 fun CheckableUnresolvedUserRow(
     checked: Boolean,
+    onCheckedChange: (Boolean) -> Unit,
     avatarData: AvatarData,
     id: String,
     modifier: Modifier = Modifier,
-    onCheckedChange: (Boolean) -> Unit = {},
     enabled: Boolean = true,
 ) {
     Row(
@@ -71,12 +71,34 @@ fun CheckableUnresolvedUserRow(
 internal fun CheckableUnresolvedUserRowPreview() = ElementThemedPreview {
     val matrixUser = aMatrixUser()
     Column {
-        CheckableUnresolvedUserRow(false, matrixUser.getAvatarData(AvatarSize.UserListItem), matrixUser.userId.value)
+        CheckableUnresolvedUserRow(
+            checked = false,
+            onCheckedChange = { },
+            avatarData = matrixUser.getAvatarData(AvatarSize.UserListItem),
+            id = matrixUser.userId.value,
+        )
         HorizontalDivider()
-        CheckableUnresolvedUserRow(true, matrixUser.getAvatarData(AvatarSize.UserListItem), matrixUser.userId.value)
+        CheckableUnresolvedUserRow(
+            checked = true,
+            onCheckedChange = { },
+            avatarData = matrixUser.getAvatarData(AvatarSize.UserListItem),
+            id = matrixUser.userId.value,
+        )
         HorizontalDivider()
-        CheckableUnresolvedUserRow(false, matrixUser.getAvatarData(AvatarSize.UserListItem), matrixUser.userId.value, enabled = false)
+        CheckableUnresolvedUserRow(
+            checked = false,
+            onCheckedChange = { },
+            avatarData = matrixUser.getAvatarData(AvatarSize.UserListItem),
+            id = matrixUser.userId.value,
+            enabled = false,
+        )
         HorizontalDivider()
-        CheckableUnresolvedUserRow(true, matrixUser.getAvatarData(AvatarSize.UserListItem), matrixUser.userId.value, enabled = false)
+        CheckableUnresolvedUserRow(
+            checked = true,
+            onCheckedChange = { },
+            avatarData = matrixUser.getAvatarData(AvatarSize.UserListItem),
+            id = matrixUser.userId.value,
+            enabled = false,
+        )
     }
 }
