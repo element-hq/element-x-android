@@ -21,27 +21,36 @@ import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
 
-inline fun <reified NODE : Node> Node.createNode(context: BuildContext, plugins: List<Plugin> = emptyList()): NODE {
+inline fun <reified N : Node> Node.createNode(
+    buildContext: BuildContext,
+    plugins: List<Plugin> = emptyList()
+): N {
     val bindings: NodeFactoriesBindings = bindings()
-    return bindings.createNode(context, plugins)
+    return bindings.createNode(buildContext, plugins)
 }
 
-inline fun <reified NODE : Node> Context.createNode(context: BuildContext, plugins: List<Plugin> = emptyList()): NODE {
+inline fun <reified N : Node> Context.createNode(
+    buildContext: BuildContext,
+    plugins: List<Plugin> = emptyList()
+): N {
     val bindings: NodeFactoriesBindings = bindings()
-    return bindings.createNode(context, plugins)
+    return bindings.createNode(buildContext, plugins)
 }
 
-inline fun <reified NODE : Node> NodeFactoriesBindings.createNode(context: BuildContext, plugins: List<Plugin> = emptyList()): NODE {
-    val nodeClass = NODE::class.java
+inline fun <reified N : Node> NodeFactoriesBindings.createNode(
+    buildContext: BuildContext,
+    plugins: List<Plugin> = emptyList()
+): N {
+    val nodeClass = N::class.java
     val nodeFactoryMap = nodeFactories()
     // Note to developers: If you got the error below, make sure to build again after
     // clearing the cache (sometimes several times) to let Dagger generate the NodeFactory.
     val nodeFactory = nodeFactoryMap[nodeClass] ?: error("Cannot find NodeFactory for ${nodeClass.name}.")
 
     @Suppress("UNCHECKED_CAST")
-    val castedNodeFactory = nodeFactory as? AssistedNodeFactory<NODE>
-    val node = castedNodeFactory?.create(context, plugins)
-    return node as NODE
+    val castedNodeFactory = nodeFactory as? AssistedNodeFactory<N>
+    val node = castedNodeFactory?.create(buildContext, plugins)
+    return node as N
 }
 
 interface NodeFactoriesBindings {
