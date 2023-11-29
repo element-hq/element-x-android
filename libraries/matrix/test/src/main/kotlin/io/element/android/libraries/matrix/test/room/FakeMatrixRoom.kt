@@ -53,6 +53,7 @@ import io.element.android.libraries.matrix.test.notificationsettings.FakeNotific
 import io.element.android.libraries.matrix.test.timeline.FakeMatrixTimeline
 import io.element.android.libraries.matrix.test.widget.FakeWidgetDriver
 import io.element.android.tests.testutils.simulateLongTask
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -615,7 +616,7 @@ fun aRoomInfo(
     isSpace = isSpace,
     isTombstoned = isTombstoned,
     canonicalAlias = canonicalAlias,
-    alternativeAliases = alternativeAliases,
+    alternativeAliases = alternativeAliases.toImmutableList(),
     currentUserMembership = currentUserMembership,
     latestEvent = latestEvent,
     inviter = inviter,
@@ -626,5 +627,5 @@ fun aRoomInfo(
     notificationCount = notificationCount,
     userDefinedNotificationMode = userDefinedNotificationMode,
     hasRoomCall = hasRoomCall,
-    activeRoomCallParticipants = activeRoomCallParticipants
+    activeRoomCallParticipants = activeRoomCallParticipants.toImmutableList(),
 )

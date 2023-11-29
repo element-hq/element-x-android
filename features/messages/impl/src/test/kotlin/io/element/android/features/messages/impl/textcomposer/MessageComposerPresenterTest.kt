@@ -78,11 +78,11 @@ import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.waitForPredicate
 import io.mockk.mockk
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
-import okhttp3.internal.immutableListOf
 import org.junit.Rule
 import org.junit.Test
 import uniffi.wysiwyg_composer.MentionsState
@@ -734,7 +734,7 @@ class MessageComposerPresenterTest {
             isOneToOne = false,
         ).apply {
             givenRoomMembersState(MatrixRoomMembersState.Ready(
-                immutableListOf(currentUser, invitedUser, bob, david),
+                persistentListOf(currentUser, invitedUser, bob, david),
             ))
             givenCanTriggerRoomNotification(Result.success(true))
         }
@@ -798,7 +798,7 @@ class MessageComposerPresenterTest {
             isOneToOne = true,
         ).apply {
             givenRoomMembersState(MatrixRoomMembersState.Ready(
-                immutableListOf(currentUser, invitedUser, bob, david),
+                persistentListOf(currentUser, invitedUser, bob, david),
             ))
             givenCanTriggerRoomNotification(Result.success(true))
         }

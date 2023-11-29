@@ -48,6 +48,7 @@ import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.tests.testutils.consumeItemsUntilPredicate
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import io.element.android.tests.testutils.WarmUpRule
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
@@ -127,7 +128,7 @@ class RoomDetailsPresenterTests {
             isEncrypted = true,
             isDirect = true,
         ).apply {
-            val roomMembers = listOf(myRoomMember, otherRoomMember)
+            val roomMembers = persistentListOf(myRoomMember, otherRoomMember)
             givenRoomMembersState(MatrixRoomMembersState.Ready(roomMembers))
         }
         val presenter = createRoomDetailsPresenter(room, dispatchers = testCoroutineDispatchers())
@@ -218,7 +219,7 @@ class RoomDetailsPresenterTests {
             isEncrypted = true,
             isDirect = true,
         ).apply {
-            val roomMembers = listOf(myRoomMember, otherRoomMember)
+            val roomMembers = persistentListOf(myRoomMember, otherRoomMember)
             givenRoomMembersState(MatrixRoomMembersState.Ready(roomMembers))
 
             givenCanSendStateResult(StateEventType.ROOM_TOPIC, Result.success(true))
@@ -250,7 +251,7 @@ class RoomDetailsPresenterTests {
             isDirect = true,
             topic = null,
         ).apply {
-            val roomMembers = listOf(myRoomMember, otherRoomMember)
+            val roomMembers = persistentListOf(myRoomMember, otherRoomMember)
             givenRoomMembersState(MatrixRoomMembersState.Ready(roomMembers))
 
             givenCanSendStateResult(StateEventType.ROOM_TOPIC, Result.success(true))

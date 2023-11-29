@@ -92,6 +92,7 @@ import io.element.android.tests.testutils.consumeItemsUntilTimeout
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import io.element.android.tests.testutils.waitForPredicate
 import io.mockk.mockk
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
@@ -462,7 +463,7 @@ class MessagesPresenterTest {
         val room = FakeMatrixRoom(sessionId = A_SESSION_ID)
         room.givenRoomMembersState(
             MatrixRoomMembersState.Ready(
-                listOf(
+                persistentListOf(
                     aRoomMember(userId = A_SESSION_ID, membership = RoomMembershipState.JOIN),
                     aRoomMember(userId = A_SESSION_ID_2, membership = RoomMembershipState.LEAVE),
                 )
@@ -489,7 +490,7 @@ class MessagesPresenterTest {
         room.givenRoomMembersState(
             MatrixRoomMembersState.Error(
                 failure = Throwable(),
-                prevRoomMembers = listOf(
+                prevRoomMembers = persistentListOf(
                     aRoomMember(userId = A_SESSION_ID, membership = RoomMembershipState.JOIN),
                     aRoomMember(userId = A_SESSION_ID_2, membership = RoomMembershipState.LEAVE),
                 )
@@ -535,7 +536,7 @@ class MessagesPresenterTest {
         val room = FakeMatrixRoom(sessionId = A_SESSION_ID)
         room.givenRoomMembersState(
             MatrixRoomMembersState.Ready(
-                listOf(
+                persistentListOf(
                     aRoomMember(userId = A_SESSION_ID, membership = RoomMembershipState.JOIN),
                     aRoomMember(userId = A_SESSION_ID_2, membership = RoomMembershipState.LEAVE),
                 )

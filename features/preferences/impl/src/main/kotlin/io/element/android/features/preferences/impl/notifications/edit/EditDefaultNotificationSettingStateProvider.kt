@@ -22,6 +22,7 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.api.roomlist.RoomSummary
 import io.element.android.libraries.matrix.api.roomlist.RoomSummaryDetails
+import kotlinx.collections.immutable.persistentListOf
 
 open class EditDefaultNotificationSettingStateProvider: PreviewParameterProvider<EditDefaultNotificationSettingState> {
     override val values: Sequence<EditDefaultNotificationSettingState>
@@ -39,7 +40,7 @@ private fun anEditDefaultNotificationSettingsState(
 ) = EditDefaultNotificationSettingState(
     isOneToOne = isOneToOne,
     mode = RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY,
-    roomsWithUserDefinedMode = listOf(aRoomSummary()),
+    roomsWithUserDefinedMode = persistentListOf(aRoomSummary()),
     changeNotificationSettingAction = changeNotificationSettingAction,
     eventSink = {}
 )

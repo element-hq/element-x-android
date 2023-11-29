@@ -30,6 +30,7 @@ import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.mediaplayer.api.MediaPlayer
 import io.element.android.libraries.mediaplayer.test.FakeMediaPlayer
 import io.element.android.tests.testutils.testCoroutineDispatchers
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -88,8 +89,8 @@ fun aRedactedMatrixTimeline(eventId: EventId) = listOf<MatrixTimelineItem>(
             isOwn = false,
             isRemote = false,
             localSendState = null,
-            reactions = listOf(),
-            receipts = listOf(),
+            reactions = persistentListOf(),
+            receipts = persistentListOf(),
             sender = A_USER_ID,
             senderProfile = ProfileTimelineDetails.Unavailable,
             timestamp = 9442,

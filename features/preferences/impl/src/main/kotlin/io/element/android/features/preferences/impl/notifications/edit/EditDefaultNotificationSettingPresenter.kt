@@ -33,6 +33,7 @@ import io.element.android.libraries.matrix.api.notificationsettings.Notification
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.api.roomlist.RoomSummary
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.debounce
@@ -84,7 +85,7 @@ class EditDefaultNotificationSettingPresenter @AssistedInject constructor(
         return EditDefaultNotificationSettingState(
             isOneToOne = isOneToOne,
             mode = mode.value,
-            roomsWithUserDefinedMode = roomsWithUserDefinedMode.value,
+            roomsWithUserDefinedMode = roomsWithUserDefinedMode.value.toImmutableList(),
             changeNotificationSettingAction = changeNotificationSettingAction.value,
             eventSink = ::handleEvents
         )

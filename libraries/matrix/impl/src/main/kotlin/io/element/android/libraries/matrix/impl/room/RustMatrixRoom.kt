@@ -57,6 +57,7 @@ import io.element.android.libraries.matrix.impl.widget.RustWidgetDriver
 import io.element.android.libraries.matrix.impl.widget.generateWidgetWebViewUrl
 import io.element.android.libraries.sessionstorage.api.SessionData
 import io.element.android.services.toolbox.api.systemclock.SystemClock
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -198,7 +199,7 @@ class RustMatrixRoom(
 
     override suspend fun updateMembers(): Result<Unit> = withContext(roomMembersDispatcher) {
         val currentState = _membersStateFlow.value
-        val currentMembers = currentState.roomMembers()
+        val currentMembers = currentState.roomMembers()?.toImmutableList()
         _membersStateFlow.value = MatrixRoomMembersState.Pending(prevRoomMembers = currentMembers)
         var rustMembers: List<RoomMember>? = null
         try {
@@ -213,7 +214,7 @@ class RustMatrixRoom(
                 }
             }
             val mappedMembers = rustMembers.parallelMap(RoomMemberMapper::map)
-            _membersStateFlow.value = MatrixRoomMembersState.Ready(mappedMembers)
+            _membersStateFlow.value = MatrixRoomMembersState.Ready(mappedMembers.toImmutableList())
             Result.success(Unit)
         } catch (exception: CancellationException) {
             _membersStateFlow.value = MatrixRoomMembersState.Error(prevRoomMembers = currentMembers, failure = exception)
