@@ -16,8 +16,10 @@
 
 package io.element.android.libraries.matrix.impl.roomlist
 
+import io.element.android.libraries.matrix.api.roomlist.DynamicRoomList
 import io.element.android.libraries.matrix.api.roomlist.RoomList
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
+import io.element.android.libraries.matrix.api.roomlist.loadAllIncrementally
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -34,18 +36,29 @@ import org.matrix.rustcomponents.sdk.RoomListServiceSyncIndicator
 import timber.log.Timber
 import org.matrix.rustcomponents.sdk.RoomListService as InnerRustRoomListService
 
+private const val DEFAULT_PAGE_SIZE = 20
+
 internal class RustRoomListService(
     private val innerRoomListService: InnerRustRoomListService,
     private val sessionCoroutineScope: CoroutineScope,
     roomListFactory: RoomListFactory,
 ) : RoomListService {
 
-    override val allRooms: RoomList = roomListFactory.createRoomList {
+    override val allRooms: DynamicRoomList = roomListFactory.createRoomList(
+        pageSize = DEFAULT_PAGE_SIZE,
+        initialFilter = DynamicRoomList.Filter.AllNonLeft,
+    ) {
         innerRoomListService.allRooms()
     }
 
-    override val invites: RoomList = roomListFactory.createRoomList {
+    override val invites: RoomList = roomListFactory.createRoomList(
+        pageSize = Int.MAX_VALUE,
+    ) {
         innerRoomListService.invites()
+    }
+
+    init {
+        allRooms.loadAllIncrementally(sessionCoroutineScope)
     }
 
     override fun updateAllRoomsVisibleRange(range: IntRange) {

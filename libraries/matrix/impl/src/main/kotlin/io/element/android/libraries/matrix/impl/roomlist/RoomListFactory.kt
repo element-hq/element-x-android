@@ -23,6 +23,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.getAndUpdate
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -40,56 +41,27 @@ internal class RoomListFactory(
 ) {
 
     /**
-     * Creates a room list that will load all rooms in a single page.
-     * It mimics the usage of the old api.
-     */
-    fun createRoomList(
-        innerProvider: suspend () -> InnerRoomList,
-    ): RoomList {
-        return createRustRoomList(
-            pageSize = Int.MAX_VALUE,
-            numberOfPages = 1,
-            initialFilterKind = RoomListEntriesDynamicFilterKind.AllNonLeft,
-            innerRoomListProvider = innerProvider
-        )
-    }
-
-    /**
      * Creates a room list that can be used to load more rooms and filter them dynamically.
      */
-    fun createDynamicRoomList(
-        pageSize: Int = DynamicRoomList.DEFAULT_PAGE_SIZE,
-        pagesToLoad: Int = DynamicRoomList.DEFAULT_PAGES_TO_LOAD,
-        initialFilter: DynamicRoomList.Filter = DynamicRoomList.Filter.None,
+    fun createRoomList(
+        pageSize: Int,
+        initialFilter: DynamicRoomList.Filter = DynamicRoomList.Filter.All,
         innerProvider: suspend () -> InnerRoomList
     ): DynamicRoomList {
-        return createRustRoomList(
-            pageSize = pageSize,
-            numberOfPages = pagesToLoad,
-            initialFilterKind = initialFilter.toRustFilter(),
-            innerRoomListProvider = innerProvider
-        )
-    }
-
-    private fun createRustRoomList(
-        pageSize: Int,
-        numberOfPages: Int,
-        initialFilterKind: RoomListEntriesDynamicFilterKind,
-        innerRoomListProvider: suspend () -> InnerRoomList
-    ): RustDynamicRoomList {
         val loadingStateFlow: MutableStateFlow<RoomList.LoadingState> = MutableStateFlow(RoomList.LoadingState.NotLoaded)
         val summariesFlow = MutableStateFlow<List<RoomSummary>>(emptyList())
         val processor = RoomSummaryListProcessor(summariesFlow, innerRoomListService, dispatcher, roomSummaryDetailsFactory)
-        val dynamicEvents = MutableSharedFlow<RoomListDynamicEvents>()
-
+        // Makes sure we don't miss any events
+        val dynamicEvents = MutableSharedFlow<RoomListDynamicEvents>(replay = 100)
+        val currentFilter = MutableStateFlow(initialFilter)
+        val loadedPages = MutableStateFlow(1)
         var innerRoomList: InnerRoomList? = null
         coroutineScope.launch(dispatcher) {
-            innerRoomList = innerRoomListProvider()
+            innerRoomList = innerProvider()
             innerRoomList?.let { innerRoomList ->
                 innerRoomList.entriesFlow(
                     pageSize = pageSize,
-                    numberOfPages = numberOfPages,
-                    initialFilterKind = initialFilterKind,
+                    initialFilterKind = initialFilter.toRustFilter(),
                     roomListDynamicEvents = dynamicEvents
                 ).onEach { update ->
                     processor.postUpdate(update)
@@ -105,15 +77,26 @@ internal class RoomListFactory(
         }.invokeOnCompletion {
             innerRoomList?.destroy()
         }
-        return RustDynamicRoomList(summariesFlow, loadingStateFlow, dynamicEvents, processor)
+        return RustDynamicRoomList(
+            summaries = summariesFlow,
+            loadingState = loadingStateFlow,
+            currentFilter = currentFilter,
+            loadedPages = loadedPages,
+            dynamicEvents = dynamicEvents,
+            processor = processor,
+            pageSize = pageSize,
+        )
     }
 }
 
 private class RustDynamicRoomList(
     override val summaries: MutableStateFlow<List<RoomSummary>>,
     override val loadingState: MutableStateFlow<RoomList.LoadingState>,
+    override val currentFilter: MutableStateFlow<DynamicRoomList.Filter>,
+    override val loadedPages: MutableStateFlow<Int>,
     private val dynamicEvents: MutableSharedFlow<RoomListDynamicEvents>,
     private val processor: RoomSummaryListProcessor,
+    override val pageSize: Int,
 ) : DynamicRoomList {
 
     override suspend fun rebuildSummaries() {
@@ -121,16 +104,19 @@ private class RustDynamicRoomList(
     }
 
     override suspend fun updateFilter(filter: DynamicRoomList.Filter) {
+        currentFilter.emit(filter)
         val filterEvent = RoomListDynamicEvents.SetFilter(filter.toRustFilter())
         dynamicEvents.emit(filterEvent)
     }
 
     override suspend fun loadMore() {
         dynamicEvents.emit(RoomListDynamicEvents.LoadMore)
+        loadedPages.getAndUpdate { it + 1 }
     }
 
     override suspend fun reset() {
         dynamicEvents.emit(RoomListDynamicEvents.Reset)
+        loadedPages.emit(1)
     }
 }
 
@@ -146,6 +132,7 @@ private fun DynamicRoomList.Filter.toRustFilter(): RoomListEntriesDynamicFilterK
         DynamicRoomList.Filter.All -> RoomListEntriesDynamicFilterKind.All
         is DynamicRoomList.Filter.NormalizedMatchRoomName -> RoomListEntriesDynamicFilterKind.NormalizedMatchRoomName(this.pattern)
         DynamicRoomList.Filter.None -> RoomListEntriesDynamicFilterKind.None
+        DynamicRoomList.Filter.AllNonLeft -> RoomListEntriesDynamicFilterKind.AllNonLeft
     }
 }
 
