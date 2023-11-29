@@ -62,7 +62,7 @@ class AndroidMediaPreProcessorTest {
         /*
         val data = result.getOrThrow()
         assertThat(data.file.path).endsWith("image.png")
-        val info = (data as MediaUploadInfo.Image)
+        val info = data as MediaUploadInfo.Image
         assertThat(info.thumbnailFile).isNull() // TODO Check this
         assertThat(info.imageInfo).isEqualTo(
             ImageInfo(
@@ -97,7 +97,7 @@ class AndroidMediaPreProcessorTest {
         /*
         val data = result.getOrThrow()
         assertThat(data.file.path).endsWith("image.png")
-        val info = (data as MediaUploadInfo.Image)
+        val info = data as MediaUploadInfo.Image
         assertThat(info.thumbnailFile).isNull() // TODO Check this
         assertThat(info.imageInfo).isEqualTo(
             ImageInfo(
@@ -126,7 +126,7 @@ class AndroidMediaPreProcessorTest {
             compressIfPossible = false,
         ).getOrThrow()
         assertThat(result.file.path).endsWith("image.png")
-        val info = (result as MediaUploadInfo.Image)
+        val info = result as MediaUploadInfo.Image
         assertThat(info.thumbnailFile).isNotNull()
         assertThat(info.imageInfo).isEqualTo(
             ImageInfo(
@@ -154,7 +154,7 @@ class AndroidMediaPreProcessorTest {
             compressIfPossible = false,
         ).getOrThrow()
         assertThat(result.file.path).endsWith("image.png")
-        val info = (result as MediaUploadInfo.Image)
+        val info = result as MediaUploadInfo.Image
         assertThat(info.thumbnailFile).isNotNull()
         assertThat(info.imageInfo).isEqualTo(
             ImageInfo(
@@ -183,14 +183,14 @@ class AndroidMediaPreProcessorTest {
             compressIfPossible = true,
         ).getOrThrow()
         assertThat(result.file.path).endsWith("animated_gif.gif")
-        val info = (result as MediaUploadInfo.Image)
+        val info = result as MediaUploadInfo.Image
         assertThat(info.thumbnailFile).isNotNull()
         assertThat(info.imageInfo).isEqualTo(
             ImageInfo(
                 height = 600,
                 width = 800,
                 mimetype = MimeTypes.Gif,
-                size = 687979,
+                size = 687_979,
                 thumbnailInfo = ThumbnailInfo(height = 50, width = 50, mimetype = MimeTypes.Jpeg, size = 691),
                 thumbnailSource = null,
                 blurhash = "K00000fQfQfQfQfQfQfQfQ",
@@ -211,7 +211,7 @@ class AndroidMediaPreProcessorTest {
             compressIfPossible = true,
         ).getOrThrow()
         assertThat(result.file.path).endsWith("text.txt")
-        val info = (result as MediaUploadInfo.AnyFile)
+        val info = result as MediaUploadInfo.AnyFile
         assertThat(info.fileInfo).isEqualTo(
             FileInfo(
                 mimetype = MimeTypes.PlainText,
@@ -236,7 +236,7 @@ class AndroidMediaPreProcessorTest {
             compressIfPossible = true,
         ).getOrThrow()
         assertThat(result.file.path).endsWith("video.mp4")
-        val info = (result as MediaUploadInfo.Video)
+        val info = result as MediaUploadInfo.Video
         assertThat(info.thumbnailFile).isNotNull()
         assertThat(info.videoInfo).isEqualTo(
             VideoInfo(
@@ -265,7 +265,7 @@ class AndroidMediaPreProcessorTest {
             compressIfPossible = false,
         ).getOrThrow()
         assertThat(result.file.path).endsWith("video.mp4")
-        val info = (result as MediaUploadInfo.Video)
+        val info = result as MediaUploadInfo.Video
         assertThat(info.thumbnailFile).isNotNull()
         assertThat(info.videoInfo).isEqualTo(
             VideoInfo(
@@ -294,7 +294,7 @@ class AndroidMediaPreProcessorTest {
             compressIfPossible = true,
         ).getOrThrow()
         assertThat(result.file.path).endsWith("sample3s.mp3")
-        val info = (result as MediaUploadInfo.Audio)
+        val info = result as MediaUploadInfo.Audio
         assertThat(info.audioInfo).isEqualTo(
             AudioInfo(
                 duration = Duration.ZERO, // Not available with Robolectric?
