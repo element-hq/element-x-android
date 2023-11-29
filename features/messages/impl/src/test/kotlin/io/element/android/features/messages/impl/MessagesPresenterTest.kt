@@ -99,6 +99,7 @@ import org.junit.Rule
 import org.junit.Test
 import kotlin.time.Duration.Companion.milliseconds
 
+@Suppress("LargeClass")
 class MessagesPresenterTest {
 
     @get:Rule
