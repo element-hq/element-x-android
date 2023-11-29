@@ -364,6 +364,12 @@ class RustMatrixRoom(
         }
     }
 
+    override suspend fun canUserJoinCall(userId: UserId): Result<Boolean> {
+        return runCatching {
+            innerRoom.canUserSendState(userId.value, StateEventType.ROOM_MEMBER_EVENT.map())
+        }
+    }
+
     override suspend fun sendImage(file: File, thumbnailFile: File, imageInfo: ImageInfo, progressCallback: ProgressCallback?): Result<MediaUploadHandler> {
         return sendAttachment(listOf(file, thumbnailFile)) {
             innerTimeline.sendImage(file.path, thumbnailFile.path, imageInfo.map(), progressCallback?.toProgressWatcher())

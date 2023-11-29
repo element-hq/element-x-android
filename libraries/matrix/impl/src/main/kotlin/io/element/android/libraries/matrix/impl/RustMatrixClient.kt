@@ -77,6 +77,7 @@ import org.matrix.rustcomponents.sdk.BackupState
 import org.matrix.rustcomponents.sdk.Client
 import org.matrix.rustcomponents.sdk.ClientDelegate
 import org.matrix.rustcomponents.sdk.NotificationProcessSetup
+import org.matrix.rustcomponents.sdk.PowerLevels
 import org.matrix.rustcomponents.sdk.Room
 import org.matrix.rustcomponents.sdk.RoomListItem
 import org.matrix.rustcomponents.sdk.TaskHandle
@@ -275,6 +276,7 @@ class RustMatrixClient constructor(
                 },
                 invite = createRoomParams.invite?.map { it.value },
                 avatar = createRoomParams.avatar,
+                powerLevelContentOverride = defaultRoomCreationPowerLevels,
             )
             val roomId = RoomId(client.createRoom(rustParams))
 
@@ -297,7 +299,7 @@ class RustMatrixClient constructor(
             isDirect = true,
             visibility = RoomVisibility.PRIVATE,
             preset = RoomPreset.TRUSTED_PRIVATE_CHAT,
-            invite = listOf(userId)
+            invite = listOf(userId),
         )
         return createRoom(createRoomParams)
     }
@@ -482,3 +484,18 @@ class RustMatrixClient constructor(
     }
 }
 
+private val defaultRoomCreationPowerLevels = PowerLevels(
+    usersDefault = null,
+    eventsDefault = null,
+    stateDefault = null,
+    ban = null,
+    kick = null,
+    redact = null,
+    invite = null,
+    notifications = null,
+    users = mapOf(),
+    events = mapOf(
+        "m.call.member" to 0,
+        "org.matrix.msc3401.call.member" to 0,
+    )
+)

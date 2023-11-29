@@ -127,6 +127,20 @@ class MessagesPresenterTest {
     }
 
     @Test
+    fun `present - call is disabled if user cannot join it`() = runTest {
+        val room = FakeMatrixRoom().apply {
+            givenCanUserJoinCall(Result.success(false))
+        }
+        val presenter = createMessagesPresenter(matrixRoom = room)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = consumeItemsUntilTimeout().last()
+            assertThat(initialState.callState).isEqualTo(RoomCallState.DISABLED)
+        }
+    }
+
+    @Test
     fun `present - handle toggling a reaction`() = runTest {
         val coroutineDispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true)
         val room = FakeMatrixRoom()
@@ -656,6 +670,7 @@ class MessagesPresenterTest {
         clipboardHelper: FakeClipboardHelper = FakeClipboardHelper(),
         analyticsService: FakeAnalyticsService = FakeAnalyticsService(),
         permissionsPresenter: PermissionsPresenter = FakePermissionsPresenter(),
+        currentSessionIdHolder: CurrentSessionIdHolder = CurrentSessionIdHolder(FakeMatrixClient(A_SESSION_ID)),
     ): MessagesPresenter {
         val mediaSender = MediaSender(FakeMediaPreProcessor(), matrixRoom)
         val permissionsPresenterFactory = FakePermissionsPresenterFactory(permissionsPresenter)
@@ -724,6 +739,7 @@ class MessagesPresenterTest {
             featureFlagsService = FakeFeatureFlagService(),
             buildMeta = aBuildMeta(),
             dispatchers = coroutineDispatchers,
+            currentSessionIdHolder = currentSessionIdHolder,
         )
     }
 }
