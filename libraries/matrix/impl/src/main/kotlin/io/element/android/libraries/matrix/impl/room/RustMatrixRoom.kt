@@ -76,6 +76,7 @@ import org.matrix.rustcomponents.sdk.RoomListItem
 import org.matrix.rustcomponents.sdk.RoomMember
 import org.matrix.rustcomponents.sdk.RoomMessageEventContentWithoutRelation
 import org.matrix.rustcomponents.sdk.SendAttachmentJoinHandle
+import org.matrix.rustcomponents.sdk.Timeline
 import org.matrix.rustcomponents.sdk.WidgetCapabilities
 import org.matrix.rustcomponents.sdk.WidgetCapabilitiesProvider
 import org.matrix.rustcomponents.sdk.messageEventContentFromHtml
@@ -87,9 +88,10 @@ import java.io.File
 @OptIn(ExperimentalCoroutinesApi::class)
 class RustMatrixRoom(
     override val sessionId: SessionId,
-    isKeyBackupEnabled: Boolean,
+    private val isKeyBackupEnabled: Boolean,
     private val roomListItem: RoomListItem,
     private val innerRoom: Room,
+    private val innerTimeline: Timeline,
     private val roomNotificationSettingsService: RustNotificationSettingsService,
     sessionCoroutineScope: CoroutineScope,
     private val coroutineDispatchers: CoroutineDispatchers,
@@ -130,7 +132,7 @@ class RustMatrixRoom(
     override val timeline = RustMatrixTimeline(
         isKeyBackupEnabled = isKeyBackupEnabled,
         matrixRoom = this,
-        innerRoom = innerRoom,
+        innerTimeline = innerTimeline,
         roomCoroutineScope = roomCoroutineScope,
         dispatcher = roomDispatcher,
         lastLoginTimestamp = sessionData.loginTimestamp,
@@ -147,6 +149,7 @@ class RustMatrixRoom(
 
     override fun destroy() {
         roomCoroutineScope.cancel()
+        innerTimeline.destroy()
         innerRoom.destroy()
         roomListItem.destroy()
         specialModeEventTimelineItem?.destroy()
@@ -254,7 +257,7 @@ class RustMatrixRoom(
     override suspend fun sendMessage(body: String, htmlBody: String?, mentions: List<Mention>): Result<Unit> = withContext(roomDispatcher) {
         messageEventContentFromParts(body, htmlBody).withMentions(mentions.map()).use { content ->
             runCatching {
-                innerRoom.send(content)
+                innerTimeline.send(content)
             }
         }
     }
@@ -269,9 +272,9 @@ class RustMatrixRoom(
         withContext(roomDispatcher) {
             if (originalEventId != null) {
                 runCatching {
-                    val editedEvent = specialModeEventTimelineItem ?: innerRoom.getEventTimelineItemByEventId(originalEventId.value)
+                    val editedEvent = specialModeEventTimelineItem ?: innerTimeline.getEventTimelineItemByEventId(originalEventId.value)
                     editedEvent.use {
-                        innerRoom.edit(
+                        innerTimeline.edit(
                             newContent = messageEventContentFromParts(body, htmlBody).withMentions(mentions.map()),
                             editItem = it,
                         )
@@ -281,7 +284,7 @@ class RustMatrixRoom(
             } else {
                 runCatching {
                     transactionId?.let { cancelSend(it) }
-                    innerRoom.send(messageEventContentFromParts(body, htmlBody))
+                    innerTimeline.send(messageEventContentFromParts(body, htmlBody))
                 }
             }
         }
@@ -292,15 +295,15 @@ class RustMatrixRoom(
         runCatching {
             specialModeEventTimelineItem?.destroy()
             specialModeEventTimelineItem = null
-            specialModeEventTimelineItem = eventId?.let { innerRoom.getEventTimelineItemByEventId(it.value) }
+            specialModeEventTimelineItem = eventId?.let { innerTimeline.getEventTimelineItemByEventId(it.value) }
         }
     }
 
     override suspend fun replyMessage(eventId: EventId, body: String, htmlBody: String?, mentions: List<Mention>): Result<Unit> = withContext(roomDispatcher) {
         runCatching {
-            val inReplyTo = specialModeEventTimelineItem ?: innerRoom.getEventTimelineItemByEventId(eventId.value)
+            val inReplyTo = specialModeEventTimelineItem ?: innerTimeline.getEventTimelineItemByEventId(eventId.value)
             inReplyTo.use { eventTimelineItem ->
-                innerRoom.sendReply(messageEventContentFromParts(body, htmlBody).withMentions(mentions.map()), eventTimelineItem)
+                innerTimeline.sendReply(messageEventContentFromParts(body, htmlBody).withMentions(mentions.map()), eventTimelineItem)
             }
             specialModeEventTimelineItem = null
         }
@@ -362,37 +365,37 @@ class RustMatrixRoom(
 
     override suspend fun sendImage(file: File, thumbnailFile: File, imageInfo: ImageInfo, progressCallback: ProgressCallback?): Result<MediaUploadHandler> {
         return sendAttachment(listOf(file, thumbnailFile)) {
-            innerRoom.sendImage(file.path, thumbnailFile.path, imageInfo.map(), progressCallback?.toProgressWatcher())
+            innerTimeline.sendImage(file.path, thumbnailFile.path, imageInfo.map(), progressCallback?.toProgressWatcher())
         }
     }
 
     override suspend fun sendVideo(file: File, thumbnailFile: File, videoInfo: VideoInfo, progressCallback: ProgressCallback?): Result<MediaUploadHandler> {
         return sendAttachment(listOf(file, thumbnailFile)) {
-            innerRoom.sendVideo(file.path, thumbnailFile.path, videoInfo.map(), progressCallback?.toProgressWatcher())
+            innerTimeline.sendVideo(file.path, thumbnailFile.path, videoInfo.map(), progressCallback?.toProgressWatcher())
         }
     }
 
     override suspend fun sendAudio(file: File, audioInfo: AudioInfo, progressCallback: ProgressCallback?): Result<MediaUploadHandler> {
         return sendAttachment(listOf(file)) {
-            innerRoom.sendAudio(file.path, audioInfo.map(), progressCallback?.toProgressWatcher())
+            innerTimeline.sendAudio(file.path, audioInfo.map(), progressCallback?.toProgressWatcher())
         }
     }
 
     override suspend fun sendFile(file: File, fileInfo: FileInfo, progressCallback: ProgressCallback?): Result<MediaUploadHandler> {
         return sendAttachment(listOf(file)) {
-            innerRoom.sendFile(file.path, fileInfo.map(), progressCallback?.toProgressWatcher())
+            innerTimeline.sendFile(file.path, fileInfo.map(), progressCallback?.toProgressWatcher())
         }
     }
 
     override suspend fun toggleReaction(emoji: String, eventId: EventId): Result<Unit> = withContext(roomDispatcher) {
         runCatching {
-            innerRoom.toggleReaction(key = emoji, eventId = eventId.value)
+            innerTimeline.toggleReaction(key = emoji, eventId = eventId.value)
         }
     }
 
     override suspend fun forwardEvent(eventId: EventId, roomIds: List<RoomId>): Result<Unit> = withContext(roomDispatcher) {
         runCatching {
-            roomContentForwarder.forward(fromRoom = innerRoom, eventId = eventId, toRoomIds = roomIds)
+            roomContentForwarder.forward(fromTimeline = innerTimeline, eventId = eventId, toRoomIds = roomIds)
         }.onFailure {
             Timber.e(it)
         }
@@ -400,13 +403,13 @@ class RustMatrixRoom(
 
     override suspend fun retrySendMessage(transactionId: TransactionId): Result<Unit> = withContext(roomDispatcher) {
         runCatching {
-            innerRoom.retrySend(transactionId.value)
+            innerTimeline.retrySend(transactionId.value)
         }
     }
 
     override suspend fun cancelSend(transactionId: TransactionId): Result<Unit> = withContext(roomDispatcher) {
         runCatching {
-            innerRoom.cancelSend(transactionId.value)
+            innerTimeline.cancelSend(transactionId.value)
         }
     }
 
@@ -451,7 +454,7 @@ class RustMatrixRoom(
         assetType: AssetType?,
     ): Result<Unit> = withContext(roomDispatcher) {
         runCatching {
-            innerRoom.sendLocation(
+            innerTimeline.sendLocation(
                 body = body,
                 geoUri = geoUri,
                 description = description,
@@ -468,7 +471,7 @@ class RustMatrixRoom(
         pollKind: PollKind,
     ): Result<Unit> = withContext(roomDispatcher) {
         runCatching {
-            innerRoom.createPoll(
+            innerTimeline.createPoll(
                 question = question,
                 answers = answers,
                 maxSelections = maxSelections.toUByte(),
@@ -486,11 +489,11 @@ class RustMatrixRoom(
     ): Result<Unit> = withContext(roomDispatcher) {
         runCatching {
             val pollStartEvent =
-                innerRoom.getEventTimelineItemByEventId(
+                innerTimeline.getEventTimelineItemByEventId(
                     eventId = pollStartId.value
                 )
             pollStartEvent.use {
-                innerRoom.editPoll(
+                innerTimeline.editPoll(
                     question = question,
                     answers = answers,
                     maxSelections = maxSelections.toUByte(),
@@ -506,7 +509,7 @@ class RustMatrixRoom(
         answers: List<String>
     ): Result<Unit> = withContext(roomDispatcher) {
         runCatching {
-            innerRoom.sendPollResponse(
+            innerTimeline.sendPollResponse(
                 pollStartId = pollStartId.value,
                 answers = answers,
             )
@@ -518,7 +521,7 @@ class RustMatrixRoom(
         text: String
     ): Result<Unit> = withContext(roomDispatcher) {
         runCatching {
-            innerRoom.endPoll(
+            innerTimeline.endPoll(
                 pollStartId = pollStartId.value,
                 text = text,
             )
@@ -531,7 +534,7 @@ class RustMatrixRoom(
         waveform: List<Float>,
         progressCallback: ProgressCallback?,
     ): Result<MediaUploadHandler> = sendAttachment(listOf(file)) {
-        innerRoom.sendVoiceMessage(
+        innerTimeline.sendVoiceMessage(
             url = file.path,
             audioInfo = audioInfo.map(),
             waveform = waveform.toMSC3246range(),
@@ -559,6 +562,16 @@ class RustMatrixRoom(
             },
         )
     }
+
+    override suspend fun pollHistory() = RustMatrixTimeline(
+        isKeyBackupEnabled = isKeyBackupEnabled,
+        matrixRoom = this,
+        innerTimeline = innerRoom.pollHistory(),
+        roomCoroutineScope = roomCoroutineScope,
+        dispatcher = roomDispatcher,
+        lastLoginTimestamp = sessionData.loginTimestamp,
+        onNewSyncedEvent = { _syncUpdateFlow.value = systemClock.epochMillis() }
+    )
 
     private suspend fun sendAttachment(files: List<File>, handle: () -> SendAttachmentJoinHandle): Result<MediaUploadHandler> {
         return runCatching {

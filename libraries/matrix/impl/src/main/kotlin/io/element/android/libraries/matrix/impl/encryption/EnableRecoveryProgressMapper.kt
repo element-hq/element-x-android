@@ -22,12 +22,14 @@ import org.matrix.rustcomponents.sdk.EnableRecoveryProgress as RustEnableRecover
 class EnableRecoveryProgressMapper {
     fun map(rustEnableProgress: RustEnableRecoveryProgress): EnableRecoveryProgress {
         return when (rustEnableProgress) {
-            is RustEnableRecoveryProgress.CreatingRecoveryKey -> EnableRecoveryProgress.CreatingRecoveryKey
+            is RustEnableRecoveryProgress.Starting -> EnableRecoveryProgress.Starting
             is RustEnableRecoveryProgress.CreatingBackup -> EnableRecoveryProgress.CreatingBackup
+            is RustEnableRecoveryProgress.CreatingRecoveryKey -> EnableRecoveryProgress.CreatingRecoveryKey
             is RustEnableRecoveryProgress.BackingUp -> EnableRecoveryProgress.BackingUp(
                 backedUpCount = rustEnableProgress.backedUpCount.toInt(),
                 totalCount = rustEnableProgress.totalCount.toInt(),
             )
+            is RustEnableRecoveryProgress.RoomKeyUploadError -> EnableRecoveryProgress.RoomKeyUploadError
             is RustEnableRecoveryProgress.Done -> EnableRecoveryProgress.Done(
                 recoveryKey = rustEnableProgress.recoveryKey
             )

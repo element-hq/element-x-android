@@ -214,6 +214,7 @@ class RustMatrixClient constructor(
                 isKeyBackupEnabled = client.encryption().backupState() == BackupState.ENABLED,
                 roomListItem = roomListItem,
                 innerRoom = fullRoom,
+                innerTimeline = fullRoom.timeline(),
                 roomNotificationSettingsService = notificationSettingsService,
                 sessionCoroutineScope = sessionCoroutineScope,
                 coroutineDispatchers = dispatchers,
