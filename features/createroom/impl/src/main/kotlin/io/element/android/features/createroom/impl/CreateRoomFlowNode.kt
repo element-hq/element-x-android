@@ -72,7 +72,7 @@ class CreateRoomFlowNode @AssistedInject constructor(
                         plugins<CreateRoomEntryPoint.Callback>().forEach { it.onSuccess(roomId) }
                     }
                 }
-                createNode<CreateRoomRootNode>(context = buildContext, plugins = listOf(callback))
+                createNode<CreateRoomRootNode>(buildContext = buildContext, plugins = listOf(callback))
             }
             NavTarget.NewRoom -> {
                 val callback = object : ConfigureRoomNode.Callback {
@@ -80,7 +80,7 @@ class CreateRoomFlowNode @AssistedInject constructor(
                         plugins<CreateRoomEntryPoint.Callback>().forEach { it.onSuccess(roomId) }
                     }
                 }
-                createNode<ConfigureRoomFlowNode>(context = buildContext, plugins = listOf(callback))
+                createNode<ConfigureRoomFlowNode>(buildContext = buildContext, plugins = listOf(callback))
             }
         }
     }

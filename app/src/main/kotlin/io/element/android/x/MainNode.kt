@@ -52,7 +52,7 @@ class MainNode(
     override val daggerComponent = (context as DaggerComponentOwner).daggerComponent
 
     override fun resolve(navTarget: RootNavTarget, buildContext: BuildContext): Node {
-        return createNode<RootFlowNode>(context = buildContext)
+        return createNode<RootFlowNode>(buildContext = buildContext)
     }
 
     @Composable
