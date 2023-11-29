@@ -24,8 +24,8 @@ import io.element.android.libraries.androidutils.bitmap.calculateInSampleSize
 import io.element.android.libraries.androidutils.bitmap.resizeToMax
 import io.element.android.libraries.androidutils.bitmap.rotateToMetadataOrientation
 import io.element.android.libraries.androidutils.file.createTmpFile
+import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.di.ApplicationContext
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.InputStream
@@ -33,8 +33,8 @@ import javax.inject.Inject
 
 class ImageCompressor @Inject constructor(
     @ApplicationContext private val context: Context,
+    private val dispatchers: CoroutineDispatchers,
 ) {
-
     /**
      * Decodes the [inputStream] into a [Bitmap] and applies the needed transformations (rotation, scale) based on [resizeMode], then writes it into a
      * temporary file using the passed [format], [orientation] and [desiredQuality].
@@ -46,7 +46,7 @@ class ImageCompressor @Inject constructor(
         format: Bitmap.CompressFormat = Bitmap.CompressFormat.JPEG,
         orientation: Int = ExifInterface.ORIENTATION_UNDEFINED,
         desiredQuality: Int = 80,
-    ): Result<ImageCompressionResult> = withContext(Dispatchers.IO) {
+    ): Result<ImageCompressionResult> = withContext(dispatchers.io) {
         runCatching {
             val compressedBitmap = compressToBitmap(inputStreamProvider, resizeMode, orientation).getOrThrow()
             // Encode bitmap to the destination temporary file
