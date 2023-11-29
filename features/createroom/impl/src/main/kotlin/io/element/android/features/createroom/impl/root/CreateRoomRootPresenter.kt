@@ -28,10 +28,11 @@ import io.element.android.features.createroom.impl.userlist.UserListPresenter
 import io.element.android.features.createroom.impl.userlist.UserListPresenterArgs
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.Presenter
-import io.element.android.libraries.architecture.runCatchingUpdatingState
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.room.StartDMResult
+import io.element.android.libraries.matrix.api.room.startDM
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.usersearch.api.UserRepository
 import io.element.android.services.analytics.api.AnalyticsService
@@ -79,19 +80,18 @@ class CreateRoomRootPresenter @Inject constructor(
     }
 
     private fun CoroutineScope.startDm(matrixUser: MatrixUser, startDmAction: MutableState<Async<RoomId>>) = launch {
-        suspend {
-            matrixClient.findDM(matrixUser.userId).use { existingDM ->
-                existingDM?.roomId ?: createDM(matrixUser)
+        startDmAction.value = Async.Loading()
+        when (val result = matrixClient.startDM(matrixUser)) {
+            is StartDMResult.Success -> {
+                if (result.isNew) {
+                    analyticsService.capture(CreatedRoom(isDM = true))
+                }
+                startDmAction.value = Async.Success(result.roomId)
             }
-        }.runCatchingUpdatingState(startDmAction)
-    }
+            is StartDMResult.Failure -> {
+                startDmAction.value = Async.Failure(result)
+            }
+        }
 
-    private suspend fun createDM(user: MatrixUser): RoomId {
-        return matrixClient
-            .createDM(user.userId)
-            .onSuccess {
-                analyticsService.capture(CreatedRoom(isDM = true))
-            }
-            .getOrThrow()
     }
 }
