@@ -39,6 +39,7 @@ import io.element.android.libraries.matrix.test.room.anEventTimelineItem
 import io.element.android.libraries.matrix.test.timeline.FakeMatrixTimeline
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.tests.testutils.WarmUpRule
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
@@ -539,7 +540,7 @@ class CreatePollPresenterTest {
 
 private fun anExistingPoll() = aPollContent(
     question = "Do you like polls?",
-    answers = listOf(
+    answers = persistentListOf(
         PollAnswer("1", "Yes"),
         PollAnswer("2", "No"),
         PollAnswer("2", "Maybe"),

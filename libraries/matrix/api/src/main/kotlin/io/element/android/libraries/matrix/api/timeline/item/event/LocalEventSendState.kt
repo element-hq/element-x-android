@@ -16,8 +16,10 @@
 
 package io.element.android.libraries.matrix.api.timeline.item.event
 
+import androidx.compose.runtime.Immutable
 import io.element.android.libraries.matrix.api.core.EventId
 
+@Immutable
 sealed interface LocalEventSendState {
     data object NotSentYet : LocalEventSendState
     data object Canceled : LocalEventSendState

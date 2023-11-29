@@ -16,6 +16,9 @@
 
 package io.element.android.libraries.matrix.api.timeline.item.event
 
+import androidx.compose.runtime.Immutable
+
+@Immutable
 sealed interface ProfileTimelineDetails {
     data object Unavailable : ProfileTimelineDetails
 

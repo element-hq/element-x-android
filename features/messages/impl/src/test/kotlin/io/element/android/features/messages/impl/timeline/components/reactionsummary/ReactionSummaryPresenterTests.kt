@@ -29,6 +29,7 @@ import io.element.android.libraries.matrix.test.A_USER_NAME
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.matrix.test.room.aRoomMember
 import io.element.android.tests.testutils.WarmUpRule
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
@@ -42,7 +43,7 @@ class ReactionSummaryPresenterTests {
     private val roomMember = aRoomMember(userId = A_USER_ID,  avatarUrl = AN_AVATAR_URL, displayName = A_USER_NAME)
     private val summaryEvent = ReactionSummaryEvents.ShowReactionSummary(AN_EVENT_ID, listOf(aggregatedReaction), aggregatedReaction.key)
     private val room = FakeMatrixRoom().apply {
-        givenRoomMembersState(MatrixRoomMembersState.Ready(listOf(roomMember)))
+        givenRoomMembersState(MatrixRoomMembersState.Ready(persistentListOf(roomMember)))
     }
     private val presenter = ReactionSummaryPresenter(room)
 

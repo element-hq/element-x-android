@@ -25,6 +25,7 @@ import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.A_USER_ID_2
 import io.element.android.libraries.matrix.test.A_USER_NAME
 import io.element.android.libraries.matrix.test.FakeMatrixClient
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
@@ -37,7 +38,7 @@ internal class MatrixUserListDataSourceTest {
             searchTerm = "test",
             result = Result.success(
                 MatrixSearchUserResults(
-                    results = listOf(
+                    results = persistentListOf(
                         aMatrixUserProfile(),
                         aMatrixUserProfile(userId = A_USER_ID_2)
                     ),

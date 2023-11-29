@@ -27,6 +27,7 @@ import io.element.android.libraries.matrix.api.verification.VerificationEmoji
 import io.element.android.libraries.matrix.api.verification.VerificationFlowState
 import io.element.android.libraries.matrix.test.verification.FakeSessionVerificationService
 import io.element.android.tests.testutils.WarmUpRule
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
@@ -132,7 +133,7 @@ class VerifySelfSessionPresenterTests {
             presenter.present()
         }.test {
             requestVerificationAndAwaitVerifyingState(service)
-            service.givenVerificationFlowState(VerificationFlowState.ReceivedVerificationData(emptyList()))
+            service.givenVerificationFlowState(VerificationFlowState.ReceivedVerificationData(persistentListOf()))
             ensureAllEventsConsumed()
         }
     }

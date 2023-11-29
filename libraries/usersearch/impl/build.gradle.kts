@@ -34,6 +34,7 @@ dependencies {
     implementation(projects.libraries.matrixui)
     implementation(projects.libraries.matrix.api)
     api(projects.libraries.usersearch.api)
+    implementation(libs.kotlinx.collections.immutable)
 
     testImplementation(libs.test.junit)
     testImplementation(libs.coroutines.test)

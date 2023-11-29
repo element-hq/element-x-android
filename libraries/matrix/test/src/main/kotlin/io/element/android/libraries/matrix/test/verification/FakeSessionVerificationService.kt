@@ -20,6 +20,8 @@ import io.element.android.libraries.matrix.api.verification.SessionVerificationS
 import io.element.android.libraries.matrix.api.verification.VerificationFlowState
 import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatus
 import io.element.android.libraries.matrix.api.verification.VerificationEmoji
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -29,7 +31,7 @@ class FakeSessionVerificationService : SessionVerificationService {
     private val _sessionVerifiedStatus = MutableStateFlow<SessionVerifiedStatus>(SessionVerifiedStatus.Unknown)
     private var _verificationFlowState = MutableStateFlow<VerificationFlowState>(VerificationFlowState.Initial)
     private var _canVerifySessionFlow = MutableStateFlow(true)
-    private var emojiList = emptyList<VerificationEmoji>()
+    private var emojiList = persistentListOf<VerificationEmoji>()
     var shouldFail = false
 
     override val verificationFlowState: StateFlow<VerificationFlowState> =_verificationFlowState
@@ -87,7 +89,7 @@ class FakeSessionVerificationService : SessionVerificationService {
     }
 
     fun givenEmojiList(emojis: List<VerificationEmoji>) {
-        this.emojiList = emojis
+        this.emojiList = emojis.toPersistentList()
     }
 
     override suspend fun reset() {

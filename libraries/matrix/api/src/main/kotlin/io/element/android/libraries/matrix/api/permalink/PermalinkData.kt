@@ -17,18 +17,21 @@
 package io.element.android.libraries.matrix.api.permalink
 
 import android.net.Uri
+import androidx.compose.runtime.Immutable
+import kotlinx.collections.immutable.ImmutableList
 
 /**
  * This sealed class represents all the permalink cases.
  * You don't have to instantiate yourself but should use [PermalinkParser] instead.
  */
+@Immutable
 sealed interface PermalinkData {
 
     data class RoomLink(
         val roomIdOrAlias: String,
         val isRoomAlias: Boolean,
         val eventId: String?,
-        val viaParameters: List<String>
+        val viaParameters: ImmutableList<String>
     ) : PermalinkData
 
     /*

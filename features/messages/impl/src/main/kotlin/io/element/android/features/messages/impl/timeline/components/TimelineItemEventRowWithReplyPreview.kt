@@ -45,6 +45,8 @@ import io.element.android.libraries.matrix.api.timeline.item.event.PollContent
 import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.VideoMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.VoiceMessageType
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.persistentMapOf
 
 @PreviewsDayNight
 @Composable
@@ -127,8 +129,8 @@ class InReplyToDetailsProvider : PreviewParameterProvider<InReplyToDetails> {
                 question = "Poll which are being replied.",
                 kind = PollKind.Disclosed,
                 maxSelections = 1u,
-                answers = emptyList(),
-                votes = emptyMap(),
+                answers = persistentListOf(),
+                votes = persistentMapOf(),
                 endTime = null
             ),
         ).map {

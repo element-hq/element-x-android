@@ -17,6 +17,7 @@
 package io.element.android.libraries.matrix.api.room
 
 import io.element.android.libraries.matrix.api.timeline.item.event.EventTimelineItem
+import kotlinx.collections.immutable.ImmutableList
 
 data class MatrixRoomInfo(
     val id: String,
@@ -28,7 +29,7 @@ data class MatrixRoomInfo(
     val isSpace: Boolean,
     val isTombstoned: Boolean,
     val canonicalAlias: String?,
-    val alternativeAliases: List<String>,
+    val alternativeAliases: ImmutableList<String>,
     val currentUserMembership: CurrentUserMembership,
     val latestEvent: EventTimelineItem?,
     val inviter: RoomMember?,
@@ -39,5 +40,5 @@ data class MatrixRoomInfo(
     val notificationCount: Long,
     val userDefinedNotificationMode: RoomNotificationMode?,
     val hasRoomCall: Boolean,
-    val activeRoomCallParticipants: List<String>
+    val activeRoomCallParticipants: ImmutableList<String>
 )

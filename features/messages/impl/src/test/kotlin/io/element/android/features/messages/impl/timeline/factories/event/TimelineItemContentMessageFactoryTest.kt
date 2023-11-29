@@ -55,6 +55,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.VoiceMessageT
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.ui.components.A_BLUR_HASH
 import io.element.android.libraries.mediaviewer.api.util.FileExtensionExtractorWithoutValidation
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -280,7 +281,7 @@ class TimelineItemContentMessageFactoryTest {
                     ),
                     details = AudioDetails(
                         duration = 1.minutes,
-                        waveform = listOf(1f, 2f),
+                        waveform = persistentListOf(1f, 2f),
                     ),
                 )
             ),
@@ -293,7 +294,7 @@ class TimelineItemContentMessageFactoryTest {
             duration = 1.minutes,
             mediaSource = MediaSource(url = "url", json = null),
             mimeType = MimeTypes.Ogg,
-            waveform = listOf(1f, 2f).toImmutableList()
+            waveform = persistentListOf(1f, 2f)
         )
         assertThat(result).isEqualTo(expected)
     }
