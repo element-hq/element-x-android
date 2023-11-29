@@ -127,9 +127,10 @@ class MessagesPresenterTest {
     }
 
     @Test
-    fun `present - call is disabled if user cannot join it`() = runTest {
+    fun `present - call is disabled if user cannot join it even if there is an ongoing call`() = runTest {
         val room = FakeMatrixRoom().apply {
             givenCanUserJoinCall(Result.success(false))
+            givenRoomInfo(aRoomInfo(hasRoomCall = true))
         }
         val presenter = createMessagesPresenter(matrixRoom = room)
         moleculeFlow(RecompositionMode.Immediate) {
