@@ -444,8 +444,6 @@ private fun TextInput(
                     .fillMaxWidth(),
                 style = ElementRichTextEditorStyle.create(
                     hasFocus = state.hasFocus
-                ).copy(
-                    pill = PillStyle(Color.Red)
                 ),
                 resolveMentionDisplay = resolveMentionDisplay,
                 resolveRoomMentionDisplay = resolveRoomMentionDisplay,
