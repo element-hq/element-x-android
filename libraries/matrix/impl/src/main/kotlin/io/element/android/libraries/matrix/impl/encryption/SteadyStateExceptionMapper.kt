@@ -28,7 +28,7 @@ class SteadyStateExceptionMapper {
             is RustSteadyStateException.Connection -> SteadyStateException.Connection(
                 message = data.message
             )
-            is RustSteadyStateException.Laged -> SteadyStateException.Lagged(
+            is RustSteadyStateException.Lagged -> SteadyStateException.Lagged(
                 message = data.message
             )
         }

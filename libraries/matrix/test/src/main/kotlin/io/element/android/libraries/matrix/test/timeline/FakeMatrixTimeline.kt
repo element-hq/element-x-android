@@ -79,4 +79,6 @@ class FakeMatrixTimeline(
         sendReadReceiptLatch?.complete(Unit)
         Result.success(Unit)
     }
+
+    override fun close() = Unit
 }

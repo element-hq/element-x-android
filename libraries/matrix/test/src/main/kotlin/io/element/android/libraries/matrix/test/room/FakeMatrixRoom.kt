@@ -426,6 +426,9 @@ class FakeMatrixRoom(
     ): Result<String> = generateWidgetWebViewUrlResult
 
     override fun getWidgetDriver(widgetSettings: MatrixWidgetSettings): Result<MatrixWidgetDriver> = getWidgetDriverResult
+    override suspend fun pollHistory(): MatrixTimeline {
+        return FakeMatrixTimeline()
+    }
 
     fun givenLeaveRoomError(throwable: Throwable?) {
         this.leaveRoomError = throwable
