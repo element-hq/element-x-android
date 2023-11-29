@@ -16,9 +16,11 @@
 
 package io.element.android.libraries.matrix.api.room
 
+import androidx.compose.runtime.Immutable
 import io.element.android.libraries.matrix.api.timeline.item.event.EventTimelineItem
 import kotlinx.collections.immutable.ImmutableList
 
+@Immutable
 data class MatrixRoomInfo(
     val id: String,
     val name: String?,

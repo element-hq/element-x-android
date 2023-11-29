@@ -16,8 +16,10 @@
 
 package io.element.android.libraries.matrix.api.media
 
+import androidx.compose.runtime.Immutable
 import kotlin.time.Duration
 
+@Immutable
 data class AudioInfo(
     val duration: Duration?,
     val size: Long?,
