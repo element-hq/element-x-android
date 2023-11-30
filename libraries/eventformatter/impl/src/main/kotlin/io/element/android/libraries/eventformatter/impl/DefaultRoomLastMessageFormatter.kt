@@ -25,7 +25,6 @@ import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.eventformatter.api.RoomLastMessageFormatter
 import io.element.android.libraries.eventformatter.impl.mode.RenderingMode
-import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.timeline.item.event.AudioMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.EmoteMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.EventTimelineItem
@@ -58,14 +57,13 @@ import javax.inject.Inject
 @ContributesBinding(SessionScope::class)
 class DefaultRoomLastMessageFormatter @Inject constructor(
     private val sp: StringProvider,
-    private val matrixClient: MatrixClient,
     private val roomMembershipContentFormatter: RoomMembershipContentFormatter,
     private val profileChangeContentFormatter: ProfileChangeContentFormatter,
     private val stateContentFormatter: StateContentFormatter,
 ) : RoomLastMessageFormatter {
 
     override fun format(event: EventTimelineItem, isDmRoom: Boolean): CharSequence? {
-        val isOutgoing = matrixClient.isMe(event.sender)
+        val isOutgoing = event.isOwn
         val senderDisplayName = (event.senderProfile as? ProfileTimelineDetails.Ready)?.displayName ?: event.sender.value
         return when (val content = event.content) {
             is MessageContent -> processMessageContents(content, senderDisplayName, isDmRoom)
