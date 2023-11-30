@@ -17,7 +17,6 @@
 package io.element.android.features.messages.impl.timeline.components.reactionsummary
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
@@ -38,10 +37,6 @@ class ReactionSummaryPresenter @Inject constructor(
 ) : Presenter<ReactionSummaryState> {
     @Composable
     override fun present(): ReactionSummaryState {
-        LaunchedEffect(Unit) {
-            room.updateMembers()
-        }
-
         val membersState by room.membersStateFlow.collectAsState()
 
         val target: MutableState<ReactionSummaryState.Summary?> = remember {

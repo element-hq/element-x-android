@@ -39,6 +39,7 @@ import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_THROWABLE
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.tests.testutils.WarmUpRule
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
@@ -56,7 +57,7 @@ class RoomMemberDetailsPresenterTests {
         val room = aMatrixRoom().apply {
             givenUserDisplayNameResult(Result.success("A custom name"))
             givenUserAvatarUrlResult(Result.success("A custom avatar"))
-            givenRoomMembersState(MatrixRoomMembersState.Ready(listOf(roomMember)))
+            givenRoomMembersState(MatrixRoomMembersState.Ready(persistentListOf(roomMember)))
         }
         val presenter = createRoomMemberDetailsPresenter(
             room = room,
@@ -83,7 +84,7 @@ class RoomMemberDetailsPresenterTests {
         val room = aMatrixRoom().apply {
             givenUserDisplayNameResult(Result.failure(Throwable()))
             givenUserAvatarUrlResult(Result.failure(Throwable()))
-            givenRoomMembersState(MatrixRoomMembersState.Ready(listOf(roomMember)))
+            givenRoomMembersState(MatrixRoomMembersState.Ready(persistentListOf(roomMember)))
         }
         val presenter = createRoomMemberDetailsPresenter(
             room = room,
@@ -106,7 +107,7 @@ class RoomMemberDetailsPresenterTests {
         val room = aMatrixRoom().apply {
             givenUserDisplayNameResult(Result.success(null))
             givenUserAvatarUrlResult(Result.success(null))
-            givenRoomMembersState(MatrixRoomMembersState.Ready(listOf(roomMember)))
+            givenRoomMembersState(MatrixRoomMembersState.Ready(persistentListOf(roomMember)))
         }
         val presenter = createRoomMemberDetailsPresenter(
             room = room,

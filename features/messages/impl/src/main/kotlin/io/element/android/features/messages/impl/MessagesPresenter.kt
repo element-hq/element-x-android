@@ -79,6 +79,7 @@ import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomInfo
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.api.room.MessageEventType
+import io.element.android.libraries.matrix.api.user.CurrentSessionIdHolder
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailInfo
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailType
 import io.element.android.libraries.matrix.ui.room.canRedactAsState
@@ -108,6 +109,7 @@ class MessagesPresenter @AssistedInject constructor(
     private val featureFlagsService: FeatureFlagService,
     @Assisted private val navigator: MessagesNavigator,
     private val buildMeta: BuildMeta,
+    private val currentSessionIdHolder: CurrentSessionIdHolder,
 ) : Presenter<MessagesState> {
 
     private val timelinePresenter = timelinePresenterFactory.create(navigator = navigator)
@@ -133,15 +135,25 @@ class MessagesPresenter @AssistedInject constructor(
         val syncUpdateFlow = room.syncUpdateFlow.collectAsState()
         val userHasPermissionToSendMessage by room.canSendMessageAsState(type = MessageEventType.ROOM_MESSAGE, updateKey = syncUpdateFlow.value)
         val userHasPermissionToRedact by room.canRedactAsState(updateKey = syncUpdateFlow.value)
-        val roomName: Async<String> by remember(roomInfo?.name) {
+        val roomName: Async<String> by remember {
             derivedStateOf { roomInfo?.name?.let { Async.Success(it) } ?: Async.Uninitialized }
         }
-        val roomAvatar: Async<AvatarData> by remember(roomInfo?.avatarUrl) {
+        val roomAvatar: Async<AvatarData> by remember {
             derivedStateOf { roomInfo?.avatarData()?.let { Async.Success(it) } ?: Async.Uninitialized }
         }
 
         var hasDismissedInviteDialog by rememberSaveable {
             mutableStateOf(false)
+        }
+
+        var canJoinCall by rememberSaveable {
+            mutableStateOf(false)
+        }
+
+        LaunchedEffect(currentSessionIdHolder.current) {
+            withContext(dispatchers.io) {
+                canJoinCall = room.canUserJoinCall(userId = currentSessionIdHolder.current).getOrDefault(false)
+            }
         }
 
         val inviteProgress = remember { mutableStateOf<Async<Unit>>(Async.Uninitialized) }
@@ -162,8 +174,6 @@ class MessagesPresenter @AssistedInject constructor(
         val enableTextFormatting by preferencesStore.isRichTextEditorEnabledFlow().collectAsState(initial = true)
 
         var enableVoiceMessages by remember { mutableStateOf(false) }
-        // TODO add min power level to use this feature in the future?
-        val enableInRoomCalls = true
         LaunchedEffect(featureFlagsService) {
             enableVoiceMessages = featureFlagsService.isFeatureEnabled(FeatureFlags.VoiceMessages)
         }
@@ -193,6 +203,12 @@ class MessagesPresenter @AssistedInject constructor(
             }
         }
 
+        val callState = when {
+            !canJoinCall -> RoomCallState.DISABLED
+            roomInfo?.hasRoomCall == true -> RoomCallState.ONGOING
+            else -> RoomCallState.ENABLED
+        }
+
         return MessagesState(
             roomId = room.roomId,
             roomName = roomName,
@@ -213,9 +229,8 @@ class MessagesPresenter @AssistedInject constructor(
             inviteProgress = inviteProgress.value,
             enableTextFormatting = enableTextFormatting,
             enableVoiceMessages = enableVoiceMessages,
-            enableInRoomCalls = enableInRoomCalls,
             appName = buildMeta.applicationName,
-            isCallOngoing = roomInfo?.hasRoomCall ?: false,
+            callState = callState,
             eventSink = { handleEvents(it) }
         )
     }

@@ -53,6 +53,7 @@ import io.element.android.libraries.matrix.test.notificationsettings.FakeNotific
 import io.element.android.libraries.matrix.test.timeline.FakeMatrixTimeline
 import io.element.android.libraries.matrix.test.widget.FakeWidgetDriver
 import io.element.android.tests.testutils.simulateLongTask
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -110,6 +111,7 @@ class FakeMatrixRoom(
     private var generateWidgetWebViewUrlResult = Result.success("https://call.element.io")
     private var getWidgetDriverResult: Result<MatrixWidgetDriver> = Result.success(FakeWidgetDriver())
     private var canUserTriggerRoomNotificationResult: Result<Boolean> = Result.success(true)
+    private var canUserJoinCallResult: Result<Boolean> = Result.success(true)
     var sendMessageMentions = emptyList<Mention>()
     val editMessageCalls = mutableListOf<Pair<String, String?>>()
 
@@ -289,6 +291,10 @@ class FakeMatrixRoom(
 
     override suspend fun canUserTriggerRoomNotification(userId: UserId): Result<Boolean> {
         return canUserTriggerRoomNotificationResult
+    }
+
+    override suspend fun canUserJoinCall(userId: UserId): Result<Boolean> {
+        return canUserJoinCallResult
     }
 
     override suspend fun sendImage(
@@ -473,6 +479,10 @@ class FakeMatrixRoom(
         canUserTriggerRoomNotificationResult = result
     }
 
+    fun givenCanUserJoinCall(result: Result<Boolean>) {
+        canUserJoinCallResult = result
+    }
+
     fun givenIgnoreResult(result: Result<Unit>) {
         ignoreResult = result
     }
@@ -615,7 +625,7 @@ fun aRoomInfo(
     isSpace = isSpace,
     isTombstoned = isTombstoned,
     canonicalAlias = canonicalAlias,
-    alternativeAliases = alternativeAliases,
+    alternativeAliases = alternativeAliases.toImmutableList(),
     currentUserMembership = currentUserMembership,
     latestEvent = latestEvent,
     inviter = inviter,
@@ -626,5 +636,5 @@ fun aRoomInfo(
     notificationCount = notificationCount,
     userDefinedNotificationMode = userDefinedNotificationMode,
     hasRoomCall = hasRoomCall,
-    activeRoomCallParticipants = activeRoomCallParticipants
+    activeRoomCallParticipants = activeRoomCallParticipants.toImmutableList(),
 )

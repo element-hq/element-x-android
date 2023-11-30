@@ -55,6 +55,7 @@ import io.element.android.tests.testutils.awaitWithLatch
 import io.element.android.tests.testutils.consumeItemsUntilPredicate
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import io.element.android.tests.testutils.waitForPredicate
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
@@ -254,18 +255,18 @@ class TimelinePresenterTest {
             val (alice, bob, charlie) = aMatrixUserList().take(3).mapIndexed { i, user ->
                 ReactionSender(senderId = user.userId, timestamp = now + i * minuteInMillis)
             }
-            val oneReaction = listOf(
+            val oneReaction = persistentListOf(
                 EventReaction(
                     key = "❤️",
-                    senders = listOf(alice, charlie)
+                    senders = persistentListOf(alice, charlie)
                 ),
                 EventReaction(
                     key = "👍",
-                    senders = listOf(alice, bob)
+                    senders = persistentListOf(alice, bob)
                 ),
                 EventReaction(
                     key = "🐶",
-                    senders = listOf(charlie)
+                    senders = persistentListOf(charlie)
                 ),
             )
             timeline.updateTimelineItems {

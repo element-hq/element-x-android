@@ -20,6 +20,7 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.TransactionId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
+import kotlinx.collections.immutable.ImmutableList
 
 data class EventTimelineItem(
     val eventId: EventId?,
@@ -29,8 +30,8 @@ data class EventTimelineItem(
     val isOwn: Boolean,
     val isRemote: Boolean,
     val localSendState: LocalEventSendState?,
-    val reactions: List<EventReaction>,
-    val receipts: List<Receipt>,
+    val reactions: ImmutableList<EventReaction>,
+    val receipts: ImmutableList<Receipt>,
     val sender: UserId,
     val senderProfile: ProfileTimelineDetails,
     val timestamp: Long,

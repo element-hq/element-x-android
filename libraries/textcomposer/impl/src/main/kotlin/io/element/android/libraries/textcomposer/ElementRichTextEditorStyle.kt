@@ -19,6 +19,7 @@ package io.element.android.libraries.textcomposer
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import io.element.android.libraries.designsystem.theme.bgSubtleTertiary
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.wysiwyg.compose.RichTextEditorDefaults
@@ -39,7 +40,8 @@ internal object ElementRichTextEditorStyle {
                     m3colors.primary
                 } else {
                     m3colors.secondary
-                }
+                },
+                lineHeight = 16.25.sp,
             ),
             cursor = RichTextEditorDefaults.cursorStyle(
                 color = colors.iconAccentTertiary,

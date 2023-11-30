@@ -47,6 +47,7 @@ dependencies {
     implementation("net.java.dev.jna:jna:5.13.0@aar")
     implementation(libs.androidx.datastore.preferences)
     implementation(libs.serialization.json)
+    implementation(libs.kotlinx.collections.immutable)
 
     testImplementation(libs.test.junit)
     testImplementation(libs.test.truth)
