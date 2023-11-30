@@ -261,7 +261,6 @@ private fun TimelineItemEventRowContent(
             sender,
             message,
             reactions,
-            readReceipts,
         ) = createRefs()
 
         // Sender
