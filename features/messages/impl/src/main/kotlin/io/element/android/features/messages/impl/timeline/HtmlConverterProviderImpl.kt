@@ -19,9 +19,11 @@ package io.element.android.features.messages.impl.timeline
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalInspectionMode
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.compound.theme.LinkColor
 import io.element.android.features.messages.api.timeline.HtmlConverterProvider
+import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.matrix.api.user.CurrentSessionIdHolder
@@ -46,12 +48,16 @@ class HtmlConverterProviderImpl @Inject constructor(
 
     private var editorStyle: RichTextEditorStyle? = null
     private var mentionSpanProvider: MentionSpanProvider? = null
-    private val mentionDetector: MentionDetector = newMentionDetector()
+    private var mentionDetector: MentionDetector? = null
 
     private var htmlConverter: HtmlConverter? = null
 
     @Composable
     override fun Update() {
+        if (mentionDetector == null && !LocalInspectionMode.current) {
+            mentionDetector = remember { newMentionDetector() }
+        }
+
         editorStyle = RichTextEditorDefaults.style(
             link = LinkStyle(LinkColor),
             text = RichTextEditorDefaults.textStyle(
@@ -77,7 +83,7 @@ class HtmlConverterProviderImpl @Inject constructor(
                         return TextDisplay.Custom(mentionSpanProvider.getMentionSpanFor(text, url))
                     }
                 },
-                isMention = { _, url ->  mentionDetector.isMention(url) }
+                isMention = { _, url ->  mentionDetector?.isMention(url).orFalse() }
             ).apply {
                 configureWith(editorStyle)
             }
