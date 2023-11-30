@@ -37,6 +37,7 @@ import io.element.android.features.messages.impl.actionlist.model.TimelineItemAc
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerEvents
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerPresenter
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerState
+import io.element.android.features.messages.impl.timeline.HtmlConverterProvider
 import io.element.android.features.messages.impl.timeline.TimelineEvents
 import io.element.android.features.messages.impl.timeline.TimelinePresenter
 import io.element.android.features.messages.impl.timeline.TimelineState
@@ -107,6 +108,7 @@ class MessagesPresenter @AssistedInject constructor(
     private val clipboardHelper: ClipboardHelper,
     private val preferencesStore: PreferencesStore,
     private val featureFlagsService: FeatureFlagService,
+    private val htmlConverterProvider: HtmlConverterProvider,
     @Assisted private val navigator: MessagesNavigator,
     private val buildMeta: BuildMeta,
     private val currentSessionIdHolder: CurrentSessionIdHolder,
@@ -121,6 +123,8 @@ class MessagesPresenter @AssistedInject constructor(
 
     @Composable
     override fun present(): MessagesState {
+        htmlConverterProvider.Update()
+
         val roomInfo by room.roomInfoFlow.collectAsState(null)
         val localCoroutineScope = rememberCoroutineScope()
         val composerState = composerPresenter.present()
