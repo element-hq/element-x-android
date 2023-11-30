@@ -16,6 +16,7 @@
 
 package io.element.android.libraries.matrix.test.roomlist
 
+import io.element.android.libraries.matrix.api.roomlist.DynamicRoomList
 import io.element.android.libraries.matrix.api.roomlist.RoomList
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.api.roomlist.RoomSummary
@@ -54,14 +55,16 @@ class FakeRoomListService : RoomListService {
     var latestSlidingSyncRange: IntRange? = null
         private set
 
-    override val allRooms: RoomList = SimplePagedRoomList(
+    override val allRooms: DynamicRoomList = SimplePagedRoomList(
         allRoomSummariesFlow,
         allRoomsLoadingStateFlow,
+        MutableStateFlow(DynamicRoomList.Filter.None)
     )
 
     override val invites: RoomList = SimplePagedRoomList(
         inviteRoomSummariesFlow,
         inviteRoomsLoadingStateFlow,
+        MutableStateFlow(DynamicRoomList.Filter.None)
     )
 
     override fun updateAllRoomsVisibleRange(range: IntRange) {

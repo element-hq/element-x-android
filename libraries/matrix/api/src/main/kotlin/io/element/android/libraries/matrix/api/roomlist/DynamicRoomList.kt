@@ -16,6 +16,12 @@
 
 package io.element.android.libraries.matrix.api.roomlist
 
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+
 /**
  * RoomList with dynamic filtering and loading.
  * This is useful for large lists of rooms.
@@ -23,16 +29,16 @@ package io.element.android.libraries.matrix.api.roomlist
  */
 interface DynamicRoomList : RoomList {
 
-    companion object {
-        const val DEFAULT_PAGE_SIZE = 20
-        const val DEFAULT_PAGES_TO_LOAD = 10
-    }
-
     sealed interface Filter {
         /**
          * No filter applied.
          */
         data object All : Filter
+
+        /**
+         * Filter only the left rooms.
+         */
+        data object AllNonLeft : Filter
 
         /**
          * Filter all rooms.
@@ -44,6 +50,10 @@ interface DynamicRoomList : RoomList {
          */
         data class NormalizedMatchRoomName(val pattern: String) : Filter
     }
+
+    val currentFilter: StateFlow<Filter>
+    val loadedPages: StateFlow<Int>
+    val pageSize: Int
 
     /**
      * Load more rooms into the list if possible.
@@ -60,4 +70,30 @@ interface DynamicRoomList : RoomList {
      * @param filter the filter to apply.
      */
     suspend fun updateFilter(filter: Filter)
+}
+
+/**
+ * Offers a way to load all the rooms incrementally.
+ * It will load more room until all are loaded.
+ * If total number of rooms increase, it will load more pages if needed.
+ * The number of rooms is independent of the filter.
+ */
+fun DynamicRoomList.loadAllIncrementally(coroutineScope: CoroutineScope) {
+    combine(
+        loadedPages,
+        loadingState,
+    ) { loadedPages, loadingState ->
+        loadedPages to loadingState
+    }
+        .onEach { (loadedPages, loadingState) ->
+            when (loadingState) {
+                is RoomList.LoadingState.Loaded -> {
+                    if (pageSize * loadedPages < loadingState.numberOfRooms) {
+                        loadMore()
+                    }
+                }
+                RoomList.LoadingState.NotLoaded -> Unit
+            }
+        }
+        .launchIn(coroutineScope)
 }

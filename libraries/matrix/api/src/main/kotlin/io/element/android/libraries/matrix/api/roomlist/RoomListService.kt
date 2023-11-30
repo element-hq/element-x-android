@@ -41,10 +41,10 @@ interface RoomListService {
     }
 
     /**
-     * returns a [RoomList] object of all rooms we want to display.
+     * returns a [DynamicRoomList] object of all rooms we want to display.
      * This will exclude some rooms like the invites, or spaces.
      */
-    val allRooms: RoomList
+    val allRooms: DynamicRoomList
 
     /**
      * returns a [RoomList] object of all invites.
