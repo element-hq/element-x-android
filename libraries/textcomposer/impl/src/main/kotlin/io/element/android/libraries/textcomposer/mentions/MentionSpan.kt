@@ -23,20 +23,59 @@ import android.text.style.ReplacementSpan
 import kotlin.math.roundToInt
 
 class MentionSpan(
+    val type: Type,
     val backgroundColor: Int,
     val textColor: Int,
 ) : ReplacementSpan() {
 
     override fun getSize(paint: Paint, text: CharSequence?, start: Int, end: Int, fm: Paint.FontMetricsInt?): Int {
-        return paint.measureText(text, start, end).roundToInt() + 40
+        val mentionText = getActualText(text, start, end)
+        var actualEnd = end
+        if (mentionText != text.toString()) {
+            actualEnd = end + 1
+        }
+        return paint.measureText(mentionText, start, actualEnd).roundToInt() + 40
     }
 
     override fun draw(canvas: Canvas, text: CharSequence?, start: Int, end: Int, x: Float, top: Int, y: Int, bottom: Int, paint: Paint) {
-        val textSize = paint.measureText(text, start, end)
-        val rect = RectF(x, top.toFloat(), x + textSize + 40, bottom.toFloat())
+        val mentionText = getActualText(text, start, end)
+        var actualEnd = end
+        if (mentionText != text.toString()) {
+            actualEnd = end + 1
+        }
+        val textWidth = paint.measureText(mentionText, start, actualEnd)
+        // Extra vertical space to add below the baseline (y). This helps us center the span vertically
+        val extraVerticalSpace = y + paint.ascent() + paint.descent() - top
+        val rect = RectF(x, top.toFloat(), x + textWidth + 40, y.toFloat() + extraVerticalSpace)
         paint.color = backgroundColor
         canvas.drawRoundRect(rect, rect.height() / 2, rect.height() / 2, paint)
         paint.color = textColor
-        canvas.drawText(text!!, start, end, x + 20, y.toFloat(), paint)
+        canvas.drawText(mentionText, start, actualEnd, x + 20, y.toFloat(), paint)
+    }
+
+    private fun getActualText(text: CharSequence?, start: Int, end: Int): String {
+        return when (type) {
+            Type.USER -> {
+                val mentionText = text.toString()
+                if (start in mentionText.indices && mentionText[start] != '@') {
+                    mentionText.replaceRange(start, start, "@")
+                } else {
+                    mentionText
+                }
+            }
+            Type.ROOM -> {
+                val mentionText = text.toString()
+                if (start in mentionText.indices && mentionText[start] != '#') {
+                    mentionText.replaceRange(start, start, "#")
+                } else {
+                    mentionText
+                }
+            }
+        }
+    }
+
+    enum class Type {
+        USER,
+        ROOM,
     }
 }
