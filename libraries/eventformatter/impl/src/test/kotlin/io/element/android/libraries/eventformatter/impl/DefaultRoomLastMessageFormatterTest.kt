@@ -75,7 +75,6 @@ class DefaultRoomLastMessageFormatterTest {
         val stringProvider = AndroidStringProvider(context.resources)
         formatter = DefaultRoomLastMessageFormatter(
             sp = AndroidStringProvider(context.resources),
-            matrixClient = fakeMatrixClient,
             roomMembershipContentFormatter = RoomMembershipContentFormatter(fakeMatrixClient, stringProvider),
             profileChangeContentFormatter = ProfileChangeContentFormatter(stringProvider),
             stateContentFormatter = StateContentFormatter(stringProvider)
@@ -798,6 +797,11 @@ class DefaultRoomLastMessageFormatterTest {
     private fun createRoomEvent(sentByYou: Boolean, senderDisplayName: String?, content: EventContent): EventTimelineItem {
         val sender = if (sentByYou) A_USER_ID else UserId("@someone_else:domain")
         val profile = ProfileTimelineDetails.Ready(senderDisplayName, false, null)
-        return anEventTimelineItem(content = content, senderProfile = profile, sender = sender)
+        return anEventTimelineItem(
+            content = content,
+            senderProfile = profile,
+            sender = sender,
+            isOwn = sentByYou,
+        )
     }
 }
