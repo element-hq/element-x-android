@@ -64,9 +64,8 @@ fun TimelineItemTextView(
                 onLinkClickedListener = onLinkClicked,
                 style = RichTextEditorDefaults.style(
                     text = RichTextEditorDefaults.textStyle(
-                        fontSize = LocalTextStyle.current.fontSize,
-                        fontFamily = LocalTextStyle.current.fontFamily,
-                        lineHeight = LocalTextStyle.current.lineHeight,
+                        // TODO re-enable this once it's available in the RTE side
+                        // includeFontPadding = false
                     ),
                     link = LinkStyle(LinkColor)
                 )

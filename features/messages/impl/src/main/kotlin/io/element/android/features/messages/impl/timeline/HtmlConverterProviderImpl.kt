@@ -19,7 +19,9 @@ package io.element.android.features.messages.impl.timeline
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
+import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.compound.theme.LinkColor
+import io.element.android.features.messages.api.timeline.HtmlConverterProvider
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.matrix.api.user.CurrentSessionIdHolder
@@ -32,23 +34,31 @@ import io.element.android.wysiwyg.compose.StyledHtmlConverter
 import io.element.android.wysiwyg.display.MentionDisplayHandler
 import io.element.android.wysiwyg.display.TextDisplay
 import io.element.android.wysiwyg.utils.HtmlConverter
+import uniffi.wysiwyg_composer.MentionDetector
 import uniffi.wysiwyg_composer.newMentionDetector
 import javax.inject.Inject
 
+@ContributesBinding(SessionScope::class)
 @SingleIn(SessionScope::class)
-class HtmlConverterProvider @Inject constructor(
+class HtmlConverterProviderImpl @Inject constructor(
     private val currentSessionIdHolder: CurrentSessionIdHolder,
-) {
+) : HtmlConverterProvider {
 
     private var editorStyle: RichTextEditorStyle? = null
     private var mentionSpanProvider: MentionSpanProvider? = null
-    private val mentionDetector = newMentionDetector()
+    private val mentionDetector: MentionDetector = newMentionDetector()
 
     private var htmlConverter: HtmlConverter? = null
 
     @Composable
-    fun Update() {
-        editorStyle = RichTextEditorDefaults.style(link = LinkStyle(LinkColor))
+    override fun Update() {
+        editorStyle = RichTextEditorDefaults.style(
+            link = LinkStyle(LinkColor),
+            text = RichTextEditorDefaults.textStyle(
+                // TODO re-enable this once it's available in the RTE side
+                // includeFontPadding = false,
+            ),
+        )
         mentionSpanProvider = rememberMentionSpanProvider(currentUserId = currentSessionIdHolder.current)
 
         val context = LocalContext.current
@@ -74,7 +84,7 @@ class HtmlConverterProvider @Inject constructor(
         }
     }
 
-    fun provide(): HtmlConverter {
+    override fun provide(): HtmlConverter {
         return htmlConverter ?: error("HtmlConverter wasn't instantiated. Make sure to call HtmlConverterProvider.Update() first.")
     }
 }

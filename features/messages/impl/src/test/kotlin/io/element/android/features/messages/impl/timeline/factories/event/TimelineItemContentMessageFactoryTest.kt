@@ -27,6 +27,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVoiceContent
+import io.element.android.features.messages.test.timeline.FakeHtmlConverterProvider
 import io.element.android.libraries.androidutils.filesize.FakeFileSizeFormatter
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.featureflag.api.FeatureFlagService
@@ -77,6 +78,7 @@ class TimelineItemContentMessageFactoryTest {
             htmlDocument = null,
             plainText = "body",
             isEdited = false,
+            formattedBody = null,
         )
         assertThat(result).isEqualTo(expected)
     }
@@ -110,6 +112,7 @@ class TimelineItemContentMessageFactoryTest {
             htmlDocument = null,
             plainText = "body",
             isEdited = false,
+            formattedBody = null,
         )
         assertThat(result).isEqualTo(expected)
     }
@@ -127,6 +130,7 @@ class TimelineItemContentMessageFactoryTest {
             htmlDocument = null,
             plainText = "body",
             isEdited = false,
+            formattedBody = null,
         )
         assertThat(result).isEqualTo(expected)
     }
@@ -499,5 +503,6 @@ class TimelineItemContentMessageFactoryTest {
         fileSizeFormatter = FakeFileSizeFormatter(),
         fileExtensionExtractor = FileExtensionExtractorWithoutValidation(),
         featureFlagService = featureFlagService,
+        htmlConverterProvider = FakeHtmlConverterProvider(),
     )
 }

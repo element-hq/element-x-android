@@ -17,7 +17,7 @@
 package io.element.android.features.messages.impl.timeline.factories.event
 
 import io.element.android.features.location.api.Location
-import io.element.android.features.messages.impl.timeline.HtmlConverterProvider
+import io.element.android.features.messages.api.timeline.HtmlConverterProvider
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemAudioContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEmoteContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright (c) 2023 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,14 +14,15 @@
  * limitations under the License.
  */
 
-plugins {
-    id("io.element.android-compose-library")
-}
+package io.element.android.features.messages.api.timeline
 
-android {
-    namespace = "io.element.android.features.messages.test"
-}
+import androidx.compose.runtime.Composable
+import io.element.android.wysiwyg.utils.HtmlConverter
 
-dependencies {
-    api(projects.features.messages.api)
+interface HtmlConverterProvider {
+
+    @Composable
+    fun Update()
+
+    fun provide(): HtmlConverter
 }
