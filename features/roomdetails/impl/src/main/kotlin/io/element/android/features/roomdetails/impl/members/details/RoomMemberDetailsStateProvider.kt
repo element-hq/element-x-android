@@ -28,6 +28,7 @@ open class RoomMemberDetailsStateProvider : PreviewParameterProvider<RoomMemberD
             aRoomMemberDetailsState().copy(displayConfirmationDialog = RoomMemberDetailsState.ConfirmationDialog.Block),
             aRoomMemberDetailsState().copy(displayConfirmationDialog = RoomMemberDetailsState.ConfirmationDialog.Unblock),
             aRoomMemberDetailsState().copy(isBlocked = Async.Loading(true)),
+            aRoomMemberDetailsState().copy(startDmActionState = Async.Loading()),
             // Add other states here
         )
 }

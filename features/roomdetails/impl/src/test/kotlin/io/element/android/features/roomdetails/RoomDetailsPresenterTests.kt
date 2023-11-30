@@ -20,6 +20,7 @@ import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import io.element.android.features.createroom.test.FakeStartDMAction
 import io.element.android.features.leaveroom.api.LeaveRoomEvent
 import io.element.android.features.leaveroom.api.LeaveRoomPresenter
 import io.element.android.features.leaveroom.fake.FakeLeaveRoomPresenter
@@ -45,10 +46,11 @@ import io.element.android.libraries.matrix.test.A_USER_ID_2
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.notificationsettings.FakeNotificationSettingsService
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
+import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.consumeItemsUntilPredicate
 import io.element.android.tests.testutils.testCoroutineDispatchers
-import io.element.android.tests.testutils.WarmUpRule
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
@@ -60,16 +62,16 @@ class RoomDetailsPresenterTests {
     @get:Rule
     val warmUpRule = WarmUpRule()
 
-    private fun createRoomDetailsPresenter(
+    private fun TestScope.createRoomDetailsPresenter(
         room: MatrixRoom,
         leaveRoomPresenter: LeaveRoomPresenter = FakeLeaveRoomPresenter(),
-        dispatchers: CoroutineDispatchers,
+        dispatchers: CoroutineDispatchers = testCoroutineDispatchers(),
         notificationSettingsService: FakeNotificationSettingsService = FakeNotificationSettingsService()
     ): RoomDetailsPresenter {
         val matrixClient = FakeMatrixClient(notificationSettingsService = notificationSettingsService)
         val roomMemberDetailsPresenterFactory = object : RoomMemberDetailsPresenter.Factory {
             override fun create(roomMemberId: UserId): RoomMemberDetailsPresenter {
-                return RoomMemberDetailsPresenter(matrixClient, room, roomMemberId)
+                return RoomMemberDetailsPresenter(roomMemberId, matrixClient, room, FakeStartDMAction())
             }
         }
         val featureFlagService = FakeFeatureFlagService(
@@ -89,7 +91,7 @@ class RoomDetailsPresenterTests {
     @Test
     fun `present - initial state is created from room info`() = runTest {
         val room = aMatrixRoom()
-        val presenter = createRoomDetailsPresenter(room, dispatchers = testCoroutineDispatchers())
+        val presenter = createRoomDetailsPresenter(room)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -108,7 +110,7 @@ class RoomDetailsPresenterTests {
     @Test
     fun `present - initial state with no room name`() = runTest {
         val room = aMatrixRoom(name = null)
-        val presenter = createRoomDetailsPresenter(room, dispatchers = testCoroutineDispatchers())
+        val presenter = createRoomDetailsPresenter(room)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -130,7 +132,7 @@ class RoomDetailsPresenterTests {
             val roomMembers = listOf(myRoomMember, otherRoomMember)
             givenRoomMembersState(MatrixRoomMembersState.Ready(roomMembers))
         }
-        val presenter = createRoomDetailsPresenter(room, dispatchers = testCoroutineDispatchers())
+        val presenter = createRoomDetailsPresenter(room)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -164,7 +166,7 @@ class RoomDetailsPresenterTests {
         val room = aMatrixRoom().apply {
             givenCanInviteResult(Result.success(false))
         }
-        val presenter = createRoomDetailsPresenter(room, dispatchers = testCoroutineDispatchers())
+        val presenter = createRoomDetailsPresenter(room)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -179,7 +181,7 @@ class RoomDetailsPresenterTests {
         val room = aMatrixRoom().apply {
             givenCanInviteResult(Result.failure(Throwable("Whoops")))
         }
-        val presenter = createRoomDetailsPresenter(room, dispatchers = testCoroutineDispatchers())
+        val presenter = createRoomDetailsPresenter(room)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -197,7 +199,7 @@ class RoomDetailsPresenterTests {
             givenCanSendStateResult(StateEventType.ROOM_AVATAR, Result.failure(Throwable("Whelp")))
             givenCanInviteResult(Result.success(false))
         }
-        val presenter = createRoomDetailsPresenter(room, dispatchers = testCoroutineDispatchers())
+        val presenter = createRoomDetailsPresenter(room)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -226,7 +228,7 @@ class RoomDetailsPresenterTests {
             givenCanSendStateResult(StateEventType.ROOM_AVATAR, Result.success(true))
             givenCanInviteResult(Result.success(false))
         }
-        val presenter = createRoomDetailsPresenter(room, dispatchers = testCoroutineDispatchers())
+        val presenter = createRoomDetailsPresenter(room)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -241,6 +243,7 @@ class RoomDetailsPresenterTests {
             cancelAndIgnoreRemainingEvents()
         }
     }
+
     @Test
     fun `present - initial state when in a DM with no topic`() = runTest {
         val myRoomMember = aRoomMember(A_SESSION_ID)
@@ -255,7 +258,7 @@ class RoomDetailsPresenterTests {
 
             givenCanSendStateResult(StateEventType.ROOM_TOPIC, Result.success(true))
         }
-        val presenter = createRoomDetailsPresenter(room, dispatchers = testCoroutineDispatchers())
+        val presenter = createRoomDetailsPresenter(room)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -276,7 +279,7 @@ class RoomDetailsPresenterTests {
             givenCanSendStateResult(StateEventType.ROOM_AVATAR, Result.success(true))
             givenCanInviteResult(Result.success(false))
         }
-        val presenter = createRoomDetailsPresenter(room, dispatchers = testCoroutineDispatchers())
+        val presenter = createRoomDetailsPresenter(room)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -297,7 +300,7 @@ class RoomDetailsPresenterTests {
             givenCanSendStateResult(StateEventType.ROOM_AVATAR, Result.success(false))
             givenCanInviteResult(Result.success(false))
         }
-        val presenter = createRoomDetailsPresenter(room, dispatchers = testCoroutineDispatchers())
+        val presenter = createRoomDetailsPresenter(room)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -315,7 +318,7 @@ class RoomDetailsPresenterTests {
             givenCanInviteResult(Result.success(false))
         }
 
-        val presenter = createRoomDetailsPresenter(room, dispatchers = testCoroutineDispatchers())
+        val presenter = createRoomDetailsPresenter(room)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -333,7 +336,7 @@ class RoomDetailsPresenterTests {
             givenCanInviteResult(Result.success(false))
         }
 
-        val presenter = createRoomDetailsPresenter(room, dispatchers = testCoroutineDispatchers())
+        val presenter = createRoomDetailsPresenter(room)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -351,7 +354,11 @@ class RoomDetailsPresenterTests {
     fun `present - leave room event is passed on to leave room presenter`() = runTest {
         val leaveRoomPresenter = FakeLeaveRoomPresenter()
         val room = aMatrixRoom()
-        val presenter = createRoomDetailsPresenter(room, leaveRoomPresenter, testCoroutineDispatchers())
+        val presenter = createRoomDetailsPresenter(
+            room = room,
+            leaveRoomPresenter = leaveRoomPresenter,
+            dispatchers = testCoroutineDispatchers()
+        )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -368,14 +375,18 @@ class RoomDetailsPresenterTests {
         val leaveRoomPresenter = FakeLeaveRoomPresenter()
         val notificationSettingsService = FakeNotificationSettingsService()
         val room = aMatrixRoom(notificationSettingsService = notificationSettingsService)
-        val presenter = createRoomDetailsPresenter(room, leaveRoomPresenter, testCoroutineDispatchers(), notificationSettingsService)
+        val presenter = createRoomDetailsPresenter(
+            room = room,
+            leaveRoomPresenter = leaveRoomPresenter,
+            notificationSettingsService = notificationSettingsService,
+        )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
 
             notificationSettingsService.setRoomNotificationMode(room.roomId, RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY)
             val updatedState = consumeItemsUntilPredicate {
-                it.roomNotificationSettings?.mode ==  RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY
+                it.roomNotificationSettings?.mode == RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY
             }.last()
             assertThat(updatedState.roomNotificationSettings?.mode).isEqualTo(RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY)
             cancelAndIgnoreRemainingEvents()
@@ -384,16 +395,15 @@ class RoomDetailsPresenterTests {
 
     @Test
     fun `present - mute room notifications`() = runTest {
-        val leaveRoomPresenter = FakeLeaveRoomPresenter()
         val notificationSettingsService = FakeNotificationSettingsService(initialRoomMode = RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY)
         val room = aMatrixRoom(notificationSettingsService = notificationSettingsService)
-        val presenter = createRoomDetailsPresenter(room, leaveRoomPresenter, testCoroutineDispatchers(), notificationSettingsService)
+        val presenter = createRoomDetailsPresenter(room = room, notificationSettingsService = notificationSettingsService)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             awaitItem().eventSink(RoomDetailsEvent.MuteNotification)
             val updatedState = consumeItemsUntilPredicate(timeout = 250.milliseconds) {
-                it.roomNotificationSettings?.mode ==  RoomNotificationMode.MUTE
+                it.roomNotificationSettings?.mode == RoomNotificationMode.MUTE
             }.last()
             assertThat(updatedState.roomNotificationSettings?.mode).isEqualTo(RoomNotificationMode.MUTE)
             cancelAndIgnoreRemainingEvents()
@@ -402,19 +412,18 @@ class RoomDetailsPresenterTests {
 
     @Test
     fun `present - unmute room notifications`() = runTest {
-        val leaveRoomPresenter = FakeLeaveRoomPresenter()
         val notificationSettingsService = FakeNotificationSettingsService(
             initialRoomMode = RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY,
             initialEncryptedGroupDefaultMode = RoomNotificationMode.ALL_MESSAGES
         )
         val room = aMatrixRoom(notificationSettingsService = notificationSettingsService)
-        val presenter = createRoomDetailsPresenter(room, leaveRoomPresenter, testCoroutineDispatchers(), notificationSettingsService)
+        val presenter = createRoomDetailsPresenter(room = room, notificationSettingsService = notificationSettingsService)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             awaitItem().eventSink(RoomDetailsEvent.UnmuteNotification)
             val updatedState = consumeItemsUntilPredicate {
-                it.roomNotificationSettings?.mode ==  RoomNotificationMode.ALL_MESSAGES
+                it.roomNotificationSettings?.mode == RoomNotificationMode.ALL_MESSAGES
             }.last()
             assertThat(updatedState.roomNotificationSettings?.mode).isEqualTo(RoomNotificationMode.ALL_MESSAGES)
             cancelAndIgnoreRemainingEvents()

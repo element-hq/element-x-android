@@ -20,13 +20,22 @@ import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth
+import io.element.android.features.createroom.api.StartDMAction
+import io.element.android.features.createroom.test.FakeStartDMAction
 import io.element.android.features.roomdetails.aMatrixRoom
 import io.element.android.features.roomdetails.impl.members.aRoomMember
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsEvents
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsPresenter
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsState
 import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
+import io.element.android.libraries.matrix.api.room.RoomMember
+import io.element.android.libraries.matrix.api.room.StartDMResult
+import io.element.android.libraries.matrix.test.A_FAILURE_REASON
+import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_THROWABLE
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.tests.testutils.WarmUpRule
@@ -49,7 +58,10 @@ class RoomMemberDetailsPresenterTests {
             givenUserAvatarUrlResult(Result.success("A custom avatar"))
             givenRoomMembersState(MatrixRoomMembersState.Ready(listOf(roomMember)))
         }
-        val presenter = RoomMemberDetailsPresenter(FakeMatrixClient(), room, roomMember.userId)
+        val presenter = createRoomMemberDetailsPresenter(
+            room = room,
+            roomMember = roomMember
+        )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -73,7 +85,10 @@ class RoomMemberDetailsPresenterTests {
             givenUserAvatarUrlResult(Result.failure(Throwable()))
             givenRoomMembersState(MatrixRoomMembersState.Ready(listOf(roomMember)))
         }
-        val presenter = RoomMemberDetailsPresenter(FakeMatrixClient(), room, roomMember.userId)
+        val presenter = createRoomMemberDetailsPresenter(
+            room = room,
+            roomMember = roomMember
+        )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -93,7 +108,10 @@ class RoomMemberDetailsPresenterTests {
             givenUserAvatarUrlResult(Result.success(null))
             givenRoomMembersState(MatrixRoomMembersState.Ready(listOf(roomMember)))
         }
-        val presenter = RoomMemberDetailsPresenter(FakeMatrixClient(), room, roomMember.userId)
+        val presenter = createRoomMemberDetailsPresenter(
+            room = room,
+            roomMember = roomMember
+        )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -107,9 +125,7 @@ class RoomMemberDetailsPresenterTests {
 
     @Test
     fun `present - BlockUser needing confirmation displays confirmation dialog`() = runTest {
-        val room = aMatrixRoom()
-        val roomMember = aRoomMember()
-        val presenter = RoomMemberDetailsPresenter(FakeMatrixClient(), room, roomMember.userId)
+        val presenter = createRoomMemberDetailsPresenter()
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -128,9 +144,7 @@ class RoomMemberDetailsPresenterTests {
 
     @Test
     fun `present - BlockUser and UnblockUser without confirmation change the 'blocked' state`() = runTest {
-        val room = aMatrixRoom()
-        val roomMember = aRoomMember()
-        val presenter = RoomMemberDetailsPresenter(FakeMatrixClient(), room, roomMember.userId)
+        val presenter = createRoomMemberDetailsPresenter()
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -147,11 +161,9 @@ class RoomMemberDetailsPresenterTests {
 
     @Test
     fun `present - BlockUser with error`() = runTest {
-        val room = aMatrixRoom()
-        val roomMember = aRoomMember()
         val matrixClient = FakeMatrixClient()
         matrixClient.givenIgnoreUserResult(Result.failure(A_THROWABLE))
-        val presenter = RoomMemberDetailsPresenter(matrixClient, room, roomMember.userId)
+        val presenter = createRoomMemberDetailsPresenter(client = matrixClient)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -168,9 +180,7 @@ class RoomMemberDetailsPresenterTests {
 
     @Test
     fun `present - UnblockUser needing confirmation displays confirmation dialog`() = runTest {
-        val room = aMatrixRoom()
-        val roomMember = aRoomMember()
-        val presenter = RoomMemberDetailsPresenter(FakeMatrixClient(), room, roomMember.userId)
+        val presenter = createRoomMemberDetailsPresenter()
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -185,5 +195,53 @@ class RoomMemberDetailsPresenterTests {
 
             ensureAllEventsConsumed()
         }
+    }
+
+    @Test
+    fun `present - start DM action complete scenario`() = runTest {
+        val startDMAction = FakeStartDMAction()
+        val presenter = createRoomMemberDetailsPresenter(startDMAction = startDMAction)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            Truth.assertThat(initialState.startDmActionState).isInstanceOf(Async.Uninitialized::class.java)
+            val startDMSuccessResult = Async.Success(A_ROOM_ID)
+            val startDMFailureResult = Async.Failure<RoomId>(StartDMResult.Failure(A_FAILURE_REASON))
+
+            // Failure
+            startDMAction.givenExecuteResult(startDMFailureResult)
+            initialState.eventSink(RoomMemberDetailsEvents.StartDM)
+            Truth.assertThat(awaitItem().startDmActionState).isInstanceOf(Async.Loading::class.java)
+            awaitItem().also { state ->
+                Truth.assertThat(state.startDmActionState).isEqualTo(startDMFailureResult)
+                state.eventSink(RoomMemberDetailsEvents.ClearStartDMState)
+            }
+
+            // Success
+            startDMAction.givenExecuteResult(startDMSuccessResult)
+            awaitItem().also { state ->
+                Truth.assertThat(state.startDmActionState).isEqualTo(Async.Uninitialized)
+                state.eventSink(RoomMemberDetailsEvents.StartDM)
+            }
+            Truth.assertThat(awaitItem().startDmActionState).isInstanceOf(Async.Loading::class.java)
+            awaitItem().also { state ->
+                Truth.assertThat(state.startDmActionState).isEqualTo(startDMSuccessResult)
+            }
+        }
+    }
+
+    private fun createRoomMemberDetailsPresenter(
+        client: MatrixClient = FakeMatrixClient(),
+        room: MatrixRoom = aMatrixRoom(),
+        roomMember: RoomMember = aRoomMember(),
+        startDMAction: StartDMAction = FakeStartDMAction()
+    ): RoomMemberDetailsPresenter {
+        return RoomMemberDetailsPresenter(
+            roomMemberId = roomMember.userId,
+            client = client,
+            room = room,
+            startDMAction = startDMAction
+        )
     }
 }

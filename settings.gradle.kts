@@ -82,9 +82,9 @@ includeProjects(File(rootDir, "services"), ":services")
 
 // Uncomment to include the compound-android module as a local dependency so you can work on it locally.
 // You will also need to clone it in the specified folder.
-//includeBuild("checkouts/compound-android") {
+// includeBuild("checkouts/compound-android") {
 //    dependencySubstitution {
 //        // substitute remote dependency with local module
 //        substitute(module("io.element.android:compound-android")).using(project(":compound"))
 //    }
-//}
+// }

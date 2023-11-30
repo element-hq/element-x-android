@@ -21,7 +21,6 @@ import com.squareup.anvil.annotations.ContributesBinding
 import im.vector.app.features.analytics.plan.CreatedRoom
 import io.element.android.features.createroom.api.StartDMAction
 import io.element.android.libraries.architecture.Async
-import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId

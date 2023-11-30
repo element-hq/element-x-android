@@ -240,9 +240,8 @@ class RustMatrixClient constructor(
         }
     }
 
-    override suspend fun findDM(userId: UserId): MatrixRoom? {
-        val roomId = client.getDmRoom(userId.value)?.use { RoomId(it.id()) }
-        return roomId?.let { getRoom(it) }
+    override suspend fun findDM(userId: UserId): RoomId? {
+        return client.getDmRoom(userId.value)?.use { RoomId(it.id()) }
     }
 
     override suspend fun ignoreUser(userId: UserId): Result<Unit> = withContext(sessionDispatcher) {

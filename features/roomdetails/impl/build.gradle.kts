@@ -68,6 +68,7 @@ dependencies {
     testImplementation(projects.libraries.featureflag.test)
     testImplementation(projects.tests.testutils)
     testImplementation(projects.features.leaveroom.test)
+    testImplementation(projects.features.createroom.test)
 
     ksp(libs.showkase.processor)
 }

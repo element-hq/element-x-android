@@ -30,6 +30,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.tokens.generated.CompoundIcons
+import io.element.android.features.roomdetails.impl.R
 import io.element.android.features.roomdetails.impl.blockuser.BlockUserDialogs
 import io.element.android.features.roomdetails.impl.blockuser.BlockUserSection
 import io.element.android.libraries.designsystem.components.async.AsyncView
@@ -91,7 +92,7 @@ fun RoomMemberDetailsView(
                 async = state.startDmActionState,
                 progressText = stringResource(CommonStrings.common_starting_chat),
                 onSuccess = onDMStarted,
-                errorMessage = { stringResource(CommonStrings.common_error) },
+                errorMessage = { stringResource(R.string.screen_start_chat_error_starting_chat) },
                 onRetry = { state.eventSink(RoomMemberDetailsEvents.StartDM) },
                 onErrorDismiss = { state.eventSink(RoomMemberDetailsEvents.ClearStartDMState) },
             )

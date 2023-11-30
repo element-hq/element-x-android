@@ -24,11 +24,9 @@ import io.element.android.libraries.matrix.api.core.UserId
  * Try to find an existing DM with the given user, or create one if none exists.
  */
 suspend fun MatrixClient.startDM(userId: UserId): StartDMResult {
-    val existingRoomId = findDM(userId)?.use { existingDM ->
-        existingDM.roomId
-    }
-    return if (existingRoomId != null) {
-        StartDMResult.Success(existingRoomId, isNew = false)
+    val existingDM = findDM(userId)
+    return if (existingDM != null) {
+        StartDMResult.Success(existingDM, isNew = false)
     } else {
         createDM(userId).fold(
             { StartDMResult.Success(it, isNew = true) },
