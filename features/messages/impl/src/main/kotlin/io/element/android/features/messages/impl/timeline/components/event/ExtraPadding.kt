@@ -29,6 +29,7 @@ import io.element.android.libraries.designsystem.text.toDp
 import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
+import kotlin.math.roundToInt
 
 // Allow to not overlap the timestamp with the text, in the message bubble.
 // Compute the size of the worst case.
@@ -69,7 +70,7 @@ fun TimelineItem.Event.toExtraPadding(): ExtraPadding {
 fun ExtraPadding.getStr(fontSize: TextUnit): String {
     if (nbChars == 0) return ""
     val timestampFontSize = ElementTheme.typography.fontBodyXsRegular.fontSize // 11.sp
-    val nbOfSpaces = (timestampFontSize.value / fontSize.value * nbChars).toInt() + 1
+    val nbOfSpaces = (timestampFontSize.value / fontSize.value * nbChars).roundToInt() + 1
     // A space and some unbreakable spaces
     return " " + "\u00A0".repeat(nbOfSpaces)
 }
