@@ -17,6 +17,7 @@
 package io.element.android.features.messages.impl.timeline.factories.event
 
 import io.element.android.features.location.api.Location
+import io.element.android.features.messages.impl.timeline.HtmlConverterProvider
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemAudioContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEmoteContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
@@ -38,6 +39,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.FileMessageTy
 import io.element.android.libraries.matrix.api.timeline.item.event.ImageMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.LocationMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageContent
+import io.element.android.libraries.matrix.api.timeline.item.event.MessageFormat
 import io.element.android.libraries.matrix.api.timeline.item.event.NoticeMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.OtherMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageType
@@ -52,8 +54,9 @@ import kotlin.time.Duration
 
 class TimelineItemContentMessageFactory @Inject constructor(
     private val fileSizeFormatter: FileSizeFormatter,
-    private val fileExtensionExtractor: io.element.android.libraries.mediaviewer.api.util.FileExtensionExtractor,
+    private val fileExtensionExtractor: FileExtensionExtractor,
     private val featureFlagService: FeatureFlagService,
+    private val htmlConverterProvider: HtmlConverterProvider,
 ) {
 
     suspend fun create(content: MessageContent, senderDisplayName: String, eventId: EventId?): TimelineItemEventContent {
@@ -85,6 +88,7 @@ class TimelineItemContentMessageFactory @Inject constructor(
                         body = messageType.body,
                         htmlDocument = null,
                         plainText = messageType.body,
+                        formattedBody = null,
                         isEdited = content.isEdited,
                     )
                 } else {
@@ -165,12 +169,20 @@ class TimelineItemContentMessageFactory @Inject constructor(
                 TimelineItemTextContent(
                     body = messageType.body,
                     htmlDocument = messageType.formatted?.toHtmlDocument(),
+                    formattedBody = messageType.formatted?.let { formattedBody ->
+                        if (formattedBody.format == MessageFormat.HTML) {
+                            htmlConverterProvider.provide().fromHtmlToSpans(formattedBody.body)
+                        } else {
+                            null
+                        }
+                    },
                     isEdited = content.isEdited,
                 )
             }
             is OtherMessageType -> TimelineItemTextContent(
                 body = messageType.body,
                 htmlDocument = null,
+                formattedBody = null,
                 isEdited = content.isEdited,
             )
         }

@@ -74,6 +74,7 @@ fun aTimelineItemRedactedContent() = TimelineItemRedactedContent
 fun aTimelineItemTextContent() = TimelineItemTextContent(
     body = "Text",
     htmlDocument = null,
+    formattedBody = null,
     isEdited = false,
 )
 
