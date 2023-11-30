@@ -148,7 +148,8 @@ private fun TimelineItemGroupedEventsRowContent(
                     receipts = timelineItem.aggregatedReadReceipts,
                 ),
                 showReadReceipts = true,
-                onReadReceiptsClicked = { /* No op for group event */ })
+                onReadReceiptsClicked = onExpandGroupClick
+            )
         }
     }
 }
