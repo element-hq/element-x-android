@@ -66,7 +66,7 @@ open class MessagesStateProvider : PreviewParameterProvider<MessagesState> {
                 ),
             ),
             aMessagesState().copy(
-                isCallOngoing = true,
+                callState = RoomCallState.ONGOING,
             ),
             aMessagesState().copy(
                 enableVoiceMessages = true,
@@ -74,6 +74,9 @@ open class MessagesStateProvider : PreviewParameterProvider<MessagesState> {
                     voiceMessageState = aVoiceMessagePreviewState(),
                     showSendFailureDialog = true
                 ),
+            ),
+            aMessagesState().copy(
+                callState = RoomCallState.DISABLED,
             ),
         )
 }
@@ -117,8 +120,7 @@ fun aMessagesState() = MessagesState(
     showReinvitePrompt = false,
     enableTextFormatting = true,
     enableVoiceMessages = true,
-    enableInRoomCalls = true,
-    isCallOngoing = false,
+    callState = RoomCallState.ENABLED,
     appName = "Element",
     eventSink = {}
 )

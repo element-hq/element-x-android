@@ -51,8 +51,13 @@ data class MessagesState(
     val showReinvitePrompt: Boolean,
     val enableTextFormatting: Boolean,
     val enableVoiceMessages: Boolean,
-    val enableInRoomCalls: Boolean,
-    val isCallOngoing: Boolean,
+    val callState: RoomCallState,
     val appName: String,
     val eventSink: (MessagesEvents) -> Unit
 )
+
+enum class RoomCallState {
+    ENABLED,
+    ONGOING,
+    DISABLED
+}

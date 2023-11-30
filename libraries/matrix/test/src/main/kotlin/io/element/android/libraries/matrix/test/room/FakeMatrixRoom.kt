@@ -111,6 +111,7 @@ class FakeMatrixRoom(
     private var generateWidgetWebViewUrlResult = Result.success("https://call.element.io")
     private var getWidgetDriverResult: Result<MatrixWidgetDriver> = Result.success(FakeWidgetDriver())
     private var canUserTriggerRoomNotificationResult: Result<Boolean> = Result.success(true)
+    private var canUserJoinCallResult: Result<Boolean> = Result.success(true)
     var sendMessageMentions = emptyList<Mention>()
     val editMessageCalls = mutableListOf<Pair<String, String?>>()
 
@@ -290,6 +291,10 @@ class FakeMatrixRoom(
 
     override suspend fun canUserTriggerRoomNotification(userId: UserId): Result<Boolean> {
         return canUserTriggerRoomNotificationResult
+    }
+
+    override suspend fun canUserJoinCall(userId: UserId): Result<Boolean> {
+        return canUserJoinCallResult
     }
 
     override suspend fun sendImage(
@@ -472,6 +477,10 @@ class FakeMatrixRoom(
 
     fun givenCanTriggerRoomNotification(result: Result<Boolean>) {
         canUserTriggerRoomNotificationResult = result
+    }
+
+    fun givenCanUserJoinCall(result: Result<Boolean>) {
+        canUserJoinCallResult = result
     }
 
     fun givenIgnoreResult(result: Result<Unit>) {
