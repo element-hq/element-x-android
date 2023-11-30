@@ -21,7 +21,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import im.vector.app.features.analytics.plan.CreatedRoom
+import io.element.android.features.createroom.api.StartDMAction
 import io.element.android.features.createroom.impl.userlist.SelectionMode
 import io.element.android.features.createroom.impl.userlist.UserListDataStore
 import io.element.android.features.createroom.impl.userlist.UserListPresenter
@@ -29,14 +29,8 @@ import io.element.android.features.createroom.impl.userlist.UserListPresenterArg
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.meta.BuildMeta
-import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
-import io.element.android.libraries.matrix.api.room.StartDMResult
-import io.element.android.libraries.matrix.api.room.startDM
-import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.usersearch.api.UserRepository
-import io.element.android.services.analytics.api.AnalyticsService
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -44,8 +38,7 @@ class CreateRoomRootPresenter @Inject constructor(
     presenterFactory: UserListPresenter.Factory,
     userRepository: UserRepository,
     userListDataStore: UserListDataStore,
-    private val matrixClient: MatrixClient,
-    private val analyticsService: AnalyticsService,
+    private val startDMAction: StartDMAction,
     private val buildMeta: BuildMeta,
 ) : Presenter<CreateRoomRootState> {
 
@@ -62,36 +55,22 @@ class CreateRoomRootPresenter @Inject constructor(
         val userListState = presenter.present()
 
         val localCoroutineScope = rememberCoroutineScope()
-        val startDmAction: MutableState<Async<RoomId>> = remember { mutableStateOf(Async.Uninitialized) }
+        val startDmActionState: MutableState<Async<RoomId>> = remember { mutableStateOf(Async.Uninitialized) }
 
         fun handleEvents(event: CreateRoomRootEvents) {
             when (event) {
-                is CreateRoomRootEvents.StartDM -> localCoroutineScope.startDm(event.matrixUser, startDmAction)
-                CreateRoomRootEvents.CancelStartDM -> startDmAction.value = Async.Uninitialized
+                is CreateRoomRootEvents.StartDM -> localCoroutineScope.launch {
+                    startDMAction.execute(event.matrixUser.userId, startDmActionState)
+                }
+                CreateRoomRootEvents.CancelStartDM -> startDmActionState.value = Async.Uninitialized
             }
         }
 
         return CreateRoomRootState(
             applicationName = buildMeta.applicationName,
             userListState = userListState,
-            startDmAction = startDmAction.value,
+            startDmAction = startDmActionState.value,
             eventSink = ::handleEvents,
         )
-    }
-
-    private fun CoroutineScope.startDm(matrixUser: MatrixUser, startDmAction: MutableState<Async<RoomId>>) = launch {
-        startDmAction.value = Async.Loading()
-        when (val result = matrixClient.startDM(matrixUser)) {
-            is StartDMResult.Success -> {
-                if (result.isNew) {
-                    analyticsService.capture(CreatedRoom(isDM = true))
-                }
-                startDmAction.value = Async.Success(result.roomId)
-            }
-            is StartDMResult.Failure -> {
-                startDmAction.value = Async.Failure(result)
-            }
-        }
-
     }
 }
