@@ -26,4 +26,6 @@ data class TimelineItemNoticeContent(
     override val isEdited: Boolean,
 ) : TimelineItemTextBasedContent {
     override val type: String = "TimelineItemNoticeContent"
+
+    override val formattedBody: CharSequence? = null
 }

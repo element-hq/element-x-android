@@ -26,4 +26,6 @@ data class TimelineItemEmoteContent(
     override val isEdited: Boolean,
 ) : TimelineItemTextBasedContent {
     override val type: String = "TimelineItemEmoteContent"
+
+    override val formattedBody: CharSequence? = null
 }
