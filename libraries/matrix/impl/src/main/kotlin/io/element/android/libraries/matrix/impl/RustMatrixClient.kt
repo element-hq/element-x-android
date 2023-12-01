@@ -119,10 +119,9 @@ class RustMatrixClient constructor(
                 .filterByPushRules()
                 .finish()
         }
-    private val notificationSettings = client.getNotificationSettings()
-
     private val notificationService = RustNotificationService(sessionId, notificationClient, dispatchers, clock)
-    private val notificationSettingsService = RustNotificationSettingsService(notificationSettings, dispatchers)
+    private val notificationSettingsService = RustNotificationSettingsService(client, dispatchers)
+        .also { it.start() }
     private val roomSyncSubscriber = RoomSyncSubscriber(innerRoomListService, dispatchers)
     private val encryptionService = RustEncryptionService(
         client = client,
@@ -346,8 +345,7 @@ class RustMatrixClient constructor(
     override fun close() {
         sessionCoroutineScope.cancel()
         clientDelegateTaskHandle?.cancelAndDestroy()
-        notificationSettings.setDelegate(null)
-        notificationSettings.destroy()
+        notificationSettingsService.destroy()
         verificationService.destroy()
         syncService.destroy()
         innerRoomListService.destroy()
