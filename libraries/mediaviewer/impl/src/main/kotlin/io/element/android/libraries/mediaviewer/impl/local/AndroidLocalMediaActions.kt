@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.mediaviewer.local
+package io.element.android.libraries.mediaviewer.impl.local
 
 import android.app.Activity
 import android.content.ContentResolver
