@@ -650,7 +650,7 @@ internal fun TimelineItemEventRowPreview() = ElementPreview {
                 event = aTimelineItemEvent(
                     isMine = it,
                     content = aTimelineItemImageContent().copy(
-                        aspectRatio = 5f
+                        aspectRatio = 2.5f
                     ),
                     groupPosition = TimelineItemGroupPosition.Last,
                 ),

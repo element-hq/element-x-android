@@ -71,7 +71,7 @@ internal fun TimelineItemEventRowWithReplyPreview(
                     isMine = it,
                     timelineItemReactions = aTimelineItemReactions(count = 0),
                     content = aTimelineItemImageContent().copy(
-                        aspectRatio = 5f
+                        aspectRatio = 2.5f
                     ),
                     inReplyTo = inReplyToDetails,
                     isThreaded = true,

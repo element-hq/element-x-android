@@ -40,7 +40,7 @@ fun TimelineItemAspectRatioBox(
     Box(
         modifier = modifier
             .heightIn(min = MIN_HEIGHT_IN_DP.dp, max = MAX_HEIGHT_IN_DP.dp)
-            .aspectRatio(safeAspectRatio, true),
+            .aspectRatio(safeAspectRatio, false),
         contentAlignment = contentAlignment,
         content = content
     )
