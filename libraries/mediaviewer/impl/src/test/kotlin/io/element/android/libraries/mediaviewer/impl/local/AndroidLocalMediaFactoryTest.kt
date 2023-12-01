@@ -21,7 +21,6 @@ import io.element.android.libraries.androidutils.filesize.FakeFileSizeFormatter
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.matrix.api.media.MediaFile
 import io.element.android.libraries.matrix.test.media.FakeMediaFile
-import io.element.android.libraries.mediaviewer.api.local.LocalMedia
 import io.element.android.libraries.mediaviewer.api.local.MediaInfo
 import io.element.android.libraries.mediaviewer.api.local.anImageInfo
 import io.element.android.libraries.mediaviewer.api.util.FileExtensionExtractorWithoutValidation
