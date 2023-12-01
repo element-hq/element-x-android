@@ -163,8 +163,6 @@ fun TimelineItemEventRow(
                                 state = state.draggableState,
                             ),
                         event = event,
-                        showReadReceipts = showReadReceipts,
-                        isLastOutgoingMessage = isLastOutgoingMessage,
                         isHighlighted = isHighlighted,
                         interactionSource = interactionSource,
                         onClick = onClick,
@@ -175,7 +173,6 @@ fun TimelineItemEventRow(
                         onReactionClicked = { emoji -> onReactionClick(emoji, event) },
                         onReactionLongClicked = { emoji -> onReactionLongClick(emoji, event) },
                         onMoreReactionsClicked = { onMoreReactionsClick(event) },
-                        onReadReceiptsClicked = { onReadReceiptClick(event) },
                         eventSink = eventSink,
                     )
                 }
@@ -183,8 +180,6 @@ fun TimelineItemEventRow(
         } else {
             TimelineItemEventRowContent(
                 event = event,
-                showReadReceipts = showReadReceipts,
-                isLastOutgoingMessage = isLastOutgoingMessage,
                 isHighlighted = isHighlighted,
                 interactionSource = interactionSource,
                 onClick = onClick,
@@ -195,10 +190,20 @@ fun TimelineItemEventRow(
                 onReactionClicked = { emoji -> onReactionClick(emoji, event) },
                 onReactionLongClicked = { emoji -> onReactionLongClick(emoji, event) },
                 onMoreReactionsClicked = { onMoreReactionsClick(event) },
-                onReadReceiptsClicked = { onReadReceiptClick(event) },
                 eventSink = eventSink,
             )
         }
+        // Read receipts / Send state
+        TimelineItemReadReceiptView(
+            state = ReadReceiptViewState(
+                sendState = event.localSendState,
+                isLastOutgoingMessage = isLastOutgoingMessage,
+                receipts = event.readReceiptState.receipts,
+            ),
+            showReadReceipts = showReadReceipts,
+            onReadReceiptsClicked = { onReadReceiptClick(event) },
+            modifier = Modifier.padding(top = 4.dp),
+        )
     }
 }
 
@@ -228,8 +233,6 @@ private fun SwipeSensitivity(
 @Composable
 private fun TimelineItemEventRowContent(
     event: TimelineItem.Event,
-    showReadReceipts: Boolean,
-    isLastOutgoingMessage: Boolean,
     isHighlighted: Boolean,
     interactionSource: MutableInteractionSource,
     onClick: () -> Unit,
@@ -238,7 +241,6 @@ private fun TimelineItemEventRowContent(
     inReplyToClicked: () -> Unit,
     onUserDataClicked: () -> Unit,
     onReactionClicked: (emoji: String) -> Unit,
-    onReadReceiptsClicked: () -> Unit,
     onReactionLongClicked: (emoji: String) -> Unit,
     onMoreReactionsClicked: (event: TimelineItem.Event) -> Unit,
     eventSink: (TimelineEvents) -> Unit,
@@ -259,7 +261,6 @@ private fun TimelineItemEventRowContent(
             sender,
             message,
             reactions,
-            readReceipts,
         ) = createRefs()
 
         // Sender
@@ -326,25 +327,6 @@ private fun TimelineItemEventRowContent(
                     .padding(start = if (event.isMine) 16.dp else 36.dp, end = 16.dp)
             )
         }
-
-        // Read receipts / Send state
-        TimelineItemReadReceiptView(
-            state = ReadReceiptViewState(
-                sendState = event.localSendState,
-                isLastOutgoingMessage = isLastOutgoingMessage,
-                receipts = event.readReceiptState.receipts,
-            ),
-            showReadReceipts = showReadReceipts,
-            onReadReceiptsClicked = onReadReceiptsClicked,
-            modifier = Modifier
-                .constrainAs(readReceipts) {
-                    if (event.reactionsState.reactions.isNotEmpty()) {
-                        top.linkTo(reactions.bottom, margin = 4.dp)
-                    } else {
-                        top.linkTo(message.bottom, margin = 4.dp)
-                    }
-                }
-        )
     }
 }
 
