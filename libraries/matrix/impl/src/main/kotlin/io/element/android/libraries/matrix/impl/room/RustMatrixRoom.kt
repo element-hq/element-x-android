@@ -580,7 +580,7 @@ class RustMatrixRoom(
         onNewSyncedEvent = { _syncUpdateFlow.value = systemClock.epochMillis() }
     )
 
-    private suspend fun sendAttachment(files: List<File>, handle: () -> SendAttachmentJoinHandle): Result<MediaUploadHandler> {
+    private fun sendAttachment(files: List<File>, handle: () -> SendAttachmentJoinHandle): Result<MediaUploadHandler> {
         return runCatching {
             MediaUploadHandlerImpl(files, handle())
         }

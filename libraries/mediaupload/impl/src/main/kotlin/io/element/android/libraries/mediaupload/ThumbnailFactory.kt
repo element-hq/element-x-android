@@ -32,6 +32,7 @@ import io.element.android.libraries.androidutils.media.runAndRelease
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.matrix.api.media.ThumbnailInfo
+import io.element.android.services.toolbox.api.sdk.BuildVersionSdkIntProvider
 import kotlinx.coroutines.suspendCancellableCoroutine
 import java.io.File
 import javax.inject.Inject
@@ -56,13 +57,14 @@ private const val VIDEO_THUMB_FRAME = 0L
 
 class ThumbnailFactory @Inject constructor(
     @ApplicationContext private val context: Context,
+    private val sdkIntProvider: BuildVersionSdkIntProvider
 ) {
 
     @SuppressLint("NewApi")
     suspend fun createImageThumbnail(file: File): ThumbnailResult {
         return createThumbnail { cancellationSignal ->
             // This API works correctly with GIF
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            if (sdkIntProvider.isAtLeast(Build.VERSION_CODES.Q)) {
                 ThumbnailUtils.createImageThumbnail(
                     file,
                     Size(THUMB_MAX_WIDTH, THUMB_MAX_HEIGHT),
