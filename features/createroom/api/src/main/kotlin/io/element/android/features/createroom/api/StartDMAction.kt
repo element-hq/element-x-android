@@ -14,13 +14,18 @@
  * limitations under the License.
  */
 
-package io.element.android.features.roomdetails.impl.members.details
+package io.element.android.features.createroom.api
 
-sealed interface RoomMemberDetailsEvents {
-    data object StartDM : RoomMemberDetailsEvents
-    data object ClearStartDMState : RoomMemberDetailsEvents
-    data class BlockUser(val needsConfirmation: Boolean = false) : RoomMemberDetailsEvents
-    data class UnblockUser(val needsConfirmation: Boolean = false) : RoomMemberDetailsEvents
-    data object ClearBlockUserError : RoomMemberDetailsEvents
-    data object ClearConfirmationDialog : RoomMemberDetailsEvents
+import androidx.compose.runtime.MutableState
+import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.UserId
+
+interface StartDMAction {
+    /**
+     * Try to find an existing DM with the given user, or create one if none exists.
+     * @param userId The user to start a DM with.
+     * @param actionState The state to update with the result of the action.
+     */
+    suspend fun execute(userId: UserId, actionState: MutableState<Async<RoomId>>)
 }

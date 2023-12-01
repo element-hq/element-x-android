@@ -85,6 +85,7 @@ private fun PreferenceBlockUser(
             leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Block)),
             onClick = { if (!isLoading) eventSink(RoomMemberDetailsEvents.UnblockUser(needsConfirmation = true)) },
             trailingContent = if (isLoading) ListItemContent.Custom(loadingCurrentValue) else null,
+            style = ListItemStyle.Primary,
             modifier = modifier,
         )
     } else {

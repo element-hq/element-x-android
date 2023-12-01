@@ -14,22 +14,27 @@
  * limitations under the License.
  */
 
-package io.element.android.features.roomdetails.impl.members.details
+package io.element.android.features.createroom.test
 
+import androidx.compose.runtime.MutableState
+import io.element.android.features.createroom.api.StartDMAction
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.test.A_ROOM_ID
+import kotlinx.coroutines.delay
 
-data class RoomMemberDetailsState(
-    val userId: String,
-    val userName: String?,
-    val avatarUrl: String?,
-    val isBlocked: Async<Boolean>,
-    val startDmActionState: Async<RoomId>,
-    val displayConfirmationDialog: ConfirmationDialog?,
-    val isCurrentUser: Boolean,
-    val eventSink: (RoomMemberDetailsEvents) -> Unit
-) {
-    enum class ConfirmationDialog {
-        Block, Unblock
+class FakeStartDMAction : StartDMAction {
+
+    private var executeResult: Async<RoomId> = Async.Success(A_ROOM_ID)
+
+    fun givenExecuteResult(result: Async<RoomId>) {
+        executeResult = result
+    }
+
+    override suspend fun execute(userId: UserId, actionState: MutableState<Async<RoomId>>) {
+        actionState.value = Async.Loading()
+        delay(1)
+        actionState.value = executeResult
     }
 }
