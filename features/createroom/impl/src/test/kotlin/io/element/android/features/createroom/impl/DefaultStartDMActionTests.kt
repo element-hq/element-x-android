@@ -22,8 +22,6 @@ import im.vector.app.features.analytics.plan.CreatedRoom
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
-import io.element.android.libraries.matrix.api.room.StartDMResult
-import io.element.android.libraries.matrix.test.A_FAILURE_REASON
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_THROWABLE
 import io.element.android.libraries.matrix.test.A_USER_ID
@@ -69,7 +67,7 @@ class DefaultStartDMActionTests {
         val action = createStartDMAction(matrixClient)
         val state = mutableStateOf<Async<RoomId>>(Async.Uninitialized)
         action.execute(A_USER_ID, state)
-        assertThat(state.value).isEqualTo(Async.Failure<RoomId>(StartDMResult.Failure(A_FAILURE_REASON)))
+        assertThat(state.value).isEqualTo(Async.Failure<RoomId>(A_THROWABLE))
     }
 
     private fun createStartDMAction(

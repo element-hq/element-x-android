@@ -46,7 +46,7 @@ class DefaultStartDMAction @Inject constructor(
                 actionState.value = Async.Success(result.roomId)
             }
             is StartDMResult.Failure -> {
-                actionState.value = Async.Failure(result)
+                actionState.value = Async.Failure(result.throwable)
             }
         }
     }

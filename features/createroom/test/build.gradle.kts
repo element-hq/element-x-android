@@ -26,7 +26,6 @@ dependencies {
     implementation(libs.coroutines.core)
     implementation(projects.libraries.matrix.api)
     implementation(projects.libraries.matrix.test)
-    implementation(projects.tests.testutils)
     implementation(projects.libraries.architecture)
     api(projects.features.createroom.api)
 }

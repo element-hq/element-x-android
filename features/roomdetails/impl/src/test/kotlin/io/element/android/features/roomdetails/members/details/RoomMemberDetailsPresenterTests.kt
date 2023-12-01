@@ -33,8 +33,6 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.api.room.RoomMember
-import io.element.android.libraries.matrix.api.room.StartDMResult
-import io.element.android.libraries.matrix.test.A_FAILURE_REASON
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_THROWABLE
 import io.element.android.libraries.matrix.test.FakeMatrixClient
@@ -208,7 +206,7 @@ class RoomMemberDetailsPresenterTests {
             val initialState = awaitItem()
             Truth.assertThat(initialState.startDmActionState).isInstanceOf(Async.Uninitialized::class.java)
             val startDMSuccessResult = Async.Success(A_ROOM_ID)
-            val startDMFailureResult = Async.Failure<RoomId>(StartDMResult.Failure(A_FAILURE_REASON))
+            val startDMFailureResult = Async.Failure<RoomId>(A_THROWABLE)
 
             // Failure
             startDMAction.givenExecuteResult(startDMFailureResult)

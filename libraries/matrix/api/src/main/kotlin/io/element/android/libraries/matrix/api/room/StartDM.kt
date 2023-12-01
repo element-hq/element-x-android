@@ -30,12 +30,12 @@ suspend fun MatrixClient.startDM(userId: UserId): StartDMResult {
     } else {
         createDM(userId).fold(
             { StartDMResult.Success(it, isNew = true) },
-            { StartDMResult.Failure(it.localizedMessage) }
+            { StartDMResult.Failure(it) }
         )
     }
 }
 
 sealed interface StartDMResult {
     data class Success(val roomId: RoomId, val isNew: Boolean) : StartDMResult
-    data class Failure(override val message: String?) : StartDMResult, Exception(message)
+    data class Failure(val throwable: Throwable) : StartDMResult
 }

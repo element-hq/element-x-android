@@ -22,7 +22,7 @@ import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.test.A_ROOM_ID
-import io.element.android.tests.testutils.simulateLongTask
+import kotlinx.coroutines.delay
 
 class FakeStartDMAction : StartDMAction {
 
@@ -32,8 +32,9 @@ class FakeStartDMAction : StartDMAction {
         executeResult = result
     }
 
-    override suspend fun execute(userId: UserId, actionState: MutableState<Async<RoomId>>) = simulateLongTask {
+    override suspend fun execute(userId: UserId, actionState: MutableState<Async<RoomId>>) {
         actionState.value = Async.Loading()
+        delay(1)
         actionState.value = executeResult
     }
 }
