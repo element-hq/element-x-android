@@ -34,12 +34,18 @@ import io.element.android.features.roomdetails.impl.edit.RoomDetailsEditNode
 import io.element.android.features.roomdetails.impl.invite.RoomInviteMembersNode
 import io.element.android.features.roomdetails.impl.members.RoomMemberListNode
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsNode
+import io.element.android.features.roomdetails.impl.members.details.avatar.RoomMemberAvatarPreviewNode
 import io.element.android.features.roomdetails.impl.notificationsettings.RoomNotificationSettingsNode
 import io.element.android.libraries.architecture.BackstackNode
 import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
 import io.element.android.libraries.architecture.createNode
+import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.di.RoomScope
+import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.media.MediaSource
+import io.element.android.libraries.mediaviewer.api.local.MediaInfo
+import io.element.android.libraries.mediaviewer.api.viewer.MediaViewerNode
 import kotlinx.parcelize.Parcelize
 
 @ContributesNode(RoomScope::class)
@@ -79,6 +85,9 @@ class RoomDetailsFlowNode @AssistedInject constructor(
 
         @Parcelize
         data class RoomMemberDetails(val roomMemberId: UserId) : NavTarget
+
+        @Parcelize
+        data class MemberAvatarPreview(val userName: String, val avatarUrl: String) : NavTarget
     }
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
@@ -99,6 +108,10 @@ class RoomDetailsFlowNode @AssistedInject constructor(
 
                     override fun openRoomNotificationSettings() {
                         backstack.push(NavTarget.RoomNotificationSettings(showUserDefinedSettingStyle = false))
+                    }
+
+                    override fun openAvatarPreview(username: String, url: String) {
+                        backstack.push(NavTarget.MemberAvatarPreview(username, url))
                     }
                 }
                 createNode<RoomDetailsNode>(buildContext, listOf(roomDetailsCallback))
@@ -136,8 +149,34 @@ class RoomDetailsFlowNode @AssistedInject constructor(
             }
 
             is NavTarget.RoomMemberDetails -> {
-                val plugins = listOf(RoomMemberDetailsNode.RoomMemberDetailsInput(navTarget.roomMemberId))
+                val callback = object : RoomMemberDetailsNode.Callback {
+                    override fun openAvatarPreview(username: String, avatarUrl: String) {
+                        backstack.push(NavTarget.MemberAvatarPreview(username, avatarUrl))
+                    }
+
+                    override fun onStartDM(roomId: RoomId) {
+                        plugins<RoomDetailsEntryPoint.Callback>().forEach { it.onOpenRoom(roomId) }
+                    }
+                }
+                val plugins = listOf(RoomMemberDetailsNode.RoomMemberDetailsInput(navTarget.roomMemberId), callback)
                 createNode<RoomMemberDetailsNode>(buildContext, plugins)
+            }
+            is NavTarget.MemberAvatarPreview -> {
+                // We need to fake the MimeType here for the viewer to work.
+                val mimeType = MimeTypes.Images
+                val input = MediaViewerNode.Inputs(
+                    mediaInfo = MediaInfo(
+                        name = navTarget.userName,
+                        mimeType = mimeType,
+                        formattedFileSize = "",
+                        fileExtension = ""
+                    ),
+                    mediaSource = MediaSource(url = navTarget.avatarUrl),
+                    thumbnailSource = MediaSource(url = navTarget.avatarUrl),
+                    canDownload = false,
+                    canShare = false,
+                )
+                createNode<RoomMemberAvatarPreviewNode>(buildContext, listOf(input))
             }
         }
     }

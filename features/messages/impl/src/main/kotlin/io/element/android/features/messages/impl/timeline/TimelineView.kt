@@ -20,13 +20,11 @@ package io.element.android.features.messages.impl.timeline
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -42,36 +40,27 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.platform.LocalInspectionMode
-import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
-import io.element.android.features.messages.impl.R
-import io.element.android.features.messages.impl.timeline.components.TimelineItemEventRow
-import io.element.android.features.messages.impl.timeline.components.TimelineItemStateEventRow
-import io.element.android.features.messages.impl.timeline.components.TimelineItemVirtualRow
-import io.element.android.features.messages.impl.timeline.components.group.GroupHeaderView
+import io.element.android.features.messages.impl.timeline.components.TimelineItemRow
 import io.element.android.features.messages.impl.timeline.components.virtual.TimelineItemRoomBeginningView
 import io.element.android.features.messages.impl.timeline.components.virtual.TimelineLoadingMoreIndicator
 import io.element.android.features.messages.impl.timeline.di.LocalTimelineItemPresenterFactories
 import io.element.android.features.messages.impl.timeline.di.aFakeTimelineItemPresenterFactories
+import io.element.android.features.messages.impl.timeline.model.NewEventState
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContentProvider
-import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStateContent
-import io.element.android.features.messages.impl.timeline.model.event.canBeRepliedTo
-import io.element.android.features.messages.impl.timeline.session.SessionState
 import io.element.android.libraries.designsystem.animation.alphaAnimation
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -167,118 +156,9 @@ fun TimelineView(
         TimelineScrollHelper(
             isTimelineEmpty = state.timelineItems.isEmpty(),
             lazyListState = lazyListState,
-            hasNewItems = state.hasNewItems,
+            newEventState = state.newEventState,
             onScrollFinishedAt = ::onScrollFinishedAt
         )
-    }
-}
-
-@Composable
-private fun TimelineItemRow(
-    timelineItem: TimelineItem,
-    showReadReceipts: Boolean,
-    isLastOutgoingMessage: Boolean,
-    highlightedItem: String?,
-    userHasPermissionToSendMessage: Boolean,
-    sessionState: SessionState,
-    onUserDataClick: (UserId) -> Unit,
-    onClick: (TimelineItem.Event) -> Unit,
-    onLongClick: (TimelineItem.Event) -> Unit,
-    inReplyToClick: (EventId) -> Unit,
-    onReactionClick: (key: String, TimelineItem.Event) -> Unit,
-    onReactionLongClick: (key: String, TimelineItem.Event) -> Unit,
-    onMoreReactionsClick: (TimelineItem.Event) -> Unit,
-    onReadReceiptClick: (TimelineItem.Event) -> Unit,
-    onTimestampClicked: (TimelineItem.Event) -> Unit,
-    onSwipeToReply: (TimelineItem.Event) -> Unit,
-    eventSink: (TimelineEvents) -> Unit,
-    modifier: Modifier = Modifier
-) {
-    when (timelineItem) {
-        is TimelineItem.Virtual -> {
-            TimelineItemVirtualRow(
-                virtual = timelineItem,
-                sessionState = sessionState,
-                modifier = modifier,
-            )
-        }
-        is TimelineItem.Event -> {
-            if (timelineItem.content is TimelineItemStateContent) {
-                TimelineItemStateEventRow(
-                    event = timelineItem,
-                    isHighlighted = highlightedItem == timelineItem.identifier(),
-                    onClick = { onClick(timelineItem) },
-                    onLongClick = { onLongClick(timelineItem) },
-                    eventSink = eventSink,
-                    modifier = modifier,
-                )
-            } else {
-                TimelineItemEventRow(
-                    event = timelineItem,
-                    showReadReceipts = showReadReceipts,
-                    isLastOutgoingMessage = isLastOutgoingMessage,
-                    isHighlighted = highlightedItem == timelineItem.identifier(),
-                    canReply = userHasPermissionToSendMessage && timelineItem.content.canBeRepliedTo(),
-                    onClick = { onClick(timelineItem) },
-                    onLongClick = { onLongClick(timelineItem) },
-                    onUserDataClick = onUserDataClick,
-                    inReplyToClick = inReplyToClick,
-                    onReactionClick = onReactionClick,
-                    onReactionLongClick = onReactionLongClick,
-                    onMoreReactionsClick = onMoreReactionsClick,
-                    onReadReceiptClick = onReadReceiptClick,
-                    onTimestampClicked = onTimestampClicked,
-                    onSwipeToReply = { onSwipeToReply(timelineItem) },
-                    eventSink = eventSink,
-                    modifier = modifier,
-                )
-            }
-        }
-        is TimelineItem.GroupedEvents -> {
-            val isExpanded = rememberSaveable(key = timelineItem.identifier()) { mutableStateOf(false) }
-
-            fun onExpandGroupClick() {
-                isExpanded.value = !isExpanded.value
-            }
-
-            Column(modifier = modifier.animateContentSize()) {
-                GroupHeaderView(
-                    text = pluralStringResource(
-                        id = R.plurals.room_timeline_state_changes,
-                        count = timelineItem.events.size,
-                        timelineItem.events.size
-                    ),
-                    isExpanded = isExpanded.value,
-                    isHighlighted = !isExpanded.value && timelineItem.events.any { it.identifier() == highlightedItem },
-                    onClick = ::onExpandGroupClick,
-                )
-                if (isExpanded.value) {
-                    Column {
-                        timelineItem.events.forEach { subGroupEvent ->
-                            TimelineItemRow(
-                                timelineItem = subGroupEvent,
-                                showReadReceipts = showReadReceipts,
-                                isLastOutgoingMessage = isLastOutgoingMessage,
-                                highlightedItem = highlightedItem,
-                                sessionState = sessionState,
-                                userHasPermissionToSendMessage = false,
-                                onClick = onClick,
-                                onLongClick = onLongClick,
-                                inReplyToClick = inReplyToClick,
-                                onUserDataClick = onUserDataClick,
-                                onTimestampClicked = onTimestampClicked,
-                                onReactionClick = onReactionClick,
-                                onReactionLongClick = onReactionLongClick,
-                                onMoreReactionsClick = onMoreReactionsClick,
-                                onReadReceiptClick = onReadReceiptClick,
-                                eventSink = eventSink,
-                                onSwipeToReply = {},
-                            )
-                        }
-                    }
-                }
-            }
-        }
     }
 }
 
@@ -286,19 +166,31 @@ private fun TimelineItemRow(
 private fun BoxScope.TimelineScrollHelper(
     isTimelineEmpty: Boolean,
     lazyListState: LazyListState,
-    hasNewItems: Boolean,
+    newEventState: NewEventState,
     onScrollFinishedAt: (Int) -> Unit,
 ) {
     val coroutineScope = rememberCoroutineScope()
     val isScrollFinished by remember { derivedStateOf { !lazyListState.isScrollInProgress } }
-    val canAutoScroll by remember { derivedStateOf { lazyListState.firstVisibleItemIndex < 3 } }
+    val canAutoScroll by remember {
+        derivedStateOf {
+            lazyListState.firstVisibleItemIndex < 3
+        }
+    }
 
-    LaunchedEffect(canAutoScroll, hasNewItems) {
-        val shouldAutoScroll = isScrollFinished && canAutoScroll && hasNewItems
-        if (shouldAutoScroll) {
-            coroutineScope.launch {
+    fun scrollToBottom() {
+        coroutineScope.launch {
+            if (lazyListState.firstVisibleItemIndex > 10) {
+                lazyListState.scrollToItem(0)
+            } else {
                 lazyListState.animateScrollToItem(0)
             }
+        }
+    }
+
+    LaunchedEffect(canAutoScroll, newEventState) {
+        val shouldAutoScroll = isScrollFinished && (canAutoScroll || newEventState == NewEventState.FromMe)
+        if (shouldAutoScroll) {
+            scrollToBottom()
         }
     }
 
@@ -315,15 +207,7 @@ private fun BoxScope.TimelineScrollHelper(
         modifier = Modifier
             .align(Alignment.BottomEnd)
             .padding(end = 24.dp, bottom = 12.dp),
-        onClick = {
-            coroutineScope.launch {
-                if (lazyListState.firstVisibleItemIndex > 10) {
-                    lazyListState.scrollToItem(0)
-                } else {
-                    lazyListState.animateScrollToItem(0)
-                }
-            }
-        }
+        onClick = ::scrollToBottom,
     )
 }
 

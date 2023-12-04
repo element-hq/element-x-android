@@ -44,6 +44,9 @@ import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_ROOM_NAME
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.A_USER_NAME
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.persistentMapOf
 
 fun aRoomSummaryFilled(
     roomId: RoomId = A_ROOM_ID,
@@ -107,8 +110,8 @@ fun anEventTimelineItem(
     isOwn: Boolean = false,
     isRemote: Boolean = false,
     localSendState: LocalEventSendState? = null,
-    reactions: List<EventReaction> = emptyList(),
-    receipts: List<Receipt> = emptyList(),
+    reactions: ImmutableList<EventReaction> = persistentListOf(),
+    receipts: ImmutableList<Receipt> = persistentListOf(),
     sender: UserId = A_USER_ID,
     senderProfile: ProfileTimelineDetails = aProfileTimelineDetails(),
     timestamp: Long = 0L,
@@ -181,13 +184,13 @@ fun aTimelineItemDebugInfo(
 
 fun aPollContent(
     question: String = "Do you like polls?",
-    answers: List<PollAnswer> = listOf(PollAnswer("1", "Yes"), PollAnswer("2", "No")),
+    answers: ImmutableList<PollAnswer> = persistentListOf(PollAnswer("1", "Yes"), PollAnswer("2", "No")),
 ) = PollContent(
     question = question,
     kind = PollKind.Disclosed,
     maxSelections = 1u,
     answers = answers,
-    votes = mapOf(),
+    votes = persistentMapOf(),
     endTime = null,
     isEdited = false,
 )

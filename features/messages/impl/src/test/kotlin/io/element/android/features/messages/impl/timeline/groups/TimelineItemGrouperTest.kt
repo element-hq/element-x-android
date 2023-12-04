@@ -86,11 +86,12 @@ class TimelineItemGrouperTest {
         assertThat(result).isEqualTo(
             listOf(
                 TimelineItem.GroupedEvents(
-                    computeGroupIdWith(aGroupableItem),
+                    id = computeGroupIdWith(aGroupableItem),
                     events = listOf(
                         aGroupableItem.copy("0"),
                         aGroupableItem.copy(id = "1"),
-                    ).toImmutableList()
+                    ).toImmutableList(),
+                    aggregatedReadReceipts = emptyList<ReadReceiptData>().toImmutableList(),
                 ),
             )
         )
@@ -132,20 +133,22 @@ class TimelineItemGrouperTest {
         assertThat(result).isEqualTo(
             listOf(
                 TimelineItem.GroupedEvents(
-                    computeGroupIdWith(aGroupableItem),
+                    id = computeGroupIdWith(aGroupableItem),
                     events = listOf(
                         aGroupableItem,
                         aGroupableItem,
-                    ).toImmutableList()
+                    ).toImmutableList(),
+                    aggregatedReadReceipts = emptyList<ReadReceiptData>().toImmutableList(),
                 ),
                 aNonGroupableItem,
                 TimelineItem.GroupedEvents(
-                    computeGroupIdWith(aGroupableItem),
+                    id = computeGroupIdWith(aGroupableItem),
                     events = listOf(
                         aGroupableItem,
                         aGroupableItem,
                         aGroupableItem,
-                    ).toImmutableList()
+                    ).toImmutableList(),
+                    aggregatedReadReceipts = emptyList<ReadReceiptData>().toImmutableList(),
                 )
             )
         )

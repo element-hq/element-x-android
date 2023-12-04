@@ -191,10 +191,9 @@ fun MessagesView(
                 MessagesViewTopBar(
                     roomName = state.roomName.dataOrNull(),
                     roomAvatar = state.roomAvatar.dataOrNull(),
-                    inRoomCallsEnabled = state.enableInRoomCalls,
+                    callState = state.callState,
                     onBackPressed = onBackPressed,
                     onRoomDetailsClicked = onRoomDetailsClicked,
-                    isCallOngoing = state.isCallOngoing,
                     onJoinCallClicked = onJoinCallClicked,
                 )
             }
@@ -449,8 +448,7 @@ private fun MessagesViewComposerBottomSheetContents(
 private fun MessagesViewTopBar(
     roomName: String?,
     roomAvatar: AvatarData?,
-    inRoomCallsEnabled: Boolean,
-    isCallOngoing: Boolean,
+    callState: RoomCallState,
     onRoomDetailsClicked: () -> Unit,
     onJoinCallClicked: () -> Unit,
     onBackPressed: () -> Unit,
@@ -477,13 +475,11 @@ private fun MessagesViewTopBar(
             }
         },
         actions = {
-            if (inRoomCallsEnabled) {
-                if (isCallOngoing) {
-                    JoinCallMenuItem(onJoinCallClicked = onJoinCallClicked)
-                } else {
-                    IconButton(onClick = onJoinCallClicked) {
-                        Icon(CompoundIcons.VideoCall, contentDescription = stringResource(CommonStrings.a11y_start_call))
-                    }
+            if (callState == RoomCallState.ONGOING) {
+                JoinCallMenuItem(onJoinCallClicked = onJoinCallClicked)
+            } else {
+                IconButton(onClick = onJoinCallClicked, enabled = callState != RoomCallState.DISABLED) {
+                    Icon(CompoundIcons.VideoCall, contentDescription = stringResource(CommonStrings.a11y_start_call))
                 }
             }
             Spacer(Modifier.width(8.dp))

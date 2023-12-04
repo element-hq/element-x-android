@@ -33,6 +33,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import kotlin.coroutines.coroutineContext
 
 class AttachmentsPreviewPresenter @AssistedInject constructor(
@@ -114,6 +115,7 @@ class AttachmentsPreviewPresenter @AssistedInject constructor(
             sendActionState.value = SendActionState.Done
         },
         onFailure = { error ->
+            Timber.e(error, "Failed to send attachment")
             if (error is CancellationException) {
                 throw error
             } else {

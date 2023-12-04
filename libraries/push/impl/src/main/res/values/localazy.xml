@@ -8,10 +8,7 @@
   <string name="notification_invitation_action_join">"Join"</string>
   <string name="notification_invitation_action_reject">"Reject"</string>
   <string name="notification_invite_body">"Invited you to chat"</string>
-  <string name="notification_mentioned_you_body">"%1$s mentioned you.
-%2$s"</string>
-  <string name="notification_mentioned_you_fallback_body">"You have been mentioned.
-%1$s"</string>
+  <string name="notification_mentioned_you_body">"Mentioned you: %1$s"</string>
   <string name="notification_new_messages">"New Messages"</string>
   <string name="notification_reaction_body">"Reacted with %1$s"</string>
   <string name="notification_room_action_mark_as_read">"Mark as read"</string>

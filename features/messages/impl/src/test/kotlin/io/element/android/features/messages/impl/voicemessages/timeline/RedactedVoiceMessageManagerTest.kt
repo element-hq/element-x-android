@@ -17,6 +17,7 @@
 package io.element.android.features.messages.impl.voicemessages.timeline
 
 import com.google.common.truth.Truth
+import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
@@ -29,6 +30,7 @@ import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.mediaplayer.api.MediaPlayer
 import io.element.android.libraries.mediaplayer.test.FakeMediaPlayer
 import io.element.android.tests.testutils.testCoroutineDispatchers
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -37,7 +39,7 @@ class RedactedVoiceMessageManagerTest {
     @Test
     fun `redacted event - no playing related media`() = runTest {
         val mediaPlayer = FakeMediaPlayer().apply {
-            setMedia(uri = "someUri", mediaId = AN_EVENT_ID.value, mimeType = "audio/ogg")
+            setMedia(uri = "someUri", mediaId = AN_EVENT_ID.value, mimeType = MimeTypes.Ogg)
             play()
         }
         val manager = aDefaultRedactedVoiceMessageManager(mediaPlayer = mediaPlayer)
@@ -54,7 +56,7 @@ class RedactedVoiceMessageManagerTest {
     @Test
     fun `redacted event - playing related media is paused`() = runTest {
         val mediaPlayer = FakeMediaPlayer().apply {
-            setMedia(uri = "someUri", mediaId = AN_EVENT_ID.value, mimeType = "audio/ogg")
+            setMedia(uri = "someUri", mediaId = AN_EVENT_ID.value, mimeType = MimeTypes.Ogg)
             play()
         }
         val manager = aDefaultRedactedVoiceMessageManager(mediaPlayer = mediaPlayer)
@@ -87,8 +89,8 @@ fun aRedactedMatrixTimeline(eventId: EventId) = listOf<MatrixTimelineItem>(
             isOwn = false,
             isRemote = false,
             localSendState = null,
-            reactions = listOf(),
-            receipts = listOf(),
+            reactions = persistentListOf(),
+            receipts = persistentListOf(),
             sender = A_USER_ID,
             senderProfile = ProfileTimelineDetails.Unavailable,
             timestamp = 9442,

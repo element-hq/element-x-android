@@ -19,23 +19,30 @@ package io.element.android.libraries.matrix.test.roomlist
 import io.element.android.libraries.matrix.api.roomlist.DynamicRoomList
 import io.element.android.libraries.matrix.api.roomlist.RoomList
 import io.element.android.libraries.matrix.api.roomlist.RoomSummary
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.getAndUpdate
 
 data class SimplePagedRoomList(
     override val summaries: StateFlow<List<RoomSummary>>,
-    override val loadingState: StateFlow<RoomList.LoadingState>
+    override val loadingState: StateFlow<RoomList.LoadingState>,
+    override val currentFilter: MutableStateFlow<DynamicRoomList.Filter>
 ) : DynamicRoomList {
+
+    override val pageSize: Int = Int.MAX_VALUE
+    override val loadedPages = MutableStateFlow(1)
 
     override suspend fun loadMore() {
         //No-op
+        loadedPages.getAndUpdate { it + 1 }
     }
 
     override suspend fun reset() {
-        //No-op
+        loadedPages.emit(1)
     }
 
     override suspend fun updateFilter(filter: DynamicRoomList.Filter) {
-        //No-op
+        currentFilter.emit(filter)
     }
 
     override suspend fun rebuildSummaries() {

@@ -38,6 +38,11 @@ import io.element.android.libraries.matrix.test.A_USER_ID_7
 import io.element.android.libraries.matrix.test.A_USER_ID_8
 import io.element.android.libraries.matrix.test.A_USER_ID_9
 import io.element.android.libraries.matrix.test.FakeMatrixClient
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.ImmutableMap
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.persistentMapOf
+import kotlinx.collections.immutable.toImmutableMap
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
@@ -55,7 +60,7 @@ internal class TimelineItemContentPollFactoryTest {
 
     @Test
     fun `Disclosed poll - not ended, some votes, including one from current user`() = runTest {
-        val votes = MY_USER_WINNING_VOTES.mapKeys { it.key.id }
+        val votes = MY_USER_WINNING_VOTES.mapKeys { it.key.id }.toImmutableMap()
         Truth.assertThat(
             factory.create(aPollContent(votes = votes), eventId = null)
         )
@@ -87,7 +92,7 @@ internal class TimelineItemContentPollFactoryTest {
 
     @Test
     fun `Disclosed poll - ended, some votes, including one from current user (winner)`() = runTest {
-        val votes = MY_USER_WINNING_VOTES.mapKeys { it.key.id }
+        val votes = MY_USER_WINNING_VOTES.mapKeys { it.key.id }.toImmutableMap()
         Truth.assertThat(
             factory.create(aPollContent(votes = votes, endTime = 1UL), eventId = null)
         )
@@ -106,7 +111,7 @@ internal class TimelineItemContentPollFactoryTest {
 
     @Test
     fun `Disclosed poll - ended, some votes, including one from current user (not winner) and two winning votes`() = runTest {
-        val votes = OTHER_WINNING_VOTES.mapKeys { it.key.id }
+        val votes = OTHER_WINNING_VOTES.mapKeys { it.key.id }.toImmutableMap()
         Truth.assertThat(
             factory.create(aPollContent(votes = votes, endTime = 1UL), eventId = null)
         )
@@ -136,7 +141,7 @@ internal class TimelineItemContentPollFactoryTest {
 
     @Test
     fun `Undisclosed poll - not ended, some votes, including one from current user`() = runTest {
-        val votes = MY_USER_WINNING_VOTES.mapKeys { it.key.id }
+        val votes = MY_USER_WINNING_VOTES.mapKeys { it.key.id }.toImmutableMap()
         Truth.assertThat(
             factory.create(aPollContent(pollKind = PollKind.Undisclosed, votes = votes), eventId = null)
         )
@@ -172,7 +177,7 @@ internal class TimelineItemContentPollFactoryTest {
 
     @Test
     fun `Undisclosed poll - ended, some votes, including one from current user (winner)`() = runTest {
-        val votes = MY_USER_WINNING_VOTES.mapKeys { it.key.id }
+        val votes = MY_USER_WINNING_VOTES.mapKeys { it.key.id }.toImmutableMap()
         Truth.assertThat(
             factory.create(aPollContent(pollKind = PollKind.Undisclosed, votes = votes, endTime = 1UL), eventId = null)
         )
@@ -192,7 +197,7 @@ internal class TimelineItemContentPollFactoryTest {
 
     @Test
     fun `Undisclosed poll - ended, some votes, including one from current user (not winner) and two winning votes`() = runTest {
-        val votes = OTHER_WINNING_VOTES.mapKeys { it.key.id }
+        val votes = OTHER_WINNING_VOTES.mapKeys { it.key.id }.toImmutableMap()
         Truth.assertThat(
             factory.create(aPollContent(PollKind.Undisclosed).copy(votes = votes, endTime = 1UL), eventId = null)
         )
@@ -221,13 +226,13 @@ internal class TimelineItemContentPollFactoryTest {
 
     private fun aPollContent(
         pollKind: PollKind = PollKind.Disclosed,
-        votes: Map<String, List<UserId>> = emptyMap(),
+        votes: ImmutableMap<String, ImmutableList<UserId>> = persistentMapOf(),
         endTime: ULong? = null,
     ): PollContent = PollContent(
         question = A_POLL_QUESTION,
         kind = pollKind,
         maxSelections = 1UL,
-        answers = listOf(A_POLL_ANSWER_1, A_POLL_ANSWER_2, A_POLL_ANSWER_3, A_POLL_ANSWER_4),
+        answers = persistentListOf(A_POLL_ANSWER_1, A_POLL_ANSWER_2, A_POLL_ANSWER_3, A_POLL_ANSWER_4),
         votes = votes,
         endTime = endTime,
         isEdited = false,
@@ -277,17 +282,17 @@ internal class TimelineItemContentPollFactoryTest {
         private val A_POLL_ANSWER_3 = PollAnswer("id_3", "French Fries")
         private val A_POLL_ANSWER_4 = PollAnswer("id_4", "Hamburger")
 
-        private val MY_USER_WINNING_VOTES = mapOf(
-            A_POLL_ANSWER_1 to listOf(A_USER_ID_2, A_USER_ID_3, A_USER_ID_4),
-            A_POLL_ANSWER_2 to listOf(A_USER_ID /* my vote */, A_USER_ID_5, A_USER_ID_6, A_USER_ID_7, A_USER_ID_8, A_USER_ID_9), // winner
-            A_POLL_ANSWER_3 to emptyList(),
-            A_POLL_ANSWER_4 to listOf(A_USER_ID_10),
+        private val MY_USER_WINNING_VOTES = persistentMapOf(
+            A_POLL_ANSWER_1 to persistentListOf(A_USER_ID_2, A_USER_ID_3, A_USER_ID_4),
+            A_POLL_ANSWER_2 to persistentListOf(A_USER_ID /* my vote */, A_USER_ID_5, A_USER_ID_6, A_USER_ID_7, A_USER_ID_8, A_USER_ID_9), // winner
+            A_POLL_ANSWER_3 to persistentListOf(),
+            A_POLL_ANSWER_4 to persistentListOf(A_USER_ID_10),
         )
-        private val OTHER_WINNING_VOTES = mapOf(
-            A_POLL_ANSWER_1 to listOf(A_USER_ID_2, A_USER_ID_3, A_USER_ID_4, A_USER_ID_5), // winner
-            A_POLL_ANSWER_2 to listOf(A_USER_ID /* my vote */, A_USER_ID_6),
-            A_POLL_ANSWER_3 to emptyList(),
-            A_POLL_ANSWER_4 to listOf(A_USER_ID_7, A_USER_ID_8, A_USER_ID_9, A_USER_ID_10), // winner
+        private val OTHER_WINNING_VOTES = persistentMapOf(
+            A_POLL_ANSWER_1 to persistentListOf(A_USER_ID_2, A_USER_ID_3, A_USER_ID_4, A_USER_ID_5), // winner
+            A_POLL_ANSWER_2 to persistentListOf(A_USER_ID /* my vote */, A_USER_ID_6),
+            A_POLL_ANSWER_3 to persistentListOf(),
+            A_POLL_ANSWER_4 to persistentListOf(A_USER_ID_7, A_USER_ID_8, A_USER_ID_9, A_USER_ID_10), // winner
         )
     }
 }

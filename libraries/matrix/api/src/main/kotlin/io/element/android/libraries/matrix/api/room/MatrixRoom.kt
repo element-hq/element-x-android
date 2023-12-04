@@ -132,6 +132,8 @@ interface MatrixRoom : Closeable {
 
     suspend fun canUserTriggerRoomNotification(userId: UserId): Result<Boolean>
 
+    suspend fun canUserJoinCall(userId: UserId): Result<Boolean>
+
     suspend fun updateAvatar(mimeType: String, data: ByteArray): Result<Unit>
 
     suspend fun removeAvatar(): Result<Unit>
@@ -237,6 +239,8 @@ interface MatrixRoom : Closeable {
      * @return The resulting [MatrixWidgetDriver], or a failure.
      */
     fun getWidgetDriver(widgetSettings: MatrixWidgetSettings): Result<MatrixWidgetDriver>
+
+    suspend fun pollHistory(): MatrixTimeline
 
     override fun close() = destroy()
 }

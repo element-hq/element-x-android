@@ -16,6 +16,9 @@
 
 package io.element.android.libraries.matrix.api.timeline.item.event
 
+import androidx.compose.runtime.Immutable
+
+@Immutable
 sealed interface OtherState {
     data object PolicyRuleRoom : OtherState
     data object PolicyRuleServer : OtherState

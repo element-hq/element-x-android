@@ -16,9 +16,8 @@
 
 package io.element.android.features.messages.impl.timeline.model.event
 
-import io.element.android.features.messages.impl.media.helper.formatFileExtensionAndSize
 import io.element.android.libraries.matrix.api.media.MediaSource
-import java.time.Duration
+import kotlin.time.Duration
 
 data class TimelineItemAudioContent(
     val body: String,
@@ -29,6 +28,10 @@ data class TimelineItemAudioContent(
     val fileExtension: String,
 ) : TimelineItemEventContent {
 
-    val fileExtensionAndSize = formatFileExtensionAndSize(fileExtension, formattedFileSize)
+    val fileExtensionAndSize =
+        io.element.android.libraries.mediaviewer.api.helper.formatFileExtensionAndSize(
+            fileExtension,
+            formattedFileSize
+        )
     override val type: String = "TimelineItemAudioContent"
 }

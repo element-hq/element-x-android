@@ -19,6 +19,7 @@ package io.element.android.libraries.matrix.api.permalink
 import android.net.Uri
 import android.net.UrlQuerySanitizer
 import io.element.android.libraries.matrix.api.core.MatrixPatterns
+import kotlinx.collections.immutable.toImmutableList
 import timber.log.Timber
 import java.net.URLDecoder
 
@@ -80,7 +81,7 @@ object PermalinkParser {
                     roomIdOrAlias = decodedIdentifier,
                     isRoomAlias = true,
                     eventId = extraParameter.takeIf { !it.isNullOrEmpty() && MatrixPatterns.isEventId(it) },
-                    viaParameters = viaQueryParameters
+                    viaParameters = viaQueryParameters.toImmutableList()
                 )
             }
             else -> PermalinkData.FallbackLink(uri, MatrixPatterns.isGroupId(identifier))
@@ -119,7 +120,7 @@ object PermalinkParser {
                 roomIdOrAlias = identifier,
                 isRoomAlias = false,
                 eventId = extraParameter.takeIf { !it.isNullOrEmpty() && MatrixPatterns.isEventId(it) },
-                viaParameters = viaQueryParameters
+                viaParameters = viaQueryParameters.toImmutableList()
             )
         }
     }

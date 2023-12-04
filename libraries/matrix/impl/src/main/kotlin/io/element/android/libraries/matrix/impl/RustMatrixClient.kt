@@ -77,6 +77,7 @@ import org.matrix.rustcomponents.sdk.BackupState
 import org.matrix.rustcomponents.sdk.Client
 import org.matrix.rustcomponents.sdk.ClientDelegate
 import org.matrix.rustcomponents.sdk.NotificationProcessSetup
+import org.matrix.rustcomponents.sdk.PowerLevels
 import org.matrix.rustcomponents.sdk.Room
 import org.matrix.rustcomponents.sdk.RoomListItem
 import org.matrix.rustcomponents.sdk.TaskHandle
@@ -214,6 +215,7 @@ class RustMatrixClient constructor(
                 isKeyBackupEnabled = client.encryption().backupState() == BackupState.ENABLED,
                 roomListItem = roomListItem,
                 innerRoom = fullRoom,
+                innerTimeline = fullRoom.timeline(),
                 roomNotificationSettingsService = notificationSettingsService,
                 sessionCoroutineScope = sessionCoroutineScope,
                 coroutineDispatchers = dispatchers,
@@ -239,9 +241,8 @@ class RustMatrixClient constructor(
         }
     }
 
-    override suspend fun findDM(userId: UserId): MatrixRoom? {
-        val roomId = client.getDmRoom(userId.value)?.use { RoomId(it.id()) }
-        return roomId?.let { getRoom(it) }
+    override suspend fun findDM(userId: UserId): RoomId? {
+        return client.getDmRoom(userId.value)?.use { RoomId(it.id()) }
     }
 
     override suspend fun ignoreUser(userId: UserId): Result<Unit> = withContext(sessionDispatcher) {
@@ -274,6 +275,7 @@ class RustMatrixClient constructor(
                 },
                 invite = createRoomParams.invite?.map { it.value },
                 avatar = createRoomParams.avatar,
+                powerLevelContentOverride = defaultRoomCreationPowerLevels,
             )
             val roomId = RoomId(client.createRoom(rustParams))
 
@@ -296,7 +298,7 @@ class RustMatrixClient constructor(
             isDirect = true,
             visibility = RoomVisibility.PRIVATE,
             preset = RoomPreset.TRUSTED_PRIVATE_CHAT,
-            invite = listOf(userId)
+            invite = listOf(userId),
         )
         return createRoom(createRoomParams)
     }
@@ -481,3 +483,18 @@ class RustMatrixClient constructor(
     }
 }
 
+private val defaultRoomCreationPowerLevels = PowerLevels(
+    usersDefault = null,
+    eventsDefault = null,
+    stateDefault = null,
+    ban = null,
+    kick = null,
+    redact = null,
+    invite = null,
+    notifications = null,
+    users = mapOf(),
+    events = mapOf(
+        "m.call.member" to 0,
+        "org.matrix.msc3401.call.member" to 0,
+    )
+)

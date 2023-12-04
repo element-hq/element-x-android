@@ -16,6 +16,7 @@
 
 package io.element.android.libraries.matrix.api.roomlist
 
+import androidx.compose.runtime.Immutable
 import kotlinx.coroutines.flow.StateFlow
 
 /**
@@ -25,6 +26,7 @@ import kotlinx.coroutines.flow.StateFlow
  */
 interface RoomListService {
 
+    @Immutable
     sealed interface State {
         data object Idle : State
         data object Running : State
@@ -32,16 +34,17 @@ interface RoomListService {
         data object Terminated : State
     }
 
+    @Immutable
     sealed interface SyncIndicator {
         data object Show : SyncIndicator
         data object Hide : SyncIndicator
     }
 
     /**
-     * returns a [RoomList] object of all rooms we want to display.
+     * returns a [DynamicRoomList] object of all rooms we want to display.
      * This will exclude some rooms like the invites, or spaces.
      */
-    val allRooms: RoomList
+    val allRooms: DynamicRoomList
 
     /**
      * returns a [RoomList] object of all invites.

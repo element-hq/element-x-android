@@ -65,7 +65,6 @@ fun RoomListInterface.loadingStateFlow(): Flow<RoomListLoadingState> =
 
 internal fun RoomListInterface.entriesFlow(
     pageSize: Int,
-    numberOfPages: Int,
     roomListDynamicEvents: Flow<RoomListDynamicEvents>,
     initialFilterKind: RoomListEntriesDynamicFilterKind
 ): Flow<List<RoomListEntriesUpdate>> =
@@ -84,9 +83,7 @@ internal fun RoomListInterface.entriesFlow(
                     controller.setFilter(controllerEvents.filter)
                 }
                 is RoomListDynamicEvents.LoadMore -> {
-                    repeat(numberOfPages) {
-                        controller.addOnePage()
-                    }
+                    controller.addOnePage()
                 }
                 is RoomListDynamicEvents.Reset -> {
                     controller.resetToOnePage()

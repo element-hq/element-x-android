@@ -16,7 +16,9 @@
 
 package io.element.android.features.messages.impl.timeline
 
+import io.element.android.features.messages.impl.timeline.components.receipt.aReadReceiptData
 import io.element.android.features.messages.impl.timeline.model.InReplyToDetails
+import io.element.android.features.messages.impl.timeline.model.NewEventState
 import io.element.android.features.messages.impl.timeline.model.ReadReceiptData
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.TimelineItemGroupPosition
@@ -53,7 +55,7 @@ fun aTimelineState(timelineItems: ImmutableList<TimelineItem> = persistentListOf
     ),
     highlightedEventId = null,
     userHasPermissionToSendMessage = true,
-    hasNewItems = false,
+    newEventState = NewEventState.None,
     sessionState = aSessionState(
         isSessionVerified = true,
         isKeyBackupEnabled = true,
@@ -186,17 +188,27 @@ internal fun aTimelineItemReadReceipts(): TimelineItemReadReceipts {
     )
 }
 
-fun aGroupedEvents(id: Long = 0): TimelineItem.GroupedEvents {
-    val event = aTimelineItemEvent(
+internal fun aGroupedEvents(id: Long = 0): TimelineItem.GroupedEvents {
+    val event1 = aTimelineItemEvent(
         isMine = true,
         content = aTimelineItemStateEventContent(),
-        groupPosition = TimelineItemGroupPosition.None
+        groupPosition = TimelineItemGroupPosition.None,
+        readReceiptState = TimelineItemReadReceipts(
+            receipts = listOf(aReadReceiptData(0)).toPersistentList(),
+        ),
     )
+    val event2 = aTimelineItemEvent(
+        isMine = true,
+        content = aTimelineItemStateEventContent(body = "Another state event"),
+        groupPosition = TimelineItemGroupPosition.None,
+        readReceiptState = TimelineItemReadReceipts(
+            receipts = listOf(aReadReceiptData(1)).toPersistentList(),
+        ),
+    )
+    val events = listOf(event1, event2)
     return TimelineItem.GroupedEvents(
         id = id.toString(),
-        events = listOf(
-            event,
-            event,
-        ).toImmutableList()
+        events = events.toImmutableList(),
+        aggregatedReadReceipts = events.flatMap { it.readReceiptState.receipts }.toImmutableList(),
     )
 }

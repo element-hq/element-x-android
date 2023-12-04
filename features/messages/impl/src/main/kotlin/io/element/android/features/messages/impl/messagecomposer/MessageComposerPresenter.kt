@@ -34,7 +34,6 @@ import androidx.media3.common.util.UnstableApi
 import im.vector.app.features.analytics.plan.Composer
 import io.element.android.features.messages.impl.attachments.Attachment
 import io.element.android.features.messages.impl.attachments.preview.error.sendAttachmentError
-import io.element.android.features.messages.impl.media.local.LocalMediaFactory
 import io.element.android.features.messages.impl.mentions.MentionSuggestion
 import io.element.android.features.messages.impl.mentions.MentionSuggestionsProcessor
 import io.element.android.libraries.architecture.Presenter
@@ -51,6 +50,7 @@ import io.element.android.libraries.matrix.api.room.Mention
 import io.element.android.libraries.matrix.api.user.CurrentSessionIdHolder
 import io.element.android.libraries.mediapickers.api.PickerProvider
 import io.element.android.libraries.mediaupload.api.MediaSender
+import io.element.android.libraries.mediaviewer.api.local.LocalMediaFactory
 import io.element.android.libraries.permissions.api.PermissionsEvents
 import io.element.android.libraries.permissions.api.PermissionsPresenter
 import io.element.android.libraries.textcomposer.model.Message
@@ -72,6 +72,7 @@ import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 import kotlin.coroutines.coroutineContext
 import kotlin.time.Duration.Companion.seconds
@@ -432,6 +433,7 @@ class MessageComposerPresenter @Inject constructor(
             attachmentState.value = AttachmentsState.None
         }
         .onFailure { cause ->
+            Timber.e(cause, "Failed to send attachment")
             attachmentState.value = AttachmentsState.None
             if (cause is CancellationException) {
                 throw cause

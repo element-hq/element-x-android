@@ -20,6 +20,7 @@ import io.element.android.libraries.matrix.api.poll.PollKind
 
 sealed interface CreatePollEvents {
     data object Save : CreatePollEvents
+    data class Delete(val confirmed: Boolean) : CreatePollEvents
     data class SetQuestion(val question: String) : CreatePollEvents
     data class SetAnswer(val index: Int, val text: String) : CreatePollEvents
     data object AddAnswer : CreatePollEvents

@@ -17,13 +17,14 @@
 package io.element.android.libraries.matrix.api.room
 
 import androidx.compose.runtime.Immutable
+import kotlinx.collections.immutable.ImmutableList
 
 @Immutable
 sealed interface MatrixRoomMembersState {
     data object Unknown : MatrixRoomMembersState
-    data class Pending(val prevRoomMembers: List<RoomMember>? = null) : MatrixRoomMembersState
-    data class Error(val failure: Throwable, val prevRoomMembers: List<RoomMember>? = null) : MatrixRoomMembersState
-    data class Ready(val roomMembers: List<RoomMember>) : MatrixRoomMembersState
+    data class Pending(val prevRoomMembers: ImmutableList<RoomMember>? = null) : MatrixRoomMembersState
+    data class Error(val failure: Throwable, val prevRoomMembers: ImmutableList<RoomMember>? = null) : MatrixRoomMembersState
+    data class Ready(val roomMembers: ImmutableList<RoomMember>) : MatrixRoomMembersState
 }
 
 fun MatrixRoomMembersState.roomMembers(): List<RoomMember>? {

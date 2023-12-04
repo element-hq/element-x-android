@@ -105,6 +105,7 @@ fun DependencyHandlerScope.allLibrariesImpl() {
     implementation(project(":libraries:cryptography:impl"))
     implementation(project(":libraries:voicerecorder:impl"))
     implementation(project(":libraries:mediaplayer:impl"))
+    implementation(project(":libraries:mediaviewer:impl"))
 }
 
 fun DependencyHandlerScope.allServicesImpl() {

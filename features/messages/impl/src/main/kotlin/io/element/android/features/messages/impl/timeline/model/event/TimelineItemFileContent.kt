@@ -16,8 +16,8 @@
 
 package io.element.android.features.messages.impl.timeline.model.event
 
-import io.element.android.features.messages.impl.media.helper.formatFileExtensionAndSize
 import io.element.android.libraries.matrix.api.media.MediaSource
+import io.element.android.libraries.mediaviewer.api.helper.formatFileExtensionAndSize
 
 data class TimelineItemFileContent(
     val body: String,

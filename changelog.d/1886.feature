@@ -1,0 +1,1 @@
+Confirm back navigation when editing a poll only if the poll was changed

@@ -88,6 +88,6 @@ sealed interface TimelineItem {
     data class GroupedEvents(
         val id: String,
         val events: ImmutableList<Event>,
+        val aggregatedReadReceipts: ImmutableList<ReadReceiptData>,
     ) : TimelineItem
-
 }

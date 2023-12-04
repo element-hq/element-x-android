@@ -16,6 +16,8 @@
 
 package io.element.android.libraries.matrix.api.verification
 
+import androidx.compose.runtime.Immutable
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 
@@ -75,6 +77,7 @@ interface SessionVerificationService {
 }
 
 /** Verification status of the current session. */
+@Immutable
 sealed interface SessionVerifiedStatus {
     /** Unknown status, we couldn't read the actual value from the SDK. */
     data object Unknown : SessionVerifiedStatus
@@ -87,6 +90,7 @@ sealed interface SessionVerifiedStatus {
 }
 
 /** States produced by the [SessionVerificationService]. */
+@Immutable
 sealed interface VerificationFlowState {
     /** Initial state. */
     data object Initial : VerificationFlowState
@@ -98,7 +102,7 @@ sealed interface VerificationFlowState {
     data object StartedSasVerification : VerificationFlowState
 
     /** Verification data for the SAS verification (emojis) received. */
-    data class ReceivedVerificationData(val emoji: List<VerificationEmoji>) : VerificationFlowState
+    data class ReceivedVerificationData(val emoji: ImmutableList<VerificationEmoji>) : VerificationFlowState
 
     /** Verification completed successfully. */
     data object Finished : VerificationFlowState

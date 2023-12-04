@@ -23,6 +23,11 @@ plugins {
 
 android {
     namespace = "io.element.android.features.messages.impl"
+    testOptions {
+        unitTests {
+            isIncludeAndroidResources = true
+        }
+    }
 }
 
 anvil {
@@ -48,6 +53,7 @@ dependencies {
     implementation(projects.libraries.dateformatter.api)
     implementation(projects.libraries.eventformatter.api)
     implementation(projects.libraries.mediapickers.api)
+    implementation(projects.libraries.mediaviewer.api)
     implementation(projects.libraries.featureflag.api)
     implementation(projects.libraries.mediaupload.api)
     implementation(projects.libraries.permissions.api)
@@ -87,7 +93,10 @@ dependencies {
     testImplementation(projects.libraries.textcomposer.test)
     testImplementation(projects.libraries.voicerecorder.test)
     testImplementation(projects.libraries.mediaplayer.test)
+    testImplementation(projects.libraries.mediaviewer.test)
     testImplementation(libs.test.mockk)
+    testImplementation(libs.test.junitext)
+    testImplementation(libs.test.robolectric)
 
     ksp(libs.showkase.processor)
 }

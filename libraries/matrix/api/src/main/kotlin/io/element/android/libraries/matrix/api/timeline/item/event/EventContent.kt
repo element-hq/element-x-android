@@ -16,11 +16,15 @@
 
 package io.element.android.libraries.matrix.api.timeline.item.event
 
+import androidx.compose.runtime.Immutable
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.media.ImageInfo
 import io.element.android.libraries.matrix.api.poll.PollAnswer
 import io.element.android.libraries.matrix.api.poll.PollKind
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.ImmutableMap
 
+@Immutable
 sealed interface EventContent
 
 data class MessageContent(
@@ -43,8 +47,8 @@ data class PollContent(
     val question: String,
     val kind: PollKind,
     val maxSelections: ULong,
-    val answers: List<PollAnswer>,
-    val votes: Map<String, List<UserId>>,
+    val answers: ImmutableList<PollAnswer>,
+    val votes: ImmutableMap<String, ImmutableList<UserId>>,
     val endTime: ULong?,
     val isEdited: Boolean,
 ) : EventContent
@@ -52,6 +56,8 @@ data class PollContent(
 data class UnableToDecryptContent(
     val data: Data
 ) : EventContent {
+
+    @Immutable
     sealed interface Data {
         data class OlmV1Curve25519AesSha2(
             val senderKey: String

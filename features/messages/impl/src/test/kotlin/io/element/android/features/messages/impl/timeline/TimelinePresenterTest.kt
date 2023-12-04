@@ -26,6 +26,7 @@ import io.element.android.features.messages.impl.FakeMessagesNavigator
 import io.element.android.features.messages.impl.fixtures.aMessageEvent
 import io.element.android.features.messages.impl.fixtures.aTimelineItemsFactory
 import io.element.android.features.messages.impl.timeline.factories.TimelineItemsFactory
+import io.element.android.features.messages.impl.timeline.model.NewEventState
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.session.SessionState
 import io.element.android.features.messages.impl.voicemessages.timeline.FakeRedactedVoiceMessageManager
@@ -36,6 +37,7 @@ import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.item.event.EventReaction
+import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
 import io.element.android.libraries.matrix.api.timeline.item.event.ReactionSender
 import io.element.android.libraries.matrix.api.timeline.item.virtual.VirtualTimelineItem
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
@@ -48,9 +50,12 @@ import io.element.android.libraries.matrix.test.verification.FakeSessionVerifica
 import io.element.android.libraries.matrix.ui.components.aMatrixUserList
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.tests.testutils.WarmUpRule
+import io.element.android.tests.testutils.awaitLastSequentialItem
 import io.element.android.tests.testutils.awaitWithLatch
+import io.element.android.tests.testutils.consumeItemsUntilPredicate
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import io.element.android.tests.testutils.waitForPredicate
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
@@ -187,28 +192,49 @@ class TimelinePresenterTest {
     }
 
     @Test
-    fun `present - covers hasNewItems scenarios`() = runTest {
+    fun `present - covers newEventState scenarios`() = runTest {
         val timeline = FakeMatrixTimeline()
         val presenter = createTimelinePresenter(timeline)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            assertThat(initialState.hasNewItems).isFalse()
+            assertThat(initialState.newEventState).isEqualTo(NewEventState.None)
             assertThat(initialState.timelineItems.size).isEqualTo(0)
             timeline.updateTimelineItems {
                 listOf(MatrixTimelineItem.Event(0, anEventTimelineItem(content = aMessageContent())))
             }
-            skipItems(1)
-            assertThat(awaitItem().timelineItems.size).isEqualTo(1)
+            consumeItemsUntilPredicate { it.timelineItems.size == 1 }
+            // Mimics sending a message, and assert newEventState is FromMe
             timeline.updateTimelineItems { items ->
-                items + listOf(MatrixTimelineItem.Event(1, anEventTimelineItem(content = aMessageContent())))
+                val event = anEventTimelineItem(content = aMessageContent(), localSendState = LocalEventSendState.Sent(AN_EVENT_ID))
+                items + listOf(MatrixTimelineItem.Event(1, event))
             }
-            skipItems(1)
-            assertThat(awaitItem().timelineItems.size).isEqualTo(2)
-            assertThat(awaitItem().hasNewItems).isTrue()
+            consumeItemsUntilPredicate { it.timelineItems.size == 2 }
+            awaitLastSequentialItem().also { state ->
+                assertThat(state.newEventState).isEqualTo(NewEventState.FromMe)
+            }
+            // Mimics receiving a message without clearing the previous FromMe
+            timeline.updateTimelineItems { items ->
+                val event = anEventTimelineItem(content = aMessageContent())
+                items + listOf(MatrixTimelineItem.Event(2, event))
+            }
+            consumeItemsUntilPredicate { it.timelineItems.size == 3 }
+
+            // Scroll to bottom to clear previous FromMe
             initialState.eventSink.invoke(TimelineEvents.OnScrollFinished(0))
-            assertThat(awaitItem().hasNewItems).isFalse()
+            awaitLastSequentialItem().also { state ->
+                assertThat(state.newEventState).isEqualTo(NewEventState.None)
+            }
+            // Mimics receiving a message and assert newEventState is FromOther
+            timeline.updateTimelineItems { items ->
+                val event = anEventTimelineItem(content = aMessageContent())
+                items + listOf(MatrixTimelineItem.Event(3, event))
+            }
+            consumeItemsUntilPredicate { it.timelineItems.size == 4 }
+            awaitLastSequentialItem().also { state ->
+                assertThat(state.newEventState).isEqualTo(NewEventState.FromOther)
+            }
             cancelAndIgnoreRemainingEvents()
         }
     }
@@ -221,7 +247,7 @@ class TimelinePresenterTest {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            assertThat(initialState.hasNewItems).isFalse()
+            assertThat(initialState.newEventState).isEqualTo(NewEventState.None)
             assertThat(initialState.timelineItems.size).isEqualTo(0)
             val now = Date().time
             val minuteInMillis = 60 * 1000
@@ -229,18 +255,18 @@ class TimelinePresenterTest {
             val (alice, bob, charlie) = aMatrixUserList().take(3).mapIndexed { i, user ->
                 ReactionSender(senderId = user.userId, timestamp = now + i * minuteInMillis)
             }
-            val oneReaction = listOf(
+            val oneReaction = persistentListOf(
                 EventReaction(
                     key = "❤️",
-                    senders = listOf(alice, charlie)
+                    senders = persistentListOf(alice, charlie)
                 ),
                 EventReaction(
                     key = "👍",
-                    senders = listOf(alice, bob)
+                    senders = persistentListOf(alice, bob)
                 ),
                 EventReaction(
                     key = "🐶",
-                    senders = listOf(charlie)
+                    senders = persistentListOf(charlie)
                 ),
             )
             timeline.updateTimelineItems {

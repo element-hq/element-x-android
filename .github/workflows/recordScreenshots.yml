@@ -33,13 +33,13 @@ jobs:
         with:
           persist-credentials: false
       - name: ☕️ Use JDK 17
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
           distribution: 'temurin' # See 'Supported distributions' for available options
           java-version: '17'
       # Add gradle cache, this should speed up the process
       - name: Configure gradle
-        uses: gradle/gradle-build-action@v2.9.0
+        uses: gradle/gradle-build-action@v2.10.0
         with:
           cache-read-only: ${{ github.ref != 'refs/heads/develop' }}
       - name: Record screenshots

@@ -26,7 +26,6 @@ import app.cash.turbine.ReceiveTurbine
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import im.vector.app.features.analytics.plan.Composer
-import io.element.android.features.messages.impl.media.FakeLocalMediaFactory
 import io.element.android.features.messages.impl.mentions.MentionSuggestion
 import io.element.android.features.messages.impl.messagecomposer.AttachmentsState
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerContextImpl
@@ -67,6 +66,7 @@ import io.element.android.libraries.mediaupload.api.MediaPreProcessor
 import io.element.android.libraries.mediaupload.api.MediaSender
 import io.element.android.libraries.mediaupload.api.MediaUploadInfo
 import io.element.android.libraries.mediaupload.test.FakeMediaPreProcessor
+import io.element.android.libraries.mediaviewer.test.FakeLocalMediaFactory
 import io.element.android.libraries.permissions.api.PermissionsPresenter
 import io.element.android.libraries.permissions.test.FakePermissionsPresenter
 import io.element.android.libraries.permissions.test.FakePermissionsPresenterFactory
@@ -78,11 +78,11 @@ import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.waitForPredicate
 import io.mockk.mockk
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
-import okhttp3.internal.immutableListOf
 import org.junit.Rule
 import org.junit.Test
 import uniffi.wysiwyg_composer.MentionsState
@@ -734,7 +734,7 @@ class MessageComposerPresenterTest {
             isOneToOne = false,
         ).apply {
             givenRoomMembersState(MatrixRoomMembersState.Ready(
-                immutableListOf(currentUser, invitedUser, bob, david),
+                persistentListOf(currentUser, invitedUser, bob, david),
             ))
             givenCanTriggerRoomNotification(Result.success(true))
         }
@@ -798,7 +798,7 @@ class MessageComposerPresenterTest {
             isOneToOne = true,
         ).apply {
             givenRoomMembersState(MatrixRoomMembersState.Ready(
-                immutableListOf(currentUser, invitedUser, bob, david),
+                persistentListOf(currentUser, invitedUser, bob, david),
             ))
             givenCanTriggerRoomNotification(Result.success(true))
         }

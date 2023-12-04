@@ -74,6 +74,7 @@ class RoomLoadedFlowNode @AssistedInject constructor(
 ), DaggerComponentOwner {
 
     interface Callback : Plugin {
+        fun onOpenRoom(roomId: RoomId)
         fun onForwardedToSingleRoom(roomId: RoomId)
         fun onOpenGlobalNotificationSettings()
     }
@@ -133,6 +134,10 @@ class RoomLoadedFlowNode @AssistedInject constructor(
         val callback = object : RoomDetailsEntryPoint.Callback {
             override fun onOpenGlobalNotificationSettings() {
                 callbacks.forEach { it.onOpenGlobalNotificationSettings() }
+            }
+
+            override fun onOpenRoom(roomId: RoomId) {
+                callbacks.forEach { it.onOpenRoom(roomId) }
             }
         }
         return roomDetailsEntryPoint.nodeBuilder(this, buildContext)

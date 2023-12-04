@@ -20,23 +20,19 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.SpaceId
 import io.element.android.libraries.matrix.api.core.ThreadId
-import io.element.android.services.appnavstate.api.NavigationState
-import io.element.android.services.appnavstate.api.AppNavigationStateService
 import io.element.android.services.appnavstate.api.AppNavigationState
+import io.element.android.services.appnavstate.api.AppNavigationStateService
+import io.element.android.services.appnavstate.api.NavigationState
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 
 class FakeAppNavigationStateService(
-    private val fakeAppNavigationState: MutableStateFlow<AppNavigationState> = MutableStateFlow(
+    override val appNavigationState: MutableStateFlow<AppNavigationState> = MutableStateFlow(
         AppNavigationState(
             navigationState = NavigationState.Root,
             isInForeground = true,
         )
     ),
 ) : AppNavigationStateService {
-
-    override val appNavigationState: StateFlow<AppNavigationState> = fakeAppNavigationState
-
     override fun onNavigateToSession(owner: String, sessionId: SessionId) = Unit
     override fun onLeavingSession(owner: String) = Unit
 

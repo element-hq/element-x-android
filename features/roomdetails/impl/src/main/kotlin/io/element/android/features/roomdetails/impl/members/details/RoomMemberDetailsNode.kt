@@ -17,6 +17,7 @@
 package io.element.android.features.roomdetails.impl.members.details
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import com.bumble.appyx.core.lifecycle.subscribe
@@ -29,9 +30,11 @@ import im.vector.app.features.analytics.plan.MobileScreen
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.features.roomdetails.impl.R
 import io.element.android.libraries.androidutils.system.startSharePlainTextIntent
+import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.di.RoomScope
+import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.permalink.PermalinkBuilder
 import io.element.android.services.analytics.api.AnalyticsService
@@ -46,11 +49,17 @@ class RoomMemberDetailsNode @AssistedInject constructor(
     presenterFactory: RoomMemberDetailsPresenter.Factory,
 ) : Node(buildContext, plugins = plugins) {
 
+    interface Callback : NodeInputs {
+        fun openAvatarPreview(username: String, avatarUrl: String)
+        fun onStartDM(roomId: RoomId)
+    }
+
     data class RoomMemberDetailsInput(
         val roomMemberId: UserId
     ) : NodeInputs
 
     private val inputs = inputs<RoomMemberDetailsInput>()
+    private val callback = inputs<Callback>()
     private val presenter = presenterFactory.create(inputs.roomMemberId)
 
     init {
@@ -79,12 +88,24 @@ class RoomMemberDetailsNode @AssistedInject constructor(
             }
         }
 
+        fun onStartDM(roomId: RoomId) {
+            callback.onStartDM(roomId)
+        }
+
         val state = presenter.present()
+
+        LaunchedEffect(state.startDmActionState) {
+            if (state.startDmActionState is Async.Success) {
+                onStartDM(state.startDmActionState.data)
+            }
+        }
         RoomMemberDetailsView(
             state = state,
             modifier = modifier,
             goBack = this::navigateUp,
-            onShareUser = ::onShareUser
+            onShareUser = ::onShareUser,
+            onDMStarted = ::onStartDM,
+            openAvatarPreview = callback::openAvatarPreview,
         )
     }
 }

@@ -59,6 +59,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.constraintlayout.compose.ConstrainScope
 import androidx.constraintlayout.compose.ConstraintLayout
+import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.messages.impl.timeline.TimelineEvents
 import io.element.android.features.messages.impl.timeline.aTimelineItemEvent
 import io.element.android.features.messages.impl.timeline.components.event.TimelineItemEventContentView
@@ -66,6 +67,7 @@ import io.element.android.features.messages.impl.timeline.components.event.toExt
 import io.element.android.features.messages.impl.timeline.components.receipt.ReadReceiptViewState
 import io.element.android.features.messages.impl.timeline.components.receipt.TimelineItemReadReceiptView
 import io.element.android.features.messages.impl.timeline.model.InReplyToDetails
+import io.element.android.features.messages.impl.timeline.model.InReplyToMetadata
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.TimelineItemGroupPosition
 import io.element.android.features.messages.impl.timeline.model.bubble.BubbleState
@@ -75,6 +77,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
+import io.element.android.features.messages.impl.timeline.model.metadata
 import io.element.android.libraries.designsystem.colors.AvatarColorsProvider
 import io.element.android.libraries.designsystem.components.EqualWidthColumn
 import io.element.android.libraries.designsystem.components.avatar.Avatar
@@ -89,18 +92,7 @@ import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
-import io.element.android.libraries.matrix.api.timeline.item.event.AudioMessageType
-import io.element.android.libraries.matrix.api.timeline.item.event.FileMessageType
-import io.element.android.libraries.matrix.api.timeline.item.event.ImageMessageType
-import io.element.android.libraries.matrix.api.timeline.item.event.LocationMessageType
-import io.element.android.libraries.matrix.api.timeline.item.event.MessageContent
-import io.element.android.libraries.matrix.api.timeline.item.event.PollContent
-import io.element.android.libraries.matrix.api.timeline.item.event.VideoMessageType
-import io.element.android.libraries.matrix.api.timeline.item.event.VoiceMessageType
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnail
-import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailInfo
-import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailType
-import io.element.android.compound.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.coroutines.launch
 import kotlin.math.abs
@@ -171,8 +163,6 @@ fun TimelineItemEventRow(
                                 state = state.draggableState,
                             ),
                         event = event,
-                        showReadReceipts = showReadReceipts,
-                        isLastOutgoingMessage = isLastOutgoingMessage,
                         isHighlighted = isHighlighted,
                         interactionSource = interactionSource,
                         onClick = onClick,
@@ -183,7 +173,6 @@ fun TimelineItemEventRow(
                         onReactionClicked = { emoji -> onReactionClick(emoji, event) },
                         onReactionLongClicked = { emoji -> onReactionLongClick(emoji, event) },
                         onMoreReactionsClicked = { onMoreReactionsClick(event) },
-                        onReadReceiptsClicked = { onReadReceiptClick(event) },
                         eventSink = eventSink,
                     )
                 }
@@ -191,8 +180,6 @@ fun TimelineItemEventRow(
         } else {
             TimelineItemEventRowContent(
                 event = event,
-                showReadReceipts = showReadReceipts,
-                isLastOutgoingMessage = isLastOutgoingMessage,
                 isHighlighted = isHighlighted,
                 interactionSource = interactionSource,
                 onClick = onClick,
@@ -203,10 +190,20 @@ fun TimelineItemEventRow(
                 onReactionClicked = { emoji -> onReactionClick(emoji, event) },
                 onReactionLongClicked = { emoji -> onReactionLongClick(emoji, event) },
                 onMoreReactionsClicked = { onMoreReactionsClick(event) },
-                onReadReceiptsClicked = { onReadReceiptClick(event) },
                 eventSink = eventSink,
             )
         }
+        // Read receipts / Send state
+        TimelineItemReadReceiptView(
+            state = ReadReceiptViewState(
+                sendState = event.localSendState,
+                isLastOutgoingMessage = isLastOutgoingMessage,
+                receipts = event.readReceiptState.receipts,
+            ),
+            showReadReceipts = showReadReceipts,
+            onReadReceiptsClicked = { onReadReceiptClick(event) },
+            modifier = Modifier.padding(top = 4.dp),
+        )
     }
 }
 
@@ -236,8 +233,6 @@ private fun SwipeSensitivity(
 @Composable
 private fun TimelineItemEventRowContent(
     event: TimelineItem.Event,
-    showReadReceipts: Boolean,
-    isLastOutgoingMessage: Boolean,
     isHighlighted: Boolean,
     interactionSource: MutableInteractionSource,
     onClick: () -> Unit,
@@ -246,7 +241,6 @@ private fun TimelineItemEventRowContent(
     inReplyToClicked: () -> Unit,
     onUserDataClicked: () -> Unit,
     onReactionClicked: (emoji: String) -> Unit,
-    onReadReceiptsClicked: () -> Unit,
     onReactionLongClicked: (emoji: String) -> Unit,
     onMoreReactionsClicked: (event: TimelineItem.Event) -> Unit,
     eventSink: (TimelineEvents) -> Unit,
@@ -267,7 +261,6 @@ private fun TimelineItemEventRowContent(
             sender,
             message,
             reactions,
-            readReceipts,
         ) = createRefs()
 
         // Sender
@@ -334,25 +327,6 @@ private fun TimelineItemEventRowContent(
                     .padding(start = if (event.isMine) 16.dp else 36.dp, end = 16.dp)
             )
         }
-
-        // Read receipts / Send state
-        TimelineItemReadReceiptView(
-            state = ReadReceiptViewState(
-                sendState = event.localSendState,
-                isLastOutgoingMessage = isLastOutgoingMessage,
-                receipts = event.readReceiptState.receipts,
-            ),
-            showReadReceipts = showReadReceipts,
-            onReadReceiptsClicked = onReadReceiptsClicked,
-            modifier = Modifier
-                .constrainAs(readReceipts) {
-                    if (event.reactionsState.reactions.isNotEmpty()) {
-                        top.linkTo(reactions.bottom, margin = 4.dp)
-                    } else {
-                        top.linkTo(message.bottom, margin = 4.dp)
-                    }
-                }
-        )
     }
 }
 
@@ -538,13 +512,10 @@ private fun MessageEventBubbleContent(
         }
         val inReplyTo = @Composable { inReplyTo: InReplyToDetails ->
             val senderName = inReplyTo.senderDisplayName ?: inReplyTo.senderId.value
-            val attachmentThumbnailInfo = attachmentThumbnailInfoForInReplyTo(inReplyTo)
-            val text = textForInReplyTo(inReplyTo)
             val topPadding = if (showThreadDecoration) 0.dp else 8.dp
             ReplyToContent(
                 senderName = senderName,
-                text = text,
-                attachmentThumbnailInfo = attachmentThumbnailInfo,
+                metadata = inReplyTo.metadata(),
                 modifier = Modifier
                     .padding(top = topPadding, start = 8.dp, end = 8.dp)
                     .clip(RoundedCornerShape(6.dp))
@@ -585,11 +556,10 @@ private fun MessageEventBubbleContent(
 @Composable
 private fun ReplyToContent(
     senderName: String,
-    text: String?,
-    attachmentThumbnailInfo: AttachmentThumbnailInfo?,
+    metadata: InReplyToMetadata?,
     modifier: Modifier = Modifier,
 ) {
-    val paddings = if (attachmentThumbnailInfo != null) {
+    val paddings = if (metadata is InReplyToMetadata.Thumbnail) {
         PaddingValues(start = 4.dp, end = 12.dp, top = 4.dp, bottom = 4.dp)
     } else {
         PaddingValues(horizontal = 12.dp, vertical = 4.dp)
@@ -599,9 +569,9 @@ private fun ReplyToContent(
             .background(MaterialTheme.colorScheme.surface)
             .padding(paddings)
     ) {
-        if (attachmentThumbnailInfo != null) {
+        if (metadata is InReplyToMetadata.Thumbnail) {
             AttachmentThumbnail(
-                info = attachmentThumbnailInfo,
+                info = metadata.attachmentThumbnailInfo,
                 backgroundColor = MaterialTheme.colorScheme.surfaceVariant,
                 modifier = Modifier
                     .size(36.dp)
@@ -619,7 +589,7 @@ private fun ReplyToContent(
                 overflow = TextOverflow.Ellipsis,
             )
             Text(
-                text = text.orEmpty(),
+                text = metadata?.text.orEmpty(),
                 style = ElementTheme.typography.fontBodyMdRegular,
                 textAlign = TextAlign.Start,
                 color = ElementTheme.materialColors.secondary,
@@ -627,60 +597,6 @@ private fun ReplyToContent(
                 overflow = TextOverflow.Ellipsis,
             )
         }
-    }
-}
-
-private fun attachmentThumbnailInfoForInReplyTo(inReplyTo: InReplyToDetails): AttachmentThumbnailInfo? {
-    return when (val eventContent = inReplyTo.eventContent) {
-        is MessageContent -> when (val type = eventContent.type) {
-            is ImageMessageType -> AttachmentThumbnailInfo(
-                thumbnailSource = type.info?.thumbnailSource ?: type.source,
-                textContent = eventContent.body,
-                type = AttachmentThumbnailType.Image,
-                blurHash = type.info?.blurhash,
-            )
-            is VideoMessageType -> AttachmentThumbnailInfo(
-                thumbnailSource = type.info?.thumbnailSource,
-                textContent = eventContent.body,
-                type = AttachmentThumbnailType.Video,
-                blurHash = type.info?.blurhash,
-            )
-            is FileMessageType -> AttachmentThumbnailInfo(
-                thumbnailSource = type.info?.thumbnailSource,
-                textContent = eventContent.body,
-                type = AttachmentThumbnailType.File,
-            )
-            is LocationMessageType -> AttachmentThumbnailInfo(
-                textContent = eventContent.body,
-                type = AttachmentThumbnailType.Location,
-            )
-            is AudioMessageType -> AttachmentThumbnailInfo(
-                textContent = eventContent.body,
-                type = AttachmentThumbnailType.Audio,
-            )
-            is VoiceMessageType -> AttachmentThumbnailInfo(
-                type = AttachmentThumbnailType.Voice,
-            )
-            else -> null
-        }
-        is PollContent -> AttachmentThumbnailInfo(
-            textContent = eventContent.question,
-            type = AttachmentThumbnailType.Poll,
-        )
-        else -> null
-    }
-}
-
-@Composable
-private fun textForInReplyTo(inReplyTo: InReplyToDetails): String {
-    return when (val eventContent = inReplyTo.eventContent) {
-        is MessageContent -> when (eventContent.type) {
-            is LocationMessageType -> stringResource(CommonStrings.common_shared_location)
-            is VoiceMessageType -> stringResource(CommonStrings.common_voice_message)
-            else -> inReplyTo.textContent ?: eventContent.body
-        }
-        is PollContent -> eventContent.question
-        else -> ""
     }
 }
 

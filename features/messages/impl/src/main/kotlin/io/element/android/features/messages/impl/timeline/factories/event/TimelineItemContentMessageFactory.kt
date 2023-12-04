@@ -27,7 +27,6 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVoiceContent
-import io.element.android.features.messages.impl.timeline.util.FileExtensionExtractor
 import io.element.android.libraries.androidutils.filesize.FileSizeFormatter
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.featureflag.api.FeatureFlagService
@@ -45,14 +44,15 @@ import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageTy
 import io.element.android.libraries.matrix.api.timeline.item.event.VideoMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.VoiceMessageType
 import io.element.android.libraries.matrix.ui.messages.toHtmlDocument
+import io.element.android.libraries.mediaviewer.api.util.FileExtensionExtractor
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
-import java.time.Duration
 import javax.inject.Inject
+import kotlin.time.Duration
 
 class TimelineItemContentMessageFactory @Inject constructor(
     private val fileSizeFormatter: FileSizeFormatter,
-    private val fileExtensionExtractor: FileExtensionExtractor,
+    private val fileExtensionExtractor: io.element.android.libraries.mediaviewer.api.util.FileExtensionExtractor,
     private val featureFlagService: FeatureFlagService,
 ) {
 
@@ -104,7 +104,7 @@ class TimelineItemContentMessageFactory @Inject constructor(
                     mimeType = messageType.info?.mimetype ?: MimeTypes.OctetStream,
                     width = messageType.info?.width?.toInt(),
                     height = messageType.info?.height?.toInt(),
-                    duration = messageType.info?.duration?.toMillis() ?: 0L,
+                    duration = messageType.info?.duration ?: Duration.ZERO,
                     blurHash = messageType.info?.blurhash,
                     aspectRatio = aspectRatio,
                     formattedFileSize = fileSizeFormatter.format(messageType.info?.size ?: 0),
