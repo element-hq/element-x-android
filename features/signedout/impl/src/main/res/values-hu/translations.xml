@@ -3,6 +3,5 @@
   <string name="screen_signed_out_reason_1">"Megváltoztatta a jelszavát egy másik munkamenetben"</string>
   <string name="screen_signed_out_reason_2">"Törölte a munkamenetet egy másik munkamenetből"</string>
   <string name="screen_signed_out_reason_3">"A kiszolgáló rendszergazdája érvénytelenítette a hozzáférését"</string>
-  <string name="screen_signed_out_subtitle">"Lehet, hogy az alább felsorolt okok egyike miatt lett kijelentkeztetve. Jelentkezzen be újra az Element használatának folytatásához."</string>
   <string name="screen_signed_out_title">"Kijelentkezett"</string>
 </resources>

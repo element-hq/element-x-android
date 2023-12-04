@@ -8,10 +8,6 @@
   <string name="emoji_picker_category_people">"Mosolyok és emberek"</string>
   <string name="emoji_picker_category_places">"Utazás és helyek"</string>
   <string name="emoji_picker_category_symbols">"Szimbólumok"</string>
-  <plurals name="room_timeline_state_changes">
-    <item quantity="%1$d szobaváltás">"one"</item>
-    <item quantity="%1$d szobaváltás">"other"</item>
-  </plurals>
   <string name="report_content_explanation">"Ez az üzenet jelentve lesz a Matrix-kiszolgáló rendszergazdájának. Nem fogja tudni elolvasni a titkosított üzeneteket."</string>
   <string name="report_content_hint">"A tartalom jelentésének oka"</string>
   <string name="room_timeline_beginning_of_room">"Ez a(z) %1$s kezdete."</string>
