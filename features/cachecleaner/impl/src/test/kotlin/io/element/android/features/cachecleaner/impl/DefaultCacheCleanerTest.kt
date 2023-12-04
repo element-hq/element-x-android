@@ -16,7 +16,7 @@
 
 package io.element.android.features.cachecleaner.impl
 
-import com.google.common.truth.Truth
+import com.google.common.truth.Truth.assertThat
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
@@ -46,9 +46,9 @@ class DefaultCacheCleanerTest {
         // Check the files are gone but the sub dirs are not.
         DefaultCacheCleaner.SUBDIRS_TO_CLEANUP.forEach {
             File(temporaryFolder.root, it).apply {
-                Truth.assertThat(exists()).isTrue()
-                Truth.assertThat(isDirectory).isTrue()
-                Truth.assertThat(listFiles()).isEmpty()
+                assertThat(exists()).isTrue()
+                assertThat(isDirectory).isTrue()
+                assertThat(listFiles()).isEmpty()
             }
         }
     }

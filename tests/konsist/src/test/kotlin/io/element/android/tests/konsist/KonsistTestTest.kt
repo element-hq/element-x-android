@@ -20,6 +20,8 @@ import com.lemonappdev.konsist.api.Konsist
 import com.lemonappdev.konsist.api.ext.list.modifierprovider.withoutOverrideModifier
 import com.lemonappdev.konsist.api.ext.list.withFunction
 import com.lemonappdev.konsist.api.ext.list.withReturnType
+import com.lemonappdev.konsist.api.ext.list.withoutName
+import com.lemonappdev.konsist.api.verify.assertFalse
 import com.lemonappdev.konsist.api.verify.assertTrue
 import org.junit.Test
 
@@ -44,6 +46,20 @@ class KonsistTestTest {
                 additionalMessage = "The function can also be named 'createPresenter'. To please Konsist in this case, just remove the return type."
             ) { functionDeclaration ->
                 functionDeclaration.name == "create${functionDeclaration.returnType?.name}"
+            }
+    }
+
+    @Test
+    fun `assertion methods must be imported`() {
+        Konsist
+            .scopeFromTest()
+            .functions()
+            // Exclude self
+            .withoutName("assertion methods must be imported")
+            .assertFalse(
+                additionalMessage = "Import methods from Truth, instead of using for instance Truth.assertThat(...)"
+            ) { functionDeclaration ->
+                functionDeclaration.text.contains("Truth.")
             }
     }
 }
