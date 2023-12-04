@@ -132,14 +132,14 @@ class SendLocationPresenterTest {
             val initialState = awaitItem()
             assertThat(initialState.permissionDialog).isEqualTo(SendLocationState.Dialog.None)
             assertThat(initialState.mode).isEqualTo(SendLocationState.Mode.PinLocation)
-            assertThat(initialState.hasLocationPermission).isEqualTo(false)
+            assertThat(initialState.hasLocationPermission).isFalse()
 
             // Click on the button to switch mode
             initialState.eventSink(SendLocationEvents.SwitchToMyLocationMode)
             val myLocationState = awaitItem()
             assertThat(myLocationState.permissionDialog).isEqualTo(SendLocationState.Dialog.PermissionDenied)
             assertThat(myLocationState.mode).isEqualTo(SendLocationState.Mode.PinLocation)
-            assertThat(myLocationState.hasLocationPermission).isEqualTo(false)
+            assertThat(myLocationState.hasLocationPermission).isFalse()
         }
     }
 
@@ -158,14 +158,14 @@ class SendLocationPresenterTest {
             val initialState = awaitItem()
             assertThat(initialState.permissionDialog).isEqualTo(SendLocationState.Dialog.None)
             assertThat(initialState.mode).isEqualTo(SendLocationState.Mode.PinLocation)
-            assertThat(initialState.hasLocationPermission).isEqualTo(false)
+            assertThat(initialState.hasLocationPermission).isFalse()
 
             // Click on the button to switch mode
             initialState.eventSink(SendLocationEvents.SwitchToMyLocationMode)
             val myLocationState = awaitItem()
             assertThat(myLocationState.permissionDialog).isEqualTo(SendLocationState.Dialog.PermissionRationale)
             assertThat(myLocationState.mode).isEqualTo(SendLocationState.Mode.PinLocation)
-            assertThat(myLocationState.hasLocationPermission).isEqualTo(false)
+            assertThat(myLocationState.hasLocationPermission).isFalse()
         }
     }
 
@@ -189,14 +189,14 @@ class SendLocationPresenterTest {
             val myLocationState = awaitItem()
             assertThat(myLocationState.permissionDialog).isEqualTo(SendLocationState.Dialog.PermissionRationale)
             assertThat(myLocationState.mode).isEqualTo(SendLocationState.Mode.PinLocation)
-            assertThat(myLocationState.hasLocationPermission).isEqualTo(false)
+            assertThat(myLocationState.hasLocationPermission).isFalse()
 
             // Dismiss the dialog
             myLocationState.eventSink(SendLocationEvents.DismissDialog)
             val dialogDismissedState = awaitItem()
             assertThat(dialogDismissedState.permissionDialog).isEqualTo(SendLocationState.Dialog.None)
             assertThat(dialogDismissedState.mode).isEqualTo(SendLocationState.Mode.PinLocation)
-            assertThat(dialogDismissedState.hasLocationPermission).isEqualTo(false)
+            assertThat(dialogDismissedState.hasLocationPermission).isFalse()
         }
     }
 
@@ -220,7 +220,7 @@ class SendLocationPresenterTest {
             val myLocationState = awaitItem()
             assertThat(myLocationState.permissionDialog).isEqualTo(SendLocationState.Dialog.PermissionRationale)
             assertThat(myLocationState.mode).isEqualTo(SendLocationState.Mode.PinLocation)
-            assertThat(myLocationState.hasLocationPermission).isEqualTo(false)
+            assertThat(myLocationState.hasLocationPermission).isFalse()
 
             // Continue the dialog sends permission request to the permissions presenter
             myLocationState.eventSink(SendLocationEvents.RequestPermissions)
@@ -248,14 +248,14 @@ class SendLocationPresenterTest {
             val myLocationState = awaitItem()
             assertThat(myLocationState.permissionDialog).isEqualTo(SendLocationState.Dialog.PermissionDenied)
             assertThat(myLocationState.mode).isEqualTo(SendLocationState.Mode.PinLocation)
-            assertThat(myLocationState.hasLocationPermission).isEqualTo(false)
+            assertThat(myLocationState.hasLocationPermission).isFalse()
 
             // Dismiss the dialog
             myLocationState.eventSink(SendLocationEvents.DismissDialog)
             val dialogDismissedState = awaitItem()
             assertThat(dialogDismissedState.permissionDialog).isEqualTo(SendLocationState.Dialog.None)
             assertThat(dialogDismissedState.mode).isEqualTo(SendLocationState.Mode.PinLocation)
-            assertThat(dialogDismissedState.hasLocationPermission).isEqualTo(false)
+            assertThat(dialogDismissedState.hasLocationPermission).isFalse()
         }
     }
 

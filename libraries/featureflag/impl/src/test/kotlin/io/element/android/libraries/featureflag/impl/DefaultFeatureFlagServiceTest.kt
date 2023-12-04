@@ -37,7 +37,7 @@ class DefaultFeatureFlagServiceTest {
     fun `given service without provider when set enabled feature is called then it returns false`() = runTest {
         val featureFlagService = DefaultFeatureFlagService(emptySet())
         val result = featureFlagService.setFeatureEnabled(FeatureFlags.LocationSharing, true)
-        assertThat(result).isEqualTo(false)
+        assertThat(result).isFalse()
     }
 
     @Test
@@ -56,7 +56,7 @@ class DefaultFeatureFlagServiceTest {
         featureFlagService.isFeatureEnabledFlow(FeatureFlags.LocationSharing).test {
             assertThat(awaitItem()).isEqualTo(true)
             featureFlagService.setFeatureEnabled(FeatureFlags.LocationSharing, false)
-            assertThat(awaitItem()).isEqualTo(false)
+            assertThat(awaitItem()).isFalse()
         }
     }
 

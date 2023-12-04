@@ -74,7 +74,7 @@ class PreferencesRootPresenterTest {
                 )
             )
             assertThat(loadedState.showDeveloperSettings).isEqualTo(true)
-            assertThat(loadedState.showAnalyticsSettings).isEqualTo(false)
+            assertThat(loadedState.showAnalyticsSettings).isFalse()
             assertThat(loadedState.accountManagementUrl).isNull()
             assertThat(loadedState.devicesManagementUrl).isNull()
         }

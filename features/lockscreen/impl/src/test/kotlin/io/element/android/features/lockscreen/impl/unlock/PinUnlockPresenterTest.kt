@@ -95,7 +95,7 @@ class PinUnlockPresenterTest {
             awaitLastSequentialItem().also { state ->
                 assertThat(state.remainingAttempts.dataOrNull()).isEqualTo(0)
                 assertThat(state.showSignOutPrompt).isEqualTo(true)
-                assertThat(state.isSignOutPromptCancellable).isEqualTo(false)
+                assertThat(state.isSignOutPromptCancellable).isFalse()
             }
         }
     }
@@ -117,7 +117,7 @@ class PinUnlockPresenterTest {
                 state.eventSink(PinUnlockEvents.ClearSignOutPrompt)
             }
             awaitLastSequentialItem().also { state ->
-                assertThat(state.showSignOutPrompt).isEqualTo(false)
+                assertThat(state.showSignOutPrompt).isFalse()
                 state.eventSink(PinUnlockEvents.OnForgetPin)
             }
             awaitLastSequentialItem().also { state ->

@@ -68,8 +68,8 @@ class ShowLocationPresenterTest {
             val initialState = awaitItem()
             assertThat(initialState.location).isEqualTo(location)
             assertThat(initialState.description).isEqualTo(A_DESCRIPTION)
-            assertThat(initialState.hasLocationPermission).isEqualTo(false)
-            assertThat(initialState.isTrackMyLocation).isEqualTo(false)
+            assertThat(initialState.hasLocationPermission).isFalse()
+            assertThat(initialState.isTrackMyLocation).isFalse()
         }
     }
 
@@ -88,8 +88,8 @@ class ShowLocationPresenterTest {
             val initialState = awaitItem()
             assertThat(initialState.location).isEqualTo(location)
             assertThat(initialState.description).isEqualTo(A_DESCRIPTION)
-            assertThat(initialState.hasLocationPermission).isEqualTo(false)
-            assertThat(initialState.isTrackMyLocation).isEqualTo(false)
+            assertThat(initialState.hasLocationPermission).isFalse()
+            assertThat(initialState.isTrackMyLocation).isFalse()
         }
     }
 
@@ -104,7 +104,7 @@ class ShowLocationPresenterTest {
             assertThat(initialState.location).isEqualTo(location)
             assertThat(initialState.description).isEqualTo(A_DESCRIPTION)
             assertThat(initialState.hasLocationPermission).isEqualTo(true)
-            assertThat(initialState.isTrackMyLocation).isEqualTo(false)
+            assertThat(initialState.isTrackMyLocation).isFalse()
         }
     }
 
@@ -119,7 +119,7 @@ class ShowLocationPresenterTest {
             assertThat(initialState.location).isEqualTo(location)
             assertThat(initialState.description).isEqualTo(A_DESCRIPTION)
             assertThat(initialState.hasLocationPermission).isEqualTo(true)
-            assertThat(initialState.isTrackMyLocation).isEqualTo(false)
+            assertThat(initialState.isTrackMyLocation).isFalse()
         }
     }
 
@@ -145,7 +145,7 @@ class ShowLocationPresenterTest {
         }.test {
             val initialState = awaitItem()
             assertThat(initialState.hasLocationPermission).isEqualTo(true)
-            assertThat(initialState.isTrackMyLocation).isEqualTo(false)
+            assertThat(initialState.isTrackMyLocation).isFalse()
 
             initialState.eventSink(ShowLocationEvents.TrackMyLocation(true))
             val trackMyLocationState = awaitItem()
@@ -159,7 +159,7 @@ class ShowLocationPresenterTest {
             initialState.eventSink(ShowLocationEvents.TrackMyLocation(false))
             val trackLocationDisabledState = awaitItem()
             assertThat(trackLocationDisabledState.permissionDialog).isEqualTo(ShowLocationState.Dialog.None)
-            assertThat(trackLocationDisabledState.isTrackMyLocation).isEqualTo(false)
+            assertThat(trackLocationDisabledState.isTrackMyLocation).isFalse()
             assertThat(trackLocationDisabledState.hasLocationPermission).isEqualTo(true)
         }
     }
@@ -183,15 +183,15 @@ class ShowLocationPresenterTest {
             initialState.eventSink(ShowLocationEvents.TrackMyLocation(true))
             val trackLocationState = awaitItem()
             assertThat(trackLocationState.permissionDialog).isEqualTo(ShowLocationState.Dialog.PermissionRationale)
-            assertThat(trackLocationState.isTrackMyLocation).isEqualTo(false)
-            assertThat(trackLocationState.hasLocationPermission).isEqualTo(false)
+            assertThat(trackLocationState.isTrackMyLocation).isFalse()
+            assertThat(trackLocationState.hasLocationPermission).isFalse()
 
             // Dismiss the dialog
             initialState.eventSink(ShowLocationEvents.DismissDialog)
             val dialogDismissedState = awaitItem()
             assertThat(dialogDismissedState.permissionDialog).isEqualTo(ShowLocationState.Dialog.None)
-            assertThat(dialogDismissedState.isTrackMyLocation).isEqualTo(false)
-            assertThat(dialogDismissedState.hasLocationPermission).isEqualTo(false)
+            assertThat(dialogDismissedState.isTrackMyLocation).isFalse()
+            assertThat(dialogDismissedState.hasLocationPermission).isFalse()
         }
     }
 
@@ -214,8 +214,8 @@ class ShowLocationPresenterTest {
             initialState.eventSink(ShowLocationEvents.TrackMyLocation(true))
             val trackLocationState = awaitItem()
             assertThat(trackLocationState.permissionDialog).isEqualTo(ShowLocationState.Dialog.PermissionRationale)
-            assertThat(trackLocationState.isTrackMyLocation).isEqualTo(false)
-            assertThat(trackLocationState.hasLocationPermission).isEqualTo(false)
+            assertThat(trackLocationState.isTrackMyLocation).isFalse()
+            assertThat(trackLocationState.hasLocationPermission).isFalse()
 
             // Continue the dialog sends permission request to the permissions presenter
             trackLocationState.eventSink(ShowLocationEvents.RequestPermissions)
@@ -242,15 +242,15 @@ class ShowLocationPresenterTest {
             initialState.eventSink(ShowLocationEvents.TrackMyLocation(true))
             val trackLocationState = awaitItem()
             assertThat(trackLocationState.permissionDialog).isEqualTo(ShowLocationState.Dialog.PermissionDenied)
-            assertThat(trackLocationState.isTrackMyLocation).isEqualTo(false)
-            assertThat(trackLocationState.hasLocationPermission).isEqualTo(false)
+            assertThat(trackLocationState.isTrackMyLocation).isFalse()
+            assertThat(trackLocationState.hasLocationPermission).isFalse()
 
             // Dismiss the dialog
             initialState.eventSink(ShowLocationEvents.DismissDialog)
             val dialogDismissedState = awaitItem()
             assertThat(dialogDismissedState.permissionDialog).isEqualTo(ShowLocationState.Dialog.None)
-            assertThat(dialogDismissedState.isTrackMyLocation).isEqualTo(false)
-            assertThat(dialogDismissedState.hasLocationPermission).isEqualTo(false)
+            assertThat(dialogDismissedState.isTrackMyLocation).isFalse()
+            assertThat(dialogDismissedState.hasLocationPermission).isFalse()
         }
     }
 
