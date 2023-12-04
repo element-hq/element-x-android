@@ -117,7 +117,7 @@ You can also have access to the aars through the [release](https://github.com/ma
 
 #### Build the SDK locally
 
-Easiest way: run the script [./tools/sdk/build_rust_sdk.sh](./tools/sdk/build_rust_sdk.sh) and just answer the questions.
+Easiest way: run the script [../tools/sdk/build_rust_sdk.sh](../tools/sdk/build_rust_sdk.sh) and just answer the questions.
 
 Legacy way:
 
