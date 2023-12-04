@@ -36,7 +36,7 @@ datetime = "0.4.1"
 serialization_json = "1.6.1"
 showkase = "1.0.2"
 appyx = "1.4.0"
-sqldelight = "2.0.0"
+sqldelight = "2.0.1"
 wysiwyg = "2.20.0"
 
 # DI
