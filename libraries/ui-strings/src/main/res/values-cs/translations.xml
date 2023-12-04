@@ -109,6 +109,7 @@
   <string name="common_dark">"Tmavé"</string>
   <string name="common_decryption_error">"Chyba dešifrování"</string>
   <string name="common_developer_options">"Možnosti pro vývojáře"</string>
+  <string name="common_direct_chat">"Přímý chat"</string>
   <string name="common_edited_suffix">"(upraveno)"</string>
   <string name="common_editing">"Úpravy"</string>
   <string name="common_emote">"* %1$s %2$s"</string>
@@ -130,7 +131,7 @@
   <string name="common_loading">"Načítání…"</string>
   <string name="common_message">"Zpráva"</string>
   <string name="common_message_actions">"Akce zprávy"</string>
-  <string name="common_message_layout">"Rozložení zprávy"</string>
+  <string name="common_message_layout">"Zobrazení zpráv"</string>
   <string name="common_message_removed">"Zpráva byla odstraněna"</string>
   <string name="common_modern">"Moderní"</string>
   <string name="common_mute">"Ztlumit"</string>

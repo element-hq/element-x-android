@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="crash_detection_dialog_content">"%1$s ist bei der letzten Nutzung abgestürzt. Möchtest du einen Absturzbericht mit uns teilen?"</string>
+  <string name="rageshake_detection_dialog_content">"Du scheinst das Telefon aus Frustration zu schütteln. Möchtest du den Bildschirm für den Fehlerbericht öffnen?"</string>
   <string name="settings_rageshake">"Rageshake"</string>
   <string name="settings_rageshake_detection_threshold">"Erkennungsschwelle"</string>
 </resources>

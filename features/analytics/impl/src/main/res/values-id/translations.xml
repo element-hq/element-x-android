@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_analytics_prompt_data_usage">"Kami tidak akan merekam atau memprofil data pribadi apa pun"</string>
+  <string name="screen_analytics_prompt_help_us_improve">"Bagikan data penggunaan anonim untuk membantu kami mengidentifikasi masalah."</string>
+  <string name="screen_analytics_prompt_read_terms">"Anda dapat membaca semua persyaratan kami %1$s."</string>
+  <string name="screen_analytics_prompt_read_terms_content_link">"di sini"</string>
+  <string name="screen_analytics_prompt_settings">"Anda dapat mematikan ini kapan saja"</string>
+  <string name="screen_analytics_prompt_third_party_sharing">"Kami tidak akan membagikan data Anda dengan pihak ketiga"</string>
+  <string name="screen_analytics_prompt_title">"Bantu sempurnakan %1$s"</string>
+</resources>

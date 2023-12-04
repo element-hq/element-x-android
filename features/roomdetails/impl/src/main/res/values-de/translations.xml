@@ -35,8 +35,10 @@
   <string name="screen_room_notification_settings_error_loading_settings">"Beim Laden der Benachrichtigungseinstellungen ist ein Fehler aufgetreten."</string>
   <string name="screen_room_notification_settings_error_restoring_default">"Fehler beim Wiederherstellen des Standardmodus. Bitte versuche es erneut."</string>
   <string name="screen_room_notification_settings_error_setting_mode">"Fehler beim Einstellen des Modus. Bitte versuche es erneut."</string>
+  <string name="screen_room_notification_settings_mentions_only_disclaimer">"Dein Homeserver unterstützt diese Option in verschlüsselten Räumen nicht. Du wirst in diesem Raum nicht benachrichtigt."</string>
   <string name="screen_room_notification_settings_mode_all_messages">"Alle Nachrichten"</string>
   <string name="screen_room_notification_settings_room_custom_settings_title">"Benachrichtige mich in diesem Raum bei"</string>
+  <string name="screen_start_chat_error_starting_chat">"Beim Versuch, einen Chat zu starten, ist ein Fehler aufgetreten"</string>
   <string name="screen_dm_details_block_alert_action">"Sperren"</string>
   <string name="screen_dm_details_block_alert_description">"Gesperrte Benutzer können dir keine Nachrichten senden und alle ihre Nachrichten werden ausgeblendet. Du kannst sie jederzeit entsperren."</string>
   <string name="screen_dm_details_block_user">"Benutzer sperren"</string>

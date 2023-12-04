@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="leave_room_alert_empty_subtitle">"Apakah Anda yakin ingin meninggalkan ruangan ini? Anda adalah orang satu-satunya di sini. Jika Anda pergi, tidak akan ada yang bisa bergabung di masa depan, termasuk Anda."</string>
+  <string name="leave_room_alert_private_subtitle">"Apakah Anda yakin ingin meninggalkan ruangan ini? Ruangan ini tidak umum dan Anda tidak akan dapat bergabung kembali tanpa undangan."</string>
+  <string name="leave_room_alert_subtitle">"Apakah Anda yakin ingin meninggalkan ruangan?"</string>
+</resources>
