@@ -284,7 +284,7 @@ class InReplyToMetadataKtTest {
             ).metadata()
         }.test {
             awaitItem().let {
-                assertThat(it).isEqualTo(null)
+                assertThat(it).isNull()
             }
         }
     }

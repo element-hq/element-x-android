@@ -98,4 +98,16 @@ class KonsistTestTest {
                 functionDeclaration.text.contains("isEqualTo(empty")
             }
     }
+
+    @Test
+    fun `use isNull() instead of isEqualTo(null)`() {
+        Konsist
+            .scopeFromTest()
+            .functions()
+            // Exclude self
+            .withoutName("use isNull() instead of isEqualTo(null)")
+            .assertFalse { functionDeclaration ->
+                functionDeclaration.text.contains("isEqualTo(null)")
+            }
+    }
 }

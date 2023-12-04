@@ -149,7 +149,7 @@ class DefaultVoiceMessagePlayerTest {
                 assertThat(it.isPlaying).isFalse()
                 assertThat(it.isEnded).isFalse()
                 assertThat(it.currentPosition).isEqualTo(0)
-                assertThat(it.duration).isEqualTo(null)
+                assertThat(it.duration).isNull()
             }
             matchReadyState(1_000L)
             player2.play()
@@ -177,7 +177,7 @@ class DefaultVoiceMessagePlayerTest {
                 assertThat(it.isPlaying).isFalse()
                 assertThat(it.isEnded).isFalse()
                 assertThat(it.currentPosition).isEqualTo(0)
-                assertThat(it.duration).isEqualTo(null)
+                assertThat(it.duration).isNull()
             }
             matchReadyState(1_000L)
             player1.play()
@@ -238,7 +238,7 @@ class DefaultVoiceMessagePlayerTest {
                 assertThat(it.isPlaying).isFalse()
                 assertThat(it.isEnded).isFalse()
                 assertThat(it.currentPosition).isEqualTo(2000)
-                assertThat(it.duration).isEqualTo(null)
+                assertThat(it.duration).isNull()
             }
             assertThat(player.prepare().isSuccess).isTrue()
             awaitItem().let {
@@ -300,7 +300,7 @@ private suspend fun TurbineTestContext<VoiceMessagePlayer.State>.matchInitialSta
         assertThat(it.isPlaying).isFalse()
         assertThat(it.isEnded).isFalse()
         assertThat(it.currentPosition).isEqualTo(0)
-        assertThat(it.duration).isEqualTo(null)
+        assertThat(it.duration).isNull()
     }
 }
 
