@@ -32,6 +32,7 @@ data class NotificationSettingsState(
         data class Valid(
             val atRoomNotificationsEnabled: Boolean,
             val callNotificationsEnabled: Boolean,
+            val inviteForMeNotificationsEnabled: Boolean,
             val defaultGroupNotificationMode: RoomNotificationMode?,
             val defaultOneToOneNotificationMode: RoomNotificationMode?,
         ) : MatrixSettings

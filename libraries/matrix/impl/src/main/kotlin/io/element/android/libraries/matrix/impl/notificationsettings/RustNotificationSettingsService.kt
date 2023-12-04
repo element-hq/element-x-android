@@ -124,6 +124,18 @@ class RustNotificationSettingsService(
         }
     }
 
+    override suspend fun isInviteForMeEnabled(): Result<Boolean> = withContext(dispatchers.io) {
+        runCatching {
+            notificationSettings.isInviteForMeEnabled()
+        }
+    }
+
+    override suspend fun setInviteForMeEnabled(enabled: Boolean): Result<Unit> = withContext(dispatchers.io) {
+        runCatching {
+            notificationSettings.setInviteForMeEnabled(enabled)
+        }
+    }
+
     override suspend fun getRoomsWithUserDefinedRules(): Result<List<String>> =
         runCatching {
             notificationSettings.getRoomsWithUserDefinedRules(enabled = true)

@@ -50,6 +50,7 @@ class NotificationSettingsPresenterTests {
             val valid = loadedState.matrixSettings as? NotificationSettingsState.MatrixSettings.Valid
             assertThat(valid?.atRoomNotificationsEnabled).isFalse()
             assertThat(valid?.callNotificationsEnabled).isFalse()
+            assertThat(valid?.inviteForMeNotificationsEnabled).isFalse()
             assertThat(valid?.defaultGroupNotificationMode).isEqualTo(RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY)
             assertThat(valid?.defaultOneToOneNotificationMode).isEqualTo(RoomNotificationMode.ALL_MESSAGES)
             cancelAndIgnoreRemainingEvents()
@@ -162,6 +163,28 @@ class NotificationSettingsPresenterTests {
             }.last()
             val updatedMatrixState = updatedState.matrixSettings as? NotificationSettingsState.MatrixSettings.Valid
             assertThat(updatedMatrixState?.callNotificationsEnabled).isTrue()
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - set invite for me notifications enabled`() = runTest {
+        val presenter = createNotificationSettingsPresenter()
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val loadedState = consumeItemsUntilPredicate {
+                (it.matrixSettings as? NotificationSettingsState.MatrixSettings.Valid)?.inviteForMeNotificationsEnabled == false
+            }.last()
+            val validMatrixState = loadedState.matrixSettings as? NotificationSettingsState.MatrixSettings.Valid
+            Truth.assertThat(validMatrixState?.inviteForMeNotificationsEnabled).isFalse()
+
+            loadedState.eventSink(NotificationSettingsEvents.SetInviteForMeNotificationsEnabled(true))
+            val updatedState = consumeItemsUntilPredicate {
+                (it.matrixSettings as? NotificationSettingsState.MatrixSettings.Valid)?.inviteForMeNotificationsEnabled == true
+            }.last()
+            val updatedMatrixState = updatedState.matrixSettings as? NotificationSettingsState.MatrixSettings.Valid
+            Truth.assertThat(updatedMatrixState?.inviteForMeNotificationsEnabled).isTrue()
             cancelAndIgnoreRemainingEvents()
         }
     }
