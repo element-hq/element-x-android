@@ -381,7 +381,7 @@ class MessageComposerPresenterTest {
             val initialState = awaitItem()
             assertThat(initialState.showAttachmentSourcePicker).isFalse()
             initialState.eventSink(MessageComposerEvents.AddAttachment)
-            assertThat(awaitItem().showAttachmentSourcePicker).isEqualTo(true)
+            assertThat(awaitItem().showAttachmentSourcePicker).isTrue()
         }
     }
 

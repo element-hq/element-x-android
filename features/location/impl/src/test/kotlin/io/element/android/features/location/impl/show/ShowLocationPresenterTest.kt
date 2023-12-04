@@ -103,7 +103,7 @@ class ShowLocationPresenterTest {
             val initialState = awaitItem()
             assertThat(initialState.location).isEqualTo(location)
             assertThat(initialState.description).isEqualTo(A_DESCRIPTION)
-            assertThat(initialState.hasLocationPermission).isEqualTo(true)
+            assertThat(initialState.hasLocationPermission).isTrue()
             assertThat(initialState.isTrackMyLocation).isFalse()
         }
     }
@@ -118,7 +118,7 @@ class ShowLocationPresenterTest {
             val initialState = awaitItem()
             assertThat(initialState.location).isEqualTo(location)
             assertThat(initialState.description).isEqualTo(A_DESCRIPTION)
-            assertThat(initialState.hasLocationPermission).isEqualTo(true)
+            assertThat(initialState.hasLocationPermission).isTrue()
             assertThat(initialState.isTrackMyLocation).isFalse()
         }
     }
@@ -144,7 +144,7 @@ class ShowLocationPresenterTest {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            assertThat(initialState.hasLocationPermission).isEqualTo(true)
+            assertThat(initialState.hasLocationPermission).isTrue()
             assertThat(initialState.isTrackMyLocation).isFalse()
 
             initialState.eventSink(ShowLocationEvents.TrackMyLocation(true))
@@ -152,15 +152,15 @@ class ShowLocationPresenterTest {
 
             delay(1)
 
-            assertThat(trackMyLocationState.hasLocationPermission).isEqualTo(true)
-            assertThat(trackMyLocationState.isTrackMyLocation).isEqualTo(true)
+            assertThat(trackMyLocationState.hasLocationPermission).isTrue()
+            assertThat(trackMyLocationState.isTrackMyLocation).isTrue()
 
             // Swipe the map to switch mode
             initialState.eventSink(ShowLocationEvents.TrackMyLocation(false))
             val trackLocationDisabledState = awaitItem()
             assertThat(trackLocationDisabledState.permissionDialog).isEqualTo(ShowLocationState.Dialog.None)
             assertThat(trackLocationDisabledState.isTrackMyLocation).isFalse()
-            assertThat(trackLocationDisabledState.hasLocationPermission).isEqualTo(true)
+            assertThat(trackLocationDisabledState.hasLocationPermission).isTrue()
         }
     }
 

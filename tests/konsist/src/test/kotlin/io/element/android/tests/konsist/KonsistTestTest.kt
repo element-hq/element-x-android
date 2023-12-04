@@ -74,4 +74,16 @@ class KonsistTestTest {
                 functionDeclaration.text.contains("isEqualTo(false)")
             }
     }
+
+    @Test
+    fun `use isTrue() instead of isEqualTo(true)`() {
+        Konsist
+            .scopeFromTest()
+            .functions()
+            // Exclude self
+            .withoutName("use isTrue() instead of isEqualTo(true)")
+            .assertFalse { functionDeclaration ->
+                functionDeclaration.text.contains("isEqualTo(true)")
+            }
+    }
 }

@@ -73,7 +73,7 @@ class PreferencesRootPresenterTest {
                     avatarUrl = AN_AVATAR_URL
                 )
             )
-            assertThat(loadedState.showDeveloperSettings).isEqualTo(true)
+            assertThat(loadedState.showDeveloperSettings).isTrue()
             assertThat(loadedState.showAnalyticsSettings).isFalse()
             assertThat(loadedState.accountManagementUrl).isNull()
             assertThat(loadedState.devicesManagementUrl).isNull()
