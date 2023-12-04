@@ -219,14 +219,6 @@
     <item quantity="one">"Olvasta: %1$s és még %2$d felhasználó"</item>
     <item quantity="other">"Olvasta: %1$s és még %2$d felhasználó"</item>
   </plurals>
-  <plurals name="common_member_count">
-    <item quantity="%1$d tag">"one"</item>
-    <item quantity="%1$d tag">"other"</item>
-  </plurals>
-  <plurals name="common_poll_votes_count">
-    <item quantity="%d szavazat">"one"</item>
-    <item quantity="%d szavazat">"other"</item>
-  </plurals>
   <string name="preference_rageshake">"Az eszköz rázása a hibajelentéshez"</string>
   <string name="screen_media_picker_error_failed_selection">"Nem sikerült kiválasztani a médiát, próbálja újra."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Nem sikerült feldolgozni a feltöltendő médiát, próbálja újra."</string>
