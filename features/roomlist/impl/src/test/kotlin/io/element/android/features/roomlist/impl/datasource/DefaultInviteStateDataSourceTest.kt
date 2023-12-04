@@ -19,7 +19,7 @@ package io.element.android.features.roomlist.impl.datasource
 import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
-import com.google.common.truth.Truth
+import com.google.common.truth.Truth.assertThat
 import io.element.android.features.invitelist.test.FakeSeenInvitesStore
 import io.element.android.features.roomlist.impl.InvitesState
 import io.element.android.libraries.matrix.test.A_ROOM_ID
@@ -43,7 +43,7 @@ internal class DefaultInviteStateDataSourceTest {
         moleculeFlow(RecompositionMode.Immediate) {
             dataSource.inviteState()
         }.test {
-            Truth.assertThat(awaitItem()).isEqualTo(InvitesState.NoInvites)
+            assertThat(awaitItem()).isEqualTo(InvitesState.NoInvites)
         }
     }
 
@@ -59,7 +59,7 @@ internal class DefaultInviteStateDataSourceTest {
             dataSource.inviteState()
         }.test {
             skipItems(1)
-            Truth.assertThat(awaitItem()).isEqualTo(InvitesState.NewInvites)
+            assertThat(awaitItem()).isEqualTo(InvitesState.NewInvites)
         }
     }
 
@@ -76,7 +76,7 @@ internal class DefaultInviteStateDataSourceTest {
             dataSource.inviteState()
         }.test {
             skipItems(1)
-            Truth.assertThat(awaitItem()).isEqualTo(InvitesState.NewInvites)
+            assertThat(awaitItem()).isEqualTo(InvitesState.NewInvites)
         }
     }
 
@@ -94,7 +94,7 @@ internal class DefaultInviteStateDataSourceTest {
         }.test {
             skipItems(1)
 
-            Truth.assertThat(awaitItem()).isEqualTo(InvitesState.SeenInvites)
+            assertThat(awaitItem()).isEqualTo(InvitesState.SeenInvites)
         }
     }
 
@@ -109,27 +109,27 @@ internal class DefaultInviteStateDataSourceTest {
             dataSource.inviteState()
         }.test {
             // Initially there are no invites
-            Truth.assertThat(awaitItem()).isEqualTo(InvitesState.NoInvites)
+            assertThat(awaitItem()).isEqualTo(InvitesState.NoInvites)
 
             // When a single invite is received, state should be NewInvites
             roomListService.postInviteRooms(listOf(aRoomSummaryFilled(roomId = A_ROOM_ID)))
             skipItems(1)
-            Truth.assertThat(awaitItem()).isEqualTo(InvitesState.NewInvites)
+            assertThat(awaitItem()).isEqualTo(InvitesState.NewInvites)
 
             // If that invite is marked as seen, then the state becomes SeenInvites
             seenStore.publishRoomIds(setOf(A_ROOM_ID))
             skipItems(1)
-            Truth.assertThat(awaitItem()).isEqualTo(InvitesState.SeenInvites)
+            assertThat(awaitItem()).isEqualTo(InvitesState.SeenInvites)
 
             // Another new invite resets it to NewInvites
             roomListService.postInviteRooms(listOf(aRoomSummaryFilled(roomId = A_ROOM_ID), aRoomSummaryFilled(roomId = A_ROOM_ID_2)))
             skipItems(1)
-            Truth.assertThat(awaitItem()).isEqualTo(InvitesState.NewInvites)
+            assertThat(awaitItem()).isEqualTo(InvitesState.NewInvites)
 
             // All of the invites going away reverts to NoInvites
             roomListService.postInviteRooms(emptyList())
             skipItems(1)
-            Truth.assertThat(awaitItem()).isEqualTo(InvitesState.NoInvites)
+            assertThat(awaitItem()).isEqualTo(InvitesState.NoInvites)
         }
     }
 }

@@ -16,7 +16,7 @@
 
 package io.element.android.features.messages.impl.voicemessages.timeline
 
-import com.google.common.truth.Truth
+import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
@@ -44,13 +44,13 @@ class RedactedVoiceMessageManagerTest {
         }
         val manager = aDefaultRedactedVoiceMessageManager(mediaPlayer = mediaPlayer)
 
-        Truth.assertThat(mediaPlayer.state.value.mediaId).isEqualTo(AN_EVENT_ID.value)
-        Truth.assertThat(mediaPlayer.state.value.isPlaying).isTrue()
+        assertThat(mediaPlayer.state.value.mediaId).isEqualTo(AN_EVENT_ID.value)
+        assertThat(mediaPlayer.state.value.isPlaying).isTrue()
 
         manager.onEachMatrixTimelineItem(aRedactedMatrixTimeline(AN_EVENT_ID_2))
 
-        Truth.assertThat(mediaPlayer.state.value.mediaId).isEqualTo(AN_EVENT_ID.value)
-        Truth.assertThat(mediaPlayer.state.value.isPlaying).isTrue()
+        assertThat(mediaPlayer.state.value.mediaId).isEqualTo(AN_EVENT_ID.value)
+        assertThat(mediaPlayer.state.value.isPlaying).isTrue()
     }
 
     @Test
@@ -61,13 +61,13 @@ class RedactedVoiceMessageManagerTest {
         }
         val manager = aDefaultRedactedVoiceMessageManager(mediaPlayer = mediaPlayer)
 
-        Truth.assertThat(mediaPlayer.state.value.mediaId).isEqualTo(AN_EVENT_ID.value)
-        Truth.assertThat(mediaPlayer.state.value.isPlaying).isTrue()
+        assertThat(mediaPlayer.state.value.mediaId).isEqualTo(AN_EVENT_ID.value)
+        assertThat(mediaPlayer.state.value.isPlaying).isTrue()
 
         manager.onEachMatrixTimelineItem(aRedactedMatrixTimeline(AN_EVENT_ID))
 
-        Truth.assertThat(mediaPlayer.state.value.mediaId).isEqualTo(AN_EVENT_ID.value)
-        Truth.assertThat(mediaPlayer.state.value.isPlaying).isFalse()
+        assertThat(mediaPlayer.state.value.mediaId).isEqualTo(AN_EVENT_ID.value)
+        assertThat(mediaPlayer.state.value.isPlaying).isFalse()
     }
 }
 

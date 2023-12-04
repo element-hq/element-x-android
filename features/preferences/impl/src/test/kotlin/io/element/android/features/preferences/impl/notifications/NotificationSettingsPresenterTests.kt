@@ -20,7 +20,7 @@ import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.element.android.libraries.pushstore.test.userpushstore.FakeUserPushStoreFactory
-import com.google.common.truth.Truth
+import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.test.A_THROWABLE
 import io.element.android.libraries.matrix.test.FakeMatrixClient
@@ -38,20 +38,20 @@ class NotificationSettingsPresenterTests {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            Truth.assertThat(initialState.appSettings.appNotificationsEnabled).isFalse()
-            Truth.assertThat(initialState.appSettings.systemNotificationsEnabled).isTrue()
-            Truth.assertThat(initialState.matrixSettings).isEqualTo(NotificationSettingsState.MatrixSettings.Uninitialized)
+            assertThat(initialState.appSettings.appNotificationsEnabled).isFalse()
+            assertThat(initialState.appSettings.systemNotificationsEnabled).isTrue()
+            assertThat(initialState.matrixSettings).isEqualTo(NotificationSettingsState.MatrixSettings.Uninitialized)
 
             val loadedState = consumeItemsUntilPredicate {
                 it.matrixSettings is NotificationSettingsState.MatrixSettings.Valid
             }.last()
-            Truth.assertThat(loadedState.appSettings.appNotificationsEnabled).isTrue()
-            Truth.assertThat(loadedState.appSettings.systemNotificationsEnabled).isTrue()
+            assertThat(loadedState.appSettings.appNotificationsEnabled).isTrue()
+            assertThat(loadedState.appSettings.systemNotificationsEnabled).isTrue()
             val valid = loadedState.matrixSettings as? NotificationSettingsState.MatrixSettings.Valid
-            Truth.assertThat(valid?.atRoomNotificationsEnabled).isFalse()
-            Truth.assertThat(valid?.callNotificationsEnabled).isFalse()
-            Truth.assertThat(valid?.defaultGroupNotificationMode).isEqualTo(RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY)
-            Truth.assertThat(valid?.defaultOneToOneNotificationMode).isEqualTo(RoomNotificationMode.ALL_MESSAGES)
+            assertThat(valid?.atRoomNotificationsEnabled).isFalse()
+            assertThat(valid?.callNotificationsEnabled).isFalse()
+            assertThat(valid?.defaultGroupNotificationMode).isEqualTo(RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY)
+            assertThat(valid?.defaultOneToOneNotificationMode).isEqualTo(RoomNotificationMode.ALL_MESSAGES)
             cancelAndIgnoreRemainingEvents()
         }
     }
@@ -71,7 +71,7 @@ class NotificationSettingsPresenterTests {
                     ?.defaultGroupNotificationMode == RoomNotificationMode.ALL_MESSAGES
             }.last()
             val valid = updatedState.matrixSettings as? NotificationSettingsState.MatrixSettings.Valid
-            Truth.assertThat(valid?.defaultGroupNotificationMode).isEqualTo(RoomNotificationMode.ALL_MESSAGES)
+            assertThat(valid?.defaultGroupNotificationMode).isEqualTo(RoomNotificationMode.ALL_MESSAGES)
         }
     }
 
@@ -96,7 +96,7 @@ class NotificationSettingsPresenterTests {
             val updatedState = consumeItemsUntilPredicate {
                 it.matrixSettings is NotificationSettingsState.MatrixSettings.Invalid
             }.last()
-            Truth.assertThat(updatedState.matrixSettings).isEqualTo(NotificationSettingsState.MatrixSettings.Invalid(fixFailed = false))
+            assertThat(updatedState.matrixSettings).isEqualTo(NotificationSettingsState.MatrixSettings.Invalid(fixFailed = false))
         }
     }
 
@@ -120,7 +120,7 @@ class NotificationSettingsPresenterTests {
             }.last()
 
             val fixedMatrixState = fixedState.matrixSettings as? NotificationSettingsState.MatrixSettings.Valid
-            Truth.assertThat(fixedMatrixState?.defaultGroupNotificationMode).isEqualTo(RoomNotificationMode.ALL_MESSAGES)
+            assertThat(fixedMatrixState?.defaultGroupNotificationMode).isEqualTo(RoomNotificationMode.ALL_MESSAGES)
         }
     }
 
@@ -133,13 +133,13 @@ class NotificationSettingsPresenterTests {
             val loadedState = consumeItemsUntilPredicate {
                 it.matrixSettings is NotificationSettingsState.MatrixSettings.Valid
             }.last()
-            Truth.assertThat(loadedState.appSettings.appNotificationsEnabled).isTrue()
+            assertThat(loadedState.appSettings.appNotificationsEnabled).isTrue()
 
             loadedState.eventSink(NotificationSettingsEvents.SetNotificationsEnabled(false))
             val updatedState = consumeItemsUntilPredicate {
                 !it.appSettings.appNotificationsEnabled
             }.last()
-            Truth.assertThat(updatedState.appSettings.appNotificationsEnabled).isFalse()
+            assertThat(updatedState.appSettings.appNotificationsEnabled).isFalse()
             cancelAndIgnoreRemainingEvents()
         }
     }
@@ -154,14 +154,14 @@ class NotificationSettingsPresenterTests {
                 (it.matrixSettings as? NotificationSettingsState.MatrixSettings.Valid)?.callNotificationsEnabled == false
             }.last()
             val validMatrixState = loadedState.matrixSettings as? NotificationSettingsState.MatrixSettings.Valid
-            Truth.assertThat(validMatrixState?.callNotificationsEnabled).isFalse()
+            assertThat(validMatrixState?.callNotificationsEnabled).isFalse()
 
             loadedState.eventSink(NotificationSettingsEvents.SetCallNotificationsEnabled(true))
             val updatedState = consumeItemsUntilPredicate {
                 (it.matrixSettings as? NotificationSettingsState.MatrixSettings.Valid)?.callNotificationsEnabled == true
             }.last()
             val updatedMatrixState = updatedState.matrixSettings as? NotificationSettingsState.MatrixSettings.Valid
-            Truth.assertThat(updatedMatrixState?.callNotificationsEnabled).isTrue()
+            assertThat(updatedMatrixState?.callNotificationsEnabled).isTrue()
             cancelAndIgnoreRemainingEvents()
         }
     }
@@ -176,14 +176,14 @@ class NotificationSettingsPresenterTests {
                 (it.matrixSettings as? NotificationSettingsState.MatrixSettings.Valid)?.atRoomNotificationsEnabled == false
             }.last()
             val validMatrixState = loadedState.matrixSettings as? NotificationSettingsState.MatrixSettings.Valid
-            Truth.assertThat(validMatrixState?.atRoomNotificationsEnabled).isFalse()
+            assertThat(validMatrixState?.atRoomNotificationsEnabled).isFalse()
 
             loadedState.eventSink(NotificationSettingsEvents.SetAtRoomNotificationsEnabled(true))
             val updatedState = consumeItemsUntilPredicate {
                 (it.matrixSettings as? NotificationSettingsState.MatrixSettings.Valid)?.atRoomNotificationsEnabled == true
             }.last()
             val updatedMatrixState = updatedState.matrixSettings as? NotificationSettingsState.MatrixSettings.Valid
-            Truth.assertThat(updatedMatrixState?.atRoomNotificationsEnabled).isTrue()
+            assertThat(updatedMatrixState?.atRoomNotificationsEnabled).isTrue()
             cancelAndIgnoreRemainingEvents()
         }
     }
@@ -200,19 +200,19 @@ class NotificationSettingsPresenterTests {
                 (it.matrixSettings as? NotificationSettingsState.MatrixSettings.Valid)?.atRoomNotificationsEnabled == false
             }.last()
             val validMatrixState = loadedState.matrixSettings as? NotificationSettingsState.MatrixSettings.Valid
-            Truth.assertThat(validMatrixState?.atRoomNotificationsEnabled).isFalse()
+            assertThat(validMatrixState?.atRoomNotificationsEnabled).isFalse()
 
             loadedState.eventSink(NotificationSettingsEvents.SetAtRoomNotificationsEnabled(true))
             val errorState = consumeItemsUntilPredicate {
                 it.changeNotificationSettingAction.isFailure()
             }.last()
-            Truth.assertThat(errorState.changeNotificationSettingAction.isFailure()).isTrue()
+            assertThat(errorState.changeNotificationSettingAction.isFailure()).isTrue()
             errorState.eventSink(NotificationSettingsEvents.ClearNotificationChangeError)
 
             val clearErrorState = consumeItemsUntilPredicate {
                 it.changeNotificationSettingAction.isUninitialized()
             }.last()
-            Truth.assertThat(clearErrorState.changeNotificationSettingAction.isUninitialized()).isTrue()
+            assertThat(clearErrorState.changeNotificationSettingAction.isUninitialized()).isTrue()
             cancelAndIgnoreRemainingEvents()
         }
     }

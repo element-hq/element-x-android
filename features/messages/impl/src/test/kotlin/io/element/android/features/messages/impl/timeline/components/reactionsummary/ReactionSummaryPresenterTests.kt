@@ -53,7 +53,7 @@ class ReactionSummaryPresenterTests {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            assertThat(initialState.target).isEqualTo(null)
+            assertThat(initialState.target).isNull()
 
             initialState.eventSink(summaryEvent)
             assertThat(awaitItem().target).isNotNull()
@@ -69,7 +69,7 @@ class ReactionSummaryPresenterTests {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            assertThat(initialState.target).isEqualTo(null)
+            assertThat(initialState.target).isNull()
 
             initialState.eventSink(summaryEvent)
             val reactions = awaitItem().target?.reactions

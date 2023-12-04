@@ -20,7 +20,7 @@ import android.os.Build
 import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
-import com.google.common.truth.Truth
+import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.permissions.api.PermissionStateProvider
 import io.element.android.libraries.permissions.api.PermissionsPresenter
 import io.element.android.libraries.permissions.impl.FakePermissionStateProvider
@@ -52,7 +52,7 @@ class NotificationsOptInPresenterTests {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            Truth.assertThat(initialState.notificationsPermissionState.showDialog).isFalse()
+            assertThat(initialState.notificationsPermissionState.showDialog).isFalse()
         }
     }
 
@@ -65,7 +65,7 @@ class NotificationsOptInPresenterTests {
         }.test {
             val initialState = awaitItem()
             initialState.eventSink(NotificationsOptInEvents.ContinueClicked)
-            Truth.assertThat(awaitItem().notificationsPermissionState.showDialog).isTrue()
+            assertThat(awaitItem().notificationsPermissionState.showDialog).isTrue()
         }
     }
 
@@ -80,7 +80,7 @@ class NotificationsOptInPresenterTests {
         }.test {
             val initialState = awaitItem()
             initialState.eventSink(NotificationsOptInEvents.ContinueClicked)
-            Truth.assertThat(isFinished).isTrue()
+            assertThat(isFinished).isTrue()
         }
     }
 
@@ -96,7 +96,7 @@ class NotificationsOptInPresenterTests {
         }.test {
             val initialState = awaitItem()
             initialState.eventSink(NotificationsOptInEvents.NotNowClicked)
-            Truth.assertThat(isFinished).isTrue()
+            assertThat(isFinished).isTrue()
         }
     }
 
@@ -122,7 +122,7 @@ class NotificationsOptInPresenterTests {
             val isPermissionDenied = runBlocking {
                 permissionStateProvider.isPermissionDenied("notifications").first()
             }
-            Truth.assertThat(isPermissionDenied).isTrue()
+            assertThat(isPermissionDenied).isTrue()
         }
     }
 

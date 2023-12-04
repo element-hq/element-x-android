@@ -16,7 +16,7 @@
 
 package io.element.android.features.messages.impl.voicemessages.timeline
 
-import com.google.common.truth.Truth
+import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.matrix.api.media.MatrixMediaLoader
 import io.element.android.libraries.matrix.api.media.MediaSource
@@ -43,10 +43,10 @@ class DefaultVoiceMessageMediaRepoTest {
         )
 
         repo.getMediaFile().let { result ->
-            Truth.assertThat(result.isSuccess).isTrue()
+            assertThat(result.isSuccess).isTrue()
             result.getOrThrow().let { file ->
-                Truth.assertThat(file.path).isEqualTo(temporaryFolder.cachedFilePath)
-                Truth.assertThat(file.exists()).isTrue()
+                assertThat(file.path).isEqualTo(temporaryFolder.cachedFilePath)
+                assertThat(file.exists()).isTrue()
             }
         }
     }
@@ -62,9 +62,9 @@ class DefaultVoiceMessageMediaRepoTest {
         )
 
         repo.getMediaFile().let { result ->
-            Truth.assertThat(result.isFailure).isTrue()
+            assertThat(result.isFailure).isTrue()
             result.exceptionOrNull()!!.let { exception ->
-                Truth.assertThat(exception).isInstanceOf(RuntimeException::class.java)
+                assertThat(exception).isInstanceOf(RuntimeException::class.java)
             }
         }
     }
@@ -87,9 +87,9 @@ class DefaultVoiceMessageMediaRepoTest {
         )
 
         repo.getMediaFile().let { result ->
-            Truth.assertThat(result.isFailure).isTrue()
+            assertThat(result.isFailure).isTrue()
             result.exceptionOrNull()?.let { exception ->
-                Truth.assertThat(exception).apply {
+                assertThat(exception).apply {
                     isInstanceOf(IllegalStateException::class.java)
                     hasMessageThat().isEqualTo("Failed to move file to cache.")
                 }
@@ -109,10 +109,10 @@ class DefaultVoiceMessageMediaRepoTest {
         )
 
         repo.getMediaFile().let { result ->
-            Truth.assertThat(result.isSuccess).isTrue()
+            assertThat(result.isSuccess).isTrue()
             result.getOrThrow().let { file ->
-                Truth.assertThat(file.path).isEqualTo(temporaryFolder.cachedFilePath)
-                Truth.assertThat(file.exists()).isTrue()
+                assertThat(file.path).isEqualTo(temporaryFolder.cachedFilePath)
+                assertThat(file.exists()).isTrue()
             }
         }
     }
@@ -124,10 +124,10 @@ class DefaultVoiceMessageMediaRepoTest {
             mxcUri = INVALID_MXC_URI,
         )
         repo.getMediaFile().let { result ->
-            Truth.assertThat(result.isFailure).isTrue()
+            assertThat(result.isFailure).isTrue()
             result.exceptionOrNull()!!.let { exception ->
-                Truth.assertThat(exception).isInstanceOf(RuntimeException::class.java)
-                Truth.assertThat(exception).hasMessageThat().isEqualTo("Invalid mxcUri.")
+                assertThat(exception).isInstanceOf(RuntimeException::class.java)
+                assertThat(exception).hasMessageThat().isEqualTo("Invalid mxcUri.")
             }
         }
     }
