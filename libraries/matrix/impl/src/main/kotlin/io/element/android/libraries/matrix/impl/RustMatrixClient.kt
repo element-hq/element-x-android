@@ -121,7 +121,7 @@ class RustMatrixClient constructor(
         }
     private val notificationService = RustNotificationService(sessionId, notificationClient, dispatchers, clock)
     private val notificationSettingsService = RustNotificationSettingsService(client, dispatchers)
-        .also { it.start() }
+        .apply { start() }
     private val roomSyncSubscriber = RoomSyncSubscriber(innerRoomListService, dispatchers)
     private val encryptionService = RustEncryptionService(
         client = client,
