@@ -109,7 +109,6 @@
   <string name="common_dark">"Dunkel"</string>
   <string name="common_decryption_error">"Dekodierungsfehler"</string>
   <string name="common_developer_options">"Entwickleroptionen"</string>
-  <string name="common_direct_chat">"Direkter Chat"</string>
   <string name="common_edited_suffix">"(bearbeitet)"</string>
   <string name="common_editing">"Bearbeitung"</string>
   <string name="common_emote">"* %1$s %2$s"</string>
@@ -146,7 +145,6 @@
   <string name="common_privacy_policy">"Datenschutz­erklärung"</string>
   <string name="common_reaction">"Reaktion"</string>
   <string name="common_reactions">"Reaktionen"</string>
-  <string name="common_recovery_key"><b>"Wiederherstellungsschlüssel"</b></string>
   <string name="common_refreshing">"Wird erneuert…"</string>
   <string name="common_replying_to">"%1$s antworten"</string>
   <string name="common_report_a_bug">"Einen Fehler melden"</string>
