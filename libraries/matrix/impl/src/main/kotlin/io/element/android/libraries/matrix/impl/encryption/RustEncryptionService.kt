@@ -179,7 +179,7 @@ internal class RustEncryptionService(
         }
     }
 
-    override suspend fun fixRecoveryIssues(recoveryKey: String): Result<Unit> = withContext(dispatchers.io) {
+    override suspend fun recover(recoveryKey: String): Result<Unit> = withContext(dispatchers.io) {
         runCatching {
             service.recover(recoveryKey)
         }
