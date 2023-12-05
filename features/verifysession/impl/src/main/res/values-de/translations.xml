@@ -9,6 +9,7 @@
   <string name="screen_session_verification_positive_button_canceled">"Verifizierung wiederholen"</string>
   <string name="screen_session_verification_positive_button_initial">"Ich bin bereit"</string>
   <string name="screen_session_verification_positive_button_verifying_ongoing">"Warten auf eine Übereinstimmung"</string>
+  <string name="screen_session_verification_ready_subtitle">"Vergleiche eine spezielle Reihe von Emojis."</string>
   <string name="screen_session_verification_request_accepted_subtitle">"Vergleiche die einzelnen Emojis und stelle sicher, dass sie in der gleichen Reihenfolge erscheinen."</string>
   <string name="screen_session_verification_they_dont_match">"Sie stimmen nicht überein"</string>
   <string name="screen_session_verification_they_match">"Sie stimmen überein"</string>

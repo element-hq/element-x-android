@@ -109,6 +109,7 @@
   <string name="common_dark">"Tmavý"</string>
   <string name="common_decryption_error">"Chyba dešifrovania"</string>
   <string name="common_developer_options">"Možnosti pre vývojárov"</string>
+  <string name="common_direct_chat">"Priama konverzácia"</string>
   <string name="common_edited_suffix">"(upravené)"</string>
   <string name="common_editing">"Upravuje sa"</string>
   <string name="common_emote">"* %1$s %2$s"</string>

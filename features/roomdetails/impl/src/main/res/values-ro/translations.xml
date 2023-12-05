@@ -37,6 +37,7 @@
   <string name="screen_room_notification_settings_error_setting_mode">"Nu s-a reușit setarea modului, vă rugăm să încercați din nou."</string>
   <string name="screen_room_notification_settings_mode_all_messages">"Toate mesajele"</string>
   <string name="screen_room_notification_settings_room_custom_settings_title">"În această cameră, anunțați-mă pentru"</string>
+  <string name="screen_start_chat_error_starting_chat">"A apărut o eroare la încercarea începerii conversației"</string>
   <string name="screen_dm_details_block_alert_action">"Blocați"</string>
   <string name="screen_dm_details_block_alert_description">"Utilizatorii blocați nu vă vor putea trimite mesaje și toate mesajele lor vor fi ascunse. Puteți anula această acțiune oricând."</string>
   <string name="screen_dm_details_block_user">"Blocați utilizatorul"</string>

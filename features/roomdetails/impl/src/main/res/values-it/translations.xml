@@ -8,6 +8,7 @@
   <string name="screen_room_details_encryption_enabled_title">"Crittografia messaggi abilitata"</string>
   <string name="screen_room_details_invite_people_title">"Invita persone"</string>
   <string name="screen_room_details_share_room_title">"Condividi stanza"</string>
+  <string name="screen_start_chat_error_starting_chat">"Si è verificato un errore durante il tentativo di avviare una chat"</string>
   <string name="screen_dm_details_block_alert_action">"Blocca"</string>
   <string name="screen_dm_details_block_alert_description">"Gli utenti bloccati non saranno in grado di inviarti nuovi messaggi e tutti quelli già esistenti saranno nascosti. Potrai annullare questa azione in qualsiasi momento."</string>
   <string name="screen_dm_details_block_user">"Blocca utente"</string>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_account_provider_change">"Ubah penyedia akun"</string>
+  <string name="screen_account_provider_form_hint">"Alamat homeserver"</string>
+  <string name="screen_account_provider_form_notice">"Masukkan istilah pencarian atau alamat domain."</string>
+  <string name="screen_account_provider_form_subtitle">"Cari perusahaan, komunitas, atau server pribadi."</string>
+  <string name="screen_account_provider_form_title">"Cari penyedia akun"</string>
+  <string name="screen_account_provider_signin_subtitle">"Di sinilah percakapan Anda akan berlangsung — sama seperti Anda menggunakan penyedia surel untuk menyimpan surel Anda."</string>
+  <string name="screen_account_provider_signin_title">"Anda akan masuk ke %s"</string>
+  <string name="screen_account_provider_signup_subtitle">"Di sinilah percakapan Anda akan berlangsung — sama seperti Anda menggunakan penyedia surel untuk menyimpan surel Anda."</string>
+  <string name="screen_account_provider_signup_title">"Anda akan membuat akun di %s"</string>
+  <string name="screen_change_account_provider_matrix_org_subtitle">"Matrix.org adalah server besar dan gratis di jaringan Matrix publik untuk komunikasi yang aman dan terdesentralisasi, disediakan oleh Yayasan Matrix.org."</string>
+  <string name="screen_change_account_provider_other">"Lainnya"</string>
+  <string name="screen_change_account_provider_subtitle">"Gunakan penyedia akun yang berbeda, seperti server pribadi Anda sendiri atau akun kerja."</string>
+  <string name="screen_change_account_provider_title">"Ubah penyedia akun"</string>
+  <string name="screen_change_server_error_invalid_homeserver">"Kami tidak dapat menjangkau server ini. Periksa apakah Anda telah memasukkan URL homeserver dengan benar. Jika URL sudah benar, hubungi administrator homeserver Anda untuk bantuan lebih lanjut."</string>
+  <string name="screen_change_server_error_no_sliding_sync_message">"Server ini saat ini tidak mendukung sinkronisasi geser."</string>
+  <string name="screen_change_server_form_header">"URL Homeserver"</string>
+  <string name="screen_change_server_form_notice">"Anda hanya dapat terhubung ke server yang ada yang mendukung sinkronisasi geser. Admin homeserver Anda perlu mengaturnya. %1$s"</string>
+  <string name="screen_change_server_subtitle">"Apa alamat server Anda?"</string>
+  <string name="screen_change_server_title">"Pilih server Anda"</string>
+  <string name="screen_login_error_deactivated_account">"Akun ini telah dinonaktifkan."</string>
+  <string name="screen_login_error_invalid_credentials">"Nama pengguna dan/atau kata sandi salah"</string>
+  <string name="screen_login_error_invalid_user_id">"Ini bukan pengenal pengguna yang valid. Format yang diharapkan: \'@pengguna:homeserver.org\'"</string>
+  <string name="screen_login_error_unsupported_authentication">"Homeserver yang dipilih tidak mendukung log masuk kata sandi atau OIDC. Silakan hubungi admin Anda atau pilih homeserver yang lain."</string>
+  <string name="screen_login_form_header">"Masukkan detail Anda"</string>
+  <string name="screen_login_title">"Selamat datang kembali!"</string>
+  <string name="screen_login_title_with_homeserver">"Masuk ke %1$s"</string>
+  <string name="screen_server_confirmation_change_server">"Ubah penyedia akun"</string>
+  <string name="screen_server_confirmation_message_login_element_dot_io">"Server pribadi untuk karyawan Element."</string>
+  <string name="screen_server_confirmation_message_login_matrix_dot_org">"Matrix adalah jaringan terbuka untuk komunikasi yang aman dan terdesentralisasi."</string>
+  <string name="screen_server_confirmation_message_register">"Di sinilah percakapan Anda akan berlangsung — sama seperti Anda menggunakan penyedia surel untuk menyimpan surel Anda."</string>
+  <string name="screen_server_confirmation_title_login">"Anda akan masuk ke %1$s"</string>
+  <string name="screen_server_confirmation_title_register">"Anda akan membuat akun di %1$s"</string>
+  <string name="screen_waitlist_message">"Ada permintaan tinggi untuk %1$s di %2$s saat ini. Kembalilah ke aplikasi dalam beberapa hari dan coba lagi.
+
+Terima kasih atas kesabaran Anda!"</string>
+  <string name="screen_waitlist_title">"Anda hampir selesai."</string>
+  <string name="screen_waitlist_title_success">"Anda sudah masuk."</string>
+  <string name="screen_login_subtitle">"Matrix adalah jaringan terbuka untuk komunikasi yang aman dan terdesentralisasi."</string>
+  <string name="screen_waitlist_message_success">"Selamat datang di %1$s!"</string>
+</resources>

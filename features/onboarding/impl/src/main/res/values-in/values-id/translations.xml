@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_onboarding_sign_in_manually">"Masuk secara manual"</string>
+  <string name="screen_onboarding_sign_in_with_qr_code">"Masuk dengan kode QR"</string>
+  <string name="screen_onboarding_sign_up">"Buat akun"</string>
+  <string name="screen_onboarding_welcome_message">"Selamat datang di Element tercepat yang pernah ada. Berdaya besar untuk kecepatan dan kesederhanaan."</string>
+  <string name="screen_onboarding_welcome_subtitle">"Selamat datang di %1$s. Berdaya penuh, untuk kecepatan dan kesederhanaan."</string>
+  <string name="screen_onboarding_welcome_title">"Berada di elemen Anda"</string>
+</resources>

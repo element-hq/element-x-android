@@ -46,6 +46,11 @@ if [[ $allFiles == 1 ]]; then
   find . -name 'translations.xml' -print0 -exec bash -c "echo \"\" >> \"{}\"" \; >> /dev/null
 fi
 
+echo "Renaming all the folders values-id to values-in..."
+set +e
+find . -type d -name 'values-id' -execdir mv {} values-in 2> /dev/null \;
+set -e
+
 echo "Removing the generated config"
 rm ./tools/localazy/localazy.json
 

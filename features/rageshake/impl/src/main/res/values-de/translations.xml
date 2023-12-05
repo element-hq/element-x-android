@@ -4,7 +4,7 @@
   <string name="screen_bug_report_contact_me">"Sie können mich kontaktieren, wenn Sie weitere Fragen haben."</string>
   <string name="screen_bug_report_contact_me_title">"Kontaktieren Sie mich"</string>
   <string name="screen_bug_report_edit_screenshot">"Bildschirmfoto bearbeiten"</string>
-  <string name="screen_bug_report_editor_description">"Bitte beschreibe den Fehler. Was hast du getan? Was hast du erwartet, was passiert? Was ist tatsächlich passiert. Bitte gehe so detailliert wie möglich vor."</string>
+  <string name="screen_bug_report_editor_description">"Bitte beschreibe den Fehler. Was hast du getan? Was hast du erwartet, was passiert? Was ist tatsächlich passiert? Bitte gehe so detailliert wie möglich vor."</string>
   <string name="screen_bug_report_editor_placeholder">"Beschreibe den Fehler…"</string>
   <string name="screen_bug_report_editor_supporting">"Wenn möglich, verfasse die Beschreibung bitte auf Englisch."</string>
   <string name="screen_bug_report_include_crash_logs">"Absturzprotokolle senden"</string>
