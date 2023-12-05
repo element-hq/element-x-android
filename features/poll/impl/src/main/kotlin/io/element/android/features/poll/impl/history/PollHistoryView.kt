@@ -16,27 +16,31 @@
 
 package io.element.android.features.poll.impl.history
 
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
-import io.element.android.features.poll.api.PollAnswerItem
-import io.element.android.features.poll.api.PollContentView
+import io.element.android.features.poll.api.pollcontent.PollContentView
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.aliasScreenTitle
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
+import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
-import io.element.android.libraries.matrix.api.poll.PollAnswer
-import kotlinx.collections.immutable.toImmutableList
+import io.element.android.libraries.matrix.api.core.EventId
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -70,34 +74,72 @@ fun PollHistoryView(
             if (state.paginationState.isBackPaginating) item {
                 CircularProgressIndicator()
             }
-            items(state.matrixTimelineItems) { pollContent ->
-                PollContentView(
-                    eventId = null,
-                    question = pollContent.question,
-                    answerItems = pollContent.answers.map {
-                        PollAnswerItem(
-                            answer = PollAnswer(
-                                id = it.id,
-                                text = it.text,
-                            ),
-                            isSelected = false,
-                            isEnabled = false,
-                            isWinner = false,
-                            isDisclosed = false,
-                            votesCount = 9393,
-                            percentage = 4.5f,
-                        )
-                    }.toImmutableList(),
-                    pollKind = pollContent.kind,
-                    isPollEditable = false,
-                    isPollEnded = false,
-                    isMine = false,
-                    onAnswerSelected = { _, _ -> },
-                    onPollEdit = {},
-                    onPollEnd = {},
+            itemsIndexed(state.pollItems) { index, pollHistoryItem ->
+                PollHistoryItemRow(
+                    pollHistoryItem = pollHistoryItem,
+                    onAnswerSelected = fun(pollStartId: EventId, answerId: String) {
+                        state.eventSink(PollHistoryEvents.PollAnswerSelected(pollStartId, answerId))
+                    },
+                    onPollEdit = {
+                        state.eventSink(PollHistoryEvents.EditPoll)
+                    },
+                    onPollEnd = {
+                        state.eventSink(PollHistoryEvents.PollEndClicked(it))
+                    },
                 )
+                if (index != state.pollItems.lastIndex) {
+                    HorizontalDivider()
+                }
             }
         }
+    }
+}
+
+@Composable
+private fun PollHistoryItemRow(
+    pollHistoryItem: PollHistoryItem,
+    onAnswerSelected: (pollStartId: EventId, answerId: String) -> Unit,
+    onPollEdit: (pollStartId: EventId) -> Unit,
+    onPollEnd: (pollStartId: EventId) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    when (pollHistoryItem) {
+        is PollHistoryItem.PollContent -> {
+            PollContentItemRow(
+                pollContentItem = pollHistoryItem,
+                onAnswerSelected = onAnswerSelected,
+                onPollEdit = onPollEdit,
+                onPollEnd = onPollEnd,
+                modifier = modifier.padding(
+                    horizontal = 16.dp,
+                    vertical = 24.dp
+                ),
+            )
+        }
+    }
+}
+
+@Composable
+private fun PollContentItemRow(
+    pollContentItem: PollHistoryItem.PollContent,
+    onAnswerSelected: (pollStartId: EventId, answerId: String) -> Unit,
+    onPollEdit: (pollStartId: EventId) -> Unit,
+    onPollEnd: (pollStartId: EventId) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Column(modifier = modifier) {
+        Text(
+            text = pollContentItem.formattedDate,
+            color = MaterialTheme.colorScheme.secondary,
+            style = ElementTheme.typography.fontBodySmRegular,
+        )
+        Spacer(modifier = Modifier.height(4.dp))
+        PollContentView(
+            state = pollContentItem.state,
+            onAnswerSelected = onAnswerSelected,
+            onPollEdit = onPollEdit,
+            onPollEnd = onPollEnd,
+        )
     }
 }
 

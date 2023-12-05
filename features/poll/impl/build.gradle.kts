@@ -40,6 +40,7 @@ dependencies {
     implementation(projects.libraries.designsystem)
     implementation(projects.services.analytics.api)
     implementation(projects.features.messages.api)
+    implementation(projects.libraries.dateformatter.api)
     implementation(projects.libraries.uiStrings)
 
     testImplementation(libs.test.junit)

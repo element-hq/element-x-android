@@ -22,7 +22,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import io.element.android.features.messages.impl.timeline.TimelineEvents
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemPollContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemPollContentProvider
-import io.element.android.features.poll.api.PollContentView
+import io.element.android.features.poll.api.pollcontent.PollContentView
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.matrix.api.core.EventId
@@ -31,8 +31,6 @@ import kotlinx.collections.immutable.toImmutableList
 @Composable
 fun TimelineItemPollView(
     content: TimelineItemPollContent,
-    isMine: Boolean,
-    isEditable: Boolean,
     eventSink: (TimelineEvents) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -54,8 +52,8 @@ fun TimelineItemPollView(
         answerItems = content.answerItems.toImmutableList(),
         pollKind = content.pollKind,
         isPollEnded = content.isEnded,
-        isPollEditable = isEditable,
-        isMine = isMine,
+        isPollEditable = content.isEditable,
+        isMine = content.isMine,
         onAnswerSelected = ::onAnswerSelected,
         onPollEdit = ::onPollEdit,
         onPollEnd = ::onPollEnd,
@@ -69,8 +67,6 @@ internal fun TimelineItemPollViewPreview(@PreviewParameter(TimelineItemPollConte
     ElementPreview {
         TimelineItemPollView(
             content = content,
-            isMine = false,
-            isEditable = false,
             eventSink = {},
         )
     }
@@ -81,8 +77,6 @@ internal fun TimelineItemPollCreatorViewPreview(@PreviewParameter(TimelineItemPo
     ElementPreview {
         TimelineItemPollView(
             content = content,
-            isMine = true,
-            isEditable = false,
             eventSink = {},
         )
     }

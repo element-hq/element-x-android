@@ -14,13 +14,11 @@
  * limitations under the License.
  */
 
-package io.element.android.features.poll.impl.history
+package io.element.android.features.poll.api.pollcontent
 
-import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
-import kotlinx.collections.immutable.ImmutableList
+import io.element.android.libraries.matrix.api.timeline.item.event.EventTimelineItem
+import io.element.android.libraries.matrix.api.timeline.item.event.PollContent
 
-data class PollHistoryState(
-    val paginationState: MatrixTimeline.PaginationState,
-    val pollItems: ImmutableList<PollHistoryItem>,
-    val eventSink: (PollHistoryEvents) -> Unit,
-)
+interface PollContentStateFactory {
+    suspend fun create(event: EventTimelineItem, content: PollContent): PollContentState
+}

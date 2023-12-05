@@ -17,22 +17,29 @@
 package io.element.android.features.poll.impl.history
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import io.element.android.features.poll.api.actions.EndPollAction
+import io.element.android.features.poll.api.actions.SendPollResponseAction
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
-import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
-import io.element.android.libraries.matrix.api.timeline.item.event.PollContent
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 
 class PollHistoryPresenter @AssistedInject constructor(
     @Assisted private val pollHistory: MatrixTimeline,
+    private val appCoroutineScope: CoroutineScope,
+    private val sendPollResponseAction: SendPollResponseAction,
+    private val endPollAction: EndPollAction,
+    private val pollHistoryItemFactory: PollHistoryItemsFactory,
 ) : Presenter<PollHistoryState> {
 
     @AssistedFactory
@@ -47,26 +54,36 @@ class PollHistoryPresenter @AssistedInject constructor(
         val paginationState by pollHistory.paginationState.collectAsState()
         val timelineItemsFlow = remember {
             pollHistory.timelineItems.map { items ->
-                items.filterIsInstance<MatrixTimelineItem.Event>()
-                    .map { it.event.content }
-                    .filterIsInstance<PollContent>()
-                    .reversed()
-            }.onEach {
-                if (it.isEmpty()) pollHistory.paginateBackwards(20, 50)
+                pollHistoryItemFactory.create(items)
             }
         }
         val items by timelineItemsFlow.collectAsState(initial = emptyList())
-
+        LaunchedEffect(items.size) {
+            if (items.isEmpty()) loadMore()
+        }
+        val coroutineScope = rememberCoroutineScope()
         fun handleEvents(event: PollHistoryEvents) {
             when (event) {
-                is PollHistoryEvents.History -> Unit // TODO which events to handle?
+                is PollHistoryEvents.LoadMore -> {
+                    coroutineScope.loadMore()
+                }
+                is PollHistoryEvents.PollAnswerSelected -> appCoroutineScope.launch {
+                    sendPollResponseAction.execute(pollStartId = event.pollStartId, answerId = event.answerId)
+                }
+                is PollHistoryEvents.PollEndClicked -> appCoroutineScope.launch {
+                    endPollAction.execute(pollStartId = event.pollStartId)
+                }
+                PollHistoryEvents.EditPoll -> Unit
             }
         }
-
         return PollHistoryState(
             paginationState = paginationState,
-            matrixTimelineItems = items.toImmutableList(),
+            pollItems = items.toImmutableList(),
             eventSink = ::handleEvents,
         )
+    }
+
+    private fun CoroutineScope.loadMore() = launch {
+        pollHistory.paginateBackwards(20, 3)
     }
 }

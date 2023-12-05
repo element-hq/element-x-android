@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.features.poll.api
+package io.element.android.features.poll.api.pollcontent
 
 import io.element.android.libraries.matrix.api.poll.PollAnswer
 

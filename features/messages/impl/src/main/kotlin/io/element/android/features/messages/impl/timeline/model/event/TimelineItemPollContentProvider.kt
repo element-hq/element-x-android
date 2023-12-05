@@ -17,9 +17,9 @@
 package io.element.android.features.messages.impl.timeline.model.event
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import io.element.android.features.poll.api.PollAnswerItem
-import io.element.android.features.poll.api.aPollAnswerItemList
-import io.element.android.features.poll.api.aPollQuestion
+import io.element.android.features.poll.api.pollcontent.aPollAnswerItemList
+import io.element.android.features.poll.api.pollcontent.aPollQuestion
+import io.element.android.features.poll.api.pollcontent.PollAnswerItem
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.poll.PollKind
 
@@ -28,12 +28,16 @@ open class TimelineItemPollContentProvider : PreviewParameterProvider<TimelineIt
         get() = sequenceOf(
             aTimelineItemPollContent(),
             aTimelineItemPollContent().copy(pollKind = PollKind.Undisclosed),
+            aTimelineItemPollContent().copy(isMine = true),
+            aTimelineItemPollContent().copy(isEditable = true),
         )
 }
 
 fun aTimelineItemPollContent(
     question: String = aPollQuestion(),
     answerItems: List<PollAnswerItem> = aPollAnswerItemList(),
+    isMine: Boolean = false,
+    isEditable: Boolean = false,
     isEnded: Boolean = false,
 ): TimelineItemPollContent {
     return TimelineItemPollContent(
@@ -41,6 +45,8 @@ fun aTimelineItemPollContent(
         pollKind = PollKind.Disclosed,
         question = question,
         answerItems = answerItems,
+        isMine = isMine,
+        isEditable = isEditable,
         isEnded = isEnded,
     )
 }

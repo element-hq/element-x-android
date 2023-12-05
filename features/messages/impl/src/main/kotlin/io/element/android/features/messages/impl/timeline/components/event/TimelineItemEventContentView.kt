@@ -41,8 +41,6 @@ import io.element.android.libraries.architecture.Presenter
 @Composable
 fun TimelineItemEventContentView(
     content: TimelineItemEventContent,
-    isMine: Boolean,
-    isEditable: Boolean,
     interactionSource: MutableInteractionSource,
     extraPadding: ExtraPadding,
     onClick: () -> Unit,
@@ -103,8 +101,6 @@ fun TimelineItemEventContentView(
         )
         is TimelineItemPollContent -> TimelineItemPollView(
             content = content,
-            isMine = isMine,
-            isEditable = isEditable,
             eventSink = eventSink,
             modifier = modifier,
         )

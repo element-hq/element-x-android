@@ -517,12 +517,10 @@ private fun MessageEventBubbleContent(
             ) {
                 TimelineItemEventContentView(
                     content = event.content,
-                    isMine = event.isMine,
-                    isEditable = event.isEditable,
                     interactionSource = interactionSource,
+                    extraPadding = event.toExtraPadding(),
                     onClick = onMessageClick,
                     onLongClick = onMessageLongClick,
-                    extraPadding = event.toExtraPadding(),
                     eventSink = eventSink,
                     modifier = contentModifier,
                 )
