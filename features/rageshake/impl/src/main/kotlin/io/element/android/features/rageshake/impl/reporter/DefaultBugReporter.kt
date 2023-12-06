@@ -82,11 +82,11 @@ class DefaultBugReporter @Inject constructor(
         private const val LOG_CAT_FILENAME = "logcat.log"
         private const val LOG_DIRECTORY_NAME = "logs"
         private const val BUFFER_SIZE = 1024 * 1024 * 50
+        var currentTracingFilter: String? = null
     }
 
     // the pending bug report call
     private var bugReportCall: Call? = null
-
     // boolean to cancel the bug report
     private val isCancelled = false
     private val logcatCommandDebug = arrayOf("logcat", "-d", "-v", "threadtime", "*:*")
@@ -153,6 +153,9 @@ class DefaultBugReporter @Inject constructor(
                         .addFormDataPart("device_id", deviceId)
                         .addFormDataPart("device", Build.MODEL.trim())
                         .addFormDataPart("locale", Locale.getDefault().toString())
+                    currentTracingFilter?.let {
+                        builder.addFormDataPart("tracing_filter", it)
+                    }
 
                     // add the gzipped files, don't cancel the whole upload if only some file failed to upload
                     var uploadedSomeLogs = false
@@ -321,6 +324,10 @@ class DefaultBugReporter @Inject constructor(
             // delete the log files older than 1 day, except the most recent one
             deleteOldLogFiles(systemClock.epochMillis() - DAY_IN_MILLIS)
         }
+    }
+
+    override fun setCurrentTracingFilter(tracingFilter: String) {
+        currentTracingFilter = tracingFilter
     }
 
     /**

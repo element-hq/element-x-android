@@ -47,4 +47,9 @@ interface BugReporter {
      * Provide the log directory.
      */
     fun logDirectory(): File
+
+    /**
+     * Set the current tracing filter.
+     */
+    fun setCurrentTracingFilter(tracingFilter: String)
 }
