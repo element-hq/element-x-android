@@ -23,6 +23,7 @@ fun StateEventType.map(): RustStateEventType = when (this) {
     StateEventType.POLICY_RULE_ROOM -> RustStateEventType.POLICY_RULE_ROOM
     StateEventType.POLICY_RULE_SERVER -> RustStateEventType.POLICY_RULE_SERVER
     StateEventType.POLICY_RULE_USER -> RustStateEventType.POLICY_RULE_USER
+    StateEventType.CALL_MEMBER -> RustStateEventType.CALL_MEMBER
     StateEventType.ROOM_ALIASES -> RustStateEventType.ROOM_ALIASES
     StateEventType.ROOM_AVATAR -> RustStateEventType.ROOM_AVATAR
     StateEventType.ROOM_CANONICAL_ALIAS -> RustStateEventType.ROOM_CANONICAL_ALIAS
@@ -47,6 +48,7 @@ fun RustStateEventType.map(): StateEventType = when (this) {
     RustStateEventType.POLICY_RULE_ROOM -> StateEventType.POLICY_RULE_ROOM
     RustStateEventType.POLICY_RULE_SERVER -> StateEventType.POLICY_RULE_SERVER
     RustStateEventType.POLICY_RULE_USER -> StateEventType.POLICY_RULE_USER
+    RustStateEventType.CALL_MEMBER -> StateEventType.CALL_MEMBER
     RustStateEventType.ROOM_ALIASES -> StateEventType.ROOM_ALIASES
     RustStateEventType.ROOM_AVATAR -> StateEventType.ROOM_AVATAR
     RustStateEventType.ROOM_CANONICAL_ALIAS -> StateEventType.ROOM_CANONICAL_ALIAS
