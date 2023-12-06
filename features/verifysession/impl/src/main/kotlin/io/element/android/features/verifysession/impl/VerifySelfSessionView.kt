@@ -41,8 +41,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
-import io.element.android.features.verifysession.impl.emoji.toEmojiDrawableRes
-import io.element.android.features.verifysession.impl.emoji.toEmojiStringRes
+import io.element.android.features.verifysession.impl.emoji.toEmojiResource
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.designsystem.atomic.molecules.ButtonColumnMolecule
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
@@ -161,15 +160,16 @@ private fun ContentVerifying(verificationFlowStep: FlowStep.Verifying, modifier:
 
 @Composable
 private fun EmojiItemView(emoji: VerificationEmoji, modifier: Modifier = Modifier) {
+    val emojiResource = emoji.code.toEmojiResource()
     Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = modifier) {
         Image(
             modifier = Modifier.size(48.dp),
-            painter = painterResource(id = emoji.code.toEmojiDrawableRes()),
+            painter = painterResource(id = emojiResource.drawableRes),
             contentDescription = null,
         )
         Spacer(modifier = Modifier.height(16.dp))
         Text(
-            text = stringResource(id = emoji.code.toEmojiStringRes()),
+            text = stringResource(id = emojiResource.nameRes),
             style = ElementTheme.typography.fontBodyMdRegular,
             color = MaterialTheme.colorScheme.secondary,
             maxLines = 1,
