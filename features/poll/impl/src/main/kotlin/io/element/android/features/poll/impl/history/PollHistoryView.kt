@@ -16,28 +16,37 @@
 
 package io.element.android.features.poll.impl.history
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.poll.api.pollcontent.PollContentView
+import io.element.android.features.poll.impl.history.model.PollHistoryFilter
+import io.element.android.features.poll.impl.history.model.PollHistoryItem
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.aliasScreenTitle
-import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
-import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
+import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.Scaffold
+import io.element.android.libraries.designsystem.theme.components.SegmentedButton
+import io.element.android.libraries.designsystem.theme.components.Surface
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.matrix.api.core.EventId
@@ -64,32 +73,81 @@ fun PollHistoryView(
                 },
             )
         },
-    ) { paddingValues ->
-        LazyColumn(
+    ) { padding ->
+        Column(
             modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues),
-            reverseLayout = false,
+                .padding(padding)
+                .consumeWindowInsets(padding)
         ) {
-            if (state.paginationState.isBackPaginating) item {
-                CircularProgressIndicator()
-            }
-            itemsIndexed(state.pollItems) { index, pollHistoryItem ->
-                PollHistoryItemRow(
-                    pollHistoryItem = pollHistoryItem,
-                    onAnswerSelected = fun(pollStartId: EventId, answerId: String) {
-                        state.eventSink(PollHistoryEvents.PollAnswerSelected(pollStartId, answerId))
+            PollHistoryFilterButtons(
+                activeFilter = state.activeFilter,
+                onFilterSelected = { state.eventSink(PollHistoryEvents.OnFilterSelected(it)) },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 8.dp),
+            )
+            PollHistoryList(
+                state = state,
+                modifier = Modifier.fillMaxSize()
+            )
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun PollHistoryFilterButtons(
+    activeFilter: PollHistoryFilter,
+    onFilterSelected: (PollHistoryFilter) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    SingleChoiceSegmentedButtonRow(modifier = modifier) {
+        PollHistoryFilter.entries.forEach { filter ->
+            SegmentedButton(
+                index = filter.ordinal,
+                count = PollHistoryFilter.entries.size,
+                selected = activeFilter == filter,
+                onClick = { onFilterSelected(filter) },
+                text = filter.name
+            )
+        }
+    }
+}
+
+@Composable
+private fun PollHistoryList(
+    state: PollHistoryState,
+    modifier: Modifier = Modifier,
+) {
+    LazyColumn(
+        modifier = modifier,
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        items(state.currentItems) { pollHistoryItem ->
+            PollHistoryItemRow(
+                pollHistoryItem = pollHistoryItem,
+                onAnswerSelected = fun(pollStartId: EventId, answerId: String) {
+                    state.eventSink(PollHistoryEvents.PollAnswerSelected(pollStartId, answerId))
+                },
+                onPollEdit = {
+                    state.eventSink(PollHistoryEvents.EditPoll)
+                },
+                onPollEnd = {
+                    state.eventSink(PollHistoryEvents.PollEndClicked(it))
+                },
+                modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp)
+            )
+        }
+        if (state.hasMoreToLoad) {
+            item {
+                Button(
+                    text = "Load more",
+                    showProgress = state.isLoading,
+                    onClick = {
+                        state.eventSink(PollHistoryEvents.LoadMore)
                     },
-                    onPollEdit = {
-                        state.eventSink(PollHistoryEvents.EditPoll)
-                    },
-                    onPollEnd = {
-                        state.eventSink(PollHistoryEvents.PollEndClicked(it))
-                    },
+                    modifier = Modifier.padding(vertical = 24.dp),
                 )
-                if (index != state.pollItems.lastIndex) {
-                    HorizontalDivider()
-                }
             }
         }
     }
@@ -103,43 +161,25 @@ private fun PollHistoryItemRow(
     onPollEnd: (pollStartId: EventId) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    when (pollHistoryItem) {
-        is PollHistoryItem.PollContent -> {
-            PollContentItemRow(
-                pollContentItem = pollHistoryItem,
+    Surface(
+        modifier = modifier,
+        border = BorderStroke(1.dp, ElementTheme.colors.borderInteractiveSecondary),
+        shape = RoundedCornerShape(size = 12.dp)
+    ) {
+        Column(modifier = Modifier.padding(16.dp)) {
+            Text(
+                text = pollHistoryItem.formattedDate,
+                color = MaterialTheme.colorScheme.secondary,
+                style = ElementTheme.typography.fontBodySmRegular,
+            )
+            Spacer(modifier = Modifier.height(4.dp))
+            PollContentView(
+                state = pollHistoryItem.state,
                 onAnswerSelected = onAnswerSelected,
                 onPollEdit = onPollEdit,
                 onPollEnd = onPollEnd,
-                modifier = modifier.padding(
-                    horizontal = 16.dp,
-                    vertical = 24.dp
-                ),
             )
         }
-    }
-}
-
-@Composable
-private fun PollContentItemRow(
-    pollContentItem: PollHistoryItem.PollContent,
-    onAnswerSelected: (pollStartId: EventId, answerId: String) -> Unit,
-    onPollEdit: (pollStartId: EventId) -> Unit,
-    onPollEnd: (pollStartId: EventId) -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    Column(modifier = modifier) {
-        Text(
-            text = pollContentItem.formattedDate,
-            color = MaterialTheme.colorScheme.secondary,
-            style = ElementTheme.typography.fontBodySmRegular,
-        )
-        Spacer(modifier = Modifier.height(4.dp))
-        PollContentView(
-            state = pollContentItem.state,
-            onAnswerSelected = onAnswerSelected,
-            onPollEdit = onPollEdit,
-            onPollEnd = onPollEnd,
-        )
     }
 }
 
