@@ -41,6 +41,7 @@ import io.element.android.libraries.matrix.api.room.StateEventType
 import io.element.android.libraries.matrix.api.room.location.AssetType
 import io.element.android.libraries.matrix.api.room.roomMembers
 import io.element.android.libraries.matrix.api.room.roomNotificationSettings
+import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
 import io.element.android.libraries.matrix.api.widget.MatrixWidgetDriver
 import io.element.android.libraries.matrix.api.widget.MatrixWidgetSettings
 import io.element.android.libraries.matrix.impl.core.toProgressWatcher
@@ -50,6 +51,7 @@ import io.element.android.libraries.matrix.impl.media.toMSC3246range
 import io.element.android.libraries.matrix.impl.notificationsettings.RustNotificationSettingsService
 import io.element.android.libraries.matrix.impl.poll.toInner
 import io.element.android.libraries.matrix.impl.room.location.toInner
+import io.element.android.libraries.matrix.impl.timeline.AsyncMatrixTimeline
 import io.element.android.libraries.matrix.impl.timeline.RustMatrixTimeline
 import io.element.android.libraries.matrix.impl.util.destroyAll
 import io.element.android.libraries.matrix.impl.util.mxCallbackFlow
@@ -70,14 +72,12 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.EventTimelineItem
-import org.matrix.rustcomponents.sdk.Room
 import org.matrix.rustcomponents.sdk.RoomInfo
 import org.matrix.rustcomponents.sdk.RoomInfoListener
 import org.matrix.rustcomponents.sdk.RoomListItem
 import org.matrix.rustcomponents.sdk.RoomMember
 import org.matrix.rustcomponents.sdk.RoomMessageEventContentWithoutRelation
 import org.matrix.rustcomponents.sdk.SendAttachmentJoinHandle
-import org.matrix.rustcomponents.sdk.Timeline
 import org.matrix.rustcomponents.sdk.WidgetCapabilities
 import org.matrix.rustcomponents.sdk.WidgetCapabilitiesProvider
 import org.matrix.rustcomponents.sdk.messageEventContentFromHtml
@@ -85,14 +85,16 @@ import org.matrix.rustcomponents.sdk.messageEventContentFromMarkdown
 import org.matrix.rustcomponents.sdk.use
 import timber.log.Timber
 import java.io.File
+import org.matrix.rustcomponents.sdk.Room as InnerRoom
+import org.matrix.rustcomponents.sdk.Timeline as InnerTimeline
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class RustMatrixRoom(
     override val sessionId: SessionId,
     private val isKeyBackupEnabled: Boolean,
     private val roomListItem: RoomListItem,
-    private val innerRoom: Room,
-    private val innerTimeline: Timeline,
+    private val innerRoom: InnerRoom,
+    private val innerTimeline: InnerTimeline,
     private val roomNotificationSettingsService: RustNotificationSettingsService,
     sessionCoroutineScope: CoroutineScope,
     private val coroutineDispatchers: CoroutineDispatchers,
@@ -130,15 +132,9 @@ class RustMatrixRoom(
     private val _roomNotificationSettingsStateFlow = MutableStateFlow<MatrixRoomNotificationSettingsState>(MatrixRoomNotificationSettingsState.Unknown)
     override val roomNotificationSettingsStateFlow: StateFlow<MatrixRoomNotificationSettingsState> = _roomNotificationSettingsStateFlow
 
-    override val timeline = RustMatrixTimeline(
-        isKeyBackupEnabled = isKeyBackupEnabled,
-        matrixRoom = this,
-        innerTimeline = innerTimeline,
-        roomCoroutineScope = roomCoroutineScope,
-        dispatcher = roomDispatcher,
-        lastLoginTimestamp = sessionData.loginTimestamp,
-        onNewSyncedEvent = { _syncUpdateFlow.value = systemClock.epochMillis() }
-    )
+    override val timeline = createMatrixTimeline(innerTimeline) {
+        _syncUpdateFlow.value = systemClock.epochMillis()
+    }
 
     override val membersStateFlow: StateFlow<MatrixRoomMembersState> = _membersStateFlow.asStateFlow()
 
@@ -150,7 +146,7 @@ class RustMatrixRoom(
 
     override fun destroy() {
         roomCoroutineScope.cancel()
-        innerTimeline.destroy()
+        timeline.close()
         innerRoom.destroy()
         roomListItem.destroy()
         specialModeEventTimelineItem?.destroy()
@@ -570,20 +566,33 @@ class RustMatrixRoom(
         )
     }
 
-    override suspend fun pollHistory() = RustMatrixTimeline(
-        isKeyBackupEnabled = isKeyBackupEnabled,
-        matrixRoom = this,
-        innerTimeline = innerRoom.pollHistory(),
-        roomCoroutineScope = roomCoroutineScope,
-        dispatcher = roomDispatcher,
-        lastLoginTimestamp = sessionData.loginTimestamp,
-        onNewSyncedEvent = { _syncUpdateFlow.value = systemClock.epochMillis() }
-    )
+    override fun pollHistory() = AsyncMatrixTimeline(
+        coroutineScope = roomCoroutineScope,
+        dispatcher = roomDispatcher
+    ) {
+        val innerTimeline = innerRoom.pollHistory()
+        createMatrixTimeline(innerTimeline)
+    }
 
-    private suspend fun sendAttachment(files: List<File>, handle: () -> SendAttachmentJoinHandle): Result<MediaUploadHandler> {
+    private fun sendAttachment(files: List<File>, handle: () -> SendAttachmentJoinHandle): Result<MediaUploadHandler> {
         return runCatching {
             MediaUploadHandlerImpl(files, handle())
         }
+    }
+
+    private fun createMatrixTimeline(
+        timeline: InnerTimeline,
+        onNewSyncedEvent: () -> Unit = {},
+    ): MatrixTimeline {
+        return RustMatrixTimeline(
+            isKeyBackupEnabled = isKeyBackupEnabled,
+            matrixRoom = this,
+            roomCoroutineScope = roomCoroutineScope,
+            dispatcher = roomDispatcher,
+            lastLoginTimestamp = sessionData.loginTimestamp,
+            onNewSyncedEvent = onNewSyncedEvent,
+            innerTimeline = timeline,
+        )
     }
 
     private fun messageEventContentFromParts(body: String, htmlBody: String?): RoomMessageEventContentWithoutRelation =

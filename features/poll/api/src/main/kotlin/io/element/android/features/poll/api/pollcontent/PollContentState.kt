@@ -20,6 +20,16 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.poll.PollKind
 import kotlinx.collections.immutable.ImmutableList
 
+/**
+ * UI model for a PollContent.
+ * @property eventId the event id of the poll.
+ * @property question the poll question.
+ * @property answerItems the list of answers.
+ * @property pollKind the kind of poll.
+ * @property isPollEditable whether the poll is editable.
+ * @property isPollEnded whether the poll is ended.
+ * @property isMine whether the poll has been created by me.
+ */
 data class PollContentState(
     val eventId: EventId?,
     val question: String,

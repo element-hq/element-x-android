@@ -14,10 +14,14 @@
  * limitations under the License.
  */
 
-package io.element.android.features.poll.impl.history
+package io.element.android.features.poll.impl.history.model
 
-import io.element.android.features.poll.api.pollcontent.PollContentState
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 
-sealed interface PollHistoryItem {
-    data class PollContent(val formattedDate: String, val state: PollContentState) : PollHistoryItem
+data class PollHistoryItems(
+    val ongoing: ImmutableList<PollHistoryItem> = persistentListOf(),
+    val past: ImmutableList<PollHistoryItem> = persistentListOf(),
+) {
+    val size = ongoing.size + past.size
 }

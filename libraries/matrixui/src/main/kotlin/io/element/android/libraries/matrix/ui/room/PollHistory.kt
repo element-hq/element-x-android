@@ -14,16 +14,23 @@
  * limitations under the License.
  */
 
-package io.element.android.features.poll.impl.history
+package io.element.android.libraries.matrix.ui.room
 
-import io.element.android.features.poll.impl.history.model.PollHistoryFilter
-import io.element.android.features.poll.impl.history.model.PollHistoryItem
-import kotlinx.collections.immutable.ImmutableList
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.remember
+import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
 
-data class PollHistoryState(
-    val isLoading: Boolean,
-    val hasMoreToLoad: Boolean,
-    val activeFilter: PollHistoryFilter,
-    val currentItems: ImmutableList<PollHistoryItem>,
-    val eventSink: (PollHistoryEvents) -> Unit,
-)
+@Composable
+fun MatrixRoom.rememberPollHistory(): MatrixTimeline {
+    val pollHistory = remember {
+        pollHistory()
+    }
+    DisposableEffect(pollHistory) {
+        onDispose {
+            pollHistory.close()
+        }
+    }
+    return pollHistory
+}

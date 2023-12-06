@@ -14,16 +14,9 @@
  * limitations under the License.
  */
 
-package io.element.android.features.poll.impl.history
+package io.element.android.features.poll.impl.history.model
 
-import io.element.android.features.poll.impl.history.model.PollHistoryFilter
-import io.element.android.features.poll.impl.history.model.PollHistoryItem
-import kotlinx.collections.immutable.ImmutableList
-
-data class PollHistoryState(
-    val isLoading: Boolean,
-    val hasMoreToLoad: Boolean,
-    val activeFilter: PollHistoryFilter,
-    val currentItems: ImmutableList<PollHistoryItem>,
-    val eventSink: (PollHistoryEvents) -> Unit,
-)
+enum class PollHistoryFilter {
+    ONGOING,
+    PAST,
+}

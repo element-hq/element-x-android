@@ -14,13 +14,14 @@
  * limitations under the License.
  */
 
-package io.element.android.features.poll.impl.history
+package io.element.android.features.poll.impl.history.model
 
 import io.element.android.features.poll.api.pollcontent.PollContentStateFactory
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.dateformatter.api.DaySeparatorFormatter
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.item.event.PollContent
+import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
@@ -30,8 +31,22 @@ class PollHistoryItemsFactory @Inject constructor(
     private val dispatchers: CoroutineDispatchers,
 ) {
 
-    suspend fun create(timelineItems: List<MatrixTimelineItem>): List<PollHistoryItem> = withContext(dispatchers.computation) {
-        timelineItems.mapNotNull { create(it) }.reversed()
+    suspend fun create(timelineItems: List<MatrixTimelineItem>): PollHistoryItems = withContext(dispatchers.computation) {
+        val past = ArrayList<PollHistoryItem>()
+        val ongoing = ArrayList<PollHistoryItem>()
+        for (index in timelineItems.indices.reversed()) {
+            val timelineItem = timelineItems[index]
+            val pollHistoryItem = create(timelineItem) ?: continue
+            if (pollHistoryItem.state.isPollEnded) {
+                past.add(pollHistoryItem)
+            } else {
+                ongoing.add(pollHistoryItem)
+            }
+        }
+        PollHistoryItems(
+            ongoing = ongoing.toPersistentList(),
+            past = past.toPersistentList()
+        )
     }
 
     private suspend fun create(timelineItem: MatrixTimelineItem): PollHistoryItem? {
@@ -39,7 +54,7 @@ class PollHistoryItemsFactory @Inject constructor(
             is MatrixTimelineItem.Event -> {
                 val pollContent = timelineItem.event.content as? PollContent ?: return null
                 val pollContentState = pollContentStateFactory.create(timelineItem.event, pollContent)
-                PollHistoryItem.PollContent(
+                PollHistoryItem(
                     formattedDate = daySeparatorFormatter.format(timelineItem.event.timestamp),
                     state = pollContentState
                 )

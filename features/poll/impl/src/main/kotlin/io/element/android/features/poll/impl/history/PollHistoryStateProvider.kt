@@ -17,8 +17,48 @@
 package io.element.android.features.poll.impl.history
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import io.element.android.features.poll.api.pollcontent.PollContentState
+import io.element.android.features.poll.api.pollcontent.aPollContentState
+import io.element.android.features.poll.impl.history.model.PollHistoryFilter
+import io.element.android.features.poll.impl.history.model.PollHistoryItem
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 
 class PollHistoryStateProvider : PreviewParameterProvider<PollHistoryState> {
     override val values: Sequence<PollHistoryState>
-        get() = sequenceOf() // TODO
+        get() = sequenceOf(
+            aPollHistoryState(
+                isLoading = false,
+                hasMoreToLoad = false,
+                activeFilter = PollHistoryFilter.ONGOING,
+            ),
+            aPollHistoryState(
+                isLoading = true,
+                hasMoreToLoad = true,
+                activeFilter = PollHistoryFilter.PAST,
+            ),
+        )
 }
+
+private fun aPollHistoryState(
+    isLoading: Boolean = false,
+    hasMoreToLoad: Boolean = false,
+    activeFilter: PollHistoryFilter = PollHistoryFilter.ONGOING,
+    currentItems: ImmutableList<PollHistoryItem> = persistentListOf(
+        aPollHistoryItem(),
+    ),
+) = PollHistoryState(
+    isLoading = isLoading,
+    hasMoreToLoad = hasMoreToLoad,
+    activeFilter = activeFilter,
+    currentItems = currentItems,
+    eventSink = {},
+)
+
+private fun aPollHistoryItem(
+    formattedDate: String = "01/12/2023",
+    state: PollContentState = aPollContentState(),
+) = PollHistoryItem(
+    formattedDate = formattedDate,
+    state = state,
+)

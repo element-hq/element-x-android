@@ -16,6 +16,7 @@
 
 package io.element.android.features.poll.impl.history
 
+import io.element.android.features.poll.impl.history.model.PollHistoryFilter
 import io.element.android.libraries.matrix.api.core.EventId
 
 sealed interface PollHistoryEvents {
@@ -23,4 +24,5 @@ sealed interface PollHistoryEvents {
     data class PollAnswerSelected(val pollStartId: EventId, val answerId: String) : PollHistoryEvents
     data class PollEndClicked(val pollStartId: EventId) : PollHistoryEvents
     data object EditPoll : PollHistoryEvents
+    data class OnFilterSelected(val filter: PollHistoryFilter) : PollHistoryEvents
 }
