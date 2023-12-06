@@ -42,6 +42,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.verifysession.impl.emoji.toEmojiDrawableRes
+import io.element.android.features.verifysession.impl.emoji.toEmojiStringRes
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.designsystem.atomic.molecules.ButtonColumnMolecule
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
@@ -168,7 +169,7 @@ private fun EmojiItemView(emoji: VerificationEmoji, modifier: Modifier = Modifie
         )
         Spacer(modifier = Modifier.height(16.dp))
         Text(
-            emoji.name,
+            text = stringResource(id = emoji.code.toEmojiStringRes()),
             style = ElementTheme.typography.fontBodyMdRegular,
             color = MaterialTheme.colorScheme.secondary,
             maxLines = 1,
