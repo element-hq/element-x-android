@@ -17,6 +17,6 @@
 package io.element.android.libraries.matrix.api.verification
 
 data class VerificationEmoji(
-    val code: String,
+    val code: Int,
     val name: String,
 )

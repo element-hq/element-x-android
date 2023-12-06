@@ -17,6 +17,7 @@
 package io.element.android.features.verifysession.impl
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -25,6 +26,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -33,11 +35,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import io.element.android.compound.theme.ElementTheme
+import io.element.android.features.verifysession.impl.emoji.toEmojiDrawableRes
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.designsystem.atomic.molecules.ButtonColumnMolecule
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
@@ -49,7 +53,6 @@ import io.element.android.libraries.designsystem.theme.components.CircularProgre
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.matrix.api.verification.VerificationEmoji
-import io.element.android.compound.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.features.verifysession.impl.VerifySelfSessionState.VerificationStep as FlowStep
 
@@ -158,9 +161,10 @@ private fun ContentVerifying(verificationFlowStep: FlowStep.Verifying, modifier:
 @Composable
 private fun EmojiItemView(emoji: VerificationEmoji, modifier: Modifier = Modifier) {
     Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = modifier) {
-        Text(
-            text = emoji.code,
-            style = ElementTheme.typography.fontBodyMdRegular.copy(fontSize = 34.sp),
+        Image(
+            modifier = Modifier.size(48.dp),
+            painter = painterResource(id = emoji.code.toEmojiDrawableRes()),
+            contentDescription = null,
         )
         Spacer(modifier = Modifier.height(16.dp))
         Text(

@@ -49,11 +49,11 @@ fun aVerifySelfSessionState() = VerifySelfSessionState(
 )
 
 fun aVerificationEmojiList() = listOf(
-    VerificationEmoji("🍕", "Pizza"),
-    VerificationEmoji("🚀", "Rocket"),
-    VerificationEmoji("🚀", "Rocket"),
-    VerificationEmoji("🗺️", "Map"),
-    VerificationEmoji("🎳", "Bowling"),
-    VerificationEmoji("🎳", "Bowling"),
-    VerificationEmoji("📌", "Pin"),
+    VerificationEmoji(27, "Pizza"),
+    VerificationEmoji(54, "Rocket"),
+    VerificationEmoji(54, "Rocket"),
+    VerificationEmoji(42, "Book"),
+    VerificationEmoji(48, "Hammer"),
+    VerificationEmoji(48, "Hammer"),
+    VerificationEmoji(63, "Pin"),
 )

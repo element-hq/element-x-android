@@ -107,7 +107,7 @@ class RustSessionVerificationService(
 
     override fun didReceiveVerificationData(data: List<SessionVerificationEmoji>) {
         val emojis = data.map { emoji ->
-                emoji.use { VerificationEmoji(it.symbol(), it.description()) }
+                emoji.use { VerificationEmoji(it.code(), it.description()) }
             }
             .toImmutableList()
         _verificationFlowState.value = VerificationFlowState.ReceivedVerificationData(emojis)

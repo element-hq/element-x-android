@@ -157,8 +157,8 @@ class VerifySelfSessionPresenterTests {
 
     @Test
     fun `present - When verification is approved, the flow completes if there is no error`() = runTest {
-        val emojis = listOf<VerificationEmoji>(
-            VerificationEmoji("😄", "Smile")
+        val emojis = listOf(
+            VerificationEmoji(30, "Smiley")
         )
         val service = FakeSessionVerificationService().apply {
             givenEmojiList(emojis)
