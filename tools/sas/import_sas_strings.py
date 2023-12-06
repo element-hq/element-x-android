@@ -87,7 +87,7 @@ def write_file(file, dict):
         o.write("</resources>\n")
 
 scripts_dir = os.path.dirname(os.path.abspath(__file__))
-data_defs_dir = os.path.join(scripts_dir, "../matrix-sdk-android/src/main/res")
+data_defs_dir = os.path.join(scripts_dir, "../../features/verifysession/impl/src/main/res")
 
 # Write default file
 write_file(os.path.join(data_defs_dir, "values/strings_sas.xml"), default)
@@ -96,7 +96,8 @@ write_file(os.path.join(data_defs_dir, "values/strings_sas.xml"), default)
 for lang in cumul:
     androidLang = lang\
         .replace("_", "-r")\
-        .replace("zh-rHans", "zh-rCN")
+        .replace("zh-rHans", "zh-rCN") \
+        .replace("zh-rHant", "zh-rTW")
     write_file(os.path.join(data_defs_dir, "values-" + androidLang + "/strings_sas.xml"), cumul[lang])
 
 print()
