@@ -38,6 +38,17 @@ import org.robolectric.RuntimeEnvironment
 @RunWith(RobolectricTestRunner::class)
 class IntentResolverTest {
     @Test
+    fun `resolve launcher intent should return null`() {
+        val sut = createIntentResolver()
+        val intent = Intent(RuntimeEnvironment.getApplication(), Activity::class.java).apply {
+            action = Intent.ACTION_MAIN
+            addCategory(Intent.CATEGORY_LAUNCHER)
+        }
+        val result = sut.resolve(intent)
+        assertThat(result).isNull()
+    }
+
+    @Test
     fun `test resolve navigation intent root`() {
         val sut = createIntentResolver()
         val intent = Intent(RuntimeEnvironment.getApplication(), Activity::class.java).apply {
