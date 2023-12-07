@@ -14,15 +14,8 @@
  * limitations under the License.
  */
 
-package io.element.android.features.messages.impl.forward
+package io.element.android.libraries.roomselect.api
 
-import io.element.android.libraries.matrix.api.core.RoomId
-import kotlinx.collections.immutable.ImmutableList
-
-data class ForwardMessagesState(
-    // TODO Migrate to an Async
-    val isForwarding: Boolean,
-    val error: Throwable?,
-    val forwardingSucceeded: ImmutableList<RoomId>?,
-    val eventSink: (ForwardMessagesEvents) -> Unit
-)
+enum class RoomSelectMode {
+    Forward,
+}

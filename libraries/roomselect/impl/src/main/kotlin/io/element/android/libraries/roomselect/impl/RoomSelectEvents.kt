@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-package io.element.android.features.messages.impl.forward
+package io.element.android.libraries.roomselect.impl
 
-import io.element.android.libraries.matrix.api.core.RoomId
-import kotlinx.collections.immutable.ImmutableList
+import io.element.android.libraries.matrix.api.roomlist.RoomSummaryDetails
 
-data class ForwardMessagesState(
-    // TODO Migrate to an Async
-    val isForwarding: Boolean,
-    val error: Throwable?,
-    val forwardingSucceeded: ImmutableList<RoomId>?,
-    val eventSink: (ForwardMessagesEvents) -> Unit
-)
+sealed interface RoomSelectEvents {
+    data class SetSelectedRoom(val room: RoomSummaryDetails) : RoomSelectEvents
+
+    // TODO remove to restore multi-selection
+    data object RemoveSelectedRoom : RoomSelectEvents
+    data object ToggleSearchActive : RoomSelectEvents
+    data class UpdateQuery(val query: String) : RoomSelectEvents
+}
