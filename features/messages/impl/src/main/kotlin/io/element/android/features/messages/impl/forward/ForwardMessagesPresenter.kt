@@ -27,7 +27,6 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.Presenter
-import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
@@ -40,7 +39,6 @@ class ForwardMessagesPresenter @AssistedInject constructor(
     @Assisted eventId: String,
     private val room: MatrixRoom,
     private val matrixCoroutineScope: CoroutineScope,
-    private val client: MatrixClient,
 ) : Presenter<ForwardMessagesState> {
 
     private val eventId: EventId = EventId(eventId)

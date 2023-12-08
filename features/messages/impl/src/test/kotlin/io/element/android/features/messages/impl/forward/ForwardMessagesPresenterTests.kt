@@ -22,7 +22,6 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
-import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.matrix.test.room.aRoomSummaryDetail
 import io.element.android.tests.testutils.WarmUpRule
@@ -91,6 +90,9 @@ class ForwardMessagesPresenterTests {
         eventId: EventId = AN_EVENT_ID,
         fakeMatrixRoom: FakeMatrixRoom = FakeMatrixRoom(),
         coroutineScope: CoroutineScope = this,
-        client: FakeMatrixClient = FakeMatrixClient(),
-    ) = ForwardMessagesPresenter(eventId.value, fakeMatrixRoom, coroutineScope, client)
+    ) = ForwardMessagesPresenter(
+        eventId = eventId.value,
+        room = fakeMatrixRoom,
+        matrixCoroutineScope = coroutineScope,
+    )
 }
