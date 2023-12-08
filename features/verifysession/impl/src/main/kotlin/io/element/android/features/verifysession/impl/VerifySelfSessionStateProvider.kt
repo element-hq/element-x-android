@@ -29,10 +29,10 @@ open class VerifySelfSessionStateProvider : PreviewParameterProvider<VerifySelfS
                 verificationFlowStep = VerifySelfSessionState.VerificationStep.AwaitingOtherDeviceResponse
             ),
             aVerifySelfSessionState().copy(
-                verificationFlowStep = VerifySelfSessionState.VerificationStep.Verifying(aSessionVerificationData(), Async.Uninitialized)
+                verificationFlowStep = VerifySelfSessionState.VerificationStep.Verifying(aEmojisSessionVerificationData(), Async.Uninitialized)
             ),
             aVerifySelfSessionState().copy(
-                verificationFlowStep = VerifySelfSessionState.VerificationStep.Verifying(aSessionVerificationData(), Async.Loading())
+                verificationFlowStep = VerifySelfSessionState.VerificationStep.Verifying(aEmojisSessionVerificationData(), Async.Loading())
             ),
             aVerifySelfSessionState().copy(
                 verificationFlowStep = VerifySelfSessionState.VerificationStep.Canceled
@@ -40,19 +40,23 @@ open class VerifySelfSessionStateProvider : PreviewParameterProvider<VerifySelfS
             aVerifySelfSessionState().copy(
                 verificationFlowStep = VerifySelfSessionState.VerificationStep.Ready
             ),
+            aVerifySelfSessionState().copy(
+                verificationFlowStep = VerifySelfSessionState.VerificationStep.Verifying(aDecimalsSessionVerificationData(), Async.Uninitialized)
+            ),
             // Add other state here
         )
 }
 
-private fun aSessionVerificationData(
+private fun aEmojisSessionVerificationData(
     emojiList: List<VerificationEmoji> = aVerificationEmojiList(),
-    decimals: List<Int> = emptyList(),
 ): SessionVerificationData {
-    return if (emojiList.isEmpty()) {
-        SessionVerificationData.Decimals(decimals)
-    } else {
-        SessionVerificationData.Emojis(emojiList)
-    }
+    return SessionVerificationData.Emojis(emojiList)
+}
+
+private fun aDecimalsSessionVerificationData(
+    decimals: List<Int> = listOf(123, 456, 789),
+): SessionVerificationData {
+    return SessionVerificationData.Decimals(decimals)
 }
 
 private fun aVerifySelfSessionState() = VerifySelfSessionState(

@@ -19,6 +19,7 @@ package io.element.android.features.verifysession.impl
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -104,14 +105,23 @@ private fun HeaderContent(verificationFlowStep: FlowStep, modifier: Modifier = M
         FlowStep.Initial -> R.string.screen_session_verification_open_existing_session_title
         FlowStep.Canceled -> CommonStrings.common_verification_cancelled
         FlowStep.AwaitingOtherDeviceResponse -> R.string.screen_session_verification_waiting_to_accept_title
-        FlowStep.Ready, is FlowStep.Verifying, FlowStep.Completed -> R.string.screen_session_verification_compare_emojis_title
+        FlowStep.Ready,
+        FlowStep.Completed -> R.string.screen_session_verification_compare_emojis_title
+        is FlowStep.Verifying -> when (verificationFlowStep.data) {
+            is SessionVerificationData.Decimals -> R.string.screen_session_verification_compare_numbers_title
+            is SessionVerificationData.Emojis -> R.string.screen_session_verification_compare_emojis_title
+        }
     }
     val subtitleTextId = when (verificationFlowStep) {
         FlowStep.Initial -> R.string.screen_session_verification_open_existing_session_subtitle
         FlowStep.Canceled -> R.string.screen_session_verification_cancelled_subtitle
         FlowStep.AwaitingOtherDeviceResponse -> R.string.screen_session_verification_waiting_to_accept_subtitle
-        is FlowStep.Verifying, FlowStep.Completed -> R.string.screen_session_verification_compare_emojis_subtitle
         FlowStep.Ready -> R.string.screen_session_verification_ready_subtitle
+        FlowStep.Completed -> R.string.screen_session_verification_compare_emojis_subtitle
+        is FlowStep.Verifying -> when (verificationFlowStep.data) {
+            is SessionVerificationData.Decimals -> R.string.screen_session_verification_compare_numbers_subtitle
+            is SessionVerificationData.Emojis -> R.string.screen_session_verification_compare_emojis_subtitle
+        }
     }
 
     IconTitleSubtitleMolecule(
@@ -143,7 +153,20 @@ private fun ContentWaiting(modifier: Modifier = Modifier) {
 @Composable
 private fun ContentVerifying(verificationFlowStep: FlowStep.Verifying, modifier: Modifier = Modifier) {
     when (verificationFlowStep.data) {
-        is SessionVerificationData.Decimals -> Unit // TODO Render decimals
+        is SessionVerificationData.Decimals -> {
+            val text = verificationFlowStep.data.decimals.joinToString(separator = " - ") { it.toString() }
+            Box(
+                modifier = modifier.fillMaxWidth(),
+                contentAlignment = Alignment.Center,
+            ) {
+                Text(
+                    text = text,
+                    style = ElementTheme.typography.fontHeadingLgBold,
+                    color = MaterialTheme.colorScheme.primary,
+                    maxLines = 1,
+                )
+            }
+        }
         is SessionVerificationData.Emojis -> {
             // We want each row to have up to 4 emojis
             val rows = verificationFlowStep.data.emojis.chunked(4)

@@ -3,6 +3,8 @@
   <string name="screen_session_verification_cancelled_subtitle">"Something doesn’t seem right. Either the request timed out or the request was denied."</string>
   <string name="screen_session_verification_compare_emojis_subtitle">"Confirm that the emojis below match those shown on your other session."</string>
   <string name="screen_session_verification_compare_emojis_title">"Compare emojis"</string>
+  <string name="screen_session_verification_compare_numbers_subtitle">"Confirm that the numbers below match those shown on your other session."</string>
+  <string name="screen_session_verification_compare_numbers_title">"Compare numbers"</string>
   <string name="screen_session_verification_complete_subtitle">"Your new session is now verified. It has access to your encrypted messages, and other users will see it as trusted."</string>
   <string name="screen_session_verification_open_existing_session_subtitle">"Prove it’s you in order to access your encrypted message history."</string>
   <string name="screen_session_verification_open_existing_session_title">"Open an existing session"</string>
