@@ -31,6 +31,7 @@ Jika Anda melanjutkan, beberapa pengaturan Anda dapat berubah."</string>
   <string name="screen_notification_settings_enable_notifications">"Aktifkan pemberitahuan di perangkat ini"</string>
   <string name="screen_notification_settings_failed_fixing_configuration">"Pengaturan belum diperbaiki, silakan coba lagi."</string>
   <string name="screen_notification_settings_group_chats">"Obrolan grup"</string>
+  <string name="screen_notification_settings_invite_for_me_label">"Undangan"</string>
   <string name="screen_notification_settings_mentions_only_disclaimer">"Homeserver Anda tidak mendukung opsi ini dalam ruangan terenkripsi, Anda mungkin tidak diberi tahu dalam beberapa ruangan."</string>
   <string name="screen_notification_settings_mentions_section_title">"Sebutan"</string>
   <string name="screen_notification_settings_mode_all">"Semua"</string>
