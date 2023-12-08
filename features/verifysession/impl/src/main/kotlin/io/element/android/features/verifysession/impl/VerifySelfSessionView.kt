@@ -19,7 +19,6 @@ package io.element.android.features.verifysession.impl
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -38,6 +37,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -155,27 +155,22 @@ private fun ContentVerifying(verificationFlowStep: FlowStep.Verifying, modifier:
     when (verificationFlowStep.data) {
         is SessionVerificationData.Decimals -> {
             val text = verificationFlowStep.data.decimals.joinToString(separator = " - ") { it.toString() }
-            Box(
+            Text(
                 modifier = modifier.fillMaxWidth(),
-                contentAlignment = Alignment.Center,
-            ) {
-                Text(
-                    text = text,
-                    style = ElementTheme.typography.fontHeadingLgBold,
-                    color = MaterialTheme.colorScheme.primary,
-                    maxLines = 1,
-                )
-            }
+                text = text,
+                style = ElementTheme.typography.fontHeadingLgBold,
+                color = MaterialTheme.colorScheme.primary,
+                textAlign = TextAlign.Center,
+            )
         }
         is SessionVerificationData.Emojis -> {
             // We want each row to have up to 4 emojis
             val rows = verificationFlowStep.data.emojis.chunked(4)
-            Column(modifier = modifier.fillMaxWidth()) {
-                for ((rowIndex, emojis) in rows.withIndex()) {
-                    // Vertical spacing between rows
-                    if (rowIndex > 0) {
-                        Spacer(modifier = Modifier.height(40.dp))
-                    }
+            Column(
+                modifier = modifier.fillMaxWidth(),
+                verticalArrangement = Arrangement.spacedBy(40.dp),
+            ) {
+                rows.forEach { emojis ->
                     Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
                         for (emoji in emojis) {
                             EmojiItemView(emoji = emoji, modifier = Modifier.widthIn(max = 60.dp))
