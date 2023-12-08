@@ -17,7 +17,6 @@
 package io.element.android.libraries.matrix.api.verification
 
 import androidx.compose.runtime.Immutable
-import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 
@@ -26,7 +25,7 @@ interface SessionVerificationService {
     /**
      * State of the current verification flow ([VerificationFlowState.Initial] if not started).
      */
-    val verificationFlowState : StateFlow<VerificationFlowState>
+    val verificationFlowState: StateFlow<VerificationFlowState>
 
     /**
      * The internal service that checks verification can only run after the initial sync.
