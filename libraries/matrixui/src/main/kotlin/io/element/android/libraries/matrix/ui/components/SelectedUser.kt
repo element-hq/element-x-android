@@ -31,6 +31,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -62,6 +63,7 @@ fun SelectedUser(
         ) {
             Avatar(matrixUser.getAvatarData(size = AvatarSize.SelectedUser))
             Text(
+                modifier = Modifier.clipToBounds(),
                 text = matrixUser.getBestName(),
                 overflow = TextOverflow.Ellipsis,
                 maxLines = 1,

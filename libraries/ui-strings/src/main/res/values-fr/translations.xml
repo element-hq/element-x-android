@@ -95,6 +95,7 @@
   <string name="action_try_again">"Essayer à nouveau"</string>
   <string name="action_view_source">"Afficher la source"</string>
   <string name="action_yes">"Oui"</string>
+  <string name="action_load_more">"Voir plus"</string>
   <string name="common_about">"À propos"</string>
   <string name="common_acceptable_use_policy">"Politique d’utilisation acceptable"</string>
   <string name="common_advanced_settings">"Paramètres avancés"</string>

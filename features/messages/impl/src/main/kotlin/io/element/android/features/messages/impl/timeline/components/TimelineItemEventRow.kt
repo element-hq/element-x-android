@@ -360,6 +360,7 @@ private fun MessageSenderInformation(
             Avatar(senderAvatar)
             Spacer(modifier = Modifier.width(4.dp))
             Text(
+                modifier = Modifier.clipToBounds(),
                 text = sender,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,

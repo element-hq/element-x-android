@@ -44,6 +44,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -551,7 +552,7 @@ private fun ReplyToModeView(
         ) {
             Text(
                 text = senderName,
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth().clipToBounds(),
                 style = ElementTheme.typography.fontBodySmMedium,
                 textAlign = TextAlign.Start,
                 color = ElementTheme.materialColors.primary,

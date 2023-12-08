@@ -95,6 +95,7 @@
   <string name="action_try_again">"Coba lagi"</string>
   <string name="action_view_source">"Tampilkan sumber"</string>
   <string name="action_yes">"Ya"</string>
+  <string name="action_load_more">"Muat lainnya"</string>
   <string name="common_about">"Tentang"</string>
   <string name="common_acceptable_use_policy">"Kebijakan penggunaan wajar"</string>
   <string name="common_advanced_settings">"Pengaturan tingkat lanjut"</string>
