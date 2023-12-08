@@ -31,6 +31,7 @@ Si vous continuez, il est possible que certains de vos paramètres soient modifi
   <string name="screen_notification_settings_enable_notifications">"Activer les notifications sur cet appareil"</string>
   <string name="screen_notification_settings_failed_fixing_configuration">"La configuration n’a pas été corrigée, veuillez réessayer."</string>
   <string name="screen_notification_settings_group_chats">"Discussions de groupe"</string>
+  <string name="screen_notification_settings_invite_for_me_label">"Invitations"</string>
   <string name="screen_notification_settings_mentions_only_disclaimer">"Votre serveur d’accueil ne supporte pas cette option pour les salons chiffrés, vous pourriez ne pas être notifié(e) dans certains salons."</string>
   <string name="screen_notification_settings_mentions_section_title">"Mentions"</string>
   <string name="screen_notification_settings_mode_all">"Tous"</string>
