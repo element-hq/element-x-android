@@ -47,6 +47,7 @@ import kotlin.random.Random
 
 fun aTimelineState(timelineItems: ImmutableList<TimelineItem> = persistentListOf()) = TimelineState(
     timelineItems = timelineItems,
+    timelineRoomInfo = aTimelineRoomInfo(),
     showReadReceipts = false,
     paginationState = MatrixTimeline.PaginationState(
         isBackPaginating = false,
@@ -212,3 +213,9 @@ internal fun aGroupedEvents(id: Long = 0): TimelineItem.GroupedEvents {
         aggregatedReadReceipts = events.flatMap { it.readReceiptState.receipts }.toImmutableList(),
     )
 }
+
+internal fun aTimelineRoomInfo(
+    isDirect: Boolean = false,
+) = TimelineRoomInfo(
+    isDirect = isDirect,
+)

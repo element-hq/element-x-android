@@ -24,8 +24,10 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.pluralStringResource
 import io.element.android.features.messages.impl.R
+import io.element.android.features.messages.impl.timeline.TimelineRoomInfo
 import io.element.android.features.messages.impl.timeline.TimelineEvents
 import io.element.android.features.messages.impl.timeline.aGroupedEvents
+import io.element.android.features.messages.impl.timeline.aTimelineRoomInfo
 import io.element.android.features.messages.impl.timeline.components.group.GroupHeaderView
 import io.element.android.features.messages.impl.timeline.components.receipt.ReadReceiptViewState
 import io.element.android.features.messages.impl.timeline.components.receipt.TimelineItemReadReceiptView
@@ -40,6 +42,7 @@ import io.element.android.libraries.matrix.api.core.UserId
 @Composable
 fun TimelineItemGroupedEventsRow(
     timelineItem: TimelineItem.GroupedEvents,
+    timelineRoomInfo: TimelineRoomInfo,
     showReadReceipts: Boolean,
     isLastOutgoingMessage: Boolean,
     highlightedItem: String?,
@@ -66,6 +69,7 @@ fun TimelineItemGroupedEventsRow(
         isExpanded = isExpanded.value,
         onExpandGroupClick = ::onExpandGroupClick,
         timelineItem = timelineItem,
+        timelineRoomInfo = timelineRoomInfo,
         highlightedItem = highlightedItem,
         showReadReceipts = showReadReceipts,
         isLastOutgoingMessage = isLastOutgoingMessage,
@@ -89,6 +93,7 @@ private fun TimelineItemGroupedEventsRowContent(
     isExpanded: Boolean,
     onExpandGroupClick: () -> Unit,
     timelineItem: TimelineItem.GroupedEvents,
+    timelineRoomInfo: TimelineRoomInfo,
     highlightedItem: String?,
     showReadReceipts: Boolean,
     isLastOutgoingMessage: Boolean,
@@ -121,6 +126,7 @@ private fun TimelineItemGroupedEventsRowContent(
                 timelineItem.events.forEach { subGroupEvent ->
                     TimelineItemRow(
                         timelineItem = subGroupEvent,
+                        timelineRoomInfo = timelineRoomInfo,
                         showReadReceipts = showReadReceipts,
                         isLastOutgoingMessage = isLastOutgoingMessage,
                         highlightedItem = highlightedItem,
@@ -161,6 +167,7 @@ internal fun TimelineItemGroupedEventsRowContentExpandedPreview() = ElementPrevi
         isExpanded = true,
         onExpandGroupClick = {},
         timelineItem = aGroupedEvents(),
+        timelineRoomInfo = aTimelineRoomInfo(),
         highlightedItem = null,
         showReadReceipts = true,
         isLastOutgoingMessage = false,
@@ -185,6 +192,7 @@ internal fun TimelineItemGroupedEventsRowContentCollapsePreview() = ElementPrevi
         isExpanded = false,
         onExpandGroupClick = {},
         timelineItem = aGroupedEvents(),
+        timelineRoomInfo = aTimelineRoomInfo(),
         highlightedItem = null,
         showReadReceipts = true,
         isLastOutgoingMessage = false,
