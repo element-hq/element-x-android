@@ -97,7 +97,8 @@ for lang in cumul:
     androidLang = lang\
         .replace("_", "-r")\
         .replace("zh-rHans", "zh-rCN") \
-        .replace("zh-rHant", "zh-rTW")
+        .replace("zh-rHant", "zh-rTW") \
+        .replace("id", "in")
     write_file(os.path.join(data_defs_dir, "values-" + androidLang + "/strings_sas.xml"), cumul[lang])
 
 print()
