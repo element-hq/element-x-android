@@ -16,12 +16,10 @@
 
 package io.element.android.libraries.matrix.test.verification
 
+import io.element.android.libraries.matrix.api.verification.SessionVerificationData
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
-import io.element.android.libraries.matrix.api.verification.VerificationFlowState
 import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatus
-import io.element.android.libraries.matrix.api.verification.VerificationEmoji
-import kotlinx.collections.immutable.persistentListOf
-import kotlinx.collections.immutable.toPersistentList
+import io.element.android.libraries.matrix.api.verification.VerificationFlowState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -31,10 +29,9 @@ class FakeSessionVerificationService : SessionVerificationService {
     private val _sessionVerifiedStatus = MutableStateFlow<SessionVerifiedStatus>(SessionVerifiedStatus.Unknown)
     private var _verificationFlowState = MutableStateFlow<VerificationFlowState>(VerificationFlowState.Initial)
     private var _canVerifySessionFlow = MutableStateFlow(true)
-    private var emojiList = persistentListOf<VerificationEmoji>()
     var shouldFail = false
 
-    override val verificationFlowState: StateFlow<VerificationFlowState> =_verificationFlowState
+    override val verificationFlowState: StateFlow<VerificationFlowState> = _verificationFlowState
     override val sessionVerifiedStatus: StateFlow<SessionVerifiedStatus> = _sessionVerifiedStatus
     override val canVerifySessionFlow: Flow<Boolean> = _canVerifySessionFlow
 
@@ -64,8 +61,8 @@ class FakeSessionVerificationService : SessionVerificationService {
         }
     }
 
-    fun triggerReceiveVerificationData() {
-        _verificationFlowState.value = VerificationFlowState.ReceivedVerificationData(emojiList)
+    fun triggerReceiveVerificationData(sessionVerificationData: SessionVerificationData) {
+        _verificationFlowState.value = VerificationFlowState.ReceivedVerificationData(sessionVerificationData)
     }
 
     override suspend fun startVerification() {
@@ -86,10 +83,6 @@ class FakeSessionVerificationService : SessionVerificationService {
 
     fun givenIsReady(value: Boolean) {
         _isReady.value = value
-    }
-
-    fun givenEmojiList(emojis: List<VerificationEmoji>) {
-        this.emojiList = emojis.toPersistentList()
     }
 
     override suspend fun reset() {
