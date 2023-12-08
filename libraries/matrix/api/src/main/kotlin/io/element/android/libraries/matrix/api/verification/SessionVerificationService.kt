@@ -101,8 +101,8 @@ sealed interface VerificationFlowState {
     /** Short Authentication String (SAS) verification started between the 2 devices. */
     data object StartedSasVerification : VerificationFlowState
 
-    /** Verification data for the SAS verification (emojis) received. */
-    data class ReceivedVerificationData(val emoji: ImmutableList<VerificationEmoji>) : VerificationFlowState
+    /** Verification data for the SAS verification received. */
+    data class ReceivedVerificationData(val data: SessionVerificationData) : VerificationFlowState
 
     /** Verification completed successfully. */
     data object Finished : VerificationFlowState

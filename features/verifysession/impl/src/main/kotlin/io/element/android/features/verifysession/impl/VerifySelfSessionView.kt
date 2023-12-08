@@ -52,6 +52,7 @@ import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
+import io.element.android.libraries.matrix.api.verification.SessionVerificationData
 import io.element.android.libraries.matrix.api.verification.VerificationEmoji
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.features.verifysession.impl.VerifySelfSessionState.VerificationStep as FlowStep
@@ -141,17 +142,22 @@ private fun ContentWaiting(modifier: Modifier = Modifier) {
 
 @Composable
 private fun ContentVerifying(verificationFlowStep: FlowStep.Verifying, modifier: Modifier = Modifier) {
-    // We want each row to have up to 4 emojis
-    val rows = verificationFlowStep.emojiList.chunked(4)
-    Column(modifier = modifier.fillMaxWidth()) {
-        for ((rowIndex, emojis) in rows.withIndex()) {
-            // Vertical spacing between rows
-            if (rowIndex > 0) {
-                Spacer(modifier = Modifier.height(40.dp))
-            }
-            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
-                for (emoji in emojis) {
-                    EmojiItemView(emoji = emoji, modifier = Modifier.widthIn(max = 60.dp))
+    when (verificationFlowStep.data) {
+        is SessionVerificationData.Decimals -> Unit // TODO Render decimals
+        is SessionVerificationData.Emojis -> {
+            // We want each row to have up to 4 emojis
+            val rows = verificationFlowStep.data.emojis.chunked(4)
+            Column(modifier = modifier.fillMaxWidth()) {
+                for ((rowIndex, emojis) in rows.withIndex()) {
+                    // Vertical spacing between rows
+                    if (rowIndex > 0) {
+                        Spacer(modifier = Modifier.height(40.dp))
+                    }
+                    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
+                        for (emoji in emojis) {
+                            EmojiItemView(emoji = emoji, modifier = Modifier.widthIn(max = 60.dp))
+                        }
+                    }
                 }
             }
         }
@@ -160,7 +166,7 @@ private fun ContentVerifying(verificationFlowStep: FlowStep.Verifying, modifier:
 
 @Composable
 private fun EmojiItemView(emoji: VerificationEmoji, modifier: Modifier = Modifier) {
-    val emojiResource = emoji.code.toEmojiResource()
+    val emojiResource = emoji.number.toEmojiResource()
     Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = modifier) {
         Image(
             modifier = Modifier.size(48.dp),
