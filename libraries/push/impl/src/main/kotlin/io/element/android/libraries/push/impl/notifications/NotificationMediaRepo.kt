@@ -24,6 +24,7 @@ import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.CacheDirectory
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.media.MediaSource
+import io.element.android.libraries.matrix.api.mxc.MxcTools
 import java.io.File
 
 /**
@@ -68,6 +69,7 @@ interface NotificationMediaRepo {
 
 class DefaultNotificationMediaRepo @AssistedInject constructor(
     @CacheDirectory private val cacheDir: File,
+    private val mxcTools: MxcTools,
     @Assisted private val client: MatrixClient,
 ) : NotificationMediaRepo {
 
@@ -107,7 +109,7 @@ class DefaultNotificationMediaRepo @AssistedInject constructor(
         }
     }
 
-    private fun MediaSource.cachedFile(): File? = mxcUri2FilePath(url)?.let {
+    private fun MediaSource.cachedFile(): File? = mxcTools.mxcUri2FilePath(url)?.let {
         File("${cacheDir.path}/$CACHE_NOTIFICATION_SUBDIR/$it")
     }
 }
@@ -116,24 +118,3 @@ class DefaultNotificationMediaRepo @AssistedInject constructor(
  * Subdirectory of the application's cache directory where file are stored.
  */
 private const val CACHE_NOTIFICATION_SUBDIR = "temp/notif"
-
-/**
- * Regex to match a Matrix Content (mxc://) URI.
- *
- * See: https://spec.matrix.org/v1.8/client-server-api/#matrix-content-mxc-uris
- */
-private val mxcRegex = Regex("""^mxc:\/\/([^\/]+)\/([^\/]+)$""")
-
-/**
- * Sanitizes an mxcUri to be used as a relative file path.
- *
- * @param mxcUri the Matrix Content (mxc://) URI of the file.
- * @return the relative file path as "<server-name>/<media-id>" or null if the mxcUri is invalid.
- */
-private fun mxcUri2FilePath(mxcUri: String): String? = mxcRegex.matchEntire(mxcUri)?.let { match ->
-    buildString {
-        append(match.groupValues[1])
-        append("/")
-        append(match.groupValues[2])
-    }
-}
