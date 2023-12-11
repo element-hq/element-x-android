@@ -16,7 +16,12 @@
 
 package io.element.android.libraries.push.impl.notifications
 
+import android.content.Context
+import android.net.Uri
+import androidx.core.content.FileProvider
 import io.element.android.libraries.core.log.logger.LoggerTag
+import io.element.android.libraries.di.ApplicationContext
+import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.MatrixClientProvider
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -60,6 +65,8 @@ class NotifiableEventResolver @Inject constructor(
     private val stringProvider: StringProvider,
     private val clock: SystemClock,
     private val matrixClientProvider: MatrixClientProvider,
+    private val notificationMediaRepoFactory: NotificationMediaRepo.Factory,
+    @ApplicationContext private val context: Context,
 ) {
 
     suspend fun resolveEvent(sessionId: SessionId, roomId: RoomId, eventId: EventId): NotifiableEvent? {
@@ -75,10 +82,13 @@ class NotifiableEventResolver @Inject constructor(
         }.getOrNull()
 
         // TODO this notificationData is not always valid at the moment, sometimes the Rust SDK can't fetch the matching event
-        return notificationData?.asNotifiableEvent(sessionId)
+        return notificationData?.asNotifiableEvent(client, sessionId)
     }
 
-    private fun NotificationData.asNotifiableEvent(userId: SessionId): NotifiableEvent? {
+    private suspend fun NotificationData.asNotifiableEvent(
+        client: MatrixClient,
+        userId: SessionId,
+    ): NotifiableEvent? {
         return when (val content = this.content) {
             is NotificationContent.MessageLike.RoomMessage -> {
                 val messageBody = descriptionFromMessageContent(content, senderDisplayName ?: content.senderId.value)
@@ -96,7 +106,7 @@ class NotifiableEventResolver @Inject constructor(
                     timestamp = this.timestamp,
                     senderName = senderDisplayName,
                     body = notificationBody,
-                    imageUriString = this.contentUrl,
+                    imageUriString = fetchImageIfPresent(client)?.toString(),
                     roomName = roomDisplayName,
                     roomIsDirect = isDirect,
                     roomAvatarPath = roomAvatarUrl,
@@ -237,6 +247,39 @@ class NotifiableEventResolver @Inject constructor(
         } else {
             stringProvider.getString(R.string.notification_room_invite_body)
         }
+    }
+
+    private suspend fun NotificationData.fetchImageIfPresent(client: MatrixClient): Uri? {
+        val fileResult = when (val content = this.content) {
+            is NotificationContent.MessageLike.RoomMessage -> {
+                when (val messageType = content.messageType) {
+                    is AudioMessageType -> null
+                    is VoiceMessageType -> null
+                    is EmoteMessageType -> null
+                    is FileMessageType -> null
+                    is ImageMessageType -> notificationMediaRepoFactory.create(client)
+                        .getMediaFile(
+                            mediaSource = messageType.source,
+                            mimeType = messageType.info?.mimetype,
+                            body = messageType.body,
+                        )
+                    is NoticeMessageType -> null
+                    is TextMessageType -> null
+                    is VideoMessageType -> null
+                    is LocationMessageType -> null
+                    is OtherMessageType -> null
+                }
+            }
+            else -> null
+        } ?: return null
+
+        return fileResult
+            .onFailure {
+                Timber.tag(loggerTag.value).e(it, "Failed to download image for notification")
+            }.getOrNull()?.let { mediaFile ->
+                val authority = "${context.packageName}.notifications.fileprovider"
+                FileProvider.getUriForFile(context, authority, mediaFile)
+            }
     }
 }
 
