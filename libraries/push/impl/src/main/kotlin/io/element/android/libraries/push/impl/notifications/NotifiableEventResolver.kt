@@ -253,21 +253,14 @@ class NotifiableEventResolver @Inject constructor(
         val fileResult = when (val content = this.content) {
             is NotificationContent.MessageLike.RoomMessage -> {
                 when (val messageType = content.messageType) {
-                    is AudioMessageType -> null
-                    is VoiceMessageType -> null
-                    is EmoteMessageType -> null
-                    is FileMessageType -> null
                     is ImageMessageType -> notificationMediaRepoFactory.create(client)
                         .getMediaFile(
                             mediaSource = messageType.source,
                             mimeType = messageType.info?.mimetype,
                             body = messageType.body,
                         )
-                    is NoticeMessageType -> null
-                    is TextMessageType -> null
-                    is VideoMessageType -> null
-                    is LocationMessageType -> null
-                    is OtherMessageType -> null
+                    is VideoMessageType -> null // Use the thumbnail here?
+                    else -> null
                 }
             }
             else -> null
