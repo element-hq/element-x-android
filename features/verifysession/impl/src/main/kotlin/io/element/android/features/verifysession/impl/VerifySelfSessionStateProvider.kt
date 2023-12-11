@@ -18,6 +18,7 @@ package io.element.android.features.verifysession.impl
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.matrix.api.verification.SessionVerificationData
 import io.element.android.libraries.matrix.api.verification.VerificationEmoji
 
 open class VerifySelfSessionStateProvider : PreviewParameterProvider<VerifySelfSessionState> {
@@ -28,10 +29,10 @@ open class VerifySelfSessionStateProvider : PreviewParameterProvider<VerifySelfS
                 verificationFlowStep = VerifySelfSessionState.VerificationStep.AwaitingOtherDeviceResponse
             ),
             aVerifySelfSessionState().copy(
-                verificationFlowStep = VerifySelfSessionState.VerificationStep.Verifying(aVerificationEmojiList(), Async.Uninitialized)
+                verificationFlowStep = VerifySelfSessionState.VerificationStep.Verifying(aEmojisSessionVerificationData(), Async.Uninitialized)
             ),
             aVerifySelfSessionState().copy(
-                verificationFlowStep = VerifySelfSessionState.VerificationStep.Verifying(aVerificationEmojiList(), Async.Loading())
+                verificationFlowStep = VerifySelfSessionState.VerificationStep.Verifying(aEmojisSessionVerificationData(), Async.Loading())
             ),
             aVerifySelfSessionState().copy(
                 verificationFlowStep = VerifySelfSessionState.VerificationStep.Canceled
@@ -39,21 +40,36 @@ open class VerifySelfSessionStateProvider : PreviewParameterProvider<VerifySelfS
             aVerifySelfSessionState().copy(
                 verificationFlowStep = VerifySelfSessionState.VerificationStep.Ready
             ),
+            aVerifySelfSessionState().copy(
+                verificationFlowStep = VerifySelfSessionState.VerificationStep.Verifying(aDecimalsSessionVerificationData(), Async.Uninitialized)
+            ),
             // Add other state here
         )
 }
 
-fun aVerifySelfSessionState() = VerifySelfSessionState(
+private fun aEmojisSessionVerificationData(
+    emojiList: List<VerificationEmoji> = aVerificationEmojiList(),
+): SessionVerificationData {
+    return SessionVerificationData.Emojis(emojiList)
+}
+
+private fun aDecimalsSessionVerificationData(
+    decimals: List<Int> = listOf(123, 456, 789),
+): SessionVerificationData {
+    return SessionVerificationData.Decimals(decimals)
+}
+
+private fun aVerifySelfSessionState() = VerifySelfSessionState(
     verificationFlowStep = VerifySelfSessionState.VerificationStep.Initial,
     eventSink = {},
 )
 
-fun aVerificationEmojiList() = listOf(
-    VerificationEmoji("🍕", "Pizza"),
-    VerificationEmoji("🚀", "Rocket"),
-    VerificationEmoji("🚀", "Rocket"),
-    VerificationEmoji("🗺️", "Map"),
-    VerificationEmoji("🎳", "Bowling"),
-    VerificationEmoji("🎳", "Bowling"),
-    VerificationEmoji("📌", "Pin"),
+private fun aVerificationEmojiList() = listOf(
+    VerificationEmoji(number = 27, emoji = "🍕", description = "Pizza"),
+    VerificationEmoji(number = 54, emoji = "🚀", description = "Rocket"),
+    VerificationEmoji(number = 54, emoji = "🚀", description = "Rocket"),
+    VerificationEmoji(number = 42, emoji = "📕", description = "Book"),
+    VerificationEmoji(number = 48, emoji = "🔨", description = "Hammer"),
+    VerificationEmoji(number = 48, emoji = "🔨", description = "Hammer"),
+    VerificationEmoji(number = 63, emoji = "📌", description = "Pin"),
 )

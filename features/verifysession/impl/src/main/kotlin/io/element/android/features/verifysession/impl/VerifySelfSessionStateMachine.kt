@@ -20,8 +20,8 @@
 package io.element.android.features.verifysession.impl
 
 import com.freeletics.flowredux.dsl.FlowReduxStateMachine
+import io.element.android.libraries.matrix.api.verification.SessionVerificationData
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
-import io.element.android.libraries.matrix.api.verification.VerificationEmoji
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import javax.inject.Inject
 import com.freeletics.flowredux.dsl.State as MachineState
@@ -70,15 +70,15 @@ class VerifySelfSessionStateMachine @Inject constructor(
             }
             inState<State.SasVerificationStarted> {
                 on { event: Event.DidReceiveChallenge, state: MachineState<State.SasVerificationStarted> ->
-                    state.override { State.Verifying.ChallengeReceived(event.emojis) }
+                    state.override { State.Verifying.ChallengeReceived(event.data) }
                 }
             }
             inState<State.Verifying.ChallengeReceived> {
                 on { _: Event.AcceptChallenge, state: MachineState<State.Verifying.ChallengeReceived> ->
-                    state.override { State.Verifying.Replying(state.snapshot.emojis, accept = true) }
+                    state.override { State.Verifying.Replying(state.snapshot.data, accept = true) }
                 }
                 on { _: Event.DeclineChallenge, state: MachineState<State.Verifying.ChallengeReceived> ->
-                    state.override { State.Verifying.Replying(state.snapshot.emojis, accept = false) }
+                    state.override { State.Verifying.Replying(state.snapshot.data, accept = false) }
                 }
             }
             inState<State.Verifying.Replying> {
@@ -139,12 +139,12 @@ class VerifySelfSessionStateMachine @Inject constructor(
         /** A SaS verification flow has been started. */
         data object SasVerificationStarted : State
 
-        sealed class Verifying(open val emojis: List<VerificationEmoji>) : State {
+        sealed class Verifying(open val data: SessionVerificationData) : State {
             /** Verification accepted and emojis received. */
-            data class ChallengeReceived(override val emojis: List<VerificationEmoji>) : Verifying(emojis)
+            data class ChallengeReceived(override val data: SessionVerificationData) : Verifying(data)
 
             /** Replying to a verification challenge. */
-            data class Replying(override val emojis: List<VerificationEmoji>, val accept: Boolean) : Verifying(emojis)
+            data class Replying(override val data: SessionVerificationData, val accept: Boolean) : Verifying(data)
         }
 
         /** The verification is being canceled. */
@@ -170,8 +170,8 @@ class VerifySelfSessionStateMachine @Inject constructor(
         /** Started a SaS verification flow. */
         data object DidStartSasVerification : Event
 
-        /** Has received emojis. */
-        data class DidReceiveChallenge(val emojis: List<VerificationEmoji>) : Event
+        /** Has received data. */
+        data class DidReceiveChallenge(val data: SessionVerificationData) : Event
 
         /** Emojis match. */
         data object AcceptChallenge : Event
