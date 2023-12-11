@@ -59,6 +59,10 @@ class FakeBugReporter(val mode: FakeBugReporterMode = FakeBugReporterMode.Succes
     override fun logDirectory(): File {
         return File("fake")
     }
+
+    override fun setCurrentTracingFilter(tracingFilter: String) {
+        // No op
+    }
 }
 
 enum class FakeBugReporterMode {
