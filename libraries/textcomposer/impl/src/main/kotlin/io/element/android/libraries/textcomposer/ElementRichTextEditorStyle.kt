@@ -25,7 +25,7 @@ import io.element.android.libraries.designsystem.theme.bgSubtleTertiary
 import io.element.android.wysiwyg.compose.RichTextEditorDefaults
 import io.element.android.wysiwyg.compose.RichTextEditorStyle
 
-internal object ElementRichTextEditorStyle {
+object ElementRichTextEditorStyle {
     @Composable
     fun create(
         hasFocus: Boolean,
@@ -42,6 +42,7 @@ internal object ElementRichTextEditorStyle {
                     m3colors.secondary
                 },
                 lineHeight = TextUnit.Unspecified,
+                includeFontPadding = false,
             ),
             cursor = RichTextEditorDefaults.cursorStyle(
                 color = colors.iconAccentTertiary,

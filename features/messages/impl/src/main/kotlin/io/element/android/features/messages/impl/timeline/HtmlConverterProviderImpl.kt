@@ -21,16 +21,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
 import com.squareup.anvil.annotations.ContributesBinding
-import io.element.android.compound.theme.LinkColor
 import io.element.android.features.messages.api.timeline.HtmlConverterProvider
 import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.matrix.api.user.CurrentSessionIdHolder
+import io.element.android.libraries.textcomposer.ElementRichTextEditorStyle
 import io.element.android.libraries.textcomposer.mentions.MentionSpanProvider
 import io.element.android.libraries.textcomposer.mentions.rememberMentionSpanProvider
-import io.element.android.wysiwyg.compose.LinkStyle
-import io.element.android.wysiwyg.compose.RichTextEditorDefaults
 import io.element.android.wysiwyg.compose.RichTextEditorStyle
 import io.element.android.wysiwyg.compose.StyledHtmlConverter
 import io.element.android.wysiwyg.display.MentionDisplayHandler
@@ -58,12 +56,7 @@ class HtmlConverterProviderImpl @Inject constructor(
             mentionDetector = remember { newMentionDetector() }
         }
 
-        editorStyle = RichTextEditorDefaults.style(
-            link = LinkStyle(LinkColor),
-            text = RichTextEditorDefaults.textStyle(
-                 includeFontPadding = false,
-            ),
-        )
+        editorStyle = ElementRichTextEditorStyle.create(hasFocus = true)
         mentionSpanProvider = rememberMentionSpanProvider(currentUserId = currentSessionIdHolder.current)
 
         val context = LocalContext.current

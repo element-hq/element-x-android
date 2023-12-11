@@ -29,14 +29,12 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.core.text.buildSpannedString
 import androidx.core.text.util.LinkifyCompat
 import io.element.android.compound.theme.ElementTheme
-import io.element.android.compound.theme.LinkColor
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextBasedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextBasedContentProvider
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.textcomposer.ElementRichTextEditorStyle
 import io.element.android.wysiwyg.compose.EditorStyledText
-import io.element.android.wysiwyg.compose.LinkStyle
-import io.element.android.wysiwyg.compose.RichTextEditorDefaults
 
 @Composable
 fun TimelineItemTextView(
@@ -62,12 +60,7 @@ fun TimelineItemTextView(
             EditorStyledText(
                 text = textWithPadding,
                 onLinkClickedListener = onLinkClicked,
-                style = RichTextEditorDefaults.style(
-                    text = RichTextEditorDefaults.textStyle(
-                         includeFontPadding = false
-                    ),
-                    link = LinkStyle(LinkColor)
-                )
+                style = ElementRichTextEditorStyle.create(hasFocus = true),
             )
         }
     }
