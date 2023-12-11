@@ -48,23 +48,29 @@ if args.verbose:
 
 print()
 
-# emoji -> translation
+# number -> translation
 default = dict()
 # Language -> emoji -> translation
 cumul = dict()
 
 for emoji in data0:
-    description = emoji["description"]
+    d = dict()
+    number = emoji["number"]
+    d["description"] = emoji["description"]
+    d["emoji"] = emoji["emoji"]
+    d["unicode"] = emoji["unicode"]
     if args.verbose:
-        print("Description: " + description)
-    default[description] = description
+        print("Dict: " + str(d))
+    default[number] = d
 
     for lang in emoji["translated_descriptions"]:
         if args.verbose:
             print("Lang: " + lang)
         if not (lang in cumul):
             cumul[lang] = dict()
-        cumul[lang][description] = emoji["translated_descriptions"][lang]
+        d = dict()
+        d["description"] = emoji["translated_descriptions"][lang]
+        cumul[lang][number] = d
 
 if args.verbose:
     print(default)
@@ -83,7 +89,9 @@ def write_file(file, dict):
         for key in dict:
             if dict[key] is None:
                 continue
-            o.write("    <string name=\"verification_emoji_" + key.lower().replace(" ", "_") + "\">" + dict[key].replace("'", "\\'") + "</string>\n")
+            if dict[key]["description"] is None:
+                continue
+            o.write("    <string name=\"verification_emoji_" + format(key, '02d') + "\">" + dict[key]["description"].replace("'", "\\'") + "</string>\n")
         o.write("</resources>\n")
 
 scripts_dir = os.path.dirname(os.path.abspath(__file__))
@@ -94,8 +102,8 @@ write_file(os.path.join(data_defs_dir, "values/strings_sas.xml"), default)
 
 # Write each language file
 for lang in cumul:
-    androidLang = lang\
-        .replace("_", "-r")\
+    androidLang = lang \
+        .replace("_", "-r") \
         .replace("zh-rHans", "zh-rCN") \
         .replace("zh-rHant", "zh-rTW") \
         .replace("id", "in")
