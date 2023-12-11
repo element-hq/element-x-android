@@ -18,6 +18,7 @@ package io.element.android.features.messages.impl.timeline.components
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import io.element.android.features.messages.impl.timeline.TimelineRoomInfo
 import io.element.android.features.messages.impl.timeline.TimelineEvents
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStateContent
@@ -29,6 +30,7 @@ import io.element.android.libraries.matrix.api.core.UserId
 @Composable
 internal fun TimelineItemRow(
     timelineItem: TimelineItem,
+    timelineRoomInfo: TimelineRoomInfo,
     showReadReceipts: Boolean,
     isLastOutgoingMessage: Boolean,
     highlightedItem: String?,
@@ -71,6 +73,7 @@ internal fun TimelineItemRow(
             } else {
                 TimelineItemEventRow(
                     event = timelineItem,
+                    timelineRoomInfo = timelineRoomInfo,
                     showReadReceipts = showReadReceipts,
                     isLastOutgoingMessage = isLastOutgoingMessage,
                     isHighlighted = highlightedItem == timelineItem.identifier(),
@@ -93,6 +96,7 @@ internal fun TimelineItemRow(
         is TimelineItem.GroupedEvents -> {
             TimelineItemGroupedEventsRow(
                 timelineItem = timelineItem,
+                timelineRoomInfo = timelineRoomInfo,
                 showReadReceipts = showReadReceipts,
                 isLastOutgoingMessage = isLastOutgoingMessage,
                 highlightedItem = highlightedItem,

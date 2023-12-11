@@ -60,6 +60,7 @@ import androidx.compose.ui.zIndex
 import androidx.constraintlayout.compose.ConstrainScope
 import androidx.constraintlayout.compose.ConstraintLayout
 import io.element.android.compound.theme.ElementTheme
+import io.element.android.features.messages.impl.timeline.TimelineRoomInfo
 import io.element.android.features.messages.impl.timeline.TimelineEvents
 import io.element.android.features.messages.impl.timeline.aTimelineItemEvent
 import io.element.android.features.messages.impl.timeline.components.event.TimelineItemEventContentView
@@ -101,6 +102,7 @@ import kotlin.math.roundToInt
 @Composable
 fun TimelineItemEventRow(
     event: TimelineItem.Event,
+    timelineRoomInfo: TimelineRoomInfo,
     showReadReceipts: Boolean,
     isLastOutgoingMessage: Boolean,
     isHighlighted: Boolean,
@@ -164,6 +166,7 @@ fun TimelineItemEventRow(
                             ),
                         event = event,
                         isHighlighted = isHighlighted,
+                        timelineRoomInfo = timelineRoomInfo,
                         interactionSource = interactionSource,
                         onClick = onClick,
                         onLongClick = onLongClick,
@@ -181,6 +184,7 @@ fun TimelineItemEventRow(
             TimelineItemEventRowContent(
                 event = event,
                 isHighlighted = isHighlighted,
+                timelineRoomInfo = timelineRoomInfo,
                 interactionSource = interactionSource,
                 onClick = onClick,
                 onLongClick = onLongClick,
@@ -234,6 +238,7 @@ private fun SwipeSensitivity(
 private fun TimelineItemEventRowContent(
     event: TimelineItem.Event,
     isHighlighted: Boolean,
+    timelineRoomInfo: TimelineRoomInfo,
     interactionSource: MutableInteractionSource,
     onClick: () -> Unit,
     onLongClick: () -> Unit,
@@ -265,7 +270,7 @@ private fun TimelineItemEventRowContent(
 
         // Sender
         val avatarStrokeSize = 3.dp
-        if (event.showSenderInformation) {
+        if (event.showSenderInformation && !timelineRoomInfo.isDirect) {
             MessageSenderInformation(
                 event.safeSenderName,
                 event.senderAvatar,
@@ -285,6 +290,7 @@ private fun TimelineItemEventRowContent(
             groupPosition = event.groupPosition,
             isMine = event.isMine,
             isHighlighted = isHighlighted,
+            timelineRoomInfo = timelineRoomInfo,
         )
         MessageEventBubble(
             modifier = Modifier
