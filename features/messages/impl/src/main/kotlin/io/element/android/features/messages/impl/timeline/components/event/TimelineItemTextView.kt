@@ -43,7 +43,10 @@ fun TimelineItemTextView(
     onLinkClicked: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    CompositionLocalProvider(LocalContentColor provides ElementTheme.colors.textPrimary) {
+    CompositionLocalProvider(
+        LocalContentColor provides ElementTheme.colors.textPrimary,
+        LocalTextStyle provides ElementTheme.typography.fontBodyLgRegular
+    ) {
         val fontSize = LocalTextStyle.current.fontSize
 
         val formattedBody = content.formattedBody
@@ -60,7 +63,7 @@ fun TimelineItemTextView(
             EditorStyledText(
                 text = textWithPadding,
                 onLinkClickedListener = onLinkClicked,
-                style = ElementRichTextEditorStyle.create(hasFocus = true),
+                style = ElementRichTextEditorStyle.textStyle(),
             )
         }
     }

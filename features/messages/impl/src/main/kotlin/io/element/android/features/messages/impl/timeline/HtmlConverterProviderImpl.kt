@@ -56,7 +56,7 @@ class HtmlConverterProviderImpl @Inject constructor(
             mentionDetector = remember { newMentionDetector() }
         }
 
-        editorStyle = ElementRichTextEditorStyle.create(hasFocus = true)
+        editorStyle = ElementRichTextEditorStyle.textStyle()
         mentionSpanProvider = rememberMentionSpanProvider(currentUserId = currentSessionIdHolder.current)
 
         val context = LocalContext.current
