@@ -42,6 +42,7 @@ import io.element.android.libraries.matrix.test.A_USER_ID_2
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.FakeMatrixClientProvider
 import io.element.android.libraries.matrix.test.notification.FakeNotificationService
+import io.element.android.libraries.push.impl.notifications.fake.FakeNotificationMediaRepo
 import io.element.android.libraries.push.impl.notifications.model.FallbackNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.InviteNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.NotifiableMessageEvent
@@ -257,7 +258,7 @@ class NotifiableEventResolverTest {
                 createNotificationData(
                     content = NotificationContent.MessageLike.RoomMessage(
                         senderId = A_USER_ID_2,
-                        messageType =  LocationMessageType("Location", "geo:1,2", null),
+                        messageType = LocationMessageType("Location", "geo:1,2", null),
                     )
                 )
             )
@@ -274,7 +275,7 @@ class NotifiableEventResolverTest {
                 createNotificationData(
                     content = NotificationContent.MessageLike.RoomMessage(
                         senderId = A_USER_ID_2,
-                        messageType =  NoticeMessageType("Notice", null),
+                        messageType = NoticeMessageType("Notice", null),
                     )
                 )
             )
@@ -291,7 +292,7 @@ class NotifiableEventResolverTest {
                 createNotificationData(
                     content = NotificationContent.MessageLike.RoomMessage(
                         senderId = A_USER_ID_2,
-                        messageType =  EmoteMessageType("is happy", null),
+                        messageType = EmoteMessageType("is happy", null),
                     )
                 )
             )
@@ -487,11 +488,15 @@ class NotifiableEventResolverTest {
                 Result.success(FakeMatrixClient(notificationService = notificationService))
             }
         })
-
+        val notificationMediaRepoFactory = NotificationMediaRepo.Factory {
+            FakeNotificationMediaRepo()
+        }
         return NotifiableEventResolver(
             stringProvider = AndroidStringProvider(context.resources),
             clock = FakeSystemClock(),
             matrixClientProvider = matrixClientProvider,
+            notificationMediaRepoFactory = notificationMediaRepoFactory,
+            context = context,
         )
     }
 
@@ -512,7 +517,6 @@ class NotifiableEventResolverTest {
             isNoisy = false,
             timestamp = A_TIMESTAMP,
             content = content,
-            contentUrl = null,
             hasMention = hasMention,
         )
     }

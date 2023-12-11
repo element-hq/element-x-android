@@ -16,13 +16,10 @@
 
 package io.element.android.libraries.push.impl.notifications
 
-import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Intent
+import androidx.core.content.FileProvider
 
-class TestNotificationReceiver : BroadcastReceiver() {
-
-    override fun onReceive(context: Context, intent: Intent) {
-        // TODO The test notification has been clicked, notify the ui
-    }
-}
+/**
+ * We have to declare our own file provider to avoid collision with other modules
+ * having their own.
+ */
+class NotificationsFileProvider : FileProvider()

@@ -14,15 +14,18 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.push.impl.notifications
+package io.element.android.libraries.push.impl.notifications.fake
 
-import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Intent
+import io.element.android.libraries.matrix.api.media.MediaSource
+import io.element.android.libraries.push.impl.notifications.NotificationMediaRepo
+import java.io.File
 
-class TestNotificationReceiver : BroadcastReceiver() {
-
-    override fun onReceive(context: Context, intent: Intent) {
-        // TODO The test notification has been clicked, notify the ui
+class FakeNotificationMediaRepo : NotificationMediaRepo {
+    override suspend fun getMediaFile(
+        mediaSource: MediaSource,
+        mimeType: String?,
+        body: String?,
+    ): Result<File> {
+        return Result.failure(IllegalStateException("Fake class"))
     }
 }
