@@ -61,8 +61,7 @@ class HtmlConverterProviderImpl @Inject constructor(
         editorStyle = RichTextEditorDefaults.style(
             link = LinkStyle(LinkColor),
             text = RichTextEditorDefaults.textStyle(
-                // TODO re-enable this once it's available in the RTE side
-                // includeFontPadding = false,
+                 includeFontPadding = false,
             ),
         )
         mentionSpanProvider = rememberMentionSpanProvider(currentUserId = currentSessionIdHolder.current)
