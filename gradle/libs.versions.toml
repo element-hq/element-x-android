@@ -209,7 +209,7 @@ kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 anvil = { id = "com.squareup.anvil", version.ref = "anvil" }
 detekt = "io.gitlab.arturbosch.detekt:1.23.4"
-ktlint = "org.jlleitschuh.gradle.ktlint:12.0.2"
+ktlint = "org.jlleitschuh.gradle.ktlint:12.0.3"
 dependencygraph = "com.savvasdalkitsis.module-dependency-graph:0.12"
 dependencycheck = "org.owasp.dependencycheck:9.0.4"
 dependencyanalysis = "com.autonomousapps.dependency-analysis:1.27.0"
