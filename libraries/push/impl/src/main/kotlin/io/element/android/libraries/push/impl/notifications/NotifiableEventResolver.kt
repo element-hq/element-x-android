@@ -269,10 +269,12 @@ class NotifiableEventResolver @Inject constructor(
         return fileResult
             .onFailure {
                 Timber.tag(loggerTag.value).e(it, "Failed to download image for notification")
-            }.getOrNull()?.let { mediaFile ->
+            }
+            .map { mediaFile ->
                 val authority = "${context.packageName}.notifications.fileprovider"
                 FileProvider.getUriForFile(context, authority, mediaFile)
             }
+            .getOrNull()
     }
 }
 
