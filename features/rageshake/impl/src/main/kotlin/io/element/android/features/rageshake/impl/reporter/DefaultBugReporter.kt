@@ -35,6 +35,7 @@ import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
+import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.network.useragent.UserAgentProvider
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import io.element.android.services.toolbox.api.systemclock.SystemClock
@@ -63,6 +64,7 @@ import javax.inject.Provider
 /**
  * BugReporter creates and sends the bug reports.
  */
+@SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
 class DefaultBugReporter @Inject constructor(
     @ApplicationContext private val context: Context,
@@ -82,7 +84,6 @@ class DefaultBugReporter @Inject constructor(
         private const val LOG_CAT_FILENAME = "logcat.log"
         private const val LOG_DIRECTORY_NAME = "logs"
         private const val BUFFER_SIZE = 1024 * 1024 * 50
-        var currentTracingFilter: String? = null
     }
 
     // the pending bug report call
@@ -90,6 +91,7 @@ class DefaultBugReporter @Inject constructor(
     // boolean to cancel the bug report
     private val isCancelled = false
     private val logcatCommandDebug = arrayOf("logcat", "-d", "-v", "threadtime", "*:*")
+    private var currentTracingFilter: String? = null
 
     override suspend fun sendBugReport(
         withDevicesLogs: Boolean,
