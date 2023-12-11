@@ -18,6 +18,7 @@ package io.element.android.libraries.textcomposer
 
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.element.android.libraries.designsystem.theme.bgSubtleTertiary
@@ -41,7 +42,7 @@ internal object ElementRichTextEditorStyle {
                 } else {
                     m3colors.secondary
                 },
-                lineHeight = 16.25.sp,
+                lineHeight = TextUnit.Unspecified,
             ),
             cursor = RichTextEditorDefaults.cursorStyle(
                 color = colors.iconAccentTertiary,
