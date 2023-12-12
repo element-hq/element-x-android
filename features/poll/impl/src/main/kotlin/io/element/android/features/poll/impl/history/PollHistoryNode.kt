@@ -41,6 +41,7 @@ class PollHistoryNode @AssistedInject constructor(
         PollHistoryView(
             state = presenter.present(),
             modifier = modifier,
+            onEditPoll = {},
             goBack = this::navigateUp,
         )
     }

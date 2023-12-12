@@ -23,6 +23,5 @@ sealed interface PollHistoryEvents {
     data object LoadMore : PollHistoryEvents
     data class PollAnswerSelected(val pollStartId: EventId, val answerId: String) : PollHistoryEvents
     data class PollEndClicked(val pollStartId: EventId) : PollHistoryEvents
-    data object EditPoll : PollHistoryEvents
     data class OnFilterSelected(val filter: PollHistoryFilter) : PollHistoryEvents
 }

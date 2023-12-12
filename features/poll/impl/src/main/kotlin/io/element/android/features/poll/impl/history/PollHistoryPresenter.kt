@@ -38,7 +38,6 @@ import io.element.android.libraries.matrix.ui.room.rememberPollHistory
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import javax.inject.Inject
 
 class PollHistoryPresenter @Inject constructor(
@@ -82,32 +81,23 @@ class PollHistoryPresenter @Inject constructor(
                 is PollHistoryEvents.PollEndClicked -> appCoroutineScope.launch {
                     endPollAction.execute(pollStartId = event.pollStartId)
                 }
-                PollHistoryEvents.EditPoll -> Unit
                 is PollHistoryEvents.OnFilterSelected -> {
                     activeFilter = event.filter
                 }
             }
         }
 
-        val currentItems by remember {
-            derivedStateOf {
-                when (activeFilter) {
-                    PollHistoryFilter.ONGOING -> pollHistoryItems.ongoing
-                    PollHistoryFilter.PAST -> pollHistoryItems.past
-                }
-            }
-        }
+
         return PollHistoryState(
             isLoading = isLoading,
             hasMoreToLoad = paginationState.hasMoreToLoadBackwards,
-            currentItems = currentItems,
+            pollHistoryItems = pollHistoryItems,
             activeFilter = activeFilter,
             eventSink = ::handleEvents,
         )
     }
 
     private fun CoroutineScope.loadMore(pollHistory: MatrixTimeline) = launch {
-        Timber.d("LoadMore poll history")
-        pollHistory.paginateBackwards(50, 3)
+        pollHistory.paginateBackwards(200)
     }
 }

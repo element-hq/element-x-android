@@ -17,6 +17,7 @@
 package io.element.android.features.poll.impl.history
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.consumeWindowInsets
@@ -26,11 +27,15 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -50,14 +55,29 @@ import io.element.android.libraries.designsystem.theme.components.Surface
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.matrix.api.core.EventId
+import kotlinx.collections.immutable.ImmutableList
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun PollHistoryView(
     state: PollHistoryState,
     modifier: Modifier = Modifier,
+    onEditPoll: (EventId) -> Unit,
     goBack: () -> Unit,
 ) {
+
+    fun onLoadMore() {
+        state.eventSink(PollHistoryEvents.LoadMore)
+    }
+
+    fun onAnswerSelected(pollStartId: EventId, answerId: String) {
+        state.eventSink(PollHistoryEvents.PollAnswerSelected(pollStartId, answerId))
+    }
+
+    fun onPollEnd(pollStartId: EventId) {
+        state.eventSink(PollHistoryEvents.PollEndClicked(pollStartId))
+    }
+
     Scaffold(
         modifier = modifier,
         topBar = {
@@ -79,6 +99,12 @@ fun PollHistoryView(
                 .padding(padding)
                 .consumeWindowInsets(padding)
         ) {
+            val pagerState = rememberPagerState(state.activeFilter.ordinal, 0f) {
+                PollHistoryFilter.entries.size
+            }
+            LaunchedEffect(state.activeFilter) {
+                pagerState.scrollToPage(state.activeFilter.ordinal)
+            }
             PollHistoryFilterButtons(
                 activeFilter = state.activeFilter,
                 onFilterSelected = { state.eventSink(PollHistoryEvents.OnFilterSelected(it)) },
@@ -86,10 +112,25 @@ fun PollHistoryView(
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp, vertical = 8.dp),
             )
-            PollHistoryList(
-                state = state,
-                modifier = Modifier.fillMaxSize()
-            )
+            HorizontalPager(
+                state = pagerState,
+                userScrollEnabled = false,
+                modifier = modifier.fillMaxSize()
+            ) { page ->
+                val filter = PollHistoryFilter.entries[page]
+                val pollHistoryItems = state.pollHistoryForFilter(filter)
+                PollHistoryList(
+                    pollHistoryItems = pollHistoryItems,
+                    hasMoreToLoad = state.hasMoreToLoad,
+                    isLoading = state.isLoading,
+                    onAnswerSelected = ::onAnswerSelected,
+                    onPollEdit = onEditPoll,
+                    onPollEnd = ::onPollEnd,
+                    onLoadMore = ::onLoadMore,
+                    modifier = Modifier.fillMaxSize(),
+                )
+
+            }
         }
     }
 }
@@ -116,36 +157,36 @@ private fun PollHistoryFilterButtons(
 
 @Composable
 private fun PollHistoryList(
-    state: PollHistoryState,
+    pollHistoryItems: ImmutableList<PollHistoryItem>,
+    hasMoreToLoad: Boolean,
+    isLoading: Boolean,
+    onAnswerSelected: (pollStartId: EventId, answerId: String) -> Unit,
+    onPollEdit: (pollStartId: EventId) -> Unit,
+    onPollEnd: (pollStartId: EventId) -> Unit,
+    onLoadMore: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val lazyListState = rememberLazyListState()
     LazyColumn(
+        state = lazyListState,
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        items(state.currentItems) { pollHistoryItem ->
+        items(pollHistoryItems) { pollHistoryItem ->
             PollHistoryItemRow(
                 pollHistoryItem = pollHistoryItem,
-                onAnswerSelected = fun(pollStartId: EventId, answerId: String) {
-                    state.eventSink(PollHistoryEvents.PollAnswerSelected(pollStartId, answerId))
-                },
-                onPollEdit = {
-                    state.eventSink(PollHistoryEvents.EditPoll)
-                },
-                onPollEnd = {
-                    state.eventSink(PollHistoryEvents.PollEndClicked(it))
-                },
+                onAnswerSelected = onAnswerSelected,
+                onPollEdit = onPollEdit,
+                onPollEnd = onPollEnd,
                 modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp)
             )
         }
-        if (state.hasMoreToLoad) {
+        if (hasMoreToLoad) {
             item {
                 Button(
                     text = "Load more",
-                    showProgress = state.isLoading,
-                    onClick = {
-                        state.eventSink(PollHistoryEvents.LoadMore)
-                    },
+                    showProgress = isLoading,
+                    onClick = onLoadMore,
                     modifier = Modifier.padding(vertical = 24.dp),
                 )
             }
@@ -190,6 +231,7 @@ internal fun PollHistoryViewPreview(
 ) = ElementPreview {
     PollHistoryView(
         state = state,
+        onEditPoll = {},
         goBack = {},
     )
 }

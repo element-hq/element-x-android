@@ -18,12 +18,21 @@ package io.element.android.features.poll.impl.history
 
 import io.element.android.features.poll.impl.history.model.PollHistoryFilter
 import io.element.android.features.poll.impl.history.model.PollHistoryItem
+import io.element.android.features.poll.impl.history.model.PollHistoryItems
 import kotlinx.collections.immutable.ImmutableList
 
 data class PollHistoryState(
     val isLoading: Boolean,
     val hasMoreToLoad: Boolean,
     val activeFilter: PollHistoryFilter,
-    val currentItems: ImmutableList<PollHistoryItem>,
+    val pollHistoryItems: PollHistoryItems,
     val eventSink: (PollHistoryEvents) -> Unit,
-)
+) {
+
+    fun pollHistoryForFilter(filter: PollHistoryFilter): ImmutableList<PollHistoryItem> {
+        return when (filter) {
+            PollHistoryFilter.ONGOING -> pollHistoryItems.ongoing
+            PollHistoryFilter.PAST -> pollHistoryItems.past
+        }
+    }
+}

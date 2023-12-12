@@ -21,6 +21,7 @@ import io.element.android.features.poll.api.pollcontent.PollContentState
 import io.element.android.features.poll.api.pollcontent.aPollContentState
 import io.element.android.features.poll.impl.history.model.PollHistoryFilter
 import io.element.android.features.poll.impl.history.model.PollHistoryItem
+import io.element.android.features.poll.impl.history.model.PollHistoryItems
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
@@ -51,7 +52,9 @@ private fun aPollHistoryState(
     isLoading = isLoading,
     hasMoreToLoad = hasMoreToLoad,
     activeFilter = activeFilter,
-    currentItems = currentItems,
+    pollHistoryItems = PollHistoryItems(
+        ongoing = currentItems,
+        past = currentItems,),
     eventSink = {},
 )
 
