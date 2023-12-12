@@ -34,7 +34,6 @@ import io.element.android.features.poll.impl.history.model.PollHistoryItemsFacto
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
-import io.element.android.libraries.matrix.ui.room.rememberPollHistory
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
@@ -50,10 +49,11 @@ class PollHistoryPresenter @Inject constructor(
 
     @Composable
     override fun present(): PollHistoryState {
-        val pollHistory = room.rememberPollHistory()
-        val paginationState by pollHistory.paginationState.collectAsState()
+        // TODO use room.rememberPollHistory() when working properly?
+        val timeline = room.timeline
+        val paginationState by timeline.paginationState.collectAsState()
         val pollHistoryItemsFlow = remember {
-            pollHistory.timelineItems.map { items ->
+            timeline.timelineItems.map { items ->
                 pollHistoryItemFactory.create(items)
             }
         }
@@ -62,7 +62,7 @@ class PollHistoryPresenter @Inject constructor(
         }
         val pollHistoryItems by pollHistoryItemsFlow.collectAsState(initial = PollHistoryItems())
         LaunchedEffect(paginationState, pollHistoryItems.size) {
-            if (pollHistoryItems.size == 0 && paginationState.canBackPaginate) loadMore(pollHistory)
+            if (pollHistoryItems.size == 0 && paginationState.canBackPaginate) loadMore(timeline)
         }
         val isLoading by remember {
             derivedStateOf {
@@ -73,7 +73,7 @@ class PollHistoryPresenter @Inject constructor(
         fun handleEvents(event: PollHistoryEvents) {
             when (event) {
                 is PollHistoryEvents.LoadMore -> {
-                    coroutineScope.loadMore(pollHistory)
+                    coroutineScope.loadMore(timeline)
                 }
                 is PollHistoryEvents.PollAnswerSelected -> appCoroutineScope.launch {
                     sendPollResponseAction.execute(pollStartId = event.pollStartId, answerId = event.answerId)
