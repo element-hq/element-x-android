@@ -95,6 +95,7 @@
   <string name="action_try_again">"Try again"</string>
   <string name="action_view_source">"View source"</string>
   <string name="action_yes">"Yes"</string>
+  <string name="action_load_more">"Load more"</string>
   <string name="common_about">"About"</string>
   <string name="common_acceptable_use_policy">"Acceptable use policy"</string>
   <string name="common_advanced_settings">"Advanced settings"</string>
@@ -109,6 +110,7 @@
   <string name="common_dark">"Dark"</string>
   <string name="common_decryption_error">"Decryption error"</string>
   <string name="common_developer_options">"Developer options"</string>
+  <string name="common_direct_chat">"Direct chat"</string>
   <string name="common_edited_suffix">"(edited)"</string>
   <string name="common_editing">"Editing"</string>
   <string name="common_emote">"* %1$s %2$s"</string>
@@ -227,9 +229,6 @@
     <item quantity="other">"%d votes"</item>
   </plurals>
   <string name="preference_rageshake">"Rageshake to report bug"</string>
-  <string name="screen_edit_poll_delete_confirmation">"Are you sure you want to delete this poll?"</string>
-  <string name="screen_edit_poll_delete_confirmation_title">"Delete Poll"</string>
-  <string name="screen_edit_poll_title">"Edit poll"</string>
   <string name="screen_media_picker_error_failed_selection">"Failed selecting media, please try again."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Failed processing media to upload, please try again."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Failed uploading media, please try again."</string>

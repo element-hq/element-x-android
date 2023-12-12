@@ -38,10 +38,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.poll.api.pollcontent.PollContentView
+import io.element.android.features.poll.impl.R
 import io.element.android.features.poll.impl.history.model.PollHistoryFilter
 import io.element.android.features.poll.impl.history.model.PollHistoryItem
 import io.element.android.libraries.designsystem.components.button.BackButton
@@ -55,6 +57,7 @@ import io.element.android.libraries.designsystem.theme.components.Surface
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
@@ -84,7 +87,7 @@ fun PollHistoryView(
             TopAppBar(
                 title = {
                     Text(
-                        text = "Polls", // TODO Polls: Localazy
+                        text = stringResource(R.string.screen_polls_history_title),
                         style = ElementTheme.typography.aliasScreenTitle,
                     )
                 },
@@ -149,7 +152,7 @@ private fun PollHistoryFilterButtons(
                 count = PollHistoryFilter.entries.size,
                 selected = activeFilter == filter,
                 onClick = { onFilterSelected(filter) },
-                text = filter.name
+                text = stringResource(filter.stringResource),
             )
         }
     }
@@ -184,7 +187,7 @@ private fun PollHistoryList(
         if (hasMoreToLoad) {
             item {
                 Button(
-                    text = "Load more",
+                    text = stringResource(CommonStrings.action_load_more),
                     showProgress = isLoading,
                     onClick = onLoadMore,
                     modifier = Modifier.padding(vertical = 24.dp),

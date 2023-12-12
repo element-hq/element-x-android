@@ -16,7 +16,9 @@
 
 package io.element.android.features.poll.impl.history.model
 
-enum class PollHistoryFilter {
-    ONGOING,
-    PAST,
+import io.element.android.features.poll.impl.R
+
+enum class PollHistoryFilter(val stringResource: Int) {
+    ONGOING(R.string.screen_polls_history_filter_ongoing),
+    PAST(R.string.screen_polls_history_filter_past),
 }

@@ -385,7 +385,7 @@ private fun PollsSection(
 ) {
     PreferenceCategory(modifier = modifier) {
         ListItem(
-            headlineContent = { Text("Polls") }, // TODO Polls: Localazy
+            headlineContent = { Text(stringResource(R.string.screen_polls_history_title)) },
             leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Polls)),
             onClick = openPollHistory,
         )
