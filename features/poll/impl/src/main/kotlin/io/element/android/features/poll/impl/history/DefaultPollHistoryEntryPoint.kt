@@ -27,6 +27,6 @@ import javax.inject.Inject
 @ContributesBinding(AppScope::class)
 class DefaultPollHistoryEntryPoint @Inject constructor() : PollHistoryEntryPoint {
     override fun createNode(parentNode: Node, buildContext: BuildContext): Node {
-        return parentNode.createNode<PollHistoryNode>(buildContext)
+        return parentNode.createNode<PollHistoryFlowNode>(buildContext)
     }
 }

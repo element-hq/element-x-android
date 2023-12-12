@@ -21,10 +21,12 @@ import androidx.compose.ui.Modifier
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
+import com.bumble.appyx.core.plugin.plugins
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.libraries.di.RoomScope
+import io.element.android.libraries.matrix.api.core.EventId
 
 @ContributesNode(RoomScope::class)
 class PollHistoryNode @AssistedInject constructor(
@@ -36,12 +38,20 @@ class PollHistoryNode @AssistedInject constructor(
     plugins = plugins,
 ) {
 
+    interface Callback : Plugin {
+        fun onEditPoll(pollStartEventId: EventId)
+    }
+
+    private fun onEditPoll(pollStartEventId: EventId) {
+        plugins<Callback>().forEach { it.onEditPoll(pollStartEventId) }
+    }
+
     @Composable
     override fun View(modifier: Modifier) {
         PollHistoryView(
             state = presenter.present(),
             modifier = modifier,
-            onEditPoll = {},
+            onEditPoll = ::onEditPoll,
             goBack = this::navigateUp,
         )
     }
