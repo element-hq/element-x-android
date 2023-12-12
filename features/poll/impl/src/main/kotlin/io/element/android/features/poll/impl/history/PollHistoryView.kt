@@ -123,6 +123,7 @@ fun PollHistoryView(
                 val filter = PollHistoryFilter.entries[page]
                 val pollHistoryItems = state.pollHistoryForFilter(filter)
                 PollHistoryList(
+                    filter = filter,
                     pollHistoryItems = pollHistoryItems,
                     hasMoreToLoad = state.hasMoreToLoad,
                     isLoading = state.isLoading,
@@ -160,6 +161,7 @@ private fun PollHistoryFilterButtons(
 
 @Composable
 private fun PollHistoryList(
+    filter: PollHistoryFilter,
     pollHistoryItems: ImmutableList<PollHistoryItem>,
     hasMoreToLoad: Boolean,
     isLoading: Boolean,
@@ -183,6 +185,21 @@ private fun PollHistoryList(
                 onPollEnd = onPollEnd,
                 modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp)
             )
+        }
+        if (pollHistoryItems.isEmpty()) {
+            item {
+                val emptyStringResource = if (filter == PollHistoryFilter.PAST) {
+                    stringResource(R.string.screen_polls_history_empty_past)
+                } else {
+                    stringResource(R.string.screen_polls_history_empty_ongoing)
+                }
+                Text(
+                    text = emptyStringResource,
+                    style = ElementTheme.typography.fontBodyLgRegular,
+                    color = ElementTheme.colors.textSecondary,
+                    modifier = Modifier.padding(vertical = 24.dp, horizontal = 16.dp)
+                )
+            }
         }
         if (hasMoreToLoad) {
             item {
