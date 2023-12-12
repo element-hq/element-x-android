@@ -21,6 +21,7 @@ import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID
+import io.element.android.libraries.push.impl.notifications.fake.FakeImageLoader
 import io.element.android.libraries.push.impl.notifications.fake.FakeNotificationDisplayer
 import io.element.android.libraries.push.impl.notifications.fake.FakeNotificationFactory
 import io.element.android.libraries.push.impl.notifications.model.NotifiableEvent
@@ -197,7 +198,8 @@ class NotificationRendererTest {
         notificationRenderer.render(
             MatrixUser(A_SESSION_ID, MY_USER_DISPLAY_NAME, MY_USER_AVATAR_URL),
             useCompleteNotificationFormat = USE_COMPLETE_NOTIFICATION_FORMAT,
-            eventsToProcess = AN_EVENT_LIST
+            eventsToProcess = AN_EVENT_LIST,
+            imageLoader = FakeImageLoader(),
         )
     }
 

@@ -23,6 +23,7 @@ import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.push.impl.notifications.fake.FakeAndroidNotificationFactory
+import io.element.android.libraries.push.impl.notifications.fake.FakeImageLoader
 import io.element.android.libraries.push.impl.notifications.fake.FakeRoomGroupMessageCreator
 import io.element.android.libraries.push.impl.notifications.fake.FakeSummaryGroupMessageCreator
 import io.element.android.libraries.push.impl.notifications.fixtures.aNotifiableMessageEvent
@@ -131,7 +132,8 @@ class NotificationFactoryTest {
         val roomWithMessage = mapOf(A_ROOM_ID to listOf(ProcessedEvent(ProcessedEvent.Type.KEEP, A_MESSAGE_EVENT)))
 
         val result = roomWithMessage.toNotifications(
-            MatrixUser(A_SESSION_ID, A_SESSION_ID.value, MY_AVATAR_URL)
+            currentUser = MatrixUser(A_SESSION_ID, A_SESSION_ID.value, MY_AVATAR_URL),
+            imageLoader = FakeImageLoader(),
         )
 
         assertThat(result).isEqualTo(listOf(expectedNotification))
@@ -143,7 +145,8 @@ class NotificationFactoryTest {
         val emptyRoom = mapOf(A_ROOM_ID to events)
 
         val result = emptyRoom.toNotifications(
-            MatrixUser(A_SESSION_ID, A_SESSION_ID.value, MY_AVATAR_URL)
+            currentUser = MatrixUser(A_SESSION_ID, A_SESSION_ID.value, MY_AVATAR_URL),
+            imageLoader = FakeImageLoader(),
         )
 
         assertThat(result).isEqualTo(
@@ -160,7 +163,8 @@ class NotificationFactoryTest {
         val redactedRoom = mapOf(A_ROOM_ID to listOf(ProcessedEvent(ProcessedEvent.Type.KEEP, A_MESSAGE_EVENT.copy(isRedacted = true))))
 
         val result = redactedRoom.toNotifications(
-            MatrixUser(A_SESSION_ID, A_SESSION_ID.value, MY_AVATAR_URL)
+            currentUser = MatrixUser(A_SESSION_ID, A_SESSION_ID.value, MY_AVATAR_URL),
+            imageLoader = FakeImageLoader(),
         )
 
         assertThat(result).isEqualTo(
@@ -190,7 +194,8 @@ class NotificationFactoryTest {
         )
 
         val result = roomWithRedactedMessage.toNotifications(
-            MatrixUser(A_SESSION_ID, A_SESSION_ID.value, MY_AVATAR_URL)
+            currentUser = MatrixUser(A_SESSION_ID, A_SESSION_ID.value, MY_AVATAR_URL),
+            imageLoader = FakeImageLoader(),
         )
 
         assertThat(result).isEqualTo(listOf(expectedNotification))

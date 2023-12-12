@@ -30,6 +30,7 @@ import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.ui.components.aMatrixUser
 import io.element.android.libraries.matrix.ui.media.MediaRequestData
 import io.element.android.libraries.push.impl.notifications.factories.createNotificationCreator
+import io.element.android.libraries.push.impl.notifications.fake.FakeImageLoader
 import io.element.android.libraries.push.impl.notifications.fixtures.aNotifiableMessageEvent
 import io.element.android.services.toolbox.api.sdk.BuildVersionSdkIntProvider
 import io.element.android.services.toolbox.impl.strings.AndroidStringProvider
@@ -58,6 +59,7 @@ class RoomGroupMessageCreatorTest {
                 )
             ),
             roomId = A_ROOM_ID,
+            imageLoader = FakeImageLoader(),
         )
         val resultMetaWithoutFormatting = result.meta.copy(
             summaryLine = result.meta.summaryLine.toString()
@@ -84,6 +86,7 @@ class RoomGroupMessageCreatorTest {
                 )
             ),
             roomId = A_ROOM_ID,
+            imageLoader = FakeImageLoader(),
         )
         val resultMetaWithoutFormatting = result.meta.copy(
             summaryLine = result.meta.summaryLine.toString()
@@ -170,6 +173,7 @@ class RoomGroupMessageCreatorTest {
                 )
             ),
             roomId = A_ROOM_ID,
+            imageLoader = imageLoader,
         )
         val resultMetaWithoutFormatting = result.meta.copy(
             summaryLine = result.meta.summaryLine.toString()
@@ -196,6 +200,7 @@ class RoomGroupMessageCreatorTest {
                 aNotifiableMessageEvent(timestamp = A_TIMESTAMP + 10),
             ),
             roomId = A_ROOM_ID,
+            imageLoader = FakeImageLoader(),
         )
         val resultMetaWithoutFormatting = result.meta.copy(
             summaryLine = result.meta.summaryLine.toString()
@@ -223,6 +228,7 @@ class RoomGroupMessageCreatorTest {
                 ),
             ),
             roomId = A_ROOM_ID,
+            imageLoader = FakeImageLoader(),
         )
         val resultMetaWithoutFormatting = result.meta.copy(
             summaryLine = result.meta.summaryLine.toString()
@@ -249,6 +255,7 @@ class RoomGroupMessageCreatorTest {
                 ),
             ),
             roomId = A_ROOM_ID,
+            imageLoader = FakeImageLoader(),
         )
         val resultMetaWithoutFormatting = result.meta.copy(
             summaryLine = result.meta.summaryLine.toString()

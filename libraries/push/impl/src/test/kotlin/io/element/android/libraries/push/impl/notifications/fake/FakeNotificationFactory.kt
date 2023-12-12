@@ -40,7 +40,7 @@ class FakeNotificationFactory {
         summaryNotification: SummaryNotification
     ) {
         with(instance) {
-            coEvery { groupedEvents.roomEvents.toNotifications(matrixUser) } returns roomNotifications
+            coEvery { groupedEvents.roomEvents.toNotifications(matrixUser, any()) } returns roomNotifications
             every { groupedEvents.invitationEvents.toNotifications() } returns invitationNotifications
             every { groupedEvents.simpleEvents.toNotifications() } returns simpleNotifications
             every { groupedEvents.fallbackEvents.toNotifications() } returns fallbackNotifications

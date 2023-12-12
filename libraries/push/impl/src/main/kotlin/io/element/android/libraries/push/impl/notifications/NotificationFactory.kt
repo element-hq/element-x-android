@@ -17,6 +17,7 @@
 package io.element.android.libraries.push.impl.notifications
 
 import android.app.Notification
+import coil.ImageLoader
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.push.impl.notifications.factories.NotificationCreator
@@ -36,6 +37,7 @@ class NotificationFactory @Inject constructor(
 
     suspend fun Map<RoomId, ProcessedMessageEvents>.toNotifications(
         currentUser: MatrixUser,
+        imageLoader: ImageLoader,
     ): List<RoomNotification> {
         return map { (roomId, events) ->
             when {
@@ -46,6 +48,7 @@ class NotificationFactory @Inject constructor(
                         currentUser = currentUser,
                         events = messageEvents,
                         roomId = roomId,
+                        imageLoader = imageLoader,
                     )
                 }
             }
