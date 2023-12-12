@@ -28,6 +28,8 @@ import io.element.android.libraries.push.impl.notifications.model.NotifiableEven
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
+import org.junit.runner.RunWith
+import org.robolectric.RobolectricTestRunner
 
 private const val MY_USER_DISPLAY_NAME = "display-name"
 private const val MY_USER_AVATAR_URL = "avatar-url"
@@ -43,6 +45,7 @@ private val MESSAGE_META = RoomNotification.Message.Meta(
 )
 private val ONE_SHOT_META = OneShotNotification.Append.Meta(key = "ignored", summaryLine = "ignored", isNoisy = false, timestamp = -1)
 
+@RunWith(RobolectricTestRunner::class)
 class NotificationRendererTest {
 
     private val notificationDisplayer = FakeNotificationDisplayer()
@@ -199,7 +202,7 @@ class NotificationRendererTest {
             MatrixUser(A_SESSION_ID, MY_USER_DISPLAY_NAME, MY_USER_AVATAR_URL),
             useCompleteNotificationFormat = USE_COMPLETE_NOTIFICATION_FORMAT,
             eventsToProcess = AN_EVENT_LIST,
-            imageLoader = FakeImageLoader(),
+            imageLoader = FakeImageLoader().getImageLoader(),
         )
     }
 

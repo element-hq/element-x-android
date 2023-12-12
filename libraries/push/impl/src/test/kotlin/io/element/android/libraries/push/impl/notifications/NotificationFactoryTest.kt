@@ -31,12 +31,15 @@ import io.element.android.libraries.push.impl.notifications.fixtures.aSimpleNoti
 import io.element.android.libraries.push.impl.notifications.fixtures.anInviteNotifiableEvent
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
+import org.junit.runner.RunWith
+import org.robolectric.RobolectricTestRunner
 
 private val MY_AVATAR_URL: String? = null
 private val AN_INVITATION_EVENT = anInviteNotifiableEvent(roomId = A_ROOM_ID)
 private val A_SIMPLE_EVENT = aSimpleNotifiableEvent(eventId = AN_EVENT_ID)
 private val A_MESSAGE_EVENT = aNotifiableMessageEvent(eventId = AN_EVENT_ID, roomId = A_ROOM_ID)
 
+@RunWith(RobolectricTestRunner::class)
 class NotificationFactoryTest {
 
     private val androidNotificationFactory = FakeAndroidNotificationFactory()
@@ -131,12 +134,14 @@ class NotificationFactoryTest {
         )
         val roomWithMessage = mapOf(A_ROOM_ID to listOf(ProcessedEvent(ProcessedEvent.Type.KEEP, A_MESSAGE_EVENT)))
 
+        val fakeImageLoader = FakeImageLoader()
         val result = roomWithMessage.toNotifications(
             currentUser = MatrixUser(A_SESSION_ID, A_SESSION_ID.value, MY_AVATAR_URL),
-            imageLoader = FakeImageLoader(),
+            imageLoader = fakeImageLoader.getImageLoader(),
         )
 
         assertThat(result).isEqualTo(listOf(expectedNotification))
+        assertThat(fakeImageLoader.getCoilRequests().size).isEqualTo(0)
     }
 
     @Test
@@ -144,9 +149,10 @@ class NotificationFactoryTest {
         val events = listOf(ProcessedEvent(ProcessedEvent.Type.REMOVE, A_MESSAGE_EVENT))
         val emptyRoom = mapOf(A_ROOM_ID to events)
 
+        val fakeImageLoader = FakeImageLoader()
         val result = emptyRoom.toNotifications(
             currentUser = MatrixUser(A_SESSION_ID, A_SESSION_ID.value, MY_AVATAR_URL),
-            imageLoader = FakeImageLoader(),
+            imageLoader = fakeImageLoader.getImageLoader(),
         )
 
         assertThat(result).isEqualTo(
@@ -156,15 +162,17 @@ class NotificationFactoryTest {
                 )
             )
         )
+        assertThat(fakeImageLoader.getCoilRequests().size).isEqualTo(0)
     }
 
     @Test
     fun `given a room with only redacted events when mapping to notification then is Empty`() = testWith(notificationFactory) {
         val redactedRoom = mapOf(A_ROOM_ID to listOf(ProcessedEvent(ProcessedEvent.Type.KEEP, A_MESSAGE_EVENT.copy(isRedacted = true))))
 
+        val fakeImageLoader = FakeImageLoader()
         val result = redactedRoom.toNotifications(
             currentUser = MatrixUser(A_SESSION_ID, A_SESSION_ID.value, MY_AVATAR_URL),
-            imageLoader = FakeImageLoader(),
+            imageLoader = fakeImageLoader.getImageLoader(),
         )
 
         assertThat(result).isEqualTo(
@@ -174,6 +182,7 @@ class NotificationFactoryTest {
                 )
             )
         )
+        assertThat(fakeImageLoader.getCoilRequests().size).isEqualTo(0)
     }
 
     @Test
@@ -193,12 +202,14 @@ class NotificationFactoryTest {
             A_ROOM_ID,
         )
 
+        val fakeImageLoader = FakeImageLoader()
         val result = roomWithRedactedMessage.toNotifications(
             currentUser = MatrixUser(A_SESSION_ID, A_SESSION_ID.value, MY_AVATAR_URL),
-            imageLoader = FakeImageLoader(),
+            imageLoader = fakeImageLoader.getImageLoader(),
         )
 
         assertThat(result).isEqualTo(listOf(expectedNotification))
+        assertThat(fakeImageLoader.getCoilRequests().size).isEqualTo(0)
     }
 }
 

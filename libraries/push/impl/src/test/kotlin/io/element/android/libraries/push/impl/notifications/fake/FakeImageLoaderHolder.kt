@@ -21,7 +21,8 @@ import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.ui.media.ImageLoaderHolder
 
 class FakeImageLoaderHolder : ImageLoaderHolder {
+    private val fakeImageLoader = FakeImageLoader()
     override fun get(client: MatrixClient): ImageLoader {
-        return FakeImageLoader()
+        return fakeImageLoader.getImageLoader()
     }
 }

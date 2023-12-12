@@ -16,32 +16,40 @@
 
 package io.element.android.libraries.push.impl.notifications.fake
 
-import coil.ComponentRegistry
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import coil.ImageLoader
-import coil.disk.DiskCache
-import coil.memory.MemoryCache
-import coil.request.DefaultRequestOptions
-import coil.request.Disposable
-import coil.request.ImageRequest
-import coil.request.ImageResult
+import coil.annotation.ExperimentalCoilApi
+import coil.test.FakeImageLoaderEngine
+import org.robolectric.RuntimeEnvironment
 
-class FakeImageLoader : ImageLoader {
-    override val components: ComponentRegistry = error("Fake class")
-    override val defaults: DefaultRequestOptions = error("Fake class")
-    override val diskCache: DiskCache? = null
-    override val memoryCache: MemoryCache? = null
+@OptIn(ExperimentalCoilApi::class)
+class FakeImageLoader {
+    private val coilRequests = mutableListOf<Any>()
 
-    override fun enqueue(request: ImageRequest): Disposable {
-        error("Fake class")
+    private var cache: ImageLoader? = null
+
+    fun getImageLoader(): ImageLoader {
+        return cache ?: ImageLoader.Builder(RuntimeEnvironment.getApplication())
+            .components {
+                val engine = FakeImageLoaderEngine.Builder()
+                    .intercept(
+                        predicate = {
+                            coilRequests.add(it)
+                            true
+                        },
+                        drawable = ColorDrawable(Color.BLUE)
+                    )
+                    .build()
+                add(engine)
+            }
+            .build()
+            .also {
+                cache = it
+            }
     }
 
-    override suspend fun execute(request: ImageRequest): ImageResult {
-        error("Fake class")
+    fun getCoilRequests(): List<Any> {
+        return coilRequests.toList()
     }
-
-    override fun newBuilder(): ImageLoader.Builder {
-        error("Fake class")
-    }
-
-    override fun shutdown() = Unit
 }
