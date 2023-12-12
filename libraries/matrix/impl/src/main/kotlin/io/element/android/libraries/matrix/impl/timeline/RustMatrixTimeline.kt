@@ -188,6 +188,14 @@ class RustMatrixTimeline(
         }
     }
 
+    override suspend fun paginateBackwards(requestSize: Int): Result<Unit> {
+        val paginationOptions = PaginationOptions.SimpleRequest(
+            eventLimit = requestSize.toUShort(),
+            waitForToken = true,
+        )
+        return paginateBackwards(paginationOptions)
+    }
+
     override suspend fun paginateBackwards(requestSize: Int, untilNumberOfItems: Int): Result<Unit> {
         val paginationOptions = PaginationOptions.UntilNumItems(
             eventLimit = requestSize.toUShort(),
@@ -198,6 +206,7 @@ class RustMatrixTimeline(
     }
 
     private suspend fun paginateBackwards(paginationOptions: PaginationOptions): Result<Unit> = withContext(dispatcher) {
+        initLatch.await()
         runCatching {
             if (!canBackPaginate()) throw TimelineException.CannotPaginate
             Timber.v("Start back paginating for room ${matrixRoom.roomId} ")

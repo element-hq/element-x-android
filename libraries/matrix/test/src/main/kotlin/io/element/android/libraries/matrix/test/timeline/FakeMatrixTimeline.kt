@@ -56,7 +56,10 @@ class FakeMatrixTimeline(
 
     override val timelineItems: Flow<List<MatrixTimelineItem>> = _timelineItems
 
-    override suspend fun paginateBackwards(requestSize: Int, untilNumberOfItems: Int): Result<Unit> {
+    override suspend fun paginateBackwards(requestSize: Int) = paginateBackwards()
+    override suspend fun paginateBackwards(requestSize: Int, untilNumberOfItems: Int) = paginateBackwards()
+
+    private suspend fun paginateBackwards(): Result<Unit> {
         updatePaginationState {
             copy(isBackPaginating = true)
         }

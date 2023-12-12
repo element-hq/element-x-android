@@ -77,6 +77,10 @@ class AsyncMatrixTimeline(
     override val paginationState: StateFlow<MatrixTimeline.PaginationState> = _paginationState
     override val timelineItems: Flow<List<MatrixTimelineItem>> = _timelineItems
 
+    override suspend fun paginateBackwards(requestSize: Int): Result<Unit> {
+        return timeline.await().paginateBackwards(requestSize)
+    }
+
     override suspend fun paginateBackwards(requestSize: Int, untilNumberOfItems: Int): Result<Unit> {
         return timeline.await().paginateBackwards(requestSize, untilNumberOfItems)
     }
