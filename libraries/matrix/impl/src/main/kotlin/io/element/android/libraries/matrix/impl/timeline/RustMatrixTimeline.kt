@@ -126,7 +126,11 @@ class RustMatrixTimeline(
 
     private suspend fun fetchMembers() = withContext(dispatcher) {
         initLatch.await()
-        innerTimeline.fetchMembers()
+        try {
+            innerTimeline.fetchMembers()
+        } catch (exception: Exception) {
+            Timber.e(exception, "Error fetching members for room ${matrixRoom.roomId}")
+        }
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
