@@ -91,7 +91,7 @@ import org.matrix.rustcomponents.sdk.RoomVisibility as RustRoomVisibility
 import org.matrix.rustcomponents.sdk.SyncService as ClientSyncService
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class RustMatrixClient constructor(
+class RustMatrixClient(
     private val client: Client,
     private val syncService: ClientSyncService,
     private val sessionStore: SessionStore,
