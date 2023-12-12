@@ -18,7 +18,7 @@ package io.element.android.libraries.push.impl.notifications.fake
 
 import coil.ImageLoader
 import io.element.android.libraries.matrix.api.MatrixClient
-import io.element.android.libraries.push.impl.notifications.ImageLoaderHolder
+import io.element.android.libraries.matrix.ui.media.ImageLoaderHolder
 
 class FakeImageLoaderHolder : ImageLoaderHolder {
     override fun get(client: MatrixClient): ImageLoader {
