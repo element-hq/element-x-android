@@ -98,6 +98,7 @@ dependencies {
     testImplementation(libs.test.mockk)
     testImplementation(libs.test.junitext)
     testImplementation(libs.test.robolectric)
+    testImplementation(libs.androidx.compose.ui.test.junit)
 
     ksp(libs.showkase.processor)
 }

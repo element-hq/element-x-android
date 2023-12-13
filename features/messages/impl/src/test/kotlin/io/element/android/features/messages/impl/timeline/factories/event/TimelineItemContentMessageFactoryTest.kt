@@ -459,6 +459,7 @@ class TimelineItemContentMessageFactoryTest {
             body = "body",
             htmlDocument = null,
             plainText = "body",
+            formattedBody = null,
             isEdited = false,
         )
         assertThat(result).isEqualTo(expected)
@@ -476,6 +477,7 @@ class TimelineItemContentMessageFactoryTest {
             body = "* Bob body",
             htmlDocument = null,
             plainText = "* Bob body",
+            formattedBody = null,
             isEdited = false,
         )
         assertThat(result).isEqualTo(expected)

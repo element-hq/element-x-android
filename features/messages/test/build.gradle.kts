@@ -24,4 +24,5 @@ android {
 
 dependencies {
     api(projects.features.messages.api)
+    implementation(projects.libraries.matrix.api)
 }
