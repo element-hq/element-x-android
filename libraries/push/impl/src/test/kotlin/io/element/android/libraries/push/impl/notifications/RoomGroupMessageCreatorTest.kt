@@ -17,19 +17,15 @@
 package io.element.android.libraries.push.impl.notifications
 
 import android.content.Context
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Build
-import coil.Coil
-import coil.ImageLoader
 import coil.annotation.ExperimentalCoilApi
-import coil.test.FakeImageLoaderEngine
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.ui.components.aMatrixUser
 import io.element.android.libraries.matrix.ui.media.MediaRequestData
 import io.element.android.libraries.push.impl.notifications.factories.createNotificationCreator
+import io.element.android.libraries.push.impl.notifications.fake.FakeImageLoader
 import io.element.android.libraries.push.impl.notifications.fixtures.aNotifiableMessageEvent
 import io.element.android.services.toolbox.api.sdk.BuildVersionSdkIntProvider
 import io.element.android.services.toolbox.impl.strings.AndroidStringProvider
@@ -50,6 +46,7 @@ class RoomGroupMessageCreatorTest {
     @Test
     fun `test createRoomMessage with one Event`() = runTest {
         val sut = createRoomGroupMessageCreator()
+        val fakeImageLoader = FakeImageLoader()
         val result = sut.createRoomMessage(
             currentUser = aMatrixUser(),
             events = listOf(
@@ -58,6 +55,7 @@ class RoomGroupMessageCreatorTest {
                 )
             ),
             roomId = A_ROOM_ID,
+            imageLoader = fakeImageLoader.getImageLoader(),
         )
         val resultMetaWithoutFormatting = result.meta.copy(
             summaryLine = result.meta.summaryLine.toString()
@@ -71,11 +69,13 @@ class RoomGroupMessageCreatorTest {
                 shouldBing = false,
             )
         )
+        assertThat(fakeImageLoader.getCoilRequests().size).isEqualTo(0)
     }
 
     @Test
     fun `test createRoomMessage with one noisy Event`() = runTest {
         val sut = createRoomGroupMessageCreator()
+        val fakeImageLoader = FakeImageLoader()
         val result = sut.createRoomMessage(
             currentUser = aMatrixUser(),
             events = listOf(
@@ -84,6 +84,7 @@ class RoomGroupMessageCreatorTest {
                 )
             ),
             roomId = A_ROOM_ID,
+            imageLoader = fakeImageLoader.getImageLoader(),
         )
         val resultMetaWithoutFormatting = result.meta.copy(
             summaryLine = result.meta.summaryLine.toString()
@@ -97,6 +98,7 @@ class RoomGroupMessageCreatorTest {
                 shouldBing = true,
             )
         )
+        assertThat(fakeImageLoader.getCoilRequests().size).isEqualTo(0)
     }
 
     @Test
@@ -141,20 +143,7 @@ class RoomGroupMessageCreatorTest {
         api: Int,
         expectedCoilRequests: List<Any>,
     ) = runTest {
-        val coilRequests = mutableListOf<Any>()
-        val engine = FakeImageLoaderEngine.Builder()
-            .intercept(
-                predicate = {
-                    coilRequests.add(it)
-                    true
-                },
-                drawable = ColorDrawable(Color.BLUE)
-            )
-            .build()
-        val imageLoader = ImageLoader.Builder(RuntimeEnvironment.getApplication())
-            .components { add(engine) }
-            .build()
-        Coil.setImageLoader(imageLoader)
+        val fakeImageLoader = FakeImageLoader()
         val sut = createRoomGroupMessageCreator(
             sdkIntProvider = FakeBuildVersionSdkIntProvider(api)
         )
@@ -170,6 +159,7 @@ class RoomGroupMessageCreatorTest {
                 )
             ),
             roomId = A_ROOM_ID,
+            imageLoader = fakeImageLoader.getImageLoader(),
         )
         val resultMetaWithoutFormatting = result.meta.copy(
             summaryLine = result.meta.summaryLine.toString()
@@ -183,12 +173,13 @@ class RoomGroupMessageCreatorTest {
                 shouldBing = false,
             )
         )
-        assertThat(coilRequests.toList()).isEqualTo(expectedCoilRequests)
+        assertThat(fakeImageLoader.getCoilRequests()).isEqualTo(expectedCoilRequests)
     }
 
     @Test
     fun `test createRoomMessage with two Events`() = runTest {
         val sut = createRoomGroupMessageCreator()
+        val fakeImageLoader = FakeImageLoader()
         val result = sut.createRoomMessage(
             currentUser = aMatrixUser(),
             events = listOf(
@@ -196,6 +187,7 @@ class RoomGroupMessageCreatorTest {
                 aNotifiableMessageEvent(timestamp = A_TIMESTAMP + 10),
             ),
             roomId = A_ROOM_ID,
+            imageLoader = fakeImageLoader.getImageLoader(),
         )
         val resultMetaWithoutFormatting = result.meta.copy(
             summaryLine = result.meta.summaryLine.toString()
@@ -209,11 +201,13 @@ class RoomGroupMessageCreatorTest {
                 shouldBing = false,
             )
         )
+        assertThat(fakeImageLoader.getCoilRequests().size).isEqualTo(0)
     }
 
     @Test
     fun `test createRoomMessage with smart reply error`() = runTest {
         val sut = createRoomGroupMessageCreator()
+        val fakeImageLoader = FakeImageLoader()
         val result = sut.createRoomMessage(
             currentUser = aMatrixUser(),
             events = listOf(
@@ -223,6 +217,7 @@ class RoomGroupMessageCreatorTest {
                 ),
             ),
             roomId = A_ROOM_ID,
+            imageLoader = fakeImageLoader.getImageLoader(),
         )
         val resultMetaWithoutFormatting = result.meta.copy(
             summaryLine = result.meta.summaryLine.toString()
@@ -236,11 +231,13 @@ class RoomGroupMessageCreatorTest {
                 shouldBing = false,
             )
         )
+        assertThat(fakeImageLoader.getCoilRequests().size).isEqualTo(0)
     }
 
     @Test
     fun `test createRoomMessage for direct room`() = runTest {
         val sut = createRoomGroupMessageCreator()
+        val fakeImageLoader = FakeImageLoader()
         val result = sut.createRoomMessage(
             currentUser = aMatrixUser(),
             events = listOf(
@@ -249,6 +246,7 @@ class RoomGroupMessageCreatorTest {
                 ),
             ),
             roomId = A_ROOM_ID,
+            imageLoader = fakeImageLoader.getImageLoader(),
         )
         val resultMetaWithoutFormatting = result.meta.copy(
             summaryLine = result.meta.summaryLine.toString()
@@ -262,6 +260,7 @@ class RoomGroupMessageCreatorTest {
                 shouldBing = false,
             )
         )
+        assertThat(fakeImageLoader.getCoilRequests().size).isEqualTo(0)
     }
 }
 

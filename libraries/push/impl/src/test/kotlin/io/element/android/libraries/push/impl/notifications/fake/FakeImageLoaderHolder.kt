@@ -14,13 +14,15 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.matrix.ui.di
+package io.element.android.libraries.push.impl.notifications.fake
 
-import com.squareup.anvil.annotations.ContributesTo
-import io.element.android.libraries.di.SessionScope
-import io.element.android.libraries.matrix.ui.media.LoggedInImageLoaderFactory
+import coil.ImageLoader
+import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.ui.media.ImageLoaderHolder
 
-@ContributesTo(SessionScope::class)
-interface MatrixUIBindings {
-    fun loggedInImageLoaderFactory(): LoggedInImageLoaderFactory
+class FakeImageLoaderHolder : ImageLoaderHolder {
+    private val fakeImageLoader = FakeImageLoader()
+    override fun get(client: MatrixClient): ImageLoader {
+        return fakeImageLoader.getImageLoader()
+    }
 }

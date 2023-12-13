@@ -30,6 +30,7 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.user.MatrixUser
+import io.element.android.libraries.matrix.ui.media.ImageLoaderHolder
 import io.element.android.libraries.push.api.notifications.NotificationDrawerManager
 import io.element.android.libraries.push.impl.notifications.model.NotifiableEvent
 import io.element.android.services.appnavstate.api.AppNavigationStateService
@@ -61,6 +62,7 @@ class DefaultNotificationDrawerManager @Inject constructor(
     private val dispatchers: CoroutineDispatchers,
     private val buildMeta: BuildMeta,
     private val matrixClientProvider: MatrixClientProvider,
+    private val imageLoaderHolder: ImageLoaderHolder,
 ) : NotificationDrawerManager {
     private var appNavigationStateObserver: Job? = null
 
@@ -288,10 +290,11 @@ class DefaultNotificationDrawerManager @Inject constructor(
         }
 
         eventsForSessions.forEach { (sessionId, notifiableEvents) ->
+            val client = matrixClientProvider.getOrRestore(sessionId).getOrThrow()
+            val imageLoader = imageLoaderHolder.get(client)
             val currentUser = tryOrNull(
                 onError = { Timber.tag(loggerTag.value).e(it, "Unable to retrieve info for user ${sessionId.value}") },
                 operation = {
-                    val client = matrixClientProvider.getOrRestore(sessionId).getOrThrow()
                     // myUserDisplayName cannot be empty else NotificationCompat.MessagingStyle() will crash
                     val myUserDisplayName = client.loadUserDisplayName().getOrNull() ?: sessionId.value
                     val userAvatarUrl = client.loadUserAvatarURLString().getOrNull()
@@ -307,7 +310,7 @@ class DefaultNotificationDrawerManager @Inject constructor(
                 avatarUrl = null
             )
 
-            notificationRenderer.render(currentUser, useCompleteNotificationFormat, notifiableEvents)
+            notificationRenderer.render(currentUser, useCompleteNotificationFormat, notifiableEvents, imageLoader)
         }
     }
 }

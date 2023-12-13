@@ -23,6 +23,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.Person
 import androidx.core.text.buildSpannedString
 import androidx.core.text.inSpans
+import coil.ImageLoader
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.push.impl.R
@@ -42,6 +43,7 @@ class RoomGroupMessageCreator @Inject constructor(
         currentUser: MatrixUser,
         events: List<NotifiableMessageEvent>,
         roomId: RoomId,
+        imageLoader: ImageLoader,
     ): RoomNotification.Message {
         val lastKnownRoomEvent = events.last()
         val roomName = lastKnownRoomEvent.roomName ?: lastKnownRoomEvent.senderName ?: "Room name (${roomId.value.take(8)}…)"
@@ -49,13 +51,13 @@ class RoomGroupMessageCreator @Inject constructor(
         val style = NotificationCompat.MessagingStyle(
             Person.Builder()
                 .setName(currentUser.displayName?.annotateForDebug(50))
-                .setIcon(bitmapLoader.getUserIcon(currentUser.avatarUrl))
+                .setIcon(bitmapLoader.getUserIcon(currentUser.avatarUrl, imageLoader))
                 .setKey(lastKnownRoomEvent.sessionId.value)
                 .build()
         ).also {
             it.conversationTitle = roomName.takeIf { roomIsGroup }?.annotateForDebug(51)
             it.isGroupConversation = roomIsGroup
-            it.addMessagesFromEvents(events)
+            it.addMessagesFromEvents(events, imageLoader)
         }
 
         val tickerText = if (roomIsGroup) {
@@ -64,7 +66,7 @@ class RoomGroupMessageCreator @Inject constructor(
             stringProvider.getString(R.string.notification_ticker_text_dm, events.last().senderName, events.last().description)
         }
 
-        val largeBitmap = getRoomBitmap(events)
+        val largeBitmap = getRoomBitmap(events, imageLoader)
 
         val lastMessageTimestamp = events.last().timestamp
         val smartReplyErrors = events.filter { it.isSmartReplyError() }
@@ -98,14 +100,17 @@ class RoomGroupMessageCreator @Inject constructor(
         )
     }
 
-    private suspend fun NotificationCompat.MessagingStyle.addMessagesFromEvents(events: List<NotifiableMessageEvent>) {
+    private suspend fun NotificationCompat.MessagingStyle.addMessagesFromEvents(
+        events: List<NotifiableMessageEvent>,
+        imageLoader: ImageLoader,
+    ) {
         events.forEach { event ->
             val senderPerson = if (event.outGoingMessage) {
                 null
             } else {
                 Person.Builder()
                     .setName(event.senderName?.annotateForDebug(70))
-                    .setIcon(bitmapLoader.getUserIcon(event.senderAvatarPath))
+                    .setIcon(bitmapLoader.getUserIcon(event.senderAvatarPath, imageLoader))
                     .setKey(event.senderId.value)
                     .build()
             }
@@ -167,10 +172,13 @@ class RoomGroupMessageCreator @Inject constructor(
         }
     }
 
-    private suspend fun getRoomBitmap(events: List<NotifiableMessageEvent>): Bitmap? {
+    private suspend fun getRoomBitmap(
+        events: List<NotifiableMessageEvent>,
+        imageLoader: ImageLoader,
+    ): Bitmap? {
         // Use the last event (most recent?)
         return events.reversed().firstNotNullOfOrNull { it.roomAvatarPath }
-            ?.let { bitmapLoader.getRoomBitmap(it) }
+            ?.let { bitmapLoader.getRoomBitmap(it, imageLoader) }
     }
 }
 
