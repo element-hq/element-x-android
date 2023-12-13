@@ -187,7 +187,7 @@ internal fun PinIconPreview() = ElementPreview {
 }
 ```
 
-This will allow to preview the composable in both light and dark mode in Android Studio. This will also automatically add UI tests. The GitHub action [Record screenshots](https://github.com/vector-im/element-x-android/actions/workflows/recordScreenshots.yml) has to be run to record the new screenshots. The PR reviewer can trigger this for you if you're not part of the core team. 
+This will allow to preview the composable in both light and dark mode in Android Studio. This will also automatically add UI tests. The GitHub action [Record screenshots](https://github.com/element-hq/element-x-android/actions/workflows/recordScreenshots.yml) has to be run to record the new screenshots. The PR reviewer can trigger this for you if you're not part of the core team. 
 
 ### Authors
 

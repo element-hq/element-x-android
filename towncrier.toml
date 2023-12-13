@@ -3,7 +3,7 @@
     filename = "CHANGES.md"
     name = "Changes in Element X"
     template = "tools/towncrier/template.md"
-    issue_format = "[#{issue}](https://github.com/vector-im/element-x-android/issues/{issue})"
+    issue_format = "[#{issue}](https://github.com/element-hq/element-x-android/issues/{issue})"
 
     [[tool.towncrier.type]]
         directory = "feature"

@@ -322,7 +322,7 @@ We are using [Gradle version catalog](https://docs.gradle.org/current/userguide/
 All the dependencies (including android artifact, gradle plugin, etc.) should be declared in [../gradle/libs.versions.toml](libs.versions.toml) file.
 Some dependency, mainly because they are not shared can be declared in `build.gradle.kts` files.
 
-[Renovate](https://github.com/apps/renovate) is set up on the project. This tool will automatically create Pull Request to upgrade our dependencies one by one. A [dependency dashboard issue](https://github.com/vector-im/element-x-android/issues/150) is maintained by the tool and allow to perform some actions.
+[Renovate](https://github.com/apps/renovate) is set up on the project. This tool will automatically create Pull Request to upgrade our dependencies one by one. A [dependency dashboard issue](https://github.com/element-hq/element-x-android/issues/150) is maintained by the tool and allow to perform some actions.
 
 ### Test
 

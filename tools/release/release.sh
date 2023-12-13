@@ -166,7 +166,7 @@ printf -v versionMinor2Digits "%02d" ${versionMinor}
 printf -v versionPatch2Digits "%02d" ${versionPatch}
 fastlaneFile="4${versionMajor2Digits}${versionMinor2Digits}${versionPatch2Digits}0.txt"
 fastlanePathFile="./fastlane/metadata/android/en-US/changelogs/${fastlaneFile}"
-printf "Main changes in this version: TODO.\nFull changelog: https://github.com/vector-im/element-x-android/releases" > ${fastlanePathFile}
+printf "Main changes in this version: TODO.\nFull changelog: https://github.com/element-hq/element-x-android/releases" > ${fastlanePathFile}
 
 read -p "I have created the file ${fastlanePathFile}, please edit it and press enter to continue. "
 git add ${fastlanePathFile}
@@ -217,7 +217,7 @@ else
 fi
 
 printf "\n================================================================================\n"
-printf "Wait for the GitHub action https://github.com/vector-im/element-x-android/actions/workflows/release.yml?query=branch%%3Amain to build the 'main' branch.\n"
+printf "Wait for the GitHub action https://github.com/element-hq/element-x-android/actions/workflows/release.yml?query=branch%%3Amain to build the 'main' branch.\n"
 read -p "After GHA is finished, please enter the artifact URL (for 'elementx-app-bundle-unsigned'): " artifactUrl
 
 printf "\n================================================================================\n"
@@ -292,7 +292,7 @@ else
 fi
 
 printf "\n================================================================================\n"
-githubCreateReleaseLink="https://github.com/vector-im/element-x-android/releases/new?tag=v${version}&title=Element%20X%20Android%20v${version}&body=${changelogUrlEncoded}"
+githubCreateReleaseLink="https://github.com/element-hq/element-x-android/releases/new?tag=v${version}&title=Element%20X%20Android%20v${version}&body=${changelogUrlEncoded}"
 printf "Creating the release on gitHub.\n"
 printf -- "Open this link: %s\n" ${githubCreateReleaseLink}
 printf "Then\n"
@@ -303,7 +303,7 @@ read -p ". Press enter to continue. "
 
 printf "\n================================================================================\n"
 printf "Message for the Android internal room:\n\n"
-message="@room Element X Android ${version} is ready to be tested. You can get it from https://github.com/vector-im/element-x-android/releases/tag/v${version}. Installation instructions can be found [here](https://github.com/vector-im/element-x-android/blob/develop/docs/install_from_github_release.md). Please report any feedback. Thanks!"
+message="@room Element X Android ${version} is ready to be tested. You can get it from https://github.com/element-hq/element-x-android/releases/tag/v${version}. Installation instructions can be found [here](https://github.com/element-hq/element-x-android/blob/develop/docs/install_from_github_release.md). Please report any feedback. Thanks!"
 printf "${message}\n\n"
 
 if [[ -z "${elementBotToken}" ]]; then
