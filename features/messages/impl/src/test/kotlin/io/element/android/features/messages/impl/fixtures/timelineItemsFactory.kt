@@ -32,6 +32,7 @@ import io.element.android.features.messages.impl.timeline.factories.event.Timeli
 import io.element.android.features.messages.impl.timeline.factories.virtual.TimelineItemDaySeparatorFactory
 import io.element.android.features.messages.impl.timeline.factories.virtual.TimelineItemVirtualFactory
 import io.element.android.features.messages.impl.timeline.groups.TimelineItemGrouper
+import io.element.android.features.poll.test.pollcontent.FakePollContentStateFactory
 import io.element.android.libraries.androidutils.filesize.FakeFileSizeFormatter
 import io.element.android.libraries.dateformatter.test.FakeDaySeparatorFormatter
 import io.element.android.libraries.dateformatter.test.FakeLastMessageTimestampFormatter
@@ -57,7 +58,7 @@ internal fun TestScope.aTimelineItemsFactory(): TimelineItemsFactory {
                 ),
                 redactedMessageFactory = TimelineItemContentRedactedFactory(),
                 stickerFactory = TimelineItemContentStickerFactory(),
-                pollFactory = TimelineItemContentPollFactory(matrixClient, FakeFeatureFlagService()),
+                pollFactory = TimelineItemContentPollFactory(FakeFeatureFlagService(), FakePollContentStateFactory()),
                 utdFactory = TimelineItemContentUTDFactory(),
                 roomMembershipFactory = TimelineItemContentRoomMembershipFactory(timelineEventFormatter),
                 profileChangeFactory = TimelineItemContentProfileChangeFactory(timelineEventFormatter),

@@ -52,6 +52,8 @@ dependencies {
     testImplementation(projects.services.analytics.test)
     testImplementation(projects.features.messages.test)
     testImplementation(projects.tests.testutils)
+    testImplementation(projects.libraries.dateformatter.test)
+    testImplementation(projects.features.poll.test)
 
     ksp(libs.showkase.processor)
 }

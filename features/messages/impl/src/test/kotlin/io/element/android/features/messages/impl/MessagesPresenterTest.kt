@@ -47,6 +47,8 @@ import io.element.android.features.messages.impl.voicemessages.composer.VoiceMes
 import io.element.android.features.messages.impl.voicemessages.timeline.FakeRedactedVoiceMessageManager
 import io.element.android.features.messages.test.FakeMessageComposerContext
 import io.element.android.features.networkmonitor.test.FakeNetworkMonitor
+import io.element.android.features.poll.test.actions.FakeEndPollAction
+import io.element.android.features.poll.test.actions.FakeSendPollResponseAction
 import io.element.android.libraries.androidutils.clipboard.FakeClipboardHelper
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
@@ -705,11 +707,12 @@ class MessagesPresenterTest {
             dispatchers = coroutineDispatchers,
             appScope = this,
             navigator = navigator,
-            analyticsService = analyticsService,
             encryptionService = FakeEncryptionService(),
             verificationService = FakeSessionVerificationService(),
             featureFlagService = FakeFeatureFlagService(),
             redactedVoiceMessageManager = FakeRedactedVoiceMessageManager(),
+            endPollAction = FakeEndPollAction(),
+            sendPollResponseAction = FakeSendPollResponseAction(),
         )
         val timelinePresenterFactory = object: TimelinePresenter.Factory {
             override fun create(navigator: MessagesNavigator): TimelinePresenter {
