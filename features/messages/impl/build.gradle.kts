@@ -73,6 +73,7 @@ dependencies {
     implementation(libs.vanniktech.blurhash)
     implementation(libs.telephoto.zoomableimage)
     implementation(libs.matrix.emojibase.bindings)
+    api(libs.matrix.richtexteditor.compose)
 
     testImplementation(libs.test.junit)
     testImplementation(libs.coroutines.test)
@@ -97,6 +98,8 @@ dependencies {
     testImplementation(libs.test.mockk)
     testImplementation(libs.test.junitext)
     testImplementation(libs.test.robolectric)
+    testImplementation(libs.androidx.compose.ui.test.junit)
+    testReleaseImplementation(libs.androidx.compose.ui.test.manifest)
 
     ksp(libs.showkase.processor)
 }

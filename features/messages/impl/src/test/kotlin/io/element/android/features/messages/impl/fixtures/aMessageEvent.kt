@@ -39,7 +39,7 @@ internal fun aMessageEvent(
     eventId: EventId? = AN_EVENT_ID,
     isMine: Boolean = true,
     isEditable: Boolean = true,
-    content: TimelineItemEventContent = TimelineItemTextContent(body = A_MESSAGE, htmlDocument = null, isEdited = false),
+    content: TimelineItemEventContent = TimelineItemTextContent(body = A_MESSAGE, htmlDocument = null, formattedBody = null, isEdited = false),
     inReplyTo: InReplyToDetails? = null,
     isThreaded: Boolean = false,
     debugInfo: TimelineItemDebugInfo = aTimelineItemDebugInfo(),

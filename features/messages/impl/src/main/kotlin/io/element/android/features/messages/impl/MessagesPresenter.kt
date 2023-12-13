@@ -31,6 +31,7 @@ import androidx.compose.runtime.setValue
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import io.element.android.features.messages.api.timeline.HtmlConverterProvider
 import io.element.android.features.messages.impl.actionlist.ActionListEvents
 import io.element.android.features.messages.impl.actionlist.ActionListPresenter
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
@@ -107,6 +108,7 @@ class MessagesPresenter @AssistedInject constructor(
     private val clipboardHelper: ClipboardHelper,
     private val preferencesStore: PreferencesStore,
     private val featureFlagsService: FeatureFlagService,
+    private val htmlConverterProvider: HtmlConverterProvider,
     @Assisted private val navigator: MessagesNavigator,
     private val buildMeta: BuildMeta,
     private val currentSessionIdHolder: CurrentSessionIdHolder,
@@ -121,6 +123,8 @@ class MessagesPresenter @AssistedInject constructor(
 
     @Composable
     override fun present(): MessagesState {
+        htmlConverterProvider.Update(currentUserId = currentSessionIdHolder.current)
+
         val roomInfo by room.roomInfoFlow.collectAsState(null)
         val localCoroutineScope = rememberCoroutineScope()
         val composerState = composerPresenter.present()

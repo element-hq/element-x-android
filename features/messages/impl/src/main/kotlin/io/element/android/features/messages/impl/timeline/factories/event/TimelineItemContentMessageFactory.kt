@@ -16,7 +16,14 @@
 
 package io.element.android.features.messages.impl.timeline.factories.event
 
+import android.text.Spannable
+import android.text.style.URLSpan
+import android.text.util.Linkify
+import androidx.core.text.buildSpannedString
+import androidx.core.text.getSpans
+import androidx.core.text.util.LinkifyCompat
 import io.element.android.features.location.api.Location
+import io.element.android.features.messages.api.timeline.HtmlConverterProvider
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemAudioContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEmoteContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
@@ -35,9 +42,11 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.timeline.item.event.AudioMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.EmoteMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.FileMessageType
+import io.element.android.libraries.matrix.api.timeline.item.event.FormattedBody
 import io.element.android.libraries.matrix.api.timeline.item.event.ImageMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.LocationMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageContent
+import io.element.android.libraries.matrix.api.timeline.item.event.MessageFormat
 import io.element.android.libraries.matrix.api.timeline.item.event.NoticeMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.OtherMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageType
@@ -52,8 +61,9 @@ import kotlin.time.Duration
 
 class TimelineItemContentMessageFactory @Inject constructor(
     private val fileSizeFormatter: FileSizeFormatter,
-    private val fileExtensionExtractor: io.element.android.libraries.mediaviewer.api.util.FileExtensionExtractor,
+    private val fileExtensionExtractor: FileExtensionExtractor,
     private val featureFlagService: FeatureFlagService,
+    private val htmlConverterProvider: HtmlConverterProvider,
 ) {
 
     suspend fun create(content: MessageContent, senderDisplayName: String, eventId: EventId?): TimelineItemEventContent {
@@ -61,6 +71,7 @@ class TimelineItemContentMessageFactory @Inject constructor(
             is EmoteMessageType -> TimelineItemEmoteContent(
                 body = "* $senderDisplayName ${messageType.body}",
                 htmlDocument = messageType.formatted?.toHtmlDocument(prefix = "* $senderDisplayName"),
+                formattedBody = parseHtml(messageType.formatted, prefix = "* $senderDisplayName"),
                 isEdited = content.isEdited,
             )
             is ImageMessageType -> {
@@ -85,6 +96,7 @@ class TimelineItemContentMessageFactory @Inject constructor(
                         body = messageType.body,
                         htmlDocument = null,
                         plainText = messageType.body,
+                        formattedBody = null,
                         isEdited = content.isEdited,
                     )
                 } else {
@@ -159,18 +171,21 @@ class TimelineItemContentMessageFactory @Inject constructor(
             is NoticeMessageType -> TimelineItemNoticeContent(
                 body = messageType.body,
                 htmlDocument = messageType.formatted?.toHtmlDocument(),
+                formattedBody = parseHtml(messageType.formatted),
                 isEdited = content.isEdited,
             )
             is TextMessageType -> {
                 TimelineItemTextContent(
                     body = messageType.body,
                     htmlDocument = messageType.formatted?.toHtmlDocument(),
+                    formattedBody = parseHtml(messageType.formatted),
                     isEdited = content.isEdited,
                 )
             }
             is OtherMessageType -> TimelineItemTextContent(
                 body = messageType.body,
                 htmlDocument = null,
+                formattedBody = null,
                 isEdited = content.isEdited,
             )
         }
@@ -184,5 +199,41 @@ class TimelineItemContentMessageFactory @Inject constructor(
         }
 
         return result?.takeIf { it.isFinite() }
+    }
+
+    private fun parseHtml(formattedBody: FormattedBody?, prefix: String? = null): CharSequence? {
+        if (formattedBody == null || formattedBody.format != MessageFormat.HTML) return null
+        val result = htmlConverterProvider.provide()
+            .fromHtmlToSpans(formattedBody.body)
+            .withFixedURLSpans()
+        return if (prefix != null) {
+            buildSpannedString {
+                append(prefix)
+                append(" ")
+                append(result)
+            }
+        } else {
+            result
+        }
+    }
+
+    private fun CharSequence.withFixedURLSpans(): CharSequence {
+        if (this !is Spannable) return this
+        // Get all URL spans, as they will be removed by LinkifyCompat.addLinks
+        val oldURLSpans = getSpans<URLSpan>(0, length).associateWith {
+            val start = getSpanStart(it)
+            val end = getSpanEnd(it)
+            Pair(start, end)
+        }
+        // Find and set as URLSpans any links present in the text
+        LinkifyCompat.addLinks(this, Linkify.WEB_URLS or Linkify.PHONE_NUMBERS)
+        // Restore old spans if they don't conflict with the new ones
+        for ((urlSpan, location) in oldURLSpans) {
+            val (start, end) = location
+            if (getSpans<URLSpan>(start, end).isEmpty()) {
+                setSpan(urlSpan, start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            }
+        }
+        return this
     }
 }

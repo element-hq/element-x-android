@@ -441,9 +441,7 @@ private fun TextInput(
                 modifier = Modifier
                     .padding(top = 6.dp, bottom = 6.dp)
                     .fillMaxWidth(),
-                style = ElementRichTextEditorStyle.create(
-                    hasFocus = state.hasFocus
-                ),
+                style = ElementRichTextEditorStyle.composerStyle(hasFocus = state.hasFocus),
                 resolveMentionDisplay = resolveMentionDisplay,
                 resolveRoomMentionDisplay = resolveRoomMentionDisplay,
                 onError = onError

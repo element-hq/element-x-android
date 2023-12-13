@@ -17,6 +17,7 @@
 package io.element.android.features.messages.impl.timeline.components
 
 import android.annotation.SuppressLint
+import android.net.Uri
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -48,6 +49,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalViewConfiguration
 import androidx.compose.ui.platform.ViewConfiguration
 import androidx.compose.ui.res.stringResource
@@ -79,6 +81,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
 import io.element.android.features.messages.impl.timeline.model.metadata
+import io.element.android.libraries.androidutils.system.openUrlInExternalApp
 import io.element.android.libraries.designsystem.colors.AvatarColorsProvider
 import io.element.android.libraries.designsystem.components.EqualWidthColumn
 import io.element.android.libraries.designsystem.components.avatar.Avatar
@@ -93,9 +96,12 @@ import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.permalink.PermalinkData
+import io.element.android.libraries.matrix.api.permalink.PermalinkParser
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnail
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import kotlin.math.abs
 import kotlin.math.roundToInt
 
@@ -305,8 +311,6 @@ private fun TimelineItemEventRowContent(
         ) {
             MessageEventBubbleContent(
                 event = event,
-                interactionSource = interactionSource,
-                onMessageClick = onClick,
                 onMessageLongClick = onLongClick,
                 inReplyToClick = inReplyToClicked,
                 onTimestampClicked = {
@@ -380,8 +384,6 @@ private fun MessageSenderInformation(
 @Composable
 private fun MessageEventBubbleContent(
     event: TimelineItem.Event,
-    interactionSource: MutableInteractionSource,
-    onMessageClick: () -> Unit,
     onMessageLongClick: () -> Unit,
     inReplyToClick: () -> Unit,
     onTimestampClicked: () -> Unit,
@@ -473,6 +475,7 @@ private fun MessageEventBubbleContent(
         inReplyToDetails: InReplyToDetails?,
         modifier: Modifier = Modifier
     ) {
+        val context = LocalContext.current
         val timestampLayoutModifier: Modifier
         val contentModifier: Modifier
         when {
@@ -508,9 +511,18 @@ private fun MessageEventBubbleContent(
                     content = event.content,
                     isMine = event.isMine,
                     isEditable = event.isEditable,
-                    interactionSource = interactionSource,
-                    onClick = onMessageClick,
-                    onLongClick = onMessageLongClick,
+                    onLinkClicked = { url ->
+                        Timber.d("Clicked on: $url")
+                        when (PermalinkParser.parse(Uri.parse(url))) {
+                            is PermalinkData.UserLink -> {
+                                // TODO open member details
+                            }
+                            is PermalinkData.FallbackLink -> {
+                                context.openUrlInExternalApp(url)
+                            }
+                            else -> Unit // TODO handle other types of links, as room ones
+                        }
+                    },
                     extraPadding = event.toExtraPadding(),
                     eventSink = eventSink,
                     modifier = contentModifier,

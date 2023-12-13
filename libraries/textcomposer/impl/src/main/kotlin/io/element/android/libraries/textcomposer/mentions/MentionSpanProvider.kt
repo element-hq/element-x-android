@@ -60,18 +60,21 @@ class MentionSpanProvider(
             permalinkData is PermalinkData.UserLink -> {
                 val isCurrentUser = permalinkData.userId == currentSessionId.value
                 MentionSpan(
+                    type = MentionSpan.Type.USER,
                     backgroundColor = if (isCurrentUser) currentUserBackgroundColor else otherBackgroundColor,
                     textColor = if (isCurrentUser) currentUserTextColor else otherTextColor,
                 )
             }
             text == "@room" && permalinkData is PermalinkData.FallbackLink -> {
                 MentionSpan(
+                    type = MentionSpan.Type.USER,
                     backgroundColor = otherBackgroundColor,
                     textColor = otherTextColor,
                 )
             }
             else -> {
                 MentionSpan(
+                    type = MentionSpan.Type.ROOM,
                     backgroundColor = otherBackgroundColor,
                     textColor = otherTextColor,
                 )
@@ -97,17 +100,26 @@ internal fun MentionSpanPreview() {
         provider.setup()
 
         val textColor = ElementTheme.colors.textPrimary.toArgb()
-        val mentionSpan = provider.getMentionSpanFor("me", "https://matrix.to/#/@me:matrix.org")
-        val mentionSpan2 = provider.getMentionSpanFor("other", "https://matrix.to/#/@other:matrix.org")
+        fun mentionSpanMe() = provider.getMentionSpanFor("me", "https://matrix.to/#/@me:matrix.org")
+        fun mentionSpanOther() = provider.getMentionSpanFor("other", "https://matrix.to/#/@other:matrix.org")
+        fun mentionSpanRoom() = provider.getMentionSpanFor("room", "https://matrix.to/#/#room:matrix.org")
         AndroidView(factory = { context ->
             TextView(context).apply {
+                includeFontPadding = false
                 layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
                 text = buildSpannedString {
                     append("This is a ")
-                    append("@mention", mentionSpan, 0)
+                    append("@mention", mentionSpanMe(), 0)
                     append(" to the current user and this is a ")
-                    append("@mention", mentionSpan2, 0)
-                    append(" to other user")
+                    append("@mention", mentionSpanOther(), 0)
+                    append(" to other user. This one is for a room: ")
+                    append("#room:matrix.org", mentionSpanRoom(), 0)
+                    append("\n\n")
+                    append("This ")
+                    append("mention", mentionSpanMe(), 0)
+                    append(" didn't have an '@' and it was automatically added, same as this ")
+                    append("room:matrix.org", mentionSpanRoom(), 0)
+                    append(" one, which had no leading '#'.")
                 }
                 setTextColor(textColor)
             }
