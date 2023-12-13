@@ -16,6 +16,10 @@
 
 package io.element.android.features.messages.impl.timeline.factories.event
 
+import android.text.SpannableString
+import android.text.SpannableStringBuilder
+import android.text.style.URLSpan
+import androidx.core.text.inSpans
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.location.api.Location
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemAudioContent
@@ -43,10 +47,12 @@ import io.element.android.libraries.matrix.api.media.VideoInfo
 import io.element.android.libraries.matrix.api.timeline.item.event.AudioMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.EmoteMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.FileMessageType
+import io.element.android.libraries.matrix.api.timeline.item.event.FormattedBody
 import io.element.android.libraries.matrix.api.timeline.item.event.ImageMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.InReplyTo
 import io.element.android.libraries.matrix.api.timeline.item.event.LocationMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageContent
+import io.element.android.libraries.matrix.api.timeline.item.event.MessageFormat
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.NoticeMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.OtherMessageType
@@ -60,9 +66,12 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
+import org.junit.runner.RunWith
+import org.robolectric.RobolectricTestRunner
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.minutes
 
+@RunWith(RobolectricTestRunner::class)
 class TimelineItemContentMessageFactoryTest {
 
     @Test
@@ -133,6 +142,48 @@ class TimelineItemContentMessageFactoryTest {
             formattedBody = null,
         )
         assertThat(result).isEqualTo(expected)
+    }
+
+    @Test
+    fun `test create TextMessageType with HTML formatted body`() = runTest {
+        val expected = SpannableStringBuilder().apply {
+            append("link to ")
+            inSpans(URLSpan("https://matrix.org")) {
+                append("https://matrix.org")
+            }
+            append(" ")
+            inSpans(URLSpan("https://matrix.org")) {
+                append("and manually added link")
+            }
+        }
+        val sut = createTimelineItemContentMessageFactory(
+            htmlConverterTransform = { expected }
+        )
+        val result = sut.create(
+            content = createMessageContent(type = TextMessageType(
+                body = "body",
+                formatted = FormattedBody(MessageFormat.HTML, expected.toString())
+            )),
+            senderDisplayName = "Bob",
+            eventId = AN_EVENT_ID,
+        )
+        assertThat((result as TimelineItemTextContent).formattedBody).isEqualTo(expected)
+    }
+
+    @Test
+    fun `test create TextMessageType with unknown formatted body does nothing`() = runTest {
+        val sut = createTimelineItemContentMessageFactory(
+            htmlConverterTransform = { it }
+        )
+        val result = sut.create(
+            content = createMessageContent(type = TextMessageType(
+                body = "body",
+                formatted = FormattedBody(MessageFormat.UNKNOWN, "formatted")
+            )),
+            senderDisplayName = "Bob",
+            eventId = AN_EVENT_ID,
+        )
+        assertThat((result as TimelineItemTextContent).formattedBody).isNull()
     }
 
     @Test
@@ -466,6 +517,20 @@ class TimelineItemContentMessageFactoryTest {
     }
 
     @Test
+    fun `test create NoticeMessageType with HTML formatted body`() = runTest {
+        val sut = createTimelineItemContentMessageFactory()
+        val result = sut.create(
+            content = createMessageContent(type = NoticeMessageType(
+                body = "body",
+                formatted = FormattedBody(MessageFormat.HTML, "formatted")
+            )),
+            senderDisplayName = "Bob",
+            eventId = AN_EVENT_ID,
+        )
+        assertThat((result as TimelineItemNoticeContent).formattedBody).isEqualTo("formatted")
+    }
+
+    @Test
     fun `test create EmoteMessageType`() = runTest {
         val sut = createTimelineItemContentMessageFactory()
         val result = sut.create(
@@ -481,6 +546,20 @@ class TimelineItemContentMessageFactoryTest {
             isEdited = false,
         )
         assertThat(result).isEqualTo(expected)
+    }
+
+    @Test
+    fun `test create EmoteMessageType with HTML formatted body`() = runTest {
+        val sut = createTimelineItemContentMessageFactory()
+        val result = sut.create(
+            content = createMessageContent(type = EmoteMessageType(
+                body = "body",
+                formatted = FormattedBody(MessageFormat.HTML, "formatted")
+            )),
+            senderDisplayName = "Bob",
+            eventId = AN_EVENT_ID,
+        )
+        assertThat((result as TimelineItemEmoteContent).formattedBody).isEqualTo(SpannableString("* Bob formatted"))
     }
 
     private fun createMessageContent(
@@ -500,11 +579,12 @@ class TimelineItemContentMessageFactoryTest {
     }
 
     private fun createTimelineItemContentMessageFactory(
-        featureFlagService: FeatureFlagService = FakeFeatureFlagService()
+        featureFlagService: FeatureFlagService = FakeFeatureFlagService(),
+        htmlConverterTransform: (String) -> CharSequence = { it },
     ) = TimelineItemContentMessageFactory(
         fileSizeFormatter = FakeFileSizeFormatter(),
         fileExtensionExtractor = FileExtensionExtractorWithoutValidation(),
         featureFlagService = featureFlagService,
-        htmlConverterProvider = FakeHtmlConverterProvider(),
+        htmlConverterProvider = FakeHtmlConverterProvider(htmlConverterTransform),
     )
 }

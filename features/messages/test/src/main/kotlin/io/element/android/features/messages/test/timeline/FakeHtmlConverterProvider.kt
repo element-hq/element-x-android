@@ -22,8 +22,8 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.wysiwyg.utils.HtmlConverter
 
 class FakeHtmlConverterProvider(
-    private val result: String = "",
-) : HtmlConverterProvider {
+    private val transform: (String) -> CharSequence = { it },
+): HtmlConverterProvider {
 
     @Composable
     override fun Update(currentUserId: UserId) = Unit
@@ -31,7 +31,7 @@ class FakeHtmlConverterProvider(
     override fun provide(): HtmlConverter {
         return object : HtmlConverter {
             override fun fromHtmlToSpans(html: String): CharSequence {
-                return result
+                return transform(html)
             }
         }
     }
