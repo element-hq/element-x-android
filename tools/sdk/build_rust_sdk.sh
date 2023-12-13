@@ -8,6 +8,7 @@ read -p "Do you want to build the Rust SDK from local source (yes/no) default to
 buildLocal=${buildLocal:-yes}
 
 date=$(gdate +%Y%m%d%H%M%S)
+elementPwd=`pwd`
 
 # Ask for the Rust SDK local source path
 # if folder rustSdk/ exists, use it as default
@@ -28,7 +29,7 @@ else
     cd matrix-rust-sdk-$date
     git checkout ${rustSdkBranch}
     rustSdkPath=$(pwd)
-    cd ../element-x-android
+    cd ${elementPwd}
 fi
 
 
@@ -46,6 +47,8 @@ fi
 read -p "Do you want to build the app after (yes/no) default to yes? " buildApp
 buildApp=${buildApp:-yes}
 
+cd ${elementPwd}
+
 # If folder ../matrix-rust-components-kotlin does not exist, clone the repo
 if [ ! -d "../matrix-rust-components-kotlin" ]; then
     printf "\nFolder ../matrix-rust-components-kotlin does not exist. Cloning the repository into ../matrix-rust-components-kotlin.\n\n"
@@ -59,9 +62,9 @@ git checkout main
 git pull
 
 printf "\nBuilding the SDK for aarch64-linux-android...\n\n"
-./scripts/build.sh -p ${rustSdkPath} -m sdk -t aarch64-linux-android -o ../element-x-android/libraries/rustsdk
+./scripts/build.sh -p ${rustSdkPath} -m sdk -t aarch64-linux-android -o ${elementPwd}/libraries/rustsdk
 
-cd ../element-x-android
+cd ${elementPwd}
 mv ./libraries/rustsdk/sdk-android-debug.aar ./libraries/rustsdk/matrix-rust-sdk.aar
 mkdir -p ./libraries/rustsdk/sdks
 cp ./libraries/rustsdk/matrix-rust-sdk.aar ./libraries/rustsdk/sdks/matrix-rust-sdk-${date}.aar
