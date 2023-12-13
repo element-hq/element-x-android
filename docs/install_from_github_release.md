@@ -18,7 +18,7 @@ The easiest way to do that is to use the debug signature that is shared between 
 
 You can clone the project by running:
 ```bash
-git clone git@github.com:vector-im/element-x-android.git
+git clone git@github.com:element-hq/element-x-android.git
 ```
 or
 ```bash
