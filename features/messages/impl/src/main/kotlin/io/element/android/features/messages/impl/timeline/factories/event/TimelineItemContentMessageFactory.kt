@@ -16,6 +16,11 @@
 
 package io.element.android.features.messages.impl.timeline.factories.event
 
+import android.text.Spannable
+import android.text.style.URLSpan
+import android.text.util.Linkify
+import androidx.core.text.getSpans
+import androidx.core.text.util.LinkifyCompat
 import io.element.android.features.location.api.Location
 import io.element.android.features.messages.api.timeline.HtmlConverterProvider
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemAudioContent
@@ -171,7 +176,9 @@ class TimelineItemContentMessageFactory @Inject constructor(
                     htmlDocument = messageType.formatted?.toHtmlDocument(),
                     formattedBody = messageType.formatted?.let { formattedBody ->
                         if (formattedBody.format == MessageFormat.HTML) {
-                            htmlConverterProvider.provide().fromHtmlToSpans(formattedBody.body)
+                            htmlConverterProvider.provide()
+                                .fromHtmlToSpans(formattedBody.body)
+                                .withFixedURLSpans()
                         } else {
                             null
                         }
@@ -197,4 +204,24 @@ class TimelineItemContentMessageFactory @Inject constructor(
 
         return result?.takeIf { it.isFinite() }
     }
+}
+
+private fun CharSequence.withFixedURLSpans(): CharSequence {
+    if (this !is Spannable) return this
+    // Get all URL spans, as they will be removed by LinkifyCompat.addLinks
+    val oldURLSpans = getSpans<URLSpan>(0, length).associateWith {
+        val start = getSpanStart(it)
+        val end = getSpanEnd(it)
+        Pair(start, end)
+    }
+    // Find and set as URLSpans any links present in the text
+    LinkifyCompat.addLinks(this, Linkify.WEB_URLS or Linkify.PHONE_NUMBERS)
+    // Restore old spans if they don't conflict with the new ones
+    for ((urlSpan, location) in oldURLSpans) {
+        val (start, end) = location
+        if (getSpans<URLSpan>(start, end).isEmpty()) {
+            setSpan(urlSpan, start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
+    }
+    return this
 }

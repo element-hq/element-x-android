@@ -17,7 +17,6 @@
 package io.element.android.features.messages.impl.timeline.components.event
 
 import android.text.SpannableString
-import android.text.util.Linkify
 import androidx.compose.foundation.layout.Box
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
@@ -27,7 +26,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.core.text.buildSpannedString
-import androidx.core.text.util.LinkifyCompat
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextBasedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextBasedContentProvider
@@ -51,7 +49,6 @@ fun TimelineItemTextView(
 
         val formattedBody = content.formattedBody
         val body = SpannableString(formattedBody ?: content.body)
-        LinkifyCompat.addLinks(body, Linkify.WEB_URLS or Linkify.PHONE_NUMBERS)
 
         Box(modifier) {
             val textWithPadding = remember(body, fontSize) {
