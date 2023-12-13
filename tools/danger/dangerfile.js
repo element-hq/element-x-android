@@ -107,11 +107,11 @@ if (allowList.includes(user)) {
     signoff_unneeded("allow-list")
 } else {
 //  github.api.rest.orgs.checkMembershipForUser({
-//      org: "vector-im",
+//      org: "element-hq",
 //      username: user,
 //   }).then((result) => {
     github.api.rest.teams.getMembershipForUserInOrg({
-        org: "vector-im",
+        org: "element-hq",
         team_slug: "vector-core",
         username: user,
     }).then((result) => {
