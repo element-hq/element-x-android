@@ -76,6 +76,9 @@ class NotificationSettingsPresenter @Inject constructor(
                 is NotificationSettingsEvents.SetCallNotificationsEnabled -> {
                     localCoroutineScope.setCallNotificationsEnabled(event.enabled, changeNotificationSettingAction)
                 }
+                is NotificationSettingsEvents.SetInviteForMeNotificationsEnabled -> {
+                    localCoroutineScope.setInviteForMeNotificationsEnabled(event.enabled, changeNotificationSettingAction)
+                }
                 is NotificationSettingsEvents.SetNotificationsEnabled -> localCoroutineScope.setNotificationsEnabled(userPushStore, event.enabled)
                 NotificationSettingsEvents.ClearConfigurationMismatchError -> {
                     matrixSettings.value = NotificationSettingsState.MatrixSettings.Invalid(fixFailed = false)
@@ -123,10 +126,12 @@ class NotificationSettingsPresenter @Inject constructor(
 
         val callNotificationsEnabled = notificationSettingsService.isCallEnabled().getOrThrow()
         val atRoomNotificationsEnabled = notificationSettingsService.isRoomMentionEnabled().getOrThrow()
+        val inviteForMeNotificationsEnabled = notificationSettingsService.isInviteForMeEnabled().getOrThrow()
 
         target.value = NotificationSettingsState.MatrixSettings.Valid(
             atRoomNotificationsEnabled = atRoomNotificationsEnabled,
             callNotificationsEnabled = callNotificationsEnabled,
+            inviteForMeNotificationsEnabled = inviteForMeNotificationsEnabled,
             defaultGroupNotificationMode = encryptedGroupDefaultMode,
             defaultOneToOneNotificationMode = encryptedOneToOneDefaultMode,
         )
@@ -172,6 +177,12 @@ class NotificationSettingsPresenter @Inject constructor(
     private fun CoroutineScope.setCallNotificationsEnabled(enabled: Boolean, action: MutableState<Async<Unit>>) = launch {
         suspend {
             notificationSettingsService.setCallEnabled(enabled).getOrThrow()
+        }.runCatchingUpdatingState(action)
+    }
+
+    private fun CoroutineScope.setInviteForMeNotificationsEnabled(enabled: Boolean, action: MutableState<Async<Unit>>) = launch {
+        suspend {
+            notificationSettingsService.setInviteForMeEnabled(enabled).getOrThrow()
         }.runCatchingUpdatingState(action)
     }
 

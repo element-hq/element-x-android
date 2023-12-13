@@ -15,7 +15,7 @@ jobs:
   nightlyReports:
     name: Create kover report artifact and upload sonar result.
     runs-on: ubuntu-latest
-    if: ${{ github.repository == 'vector-im/element-x-android' }}
+    if: ${{ github.repository == 'element-hq/element-x-android' }}
     steps:
       - name: ⏬ Checkout with LFS
         uses: nschloe/action-cached-lfs-checkout@v1.2.2
@@ -62,7 +62,7 @@ jobs:
           distribution: 'temurin' # See 'Supported distributions' for available options
           java-version: '17'
       - name: Configure gradle
-        uses: gradle/gradle-build-action@v2.10.0
+        uses: gradle/gradle-build-action@v2.11.0
         with:
           cache-read-only: ${{ github.ref != 'refs/heads/develop' }}
       - name: Dependency analysis

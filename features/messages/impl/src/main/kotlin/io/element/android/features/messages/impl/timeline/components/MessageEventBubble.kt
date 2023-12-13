@@ -35,17 +35,17 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.messages.impl.timeline.model.TimelineItemGroupPosition
 import io.element.android.features.messages.impl.timeline.model.bubble.BubbleState
 import io.element.android.features.messages.impl.timeline.model.bubble.BubbleStateProvider
 import io.element.android.libraries.core.extensions.to01
-import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Surface
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.messageFromMeBackground
 import io.element.android.libraries.designsystem.theme.messageFromOtherBackground
-import io.element.android.compound.theme.ElementTheme
 
 private val BUBBLE_RADIUS = 12.dp
 private val BUBBLE_INCOMING_OFFSET = 16.dp
@@ -91,10 +91,10 @@ fun MessageEventBubble(
     }
 
     fun Modifier.offsetForItem(): Modifier {
-        return if (state.isMine) {
-            this
-        } else {
-            offset(x = BUBBLE_INCOMING_OFFSET)
+        return when {
+            state.isMine -> this
+            state.timelineRoomInfo.isDirect -> this
+            else -> offset(x = BUBBLE_INCOMING_OFFSET)
         }
     }
 

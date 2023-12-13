@@ -16,8 +16,7 @@
 
 package io.element.android.services.analyticsproviders.posthog
 
-import com.posthog.android.PostHog
-import com.posthog.android.Properties
+import com.posthog.PostHogInterface
 import com.squareup.anvil.annotations.ContributesMultibinding
 import im.vector.app.features.analytics.itf.VectorAnalyticsEvent
 import im.vector.app.features.analytics.itf.VectorAnalyticsScreen
@@ -37,30 +36,31 @@ class PosthogAnalyticsProvider @Inject constructor(
 ) : AnalyticsProvider {
     override val name = "Posthog"
 
-    private var posthog: PostHog? = null
+    private var posthog: PostHogInterface? = null
     private var analyticsId: String? = null
 
     override fun init() {
         posthog = createPosthog()
-        posthog?.optOut(false)
+        posthog?.optIn()
+        // Timber.e("PostHog distinctId: ${posthog?.distinctId()}")
         identifyPostHog()
     }
 
     override fun stop() {
         // When opting out, ensure that the queue is flushed first, or it will be flushed later (after user has revoked consent)
         posthog?.flush()
-        posthog?.optOut(true)
-        posthog?.shutdown()
+        posthog?.optOut()
+        posthog?.close()
         posthog = null
         analyticsId = null
     }
 
     override fun capture(event: VectorAnalyticsEvent) {
-        posthog?.capture(event.getName(), event.getProperties()?.toPostHogProperties())
+        posthog?.capture(event.getName(), properties = event.getProperties()?.keepOnlyNonNullValues())
     }
 
     override fun screen(screen: VectorAnalyticsScreen) {
-        posthog?.screen(screen.getName(), screen.getProperties()?.toPostHogProperties())
+        posthog?.screen(screen.getName(), properties = screen.getProperties())
     }
 
     override fun updateUserProperties(userProperties: UserProperties) {
@@ -74,7 +74,7 @@ class PosthogAnalyticsProvider @Inject constructor(
         // Not implemented
     }
 
-    private fun createPosthog(): PostHog = postHogFactory.createPosthog()
+    private fun createPosthog(): PostHogInterface = postHogFactory.createPosthog()
 
     private fun identifyPostHog() {
         val id = analyticsId ?: return
@@ -86,24 +86,15 @@ class PosthogAnalyticsProvider @Inject constructor(
 //            posthog?.identify(id, lateInitUserPropertiesFactory.createUserProperties()?.getProperties()?.toPostHogUserProperties(), IGNORED_OPTIONS)
         }
     }
+}
 
-    private fun Map<String, Any?>?.toPostHogProperties(): Properties? {
-        if (this == null) return null
-
-        return Properties().apply {
-            putAll(this@toPostHogProperties)
+private fun Map<String, Any?>.keepOnlyNonNullValues(): Map<String, Any> {
+    val result = mutableMapOf<String, Any>()
+    for (entry in this) {
+        val value = entry.value
+        if (value != null) {
+            result[entry.key] = value
         }
     }
-
-    /**
-     * We avoid sending nulls as part of the UserProperties as this will reset the values across all devices.
-     * The UserProperties event has nullable properties to allow for clients to opt in.
-     */
-    /*
-    private fun Map<String, Any?>.toPostHogUserProperties(): Properties {
-        return Properties().apply {
-            putAll(this@toPostHogUserProperties.filter { it.value != null })
-        }
-    }
-     */
+    return result
 }

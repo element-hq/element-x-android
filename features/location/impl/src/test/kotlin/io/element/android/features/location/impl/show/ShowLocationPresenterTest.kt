@@ -19,7 +19,7 @@ package io.element.android.features.location.impl.show
 import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
-import com.google.common.truth.Truth
+import com.google.common.truth.Truth.assertThat
 import io.element.android.features.location.api.Location
 import io.element.android.features.location.impl.aPermissionsState
 import io.element.android.features.location.impl.common.actions.FakeLocationActions
@@ -66,10 +66,10 @@ class ShowLocationPresenterTest {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            Truth.assertThat(initialState.location).isEqualTo(location)
-            Truth.assertThat(initialState.description).isEqualTo(A_DESCRIPTION)
-            Truth.assertThat(initialState.hasLocationPermission).isEqualTo(false)
-            Truth.assertThat(initialState.isTrackMyLocation).isEqualTo(false)
+            assertThat(initialState.location).isEqualTo(location)
+            assertThat(initialState.description).isEqualTo(A_DESCRIPTION)
+            assertThat(initialState.hasLocationPermission).isFalse()
+            assertThat(initialState.isTrackMyLocation).isFalse()
         }
     }
 
@@ -86,10 +86,10 @@ class ShowLocationPresenterTest {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            Truth.assertThat(initialState.location).isEqualTo(location)
-            Truth.assertThat(initialState.description).isEqualTo(A_DESCRIPTION)
-            Truth.assertThat(initialState.hasLocationPermission).isEqualTo(false)
-            Truth.assertThat(initialState.isTrackMyLocation).isEqualTo(false)
+            assertThat(initialState.location).isEqualTo(location)
+            assertThat(initialState.description).isEqualTo(A_DESCRIPTION)
+            assertThat(initialState.hasLocationPermission).isFalse()
+            assertThat(initialState.isTrackMyLocation).isFalse()
         }
     }
 
@@ -101,10 +101,10 @@ class ShowLocationPresenterTest {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            Truth.assertThat(initialState.location).isEqualTo(location)
-            Truth.assertThat(initialState.description).isEqualTo(A_DESCRIPTION)
-            Truth.assertThat(initialState.hasLocationPermission).isEqualTo(true)
-            Truth.assertThat(initialState.isTrackMyLocation).isEqualTo(false)
+            assertThat(initialState.location).isEqualTo(location)
+            assertThat(initialState.description).isEqualTo(A_DESCRIPTION)
+            assertThat(initialState.hasLocationPermission).isTrue()
+            assertThat(initialState.isTrackMyLocation).isFalse()
         }
     }
 
@@ -116,10 +116,10 @@ class ShowLocationPresenterTest {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            Truth.assertThat(initialState.location).isEqualTo(location)
-            Truth.assertThat(initialState.description).isEqualTo(A_DESCRIPTION)
-            Truth.assertThat(initialState.hasLocationPermission).isEqualTo(true)
-            Truth.assertThat(initialState.isTrackMyLocation).isEqualTo(false)
+            assertThat(initialState.location).isEqualTo(location)
+            assertThat(initialState.description).isEqualTo(A_DESCRIPTION)
+            assertThat(initialState.hasLocationPermission).isTrue()
+            assertThat(initialState.isTrackMyLocation).isFalse()
         }
     }
 
@@ -131,8 +131,8 @@ class ShowLocationPresenterTest {
             val initialState = awaitItem()
             initialState.eventSink(ShowLocationEvents.Share)
 
-            Truth.assertThat(fakeLocationActions.sharedLocation).isEqualTo(location)
-            Truth.assertThat(fakeLocationActions.sharedLabel).isEqualTo(A_DESCRIPTION)
+            assertThat(fakeLocationActions.sharedLocation).isEqualTo(location)
+            assertThat(fakeLocationActions.sharedLabel).isEqualTo(A_DESCRIPTION)
         }
     }
 
@@ -144,23 +144,23 @@ class ShowLocationPresenterTest {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            Truth.assertThat(initialState.hasLocationPermission).isEqualTo(true)
-            Truth.assertThat(initialState.isTrackMyLocation).isEqualTo(false)
+            assertThat(initialState.hasLocationPermission).isTrue()
+            assertThat(initialState.isTrackMyLocation).isFalse()
 
             initialState.eventSink(ShowLocationEvents.TrackMyLocation(true))
             val trackMyLocationState = awaitItem()
 
             delay(1)
 
-            Truth.assertThat(trackMyLocationState.hasLocationPermission).isEqualTo(true)
-            Truth.assertThat(trackMyLocationState.isTrackMyLocation).isEqualTo(true)
+            assertThat(trackMyLocationState.hasLocationPermission).isTrue()
+            assertThat(trackMyLocationState.isTrackMyLocation).isTrue()
 
             // Swipe the map to switch mode
             initialState.eventSink(ShowLocationEvents.TrackMyLocation(false))
             val trackLocationDisabledState = awaitItem()
-            Truth.assertThat(trackLocationDisabledState.permissionDialog).isEqualTo(ShowLocationState.Dialog.None)
-            Truth.assertThat(trackLocationDisabledState.isTrackMyLocation).isEqualTo(false)
-            Truth.assertThat(trackLocationDisabledState.hasLocationPermission).isEqualTo(true)
+            assertThat(trackLocationDisabledState.permissionDialog).isEqualTo(ShowLocationState.Dialog.None)
+            assertThat(trackLocationDisabledState.isTrackMyLocation).isFalse()
+            assertThat(trackLocationDisabledState.hasLocationPermission).isTrue()
         }
     }
 
@@ -182,16 +182,16 @@ class ShowLocationPresenterTest {
             // Click on the button to switch mode
             initialState.eventSink(ShowLocationEvents.TrackMyLocation(true))
             val trackLocationState = awaitItem()
-            Truth.assertThat(trackLocationState.permissionDialog).isEqualTo(ShowLocationState.Dialog.PermissionRationale)
-            Truth.assertThat(trackLocationState.isTrackMyLocation).isEqualTo(false)
-            Truth.assertThat(trackLocationState.hasLocationPermission).isEqualTo(false)
+            assertThat(trackLocationState.permissionDialog).isEqualTo(ShowLocationState.Dialog.PermissionRationale)
+            assertThat(trackLocationState.isTrackMyLocation).isFalse()
+            assertThat(trackLocationState.hasLocationPermission).isFalse()
 
             // Dismiss the dialog
             initialState.eventSink(ShowLocationEvents.DismissDialog)
             val dialogDismissedState = awaitItem()
-            Truth.assertThat(dialogDismissedState.permissionDialog).isEqualTo(ShowLocationState.Dialog.None)
-            Truth.assertThat(dialogDismissedState.isTrackMyLocation).isEqualTo(false)
-            Truth.assertThat(dialogDismissedState.hasLocationPermission).isEqualTo(false)
+            assertThat(dialogDismissedState.permissionDialog).isEqualTo(ShowLocationState.Dialog.None)
+            assertThat(dialogDismissedState.isTrackMyLocation).isFalse()
+            assertThat(dialogDismissedState.hasLocationPermission).isFalse()
         }
     }
 
@@ -213,13 +213,13 @@ class ShowLocationPresenterTest {
             // Click on the button to switch mode
             initialState.eventSink(ShowLocationEvents.TrackMyLocation(true))
             val trackLocationState = awaitItem()
-            Truth.assertThat(trackLocationState.permissionDialog).isEqualTo(ShowLocationState.Dialog.PermissionRationale)
-            Truth.assertThat(trackLocationState.isTrackMyLocation).isEqualTo(false)
-            Truth.assertThat(trackLocationState.hasLocationPermission).isEqualTo(false)
+            assertThat(trackLocationState.permissionDialog).isEqualTo(ShowLocationState.Dialog.PermissionRationale)
+            assertThat(trackLocationState.isTrackMyLocation).isFalse()
+            assertThat(trackLocationState.hasLocationPermission).isFalse()
 
             // Continue the dialog sends permission request to the permissions presenter
             trackLocationState.eventSink(ShowLocationEvents.RequestPermissions)
-            Truth.assertThat(permissionsPresenterFake.events.last()).isEqualTo(PermissionsEvents.RequestPermissions)
+            assertThat(permissionsPresenterFake.events.last()).isEqualTo(PermissionsEvents.RequestPermissions)
         }
     }
 
@@ -241,16 +241,16 @@ class ShowLocationPresenterTest {
             // Click on the button to switch mode
             initialState.eventSink(ShowLocationEvents.TrackMyLocation(true))
             val trackLocationState = awaitItem()
-            Truth.assertThat(trackLocationState.permissionDialog).isEqualTo(ShowLocationState.Dialog.PermissionDenied)
-            Truth.assertThat(trackLocationState.isTrackMyLocation).isEqualTo(false)
-            Truth.assertThat(trackLocationState.hasLocationPermission).isEqualTo(false)
+            assertThat(trackLocationState.permissionDialog).isEqualTo(ShowLocationState.Dialog.PermissionDenied)
+            assertThat(trackLocationState.isTrackMyLocation).isFalse()
+            assertThat(trackLocationState.hasLocationPermission).isFalse()
 
             // Dismiss the dialog
             initialState.eventSink(ShowLocationEvents.DismissDialog)
             val dialogDismissedState = awaitItem()
-            Truth.assertThat(dialogDismissedState.permissionDialog).isEqualTo(ShowLocationState.Dialog.None)
-            Truth.assertThat(dialogDismissedState.isTrackMyLocation).isEqualTo(false)
-            Truth.assertThat(dialogDismissedState.hasLocationPermission).isEqualTo(false)
+            assertThat(dialogDismissedState.permissionDialog).isEqualTo(ShowLocationState.Dialog.None)
+            assertThat(dialogDismissedState.isTrackMyLocation).isFalse()
+            assertThat(dialogDismissedState.hasLocationPermission).isFalse()
         }
     }
 
@@ -276,8 +276,8 @@ class ShowLocationPresenterTest {
             dialogShownState.eventSink(ShowLocationEvents.OpenAppSettings)
             val settingsOpenedState = awaitItem()
 
-            Truth.assertThat(settingsOpenedState.permissionDialog).isEqualTo(ShowLocationState.Dialog.None)
-            Truth.assertThat(fakeLocationActions.openSettingsInvocationsCount).isEqualTo(1)
+            assertThat(settingsOpenedState.permissionDialog).isEqualTo(ShowLocationState.Dialog.None)
+            assertThat(fakeLocationActions.openSettingsInvocationsCount).isEqualTo(1)
         }
     }
 
@@ -287,7 +287,7 @@ class ShowLocationPresenterTest {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            Truth.assertThat(initialState.appName).isEqualTo("app name")
+            assertThat(initialState.appName).isEqualTo("app name")
         }
     }
 

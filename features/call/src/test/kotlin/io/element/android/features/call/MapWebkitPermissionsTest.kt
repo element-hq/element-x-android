@@ -39,7 +39,6 @@ class MapWebkitPermissionsTest {
     @Test
     fun `given any other permission, it returns nothing`() {
         val permission = mapWebkitPermissions(arrayOf(PermissionRequest.RESOURCE_PROTECTED_MEDIA_ID))
-        assertThat(permission).isEqualTo(emptyList<String>())
+        assertThat(permission).isEmpty()
     }
-
 }

@@ -116,7 +116,8 @@
         "screen_dm_details_.*",
         "screen_room_notification_settings_.*",
         "screen_notification_settings_edit_failed_updating_default_mode",
-        "screen_polls_history_title"
+        "screen_polls_history_title",
+        "screen_start_chat_error_starting_chat"
       ]
     },
     {

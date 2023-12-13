@@ -256,6 +256,10 @@ class LoggedInFlowNode @AssistedInject constructor(
             }
             is NavTarget.Room -> {
                 val callback = object : RoomLoadedFlowNode.Callback {
+                    override fun onOpenRoom(roomId: RoomId) {
+                        backstack.push(NavTarget.Room(roomId))
+                    }
+
                     override fun onForwardedToSingleRoom(roomId: RoomId) {
                         coroutineScope.launch { attachRoom(roomId) }
                     }

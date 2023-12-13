@@ -89,7 +89,7 @@ class SecureBackupEnterRecoveryKeyPresenter @Inject constructor(
         action: MutableState<Async<Unit>>
     ) = launch {
         suspend {
-            encryptionService.fixRecoveryIssues(recoveryKey).getOrThrow()
+            encryptionService.recover(recoveryKey).getOrThrow()
         }.runCatchingUpdatingState(action)
     }
 }

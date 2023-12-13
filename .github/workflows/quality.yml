@@ -40,7 +40,7 @@ jobs:
           distribution: 'temurin' # See 'Supported distributions' for available options
           java-version: '17'
       - name: Configure gradle
-        uses: gradle/gradle-build-action@v2.10.0
+        uses: gradle/gradle-build-action@v2.11.0
         with:
           cache-read-only: ${{ github.ref != 'refs/heads/develop' }}
       - name: Run code quality check suite
@@ -60,7 +60,7 @@ jobs:
           yarn add danger-plugin-lint-report --dev
       - name: Danger lint
         if: always()
-        uses: danger/danger-js@11.3.0
+        uses: danger/danger-js@11.3.1
         with:
           args: "--dangerfile ./tools/danger/dangerfile-lint.js"
         env:

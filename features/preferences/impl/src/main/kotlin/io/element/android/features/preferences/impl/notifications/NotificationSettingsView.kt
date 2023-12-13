@@ -77,6 +77,7 @@ fun NotificationSettingsView(
                 onMentionNotificationsChanged = { state.eventSink(NotificationSettingsEvents.SetAtRoomNotificationsEnabled(it)) },
                 // TODO We are removing the call notification toggle until support for call notifications has been added
 //                onCallsNotificationsChanged = { state.eventSink(NotificationSettingsEvents.SetCallNotificationsEnabled(it)) },
+                onInviteForMeNotificationsChanged = { state.eventSink(NotificationSettingsEvents.SetInviteForMeNotificationsEnabled(it)) },
             )
         }
         AsyncView(
@@ -98,6 +99,7 @@ private fun NotificationSettingsContentView(
     onMentionNotificationsChanged: (Boolean) -> Unit,
     // TODO We are removing the call notification toggle until support for call notifications has been added
 //    onCallsNotificationsChanged: (Boolean) -> Unit,
+    onInviteForMeNotificationsChanged: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val context = LocalContext.current
@@ -147,8 +149,8 @@ private fun NotificationSettingsContentView(
                 onCheckedChange = onMentionNotificationsChanged
             )
         }
-        // TODO We are removing the call notification toggle until support for call notifications has been added
-//            PreferenceCategory(title = stringResource(id = CommonStrings.screen_notification_settings_additional_settings_section_title)) {
+        PreferenceCategory(title = stringResource(id = R.string.screen_notification_settings_additional_settings_section_title)) {
+            // TODO We are removing the call notification toggle until support for call notifications has been added
 //                PreferenceSwitch(
 //                    modifier = Modifier,
 //                    title = stringResource(id = CommonStrings.screen_notification_settings_calls_label),
@@ -156,7 +158,14 @@ private fun NotificationSettingsContentView(
 //                    switchAlignment = Alignment.Top,
 //                    onCheckedChange = onCallsNotificationsChanged
 //                )
-//            }
+            PreferenceSwitch(
+                modifier = Modifier,
+                title = stringResource(id = R.string.screen_notification_settings_invite_for_me_label),
+                isChecked = matrixSettings.inviteForMeNotificationsEnabled,
+                switchAlignment = Alignment.Top,
+                onCheckedChange = onInviteForMeNotificationsChanged
+            )
+        }
     }
 }
 

@@ -62,7 +62,7 @@ allprojects {
         config.from(files("$rootDir/tools/detekt/detekt.yml"))
     }
     dependencies {
-        detektPlugins("io.nlopez.compose.rules:detekt:0.3.3")
+        detektPlugins("io.nlopez.compose.rules:detekt:0.3.5")
     }
 
     // KtLint
@@ -130,10 +130,10 @@ sonar {
         property("sonar.host.url", "https://sonarcloud.io")
         property("sonar.projectVersion", "1.0") // TODO project(":app").android.defaultConfig.versionName)
         property("sonar.sourceEncoding", "UTF-8")
-        property("sonar.links.homepage", "https://github.com/vector-im/element-x-android/")
-        property("sonar.links.ci", "https://github.com/vector-im/element-x-android/actions")
-        property("sonar.links.scm", "https://github.com/vector-im/element-x-android/")
-        property("sonar.links.issue", "https://github.com/vector-im/element-x-android/issues")
+        property("sonar.links.homepage", "https://github.com/element-hq/element-x-android/")
+        property("sonar.links.ci", "https://github.com/element-hq/element-x-android/actions")
+        property("sonar.links.scm", "https://github.com/element-hq/element-x-android/")
+        property("sonar.links.issue", "https://github.com/element-hq/element-x-android/issues")
         property("sonar.organization", "new_vector_ltd_organization")
         property("sonar.login", if (project.hasProperty("SONAR_LOGIN")) project.property("SONAR_LOGIN")!! else "invalid")
 

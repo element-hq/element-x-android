@@ -94,8 +94,8 @@ class PinUnlockPresenterTest {
             }
             awaitLastSequentialItem().also { state ->
                 assertThat(state.remainingAttempts.dataOrNull()).isEqualTo(0)
-                assertThat(state.showSignOutPrompt).isEqualTo(true)
-                assertThat(state.isSignOutPromptCancellable).isEqualTo(false)
+                assertThat(state.showSignOutPrompt).isTrue()
+                assertThat(state.isSignOutPromptCancellable).isFalse()
             }
         }
     }
@@ -112,16 +112,16 @@ class PinUnlockPresenterTest {
                 state.eventSink(PinUnlockEvents.OnForgetPin)
             }
             awaitLastSequentialItem().also { state ->
-                assertThat(state.showSignOutPrompt).isEqualTo(true)
-                assertThat(state.isSignOutPromptCancellable).isEqualTo(true)
+                assertThat(state.showSignOutPrompt).isTrue()
+                assertThat(state.isSignOutPromptCancellable).isTrue()
                 state.eventSink(PinUnlockEvents.ClearSignOutPrompt)
             }
             awaitLastSequentialItem().also { state ->
-                assertThat(state.showSignOutPrompt).isEqualTo(false)
+                assertThat(state.showSignOutPrompt).isFalse()
                 state.eventSink(PinUnlockEvents.OnForgetPin)
             }
             awaitLastSequentialItem().also { state ->
-                assertThat(state.showSignOutPrompt).isEqualTo(true)
+                assertThat(state.showSignOutPrompt).isTrue()
                 state.eventSink(PinUnlockEvents.SignOut)
             }
             consumeItemsUntilPredicate { state ->

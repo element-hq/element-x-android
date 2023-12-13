@@ -19,7 +19,7 @@ package io.element.android.features.roomdetails.members
 import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
-import com.google.common.truth.Truth
+import com.google.common.truth.Truth.assertThat
 import io.element.android.features.roomdetails.impl.members.RoomMemberListDataSource
 import io.element.android.features.roomdetails.impl.members.RoomMemberListEvents
 import io.element.android.features.roomdetails.impl.members.RoomMemberListPresenter
@@ -53,14 +53,14 @@ class RoomMemberListPresenterTests {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            Truth.assertThat(initialState.roomMembers).isInstanceOf(Async.Loading::class.java)
-            Truth.assertThat(initialState.searchQuery).isEmpty()
-            Truth.assertThat(initialState.searchResults).isInstanceOf(SearchBarResultState.NotSearching::class.java)
-            Truth.assertThat(initialState.isSearchActive).isFalse()
+            assertThat(initialState.roomMembers).isInstanceOf(Async.Loading::class.java)
+            assertThat(initialState.searchQuery).isEmpty()
+            assertThat(initialState.searchResults).isInstanceOf(SearchBarResultState.NotSearching::class.java)
+            assertThat(initialState.isSearchActive).isFalse()
             val loadedState = awaitItem()
-            Truth.assertThat(loadedState.roomMembers).isInstanceOf(Async.Success::class.java)
-            Truth.assertThat((loadedState.roomMembers as Async.Success).data.invited).isEqualTo(listOf(aVictor(), aWalter()))
-            Truth.assertThat((loadedState.roomMembers as Async.Success).data.joined).isNotEmpty()
+            assertThat(loadedState.roomMembers).isInstanceOf(Async.Success::class.java)
+            assertThat((loadedState.roomMembers as Async.Success).data.invited).isEqualTo(listOf(aVictor(), aWalter()))
+            assertThat((loadedState.roomMembers as Async.Success).data.joined).isNotEmpty()
         }
     }
 
@@ -74,7 +74,7 @@ class RoomMemberListPresenterTests {
             val loadedState = awaitItem()
             loadedState.eventSink(RoomMemberListEvents.OnSearchActiveChanged(true))
             val searchActiveState = awaitItem()
-            Truth.assertThat(searchActiveState.isSearchActive).isTrue()
+            assertThat(searchActiveState.isSearchActive).isTrue()
         }
     }
 
@@ -90,9 +90,9 @@ class RoomMemberListPresenterTests {
             val searchActiveState = awaitItem()
             searchActiveState.eventSink(RoomMemberListEvents.UpdateSearchQuery("something"))
             val searchQueryUpdatedState = awaitItem()
-            Truth.assertThat(searchQueryUpdatedState.searchQuery).isEqualTo("something")
+            assertThat(searchQueryUpdatedState.searchQuery).isEqualTo("something")
             val searchSearchResultDelivered = awaitItem()
-            Truth.assertThat(searchSearchResultDelivered.searchResults).isInstanceOf(SearchBarResultState.NoResults::class.java)
+            assertThat(searchSearchResultDelivered.searchResults).isInstanceOf(SearchBarResultState.NoResults::class.java)
         }
     }
 
@@ -108,10 +108,10 @@ class RoomMemberListPresenterTests {
             val searchActiveState = awaitItem()
             searchActiveState.eventSink(RoomMemberListEvents.UpdateSearchQuery("Alice"))
             val searchQueryUpdatedState = awaitItem()
-            Truth.assertThat(searchQueryUpdatedState.searchQuery).isEqualTo("Alice")
+            assertThat(searchQueryUpdatedState.searchQuery).isEqualTo("Alice")
             val searchSearchResultDelivered = awaitItem()
-            Truth.assertThat(searchSearchResultDelivered.searchResults).isInstanceOf(SearchBarResultState.Results::class.java)
-            Truth.assertThat((searchSearchResultDelivered.searchResults as SearchBarResultState.Results).results.joined.first().displayName)
+            assertThat(searchSearchResultDelivered.searchResults).isInstanceOf(SearchBarResultState.Results::class.java)
+            assertThat((searchSearchResultDelivered.searchResults as SearchBarResultState.Results).results.joined.first().displayName)
                 .isEqualTo("Alice")
         }
     }
@@ -128,7 +128,7 @@ class RoomMemberListPresenterTests {
         }.test {
             skipItems(1)
             val loadedState = awaitItem()
-            Truth.assertThat(loadedState.canInvite).isTrue()
+            assertThat(loadedState.canInvite).isTrue()
         }
     }
 
@@ -144,7 +144,7 @@ class RoomMemberListPresenterTests {
         }.test {
             skipItems(1)
             val loadedState = awaitItem()
-            Truth.assertThat(loadedState.canInvite).isFalse()
+            assertThat(loadedState.canInvite).isFalse()
         }
     }
 
@@ -160,7 +160,7 @@ class RoomMemberListPresenterTests {
         }.test {
             skipItems(1)
             val loadedState = awaitItem()
-            Truth.assertThat(loadedState.canInvite).isFalse()
+            assertThat(loadedState.canInvite).isFalse()
         }
     }
 }

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_signed_out_reason_1">"Anda telah mengubah kata sandi Anda di sesi yang lain"</string>
+  <string name="screen_signed_out_reason_2">"Anda telah menghapus sesi dari sesi lain"</string>
+  <string name="screen_signed_out_reason_3">"Administrator homeserver Anda telah membatalkan akses Anda"</string>
+  <string name="screen_signed_out_subtitle">"Anda mungkin dikeluarkan karena alasan berikut. Silakan masuk lagi untuk melanjutkan menggunakan %s."</string>
+  <string name="screen_signed_out_title">"Anda telah keluar"</string>
+</resources>

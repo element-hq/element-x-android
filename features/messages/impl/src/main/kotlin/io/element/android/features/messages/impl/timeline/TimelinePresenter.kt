@@ -175,6 +175,9 @@ class TimelinePresenter @AssistedInject constructor(
         }
 
         return TimelineState(
+            timelineRoomInfo = TimelineRoomInfo(
+                isDirect = room.isDirect
+            ),
             highlightedEventId = highlightedEventId.value,
             userHasPermissionToSendMessage = userHasPermissionToSendMessage,
             paginationState = paginationState,

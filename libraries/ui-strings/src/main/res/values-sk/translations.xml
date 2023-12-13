@@ -95,6 +95,7 @@
   <string name="action_try_again">"Skúste to znova"</string>
   <string name="action_view_source">"Zobraziť zdroj"</string>
   <string name="action_yes">"Áno"</string>
+  <string name="action_load_more">"Načítať viac"</string>
   <string name="common_about">"O aplikácii"</string>
   <string name="common_acceptable_use_policy">"Zásady prijateľného používania"</string>
   <string name="common_advanced_settings">"Pokročilé nastavenia"</string>
@@ -109,6 +110,7 @@
   <string name="common_dark">"Tmavý"</string>
   <string name="common_decryption_error">"Chyba dešifrovania"</string>
   <string name="common_developer_options">"Možnosti pre vývojárov"</string>
+  <string name="common_direct_chat">"Priama konverzácia"</string>
   <string name="common_edited_suffix">"(upravené)"</string>
   <string name="common_editing">"Upravuje sa"</string>
   <string name="common_emote">"* %1$s %2$s"</string>

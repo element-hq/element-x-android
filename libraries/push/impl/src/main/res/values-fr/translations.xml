@@ -8,6 +8,7 @@
   <string name="notification_invitation_action_join">"Rejoindre"</string>
   <string name="notification_invitation_action_reject">"Rejeter"</string>
   <string name="notification_invite_body">"Vous a invité(e) à discuter"</string>
+  <string name="notification_mentioned_you_body">"Mentionné(e): %1$s"</string>
   <string name="notification_new_messages">"Nouveaux messages"</string>
   <string name="notification_reaction_body">"A réagi avec %1$s"</string>
   <string name="notification_room_action_mark_as_read">"Marquer comme lu"</string>

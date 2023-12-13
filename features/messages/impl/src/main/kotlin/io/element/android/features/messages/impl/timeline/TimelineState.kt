@@ -27,6 +27,7 @@ import kotlinx.collections.immutable.ImmutableList
 @Immutable
 data class TimelineState(
     val timelineItems: ImmutableList<TimelineItem>,
+    val timelineRoomInfo: TimelineRoomInfo,
     val showReadReceipts: Boolean,
     val highlightedEventId: EventId?,
     val userHasPermissionToSendMessage: Boolean,
@@ -34,4 +35,9 @@ data class TimelineState(
     val newEventState: NewEventState,
     val sessionState: SessionState,
     val eventSink: (TimelineEvents) -> Unit
+)
+
+@Immutable
+data class TimelineRoomInfo(
+    val isDirect: Boolean,
 )

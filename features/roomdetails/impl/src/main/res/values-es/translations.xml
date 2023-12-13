@@ -8,6 +8,7 @@
   <string name="screen_room_details_encryption_enabled_title">"Cifrado de mensajes activado"</string>
   <string name="screen_room_details_invite_people_title">"Invitar a otras personas"</string>
   <string name="screen_room_details_share_room_title">"Compartir sala"</string>
+  <string name="screen_start_chat_error_starting_chat">"Se ha producido un error al intentar iniciar un chat"</string>
   <string name="screen_dm_details_block_alert_action">"Bloquear"</string>
   <string name="screen_dm_details_block_alert_description">"Los usuarios bloqueados no podrán enviarte mensajes y se ocultarán todos sus mensajes. Puede revertir esta acción en cualquier momento."</string>
   <string name="screen_dm_details_block_user">"Bloquear usuario"</string>

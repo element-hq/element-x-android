@@ -37,7 +37,7 @@ import java.util.UUID
 import javax.inject.Inject
 
 @ContributesBinding(AppScope::class)
-class PickerProviderImpl constructor(private val isInTest: Boolean) : PickerProvider {
+class PickerProviderImpl(private val isInTest: Boolean) : PickerProvider {
 
     @Inject
     constructor(): this(false)

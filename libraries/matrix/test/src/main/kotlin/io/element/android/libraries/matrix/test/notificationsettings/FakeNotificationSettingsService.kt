@@ -41,6 +41,7 @@ class FakeNotificationSettingsService(
     private var roomNotificationMode: RoomNotificationMode = initialRoomMode
     private var roomNotificationModeIsDefault: Boolean = initialRoomModeIsDefault
     private var callNotificationsEnabled = false
+    private var inviteNotificationsEnabled = false
     private var atRoomNotificationsEnabled = false
     private var setNotificationModeError: Throwable? = null
     private var restoreDefaultNotificationModeError: Throwable? = null
@@ -52,7 +53,7 @@ class FakeNotificationSettingsService(
     override suspend fun getRoomNotificationSettings(roomId: RoomId, isEncrypted: Boolean, isOneToOne: Boolean): Result<RoomNotificationSettings> {
         return Result.success(
             RoomNotificationSettings(
-                mode = if(roomNotificationModeIsDefault) defaultEncryptedGroupRoomNotificationMode else roomNotificationMode,
+                mode = if (roomNotificationModeIsDefault) defaultEncryptedGroupRoomNotificationMode else roomNotificationMode,
                 isDefault = roomNotificationModeIsDefault
             )
         )
@@ -149,6 +150,15 @@ class FakeNotificationSettingsService(
         return Result.success(Unit)
     }
 
+    override suspend fun isInviteForMeEnabled(): Result<Boolean> {
+        return Result.success(inviteNotificationsEnabled)
+    }
+
+    override suspend fun setInviteForMeEnabled(enabled: Boolean): Result<Unit> {
+        inviteNotificationsEnabled = enabled
+        return Result.success(Unit)
+    }
+
     override suspend fun getRoomsWithUserDefinedRules(): Result<List<String>> {
         return Result.success(if (roomNotificationModeIsDefault) listOf() else listOf(A_ROOM_ID.value))
     }
@@ -168,5 +178,4 @@ class FakeNotificationSettingsService(
     fun givenSetDefaultNotificationModeError(throwable: Throwable?) {
         setDefaultNotificationModeError = throwable
     }
-
 }

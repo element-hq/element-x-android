@@ -26,7 +26,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
-import com.google.common.truth.Truth
+import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.media.AudioInfo
@@ -59,7 +59,7 @@ class InReplyToMetadataKtTest {
             anInReplyToDetails(eventContent = aMessageContent()).metadata()
         }.test {
             awaitItem().let {
-                Truth.assertThat(it).isEqualTo(InReplyToMetadata.Text("textContent"))
+                assertThat(it).isEqualTo(InReplyToMetadata.Text("textContent"))
             }
         }
     }
@@ -78,7 +78,7 @@ class InReplyToMetadataKtTest {
             ).metadata()
         }.test {
             awaitItem().let {
-                Truth.assertThat(it).isEqualTo(
+                assertThat(it).isEqualTo(
                     InReplyToMetadata.Thumbnail(
                         attachmentThumbnailInfo = AttachmentThumbnailInfo(
                             thumbnailSource = aMediaSource(),
@@ -115,7 +115,7 @@ class InReplyToMetadataKtTest {
             ).metadata()
         }.test {
             awaitItem().let {
-                Truth.assertThat(it).isEqualTo(
+                assertThat(it).isEqualTo(
                     InReplyToMetadata.Thumbnail(
                         attachmentThumbnailInfo = AttachmentThumbnailInfo(
                             thumbnailSource = aMediaSource(),
@@ -148,7 +148,7 @@ class InReplyToMetadataKtTest {
             ).metadata()
         }.test {
             awaitItem().let {
-                Truth.assertThat(it).isEqualTo(
+                assertThat(it).isEqualTo(
                     InReplyToMetadata.Thumbnail(
                         attachmentThumbnailInfo = AttachmentThumbnailInfo(
                             thumbnailSource = aMediaSource(),
@@ -180,7 +180,7 @@ class InReplyToMetadataKtTest {
             ).metadata()
         }.test {
             awaitItem().let {
-                Truth.assertThat(it).isEqualTo(
+                assertThat(it).isEqualTo(
                     InReplyToMetadata.Thumbnail(
                         attachmentThumbnailInfo = AttachmentThumbnailInfo(
                             textContent = "body",
@@ -209,7 +209,7 @@ class InReplyToMetadataKtTest {
             }
         }.test {
             awaitItem().let {
-                Truth.assertThat(it).isEqualTo(
+                assertThat(it).isEqualTo(
                     InReplyToMetadata.Thumbnail(
                         attachmentThumbnailInfo = AttachmentThumbnailInfo(
                             thumbnailSource = null,
@@ -240,7 +240,7 @@ class InReplyToMetadataKtTest {
             }
         }.test {
             awaitItem().let {
-                Truth.assertThat(it).isEqualTo(
+                assertThat(it).isEqualTo(
                     InReplyToMetadata.Thumbnail(
                         attachmentThumbnailInfo = AttachmentThumbnailInfo(
                             thumbnailSource = null,
@@ -262,7 +262,7 @@ class InReplyToMetadataKtTest {
             ).metadata()
         }.test {
             awaitItem().let {
-                Truth.assertThat(it).isEqualTo(
+                assertThat(it).isEqualTo(
                     InReplyToMetadata.Thumbnail(
                         attachmentThumbnailInfo = AttachmentThumbnailInfo(
                             thumbnailSource = null,
@@ -284,7 +284,7 @@ class InReplyToMetadataKtTest {
             ).metadata()
         }.test {
             awaitItem().let {
-                Truth.assertThat(it).isEqualTo(null)
+                assertThat(it).isNull()
             }
         }
     }

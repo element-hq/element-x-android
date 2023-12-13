@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="leave_room_alert_empty_subtitle">"Biztos, hogy elhagyja ezt a szobát? Ön az egyedüli ember itt. Ha kilép, akkor senki sem fog tudni csatlakozni a jövőben, Önt is beleértve."</string>
+  <string name="leave_room_alert_private_subtitle">"Biztos, hogy elhagyja ezt a szobát? Ez a szoba nem nyilvános, és meghívó nélkül nem fog tudni újra belépni."</string>
+  <string name="leave_room_alert_subtitle">"Biztos, hogy elhagyja a szobát?"</string>
+</resources>

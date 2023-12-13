@@ -29,6 +29,7 @@
   <string name="screen_notification_settings_enable_notifications">"Включить уведомления на данном устройстве"</string>
   <string name="screen_notification_settings_failed_fixing_configuration">"Конфигурация не была исправлена, попробуйте еще раз."</string>
   <string name="screen_notification_settings_group_chats">"Групповые чаты"</string>
+  <string name="screen_notification_settings_invite_for_me_label">"Приглашения"</string>
   <string name="screen_notification_settings_mentions_only_disclaimer">"Ваш домашний сервер не поддерживает эту опцию в зашифрованных комнатах, в некоторых комнатах вы можете не получать уведомления."</string>
   <string name="screen_notification_settings_mentions_section_title">"Упоминания"</string>
   <string name="screen_notification_settings_mode_all">"Все"</string>

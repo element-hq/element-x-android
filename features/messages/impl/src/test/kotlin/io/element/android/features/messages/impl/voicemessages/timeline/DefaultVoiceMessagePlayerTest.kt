@@ -18,7 +18,7 @@ package io.element.android.features.messages.impl.voicemessages.timeline
 
 import app.cash.turbine.TurbineTestContext
 import app.cash.turbine.test
-import com.google.common.truth.Truth
+import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.media.MediaSource
@@ -42,7 +42,7 @@ class DefaultVoiceMessagePlayerTest {
         val player = createDefaultVoiceMessagePlayer()
         player.state.test {
             matchInitialState()
-            Truth.assertThat(player.prepare().isSuccess).isTrue()
+            assertThat(player.prepare().isSuccess).isTrue()
             matchReadyState()
         }
     }
@@ -56,7 +56,7 @@ class DefaultVoiceMessagePlayerTest {
         )
         player.state.test {
             matchInitialState()
-            Truth.assertThat(player.prepare().isFailure).isTrue()
+            assertThat(player.prepare().isFailure).isTrue()
         }
     }
 
@@ -67,7 +67,7 @@ class DefaultVoiceMessagePlayerTest {
         )
         player.state.test {
             matchInitialState()
-            Truth.assertThat(player.prepare().isFailure).isTrue()
+            assertThat(player.prepare().isFailure).isTrue()
         }
     }
 
@@ -76,12 +76,12 @@ class DefaultVoiceMessagePlayerTest {
         val player = createDefaultVoiceMessagePlayer()
         player.state.test {
             matchInitialState()
-            Truth.assertThat(player.prepare().isSuccess).isTrue()
+            assertThat(player.prepare().isSuccess).isTrue()
             matchReadyState()
             player.play()
             awaitItem().let {
-                Truth.assertThat(it.isPlaying).isEqualTo(true)
-                Truth.assertThat(it.currentPosition).isEqualTo(1000)
+                assertThat(it.isPlaying).isTrue()
+                assertThat(it.currentPosition).isEqualTo(1000)
             }
         }
     }
@@ -96,15 +96,15 @@ class DefaultVoiceMessagePlayerTest {
         )
         player.state.test {
             matchInitialState()
-            Truth.assertThat(player.prepare().isSuccess).isTrue()
+            assertThat(player.prepare().isSuccess).isTrue()
             matchReadyState(fakeTotalDurationMs = 1000)
             player.play()
             awaitItem().let {
-                Truth.assertThat(it.isReady).isEqualTo(false)
-                Truth.assertThat(it.isPlaying).isEqualTo(false)
-                Truth.assertThat(it.isEnded).isEqualTo(true)
-                Truth.assertThat(it.currentPosition).isEqualTo(1000)
-                Truth.assertThat(it.duration).isEqualTo(1000)
+                assertThat(it.isReady).isFalse()
+                assertThat(it.isPlaying).isFalse()
+                assertThat(it.isEnded).isTrue()
+                assertThat(it.currentPosition).isEqualTo(1000)
+                assertThat(it.duration).isEqualTo(1000)
             }
         }
     }
@@ -121,72 +121,72 @@ class DefaultVoiceMessagePlayerTest {
         // Play player1 until the end.
         player1.state.test {
             matchInitialState()
-            Truth.assertThat(player1.prepare().isSuccess).isTrue()
+            assertThat(player1.prepare().isSuccess).isTrue()
             matchReadyState(1_000L)
             player1.play()
             awaitItem().let { // it plays until the end.
-                Truth.assertThat(it.isReady).isEqualTo(false)
-                Truth.assertThat(it.isPlaying).isEqualTo(false)
-                Truth.assertThat(it.isEnded).isEqualTo(true)
-                Truth.assertThat(it.currentPosition).isEqualTo(1000)
-                Truth.assertThat(it.duration).isEqualTo(1000)
+                assertThat(it.isReady).isFalse()
+                assertThat(it.isPlaying).isFalse()
+                assertThat(it.isEnded).isTrue()
+                assertThat(it.currentPosition).isEqualTo(1000)
+                assertThat(it.duration).isEqualTo(1000)
             }
         }
 
         // Play player2 until the end.
         player2.state.test {
             matchInitialState()
-            Truth.assertThat(player2.prepare().isSuccess).isTrue()
+            assertThat(player2.prepare().isSuccess).isTrue()
             awaitItem().let { // Additional spurious state due to MediaPlayer owner change.
-                Truth.assertThat(it.isReady).isEqualTo(false)
-                Truth.assertThat(it.isPlaying).isEqualTo(false)
-                Truth.assertThat(it.isEnded).isEqualTo(true)
-                Truth.assertThat(it.currentPosition).isEqualTo(1000)
-                Truth.assertThat(it.duration).isEqualTo(1000)
+                assertThat(it.isReady).isFalse()
+                assertThat(it.isPlaying).isFalse()
+                assertThat(it.isEnded).isTrue()
+                assertThat(it.currentPosition).isEqualTo(1000)
+                assertThat(it.duration).isEqualTo(1000)
             }
             awaitItem().let {// Additional spurious state due to MediaPlayer owner change.
-                Truth.assertThat(it.isReady).isEqualTo(false)
-                Truth.assertThat(it.isPlaying).isEqualTo(false)
-                Truth.assertThat(it.isEnded).isEqualTo(false)
-                Truth.assertThat(it.currentPosition).isEqualTo(0)
-                Truth.assertThat(it.duration).isEqualTo(null)
+                assertThat(it.isReady).isFalse()
+                assertThat(it.isPlaying).isFalse()
+                assertThat(it.isEnded).isFalse()
+                assertThat(it.currentPosition).isEqualTo(0)
+                assertThat(it.duration).isNull()
             }
             matchReadyState(1_000L)
             player2.play()
             awaitItem().let { // it plays until the end.
-                Truth.assertThat(it.isReady).isEqualTo(false)
-                Truth.assertThat(it.isPlaying).isEqualTo(false)
-                Truth.assertThat(it.isEnded).isEqualTo(true)
-                Truth.assertThat(it.currentPosition).isEqualTo(1000)
-                Truth.assertThat(it.duration).isEqualTo(1000)
+                assertThat(it.isReady).isFalse()
+                assertThat(it.isPlaying).isFalse()
+                assertThat(it.isEnded).isTrue()
+                assertThat(it.currentPosition).isEqualTo(1000)
+                assertThat(it.duration).isEqualTo(1000)
             }
         }
 
         // Play player1 again.
         player1.state.test {
             awaitItem().let {// Last previous state/
-                Truth.assertThat(it.isReady).isEqualTo(false)
-                Truth.assertThat(it.isPlaying).isEqualTo(false)
-                Truth.assertThat(it.isEnded).isEqualTo(true)
-                Truth.assertThat(it.currentPosition).isEqualTo(1000)
-                Truth.assertThat(it.duration).isEqualTo(1000)
+                assertThat(it.isReady).isFalse()
+                assertThat(it.isPlaying).isFalse()
+                assertThat(it.isEnded).isTrue()
+                assertThat(it.currentPosition).isEqualTo(1000)
+                assertThat(it.duration).isEqualTo(1000)
             }
-            Truth.assertThat(player1.prepare().isSuccess).isTrue()
+            assertThat(player1.prepare().isSuccess).isTrue()
             awaitItem().let {// Additional spurious state due to MediaPlayer owner change.
-                Truth.assertThat(it.isReady).isEqualTo(false)
-                Truth.assertThat(it.isPlaying).isEqualTo(false)
-                Truth.assertThat(it.isEnded).isEqualTo(false)
-                Truth.assertThat(it.currentPosition).isEqualTo(0)
-                Truth.assertThat(it.duration).isEqualTo(null)
+                assertThat(it.isReady).isFalse()
+                assertThat(it.isPlaying).isFalse()
+                assertThat(it.isEnded).isFalse()
+                assertThat(it.currentPosition).isEqualTo(0)
+                assertThat(it.duration).isNull()
             }
             matchReadyState(1_000L)
             player1.play()
             awaitItem().let { // it played again until the end.
-                Truth.assertThat(it.isReady).isEqualTo(false)
-                Truth.assertThat(it.isPlaying).isEqualTo(false)
-                Truth.assertThat(it.isEnded).isEqualTo(true)
-                Truth.assertThat(it.currentPosition).isEqualTo(1000)
-                Truth.assertThat(it.duration).isEqualTo(1000)
+                assertThat(it.isReady).isFalse()
+                assertThat(it.isPlaying).isFalse()
+                assertThat(it.isEnded).isTrue()
+                assertThat(it.currentPosition).isEqualTo(1000)
+                assertThat(it.duration).isEqualTo(1000)
             }
         }
     }
@@ -196,14 +196,14 @@ class DefaultVoiceMessagePlayerTest {
         val player = createDefaultVoiceMessagePlayer()
         player.state.test {
             matchInitialState()
-            Truth.assertThat(player.prepare().isSuccess).isTrue()
+            assertThat(player.prepare().isSuccess).isTrue()
             matchReadyState()
             player.play()
             skipItems(1) // skip play state
             player.pause()
             awaitItem().let {
-                Truth.assertThat(it.isPlaying).isEqualTo(false)
-                Truth.assertThat(it.currentPosition).isEqualTo(1000)
+                assertThat(it.isPlaying).isFalse()
+                assertThat(it.currentPosition).isEqualTo(1000)
             }
         }
     }
@@ -213,7 +213,7 @@ class DefaultVoiceMessagePlayerTest {
         val player = createDefaultVoiceMessagePlayer()
         player.state.test {
             matchInitialState()
-            Truth.assertThat(player.prepare().isSuccess).isTrue()
+            assertThat(player.prepare().isSuccess).isTrue()
             matchReadyState()
             player.play()
             skipItems(1) // skip play state
@@ -221,8 +221,8 @@ class DefaultVoiceMessagePlayerTest {
             skipItems(1) // skip pause state
             player.play()
             awaitItem().let {
-                Truth.assertThat(it.isPlaying).isEqualTo(true)
-                Truth.assertThat(it.currentPosition).isEqualTo(2000)
+                assertThat(it.isPlaying).isTrue()
+                assertThat(it.currentPosition).isEqualTo(2000)
             }
         }
     }
@@ -234,19 +234,19 @@ class DefaultVoiceMessagePlayerTest {
             matchInitialState()
             player.seekTo(2000)
             awaitItem().let {
-                Truth.assertThat(it.isReady).isEqualTo(false)
-                Truth.assertThat(it.isPlaying).isEqualTo(false)
-                Truth.assertThat(it.isEnded).isEqualTo(false)
-                Truth.assertThat(it.currentPosition).isEqualTo(2000)
-                Truth.assertThat(it.duration).isEqualTo(null)
+                assertThat(it.isReady).isFalse()
+                assertThat(it.isPlaying).isFalse()
+                assertThat(it.isEnded).isFalse()
+                assertThat(it.currentPosition).isEqualTo(2000)
+                assertThat(it.duration).isNull()
             }
-            Truth.assertThat(player.prepare().isSuccess).isTrue()
+            assertThat(player.prepare().isSuccess).isTrue()
             awaitItem().let {
-                Truth.assertThat(it.isReady).isEqualTo(true)
-                Truth.assertThat(it.isPlaying).isEqualTo(false)
-                Truth.assertThat(it.isEnded).isEqualTo(false)
-                Truth.assertThat(it.currentPosition).isEqualTo(2000)
-                Truth.assertThat(it.duration).isEqualTo(FAKE_TOTAL_DURATION_MS)
+                assertThat(it.isReady).isTrue()
+                assertThat(it.isPlaying).isFalse()
+                assertThat(it.isEnded).isFalse()
+                assertThat(it.currentPosition).isEqualTo(2000)
+                assertThat(it.duration).isEqualTo(FAKE_TOTAL_DURATION_MS)
             }
         }
     }
@@ -256,15 +256,15 @@ class DefaultVoiceMessagePlayerTest {
         val player = createDefaultVoiceMessagePlayer()
         player.state.test {
             matchInitialState()
-            Truth.assertThat(player.prepare().isSuccess).isTrue()
+            assertThat(player.prepare().isSuccess).isTrue()
             matchReadyState()
             player.seekTo(2000)
             awaitItem().let {
-                Truth.assertThat(it.isReady).isEqualTo(true)
-                Truth.assertThat(it.isPlaying).isEqualTo(false)
-                Truth.assertThat(it.isEnded).isEqualTo(false)
-                Truth.assertThat(it.currentPosition).isEqualTo(2000)
-                Truth.assertThat(it.duration).isEqualTo(FAKE_TOTAL_DURATION_MS)
+                assertThat(it.isReady).isTrue()
+                assertThat(it.isPlaying).isFalse()
+                assertThat(it.isEnded).isFalse()
+                assertThat(it.currentPosition).isEqualTo(2000)
+                assertThat(it.duration).isEqualTo(FAKE_TOTAL_DURATION_MS)
             }
         }
     }
@@ -296,11 +296,11 @@ private const val MXC_URI = "mxc://matrix.org/1234567890abcdefg"
 
 private suspend fun TurbineTestContext<VoiceMessagePlayer.State>.matchInitialState() {
     awaitItem().let {
-        Truth.assertThat(it.isReady).isEqualTo(false)
-        Truth.assertThat(it.isPlaying).isEqualTo(false)
-        Truth.assertThat(it.isEnded).isEqualTo(false)
-        Truth.assertThat(it.currentPosition).isEqualTo(0)
-        Truth.assertThat(it.duration).isEqualTo(null)
+        assertThat(it.isReady).isFalse()
+        assertThat(it.isPlaying).isFalse()
+        assertThat(it.isEnded).isFalse()
+        assertThat(it.currentPosition).isEqualTo(0)
+        assertThat(it.duration).isNull()
     }
 }
 
@@ -308,10 +308,10 @@ private suspend fun TurbineTestContext<VoiceMessagePlayer.State>.matchReadyState
     fakeTotalDurationMs: Long = FAKE_TOTAL_DURATION_MS,
 ) {
     awaitItem().let {
-        Truth.assertThat(it.isReady).isEqualTo(true)
-        Truth.assertThat(it.isPlaying).isEqualTo(false)
-        Truth.assertThat(it.isEnded).isEqualTo(false)
-        Truth.assertThat(it.currentPosition).isEqualTo(0)
-        Truth.assertThat(it.duration).isEqualTo(fakeTotalDurationMs)
+        assertThat(it.isReady).isTrue()
+        assertThat(it.isPlaying).isFalse()
+        assertThat(it.isEnded).isFalse()
+        assertThat(it.currentPosition).isEqualTo(0)
+        assertThat(it.duration).isEqualTo(fakeTotalDurationMs)
     }
 }

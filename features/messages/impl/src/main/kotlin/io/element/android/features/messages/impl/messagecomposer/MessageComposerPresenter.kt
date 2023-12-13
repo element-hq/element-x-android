@@ -72,6 +72,7 @@ import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 import kotlin.coroutines.coroutineContext
 import kotlin.time.Duration.Companion.seconds
@@ -432,6 +433,7 @@ class MessageComposerPresenter @Inject constructor(
             attachmentState.value = AttachmentsState.None
         }
         .onFailure { cause ->
+            Timber.e(cause, "Failed to send attachment")
             attachmentState.value = AttachmentsState.None
             if (cause is CancellationException) {
                 throw cause

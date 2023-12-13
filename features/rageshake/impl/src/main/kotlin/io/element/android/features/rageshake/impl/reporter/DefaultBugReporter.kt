@@ -35,6 +35,7 @@ import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
+import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.network.useragent.UserAgentProvider
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import io.element.android.services.toolbox.api.systemclock.SystemClock
@@ -63,6 +64,7 @@ import javax.inject.Provider
 /**
  * BugReporter creates and sends the bug reports.
  */
+@SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
 class DefaultBugReporter @Inject constructor(
     @ApplicationContext private val context: Context,
@@ -86,10 +88,10 @@ class DefaultBugReporter @Inject constructor(
 
     // the pending bug report call
     private var bugReportCall: Call? = null
-
     // boolean to cancel the bug report
     private val isCancelled = false
     private val logcatCommandDebug = arrayOf("logcat", "-d", "-v", "threadtime", "*:*")
+    private var currentTracingFilter: String? = null
 
     override suspend fun sendBugReport(
         withDevicesLogs: Boolean,
@@ -153,6 +155,9 @@ class DefaultBugReporter @Inject constructor(
                         .addFormDataPart("device_id", deviceId)
                         .addFormDataPart("device", Build.MODEL.trim())
                         .addFormDataPart("locale", Locale.getDefault().toString())
+                    currentTracingFilter?.let {
+                        builder.addFormDataPart("tracing_filter", it)
+                    }
 
                     // add the gzipped files, don't cancel the whole upload if only some file failed to upload
                     var uploadedSomeLogs = false
@@ -321,6 +326,10 @@ class DefaultBugReporter @Inject constructor(
             // delete the log files older than 1 day, except the most recent one
             deleteOldLogFiles(systemClock.epochMillis() - DAY_IN_MILLIS)
         }
+    }
+
+    override fun setCurrentTracingFilter(tracingFilter: String) {
+        currentTracingFilter = tracingFilter
     }
 
     /**

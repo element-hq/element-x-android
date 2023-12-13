@@ -18,11 +18,11 @@ The easiest way to do that is to use the debug signature that is shared between 
 
 You can clone the project by running:
 ```bash
-git clone git@github.com:vector-im/element-x-android.git
+git clone git@github.com:element-hq/element-x-android.git
 ```
 or
 ```bash
-git clone https://github.com/vector-im/element-x-android.git
+git clone https://github.com/element-hq/element-x-android.git
 ```
 
 You will also need to install [bundletool](https://developer.android.com/studio/command-line/bundletool). On MacOS, you can run the following command:
@@ -33,7 +33,7 @@ brew install bundletool
 
 ## Steps
 
-1. Open the GitHub release that you want to install from https://github.com/vector-im/element-x-android/releases
+1. Open the GitHub release that you want to install from https://github.com/element-hq/element-x-android/releases
 2. Download the asset `app-release-signed.aab`
 3. Navigate to the folder where you cloned the project and run the following command:
 ```bash

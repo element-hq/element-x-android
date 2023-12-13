@@ -57,6 +57,7 @@ class TracingInitializer : Initializer<Unit> {
             )
         }
         bugReporter.cleanLogDirectoryIfNeeded()
+        bugReporter.setCurrentTracingFilter(tracingConfiguration.filterConfiguration.filter)
         tracingService.setupTracing(tracingConfiguration)
         // Also set env variable for rust back trace
         Os.setenv("RUST_BACKTRACE", "1", true)

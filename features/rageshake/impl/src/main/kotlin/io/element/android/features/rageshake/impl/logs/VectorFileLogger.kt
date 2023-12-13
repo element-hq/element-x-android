@@ -136,7 +136,7 @@ class VectorFileLogger(
      *
      * @return The list of files with logs.
      */
-    fun getLogFiles(): List<File> {
+    private fun getLogFiles(): List<File> {
         return tryOrNull(
             onError = { Timber.e(it, "## getLogFiles() failed") }
         ) {

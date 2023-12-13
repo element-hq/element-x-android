@@ -20,7 +20,7 @@ import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.TurbineTestContext
 import app.cash.turbine.test
-import com.google.common.truth.Truth
+import com.google.common.truth.Truth.assertThat
 import im.vector.app.features.analytics.plan.Composer
 import im.vector.app.features.analytics.plan.PollCreation
 import io.element.android.features.messages.test.FakeMessageComposerContext
@@ -88,8 +88,8 @@ class CreatePollPresenterTest {
             presenter.present()
         }.test {
             awaitDefaultItem()
-            Truth.assertThat(fakeAnalyticsService.trackedErrors.filterIsInstance<CreatePollException.GetPollFailed>()).isNotEmpty()
-            Truth.assertThat(navUpInvocationsCount).isEqualTo(1)
+            assertThat(fakeAnalyticsService.trackedErrors.filterIsInstance<CreatePollException.GetPollFailed>()).isNotEmpty()
+            assertThat(navUpInvocationsCount).isEqualTo(1)
         }
     }
 
@@ -100,19 +100,19 @@ class CreatePollPresenterTest {
             presenter.present()
         }.test {
             val initial = awaitItem()
-            Truth.assertThat(initial.canSave).isFalse()
+            assertThat(initial.canSave).isFalse()
 
             initial.eventSink(CreatePollEvents.SetQuestion("A question?"))
             val questionSet = awaitItem()
-            Truth.assertThat(questionSet.canSave).isFalse()
+            assertThat(questionSet.canSave).isFalse()
 
             questionSet.eventSink(CreatePollEvents.SetAnswer(0, "Answer 1"))
             val answer1Set = awaitItem()
-            Truth.assertThat(answer1Set.canSave).isFalse()
+            assertThat(answer1Set.canSave).isFalse()
 
             answer1Set.eventSink(CreatePollEvents.SetAnswer(1, "Answer 2"))
             val answer2Set = awaitItem()
-            Truth.assertThat(answer2Set.canSave).isTrue()
+            assertThat(answer2Set.canSave).isTrue()
         }
     }
 
@@ -129,8 +129,8 @@ class CreatePollPresenterTest {
             skipItems(3)
             initial.eventSink(CreatePollEvents.Save)
             delay(1) // Wait for the coroutine to finish
-            Truth.assertThat(fakeMatrixRoom.createPollInvocations.size).isEqualTo(1)
-            Truth.assertThat(fakeMatrixRoom.createPollInvocations.last()).isEqualTo(
+            assertThat(fakeMatrixRoom.createPollInvocations.size).isEqualTo(1)
+            assertThat(fakeMatrixRoom.createPollInvocations.last()).isEqualTo(
                 SavePollInvocation(
                     question = "A question?",
                     answers = listOf("Answer 1", "Answer 2"),
@@ -138,8 +138,8 @@ class CreatePollPresenterTest {
                     pollKind = PollKind.Disclosed
                 )
             )
-            Truth.assertThat(fakeAnalyticsService.capturedEvents.size).isEqualTo(2)
-            Truth.assertThat(fakeAnalyticsService.capturedEvents[0]).isEqualTo(
+            assertThat(fakeAnalyticsService.capturedEvents.size).isEqualTo(2)
+            assertThat(fakeAnalyticsService.capturedEvents[0]).isEqualTo(
                 Composer(
                     inThread = false,
                     isEditing = false,
@@ -147,7 +147,7 @@ class CreatePollPresenterTest {
                     messageType = Composer.MessageType.Poll,
                 )
             )
-            Truth.assertThat(fakeAnalyticsService.capturedEvents[1]).isEqualTo(
+            assertThat(fakeAnalyticsService.capturedEvents[1]).isEqualTo(
                 PollCreation(
                     action = PollCreation.Action.Create,
                     isUndisclosed = false,
@@ -170,10 +170,10 @@ class CreatePollPresenterTest {
             awaitItem().eventSink(CreatePollEvents.SetAnswer(1, "Answer 2"))
             awaitItem().eventSink(CreatePollEvents.Save)
             delay(1) // Wait for the coroutine to finish
-            Truth.assertThat(fakeMatrixRoom.createPollInvocations).hasSize(1)
-            Truth.assertThat(fakeAnalyticsService.capturedEvents).isEmpty()
-            Truth.assertThat(fakeAnalyticsService.trackedErrors).hasSize(1)
-            Truth.assertThat(fakeAnalyticsService.trackedErrors).containsExactly(
+            assertThat(fakeMatrixRoom.createPollInvocations).hasSize(1)
+            assertThat(fakeAnalyticsService.capturedEvents).isEmpty()
+            assertThat(fakeAnalyticsService.trackedErrors).hasSize(1)
+            assertThat(fakeAnalyticsService.trackedErrors).containsExactly(
                 CreatePollException.SavePollFailed("Failed to create poll", error)
             )
         }
@@ -203,8 +203,8 @@ class CreatePollPresenterTest {
                 eventSink(CreatePollEvents.Save)
             }
             delay(1) // Wait for the coroutine to finish
-            Truth.assertThat(fakeMatrixRoom.editPollInvocations.size).isEqualTo(1)
-            Truth.assertThat(fakeMatrixRoom.editPollInvocations.last()).isEqualTo(
+            assertThat(fakeMatrixRoom.editPollInvocations.size).isEqualTo(1)
+            assertThat(fakeMatrixRoom.editPollInvocations.last()).isEqualTo(
                 SavePollInvocation(
                     question = "Changed question",
                     answers = listOf("Changed answer 1", "Changed answer 2", "Maybe"),
@@ -212,8 +212,8 @@ class CreatePollPresenterTest {
                     pollKind = PollKind.Disclosed
                 )
             )
-            Truth.assertThat(fakeAnalyticsService.capturedEvents.size).isEqualTo(2)
-            Truth.assertThat(fakeAnalyticsService.capturedEvents[0]).isEqualTo(
+            assertThat(fakeAnalyticsService.capturedEvents.size).isEqualTo(2)
+            assertThat(fakeAnalyticsService.capturedEvents[0]).isEqualTo(
                 Composer(
                     inThread = false,
                     isEditing = true,
@@ -221,7 +221,7 @@ class CreatePollPresenterTest {
                     messageType = Composer.MessageType.Poll,
                 )
             )
-            Truth.assertThat(fakeAnalyticsService.capturedEvents[1]).isEqualTo(
+            assertThat(fakeAnalyticsService.capturedEvents[1]).isEqualTo(
                 PollCreation(
                     action = PollCreation.Action.Edit,
                     isUndisclosed = false,
@@ -243,10 +243,10 @@ class CreatePollPresenterTest {
             awaitPollLoaded().eventSink(CreatePollEvents.SetAnswer(0, "A"))
             awaitPollLoaded(newAnswer1 = "A").eventSink(CreatePollEvents.Save)
             delay(1) // Wait for the coroutine to finish
-            Truth.assertThat(fakeMatrixRoom.editPollInvocations).hasSize(1)
-            Truth.assertThat(fakeAnalyticsService.capturedEvents).isEmpty()
-            Truth.assertThat(fakeAnalyticsService.trackedErrors).hasSize(1)
-            Truth.assertThat(fakeAnalyticsService.trackedErrors).containsExactly(
+            assertThat(fakeMatrixRoom.editPollInvocations).hasSize(1)
+            assertThat(fakeAnalyticsService.capturedEvents).isEmpty()
+            assertThat(fakeAnalyticsService.trackedErrors).hasSize(1)
+            assertThat(fakeAnalyticsService.trackedErrors).containsExactly(
                 CreatePollException.SavePollFailed("Failed to edit poll", error)
             )
         }
@@ -259,16 +259,16 @@ class CreatePollPresenterTest {
             presenter.present()
         }.test {
             val initial = awaitItem()
-            Truth.assertThat(initial.answers.size).isEqualTo(2)
+            assertThat(initial.answers.size).isEqualTo(2)
 
             initial.eventSink(CreatePollEvents.AddAnswer)
             val answerAdded = awaitItem()
-            Truth.assertThat(answerAdded.answers.size).isEqualTo(3)
-            Truth.assertThat(answerAdded.answers[2].text).isEmpty()
+            assertThat(answerAdded.answers.size).isEqualTo(3)
+            assertThat(answerAdded.answers[2].text).isEmpty()
 
             initial.eventSink(CreatePollEvents.RemoveAnswer(2))
             val answerRemoved = awaitItem()
-            Truth.assertThat(answerRemoved.answers.size).isEqualTo(2)
+            assertThat(answerRemoved.answers.size).isEqualTo(2)
         }
     }
 
@@ -281,7 +281,7 @@ class CreatePollPresenterTest {
             val initial = awaitItem()
             initial.eventSink(CreatePollEvents.SetQuestion("A question?"))
             val questionSet = awaitItem()
-            Truth.assertThat(questionSet.question).isEqualTo("A question?")
+            assertThat(questionSet.question).isEqualTo("A question?")
         }
     }
 
@@ -294,7 +294,7 @@ class CreatePollPresenterTest {
             val initial = awaitItem()
             initial.eventSink(CreatePollEvents.SetAnswer(0, "This is answer 1"))
             val answerSet = awaitItem()
-            Truth.assertThat(answerSet.answers.first().text).isEqualTo("This is answer 1")
+            assertThat(answerSet.answers.first().text).isEqualTo("This is answer 1")
         }
     }
 
@@ -307,7 +307,7 @@ class CreatePollPresenterTest {
             val initial = awaitItem()
             initial.eventSink(CreatePollEvents.SetPollKind(PollKind.Undisclosed))
             val kindSet = awaitItem()
-            Truth.assertThat(kindSet.pollKind).isEqualTo(PollKind.Undisclosed)
+            assertThat(kindSet.pollKind).isEqualTo(PollKind.Undisclosed)
         }
     }
 
@@ -318,13 +318,13 @@ class CreatePollPresenterTest {
             presenter.present()
         }.test {
             val initial = awaitItem()
-            Truth.assertThat(initial.canAddAnswer).isTrue()
+            assertThat(initial.canAddAnswer).isTrue()
             repeat(17) {
                 initial.eventSink(CreatePollEvents.AddAnswer)
-                Truth.assertThat(awaitItem().canAddAnswer).isTrue()
+                assertThat(awaitItem().canAddAnswer).isTrue()
             }
             initial.eventSink(CreatePollEvents.AddAnswer)
-            Truth.assertThat(awaitItem().canAddAnswer).isFalse()
+            assertThat(awaitItem().canAddAnswer).isFalse()
         }
     }
 
@@ -335,9 +335,9 @@ class CreatePollPresenterTest {
             presenter.present()
         }.test {
             val initial = awaitItem()
-            Truth.assertThat(initial.answers.all { it.canDelete }).isFalse()
+            assertThat(initial.answers.all { it.canDelete }).isFalse()
             initial.eventSink(CreatePollEvents.AddAnswer)
-            Truth.assertThat(awaitItem().answers.all { it.canDelete }).isTrue()
+            assertThat(awaitItem().answers.all { it.canDelete }).isTrue()
         }
     }
 
@@ -349,7 +349,7 @@ class CreatePollPresenterTest {
         }.test {
             val initial = awaitItem()
             initial.eventSink(CreatePollEvents.SetAnswer(0, "A".repeat(241)))
-            Truth.assertThat(awaitItem().answers.first().text.length).isEqualTo(240)
+            assertThat(awaitItem().answers.first().text.length).isEqualTo(240)
         }
     }
 
@@ -360,9 +360,9 @@ class CreatePollPresenterTest {
             presenter.present()
         }.test {
             val initial = awaitItem()
-            Truth.assertThat(navUpInvocationsCount).isEqualTo(0)
+            assertThat(navUpInvocationsCount).isEqualTo(0)
             initial.eventSink(CreatePollEvents.NavBack)
-            Truth.assertThat(navUpInvocationsCount).isEqualTo(1)
+            assertThat(navUpInvocationsCount).isEqualTo(1)
         }
     }
 
@@ -373,10 +373,10 @@ class CreatePollPresenterTest {
             presenter.present()
         }.test {
             val initial = awaitItem()
-            Truth.assertThat(navUpInvocationsCount).isEqualTo(0)
-            Truth.assertThat(initial.showBackConfirmation).isFalse()
+            assertThat(navUpInvocationsCount).isEqualTo(0)
+            assertThat(initial.showBackConfirmation).isFalse()
             initial.eventSink(CreatePollEvents.ConfirmNavBack)
-            Truth.assertThat(navUpInvocationsCount).isEqualTo(1)
+            assertThat(navUpInvocationsCount).isEqualTo(1)
         }
     }
 
@@ -388,12 +388,12 @@ class CreatePollPresenterTest {
         }.test {
             val initial = awaitItem()
             initial.eventSink(CreatePollEvents.SetQuestion("Non blank"))
-            Truth.assertThat(awaitItem().showBackConfirmation).isFalse()
+            assertThat(awaitItem().showBackConfirmation).isFalse()
             initial.eventSink(CreatePollEvents.ConfirmNavBack)
-            Truth.assertThat(awaitItem().showBackConfirmation).isTrue()
+            assertThat(awaitItem().showBackConfirmation).isTrue()
             initial.eventSink(CreatePollEvents.HideConfirmation)
-            Truth.assertThat(awaitItem().showBackConfirmation).isFalse()
-            Truth.assertThat(navUpInvocationsCount).isEqualTo(0)
+            assertThat(awaitItem().showBackConfirmation).isFalse()
+            assertThat(navUpInvocationsCount).isEqualTo(0)
         }
     }
 
@@ -405,10 +405,10 @@ class CreatePollPresenterTest {
         }.test {
             awaitDefaultItem()
             val loaded = awaitPollLoaded()
-            Truth.assertThat(navUpInvocationsCount).isEqualTo(0)
-            Truth.assertThat(loaded.showBackConfirmation).isFalse()
+            assertThat(navUpInvocationsCount).isEqualTo(0)
+            assertThat(loaded.showBackConfirmation).isFalse()
             loaded.eventSink(CreatePollEvents.ConfirmNavBack)
-            Truth.assertThat(navUpInvocationsCount).isEqualTo(1)
+            assertThat(navUpInvocationsCount).isEqualTo(1)
         }
     }
 
@@ -421,12 +421,12 @@ class CreatePollPresenterTest {
             awaitDefaultItem()
             val loaded = awaitPollLoaded()
             loaded.eventSink(CreatePollEvents.SetQuestion("CHANGED"))
-            Truth.assertThat(awaitItem().showBackConfirmation).isFalse()
+            assertThat(awaitItem().showBackConfirmation).isFalse()
             loaded.eventSink(CreatePollEvents.ConfirmNavBack)
-            Truth.assertThat(awaitItem().showBackConfirmation).isTrue()
+            assertThat(awaitItem().showBackConfirmation).isTrue()
             loaded.eventSink(CreatePollEvents.HideConfirmation)
-            Truth.assertThat(awaitItem().showBackConfirmation).isFalse()
-            Truth.assertThat(navUpInvocationsCount).isEqualTo(0)
+            assertThat(awaitItem().showBackConfirmation).isFalse()
+            assertThat(navUpInvocationsCount).isEqualTo(0)
         }
     }
 
@@ -439,7 +439,7 @@ class CreatePollPresenterTest {
             awaitDefaultItem()
             awaitPollLoaded().eventSink(CreatePollEvents.Delete(confirmed = false))
             awaitDeleteConfirmation()
-            Truth.assertThat(fakeMatrixRoom.redactEventEventIdParam).isNull()
+            assertThat(fakeMatrixRoom.redactEventEventIdParam).isNull()
         }
     }
 
@@ -451,12 +451,12 @@ class CreatePollPresenterTest {
         }.test {
             awaitDefaultItem()
             awaitPollLoaded().eventSink(CreatePollEvents.Delete(confirmed = false))
-            Truth.assertThat(fakeMatrixRoom.redactEventEventIdParam).isNull()
+            assertThat(fakeMatrixRoom.redactEventEventIdParam).isNull()
             awaitDeleteConfirmation().eventSink(CreatePollEvents.HideConfirmation)
             awaitPollLoaded().apply {
-                Truth.assertThat(showDeleteConfirmation).isFalse()
+                assertThat(showDeleteConfirmation).isFalse()
             }
-            Truth.assertThat(fakeMatrixRoom.redactEventEventIdParam).isNull()
+            assertThat(fakeMatrixRoom.redactEventEventIdParam).isNull()
         }
     }
 
@@ -468,29 +468,29 @@ class CreatePollPresenterTest {
         }.test {
             awaitDefaultItem()
             awaitPollLoaded().eventSink(CreatePollEvents.Delete(confirmed = false))
-            Truth.assertThat(fakeMatrixRoom.redactEventEventIdParam).isNull()
+            assertThat(fakeMatrixRoom.redactEventEventIdParam).isNull()
             awaitDeleteConfirmation().eventSink(CreatePollEvents.Delete(confirmed = true))
             awaitPollLoaded().apply {
-                Truth.assertThat(showDeleteConfirmation).isFalse()
+                assertThat(showDeleteConfirmation).isFalse()
             }
-            Truth.assertThat(fakeMatrixRoom.redactEventEventIdParam).isEqualTo(pollEventId)
+            assertThat(fakeMatrixRoom.redactEventEventIdParam).isEqualTo(pollEventId)
         }
     }
 
     private suspend fun TurbineTestContext<CreatePollState>.awaitDefaultItem() =
         awaitItem().apply {
-            Truth.assertThat(canSave).isFalse()
-            Truth.assertThat(canAddAnswer).isTrue()
-            Truth.assertThat(question).isEmpty()
-            Truth.assertThat(answers).isEqualTo(listOf(Answer("", false), Answer("", false)))
-            Truth.assertThat(pollKind).isEqualTo(PollKind.Disclosed)
-            Truth.assertThat(showBackConfirmation).isFalse()
-            Truth.assertThat(showDeleteConfirmation).isFalse()
+            assertThat(canSave).isFalse()
+            assertThat(canAddAnswer).isTrue()
+            assertThat(question).isEmpty()
+            assertThat(answers).isEqualTo(listOf(Answer("", false), Answer("", false)))
+            assertThat(pollKind).isEqualTo(PollKind.Disclosed)
+            assertThat(showBackConfirmation).isFalse()
+            assertThat(showDeleteConfirmation).isFalse()
         }
 
     private suspend fun TurbineTestContext<CreatePollState>.awaitDeleteConfirmation() =
         awaitItem().apply {
-            Truth.assertThat(showDeleteConfirmation).isTrue()
+            assertThat(showDeleteConfirmation).isTrue()
         }
 
     private suspend fun TurbineTestContext<CreatePollState>.awaitPollLoaded(
@@ -499,14 +499,14 @@ class CreatePollPresenterTest {
         newAnswer2: String? = null,
     ) =
         awaitItem().apply {
-            Truth.assertThat(canSave).isTrue()
-            Truth.assertThat(canAddAnswer).isTrue()
-            Truth.assertThat(question).isEqualTo(newQuestion ?: existingPoll.question)
-            Truth.assertThat(answers).isEqualTo(existingPoll.expectedAnswersState().toMutableList().apply {
+            assertThat(canSave).isTrue()
+            assertThat(canAddAnswer).isTrue()
+            assertThat(question).isEqualTo(newQuestion ?: existingPoll.question)
+            assertThat(answers).isEqualTo(existingPoll.expectedAnswersState().toMutableList().apply {
                 newAnswer1?.let { this[0] = Answer(it, true) }
                 newAnswer2?.let { this[1] = Answer(it, true) }
             })
-            Truth.assertThat(pollKind).isEqualTo(existingPoll.kind)
+            assertThat(pollKind).isEqualTo(existingPoll.kind)
         }
 
     private fun createCreatePollPresenter(

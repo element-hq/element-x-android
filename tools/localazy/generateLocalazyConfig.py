@@ -31,7 +31,7 @@ baseAction = {
     }
 }
 
-# Store all regex specific to module, to eclude the corresponding keyx from the common string module
+# Store all regex specific to module, to exclude the corresponding key from the common string module
 allRegexToExcludeFromMainModule = []
 # All actions that will be serialized in the localazy config
 allActions = []

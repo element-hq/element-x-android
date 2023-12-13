@@ -42,6 +42,7 @@ import io.element.android.libraries.architecture.animation.rememberDefaultTransi
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.di.RoomScope
+import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.mediaviewer.api.local.MediaInfo
@@ -160,6 +161,10 @@ class RoomDetailsFlowNode @AssistedInject constructor(
                 val callback = object : RoomMemberDetailsNode.Callback {
                     override fun openAvatarPreview(username: String, avatarUrl: String) {
                         backstack.push(NavTarget.MemberAvatarPreview(username, avatarUrl))
+                    }
+
+                    override fun onStartDM(roomId: RoomId) {
+                        plugins<RoomDetailsEntryPoint.Callback>().forEach { it.onOpenRoom(roomId) }
                     }
                 }
                 val plugins = listOf(RoomMemberDetailsNode.RoomMemberDetailsInput(navTarget.roomMemberId), callback)

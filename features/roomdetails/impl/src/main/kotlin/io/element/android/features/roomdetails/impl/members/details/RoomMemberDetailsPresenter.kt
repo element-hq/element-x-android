@@ -27,11 +27,13 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
+import io.element.android.features.createroom.api.StartDMAction
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsState.ConfirmationDialog
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.ui.room.getRoomMemberAsState
@@ -39,9 +41,10 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 class RoomMemberDetailsPresenter @AssistedInject constructor(
+    @Assisted private val roomMemberId: UserId,
     private val client: MatrixClient,
     private val room: MatrixRoom,
-    @Assisted private val roomMemberId: UserId,
+    private val startDMAction: StartDMAction,
 ) : Presenter<RoomMemberDetailsState> {
 
     interface Factory {
@@ -53,6 +56,7 @@ class RoomMemberDetailsPresenter @AssistedInject constructor(
         val coroutineScope = rememberCoroutineScope()
         var confirmationDialog by remember { mutableStateOf<ConfirmationDialog?>(null) }
         val roomMember by room.getRoomMemberAsState(roomMemberId)
+        val startDmActionState: MutableState<Async<RoomId>> = remember { mutableStateOf(Async.Uninitialized) }
         // the room member is not really live...
         val isBlocked: MutableState<Async<Boolean>> = remember(roomMember) {
             val isIgnored = roomMember?.isIgnored
@@ -88,6 +92,14 @@ class RoomMemberDetailsPresenter @AssistedInject constructor(
                 RoomMemberDetailsEvents.ClearBlockUserError -> {
                     isBlocked.value = Async.Success(isBlocked.value.dataOrNull().orFalse())
                 }
+                RoomMemberDetailsEvents.StartDM -> {
+                    coroutineScope.launch {
+                        startDMAction.execute(roomMemberId, startDmActionState)
+                    }
+                }
+                RoomMemberDetailsEvents.ClearStartDMState -> {
+                    startDmActionState.value = Async.Uninitialized
+                }
             }
         }
 
@@ -108,6 +120,7 @@ class RoomMemberDetailsPresenter @AssistedInject constructor(
             userName = userName,
             avatarUrl = userAvatar,
             isBlocked = isBlocked.value,
+            startDmActionState = startDmActionState.value,
             displayConfirmationDialog = confirmationDialog,
             isCurrentUser = client.isMe(roomMember?.userId),
             eventSink = ::handleEvents

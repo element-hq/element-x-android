@@ -19,7 +19,7 @@ package io.element.android.features.preferences.impl.notifications
 import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
-import com.google.common.truth.Truth
+import com.google.common.truth.Truth.assertThat
 import io.element.android.features.preferences.impl.notifications.edit.EditDefaultNotificationSettingPresenter
 import io.element.android.features.preferences.impl.notifications.edit.EditDefaultNotificationSettingStateEvents
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
@@ -44,13 +44,13 @@ class EditDefaultNotificationSettingsPresenterTests {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            Truth.assertThat(initialState.mode).isNull()
-            Truth.assertThat(initialState.isOneToOne).isFalse()
+            assertThat(initialState.mode).isNull()
+            assertThat(initialState.isOneToOne).isFalse()
 
             val loadedState = consumeItemsUntilPredicate {
                 it.mode == RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY
             }.last()
-            Truth.assertThat(loadedState.mode).isEqualTo(RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY)
+            assertThat(loadedState.mode).isEqualTo(RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY)
         }
     }
 
@@ -73,7 +73,7 @@ class EditDefaultNotificationSettingsPresenterTests {
             val loadedState = consumeItemsUntilPredicate { state ->
                 state.roomsWithUserDefinedMode.any { it.details.notificationMode == RoomNotificationMode.ALL_MESSAGES }
             }.last()
-            Truth.assertThat(loadedState.roomsWithUserDefinedMode.any { it.details.notificationMode == RoomNotificationMode.ALL_MESSAGES }).isTrue()
+            assertThat(loadedState.roomsWithUserDefinedMode.any { it.details.notificationMode == RoomNotificationMode.ALL_MESSAGES }).isTrue()
         }
     }
 
@@ -87,7 +87,7 @@ class EditDefaultNotificationSettingsPresenterTests {
             val loadedState = consumeItemsUntilPredicate {
                 it.mode == RoomNotificationMode.ALL_MESSAGES
             }.last()
-            Truth.assertThat(loadedState.mode).isEqualTo(RoomNotificationMode.ALL_MESSAGES)
+            assertThat(loadedState.mode).isEqualTo(RoomNotificationMode.ALL_MESSAGES)
         }
     }
 
@@ -103,12 +103,12 @@ class EditDefaultNotificationSettingsPresenterTests {
             val errorState = consumeItemsUntilPredicate {
                 it.changeNotificationSettingAction.isFailure()
             }.last()
-            Truth.assertThat(errorState.changeNotificationSettingAction.isFailure()).isTrue()
+            assertThat(errorState.changeNotificationSettingAction.isFailure()).isTrue()
             errorState.eventSink(EditDefaultNotificationSettingStateEvents.ClearError)
             val clearErrorState = consumeItemsUntilPredicate {
                 it.changeNotificationSettingAction.isUninitialized()
             }.last()
-            Truth.assertThat(clearErrorState.changeNotificationSettingAction.isUninitialized()).isTrue()
+            assertThat(clearErrorState.changeNotificationSettingAction.isUninitialized()).isTrue()
         }
     }
 

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_advanced_settings_element_call_base_url">"URL dasar Element Call khusus"</string>
+  <string name="screen_advanced_settings_element_call_base_url_description">"Tetapkan URL dasar khusus untuk Element Call."</string>
+  <string name="screen_advanced_settings_element_call_base_url_validation_error">"URL tidak valid, pastikan Anda menyertakan protokol (http/https) dan alamat yang benar."</string>
+  <string name="screen_advanced_settings_developer_mode">"Mode pengembang"</string>
+  <string name="screen_advanced_settings_developer_mode_description">"Aktifkan untuk mengakses fitur dan fungsi untuk para pengembang."</string>
+  <string name="screen_advanced_settings_rich_text_editor_description">"Nonaktifkan penyunting teks kaya untuk mengetik Markdown secara manual."</string>
+  <string name="screen_advanced_settings_view_source_description">"Aktifkan opsi untuk melihat sumber pesan dalam lini masa."</string>
+  <string name="screen_edit_profile_display_name">"Nama tampilan"</string>
+  <string name="screen_edit_profile_display_name_placeholder">"Nama tampilan Anda"</string>
+  <string name="screen_edit_profile_error">"Terjadi kesalahan yang tidak diketahui dan informasi tidak dapat diubah."</string>
+  <string name="screen_edit_profile_error_title">"Tidak dapat memperbarui profil"</string>
+  <string name="screen_edit_profile_title">"Sunting profil"</string>
+  <string name="screen_edit_profile_updating_details">"Memperbarui profil…"</string>
+  <string name="screen_notification_settings_additional_settings_section_title">"Pengaturan tambahan"</string>
+  <string name="screen_notification_settings_calls_label">"Panggilan audio dan video"</string>
+  <string name="screen_notification_settings_configuration_mismatch">"Ketidakcocokan pengaturan"</string>
+  <string name="screen_notification_settings_configuration_mismatch_description">"Kami telah menyederhanakan Pengaturan Pemberitahuan untuk membuat opsi lebih mudah ditemukan.
+
+Beberapa pengaturan khusus yang Anda pilih di masa lalu tidak ditampilkan di sini, tetapi masih aktif.
+
+Jika Anda melanjutkan, beberapa pengaturan Anda dapat berubah."</string>
+  <string name="screen_notification_settings_direct_chats">"Obrolan langsung"</string>
+  <string name="screen_notification_settings_edit_custom_settings_section_title">"Pengaturan khusus per obrolan"</string>
+  <string name="screen_notification_settings_edit_failed_updating_default_mode">"Terjadi kesalahan saat memperbarui pengaturan pemberitahuan."</string>
+  <string name="screen_notification_settings_edit_mode_all_messages">"Semua pesan"</string>
+  <string name="screen_notification_settings_edit_mode_mentions_and_keywords">"Sebutan dan Kata Kunci saja"</string>
+  <string name="screen_notification_settings_edit_screen_direct_section_header">"Di obrolan langsung, beri tahu saya tentang"</string>
+  <string name="screen_notification_settings_edit_screen_group_section_header">"Di obrolan grup, beri tahu tentang"</string>
+  <string name="screen_notification_settings_enable_notifications">"Aktifkan pemberitahuan di perangkat ini"</string>
+  <string name="screen_notification_settings_failed_fixing_configuration">"Pengaturan belum diperbaiki, silakan coba lagi."</string>
+  <string name="screen_notification_settings_group_chats">"Obrolan grup"</string>
+  <string name="screen_notification_settings_invite_for_me_label">"Undangan"</string>
+  <string name="screen_notification_settings_mentions_only_disclaimer">"Homeserver Anda tidak mendukung opsi ini dalam ruangan terenkripsi, Anda mungkin tidak diberi tahu dalam beberapa ruangan."</string>
+  <string name="screen_notification_settings_mentions_section_title">"Sebutan"</string>
+  <string name="screen_notification_settings_mode_all">"Semua"</string>
+  <string name="screen_notification_settings_mode_mentions">"Sebutan"</string>
+  <string name="screen_notification_settings_notification_section_title">"Beri tahu saya tentang"</string>
+  <string name="screen_notification_settings_room_mention_label">"Beri tahu saya pada @room"</string>
+  <string name="screen_notification_settings_system_notifications_action_required">"Untuk menerima pemberitahuan, silakan ubah %1$s Anda."</string>
+  <string name="screen_notification_settings_system_notifications_action_required_content_link">"pengaturan sistem"</string>
+  <string name="screen_notification_settings_system_notifications_turned_off">"Pemberitahuan sistem dimatikan"</string>
+  <string name="screen_notification_settings_title">"Notifikasi"</string>
+</resources>

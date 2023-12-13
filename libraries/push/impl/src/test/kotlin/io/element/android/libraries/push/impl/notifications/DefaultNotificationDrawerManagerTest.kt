@@ -24,6 +24,7 @@ import io.element.android.libraries.matrix.test.A_THREAD_ID
 import io.element.android.libraries.matrix.test.FakeMatrixClientProvider
 import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.push.impl.notifications.fake.FakeAndroidNotificationFactory
+import io.element.android.libraries.push.impl.notifications.fake.FakeImageLoaderHolder
 import io.element.android.libraries.push.impl.notifications.fake.FakeRoomGroupMessageCreator
 import io.element.android.libraries.push.impl.notifications.fake.FakeSummaryGroupMessageCreator
 import io.element.android.libraries.push.impl.notifications.fixtures.aNotifiableMessageEvent
@@ -129,6 +130,7 @@ class DefaultNotificationDrawerManagerTest {
             dispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true),
             buildMeta = aBuildMeta(),
             matrixClientProvider = FakeMatrixClientProvider(),
+            imageLoaderHolder = FakeImageLoaderHolder(),
         )
     }
 }

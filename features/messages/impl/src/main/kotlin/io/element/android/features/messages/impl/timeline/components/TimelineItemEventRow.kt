@@ -60,6 +60,7 @@ import androidx.compose.ui.zIndex
 import androidx.constraintlayout.compose.ConstrainScope
 import androidx.constraintlayout.compose.ConstraintLayout
 import io.element.android.compound.theme.ElementTheme
+import io.element.android.features.messages.impl.timeline.TimelineRoomInfo
 import io.element.android.features.messages.impl.timeline.TimelineEvents
 import io.element.android.features.messages.impl.timeline.aTimelineItemEvent
 import io.element.android.features.messages.impl.timeline.components.event.TimelineItemEventContentView
@@ -101,6 +102,7 @@ import kotlin.math.roundToInt
 @Composable
 fun TimelineItemEventRow(
     event: TimelineItem.Event,
+    timelineRoomInfo: TimelineRoomInfo,
     showReadReceipts: Boolean,
     isLastOutgoingMessage: Boolean,
     isHighlighted: Boolean,
@@ -163,9 +165,8 @@ fun TimelineItemEventRow(
                                 state = state.draggableState,
                             ),
                         event = event,
-                        showReadReceipts = showReadReceipts,
-                        isLastOutgoingMessage = isLastOutgoingMessage,
                         isHighlighted = isHighlighted,
+                        timelineRoomInfo = timelineRoomInfo,
                         interactionSource = interactionSource,
                         onClick = onClick,
                         onLongClick = onLongClick,
@@ -175,7 +176,6 @@ fun TimelineItemEventRow(
                         onReactionClicked = { emoji -> onReactionClick(emoji, event) },
                         onReactionLongClicked = { emoji -> onReactionLongClick(emoji, event) },
                         onMoreReactionsClicked = { onMoreReactionsClick(event) },
-                        onReadReceiptsClicked = { onReadReceiptClick(event) },
                         eventSink = eventSink,
                     )
                 }
@@ -183,9 +183,8 @@ fun TimelineItemEventRow(
         } else {
             TimelineItemEventRowContent(
                 event = event,
-                showReadReceipts = showReadReceipts,
-                isLastOutgoingMessage = isLastOutgoingMessage,
                 isHighlighted = isHighlighted,
+                timelineRoomInfo = timelineRoomInfo,
                 interactionSource = interactionSource,
                 onClick = onClick,
                 onLongClick = onLongClick,
@@ -195,10 +194,20 @@ fun TimelineItemEventRow(
                 onReactionClicked = { emoji -> onReactionClick(emoji, event) },
                 onReactionLongClicked = { emoji -> onReactionLongClick(emoji, event) },
                 onMoreReactionsClicked = { onMoreReactionsClick(event) },
-                onReadReceiptsClicked = { onReadReceiptClick(event) },
                 eventSink = eventSink,
             )
         }
+        // Read receipts / Send state
+        TimelineItemReadReceiptView(
+            state = ReadReceiptViewState(
+                sendState = event.localSendState,
+                isLastOutgoingMessage = isLastOutgoingMessage,
+                receipts = event.readReceiptState.receipts,
+            ),
+            showReadReceipts = showReadReceipts,
+            onReadReceiptsClicked = { onReadReceiptClick(event) },
+            modifier = Modifier.padding(top = 4.dp),
+        )
     }
 }
 
@@ -228,9 +237,8 @@ private fun SwipeSensitivity(
 @Composable
 private fun TimelineItemEventRowContent(
     event: TimelineItem.Event,
-    showReadReceipts: Boolean,
-    isLastOutgoingMessage: Boolean,
     isHighlighted: Boolean,
+    timelineRoomInfo: TimelineRoomInfo,
     interactionSource: MutableInteractionSource,
     onClick: () -> Unit,
     onLongClick: () -> Unit,
@@ -238,7 +246,6 @@ private fun TimelineItemEventRowContent(
     inReplyToClicked: () -> Unit,
     onUserDataClicked: () -> Unit,
     onReactionClicked: (emoji: String) -> Unit,
-    onReadReceiptsClicked: () -> Unit,
     onReactionLongClicked: (emoji: String) -> Unit,
     onMoreReactionsClicked: (event: TimelineItem.Event) -> Unit,
     eventSink: (TimelineEvents) -> Unit,
@@ -259,12 +266,11 @@ private fun TimelineItemEventRowContent(
             sender,
             message,
             reactions,
-            readReceipts,
         ) = createRefs()
 
         // Sender
         val avatarStrokeSize = 3.dp
-        if (event.showSenderInformation) {
+        if (event.showSenderInformation && !timelineRoomInfo.isDirect) {
             MessageSenderInformation(
                 event.safeSenderName,
                 event.senderAvatar,
@@ -284,6 +290,7 @@ private fun TimelineItemEventRowContent(
             groupPosition = event.groupPosition,
             isMine = event.isMine,
             isHighlighted = isHighlighted,
+            timelineRoomInfo = timelineRoomInfo,
         )
         MessageEventBubble(
             modifier = Modifier
@@ -326,25 +333,6 @@ private fun TimelineItemEventRowContent(
                     .padding(start = if (event.isMine) 16.dp else 36.dp, end = 16.dp)
             )
         }
-
-        // Read receipts / Send state
-        TimelineItemReadReceiptView(
-            state = ReadReceiptViewState(
-                sendState = event.localSendState,
-                isLastOutgoingMessage = isLastOutgoingMessage,
-                receipts = event.readReceiptState.receipts,
-            ),
-            showReadReceipts = showReadReceipts,
-            onReadReceiptsClicked = onReadReceiptsClicked,
-            modifier = Modifier
-                .constrainAs(readReceipts) {
-                    if (event.reactionsState.reactions.isNotEmpty()) {
-                        top.linkTo(reactions.bottom, margin = 4.dp)
-                    } else {
-                        top.linkTo(message.bottom, margin = 4.dp)
-                    }
-                }
-        )
     }
 }
 
@@ -378,6 +366,7 @@ private fun MessageSenderInformation(
             Avatar(senderAvatar)
             Spacer(modifier = Modifier.width(4.dp))
             Text(
+                modifier = Modifier.clipToBounds(),
                 text = sender,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,

@@ -2,15 +2,21 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="a11y_delete">"Supprimer"</string>
   <string name="a11y_hide_password">"Masquer le mot de passe"</string>
+  <string name="a11y_jump_to_bottom">"Retourner à la fin de la conversation"</string>
   <string name="a11y_notifications_mentions_only">"Mentions uniquement"</string>
   <string name="a11y_notifications_muted">"En sourdine"</string>
+  <string name="a11y_page_n">"Page %1$d"</string>
   <string name="a11y_pause">"Pause"</string>
   <string name="a11y_pin_field">"Code PIN"</string>
   <string name="a11y_play">"Lecture"</string>
   <string name="a11y_poll">"Sondage"</string>
   <string name="a11y_poll_end">"Sondage terminé"</string>
+  <string name="a11y_react_with">"Réagir avec %1$s"</string>
+  <string name="a11y_react_with_other_emojis">"Réagir avec d’autres emojis"</string>
   <string name="a11y_read_receipts_multiple">"Lu par %1$s et %2$s"</string>
   <string name="a11y_read_receipts_single">"Lu par %1$s"</string>
+  <string name="a11y_read_receipts_tap_to_show_all">"Taper pour voir toute la liste"</string>
+  <string name="a11y_remove_reaction_with">"Supprimer la réaction avec %1$s"</string>
   <string name="a11y_send_files">"Envoyer des fichiers"</string>
   <string name="a11y_show_password">"Afficher le mot de passe"</string>
   <string name="a11y_start_call">"Démarrer un appel"</string>
@@ -33,6 +39,7 @@
   <string name="action_create">"Créer"</string>
   <string name="action_create_a_room">"Créer un salon"</string>
   <string name="action_decline">"Refuser"</string>
+  <string name="action_delete_poll">"Supprimer le sondage"</string>
   <string name="action_disable">"Désactiver"</string>
   <string name="action_done">"Terminé"</string>
   <string name="action_edit">"Modifier"</string>
@@ -88,6 +95,7 @@
   <string name="action_try_again">"Essayer à nouveau"</string>
   <string name="action_view_source">"Afficher la source"</string>
   <string name="action_yes">"Oui"</string>
+  <string name="action_load_more">"Voir plus"</string>
   <string name="common_about">"À propos"</string>
   <string name="common_acceptable_use_policy">"Politique d’utilisation acceptable"</string>
   <string name="common_advanced_settings">"Paramètres avancés"</string>
@@ -102,6 +110,7 @@
   <string name="common_dark">"Sombre"</string>
   <string name="common_decryption_error">"Erreur de déchiffrement"</string>
   <string name="common_developer_options">"Options pour les développeurs"</string>
+  <string name="common_direct_chat">"Discussion à deux"</string>
   <string name="common_edited_suffix">"(modifié)"</string>
   <string name="common_editing">"Édition"</string>
   <string name="common_emote">"* %1$s %2$s"</string>

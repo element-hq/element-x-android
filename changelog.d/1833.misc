@@ -1,1 +1,1 @@
-Remove `:libraries:theme` module, extract theme and tokens to [Compound Android](https://github.com/vector-im/compound-android).
+Remove `:libraries:theme` module, extract theme and tokens to [Compound Android](https://github.com/element-hq/compound-android).

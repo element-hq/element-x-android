@@ -16,7 +16,7 @@
 
 package io.element.android.libraries.voicerecorder.impl.audio
 
-import com.google.common.truth.Truth
+import com.google.common.truth.Truth.assertThat
 import org.junit.Test
 
 class DBovAudioLevelCalculatorTest {
@@ -26,7 +26,7 @@ class DBovAudioLevelCalculatorTest {
         val calculator = DBovAudioLevelCalculator()
         val buffer = ShortArray(100) { Short.MAX_VALUE }
         val level = calculator.calculateAudioLevel(buffer)
-        Truth.assertThat(level).isEqualTo(1.0f)
+        assertThat(level).isEqualTo(1.0f)
     }
 
     @Test
@@ -34,7 +34,7 @@ class DBovAudioLevelCalculatorTest {
         val calculator = DBovAudioLevelCalculator()
         val buffer = shortArrayOf(100, -200, 300, -400, 500, -600, 700, -800, 900, -1000)
         val level = calculator.calculateAudioLevel(buffer)
-        Truth.assertThat(level).apply {
+        assertThat(level).apply {
             isGreaterThan(0f)
             isLessThan(1f)
         }
@@ -45,6 +45,6 @@ class DBovAudioLevelCalculatorTest {
         val calculator = DBovAudioLevelCalculator()
         val buffer = ShortArray(100) { 0 }
         val level = calculator.calculateAudioLevel(buffer)
-        Truth.assertThat(level).isEqualTo(0.0f)
+        assertThat(level).isEqualTo(0.0f)
     }
 }

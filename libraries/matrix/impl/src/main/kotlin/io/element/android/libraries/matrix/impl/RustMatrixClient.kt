@@ -91,7 +91,7 @@ import org.matrix.rustcomponents.sdk.RoomVisibility as RustRoomVisibility
 import org.matrix.rustcomponents.sdk.SyncService as ClientSyncService
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class RustMatrixClient constructor(
+class RustMatrixClient(
     private val client: Client,
     private val syncService: ClientSyncService,
     private val sessionStore: SessionStore,
@@ -119,10 +119,9 @@ class RustMatrixClient constructor(
                 .filterByPushRules()
                 .finish()
         }
-    private val notificationSettings = client.getNotificationSettings()
-
     private val notificationService = RustNotificationService(sessionId, notificationClient, dispatchers, clock)
-    private val notificationSettingsService = RustNotificationSettingsService(notificationSettings, dispatchers)
+    private val notificationSettingsService = RustNotificationSettingsService(client, dispatchers)
+        .apply { start() }
     private val roomSyncSubscriber = RoomSyncSubscriber(innerRoomListService, dispatchers)
     private val encryptionService = RustEncryptionService(
         client = client,
@@ -241,9 +240,8 @@ class RustMatrixClient constructor(
         }
     }
 
-    override suspend fun findDM(userId: UserId): MatrixRoom? {
-        val roomId = client.getDmRoom(userId.value)?.use { RoomId(it.id()) }
-        return roomId?.let { getRoom(it) }
+    override suspend fun findDM(userId: UserId): RoomId? {
+        return client.getDmRoom(userId.value)?.use { RoomId(it.id()) }
     }
 
     override suspend fun ignoreUser(userId: UserId): Result<Unit> = withContext(sessionDispatcher) {
@@ -347,8 +345,7 @@ class RustMatrixClient constructor(
     override fun close() {
         sessionCoroutineScope.cancel()
         clientDelegateTaskHandle?.cancelAndDestroy()
-        notificationSettings.setDelegate(null)
-        notificationSettings.destroy()
+        notificationSettingsService.destroy()
         verificationService.destroy()
         syncService.destroy()
         innerRoomListService.destroy()

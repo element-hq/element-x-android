@@ -95,6 +95,7 @@
   <string name="action_try_again">"Повторить попытку"</string>
   <string name="action_view_source">"Показать источник"</string>
   <string name="action_yes">"Да"</string>
+  <string name="action_load_more">"Загрузить еще"</string>
   <string name="common_about">"О приложении"</string>
   <string name="common_acceptable_use_policy">"Политика допустимого использования"</string>
   <string name="common_advanced_settings">"Дополнительные параметры"</string>
@@ -109,6 +110,7 @@
   <string name="common_dark">"Темная"</string>
   <string name="common_decryption_error">"Ошибка расшифровки"</string>
   <string name="common_developer_options">"Для разработчика"</string>
+  <string name="common_direct_chat">"Прямой чат"</string>
   <string name="common_edited_suffix">"(изменено)"</string>
   <string name="common_editing">"Редактирование"</string>
   <string name="common_emote">"%1$s%2$s"</string>
@@ -130,7 +132,7 @@
   <string name="common_loading">"Загрузка…"</string>
   <string name="common_message">"Сообщение"</string>
   <string name="common_message_actions">"Действия с сообщением"</string>
-  <string name="common_message_layout">"Оформление сообщений"</string>
+  <string name="common_message_layout">"Оформление сообщения"</string>
   <string name="common_message_removed">"Сообщение удалено"</string>
   <string name="common_modern">"Современный"</string>
   <string name="common_mute">"Без звука"</string>

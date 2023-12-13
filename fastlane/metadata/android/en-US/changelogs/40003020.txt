@@ -4,4 +4,4 @@ Main changes in this version:
 - Adding mentions to a message is now possible, but it's disabled by default as it's a work in progress. They can be enabled in the developer options.
 - Voice messages behavior changed: there is no need to keep pressing to record, to start recording a message just tap on the mic button, then tap again to stop recording.
 - Added a marker in the timeline to indicate the starting point of the room messages.
-Full changelog: https://github.com/vector-im/element-x-android/releases
+Full changelog: https://github.com/element-hq/element-x-android/releases

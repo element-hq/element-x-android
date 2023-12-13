@@ -19,7 +19,7 @@ package io.element.android.features.roomdetails.notificationsettings
 import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
-import com.google.common.truth.Truth
+import com.google.common.truth.Truth.assertThat
 import io.element.android.features.roomdetails.aMatrixRoom
 import io.element.android.features.roomdetails.impl.notificationsettings.RoomNotificationSettingsEvents
 import io.element.android.features.roomdetails.impl.notificationsettings.RoomNotificationSettingsPresenter
@@ -39,8 +39,8 @@ class RoomNotificationSettingsPresenterTests {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            Truth.assertThat(initialState.roomNotificationSettings.dataOrNull()).isNull()
-            Truth.assertThat(initialState.defaultRoomNotificationMode).isNull()
+            assertThat(initialState.roomNotificationSettings.dataOrNull()).isNull()
+            assertThat(initialState.defaultRoomNotificationMode).isNull()
             cancelAndIgnoreRemainingEvents()
         }
     }
@@ -55,7 +55,7 @@ class RoomNotificationSettingsPresenterTests {
             val updatedState = consumeItemsUntilPredicate {
                 it.roomNotificationSettings.dataOrNull()?.mode ==  RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY
             }.last()
-            Truth.assertThat(updatedState.roomNotificationSettings.dataOrNull()?.mode).isEqualTo(RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY)
+            assertThat(updatedState.roomNotificationSettings.dataOrNull()?.mode).isEqualTo(RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY)
             cancelAndIgnoreRemainingEvents()
         }
     }
@@ -71,7 +71,7 @@ class RoomNotificationSettingsPresenterTests {
             val updatedState = consumeItemsUntilPredicate {
                 it.roomNotificationSettings.dataOrNull()?.mode ==  RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY
             }.last()
-            Truth.assertThat(updatedState.roomNotificationSettings.dataOrNull()?.mode).isEqualTo(RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY)
+            assertThat(updatedState.roomNotificationSettings.dataOrNull()?.mode).isEqualTo(RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY)
         }
     }
 
@@ -89,16 +89,16 @@ class RoomNotificationSettingsPresenterTests {
                 it.setNotificationSettingAction.isFailure()
             }.last()
 
-            Truth.assertThat(failedState.roomNotificationSettings.dataOrNull()?.isDefault).isTrue()
-            Truth.assertThat(failedState.pendingSetDefault).isNull()
-            Truth.assertThat(failedState.setNotificationSettingAction.isFailure()).isTrue()
+            assertThat(failedState.roomNotificationSettings.dataOrNull()?.isDefault).isTrue()
+            assertThat(failedState.pendingSetDefault).isNull()
+            assertThat(failedState.setNotificationSettingAction.isFailure()).isTrue()
 
             failedState.eventSink(RoomNotificationSettingsEvents.ClearSetNotificationError)
 
             val errorClearedState = consumeItemsUntilPredicate {
                 it.setNotificationSettingAction.isUninitialized()
             }.last()
-            Truth.assertThat(errorClearedState.setNotificationSettingAction.isUninitialized()).isTrue()
+            assertThat(errorClearedState.setNotificationSettingAction.isUninitialized()).isTrue()
         }
     }
 
@@ -114,7 +114,7 @@ class RoomNotificationSettingsPresenterTests {
             val defaultState = consumeItemsUntilPredicate {
                 it.roomNotificationSettings.dataOrNull()?.isDefault == false
             }.last()
-            Truth.assertThat(defaultState.roomNotificationSettings.dataOrNull()?.isDefault).isFalse()
+            assertThat(defaultState.roomNotificationSettings.dataOrNull()?.isDefault).isFalse()
         }
     }
 
@@ -130,7 +130,7 @@ class RoomNotificationSettingsPresenterTests {
             val defaultState = consumeItemsUntilPredicate {
                 it.roomNotificationSettings.dataOrNull()?.mode == RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY
             }.last()
-            Truth.assertThat(defaultState.roomNotificationSettings.dataOrNull()?.mode).isEqualTo(RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY)
+            assertThat(defaultState.roomNotificationSettings.dataOrNull()?.mode).isEqualTo(RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY)
             cancelAndIgnoreRemainingEvents()
         }
     }
@@ -149,13 +149,13 @@ class RoomNotificationSettingsPresenterTests {
             val failedState = consumeItemsUntilPredicate {
                 it.restoreDefaultAction.isFailure()
             }.last()
-            Truth.assertThat(failedState.restoreDefaultAction.isFailure()).isTrue()
+            assertThat(failedState.restoreDefaultAction.isFailure()).isTrue()
             failedState.eventSink(RoomNotificationSettingsEvents.ClearRestoreDefaultError)
 
             val errorClearedState = consumeItemsUntilPredicate {
                 it.restoreDefaultAction.isUninitialized()
             }.last()
-            Truth.assertThat(errorClearedState.restoreDefaultAction.isUninitialized()).isTrue()
+            assertThat(errorClearedState.restoreDefaultAction.isUninitialized()).isTrue()
             cancelAndIgnoreRemainingEvents()
         }
     }

@@ -39,6 +39,7 @@
   <string name="screen_room_notification_settings_mentions_only_disclaimer">"Ваш домашний сервер не поддерживает эту опцию в зашифрованных комнатах, вы не будете получать уведомления в этой комнате."</string>
   <string name="screen_room_notification_settings_mode_all_messages">"Все сообщения"</string>
   <string name="screen_room_notification_settings_room_custom_settings_title">"В этой комнате уведомить меня о"</string>
+  <string name="screen_start_chat_error_starting_chat">"Произошла ошибка при попытке открытия комнаты"</string>
   <string name="screen_dm_details_block_alert_action">"Заблокировать"</string>
   <string name="screen_dm_details_block_alert_description">"Заблокированные пользователи не смогут отправлять вам сообщения, а все их сообщения будут скрыты. Вы можете разблокировать их в любое время."</string>
   <string name="screen_dm_details_block_user">"Заблокировать пользователя"</string>

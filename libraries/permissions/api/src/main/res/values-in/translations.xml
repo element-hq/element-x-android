@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="dialog_permission_camera">"Supaya aplikasinya dapat menggunakan kamera, berikan izin dalam pengaturan sistem."</string>
+  <string name="dialog_permission_generic">"Silakan memberikan izin dalam pengaturan sistem."</string>
+  <string name="dialog_permission_microphone">"Supaya aplikasinya dapat menggunakan mikrofon, berikan izin dalam pengaturan sistem."</string>
+  <string name="dialog_permission_notification">"Supaya aplikasinya dapat menampilkan notifikasi, berikan izin dalam pengaturan sistem."</string>
+</resources>
