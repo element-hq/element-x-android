@@ -30,7 +30,7 @@ If installed correctly, `git push` and `git pull` will now include LFS content.
 
 ## Recording
 
-Recording of screenshots is done by triggering the GitHub action [Record screenshots](https://github.com/vector-im/element-x-android/actions/workflows/recordScreenshots.yml), to avoid differences of generated binary files (png images) depending on developers' environment.
+Recording of screenshots is done by triggering the GitHub action [Record screenshots](https://github.com/element-hq/element-x-android/actions/workflows/recordScreenshots.yml), to avoid differences of generated binary files (png images) depending on developers' environment.
 
 So basically, you will create a branch, do some commits with your work on it, then push your branch, trigger the GitHub action to record the screenshots (only if you think preview may have changed), and finally create a pull request. The GitHub action will record the screenshots and commit the changes to the branch.
 

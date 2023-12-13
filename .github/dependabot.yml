@@ -13,7 +13,7 @@ updates:
     ignore:
       - dependency-name: "*"
     reviewers:
-      - "vector-im/element-x-android-reviewers"
+      - "element-hq/element-x-android-reviewers"
   # Updates for Gradle dependencies used in the app
   - package-ecosystem: "gradle"
     directory: "/"
@@ -23,4 +23,4 @@ updates:
     ignore:
       - dependency-name: "*"
     reviewers:
-      - "vector-im/element-x-android-reviewers"
+      - "element-hq/element-x-android-reviewers"

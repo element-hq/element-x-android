@@ -64,7 +64,7 @@ A comprehensive [color definition documentation](https://compound.element.io/?pa
 Most icons should be available as part of the [Compound icon library](https://compound.element.io/?path=/docs/tokens-icons--docs)
 
 All drawable are auto-generated as part of the design tokens library. You can find
-all assets in [`vector-im/compound-design-tokens#assets/android`](https://github.com/vector-im/compound-design-tokens/tree/develop/assets/android)
+all assets in [`element-hq/compound-design-tokens#assets/android`](https://github.com/element-hq/compound-design-tokens/tree/main/assets/android)
 
 If you are missing an icon, follow to [contribution guidelines for icons](https://www.figma.com/file/gkNXqPoiJhEv2wt0EJpew4/Compound-Icons?type=design&node-id=178-3119&t=j2uSJD9xPXJn5aRM-0)
 

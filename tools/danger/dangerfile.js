@@ -38,7 +38,7 @@ if (requiresChangelog) {
     const changelogFiles = editedFiles.filter(file => file.startsWith("changelog.d/"))
 
     if (changelogFiles.length == 0) {
-        warn("Please add a changelog. See instructions [here](https://github.com/vector-im/element-android/blob/develop/CONTRIBUTING.md#changelog)")
+        warn("Please add a changelog. See instructions [here](https://github.com/element-hq/element-android/blob/develop/CONTRIBUTING.md#changelog)")
     } else {
         const validTowncrierExtensions = [
             "bugfix",
@@ -48,7 +48,7 @@ if (requiresChangelog) {
             "wip",
         ]
         if (!changelogFiles.every(file => validTowncrierExtensions.includes(file.split(".").pop()))) {
-            fail("Invalid extension for changelog. See instructions [here](https://github.com/vector-im/element-android/blob/develop/CONTRIBUTING.md#changelog)")
+            fail("Invalid extension for changelog. See instructions [here](https://github.com/element-hq/element-android/blob/develop/CONTRIBUTING.md#changelog)")
         }
     }
 }
@@ -107,11 +107,11 @@ if (allowList.includes(user)) {
     signoff_unneeded("allow-list")
 } else {
 //  github.api.rest.orgs.checkMembershipForUser({
-//      org: "vector-im",
+//      org: "element-hq",
 //      username: user,
 //   }).then((result) => {
     github.api.rest.teams.getMembershipForUserInOrg({
-        org: "vector-im",
+        org: "element-hq",
         team_slug: "vector-core",
         username: user,
     }).then((result) => {
@@ -172,7 +172,7 @@ const translationAllowList = [
 
 if (!translationAllowList.includes(user)) {
    if (editedFiles.some(file => file.endsWith("strings.xml") && !file.endsWith("values/strings.xml"))) {
-       fail("Some translation files have been edited. Only user `RiotTranslateBot` (i.e. translations coming from Weblate) or `github-actions[bot]` (i.e. translations coming from automation) are allowed to do that.\nPlease read more about translations management [in the doc](https://github.com/vector-im/element-android/blob/develop/CONTRIBUTING.md#internationalisation).")
+       fail("Some translation files have been edited. Only user `RiotTranslateBot` (i.e. translations coming from Weblate) or `github-actions[bot]` (i.e. translations coming from automation) are allowed to do that.\nPlease read more about translations management [in the doc](https://github.com/element-hq/element-android/blob/develop/CONTRIBUTING.md#internationalisation).")
    }
 
    // Check that new strings are not added to `values/strings.xml`
