@@ -74,6 +74,7 @@ dependencies {
     implementation(libs.telephoto.zoomableimage)
     implementation(libs.matrix.emojibase.bindings)
     api(libs.matrix.richtexteditor.compose)
+    testReleaseImplementation(libs.androidx.compose.ui.test.manifest)
 
     testImplementation(libs.test.junit)
     testImplementation(libs.coroutines.test)
