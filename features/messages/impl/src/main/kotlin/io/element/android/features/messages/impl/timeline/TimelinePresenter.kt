@@ -48,6 +48,7 @@ import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MessageEventType
 import io.element.android.libraries.matrix.api.room.roomMembers
+import io.element.android.libraries.matrix.api.timeline.ReceiptType
 import io.element.android.libraries.matrix.api.timeline.item.event.TimelineItemEventOrigin
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatus
@@ -236,7 +237,7 @@ class TimelinePresenter @AssistedInject constructor(
         if (eventId != null && firstVisibleIndex <= lastReadReceiptIndex.value && eventId != lastReadReceiptId.value) {
             lastReadReceiptIndex.value = firstVisibleIndex
             lastReadReceiptId.value = eventId
-            timeline.sendReadReceipt(eventId)
+            timeline.sendReadReceipt(eventId = eventId, receiptType = ReceiptType.READ)
         }
     }
 

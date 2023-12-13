@@ -20,6 +20,7 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
+import io.element.android.libraries.matrix.api.timeline.ReceiptType
 import io.element.android.libraries.matrix.api.timeline.TimelineException
 import io.element.android.libraries.matrix.api.timeline.item.virtual.VirtualTimelineItem
 import io.element.android.libraries.matrix.impl.timeline.item.event.EventMessageMapper
@@ -217,9 +218,15 @@ class RustMatrixTimeline(
         return isInit.get() && paginationState.value.canBackPaginate
     }
 
-    override suspend fun sendReadReceipt(eventId: EventId) = withContext(dispatcher) {
+    override suspend fun sendReadReceipt(
+        eventId: EventId,
+        receiptType: ReceiptType,
+    ) = withContext(dispatcher) {
         runCatching {
-            innerTimeline.sendReadReceipt(eventId = eventId.value)
+            innerTimeline.sendReadReceipt(
+                receiptType = receiptType.toRustReceiptType(),
+                eventId = eventId.value,
+            )
         }
     }
 
