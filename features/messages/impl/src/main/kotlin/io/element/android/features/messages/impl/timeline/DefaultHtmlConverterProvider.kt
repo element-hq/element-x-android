@@ -28,8 +28,8 @@ import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.textcomposer.ElementRichTextEditorStyle
 import io.element.android.libraries.textcomposer.mentions.rememberMentionSpanProvider
-import io.element.android.wysiwyg.compose.RichTextEditorStyle
 import io.element.android.wysiwyg.compose.StyledHtmlConverter
 import io.element.android.wysiwyg.display.MentionDisplayHandler
 import io.element.android.wysiwyg.display.TextDisplay
@@ -44,12 +44,13 @@ class DefaultHtmlConverterProvider @Inject constructor(): HtmlConverterProvider 
     private val htmlConverter: MutableState<HtmlConverter?> = mutableStateOf(null)
 
     @Composable
-    override fun Update(editorStyle: RichTextEditorStyle, currentUserId: UserId) {
+    override fun Update(currentUserId: UserId) {
         val isInEditMode = LocalInspectionMode.current
         val mentionDetector = remember(isInEditMode) {
             if (isInEditMode) { null } else { newMentionDetector() }
         }
 
+        val editorStyle = ElementRichTextEditorStyle.textStyle()
         val mentionSpanProvider = rememberMentionSpanProvider(currentUserId = currentUserId)
 
         val context = LocalContext.current

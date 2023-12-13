@@ -21,7 +21,6 @@ import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.test.junit4.createComposeRule
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.test.A_USER_ID
-import io.element.android.wysiwyg.compose.RichTextEditorDefaults
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -46,7 +45,7 @@ class DefaultHtmlConverterProviderTest {
         val provider = DefaultHtmlConverterProvider()
         composeTestRule.setContent {
             CompositionLocalProvider(LocalInspectionMode provides true) {
-                provider.Update(editorStyle = RichTextEditorDefaults.style(), currentUserId = A_USER_ID)
+                provider.Update(currentUserId = A_USER_ID)
             }
         }
 

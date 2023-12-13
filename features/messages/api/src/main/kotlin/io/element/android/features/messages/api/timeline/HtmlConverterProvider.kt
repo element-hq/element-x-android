@@ -18,13 +18,12 @@ package io.element.android.features.messages.api.timeline
 
 import androidx.compose.runtime.Composable
 import io.element.android.libraries.matrix.api.core.UserId
-import io.element.android.wysiwyg.compose.RichTextEditorStyle
 import io.element.android.wysiwyg.utils.HtmlConverter
 
 interface HtmlConverterProvider {
 
     @Composable
-    fun Update(editorStyle: RichTextEditorStyle, currentUserId: UserId)
+    fun Update(currentUserId: UserId)
 
     fun provide(): HtmlConverter
 }
