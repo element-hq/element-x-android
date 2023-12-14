@@ -1,0 +1,49 @@
+/*
+ * Copyright (c) 2023 New Vector Ltd
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package io.element.android.libraries.matrix.api.permalink
+
+import com.google.common.truth.Truth.assertThat
+import kotlinx.collections.immutable.persistentListOf
+import org.junit.Test
+
+class PermalinkDataTest {
+
+    @Test
+    fun `getRoomId() returns value when isRoomAlias is false`() {
+        val permalinkData = PermalinkData.RoomLink(
+                roomIdOrAlias = "!abcdef123456:matrix.org",
+                isRoomAlias = false,
+                eventId = null,
+                viaParameters = persistentListOf(),
+        )
+        assertThat(permalinkData.getRoomId()).isNotNull()
+        assertThat(permalinkData.getRoomAlias()).isNull()
+    }
+
+    @Test
+    fun `getRoomAlias() returns value when isRoomAlias is true`() {
+        val permalinkData = PermalinkData.RoomLink(
+            roomIdOrAlias = "#room:matrix.org",
+            isRoomAlias = true,
+            eventId = null,
+            viaParameters = persistentListOf(),
+        )
+        assertThat(permalinkData.getRoomId()).isNull()
+        assertThat(permalinkData.getRoomAlias()).isNotNull()
+    }
+
+}

@@ -862,7 +862,7 @@ class MessageComposerPresenterTest {
 
             advanceUntilIdle()
 
-            assertThat(room.sendMessageMentions).isEqualTo(listOf(Mention.User(A_USER_ID.value)))
+            assertThat(room.sendMessageMentions).isEqualTo(listOf(Mention.User(A_USER_ID)))
 
             // Check intentional mentions on reply sent
             initialState.eventSink(MessageComposerEvents.SetMode(aReplyMode()))
@@ -877,7 +877,7 @@ class MessageComposerPresenterTest {
             initialState.eventSink(MessageComposerEvents.SendMessage(A_MESSAGE.toMessage()))
             advanceUntilIdle()
 
-            assertThat(room.sendMessageMentions).isEqualTo(listOf(Mention.User(A_USER_ID_2.value)))
+            assertThat(room.sendMessageMentions).isEqualTo(listOf(Mention.User(A_USER_ID_2)))
 
             // Check intentional mentions on edit message
             skipItems(1)
@@ -893,7 +893,7 @@ class MessageComposerPresenterTest {
             initialState.eventSink(MessageComposerEvents.SendMessage(A_MESSAGE.toMessage()))
             advanceUntilIdle()
 
-            assertThat(room.sendMessageMentions).isEqualTo(listOf(Mention.User(A_USER_ID_3.value)))
+            assertThat(room.sendMessageMentions).isEqualTo(listOf(Mention.User(A_USER_ID_3)))
 
             skipItems(1)
         }

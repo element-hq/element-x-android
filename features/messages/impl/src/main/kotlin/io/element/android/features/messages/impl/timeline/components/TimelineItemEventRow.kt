@@ -62,8 +62,8 @@ import androidx.compose.ui.zIndex
 import androidx.constraintlayout.compose.ConstrainScope
 import androidx.constraintlayout.compose.ConstraintLayout
 import io.element.android.compound.theme.ElementTheme
-import io.element.android.features.messages.impl.timeline.TimelineRoomInfo
 import io.element.android.features.messages.impl.timeline.TimelineEvents
+import io.element.android.features.messages.impl.timeline.TimelineRoomInfo
 import io.element.android.features.messages.impl.timeline.aTimelineItemEvent
 import io.element.android.features.messages.impl.timeline.components.event.TimelineItemEventContentView
 import io.element.android.features.messages.impl.timeline.components.event.toExtraPadding
@@ -98,10 +98,10 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
+import io.element.android.libraries.matrix.api.room.Mention
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnail
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import kotlin.math.abs
 import kotlin.math.roundToInt
 
@@ -136,6 +136,13 @@ fun TimelineItemEventRow(
     fun inReplyToClicked() {
         val inReplyToEventId = event.inReplyTo?.eventId ?: return
         inReplyToClick(inReplyToEventId)
+    }
+
+    fun onMentionClicked(mention: Mention) {
+        when (mention) {
+            is Mention.User -> onUserDataClick(mention.userId)
+            else -> Unit // TODO implement actions for other mentions being clicked
+        }
     }
 
     Column(modifier = modifier.fillMaxWidth()) {
@@ -182,6 +189,7 @@ fun TimelineItemEventRow(
                         onReactionClicked = { emoji -> onReactionClick(emoji, event) },
                         onReactionLongClicked = { emoji -> onReactionLongClick(emoji, event) },
                         onMoreReactionsClicked = { onMoreReactionsClick(event) },
+                        onMentionClicked = ::onMentionClicked,
                         eventSink = eventSink,
                     )
                 }
@@ -200,6 +208,7 @@ fun TimelineItemEventRow(
                 onReactionClicked = { emoji -> onReactionClick(emoji, event) },
                 onReactionLongClicked = { emoji -> onReactionLongClick(emoji, event) },
                 onMoreReactionsClicked = { onMoreReactionsClick(event) },
+                onMentionClicked = ::onMentionClicked,
                 eventSink = eventSink,
             )
         }
@@ -254,6 +263,7 @@ private fun TimelineItemEventRowContent(
     onReactionClicked: (emoji: String) -> Unit,
     onReactionLongClicked: (emoji: String) -> Unit,
     onMoreReactionsClicked: (event: TimelineItem.Event) -> Unit,
+    onMentionClicked: (Mention) -> Unit,
     eventSink: (TimelineEvents) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -316,6 +326,7 @@ private fun TimelineItemEventRowContent(
                 onTimestampClicked = {
                     onTimestampClicked(event)
                 },
+                onMentionClicked = onMentionClicked,
                 eventSink = eventSink,
             )
         }
@@ -387,6 +398,7 @@ private fun MessageEventBubbleContent(
     onMessageLongClick: () -> Unit,
     inReplyToClick: () -> Unit,
     onTimestampClicked: () -> Unit,
+    onMentionClicked: (Mention) -> Unit,
     eventSink: (TimelineEvents) -> Unit,
     @SuppressLint("ModifierParameter")
     @Suppress("ModifierNaming")
@@ -512,15 +524,17 @@ private fun MessageEventBubbleContent(
                     isMine = event.isMine,
                     isEditable = event.isEditable,
                     onLinkClicked = { url ->
-                        Timber.d("Clicked on: $url")
-                        when (PermalinkParser.parse(Uri.parse(url))) {
+                        when (val permalink = PermalinkParser.parse(Uri.parse(url))) {
                             is PermalinkData.UserLink -> {
-                                // TODO open member details
+                                onMentionClicked(Mention.User(UserId(permalink.userId)))
                             }
-                            is PermalinkData.FallbackLink -> {
+                            is PermalinkData.RoomLink -> {
+                                onMentionClicked(Mention.Room(permalink.getRoomId(), permalink.getRoomAlias()))
+                            }
+                            is PermalinkData.FallbackLink,
+                            is PermalinkData.RoomEmailInviteLink -> {
                                 context.openUrlInExternalApp(url)
                             }
-                            else -> Unit // TODO handle other types of links, as room ones
                         }
                     },
                     extraPadding = event.toExtraPadding(),
