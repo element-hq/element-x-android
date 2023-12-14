@@ -64,9 +64,9 @@ import kotlinx.collections.immutable.ImmutableList
 @Composable
 fun PollHistoryView(
     state: PollHistoryState,
-    modifier: Modifier = Modifier,
     onEditPoll: (EventId) -> Unit,
     goBack: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
 
     fun onLoadMore() {
@@ -118,7 +118,7 @@ fun PollHistoryView(
             HorizontalPager(
                 state = pagerState,
                 userScrollEnabled = false,
-                modifier = modifier.fillMaxSize()
+                modifier = Modifier.fillMaxSize()
             ) { page ->
                 val filter = PollHistoryFilter.entries[page]
                 val pollHistoryItems = state.pollHistoryForFilter(filter)

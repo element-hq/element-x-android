@@ -47,7 +47,7 @@ class AsyncMatrixTimeline(
         MutableStateFlow(emptyList())
 
     private val _paginationState = MutableStateFlow(
-        MatrixTimeline.PaginationState()
+        MatrixTimeline.PaginationState.Initial
     )
     private val timeline = coroutineScope.async(context = dispatcher, start = CoroutineStart.LAZY) {
         timelineProvider()

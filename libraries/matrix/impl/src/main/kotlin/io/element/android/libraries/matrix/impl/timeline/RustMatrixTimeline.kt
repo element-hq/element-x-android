@@ -72,7 +72,7 @@ class RustMatrixTimeline(
         MutableStateFlow(emptyList())
 
     private val _paginationState = MutableStateFlow(
-        MatrixTimeline.PaginationState()
+        MatrixTimeline.PaginationState.Initial
     )
 
     private val encryptedHistoryPostProcessor = TimelineEncryptedHistoryPostProcessor(
