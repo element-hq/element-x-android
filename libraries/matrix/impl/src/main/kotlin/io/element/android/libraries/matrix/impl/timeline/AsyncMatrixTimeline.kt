@@ -19,6 +19,7 @@ package io.element.android.libraries.matrix.impl.timeline
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
+import io.element.android.libraries.matrix.api.timeline.ReceiptType
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
@@ -89,8 +90,8 @@ class AsyncMatrixTimeline(
         return timeline.await().fetchDetailsForEvent(eventId)
     }
 
-    override suspend fun sendReadReceipt(eventId: EventId): Result<Unit> {
-        return timeline.await().sendReadReceipt(eventId)
+    override suspend fun sendReadReceipt(eventId: EventId, receiptType: ReceiptType): Result<Unit> {
+        return timeline.await().sendReadReceipt(eventId, receiptType)
     }
 
     override fun close() {
