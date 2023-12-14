@@ -172,7 +172,7 @@ class RoomDetailsFlowNode @AssistedInject constructor(
                         fileExtension = ""
                     ),
                     mediaSource = MediaSource(url = navTarget.avatarUrl),
-                    thumbnailSource = MediaSource(url = navTarget.avatarUrl),
+                    thumbnailSource = null,
                     canDownload = false,
                     canShare = false,
                 )
