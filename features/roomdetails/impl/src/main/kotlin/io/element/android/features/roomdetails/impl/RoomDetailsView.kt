@@ -122,10 +122,8 @@ fun RoomDetailsView(
                         roomId = state.roomId,
                         roomName = state.roomName,
                         roomAlias = state.roomAlias,
-                        openAvatarPreview = {
-                            if (state.roomAvatarUrl != null) {
-                                openAvatarPreview(state.roomName, state.roomAvatarUrl)
-                            }
+                        openAvatarPreview = { avatarUrl ->
+                            openAvatarPreview(state.roomName, avatarUrl)
                         },
                     )
                     MainActionsSection(
@@ -140,10 +138,8 @@ fun RoomDetailsView(
                         avatarUrl = state.roomAvatarUrl ?: member.avatarUrl,
                         userId = member.userId.value,
                         userName = state.roomName,
-                        openAvatarPreview = {
-                            if (member.avatarUrl != null) {
-                                openAvatarPreview(member.displayName ?: member.userId.value, member.avatarUrl!!)
-                            }
+                        openAvatarPreview = { avatarUrl ->
+                            openAvatarPreview(member.displayName ?: member.userId.value, avatarUrl)
                         },
                     )
                     RoomMemberMainActionsSection(onShareUser = ::onShareMember)
