@@ -26,7 +26,7 @@ import io.element.android.libraries.mediaviewer.api.viewer.MediaViewerNode
 import io.element.android.libraries.mediaviewer.api.viewer.MediaViewerPresenter
 
 @ContributesNode(RoomScope::class)
-class RoomMemberAvatarPreviewNode @AssistedInject constructor(
+class AvatarPreviewNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     presenterFactory: MediaViewerPresenter.Factory,

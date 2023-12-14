@@ -242,7 +242,6 @@ class MessagesFlowNode @AssistedInject constructor(
                 backstack.push(navTarget)
             }
             is TimelineItemVideoContent -> {
-                val mediaSource = event.content.videoSource
                 val navTarget = NavTarget.MediaViewer(
                     mediaInfo = MediaInfo(
                         name = event.content.body,
@@ -250,13 +249,12 @@ class MessagesFlowNode @AssistedInject constructor(
                         formattedFileSize = event.content.formattedFileSize,
                         fileExtension = event.content.fileExtension
                     ),
-                    mediaSource = mediaSource,
+                    mediaSource = event.content.videoSource,
                     thumbnailSource = event.content.thumbnailSource,
                 )
                 backstack.push(navTarget)
             }
             is TimelineItemFileContent -> {
-                val mediaSource = event.content.fileSource
                 val navTarget = NavTarget.MediaViewer(
                     mediaInfo = MediaInfo(
                         name = event.content.body,
@@ -264,13 +262,12 @@ class MessagesFlowNode @AssistedInject constructor(
                         formattedFileSize = event.content.formattedFileSize,
                         fileExtension = event.content.fileExtension
                     ),
-                    mediaSource = mediaSource,
+                    mediaSource = event.content.fileSource,
                     thumbnailSource = event.content.thumbnailSource,
                 )
                 backstack.push(navTarget)
             }
             is TimelineItemAudioContent -> {
-                val mediaSource = event.content.mediaSource
                 val navTarget = NavTarget.MediaViewer(
                     mediaInfo = MediaInfo(
                         name = event.content.body,
@@ -278,7 +275,7 @@ class MessagesFlowNode @AssistedInject constructor(
                         formattedFileSize = event.content.formattedFileSize,
                         fileExtension = event.content.fileExtension
                     ),
-                    mediaSource = mediaSource,
+                    mediaSource = event.content.mediaSource,
                     thumbnailSource = null,
                 )
                 backstack.push(navTarget)
