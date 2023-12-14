@@ -16,56 +16,52 @@
 
 package io.element.android.features.messages.impl.timeline.components.event
 
-import androidx.compose.foundation.interaction.MutableInteractionSource
+import android.text.SpannableString
 import androidx.compose.foundation.layout.Box
 import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.PreviewParameter
-import androidx.compose.ui.unit.sp
-import io.element.android.features.messages.impl.timeline.components.html.HtmlDocument
+import androidx.core.text.buildSpannedString
+import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextBasedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextBasedContentProvider
-import io.element.android.libraries.designsystem.components.ClickableLinkText
-import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
-import io.element.android.libraries.designsystem.text.toAnnotatedString
-import io.element.android.compound.theme.ElementTheme
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.textcomposer.ElementRichTextEditorStyle
+import io.element.android.wysiwyg.compose.EditorStyledText
 
 @Composable
 fun TimelineItemTextView(
     content: TimelineItemTextBasedContent,
-    interactionSource: MutableInteractionSource,
     extraPadding: ExtraPadding,
-    onTextClicked: () -> Unit,
-    onTextLongClicked: () -> Unit,
+    onLinkClicked: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    CompositionLocalProvider(LocalContentColor provides ElementTheme.colors.textPrimary) {
-        val htmlDocument = content.htmlDocument
-        if (htmlDocument != null) {
-            HtmlDocument(
-                document = htmlDocument,
-                extraPadding = extraPadding,
-                modifier = modifier,
-                onTextClicked = onTextClicked,
-                onTextLongClicked = onTextLongClicked,
-                interactionSource = interactionSource
-            )
-        } else {
-            Box(modifier) {
-                val textWithPadding = remember(content.body) {
-                    content.body + extraPadding.getStr(16.sp).toAnnotatedString()
+    CompositionLocalProvider(
+        LocalContentColor provides ElementTheme.colors.textPrimary,
+        LocalTextStyle provides ElementTheme.typography.fontBodyLgRegular
+    ) {
+        val fontSize = LocalTextStyle.current.fontSize
+
+        val formattedBody = content.formattedBody
+        val body = SpannableString(formattedBody ?: content.body)
+
+        Box(modifier) {
+            val textWithPadding = remember(body, fontSize) {
+                buildSpannedString {
+                    append(body)
+                    append(extraPadding.getStr(fontSize))
                 }
-                ClickableLinkText(
-                    text = textWithPadding,
-                    onClick = onTextClicked,
-                    onLongClick = onTextLongClicked,
-                    interactionSource = interactionSource
-                )
             }
+            EditorStyledText(
+                text = textWithPadding,
+                onLinkClickedListener = onLinkClicked,
+                style = ElementRichTextEditorStyle.textStyle(),
+            )
         }
     }
 }
@@ -77,9 +73,7 @@ internal fun TimelineItemTextViewPreview(
 ) = ElementPreview {
     TimelineItemTextView(
         content = content,
-        interactionSource = remember { MutableInteractionSource() },
         extraPadding = ExtraPadding(nbChars = 8),
-        onTextClicked = {},
-        onTextLongClicked = {},
+        onLinkClicked = {},
     )
 }

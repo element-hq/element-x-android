@@ -113,6 +113,7 @@ class TimelineEventContentMapper(private val eventMessageMapper: EventMessageMap
                     vote.value.map { userId -> UserId(userId) }.toImmutableList()
                 }.toImmutableMap(),
                 endTime = kind.endTime,
+                isEdited = kind.hasBeenEdited,
             )
         }
         is TimelineItemContentKind.UnableToDecrypt -> {

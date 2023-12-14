@@ -36,8 +36,7 @@ import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
-import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextBasedContent
-import io.element.android.libraries.core.bool.orFalse
+import io.element.android.features.messages.impl.timeline.model.event.isEdited
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Icon
@@ -55,7 +54,7 @@ fun TimelineEventTimestampView(
 ) {
     val formattedTime = event.sentTime
     val hasMessageSendingFailed = event.localSendState is LocalEventSendState.SendingFailed
-    val isMessageEdited = (event.content as? TimelineItemTextBasedContent)?.isEdited.orFalse()
+    val isMessageEdited = event.content.isEdited()
     val tint = if (hasMessageSendingFailed) MaterialTheme.colorScheme.error else null
     val clickModifier = if (hasMessageSendingFailed) {
         Modifier.combinedClickable(

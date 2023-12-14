@@ -222,6 +222,7 @@ class PollContentStateFactoryTest {
         answers = persistentListOf(A_POLL_ANSWER_1, A_POLL_ANSWER_2, A_POLL_ANSWER_3, A_POLL_ANSWER_4),
         votes = votes,
         endTime = endTime,
+        isEdited = false,
     )
 
     private fun aPollContentState(
@@ -242,9 +243,9 @@ class PollContentStateFactoryTest {
         question = question,
         answerItems = answerItems.toImmutableList(),
         pollKind = pollKind,
-        isMine = isMine,
-        isPollEnded = isEnded,
         isPollEditable = isEditable,
+        isPollEnded = isEnded,
+        isMine = isMine,
     )
 
     private fun aPollAnswerItem(

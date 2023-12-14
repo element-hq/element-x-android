@@ -16,7 +16,11 @@
 
 package io.element.android.libraries.matrix.api.room
 
+import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.UserId
+
 sealed interface Mention {
-    data class User(val userId: String): Mention
+    data class User(val userId: UserId): Mention
     data object AtRoom: Mention
+    data class Room(val roomId: RoomId?, val roomAlias: String?): Mention
 }

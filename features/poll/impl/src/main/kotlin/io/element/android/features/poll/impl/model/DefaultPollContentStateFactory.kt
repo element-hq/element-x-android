@@ -69,12 +69,12 @@ class DefaultPollContentStateFactory @Inject constructor(
 
         return PollContentState(
             eventId = event.eventId,
-            isMine = event.isOwn,
             question = content.question,
             answerItems = answerItems.toImmutableList(),
             pollKind = content.kind,
             isPollEditable = event.isEditable,
             isPollEnded = isPollEnded,
+            isMine = event.isOwn,
         )
     }
 }

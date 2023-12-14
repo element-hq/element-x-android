@@ -131,7 +131,8 @@ class InReplyToDetailsProvider : PreviewParameterProvider<InReplyToDetails> {
                 maxSelections = 1u,
                 answers = persistentListOf(),
                 votes = persistentMapOf(),
-                endTime = null
+                endTime = null,
+                isEdited = false,
             ),
         ).map {
             aInReplyToDetails(

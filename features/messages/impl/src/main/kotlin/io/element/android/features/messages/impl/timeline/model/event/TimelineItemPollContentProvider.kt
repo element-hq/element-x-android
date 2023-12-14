@@ -39,6 +39,7 @@ fun aTimelineItemPollContent(
     isMine: Boolean = false,
     isEditable: Boolean = false,
     isEnded: Boolean = false,
+    isEdited: Boolean = false,
 ): TimelineItemPollContent {
     return TimelineItemPollContent(
         eventId = EventId("\$anEventId"),
@@ -48,5 +49,6 @@ fun aTimelineItemPollContent(
         isMine = isMine,
         isEditable = isEditable,
         isEnded = isEnded,
+        isEdited = isEdited,
     )
 }

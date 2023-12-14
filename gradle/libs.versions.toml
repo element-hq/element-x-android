@@ -15,7 +15,7 @@ core = "1.12.0"
 datastore = "1.0.0"
 constraintlayout = "2.1.4"
 constraintlayout_compose = "1.0.1"
-lifecycle = "2.7.0-rc01"
+lifecycle = "2.7.0-rc02"
 activity = "1.8.1"
 media3 = "1.2.0"
 
@@ -67,10 +67,10 @@ firebase_appdistribution_gradle = { module = "com.google.firebase:firebase-appdi
 # AndroidX
 androidx_core = { module = "androidx.core:core", version.ref = "core" }
 androidx_corektx = { module = "androidx.core:core-ktx", version.ref = "core" }
-androidx_annotationjvm = "androidx.annotation:annotation-jvm:1.7.0"
+androidx_annotationjvm = "androidx.annotation:annotation-jvm:1.7.1"
 androidx_datastore_preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore" }
 androidx_datastore_datastore = { module = "androidx.datastore:datastore", version.ref = "datastore" }
-androidx_exifinterface = "androidx.exifinterface:exifinterface:1.3.6"
+androidx_exifinterface = "androidx.exifinterface:exifinterface:1.3.7"
 androidx_constraintlayout = { module = "androidx.constraintlayout:constraintlayout", version.ref = "constraintlayout" }
 androidx_constraintlayout_compose = { module = "androidx.constraintlayout:constraintlayout-compose", version.ref = "constraintlayout_compose" }
 
@@ -96,6 +96,7 @@ androidx_compose_ui = { module = "androidx.compose.ui:ui" }
 androidx_compose_ui_tooling = { module = "androidx.compose.ui:ui-tooling" }
 androidx_compose_ui_tooling_preview = { module = "androidx.compose.ui:ui-tooling-preview" }
 androidx_compose_ui_test_manifest = { module = "androidx.compose.ui:ui-test-manifest" }
+androidx_compose_ui_test_junit = { module = "androidx.compose.ui:ui-test-junit4-android" }
 androidx_compose_material = { module = "androidx.compose.material:material" }
 androidx_compose_material_icons = { module = "androidx.compose.material:material-icons-extended" }
 
@@ -211,8 +212,8 @@ anvil = { id = "com.squareup.anvil", version.ref = "anvil" }
 detekt = "io.gitlab.arturbosch.detekt:1.23.4"
 ktlint = "org.jlleitschuh.gradle.ktlint:12.0.3"
 dependencygraph = "com.savvasdalkitsis.module-dependency-graph:0.12"
-dependencycheck = "org.owasp.dependencycheck:9.0.4"
-dependencyanalysis = "com.autonomousapps.dependency-analysis:1.27.0"
+dependencycheck = "org.owasp.dependencycheck:9.0.5"
+dependencyanalysis = "com.autonomousapps.dependency-analysis:1.28.0"
 paparazzi = "app.cash.paparazzi:1.3.1"
 kover = "org.jetbrains.kotlinx.kover:0.6.1"
 sqldelight = { id = "app.cash.sqldelight", version.ref = "sqldelight" }

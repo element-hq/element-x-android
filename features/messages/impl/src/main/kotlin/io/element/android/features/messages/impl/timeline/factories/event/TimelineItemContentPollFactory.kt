@@ -45,6 +45,7 @@ class TimelineItemContentPollFactory @Inject constructor(
             answerItems = pollContentState.answerItems,
             pollKind = pollContentState.pollKind,
             isEnded = pollContentState.isPollEnded,
+            isEdited = content.isEdited
         )
     }
 }

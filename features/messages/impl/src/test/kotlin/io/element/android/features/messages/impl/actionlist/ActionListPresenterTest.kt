@@ -113,7 +113,7 @@ class ActionListPresenterTest {
             val initialState = awaitItem()
             val messageEvent = aMessageEvent(
                 isMine = false,
-                content = TimelineItemTextContent(body = A_MESSAGE, htmlDocument = null, isEdited = false)
+                content = TimelineItemTextContent(body = A_MESSAGE, htmlDocument = null, isEdited = false, formattedBody = null)
             )
             initialState.eventSink.invoke(ActionListEvents.ComputeForMessage(messageEvent, canRedact = false, canSendMessage = true))
             // val loadingState = awaitItem()
@@ -145,7 +145,7 @@ class ActionListPresenterTest {
             val initialState = awaitItem()
             val messageEvent = aMessageEvent(
                 isMine = false,
-                content = TimelineItemTextContent(body = A_MESSAGE, htmlDocument = null, isEdited = false)
+                content = TimelineItemTextContent(body = A_MESSAGE, htmlDocument = null, isEdited = false, formattedBody = null)
             )
             initialState.eventSink.invoke(ActionListEvents.ComputeForMessage(messageEvent, canRedact = false, canSendMessage = false))
             // val loadingState = awaitItem()
@@ -176,7 +176,7 @@ class ActionListPresenterTest {
             val initialState = awaitItem()
             val messageEvent = aMessageEvent(
                 isMine = false,
-                content = TimelineItemTextContent(body = A_MESSAGE, htmlDocument = null, isEdited = false)
+                content = TimelineItemTextContent(body = A_MESSAGE, htmlDocument = null, isEdited = false, formattedBody = null)
             )
             initialState.eventSink.invoke(ActionListEvents.ComputeForMessage(messageEvent, canRedact = true, canSendMessage = true))
             val successState = awaitItem()
@@ -207,7 +207,7 @@ class ActionListPresenterTest {
             val initialState = awaitItem()
             val messageEvent = aMessageEvent(
                 isMine = true,
-                content = TimelineItemTextContent(body = A_MESSAGE, htmlDocument = null, isEdited = false)
+                content = TimelineItemTextContent(body = A_MESSAGE, htmlDocument = null, isEdited = false, formattedBody = null)
             )
             initialState.eventSink.invoke(ActionListEvents.ComputeForMessage(messageEvent, canRedact = false, canSendMessage = true))
             // val loadingState = awaitItem()
@@ -328,7 +328,7 @@ class ActionListPresenterTest {
             val initialState = awaitItem()
             val messageEvent = aMessageEvent(
                 isMine = true,
-                content = TimelineItemTextContent(body = A_MESSAGE, htmlDocument = null, isEdited = false)
+                content = TimelineItemTextContent(body = A_MESSAGE, htmlDocument = null, isEdited = false, formattedBody = null)
             )
             initialState.eventSink.invoke(ActionListEvents.ComputeForMessage(messageEvent, canRedact = false, canSendMessage = true))
             // val loadingState = awaitItem()
@@ -360,7 +360,7 @@ class ActionListPresenterTest {
             val initialState = awaitItem()
             val messageEvent = aMessageEvent(
                 isMine = true,
-                content = TimelineItemTextContent(body = A_MESSAGE, htmlDocument = null, isEdited = false)
+                content = TimelineItemTextContent(body = A_MESSAGE, htmlDocument = null, isEdited = false, formattedBody = null)
             )
             val redactedEvent = aMessageEvent(
                 isMine = true,
@@ -388,7 +388,7 @@ class ActionListPresenterTest {
             val messageEvent = aMessageEvent(
                 eventId = null, // No event id, so it's not sent yet
                 isMine = true,
-                content = TimelineItemTextContent(body = A_MESSAGE, htmlDocument = null, isEdited = false),
+                content = TimelineItemTextContent(body = A_MESSAGE, htmlDocument = null, isEdited = false, formattedBody = null),
             )
 
             initialState.eventSink.invoke(ActionListEvents.ComputeForMessage(messageEvent, canRedact = false, canSendMessage = true))

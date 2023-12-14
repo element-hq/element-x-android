@@ -18,6 +18,7 @@ package io.element.android.libraries.matrix.api.permalink
 
 import android.net.Uri
 import androidx.compose.runtime.Immutable
+import io.element.android.libraries.matrix.api.core.RoomId
 import kotlinx.collections.immutable.ImmutableList
 
 /**
@@ -32,7 +33,15 @@ sealed interface PermalinkData {
         val isRoomAlias: Boolean,
         val eventId: String?,
         val viaParameters: ImmutableList<String>
-    ) : PermalinkData
+    ) : PermalinkData {
+        fun getRoomId(): RoomId? {
+            return roomIdOrAlias.takeIf { !isRoomAlias }?.let(::RoomId)
+        }
+
+        fun getRoomAlias(): String? {
+            return roomIdOrAlias.takeIf { isRoomAlias }
+        }
+    }
 
     /*
      * &room_name=Team2

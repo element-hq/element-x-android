@@ -16,7 +16,6 @@
 
 package io.element.android.features.messages.impl.timeline.components.event
 
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import io.element.android.features.messages.impl.timeline.TimelineEvents
@@ -41,10 +40,8 @@ import io.element.android.libraries.architecture.Presenter
 @Composable
 fun TimelineItemEventContentView(
     content: TimelineItemEventContent,
-    interactionSource: MutableInteractionSource,
     extraPadding: ExtraPadding,
-    onClick: () -> Unit,
-    onLongClick: () -> Unit,
+    onLinkClicked: (url: String) -> Unit,
     eventSink: (TimelineEvents) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -63,10 +60,8 @@ fun TimelineItemEventContentView(
         is TimelineItemTextBasedContent -> TimelineItemTextView(
             content = content,
             extraPadding = extraPadding,
-            interactionSource = interactionSource,
             modifier = modifier,
-            onTextClicked = onClick,
-            onTextLongClicked = onLongClick
+            onLinkClicked = onLinkClicked,
         )
         is TimelineItemUnknownContent -> TimelineItemUnknownView(
             content = content,

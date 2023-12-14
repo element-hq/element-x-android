@@ -46,6 +46,7 @@ import io.element.android.features.messages.impl.voicemessages.composer.VoiceMes
 import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessageComposerPresenter
 import io.element.android.features.messages.impl.voicemessages.timeline.FakeRedactedVoiceMessageManager
 import io.element.android.features.messages.test.FakeMessageComposerContext
+import io.element.android.features.messages.test.timeline.FakeHtmlConverterProvider
 import io.element.android.features.networkmonitor.test.FakeNetworkMonitor
 import io.element.android.features.poll.test.actions.FakeEndPollAction
 import io.element.android.features.poll.test.actions.FakeSendPollResponseAction
@@ -745,6 +746,7 @@ class MessagesPresenterTest {
             buildMeta = aBuildMeta(),
             dispatchers = coroutineDispatchers,
             currentSessionIdHolder = currentSessionIdHolder,
+            htmlConverterProvider = FakeHtmlConverterProvider(),
         )
     }
 }

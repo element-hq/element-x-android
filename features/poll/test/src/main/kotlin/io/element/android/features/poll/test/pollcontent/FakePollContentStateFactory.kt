@@ -28,12 +28,12 @@ class FakePollContentStateFactory : PollContentStateFactory {
     override suspend fun create(event: EventTimelineItem, content: PollContent): PollContentState {
         return PollContentState(
             eventId = event.eventId,
-            isMine = event.isOwn,
             question = content.question,
             answerItems = emptyList<PollAnswerItem>().toImmutableList(),
             pollKind = content.kind,
             isPollEditable = event.isEditable,
             isPollEnded = content.endTime != null,
+            isMine = event.isOwn
         )
     }
 }

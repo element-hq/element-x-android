@@ -67,9 +67,9 @@ class DeveloperSettingsPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            skipItems(1)
-            val state = awaitItem()
-            assertThat(state.features).hasSize(FeatureFlags.entries.size)
+            val state = awaitLastSequentialItem()
+            val numberOfModifiableFeatureFlags = FeatureFlags.entries.count { it.isFinished.not() }
+            assertThat(state.features).hasSize(numberOfModifiableFeatureFlags)
             cancelAndIgnoreRemainingEvents()
         }
     }

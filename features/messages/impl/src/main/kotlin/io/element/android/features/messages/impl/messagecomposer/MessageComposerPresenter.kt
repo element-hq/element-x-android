@@ -44,6 +44,7 @@ import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.core.ProgressCallback
+import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.permalink.PermalinkBuilder
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.Mention
@@ -335,7 +336,7 @@ class MessageComposerPresenter @Inject constructor(
                     add(Mention.AtRoom)
                 }
                 for (userId in state.userIds) {
-                    add(Mention.User(userId))
+                    add(Mention.User(UserId(userId)))
                 }
             }
         }.orEmpty()
