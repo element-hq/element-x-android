@@ -17,16 +17,24 @@
 package io.element.android.libraries.textcomposer.mentions
 
 import android.graphics.Color
+import android.graphics.Typeface
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.text.buildSpannedString
+import io.element.android.compound.theme.ElementTheme
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.text.rememberTypeface
 import io.element.android.libraries.designsystem.theme.currentUserMentionPillBackground
 import io.element.android.libraries.designsystem.theme.currentUserMentionPillText
 import io.element.android.libraries.designsystem.theme.mentionPillBackground
@@ -34,7 +42,6 @@ import io.element.android.libraries.designsystem.theme.mentionPillText
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
-import io.element.android.compound.theme.ElementTheme
 
 @Stable
 class MentionSpanProvider(
@@ -44,6 +51,10 @@ class MentionSpanProvider(
     private var otherTextColor: Int = 0,
     private var otherBackgroundColor: Int = Color.WHITE,
 ) {
+    private val paddingValues = PaddingValues(start = 4.dp, end = 6.dp)
+
+    private val paddingValuesPx = mutableStateOf(0 to 0)
+    private val typeface = mutableStateOf(Typeface.DEFAULT)
 
     @Suppress("ComposableNaming")
     @Composable
@@ -52,10 +63,18 @@ class MentionSpanProvider(
         currentUserBackgroundColor = ElementTheme.colors.currentUserMentionPillBackground.toArgb()
         otherTextColor = ElementTheme.colors.mentionPillText.toArgb()
         otherBackgroundColor = ElementTheme.colors.mentionPillBackground.toArgb()
+
+        typeface.value = ElementTheme.typography.fontBodyLgMedium.rememberTypeface().value
+        with(LocalDensity.current) {
+            val leftPadding = paddingValues.calculateLeftPadding(LocalLayoutDirection.current).roundToPx()
+            val rightPadding = paddingValues.calculateRightPadding(LocalLayoutDirection.current).roundToPx()
+            paddingValuesPx.value = leftPadding to rightPadding
+        }
     }
 
     fun getMentionSpanFor(text: String, url: String): MentionSpan {
         val permalinkData = PermalinkParser.parse(url)
+        val (startPaddingPx, endPaddingPx) = paddingValuesPx.value
         return when {
             permalinkData is PermalinkData.UserLink -> {
                 val isCurrentUser = permalinkData.userId == currentSessionId.value
@@ -63,6 +82,9 @@ class MentionSpanProvider(
                     type = MentionSpan.Type.USER,
                     backgroundColor = if (isCurrentUser) currentUserBackgroundColor else otherBackgroundColor,
                     textColor = if (isCurrentUser) currentUserTextColor else otherTextColor,
+                    startPadding = startPaddingPx,
+                    endPadding = endPaddingPx,
+                    typeface = typeface.value,
                 )
             }
             text == "@room" && permalinkData is PermalinkData.FallbackLink -> {
@@ -70,6 +92,9 @@ class MentionSpanProvider(
                     type = MentionSpan.Type.USER,
                     backgroundColor = otherBackgroundColor,
                     textColor = otherTextColor,
+                    startPadding = startPaddingPx,
+                    endPadding = endPaddingPx,
+                    typeface = typeface.value,
                 )
             }
             else -> {
@@ -77,6 +102,9 @@ class MentionSpanProvider(
                     type = MentionSpan.Type.ROOM,
                     backgroundColor = otherBackgroundColor,
                     textColor = otherTextColor,
+                    startPadding = startPaddingPx,
+                    endPadding = endPaddingPx,
+                    typeface = typeface.value,
                 )
             }
         }
