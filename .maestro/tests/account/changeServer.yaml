@@ -9,13 +9,10 @@ appId: ${APP_ID}
 - tapOn: "Other"
 - tapOn:
     id: "change_server-server"
-# Test server that does not support sliding sync.
-- inputText: "https://kieranml.ems-support.element.dev"
+- inputText: "element"
 - hideKeyboard
-- tapOn: "kieranml.ems-support.element.dev"
-- extendedWaitUntil:
-    visible: "This server currently doesn’t support sliding sync."
-    timeout: 10000
-- tapOn: "Cancel"
-- back
-- back
+- tapOn: "element.io"
+# Revert to matrix.org
+- tapOn:
+    id: "login-change_server"
+- tapOn: "matrix.org"
