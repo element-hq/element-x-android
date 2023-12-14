@@ -67,6 +67,7 @@ import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.MAIN_SPACE
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.roomlist.RoomList
 import io.element.android.libraries.matrix.api.sync.SyncState
 import io.element.android.libraries.push.api.notifications.NotificationDrawerManager
 import io.element.android.services.appnavstate.api.AppNavigationStateService
@@ -149,6 +150,23 @@ class LoggedInFlowNode @AssistedInject constructor(
             }
         )
         observeSyncStateAndNetworkStatus()
+        observeInvitesLoadingState()
+    }
+
+    private fun observeInvitesLoadingState() {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                matrixClient.roomListService.invites.loadingState
+                    .collect { inviteState ->
+                        when (inviteState) {
+                            is RoomList.LoadingState.Loaded -> if (inviteState.numberOfRooms == 0) {
+                                backstack.removeLast(NavTarget.InviteList)
+                            }
+                            RoomList.LoadingState.NotLoaded -> Unit
+                        }
+                    }
+            }
+        }
     }
 
     @OptIn(FlowPreview::class)
