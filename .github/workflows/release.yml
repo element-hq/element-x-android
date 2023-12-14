@@ -33,7 +33,7 @@ jobs:
           ELEMENT_ANDROID_MAPTILER_DARK_MAP_ID: ${{ secrets.MAPTILER_DARK_MAP_ID }}
         run: ./gradlew bundleRelease $CI_GRADLE_ARG_PROPERTIES
       - name: Upload bundle as artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: elementx-app-bundle-unsigned
           path: |
