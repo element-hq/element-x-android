@@ -54,7 +54,8 @@ private fun aPollHistoryState(
     activeFilter = activeFilter,
     pollHistoryItems = PollHistoryItems(
         ongoing = currentItems,
-        past = currentItems,),
+        past = currentItems,
+    ),
     eventSink = {},
 )
 
