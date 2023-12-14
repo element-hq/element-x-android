@@ -87,7 +87,7 @@ class RoomDetailsFlowNode @AssistedInject constructor(
         data class RoomMemberDetails(val roomMemberId: UserId) : NavTarget
 
         @Parcelize
-        data class AvatarPreview(val userName: String, val avatarUrl: String) : NavTarget
+        data class AvatarPreview(val name: String, val avatarUrl: String) : NavTarget
     }
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
@@ -110,8 +110,8 @@ class RoomDetailsFlowNode @AssistedInject constructor(
                         backstack.push(NavTarget.RoomNotificationSettings(showUserDefinedSettingStyle = false))
                     }
 
-                    override fun openAvatarPreview(username: String, url: String) {
-                        backstack.push(NavTarget.AvatarPreview(username, url))
+                    override fun openAvatarPreview(name: String, url: String) {
+                        backstack.push(NavTarget.AvatarPreview(name, url))
                     }
                 }
                 createNode<RoomDetailsNode>(buildContext, listOf(roomDetailsCallback))
@@ -166,7 +166,7 @@ class RoomDetailsFlowNode @AssistedInject constructor(
                 val mimeType = MimeTypes.Images
                 val input = MediaViewerNode.Inputs(
                     mediaInfo = MediaInfo(
-                        name = navTarget.userName,
+                        name = navTarget.name,
                         mimeType = mimeType,
                         formattedFileSize = "",
                         fileExtension = ""

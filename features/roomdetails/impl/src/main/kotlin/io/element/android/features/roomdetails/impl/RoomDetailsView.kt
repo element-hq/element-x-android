@@ -91,7 +91,7 @@ fun RoomDetailsView(
     openRoomMemberList: () -> Unit,
     openRoomNotificationSettings: () -> Unit,
     invitePeople: () -> Unit,
-    openAvatarPreview: (username: String, url: String) -> Unit,
+    openAvatarPreview: (name: String, url: String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     fun onShareMember() {
