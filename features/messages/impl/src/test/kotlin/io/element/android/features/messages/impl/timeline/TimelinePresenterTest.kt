@@ -37,7 +37,6 @@ import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.item.event.EventReaction
-import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
 import io.element.android.libraries.matrix.api.timeline.item.event.ReactionSender
 import io.element.android.libraries.matrix.api.timeline.item.virtual.VirtualTimelineItem
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
@@ -205,7 +204,7 @@ class TimelinePresenterTest {
             consumeItemsUntilPredicate { it.timelineItems.size == 1 }
             // Mimics sending a message, and assert newEventState is FromMe
             timeline.updateTimelineItems { items ->
-                val event = anEventTimelineItem(content = aMessageContent(), localSendState = LocalEventSendState.Sent(AN_EVENT_ID))
+                val event = anEventTimelineItem(content = aMessageContent(), isOwn = true)
                 items + listOf(MatrixTimelineItem.Event(1, event))
             }
             consumeItemsUntilPredicate { it.timelineItems.size == 2 }
@@ -366,7 +365,7 @@ class TimelinePresenterTest {
         messagesNavigator: FakeMessagesNavigator = FakeMessagesNavigator(),
         endPollAction: EndPollAction = FakeEndPollAction(),
         sendPollResponseAction: SendPollResponseAction = FakeSendPollResponseAction(),
-        ): TimelinePresenter {
+    ): TimelinePresenter {
         return TimelinePresenter(
             timelineItemsFactory = timelineItemsFactory,
             room = FakeMatrixRoom(matrixTimeline = timeline),
