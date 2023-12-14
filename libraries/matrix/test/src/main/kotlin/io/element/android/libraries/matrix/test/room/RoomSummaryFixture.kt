@@ -191,5 +191,6 @@ fun aPollContent(
     maxSelections = 1u,
     answers = answers,
     votes = persistentMapOf(),
-    endTime = null
+    endTime = null,
+    isEdited = false,
 )

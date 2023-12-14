@@ -235,6 +235,7 @@ internal class TimelineItemContentPollFactoryTest {
         answers = persistentListOf(A_POLL_ANSWER_1, A_POLL_ANSWER_2, A_POLL_ANSWER_3, A_POLL_ANSWER_4),
         votes = votes,
         endTime = endTime,
+        isEdited = false,
     )
 
     private fun aTimelineItemPollContent(
@@ -253,6 +254,7 @@ internal class TimelineItemContentPollFactoryTest {
         answerItems = answerItems,
         pollKind = pollKind,
         isEnded = isEnded,
+        isEdited = false,
     )
 
     private fun aPollAnswerItem(

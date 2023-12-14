@@ -35,6 +35,7 @@ fun aTimelineItemPollContent(
     question: String = aPollQuestion(),
     answerItems: List<PollAnswerItem> = aPollAnswerItemList(),
     isEnded: Boolean = false,
+    isEdited: Boolean = false,
 ): TimelineItemPollContent {
     return TimelineItemPollContent(
         eventId = EventId("\$anEventId"),
@@ -42,5 +43,6 @@ fun aTimelineItemPollContent(
         question = question,
         answerItems = answerItems,
         isEnded = isEnded,
+        isEdited = isEdited,
     )
 }
