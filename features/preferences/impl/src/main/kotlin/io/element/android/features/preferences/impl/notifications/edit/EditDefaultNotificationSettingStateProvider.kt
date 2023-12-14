@@ -31,17 +31,20 @@ open class EditDefaultNotificationSettingStateProvider: PreviewParameterProvider
             anEditDefaultNotificationSettingsState(isOneToOne = true),
             anEditDefaultNotificationSettingsState(changeNotificationSettingAction = Async.Loading(Unit)),
             anEditDefaultNotificationSettingsState(changeNotificationSettingAction = Async.Failure(Throwable("error"))),
+            anEditDefaultNotificationSettingsState(displayMentionsOnlyDisclaimer = true),
         )
 }
 
 private fun anEditDefaultNotificationSettingsState(
     isOneToOne: Boolean = false,
-    changeNotificationSettingAction: Async<Unit> = Async.Uninitialized
+    changeNotificationSettingAction: Async<Unit> = Async.Uninitialized,
+    displayMentionsOnlyDisclaimer: Boolean = false,
 ) = EditDefaultNotificationSettingState(
     isOneToOne = isOneToOne,
     mode = RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY,
     roomsWithUserDefinedMode = persistentListOf(aRoomSummary()),
     changeNotificationSettingAction = changeNotificationSettingAction,
+    displayMentionsOnlyDisclaimer = displayMentionsOnlyDisclaimer,
     eventSink = {}
 )
 

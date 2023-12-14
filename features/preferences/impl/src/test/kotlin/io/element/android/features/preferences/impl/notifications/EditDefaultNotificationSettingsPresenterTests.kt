@@ -31,6 +31,7 @@ import io.element.android.libraries.matrix.test.notificationsettings.FakeNotific
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.matrix.test.room.aRoomSummaryDetail
 import io.element.android.libraries.matrix.test.roomlist.FakeRoomListService
+import io.element.android.tests.testutils.awaitLastSequentialItem
 import io.element.android.tests.testutils.consumeItemsUntilPredicate
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -51,6 +52,8 @@ class EditDefaultNotificationSettingsPresenterTests {
                 it.mode == RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY
             }.last()
             assertThat(loadedState.mode).isEqualTo(RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY)
+
+            assertThat(loadedState.displayMentionsOnlyDisclaimer).isFalse()
         }
     }
 
@@ -109,6 +112,20 @@ class EditDefaultNotificationSettingsPresenterTests {
                 it.changeNotificationSettingAction.isUninitialized()
             }.last()
             assertThat(clearErrorState.changeNotificationSettingAction.isUninitialized()).isTrue()
+        }
+    }
+
+    @Test
+    fun `present - display mentions only warning if homeserver does not support it`() = runTest {
+        val notificationSettingsService = FakeNotificationSettingsService().apply {
+            givenCanHomeServerPushEncryptedEventsToDeviceResult(Result.success(false))
+        }
+        val presenter = createEditDefaultNotificationSettingPresenter(notificationSettingsService)
+        notificationSettingsService.givenSetDefaultNotificationModeError(A_THROWABLE)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            assertThat(awaitLastSequentialItem().displayMentionsOnlyDisclaimer).isTrue()
         }
     }
 

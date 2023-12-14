@@ -116,6 +116,7 @@
         "screen_dm_details_.*",
         "screen_room_notification_settings_.*",
         "screen_notification_settings_edit_failed_updating_default_mode",
+        "screen_notification_settings_mentions_only_disclaimer",
         "screen_start_chat_error_starting_chat"
       ]
     },

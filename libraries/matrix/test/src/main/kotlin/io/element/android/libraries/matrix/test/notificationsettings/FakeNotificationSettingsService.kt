@@ -47,6 +47,7 @@ class FakeNotificationSettingsService(
     private var restoreDefaultNotificationModeError: Throwable? = null
     private var setDefaultNotificationModeError: Throwable? = null
     private var setAtRoomError: Throwable? = null
+    private var canHomeServerPushEncryptedEventsToDeviceResult = Result.success(true)
     override val notificationSettingsChangeFlow: SharedFlow<Unit>
         get() = _notificationSettingsStateFlow
 
@@ -163,6 +164,10 @@ class FakeNotificationSettingsService(
         return Result.success(if (roomNotificationModeIsDefault) listOf() else listOf(A_ROOM_ID.value))
     }
 
+    override suspend fun canHomeServerPushEncryptedEventsToDevice(): Result<Boolean> {
+        return canHomeServerPushEncryptedEventsToDeviceResult
+    }
+
     fun givenSetNotificationModeError(throwable: Throwable?) {
         setNotificationModeError = throwable
     }
@@ -177,5 +182,9 @@ class FakeNotificationSettingsService(
 
     fun givenSetDefaultNotificationModeError(throwable: Throwable?) {
         setDefaultNotificationModeError = throwable
+    }
+
+    fun givenCanHomeServerPushEncryptedEventsToDeviceResult(result: Result<Boolean>) {
+        canHomeServerPushEncryptedEventsToDeviceResult = result
     }
 }

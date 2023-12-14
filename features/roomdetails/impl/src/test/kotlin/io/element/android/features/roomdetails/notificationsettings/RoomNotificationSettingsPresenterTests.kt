@@ -27,6 +27,7 @@ import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_THROWABLE
 import io.element.android.libraries.matrix.test.notificationsettings.FakeNotificationSettingsService
+import io.element.android.tests.testutils.awaitLastSequentialItem
 import io.element.android.tests.testutils.consumeItemsUntilPredicate
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -41,6 +42,8 @@ class RoomNotificationSettingsPresenterTests {
             val initialState = awaitItem()
             assertThat(initialState.roomNotificationSettings.dataOrNull()).isNull()
             assertThat(initialState.defaultRoomNotificationMode).isNull()
+            val loadedState = awaitItem()
+            assertThat(loadedState.displayMentionsOnlyDisclaimer).isFalse()
             cancelAndIgnoreRemainingEvents()
         }
     }
@@ -159,6 +162,20 @@ class RoomNotificationSettingsPresenterTests {
             cancelAndIgnoreRemainingEvents()
         }
     }
+
+    @Test
+    fun `present - display mentions only warning if homeserver does not support it`() = runTest {
+        val notificationService = FakeNotificationSettingsService().apply {
+            givenCanHomeServerPushEncryptedEventsToDeviceResult(Result.success(false))
+        }
+        val presenter = createRoomNotificationSettingsPresenter(notificationService)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            assertThat(awaitLastSequentialItem().displayMentionsOnlyDisclaimer).isTrue()
+        }
+    }
+
     private fun createRoomNotificationSettingsPresenter(
         notificationSettingsService: FakeNotificationSettingsService = FakeNotificationSettingsService()
     ): RoomNotificationSettingsPresenter{
