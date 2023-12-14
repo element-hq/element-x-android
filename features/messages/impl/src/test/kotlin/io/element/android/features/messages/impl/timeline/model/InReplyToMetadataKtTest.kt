@@ -43,8 +43,8 @@ import io.element.android.libraries.matrix.api.timeline.item.event.VoiceMessageT
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.media.aMediaSource
-import io.element.android.libraries.matrix.test.room.aMessageContent
-import io.element.android.libraries.matrix.test.room.aPollContent
+import io.element.android.libraries.matrix.test.timeline.aMessageContent
+import io.element.android.libraries.matrix.test.timeline.aPollContent
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailInfo
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailType
 import kotlinx.coroutines.test.runTest

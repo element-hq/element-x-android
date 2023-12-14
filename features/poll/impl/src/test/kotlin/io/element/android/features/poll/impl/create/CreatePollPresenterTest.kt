@@ -25,21 +25,17 @@ import im.vector.app.features.analytics.plan.Composer
 import im.vector.app.features.analytics.plan.PollCreation
 import io.element.android.features.messages.test.FakeMessageComposerContext
 import io.element.android.features.poll.api.create.CreatePollMode
+import io.element.android.features.poll.impl.aPollTimeline
+import io.element.android.features.poll.impl.anOngoingPollContent
 import io.element.android.features.poll.impl.data.PollRepository
-import io.element.android.libraries.matrix.api.poll.PollAnswer
 import io.element.android.libraries.matrix.api.poll.PollKind
 import io.element.android.libraries.matrix.api.room.MatrixRoom
-import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.item.event.PollContent
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
-import io.element.android.libraries.matrix.test.room.SavePollInvocation
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
-import io.element.android.libraries.matrix.test.room.aPollContent
-import io.element.android.libraries.matrix.test.room.anEventTimelineItem
-import io.element.android.libraries.matrix.test.timeline.FakeMatrixTimeline
+import io.element.android.libraries.matrix.test.room.SavePollInvocation
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.tests.testutils.WarmUpRule
-import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
@@ -52,8 +48,12 @@ class CreatePollPresenterTest {
 
     private val pollEventId = AN_EVENT_ID
     private var navUpInvocationsCount = 0
-    private val existingPoll = anExistingPoll()
-    private val fakeMatrixRoom = createFakeMatrixRoom(existingPoll)
+    private val existingPoll = anOngoingPollContent()
+    private val fakeMatrixRoom = FakeMatrixRoom(
+        matrixTimeline = aPollTimeline(
+            mapOf(pollEventId to existingPoll)
+        )
+    )
     private val fakeAnalyticsService = FakeAnalyticsService()
     private val fakeMessageComposerContext = FakeMessageComposerContext()
 
@@ -80,7 +80,9 @@ class CreatePollPresenterTest {
 
     @Test
     fun `in edit mode, if poll doesn't exist, error is tracked and screen is closed`() = runTest {
-        val room = createFakeMatrixRoom(existingPoll = null)
+        val room = FakeMatrixRoom(
+            matrixTimeline = aPollTimeline()
+        )
         val presenter = createCreatePollPresenter(mode = CreatePollMode.EditPoll(AN_EVENT_ID), room = room)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -475,7 +477,6 @@ class CreatePollPresenterTest {
         }
     }
 
-
     private suspend fun TurbineTestContext<CreatePollState>.awaitDefaultItem() =
         awaitItem().apply {
             assertThat(canSave).isFalse()
@@ -518,34 +519,7 @@ class CreatePollPresenterTest {
         navigateUp = { navUpInvocationsCount++ },
         mode = mode,
     )
-
-    private fun createFakeMatrixRoom(
-        existingPoll: PollContent? = anExistingPoll(),
-    ) = FakeMatrixRoom(
-        matrixTimeline = FakeMatrixTimeline(
-            initialTimelineItems = existingPoll?.let {
-                listOf(
-                    MatrixTimelineItem.Event(
-                        0,
-                        anEventTimelineItem(
-                            eventId = pollEventId,
-                            content = it,
-                        )
-                    )
-                )
-            }.orEmpty()
-        )
-    )
 }
-
-private fun anExistingPoll() = aPollContent(
-    question = "Do you like polls?",
-    answers = persistentListOf(
-        PollAnswer("1", "Yes"),
-        PollAnswer("2", "No"),
-        PollAnswer("2", "Maybe"),
-    ),
-)
 
 private fun PollContent.expectedAnswersState() = answers.map { answer ->
     Answer(

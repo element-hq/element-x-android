@@ -92,6 +92,7 @@ fun RoomDetailsView(
     openRoomNotificationSettings: () -> Unit,
     invitePeople: () -> Unit,
     openAvatarPreview: (name: String, url: String) -> Unit,
+    openPollHistory: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     fun onShareMember() {
@@ -174,6 +175,10 @@ fun RoomDetailsView(
                     )
                 }
             }
+
+            PollsSection(
+                openPollHistory = openPollHistory
+            )
 
             if (state.isEncrypted) {
                 SecuritySection()
@@ -380,6 +385,20 @@ private fun InviteSection(
 }
 
 @Composable
+private fun PollsSection(
+    openPollHistory: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    PreferenceCategory(modifier = modifier) {
+        ListItem(
+            headlineContent = { Text(stringResource(R.string.screen_polls_history_title)) },
+            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Polls)),
+            onClick = openPollHistory,
+        )
+    }
+}
+
+@Composable
 private fun SecuritySection(modifier: Modifier = Modifier) {
     PreferenceCategory(title = stringResource(R.string.screen_room_details_security_title), modifier = modifier) {
         ListItem(
@@ -424,5 +443,6 @@ private fun ContentToPreview(state: RoomDetailsState) {
         openRoomNotificationSettings = {},
         invitePeople = {},
         openAvatarPreview = { _, _ -> },
+        openPollHistory = {},
     )
 }

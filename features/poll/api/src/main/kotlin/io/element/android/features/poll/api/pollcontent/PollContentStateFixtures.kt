@@ -14,9 +14,11 @@
  * limitations under the License.
  */
 
-package io.element.android.features.poll.api
+package io.element.android.features.poll.api.pollcontent
 
 import io.element.android.libraries.matrix.api.poll.PollAnswer
+import io.element.android.libraries.matrix.api.poll.PollKind
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
 fun aPollQuestion() = "What type of food should we have at the party?"
@@ -78,4 +80,26 @@ fun aPollAnswerItem(
     isDisclosed = isDisclosed,
     votesCount = votesCount,
     percentage = percentage
+)
+
+fun aPollContentState(
+    isMine: Boolean = false,
+    isEnded: Boolean = false,
+    isDisclosed: Boolean = true,
+    hasVotes: Boolean = true,
+    question: String = aPollQuestion(),
+    pollKind: PollKind = PollKind.Disclosed,
+    answerItems: ImmutableList<PollAnswerItem> = aPollAnswerItemList(
+        isEnded = isEnded,
+        isDisclosed = isDisclosed,
+        hasVotes = hasVotes
+    ),
+) = PollContentState(
+    eventId = null,
+    question = question,
+    answerItems = answerItems,
+    pollKind = pollKind,
+    isPollEditable = isMine && !isEnded,
+    isPollEnded = isEnded,
+    isMine = isMine,
 )

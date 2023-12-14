@@ -40,6 +40,7 @@ dependencies {
     implementation(projects.libraries.designsystem)
     implementation(projects.services.analytics.api)
     implementation(projects.features.messages.api)
+    implementation(projects.libraries.dateformatter.api)
     implementation(projects.libraries.uiStrings)
 
     testImplementation(libs.test.junit)
@@ -51,6 +52,8 @@ dependencies {
     testImplementation(projects.services.analytics.test)
     testImplementation(projects.features.messages.test)
     testImplementation(projects.tests.testutils)
+    testImplementation(projects.libraries.dateformatter.test)
+    testImplementation(projects.features.poll.test)
 
     ksp(libs.showkase.processor)
 }

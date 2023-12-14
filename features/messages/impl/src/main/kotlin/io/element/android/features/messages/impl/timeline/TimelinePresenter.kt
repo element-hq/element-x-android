@@ -30,14 +30,14 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import im.vector.app.features.analytics.plan.PollEnd
-import im.vector.app.features.analytics.plan.PollVote
 import io.element.android.features.messages.impl.MessagesNavigator
 import io.element.android.features.messages.impl.timeline.factories.TimelineItemsFactory
 import io.element.android.features.messages.impl.timeline.model.NewEventState
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.session.SessionState
 import io.element.android.features.messages.impl.voicemessages.timeline.RedactedVoiceMessageManager
+import io.element.android.features.poll.api.actions.EndPollAction
+import io.element.android.features.poll.api.actions.SendPollResponseAction
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.featureflag.api.FeatureFlagService
@@ -53,7 +53,6 @@ import io.element.android.libraries.matrix.api.timeline.item.event.TimelineItemE
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatus
 import io.element.android.libraries.matrix.ui.room.canSendMessageAsState
-import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.launchIn
@@ -70,11 +69,12 @@ class TimelinePresenter @AssistedInject constructor(
     private val dispatchers: CoroutineDispatchers,
     private val appScope: CoroutineScope,
     @Assisted private val navigator: MessagesNavigator,
-    private val analyticsService: AnalyticsService,
     private val verificationService: SessionVerificationService,
     private val encryptionService: EncryptionService,
     private val featureFlagService: FeatureFlagService,
     private val redactedVoiceMessageManager: RedactedVoiceMessageManager,
+    private val sendPollResponseAction: SendPollResponseAction,
+    private val endPollAction: EndPollAction,
 ) : Presenter<TimelineState> {
 
     @AssistedFactory
@@ -133,18 +133,15 @@ class TimelinePresenter @AssistedInject constructor(
                     )
                 }
                 is TimelineEvents.PollAnswerSelected -> appScope.launch {
-                    room.sendPollResponse(
+                    sendPollResponseAction.execute(
                         pollStartId = event.pollStartId,
-                        answers = listOf(event.answerId),
+                        answerId = event.answerId
                     )
-                    analyticsService.capture(PollVote())
                 }
                 is TimelineEvents.PollEndClicked -> appScope.launch {
-                    room.endPoll(
+                    endPollAction.execute(
                         pollStartId = event.pollStartId,
-                        text = "The poll with event id: ${event.pollStartId} has ended."
                     )
-                    analyticsService.capture(PollEnd())
                 }
                 is TimelineEvents.PollEditClicked ->
                     navigator.onEditPollClicked(event.pollStartId)

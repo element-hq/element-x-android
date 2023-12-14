@@ -521,8 +521,6 @@ private fun MessageEventBubbleContent(
             ) {
                 TimelineItemEventContentView(
                     content = event.content,
-                    isMine = event.isMine,
-                    isEditable = event.isEditable,
                     onLinkClicked = { url ->
                         when (val permalink = PermalinkParser.parse(Uri.parse(url))) {
                             is PermalinkData.UserLink -> {

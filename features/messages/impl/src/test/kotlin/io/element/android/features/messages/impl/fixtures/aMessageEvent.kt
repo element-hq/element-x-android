@@ -16,6 +16,7 @@
 
 package io.element.android.features.messages.impl.fixtures
 
+import io.element.android.features.messages.impl.timeline.aTimelineItemDebugInfo
 import io.element.android.features.messages.impl.timeline.aTimelineItemReactions
 import io.element.android.features.messages.impl.timeline.model.InReplyToDetails
 import io.element.android.features.messages.impl.timeline.model.ReadReceiptData
@@ -32,7 +33,6 @@ import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_MESSAGE
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.A_USER_NAME
-import io.element.android.libraries.matrix.test.room.aTimelineItemDebugInfo
 import kotlinx.collections.immutable.toImmutableList
 
 internal fun aMessageEvent(

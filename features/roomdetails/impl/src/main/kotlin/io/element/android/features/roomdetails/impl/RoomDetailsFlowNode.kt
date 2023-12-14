@@ -29,6 +29,7 @@ import com.bumble.appyx.navmodel.backstack.operation.push
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
+import io.element.android.features.poll.api.history.PollHistoryEntryPoint
 import io.element.android.features.roomdetails.api.RoomDetailsEntryPoint
 import io.element.android.features.roomdetails.impl.edit.RoomDetailsEditNode
 import io.element.android.features.roomdetails.impl.invite.RoomInviteMembersNode
@@ -52,6 +53,7 @@ import kotlinx.parcelize.Parcelize
 class RoomDetailsFlowNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
+    private val pollHistoryEntryPoint: PollHistoryEntryPoint,
 ) : BackstackNode<RoomDetailsFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = plugins.filterIsInstance<RoomDetailsEntryPoint.Params>().first().initialElement.toNavTarget(),
@@ -88,6 +90,9 @@ class RoomDetailsFlowNode @AssistedInject constructor(
 
         @Parcelize
         data class AvatarPreview(val name: String, val avatarUrl: String) : NavTarget
+
+        @Parcelize
+        data object PollHistory : NavTarget
     }
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
@@ -112,6 +117,10 @@ class RoomDetailsFlowNode @AssistedInject constructor(
 
                     override fun openAvatarPreview(name: String, url: String) {
                         backstack.push(NavTarget.AvatarPreview(name, url))
+                    }
+
+                    override fun openPollHistory() {
+                        backstack.push(NavTarget.PollHistory)
                     }
                 }
                 createNode<RoomDetailsNode>(buildContext, listOf(roomDetailsCallback))
@@ -177,6 +186,10 @@ class RoomDetailsFlowNode @AssistedInject constructor(
                     canShare = false,
                 )
                 createNode<AvatarPreviewNode>(buildContext, listOf(input))
+            }
+
+            is NavTarget.PollHistory -> {
+                pollHistoryEntryPoint.createNode(this, buildContext)
             }
         }
     }

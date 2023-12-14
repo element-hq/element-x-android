@@ -98,6 +98,8 @@ dependencies {
     testImplementation(libs.test.mockk)
     testImplementation(libs.test.junitext)
     testImplementation(libs.test.robolectric)
+    testImplementation(projects.features.poll.test)
+    testImplementation(projects.features.poll.impl)
     testImplementation(libs.androidx.compose.ui.test.junit)
     testReleaseImplementation(libs.androidx.compose.ui.test.manifest)
 

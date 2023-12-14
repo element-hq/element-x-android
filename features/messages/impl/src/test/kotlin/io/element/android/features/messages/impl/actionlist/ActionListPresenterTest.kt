@@ -29,7 +29,7 @@ import io.element.android.features.messages.impl.timeline.model.event.aTimelineI
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemPollContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemStateEventContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemVoiceContent
-import io.element.android.features.poll.api.aPollAnswerItemList
+import io.element.android.features.poll.api.pollcontent.aPollAnswerItemList
 import io.element.android.libraries.featureflag.test.InMemoryPreferencesStore
 import io.element.android.libraries.matrix.test.A_MESSAGE
 import io.element.android.tests.testutils.WarmUpRule

@@ -18,6 +18,7 @@ package io.element.android.features.messages.impl.timeline.groups
 
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.messages.impl.fixtures.aMessageEvent
+import io.element.android.features.messages.impl.timeline.aTimelineItemDebugInfo
 import io.element.android.features.messages.impl.timeline.aTimelineItemReactions
 import io.element.android.features.messages.impl.timeline.model.ReadReceiptData
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
@@ -28,7 +29,6 @@ import io.element.android.libraries.designsystem.components.avatar.anAvatarData
 import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_USER_ID
-import io.element.android.libraries.matrix.test.room.aTimelineItemDebugInfo
 import kotlinx.collections.immutable.toImmutableList
 import org.junit.Test
 

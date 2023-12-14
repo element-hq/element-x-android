@@ -20,7 +20,7 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.item.virtual.VirtualTimelineItem
-import io.element.android.libraries.matrix.test.room.anEventTimelineItem
+import io.element.android.libraries.matrix.test.timeline.anEventTimelineItem
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestScope

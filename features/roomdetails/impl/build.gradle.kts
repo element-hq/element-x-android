@@ -53,6 +53,7 @@ dependencies {
     implementation(projects.features.leaveroom.api)
     implementation(projects.features.createroom.api)
     implementation(projects.services.analytics.api)
+    implementation(projects.features.poll.api)
 
     testImplementation(libs.test.junit)
     testImplementation(libs.coroutines.test)

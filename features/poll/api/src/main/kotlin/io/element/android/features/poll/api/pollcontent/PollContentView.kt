@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.features.poll.api
+package io.element.android.features.poll.api.pollcontent
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -48,6 +48,29 @@ import io.element.android.libraries.matrix.api.poll.PollAnswer
 import io.element.android.libraries.matrix.api.poll.PollKind
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
+
+@Composable
+fun PollContentView(
+    state: PollContentState,
+    onAnswerSelected: (pollStartId: EventId, answerId: String) -> Unit,
+    onPollEdit: (pollStartId: EventId) -> Unit,
+    onPollEnd: (pollStartId: EventId) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    PollContentView(
+        eventId = state.eventId,
+        question = state.question,
+        answerItems = state.answerItems,
+        pollKind = state.pollKind,
+        isPollEditable = state.isPollEditable,
+        isPollEnded = state.isPollEnded,
+        isMine = state.isMine,
+        onPollEdit = onPollEdit,
+        onAnswerSelected = onAnswerSelected,
+        onPollEnd = onPollEnd,
+        modifier = modifier,
+    )
+}
 
 @Composable
 fun PollContentView(

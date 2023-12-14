@@ -59,7 +59,7 @@ class TimelineItemContentFactory @Inject constructor(
             is RoomMembershipContent -> roomMembershipFactory.create(eventTimelineItem)
             is StateContent -> stateFactory.create(eventTimelineItem)
             is StickerContent -> stickerFactory.create(itemContent)
-            is PollContent -> pollFactory.create(itemContent, eventTimelineItem.eventId)
+            is PollContent -> pollFactory.create(eventTimelineItem, itemContent)
             is UnableToDecryptContent -> utdFactory.create(itemContent)
             is UnknownContent -> TimelineItemUnknownContent
         }

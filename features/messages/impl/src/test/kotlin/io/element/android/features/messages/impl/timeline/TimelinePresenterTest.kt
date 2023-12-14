@@ -20,10 +20,7 @@ import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import im.vector.app.features.analytics.plan.PollEnd
-import im.vector.app.features.analytics.plan.PollVote
 import io.element.android.features.messages.impl.FakeMessagesNavigator
-import io.element.android.features.messages.impl.fixtures.aMessageEvent
 import io.element.android.features.messages.impl.fixtures.aTimelineItemsFactory
 import io.element.android.features.messages.impl.timeline.factories.TimelineItemsFactory
 import io.element.android.features.messages.impl.timeline.model.NewEventState
@@ -32,8 +29,11 @@ import io.element.android.features.messages.impl.timeline.session.SessionState
 import io.element.android.features.messages.impl.voicemessages.timeline.FakeRedactedVoiceMessageManager
 import io.element.android.features.messages.impl.voicemessages.timeline.RedactedVoiceMessageManager
 import io.element.android.features.messages.impl.voicemessages.timeline.aRedactedMatrixTimeline
+import io.element.android.features.poll.api.actions.EndPollAction
+import io.element.android.features.poll.api.actions.SendPollResponseAction
+import io.element.android.features.poll.test.actions.FakeEndPollAction
+import io.element.android.features.poll.test.actions.FakeSendPollResponseAction
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
-import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.item.event.EventReaction
@@ -43,18 +43,16 @@ import io.element.android.libraries.matrix.api.timeline.item.virtual.VirtualTime
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.encryption.FakeEncryptionService
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
-import io.element.android.libraries.matrix.test.room.aMessageContent
-import io.element.android.libraries.matrix.test.room.anEventTimelineItem
 import io.element.android.libraries.matrix.test.timeline.FakeMatrixTimeline
+import io.element.android.libraries.matrix.test.timeline.aMessageContent
+import io.element.android.libraries.matrix.test.timeline.anEventTimelineItem
 import io.element.android.libraries.matrix.test.verification.FakeSessionVerificationService
 import io.element.android.libraries.matrix.ui.components.aMatrixUserList
-import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.awaitLastSequentialItem
 import io.element.android.tests.testutils.awaitWithLatch
 import io.element.android.tests.testutils.consumeItemsUntilPredicate
 import io.element.android.tests.testutils.testCoroutineDispatchers
-import io.element.android.tests.testutils.waitForPredicate
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.test.TestScope
@@ -295,12 +293,10 @@ class TimelinePresenterTest {
     }
 
     @Test
-    fun `present - PollAnswerSelected event calls into rust room api and analytics`() = runTest {
-        val room = FakeMatrixRoom()
-        val analyticsService = FakeAnalyticsService()
+    fun `present - PollAnswerSelected event`() = runTest {
+        val sendPollResponseAction = FakeSendPollResponseAction()
         val presenter = createTimelinePresenter(
-            room = room,
-            analyticsService = analyticsService,
+            sendPollResponseAction = sendPollResponseAction,
         )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -309,34 +305,23 @@ class TimelinePresenterTest {
             initialState.eventSink.invoke(TimelineEvents.PollAnswerSelected(AN_EVENT_ID, "anAnswerId"))
         }
         delay(1)
-        assertThat(room.sendPollResponseInvocations.size).isEqualTo(1)
-        assertThat(room.sendPollResponseInvocations.first().answers).isEqualTo(listOf("anAnswerId"))
-        assertThat(room.sendPollResponseInvocations.first().pollStartId).isEqualTo(AN_EVENT_ID)
-        assertThat(analyticsService.capturedEvents.size).isEqualTo(1)
-        assertThat(analyticsService.capturedEvents.last()).isEqualTo(PollVote())
+        sendPollResponseAction.verifyExecutionCount(1)
     }
 
     @Test
-    fun `present - PollEndClicked event calls into rust room api and analytics`() = runTest {
-        val room = FakeMatrixRoom()
-        val analyticsService = FakeAnalyticsService()
+    fun `present - PollEndClicked event`() = runTest {
+        val endPollAction = FakeEndPollAction()
         val presenter = createTimelinePresenter(
-            room = room,
-            analyticsService = analyticsService,
+            endPollAction = endPollAction,
         )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            initialState.eventSink(TimelineEvents.PollEndClicked(aMessageEvent().eventId!!))
-            waitForPredicate { room.endPollInvocations.size == 1 }
-            cancelAndIgnoreRemainingEvents()
-            assertThat(room.endPollInvocations.size).isEqualTo(1)
-            assertThat(room.endPollInvocations.first().pollStartId).isEqualTo(AN_EVENT_ID)
-            assertThat(room.endPollInvocations.first().text).isEqualTo("The poll with event id: \$anEventId has ended.")
-            assertThat(analyticsService.capturedEvents.size).isEqualTo(1)
-            assertThat(analyticsService.capturedEvents.last()).isEqualTo(PollEnd())
+            initialState.eventSink.invoke(TimelineEvents.PollEndClicked(AN_EVENT_ID))
         }
+        delay(1)
+        endPollAction.verifyExecutionCount(1)
     }
 
     @Test
@@ -379,36 +364,21 @@ class TimelinePresenterTest {
         timelineItemsFactory: TimelineItemsFactory = aTimelineItemsFactory(),
         redactedVoiceMessageManager: RedactedVoiceMessageManager = FakeRedactedVoiceMessageManager(),
         messagesNavigator: FakeMessagesNavigator = FakeMessagesNavigator(),
-    ): TimelinePresenter {
+        endPollAction: EndPollAction = FakeEndPollAction(),
+        sendPollResponseAction: SendPollResponseAction = FakeSendPollResponseAction(),
+        ): TimelinePresenter {
         return TimelinePresenter(
             timelineItemsFactory = timelineItemsFactory,
             room = FakeMatrixRoom(matrixTimeline = timeline),
             dispatchers = testCoroutineDispatchers(),
             appScope = this,
             navigator = messagesNavigator,
-            analyticsService = FakeAnalyticsService(),
             encryptionService = FakeEncryptionService(),
             verificationService = FakeSessionVerificationService(),
             featureFlagService = FakeFeatureFlagService(),
             redactedVoiceMessageManager = redactedVoiceMessageManager,
-        )
-    }
-
-    private fun TestScope.createTimelinePresenter(
-        room: MatrixRoom,
-        analyticsService: FakeAnalyticsService = FakeAnalyticsService(),
-    ): TimelinePresenter {
-        return TimelinePresenter(
-            timelineItemsFactory = aTimelineItemsFactory(),
-            room = room,
-            dispatchers = testCoroutineDispatchers(),
-            appScope = this,
-            navigator = FakeMessagesNavigator(),
-            analyticsService = analyticsService,
-            encryptionService = FakeEncryptionService(),
-            verificationService = FakeSessionVerificationService(),
-            featureFlagService = FakeFeatureFlagService(),
-            redactedVoiceMessageManager = FakeRedactedVoiceMessageManager(),
+            endPollAction = endPollAction,
+            sendPollResponseAction = sendPollResponseAction,
         )
     }
 }

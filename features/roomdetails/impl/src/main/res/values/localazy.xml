@@ -5,6 +5,7 @@
     <item quantity="other">"%1$d people"</item>
   </plurals>
   <string name="screen_notification_settings_edit_failed_updating_default_mode">"An error occurred while updating the notification setting."</string>
+  <string name="screen_polls_history_title">"Polls"</string>
   <string name="screen_notification_settings_mentions_only_disclaimer">"Your homeserver does not support this option in encrypted rooms, you may not get notified in some rooms."</string>
   <string name="screen_room_details_add_topic_title">"Add topic"</string>
   <string name="screen_room_details_already_a_member">"Already a member"</string>

@@ -50,9 +50,9 @@ import io.element.android.libraries.matrix.api.timeline.item.event.VideoMessageT
 import io.element.android.libraries.matrix.api.timeline.item.event.VoiceMessageType
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.FakeMatrixClient
-import io.element.android.libraries.matrix.test.room.aPollContent
-import io.element.android.libraries.matrix.test.room.aProfileChangeMessageContent
-import io.element.android.libraries.matrix.test.room.anEventTimelineItem
+import io.element.android.libraries.matrix.test.timeline.aPollContent
+import io.element.android.libraries.matrix.test.timeline.aProfileChangeMessageContent
+import io.element.android.libraries.matrix.test.timeline.anEventTimelineItem
 import io.element.android.services.toolbox.impl.strings.AndroidStringProvider
 import org.junit.Before
 import org.junit.Test
