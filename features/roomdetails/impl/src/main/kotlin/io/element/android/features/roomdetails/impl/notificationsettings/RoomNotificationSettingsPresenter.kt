@@ -90,7 +90,7 @@ class RoomNotificationSettingsPresenter @AssistedInject constructor(
             getDefaultRoomNotificationMode(defaultRoomNotificationMode)
             fetchNotificationSettings(pendingRoomNotificationMode, roomNotificationSettings)
             observeNotificationSettings(pendingRoomNotificationMode, roomNotificationSettings)
-            shouldDisplayMentionsOnlyDisclaimer = !notificationSettingsService.canHomeServerPushEncryptedEventsToDevice().getOrDefault(true)
+            shouldDisplayMentionsOnlyDisclaimer = room.isEncrypted && !notificationSettingsService.canHomeServerPushEncryptedEventsToDevice().getOrDefault(true)
         }
 
         fun handleEvents(event: RoomNotificationSettingsEvents) {

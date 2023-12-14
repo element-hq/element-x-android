@@ -121,7 +121,6 @@ class EditDefaultNotificationSettingsPresenterTests {
             givenCanHomeServerPushEncryptedEventsToDeviceResult(Result.success(false))
         }
         val presenter = createEditDefaultNotificationSettingPresenter(notificationSettingsService)
-        notificationSettingsService.givenSetDefaultNotificationModeError(A_THROWABLE)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
