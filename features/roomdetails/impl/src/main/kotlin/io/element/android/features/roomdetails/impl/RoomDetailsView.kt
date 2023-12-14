@@ -16,6 +16,7 @@
 
 package io.element.android.features.roomdetails.impl
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -120,7 +121,12 @@ fun RoomDetailsView(
                         avatarUrl = state.roomAvatarUrl,
                         roomId = state.roomId,
                         roomName = state.roomName,
-                        roomAlias = state.roomAlias
+                        roomAlias = state.roomAlias,
+                        openAvatarPreview = {
+                            if (state.roomAvatarUrl != null) {
+                                openAvatarPreview(state.roomName, state.roomAvatarUrl)
+                            }
+                        },
                     )
                     MainActionsSection(
                         state = state,
@@ -265,6 +271,7 @@ private fun RoomHeaderSection(
     roomId: String,
     roomName: String,
     roomAlias: String?,
+    openAvatarPreview: (url: String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -275,7 +282,9 @@ private fun RoomHeaderSection(
     ) {
         Avatar(
             avatarData = AvatarData(roomId, roomName, avatarUrl, AvatarSize.RoomHeader),
-            modifier = Modifier.size(70.dp)
+            modifier = Modifier
+                .size(70.dp)
+                .clickable(enabled = avatarUrl != null) { openAvatarPreview(avatarUrl!!) }
         )
         Spacer(modifier = Modifier.height(24.dp))
         Text(
