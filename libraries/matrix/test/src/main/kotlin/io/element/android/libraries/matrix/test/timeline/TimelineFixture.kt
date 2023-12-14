@@ -129,6 +129,7 @@ fun aPollContent(
     maxSelections: ULong = 1u,
     votes: ImmutableMap<String, ImmutableList<UserId>> = persistentMapOf(),
     endTime: ULong? = null,
+    isEdited: Boolean = false,
 ) = PollContent(
     question = question,
     kind = kind,
@@ -136,4 +137,5 @@ fun aPollContent(
     answers = answers,
     votes = votes,
     endTime = endTime,
+    isEdited = isEdited,
 )
