@@ -14,25 +14,10 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.matrix.api.room
+package io.element.android.libraries.matrix.api.timeline
 
-import io.element.android.libraries.matrix.api.core.UserId
-
-data class RoomMember(
-    val userId: UserId,
-    val displayName: String?,
-    val avatarUrl: String?,
-    val membership: RoomMembershipState,
-    val isNameAmbiguous: Boolean,
-    val powerLevel: Long,
-    val normalizedPowerLevel: Long,
-    val isIgnored: Boolean,
-)
-
-enum class RoomMembershipState {
-    BAN, INVITE, JOIN, KNOCK, LEAVE
-}
-
-fun RoomMember.getBestName(): String {
-    return displayName?.takeIf { it.isNotEmpty() } ?: userId.value
+enum class ReceiptType {
+    READ,
+    READ_PRIVATE,
+    FULLY_READ;
 }

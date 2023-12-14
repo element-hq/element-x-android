@@ -52,7 +52,7 @@ class RoomDetailsNode @AssistedInject constructor(
         fun openInviteMembers()
         fun editRoomDetails()
         fun openRoomNotificationSettings()
-        fun openAvatarPreview(username: String, url: String)
+        fun openAvatarPreview(name: String, url: String)
         fun openPollHistory()
     }
 
@@ -116,8 +116,8 @@ class RoomDetailsNode @AssistedInject constructor(
         callbacks.forEach { it.editRoomDetails() }
     }
 
-    private fun openAvatarPreview(username: String, url: String) {
-        callbacks.forEach { it.openAvatarPreview(username, url) }
+    private fun openAvatarPreview(name: String, url: String) {
+        callbacks.forEach { it.openAvatarPreview(name, url) }
     }
 
     @Composable

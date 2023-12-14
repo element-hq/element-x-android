@@ -44,5 +44,5 @@ interface MatrixTimeline : AutoCloseable {
     suspend fun paginateBackwards(requestSize: Int): Result<Unit>
     suspend fun paginateBackwards(requestSize: Int, untilNumberOfItems: Int): Result<Unit>
     suspend fun fetchDetailsForEvent(eventId: EventId): Result<Unit>
-    suspend fun sendReadReceipt(eventId: EventId): Result<Unit>
+    suspend fun sendReadReceipt(eventId: EventId, receiptType: ReceiptType): Result<Unit>
 }
