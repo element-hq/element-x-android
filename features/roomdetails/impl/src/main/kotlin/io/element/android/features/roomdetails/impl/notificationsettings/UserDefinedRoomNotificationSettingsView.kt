@@ -66,6 +66,7 @@ fun UserDefinedRoomNotificationSettingsView(
                 RoomNotificationSettingsOptions(
                     selected = state.displayNotificationMode,
                     enabled = !state.displayIsDefault.orTrue(),
+                    displayMentionsOnlyDisclaimer = state.displayMentionsOnlyDisclaimer,
                     onOptionSelected = {
                         state.eventSink(RoomNotificationSettingsEvents.RoomNotificationModeChanged(it.mode))
                     },

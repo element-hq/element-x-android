@@ -133,10 +133,13 @@ private fun RoomSpecificNotificationSettingsView(
                             }
                             RoomNotificationMode.MUTE -> stringResource(id = CommonStrings.common_mute)
                         }
+                        val displayMentionsOnlyDisclaimer = state.displayMentionsOnlyDisclaimer
+                            && state.defaultRoomNotificationMode == RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY
                         RoomNotificationSettingsOption(
                             roomNotificationSettingsItem = RoomNotificationSettingsItem(state.defaultRoomNotificationMode, defaultModeTitle),
                             isSelected = true,
                             onOptionSelected = { },
+                            displayMentionsOnlyDisclaimer = displayMentionsOnlyDisclaimer,
                             enabled = true
                         )
                     }
@@ -146,6 +149,7 @@ private fun RoomSpecificNotificationSettingsView(
                     RoomNotificationSettingsOptions(
                         selected = state.displayNotificationMode,
                         enabled = !state.displayIsDefault.orTrue(),
+                        displayMentionsOnlyDisclaimer = state.displayMentionsOnlyDisclaimer,
                         onOptionSelected = {
                             state.eventSink(RoomNotificationSettingsEvents.RoomNotificationModeChanged(it.mode))
                         },

@@ -30,12 +30,14 @@ internal class RoomNotificationSettingsStateProvider : PreviewParameterProvider<
             aRoomNotificationSettingsState(setNotificationSettingAction = Async.Failure(Throwable("error"))),
             aRoomNotificationSettingsState(restoreDefaultAction = Async.Loading(Unit)),
             aRoomNotificationSettingsState(restoreDefaultAction = Async.Failure(Throwable("error"))),
+            aRoomNotificationSettingsState(displayMentionsOnlyDisclaimer = true)
         )
 
     private fun aRoomNotificationSettingsState(
         isDefault: Boolean = true,
         setNotificationSettingAction: Async<Unit> = Async.Uninitialized,
         restoreDefaultAction: Async<Unit> = Async.Uninitialized,
+        displayMentionsOnlyDisclaimer: Boolean = false,
     ): RoomNotificationSettingsState {
         return RoomNotificationSettingsState(
             showUserDefinedSettingStyle = false,
@@ -48,6 +50,7 @@ internal class RoomNotificationSettingsStateProvider : PreviewParameterProvider<
             defaultRoomNotificationMode = RoomNotificationMode.ALL_MESSAGES,
             setNotificationSettingAction = setNotificationSettingAction,
             restoreDefaultAction = restoreDefaultAction,
+            displayMentionsOnlyDisclaimer = displayMentionsOnlyDisclaimer,
             eventSink = { },
         )
     }

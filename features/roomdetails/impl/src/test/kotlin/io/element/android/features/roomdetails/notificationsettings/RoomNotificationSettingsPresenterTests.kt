@@ -27,6 +27,8 @@ import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_THROWABLE
 import io.element.android.libraries.matrix.test.notificationsettings.FakeNotificationSettingsService
+import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
+import io.element.android.tests.testutils.awaitLastSequentialItem
 import io.element.android.tests.testutils.consumeItemsUntilPredicate
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -41,6 +43,8 @@ class RoomNotificationSettingsPresenterTests {
             val initialState = awaitItem()
             assertThat(initialState.roomNotificationSettings.dataOrNull()).isNull()
             assertThat(initialState.defaultRoomNotificationMode).isNull()
+            val loadedState = awaitItem()
+            assertThat(loadedState.displayMentionsOnlyDisclaimer).isFalse()
             cancelAndIgnoreRemainingEvents()
         }
     }
@@ -159,10 +163,39 @@ class RoomNotificationSettingsPresenterTests {
             cancelAndIgnoreRemainingEvents()
         }
     }
+
+    @Test
+    fun `present - display mentions only warning for a room if homeserver does not support it and it's encrypted`() = runTest {
+        val notificationService = FakeNotificationSettingsService().apply {
+            givenCanHomeServerPushEncryptedEventsToDeviceResult(Result.success(false))
+        }
+        val room = aMatrixRoom(notificationSettingsService = notificationService, isEncrypted = true)
+        val presenter = createRoomNotificationSettingsPresenter(notificationService, room)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            assertThat(awaitLastSequentialItem().displayMentionsOnlyDisclaimer).isTrue()
+        }
+    }
+
+    @Test
+    fun `present - do not display mentions only warning for a room it's not encrypted`() = runTest {
+        val notificationService = FakeNotificationSettingsService().apply {
+            givenCanHomeServerPushEncryptedEventsToDeviceResult(Result.success(false))
+        }
+        val room = aMatrixRoom(notificationSettingsService = notificationService, isEncrypted = false)
+        val presenter = createRoomNotificationSettingsPresenter(notificationService, room)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            assertThat(awaitLastSequentialItem().displayMentionsOnlyDisclaimer).isFalse()
+        }
+    }
+
     private fun createRoomNotificationSettingsPresenter(
-        notificationSettingsService: FakeNotificationSettingsService = FakeNotificationSettingsService()
+        notificationSettingsService: FakeNotificationSettingsService = FakeNotificationSettingsService(),
+        room: FakeMatrixRoom = aMatrixRoom(notificationSettingsService = notificationSettingsService),
     ): RoomNotificationSettingsPresenter{
-        val room = aMatrixRoom(notificationSettingsService = notificationSettingsService)
         return RoomNotificationSettingsPresenter(
             room = room,
             notificationSettingsService = notificationSettingsService,

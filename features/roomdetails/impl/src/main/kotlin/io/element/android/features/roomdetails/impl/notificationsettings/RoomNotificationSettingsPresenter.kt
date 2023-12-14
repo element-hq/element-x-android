@@ -19,10 +19,12 @@ package io.element.android.features.roomdetails.impl.notificationsettings
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -54,6 +56,7 @@ class RoomNotificationSettingsPresenter @AssistedInject constructor(
 
     @Composable
     override fun present(): RoomNotificationSettingsState {
+        var shouldDisplayMentionsOnlyDisclaimer by remember { mutableStateOf(false) }
         val defaultRoomNotificationMode: MutableState<RoomNotificationMode?> = rememberSaveable {
             mutableStateOf(null)
         }
@@ -87,6 +90,7 @@ class RoomNotificationSettingsPresenter @AssistedInject constructor(
             getDefaultRoomNotificationMode(defaultRoomNotificationMode)
             fetchNotificationSettings(pendingRoomNotificationMode, roomNotificationSettings)
             observeNotificationSettings(pendingRoomNotificationMode, roomNotificationSettings)
+            shouldDisplayMentionsOnlyDisclaimer = room.isEncrypted && !notificationSettingsService.canHomeServerPushEncryptedEventsToDevice().getOrDefault(true)
         }
 
         fun handleEvents(event: RoomNotificationSettingsEvents) {
@@ -124,6 +128,7 @@ class RoomNotificationSettingsPresenter @AssistedInject constructor(
             defaultRoomNotificationMode = defaultRoomNotificationMode.value,
             setNotificationSettingAction = setNotificationSettingAction.value,
             restoreDefaultAction = restoreDefaultAction.value,
+            displayMentionsOnlyDisclaimer = shouldDisplayMentionsOnlyDisclaimer,
             eventSink = ::handleEvents,
         )
     }
