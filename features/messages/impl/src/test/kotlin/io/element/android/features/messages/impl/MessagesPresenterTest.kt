@@ -21,7 +21,6 @@ import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import im.vector.app.features.analytics.plan.PollEnd
 import io.element.android.features.messages.impl.actionlist.ActionListPresenter
 import io.element.android.features.messages.impl.actionlist.ActionListState
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
@@ -93,7 +92,6 @@ import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.consumeItemsUntilPredicate
 import io.element.android.tests.testutils.consumeItemsUntilTimeout
 import io.element.android.tests.testutils.testCoroutineDispatchers
-import io.element.android.tests.testutils.waitForPredicate
 import io.mockk.mockk
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.test.TestScope
@@ -622,29 +620,6 @@ class MessagesPresenterTest {
     }
 
     @Test
-    fun `present - handle poll end`() = runTest {
-        val room = FakeMatrixRoom()
-        val analyticsService = FakeAnalyticsService()
-        val presenter = createMessagesPresenter(
-            matrixRoom = room,
-            analyticsService = analyticsService,
-        )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
-            val initialState = awaitItem()
-            initialState.eventSink(MessagesEvents.HandleAction(TimelineItemAction.EndPoll, aMessageEvent()))
-            waitForPredicate { room.endPollInvocations.size == 1 }
-            cancelAndIgnoreRemainingEvents()
-            assertThat(room.endPollInvocations.size).isEqualTo(1)
-            assertThat(room.endPollInvocations.first().pollStartId).isEqualTo(AN_EVENT_ID)
-            assertThat(room.endPollInvocations.first().text).isEqualTo("The poll with event id: \$anEventId has ended.")
-            assertThat(analyticsService.capturedEvents.size).isEqualTo(1)
-            assertThat(analyticsService.capturedEvents.last()).isEqualTo(PollEnd())
-        }
-    }
-
-    @Test
     fun `present - handle action reply to a poll`() = runTest {
         val presenter = createMessagesPresenter()
         moleculeFlow(RecompositionMode.Immediate) {
@@ -715,7 +690,7 @@ class MessagesPresenterTest {
             endPollAction = FakeEndPollAction(),
             sendPollResponseAction = FakeSendPollResponseAction(),
         )
-        val timelinePresenterFactory = object: TimelinePresenter.Factory {
+        val timelinePresenterFactory = object : TimelinePresenter.Factory {
             override fun create(navigator: MessagesNavigator): TimelinePresenter {
                 return timelinePresenter
             }
