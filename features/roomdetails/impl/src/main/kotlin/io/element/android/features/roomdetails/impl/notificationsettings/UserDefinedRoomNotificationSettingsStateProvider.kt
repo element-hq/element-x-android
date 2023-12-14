@@ -37,6 +37,7 @@ internal class UserDefinedRoomNotificationSettingsStateProvider : PreviewParamet
                 defaultRoomNotificationMode = RoomNotificationMode.ALL_MESSAGES,
                 setNotificationSettingAction = Async.Uninitialized,
                 restoreDefaultAction = Async.Uninitialized,
+                displayMentionsOnlyDisclaimer = false,
                 eventSink = { },
             ),
         )

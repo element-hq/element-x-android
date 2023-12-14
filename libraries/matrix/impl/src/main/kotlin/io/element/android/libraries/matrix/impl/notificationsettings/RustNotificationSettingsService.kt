@@ -140,4 +140,9 @@ class RustNotificationSettingsService(
         runCatching {
             notificationSettings.getRoomsWithUserDefinedRules(enabled = true)
         }
+
+    override suspend fun canHomeServerPushEncryptedEventsToDevice(): Result<Boolean> =
+        runCatching {
+            notificationSettings.canHomeserverPushEncryptedEventToDevice()
+        }
 }

@@ -27,6 +27,7 @@ fun RoomNotificationSettingsOptions(
     selected: RoomNotificationMode?,
     enabled: Boolean,
     onOptionSelected: (RoomNotificationSettingsItem) -> Unit,
+    displayMentionsOnlyDisclaimer: Boolean,
     modifier: Modifier = Modifier,
 ) {
     val items = roomNotificationSettingsItems()
@@ -36,6 +37,7 @@ fun RoomNotificationSettingsOptions(
                 roomNotificationSettingsItem = item,
                 isSelected = selected == item.mode,
                 onOptionSelected = onOptionSelected,
+                displayMentionsOnlyDisclaimer = displayMentionsOnlyDisclaimer,
                 enabled = enabled
             )
         }
