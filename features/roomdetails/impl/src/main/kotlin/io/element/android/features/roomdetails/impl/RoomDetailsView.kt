@@ -78,6 +78,7 @@ import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
+import io.element.android.libraries.matrix.api.room.getBestName
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
@@ -139,7 +140,7 @@ fun RoomDetailsView(
                         userId = member.userId.value,
                         userName = state.roomName,
                         openAvatarPreview = { avatarUrl ->
-                            openAvatarPreview(member.displayName ?: member.userId.value, avatarUrl)
+                            openAvatarPreview(member.getBestName(), avatarUrl)
                         },
                     )
                     RoomMemberMainActionsSection(onShareUser = ::onShareMember)
