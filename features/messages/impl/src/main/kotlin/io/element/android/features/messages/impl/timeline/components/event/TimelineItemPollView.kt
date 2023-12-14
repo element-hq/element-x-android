@@ -70,13 +70,3 @@ internal fun TimelineItemPollViewPreview(@PreviewParameter(TimelineItemPollConte
             eventSink = {},
         )
     }
-
-@PreviewsDayNight
-@Composable
-internal fun TimelineItemPollCreatorViewPreview(@PreviewParameter(TimelineItemPollContentProvider::class) content: TimelineItemPollContent) =
-    ElementPreview {
-        TimelineItemPollView(
-            content = content,
-            eventSink = {},
-        )
-    }
