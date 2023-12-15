@@ -43,7 +43,9 @@ import io.element.android.libraries.designsystem.theme.components.OutlinedButton
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.progressIndicatorTrackColor
 import io.element.android.libraries.designsystem.utils.CommonDrawables
+import io.element.android.libraries.matrix.api.encryption.BackupState
 import io.element.android.libraries.matrix.api.encryption.BackupUploadState
+import io.element.android.libraries.matrix.api.encryption.RecoveryState
 import io.element.android.libraries.matrix.api.encryption.SteadyStateException
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
@@ -120,7 +122,15 @@ fun LogoutView(
 private fun title(state: LogoutState): String {
     return when {
         state.backupUploadState.isBackingUp() -> stringResource(id = R.string.screen_signout_key_backup_ongoing_title)
-        state.isLastSession -> stringResource(id = R.string.screen_signout_key_backup_disabled_title)
+        state.isLastSession -> {
+            if (state.recoveryState != RecoveryState.ENABLED) {
+                stringResource(id = R.string.screen_signout_recovery_disabled_title)
+            } else if (state.backupState == BackupState.UNKNOWN && state.doesBackupExistOnServer.not()) {
+                stringResource(id = R.string.screen_signout_key_backup_disabled_title)
+            } else {
+                stringResource(id = R.string.screen_signout_save_recovery_key_title)
+            }
+        }
         else -> stringResource(CommonStrings.action_signout)
     }
 }
@@ -138,10 +148,10 @@ private fun subtitle(state: LogoutState): String? {
 
 private fun BackupUploadState.isBackingUp(): Boolean {
     return when (this) {
-        BackupUploadState.Unknown,
         BackupUploadState.Waiting,
         is BackupUploadState.Uploading -> true
         is BackupUploadState.SteadyException -> exception is SteadyStateException.Connection
+        BackupUploadState.Unknown,
         BackupUploadState.Done,
         BackupUploadState.Error -> false
     }
