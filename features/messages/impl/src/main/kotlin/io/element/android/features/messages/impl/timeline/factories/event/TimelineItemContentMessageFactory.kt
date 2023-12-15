@@ -244,9 +244,6 @@ class TimelineItemContentMessageFactory @Inject constructor(
 
 private fun String.withLinks(): CharSequence? {
     val spannable = toSpannable()
-    LinkifyCompat.addLinks(spannable, Linkify.WEB_URLS or Linkify.PHONE_NUMBERS)
-    if (spannable.getSpans<URLSpan>().isEmpty()) {
-        return null
-    }
-    return spannable
+    val addedLinks = LinkifyCompat.addLinks(spannable, Linkify.WEB_URLS or Linkify.PHONE_NUMBERS)
+    return spannable.takeIf { addedLinks }
 }
