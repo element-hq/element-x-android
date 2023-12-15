@@ -242,8 +242,10 @@ class TimelineItemContentMessageFactory @Inject constructor(
     }
 }
 
+@Suppress("USELESS_ELVIS")
 private fun String.withLinks(): CharSequence? {
-    val spannable = toSpannable()
+    /* Note: toSpannable() can return null when running unit tests */
+    val spannable = toSpannable() ?: return null
     val addedLinks = LinkifyCompat.addLinks(spannable, Linkify.WEB_URLS or Linkify.PHONE_NUMBERS or Linkify.EMAIL_ADDRESSES)
     return spannable.takeIf { addedLinks }
 }
