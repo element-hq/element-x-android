@@ -69,12 +69,15 @@ class TimelineItemContentMessageFactory @Inject constructor(
 
     suspend fun create(content: MessageContent, senderDisplayName: String, eventId: EventId?): TimelineItemEventContent {
         return when (val messageType = content.type) {
-            is EmoteMessageType -> TimelineItemEmoteContent(
-                body = "* $senderDisplayName ${messageType.body}",
-                htmlDocument = messageType.formatted?.toHtmlDocument(prefix = "* $senderDisplayName"),
-                formattedBody = parseHtml(messageType.formatted, prefix = "* $senderDisplayName"),
-                isEdited = content.isEdited,
-            )
+            is EmoteMessageType -> {
+                val emoteBody = "* $senderDisplayName ${messageType.body}"
+                TimelineItemEmoteContent(
+                    body = emoteBody,
+                    htmlDocument = messageType.formatted?.toHtmlDocument(prefix = "* $senderDisplayName"),
+                    formattedBody = parseHtml(messageType.formatted, prefix = "* $senderDisplayName") ?: emoteBody.withLinks(),
+                    isEdited = content.isEdited,
+                )
+            }
             is ImageMessageType -> {
                 val aspectRatio = aspectRatioOf(messageType.info?.width, messageType.info?.height)
                 TimelineItemImageContent(
@@ -172,7 +175,7 @@ class TimelineItemContentMessageFactory @Inject constructor(
             is NoticeMessageType -> TimelineItemNoticeContent(
                 body = messageType.body,
                 htmlDocument = messageType.formatted?.toHtmlDocument(),
-                formattedBody = parseHtml(messageType.formatted),
+                formattedBody = parseHtml(messageType.formatted) ?: messageType.body.withLinks(),
                 isEdited = content.isEdited,
             )
             is TextMessageType -> {
@@ -186,7 +189,7 @@ class TimelineItemContentMessageFactory @Inject constructor(
             is OtherMessageType -> TimelineItemTextContent(
                 body = messageType.body,
                 htmlDocument = null,
-                formattedBody = null,
+                formattedBody = messageType.body.withLinks(),
                 isEdited = content.isEdited,
             )
         }
