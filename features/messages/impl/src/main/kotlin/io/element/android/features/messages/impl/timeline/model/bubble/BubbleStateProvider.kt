@@ -48,11 +48,9 @@ internal fun aBubbleState(
     isMine: Boolean = false,
     isHighlighted: Boolean = false,
     timelineRoomInfo: TimelineRoomInfo = aTimelineRoomInfo(),
-    displayBackground: Boolean = true,
 ) = BubbleState(
     groupPosition = groupPosition,
     isMine = isMine,
     isHighlighted = isHighlighted,
     timelineRoomInfo = timelineRoomInfo,
-    displayBackground = displayBackground,
 )

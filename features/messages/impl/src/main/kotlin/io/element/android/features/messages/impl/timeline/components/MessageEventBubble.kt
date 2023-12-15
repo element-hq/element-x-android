@@ -101,7 +101,6 @@ fun MessageEventBubble(
 
     // Ignore state.isHighlighted for now, we need a design decision on it.
     val backgroundBubbleColor = when {
-        !state.displayBackground -> Color.White
         state.isMine -> ElementTheme.colors.messageFromMeBackground
         else -> ElementTheme.colors.messageFromOtherBackground
     }
