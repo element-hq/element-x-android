@@ -80,7 +80,7 @@ fun TestScope.aDefaultRedactedVoiceMessageManager(
 
 fun aRedactedMatrixTimeline(eventId: EventId) = listOf<MatrixTimelineItem>(
     MatrixTimelineItem.Event(
-        uniqueId = 0,
+        uniqueId = "0",
         event = EventTimelineItem(
             eventId = eventId,
             transactionId = null,

@@ -121,7 +121,7 @@ class TimelinePresenterTest {
     fun `present - on scroll finished send read receipt if an event is before the index`() = runTest {
         val timeline = FakeMatrixTimeline(
             initialTimelineItems = listOf(
-                MatrixTimelineItem.Event(0, anEventTimelineItem())
+                MatrixTimelineItem.Event("0", anEventTimelineItem())
             )
         )
         val presenter = createTimelinePresenter(timeline)
@@ -145,7 +145,7 @@ class TimelinePresenterTest {
     fun `present - on scroll finished will not send read receipt if no event is before the index`() = runTest {
         val timeline = FakeMatrixTimeline(
             initialTimelineItems = listOf(
-                MatrixTimelineItem.Event(0, anEventTimelineItem())
+                MatrixTimelineItem.Event("0", anEventTimelineItem())
             )
         )
         val presenter = createTimelinePresenter(timeline)
@@ -169,7 +169,7 @@ class TimelinePresenterTest {
     fun `present - on scroll finished will not send read receipt only virtual events exist before the index`() = runTest {
         val timeline = FakeMatrixTimeline(
             initialTimelineItems = listOf(
-                MatrixTimelineItem.Virtual(0, VirtualTimelineItem.ReadMarker)
+                MatrixTimelineItem.Virtual("0", VirtualTimelineItem.ReadMarker)
             )
         )
         val presenter = createTimelinePresenter(timeline)
@@ -200,13 +200,13 @@ class TimelinePresenterTest {
             assertThat(initialState.newEventState).isEqualTo(NewEventState.None)
             assertThat(initialState.timelineItems.size).isEqualTo(0)
             timeline.updateTimelineItems {
-                listOf(MatrixTimelineItem.Event(0, anEventTimelineItem(content = aMessageContent())))
+                listOf(MatrixTimelineItem.Event("0", anEventTimelineItem(content = aMessageContent())))
             }
             consumeItemsUntilPredicate { it.timelineItems.size == 1 }
             // Mimics sending a message, and assert newEventState is FromMe
             timeline.updateTimelineItems { items ->
                 val event = anEventTimelineItem(content = aMessageContent(), localSendState = LocalEventSendState.Sent(AN_EVENT_ID))
-                items + listOf(MatrixTimelineItem.Event(1, event))
+                items + listOf(MatrixTimelineItem.Event("1", event))
             }
             consumeItemsUntilPredicate { it.timelineItems.size == 2 }
             awaitLastSequentialItem().also { state ->
@@ -215,7 +215,7 @@ class TimelinePresenterTest {
             // Mimics receiving a message without clearing the previous FromMe
             timeline.updateTimelineItems { items ->
                 val event = anEventTimelineItem(content = aMessageContent())
-                items + listOf(MatrixTimelineItem.Event(2, event))
+                items + listOf(MatrixTimelineItem.Event("2", event))
             }
             consumeItemsUntilPredicate { it.timelineItems.size == 3 }
 
@@ -227,7 +227,7 @@ class TimelinePresenterTest {
             // Mimics receiving a message and assert newEventState is FromOther
             timeline.updateTimelineItems { items ->
                 val event = anEventTimelineItem(content = aMessageContent())
-                items + listOf(MatrixTimelineItem.Event(3, event))
+                items + listOf(MatrixTimelineItem.Event("3", event))
             }
             consumeItemsUntilPredicate { it.timelineItems.size == 4 }
             awaitLastSequentialItem().also { state ->
@@ -268,7 +268,7 @@ class TimelinePresenterTest {
                 ),
             )
             timeline.updateTimelineItems {
-                listOf(MatrixTimelineItem.Event(0, anEventTimelineItem(reactions = oneReaction)))
+                listOf(MatrixTimelineItem.Event("0", anEventTimelineItem(reactions = oneReaction)))
             }
             skipItems(1)
             val item = awaitItem().timelineItems.first()

@@ -62,7 +62,7 @@ class TimelineEncryptedHistoryPostProcessor(
         }
         return if (lastEncryptedHistoryBannerIndex >= 0) {
             val sublist = list.drop(lastEncryptedHistoryBannerIndex + 1).toMutableList()
-            sublist.add(0, MatrixTimelineItem.Virtual(0L, VirtualTimelineItem.EncryptedHistoryBanner))
+            sublist.add(0, MatrixTimelineItem.Virtual(VirtualTimelineItem.EncryptedHistoryBanner.toString(), VirtualTimelineItem.EncryptedHistoryBanner))
             sublist
         } else {
             list
