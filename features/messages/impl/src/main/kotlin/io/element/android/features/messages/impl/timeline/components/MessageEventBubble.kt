@@ -32,6 +32,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -99,10 +100,10 @@ fun MessageEventBubble(
     }
 
     // Ignore state.isHighlighted for now, we need a design decision on it.
-    val backgroundBubbleColor = if (state.isMine) {
-        ElementTheme.colors.messageFromMeBackground
-    } else {
-        ElementTheme.colors.messageFromOtherBackground
+    val backgroundBubbleColor = when {
+        !state.displayBackground -> Color.White
+        state.isMine -> ElementTheme.colors.messageFromMeBackground
+        else -> ElementTheme.colors.messageFromOtherBackground
     }
     val bubbleShape = bubbleShape()
     Box(

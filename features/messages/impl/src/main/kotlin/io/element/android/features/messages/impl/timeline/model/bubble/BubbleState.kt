@@ -24,4 +24,5 @@ data class BubbleState(
     val isMine: Boolean,
     val isHighlighted: Boolean,
     val timelineRoomInfo: TimelineRoomInfo,
+    val displayBackground: Boolean,
 )

@@ -33,7 +33,7 @@ fun TimelineItemImageView(
 ) {
     TimelineItemAspectRatioBox(
         aspectRatio = content.aspectRatio,
-        modifier = modifier
+        modifier = modifier,
     ) {
         BlurHashAsyncImage(
             model = MediaRequestData(content.preferredMediaSource, MediaRequestData.Kind.File(content.body, content.mimeType)),

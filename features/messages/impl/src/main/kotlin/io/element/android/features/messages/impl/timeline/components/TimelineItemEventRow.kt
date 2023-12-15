@@ -80,6 +80,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
+import io.element.android.features.messages.impl.timeline.model.event.hasMediaThumbnail
 import io.element.android.features.messages.impl.timeline.model.metadata
 import io.element.android.libraries.androidutils.system.openUrlInExternalApp
 import io.element.android.libraries.designsystem.colors.AvatarColorsProvider
@@ -301,12 +302,15 @@ private fun TimelineItemEventRowContent(
             )
         }
 
+        val displayBubbleBackground = !event.content.hasMediaThumbnail() || event.inReplyTo != null
+
         // Message bubble
         val bubbleState = BubbleState(
             groupPosition = event.groupPosition,
             isMine = event.isMine,
             isHighlighted = isHighlighted,
             timelineRoomInfo = timelineRoomInfo,
+            displayBackground = displayBubbleBackground,
         )
         MessageEventBubble(
             modifier = Modifier
@@ -439,7 +443,7 @@ private fun MessageEventBubbleContent(
     ) {
         when (timestampPosition) {
             TimestampPosition.Overlay ->
-                Box(modifier) {
+                Box(modifier, contentAlignment = Alignment.Center) {
                     content()
                     TimelineEventTimestampView(
                         event = event,

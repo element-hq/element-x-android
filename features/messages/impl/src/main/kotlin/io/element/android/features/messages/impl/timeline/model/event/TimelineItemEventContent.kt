@@ -73,3 +73,10 @@ fun TimelineItemEventContent.isEdited(): Boolean =
         is TimelineItemPollContent -> isEdited
         else -> false
     }
+
+fun TimelineItemEventContent.hasMediaThumbnail(): Boolean =
+    when (this) {
+        is TimelineItemImageContent -> true
+        is TimelineItemVideoContent -> true
+        else -> false
+    }
