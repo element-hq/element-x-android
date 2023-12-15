@@ -230,7 +230,7 @@ class TimelineItemContentMessageFactory @Inject constructor(
             Pair(start, end)
         }
         // Find and set as URLSpans any links present in the text
-        LinkifyCompat.addLinks(this, Linkify.WEB_URLS or Linkify.PHONE_NUMBERS)
+        LinkifyCompat.addLinks(this, Linkify.WEB_URLS or Linkify.PHONE_NUMBERS or Linkify.EMAIL_ADDRESSES)
         // Restore old spans if they don't conflict with the new ones
         for ((urlSpan, location) in oldURLSpans) {
             val (start, end) = location
@@ -244,6 +244,6 @@ class TimelineItemContentMessageFactory @Inject constructor(
 
 private fun String.withLinks(): CharSequence? {
     val spannable = toSpannable()
-    val addedLinks = LinkifyCompat.addLinks(spannable, Linkify.WEB_URLS or Linkify.PHONE_NUMBERS)
+    val addedLinks = LinkifyCompat.addLinks(spannable, Linkify.WEB_URLS or Linkify.PHONE_NUMBERS or Linkify.EMAIL_ADDRESSES)
     return spannable.takeIf { addedLinks }
 }
