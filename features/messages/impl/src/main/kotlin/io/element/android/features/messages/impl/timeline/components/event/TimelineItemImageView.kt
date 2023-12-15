@@ -18,13 +18,12 @@ package io.element.android.features.messages.impl.timeline.components.event
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContentProvider
 import io.element.android.libraries.designsystem.components.BlurHashAsyncImage
-import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.matrix.ui.media.MediaRequestData
 
 @Composable
@@ -34,12 +33,11 @@ fun TimelineItemImageView(
 ) {
     TimelineItemAspectRatioBox(
         aspectRatio = content.aspectRatio,
-        modifier = modifier
+        modifier = modifier,
     ) {
         BlurHashAsyncImage(
             model = MediaRequestData(content.preferredMediaSource, MediaRequestData.Kind.File(content.body, content.mimeType)),
             blurHash = content.blurhash,
-            contentScale = ContentScale.Crop,
         )
     }
 }
