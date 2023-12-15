@@ -17,11 +17,9 @@
 package io.element.android.libraries.matrix.impl.timeline.postprocessor
 
 import com.google.common.truth.Truth.assertThat
-import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.item.virtual.VirtualTimelineItem
 import io.element.android.libraries.matrix.test.timeline.anEventTimelineItem
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
@@ -97,15 +95,8 @@ class TimelineEncryptedHistoryPostProcessorTest {
     }
 
     @Test
-    fun `given a list with several with lower or equal timestamps than lastLoginTimestamp, they're replaced and the user can't back paginate`() = runTest {
-        val paginationStateFlow = MutableStateFlow(
-            MatrixTimeline.PaginationState(
-                hasMoreToLoadBackwards = true,
-                isBackPaginating = false,
-                beginningOfRoomReached = false,
-            )
-        )
-        val processor = createPostProcessor(paginationStateFlow = paginationStateFlow)
+    fun `given a list with several with lower or equal timestamps than lastLoginTimestamp, then they're replaced`() = runTest {
+        val processor = createPostProcessor()
         val items = listOf(
             MatrixTimelineItem.Event("0L", anEventTimelineItem(timestamp = defaultLastLoginTimestamp.time - 1)),
             MatrixTimelineItem.Event("0L", anEventTimelineItem(timestamp = defaultLastLoginTimestamp.time)),
@@ -117,32 +108,16 @@ class TimelineEncryptedHistoryPostProcessorTest {
                 MatrixTimelineItem.Event("0L", anEventTimelineItem(timestamp = defaultLastLoginTimestamp.time + 1))
             )
         )
-        assertThat(paginationStateFlow.value).isEqualTo(
-            MatrixTimeline.PaginationState(
-                hasMoreToLoadBackwards = false,
-                isBackPaginating = false,
-                beginningOfRoomReached = false,
-            )
-        )
     }
 
     private fun TestScope.createPostProcessor(
         lastLoginTimestamp: Date? = defaultLastLoginTimestamp,
         isRoomEncrypted: Boolean = true,
         isKeyBackupEnabled: Boolean = false,
-        paginationStateFlow: MutableStateFlow<MatrixTimeline.PaginationState> =
-            MutableStateFlow(
-                MatrixTimeline.PaginationState(
-                    hasMoreToLoadBackwards = true,
-                    isBackPaginating = false,
-                    beginningOfRoomReached = false,
-                )
-            )
     ) = TimelineEncryptedHistoryPostProcessor(
         lastLoginTimestamp = lastLoginTimestamp,
         isRoomEncrypted = isRoomEncrypted,
         isKeyBackupEnabled = isKeyBackupEnabled,
-        paginationStateFlow = paginationStateFlow,
         dispatcher = StandardTestDispatcher(testScheduler)
     )
 }
