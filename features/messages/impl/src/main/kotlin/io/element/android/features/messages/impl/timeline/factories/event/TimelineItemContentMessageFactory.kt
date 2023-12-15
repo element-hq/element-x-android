@@ -21,6 +21,7 @@ import android.text.style.URLSpan
 import android.text.util.Linkify
 import androidx.core.text.buildSpannedString
 import androidx.core.text.getSpans
+import androidx.core.text.toSpannable
 import androidx.core.text.util.LinkifyCompat
 import io.element.android.features.location.api.Location
 import io.element.android.features.messages.api.timeline.HtmlConverterProvider
@@ -178,7 +179,7 @@ class TimelineItemContentMessageFactory @Inject constructor(
                 TimelineItemTextContent(
                     body = messageType.body,
                     htmlDocument = messageType.formatted?.toHtmlDocument(),
-                    formattedBody = parseHtml(messageType.formatted),
+                    formattedBody = parseHtml(messageType.formatted) ?: messageType.body.withLinks(),
                     isEdited = content.isEdited,
                 )
             }
@@ -236,4 +237,13 @@ class TimelineItemContentMessageFactory @Inject constructor(
         }
         return this
     }
+}
+
+private fun String.withLinks(): CharSequence? {
+    val spannable = toSpannable()
+    LinkifyCompat.addLinks(spannable, Linkify.WEB_URLS or Linkify.PHONE_NUMBERS)
+    if (spannable.getSpans<URLSpan>().isEmpty()) {
+        return null
+    }
+    return spannable
 }
