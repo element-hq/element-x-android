@@ -192,10 +192,12 @@ class TimelineItemContentMessageFactoryTest {
             htmlConverterTransform = { expected }
         )
         val result = sut.create(
-            content = createMessageContent(type = TextMessageType(
-                body = "body",
-                formatted = FormattedBody(MessageFormat.HTML, expected.toString())
-            )),
+            content = createMessageContent(
+                type = TextMessageType(
+                    body = "body",
+                    formatted = FormattedBody(MessageFormat.HTML, expected.toString())
+                )
+            ),
             senderDisplayName = "Bob",
             eventId = AN_EVENT_ID,
         )
@@ -208,10 +210,12 @@ class TimelineItemContentMessageFactoryTest {
             htmlConverterTransform = { it }
         )
         val result = sut.create(
-            content = createMessageContent(type = TextMessageType(
-                body = "body",
-                formatted = FormattedBody(MessageFormat.UNKNOWN, "formatted")
-            )),
+            content = createMessageContent(
+                type = TextMessageType(
+                    body = "body",
+                    formatted = FormattedBody(MessageFormat.UNKNOWN, "formatted")
+                )
+            ),
             senderDisplayName = "Bob",
             eventId = AN_EVENT_ID,
         )
@@ -552,10 +556,12 @@ class TimelineItemContentMessageFactoryTest {
     fun `test create NoticeMessageType with HTML formatted body`() = runTest {
         val sut = createTimelineItemContentMessageFactory()
         val result = sut.create(
-            content = createMessageContent(type = NoticeMessageType(
-                body = "body",
-                formatted = FormattedBody(MessageFormat.HTML, "formatted")
-            )),
+            content = createMessageContent(
+                type = NoticeMessageType(
+                    body = "body",
+                    formatted = FormattedBody(MessageFormat.HTML, "formatted")
+                )
+            ),
             senderDisplayName = "Bob",
             eventId = AN_EVENT_ID,
         )
@@ -584,10 +590,12 @@ class TimelineItemContentMessageFactoryTest {
     fun `test create EmoteMessageType with HTML formatted body`() = runTest {
         val sut = createTimelineItemContentMessageFactory()
         val result = sut.create(
-            content = createMessageContent(type = EmoteMessageType(
-                body = "body",
-                formatted = FormattedBody(MessageFormat.HTML, "formatted")
-            )),
+            content = createMessageContent(
+                type = EmoteMessageType(
+                    body = "body",
+                    formatted = FormattedBody(MessageFormat.HTML, "formatted")
+                )
+            ),
             senderDisplayName = "Bob",
             eventId = AN_EVENT_ID,
         )
