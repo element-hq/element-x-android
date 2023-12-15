@@ -52,6 +52,10 @@ class FakeRoomListService : RoomListService {
         roomListStateFlow.emit(state)
     }
 
+    suspend fun postSyncIndicator(value: RoomListService.SyncIndicator) {
+        syncIndicatorStateFlow.emit(value)
+    }
+
     var latestSlidingSyncRange: IntRange? = null
         private set
 

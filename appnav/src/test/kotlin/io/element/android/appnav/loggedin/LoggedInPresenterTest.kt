@@ -60,8 +60,9 @@ class LoggedInPresenterTest {
         }.test {
             val initialState = awaitItem()
             assertThat(initialState.showSyncSpinner).isFalse()
+            roomListService.postSyncIndicator(RoomListService.SyncIndicator.Show)
             consumeItemsUntilPredicate { it.showSyncSpinner }
-            roomListService.postState(RoomListService.State.Running)
+            roomListService.postSyncIndicator(RoomListService.SyncIndicator.Hide)
             consumeItemsUntilPredicate { !it.showSyncSpinner }
         }
     }
