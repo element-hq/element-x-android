@@ -18,7 +18,6 @@ package io.element.android.features.roomdetails.impl.invite
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -54,7 +53,6 @@ import io.element.android.compound.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
 
-@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun RoomInviteMembersView(
     state: RoomInviteMembersState,
@@ -128,7 +126,7 @@ private fun RoomInviteMembersTopBar(
         navigationIcon = { BackButton(onClick = onBackPressed) },
         actions = {
             TextButton(
-                text = stringResource(CommonStrings.action_send),
+                text = stringResource(CommonStrings.action_invite),
                 onClick = onSendPressed,
                 enabled = canSend,
             )
