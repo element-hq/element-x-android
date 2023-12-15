@@ -161,7 +161,8 @@ class LogoutPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            val initialState = awaitLastSequentialItem()
+            skipItems(1)
+            val initialState = awaitItem()
             initialState.eventSink.invoke(LogoutEvents.Logout(ignoreSdkError = false))
             val confirmationState = awaitItem()
             assertThat(confirmationState.showConfirmationDialog).isTrue()
@@ -170,6 +171,7 @@ class LogoutPresenterTest {
             val loadingState = awaitItem()
             assertThat(loadingState.showConfirmationDialog).isFalse()
             assertThat(loadingState.logoutAction).isInstanceOf(Async.Loading::class.java)
+            skipItems(1)
             val errorState = awaitItem()
             assertThat(errorState.logoutAction).isEqualTo(Async.Failure<LogoutState>(A_THROWABLE))
             errorState.eventSink.invoke(LogoutEvents.CloseDialogs)
