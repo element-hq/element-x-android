@@ -37,6 +37,7 @@ import io.element.android.libraries.permissions.test.FakePermissionsPresenter
 import io.element.android.libraries.permissions.test.FakePermissionsPresenterFactory
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.consumeItemsUntilPredicate
+import io.element.android.tests.testutils.consumeItemsUntilTimeout
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
@@ -292,11 +293,10 @@ class EditUserProfilePresenterTest {
             val initialState = awaitItem()
             initialState.eventSink(EditUserProfileEvents.UpdateDisplayName("   Name   "))
             initialState.eventSink(EditUserProfileEvents.Save)
-            consumeItemsUntilPredicate { matrixClient.setDisplayNameCalled && !matrixClient.removeAvatarCalled && !matrixClient.uploadAvatarCalled }
+            consumeItemsUntilTimeout()
             assertThat(matrixClient.setDisplayNameCalled).isFalse()
             assertThat(matrixClient.uploadAvatarCalled).isFalse()
             assertThat(matrixClient.removeAvatarCalled).isFalse()
-            cancelAndIgnoreRemainingEvents()
         }
     }
 
