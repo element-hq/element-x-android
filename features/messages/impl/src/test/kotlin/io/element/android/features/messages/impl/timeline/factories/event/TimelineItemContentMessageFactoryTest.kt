@@ -178,7 +178,7 @@ class TimelineItemContentMessageFactoryTest {
 
     @Test
     fun `test create TextMessageType with HTML formatted body`() = runTest {
-        val expected = SpannableStringBuilder().apply {
+        val expected = buildSpannedString {
             append("link to ")
             inSpans(URLSpan("https://matrix.org")) {
                 append("https://matrix.org")
