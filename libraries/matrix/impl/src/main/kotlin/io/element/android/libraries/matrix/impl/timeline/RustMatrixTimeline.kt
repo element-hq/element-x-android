@@ -101,6 +101,11 @@ class RustMatrixTimeline(
 
     override val paginationState: StateFlow<MatrixTimeline.PaginationState> = _paginationState.asStateFlow()
 
+    @OptIn(ExperimentalCoroutinesApi::class)
+    override val timelineItems: Flow<List<MatrixTimelineItem>> = _timelineItems.mapLatest { items ->
+        encryptedHistoryPostProcessor.process(items)
+    }
+
     init {
         Timber.d("Initialize timeline for room ${matrixRoom.roomId}")
 
@@ -169,11 +174,6 @@ class RustMatrixTimeline(
         } catch (exception: Exception) {
             Timber.e(exception, "Error fetching members for room ${matrixRoom.roomId}")
         }
-    }
-
-    @OptIn(ExperimentalCoroutinesApi::class)
-    override val timelineItems: Flow<List<MatrixTimelineItem>> = _timelineItems.mapLatest { items ->
-        encryptedHistoryPostProcessor.process(items)
     }
 
     private suspend fun postItems(items: List<TimelineItem>) = coroutineScope {

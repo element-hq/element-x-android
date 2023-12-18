@@ -60,6 +60,8 @@ import org.junit.Rule
 import org.junit.Test
 import java.util.Date
 
+private const val FAKE_UNIQUE_ID = "FAKE_UNIQUE_ID"
+
 class TimelinePresenterTest {
 
     @get:Rule
@@ -120,7 +122,7 @@ class TimelinePresenterTest {
     fun `present - on scroll finished send read receipt if an event is before the index`() = runTest {
         val timeline = FakeMatrixTimeline(
             initialTimelineItems = listOf(
-                MatrixTimelineItem.Event("0", anEventTimelineItem())
+                MatrixTimelineItem.Event(FAKE_UNIQUE_ID, anEventTimelineItem())
             )
         )
         val presenter = createTimelinePresenter(timeline)
@@ -144,7 +146,7 @@ class TimelinePresenterTest {
     fun `present - on scroll finished will not send read receipt if no event is before the index`() = runTest {
         val timeline = FakeMatrixTimeline(
             initialTimelineItems = listOf(
-                MatrixTimelineItem.Event("0", anEventTimelineItem())
+                MatrixTimelineItem.Event(FAKE_UNIQUE_ID, anEventTimelineItem())
             )
         )
         val presenter = createTimelinePresenter(timeline)
@@ -168,7 +170,7 @@ class TimelinePresenterTest {
     fun `present - on scroll finished will not send read receipt only virtual events exist before the index`() = runTest {
         val timeline = FakeMatrixTimeline(
             initialTimelineItems = listOf(
-                MatrixTimelineItem.Virtual("0", VirtualTimelineItem.ReadMarker)
+                MatrixTimelineItem.Virtual(FAKE_UNIQUE_ID, VirtualTimelineItem.ReadMarker)
             )
         )
         val presenter = createTimelinePresenter(timeline)
@@ -267,7 +269,7 @@ class TimelinePresenterTest {
                 ),
             )
             timeline.updateTimelineItems {
-                listOf(MatrixTimelineItem.Event("0", anEventTimelineItem(reactions = oneReaction)))
+                listOf(MatrixTimelineItem.Event(FAKE_UNIQUE_ID, anEventTimelineItem(reactions = oneReaction)))
             }
             skipItems(1)
             val item = awaitItem().timelineItems.first()

@@ -26,6 +26,8 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import java.util.Date
 
+private const val FAKE_UNIQUE_ID = "FAKE_UNIQUE_ID"
+
 class TimelineEncryptedHistoryPostProcessorTest {
 
     private val defaultLastLoginTimestamp = Date(1_689_061_264L)
@@ -34,7 +36,7 @@ class TimelineEncryptedHistoryPostProcessorTest {
     fun `given an unencrypted room, nothing is done`() = runTest {
         val processor = createPostProcessor(isRoomEncrypted = false)
         val items = listOf(
-            MatrixTimelineItem.Event("0L", anEventTimelineItem())
+            MatrixTimelineItem.Event(FAKE_UNIQUE_ID, anEventTimelineItem())
         )
         assertThat(processor.process(items)).isSameInstanceAs(items)
     }
@@ -43,7 +45,7 @@ class TimelineEncryptedHistoryPostProcessorTest {
     fun `given an encrypted room, and key backup enabled, nothing is done`() = runTest {
         val processor = createPostProcessor(isKeyBackupEnabled = true)
         val items = listOf(
-            MatrixTimelineItem.Event("0L", anEventTimelineItem())
+            MatrixTimelineItem.Event(FAKE_UNIQUE_ID, anEventTimelineItem())
         )
         assertThat(processor.process(items)).isSameInstanceAs(items)
     }
@@ -52,7 +54,7 @@ class TimelineEncryptedHistoryPostProcessorTest {
     fun `given a null lastLoginTimestamp, nothing is done`() = runTest {
         val processor = createPostProcessor(lastLoginTimestamp = null)
         val items = listOf(
-            MatrixTimelineItem.Event("0L", anEventTimelineItem())
+            MatrixTimelineItem.Event(FAKE_UNIQUE_ID, anEventTimelineItem())
         )
         assertThat(processor.process(items)).isSameInstanceAs(items)
     }
@@ -68,7 +70,7 @@ class TimelineEncryptedHistoryPostProcessorTest {
     fun `given a list with no items before lastLoginTimestamp, nothing is done`() = runTest {
         val processor = createPostProcessor()
         val items = listOf(
-            MatrixTimelineItem.Event("0L", anEventTimelineItem(timestamp = defaultLastLoginTimestamp.time + 1))
+            MatrixTimelineItem.Event(FAKE_UNIQUE_ID, anEventTimelineItem(timestamp = defaultLastLoginTimestamp.time + 1))
         )
         assertThat(processor.process(items)).isSameInstanceAs(items)
     }
@@ -77,7 +79,7 @@ class TimelineEncryptedHistoryPostProcessorTest {
     fun `given a list with an item with equal timestamp as lastLoginTimestamp, it's replaced`() = runTest {
         val processor = createPostProcessor()
         val items = listOf(
-            MatrixTimelineItem.Event("0L", anEventTimelineItem(timestamp = defaultLastLoginTimestamp.time))
+            MatrixTimelineItem.Event(FAKE_UNIQUE_ID, anEventTimelineItem(timestamp = defaultLastLoginTimestamp.time))
         )
         assertThat(processor.process(items))
             .isEqualTo(listOf(MatrixTimelineItem.Virtual(VirtualTimelineItem.EncryptedHistoryBanner.toString(), VirtualTimelineItem.EncryptedHistoryBanner)))
@@ -87,7 +89,7 @@ class TimelineEncryptedHistoryPostProcessorTest {
     fun `given a list with an item with a lower timestamp than lastLoginTimestamp, it's replaced`() = runTest {
         val processor = createPostProcessor()
         val items = listOf(
-            MatrixTimelineItem.Event("0", anEventTimelineItem(timestamp = defaultLastLoginTimestamp.time - 1))
+            MatrixTimelineItem.Event(FAKE_UNIQUE_ID, anEventTimelineItem(timestamp = defaultLastLoginTimestamp.time - 1))
         )
         assertThat(processor.process(items)).isEqualTo(
             listOf(MatrixTimelineItem.Virtual(VirtualTimelineItem.EncryptedHistoryBanner.toString(), VirtualTimelineItem.EncryptedHistoryBanner))
@@ -98,14 +100,14 @@ class TimelineEncryptedHistoryPostProcessorTest {
     fun `given a list with several with lower or equal timestamps than lastLoginTimestamp, then they're replaced`() = runTest {
         val processor = createPostProcessor()
         val items = listOf(
-            MatrixTimelineItem.Event("0L", anEventTimelineItem(timestamp = defaultLastLoginTimestamp.time - 1)),
-            MatrixTimelineItem.Event("0L", anEventTimelineItem(timestamp = defaultLastLoginTimestamp.time)),
-            MatrixTimelineItem.Event("0L", anEventTimelineItem(timestamp = defaultLastLoginTimestamp.time + 1)),
+            MatrixTimelineItem.Event(FAKE_UNIQUE_ID, anEventTimelineItem(timestamp = defaultLastLoginTimestamp.time - 1)),
+            MatrixTimelineItem.Event(FAKE_UNIQUE_ID, anEventTimelineItem(timestamp = defaultLastLoginTimestamp.time)),
+            MatrixTimelineItem.Event(FAKE_UNIQUE_ID, anEventTimelineItem(timestamp = defaultLastLoginTimestamp.time + 1)),
         )
         assertThat(processor.process(items)).isEqualTo(
             listOf(
                 MatrixTimelineItem.Virtual(VirtualTimelineItem.EncryptedHistoryBanner.toString(), VirtualTimelineItem.EncryptedHistoryBanner),
-                MatrixTimelineItem.Event("0L", anEventTimelineItem(timestamp = defaultLastLoginTimestamp.time + 1))
+                MatrixTimelineItem.Event(FAKE_UNIQUE_ID, anEventTimelineItem(timestamp = defaultLastLoginTimestamp.time + 1))
             )
         )
     }
