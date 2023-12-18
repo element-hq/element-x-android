@@ -23,7 +23,7 @@ appId: ${APP_ID}
 - tapOn:
     text: ${INVITEE2_MXID}
     index: 1
-- tapOn: "Send"
+- tapOn: "Invite"
 - tapOn: "Back"
 - tapOn: "aRoomName"
 - tapOn: "People"
