@@ -29,6 +29,7 @@ Ha folytatja, egyes beállítások megváltozhatnak."</string>
   <string name="screen_notification_settings_enable_notifications">"Értesítések engedélyezése ezen az eszközön"</string>
   <string name="screen_notification_settings_failed_fixing_configuration">"A konfiguráció nem lett kijavítva, próbálja újra."</string>
   <string name="screen_notification_settings_group_chats">"Csoportos csevegések"</string>
+  <string name="screen_notification_settings_invite_for_me_label">"Meghívók"</string>
   <string name="screen_notification_settings_mentions_only_disclaimer">"A Matrix-kiszolgálója nem támogatja ezt a beállítást a titkosított szobákban, előfordulhat, hogy egyes szobákban nem kap értesítést."</string>
   <string name="screen_notification_settings_mentions_section_title">"Említések"</string>
   <string name="screen_notification_settings_mode_all">"Összes"</string>

@@ -3,6 +3,8 @@
   <string name="screen_session_verification_cancelled_subtitle">"Кажется, что-то не так. Время ожидания запроса истекло, либо запрос был отклонен."</string>
   <string name="screen_session_verification_compare_emojis_subtitle">"Убедитесь, что приведенные ниже смайлики совпадают со смайликами, показанными во время другого сеанса."</string>
   <string name="screen_session_verification_compare_emojis_title">"Сравните емодзи"</string>
+  <string name="screen_session_verification_compare_numbers_subtitle">"Убедитесь, что приведенные ниже числа совпадают с цифрами, показанными в другом сеансе."</string>
+  <string name="screen_session_verification_compare_numbers_title">"Сравните числа"</string>
   <string name="screen_session_verification_complete_subtitle">"Ваш новый сеанс подтвержден. У него есть доступ к вашим зашифрованным сообщениям, и другие пользователи увидят его как доверенное."</string>
   <string name="screen_session_verification_open_existing_session_subtitle">"Чтобы получить доступ к зашифрованной истории сообщений, докажите, что это вы."</string>
   <string name="screen_session_verification_open_existing_session_title">"Открыть существующий сеанс"</string>

@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <plurals name="screen_room_member_list_header_title">
+    <item quantity="one">"%1$d személy"</item>
+    <item quantity="other">"%1$d személy"</item>
+  </plurals>
   <string name="screen_notification_settings_edit_failed_updating_default_mode">"Hiba történt az értesítési beállítás frissítésekor."</string>
+  <string name="screen_notification_settings_mentions_only_disclaimer">"A Matrix-kiszolgálója nem támogatja ezt a beállítást a titkosított szobákban, előfordulhat, hogy egyes szobákban nem kap értesítést."</string>
+  <string name="screen_polls_history_title">"Szavazások"</string>
   <string name="screen_room_details_add_topic_title">"Téma hozzáadása"</string>
   <string name="screen_room_details_already_a_member">"Már tag"</string>
   <string name="screen_room_details_already_invited">"Már meghívták"</string>
