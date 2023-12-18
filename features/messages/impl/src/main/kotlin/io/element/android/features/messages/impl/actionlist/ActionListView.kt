@@ -34,7 +34,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -44,7 +43,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -54,6 +52,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemAudioContent
@@ -84,10 +83,6 @@ import io.element.android.libraries.designsystem.theme.components.ModalBottomShe
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.hide
 import io.element.android.libraries.designsystem.utils.CommonDrawables
-import io.element.android.libraries.matrix.ui.components.AttachmentThumbnail
-import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailInfo
-import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailType
-import io.element.android.compound.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
 
@@ -220,11 +215,8 @@ private fun SheetContent(
 @Composable
 private fun MessageSummary(event: TimelineItem.Event, modifier: Modifier = Modifier) {
     val content: @Composable () -> Unit
-    var icon: @Composable () -> Unit = { Avatar(avatarData = event.senderAvatar.copy(size = AvatarSize.MessageActionSender)) }
+    val icon: @Composable () -> Unit = { Avatar(avatarData = event.senderAvatar.copy(size = AvatarSize.MessageActionSender)) }
     val contentStyle = ElementTheme.typography.fontBodyMdRegular.copy(color = MaterialTheme.colorScheme.secondary)
-    val imageModifier = Modifier
-        .size(AvatarSize.MessageActionSender.dp)
-        .clip(RoundedCornerShape(9.dp))
 
     @Composable
     fun ContentForBody(body: String) {
@@ -242,92 +234,24 @@ private fun MessageSummary(event: TimelineItem.Event, modifier: Modifier = Modif
         is TimelineItemRedactedContent,
         is TimelineItemUnknownContent -> content = { ContentForBody(textContent) }
         is TimelineItemLocationContent -> {
-            icon = {
-                AttachmentThumbnail(
-                    modifier = imageModifier,
-                    info = AttachmentThumbnailInfo(
-                        type = AttachmentThumbnailType.Location,
-                        textContent = stringResource(CommonStrings.common_shared_location),
-                    )
-                )
-            }
             content = { ContentForBody(stringResource(CommonStrings.common_shared_location)) }
         }
         is TimelineItemImageContent -> {
-            icon = {
-                AttachmentThumbnail(
-                    modifier = imageModifier,
-                    info = AttachmentThumbnailInfo(
-                        thumbnailSource = event.content.thumbnailSource ?: event.content.mediaSource,
-                        textContent = textContent,
-                        type = AttachmentThumbnailType.Image,
-                        blurHash = event.content.blurhash,
-                    )
-                )
-            }
             content = { ContentForBody(event.content.body) }
         }
         is TimelineItemVideoContent -> {
-            icon = {
-                AttachmentThumbnail(
-                    modifier = imageModifier,
-                    info = AttachmentThumbnailInfo(
-                        thumbnailSource = event.content.thumbnailSource,
-                        textContent = textContent,
-                        type = AttachmentThumbnailType.Video,
-                        blurHash = event.content.blurHash,
-                    )
-                )
-            }
             content = { ContentForBody(event.content.body) }
         }
         is TimelineItemFileContent -> {
-            icon = {
-                AttachmentThumbnail(
-                    modifier = imageModifier,
-                    info = AttachmentThumbnailInfo(
-                        thumbnailSource = event.content.thumbnailSource,
-                        textContent = textContent,
-                        type = AttachmentThumbnailType.File,
-                    )
-                )
-            }
             content = { ContentForBody(event.content.body) }
         }
         is TimelineItemAudioContent -> {
-            icon = {
-                AttachmentThumbnail(
-                    modifier = imageModifier,
-                    info = AttachmentThumbnailInfo(
-                        textContent = textContent,
-                        type = AttachmentThumbnailType.Audio,
-                    )
-                )
-            }
             content = { ContentForBody(event.content.body) }
         }
         is TimelineItemVoiceContent -> {
-            icon = {
-                AttachmentThumbnail(
-                    modifier = imageModifier,
-                    info = AttachmentThumbnailInfo(
-                        textContent = textContent,
-                        type = AttachmentThumbnailType.Voice,
-                    )
-                )
-            }
             content = { ContentForBody(textContent) }
         }
         is TimelineItemPollContent -> {
-            icon = {
-                AttachmentThumbnail(
-                    modifier = imageModifier,
-                    info = AttachmentThumbnailInfo(
-                        textContent = textContent,
-                        type = AttachmentThumbnailType.Poll,
-                    )
-                )
-            }
             content = { ContentForBody(textContent) }
         }
     }
