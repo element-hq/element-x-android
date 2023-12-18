@@ -142,7 +142,7 @@ fun ClickableLinkText(
 fun AnnotatedString.linkify(linkStyle: SpanStyle): AnnotatedString {
     val original = this
     val spannable = SpannableString(this.text)
-    LinkifyCompat.addLinks(spannable, Linkify.WEB_URLS or Linkify.PHONE_NUMBERS)
+    LinkifyCompat.addLinks(spannable, Linkify.WEB_URLS or Linkify.PHONE_NUMBERS or Linkify.EMAIL_ADDRESSES)
 
     val spans = spannable.getSpans(0, spannable.length, URLSpan::class.java)
     return buildAnnotatedString {

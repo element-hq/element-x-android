@@ -52,13 +52,14 @@ class PollHistoryPresenterTest {
     @get:Rule
     val warmUpRule = WarmUpRule()
 
-    private val room = FakeMatrixRoom(
-        matrixTimeline = aPollTimeline(
-            polls = mapOf(
-                AN_EVENT_ID to anOngoingPollContent(),
-                AN_EVENT_ID_2 to anEndedPollContent()
-            )
+    private val timeline = aPollTimeline(
+        polls = mapOf(
+            AN_EVENT_ID to anOngoingPollContent(),
+            AN_EVENT_ID_2 to anEndedPollContent()
         )
+    )
+    private val room = FakeMatrixRoom(
+        matrixTimeline = timeline
     )
 
     @Test
@@ -134,10 +135,14 @@ class PollHistoryPresenterTest {
             presenter.present()
         }.test {
             consumeItemsUntilPredicate {
-                it.pollHistoryItems.size == 2 && !it.isLoading
-            }.last().also { state ->
-                state.eventSink(PollHistoryEvents.LoadMore)
+                it.pollHistoryItems.size == 2
             }
+            timeline.updatePaginationState {
+                copy(isBackPaginating = false)
+            }
+            val loadedState = awaitItem()
+            assertThat(loadedState.isLoading).isFalse()
+            loadedState.eventSink(PollHistoryEvents.LoadMore)
             consumeItemsUntilPredicate {
                 it.isLoading
             }

@@ -21,6 +21,7 @@ import android.text.style.URLSpan
 import android.text.util.Linkify
 import androidx.core.text.buildSpannedString
 import androidx.core.text.getSpans
+import androidx.core.text.toSpannable
 import androidx.core.text.util.LinkifyCompat
 import io.element.android.features.location.api.Location
 import io.element.android.features.messages.api.timeline.HtmlConverterProvider
@@ -68,12 +69,15 @@ class TimelineItemContentMessageFactory @Inject constructor(
 
     suspend fun create(content: MessageContent, senderDisplayName: String, eventId: EventId?): TimelineItemEventContent {
         return when (val messageType = content.type) {
-            is EmoteMessageType -> TimelineItemEmoteContent(
-                body = "* $senderDisplayName ${messageType.body}",
-                htmlDocument = messageType.formatted?.toHtmlDocument(prefix = "* $senderDisplayName"),
-                formattedBody = parseHtml(messageType.formatted, prefix = "* $senderDisplayName"),
-                isEdited = content.isEdited,
-            )
+            is EmoteMessageType -> {
+                val emoteBody = "* $senderDisplayName ${messageType.body}"
+                TimelineItemEmoteContent(
+                    body = emoteBody,
+                    htmlDocument = messageType.formatted?.toHtmlDocument(prefix = "* $senderDisplayName"),
+                    formattedBody = parseHtml(messageType.formatted, prefix = "* $senderDisplayName") ?: emoteBody.withLinks(),
+                    isEdited = content.isEdited,
+                )
+            }
             is ImageMessageType -> {
                 val aspectRatio = aspectRatioOf(messageType.info?.width, messageType.info?.height)
                 TimelineItemImageContent(
@@ -171,21 +175,21 @@ class TimelineItemContentMessageFactory @Inject constructor(
             is NoticeMessageType -> TimelineItemNoticeContent(
                 body = messageType.body,
                 htmlDocument = messageType.formatted?.toHtmlDocument(),
-                formattedBody = parseHtml(messageType.formatted),
+                formattedBody = parseHtml(messageType.formatted) ?: messageType.body.withLinks(),
                 isEdited = content.isEdited,
             )
             is TextMessageType -> {
                 TimelineItemTextContent(
                     body = messageType.body,
                     htmlDocument = messageType.formatted?.toHtmlDocument(),
-                    formattedBody = parseHtml(messageType.formatted),
+                    formattedBody = parseHtml(messageType.formatted) ?: messageType.body.withLinks(),
                     isEdited = content.isEdited,
                 )
             }
             is OtherMessageType -> TimelineItemTextContent(
                 body = messageType.body,
                 htmlDocument = null,
-                formattedBody = null,
+                formattedBody = messageType.body.withLinks(),
                 isEdited = content.isEdited,
             )
         }
@@ -226,7 +230,7 @@ class TimelineItemContentMessageFactory @Inject constructor(
             Pair(start, end)
         }
         // Find and set as URLSpans any links present in the text
-        LinkifyCompat.addLinks(this, Linkify.WEB_URLS or Linkify.PHONE_NUMBERS)
+        LinkifyCompat.addLinks(this, Linkify.WEB_URLS or Linkify.PHONE_NUMBERS or Linkify.EMAIL_ADDRESSES)
         // Restore old spans if they don't conflict with the new ones
         for ((urlSpan, location) in oldURLSpans) {
             val (start, end) = location
@@ -236,4 +240,12 @@ class TimelineItemContentMessageFactory @Inject constructor(
         }
         return this
     }
+}
+
+@Suppress("USELESS_ELVIS")
+private fun String.withLinks(): CharSequence? {
+    /* Note: toSpannable() can return null when running unit tests */
+    val spannable = toSpannable() ?: return null
+    val addedLinks = LinkifyCompat.addLinks(spannable, Linkify.WEB_URLS or Linkify.PHONE_NUMBERS or Linkify.EMAIL_ADDRESSES)
+    return spannable.takeIf { addedLinks }
 }

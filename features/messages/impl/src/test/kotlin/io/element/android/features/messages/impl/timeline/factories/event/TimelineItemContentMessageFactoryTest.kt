@@ -17,8 +17,9 @@
 package io.element.android.features.messages.impl.timeline.factories.event
 
 import android.text.SpannableString
-import android.text.SpannableStringBuilder
+import android.text.Spanned
 import android.text.style.URLSpan
+import androidx.core.text.buildSpannedString
 import androidx.core.text.inSpans
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.location.api.Location
@@ -145,8 +146,39 @@ class TimelineItemContentMessageFactoryTest {
     }
 
     @Test
+    fun `test create TextMessageType with simple link`() = runTest {
+        val sut = createTimelineItemContentMessageFactory()
+        val result = sut.create(
+            content = createMessageContent(type = TextMessageType("https://www.example.org", null)),
+            senderDisplayName = "Bob",
+            eventId = AN_EVENT_ID,
+        ) as TimelineItemTextContent
+        val expected = TimelineItemTextContent(
+            body = "https://www.example.org",
+            htmlDocument = null,
+            plainText = "https://www.example.org",
+            isEdited = false,
+            formattedBody = buildSpannedString {
+                inSpans(URLSpan("https://www.example.org")) {
+                    append("https://www.example.org")
+                }
+            }
+        )
+        assertThat(result.body).isEqualTo(expected.body)
+        assertThat(result.htmlDocument).isEqualTo(expected.htmlDocument)
+        assertThat(result.plainText).isEqualTo(expected.plainText)
+        assertThat(result.isEdited).isEqualTo(expected.isEdited)
+        assertThat(result.formattedBody).isInstanceOf(Spanned::class.java)
+        val spanned = result.formattedBody as Spanned
+        assertThat(spanned.toString()).isEqualTo("https://www.example.org")
+        val urlSpans = spanned.getSpans(0, spanned.length, URLSpan::class.java)
+        assertThat(urlSpans).hasLength(1)
+        assertThat(urlSpans[0].url).isEqualTo("https://www.example.org")
+    }
+
+    @Test
     fun `test create TextMessageType with HTML formatted body`() = runTest {
-        val expected = SpannableStringBuilder().apply {
+        val expected = buildSpannedString {
             append("link to ")
             inSpans(URLSpan("https://matrix.org")) {
                 append("https://matrix.org")
@@ -160,10 +192,12 @@ class TimelineItemContentMessageFactoryTest {
             htmlConverterTransform = { expected }
         )
         val result = sut.create(
-            content = createMessageContent(type = TextMessageType(
-                body = "body",
-                formatted = FormattedBody(MessageFormat.HTML, expected.toString())
-            )),
+            content = createMessageContent(
+                type = TextMessageType(
+                    body = "body",
+                    formatted = FormattedBody(MessageFormat.HTML, expected.toString())
+                )
+            ),
             senderDisplayName = "Bob",
             eventId = AN_EVENT_ID,
         )
@@ -176,10 +210,12 @@ class TimelineItemContentMessageFactoryTest {
             htmlConverterTransform = { it }
         )
         val result = sut.create(
-            content = createMessageContent(type = TextMessageType(
-                body = "body",
-                formatted = FormattedBody(MessageFormat.UNKNOWN, "formatted")
-            )),
+            content = createMessageContent(
+                type = TextMessageType(
+                    body = "body",
+                    formatted = FormattedBody(MessageFormat.UNKNOWN, "formatted")
+                )
+            ),
             senderDisplayName = "Bob",
             eventId = AN_EVENT_ID,
         )
@@ -520,10 +556,12 @@ class TimelineItemContentMessageFactoryTest {
     fun `test create NoticeMessageType with HTML formatted body`() = runTest {
         val sut = createTimelineItemContentMessageFactory()
         val result = sut.create(
-            content = createMessageContent(type = NoticeMessageType(
-                body = "body",
-                formatted = FormattedBody(MessageFormat.HTML, "formatted")
-            )),
+            content = createMessageContent(
+                type = NoticeMessageType(
+                    body = "body",
+                    formatted = FormattedBody(MessageFormat.HTML, "formatted")
+                )
+            ),
             senderDisplayName = "Bob",
             eventId = AN_EVENT_ID,
         )
@@ -552,10 +590,12 @@ class TimelineItemContentMessageFactoryTest {
     fun `test create EmoteMessageType with HTML formatted body`() = runTest {
         val sut = createTimelineItemContentMessageFactory()
         val result = sut.create(
-            content = createMessageContent(type = EmoteMessageType(
-                body = "body",
-                formatted = FormattedBody(MessageFormat.HTML, "formatted")
-            )),
+            content = createMessageContent(
+                type = EmoteMessageType(
+                    body = "body",
+                    formatted = FormattedBody(MessageFormat.HTML, "formatted")
+                )
+            ),
             senderDisplayName = "Bob",
             eventId = AN_EVENT_ID,
         )
