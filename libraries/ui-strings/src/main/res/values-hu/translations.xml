@@ -10,7 +10,7 @@
   <string name="a11y_pin_field">"PIN-mező"</string>
   <string name="a11y_play">"Lejátszás"</string>
   <string name="a11y_poll">"Szavazás"</string>
-  <string name="a11y_poll_end">"Szavazás befejezve"</string>
+  <string name="a11y_poll_end">"Befejezett szavazás"</string>
   <string name="a11y_react_with">"Reagálás a következővel: %1$s"</string>
   <string name="a11y_react_with_other_emojis">"Reagálás más emodzsikkal"</string>
   <string name="a11y_read_receipts_multiple">"Olvasta: %1$s és %2$s"</string>
@@ -45,7 +45,7 @@
   <string name="action_edit">"Szerkesztés"</string>
   <string name="action_edit_poll">"Szavazás szerkesztése"</string>
   <string name="action_enable">"Engedélyezés"</string>
-  <string name="action_end_poll">"Szavazás befejezése"</string>
+  <string name="action_end_poll">"Szavazás lezárása"</string>
   <string name="action_enter_pin">"Adja meg a PIN-kódot"</string>
   <string name="action_forgot_password">"Elfelejtette a jelszót?"</string>
   <string name="action_forward">"Tovább"</string>
@@ -56,7 +56,7 @@
   <string name="action_invites_list">"Meghívások"</string>
   <string name="action_join">"Csatlakozás"</string>
   <string name="action_learn_more">"További tudnivalók"</string>
-  <string name="action_leave">"Kilépés"</string>
+  <string name="action_leave">"Elhagyás"</string>
   <string name="action_leave_room">"Szoba elhagyása"</string>
   <string name="action_manage_account">"Fiók kezelése"</string>
   <string name="action_manage_devices">"Eszközök kezelése"</string>
@@ -65,7 +65,7 @@
   <string name="action_not_now">"Most nem"</string>
   <string name="action_ok">"Rendben"</string>
   <string name="action_open_settings">"Beállítások megnyitása"</string>
-  <string name="action_open_with">"Megnyitás…"</string>
+  <string name="action_open_with">"Megnyitás a következővel"</string>
   <string name="action_quick_reply">"Gyors válasz"</string>
   <string name="action_quote">"Idézet"</string>
   <string name="action_react">"Reakció"</string>
@@ -95,6 +95,7 @@
   <string name="action_try_again">"Próbálja újra"</string>
   <string name="action_view_source">"Forrás megtekintése"</string>
   <string name="action_yes">"Igen"</string>
+  <string name="action_load_more">"Továbbiak betöltése"</string>
   <string name="common_about">"Névjegy"</string>
   <string name="common_acceptable_use_policy">"Elfogadható használatra vonatkozó szabályzat"</string>
   <string name="common_advanced_settings">"Speciális beállítások"</string>
@@ -105,7 +106,7 @@
   <string name="common_chat_backup">"Csevegés biztonsági mentése"</string>
   <string name="common_copyright">"Szerzői jogok"</string>
   <string name="common_creating_room">"Szoba létrehozása…"</string>
-  <string name="common_current_user_left_room">"Kilépett a szobából"</string>
+  <string name="common_current_user_left_room">"Elhagyta a szobát"</string>
   <string name="common_dark">"Sötét"</string>
   <string name="common_decryption_error">"Visszafejtési hiba"</string>
   <string name="common_developer_options">"Fejlesztői beállítások"</string>
@@ -122,7 +123,7 @@
   <string name="common_forward_message">"Üzenet továbbítása"</string>
   <string name="common_gif">"GIF"</string>
   <string name="common_image">"Kép"</string>
-  <string name="common_in_reply_to">"Válaszként erre: %1$s"</string>
+  <string name="common_in_reply_to">"Válasz erre: %1$s"</string>
   <string name="common_install_apk_android">"APK telepítése"</string>
   <string name="common_invite_unknown_profile">"Ez a Matrix-azonosító nem található, ezért előfordulhat, hogy a meghívó nem érkezik meg."</string>
   <string name="common_leaving_room">"Szoba elhagyása"</string>
@@ -160,14 +161,14 @@
   <string name="common_search_for_someone">"Személy keresése"</string>
   <string name="common_search_results">"Keresési találatok"</string>
   <string name="common_security">"Biztonság"</string>
-  <string name="common_seen_by">"Látta:"</string>
+  <string name="common_seen_by">"Látta"</string>
   <string name="common_sending">"Küldés…"</string>
   <string name="common_sending_failed">"A küldés sikertelen"</string>
   <string name="common_sent">"Elküldve"</string>
   <string name="common_server_not_supported">"A kiszolgáló nem támogatott"</string>
   <string name="common_server_url">"Kiszolgáló webcíme"</string>
   <string name="common_settings">"Beállítások"</string>
-  <string name="common_shared_location">"Megosztott hely"</string>
+  <string name="common_shared_location">"Megosztott tartózkodási hely"</string>
   <string name="common_signing_out">"Kijelentkezés"</string>
   <string name="common_starting_chat">"Csevegés megkezdése…"</string>
   <string name="common_sticker">"Matrica"</string>
@@ -182,7 +183,7 @@
   <string name="common_topic_placeholder">"Miről szól ez a szoba?"</string>
   <string name="common_unable_to_decrypt">"Nem lehet visszafejteni"</string>
   <string name="common_unable_to_invite_message">"Nem sikerült meghívót küldeni egy vagy több felhasználónak."</string>
-  <string name="common_unable_to_invite_title">"Nem sikerült meghívót küldeni"</string>
+  <string name="common_unable_to_invite_title">"Nem sikerült elküldeni a meghívót (meghívókat)"</string>
   <string name="common_unlock">"Feloldás"</string>
   <string name="common_unmute">"Némítás feloldása"</string>
   <string name="common_unsupported_event">"Nem támogatott esemény"</string>
@@ -218,6 +219,14 @@
   <plurals name="a11y_read_receipts_multiple_with_others">
     <item quantity="one">"Olvasta: %1$s és még %2$d felhasználó"</item>
     <item quantity="other">"Olvasta: %1$s és még %2$d felhasználó"</item>
+  </plurals>
+  <plurals name="common_member_count">
+    <item quantity="one">"%1$d tag"</item>
+    <item quantity="other">"%1$d tag"</item>
+  </plurals>
+  <plurals name="common_poll_votes_count">
+    <item quantity="one">"%d szavazat"</item>
+    <item quantity="other">"%d szavazat"</item>
   </plurals>
   <string name="preference_rageshake">"Az eszköz rázása a hibajelentéshez"</string>
   <string name="screen_media_picker_error_failed_selection">"Nem sikerült kiválasztani a médiát, próbálja újra."</string>

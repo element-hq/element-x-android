@@ -95,6 +95,7 @@
   <string name="action_try_again">"Zkusit znovu"</string>
   <string name="action_view_source">"Zobrazit zdroj"</string>
   <string name="action_yes">"Ano"</string>
+  <string name="action_load_more">"Načíst více"</string>
   <string name="common_about">"O aplikaci"</string>
   <string name="common_acceptable_use_policy">"Zásady používání"</string>
   <string name="common_advanced_settings">"Pokročilá nastavení"</string>
