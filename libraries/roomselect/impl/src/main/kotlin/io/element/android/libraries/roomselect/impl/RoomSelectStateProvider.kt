@@ -14,9 +14,11 @@
  * limitations under the License.
  */
 
-package io.element.android.features.messages.impl.forward
+package io.element.android.libraries.roomselect.impl
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import io.element.android.libraries.roomselect.api.RoomSelectMode
+import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.message.RoomMessage
@@ -24,31 +26,38 @@ import io.element.android.libraries.matrix.api.roomlist.RoomSummaryDetails
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
-open class ForwardMessagesStateProvider : PreviewParameterProvider<ForwardMessagesState> {
-    override val values: Sequence<ForwardMessagesState>
+open class RoomSelectStateProvider : PreviewParameterProvider<RoomSelectState> {
+    override val values: Sequence<RoomSelectState>
         get() = sequenceOf(
-            aForwardMessagesState(),
-            aForwardMessagesState(
-                isForwarding = true,
+            aRoomSelectState(),
+            aRoomSelectState(query = "Test", isSearchActive = true),
+            aRoomSelectState(resultState = SearchBarResultState.Results(aForwardMessagesRoomList())),
+            aRoomSelectState(
+                resultState = SearchBarResultState.Results(aForwardMessagesRoomList()),
+                query = "Test",
+                isSearchActive = true,
             ),
-            aForwardMessagesState(
-                forwardingSucceeded = persistentListOf(RoomId("!room2:domain")),
-            ),
-            aForwardMessagesState(
-                error = Throwable("error"),
+            aRoomSelectState(
+                resultState = SearchBarResultState.Results(aForwardMessagesRoomList()),
+                query = "Test",
+                isSearchActive = true,
+                selectedRooms = persistentListOf(aRoomDetailsState(roomId = RoomId("!room2:domain")))
             ),
             // Add other states here
         )
 }
 
-fun aForwardMessagesState(
-    isForwarding: Boolean = false,
-    error: Throwable? = null,
-    forwardingSucceeded: ImmutableList<RoomId>? = null,
-) = ForwardMessagesState(
-    isForwarding = isForwarding,
-    error = error,
-    forwardingSucceeded = forwardingSucceeded,
+fun aRoomSelectState(
+    resultState: SearchBarResultState<ImmutableList<RoomSummaryDetails>> = SearchBarResultState.NotSearching(),
+    query: String = "",
+    isSearchActive: Boolean = false,
+    selectedRooms: ImmutableList<RoomSummaryDetails> = persistentListOf(),
+) = RoomSelectState(
+    mode = RoomSelectMode.Forward,
+    resultState = resultState,
+    query = query,
+    isSearchActive = isSearchActive,
+    selectedRooms = selectedRooms,
     eventSink = {}
 )
 

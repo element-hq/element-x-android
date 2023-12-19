@@ -20,16 +20,11 @@ import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
 import io.element.android.libraries.matrix.api.core.EventId
-import io.element.android.libraries.matrix.api.roomlist.RoomSummary
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
-import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.matrix.test.room.aRoomSummaryDetail
-import io.element.android.libraries.matrix.test.roomlist.FakeRoomListService
 import io.element.android.tests.testutils.WarmUpRule
-import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
@@ -40,7 +35,6 @@ class ForwardMessagesPresenterTests {
     @get:Rule
     val warmUpRule = WarmUpRule()
 
-
     @Test
     fun `present - initial state`() = runTest {
         val presenter = aPresenter()
@@ -48,75 +42,23 @@ class ForwardMessagesPresenterTests {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            assertThat(initialState.selectedRooms).isEmpty()
-            assertThat(initialState.resultState).isInstanceOf(SearchBarResultState.NotSearching::class.java)
-            assertThat(initialState.isSearchActive).isFalse()
             assertThat(initialState.isForwarding).isFalse()
             assertThat(initialState.error).isNull()
             assertThat(initialState.forwardingSucceeded).isNull()
-
-            // Search is run automatically
-            val searchState = awaitItem()
-            assertThat(searchState.resultState).isInstanceOf(SearchBarResultState.NoResults::class.java)
         }
     }
 
     @Test
-    fun `present - toggle search active`() = runTest {
+    fun `present - forward successful`() = runTest {
         val presenter = aPresenter()
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            val initialState = awaitItem()
-            skipItems(1)
-
-            initialState.eventSink(ForwardMessagesEvents.ToggleSearchActive)
-            assertThat(awaitItem().isSearchActive).isTrue()
-
-            initialState.eventSink(ForwardMessagesEvents.ToggleSearchActive)
-            assertThat(awaitItem().isSearchActive).isFalse()
-        }
-    }
-
-    @Test
-    fun `present - update query`() = runTest {
-        val roomListService = FakeRoomListService().apply {
-            postAllRooms(listOf(RoomSummary.Filled(aRoomSummaryDetail())))
-        }
-        val client = FakeMatrixClient(roomListService = roomListService)
-        val presenter = aPresenter(client = client)
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
-            val initialState = awaitItem()
-            assertThat(awaitItem().resultState as? SearchBarResultState.Results).isEqualTo(SearchBarResultState.Results(listOf(aRoomSummaryDetail())))
-
-            initialState.eventSink(ForwardMessagesEvents.UpdateQuery("string not contained"))
-            assertThat(awaitItem().query).isEqualTo("string not contained")
-            assertThat(awaitItem().resultState).isInstanceOf(SearchBarResultState.NoResults::class.java)
-        }
-    }
-
-    @Test
-    fun `present - select a room and forward successful`() = runTest {
-        val presenter = aPresenter()
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
-            val initialState = awaitItem()
             skipItems(1)
             val summary = aRoomSummaryDetail()
-
-            initialState.eventSink(ForwardMessagesEvents.SetSelectedRoom(summary))
-            awaitItem()
-
-            // Test successful forwarding
-            initialState.eventSink(ForwardMessagesEvents.ForwardEvent)
-
+            presenter.onRoomSelected(listOf(summary.roomId))
             val forwardingState = awaitItem()
-            assertThat(forwardingState.isSearchActive).isFalse()
             assertThat(forwardingState.isForwarding).isTrue()
-
             val successfulForwardState = awaitItem()
             assertThat(successfulForwardState.isForwarding).isFalse()
             assertThat(successfulForwardState.forwardingSucceeded).isNotNull()
@@ -130,43 +72,17 @@ class ForwardMessagesPresenterTests {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            val initialState = awaitItem()
-            skipItems(1)
-            val summary = aRoomSummaryDetail()
-
-            initialState.eventSink(ForwardMessagesEvents.SetSelectedRoom(summary))
-            awaitItem()
-
             // Test failed forwarding
             room.givenForwardEventResult(Result.failure(Throwable("error")))
-            initialState.eventSink(ForwardMessagesEvents.ForwardEvent)
-            skipItems(1)
-
-            val failedForwardState = awaitItem()
-            assertThat(failedForwardState.isForwarding).isFalse()
-            assertThat(failedForwardState.error).isNotNull()
-
-            // Then clear error
-            initialState.eventSink(ForwardMessagesEvents.ClearError)
-            assertThat(awaitItem().error).isNull()
-        }
-    }
-
-    @Test
-    fun `present - select and remove a room`() = runTest {
-        val presenter = aPresenter()
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
-            val initialState = awaitItem()
             skipItems(1)
             val summary = aRoomSummaryDetail()
-
-            initialState.eventSink(ForwardMessagesEvents.SetSelectedRoom(summary))
-            assertThat(awaitItem().selectedRooms).isEqualTo(persistentListOf(summary))
-
-            initialState.eventSink(ForwardMessagesEvents.RemoveSelectedRoom)
-            assertThat(awaitItem().selectedRooms).isEmpty()
+            presenter.onRoomSelected(listOf(summary.roomId))
+            skipItems(1)
+            val failedForwardState = awaitItem()
+            assertThat(failedForwardState.error).isNotNull()
+            // Then clear error
+            failedForwardState.eventSink(ForwardMessagesEvents.ClearError)
+            assertThat(awaitItem().error).isNull()
         }
     }
 
@@ -174,6 +90,9 @@ class ForwardMessagesPresenterTests {
         eventId: EventId = AN_EVENT_ID,
         fakeMatrixRoom: FakeMatrixRoom = FakeMatrixRoom(),
         coroutineScope: CoroutineScope = this,
-        client: FakeMatrixClient = FakeMatrixClient(),
-    ) = ForwardMessagesPresenter(eventId.value, fakeMatrixRoom, coroutineScope, client)
+    ) = ForwardMessagesPresenter(
+        eventId = eventId.value,
+        room = fakeMatrixRoom,
+        matrixCoroutineScope = coroutineScope,
+    )
 }

@@ -14,15 +14,18 @@
  * limitations under the License.
  */
 
-package io.element.android.features.messages.impl.forward
+package io.element.android.libraries.roomselect.impl
 
-import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.roomselect.api.RoomSelectMode
+import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
+import io.element.android.libraries.matrix.api.roomlist.RoomSummaryDetails
 import kotlinx.collections.immutable.ImmutableList
 
-data class ForwardMessagesState(
-    // TODO Migrate to an Async
-    val isForwarding: Boolean,
-    val error: Throwable?,
-    val forwardingSucceeded: ImmutableList<RoomId>?,
-    val eventSink: (ForwardMessagesEvents) -> Unit
+data class RoomSelectState(
+    val mode: RoomSelectMode,
+    val resultState: SearchBarResultState<ImmutableList<RoomSummaryDetails>>,
+    val query: String,
+    val isSearchActive: Boolean,
+    val selectedRooms: ImmutableList<RoomSummaryDetails>,
+    val eventSink: (RoomSelectEvents) -> Unit
 )
