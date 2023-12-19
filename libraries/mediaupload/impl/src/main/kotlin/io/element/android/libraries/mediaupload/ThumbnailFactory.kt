@@ -65,24 +65,29 @@ class ThumbnailFactory @Inject constructor(
     @SuppressLint("NewApi")
     suspend fun createImageThumbnail(file: File): ThumbnailResult? {
         return createThumbnail { cancellationSignal ->
-            // This API works correctly with GIF
-            if (sdkIntProvider.isAtLeast(Build.VERSION_CODES.Q)) {
-                try {
+            try {
+                // This API works correctly with GIF
+                if (sdkIntProvider.isAtLeast(Build.VERSION_CODES.Q)) {
+                    try {
+                        ThumbnailUtils.createImageThumbnail(
+                            file,
+                            Size(THUMB_MAX_WIDTH, THUMB_MAX_HEIGHT),
+                            cancellationSignal
+                        )
+                    } catch (ioException: IOException) {
+                        Timber.w(ioException, "Failed to create thumbnail for $file")
+                        null
+                    }
+                } else {
+                    @Suppress("DEPRECATION")
                     ThumbnailUtils.createImageThumbnail(
-                        file,
-                        Size(THUMB_MAX_WIDTH, THUMB_MAX_HEIGHT),
-                        cancellationSignal
+                        file.path,
+                        MediaStore.Images.Thumbnails.MINI_KIND,
                     )
-                } catch (ioException: IOException) {
-                    Timber.w(ioException, "Failed to create thumbnail for $file")
-                    null
                 }
-            } else {
-                @Suppress("DEPRECATION")
-                ThumbnailUtils.createImageThumbnail(
-                    file.path,
-                    MediaStore.Images.Thumbnails.MINI_KIND,
-                )
+            } catch (throwable: Throwable) {
+                Timber.w(throwable, "Failed to create thumbnail for $file")
+                null
             }
         }
     }

@@ -55,15 +55,11 @@ class AndroidMediaPreProcessorTest {
             deleteOriginal = false,
             compressIfPossible = true,
         )
-        // This is failing for now
-        val error = result.exceptionOrNull()
-        assertThat(error).isInstanceOf(MediaPreProcessor.Failure::class.java)
-        assertThat(error?.cause).isInstanceOf(NullPointerException::class.java)
-        /*
         val data = result.getOrThrow()
         assertThat(data.file.path).endsWith("image.png")
         val info = data as MediaUploadInfo.Image
-        assertThat(info.thumbnailFile).isNull() // TODO Check this
+        // Computing thumbnailFile is failing with Robolectric
+        assertThat(info.thumbnailFile).isNull()
         assertThat(info.imageInfo).isEqualTo(
             ImageInfo(
                 height = 1_178,
@@ -76,7 +72,6 @@ class AndroidMediaPreProcessorTest {
             )
         )
         assertThat(file.exists()).isTrue()
-         */
     }
 
     @Test
@@ -90,15 +85,11 @@ class AndroidMediaPreProcessorTest {
             deleteOriginal = false,
             compressIfPossible = true,
         )
-        // This is not working for now
-        val error = result.exceptionOrNull()
-        assertThat(error).isInstanceOf(MediaPreProcessor.Failure::class.java)
-        assertThat(error?.cause).isInstanceOf(NoSuchMethodError::class.java)
-        /*
         val data = result.getOrThrow()
         assertThat(data.file.path).endsWith("image.png")
         val info = data as MediaUploadInfo.Image
-        assertThat(info.thumbnailFile).isNull() // TODO Check this
+        // Computing thumbnailFile is failing with Robolectric
+        assertThat(info.thumbnailFile).isNull()
         assertThat(info.imageInfo).isEqualTo(
             ImageInfo(
                 height = 1_178,
@@ -111,7 +102,6 @@ class AndroidMediaPreProcessorTest {
             )
         )
         assertThat(file.exists()).isTrue()
-         */
     }
 
     @Test
@@ -266,7 +256,8 @@ class AndroidMediaPreProcessorTest {
         ).getOrThrow()
         assertThat(result.file.path).endsWith("video.mp4")
         val info = result as MediaUploadInfo.Video
-        assertThat(info.thumbnailFile).isNotNull()
+        // Computing thumbnailFile is failing with Robolectric
+        assertThat(info.thumbnailFile).isNull()
         assertThat(info.videoInfo).isEqualTo(
             VideoInfo(
                 duration = Duration.ZERO, // Not available with Robolectric?
@@ -274,7 +265,7 @@ class AndroidMediaPreProcessorTest {
                 width = 0, // Not available with Robolectric?
                 mimetype = MimeTypes.Mp4,
                 size = 1_673_712,
-                thumbnailInfo = ThumbnailInfo(height = null, width = null, mimetype = MimeTypes.Jpeg, size = 0), // Not available with Robolectric?
+                thumbnailInfo = null,
                 thumbnailSource = null,
                 blurhash = null,
             )
