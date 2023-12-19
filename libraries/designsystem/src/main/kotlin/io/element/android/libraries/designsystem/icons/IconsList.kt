@@ -49,7 +49,6 @@ internal val iconsOther = listOf(
     R.drawable.ic_strikethrough,
     R.drawable.ic_take_photo_camera,
     R.drawable.ic_text_formatting,
-    R.drawable.ic_thread_decoration,
     R.drawable.ic_underline,
     R.drawable.ic_user,
     R.drawable.ic_user_add,
