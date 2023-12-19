@@ -36,7 +36,8 @@ import io.element.android.features.lockscreen.impl.pin.DefaultPinCodeManagerCall
 import io.element.android.features.lockscreen.impl.pin.PinCodeManager
 import io.element.android.features.lockscreen.impl.setup.pin.SetupPinNode
 import io.element.android.features.lockscreen.impl.unlock.PinUnlockNode
-import io.element.android.libraries.architecture.BackstackNode
+import io.element.android.libraries.architecture.BackstackView
+import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.di.SessionScope
@@ -49,7 +50,7 @@ class LockScreenSettingsFlowNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     private val pinCodeManager: PinCodeManager,
-) : BackstackNode<LockScreenSettingsFlowNode.NavTarget>(
+) : BaseFlowNode<LockScreenSettingsFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = NavTarget.Unknown,
         savedStateMap = buildContext.savedStateMap,
@@ -132,10 +133,6 @@ class LockScreenSettingsFlowNode @AssistedInject constructor(
 
     @Composable
     override fun View(modifier: Modifier) {
-        Children(
-            navModel = backstack,
-            modifier = modifier,
-            transitionHandler = rememberDefaultTransitionHandler(),
-        )
+        BackstackView()
     }
 }

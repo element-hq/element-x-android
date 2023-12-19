@@ -30,7 +30,8 @@ import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.features.poll.api.create.CreatePollEntryPoint
 import io.element.android.features.poll.api.create.CreatePollMode
-import io.element.android.libraries.architecture.BackstackNode
+import io.element.android.libraries.architecture.BackstackView
+import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.di.RoomScope
@@ -42,7 +43,7 @@ class PollHistoryFlowNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     private val createPollEntryPoint: CreatePollEntryPoint,
-) : BackstackNode<PollHistoryFlowNode.NavTarget>(
+) : BaseFlowNode<PollHistoryFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = NavTarget.Root,
         savedStateMap = buildContext.savedStateMap,
@@ -82,11 +83,7 @@ class PollHistoryFlowNode @AssistedInject constructor(
 
     @Composable
     override fun View(modifier: Modifier) {
-        Children(
-            navModel = backstack,
-            modifier = modifier,
-            transitionHandler = rememberDefaultTransitionHandler()
-        )
+        BackstackView()
     }
 
 }

@@ -32,7 +32,8 @@ import io.element.android.anvilannotations.ContributesNode
 import io.element.android.features.createroom.impl.addpeople.AddPeopleNode
 import io.element.android.features.createroom.impl.configureroom.ConfigureRoomNode
 import io.element.android.features.createroom.impl.di.CreateRoomComponent
-import io.element.android.libraries.architecture.BackstackNode
+import io.element.android.libraries.architecture.BackstackView
+import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
 import io.element.android.libraries.architecture.bindings
 import io.element.android.libraries.architecture.createNode
@@ -45,7 +46,7 @@ class ConfigureRoomFlowNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
 ) : DaggerComponentOwner,
-    BackstackNode<ConfigureRoomFlowNode.NavTarget>(
+    BaseFlowNode<ConfigureRoomFlowNode.NavTarget>(
         backstack = BackStack(
             initialElement = NavTarget.Root,
             savedStateMap = buildContext.savedStateMap,
@@ -88,10 +89,6 @@ class ConfigureRoomFlowNode @AssistedInject constructor(
 
     @Composable
     override fun View(modifier: Modifier) {
-        Children(
-            navModel = backstack,
-            modifier = modifier,
-            transitionHandler = rememberDefaultTransitionHandler()
-        )
+        BackstackView()
     }
 }

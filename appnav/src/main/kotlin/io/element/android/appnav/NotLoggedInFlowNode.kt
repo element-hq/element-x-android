@@ -33,7 +33,8 @@ import io.element.android.anvilannotations.ContributesNode
 import io.element.android.features.login.api.LoginEntryPoint
 import io.element.android.features.onboarding.api.OnBoardingEntryPoint
 import io.element.android.features.preferences.api.ConfigureTracingEntryPoint
-import io.element.android.libraries.architecture.BackstackNode
+import io.element.android.libraries.architecture.BackstackView
+import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.matrix.ui.media.NotLoggedInImageLoaderFactory
@@ -47,7 +48,7 @@ class NotLoggedInFlowNode @AssistedInject constructor(
     private val configureTracingEntryPoint: ConfigureTracingEntryPoint,
     private val loginEntryPoint: LoginEntryPoint,
     private val notLoggedInImageLoaderFactory: NotLoggedInImageLoaderFactory,
-) : BackstackNode<NotLoggedInFlowNode.NavTarget>(
+) : BaseFlowNode<NotLoggedInFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = NavTarget.OnBoarding,
         savedStateMap = buildContext.savedStateMap
@@ -111,11 +112,6 @@ class NotLoggedInFlowNode @AssistedInject constructor(
 
     @Composable
     override fun View(modifier: Modifier) {
-        Children(
-            navModel = backstack,
-            modifier = modifier,
-            // Animate navigation to login screen
-            transitionHandler = rememberDefaultTransitionHandler(),
-        )
+        BackstackView()
     }
 }

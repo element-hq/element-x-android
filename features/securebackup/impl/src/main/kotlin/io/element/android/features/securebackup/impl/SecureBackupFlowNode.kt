@@ -33,7 +33,8 @@ import io.element.android.features.securebackup.impl.enable.SecureBackupEnableNo
 import io.element.android.features.securebackup.impl.enter.SecureBackupEnterRecoveryKeyNode
 import io.element.android.features.securebackup.impl.root.SecureBackupRootNode
 import io.element.android.features.securebackup.impl.setup.SecureBackupSetupNode
-import io.element.android.libraries.architecture.BackstackNode
+import io.element.android.libraries.architecture.BackstackView
+import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.di.SessionScope
@@ -43,7 +44,7 @@ import kotlinx.parcelize.Parcelize
 class SecureBackupFlowNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
-) : BackstackNode<SecureBackupFlowNode.NavTarget>(
+) : BaseFlowNode<SecureBackupFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = NavTarget.Root,
         savedStateMap = buildContext.savedStateMap,
@@ -124,10 +125,6 @@ class SecureBackupFlowNode @AssistedInject constructor(
 
     @Composable
     override fun View(modifier: Modifier) {
-        Children(
-            navModel = backstack,
-            modifier = modifier,
-            transitionHandler = rememberDefaultTransitionHandler()
-        )
+        BackstackView()
     }
 }

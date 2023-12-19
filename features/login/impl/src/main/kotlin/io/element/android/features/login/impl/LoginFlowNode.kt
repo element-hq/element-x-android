@@ -48,7 +48,8 @@ import io.element.android.features.login.impl.screens.loginpassword.LoginFormSta
 import io.element.android.features.login.impl.screens.loginpassword.LoginPasswordNode
 import io.element.android.features.login.impl.screens.searchaccountprovider.SearchAccountProviderNode
 import io.element.android.features.login.impl.screens.waitlistscreen.WaitListNode
-import io.element.android.libraries.architecture.BackstackNode
+import io.element.android.libraries.architecture.BackstackView
+import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
 import io.element.android.libraries.architecture.createNode
@@ -68,7 +69,7 @@ class LoginFlowNode @AssistedInject constructor(
     private val accountProviderDataSource: AccountProviderDataSource,
     private val defaultLoginUserStory: DefaultLoginUserStory,
     private val oidcActionFlow: OidcActionFlow,
-) : BackstackNode<LoginFlowNode.NavTarget>(
+) : BaseFlowNode<LoginFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = NavTarget.ConfirmAccountProvider,
         savedStateMap = buildContext.savedStateMap,
@@ -217,11 +218,6 @@ class LoginFlowNode @AssistedInject constructor(
                 accountProviderDataSource.reset()
             }
         }
-        Children(
-            navModel = backstack,
-            modifier = modifier,
-            // Animate transition to change server screen
-            transitionHandler = rememberDefaultTransitionHandler(),
-        )
+        BackstackView()
     }
 }

@@ -38,7 +38,8 @@ import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.features.networkmonitor.api.NetworkMonitor
 import io.element.android.features.networkmonitor.api.NetworkStatus
-import io.element.android.libraries.architecture.BackstackNode
+import io.element.android.libraries.architecture.BackstackView
+import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.architecture.inputs
@@ -57,7 +58,7 @@ class RoomFlowNode @AssistedInject constructor(
     loadingRoomStateFlowFactory: LoadingRoomStateFlowFactory,
     private val networkMonitor: NetworkMonitor,
 ) :
-    BackstackNode<RoomFlowNode.NavTarget>(
+    BaseFlowNode<RoomFlowNode.NavTarget>(
         backstack = BackStack(
             initialElement = NavTarget.Loading,
             savedStateMap = buildContext.savedStateMap,
@@ -130,10 +131,7 @@ class RoomFlowNode @AssistedInject constructor(
 
     @Composable
     override fun View(modifier: Modifier) {
-        Children(
-            navModel = backstack,
-            modifier = modifier,
-        )
+        BackstackView()
     }
 }
 

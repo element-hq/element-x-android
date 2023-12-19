@@ -32,7 +32,8 @@ import io.element.android.anvilannotations.ContributesNode
 import io.element.android.features.createroom.api.CreateRoomEntryPoint
 import io.element.android.features.createroom.impl.configureroom.ConfigureRoomNode
 import io.element.android.features.createroom.impl.root.CreateRoomRootNode
-import io.element.android.libraries.architecture.BackstackNode
+import io.element.android.libraries.architecture.BackstackView
+import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.di.SessionScope
@@ -43,7 +44,7 @@ import kotlinx.parcelize.Parcelize
 class CreateRoomFlowNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
-) : BackstackNode<CreateRoomFlowNode.NavTarget>(
+) : BaseFlowNode<CreateRoomFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = NavTarget.Root,
         savedStateMap = buildContext.savedStateMap,
@@ -87,10 +88,6 @@ class CreateRoomFlowNode @AssistedInject constructor(
 
     @Composable
     override fun View(modifier: Modifier) {
-        Children(
-            navModel = backstack,
-            modifier = modifier,
-            transitionHandler = rememberDefaultTransitionHandler()
-        )
+        BackstackView()
     }
 }

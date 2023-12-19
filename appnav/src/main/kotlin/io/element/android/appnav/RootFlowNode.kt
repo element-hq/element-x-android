@@ -46,7 +46,8 @@ import io.element.android.features.login.api.oidc.OidcAction
 import io.element.android.features.login.api.oidc.OidcActionFlow
 import io.element.android.features.rageshake.api.bugreport.BugReportEntryPoint
 import io.element.android.features.signedout.api.SignedOutEntryPoint
-import io.element.android.libraries.architecture.BackstackNode
+import io.element.android.libraries.architecture.BackstackView
+import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.architecture.waitForChildAttached
@@ -74,7 +75,7 @@ class RootFlowNode @AssistedInject constructor(
     private val signedOutEntryPoint: SignedOutEntryPoint,
     private val intentResolver: IntentResolver,
     private val oidcActionFlow: OidcActionFlow,
-) : BackstackNode<RootFlowNode.NavTarget>(
+) : BaseFlowNode<RootFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = NavTarget.SplashScreen,
         savedStateMap = buildContext.savedStateMap,
@@ -172,11 +173,7 @@ class RootFlowNode @AssistedInject constructor(
             modifier = modifier,
             onOpenBugReport = this::onOpenBugReport,
         ) {
-            Children(
-                navModel = backstack,
-                // Animate opening the bug report screen
-                transitionHandler = rememberDefaultTransitionHandler(),
-            )
+            BackstackView()
         }
     }
 

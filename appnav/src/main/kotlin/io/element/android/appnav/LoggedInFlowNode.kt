@@ -57,7 +57,8 @@ import io.element.android.features.preferences.api.PreferencesEntryPoint
 import io.element.android.features.roomlist.api.RoomListEntryPoint
 import io.element.android.features.securebackup.api.SecureBackupEntryPoint
 import io.element.android.features.verifysession.api.VerifySessionEntryPoint
-import io.element.android.libraries.architecture.BackstackNode
+import io.element.android.libraries.architecture.BackstackView
+import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.architecture.waitForChildAttached
@@ -100,7 +101,7 @@ class LoggedInFlowNode @AssistedInject constructor(
     private val lockScreenStateService: LockScreenService,
     private val matrixClient: MatrixClient,
     snackbarDispatcher: SnackbarDispatcher,
-) : BackstackNode<LoggedInFlowNode.NavTarget>(
+) : BaseFlowNode<LoggedInFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = NavTarget.RoomList,
         savedStateMap = buildContext.savedStateMap,
@@ -384,12 +385,7 @@ class LoggedInFlowNode @AssistedInject constructor(
     override fun View(modifier: Modifier) {
         Box(modifier = modifier) {
             val lockScreenState by lockScreenStateService.lockState.collectAsState()
-            Children(
-                navModel = backstack,
-                modifier = Modifier,
-                // Animate navigation to settings and to a room
-                transitionHandler = rememberDefaultTransitionHandler(),
-            )
+            BackstackView()
             val isFtueDisplayed by ftueState.shouldDisplayFlow.collectAsState()
             if (!isFtueDisplayed) {
                 PermanentChild(permanentNavModel = permanentNavModel, navTarget = NavTarget.LoggedInPermanent)

@@ -20,9 +20,9 @@ import android.content.Context
 import android.os.Parcelable
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.bumble.appyx.core.composable.Children
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
+import com.bumble.appyx.core.node.node
 import com.bumble.appyx.core.plugin.Plugin
 import com.bumble.appyx.core.plugin.plugins
 import com.bumble.appyx.navmodel.backstack.BackStack
@@ -49,9 +49,11 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
 import io.element.android.features.poll.api.create.CreatePollEntryPoint
 import io.element.android.features.poll.api.create.CreatePollMode
-import io.element.android.libraries.architecture.BackstackNode
-import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
+import io.element.android.libraries.architecture.BackstackWithOverlayBox
+import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.architecture.createNode
+import io.element.android.libraries.architecture.overlay.Overlay
+import io.element.android.libraries.architecture.overlay.operation.show
 import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.MatrixClient
@@ -74,9 +76,12 @@ class MessagesFlowNode @AssistedInject constructor(
     private val sendLocationEntryPoint: SendLocationEntryPoint,
     private val showLocationEntryPoint: ShowLocationEntryPoint,
     private val createPollEntryPoint: CreatePollEntryPoint,
-) : BackstackNode<MessagesFlowNode.NavTarget>(
+) : BaseFlowNode<MessagesFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = NavTarget.Messages,
+        savedStateMap = buildContext.savedStateMap,
+    ),
+    overlay = Overlay(
         savedStateMap = buildContext.savedStateMap,
     ),
     buildContext = buildContext,
@@ -84,6 +89,10 @@ class MessagesFlowNode @AssistedInject constructor(
 ) {
 
     sealed interface NavTarget : Parcelable {
+
+        @Parcelize
+        data object Empty : NavTarget
+
         @Parcelize
         data object Messages : NavTarget
 
@@ -223,6 +232,9 @@ class MessagesFlowNode @AssistedInject constructor(
                     .params(CreatePollEntryPoint.Params(mode = CreatePollMode.EditPoll(eventId = navTarget.eventId)))
                     .build()
             }
+            NavTarget.Empty -> {
+                node(buildContext) {}
+            }
         }
     }
 
@@ -239,7 +251,7 @@ class MessagesFlowNode @AssistedInject constructor(
                     mediaSource = event.content.mediaSource,
                     thumbnailSource = event.content.thumbnailSource,
                 )
-                backstack.push(navTarget)
+                overlay.show(navTarget)
             }
             is TimelineItemVideoContent -> {
                 val navTarget = NavTarget.MediaViewer(
@@ -252,7 +264,7 @@ class MessagesFlowNode @AssistedInject constructor(
                     mediaSource = event.content.videoSource,
                     thumbnailSource = event.content.thumbnailSource,
                 )
-                backstack.push(navTarget)
+                overlay.show(navTarget)
             }
             is TimelineItemFileContent -> {
                 val navTarget = NavTarget.MediaViewer(
@@ -265,7 +277,7 @@ class MessagesFlowNode @AssistedInject constructor(
                     mediaSource = event.content.fileSource,
                     thumbnailSource = event.content.thumbnailSource,
                 )
-                backstack.push(navTarget)
+                overlay.show(navTarget)
             }
             is TimelineItemAudioContent -> {
                 val navTarget = NavTarget.MediaViewer(
@@ -278,14 +290,14 @@ class MessagesFlowNode @AssistedInject constructor(
                     mediaSource = event.content.mediaSource,
                     thumbnailSource = null,
                 )
-                backstack.push(navTarget)
+                overlay.show(navTarget)
             }
             is TimelineItemLocationContent -> {
                 val navTarget = NavTarget.LocationViewer(
                     location = event.content.location,
                     description = event.content.description,
                 )
-                backstack.push(navTarget)
+                overlay.show(navTarget)
             }
             else -> Unit
         }
@@ -293,10 +305,6 @@ class MessagesFlowNode @AssistedInject constructor(
 
     @Composable
     override fun View(modifier: Modifier) {
-        Children(
-            navModel = backstack,
-            modifier = modifier,
-            transitionHandler = rememberDefaultTransitionHandler(),
-        )
+        BackstackWithOverlayBox(modifier)
     }
 }

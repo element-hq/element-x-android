@@ -35,7 +35,8 @@ import io.element.android.anvilannotations.ContributesNode
 import io.element.android.appnav.di.RoomComponentFactory
 import io.element.android.features.messages.api.MessagesEntryPoint
 import io.element.android.features.roomdetails.api.RoomDetailsEntryPoint
-import io.element.android.libraries.architecture.BackstackNode
+import io.element.android.libraries.architecture.BackstackView
+import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
 import io.element.android.libraries.architecture.inputs
@@ -64,7 +65,7 @@ class RoomLoadedFlowNode @AssistedInject constructor(
     private val appCoroutineScope: CoroutineScope,
     roomComponentFactory: RoomComponentFactory,
     roomMembershipObserver: RoomMembershipObserver,
-) : BackstackNode<RoomLoadedFlowNode.NavTarget>(
+) : BaseFlowNode<RoomLoadedFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = plugins.filterIsInstance(Inputs::class.java).first().initialElement,
         savedStateMap = buildContext.savedStateMap,
@@ -202,10 +203,6 @@ class RoomLoadedFlowNode @AssistedInject constructor(
                 }
             }
         }
-        Children(
-            navModel = backstack,
-            modifier = modifier,
-            transitionHandler = rememberDefaultTransitionHandler(),
-        )
+        BackstackView()
     }
 }
