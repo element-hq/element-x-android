@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package io.element.android.features.analytics.api
+package io.element.android.appconfig
 
-object Config {
+object AnalyticsConfig {
     const val POLICY_LINK = "https://element.io/cookie-policy"
 }
 

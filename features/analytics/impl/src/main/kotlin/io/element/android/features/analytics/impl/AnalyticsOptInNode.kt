@@ -27,7 +27,7 @@ import com.bumble.appyx.core.plugin.Plugin
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
-import io.element.android.features.analytics.api.Config
+import io.element.android.appconfig.AnalyticsConfig
 import io.element.android.libraries.androidutils.browser.openUrlInChromeCustomTab
 import io.element.android.libraries.di.AppScope
 
@@ -39,7 +39,7 @@ class AnalyticsOptInNode @AssistedInject constructor(
 ) : Node(buildContext, plugins = plugins) {
 
     private fun onClickTerms(activity: Activity, darkTheme: Boolean) {
-        activity.openUrlInChromeCustomTab(null, darkTheme, Config.POLICY_LINK)
+        activity.openUrlInChromeCustomTab(null, darkTheme, AnalyticsConfig.POLICY_LINK)
     }
 
     @Composable
