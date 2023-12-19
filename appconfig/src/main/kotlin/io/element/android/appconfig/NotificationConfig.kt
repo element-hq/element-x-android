@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.push.impl
+package io.element.android.appconfig
 
 object NotificationConfig {
     // TODO EAx Implement and set to true at some point
