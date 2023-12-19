@@ -25,9 +25,6 @@ import com.bumble.appyx.core.navigation.operationstrategies.OperationStrategy
 import com.bumble.appyx.core.state.SavedStateMap
 import com.bumble.appyx.navmodel.backstack.BackStack
 import com.bumble.appyx.navmodel.backstack.BackStackOnScreenResolver
-import com.bumble.appyx.navmodel.backstack.backpresshandler.PopBackPressHandler
-import com.bumble.appyx.navmodel.backstack.operation.NewRoot
-import com.bumble.appyx.navmodel.backstack.operation.Push
 
 class Overlay<NavTarget : Any>(
     savedStateMap: SavedStateMap?,

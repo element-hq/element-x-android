@@ -20,7 +20,6 @@ import android.os.Parcelable
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import coil.Coil
-import com.bumble.appyx.core.composable.Children
 import com.bumble.appyx.core.lifecycle.subscribe
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
@@ -35,7 +34,6 @@ import io.element.android.features.onboarding.api.OnBoardingEntryPoint
 import io.element.android.features.preferences.api.ConfigureTracingEntryPoint
 import io.element.android.libraries.architecture.BackstackView
 import io.element.android.libraries.architecture.BaseFlowNode
-import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.matrix.ui.media.NotLoggedInImageLoaderFactory
 import kotlinx.parcelize.Parcelize
