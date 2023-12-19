@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.mediaupload
+package io.element.android.libraries.mediaupload.impl
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -34,7 +34,9 @@ import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.matrix.api.media.ThumbnailInfo
 import io.element.android.services.toolbox.api.sdk.BuildVersionSdkIntProvider
 import kotlinx.coroutines.suspendCancellableCoroutine
+import timber.log.Timber
 import java.io.File
+import java.io.IOException
 import javax.inject.Inject
 import kotlin.coroutines.resume
 
@@ -61,26 +63,36 @@ class ThumbnailFactory @Inject constructor(
 ) {
 
     @SuppressLint("NewApi")
-    suspend fun createImageThumbnail(file: File): ThumbnailResult {
+    suspend fun createImageThumbnail(file: File): ThumbnailResult? {
         return createThumbnail { cancellationSignal ->
-            // This API works correctly with GIF
-            if (sdkIntProvider.isAtLeast(Build.VERSION_CODES.Q)) {
-                ThumbnailUtils.createImageThumbnail(
-                    file,
-                    Size(THUMB_MAX_WIDTH, THUMB_MAX_HEIGHT),
-                    cancellationSignal
-                )
-            } else {
-                @Suppress("DEPRECATION")
-                ThumbnailUtils.createImageThumbnail(
-                    file.path,
-                    MediaStore.Images.Thumbnails.MINI_KIND,
-                )
+            try {
+                // This API works correctly with GIF
+                if (sdkIntProvider.isAtLeast(Build.VERSION_CODES.Q)) {
+                    try {
+                        ThumbnailUtils.createImageThumbnail(
+                            file,
+                            Size(THUMB_MAX_WIDTH, THUMB_MAX_HEIGHT),
+                            cancellationSignal
+                        )
+                    } catch (ioException: IOException) {
+                        Timber.w(ioException, "Failed to create thumbnail for $file")
+                        null
+                    }
+                } else {
+                    @Suppress("DEPRECATION")
+                    ThumbnailUtils.createImageThumbnail(
+                        file.path,
+                        MediaStore.Images.Thumbnails.MINI_KIND,
+                    )
+                }
+            } catch (throwable: Throwable) {
+                Timber.w(throwable, "Failed to create thumbnail for $file")
+                null
             }
         }
     }
 
-    suspend fun createVideoThumbnail(file: File): ThumbnailResult {
+    suspend fun createVideoThumbnail(file: File): ThumbnailResult? {
         return createThumbnail {
             MediaMetadataRetriever().runAndRelease {
                 setDataSource(context, file.toUri())
@@ -89,37 +101,38 @@ class ThumbnailFactory @Inject constructor(
         }
     }
 
-    private suspend fun createThumbnail(bitmapFactory: (CancellationSignal) -> Bitmap?): ThumbnailResult = suspendCancellableCoroutine { continuation ->
+    private suspend fun createThumbnail(bitmapFactory: (CancellationSignal) -> Bitmap?): ThumbnailResult? = suspendCancellableCoroutine { continuation ->
         val cancellationSignal = CancellationSignal()
         continuation.invokeOnCancellation {
             cancellationSignal.cancel()
         }
         val bitmapThumbnail: Bitmap? = bitmapFactory(cancellationSignal)
+        if (bitmapThumbnail == null) {
+            continuation.resume(null)
+            return@suspendCancellableCoroutine
+        }
         val thumbnailFile = context.createTmpFile(extension = "jpeg")
         thumbnailFile.outputStream().use { outputStream ->
-            bitmapThumbnail?.compress(Bitmap.CompressFormat.JPEG, 80, outputStream)
+            bitmapThumbnail.compress(Bitmap.CompressFormat.JPEG, 80, outputStream)
         }
-        val blurhash = bitmapThumbnail?.let {
-            BlurHash.encode(it, 3, 3)
-        }
+        val blurhash = BlurHash.encode(bitmapThumbnail, 3, 3)
         val thumbnailResult = ThumbnailResult(
             file = thumbnailFile,
             info = ThumbnailInfo(
-                height = bitmapThumbnail?.height?.toLong(),
-                width = bitmapThumbnail?.width?.toLong(),
+                height = bitmapThumbnail.height.toLong(),
+                width = bitmapThumbnail.width.toLong(),
                 mimetype = MimeTypes.Jpeg,
                 size = thumbnailFile.length()
             ),
             blurhash = blurhash
         )
-        bitmapThumbnail?.recycle()
+        bitmapThumbnail.recycle()
         continuation.resume(thumbnailResult)
-
     }
 }
 
 data class ThumbnailResult(
     val file: File,
     val info: ThumbnailInfo,
-    val blurhash: String?,
+    val blurhash: String,
 )

@@ -360,15 +360,25 @@ class RustMatrixRoom(
         }
     }
 
-    override suspend fun sendImage(file: File, thumbnailFile: File, imageInfo: ImageInfo, progressCallback: ProgressCallback?): Result<MediaUploadHandler> {
-        return sendAttachment(listOf(file, thumbnailFile)) {
-            innerTimeline.sendImage(file.path, thumbnailFile.path, imageInfo.map(), progressCallback?.toProgressWatcher())
+    override suspend fun sendImage(
+        file: File,
+        thumbnailFile: File?,
+        imageInfo: ImageInfo,
+        progressCallback: ProgressCallback?,
+    ): Result<MediaUploadHandler> {
+        return sendAttachment(listOfNotNull(file, thumbnailFile)) {
+            innerTimeline.sendImage(file.path, thumbnailFile?.path, imageInfo.map(), progressCallback?.toProgressWatcher())
         }
     }
 
-    override suspend fun sendVideo(file: File, thumbnailFile: File, videoInfo: VideoInfo, progressCallback: ProgressCallback?): Result<MediaUploadHandler> {
-        return sendAttachment(listOf(file, thumbnailFile)) {
-            innerTimeline.sendVideo(file.path, thumbnailFile.path, videoInfo.map(), progressCallback?.toProgressWatcher())
+    override suspend fun sendVideo(
+        file: File,
+        thumbnailFile: File?,
+        videoInfo: VideoInfo,
+        progressCallback: ProgressCallback?,
+    ): Result<MediaUploadHandler> {
+        return sendAttachment(listOfNotNull(file, thumbnailFile)) {
+            innerTimeline.sendVideo(file.path, thumbnailFile?.path, videoInfo.map(), progressCallback?.toProgressWatcher())
         }
     }
 

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.mediaupload
+package io.element.android.libraries.mediaupload.impl
 
 import android.content.Context
 import android.graphics.Bitmap

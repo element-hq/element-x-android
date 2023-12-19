@@ -299,14 +299,14 @@ class FakeMatrixRoom(
 
     override suspend fun sendImage(
         file: File,
-        thumbnailFile: File,
+        thumbnailFile: File?,
         imageInfo: ImageInfo,
         progressCallback: ProgressCallback?
     ): Result<MediaUploadHandler> = fakeSendMedia(progressCallback)
 
     override suspend fun sendVideo(
         file: File,
-        thumbnailFile: File,
+        thumbnailFile: File?,
         videoInfo: VideoInfo,
         progressCallback: ProgressCallback?
     ): Result<MediaUploadHandler> = fakeSendMedia(
