@@ -19,7 +19,6 @@ package io.element.android.libraries.textcomposer.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
@@ -58,11 +57,6 @@ internal fun SendButton(
             is MessageComposerMode.Edit -> CompoundIcons.Check
             else -> CompoundIcons.Send
         }
-        val iconSize = when (composerMode) {
-            is MessageComposerMode.Edit -> 24.dp
-            // CommonDrawables.ic_september_send is too big... reduce its size.
-            else -> 18.dp
-        }
         val iconStartPadding = when (composerMode) {
             is MessageComposerMode.Edit -> 0.dp
             else -> 2.dp
@@ -79,7 +73,6 @@ internal fun SendButton(
         ) {
             Icon(
                 modifier = Modifier
-                    .height(iconSize)
                     .padding(start = iconStartPadding)
                     .align(Alignment.Center),
                 imageVector = iconVector,
