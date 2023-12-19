@@ -122,5 +122,5 @@ class ThumbnailFactory @Inject constructor(
 data class ThumbnailResult(
     val file: File,
     val info: ThumbnailInfo,
-    val blurhash: String?,
+    val blurhash: String,
 )
