@@ -14,9 +14,12 @@
  * limitations under the License.
  */
 
-package io.element.android.features.analytics.api
+package io.element.android.appconfig
 
-object Config {
-    const val POLICY_LINK = "https://element.io/cookie-policy"
+object NotificationConfig {
+    // TODO EAx Implement and set to true at some point
+    const val supportMarkAsReadAction = false
+
+    // TODO EAx Implement and set to true at some point
+    const val supportQuickReplyAction = false
 }
-

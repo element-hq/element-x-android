@@ -46,6 +46,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
+import io.element.android.appconfig.RoomListConfig
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.roomlist.impl.R
@@ -128,8 +129,6 @@ private fun DefaultRoomListTopBar(
     onMenuActionClicked: (RoomListMenuAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    var showMenu by remember { mutableStateOf(false) }
-
     // We need this to manually clip the top app bar in preview mode
     val previewAppBarHeight = if (LocalInspectionMode.current) {
         112.dp.roundToPx()
@@ -222,46 +221,53 @@ private fun DefaultRoomListTopBar(
                         contentDescription = stringResource(CommonStrings.action_search),
                     )
                 }
-                IconButton(
-                    onClick = { showMenu = !showMenu }
-                ) {
-                    Icon(
-                        imageVector = CompoundIcons.OverflowVertical,
-                        contentDescription = null,
-                    )
-                }
-                DropdownMenu(
-                    expanded = showMenu,
-                    onDismissRequest = { showMenu = false }
-                ) {
-                    DropdownMenuItem(
-                        onClick = {
-                            showMenu = false
-                            onMenuActionClicked(RoomListMenuAction.InviteFriends)
-                        },
-                        text = { Text(stringResource(id = CommonStrings.action_invite)) },
-                        leadingIcon = {
-                            Icon(
-                                imageVector = CompoundIcons.ShareAndroid,
-                                tint = ElementTheme.materialColors.secondary,
-                                contentDescription = null,
+                if (RoomListConfig.hasDropdownMenu) {
+                    var showMenu by remember { mutableStateOf(false) }
+                    IconButton(
+                        onClick = { showMenu = !showMenu }
+                    ) {
+                        Icon(
+                            imageVector = CompoundIcons.OverflowVertical,
+                            contentDescription = null,
+                        )
+                    }
+                    DropdownMenu(
+                        expanded = showMenu,
+                        onDismissRequest = { showMenu = false }
+                    ) {
+                        if (RoomListConfig.showInviteMenuItem) {
+                            DropdownMenuItem(
+                                onClick = {
+                                    showMenu = false
+                                    onMenuActionClicked(RoomListMenuAction.InviteFriends)
+                                },
+                                text = { Text(stringResource(id = CommonStrings.action_invite)) },
+                                leadingIcon = {
+                                    Icon(
+                                        imageVector = CompoundIcons.ShareAndroid,
+                                        tint = ElementTheme.materialColors.secondary,
+                                        contentDescription = null,
+                                    )
+                                }
                             )
                         }
-                    )
-                    DropdownMenuItem(
-                        onClick = {
-                            showMenu = false
-                            onMenuActionClicked(RoomListMenuAction.ReportBug)
-                        },
-                        text = { Text(stringResource(id = CommonStrings.common_report_a_problem)) },
-                        leadingIcon = {
-                            Icon(
-                                imageVector = CompoundIcons.ChatProblem,
-                                tint = ElementTheme.materialColors.secondary,
-                                contentDescription = null,
+                        if (RoomListConfig.showReportProblemMenuItem) {
+                            DropdownMenuItem(
+                                onClick = {
+                                    showMenu = false
+                                    onMenuActionClicked(RoomListMenuAction.ReportBug)
+                                },
+                                text = { Text(stringResource(id = CommonStrings.common_report_a_problem)) },
+                                leadingIcon = {
+                                    Icon(
+                                        imageVector = CompoundIcons.ChatProblem,
+                                        tint = ElementTheme.materialColors.secondary,
+                                        contentDescription = null,
+                                    )
+                                }
                             )
                         }
-                    )
+                    }
                 }
             },
             scrollBehavior = scrollBehavior,

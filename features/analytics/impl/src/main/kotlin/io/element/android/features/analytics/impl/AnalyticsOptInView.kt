@@ -40,10 +40,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import io.element.android.appconfig.AnalyticsConfig
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.analytics.api.AnalyticsOptInEvents
-import io.element.android.features.analytics.api.Config
 import io.element.android.libraries.designsystem.atomic.molecules.ButtonColumnMolecule
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
 import io.element.android.libraries.designsystem.atomic.organisms.InfoListItem
@@ -119,7 +119,7 @@ private fun AnalyticsOptInHeader(
             color = Color.Unspecified,
             underline = false,
             bold = true,
-            tagAndLink = LINK_TAG to Config.POLICY_LINK,
+            tagAndLink = LINK_TAG to AnalyticsConfig.POLICY_LINK,
         )
         ClickableText(
             text = text,

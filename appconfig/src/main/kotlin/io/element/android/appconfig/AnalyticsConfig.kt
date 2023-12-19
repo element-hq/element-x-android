@@ -14,12 +14,8 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.push.impl
+package io.element.android.appconfig
 
-object NotificationConfig {
-    // TODO EAx Implement and set to true at some point
-    const val supportMarkAsReadAction = false
-
-    // TODO EAx Implement and set to true at some point
-    const val supportQuickReplyAction = false
+object AnalyticsConfig {
+    const val POLICY_LINK = "https://element.io/cookie-policy"
 }
