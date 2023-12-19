@@ -34,7 +34,9 @@ import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.matrix.api.media.ThumbnailInfo
 import io.element.android.services.toolbox.api.sdk.BuildVersionSdkIntProvider
 import kotlinx.coroutines.suspendCancellableCoroutine
+import timber.log.Timber
 import java.io.File
+import java.io.IOException
 import javax.inject.Inject
 import kotlin.coroutines.resume
 
@@ -65,11 +67,16 @@ class ThumbnailFactory @Inject constructor(
         return createThumbnail { cancellationSignal ->
             // This API works correctly with GIF
             if (sdkIntProvider.isAtLeast(Build.VERSION_CODES.Q)) {
-                ThumbnailUtils.createImageThumbnail(
-                    file,
-                    Size(THUMB_MAX_WIDTH, THUMB_MAX_HEIGHT),
-                    cancellationSignal
-                )
+                try {
+                    ThumbnailUtils.createImageThumbnail(
+                        file,
+                        Size(THUMB_MAX_WIDTH, THUMB_MAX_HEIGHT),
+                        cancellationSignal
+                    )
+                } catch (ioException: IOException) {
+                    Timber.w(ioException, "Failed to create thumbnail for $file")
+                    null
+                }
             } else {
                 @Suppress("DEPRECATION")
                 ThumbnailUtils.createImageThumbnail(
