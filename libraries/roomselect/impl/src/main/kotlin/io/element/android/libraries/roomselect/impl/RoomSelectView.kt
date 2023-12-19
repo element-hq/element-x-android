@@ -32,7 +32,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -41,7 +40,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
-import io.element.android.libraries.roomselect.api.RoomSelectMode
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
@@ -57,11 +55,10 @@ import io.element.android.libraries.designsystem.theme.components.SearchBarResul
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
-import io.element.android.libraries.designsystem.theme.roomListRoomMessage
-import io.element.android.libraries.designsystem.theme.roomListRoomName
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.roomlist.RoomSummaryDetails
 import io.element.android.libraries.matrix.ui.components.SelectedRoom
+import io.element.android.libraries.roomselect.api.RoomSelectMode
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
 
@@ -221,13 +218,12 @@ private fun RoomSummaryView(
             .heightIn(56.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        val roomAlias = summary.canonicalAlias ?: summary.roomId.value
         Avatar(
             avatarData = AvatarData(
-                id = roomAlias,
+                id = summary.roomId.value,
                 name = summary.name,
                 url = summary.avatarURLString,
-                size = AvatarSize.ForwardRoomListItem,
+                size = AvatarSize.RoomSelectRoomListItem,
             ),
         )
         Column(
@@ -239,18 +235,20 @@ private fun RoomSummaryView(
             Text(
                 style = ElementTheme.typography.fontBodyLgRegular,
                 text = summary.name,
-                color = MaterialTheme.roomListRoomName(),
+                color = ElementTheme.colors.textPrimary,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
-            // Id
-            Text(
-                text = roomAlias,
-                color = MaterialTheme.roomListRoomMessage(),
-                style = ElementTheme.typography.fontBodySmRegular,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
-            )
+            // Alias
+            summary.canonicalAlias?.let { alias ->
+                Text(
+                    text = alias,
+                    color = ElementTheme.colors.textSecondary,
+                    style = ElementTheme.typography.fontBodySmRegular,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
         }
         RadioButton(selected = isSelected, onClick = { onSelection(summary) })
     }
