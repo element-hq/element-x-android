@@ -17,12 +17,12 @@
 package io.element.android.libraries.roomselect.impl
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import io.element.android.libraries.roomselect.api.RoomSelectMode
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.message.RoomMessage
 import io.element.android.libraries.matrix.api.roomlist.RoomSummaryDetails
+import io.element.android.libraries.roomselect.api.RoomSelectMode
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
@@ -47,7 +47,7 @@ open class RoomSelectStateProvider : PreviewParameterProvider<RoomSelectState> {
         )
 }
 
-fun aRoomSelectState(
+private fun aRoomSelectState(
     resultState: SearchBarResultState<ImmutableList<RoomSummaryDetails>> = SearchBarResultState.NotSearching(),
     query: String = "",
     isSearchActive: Boolean = false,
@@ -61,12 +61,16 @@ fun aRoomSelectState(
     eventSink = {}
 )
 
-internal fun aForwardMessagesRoomList() = persistentListOf(
+private fun aForwardMessagesRoomList() = persistentListOf(
     aRoomDetailsState(),
-    aRoomDetailsState(roomId = RoomId("!room2:domain"), canonicalAlias = "#element-x-room:matrix.org"),
+    aRoomDetailsState(
+        roomId = RoomId("!room2:domain"),
+        name = "Room with alias",
+        canonicalAlias = "#alias:example.org",
+    ),
 )
 
-fun aRoomDetailsState(
+private fun aRoomDetailsState(
     roomId: RoomId = RoomId("!room:domain"),
     name: String = "roomName",
     canonicalAlias: String? = null,
