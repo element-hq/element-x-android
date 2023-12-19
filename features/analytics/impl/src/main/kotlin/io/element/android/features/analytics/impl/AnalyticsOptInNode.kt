@@ -17,7 +17,6 @@
 package io.element.android.features.analytics.impl
 
 import android.app.Activity
-import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -28,6 +27,7 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.appconfig.AnalyticsConfig
+import io.element.android.compound.theme.ElementTheme
 import io.element.android.libraries.androidutils.browser.openUrlInChromeCustomTab
 import io.element.android.libraries.di.AppScope
 
@@ -45,7 +45,7 @@ class AnalyticsOptInNode @AssistedInject constructor(
     @Composable
     override fun View(modifier: Modifier) {
         val activity = LocalContext.current as Activity
-        val isDark = MaterialTheme.colors.isLight.not()
+        val isDark = ElementTheme.isLightTheme.not()
         val state = presenter.present()
         AnalyticsOptInView(
             state = state,
