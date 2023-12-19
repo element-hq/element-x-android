@@ -57,7 +57,6 @@ import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.TransactionId
 import io.element.android.libraries.matrix.api.core.UserId
@@ -550,7 +549,9 @@ private fun ReplyToModeView(
         ) {
             Text(
                 text = senderName,
-                modifier = Modifier.fillMaxWidth().clipToBounds(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clipToBounds(),
                 style = ElementTheme.typography.fontBodySmMedium,
                 textAlign = TextAlign.Start,
                 color = ElementTheme.materialColors.primary,
