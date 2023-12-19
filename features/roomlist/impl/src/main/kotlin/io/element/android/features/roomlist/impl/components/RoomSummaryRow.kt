@@ -176,7 +176,7 @@ private fun RowScope.LastMessageAndIndicatorRow(room: RoomListRoomSummary) {
         if (room.hasOngoingCall) {
             Icon(
                 modifier = Modifier.size(16.dp),
-                imageVector = CompoundIcons.VideoCall,
+                imageVector = CompoundIcons.VideoCallSolid,
                 contentDescription = null,
                 tint = ElementTheme.colors.unreadIndicator,
             )

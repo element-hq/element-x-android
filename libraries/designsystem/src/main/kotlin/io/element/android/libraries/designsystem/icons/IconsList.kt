@@ -54,6 +54,5 @@ internal val iconsOther = listOf(
     R.drawable.ic_underline,
     R.drawable.ic_user,
     R.drawable.ic_user_add,
-    R.drawable.ic_video_call,
     R.drawable.ic_waiting_to_decrypt,
 )
