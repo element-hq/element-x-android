@@ -2,6 +2,7 @@
     <dictionary name="shared">
         <words>
             <w>backstack</w>
+            <w>blurhash</w>
             <w>ftue</w>
             <w>homeserver</w>
             <w>konsist</w>
