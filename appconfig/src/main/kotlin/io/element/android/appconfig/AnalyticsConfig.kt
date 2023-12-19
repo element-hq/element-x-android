@@ -19,4 +19,3 @@ package io.element.android.appconfig
 object AnalyticsConfig {
     const val POLICY_LINK = "https://element.io/cookie-policy"
 }
-

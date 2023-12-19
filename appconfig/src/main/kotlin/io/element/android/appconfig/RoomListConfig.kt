@@ -22,4 +22,3 @@ object RoomListConfig {
 
     const val hasDropdownMenu = showInviteMenuItem || showReportProblemMenuItem
 }
-
