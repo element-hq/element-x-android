@@ -30,14 +30,15 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import io.element.android.compound.icons.CompoundIcons
+import io.element.android.compound.icons.compoundicons.Check
+import io.element.android.compound.icons.compoundicons.Send
+import io.element.android.compound.theme.ElementTheme
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
-import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
-import io.element.android.compound.theme.ElementTheme
-import io.element.android.libraries.designsystem.icons.CompoundDrawables
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
@@ -53,9 +54,9 @@ internal fun SendButton(
         onClick = onClick,
         enabled = canSendMessage,
     ) {
-        val iconId = when (composerMode) {
-            is MessageComposerMode.Edit -> CompoundDrawables.ic_check
-            else -> CommonDrawables.ic_send
+        val iconVector = when (composerMode) {
+            is MessageComposerMode.Edit -> CompoundIcons.Check
+            else -> CompoundIcons.Send
         }
         val iconSize = when (composerMode) {
             is MessageComposerMode.Edit -> 24.dp
@@ -81,7 +82,7 @@ internal fun SendButton(
                     .height(iconSize)
                     .padding(start = iconStartPadding)
                     .align(Alignment.Center),
-                resourceId = iconId,
+                imageVector = iconVector,
                 contentDescription = contentDescription,
                 // Exception here, we use Color.White instead of ElementTheme.colors.iconOnSolidPrimary
                 tint = if (canSendMessage) Color.White else ElementTheme.colors.iconDisabled
