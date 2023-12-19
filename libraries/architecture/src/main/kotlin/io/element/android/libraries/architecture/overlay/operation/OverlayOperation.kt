@@ -13,22 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-plugins {
-    id("io.element.android-compose-library")
-    id("kotlin-parcelize")
-}
 
-android {
-    namespace = "io.element.android.libraries.architecture"
-}
+package io.element.android.libraries.architecture.overlay.operation
 
-dependencies {
-    api(projects.libraries.di)
-    api(libs.dagger)
-    api(libs.appyx.core)
-    api(libs.androidx.lifecycle.runtime)
+import com.bumble.appyx.core.navigation.Operation
+import com.bumble.appyx.navmodel.backstack.BackStack
 
-    testImplementation(libs.test.junit)
-    testImplementation(libs.coroutines.test)
-    testImplementation(libs.test.truth)
-}
+interface OverlayOperation<T> : Operation<T, BackStack.State>
