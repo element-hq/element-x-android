@@ -137,7 +137,7 @@ class AndroidMediaPreProcessor @Inject constructor(
                 resizeMode = ResizeMode.Approximate(IMAGE_SCALE_REF_SIZE, IMAGE_SCALE_REF_SIZE),
                 orientation = orientation,
             ).getOrThrow()
-            val thumbnailResult: ThumbnailResult = thumbnailFactory.createImageThumbnail(compressionResult.file)
+            val thumbnailResult = thumbnailFactory.createImageThumbnail(compressionResult.file)
             val imageInfo = compressionResult.toImageInfo(
                 mimeType = mimeType,
                 thumbnailResult = thumbnailResult
@@ -146,13 +146,13 @@ class AndroidMediaPreProcessor @Inject constructor(
             return MediaUploadInfo.Image(
                 file = compressionResult.file,
                 imageInfo = imageInfo,
-                thumbnailFile = thumbnailResult.file
+                thumbnailFile = thumbnailResult?.file
             )
         }
 
         suspend fun processImageWithoutCompression(): MediaUploadInfo {
             val file = copyToTmpFile(uri)
-            val thumbnailResult: ThumbnailResult = thumbnailFactory.createImageThumbnail(file)
+            val thumbnailResult = thumbnailFactory.createImageThumbnail(file)
             val imageInfo = contentResolver.openInputStream(uri).use { input ->
                 val bitmap = BitmapFactory.decodeStream(input, null, null)!!
                 ImageInfo(
@@ -160,16 +160,16 @@ class AndroidMediaPreProcessor @Inject constructor(
                     height = bitmap.height.toLong(),
                     mimetype = mimeType,
                     size = file.length(),
-                    thumbnailInfo = thumbnailResult.info,
+                    thumbnailInfo = thumbnailResult?.info,
                     thumbnailSource = null,
-                    blurhash = thumbnailResult.blurhash,
+                    blurhash = thumbnailResult?.blurhash,
                 )
             }
             removeSensitiveImageMetadata(file)
             return MediaUploadInfo.Image(
                 file = file,
                 imageInfo = imageInfo,
-                thumbnailFile = thumbnailResult.file
+                thumbnailFile = thumbnailResult?.file
             )
         }
 
@@ -197,7 +197,7 @@ class AndroidMediaPreProcessor @Inject constructor(
         return MediaUploadInfo.Video(
             file = resultFile,
             videoInfo = videoInfo,
-            thumbnailFile = thumbnailInfo.file
+            thumbnailFile = thumbnailInfo?.file
         )
     }
 
@@ -235,7 +235,7 @@ class AndroidMediaPreProcessor @Inject constructor(
         }
     }
 
-    private fun extractVideoMetadata(file: File, mimeType: String?, thumbnailResult: ThumbnailResult): VideoInfo =
+    private fun extractVideoMetadata(file: File, mimeType: String?, thumbnailResult: ThumbnailResult?): VideoInfo =
         MediaMetadataRetriever().runAndRelease {
             setDataSource(context, Uri.fromFile(file))
             VideoInfo(
@@ -244,10 +244,10 @@ class AndroidMediaPreProcessor @Inject constructor(
                 height = extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_HEIGHT)?.toLong() ?: 0L,
                 mimetype = mimeType,
                 size = file.length(),
-                thumbnailInfo = thumbnailResult.info,
+                thumbnailInfo = thumbnailResult?.info,
                 // Will be computed by the rust sdk
                 thumbnailSource = null,
-                blurhash = thumbnailResult.blurhash,
+                blurhash = thumbnailResult?.blurhash,
             )
         }
 
@@ -257,15 +257,15 @@ class AndroidMediaPreProcessor @Inject constructor(
     }
 }
 
-fun ImageCompressionResult.toImageInfo(mimeType: String, thumbnailResult: ThumbnailResult) = ImageInfo(
+private fun ImageCompressionResult.toImageInfo(mimeType: String, thumbnailResult: ThumbnailResult?) = ImageInfo(
     width = width.toLong(),
     height = height.toLong(),
     mimetype = mimeType,
     size = size,
-    thumbnailInfo = thumbnailResult.info,
+    thumbnailInfo = thumbnailResult?.info,
     // Will be computed by the rust sdk
     thumbnailSource = null,
-    blurhash = thumbnailResult.blurhash,
+    blurhash = thumbnailResult?.blurhash,
 )
 
 private fun MediaMetadataRetriever.extractDuration(): Duration {
