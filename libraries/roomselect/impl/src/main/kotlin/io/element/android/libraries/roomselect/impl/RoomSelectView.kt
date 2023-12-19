@@ -226,7 +226,7 @@ private fun RoomSummaryView(
                 id = summary.roomId.value,
                 name = summary.name,
                 url = summary.avatarURLString,
-                size = AvatarSize.ForwardRoomListItem,
+                size = AvatarSize.RoomSelectRoomListItem,
             ),
         )
         Column(
