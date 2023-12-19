@@ -28,7 +28,6 @@ internal val iconsOther = listOf(
     R.drawable.ic_devices,
     R.drawable.ic_edit,
     R.drawable.ic_edit_outline,
-    R.drawable.ic_edit_solid,
     R.drawable.ic_encryption_enabled,
     R.drawable.ic_forward,
     R.drawable.ic_groups,
