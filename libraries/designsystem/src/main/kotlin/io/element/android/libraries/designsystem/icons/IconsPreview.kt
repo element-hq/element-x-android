@@ -44,7 +44,7 @@ internal class CompoundIconListPreviewProvider : PreviewParameterProvider<IconCh
         get() {
             val chunks = CompoundIcons.allResIds.chunked(36)
             return chunks.mapIndexed { index, chunk ->
-                IconChunk(index = index+1, total =  chunks.size, icons = chunk.toPersistentList())
+                IconChunk(index = index + 1, total = chunks.size, icons = chunk.toPersistentList())
             }
                 .asSequence()
         }
