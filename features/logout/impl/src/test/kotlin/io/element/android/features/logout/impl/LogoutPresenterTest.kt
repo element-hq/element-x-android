@@ -71,7 +71,7 @@ class LogoutPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            skipItems(1)
+            skipItems(3)
             val initialState = awaitItem()
             assertThat(initialState.isLastSession).isTrue()
             assertThat(initialState.backupUploadState).isEqualTo(BackupUploadState.Unknown)
