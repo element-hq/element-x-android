@@ -48,7 +48,7 @@ import io.element.android.libraries.designsystem.theme.messageFromMeBackground
 import io.element.android.libraries.designsystem.theme.messageFromOtherBackground
 
 private val BUBBLE_RADIUS = 12.dp
-private val BUBBLE_INCOMING_OFFSET = 16.dp
+internal val BUBBLE_INCOMING_OFFSET = 16.dp
 
 // Design says: The maximum width of a bubble is still 3/4 of the screen width. But try with 85% now.
 private const val BUBBLE_WIDTH_RATIO = 0.85f
