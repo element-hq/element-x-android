@@ -76,7 +76,7 @@ fun TimelineItemAudioView(
                 overflow = TextOverflow.Ellipsis
             )
             Text(
-                text = content.fileExtensionAndSize + extraPadding.getStr(12.sp),
+                text = content.fileExtensionAndSize + extraPadding.getStr(ElementTheme.typography.fontBodySmRegular),
                 color = ElementTheme.materialColors.secondary,
                 style = ElementTheme.typography.fontBodySmRegular,
                 maxLines = 1,
