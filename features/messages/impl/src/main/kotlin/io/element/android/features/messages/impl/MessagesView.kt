@@ -91,7 +91,6 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
-import io.element.android.libraries.designsystem.icons.CompoundDrawables
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.BottomSheetDragHandle
@@ -479,7 +478,10 @@ private fun MessagesViewTopBar(
                 JoinCallMenuItem(onJoinCallClicked = onJoinCallClicked)
             } else {
                 IconButton(onClick = onJoinCallClicked, enabled = callState != RoomCallState.DISABLED) {
-                    Icon(CompoundIcons.VideoCall, contentDescription = stringResource(CommonStrings.a11y_start_call))
+                    Icon(
+                        imageVector = CompoundIcons.VideoCallSolid,
+                        contentDescription = stringResource(CommonStrings.a11y_start_call),
+                    )
                 }
             }
             Spacer(Modifier.width(8.dp))
@@ -504,7 +506,7 @@ private fun JoinCallMenuItem(
     ) {
         Icon(
             modifier = Modifier.size(20.dp),
-            resourceId = CompoundDrawables.ic_video_call,
+            imageVector = CompoundIcons.VideoCallSolid,
             contentDescription = null
         )
         Spacer(Modifier.width(8.dp))

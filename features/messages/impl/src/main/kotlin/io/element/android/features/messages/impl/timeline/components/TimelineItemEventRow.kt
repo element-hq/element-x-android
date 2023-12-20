@@ -62,6 +62,7 @@ import androidx.compose.ui.zIndex
 import androidx.constraintlayout.compose.ConstrainScope
 import androidx.constraintlayout.compose.ConstraintLayout
 import io.element.android.compound.theme.ElementTheme
+import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.messages.impl.timeline.TimelineEvents
 import io.element.android.features.messages.impl.timeline.TimelineRoomInfo
 import io.element.android.features.messages.impl.timeline.aTimelineItemEvent
@@ -93,7 +94,6 @@ import io.element.android.libraries.designsystem.swipe.rememberSwipeableActionsS
 import io.element.android.libraries.designsystem.text.toPx
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
@@ -428,7 +428,8 @@ private fun MessageEventBubbleContent(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Icon(
-                resourceId = CommonDrawables.ic_thread_decoration,
+                modifier = Modifier.height(14.dp),
+                imageVector = CompoundIcons.Threads,
                 contentDescription = null,
                 tint = ElementTheme.colors.iconSecondary,
             )
