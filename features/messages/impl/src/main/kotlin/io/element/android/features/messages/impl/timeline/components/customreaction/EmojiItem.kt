@@ -22,9 +22,12 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.ripple.rememberRipple
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -33,12 +36,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import io.element.android.emojibasebindings.Emoji
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.compound.theme.ElementTheme
+import io.element.android.libraries.designsystem.text.toDp
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
@@ -47,6 +53,7 @@ fun EmojiItem(
     isSelected: Boolean,
     onEmojiSelected: (Emoji) -> Unit,
     modifier: Modifier = Modifier,
+    emojiSize: TextUnit = 20.sp,
 ) {
     val backgroundColor = if (isSelected) {
         ElementTheme.colors.bgActionPrimaryRest
@@ -60,12 +67,12 @@ fun EmojiItem(
     }
     Box(
         modifier = modifier
-            .size(40.dp)
+            .sizeIn(minWidth = 40.dp, minHeight = 40.dp)
             .background(backgroundColor, CircleShape)
             .clickable(
                 enabled = true,
                 onClick = { onEmojiSelected(item) },
-                indication = rememberRipple(bounded = false, radius = 20.dp),
+                indication = rememberRipple(bounded = false, radius = emojiSize.toDp() / 2 + 10.dp),
                 interactionSource = remember { MutableInteractionSource() }
             )
             .clearAndSetSemantics {
@@ -75,7 +82,7 @@ fun EmojiItem(
     ) {
         Text(
             text = item.unicode,
-            style = ElementTheme.typography.fontHeadingSmRegular,
+            style = LocalTextStyle.current.copy(fontSize = emojiSize),
         )
     }
 }
