@@ -150,8 +150,8 @@ private fun DefaultRoomListTopBar(
     val statusBarPadding = with(LocalDensity.current) { WindowInsets.statusBars.getTop(this).toDp() }
 
     Box(modifier = modifier) {
-        val smallTextStyle = ElementTheme.typography.aliasScreenTitle
-        val largeTextStyle = ElementTheme.typography.fontHeadingLgBold.copy(
+        val collapsedTitleTextStyle = ElementTheme.typography.aliasScreenTitle
+        val expandedTitleTextStyle = ElementTheme.typography.fontHeadingLgBold.copy(
             // Due to a limitation of MediumTopAppBar, and to avoid the text to be truncated,
             // ensure that the font size will never be bigger than 28.dp.
             fontSize = 28.dp.applyScaleDown().toSp()
@@ -159,7 +159,10 @@ private fun DefaultRoomListTopBar(
         MaterialTheme(
             colorScheme = ElementTheme.materialColors,
             shapes = MaterialTheme.shapes,
-            typography = ElementTheme.materialTypography.copy(headlineSmall = largeTextStyle, titleLarge = smallTextStyle),
+            typography = ElementTheme.materialTypography.copy(
+                headlineSmall = expandedTitleTextStyle,
+                titleLarge = collapsedTitleTextStyle
+            ),
         ) {
             MediumTopAppBar(
                 modifier = Modifier
