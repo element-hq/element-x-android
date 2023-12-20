@@ -145,7 +145,7 @@ class LogoutPresenterTest {
             val loadingState = awaitItem()
             assertThat(loadingState.showConfirmationDialog).isFalse()
             assertThat(loadingState.logoutAction).isInstanceOf(Async.Loading::class.java)
-            val successState = awaitItem()
+            val successState = awaitLastSequentialItem()
             assertThat(successState.logoutAction).isInstanceOf(Async.Success::class.java)
         }
     }
