@@ -345,7 +345,16 @@ private fun TimelineItemEventRowContent(
                         linkStartOrEnd(event)
                     }
                     .zIndex(1f)
-                    .padding(start = if (event.isMine) 16.dp else 36.dp, end = 16.dp)
+                    .padding(
+                        // Note: due to the applied constraints, start is left for other's message and right for mine
+                        // In design we want a offset of 6.dp compare to the bubble, so start is 22.dp (16 + 6)
+                        start = when {
+                            event.isMine -> 22.dp
+                            timelineRoomInfo.isDirect -> 22.dp
+                            else -> 22.dp + BUBBLE_INCOMING_OFFSET
+                        },
+                        end = 16.dp
+                    )
             )
         }
     }
