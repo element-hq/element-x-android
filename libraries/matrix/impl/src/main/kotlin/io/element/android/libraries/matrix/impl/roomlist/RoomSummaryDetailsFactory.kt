@@ -41,7 +41,8 @@ class RoomSummaryDetailsFactory(private val roomMessageFactory: RoomMessageFacto
             userDefinedNotificationMode = roomInfo.userDefinedNotificationMode?.let(RoomNotificationSettingsMapper::mapMode),
             hasRoomCall = roomInfo.hasRoomCall,
             numUnreadMentions = roomInfo.numUnreadMentions.toInt(),
-            numUnreadMessages = roomInfo.numUnreadMessages.toInt(),
+            // Use RoomInfo.notificationCount for now, as numUnreadMessages is not always updated when a message is sent
+            numUnreadMessages = roomInfo.notificationCount.toInt(),
         )
     }
 }
