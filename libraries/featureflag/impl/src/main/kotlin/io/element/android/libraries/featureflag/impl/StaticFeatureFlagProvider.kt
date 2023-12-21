@@ -39,9 +39,9 @@ class StaticFeatureFlagProvider @Inject constructor() :
                 FeatureFlags.NotificationSettings -> true
                 FeatureFlags.VoiceMessages -> true
                 FeatureFlags.PinUnlock -> true
-                FeatureFlags.Mentions -> false
-                FeatureFlags.SecureStorage -> false
-                FeatureFlags.ReadReceipts -> false
+                FeatureFlags.Mentions -> true
+                FeatureFlags.SecureStorage -> true
+                FeatureFlags.ReadReceipts -> true
             }
         } else {
             false
