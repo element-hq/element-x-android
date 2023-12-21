@@ -204,8 +204,8 @@ private fun RowScope.NotificationIcons(room: RoomListRoomSummary) {
                     imageVector = CompoundIcons.Mention,
                     tint = ElementTheme.colors.unreadIndicator,
                 )
-            }
-            if (room.numUnreadMessages > 0) {
+                UnreadIndicatorAtom()
+            } else if (room.numUnreadMessages > 0) {
                 UnreadIndicatorAtom()
             }
         }
@@ -217,13 +217,9 @@ private fun RowScope.NotificationIcons(room: RoomListRoomSummary) {
                     imageVector = CompoundIcons.Mention,
                     tint = ElementTheme.colors.unreadIndicator,
                 )
-                if (room.numUnreadMessages > 0) {
-                    UnreadIndicatorAtom()
-                }
-            } else {
-                if (room.numUnreadMessages > 0) {
-                    UnreadIndicatorAtom(color = ElementTheme.colors.iconQuaternary)
-                }
+                UnreadIndicatorAtom()
+            } else if (room.numUnreadMessages > 0) {
+                UnreadIndicatorAtom(color = ElementTheme.colors.iconQuaternary)
             }
         }
         RoomNotificationMode.MUTE -> {
@@ -233,7 +229,7 @@ private fun RowScope.NotificationIcons(room: RoomListRoomSummary) {
                 imageVector = CompoundIcons.NotificationsSolidOff,
                 tint = ElementTheme.colors.iconQuaternary,
             )
-            if (room.numUnreadMessages > 0) {
+            if (room.numUnreadMessages > 0 || room.numUnreadMentions > 0) {
                 UnreadIndicatorAtom(color = ElementTheme.colors.iconQuaternary)
             }
         }

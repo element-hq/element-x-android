@@ -69,6 +69,14 @@ open class RoomListRoomSummaryProvider : PreviewParameterProvider<RoomListRoomSu
                             numUnreadMentions = 1,
                             hasOngoingCall = hasCall,
                         ),
+                        aRoomListRoomSummary(
+                            name = roomNotificationMode.name,
+                            lastMessage = "New mentions" + if (hasCall) ", call" else "",
+                            notificationMode = roomNotificationMode,
+                            numUnreadMessages = 0,
+                            numUnreadMentions = 1,
+                            hasOngoingCall = hasCall,
+                        ),
                     )
                 }.flatten()
             }.flatten(),
