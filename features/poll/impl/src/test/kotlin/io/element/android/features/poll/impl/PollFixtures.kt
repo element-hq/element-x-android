@@ -31,7 +31,7 @@ fun aPollTimeline(
     return FakeMatrixTimeline(
         initialTimelineItems = polls.map { entry ->
             MatrixTimelineItem.Event(
-                entry.key.hashCode().toLong(),
+                entry.key.value,
                 anEventTimelineItem(
                     eventId = entry.key,
                     content = entry.value,

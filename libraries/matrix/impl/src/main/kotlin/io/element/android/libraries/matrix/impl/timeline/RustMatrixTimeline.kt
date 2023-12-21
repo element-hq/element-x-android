@@ -38,7 +38,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.getAndUpdate
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.onEach
@@ -80,7 +80,6 @@ class RustMatrixTimeline(
         lastLoginTimestamp = lastLoginTimestamp,
         isRoomEncrypted = matrixRoom.isEncrypted,
         isKeyBackupEnabled = isKeyBackupEnabled,
-        paginationStateFlow = _paginationState,
         dispatcher = dispatcher,
     )
 
@@ -102,6 +101,11 @@ class RustMatrixTimeline(
 
     override val paginationState: StateFlow<MatrixTimeline.PaginationState> = _paginationState.asStateFlow()
 
+    @OptIn(ExperimentalCoroutinesApi::class)
+    override val timelineItems: Flow<List<MatrixTimelineItem>> = _timelineItems.mapLatest { items ->
+        encryptedHistoryPostProcessor.process(items)
+    }
+
     init {
         Timber.d("Initialize timeline for room ${matrixRoom.roomId}")
 
@@ -115,13 +119,51 @@ class RustMatrixTimeline(
                 postDiffs(diffs)
             }.launchIn(this)
 
-            innerTimeline.backPaginationStatusFlow()
+            paginationStateFlow()
                 .onEach {
-                    postPaginationStatus(it)
+                    _paginationState.value = it
                 }
                 .launchIn(this)
 
             fetchMembers()
+        }
+    }
+
+    private fun paginationStateFlow(): Flow<MatrixTimeline.PaginationState> {
+        return combine(
+            innerTimeline.backPaginationStatusFlow(),
+            timelineItems,
+        ) { paginationStatus, filteredItems ->
+            if (filteredItems.hasEncryptionHistoryBanner()) {
+                return@combine MatrixTimeline.PaginationState(
+                    isBackPaginating = false,
+                    hasMoreToLoadBackwards = false,
+                    beginningOfRoomReached = false,
+                )
+            }
+            when (paginationStatus) {
+                BackPaginationStatus.IDLE -> {
+                    MatrixTimeline.PaginationState(
+                        isBackPaginating = false,
+                        hasMoreToLoadBackwards = true,
+                        beginningOfRoomReached = false,
+                    )
+                }
+                BackPaginationStatus.PAGINATING -> {
+                    MatrixTimeline.PaginationState(
+                        isBackPaginating = true,
+                        hasMoreToLoadBackwards = true,
+                        beginningOfRoomReached = false,
+                    )
+                }
+                BackPaginationStatus.TIMELINE_START_REACHED -> {
+                    MatrixTimeline.PaginationState(
+                        isBackPaginating = false,
+                        hasMoreToLoadBackwards = false,
+                        beginningOfRoomReached = true,
+                    )
+                }
+            }
         }
     }
 
@@ -132,11 +174,6 @@ class RustMatrixTimeline(
         } catch (exception: Exception) {
             Timber.e(exception, "Error fetching members for room ${matrixRoom.roomId}")
         }
-    }
-
-    @OptIn(ExperimentalCoroutinesApi::class)
-    override val timelineItems: Flow<List<MatrixTimelineItem>> = _timelineItems.mapLatest { items ->
-        encryptedHistoryPostProcessor.process(items)
     }
 
     private suspend fun postItems(items: List<TimelineItem>) = coroutineScope {
@@ -152,39 +189,6 @@ class RustMatrixTimeline(
     private suspend fun postDiffs(diffs: List<TimelineDiff>) {
         initLatch.await()
         timelineDiffProcessor.postDiffs(diffs)
-    }
-
-    private fun postPaginationStatus(status: BackPaginationStatus) {
-        _paginationState.getAndUpdate { currentPaginationState ->
-            if (hasEncryptionHistoryBanner()) {
-                return@getAndUpdate currentPaginationState.copy(
-                    isBackPaginating = false,
-                    hasMoreToLoadBackwards = false,
-                    beginningOfRoomReached = false,
-                )
-            }
-            when (status) {
-                BackPaginationStatus.IDLE -> {
-                    currentPaginationState.copy(
-                        isBackPaginating = false,
-                        hasMoreToLoadBackwards = true
-                    )
-                }
-                BackPaginationStatus.PAGINATING -> {
-                    currentPaginationState.copy(
-                        isBackPaginating = true,
-                        hasMoreToLoadBackwards = true
-                    )
-                }
-                BackPaginationStatus.TIMELINE_START_REACHED -> {
-                    currentPaginationState.copy(
-                        isBackPaginating = false,
-                        hasMoreToLoadBackwards = false,
-                        beginningOfRoomReached = true,
-                    )
-                }
-            }
-        }
     }
 
     override suspend fun fetchDetailsForEvent(eventId: EventId): Result<Unit> = withContext(dispatcher) {
@@ -251,8 +255,8 @@ class RustMatrixTimeline(
         return _timelineItems.value.firstOrNull { (it as? MatrixTimelineItem.Event)?.eventId == eventId } as? MatrixTimelineItem.Event
     }
 
-    private fun hasEncryptionHistoryBanner(): Boolean {
-        val firstItem = _timelineItems.value.firstOrNull()
+    private fun List<MatrixTimelineItem>.hasEncryptionHistoryBanner(): Boolean {
+        val firstItem = firstOrNull()
         return firstItem is MatrixTimelineItem.Virtual
             && firstItem.virtual is VirtualTimelineItem.EncryptedHistoryBanner
     }

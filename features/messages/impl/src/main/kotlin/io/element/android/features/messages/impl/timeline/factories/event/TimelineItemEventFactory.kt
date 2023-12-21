@@ -80,7 +80,7 @@ class TimelineItemEventFactory @Inject constructor(
         )
         currentTimelineItem.event
         return TimelineItem.Event(
-            id = currentTimelineItem.uniqueId.toString(),
+            id = currentTimelineItem.uniqueId,
             eventId = currentTimelineItem.eventId,
             transactionId = currentTimelineItem.transactionId,
             senderId = currentSender,
