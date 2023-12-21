@@ -18,6 +18,7 @@ package io.element.android.features.messages.impl.timeline
 
 import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
+import app.cash.turbine.ReceiveTurbine
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.messages.impl.FakeMessagesNavigator
@@ -33,6 +34,7 @@ import io.element.android.features.poll.api.actions.EndPollAction
 import io.element.android.features.poll.api.actions.SendPollResponseAction
 import io.element.android.features.poll.test.actions.FakeEndPollAction
 import io.element.android.features.poll.test.actions.FakeSendPollResponseAction
+import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
@@ -73,7 +75,7 @@ class TimelinePresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            val initialState = awaitItem()
+            val initialState = awaitFirstItem()
             assertThat(initialState.timelineItems).isEmpty()
             val loadedNoTimelineState = awaitItem()
             assertThat(loadedNoTimelineState.timelineItems).isEmpty()
@@ -87,7 +89,7 @@ class TimelinePresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            val initialState = awaitItem()
+            val initialState = awaitFirstItem()
             assertThat(initialState.paginationState.hasMoreToLoadBackwards).isTrue()
             assertThat(initialState.paginationState.isBackPaginating).isFalse()
             initialState.eventSink.invoke(TimelineEvents.LoadMore)
@@ -106,7 +108,7 @@ class TimelinePresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            val initialState = awaitItem()
+            val initialState = awaitFirstItem()
             skipItems(1)
             assertThat(initialState.highlightedEventId).isNull()
             initialState.eventSink.invoke(TimelineEvents.SetHighlightedEvent(AN_EVENT_ID))
@@ -130,7 +132,7 @@ class TimelinePresenterTest {
             presenter.present()
         }.test {
             assertThat(timeline.sendReadReceiptCount).isEqualTo(0)
-            val initialState = awaitItem()
+            val initialState = awaitFirstItem()
             // Wait for timeline items to be populated
             skipItems(1)
             awaitWithLatch { latch ->
@@ -154,7 +156,7 @@ class TimelinePresenterTest {
             presenter.present()
         }.test {
             assertThat(timeline.sendReadReceiptCount).isEqualTo(0)
-            val initialState = awaitItem()
+            val initialState = awaitFirstItem()
             // Wait for timeline items to be populated
             skipItems(1)
             awaitWithLatch { latch ->
@@ -178,7 +180,7 @@ class TimelinePresenterTest {
             presenter.present()
         }.test {
             assertThat(timeline.sendReadReceiptCount).isEqualTo(0)
-            val initialState = awaitItem()
+            val initialState = awaitFirstItem()
             // Wait for timeline items to be populated
             skipItems(1)
             awaitWithLatch { latch ->
@@ -197,7 +199,7 @@ class TimelinePresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            val initialState = awaitItem()
+            val initialState = awaitFirstItem()
             assertThat(initialState.newEventState).isEqualTo(NewEventState.None)
             assertThat(initialState.timelineItems.size).isEqualTo(0)
             timeline.updateTimelineItems {
@@ -245,7 +247,7 @@ class TimelinePresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            val initialState = awaitItem()
+            val initialState = awaitFirstItem()
             assertThat(initialState.newEventState).isEqualTo(NewEventState.None)
             assertThat(initialState.timelineItems.size).isEqualTo(0)
             val now = Date().time
@@ -302,7 +304,7 @@ class TimelinePresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            val initialState = awaitItem()
+            val initialState = awaitFirstItem()
             initialState.eventSink.invoke(TimelineEvents.PollAnswerSelected(AN_EVENT_ID, "anAnswerId"))
         }
         delay(1)
@@ -318,7 +320,7 @@ class TimelinePresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            val initialState = awaitItem()
+            val initialState = awaitFirstItem()
             initialState.eventSink.invoke(TimelineEvents.PollEndClicked(AN_EVENT_ID))
         }
         delay(1)
@@ -334,7 +336,7 @@ class TimelinePresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            awaitItem().eventSink(TimelineEvents.PollEditClicked(AN_EVENT_ID))
+            awaitFirstItem().eventSink(TimelineEvents.PollEditClicked(AN_EVENT_ID))
             assertThat(navigator.onEditPollClickedCount).isEqualTo(1)
         }
     }
@@ -351,13 +353,21 @@ class TimelinePresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            skipItems(1) // skip initial state
             assertThat(redactedVoiceMessageManager.invocations.size).isEqualTo(0)
+            awaitFirstItem()
             awaitItem().let {
                 assertThat(it.timelineItems).isNotEmpty()
-                assertThat(redactedVoiceMessageManager.invocations.size).isEqualTo(1)
             }
+            assertThat(redactedVoiceMessageManager.invocations.size).isEqualTo(1)
         }
+    }
+
+    private suspend fun <T> ReceiveTurbine<T>.awaitFirstItem(): T {
+        // Skip 1 item if Mentions feature is enabled
+        if (FeatureFlags.Mentions.defaultValue) {
+            skipItems(1)
+        }
+        return awaitItem()
     }
 
     private fun TestScope.createTimelinePresenter(

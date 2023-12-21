@@ -19,6 +19,7 @@ package io.element.android.features.messages.impl
 import android.net.Uri
 import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
+import app.cash.turbine.ReceiveTurbine
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.messages.impl.actionlist.ActionListPresenter
@@ -171,8 +172,7 @@ class MessagesPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            skipItems(1)
-            val initialState = awaitItem()
+            val initialState = awaitFirstItem()
             initialState.eventSink.invoke(MessagesEvents.ToggleReaction("👍", AN_EVENT_ID))
             assertThat(room.myReactions.count()).isEqualTo(1)
 
@@ -188,6 +188,7 @@ class MessagesPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
+            skipItems(1)
             val initialState = awaitItem()
             initialState.eventSink.invoke(MessagesEvents.HandleAction(TimelineItemAction.Forward, aMessageEvent()))
             assertThat(awaitItem().actionListState.target).isEqualTo(ActionListState.Target.None)
@@ -203,8 +204,7 @@ class MessagesPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            skipItems(1)
-            val initialState = awaitItem()
+            val initialState = awaitFirstItem()
             initialState.eventSink.invoke(MessagesEvents.HandleAction(TimelineItemAction.Copy, event))
             assertThat(awaitItem().actionListState.target).isEqualTo(ActionListState.Target.None)
             assertThat(clipboardHelper.clipboardContents).isEqualTo((event.content as TimelineItemTextContent).body)
@@ -217,8 +217,7 @@ class MessagesPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            skipItems(1)
-            val initialState = awaitItem()
+            val initialState = awaitFirstItem()
             initialState.eventSink.invoke(MessagesEvents.HandleAction(TimelineItemAction.Reply, aMessageEvent()))
             val finalState = awaitItem()
             assertThat(finalState.composerState.mode).isInstanceOf(MessageComposerMode.Reply::class.java)
@@ -232,6 +231,7 @@ class MessagesPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
+            skipItems(3)
             val initialState = awaitItem()
             initialState.eventSink.invoke(MessagesEvents.HandleAction(TimelineItemAction.Reply, aMessageEvent(eventId = null)))
             assertThat(awaitItem().actionListState.target).isEqualTo(ActionListState.Target.None)
@@ -246,8 +246,7 @@ class MessagesPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            skipItems(1)
-            val initialState = awaitItem()
+            val initialState = awaitFirstItem()
             val mediaMessage = aMessageEvent(
                 content = TimelineItemImageContent(
                     body = "image.jpg",
@@ -277,8 +276,7 @@ class MessagesPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            skipItems(1)
-            val initialState = awaitItem()
+            val initialState = awaitFirstItem()
             val mediaMessage = aMessageEvent(
                 content = TimelineItemVideoContent(
                     body = "video.mp4",
@@ -309,8 +307,7 @@ class MessagesPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            skipItems(1)
-            val initialState = awaitItem()
+            val initialState = awaitFirstItem()
             val mediaMessage = aMessageEvent(
                 content = TimelineItemFileContent(
                     body = "file.pdf",
@@ -336,8 +333,7 @@ class MessagesPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            skipItems(1)
-            val initialState = awaitItem()
+            val initialState = awaitFirstItem()
             initialState.eventSink.invoke(MessagesEvents.HandleAction(TimelineItemAction.Edit, aMessageEvent()))
             val finalState = awaitItem()
             assertThat(finalState.composerState.mode).isInstanceOf(MessageComposerMode.Edit::class.java)
@@ -352,8 +348,7 @@ class MessagesPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            skipItems(1)
-            val initialState = awaitItem()
+            val initialState = awaitFirstItem()
             initialState.eventSink.invoke(MessagesEvents.HandleAction(TimelineItemAction.Edit, aMessageEvent(content = aTimelineItemPollContent())))
             assertThat(navigator.onEditPollClickedCount).isEqualTo(1)
         }
@@ -383,6 +378,7 @@ class MessagesPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
+            skipItems(1)
             val initialState = awaitItem()
             initialState.eventSink.invoke(MessagesEvents.HandleAction(TimelineItemAction.ReportContent, aMessageEvent()))
             assertThat(awaitItem().actionListState.target).isEqualTo(ActionListState.Target.None)
@@ -396,10 +392,10 @@ class MessagesPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
+            skipItems(1)
             val initialState = awaitItem()
             initialState.eventSink.invoke(MessagesEvents.Dismiss)
             assertThat(awaitItem().actionListState.target).isEqualTo(ActionListState.Target.None)
-
         }
     }
 
@@ -410,6 +406,7 @@ class MessagesPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
+            skipItems(1)
             val initialState = awaitItem()
             initialState.eventSink.invoke(MessagesEvents.HandleAction(TimelineItemAction.ViewSource, aMessageEvent()))
             assertThat(awaitItem().actionListState.target).isEqualTo(ActionListState.Target.None)
@@ -450,8 +447,7 @@ class MessagesPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            skipItems(1)
-            val initialState = awaitItem()
+            val initialState = awaitFirstItem()
             assertThat(initialState.showReinvitePrompt).isFalse()
             initialState.composerState.richTextEditorState.requestFocus()
             val focusedState = awaitItem()
@@ -466,8 +462,7 @@ class MessagesPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            skipItems(1)
-            val initialState = awaitItem()
+            val initialState = awaitFirstItem()
             assertThat(initialState.showReinvitePrompt).isFalse()
             initialState.composerState.richTextEditorState.requestFocus()
             val focusedState = awaitItem()
@@ -585,8 +580,8 @@ class MessagesPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            skipItems(1)
-            assertThat(awaitItem().userHasPermissionToSendMessage).isTrue()
+            val state = awaitFirstItem()
+            assertThat(state.userHasPermissionToSendMessage).isTrue()
         }
     }
 
@@ -625,8 +620,7 @@ class MessagesPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            skipItems(1)
-            val initialState = awaitItem()
+            val initialState = awaitFirstItem()
             val poll = aMessageEvent(
                 content = aTimelineItemPollContent()
             )
@@ -639,6 +633,12 @@ class MessagesPresenterTest {
                 .isEqualTo("What type of food should we have at the party?")
             assertThat(awaitItem().actionListState.target).isEqualTo(ActionListState.Target.None)
         }
+    }
+
+    private suspend fun <T> ReceiveTurbine<T>.awaitFirstItem(): T {
+        // Skip 2 item if Mentions feature is enabled, else 1
+        skipItems(if (FeatureFlags.Mentions.defaultValue) 2 else 1)
+        return awaitItem()
     }
 
     private fun TestScope.createMessagesPresenter(

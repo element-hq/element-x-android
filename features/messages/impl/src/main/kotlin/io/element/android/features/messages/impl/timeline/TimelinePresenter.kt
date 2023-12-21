@@ -186,7 +186,7 @@ class TimelinePresenter @AssistedInject constructor(
             showReadReceipts = readReceiptsEnabled,
             newEventState = newItemState.value,
             sessionState = sessionState,
-            eventSink = ::handleEvents
+            eventSink = { handleEvents(it) }
         )
     }
 
