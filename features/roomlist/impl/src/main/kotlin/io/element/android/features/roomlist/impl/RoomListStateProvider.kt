@@ -71,7 +71,7 @@ internal fun aRoomListRoomSummaryList(): ImmutableList<RoomListRoomSummary> {
     return persistentListOf(
         RoomListRoomSummary(
             name = "Room",
-            hasUnread = true,
+            numUnreadMessages = 1,
             timestamp = "14:18",
             lastMessage = "A very very very very long message which suites on two lines",
             avatarData = AvatarData("!id", "R", size = AvatarSize.RoomListItem),
@@ -80,7 +80,7 @@ internal fun aRoomListRoomSummaryList(): ImmutableList<RoomListRoomSummary> {
         ),
         RoomListRoomSummary(
             name = "Room#2",
-            hasUnread = false,
+            numUnreadMessages = 0,
             timestamp = "14:16",
             lastMessage = "A short message",
             avatarData = AvatarData("!id", "Z", size = AvatarSize.RoomListItem),

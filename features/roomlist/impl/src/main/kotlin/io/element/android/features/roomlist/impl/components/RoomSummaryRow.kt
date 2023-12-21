@@ -43,6 +43,7 @@ import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummaryProvider
+import io.element.android.features.roomlist.impl.model.isTimestampHighlighted
 import io.element.android.libraries.core.extensions.orEmpty
 import io.element.android.libraries.designsystem.atomic.atoms.UnreadIndicatorAtom
 import io.element.android.libraries.designsystem.components.avatar.Avatar
@@ -141,7 +142,7 @@ private fun RowScope.NameAndTimestampRow(room: RoomListRoomSummary) {
     Text(
         text = room.timestamp ?: "",
         style = ElementTheme.typography.fontBodySmMedium,
-        color = if (room.hasUnread) {
+        color = if (room.isTimestampHighlighted()) {
             ElementTheme.colors.unreadIndicator
         } else {
             MaterialTheme.roomListRoomMessageDate()
@@ -173,40 +174,69 @@ private fun RowScope.LastMessageAndIndicatorRow(room: RoomListRoomSummary) {
         verticalAlignment = Alignment.CenterVertically,
     ) {
         // Video call
-        if (room.hasOngoingCall) {
-            Icon(
-                modifier = Modifier.size(16.dp),
-                imageVector = CompoundIcons.VideoCallSolid,
-                contentDescription = null,
-                tint = ElementTheme.colors.unreadIndicator,
-            )
-        }
-        NotificationIcon(room)
-        if (room.hasUnread) {
-            UnreadIndicatorAtom()
-        }
+        OnGoingCallIcon(room)
+        // Other indicators
+        NotificationIcons(room)
     }
 }
 
 @Composable
-private fun NotificationIcon(room: RoomListRoomSummary) {
-    val tint = if (room.hasUnread) ElementTheme.colors.unreadIndicator else ElementTheme.colors.iconQuaternary
-    when (room.notificationMode) {
-        null, RoomNotificationMode.ALL_MESSAGES -> return
-        RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY ->
-            Icon(
-                modifier = Modifier.size(16.dp),
-                contentDescription = null,
-                imageVector = CompoundIcons.Mention,
-                tint = tint,
-            )
-        RoomNotificationMode.MUTE ->
+private fun OnGoingCallIcon(room: RoomListRoomSummary) {
+    if (room.hasRoomCall) {
+        Icon(
+            modifier = Modifier.size(16.dp),
+            imageVector = CompoundIcons.VideoCallSolid,
+            contentDescription = null,
+            tint = ElementTheme.colors.unreadIndicator,
+        )
+    }
+}
+
+@Composable
+private fun RowScope.NotificationIcons(room: RoomListRoomSummary) {
+    when (room.userDefinedNotificationMode) {
+        null,
+        RoomNotificationMode.ALL_MESSAGES -> {
+            if (room.numUnreadMentions > 0) {
+                Icon(
+                    modifier = Modifier.size(16.dp),
+                    contentDescription = null,
+                    imageVector = CompoundIcons.Mention,
+                    tint = ElementTheme.colors.unreadIndicator,
+                )
+            }
+            if (room.numUnreadMessages > 0) {
+                UnreadIndicatorAtom()
+            }
+        }
+        RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY -> {
+            if (room.numUnreadMentions > 0) {
+                Icon(
+                    modifier = Modifier.size(16.dp),
+                    contentDescription = null,
+                    imageVector = CompoundIcons.Mention,
+                    tint = ElementTheme.colors.unreadIndicator,
+                )
+                if (room.numUnreadMessages > 0) {
+                    UnreadIndicatorAtom()
+                }
+            } else {
+                if (room.numUnreadMessages > 0) {
+                    UnreadIndicatorAtom(color = ElementTheme.colors.iconQuaternary)
+                }
+            }
+        }
+        RoomNotificationMode.MUTE -> {
             Icon(
                 modifier = Modifier.size(16.dp),
                 contentDescription = null,
                 imageVector = CompoundIcons.NotificationsSolidOff,
-                tint = tint,
+                tint = ElementTheme.colors.iconQuaternary,
             )
+            if (room.numUnreadMessages > 0) {
+                UnreadIndicatorAtom(color = ElementTheme.colors.iconQuaternary)
+            }
+        }
     }
 }
 

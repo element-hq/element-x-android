@@ -16,6 +16,7 @@
             <w>snackbar</w>
             <w>swipeable</w>
             <w>textfields</w>
+            <w>tombstoned</w>
         </words>
     </dictionary>
 </component>

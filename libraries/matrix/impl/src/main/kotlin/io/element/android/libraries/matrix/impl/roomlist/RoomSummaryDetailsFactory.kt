@@ -35,13 +35,13 @@ class RoomSummaryDetailsFactory(private val roomMessageFactory: RoomMessageFacto
             name = roomInfo.name ?: roomInfo.id,
             canonicalAlias = roomInfo.canonicalAlias,
             isDirect = roomInfo.isDirect,
-            avatarURLString = roomInfo.avatarUrl,
-            unreadNotificationCount = roomInfo.notificationCount.toInt(),
+            avatarUrl = roomInfo.avatarUrl,
             lastMessage = latestRoomMessage,
-            lastMessageTimestamp = latestRoomMessage?.originServerTs,
             inviter = roomInfo.inviter?.let(RoomMemberMapper::map),
-            notificationMode = roomInfo.userDefinedNotificationMode?.let(RoomNotificationSettingsMapper::mapMode),
-            hasOngoingCall = roomInfo.hasRoomCall,
+            userDefinedNotificationMode = roomInfo.userDefinedNotificationMode?.let(RoomNotificationSettingsMapper::mapMode),
+            hasRoomCall = roomInfo.hasRoomCall,
+            numUnreadMentions = roomInfo.numUnreadMentions.toInt(),
+            numUnreadMessages = roomInfo.numUnreadMessages.toInt(),
         )
     }
 }
