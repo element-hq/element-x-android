@@ -19,6 +19,7 @@ package io.element.android.features.messages.impl.timeline.components.event
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import io.element.android.features.messages.impl.timeline.TimelineEvents
+import io.element.android.features.messages.impl.timeline.components.layout.ContentAvoidingLayoutData
 import io.element.android.features.messages.impl.timeline.di.LocalTimelineItemPresenterFactories
 import io.element.android.features.messages.impl.timeline.di.rememberPresenter
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemAudioContent
@@ -41,32 +42,32 @@ import io.element.android.libraries.architecture.Presenter
 @Composable
 fun TimelineItemEventContentView(
     content: TimelineItemEventContent,
-    extraPadding: ExtraPadding,
     onLinkClicked: (url: String) -> Unit,
     eventSink: (TimelineEvents) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onContentLayoutChanged: (ContentAvoidingLayoutData) -> Unit = {},
 ) {
     val presenterFactories = LocalTimelineItemPresenterFactories.current
     when (content) {
         is TimelineItemEncryptedContent -> TimelineItemEncryptedView(
             content = content,
-            extraPadding = extraPadding,
+            onContentLayoutChanged = onContentLayoutChanged,
             modifier = modifier
         )
         is TimelineItemRedactedContent -> TimelineItemRedactedView(
             content = content,
-            extraPadding = extraPadding,
+            onContentLayoutChanged = onContentLayoutChanged,
             modifier = modifier
         )
         is TimelineItemTextBasedContent -> TimelineItemTextView(
             content = content,
-            extraPadding = extraPadding,
             modifier = modifier,
             onLinkClicked = onLinkClicked,
+            onContentLayoutChanged = onContentLayoutChanged
         )
         is TimelineItemUnknownContent -> TimelineItemUnknownView(
             content = content,
-            extraPadding = extraPadding,
+            onContentLayoutChanged = onContentLayoutChanged,
             modifier = modifier
         )
         is TimelineItemLocationContent -> TimelineItemLocationView(
@@ -87,12 +88,12 @@ fun TimelineItemEventContentView(
         )
         is TimelineItemFileContent -> TimelineItemFileView(
             content = content,
-            extraPadding = extraPadding,
+            onContentLayoutChanged = onContentLayoutChanged,
             modifier = modifier
         )
         is TimelineItemAudioContent -> TimelineItemAudioView(
             content = content,
-            extraPadding = extraPadding,
+            onContentLayoutChanged = onContentLayoutChanged,
             modifier = modifier
         )
         is TimelineItemStateContent -> TimelineItemStateView(
@@ -109,7 +110,7 @@ fun TimelineItemEventContentView(
             TimelineItemVoiceView(
                 state = presenter.present(),
                 content = content,
-                extraPadding = extraPadding,
+                onContentLayoutChanged = onContentLayoutChanged,
                 modifier = modifier
             )
         }

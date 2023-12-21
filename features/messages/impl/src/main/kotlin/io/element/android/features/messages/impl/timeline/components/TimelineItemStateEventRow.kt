@@ -32,7 +32,6 @@ import androidx.compose.ui.zIndex
 import io.element.android.features.messages.impl.timeline.TimelineEvents
 import io.element.android.features.messages.impl.timeline.aTimelineItemEvent
 import io.element.android.features.messages.impl.timeline.components.event.TimelineItemEventContentView
-import io.element.android.features.messages.impl.timeline.components.event.noExtraPadding
 import io.element.android.features.messages.impl.timeline.components.receipt.ReadReceiptViewState
 import io.element.android.features.messages.impl.timeline.components.receipt.TimelineItemReadReceiptView
 import io.element.android.features.messages.impl.timeline.components.receipt.aReadReceiptData
@@ -81,7 +80,6 @@ fun TimelineItemStateEventRow(
                 TimelineItemEventContentView(
                     content = event.content,
                     onLinkClicked = {},
-                    extraPadding = noExtraPadding,
                     eventSink = eventSink,
                     modifier = Modifier.defaultTimelineContentPadding()
                 )

@@ -19,6 +19,7 @@ package io.element.android.features.messages.impl.timeline.components
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
@@ -69,7 +70,7 @@ fun TimelineEventTimestampView(
     Row(
         modifier = Modifier
             .then(clickModifier)
-            .padding(start = 16.dp) // Add extra padding for touch target size
+            .padding(TimelineEventTimestampViewDefaults.padding) // Add extra padding for touch target size
             .then(modifier),
         verticalAlignment = Alignment.CenterVertically,
     ) {
@@ -106,4 +107,8 @@ internal fun TimelineEventTimestampViewPreview(@PreviewParameter(TimelineItemEve
         onClick = {},
         onLongClick = {},
     )
+}
+
+object TimelineEventTimestampViewDefaults {
+    val padding = PaddingValues(start = 16.dp)
 }

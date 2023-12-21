@@ -19,6 +19,7 @@ package io.element.android.features.messages.impl.timeline.components.event
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import io.element.android.features.messages.impl.timeline.components.layout.ContentAvoidingLayoutData
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEncryptedContent
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -29,14 +30,14 @@ import io.element.android.libraries.ui.strings.CommonStrings
 @Composable
 fun TimelineItemEncryptedView(
     @Suppress("UNUSED_PARAMETER") content: TimelineItemEncryptedContent,
-    extraPadding: ExtraPadding,
+    onContentLayoutChanged: (ContentAvoidingLayoutData) -> Unit,
     modifier: Modifier = Modifier
 ) {
     TimelineItemInformativeView(
         text = stringResource(id = CommonStrings.common_waiting_for_decryption_key),
         iconDescription = stringResource(id = CommonStrings.dialog_title_warning),
         iconResourceId = CommonDrawables.ic_waiting_to_decrypt,
-        extraPadding = extraPadding,
+        onContentLayoutChanged = onContentLayoutChanged,
         modifier = modifier
     )
 }
@@ -48,6 +49,6 @@ internal fun TimelineItemEncryptedViewPreview() = ElementPreview {
         content = TimelineItemEncryptedContent(
             data = UnableToDecryptContent.Data.Unknown
         ),
-        extraPadding = noExtraPadding
+        onContentLayoutChanged = {},
     )
 }

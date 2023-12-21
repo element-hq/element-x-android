@@ -22,25 +22,24 @@ import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.PreviewParameter
-import androidx.compose.ui.unit.dp
-import androidx.core.text.buildSpannedString
 import io.element.android.compound.theme.ElementTheme
+import io.element.android.features.messages.impl.timeline.components.layout.ContentAvoidingLayoutData
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextBasedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextBasedContentProvider
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.textcomposer.ElementRichTextEditorStyle
 import io.element.android.wysiwyg.compose.EditorStyledText
+import kotlin.math.roundToInt
 
 @Composable
 fun TimelineItemTextView(
     content: TimelineItemTextBasedContent,
-    extraPadding: ExtraPadding,
     onLinkClicked: (String) -> Unit,
     modifier: Modifier = Modifier,
+    onContentLayoutChanged: (ContentAvoidingLayoutData) -> Unit = {},
 ) {
     CompositionLocalProvider(
         LocalContentColor provides ElementTheme.colors.textPrimary,
@@ -49,19 +48,23 @@ fun TimelineItemTextView(
 
         val formattedBody = content.formattedBody
         val body = SpannableString(formattedBody ?: content.body)
-        val extraPaddingText = extraPadding.getStr()
 
         Box(modifier) {
-            val textWithPadding = remember(body) {
-                buildSpannedString {
-                    append(body)
-                    append(extraPaddingText)
-                }
-            }
             EditorStyledText(
-                text = textWithPadding,
+                text = body,
                 onLinkClickedListener = onLinkClicked,
                 style = ElementRichTextEditorStyle.textStyle(),
+                onTextLayout = { textLayout ->
+                    val layoutData =
+                        ContentAvoidingLayoutData(
+                            contentStart = textLayout.getLineStart(textLayout.lineCount - 1),
+                            contentWidth = textLayout.width,
+                            nonOverlappingContentWidth = textLayout.getLineWidth(textLayout.lineCount - 1).roundToInt(),
+                            contentHeight = textLayout.height,
+                            hasPadding = true,
+                        )
+                    onContentLayoutChanged(layoutData)
+                }
             )
         }
     }
@@ -74,7 +77,6 @@ internal fun TimelineItemTextViewPreview(
 ) = ElementPreview {
     TimelineItemTextView(
         content = content,
-        extraPadding = ExtraPadding(extraWidth = 32.dp),
         onLinkClicked = {},
     )
 }

@@ -33,6 +33,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
+import io.element.android.features.messages.impl.timeline.components.layout.ContentAvoidingLayoutData
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemFileContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemFileContentProvider
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -40,11 +41,12 @@ import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.utils.CommonDrawables
+import kotlin.math.roundToInt
 
 @Composable
 fun TimelineItemFileView(
     content: TimelineItemFileContent,
-    extraPadding: ExtraPadding,
+    onContentLayoutChanged: (ContentAvoidingLayoutData) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -76,11 +78,24 @@ fun TimelineItemFileView(
                 overflow = TextOverflow.Ellipsis
             )
             Text(
-                text = content.fileExtensionAndSize + extraPadding.getStr(textStyle = ElementTheme.typography.fontBodySmRegular),
+                text = content.fileExtensionAndSize,
                 color = ElementTheme.materialColors.secondary,
                 style = ElementTheme.typography.fontBodySmRegular,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
+                onTextLayout = { textLayout ->
+                    val lastLineEndOffset = textLayout.getLineEnd(textLayout.lineCount - 1)
+                    val lastLineWidth = textLayout.getHorizontalPosition(lastLineEndOffset, true).roundToInt()
+                    val lastLineHeight = textLayout.getLineBottom(textLayout.lineCount - 1).roundToInt()
+                    onContentLayoutChanged(
+                        ContentAvoidingLayoutData(
+                            contentWidth = textLayout.size.width,
+                            contentHeight = textLayout.size.height,
+                            nonOverlappingContentWidth = lastLineWidth,
+                            nonOverlappingContentHeight = lastLineHeight,
+                        )
+                    )
+                }
             )
         }
     }
@@ -91,6 +106,6 @@ fun TimelineItemFileView(
 internal fun TimelineItemFileViewPreview(@PreviewParameter(TimelineItemFileContentProvider::class) content: TimelineItemFileContent) = ElementPreview {
     TimelineItemFileView(
         content,
-        extraPadding = noExtraPadding,
+        onContentLayoutChanged = {},
     )
 }
