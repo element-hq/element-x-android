@@ -20,6 +20,7 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -43,6 +44,7 @@ import io.element.android.emojibasebindings.EmojibaseDatasource
 import io.element.android.emojibasebindings.EmojibaseStore
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.text.toSp
 import io.element.android.libraries.designsystem.theme.components.Icon
 import kotlinx.collections.immutable.ImmutableSet
 import kotlinx.collections.immutable.persistentSetOf
@@ -65,7 +67,7 @@ fun EmojiPicker(
         ) {
             EmojibaseCategory.entries.forEachIndexed { index, category ->
                 Tab(
-                    text = {
+                    icon = {
                         Icon(
                             imageVector = category.icon,
                             contentDescription = stringResource(id = category.title)
@@ -87,15 +89,18 @@ fun EmojiPicker(
             val emojis = categories[category] ?: listOf()
             LazyVerticalGrid(
                 modifier = Modifier.fillMaxSize(),
-                columns = GridCells.Adaptive(minSize = 40.dp),
+                columns = GridCells.Adaptive(minSize = 48.dp),
                 contentPadding = PaddingValues(vertical = 10.dp, horizontal = 16.dp),
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalArrangement = Arrangement.spacedBy(2.dp)
             ) {
                 items(emojis, key = { it.unicode }) { item ->
                     EmojiItem(
+                        modifier = Modifier.aspectRatio(1f),
                         item = item,
                         isSelected = selectedEmojis.contains(item.unicode),
-                        onEmojiSelected = onEmojiSelected
+                        onEmojiSelected = onEmojiSelected,
+                        emojiSize = 32.dp.toSp(),
                     )
                 }
             }
