@@ -37,6 +37,7 @@ fun aRoomSummaryFilled(
     isDirect: Boolean = false,
     avatarUrl: String? = null,
     lastMessage: RoomMessage? = aRoomMessage(),
+    numUnreadMentions: Int = 1,
     numUnreadMessages: Int = 2,
     notificationMode: RoomNotificationMode? = null,
 ) = RoomSummary.Filled(
@@ -46,6 +47,7 @@ fun aRoomSummaryFilled(
         isDirect = isDirect,
         avatarUrl = avatarUrl,
         lastMessage = lastMessage,
+        numUnreadMentions = numUnreadMentions,
         numUnreadMessages = numUnreadMessages,
         notificationMode = notificationMode,
     )
