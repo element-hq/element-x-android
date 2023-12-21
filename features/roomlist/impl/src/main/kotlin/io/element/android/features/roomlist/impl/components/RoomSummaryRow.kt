@@ -174,15 +174,23 @@ private fun RowScope.LastMessageAndIndicatorRow(room: RoomListRoomSummary) {
         verticalAlignment = Alignment.CenterVertically,
     ) {
         // Video call
-        OnGoingCallIcon(room)
+        OnGoingCallIcon(
+            room.hasRoomCall,
+        )
         // Other indicators
-        NotificationIcons(room)
+        NotificationIcons(
+            room.userDefinedNotificationMode,
+            room.numberOfUnreadMessages,
+            room.numberOfUnreadMentions,
+        )
     }
 }
 
 @Composable
-private fun OnGoingCallIcon(room: RoomListRoomSummary) {
-    if (room.hasRoomCall) {
+private fun OnGoingCallIcon(
+    hasRoomCall: Boolean,
+) {
+    if (hasRoomCall) {
         Icon(
             modifier = Modifier.size(16.dp),
             imageVector = CompoundIcons.VideoCallSolid,
@@ -193,11 +201,15 @@ private fun OnGoingCallIcon(room: RoomListRoomSummary) {
 }
 
 @Composable
-private fun RowScope.NotificationIcons(room: RoomListRoomSummary) {
-    when (room.userDefinedNotificationMode) {
+private fun RowScope.NotificationIcons(
+    userDefinedNotificationMode: RoomNotificationMode?,
+    numberOfUnreadMessages: Int,
+    numberOfUnreadMentions: Int,
+) {
+    when (userDefinedNotificationMode) {
         null,
         RoomNotificationMode.ALL_MESSAGES -> {
-            if (room.numUnreadMentions > 0) {
+            if (numberOfUnreadMentions > 0) {
                 Icon(
                     modifier = Modifier.size(16.dp),
                     contentDescription = null,
@@ -205,12 +217,12 @@ private fun RowScope.NotificationIcons(room: RoomListRoomSummary) {
                     tint = ElementTheme.colors.unreadIndicator,
                 )
                 UnreadIndicatorAtom()
-            } else if (room.numUnreadMessages > 0) {
+            } else if (numberOfUnreadMessages > 0) {
                 UnreadIndicatorAtom()
             }
         }
         RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY -> {
-            if (room.numUnreadMentions > 0) {
+            if (numberOfUnreadMentions > 0) {
                 Icon(
                     modifier = Modifier.size(16.dp),
                     contentDescription = null,
@@ -218,7 +230,7 @@ private fun RowScope.NotificationIcons(room: RoomListRoomSummary) {
                     tint = ElementTheme.colors.unreadIndicator,
                 )
                 UnreadIndicatorAtom()
-            } else if (room.numUnreadMessages > 0) {
+            } else if (numberOfUnreadMessages > 0) {
                 UnreadIndicatorAtom(color = ElementTheme.colors.iconQuaternary)
             }
         }
@@ -229,7 +241,7 @@ private fun RowScope.NotificationIcons(room: RoomListRoomSummary) {
                 imageVector = CompoundIcons.NotificationsSolidOff,
                 tint = ElementTheme.colors.iconQuaternary,
             )
-            if (room.numUnreadMessages > 0 || room.numUnreadMentions > 0) {
+            if (numberOfUnreadMessages > 0 || numberOfUnreadMentions > 0) {
                 UnreadIndicatorAtom(color = ElementTheme.colors.iconQuaternary)
             }
         }

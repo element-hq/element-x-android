@@ -439,7 +439,7 @@ private val aRoomListRoomSummary = RoomListRoomSummary(
     id = A_ROOM_ID.value,
     roomId = A_ROOM_ID,
     name = A_ROOM_NAME,
-    numUnreadMessages = 1,
+    numberOfUnreadMessages = 1,
     timestamp = A_FORMATTED_DATE,
     lastMessage = "",
     avatarData = AvatarData(id = A_ROOM_ID.value, name = A_ROOM_NAME, size = AvatarSize.RoomListItem),

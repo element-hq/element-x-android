@@ -154,8 +154,8 @@ class RoomListDataSource @Inject constructor(
                     id = roomSummary.identifier(),
                     roomId = RoomId(roomIdentifier),
                     name = roomSummary.details.name,
-                    numUnreadMessages = roomSummary.details.numUnreadMessages,
-                    numUnreadMentions = roomSummary.details.numUnreadMentions,
+                    numberOfUnreadMessages = roomSummary.details.numUnreadMessages,
+                    numberOfUnreadMentions = roomSummary.details.numUnreadMentions,
                     timestamp = lastMessageTimestampFormatter.format(roomSummary.details.lastMessageTimestamp),
                     lastMessage = roomSummary.details.lastMessage?.let { message ->
                         roomLastMessageFormatter.format(message.event, roomSummary.details.isDirect)

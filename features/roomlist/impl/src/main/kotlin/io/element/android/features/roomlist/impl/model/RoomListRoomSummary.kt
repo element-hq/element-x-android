@@ -32,8 +32,8 @@ data class RoomListRoomSummary(
     val avatarData: AvatarData = AvatarData(id, name, size = AvatarSize.RoomListItem),
     val isPlaceholder: Boolean = false,
     val userDefinedNotificationMode: RoomNotificationMode? = null,
-    val numUnreadMessages: Int = 0,
-    val numUnreadMentions: Int = 0,
+    val numberOfUnreadMessages: Int = 0,
+    val numberOfUnreadMentions: Int = 0,
     val hasRoomCall: Boolean = false,
 )
 
@@ -41,8 +41,8 @@ fun RoomListRoomSummary.isTimestampHighlighted(): Boolean {
     return hasRoomCall ||
         when (userDefinedNotificationMode) {
             null,
-            RoomNotificationMode.ALL_MESSAGES -> numUnreadMessages > 0 || numUnreadMentions > 0
-            RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY -> numUnreadMentions > 0
+            RoomNotificationMode.ALL_MESSAGES -> numberOfUnreadMessages > 0 || numberOfUnreadMentions > 0
+            RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY -> numberOfUnreadMentions > 0
             RoomNotificationMode.MUTE -> false
         }
 }
