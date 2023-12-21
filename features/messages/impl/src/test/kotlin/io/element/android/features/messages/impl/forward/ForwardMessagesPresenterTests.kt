@@ -23,7 +23,7 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
-import io.element.android.libraries.matrix.test.room.aRoomSummaryDetail
+import io.element.android.libraries.matrix.test.room.aRoomSummaryDetails
 import io.element.android.tests.testutils.WarmUpRule
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.test.runTest
@@ -55,7 +55,7 @@ class ForwardMessagesPresenterTests {
             presenter.present()
         }.test {
             skipItems(1)
-            val summary = aRoomSummaryDetail()
+            val summary = aRoomSummaryDetails()
             presenter.onRoomSelected(listOf(summary.roomId))
             val forwardingState = awaitItem()
             assertThat(forwardingState.isForwarding).isTrue()
@@ -75,7 +75,7 @@ class ForwardMessagesPresenterTests {
             // Test failed forwarding
             room.givenForwardEventResult(Result.failure(Throwable("error")))
             skipItems(1)
-            val summary = aRoomSummaryDetail()
+            val summary = aRoomSummaryDetails()
             presenter.onRoomSelected(listOf(summary.roomId))
             skipItems(1)
             val failedForwardState = awaitItem()

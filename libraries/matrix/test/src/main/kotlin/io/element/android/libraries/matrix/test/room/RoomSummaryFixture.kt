@@ -19,6 +19,7 @@ package io.element.android.libraries.matrix.test.room
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.api.room.message.RoomMessage
 import io.element.android.libraries.matrix.api.roomlist.RoomSummary
@@ -34,42 +35,48 @@ fun aRoomSummaryFilled(
     roomId: RoomId = A_ROOM_ID,
     name: String = A_ROOM_NAME,
     isDirect: Boolean = false,
-    avatarURLString: String? = null,
+    avatarUrl: String? = null,
     lastMessage: RoomMessage? = aRoomMessage(),
-    lastMessageTimestamp: Long? = null,
-    unreadNotificationCount: Int = 2,
+    numUnreadMentions: Int = 1,
+    numUnreadMessages: Int = 2,
     notificationMode: RoomNotificationMode? = null,
 ) = RoomSummary.Filled(
-    aRoomSummaryDetail(
+    aRoomSummaryDetails(
         roomId = roomId,
         name = name,
         isDirect = isDirect,
-        avatarURLString = avatarURLString,
+        avatarUrl = avatarUrl,
         lastMessage = lastMessage,
-        lastMessageTimestamp = lastMessageTimestamp,
-        unreadNotificationCount = unreadNotificationCount,
+        numUnreadMentions = numUnreadMentions,
+        numUnreadMessages = numUnreadMessages,
         notificationMode = notificationMode,
     )
 )
 
-fun aRoomSummaryDetail(
+fun aRoomSummaryDetails(
     roomId: RoomId = A_ROOM_ID,
     name: String = A_ROOM_NAME,
     isDirect: Boolean = false,
-    avatarURLString: String? = null,
+    avatarUrl: String? = null,
     lastMessage: RoomMessage? = aRoomMessage(),
-    lastMessageTimestamp: Long? = null,
-    unreadNotificationCount: Int = 2,
     notificationMode: RoomNotificationMode? = null,
+    inviter: RoomMember? = null,
+    canonicalAlias: String? = null,
+    hasOngoingCall: Boolean = false,
+    numUnreadMentions: Int = 0,
+    numUnreadMessages: Int = 0,
 ) = RoomSummaryDetails(
     roomId = roomId,
     name = name,
     isDirect = isDirect,
-    avatarURLString = avatarURLString,
+    avatarUrl = avatarUrl,
     lastMessage = lastMessage,
-    lastMessageTimestamp = lastMessageTimestamp,
-    unreadNotificationCount = unreadNotificationCount,
-    notificationMode = notificationMode
+    userDefinedNotificationMode = notificationMode,
+    canonicalAlias = canonicalAlias,
+    inviter = inviter,
+    hasRoomCall = hasOngoingCall,
+    numUnreadMentions = numUnreadMentions,
+    numUnreadMessages = numUnreadMessages,
 )
 
 fun aRoomMessage(

@@ -27,11 +27,22 @@ data class RoomListRoomSummary(
     val id: String,
     val roomId: RoomId,
     val name: String = "",
-    val hasUnread: Boolean = false,
     val timestamp: String? = null,
     val lastMessage: CharSequence? = null,
     val avatarData: AvatarData = AvatarData(id, name, size = AvatarSize.RoomListItem),
     val isPlaceholder: Boolean = false,
-    val notificationMode: RoomNotificationMode? = null,
-    val hasOngoingCall: Boolean = false,
+    val userDefinedNotificationMode: RoomNotificationMode? = null,
+    val numberOfUnreadMessages: Int = 0,
+    val numberOfUnreadMentions: Int = 0,
+    val hasRoomCall: Boolean = false,
 )
+
+fun RoomListRoomSummary.isTimestampHighlighted(): Boolean {
+    return hasRoomCall ||
+        when (userDefinedNotificationMode) {
+            null,
+            RoomNotificationMode.ALL_MESSAGES -> numberOfUnreadMessages > 0 || numberOfUnreadMentions > 0
+            RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY -> numberOfUnreadMentions > 0
+            RoomNotificationMode.MUTE -> false
+        }
+}

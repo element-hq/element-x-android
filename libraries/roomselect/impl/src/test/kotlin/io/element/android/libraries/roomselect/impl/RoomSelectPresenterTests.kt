@@ -24,7 +24,7 @@ import io.element.android.libraries.roomselect.api.RoomSelectMode
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
 import io.element.android.libraries.matrix.api.roomlist.RoomSummary
 import io.element.android.libraries.matrix.test.FakeMatrixClient
-import io.element.android.libraries.matrix.test.room.aRoomSummaryDetail
+import io.element.android.libraries.matrix.test.room.aRoomSummaryDetails
 import io.element.android.libraries.matrix.test.roomlist.FakeRoomListService
 import io.element.android.tests.testutils.WarmUpRule
 import kotlinx.collections.immutable.persistentListOf
@@ -73,7 +73,7 @@ class RoomSelectPresenterTests {
     @Test
     fun `present - update query`() = runTest {
         val roomListService = FakeRoomListService().apply {
-            postAllRooms(listOf(RoomSummary.Filled(aRoomSummaryDetail())))
+            postAllRooms(listOf(RoomSummary.Filled(aRoomSummaryDetails())))
         }
         val client = FakeMatrixClient(roomListService = roomListService)
         val presenter = aPresenter(client = client)
@@ -81,7 +81,7 @@ class RoomSelectPresenterTests {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            assertThat(awaitItem().resultState as? SearchBarResultState.Results).isEqualTo(SearchBarResultState.Results(listOf(aRoomSummaryDetail())))
+            assertThat(awaitItem().resultState as? SearchBarResultState.Results).isEqualTo(SearchBarResultState.Results(listOf(aRoomSummaryDetails())))
 
             initialState.eventSink(RoomSelectEvents.UpdateQuery("string not contained"))
             assertThat(awaitItem().query).isEqualTo("string not contained")
@@ -97,7 +97,7 @@ class RoomSelectPresenterTests {
         }.test {
             val initialState = awaitItem()
             skipItems(1)
-            val summary = aRoomSummaryDetail()
+            val summary = aRoomSummaryDetails()
 
             initialState.eventSink(RoomSelectEvents.SetSelectedRoom(summary))
             assertThat(awaitItem().selectedRooms).isEqualTo(persistentListOf(summary))
