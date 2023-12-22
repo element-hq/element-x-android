@@ -18,6 +18,9 @@ package io.element.android.features.messages.impl.forward
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.room.RoomMember
+import io.element.android.libraries.matrix.api.room.message.RoomMessage
+import io.element.android.libraries.matrix.api.roomlist.RoomSummaryDetails
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
@@ -47,4 +50,31 @@ fun aForwardMessagesState(
     error = error,
     forwardingSucceeded = forwardingSucceeded,
     eventSink = {}
+)
+
+internal fun aForwardMessagesRoomList() = persistentListOf(
+    aRoomDetailsState(),
+    aRoomDetailsState(roomId = RoomId("!room2:domain"), canonicalAlias = "#element-x-room:matrix.org"),
+)
+
+fun aRoomDetailsState(
+    roomId: RoomId = RoomId("!room:domain"),
+    name: String = "roomName",
+    canonicalAlias: String? = null,
+    isDirect: Boolean = true,
+    avatarURLString: String? = null,
+    lastMessage: RoomMessage? = null,
+    lastMessageTimestamp: Long? = null,
+    unreadNotificationCount: Int = 0,
+    inviter: RoomMember? = null,
+) = RoomSummaryDetails(
+    roomId = roomId,
+    name = name,
+    canonicalAlias = canonicalAlias,
+    isDirect = isDirect,
+    avatarURLString = avatarURLString,
+    lastMessage = lastMessage,
+    lastMessageTimestamp = lastMessageTimestamp,
+    unreadNotificationCount = unreadNotificationCount,
+    inviter = inviter,
 )

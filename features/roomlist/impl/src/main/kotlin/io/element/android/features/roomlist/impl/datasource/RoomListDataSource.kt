@@ -146,7 +146,7 @@ class RoomListDataSource @Inject constructor(
                 val avatarData = AvatarData(
                     id = roomSummary.identifier(),
                     name = roomSummary.details.name,
-                    url = roomSummary.details.avatarUrl,
+                    url = roomSummary.details.avatarURLString,
                     size = AvatarSize.RoomListItem,
                 )
                 val roomIdentifier = roomSummary.identifier()
@@ -154,15 +154,14 @@ class RoomListDataSource @Inject constructor(
                     id = roomSummary.identifier(),
                     roomId = RoomId(roomIdentifier),
                     name = roomSummary.details.name,
-                    numberOfUnreadMessages = roomSummary.details.numUnreadMessages,
-                    numberOfUnreadMentions = roomSummary.details.numUnreadMentions,
+                    hasUnread = roomSummary.details.unreadNotificationCount > 0,
                     timestamp = lastMessageTimestampFormatter.format(roomSummary.details.lastMessageTimestamp),
                     lastMessage = roomSummary.details.lastMessage?.let { message ->
                         roomLastMessageFormatter.format(message.event, roomSummary.details.isDirect)
                     }.orEmpty(),
                     avatarData = avatarData,
-                    userDefinedNotificationMode = roomSummary.details.userDefinedNotificationMode,
-                    hasRoomCall = roomSummary.details.hasRoomCall,
+                    notificationMode = roomSummary.details.notificationMode,
+                    hasOngoingCall = roomSummary.details.hasOngoingCall,
                 )
             }
             null -> null

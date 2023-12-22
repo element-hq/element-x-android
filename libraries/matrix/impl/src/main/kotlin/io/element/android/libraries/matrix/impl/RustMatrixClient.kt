@@ -412,7 +412,7 @@ class RustMatrixClient(
         }
     }
 
-    override suspend fun loadUserAvatarUrl(): Result<String?> = withContext(sessionDispatcher) {
+    override suspend fun loadUserAvatarURLString(): Result<String?> = withContext(sessionDispatcher) {
         runCatching {
             client.avatarUrl()
         }

@@ -72,7 +72,7 @@ class FakeEncryptionService : EncryptionService {
         this.isLastDevice = isLastDevice
     }
 
-    override suspend fun isLastDevice(): Result<Boolean> = simulateLongTask {
+    override suspend fun isLastDevice(): Result<Boolean> {
         return Result.success(isLastDevice)
     }
 

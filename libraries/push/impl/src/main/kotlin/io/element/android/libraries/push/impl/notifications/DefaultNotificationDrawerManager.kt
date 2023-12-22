@@ -297,7 +297,7 @@ class DefaultNotificationDrawerManager @Inject constructor(
                 operation = {
                     // myUserDisplayName cannot be empty else NotificationCompat.MessagingStyle() will crash
                     val myUserDisplayName = client.loadUserDisplayName().getOrNull() ?: sessionId.value
-                    val userAvatarUrl = client.loadUserAvatarUrl().getOrNull()
+                    val userAvatarUrl = client.loadUserAvatarURLString().getOrNull()
                     MatrixUser(
                         userId = sessionId,
                         displayName = myUserDisplayName,
