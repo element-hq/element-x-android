@@ -1,1 +1,0 @@
-Add option to delete a poll while editing the poll

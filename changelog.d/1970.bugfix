@@ -1,1 +1,0 @@
-Do not render `roomId` if the room has no canonical alias.

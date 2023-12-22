@@ -1,1 +1,0 @@
-Make most code used in Compose from `:libraries:matrix` and derived classes Immutable or Stable.
