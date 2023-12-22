@@ -123,7 +123,7 @@ class RoomListPresenterTests {
     fun `present - should start with no user and then load user with error`() = runTest {
         val matrixClient = FakeMatrixClient(
             userDisplayName = Result.failure(AN_EXCEPTION),
-            userAvatarUrl = Result.failure(AN_EXCEPTION),
+            userAvatarURLString = Result.failure(AN_EXCEPTION),
         )
         val scope = CoroutineScope(coroutineContext + SupervisorJob())
         val presenter = createRoomListPresenter(client = matrixClient, coroutineScope = scope)
@@ -385,11 +385,11 @@ class RoomListPresenterTests {
             notificationSettingsService.setRoomNotificationMode(A_ROOM_ID, userDefinedMode)
 
             val updatedState = consumeItemsUntilPredicate { state ->
-                state.roomList.any { it.id == A_ROOM_ID.value && it.userDefinedNotificationMode == userDefinedMode }
+                state.roomList.any { it.id == A_ROOM_ID.value && it.notificationMode == userDefinedMode }
             }.last()
 
             val room = updatedState.roomList.find { it.id == A_ROOM_ID.value }
-            assertThat(room?.userDefinedNotificationMode).isEqualTo(userDefinedMode)
+            assertThat(room?.notificationMode).isEqualTo(userDefinedMode)
             cancelAndIgnoreRemainingEvents()
             scope.cancel()
         }
@@ -439,8 +439,7 @@ private val aRoomListRoomSummary = RoomListRoomSummary(
     id = A_ROOM_ID.value,
     roomId = A_ROOM_ID,
     name = A_ROOM_NAME,
-    numberOfUnreadMentions = 1,
-    numberOfUnreadMessages = 2,
+    hasUnread = true,
     timestamp = A_FORMATTED_DATE,
     lastMessage = "",
     avatarData = AvatarData(id = A_ROOM_ID.value, name = A_ROOM_NAME, size = AvatarSize.RoomListItem),

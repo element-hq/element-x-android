@@ -19,8 +19,9 @@ package io.element.android.libraries.roomselect.impl
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.room.RoomMember
+import io.element.android.libraries.matrix.api.room.message.RoomMessage
 import io.element.android.libraries.matrix.api.roomlist.RoomSummaryDetails
-import io.element.android.libraries.matrix.ui.components.aRoomSummaryDetails
 import io.element.android.libraries.roomselect.api.RoomSelectMode
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -40,7 +41,7 @@ open class RoomSelectStateProvider : PreviewParameterProvider<RoomSelectState> {
                 resultState = SearchBarResultState.Results(aForwardMessagesRoomList()),
                 query = "Test",
                 isSearchActive = true,
-                selectedRooms = persistentListOf(aRoomSummaryDetails(roomId = RoomId("!room2:domain")))
+                selectedRooms = persistentListOf(aRoomDetailsState(roomId = RoomId("!room2:domain")))
             ),
             // Add other states here
         )
@@ -61,10 +62,32 @@ private fun aRoomSelectState(
 )
 
 private fun aForwardMessagesRoomList() = persistentListOf(
-    aRoomSummaryDetails(),
-    aRoomSummaryDetails(
+    aRoomDetailsState(),
+    aRoomDetailsState(
         roomId = RoomId("!room2:domain"),
         name = "Room with alias",
         canonicalAlias = "#alias:example.org",
     ),
+)
+
+private fun aRoomDetailsState(
+    roomId: RoomId = RoomId("!room:domain"),
+    name: String = "roomName",
+    canonicalAlias: String? = null,
+    isDirect: Boolean = true,
+    avatarURLString: String? = null,
+    lastMessage: RoomMessage? = null,
+    lastMessageTimestamp: Long? = null,
+    unreadNotificationCount: Int = 0,
+    inviter: RoomMember? = null,
+) = RoomSummaryDetails(
+    roomId = roomId,
+    name = name,
+    canonicalAlias = canonicalAlias,
+    isDirect = isDirect,
+    avatarURLString = avatarURLString,
+    lastMessage = lastMessage,
+    lastMessageTimestamp = lastMessageTimestamp,
+    unreadNotificationCount = unreadNotificationCount,
+    inviter = inviter,
 )

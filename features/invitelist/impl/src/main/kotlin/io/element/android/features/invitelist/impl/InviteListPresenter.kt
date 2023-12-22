@@ -170,7 +170,7 @@ class InviteListPresenter @Inject constructor(
             AvatarData(
                 id = roomId.value,
                 name = name,
-                url = avatarUrl,
+                url = avatarURLString,
                 size = AvatarSize.RoomInviteItem,
             )
 

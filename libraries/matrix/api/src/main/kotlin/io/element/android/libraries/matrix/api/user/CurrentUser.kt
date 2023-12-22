@@ -19,11 +19,11 @@ package io.element.android.libraries.matrix.api.user
 import io.element.android.libraries.matrix.api.MatrixClient
 
 /**
- * Get the current user, as [MatrixUser], using  [MatrixClient.loadUserAvatarUrl]
+ * Get the current user, as [MatrixUser], using  [MatrixClient.loadUserAvatarURLString]
  * and [MatrixClient.loadUserDisplayName].
  */
 suspend fun MatrixClient.getCurrentUser(): MatrixUser {
-    val userAvatarUrl = loadUserAvatarUrl().getOrNull()
+    val userAvatarUrl = loadUserAvatarURLString().getOrNull()
     val userDisplayName = loadUserDisplayName().getOrNull()
     return MatrixUser(
         userId = sessionId,
