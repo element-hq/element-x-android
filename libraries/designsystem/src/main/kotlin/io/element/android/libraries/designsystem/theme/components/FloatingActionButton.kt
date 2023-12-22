@@ -30,9 +30,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
-import io.element.android.libraries.designsystem.utils.CommonDrawables
 
 @Composable
 fun FloatingActionButton(
@@ -66,7 +66,7 @@ internal fun FloatingActionButtonPreview() =
 private fun ContentToPreview() {
     Box(modifier = Modifier.padding(8.dp)) {
         FloatingActionButton(onClick = {}) {
-            Icon(resourceId = CommonDrawables.ic_compound_close, contentDescription = "")
+            Icon(imageVector = CompoundIcons.Close, contentDescription = null)
         }
     }
 }

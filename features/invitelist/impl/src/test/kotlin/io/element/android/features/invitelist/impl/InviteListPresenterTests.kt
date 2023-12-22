@@ -19,7 +19,7 @@ package io.element.android.features.invitelist.impl
 import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
-import com.google.common.truth.Truth
+import com.google.common.truth.Truth.assertThat
 import io.element.android.features.invitelist.api.SeenInvitesStore
 import io.element.android.features.invitelist.test.FakeSeenInvitesStore
 import io.element.android.libraries.architecture.Async
@@ -63,14 +63,14 @@ class InviteListPresenterTests {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            Truth.assertThat(initialState.inviteList).isEmpty()
+            assertThat(initialState.inviteList).isEmpty()
 
             roomListService.postInviteRooms(listOf(aRoomSummary()))
 
             val withInviteState = awaitItem()
-            Truth.assertThat(withInviteState.inviteList.size).isEqualTo(1)
-            Truth.assertThat(withInviteState.inviteList[0].roomId).isEqualTo(A_ROOM_ID)
-            Truth.assertThat(withInviteState.inviteList[0].roomName).isEqualTo(A_ROOM_NAME)
+            assertThat(withInviteState.inviteList.size).isEqualTo(1)
+            assertThat(withInviteState.inviteList[0].roomId).isEqualTo(A_ROOM_ID)
+            assertThat(withInviteState.inviteList[0].roomName).isEqualTo(A_ROOM_NAME)
         }
     }
 
@@ -84,11 +84,11 @@ class InviteListPresenterTests {
             presenter.present()
         }.test {
             val withInviteState = awaitItem()
-            Truth.assertThat(withInviteState.inviteList.size).isEqualTo(1)
-            Truth.assertThat(withInviteState.inviteList[0].roomId).isEqualTo(A_ROOM_ID)
-            Truth.assertThat(withInviteState.inviteList[0].roomAlias).isEqualTo(A_USER_ID.value)
-            Truth.assertThat(withInviteState.inviteList[0].roomName).isEqualTo(A_ROOM_NAME)
-            Truth.assertThat(withInviteState.inviteList[0].roomAvatarData).isEqualTo(
+            assertThat(withInviteState.inviteList.size).isEqualTo(1)
+            assertThat(withInviteState.inviteList[0].roomId).isEqualTo(A_ROOM_ID)
+            assertThat(withInviteState.inviteList[0].roomAlias).isEqualTo(A_USER_ID.value)
+            assertThat(withInviteState.inviteList[0].roomName).isEqualTo(A_ROOM_NAME)
+            assertThat(withInviteState.inviteList[0].roomAvatarData).isEqualTo(
                 AvatarData(
                     id = A_USER_ID.value,
                     name = A_USER_NAME,
@@ -96,7 +96,7 @@ class InviteListPresenterTests {
                     size = AvatarSize.RoomInviteItem,
                 )
             )
-            Truth.assertThat(withInviteState.inviteList[0].sender).isNull()
+            assertThat(withInviteState.inviteList[0].sender).isNull()
         }
     }
 
@@ -110,10 +110,10 @@ class InviteListPresenterTests {
             presenter.present()
         }.test {
             val withInviteState = awaitItem()
-            Truth.assertThat(withInviteState.inviteList.size).isEqualTo(1)
-            Truth.assertThat(withInviteState.inviteList[0].sender?.displayName).isEqualTo(A_USER_NAME)
-            Truth.assertThat(withInviteState.inviteList[0].sender?.userId).isEqualTo(A_USER_ID)
-            Truth.assertThat(withInviteState.inviteList[0].sender?.avatarData).isEqualTo(
+            assertThat(withInviteState.inviteList.size).isEqualTo(1)
+            assertThat(withInviteState.inviteList[0].sender?.displayName).isEqualTo(A_USER_NAME)
+            assertThat(withInviteState.inviteList[0].sender?.userId).isEqualTo(A_USER_ID)
+            assertThat(withInviteState.inviteList[0].sender?.avatarData).isEqualTo(
                 AvatarData(
                     id = A_USER_ID.value,
                     name = A_USER_NAME,
@@ -142,11 +142,11 @@ class InviteListPresenterTests {
             originalState.eventSink(InviteListEvents.DeclineInvite(originalState.inviteList[0]))
 
             val newState = awaitItem()
-            Truth.assertThat(newState.declineConfirmationDialog).isInstanceOf(InviteDeclineConfirmationDialog.Visible::class.java)
+            assertThat(newState.declineConfirmationDialog).isInstanceOf(InviteDeclineConfirmationDialog.Visible::class.java)
 
             val confirmDialog = newState.declineConfirmationDialog as InviteDeclineConfirmationDialog.Visible
-            Truth.assertThat(confirmDialog.isDirect).isTrue()
-            Truth.assertThat(confirmDialog.name).isEqualTo(A_ROOM_NAME)
+            assertThat(confirmDialog.isDirect).isTrue()
+            assertThat(confirmDialog.name).isEqualTo(A_ROOM_NAME)
         }
     }
 
@@ -163,11 +163,11 @@ class InviteListPresenterTests {
             originalState.eventSink(InviteListEvents.DeclineInvite(originalState.inviteList[0]))
 
             val newState = awaitItem()
-            Truth.assertThat(newState.declineConfirmationDialog).isInstanceOf(InviteDeclineConfirmationDialog.Visible::class.java)
+            assertThat(newState.declineConfirmationDialog).isInstanceOf(InviteDeclineConfirmationDialog.Visible::class.java)
 
             val confirmDialog = newState.declineConfirmationDialog as InviteDeclineConfirmationDialog.Visible
-            Truth.assertThat(confirmDialog.isDirect).isFalse()
-            Truth.assertThat(confirmDialog.name).isEqualTo(A_ROOM_NAME)
+            assertThat(confirmDialog.isDirect).isFalse()
+            assertThat(confirmDialog.name).isEqualTo(A_ROOM_NAME)
         }
     }
 
@@ -188,7 +188,7 @@ class InviteListPresenterTests {
             originalState.eventSink(InviteListEvents.CancelDeclineInvite)
 
             val newState = awaitItem()
-            Truth.assertThat(newState.declineConfirmationDialog).isInstanceOf(InviteDeclineConfirmationDialog.Hidden::class.java)
+            assertThat(newState.declineConfirmationDialog).isInstanceOf(InviteDeclineConfirmationDialog.Hidden::class.java)
         }
     }
 
@@ -215,7 +215,7 @@ class InviteListPresenterTests {
 
             skipItems(2)
 
-            Truth.assertThat(fakeNotificationDrawerManager.getClearMembershipNotificationForRoomCount(client.sessionId, A_ROOM_ID)).isEqualTo(1)
+            assertThat(fakeNotificationDrawerManager.getClearMembershipNotificationForRoomCount(client.sessionId, A_ROOM_ID)).isEqualTo(1)
         }
     }
 
@@ -245,7 +245,7 @@ class InviteListPresenterTests {
 
             val newState = awaitItem()
 
-            Truth.assertThat(newState.declinedAction).isEqualTo(Async.Failure<Unit>(ex))
+            assertThat(newState.declinedAction).isEqualTo(Async.Failure<Unit>(ex))
         }
     }
 
@@ -277,7 +277,7 @@ class InviteListPresenterTests {
 
             val newState = awaitItem()
 
-            Truth.assertThat(newState.declinedAction).isEqualTo(Async.Uninitialized)
+            assertThat(newState.declinedAction).isEqualTo(Async.Uninitialized)
         }
     }
 
@@ -300,8 +300,8 @@ class InviteListPresenterTests {
 
             val newState = awaitItem()
 
-            Truth.assertThat(newState.acceptedAction).isEqualTo(Async.Success(A_ROOM_ID))
-            Truth.assertThat(fakeNotificationDrawerManager.getClearMembershipNotificationForRoomCount(client.sessionId, A_ROOM_ID)).isEqualTo(1)
+            assertThat(newState.acceptedAction).isEqualTo(Async.Success(A_ROOM_ID))
+            assertThat(fakeNotificationDrawerManager.getClearMembershipNotificationForRoomCount(client.sessionId, A_ROOM_ID)).isEqualTo(1)
         }
     }
 
@@ -323,7 +323,7 @@ class InviteListPresenterTests {
             val originalState = awaitItem()
             originalState.eventSink(InviteListEvents.AcceptInvite(originalState.inviteList[0]))
 
-            Truth.assertThat(awaitItem().acceptedAction).isEqualTo(Async.Failure<RoomId>(ex))
+            assertThat(awaitItem().acceptedAction).isEqualTo(Async.Failure<RoomId>(ex))
         }
     }
 
@@ -350,7 +350,7 @@ class InviteListPresenterTests {
             originalState.eventSink(InviteListEvents.DismissAcceptError)
 
             val newState = awaitItem()
-            Truth.assertThat(newState.acceptedAction).isEqualTo(Async.Uninitialized)
+            assertThat(newState.acceptedAction).isEqualTo(Async.Uninitialized)
         }
     }
 
@@ -375,19 +375,19 @@ class InviteListPresenterTests {
             roomListService.postInviteRooms(listOf(aRoomSummary()))
 
             awaitItem()
-            Truth.assertThat(store.getProvidedRoomIds()).isEqualTo(setOf(A_ROOM_ID))
+            assertThat(store.getProvidedRoomIds()).isEqualTo(setOf(A_ROOM_ID))
 
             // When a second is added, both are saved
             roomListService.postInviteRooms(listOf(aRoomSummary(), aRoomSummary(A_ROOM_ID_2)))
 
             awaitItem()
-            Truth.assertThat(store.getProvidedRoomIds()).isEqualTo(setOf(A_ROOM_ID, A_ROOM_ID_2))
+            assertThat(store.getProvidedRoomIds()).isEqualTo(setOf(A_ROOM_ID, A_ROOM_ID_2))
 
             // When they're both dismissed, an empty set is saved
             roomListService.postInviteRooms(listOf())
 
             awaitItem()
-            Truth.assertThat(store.getProvidedRoomIds()).isEmpty()
+            assertThat(store.getProvidedRoomIds()).isEmpty()
         }
     }
 
@@ -413,11 +413,11 @@ class InviteListPresenterTests {
             skipItems(1)
 
             val withInviteState = awaitItem()
-            Truth.assertThat(withInviteState.inviteList.size).isEqualTo(2)
-            Truth.assertThat(withInviteState.inviteList[0].roomId).isEqualTo(A_ROOM_ID)
-            Truth.assertThat(withInviteState.inviteList[0].isNew).isFalse()
-            Truth.assertThat(withInviteState.inviteList[1].roomId).isEqualTo(A_ROOM_ID_2)
-            Truth.assertThat(withInviteState.inviteList[1].isNew).isTrue()
+            assertThat(withInviteState.inviteList.size).isEqualTo(2)
+            assertThat(withInviteState.inviteList[0].roomId).isEqualTo(A_ROOM_ID)
+            assertThat(withInviteState.inviteList[0].isNew).isFalse()
+            assertThat(withInviteState.inviteList[1].roomId).isEqualTo(A_ROOM_ID_2)
+            assertThat(withInviteState.inviteList[1].isNew).isTrue()
         }
     }
 

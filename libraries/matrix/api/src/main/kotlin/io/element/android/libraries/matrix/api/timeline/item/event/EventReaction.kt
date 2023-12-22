@@ -16,7 +16,11 @@
 
 package io.element.android.libraries.matrix.api.timeline.item.event
 
+import androidx.compose.runtime.Immutable
+import kotlinx.collections.immutable.ImmutableList
+
+@Immutable
 data class EventReaction(
     val key: String,
-    val senders: List<ReactionSender>
+    val senders: ImmutableList<ReactionSender>
 )

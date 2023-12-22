@@ -33,14 +33,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemAudioContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemAudioContentProvider
-import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.theme.ElementTheme
 
 @Composable
 fun TimelineItemAudioView(
@@ -76,7 +75,7 @@ fun TimelineItemAudioView(
                 overflow = TextOverflow.Ellipsis
             )
             Text(
-                text = content.fileExtensionAndSize + extraPadding.getStr(12.sp),
+                text = content.fileExtensionAndSize + extraPadding.getStr(ElementTheme.typography.fontBodySmRegular),
                 color = ElementTheme.materialColors.secondary,
                 style = ElementTheme.typography.fontBodySmRegular,
                 maxLines = 1,

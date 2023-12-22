@@ -82,7 +82,7 @@ class RustMediaLoader(
                     val mediaFile = innerClient.getMediaFile(
                         mediaSource = mediaSource,
                         body = body,
-                        mimeType = mimeType ?: MimeTypes.OctetStream,
+                        mimeType = mimeType?.takeIf { MimeTypes.hasSubtype(it) } ?: MimeTypes.OctetStream,
                         useCache = useCache,
                         tempDir = cacheDirectory.path,
                     )

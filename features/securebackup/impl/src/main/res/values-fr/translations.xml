@@ -22,6 +22,8 @@
   <string name="screen_recovery_key_change_success">"Clé de récupération modifée"</string>
   <string name="screen_recovery_key_change_title">"Changer la clé de récupération?"</string>
   <string name="screen_recovery_key_confirm_description">"Saisissez votre clé de récupération pour accéder à l’historique de vos discussions."</string>
+  <string name="screen_recovery_key_confirm_error_content">"Veuillez réessayer pour accéder à votre historique chiffré."</string>
+  <string name="screen_recovery_key_confirm_error_title">"Clé de récupération incorrecte"</string>
   <string name="screen_recovery_key_confirm_key_description">"Saisissez la clé à 48 caractères."</string>
   <string name="screen_recovery_key_confirm_key_placeholder">"Saisissez la clé ici…"</string>
   <string name="screen_recovery_key_confirm_success">"Clé de récupération confirmée"</string>

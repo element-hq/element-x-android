@@ -27,13 +27,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.compound.theme.ElementTheme
+import io.element.android.libraries.designsystem.icons.CompoundDrawables
 import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.designsystem.utils.CommonDrawables
-import io.element.android.libraries.theme.ElementTheme
 
 @Composable
 fun TimelineItemInformativeView(
@@ -58,7 +57,7 @@ fun TimelineItemInformativeView(
             fontStyle = FontStyle.Italic,
             color = MaterialTheme.colorScheme.secondary,
             style = ElementTheme.typography.fontBodyMdRegular,
-            text = text + extraPadding.getStr(14.sp)
+            text = text + extraPadding.getStr(textStyle = ElementTheme.typography.fontBodyMdRegular)
         )
     }
 }
@@ -69,7 +68,7 @@ internal fun TimelineItemInformativeViewPreview() = ElementPreview {
     TimelineItemInformativeView(
         text = "Info",
         iconDescription = "",
-        iconResourceId = CommonDrawables.ic_compound_delete,
+        iconResourceId = CompoundDrawables.ic_delete,
         extraPadding = noExtraPadding,
     )
 }

@@ -18,10 +18,10 @@ package extension
 
 import Versions
 import com.android.build.api.dsl.CommonExtension
+import org.gradle.accessors.dm.LibrariesForLibs
 import org.gradle.api.JavaVersion
 import org.gradle.api.Project
 import java.io.File
-import org.gradle.accessors.dm.LibrariesForLibs
 
 fun CommonExtension<*, *, *, *, *>.androidConfig(project: Project) {
     defaultConfig {

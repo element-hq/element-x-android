@@ -18,7 +18,9 @@ package io.element.android.features.logout.impl
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.matrix.api.encryption.BackupState
 import io.element.android.libraries.matrix.api.encryption.BackupUploadState
+import io.element.android.libraries.matrix.api.encryption.RecoveryState
 import io.element.android.libraries.matrix.api.encryption.SteadyStateException
 
 open class LogoutStateProvider : PreviewParameterProvider<LogoutState> {
@@ -32,16 +34,26 @@ open class LogoutStateProvider : PreviewParameterProvider<LogoutState> {
             aLogoutState(logoutAction = Async.Loading()),
             aLogoutState(logoutAction = Async.Failure(Exception("Failed to logout"))),
             aLogoutState(backupUploadState = BackupUploadState.SteadyException(SteadyStateException.Connection("No network"))),
+            // Last session no recovery
+            aLogoutState(isLastSession = true, recoveryState = RecoveryState.DISABLED),
+            // Last session no backup
+            aLogoutState(isLastSession = true, backupState = BackupState.UNKNOWN, doesBackupExistOnServer = false),
         )
 }
 
 fun aLogoutState(
     isLastSession: Boolean = false,
+    backupState: BackupState = BackupState.ENABLED,
+    doesBackupExistOnServer: Boolean = true,
+    recoveryState: RecoveryState = RecoveryState.ENABLED,
     backupUploadState: BackupUploadState = BackupUploadState.Unknown,
     showConfirmationDialog: Boolean = false,
     logoutAction: Async<String?> = Async.Uninitialized,
 ) = LogoutState(
     isLastSession = isLastSession,
+    backupState = backupState,
+    doesBackupExistOnServer = doesBackupExistOnServer,
+    recoveryState = recoveryState,
     backupUploadState = backupUploadState,
     showConfirmationDialog = showConfirmationDialog,
     logoutAction = logoutAction,

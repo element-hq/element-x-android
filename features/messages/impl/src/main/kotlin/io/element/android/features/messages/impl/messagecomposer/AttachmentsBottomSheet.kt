@@ -32,6 +32,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
+import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.messages.impl.R
 import io.element.android.libraries.androidutils.ui.hideKeyboard
 import io.element.android.libraries.designsystem.components.list.ListItemContent
@@ -127,7 +128,7 @@ private fun AttachmentSourcePickerMenu(
         )
         ListItem(
             modifier = Modifier.clickable { state.eventSink(MessageComposerEvents.PickAttachmentSource.VideoFromCamera) },
-            leadingContent = ListItemContent.Icon(IconSource.Resource(CommonDrawables.ic_video_call)),
+            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.VideoCall)),
             headlineContent = { Text(stringResource(R.string.screen_room_attachment_source_camera_video)) },
             style = ListItemStyle.Primary,
         )
@@ -137,7 +138,7 @@ private fun AttachmentSourcePickerMenu(
                     state.eventSink(MessageComposerEvents.PickAttachmentSource.Location)
                     onSendLocationClicked()
                 },
-                leadingContent = ListItemContent.Icon(IconSource.Resource(CommonDrawables.ic_location_pin) ),
+                leadingContent = ListItemContent.Icon(IconSource.Resource(CommonDrawables.ic_location_pin)),
                 headlineContent = { Text(stringResource(R.string.screen_room_attachment_source_location)) },
                 style = ListItemStyle.Primary,
             )
@@ -148,7 +149,7 @@ private fun AttachmentSourcePickerMenu(
                     state.eventSink(MessageComposerEvents.PickAttachmentSource.Poll)
                     onCreatePollClicked()
                 },
-                leadingContent = ListItemContent.Icon(IconSource.Resource(CommonDrawables.ic_compound_polls)),
+                leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Polls)),
                 headlineContent = { Text(stringResource(R.string.screen_room_attachment_source_poll)) },
                 style = ListItemStyle.Primary,
             )

@@ -98,7 +98,7 @@ class VoiceMessagePresenter @AssistedInject constructor(
             }
         }
         val duration by remember {
-            derivedStateOf { playerState.duration ?: content.duration.toMillis() }
+            derivedStateOf { playerState.duration ?: content.duration.inWholeMilliseconds }
         }
         val progress by remember {
             derivedStateOf {

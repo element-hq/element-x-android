@@ -16,12 +16,9 @@
 
 package io.element.android.libraries.matrix.impl.timeline.postprocessor
 
-import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.item.virtual.VirtualTimelineItem
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.getAndUpdate
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.util.Date
@@ -31,26 +28,12 @@ class TimelineEncryptedHistoryPostProcessor(
     private val lastLoginTimestamp: Date?,
     private val isRoomEncrypted: Boolean,
     private val isKeyBackupEnabled: Boolean,
-    private val paginationStateFlow: MutableStateFlow<MatrixTimeline.PaginationState>,
 ) {
 
     suspend fun process(items: List<MatrixTimelineItem>): List<MatrixTimelineItem> = withContext(dispatcher) {
         Timber.d("Process on Thread=${Thread.currentThread()}")
         if (!isRoomEncrypted || isKeyBackupEnabled || lastLoginTimestamp == null) return@withContext items
-
-        val filteredItems = replaceWithEncryptionHistoryBannerIfNeeded(items)
-        // Disable back pagination
-        val wasFiltered = filteredItems !== items
-        if (wasFiltered) {
-            paginationStateFlow.getAndUpdate {
-                it.copy(
-                    isBackPaginating = false,
-                    hasMoreToLoadBackwards = false,
-                    beginningOfRoomReached = false,
-                )
-            }
-        }
-        filteredItems
+        replaceWithEncryptionHistoryBannerIfNeeded(items)
     }
 
     private fun replaceWithEncryptionHistoryBannerIfNeeded(list: List<MatrixTimelineItem>): List<MatrixTimelineItem> {
@@ -62,7 +45,7 @@ class TimelineEncryptedHistoryPostProcessor(
         }
         return if (lastEncryptedHistoryBannerIndex >= 0) {
             val sublist = list.drop(lastEncryptedHistoryBannerIndex + 1).toMutableList()
-            sublist.add(0, MatrixTimelineItem.Virtual(0L, VirtualTimelineItem.EncryptedHistoryBanner))
+            sublist.add(0, MatrixTimelineItem.Virtual(VirtualTimelineItem.EncryptedHistoryBanner.toString(), VirtualTimelineItem.EncryptedHistoryBanner))
             sublist
         } else {
             list

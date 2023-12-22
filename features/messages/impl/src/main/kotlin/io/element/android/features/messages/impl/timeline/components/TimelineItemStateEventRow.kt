@@ -18,6 +18,7 @@ package io.element.android.features.messages.impl.timeline.components
 
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
@@ -32,50 +33,69 @@ import io.element.android.features.messages.impl.timeline.TimelineEvents
 import io.element.android.features.messages.impl.timeline.aTimelineItemEvent
 import io.element.android.features.messages.impl.timeline.components.event.TimelineItemEventContentView
 import io.element.android.features.messages.impl.timeline.components.event.noExtraPadding
+import io.element.android.features.messages.impl.timeline.components.receipt.ReadReceiptViewState
+import io.element.android.features.messages.impl.timeline.components.receipt.TimelineItemReadReceiptView
+import io.element.android.features.messages.impl.timeline.components.receipt.aReadReceiptData
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.TimelineItemGroupPosition
+import io.element.android.features.messages.impl.timeline.model.TimelineItemReadReceipts
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemStateEventContent
 import io.element.android.features.messages.impl.timeline.util.defaultTimelineContentPadding
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import kotlinx.collections.immutable.toPersistentList
 
 @Composable
 fun TimelineItemStateEventRow(
     event: TimelineItem.Event,
+    showReadReceipts: Boolean,
+    isLastOutgoingMessage: Boolean,
     isHighlighted: Boolean,
     onClick: () -> Unit,
     onLongClick: () -> Unit,
+    onReadReceiptsClick: (event: TimelineItem.Event) -> Unit,
     eventSink: (TimelineEvents) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val interactionSource = remember { MutableInteractionSource() }
-    Box(
+    Column(
         modifier = modifier
             .fillMaxWidth()
-            .padding(vertical = 8.dp)
-            .wrapContentHeight(),
-        contentAlignment = Alignment.Center
     ) {
-        MessageStateEventContainer(
-            isHighlighted = isHighlighted,
-            interactionSource = interactionSource,
-            onClick = onClick,
-            onLongClick = onLongClick,
+        Box(
             modifier = Modifier
-                .zIndex(-1f)
-                .widthIn(max = 320.dp)
+                .fillMaxWidth()
+                .padding(top = 8.dp, bottom = 2.dp)
+                .wrapContentHeight(),
+            contentAlignment = Alignment.Center
         ) {
-            TimelineItemEventContentView(
-                content = event.content,
-                isMine = event.isMine,
+            MessageStateEventContainer(
+                isHighlighted = isHighlighted,
                 interactionSource = interactionSource,
                 onClick = onClick,
                 onLongClick = onLongClick,
-                extraPadding = noExtraPadding,
-                eventSink = eventSink,
-                modifier = Modifier.defaultTimelineContentPadding()
-            )
+                modifier = Modifier
+                    .zIndex(-1f)
+                    .widthIn(max = 320.dp)
+            ) {
+                TimelineItemEventContentView(
+                    content = event.content,
+                    onLinkClicked = {},
+                    extraPadding = noExtraPadding,
+                    eventSink = eventSink,
+                    modifier = Modifier.defaultTimelineContentPadding()
+                )
+            }
         }
+        TimelineItemReadReceiptView(
+            state = ReadReceiptViewState(
+                sendState = event.localSendState,
+                isLastOutgoingMessage = isLastOutgoingMessage,
+                receipts = event.readReceiptState.receipts,
+            ),
+            showReadReceipts = showReadReceipts,
+            onReadReceiptsClicked = { onReadReceiptsClick(event) },
+        )
     }
 }
 
@@ -86,11 +106,17 @@ internal fun TimelineItemStateEventRowPreview() = ElementPreview {
         event = aTimelineItemEvent(
             isMine = false,
             content = aTimelineItemStateEventContent(),
-            groupPosition = TimelineItemGroupPosition.None
+            groupPosition = TimelineItemGroupPosition.None,
+            readReceiptState = TimelineItemReadReceipts(
+                receipts = listOf(aReadReceiptData(0)).toPersistentList(),
+            )
         ),
+        showReadReceipts = true,
+        isLastOutgoingMessage = false,
         isHighlighted = false,
         onClick = {},
         onLongClick = {},
+        onReadReceiptsClick = {},
         eventSink = {}
     )
 }

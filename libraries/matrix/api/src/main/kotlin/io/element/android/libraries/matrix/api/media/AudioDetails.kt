@@ -16,9 +16,10 @@
 
 package io.element.android.libraries.matrix.api.media
 
-import java.time.Duration
+import kotlinx.collections.immutable.ImmutableList
+import kotlin.time.Duration
 
 data class AudioDetails(
     val duration: Duration,
-    val waveform: List<Float>,
+    val waveform: ImmutableList<Float>,
 )

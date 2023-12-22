@@ -22,12 +22,10 @@ import io.element.android.libraries.matrix.api.roomlist.RoomSummary
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID_2
 import io.element.android.libraries.matrix.test.room.aRoomSummaryFilled
-import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.withTimeout
 import org.junit.Test
 import org.matrix.rustcomponents.sdk.RoomList
 import org.matrix.rustcomponents.sdk.RoomListEntriesUpdate
@@ -38,7 +36,6 @@ import org.matrix.rustcomponents.sdk.RoomListServiceInterface
 import org.matrix.rustcomponents.sdk.RoomListServiceStateListener
 import org.matrix.rustcomponents.sdk.RoomListServiceSyncIndicatorListener
 import org.matrix.rustcomponents.sdk.TaskHandle
-import kotlin.time.Duration.Companion.milliseconds
 
 // NOTE: this class is using a fake implementation of a Rust SDK interface which returns actual Rust objects with pointers.
 // Since we don't access the data in those objects, this is fine for our tests, but that's as far as we can test this class.
@@ -47,37 +44,10 @@ class RoomSummaryListProcessorTests {
     private val summaries = MutableStateFlow<List<RoomSummary>>(emptyList())
 
     @Test
-    fun `postUpdates can't start until postEntries is done`() = runTest {
-        val processor = createProcessor()
-        val update = listOf(RoomListEntriesUpdate.Reset(emptyList()))
-
-        val timeoutError = runCatching {
-            withTimeout(10.milliseconds) { processor.postUpdate(update) }
-        }.exceptionOrNull()
-        assertThat(timeoutError).isInstanceOf(CancellationException::class.java)
-
-        processor.postEntries(listOf(RoomListEntry.Empty))
-        processor.postUpdate(update)
-    }
-
-    @Test
-    fun `postEntries adds all new entries with no diffing`() = runTest {
-        summaries.value = listOf(aRoomSummaryFilled())
-        val processor = createProcessor()
-
-        processor.postEntries(listOf(RoomListEntry.Empty, RoomListEntry.Empty, RoomListEntry.Empty))
-
-        assertThat(summaries.value.count()).isEqualTo(4)
-    }
-
-    @Test
     fun `Append adds new entries at the end of the list`() = runTest {
         summaries.value = listOf(aRoomSummaryFilled())
         val processor = createProcessor()
 
-        // Start processing updates
-        processor.postEntries(listOf())
-        // Process actual update
         processor.postUpdate(listOf(RoomListEntriesUpdate.Append(listOf(RoomListEntry.Empty, RoomListEntry.Empty, RoomListEntry.Empty))))
 
         assertThat(summaries.value.count()).isEqualTo(4)
@@ -88,10 +58,6 @@ class RoomSummaryListProcessorTests {
     fun `PushBack adds a new entry at the end of the list`() = runTest {
         summaries.value = listOf(aRoomSummaryFilled())
         val processor = createProcessor()
-
-        // Start processing updates
-        processor.postEntries(listOf())
-        // Process actual update
         processor.postUpdate(listOf(RoomListEntriesUpdate.PushBack(RoomListEntry.Empty)))
 
         assertThat(summaries.value.count()).isEqualTo(2)
@@ -102,10 +68,6 @@ class RoomSummaryListProcessorTests {
     fun `PushFront inserts a new entry at the start of the list`() = runTest {
         summaries.value = listOf(aRoomSummaryFilled())
         val processor = createProcessor()
-
-        // Start processing updates
-        processor.postEntries(listOf())
-        // Process actual update
         processor.postUpdate(listOf(RoomListEntriesUpdate.PushFront(RoomListEntry.Empty)))
 
         assertThat(summaries.value.count()).isEqualTo(2)
@@ -118,9 +80,6 @@ class RoomSummaryListProcessorTests {
         val processor = createProcessor()
         val index = 0
 
-        // Start processing updates
-        processor.postEntries(listOf())
-        // Process actual update
         processor.postUpdate(listOf(RoomListEntriesUpdate.Set(index.toUInt(), RoomListEntry.Empty)))
 
         assertThat(summaries.value.count()).isEqualTo(1)
@@ -133,9 +92,6 @@ class RoomSummaryListProcessorTests {
         val processor = createProcessor()
         val index = 0
 
-        // Start processing updates
-        processor.postEntries(listOf())
-        // Process actual update
         processor.postUpdate(listOf(RoomListEntriesUpdate.Insert(index.toUInt(), RoomListEntry.Empty)))
 
         assertThat(summaries.value.count()).isEqualTo(2)
@@ -148,9 +104,6 @@ class RoomSummaryListProcessorTests {
         val processor = createProcessor()
         val index = 0
 
-        // Start processing updates
-        processor.postEntries(listOf())
-        // Process actual update
         processor.postUpdate(listOf(RoomListEntriesUpdate.Remove(index.toUInt())))
 
         assertThat(summaries.value.count()).isEqualTo(1)
@@ -163,9 +116,6 @@ class RoomSummaryListProcessorTests {
         val processor = createProcessor()
         val index = 0
 
-        // Start processing updates
-        processor.postEntries(listOf())
-        // Process actual update
         processor.postUpdate(listOf(RoomListEntriesUpdate.PopBack))
 
         assertThat(summaries.value.count()).isEqualTo(1)
@@ -178,9 +128,6 @@ class RoomSummaryListProcessorTests {
         val processor = createProcessor()
         val index = 0
 
-        // Start processing updates
-        processor.postEntries(listOf())
-        // Process actual update
         processor.postUpdate(listOf(RoomListEntriesUpdate.PopFront))
 
         assertThat(summaries.value.count()).isEqualTo(1)
@@ -192,9 +139,6 @@ class RoomSummaryListProcessorTests {
         summaries.value = listOf(aRoomSummaryFilled(roomId = A_ROOM_ID), aRoomSummaryFilled(A_ROOM_ID_2))
         val processor = createProcessor()
 
-        // Start processing updates
-        processor.postEntries(listOf())
-        // Process actual update
         processor.postUpdate(listOf(RoomListEntriesUpdate.Clear))
 
         assertThat(summaries.value).isEmpty()
@@ -206,9 +150,6 @@ class RoomSummaryListProcessorTests {
         val processor = createProcessor()
         val index = 0
 
-        // Start processing updates
-        processor.postEntries(listOf())
-        // Process actual update
         processor.postUpdate(listOf(RoomListEntriesUpdate.Truncate(1u)))
 
         assertThat(summaries.value.count()).isEqualTo(1)

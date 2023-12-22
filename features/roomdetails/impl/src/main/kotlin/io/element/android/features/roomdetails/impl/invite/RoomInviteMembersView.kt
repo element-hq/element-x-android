@@ -18,7 +18,6 @@ package io.element.android.features.roomdetails.impl.invite
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -34,8 +33,8 @@ import androidx.compose.ui.unit.dp
 import io.element.android.features.roomdetails.impl.R
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.button.BackButton
-import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.aliasScreenTitle
 import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
 import io.element.android.libraries.designsystem.theme.components.Scaffold
@@ -50,17 +49,16 @@ import io.element.android.libraries.matrix.ui.components.CheckableUserRow
 import io.element.android.libraries.matrix.ui.components.SelectedUsersList
 import io.element.android.libraries.matrix.ui.model.getAvatarData
 import io.element.android.libraries.matrix.ui.model.getBestName
-import io.element.android.libraries.theme.ElementTheme
+import io.element.android.compound.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
 
-@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun RoomInviteMembersView(
     state: RoomInviteMembersState,
+    onBackPressed: () -> Unit,
+    onSubmitPressed: (List<MatrixUser>) -> Unit,
     modifier: Modifier = Modifier,
-    onBackPressed: () -> Unit = {},
-    onSendPressed: (List<MatrixUser>) -> Unit = {},
 ) {
     Scaffold(
         modifier = modifier,
@@ -73,7 +71,7 @@ fun RoomInviteMembersView(
                         onBackPressed()
                     }
                 },
-                onSendPressed = { onSendPressed(state.selectedUsers) },
+                onSubmitPressed = { onSubmitPressed(state.selectedUsers) },
                 canSend = state.canInvite,
             )
         }
@@ -113,9 +111,9 @@ fun RoomInviteMembersView(
 @Composable
 private fun RoomInviteMembersTopBar(
     canSend: Boolean,
+    onBackPressed: () -> Unit,
+    onSubmitPressed: () -> Unit,
     modifier: Modifier = Modifier,
-    onBackPressed: () -> Unit = {},
-    onSendPressed: () -> Unit = {},
 ) {
     TopAppBar(
         modifier = modifier,
@@ -128,8 +126,8 @@ private fun RoomInviteMembersTopBar(
         navigationIcon = { BackButton(onClick = onBackPressed) },
         actions = {
             TextButton(
-                text = stringResource(CommonStrings.action_send),
-                onClick = onSendPressed,
+                text = stringResource(CommonStrings.action_invite),
+                onClick = onSubmitPressed,
                 enabled = canSend,
             )
         }
@@ -143,11 +141,11 @@ private fun RoomInviteMembersSearchBar(
     state: SearchBarResultState<ImmutableList<InvitableUser>>,
     selectedUsers: ImmutableList<MatrixUser>,
     active: Boolean,
+    onActiveChanged: (Boolean) -> Unit,
+    onTextChanged: (String) -> Unit,
+    onUserToggled: (MatrixUser) -> Unit,
     modifier: Modifier = Modifier,
     placeHolderTitle: String = stringResource(CommonStrings.common_search_for_someone),
-    onActiveChanged: (Boolean) -> Unit = {},
-    onTextChanged: (String) -> Unit = {},
-    onUserToggled: (MatrixUser) -> Unit = {},
 ) {
     SearchBar(
         query = query,
@@ -219,5 +217,9 @@ private fun RoomInviteMembersSearchBar(
 @PreviewsDayNight
 @Composable
 internal fun RoomInviteMembersPreview(@PreviewParameter(RoomInviteMembersStateProvider::class) state: RoomInviteMembersState) = ElementPreview {
-    RoomInviteMembersView(state)
+    RoomInviteMembersView(
+        state = state,
+        onBackPressed = {},
+        onSubmitPressed = {},
+    )
 }

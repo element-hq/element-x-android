@@ -41,8 +41,7 @@ fun TimelineItemEventContent.canBeCopied(): Boolean =
 fun TimelineItemEventContent.canBeRepliedTo(): Boolean =
     when (this) {
         is TimelineItemRedactedContent,
-        is TimelineItemStateContent,
-        is TimelineItemPollContent -> false
+        is TimelineItemStateContent -> false
         else -> true
     }
 
@@ -63,4 +62,14 @@ fun TimelineItemEventContent.canReact(): Boolean =
         is TimelineItemStateContent,
         is TimelineItemRedactedContent,
         TimelineItemUnknownContent -> false
+    }
+
+/**
+ * Whether the event content has been edited.
+ */
+fun TimelineItemEventContent.isEdited(): Boolean =
+    when (this) {
+        is TimelineItemTextBasedContent -> isEdited
+        is TimelineItemPollContent -> isEdited
+        else -> false
     }

@@ -21,5 +21,4 @@ package io.element.android.libraries.androidutils.clipboard
  */
 interface ClipboardHelper {
     fun copyPlainText(text: String)
-
 }

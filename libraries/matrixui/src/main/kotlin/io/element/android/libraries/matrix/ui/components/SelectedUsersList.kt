@@ -37,8 +37,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.unit.dp
-import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.text.toPx
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import kotlinx.collections.immutable.ImmutableList
@@ -48,10 +48,10 @@ import kotlin.math.floor
 @Composable
 fun SelectedUsersList(
     selectedUsers: ImmutableList<MatrixUser>,
+    onUserRemoved: (MatrixUser) -> Unit,
     modifier: Modifier = Modifier,
     autoScroll: Boolean = false,
     contentPadding: PaddingValues = PaddingValues(0.dp),
-    onUserRemoved: (MatrixUser) -> Unit = {},
 ) {
     val lazyListState = rememberLazyListState()
     if (autoScroll) {
@@ -135,6 +135,7 @@ internal fun SelectedUsersListPreview() = ElementPreview {
         // Two users that will be visible with no scrolling
         SelectedUsersList(
             selectedUsers = aMatrixUserList().take(2).toImmutableList(),
+            onUserRemoved = {},
             modifier = Modifier
                 .width(200.dp)
                 .border(1.dp, Color.Red)
@@ -144,6 +145,7 @@ internal fun SelectedUsersListPreview() = ElementPreview {
         for (i in 0..5) {
             SelectedUsersList(
                 selectedUsers = aMatrixUserList().take(6).toImmutableList(),
+                onUserRemoved = {},
                 modifier = Modifier
                     .width((200 + i * 20).dp)
                     .border(1.dp, Color.Red)

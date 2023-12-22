@@ -30,12 +30,14 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.user.MatrixUser
+import io.element.android.libraries.matrix.ui.media.ImageLoaderHolder
 import io.element.android.libraries.push.api.notifications.NotificationDrawerManager
 import io.element.android.libraries.push.impl.notifications.model.NotifiableEvent
 import io.element.android.services.appnavstate.api.AppNavigationStateService
 import io.element.android.services.appnavstate.api.NavigationState
 import io.element.android.services.appnavstate.api.currentSessionId
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -60,7 +62,10 @@ class DefaultNotificationDrawerManager @Inject constructor(
     private val dispatchers: CoroutineDispatchers,
     private val buildMeta: BuildMeta,
     private val matrixClientProvider: MatrixClientProvider,
+    private val imageLoaderHolder: ImageLoaderHolder,
 ) : NotificationDrawerManager {
+    private var appNavigationStateObserver: Job? = null
+
     /**
      * Lazily initializes the NotificationState as we rely on having a current session in order to fetch the persisted queue of events.
      */
@@ -72,10 +77,15 @@ class DefaultNotificationDrawerManager @Inject constructor(
 
     init {
         // Observe application state
-        coroutineScope.launch {
+        appNavigationStateObserver = coroutineScope.launch {
             appNavigationStateService.appNavigationState
                 .collect { onAppNavigationStateChange(it.navigationState) }
         }
+    }
+
+    // For test only
+    fun destroy() {
+        appNavigationStateObserver?.cancel()
     }
 
     private var currentAppNavigationState: NavigationState? = null
@@ -280,10 +290,11 @@ class DefaultNotificationDrawerManager @Inject constructor(
         }
 
         eventsForSessions.forEach { (sessionId, notifiableEvents) ->
+            val client = matrixClientProvider.getOrRestore(sessionId).getOrThrow()
+            val imageLoader = imageLoaderHolder.get(client)
             val currentUser = tryOrNull(
                 onError = { Timber.tag(loggerTag.value).e(it, "Unable to retrieve info for user ${sessionId.value}") },
                 operation = {
-                    val client = matrixClientProvider.getOrRestore(sessionId).getOrThrow()
                     // myUserDisplayName cannot be empty else NotificationCompat.MessagingStyle() will crash
                     val myUserDisplayName = client.loadUserDisplayName().getOrNull() ?: sessionId.value
                     val userAvatarUrl = client.loadUserAvatarURLString().getOrNull()
@@ -299,7 +310,7 @@ class DefaultNotificationDrawerManager @Inject constructor(
                 avatarUrl = null
             )
 
-            notificationRenderer.render(currentUser, useCompleteNotificationFormat, notifiableEvents)
+            notificationRenderer.render(currentUser, useCompleteNotificationFormat, notifiableEvents, imageLoader)
         }
     }
 }

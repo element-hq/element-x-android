@@ -45,7 +45,7 @@ class DefaultInviteStateDataSource @Inject constructor(
     override fun inviteState(): InvitesState {
         val invites by client
             .roomListService
-            .invites()
+            .invites
             .summaries
             .collectAsState()
 

@@ -6,6 +6,7 @@
   <string name="screen_advanced_settings_developer_mode">"Vývojářský režim"</string>
   <string name="screen_advanced_settings_developer_mode_description">"Povolením získáte přístup k funkcím a funkcím pro vývojáře."</string>
   <string name="screen_advanced_settings_rich_text_editor_description">"Vypněte editor formátovaného textu pro ruční zadání Markdown."</string>
+  <string name="screen_advanced_settings_view_source_description">"Povolit možnost zobrazení zdroje zprávy na časové ose."</string>
   <string name="screen_edit_profile_display_name">"Zobrazované jméno"</string>
   <string name="screen_edit_profile_display_name_placeholder">"Vaše zobrazované jméno"</string>
   <string name="screen_edit_profile_error">"Došlo k neznámé chybě a informace nelze změnit."</string>
@@ -30,6 +31,8 @@ Pokud budete pokračovat, některá nastavení se mohou změnit."</string>
   <string name="screen_notification_settings_enable_notifications">"Povolit oznámení na tomto zařízení"</string>
   <string name="screen_notification_settings_failed_fixing_configuration">"Konfigurace nebyla opravena, zkuste to prosím znovu."</string>
   <string name="screen_notification_settings_group_chats">"Skupinové chaty"</string>
+  <string name="screen_notification_settings_invite_for_me_label">"Pozvánky"</string>
+  <string name="screen_notification_settings_mentions_only_disclaimer">"Váš domovský server tuto možnost v zašifrovaných místnostech nepodporuje, v některých místnostech nemusíte být upozorněni."</string>
   <string name="screen_notification_settings_mentions_section_title">"Zmínky"</string>
   <string name="screen_notification_settings_mode_all">"Vše"</string>
   <string name="screen_notification_settings_mode_mentions">"Zmínky"</string>

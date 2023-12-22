@@ -32,15 +32,15 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import io.element.android.compound.theme.ElementTheme
+import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.matrix.ui.model.getAvatarData
-import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
@@ -78,8 +78,8 @@ fun UnresolvedUserRow(
                     .padding(top = 3.dp)
             ) {
                 Icon(
-                    resourceId = CommonDrawables.ic_compound_error,
-                    contentDescription = "",
+                    imageVector = CompoundIcons.Error,
+                    contentDescription = null,
                     modifier = Modifier
                         .size(18.dp)
                         .align(Alignment.Top)

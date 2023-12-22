@@ -17,7 +17,7 @@
 package io.element.android.libraries.designsystem.theme
 
 import androidx.compose.ui.text.TextStyle
-import io.element.android.libraries.theme.compound.generated.TypographyTokens
+import io.element.android.compound.tokens.generated.TypographyTokens
 
 /*
  * This file contains aliases for TypographyTokens.

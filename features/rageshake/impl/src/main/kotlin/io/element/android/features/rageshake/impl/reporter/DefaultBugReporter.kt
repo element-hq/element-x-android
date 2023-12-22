@@ -25,18 +25,17 @@ import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.features.rageshake.api.crash.CrashDataStore
 import io.element.android.features.rageshake.api.reporter.BugReporter
 import io.element.android.features.rageshake.api.reporter.BugReporterListener
-import io.element.android.features.rageshake.api.reporter.ReportType
 import io.element.android.features.rageshake.api.screenshot.ScreenshotHolder
 import io.element.android.features.rageshake.impl.R
 import io.element.android.libraries.androidutils.file.compressFile
 import io.element.android.libraries.androidutils.file.safeDelete
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.data.tryOrNull
-import io.element.android.libraries.core.extensions.toOnOff
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
+import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.network.useragent.UserAgentProvider
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import io.element.android.services.toolbox.api.systemclock.SystemClock
@@ -65,6 +64,7 @@ import javax.inject.Provider
 /**
  * BugReporter creates and sends the bug reports.
  */
+@SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
 class DefaultBugReporter @Inject constructor(
     @ApplicationContext private val context: Context,
@@ -77,86 +77,34 @@ class DefaultBugReporter @Inject constructor(
     private val userAgentProvider: UserAgentProvider,
     private val sessionStore: SessionStore,
     private val buildMeta: BuildMeta,
-    /*
-    private val versionProvider: VersionProvider,
-    private val vectorPreferences: VectorPreferences,
-    private val vectorFileLogger: VectorFileLogger,
-    private val systemLocaleProvider: SystemLocaleProvider,
-    private val matrix: Matrix,
-    private val processInfo: ProcessInfo,
-    private val sdkIntProvider: BuildVersionSdkIntProvider,
-    private val vectorLocale: VectorLocaleProvider,
-     */
+    private val bugReporterUrlProvider: BugReporterUrlProvider,
 ) : BugReporter {
-    var inMultiWindowMode = false
-
     companion object {
         // filenames
-        private const val LOG_CAT_ERROR_FILENAME = "logcatError.log"
         private const val LOG_CAT_FILENAME = "logcat.log"
         private const val LOG_DIRECTORY_NAME = "logs"
-        // private const val KEY_REQUESTS_FILENAME = "keyRequests.log"
-
         private const val BUFFER_SIZE = 1024 * 1024 * 50
     }
 
     // the pending bug report call
     private var bugReportCall: Call? = null
-
     // boolean to cancel the bug report
     private val isCancelled = false
-
-    /*
-    val adapter = MatrixJsonParser.getMoshi()
-            .adapter<JsonDict>(Types.newParameterizedType(Map::class.java, String::class.java, Any::class.java))
-     */
-
-    private val logcatCommandError = arrayOf(
-        "logcat", // /< Run 'logcat' command
-        "-d", // /< Dump the log rather than continue outputting it
-        "-v", // formatting
-        "threadtime", // include timestamps
-        "AndroidRuntime:E " + // /< Pick all AndroidRuntime errors (such as uncaught exceptions)"communicatorjni:V " + ///< All communicatorjni logging
-            "libcommunicator:V " + // /< All libcommunicator logging
-            "DEBUG:V " + // /< All DEBUG logging - which includes native land crashes (seg faults, etc)
-            "*:S" // /< Everything else silent, so don't pick it..
-    )
-
     private val logcatCommandDebug = arrayOf("logcat", "-d", "-v", "threadtime", "*:*")
+    private var currentTracingFilter: String? = null
 
-    /**
-     * Send a bug report.
-     *
-     * @param reportType The report type (bug, suggestion, feedback)
-     * @param withDevicesLogs true to include the device log
-     * @param withCrashLogs true to include the crash logs
-     * @param withKeyRequestHistory true to include the crash logs
-     * @param withScreenshot true to include the screenshot
-     * @param theBugDescription the bug description
-     * @param serverVersion version of the server
-     * @param canContact true if the user opt in to be contacted directly
-     * @param customFields fields which will be sent with the report
-     * @param listener the listener
-     */
     override suspend fun sendBugReport(
-        reportType: ReportType,
         withDevicesLogs: Boolean,
         withCrashLogs: Boolean,
-        withKeyRequestHistory: Boolean,
         withScreenshot: Boolean,
         theBugDescription: String,
-        serverVersion: String,
         canContact: Boolean,
-        customFields: Map<String, String>?,
         listener: BugReporterListener?
     ) {
         // enumerate files to delete
         val bugReportFiles: MutableList<File> = ArrayList()
-
         try {
-
             var serverError: String? = null
-            var reportURL: String? = null
             withContext(coroutineDispatchers.io) {
                 var bugDescription = theBugDescription
                 val crashCallStack = crashDataStore.crashInfo().first()
@@ -181,7 +129,7 @@ class DefaultBugReporter @Inject constructor(
                 }
 
                 if (!isCancelled && (withCrashLogs || withDevicesLogs)) {
-                    val gzippedLogcat = saveLogCat(false)
+                    val gzippedLogcat = saveLogCat()
 
                     if (null != gzippedLogcat) {
                         if (gzippedFiles.size == 0) {
@@ -192,68 +140,24 @@ class DefaultBugReporter @Inject constructor(
                     }
                 }
 
-                /*
-            activeSessionHolder.getSafeActiveSession()
-                    ?.takeIf { !mIsCancelled && withKeyRequestHistory }
-                    ?.cryptoService()
-                    ?.getGossipingEvents()
-                    ?.let { GossipingEventsSerializer().serialize(it) }
-                    ?.toByteArray()
-                    ?.let { rawByteArray ->
-                        File(context.cacheDir.absolutePath, KEY_REQUESTS_FILENAME)
-                                .also {
-                                    it.outputStream()
-                                            .use { os -> os.write(rawByteArray) }
-                                }
-                    }
-                    ?.let { compressFile(it) }
-                    ?.let { gzippedFiles.add(it) }
-             */
-
                 val sessionData = sessionStore.getLatestSession()
                 val deviceId = sessionData?.deviceId ?: "undefined"
                 val userId = sessionData?.userId ?: "undefined"
-                var olmVersion = "undefined"
 
                 if (!isCancelled) {
-                    val text = when (reportType) {
-                        ReportType.BUG_REPORT -> bugDescription
-                        ReportType.SUGGESTION -> "[Suggestion] $bugDescription"
-                        ReportType.SPACE_BETA_FEEDBACK -> "[spaces-feedback] $bugDescription"
-                        ReportType.THREADS_BETA_FEEDBACK -> "[threads-feedback] $bugDescription"
-                        ReportType.AUTO_UISI_SENDER,
-                        ReportType.AUTO_UISI -> bugDescription
-                    }
-
                     // build the multi part request
                     val builder = BugReporterMultipartBody.Builder()
-                        .addFormDataPart("text", text)
-                        .addFormDataPart("app", rageShakeAppNameForReport(reportType))
+                        .addFormDataPart("text", bugDescription)
+                        .addFormDataPart("app", context.getString(R.string.bug_report_app_name))
                         .addFormDataPart("user_agent", userAgentProvider.provide())
                         .addFormDataPart("user_id", userId)
                         .addFormDataPart("can_contact", canContact.toString())
                         .addFormDataPart("device_id", deviceId)
-                        // .addFormDataPart("version", versionProvider.getVersion(longFormat = true))
-                        // .addFormDataPart("branch_name", buildMeta.gitBranchName)
-                        // .addFormDataPart("matrix_sdk_version", Matrix.getSdkVersion())
-                        .addFormDataPart("olm_version", olmVersion)
                         .addFormDataPart("device", Build.MODEL.trim())
-                        // .addFormDataPart("verbose_log", vectorPreferences.labAllowedExtendedLogging().toOnOff())
-                        .addFormDataPart("multi_window", inMultiWindowMode.toOnOff())
-                        // .addFormDataPart(
-                        //        "os", Build.VERSION.RELEASE + " (API " + sdkIntProvider.get() + ") " +
-                        //        Build.VERSION.INCREMENTAL + "-" + Build.VERSION.CODENAME
-                        // )
                         .addFormDataPart("locale", Locale.getDefault().toString())
-                        // .addFormDataPart("app_language", vectorLocale.applicationLocale.toString())
-                        // .addFormDataPart("default_app_language", systemLocaleProvider.getSystemLocale().toString())
-                        // .addFormDataPart("theme", ThemeUtils.getApplicationTheme(context))
-                        .addFormDataPart("server_version", serverVersion)
-                        .apply {
-                            customFields?.forEach { (name, value) ->
-                                addFormDataPart(name, value)
-                            }
-                        }
+                    currentTracingFilter?.let {
+                        builder.addFormDataPart("tracing_filter", it)
+                    }
 
                     // add the gzipped files, don't cancel the whole upload if only some file failed to upload
                     var uploadedSomeLogs = false
@@ -293,31 +197,6 @@ class DefaultBugReporter @Inject constructor(
 
                     // add some github labels
                     builder.addFormDataPart("label", buildMeta.versionName)
-                    // builder.addFormDataPart("label", buildMeta.flavorDescription)
-                    // builder.addFormDataPart("label", buildMeta.gitBranchName)
-
-                    // Possible values for BuildConfig.BUILD_TYPE: "debug", "nightly", "release".
-                    // builder.addFormDataPart("label", BuildConfig.BUILD_TYPE)
-
-                    when (reportType) {
-                        ReportType.BUG_REPORT -> {
-                            /* nop */
-                        }
-                        ReportType.SUGGESTION -> builder.addFormDataPart("label", "[Suggestion]")
-                        ReportType.SPACE_BETA_FEEDBACK -> builder.addFormDataPart("label", "spaces-feedback")
-                        ReportType.THREADS_BETA_FEEDBACK -> builder.addFormDataPart("label", "threads-feedback")
-                        ReportType.AUTO_UISI -> {
-                            builder.addFormDataPart("label", "Z-UISI")
-                            builder.addFormDataPart("label", "android")
-                            builder.addFormDataPart("label", "uisi-recipient")
-                        }
-                        ReportType.AUTO_UISI_SENDER -> {
-                            builder.addFormDataPart("label", "Z-UISI")
-                            builder.addFormDataPart("label", "android")
-                            builder.addFormDataPart("label", "uisi-sender")
-                        }
-                    }
-
                     if (crashCallStack.isNotEmpty() && withCrashLogs) {
                         builder.addFormDataPart("label", "crash")
                     }
@@ -350,7 +229,7 @@ class DefaultBugReporter @Inject constructor(
 
                     // build the request
                     val request = Request.Builder()
-                        .url(context.getString(R.string.bug_report_url))
+                        .url(bugReporterUrlProvider.provide())
                         .post(requestBody)
                         .build()
 
@@ -379,7 +258,6 @@ class DefaultBugReporter @Inject constructor(
                         } else {
                             try {
                                 val inputStream = response.body!!.byteStream()
-
                                 serverError = inputStream.use {
                                     buildString {
                                         var ch = it.read()
@@ -389,7 +267,6 @@ class DefaultBugReporter @Inject constructor(
                                         }
                                     }
                                 }
-
                                 // check if the error message
                                 serverError?.let {
                                     try {
@@ -401,7 +278,6 @@ class DefaultBugReporter @Inject constructor(
                                         Timber.e(e, "doInBackground ; Json conversion failed")
                                     }
                                 }
-
                                 // should never happen
                                 if (null == serverError) {
                                     serverError = "Failed with error $responseCode"
@@ -412,25 +288,17 @@ class DefaultBugReporter @Inject constructor(
                                 Timber.e(e, "## sendBugReport() : failed to parse error")
                             }
                         }
-                    } else {
-                        /*
-                    reportURL = response?.body?.string()?.let { stringBody ->
-                        adapter.fromJson(stringBody)?.get("report_url")?.toString()
-                    }
-                     */
                     }
                 }
             }
-
             withContext(coroutineDispatchers.main) {
                 bugReportCall = null
-
                 if (null != listener) {
                     try {
                         if (isCancelled) {
                             listener.onUploadCancelled()
                         } else if (null == serverError) {
-                            listener.onUploadSucceed(reportURL)
+                            listener.onUploadSucceed()
                         } else {
                             listener.onUploadFailed(serverError)
                         }
@@ -449,47 +317,6 @@ class DefaultBugReporter @Inject constructor(
         }
     }
 
-    /**
-     * Send a bug report either with email or with Vector.
-     */
-    /* TODO Remove
-    fun openBugReportScreen(activity: FragmentActivity, reportType: ReportType = ReportType.BUG_REPORT) {
-        screenshot = takeScreenshot(activity)
-        logDbInfo()
-        logProcessInfo()
-        logOtherInfo()
-        activity.startActivity(BugReportActivity.intent(activity, reportType))
-    }
-     */
-
-    // private fun logOtherInfo() {
-    //    Timber.i("SyncThread state: " + activeSessionHolder.getSafeActiveSession()?.syncService()?.getSyncState())
-    // }
-
-    // private fun logDbInfo() {
-    //    val dbInfo = matrix.debugService().getDbUsageInfo()
-    //    Timber.i(dbInfo)
-    // }
-
-    // private fun logProcessInfo() {
-    //    val pInfo = processInfo.getInfo()
-    //    Timber.i(pInfo)
-    // }
-
-    private fun rageShakeAppNameForReport(reportType: ReportType): String {
-        // As per https://github.com/matrix-org/rageshake
-        // app: Identifier for the application (eg 'riot-web').
-        // Should correspond to a mapping configured in the configuration file for github issue reporting to work.
-        // (see R.string.bug_report_url for configured RS server)
-        return context.getString(
-            when (reportType) {
-                ReportType.AUTO_UISI_SENDER,
-                ReportType.AUTO_UISI -> R.string.bug_report_auto_uisi_app_name
-                else -> R.string.bug_report_app_name
-            }
-        )
-    }
-
     override fun logDirectory(): File {
         return File(context.cacheDir, LOG_DIRECTORY_NAME)
     }
@@ -499,6 +326,10 @@ class DefaultBugReporter @Inject constructor(
             // delete the log files older than 1 day, except the most recent one
             deleteOldLogFiles(systemClock.epochMillis() - DAY_IN_MILLIS)
         }
+    }
+
+    override fun setCurrentTracingFilter(tracingFilter: String) {
+        currentTracingFilter = tracingFilter
     }
 
     /**
@@ -545,11 +376,10 @@ class DefaultBugReporter @Inject constructor(
     /**
      * Save the logcat.
      *
-     * @param isErrorLogcat true to save the error logcat
      * @return the file if the operation succeeds
      */
-    private fun saveLogCat(isErrorLogcat: Boolean): File? {
-        val logCatErrFile = File(context.cacheDir.absolutePath, if (isErrorLogcat) LOG_CAT_ERROR_FILENAME else LOG_CAT_FILENAME)
+    private fun saveLogCat(): File? {
+        val logCatErrFile = File(context.cacheDir.absolutePath, LOG_CAT_FILENAME)
 
         if (logCatErrFile.exists()) {
             logCatErrFile.safeDelete()
@@ -557,7 +387,7 @@ class DefaultBugReporter @Inject constructor(
 
         try {
             logCatErrFile.writer().use {
-                getLogCatError(it, isErrorLogcat)
+                getLogCatError(it)
             }
 
             return compressFile(logCatErrFile)
@@ -578,13 +408,12 @@ class DefaultBugReporter @Inject constructor(
      * Retrieves the logs.
      *
      * @param streamWriter the stream writer
-     * @param isErrorLogCat true to save the error logs
      */
-    private fun getLogCatError(streamWriter: OutputStreamWriter, isErrorLogCat: Boolean) {
+    private fun getLogCatError(streamWriter: OutputStreamWriter) {
         val logcatProc: Process
 
         try {
-            logcatProc = Runtime.getRuntime().exec(if (isErrorLogCat) logcatCommandError else logcatCommandDebug)
+            logcatProc = Runtime.getRuntime().exec(logcatCommandDebug)
         } catch (e1: IOException) {
             return
         }

@@ -2,6 +2,8 @@ name: Record screenshots
 
 on:
   workflow_dispatch:
+  pull_request:
+    types: [ labeled ]
 
 # Enrich gradle.properties for CI/CD
 env:
@@ -9,26 +11,39 @@ env:
 
 jobs:
   record:
-    name: Record screenshots on branch ${{ github.ref_name }}
+    name: Record screenshots on branch ${{ github.event.pull_request.head.ref || github.ref_name }}
     runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch' || github.event.label.name == 'Record-Screenshots'
 
     steps:
-      - name: ⏬ Checkout with LFS
+      - name: Remove Record-Screenshots label
+        if: github.event.label.name == 'Record-Screenshots'
+        uses: actions-ecosystem/action-remove-labels@v1
+        with:
+          labels: Record-Screenshots
+      - name: ⏬ Checkout with LFS (PR)
+        if: github.event.label.name == 'Record-Screenshots'
+        uses: nschloe/action-cached-lfs-checkout@v1.2.2
+        with:
+          persist-credentials: false
+          ref: ${{ github.event.pull_request.head.ref }}
+      - name: ⏬ Checkout with LFS (Branch)
+        if: github.event_name == 'workflow_dispatch'
         uses: nschloe/action-cached-lfs-checkout@v1.2.2
         with:
           persist-credentials: false
       - name: ☕️ Use JDK 17
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
           distribution: 'temurin' # See 'Supported distributions' for available options
           java-version: '17'
       # Add gradle cache, this should speed up the process
       - name: Configure gradle
-        uses: gradle/gradle-build-action@v2.9.0
+        uses: gradle/gradle-build-action@v2.11.1
         with:
           cache-read-only: ${{ github.ref != 'refs/heads/develop' }}
       - name: Record screenshots
-        run: "./.github/workflows/scripts/recordScreenshots.sh"
+        run: ./.github/workflows/scripts/recordScreenshots.sh
         env:
           GITHUB_TOKEN: ${{ secrets.DANGER_GITHUB_API_TOKEN }}
           GITHUB_REPOSITORY: ${{ secrets.GITHUB_REPOSITORY }}

@@ -69,7 +69,7 @@ private fun ContentToPreview() {
             val icon: @Composable () -> Unit = {
                 Icon(
                     imageVector = if (checked) Icons.Default.CheckCircle else Icons.Default.RadioButtonUnchecked,
-                    contentDescription = "IconToggleButton"
+                    contentDescription = null
                 )
             }
             IconToggleButton(checked = checked, enabled = true, onCheckedChange = { checked = !checked }, content = icon)
@@ -79,7 +79,7 @@ private fun ContentToPreview() {
             val icon: @Composable () -> Unit = {
                 Icon(
                     imageVector = if (!checked) Icons.Default.CheckCircle else Icons.Default.RadioButtonUnchecked,
-                    contentDescription = "IconToggleButton"
+                    contentDescription = null
                 )
             }
             IconToggleButton(checked = !checked, enabled = true, onCheckedChange = { checked = !checked }, content = icon)

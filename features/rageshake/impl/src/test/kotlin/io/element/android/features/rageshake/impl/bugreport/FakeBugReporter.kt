@@ -18,22 +18,17 @@ package io.element.android.features.rageshake.impl.bugreport
 
 import io.element.android.features.rageshake.api.reporter.BugReporter
 import io.element.android.features.rageshake.api.reporter.BugReporterListener
-import io.element.android.features.rageshake.api.reporter.ReportType
 import io.element.android.libraries.matrix.test.A_FAILURE_REASON
 import kotlinx.coroutines.delay
 import java.io.File
 
 class FakeBugReporter(val mode: FakeBugReporterMode = FakeBugReporterMode.Success) : BugReporter {
     override suspend fun sendBugReport(
-        reportType: ReportType,
         withDevicesLogs: Boolean,
         withCrashLogs: Boolean,
-        withKeyRequestHistory: Boolean,
         withScreenshot: Boolean,
         theBugDescription: String,
-        serverVersion: String,
         canContact: Boolean,
-        customFields: Map<String, String>?,
         listener: BugReporterListener?,
     ) {
         delay(100)
@@ -54,7 +49,7 @@ class FakeBugReporter(val mode: FakeBugReporterMode = FakeBugReporterMode.Succes
         }
         listener?.onProgress(100)
         delay(100)
-        listener?.onUploadSucceed(null)
+        listener?.onUploadSucceed()
     }
 
     override fun cleanLogDirectoryIfNeeded() {
@@ -63,6 +58,10 @@ class FakeBugReporter(val mode: FakeBugReporterMode = FakeBugReporterMode.Succes
 
     override fun logDirectory(): File {
         return File("fake")
+    }
+
+    override fun setCurrentTracingFilter(tracingFilter: String) {
+        // No op
     }
 }
 

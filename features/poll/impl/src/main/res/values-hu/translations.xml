@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_create_poll_add_option_btn">"Lehetőség hozzáadása"</string>
+  <string name="screen_create_poll_anonymous_desc">"Eredmények megjelenítése csak a szavazás befejezése után"</string>
+  <string name="screen_create_poll_anonymous_headline">"Szavazatok elrejtése"</string>
+  <string name="screen_create_poll_answer_hint">"%1$d. lehetőség"</string>
+  <string name="screen_create_poll_cancel_confirmation_content_android">"A módosítások nem lettek mentve. Biztos, hogy vissza akar lépni?"</string>
+  <string name="screen_create_poll_question_desc">"Kérdés vagy téma"</string>
+  <string name="screen_create_poll_question_hint">"Miről szól ez a szavazás?"</string>
+  <string name="screen_create_poll_title">"Szavazás létrehozása"</string>
+  <string name="screen_edit_poll_delete_confirmation">"Biztos, hogy törli ezt a szavazást?"</string>
+  <string name="screen_edit_poll_delete_confirmation_title">"Szavazás törlése"</string>
+  <string name="screen_edit_poll_title">"Szavazás szerkesztése"</string>
+  <string name="screen_polls_history_empty_ongoing">"Nem találhatók folyamatban lévő szavazások."</string>
+  <string name="screen_polls_history_empty_past">"Nem található korábbi szavazás."</string>
+  <string name="screen_polls_history_filter_ongoing">"Folyamatban"</string>
+  <string name="screen_polls_history_filter_past">"Korábbi"</string>
+  <string name="screen_polls_history_title">"Szavazások"</string>
+</resources>

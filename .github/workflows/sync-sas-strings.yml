@@ -1,0 +1,35 @@
+name: Sync SAS strings
+on:
+  workflow_dispatch:
+  schedule:
+    # At 00:00 on every Monday UTC
+    - cron: '0 0 * * 1'
+
+jobs:
+  sync-sas-strings:
+    runs-on: ubuntu-latest
+    # Skip in forks
+    if: github.repository == 'element-hq/element-x-android'
+    # No concurrency required, runs every time on a schedule.
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.9
+      - name: Install Prerequisite dependencies
+        run: |
+          pip install requests
+      - name: Run SAS String script
+        run: ./tools/sas/import_sas_strings.py
+      - name: Create Pull Request for SAS Strings
+        uses: peter-evans/create-pull-request@v5
+        with:
+          commit-message: Sync SAS Strings
+          title: Sync SAS Strings
+          body: |
+            - Update SAS Strings from matrix-doc.
+          branch: sync-sas-strings
+          base: develop
+
+

@@ -73,7 +73,7 @@ class SecureBackupEnterRecoveryKeyPresenterTest {
                     inProgress = false,
                 )
             )
-            encryptionService.givenFixRecoveryIssuesFailure(AN_EXCEPTION)
+            encryptionService.givenRecoverFailure(AN_EXCEPTION)
             withRecoveryKeyState.eventSink(SecureBackupEnterRecoveryKeyEvents.Submit)
             val loadingState = awaitItem()
             assertThat(loadingState.submitAction).isEqualTo(Async.Loading<Unit>())
@@ -85,7 +85,7 @@ class SecureBackupEnterRecoveryKeyPresenterTest {
             val clearedState = awaitItem()
             assertThat(clearedState.submitAction).isEqualTo(Async.Uninitialized)
             assertThat(clearedState.isSubmitEnabled).isTrue()
-            encryptionService.givenFixRecoveryIssuesFailure(null)
+            encryptionService.givenRecoverFailure(null)
             clearedState.eventSink(SecureBackupEnterRecoveryKeyEvents.Submit)
             val loadingState2 = awaitItem()
             assertThat(loadingState2.submitAction).isEqualTo(Async.Loading<Unit>())

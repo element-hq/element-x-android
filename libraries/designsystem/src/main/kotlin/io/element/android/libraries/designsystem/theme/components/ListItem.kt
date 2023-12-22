@@ -33,11 +33,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import io.element.android.compound.theme.ElementTheme
+import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.designsystem.components.list.ListItemContent
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
-import io.element.android.libraries.designsystem.utils.CommonDrawables
-import io.element.android.libraries.theme.ElementTheme
 
 // Designs: https://www.figma.com/file/G1xy0HDZKJf5TCRFmKb5d5/Compound-Android-Components?type=design&node-id=425%3A24208&mode=design&t=G5hCfkLB6GgXDuWe-1
 
@@ -466,7 +466,8 @@ private object PreviewItems {
         return ListItemContent.Switch(checked = checked, onChange = { checked = !checked })
     }
 
+    @Composable
     fun icon() = ListItemContent.Icon(
-        iconSource = IconSource.Resource(CommonDrawables.ic_compound_share_android)
+        iconSource = IconSource.Vector(CompoundIcons.ShareAndroid)
     )
 }

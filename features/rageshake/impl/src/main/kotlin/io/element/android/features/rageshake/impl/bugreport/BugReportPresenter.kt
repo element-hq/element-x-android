@@ -25,12 +25,11 @@ import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
+import io.element.android.features.rageshake.api.crash.CrashDataStore
 import io.element.android.features.rageshake.api.reporter.BugReporter
 import io.element.android.features.rageshake.api.reporter.BugReporterListener
-import io.element.android.features.rageshake.api.reporter.ReportType
-import io.element.android.features.rageshake.api.crash.CrashDataStore
-import io.element.android.features.rageshake.impl.logs.VectorFileLogger
 import io.element.android.features.rageshake.api.screenshot.ScreenshotHolder
+import io.element.android.features.rageshake.impl.logs.VectorFileLogger
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.Presenter
 import kotlinx.coroutines.CoroutineScope
@@ -64,7 +63,7 @@ class BugReportPresenter @Inject constructor(
             sendingAction.value = Async.Loading()
         }
 
-        override fun onUploadSucceed(reportUrl: String?) {
+        override fun onUploadSucceed() {
             sendingProgress.floatValue = 0f
             sendingAction.value = Async.Success(Unit)
         }
@@ -135,15 +134,11 @@ class BugReportPresenter @Inject constructor(
         listener: BugReporterListener,
     ) = launch {
         bugReporter.sendBugReport(
-            reportType = ReportType.BUG_REPORT,
             withDevicesLogs = formState.sendLogs,
             withCrashLogs = hasCrashLogs && formState.sendLogs,
-            withKeyRequestHistory = false,
             withScreenshot = formState.sendScreenshot,
             theBugDescription = formState.description,
-            serverVersion = "",
             canContact = formState.canContact,
-            customFields = emptyMap(),
             listener = listener
         )
     }

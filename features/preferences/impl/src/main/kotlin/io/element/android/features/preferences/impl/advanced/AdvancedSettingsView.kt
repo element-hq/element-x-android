@@ -25,13 +25,12 @@ import io.element.android.libraries.designsystem.components.dialogs.ListOption
 import io.element.android.libraries.designsystem.components.dialogs.SingleSelectionDialog
 import io.element.android.libraries.designsystem.components.list.ListItemContent
 import io.element.android.libraries.designsystem.components.preferences.PreferencePage
-import io.element.android.libraries.designsystem.components.preferences.PreferenceSwitch
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.ListItem
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.theme.theme.Theme
-import io.element.android.libraries.theme.theme.themes
+import io.element.android.compound.theme.Theme
+import io.element.android.compound.theme.themes
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
@@ -49,9 +48,7 @@ fun AdvancedSettingsView(
     ) {
         ListItem(
             headlineContent = {
-                Text(
-                    text = stringResource(id = CommonStrings.common_appearance)
-                )
+                Text(text = stringResource(id = CommonStrings.common_appearance))
             },
             trailingContent = ListItemContent.Text(
                 state.theme.toHumanReadable()
@@ -60,17 +57,29 @@ fun AdvancedSettingsView(
                 state.eventSink(AdvancedSettingsEvents.ChangeTheme)
             }
         )
-        PreferenceSwitch(
-            title = stringResource(id = CommonStrings.common_rich_text_editor),
-            subtitle = stringResource(id = R.string.screen_advanced_settings_rich_text_editor_description),
-            isChecked = state.isRichTextEditorEnabled,
-            onCheckedChange = { state.eventSink(AdvancedSettingsEvents.SetRichTextEditorEnabled(it)) },
+        ListItem(
+            headlineContent = {
+                Text(text = stringResource(id = CommonStrings.common_rich_text_editor))
+            },
+            supportingContent = {
+                Text(text = stringResource(id = R.string.screen_advanced_settings_rich_text_editor_description))
+            },
+            trailingContent = ListItemContent.Switch(
+                checked = state.isRichTextEditorEnabled,
+                onChange = { state.eventSink(AdvancedSettingsEvents.SetRichTextEditorEnabled(it)) },
+            ),
         )
-        PreferenceSwitch(
-            title = stringResource(id = R.string.screen_advanced_settings_developer_mode),
-            subtitle = stringResource(id = R.string.screen_advanced_settings_developer_mode_description),
-            isChecked = state.isDeveloperModeEnabled,
-            onCheckedChange = { state.eventSink(AdvancedSettingsEvents.SetDeveloperModeEnabled(it)) },
+        ListItem(
+            headlineContent = {
+                Text(text = stringResource(id = CommonStrings.action_view_source))
+            },
+            supportingContent = {
+                Text(text = stringResource(id = R.string.screen_advanced_settings_view_source_description))
+            },
+            trailingContent = ListItemContent.Switch(
+                checked = state.isDeveloperModeEnabled,
+                onChange = { state.eventSink(AdvancedSettingsEvents.SetDeveloperModeEnabled(it)) },
+            ),
         )
     }
 

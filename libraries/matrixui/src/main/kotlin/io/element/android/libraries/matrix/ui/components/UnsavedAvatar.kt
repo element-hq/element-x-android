@@ -40,7 +40,7 @@ import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.debugPlaceholderBackground
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.temporaryColorBgSpecial
-import io.element.android.libraries.theme.ElementTheme
+import io.element.android.compound.theme.ElementTheme
 
 /**
  * An avatar that the user has selected, but which has not yet been uploaded to Matrix.
@@ -72,7 +72,7 @@ fun UnsavedAvatar(
         Box(modifier = commonModifier.background(ElementTheme.colors.temporaryColorBgSpecial)) {
             Icon(
                 imageVector = Icons.Outlined.AddAPhoto,
-                contentDescription = "",
+                contentDescription = null,
                 modifier = Modifier
                     .align(Alignment.Center)
                     .size(40.dp),

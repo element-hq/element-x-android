@@ -132,3 +132,7 @@ System\.currentTimeMillis\(\)===1
 
 ### Use `import io.element.android.libraries.ui.strings.CommonStrings` then `CommonStrings.<stringKey>` instead
 import io\.element\.android\.libraries\.ui\.strings\.R
+
+# Accessibility
+### Use string resource for `contentDescription`, or null instead of empty string
+contentDescription = "

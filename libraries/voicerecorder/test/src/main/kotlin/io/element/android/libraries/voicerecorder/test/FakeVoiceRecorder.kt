@@ -17,6 +17,7 @@
 package io.element.android.libraries.voicerecorder.test
 
 import com.google.common.truth.Truth.assertThat
+import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.voicerecorder.api.VoiceRecorder
 import io.element.android.libraries.voicerecorder.api.VoiceRecorderState
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -73,7 +74,7 @@ class FakeVoiceRecorder(
                 null -> VoiceRecorderState.Idle
                 else -> VoiceRecorderState.Finished(
                     file = curRecording!!,
-                    mimeType = "audio/ogg",
+                    mimeType = MimeTypes.Ogg,
                     duration = recordingDuration,
                     waveform = waveform,
                 )

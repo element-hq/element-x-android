@@ -28,9 +28,11 @@ import androidx.compose.runtime.setValue
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runCatchingUpdatingState
+import io.element.android.libraries.core.bool.orTrue
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.encryption.BackupState
 import io.element.android.libraries.matrix.api.encryption.BackupUploadState
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import kotlinx.coroutines.CoroutineScope
@@ -70,6 +72,19 @@ class LogoutPresenter @Inject constructor(
             isLastSession = encryptionService.isLastDevice().getOrNull() ?: false
         }
 
+        val backupState by encryptionService.backupStateStateFlow.collectAsState()
+        val recoveryState by encryptionService.recoveryStateStateFlow.collectAsState()
+
+        val doesBackupExistOnServerAction: MutableState<Async<Boolean>> = remember {
+            mutableStateOf(Async.Uninitialized)
+        }
+
+        LaunchedEffect(backupState) {
+            if (backupState == BackupState.UNKNOWN) {
+                getKeyBackupStatus(doesBackupExistOnServerAction)
+            }
+        }
+
         fun handleEvents(event: LogoutEvents) {
             when (event) {
                 is LogoutEvents.Logout -> {
@@ -89,11 +104,20 @@ class LogoutPresenter @Inject constructor(
 
         return LogoutState(
             isLastSession = isLastSession,
+            backupState = backupState,
+            doesBackupExistOnServer = doesBackupExistOnServerAction.value.dataOrNull().orTrue(),
+            recoveryState = recoveryState,
             backupUploadState = backupUploadState,
             showConfirmationDialog = showLogoutDialog,
             logoutAction = logoutAction.value,
             eventSink = ::handleEvents
         )
+    }
+
+    private fun CoroutineScope.getKeyBackupStatus(action: MutableState<Async<Boolean>>) = launch {
+        suspend {
+            encryptionService.doesBackupExistOnServer().getOrThrow()
+        }.runCatchingUpdatingState(action)
     }
 
     private fun CoroutineScope.logout(

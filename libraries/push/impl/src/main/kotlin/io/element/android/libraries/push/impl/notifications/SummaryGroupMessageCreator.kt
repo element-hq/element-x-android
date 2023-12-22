@@ -21,7 +21,7 @@ import androidx.core.app.NotificationCompat
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.push.impl.R
 import io.element.android.libraries.push.impl.notifications.debug.annotateForDebug
-import io.element.android.libraries.push.impl.notifications.factories.NotificationFactory
+import io.element.android.libraries.push.impl.notifications.factories.NotificationCreator
 import io.element.android.services.toolbox.api.strings.StringProvider
 import javax.inject.Inject
 
@@ -41,7 +41,7 @@ import javax.inject.Inject
  */
 class SummaryGroupMessageCreator @Inject constructor(
     private val stringProvider: StringProvider,
-    private val notificationFactory: NotificationFactory,
+    private val notificationCreator: NotificationCreator,
 ) {
 
     fun createSummaryNotification(
@@ -77,7 +77,7 @@ class SummaryGroupMessageCreator @Inject constructor(
             // Use account name now, for multi-session
             .setSummaryText(currentUser.userId.value.annotateForDebug(44))
         return if (useCompleteNotificationFormat) {
-            notificationFactory.createSummaryListNotification(
+            notificationCreator.createSummaryListNotification(
                 currentUser,
                 summaryInboxStyle,
                 sumTitle,
@@ -170,7 +170,7 @@ class SummaryGroupMessageCreator @Inject constructor(
                 messageStr
             }
         }
-        return notificationFactory.createSummaryListNotification(
+        return notificationCreator.createSummaryListNotification(
             currentUser = currentUser,
             style = null,
             compatSummary = privacyTitle,

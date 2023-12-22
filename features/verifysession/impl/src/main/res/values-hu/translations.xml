@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_session_verification_cancelled_subtitle">"Valami hibásnak tűnik. A kérés vagy időtúllépésre futott, vagy elutasították."</string>
+  <string name="screen_session_verification_compare_emojis_subtitle">"Erősítse meg, hogy a lenti emodzsik egyeznek-e a másik munkamenetben megjelenítettekkel."</string>
+  <string name="screen_session_verification_compare_emojis_title">"Emodzsik összehasonlítása"</string>
+  <string name="screen_session_verification_compare_numbers_subtitle">"Ellenőrizze, hogy az alábbi számok megegyeznek-e a másik munkamenetben feltüntetett számokkal."</string>
+  <string name="screen_session_verification_compare_numbers_title">"Számok összehasonlítása"</string>
+  <string name="screen_session_verification_complete_subtitle">"Az új munkamenete most már ellenőrizve van. Eléri a titkosított üzeneteit, és a többi felhasználó is megbízhatónak fogja látni."</string>
+  <string name="screen_session_verification_open_existing_session_subtitle">"Bizonyítsa, hogy valóban Ön az, hogy elérje a titkosított üzeneteinek előzményeit."</string>
+  <string name="screen_session_verification_open_existing_session_title">"Meglévő munkamenet megnyitása"</string>
+  <string name="screen_session_verification_positive_button_canceled">"Ellenőrzés újrapróbálása"</string>
+  <string name="screen_session_verification_positive_button_initial">"Kész vagyok"</string>
+  <string name="screen_session_verification_positive_button_verifying_ongoing">"Várakozás az egyezésre"</string>
+  <string name="screen_session_verification_ready_subtitle">"Egyedi emodzsik összehasonlítása."</string>
+  <string name="screen_session_verification_request_accepted_subtitle">"Hasonlítsa össze az egyedi emodzsikat, meggyőződve arról, hogy azonos a sorrendjük."</string>
+  <string name="screen_session_verification_they_dont_match">"Nem egyeznek"</string>
+  <string name="screen_session_verification_they_match">"Megegyeznek"</string>
+  <string name="screen_session_verification_waiting_to_accept_subtitle">"A folytatáshoz fogadja el az ellenőrzési folyamat indítási kérését a másik munkamenetében."</string>
+  <string name="screen_session_verification_waiting_to_accept_title">"Várakozás a kérés elfogadására"</string>
+</resources>

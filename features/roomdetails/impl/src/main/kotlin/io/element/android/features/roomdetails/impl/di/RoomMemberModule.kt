@@ -19,6 +19,7 @@ package io.element.android.features.roomdetails.impl.di
 import com.squareup.anvil.annotations.ContributesTo
 import dagger.Module
 import dagger.Provides
+import io.element.android.features.createroom.api.StartDMAction
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsPresenter
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.MatrixClient
@@ -33,10 +34,11 @@ object RoomMemberModule {
     fun provideRoomMemberDetailsPresenterFactory(
         matrixClient: MatrixClient,
         room: MatrixRoom,
+        startDMAction: StartDMAction,
     ): RoomMemberDetailsPresenter.Factory {
         return object : RoomMemberDetailsPresenter.Factory {
             override fun create(roomMemberId: UserId): RoomMemberDetailsPresenter {
-                return RoomMemberDetailsPresenter(matrixClient, room, roomMemberId)
+                return RoomMemberDetailsPresenter(roomMemberId, matrixClient, room, startDMAction)
             }
         }
     }

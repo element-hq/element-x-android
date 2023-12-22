@@ -32,6 +32,8 @@ import io.element.android.libraries.matrix.api.timeline.item.event.UnableToDecry
 import io.element.android.libraries.matrix.api.timeline.item.event.UnknownContent
 import io.element.android.libraries.matrix.impl.media.map
 import io.element.android.libraries.matrix.impl.poll.map
+import kotlinx.collections.immutable.toImmutableList
+import kotlinx.collections.immutable.toImmutableMap
 import org.matrix.rustcomponents.sdk.TimelineItemContent
 import org.matrix.rustcomponents.sdk.TimelineItemContentKind
 import org.matrix.rustcomponents.sdk.use
@@ -106,11 +108,12 @@ class TimelineEventContentMapper(private val eventMessageMapper: EventMessageMap
                 question = kind.question,
                 kind = kind.kind.map(),
                 maxSelections = kind.maxSelections,
-                answers = kind.answers.map { answer -> answer.map() },
+                answers = kind.answers.map { answer -> answer.map() }.toImmutableList(),
                 votes = kind.votes.mapValues { vote ->
-                    vote.value.map { userId -> UserId(userId) }
-                },
+                    vote.value.map { userId -> UserId(userId) }.toImmutableList()
+                }.toImmutableMap(),
                 endTime = kind.endTime,
+                isEdited = kind.hasBeenEdited,
             )
         }
         is TimelineItemContentKind.UnableToDecrypt -> {

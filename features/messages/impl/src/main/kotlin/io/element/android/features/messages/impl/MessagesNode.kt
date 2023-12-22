@@ -66,6 +66,7 @@ class MessagesNode @AssistedInject constructor(
         fun onReportMessage(eventId: EventId, senderId: UserId)
         fun onSendLocationClicked()
         fun onCreatePollClicked()
+        fun onEditPollClicked(eventId: EventId)
         fun onJoinCallClicked(roomId: RoomId)
     }
 
@@ -105,6 +106,10 @@ class MessagesNode @AssistedInject constructor(
 
     override fun onReportContentClicked(eventId: EventId, senderId: UserId) {
         callback?.onReportMessage(eventId, senderId)
+    }
+
+    override fun onEditPollClicked(eventId: EventId) {
+        callback?.onEditPollClicked(eventId)
     }
 
     private fun onSendLocationClicked() {

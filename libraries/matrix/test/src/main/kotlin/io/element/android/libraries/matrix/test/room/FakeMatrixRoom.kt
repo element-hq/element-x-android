@@ -53,6 +53,7 @@ import io.element.android.libraries.matrix.test.notificationsettings.FakeNotific
 import io.element.android.libraries.matrix.test.timeline.FakeMatrixTimeline
 import io.element.android.libraries.matrix.test.widget.FakeWidgetDriver
 import io.element.android.tests.testutils.simulateLongTask
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -103,12 +104,14 @@ class FakeMatrixRoom(
     private var reportContentResult = Result.success(Unit)
     private var sendLocationResult = Result.success(Unit)
     private var createPollResult = Result.success(Unit)
+    private var editPollResult = Result.success(Unit)
     private var sendPollResponseResult = Result.success(Unit)
     private var endPollResult = Result.success(Unit)
     private var progressCallbackValues = emptyList<Pair<Long, Long>>()
     private var generateWidgetWebViewUrlResult = Result.success("https://call.element.io")
     private var getWidgetDriverResult: Result<MatrixWidgetDriver> = Result.success(FakeWidgetDriver())
     private var canUserTriggerRoomNotificationResult: Result<Boolean> = Result.success(true)
+    private var canUserJoinCallResult: Result<Boolean> = Result.success(true)
     var sendMessageMentions = emptyList<Mention>()
     val editMessageCalls = mutableListOf<Pair<String, String?>>()
 
@@ -130,8 +133,11 @@ class FakeMatrixRoom(
     private val _sentLocations = mutableListOf<SendLocationInvocation>()
     val sentLocations: List<SendLocationInvocation> = _sentLocations
 
-    private val _createPollInvocations = mutableListOf<CreatePollInvocation>()
-    val createPollInvocations: List<CreatePollInvocation> = _createPollInvocations
+    private val _createPollInvocations = mutableListOf<SavePollInvocation>()
+    val createPollInvocations: List<SavePollInvocation> = _createPollInvocations
+
+    private val _editPollInvocations = mutableListOf<SavePollInvocation>()
+    val editPollInvocations: List<SavePollInvocation> = _editPollInvocations
 
     private val _sendPollResponseInvocations = mutableListOf<SendPollResponseInvocation>()
     val sendPollResponseInvocations: List<SendPollResponseInvocation> = _sendPollResponseInvocations
@@ -287,16 +293,20 @@ class FakeMatrixRoom(
         return canUserTriggerRoomNotificationResult
     }
 
+    override suspend fun canUserJoinCall(userId: UserId): Result<Boolean> {
+        return canUserJoinCallResult
+    }
+
     override suspend fun sendImage(
         file: File,
-        thumbnailFile: File,
+        thumbnailFile: File?,
         imageInfo: ImageInfo,
         progressCallback: ProgressCallback?
     ): Result<MediaUploadHandler> = fakeSendMedia(progressCallback)
 
     override suspend fun sendVideo(
         file: File,
-        thumbnailFile: File,
+        thumbnailFile: File?,
         videoInfo: VideoInfo,
         progressCallback: ProgressCallback?
     ): Result<MediaUploadHandler> = fakeSendMedia(
@@ -375,8 +385,19 @@ class FakeMatrixRoom(
         maxSelections: Int,
         pollKind: PollKind
     ): Result<Unit> = simulateLongTask {
-        _createPollInvocations.add(CreatePollInvocation(question, answers, maxSelections, pollKind))
+        _createPollInvocations.add(SavePollInvocation(question, answers, maxSelections, pollKind))
         return createPollResult
+    }
+
+    override suspend fun editPoll(
+        pollStartId: EventId,
+        question: String,
+        answers: List<String>,
+        maxSelections: Int,
+        pollKind: PollKind
+    ): Result<Unit> = simulateLongTask {
+        _editPollInvocations.add(SavePollInvocation(question, answers, maxSelections, pollKind))
+        return editPollResult
     }
 
     override suspend fun sendPollResponse(
@@ -410,6 +431,10 @@ class FakeMatrixRoom(
     ): Result<String> = generateWidgetWebViewUrlResult
 
     override fun getWidgetDriver(widgetSettings: MatrixWidgetSettings): Result<MatrixWidgetDriver> = getWidgetDriverResult
+
+    override fun pollHistory(): MatrixTimeline {
+        return FakeMatrixTimeline()
+    }
 
     fun givenLeaveRoomError(throwable: Throwable?) {
         this.leaveRoomError = throwable
@@ -453,6 +478,10 @@ class FakeMatrixRoom(
 
     fun givenCanTriggerRoomNotification(result: Result<Boolean>) {
         canUserTriggerRoomNotificationResult = result
+    }
+
+    fun givenCanUserJoinCall(result: Result<Boolean>) {
+        canUserJoinCallResult = result
     }
 
     fun givenIgnoreResult(result: Result<Unit>) {
@@ -511,6 +540,10 @@ class FakeMatrixRoom(
         createPollResult = result
     }
 
+    fun givenEditPollResult(result: Result<Unit>) {
+        editPollResult = result
+    }
+
     fun givenSendPollResponseResult(result: Result<Unit>) {
         sendPollResponseResult = result
     }
@@ -544,7 +577,7 @@ data class SendLocationInvocation(
     val assetType: AssetType?,
 )
 
-data class CreatePollInvocation(
+data class SavePollInvocation(
     val question: String,
     val answers: List<String>,
     val maxSelections: Int,
@@ -593,7 +626,7 @@ fun aRoomInfo(
     isSpace = isSpace,
     isTombstoned = isTombstoned,
     canonicalAlias = canonicalAlias,
-    alternativeAliases = alternativeAliases,
+    alternativeAliases = alternativeAliases.toImmutableList(),
     currentUserMembership = currentUserMembership,
     latestEvent = latestEvent,
     inviter = inviter,
@@ -604,5 +637,5 @@ fun aRoomInfo(
     notificationCount = notificationCount,
     userDefinedNotificationMode = userDefinedNotificationMode,
     hasRoomCall = hasRoomCall,
-    activeRoomCallParticipants = activeRoomCallParticipants
+    activeRoomCallParticipants = activeRoomCallParticipants.toImmutableList(),
 )

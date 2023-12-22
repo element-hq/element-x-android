@@ -16,6 +16,7 @@
 
 package io.element.android.libraries.matrix.api.timeline.item.event
 
+import androidx.compose.runtime.Immutable
 import io.element.android.libraries.matrix.api.media.AudioDetails
 import io.element.android.libraries.matrix.api.media.AudioInfo
 import io.element.android.libraries.matrix.api.media.FileInfo
@@ -23,9 +24,8 @@ import io.element.android.libraries.matrix.api.media.ImageInfo
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.api.media.VideoInfo
 
+@Immutable
 sealed interface MessageType
-
-data object UnknownMessageType : MessageType
 
 data class EmoteMessageType(
     val body: String,

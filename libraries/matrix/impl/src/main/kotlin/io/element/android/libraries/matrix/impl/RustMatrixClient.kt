@@ -53,6 +53,7 @@ import io.element.android.libraries.matrix.impl.room.MatrixRoomInfoMapper
 import io.element.android.libraries.matrix.impl.room.RoomContentForwarder
 import io.element.android.libraries.matrix.impl.room.RoomSyncSubscriber
 import io.element.android.libraries.matrix.impl.room.RustMatrixRoom
+import io.element.android.libraries.matrix.impl.roomlist.RoomListFactory
 import io.element.android.libraries.matrix.impl.roomlist.RustRoomListService
 import io.element.android.libraries.matrix.impl.roomlist.roomOrNull
 import io.element.android.libraries.matrix.impl.sync.RustSyncService
@@ -76,6 +77,7 @@ import org.matrix.rustcomponents.sdk.BackupState
 import org.matrix.rustcomponents.sdk.Client
 import org.matrix.rustcomponents.sdk.ClientDelegate
 import org.matrix.rustcomponents.sdk.NotificationProcessSetup
+import org.matrix.rustcomponents.sdk.PowerLevels
 import org.matrix.rustcomponents.sdk.Room
 import org.matrix.rustcomponents.sdk.RoomListItem
 import org.matrix.rustcomponents.sdk.TaskHandle
@@ -89,7 +91,7 @@ import org.matrix.rustcomponents.sdk.RoomVisibility as RustRoomVisibility
 import org.matrix.rustcomponents.sdk.SyncService as ClientSyncService
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class RustMatrixClient constructor(
+class RustMatrixClient(
     private val client: Client,
     private val syncService: ClientSyncService,
     private val sessionStore: SessionStore,
@@ -117,10 +119,9 @@ class RustMatrixClient constructor(
                 .filterByPushRules()
                 .finish()
         }
-    private val notificationSettings = client.getNotificationSettings()
-
     private val notificationService = RustNotificationService(sessionId, notificationClient, dispatchers, clock)
-    private val notificationSettingsService = RustNotificationSettingsService(notificationSettings, dispatchers)
+    private val notificationSettingsService = RustNotificationSettingsService(client, dispatchers)
+        .apply { start() }
     private val roomSyncSubscriber = RoomSyncSubscriber(innerRoomListService, dispatchers)
     private val encryptionService = RustEncryptionService(
         client = client,
@@ -171,7 +172,11 @@ class RustMatrixClient constructor(
         RustRoomListService(
             innerRoomListService = innerRoomListService,
             sessionCoroutineScope = sessionCoroutineScope,
-            dispatcher = sessionDispatcher,
+            roomListFactory = RoomListFactory(
+                innerRoomListService = innerRoomListService,
+                coroutineScope = sessionCoroutineScope,
+                dispatcher = sessionDispatcher,
+            ),
         )
 
     override val roomListService: RoomListService
@@ -200,7 +205,7 @@ class RustMatrixClient constructor(
         var cachedPairOfRoom = pairOfRoom(roomId)
         if (cachedPairOfRoom == null) {
             //... otherwise, lets wait for the SS to load all rooms and check again.
-            roomListService.allRooms().awaitLoaded()
+            roomListService.allRooms.awaitLoaded()
             cachedPairOfRoom = pairOfRoom(roomId)
         }
         cachedPairOfRoom?.let { (roomListItem, fullRoom) ->
@@ -209,6 +214,7 @@ class RustMatrixClient constructor(
                 isKeyBackupEnabled = client.encryption().backupState() == BackupState.ENABLED,
                 roomListItem = roomListItem,
                 innerRoom = fullRoom,
+                innerTimeline = fullRoom.timeline(),
                 roomNotificationSettingsService = notificationSettingsService,
                 sessionCoroutineScope = sessionCoroutineScope,
                 coroutineDispatchers = dispatchers,
@@ -234,9 +240,8 @@ class RustMatrixClient constructor(
         }
     }
 
-    override suspend fun findDM(userId: UserId): MatrixRoom? {
-        val roomId = client.getDmRoom(userId.value)?.use { RoomId(it.id()) }
-        return roomId?.let { getRoom(it) }
+    override suspend fun findDM(userId: UserId): RoomId? {
+        return client.getDmRoom(userId.value)?.use { RoomId(it.id()) }
     }
 
     override suspend fun ignoreUser(userId: UserId): Result<Unit> = withContext(sessionDispatcher) {
@@ -269,12 +274,13 @@ class RustMatrixClient constructor(
                 },
                 invite = createRoomParams.invite?.map { it.value },
                 avatar = createRoomParams.avatar,
+                powerLevelContentOverride = defaultRoomCreationPowerLevels,
             )
             val roomId = RoomId(client.createRoom(rustParams))
 
             // Wait to receive the room back from the sync
             withTimeout(30_000L) {
-                roomListService.allRooms().summaries
+                roomListService.allRooms.summaries
                     .filter { roomSummaries ->
                         roomSummaries.map { it.identifier() }.contains(roomId.value)
                     }
@@ -291,7 +297,7 @@ class RustMatrixClient constructor(
             isDirect = true,
             visibility = RoomVisibility.PRIVATE,
             preset = RoomPreset.TRUSTED_PRIVATE_CHAT,
-            invite = listOf(userId)
+            invite = listOf(userId),
         )
         return createRoom(createRoomParams)
     }
@@ -339,8 +345,7 @@ class RustMatrixClient constructor(
     override fun close() {
         sessionCoroutineScope.cancel()
         clientDelegateTaskHandle?.cancelAndDestroy()
-        notificationSettings.setDelegate(null)
-        notificationSettings.destroy()
+        notificationSettingsService.destroy()
         verificationService.destroy()
         syncService.destroy()
         innerRoomListService.destroy()
@@ -476,3 +481,18 @@ class RustMatrixClient constructor(
     }
 }
 
+private val defaultRoomCreationPowerLevels = PowerLevels(
+    usersDefault = null,
+    eventsDefault = null,
+    stateDefault = null,
+    ban = null,
+    kick = null,
+    redact = null,
+    invite = null,
+    notifications = null,
+    users = mapOf(),
+    events = mapOf(
+        "m.call.member" to 0,
+        "org.matrix.msc3401.call.member" to 0,
+    )
+)

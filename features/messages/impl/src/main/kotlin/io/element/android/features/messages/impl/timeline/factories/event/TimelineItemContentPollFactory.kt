@@ -19,63 +19,33 @@ package io.element.android.features.messages.impl.timeline.factories.event
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemPollContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemUnknownContent
-import io.element.android.features.poll.api.PollAnswerItem
+import io.element.android.features.poll.api.pollcontent.PollContentStateFactory
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
-import io.element.android.libraries.matrix.api.MatrixClient
-import io.element.android.libraries.matrix.api.core.EventId
-import io.element.android.libraries.matrix.api.poll.isDisclosed
+import io.element.android.libraries.matrix.api.timeline.item.event.EventTimelineItem
 import io.element.android.libraries.matrix.api.timeline.item.event.PollContent
 import javax.inject.Inject
 
 class TimelineItemContentPollFactory @Inject constructor(
-    private val matrixClient: MatrixClient,
     private val featureFlagService: FeatureFlagService,
+    private val pollContentStateFactory: PollContentStateFactory,
 ) {
 
     suspend fun create(
+        event: EventTimelineItem,
         content: PollContent,
-        eventId: EventId?
     ): TimelineItemEventContent {
         if (!featureFlagService.isFeatureEnabled(FeatureFlags.Polls)) return TimelineItemUnknownContent
-
-        // Todo Move this computation to the matrix rust sdk
-        val totalVoteCount = content.votes.flatMap { it.value }.size
-        val myVotes = content.votes.filter { matrixClient.sessionId in it.value }.keys
-        val isEndedPoll = content.endTime != null
-        val winnerIds = if (!isEndedPoll) {
-            emptyList()
-        } else {
-            content.answers
-                .map { answer -> answer.id }
-                .groupBy { answerId -> content.votes[answerId]?.size ?: 0 } // Group by votes count
-                .maxByOrNull { (votes, _) -> votes } // Keep max voted answers
-                ?.takeIf { (votes, _) -> votes > 0 } // Ignore if no option has been voted
-                ?.value
-                .orEmpty()
-        }
-        val answerItems = content.answers.map { answer ->
-            val answerVoteCount = content.votes[answer.id]?.size ?: 0
-            val isSelected = answer.id in myVotes
-            val isWinner = answer.id in winnerIds
-            val percentage = if (totalVoteCount > 0) answerVoteCount.toFloat() / totalVoteCount.toFloat() else 0f
-            PollAnswerItem(
-                answer = answer,
-                isSelected = isSelected,
-                isEnabled = !isEndedPoll,
-                isWinner = isWinner,
-                isDisclosed = content.kind.isDisclosed || isEndedPoll,
-                votesCount = answerVoteCount,
-                percentage = percentage,
-            )
-        }
-
+        val pollContentState = pollContentStateFactory.create(event, content)
         return TimelineItemPollContent(
-            eventId = eventId,
-            question = content.question,
-            answerItems = answerItems,
-            pollKind = content.kind,
-            isEnded = isEndedPoll,
+            isMine = pollContentState.isMine,
+            isEditable = pollContentState.isPollEditable,
+            eventId = event.eventId,
+            question = pollContentState.question,
+            answerItems = pollContentState.answerItems,
+            pollKind = pollContentState.pollKind,
+            isEnded = pollContentState.isPollEnded,
+            isEdited = content.isEdited
         )
     }
 }

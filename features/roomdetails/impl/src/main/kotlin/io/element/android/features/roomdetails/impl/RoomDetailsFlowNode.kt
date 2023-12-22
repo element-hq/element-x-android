@@ -19,7 +19,6 @@ package io.element.android.features.roomdetails.impl
 import android.os.Parcelable
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.bumble.appyx.core.composable.Children
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
@@ -29,24 +28,32 @@ import com.bumble.appyx.navmodel.backstack.operation.push
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
+import io.element.android.features.poll.api.history.PollHistoryEntryPoint
 import io.element.android.features.roomdetails.api.RoomDetailsEntryPoint
 import io.element.android.features.roomdetails.impl.edit.RoomDetailsEditNode
 import io.element.android.features.roomdetails.impl.invite.RoomInviteMembersNode
 import io.element.android.features.roomdetails.impl.members.RoomMemberListNode
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsNode
+import io.element.android.features.roomdetails.impl.members.details.avatar.AvatarPreviewNode
 import io.element.android.features.roomdetails.impl.notificationsettings.RoomNotificationSettingsNode
-import io.element.android.libraries.architecture.BackstackNode
-import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
+import io.element.android.libraries.architecture.BackstackView
+import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.architecture.createNode
+import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.di.RoomScope
+import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.media.MediaSource
+import io.element.android.libraries.mediaviewer.api.local.MediaInfo
+import io.element.android.libraries.mediaviewer.api.viewer.MediaViewerNode
 import kotlinx.parcelize.Parcelize
 
 @ContributesNode(RoomScope::class)
 class RoomDetailsFlowNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
-) : BackstackNode<RoomDetailsFlowNode.NavTarget>(
+    private val pollHistoryEntryPoint: PollHistoryEntryPoint,
+) : BaseFlowNode<RoomDetailsFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = plugins.filterIsInstance<RoomDetailsEntryPoint.Params>().first().initialElement.toNavTarget(),
         savedStateMap = buildContext.savedStateMap,
@@ -79,6 +86,12 @@ class RoomDetailsFlowNode @AssistedInject constructor(
 
         @Parcelize
         data class RoomMemberDetails(val roomMemberId: UserId) : NavTarget
+
+        @Parcelize
+        data class AvatarPreview(val name: String, val avatarUrl: String) : NavTarget
+
+        @Parcelize
+        data object PollHistory : NavTarget
     }
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
@@ -99,6 +112,14 @@ class RoomDetailsFlowNode @AssistedInject constructor(
 
                     override fun openRoomNotificationSettings() {
                         backstack.push(NavTarget.RoomNotificationSettings(showUserDefinedSettingStyle = false))
+                    }
+
+                    override fun openAvatarPreview(name: String, url: String) {
+                        backstack.push(NavTarget.AvatarPreview(name, url))
+                    }
+
+                    override fun openPollHistory() {
+                        backstack.push(NavTarget.PollHistory)
                     }
                 }
                 createNode<RoomDetailsNode>(buildContext, listOf(roomDetailsCallback))
@@ -136,18 +157,44 @@ class RoomDetailsFlowNode @AssistedInject constructor(
             }
 
             is NavTarget.RoomMemberDetails -> {
-                val plugins = listOf(RoomMemberDetailsNode.RoomMemberDetailsInput(navTarget.roomMemberId))
+                val callback = object : RoomMemberDetailsNode.Callback {
+                    override fun openAvatarPreview(username: String, avatarUrl: String) {
+                        backstack.push(NavTarget.AvatarPreview(username, avatarUrl))
+                    }
+
+                    override fun onStartDM(roomId: RoomId) {
+                        plugins<RoomDetailsEntryPoint.Callback>().forEach { it.onOpenRoom(roomId) }
+                    }
+                }
+                val plugins = listOf(RoomMemberDetailsNode.RoomMemberDetailsInput(navTarget.roomMemberId), callback)
                 createNode<RoomMemberDetailsNode>(buildContext, plugins)
+            }
+            is NavTarget.AvatarPreview -> {
+                // We need to fake the MimeType here for the viewer to work.
+                val mimeType = MimeTypes.Images
+                val input = MediaViewerNode.Inputs(
+                    mediaInfo = MediaInfo(
+                        name = navTarget.name,
+                        mimeType = mimeType,
+                        formattedFileSize = "",
+                        fileExtension = ""
+                    ),
+                    mediaSource = MediaSource(url = navTarget.avatarUrl),
+                    thumbnailSource = null,
+                    canDownload = false,
+                    canShare = false,
+                )
+                createNode<AvatarPreviewNode>(buildContext, listOf(input))
+            }
+
+            is NavTarget.PollHistory -> {
+                pollHistoryEntryPoint.createNode(this, buildContext)
             }
         }
     }
 
     @Composable
     override fun View(modifier: Modifier) {
-        Children(
-            navModel = backstack,
-            modifier = modifier,
-            transitionHandler = rememberDefaultTransitionHandler(),
-        )
+        BackstackView()
     }
 }

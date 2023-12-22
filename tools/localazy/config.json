@@ -1,91 +1,91 @@
 {
-  "modules": [
+  "modules" : [
     {
-      "name": ":features:rageshake:impl",
-      "includeRegex": [
+      "name" : ":features:rageshake:impl",
+      "includeRegex" : [
         "screen_bug_report_.*"
       ]
     },
     {
-      "name": ":features:rageshake:api",
-      "includeRegex": [
+      "name" : ":features:rageshake:api",
+      "includeRegex" : [
         "crash_detection_.*",
         "rageshake_detection_.*",
         "settings_rageshake.*"
       ]
     },
     {
-      "name": ":features:logout:impl",
-      "includeRegex": [
+      "name" : ":features:logout:impl",
+      "includeRegex" : [
         "screen_signout_.*"
       ]
     },
     {
-      "name": ":features:onboarding:impl",
-      "includeRegex": [
+      "name" : ":features:onboarding:impl",
+      "includeRegex" : [
         "screen_onboarding_.*"
       ]
     },
     {
-      "name": ":features:signedout:impl",
-      "includeRegex": [
+      "name" : ":features:signedout:impl",
+      "includeRegex" : [
         "screen_signed_out_.*"
       ]
     },
     {
-      "name": ":features:invitelist:impl",
-      "includeRegex": [
+      "name" : ":features:invitelist:impl",
+      "includeRegex" : [
         "screen_invites_.*"
       ]
     },
     {
-      "name": ":features:createroom:impl",
-      "includeRegex": [
+      "name" : ":features:createroom:impl",
+      "includeRegex" : [
         "screen_create_room_.*",
         "screen_start_chat_.*"
       ]
     },
     {
-      "name": ":features:verifysession:impl",
-      "includeRegex": [
+      "name" : ":features:verifysession:impl",
+      "includeRegex" : [
         "screen_session_verification_.*"
       ]
     },
     {
-      "name": ":libraries:textcomposer:impl",
-      "includeRegex": [
+      "name" : ":libraries:textcomposer:impl",
+      "includeRegex" : [
         "rich_text_editor.*",
         ".*voice_message_tooltip"
       ]
     },
     {
-      "name": ":libraries:permissions:api",
-      "includeRegex": [
+      "name" : ":libraries:permissions:api",
+      "includeRegex" : [
         "dialog\\.permission_.*"
       ]
     },
     {
-      "name": ":libraries:androidutils",
-      "includeRegex": [
+      "name" : ":libraries:androidutils",
+      "includeRegex" : [
         "error_no_compatible_app_found"
       ]
     },
     {
-      "name": ":libraries:eventformatter:impl",
-      "includeRegex": [
+      "name" : ":libraries:eventformatter:impl",
+      "includeRegex" : [
         "state_event_.*"
       ]
     },
     {
-      "name": ":libraries:push:impl",
-      "includeRegex": [
+      "name" : ":libraries:push:impl",
+      "includeRegex" : [
         "push_.*",
         "notification_.*"
       ]
     },
     {
-      "name": ":features:login:impl",
-      "includeRegex": [
+      "name" : ":features:login:impl",
+      "includeRegex" : [
         "screen_login_.*",
         "screen_server_confirmation_.*",
         "screen_change_server_.*",
@@ -95,32 +95,35 @@
       ]
     },
     {
-      "name": ":features:leaveroom:api",
-      "includeRegex": [
+      "name" : ":features:leaveroom:api",
+      "includeRegex" : [
         "leave_room_alert_.*"
       ]
     },
     {
-      "name": ":features:roomlist:impl",
-      "includeRegex": [
+      "name" : ":features:roomlist:impl",
+      "includeRegex" : [
         "screen_roomlist_.*",
         "session_verification_banner_.*",
         "confirm_recovery_key_banner_.*"
       ]
     },
     {
-      "name": ":features:roomdetails:impl",
-      "includeRegex": [
+      "name" : ":features:roomdetails:impl",
+      "includeRegex" : [
         "screen_room_details_.*",
         "screen_room_member_list_.*",
         "screen_dm_details_.*",
         "screen_room_notification_settings_.*",
-        "screen_notification_settings_edit_failed_updating_default_mode"
+        "screen_notification_settings_edit_failed_updating_default_mode",
+        "screen_polls_history_title",
+        "screen_notification_settings_mentions_only_disclaimer",
+        "screen_start_chat_error_starting_chat"
       ]
     },
     {
-      "name": ":features:messages:impl",
-      "includeRegex": [
+      "name" : ":features:messages:impl",
+      "includeRegex" : [
         "room_timeline_.*",
         "screen_room_.*",
         "screen\\.room\\..*",
@@ -128,49 +131,51 @@
         "emoji_picker_category_.*",
         ".*report_content_.*"
       ],
-      "excludeRegex": [
+      "excludeRegex" : [
         "screen_room_details_.*",
         "screen_room_member.*",
         "screen_dm_.*"
       ]
     },
     {
-      "name": ":features:analytics:impl",
-      "includeRegex": [
+      "name" : ":features:analytics:impl",
+      "includeRegex" : [
         "screen_analytics_prompt.*"
       ]
     },
     {
-      "name": ":features:analytics:api",
-      "includeRegex": [
+      "name" : ":features:analytics:api",
+      "includeRegex" : [
         "screen_analytics_settings_.*"
       ]
     },
     {
-      "name": ":features:ftue:impl",
-      "includeRegex": [
+      "name" : ":features:ftue:impl",
+      "includeRegex" : [
         "screen_welcome_.*",
         "screen_migration_.*",
         "screen_notification_optin_.*"
       ]
     },
     {
-      "name": ":features:poll:impl",
-      "includeRegex": [
-        "screen_create_poll_.*"
+      "name" : ":features:poll:impl",
+      "includeRegex" : [
+        "screen_create_poll_.*",
+        "screen_edit_poll_.*",
+        "screen_polls_history_.*"
       ]
     },
     {
-      "name": ":features:securebackup:impl",
-      "includeRegex": [
+      "name" : ":features:securebackup:impl",
+      "includeRegex" : [
         "screen_chat_backup_.*",
         "screen_key_backup_disable_.*",
         "screen_recovery_key_.*"
       ]
     },
     {
-      "name": ":features:preferences:impl",
-      "includeRegex": [
+      "name" : ":features:preferences:impl",
+      "includeRegex" : [
         "screen_advanced_settings_.*",
         "screen\\.advanced_settings\\..*",
         "screen_edit_profile_.*",
@@ -178,14 +183,14 @@
       ]
     },
     {
-      "name": ":features:call",
-      "includeRegex": [
+      "name" : ":features:call",
+      "includeRegex" : [
         "call_.*"
       ]
     },
     {
-      "name": ":features:lockscreen:impl",
-      "includeRegex": [
+      "name" : ":features:lockscreen:impl",
+      "includeRegex" : [
         "screen_app_lock_.*",
         "screen_signout_in_progress_dialog_content"
       ]

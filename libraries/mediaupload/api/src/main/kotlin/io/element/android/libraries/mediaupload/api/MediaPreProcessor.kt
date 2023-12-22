@@ -31,6 +31,6 @@ interface MediaPreProcessor {
         compressIfPossible: Boolean
     ): Result<MediaUploadInfo>
 
-    data class Failure(override val cause: Throwable?) : RuntimeException(cause)
+    data class Failure(override val cause: Throwable?) : Exception(cause)
 }
 

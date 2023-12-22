@@ -24,5 +24,6 @@ android {
 
 dependencies {
     api(projects.libraries.mediaupload.api)
+    implementation(projects.libraries.core)
     implementation(projects.tests.testutils)
 }

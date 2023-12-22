@@ -43,7 +43,7 @@ class MessageSummaryFormatterImpl @Inject constructor(
 ) : MessageSummaryFormatter {
     override fun format(event: TimelineItem.Event): String {
         return when (event.content) {
-            is TimelineItemTextBasedContent -> event.content.body
+            is TimelineItemTextBasedContent -> event.content.plainText
             is TimelineItemProfileChangeContent -> event.content.body
             is TimelineItemStateContent -> event.content.body
             is TimelineItemLocationContent -> context.getString(CommonStrings.common_shared_location)

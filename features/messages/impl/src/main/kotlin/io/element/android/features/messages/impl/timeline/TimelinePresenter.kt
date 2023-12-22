@@ -27,12 +27,17 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
-import im.vector.app.features.analytics.plan.PollEnd
-import im.vector.app.features.analytics.plan.PollVote
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import io.element.android.features.messages.impl.MessagesNavigator
 import io.element.android.features.messages.impl.timeline.factories.TimelineItemsFactory
+import io.element.android.features.messages.impl.timeline.model.NewEventState
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.session.SessionState
 import io.element.android.features.messages.impl.voicemessages.timeline.RedactedVoiceMessageManager
+import io.element.android.features.poll.api.actions.EndPollAction
+import io.element.android.features.poll.api.actions.SendPollResponseAction
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.featureflag.api.FeatureFlagService
@@ -43,33 +48,39 @@ import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MessageEventType
 import io.element.android.libraries.matrix.api.room.roomMembers
+import io.element.android.libraries.matrix.api.timeline.ReceiptType
 import io.element.android.libraries.matrix.api.timeline.item.event.TimelineItemEventOrigin
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatus
 import io.element.android.libraries.matrix.ui.room.canSendMessageAsState
-import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import javax.inject.Inject
 
 private const val BACK_PAGINATION_EVENT_LIMIT = 20
 private const val BACK_PAGINATION_PAGE_SIZE = 50
 
-class TimelinePresenter @Inject constructor(
+class TimelinePresenter @AssistedInject constructor(
     private val timelineItemsFactory: TimelineItemsFactory,
     private val room: MatrixRoom,
     private val dispatchers: CoroutineDispatchers,
     private val appScope: CoroutineScope,
-    private val analyticsService: AnalyticsService,
+    @Assisted private val navigator: MessagesNavigator,
     private val verificationService: SessionVerificationService,
     private val encryptionService: EncryptionService,
     private val featureFlagService: FeatureFlagService,
     private val redactedVoiceMessageManager: RedactedVoiceMessageManager,
+    private val sendPollResponseAction: SendPollResponseAction,
+    private val endPollAction: EndPollAction,
 ) : Presenter<TimelineState> {
+
+    @AssistedFactory
+    interface Factory {
+        fun create(navigator: MessagesNavigator): TimelinePresenter
+    }
 
     private val timeline = room.timeline
 
@@ -89,7 +100,7 @@ class TimelinePresenter @Inject constructor(
         val userHasPermissionToSendMessage by room.canSendMessageAsState(type = MessageEventType.ROOM_MESSAGE, updateKey = syncUpdateFlow.value)
 
         val prevMostRecentItemId = rememberSaveable { mutableStateOf<String?>(null) }
-        val hasNewItems = remember { mutableStateOf(false) }
+        val newItemState = remember { mutableStateOf(NewEventState.None) }
 
         val sessionVerifiedStatus by verificationService.sessionVerifiedStatus.collectAsState()
         val keyBackupState by encryptionService.backupStateStateFlow.collectAsState()
@@ -112,7 +123,7 @@ class TimelinePresenter @Inject constructor(
                 is TimelineEvents.SetHighlightedEvent -> highlightedEventId.value = event.eventId
                 is TimelineEvents.OnScrollFinished -> {
                     if (event.firstIndex == 0) {
-                        hasNewItems.value = false
+                        newItemState.value = NewEventState.None
                     }
                     appScope.sendReadReceiptIfNeeded(
                         firstVisibleIndex = event.firstIndex,
@@ -122,24 +133,23 @@ class TimelinePresenter @Inject constructor(
                     )
                 }
                 is TimelineEvents.PollAnswerSelected -> appScope.launch {
-                    room.sendPollResponse(
+                    sendPollResponseAction.execute(
                         pollStartId = event.pollStartId,
-                        answers = listOf(event.answerId),
+                        answerId = event.answerId
                     )
-                    analyticsService.capture(PollVote())
                 }
                 is TimelineEvents.PollEndClicked -> appScope.launch {
-                    room.endPoll(
+                    endPollAction.execute(
                         pollStartId = event.pollStartId,
-                        text = "The poll with event id: ${event.pollStartId} has ended."
                     )
-                    analyticsService.capture(PollEnd())
                 }
+                is TimelineEvents.PollEditClicked ->
+                    navigator.onEditPollClicked(event.pollStartId)
             }
         }
 
         LaunchedEffect(timelineItems.size) {
-            computeHasNewItems(timelineItems, prevMostRecentItemId, hasNewItems)
+            computeNewItemState(timelineItems, prevMostRecentItemId, newItemState)
         }
 
         LaunchedEffect(Unit) {
@@ -166,36 +176,50 @@ class TimelinePresenter @Inject constructor(
         }
 
         return TimelineState(
+            timelineRoomInfo = TimelineRoomInfo(
+                isDirect = room.isDirect
+            ),
             highlightedEventId = highlightedEventId.value,
             userHasPermissionToSendMessage = userHasPermissionToSendMessage,
             paginationState = paginationState,
             timelineItems = timelineItems,
             showReadReceipts = readReceiptsEnabled,
-            hasNewItems = hasNewItems.value,
+            newEventState = newItemState.value,
             sessionState = sessionState,
-            eventSink = ::handleEvents
+            eventSink = { handleEvents(it) }
         )
     }
 
     /**
      * This method compute the hasNewItem state passed as a [MutableState] each time the timeline items size changes.
      * Basically, if we got new timeline event from sync or local, either from us or another user, we update the state so we tell we have new items.
-     * The state never goes back to false from this method, but need to be reset from somewhere else.
+     * The state never goes back to None from this method, but need to be reset from somewhere else.
      */
-    private suspend fun computeHasNewItems(
+    private suspend fun computeNewItemState(
         timelineItems: ImmutableList<TimelineItem>,
         prevMostRecentItemId: MutableState<String?>,
-        hasNewItemsState: MutableState<Boolean>
+        newEventState: MutableState<NewEventState>
     ) = withContext(dispatchers.computation) {
+        // FromMe is prioritized over FromOther, so skip if we already have a FromMe
+        if (newEventState.value == NewEventState.FromMe) {
+            return@withContext
+        }
         val newMostRecentItem = timelineItems.firstOrNull()
         val prevMostRecentItemIdValue = prevMostRecentItemId.value
         val newMostRecentItemId = newMostRecentItem?.identifier()
-        val hasNewItems = prevMostRecentItemIdValue != null &&
+        val hasNewEvent = prevMostRecentItemIdValue != null &&
             newMostRecentItem is TimelineItem.Event &&
             newMostRecentItem.origin != TimelineItemEventOrigin.PAGINATION &&
             newMostRecentItemId != prevMostRecentItemIdValue
-        if (hasNewItems) {
-            hasNewItemsState.value = true
+        if (hasNewEvent) {
+            val newMostRecentEvent = newMostRecentItem as? TimelineItem.Event
+            // Scroll to bottom if the new event is from me, even if sent from another device
+            val fromMe = newMostRecentEvent?.isMine == true
+            newEventState.value = if (fromMe) {
+                NewEventState.FromMe
+            } else {
+                NewEventState.FromOther
+            }
         }
         prevMostRecentItemId.value = newMostRecentItemId
     }
@@ -211,7 +235,7 @@ class TimelinePresenter @Inject constructor(
         if (eventId != null && firstVisibleIndex <= lastReadReceiptIndex.value && eventId != lastReadReceiptId.value) {
             lastReadReceiptIndex.value = firstVisibleIndex
             lastReadReceiptId.value = eventId
-            timeline.sendReadReceipt(eventId)
+            timeline.sendReadReceipt(eventId = eventId, receiptType = ReceiptType.READ)
         }
     }
 

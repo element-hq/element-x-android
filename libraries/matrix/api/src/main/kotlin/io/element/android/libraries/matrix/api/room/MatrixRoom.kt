@@ -100,9 +100,9 @@ interface MatrixRoom : Closeable {
 
     suspend fun redactEvent(eventId: EventId, reason: String? = null): Result<Unit>
 
-    suspend fun sendImage(file: File, thumbnailFile: File, imageInfo: ImageInfo, progressCallback: ProgressCallback?): Result<MediaUploadHandler>
+    suspend fun sendImage(file: File, thumbnailFile: File?, imageInfo: ImageInfo, progressCallback: ProgressCallback?): Result<MediaUploadHandler>
 
-    suspend fun sendVideo(file: File, thumbnailFile: File, videoInfo: VideoInfo, progressCallback: ProgressCallback?): Result<MediaUploadHandler>
+    suspend fun sendVideo(file: File, thumbnailFile: File?, videoInfo: VideoInfo, progressCallback: ProgressCallback?): Result<MediaUploadHandler>
 
     suspend fun sendAudio(file: File, audioInfo: AudioInfo, progressCallback: ProgressCallback?): Result<MediaUploadHandler>
 
@@ -131,6 +131,9 @@ interface MatrixRoom : Closeable {
     suspend fun canUserSendMessage(userId: UserId, type: MessageEventType): Result<Boolean>
 
     suspend fun canUserTriggerRoomNotification(userId: UserId): Result<Boolean>
+
+    suspend fun canUserJoinCall(userId: UserId): Result<Boolean> =
+        canUserSendState(userId, StateEventType.CALL_MEMBER)
 
     suspend fun updateAvatar(mimeType: String, data: ByteArray): Result<Unit>
 
@@ -170,6 +173,23 @@ interface MatrixRoom : Closeable {
      * @param pollKind The kind of poll to create.
      */
     suspend fun createPoll(
+        question: String,
+        answers: List<String>,
+        maxSelections: Int,
+        pollKind: PollKind,
+    ): Result<Unit>
+
+    /**
+     * Edit a poll in the room.
+     *
+     * @param pollStartId The event ID of the poll start event.
+     * @param question The question to ask.
+     * @param answers The list of answers.
+     * @param maxSelections The maximum number of answers that can be selected.
+     * @param pollKind The kind of poll to create.
+     */
+    suspend fun editPoll(
+        pollStartId: EventId,
         question: String,
         answers: List<String>,
         maxSelections: Int,
@@ -220,6 +240,8 @@ interface MatrixRoom : Closeable {
      * @return The resulting [MatrixWidgetDriver], or a failure.
      */
     fun getWidgetDriver(widgetSettings: MatrixWidgetSettings): Result<MatrixWidgetDriver>
+
+    fun pollHistory(): MatrixTimeline
 
     override fun close() = destroy()
 }

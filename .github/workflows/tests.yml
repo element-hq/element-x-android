@@ -39,12 +39,12 @@ jobs:
           # https://github.com/actions/checkout/issues/881
           ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.ref }}
       - name: ☕️ Use JDK 17
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
           distribution: 'temurin' # See 'Supported distributions' for available options
           java-version: '17'
       - name: Configure gradle
-        uses: gradle/gradle-build-action@v2.9.0
+        uses: gradle/gradle-build-action@v2.11.1
         with:
           cache-read-only: ${{ github.ref != 'refs/heads/develop' }}
 
@@ -59,7 +59,7 @@ jobs:
 
       - name: 🚫 Upload kover failed coverage reports
         if: failure()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: kover-error-report
           path: |
@@ -71,7 +71,7 @@ jobs:
 
       - name: 🚫 Upload test results on error
         if: failure()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: tests-and-screenshot-tests-results
           path: |

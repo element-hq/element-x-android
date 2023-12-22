@@ -18,9 +18,10 @@ package io.element.android.features.messages.impl.timeline.components.receipt.bo
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -29,6 +30,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import io.element.android.compound.theme.ElementTheme
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -38,7 +40,6 @@ import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.components.MatrixUserRow
-import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.coroutines.launch
 
@@ -83,34 +84,39 @@ internal fun ReadReceiptBottomSheet(
 }
 
 @Composable
-private fun ColumnScope.ReadReceiptBottomSheetContent(
+private fun ReadReceiptBottomSheetContent(
     state: ReadReceiptBottomSheetState,
     onUserDataClicked: (UserId) -> Unit,
 ) {
-    ListItem(
-        headlineContent = {
-            Text(text = stringResource(id = CommonStrings.common_seen_by))
+    LazyColumn {
+        item {
+            ListItem(
+                headlineContent = {
+                    Text(text = stringResource(id = CommonStrings.common_seen_by))
+                }
+            )
         }
-    )
-    val receipts = state.selectedEvent?.readReceiptState?.receipts.orEmpty()
-    receipts.forEach {
-        val userId = UserId(it.avatarData.id)
-        MatrixUserRow(
-            modifier = Modifier.clickable { onUserDataClicked(userId) },
-            matrixUser = MatrixUser(
-                userId = userId,
-                displayName = it.avatarData.name,
-                avatarUrl = it.avatarData.url,
-            ),
-            avatarSize = AvatarSize.ReadReceiptList,
-            trailingContent = {
-                Text(
-                    text = it.formattedDate,
-                    style = ElementTheme.typography.fontBodySmRegular,
-                    color = ElementTheme.colors.textSecondary,
-                )
-            }
-        )
+        items(
+            items = state.selectedEvent?.readReceiptState?.receipts.orEmpty()
+        ) {
+            val userId = UserId(it.avatarData.id)
+            MatrixUserRow(
+                modifier = Modifier.clickable { onUserDataClicked(userId) },
+                matrixUser = MatrixUser(
+                    userId = userId,
+                    displayName = it.avatarData.name,
+                    avatarUrl = it.avatarData.url,
+                ),
+                avatarSize = AvatarSize.ReadReceiptList,
+                trailingContent = {
+                    Text(
+                        text = it.formattedDate,
+                        style = ElementTheme.typography.fontBodySmRegular,
+                        color = ElementTheme.colors.textSecondary,
+                    )
+                }
+            )
+        }
     }
 }
 

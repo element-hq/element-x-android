@@ -58,9 +58,8 @@ data class NotifiableMessageEvent(
     override val description: String = body ?: ""
     val title: String = senderName ?: ""
 
-    // TODO EAx The image has to be downloaded and expose using the file provider.
-    // Example of value from Element Android:
-    // content://im.vector.app.debug.mx-sdk.fileprovider/downloads/downloads/816abf76d806c768760568952b1862c8/F/72c33edd23dee3b95f4d5a18aa25fa54/image.png
+    // Example of value:
+    // content://io.element.android.x.debug.notifications.fileprovider/downloads/temp/notif/matrix.org/XGItzSDOnSyXjYtOPfiKexDJ
     val imageUri: Uri?
         get() = imageUriString?.let { Uri.parse(it) }
 }

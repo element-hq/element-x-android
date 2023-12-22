@@ -4,9 +4,16 @@
   <string name="screen_create_poll_anonymous_desc">"Afficher les résultats uniquement après la fin du sondage"</string>
   <string name="screen_create_poll_anonymous_headline">"Masquer les votes"</string>
   <string name="screen_create_poll_answer_hint">"Option %1$d"</string>
-  <string name="screen_create_poll_discard_confirmation">"Êtes-vous sûr de vouloir supprimer ce sondage ?"</string>
-  <string name="screen_create_poll_discard_confirmation_title">"Supprimer le sondage"</string>
+  <string name="screen_create_poll_cancel_confirmation_content_android">"Vos modifications n’ont pas été enregistrées. Êtes-vous certain de vouloir quitter?"</string>
   <string name="screen_create_poll_question_desc">"Question ou sujet"</string>
   <string name="screen_create_poll_question_hint">"Quel est le sujet du sondage ?"</string>
   <string name="screen_create_poll_title">"Créer un sondage"</string>
+  <string name="screen_edit_poll_delete_confirmation">"Êtes-vous certain de vouloir supprimer ce sondage?"</string>
+  <string name="screen_edit_poll_delete_confirmation_title">"Supprimer le sondage"</string>
+  <string name="screen_edit_poll_title">"Modifier le sondage"</string>
+  <string name="screen_polls_history_empty_ongoing">"Impossible de trouver des sondages en cours."</string>
+  <string name="screen_polls_history_empty_past">"Impossible de trouver des sondages terminés."</string>
+  <string name="screen_polls_history_filter_ongoing">"En cours"</string>
+  <string name="screen_polls_history_filter_past">"Terminés"</string>
+  <string name="screen_polls_history_title">"Sondages"</string>
 </resources>

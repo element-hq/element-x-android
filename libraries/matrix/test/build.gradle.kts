@@ -28,4 +28,5 @@ dependencies {
     api(libs.coroutines.core)
     implementation(libs.coroutines.test)
     implementation(projects.tests.testutils)
+    implementation(libs.kotlinx.collections.immutable)
 }

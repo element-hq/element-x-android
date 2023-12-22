@@ -16,6 +16,7 @@
 
 package io.element.android.features.roomdetails.impl
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -45,6 +46,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import io.element.android.compound.theme.ElementTheme
+import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.leaveroom.api.LeaveRoomView
 import io.element.android.features.roomdetails.impl.blockuser.BlockUserDialogs
 import io.element.android.features.roomdetails.impl.blockuser.BlockUserSection
@@ -75,7 +78,7 @@ import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
-import io.element.android.libraries.theme.ElementTheme
+import io.element.android.libraries.matrix.api.room.getBestName
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
@@ -88,6 +91,8 @@ fun RoomDetailsView(
     openRoomMemberList: () -> Unit,
     openRoomNotificationSettings: () -> Unit,
     invitePeople: () -> Unit,
+    openAvatarPreview: (name: String, url: String) -> Unit,
+    openPollHistory: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     fun onShareMember() {
@@ -118,7 +123,10 @@ fun RoomDetailsView(
                         avatarUrl = state.roomAvatarUrl,
                         roomId = state.roomId,
                         roomName = state.roomName,
-                        roomAlias = state.roomAlias
+                        roomAlias = state.roomAlias,
+                        openAvatarPreview = { avatarUrl ->
+                            openAvatarPreview(state.roomName, avatarUrl)
+                        },
                     )
                     MainActionsSection(
                         state = state,
@@ -131,7 +139,10 @@ fun RoomDetailsView(
                     RoomMemberHeaderSection(
                         avatarUrl = state.roomAvatarUrl ?: member.avatarUrl,
                         userId = member.userId.value,
-                        userName = state.roomName
+                        userName = state.roomName,
+                        openAvatarPreview = { avatarUrl ->
+                            openAvatarPreview(member.getBestName(), avatarUrl)
+                        },
                     )
                     RoomMemberMainActionsSection(onShareUser = ::onShareMember)
                 }
@@ -164,6 +175,10 @@ fun RoomDetailsView(
                     )
                 }
             }
+
+            PollsSection(
+                openPollHistory = openPollHistory
+            )
 
             if (state.isEncrypted) {
                 SecuritySection()
@@ -228,7 +243,7 @@ private fun MainActionsSection(state: RoomDetailsState, onShareRoom: () -> Unit,
             if (roomNotificationSettings.mode == RoomNotificationMode.MUTE) {
                 MainActionButton(
                     title = stringResource(CommonStrings.common_unmute),
-                    iconResourceId = CommonDrawables.ic_compound_notifications_off,
+                    imageVector = CompoundIcons.NotificationsOff,
                     onClick = {
                         state.eventSink(RoomDetailsEvent.UnmuteNotification)
                     },
@@ -236,7 +251,7 @@ private fun MainActionsSection(state: RoomDetailsState, onShareRoom: () -> Unit,
             } else {
                 MainActionButton(
                     title = stringResource(CommonStrings.common_mute),
-                    iconResourceId = CommonDrawables.ic_compound_notifications,
+                    imageVector = CompoundIcons.Notifications,
                     onClick = {
                         state.eventSink(RoomDetailsEvent.MuteNotification)
                     },
@@ -246,7 +261,7 @@ private fun MainActionsSection(state: RoomDetailsState, onShareRoom: () -> Unit,
         Spacer(modifier = Modifier.width(20.dp))
         MainActionButton(
             title = stringResource(R.string.screen_room_details_share_room_title),
-            iconResourceId = CommonDrawables.ic_compound_share_android,
+            imageVector = CompoundIcons.ShareAndroid,
             onClick = onShareRoom
         )
     }
@@ -258,6 +273,7 @@ private fun RoomHeaderSection(
     roomId: String,
     roomName: String,
     roomAlias: String?,
+    openAvatarPreview: (url: String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -268,7 +284,9 @@ private fun RoomHeaderSection(
     ) {
         Avatar(
             avatarData = AvatarData(roomId, roomName, avatarUrl, AvatarSize.RoomHeader),
-            modifier = Modifier.size(70.dp)
+            modifier = Modifier
+                .size(70.dp)
+                .clickable(enabled = avatarUrl != null) { openAvatarPreview(avatarUrl!!) }
         )
         Spacer(modifier = Modifier.height(24.dp))
         Text(
@@ -330,7 +348,7 @@ private fun NotificationSection(
         ListItem(
             headlineContent = { Text(text = stringResource(R.string.screen_room_details_notification_title)) },
             supportingContent = { Text(text = subtitle) },
-            leadingContent = ListItemContent.Icon(IconSource.Resource(CommonDrawables.ic_compound_notifications)),
+            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Notifications)),
             onClick = openRoomNotificationSettings,
         )
     }
@@ -367,6 +385,20 @@ private fun InviteSection(
 }
 
 @Composable
+private fun PollsSection(
+    openPollHistory: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    PreferenceCategory(modifier = modifier) {
+        ListItem(
+            headlineContent = { Text(stringResource(R.string.screen_polls_history_title)) },
+            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Polls)),
+            onClick = openPollHistory,
+        )
+    }
+}
+
+@Composable
 private fun SecuritySection(modifier: Modifier = Modifier) {
     PreferenceCategory(title = stringResource(R.string.screen_room_details_security_title), modifier = modifier) {
         ListItem(
@@ -382,7 +414,7 @@ private fun OtherActionsSection(onLeaveRoom: () -> Unit, modifier: Modifier = Mo
     PreferenceCategory(showDivider = false, modifier = modifier) {
         ListItem(
             headlineContent = { Text(stringResource(R.string.screen_room_details_leave_room_title)) },
-            leadingContent = ListItemContent.Icon(IconSource.Resource(CommonDrawables.ic_compound_leave)),
+            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Leave)),
             style = ListItemStyle.Destructive,
             onClick = onLeaveRoom,
         )
@@ -410,5 +442,7 @@ private fun ContentToPreview(state: RoomDetailsState) {
         openRoomMemberList = {},
         openRoomNotificationSettings = {},
         invitePeople = {},
+        openAvatarPreview = { _, _ -> },
+        openPollHistory = {},
     )
 }

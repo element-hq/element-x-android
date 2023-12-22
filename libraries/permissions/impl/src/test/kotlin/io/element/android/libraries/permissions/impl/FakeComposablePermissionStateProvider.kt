@@ -27,7 +27,7 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionState
 import com.google.accompanist.permissions.PermissionStatus
 
-class FakeComposablePermissionStateProvider constructor(
+class FakeComposablePermissionStateProvider(
     private val permissionState: FakePermissionState
 ) : ComposablePermissionStateProvider {
     private lateinit var onPermissionResult: (Boolean) -> Unit

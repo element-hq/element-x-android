@@ -23,6 +23,7 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.verifysession.impl.VerifySelfSessionState.VerificationStep
 import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.matrix.api.verification.SessionVerificationData
 import io.element.android.libraries.matrix.api.verification.VerificationEmoji
 import io.element.android.libraries.matrix.api.verification.VerificationFlowState
 import io.element.android.libraries.matrix.test.verification.FakeSessionVerificationService
@@ -73,7 +74,7 @@ class VerifySelfSessionPresenterTests {
             // Await for other device response:
             assertThat(awaitItem().verificationFlowStep).isEqualTo(VerificationStep.AwaitingOtherDeviceResponse)
             // ChallengeReceived:
-            service.triggerReceiveVerificationData()
+            service.triggerReceiveVerificationData(SessionVerificationData.Emojis(emptyList()))
             val verifyingState = awaitItem()
             assertThat(verifyingState.verificationFlowStep).isInstanceOf(VerificationStep.Verifying::class.java)
         }
@@ -132,7 +133,7 @@ class VerifySelfSessionPresenterTests {
             presenter.present()
         }.test {
             requestVerificationAndAwaitVerifyingState(service)
-            service.givenVerificationFlowState(VerificationFlowState.ReceivedVerificationData(emptyList()))
+            service.givenVerificationFlowState(VerificationFlowState.ReceivedVerificationData(SessionVerificationData.Emojis(emptyList())))
             ensureAllEventsConsumed()
         }
     }
@@ -156,19 +157,25 @@ class VerifySelfSessionPresenterTests {
 
     @Test
     fun `present - When verification is approved, the flow completes if there is no error`() = runTest {
-        val emojis = listOf<VerificationEmoji>(
-            VerificationEmoji("😄", "Smile")
+        val emojis = listOf(
+            VerificationEmoji(number = 30, emoji = "😀", description = "Smiley")
         )
-        val service = FakeSessionVerificationService().apply {
-            givenEmojiList(emojis)
-        }
+        val service = FakeSessionVerificationService()
         val presenter = createVerifySelfSessionPresenter(service)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            val state = requestVerificationAndAwaitVerifyingState(service)
+            val state = requestVerificationAndAwaitVerifyingState(
+                service,
+                SessionVerificationData.Emojis(emojis)
+            )
             state.eventSink(VerifySelfSessionViewEvents.ConfirmVerification)
-            assertThat(awaitItem().verificationFlowStep).isEqualTo(VerificationStep.Verifying(emojis, Async.Loading()))
+            assertThat(awaitItem().verificationFlowStep).isEqualTo(
+                VerificationStep.Verifying(
+                    SessionVerificationData.Emojis(emojis),
+                    Async.Loading(),
+                )
+            )
             assertThat(awaitItem().verificationFlowStep).isEqualTo(VerificationStep.Completed)
         }
     }
@@ -182,13 +189,19 @@ class VerifySelfSessionPresenterTests {
         }.test {
             val state = requestVerificationAndAwaitVerifyingState(service)
             state.eventSink(VerifySelfSessionViewEvents.DeclineVerification)
-            assertThat(awaitItem().verificationFlowStep).isEqualTo(VerificationStep.Verifying(emptyList(), Async.Loading()))
+            assertThat(awaitItem().verificationFlowStep).isEqualTo(
+                VerificationStep.Verifying(
+                    SessionVerificationData.Emojis(emptyList()),
+                    Async.Loading(),
+                )
+            )
             assertThat(awaitItem().verificationFlowStep).isEqualTo(VerificationStep.Canceled)
         }
     }
 
     private suspend fun ReceiveTurbine<VerifySelfSessionState>.requestVerificationAndAwaitVerifyingState(
-        fakeService: FakeSessionVerificationService
+        fakeService: FakeSessionVerificationService,
+        sessionVerificationData: SessionVerificationData = SessionVerificationData.Emojis(emptyList()),
     ): VerifySelfSessionState {
         var state = awaitItem()
         assertThat(state.verificationFlowStep).isEqualTo(VerificationStep.Initial)
@@ -203,7 +216,7 @@ class VerifySelfSessionPresenterTests {
         // Await for other device response (again):
         state = awaitItem()
         assertThat(state.verificationFlowStep).isEqualTo(VerificationStep.AwaitingOtherDeviceResponse)
-        fakeService.triggerReceiveVerificationData()
+        fakeService.triggerReceiveVerificationData(sessionVerificationData)
         // Finally, ChallengeReceived:
         state = awaitItem()
         assertThat(state.verificationFlowStep).isInstanceOf(VerificationStep.Verifying::class.java)

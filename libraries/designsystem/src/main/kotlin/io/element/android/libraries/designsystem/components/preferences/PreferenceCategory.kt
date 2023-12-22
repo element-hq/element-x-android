@@ -27,8 +27,8 @@ import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.designsystem.utils.CommonDrawables
-import io.element.android.libraries.theme.ElementTheme
+import io.element.android.compound.theme.ElementTheme
+import io.element.android.libraries.designsystem.icons.CompoundDrawables
 
 @Composable
 fun PreferenceCategory(
@@ -77,18 +77,20 @@ private fun ContentToPreview() {
     ) {
         PreferenceText(
             title = "Title",
-            iconResourceId = CommonDrawables.ic_compound_chat_problem,
+            iconResourceId = CompoundDrawables.ic_chat_problem,
         )
         PreferenceSwitch(
             title = "Switch",
-            iconResourceId = CommonDrawables.ic_compound_threads,
-            isChecked = true
+            iconResourceId = CompoundDrawables.ic_threads,
+            isChecked = true,
+            onCheckedChange = {},
         )
         PreferenceSlide(
             title = "Slide",
             summary = "Summary",
             value = 0.75F,
             showIconAreaIfNoIcon = true,
+            onValueChange = {},
         )
     }
 }

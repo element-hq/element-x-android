@@ -52,13 +52,13 @@ fun SearchUserBar(
     selectedUsers: ImmutableList<MatrixUser>,
     active: Boolean,
     isMultiSelectionEnabled: Boolean,
+    onActiveChanged: (Boolean) -> Unit,
+    onTextChanged: (String) -> Unit,
+    onUserSelected: (MatrixUser) -> Unit,
+    onUserDeselected: (MatrixUser) -> Unit,
     modifier: Modifier = Modifier,
     showBackButton: Boolean = true,
     placeHolderTitle: String = stringResource(CommonStrings.common_search_for_someone),
-    onActiveChanged: (Boolean) -> Unit = {},
-    onTextChanged: (String) -> Unit = {},
-    onUserSelected: (MatrixUser) -> Unit = {},
-    onUserDeselected: (MatrixUser) -> Unit = {},
 ) {
     val columnState = rememberLazyListState()
 

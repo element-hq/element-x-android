@@ -45,13 +45,13 @@ import io.element.android.features.invitelist.impl.model.InviteListInviteSummary
 import io.element.android.features.invitelist.impl.model.InviteSender
 import io.element.android.libraries.designsystem.atomic.atoms.UnreadIndicatorAtom
 import io.element.android.libraries.designsystem.components.avatar.Avatar
-import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.ButtonSize
 import io.element.android.libraries.designsystem.theme.components.OutlinedButton
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.theme.ElementTheme
+import io.element.android.compound.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
 
 private val minHeight = 72.dp
@@ -59,9 +59,9 @@ private val minHeight = 72.dp
 @Composable
 internal fun InviteSummaryRow(
     invite: InviteListInviteSummary,
+    onAcceptClicked: () -> Unit,
+    onDeclineClicked: () -> Unit,
     modifier: Modifier = Modifier,
-    onAcceptClicked: () -> Unit = {},
-    onDeclineClicked: () -> Unit = {},
 ) {
     Box(
         modifier = modifier
@@ -79,8 +79,8 @@ internal fun InviteSummaryRow(
 @Composable
 private fun DefaultInviteSummaryRow(
     invite: InviteListInviteSummary,
-    onAcceptClicked: () -> Unit = {},
-    onDeclineClicked: () -> Unit = {},
+    onAcceptClicked: () -> Unit,
+    onDeclineClicked: () -> Unit,
 ) {
     Row(
         modifier = Modifier
@@ -187,5 +187,9 @@ private fun SenderRow(sender: InviteSender) {
 @PreviewsDayNight
 @Composable
 internal fun InviteSummaryRowPreview(@PreviewParameter(InviteListInviteSummaryProvider::class) data: InviteListInviteSummary) = ElementPreview {
-    InviteSummaryRow(data)
+    InviteSummaryRow(
+        invite = data,
+        onAcceptClicked = {},
+        onDeclineClicked = {},
+    )
 }

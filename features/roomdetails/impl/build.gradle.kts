@@ -42,6 +42,7 @@ dependencies {
     implementation(projects.libraries.androidutils)
     implementation(projects.libraries.mediapickers.api)
     implementation(projects.libraries.mediaupload.api)
+    implementation(projects.libraries.mediaviewer.api)
     implementation(projects.libraries.featureflag.api)
     implementation(projects.libraries.permissions.api)
     implementation(projects.libraries.preferences.api)
@@ -50,7 +51,9 @@ dependencies {
     api(projects.services.apperror.api)
     implementation(libs.coil.compose)
     implementation(projects.features.leaveroom.api)
+    implementation(projects.features.createroom.api)
     implementation(projects.services.analytics.api)
+    implementation(projects.features.poll.api)
 
     testImplementation(libs.test.junit)
     testImplementation(libs.coroutines.test)
@@ -66,6 +69,7 @@ dependencies {
     testImplementation(projects.libraries.featureflag.test)
     testImplementation(projects.tests.testutils)
     testImplementation(projects.features.leaveroom.test)
+    testImplementation(projects.features.createroom.test)
 
     ksp(libs.showkase.processor)
 }

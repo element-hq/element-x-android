@@ -90,7 +90,7 @@ fun aRoomMember(
     isIgnored = isIgnored,
 )
 
-fun aRoomMemberList() = listOf(
+fun aRoomMemberList() = persistentListOf(
     anAlice(),
     aBob(),
     aRoomMember(UserId("@carol:server.org"), "Carol"),

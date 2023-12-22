@@ -39,7 +39,6 @@ import io.element.android.libraries.matrix.test.media.FakeMediaLoader
 import io.element.android.libraries.matrix.test.notification.FakeNotificationService
 import io.element.android.libraries.matrix.test.notificationsettings.FakeNotificationSettingsService
 import io.element.android.libraries.matrix.test.pushers.FakePushersService
-import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.matrix.test.roomlist.FakeRoomListService
 import io.element.android.libraries.matrix.test.sync.FakeSyncService
 import io.element.android.libraries.matrix.test.verification.FakeSessionVerificationService
@@ -72,8 +71,7 @@ class FakeMatrixClient(
     private var unignoreUserResult: Result<Unit> = Result.success(Unit)
     private var createRoomResult: Result<RoomId> = Result.success(A_ROOM_ID)
     private var createDmResult: Result<RoomId> = Result.success(A_ROOM_ID)
-    private var createDmFailure: Throwable? = null
-    private var findDmResult: MatrixRoom? = FakeMatrixRoom()
+    private var findDmResult: RoomId? = A_ROOM_ID
     private var logoutFailure: Throwable? = null
     private val getRoomResults = mutableMapOf<RoomId, MatrixRoom>()
     private val searchUserResults = mutableMapOf<String, Result<MatrixSearchUserResults>>()
@@ -87,7 +85,7 @@ class FakeMatrixClient(
         return getRoomResults[roomId]
     }
 
-    override suspend fun findDM(userId: UserId): MatrixRoom? {
+    override suspend fun findDM(userId: UserId): RoomId? {
         return findDmResult
     }
 
@@ -99,14 +97,11 @@ class FakeMatrixClient(
         return unignoreUserResult
     }
 
-    override suspend fun createRoom(createRoomParams: CreateRoomParameters): Result<RoomId> {
-        delay(100)
+    override suspend fun createRoom(createRoomParams: CreateRoomParameters): Result<RoomId> = simulateLongTask {
         return createRoomResult
     }
 
-    override suspend fun createDM(userId: UserId): Result<RoomId> {
-        delay(100)
-        createDmFailure?.let { throw it }
+    override suspend fun createDM(userId: UserId): Result<RoomId> = simulateLongTask {
         return createDmResult
     }
 
@@ -206,11 +201,7 @@ class FakeMatrixClient(
         unignoreUserResult = result
     }
 
-    fun givenCreateDmError(failure: Throwable?) {
-        createDmFailure = failure
-    }
-
-    fun givenFindDmResult(result: MatrixRoom?) {
+    fun givenFindDmResult(result: RoomId?) {
         findDmResult = result
     }
 

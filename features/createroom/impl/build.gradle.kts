@@ -67,6 +67,7 @@ dependencies {
     testImplementation(projects.libraries.mediaupload.test)
     testImplementation(projects.libraries.permissions.test)
     testImplementation(projects.libraries.usersearch.test)
+    testImplementation(projects.features.createroom.test)
     testImplementation(projects.tests.testutils)
 
     ksp(libs.showkase.processor)

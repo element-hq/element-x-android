@@ -17,6 +17,7 @@
 package io.element.android.features.verifysession.impl
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -25,6 +26,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -33,11 +35,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import io.element.android.compound.theme.ElementTheme
+import io.element.android.features.verifysession.impl.emoji.toEmojiResource
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.designsystem.atomic.molecules.ButtonColumnMolecule
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
@@ -48,8 +53,8 @@ import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
+import io.element.android.libraries.matrix.api.verification.SessionVerificationData
 import io.element.android.libraries.matrix.api.verification.VerificationEmoji
-import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.features.verifysession.impl.VerifySelfSessionState.VerificationStep as FlowStep
 
@@ -100,14 +105,23 @@ private fun HeaderContent(verificationFlowStep: FlowStep, modifier: Modifier = M
         FlowStep.Initial -> R.string.screen_session_verification_open_existing_session_title
         FlowStep.Canceled -> CommonStrings.common_verification_cancelled
         FlowStep.AwaitingOtherDeviceResponse -> R.string.screen_session_verification_waiting_to_accept_title
-        FlowStep.Ready, is FlowStep.Verifying, FlowStep.Completed -> R.string.screen_session_verification_compare_emojis_title
+        FlowStep.Ready,
+        FlowStep.Completed -> R.string.screen_session_verification_compare_emojis_title
+        is FlowStep.Verifying -> when (verificationFlowStep.data) {
+            is SessionVerificationData.Decimals -> R.string.screen_session_verification_compare_numbers_title
+            is SessionVerificationData.Emojis -> R.string.screen_session_verification_compare_emojis_title
+        }
     }
     val subtitleTextId = when (verificationFlowStep) {
         FlowStep.Initial -> R.string.screen_session_verification_open_existing_session_subtitle
         FlowStep.Canceled -> R.string.screen_session_verification_cancelled_subtitle
         FlowStep.AwaitingOtherDeviceResponse -> R.string.screen_session_verification_waiting_to_accept_subtitle
-        is FlowStep.Verifying, FlowStep.Completed -> R.string.screen_session_verification_compare_emojis_subtitle
         FlowStep.Ready -> R.string.screen_session_verification_ready_subtitle
+        FlowStep.Completed -> R.string.screen_session_verification_compare_emojis_subtitle
+        is FlowStep.Verifying -> when (verificationFlowStep.data) {
+            is SessionVerificationData.Decimals -> R.string.screen_session_verification_compare_numbers_subtitle
+            is SessionVerificationData.Emojis -> R.string.screen_session_verification_compare_emojis_subtitle
+        }
     }
 
     IconTitleSubtitleMolecule(
@@ -138,17 +152,30 @@ private fun ContentWaiting(modifier: Modifier = Modifier) {
 
 @Composable
 private fun ContentVerifying(verificationFlowStep: FlowStep.Verifying, modifier: Modifier = Modifier) {
-    // We want each row to have up to 4 emojis
-    val rows = verificationFlowStep.emojiList.chunked(4)
-    Column(modifier = modifier.fillMaxWidth()) {
-        for ((rowIndex, emojis) in rows.withIndex()) {
-            // Vertical spacing between rows
-            if (rowIndex > 0) {
-                Spacer(modifier = Modifier.height(40.dp))
-            }
-            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
-                for (emoji in emojis) {
-                    EmojiItemView(emoji = emoji, modifier = Modifier.widthIn(max = 60.dp))
+    when (verificationFlowStep.data) {
+        is SessionVerificationData.Decimals -> {
+            val text = verificationFlowStep.data.decimals.joinToString(separator = " - ") { it.toString() }
+            Text(
+                modifier = modifier.fillMaxWidth(),
+                text = text,
+                style = ElementTheme.typography.fontHeadingLgBold,
+                color = MaterialTheme.colorScheme.primary,
+                textAlign = TextAlign.Center,
+            )
+        }
+        is SessionVerificationData.Emojis -> {
+            // We want each row to have up to 4 emojis
+            val rows = verificationFlowStep.data.emojis.chunked(4)
+            Column(
+                modifier = modifier.fillMaxWidth(),
+                verticalArrangement = Arrangement.spacedBy(40.dp),
+            ) {
+                rows.forEach { emojis ->
+                    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
+                        for (emoji in emojis) {
+                            EmojiItemView(emoji = emoji, modifier = Modifier.widthIn(max = 60.dp))
+                        }
+                    }
                 }
             }
         }
@@ -157,14 +184,16 @@ private fun ContentVerifying(verificationFlowStep: FlowStep.Verifying, modifier:
 
 @Composable
 private fun EmojiItemView(emoji: VerificationEmoji, modifier: Modifier = Modifier) {
+    val emojiResource = emoji.number.toEmojiResource()
     Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = modifier) {
-        Text(
-            text = emoji.code,
-            style = ElementTheme.typography.fontBodyMdRegular.copy(fontSize = 34.sp),
+        Image(
+            modifier = Modifier.size(48.dp),
+            painter = painterResource(id = emojiResource.drawableRes),
+            contentDescription = null,
         )
         Spacer(modifier = Modifier.height(16.dp))
         Text(
-            emoji.name,
+            text = stringResource(id = emojiResource.nameRes),
             style = ElementTheme.typography.fontBodyMdRegular,
             color = MaterialTheme.colorScheme.secondary,
             maxLines = 1,

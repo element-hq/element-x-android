@@ -46,14 +46,21 @@ class MentionSpanProviderTest {
 
     @Test
     fun `getting mention span for current user should return a MentionSpan with custom colors`() {
-        val mentionSpan = mentionSpanProvider.getMentionSpanFor("me", "https://matrix.to/#/${currentUserId.value}")
+        val mentionSpan = mentionSpanProvider.getMentionSpanFor("@me:matrix.org", "https://matrix.to/#/${currentUserId.value}")
         assertThat(mentionSpan.backgroundColor).isEqualTo(myUserColor)
         assertThat(mentionSpan.textColor).isEqualTo(myUserColor)
     }
 
     @Test
     fun `getting mention span for other user should return a MentionSpan with normal colors`() {
-        val mentionSpan = mentionSpanProvider.getMentionSpanFor("other", "https://matrix.to/#/@other:matrix.org")
+        val mentionSpan = mentionSpanProvider.getMentionSpanFor("@other:matrix.org", "https://matrix.to/#/@other:matrix.org")
+        assertThat(mentionSpan.backgroundColor).isEqualTo(otherColor)
+        assertThat(mentionSpan.textColor).isEqualTo(otherColor)
+    }
+
+    @Test
+    fun `getting mention span for a room should return a MentionSpan with normal colors`() {
+        val mentionSpan = mentionSpanProvider.getMentionSpanFor("#room:matrix.org", "https://matrix.to/#/#room:matrix.org")
         assertThat(mentionSpan.backgroundColor).isEqualTo(otherColor)
         assertThat(mentionSpan.textColor).isEqualTo(otherColor)
     }

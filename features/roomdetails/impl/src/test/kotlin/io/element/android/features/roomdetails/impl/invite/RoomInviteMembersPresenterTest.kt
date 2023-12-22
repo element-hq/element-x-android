@@ -39,6 +39,7 @@ import io.element.android.libraries.usersearch.test.FakeUserRepository
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
@@ -167,7 +168,7 @@ internal class RoomInviteMembersPresenterTest {
                 matrixRoom = FakeMatrixRoom().apply {
                     givenRoomMembersState(
                         MatrixRoomMembersState.Ready(
-                            listOf(
+                            persistentListOf(
                                 aRoomMember(userId = joinedUser.userId, membership = RoomMembershipState.JOIN),
                                 aRoomMember(userId = invitedUser.userId, membership = RoomMembershipState.INVITE),
                             )
@@ -227,7 +228,7 @@ internal class RoomInviteMembersPresenterTest {
             roomMemberListDataSource = createDataSource(FakeMatrixRoom().apply {
                 givenRoomMembersState(
                     MatrixRoomMembersState.Ready(
-                        listOf(
+                        persistentListOf(
                             aRoomMember(userId = joinedUser.userId, membership = RoomMembershipState.JOIN),
                             aRoomMember(userId = invitedUser.userId, membership = RoomMembershipState.INVITE),
                         )

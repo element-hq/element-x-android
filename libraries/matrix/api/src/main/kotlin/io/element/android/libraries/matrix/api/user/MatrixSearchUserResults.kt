@@ -16,7 +16,9 @@
 
 package io.element.android.libraries.matrix.api.user
 
+import kotlinx.collections.immutable.ImmutableList
+
 data class MatrixSearchUserResults(
-    val results: List<MatrixUser>,
+    val results: ImmutableList<MatrixUser>,
     val limited: Boolean,
 )

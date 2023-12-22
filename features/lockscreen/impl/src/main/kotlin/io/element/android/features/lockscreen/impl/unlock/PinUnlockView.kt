@@ -68,7 +68,7 @@ import io.element.android.libraries.designsystem.theme.components.Surface
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.designsystem.utils.OnLifecycleEvent
-import io.element.android.libraries.theme.ElementTheme
+import io.element.android.compound.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
@@ -300,7 +300,7 @@ private fun PinUnlockHeader(
                     .size(32.dp),
                 tint = ElementTheme.colors.iconPrimary,
                 imageVector = Icons.Filled.Lock,
-                contentDescription = "",
+                contentDescription = null,
             )
         }
         Spacer(modifier = Modifier.height(16.dp))

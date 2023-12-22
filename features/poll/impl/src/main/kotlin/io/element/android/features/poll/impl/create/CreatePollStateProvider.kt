@@ -25,6 +25,7 @@ class CreatePollStateProvider : PreviewParameterProvider<CreatePollState> {
     override val values: Sequence<CreatePollState>
         get() = sequenceOf(
             aCreatePollState(
+                mode = CreatePollState.Mode.New,
                 canCreate = false,
                 canAddAnswer = true,
                 question = "",
@@ -33,9 +34,11 @@ class CreatePollStateProvider : PreviewParameterProvider<CreatePollState> {
                     Answer("", false)
                 ),
                 pollKind = PollKind.Disclosed,
-                showConfirmation = false,
+                showBackConfirmation = false,
+                showDeleteConfirmation = false,
             ),
             aCreatePollState(
+                mode = CreatePollState.Mode.New,
                 canCreate = true,
                 canAddAnswer = true,
                 question = "What type of food should we have?",
@@ -43,10 +46,12 @@ class CreatePollStateProvider : PreviewParameterProvider<CreatePollState> {
                     Answer("Italian \uD83C\uDDEE\uD83C\uDDF9", false),
                     Answer("Chinese \uD83C\uDDE8\uD83C\uDDF3", false),
                 ),
-                showConfirmation = false,
+                showBackConfirmation = false,
+                showDeleteConfirmation = false,
                 pollKind = PollKind.Undisclosed,
             ),
             aCreatePollState(
+                mode = CreatePollState.Mode.New,
                 canCreate = true,
                 canAddAnswer = true,
                 question = "What type of food should we have?",
@@ -54,10 +59,12 @@ class CreatePollStateProvider : PreviewParameterProvider<CreatePollState> {
                     Answer("Italian \uD83C\uDDEE\uD83C\uDDF9", false),
                     Answer("Chinese \uD83C\uDDE8\uD83C\uDDF3", false),
                 ),
-                showConfirmation = true,
+                showBackConfirmation = true,
+                showDeleteConfirmation = false,
                 pollKind = PollKind.Undisclosed,
             ),
             aCreatePollState(
+                mode = CreatePollState.Mode.New,
                 canCreate = true,
                 canAddAnswer = true,
                 question = "What type of food should we have?",
@@ -67,10 +74,12 @@ class CreatePollStateProvider : PreviewParameterProvider<CreatePollState> {
                     Answer("Brazilian \uD83C\uDDE7\uD83C\uDDF7", true),
                     Answer("French \uD83C\uDDEB\uD83C\uDDF7", true),
                 ),
-                showConfirmation = false,
+                showBackConfirmation = false,
+                showDeleteConfirmation = false,
                 pollKind = PollKind.Undisclosed,
             ),
             aCreatePollState(
+                mode = CreatePollState.Mode.New,
                 canCreate = true,
                 canAddAnswer = false,
                 question = "Should there be more than 20 answers?",
@@ -96,10 +105,12 @@ class CreatePollStateProvider : PreviewParameterProvider<CreatePollState> {
                     Answer("19", true),
                     Answer("20", true),
                 ),
-                showConfirmation = false,
+                showBackConfirmation = false,
+                showDeleteConfirmation = false,
                 pollKind = PollKind.Undisclosed,
             ),
             aCreatePollState(
+                mode = CreatePollState.Mode.New,
                 canCreate = true,
                 canAddAnswer = true,
                 question = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua." +
@@ -118,26 +129,57 @@ class CreatePollStateProvider : PreviewParameterProvider<CreatePollState> {
                         false
                     ),
                 ),
-                showConfirmation = false,
+                showBackConfirmation = false,
+                showDeleteConfirmation = false,
                 pollKind = PollKind.Undisclosed,
-            )
+            ),
+            aCreatePollState(
+                mode = CreatePollState.Mode.Edit,
+                canCreate = false,
+                canAddAnswer = true,
+                question = "",
+                answers = persistentListOf(
+                    Answer("", false),
+                    Answer("", false)
+                ),
+                pollKind = PollKind.Disclosed,
+                showDeleteConfirmation = false,
+                showBackConfirmation = false,
+            ),
+            aCreatePollState(
+                mode = CreatePollState.Mode.Edit,
+                canCreate = false,
+                canAddAnswer = true,
+                question = "",
+                answers = persistentListOf(
+                    Answer("", false),
+                    Answer("", false)
+                ),
+                pollKind = PollKind.Disclosed,
+                showDeleteConfirmation = true,
+                showBackConfirmation = false,
+            ),
         )
 }
 
 private fun aCreatePollState(
+    mode: CreatePollState.Mode,
     canCreate: Boolean,
     canAddAnswer: Boolean,
     question: String,
     answers: PersistentList<Answer>,
-    showConfirmation: Boolean,
+    showBackConfirmation: Boolean,
+    showDeleteConfirmation: Boolean,
     pollKind: PollKind
 ): CreatePollState {
     return CreatePollState(
-        canCreate = canCreate,
+        mode = mode,
+        canSave = canCreate,
         canAddAnswer = canAddAnswer,
         question = question,
         answers = answers,
-        showConfirmation = showConfirmation,
+        showBackConfirmation = showBackConfirmation,
+        showDeleteConfirmation = showDeleteConfirmation,
         pollKind = pollKind,
         eventSink = {}
     )

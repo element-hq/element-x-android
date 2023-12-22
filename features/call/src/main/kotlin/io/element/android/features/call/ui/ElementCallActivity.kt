@@ -37,16 +37,16 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.core.content.IntentCompat
 import com.bumble.appyx.core.integrationpoint.NodeComponentActivity
+import io.element.android.compound.theme.ElementTheme
+import io.element.android.compound.theme.Theme
+import io.element.android.compound.theme.isDark
+import io.element.android.compound.theme.mapToTheme
 import io.element.android.features.call.CallForegroundService
 import io.element.android.features.call.CallType
 import io.element.android.features.call.di.CallBindings
 import io.element.android.features.call.utils.CallIntentDataParser
 import io.element.android.features.preferences.api.store.PreferencesStore
 import io.element.android.libraries.architecture.bindings
-import io.element.android.libraries.theme.ElementTheme
-import io.element.android.libraries.theme.theme.Theme
-import io.element.android.libraries.theme.theme.isDark
-import io.element.android.libraries.theme.theme.mapToTheme
 import javax.inject.Inject
 
 class ElementCallActivity : NodeComponentActivity(), CallScreenNavigator {

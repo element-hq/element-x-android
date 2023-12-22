@@ -32,11 +32,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import io.element.android.compound.theme.ElementTheme
+import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.designsystem.text.toDp
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.designsystem.utils.CommonDrawables
-import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
@@ -54,7 +54,7 @@ internal fun Indicator(
     ) {
         val tint = MaterialTheme.colorScheme.primary
         Icon(
-            resourceId = CommonDrawables.ic_compound_offline,
+            imageVector = CompoundIcons.Offline,
             contentDescription = null,
             tint = tint,
             modifier = Modifier.size(16.sp.toDp()),

@@ -1,4 +1,4 @@
-A full developer contributors list can be found [here](https://github.com/vector-im/element-x-android/graphs/contributors).
+A full developer contributors list can be found [here](https://github.com/element-hq/element-x-android/graphs/contributors).
 
 # Core team:
 

@@ -225,6 +225,7 @@ dependencies {
     kapt(libs.dagger.compiler)
 
     testImplementation(libs.test.junit)
+    testImplementation(libs.test.robolectric)
     testImplementation(libs.coroutines.test)
     testImplementation(libs.molecule.runtime)
     testImplementation(libs.test.truth)

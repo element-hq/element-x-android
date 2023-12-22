@@ -19,6 +19,7 @@ package io.element.android.libraries.matrix.test.timeline
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
+import io.element.android.libraries.matrix.api.timeline.ReceiptType
 import io.element.android.tests.testutils.simulateLongTask
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.delay
@@ -56,7 +57,10 @@ class FakeMatrixTimeline(
 
     override val timelineItems: Flow<List<MatrixTimelineItem>> = _timelineItems
 
-    override suspend fun paginateBackwards(requestSize: Int, untilNumberOfItems: Int): Result<Unit> {
+    override suspend fun paginateBackwards(requestSize: Int) = paginateBackwards()
+    override suspend fun paginateBackwards(requestSize: Int, untilNumberOfItems: Int) = paginateBackwards()
+
+    private suspend fun paginateBackwards(): Result<Unit> {
         updatePaginationState {
             copy(isBackPaginating = true)
         }
@@ -74,9 +78,14 @@ class FakeMatrixTimeline(
         Result.success(Unit)
     }
 
-    override suspend fun sendReadReceipt(eventId: EventId): Result<Unit> = simulateLongTask {
+    override suspend fun sendReadReceipt(
+        eventId: EventId,
+        receiptType: ReceiptType,
+    ): Result<Unit> = simulateLongTask {
         sendReadReceiptCount++
         sendReadReceiptLatch?.complete(Unit)
         Result.success(Unit)
     }
+
+    override fun close() = Unit
 }

@@ -31,7 +31,7 @@ data class RoomNotificationSettingsItem(
 
 @Composable
 fun roomNotificationSettingsItems(): ImmutableList<RoomNotificationSettingsItem> {
-    return RoomNotificationMode.values()
+    return RoomNotificationMode.entries
         .map {
             when (it) {
                 RoomNotificationMode.ALL_MESSAGES -> RoomNotificationSettingsItem(

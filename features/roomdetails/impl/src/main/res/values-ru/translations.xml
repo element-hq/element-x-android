@@ -6,6 +6,8 @@
     <item quantity="many">"%1$d пользователей"</item>
   </plurals>
   <string name="screen_notification_settings_edit_failed_updating_default_mode">"При обновлении настроек уведомления произошла ошибка."</string>
+  <string name="screen_notification_settings_mentions_only_disclaimer">"Ваш домашний сервер не поддерживает эту опцию в зашифрованных комнатах, в некоторых комнатах вы можете не получать уведомления."</string>
+  <string name="screen_polls_history_title">"Опросы"</string>
   <string name="screen_room_details_add_topic_title">"Добавить тему"</string>
   <string name="screen_room_details_already_a_member">"Уже зарегистрирован"</string>
   <string name="screen_room_details_already_invited">"Уже приглашены"</string>
@@ -39,6 +41,7 @@
   <string name="screen_room_notification_settings_mentions_only_disclaimer">"Ваш домашний сервер не поддерживает эту опцию в зашифрованных комнатах, вы не будете получать уведомления в этой комнате."</string>
   <string name="screen_room_notification_settings_mode_all_messages">"Все сообщения"</string>
   <string name="screen_room_notification_settings_room_custom_settings_title">"В этой комнате уведомить меня о"</string>
+  <string name="screen_start_chat_error_starting_chat">"Произошла ошибка при попытке открытия комнаты"</string>
   <string name="screen_dm_details_block_alert_action">"Заблокировать"</string>
   <string name="screen_dm_details_block_alert_description">"Заблокированные пользователи не смогут отправлять вам сообщения, а все их сообщения будут скрыты. Вы можете разблокировать их в любое время."</string>
   <string name="screen_dm_details_block_user">"Заблокировать пользователя"</string>

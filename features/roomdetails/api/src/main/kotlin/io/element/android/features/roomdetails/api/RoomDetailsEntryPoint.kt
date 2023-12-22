@@ -22,6 +22,7 @@ import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
 import io.element.android.libraries.architecture.FeatureEntryPoint
 import io.element.android.libraries.architecture.NodeInputs
+import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
 import kotlinx.parcelize.Parcelize
 
@@ -42,6 +43,7 @@ interface RoomDetailsEntryPoint : FeatureEntryPoint {
 
     interface Callback : Plugin {
         fun onOpenGlobalNotificationSettings()
+        fun onOpenRoom(roomId: RoomId)
     }
 
     interface NodeBuilder {

@@ -36,13 +36,16 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import com.mapbox.mapboxsdk.camera.CameraPosition
 import com.mapbox.mapboxsdk.geometry.LatLng
+import io.element.android.compound.theme.ElementTheme
+import io.element.android.compound.tokens.generated.CompoundIcons
+import io.element.android.compound.tokens.generated.TypographyTokens
 import io.element.android.features.location.api.internal.rememberTileStyleUrl
 import io.element.android.features.location.impl.common.MapDefaults
 import io.element.android.features.location.impl.common.PermissionDeniedDialog
 import io.element.android.features.location.impl.common.PermissionRationaleDialog
 import io.element.android.libraries.designsystem.components.button.BackButton
-import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.aliasScreenTitle
 import io.element.android.libraries.designsystem.theme.components.FloatingActionButton
 import io.element.android.libraries.designsystem.theme.components.Icon
@@ -58,8 +61,6 @@ import io.element.android.libraries.maplibre.compose.MapboxMap
 import io.element.android.libraries.maplibre.compose.Symbol
 import io.element.android.libraries.maplibre.compose.rememberCameraPositionState
 import io.element.android.libraries.maplibre.compose.rememberSymbolState
-import io.element.android.libraries.theme.ElementTheme
-import io.element.android.libraries.theme.compound.generated.TypographyTokens
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.toImmutableMap
 
@@ -67,8 +68,8 @@ import kotlinx.collections.immutable.toImmutableMap
 @Composable
 fun ShowLocationView(
     state: ShowLocationState,
+    onBackPressed: () -> Unit,
     modifier: Modifier = Modifier,
-    onBackPressed: () -> Unit = {},
 ) {
     when (state.permissionDialog) {
         ShowLocationState.Dialog.None -> Unit
@@ -125,7 +126,7 @@ fun ShowLocationView(
                 actions = {
                     IconButton(onClick = { state.eventSink(ShowLocationEvents.Share) }) {
                         Icon(
-                            resourceId = CommonDrawables.ic_compound_share_android,
+                            imageVector = CompoundIcons.ShareAndroid,
                             contentDescription = stringResource(CommonStrings.action_share),
                         )
                     }

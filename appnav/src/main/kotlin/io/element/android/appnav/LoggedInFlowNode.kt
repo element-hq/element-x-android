@@ -25,7 +25,6 @@ import androidx.compose.ui.Modifier
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import com.bumble.appyx.core.composable.Children
 import com.bumble.appyx.core.composable.PermanentChild
 import com.bumble.appyx.core.lifecycle.subscribe
 import com.bumble.appyx.core.modality.BuildContext
@@ -57,8 +56,8 @@ import io.element.android.features.preferences.api.PreferencesEntryPoint
 import io.element.android.features.roomlist.api.RoomListEntryPoint
 import io.element.android.features.securebackup.api.SecureBackupEntryPoint
 import io.element.android.features.verifysession.api.VerifySessionEntryPoint
-import io.element.android.libraries.architecture.BackstackNode
-import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
+import io.element.android.libraries.architecture.BackstackView
+import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.architecture.waitForChildAttached
 import io.element.android.libraries.deeplink.DeeplinkData
@@ -67,6 +66,7 @@ import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.MAIN_SPACE
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.roomlist.RoomList
 import io.element.android.libraries.matrix.api.sync.SyncState
 import io.element.android.libraries.push.api.notifications.NotificationDrawerManager
 import io.element.android.services.appnavstate.api.AppNavigationStateService
@@ -99,7 +99,7 @@ class LoggedInFlowNode @AssistedInject constructor(
     private val lockScreenStateService: LockScreenService,
     private val matrixClient: MatrixClient,
     snackbarDispatcher: SnackbarDispatcher,
-) : BackstackNode<LoggedInFlowNode.NavTarget>(
+) : BaseFlowNode<LoggedInFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = NavTarget.RoomList,
         savedStateMap = buildContext.savedStateMap,
@@ -149,6 +149,23 @@ class LoggedInFlowNode @AssistedInject constructor(
             }
         )
         observeSyncStateAndNetworkStatus()
+        observeInvitesLoadingState()
+    }
+
+    private fun observeInvitesLoadingState() {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                matrixClient.roomListService.invites.loadingState
+                    .collect { inviteState ->
+                        when (inviteState) {
+                            is RoomList.LoadingState.Loaded -> if (inviteState.numberOfRooms == 0) {
+                                backstack.removeLast(NavTarget.InviteList)
+                            }
+                            RoomList.LoadingState.NotLoaded -> Unit
+                        }
+                    }
+            }
+        }
     }
 
     @OptIn(FlowPreview::class)
@@ -256,6 +273,10 @@ class LoggedInFlowNode @AssistedInject constructor(
             }
             is NavTarget.Room -> {
                 val callback = object : RoomLoadedFlowNode.Callback {
+                    override fun onOpenRoom(roomId: RoomId) {
+                        backstack.push(NavTarget.Room(roomId))
+                    }
+
                     override fun onForwardedToSingleRoom(roomId: RoomId) {
                         coroutineScope.launch { attachRoom(roomId) }
                     }
@@ -362,12 +383,7 @@ class LoggedInFlowNode @AssistedInject constructor(
     override fun View(modifier: Modifier) {
         Box(modifier = modifier) {
             val lockScreenState by lockScreenStateService.lockState.collectAsState()
-            Children(
-                navModel = backstack,
-                modifier = Modifier,
-                // Animate navigation to settings and to a room
-                transitionHandler = rememberDefaultTransitionHandler(),
-            )
+            BackstackView()
             val isFtueDisplayed by ftueState.shouldDisplayFlow.collectAsState()
             if (!isFtueDisplayed) {
                 PermanentChild(permanentNavModel = permanentNavModel, navTarget = NavTarget.LoggedInPermanent)

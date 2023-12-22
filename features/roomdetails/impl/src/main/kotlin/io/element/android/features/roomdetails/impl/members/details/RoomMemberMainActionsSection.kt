@@ -22,8 +22,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.designsystem.components.button.MainActionButton
-import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
@@ -31,7 +31,7 @@ fun RoomMemberMainActionsSection(onShareUser: () -> Unit, modifier: Modifier = M
     Row(modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
         MainActionButton(
             title = stringResource(CommonStrings.action_share),
-            iconResourceId = CommonDrawables.ic_compound_share_android,
+            imageVector = CompoundIcons.ShareAndroid,
             onClick = onShareUser
         )
     }

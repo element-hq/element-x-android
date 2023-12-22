@@ -16,16 +16,11 @@
 
 package io.element.android.features.messages.impl.forward
 
-import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
 import io.element.android.libraries.matrix.api.core.RoomId
-import io.element.android.libraries.matrix.api.roomlist.RoomSummaryDetails
 import kotlinx.collections.immutable.ImmutableList
 
 data class ForwardMessagesState(
-    val resultState: SearchBarResultState<ImmutableList<RoomSummaryDetails>>,
-    val query: String,
-    val isSearchActive: Boolean,
-    val selectedRooms: ImmutableList<RoomSummaryDetails>,
+    // TODO Migrate to an Async
     val isForwarding: Boolean,
     val error: Throwable?,
     val forwardingSucceeded: ImmutableList<RoomId>?,

@@ -28,10 +28,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import io.element.android.compound.theme.ElementTheme
+import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
-import io.element.android.libraries.designsystem.utils.CommonDrawables
-import io.element.android.libraries.theme.ElementTheme
 
 // Figma designs: https://www.figma.com/file/G1xy0HDZKJf5TCRFmKb5d5/Compound-Android-Components?type=design&node-id=1032%3A44063&mode=design&t=rsNegTbEVLYAXL76-1
 
@@ -86,32 +86,32 @@ private fun ContentToPreview() {
         DropdownMenuItem(
             text = { Text(text = "Item") },
             onClick = {},
-            trailingIcon = { Icon(resourceId = CommonDrawables.ic_compound_chevron_right, contentDescription = null) },
+            trailingIcon = { Icon(imageVector = CompoundIcons.ChevronRight, contentDescription = null) },
         )
         HorizontalDivider()
         DropdownMenuItem(
             text = { Text(text = "Item") },
             onClick = {},
-            leadingIcon = { Icon(resourceId = CommonDrawables.ic_compound_chat_problem, contentDescription = null) },
+            leadingIcon = { Icon(imageVector = CompoundIcons.ChatProblem, contentDescription = null) },
         )
         DropdownMenuItem(
             text = { Text(text = "Item") },
             onClick = {},
-            leadingIcon = { Icon(resourceId = CommonDrawables.ic_compound_chat_problem, contentDescription = null) },
-            trailingIcon = { Icon(resourceId = CommonDrawables.ic_compound_chevron_right, contentDescription = null) },
+            leadingIcon = { Icon(imageVector = CompoundIcons.ChatProblem, contentDescription = null) },
+            trailingIcon = { Icon(imageVector = CompoundIcons.ChevronRight, contentDescription = null) },
         )
         DropdownMenuItem(
             text = { Text(text = "Item") },
             onClick = {},
             enabled = false,
-            leadingIcon = { Icon(resourceId = CommonDrawables.ic_compound_chat_problem, contentDescription = null) },
-            trailingIcon = { Icon(resourceId = CommonDrawables.ic_compound_chevron_right, contentDescription = null) },
+            leadingIcon = { Icon(imageVector = CompoundIcons.ChatProblem, contentDescription = null) },
+            trailingIcon = { Icon(imageVector = CompoundIcons.ChevronRight, contentDescription = null) },
         )
         HorizontalDivider()
         DropdownMenuItem(
             text = { Text(text = "Multiline\nItem") },
             onClick = {},
-            trailingIcon = { Icon(resourceId = CommonDrawables.ic_compound_chevron_right, contentDescription = null) },
+            trailingIcon = { Icon(imageVector = CompoundIcons.ChevronRight, contentDescription = null) },
         )
     }
 }

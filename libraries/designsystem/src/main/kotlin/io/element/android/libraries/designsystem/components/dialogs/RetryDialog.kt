@@ -32,12 +32,12 @@ import io.element.android.libraries.ui.strings.CommonStrings
 @Composable
 fun RetryDialog(
     content: String,
+    onRetry: () -> Unit,
+    onDismiss: () -> Unit,
     modifier: Modifier = Modifier,
     title: String = RetryDialogDefaults.title,
     retryText: String = RetryDialogDefaults.retryText,
     dismissText: String = RetryDialogDefaults.dismissText,
-    onRetry: () -> Unit = {},
-    onDismiss: () -> Unit = {},
 ) {
     BasicAlertDialog(modifier = modifier, onDismissRequest = onDismiss) {
         RetryDialogContent(
@@ -54,12 +54,12 @@ fun RetryDialog(
 @Composable
 private fun RetryDialogContent(
     content: String,
+    onRetry: () -> Unit,
+    onDismiss: () -> Unit,
     modifier: Modifier = Modifier,
     title: String = RetryDialogDefaults.title,
     retryText: String = RetryDialogDefaults.retryText,
     dismissText: String = RetryDialogDefaults.dismissText,
-    onRetry: () -> Unit = {},
-    onDismiss: () -> Unit = {},
 ) {
     SimpleAlertDialogContent(
         modifier = modifier,
@@ -85,6 +85,8 @@ internal fun RetryDialogPreview() {
         DialogPreview {
             RetryDialogContent(
                 content = "Content",
+                onRetry = {},
+                onDismiss = {},
             )
         }
     }

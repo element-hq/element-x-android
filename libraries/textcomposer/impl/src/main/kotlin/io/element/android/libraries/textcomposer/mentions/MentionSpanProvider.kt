@@ -17,16 +17,24 @@
 package io.element.android.libraries.textcomposer.mentions
 
 import android.graphics.Color
+import android.graphics.Typeface
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.text.buildSpannedString
+import io.element.android.compound.theme.ElementTheme
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.text.rememberTypeface
 import io.element.android.libraries.designsystem.theme.currentUserMentionPillBackground
 import io.element.android.libraries.designsystem.theme.currentUserMentionPillText
 import io.element.android.libraries.designsystem.theme.mentionPillBackground
@@ -34,7 +42,6 @@ import io.element.android.libraries.designsystem.theme.mentionPillText
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
-import io.element.android.libraries.theme.ElementTheme
 
 @Stable
 class MentionSpanProvider(
@@ -44,6 +51,10 @@ class MentionSpanProvider(
     private var otherTextColor: Int = 0,
     private var otherBackgroundColor: Int = Color.WHITE,
 ) {
+    private val paddingValues = PaddingValues(start = 4.dp, end = 6.dp)
+
+    private val paddingValuesPx = mutableStateOf(0 to 0)
+    private val typeface = mutableStateOf(Typeface.DEFAULT)
 
     @Suppress("ComposableNaming")
     @Composable
@@ -52,28 +63,48 @@ class MentionSpanProvider(
         currentUserBackgroundColor = ElementTheme.colors.currentUserMentionPillBackground.toArgb()
         otherTextColor = ElementTheme.colors.mentionPillText.toArgb()
         otherBackgroundColor = ElementTheme.colors.mentionPillBackground.toArgb()
+
+        typeface.value = ElementTheme.typography.fontBodyLgMedium.rememberTypeface().value
+        with(LocalDensity.current) {
+            val leftPadding = paddingValues.calculateLeftPadding(LocalLayoutDirection.current).roundToPx()
+            val rightPadding = paddingValues.calculateRightPadding(LocalLayoutDirection.current).roundToPx()
+            paddingValuesPx.value = leftPadding to rightPadding
+        }
     }
 
     fun getMentionSpanFor(text: String, url: String): MentionSpan {
         val permalinkData = PermalinkParser.parse(url)
+        val (startPaddingPx, endPaddingPx) = paddingValuesPx.value
         return when {
             permalinkData is PermalinkData.UserLink -> {
                 val isCurrentUser = permalinkData.userId == currentSessionId.value
                 MentionSpan(
+                    type = MentionSpan.Type.USER,
                     backgroundColor = if (isCurrentUser) currentUserBackgroundColor else otherBackgroundColor,
                     textColor = if (isCurrentUser) currentUserTextColor else otherTextColor,
+                    startPadding = startPaddingPx,
+                    endPadding = endPaddingPx,
+                    typeface = typeface.value,
                 )
             }
             text == "@room" && permalinkData is PermalinkData.FallbackLink -> {
                 MentionSpan(
+                    type = MentionSpan.Type.USER,
                     backgroundColor = otherBackgroundColor,
                     textColor = otherTextColor,
+                    startPadding = startPaddingPx,
+                    endPadding = endPaddingPx,
+                    typeface = typeface.value,
                 )
             }
             else -> {
                 MentionSpan(
+                    type = MentionSpan.Type.ROOM,
                     backgroundColor = otherBackgroundColor,
                     textColor = otherTextColor,
+                    startPadding = startPaddingPx,
+                    endPadding = endPaddingPx,
+                    typeface = typeface.value,
                 )
             }
         }
@@ -97,17 +128,26 @@ internal fun MentionSpanPreview() {
         provider.setup()
 
         val textColor = ElementTheme.colors.textPrimary.toArgb()
-        val mentionSpan = provider.getMentionSpanFor("me", "https://matrix.to/#/@me:matrix.org")
-        val mentionSpan2 = provider.getMentionSpanFor("other", "https://matrix.to/#/@other:matrix.org")
+        fun mentionSpanMe() = provider.getMentionSpanFor("me", "https://matrix.to/#/@me:matrix.org")
+        fun mentionSpanOther() = provider.getMentionSpanFor("other", "https://matrix.to/#/@other:matrix.org")
+        fun mentionSpanRoom() = provider.getMentionSpanFor("room", "https://matrix.to/#/#room:matrix.org")
         AndroidView(factory = { context ->
             TextView(context).apply {
+                includeFontPadding = false
                 layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
                 text = buildSpannedString {
                     append("This is a ")
-                    append("@mention", mentionSpan, 0)
+                    append("@mention", mentionSpanMe(), 0)
                     append(" to the current user and this is a ")
-                    append("@mention", mentionSpan2, 0)
-                    append(" to other user")
+                    append("@mention", mentionSpanOther(), 0)
+                    append(" to other user. This one is for a room: ")
+                    append("#room:matrix.org", mentionSpanRoom(), 0)
+                    append("\n\n")
+                    append("This ")
+                    append("mention", mentionSpanMe(), 0)
+                    append(" didn't have an '@' and it was automatically added, same as this ")
+                    append("room:matrix.org", mentionSpanRoom(), 0)
+                    append(" one, which had no leading '#'.")
                 }
                 setTextColor(textColor)
             }

@@ -17,7 +17,7 @@
 package io.element.android.appnav.room
 
 import app.cash.turbine.test
-import com.google.common.truth.Truth
+import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.api.roomlist.RoomList
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID
@@ -39,8 +39,8 @@ class LoadingRoomStateFlowFactoryTest {
         flowFactory
             .create(this, A_ROOM_ID)
         .test {
-            Truth.assertThat(awaitItem()).isEqualTo(LoadingRoomState.Loading)
-            Truth.assertThat(awaitItem()).isEqualTo(LoadingRoomState.Loaded(room))
+            assertThat(awaitItem()).isEqualTo(LoadingRoomState.Loading)
+            assertThat(awaitItem()).isEqualTo(LoadingRoomState.Loaded(room))
         }
     }
 
@@ -53,10 +53,10 @@ class LoadingRoomStateFlowFactoryTest {
         flowFactory
             .create(this, A_ROOM_ID)
             .test {
-                Truth.assertThat(awaitItem()).isEqualTo(LoadingRoomState.Loading)
+                assertThat(awaitItem()).isEqualTo(LoadingRoomState.Loading)
                 matrixClient.givenGetRoomResult(A_ROOM_ID, room)
                 roomListService.postAllRoomsLoadingState(RoomList.LoadingState.Loaded(1))
-                Truth.assertThat(awaitItem()).isEqualTo(LoadingRoomState.Loaded(room))
+                assertThat(awaitItem()).isEqualTo(LoadingRoomState.Loaded(room))
             }
     }
 
@@ -68,12 +68,9 @@ class LoadingRoomStateFlowFactoryTest {
         flowFactory
             .create(this, A_ROOM_ID)
             .test {
-                Truth.assertThat(awaitItem()).isEqualTo(LoadingRoomState.Loading)
+                assertThat(awaitItem()).isEqualTo(LoadingRoomState.Loading)
                 roomListService.postAllRoomsLoadingState(RoomList.LoadingState.Loaded(1))
-                Truth.assertThat(awaitItem()).isEqualTo(LoadingRoomState.Error)
+                assertThat(awaitItem()).isEqualTo(LoadingRoomState.Error)
             }
     }
-
-
-
 }

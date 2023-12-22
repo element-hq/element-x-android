@@ -19,7 +19,6 @@ package io.element.android.features.createroom.impl
 import android.os.Parcelable
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.bumble.appyx.core.composable.Children
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
@@ -32,8 +31,8 @@ import io.element.android.anvilannotations.ContributesNode
 import io.element.android.features.createroom.impl.addpeople.AddPeopleNode
 import io.element.android.features.createroom.impl.configureroom.ConfigureRoomNode
 import io.element.android.features.createroom.impl.di.CreateRoomComponent
-import io.element.android.libraries.architecture.BackstackNode
-import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
+import io.element.android.libraries.architecture.BackstackView
+import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.architecture.bindings
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.di.DaggerComponentOwner
@@ -45,7 +44,7 @@ class ConfigureRoomFlowNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
 ) : DaggerComponentOwner,
-    BackstackNode<ConfigureRoomFlowNode.NavTarget>(
+    BaseFlowNode<ConfigureRoomFlowNode.NavTarget>(
         backstack = BackStack(
             initialElement = NavTarget.Root,
             savedStateMap = buildContext.savedStateMap,
@@ -77,21 +76,17 @@ class ConfigureRoomFlowNode @AssistedInject constructor(
                         backstack.push(NavTarget.ConfigureRoom)
                     }
                 }
-                createNode<AddPeopleNode>(context = buildContext, plugins = listOf(callback))
+                createNode<AddPeopleNode>(buildContext = buildContext, plugins = listOf(callback))
             }
             NavTarget.ConfigureRoom -> {
                 val callbacks = plugins<ConfigureRoomNode.Callback>()
-                createNode<ConfigureRoomNode>(context = buildContext, plugins = callbacks)
+                createNode<ConfigureRoomNode>(buildContext = buildContext, plugins = callbacks)
             }
         }
     }
 
     @Composable
     override fun View(modifier: Modifier) {
-        Children(
-            navModel = backstack,
-            modifier = modifier,
-            transitionHandler = rememberDefaultTransitionHandler()
-        )
+        BackstackView()
     }
 }

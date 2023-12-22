@@ -16,6 +16,7 @@
 
 package io.element.android.libraries.push.impl.notifications
 
+import coil.ImageLoader
 import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.user.MatrixUser
@@ -38,11 +39,12 @@ class NotificationRenderer @Inject constructor(
     suspend fun render(
         currentUser: MatrixUser,
         useCompleteNotificationFormat: Boolean,
-        eventsToProcess: List<ProcessedEvent<NotifiableEvent>>
+        eventsToProcess: List<ProcessedEvent<NotifiableEvent>>,
+        imageLoader: ImageLoader,
     ) {
         val groupedEvents = eventsToProcess.groupByType()
         with(notificationFactory) {
-            val roomNotifications = groupedEvents.roomEvents.toNotifications(currentUser)
+            val roomNotifications = groupedEvents.roomEvents.toNotifications(currentUser, imageLoader)
             val invitationNotifications = groupedEvents.invitationEvents.toNotifications()
             val simpleNotifications = groupedEvents.simpleEvents.toNotifications()
             val fallbackNotifications = groupedEvents.fallbackEvents.toNotifications()

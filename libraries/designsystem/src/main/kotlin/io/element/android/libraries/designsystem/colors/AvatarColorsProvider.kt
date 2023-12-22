@@ -17,8 +17,8 @@
 package io.element.android.libraries.designsystem.colors
 
 import androidx.collection.LruCache
-import io.element.android.libraries.theme.colors.avatarColorsDark
-import io.element.android.libraries.theme.colors.avatarColorsLight
+import io.element.android.compound.theme.avatarColorsDark
+import io.element.android.compound.theme.avatarColorsLight
 
 object AvatarColorsProvider {
     private val cache = LruCache<String, AvatarColors>(200)

@@ -21,6 +21,6 @@ import org.matrix.rustcomponents.sdk.Mentions
 
 fun List<Mention>.map(): Mentions {
     val hasAtRoom = any { it is Mention.AtRoom }
-    val userIds = filterIsInstance<Mention.User>().map { it.userId }
+    val userIds = filterIsInstance<Mention.User>().map { it.userId.value }
     return Mentions(userIds, hasAtRoom)
 }

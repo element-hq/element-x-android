@@ -31,14 +31,14 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import io.element.android.compound.theme.ElementTheme
+import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.messages.impl.R
 import io.element.android.features.messages.impl.timeline.session.SessionState
 import io.element.android.features.messages.impl.timeline.session.SessionStateProvider
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Icon
-import io.element.android.libraries.designsystem.utils.CommonDrawables
-import io.element.android.libraries.theme.ElementTheme
 
 @Composable
 fun TimelineEncryptedHistoryBannerView(
@@ -56,8 +56,8 @@ fun TimelineEncryptedHistoryBannerView(
     ) {
         Icon(
             modifier = Modifier.size(20.dp),
-            resourceId = CommonDrawables.ic_compound_info_solid,
-            contentDescription = "Info",
+            imageVector = CompoundIcons.InfoSolid,
+            contentDescription = null,
             tint = ElementTheme.colors.iconInfoPrimary
         )
         Text(

@@ -24,6 +24,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.rememberTopAppBarState
@@ -46,6 +47,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
+import io.element.android.appconfig.RoomListConfig
+import io.element.android.compound.theme.ElementTheme
+import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.roomlist.impl.R
 import io.element.android.libraries.designsystem.atomic.atoms.RedIndicatorAtom
 import io.element.android.libraries.designsystem.components.avatar.Avatar
@@ -65,14 +69,12 @@ import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.MediumTopAppBar
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.designsystem.utils.LogCompositions
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.model.getAvatarData
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
-import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
 
 private val avatarBloomSize = 430.dp
@@ -128,8 +130,6 @@ private fun DefaultRoomListTopBar(
     onMenuActionClicked: (RoomListMenuAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    var showMenu by remember { mutableStateOf(false) }
-
     // We need this to manually clip the top app bar in preview mode
     val previewAppBarHeight = if (LocalInspectionMode.current) {
         112.dp.roundToPx()
@@ -150,123 +150,134 @@ private fun DefaultRoomListTopBar(
     val statusBarPadding = with(LocalDensity.current) { WindowInsets.statusBars.getTop(this).toDp() }
 
     Box(modifier = modifier) {
-        MediumTopAppBar(
-            modifier = Modifier
-                .onSizeChanged {
-                    appBarHeight = it.height
-                }
-                .nestedScroll(scrollBehavior.nestedScrollConnection)
-                .avatarBloom(
-                    avatarData = avatarData,
-                    background = if (ElementTheme.isLightTheme) {
-                        // Workaround to display a very subtle bloom for avatars with very soft colors
-                        Color(0xFFF9F9F9)
-                    } else {
-                        ElementTheme.materialColors.background
-                    },
-                    blurSize = DpSize(avatarBloomSize, avatarBloomSize),
-                    offset = DpOffset(24.dp, 24.dp + statusBarPadding),
-                    clipToSize = if (appBarHeight > 0) DpSize(
-                        avatarBloomSize,
-                        appBarHeight.toDp()
-                    ) else DpSize.Unspecified,
-                    bottomSoftEdgeColor = ElementTheme.materialColors.background,
-                    bottomSoftEdgeAlpha = 1f - collapsedFraction,
-                    alpha = if (areSearchResultsDisplayed) 0f else 1f,
-                )
-                .statusBarsPadding(),
-            colors = TopAppBarDefaults.mediumTopAppBarColors(
-                containerColor = Color.Transparent,
-                scrolledContainerColor = Color.Transparent,
+        val collapsedTitleTextStyle = ElementTheme.typography.aliasScreenTitle
+        val expandedTitleTextStyle = ElementTheme.typography.fontHeadingLgBold.copy(
+            // Due to a limitation of MediumTopAppBar, and to avoid the text to be truncated,
+            // ensure that the font size will never be bigger than 28.dp.
+            fontSize = 28.dp.applyScaleDown().toSp()
+        )
+        MaterialTheme(
+            colorScheme = ElementTheme.materialColors,
+            shapes = MaterialTheme.shapes,
+            typography = ElementTheme.materialTypography.copy(
+                headlineSmall = expandedTitleTextStyle,
+                titleLarge = collapsedTitleTextStyle
             ),
-            title = {
-                val fontStyle = if (scrollBehavior.state.collapsedFraction > 0.5)
-                    ElementTheme.typography.aliasScreenTitle
-                else
-                    ElementTheme.typography.fontHeadingLgBold.copy(
-                        // Due to a limitation of MediumTopAppBar, and to avoid the text to be truncated,
-                        // ensure that the font size will never be bigger than 28.dp.
-                        fontSize = 28.dp.applyScaleDown().toSp()
+        ) {
+            MediumTopAppBar(
+                modifier = Modifier
+                    .onSizeChanged {
+                        appBarHeight = it.height
+                    }
+                    .nestedScroll(scrollBehavior.nestedScrollConnection)
+                    .avatarBloom(
+                        avatarData = avatarData,
+                        background = if (ElementTheme.isLightTheme) {
+                            // Workaround to display a very subtle bloom for avatars with very soft colors
+                            Color(0xFFF9F9F9)
+                        } else {
+                            ElementTheme.materialColors.background
+                        },
+                        blurSize = DpSize(avatarBloomSize, avatarBloomSize),
+                        offset = DpOffset(24.dp, 24.dp + statusBarPadding),
+                        clipToSize = if (appBarHeight > 0) DpSize(
+                            avatarBloomSize,
+                            appBarHeight.toDp()
+                        ) else DpSize.Unspecified,
+                        bottomSoftEdgeColor = ElementTheme.materialColors.background,
+                        bottomSoftEdgeAlpha = 1f - collapsedFraction,
+                        alpha = if (areSearchResultsDisplayed) 0f else 1f,
                     )
-                Text(
-                    style = fontStyle,
-                    text = stringResource(id = R.string.screen_roomlist_main_space_title)
-                )
-            },
-            navigationIcon = {
-                avatarData?.let {
-                    IconButton(
-                        modifier = Modifier.testTag(TestTags.homeScreenSettings),
-                        onClick = onOpenSettings
-                    ) {
-                        Avatar(
-                            avatarData = it,
-                            contentDescription = stringResource(CommonStrings.common_settings),
-                        )
-                        if (showAvatarIndicator) {
-                            RedIndicatorAtom(
-                                modifier = Modifier
-                                    .padding(4.5.dp)
-                                    .align(Alignment.TopEnd)
+                    .statusBarsPadding(),
+                colors = TopAppBarDefaults.mediumTopAppBarColors(
+                    containerColor = Color.Transparent,
+                    scrolledContainerColor = Color.Transparent,
+                ),
+                title = {
+                    Text(text = stringResource(id = R.string.screen_roomlist_main_space_title))
+                },
+                navigationIcon = {
+                    avatarData?.let {
+                        IconButton(
+                            modifier = Modifier.testTag(TestTags.homeScreenSettings),
+                            onClick = onOpenSettings
+                        ) {
+                            Avatar(
+                                avatarData = it,
+                                contentDescription = stringResource(CommonStrings.common_settings),
                             )
+                            if (showAvatarIndicator) {
+                                RedIndicatorAtom(
+                                    modifier = Modifier
+                                        .padding(4.5.dp)
+                                        .align(Alignment.TopEnd)
+                                )
+                            }
                         }
                     }
-                }
-            },
-            actions = {
-                IconButton(
-                    onClick = onSearchClicked,
-                ) {
-                    Icon(
-                        resourceId = CommonDrawables.ic_compound_search,
-                        contentDescription = stringResource(CommonStrings.action_search),
-                    )
-                }
-                IconButton(
-                    onClick = { showMenu = !showMenu }
-                ) {
-                    Icon(
-                        resourceId = CommonDrawables.ic_compound_overflow_vertical,
-                        contentDescription = null,
-                    )
-                }
-                DropdownMenu(
-                    expanded = showMenu,
-                    onDismissRequest = { showMenu = false }
-                ) {
-                    DropdownMenuItem(
-                        onClick = {
-                            showMenu = false
-                            onMenuActionClicked(RoomListMenuAction.InviteFriends)
-                        },
-                        text = { Text(stringResource(id = CommonStrings.action_invite)) },
-                        leadingIcon = {
+                },
+                actions = {
+                    IconButton(
+                        onClick = onSearchClicked,
+                    ) {
+                        Icon(
+                            imageVector = CompoundIcons.Search,
+                            contentDescription = stringResource(CommonStrings.action_search),
+                        )
+                    }
+                    if (RoomListConfig.hasDropdownMenu) {
+                        var showMenu by remember { mutableStateOf(false) }
+                        IconButton(
+                            onClick = { showMenu = !showMenu }
+                        ) {
                             Icon(
-                                resourceId = CommonDrawables.ic_compound_share_android,
-                                tint = ElementTheme.materialColors.secondary,
+                                imageVector = CompoundIcons.OverflowVertical,
                                 contentDescription = null,
                             )
                         }
-                    )
-                    DropdownMenuItem(
-                        onClick = {
-                            showMenu = false
-                            onMenuActionClicked(RoomListMenuAction.ReportBug)
-                        },
-                        text = { Text(stringResource(id = CommonStrings.common_report_a_problem)) },
-                        leadingIcon = {
-                            Icon(
-                                resourceId = CommonDrawables.ic_compound_chat_problem,
-                                tint = ElementTheme.materialColors.secondary,
-                                contentDescription = null,
-                            )
+                        DropdownMenu(
+                            expanded = showMenu,
+                            onDismissRequest = { showMenu = false }
+                        ) {
+                            if (RoomListConfig.showInviteMenuItem) {
+                                DropdownMenuItem(
+                                    onClick = {
+                                        showMenu = false
+                                        onMenuActionClicked(RoomListMenuAction.InviteFriends)
+                                    },
+                                    text = { Text(stringResource(id = CommonStrings.action_invite)) },
+                                    leadingIcon = {
+                                        Icon(
+                                            imageVector = CompoundIcons.ShareAndroid,
+                                            tint = ElementTheme.materialColors.secondary,
+                                            contentDescription = null,
+                                        )
+                                    }
+                                )
+                            }
+                            if (RoomListConfig.showReportProblemMenuItem) {
+                                DropdownMenuItem(
+                                    onClick = {
+                                        showMenu = false
+                                        onMenuActionClicked(RoomListMenuAction.ReportBug)
+                                    },
+                                    text = { Text(stringResource(id = CommonStrings.common_report_a_problem)) },
+                                    leadingIcon = {
+                                        Icon(
+                                            imageVector = CompoundIcons.ChatProblem,
+                                            tint = ElementTheme.materialColors.secondary,
+                                            contentDescription = null,
+                                        )
+                                    }
+                                )
+                            }
                         }
-                    )
-                }
-            },
-            scrollBehavior = scrollBehavior,
-            windowInsets = WindowInsets(0.dp),
-        )
+                    }
+                },
+                scrollBehavior = scrollBehavior,
+                windowInsets = WindowInsets(0.dp),
+            )
+        }
 
         HorizontalDivider(
             modifier =

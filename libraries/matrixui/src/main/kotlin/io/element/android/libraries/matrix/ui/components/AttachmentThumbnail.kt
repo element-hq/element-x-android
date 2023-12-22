@@ -36,6 +36,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.designsystem.components.BlurHashAsyncImage
 import io.element.android.libraries.designsystem.components.PinIcon
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -122,6 +123,12 @@ fun AttachmentThumbnail(
                     )
                      */
                 }
+                AttachmentThumbnailType.Poll -> {
+                    Icon(
+                        imageVector = CompoundIcons.Polls,
+                        contentDescription = info.textContent,
+                    )
+                }
             }
         }
     }
@@ -129,7 +136,7 @@ fun AttachmentThumbnail(
 
 @Parcelize
 enum class AttachmentThumbnailType : Parcelable {
-    Image, Video, File, Audio, Location, Voice
+    Image, Video, File, Audio, Location, Voice, Poll
 }
 
 @Parcelize

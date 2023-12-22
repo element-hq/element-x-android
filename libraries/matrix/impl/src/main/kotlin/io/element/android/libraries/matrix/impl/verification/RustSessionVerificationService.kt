@@ -18,6 +18,7 @@ package io.element.android.libraries.matrix.impl.verification
 
 import io.element.android.libraries.core.data.tryOrNull
 import io.element.android.libraries.matrix.api.sync.SyncState
+import io.element.android.libraries.matrix.api.verification.SessionVerificationData
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatus
 import io.element.android.libraries.matrix.api.verification.VerificationEmoji
@@ -32,7 +33,8 @@ import kotlinx.coroutines.launch
 import org.matrix.rustcomponents.sdk.SessionVerificationController
 import org.matrix.rustcomponents.sdk.SessionVerificationControllerDelegate
 import org.matrix.rustcomponents.sdk.SessionVerificationControllerInterface
-import org.matrix.rustcomponents.sdk.SessionVerificationEmoji
+import org.matrix.rustcomponents.sdk.use
+import org.matrix.rustcomponents.sdk.SessionVerificationData as RustSessionVerificationData
 
 class RustSessionVerificationService(
     private val syncService: RustSyncService,
@@ -104,11 +106,8 @@ class RustSessionVerificationService(
         updateVerificationStatus(isVerified = true)
     }
 
-    override fun didReceiveVerificationData(data: List<SessionVerificationEmoji>) {
-        val emojis = data.map { emoji ->
-            emoji.use { VerificationEmoji(it.symbol(), it.description()) }
-        }
-        _verificationFlowState.value = VerificationFlowState.ReceivedVerificationData(emojis)
+    override fun didReceiveVerificationData(data: RustSessionVerificationData) {
+        _verificationFlowState.value = VerificationFlowState.ReceivedVerificationData(data.map())
     }
 
     // When the actual SAS verification starts
@@ -138,5 +137,30 @@ class RustSessionVerificationService(
             else -> SessionVerifiedStatus.Verified
         }
         _sessionVerifiedStatus.value = newValue
+    }
+}
+
+private fun RustSessionVerificationData.map(): SessionVerificationData {
+    return use { sessionVerificationData ->
+        when (sessionVerificationData) {
+            is RustSessionVerificationData.Emojis -> {
+                SessionVerificationData.Emojis(
+                    emojis = sessionVerificationData.emojis.mapIndexed { index, emoji ->
+                        emoji.use { sessionVerificationEmoji ->
+                            VerificationEmoji(
+                                number = sessionVerificationData.indices[index].toInt(),
+                                emoji = sessionVerificationEmoji.symbol(),
+                                description = sessionVerificationEmoji.description(),
+                            )
+                        }
+                    },
+                )
+            }
+            is RustSessionVerificationData.Decimals -> {
+                SessionVerificationData.Decimals(
+                    decimals = sessionVerificationData.values.map { it.toInt() },
+                )
+            }
+        }
     }
 }

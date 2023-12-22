@@ -27,6 +27,9 @@ import io.element.android.libraries.matrix.api.timeline.item.event.ProfileTimeli
 import io.element.android.libraries.matrix.api.timeline.item.event.ReactionSender
 import io.element.android.libraries.matrix.api.timeline.item.event.Receipt
 import io.element.android.libraries.matrix.api.timeline.item.event.TimelineItemEventOrigin
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 import org.matrix.rustcomponents.sdk.Reaction
 import org.matrix.rustcomponents.sdk.EventItemOrigin as RustEventItemOrigin
 import org.matrix.rustcomponents.sdk.EventSendState as RustEventSendState
@@ -81,7 +84,7 @@ fun RustEventSendState?.map(): LocalEventSendState? {
     }
 }
 
-private fun List<Reaction>?.map(): List<EventReaction> {
+private fun List<Reaction>?.map(): ImmutableList<EventReaction> {
     return this?.map {
         EventReaction(
             key = it.key,
@@ -90,18 +93,20 @@ private fun List<Reaction>?.map(): List<EventReaction> {
                     senderId = UserId(sender.senderId),
                     timestamp = sender.timestamp.toLong()
                 )
-            }
+            }.toImmutableList()
         )
-    } ?: emptyList()
+    }?.toImmutableList() ?: persistentListOf()
 }
 
-private fun Map<String, RustReceipt>.map(): List<Receipt> {
+private fun Map<String, RustReceipt>.map(): ImmutableList<Receipt> {
     return map {
-        Receipt(
-            userId = UserId(it.key),
-            timestamp = it.value.timestamp?.toLong() ?: 0
-        )
-    }.sortedByDescending { it.timestamp }
+            Receipt(
+                userId = UserId(it.key),
+                timestamp = it.value.timestamp?.toLong() ?: 0
+            )
+        }
+        .sortedByDescending { it.timestamp }
+        .toImmutableList()
 }
 
 private fun RustEventTimelineItemDebugInfo.map(): TimelineItemDebugInfo {

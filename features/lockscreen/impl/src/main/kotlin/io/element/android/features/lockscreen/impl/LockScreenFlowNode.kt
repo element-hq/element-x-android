@@ -19,7 +19,6 @@ package io.element.android.features.lockscreen.impl
 import android.os.Parcelable
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.bumble.appyx.core.composable.Children
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
@@ -32,9 +31,9 @@ import io.element.android.features.lockscreen.api.LockScreenEntryPoint
 import io.element.android.features.lockscreen.impl.settings.LockScreenSettingsFlowNode
 import io.element.android.features.lockscreen.impl.setup.LockScreenSetupFlowNode
 import io.element.android.features.lockscreen.impl.unlock.PinUnlockNode
-import io.element.android.libraries.architecture.BackstackNode
+import io.element.android.libraries.architecture.BackstackView
+import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.architecture.NodeInputs
-import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.di.SessionScope
 import kotlinx.parcelize.Parcelize
@@ -43,7 +42,7 @@ import kotlinx.parcelize.Parcelize
 class LockScreenFlowNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
-) : BackstackNode<LockScreenFlowNode.NavTarget>(
+) : BaseFlowNode<LockScreenFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = plugins.filterIsInstance(Inputs::class.java).first().initialNavTarget,
         savedStateMap = buildContext.savedStateMap,
@@ -93,10 +92,6 @@ class LockScreenFlowNode @AssistedInject constructor(
 
     @Composable
     override fun View(modifier: Modifier) {
-        Children(
-            navModel = backstack,
-            modifier = modifier,
-            transitionHandler = rememberDefaultTransitionHandler(),
-        )
+        BackstackView()
     }
 }

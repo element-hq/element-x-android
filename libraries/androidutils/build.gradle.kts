@@ -1,4 +1,3 @@
-
 /*
  * Copyright (c) 2023 New Vector Ltd
  *
@@ -33,6 +32,7 @@ dependencies {
     implementation(projects.libraries.di)
 
     implementation(projects.libraries.core)
+    implementation(projects.services.toolbox.api)
     implementation(libs.dagger)
     implementation(libs.timber)
     implementation(libs.androidx.corektx)
@@ -41,4 +41,12 @@ dependencies {
     implementation(libs.androidx.exifinterface)
     implementation(libs.androidx.security.crypto)
     api(libs.androidx.browser)
+
+    testImplementation(projects.tests.testutils)
+    testImplementation(libs.test.junit)
+    testImplementation(libs.test.truth)
+    testImplementation(libs.test.robolectric)
+    testImplementation(libs.coroutines.core)
+    testImplementation(libs.coroutines.test)
+    testImplementation(projects.services.toolbox.test)
 }

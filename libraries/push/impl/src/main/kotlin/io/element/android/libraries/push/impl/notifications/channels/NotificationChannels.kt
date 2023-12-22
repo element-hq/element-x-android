@@ -16,7 +16,6 @@
 
 package io.element.android.libraries.push.impl.notifications.channels
 
-import android.app.Activity
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
@@ -24,7 +23,6 @@ import android.os.Build
 import androidx.annotation.ChecksSdkIntAtLeast
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
-import io.element.android.libraries.androidutils.system.startNotificationChannelSettingsIntent
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.di.SingleIn
@@ -163,17 +161,5 @@ class NotificationChannels @Inject constructor(
 
         @ChecksSdkIntAtLeast(api = Build.VERSION_CODES.O)
         private fun supportNotificationChannels() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
-
-        fun openSystemSettingsForSilentCategory(activity: Activity) {
-            activity.startNotificationChannelSettingsIntent(SILENT_NOTIFICATION_CHANNEL_ID)
-        }
-
-        fun openSystemSettingsForNoisyCategory(activity: Activity) {
-            activity.startNotificationChannelSettingsIntent(NOISY_NOTIFICATION_CHANNEL_ID)
-        }
-
-        fun openSystemSettingsForCallCategory(activity: Activity) {
-            activity.startNotificationChannelSettingsIntent(CALL_NOTIFICATION_CHANNEL_ID)
-        }
     }
 }

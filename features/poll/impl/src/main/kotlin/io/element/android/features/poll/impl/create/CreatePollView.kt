@@ -43,12 +43,14 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import io.element.android.compound.theme.ElementTheme
+import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.poll.impl.R
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
 import io.element.android.libraries.designsystem.components.list.ListItemContent
-import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.aliasScreenTitle
 import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
 import io.element.android.libraries.designsystem.theme.components.Icon
@@ -60,14 +62,11 @@ import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
-import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.matrix.api.poll.PollKind
-import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CreatePollView(
     state: CreatePollState,
@@ -77,11 +76,21 @@ fun CreatePollView(
 
     val navBack = { state.eventSink(CreatePollEvents.ConfirmNavBack) }
     BackHandler(onBack = navBack)
-    if (state.showConfirmation) ConfirmationDialog(
-        content = stringResource(id = R.string.screen_create_poll_discard_confirmation),
-        onSubmitClicked = { state.eventSink(CreatePollEvents.NavBack) },
-        onDismiss = { state.eventSink(CreatePollEvents.HideConfirmation) }
-    )
+    if (state.showBackConfirmation) {
+        ConfirmationDialog(
+            content = stringResource(id = R.string.screen_create_poll_cancel_confirmation_content_android),
+            onSubmitClicked = { state.eventSink(CreatePollEvents.NavBack) },
+            onDismiss = { state.eventSink(CreatePollEvents.HideConfirmation) }
+        )
+    }
+    if (state.showDeleteConfirmation) {
+        ConfirmationDialog(
+            title = stringResource(id = R.string.screen_edit_poll_delete_confirmation_title),
+            content = stringResource(id = R.string.screen_edit_poll_delete_confirmation),
+            onSubmitClicked = { state.eventSink(CreatePollEvents.Delete(confirmed = true)) },
+            onDismiss = { state.eventSink(CreatePollEvents.HideConfirmation) }
+        )
+    }
     val questionFocusRequester = remember { FocusRequester() }
     val answerFocusRequester = remember { FocusRequester() }
     LaunchedEffect(Unit) {
@@ -90,23 +99,11 @@ fun CreatePollView(
     Scaffold(
         modifier = modifier,
         topBar = {
-            TopAppBar(
-                title = {
-                    Text(
-                        text = stringResource(id = R.string.screen_create_poll_title),
-                        style = ElementTheme.typography.aliasScreenTitle,
-                    )
-                },
-                navigationIcon = {
-                    BackButton(onClick = navBack)
-                },
-                actions = {
-                    TextButton(
-                        text = stringResource(id = CommonStrings.action_create),
-                        onClick = { state.eventSink(CreatePollEvents.Create) },
-                        enabled = state.canCreate,
-                    )
-                }
+            CreatePollTopAppBar(
+                mode = state.mode,
+                saveEnabled = state.canSave,
+                onBackPress = navBack,
+                onSaveClicked = { state.eventSink(CreatePollEvents.Save) }
             )
         },
     ) { paddingValues ->
@@ -165,7 +162,7 @@ fun CreatePollView(
                     },
                     trailingContent = ListItemContent.Custom {
                         Icon(
-                            resourceId = CommonDrawables.ic_compound_delete,
+                            imageVector = CompoundIcons.Delete,
                             contentDescription = null,
                             modifier = Modifier.clickable(answer.canDelete) {
                                 state.eventSink(CreatePollEvents.RemoveAnswer(index))
@@ -204,10 +201,51 @@ fun CreatePollView(
                             onChange = { state.eventSink(CreatePollEvents.SetPollKind(if (it) PollKind.Undisclosed else PollKind.Disclosed)) },
                         ),
                     )
+                    if (state.canDelete) {
+                        ListItem(
+                            headlineContent = { Text(text = stringResource(id = CommonStrings.action_delete_poll)) },
+                            style = ListItemStyle.Destructive,
+                            onClick = { state.eventSink(CreatePollEvents.Delete(confirmed = false)) },
+                        )
+                    }
                 }
             }
         }
     }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun CreatePollTopAppBar(
+    mode: CreatePollState.Mode,
+    saveEnabled: Boolean,
+    onBackPress: () -> Unit = {},
+    onSaveClicked: () -> Unit = {},
+) {
+    TopAppBar(
+        title = {
+            Text(
+                text = when (mode) {
+                    CreatePollState.Mode.New -> stringResource(id = R.string.screen_create_poll_title)
+                    CreatePollState.Mode.Edit -> stringResource(id = R.string.screen_edit_poll_title)
+                },
+                style = ElementTheme.typography.aliasScreenTitle,
+            )
+        },
+        navigationIcon = {
+            BackButton(onClick = onBackPress)
+        },
+        actions = {
+            TextButton(
+                text = when (mode) {
+                    CreatePollState.Mode.New -> stringResource(id = CommonStrings.action_create)
+                    CreatePollState.Mode.Edit -> stringResource(id = CommonStrings.action_done)
+                },
+                onClick = onSaveClicked,
+                enabled = saveEnabled,
+            )
+        }
+    )
 }
 
 @PreviewsDayNight

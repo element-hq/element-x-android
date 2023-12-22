@@ -22,6 +22,7 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.api.roomlist.RoomSummary
 import io.element.android.libraries.matrix.api.roomlist.RoomSummaryDetails
+import kotlinx.collections.immutable.persistentListOf
 
 open class EditDefaultNotificationSettingStateProvider: PreviewParameterProvider<EditDefaultNotificationSettingState> {
     override val values: Sequence<EditDefaultNotificationSettingState>
@@ -30,17 +31,20 @@ open class EditDefaultNotificationSettingStateProvider: PreviewParameterProvider
             anEditDefaultNotificationSettingsState(isOneToOne = true),
             anEditDefaultNotificationSettingsState(changeNotificationSettingAction = Async.Loading(Unit)),
             anEditDefaultNotificationSettingsState(changeNotificationSettingAction = Async.Failure(Throwable("error"))),
+            anEditDefaultNotificationSettingsState(displayMentionsOnlyDisclaimer = true),
         )
 }
 
 private fun anEditDefaultNotificationSettingsState(
     isOneToOne: Boolean = false,
-    changeNotificationSettingAction: Async<Unit> = Async.Uninitialized
+    changeNotificationSettingAction: Async<Unit> = Async.Uninitialized,
+    displayMentionsOnlyDisclaimer: Boolean = false,
 ) = EditDefaultNotificationSettingState(
     isOneToOne = isOneToOne,
     mode = RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY,
-    roomsWithUserDefinedMode = listOf(aRoomSummary()),
+    roomsWithUserDefinedMode = persistentListOf(aRoomSummary()),
     changeNotificationSettingAction = changeNotificationSettingAction,
+    displayMentionsOnlyDisclaimer = displayMentionsOnlyDisclaimer,
     eventSink = {}
 )
 

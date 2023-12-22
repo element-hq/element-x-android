@@ -24,11 +24,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
+import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
-import io.element.android.libraries.designsystem.utils.CommonDrawables
 
 /**
  * Icon is a wrapper around [androidx.compose.material3.Icon] which allows to use
@@ -116,7 +116,7 @@ fun Icon(
     tint: Color = LocalContentColor.current,
 ) {
     androidx.compose.material3.Icon(
-        painter = painterResource(id = resourceId),
+        imageVector = ImageVector.vectorResource(id = resourceId),
         contentDescription = contentDescription,
         modifier = modifier,
         tint = tint
@@ -145,5 +145,5 @@ internal fun IconImageVectorPreview() =
 
 @Composable
 private fun ContentToPreview() {
-    Icon(resourceId = CommonDrawables.ic_compound_close, contentDescription = "")
+    Icon(imageVector = CompoundIcons.Close, contentDescription = null)
 }

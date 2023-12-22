@@ -17,6 +17,7 @@
 package io.element.android.libraries.matrix.api.permalink
 
 import com.google.common.truth.Truth.assertThat
+import kotlinx.collections.immutable.persistentListOf
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
@@ -66,7 +67,7 @@ class PermalinkParserTest {
                 roomIdOrAlias = "!aBCD1234:matrix.org",
                 isRoomAlias = false,
                 eventId = null,
-                viaParameters = emptyList(),
+                viaParameters = persistentListOf(),
             )
         )
     }
@@ -79,7 +80,7 @@ class PermalinkParserTest {
                 roomIdOrAlias = "!aBCD1234:matrix.org",
                 isRoomAlias = false,
                 eventId = "\$1234567890abcdef:matrix.org",
-                viaParameters = emptyList(),
+                viaParameters = persistentListOf(),
             )
         )
     }
@@ -92,7 +93,7 @@ class PermalinkParserTest {
                 roomIdOrAlias = "!aBCD1234:matrix.org",
                 isRoomAlias = false,
                 eventId = null,
-                viaParameters = emptyList(),
+                viaParameters = persistentListOf(),
             )
         )
     }
@@ -105,7 +106,7 @@ class PermalinkParserTest {
                 roomIdOrAlias = "!aBCD1234:matrix.org",
                 isRoomAlias = false,
                 eventId = "\$1234567890abcdef:matrix.org",
-                viaParameters = listOf("matrix.org", "matrix.com"),
+                viaParameters = persistentListOf("matrix.org", "matrix.com"),
             )
         )
     }
@@ -118,7 +119,7 @@ class PermalinkParserTest {
                         roomIdOrAlias = "#element-android:matrix.org",
                         isRoomAlias = true,
                         eventId = null,
-                        viaParameters = emptyList(),
+                        viaParameters = persistentListOf(),
                 )
         )
     }

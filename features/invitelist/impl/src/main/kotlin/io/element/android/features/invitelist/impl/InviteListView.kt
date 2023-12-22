@@ -47,15 +47,15 @@ import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.matrix.api.core.RoomId
-import io.element.android.libraries.theme.ElementTheme
+import io.element.android.compound.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
 fun InviteListView(
     state: InviteListState,
+    onBackClicked: () -> Unit,
+    onInviteAccepted: (RoomId) -> Unit,
     modifier: Modifier = Modifier,
-    onBackClicked: () -> Unit = {},
-    onInviteAccepted: (RoomId) -> Unit = {},
 ) {
     if (state.acceptedAction is Async.Success) {
         LaunchedEffect(state.acceptedAction) {
@@ -113,8 +113,8 @@ fun InviteListView(
 @Composable
 private fun InviteListContent(
     state: InviteListState,
+    onBackClicked: () -> Unit,
     modifier: Modifier = Modifier,
-    onBackClicked: () -> Unit = {},
 ) {
     Scaffold(
         modifier = modifier,
@@ -173,5 +173,9 @@ private fun InviteListContent(
 @PreviewsDayNight
 @Composable
 internal fun InviteListViewPreview(@PreviewParameter(InviteListStateProvider::class) state: InviteListState) = ElementPreview {
-    InviteListView(state)
+    InviteListView(
+        state = state,
+        onBackClicked = {},
+        onInviteAccepted = {},
+    )
 }

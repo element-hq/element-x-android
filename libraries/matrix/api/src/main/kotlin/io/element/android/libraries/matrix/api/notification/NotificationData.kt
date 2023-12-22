@@ -25,6 +25,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.MessageType
 data class NotificationData(
     val eventId: EventId,
     val roomId: RoomId,
+    // mxc url
     val senderAvatarUrl: String?,
     val senderDisplayName: String?,
     val roomAvatarUrl: String?,
@@ -34,8 +35,7 @@ data class NotificationData(
     val isNoisy: Boolean,
     val timestamp: Long,
     val content: NotificationContent,
-    // For images for instance
-    val contentUrl: String?,
+    val hasMention: Boolean,
 )
 
 sealed interface NotificationContent {

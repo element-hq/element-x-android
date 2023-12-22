@@ -28,8 +28,8 @@ import okhttp3.OkHttpClient
 import javax.inject.Inject
 import javax.inject.Provider
 
-class LoggedInImageLoaderFactory @Inject constructor(
-    @ApplicationContext private val context: Context,
+class LoggedInImageLoaderFactory(
+    private val context: Context,
     private val matrixClient: MatrixClient,
     private val okHttpClient: Provider<OkHttpClient>,
 ) : ImageLoaderFactory {

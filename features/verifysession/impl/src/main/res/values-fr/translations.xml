@@ -3,12 +3,15 @@
   <string name="screen_session_verification_cancelled_subtitle">"Quelque chose ne va pas. Soit la demande a expiré, soit elle a été refusée."</string>
   <string name="screen_session_verification_compare_emojis_subtitle">"Confirmez que les emojis ci-dessous correspondent à ceux affichés sur votre autre session."</string>
   <string name="screen_session_verification_compare_emojis_title">"Comparez les émojis"</string>
+  <string name="screen_session_verification_compare_numbers_subtitle">"Confirmez que les nombres ci-dessous correspondent à ceux affichés sur votre autre session."</string>
+  <string name="screen_session_verification_compare_numbers_title">"Comparez les nombres"</string>
   <string name="screen_session_verification_complete_subtitle">"Votre nouvelle session est désormais vérifiée. Elle a accès à vos messages chiffrés et les autres utilisateurs la verront identifiée comme fiable."</string>
   <string name="screen_session_verification_open_existing_session_subtitle">"Prouvez qu’il s’agit bien de vous pour accéder à l’historique de vos messages chiffrés."</string>
   <string name="screen_session_verification_open_existing_session_title">"Ouvrir une session existante"</string>
   <string name="screen_session_verification_positive_button_canceled">"Réessayer la vérification"</string>
   <string name="screen_session_verification_positive_button_initial">"Je suis prêt.e"</string>
   <string name="screen_session_verification_positive_button_verifying_ongoing">"En attente de correspondance"</string>
+  <string name="screen_session_verification_ready_subtitle">"Comparer un groupe unique d’Emojis."</string>
   <string name="screen_session_verification_request_accepted_subtitle">"Comparez les emoji uniques en veillant à ce qu’ils apparaissent dans le même ordre."</string>
   <string name="screen_session_verification_they_dont_match">"Ils ne correspondent pas"</string>
   <string name="screen_session_verification_they_match">"Ils correspondent"</string>

@@ -23,26 +23,27 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.Person
 import androidx.core.text.buildSpannedString
 import androidx.core.text.inSpans
+import coil.ImageLoader
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.push.impl.R
 import io.element.android.libraries.push.impl.notifications.debug.annotateForDebug
-import io.element.android.libraries.push.impl.notifications.factories.NotificationFactory
+import io.element.android.libraries.push.impl.notifications.factories.NotificationCreator
 import io.element.android.libraries.push.impl.notifications.model.NotifiableMessageEvent
 import io.element.android.services.toolbox.api.strings.StringProvider
-import timber.log.Timber
 import javax.inject.Inject
 
 class RoomGroupMessageCreator @Inject constructor(
     private val bitmapLoader: NotificationBitmapLoader,
     private val stringProvider: StringProvider,
-    private val notificationFactory: NotificationFactory
+    private val notificationCreator: NotificationCreator
 ) {
 
     suspend fun createRoomMessage(
         currentUser: MatrixUser,
         events: List<NotifiableMessageEvent>,
         roomId: RoomId,
+        imageLoader: ImageLoader,
     ): RoomNotification.Message {
         val lastKnownRoomEvent = events.last()
         val roomName = lastKnownRoomEvent.roomName ?: lastKnownRoomEvent.senderName ?: "Room name (${roomId.value.take(8)}…)"
@@ -50,13 +51,13 @@ class RoomGroupMessageCreator @Inject constructor(
         val style = NotificationCompat.MessagingStyle(
             Person.Builder()
                 .setName(currentUser.displayName?.annotateForDebug(50))
-                .setIcon(bitmapLoader.getUserIcon(currentUser.avatarUrl))
+                .setIcon(bitmapLoader.getUserIcon(currentUser.avatarUrl, imageLoader))
                 .setKey(lastKnownRoomEvent.sessionId.value)
                 .build()
         ).also {
             it.conversationTitle = roomName.takeIf { roomIsGroup }?.annotateForDebug(51)
             it.isGroupConversation = roomIsGroup
-            it.addMessagesFromEvents(events)
+            it.addMessagesFromEvents(events, imageLoader)
         }
 
         val tickerText = if (roomIsGroup) {
@@ -65,7 +66,7 @@ class RoomGroupMessageCreator @Inject constructor(
             stringProvider.getString(R.string.notification_ticker_text_dm, events.last().senderName, events.last().description)
         }
 
-        val largeBitmap = getRoomBitmap(events)
+        val largeBitmap = getRoomBitmap(events, imageLoader)
 
         val lastMessageTimestamp = events.last().timestamp
         val smartReplyErrors = events.filter { it.isSmartReplyError() }
@@ -78,7 +79,7 @@ class RoomGroupMessageCreator @Inject constructor(
             shouldBing = events.any { it.noisy }
         )
         return RoomNotification.Message(
-            notificationFactory.createMessagesListNotification(
+            notificationCreator.createMessagesListNotification(
                 style,
                 RoomEventGroupInfo(
                     sessionId = currentUser.userId,
@@ -99,14 +100,17 @@ class RoomGroupMessageCreator @Inject constructor(
         )
     }
 
-    private suspend fun NotificationCompat.MessagingStyle.addMessagesFromEvents(events: List<NotifiableMessageEvent>) {
+    private suspend fun NotificationCompat.MessagingStyle.addMessagesFromEvents(
+        events: List<NotifiableMessageEvent>,
+        imageLoader: ImageLoader,
+    ) {
         events.forEach { event ->
             val senderPerson = if (event.outGoingMessage) {
                 null
             } else {
                 Person.Builder()
                     .setName(event.senderName?.annotateForDebug(70))
-                    .setIcon(bitmapLoader.getUserIcon(event.senderAvatarPath))
+                    .setIcon(bitmapLoader.getUserIcon(event.senderAvatarPath, imageLoader))
                     .setKey(event.senderId.value)
                     .build()
             }
@@ -133,22 +137,16 @@ class RoomGroupMessageCreator @Inject constructor(
     }
 
     private fun createRoomMessagesGroupSummaryLine(events: List<NotifiableMessageEvent>, roomName: String, roomIsDirect: Boolean): CharSequence {
-        return try {
-            when (events.size) {
-                1 -> createFirstMessageSummaryLine(events.first(), roomName, roomIsDirect)
-                else -> {
-                    stringProvider.getQuantityString(
-                        R.plurals.notification_compat_summary_line_for_room,
-                        events.size,
-                        roomName,
-                        events.size
-                    )
-                }
+        return when (events.size) {
+            1 -> createFirstMessageSummaryLine(events.first(), roomName, roomIsDirect)
+            else -> {
+                stringProvider.getQuantityString(
+                    R.plurals.notification_compat_summary_line_for_room,
+                    events.size,
+                    roomName,
+                    events.size
+                )
             }
-        } catch (e: Throwable) {
-            // String not found or bad format
-            Timber.v("%%%%%%%% REFRESH NOTIFICATION DRAWER failed to resolve string")
-            roomName
         }
     }
 
@@ -166,7 +164,7 @@ class RoomGroupMessageCreator @Inject constructor(
                 inSpans(StyleSpan(Typeface.BOLD)) {
                     append(roomName)
                     append(": ")
-                    event.senderName
+                    append(event.senderName)
                     append(" ")
                 }
                 append(event.description)
@@ -174,10 +172,13 @@ class RoomGroupMessageCreator @Inject constructor(
         }
     }
 
-    private suspend fun getRoomBitmap(events: List<NotifiableMessageEvent>): Bitmap? {
+    private suspend fun getRoomBitmap(
+        events: List<NotifiableMessageEvent>,
+        imageLoader: ImageLoader,
+    ): Bitmap? {
         // Use the last event (most recent?)
         return events.reversed().firstNotNullOfOrNull { it.roomAvatarPath }
-            ?.let { bitmapLoader.getRoomBitmap(it) }
+            ?.let { bitmapLoader.getRoomBitmap(it, imageLoader) }
     }
 }
 

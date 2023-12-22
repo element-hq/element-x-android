@@ -16,7 +16,7 @@
 
 package io.element.android.libraries.usersearch.impl
 
-import com.google.common.truth.Truth
+import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.user.MatrixSearchUserResults
 import io.element.android.libraries.matrix.api.user.MatrixUser
@@ -25,6 +25,7 @@ import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.A_USER_ID_2
 import io.element.android.libraries.matrix.test.A_USER_NAME
 import io.element.android.libraries.matrix.test.FakeMatrixClient
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
@@ -37,7 +38,7 @@ internal class MatrixUserListDataSourceTest {
             searchTerm = "test",
             result = Result.success(
                 MatrixSearchUserResults(
-                    results = listOf(
+                    results = persistentListOf(
                         aMatrixUserProfile(),
                         aMatrixUserProfile(userId = A_USER_ID_2)
                     ),
@@ -48,7 +49,7 @@ internal class MatrixUserListDataSourceTest {
         val dataSource = MatrixUserListDataSource(matrixClient)
 
         val results = dataSource.search("test", 2)
-        Truth.assertThat(results).containsExactly(
+        assertThat(results).containsExactly(
             aMatrixUserProfile(),
             aMatrixUserProfile(userId = A_USER_ID_2)
         )
@@ -64,7 +65,7 @@ internal class MatrixUserListDataSourceTest {
         val dataSource = MatrixUserListDataSource(matrixClient)
 
         val results = dataSource.search("test", 2)
-        Truth.assertThat(results).isEmpty()
+        assertThat(results).isEmpty()
     }
 
     @Test
@@ -77,7 +78,7 @@ internal class MatrixUserListDataSourceTest {
         val dataSource = MatrixUserListDataSource(matrixClient)
 
         val result = dataSource.getProfile(A_USER_ID)
-        Truth.assertThat(result).isEqualTo(aMatrixUserProfile())
+        assertThat(result).isEqualTo(aMatrixUserProfile())
     }
 
     @Test
@@ -90,7 +91,7 @@ internal class MatrixUserListDataSourceTest {
         val dataSource = MatrixUserListDataSource(matrixClient)
 
         val result = dataSource.getProfile(A_USER_ID)
-        Truth.assertThat(result).isNull()
+        assertThat(result).isNull()
     }
 
     private fun aMatrixUserProfile(

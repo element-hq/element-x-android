@@ -35,12 +35,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import io.element.android.compound.theme.ElementTheme
+import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummaryProvider
 import io.element.android.libraries.core.extensions.orEmpty
@@ -54,9 +54,7 @@ import io.element.android.libraries.designsystem.theme.roomListRoomMessage
 import io.element.android.libraries.designsystem.theme.roomListRoomMessageDate
 import io.element.android.libraries.designsystem.theme.roomListRoomName
 import io.element.android.libraries.designsystem.theme.unreadIndicator
-import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
-import io.element.android.libraries.theme.ElementTheme
 
 internal val minHeight = 84.dp
 
@@ -142,7 +140,7 @@ private fun RowScope.NameAndTimestampRow(room: RoomListRoomSummary) {
     // Timestamp
     Text(
         text = room.timestamp ?: "",
-        style = ElementTheme.typography.fontBodySmRegular,
+        style = ElementTheme.typography.fontBodySmMedium,
         color = if (room.hasUnread) {
             ElementTheme.colors.unreadIndicator
         } else {
@@ -178,7 +176,7 @@ private fun RowScope.LastMessageAndIndicatorRow(room: RoomListRoomSummary) {
         if (room.hasOngoingCall) {
             Icon(
                 modifier = Modifier.size(16.dp),
-                resourceId = CommonDrawables.ic_compound_video_call,
+                imageVector = CompoundIcons.VideoCallSolid,
                 contentDescription = null,
                 tint = ElementTheme.colors.unreadIndicator,
             )
@@ -199,14 +197,14 @@ private fun NotificationIcon(room: RoomListRoomSummary) {
             Icon(
                 modifier = Modifier.size(16.dp),
                 contentDescription = null,
-                imageVector = ImageVector.vectorResource(CommonDrawables.ic_compound_mention),
+                imageVector = CompoundIcons.Mention,
                 tint = tint,
             )
         RoomNotificationMode.MUTE ->
             Icon(
                 modifier = Modifier.size(16.dp),
                 contentDescription = null,
-                imageVector = ImageVector.vectorResource(CommonDrawables.ic_compound_notifications_solid_off),
+                imageVector = CompoundIcons.NotificationsSolidOff,
                 tint = tint,
             )
     }

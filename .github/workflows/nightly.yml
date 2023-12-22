@@ -14,11 +14,11 @@ jobs:
   nightly:
     name: Build and publish nightly bundle to Firebase
     runs-on: ubuntu-latest
-    if: ${{ github.repository == 'vector-im/element-x-android' }}
+    if: ${{ github.repository == 'element-hq/element-x-android' }}
     steps:
       - uses: actions/checkout@v4
       - name: Use JDK 17
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
           distribution: 'temurin' # See 'Supported distributions' for available options
           java-version: '17'

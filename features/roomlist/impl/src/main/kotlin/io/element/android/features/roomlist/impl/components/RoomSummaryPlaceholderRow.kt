@@ -36,7 +36,7 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.theme.placeholderBackground
-import io.element.android.libraries.theme.ElementTheme
+import io.element.android.compound.theme.ElementTheme
 
 /**
  * https://www.figma.com/file/0MMNu7cTOzLOlWb7ctTkv3/Element-X?node-id=6547%3A147623

@@ -3,6 +3,8 @@
   <string name="screen_session_verification_cancelled_subtitle">"Něco není v pořádku. Buď vypršel časový limit požadavku, nebo byl požadavek zamítnut."</string>
   <string name="screen_session_verification_compare_emojis_subtitle">"Zkontrolujte, zda se níže uvedené emotikony shodují s emotikony zobrazenými na jiné relaci."</string>
   <string name="screen_session_verification_compare_emojis_title">"Porovnání emotikonů"</string>
+  <string name="screen_session_verification_compare_numbers_subtitle">"Potvrďte, že níže uvedená čísla odpovídají číslům zobrazeným na vaší druhé relaci."</string>
+  <string name="screen_session_verification_compare_numbers_title">"Porovnejte čísla"</string>
   <string name="screen_session_verification_complete_subtitle">"Vaše nová relace je nyní ověřena. Má přístup k vašim zašifrovaným zprávám a ostatní uživatelé ji uvidí jako důvěryhodnou."</string>
   <string name="screen_session_verification_open_existing_session_subtitle">"Pro přístup k historii zašifrovaných zpráv prokažte, že jste to vy."</string>
   <string name="screen_session_verification_open_existing_session_title">"Otevřete existující relaci"</string>

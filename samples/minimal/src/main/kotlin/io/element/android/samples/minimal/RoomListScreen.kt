@@ -79,7 +79,6 @@ class RoomListScreen(
             lastMessageTimestampFormatter = DefaultLastMessageTimestampFormatter(dateTimeProvider, dateFormatters),
             roomLastMessageFormatter = DefaultRoomLastMessageFormatter(
                 sp = stringProvider,
-                matrixClient = matrixClient,
                 roomMembershipContentFormatter = RoomMembershipContentFormatter(matrixClient, stringProvider),
                 profileChangeContentFormatter = ProfileChangeContentFormatter(stringProvider),
                 stateContentFormatter = StateContentFormatter(stringProvider),

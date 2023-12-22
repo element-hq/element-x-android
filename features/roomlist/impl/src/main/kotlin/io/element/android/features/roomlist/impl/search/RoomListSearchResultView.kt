@@ -48,6 +48,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Velocity
 import androidx.compose.ui.unit.dp
+import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.roomlist.impl.RoomListEvents
 import io.element.android.features.roomlist.impl.RoomListState
 import io.element.android.features.roomlist.impl.aRoomListState
@@ -56,14 +57,13 @@ import io.element.android.features.roomlist.impl.contentType
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.modifiers.applyIf
-import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.TextField
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
-import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.designsystem.utils.copy
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -153,7 +153,7 @@ private fun RoomListSearchResultContent(
                                     state.eventSink(RoomListEvents.UpdateFilter(""))
                                 }) {
                                     Icon(
-                                        resourceId = CommonDrawables.ic_compound_close,
+                                        imageVector = CompoundIcons.Close,
                                         contentDescription = stringResource(CommonStrings.action_cancel)
                                     )
                                 }

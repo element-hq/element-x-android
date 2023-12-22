@@ -97,7 +97,7 @@ class VerifySelfSessionPresenter @Inject constructor(
                     is StateMachineState.Verifying.Replying -> Async.Loading()
                     else -> Async.Uninitialized
                 }
-                VerifySelfSessionState.VerificationStep.Verifying(machineState.emojis, async)
+                VerifySelfSessionState.VerificationStep.Verifying(machineState.data, async)
             }
 
             StateMachineState.Completed -> {
@@ -116,7 +116,7 @@ class VerifySelfSessionPresenter @Inject constructor(
                     stateMachine.dispatch(VerifySelfSessionStateMachine.Event.DidStartSasVerification)
                 }
                 is VerificationFlowState.ReceivedVerificationData -> {
-                    stateMachine.dispatch(VerifySelfSessionStateMachine.Event.DidReceiveChallenge(verificationAttemptState.emoji))
+                    stateMachine.dispatch(VerifySelfSessionStateMachine.Event.DidReceiveChallenge(verificationAttemptState.data))
                 }
                 VerificationFlowState.Finished -> {
                     stateMachine.dispatch(VerifySelfSessionStateMachine.Event.DidAcceptChallenge)

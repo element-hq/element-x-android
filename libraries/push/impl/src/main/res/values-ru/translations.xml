@@ -8,10 +8,7 @@
   <string name="notification_invitation_action_join">"Присоединиться"</string>
   <string name="notification_invitation_action_reject">"Отклонить"</string>
   <string name="notification_invite_body">"Пригласил вас в чат"</string>
-  <string name="notification_mentioned_you_body">"%1$s упомянул вас.
-%2$s"</string>
-  <string name="notification_mentioned_you_fallback_body">"Вас уже упомянули.
-%1$s"</string>
+  <string name="notification_mentioned_you_body">"Упомянул вас: %1$s"</string>
   <string name="notification_new_messages">"Новые сообщения"</string>
   <string name="notification_reaction_body">"Отреагировал на %1$s"</string>
   <string name="notification_room_action_mark_as_read">"Отметить как прочитанное"</string>

@@ -4,9 +4,16 @@
   <string name="screen_create_poll_anonymous_desc">"Zobrazit výsledky až po skončení hlasování"</string>
   <string name="screen_create_poll_anonymous_headline">"Anonymní hlasování"</string>
   <string name="screen_create_poll_answer_hint">"Volba %1$d"</string>
-  <string name="screen_create_poll_discard_confirmation">"Opravdu chcete zrušit toto hlasování?"</string>
-  <string name="screen_create_poll_discard_confirmation_title">"Zrušit hlasování"</string>
+  <string name="screen_create_poll_cancel_confirmation_content_android">"Vaše změny nebyly uloženy. Opravdu se chcete vrátit?"</string>
   <string name="screen_create_poll_question_desc">"Otázka nebo téma"</string>
   <string name="screen_create_poll_question_hint">"Čeho se hlasování týká?"</string>
   <string name="screen_create_poll_title">"Vytvořit hlasování"</string>
+  <string name="screen_edit_poll_delete_confirmation">"Opravdu chcete odstranit toto hlasování?"</string>
+  <string name="screen_edit_poll_delete_confirmation_title">"Odstranit hlasování"</string>
+  <string name="screen_edit_poll_title">"Upravit hlasování"</string>
+  <string name="screen_polls_history_empty_ongoing">"Nelze najít žádná probíhající hlasování."</string>
+  <string name="screen_polls_history_empty_past">"Nelze najít žádná minulá hlasování."</string>
+  <string name="screen_polls_history_filter_ongoing">"Probíhající"</string>
+  <string name="screen_polls_history_filter_past">"Minulé"</string>
+  <string name="screen_polls_history_title">"Hlasování"</string>
 </resources>

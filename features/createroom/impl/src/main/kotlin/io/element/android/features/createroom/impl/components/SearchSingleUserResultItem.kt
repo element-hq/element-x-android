@@ -33,8 +33,8 @@ import io.element.android.libraries.usersearch.api.UserSearchResult
 @Composable
 fun SearchSingleUserResultItem(
     searchResult: UserSearchResult,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    onClick: () -> Unit = {},
 ) {
     if (searchResult.isUnresolved) {
         UnresolvedUserRow(
@@ -58,8 +58,14 @@ internal fun SearchSingleUserResultItemPreview() = ElementThemedPreview { Conten
 @Composable
 private fun ContentToPreview() {
     Column {
-        SearchSingleUserResultItem(searchResult = UserSearchResult(aMatrixUser(), isUnresolved = false))
+        SearchSingleUserResultItem(
+            searchResult = UserSearchResult(aMatrixUser(), isUnresolved = false),
+            onClick = {},
+        )
         HorizontalDivider()
-        SearchSingleUserResultItem(searchResult = UserSearchResult(aMatrixUser(), isUnresolved = true))
+        SearchSingleUserResultItem(
+            searchResult = UserSearchResult(aMatrixUser(), isUnresolved = true),
+            onClick = {},
+        )
     }
 }

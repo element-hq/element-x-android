@@ -19,7 +19,7 @@ package io.element.android.features.roomlist.impl
 import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
-import com.google.common.truth.Truth
+import com.google.common.truth.Truth.assertThat
 import io.element.android.features.leaveroom.api.LeaveRoomEvent
 import io.element.android.features.leaveroom.api.LeaveRoomPresenter
 import io.element.android.features.leaveroom.fake.FakeLeaveRoomPresenter
@@ -83,13 +83,13 @@ class RoomListPresenterTests {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            Truth.assertThat(initialState.matrixUser).isNull()
+            assertThat(initialState.matrixUser).isNull()
             val withUserState = awaitItem()
-            Truth.assertThat(withUserState.matrixUser).isNotNull()
-            Truth.assertThat(withUserState.matrixUser!!.userId).isEqualTo(A_USER_ID)
-            Truth.assertThat(withUserState.matrixUser!!.displayName).isEqualTo(A_USER_NAME)
-            Truth.assertThat(withUserState.matrixUser!!.avatarUrl).isEqualTo(AN_AVATAR_URL)
-            Truth.assertThat(withUserState.showAvatarIndicator).isFalse()
+            assertThat(withUserState.matrixUser).isNotNull()
+            assertThat(withUserState.matrixUser!!.userId).isEqualTo(A_USER_ID)
+            assertThat(withUserState.matrixUser!!.displayName).isEqualTo(A_USER_NAME)
+            assertThat(withUserState.matrixUser!!.avatarUrl).isEqualTo(AN_AVATAR_URL)
+            assertThat(withUserState.showAvatarIndicator).isFalse()
             scope.cancel()
         }
     }
@@ -109,12 +109,12 @@ class RoomListPresenterTests {
         }.test {
             skipItems(1)
             val initialState = awaitItem()
-            Truth.assertThat(initialState.showAvatarIndicator).isFalse()
+            assertThat(initialState.showAvatarIndicator).isFalse()
             sessionVerificationService.givenCanVerifySession(false)
-            Truth.assertThat(awaitItem().showAvatarIndicator).isFalse()
+            assertThat(awaitItem().showAvatarIndicator).isFalse()
             encryptionService.emitBackupState(BackupState.UNKNOWN)
             val finalState = awaitItem()
-            Truth.assertThat(finalState.showAvatarIndicator).isTrue()
+            assertThat(finalState.showAvatarIndicator).isTrue()
             scope.cancel()
         }
     }
@@ -131,9 +131,9 @@ class RoomListPresenterTests {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            Truth.assertThat(initialState.matrixUser).isNull()
+            assertThat(initialState.matrixUser).isNull()
             val withUserState = awaitItem()
-            Truth.assertThat(withUserState.matrixUser).isNotNull()
+            assertThat(withUserState.matrixUser).isNotNull()
             scope.cancel()
         }
     }
@@ -147,10 +147,10 @@ class RoomListPresenterTests {
         }.test {
             skipItems(1)
             val withUserState = awaitItem()
-            Truth.assertThat(withUserState.filter).isEqualTo("")
+            assertThat(withUserState.filter).isEqualTo("")
             withUserState.eventSink.invoke(RoomListEvents.UpdateFilter("t"))
             val withFilterState = awaitItem()
-            Truth.assertThat(withFilterState.filter).isEqualTo("t")
+            assertThat(withFilterState.filter).isEqualTo("t")
             cancelAndIgnoreRemainingEvents()
             scope.cancel()
         }
@@ -169,12 +169,12 @@ class RoomListPresenterTests {
         }.test {
             val initialState = consumeItemsUntilPredicate { state -> state.roomList.size == 16 }.last()
             // Room list is loaded with 16 placeholders
-            Truth.assertThat(initialState.roomList.size).isEqualTo(16)
-            Truth.assertThat(initialState.roomList.all { it.isPlaceholder }).isTrue()
+            assertThat(initialState.roomList.size).isEqualTo(16)
+            assertThat(initialState.roomList.all { it.isPlaceholder }).isTrue()
             roomListService.postAllRooms(listOf(aRoomSummaryFilled()))
             val withRoomState = consumeItemsUntilPredicate { state -> state.roomList.size == 1 }.last()
-            Truth.assertThat(withRoomState.roomList.size).isEqualTo(1)
-            Truth.assertThat(withRoomState.roomList.first())
+            assertThat(withRoomState.roomList.size).isEqualTo(1)
+            assertThat(withRoomState.roomList.first())
                 .isEqualTo(aRoomListRoomSummary)
             scope.cancel()
         }
@@ -192,19 +192,24 @@ class RoomListPresenterTests {
             presenter.present()
         }.test {
             roomListService.postAllRooms(listOf(aRoomSummaryFilled()))
-            val loadedState = consumeItemsUntilPredicate { state -> state.roomList.size == 1 }.last()
+            skipItems(3)
+            val loadedState = awaitItem()
             // Test filtering with result
+            assertThat(loadedState.roomList.size).isEqualTo(1)
             loadedState.eventSink.invoke(RoomListEvents.UpdateFilter(A_ROOM_NAME.substring(0, 3)))
-            val withFilteredRoomState = consumeItemsUntilPredicate { state -> state.filteredRoomList.size == 1 }.last()
-            Truth.assertThat(withFilteredRoomState.filter).isEqualTo(A_ROOM_NAME.substring(0, 3))
-            Truth.assertThat(withFilteredRoomState.filteredRoomList.size).isEqualTo(1)
-            Truth.assertThat(withFilteredRoomState.filteredRoomList.first())
+            skipItems(1)
+            val withFilteredRoomState = awaitItem()
+            assertThat(withFilteredRoomState.filteredRoomList.size).isEqualTo(1)
+            assertThat(withFilteredRoomState.filter).isEqualTo(A_ROOM_NAME.substring(0, 3))
+            assertThat(withFilteredRoomState.filteredRoomList.size).isEqualTo(1)
+            assertThat(withFilteredRoomState.filteredRoomList.first())
                 .isEqualTo(aRoomListRoomSummary)
             // Test filtering without result
             withFilteredRoomState.eventSink.invoke(RoomListEvents.UpdateFilter("tada"))
-            val withNotFilteredRoomState = consumeItemsUntilPredicate { state -> state.filteredRoomList.size == 0 }.last()
-            Truth.assertThat(withNotFilteredRoomState.filter).isEqualTo("tada")
-            Truth.assertThat(withNotFilteredRoomState.filteredRoomList).isEmpty()
+            skipItems(1)
+            val withNotFilteredRoomState = awaitItem()
+            assertThat(withNotFilteredRoomState.filter).isEqualTo("tada")
+            assertThat(withNotFilteredRoomState.filteredRoomList).isEmpty()
             scope.cancel()
         }
     }
@@ -223,28 +228,28 @@ class RoomListPresenterTests {
             roomListService.postAllRooms(listOf(aRoomSummaryFilled()))
             val loadedState = awaitItem()
             // check initial value
-            Truth.assertThat(roomListService.latestSlidingSyncRange).isNull()
+            assertThat(roomListService.latestSlidingSyncRange).isNull()
             // Test empty range
             loadedState.eventSink.invoke(RoomListEvents.UpdateVisibleRange(IntRange(1, 0)))
-            Truth.assertThat(roomListService.latestSlidingSyncRange).isNull()
+            assertThat(roomListService.latestSlidingSyncRange).isNull()
             // Update visible range and check that range is transmitted to the SDK after computation
             loadedState.eventSink.invoke(RoomListEvents.UpdateVisibleRange(IntRange(0, 0)))
-            Truth.assertThat(roomListService.latestSlidingSyncRange)
+            assertThat(roomListService.latestSlidingSyncRange)
                 .isEqualTo(IntRange(0, 20))
             loadedState.eventSink.invoke(RoomListEvents.UpdateVisibleRange(IntRange(0, 1)))
-            Truth.assertThat(roomListService.latestSlidingSyncRange)
+            assertThat(roomListService.latestSlidingSyncRange)
                 .isEqualTo(IntRange(0, 21))
             loadedState.eventSink.invoke(RoomListEvents.UpdateVisibleRange(IntRange(19, 29)))
-            Truth.assertThat(roomListService.latestSlidingSyncRange)
+            assertThat(roomListService.latestSlidingSyncRange)
                 .isEqualTo(IntRange(0, 49))
             loadedState.eventSink.invoke(RoomListEvents.UpdateVisibleRange(IntRange(49, 59)))
-            Truth.assertThat(roomListService.latestSlidingSyncRange)
+            assertThat(roomListService.latestSlidingSyncRange)
                 .isEqualTo(IntRange(29, 79))
             loadedState.eventSink.invoke(RoomListEvents.UpdateVisibleRange(IntRange(149, 159)))
-            Truth.assertThat(roomListService.latestSlidingSyncRange)
+            assertThat(roomListService.latestSlidingSyncRange)
                 .isEqualTo(IntRange(129, 179))
             loadedState.eventSink.invoke(RoomListEvents.UpdateVisibleRange(IntRange(149, 259)))
-            Truth.assertThat(roomListService.latestSlidingSyncRange)
+            assertThat(roomListService.latestSlidingSyncRange)
                 .isEqualTo(IntRange(129, 279))
             cancelAndIgnoreRemainingEvents()
             scope.cancel()
@@ -270,10 +275,10 @@ class RoomListPresenterTests {
             presenter.present()
         }.test {
             val eventSink = awaitItem().eventSink
-            Truth.assertThat(awaitItem().displayVerificationPrompt).isTrue()
+            assertThat(awaitItem().displayVerificationPrompt).isTrue()
 
             eventSink(RoomListEvents.DismissRequestVerificationPrompt)
-            Truth.assertThat(awaitItem().displayVerificationPrompt).isFalse()
+            assertThat(awaitItem().displayVerificationPrompt).isFalse()
             scope.cancel()
         }
     }
@@ -288,16 +293,16 @@ class RoomListPresenterTests {
             presenter.present()
         }.test {
             skipItems(1)
-            Truth.assertThat(awaitItem().invitesState).isEqualTo(InvitesState.NoInvites)
+            assertThat(awaitItem().invitesState).isEqualTo(InvitesState.NoInvites)
 
             inviteStateFlow.value = InvitesState.SeenInvites
-            Truth.assertThat(awaitItem().invitesState).isEqualTo(InvitesState.SeenInvites)
+            assertThat(awaitItem().invitesState).isEqualTo(InvitesState.SeenInvites)
 
             inviteStateFlow.value = InvitesState.NewInvites
-            Truth.assertThat(awaitItem().invitesState).isEqualTo(InvitesState.NewInvites)
+            assertThat(awaitItem().invitesState).isEqualTo(InvitesState.NewInvites)
 
             inviteStateFlow.value = InvitesState.NoInvites
-            Truth.assertThat(awaitItem().invitesState).isEqualTo(InvitesState.NoInvites)
+            assertThat(awaitItem().invitesState).isEqualTo(InvitesState.NoInvites)
             scope.cancel()
         }
     }
@@ -316,7 +321,7 @@ class RoomListPresenterTests {
             initialState.eventSink(RoomListEvents.ShowContextMenu(summary))
 
             val shownState = awaitItem()
-            Truth.assertThat(shownState.contextMenu)
+            assertThat(shownState.contextMenu)
                 .isEqualTo(RoomListState.ContextMenu.Shown(summary.roomId, summary.name))
             scope.cancel()
         }
@@ -336,12 +341,12 @@ class RoomListPresenterTests {
             initialState.eventSink(RoomListEvents.ShowContextMenu(summary))
 
             val shownState = awaitItem()
-            Truth.assertThat(shownState.contextMenu)
+            assertThat(shownState.contextMenu)
                 .isEqualTo(RoomListState.ContextMenu.Shown(summary.roomId, summary.name))
             shownState.eventSink(RoomListEvents.HideContextMenu)
 
             val hiddenState = awaitItem()
-            Truth.assertThat(hiddenState.contextMenu).isEqualTo(RoomListState.ContextMenu.Hidden)
+            assertThat(hiddenState.contextMenu).isEqualTo(RoomListState.ContextMenu.Hidden)
             scope.cancel()
         }
     }
@@ -356,7 +361,7 @@ class RoomListPresenterTests {
         }.test {
             val initialState = awaitItem()
             initialState.eventSink(RoomListEvents.LeaveRoom(A_ROOM_ID))
-            Truth.assertThat(leaveRoomPresenter.events).containsExactly(LeaveRoomEvent.ShowConfirmation(A_ROOM_ID))
+            assertThat(leaveRoomPresenter.events).containsExactly(LeaveRoomEvent.ShowConfirmation(A_ROOM_ID))
             cancelAndIgnoreRemainingEvents()
             scope.cancel()
         }
@@ -384,7 +389,7 @@ class RoomListPresenterTests {
             }.last()
 
             val room = updatedState.roomList.find { it.id == A_ROOM_ID.value }
-            Truth.assertThat(room?.notificationMode).isEqualTo(userDefinedMode)
+            assertThat(room?.notificationMode).isEqualTo(userDefinedMode)
             cancelAndIgnoreRemainingEvents()
             scope.cancel()
         }

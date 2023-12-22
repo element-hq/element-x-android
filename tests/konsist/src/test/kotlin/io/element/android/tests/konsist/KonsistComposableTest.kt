@@ -24,6 +24,7 @@ import com.lemonappdev.konsist.api.ext.list.withAllAnnotationsOf
 import com.lemonappdev.konsist.api.ext.list.withTopLevel
 import com.lemonappdev.konsist.api.ext.list.withoutName
 import com.lemonappdev.konsist.api.ext.list.withoutNameEndingWith
+import com.lemonappdev.konsist.api.ext.list.withoutReceiverType
 import com.lemonappdev.konsist.api.verify.assertTrue
 import org.junit.Test
 
@@ -37,6 +38,7 @@ class KonsistComposableTest {
             .withoutModifier(KoModifier.PRIVATE)
             .withoutNameEndingWith("Preview")
             .withAllAnnotationsOf(Composable::class)
+            .withoutReceiverType()
             .withoutName(
                 // Add some exceptions...
                 "OutlinedButton",

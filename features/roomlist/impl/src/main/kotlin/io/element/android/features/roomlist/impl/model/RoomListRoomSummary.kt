@@ -23,7 +23,7 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 
 @Immutable
-data class RoomListRoomSummary constructor(
+data class RoomListRoomSummary(
     val id: String,
     val roomId: RoomId,
     val name: String = "",

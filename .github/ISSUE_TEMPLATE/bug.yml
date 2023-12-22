@@ -1,5 +1,5 @@
 name: Bug report for the Element X Android app
-description: Report any issues that you have found with the Element X app. Please [check open issues](https://github.com/vector-im/element-x-android/issues) first, in case it has already been reported.
+description: Report any issues that you have found with the Element X app. Please [check open issues](https://github.com/element-hq/element-x-android/issues) first, in case it has already been reported.
 labels: [T-Defect]
 body:
   - type: markdown

@@ -24,8 +24,10 @@ import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.encryption.BackupState
 import io.element.android.libraries.matrix.api.encryption.BackupUploadState
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
+import io.element.android.libraries.matrix.api.encryption.RecoveryState
 import io.element.android.libraries.matrix.test.A_THROWABLE
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.encryption.FakeEncryptionService
@@ -50,6 +52,9 @@ class LogoutPresenterTest {
         }.test {
             val initialState = awaitLastSequentialItem()
             assertThat(initialState.isLastSession).isFalse()
+            assertThat(initialState.backupState).isEqualTo(BackupState.UNKNOWN)
+            assertThat(initialState.doesBackupExistOnServer).isTrue()
+            assertThat(initialState.recoveryState).isEqualTo(RecoveryState.UNKNOWN)
             assertThat(initialState.backupUploadState).isEqualTo(BackupUploadState.Unknown)
             assertThat(initialState.showConfirmationDialog).isFalse()
             assertThat(initialState.logoutAction).isEqualTo(Async.Uninitialized)
@@ -93,14 +98,15 @@ class LogoutPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            skipItems(1)
             val initialState = awaitItem()
             assertThat(initialState.isLastSession).isFalse()
             assertThat(initialState.backupUploadState).isEqualTo(BackupUploadState.Unknown)
             assertThat(initialState.showConfirmationDialog).isFalse()
             assertThat(initialState.logoutAction).isEqualTo(Async.Uninitialized)
+            skipItems(1)
             val waitingState = awaitItem()
             assertThat(waitingState.backupUploadState).isEqualTo(BackupUploadState.Waiting)
+            skipItems(1)
             val uploadingState = awaitItem()
             assertThat(uploadingState.backupUploadState).isEqualTo(BackupUploadState.Uploading(backedUpCount = 1, totalCount = 2))
             val doneState = awaitItem()
@@ -155,7 +161,8 @@ class LogoutPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            val initialState = awaitLastSequentialItem()
+            skipItems(1)
+            val initialState = awaitItem()
             initialState.eventSink.invoke(LogoutEvents.Logout(ignoreSdkError = false))
             val confirmationState = awaitItem()
             assertThat(confirmationState.showConfirmationDialog).isTrue()
@@ -164,6 +171,7 @@ class LogoutPresenterTest {
             val loadingState = awaitItem()
             assertThat(loadingState.showConfirmationDialog).isFalse()
             assertThat(loadingState.logoutAction).isInstanceOf(Async.Loading::class.java)
+            skipItems(1)
             val errorState = awaitItem()
             assertThat(errorState.logoutAction).isEqualTo(Async.Failure<LogoutState>(A_THROWABLE))
             errorState.eventSink.invoke(LogoutEvents.CloseDialogs)
@@ -183,7 +191,8 @@ class LogoutPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            val initialState = awaitLastSequentialItem()
+            skipItems(1)
+            val initialState = awaitItem()
             initialState.eventSink.invoke(LogoutEvents.Logout(ignoreSdkError = false))
             val confirmationState = awaitItem()
             assertThat(confirmationState.showConfirmationDialog).isTrue()
@@ -192,6 +201,7 @@ class LogoutPresenterTest {
             val loadingState = awaitItem()
             assertThat(loadingState.showConfirmationDialog).isFalse()
             assertThat(loadingState.logoutAction).isInstanceOf(Async.Loading::class.java)
+            skipItems(1)
             val errorState = awaitItem()
             assertThat(errorState.logoutAction).isEqualTo(Async.Failure<LogoutState>(A_THROWABLE))
             errorState.eventSink.invoke(LogoutEvents.Logout(ignoreSdkError = true))

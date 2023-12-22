@@ -57,6 +57,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import io.element.android.compound.theme.ElementTheme
+import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.messages.impl.actionlist.ActionListEvents
 import io.element.android.features.messages.impl.actionlist.ActionListView
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
@@ -97,7 +99,6 @@ import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
-import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.designsystem.utils.KeepScreenOn
 import io.element.android.libraries.designsystem.utils.LogCompositions
 import io.element.android.libraries.designsystem.utils.OnLifecycleEvent
@@ -105,7 +106,6 @@ import io.element.android.libraries.designsystem.utils.snackbar.SnackbarHost
 import io.element.android.libraries.designsystem.utils.snackbar.rememberSnackbarHostState
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
-import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
 import timber.log.Timber
@@ -190,10 +190,9 @@ fun MessagesView(
                 MessagesViewTopBar(
                     roomName = state.roomName.dataOrNull(),
                     roomAvatar = state.roomAvatar.dataOrNull(),
-                    inRoomCallsEnabled = state.enableInRoomCalls,
+                    callState = state.callState,
                     onBackPressed = onBackPressed,
                     onRoomDetailsClicked = onRoomDetailsClicked,
-                    isCallOngoing = state.isCallOngoing,
                     onJoinCallClicked = onJoinCallClicked,
                 )
             }
@@ -448,12 +447,11 @@ private fun MessagesViewComposerBottomSheetContents(
 private fun MessagesViewTopBar(
     roomName: String?,
     roomAvatar: AvatarData?,
-    inRoomCallsEnabled: Boolean,
-    isCallOngoing: Boolean,
+    callState: RoomCallState,
+    onRoomDetailsClicked: () -> Unit,
+    onJoinCallClicked: () -> Unit,
+    onBackPressed: () -> Unit,
     modifier: Modifier = Modifier,
-    onRoomDetailsClicked: () -> Unit = {},
-    onJoinCallClicked: () -> Unit = {},
-    onBackPressed: () -> Unit = {},
 ) {
     TopAppBar(
         modifier = modifier,
@@ -476,13 +474,14 @@ private fun MessagesViewTopBar(
             }
         },
         actions = {
-            if (inRoomCallsEnabled) {
-                if (isCallOngoing) {
-                    JoinCallMenuItem(onJoinCallClicked = onJoinCallClicked)
-                } else {
-                    IconButton(onClick = onJoinCallClicked) {
-                        Icon(CommonDrawables.ic_compound_video_call, contentDescription = stringResource(CommonStrings.a11y_start_call))
-                    }
+            if (callState == RoomCallState.ONGOING) {
+                JoinCallMenuItem(onJoinCallClicked = onJoinCallClicked)
+            } else {
+                IconButton(onClick = onJoinCallClicked, enabled = callState != RoomCallState.DISABLED) {
+                    Icon(
+                        imageVector = CompoundIcons.VideoCallSolid,
+                        contentDescription = stringResource(CommonStrings.a11y_start_call),
+                    )
                 }
             }
             Spacer(Modifier.width(8.dp))
@@ -507,7 +506,7 @@ private fun JoinCallMenuItem(
     ) {
         Icon(
             modifier = Modifier.size(20.dp),
-            resourceId = CommonDrawables.ic_compound_video_call,
+            imageVector = CompoundIcons.VideoCallSolid,
             contentDescription = null
         )
         Spacer(Modifier.width(8.dp))

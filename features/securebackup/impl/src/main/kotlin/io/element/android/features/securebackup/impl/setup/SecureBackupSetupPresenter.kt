@@ -129,11 +129,11 @@ class SecureBackupSetupPresenter @AssistedInject constructor(
         encryptionService.enableRecoveryProgressStateFlow.collect { enableRecoveryProgress ->
             Timber.tag(loggerTagSetup.value).d("New enableRecoveryProgress: ${enableRecoveryProgress.javaClass.simpleName}")
             when (enableRecoveryProgress) {
-                EnableRecoveryProgress.Unknown,
+                is EnableRecoveryProgress.Starting,
+                is EnableRecoveryProgress.CreatingBackup,
+                is EnableRecoveryProgress.CreatingRecoveryKey,
                 is EnableRecoveryProgress.BackingUp,
-                EnableRecoveryProgress.CreatingBackup,
-                EnableRecoveryProgress.CreatingRecoveryKey ->
-                    Unit
+                is EnableRecoveryProgress.RoomKeyUploadError -> Unit
                 is EnableRecoveryProgress.Done ->
                     stateAndDispatch.dispatchAction(SecureBackupSetupStateMachine.Event.SdkHasCreatedKey(enableRecoveryProgress.recoveryKey))
             }

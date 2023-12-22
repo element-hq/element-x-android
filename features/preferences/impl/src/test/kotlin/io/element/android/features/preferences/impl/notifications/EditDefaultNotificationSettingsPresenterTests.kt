@@ -19,7 +19,7 @@ package io.element.android.features.preferences.impl.notifications
 import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
-import com.google.common.truth.Truth
+import com.google.common.truth.Truth.assertThat
 import io.element.android.features.preferences.impl.notifications.edit.EditDefaultNotificationSettingPresenter
 import io.element.android.features.preferences.impl.notifications.edit.EditDefaultNotificationSettingStateEvents
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
@@ -31,6 +31,7 @@ import io.element.android.libraries.matrix.test.notificationsettings.FakeNotific
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.matrix.test.room.aRoomSummaryDetail
 import io.element.android.libraries.matrix.test.roomlist.FakeRoomListService
+import io.element.android.tests.testutils.awaitLastSequentialItem
 import io.element.android.tests.testutils.consumeItemsUntilPredicate
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -44,13 +45,15 @@ class EditDefaultNotificationSettingsPresenterTests {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            Truth.assertThat(initialState.mode).isNull()
-            Truth.assertThat(initialState.isOneToOne).isFalse()
+            assertThat(initialState.mode).isNull()
+            assertThat(initialState.isOneToOne).isFalse()
 
             val loadedState = consumeItemsUntilPredicate {
                 it.mode == RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY
             }.last()
-            Truth.assertThat(loadedState.mode).isEqualTo(RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY)
+            assertThat(loadedState.mode).isEqualTo(RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY)
+
+            assertThat(loadedState.displayMentionsOnlyDisclaimer).isFalse()
         }
     }
 
@@ -73,7 +76,7 @@ class EditDefaultNotificationSettingsPresenterTests {
             val loadedState = consumeItemsUntilPredicate { state ->
                 state.roomsWithUserDefinedMode.any { it.details.notificationMode == RoomNotificationMode.ALL_MESSAGES }
             }.last()
-            Truth.assertThat(loadedState.roomsWithUserDefinedMode.any { it.details.notificationMode == RoomNotificationMode.ALL_MESSAGES }).isTrue()
+            assertThat(loadedState.roomsWithUserDefinedMode.any { it.details.notificationMode == RoomNotificationMode.ALL_MESSAGES }).isTrue()
         }
     }
 
@@ -87,7 +90,7 @@ class EditDefaultNotificationSettingsPresenterTests {
             val loadedState = consumeItemsUntilPredicate {
                 it.mode == RoomNotificationMode.ALL_MESSAGES
             }.last()
-            Truth.assertThat(loadedState.mode).isEqualTo(RoomNotificationMode.ALL_MESSAGES)
+            assertThat(loadedState.mode).isEqualTo(RoomNotificationMode.ALL_MESSAGES)
         }
     }
 
@@ -103,12 +106,25 @@ class EditDefaultNotificationSettingsPresenterTests {
             val errorState = consumeItemsUntilPredicate {
                 it.changeNotificationSettingAction.isFailure()
             }.last()
-            Truth.assertThat(errorState.changeNotificationSettingAction.isFailure()).isTrue()
+            assertThat(errorState.changeNotificationSettingAction.isFailure()).isTrue()
             errorState.eventSink(EditDefaultNotificationSettingStateEvents.ClearError)
             val clearErrorState = consumeItemsUntilPredicate {
                 it.changeNotificationSettingAction.isUninitialized()
             }.last()
-            Truth.assertThat(clearErrorState.changeNotificationSettingAction.isUninitialized()).isTrue()
+            assertThat(clearErrorState.changeNotificationSettingAction.isUninitialized()).isTrue()
+        }
+    }
+
+    @Test
+    fun `present - display mentions only warning if homeserver does not support it`() = runTest {
+        val notificationSettingsService = FakeNotificationSettingsService().apply {
+            givenCanHomeServerPushEncryptedEventsToDeviceResult(Result.success(false))
+        }
+        val presenter = createEditDefaultNotificationSettingPresenter(notificationSettingsService)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            assertThat(awaitLastSequentialItem().displayMentionsOnlyDisclaimer).isTrue()
         }
     }
 

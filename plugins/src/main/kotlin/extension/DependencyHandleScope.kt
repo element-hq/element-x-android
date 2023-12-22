@@ -17,9 +17,9 @@
 package extension
 
 import org.gradle.accessors.dm.LibrariesForLibs
+import org.gradle.api.logging.Logger
 import org.gradle.kotlin.dsl.DependencyHandlerScope
 import org.gradle.kotlin.dsl.project
-import org.gradle.api.logging.Logger
 import java.io.File
 
 private fun DependencyHandlerScope.implementation(dependency: Any) = dependencies.add("implementation", dependency)
@@ -102,9 +102,11 @@ fun DependencyHandlerScope.allLibrariesImpl() {
     implementation(project(":libraries:mediaupload:impl"))
     implementation(project(":libraries:usersearch:impl"))
     implementation(project(":libraries:textcomposer:impl"))
+    implementation(project(":libraries:roomselect:impl"))
     implementation(project(":libraries:cryptography:impl"))
     implementation(project(":libraries:voicerecorder:impl"))
     implementation(project(":libraries:mediaplayer:impl"))
+    implementation(project(":libraries:mediaviewer:impl"))
 }
 
 fun DependencyHandlerScope.allServicesImpl() {

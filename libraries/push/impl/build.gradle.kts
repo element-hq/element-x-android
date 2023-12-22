@@ -21,6 +21,12 @@ plugins {
 
 android {
     namespace = "io.element.android.libraries.push.impl"
+
+    testOptions {
+        unitTests {
+            isIncludeAndroidResources = true
+        }
+    }
 }
 
 anvil {
@@ -55,10 +61,15 @@ dependencies {
     implementation(projects.services.toolbox.api)
 
     testImplementation(libs.test.junit)
+    testImplementation(libs.test.robolectric)
     testImplementation(libs.test.mockk)
     testImplementation(libs.test.truth)
     testImplementation(libs.test.turbine)
+    testImplementation(libs.coil.test)
     testImplementation(libs.coroutines.test)
     testImplementation(projects.libraries.matrix.test)
+    testImplementation(projects.tests.testutils)
     testImplementation(projects.services.appnavstate.test)
+    testImplementation(projects.services.toolbox.impl)
+    testImplementation(projects.services.toolbox.test)
 }

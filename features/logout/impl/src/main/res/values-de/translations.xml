@@ -2,4 +2,17 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_signout_confirmation_dialog_content">"Bist du sicher, dass du dich abmelden willst?"</string>
   <string name="screen_signout_in_progress_dialog_content">"Abmelden…"</string>
+  <string name="screen_signout_key_backup_disabled_subtitle">"Du bist dabei, dich von deiner letzten Sitzung abzumelden. Wenn du dich jetzt abmeldest, verlierst du den Zugriff auf deine verschlüsselten Nachrichten."</string>
+  <string name="screen_signout_key_backup_disabled_title">"Du hast das Backup ausgeschaltet"</string>
+  <string name="screen_signout_key_backup_offline_subtitle">"Deine Schlüssel wurden noch gesichert, als du offline gegangen bist. Stelle die Verbindung wieder her, damit deine Schlüssel gesichert werden können, bevor du dich abmeldest."</string>
+  <string name="screen_signout_key_backup_offline_title">"Deine Schlüssel werden noch gesichert"</string>
+  <string name="screen_signout_key_backup_ongoing_subtitle">"Bitte warte, bis der Vorgang abgeschlossen ist, bevor du dich abmeldest."</string>
+  <string name="screen_signout_key_backup_ongoing_title">"Deine Schlüssel werden noch gesichert"</string>
+  <string name="screen_signout_recovery_disabled_subtitle">"Du bist dabei, dich von deiner letzten Sitzung abzumelden. Wenn du dich jetzt abmeldest, verlierst du den Zugriff auf deine verschlüsselten Nachrichten."</string>
+  <string name="screen_signout_recovery_disabled_title">"Wiederherstellung nicht eingerichtet"</string>
+  <string name="screen_signout_save_recovery_key_subtitle">"Du bist dabei, dich von deiner letzten Sitzung abzumelden. Wenn du dich jetzt abmeldest, verlierst du möglicherweise den Zugriff auf deine verschlüsselten Nachrichten."</string>
+  <string name="screen_signout_save_recovery_key_title">"Hast du deinen Wiederherstellungsschlüssel gespeichert?"</string>
+  <string name="screen_signout_confirmation_dialog_submit">"Abmelden"</string>
+  <string name="screen_signout_confirmation_dialog_title">"Abmelden"</string>
+  <string name="screen_signout_preference_item">"Abmelden"</string>
 </resources>

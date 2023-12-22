@@ -19,9 +19,11 @@ package io.element.android.features.preferences.impl.notifications.edit
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -33,6 +35,7 @@ import io.element.android.libraries.matrix.api.notificationsettings.Notification
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.api.roomlist.RoomSummary
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.debounce
@@ -54,6 +57,7 @@ class EditDefaultNotificationSettingPresenter @AssistedInject constructor(
     }
     @Composable
     override fun present(): EditDefaultNotificationSettingState {
+        var displayMentionsOnlyDisclaimer by remember { mutableStateOf(false) }
 
         val mode: MutableState<RoomNotificationMode?> = remember {
             mutableStateOf(null)
@@ -70,6 +74,7 @@ class EditDefaultNotificationSettingPresenter @AssistedInject constructor(
             fetchSettings(mode)
             observeNotificationSettings(mode)
             observeRoomSummaries(roomsWithUserDefinedMode)
+            displayMentionsOnlyDisclaimer = !notificationSettingsService.canHomeServerPushEncryptedEventsToDevice().getOrDefault(true)
         }
 
         fun handleEvents(event: EditDefaultNotificationSettingStateEvents) {
@@ -84,8 +89,9 @@ class EditDefaultNotificationSettingPresenter @AssistedInject constructor(
         return EditDefaultNotificationSettingState(
             isOneToOne = isOneToOne,
             mode = mode.value,
-            roomsWithUserDefinedMode = roomsWithUserDefinedMode.value,
+            roomsWithUserDefinedMode = roomsWithUserDefinedMode.value.toImmutableList(),
             changeNotificationSettingAction = changeNotificationSettingAction.value,
+            displayMentionsOnlyDisclaimer = displayMentionsOnlyDisclaimer,
             eventSink = ::handleEvents
         )
     }
@@ -105,7 +111,7 @@ class EditDefaultNotificationSettingPresenter @AssistedInject constructor(
     }
 
     private fun CoroutineScope.observeRoomSummaries(roomsWithUserDefinedMode: MutableState<List<RoomSummary.Filled>>) {
-        roomListService.allRooms()
+        roomListService.allRooms
             .summaries
             .onEach {
                 updateRoomsWithUserDefinedMode(it, roomsWithUserDefinedMode)

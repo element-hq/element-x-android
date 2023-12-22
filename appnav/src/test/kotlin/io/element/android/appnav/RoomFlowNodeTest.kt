@@ -25,7 +25,7 @@ import com.bumble.appyx.core.plugin.Plugin
 import com.bumble.appyx.navmodel.backstack.activeElement
 import com.bumble.appyx.testing.junit4.util.MainDispatcherRule
 import com.bumble.appyx.testing.unit.common.helper.parentNodeTestHelper
-import com.google.common.truth.Truth
+import com.google.common.truth.Truth.assertThat
 import io.element.android.appnav.di.RoomComponentFactory
 import io.element.android.appnav.room.RoomLoadedFlowNode
 import io.element.android.features.messages.api.MessagesEntryPoint
@@ -83,7 +83,7 @@ class RoomFlowNodeTest {
                 }
 
                 override fun build(): Node {
-                    return  node(buildContext) {}.also {
+                    return node(buildContext) {}.also {
                         nodeId = it.id
                     }
                 }
@@ -122,10 +122,10 @@ class RoomFlowNodeTest {
         val roomFlowNodeTestHelper = roomFlowNode.parentNodeTestHelper()
 
         // THEN
-        Truth.assertThat(roomFlowNode.backstack.activeElement).isEqualTo(RoomLoadedFlowNode.NavTarget.Messages)
+        assertThat(roomFlowNode.backstack.activeElement).isEqualTo(RoomLoadedFlowNode.NavTarget.Messages)
         roomFlowNodeTestHelper.assertChildHasLifecycle(RoomLoadedFlowNode.NavTarget.Messages, Lifecycle.State.CREATED)
         val messagesNode = roomFlowNode.childNode(RoomLoadedFlowNode.NavTarget.Messages)!!
-        Truth.assertThat(messagesNode.id).isEqualTo(fakeMessagesEntryPoint.nodeId)
+        assertThat(messagesNode.id).isEqualTo(fakeMessagesEntryPoint.nodeId)
     }
 
     @Test
@@ -147,6 +147,6 @@ class RoomFlowNodeTest {
         // THEN
         roomFlowNodeTestHelper.assertChildHasLifecycle(RoomLoadedFlowNode.NavTarget.RoomDetails, Lifecycle.State.CREATED)
         val roomDetailsNode = roomFlowNode.childNode(RoomLoadedFlowNode.NavTarget.RoomDetails)!!
-        Truth.assertThat(roomDetailsNode.id).isEqualTo(fakeRoomDetailsEntryPoint.nodeId)
+        assertThat(roomDetailsNode.id).isEqualTo(fakeRoomDetailsEntryPoint.nodeId)
     }
 }

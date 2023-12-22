@@ -33,7 +33,7 @@ data class InviteListInviteSummary(
     val isNew: Boolean = false,
 )
 
-data class InviteSender constructor(
+data class InviteSender(
     val userId: UserId,
     val displayName: String,
     val avatarData: AvatarData = AvatarData(userId.value, displayName, size = AvatarSize.InviteSender),

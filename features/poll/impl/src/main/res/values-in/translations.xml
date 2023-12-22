@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_create_poll_add_option_btn">"Tambahkan opsi"</string>
+  <string name="screen_create_poll_anonymous_desc">"Tampilkan hasil hanya setelah pemungutan suara berakhir"</string>
+  <string name="screen_create_poll_anonymous_headline">"Pemungutan suara anonim"</string>
+  <string name="screen_create_poll_answer_hint">"Opsi %1$d"</string>
+  <string name="screen_create_poll_cancel_confirmation_content_android">"Perubahan Anda belum disimpan. Apakah Anda yakin ingin kembali?"</string>
+  <string name="screen_create_poll_question_desc">"Pertanyaan atau topik"</string>
+  <string name="screen_create_poll_question_hint">"Tentang apa pemungutan suara ini?"</string>
+  <string name="screen_create_poll_title">"Buat pemungutan suara"</string>
+  <string name="screen_edit_poll_delete_confirmation">"Apakah Anda yakin ingin menghapus pemungutan suara ini?"</string>
+  <string name="screen_edit_poll_delete_confirmation_title">"Hapus pemungutan suara"</string>
+  <string name="screen_edit_poll_title">"Sunting pemungutan suara"</string>
+</resources>

@@ -21,10 +21,10 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.designsystem.components.button.ButtonVisuals
 import io.element.android.libraries.designsystem.theme.components.IconSource
 import io.element.android.libraries.designsystem.theme.components.Snackbar
-import io.element.android.libraries.designsystem.utils.CommonDrawables
 
 @Composable
 fun SnackbarHost(hostState: SnackbarHostState, modifier: Modifier = Modifier) {
@@ -35,7 +35,7 @@ fun SnackbarHost(hostState: SnackbarHostState, modifier: Modifier = Modifier) {
             action = data.visuals.actionLabel?.let { ButtonVisuals.Text(it, data::performAction) },
             dismissAction = if (data.visuals.withDismissAction) {
                 ButtonVisuals.Icon(
-                    IconSource.Resource(CommonDrawables.ic_compound_close),
+                    IconSource.Vector(CompoundIcons.Close),
                     data::dismiss
                 )
             } else null,

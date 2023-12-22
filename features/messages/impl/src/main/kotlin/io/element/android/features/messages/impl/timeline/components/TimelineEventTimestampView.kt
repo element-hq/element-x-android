@@ -33,16 +33,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import io.element.android.compound.theme.ElementTheme
+import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
-import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextBasedContent
-import io.element.android.libraries.core.bool.orFalse
-import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.features.messages.impl.timeline.model.event.isEdited
 import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
-import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -55,7 +54,7 @@ fun TimelineEventTimestampView(
 ) {
     val formattedTime = event.sentTime
     val hasMessageSendingFailed = event.localSendState is LocalEventSendState.SendingFailed
-    val isMessageEdited = (event.content as? TimelineItemTextBasedContent)?.isEdited.orFalse()
+    val isMessageEdited = event.content.isEdited()
     val tint = if (hasMessageSendingFailed) MaterialTheme.colorScheme.error else null
     val clickModifier = if (hasMessageSendingFailed) {
         Modifier.combinedClickable(
@@ -90,8 +89,8 @@ fun TimelineEventTimestampView(
         if (hasMessageSendingFailed && tint != null) {
             Spacer(modifier = Modifier.width(2.dp))
             Icon(
-                resourceId = CommonDrawables.ic_compound_error,
-                contentDescription = "Error sending message",
+                imageVector = CompoundIcons.Error,
+                contentDescription = stringResource(id = CommonStrings.common_sending_failed),
                 tint = tint,
                 modifier = Modifier.size(15.dp, 18.dp),
             )

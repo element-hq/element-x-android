@@ -5,6 +5,8 @@
     <item quantity="other">"%1$d personnes"</item>
   </plurals>
   <string name="screen_notification_settings_edit_failed_updating_default_mode">"Une erreur s’est produite lors de la mise à jour du paramètre de notification."</string>
+  <string name="screen_notification_settings_mentions_only_disclaimer">"Votre serveur d’accueil ne supporte pas cette option pour les salons chiffrés, vous pourriez ne pas être notifié(e) dans certains salons."</string>
+  <string name="screen_polls_history_title">"Sondages"</string>
   <string name="screen_room_details_add_topic_title">"Ajouter un sujet"</string>
   <string name="screen_room_details_already_a_member">"Déjà membre"</string>
   <string name="screen_room_details_already_invited">"Déjà invité(e)"</string>
@@ -35,8 +37,10 @@
   <string name="screen_room_notification_settings_error_loading_settings">"Une erreur s’est produite lors du chargement des paramètres de notification."</string>
   <string name="screen_room_notification_settings_error_restoring_default">"Échec de la restauration du mode par défaut, veuillez réessayer."</string>
   <string name="screen_room_notification_settings_error_setting_mode">"Échec de la configuration du mode, veuillez réessayer."</string>
+  <string name="screen_room_notification_settings_mentions_only_disclaimer">"Votre serveur d’accueil ne supporte pas cette option pour les salons chiffrés, vous ne serez pas notifié(e) dans ce salon."</string>
   <string name="screen_room_notification_settings_mode_all_messages">"Tous les messages"</string>
   <string name="screen_room_notification_settings_room_custom_settings_title">"Dans ce salon, prévenez-moi pour"</string>
+  <string name="screen_start_chat_error_starting_chat">"Une erreur s’est produite lors de la tentative de création de la discussion"</string>
   <string name="screen_dm_details_block_alert_action">"Bloquer"</string>
   <string name="screen_dm_details_block_alert_description">"Les utilisateurs bloqués ne pourront pas vous envoyer de messages et tous leurs messages seront masqués. Vous pouvez les débloquer à tout moment."</string>
   <string name="screen_dm_details_block_user">"Bloquer l’utilisateur"</string>

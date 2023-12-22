@@ -19,6 +19,7 @@ package io.element.android.features.messages.impl.actionlist.model
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.runtime.Immutable
+import io.element.android.libraries.designsystem.icons.CompoundDrawables
 import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.ui.strings.CommonStrings
 
@@ -30,11 +31,11 @@ sealed class TimelineItemAction(
 ) {
     data object Forward : TimelineItemAction(CommonStrings.action_forward, CommonDrawables.ic_forward)
     data object Copy : TimelineItemAction(CommonStrings.action_copy, CommonDrawables.ic_copy)
-    data object Redact : TimelineItemAction(CommonStrings.action_remove, CommonDrawables.ic_compound_delete, destructive = true)
+    data object Redact : TimelineItemAction(CommonStrings.action_remove, CompoundDrawables.ic_delete, destructive = true)
     data object Reply : TimelineItemAction(CommonStrings.action_reply, CommonDrawables.ic_reply)
     data object ReplyInThread : TimelineItemAction(CommonStrings.action_reply_in_thread, CommonDrawables.ic_reply)
     data object Edit : TimelineItemAction(CommonStrings.action_edit, CommonDrawables.ic_edit_outline)
     data object ViewSource : TimelineItemAction(CommonStrings.action_view_source, CommonDrawables.ic_developer_options)
-    data object ReportContent : TimelineItemAction(CommonStrings.action_report_content, CommonDrawables.ic_compound_chat_problem, destructive = true)
-    data object EndPoll : TimelineItemAction(CommonStrings.action_end_poll, CommonDrawables.ic_poll_end)
+    data object ReportContent : TimelineItemAction(CommonStrings.action_report_content, CompoundDrawables.ic_chat_problem, destructive = true)
+    data object EndPoll : TimelineItemAction(CommonStrings.action_end_poll, CompoundDrawables.ic_polls_end)
 }

@@ -6,6 +6,7 @@
   <string name="screen_advanced_settings_developer_mode">"Developer mode"</string>
   <string name="screen_advanced_settings_developer_mode_description">"Enable to have access to features and functionality for developers."</string>
   <string name="screen_advanced_settings_rich_text_editor_description">"Disable the rich text editor to type Markdown manually."</string>
+  <string name="screen_advanced_settings_view_source_description">"Enable option to view message source in the timeline."</string>
   <string name="screen_edit_profile_display_name">"Display name"</string>
   <string name="screen_edit_profile_display_name_placeholder">"Your display name"</string>
   <string name="screen_edit_profile_error">"An unknown error was encountered and the information couldn\'t be changed."</string>
@@ -28,6 +29,7 @@ If you proceed, some of your settings may change."</string>
   <string name="screen_notification_settings_enable_notifications">"Enable notifications on this device"</string>
   <string name="screen_notification_settings_failed_fixing_configuration">"The configuration has not been corrected, please try again."</string>
   <string name="screen_notification_settings_group_chats">"Group chats"</string>
+  <string name="screen_notification_settings_invite_for_me_label">"Invitations"</string>
   <string name="screen_notification_settings_mentions_only_disclaimer">"Your homeserver does not support this option in encrypted rooms, you may not get notified in some rooms."</string>
   <string name="screen_notification_settings_mentions_section_title">"Mentions"</string>
   <string name="screen_notification_settings_mode_all">"All"</string>

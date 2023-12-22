@@ -24,8 +24,8 @@ import io.element.android.libraries.matrix.impl.roomlist.roomOrNull
 import io.element.android.libraries.matrix.impl.timeline.runWithTimelineListenerRegistered
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.withTimeout
-import org.matrix.rustcomponents.sdk.Room
 import org.matrix.rustcomponents.sdk.RoomListService
+import org.matrix.rustcomponents.sdk.Timeline
 import kotlin.time.Duration.Companion.milliseconds
 
 /**
@@ -37,19 +37,19 @@ class RoomContentForwarder(
 ) {
 
     /**
-     * Forwards the event with the given [eventId] from the [fromRoom] to the given [toRoomIds].
-     * @param fromRoom the room to forward the event from
+     * Forwards the event with the given [eventId] from the [fromTimeline] to the given [toRoomIds].
+     * @param fromTimeline the room to forward the event from
      * @param eventId the id of the event to forward
      * @param toRoomIds the ids of the rooms to forward the event to
      * @param timeoutMs the maximum time in milliseconds to wait for the event to be sent to a room
      */
     suspend fun forward(
-        fromRoom: Room,
+        fromTimeline: Timeline,
         eventId: EventId,
         toRoomIds: List<RoomId>,
         timeoutMs: Long = 5000L
     ) {
-        val content = fromRoom.getTimelineEventContentByEventId(eventId.value)
+        val content = fromTimeline.getTimelineEventContentByEventId(eventId.value)
         val targetSlidingSyncRooms = toRoomIds.mapNotNull { roomId -> roomListService.roomOrNull(roomId.value) }
         val targetRooms = targetSlidingSyncRooms.mapNotNull { slidingSyncRoom -> slidingSyncRoom.use { it.fullRoom() } }
         val failedForwardingTo = mutableSetOf<RoomId>()
@@ -57,9 +57,9 @@ class RoomContentForwarder(
             room.use { targetRoom ->
                 runCatching {
                     // Sending a message requires a registered timeline listener
-                    targetRoom.runWithTimelineListenerRegistered {
+                    targetRoom.timeline().runWithTimelineListenerRegistered {
                         withTimeout(timeoutMs.milliseconds) {
-                            targetRoom.send(content)
+                            targetRoom.timeline().send(content)
                         }
                     }
                 }

@@ -30,20 +30,21 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
+import io.element.android.compound.theme.ElementTheme
+import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.theme.ElementTheme
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toPersistentList
 
 internal class CompoundIconListPreviewProvider : PreviewParameterProvider<IconChunk> {
     override val values: Sequence<IconChunk>
         get() {
-            val chunks = iconsCompound.chunked(36)
+            val chunks = CompoundIcons.allResIds.chunked(36)
             return chunks.mapIndexed { index, chunk ->
-                IconChunk(index = index+1, total =  chunks.size, icons = chunk.toPersistentList())
+                IconChunk(index = index + 1, total = chunks.size, icons = chunk.toPersistentList())
             }
                 .asSequence()
         }
@@ -109,7 +110,7 @@ private fun IconsPreview(
             textAlign = TextAlign.Center,
         )
         iconsList.chunked(6).forEach { iconsRow ->
-            Row(horizontalArrangement = Arrangement.spacedBy(1.dp)) {
+            Row(horizontalArrangement = Arrangement.spacedBy(2.dp)) {
                 iconsRow.forEach { icon ->
                     Column(
                         modifier = Modifier.width(48.dp),

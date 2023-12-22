@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_advanced_settings_element_call_base_url">"Egyéni Element Call alapwebcím"</string>
+  <string name="screen_advanced_settings_element_call_base_url_description">"Egyéni alapwebcím beállítása az Element Callhoz."</string>
+  <string name="screen_advanced_settings_element_call_base_url_validation_error">"Érvénytelen webcím, győződjön meg arról, hogy szerepel benne a protokoll (http/https), és hogy helyes a cím."</string>
+  <string name="screen_advanced_settings_developer_mode">"Fejlesztői mód"</string>
+  <string name="screen_advanced_settings_developer_mode_description">"Engedélyezze, hogy elérje a fejlesztőknek szánt funkciókat."</string>
+  <string name="screen_advanced_settings_rich_text_editor_description">"A formázott szöveges szerkesztő letiltása, hogy kézzel írhasson Markdownt."</string>
+  <string name="screen_advanced_settings_view_source_description">"Engedélyezze a beállítást az üzenet forrásának megjelenítéséhez az idővonalon."</string>
+  <string name="screen_edit_profile_display_name">"Megjelenítendő név"</string>
+  <string name="screen_edit_profile_display_name_placeholder">"Saját megjelenítendő név"</string>
+  <string name="screen_edit_profile_error">"Ismeretlen hiba történt, és az információ módosítása nem sikerült."</string>
+  <string name="screen_edit_profile_error_title">"Nem sikerült frissíteni a profilt"</string>
+  <string name="screen_edit_profile_title">"Profil szerkesztése"</string>
+  <string name="screen_edit_profile_updating_details">"Profil frissítése…"</string>
+  <string name="screen_notification_settings_additional_settings_section_title">"További beállítások"</string>
+  <string name="screen_notification_settings_calls_label">"Hang- és videóhívások"</string>
+  <string name="screen_notification_settings_configuration_mismatch">"Konfigurációs eltérés"</string>
+  <string name="screen_notification_settings_configuration_mismatch_description">"Egyszerűsítettük az értesítési beállításokat, hogy könnyebben megtalálhatók legyenek a lehetőségek. A korábban kiválasztott egyéni beállítások némelyike nem jelenik meg itt, de továbbra is aktív.
+
+Ha folytatja, egyes beállítások megváltozhatnak."</string>
+  <string name="screen_notification_settings_direct_chats">"Közvetlen csevegések"</string>
+  <string name="screen_notification_settings_edit_custom_settings_section_title">"Egyéni beállítás csevegésenként"</string>
+  <string name="screen_notification_settings_edit_failed_updating_default_mode">"Hiba történt az értesítési beállítás frissítésekor."</string>
+  <string name="screen_notification_settings_edit_mode_all_messages">"Összes üzenet"</string>
+  <string name="screen_notification_settings_edit_mode_mentions_and_keywords">"Csak említések és kulcsszavak"</string>
+  <string name="screen_notification_settings_edit_screen_direct_section_header">"Közvetlen csevegéseknél értesítés ezekről:"</string>
+  <string name="screen_notification_settings_edit_screen_group_section_header">"Csoportos csevegésekben értesítés ezekről:"</string>
+  <string name="screen_notification_settings_enable_notifications">"Értesítések engedélyezése ezen az eszközön"</string>
+  <string name="screen_notification_settings_failed_fixing_configuration">"A konfiguráció nem lett kijavítva, próbálja újra."</string>
+  <string name="screen_notification_settings_group_chats">"Csoportos csevegések"</string>
+  <string name="screen_notification_settings_invite_for_me_label">"Meghívók"</string>
+  <string name="screen_notification_settings_mentions_only_disclaimer">"A Matrix-kiszolgálója nem támogatja ezt a beállítást a titkosított szobákban, előfordulhat, hogy egyes szobákban nem kap értesítést."</string>
+  <string name="screen_notification_settings_mentions_section_title">"Említések"</string>
+  <string name="screen_notification_settings_mode_all">"Összes"</string>
+  <string name="screen_notification_settings_mode_mentions">"Említések"</string>
+  <string name="screen_notification_settings_notification_section_title">"Értesítés ezekről:"</string>
+  <string name="screen_notification_settings_room_mention_label">"Értesítés a @room említésekor"</string>
+  <string name="screen_notification_settings_system_notifications_action_required">"Az értesítések fogadásához kérjük, módosítsa a %1$s."</string>
+  <string name="screen_notification_settings_system_notifications_action_required_content_link">"rendszerbeállításokat"</string>
+  <string name="screen_notification_settings_system_notifications_turned_off">"A rendszerértesítések ki vannak kapcsolva"</string>
+  <string name="screen_notification_settings_title">"Értesítések"</string>
+</resources>

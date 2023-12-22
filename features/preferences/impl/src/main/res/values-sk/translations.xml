@@ -6,6 +6,7 @@
   <string name="screen_advanced_settings_developer_mode">"Vývojársky režim"</string>
   <string name="screen_advanced_settings_developer_mode_description">"Umožniť prístup k možnostiam a funkciám pre vývojárov."</string>
   <string name="screen_advanced_settings_rich_text_editor_description">"Vypnite rozšírený textový editor na ručné písanie Markdown."</string>
+  <string name="screen_advanced_settings_view_source_description">"Povoliť možnosť zobrazenia zdroja správy na časovej osi."</string>
   <string name="screen_edit_profile_display_name">"Zobrazované meno"</string>
   <string name="screen_edit_profile_display_name_placeholder">"Vaše zobrazované meno"</string>
   <string name="screen_edit_profile_error">"Vyskytla sa neznáma chyba a informácie nebolo možné zmeniť."</string>
@@ -30,6 +31,7 @@ Ak budete pokračovať, niektoré z vašich nastavení sa môžu zmeniť."</stri
   <string name="screen_notification_settings_enable_notifications">"Povoliť oznámenia na tomto zariadení"</string>
   <string name="screen_notification_settings_failed_fixing_configuration">"Konfigurácia nebola opravená, skúste to prosím znova."</string>
   <string name="screen_notification_settings_group_chats">"Skupinové rozhovory"</string>
+  <string name="screen_notification_settings_invite_for_me_label">"Pozvánky"</string>
   <string name="screen_notification_settings_mentions_only_disclaimer">"Váš domovský server nepodporuje túto možnosť v šifrovaných miestnostiach, v niektorých miestnostiach nemusíte dostať upozornenie."</string>
   <string name="screen_notification_settings_mentions_section_title">"Zmienky"</string>
   <string name="screen_notification_settings_mode_all">"Všetky"</string>

@@ -62,7 +62,7 @@ allprojects {
         config.from(files("$rootDir/tools/detekt/detekt.yml"))
     }
     dependencies {
-        detektPlugins("io.nlopez.compose.rules:detekt:0.3.3")
+        detektPlugins("io.nlopez.compose.rules:detekt:0.3.8")
     }
 
     // KtLint
@@ -130,10 +130,10 @@ sonar {
         property("sonar.host.url", "https://sonarcloud.io")
         property("sonar.projectVersion", "1.0") // TODO project(":app").android.defaultConfig.versionName)
         property("sonar.sourceEncoding", "UTF-8")
-        property("sonar.links.homepage", "https://github.com/vector-im/element-x-android/")
-        property("sonar.links.ci", "https://github.com/vector-im/element-x-android/actions")
-        property("sonar.links.scm", "https://github.com/vector-im/element-x-android/")
-        property("sonar.links.issue", "https://github.com/vector-im/element-x-android/issues")
+        property("sonar.links.homepage", "https://github.com/element-hq/element-x-android/")
+        property("sonar.links.ci", "https://github.com/element-hq/element-x-android/actions")
+        property("sonar.links.scm", "https://github.com/element-hq/element-x-android/")
+        property("sonar.links.issue", "https://github.com/element-hq/element-x-android/issues")
         property("sonar.organization", "new_vector_ltd_organization")
         property("sonar.login", if (project.hasProperty("SONAR_LOGIN")) project.property("SONAR_LOGIN")!! else "invalid")
 
@@ -236,11 +236,11 @@ koverMerged {
             name = "Global minimum code coverage."
             target = kotlinx.kover.api.VerificationTarget.ALL
             bound {
-                minValue = 60
+                minValue = 65
                 // Setting a max value, so that if coverage is bigger, it means that we have to change minValue.
                 // For instance if we have minValue = 20 and maxValue = 30, and current code coverage is now 31.32%, update
                 // minValue to 25 and maxValue to 35.
-                maxValue = 70
+                maxValue = 75
                 counter = kotlinx.kover.api.CounterType.INSTRUCTION
                 valueType = kotlinx.kover.api.VerificationValueType.COVERED_PERCENTAGE
             }
@@ -372,6 +372,25 @@ subprojects {
                     setFile(file)
                     execute()
                 }
+            }
+        }
+    }
+}
+
+subprojects {
+    tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
+        kotlinOptions {
+            if (project.findProperty("composeCompilerReports") == "true") {
+                freeCompilerArgs += listOf(
+                    "-P",
+                    "plugin:androidx.compose.compiler.plugins.kotlin:reportsDestination=${project.layout.buildDirectory.asFile.get().absolutePath}/compose_compiler"
+                )
+            }
+            if (project.findProperty("composeCompilerMetrics") == "true") {
+                freeCompilerArgs += listOf(
+                    "-P",
+                    "plugin:androidx.compose.compiler.plugins.kotlin:metricsDestination=${project.layout.buildDirectory.asFile.get().absolutePath}/compose_compiler"
+                )
             }
         }
     }

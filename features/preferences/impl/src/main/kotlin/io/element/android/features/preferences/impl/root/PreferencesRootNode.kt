@@ -30,7 +30,7 @@ import io.element.android.anvilannotations.ContributesNode
 import io.element.android.libraries.androidutils.browser.openUrlInChromeCustomTab
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.user.MatrixUser
-import io.element.android.libraries.theme.ElementTheme
+import io.element.android.compound.theme.ElementTheme
 
 @ContributesNode(SessionScope::class)
 class PreferencesRootNode @AssistedInject constructor(

@@ -36,15 +36,6 @@ fun View.showKeyboard(andRequestFocus: Boolean = false) {
     imm?.showSoftInput(this, InputMethodManager.SHOW_IMPLICIT)
 }
 
-fun View.setHorizontalPadding(padding: Int) {
-    setPadding(
-        padding,
-        paddingTop,
-        padding,
-        paddingBottom
-    )
-}
-
 suspend fun View.awaitWindowFocus() = suspendCancellableCoroutine { continuation ->
     if (hasWindowFocus()) {
         continuation.resume(Unit)

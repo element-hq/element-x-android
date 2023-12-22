@@ -76,6 +76,7 @@ fun EditDefaultNotificationSettingView(
                         DefaultNotificationSettingOption(
                             mode = item,
                             isSelected = state.mode == item,
+                            displayMentionsOnlyDisclaimer = state.displayMentionsOnlyDisclaimer,
                             onOptionSelected = { state.eventSink(EditDefaultNotificationSettingStateEvents.SetNotificationMode(it)) }
                         )
                     }

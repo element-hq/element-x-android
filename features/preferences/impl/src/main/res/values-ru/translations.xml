@@ -6,6 +6,7 @@
   <string name="screen_advanced_settings_developer_mode">"Режим разработчика"</string>
   <string name="screen_advanced_settings_developer_mode_description">"Предоставьте разработчикам доступ к функциям и функциональным возможностям."</string>
   <string name="screen_advanced_settings_rich_text_editor_description">"Отключить редактор форматированного текста и включить Markdown."</string>
+  <string name="screen_advanced_settings_view_source_description">"Включить опцию просмотра источника сообщения на временной шкале."</string>
   <string name="screen_edit_profile_display_name">"Отображаемое имя"</string>
   <string name="screen_edit_profile_display_name_placeholder">"Ваше отображаемое имя"</string>
   <string name="screen_edit_profile_error">"Произошла неизвестная ошибка, изменить информацию не удалось."</string>
@@ -28,6 +29,7 @@
   <string name="screen_notification_settings_enable_notifications">"Включить уведомления на данном устройстве"</string>
   <string name="screen_notification_settings_failed_fixing_configuration">"Конфигурация не была исправлена, попробуйте еще раз."</string>
   <string name="screen_notification_settings_group_chats">"Групповые чаты"</string>
+  <string name="screen_notification_settings_invite_for_me_label">"Приглашения"</string>
   <string name="screen_notification_settings_mentions_only_disclaimer">"Ваш домашний сервер не поддерживает эту опцию в зашифрованных комнатах, в некоторых комнатах вы можете не получать уведомления."</string>
   <string name="screen_notification_settings_mentions_section_title">"Упоминания"</string>
   <string name="screen_notification_settings_mode_all">"Все"</string>

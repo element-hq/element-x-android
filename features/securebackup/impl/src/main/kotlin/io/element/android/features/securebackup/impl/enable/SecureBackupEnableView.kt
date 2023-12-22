@@ -21,7 +21,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import io.element.android.features.securebackup.impl.R
 import io.element.android.libraries.architecture.Async
@@ -48,7 +50,7 @@ fun SecureBackupEnableView(
         modifier = modifier,
         onBackClicked = onBackClicked,
         title = stringResource(id = R.string.screen_chat_backup_key_backup_action_enable),
-        iconResourceId = CommonDrawables.ic_key,
+        iconVector = ImageVector.vectorResource(CommonDrawables.ic_key),
         buttons = { Buttons(state = state) }
     )
     if (state.enableAction is Async.Failure) {

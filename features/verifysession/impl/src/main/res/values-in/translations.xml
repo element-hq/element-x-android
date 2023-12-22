@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_session_verification_cancelled_subtitle">"Sepertinya ada yang tidak beres. Entah permintaan sudah habis masa berlakunya atau permintaan ditolak."</string>
+  <string name="screen_session_verification_compare_emojis_subtitle">"Konfirmasikan bahwa emoji di bawah ini sesuai dengan yang ditampilkan pada sesi Anda yang lain."</string>
+  <string name="screen_session_verification_compare_emojis_title">"Bandingkan emoji"</string>
+  <string name="screen_session_verification_complete_subtitle">"Sesi baru Anda sekarang diverifikasi. Ini memiliki akses ke pesan terenkripsi Anda, dan pengguna lain akan melihatnya sebagai tepercaya."</string>
+  <string name="screen_session_verification_open_existing_session_subtitle">"Buktikan bahwa ini memang Anda untuk mengakses riwayat pesan terenkripsi Anda."</string>
+  <string name="screen_session_verification_open_existing_session_title">"Buka sesi yang sudah ada"</string>
+  <string name="screen_session_verification_positive_button_canceled">"Verifikasi ulang"</string>
+  <string name="screen_session_verification_positive_button_initial">"Saya siap"</string>
+  <string name="screen_session_verification_positive_button_verifying_ongoing">"Menunggu untuk mencocokkan"</string>
+  <string name="screen_session_verification_ready_subtitle">"Bandingkan satu set emoji yang unik."</string>
+  <string name="screen_session_verification_request_accepted_subtitle">"Bandingkan emoji unik, dan pastikan emoji tersebut muncul dalam urutan yang sama."</string>
+  <string name="screen_session_verification_they_dont_match">"Mereka tidak cocok"</string>
+  <string name="screen_session_verification_they_match">"Mereka cocok"</string>
+  <string name="screen_session_verification_waiting_to_accept_subtitle">"Terima permintaan untuk memulai proses verifikasi di sesi Anda yang lain untuk melanjutkan."</string>
+  <string name="screen_session_verification_waiting_to_accept_title">"Menunggu untuk menerima permintaan"</string>
+</resources>

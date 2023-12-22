@@ -40,10 +40,10 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.text.util.LinkifyCompat
+import io.element.android.compound.theme.LinkColor
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.theme.LinkColor
 import kotlinx.collections.immutable.ImmutableMap
 import kotlinx.collections.immutable.persistentMapOf
 
@@ -142,7 +142,7 @@ fun ClickableLinkText(
 fun AnnotatedString.linkify(linkStyle: SpanStyle): AnnotatedString {
     val original = this
     val spannable = SpannableString(this.text)
-    LinkifyCompat.addLinks(spannable, Linkify.WEB_URLS or Linkify.PHONE_NUMBERS)
+    LinkifyCompat.addLinks(spannable, Linkify.WEB_URLS or Linkify.PHONE_NUMBERS or Linkify.EMAIL_ADDRESSES)
 
     val spans = spannable.getSpans(0, spannable.length, URLSpan::class.java)
     return buildAnnotatedString {

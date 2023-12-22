@@ -94,3 +94,5 @@ lint/tmp/
 
 /tmp
 .DS_Store
+
+checkouts/**

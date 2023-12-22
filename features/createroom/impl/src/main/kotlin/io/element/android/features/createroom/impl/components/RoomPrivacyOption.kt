@@ -36,14 +36,14 @@ import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.RadioButton
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.theme.ElementTheme
+import io.element.android.compound.theme.ElementTheme
 
 @Composable
 fun RoomPrivacyOption(
     roomPrivacyItem: RoomPrivacyItem,
+    onOptionSelected: (RoomPrivacyItem) -> Unit,
     modifier: Modifier = Modifier,
     isSelected: Boolean = false,
-    onOptionSelected: (RoomPrivacyItem) -> Unit = {},
 ) {
     Row(
         modifier
@@ -58,7 +58,7 @@ fun RoomPrivacyOption(
         Icon(
             modifier = Modifier.padding(horizontal = 8.dp),
             resourceId = roomPrivacyItem.icon,
-            contentDescription = "",
+            contentDescription = null,
             tint = MaterialTheme.colorScheme.secondary,
         )
 
@@ -97,10 +97,12 @@ internal fun RoomPrivacyOptionPreview() = ElementPreview {
     Column {
         RoomPrivacyOption(
             roomPrivacyItem = aRoomPrivacyItem,
+            onOptionSelected = {},
             isSelected = true,
         )
         RoomPrivacyOption(
             roomPrivacyItem = aRoomPrivacyItem,
+            onOptionSelected = {},
             isSelected = false,
         )
     }

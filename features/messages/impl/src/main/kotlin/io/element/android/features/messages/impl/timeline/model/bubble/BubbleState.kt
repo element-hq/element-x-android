@@ -16,10 +16,12 @@
 
 package io.element.android.features.messages.impl.timeline.model.bubble
 
+import io.element.android.features.messages.impl.timeline.TimelineRoomInfo
 import io.element.android.features.messages.impl.timeline.model.TimelineItemGroupPosition
 
 data class BubbleState(
     val groupPosition: TimelineItemGroupPosition,
     val isMine: Boolean,
     val isHighlighted: Boolean,
+    val timelineRoomInfo: TimelineRoomInfo,
 )

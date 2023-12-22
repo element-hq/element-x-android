@@ -21,37 +21,40 @@ import android.graphics.Bitmap
 import android.os.Build
 import androidx.core.graphics.drawable.IconCompat
 import androidx.core.graphics.drawable.toBitmap
-import coil.imageLoader
+import coil.ImageLoader
 import coil.request.ImageRequest
 import coil.transform.CircleCropTransformation
 import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.ui.media.MediaRequestData
+import io.element.android.services.toolbox.api.sdk.BuildVersionSdkIntProvider
 import timber.log.Timber
 import javax.inject.Inject
 
 class NotificationBitmapLoader @Inject constructor(
-    @ApplicationContext private val context: Context
+    @ApplicationContext private val context: Context,
+    private val sdkIntProvider: BuildVersionSdkIntProvider,
 ) {
 
     /**
      * Get icon of a room.
      * @param path mxc url
+     * @param imageLoader Coil image loader
      */
-    suspend fun getRoomBitmap(path: String?): Bitmap? {
+    suspend fun getRoomBitmap(path: String?, imageLoader: ImageLoader): Bitmap? {
         if (path == null) {
             return null
         }
-        return loadRoomBitmap(path)
+        return loadRoomBitmap(path, imageLoader)
     }
 
-    private suspend fun loadRoomBitmap(path: String): Bitmap? {
+    private suspend fun loadRoomBitmap(path: String, imageLoader: ImageLoader): Bitmap? {
         return try {
             val imageRequest = ImageRequest.Builder(context)
                 .data(MediaRequestData(MediaSource(path), MediaRequestData.Kind.Thumbnail(1024)))
                 .transformations(CircleCropTransformation())
                 .build()
-            val result = context.imageLoader.execute(imageRequest)
+            val result = imageLoader.execute(imageRequest)
             result.drawable?.toBitmap()
         } catch (e: Throwable) {
             Timber.e(e, "Unable to load room bitmap")
@@ -63,22 +66,23 @@ class NotificationBitmapLoader @Inject constructor(
      * Get icon of a user.
      * Before Android P, this does nothing because the icon won't be used
      * @param path mxc url
+     * @param imageLoader Coil image loader
      */
-    suspend fun getUserIcon(path: String?): IconCompat? {
-        if (path == null || Build.VERSION.SDK_INT < Build.VERSION_CODES.P) {
+    suspend fun getUserIcon(path: String?, imageLoader: ImageLoader): IconCompat? {
+        if (path == null || sdkIntProvider.get() < Build.VERSION_CODES.P) {
             return null
         }
 
-        return loadUserIcon(path)
+        return loadUserIcon(path, imageLoader)
     }
 
-    private suspend fun loadUserIcon(path: String): IconCompat? {
+    private suspend fun loadUserIcon(path: String, imageLoader: ImageLoader): IconCompat? {
         return try {
             val imageRequest = ImageRequest.Builder(context)
                 .data(MediaRequestData(MediaSource(path), MediaRequestData.Kind.Thumbnail(1024)))
                 .transformations(CircleCropTransformation())
                 .build()
-            val result = context.imageLoader.execute(imageRequest)
+            val result = imageLoader.execute(imageRequest)
             val bitmap = result.drawable?.toBitmap()
             return bitmap?.let { IconCompat.createWithBitmap(it) }
         } catch (e: Throwable) {

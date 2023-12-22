@@ -25,12 +25,13 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import io.element.android.compound.theme.ElementTheme
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.theme.ElementTheme
 
 @Composable
 internal fun UserRow(
@@ -55,6 +56,7 @@ internal fun UserRow(
         ) {
             // Name
             Text(
+                modifier = Modifier.clipToBounds(),
                 text = name,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,

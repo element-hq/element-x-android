@@ -23,13 +23,13 @@ class SteadyStateExceptionMapper {
     fun map(data: RustSteadyStateException): SteadyStateException {
         return when (data) {
             is RustSteadyStateException.BackupDisabled -> SteadyStateException.BackupDisabled(
-                message = data.message
+                message = data.message.orEmpty()
             )
             is RustSteadyStateException.Connection -> SteadyStateException.Connection(
-                message = data.message
+                message = data.message.orEmpty()
             )
-            is RustSteadyStateException.Laged -> SteadyStateException.Lagged(
-                message = data.message
+            is RustSteadyStateException.Lagged -> SteadyStateException.Lagged(
+                message = data.message.orEmpty()
             )
         }
     }

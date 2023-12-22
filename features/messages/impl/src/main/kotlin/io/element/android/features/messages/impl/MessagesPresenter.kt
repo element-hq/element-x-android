@@ -31,6 +31,7 @@ import androidx.compose.runtime.setValue
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import io.element.android.features.messages.api.timeline.HtmlConverterProvider
 import io.element.android.features.messages.impl.actionlist.ActionListEvents
 import io.element.android.features.messages.impl.actionlist.ActionListPresenter
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
@@ -79,6 +80,7 @@ import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomInfo
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.api.room.MessageEventType
+import io.element.android.libraries.matrix.api.user.CurrentSessionIdHolder
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailInfo
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailType
 import io.element.android.libraries.matrix.ui.room.canRedactAsState
@@ -93,7 +95,7 @@ class MessagesPresenter @AssistedInject constructor(
     private val room: MatrixRoom,
     private val composerPresenter: MessageComposerPresenter,
     private val voiceMessageComposerPresenter: VoiceMessageComposerPresenter,
-    private val timelinePresenter: TimelinePresenter,
+    timelinePresenterFactory: TimelinePresenter.Factory,
     private val actionListPresenter: ActionListPresenter,
     private val customReactionPresenter: CustomReactionPresenter,
     private val reactionSummaryPresenter: ReactionSummaryPresenter,
@@ -106,9 +108,13 @@ class MessagesPresenter @AssistedInject constructor(
     private val clipboardHelper: ClipboardHelper,
     private val preferencesStore: PreferencesStore,
     private val featureFlagsService: FeatureFlagService,
+    private val htmlConverterProvider: HtmlConverterProvider,
     @Assisted private val navigator: MessagesNavigator,
     private val buildMeta: BuildMeta,
+    private val currentSessionIdHolder: CurrentSessionIdHolder,
 ) : Presenter<MessagesState> {
+
+    private val timelinePresenter = timelinePresenterFactory.create(navigator = navigator)
 
     @AssistedFactory
     interface Factory {
@@ -117,6 +123,8 @@ class MessagesPresenter @AssistedInject constructor(
 
     @Composable
     override fun present(): MessagesState {
+        htmlConverterProvider.Update(currentUserId = currentSessionIdHolder.current)
+
         val roomInfo by room.roomInfoFlow.collectAsState(null)
         val localCoroutineScope = rememberCoroutineScope()
         val composerState = composerPresenter.present()
@@ -142,6 +150,16 @@ class MessagesPresenter @AssistedInject constructor(
             mutableStateOf(false)
         }
 
+        var canJoinCall by rememberSaveable {
+            mutableStateOf(false)
+        }
+
+        LaunchedEffect(currentSessionIdHolder.current) {
+            withContext(dispatchers.io) {
+                canJoinCall = room.canUserJoinCall(userId = currentSessionIdHolder.current).getOrDefault(false)
+            }
+        }
+
         val inviteProgress = remember { mutableStateOf<Async<Unit>>(Async.Uninitialized) }
         var showReinvitePrompt by remember { mutableStateOf(false) }
         LaunchedEffect(hasDismissedInviteDialog, composerState.hasFocus, syncUpdateFlow) {
@@ -160,8 +178,6 @@ class MessagesPresenter @AssistedInject constructor(
         val enableTextFormatting by preferencesStore.isRichTextEditorEnabledFlow().collectAsState(initial = true)
 
         var enableVoiceMessages by remember { mutableStateOf(false) }
-        // TODO add min power level to use this feature in the future?
-        val enableInRoomCalls = true
         LaunchedEffect(featureFlagsService) {
             enableVoiceMessages = featureFlagsService.isFeatureEnabled(FeatureFlags.VoiceMessages)
         }
@@ -191,6 +207,12 @@ class MessagesPresenter @AssistedInject constructor(
             }
         }
 
+        val callState = when {
+            !canJoinCall -> RoomCallState.DISABLED
+            roomInfo?.hasRoomCall == true -> RoomCallState.ONGOING
+            else -> RoomCallState.ENABLED
+        }
+
         return MessagesState(
             roomId = room.roomId,
             roomName = roomName,
@@ -211,9 +233,8 @@ class MessagesPresenter @AssistedInject constructor(
             inviteProgress = inviteProgress.value,
             enableTextFormatting = enableTextFormatting,
             enableVoiceMessages = enableVoiceMessages,
-            enableInRoomCalls = enableInRoomCalls,
             appName = buildMeta.applicationName,
-            isCallOngoing = roomInfo?.hasRoomCall ?: false,
+            callState = callState,
             eventSink = { handleEvents(it) }
         )
     }
@@ -222,7 +243,7 @@ class MessagesPresenter @AssistedInject constructor(
         return AvatarData(
             id = id,
             name = name,
-            url = avatarUrl,
+            url = avatarUrl ?: room.avatarUrl,
             size = AvatarSize.TimelineRoom
         )
     }
@@ -294,20 +315,28 @@ class MessagesPresenter @AssistedInject constructor(
         composerState: MessageComposerState,
         enableTextFormatting: Boolean,
     ) {
-        val composerMode = MessageComposerMode.Edit(
-            targetEvent.eventId,
-            (targetEvent.content as? TimelineItemTextBasedContent)?.let {
-                if (enableTextFormatting) {
-                    it.htmlBody ?: it.body
-                } else {
-                    it.body
-                }
-            }.orEmpty(),
-            targetEvent.transactionId,
-        )
-        composerState.eventSink(
-            MessageComposerEvents.SetMode(composerMode)
-        )
+        when (targetEvent.content) {
+            is TimelineItemPollContent -> {
+                if (targetEvent.eventId == null) return
+                navigator.onEditPollClicked(targetEvent.eventId)
+            }
+            else -> {
+                val composerMode = MessageComposerMode.Edit(
+                    targetEvent.eventId,
+                    (targetEvent.content as? TimelineItemTextBasedContent)?.let {
+                        if (enableTextFormatting) {
+                            it.htmlBody ?: it.body
+                        } else {
+                            it.body
+                        }
+                    }.orEmpty(),
+                    targetEvent.transactionId,
+                )
+                composerState.eventSink(
+                    MessageComposerEvents.SetMode(composerMode)
+                )
+            }
+        }
     }
 
     private fun handleActionReply(targetEvent: TimelineItem.Event, composerState: MessageComposerState) {
@@ -342,7 +371,10 @@ class MessagesPresenter @AssistedInject constructor(
             is TimelineItemLocationContent -> AttachmentThumbnailInfo(
                 type = AttachmentThumbnailType.Location,
             )
-            is TimelineItemPollContent, // TODO Polls: handle reply to
+            is TimelineItemPollContent -> AttachmentThumbnailInfo(
+                textContent = targetEvent.content.question,
+                type = AttachmentThumbnailType.Poll,
+            )
             is TimelineItemTextBasedContent,
             is TimelineItemRedactedContent,
             is TimelineItemStateContent,

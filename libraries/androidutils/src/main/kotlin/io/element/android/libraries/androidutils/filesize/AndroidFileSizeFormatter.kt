@@ -22,16 +22,18 @@ import android.text.format.Formatter
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
+import io.element.android.services.toolbox.api.sdk.BuildVersionSdkIntProvider
 import javax.inject.Inject
 
 @ContributesBinding(AppScope::class)
 class AndroidFileSizeFormatter @Inject constructor(
     @ApplicationContext private val context: Context,
-    ) : FileSizeFormatter {
+    private val sdkIntProvider: BuildVersionSdkIntProvider,
+) : FileSizeFormatter {
     override fun format(fileSize: Long, useShortFormat: Boolean): String {
         // Since Android O, the system considers that 1kB = 1000 bytes instead of 1024 bytes.
         // We want to avoid that.
-        val normalizedSize = if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.N) {
+        val normalizedSize = if (sdkIntProvider.get() <= Build.VERSION_CODES.N) {
             fileSize
         } else {
             // First convert the size

@@ -33,28 +33,28 @@ class ReadReceiptViewStateProvider : PreviewParameterProvider<ReadReceiptViewSta
             aReadReceiptViewState(sendState = LocalEventSendState.Sent(EventId("\$eventId"))),
             aReadReceiptViewState(
                 sendState = LocalEventSendState.Sent(EventId("\$eventId")),
-                receipts = mutableListOf<ReadReceiptData>().apply { repeat(1) { add(aReadReceiptData(it)) } },
+                receipts = List(1) { aReadReceiptData(it) },
             ),
             aReadReceiptViewState(
                 sendState = LocalEventSendState.Sent(EventId("\$eventId")),
-                receipts = mutableListOf<ReadReceiptData>().apply { repeat(2) { add(aReadReceiptData(it)) } },
+                receipts = List(2) { aReadReceiptData(it) },
             ),
             aReadReceiptViewState(
                 sendState = LocalEventSendState.Sent(EventId("\$eventId")),
-                receipts = mutableListOf<ReadReceiptData>().apply { repeat(3) { add(aReadReceiptData(it)) } },
+                receipts = List(3) { aReadReceiptData(it) },
             ),
             aReadReceiptViewState(
                 sendState = LocalEventSendState.Sent(EventId("\$eventId")),
-                receipts = mutableListOf<ReadReceiptData>().apply { repeat(4) { add(aReadReceiptData(it)) } },
+                receipts = List(4) { aReadReceiptData(it) },
             ),
             aReadReceiptViewState(
                 sendState = LocalEventSendState.Sent(EventId("\$eventId")),
-                receipts = mutableListOf<ReadReceiptData>().apply { repeat(5) { add(aReadReceiptData(it)) } },
+                receipts = List(5) { aReadReceiptData(it) },
             ),
         )
 }
 
-private fun aReadReceiptViewState(
+internal fun aReadReceiptViewState(
     sendState: LocalEventSendState? = null,
     isLastOutgoingMessage: Boolean = true,
     receipts: List<ReadReceiptData> = emptyList(),
@@ -64,7 +64,7 @@ private fun aReadReceiptViewState(
     receipts = receipts.toImmutableList(),
 )
 
-private fun aReadReceiptData(
+internal fun aReadReceiptData(
     index: Int,
     avatarData: AvatarData = anAvatarData(
         id = "$index",

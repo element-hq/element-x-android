@@ -4,8 +4,6 @@
   <string name="screen_create_poll_anonymous_desc">"只在投票結束後顯示結果"</string>
   <string name="screen_create_poll_anonymous_headline">"隱藏票數"</string>
   <string name="screen_create_poll_answer_hint">"選項 %1$d"</string>
-  <string name="screen_create_poll_discard_confirmation">"您確定要捨棄這項投票嗎？"</string>
-  <string name="screen_create_poll_discard_confirmation_title">"捨棄投票"</string>
   <string name="screen_create_poll_question_desc">"問題或主題"</string>
   <string name="screen_create_poll_question_hint">"投什麼？"</string>
   <string name="screen_create_poll_title">"建立投票"</string>

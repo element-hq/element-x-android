@@ -16,9 +16,11 @@
 
 package io.element.android.libraries.matrix.api.timeline.item.event
 
+import androidx.compose.runtime.Immutable
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
 
+@Immutable
 sealed interface InReplyTo {
     /** The event details are not loaded yet. We can fetch them. */
     data class NotLoaded(val eventId: EventId) : InReplyTo

@@ -30,10 +30,10 @@ class FakeEncryptionService : EncryptionService {
     private var disableRecoveryFailure: Exception? = null
     override val backupStateStateFlow: MutableStateFlow<BackupState> = MutableStateFlow(BackupState.UNKNOWN)
     override val recoveryStateStateFlow: MutableStateFlow<RecoveryState> = MutableStateFlow(RecoveryState.UNKNOWN)
-    override val enableRecoveryProgressStateFlow: MutableStateFlow<EnableRecoveryProgress> = MutableStateFlow(EnableRecoveryProgress.Unknown)
+    override val enableRecoveryProgressStateFlow: MutableStateFlow<EnableRecoveryProgress> = MutableStateFlow(EnableRecoveryProgress.Starting)
     private var waitForBackupUploadSteadyStateFlow: Flow<BackupUploadState> = flowOf()
 
-    private var fixRecoveryIssuesFailure: Exception? = null
+    private var recoverFailure: Exception? = null
     private var doesBackupExistOnServerResult: Result<Boolean> = Result.success(true)
 
     override suspend fun enableBackups(): Result<Unit> = simulateLongTask {
@@ -44,8 +44,8 @@ class FakeEncryptionService : EncryptionService {
         disableRecoveryFailure = exception
     }
 
-    fun givenFixRecoveryIssuesFailure(exception: Exception?) {
-        fixRecoveryIssuesFailure = exception
+    fun givenRecoverFailure(exception: Exception?) {
+        recoverFailure = exception
     }
 
     override suspend fun disableRecovery(): Result<Unit> = simulateLongTask {
@@ -61,8 +61,8 @@ class FakeEncryptionService : EncryptionService {
         return doesBackupExistOnServerResult
     }
 
-    override suspend fun fixRecoveryIssues(recoveryKey: String): Result<Unit> = simulateLongTask {
-        fixRecoveryIssuesFailure?.let { return Result.failure(it) }
+    override suspend fun recover(recoveryKey: String): Result<Unit> = simulateLongTask {
+        recoverFailure?.let { return Result.failure(it) }
         return Result.success(Unit)
     }
 

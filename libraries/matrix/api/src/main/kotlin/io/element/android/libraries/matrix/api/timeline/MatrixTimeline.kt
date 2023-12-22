@@ -20,7 +20,7 @@ import io.element.android.libraries.matrix.api.core.EventId
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 
-interface MatrixTimeline {
+interface MatrixTimeline : AutoCloseable {
 
     data class PaginationState(
         val isBackPaginating: Boolean,
@@ -28,13 +28,21 @@ interface MatrixTimeline {
         val beginningOfRoomReached: Boolean,
     ) {
         val canBackPaginate = !isBackPaginating && hasMoreToLoadBackwards
+
+        companion object {
+            val Initial = PaginationState(
+                isBackPaginating = false,
+                hasMoreToLoadBackwards = true,
+                beginningOfRoomReached = false
+            )
+        }
     }
 
     val paginationState: StateFlow<PaginationState>
     val timelineItems: Flow<List<MatrixTimelineItem>>
 
+    suspend fun paginateBackwards(requestSize: Int): Result<Unit>
     suspend fun paginateBackwards(requestSize: Int, untilNumberOfItems: Int): Result<Unit>
     suspend fun fetchDetailsForEvent(eventId: EventId): Result<Unit>
-
-    suspend fun sendReadReceipt(eventId: EventId): Result<Unit>
+    suspend fun sendReadReceipt(eventId: EventId, receiptType: ReceiptType): Result<Unit>
 }

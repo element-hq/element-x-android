@@ -25,7 +25,6 @@ import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.eventformatter.api.RoomLastMessageFormatter
 import io.element.android.libraries.eventformatter.impl.mode.RenderingMode
-import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.timeline.item.event.AudioMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.EmoteMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.EventTimelineItem
@@ -48,9 +47,9 @@ import io.element.android.libraries.matrix.api.timeline.item.event.StickerConten
 import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.UnableToDecryptContent
 import io.element.android.libraries.matrix.api.timeline.item.event.UnknownContent
-import io.element.android.libraries.matrix.api.timeline.item.event.UnknownMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.VideoMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.VoiceMessageType
+import io.element.android.libraries.matrix.ui.messages.toPlainText
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.services.toolbox.api.strings.StringProvider
 import javax.inject.Inject
@@ -58,14 +57,13 @@ import javax.inject.Inject
 @ContributesBinding(SessionScope::class)
 class DefaultRoomLastMessageFormatter @Inject constructor(
     private val sp: StringProvider,
-    private val matrixClient: MatrixClient,
     private val roomMembershipContentFormatter: RoomMembershipContentFormatter,
     private val profileChangeContentFormatter: ProfileChangeContentFormatter,
     private val stateContentFormatter: StateContentFormatter,
 ) : RoomLastMessageFormatter {
 
     override fun format(event: EventTimelineItem, isDmRoom: Boolean): CharSequence? {
-        val isOutgoing = matrixClient.isMe(event.sender)
+        val isOutgoing = event.isOwn
         val senderDisplayName = (event.senderProfile as? ProfileTimelineDetails.Ready)?.displayName ?: event.sender.value
         return when (val content = event.content) {
             is MessageContent -> processMessageContents(content, senderDisplayName, isDmRoom)
@@ -114,7 +112,7 @@ class DefaultRoomLastMessageFormatter @Inject constructor(
                 return "* $senderDisplayName ${messageType.body}"
             }
             is TextMessageType -> {
-                messageType.body
+                messageType.toPlainText()
             }
             is VideoMessageType -> {
                 sp.getString(CommonStrings.common_video)
@@ -136,11 +134,6 @@ class DefaultRoomLastMessageFormatter @Inject constructor(
             }
             is OtherMessageType -> {
                 messageType.body
-            }
-            UnknownMessageType -> {
-                // Display the body as a fallback, but should not happen anymore
-                // (we have `OtherMessageType` now)
-                messageContent.body
             }
             is NoticeMessageType -> {
                 messageType.body

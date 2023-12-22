@@ -52,7 +52,7 @@ class NotificationMapper(
                 isNoisy = item.isNoisy.orFalse(),
                 timestamp = item.timestamp() ?: clock.epochMillis(),
                 content = item.event.use { notificationContentMapper.map(it) },
-                contentUrl = null,
+                hasMention = item.hasMention.orFalse(),
             )
         }
     }

@@ -28,20 +28,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import io.element.android.compound.theme.ElementTheme
 import io.element.android.libraries.designsystem.components.preferences.components.PreferenceIcon
+import io.element.android.libraries.designsystem.icons.CompoundDrawables
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
 import io.element.android.libraries.designsystem.theme.components.Slider
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.toEnabledColor
-import io.element.android.libraries.designsystem.utils.CommonDrawables
-import io.element.android.libraries.theme.ElementTheme
 
 @Composable
 fun PreferenceSlide(
     title: String,
     @FloatRange(0.0, 1.0)
     value: Float,
+    onValueChange: (Float) -> Unit,
     modifier: Modifier = Modifier,
     icon: ImageVector? = null,
     @DrawableRes iconResourceId: Int? = null,
@@ -49,7 +50,6 @@ fun PreferenceSlide(
     enabled: Boolean = true,
     summary: String? = null,
     steps: Int = 0,
-    onValueChange: (Float) -> Unit = {},
 ) {
     Row(
         modifier = modifier
@@ -95,9 +95,10 @@ internal fun PreferenceSlidePreview() = ElementThemedPreview { ContentToPreview(
 @Composable
 private fun ContentToPreview() {
     PreferenceSlide(
-        iconResourceId = CommonDrawables.ic_compound_user_profile,
+        iconResourceId = CompoundDrawables.ic_user_profile,
         title = "Slide",
         summary = "Summary",
-        value = 0.75F
+        value = 0.75F,
+        onValueChange = {},
     )
 }

@@ -23,6 +23,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.lifecycle.Lifecycle
+import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.preferences.impl.R
 import io.element.android.libraries.androidutils.system.startNotificationSettingsIntent
 import io.element.android.libraries.designsystem.atomic.molecules.DialogLikeBannerMolecule
@@ -34,7 +35,6 @@ import io.element.android.libraries.designsystem.components.preferences.Preferen
 import io.element.android.libraries.designsystem.components.preferences.PreferenceText
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.designsystem.utils.OnLifecycleEvent
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -77,6 +77,7 @@ fun NotificationSettingsView(
                 onMentionNotificationsChanged = { state.eventSink(NotificationSettingsEvents.SetAtRoomNotificationsEnabled(it)) },
                 // TODO We are removing the call notification toggle until support for call notifications has been added
 //                onCallsNotificationsChanged = { state.eventSink(NotificationSettingsEvents.SetCallNotificationsEnabled(it)) },
+                onInviteForMeNotificationsChanged = { state.eventSink(NotificationSettingsEvents.SetInviteForMeNotificationsEnabled(it)) },
             )
         }
         AsyncView(
@@ -98,12 +99,13 @@ private fun NotificationSettingsContentView(
     onMentionNotificationsChanged: (Boolean) -> Unit,
     // TODO We are removing the call notification toggle until support for call notifications has been added
 //    onCallsNotificationsChanged: (Boolean) -> Unit,
+    onInviteForMeNotificationsChanged: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val context = LocalContext.current
     if (systemSettings.appNotificationsEnabled && !systemSettings.systemNotificationsEnabled) {
         PreferenceText(
-            iconResourceId = CommonDrawables.ic_compound_notifications_solid_off,
+            icon = CompoundIcons.NotificationsSolidOff,
             title = stringResource(id = R.string.screen_notification_settings_system_notifications_turned_off),
             subtitle = stringResource(
                 id = R.string.screen_notification_settings_system_notifications_action_required,
@@ -147,8 +149,8 @@ private fun NotificationSettingsContentView(
                 onCheckedChange = onMentionNotificationsChanged
             )
         }
-        // TODO We are removing the call notification toggle until support for call notifications has been added
-//            PreferenceCategory(title = stringResource(id = CommonStrings.screen_notification_settings_additional_settings_section_title)) {
+        PreferenceCategory(title = stringResource(id = R.string.screen_notification_settings_additional_settings_section_title)) {
+            // TODO We are removing the call notification toggle until support for call notifications has been added
 //                PreferenceSwitch(
 //                    modifier = Modifier,
 //                    title = stringResource(id = CommonStrings.screen_notification_settings_calls_label),
@@ -156,7 +158,14 @@ private fun NotificationSettingsContentView(
 //                    switchAlignment = Alignment.Top,
 //                    onCheckedChange = onCallsNotificationsChanged
 //                )
-//            }
+            PreferenceSwitch(
+                modifier = Modifier,
+                title = stringResource(id = R.string.screen_notification_settings_invite_for_me_label),
+                isChecked = matrixSettings.inviteForMeNotificationsEnabled,
+                switchAlignment = Alignment.Top,
+                onCheckedChange = onInviteForMeNotificationsChanged
+            )
+        }
     }
 }
 

@@ -26,16 +26,16 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.withContext
-import org.matrix.rustcomponents.sdk.NotificationSettings
+import org.matrix.rustcomponents.sdk.Client
 import org.matrix.rustcomponents.sdk.NotificationSettingsDelegate
 import org.matrix.rustcomponents.sdk.NotificationSettingsException
 import timber.log.Timber
 
 class RustNotificationSettingsService(
-    private val notificationSettings: NotificationSettings,
+    client: Client,
     private val dispatchers: CoroutineDispatchers,
 ) : NotificationSettingsService {
-
+    private val notificationSettings = client.getNotificationSettings()
     private val _notificationSettingsChangeFlow = MutableSharedFlow<Unit>(extraBufferCapacity = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
     override val notificationSettingsChangeFlow: SharedFlow<Unit> = _notificationSettingsChangeFlow.asSharedFlow()
 
@@ -45,8 +45,13 @@ class RustNotificationSettingsService(
         }
     }
 
-    init {
+    fun start() {
         notificationSettings.setDelegate(notificationSettingsDelegate)
+    }
+
+    fun destroy() {
+        notificationSettings.setDelegate(null)
+        notificationSettings.destroy()
     }
 
     override suspend fun getRoomNotificationSettings(roomId: RoomId, isEncrypted: Boolean, isOneToOne: Boolean): Result<RoomNotificationSettings> =
@@ -119,8 +124,25 @@ class RustNotificationSettingsService(
         }
     }
 
+    override suspend fun isInviteForMeEnabled(): Result<Boolean> = withContext(dispatchers.io) {
+        runCatching {
+            notificationSettings.isInviteForMeEnabled()
+        }
+    }
+
+    override suspend fun setInviteForMeEnabled(enabled: Boolean): Result<Unit> = withContext(dispatchers.io) {
+        runCatching {
+            notificationSettings.setInviteForMeEnabled(enabled)
+        }
+    }
+
     override suspend fun getRoomsWithUserDefinedRules(): Result<List<String>> =
         runCatching {
             notificationSettings.getRoomsWithUserDefinedRules(enabled = true)
+        }
+
+    override suspend fun canHomeServerPushEncryptedEventsToDevice(): Result<Boolean> =
+        runCatching {
+            notificationSettings.canHomeserverPushEncryptedEventToDevice()
         }
 }

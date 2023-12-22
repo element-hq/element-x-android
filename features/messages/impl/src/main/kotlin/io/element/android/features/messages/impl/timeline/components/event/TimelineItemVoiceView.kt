@@ -42,7 +42,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
-import io.element.android.features.messages.impl.R
+import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVoiceContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVoiceContentProvider
 import io.element.android.features.messages.impl.voicemessages.timeline.VoiceMessageEvents
@@ -56,7 +56,7 @@ import io.element.android.libraries.designsystem.theme.components.CircularProgre
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.theme.ElementTheme
+import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.coroutines.delay
 
@@ -119,7 +119,7 @@ private fun PlayButton(
         enabled = enabled,
     ) {
         Icon(
-            resourceId = R.drawable.play,
+            resourceId = CommonDrawables.ic_play,
             contentDescription = stringResource(id = CommonStrings.a11y_play),
         )
     }
@@ -133,8 +133,8 @@ private fun PauseButton(
         onClick = onClick,
     ) {
         Icon(
-            resourceId = R.drawable.pause,
-            contentDescription = stringResource(id = CommonStrings.a11y_play),
+            resourceId = CommonDrawables.ic_pause,
+            contentDescription = stringResource(id = CommonStrings.a11y_pause),
         )
     }
 }
@@ -147,7 +147,7 @@ private fun RetryButton(
         onClick = onClick,
     ) {
         Icon(
-            resourceId = R.drawable.retry,
+            resourceId = CommonDrawables.ic_retry,
             contentDescription = stringResource(id = CommonStrings.action_retry),
         )
     }
@@ -183,7 +183,7 @@ private fun ProgressButton(
             )
         } else {
             Icon(
-                resourceId = R.drawable.pause,
+                resourceId = CommonDrawables.ic_pause,
                 contentDescription = stringResource(id = CommonStrings.a11y_pause),
             )
         }

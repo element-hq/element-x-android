@@ -24,4 +24,5 @@ interface MessagesNavigator {
     fun onShowEventDebugInfoClicked(eventId: EventId?, debugInfo: TimelineItemDebugInfo)
     fun onForwardEventClicked(eventId: EventId)
     fun onReportContentClicked(eventId: EventId, senderId: UserId)
+    fun onEditPollClicked(eventId: EventId)
 }

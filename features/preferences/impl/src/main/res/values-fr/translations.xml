@@ -6,6 +6,7 @@
   <string name="screen_advanced_settings_developer_mode">"Mode développeur"</string>
   <string name="screen_advanced_settings_developer_mode_description">"Activer pour pouvoir accéder aux fonctionnalités destinées aux développeurs."</string>
   <string name="screen_advanced_settings_rich_text_editor_description">"Désactivez l’éditeur de texte enrichi pour saisir manuellement du Markdown."</string>
+  <string name="screen_advanced_settings_view_source_description">"Activer cette option pour pouvoir voir la source des messages dans la discussion."</string>
   <string name="screen_edit_profile_display_name">"Pseudonyme"</string>
   <string name="screen_edit_profile_display_name_placeholder">"Votre pseudonyme"</string>
   <string name="screen_edit_profile_error">"Une erreur inconnue s’est produite et les informations n’ont pas pu être modifiées."</string>
@@ -30,6 +31,8 @@ Si vous continuez, il est possible que certains de vos paramètres soient modifi
   <string name="screen_notification_settings_enable_notifications">"Activer les notifications sur cet appareil"</string>
   <string name="screen_notification_settings_failed_fixing_configuration">"La configuration n’a pas été corrigée, veuillez réessayer."</string>
   <string name="screen_notification_settings_group_chats">"Discussions de groupe"</string>
+  <string name="screen_notification_settings_invite_for_me_label">"Invitations"</string>
+  <string name="screen_notification_settings_mentions_only_disclaimer">"Votre serveur d’accueil ne supporte pas cette option pour les salons chiffrés, vous pourriez ne pas être notifié(e) dans certains salons."</string>
   <string name="screen_notification_settings_mentions_section_title">"Mentions"</string>
   <string name="screen_notification_settings_mode_all">"Tous"</string>
   <string name="screen_notification_settings_mode_mentions">"Mentions"</string>

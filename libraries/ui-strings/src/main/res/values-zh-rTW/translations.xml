@@ -29,6 +29,7 @@
   <string name="action_disable">"停用"</string>
   <string name="action_done">"完成"</string>
   <string name="action_edit">"編輯"</string>
+  <string name="action_edit_poll">"編輯投票"</string>
   <string name="action_enable">"啟用"</string>
   <string name="action_end_poll">"結束投票"</string>
   <string name="action_forgot_password">"忘記密碼？"</string>
@@ -74,7 +75,6 @@
   <string name="action_take_photo">"拍照"</string>
   <string name="action_view_source">"檢視原始碼"</string>
   <string name="action_yes">"是"</string>
-  <string name="action_edit_poll">"編輯投票"</string>
   <string name="common_about">"關於"</string>
   <string name="common_acceptable_use_policy">"可接受使用政策"</string>
   <string name="common_advanced_settings">"進階設定"</string>

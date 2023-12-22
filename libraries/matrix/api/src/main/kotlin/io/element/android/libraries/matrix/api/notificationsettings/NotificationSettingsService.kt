@@ -38,5 +38,8 @@ interface NotificationSettingsService {
     suspend fun setRoomMentionEnabled(enabled: Boolean): Result<Unit>
     suspend fun isCallEnabled(): Result<Boolean>
     suspend fun setCallEnabled(enabled: Boolean): Result<Unit>
+    suspend fun isInviteForMeEnabled(): Result<Boolean>
+    suspend fun setInviteForMeEnabled(enabled: Boolean): Result<Unit>
     suspend fun getRoomsWithUserDefinedRules(): Result<List<String>>
+    suspend fun canHomeServerPushEncryptedEventsToDevice(): Result<Boolean>
 }

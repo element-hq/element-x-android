@@ -8,6 +8,7 @@
   <string name="notification_invitation_action_join">"Beitreten"</string>
   <string name="notification_invitation_action_reject">"Ablehnen"</string>
   <string name="notification_invite_body">"Du wurdest zu einem Chat eingeladen"</string>
+  <string name="notification_mentioned_you_body">"Hat Dich erwähnt: %1$s"</string>
   <string name="notification_new_messages">"Neue Nachrichten"</string>
   <string name="notification_reaction_body">"Reagiert mit %1$s"</string>
   <string name="notification_room_action_mark_as_read">"Als gelesen markieren"</string>

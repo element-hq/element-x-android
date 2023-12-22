@@ -25,7 +25,6 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.TransactionId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
-import io.element.android.libraries.matrix.api.timeline.item.event.InReplyTo
 import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
 import io.element.android.libraries.matrix.api.timeline.item.event.TimelineItemEventOrigin
 import kotlinx.collections.immutable.ImmutableList
@@ -63,11 +62,12 @@ sealed interface TimelineItem {
         val content: TimelineItemEventContent,
         val sentTime: String = "",
         val isMine: Boolean = false,
+        val isEditable: Boolean,
         val groupPosition: TimelineItemGroupPosition = TimelineItemGroupPosition.None,
         val reactionsState: TimelineItemReactions,
         val readReceiptState: TimelineItemReadReceipts,
         val localSendState: LocalEventSendState?,
-        val inReplyTo: InReplyTo?,
+        val inReplyTo: InReplyToDetails?,
         val isThreaded: Boolean,
         val debugInfo: TimelineItemDebugInfo,
         val origin: TimelineItemEventOrigin?,
@@ -88,6 +88,6 @@ sealed interface TimelineItem {
     data class GroupedEvents(
         val id: String,
         val events: ImmutableList<Event>,
+        val aggregatedReadReceipts: ImmutableList<ReadReceiptData>,
     ) : TimelineItem
-
 }

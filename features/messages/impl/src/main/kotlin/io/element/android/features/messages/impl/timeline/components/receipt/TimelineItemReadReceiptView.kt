@@ -35,7 +35,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
-import androidx.compose.ui.semantics.stateDescription
+import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
@@ -50,7 +50,7 @@ import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
-import io.element.android.libraries.theme.ElementTheme
+import io.element.android.compound.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonPlurals
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
@@ -69,7 +69,9 @@ fun TimelineItemReadReceiptView(
                     receipts = state.receipts,
                     modifier = Modifier
                         .clip(RoundedCornerShape(4.dp))
-                        .clickable { onReadReceiptsClicked() }
+                        .clickable {
+                            onReadReceiptsClicked()
+                        }
                         .padding(2.dp)
                 )
             }
@@ -80,7 +82,7 @@ fun TimelineItemReadReceiptView(
                 Icon(
                     modifier = Modifier.padding(2.dp),
                     resourceId = CommonDrawables.ic_sending,
-                    contentDescription = null,
+                    contentDescription = stringResource(id = CommonStrings.common_sending),
                     tint = ElementTheme.colors.iconSecondary
                 )
             }
@@ -96,7 +98,7 @@ fun TimelineItemReadReceiptView(
                     Icon(
                         modifier = Modifier.padding(2.dp),
                         resourceId = CommonDrawables.ic_sent,
-                        contentDescription = null,
+                        contentDescription = stringResource(id = CommonStrings.common_sent),
                         tint = ElementTheme.colors.iconSecondary
                     )
                 }
@@ -139,7 +141,7 @@ private fun ReadReceiptsAvatars(
     Row(
         modifier = modifier
             .clearAndSetSemantics {
-                stateDescription = receiptDescription
+                contentDescription = receiptDescription
             },
         horizontalArrangement = Arrangement.spacedBy(4.dp - avatarStrokeSize),
         verticalAlignment = Alignment.CenterVertically,

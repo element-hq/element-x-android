@@ -17,12 +17,14 @@
 package io.element.android.features.roomdetails.impl.members.details
 
 import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.matrix.api.core.RoomId
 
 data class RoomMemberDetailsState(
     val userId: String,
     val userName: String?,
     val avatarUrl: String?,
     val isBlocked: Async<Boolean>,
+    val startDmActionState: Async<RoomId>,
     val displayConfirmationDialog: ConfirmationDialog?,
     val isCurrentUser: Boolean,
     val eventSink: (RoomMemberDetailsEvents) -> Unit

@@ -16,6 +16,7 @@
 
 package io.element.android.features.roomdetails.impl.members.details
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -28,31 +29,39 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import io.element.android.compound.theme.ElementTheme
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.theme.ElementTheme
 
 @Composable
 fun RoomMemberHeaderSection(
     avatarUrl: String?,
     userId: String,
     userName: String?,
+    openAvatarPreview: (url: String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
         Box(modifier = Modifier.size(70.dp)) {
             Avatar(
                 avatarData = AvatarData(userId, userName, avatarUrl, AvatarSize.UserHeader),
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier
+                    .clickable(enabled = avatarUrl != null) { openAvatarPreview(avatarUrl!!) }
+                    .fillMaxSize()
             )
         }
         Spacer(modifier = Modifier.height(24.dp))
         if (userName != null) {
-            Text(text = userName, style = ElementTheme.typography.fontHeadingLgBold)
+            Text(
+                modifier = Modifier.clipToBounds(),
+                text = userName,
+                style = ElementTheme.typography.fontHeadingLgBold,
+            )
             Spacer(modifier = Modifier.height(6.dp))
         }
         Text(

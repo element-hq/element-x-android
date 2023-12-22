@@ -39,6 +39,7 @@ dependencies {
     implementation(projects.libraries.uiStrings)
     api(projects.features.analytics.api)
     api(projects.services.analytics.api)
+    implementation(projects.appconfig)
     implementation(libs.androidx.datastore.preferences)
     implementation(libs.androidx.browser)
     ksp(libs.showkase.processor)

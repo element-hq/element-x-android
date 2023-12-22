@@ -35,20 +35,20 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.messages.impl.timeline.model.TimelineItemGroupPosition
 import io.element.android.features.messages.impl.timeline.model.bubble.BubbleState
 import io.element.android.features.messages.impl.timeline.model.bubble.BubbleStateProvider
 import io.element.android.libraries.core.extensions.to01
-import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Surface
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.messageFromMeBackground
 import io.element.android.libraries.designsystem.theme.messageFromOtherBackground
-import io.element.android.libraries.theme.ElementTheme
 
 private val BUBBLE_RADIUS = 12.dp
-private val BUBBLE_INCOMING_OFFSET = 16.dp
+internal val BUBBLE_INCOMING_OFFSET = 16.dp
 
 // Design says: The maximum width of a bubble is still 3/4 of the screen width. But try with 85% now.
 private const val BUBBLE_WIDTH_RATIO = 0.85f
@@ -58,9 +58,9 @@ private const val BUBBLE_WIDTH_RATIO = 0.85f
 fun MessageEventBubble(
     state: BubbleState,
     interactionSource: MutableInteractionSource,
+    onClick: () -> Unit,
+    onLongClick: () -> Unit,
     modifier: Modifier = Modifier,
-    onClick: () -> Unit = {},
-    onLongClick: () -> Unit = {},
     content: @Composable () -> Unit = {},
 ) {
     fun bubbleShape(): Shape {
@@ -91,18 +91,17 @@ fun MessageEventBubble(
     }
 
     fun Modifier.offsetForItem(): Modifier {
-        return if (state.isMine) {
-            this
-        } else {
-            offset(x = BUBBLE_INCOMING_OFFSET)
+        return when {
+            state.isMine -> this
+            state.timelineRoomInfo.isDirect -> this
+            else -> offset(x = BUBBLE_INCOMING_OFFSET)
         }
     }
 
     // Ignore state.isHighlighted for now, we need a design decision on it.
-    val backgroundBubbleColor = if (state.isMine) {
-        ElementTheme.colors.messageFromMeBackground
-    } else {
-        ElementTheme.colors.messageFromOtherBackground
+    val backgroundBubbleColor = when {
+        state.isMine -> ElementTheme.colors.messageFromMeBackground
+        else -> ElementTheme.colors.messageFromOtherBackground
     }
     val bubbleShape = bubbleShape()
     Box(
@@ -144,6 +143,8 @@ internal fun MessageEventBubblePreview(@PreviewParameter(BubbleStateProvider::cl
         MessageEventBubble(
             state = state,
             interactionSource = remember { MutableInteractionSource() },
+            onClick = {},
+            onLongClick = {},
         ) {
             // Render the state as a text to better understand the previews
             Box(

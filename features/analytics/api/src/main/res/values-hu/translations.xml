@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_analytics_settings_share_data">"Elemzési adatok megosztása"</string>
+  <string name="screen_analytics_settings_help_us_improve">"Anonim használati adatok megosztása a problémák azonosítása érdekében."</string>
+  <string name="screen_analytics_settings_read_terms">"%1$s olvashatja el a feltételeinket."</string>
+  <string name="screen_analytics_settings_read_terms_content_link">"Itt"</string>
+</resources>

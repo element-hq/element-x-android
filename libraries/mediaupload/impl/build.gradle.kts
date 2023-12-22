@@ -27,6 +27,12 @@ android {
         generateDaggerFactories.set(true)
     }
 
+    testOptions {
+        unitTests {
+            isIncludeAndroidResources = true
+        }
+    }
+
     dependencies {
         implementation(projects.anvilannotations)
         anvil(projects.anvilcodegen)
@@ -37,6 +43,7 @@ android {
         implementation(projects.libraries.core)
         implementation(projects.libraries.di)
         implementation(projects.libraries.matrix.api)
+        implementation(projects.services.toolbox.api)
         implementation(libs.inject)
         implementation(libs.androidx.exifinterface)
         implementation(libs.coroutines.core)
@@ -44,7 +51,10 @@ android {
         implementation(libs.vanniktech.blurhash)
 
         testImplementation(libs.test.junit)
+        testImplementation(libs.test.robolectric)
         testImplementation(libs.coroutines.test)
         testImplementation(libs.test.truth)
+        testImplementation(projects.tests.testutils)
+        testImplementation(projects.services.toolbox.test)
     }
 }

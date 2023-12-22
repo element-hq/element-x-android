@@ -22,18 +22,22 @@ import org.matrix.rustcomponents.sdk.BackupUploadState as RustBackupUploadState
 class BackupUploadStateMapper {
     fun map(rustEnableProgress: RustBackupUploadState): BackupUploadState {
         return when (rustEnableProgress) {
-            is RustBackupUploadState.CheckingIfUploadNeeded ->
-                BackupUploadState.CheckingIfUploadNeeded(
-                    backedUpCount = rustEnableProgress.backedUpCount.toInt(),
-                    totalCount = rustEnableProgress.totalCount.toInt(),
-                )
             RustBackupUploadState.Done ->
                 BackupUploadState.Done
-            is RustBackupUploadState.Uploading ->
-                BackupUploadState.Uploading(
-                    backedUpCount = rustEnableProgress.backedUpCount.toInt(),
-                    totalCount = rustEnableProgress.totalCount.toInt(),
-                )
+            is RustBackupUploadState.Uploading -> {
+                val backedUpCount = rustEnableProgress.backedUpCount.toInt()
+                val totalCount = rustEnableProgress.totalCount.toInt()
+                if (backedUpCount == totalCount) {
+                    // Consider that the state is Done in this case,
+                    // the SDK will not send a Done state
+                    BackupUploadState.Done
+                } else {
+                    BackupUploadState.Uploading(
+                        backedUpCount = backedUpCount,
+                        totalCount = totalCount,
+                    )
+                }
+            }
             RustBackupUploadState.Waiting ->
                 BackupUploadState.Waiting
             RustBackupUploadState.Error ->

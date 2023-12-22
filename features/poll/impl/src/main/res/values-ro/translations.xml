@@ -4,8 +4,6 @@
   <string name="screen_create_poll_anonymous_desc">"Afișați rezultatele numai după încheierea sondajului"</string>
   <string name="screen_create_poll_anonymous_headline">"Sondaj anonim"</string>
   <string name="screen_create_poll_answer_hint">"Opțiune %1$d"</string>
-  <string name="screen_create_poll_discard_confirmation">"Sunteți sigur că doriți să renunțați la acest sondaj?"</string>
-  <string name="screen_create_poll_discard_confirmation_title">"Renunțați la sondaj"</string>
   <string name="screen_create_poll_question_desc">"Întrebare sau subiect"</string>
   <string name="screen_create_poll_question_hint">"Despre ce este sondajul?"</string>
   <string name="screen_create_poll_title">"Creați un sondaj"</string>

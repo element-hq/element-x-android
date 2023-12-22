@@ -6,6 +6,8 @@
     <item quantity="other">"%1$d osôb"</item>
   </plurals>
   <string name="screen_notification_settings_edit_failed_updating_default_mode">"Pri aktualizácii nastavenia oznámenia došlo k chybe."</string>
+  <string name="screen_notification_settings_mentions_only_disclaimer">"Váš domovský server nepodporuje túto možnosť v šifrovaných miestnostiach, v niektorých miestnostiach nemusíte dostať upozornenie."</string>
+  <string name="screen_polls_history_title">"Ankety"</string>
   <string name="screen_room_details_add_topic_title">"Pridať tému"</string>
   <string name="screen_room_details_already_a_member">"Už ste členom"</string>
   <string name="screen_room_details_already_invited">"Už ste pozvaní"</string>
@@ -39,6 +41,7 @@
   <string name="screen_room_notification_settings_mentions_only_disclaimer">"Váš domovský server nepodporuje túto možnosť v šifrovaných miestnostiach, v tejto miestnosti nedostanete upozornenie."</string>
   <string name="screen_room_notification_settings_mode_all_messages">"Všetky správy"</string>
   <string name="screen_room_notification_settings_room_custom_settings_title">"V tejto miestnosti ma upozorniť na"</string>
+  <string name="screen_start_chat_error_starting_chat">"Pri pokuse o spustenie konverzácie sa vyskytla chyba"</string>
   <string name="screen_dm_details_block_alert_action">"Zablokovať"</string>
   <string name="screen_dm_details_block_alert_description">"Blokovaní používatelia vám nebudú môcť posielať správy a všetky ich správy budú skryté. Môžete ich kedykoľvek odblokovať."</string>
   <string name="screen_dm_details_block_user">"Zablokovať používateľa"</string>

@@ -43,9 +43,9 @@ interface EncryptionService {
     suspend fun doesBackupExistOnServer(): Result<Boolean>
 
     /**
-     * Note: accept bot recoveryKey and passphrase.
+     * Note: accept both recoveryKey and passphrase.
      */
-    suspend fun fixRecoveryIssues(recoveryKey: String): Result<Unit>
+    suspend fun recover(recoveryKey: String): Result<Unit>
 
     /**
      * Wait for backup upload steady state.

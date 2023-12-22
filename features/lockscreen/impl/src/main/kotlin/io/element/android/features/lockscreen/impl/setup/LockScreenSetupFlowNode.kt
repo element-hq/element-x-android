@@ -19,7 +19,6 @@ package io.element.android.features.lockscreen.impl.setup
 import android.os.Parcelable
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.bumble.appyx.core.composable.Children
 import com.bumble.appyx.core.lifecycle.subscribe
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
@@ -34,8 +33,8 @@ import io.element.android.features.lockscreen.impl.pin.DefaultPinCodeManagerCall
 import io.element.android.features.lockscreen.impl.pin.PinCodeManager
 import io.element.android.features.lockscreen.impl.setup.biometric.SetupBiometricNode
 import io.element.android.features.lockscreen.impl.setup.pin.SetupPinNode
-import io.element.android.libraries.architecture.BackstackNode
-import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
+import io.element.android.libraries.architecture.BackstackView
+import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.di.SessionScope
 import kotlinx.parcelize.Parcelize
@@ -45,7 +44,7 @@ class LockScreenSetupFlowNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     private val pinCodeManager: PinCodeManager,
-) : BackstackNode<LockScreenSetupFlowNode.NavTarget>(
+) : BaseFlowNode<LockScreenSetupFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = NavTarget.Pin,
         savedStateMap = buildContext.savedStateMap,
@@ -106,10 +105,6 @@ class LockScreenSetupFlowNode @AssistedInject constructor(
 
     @Composable
     override fun View(modifier: Modifier) {
-        Children(
-            navModel = backstack,
-            modifier = modifier,
-            transitionHandler = rememberDefaultTransitionHandler(),
-        )
+        BackstackView()
     }
 }

@@ -45,6 +45,7 @@
   <string name="screen_room_notification_settings_error_loading_settings">"Při načítání nastavení oznámení došlo k chybě."</string>
   <string name="screen_room_notification_settings_error_restoring_default">"Obnovení výchozího režimu se nezdařilo, zkuste to prosím znovu."</string>
   <string name="screen_room_notification_settings_error_setting_mode">"Nastavení režimu se nezdařilo, zkuste to prosím znovu."</string>
+  <string name="screen_room_notification_settings_mentions_only_disclaimer">"Váš domovský server tuto možnost nepodporuje v šifrovaných místnostech, v této místnosti nebudete dostávat upozornění."</string>
   <string name="screen_room_notification_settings_mode_all_messages">"Všechny zprávy"</string>
   <string name="screen_room_notification_settings_room_custom_settings_title">"V této místnosti mě upozornit na"</string>
   <string name="screen_room_reactions_show_less">"Zobrazit méně"</string>

@@ -39,6 +39,7 @@ class FakeRoomGroupMessageCreator {
                 currentUser = matrixUser,
                 events = events,
                 roomId = roomId,
+                imageLoader = any(),
             )
         } returns mockMessage
         return mockMessage

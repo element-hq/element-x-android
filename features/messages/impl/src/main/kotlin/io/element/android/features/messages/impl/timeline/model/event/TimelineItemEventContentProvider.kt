@@ -16,9 +16,12 @@
 
 package io.element.android.features.messages.impl.timeline.model.event
 
+import android.graphics.Typeface
+import android.text.style.StyleSpan
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import androidx.core.text.buildSpannedString
+import androidx.core.text.inSpans
 import io.element.android.libraries.matrix.api.timeline.item.event.UnableToDecryptContent
-import org.jsoup.Jsoup
 
 class TimelineItemEventContentProvider : PreviewParameterProvider<TimelineItemEventContent> {
     override val values = sequenceOf(
@@ -43,19 +46,29 @@ class TimelineItemEventContentProvider : PreviewParameterProvider<TimelineItemEv
 }
 
 class TimelineItemTextBasedContentProvider : PreviewParameterProvider<TimelineItemTextBasedContent> {
+
+    private fun buildSpanned(text: String) = buildSpannedString {
+        inSpans(StyleSpan(Typeface.BOLD)) {
+            append("Rich Text")
+        }
+        append(" ")
+        append(text)
+    }
+
     override val values = sequenceOf(
         aTimelineItemEmoteContent(),
-        aTimelineItemEmoteContent().copy(htmlDocument = Jsoup.parse("Emote Document")),
+        aTimelineItemEmoteContent().copy(formattedBody = buildSpanned("Emote")),
         aTimelineItemNoticeContent(),
-        aTimelineItemNoticeContent().copy(htmlDocument = Jsoup.parse("Notice Document")),
+        aTimelineItemNoticeContent().copy(formattedBody = buildSpanned("Notice")),
         aTimelineItemTextContent(),
-        aTimelineItemTextContent().copy(htmlDocument = Jsoup.parse("Text Document")),
+        aTimelineItemTextContent().copy(formattedBody = buildSpanned("Text")),
     )
 }
 
 fun aTimelineItemEmoteContent() = TimelineItemEmoteContent(
     body = "Emote",
     htmlDocument = null,
+    formattedBody = null,
     isEdited = false,
 )
 
@@ -66,6 +79,7 @@ fun aTimelineItemEncryptedContent() = TimelineItemEncryptedContent(
 fun aTimelineItemNoticeContent() = TimelineItemNoticeContent(
     body = "Notice",
     htmlDocument = null,
+    formattedBody = null,
     isEdited = false,
 )
 
@@ -74,11 +88,14 @@ fun aTimelineItemRedactedContent() = TimelineItemRedactedContent
 fun aTimelineItemTextContent() = TimelineItemTextContent(
     body = "Text",
     htmlDocument = null,
+    formattedBody = null,
     isEdited = false,
 )
 
 fun aTimelineItemUnknownContent() = TimelineItemUnknownContent
 
-fun aTimelineItemStateEventContent() = TimelineItemStateEventContent(
-    body = "A state event",
+fun aTimelineItemStateEventContent(
+    body: String = "A state event",
+) = TimelineItemStateEventContent(
+    body = body,
 )

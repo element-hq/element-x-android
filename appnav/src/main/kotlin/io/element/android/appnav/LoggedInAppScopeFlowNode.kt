@@ -33,13 +33,12 @@ import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.appnav.di.SessionComponentFactory
 import io.element.android.libraries.architecture.NodeInputs
-import io.element.android.libraries.architecture.bindings
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.DaggerComponentOwner
 import io.element.android.libraries.matrix.api.MatrixClient
-import io.element.android.libraries.matrix.ui.di.MatrixUIBindings
+import io.element.android.libraries.matrix.ui.media.ImageLoaderHolder
 import kotlinx.parcelize.Parcelize
 
 /**
@@ -52,6 +51,7 @@ class LoggedInAppScopeFlowNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     sessionComponentFactory: SessionComponentFactory,
+    private val imageLoaderHolder: ImageLoaderHolder,
 ) : ParentNode<LoggedInAppScopeFlowNode.NavTarget>(
     navModel = PermanentNavModel(
         navTargets = setOf(NavTarget),
@@ -78,8 +78,7 @@ class LoggedInAppScopeFlowNode @AssistedInject constructor(
         super.onBuilt()
         lifecycle.subscribe(
             onCreate = {
-                val imageLoaderFactory = bindings<MatrixUIBindings>().loggedInImageLoaderFactory()
-                Coil.setImageLoader(imageLoaderFactory)
+                Coil.setImageLoader(imageLoaderHolder.get(inputs.matrixClient))
             },
         )
     }

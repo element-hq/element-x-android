@@ -16,67 +16,43 @@
 
 package io.element.android.features.preferences.impl.notifications.edit
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.selection.selectable
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.unit.dp
 import io.element.android.features.preferences.impl.R
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
-import io.element.android.libraries.designsystem.theme.components.RadioButton
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
-import io.element.android.libraries.theme.ElementTheme
+import io.element.android.libraries.designsystem.components.list.ListItemContent
+import io.element.android.libraries.designsystem.theme.components.ListItem
 
 @Composable
 fun DefaultNotificationSettingOption(
     mode: RoomNotificationMode,
+    onOptionSelected: (RoomNotificationMode) -> Unit,
+    displayMentionsOnlyDisclaimer: Boolean,
     modifier: Modifier = Modifier,
     isSelected: Boolean = false,
-    onOptionSelected: (RoomNotificationMode) -> Unit = {},
 ) {
-    val subtitle = when(mode) {
+    val title = when (mode) {
         RoomNotificationMode.ALL_MESSAGES -> stringResource(id = R.string.screen_notification_settings_edit_mode_all_messages)
         RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY -> stringResource(id = R.string.screen_notification_settings_edit_mode_mentions_and_keywords)
         else -> ""
     }
-    Row(
-        modifier
-            .fillMaxWidth()
-            .selectable(
-                selected = isSelected,
-                onClick = { onOptionSelected(mode) },
-                role = Role.RadioButton,
-            )
-            .padding(8.dp),
-    ) {
-        Column(
-            Modifier
-                .weight(1f)
-                .padding(horizontal = 8.dp)
-                .align(Alignment.CenterVertically)
-        ) {
-            Text(
-                text = subtitle,
-                style = ElementTheme.typography.fontBodyLgRegular,
-            )
+    val subtitle = when {
+        mode == RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY && displayMentionsOnlyDisclaimer -> {
+            stringResource(id = R.string.screen_notification_settings_mentions_only_disclaimer)
         }
-
-        RadioButton(
-            modifier = Modifier
-                .align(Alignment.CenterVertically)
-                .size(48.dp),
-            selected = isSelected,
-            onClick = null // null recommended for accessibility with screenreaders
-        )
+        else -> null
     }
+    ListItem(
+        modifier = modifier,
+        headlineContent = { Text(title) },
+        supportingContent = subtitle?.let { { Text(it) } },
+        trailingContent = ListItemContent.RadioButton(selected = isSelected),
+        onClick = { onOptionSelected(mode) },
+    )
 }
 
 @PreviewsDayNight
@@ -86,10 +62,20 @@ internal fun DefaultNotificationSettingOptionPreview() = ElementPreview {
         DefaultNotificationSettingOption(
             mode = RoomNotificationMode.ALL_MESSAGES,
             isSelected = true,
+            displayMentionsOnlyDisclaimer = false,
+            onOptionSelected = {},
         )
         DefaultNotificationSettingOption(
             mode = RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY,
             isSelected = false,
+            displayMentionsOnlyDisclaimer = false,
+            onOptionSelected = {},
+        )
+        DefaultNotificationSettingOption(
+            mode = RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY,
+            isSelected = false,
+            displayMentionsOnlyDisclaimer = true,
+            onOptionSelected = {},
         )
     }
 }

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_signout_confirmation_dialog_content">"Biztos, hogy kijelentkezik?"</string>
+  <string name="screen_signout_in_progress_dialog_content">"Kijelentkezés…"</string>
+  <string name="screen_signout_key_backup_disabled_subtitle">"Arra készül, hogy kijelentkezzen az utolsó munkamenetéből is. Ha most kijelentkezik, akkor elveszti a hozzáférését a titkosított üzeneteihez."</string>
+  <string name="screen_signout_key_backup_disabled_title">"Kikapcsolta a biztonsági mentést"</string>
+  <string name="screen_signout_key_backup_offline_subtitle">"A kulcsai mentése során bontotta a kapcsolatot. Kapcsolódjon újra, hogy a kulcsai továbbra is mentésre kerüljenek mielőtt kijelentkezik."</string>
+  <string name="screen_signout_key_backup_offline_title">"A kulcsai mentése még folyamatban van"</string>
+  <string name="screen_signout_key_backup_ongoing_subtitle">"Kijelentkezés előtt várja meg a befejezését."</string>
+  <string name="screen_signout_key_backup_ongoing_title">"A kulcsai mentése még folyamatban van"</string>
+  <string name="screen_signout_recovery_disabled_subtitle">"Arra készül, hogy kijelentkezzen az utolsó munkamenetéből is. Ha most kijelentkezik, akkor elveszti a hozzáférését a titkosított üzeneteihez."</string>
+  <string name="screen_signout_recovery_disabled_title">"A helyreállítás nincs beállítva"</string>
+  <string name="screen_signout_save_recovery_key_subtitle">"Arra készül, hogy kijelentkezzen az utolsó munkamenetéből is. Ha most kijelentkezik, akkor elveszítheti a hozzáférését a titkosított üzeneteihez."</string>
+  <string name="screen_signout_save_recovery_key_title">"Mentette a helyreállítási kulcsát?"</string>
+  <string name="screen_signout_confirmation_dialog_submit">"Kijelentkezés"</string>
+  <string name="screen_signout_confirmation_dialog_title">"Kijelentkezés"</string>
+  <string name="screen_signout_preference_item">"Kijelentkezés"</string>
+</resources>

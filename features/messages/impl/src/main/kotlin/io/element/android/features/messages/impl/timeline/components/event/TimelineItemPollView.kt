@@ -22,7 +22,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import io.element.android.features.messages.impl.timeline.TimelineEvents
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemPollContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemPollContentProvider
-import io.element.android.features.poll.api.PollContentView
+import io.element.android.features.poll.api.pollcontent.PollContentView
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.matrix.api.core.EventId
@@ -31,7 +31,6 @@ import kotlinx.collections.immutable.toImmutableList
 @Composable
 fun TimelineItemPollView(
     content: TimelineItemPollContent,
-    isMine: Boolean,
     eventSink: (TimelineEvents) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -43,15 +42,20 @@ fun TimelineItemPollView(
         eventSink(TimelineEvents.PollEndClicked(pollStartId))
     }
 
+    fun onPollEdit(pollStartId: EventId) {
+        eventSink(TimelineEvents.PollEditClicked(pollStartId))
+    }
+
     PollContentView(
         eventId = content.eventId,
         question = content.question,
         answerItems = content.answerItems.toImmutableList(),
         pollKind = content.pollKind,
         isPollEnded = content.isEnded,
-        isMine = isMine,
+        isPollEditable = content.isEditable,
+        isMine = content.isMine,
         onAnswerSelected = ::onAnswerSelected,
-        onPollEdit = {}, // TODO Polls: Wire up this callback once poll edit screen is done.
+        onPollEdit = ::onPollEdit,
         onPollEnd = ::onPollEnd,
         modifier = modifier,
     )
@@ -63,18 +67,6 @@ internal fun TimelineItemPollViewPreview(@PreviewParameter(TimelineItemPollConte
     ElementPreview {
         TimelineItemPollView(
             content = content,
-            isMine = false,
-            eventSink = {},
-        )
-    }
-
-@PreviewsDayNight
-@Composable
-internal fun TimelineItemPollCreatorViewPreview(@PreviewParameter(TimelineItemPollContentProvider::class) content: TimelineItemPollContent) =
-    ElementPreview {
-        TimelineItemPollView(
-            content = content,
-            isMine = true,
             eventSink = {},
         )
     }

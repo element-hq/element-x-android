@@ -17,26 +17,15 @@
 package io.element.android.libraries.androidutils.compat
 
 import android.content.pm.ApplicationInfo
-import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.os.Build
 
 fun PackageManager.getApplicationInfoCompat(packageName: String, flags: Int): ApplicationInfo {
     return when {
         Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU -> getApplicationInfo(
-                packageName,
-                PackageManager.ApplicationInfoFlags.of(flags.toLong())
+            packageName,
+            PackageManager.ApplicationInfoFlags.of(flags.toLong())
         )
         else -> @Suppress("DEPRECATION") getApplicationInfo(packageName, flags)
-    }
-}
-
-fun PackageManager.getPackageInfoCompat(packageName: String, flags: Int): PackageInfo {
-    return when {
-        Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU -> getPackageInfo(
-                packageName,
-                PackageManager.PackageInfoFlags.of(flags.toLong())
-        )
-        else -> @Suppress("DEPRECATION") getPackageInfo(packageName, flags)
     }
 }

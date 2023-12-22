@@ -17,6 +17,7 @@
 package io.element.android.libraries.matrix.impl.encryption
 
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.core.extensions.mapFailure
 import io.element.android.libraries.matrix.api.encryption.BackupState
 import io.element.android.libraries.matrix.api.encryption.BackupUploadState
 import io.element.android.libraries.matrix.api.encryption.EnableRecoveryProgress
@@ -86,7 +87,7 @@ internal class RustEncryptionService(
         }
     }.stateIn(sessionCoroutineScope, SharingStarted.Eagerly, RecoveryState.WAITING_FOR_SYNC)
 
-    override val enableRecoveryProgressStateFlow: MutableStateFlow<EnableRecoveryProgress> = MutableStateFlow(EnableRecoveryProgress.Unknown)
+    override val enableRecoveryProgressStateFlow: MutableStateFlow<EnableRecoveryProgress> = MutableStateFlow(EnableRecoveryProgress.Starting)
 
     fun start() {
         service.backupStateListener(object : BackupStateListener {
@@ -110,6 +111,8 @@ internal class RustEncryptionService(
     override suspend fun enableBackups(): Result<Unit> = withContext(dispatchers.io) {
         runCatching {
             service.enableBackups()
+        }.mapFailure {
+            it.mapRecoveryException()
         }
     }
 
@@ -127,6 +130,8 @@ internal class RustEncryptionService(
             )
                 // enableRecovery returns the encryption key, but we read it from the state flow
                 .let { }
+        }.mapFailure {
+            it.mapRecoveryException()
         }
     }
 
@@ -164,24 +169,32 @@ internal class RustEncryptionService(
     override suspend fun disableRecovery(): Result<Unit> = withContext(dispatchers.io) {
         runCatching {
             service.disableRecovery()
+        }.mapFailure {
+            it.mapRecoveryException()
         }
     }
 
     override suspend fun isLastDevice(): Result<Boolean> = withContext(dispatchers.io) {
         runCatching {
             service.isLastDevice()
+        }.mapFailure {
+            it.mapRecoveryException()
         }
     }
 
     override suspend fun resetRecoveryKey(): Result<String> = withContext(dispatchers.io) {
         runCatching {
             service.resetRecoveryKey()
+        }.mapFailure {
+            it.mapRecoveryException()
         }
     }
 
-    override suspend fun fixRecoveryIssues(recoveryKey: String): Result<Unit> = withContext(dispatchers.io) {
+    override suspend fun recover(recoveryKey: String): Result<Unit> = withContext(dispatchers.io) {
         runCatching {
-            service.fixRecoveryIssues(recoveryKey)
+            service.recover(recoveryKey)
+        }.mapFailure {
+            it.mapRecoveryException()
         }
     }
 }

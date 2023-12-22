@@ -35,6 +35,7 @@ fun aNotificationSettingsState(
     matrixSettings = NotificationSettingsState.MatrixSettings.Valid(
         atRoomNotificationsEnabled = true,
         callNotificationsEnabled = true,
+        inviteForMeNotificationsEnabled = true,
         defaultGroupNotificationMode = RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY,
         defaultOneToOneNotificationMode = RoomNotificationMode.ALL_MESSAGES,
     ),

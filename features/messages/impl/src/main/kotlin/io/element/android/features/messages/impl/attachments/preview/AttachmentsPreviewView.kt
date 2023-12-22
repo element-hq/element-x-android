@@ -32,7 +32,6 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.features.messages.impl.attachments.Attachment
 import io.element.android.features.messages.impl.attachments.preview.error.sendAttachmentError
-import io.element.android.features.messages.impl.media.local.LocalMediaView
 import io.element.android.libraries.designsystem.atomic.molecules.ButtonRowMolecule
 import io.element.android.libraries.designsystem.components.ProgressDialog
 import io.element.android.libraries.designsystem.components.ProgressDialogType
@@ -40,6 +39,7 @@ import io.element.android.libraries.designsystem.components.dialogs.RetryDialog
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.TextButton
+import io.element.android.libraries.mediaviewer.api.local.LocalMediaView
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable

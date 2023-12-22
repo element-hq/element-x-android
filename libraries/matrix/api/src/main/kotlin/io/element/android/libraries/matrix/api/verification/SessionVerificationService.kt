@@ -16,6 +16,7 @@
 
 package io.element.android.libraries.matrix.api.verification
 
+import androidx.compose.runtime.Immutable
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 
@@ -24,7 +25,7 @@ interface SessionVerificationService {
     /**
      * State of the current verification flow ([VerificationFlowState.Initial] if not started).
      */
-    val verificationFlowState : StateFlow<VerificationFlowState>
+    val verificationFlowState: StateFlow<VerificationFlowState>
 
     /**
      * The internal service that checks verification can only run after the initial sync.
@@ -75,6 +76,7 @@ interface SessionVerificationService {
 }
 
 /** Verification status of the current session. */
+@Immutable
 sealed interface SessionVerifiedStatus {
     /** Unknown status, we couldn't read the actual value from the SDK. */
     data object Unknown : SessionVerifiedStatus
@@ -87,6 +89,7 @@ sealed interface SessionVerifiedStatus {
 }
 
 /** States produced by the [SessionVerificationService]. */
+@Immutable
 sealed interface VerificationFlowState {
     /** Initial state. */
     data object Initial : VerificationFlowState
@@ -97,8 +100,8 @@ sealed interface VerificationFlowState {
     /** Short Authentication String (SAS) verification started between the 2 devices. */
     data object StartedSasVerification : VerificationFlowState
 
-    /** Verification data for the SAS verification (emojis) received. */
-    data class ReceivedVerificationData(val emoji: List<VerificationEmoji>) : VerificationFlowState
+    /** Verification data for the SAS verification received. */
+    data class ReceivedVerificationData(val data: SessionVerificationData) : VerificationFlowState
 
     /** Verification completed successfully. */
     data object Finished : VerificationFlowState

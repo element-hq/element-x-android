@@ -31,7 +31,7 @@ baseAction = {
     }
 }
 
-# Store all regex specific to module, to eclude the corresponding keyx from the common string module
+# Store all regex specific to module, to exclude the corresponding key from the common string module
 allRegexToExcludeFromMainModule = []
 # All actions that will be serialized in the localazy config
 allActions = []
@@ -47,7 +47,7 @@ for entry in config["modules"]:
         "includeKeys": list(map(lambda i: "REGEX:" + i, entry["includeRegex"])),
         "excludeKeys": list(map(lambda i: "REGEX:" + i, excludeRegex)),
         "conditions": [
-            "equals: ${languageCode}, en"
+            "equals: ${languageCode}, en | equals: ${file}, content.json"
         ]
     }
     # print(action)
@@ -59,7 +59,7 @@ for entry in config["modules"]:
             "includeKeys": list(map(lambda i: "REGEX:" + i, entry["includeRegex"])),
             "excludeKeys": list(map(lambda i: "REGEX:" + i, excludeRegex)),
             "conditions": [
-                "!equals: ${languageCode}, en"
+                "!equals: ${languageCode}, en | equals: ${file}, content.json"
             ]
         }
         allActions.append(actionTranslation)
@@ -70,7 +70,7 @@ mainAction = baseAction | {
     "output": "libraries/ui-strings/src/main/res/values/localazy.xml",
     "excludeKeys": list(map(lambda i: "REGEX:" + i, allRegexToExcludeFromMainModule + regexToAlwaysExclude)),
     "conditions": [
-        "equals: ${languageCode}, en"
+        "equals: ${languageCode}, en | equals: ${file}, content.json"
     ]
 }
 # print(mainAction)
@@ -82,7 +82,7 @@ if allFiles:
         "output": "libraries/ui-strings/src/main/res/values-${langAndroidResNoScript}/translations.xml",
         "excludeKeys": list(map(lambda i: "REGEX:" + i, allRegexToExcludeFromMainModule + regexToAlwaysExclude)),
         "conditions": [
-            "!equals: ${languageCode}, en"
+            "!equals: ${languageCode}, en | equals: ${file}, content.json"
         ]
     }
     allActions.append(mainActionTranslation)

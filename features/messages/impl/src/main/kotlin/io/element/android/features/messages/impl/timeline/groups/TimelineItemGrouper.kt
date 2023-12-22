@@ -73,7 +73,8 @@ private fun MutableList<TimelineItem>.addGroup(
         add(
             TimelineItem.GroupedEvents(
                 id = groupId,
-                events = groupOfItems.toImmutableList()
+                events = groupOfItems.toImmutableList(),
+                aggregatedReadReceipts = groupOfItems.flatMap { it.readReceiptState.receipts }.toImmutableList()
             )
         )
     }

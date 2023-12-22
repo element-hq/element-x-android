@@ -16,6 +16,8 @@
 
 package io.element.android.features.messages.impl.timeline.components.group
 
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -26,19 +28,20 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.compound.theme.ElementTheme
+import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Surface
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.designsystem.utils.CommonDrawables
-import io.element.android.libraries.theme.ElementTheme
 
 private val CORNER_RADIUS = 8.dp
 
@@ -76,9 +79,17 @@ fun GroupHeaderView(
                     color = MaterialTheme.colorScheme.secondary,
                     style = ElementTheme.typography.fontBodyMdRegular,
                 )
+                val rotation: Float by animateFloatAsState(
+                    targetValue = if (isExpanded) 90f else 0f,
+                    animationSpec = tween(
+                        delayMillis = 0,
+                        durationMillis = 300,
+                    ),
+                    label = "chevron"
+                )
                 Icon(
-                    modifier = Modifier.rotate(if (isExpanded) 180f else 0f),
-                    resourceId = CommonDrawables.ic_compound_chevron_down,
+                    modifier = Modifier.rotate(rotation),
+                    imageVector = CompoundIcons.ChevronRight,
                     contentDescription = null,
                     tint = MaterialTheme.colorScheme.secondary
                 )

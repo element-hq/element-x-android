@@ -17,6 +17,7 @@
 package io.element.android.features.messages.impl.voicemessages.timeline
 
 import com.squareup.anvil.annotations.ContributesBinding
+import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.media.MediaSource
@@ -196,7 +197,7 @@ class DefaultVoiceMessagePlayer(
             mediaPlayer.setMedia(
                 uri = mediaFile.path,
                 mediaId = eventId.value,
-                mimeType = "audio/ogg", // Files in the voice cache have no extension so we need to set the mime type manually.
+                mimeType = MimeTypes.Ogg, // Files in the voice cache have no extension so we need to set the mime type manually.
                 startPositionMs = if (state.isEnded) 0L else state.currentPosition,
             )
         }

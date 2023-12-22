@@ -19,7 +19,7 @@ package io.element.android.features.roomdetails.notificationsettings
 import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
-import com.google.common.truth.Truth
+import com.google.common.truth.Truth.assertThat
 import io.element.android.features.roomdetails.aMatrixRoom
 import io.element.android.features.roomdetails.impl.notificationsettings.RoomNotificationSettingsEvents
 import io.element.android.features.roomdetails.impl.notificationsettings.RoomNotificationSettingsPresenter
@@ -27,6 +27,8 @@ import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_THROWABLE
 import io.element.android.libraries.matrix.test.notificationsettings.FakeNotificationSettingsService
+import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
+import io.element.android.tests.testutils.awaitLastSequentialItem
 import io.element.android.tests.testutils.consumeItemsUntilPredicate
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -39,8 +41,10 @@ class RoomNotificationSettingsPresenterTests {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            Truth.assertThat(initialState.roomNotificationSettings.dataOrNull()).isNull()
-            Truth.assertThat(initialState.defaultRoomNotificationMode).isNull()
+            assertThat(initialState.roomNotificationSettings.dataOrNull()).isNull()
+            assertThat(initialState.defaultRoomNotificationMode).isNull()
+            val loadedState = awaitItem()
+            assertThat(loadedState.displayMentionsOnlyDisclaimer).isFalse()
             cancelAndIgnoreRemainingEvents()
         }
     }
@@ -55,7 +59,7 @@ class RoomNotificationSettingsPresenterTests {
             val updatedState = consumeItemsUntilPredicate {
                 it.roomNotificationSettings.dataOrNull()?.mode ==  RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY
             }.last()
-            Truth.assertThat(updatedState.roomNotificationSettings.dataOrNull()?.mode).isEqualTo(RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY)
+            assertThat(updatedState.roomNotificationSettings.dataOrNull()?.mode).isEqualTo(RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY)
             cancelAndIgnoreRemainingEvents()
         }
     }
@@ -71,7 +75,7 @@ class RoomNotificationSettingsPresenterTests {
             val updatedState = consumeItemsUntilPredicate {
                 it.roomNotificationSettings.dataOrNull()?.mode ==  RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY
             }.last()
-            Truth.assertThat(updatedState.roomNotificationSettings.dataOrNull()?.mode).isEqualTo(RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY)
+            assertThat(updatedState.roomNotificationSettings.dataOrNull()?.mode).isEqualTo(RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY)
         }
     }
 
@@ -89,16 +93,16 @@ class RoomNotificationSettingsPresenterTests {
                 it.setNotificationSettingAction.isFailure()
             }.last()
 
-            Truth.assertThat(failedState.roomNotificationSettings.dataOrNull()?.isDefault).isTrue()
-            Truth.assertThat(failedState.pendingSetDefault).isNull()
-            Truth.assertThat(failedState.setNotificationSettingAction.isFailure()).isTrue()
+            assertThat(failedState.roomNotificationSettings.dataOrNull()?.isDefault).isTrue()
+            assertThat(failedState.pendingSetDefault).isNull()
+            assertThat(failedState.setNotificationSettingAction.isFailure()).isTrue()
 
             failedState.eventSink(RoomNotificationSettingsEvents.ClearSetNotificationError)
 
             val errorClearedState = consumeItemsUntilPredicate {
                 it.setNotificationSettingAction.isUninitialized()
             }.last()
-            Truth.assertThat(errorClearedState.setNotificationSettingAction.isUninitialized()).isTrue()
+            assertThat(errorClearedState.setNotificationSettingAction.isUninitialized()).isTrue()
         }
     }
 
@@ -114,7 +118,7 @@ class RoomNotificationSettingsPresenterTests {
             val defaultState = consumeItemsUntilPredicate {
                 it.roomNotificationSettings.dataOrNull()?.isDefault == false
             }.last()
-            Truth.assertThat(defaultState.roomNotificationSettings.dataOrNull()?.isDefault).isFalse()
+            assertThat(defaultState.roomNotificationSettings.dataOrNull()?.isDefault).isFalse()
         }
     }
 
@@ -130,7 +134,7 @@ class RoomNotificationSettingsPresenterTests {
             val defaultState = consumeItemsUntilPredicate {
                 it.roomNotificationSettings.dataOrNull()?.mode == RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY
             }.last()
-            Truth.assertThat(defaultState.roomNotificationSettings.dataOrNull()?.mode).isEqualTo(RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY)
+            assertThat(defaultState.roomNotificationSettings.dataOrNull()?.mode).isEqualTo(RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY)
             cancelAndIgnoreRemainingEvents()
         }
     }
@@ -149,20 +153,49 @@ class RoomNotificationSettingsPresenterTests {
             val failedState = consumeItemsUntilPredicate {
                 it.restoreDefaultAction.isFailure()
             }.last()
-            Truth.assertThat(failedState.restoreDefaultAction.isFailure()).isTrue()
+            assertThat(failedState.restoreDefaultAction.isFailure()).isTrue()
             failedState.eventSink(RoomNotificationSettingsEvents.ClearRestoreDefaultError)
 
             val errorClearedState = consumeItemsUntilPredicate {
                 it.restoreDefaultAction.isUninitialized()
             }.last()
-            Truth.assertThat(errorClearedState.restoreDefaultAction.isUninitialized()).isTrue()
+            assertThat(errorClearedState.restoreDefaultAction.isUninitialized()).isTrue()
             cancelAndIgnoreRemainingEvents()
         }
     }
+
+    @Test
+    fun `present - display mentions only warning for a room if homeserver does not support it and it's encrypted`() = runTest {
+        val notificationService = FakeNotificationSettingsService().apply {
+            givenCanHomeServerPushEncryptedEventsToDeviceResult(Result.success(false))
+        }
+        val room = aMatrixRoom(notificationSettingsService = notificationService, isEncrypted = true)
+        val presenter = createRoomNotificationSettingsPresenter(notificationService, room)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            assertThat(awaitLastSequentialItem().displayMentionsOnlyDisclaimer).isTrue()
+        }
+    }
+
+    @Test
+    fun `present - do not display mentions only warning for a room it's not encrypted`() = runTest {
+        val notificationService = FakeNotificationSettingsService().apply {
+            givenCanHomeServerPushEncryptedEventsToDeviceResult(Result.success(false))
+        }
+        val room = aMatrixRoom(notificationSettingsService = notificationService, isEncrypted = false)
+        val presenter = createRoomNotificationSettingsPresenter(notificationService, room)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            assertThat(awaitLastSequentialItem().displayMentionsOnlyDisclaimer).isFalse()
+        }
+    }
+
     private fun createRoomNotificationSettingsPresenter(
-        notificationSettingsService: FakeNotificationSettingsService = FakeNotificationSettingsService()
+        notificationSettingsService: FakeNotificationSettingsService = FakeNotificationSettingsService(),
+        room: FakeMatrixRoom = aMatrixRoom(notificationSettingsService = notificationSettingsService),
     ): RoomNotificationSettingsPresenter{
-        val room = aMatrixRoom(notificationSettingsService = notificationSettingsService)
         return RoomNotificationSettingsPresenter(
             room = room,
             notificationSettingsService = notificationSettingsService,

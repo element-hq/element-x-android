@@ -16,30 +16,52 @@
 
 package io.element.android.libraries.textcomposer
 
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.isSpecified
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
+import io.element.android.compound.theme.ElementTheme
 import io.element.android.libraries.designsystem.theme.bgSubtleTertiary
-import io.element.android.libraries.theme.ElementTheme
 import io.element.android.wysiwyg.compose.RichTextEditorDefaults
 import io.element.android.wysiwyg.compose.RichTextEditorStyle
 
-internal object ElementRichTextEditorStyle {
+object ElementRichTextEditorStyle {
     @Composable
-    fun create(
+    fun composerStyle(
         hasFocus: Boolean,
     ) : RichTextEditorStyle {
+        val baseStyle = common()
+        return baseStyle.copy(
+            text = baseStyle.text.copy(
+                color = if (hasFocus) {
+                    ElementTheme.materialColors.primary
+                } else {
+                    ElementTheme.materialColors.secondary
+                },
+                lineHeight = TextUnit.Unspecified,
+                includeFontPadding = true,
+            )
+        )
+    }
+
+    @Composable
+    fun textStyle(): RichTextEditorStyle {
+        return common()
+    }
+
+    @Composable
+    private fun common(): RichTextEditorStyle {
         val colors = ElementTheme.colors
-        val m3colors = MaterialTheme.colorScheme
         val codeCornerRadius = 4.dp
         val codeBorderWidth = 1.dp
         return RichTextEditorDefaults.style(
             text = RichTextEditorDefaults.textStyle(
-                color = if (hasFocus) {
-                    m3colors.primary
-                } else {
-                    m3colors.secondary
-                }
+                color = LocalTextStyle.current.color.takeIf { it.isSpecified } ?: LocalContentColor.current,
+                fontStyle = LocalTextStyle.current.fontStyle,
+                lineHeight = LocalTextStyle.current.lineHeight,
+                includeFontPadding = false,
             ),
             cursor = RichTextEditorDefaults.cursorStyle(
                 color = colors.iconAccentTertiary,

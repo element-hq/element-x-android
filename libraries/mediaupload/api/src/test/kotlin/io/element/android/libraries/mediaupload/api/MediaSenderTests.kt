@@ -18,6 +18,7 @@ package io.element.android.libraries.mediaupload.api
 
 import android.net.Uri
 import com.google.common.truth.Truth.assertThat
+import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.mediaupload.test.FakeMediaPreProcessor
@@ -39,7 +40,7 @@ class MediaSenderTests {
         val sender = aMediaSender(preProcessor)
 
         val uri = Uri.parse("content://image.jpg")
-        sender.sendMedia(uri = uri, mimeType = "image/jpeg", compressIfPossible = true)
+        sender.sendMedia(uri = uri, mimeType = MimeTypes.Jpeg, compressIfPossible = true)
 
         assertThat(preProcessor.processCallCount).isEqualTo(1)
     }
@@ -50,7 +51,7 @@ class MediaSenderTests {
         val sender = aMediaSender(room = room)
 
         val uri = Uri.parse("content://image.jpg")
-        sender.sendMedia(uri = uri, mimeType = "image/jpeg", compressIfPossible = true)
+        sender.sendMedia(uri = uri, mimeType = MimeTypes.Jpeg, compressIfPossible = true)
 
         assertThat(room.sendMediaCount).isEqualTo(1)
     }
@@ -63,7 +64,7 @@ class MediaSenderTests {
         val sender = aMediaSender(preProcessor)
 
         val uri = Uri.parse("content://image.jpg")
-        val result = sender.sendMedia(uri = uri, mimeType = "image/jpeg", compressIfPossible = true)
+        val result = sender.sendMedia(uri = uri, mimeType = MimeTypes.Jpeg, compressIfPossible = true)
 
         assertThat(result.exceptionOrNull()).isNotNull()
     }
@@ -76,7 +77,7 @@ class MediaSenderTests {
         val sender = aMediaSender(room = room)
 
         val uri = Uri.parse("content://image.jpg")
-        val result = sender.sendMedia(uri = uri, mimeType = "image/jpeg", compressIfPossible = true)
+        val result = sender.sendMedia(uri = uri, mimeType = MimeTypes.Jpeg, compressIfPossible = true)
 
         assertThat(result.exceptionOrNull()).isNotNull()
     }
@@ -88,7 +89,7 @@ class MediaSenderTests {
         val sender = aMediaSender(room = room)
         val sendJob = launch {
             val uri = Uri.parse("content://image.jpg")
-            sender.sendMedia(uri = uri, mimeType = "image/jpeg", compressIfPossible = true)
+            sender.sendMedia(uri = uri, mimeType = MimeTypes.Jpeg, compressIfPossible = true)
         }
         // Wait until several internal tasks run and the file is being uploaded
         advanceTimeBy(3L)

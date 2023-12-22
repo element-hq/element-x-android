@@ -1,8 +1,8 @@
-[![Latest build](https://github.com/vector-im/element-x-android/actions/workflows/build.yml/badge.svg?query=branch%3Adevelop)](https://github.com/vector-im/element-x-android/actions/workflows/build.yml?query=branch%3Adevelop)
+[![Latest build](https://github.com/element-hq/element-x-android/actions/workflows/build.yml/badge.svg?query=branch%3Adevelop)](https://github.com/element-hq/element-x-android/actions/workflows/build.yml?query=branch%3Adevelop)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=vector-im_element-x-android&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=vector-im_element-x-android)
 [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=vector-im_element-x-android&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=vector-im_element-x-android)
 [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=vector-im_element-x-android&metric=bugs)](https://sonarcloud.io/summary/new_code?id=vector-im_element-x-android)
-[![codecov](https://codecov.io/github/vector-im/element-x-android/branch/develop/graph/badge.svg?token=ecwvia7amV)](https://codecov.io/github/vector-im/element-x-android)
+[![codecov](https://codecov.io/github/element-hq/element-x-android/branch/develop/graph/badge.svg?token=ecwvia7amV)](https://codecov.io/github/vector-im/element-x-android)
 [![Element X_Android Matrix room #element-x-android:matrix.org](https://img.shields.io/matrix/element-x-android:matrix.org.svg?label=%23element-x-android:matrix.org&logo=matrix&server_fqdn=matrix.org)](https://matrix.to/#/#element-x-android:matrix.org)
 [![Localazy](https://img.shields.io/endpoint?url=https%3A%2F%2Fconnect.localazy.com%2Fstatus%2Felement%2Fdata%3Fcontent%3Dall%26title%3Dlocalazy%26logo%3Dtrue)](https://localazy.com/p/element)
 
@@ -10,7 +10,7 @@
 
 Element X Android is a [Matrix](https://matrix.org/) Android Client provided by [element.io](https://element.io/). This app is currently in a pre-alpha release stage with only basic functionalities.
 
-The application is a total rewrite of [Element-Android](https://github.com/vector-im/element-android) using the [Matrix Rust SDK](https://github.com/matrix-org/matrix-rust-sdk) underneath and targeting devices running Android 6+. The UI layer is written using [Jetpack Compose](https://developer.android.com/jetpack/compose), and the navigation is managed using [Appyx](https://github.com/bumble-tech/appyx).
+The application is a total rewrite of [Element-Android](https://github.com/element-hq/element-android) using the [Matrix Rust SDK](https://github.com/matrix-org/matrix-rust-sdk) underneath and targeting devices running Android 6+. The UI layer is written using [Jetpack Compose](https://developer.android.com/jetpack/compose), and the navigation is managed using [Appyx](https://github.com/bumble-tech/appyx).
 
 Learn more about why we are building Element X in our blog post: [https://element.io/blog/element-x-experience-the-future-of-element/](https://element.io/blog/element-x-experience-the-future-of-element/).
 
@@ -58,11 +58,11 @@ We're doing this as a way to share code between platforms and while we've seen p
 
 ## Status
 
-This project is in work in progress. The app does not cover yet all functionalities we expect. The list of supported features can be found in [this issue](https://github.com/vector-im/element-x-android/issues/911).
+This project is in work in progress. The app does not cover yet all functionalities we expect. The list of supported features can be found in [this issue](https://github.com/element-hq/element-x-android/issues/911).
 
 ## Contributing
 
-Want to get actively involved in the project? You're more than welcome! A good way to start is to check the issues that are labelled with the [good first issue](https://github.com/vector-im/element-x-android/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22) label. Let us know by commenting the issue that you're starting working on it.
+Want to get actively involved in the project? You're more than welcome! A good way to start is to check the issues that are labelled with the [good first issue](https://github.com/element-hq/element-x-android/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22) label. Let us know by commenting the issue that you're starting working on it.
 
 But first make sure to read our [contribution guide](CONTRIBUTING.md) first.
 
@@ -75,7 +75,7 @@ Makes sure to select the `app` configuration when building (as we also have samp
 
 ## Support
 
-When you are experiencing an issue on Element X Android, please first search in [GitHub issues](https://github.com/vector-im/element-x-android/issues)
+When you are experiencing an issue on Element X Android, please first search in [GitHub issues](https://github.com/element-hq/element-x-android/issues)
 and then in [#element-x-android:matrix.org](https://matrix.to/#/#element-x-android:matrix.org).
 If after your research you still have a question, ask at [#element-x-android:matrix.org](https://matrix.to/#/#element-x-android:matrix.org). Otherwise feel free to create a GitHub issue if you encounter a bug or a crash, by explaining clearly in detail what happened. You can also perform bug reporting from the application settings. This is especially recommended when you encounter a crash.
 

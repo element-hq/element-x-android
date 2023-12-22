@@ -16,6 +16,9 @@
 
 package io.element.android.libraries.matrix.api.encryption
 
+import androidx.compose.runtime.Immutable
+
+@Immutable
 sealed interface SteadyStateException {
     /**
      * The backup can be deleted.

@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="confirm_recovery_key_banner_message">"Dein Chat-Backup ist derzeit nicht synchronisiert. Du musst deinen Wiederherstellungsschlüssel bestätigen, um Zugriff auf dein Chat-Backup zu erhalten."</string>
+  <string name="confirm_recovery_key_banner_title">"Wiederherstellungsschlüssel bestätigen."</string>
   <string name="screen_roomlist_a11y_create_message">"Eine neue Unterhaltung oder einen neuen Raum erstellen"</string>
   <string name="screen_roomlist_empty_message">"Beginne, indem du jemandem eine Nachricht sendest."</string>
   <string name="screen_roomlist_empty_title">"Noch keine Chats."</string>

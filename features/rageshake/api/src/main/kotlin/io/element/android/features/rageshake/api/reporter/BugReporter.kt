@@ -22,27 +22,19 @@ interface BugReporter {
     /**
      * Send a bug report.
      *
-     * @param reportType The report type (bug, suggestion, feedback)
      * @param withDevicesLogs true to include the device log
      * @param withCrashLogs true to include the crash logs
-     * @param withKeyRequestHistory true to include the crash logs
      * @param withScreenshot true to include the screenshot
      * @param theBugDescription the bug description
-     * @param serverVersion version of the server
      * @param canContact true if the user opt in to be contacted directly
-     * @param customFields fields which will be sent with the report
      * @param listener the listener
      */
     suspend fun sendBugReport(
-        reportType: ReportType,
         withDevicesLogs: Boolean,
         withCrashLogs: Boolean,
-        withKeyRequestHistory: Boolean,
         withScreenshot: Boolean,
         theBugDescription: String,
-        serverVersion: String,
         canContact: Boolean = false,
-        customFields: Map<String, String>? = null,
         listener: BugReporterListener?
     )
 
@@ -55,4 +47,9 @@ interface BugReporter {
      * Provide the log directory.
      */
     fun logDirectory(): File
+
+    /**
+     * Set the current tracing filter.
+     */
+    fun setCurrentTracingFilter(tracingFilter: String)
 }

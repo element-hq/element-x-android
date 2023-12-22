@@ -32,3 +32,7 @@ data class RoomMember(
 enum class RoomMembershipState {
     BAN, INVITE, JOIN, KNOCK, LEAVE
 }
+
+fun RoomMember.getBestName(): String {
+    return displayName?.takeIf { it.isNotEmpty() } ?: userId.value
+}

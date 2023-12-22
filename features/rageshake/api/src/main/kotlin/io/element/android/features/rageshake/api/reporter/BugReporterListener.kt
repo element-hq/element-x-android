@@ -42,5 +42,5 @@ interface BugReporterListener {
     /**
      * The bug report upload succeeded.
      */
-    fun onUploadSucceed(reportUrl: String?)
+    fun onUploadSucceed()
 }

@@ -16,25 +16,30 @@
 
 package io.element.android.features.messages.impl.timeline.components.event
 
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextMeasurer
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.rememberTextMeasurer
+import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.times
+import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextBasedContent
 import io.element.android.libraries.core.bool.orFalse
-import io.element.android.libraries.designsystem.text.toDp
 import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
-import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
+import kotlin.math.ceil
 
 // Allow to not overlap the timestamp with the text, in the message bubble.
 // Compute the size of the worst case.
-data class ExtraPadding(val nbChars: Int)
+data class ExtraPadding(val extraWidth: Dp)
 
-val noExtraPadding = ExtraPadding(0)
+val noExtraPadding = ExtraPadding(0.dp)
 
 /**
  * See [io.element.android.features.messages.impl.timeline.components.TimelineEventTimestampView] for the related View.
@@ -46,37 +51,48 @@ fun TimelineItem.Event.toExtraPadding(): ExtraPadding {
     val hasMessageSendingFailed = localSendState is LocalEventSendState.SendingFailed
     val isMessageEdited = (content as? TimelineItemTextBasedContent)?.isEdited.orFalse()
 
-    var strLen = 6
+    val textMeasurer = rememberTextMeasurer(cacheSize = 128)
+    val density = LocalDensity.current
+
+    var strLen = 2.dp // Extra space char
     if (isMessageEdited) {
-        strLen += stringResource(id = CommonStrings.common_edited_suffix).length + 3
+        val editedText = stringResource(id = CommonStrings.common_edited_suffix)
+        val extraLen = remember(editedText, density) { textMeasurer.getExtraPadding(editedText, density) } + 10.dp // Text + spacing
+        strLen += extraLen
     }
-    strLen += formattedTime.length
+    strLen += remember(formattedTime, density) { textMeasurer.getExtraPadding(formattedTime, density) }
     if (hasMessageSendingFailed) {
-        strLen += 5
+        strLen += 19.dp // Image + spacing
+        // I do not know why, but adding extra widths avoid overlapping when the
+        // message is edited and in error.
         if (isMessageEdited) {
-            // I do not know why, but adding 2 more chars avoid overlapping when the
-            // message is edited and in error.
-            strLen += 2
+            strLen += 2.dp
         }
     }
     return ExtraPadding(strLen)
 }
 
+private fun TextMeasurer.getExtraPadding(text: String, density: Density): Dp {
+    val timestampTextStyle = ElementTheme.typography.fontBodyXsRegular
+    val textWidth = measure(text = text, style = timestampTextStyle).size.width
+    return (textWidth/density.density).dp
+}
+
 /**
  * Get a string to add to the content of the message to avoid overlapping the timestamp.
- * @param fontSize the font size of the message content, to be able to add more space char if the font is small.
  */
-fun ExtraPadding.getStr(fontSize: TextUnit): String {
-    if (nbChars == 0) return ""
-    val timestampFontSize = ElementTheme.typography.fontBodyXsRegular.fontSize // 11.sp
-    val nbOfSpaces = (timestampFontSize.value / fontSize.value * nbChars).toInt() + 1
-    // A space and some unbreakable spaces
-    return " " + "\u00A0".repeat(nbOfSpaces)
+@Composable
+fun ExtraPadding.getStr(textStyle: TextStyle = LocalTextStyle.current): String {
+    if (extraWidth == 0.dp) return ""
+    val density = LocalDensity.current
+    val textMeasurer = rememberTextMeasurer(128)
+    val charWidth = remember(textStyle) { textMeasurer.measure(text = "\u00A0", style = textStyle).size.width }
+    val widthPx = remember(density, extraWidth) { with(density) { extraWidth.toPx() } }
+    // A space and some unbreakable spaces, always rounding the result to the next value if not a integer
+    return " " + "\u00A0".repeat(ceil(widthPx / charWidth).toInt())
 }
 
 @Composable
 fun ExtraPadding.getDpSize(): Dp {
-    if (nbChars == 0) return 0.dp
-    val timestampFontSize = ElementTheme.typography.fontBodyXsRegular.fontSize // 11.sp
-    return nbChars * timestampFontSize.toDp() / 3
+    return extraWidth
 }

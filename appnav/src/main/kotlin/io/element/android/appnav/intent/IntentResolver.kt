@@ -34,6 +34,8 @@ class IntentResolver @Inject constructor(
     private val oidcIntentResolver: OidcIntentResolver
 ) {
     fun resolve(intent: Intent): ResolvedIntent? {
+        if (intent.canBeIgnored()) return null
+
         val deepLinkData = deeplinkParser.getFromIntent(intent)
         if (deepLinkData != null) return ResolvedIntent.Navigation(deepLinkData)
 
@@ -44,4 +46,9 @@ class IntentResolver @Inject constructor(
         Timber.w("Unknown intent")
         return null
     }
+}
+
+private fun Intent.canBeIgnored(): Boolean {
+    return action == Intent.ACTION_MAIN &&
+        categories?.contains(Intent.CATEGORY_LAUNCHER) == true
 }

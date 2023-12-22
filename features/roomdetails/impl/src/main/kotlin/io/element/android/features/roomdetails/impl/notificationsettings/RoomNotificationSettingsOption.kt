@@ -17,78 +17,56 @@
 package io.element.android.features.roomdetails.impl.notificationsettings
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.selection.selectable
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.unit.dp
-import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import androidx.compose.ui.res.stringResource
+import io.element.android.features.roomdetails.impl.R
+import io.element.android.libraries.designsystem.components.list.ListItemContent
 import io.element.android.libraries.designsystem.preview.ElementPreview
-import io.element.android.libraries.designsystem.theme.components.RadioButton
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.theme.components.ListItem
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.designsystem.toEnabledColor
-import io.element.android.libraries.theme.ElementTheme
+import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 
 @Composable
 fun RoomNotificationSettingsOption(
     roomNotificationSettingsItem: RoomNotificationSettingsItem,
+    onOptionSelected: (RoomNotificationSettingsItem) -> Unit,
+    displayMentionsOnlyDisclaimer: Boolean,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     isSelected: Boolean = false,
-    onOptionSelected: (RoomNotificationSettingsItem) -> Unit = {},
 ) {
-    Row(
-        modifier
-            .fillMaxWidth()
-            .selectable(
-                selected = isSelected,
-                enabled = enabled,
-                onClick = { onOptionSelected(roomNotificationSettingsItem) },
-                role = Role.RadioButton,
-            )
-            .padding(8.dp),
-    ) {
-        Column(
-            Modifier
-                .weight(1f)
-                .padding(horizontal = 8.dp)
-                .align(Alignment.CenterVertically)
-        ) {
-            Text(
-                text = roomNotificationSettingsItem.title,
-                style = ElementTheme.typography.fontBodyLgRegular,
-                color = enabled.toEnabledColor(),
-            )
+    val mode = roomNotificationSettingsItem.mode
+    val title = roomNotificationSettingsItem.title
+    val subtitle = when {
+        mode == RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY && displayMentionsOnlyDisclaimer -> {
+            stringResource(id = R.string.screen_notification_settings_mentions_only_disclaimer)
         }
-
-        RadioButton(
-            modifier = Modifier
-                .align(Alignment.CenterVertically)
-                .size(48.dp),
-            selected = isSelected,
-            enabled = enabled,
-            onClick = null // null recommended for accessibility with screenreaders
-        )
+        else -> null
     }
+    ListItem(
+        modifier = modifier,
+        enabled = enabled,
+        headlineContent = { Text(title) },
+        supportingContent = subtitle?.let { { Text(it) } },
+        trailingContent = ListItemContent.RadioButton(selected = isSelected),
+        onClick = { onOptionSelected(roomNotificationSettingsItem) },
+    )
 }
 
 @PreviewsDayNight
 @Composable
 internal fun RoomPrivacyOptionPreview() = ElementPreview {
     Column {
-        RoomNotificationSettingsOption(
-            roomNotificationSettingsItem = roomNotificationSettingsItems().first(),
-            isSelected = true,
-        )
-        RoomNotificationSettingsOption(
-            roomNotificationSettingsItem = roomNotificationSettingsItems().last(),
-            isSelected = false,
-            enabled = false,
-        )
+        for ((index, item) in roomNotificationSettingsItems().withIndex()) {
+            RoomNotificationSettingsOption(
+                roomNotificationSettingsItem = item,
+                onOptionSelected = {},
+                isSelected = index == 0,
+                enabled = index != 2,
+                displayMentionsOnlyDisclaimer = index == 1,
+            )
+        }
     }
 }

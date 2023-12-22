@@ -3,12 +3,15 @@
   <string name="screen_session_verification_cancelled_subtitle">"Etwas scheint nicht zu stimmen. Entweder ist das Zeitlimit für die Anfrage abgelaufen oder die Anfrage wurde abgelehnt."</string>
   <string name="screen_session_verification_compare_emojis_subtitle">"Vergewissere dich dass die folgenden Emojis mit denen in deiner anderen Session übereinstimmen."</string>
   <string name="screen_session_verification_compare_emojis_title">"Emojis vergleichen"</string>
+  <string name="screen_session_verification_compare_numbers_subtitle">"Bestätige, dass die Zahlen mit denen deiner anderen Sitzung übereinstimmen."</string>
+  <string name="screen_session_verification_compare_numbers_title">"Vergleiche die Zahlen"</string>
   <string name="screen_session_verification_complete_subtitle">"Deine neue Session ist nun verifiziert. Sie hat Zugriff auf deine verschlüsselten Nachrichten und wird von anderen Benutzern als vertrauenswürdig eingestuft."</string>
   <string name="screen_session_verification_open_existing_session_subtitle">"Beweise deine Identität, um auf deinen verschlüsselten Nachrichtenverlauf zuzugreifen."</string>
   <string name="screen_session_verification_open_existing_session_title">"Öffne eine bestehende Session"</string>
   <string name="screen_session_verification_positive_button_canceled">"Verifizierung wiederholen"</string>
   <string name="screen_session_verification_positive_button_initial">"Ich bin bereit"</string>
   <string name="screen_session_verification_positive_button_verifying_ongoing">"Warten auf eine Übereinstimmung"</string>
+  <string name="screen_session_verification_ready_subtitle">"Vergleiche eine spezielle Reihe von Emojis."</string>
   <string name="screen_session_verification_request_accepted_subtitle">"Vergleiche die einzelnen Emojis und stelle sicher, dass sie in der gleichen Reihenfolge erscheinen."</string>
   <string name="screen_session_verification_they_dont_match">"Sie stimmen nicht überein"</string>
   <string name="screen_session_verification_they_match">"Sie stimmen überein"</string>

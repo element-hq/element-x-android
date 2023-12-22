@@ -29,29 +29,28 @@ import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.catch
 import org.matrix.rustcomponents.sdk.BackPaginationStatus
 import org.matrix.rustcomponents.sdk.BackPaginationStatusListener
-import org.matrix.rustcomponents.sdk.Room
+import org.matrix.rustcomponents.sdk.Timeline
 import org.matrix.rustcomponents.sdk.TimelineDiff
 import org.matrix.rustcomponents.sdk.TimelineItem
 import org.matrix.rustcomponents.sdk.TimelineListener
 import timber.log.Timber
 
-internal fun Room.timelineDiffFlow(onInitialList: suspend (List<TimelineItem>) -> Unit): Flow<List<TimelineDiff>> =
+internal fun Timeline.timelineDiffFlow(onInitialList: suspend (List<TimelineItem>) -> Unit): Flow<List<TimelineDiff>> =
     callbackFlow {
         val listener = object : TimelineListener {
             override fun onUpdate(diff: List<TimelineDiff>) {
                 trySendBlocking(diff)
             }
         }
-        val roomId = id()
-        Timber.d("Open timelineDiffFlow for room $roomId")
-        val result = addTimelineListener(listener)
+        Timber.d("Open timelineDiffFlow for TimelineInterface ${this@timelineDiffFlow}")
+        val result = addListener(listener)
         try {
             onInitialList(result.items)
         } catch (exception: Exception) {
-            Timber.d(exception, "Catch failure in timelineDiffFlow of room $roomId")
+            Timber.d(exception, "Catch failure in timelineDiffFlow of TimelineInterface ${this@timelineDiffFlow}")
         }
         awaitClose {
-            Timber.d("Close timelineDiffFlow for room $roomId")
+            Timber.d("Close timelineDiffFlow for TimelineInterface ${this@timelineDiffFlow}")
             result.itemsStream.cancelAndDestroy()
             result.items.destroyAll()
         }
@@ -59,7 +58,7 @@ internal fun Room.timelineDiffFlow(onInitialList: suspend (List<TimelineItem>) -
         Timber.d(it, "timelineDiffFlow() failed")
     }.buffer(Channel.UNLIMITED)
 
-internal fun Room.backPaginationStatusFlow(): Flow<BackPaginationStatus> =
+internal fun Timeline.backPaginationStatusFlow(): Flow<BackPaginationStatus> =
     mxCallbackFlow {
         val listener = object : BackPaginationStatusListener {
             override fun onUpdate(status: BackPaginationStatus) {
@@ -71,8 +70,8 @@ internal fun Room.backPaginationStatusFlow(): Flow<BackPaginationStatus> =
         }
     }.buffer(Channel.UNLIMITED)
 
-internal suspend fun Room.runWithTimelineListenerRegistered(action: suspend () -> Unit) {
-    val result = addTimelineListener(NoOpTimelineListener)
+internal suspend fun Timeline.runWithTimelineListenerRegistered(action: suspend () -> Unit) {
+    val result = addListener(NoOpTimelineListener)
     try {
         action()
     } finally {

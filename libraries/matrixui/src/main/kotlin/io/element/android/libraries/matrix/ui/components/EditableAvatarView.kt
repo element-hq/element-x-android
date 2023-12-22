@@ -87,7 +87,7 @@ fun EditableAvatarView(
                 Icon(
                     modifier = Modifier.size(16.dp),
                     resourceId = CommonDrawables.ic_edit,
-                    contentDescription = "",
+                    contentDescription = null,
                     tint = MaterialTheme.colorScheme.onPrimary,
                 )
             }

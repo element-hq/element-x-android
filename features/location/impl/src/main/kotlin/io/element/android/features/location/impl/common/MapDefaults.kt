@@ -23,10 +23,10 @@ import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.ui.graphics.Color
 import com.mapbox.mapboxsdk.camera.CameraPosition
 import com.mapbox.mapboxsdk.geometry.LatLng
+import io.element.android.compound.theme.ElementTheme
 import io.element.android.libraries.maplibre.compose.MapLocationSettings
 import io.element.android.libraries.maplibre.compose.MapSymbolManagerSettings
 import io.element.android.libraries.maplibre.compose.MapUiSettings
-import io.element.android.libraries.theme.ElementTheme
 
 /**
  * Common configuration values for the map.

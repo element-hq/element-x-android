@@ -20,6 +20,7 @@ import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.room.MatrixRoomInfo
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.impl.timeline.item.event.EventTimelineItemMapper
+import kotlinx.collections.immutable.toImmutableList
 import org.matrix.rustcomponents.sdk.use
 import org.matrix.rustcomponents.sdk.Membership as RustMembership
 import org.matrix.rustcomponents.sdk.RoomInfo as RustRoomInfo
@@ -40,7 +41,7 @@ class MatrixRoomInfoMapper(
             isSpace = it.isSpace,
             isTombstoned = it.isTombstoned,
             canonicalAlias = it.canonicalAlias,
-            alternativeAliases = it.alternativeAliases,
+            alternativeAliases = it.alternativeAliases.toImmutableList(),
             currentUserMembership = it.membership.map(),
             latestEvent = it.latestEvent?.use (timelineItemMapper::map),
             inviter = it.inviter?.use(RoomMemberMapper::map),
@@ -51,7 +52,7 @@ class MatrixRoomInfoMapper(
             notificationCount = it.notificationCount.toLong(),
             userDefinedNotificationMode = it.userDefinedNotificationMode?.map(),
             hasRoomCall = it.hasRoomCall,
-            activeRoomCallParticipants = it.activeRoomCallParticipants
+            activeRoomCallParticipants = it.activeRoomCallParticipants.toImmutableList()
         )
     }
 }

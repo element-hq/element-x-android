@@ -27,10 +27,10 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import io.element.android.compound.theme.ElementTheme
+import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
-import io.element.android.libraries.designsystem.utils.CommonDrawables
-import io.element.android.libraries.theme.ElementTheme
 
 // Figma designs: https://www.figma.com/file/G1xy0HDZKJf5TCRFmKb5d5/Compound-Android-Components?type=design&node-id=1182%3A48861&mode=design&t=Shlcvznm1oUyqGC2-1
 
@@ -67,20 +67,20 @@ private fun ContentToPreview() {
         CompositionLocalProvider(LocalContentColor provides ElementTheme.colors.iconPrimary) {
             Row {
                 IconButton(onClick = {}) {
-                    Icon(resourceId = CommonDrawables.ic_compound_close, contentDescription = "")
+                    Icon(imageVector = CompoundIcons.Close, contentDescription = null)
                 }
                 IconButton(enabled = false, onClick = {}) {
-                    Icon(resourceId = CommonDrawables.ic_compound_close, contentDescription = "")
+                    Icon(imageVector = CompoundIcons.Close, contentDescription = null)
                 }
             }
         }
         CompositionLocalProvider(LocalContentColor provides ElementTheme.colors.iconSecondary) {
             Row {
                 IconButton(onClick = {}) {
-                    Icon(resourceId = CommonDrawables.ic_compound_close, contentDescription = "")
+                    Icon(imageVector = CompoundIcons.Close, contentDescription = null)
                 }
                 IconButton(enabled = false, onClick = {}) {
-                    Icon(resourceId = CommonDrawables.ic_compound_close, contentDescription = "")
+                    Icon(imageVector = CompoundIcons.Close, contentDescription = null)
                 }
             }
         }

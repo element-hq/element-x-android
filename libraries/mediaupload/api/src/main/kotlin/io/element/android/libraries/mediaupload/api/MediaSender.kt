@@ -101,7 +101,6 @@ class MediaSender @Inject constructor(
                     progressCallback = progressCallback
                 )
             }
-
             is MediaUploadInfo.Video -> {
                 sendVideo(
                     file = uploadInfo.file,

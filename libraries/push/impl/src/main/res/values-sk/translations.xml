@@ -8,10 +8,7 @@
   <string name="notification_invitation_action_join">"Pripojiť sa"</string>
   <string name="notification_invitation_action_reject">"Zamietnuť"</string>
   <string name="notification_invite_body">"Vás pozval/a na konverzáciu"</string>
-  <string name="notification_mentioned_you_body">"%1$s vás spomenul/-a.
-%2$s"</string>
-  <string name="notification_mentioned_you_fallback_body">"Boli ste spomenutí.
-%1$s"</string>
+  <string name="notification_mentioned_you_body">"Spomenul/a vás: %1$s"</string>
   <string name="notification_new_messages">"Nové správy"</string>
   <string name="notification_reaction_body">"Reagoval/a s %1$s"</string>
   <string name="notification_room_action_mark_as_read">"Označiť ako prečítané"</string>

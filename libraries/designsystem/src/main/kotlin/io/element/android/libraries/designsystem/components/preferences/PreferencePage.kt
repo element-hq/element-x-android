@@ -18,7 +18,6 @@ package io.element.android.libraries.designsystem.components.preferences
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
@@ -32,22 +31,21 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
+import io.element.android.compound.theme.ElementTheme
 import io.element.android.libraries.designsystem.components.button.BackButton
-import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.icons.CompoundDrawables
 import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.aliasScreenTitle
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
-import io.element.android.libraries.designsystem.utils.CommonDrawables
-import io.element.android.libraries.theme.ElementTheme
 
-@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun PreferencePage(
     title: String,
+    onBackPressed: () -> Unit,
     modifier: Modifier = Modifier,
-    onBackPressed: () -> Unit = {},
     snackbarHost: @Composable () -> Unit = {},
     content: @Composable ColumnScope.() -> Unit,
 ) {
@@ -81,8 +79,8 @@ fun PreferencePage(
 @Composable
 private fun PreferenceTopAppBar(
     title: String,
+    onBackPressed: () -> Unit,
     modifier: Modifier = Modifier,
-    onBackPressed: () -> Unit = {},
 ) {
     TopAppBar(
         modifier = modifier,
@@ -105,7 +103,8 @@ private fun PreferenceTopAppBar(
 @Composable
 internal fun PreferenceViewPreview() = ElementPreview {
     PreferencePage(
-        title = "Preference screen"
+        title = "Preference screen",
+        onBackPressed = {},
     ) {
         PreferenceCategory(
             title = "Category title",
@@ -113,19 +112,21 @@ internal fun PreferenceViewPreview() = ElementPreview {
             PreferenceText(
                 title = "Title",
                 subtitle = "Some other text",
-                iconResourceId = CommonDrawables.ic_compound_chat_problem,
+                iconResourceId = CompoundDrawables.ic_chat_problem,
             )
             PreferenceDivider()
             PreferenceSwitch(
                 title = "Switch",
-                iconResourceId = CommonDrawables.ic_compound_threads,
+                iconResourceId = CompoundDrawables.ic_threads,
                 isChecked = true,
+                onCheckedChange = {},
             )
             PreferenceDivider()
             PreferenceCheckbox(
                 title = "Checkbox",
-                iconResourceId = CommonDrawables.ic_compound_notifications,
+                iconResourceId = CompoundDrawables.ic_notifications,
                 isChecked = true,
+                onCheckedChange = {},
             )
             PreferenceDivider()
             PreferenceSlide(
@@ -133,6 +134,7 @@ internal fun PreferenceViewPreview() = ElementPreview {
                 summary = "Summary",
                 value = 0.75F,
                 showIconAreaIfNoIcon = true,
+                onValueChange = {},
             )
         }
     }

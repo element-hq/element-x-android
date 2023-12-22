@@ -19,11 +19,11 @@ package io.element.android.libraries.designsystem.theme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
-import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.compound.previews.ColorListPreview
+import io.element.android.compound.theme.ElementTheme
+import io.element.android.compound.tokens.generated.SemanticColors
 import io.element.android.libraries.designsystem.preview.ElementPreview
-import io.element.android.libraries.theme.ElementTheme
-import io.element.android.libraries.theme.compound.generated.SemanticColors
-import io.element.android.libraries.theme.previews.ColorListPreview
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import kotlinx.collections.immutable.persistentMapOf
 
 /**

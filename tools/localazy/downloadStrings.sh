@@ -46,6 +46,14 @@ if [[ $allFiles == 1 ]]; then
   find . -name 'translations.xml' -print0 -exec bash -c "echo \"\" >> \"{}\"" \; >> /dev/null
 fi
 
+set +e
+echo "Moving files from values-id to values-in..."
+find . -type d -name 'values-id' -execdir mv {}/translations.xml {}/../values-in/translations.xml 2> /dev/null \;
+
+echo "Deleting all the folders values-id..."
+find . -type d -name 'values-id' -exec rm -rf {} 2> /dev/null \;
+set -e
+
 echo "Removing the generated config"
 rm ./tools/localazy/localazy.json
 

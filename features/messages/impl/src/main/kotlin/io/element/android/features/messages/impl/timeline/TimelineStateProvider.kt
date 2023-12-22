@@ -16,6 +16,9 @@
 
 package io.element.android.features.messages.impl.timeline
 
+import io.element.android.features.messages.impl.timeline.components.receipt.aReadReceiptData
+import io.element.android.features.messages.impl.timeline.model.InReplyToDetails
+import io.element.android.features.messages.impl.timeline.model.NewEventState
 import io.element.android.features.messages.impl.timeline.model.ReadReceiptData
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.TimelineItemGroupPosition
@@ -34,7 +37,6 @@ import io.element.android.libraries.matrix.api.core.TransactionId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
-import io.element.android.libraries.matrix.api.timeline.item.event.InReplyTo
 import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -45,6 +47,7 @@ import kotlin.random.Random
 
 fun aTimelineState(timelineItems: ImmutableList<TimelineItem> = persistentListOf()) = TimelineState(
     timelineItems = timelineItems,
+    timelineRoomInfo = aTimelineRoomInfo(),
     showReadReceipts = false,
     paginationState = MatrixTimeline.PaginationState(
         isBackPaginating = false,
@@ -53,7 +56,7 @@ fun aTimelineState(timelineItems: ImmutableList<TimelineItem> = persistentListOf
     ),
     highlightedEventId = null,
     userHasPermissionToSendMessage = true,
-    hasNewItems = false,
+    newEventState = NewEventState.None,
     sessionState = aSessionState(
         isSessionVerified = true,
         isKeyBackupEnabled = true,
@@ -118,11 +121,12 @@ internal fun aTimelineItemEvent(
     eventId: EventId = EventId("\$" + Random.nextInt().toString()),
     transactionId: TransactionId? = null,
     isMine: Boolean = false,
+    isEditable: Boolean = false,
     senderDisplayName: String = "Sender",
     content: TimelineItemEventContent = aTimelineItemTextContent(),
     groupPosition: TimelineItemGroupPosition = TimelineItemGroupPosition.None,
     sendState: LocalEventSendState? = null,
-    inReplyTo: InReplyTo? = null,
+    inReplyTo: InReplyToDetails? = null,
     isThreaded: Boolean = false,
     debugInfo: TimelineItemDebugInfo = aTimelineItemDebugInfo(),
     timelineItemReactions: TimelineItemReactions = aTimelineItemReactions(),
@@ -139,6 +143,7 @@ internal fun aTimelineItemEvent(
         readReceiptState = readReceiptState,
         sentTime = "12:34",
         isMine = isMine,
+        isEditable = isEditable,
         senderDisplayName = senderDisplayName,
         groupPosition = groupPosition,
         localSendState = sendState,
@@ -184,17 +189,33 @@ internal fun aTimelineItemReadReceipts(): TimelineItemReadReceipts {
     )
 }
 
-fun aGroupedEvents(id: Long = 0): TimelineItem.GroupedEvents {
-    val event = aTimelineItemEvent(
+internal fun aGroupedEvents(id: Long = 0): TimelineItem.GroupedEvents {
+    val event1 = aTimelineItemEvent(
         isMine = true,
         content = aTimelineItemStateEventContent(),
-        groupPosition = TimelineItemGroupPosition.None
+        groupPosition = TimelineItemGroupPosition.None,
+        readReceiptState = TimelineItemReadReceipts(
+            receipts = listOf(aReadReceiptData(0)).toPersistentList(),
+        ),
     )
+    val event2 = aTimelineItemEvent(
+        isMine = true,
+        content = aTimelineItemStateEventContent(body = "Another state event"),
+        groupPosition = TimelineItemGroupPosition.None,
+        readReceiptState = TimelineItemReadReceipts(
+            receipts = listOf(aReadReceiptData(1)).toPersistentList(),
+        ),
+    )
+    val events = listOf(event1, event2)
     return TimelineItem.GroupedEvents(
         id = id.toString(),
-        events = listOf(
-            event,
-            event,
-        ).toImmutableList()
+        events = events.toImmutableList(),
+        aggregatedReadReceipts = events.flatMap { it.readReceiptState.receipts }.toImmutableList(),
     )
 }
+
+internal fun aTimelineRoomInfo(
+    isDirect: Boolean = false,
+) = TimelineRoomInfo(
+    isDirect = isDirect,
+)

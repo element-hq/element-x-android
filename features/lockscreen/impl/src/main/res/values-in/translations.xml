@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <plurals name="screen_app_lock_subtitle">
+    <item quantity="other">"Anda memiliki %1$d percobaan lagi untuk membuka kunci"</item>
+  </plurals>
+  <plurals name="screen_app_lock_subtitle_wrong_pin">
+    <item quantity="other">"PIN salah. Anda memiliki %1$d percobaan lagi"</item>
+  </plurals>
+  <string name="screen_app_lock_biometric_authentication">"autentikasi biometrik"</string>
+  <string name="screen_app_lock_biometric_unlock">"pembukaan biometrik"</string>
+  <string name="screen_app_lock_biometric_unlock_title_android">"Buka kunci dengan biometrik"</string>
+  <string name="screen_app_lock_forgot_pin">"Lupa PIN?"</string>
+  <string name="screen_app_lock_settings_change_pin">"Ubah kode PIN"</string>
+  <string name="screen_app_lock_settings_enable_biometric_unlock">"Perbolehkan pembukaan biometrik"</string>
+  <string name="screen_app_lock_settings_remove_pin">"Hapus PIN"</string>
+  <string name="screen_app_lock_settings_remove_pin_alert_message">"Apakah Anda yakin ingin menghapus PIN?"</string>
+  <string name="screen_app_lock_settings_remove_pin_alert_title">"Hapus PIN?"</string>
+  <string name="screen_app_lock_setup_biometric_unlock_allow_title">"Perbolehkan %1$s"</string>
+  <string name="screen_app_lock_setup_biometric_unlock_skip">"Saya lebih suka menggunakan PIN"</string>
+  <string name="screen_app_lock_setup_biometric_unlock_subtitle">"Hemat waktu Anda dan gunakan %1$s untuk membuka kunci aplikasi setiap kalinya"</string>
+  <string name="screen_app_lock_setup_choose_pin">"Pilih PIN"</string>
+  <string name="screen_app_lock_setup_confirm_pin">"Konfirmasi PIN"</string>
+  <string name="screen_app_lock_setup_pin_blacklisted_dialog_content">"Anda tidak dapat memilih PIN ini demi keamanan"</string>
+  <string name="screen_app_lock_setup_pin_blacklisted_dialog_title">"Pilih PIN yang lain"</string>
+  <string name="screen_app_lock_setup_pin_context">"Kunci %1$s untuk menambahkan keamanan tambahan pada percakapan Anda.
+
+Pilih sesuatu yang mudah untuk diingat. Jika Anda lupa PIN ini, Anda akan dikeluarkan dari aplikasi."</string>
+  <string name="screen_app_lock_setup_pin_mismatch_dialog_content">"Silakan masukkan PIN yang sama dua kali"</string>
+  <string name="screen_app_lock_setup_pin_mismatch_dialog_title">"PIN tidak cocok"</string>
+  <string name="screen_app_lock_signout_alert_message">"Anda harus masuk ulang dan membuat PIN baru untuk melanjutkan"</string>
+  <string name="screen_app_lock_signout_alert_title">"Anda sedang dikeluarkan"</string>
+  <string name="screen_app_lock_use_biometric_android">"Gunakan biometrik"</string>
+  <string name="screen_app_lock_use_pin_android">"Gunakan PIN"</string>
+  <string name="screen_signout_in_progress_dialog_content">"Mengeluarkan dari akun…"</string>
+</resources>

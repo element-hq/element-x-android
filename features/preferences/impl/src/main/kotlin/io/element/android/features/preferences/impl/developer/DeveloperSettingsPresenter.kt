@@ -75,10 +75,12 @@ class DeveloperSettingsPresenter @Inject constructor(
             .collectAsState(initial = null)
 
         LaunchedEffect(Unit) {
-            FeatureFlags.entries.forEach { feature ->
-                features[feature.key] = feature
-                enabledFeatures[feature.key] = featureFlagService.isFeatureEnabled(feature)
-            }
+            FeatureFlags.entries
+                .filter { it.isFinished.not() }
+                .forEach { feature ->
+                    features[feature.key] = feature
+                    enabledFeatures[feature.key] = featureFlagService.isFeatureEnabled(feature)
+                }
         }
         val featureUiModels = createUiModels(features, enabledFeatures)
         val coroutineScope = rememberCoroutineScope()

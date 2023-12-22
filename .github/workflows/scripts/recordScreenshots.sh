@@ -48,6 +48,9 @@ do
   esac
 done
 
+BRANCH=$(git rev-parse --abbrev-ref HEAD)
+echo Branch used: $BRANCH
+
 if [[ -z ${TOKEN} ]]; then
   echo "No token specified, either set the env var GITHUB_TOKEN or use the --token option"
   exit 1
@@ -70,8 +73,6 @@ git config user.email "benoitm+elementbot@element.io"
 git add -A
 git commit -m "Update screenshots"
 
-BRANCH=$(git rev-parse --abbrev-ref HEAD)
-
 echo "Pushing changes"
-git push "https://$TOKEN@github.com/$REPO.git" $BRANCH:refs/heads/$BRANCH
+git push "https://$TOKEN@github.com/$REPO.git" $BRANCH
 echo "Done!"

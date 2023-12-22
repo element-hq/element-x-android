@@ -41,7 +41,7 @@ interface MatrixClient : Closeable {
     val roomListService: RoomListService
     val mediaLoader: MatrixMediaLoader
     suspend fun getRoom(roomId: RoomId): MatrixRoom?
-    suspend fun findDM(userId: UserId): MatrixRoom?
+    suspend fun findDM(userId: UserId): RoomId?
     suspend fun ignoreUser(userId: UserId): Result<Unit>
     suspend fun unignoreUser(userId: UserId): Result<Unit>
     suspend fun createRoom(createRoomParams: CreateRoomParameters): Result<RoomId>

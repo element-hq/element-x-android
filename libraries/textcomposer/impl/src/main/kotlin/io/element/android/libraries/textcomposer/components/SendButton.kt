@@ -19,7 +19,6 @@ package io.element.android.libraries.textcomposer.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
@@ -30,13 +29,15 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import io.element.android.compound.icons.CompoundIcons
+import io.element.android.compound.icons.compoundicons.Check
+import io.element.android.compound.icons.compoundicons.Send
+import io.element.android.compound.theme.ElementTheme
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
-import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
-import io.element.android.libraries.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
@@ -52,14 +53,9 @@ internal fun SendButton(
         onClick = onClick,
         enabled = canSendMessage,
     ) {
-        val iconId = when (composerMode) {
-            is MessageComposerMode.Edit -> CommonDrawables.ic_compound_check
-            else -> CommonDrawables.ic_send
-        }
-        val iconSize = when (composerMode) {
-            is MessageComposerMode.Edit -> 24.dp
-            // CommonDrawables.ic_september_send is too big... reduce its size.
-            else -> 18.dp
+        val iconVector = when (composerMode) {
+            is MessageComposerMode.Edit -> CompoundIcons.Check
+            else -> CompoundIcons.Send
         }
         val iconStartPadding = when (composerMode) {
             is MessageComposerMode.Edit -> 0.dp
@@ -77,10 +73,9 @@ internal fun SendButton(
         ) {
             Icon(
                 modifier = Modifier
-                    .height(iconSize)
                     .padding(start = iconStartPadding)
                     .align(Alignment.Center),
-                resourceId = iconId,
+                imageVector = iconVector,
                 contentDescription = contentDescription,
                 // Exception here, we use Color.White instead of ElementTheme.colors.iconOnSolidPrimary
                 tint = if (canSendMessage) Color.White else ElementTheme.colors.iconDisabled

@@ -21,6 +21,7 @@ import android.media.MediaRecorder
 import com.squareup.anvil.annotations.ContributesTo
 import dagger.Module
 import dagger.Provides
+import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.voicerecorder.impl.audio.AudioConfig
 import io.element.android.libraries.voicerecorder.impl.audio.SampleRate
@@ -50,7 +51,7 @@ object VoiceRecorderModule {
         VoiceFileConfig(
             cacheSubdir = "voice_recordings",
             fileExt = "ogg",
-            mimeType = "audio/ogg",
+            mimeType = MimeTypes.Ogg,
         )
 
     @Provides
