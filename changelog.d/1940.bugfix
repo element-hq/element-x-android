@@ -1,1 +1,0 @@
-Fix scaling of timeline images: don't crop, don't set min/max aspect ratio values.

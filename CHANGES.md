@@ -1,3 +1,54 @@
+Changes in Element X v0.4.0 (2023-12-22)
+========================================
+
+Features ✨
+----------
+ - Use the RTE library `TextView` to render text events in the timeline. Add support for mention pills - with no interaction yet. ([#1433](https://github.com/element-hq/element-x-android/issues/1433))
+ - Tapping on a user mention pill opens their profile. ([#1448](https://github.com/element-hq/element-x-android/issues/1448))
+ - Display different notifications for mentions. ([#1451](https://github.com/element-hq/element-x-android/issues/1451))
+ - Reply to a poll ([#1848](https://github.com/element-hq/element-x-android/issues/1848))
+ - Add plain text representation of messages ([#1850](https://github.com/element-hq/element-x-android/issues/1850))
+ - Allow polls to be edited when they have not been voted on ([#1869](https://github.com/element-hq/element-x-android/issues/1869))
+ - Scroll to end of timeline when sending a new message. ([#1877](https://github.com/element-hq/element-x-android/issues/1877))
+ - Confirm back navigation when editing a poll only if the poll was changed ([#1886](https://github.com/element-hq/element-x-android/issues/1886))
+ - Add option to delete a poll while editing the poll ([#1895](https://github.com/element-hq/element-x-android/issues/1895))
+ - Open room member avatar when you click on it inside the member details screen. ([#1907](https://github.com/element-hq/element-x-android/issues/1907))
+ - Poll history of a room is now accessible from the room details screen. ([#2014](https://github.com/element-hq/element-x-android/issues/2014))
+ - Always close the invite list screen when there is no more invite. ([#2022](https://github.com/element-hq/element-x-android/issues/2022))
+
+Bugfixes 🐛
+----------
+ - Fix see room in the room list after leaving it. ([#1006](https://github.com/element-hq/element-x-android/issues/1006))
+ - Adjust mention pills font weight and horizontal padding ([#1449](https://github.com/element-hq/element-x-android/issues/1449))
+ - Font size in 'All Chats' header was changing mid-animation. ([#1572](https://github.com/element-hq/element-x-android/issues/1572))
+ - Accessibility: do not read initial used for avatar out loud. ([#1864](https://github.com/element-hq/element-x-android/issues/1864))
+ - Use the right avatar for DMs in DM rooms ([#1912](https://github.com/element-hq/element-x-android/issues/1912))
+ - Fix scaling of timeline images: don't crop, don't set min/max aspect ratio values. ([#1940](https://github.com/element-hq/element-x-android/issues/1940))
+ - Fix rendering of user name with vertical text by clipping the text. ([#1950](https://github.com/element-hq/element-x-android/issues/1950))
+ - Do not render `roomId` if the room has no canonical alias. ([#1970](https://github.com/element-hq/element-x-android/issues/1970))
+ - Fix avatar not displayed in notification when the app is not in background ([#1991](https://github.com/element-hq/element-x-android/issues/1991))
+ - Fix wording in room invite members view: `Send` -> `Invite`. ([#2037](https://github.com/element-hq/element-x-android/issues/2037))
+ - Timestamp positioning was broken, specially for edited messages. ([#2060](https://github.com/element-hq/element-x-android/issues/2060))
+ - Emojis in custom reaction bottom sheet are too tiny. ([#2066](https://github.com/element-hq/element-x-android/issues/2066))
+ - Set a default power level to join calls. Also, create new rooms taking this power level into account.
+
+Other changes
+-------------
+ - Add a warning for 'mentions and keywords only' notification option if your homeserver does not support it ([#1749](https://github.com/element-hq/element-x-android/issues/1749))
+ - Remove `:libraries:theme` module, extract theme and tokens to [Compound Android](https://github.com/element-hq/compound-android). ([#1833](https://github.com/element-hq/element-x-android/issues/1833))
+ - Update poll icons from Compound ([#1849](https://github.com/element-hq/element-x-android/issues/1849))
+ - Add ability to see the room avatar in the media viewer. ([#1918](https://github.com/element-hq/element-x-android/issues/1918))
+ - RoomList: introduce incremental loading to improve performances. ([#1920](https://github.com/element-hq/element-x-android/issues/1920))
+ - Add toggle in the notification settings to disable notifications for room invites. ([#1944](https://github.com/element-hq/element-x-android/issues/1944))
+ - Update rendering of Emojis displayed during verification. ([#1965](https://github.com/element-hq/element-x-android/issues/1965))
+ - Hide sender info in direct rooms ([#1979](https://github.com/element-hq/element-x-android/issues/1979))
+ - Render images in Notification ([#1991](https://github.com/element-hq/element-x-android/issues/1991))
+ - Only process content.json from Localazy. ([#2031](https://github.com/element-hq/element-x-android/issues/2031))
+ - Always show user avatar in message action sheet ([#2032](https://github.com/element-hq/element-x-android/issues/2032))
+ - Hide room list dropdown menu. ([#2062](https://github.com/element-hq/element-x-android/issues/2062))
+ - Enable Chat backup, Mentions and Read Receipt in release. ([#2087](https://github.com/element-hq/element-x-android/issues/2087))
+ - Make most code used in Compose from `:libraries:matrix` and derived classes Immutable or Stable.
+
 Changes in Element X v0.3.2 (2023-11-22)
 ========================================
 
