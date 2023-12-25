@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_bug_report_attach_screenshot">"Adjuntar captura de pantalla"</string>
-  <string name="screen_bug_report_contact_me">"Podéis poneros en contacto conmigo para resolver dudas relacionadas"</string>
+  <string name="screen_bug_report_contact_me">"Pueden ponerse en contacto conmigo si tienen alguna pregunta relacionada."</string>
+  <string name="screen_bug_report_contact_me_title">"Contáctame"</string>
   <string name="screen_bug_report_edit_screenshot">"Editar captura de pantalla"</string>
-  <string name="screen_bug_report_editor_description">"Describe el problema. ¿Qué hiciste? ¿Qué esperabas que ocurriera? ¿Qué ocurrió en realidad? Por favor, detállalo todo lo que puedas."</string>
-  <string name="screen_bug_report_editor_placeholder">"Describe el error…"</string>
+  <string name="screen_bug_report_editor_description">"Describe el problema. ¿Qué has hecho? ¿Qué esperabas que ocurriera? ¿Qué ocurrió realmente? Por favor, detállalo todo lo que puedas."</string>
+  <string name="screen_bug_report_editor_placeholder">"Describe el problema…"</string>
   <string name="screen_bug_report_editor_supporting">"Si es posible, escriba la descripción en inglés."</string>
   <string name="screen_bug_report_include_crash_logs">"Enviar registros de fallos"</string>
-  <string name="screen_bug_report_include_logs">"Enviar registros para ayudar"</string>
+  <string name="screen_bug_report_include_logs">"Permitir registros"</string>
   <string name="screen_bug_report_include_screenshot">"Enviar captura de pantalla"</string>
-  <string name="screen_bug_report_logs_description">"Para comprobar que todo funciona correctamente, se enviarán registros de fallos con su mensaje. Serán privados. Para enviar sólo tu mensaje, desactiva esta opción."</string>
+  <string name="screen_bug_report_logs_description">"Los registros se incluirán con su mensaje para asegurarse de que todo funciona correctamente. Para enviar tu mensaje sin registros, desactiva esta configuración."</string>
   <string name="screen_bug_report_rash_logs_alert_title">"%1$s se cerró inesperadamente la última vez que se lo usaste. ¿Quieres compartir un informe de error con nosotros?"</string>
 </resources>

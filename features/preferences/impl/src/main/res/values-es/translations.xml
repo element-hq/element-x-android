@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_advanced_settings_element_call_base_url">"URL base personalizada de Element Call"</string>
+  <string name="screen_advanced_settings_element_call_base_url_description">"Define una URL base personalizada para Element Call."</string>
+  <string name="screen_advanced_settings_element_call_base_url_validation_error">"URL no válida, asegúrate de incluir el protocolo (http/https) y la dirección correcta."</string>
+  <string name="screen_advanced_settings_developer_mode">"Modo desarrollador"</string>
+  <string name="screen_advanced_settings_developer_mode_description">"Habilita para tener acceso a características y funcionalidades para desarrolladores."</string>
+  <string name="screen_advanced_settings_rich_text_editor_description">"Desactiva el editor de texto enriquecido para escribir Markdown manualmente."</string>
+  <string name="screen_advanced_settings_view_source_description">"Habilita la opción para ver el contenido en bruto del mensaje en la cronología."</string>
+  <string name="screen_edit_profile_display_name">"Nombre público"</string>
+  <string name="screen_edit_profile_display_name_placeholder">"Tu nombre visible"</string>
+  <string name="screen_edit_profile_error">"Se encontró un error desconocido y no se pudo cambiar la información."</string>
+  <string name="screen_edit_profile_error_title">"No se puede actualizar el perfil"</string>
+  <string name="screen_edit_profile_title">"Editar perfil"</string>
+  <string name="screen_edit_profile_updating_details">"Actualizando perfil…"</string>
+  <string name="screen_notification_settings_additional_settings_section_title">"Ajustes adicionales"</string>
+  <string name="screen_notification_settings_calls_label">"Llamadas de audio y vídeo"</string>
+  <string name="screen_notification_settings_configuration_mismatch">"La configuración no coincide"</string>
+  <string name="screen_notification_settings_configuration_mismatch_description">"Hemos simplificado la Configuración de Notificaciones para hacer las opciones más fáciles de encontrar. Algunas configuraciones personalizadas que has elegido en el pasado no se muestran aquí, pero siguen activas.
+
+Si continúas, es posible que algunos de tus ajustes cambien."</string>
+  <string name="screen_notification_settings_direct_chats">"Chats directos"</string>
+  <string name="screen_notification_settings_edit_custom_settings_section_title">"Configuración personalizada por chat"</string>
+  <string name="screen_notification_settings_edit_failed_updating_default_mode">"Se ha producido un error al actualizar la configuración de notificaciones."</string>
+  <string name="screen_notification_settings_edit_mode_all_messages">"Todos los mensajes"</string>
+  <string name="screen_notification_settings_edit_mode_mentions_and_keywords">"Únicamente Menciones y Palabras clave"</string>
+  <string name="screen_notification_settings_edit_screen_direct_section_header">"En los chats directos, notifícame por"</string>
+  <string name="screen_notification_settings_edit_screen_group_section_header">"En los chats grupales, notifícame por"</string>
+  <string name="screen_notification_settings_enable_notifications">"Habilitar las notificaciones en este dispositivo"</string>
+  <string name="screen_notification_settings_failed_fixing_configuration">"La configuración no se ha corregido, por favor inténtalo de nuevo."</string>
+  <string name="screen_notification_settings_group_chats">"Chats grupales"</string>
+  <string name="screen_notification_settings_invite_for_me_label">"Invitaciones"</string>
+  <string name="screen_notification_settings_mentions_only_disclaimer">"Tu servidor principal no admite esta opción en salas cifradas, puede que no recibas notificaciones en algunas salas."</string>
+  <string name="screen_notification_settings_mentions_section_title">"Menciones"</string>
+  <string name="screen_notification_settings_mode_all">"Todos"</string>
+  <string name="screen_notification_settings_mode_mentions">"Menciones"</string>
+  <string name="screen_notification_settings_notification_section_title">"Notificarme para"</string>
+  <string name="screen_notification_settings_room_mention_label">"Notificarme con @room"</string>
+  <string name="screen_notification_settings_system_notifications_action_required">"Para recibir notificaciones, cambia tus %1$s."</string>
+  <string name="screen_notification_settings_system_notifications_action_required_content_link">"ajustes del sistema"</string>
+  <string name="screen_notification_settings_system_notifications_turned_off">"Notificaciones del sistema desactivadas"</string>
+  <string name="screen_notification_settings_title">"Notificaciones"</string>
+</resources>

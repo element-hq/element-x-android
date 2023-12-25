@@ -6,7 +6,9 @@
   <string name="notification_invitation_action_join">"加入"</string>
   <string name="notification_invitation_action_reject">"拒絕"</string>
   <string name="notification_invite_body">"邀請您聊天"</string>
+  <string name="notification_mentioned_you_body">"提及您：%1$s"</string>
   <string name="notification_new_messages">"新訊息"</string>
+  <string name="notification_reaction_body">"回應 %1$s"</string>
   <string name="notification_room_action_mark_as_read">"標示為已讀"</string>
   <string name="notification_room_invite_body">"邀請您加入聊天室"</string>
   <string name="notification_sender_me">"我"</string>

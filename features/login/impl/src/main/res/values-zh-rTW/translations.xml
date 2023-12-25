@@ -15,6 +15,8 @@
   <string name="screen_change_account_provider_title">"更改帳號提供者"</string>
   <string name="screen_change_server_error_no_sliding_sync_message">"此伺服器目前不支援滑動同步（sliding sync）。"</string>
   <string name="screen_change_server_form_header">"家伺服器 URL"</string>
+  <string name="screen_change_server_subtitle">"您的伺服器地址？"</string>
+  <string name="screen_change_server_title">"選擇您的伺服器"</string>
   <string name="screen_login_error_deactivated_account">"這個帳號已被停用。"</string>
   <string name="screen_login_error_invalid_credentials">"不正確的使用者名稱或密碼"</string>
   <string name="screen_login_form_header">"輸入您的詳細資料"</string>
