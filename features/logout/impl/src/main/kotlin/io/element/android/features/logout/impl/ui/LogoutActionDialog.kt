@@ -22,7 +22,7 @@ import androidx.compose.ui.res.stringResource
 import io.element.android.features.logout.impl.R
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.designsystem.components.ProgressDialog
-import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
+import io.element.android.libraries.designsystem.components.dialogs.RetryDialog
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
@@ -36,11 +36,11 @@ fun LogoutActionDialog(
         is Async.Loading ->
             ProgressDialog(text = stringResource(id = R.string.screen_signout_in_progress_dialog_content))
         is Async.Failure ->
-            ConfirmationDialog(
+            RetryDialog(
                 title = stringResource(id = CommonStrings.dialog_title_error),
                 content = stringResource(id = CommonStrings.error_unknown),
-                submitText = stringResource(id = CommonStrings.action_signout_anyway),
-                onSubmitClicked = onForceLogoutClicked,
+                retryText = stringResource(id = CommonStrings.action_signout_anyway),
+                onRetry = onForceLogoutClicked,
                 onDismiss = onDismissError,
             )
         Async.Uninitialized ->
