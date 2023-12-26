@@ -29,7 +29,6 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
-import io.element.android.features.logout.api.direct.DirectLogoutEvents
 import io.element.android.features.preferences.impl.R
 import io.element.android.features.preferences.impl.user.UserPreferences
 import io.element.android.libraries.designsystem.components.list.ListItemContent
@@ -163,13 +162,7 @@ fun PreferencesRootView(
             headlineContent = { Text(stringResource(id = CommonStrings.action_signout)) },
             leadingContent = ListItemContent.Icon(IconSource.Resource(CommonDrawables.ic_sign_out)),
             style = ListItemStyle.Destructive,
-            onClick = {
-                if (state.directLogoutState.canDoDirectSignOut) {
-                    state.directLogoutState.eventSink(DirectLogoutEvents.Logout(ignoreSdkError = false))
-                } else {
-                    onSignOutClicked()
-                }
-            },
+            onClick = onSignOutClicked,
         )
         Text(
             modifier = Modifier

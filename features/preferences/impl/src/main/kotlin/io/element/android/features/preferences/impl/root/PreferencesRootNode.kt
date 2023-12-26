@@ -28,6 +28,7 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.compound.theme.ElementTheme
+import io.element.android.features.logout.api.direct.DirectLogoutEvents
 import io.element.android.features.logout.api.direct.DirectLogoutView
 import io.element.android.libraries.androidutils.browser.openUrlInChromeCustomTab
 import io.element.android.libraries.di.SessionScope
@@ -141,7 +142,13 @@ class PreferencesRootNode @AssistedInject constructor(
             onOpenNotificationSettings = this::onOpenNotificationSettings,
             onOpenLockScreenSettings = this::onOpenLockScreenSettings,
             onOpenUserProfile = this::onOpenUserProfile,
-            onSignOutClicked = this::onSignOutClicked,
+            onSignOutClicked = {
+                if (state.directLogoutState.canDoDirectSignOut) {
+                    state.directLogoutState.eventSink(DirectLogoutEvents.Logout(ignoreSdkError = false))
+                } else {
+                    onSignOutClicked()
+                }
+            },
         )
 
         directLogoutView.Render(
