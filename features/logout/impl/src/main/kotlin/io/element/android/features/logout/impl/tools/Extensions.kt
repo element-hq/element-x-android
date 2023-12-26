@@ -23,6 +23,7 @@ internal fun BackupUploadState.isBackingUp(): Boolean {
     return when (this) {
         BackupUploadState.Waiting,
         is BackupUploadState.Uploading -> true
+        // The backup is in progress, but there have been a network issue, so we have to warn the user.
         is BackupUploadState.SteadyException -> exception is SteadyStateException.Connection
         BackupUploadState.Unknown,
         BackupUploadState.Done,
