@@ -16,55 +16,70 @@
 
 package io.element.android.features.messages.impl.timeline.components.layout
 
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.LayoutDirection
-import io.element.android.features.messages.impl.timeline.components.TimelineEventTimestampViewDefaults
+import androidx.compose.ui.unit.dp
 import kotlin.math.max
 
+/**
+ * A layout with 2 children: the `content` and the `overlay`.
+ *
+ * It will try to place the `overlay` on top of the `content` if possible, avoiding the area of it that is non-overlapping.
+ * If the `overlay` can't be placed on top of the `content`, it will be placed to the right of it, if it fits, otherwise, to its bottom in a new row.
+ *
+ * @param modifier The modifier for the layout.
+ * @param spacing The spacing between the `content` and the `overlay`. Defaults to `0.dp`.
+ * @param shrinkContent Whether the content should be shrunk to fit the available width or not. Defaults to `false`.
+ * @param layoutContent The content of the layout. **It must have exactly 2 children.**
+ */
 @Composable
 fun ContentAvoidingLayout(
     modifier: Modifier = Modifier,
+    spacing: Dp = 0.dp,
     shrinkContent: Boolean = false,
-    content: @Composable ContentAvoidingLayoutScope.() -> Unit,
+    layoutContent: @Composable ContentAvoidingLayoutScope.() -> Unit,
 ) {
     val scope = remember { ContentAvoidingLayoutScopeInstance() }
 
-    Layout(modifier = modifier, content = { scope.content() }) { measurables, constraints ->
+    Layout(modifier = modifier, content = { scope.layoutContent() }) { measurables, constraints ->
         assert(measurables.size == 2) { "TextAvoidingLayout must have exactly 2 children" }
 
-        val timestamp = measurables.last().measure(Constraints(minWidth = 0, maxWidth = constraints.maxWidth))
+        // Measure the `overlay` view first, in case we need to shrink the `content`
+        val overlay = measurables.last().measure(Constraints(minWidth = 0, maxWidth = constraints.maxWidth))
         val contentConstraints = if (shrinkContent) {
-            Constraints(minWidth = 0, maxWidth =  constraints.maxWidth - timestamp.width)
+            Constraints(minWidth = 0, maxWidth =  constraints.maxWidth - overlay.width)
         } else {
             Constraints(minWidth = 0, maxWidth = constraints.maxWidth)
         }
-        val messageContent = measurables.first().measure(contentConstraints)
+        val content = measurables.first().measure(contentConstraints)
 
-        var layoutWidth = messageContent.width
-        var layoutHeight = messageContent.height
+        var layoutWidth = content.width
+        var layoutHeight = content.height
 
         val data = scope.data
 
-        // Horizontal padding = width of the component - width of its contents
+        // Horizontal padding = width of the component - width of its contents, but only if `hasPadding` is true
         val internalContentHorizontalPadding = if (data.hasPadding) {
-            messageContent.width - data.contentWidth
+            content.width - data.contentWidth
         } else {
             0
         }
 
         when {
-            !shrinkContent && data.nonOverlappingContentWidth + timestamp.width > constraints.maxWidth -> {
-                layoutHeight += timestamp.height
+            // When the content + the overlay don't fit in the available max width, we need to move the overlay to a new row
+            !shrinkContent && data.nonOverlappingContentWidth + overlay.width > constraints.maxWidth -> {
+                layoutHeight += overlay.height
             }
+            // If the content is smaller than the available max width, we can move the overlaidView to the right of the content
             layoutWidth < constraints.maxWidth -> {
-                if (data.nonOverlappingContentWidth + internalContentHorizontalPadding + timestamp.width > layoutWidth) {
-                    layoutWidth += timestamp.width - TimelineEventTimestampViewDefaults.padding.horizontalPadding().roundToPx() - internalContentHorizontalPadding / 2
+                // If both the content and the overlay plus the padding can fit inside the current layoutWidth, there is no need to increase it
+                if (data.nonOverlappingContentWidth + internalContentHorizontalPadding + overlay.width > layoutWidth) {
+                    // Otherwise, we need to increase it by the width of the overlay + some padding adjustments
+                    layoutWidth += overlay.width + spacing.roundToPx() - internalContentHorizontalPadding / 2
                 }
             }
             else -> Unit
@@ -74,22 +89,39 @@ fun ContentAvoidingLayout(
         layoutHeight = max(layoutHeight, constraints.minHeight)
 
         layout(layoutWidth, layoutHeight) {
-            messageContent.placeRelative(0, 0)
-            timestamp.placeRelative(layoutWidth - timestamp.width, layoutHeight - timestamp.height)
+            content.placeRelative(0, 0)
+            overlay.placeRelative(layoutWidth - overlay.width, layoutHeight - overlay.height)
         }
     }
 }
 
+/**
+ * Data class to hold the content layout data.
+ * This is used to pass the data from the content to the [ContentAvoidingLayout].
+ *
+ * @param contentWidth The full width of the content in pixels.
+ * @param contentHeight The full height of the content in pixels.
+ * @param nonOverlappingContentWidth The width of the part of the content that can't overlap with the timestamp.
+ * @param nonOverlappingContentHeight The height of the part of the content that can't overlap with the timestamp.
+ * @param hasPadding Whether the content has padding or not. Defaults to `false`.
+ */
+@Suppress("DataClassShouldBeImmutable")
 data class ContentAvoidingLayoutData(
     var contentWidth: Int = 0,
     var contentHeight: Int = 0,
-    var contentStart: Int = 0,
     var nonOverlappingContentWidth: Int = contentWidth,
     var nonOverlappingContentHeight: Int = contentHeight,
     var hasPadding: Boolean = false,
 )
 
+/**
+ * A scope for the [ContentAvoidingLayout].
+ */
 interface ContentAvoidingLayoutScope {
+
+    /**
+     * It should be called when the content layout changes, so it can update the [ContentAvoidingLayoutData] and measure and layout the content properly.
+     */
     fun onContentLayoutChanged(data: ContentAvoidingLayoutData)
 }
 
@@ -101,11 +133,6 @@ private class ContentAvoidingLayoutScopeInstance(
         this.data.contentHeight = data.contentHeight
         this.data.nonOverlappingContentWidth = data.nonOverlappingContentWidth
         this.data.nonOverlappingContentHeight = data.nonOverlappingContentHeight
-        this.data.contentStart = data.contentStart
         this.data.hasPadding = data.hasPadding
     }
-}
-
-private fun PaddingValues.horizontalPadding(): Dp {
-    return this.calculateLeftPadding(LayoutDirection.Ltr) + this.calculateRightPadding(LayoutDirection.Ltr)
 }

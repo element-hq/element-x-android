@@ -70,7 +70,8 @@ fun TimelineEventTimestampView(
     Row(
         modifier = Modifier
             .then(clickModifier)
-            .padding(TimelineEventTimestampViewDefaults.padding) // Add extra padding for touch target size
+            // Add extra padding for touch target size
+            .padding(PaddingValues(start = TimelineEventTimestampViewDefaults.spacing))
             .then(modifier),
         verticalAlignment = Alignment.CenterVertically,
     ) {
@@ -110,5 +111,5 @@ internal fun TimelineEventTimestampViewPreview(@PreviewParameter(TimelineItemEve
 }
 
 object TimelineEventTimestampViewDefaults {
-    val padding = PaddingValues(start = 16.dp)
+    val spacing = 16.dp
 }

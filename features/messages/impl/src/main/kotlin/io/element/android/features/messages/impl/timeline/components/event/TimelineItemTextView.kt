@@ -57,7 +57,6 @@ fun TimelineItemTextView(
                 onTextLayout = { textLayout ->
                     val layoutData =
                         ContentAvoidingLayoutData(
-                            contentStart = textLayout.getLineStart(textLayout.lineCount - 1),
                             contentWidth = textLayout.width,
                             nonOverlappingContentWidth = textLayout.getLineWidth(textLayout.lineCount - 1).roundToInt(),
                             contentHeight = textLayout.height,

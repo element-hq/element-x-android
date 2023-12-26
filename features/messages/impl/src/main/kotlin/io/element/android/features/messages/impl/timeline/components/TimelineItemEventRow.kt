@@ -469,7 +469,12 @@ private fun MessageEventBubbleContent(
                     )
                 }
             TimestampPosition.Aligned ->
-                ContentAvoidingLayout(modifier = modifier, shrinkContent = canShrinkContent) {
+                ContentAvoidingLayout(
+                    modifier = modifier,
+                    // The spacing is negative to make the content overlap the empty space at the start of the timestamp
+                    spacing = -TimelineEventTimestampViewDefaults.spacing,
+                    shrinkContent = canShrinkContent,
+                ) {
                     content(this::onContentLayoutChanged)
                     TimelineEventTimestampView(
                         event = event,
