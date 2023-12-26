@@ -21,7 +21,6 @@ import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.logout.api.direct.DirectLogoutEvents
-import io.element.android.features.logout.api.direct.DirectLogoutPresenter
 import io.element.android.features.logout.api.direct.DirectLogoutState
 import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.featureflag.api.FeatureFlags

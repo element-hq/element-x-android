@@ -20,7 +20,7 @@ import androidx.compose.runtime.Composable
 
 interface DirectLogoutView {
     @Composable
-    fun render(
+    fun Render(
         state: DirectLogoutState,
         onSuccessLogout: (logoutUrlResult: String?) -> Unit
     )

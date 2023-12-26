@@ -29,7 +29,7 @@ import javax.inject.Inject
 @ContributesBinding(SessionScope::class)
 class DefaultDirectLogoutView @Inject constructor() : DirectLogoutView {
     @Composable
-    override fun render(
+    override fun Render(
         state: DirectLogoutState,
         onSuccessLogout: (logoutUrlResult: String?) -> Unit,
     ) {

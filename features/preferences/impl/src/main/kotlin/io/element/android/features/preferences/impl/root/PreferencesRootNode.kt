@@ -144,7 +144,7 @@ class PreferencesRootNode @AssistedInject constructor(
             onSignOutClicked = this::onSignOutClicked,
         )
 
-        directLogoutView.render(
+        directLogoutView.Render(
             state = state.directLogoutState,
             onSuccessLogout = {
                 onSuccessLogout(activity, it)
