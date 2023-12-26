@@ -172,8 +172,8 @@ class ActionListPresenter @Inject constructor(
                 }
             }
         val displayEmojiReactions = userCanSendReaction &&
-            timelineItem.isRemote
-            && timelineItem.content.canReact()
+            timelineItem.isRemote &&
+            timelineItem.content.canReact()
         if (actions.isNotEmpty() || displayEmojiReactions) {
             target.value = ActionListState.Target.Success(
                 event = timelineItem,
