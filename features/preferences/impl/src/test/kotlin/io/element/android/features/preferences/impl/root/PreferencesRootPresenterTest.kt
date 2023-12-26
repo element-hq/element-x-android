@@ -88,11 +88,18 @@ class PreferencesRootPresenterTest {
                     avatarUrl = AN_AVATAR_URL
                 )
             )
-            assertThat(loadedState.showDeveloperSettings).isTrue()
-            assertThat(loadedState.showAnalyticsSettings).isFalse()
+            assertThat(initialState.version).isEqualTo("A Version")
+            assertThat(loadedState.showCompleteVerification).isTrue()
+            assertThat(loadedState.showSecureBackup).isFalse()
+            assertThat(loadedState.showSecureBackupBadge).isTrue()
             assertThat(loadedState.accountManagementUrl).isNull()
             assertThat(loadedState.devicesManagementUrl).isNull()
+            assertThat(loadedState.showAnalyticsSettings).isFalse()
+            assertThat(loadedState.showDeveloperSettings).isTrue()
+            assertThat(loadedState.showLockScreenSettings).isTrue()
+            assertThat(loadedState.showNotificationSettings).isTrue()
             assertThat(loadedState.directLogoutState).isEqualTo(aDirectLogoutState)
+            assertThat(loadedState.snackbarMessage).isNull()
         }
     }
 }
