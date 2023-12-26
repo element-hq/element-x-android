@@ -471,8 +471,24 @@ class DefaultRoomLastMessageFormatterTest {
 
     @Test
     @Config(qualifiers = "en")
+    fun `Membership change - None`() {
+        val otherName = "Someone"
+        val youContent = RoomMembershipContent(A_USER_ID, MembershipChange.NONE)
+        val someoneContent = RoomMembershipContent(UserId("@someone_else:domain"), MembershipChange.NONE)
+
+        val youNoneRoomEvent = createRoomEvent(sentByYou = true, senderDisplayName = null, content = youContent)
+        val youNoneRoom = formatter.format(youNoneRoomEvent, false)
+        assertThat(youNoneRoom).isEqualTo("You made no changes")
+
+        val someoneNoneRoomEvent = createRoomEvent(sentByYou = false, senderDisplayName = otherName, content = someoneContent)
+        val someoneNoneRoom = formatter.format(someoneNoneRoomEvent, false)
+        assertThat(someoneNoneRoom).isEqualTo("$otherName made no changes")
+    }
+
+    @Test
+    @Config(qualifiers = "en")
     fun `Membership change - others`() {
-        val otherChanges = arrayOf(MembershipChange.NONE, MembershipChange.ERROR, MembershipChange.NOT_IMPLEMENTED)
+        val otherChanges = arrayOf(MembershipChange.ERROR, MembershipChange.NOT_IMPLEMENTED)
 
         val results = otherChanges.map { change ->
             val content = RoomMembershipContent(A_USER_ID, change)
