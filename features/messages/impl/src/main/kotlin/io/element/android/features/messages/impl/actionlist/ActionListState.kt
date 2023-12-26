@@ -24,7 +24,6 @@ import kotlinx.collections.immutable.ImmutableList
 @Immutable
 data class ActionListState(
     val target: Target,
-    val displayEmojiReactions: Boolean,
     val eventSink: (ActionListEvents) -> Unit,
 ) {
     sealed interface Target {
@@ -32,6 +31,7 @@ data class ActionListState(
         data class Loading(val event: TimelineItem.Event) : Target
         data class Success(
             val event: TimelineItem.Event,
+            val displayEmojiReactions: Boolean,
             val actions: ImmutableList<TimelineItemAction>,
         ) : Target
     }

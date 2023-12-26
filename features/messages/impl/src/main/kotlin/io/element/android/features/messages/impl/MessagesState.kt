@@ -37,6 +37,7 @@ data class MessagesState(
     val roomAvatar: Async<AvatarData>,
     val userHasPermissionToSendMessage: Boolean,
     val userHasPermissionToRedact: Boolean,
+    val userHasPermissionToSendReaction: Boolean,
     val composerState: MessageComposerState,
     val voiceMessageComposerState: VoiceMessageComposerState,
     val timelineState: TimelineState,

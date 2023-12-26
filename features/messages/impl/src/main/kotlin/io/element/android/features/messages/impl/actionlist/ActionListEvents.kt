@@ -24,5 +24,6 @@ sealed interface ActionListEvents {
         val event: TimelineItem.Event,
         val canRedact: Boolean,
         val canSendMessage: Boolean,
+        val canSendReaction: Boolean,
     ) : ActionListEvents
 }
