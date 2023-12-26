@@ -3,6 +3,8 @@
   <string name="screen_session_verification_cancelled_subtitle">"Sepertinya ada yang tidak beres. Entah permintaan sudah habis masa berlakunya atau permintaan ditolak."</string>
   <string name="screen_session_verification_compare_emojis_subtitle">"Konfirmasikan bahwa emoji di bawah ini sesuai dengan yang ditampilkan pada sesi Anda yang lain."</string>
   <string name="screen_session_verification_compare_emojis_title">"Bandingkan emoji"</string>
+  <string name="screen_session_verification_compare_numbers_subtitle">"Konfirmasikan bahwa angka-angka di bawah ini sesuai dengan yang ditampilkan pada sesi Anda yang lain."</string>
+  <string name="screen_session_verification_compare_numbers_title">"Bandingkan angka"</string>
   <string name="screen_session_verification_complete_subtitle">"Sesi baru Anda sekarang diverifikasi. Ini memiliki akses ke pesan terenkripsi Anda, dan pengguna lain akan melihatnya sebagai tepercaya."</string>
   <string name="screen_session_verification_open_existing_session_subtitle">"Buktikan bahwa ini memang Anda untuk mengakses riwayat pesan terenkripsi Anda."</string>
   <string name="screen_session_verification_open_existing_session_title">"Buka sesi yang sudah ada"</string>

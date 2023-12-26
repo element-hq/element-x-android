@@ -50,8 +50,8 @@
   <string name="action_forgot_password">"Lupa kata sandi?"</string>
   <string name="action_forward">"Teruskan"</string>
   <string name="action_invite">"Undang"</string>
-  <string name="action_invite_friends">"Undang teman"</string>
-  <string name="action_invite_friends_to_app">"Undang teman ke %1$s"</string>
+  <string name="action_invite_friends">"Undang orang-orang"</string>
+  <string name="action_invite_friends_to_app">"Undang orang-orang ke %1$s"</string>
   <string name="action_invite_people_to_app">"Undang orang-orang ke %1$s"</string>
   <string name="action_invites_list">"Undangan"</string>
   <string name="action_join">"Gabung"</string>

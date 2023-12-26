@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_analytics_settings_share_data">"分享分析數據"</string>
-  <string name="screen_analytics_settings_help_us_improve">"分享匿名的使用數據以協助我們釐清問題。"</string>
+  <string name="screen_analytics_settings_share_data">"提供分析數據"</string>
+  <string name="screen_analytics_settings_help_us_improve">"提供匿名的使用數據以協助我們釐清問題。"</string>
   <string name="screen_analytics_settings_read_terms">"您可以到%1$s閱讀我們的條款。"</string>
   <string name="screen_analytics_settings_read_terms_content_link">"這裡"</string>
 </resources>
