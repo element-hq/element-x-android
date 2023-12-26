@@ -68,8 +68,9 @@ class ActionListPresenterTest {
             val successState = awaitItem()
             assertThat(successState.target).isEqualTo(
                 ActionListState.Target.Success(
-                    messageEvent,
-                    persistentListOf(
+                    event = messageEvent,
+                    displayEmojiReactions = false,
+                    actions = persistentListOf(
                         TimelineItemAction.ViewSource,
                     )
                 )
@@ -93,8 +94,9 @@ class ActionListPresenterTest {
             val successState = awaitItem()
             assertThat(successState.target).isEqualTo(
                 ActionListState.Target.Success(
-                    messageEvent,
-                    persistentListOf(
+                    event = messageEvent,
+                    displayEmojiReactions = false,
+                    actions = persistentListOf(
                         TimelineItemAction.ViewSource,
                     )
                 )
@@ -121,8 +123,9 @@ class ActionListPresenterTest {
             val successState = awaitItem()
             assertThat(successState.target).isEqualTo(
                 ActionListState.Target.Success(
-                    messageEvent,
-                    persistentListOf(
+                    event = messageEvent,
+                    displayEmojiReactions = true,
+                    actions = persistentListOf(
                         TimelineItemAction.Reply,
                         TimelineItemAction.Forward,
                         TimelineItemAction.Copy,
@@ -153,8 +156,9 @@ class ActionListPresenterTest {
             val successState = awaitItem()
             assertThat(successState.target).isEqualTo(
                 ActionListState.Target.Success(
-                    messageEvent,
-                    persistentListOf(
+                    event = messageEvent,
+                    displayEmojiReactions = true,
+                    actions = persistentListOf(
                         TimelineItemAction.Forward,
                         TimelineItemAction.Copy,
                         TimelineItemAction.ViewSource,
@@ -182,8 +186,9 @@ class ActionListPresenterTest {
             val successState = awaitItem()
             assertThat(successState.target).isEqualTo(
                 ActionListState.Target.Success(
-                    messageEvent,
-                    persistentListOf(
+                    event = messageEvent,
+                    displayEmojiReactions = true,
+                    actions = persistentListOf(
                         TimelineItemAction.Reply,
                         TimelineItemAction.Forward,
                         TimelineItemAction.Copy,
@@ -215,8 +220,9 @@ class ActionListPresenterTest {
             val successState = awaitItem()
             assertThat(successState.target).isEqualTo(
                 ActionListState.Target.Success(
-                    messageEvent,
-                    persistentListOf(
+                    event = messageEvent,
+                    displayEmojiReactions = true,
+                    actions = persistentListOf(
                         TimelineItemAction.Reply,
                         TimelineItemAction.Forward,
                         TimelineItemAction.Edit,
@@ -248,8 +254,9 @@ class ActionListPresenterTest {
             val successState = awaitItem()
             assertThat(successState.target).isEqualTo(
                 ActionListState.Target.Success(
-                    messageEvent,
-                    persistentListOf(
+                    event = messageEvent,
+                    displayEmojiReactions = true,
+                    actions = persistentListOf(
                         TimelineItemAction.Reply,
                         TimelineItemAction.Forward,
                         TimelineItemAction.ViewSource,
@@ -279,8 +286,9 @@ class ActionListPresenterTest {
             val successState = awaitItem()
             assertThat(successState.target).isEqualTo(
                 ActionListState.Target.Success(
-                    stateEvent,
-                    persistentListOf(
+                    event = stateEvent,
+                    displayEmojiReactions = false,
+                    actions = persistentListOf(
                         TimelineItemAction.Copy,
                         TimelineItemAction.ViewSource,
                     )
@@ -308,8 +316,9 @@ class ActionListPresenterTest {
             val successState = awaitItem()
             assertThat(successState.target).isEqualTo(
                 ActionListState.Target.Success(
-                    stateEvent,
-                    persistentListOf(
+                    event = stateEvent,
+                    displayEmojiReactions = false,
+                    actions = persistentListOf(
                         TimelineItemAction.Copy,
                     )
                 )
@@ -336,8 +345,9 @@ class ActionListPresenterTest {
             val successState = awaitItem()
             assertThat(successState.target).isEqualTo(
                 ActionListState.Target.Success(
-                    messageEvent,
-                    persistentListOf(
+                    event = messageEvent,
+                    displayEmojiReactions = true,
+                    actions = persistentListOf(
                         TimelineItemAction.Reply,
                         TimelineItemAction.Forward,
                         TimelineItemAction.Edit,
@@ -373,7 +383,6 @@ class ActionListPresenterTest {
             initialState.eventSink.invoke(ActionListEvents.ComputeForMessage(redactedEvent, canRedact = false, canSendMessage = true))
             awaitItem().run {
                 assertThat(target).isEqualTo(ActionListState.Target.None)
-                assertThat(displayEmojiReactions).isFalse()
             }
         }
     }
@@ -395,15 +404,15 @@ class ActionListPresenterTest {
             val successState = awaitItem()
             assertThat(successState.target).isEqualTo(
                 ActionListState.Target.Success(
-                    messageEvent,
-                    persistentListOf(
+                    event = messageEvent,
+                    displayEmojiReactions = false,
+                    actions = persistentListOf(
                         TimelineItemAction.Edit,
                         TimelineItemAction.Copy,
                         TimelineItemAction.Redact,
                     )
                 )
             )
-            assertThat(successState.displayEmojiReactions).isFalse()
         }
     }
 
@@ -423,8 +432,9 @@ class ActionListPresenterTest {
             val successState = awaitItem()
             assertThat(successState.target).isEqualTo(
                 ActionListState.Target.Success(
-                    messageEvent,
-                    persistentListOf(
+                    event = messageEvent,
+                    displayEmojiReactions = true,
+                    actions = persistentListOf(
                         TimelineItemAction.Reply,
                         TimelineItemAction.Edit,
                         TimelineItemAction.EndPoll,
@@ -432,9 +442,9 @@ class ActionListPresenterTest {
                     )
                 )
             )
-            assertThat(successState.displayEmojiReactions).isTrue()
         }
     }
+
     @Test
     fun `present - compute for non-editable poll message`() = runTest {
         val presenter = createActionListPresenter(isDeveloperModeEnabled = false)
@@ -451,15 +461,15 @@ class ActionListPresenterTest {
             val successState = awaitItem()
             assertThat(successState.target).isEqualTo(
                 ActionListState.Target.Success(
-                    messageEvent,
-                    persistentListOf(
+                    event = messageEvent,
+                    displayEmojiReactions = true,
+                    actions = persistentListOf(
                         TimelineItemAction.Reply,
                         TimelineItemAction.EndPoll,
                         TimelineItemAction.Redact,
                     )
                 )
             )
-            assertThat(successState.displayEmojiReactions).isTrue()
         }
     }
 
@@ -479,14 +489,14 @@ class ActionListPresenterTest {
             val successState = awaitItem()
             assertThat(successState.target).isEqualTo(
                 ActionListState.Target.Success(
-                    messageEvent,
-                    persistentListOf(
+                    event = messageEvent,
+                    displayEmojiReactions = true,
+                    actions = persistentListOf(
                         TimelineItemAction.Reply,
                         TimelineItemAction.Redact,
                     )
                 )
             )
-            assertThat(successState.displayEmojiReactions).isTrue()
         }
     }
 
@@ -505,15 +515,15 @@ class ActionListPresenterTest {
             val successState = awaitItem()
             assertThat(successState.target).isEqualTo(
                 ActionListState.Target.Success(
-                    messageEvent,
-                    persistentListOf(
+                    event = messageEvent,
+                    displayEmojiReactions = true,
+                    actions = persistentListOf(
                         TimelineItemAction.Reply,
                         TimelineItemAction.Forward,
                         TimelineItemAction.Redact,
                     )
                 )
             )
-            assertThat(successState.displayEmojiReactions).isTrue()
         }
     }
 }

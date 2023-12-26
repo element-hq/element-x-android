@@ -19,7 +19,6 @@ package io.element.android.features.messages.impl.actionlist
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -53,13 +52,6 @@ class ActionListPresenter @Inject constructor(
 
         val isDeveloperModeEnabled by preferencesStore.isDeveloperModeEnabledFlow().collectAsState(initial = false)
 
-        val displayEmojiReactions by remember {
-            derivedStateOf {
-                val event = (target.value as? ActionListState.Target.Success)?.event
-                event?.isRemote == true && event.content.canReact()
-            }
-        }
-
         fun handleEvents(event: ActionListEvents) {
             when (event) {
                 ActionListEvents.Clear -> target.value = ActionListState.Target.None
@@ -75,7 +67,6 @@ class ActionListPresenter @Inject constructor(
 
         return ActionListState(
             target = target.value,
-            displayEmojiReactions = displayEmojiReactions,
             eventSink = { handleEvents(it) }
         )
     }
@@ -178,8 +169,13 @@ class ActionListPresenter @Inject constructor(
                     }
                 }
             }
-        if (actions.isNotEmpty()) {
-            target.value = ActionListState.Target.Success(timelineItem, actions.toImmutableList())
+        val displayEmojiReactions = timelineItem.isRemote && timelineItem.content.canReact()
+        if (actions.isNotEmpty() || displayEmojiReactions) {
+            target.value = ActionListState.Target.Success(
+                event = timelineItem,
+                displayEmojiReactions = displayEmojiReactions,
+                actions = actions.toImmutableList()
+            )
         } else {
             target.value = ActionListState.Target.None
         }

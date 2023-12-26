@@ -179,7 +179,7 @@ private fun SheetContent(
                         HorizontalDivider()
                     }
                 }
-                if (state.displayEmojiReactions) {
+                if (target.displayEmojiReactions) {
                     item {
                         EmojiReactionsRow(
                             highlightedEmojis = target.event.reactionsState.highlightedKeys,
