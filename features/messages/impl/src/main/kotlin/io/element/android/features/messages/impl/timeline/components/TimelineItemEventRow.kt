@@ -81,6 +81,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
+import io.element.android.features.messages.impl.timeline.model.event.canBeRepliedTo
 import io.element.android.features.messages.impl.timeline.model.metadata
 import io.element.android.libraries.androidutils.system.openUrlInExternalApp
 import io.element.android.libraries.designsystem.colors.AvatarColorsProvider
@@ -112,7 +113,6 @@ fun TimelineItemEventRow(
     showReadReceipts: Boolean,
     isLastOutgoingMessage: Boolean,
     isHighlighted: Boolean,
-    canReply: Boolean,
     onClick: () -> Unit,
     onLongClick: () -> Unit,
     onUserDataClick: (UserId) -> Unit,
@@ -151,6 +151,7 @@ fun TimelineItemEventRow(
         } else {
             Spacer(modifier = Modifier.height(2.dp))
         }
+        val canReply = timelineRoomInfo.userHasPermissionToSendMessage && event.content.canBeRepliedTo()
         if (canReply) {
             val state: SwipeableActionsState = rememberSwipeableActionsState()
             val offset = state.offset.floatValue
@@ -335,6 +336,7 @@ private fun TimelineItemEventRowContent(
         if (event.reactionsState.reactions.isNotEmpty()) {
             TimelineItemReactionsView(
                 reactionsState = event.reactionsState,
+                userCanSendReaction = timelineRoomInfo.userHasPermissionToSendReaction,
                 isOutgoing = event.isMine,
                 onReactionClicked = onReactionClicked,
                 onReactionLongClicked = onReactionLongClicked,

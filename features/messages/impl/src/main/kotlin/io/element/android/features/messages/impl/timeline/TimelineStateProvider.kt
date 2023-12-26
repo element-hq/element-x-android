@@ -55,7 +55,6 @@ fun aTimelineState(timelineItems: ImmutableList<TimelineItem> = persistentListOf
         beginningOfRoomReached = false,
     ),
     highlightedEventId = null,
-    userHasPermissionToSendMessage = true,
     newEventState = NewEventState.None,
     sessionState = aSessionState(
         isSessionVerified = true,
@@ -218,4 +217,6 @@ internal fun aTimelineRoomInfo(
     isDirect: Boolean = false,
 ) = TimelineRoomInfo(
     isDirect = isDirect,
+    userHasPermissionToSendMessage = true,
+    userHasPermissionToSendReaction = true,
 )

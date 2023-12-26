@@ -26,8 +26,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import io.element.android.features.messages.impl.R
-import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.utils.CommonDrawables
 
 /**
@@ -46,7 +46,7 @@ import io.element.android.libraries.designsystem.utils.CommonDrawables
 @Composable
 fun TimelineItemReactionsLayout(
     expandButton: @Composable () -> Unit,
-    addMoreButton: @Composable () -> Unit,
+    addMoreButton: (@Composable () -> Unit)?,
     modifier: Modifier = Modifier,
     itemSpacing: Dp = 0.dp,
     rowSpacing: Dp = 0.dp,
@@ -82,21 +82,21 @@ fun TimelineItemReactionsLayout(
 
         // Used to render the collapsed state, this takes the rows inputted and adds the extra button to the last row,
         // removing only as many trailing reactions as needed to make space for it.
-        fun replaceTrailingItemsWithButtons(rowsIn: List<List<Placeable>>, expandButton: Placeable, addMoreButton: Placeable): List<List<Placeable>> {
+        fun replaceTrailingItemsWithButtons(rowsIn: List<List<Placeable>>, expandButton: Placeable, addMoreButton: Placeable?): List<List<Placeable>> {
             val rows = rowsIn.toMutableList()
             val lastRow = rows.last()
-            val buttonsWidth = expandButton.width + itemSpacing.toPx().toInt() + addMoreButton.width
+            val buttonsWidth = expandButton.width + itemSpacing.toPx().toInt() + (addMoreButton?.width ?: 0)
             var rowX = 0
             lastRow.forEachIndexed { i, placeable ->
                 val horizontalSpacing = if (i == 0) 0 else itemSpacing.toPx().toInt()
                 rowX += placeable.width + horizontalSpacing
                 if (rowX > constraints.maxWidth - (buttonsWidth + horizontalSpacing)) {
-                    val lastRowWithButton = lastRow.take(i) + listOf(expandButton, addMoreButton)
+                    val lastRowWithButton = lastRow.take(i) + listOfNotNull(expandButton, addMoreButton)
                     rows[rows.size - 1] = lastRowWithButton
                     return rows
                 }
             }
-            val lastRowWithButton = lastRow + listOf(expandButton, addMoreButton)
+            val lastRowWithButton = lastRow + listOfNotNull(expandButton, addMoreButton)
             rows[rows.size - 1] = lastRowWithButton
             return rows
         }
@@ -155,16 +155,15 @@ fun TimelineItemReactionsLayout(
         val newConstrains = constraints.copy(minHeight = maxHeight)
         reactionsPlaceables = subcompose(2, reactions).map { it.measure(newConstrains) }
         expandPlaceable = subcompose(3, expandButton).first().measure(newConstrains)
-        val addMorePlaceable = subcompose(4, addMoreButton).first().measure(newConstrains)
-
+        val addMorePlaceable = addMoreButton?.let { subcompose(4, addMoreButton).first().measure(newConstrains) }
 
         // Calculate the layout of the rows with the reactions button and add more button
-        val reactionsAndAddMore = calculateRows(reactionsPlaceables + listOf(addMorePlaceable))
+        val reactionsAndAddMore = calculateRows(reactionsPlaceables + listOfNotNull(addMorePlaceable))
         // If we have extended beyond the defined number of rows we are showing the expand/collapse ui
         if (rowsBeforeCollapsible?.let { reactionsAndAddMore.size > it } == true) {
             if (expanded) {
                 // Show all subviews with the add more button at the end
-                var reactionsAndButtons = calculateRows(reactionsPlaceables + listOf(expandPlaceable, addMorePlaceable))
+                var reactionsAndButtons = calculateRows(reactionsPlaceables + listOfNotNull(expandPlaceable, addMorePlaceable))
                 reactionsAndButtons = ensureCollapseAndAddMoreButtonsAreOnTheSameRow(reactionsAndButtons)
                 layoutRows(reactionsAndButtons)
             } else {

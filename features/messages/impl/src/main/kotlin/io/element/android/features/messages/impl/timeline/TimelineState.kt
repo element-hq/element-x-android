@@ -30,7 +30,6 @@ data class TimelineState(
     val timelineRoomInfo: TimelineRoomInfo,
     val showReadReceipts: Boolean,
     val highlightedEventId: EventId?,
-    val userHasPermissionToSendMessage: Boolean,
     val paginationState: MatrixTimeline.PaginationState,
     val newEventState: NewEventState,
     val sessionState: SessionState,
@@ -40,4 +39,6 @@ data class TimelineState(
 @Immutable
 data class TimelineRoomInfo(
     val isDirect: Boolean,
+    val userHasPermissionToSendMessage: Boolean,
+    val userHasPermissionToSendReaction: Boolean,
 )

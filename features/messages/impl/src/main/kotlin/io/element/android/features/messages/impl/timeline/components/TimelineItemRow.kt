@@ -18,11 +18,10 @@ package io.element.android.features.messages.impl.timeline.components
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import io.element.android.features.messages.impl.timeline.TimelineRoomInfo
 import io.element.android.features.messages.impl.timeline.TimelineEvents
+import io.element.android.features.messages.impl.timeline.TimelineRoomInfo
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStateContent
-import io.element.android.features.messages.impl.timeline.model.event.canBeRepliedTo
 import io.element.android.features.messages.impl.timeline.session.SessionState
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
@@ -34,7 +33,6 @@ internal fun TimelineItemRow(
     showReadReceipts: Boolean,
     isLastOutgoingMessage: Boolean,
     highlightedItem: String?,
-    userHasPermissionToSendMessage: Boolean,
     sessionState: SessionState,
     onUserDataClick: (UserId) -> Unit,
     onClick: (TimelineItem.Event) -> Unit,
@@ -77,7 +75,6 @@ internal fun TimelineItemRow(
                     showReadReceipts = showReadReceipts,
                     isLastOutgoingMessage = isLastOutgoingMessage,
                     isHighlighted = highlightedItem == timelineItem.identifier(),
-                    canReply = userHasPermissionToSendMessage && timelineItem.content.canBeRepliedTo(),
                     onClick = { onClick(timelineItem) },
                     onLongClick = { onLongClick(timelineItem) },
                     onUserDataClick = onUserDataClick,

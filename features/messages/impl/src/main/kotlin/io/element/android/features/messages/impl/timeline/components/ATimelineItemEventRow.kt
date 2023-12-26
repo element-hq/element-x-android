@@ -35,7 +35,6 @@ internal fun ATimelineItemEventRow(
     showReadReceipts = showReadReceipts,
     isLastOutgoingMessage = isLastOutgoingMessage,
     isHighlighted = isHighlighted,
-    canReply = true,
     onClick = {},
     onLongClick = {},
     onUserDataClick = {},

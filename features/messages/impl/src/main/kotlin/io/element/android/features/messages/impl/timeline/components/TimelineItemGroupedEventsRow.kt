@@ -131,7 +131,6 @@ private fun TimelineItemGroupedEventsRowContent(
                         isLastOutgoingMessage = isLastOutgoingMessage,
                         highlightedItem = highlightedItem,
                         sessionState = sessionState,
-                        userHasPermissionToSendMessage = false,
                         onClick = onClick,
                         onLongClick = onLongClick,
                         inReplyToClick = inReplyToClick,

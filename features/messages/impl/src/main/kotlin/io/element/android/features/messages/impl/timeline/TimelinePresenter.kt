@@ -98,6 +98,7 @@ class TimelinePresenter @AssistedInject constructor(
         val paginationState by timeline.paginationState.collectAsState()
         val syncUpdateFlow = room.syncUpdateFlow.collectAsState()
         val userHasPermissionToSendMessage by room.canSendMessageAsState(type = MessageEventType.ROOM_MESSAGE, updateKey = syncUpdateFlow.value)
+        val userHasPermissionToSendReaction by room.canSendMessageAsState(type = MessageEventType.REACTION_SENT, updateKey = syncUpdateFlow.value)
 
         val prevMostRecentItemId = rememberSaveable { mutableStateOf<String?>(null) }
         val newItemState = remember { mutableStateOf(NewEventState.None) }
@@ -175,12 +176,18 @@ class TimelinePresenter @AssistedInject constructor(
                 .launchIn(this)
         }
 
+        val timelineRoomInfo by remember {
+            derivedStateOf {
+                TimelineRoomInfo(
+                    isDirect = room.isDirect,
+                    userHasPermissionToSendMessage = userHasPermissionToSendMessage,
+                    userHasPermissionToSendReaction = userHasPermissionToSendReaction,
+                )
+            }
+        }
         return TimelineState(
-            timelineRoomInfo = TimelineRoomInfo(
-                isDirect = room.isDirect
-            ),
+            timelineRoomInfo = timelineRoomInfo,
             highlightedEventId = highlightedEventId.value,
-            userHasPermissionToSendMessage = userHasPermissionToSendMessage,
             paginationState = paginationState,
             timelineItems = timelineItems,
             showReadReceipts = readReceiptsEnabled,
