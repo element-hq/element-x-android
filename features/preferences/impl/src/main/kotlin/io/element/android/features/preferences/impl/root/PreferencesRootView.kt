@@ -29,6 +29,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
+import io.element.android.features.logout.api.direct.DirectLogoutEvents
 import io.element.android.features.preferences.impl.R
 import io.element.android.features.preferences.impl.user.UserPreferences
 import io.element.android.libraries.designsystem.components.list.ListItemContent
@@ -57,7 +58,7 @@ fun PreferencesRootView(
     onManageAccountClicked: (url: String) -> Unit,
     onOpenAnalytics: () -> Unit,
     onOpenRageShake: () -> Unit,
-    onOpenLockScreenSettings: ()->Unit,
+    onOpenLockScreenSettings: () -> Unit,
     onOpenAbout: () -> Unit,
     onOpenDeveloperSettings: () -> Unit,
     onOpenAdvancedSettings: () -> Unit,
@@ -91,7 +92,7 @@ fun PreferencesRootView(
         if (state.showSecureBackup) {
             ListItem(
                 headlineContent = { Text(stringResource(id = CommonStrings.common_chat_backup)) },
-                leadingContent = ListItemContent.Icon(IconSource.Resource(CommonDrawables.ic_key_filled),),
+                leadingContent = ListItemContent.Icon(IconSource.Resource(CommonDrawables.ic_key_filled)),
                 trailingContent = ListItemContent.Badge.takeIf { state.showSecureBackupBadge },
                 onClick = onSecureBackupClicked,
             )
@@ -162,7 +163,13 @@ fun PreferencesRootView(
             headlineContent = { Text(stringResource(id = CommonStrings.action_signout)) },
             leadingContent = ListItemContent.Icon(IconSource.Resource(CommonDrawables.ic_sign_out)),
             style = ListItemStyle.Destructive,
-            onClick = onSignOutClicked,
+            onClick = {
+                if (state.directLogoutState.canDoDirectSignOut) {
+                    state.directLogoutState.eventSink(DirectLogoutEvents.Logout(ignoreSdkError = false))
+                } else {
+                    onSignOutClicked()
+                }
+            },
         )
         Text(
             modifier = Modifier
