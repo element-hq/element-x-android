@@ -159,6 +159,7 @@ fun MessagesView(
                 event = event,
                 canRedact = state.userHasPermissionToRedact,
                 canSendMessage = state.userHasPermissionToSendMessage,
+                canSendReaction = state.userHasPermissionToSendReaction,
             )
         )
     }

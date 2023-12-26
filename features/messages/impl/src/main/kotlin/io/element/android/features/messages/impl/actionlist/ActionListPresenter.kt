@@ -59,6 +59,7 @@ class ActionListPresenter @Inject constructor(
                     timelineItem = event.event,
                     userCanRedact = event.canRedact,
                     userCanSendMessage = event.canSendMessage,
+                    userCanSendReaction = event.canSendReaction,
                     isDeveloperModeEnabled = isDeveloperModeEnabled,
                     target = target,
                 )
@@ -75,6 +76,7 @@ class ActionListPresenter @Inject constructor(
         timelineItem: TimelineItem.Event,
         userCanRedact: Boolean,
         userCanSendMessage: Boolean,
+        userCanSendReaction: Boolean,
         isDeveloperModeEnabled: Boolean,
         target: MutableState<ActionListState.Target>
     ) = launch {
@@ -169,7 +171,9 @@ class ActionListPresenter @Inject constructor(
                     }
                 }
             }
-        val displayEmojiReactions = timelineItem.isRemote && timelineItem.content.canReact()
+        val displayEmojiReactions = userCanSendReaction &&
+            timelineItem.isRemote
+            && timelineItem.content.canReact()
         if (actions.isNotEmpty() || displayEmojiReactions) {
             target.value = ActionListState.Target.Success(
                 event = timelineItem,
