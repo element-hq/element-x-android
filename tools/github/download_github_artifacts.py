@@ -74,13 +74,13 @@ if "/artifacts/" not in artifactUrl:
     print("❌ Invalid parameter --artifactUrl %s. Must contain '/artifacts/'" % artifactUrl)
     exit(1)
 artifactItems = artifactUrl.split("/")
-if len(artifactItems) != 9:
+if len(artifactItems) != 10:
     print("❌ Invalid parameter --artifactUrl %s. Please check the format." % (artifactUrl))
     exit(1)
 
 gitHubRepoOwner = artifactItems[3]
 gitHubRepo = artifactItems[4]
-artifactId = artifactItems[8]
+artifactId = artifactItems[9]
 
 if args.verbose:
     print("gitHubRepoOwner: %s, gitHubRepo: %s, artifactId: %s" % (gitHubRepoOwner, gitHubRepo, artifactId))
