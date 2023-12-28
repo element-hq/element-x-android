@@ -63,7 +63,8 @@ fun TimelineItemTextView(
                             hasPadding = true,
                         )
                     onContentLayoutChanged(layoutData)
-                }
+                },
+                releaseOnDetach = false,
             )
         }
     }
