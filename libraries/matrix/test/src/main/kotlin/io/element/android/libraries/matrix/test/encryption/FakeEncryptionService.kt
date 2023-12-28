@@ -36,7 +36,14 @@ class FakeEncryptionService : EncryptionService {
     private var recoverFailure: Exception? = null
     private var doesBackupExistOnServerResult: Result<Boolean> = Result.success(true)
 
+    private var enableBackupsFailure: Exception? = null
+
+    fun givenEnableBackupsFailure(exception: Exception?) {
+        enableBackupsFailure = exception
+    }
+
     override suspend fun enableBackups(): Result<Unit> = simulateLongTask {
+        enableBackupsFailure?.let { return Result.failure(it) }
         return Result.success(Unit)
     }
 
