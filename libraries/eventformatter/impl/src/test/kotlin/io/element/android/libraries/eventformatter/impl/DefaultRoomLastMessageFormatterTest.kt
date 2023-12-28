@@ -488,7 +488,7 @@ class DefaultRoomLastMessageFormatterTest {
     @Test
     @Config(qualifiers = "en")
     fun `Membership change - others`() {
-        val otherChanges = arrayOf(MembershipChange.ERROR, MembershipChange.NOT_IMPLEMENTED)
+        val otherChanges = arrayOf(MembershipChange.ERROR, MembershipChange.NOT_IMPLEMENTED, null)
 
         val results = otherChanges.map { change ->
             val content = RoomMembershipContent(A_USER_ID, change)
