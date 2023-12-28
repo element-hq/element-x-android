@@ -54,7 +54,7 @@ cd $rtePath
 printf "\nBuilding the RTE for aarch64...\n\n"
 make android-bindings-aarch64
 cd platforms/android
-./gradlew :library-compose:assembleRelease
+./gradlew clean :library:assembleRelease :library-compose:assembleRelease
 cp ./library/build/outputs/aar/library-release.aar $elementPwd/libraries/textcomposer/lib/library.aar
 cp ./library-compose/build/outputs/aar/library-compose-release.aar $elementPwd/libraries/textcomposer/lib/library-compose.aar
 
