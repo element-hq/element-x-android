@@ -30,6 +30,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.ImageMessageT
 import io.element.android.libraries.matrix.api.timeline.item.event.LocationMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageFormat
 import io.element.android.libraries.matrix.api.timeline.item.event.NoticeMessageType
+import io.element.android.libraries.matrix.api.timeline.item.event.StickerMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.VideoMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.VoiceMessageType
@@ -231,6 +232,23 @@ class NotifiableEventResolverTest {
         )
         val result = sut.resolveEvent(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID)
         val expectedResult = createNotifiableMessageEvent(body = "Image")
+        assertThat(result).isEqualTo(expectedResult)
+    }
+
+    @Test
+    fun `resolve event message sticker`() = runTest {
+        val sut = createNotifiableEventResolver(
+            notificationResult = Result.success(
+                createNotificationData(
+                    content = NotificationContent.MessageLike.RoomMessage(
+                        senderId = A_USER_ID_2,
+                        messageType = StickerMessageType("Image", MediaSource("url"), null),
+                    )
+                )
+            )
+        )
+        val result = sut.resolveEvent(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID)
+        val expectedResult = createNotifiableMessageEvent(body = "Sticker")
         assertThat(result).isEqualTo(expectedResult)
     }
 

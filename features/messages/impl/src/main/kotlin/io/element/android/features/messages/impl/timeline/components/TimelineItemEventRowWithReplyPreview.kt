@@ -42,6 +42,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.MessageConten
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.NoticeMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.PollContent
+import io.element.android.libraries.matrix.api.timeline.item.event.StickerMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.VideoMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.VoiceMessageType
@@ -108,6 +109,10 @@ class InReplyToDetailsProvider : PreviewParameterProvider<InReplyToDetails> {
             aMessageContent(
                 body = "Image",
                 type = ImageMessageType("Image", MediaSource("url"), null),
+            ),
+            aMessageContent(
+                body = "Sticker",
+                type = StickerMessageType("Image", MediaSource("url"), null),
             ),
             aMessageContent(
                 body = "File",

@@ -29,6 +29,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemLocationContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemNoticeContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStickerContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVoiceContent
@@ -57,6 +58,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.MessageFormat
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.NoticeMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.OtherMessageType
+import io.element.android.libraries.matrix.api.timeline.item.event.StickerMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.VideoMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.VoiceMessageType
@@ -424,6 +426,29 @@ class TimelineItemContentMessageFactoryTest {
             eventId = AN_EVENT_ID,
         )
         val expected = TimelineItemImageContent(
+            body = "body",
+            mediaSource = MediaSource(url = "url", json = null),
+            thumbnailSource = null,
+            formattedFileSize = "0 Bytes",
+            fileExtension = "",
+            mimeType = MimeTypes.OctetStream,
+            blurhash = null,
+            width = null,
+            height = null,
+            aspectRatio = null
+        )
+        assertThat(result).isEqualTo(expected)
+    }
+
+    @Test
+    fun `test create StickerMessageType`() = runTest {
+        val sut = createTimelineItemContentMessageFactory()
+        val result = sut.create(
+            content = createMessageContent(type = StickerMessageType("body", MediaSource("url"), null)),
+            senderDisplayName = "Bob",
+            eventId = AN_EVENT_ID,
+        )
+        val expected = TimelineItemStickerContent(
             body = "body",
             mediaSource = MediaSource(url = "url", json = null),
             thumbnailSource = null,

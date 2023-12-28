@@ -44,6 +44,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.RedactedConte
 import io.element.android.libraries.matrix.api.timeline.item.event.RoomMembershipContent
 import io.element.android.libraries.matrix.api.timeline.item.event.StateContent
 import io.element.android.libraries.matrix.api.timeline.item.event.StickerContent
+import io.element.android.libraries.matrix.api.timeline.item.event.StickerMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.UnableToDecryptContent
 import io.element.android.libraries.matrix.api.timeline.item.event.UnknownContent
@@ -119,6 +120,9 @@ class DefaultRoomLastMessageFormatter @Inject constructor(
             }
             is ImageMessageType -> {
                 sp.getString(CommonStrings.common_image)
+            }
+            is StickerMessageType -> {
+                sp.getString(CommonStrings.common_sticker)
             }
             is LocationMessageType -> {
                 sp.getString(CommonStrings.common_shared_location)

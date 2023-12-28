@@ -38,6 +38,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.ImageMessageT
 import io.element.android.libraries.matrix.api.timeline.item.event.LocationMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.NoticeMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.OtherMessageType
+import io.element.android.libraries.matrix.api.timeline.item.event.StickerMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.VideoMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.VoiceMessageType
@@ -231,6 +232,7 @@ class NotifiableEventResolver @Inject constructor(
             is EmoteMessageType -> "* $senderDisplayName ${messageType.body}"
             is FileMessageType -> messageType.body
             is ImageMessageType -> messageType.body
+            is StickerMessageType -> messageType.body
             is NoticeMessageType -> messageType.body
             is TextMessageType -> messageType.toPlainText()
             is VideoMessageType -> messageType.body
