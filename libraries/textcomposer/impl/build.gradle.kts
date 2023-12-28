@@ -34,6 +34,8 @@ dependencies {
     implementation(projects.libraries.testtags)
     implementation(projects.libraries.uiUtils)
 
+    releaseApi(libs.matrix.richtexteditor)
+    releaseApi(libs.matrix.richtexteditor.compose)
     if (file("${rootDir.path}/libraries/textcomposer/lib/library-compose.aar").exists()) {
         println("\nNote: Using local binaries of the Rich Text Editor.\n")
         debugApi(projects.libraries.textcomposer.lib)
