@@ -29,4 +29,5 @@ dependencies {
     implementation(platform(libs.google.firebase.bom))
     implementation(libs.firebase.appdistribution.gradle)
     implementation(files(libs.javaClass.superclass.protectionDomain.codeSource.location))
+    implementation(libs.autonomousapps.dependencyanalysis.plugin)
 }

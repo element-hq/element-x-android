@@ -111,11 +111,6 @@ allprojects {
              */
         }
     }
-
-    // Detect unused dependencies
-    apply {
-        plugin("com.autonomousapps.dependency-analysis")
-    }
 }
 
 // See https://github.com/autonomousapps/dependency-analysis-android-gradle-plugin/wiki/Customizing-plugin-behavior
