@@ -100,6 +100,16 @@ allprojects {
         // You can override by passing `-PallWarningsAsErrors=true` in the command line
         // Or add a line with "allWarningsAsErrors=true" in your ~/.gradle/gradle.properties file
         kotlinOptions.allWarningsAsErrors = project.properties["allWarningsAsErrors"] == "true"
+
+        kotlinOptions {
+            // Uncomment to suppress Compose Kotlin compiler compatibility warning
+            /*
+            freeCompilerArgs += listOf(
+                "-P",
+                "plugin:androidx.compose.compiler.plugins.kotlin:suppressKotlinVersionCompatibilityCheck=true"
+            )
+             */
+        }
     }
 
     // Detect unused dependencies
