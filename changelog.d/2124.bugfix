@@ -1,0 +1,1 @@
+Disable rasterisation of Vector XMLs, which was causing crashes on API 23.
