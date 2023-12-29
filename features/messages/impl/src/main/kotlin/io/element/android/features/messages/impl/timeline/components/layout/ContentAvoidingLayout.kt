@@ -46,7 +46,7 @@ fun ContentAvoidingLayout(
     val scope = remember { ContentAvoidingLayoutScopeInstance() }
 
     Layout(modifier = modifier, content = { scope.layoutContent() }) { measurables, constraints ->
-        assert(measurables.size == 2) { "TextAvoidingLayout must have exactly 2 children" }
+        assert(measurables.size == 2) { "ContentAvoidingLayout must have exactly 2 children" }
 
         // Measure the `overlay` view first, in case we need to shrink the `content`
         val overlay = measurables.last().measure(Constraints(minWidth = 0, maxWidth = constraints.maxWidth))
