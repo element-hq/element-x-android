@@ -51,7 +51,7 @@ fun ContentAvoidingLayout(
         // Measure the `overlay` view first, in case we need to shrink the `content`
         val overlay = measurables.last().measure(Constraints(minWidth = 0, maxWidth = constraints.maxWidth))
         val contentConstraints = if (shrinkContent) {
-            Constraints(minWidth = 0, maxWidth =  constraints.maxWidth - overlay.width)
+            Constraints(minWidth = 0, maxWidth = constraints.maxWidth - overlay.width)
         } else {
             Constraints(minWidth = 0, maxWidth = constraints.maxWidth)
         }
