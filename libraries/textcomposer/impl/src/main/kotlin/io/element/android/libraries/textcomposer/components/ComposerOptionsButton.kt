@@ -41,7 +41,7 @@ internal fun ComposerOptionsButton(
     ) {
         Icon(
             modifier = Modifier.size(30.dp),
-            resourceId = CommonDrawables.ic_plus,
+            resourceId = CommonDrawables.ic_plus_composer,
             contentDescription = stringResource(R.string.rich_text_editor_a11y_add_attachment),
             tint = ElementTheme.colors.iconPrimary,
         )

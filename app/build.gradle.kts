@@ -43,10 +43,6 @@ android {
         versionCode = Versions.versionCode
         versionName = Versions.versionName
 
-        vectorDrawables {
-            useSupportLibrary = true
-        }
-
         // Keep abiFilter for the universalApk
         ndk {
             abiFilters += listOf("armeabi-v7a", "x86", "arm64-v8a", "x86_64")
