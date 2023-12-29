@@ -41,7 +41,7 @@ internal val iconsOther = listOf(
     R.drawable.ic_location_navigator_centered,
     R.drawable.ic_new_message,
     R.drawable.ic_numbered_list,
-    R.drawable.ic_plus,
+    R.drawable.ic_plus_composer,
     R.drawable.ic_quote,
     R.drawable.ic_reply,
     R.drawable.ic_retry,
