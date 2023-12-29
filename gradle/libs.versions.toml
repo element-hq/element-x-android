@@ -43,7 +43,7 @@ sqldelight = "2.0.1"
 wysiwyg = "2.22.0"
 
 # DI
-dagger = "2.49"
+dagger = "2.50"
 anvil = "2.4.8-1-8"
 
 # Auto service
