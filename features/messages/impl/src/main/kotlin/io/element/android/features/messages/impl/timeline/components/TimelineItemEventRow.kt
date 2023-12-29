@@ -472,7 +472,7 @@ private fun MessageEventBubbleContent(
                 ContentAvoidingLayout(
                     modifier = modifier,
                     // The spacing is negative to make the content overlap the empty space at the start of the timestamp
-                    spacing = -TimelineEventTimestampViewDefaults.spacing,
+                    spacing = -TimelineEventTimestampViewDefaults.spacing / 2,
                     shrinkContent = canShrinkContent,
                 ) {
                     content(this::onContentLayoutChanged)
@@ -665,7 +665,8 @@ internal fun TimelineItemEventRowPreview() = ElementPreview {
                 event = aTimelineItemEvent(
                     isMine = it,
                     content = aTimelineItemTextContent().copy(
-                        body = "A long text",
+                        body = "A long text which will be displayed on several lines and" +
+                        " hopefully can be manually adjusted to test different behaviors."
                     ),
                     groupPosition = TimelineItemGroupPosition.First,
                 ),

@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import kotlin.math.max
+import kotlin.math.min
 
 /**
  * A layout with 2 children: the `content` and the `overlay`.
@@ -62,24 +63,21 @@ fun ContentAvoidingLayout(
 
         val data = scope.data
 
-        // Horizontal padding = width of the component - width of its contents, but only if `hasPadding` is true
-        val internalContentHorizontalPadding = if (data.hasPadding) {
-            content.width - data.contentWidth
-        } else {
-            0
-        }
+        // Free space = width of the whole component - width of its non overlapping contents
+        val freeSpace = max(content.width - data.nonOverlappingContentWidth, 0)
 
         when {
             // When the content + the overlay don't fit in the available max width, we need to move the overlay to a new row
             !shrinkContent && data.nonOverlappingContentWidth + overlay.width > constraints.maxWidth -> {
                 layoutHeight += overlay.height
             }
-            // If the content is smaller than the available max width, we can move the overlaidView to the right of the content
-            layoutWidth < constraints.maxWidth -> {
+            // If the content is smaller than the available max width, we can move the overlay to the right of the content
+            content.width < constraints.maxWidth -> {
                 // If both the content and the overlay plus the padding can fit inside the current layoutWidth, there is no need to increase it
-                if (data.nonOverlappingContentWidth + internalContentHorizontalPadding + overlay.width > layoutWidth) {
+                if (freeSpace < overlay.width + spacing.roundToPx()) {
                     // Otherwise, we need to increase it by the width of the overlay + some padding adjustments
-                    layoutWidth += overlay.width + spacing.roundToPx() - internalContentHorizontalPadding / 2
+                    val calculatedWidth = max(data.nonOverlappingContentWidth + overlay.width + spacing.roundToPx(), content.width)
+                    layoutWidth = min(calculatedWidth, constraints.maxWidth)
                 }
             }
             else -> Unit
@@ -103,7 +101,6 @@ fun ContentAvoidingLayout(
  * @param contentHeight The full height of the content in pixels.
  * @param nonOverlappingContentWidth The width of the part of the content that can't overlap with the timestamp.
  * @param nonOverlappingContentHeight The height of the part of the content that can't overlap with the timestamp.
- * @param hasPadding Whether the content has padding or not. Defaults to `false`.
  */
 @Suppress("DataClassShouldBeImmutable")
 data class ContentAvoidingLayoutData(
@@ -111,7 +108,6 @@ data class ContentAvoidingLayoutData(
     var contentHeight: Int = 0,
     var nonOverlappingContentWidth: Int = contentWidth,
     var nonOverlappingContentHeight: Int = contentHeight,
-    var hasPadding: Boolean = false,
 )
 
 /**
@@ -133,6 +129,5 @@ private class ContentAvoidingLayoutScopeInstance(
         this.data.contentHeight = data.contentHeight
         this.data.nonOverlappingContentWidth = data.nonOverlappingContentWidth
         this.data.nonOverlappingContentHeight = data.nonOverlappingContentHeight
-        this.data.hasPadding = data.hasPadding
     }
 }

@@ -60,7 +60,6 @@ fun TimelineItemTextView(
                             contentWidth = textLayout.width,
                             nonOverlappingContentWidth = textLayout.getLineWidth(textLayout.lineCount - 1).roundToInt(),
                             contentHeight = textLayout.height,
-                            hasPadding = true,
                         )
                     onContentLayoutChanged(layoutData)
                 },

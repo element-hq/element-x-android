@@ -51,7 +51,8 @@ fun TimelineItemInformativeView(
                     contentWidth = size.width,
                     contentHeight = size.height,
                 )
-            )        },
+            )
+        },
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Icon(

@@ -30,6 +30,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -49,12 +50,15 @@ fun TimelineItemAudioView(
     onContentLayoutChanged: (ContentAvoidingLayoutData) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val iconSize = 32.dp
+    val spacing = 8.dp
+    val density = LocalDensity.current
     Row(
         modifier = modifier,
     ) {
         Box(
             modifier = Modifier
-                .size(32.dp)
+                .size(iconSize)
                 .clip(CircleShape)
                 .background(ElementTheme.materialColors.background),
             contentAlignment = Alignment.Center,
@@ -67,7 +71,7 @@ fun TimelineItemAudioView(
                     .size(16.dp),
             )
         }
-        Spacer(Modifier.width(8.dp))
+        Spacer(Modifier.width(spacing))
         Column {
             Text(
                 text = content.body,
@@ -83,14 +87,15 @@ fun TimelineItemAudioView(
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
                 onTextLayout = { textLayout ->
-                    val lastLineEndOffset = textLayout.getLineEnd(textLayout.lineCount - 1)
-                    val lastLineWidth = textLayout.getHorizontalPosition(lastLineEndOffset, true).roundToInt()
+                    // We need to add the external extra width so it's not taken into account as 'free space'
+                    val extraWidth = with(density) { iconSize.roundToPx() + spacing.roundToPx() }
+                    val lastLineWidth = textLayout.getLineRight(textLayout.lineCount - 1).roundToInt()
                     val lastLineHeight = textLayout.getLineBottom(textLayout.lineCount - 1).roundToInt()
                     onContentLayoutChanged(
                         ContentAvoidingLayoutData(
-                            contentWidth = textLayout.size.width,
+                            contentWidth = textLayout.size.width + extraWidth,
                             contentHeight = textLayout.size.height,
-                            nonOverlappingContentWidth = lastLineWidth,
+                            nonOverlappingContentWidth = lastLineWidth + extraWidth,
                             nonOverlappingContentHeight = lastLineHeight,
                         )
                     )
