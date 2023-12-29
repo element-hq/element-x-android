@@ -59,7 +59,10 @@ internal fun TestScope.aTimelineItemsFactory(): TimelineItemsFactory {
                     htmlConverterProvider = FakeHtmlConverterProvider(),
                 ),
                 redactedMessageFactory = TimelineItemContentRedactedFactory(),
-                stickerFactory = TimelineItemContentStickerFactory(),
+                stickerFactory = TimelineItemContentStickerFactory(
+                    fileSizeFormatter = FakeFileSizeFormatter(),
+                    fileExtensionExtractor = FileExtensionExtractorWithoutValidation()
+                ),
                 pollFactory = TimelineItemContentPollFactory(FakeFeatureFlagService(), FakePollContentStateFactory()),
                 utdFactory = TimelineItemContentUTDFactory(),
                 roomMembershipFactory = TimelineItemContentRoomMembershipFactory(timelineEventFormatter),
