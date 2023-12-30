@@ -46,6 +46,6 @@ jobs:
       - name: Record screenshots
         run: ./.github/workflows/scripts/recordScreenshots.sh
         env:
-          GITHUB_TOKEN: ${{ secrets.DANGER_GITHUB_API_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPOSITORY: ${{ github.event.pull_request.head.repo.ssh_url }}
 
