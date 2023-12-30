@@ -47,5 +47,5 @@ jobs:
         run: ./.github/workflows/scripts/recordScreenshots.sh
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_REPOSITORY: ${{ github.event.pull_request.head.repo.ssh_url }}
+          GITHUB_REPOSITORY: ${{ github.event.pull_request.head.repo.full_name }}
 
