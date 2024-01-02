@@ -1,0 +1,30 @@
+name: Community PR notice
+
+on:
+  workflow_dispatch:
+  pull_request_target:
+    types:
+      - opened
+      - reopened
+
+jobs:
+  welcome:
+    runs-on: ubuntu-latest
+    name: Welcome comment
+    steps:
+      - name: Add auto-generated commit warning
+        uses: actions/github-script@v6
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `Thank you for your contribution! Here are a few things to check in the PR to ensure it's reviewed as quickly as possible:
+            
+                - Your branch should be based on `origin/develop`, at least when it was created.
+                - There is a changelog entry in the `changelog.d` folder with [the Towncrier format](https://towncrier.readthedocs.io/en/latest/tutorial.html#creating-news-fragments).
+                - The test pass locally running `./gradlew test`.
+                - The code quality check suite pass locally running `./gradlew runQualityChecks`.
+                - If you modified anything related to the UI, including previews, you'll have to run the `Record screenshots` GH action in your forked repo: that will generate compatible new screenshots. However, given Github Actions limitations, **it will prevent the CI from running temporarily**, until you upload a new commit after that one. To do so, just pull the latest changes and push [an empty commit](https://coderwall.com/p/vkdekq/git-commit-allow-empty).`
+            })
