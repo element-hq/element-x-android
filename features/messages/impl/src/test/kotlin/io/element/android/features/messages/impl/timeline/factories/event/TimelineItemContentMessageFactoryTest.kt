@@ -58,7 +58,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.MessageFormat
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.NoticeMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.OtherMessageType
-import io.element.android.libraries.matrix.api.timeline.item.event.StickerMessageType
+import io.element.android.libraries.matrix.api.timeline.item.event.StickerContent
 import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.VideoMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.VoiceMessageType
@@ -442,22 +442,23 @@ class TimelineItemContentMessageFactoryTest {
 
     @Test
     fun `test create StickerMessageType`() = runTest {
-        val sut = createTimelineItemContentMessageFactory()
+        val sut = createTimelineItemContentStickerFactory()
         val result = sut.create(
-            content = createMessageContent(type = StickerMessageType("body", MediaSource("url"), null)),
-            senderDisplayName = "Bob",
-            eventId = AN_EVENT_ID,
+            content = createStickerContent(
+                "body",
+                ImageInfo(32, 32, "image/webp", 8192, null, MediaSource("thumbnail://url"), null),
+                "url")
         )
         val expected = TimelineItemStickerContent(
             body = "body",
             mediaSource = MediaSource(url = "url", json = null),
-            thumbnailSource = null,
-            formattedFileSize = "0 Bytes",
+            thumbnailSource = MediaSource(url = "thumbnail://url", json = null),
+            formattedFileSize = "8192 Bytes",
             fileExtension = "",
-            mimeType = MimeTypes.OctetStream,
+            mimeType = MimeTypes.WebP,
             blurhash = null,
-            width = null,
-            height = null,
+            width = 32,
+            height = 32,
             aspectRatio = null
         )
         assertThat(result).isEqualTo(expected)
@@ -651,5 +652,21 @@ class TimelineItemContentMessageFactoryTest {
         fileExtensionExtractor = FileExtensionExtractorWithoutValidation(),
         featureFlagService = featureFlagService,
         htmlConverterProvider = FakeHtmlConverterProvider(htmlConverterTransform),
+    )
+
+    private fun createStickerContent(
+        body: String = "Body",
+        inImageInfo: ImageInfo,
+        inUrl: String
+    ): StickerContent {
+        return StickerContent (
+            body = body,
+            info = inImageInfo,
+            url = inUrl
+        )
+    }
+    private fun createTimelineItemContentStickerFactory() = TimelineItemContentStickerFactory(
+        fileSizeFormatter = FakeFileSizeFormatter(),
+        fileExtensionExtractor = FileExtensionExtractorWithoutValidation()
     )
 }
