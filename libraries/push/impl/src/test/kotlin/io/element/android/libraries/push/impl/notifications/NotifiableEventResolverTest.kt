@@ -242,7 +242,7 @@ class NotifiableEventResolverTest {
                 createNotificationData(
                     content = NotificationContent.MessageLike.RoomMessage(
                         senderId = A_USER_ID_2,
-                        messageType = StickerMessageType("Image", MediaSource("url"), null),
+                        messageType = StickerMessageType("Sticker", MediaSource("url"), null),
                     )
                 )
             )
