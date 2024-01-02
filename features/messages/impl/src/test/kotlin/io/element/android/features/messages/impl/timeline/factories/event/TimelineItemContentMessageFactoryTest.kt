@@ -459,7 +459,7 @@ class TimelineItemContentMessageFactoryTest {
             blurhash = null,
             width = 32,
             height = 32,
-            aspectRatio = null
+            aspectRatio = 1.0f
         )
         assertThat(result).isEqualTo(expected)
     }
