@@ -10,6 +10,9 @@
 -keep class com.sun.jna.** { *; }
 -keep class * implements com.sun.jna.** { *; }
 
+# TagSoup, coming from the RTE library
+-keep class org.ccil.cowan.tagsoup.** { *; }
+
 # kotlinx.serialization
 
 # Kotlin serialization looks up the generated serializer classes through a function on companion
