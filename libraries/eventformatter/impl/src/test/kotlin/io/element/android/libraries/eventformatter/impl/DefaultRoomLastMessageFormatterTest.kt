@@ -43,6 +43,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.RedactedConte
 import io.element.android.libraries.matrix.api.timeline.item.event.RoomMembershipContent
 import io.element.android.libraries.matrix.api.timeline.item.event.StateContent
 import io.element.android.libraries.matrix.api.timeline.item.event.StickerContent
+import io.element.android.libraries.matrix.api.timeline.item.event.StickerMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.UnableToDecryptContent
 import io.element.android.libraries.matrix.api.timeline.item.event.UnknownContent
@@ -165,6 +166,7 @@ class DefaultRoomLastMessageFormatterTest {
             AudioMessageType(body, MediaSource("url"), null),
             VoiceMessageType(body, MediaSource("url"), null, null),
             ImageMessageType(body, MediaSource("url"), null),
+            StickerMessageType(body, MediaSource("url"), null),
             FileMessageType(body, MediaSource("url"), null),
             LocationMessageType(body, "geo:1,2", null),
             NoticeMessageType(body, null),
@@ -196,6 +198,7 @@ class DefaultRoomLastMessageFormatterTest {
                 is AudioMessageType -> "Audio"
                 is VoiceMessageType -> "Voice message"
                 is ImageMessageType -> "Image"
+                is StickerMessageType -> "Sticker"
                 is FileMessageType -> "File"
                 is LocationMessageType -> "Shared location"
                 is EmoteMessageType -> "* $senderName ${type.body}"
@@ -214,6 +217,7 @@ class DefaultRoomLastMessageFormatterTest {
                 is AudioMessageType -> "$senderName: Audio"
                 is VoiceMessageType -> "$senderName: Voice message"
                 is ImageMessageType -> "$senderName: Image"
+                is StickerMessageType -> "$senderName: Sticker"
                 is FileMessageType -> "$senderName: File"
                 is LocationMessageType -> "$senderName: Shared location"
                 is TextMessageType,
@@ -226,6 +230,7 @@ class DefaultRoomLastMessageFormatterTest {
                 is AudioMessageType -> true
                 is VoiceMessageType -> true
                 is ImageMessageType -> true
+                is StickerMessageType -> true
                 is FileMessageType -> true
                 is LocationMessageType -> false
                 is EmoteMessageType -> false

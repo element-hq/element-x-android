@@ -54,6 +54,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemPollContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemRedactedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStateContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStickerContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextBasedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemUnknownContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
@@ -346,6 +347,12 @@ class MessagesPresenter @AssistedInject constructor(
         val textContent = messageSummaryFormatter.format(targetEvent)
         val attachmentThumbnailInfo = when (targetEvent.content) {
             is TimelineItemImageContent -> AttachmentThumbnailInfo(
+                thumbnailSource = targetEvent.content.thumbnailSource ?: targetEvent.content.mediaSource,
+                textContent = targetEvent.content.body,
+                type = AttachmentThumbnailType.Image,
+                blurHash = targetEvent.content.blurhash,
+            )
+            is TimelineItemStickerContent -> AttachmentThumbnailInfo(
                 thumbnailSource = targetEvent.content.thumbnailSource ?: targetEvent.content.mediaSource,
                 textContent = targetEvent.content.body,
                 type = AttachmentThumbnailType.Image,
