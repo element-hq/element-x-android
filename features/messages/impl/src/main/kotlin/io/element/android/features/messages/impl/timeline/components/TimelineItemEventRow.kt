@@ -56,6 +56,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
@@ -472,18 +473,20 @@ private fun MessageEventBubbleContent(
                 ContentAvoidingLayout(
                     modifier = modifier,
                     // The spacing is negative to make the content overlap the empty space at the start of the timestamp
-                    spacing = -TimelineEventTimestampViewDefaults.spacing / 2,
+                    spacing = (-4).dp,
+                    overlayOffset = DpOffset(0.dp, -1.dp),
                     shrinkContent = canShrinkContent,
-                ) {
-                    content(this::onContentLayoutChanged)
-                    TimelineEventTimestampView(
-                        event = event,
-                        onClick = onTimestampClicked,
-                        onLongClick = ::onTimestampLongClick,
-                        modifier = Modifier
-                            .padding(horizontal = 8.dp, vertical = 4.dp)
-                    )
-                }
+                    content = { content(this::onContentLayoutChanged) },
+                    overlay = {
+                        TimelineEventTimestampView(
+                            event = event,
+                            onClick = onTimestampClicked,
+                            onLongClick = ::onTimestampLongClick,
+                            modifier = Modifier
+                                .padding(horizontal = 8.dp, vertical = 4.dp)
+                        )
+                    }
+                )
             TimestampPosition.Below ->
                 Column(modifier) {
                     content {}

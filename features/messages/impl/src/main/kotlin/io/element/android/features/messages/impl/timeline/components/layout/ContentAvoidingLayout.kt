@@ -16,67 +16,85 @@
 
 package io.element.android.features.messages.impl.timeline.components.layout
 
+import android.text.Layout
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.Layout
+import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.DpOffset
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
+import io.element.android.libraries.designsystem.text.roundToPx
+import io.element.android.wysiwyg.compose.EditorStyledText
 import kotlin.math.max
 import kotlin.math.min
+import kotlin.math.roundToInt
 
 /**
- * A layout with 2 children: the `content` and the `overlay`.
+ * A layout with 2 children: the [content] and the [overlay].
  *
- * It will try to place the `overlay` on top of the `content` if possible, avoiding the area of it that is non-overlapping.
- * If the `overlay` can't be placed on top of the `content`, it will be placed to the right of it, if it fits, otherwise, to its bottom in a new row.
+ * It will try to place the [overlay] on top of the [content] if possible, avoiding the area of it that is non-overlapping.
+ * If the [overlay] can't be placed on top of the [content], it will be placed to the right of it, if it fits, otherwise, to its bottom in a new row.
  *
+ * @param overlay The 'overlay' component of the layout, which will be positioned relative to the [content].
  * @param modifier The modifier for the layout.
- * @param spacing The spacing between the `content` and the `overlay`. Defaults to `0.dp`.
+ * @param spacing The spacing between the [content] and the [overlay]. Defaults to `0.dp`.
+ * @param overlayOffset The offset of the [overlay] from the bottom right corner of the [content].
  * @param shrinkContent Whether the content should be shrunk to fit the available width or not. Defaults to `false`.
- * @param layoutContent The content of the layout. **It must have exactly 2 children.**
+ * @param content The 'content' component of the layout.
  */
 @Composable
 fun ContentAvoidingLayout(
+    overlay: @Composable () -> Unit,
     modifier: Modifier = Modifier,
     spacing: Dp = 0.dp,
+    overlayOffset: DpOffset = DpOffset.Zero,
     shrinkContent: Boolean = false,
-    layoutContent: @Composable ContentAvoidingLayoutScope.() -> Unit,
+    content: @Composable ContentAvoidingLayoutScope.() -> Unit,
 ) {
     val scope = remember { ContentAvoidingLayoutScopeInstance() }
 
-    Layout(modifier = modifier, content = { scope.layoutContent() }) { measurables, constraints ->
+    Layout(
+        modifier = modifier,
+        content = {
+            scope.content()
+            overlay()
+        }
+    ) { measurables, constraints ->
         assert(measurables.size == 2) { "ContentAvoidingLayout must have exactly 2 children" }
 
         // Measure the `overlay` view first, in case we need to shrink the `content`
-        val overlay = measurables.last().measure(Constraints(minWidth = 0, maxWidth = constraints.maxWidth))
+        val overlayPlaceable = measurables.last().measure(Constraints(minWidth = 0, maxWidth = constraints.maxWidth))
         val contentConstraints = if (shrinkContent) {
-            Constraints(minWidth = 0, maxWidth = constraints.maxWidth - overlay.width)
+            Constraints(minWidth = 0, maxWidth = constraints.maxWidth - overlayPlaceable.width)
         } else {
             Constraints(minWidth = 0, maxWidth = constraints.maxWidth)
         }
-        val content = measurables.first().measure(contentConstraints)
+        val contentPlaceable = measurables.first().measure(contentConstraints)
 
-        var layoutWidth = content.width
-        var layoutHeight = content.height
+        var layoutWidth = contentPlaceable.width
+        var layoutHeight = contentPlaceable.height
 
         val data = scope.data
 
         // Free space = width of the whole component - width of its non overlapping contents
-        val freeSpace = max(content.width - data.nonOverlappingContentWidth, 0)
+        val freeSpace = max(contentPlaceable.width - data.nonOverlappingContentWidth, 0)
 
         when {
             // When the content + the overlay don't fit in the available max width, we need to move the overlay to a new row
-            !shrinkContent && data.nonOverlappingContentWidth + overlay.width > constraints.maxWidth -> {
-                layoutHeight += overlay.height
+            !shrinkContent && data.nonOverlappingContentWidth + overlayPlaceable.width > constraints.maxWidth -> {
+                layoutHeight += overlayPlaceable.height + overlayOffset.y.roundToPx()
             }
             // If the content is smaller than the available max width, we can move the overlay to the right of the content
-            content.width < constraints.maxWidth -> {
+            contentPlaceable.width < constraints.maxWidth -> {
                 // If both the content and the overlay plus the padding can fit inside the current layoutWidth, there is no need to increase it
-                if (freeSpace < overlay.width + spacing.roundToPx()) {
+                if (freeSpace < overlayPlaceable.width + spacing.roundToPx()) {
                     // Otherwise, we need to increase it by the width of the overlay + some padding adjustments
-                    val calculatedWidth = max(data.nonOverlappingContentWidth + overlay.width + spacing.roundToPx(), content.width)
+                    val calculatedWidth = max(data.nonOverlappingContentWidth + overlayPlaceable.width + spacing.roundToPx(), contentPlaceable.width)
                     layoutWidth = min(calculatedWidth, constraints.maxWidth)
                 }
             }
@@ -87,8 +105,8 @@ fun ContentAvoidingLayout(
         layoutHeight = max(layoutHeight, constraints.minHeight)
 
         layout(layoutWidth, layoutHeight) {
-            content.placeRelative(0, 0)
-            overlay.placeRelative(layoutWidth - overlay.width, layoutHeight - overlay.height)
+            contentPlaceable.placeRelative(0, 0)
+            overlayPlaceable.placeRelative(layoutWidth - overlayPlaceable.width, layoutHeight - overlayPlaceable.height + overlayOffset.y.roundToPx())
         }
     }
 }
@@ -129,5 +147,63 @@ private class ContentAvoidingLayoutScopeInstance(
         this.data.contentHeight = data.contentHeight
         this.data.nonOverlappingContentWidth = data.nonOverlappingContentWidth
         this.data.nonOverlappingContentHeight = data.nonOverlappingContentHeight
+    }
+}
+
+object ContentAvoidingLayout {
+    /**
+     * Measures the last line of a [TextLayoutResult] and calls [onContentLayoutChanged] with the [ContentAvoidingLayoutData].
+     *
+     * This is supposed to be used in the `onTextLayout` parameter of a Text based component.
+     */
+    @Composable
+    internal fun measureLastTextLine(
+        onContentLayoutChanged: (ContentAvoidingLayoutData) -> Unit,
+        extraWidth: Dp = 0.dp,
+    ): ((TextLayoutResult) -> Unit) {
+        val layoutDirection = LocalLayoutDirection.current
+        val extraWidthPx = extraWidth.roundToPx()
+        return { textLayout: TextLayoutResult ->
+            // We need to add the external extra width so it's not taken into account as 'free space'
+            val lastLineWidth = when (layoutDirection) {
+                LayoutDirection.Ltr -> textLayout.getLineRight(textLayout.lineCount - 1).roundToInt()
+                LayoutDirection.Rtl -> textLayout.getLineLeft(textLayout.lineCount - 1).roundToInt()
+            }
+            val lastLineHeight = textLayout.getLineBottom(textLayout.lineCount - 1).roundToInt()
+            onContentLayoutChanged(
+                ContentAvoidingLayoutData(
+                    contentWidth = textLayout.size.width + extraWidthPx,
+                    contentHeight = textLayout.size.height,
+                    nonOverlappingContentWidth = lastLineWidth + extraWidthPx,
+                    nonOverlappingContentHeight = lastLineHeight,
+                )
+            )
+        }
+    }
+
+    /**
+     * Measures the last line of a [Layout] and calls [onContentLayoutChanged] with the [ContentAvoidingLayoutData].
+     *
+     * This is supposed to be used in the `onTextLayout` parameter of an [EditorStyledText] component.
+     */
+    @Composable
+    internal fun measureLegacyLastTextLine(
+        onContentLayoutChanged: (ContentAvoidingLayoutData) -> Unit,
+        extraWidth: Dp = 0.dp,
+    ): ((Layout) -> Unit) {
+        val extraWidthPx = extraWidth.roundToPx()
+        return { textLayout: Layout ->
+            // We need to add the external extra width so it's not taken into account as 'free space'
+            val lastLineWidth = textLayout.getLineWidth(textLayout.lineCount - 1).roundToInt()
+            val lastLineHeight = textLayout.getLineBottom(textLayout.lineCount - 1)
+            onContentLayoutChanged(
+                ContentAvoidingLayoutData(
+                    contentWidth = textLayout.width + extraWidthPx,
+                    contentHeight = textLayout.height,
+                    nonOverlappingContentWidth = lastLineWidth + extraWidthPx,
+                    nonOverlappingContentHeight = lastLineHeight,
+                )
+            )
+        }
     }
 }

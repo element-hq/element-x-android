@@ -29,11 +29,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
+import io.element.android.features.messages.impl.timeline.components.layout.ContentAvoidingLayout
 import io.element.android.features.messages.impl.timeline.components.layout.ContentAvoidingLayoutData
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemFileContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemFileContentProvider
@@ -42,7 +42,6 @@ import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.utils.CommonDrawables
-import kotlin.math.roundToInt
 
 @Composable
 fun TimelineItemFileView(
@@ -52,7 +51,6 @@ fun TimelineItemFileView(
 ) {
     val iconSize = 32.dp
     val spacing = 8.dp
-    val density = LocalDensity.current
     Row(
         modifier = modifier,
     ) {
@@ -87,20 +85,10 @@ fun TimelineItemFileView(
                 style = ElementTheme.typography.fontBodySmRegular,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
-                onTextLayout = { textLayout ->
-                    // We need to add the external extra width so it's not taken into account as 'free space'
-                    val extraWidth = with(density) { iconSize.roundToPx() + spacing.roundToPx() }
-                    val lastLineWidth = textLayout.getLineRight(textLayout.lineCount - 1).roundToInt()
-                    val lastLineHeight = textLayout.getLineBottom(textLayout.lineCount - 1).roundToInt()
-                    onContentLayoutChanged(
-                        ContentAvoidingLayoutData(
-                            contentWidth = textLayout.size.width + extraWidth,
-                            contentHeight = textLayout.size.height,
-                            nonOverlappingContentWidth = lastLineWidth + extraWidth,
-                            nonOverlappingContentHeight = lastLineHeight,
-                        )
-                    )
-                }
+                onTextLayout = ContentAvoidingLayout.measureLastTextLine(
+                    onContentLayoutChanged = onContentLayoutChanged,
+                    extraWidth = iconSize + spacing
+                )
             )
         }
     }

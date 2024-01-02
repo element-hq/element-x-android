@@ -25,6 +25,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import io.element.android.compound.theme.ElementTheme
+import io.element.android.features.messages.impl.timeline.components.layout.ContentAvoidingLayout
 import io.element.android.features.messages.impl.timeline.components.layout.ContentAvoidingLayoutData
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextBasedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextBasedContentProvider
@@ -32,7 +33,6 @@ import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.textcomposer.ElementRichTextEditorStyle
 import io.element.android.wysiwyg.compose.EditorStyledText
-import kotlin.math.roundToInt
 
 @Composable
 fun TimelineItemTextView(
@@ -54,15 +54,7 @@ fun TimelineItemTextView(
                 text = body,
                 onLinkClickedListener = onLinkClicked,
                 style = ElementRichTextEditorStyle.textStyle(),
-                onTextLayout = { textLayout ->
-                    val layoutData =
-                        ContentAvoidingLayoutData(
-                            contentWidth = textLayout.width,
-                            nonOverlappingContentWidth = textLayout.getLineWidth(textLayout.lineCount - 1).roundToInt(),
-                            contentHeight = textLayout.height,
-                        )
-                    onContentLayoutChanged(layoutData)
-                },
+                onTextLayout = ContentAvoidingLayout.measureLegacyLastTextLine(onContentLayoutChanged = onContentLayoutChanged),
                 releaseOnDetach = false,
             )
         }
