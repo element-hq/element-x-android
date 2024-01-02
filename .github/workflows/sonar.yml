@@ -3,6 +3,7 @@ name: Sonar
 on:
   workflow_dispatch:
   pull_request:
+    types: [ synchronize, labeled ]
   merge_group:
   push:
     branches: [ main, develop ]
@@ -16,6 +17,7 @@ jobs:
   sonar:
     name: Sonar Quality Checks
     runs-on: ubuntu-latest
+    if: ${{ !github.event.label.name || github.event.label.name == 'Force CI run' }}
     # Allow all jobs on main and develop. Just one per PR.
     concurrency:
       group: ${{ github.ref == 'refs/heads/main' && format('sonar-main-{0}', github.sha) || github.ref == 'refs/heads/develop' && format('sonar-develop-{0}', github.sha) || format('sonar-{0}', github.ref) }}

@@ -1,11 +1,14 @@
 name: Danger CI
 
-on: [pull_request, merge_group]
+on:
+  pull_request:
+    types: [ synchronize, labeled ]
 
 jobs:
   build:
     runs-on: ubuntu-latest
     name: Danger main check
+    if: ${{ !github.event.label.name || github.event.label.name == 'Force CI run' }}
     steps:
       - uses: actions/checkout@v4
       - run: |

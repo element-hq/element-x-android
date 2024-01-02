@@ -1,11 +1,14 @@
 name: Validate Git LFS
 
-on: [pull_request, merge_group]
+on:
+  pull_request:
+    types: [ synchronize, labeled ]
 
 jobs:
   build:
     runs-on: ubuntu-latest
     name: Validate
+    if: ${{ !github.event.label.name || github.event.label.name == 'Force CI run' }}
     steps:
       - uses: nschloe/action-cached-lfs-checkout@v1.2.2
 

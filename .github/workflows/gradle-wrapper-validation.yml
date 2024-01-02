@@ -1,6 +1,7 @@
 name: "Validate Gradle Wrapper"
 on:
   pull_request:
+    types: [ synchronize, labeled ]
   merge_group:
   push:
     branches: [ main, develop ]
@@ -9,6 +10,7 @@ jobs:
   validation:
     name: "Validation"
     runs-on: ubuntu-latest
+    if: ${{ !github.event.label.name || github.event.label.name == 'Force CI run' }}
     # No concurrency required, this is a prerequisite to other actions and should run every time.
     steps:
       - uses: actions/checkout@v4

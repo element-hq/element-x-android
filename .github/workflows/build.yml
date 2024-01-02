@@ -3,6 +3,7 @@ name: APK Build
 on:
   workflow_dispatch:
   pull_request:
+    types: [ synchronize, labeled ]
   merge_group:
   push:
     branches: [ develop ]
@@ -17,7 +18,7 @@ jobs:
     name: Build APKs
     runs-on: ubuntu-latest
     # Skip for `main`
-    if: github.ref != 'refs/heads/main'
+    if: github.ref != 'refs/heads/main' || github.event.label.name == 'Force CI run'
     strategy:
       matrix:
         variant: [debug, release, nightly, samples]

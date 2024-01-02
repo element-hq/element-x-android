@@ -24,7 +24,7 @@ jobs:
       cancel-in-progress: true
     steps:
       - name: Remove Run-Maestro label
-        if: ${{ github.event.label.name == 'Run-Maestro' }}
+        if: ${{ !github.event.pull_request.fork && github.event.label.name == 'Run-Maestro' }}
         uses: actions-ecosystem/action-remove-labels@v1
         with:
           labels: Run-Maestro
@@ -35,16 +35,19 @@ jobs:
           ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.ref }}
       - uses: actions/setup-java@v4
         name: Use JDK 17
+        if: ${{ !github.event.pull_request.fork }}
         with:
           distribution: 'temurin' # See 'Supported distributions' for available options
           java-version: '17'
       - name: Assemble debug APK
+        if: ${{ !github.event.pull_request.fork }}
         run: ./gradlew :app:assembleDebug $CI_GRADLE_ARG_PROPERTIES
         env:
           ELEMENT_ANDROID_MAPTILER_API_KEY: ${{ secrets.MAPTILER_KEY }}
           ELEMENT_ANDROID_MAPTILER_LIGHT_MAP_ID: ${{ secrets.MAPTILER_LIGHT_MAP_ID }}
           ELEMENT_ANDROID_MAPTILER_DARK_MAP_ID: ${{ secrets.MAPTILER_DARK_MAP_ID }}
       - uses: mobile-dev-inc/action-maestro-cloud@v1.8.0
+        if: ${{ !github.event.pull_request.fork }}
         with:
           api-key: ${{ secrets.MAESTRO_CLOUD_API_KEY }}
           # Doc says (https://github.com/mobile-dev-inc/action-maestro-cloud#android):
