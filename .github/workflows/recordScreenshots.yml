@@ -26,7 +26,7 @@ jobs:
         uses: nschloe/action-cached-lfs-checkout@v1.2.2
         with:
           persist-credentials: false
-          ref: ${{ github.event.pull_request.head.ref }}
+          ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.ref || github.ref }}
       - name: ⏬ Checkout with LFS (Branch)
         if: github.event_name == 'workflow_dispatch'
         uses: nschloe/action-cached-lfs-checkout@v1.2.2
@@ -45,6 +45,5 @@ jobs:
       - name: Record screenshots
         run: ./.github/workflows/scripts/recordScreenshots.sh
         env:
-          GITHUB_TOKEN: ${{ secrets.DANGER_GITHUB_API_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPOSITORY: ${{ secrets.GITHUB_REPOSITORY }}
-

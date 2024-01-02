@@ -68,11 +68,27 @@ echo "Record screenshots"
 ./gradlew recordPaparazziDebug --stacktrace -PpreDexEnable=false --max-workers 4 --warn
 
 echo "Committing changes"
-git config user.name "ElementBot"
-git config user.email "benoitm+elementbot@element.io"
+git config http.sslVerify false
+
+if [[ -z ${INPUT_AUTHOR_NAME} ]]; then
+  git config user.name "ElementBot"
+else
+  git config --local user.name "${INPUT_AUTHOR_NAME}"
+fi
+
+if [[ -z ${INPUT_AUTHOR_EMAIL} ]]; then
+  git config user.email "benoitm+elementbot@element.io"
+else
+  git config --local user.name "${INPUT_AUTHOR_EMAIL}"
+fi
 git add -A
 git commit -m "Update screenshots"
 
+GITHUB_REPO="https://$GITHUB_ACTOR:$TOKEN@github.com/$REPO.git"
 echo "Pushing changes"
-git push "https://$TOKEN@github.com/$REPO.git" $BRANCH
+if [[ -z ${GITHUB_ACTOR} ]]; then
+  echo "No GITHUB_ACTOR env var"
+  GITHUB_REPO="https://$TOKEN@github.com/$REPO.git"
+fi
+git push $GITHUB_REPO "$BRANCH"
 echo "Done!"
