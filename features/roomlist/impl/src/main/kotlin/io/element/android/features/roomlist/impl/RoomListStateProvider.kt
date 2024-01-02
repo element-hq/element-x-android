@@ -34,7 +34,7 @@ open class RoomListStateProvider : PreviewParameterProvider<RoomListState> {
     override val values: Sequence<RoomListState>
         get() = sequenceOf(
             aRoomListState(),
-            aRoomListState().copy(displayVerificationPrompt = true),
+            aRoomListState().copy(displayVerificationPrompt = false),
             aRoomListState().copy(snackbarMessage = SnackbarMessage(CommonStrings.common_verification_complete)),
             aRoomListState().copy(hasNetworkConnection = false),
             aRoomListState().copy(invitesState = InvitesState.SeenInvites),
