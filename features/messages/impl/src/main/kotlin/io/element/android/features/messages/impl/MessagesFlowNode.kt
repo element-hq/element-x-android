@@ -270,10 +270,6 @@ class MessagesFlowNode @AssistedInject constructor(
                     )
                     overlay.show(navTarget)
                 }
-                else
-                {
-                    Unit
-                }
             }
             is TimelineItemVideoContent -> {
                 val navTarget = NavTarget.MediaViewer(
