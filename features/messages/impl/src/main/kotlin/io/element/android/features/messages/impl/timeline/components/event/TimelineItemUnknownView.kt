@@ -19,6 +19,7 @@ package io.element.android.features.messages.impl.timeline.components.event
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import io.element.android.features.messages.impl.timeline.components.layout.ContentAvoidingLayoutData
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemUnknownContent
 import io.element.android.libraries.designsystem.icons.CompoundDrawables
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -28,14 +29,14 @@ import io.element.android.libraries.ui.strings.CommonStrings
 @Composable
 fun TimelineItemUnknownView(
     @Suppress("UNUSED_PARAMETER") content: TimelineItemUnknownContent,
-    extraPadding: ExtraPadding,
+    onContentLayoutChanged: (ContentAvoidingLayoutData) -> Unit,
     modifier: Modifier = Modifier
 ) {
     TimelineItemInformativeView(
         text = stringResource(id = CommonStrings.common_unsupported_event),
         iconDescription = stringResource(id = CommonStrings.dialog_title_warning),
         iconResourceId = CompoundDrawables.ic_info_solid,
-        extraPadding = extraPadding,
+        onContentLayoutChanged = onContentLayoutChanged,
         modifier = modifier
     )
 }
@@ -45,6 +46,6 @@ fun TimelineItemUnknownView(
 internal fun TimelineItemUnknownViewPreview() = ElementPreview {
     TimelineItemUnknownView(
         content = TimelineItemUnknownContent,
-        extraPadding = noExtraPadding
+        onContentLayoutChanged = {},
     )
 }

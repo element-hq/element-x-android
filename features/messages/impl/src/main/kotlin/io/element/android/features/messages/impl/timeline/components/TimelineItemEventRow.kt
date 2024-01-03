@@ -56,6 +56,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
@@ -67,7 +68,8 @@ import io.element.android.features.messages.impl.timeline.TimelineEvents
 import io.element.android.features.messages.impl.timeline.TimelineRoomInfo
 import io.element.android.features.messages.impl.timeline.aTimelineItemEvent
 import io.element.android.features.messages.impl.timeline.components.event.TimelineItemEventContentView
-import io.element.android.features.messages.impl.timeline.components.event.toExtraPadding
+import io.element.android.features.messages.impl.timeline.components.layout.ContentAvoidingLayout
+import io.element.android.features.messages.impl.timeline.components.layout.ContentAvoidingLayoutData
 import io.element.android.features.messages.impl.timeline.components.receipt.ReadReceiptViewState
 import io.element.android.features.messages.impl.timeline.components.receipt.TimelineItemReadReceiptView
 import io.element.android.features.messages.impl.timeline.model.InReplyToDetails
@@ -80,6 +82,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemPollContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStickerContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVoiceContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
 import io.element.android.features.messages.impl.timeline.model.event.canBeRepliedTo
@@ -448,12 +451,13 @@ private fun MessageEventBubbleContent(
     fun WithTimestampLayout(
         timestampPosition: TimestampPosition,
         modifier: Modifier = Modifier,
-        content: @Composable () -> Unit,
+        canShrinkContent: Boolean = false,
+        content: @Composable (onContentLayoutChanged: (ContentAvoidingLayoutData) -> Unit) -> Unit,
     ) {
         when (timestampPosition) {
             TimestampPosition.Overlay ->
                 Box(modifier, contentAlignment = Alignment.Center) {
-                    content()
+                    content {}
                     TimelineEventTimestampView(
                         event = event,
                         onClick = onTimestampClicked,
@@ -466,20 +470,26 @@ private fun MessageEventBubbleContent(
                     )
                 }
             TimestampPosition.Aligned ->
-                Box(modifier) {
-                    content()
-                    TimelineEventTimestampView(
-                        event = event,
-                        onClick = onTimestampClicked,
-                        onLongClick = ::onTimestampLongClick,
-                        modifier = Modifier
-                            .align(Alignment.BottomEnd)
-                            .padding(horizontal = 8.dp, vertical = 4.dp)
-                    )
-                }
+                ContentAvoidingLayout(
+                    modifier = modifier,
+                    // The spacing is negative to make the content overlap the empty space at the start of the timestamp
+                    spacing = (-4).dp,
+                    overlayOffset = DpOffset(0.dp, -1.dp),
+                    shrinkContent = canShrinkContent,
+                    content = { content(this::onContentLayoutChanged) },
+                    overlay = {
+                        TimelineEventTimestampView(
+                            event = event,
+                            onClick = onTimestampClicked,
+                            onLongClick = ::onTimestampLongClick,
+                            modifier = Modifier
+                                .padding(horizontal = 8.dp, vertical = 4.dp)
+                        )
+                    }
+                )
             TimestampPosition.Below ->
                 Column(modifier) {
-                    content()
+                    content {}
                     TimelineEventTimestampView(
                         event = event,
                         onClick = onTimestampClicked,
@@ -498,7 +508,8 @@ private fun MessageEventBubbleContent(
         timestampPosition: TimestampPosition,
         showThreadDecoration: Boolean,
         inReplyToDetails: InReplyToDetails?,
-        modifier: Modifier = Modifier
+        modifier: Modifier = Modifier,
+        canShrinkContent: Boolean = false,
     ) {
         val context = LocalContext.current
         val timestampLayoutModifier: Modifier
@@ -515,7 +526,8 @@ private fun MessageEventBubbleContent(
             }
             timestampPosition != TimestampPosition.Overlay -> {
                 timestampLayoutModifier = Modifier
-                contentModifier = Modifier.padding(start = 12.dp, end = 12.dp, top = 8.dp, bottom = 8.dp)
+                contentModifier = Modifier
+                    .padding(start = 12.dp, end = 12.dp, top = 8.dp, bottom = 8.dp)
             }
             else -> {
                 timestampLayoutModifier = Modifier
@@ -530,8 +542,9 @@ private fun MessageEventBubbleContent(
         val contentWithTimestamp = @Composable {
             WithTimestampLayout(
                 timestampPosition = timestampPosition,
+                canShrinkContent = canShrinkContent,
                 modifier = timestampLayoutModifier,
-            ) {
+            ) { onContentLayoutChanged ->
                 TimelineItemEventContentView(
                     content = event.content,
                     onLinkClicked = { url ->
@@ -548,9 +561,9 @@ private fun MessageEventBubbleContent(
                             }
                         }
                     },
-                    extraPadding = event.toExtraPadding(),
                     eventSink = eventSink,
-                    modifier = contentModifier,
+                    onContentLayoutChanged = onContentLayoutChanged,
+                    modifier = contentModifier
                 )
             }
         }
@@ -594,6 +607,7 @@ private fun MessageEventBubbleContent(
         showThreadDecoration = event.isThreaded,
         timestampPosition = timestampPosition,
         inReplyToDetails = event.inReplyTo,
+        canShrinkContent = event.content is TimelineItemVoiceContent,
         modifier = bubbleModifier
     )
 }
@@ -655,7 +669,7 @@ internal fun TimelineItemEventRowPreview() = ElementPreview {
                     isMine = it,
                     content = aTimelineItemTextContent().copy(
                         body = "A long text which will be displayed on several lines and" +
-                            " hopefully can be manually adjusted to test different behaviors."
+                        " hopefully can be manually adjusted to test different behaviors."
                     ),
                     groupPosition = TimelineItemGroupPosition.First,
                 ),

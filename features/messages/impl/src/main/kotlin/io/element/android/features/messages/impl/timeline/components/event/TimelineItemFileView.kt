@@ -33,6 +33,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
+import io.element.android.features.messages.impl.timeline.components.layout.ContentAvoidingLayout
+import io.element.android.features.messages.impl.timeline.components.layout.ContentAvoidingLayoutData
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemFileContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemFileContentProvider
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -44,15 +46,17 @@ import io.element.android.libraries.designsystem.utils.CommonDrawables
 @Composable
 fun TimelineItemFileView(
     content: TimelineItemFileContent,
-    extraPadding: ExtraPadding,
+    onContentLayoutChanged: (ContentAvoidingLayoutData) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val iconSize = 32.dp
+    val spacing = 8.dp
     Row(
         modifier = modifier,
     ) {
         Box(
             modifier = Modifier
-                .size(32.dp)
+                .size(iconSize)
                 .clip(CircleShape)
                 .background(ElementTheme.materialColors.background),
             contentAlignment = Alignment.Center,
@@ -66,7 +70,7 @@ fun TimelineItemFileView(
                     .rotate(-45f),
             )
         }
-        Spacer(Modifier.width(8.dp))
+        Spacer(Modifier.width(spacing))
         Column {
             Text(
                 text = content.body,
@@ -76,11 +80,15 @@ fun TimelineItemFileView(
                 overflow = TextOverflow.Ellipsis
             )
             Text(
-                text = content.fileExtensionAndSize + extraPadding.getStr(textStyle = ElementTheme.typography.fontBodySmRegular),
+                text = content.fileExtensionAndSize,
                 color = ElementTheme.materialColors.secondary,
                 style = ElementTheme.typography.fontBodySmRegular,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
+                onTextLayout = ContentAvoidingLayout.measureLastTextLine(
+                    onContentLayoutChanged = onContentLayoutChanged,
+                    extraWidth = iconSize + spacing
+                )
             )
         }
     }
@@ -91,6 +99,6 @@ fun TimelineItemFileView(
 internal fun TimelineItemFileViewPreview(@PreviewParameter(TimelineItemFileContentProvider::class) content: TimelineItemFileContent) = ElementPreview {
     TimelineItemFileView(
         content,
-        extraPadding = noExtraPadding,
+        onContentLayoutChanged = {},
     )
 }

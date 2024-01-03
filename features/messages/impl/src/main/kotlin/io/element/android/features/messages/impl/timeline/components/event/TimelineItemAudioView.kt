@@ -34,6 +34,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
+import io.element.android.features.messages.impl.timeline.components.layout.ContentAvoidingLayout
+import io.element.android.features.messages.impl.timeline.components.layout.ContentAvoidingLayoutData
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemAudioContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemAudioContentProvider
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -44,15 +46,17 @@ import io.element.android.libraries.designsystem.theme.components.Text
 @Composable
 fun TimelineItemAudioView(
     content: TimelineItemAudioContent,
-    extraPadding: ExtraPadding,
+    onContentLayoutChanged: (ContentAvoidingLayoutData) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val iconSize = 32.dp
+    val spacing = 8.dp
     Row(
         modifier = modifier,
     ) {
         Box(
             modifier = Modifier
-                .size(32.dp)
+                .size(iconSize)
                 .clip(CircleShape)
                 .background(ElementTheme.materialColors.background),
             contentAlignment = Alignment.Center,
@@ -65,7 +69,7 @@ fun TimelineItemAudioView(
                     .size(16.dp),
             )
         }
-        Spacer(Modifier.width(8.dp))
+        Spacer(Modifier.width(spacing))
         Column {
             Text(
                 text = content.body,
@@ -75,11 +79,15 @@ fun TimelineItemAudioView(
                 overflow = TextOverflow.Ellipsis
             )
             Text(
-                text = content.fileExtensionAndSize + extraPadding.getStr(ElementTheme.typography.fontBodySmRegular),
+                text = content.fileExtensionAndSize,
                 color = ElementTheme.materialColors.secondary,
                 style = ElementTheme.typography.fontBodySmRegular,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
+                onTextLayout = ContentAvoidingLayout.measureLastTextLine(
+                    onContentLayoutChanged = onContentLayoutChanged,
+                    extraWidth = iconSize + spacing
+                )
             )
         }
     }
@@ -91,6 +99,6 @@ internal fun TimelineItemAudioViewPreview(@PreviewParameter(TimelineItemAudioCon
     ElementPreview {
         TimelineItemAudioView(
             content,
-            extraPadding = noExtraPadding,
+            onContentLayoutChanged = {},
         )
     }

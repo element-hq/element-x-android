@@ -19,6 +19,7 @@ package io.element.android.features.messages.impl.timeline.components.event
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import io.element.android.features.messages.impl.timeline.components.layout.ContentAvoidingLayoutData
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemRedactedContent
 import io.element.android.libraries.designsystem.icons.CompoundDrawables
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -28,14 +29,14 @@ import io.element.android.libraries.ui.strings.CommonStrings
 @Composable
 fun TimelineItemRedactedView(
     @Suppress("UNUSED_PARAMETER") content: TimelineItemRedactedContent,
-    extraPadding: ExtraPadding,
+    onContentLayoutChanged: (ContentAvoidingLayoutData) -> Unit,
     modifier: Modifier = Modifier
 ) {
     TimelineItemInformativeView(
         text = stringResource(id = CommonStrings.common_message_removed),
         iconDescription = stringResource(id = CommonStrings.common_message_removed),
         iconResourceId = CompoundDrawables.ic_delete,
-        extraPadding = extraPadding,
+        onContentLayoutChanged = onContentLayoutChanged,
         modifier = modifier
     )
 }
@@ -45,6 +46,6 @@ fun TimelineItemRedactedView(
 internal fun TimelineItemRedactedViewPreview() = ElementPreview {
     TimelineItemRedactedView(
         TimelineItemRedactedContent,
-        extraPadding = noExtraPadding
+        onContentLayoutChanged = {},
     )
 }
