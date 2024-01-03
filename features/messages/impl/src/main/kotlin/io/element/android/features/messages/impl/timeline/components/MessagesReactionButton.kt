@@ -24,7 +24,9 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -41,10 +43,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.messages.impl.R
 import io.element.android.features.messages.impl.timeline.model.AggregatedReaction
 import io.element.android.features.messages.impl.timeline.model.AggregatedReactionProvider
 import io.element.android.features.messages.impl.timeline.model.aTimelineItemReactions
+import io.element.android.libraries.designsystem.components.BlurHashAsyncImage
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.text.toDp
@@ -52,7 +56,8 @@ import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Surface
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.utils.CommonDrawables
-import io.element.android.compound.theme.ElementTheme
+import io.element.android.libraries.matrix.api.media.MediaSource
+import io.element.android.libraries.matrix.ui.media.MediaRequestData
 
 @Composable
 @OptIn(ExperimentalFoundationApi::class)
@@ -114,7 +119,8 @@ sealed interface MessagesReactionsButtonContent {
     val isHighlighted get() = this is Reaction && reaction.isHighlighted
 }
 
-private val reactionEmojiLineHeight = 20.sp
+internal val reactionEmojiLineHeight = 20.sp
+internal val reactionImageAspectRatio = 1.33f
 private val addEmojiSize = 16.dp
 
 @Composable
@@ -150,13 +156,24 @@ private fun ReactionContent(
     verticalAlignment = Alignment.CenterVertically,
     modifier = modifier,
 ) {
-    Text(
-        text = reaction.displayKey,
-        style = ElementTheme.typography.fontBodyMdRegular.copy(
-            fontSize = 15.sp,
-            lineHeight = reactionEmojiLineHeight,
-        ),
-    )
+    if (reaction.key.startsWith("mxc://")) {
+        BlurHashAsyncImage(
+            modifier = modifier
+                .heightIn(min = reactionEmojiLineHeight.toDp(), max = reactionEmojiLineHeight.toDp())
+                .aspectRatio(reactionImageAspectRatio, false),
+            model = MediaRequestData(MediaSource(reaction.key), MediaRequestData.Kind.Content),
+            blurHash = null
+        )
+    }
+    else {
+        Text(
+            text = reaction.displayKey,
+            style = ElementTheme.typography.fontBodyMdRegular.copy(
+                fontSize = 15.sp,
+                lineHeight = reactionEmojiLineHeight,
+            ),
+        )
+    }
     if (reaction.count > 1) {
         Spacer(modifier = Modifier.width(4.dp))
         Text(
