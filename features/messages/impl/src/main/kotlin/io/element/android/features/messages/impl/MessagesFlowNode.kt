@@ -255,17 +255,25 @@ class MessagesFlowNode @AssistedInject constructor(
                 overlay.show(navTarget)
             }
             is TimelineItemStickerContent -> {
-                val navTarget = NavTarget.MediaViewer(
-                    mediaInfo = MediaInfo(
-                        name = event.content.body,
-                        mimeType = event.content.mimeType,
-                        formattedFileSize = event.content.formattedFileSize,
-                        fileExtension = event.content.fileExtension
-                    ),
-                    mediaSource = event.content.mediaSource,
-                    thumbnailSource = event.content.thumbnailSource,
-                )
-                overlay.show(navTarget)
+                /* Sticker may have an empty url and no thumbnail
+                   if encrypted on certain bridges */
+                if (event.content.preferredMediaSource != null) {
+                    val navTarget = NavTarget.MediaViewer(
+                        mediaInfo = MediaInfo(
+                            name = event.content.body,
+                            mimeType = event.content.mimeType,
+                            formattedFileSize = event.content.formattedFileSize,
+                            fileExtension = event.content.fileExtension
+                        ),
+                        mediaSource = event.content.preferredMediaSource,
+                        thumbnailSource = event.content.thumbnailSource,
+                    )
+                    overlay.show(navTarget)
+                }
+                else
+                {
+                    Unit
+                }
             }
             is TimelineItemVideoContent -> {
                 val navTarget = NavTarget.MediaViewer(
