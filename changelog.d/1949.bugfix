@@ -1,0 +1,1 @@
+Make sure the media viewer tries the main url first (if not empty) then the thumbnail url and then not open if both are missing instead of failing with an error dialog
