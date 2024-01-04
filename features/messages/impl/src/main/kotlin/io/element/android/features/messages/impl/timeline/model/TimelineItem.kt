@@ -18,6 +18,7 @@ package io.element.android.features.messages.impl.timeline.model
 
 import androidx.compose.runtime.Immutable
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStickerContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextBasedContent
 import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemVirtualModel
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
@@ -80,6 +81,8 @@ sealed interface TimelineItem {
         val failedToSend: Boolean = localSendState is LocalEventSendState.SendingFailed
 
         val isTextMessage: Boolean = content is TimelineItemTextBasedContent
+
+        val isSticker: Boolean = content is TimelineItemStickerContent
 
         val isRemote = eventId != null
     }

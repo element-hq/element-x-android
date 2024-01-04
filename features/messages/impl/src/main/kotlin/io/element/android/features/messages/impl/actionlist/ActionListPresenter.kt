@@ -152,7 +152,9 @@ class ActionListPresenter @Inject constructor(
                                 add(TimelineItemAction.Reply)
                             }
                         }
-                        add(TimelineItemAction.Forward)
+                        if (!timelineItem.isSticker) {
+                            add(TimelineItemAction.Forward)
+                        }
                     }
                     if (timelineItem.isMine && timelineItem.isTextMessage) {
                         add(TimelineItemAction.Edit)
