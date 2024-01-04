@@ -61,6 +61,7 @@ import io.element.android.libraries.matrix.ui.components.AvatarActionBottomSheet
 import io.element.android.libraries.matrix.ui.components.EditableAvatarView
 import io.element.android.libraries.permissions.api.PermissionsView
 import io.element.android.compound.theme.ElementTheme
+import io.element.android.libraries.designsystem.components.async.AsyncActionViewDefaults
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.coroutines.launch
 
@@ -173,7 +174,11 @@ fun RoomDetailsEditView(
 
     AsyncActionView(
         async = state.saveAction,
-        progressText = stringResource(R.string.screen_room_details_updating_room),
+        progressDialog = {
+            AsyncActionViewDefaults.ProgressDialog(
+                progressText = stringResource(R.string.screen_room_details_updating_room),
+            )
+        },
         onSuccess = { onRoomEdited() },
         errorMessage = { stringResource(R.string.screen_room_details_edition_error) },
         onErrorDismiss = { state.eventSink(RoomDetailsEditEvents.CancelSaveChanges) }

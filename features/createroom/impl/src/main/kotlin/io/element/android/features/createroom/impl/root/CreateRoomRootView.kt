@@ -39,6 +39,7 @@ import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.createroom.impl.R
 import io.element.android.features.createroom.impl.components.UserListView
 import io.element.android.libraries.designsystem.components.async.AsyncActionView
+import io.element.android.libraries.designsystem.components.async.AsyncActionViewDefaults
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.icons.CompoundDrawables
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -95,7 +96,11 @@ fun CreateRoomRootView(
 
     AsyncActionView(
         async = state.startDmAction,
-        progressText = stringResource(CommonStrings.common_starting_chat),
+        progressDialog = {
+            AsyncActionViewDefaults.ProgressDialog(
+                progressText = stringResource(CommonStrings.common_starting_chat),
+            )
+        },
         onSuccess = { onOpenDM(it) },
         errorMessage = { stringResource(R.string.screen_start_chat_error_starting_chat) },
         onRetry = {

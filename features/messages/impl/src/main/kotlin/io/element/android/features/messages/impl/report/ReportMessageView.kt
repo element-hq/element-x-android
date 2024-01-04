@@ -42,7 +42,6 @@ import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.messages.impl.R
 import io.element.android.libraries.architecture.AsyncAction
-import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.components.async.AsyncActionView
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -66,7 +65,7 @@ fun ReportMessageView(
     val isSending = state.result is AsyncAction.Loading
     AsyncActionView(
         async = state.result,
-        showProgressDialog = false,
+        progressDialog = {},
         onSuccess = { onBackClicked() },
         errorMessage = { stringResource(CommonStrings.error_unknown) },
         onErrorDismiss = { state.eventSink(ReportMessageEvents.ClearError) }

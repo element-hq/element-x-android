@@ -18,69 +18,29 @@ package io.element.android.libraries.designsystem.components.async
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.designsystem.components.ProgressDialog
+import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
 import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
 import io.element.android.libraries.designsystem.components.dialogs.ErrorDialogDefaults
 import io.element.android.libraries.designsystem.components.dialogs.RetryDialog
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.ui.strings.CommonStrings
 
 /**
  * Render an AsyncAction object.
  * - If Success, invoke the callback [onSuccess], only once.
  * - If Failure, display a dialog with the error, which can be transformed, using [errorMessage]. When
  * closed, [onErrorDismiss] will be invoked. If [onRetry] is not null, a retry button will be displayed.
- * - When loading, display a loading dialog, if [showProgressDialog] is true, with on optional [progressText].
+ * - When loading, display a loading dialog using [progressDialog]. Pass empty lambda to disable.
  */
 @Composable
 fun <T> AsyncActionView(
     async: AsyncAction<T>,
     onSuccess: (T) -> Unit,
     onErrorDismiss: () -> Unit,
-    showConfirmationDialog: Boolean = false,
-    confirmationText: String? = null,
-    confirmationSubmit: String? = null,
-    onConfirmation: (() -> Unit)? = null,
-    showProgressDialog: Boolean = true,
-    progressText: String? = null,
-    errorTitle: @Composable (Throwable) -> String = { ErrorDialogDefaults.title },
-    errorMessage: @Composable (Throwable) -> String = { it.message ?: it.toString() },
-    onRetry: (() -> Unit)? = null,
-) {
-    AsyncActionView(
-        async = async,
-        onSuccess = onSuccess,
-        onErrorDismiss = onErrorDismiss,
-        confirmationDialog = {
-            if (showConfirmationDialog) {
-                AsyncActionViewDefaults.ConfirmationDialog(
-                    confirmationText = confirmationText,
-                    confirmationSubmit = confirmationSubmit,
-                    onConfirmation = onConfirmation,
-                )
-            }
-        },
-        progressDialog = {
-            if (showProgressDialog) {
-                AsyncActionViewDefaults.ProgressDialog(progressText)
-            }
-        },
-        errorTitle = errorTitle,
-        errorMessage = errorMessage,
-        onRetry = onRetry,
-    )
-}
-
-@Composable
-fun <T> AsyncActionView(
-    async: AsyncAction<T>,
-    onSuccess: (T) -> Unit,
-    onErrorDismiss: () -> Unit,
-    confirmationDialog: @Composable () -> Unit = { AsyncActionViewDefaults.ConfirmationDialog() },
+    confirmationDialog: @Composable () -> Unit = { },
     progressDialog: @Composable () -> Unit = { AsyncActionViewDefaults.ProgressDialog() },
     errorTitle: @Composable (Throwable) -> String = { ErrorDialogDefaults.title },
     errorMessage: @Composable (Throwable) -> String = { it.message ?: it.toString() },
@@ -116,22 +76,6 @@ fun <T> AsyncActionView(
 
 object AsyncActionViewDefaults {
     @Composable
-    fun ConfirmationDialog(
-        confirmationText: String? = null,
-        confirmationSubmit: String? = null,
-        onConfirmation: (() -> Unit)? = null,
-        onDismiss: (() -> Unit)? = null,
-    ) {
-        io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog(
-            content = confirmationText.orEmpty(),
-            onSubmitClicked = onConfirmation ?: {},
-            onDismiss = onDismiss ?: {},
-            submitText = confirmationSubmit ?: stringResource(CommonStrings.action_continue),
-            cancelText = stringResource(CommonStrings.action_cancel),
-        )
-    }
-
-    @Composable
     fun ProgressDialog(progressText: String? = null) {
         ProgressDialog(
             text = progressText,
@@ -148,5 +92,13 @@ internal fun AsyncActionViewPreview(
         async = async,
         onSuccess = {},
         onErrorDismiss = {},
+        confirmationDialog = {
+            ConfirmationDialog(
+                title = "Confirmation",
+                content = "Are you sure?",
+                onSubmitClicked = {},
+                onDismiss = {},
+            )
+        },
     )
 }

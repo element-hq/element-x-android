@@ -152,7 +152,7 @@ fun BugReportView(
 
         AsyncActionView(
             async = state.sending,
-            showProgressDialog = false,
+            progressDialog = { },
             onSuccess = {
                 eventSink(BugReportEvents.ResetAll)
                 onDone()

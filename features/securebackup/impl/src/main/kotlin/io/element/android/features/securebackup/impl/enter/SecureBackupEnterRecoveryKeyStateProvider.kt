@@ -21,7 +21,6 @@ import io.element.android.features.securebackup.impl.setup.views.RecoveryKeyUser
 import io.element.android.features.securebackup.impl.setup.views.RecoveryKeyViewState
 import io.element.android.features.securebackup.impl.setup.views.aFormattedRecoveryKey
 import io.element.android.libraries.architecture.AsyncAction
-import io.element.android.libraries.architecture.AsyncData
 
 open class SecureBackupEnterRecoveryKeyStateProvider : PreviewParameterProvider<SecureBackupEnterRecoveryKeyState> {
     override val values: Sequence<SecureBackupEnterRecoveryKeyState>

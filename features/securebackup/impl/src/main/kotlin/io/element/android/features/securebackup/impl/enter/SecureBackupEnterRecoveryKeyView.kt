@@ -46,7 +46,7 @@ fun SecureBackupEnterRecoveryKeyView(
     AsyncActionView(
         async = state.submitAction,
         onSuccess = { onDone() },
-        showProgressDialog = false,
+        progressDialog = { },
         errorTitle = { stringResource(id = R.string.screen_recovery_key_confirm_error_title) },
         errorMessage = { stringResource(id = R.string.screen_recovery_key_confirm_error_content) },
         onErrorDismiss = { state.eventSink(SecureBackupEnterRecoveryKeyEvents.ClearDialog) },

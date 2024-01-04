@@ -50,6 +50,7 @@ import io.element.android.features.createroom.impl.R
 import io.element.android.features.createroom.impl.components.RoomPrivacyOption
 import io.element.android.libraries.designsystem.components.LabelledTextField
 import io.element.android.libraries.designsystem.components.async.AsyncActionView
+import io.element.android.libraries.designsystem.components.async.AsyncActionViewDefaults
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -150,7 +151,11 @@ fun ConfigureRoomView(
 
     AsyncActionView(
         async = state.createRoomAction,
-        progressText = stringResource(CommonStrings.common_creating_room),
+        progressDialog = {
+            AsyncActionViewDefaults.ProgressDialog(
+                progressText = stringResource(CommonStrings.common_creating_room),
+            )
+        },
         onSuccess = { onRoomCreated(it) },
         errorMessage = { stringResource(R.string.screen_create_room_error_creating_room) },
         onRetry = { state.eventSink(ConfigureRoomEvents.CreateRoom(state.config)) },
