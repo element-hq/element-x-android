@@ -74,7 +74,7 @@ class TimelineItemContentMessageFactory @Inject constructor(
             is EmoteMessageType -> {
                 val emoteBody = "* $senderDisplayName ${messageType.body}"
                 TimelineItemEmoteContent(
-                    body = emoteBody,
+                    body = emoteBody.trimEnd(),
                     htmlDocument = messageType.formatted?.toHtmlDocument(prefix = "* $senderDisplayName"),
                     formattedBody = parseHtml(messageType.formatted, prefix = "* $senderDisplayName") ?: emoteBody.withLinks(),
                     isEdited = content.isEdited,
@@ -83,7 +83,7 @@ class TimelineItemContentMessageFactory @Inject constructor(
             is ImageMessageType -> {
                 val aspectRatio = aspectRatioOf(messageType.info?.width, messageType.info?.height)
                 TimelineItemImageContent(
-                    body = messageType.body,
+                    body = messageType.body.trimEnd(),
                     mediaSource = messageType.source,
                     thumbnailSource = messageType.info?.thumbnailSource,
                     mimeType = messageType.info?.mimetype ?: MimeTypes.OctetStream,
@@ -98,7 +98,7 @@ class TimelineItemContentMessageFactory @Inject constructor(
             is StickerMessageType -> {
                 val aspectRatio = aspectRatioOf(messageType.info?.width, messageType.info?.height)
                 TimelineItemStickerContent(
-                    body = messageType.body,
+                    body = messageType.body.trimEnd(),
                     mediaSource = messageType.source,
                     thumbnailSource = messageType.info?.thumbnailSource,
                     mimeType = messageType.info?.mimetype ?: MimeTypes.OctetStream,
@@ -114,7 +114,7 @@ class TimelineItemContentMessageFactory @Inject constructor(
                 val location = Location.fromGeoUri(messageType.geoUri)
                 if (location == null) {
                     TimelineItemTextContent(
-                        body = messageType.body,
+                        body = messageType.body.trimEnd(),
                         htmlDocument = null,
                         plainText = messageType.body,
                         formattedBody = null,
@@ -131,7 +131,7 @@ class TimelineItemContentMessageFactory @Inject constructor(
             is VideoMessageType -> {
                 val aspectRatio = aspectRatioOf(messageType.info?.width, messageType.info?.height)
                 TimelineItemVideoContent(
-                    body = messageType.body,
+                    body = messageType.body.trimEnd(),
                     thumbnailSource = messageType.info?.thumbnailSource,
                     videoSource = messageType.source,
                     mimeType = messageType.info?.mimetype ?: MimeTypes.OctetStream,
@@ -146,7 +146,7 @@ class TimelineItemContentMessageFactory @Inject constructor(
             }
             is AudioMessageType -> {
                 TimelineItemAudioContent(
-                    body = messageType.body,
+                    body = messageType.body.trimEnd(),
                     mediaSource = messageType.source,
                     duration = messageType.info?.duration ?: Duration.ZERO,
                     mimeType = messageType.info?.mimetype ?: MimeTypes.OctetStream,
@@ -159,7 +159,7 @@ class TimelineItemContentMessageFactory @Inject constructor(
                     true -> {
                         TimelineItemVoiceContent(
                             eventId = eventId,
-                            body = messageType.body,
+                            body = messageType.body.trimEnd(),
                             mediaSource = messageType.source,
                             duration = messageType.info?.duration ?: Duration.ZERO,
                             mimeType = messageType.info?.mimetype ?: MimeTypes.OctetStream,
@@ -168,7 +168,7 @@ class TimelineItemContentMessageFactory @Inject constructor(
                     }
                     false -> {
                         TimelineItemAudioContent(
-                            body = messageType.body,
+                            body = messageType.body.trimEnd(),
                             mediaSource = messageType.source,
                             duration = messageType.info?.duration ?: Duration.ZERO,
                             mimeType = messageType.info?.mimetype ?: MimeTypes.OctetStream,
@@ -181,7 +181,7 @@ class TimelineItemContentMessageFactory @Inject constructor(
             is FileMessageType -> {
                 val fileExtension = fileExtensionExtractor.extractFromName(messageType.body)
                 TimelineItemFileContent(
-                    body = messageType.body,
+                    body = messageType.body.trimEnd(),
                     thumbnailSource = messageType.info?.thumbnailSource,
                     fileSource = messageType.source,
                     mimeType = messageType.info?.mimetype ?: MimeTypes.fromFileExtension(fileExtension),
@@ -190,21 +190,21 @@ class TimelineItemContentMessageFactory @Inject constructor(
                 )
             }
             is NoticeMessageType -> TimelineItemNoticeContent(
-                body = messageType.body,
+                body = messageType.body.trimEnd(),
                 htmlDocument = messageType.formatted?.toHtmlDocument(),
                 formattedBody = parseHtml(messageType.formatted) ?: messageType.body.withLinks(),
                 isEdited = content.isEdited,
             )
             is TextMessageType -> {
                 TimelineItemTextContent(
-                    body = messageType.body,
+                    body = messageType.body.trimEnd(),
                     htmlDocument = messageType.formatted?.toHtmlDocument(),
                     formattedBody = parseHtml(messageType.formatted) ?: messageType.body.withLinks(),
                     isEdited = content.isEdited,
                 )
             }
             is OtherMessageType -> TimelineItemTextContent(
-                body = messageType.body,
+                body = messageType.body.trimEnd(),
                 htmlDocument = null,
                 formattedBody = messageType.body.withLinks(),
                 isEdited = content.isEdited,
