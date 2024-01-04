@@ -62,7 +62,7 @@ fun SecureBackupDisableView(
 
     AsyncActionView(
         async = state.disableAction,
-        confirmingDialog = {
+        confirmationDialog = {
             SecureBackupDisableConfirmationDialog(
                 onConfirm = { state.eventSink.invoke(SecureBackupDisableEvents.DisableBackup) },
                 onDismiss = { state.eventSink.invoke(SecureBackupDisableEvents.DismissDialogs) },
