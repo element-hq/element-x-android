@@ -18,7 +18,7 @@ package io.element.android.features.roomdetails.impl.edit
 
 import android.net.Uri
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import io.element.android.libraries.architecture.AsyncData
+import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.permissions.api.aPermissionsState
 import kotlinx.collections.immutable.persistentListOf
 
@@ -30,8 +30,8 @@ open class RoomDetailsEditStateProvider : PreviewParameterProvider<RoomDetailsEd
             aRoomDetailsEditState().copy(roomAvatarUrl = Uri.parse("example://uri")),
             aRoomDetailsEditState().copy(canChangeName = true, canChangeTopic = false, canChangeAvatar = true, saveButtonEnabled = false),
             aRoomDetailsEditState().copy(canChangeName = false, canChangeTopic = true, canChangeAvatar = false, saveButtonEnabled = false),
-            aRoomDetailsEditState().copy(saveAction = AsyncData.Loading()),
-            aRoomDetailsEditState().copy(saveAction = AsyncData.Failure(Throwable("Whelp")))
+            aRoomDetailsEditState().copy(saveAction = AsyncAction.Loading),
+            aRoomDetailsEditState().copy(saveAction = AsyncAction.Failure(Throwable("Whelp")))
         )
 }
 
@@ -45,7 +45,7 @@ fun aRoomDetailsEditState() = RoomDetailsEditState(
     canChangeAvatar = true,
     avatarActions = persistentListOf(),
     saveButtonEnabled = true,
-    saveAction = AsyncData.Uninitialized,
+    saveAction = AsyncAction.Uninitialized,
     cameraPermissionState = aPermissionsState(showDialog = false),
     eventSink = {}
 )

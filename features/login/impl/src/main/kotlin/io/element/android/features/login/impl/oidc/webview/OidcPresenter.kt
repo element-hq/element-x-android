@@ -26,7 +26,7 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import io.element.android.features.login.api.oidc.OidcAction
-import io.element.android.libraries.architecture.AsyncData
+import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import io.element.android.libraries.matrix.api.auth.OidcDetails
@@ -44,33 +44,33 @@ class OidcPresenter @AssistedInject constructor(
 
     @Composable
     override fun present(): OidcState {
-        var requestState: AsyncData<Unit> by remember {
-            mutableStateOf(AsyncData.Uninitialized)
+        var requestState: AsyncAction<Unit> by remember {
+            mutableStateOf(AsyncAction.Uninitialized)
         }
         val localCoroutineScope = rememberCoroutineScope()
 
         fun handleCancel() {
-            requestState = AsyncData.Loading()
+            requestState = AsyncAction.Loading
             localCoroutineScope.launch {
                 authenticationService.cancelOidcLogin()
                     .fold(
                         onSuccess = {
                             // Then go back
-                            requestState = AsyncData.Success(Unit)
+                            requestState = AsyncAction.Success(Unit)
                         },
                         onFailure = {
-                            requestState = AsyncData.Failure(it)
+                            requestState = AsyncAction.Failure(it)
                         }
                     )
             }
         }
 
         fun handleSuccess(url: String) {
-            requestState = AsyncData.Loading()
+            requestState = AsyncAction.Loading
             localCoroutineScope.launch {
                 authenticationService.loginWithOidc(url)
                     .onFailure {
-                        requestState = AsyncData.Failure(it)
+                        requestState = AsyncAction.Failure(it)
                     }
                 // On success, the node tree will be updated, there is nothing to do
             }
@@ -87,7 +87,7 @@ class OidcPresenter @AssistedInject constructor(
             when (event) {
                 OidcEvents.Cancel -> handleCancel()
                 is OidcEvents.OidcActionEvent -> handleAction(event.oidcAction)
-                OidcEvents.ClearError -> requestState = AsyncData.Uninitialized
+                OidcEvents.ClearError -> requestState = AsyncAction.Uninitialized
             }
         }
 

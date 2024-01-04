@@ -17,6 +17,7 @@
 package io.element.android.features.roomdetails.impl.members.details
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
 
 open class RoomMemberDetailsStateProvider : PreviewParameterProvider<RoomMemberDetailsState> {
@@ -28,7 +29,7 @@ open class RoomMemberDetailsStateProvider : PreviewParameterProvider<RoomMemberD
             aRoomMemberDetailsState().copy(displayConfirmationDialog = RoomMemberDetailsState.ConfirmationDialog.Block),
             aRoomMemberDetailsState().copy(displayConfirmationDialog = RoomMemberDetailsState.ConfirmationDialog.Unblock),
             aRoomMemberDetailsState().copy(isBlocked = AsyncData.Loading(true)),
-            aRoomMemberDetailsState().copy(startDmActionState = AsyncData.Loading()),
+            aRoomMemberDetailsState().copy(startDmActionState = AsyncAction.Loading),
             // Add other states here
         )
 }
@@ -38,7 +39,7 @@ fun aRoomMemberDetailsState() = RoomMemberDetailsState(
     userName = "Daniel",
     avatarUrl = null,
     isBlocked = AsyncData.Success(false),
-    startDmActionState = AsyncData.Uninitialized,
+    startDmActionState = AsyncAction.Uninitialized,
     displayConfirmationDialog = null,
     isCurrentUser = false,
     eventSink = {},

@@ -34,6 +34,7 @@ import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.securebackup.impl.R
+import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.atomic.pages.FlowStepPage
 import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
@@ -53,7 +54,7 @@ fun SecureBackupDisableView(
     modifier: Modifier = Modifier,
 ) {
     LaunchedEffect(state.disableAction) {
-        if (state.disableAction is AsyncData.Success) {
+        if (state.disableAction is AsyncAction.Success) {
             onDone()
         }
     }
@@ -72,7 +73,7 @@ fun SecureBackupDisableView(
             onConfirm = { state.eventSink.invoke(SecureBackupDisableEvents.DisableBackup(force = true)) },
             onDismiss = { state.eventSink.invoke(SecureBackupDisableEvents.DismissDialogs) },
         )
-    } else if (state.disableAction is AsyncData.Failure) {
+    } else if (state.disableAction is AsyncAction.Failure) {
         ErrorDialog(
             content = state.disableAction.error.let { it.message ?: it.toString() },
             onDismiss = { state.eventSink.invoke(SecureBackupDisableEvents.DismissDialogs) },

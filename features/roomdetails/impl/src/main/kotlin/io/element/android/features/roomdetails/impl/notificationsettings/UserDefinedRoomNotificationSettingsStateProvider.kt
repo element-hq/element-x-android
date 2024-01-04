@@ -17,6 +17,7 @@
 package io.element.android.features.roomdetails.impl.notificationsettings
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.api.room.RoomNotificationSettings
@@ -35,8 +36,8 @@ internal class UserDefinedRoomNotificationSettingsStateProvider : PreviewParamet
                 pendingRoomNotificationMode = null,
                 pendingSetDefault = null,
                 defaultRoomNotificationMode = RoomNotificationMode.ALL_MESSAGES,
-                setNotificationSettingAction = AsyncData.Uninitialized,
-                restoreDefaultAction = AsyncData.Uninitialized,
+                setNotificationSettingAction = AsyncAction.Uninitialized,
+                restoreDefaultAction = AsyncAction.Uninitialized,
                 displayMentionsOnlyDisclaimer = false,
                 eventSink = { },
             ),

@@ -27,7 +27,7 @@ import androidx.compose.runtime.setValue
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import io.element.android.libraries.architecture.AsyncData
+import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runCatchingUpdatingState
 import io.element.android.libraries.matrix.api.MatrixClient
@@ -55,6 +55,7 @@ class EditDefaultNotificationSettingPresenter @AssistedInject constructor(
     interface Factory {
         fun create(oneToOne: Boolean): EditDefaultNotificationSettingPresenter
     }
+
     @Composable
     override fun present(): EditDefaultNotificationSettingState {
         var displayMentionsOnlyDisclaimer by remember { mutableStateOf(false) }
@@ -63,7 +64,7 @@ class EditDefaultNotificationSettingPresenter @AssistedInject constructor(
             mutableStateOf(null)
         }
 
-        val changeNotificationSettingAction: MutableState<AsyncData<Unit>> = remember { mutableStateOf(AsyncData.Uninitialized) }
+        val changeNotificationSettingAction: MutableState<AsyncAction<Unit>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
 
         val roomsWithUserDefinedMode: MutableState<List<RoomSummary.Filled>> = remember {
             mutableStateOf(listOf())
@@ -82,7 +83,7 @@ class EditDefaultNotificationSettingPresenter @AssistedInject constructor(
                 is EditDefaultNotificationSettingStateEvents.SetNotificationMode -> {
                     localCoroutineScope.setDefaultNotificationMode(event.mode, changeNotificationSettingAction)
                 }
-                EditDefaultNotificationSettingStateEvents.ClearError -> changeNotificationSettingAction.value = AsyncData.Uninitialized
+                EditDefaultNotificationSettingStateEvents.ClearError -> changeNotificationSettingAction.value = AsyncAction.Uninitialized
             }
         }
 
@@ -132,17 +133,16 @@ class EditDefaultNotificationSettingPresenter @AssistedInject constructor(
                 roomWithUserDefinedRules.contains(it.identifier()) && isOneToOne == room.isOneToOne
             }
             // locale sensitive sorting
-            .sortedWith(compareBy(Collator.getInstance()){ it.details.name })
+            .sortedWith(compareBy(Collator.getInstance()) { it.details.name })
 
         roomsWithUserDefinedMode.value = sortedSummaries
     }
 
-    private fun CoroutineScope.setDefaultNotificationMode(mode: RoomNotificationMode,  action: MutableState<AsyncData<Unit>>) = launch {
+    private fun CoroutineScope.setDefaultNotificationMode(mode: RoomNotificationMode, action: MutableState<AsyncAction<Unit>>) = launch {
         suspend {
             // On modern clients, we don't have different settings for encrypted and non-encrypted rooms (Legacy clients did).
             notificationSettingsService.setDefaultRoomNotificationMode(isEncrypted = true, mode = mode, isOneToOne = isOneToOne).getOrThrow()
             notificationSettingsService.setDefaultRoomNotificationMode(isEncrypted = false, mode = mode, isOneToOne = isOneToOne).getOrThrow()
         }.runCatchingUpdatingState(action)
     }
-
 }

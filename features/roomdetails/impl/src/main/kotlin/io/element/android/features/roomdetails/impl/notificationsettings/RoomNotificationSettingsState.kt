@@ -16,6 +16,7 @@
 
 package io.element.android.features.roomdetails.impl.notificationsettings
 
+import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.api.room.RoomNotificationSettings
@@ -27,8 +28,8 @@ data class RoomNotificationSettingsState(
     val pendingRoomNotificationMode: RoomNotificationMode?,
     val pendingSetDefault: Boolean?,
     val defaultRoomNotificationMode: RoomNotificationMode?,
-    val setNotificationSettingAction: AsyncData<Unit>,
-    val restoreDefaultAction: AsyncData<Unit>,
+    val setNotificationSettingAction: AsyncAction<Unit>,
+    val restoreDefaultAction: AsyncAction<Unit>,
     val displayMentionsOnlyDisclaimer: Boolean,
     val eventSink: (RoomNotificationSettingsEvents) -> Unit
 )

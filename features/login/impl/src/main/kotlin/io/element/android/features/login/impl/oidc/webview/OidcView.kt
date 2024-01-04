@@ -30,7 +30,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.viewinterop.AndroidView
 import io.element.android.features.login.impl.oidc.OidcUrlParser
 import io.element.android.libraries.core.bool.orFalse
-import io.element.android.libraries.designsystem.components.async.AsyncView
+import io.element.android.libraries.designsystem.components.async.AsyncActionView
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 
@@ -76,7 +76,7 @@ fun OidcView(
             }
         )
 
-        AsyncView(
+        AsyncActionView(
             async = state.requestState,
             onSuccess = { onNavigateBack() },
             onErrorDismiss = { state.eventSink(OidcEvents.ClearError) }

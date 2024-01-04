@@ -43,7 +43,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.features.preferences.impl.R
 import io.element.android.libraries.designsystem.components.LabelledOutlinedTextField
-import io.element.android.libraries.designsystem.components.async.AsyncView
+import io.element.android.libraries.designsystem.components.async.AsyncActionView
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -147,7 +147,7 @@ fun EditUserProfileView(
             onActionSelected = { state.eventSink(EditUserProfileEvents.HandleAvatarAction(it)) }
         )
 
-        AsyncView(
+        AsyncActionView(
             async = state.saveAction,
             progressText = stringResource(R.string.screen_edit_profile_updating_details),
             onSuccess = { onProfileEdited() },

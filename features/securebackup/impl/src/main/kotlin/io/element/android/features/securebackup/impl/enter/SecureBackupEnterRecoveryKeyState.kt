@@ -17,12 +17,12 @@
 package io.element.android.features.securebackup.impl.enter
 
 import io.element.android.features.securebackup.impl.setup.views.RecoveryKeyViewState
-import io.element.android.libraries.architecture.AsyncData
+import io.element.android.libraries.architecture.AsyncAction
 
 // Do not use default value, so no member get forgotten in the presenters.
 data class SecureBackupEnterRecoveryKeyState(
     val recoveryKeyViewState: RecoveryKeyViewState,
     val isSubmitEnabled: Boolean,
-    val submitAction: AsyncData<Unit>,
+    val submitAction: AsyncAction<Unit>,
     val eventSink: (SecureBackupEnterRecoveryKeyEvents) -> Unit
 )

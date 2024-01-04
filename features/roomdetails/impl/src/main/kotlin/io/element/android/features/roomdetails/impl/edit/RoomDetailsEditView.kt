@@ -47,7 +47,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.features.roomdetails.impl.R
 import io.element.android.libraries.designsystem.components.LabelledTextField
-import io.element.android.libraries.designsystem.components.async.AsyncView
+import io.element.android.libraries.designsystem.components.async.AsyncActionView
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -171,7 +171,7 @@ fun RoomDetailsEditView(
         onActionSelected = { state.eventSink(RoomDetailsEditEvents.HandleAvatarAction(it)) }
     )
 
-    AsyncView(
+    AsyncActionView(
         async = state.saveAction,
         progressText = stringResource(R.string.screen_room_details_updating_room),
         onSuccess = { onRoomEdited() },

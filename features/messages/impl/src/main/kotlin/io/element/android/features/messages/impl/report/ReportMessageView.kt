@@ -41,8 +41,9 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.messages.impl.R
+import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
-import io.element.android.libraries.designsystem.components.async.AsyncView
+import io.element.android.libraries.designsystem.components.async.AsyncActionView
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -62,8 +63,8 @@ fun ReportMessageView(
     modifier: Modifier = Modifier,
 ) {
     val focusManager = LocalFocusManager.current
-    val isSending = state.result is AsyncData.Loading
-    AsyncView(
+    val isSending = state.result is AsyncAction.Loading
+    AsyncActionView(
         async = state.result,
         showProgressDialog = false,
         onSuccess = { onBackClicked() },

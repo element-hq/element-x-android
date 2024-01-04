@@ -17,20 +17,20 @@
 package io.element.android.features.preferences.impl.notifications
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import io.element.android.libraries.architecture.AsyncData
+import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 
 open class NotificationSettingsStateProvider : PreviewParameterProvider<NotificationSettingsState> {
     override val values: Sequence<NotificationSettingsState>
         get() = sequenceOf(
             aNotificationSettingsState(),
-            aNotificationSettingsState(changeNotificationSettingAction = AsyncData.Loading(Unit)),
-            aNotificationSettingsState(changeNotificationSettingAction = AsyncData.Failure(Throwable("error"))),
+            aNotificationSettingsState(changeNotificationSettingAction = AsyncAction.Loading),
+            aNotificationSettingsState(changeNotificationSettingAction = AsyncAction.Failure(Throwable("error"))),
         )
 }
 
 fun aNotificationSettingsState(
-    changeNotificationSettingAction: AsyncData<Unit> = AsyncData.Uninitialized,
+    changeNotificationSettingAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
 ) = NotificationSettingsState(
     matrixSettings = NotificationSettingsState.MatrixSettings.Valid(
         atRoomNotificationsEnabled = true,

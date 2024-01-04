@@ -16,11 +16,11 @@
 
 package io.element.android.features.login.impl.oidc.webview
 
-import io.element.android.libraries.architecture.AsyncData
+import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.api.auth.OidcDetails
 
 data class OidcState(
     val oidcDetails: OidcDetails,
-    val requestState: AsyncData<Unit>,
+    val requestState: AsyncAction<Unit>,
     val eventSink: (OidcEvents) -> Unit
 )

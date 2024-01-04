@@ -30,6 +30,7 @@ import im.vector.app.features.analytics.plan.MobileScreen
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.features.roomdetails.impl.R
 import io.element.android.libraries.androidutils.system.startSharePlainTextIntent
+import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.inputs
@@ -95,7 +96,7 @@ class RoomMemberDetailsNode @AssistedInject constructor(
         val state = presenter.present()
 
         LaunchedEffect(state.startDmActionState) {
-            if (state.startDmActionState is AsyncData.Success) {
+            if (state.startDmActionState is AsyncAction.Success) {
                 onStartDM(state.startDmActionState.data)
             }
         }

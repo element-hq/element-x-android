@@ -29,6 +29,7 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.features.createroom.api.StartDMAction
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsState.ConfirmationDialog
+import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.bool.orFalse
@@ -56,7 +57,7 @@ class RoomMemberDetailsPresenter @AssistedInject constructor(
         val coroutineScope = rememberCoroutineScope()
         var confirmationDialog by remember { mutableStateOf<ConfirmationDialog?>(null) }
         val roomMember by room.getRoomMemberAsState(roomMemberId)
-        val startDmActionState: MutableState<AsyncData<RoomId>> = remember { mutableStateOf(AsyncData.Uninitialized) }
+        val startDmActionState: MutableState<AsyncAction<RoomId>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
         // the room member is not really live...
         val isBlocked: MutableState<AsyncData<Boolean>> = remember(roomMember) {
             val isIgnored = roomMember?.isIgnored
@@ -98,7 +99,7 @@ class RoomMemberDetailsPresenter @AssistedInject constructor(
                     }
                 }
                 RoomMemberDetailsEvents.ClearStartDMState -> {
-                    startDmActionState.value = AsyncData.Uninitialized
+                    startDmActionState.value = AsyncAction.Uninitialized
                 }
             }
         }

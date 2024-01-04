@@ -20,7 +20,7 @@ import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import io.element.android.libraries.architecture.AsyncData
+import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.api.encryption.BackupState
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import io.element.android.libraries.matrix.test.core.aBuildMeta
@@ -42,7 +42,7 @@ class SecureBackupDisablePresenterTest {
         }.test {
             val initialState = awaitItem()
             assertThat(initialState.backupState).isEqualTo(BackupState.UNKNOWN)
-            assertThat(initialState.disableAction).isEqualTo(AsyncData.Uninitialized)
+            assertThat(initialState.disableAction).isEqualTo(AsyncAction.Uninitialized)
             assertThat(initialState.showConfirmationDialog).isFalse()
             assertThat(initialState.appName).isEqualTo("Element")
         }
@@ -80,9 +80,9 @@ class SecureBackupDisablePresenterTest {
             skipItems(1)
             val loadingState = awaitItem()
             assertThat(loadingState.showConfirmationDialog).isFalse()
-            assertThat(loadingState.disableAction).isInstanceOf(AsyncData.Loading::class.java)
+            assertThat(loadingState.disableAction).isInstanceOf(AsyncAction.Loading::class.java)
             val finalState = awaitItem()
-            assertThat(finalState.disableAction).isEqualTo(AsyncData.Success(Unit))
+            assertThat(finalState.disableAction).isEqualTo(AsyncAction.Success(Unit))
         }
     }
 
@@ -106,12 +106,12 @@ class SecureBackupDisablePresenterTest {
             skipItems(1)
             val loadingState = awaitItem()
             assertThat(loadingState.showConfirmationDialog).isFalse()
-            assertThat(loadingState.disableAction).isInstanceOf(AsyncData.Loading::class.java)
+            assertThat(loadingState.disableAction).isInstanceOf(AsyncAction.Loading::class.java)
             val errorState = awaitItem()
-            assertThat(errorState.disableAction).isInstanceOf(AsyncData.Failure::class.java)
+            assertThat(errorState.disableAction).isInstanceOf(AsyncAction.Failure::class.java)
             errorState.eventSink(SecureBackupDisableEvents.DismissDialogs)
             val finalState = awaitItem()
-            assertThat(finalState.disableAction).isEqualTo(AsyncData.Uninitialized)
+            assertThat(finalState.disableAction).isEqualTo(AsyncAction.Uninitialized)
         }
     }
 

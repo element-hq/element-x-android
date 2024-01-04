@@ -18,8 +18,8 @@ package io.element.android.features.createroom.impl.root
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.createroom.impl.userlist.aUserListState
+import io.element.android.libraries.architecture.AsyncAction
 
-import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
 import io.element.android.libraries.matrix.ui.components.aMatrixUser
 import io.element.android.libraries.usersearch.api.UserSearchResult
@@ -30,7 +30,7 @@ open class CreateRoomRootStateProvider : PreviewParameterProvider<CreateRoomRoot
         get() = sequenceOf(
             aCreateRoomRootState(),
             aCreateRoomRootState().copy(
-                startDmAction = AsyncData.Loading(),
+                startDmAction = AsyncAction.Loading,
                 userListState = aMatrixUser().let {
                     aUserListState().copy(
                         searchQuery = it.userId.value,
@@ -41,7 +41,7 @@ open class CreateRoomRootStateProvider : PreviewParameterProvider<CreateRoomRoot
                 }
             ),
             aCreateRoomRootState().copy(
-                startDmAction = AsyncData.Failure(Throwable("error")),
+                startDmAction = AsyncAction.Failure(Throwable("error")),
                 userListState = aMatrixUser().let {
                     aUserListState().copy(
                         searchQuery = it.userId.value,
@@ -57,6 +57,6 @@ open class CreateRoomRootStateProvider : PreviewParameterProvider<CreateRoomRoot
 fun aCreateRoomRootState() = CreateRoomRootState(
     eventSink = {},
     applicationName = "Element X Preview",
-    startDmAction = AsyncData.Uninitialized,
+    startDmAction = AsyncAction.Uninitialized,
     userListState = aUserListState(),
 )

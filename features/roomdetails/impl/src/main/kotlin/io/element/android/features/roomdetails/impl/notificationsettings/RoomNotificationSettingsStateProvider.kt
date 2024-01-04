@@ -17,6 +17,7 @@
 package io.element.android.features.roomdetails.impl.notificationsettings
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.api.room.RoomNotificationSettings
@@ -26,17 +27,17 @@ internal class RoomNotificationSettingsStateProvider : PreviewParameterProvider<
         get() = sequenceOf(
             aRoomNotificationSettingsState(),
             aRoomNotificationSettingsState(isDefault = false),
-            aRoomNotificationSettingsState(setNotificationSettingAction = AsyncData.Loading(Unit)),
-            aRoomNotificationSettingsState(setNotificationSettingAction = AsyncData.Failure(Throwable("error"))),
-            aRoomNotificationSettingsState(restoreDefaultAction = AsyncData.Loading(Unit)),
-            aRoomNotificationSettingsState(restoreDefaultAction = AsyncData.Failure(Throwable("error"))),
+            aRoomNotificationSettingsState(setNotificationSettingAction = AsyncAction.Loading),
+            aRoomNotificationSettingsState(setNotificationSettingAction = AsyncAction.Failure(Throwable("error"))),
+            aRoomNotificationSettingsState(restoreDefaultAction = AsyncAction.Loading),
+            aRoomNotificationSettingsState(restoreDefaultAction = AsyncAction.Failure(Throwable("error"))),
             aRoomNotificationSettingsState(displayMentionsOnlyDisclaimer = true)
         )
 
     private fun aRoomNotificationSettingsState(
         isDefault: Boolean = true,
-        setNotificationSettingAction: AsyncData<Unit> = AsyncData.Uninitialized,
-        restoreDefaultAction: AsyncData<Unit> = AsyncData.Uninitialized,
+        setNotificationSettingAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
+        restoreDefaultAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
         displayMentionsOnlyDisclaimer: Boolean = false,
     ): RoomNotificationSettingsState {
         return RoomNotificationSettingsState(
