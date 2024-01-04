@@ -201,7 +201,7 @@ private fun AggregatedReactionButton(
         ) {
             if (reaction.key.startsWith("mxc://")) {
                 BlurHashAsyncImage(
-                    modifier = modifier
+                    modifier = Modifier
                         .heightIn(min = reactionEmojiLineHeight.toDp(), max = reactionEmojiLineHeight.toDp())
                         .aspectRatio(reactionImageAspectRatio, false),
                     model = MediaRequestData(MediaSource(reaction.key), MediaRequestData.Kind.Content),

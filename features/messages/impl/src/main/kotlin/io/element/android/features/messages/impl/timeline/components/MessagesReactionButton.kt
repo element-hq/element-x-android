@@ -120,7 +120,7 @@ sealed interface MessagesReactionsButtonContent {
 }
 
 internal val reactionEmojiLineHeight = 20.sp
-internal val reactionImageAspectRatio = 1.33f
+internal const val reactionImageAspectRatio = 1.33f
 private val addEmojiSize = 16.dp
 
 @Composable
