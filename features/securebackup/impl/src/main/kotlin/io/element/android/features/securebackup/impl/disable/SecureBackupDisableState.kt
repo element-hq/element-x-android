@@ -22,7 +22,6 @@ import io.element.android.libraries.matrix.api.encryption.BackupState
 data class SecureBackupDisableState(
     val backupState: BackupState,
     val disableAction: AsyncAction<Unit>,
-    val showConfirmationDialog: Boolean,
     val appName: String,
     val eventSink: (SecureBackupDisableEvents) -> Unit
 )

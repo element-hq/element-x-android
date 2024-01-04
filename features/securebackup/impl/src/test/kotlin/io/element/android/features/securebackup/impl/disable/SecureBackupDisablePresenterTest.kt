@@ -43,7 +43,6 @@ class SecureBackupDisablePresenterTest {
             val initialState = awaitItem()
             assertThat(initialState.backupState).isEqualTo(BackupState.UNKNOWN)
             assertThat(initialState.disableAction).isEqualTo(AsyncAction.Uninitialized)
-            assertThat(initialState.showConfirmationDialog).isFalse()
             assertThat(initialState.appName).isEqualTo("Element")
         }
     }
@@ -55,13 +54,12 @@ class SecureBackupDisablePresenterTest {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            assertThat(initialState.showConfirmationDialog).isFalse()
-            initialState.eventSink(SecureBackupDisableEvents.DisableBackup(force = false))
+            initialState.eventSink(SecureBackupDisableEvents.DisableBackup)
             val state = awaitItem()
-            assertThat(state.showConfirmationDialog).isTrue()
+            assertThat(state.disableAction).isEqualTo(AsyncAction.Confirming)
             initialState.eventSink(SecureBackupDisableEvents.DismissDialogs)
             val finalState = awaitItem()
-            assertThat(finalState.showConfirmationDialog).isFalse()
+            assertThat(finalState.disableAction).isEqualTo(AsyncAction.Uninitialized)
         }
     }
 
@@ -72,14 +70,12 @@ class SecureBackupDisablePresenterTest {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            assertThat(initialState.showConfirmationDialog).isFalse()
-            initialState.eventSink(SecureBackupDisableEvents.DisableBackup(force = false))
+            assertThat(initialState.disableAction).isEqualTo(AsyncAction.Uninitialized)
+            initialState.eventSink(SecureBackupDisableEvents.DisableBackup)
             val state = awaitItem()
-            assertThat(state.showConfirmationDialog).isTrue()
-            initialState.eventSink(SecureBackupDisableEvents.DisableBackup(force = true))
-            skipItems(1)
+            assertThat(state.disableAction).isEqualTo(AsyncAction.Confirming)
+            initialState.eventSink(SecureBackupDisableEvents.DisableBackup)
             val loadingState = awaitItem()
-            assertThat(loadingState.showConfirmationDialog).isFalse()
             assertThat(loadingState.disableAction).isInstanceOf(AsyncAction.Loading::class.java)
             val finalState = awaitItem()
             assertThat(finalState.disableAction).isEqualTo(AsyncAction.Success(Unit))
@@ -98,14 +94,12 @@ class SecureBackupDisablePresenterTest {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            assertThat(initialState.showConfirmationDialog).isFalse()
-            initialState.eventSink(SecureBackupDisableEvents.DisableBackup(force = false))
+            assertThat(initialState.disableAction).isEqualTo(AsyncAction.Uninitialized)
+            initialState.eventSink(SecureBackupDisableEvents.DisableBackup)
             val state = awaitItem()
-            assertThat(state.showConfirmationDialog).isTrue()
-            initialState.eventSink(SecureBackupDisableEvents.DisableBackup(force = true))
-            skipItems(1)
+            assertThat(state.disableAction).isEqualTo(AsyncAction.Confirming)
+            initialState.eventSink(SecureBackupDisableEvents.DisableBackup)
             val loadingState = awaitItem()
-            assertThat(loadingState.showConfirmationDialog).isFalse()
             assertThat(loadingState.disableAction).isInstanceOf(AsyncAction.Loading::class.java)
             val errorState = awaitItem()
             assertThat(errorState.disableAction).isInstanceOf(AsyncAction.Failure::class.java)
