@@ -28,7 +28,7 @@ import io.element.android.features.lockscreen.impl.pin.PinCodeManager
 import io.element.android.features.lockscreen.impl.pin.model.PinEntry
 import io.element.android.features.lockscreen.impl.pin.model.assertText
 import io.element.android.features.lockscreen.impl.unlock.keypad.PinKeypadModel
-import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.tests.testutils.awaitLastSequentialItem
 import io.element.android.tests.testutils.consumeItemsUntilPredicate
@@ -48,15 +48,15 @@ class PinUnlockPresenterTest {
             presenter.present()
         }.test {
             awaitItem().also { state ->
-                assertThat(state.pinEntry).isInstanceOf(Async.Uninitialized::class.java)
+                assertThat(state.pinEntry).isInstanceOf(AsyncData.Uninitialized::class.java)
                 assertThat(state.showWrongPinTitle).isFalse()
                 assertThat(state.showSignOutPrompt).isFalse()
                 assertThat(state.isUnlocked).isFalse()
-                assertThat(state.signOutAction).isInstanceOf(Async.Uninitialized::class.java)
-                assertThat(state.remainingAttempts).isInstanceOf(Async.Uninitialized::class.java)
+                assertThat(state.signOutAction).isInstanceOf(AsyncData.Uninitialized::class.java)
+                assertThat(state.remainingAttempts).isInstanceOf(AsyncData.Uninitialized::class.java)
             }
             consumeItemsUntilPredicate {
-                it.pinEntry is Async.Success && it.remainingAttempts is Async.Success
+                it.pinEntry is AsyncData.Success && it.remainingAttempts is AsyncData.Success
             }.last().also { state ->
                 state.eventSink(PinUnlockEvents.OnPinKeypadPressed(PinKeypadModel.Number('1')))
                 state.eventSink(PinUnlockEvents.OnPinKeypadPressed(PinKeypadModel.Number('2')))
@@ -83,7 +83,7 @@ class PinUnlockPresenterTest {
             presenter.present()
         }.test {
             val initialState = consumeItemsUntilPredicate {
-                it.pinEntry is Async.Success && it.remainingAttempts is Async.Success
+                it.pinEntry is AsyncData.Success && it.remainingAttempts is AsyncData.Success
             }.last()
             val numberOfAttempts = initialState.remainingAttempts.dataOrNull() ?: 0
             repeat(numberOfAttempts) {
@@ -107,7 +107,7 @@ class PinUnlockPresenterTest {
             presenter.present()
         }.test {
             consumeItemsUntilPredicate {
-                it.pinEntry is Async.Success && it.remainingAttempts is Async.Success
+                it.pinEntry is AsyncData.Success && it.remainingAttempts is AsyncData.Success
             }.last().also { state ->
                 state.eventSink(PinUnlockEvents.OnForgetPin)
             }
@@ -125,12 +125,12 @@ class PinUnlockPresenterTest {
                 state.eventSink(PinUnlockEvents.SignOut)
             }
             consumeItemsUntilPredicate { state ->
-                state.signOutAction is Async.Success
+                state.signOutAction is AsyncData.Success
             }
         }
     }
 
-    private fun Async<PinEntry>.assertText(text: String) {
+    private fun AsyncData<PinEntry>.assertText(text: String) {
         dataOrNull()?.assertText(text)
     }
 

@@ -18,14 +18,14 @@ package io.element.android.features.preferences.impl.developer
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.rageshake.api.preferences.aRageshakePreferencesState
-import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.featureflag.ui.model.aFeatureUiModelList
 
 open class DeveloperSettingsStateProvider : PreviewParameterProvider<DeveloperSettingsState> {
     override val values: Sequence<DeveloperSettingsState>
         get() = sequenceOf(
             aDeveloperSettingsState(),
-            aDeveloperSettingsState().copy(clearCacheAction = Async.Loading()),
+            aDeveloperSettingsState().copy(clearCacheAction = AsyncData.Loading()),
             aDeveloperSettingsState().copy(
                 customElementCallBaseUrlState = CustomElementCallBaseUrlState(
                     baseUrl = "https://call.element.ahoy",
@@ -39,8 +39,8 @@ open class DeveloperSettingsStateProvider : PreviewParameterProvider<DeveloperSe
 fun aDeveloperSettingsState() = DeveloperSettingsState(
     features = aFeatureUiModelList(),
     rageshakeState = aRageshakePreferencesState(),
-    cacheSize = Async.Success("1.2 MB"),
-    clearCacheAction = Async.Uninitialized,
+    cacheSize = AsyncData.Success("1.2 MB"),
+    clearCacheAction = AsyncData.Uninitialized,
     customElementCallBaseUrlState = CustomElementCallBaseUrlState(baseUrl = null, defaultUrl = "https://call.element.io", validator = { true }),
     eventSink = {}
 )

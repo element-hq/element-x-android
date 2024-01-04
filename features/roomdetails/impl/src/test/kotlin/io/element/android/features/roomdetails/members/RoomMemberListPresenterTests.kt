@@ -26,7 +26,7 @@ import io.element.android.features.roomdetails.impl.members.RoomMemberListPresen
 import io.element.android.features.roomdetails.impl.members.aRoomMemberList
 import io.element.android.features.roomdetails.impl.members.aVictor
 import io.element.android.features.roomdetails.impl.members.aWalter
-import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
 import io.element.android.libraries.matrix.api.room.MatrixRoom
@@ -53,14 +53,14 @@ class RoomMemberListPresenterTests {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            assertThat(initialState.roomMembers).isInstanceOf(Async.Loading::class.java)
+            assertThat(initialState.roomMembers).isInstanceOf(AsyncData.Loading::class.java)
             assertThat(initialState.searchQuery).isEmpty()
             assertThat(initialState.searchResults).isInstanceOf(SearchBarResultState.NotSearching::class.java)
             assertThat(initialState.isSearchActive).isFalse()
             val loadedState = awaitItem()
-            assertThat(loadedState.roomMembers).isInstanceOf(Async.Success::class.java)
-            assertThat((loadedState.roomMembers as Async.Success).data.invited).isEqualTo(listOf(aVictor(), aWalter()))
-            assertThat((loadedState.roomMembers as Async.Success).data.joined).isNotEmpty()
+            assertThat(loadedState.roomMembers).isInstanceOf(AsyncData.Success::class.java)
+            assertThat((loadedState.roomMembers as AsyncData.Success).data.invited).isEqualTo(listOf(aVictor(), aWalter()))
+            assertThat((loadedState.roomMembers as AsyncData.Success).data.joined).isNotEmpty()
         }
     }
 

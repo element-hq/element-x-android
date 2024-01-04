@@ -25,7 +25,7 @@ import im.vector.app.features.analytics.plan.CreatedRoom
 import io.element.android.features.createroom.impl.CreateRoomConfig
 import io.element.android.features.createroom.impl.CreateRoomDataStore
 import io.element.android.features.createroom.impl.userlist.UserListDataStore
-import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.test.AN_AVATAR_URL
 import io.element.android.libraries.matrix.test.A_MESSAGE
@@ -234,9 +234,9 @@ class ConfigureRoomPresenterTests {
             fakeMatrixClient.givenCreateRoomResult(createRoomResult)
 
             initialState.eventSink(ConfigureRoomEvents.CreateRoom(initialState.config))
-            assertThat(awaitItem().createRoomAction).isInstanceOf(Async.Loading::class.java)
+            assertThat(awaitItem().createRoomAction).isInstanceOf(AsyncData.Loading::class.java)
             val stateAfterCreateRoom = awaitItem()
-            assertThat(stateAfterCreateRoom.createRoomAction).isInstanceOf(Async.Success::class.java)
+            assertThat(stateAfterCreateRoom.createRoomAction).isInstanceOf(AsyncData.Success::class.java)
             assertThat(stateAfterCreateRoom.createRoomAction.dataOrNull()).isEqualTo(createRoomResult.getOrNull())
         }
     }
@@ -272,16 +272,16 @@ class ConfigureRoomPresenterTests {
 
             val initialState = awaitItem()
             initialState.eventSink(ConfigureRoomEvents.CreateRoom(initialState.config))
-            assertThat(awaitItem().createRoomAction).isInstanceOf(Async.Loading::class.java)
+            assertThat(awaitItem().createRoomAction).isInstanceOf(AsyncData.Loading::class.java)
             val stateAfterCreateRoom = awaitItem()
-            assertThat(stateAfterCreateRoom.createRoomAction).isInstanceOf(Async.Failure::class.java)
+            assertThat(stateAfterCreateRoom.createRoomAction).isInstanceOf(AsyncData.Failure::class.java)
             assertThat(fakeAnalyticsService.capturedEvents.filterIsInstance<CreatedRoom>()).isEmpty()
 
             fakeMatrixClient.givenUploadMediaResult(Result.success(AN_AVATAR_URL))
             stateAfterCreateRoom.eventSink(ConfigureRoomEvents.CreateRoom(initialState.config))
-            assertThat(awaitItem().createRoomAction).isInstanceOf(Async.Uninitialized::class.java)
-            assertThat(awaitItem().createRoomAction).isInstanceOf(Async.Loading::class.java)
-            assertThat(awaitItem().createRoomAction).isInstanceOf(Async.Success::class.java)
+            assertThat(awaitItem().createRoomAction).isInstanceOf(AsyncData.Uninitialized::class.java)
+            assertThat(awaitItem().createRoomAction).isInstanceOf(AsyncData.Loading::class.java)
+            assertThat(awaitItem().createRoomAction).isInstanceOf(AsyncData.Success::class.java)
         }
     }
 
@@ -297,22 +297,22 @@ class ConfigureRoomPresenterTests {
 
             // Create
             initialState.eventSink(ConfigureRoomEvents.CreateRoom(initialState.config))
-            assertThat(awaitItem().createRoomAction).isInstanceOf(Async.Loading::class.java)
+            assertThat(awaitItem().createRoomAction).isInstanceOf(AsyncData.Loading::class.java)
             val stateAfterCreateRoom = awaitItem()
-            assertThat(stateAfterCreateRoom.createRoomAction).isInstanceOf(Async.Failure::class.java)
-            assertThat((stateAfterCreateRoom.createRoomAction as? Async.Failure)?.error).isEqualTo(createRoomResult.exceptionOrNull())
+            assertThat(stateAfterCreateRoom.createRoomAction).isInstanceOf(AsyncData.Failure::class.java)
+            assertThat((stateAfterCreateRoom.createRoomAction as? AsyncData.Failure)?.error).isEqualTo(createRoomResult.exceptionOrNull())
 
             // Retry
             stateAfterCreateRoom.eventSink(ConfigureRoomEvents.CreateRoom(initialState.config))
-            assertThat(awaitItem().createRoomAction).isInstanceOf(Async.Uninitialized::class.java)
-            assertThat(awaitItem().createRoomAction).isInstanceOf(Async.Loading::class.java)
+            assertThat(awaitItem().createRoomAction).isInstanceOf(AsyncData.Uninitialized::class.java)
+            assertThat(awaitItem().createRoomAction).isInstanceOf(AsyncData.Loading::class.java)
             val stateAfterRetry = awaitItem()
-            assertThat(stateAfterRetry.createRoomAction).isInstanceOf(Async.Failure::class.java)
-            assertThat((stateAfterRetry.createRoomAction as? Async.Failure)?.error).isEqualTo(createRoomResult.exceptionOrNull())
+            assertThat(stateAfterRetry.createRoomAction).isInstanceOf(AsyncData.Failure::class.java)
+            assertThat((stateAfterRetry.createRoomAction as? AsyncData.Failure)?.error).isEqualTo(createRoomResult.exceptionOrNull())
 
             // Cancel
             stateAfterRetry.eventSink(ConfigureRoomEvents.CancelCreateRoom)
-            assertThat(awaitItem().createRoomAction).isInstanceOf(Async.Uninitialized::class.java)
+            assertThat(awaitItem().createRoomAction).isInstanceOf(AsyncData.Uninitialized::class.java)
         }
     }
 }

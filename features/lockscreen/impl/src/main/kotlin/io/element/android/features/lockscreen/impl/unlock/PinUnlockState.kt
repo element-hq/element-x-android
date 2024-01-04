@@ -19,21 +19,21 @@ package io.element.android.features.lockscreen.impl.unlock
 import io.element.android.features.lockscreen.impl.biometric.BiometricUnlock
 import io.element.android.features.lockscreen.impl.biometric.BiometricUnlockError
 import io.element.android.features.lockscreen.impl.pin.model.PinEntry
-import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.AsyncData
 
 data class PinUnlockState(
-    val pinEntry: Async<PinEntry>,
+    val pinEntry: AsyncData<PinEntry>,
     val showWrongPinTitle: Boolean,
-    val remainingAttempts: Async<Int>,
+    val remainingAttempts: AsyncData<Int>,
     val showSignOutPrompt: Boolean,
-    val signOutAction: Async<String?>,
+    val signOutAction: AsyncData<String?>,
     val showBiometricUnlock: Boolean,
     val isUnlocked: Boolean,
     val biometricUnlockResult: BiometricUnlock.AuthenticationResult?,
     val eventSink: (PinUnlockEvents) -> Unit
 ) {
     val isSignOutPromptCancellable = when (remainingAttempts) {
-        is Async.Success -> remainingAttempts.data > 0
+        is AsyncData.Success -> remainingAttempts.data > 0
         else -> true
     }
 

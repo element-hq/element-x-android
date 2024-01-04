@@ -20,7 +20,7 @@ import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.matrix.test.encryption.FakeEncryptionService
@@ -40,7 +40,7 @@ class SecureBackupEnablePresenterTest {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            assertThat(initialState.enableAction).isEqualTo(Async.Uninitialized)
+            assertThat(initialState.enableAction).isEqualTo(AsyncData.Uninitialized)
         }
     }
 
@@ -53,9 +53,9 @@ class SecureBackupEnablePresenterTest {
             val initialState = awaitItem()
             initialState.eventSink(SecureBackupEnableEvents.EnableBackup)
             val loadingState = awaitItem()
-            assertThat(loadingState.enableAction).isInstanceOf(Async.Loading::class.java)
+            assertThat(loadingState.enableAction).isInstanceOf(AsyncData.Loading::class.java)
             val finalState = awaitItem()
-            assertThat(finalState.enableAction).isEqualTo(Async.Success(Unit))
+            assertThat(finalState.enableAction).isEqualTo(AsyncData.Success(Unit))
         }
     }
 
@@ -70,12 +70,12 @@ class SecureBackupEnablePresenterTest {
             val initialState = awaitItem()
             initialState.eventSink(SecureBackupEnableEvents.EnableBackup)
             val loadingState = awaitItem()
-            assertThat(loadingState.enableAction).isInstanceOf(Async.Loading::class.java)
+            assertThat(loadingState.enableAction).isInstanceOf(AsyncData.Loading::class.java)
             val errorState = awaitItem()
-            assertThat(errorState.enableAction).isEqualTo(Async.Failure<Unit>(AN_EXCEPTION))
+            assertThat(errorState.enableAction).isEqualTo(AsyncData.Failure<Unit>(AN_EXCEPTION))
             errorState.eventSink(SecureBackupEnableEvents.DismissDialog)
             val finalState = awaitItem()
-            assertThat(finalState.enableAction).isEqualTo(Async.Uninitialized)
+            assertThat(finalState.enableAction).isEqualTo(AsyncData.Uninitialized)
         }
     }
 

@@ -25,7 +25,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import io.element.android.features.securebackup.impl.loggerTagDisable
-import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runCatchingUpdatingState
 import io.element.android.libraries.core.meta.BuildMeta
@@ -44,7 +44,7 @@ class SecureBackupDisablePresenter @Inject constructor(
     override fun present(): SecureBackupDisableState {
         val backupState by encryptionService.backupStateStateFlow.collectAsState()
         Timber.tag(loggerTagDisable.value).d("backupState: $backupState")
-        val disableAction = remember { mutableStateOf<Async<Unit>>(Async.Uninitialized) }
+        val disableAction = remember { mutableStateOf<AsyncData<Unit>>(AsyncData.Uninitialized) }
         val coroutineScope = rememberCoroutineScope()
         var showDialog by remember { mutableStateOf(false) }
         fun handleEvents(event: SecureBackupDisableEvents) {
@@ -57,7 +57,7 @@ class SecureBackupDisablePresenter @Inject constructor(
                 }
                 SecureBackupDisableEvents.DismissDialogs -> {
                     showDialog = false
-                    disableAction.value = Async.Uninitialized
+                    disableAction.value = AsyncData.Uninitialized
                 }
             }
         }
@@ -71,7 +71,7 @@ class SecureBackupDisablePresenter @Inject constructor(
         )
     }
 
-    private fun CoroutineScope.disableBackup(disableAction: MutableState<Async<Unit>>) = launch {
+    private fun CoroutineScope.disableBackup(disableAction: MutableState<AsyncData<Unit>>) = launch {
         suspend {
             Timber.tag(loggerTagDisable.value).d("Calling encryptionService.disableRecovery()")
             encryptionService.disableRecovery().getOrThrow()

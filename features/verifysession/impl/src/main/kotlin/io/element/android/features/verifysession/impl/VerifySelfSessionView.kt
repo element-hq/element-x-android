@@ -43,7 +43,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.verifysession.impl.emoji.toEmojiResource
-import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.atomic.molecules.ButtonColumnMolecule
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
 import io.element.android.libraries.designsystem.atomic.pages.HeaderFooterPage
@@ -207,7 +207,7 @@ private fun BottomMenu(screenState: VerifySelfSessionState, goBack: () -> Unit) 
     val verificationViewState = screenState.verificationFlowStep
     val eventSink = screenState.eventSink
 
-    val isVerifying = (verificationViewState as? FlowStep.Verifying)?.state is Async.Loading<Unit>
+    val isVerifying = (verificationViewState as? FlowStep.Verifying)?.state is AsyncData.Loading<Unit>
     val positiveButtonTitle = when (verificationViewState) {
         FlowStep.Initial -> R.string.screen_session_verification_positive_button_initial
         FlowStep.Canceled -> R.string.screen_session_verification_positive_button_canceled

@@ -24,7 +24,7 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.features.roomdetails.aMatrixRoom
 import io.element.android.features.roomdetails.impl.edit.RoomDetailsEditEvents
 import io.element.android.features.roomdetails.impl.edit.RoomDetailsEditPresenter
-import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.StateEventType
 import io.element.android.libraries.matrix.test.AN_AVATAR_URL
@@ -108,7 +108,7 @@ class RoomDetailsEditPresenterTest {
                 AvatarAction.Remove
             )
             assertThat(initialState.saveButtonEnabled).isFalse()
-            assertThat(initialState.saveAction).isInstanceOf(Async.Uninitialized::class.java)
+            assertThat(initialState.saveAction).isInstanceOf(AsyncData.Uninitialized::class.java)
         }
     }
 
@@ -533,7 +533,7 @@ class RoomDetailsEditPresenterTest {
             assertThat(room.newAvatarData).isNull()
             assertThat(room.removedAvatar).isFalse()
 
-            assertThat(awaitItem().saveAction).isInstanceOf(Async.Failure::class.java)
+            assertThat(awaitItem().saveAction).isInstanceOf(AsyncData.Failure::class.java)
         }
     }
 
@@ -594,10 +594,10 @@ class RoomDetailsEditPresenterTest {
             initialState.eventSink(RoomDetailsEditEvents.Save)
             skipItems(2)
 
-            assertThat(awaitItem().saveAction).isInstanceOf(Async.Failure::class.java)
+            assertThat(awaitItem().saveAction).isInstanceOf(AsyncData.Failure::class.java)
 
             initialState.eventSink(RoomDetailsEditEvents.CancelSaveChanges)
-            assertThat(awaitItem().saveAction).isInstanceOf(Async.Uninitialized::class.java)
+            assertThat(awaitItem().saveAction).isInstanceOf(AsyncData.Uninitialized::class.java)
         }
     }
 
@@ -613,8 +613,8 @@ class RoomDetailsEditPresenterTest {
             initialState.eventSink(RoomDetailsEditEvents.Save)
             skipItems(1)
 
-            assertThat(awaitItem().saveAction).isInstanceOf(Async.Loading::class.java)
-            assertThat(awaitItem().saveAction).isInstanceOf(Async.Failure::class.java)
+            assertThat(awaitItem().saveAction).isInstanceOf(AsyncData.Loading::class.java)
+            assertThat(awaitItem().saveAction).isInstanceOf(AsyncData.Failure::class.java)
         }
     }
 

@@ -17,7 +17,7 @@
 package io.element.android.features.preferences.impl.user.editprofile
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.permissions.api.aPermissionsState
 import kotlinx.collections.immutable.persistentListOf
@@ -35,7 +35,7 @@ fun aEditUserProfileState() = EditUserProfileState(
     displayName = "John Doe",
     userAvatarUrl = null,
     avatarActions = persistentListOf(),
-    saveAction = Async.Uninitialized,
+    saveAction = AsyncData.Uninitialized,
     saveButtonEnabled = true,
     cameraPermissionState = aPermissionsState(showDialog = false),
     eventSink = {}

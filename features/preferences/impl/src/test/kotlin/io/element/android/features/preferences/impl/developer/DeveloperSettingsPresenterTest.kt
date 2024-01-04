@@ -26,7 +26,7 @@ import io.element.android.features.preferences.impl.tasks.FakeComputeCacheSizeUs
 import io.element.android.features.rageshake.impl.preferences.DefaultRageshakePreferencesPresenter
 import io.element.android.features.rageshake.test.rageshake.FakeRageShake
 import io.element.android.features.rageshake.test.rageshake.FakeRageshakeDataStore
-import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.featureflag.test.InMemoryPreferencesStore
@@ -49,8 +49,8 @@ class DeveloperSettingsPresenterTest {
         }.test {
             val initialState = awaitItem()
             assertThat(initialState.features).isEmpty()
-            assertThat(initialState.clearCacheAction).isEqualTo(Async.Uninitialized)
-            assertThat(initialState.cacheSize).isEqualTo(Async.Uninitialized)
+            assertThat(initialState.clearCacheAction).isEqualTo(AsyncData.Uninitialized)
+            assertThat(initialState.cacheSize).isEqualTo(AsyncData.Uninitialized)
             assertThat(initialState.customElementCallBaseUrlState).isNotNull()
             assertThat(initialState.customElementCallBaseUrlState.baseUrl).isNull()
             val loadedState = awaitItem()
@@ -105,9 +105,9 @@ class DeveloperSettingsPresenterTest {
             assertThat(clearCacheUseCase.executeHasBeenCalled).isFalse()
             initialState.eventSink(DeveloperSettingsEvents.ClearCache)
             val stateAfterEvent = awaitItem()
-            assertThat(stateAfterEvent.clearCacheAction).isInstanceOf(Async.Loading::class.java)
+            assertThat(stateAfterEvent.clearCacheAction).isInstanceOf(AsyncData.Loading::class.java)
             skipItems(1)
-            assertThat(awaitItem().clearCacheAction).isInstanceOf(Async.Success::class.java)
+            assertThat(awaitItem().clearCacheAction).isInstanceOf(AsyncData.Success::class.java)
             assertThat(clearCacheUseCase.executeHasBeenCalled).isTrue()
             cancelAndIgnoreRemainingEvents()
         }

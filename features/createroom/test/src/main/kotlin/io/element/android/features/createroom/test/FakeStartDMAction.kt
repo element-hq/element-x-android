@@ -18,7 +18,7 @@ package io.element.android.features.createroom.test
 
 import androidx.compose.runtime.MutableState
 import io.element.android.features.createroom.api.StartDMAction
-import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.test.A_ROOM_ID
@@ -26,14 +26,14 @@ import kotlinx.coroutines.delay
 
 class FakeStartDMAction : StartDMAction {
 
-    private var executeResult: Async<RoomId> = Async.Success(A_ROOM_ID)
+    private var executeResult: AsyncData<RoomId> = AsyncData.Success(A_ROOM_ID)
 
-    fun givenExecuteResult(result: Async<RoomId>) {
+    fun givenExecuteResult(result: AsyncData<RoomId>) {
         executeResult = result
     }
 
-    override suspend fun execute(userId: UserId, actionState: MutableState<Async<RoomId>>) {
-        actionState.value = Async.Loading()
+    override suspend fun execute(userId: UserId, actionState: MutableState<AsyncData<RoomId>>) {
+        actionState.value = AsyncData.Loading()
         delay(1)
         actionState.value = executeResult
     }

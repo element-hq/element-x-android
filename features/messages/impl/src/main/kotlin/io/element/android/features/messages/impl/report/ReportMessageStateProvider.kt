@@ -17,7 +17,7 @@
 package io.element.android.features.messages.impl.report
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.AsyncData
 
 open class ReportMessageStateProvider : PreviewParameterProvider<ReportMessageState> {
     override val values: Sequence<ReportMessageState>
@@ -25,9 +25,9 @@ open class ReportMessageStateProvider : PreviewParameterProvider<ReportMessageSt
             aReportMessageState(),
             aReportMessageState(reason = "This user is making the chat very toxic."),
             aReportMessageState(reason = "This user is making the chat very toxic.", blockUser = true),
-            aReportMessageState(reason = "This user is making the chat very toxic.", blockUser = true, result = Async.Loading()),
-            aReportMessageState(reason = "This user is making the chat very toxic.", blockUser = true, result = Async.Failure(Throwable("error"))),
-            aReportMessageState(reason = "This user is making the chat very toxic.", blockUser = true, result = Async.Success(Unit)),
+            aReportMessageState(reason = "This user is making the chat very toxic.", blockUser = true, result = AsyncData.Loading()),
+            aReportMessageState(reason = "This user is making the chat very toxic.", blockUser = true, result = AsyncData.Failure(Throwable("error"))),
+            aReportMessageState(reason = "This user is making the chat very toxic.", blockUser = true, result = AsyncData.Success(Unit)),
             // Add other states here
         )
 }
@@ -35,7 +35,7 @@ open class ReportMessageStateProvider : PreviewParameterProvider<ReportMessageSt
 fun aReportMessageState(
     reason: String = "",
     blockUser: Boolean = false,
-    result: Async<Unit> = Async.Uninitialized,
+    result: AsyncData<Unit> = AsyncData.Uninitialized,
 ) = ReportMessageState(
     reason = reason,
     blockUser = blockUser,

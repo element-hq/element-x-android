@@ -17,18 +17,18 @@
 package io.element.android.features.roomdetails.impl.members.details
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.AsyncData
 
 open class RoomMemberDetailsStateProvider : PreviewParameterProvider<RoomMemberDetailsState> {
     override val values: Sequence<RoomMemberDetailsState>
         get() = sequenceOf(
             aRoomMemberDetailsState(),
             aRoomMemberDetailsState().copy(userName = null),
-            aRoomMemberDetailsState().copy(isBlocked = Async.Success(true)),
+            aRoomMemberDetailsState().copy(isBlocked = AsyncData.Success(true)),
             aRoomMemberDetailsState().copy(displayConfirmationDialog = RoomMemberDetailsState.ConfirmationDialog.Block),
             aRoomMemberDetailsState().copy(displayConfirmationDialog = RoomMemberDetailsState.ConfirmationDialog.Unblock),
-            aRoomMemberDetailsState().copy(isBlocked = Async.Loading(true)),
-            aRoomMemberDetailsState().copy(startDmActionState = Async.Loading()),
+            aRoomMemberDetailsState().copy(isBlocked = AsyncData.Loading(true)),
+            aRoomMemberDetailsState().copy(startDmActionState = AsyncData.Loading()),
             // Add other states here
         )
 }
@@ -37,8 +37,8 @@ fun aRoomMemberDetailsState() = RoomMemberDetailsState(
     userId = "@daniel:domain.com",
     userName = "Daniel",
     avatarUrl = null,
-    isBlocked = Async.Success(false),
-    startDmActionState = Async.Uninitialized,
+    isBlocked = AsyncData.Success(false),
+    startDmActionState = AsyncData.Uninitialized,
     displayConfirmationDialog = null,
     isCurrentUser = false,
     eventSink = {},

@@ -16,11 +16,11 @@
 
 package io.element.android.features.messages.impl.report
 
-import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.AsyncData
 
 data class ReportMessageState(
     val reason: String,
     val blockUser: Boolean,
-    val result: Async<Unit>,
+    val result: AsyncData<Unit>,
     val eventSink: (ReportMessageEvents) -> Unit
 )

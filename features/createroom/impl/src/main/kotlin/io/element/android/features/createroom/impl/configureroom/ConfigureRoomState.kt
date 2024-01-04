@@ -18,7 +18,7 @@ package io.element.android.features.createroom.impl.configureroom
 
 import io.element.android.libraries.matrix.ui.media.AvatarAction
 import io.element.android.features.createroom.impl.CreateRoomConfig
-import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.permissions.api.PermissionsState
 import kotlinx.collections.immutable.ImmutableList
@@ -26,7 +26,7 @@ import kotlinx.collections.immutable.ImmutableList
 data class ConfigureRoomState(
     val config: CreateRoomConfig,
     val avatarActions: ImmutableList<AvatarAction>,
-    val createRoomAction: Async<RoomId>,
+    val createRoomAction: AsyncData<RoomId>,
     val cameraPermissionState: PermissionsState,
     val eventSink: (ConfigureRoomEvents) -> Unit
 ) {

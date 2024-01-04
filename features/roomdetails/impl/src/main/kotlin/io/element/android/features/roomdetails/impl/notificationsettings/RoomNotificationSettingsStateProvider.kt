@@ -17,7 +17,7 @@
 package io.element.android.features.roomdetails.impl.notificationsettings
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.api.room.RoomNotificationSettings
 
@@ -26,23 +26,23 @@ internal class RoomNotificationSettingsStateProvider : PreviewParameterProvider<
         get() = sequenceOf(
             aRoomNotificationSettingsState(),
             aRoomNotificationSettingsState(isDefault = false),
-            aRoomNotificationSettingsState(setNotificationSettingAction = Async.Loading(Unit)),
-            aRoomNotificationSettingsState(setNotificationSettingAction = Async.Failure(Throwable("error"))),
-            aRoomNotificationSettingsState(restoreDefaultAction = Async.Loading(Unit)),
-            aRoomNotificationSettingsState(restoreDefaultAction = Async.Failure(Throwable("error"))),
+            aRoomNotificationSettingsState(setNotificationSettingAction = AsyncData.Loading(Unit)),
+            aRoomNotificationSettingsState(setNotificationSettingAction = AsyncData.Failure(Throwable("error"))),
+            aRoomNotificationSettingsState(restoreDefaultAction = AsyncData.Loading(Unit)),
+            aRoomNotificationSettingsState(restoreDefaultAction = AsyncData.Failure(Throwable("error"))),
             aRoomNotificationSettingsState(displayMentionsOnlyDisclaimer = true)
         )
 
     private fun aRoomNotificationSettingsState(
         isDefault: Boolean = true,
-        setNotificationSettingAction: Async<Unit> = Async.Uninitialized,
-        restoreDefaultAction: Async<Unit> = Async.Uninitialized,
+        setNotificationSettingAction: AsyncData<Unit> = AsyncData.Uninitialized,
+        restoreDefaultAction: AsyncData<Unit> = AsyncData.Uninitialized,
         displayMentionsOnlyDisclaimer: Boolean = false,
     ): RoomNotificationSettingsState {
         return RoomNotificationSettingsState(
             showUserDefinedSettingStyle = false,
             roomName = "Room 1",
-            Async.Success(RoomNotificationSettings(
+            AsyncData.Success(RoomNotificationSettings(
                 mode = RoomNotificationMode.MUTE,
                 isDefault = isDefault)),
             pendingRoomNotificationMode = null,

@@ -31,7 +31,7 @@ import androidx.core.net.toUri
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runCatchingUpdatingState
 import io.element.android.libraries.core.mimetype.MimeTypes
@@ -92,7 +92,7 @@ class EditUserProfilePresenter @AssistedInject constructor(
             }
         }
 
-        val saveAction: MutableState<Async<Unit>> = remember { mutableStateOf(Async.Uninitialized) }
+        val saveAction: MutableState<AsyncData<Unit>> = remember { mutableStateOf(AsyncData.Uninitialized) }
         val localCoroutineScope = rememberCoroutineScope()
         fun handleEvents(event: EditUserProfileEvents) {
             when (event) {
@@ -111,7 +111,7 @@ class EditUserProfilePresenter @AssistedInject constructor(
                 }
 
                 is EditUserProfileEvents.UpdateDisplayName -> userDisplayName = event.name
-                EditUserProfileEvents.CancelSaveChanges -> saveAction.value = Async.Uninitialized
+                EditUserProfileEvents.CancelSaveChanges -> saveAction.value = AsyncData.Uninitialized
             }
         }
 
@@ -126,7 +126,7 @@ class EditUserProfilePresenter @AssistedInject constructor(
             displayName = userDisplayName.orEmpty(),
             userAvatarUrl = userAvatarUri,
             avatarActions = avatarActions,
-            saveButtonEnabled = canSave && saveAction.value !is Async.Loading,
+            saveButtonEnabled = canSave && saveAction.value !is AsyncData.Loading,
             saveAction = saveAction.value,
             cameraPermissionState = cameraPermissionState,
             eventSink = { handleEvents(it) },
@@ -140,7 +140,7 @@ class EditUserProfilePresenter @AssistedInject constructor(
         // Need to call `toUri()?.toString()` to make the test pass (we mockk Uri)
         avatarUri?.toString()?.trim() != currentUser.avatarUrl?.toUri()?.toString()?.trim()
 
-    private fun CoroutineScope.saveChanges(name: String?, avatarUri: Uri?, currentUser: MatrixUser, action: MutableState<Async<Unit>>) = launch {
+    private fun CoroutineScope.saveChanges(name: String?, avatarUri: Uri?, currentUser: MatrixUser, action: MutableState<AsyncData<Unit>>) = launch {
         val results = mutableListOf<Result<Unit>>()
         suspend {
             if (!name.isNullOrEmpty() && name.trim() != currentUser.displayName.orEmpty().trim()) {

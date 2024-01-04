@@ -27,7 +27,7 @@ import androidx.compose.runtime.setValue
 import io.element.android.features.login.impl.changeserver.ChangeServerPresenter
 import io.element.android.features.login.impl.resolver.HomeserverData
 import io.element.android.features.login.impl.resolver.HomeserverResolver
-import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
@@ -46,8 +46,8 @@ class SearchAccountProviderPresenter @Inject constructor(
         }
         val changeServerState = changeServerPresenter.present()
 
-        val data: MutableState<Async<List<HomeserverData>>> = remember {
-            mutableStateOf(Async.Uninitialized)
+        val data: MutableState<AsyncData<List<HomeserverData>>> = remember {
+            mutableStateOf(AsyncData.Uninitialized)
         }
 
         LaunchedEffect(userInput) {
@@ -70,16 +70,16 @@ class SearchAccountProviderPresenter @Inject constructor(
         )
     }
 
-    private fun CoroutineScope.onUserInput(userInput: String, data: MutableState<Async<List<HomeserverData>>>) = launch {
-        data.value = Async.Uninitialized
+    private fun CoroutineScope.onUserInput(userInput: String, data: MutableState<AsyncData<List<HomeserverData>>>) = launch {
+        data.value = AsyncData.Uninitialized
         // Debounce
         delay(300)
-        data.value = Async.Loading()
+        data.value = AsyncData.Loading()
         homeserverResolver.resolve(userInput).collect {
-            data.value = Async.Success(it)
+            data.value = AsyncData.Success(it)
         }
-        if (data.value !is Async.Success) {
-            data.value = Async.Uninitialized
+        if (data.value !is AsyncData.Success) {
+            data.value = AsyncData.Uninitialized
         }
     }
 }

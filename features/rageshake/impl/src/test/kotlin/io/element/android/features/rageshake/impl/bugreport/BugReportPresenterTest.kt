@@ -24,7 +24,7 @@ import io.element.android.features.rageshake.test.crash.A_CRASH_DATA
 import io.element.android.features.rageshake.test.crash.FakeCrashDataStore
 import io.element.android.features.rageshake.test.screenshot.A_SCREENSHOT_URI
 import io.element.android.features.rageshake.test.screenshot.FakeScreenshotHolder
-import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.test.A_FAILURE_REASON
 import io.element.android.tests.testutils.WarmUpRule
 import kotlinx.coroutines.test.runTest
@@ -53,7 +53,7 @@ class BugReportPresenterTest {
             val initialState = awaitItem()
             assertThat(initialState.hasCrashLogs).isFalse()
             assertThat(initialState.formState).isEqualTo(BugReportFormState.Default)
-            assertThat(initialState.sending).isEqualTo(Async.Uninitialized)
+            assertThat(initialState.sending).isEqualTo(AsyncData.Uninitialized)
             assertThat(initialState.screenshotUri).isNull()
             assertThat(initialState.sendingProgress).isEqualTo(0f)
             assertThat(initialState.submitEnabled).isFalse()
@@ -174,13 +174,13 @@ class BugReportPresenterTest {
             initialState.eventSink.invoke(BugReportEvents.SendBugReport)
             skipItems(1)
             val progressState = awaitItem()
-            assertThat(progressState.sending).isEqualTo(Async.Loading(null))
+            assertThat(progressState.sending).isEqualTo(AsyncData.Loading(null))
             assertThat(progressState.sendingProgress).isEqualTo(0f)
             assertThat(progressState.submitEnabled).isFalse()
             assertThat(awaitItem().sendingProgress).isEqualTo(0.5f)
             assertThat(awaitItem().sendingProgress).isEqualTo(1f)
             skipItems(1)
-            assertThat(awaitItem().sending).isEqualTo(Async.Success(Unit))
+            assertThat(awaitItem().sending).isEqualTo(AsyncData.Success(Unit))
         }
     }
 
@@ -199,17 +199,17 @@ class BugReportPresenterTest {
             initialState.eventSink.invoke(BugReportEvents.SendBugReport)
             skipItems(1)
             val progressState = awaitItem()
-            assertThat(progressState.sending).isEqualTo(Async.Loading(null))
+            assertThat(progressState.sending).isEqualTo(AsyncData.Loading(null))
             assertThat(progressState.sendingProgress).isEqualTo(0f)
             assertThat(awaitItem().sendingProgress).isEqualTo(0.5f)
             // Failure
             assertThat(awaitItem().sendingProgress).isEqualTo(0f)
-            assertThat((awaitItem().sending as Async.Failure).error.message).isEqualTo(A_FAILURE_REASON)
+            assertThat((awaitItem().sending as AsyncData.Failure).error.message).isEqualTo(A_FAILURE_REASON)
             // Reset failure
             initialState.eventSink.invoke(BugReportEvents.ClearError)
             val lastItem = awaitItem()
             assertThat(lastItem.sendingProgress).isEqualTo(0f)
-            assertThat(lastItem.sending).isInstanceOf(Async.Uninitialized::class.java)
+            assertThat(lastItem.sending).isInstanceOf(AsyncData.Uninitialized::class.java)
         }
     }
 
@@ -228,12 +228,12 @@ class BugReportPresenterTest {
             initialState.eventSink.invoke(BugReportEvents.SendBugReport)
             skipItems(1)
             val progressState = awaitItem()
-            assertThat(progressState.sending).isEqualTo(Async.Loading(null))
+            assertThat(progressState.sending).isEqualTo(AsyncData.Loading(null))
             assertThat(progressState.sendingProgress).isEqualTo(0f)
             assertThat(awaitItem().sendingProgress).isEqualTo(0.5f)
             // Cancelled
             assertThat(awaitItem().sendingProgress).isEqualTo(0f)
-            assertThat(awaitItem().sending).isEqualTo(Async.Uninitialized)
+            assertThat(awaitItem().sending).isEqualTo(AsyncData.Uninitialized)
         }
     }
 }

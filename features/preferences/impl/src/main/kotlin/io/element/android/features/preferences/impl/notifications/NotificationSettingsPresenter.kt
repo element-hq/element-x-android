@@ -23,7 +23,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runCatchingUpdatingState
 import io.element.android.libraries.matrix.api.MatrixClient
@@ -52,7 +52,7 @@ class NotificationSettingsPresenter @Inject constructor(
         val systemNotificationsEnabled: MutableState<Boolean> = remember {
             mutableStateOf(systemNotificationsEnabledProvider.notificationsEnabled())
         }
-        val changeNotificationSettingAction: MutableState<Async<Unit>> = remember { mutableStateOf(Async.Uninitialized) }
+        val changeNotificationSettingAction: MutableState<AsyncData<Unit>> = remember { mutableStateOf(AsyncData.Uninitialized) }
 
         val localCoroutineScope = rememberCoroutineScope()
         val appNotificationsEnabled = userPushStore
@@ -87,7 +87,7 @@ class NotificationSettingsPresenter @Inject constructor(
                 NotificationSettingsEvents.RefreshSystemNotificationsEnabled -> {
                     systemNotificationsEnabled.value = systemNotificationsEnabledProvider.notificationsEnabled()
                 }
-                NotificationSettingsEvents.ClearNotificationChangeError -> changeNotificationSettingAction.value = Async.Uninitialized
+                NotificationSettingsEvents.ClearNotificationChangeError -> changeNotificationSettingAction.value = AsyncData.Uninitialized
             }
         }
 
@@ -168,19 +168,19 @@ class NotificationSettingsPresenter @Inject constructor(
         )
     }
 
-    private fun CoroutineScope.setAtRoomNotificationsEnabled(enabled: Boolean, action: MutableState<Async<Unit>>) = launch {
+    private fun CoroutineScope.setAtRoomNotificationsEnabled(enabled: Boolean, action: MutableState<AsyncData<Unit>>) = launch {
         suspend {
             notificationSettingsService.setRoomMentionEnabled(enabled).getOrThrow()
         }.runCatchingUpdatingState(action)
     }
 
-    private fun CoroutineScope.setCallNotificationsEnabled(enabled: Boolean, action: MutableState<Async<Unit>>) = launch {
+    private fun CoroutineScope.setCallNotificationsEnabled(enabled: Boolean, action: MutableState<AsyncData<Unit>>) = launch {
         suspend {
             notificationSettingsService.setCallEnabled(enabled).getOrThrow()
         }.runCatchingUpdatingState(action)
     }
 
-    private fun CoroutineScope.setInviteForMeNotificationsEnabled(enabled: Boolean, action: MutableState<Async<Unit>>) = launch {
+    private fun CoroutineScope.setInviteForMeNotificationsEnabled(enabled: Boolean, action: MutableState<AsyncData<Unit>>) = launch {
         suspend {
             notificationSettingsService.setInviteForMeEnabled(enabled).getOrThrow()
         }.runCatchingUpdatingState(action)

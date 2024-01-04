@@ -17,14 +17,14 @@
 package io.element.android.libraries.designsystem.components.async
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.AsyncData
 
-open class AsyncProvider : PreviewParameterProvider<Async<Unit>> {
-    override val values: Sequence<Async<Unit>>
+open class AsyncProvider : PreviewParameterProvider<AsyncData<Unit>> {
+    override val values: Sequence<AsyncData<Unit>>
         get() = sequenceOf(
-            Async.Uninitialized,
-            Async.Loading(),
-            Async.Failure(Exception("An error occurred")),
-            Async.Success(Unit),
+            AsyncData.Uninitialized,
+            AsyncData.Loading(),
+            AsyncData.Failure(Exception("An error occurred")),
+            AsyncData.Success(Unit),
         )
 }

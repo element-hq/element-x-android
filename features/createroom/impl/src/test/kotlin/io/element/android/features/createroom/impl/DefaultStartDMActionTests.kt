@@ -19,7 +19,7 @@ package io.element.android.features.createroom.impl
 import androidx.compose.runtime.mutableStateOf
 import com.google.common.truth.Truth.assertThat
 import im.vector.app.features.analytics.plan.CreatedRoom
-import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.test.A_ROOM_ID
@@ -39,9 +39,9 @@ class DefaultStartDMActionTests {
             givenFindDmResult(A_ROOM_ID)
         }
         val action = createStartDMAction(matrixClient)
-        val state = mutableStateOf<Async<RoomId>>(Async.Uninitialized)
+        val state = mutableStateOf<AsyncData<RoomId>>(AsyncData.Uninitialized)
         action.execute(A_USER_ID, state)
-        assertThat(state.value).isEqualTo(Async.Success(A_ROOM_ID))
+        assertThat(state.value).isEqualTo(AsyncData.Success(A_ROOM_ID))
     }
 
     @Test
@@ -52,9 +52,9 @@ class DefaultStartDMActionTests {
         }
         val analyticsService = FakeAnalyticsService()
         val action = createStartDMAction(matrixClient, analyticsService)
-        val state = mutableStateOf<Async<RoomId>>(Async.Uninitialized)
+        val state = mutableStateOf<AsyncData<RoomId>>(AsyncData.Uninitialized)
         action.execute(A_USER_ID, state)
-        assertThat(state.value).isEqualTo(Async.Success(A_ROOM_ID))
+        assertThat(state.value).isEqualTo(AsyncData.Success(A_ROOM_ID))
         assertThat(analyticsService.capturedEvents).containsExactly(CreatedRoom(isDM = true))
     }
 
@@ -65,9 +65,9 @@ class DefaultStartDMActionTests {
             givenCreateDmResult(Result.failure(A_THROWABLE))
         }
         val action = createStartDMAction(matrixClient)
-        val state = mutableStateOf<Async<RoomId>>(Async.Uninitialized)
+        val state = mutableStateOf<AsyncData<RoomId>>(AsyncData.Uninitialized)
         action.execute(A_USER_ID, state)
-        assertThat(state.value).isEqualTo(Async.Failure<RoomId>(A_THROWABLE))
+        assertThat(state.value).isEqualTo(AsyncData.Failure<RoomId>(A_THROWABLE))
     }
 
     private fun createStartDMAction(

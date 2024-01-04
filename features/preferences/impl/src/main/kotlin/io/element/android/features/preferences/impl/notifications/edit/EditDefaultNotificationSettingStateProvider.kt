@@ -17,7 +17,7 @@
 package io.element.android.features.preferences.impl.notifications.edit
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.api.roomlist.RoomSummary
@@ -29,15 +29,15 @@ open class EditDefaultNotificationSettingStateProvider: PreviewParameterProvider
         get() = sequenceOf(
             anEditDefaultNotificationSettingsState(),
             anEditDefaultNotificationSettingsState(isOneToOne = true),
-            anEditDefaultNotificationSettingsState(changeNotificationSettingAction = Async.Loading(Unit)),
-            anEditDefaultNotificationSettingsState(changeNotificationSettingAction = Async.Failure(Throwable("error"))),
+            anEditDefaultNotificationSettingsState(changeNotificationSettingAction = AsyncData.Loading(Unit)),
+            anEditDefaultNotificationSettingsState(changeNotificationSettingAction = AsyncData.Failure(Throwable("error"))),
             anEditDefaultNotificationSettingsState(displayMentionsOnlyDisclaimer = true),
         )
 }
 
 private fun anEditDefaultNotificationSettingsState(
     isOneToOne: Boolean = false,
-    changeNotificationSettingAction: Async<Unit> = Async.Uninitialized,
+    changeNotificationSettingAction: AsyncData<Unit> = AsyncData.Uninitialized,
     displayMentionsOnlyDisclaimer: Boolean = false,
 ) = EditDefaultNotificationSettingState(
     isOneToOne = isOneToOne,

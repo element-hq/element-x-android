@@ -17,7 +17,7 @@
 package io.element.android.features.securebackup.impl.disable
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.encryption.BackupState
 
 open class SecureBackupDisableStateProvider : PreviewParameterProvider<SecureBackupDisableState> {
@@ -25,15 +25,15 @@ open class SecureBackupDisableStateProvider : PreviewParameterProvider<SecureBac
         get() = sequenceOf(
             aSecureBackupDisableState(),
             aSecureBackupDisableState(showConfirmationDialog = true),
-            aSecureBackupDisableState(disableAction = Async.Loading()),
-            aSecureBackupDisableState(disableAction = Async.Failure(Exception("Failed to disable"))),
+            aSecureBackupDisableState(disableAction = AsyncData.Loading()),
+            aSecureBackupDisableState(disableAction = AsyncData.Failure(Exception("Failed to disable"))),
             // Add other states here
         )
 }
 
 fun aSecureBackupDisableState(
     backupState: BackupState = BackupState.UNKNOWN,
-    disableAction: Async<Unit> = Async.Uninitialized,
+    disableAction: AsyncData<Unit> = AsyncData.Uninitialized,
     showConfirmationDialog: Boolean = false,
 ) = SecureBackupDisableState(
     backupState = backupState,

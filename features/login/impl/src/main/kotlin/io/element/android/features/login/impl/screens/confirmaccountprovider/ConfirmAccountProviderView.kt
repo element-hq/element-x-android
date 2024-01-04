@@ -31,7 +31,7 @@ import androidx.compose.ui.unit.dp
 import io.element.android.features.login.impl.R
 import io.element.android.features.login.impl.dialogs.SlidingSyncNotSupportedDialog
 import io.element.android.features.login.impl.error.ChangeServerError
-import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.atomic.molecules.ButtonColumnMolecule
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
 import io.element.android.libraries.designsystem.atomic.pages.HeaderFooterPage
@@ -56,7 +56,7 @@ fun ConfirmAccountProviderView(
 ) {
     val isLoading by remember(state.loginFlow) {
         derivedStateOf {
-            state.loginFlow is Async.Loading
+            state.loginFlow is AsyncData.Loading
         }
     }
     val eventSink = state.eventSink
@@ -107,7 +107,7 @@ fun ConfirmAccountProviderView(
         }
     ) {
         when (state.loginFlow) {
-            is Async.Failure -> {
+            is AsyncData.Failure -> {
                 when (val error = state.loginFlow.error) {
                     is ChangeServerError.Error -> {
                         ErrorDialog(
@@ -127,14 +127,14 @@ fun ConfirmAccountProviderView(
                     }
                 }
             }
-            is Async.Loading -> Unit // The Continue button shows the loading state
-            is Async.Success -> {
+            is AsyncData.Loading -> Unit // The Continue button shows the loading state
+            is AsyncData.Success -> {
                 when (val loginFlowState = state.loginFlow.data) {
                     is LoginFlow.OidcFlow -> onOidcDetails(loginFlowState.oidcDetails)
                     LoginFlow.PasswordLogin -> onLoginPasswordNeeded()
                 }
             }
-            Async.Uninitialized -> Unit
+            AsyncData.Uninitialized -> Unit
         }
     }
 }

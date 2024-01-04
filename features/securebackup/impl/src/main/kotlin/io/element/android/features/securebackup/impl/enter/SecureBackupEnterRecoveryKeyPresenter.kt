@@ -27,7 +27,7 @@ import androidx.compose.runtime.setValue
 import io.element.android.features.securebackup.impl.setup.views.RecoveryKeyUserStory
 import io.element.android.features.securebackup.impl.setup.views.RecoveryKeyViewState
 import io.element.android.features.securebackup.impl.tools.RecoveryKeyTools
-import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runCatchingUpdatingState
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
@@ -47,13 +47,13 @@ class SecureBackupEnterRecoveryKeyPresenter @Inject constructor(
             mutableStateOf("")
         }
         val submitAction = remember {
-            mutableStateOf<Async<Unit>>(Async.Uninitialized)
+            mutableStateOf<AsyncData<Unit>>(AsyncData.Uninitialized)
         }
 
         fun handleEvents(event: SecureBackupEnterRecoveryKeyEvents) {
             when (event) {
                 SecureBackupEnterRecoveryKeyEvents.ClearDialog -> {
-                    submitAction.value = Async.Uninitialized
+                    submitAction.value = AsyncData.Uninitialized
                 }
                 is SecureBackupEnterRecoveryKeyEvents.OnRecoveryKeyChange -> {
                     val previousRecoveryKey = recoveryKey
@@ -86,7 +86,7 @@ class SecureBackupEnterRecoveryKeyPresenter @Inject constructor(
 
     private fun CoroutineScope.submitRecoveryKey(
         recoveryKey: String,
-        action: MutableState<Async<Unit>>
+        action: MutableState<AsyncData<Unit>>
     ) = launch {
         suspend {
             encryptionService.recover(recoveryKey).getOrThrow()

@@ -27,7 +27,7 @@ import io.element.android.features.roomdetails.impl.members.aRoomMember
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsEvents
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsPresenter
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsState
-import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
@@ -68,7 +68,7 @@ class RoomMemberDetailsPresenterTests {
             assertThat(initialState.userId).isEqualTo(roomMember.userId.value)
             assertThat(initialState.userName).isEqualTo(roomMember.displayName)
             assertThat(initialState.avatarUrl).isEqualTo(roomMember.avatarUrl)
-            assertThat(initialState.isBlocked).isEqualTo(Async.Success(roomMember.isIgnored))
+            assertThat(initialState.isBlocked).isEqualTo(AsyncData.Success(roomMember.isIgnored))
             skipItems(1)
             val loadedState = awaitItem()
             assertThat(loadedState.userName).isEqualTo("A custom name")
@@ -173,7 +173,7 @@ class RoomMemberDetailsPresenterTests {
             assertThat(errorState.isBlocked.errorOrNull()).isEqualTo(A_THROWABLE)
             // Clear error
             initialState.eventSink(RoomMemberDetailsEvents.ClearBlockUserError)
-            assertThat(awaitItem().isBlocked).isEqualTo(Async.Success(false))
+            assertThat(awaitItem().isBlocked).isEqualTo(AsyncData.Success(false))
         }
     }
 
@@ -204,14 +204,14 @@ class RoomMemberDetailsPresenterTests {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            assertThat(initialState.startDmActionState).isInstanceOf(Async.Uninitialized::class.java)
-            val startDMSuccessResult = Async.Success(A_ROOM_ID)
-            val startDMFailureResult = Async.Failure<RoomId>(A_THROWABLE)
+            assertThat(initialState.startDmActionState).isInstanceOf(AsyncData.Uninitialized::class.java)
+            val startDMSuccessResult = AsyncData.Success(A_ROOM_ID)
+            val startDMFailureResult = AsyncData.Failure<RoomId>(A_THROWABLE)
 
             // Failure
             startDMAction.givenExecuteResult(startDMFailureResult)
             initialState.eventSink(RoomMemberDetailsEvents.StartDM)
-            assertThat(awaitItem().startDmActionState).isInstanceOf(Async.Loading::class.java)
+            assertThat(awaitItem().startDmActionState).isInstanceOf(AsyncData.Loading::class.java)
             awaitItem().also { state ->
                 assertThat(state.startDmActionState).isEqualTo(startDMFailureResult)
                 state.eventSink(RoomMemberDetailsEvents.ClearStartDMState)
@@ -220,10 +220,10 @@ class RoomMemberDetailsPresenterTests {
             // Success
             startDMAction.givenExecuteResult(startDMSuccessResult)
             awaitItem().also { state ->
-                assertThat(state.startDmActionState).isEqualTo(Async.Uninitialized)
+                assertThat(state.startDmActionState).isEqualTo(AsyncData.Uninitialized)
                 state.eventSink(RoomMemberDetailsEvents.StartDM)
             }
-            assertThat(awaitItem().startDmActionState).isInstanceOf(Async.Loading::class.java)
+            assertThat(awaitItem().startDmActionState).isInstanceOf(AsyncData.Loading::class.java)
             awaitItem().also { state ->
                 assertThat(state.startDmActionState).isEqualTo(startDMSuccessResult)
             }

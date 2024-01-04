@@ -27,7 +27,7 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import io.element.android.features.login.impl.DefaultLoginUserStory
 import io.element.android.features.login.impl.screens.loginpassword.LoginFormState
-import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
@@ -55,8 +55,8 @@ class WaitListPresenter @AssistedInject constructor(
             authenticationService.getHomeserverDetails().value?.url ?: "server"
         }
 
-        val loginAction: MutableState<Async<SessionId>> = remember {
-            mutableStateOf(Async.Uninitialized)
+        val loginAction: MutableState<AsyncData<SessionId>> = remember {
+            mutableStateOf(AsyncData.Uninitialized)
         }
 
         val attemptNumber = remember { mutableIntStateOf(0) }
@@ -70,7 +70,7 @@ class WaitListPresenter @AssistedInject constructor(
                         coroutineScope.loginAttempt(formState, loginAction)
                     }
                 }
-                WaitListEvents.ClearError -> loginAction.value = Async.Uninitialized
+                WaitListEvents.ClearError -> loginAction.value = AsyncData.Uninitialized
                 WaitListEvents.Continue -> defaultLoginUserStory.setLoginFlowIsDone(true)
             }
         }
@@ -83,15 +83,15 @@ class WaitListPresenter @AssistedInject constructor(
         )
     }
 
-    private fun CoroutineScope.loginAttempt(formState: LoginFormState, loggedInState: MutableState<Async<SessionId>>) = launch {
+    private fun CoroutineScope.loginAttempt(formState: LoginFormState, loggedInState: MutableState<AsyncData<SessionId>>) = launch {
         Timber.w("Attempt to login...")
-        loggedInState.value = Async.Loading()
+        loggedInState.value = AsyncData.Loading()
         authenticationService.login(formState.login.trim(), formState.password)
             .onSuccess { sessionId ->
-                loggedInState.value = Async.Success(sessionId)
+                loggedInState.value = AsyncData.Success(sessionId)
             }
             .onFailure { failure ->
-                loggedInState.value = Async.Failure(failure)
+                loggedInState.value = AsyncData.Failure(failure)
             }
     }
 }

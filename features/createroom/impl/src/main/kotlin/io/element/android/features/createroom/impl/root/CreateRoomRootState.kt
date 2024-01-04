@@ -17,12 +17,12 @@
 package io.element.android.features.createroom.impl.root
 
 import io.element.android.features.createroom.impl.userlist.UserListState
-import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.core.RoomId
 
 data class CreateRoomRootState(
     val applicationName: String,
     val userListState: UserListState,
-    val startDmAction: Async<RoomId>,
+    val startDmAction: AsyncData<RoomId>,
     val eventSink: (CreateRoomRootEvents) -> Unit,
 )

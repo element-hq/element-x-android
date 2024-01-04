@@ -17,14 +17,14 @@
 package io.element.android.features.preferences.impl.notifications
 
 import androidx.compose.runtime.Immutable
-import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 
 @Immutable
 data class NotificationSettingsState(
     val matrixSettings: MatrixSettings,
     val appSettings: AppSettings,
-    val changeNotificationSettingAction: Async<Unit>,
+    val changeNotificationSettingAction: AsyncData<Unit>,
     val eventSink: (NotificationSettingsEvents) -> Unit,
 ) {
     sealed interface MatrixSettings {

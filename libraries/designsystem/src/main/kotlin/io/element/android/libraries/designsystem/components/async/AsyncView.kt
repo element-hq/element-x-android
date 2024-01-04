@@ -19,7 +19,7 @@ package io.element.android.libraries.designsystem.components.async
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.tooling.preview.PreviewParameter
-import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.components.ProgressDialog
 import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
 import io.element.android.libraries.designsystem.components.dialogs.ErrorDialogDefaults
@@ -36,7 +36,7 @@ import io.element.android.libraries.designsystem.preview.PreviewsDayNight
  */
 @Composable
 fun <T> AsyncView(
-    async: Async<T>,
+    async: AsyncData<T>,
     onSuccess: (T) -> Unit,
     onErrorDismiss: () -> Unit,
     showProgressDialog: Boolean = true,
@@ -62,7 +62,7 @@ fun <T> AsyncView(
 
 @Composable
 fun <T> AsyncView(
-    async: Async<T>,
+    async: AsyncData<T>,
     onSuccess: (T) -> Unit,
     onErrorDismiss: () -> Unit,
     progressDialog: @Composable () -> Unit = { AsyncViewDefaults.ProgressDialog() },
@@ -71,9 +71,9 @@ fun <T> AsyncView(
     onRetry: (() -> Unit)? = null,
 ) {
     when (async) {
-        Async.Uninitialized -> Unit
-        is Async.Loading -> progressDialog()
-        is Async.Failure -> {
+        AsyncData.Uninitialized -> Unit
+        is AsyncData.Loading -> progressDialog()
+        is AsyncData.Failure -> {
             if (onRetry == null) {
                 ErrorDialog(
                     title = errorTitle(async.error),
@@ -89,7 +89,7 @@ fun <T> AsyncView(
                 )
             }
         }
-        is Async.Success -> {
+        is AsyncData.Success -> {
             LaunchedEffect(async) {
                 onSuccess(async.data)
             }
@@ -109,7 +109,7 @@ object AsyncViewDefaults {
 @PreviewsDayNight
 @Composable
 internal fun AsyncViewPreview(
-    @PreviewParameter(AsyncProvider::class) async: Async<Unit>,
+    @PreviewParameter(AsyncProvider::class) async: AsyncData<Unit>,
 ) = ElementPreview {
     AsyncView(
         async = async,

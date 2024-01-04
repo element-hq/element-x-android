@@ -25,7 +25,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runCatchingUpdatingState
@@ -75,8 +75,8 @@ class LogoutPresenter @Inject constructor(
         val backupState by encryptionService.backupStateStateFlow.collectAsState()
         val recoveryState by encryptionService.recoveryStateStateFlow.collectAsState()
 
-        val doesBackupExistOnServerAction: MutableState<Async<Boolean>> = remember {
-            mutableStateOf(Async.Uninitialized)
+        val doesBackupExistOnServerAction: MutableState<AsyncData<Boolean>> = remember {
+            mutableStateOf(AsyncData.Uninitialized)
         }
 
         LaunchedEffect(backupState) {
@@ -111,7 +111,7 @@ class LogoutPresenter @Inject constructor(
         )
     }
 
-    private fun CoroutineScope.getKeyBackupStatus(action: MutableState<Async<Boolean>>) = launch {
+    private fun CoroutineScope.getKeyBackupStatus(action: MutableState<AsyncData<Boolean>>) = launch {
         suspend {
             encryptionService.doesBackupExistOnServer().getOrThrow()
         }.runCatchingUpdatingState(action)
