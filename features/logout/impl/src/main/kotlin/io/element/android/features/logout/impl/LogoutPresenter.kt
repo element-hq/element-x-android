@@ -26,6 +26,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runCatchingUpdatingState
 import io.element.android.libraries.core.bool.orTrue
@@ -50,8 +51,8 @@ class LogoutPresenter @Inject constructor(
     @Composable
     override fun present(): LogoutState {
         val localCoroutineScope = rememberCoroutineScope()
-        val logoutAction: MutableState<Async<String?>> = remember {
-            mutableStateOf(Async.Uninitialized)
+        val logoutAction: MutableState<AsyncAction<String?>> = remember {
+            mutableStateOf(AsyncAction.Uninitialized)
         }
 
         val secureStorageFlag by featureFlagService.isFeatureEnabledFlow(FeatureFlags.SecureStorage)
@@ -66,7 +67,6 @@ class LogoutPresenter @Inject constructor(
         }
             .collectAsState(initial = BackupUploadState.Unknown)
 
-        var showLogoutDialog by remember { mutableStateOf(false) }
         var isLastSession by remember { mutableStateOf(false) }
         LaunchedEffect(Unit) {
             isLastSession = encryptionService.isLastDevice().getOrNull() ?: false
@@ -88,16 +88,14 @@ class LogoutPresenter @Inject constructor(
         fun handleEvents(event: LogoutEvents) {
             when (event) {
                 is LogoutEvents.Logout -> {
-                    if (showLogoutDialog || event.ignoreSdkError) {
-                        showLogoutDialog = false
+                    if (logoutAction.value.isConfirming() || event.ignoreSdkError) {
                         localCoroutineScope.logout(logoutAction, event.ignoreSdkError)
                     } else {
-                        showLogoutDialog = true
+                        logoutAction.value = AsyncAction.Confirming
                     }
                 }
                 LogoutEvents.CloseDialogs -> {
-                    logoutAction.value = Async.Uninitialized
-                    showLogoutDialog = false
+                    logoutAction.value = AsyncAction.Uninitialized
                 }
             }
         }
@@ -108,7 +106,6 @@ class LogoutPresenter @Inject constructor(
             doesBackupExistOnServer = doesBackupExistOnServerAction.value.dataOrNull().orTrue(),
             recoveryState = recoveryState,
             backupUploadState = backupUploadState,
-            showConfirmationDialog = showLogoutDialog,
             logoutAction = logoutAction.value,
             eventSink = ::handleEvents
         )
@@ -121,7 +118,7 @@ class LogoutPresenter @Inject constructor(
     }
 
     private fun CoroutineScope.logout(
-        logoutAction: MutableState<Async<String?>>,
+        logoutAction: MutableState<AsyncAction<String?>>,
         ignoreSdkError: Boolean,
     ) = launch {
         suspend {

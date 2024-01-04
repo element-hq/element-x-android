@@ -17,7 +17,7 @@
 package io.element.android.features.preferences.impl.root
 
 import io.element.android.features.logout.api.direct.DirectLogoutState
-import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
 import io.element.android.libraries.ui.strings.CommonStrings
 
@@ -39,7 +39,6 @@ fun aPreferencesRootState() = PreferencesRootState(
 
 fun aDirectLogoutState() = DirectLogoutState(
     canDoDirectSignOut = true,
-    showConfirmationDialog = false,
-    logoutAction = Async.Uninitialized,
+    logoutAction = AsyncAction.Uninitialized,
     eventSink = {},
 )
