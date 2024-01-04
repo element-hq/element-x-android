@@ -152,6 +152,8 @@ class ActionListPresenter @Inject constructor(
                                 add(TimelineItemAction.Reply)
                             }
                         }
+                        // Stickers can't be forwarded (yet) so we don't show the option
+                        // See https://github.com/element-hq/element-x-android/issues/2161
                         if (!timelineItem.isSticker) {
                             add(TimelineItemAction.Forward)
                         }
