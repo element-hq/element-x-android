@@ -43,12 +43,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.messages.impl.R
 import io.element.android.features.messages.impl.timeline.model.AggregatedReaction
 import io.element.android.features.messages.impl.timeline.model.AggregatedReactionProvider
 import io.element.android.features.messages.impl.timeline.model.aTimelineItemReactions
-import io.element.android.libraries.designsystem.components.BlurHashAsyncImage
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.text.toDp
@@ -119,8 +119,8 @@ sealed interface MessagesReactionsButtonContent {
     val isHighlighted get() = this is Reaction && reaction.isHighlighted
 }
 
-internal val REACTION_EMOJI_LINE_HEIGHT = 20.sp
-internal const val REACTION_IMAGE_ASPECT_RATIO = 1.33f
+internal val REACTION_EMOJI_LINE_HEIGHT = 25.sp
+internal const val REACTION_IMAGE_ASPECT_RATIO = 1.0f
 private val ADD_EMOJI_SIZE = 16.dp
 
 @Composable
@@ -156,13 +156,14 @@ private fun ReactionContent(
     verticalAlignment = Alignment.CenterVertically,
     modifier = modifier,
 ) {
+    // Check if this is a custom reaction (MSC4027)
     if (reaction.key.startsWith("mxc://")) {
-        BlurHashAsyncImage(
+        AsyncImage(
             modifier = modifier
                 .heightIn(min = REACTION_EMOJI_LINE_HEIGHT.toDp(), max = REACTION_EMOJI_LINE_HEIGHT.toDp())
                 .aspectRatio(REACTION_IMAGE_ASPECT_RATIO, false),
             model = MediaRequestData(MediaSource(reaction.key), MediaRequestData.Kind.Content),
-            blurHash = null
+            contentDescription = null
         )
     }
     else {

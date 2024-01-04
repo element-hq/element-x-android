@@ -58,11 +58,11 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.messages.impl.timeline.components.REACTION_EMOJI_LINE_HEIGHT
 import io.element.android.features.messages.impl.timeline.components.REACTION_IMAGE_ASPECT_RATIO
 import io.element.android.features.messages.impl.timeline.model.AggregatedReaction
-import io.element.android.libraries.designsystem.components.BlurHashAsyncImage
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
@@ -199,13 +199,14 @@ private fun AggregatedReactionButton(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier,
         ) {
+            // Check if this is a custom reaction (MSC4027)
             if (reaction.key.startsWith("mxc://")) {
-                BlurHashAsyncImage(
+                AsyncImage(
                     modifier = Modifier
                         .heightIn(min = REACTION_EMOJI_LINE_HEIGHT.toDp(), max = REACTION_EMOJI_LINE_HEIGHT.toDp())
                         .aspectRatio(REACTION_IMAGE_ASPECT_RATIO, false),
                     model = MediaRequestData(MediaSource(reaction.key), MediaRequestData.Kind.Content),
-                    blurHash = null
+                    contentDescription = null
                 )
             }
             else {
@@ -213,7 +214,7 @@ private fun AggregatedReactionButton(
                     text = reaction.displayKey,
                     style = ElementTheme.typography.fontBodyMdRegular.copy(
                         fontSize = 20.sp,
-                        lineHeight = 25.sp
+                        lineHeight = REACTION_EMOJI_LINE_HEIGHT
                     ),
                 )
             }
@@ -224,7 +225,7 @@ private fun AggregatedReactionButton(
                     color = textColor,
                     style = ElementTheme.typography.fontBodyMdRegular.copy(
                         fontSize = 20.sp,
-                        lineHeight = 25.sp
+                        lineHeight = REACTION_EMOJI_LINE_HEIGHT
                     )
                 )
             }
