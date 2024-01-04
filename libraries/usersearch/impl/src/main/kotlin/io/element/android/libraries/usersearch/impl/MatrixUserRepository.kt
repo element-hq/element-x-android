@@ -25,6 +25,7 @@ import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.usersearch.api.UserListDataSource
 import io.element.android.libraries.usersearch.api.UserRepository
 import io.element.android.libraries.usersearch.api.UserSearchResult
+import io.element.android.libraries.usersearch.api.UserSearchResultsState
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -36,34 +37,43 @@ class MatrixUserRepository @Inject constructor(
     private val dataSource: UserListDataSource
 ) : UserRepository {
 
-    override suspend fun search(query: String): Flow<List<UserSearchResult>> = flow {
-        // If the search term is a MXID that's not ours, we'll show a 'fake' result for that user, then update it when we get search results.
+    override fun search(query: String): Flow<UserSearchResultsState> = flow {
         val shouldQueryProfile = MatrixPatterns.isUserId(query) && !client.isMe(UserId(query))
-        if (shouldQueryProfile) {
-            emit(listOf(UserSearchResult(MatrixUser(UserId(query)))))
+        val shouldFetchSearchResults = query.length >= MINIMUM_SEARCH_LENGTH
+        // If the search term is a MXID that's not ours, we'll show a 'fake' result for that user, then update it when we get search results.
+        val fakeSearchResult = if (shouldQueryProfile) {
+            UserSearchResult(MatrixUser(UserId(query)), isUnresolved = true)
+        } else {
+            null
         }
-
-        if (query.length >= MINIMUM_SEARCH_LENGTH) {
-            // Debounce
-            delay(DEBOUNCE_TIME_MILLIS)
-
-            val results = dataSource
-                .search(query, MAXIMUM_SEARCH_RESULTS)
-                .filter { !client.isMe(it.userId) }
-                .map { UserSearchResult(it) }
-                .toMutableList()
-
-            // If the query is another user's MXID and the result doesn't contain that user ID, query the profile information explicitly
-            if (shouldQueryProfile && results.none { it.matrixUser.userId.value == query }) {
-                results.add(
-                    0,
-                    dataSource.getProfile(UserId(query))
-                        ?.let { UserSearchResult(it) }
-                        ?: UserSearchResult(MatrixUser(UserId(query)), isUnresolved = true))
-            }
-
+        if (shouldQueryProfile || shouldFetchSearchResults) {
+            emit(UserSearchResultsState(isFetchingSearchResults = shouldFetchSearchResults, results = listOfNotNull(fakeSearchResult)))
+        }
+        if (shouldFetchSearchResults) {
+            val results = fetchSearchResults(query, shouldQueryProfile)
             emit(results)
         }
+    }
+
+    private suspend fun fetchSearchResults(query: String, shouldQueryProfile: Boolean): UserSearchResultsState {
+        // Debounce
+        delay(DEBOUNCE_TIME_MILLIS)
+        val results = dataSource
+            .search(query, MAXIMUM_SEARCH_RESULTS)
+            .filter { !client.isMe(it.userId) }
+            .map { UserSearchResult(it) }
+            .toMutableList()
+
+        // If the query is another user's MXID and the result doesn't contain that user ID, query the profile information explicitly
+        if (shouldQueryProfile && results.none { it.matrixUser.userId.value == query }) {
+            results.add(
+                0,
+                dataSource.getProfile(UserId(query))
+                    ?.let { UserSearchResult(it) }
+                    ?: UserSearchResult(MatrixUser(UserId(query)), isUnresolved = true))
+        }
+
+        return UserSearchResultsState(results = results, isFetchingSearchResults = false)
     }
 
     companion object {

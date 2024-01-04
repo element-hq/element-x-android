@@ -53,14 +53,14 @@ internal class RoomMemberListStateProvider : PreviewParameterProvider<RoomMember
             aRoomMemberListState().copy(
                 isSearchActive = true,
                 searchQuery = "something-with-no-results",
-                searchResults = SearchBarResultState.NoResults()
+                searchResults = SearchBarResultState.NoResultsFound()
             ),
         )
 }
 
 internal fun aRoomMemberListState(
     roomMembers: Async<RoomMembers> = Async.Uninitialized,
-    searchResults: SearchBarResultState<RoomMembers> = SearchBarResultState.NotSearching(),
+    searchResults: SearchBarResultState<RoomMembers> = SearchBarResultState.Empty(),
 ) = RoomMemberListState(
     roomMembers = roomMembers,
     searchQuery = "",

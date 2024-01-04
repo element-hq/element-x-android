@@ -48,6 +48,7 @@ fun UserListView(
             state = state.searchResults,
             selectedUsers = state.selectedUsers,
             active = state.isSearchActive,
+            isSearching = state.isFetchingSearchResults,
             isMultiSelectionEnabled = state.isMultiSelectionEnabled,
             showBackButton = showBackButton,
             onActiveChanged = { state.eventSink(UserListEvents.OnSearchActiveChanged(it)) },

@@ -24,6 +24,7 @@ import kotlinx.collections.immutable.ImmutableList
 data class UserListState(
     val searchQuery: String,
     val searchResults: SearchBarResultState<ImmutableList<UserSearchResult>>,
+    val isFetchingSearchResults: Boolean,
     val selectedUsers: ImmutableList<MatrixUser>,
     val isSearchActive: Boolean,
     val selectionMode: SelectionMode,

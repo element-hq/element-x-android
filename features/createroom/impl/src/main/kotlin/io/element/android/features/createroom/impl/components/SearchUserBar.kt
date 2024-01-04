@@ -35,6 +35,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import io.element.android.libraries.designsystem.components.async.AsyncLoading
 import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
 import io.element.android.libraries.designsystem.theme.components.SearchBar
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
@@ -49,6 +50,7 @@ import kotlinx.collections.immutable.ImmutableList
 fun SearchUserBar(
     query: String,
     state: SearchBarResultState<ImmutableList<UserSearchResult>>,
+    isSearching: Boolean,
     selectedUsers: ImmutableList<MatrixUser>,
     active: Boolean,
     isMultiSelectionEnabled: Boolean,
@@ -97,6 +99,11 @@ fun SearchUserBar(
                     onUserRemoved = onUserDeselected,
                     modifier = Modifier.background(appBarContainerColor)
                 )
+            }
+        },
+        contentSuffix = {
+            if (isSearching) {
+                AsyncLoading()
             }
         },
         resultState = state,

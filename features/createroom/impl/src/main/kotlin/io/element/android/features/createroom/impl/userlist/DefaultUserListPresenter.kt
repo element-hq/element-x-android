@@ -34,6 +34,8 @@ import io.element.android.libraries.usersearch.api.UserRepository
 import io.element.android.libraries.usersearch.api.UserSearchResult
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
 class DefaultUserListPresenter @AssistedInject constructor(
     @Assisted val args: UserListPresenterArgs,
@@ -57,18 +59,21 @@ class DefaultUserListPresenter @AssistedInject constructor(
         val selectedUsers by userListDataStore.selectedUsers().collectAsState(emptyList())
         var searchQuery by rememberSaveable { mutableStateOf("") }
         var searchResults: SearchBarResultState<ImmutableList<UserSearchResult>> by remember {
-            mutableStateOf(SearchBarResultState.NotSearching())
+            mutableStateOf(SearchBarResultState.Empty())
         }
+        var isFetchingSearchResults by remember { mutableStateOf(false) }
 
         LaunchedEffect(searchQuery) {
-            searchResults = SearchBarResultState.NotSearching()
-
-            userRepository.search(searchQuery).collect {
+            searchResults = SearchBarResultState.Empty()
+            isFetchingSearchResults = false
+            userRepository.search(searchQuery).onEach { state ->
+                isFetchingSearchResults = state.isFetchingSearchResults
                 searchResults = when {
-                    it.isEmpty() -> SearchBarResultState.NoResults()
-                    else -> SearchBarResultState.Results(it.toImmutableList())
+                    state.results.isEmpty() && state.isFetchingSearchResults -> SearchBarResultState.Empty()
+                    state.results.isEmpty() && !state.isFetchingSearchResults -> SearchBarResultState.NoResultsFound()
+                    else -> SearchBarResultState.Results(state.results.toImmutableList())
                 }
-            }
+            }.launchIn(this)
         }
 
         return UserListState(
@@ -76,6 +81,7 @@ class DefaultUserListPresenter @AssistedInject constructor(
             searchResults = searchResults,
             selectedUsers = selectedUsers.toImmutableList(),
             isSearchActive = isSearchActive,
+            isFetchingSearchResults = isFetchingSearchResults,
             selectionMode = args.selectionMode,
             eventSink = { event ->
                 when (event) {

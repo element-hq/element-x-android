@@ -32,7 +32,7 @@ internal class RoomInviteMembersStateProvider : PreviewParameterProvider<RoomInv
             aRoomInviteMembersState(canInvite = true, selectedUsers = aMatrixUserList().toImmutableList()),
             aRoomInviteMembersState(isSearchActive = true, searchQuery = "some query"),
             aRoomInviteMembersState(isSearchActive = true, searchQuery = "some query", selectedUsers = aMatrixUserList().toImmutableList()),
-            aRoomInviteMembersState(isSearchActive = true, searchQuery = "some query", searchResults = SearchBarResultState.NoResults()),
+            aRoomInviteMembersState(isSearchActive = true, searchQuery = "some query", searchResults = SearchBarResultState.NoResultsFound()),
             aRoomInviteMembersState(
                 isSearchActive = true,
                 canInvite = true,
@@ -70,9 +70,10 @@ internal class RoomInviteMembersStateProvider : PreviewParameterProvider<RoomInv
 private fun aRoomInviteMembersState(
     canInvite: Boolean = false,
     searchQuery: String = "",
-    searchResults: SearchBarResultState<ImmutableList<InvitableUser>> = SearchBarResultState.NotSearching(),
+    searchResults: SearchBarResultState<ImmutableList<InvitableUser>> = SearchBarResultState.Empty(),
     selectedUsers: ImmutableList<MatrixUser> = persistentListOf(),
     isSearchActive: Boolean = false,
+    isFetchingSearchResults: Boolean = false,
 ): RoomInviteMembersState {
     return RoomInviteMembersState(
         canInvite = canInvite,
@@ -80,6 +81,7 @@ private fun aRoomInviteMembersState(
         searchResults = searchResults,
         selectedUsers = selectedUsers,
         isSearchActive = isSearchActive,
+        isFetchingSearchResults = isFetchingSearchResults,
         eventSink = {},
     )
 }

@@ -51,17 +51,19 @@ open class UserListStateProvider : PreviewParameterProvider<UserListState> {
             aUserListState().copy(
                 isSearchActive = true,
                 searchQuery = "something-with-no-results",
-                searchResults = SearchBarResultState.NoResults()
+                searchResults = SearchBarResultState.NoResultsFound()
             ),
+            aUserListState().copy(isSearchActive = true, searchQuery = "someone", selectionMode = SelectionMode.Single),
         )
 }
 
 fun aUserListState() = UserListState(
     isSearchActive = false,
     searchQuery = "",
-    searchResults = SearchBarResultState.NotSearching(),
+    searchResults = SearchBarResultState.Empty(),
     selectedUsers = persistentListOf(),
     selectionMode = SelectionMode.Single,
+    isFetchingSearchResults = false,
     eventSink = {}
 )
 

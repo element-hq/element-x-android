@@ -45,11 +45,11 @@ class RoomSelectPresenterTests {
         }.test {
             val initialState = awaitItem()
             assertThat(initialState.selectedRooms).isEmpty()
-            assertThat(initialState.resultState).isInstanceOf(SearchBarResultState.NotSearching::class.java)
+            assertThat(initialState.resultState).isInstanceOf(SearchBarResultState.Empty::class.java)
             assertThat(initialState.isSearchActive).isFalse()
             // Search is run automatically
             val searchState = awaitItem()
-            assertThat(searchState.resultState).isInstanceOf(SearchBarResultState.NoResults::class.java)
+            assertThat(searchState.resultState).isInstanceOf(SearchBarResultState.NoResultsFound::class.java)
         }
     }
 
@@ -85,7 +85,7 @@ class RoomSelectPresenterTests {
 
             initialState.eventSink(RoomSelectEvents.UpdateQuery("string not contained"))
             assertThat(awaitItem().query).isEqualTo("string not contained")
-            assertThat(awaitItem().resultState).isInstanceOf(SearchBarResultState.NoResults::class.java)
+            assertThat(awaitItem().resultState).isInstanceOf(SearchBarResultState.NoResultsFound::class.java)
         }
     }
 

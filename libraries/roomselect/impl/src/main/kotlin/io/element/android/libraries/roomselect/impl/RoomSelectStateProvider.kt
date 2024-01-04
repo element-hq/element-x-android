@@ -48,7 +48,7 @@ open class RoomSelectStateProvider : PreviewParameterProvider<RoomSelectState> {
 }
 
 private fun aRoomSelectState(
-    resultState: SearchBarResultState<ImmutableList<RoomSummaryDetails>> = SearchBarResultState.NotSearching(),
+    resultState: SearchBarResultState<ImmutableList<RoomSummaryDetails>> = SearchBarResultState.Empty(),
     query: String = "",
     isSearchActive: Boolean = false,
     selectedRooms: ImmutableList<RoomSummaryDetails> = persistentListOf(),

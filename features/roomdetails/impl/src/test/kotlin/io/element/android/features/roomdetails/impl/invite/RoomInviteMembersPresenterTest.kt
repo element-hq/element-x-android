@@ -63,7 +63,7 @@ internal class RoomInviteMembersPresenterTest {
         }.test {
             val initialState = awaitItem()
 
-            assertThat(initialState.searchResults).isInstanceOf(SearchBarResultState.NotSearching::class.java)
+            assertThat(initialState.searchResults).isInstanceOf(SearchBarResultState.Empty::class.java)
             assertThat(initialState.isSearchActive).isFalse()
             assertThat(initialState.canInvite).isFalse()
             assertThat(initialState.searchQuery).isEmpty()
@@ -115,7 +115,7 @@ internal class RoomInviteMembersPresenterTest {
             skipItems(1)
 
             val resultState = awaitItem()
-            assertThat(resultState.searchResults).isInstanceOf(SearchBarResultState.NoResults::class.java)
+            assertThat(resultState.searchResults).isInstanceOf(SearchBarResultState.NoResultsFound::class.java)
         }
     }
 

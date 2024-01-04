@@ -55,7 +55,7 @@ class DefaultUserListPresenterTests {
             assertThat(initialState.isMultiSelectionEnabled).isFalse()
             assertThat(initialState.isSearchActive).isFalse()
             assertThat(initialState.selectedUsers).isEmpty()
-            assertThat(initialState.searchResults).isInstanceOf(SearchBarResultState.NotSearching::class.java)
+            assertThat(initialState.searchResults).isInstanceOf(SearchBarResultState.Empty::class.java)
         }
     }
 
@@ -76,7 +76,7 @@ class DefaultUserListPresenterTests {
             assertThat(initialState.isMultiSelectionEnabled).isTrue()
             assertThat(initialState.isSearchActive).isFalse()
             assertThat(initialState.selectedUsers).isEmpty()
-            assertThat(initialState.searchResults).isInstanceOf(SearchBarResultState.NotSearching::class.java)
+            assertThat(initialState.searchResults).isInstanceOf(SearchBarResultState.Empty::class.java)
         }
     }
 
@@ -131,7 +131,7 @@ class DefaultUserListPresenterTests {
             val initialState = awaitItem()
 
             initialState.eventSink(UserListEvents.UpdateSearchQuery("alice"))
-            assertThat(initialState.searchResults).isInstanceOf(SearchBarResultState.NotSearching::class.java)
+            assertThat(initialState.searchResults).isInstanceOf(SearchBarResultState.Empty::class.java)
             assertThat(userRepository.providedQuery).isEqualTo("alice")
             skipItems(2)
 
@@ -170,13 +170,13 @@ class DefaultUserListPresenterTests {
             val initialState = awaitItem()
 
             initialState.eventSink(UserListEvents.UpdateSearchQuery("alice"))
-            assertThat(initialState.searchResults).isInstanceOf(SearchBarResultState.NotSearching::class.java)
+            assertThat(initialState.searchResults).isInstanceOf(SearchBarResultState.Empty::class.java)
             assertThat(userRepository.providedQuery).isEqualTo("alice")
             skipItems(2)
 
             // When the results list is empty, the state is set to NoResults
             userRepository.emitResult(emptyList())
-            assertThat(awaitItem().searchResults).isInstanceOf(SearchBarResultState.NoResults::class.java)
+            assertThat(awaitItem().searchResults).isInstanceOf(SearchBarResultState.NoResultsFound::class.java)
         }
     }
 
