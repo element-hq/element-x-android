@@ -119,7 +119,7 @@ sealed interface MessagesReactionsButtonContent {
     val isHighlighted get() = this is Reaction && reaction.isHighlighted
 }
 
-internal val REACTION_EMOJI_LINE_HEIGHT = 25.sp
+internal val REACTION_EMOJI_LINE_HEIGHT = 20.sp
 internal const val REACTION_IMAGE_ASPECT_RATIO = 1.0f
 private val ADD_EMOJI_SIZE = 16.dp
 
