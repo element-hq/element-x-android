@@ -119,9 +119,9 @@ sealed interface MessagesReactionsButtonContent {
     val isHighlighted get() = this is Reaction && reaction.isHighlighted
 }
 
-internal val reactionEmojiLineHeight = 20.sp
-internal const val reactionImageAspectRatio = 1.33f
-private val addEmojiSize = 16.dp
+internal val REACTION_EMOJI_LINE_HEIGHT = 20.sp
+internal const val REACTION_IMAGE_ASPECT_RATIO = 1.33f
+private val ADD_EMOJI_SIZE = 16.dp
 
 @Composable
 private fun TextContent(
@@ -129,7 +129,7 @@ private fun TextContent(
     modifier: Modifier = Modifier,
 ) = Text(
     modifier = modifier
-        .height(reactionEmojiLineHeight.toDp()),
+        .height(REACTION_EMOJI_LINE_HEIGHT.toDp()),
     text = text,
     style = ElementTheme.typography.fontBodyMdRegular,
     color = ElementTheme.materialColors.primary
@@ -144,7 +144,7 @@ private fun IconContent(
     contentDescription = stringResource(id = R.string.screen_room_timeline_add_reaction),
     tint = ElementTheme.materialColors.secondary,
     modifier = modifier
-        .size(addEmojiSize)
+        .size(ADD_EMOJI_SIZE)
 
 )
 
@@ -159,8 +159,8 @@ private fun ReactionContent(
     if (reaction.key.startsWith("mxc://")) {
         BlurHashAsyncImage(
             modifier = modifier
-                .heightIn(min = reactionEmojiLineHeight.toDp(), max = reactionEmojiLineHeight.toDp())
-                .aspectRatio(reactionImageAspectRatio, false),
+                .heightIn(min = REACTION_EMOJI_LINE_HEIGHT.toDp(), max = REACTION_EMOJI_LINE_HEIGHT.toDp())
+                .aspectRatio(REACTION_IMAGE_ASPECT_RATIO, false),
             model = MediaRequestData(MediaSource(reaction.key), MediaRequestData.Kind.Content),
             blurHash = null
         )
@@ -170,7 +170,7 @@ private fun ReactionContent(
             text = reaction.displayKey,
             style = ElementTheme.typography.fontBodyMdRegular.copy(
                 fontSize = 15.sp,
-                lineHeight = reactionEmojiLineHeight,
+                lineHeight = REACTION_EMOJI_LINE_HEIGHT,
             ),
         )
     }
