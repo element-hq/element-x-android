@@ -29,14 +29,17 @@ import io.element.android.libraries.designsystem.theme.components.SearchBarResul
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
+import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.A_USER_ID_2
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.matrix.ui.components.aMatrixUser
 import io.element.android.libraries.matrix.ui.components.aMatrixUserList
 import io.element.android.libraries.usersearch.api.UserSearchResult
+import io.element.android.libraries.usersearch.api.UserSearchResultState
 import io.element.android.libraries.usersearch.test.FakeUserRepository
 import io.element.android.tests.testutils.WarmUpRule
+import io.element.android.tests.testutils.consumeItemsUntilPredicate
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -63,7 +66,7 @@ internal class RoomInviteMembersPresenterTest {
         }.test {
             val initialState = awaitItem()
 
-            assertThat(initialState.searchResults).isInstanceOf(SearchBarResultState.NotSearching::class.java)
+            assertThat(initialState.searchResults).isInstanceOf(SearchBarResultState.Initial::class.java)
             assertThat(initialState.isSearchActive).isFalse()
             assertThat(initialState.canInvite).isFalse()
             assertThat(initialState.searchQuery).isEmpty()
@@ -94,7 +97,7 @@ internal class RoomInviteMembersPresenterTest {
     }
 
     @Test
-    fun `present - performs search and handles no results`() = runTest {
+    fun `present - performs search and handles empty result list`() = runTest {
         val repository = FakeUserRepository()
         val presenter = RoomInviteMembersPresenter(
             userRepository = repository,
@@ -105,17 +108,18 @@ internal class RoomInviteMembersPresenterTest {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            skipItems(1)
-
             initialState.eventSink(RoomInviteMembersEvents.UpdateSearchQuery("some query"))
-            skipItems(1)
-
             assertThat(repository.providedQuery).isEqualTo("some query")
-            repository.emitResult(emptyList())
-            skipItems(1)
-
-            val resultState = awaitItem()
-            assertThat(resultState.searchResults).isInstanceOf(SearchBarResultState.NoResults::class.java)
+            repository.emitState(UserSearchResultState(results = emptyList(), isSearching = true))
+            consumeItemsUntilPredicate { it.showSearchLoader }.last().also { state ->
+                assertThat(state.searchResults).isInstanceOf(SearchBarResultState.Initial::class.java)
+                assertThat(state.showSearchLoader).isTrue()
+            }
+            repository.emitState(results = emptyList(), isSearching = false)
+            consumeItemsUntilPredicate { !it.showSearchLoader }.last().also { state ->
+                assertThat(state.searchResults).isInstanceOf(SearchBarResultState.NoResultsFound::class.java)
+                assertThat(state.showSearchLoader).isFalse()
+            }
         }
     }
 
@@ -137,7 +141,7 @@ internal class RoomInviteMembersPresenterTest {
             skipItems(1)
 
             assertThat(repository.providedQuery).isEqualTo("some query")
-            repository.emitResult(aMatrixUserList().map { UserSearchResult(it) })
+            repository.emitStateWithUsers(users = aMatrixUserList())
             skipItems(1)
 
             val resultState = awaitItem()
@@ -189,7 +193,7 @@ internal class RoomInviteMembersPresenterTest {
             skipItems(1)
 
             assertThat(repository.providedQuery).isEqualTo("some query")
-            repository.emitResult(aMatrixUserList().map { UserSearchResult(it) })
+            repository.emitStateWithUsers(users = aMatrixUserList())
             skipItems(1)
 
             val resultState = awaitItem()
@@ -250,7 +254,7 @@ internal class RoomInviteMembersPresenterTest {
             assertThat(repository.providedQuery).isEqualTo("some query")
 
             val unresolvedUser = UserSearchResult(aMatrixUser(id = A_USER_ID.value), isUnresolved = true)
-            repository.emitResult(listOf(unresolvedUser) + aMatrixUserList().map { UserSearchResult(it) })
+            repository.emitState(listOf(unresolvedUser) + aMatrixUserList().map { UserSearchResult(it) })
             skipItems(1)
 
             val resultState = awaitItem()
@@ -318,7 +322,7 @@ internal class RoomInviteMembersPresenterTest {
             skipItems(1)
 
             assertThat(repository.providedQuery).isEqualTo("some query")
-            repository.emitResult((aMatrixUserList() + selectedUser).map { UserSearchResult(it) })
+            repository.emitStateWithUsers(users = aMatrixUserList() + selectedUser)
             skipItems(2)
 
             val resultState = awaitItem()
@@ -358,7 +362,7 @@ internal class RoomInviteMembersPresenterTest {
             skipItems(1)
 
             assertThat(repository.providedQuery).isEqualTo("some query")
-            repository.emitResult((aMatrixUserList() + selectedUser).map { UserSearchResult(it) })
+            repository.emitStateWithUsers(users = aMatrixUserList() + selectedUser)
             skipItems(2)
 
             // And then a user is toggled
@@ -379,6 +383,27 @@ internal class RoomInviteMembersPresenterTest {
             val allOtherUsers = users.minus(shouldBeSelectedUser!!)
             assertThat(allOtherUsers.none { it.isSelected }).isTrue()
         }
+    }
+
+    private suspend fun FakeUserRepository.emitStateWithUsers(
+        users: List<MatrixUser>,
+        isSearching: Boolean = false
+    ) {
+        emitState(
+            results = users.map { UserSearchResult(it) },
+            isSearching = isSearching,
+        )
+    }
+
+    private suspend fun FakeUserRepository.emitState(
+        results: List<UserSearchResult>,
+        isSearching: Boolean = false
+    ) {
+        val state = UserSearchResultState(
+            results = results,
+            isSearching = isSearching
+        )
+        emitState(state)
     }
 
     private fun TestScope.createDataSource(

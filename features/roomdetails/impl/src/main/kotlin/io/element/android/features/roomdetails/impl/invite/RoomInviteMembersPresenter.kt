@@ -37,6 +37,8 @@ import io.element.android.libraries.usersearch.api.UserRepository
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
@@ -50,16 +52,22 @@ class RoomInviteMembersPresenter @Inject constructor(
     override fun present(): RoomInviteMembersState {
         val roomMembers = remember { mutableStateOf<AsyncData<ImmutableList<RoomMember>>>(AsyncData.Loading()) }
         val selectedUsers = remember { mutableStateOf<ImmutableList<MatrixUser>>(persistentListOf()) }
-        val searchResults = remember { mutableStateOf<SearchBarResultState<ImmutableList<InvitableUser>>>(SearchBarResultState.NotSearching()) }
+        val searchResults = remember { mutableStateOf<SearchBarResultState<ImmutableList<InvitableUser>>>(SearchBarResultState.Initial()) }
         var searchQuery by rememberSaveable { mutableStateOf("") }
         var searchActive by rememberSaveable { mutableStateOf(false) }
+        var showSearchLoader = rememberSaveable { mutableStateOf(false) }
 
         LaunchedEffect(Unit) {
             fetchMembers(roomMembers)
         }
-
         LaunchedEffect(searchQuery, roomMembers) {
-            performSearch(searchResults, roomMembers, selectedUsers, searchQuery)
+            performSearch(
+                searchResults = searchResults,
+                roomMembers = roomMembers,
+                selectedUsers = selectedUsers,
+                showSearchLoader = showSearchLoader,
+                searchQuery = searchQuery
+            )
         }
 
         return RoomInviteMembersState(
@@ -68,6 +76,7 @@ class RoomInviteMembersPresenter @Inject constructor(
             searchQuery = searchQuery,
             isSearchActive = searchActive,
             searchResults = searchResults.value,
+            showSearchLoader = showSearchLoader.value,
             eventSink = {
                 when (it) {
                     is RoomInviteMembersEvents.OnSearchActiveChanged -> {
@@ -117,16 +126,19 @@ class RoomInviteMembersPresenter @Inject constructor(
         searchResults: MutableState<SearchBarResultState<ImmutableList<InvitableUser>>>,
         roomMembers: MutableState<AsyncData<ImmutableList<RoomMember>>>,
         selectedUsers: MutableState<ImmutableList<MatrixUser>>,
+        showSearchLoader: MutableState<Boolean>,
         searchQuery: String,
     ) = withContext(coroutineDispatchers.io) {
-        searchResults.value = SearchBarResultState.NotSearching()
-
+        searchResults.value = SearchBarResultState.Initial()
+        showSearchLoader.value = false
         val joinedMembers = roomMembers.value.dataOrNull().orEmpty()
 
-        userRepository.search(searchQuery).collect {
+        userRepository.search(searchQuery).onEach { state ->
+            showSearchLoader.value = state.isSearching
             searchResults.value = when {
-                it.isEmpty() -> SearchBarResultState.NoResults()
-                else -> SearchBarResultState.Results(it.map { result ->
+                state.results.isEmpty() && state.isSearching -> SearchBarResultState.Initial()
+                state.results.isEmpty() && !state.isSearching -> SearchBarResultState.NoResultsFound()
+                else -> SearchBarResultState.Results(state.results.map { result ->
                     val existingMembership = joinedMembers.firstOrNull { j -> j.userId == result.matrixUser.userId }?.membership
                     val isJoined = existingMembership == RoomMembershipState.JOIN
                     val isInvited = existingMembership == RoomMembershipState.INVITE
@@ -139,7 +151,7 @@ class RoomInviteMembersPresenter @Inject constructor(
                     )
                 }.toImmutableList())
             }
-        }
+        }.launchIn(this)
     }
 
     private suspend fun fetchMembers(roomMembers: MutableState<AsyncData<ImmutableList<RoomMember>>>) {

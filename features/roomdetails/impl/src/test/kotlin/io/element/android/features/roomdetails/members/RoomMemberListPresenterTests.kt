@@ -55,7 +55,7 @@ class RoomMemberListPresenterTests {
             val initialState = awaitItem()
             assertThat(initialState.roomMembers).isInstanceOf(AsyncData.Loading::class.java)
             assertThat(initialState.searchQuery).isEmpty()
-            assertThat(initialState.searchResults).isInstanceOf(SearchBarResultState.NotSearching::class.java)
+            assertThat(initialState.searchResults).isInstanceOf(SearchBarResultState.Initial::class.java)
             assertThat(initialState.isSearchActive).isFalse()
             val loadedState = awaitItem()
             assertThat(loadedState.roomMembers).isInstanceOf(AsyncData.Success::class.java)
@@ -92,7 +92,7 @@ class RoomMemberListPresenterTests {
             val searchQueryUpdatedState = awaitItem()
             assertThat(searchQueryUpdatedState.searchQuery).isEqualTo("something")
             val searchSearchResultDelivered = awaitItem()
-            assertThat(searchSearchResultDelivered.searchResults).isInstanceOf(SearchBarResultState.NoResults::class.java)
+            assertThat(searchSearchResultDelivered.searchResults).isInstanceOf(SearchBarResultState.NoResultsFound::class.java)
         }
     }
 

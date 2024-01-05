@@ -59,7 +59,7 @@ fun <T> SearchBar(
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     showBackButton: Boolean = true,
-    resultState: SearchBarResultState<T> = SearchBarResultState.NotSearching(),
+    resultState: SearchBarResultState<T> = SearchBarResultState.Initial(),
     shape: Shape = SearchBarDefaults.inputFieldShape,
     tonalElevation: Dp = SearchBarDefaults.TonalElevation,
     windowInsets: WindowInsets = SearchBarDefaults.windowInsets,
@@ -129,7 +129,7 @@ fun <T> SearchBar(
                     resultHandler(resultState.results)
                 }
 
-                is SearchBarResultState.NoResults<T> -> {
+                is SearchBarResultState.NoResultsFound<T> -> {
                     // No results found, show a message
                     Spacer(Modifier.size(80.dp))
 
@@ -184,10 +184,10 @@ object ElementSearchBarDefaults {
 @Immutable
 sealed interface SearchBarResultState<in T> {
     /** No search results are available yet (e.g. because the user hasn't entered a search term). */
-    class NotSearching<T> : SearchBarResultState<T>
+    class Initial<T> : SearchBarResultState<T>
 
     /** The search has completed, but no results were found. */
-    class NoResults<T> : SearchBarResultState<T>
+    class NoResultsFound<T> : SearchBarResultState<T>
 
     /** The search has completed, and some matching users were found. */
     data class Results<T>(val results: T) : SearchBarResultState<T>
@@ -199,7 +199,7 @@ internal fun SearchBarInactivePreview() = ElementThemedPreview { ContentToPrevie
 
 @Preview(group = PreviewGroup.Search)
 @Composable
-internal fun SearchBarActiveEmptyQueryPreview() = ElementThemedPreview {
+internal fun SearchBarActiveNoneQueryPreview() = ElementThemedPreview {
     ContentToPreview(
         query = "",
         active = true,
@@ -231,7 +231,7 @@ internal fun SearchBarActiveWithNoResultsPreview() = ElementThemedPreview {
     ContentToPreview(
         query = "search term",
         active = true,
-        resultState = SearchBarResultState.NoResults(),
+        resultState = SearchBarResultState.NoResultsFound<String>(),
     )
 }
 
@@ -257,16 +257,15 @@ internal fun SearchBarActiveWithContentPreview() = ElementThemedPreview {
                     .background(color = Color.Blue)
                     .fillMaxWidth()
             )
-        },
-        resultHandler = {
-            Text(
-                text = "Results go here",
-                modifier = Modifier
-                    .background(color = Color.Green)
-                    .fillMaxWidth()
-            )
         }
-    )
+    ) {
+        Text(
+            text = "Results go here",
+            modifier = Modifier
+                .background(color = Color.Green)
+                .fillMaxWidth()
+        )
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -275,7 +274,7 @@ private fun ContentToPreview(
     query: String = "",
     active: Boolean = false,
     showBackButton: Boolean = true,
-    resultState: SearchBarResultState<String> = SearchBarResultState.NotSearching(),
+    resultState: SearchBarResultState<String> = SearchBarResultState.Initial(),
     contentPrefix: @Composable ColumnScope.() -> Unit = {},
     contentSuffix: @Composable ColumnScope.() -> Unit = {},
     resultHandler: @Composable ColumnScope.(String) -> Unit = {},

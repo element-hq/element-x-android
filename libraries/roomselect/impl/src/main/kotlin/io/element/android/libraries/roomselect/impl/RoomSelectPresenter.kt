@@ -51,7 +51,7 @@ class RoomSelectPresenter @AssistedInject constructor(
         var selectedRooms by remember { mutableStateOf(persistentListOf<RoomSummaryDetails>()) }
         var query by remember { mutableStateOf("") }
         var isSearchActive by remember { mutableStateOf(false) }
-        var results: SearchBarResultState<ImmutableList<RoomSummaryDetails>> by remember { mutableStateOf(SearchBarResultState.NotSearching()) }
+        var results: SearchBarResultState<ImmutableList<RoomSummaryDetails>> by remember { mutableStateOf(SearchBarResultState.Initial()) }
 
         val summaries by client.roomListService.allRooms.summaries.collectAsState()
 
@@ -64,7 +64,7 @@ class RoomSelectPresenter @AssistedInject constructor(
             results = if (filteredSummaries.isNotEmpty()) {
                 SearchBarResultState.Results(filteredSummaries)
             } else {
-                SearchBarResultState.NoResults()
+                SearchBarResultState.NoResultsFound()
             }
         }
 
