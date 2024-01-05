@@ -42,6 +42,12 @@ import javax.inject.Inject
 class MessageSummaryFormatterImpl @Inject constructor(
     @ApplicationContext private val context: Context,
 ) : MessageSummaryFormatter {
+
+    companion object {
+        // Max characters to display in the summary message. This works around https://github.com/element-hq/element-x-android/issues/2105
+        private const val MAX_SAFE_LENGTH = 500
+    }
+
     override fun format(event: TimelineItem.Event): String {
         return when (event.content) {
             is TimelineItemTextBasedContent -> event.content.plainText
@@ -58,6 +64,6 @@ class MessageSummaryFormatterImpl @Inject constructor(
             is TimelineItemVideoContent -> context.getString(CommonStrings.common_video)
             is TimelineItemFileContent -> context.getString(CommonStrings.common_file)
             is TimelineItemAudioContent -> context.getString(CommonStrings.common_audio)
-        }
+        }.take(MAX_SAFE_LENGTH)
     }
 }
