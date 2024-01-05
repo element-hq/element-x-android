@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright (c) 2024 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,25 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-plugins {
-    id("io.element.android-compose-library")
-    alias(libs.plugins.ksp)
-}
 
-android {
-    namespace = "io.element.android.tests.testutils"
+package io.element.android.tests.testutils
 
-    buildFeatures {
-        buildConfig = true
+class EnsureNeverCalled : () -> Unit {
+    override fun invoke() {
+        throw AssertionError("Should not be called")
     }
 }
 
-dependencies {
-    implementation(libs.test.junit)
-    implementation(libs.test.truth)
-    implementation(libs.coroutines.test)
-    implementation(projects.libraries.core)
-    implementation(libs.test.turbine)
-    implementation(libs.molecule.runtime)
-    implementation(libs.androidx.compose.ui.test.junit)
+class EnsureNeverCalledWithParam<T> : (T) -> Unit {
+    override fun invoke(p1: T) {
+        throw AssertionError("Should not be called")
+    }
 }

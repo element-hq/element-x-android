@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright (c) 2024 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,25 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-plugins {
-    id("io.element.android-compose-library")
-    alias(libs.plugins.ksp)
-}
 
-android {
-    namespace = "io.element.android.tests.testutils"
+package io.element.android.tests.testutils
 
-    buildFeatures {
-        buildConfig = true
-    }
-}
+import androidx.compose.ui.test.SemanticsNodeInteractionsProvider
+import androidx.compose.ui.test.hasClickAction
+import androidx.compose.ui.test.hasText
+import androidx.compose.ui.test.performClick
 
-dependencies {
-    implementation(libs.test.junit)
-    implementation(libs.test.truth)
-    implementation(libs.coroutines.test)
-    implementation(projects.libraries.core)
-    implementation(libs.test.turbine)
-    implementation(libs.molecule.runtime)
-    implementation(libs.androidx.compose.ui.test.junit)
+fun SemanticsNodeInteractionsProvider.clickOn(text: String) {
+    onNode(hasText(text) and hasClickAction())
+        .performClick()
 }
