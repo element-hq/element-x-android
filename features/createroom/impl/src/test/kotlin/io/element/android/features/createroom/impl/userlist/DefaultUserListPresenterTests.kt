@@ -24,7 +24,7 @@ import io.element.android.libraries.designsystem.theme.components.SearchBarResul
 import io.element.android.libraries.matrix.ui.components.aMatrixUser
 import io.element.android.libraries.matrix.ui.components.aMatrixUserList
 import io.element.android.libraries.usersearch.api.UserSearchResult
-import io.element.android.libraries.usersearch.api.UserSearchResults
+import io.element.android.libraries.usersearch.api.UserSearchResultState
 import io.element.android.libraries.usersearch.test.FakeUserRepository
 import io.element.android.tests.testutils.WarmUpRule
 import kotlinx.collections.immutable.persistentListOf
@@ -137,11 +137,11 @@ class DefaultUserListPresenterTests {
             skipItems(2)
 
             // When the user repository emits a result, it's copied to the state
-            val result = UserSearchResults(
+            val result = UserSearchResultState(
                 results = listOf(UserSearchResult(aMatrixUser())),
                 isFetchingSearchResults = false,
             )
-            userRepository.emitResult(result)
+            userRepository.emitState(result)
             awaitItem().also { state ->
                 assertThat(state.searchResults).isEqualTo(
                     SearchBarResultState.Results(
@@ -151,11 +151,11 @@ class DefaultUserListPresenterTests {
                 assertThat(state.isFetchingSearchResults).isFalse()
             }
             // When the user repository emits another result, it replaces the previous value
-            val newResult = UserSearchResults(
+            val newResult = UserSearchResultState(
                 results = aMatrixUserList().map { UserSearchResult(it) },
                 isFetchingSearchResults = false,
             )
-            userRepository.emitResult(newResult)
+            userRepository.emitState(newResult)
             awaitItem().also { state ->
                 assertThat(state.searchResults).isEqualTo(
                     SearchBarResultState.Results(
@@ -189,7 +189,7 @@ class DefaultUserListPresenterTests {
             skipItems(2)
 
             // When the results list is empty, the state is set to NoResults
-            userRepository.emitResult(UserSearchResults(results = emptyList(), isFetchingSearchResults = false))
+            userRepository.emitState(UserSearchResultState(results = emptyList(), isFetchingSearchResults = false))
             assertThat(awaitItem().searchResults).isInstanceOf(SearchBarResultState.NoResultsFound::class.java)
         }
     }

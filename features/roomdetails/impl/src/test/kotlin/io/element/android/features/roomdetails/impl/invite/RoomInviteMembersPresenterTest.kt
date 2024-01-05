@@ -29,13 +29,14 @@ import io.element.android.libraries.designsystem.theme.components.SearchBarResul
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
+import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.A_USER_ID_2
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.matrix.ui.components.aMatrixUser
 import io.element.android.libraries.matrix.ui.components.aMatrixUserList
 import io.element.android.libraries.usersearch.api.UserSearchResult
-import io.element.android.libraries.usersearch.api.UserSearchResults
+import io.element.android.libraries.usersearch.api.UserSearchResultState
 import io.element.android.libraries.usersearch.test.FakeUserRepository
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.consumeItemsUntilPredicate
@@ -109,12 +110,12 @@ internal class RoomInviteMembersPresenterTest {
             val initialState = awaitItem()
             initialState.eventSink(RoomInviteMembersEvents.UpdateSearchQuery("some query"))
             assertThat(repository.providedQuery).isEqualTo("some query")
-            repository.emitResult(UserSearchResults(results = emptyList(), isFetchingSearchResults = true))
+            repository.emitState(UserSearchResultState(results = emptyList(), isFetchingSearchResults = true))
             consumeItemsUntilPredicate { it.isFetchingSearchResults }.last().also { state ->
                 assertThat(state.searchResults).isInstanceOf(SearchBarResultState.Empty::class.java)
                 assertThat(state.isFetchingSearchResults).isTrue()
             }
-            repository.emitResult(UserSearchResults(results = emptyList(), isFetchingSearchResults = false))
+            repository.emitState(results = emptyList(), isFetchingSearchResults = false)
             consumeItemsUntilPredicate { !it.isFetchingSearchResults }.last().also { state ->
                 assertThat(state.searchResults).isInstanceOf(SearchBarResultState.NoResultsFound::class.java)
                 assertThat(state.isFetchingSearchResults).isFalse()
@@ -140,7 +141,7 @@ internal class RoomInviteMembersPresenterTest {
             skipItems(1)
 
             assertThat(repository.providedQuery).isEqualTo("some query")
-            repository.emitResult(UserSearchResults(results =aMatrixUserList().map { UserSearchResult(it) }))
+            repository.emitStateWithUsers(users = aMatrixUserList())
             skipItems(1)
 
             val resultState = awaitItem()
@@ -192,7 +193,7 @@ internal class RoomInviteMembersPresenterTest {
             skipItems(1)
 
             assertThat(repository.providedQuery).isEqualTo("some query")
-            repository.emitResult(UserSearchResults(results =aMatrixUserList().map { UserSearchResult(it) }))
+            repository.emitStateWithUsers(users = aMatrixUserList())
             skipItems(1)
 
             val resultState = awaitItem()
@@ -253,7 +254,7 @@ internal class RoomInviteMembersPresenterTest {
             assertThat(repository.providedQuery).isEqualTo("some query")
 
             val unresolvedUser = UserSearchResult(aMatrixUser(id = A_USER_ID.value), isUnresolved = true)
-            repository.emitResult(UserSearchResults(results = listOf(unresolvedUser) + aMatrixUserList().map { UserSearchResult(it) }))
+            repository.emitState(listOf(unresolvedUser) + aMatrixUserList().map { UserSearchResult(it) })
             skipItems(1)
 
             val resultState = awaitItem()
@@ -321,7 +322,7 @@ internal class RoomInviteMembersPresenterTest {
             skipItems(1)
 
             assertThat(repository.providedQuery).isEqualTo("some query")
-            repository.emitResult(UserSearchResults(results = (aMatrixUserList() + selectedUser).map { UserSearchResult(it) }))
+            repository.emitStateWithUsers(users = aMatrixUserList() + selectedUser)
             skipItems(2)
 
             val resultState = awaitItem()
@@ -361,7 +362,7 @@ internal class RoomInviteMembersPresenterTest {
             skipItems(1)
 
             assertThat(repository.providedQuery).isEqualTo("some query")
-            repository.emitResult(UserSearchResults(results =(aMatrixUserList() + selectedUser).map { UserSearchResult(it) }))
+            repository.emitStateWithUsers(users = aMatrixUserList() + selectedUser)
             skipItems(2)
 
             // And then a user is toggled
@@ -382,6 +383,27 @@ internal class RoomInviteMembersPresenterTest {
             val allOtherUsers = users.minus(shouldBeSelectedUser!!)
             assertThat(allOtherUsers.none { it.isSelected }).isTrue()
         }
+    }
+
+    private suspend fun FakeUserRepository.emitStateWithUsers(
+        users: List<MatrixUser>,
+        isFetchingSearchResults: Boolean = false
+    ) {
+        emitState(
+            results = users.map { UserSearchResult(it) },
+            isFetchingSearchResults = isFetchingSearchResults,
+        )
+    }
+
+    private suspend fun FakeUserRepository.emitState(
+        results: List<UserSearchResult>,
+        isFetchingSearchResults: Boolean = false
+    ) {
+        val state = UserSearchResultState(
+            results = results,
+            isFetchingSearchResults = isFetchingSearchResults
+        )
+        emitState(state)
     }
 
     private fun TestScope.createDataSource(

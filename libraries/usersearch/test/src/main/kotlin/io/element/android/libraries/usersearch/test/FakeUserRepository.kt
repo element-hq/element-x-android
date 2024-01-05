@@ -17,7 +17,7 @@
 package io.element.android.libraries.usersearch.test
 
 import io.element.android.libraries.usersearch.api.UserRepository
-import io.element.android.libraries.usersearch.api.UserSearchResults
+import io.element.android.libraries.usersearch.api.UserSearchResultState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 
@@ -26,15 +26,15 @@ class FakeUserRepository : UserRepository {
     var providedQuery: String? = null
         private set
 
-    private val flow = MutableSharedFlow<UserSearchResults>()
+    private val flow = MutableSharedFlow<UserSearchResultState>()
 
-    override fun search(query: String): Flow<UserSearchResults> {
+    override fun search(query: String): Flow<UserSearchResultState> {
         providedQuery = query
         return flow
     }
 
-    suspend fun emitResult(result: UserSearchResults) {
-        flow.emit(result)
+    suspend fun emitState(state: UserSearchResultState) {
+        flow.emit(state)
     }
 
 }

@@ -23,7 +23,7 @@ data class UserSearchResult(
     val isUnresolved: Boolean = false,
 )
 
-data class UserSearchResults(
+data class UserSearchResultState(
     val results: List<UserSearchResult>,
-    val isFetchingSearchResults: Boolean = false,
+    val isFetchingSearchResults: Boolean,
 )
