@@ -21,6 +21,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.Layout
+import androidx.compose.ui.layout.SubcomposeLayout
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.unit.Constraints
@@ -58,23 +59,18 @@ fun ContentAvoidingLayout(
 ) {
     val scope = remember { ContentAvoidingLayoutScopeInstance() }
 
-    Layout(
+    SubcomposeLayout(
         modifier = modifier,
-        content = {
-            scope.content()
-            overlay()
-        }
-    ) { measurables, constraints ->
-        assert(measurables.size == 2) { "ContentAvoidingLayout must have exactly 2 children" }
+    ) { constraints ->
 
         // Measure the `overlay` view first, in case we need to shrink the `content`
-        val overlayPlaceable = measurables.last().measure(Constraints(minWidth = 0, maxWidth = constraints.maxWidth))
+        val overlayPlaceable = subcompose(0, overlay).first().measure(Constraints(minWidth = 0, maxWidth = constraints.maxWidth))
         val contentConstraints = if (shrinkContent) {
             Constraints(minWidth = 0, maxWidth = constraints.maxWidth - overlayPlaceable.width)
         } else {
             Constraints(minWidth = 0, maxWidth = constraints.maxWidth)
         }
-        val contentPlaceable = measurables.first().measure(contentConstraints)
+        val contentPlaceable = subcompose(1) { scope.content() }.first().measure(contentConstraints)
 
         var layoutWidth = contentPlaceable.width
         var layoutHeight = contentPlaceable.height
