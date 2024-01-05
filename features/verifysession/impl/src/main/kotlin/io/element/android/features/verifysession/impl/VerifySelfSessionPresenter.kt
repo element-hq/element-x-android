@@ -24,7 +24,7 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import com.freeletics.flowredux.compose.rememberStateAndDispatch
-import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import io.element.android.libraries.matrix.api.verification.VerificationFlowState
@@ -94,8 +94,8 @@ class VerifySelfSessionPresenter @Inject constructor(
 
             is StateMachineState.Verifying -> {
                 val async = when (machineState) {
-                    is StateMachineState.Verifying.Replying -> Async.Loading()
-                    else -> Async.Uninitialized
+                    is StateMachineState.Verifying.Replying -> AsyncData.Loading()
+                    else -> AsyncData.Uninitialized
                 }
                 VerifySelfSessionState.VerificationStep.Verifying(machineState.data, async)
             }

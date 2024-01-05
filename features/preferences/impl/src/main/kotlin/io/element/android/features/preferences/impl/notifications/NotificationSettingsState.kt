@@ -17,18 +17,18 @@
 package io.element.android.features.preferences.impl.notifications
 
 import androidx.compose.runtime.Immutable
-import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 
 @Immutable
 data class NotificationSettingsState(
     val matrixSettings: MatrixSettings,
     val appSettings: AppSettings,
-    val changeNotificationSettingAction: Async<Unit>,
+    val changeNotificationSettingAction: AsyncAction<Unit>,
     val eventSink: (NotificationSettingsEvents) -> Unit,
 ) {
     sealed interface MatrixSettings {
-        data object Uninitialized :  MatrixSettings
+        data object Uninitialized : MatrixSettings
         data class Valid(
             val atRoomNotificationsEnabled: Boolean,
             val callNotificationsEnabled: Boolean,
@@ -39,7 +39,7 @@ data class NotificationSettingsState(
 
         data class Invalid(
             val fixFailed: Boolean
-        ) :  MatrixSettings
+        ) : MatrixSettings
     }
 
     data class AppSettings(

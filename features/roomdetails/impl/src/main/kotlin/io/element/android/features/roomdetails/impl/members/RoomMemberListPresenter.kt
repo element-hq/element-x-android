@@ -25,7 +25,7 @@ import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
@@ -44,7 +44,7 @@ class RoomMemberListPresenter @Inject constructor(
 
     @Composable
     override fun present(): RoomMemberListState {
-        var roomMembers by remember { mutableStateOf<Async<RoomMembers>>(Async.Loading()) }
+        var roomMembers by remember { mutableStateOf<AsyncData<RoomMembers>>(AsyncData.Loading()) }
         var searchQuery by rememberSaveable { mutableStateOf("") }
         var searchResults by remember {
             mutableStateOf<SearchBarResultState<RoomMembers>>(SearchBarResultState.NotSearching())
@@ -59,7 +59,7 @@ class RoomMemberListPresenter @Inject constructor(
         LaunchedEffect(Unit) {
             withContext(coroutineDispatchers.io) {
                 val members = roomMemberListDataSource.search("").groupBy { it.membership }
-                roomMembers = Async.Success(
+                roomMembers = AsyncData.Success(
                     RoomMembers(
                         invited = members.getOrDefault(RoomMembershipState.INVITE, emptyList()).toImmutableList(),
                         joined = members.getOrDefault(RoomMembershipState.JOIN, emptyList()).toImmutableList(),

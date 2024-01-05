@@ -25,7 +25,7 @@ import androidx.compose.runtime.remember
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -48,7 +48,7 @@ class ForwardMessagesPresenter @AssistedInject constructor(
         fun create(eventId: String): ForwardMessagesPresenter
     }
 
-    private val forwardingActionState: MutableState<Async<ImmutableList<RoomId>>> = mutableStateOf(Async.Uninitialized)
+    private val forwardingActionState: MutableState<AsyncData<ImmutableList<RoomId>>> = mutableStateOf(AsyncData.Uninitialized)
 
     fun onRoomSelected(roomIds: List<RoomId>) {
         matrixCoroutineScope.forwardEvent(eventId, roomIds.toPersistentList(), forwardingActionState)
@@ -62,13 +62,13 @@ class ForwardMessagesPresenter @AssistedInject constructor(
 
         fun handleEvents(event: ForwardMessagesEvents) {
             when (event) {
-                ForwardMessagesEvents.ClearError -> forwardingActionState.value = Async.Uninitialized
+                ForwardMessagesEvents.ClearError -> forwardingActionState.value = AsyncData.Uninitialized
             }
         }
 
         return ForwardMessagesState(
             isForwarding = forwardingActionState.value.isLoading(),
-            error = (forwardingActionState.value as? Async.Failure)?.error,
+            error = (forwardingActionState.value as? AsyncData.Failure)?.error,
             forwardingSucceeded = forwardingSucceeded,
             eventSink = { handleEvents(it) }
         )
@@ -77,12 +77,12 @@ class ForwardMessagesPresenter @AssistedInject constructor(
     private fun CoroutineScope.forwardEvent(
         eventId: EventId,
         roomIds: ImmutableList<RoomId>,
-        isForwardMessagesState: MutableState<Async<ImmutableList<RoomId>>>,
+        isForwardMessagesState: MutableState<AsyncData<ImmutableList<RoomId>>>,
     ) = launch {
-        isForwardMessagesState.value = Async.Loading()
+        isForwardMessagesState.value = AsyncData.Loading()
         room.forwardEvent(eventId, roomIds).fold(
-            { isForwardMessagesState.value = Async.Success(roomIds) },
-            { isForwardMessagesState.value = Async.Failure(it) }
+            { isForwardMessagesState.value = AsyncData.Success(roomIds) },
+            { isForwardMessagesState.value = AsyncData.Failure(it) }
         )
     }
 }

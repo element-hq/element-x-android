@@ -16,13 +16,13 @@
 
 package io.element.android.features.roomdetails.impl.members
 
-import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
 import io.element.android.libraries.matrix.api.room.RoomMember
 import kotlinx.collections.immutable.ImmutableList
 
 data class RoomMemberListState(
-    val roomMembers: Async<RoomMembers>,
+    val roomMembers: AsyncData<RoomMembers>,
     val searchQuery: String,
     val searchResults: SearchBarResultState<RoomMembers>,
     val isSearchActive: Boolean,

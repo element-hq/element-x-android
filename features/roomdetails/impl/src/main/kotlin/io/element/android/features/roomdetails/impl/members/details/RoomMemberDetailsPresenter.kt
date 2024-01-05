@@ -29,7 +29,8 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.features.createroom.api.StartDMAction
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsState.ConfirmationDialog
-import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.AsyncAction
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.matrix.api.MatrixClient
@@ -56,14 +57,14 @@ class RoomMemberDetailsPresenter @AssistedInject constructor(
         val coroutineScope = rememberCoroutineScope()
         var confirmationDialog by remember { mutableStateOf<ConfirmationDialog?>(null) }
         val roomMember by room.getRoomMemberAsState(roomMemberId)
-        val startDmActionState: MutableState<Async<RoomId>> = remember { mutableStateOf(Async.Uninitialized) }
+        val startDmActionState: MutableState<AsyncAction<RoomId>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
         // the room member is not really live...
-        val isBlocked: MutableState<Async<Boolean>> = remember(roomMember) {
+        val isBlocked: MutableState<AsyncData<Boolean>> = remember(roomMember) {
             val isIgnored = roomMember?.isIgnored
             if (isIgnored == null) {
-                mutableStateOf(Async.Uninitialized)
+                mutableStateOf(AsyncData.Uninitialized)
             } else {
-                mutableStateOf(Async.Success(isIgnored))
+                mutableStateOf(AsyncData.Success(isIgnored))
             }
         }
         LaunchedEffect(Unit) {
@@ -90,7 +91,7 @@ class RoomMemberDetailsPresenter @AssistedInject constructor(
                 }
                 RoomMemberDetailsEvents.ClearConfirmationDialog -> confirmationDialog = null
                 RoomMemberDetailsEvents.ClearBlockUserError -> {
-                    isBlocked.value = Async.Success(isBlocked.value.dataOrNull().orFalse())
+                    isBlocked.value = AsyncData.Success(isBlocked.value.dataOrNull().orFalse())
                 }
                 RoomMemberDetailsEvents.StartDM -> {
                     coroutineScope.launch {
@@ -98,7 +99,7 @@ class RoomMemberDetailsPresenter @AssistedInject constructor(
                     }
                 }
                 RoomMemberDetailsEvents.ClearStartDMState -> {
-                    startDmActionState.value = Async.Uninitialized
+                    startDmActionState.value = AsyncAction.Uninitialized
                 }
             }
         }
@@ -127,30 +128,30 @@ class RoomMemberDetailsPresenter @AssistedInject constructor(
         )
     }
 
-    private fun CoroutineScope.blockUser(userId: UserId, isBlockedState: MutableState<Async<Boolean>>) = launch {
-        isBlockedState.value = Async.Loading(false)
+    private fun CoroutineScope.blockUser(userId: UserId, isBlockedState: MutableState<AsyncData<Boolean>>) = launch {
+        isBlockedState.value = AsyncData.Loading(false)
         client.ignoreUser(userId)
             .fold(
                 onSuccess = {
-                    isBlockedState.value = Async.Success(true)
+                    isBlockedState.value = AsyncData.Success(true)
                     room.updateMembers()
                 },
                 onFailure = {
-                    isBlockedState.value = Async.Failure(it, false)
+                    isBlockedState.value = AsyncData.Failure(it, false)
                 }
             )
     }
 
-    private fun CoroutineScope.unblockUser(userId: UserId, isBlockedState: MutableState<Async<Boolean>>) = launch {
-        isBlockedState.value = Async.Loading(true)
+    private fun CoroutineScope.unblockUser(userId: UserId, isBlockedState: MutableState<AsyncData<Boolean>>) = launch {
+        isBlockedState.value = AsyncData.Loading(true)
         client.unignoreUser(userId)
             .fold(
                 onSuccess = {
-                    isBlockedState.value = Async.Success(false)
+                    isBlockedState.value = AsyncData.Success(false)
                     room.updateMembers()
                 },
                 onFailure = {
-                    isBlockedState.value = Async.Failure(it, true)
+                    isBlockedState.value = AsyncData.Failure(it, true)
                 }
             )
     }

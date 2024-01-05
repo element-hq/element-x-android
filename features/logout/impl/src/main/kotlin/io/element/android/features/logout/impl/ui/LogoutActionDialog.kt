@@ -20,22 +20,30 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.res.stringResource
 import io.element.android.features.logout.impl.R
-import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.designsystem.components.ProgressDialog
 import io.element.android.libraries.designsystem.components.dialogs.RetryDialog
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
 fun LogoutActionDialog(
-    state: Async<String?>,
+    state: AsyncAction<String?>,
+    onConfirmClicked: () -> Unit,
     onForceLogoutClicked: () -> Unit,
-    onDismissError: () -> Unit,
+    onDismissError: () -> Unit, // TODO Rename
     onSuccessLogout: (String?) -> Unit,
 ) {
     when (state) {
-        is Async.Loading ->
+        AsyncAction.Uninitialized ->
+            Unit
+        AsyncAction.Confirming ->
+            LogoutConfirmationDialog(
+                onSubmitClicked = onConfirmClicked,
+                onDismiss = onDismissError
+            )
+        is AsyncAction.Loading ->
             ProgressDialog(text = stringResource(id = R.string.screen_signout_in_progress_dialog_content))
-        is Async.Failure ->
+        is AsyncAction.Failure ->
             RetryDialog(
                 title = stringResource(id = CommonStrings.dialog_title_error),
                 content = stringResource(id = CommonStrings.error_unknown),
@@ -43,9 +51,7 @@ fun LogoutActionDialog(
                 onRetry = onForceLogoutClicked,
                 onDismiss = onDismissError,
             )
-        Async.Uninitialized ->
-            Unit
-        is Async.Success ->
+        is AsyncAction.Success ->
             LaunchedEffect(state) {
                 onSuccessLogout(state.data)
             }

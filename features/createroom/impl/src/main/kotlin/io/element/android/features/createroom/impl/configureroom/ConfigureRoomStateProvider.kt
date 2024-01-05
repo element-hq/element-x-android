@@ -19,7 +19,7 @@ package io.element.android.features.createroom.impl.configureroom
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.createroom.impl.CreateRoomConfig
 import io.element.android.features.createroom.impl.userlist.aListOfSelectedUsers
-import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.permissions.api.aPermissionsState
 import kotlinx.collections.immutable.persistentListOf
 
@@ -41,7 +41,7 @@ open class ConfigureRoomStateProvider : PreviewParameterProvider<ConfigureRoomSt
 fun aConfigureRoomState() = ConfigureRoomState(
     config = CreateRoomConfig(),
     avatarActions = persistentListOf(),
-    createRoomAction = Async.Uninitialized,
+    createRoomAction = AsyncAction.Uninitialized,
     cameraPermissionState = aPermissionsState(showDialog = false),
     eventSink = { },
 )

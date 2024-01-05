@@ -56,7 +56,7 @@ import io.element.android.features.lockscreen.impl.components.PinEntryTextField
 import io.element.android.features.lockscreen.impl.pin.model.PinDigit
 import io.element.android.features.lockscreen.impl.pin.model.PinEntry
 import io.element.android.features.lockscreen.impl.unlock.keypad.PinKeypad
-import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.atomic.atoms.RoundedIconAtom
 import io.element.android.libraries.designsystem.components.ProgressDialog
 import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
@@ -92,7 +92,7 @@ fun PinUnlockView(
                 onDismiss = { state.eventSink(PinUnlockEvents.ClearSignOutPrompt) },
             )
         }
-        if (state.signOutAction is Async.Loading) {
+        if (state.signOutAction is AsyncData.Loading) {
             ProgressDialog(text = stringResource(id = R.string.screen_signout_in_progress_dialog_content))
         }
         if (state.showBiometricUnlockError) {
@@ -335,7 +335,7 @@ private fun PinUnlockHeader(
             style = ElementTheme.typography.fontBodyMdRegular,
             color = subtitleColor,
         )
-        if (!isInAppUnlock && state.pinEntry is Async.Success) {
+        if (!isInAppUnlock && state.pinEntry is AsyncData.Success) {
             Spacer(Modifier.height(24.dp))
             PinDotsRow(state.pinEntry.data)
         }

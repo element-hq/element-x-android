@@ -17,27 +17,27 @@
 package io.element.android.features.preferences.impl.notifications.edit
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.api.roomlist.RoomSummary
 import io.element.android.libraries.matrix.api.roomlist.RoomSummaryDetails
 import kotlinx.collections.immutable.persistentListOf
 
-open class EditDefaultNotificationSettingStateProvider: PreviewParameterProvider<EditDefaultNotificationSettingState> {
+open class EditDefaultNotificationSettingStateProvider : PreviewParameterProvider<EditDefaultNotificationSettingState> {
     override val values: Sequence<EditDefaultNotificationSettingState>
         get() = sequenceOf(
             anEditDefaultNotificationSettingsState(),
             anEditDefaultNotificationSettingsState(isOneToOne = true),
-            anEditDefaultNotificationSettingsState(changeNotificationSettingAction = Async.Loading(Unit)),
-            anEditDefaultNotificationSettingsState(changeNotificationSettingAction = Async.Failure(Throwable("error"))),
+            anEditDefaultNotificationSettingsState(changeNotificationSettingAction = AsyncAction.Loading),
+            anEditDefaultNotificationSettingsState(changeNotificationSettingAction = AsyncAction.Failure(Throwable("error"))),
             anEditDefaultNotificationSettingsState(displayMentionsOnlyDisclaimer = true),
         )
 }
 
 private fun anEditDefaultNotificationSettingsState(
     isOneToOne: Boolean = false,
-    changeNotificationSettingAction: Async<Unit> = Async.Uninitialized,
+    changeNotificationSettingAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
     displayMentionsOnlyDisclaimer: Boolean = false,
 ) = EditDefaultNotificationSettingState(
     isOneToOne = isOneToOne,

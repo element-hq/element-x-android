@@ -22,7 +22,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import io.element.android.features.securebackup.impl.loggerTagDisable
-import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runCatchingUpdatingState
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
@@ -37,14 +37,14 @@ class SecureBackupEnablePresenter @Inject constructor(
 
     @Composable
     override fun present(): SecureBackupEnableState {
-        val enableAction = remember { mutableStateOf<Async<Unit>>(Async.Uninitialized) }
+        val enableAction = remember { mutableStateOf<AsyncData<Unit>>(AsyncData.Uninitialized) }
         val coroutineScope = rememberCoroutineScope()
         fun handleEvents(event: SecureBackupEnableEvents) {
             when (event) {
                 is SecureBackupEnableEvents.EnableBackup ->
                     coroutineScope.enableBackup(enableAction)
                 SecureBackupEnableEvents.DismissDialog -> {
-                    enableAction.value = Async.Uninitialized
+                    enableAction.value = AsyncData.Uninitialized
                 }
             }
         }
@@ -55,7 +55,7 @@ class SecureBackupEnablePresenter @Inject constructor(
         )
     }
 
-    private fun CoroutineScope.enableBackup(action: MutableState<Async<Unit>>) = launch {
+    private fun CoroutineScope.enableBackup(action: MutableState<AsyncData<Unit>>) = launch {
         suspend {
             Timber.tag(loggerTagDisable.value).d("Calling encryptionService.enableBackups()")
             encryptionService.enableBackups().getOrThrow()

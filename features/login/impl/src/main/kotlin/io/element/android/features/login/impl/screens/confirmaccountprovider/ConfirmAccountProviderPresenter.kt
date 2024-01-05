@@ -32,7 +32,7 @@ import io.element.android.features.login.impl.DefaultLoginUserStory
 import io.element.android.features.login.impl.accountprovider.AccountProviderDataSource
 import io.element.android.features.login.impl.error.ChangeServerError
 import io.element.android.features.login.impl.oidc.customtab.DefaultOidcActionFlow
-import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runCatchingUpdatingState
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
@@ -61,8 +61,8 @@ class ConfirmAccountProviderPresenter @AssistedInject constructor(
         val accountProvider by accountProviderDataSource.flow().collectAsState()
         val localCoroutineScope = rememberCoroutineScope()
 
-        val loginFlowAction: MutableState<Async<LoginFlow>> = remember {
-            mutableStateOf(Async.Uninitialized)
+        val loginFlowAction: MutableState<AsyncData<LoginFlow>> = remember {
+            mutableStateOf(AsyncData.Uninitialized)
         }
 
         LaunchedEffect(Unit) {
@@ -78,7 +78,7 @@ class ConfirmAccountProviderPresenter @AssistedInject constructor(
                 ConfirmAccountProviderEvents.Continue -> {
                     localCoroutineScope.submit(accountProvider.url, loginFlowAction)
                 }
-                ConfirmAccountProviderEvents.ClearError -> loginFlowAction.value = Async.Uninitialized
+                ConfirmAccountProviderEvents.ClearError -> loginFlowAction.value = AsyncData.Uninitialized
             }
         }
 
@@ -92,7 +92,7 @@ class ConfirmAccountProviderPresenter @AssistedInject constructor(
 
     private fun CoroutineScope.submit(
         homeserverUrl: String,
-        loginFlowAction: MutableState<Async<LoginFlow>>,
+        loginFlowAction: MutableState<AsyncData<LoginFlow>>,
     ) = launch {
         suspend {
             authenticationService.setHomeserver(homeserverUrl).map {
@@ -111,17 +111,17 @@ class ConfirmAccountProviderPresenter @AssistedInject constructor(
 
     private suspend fun onOidcAction(
         oidcAction: OidcAction,
-        loginFlowAction: MutableState<Async<LoginFlow>>,
+        loginFlowAction: MutableState<AsyncData<LoginFlow>>,
     ) {
-        loginFlowAction.value = Async.Loading()
+        loginFlowAction.value = AsyncData.Loading()
         when (oidcAction) {
             OidcAction.GoBack -> {
                 authenticationService.cancelOidcLogin()
                     .onSuccess {
-                        loginFlowAction.value = Async.Uninitialized
+                        loginFlowAction.value = AsyncData.Uninitialized
                     }
                     .onFailure { failure ->
-                        loginFlowAction.value = Async.Failure(failure)
+                        loginFlowAction.value = AsyncData.Failure(failure)
                     }
             }
             is OidcAction.Success -> {
@@ -130,7 +130,7 @@ class ConfirmAccountProviderPresenter @AssistedInject constructor(
                         defaultLoginUserStory.setLoginFlowIsDone(true)
                     }
                     .onFailure { failure ->
-                        loginFlowAction.value = Async.Failure(failure)
+                        loginFlowAction.value = AsyncData.Failure(failure)
                     }
             }
         }

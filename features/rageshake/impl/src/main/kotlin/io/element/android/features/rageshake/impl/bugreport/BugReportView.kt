@@ -37,8 +37,8 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import io.element.android.features.rageshake.impl.R
-import io.element.android.libraries.architecture.Async
-import io.element.android.libraries.designsystem.components.async.AsyncView
+import io.element.android.libraries.architecture.AsyncAction
+import io.element.android.libraries.designsystem.components.async.AsyncActionView
 import io.element.android.libraries.designsystem.components.form.textFieldState
 import io.element.android.libraries.designsystem.components.preferences.PreferencePage
 import io.element.android.libraries.designsystem.components.preferences.PreferenceRow
@@ -67,7 +67,7 @@ fun BugReportView(
             title = stringResource(id = CommonStrings.common_report_a_problem),
             onBackPressed = onBackPressed
         ) {
-            val isFormEnabled = state.sending !is Async.Loading
+            val isFormEnabled = state.sending !is AsyncAction.Loading
             var descriptionFieldState by textFieldState(
                 stateValue = state.formState.description
             )
@@ -150,9 +150,9 @@ fun BugReportView(
             }
         }
 
-        AsyncView(
+        AsyncActionView(
             async = state.sending,
-            showProgressDialog = false,
+            progressDialog = { },
             onSuccess = {
                 eventSink(BugReportEvents.ResetAll)
                 onDone()

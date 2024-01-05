@@ -27,7 +27,7 @@ import io.element.android.features.login.impl.resolver.network.FakeWellknownRequ
 import io.element.android.features.login.impl.resolver.network.WellKnown
 import io.element.android.features.login.impl.resolver.network.WellKnownBaseConfig
 import io.element.android.features.login.impl.resolver.network.WellKnownSlidingSyncConfig
-import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.test.A_HOMESERVER_URL
 import io.element.android.libraries.matrix.test.auth.FakeAuthenticationService
 import io.element.android.tests.testutils.WarmUpRule
@@ -57,7 +57,7 @@ class SearchAccountProviderPresenterTest {
         }.test {
             val initialState = awaitItem()
             assertThat(initialState.userInput).isEmpty()
-            assertThat(initialState.userInputResult).isEqualTo(Async.Uninitialized)
+            assertThat(initialState.userInputResult).isEqualTo(AsyncData.Uninitialized)
         }
     }
 
@@ -79,9 +79,9 @@ class SearchAccountProviderPresenterTest {
             initialState.eventSink.invoke(SearchAccountProviderEvents.UserInput("test"))
             val withInputState = awaitItem()
             assertThat(withInputState.userInput).isEqualTo("test")
-            assertThat(initialState.userInputResult).isEqualTo(Async.Uninitialized)
-            assertThat(awaitItem().userInputResult).isInstanceOf(Async.Loading::class.java)
-            assertThat(awaitItem().userInputResult).isEqualTo(Async.Uninitialized)
+            assertThat(initialState.userInputResult).isEqualTo(AsyncData.Uninitialized)
+            assertThat(awaitItem().userInputResult).isInstanceOf(AsyncData.Loading::class.java)
+            assertThat(awaitItem().userInputResult).isEqualTo(AsyncData.Uninitialized)
         }
     }
 
@@ -103,10 +103,10 @@ class SearchAccountProviderPresenterTest {
             initialState.eventSink.invoke(SearchAccountProviderEvents.UserInput("https://test.org"))
             val withInputState = awaitItem()
             assertThat(withInputState.userInput).isEqualTo("https://test.org")
-            assertThat(initialState.userInputResult).isEqualTo(Async.Uninitialized)
-            assertThat(awaitItem().userInputResult).isInstanceOf(Async.Loading::class.java)
+            assertThat(initialState.userInputResult).isEqualTo(AsyncData.Uninitialized)
+            assertThat(awaitItem().userInputResult).isInstanceOf(AsyncData.Loading::class.java)
             assertThat(awaitItem().userInputResult).isEqualTo(
-                Async.Success(
+                AsyncData.Success(
                     listOf(
                         aHomeserverData(homeserverUrl = "https://test.org", isWellknownValid = false, supportSlidingSync = false)
                     )
@@ -138,10 +138,10 @@ class SearchAccountProviderPresenterTest {
             initialState.eventSink.invoke(SearchAccountProviderEvents.UserInput("test"))
             val withInputState = awaitItem()
             assertThat(withInputState.userInput).isEqualTo("test")
-            assertThat(initialState.userInputResult).isEqualTo(Async.Uninitialized)
-            assertThat(awaitItem().userInputResult).isInstanceOf(Async.Loading::class.java)
+            assertThat(initialState.userInputResult).isEqualTo(AsyncData.Uninitialized)
+            assertThat(awaitItem().userInputResult).isInstanceOf(AsyncData.Loading::class.java)
             assertThat(awaitItem().userInputResult).isEqualTo(
-                Async.Success(
+                AsyncData.Success(
                     listOf(
                         aHomeserverData(homeserverUrl = "https://test.org", isWellknownValid = true, supportSlidingSync = false)
                     )
@@ -173,10 +173,10 @@ class SearchAccountProviderPresenterTest {
             initialState.eventSink.invoke(SearchAccountProviderEvents.UserInput("test"))
             val withInputState = awaitItem()
             assertThat(withInputState.userInput).isEqualTo("test")
-            assertThat(initialState.userInputResult).isEqualTo(Async.Uninitialized)
-            assertThat(awaitItem().userInputResult).isInstanceOf(Async.Loading::class.java)
+            assertThat(initialState.userInputResult).isEqualTo(AsyncData.Uninitialized)
+            assertThat(awaitItem().userInputResult).isInstanceOf(AsyncData.Loading::class.java)
             assertThat(awaitItem().userInputResult).isEqualTo(
-                Async.Success(
+                AsyncData.Success(
                     listOf(
                         aHomeserverData(homeserverUrl = "https://test.io")
                     )

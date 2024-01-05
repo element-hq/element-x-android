@@ -18,7 +18,7 @@ package io.element.android.libraries.mediaviewer.api.viewer
 
 import android.net.Uri
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.mediaviewer.api.local.LocalMedia
 import io.element.android.libraries.mediaviewer.api.local.MediaInfo
 import io.element.android.libraries.mediaviewer.api.local.aFileInfo
@@ -31,48 +31,48 @@ open class MediaViewerStateProvider : PreviewParameterProvider<MediaViewerState>
     override val values: Sequence<MediaViewerState>
         get() = sequenceOf(
             aMediaViewerState(),
-            aMediaViewerState(Async.Loading()),
-            aMediaViewerState(Async.Failure(IllegalStateException("error"))),
+            aMediaViewerState(AsyncData.Loading()),
+            aMediaViewerState(AsyncData.Failure(IllegalStateException("error"))),
             aMediaViewerState(
-                Async.Success(
+                AsyncData.Success(
                     LocalMedia(Uri.EMPTY, anImageInfo())
                 ),
                 anImageInfo(),
             ),
             aMediaViewerState(
-                Async.Success(
+                AsyncData.Success(
                     LocalMedia(Uri.EMPTY, aVideoInfo())
                 ),
                 aVideoInfo(),
             ),
             aMediaViewerState(
-                Async.Success(
+                AsyncData.Success(
                     LocalMedia(Uri.EMPTY, aPdfInfo())
                 ),
                 aPdfInfo(),
             ),
             aMediaViewerState(
-                Async.Loading(),
+                AsyncData.Loading(),
                 aFileInfo(),
             ),
             aMediaViewerState(
-                Async.Success(
+                AsyncData.Success(
                     LocalMedia(Uri.EMPTY, aFileInfo())
                 ),
                 aFileInfo(),
             ),
             aMediaViewerState(
-                Async.Loading(),
+                AsyncData.Loading(),
                 anAudioInfo(),
             ),
             aMediaViewerState(
-                Async.Success(
+                AsyncData.Success(
                     LocalMedia(Uri.EMPTY, anAudioInfo())
                 ),
                 anAudioInfo(),
             ),
             aMediaViewerState(
-                Async.Success(
+                AsyncData.Success(
                     LocalMedia(Uri.EMPTY, anImageInfo())
                 ),
                 anImageInfo(),
@@ -83,7 +83,7 @@ open class MediaViewerStateProvider : PreviewParameterProvider<MediaViewerState>
 }
 
 fun aMediaViewerState(
-    downloadedMedia: Async<LocalMedia> = Async.Uninitialized,
+    downloadedMedia: AsyncData<LocalMedia> = AsyncData.Uninitialized,
     mediaInfo: MediaInfo = anImageInfo(),
     canDownload: Boolean = true,
     canShare: Boolean = true,

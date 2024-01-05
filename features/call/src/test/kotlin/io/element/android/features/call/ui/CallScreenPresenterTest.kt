@@ -23,7 +23,7 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.features.call.CallType
 import io.element.android.features.call.utils.FakeCallWidgetProvider
 import io.element.android.features.call.utils.FakeWidgetMessageInterceptor
-import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.api.sync.SyncState
 import io.element.android.libraries.matrix.test.A_ROOM_ID
@@ -62,7 +62,7 @@ class CallScreenPresenterTest {
             skipItems(1)
 
             val initialState = awaitItem()
-            assertThat(initialState.urlState).isEqualTo(Async.Success("https://call.element.io"))
+            assertThat(initialState.urlState).isEqualTo(AsyncData.Success("https://call.element.io"))
             assertThat(initialState.isInWidgetMode).isFalse()
         }
     }
@@ -83,7 +83,7 @@ class CallScreenPresenterTest {
             skipItems(1)
 
             val initialState = awaitItem()
-            assertThat(initialState.urlState).isInstanceOf(Async.Success::class.java)
+            assertThat(initialState.urlState).isInstanceOf(AsyncData.Success::class.java)
             assertThat(initialState.isInWidgetMode).isTrue()
             assertThat(widgetProvider.getWidgetCalled).isTrue()
             assertThat(widgetDriver.runCalledCount).isEqualTo(1)

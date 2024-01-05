@@ -17,17 +17,17 @@
 package io.element.android.features.login.impl.screens.confirmaccountprovider
 
 import io.element.android.features.login.impl.accountprovider.AccountProvider
-import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.auth.OidcDetails
 
 // Do not use default value, so no member get forgotten in the presenters.
 data class ConfirmAccountProviderState(
     val accountProvider: AccountProvider,
     val isAccountCreation: Boolean,
-    val loginFlow: Async<LoginFlow>,
+    val loginFlow: AsyncData<LoginFlow>,
     val eventSink: (ConfirmAccountProviderEvents) -> Unit
 ) {
-    val submitEnabled: Boolean get() = accountProvider.url.isNotEmpty() && (loginFlow is Async.Uninitialized || loginFlow is Async.Loading)
+    val submitEnabled: Boolean get() = accountProvider.url.isNotEmpty() && (loginFlow is AsyncData.Uninitialized || loginFlow is AsyncData.Loading)
 }
 
 sealed interface LoginFlow {

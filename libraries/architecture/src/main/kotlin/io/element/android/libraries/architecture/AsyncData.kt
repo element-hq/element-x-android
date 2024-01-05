@@ -26,7 +26,7 @@ import kotlin.contracts.contract
  * Sealed type that allows to model an asynchronous operation.
  */
 @Stable
-sealed interface Async<out T> {
+sealed interface AsyncData<out T> {
 
     /**
      * Represents a failed operation.
@@ -38,7 +38,7 @@ sealed interface Async<out T> {
     data class Failure<out T>(
         val error: Throwable,
         val prevData: T? = null,
-    ) : Async<T>
+    ) : AsyncData<T>
 
     /**
      * Represents an operation that is currently ongoing.
@@ -48,7 +48,7 @@ sealed interface Async<out T> {
      */
     data class Loading<out T>(
         val prevData: T? = null,
-    ) : Async<T>
+    ) : AsyncData<T>
 
     /**
      * Represents a successful operation.
@@ -58,12 +58,12 @@ sealed interface Async<out T> {
      */
     data class Success<out T>(
         val data: T,
-    ) : Async<T>
+    ) : AsyncData<T>
 
     /**
      * Represents an uninitialized operation (i.e. yet to be run).
      */
-    data object Uninitialized : Async<Nothing>
+    data object Uninitialized : AsyncData<Nothing>
 
     /**
      * Returns the data returned by the operation, or null otherwise.
@@ -94,7 +94,7 @@ sealed interface Async<out T> {
     fun isUninitialized(): Boolean = this == Uninitialized
 }
 
-suspend inline fun <T> MutableState<Async<T>>.runCatchingUpdatingState(
+suspend inline fun <T> MutableState<AsyncData<T>>.runCatchingUpdatingState(
     errorTransform: (Throwable) -> Throwable = { it },
     block: () -> T,
 ): Result<T> = runUpdatingState(
@@ -108,7 +108,7 @@ suspend inline fun <T> MutableState<Async<T>>.runCatchingUpdatingState(
 )
 
 suspend inline fun <T> (suspend () -> T).runCatchingUpdatingState(
-    state: MutableState<Async<T>>,
+    state: MutableState<AsyncData<T>>,
     errorTransform: (Throwable) -> Throwable = { it },
 ): Result<T> = runUpdatingState(
     state = state,
@@ -120,7 +120,7 @@ suspend inline fun <T> (suspend () -> T).runCatchingUpdatingState(
     },
 )
 
-suspend inline fun <T> MutableState<Async<T>>.runUpdatingState(
+suspend inline fun <T> MutableState<AsyncData<T>>.runUpdatingState(
     errorTransform: (Throwable) -> Throwable = { it },
     resultBlock: () -> Result<T>,
 ): Result<T> = runUpdatingState(
@@ -131,7 +131,7 @@ suspend inline fun <T> MutableState<Async<T>>.runUpdatingState(
 
 /**
  * Calls the specified [Result]-returning function [resultBlock]
- * encapsulating its progress and return value into an [Async] while
+ * encapsulating its progress and return value into an [AsyncData] while
  * posting its updates to the MutableState [state].
  *
  * @param T the type of data returned by the operation.
@@ -143,7 +143,7 @@ suspend inline fun <T> MutableState<Async<T>>.runUpdatingState(
 @OptIn(ExperimentalContracts::class)
 @Suppress("REDUNDANT_INLINE_SUSPEND_FUNCTION_TYPE")
 suspend inline fun <T> runUpdatingState(
-    state: MutableState<Async<T>>,
+    state: MutableState<AsyncData<T>>,
     errorTransform: (Throwable) -> Throwable = { it },
     resultBlock: suspend () -> Result<T>,
 ): Result<T> {
@@ -151,15 +151,15 @@ suspend inline fun <T> runUpdatingState(
         callsInPlace(resultBlock, InvocationKind.EXACTLY_ONCE)
     }
     val prevData = state.value.dataOrNull()
-    state.value = Async.Loading(prevData = prevData)
+    state.value = AsyncData.Loading(prevData = prevData)
     return resultBlock().fold(
         onSuccess = {
-            state.value = Async.Success(it)
+            state.value = AsyncData.Success(it)
             Result.success(it)
         },
         onFailure = {
             val error = errorTransform(it)
-            state.value = Async.Failure(
+            state.value = AsyncData.Failure(
                 error = error,
                 prevData = prevData,
             )

@@ -17,7 +17,7 @@
 package io.element.android.features.login.impl.changeserver
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.AsyncData
 
 open class ChangeServerStateProvider : PreviewParameterProvider<ChangeServerState> {
     override val values: Sequence<ChangeServerState>
@@ -27,6 +27,6 @@ open class ChangeServerStateProvider : PreviewParameterProvider<ChangeServerStat
 }
 
 fun aChangeServerState() = ChangeServerState(
-    changeServerAction = Async.Uninitialized,
+    changeServerAction = AsyncData.Uninitialized,
     eventSink = {}
 )
