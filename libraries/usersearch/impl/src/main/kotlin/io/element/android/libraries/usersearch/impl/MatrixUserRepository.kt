@@ -25,7 +25,7 @@ import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.usersearch.api.UserListDataSource
 import io.element.android.libraries.usersearch.api.UserRepository
 import io.element.android.libraries.usersearch.api.UserSearchResult
-import io.element.android.libraries.usersearch.api.UserSearchResultsState
+import io.element.android.libraries.usersearch.api.UserSearchResults
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -37,7 +37,7 @@ class MatrixUserRepository @Inject constructor(
     private val dataSource: UserListDataSource
 ) : UserRepository {
 
-    override fun search(query: String): Flow<UserSearchResultsState> = flow {
+    override fun search(query: String): Flow<UserSearchResults> = flow {
         val shouldQueryProfile = MatrixPatterns.isUserId(query) && !client.isMe(UserId(query))
         val shouldFetchSearchResults = query.length >= MINIMUM_SEARCH_LENGTH
         // If the search term is a MXID that's not ours, we'll show a 'fake' result for that user, then update it when we get search results.
@@ -47,7 +47,7 @@ class MatrixUserRepository @Inject constructor(
             null
         }
         if (shouldQueryProfile || shouldFetchSearchResults) {
-            emit(UserSearchResultsState(isFetchingSearchResults = shouldFetchSearchResults, results = listOfNotNull(fakeSearchResult)))
+            emit(UserSearchResults(isFetchingSearchResults = shouldFetchSearchResults, results = listOfNotNull(fakeSearchResult)))
         }
         if (shouldFetchSearchResults) {
             val results = fetchSearchResults(query, shouldQueryProfile)
@@ -55,7 +55,7 @@ class MatrixUserRepository @Inject constructor(
         }
     }
 
-    private suspend fun fetchSearchResults(query: String, shouldQueryProfile: Boolean): UserSearchResultsState {
+    private suspend fun fetchSearchResults(query: String, shouldQueryProfile: Boolean): UserSearchResults {
         // Debounce
         delay(DEBOUNCE_TIME_MILLIS)
         val results = dataSource
@@ -73,7 +73,7 @@ class MatrixUserRepository @Inject constructor(
                     ?: UserSearchResult(MatrixUser(UserId(query)), isUnresolved = true))
         }
 
-        return UserSearchResultsState(results = results, isFetchingSearchResults = false)
+        return UserSearchResults(results = results, isFetchingSearchResults = false)
     }
 
     companion object {
