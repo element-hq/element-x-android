@@ -45,7 +45,7 @@ class RoomSelectPresenterTests {
         }.test {
             val initialState = awaitItem()
             assertThat(initialState.selectedRooms).isEmpty()
-            assertThat(initialState.resultState).isInstanceOf(SearchBarResultState.Empty::class.java)
+            assertThat(initialState.resultState).isInstanceOf(SearchBarResultState.Initial::class.java)
             assertThat(initialState.isSearchActive).isFalse()
             // Search is run automatically
             val searchState = awaitItem()

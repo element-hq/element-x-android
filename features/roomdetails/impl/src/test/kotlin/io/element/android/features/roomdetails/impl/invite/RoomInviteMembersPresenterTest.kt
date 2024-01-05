@@ -66,7 +66,7 @@ internal class RoomInviteMembersPresenterTest {
         }.test {
             val initialState = awaitItem()
 
-            assertThat(initialState.searchResults).isInstanceOf(SearchBarResultState.Empty::class.java)
+            assertThat(initialState.searchResults).isInstanceOf(SearchBarResultState.Initial::class.java)
             assertThat(initialState.isSearchActive).isFalse()
             assertThat(initialState.canInvite).isFalse()
             assertThat(initialState.searchQuery).isEmpty()
@@ -112,7 +112,7 @@ internal class RoomInviteMembersPresenterTest {
             assertThat(repository.providedQuery).isEqualTo("some query")
             repository.emitState(UserSearchResultState(results = emptyList(), isFetchingSearchResults = true))
             consumeItemsUntilPredicate { it.isFetchingSearchResults }.last().also { state ->
-                assertThat(state.searchResults).isInstanceOf(SearchBarResultState.Empty::class.java)
+                assertThat(state.searchResults).isInstanceOf(SearchBarResultState.Initial::class.java)
                 assertThat(state.isFetchingSearchResults).isTrue()
             }
             repository.emitState(results = emptyList(), isFetchingSearchResults = false)

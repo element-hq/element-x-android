@@ -59,17 +59,17 @@ class DefaultUserListPresenter @AssistedInject constructor(
         val selectedUsers by userListDataStore.selectedUsers().collectAsState(emptyList())
         var searchQuery by rememberSaveable { mutableStateOf("") }
         var searchResults: SearchBarResultState<ImmutableList<UserSearchResult>> by remember {
-            mutableStateOf(SearchBarResultState.Empty())
+            mutableStateOf(SearchBarResultState.Initial())
         }
         var isFetchingSearchResults by remember { mutableStateOf(false) }
 
         LaunchedEffect(searchQuery) {
-            searchResults = SearchBarResultState.Empty()
+            searchResults = SearchBarResultState.Initial()
             isFetchingSearchResults = false
             userRepository.search(searchQuery).onEach { state ->
                 isFetchingSearchResults = state.isFetchingSearchResults
                 searchResults = when {
-                    state.results.isEmpty() && state.isFetchingSearchResults -> SearchBarResultState.Empty()
+                    state.results.isEmpty() && state.isFetchingSearchResults -> SearchBarResultState.Initial()
                     state.results.isEmpty() && !state.isFetchingSearchResults -> SearchBarResultState.NoResultsFound()
                     else -> SearchBarResultState.Results(state.results.toImmutableList())
                 }

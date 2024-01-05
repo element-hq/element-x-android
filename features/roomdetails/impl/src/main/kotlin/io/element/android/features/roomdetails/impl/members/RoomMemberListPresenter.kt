@@ -47,7 +47,7 @@ class RoomMemberListPresenter @Inject constructor(
         var roomMembers by remember { mutableStateOf<AsyncData<RoomMembers>>(AsyncData.Loading()) }
         var searchQuery by rememberSaveable { mutableStateOf("") }
         var searchResults by remember {
-            mutableStateOf<SearchBarResultState<RoomMembers>>(SearchBarResultState.Empty())
+            mutableStateOf<SearchBarResultState<RoomMembers>>(SearchBarResultState.Initial())
         }
         var isSearchActive by rememberSaveable { mutableStateOf(false) }
 
@@ -71,7 +71,7 @@ class RoomMemberListPresenter @Inject constructor(
         LaunchedEffect(searchQuery) {
             withContext(coroutineDispatchers.io) {
                 searchResults = if (searchQuery.isEmpty()) {
-                    SearchBarResultState.Empty()
+                    SearchBarResultState.Initial()
                 } else {
                     val results = roomMemberListDataSource.search(searchQuery).groupBy { it.membership }
                     if (results.isEmpty()) SearchBarResultState.NoResultsFound()

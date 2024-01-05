@@ -60,7 +60,7 @@ open class UserListStateProvider : PreviewParameterProvider<UserListState> {
 fun aUserListState() = UserListState(
     isSearchActive = false,
     searchQuery = "",
-    searchResults = SearchBarResultState.Empty(),
+    searchResults = SearchBarResultState.Initial(),
     selectedUsers = persistentListOf(),
     selectionMode = SelectionMode.Single,
     isFetchingSearchResults = false,

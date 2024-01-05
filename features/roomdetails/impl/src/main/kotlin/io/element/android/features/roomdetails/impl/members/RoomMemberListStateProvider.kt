@@ -60,7 +60,7 @@ internal class RoomMemberListStateProvider : PreviewParameterProvider<RoomMember
 
 internal fun aRoomMemberListState(
     roomMembers: AsyncData<RoomMembers> = AsyncData.Uninitialized,
-    searchResults: SearchBarResultState<RoomMembers> = SearchBarResultState.Empty(),
+    searchResults: SearchBarResultState<RoomMembers> = SearchBarResultState.Initial(),
 ) = RoomMemberListState(
     roomMembers = roomMembers,
     searchQuery = "",

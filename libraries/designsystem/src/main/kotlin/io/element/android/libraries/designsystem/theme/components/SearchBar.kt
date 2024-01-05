@@ -59,7 +59,7 @@ fun <T> SearchBar(
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     showBackButton: Boolean = true,
-    resultState: SearchBarResultState<T> = SearchBarResultState.Empty(),
+    resultState: SearchBarResultState<T> = SearchBarResultState.Initial(),
     shape: Shape = SearchBarDefaults.inputFieldShape,
     tonalElevation: Dp = SearchBarDefaults.TonalElevation,
     windowInsets: WindowInsets = SearchBarDefaults.windowInsets,
@@ -184,7 +184,7 @@ object ElementSearchBarDefaults {
 @Immutable
 sealed interface SearchBarResultState<in T> {
     /** No search results are available yet (e.g. because the user hasn't entered a search term). */
-    class Empty<T> : SearchBarResultState<T>
+    class Initial<T> : SearchBarResultState<T>
 
     /** The search has completed, but no results were found. */
     class NoResultsFound<T> : SearchBarResultState<T>
@@ -274,7 +274,7 @@ private fun ContentToPreview(
     query: String = "",
     active: Boolean = false,
     showBackButton: Boolean = true,
-    resultState: SearchBarResultState<String> = SearchBarResultState.Empty(),
+    resultState: SearchBarResultState<String> = SearchBarResultState.Initial(),
     contentPrefix: @Composable ColumnScope.() -> Unit = {},
     contentSuffix: @Composable ColumnScope.() -> Unit = {},
     resultHandler: @Composable ColumnScope.(String) -> Unit = {},

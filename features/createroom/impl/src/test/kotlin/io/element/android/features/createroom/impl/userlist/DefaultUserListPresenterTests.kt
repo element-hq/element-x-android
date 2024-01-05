@@ -56,7 +56,7 @@ class DefaultUserListPresenterTests {
             assertThat(initialState.isMultiSelectionEnabled).isFalse()
             assertThat(initialState.isSearchActive).isFalse()
             assertThat(initialState.selectedUsers).isEmpty()
-            assertThat(initialState.searchResults).isInstanceOf(SearchBarResultState.Empty::class.java)
+            assertThat(initialState.searchResults).isInstanceOf(SearchBarResultState.Initial::class.java)
         }
     }
 
@@ -77,7 +77,7 @@ class DefaultUserListPresenterTests {
             assertThat(initialState.isMultiSelectionEnabled).isTrue()
             assertThat(initialState.isSearchActive).isFalse()
             assertThat(initialState.selectedUsers).isEmpty()
-            assertThat(initialState.searchResults).isInstanceOf(SearchBarResultState.Empty::class.java)
+            assertThat(initialState.searchResults).isInstanceOf(SearchBarResultState.Initial::class.java)
         }
     }
 
@@ -132,7 +132,7 @@ class DefaultUserListPresenterTests {
             val initialState = awaitItem()
 
             initialState.eventSink(UserListEvents.UpdateSearchQuery("alice"))
-            assertThat(initialState.searchResults).isInstanceOf(SearchBarResultState.Empty::class.java)
+            assertThat(initialState.searchResults).isInstanceOf(SearchBarResultState.Initial::class.java)
             assertThat(userRepository.providedQuery).isEqualTo("alice")
             skipItems(2)
 
@@ -184,7 +184,7 @@ class DefaultUserListPresenterTests {
             val initialState = awaitItem()
 
             initialState.eventSink(UserListEvents.UpdateSearchQuery("alice"))
-            assertThat(initialState.searchResults).isInstanceOf(SearchBarResultState.Empty::class.java)
+            assertThat(initialState.searchResults).isInstanceOf(SearchBarResultState.Initial::class.java)
             assertThat(userRepository.providedQuery).isEqualTo("alice")
             skipItems(2)
 

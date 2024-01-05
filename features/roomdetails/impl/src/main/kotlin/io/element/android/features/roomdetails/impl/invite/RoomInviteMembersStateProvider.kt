@@ -81,7 +81,7 @@ internal class RoomInviteMembersStateProvider : PreviewParameterProvider<RoomInv
 private fun aRoomInviteMembersState(
     canInvite: Boolean = false,
     searchQuery: String = "",
-    searchResults: SearchBarResultState<ImmutableList<InvitableUser>> = SearchBarResultState.Empty(),
+    searchResults: SearchBarResultState<ImmutableList<InvitableUser>> = SearchBarResultState.Initial(),
     selectedUsers: ImmutableList<MatrixUser> = persistentListOf(),
     isSearchActive: Boolean = false,
     isFetchingSearchResults: Boolean = false,
