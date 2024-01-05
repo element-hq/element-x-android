@@ -17,7 +17,6 @@
 package io.element.android.features.messages.impl.timeline.factories.event
 
 import android.text.Spannable
-import android.text.SpannedString
 import android.text.style.URLSpan
 import android.text.util.Linkify
 import androidx.core.text.buildSpannedString
