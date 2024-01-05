@@ -32,7 +32,11 @@ import org.jsoup.nodes.Document
  * @param prefix if not null, the prefix will be inserted at the beginning of the message.
  */
 fun FormattedBody.toHtmlDocument(prefix: String? = null): Document? {
-    return takeIf { it.format == MessageFormat.HTML }?.body?.let { formattedBody ->
+    return takeIf { it.format == MessageFormat.HTML }?.body
+        // Trim whitespace at the end to avoid having wrong rendering of the message.
+        // We don't trim the start in case it's used as indentation.
+        ?.trimEnd()
+        ?.let { formattedBody ->
         val dom = if (prefix != null) {
             Jsoup.parse("$prefix $formattedBody")
         } else {
