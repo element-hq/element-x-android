@@ -61,16 +61,16 @@ class DefaultUserListPresenter @AssistedInject constructor(
         var searchResults: SearchBarResultState<ImmutableList<UserSearchResult>> by remember {
             mutableStateOf(SearchBarResultState.Initial())
         }
-        var isFetchingSearchResults by remember { mutableStateOf(false) }
+        var showSearchLoader by remember { mutableStateOf(false) }
 
         LaunchedEffect(searchQuery) {
             searchResults = SearchBarResultState.Initial()
-            isFetchingSearchResults = false
+            showSearchLoader = false
             userRepository.search(searchQuery).onEach { state ->
-                isFetchingSearchResults = state.isFetchingSearchResults
+                showSearchLoader = state.isSearching
                 searchResults = when {
-                    state.results.isEmpty() && state.isFetchingSearchResults -> SearchBarResultState.Initial()
-                    state.results.isEmpty() && !state.isFetchingSearchResults -> SearchBarResultState.NoResultsFound()
+                    state.results.isEmpty() && state.isSearching -> SearchBarResultState.Initial()
+                    state.results.isEmpty() && !state.isSearching -> SearchBarResultState.NoResultsFound()
                     else -> SearchBarResultState.Results(state.results.toImmutableList())
                 }
             }.launchIn(this)
@@ -81,7 +81,7 @@ class DefaultUserListPresenter @AssistedInject constructor(
             searchResults = searchResults,
             selectedUsers = selectedUsers.toImmutableList(),
             isSearchActive = isSearchActive,
-            isFetchingSearchResults = isFetchingSearchResults,
+            showSearchLoader = showSearchLoader,
             selectionMode = args.selectionMode,
             eventSink = { event ->
                 when (event) {

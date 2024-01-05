@@ -55,11 +55,11 @@ internal class MatrixUserRepositoryTest {
 
         result.test {
             awaitItem().also {
-                assertThat(it.isFetchingSearchResults).isTrue()
+                assertThat(it.isSearching).isTrue()
                 assertThat(it.results).isEmpty()
             }
             awaitItem().also {
-                assertThat(it.isFetchingSearchResults).isFalse()
+                assertThat(it.isSearching).isFalse()
                 assertThat(it.results).isEmpty()
             }
             awaitComplete()
@@ -76,11 +76,11 @@ internal class MatrixUserRepositoryTest {
 
         result.test {
             awaitItem().also {
-                assertThat(it.isFetchingSearchResults).isTrue()
+                assertThat(it.isSearching).isTrue()
                 assertThat(it.results).isEmpty()
             }
             awaitItem().also {
-                assertThat(it.isFetchingSearchResults).isFalse()
+                assertThat(it.isSearching).isFalse()
                 assertThat(it.results).isEqualTo(aMatrixUserList().toUserSearchResults())
             }
             awaitComplete()
@@ -96,7 +96,7 @@ internal class MatrixUserRepositoryTest {
 
         result.test {
             awaitItem().also {
-                assertThat(it.isFetchingSearchResults).isTrue()
+                assertThat(it.isSearching).isTrue()
                 assertThat(it.results).isEqualTo(listOf(placeholderResult()))
             }
             cancelAndConsumeRemainingEvents()
@@ -112,7 +112,7 @@ internal class MatrixUserRepositoryTest {
 
         result.test {
             awaitItem().also {
-                assertThat(it.isFetchingSearchResults).isTrue()
+                assertThat(it.isSearching).isTrue()
                 assertThat(it.results).isEmpty()
             }
             cancelAndConsumeRemainingEvents()

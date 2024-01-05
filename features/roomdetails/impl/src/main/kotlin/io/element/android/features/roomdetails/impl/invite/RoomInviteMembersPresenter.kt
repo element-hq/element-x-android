@@ -55,7 +55,7 @@ class RoomInviteMembersPresenter @Inject constructor(
         val searchResults = remember { mutableStateOf<SearchBarResultState<ImmutableList<InvitableUser>>>(SearchBarResultState.Initial()) }
         var searchQuery by rememberSaveable { mutableStateOf("") }
         var searchActive by rememberSaveable { mutableStateOf(false) }
-        var isFetchingSearchResults = rememberSaveable { mutableStateOf(false) }
+        var showSearchLoader = rememberSaveable { mutableStateOf(false) }
 
         LaunchedEffect(Unit) {
             fetchMembers(roomMembers)
@@ -65,7 +65,7 @@ class RoomInviteMembersPresenter @Inject constructor(
                 searchResults = searchResults,
                 roomMembers = roomMembers,
                 selectedUsers = selectedUsers,
-                isFetchingSearchResults = isFetchingSearchResults,
+                showSearchLoader = showSearchLoader,
                 searchQuery = searchQuery
             )
         }
@@ -76,7 +76,7 @@ class RoomInviteMembersPresenter @Inject constructor(
             searchQuery = searchQuery,
             isSearchActive = searchActive,
             searchResults = searchResults.value,
-            isFetchingSearchResults = isFetchingSearchResults.value,
+            showSearchLoader = showSearchLoader.value,
             eventSink = {
                 when (it) {
                     is RoomInviteMembersEvents.OnSearchActiveChanged -> {
@@ -126,18 +126,18 @@ class RoomInviteMembersPresenter @Inject constructor(
         searchResults: MutableState<SearchBarResultState<ImmutableList<InvitableUser>>>,
         roomMembers: MutableState<AsyncData<ImmutableList<RoomMember>>>,
         selectedUsers: MutableState<ImmutableList<MatrixUser>>,
-        isFetchingSearchResults: MutableState<Boolean>,
+        showSearchLoader: MutableState<Boolean>,
         searchQuery: String,
     ) = withContext(coroutineDispatchers.io) {
         searchResults.value = SearchBarResultState.Initial()
-        isFetchingSearchResults.value = false
+        showSearchLoader.value = false
         val joinedMembers = roomMembers.value.dataOrNull().orEmpty()
 
         userRepository.search(searchQuery).onEach { state ->
-            isFetchingSearchResults.value = state.isFetchingSearchResults
+            showSearchLoader.value = state.isSearching
             searchResults.value = when {
-                state.results.isEmpty() && state.isFetchingSearchResults -> SearchBarResultState.Initial()
-                state.results.isEmpty() && !state.isFetchingSearchResults -> SearchBarResultState.NoResultsFound()
+                state.results.isEmpty() && state.isSearching -> SearchBarResultState.Initial()
+                state.results.isEmpty() && !state.isSearching -> SearchBarResultState.NoResultsFound()
                 else -> SearchBarResultState.Results(state.results.map { result ->
                     val existingMembership = joinedMembers.firstOrNull { j -> j.userId == result.matrixUser.userId }?.membership
                     val isJoined = existingMembership == RoomMembershipState.JOIN

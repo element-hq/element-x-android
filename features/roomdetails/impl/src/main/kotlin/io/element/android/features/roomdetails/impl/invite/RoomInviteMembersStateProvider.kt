@@ -73,7 +73,7 @@ internal class RoomInviteMembersStateProvider : PreviewParameterProvider<RoomInv
                         InvitableUser(aMatrixUser("@alice:server.org"), isUnresolved = true),
                     )
                 ),
-                isFetchingSearchResults = true,
+                showSearchLoader = true,
             ),
         )
 }
@@ -84,7 +84,7 @@ private fun aRoomInviteMembersState(
     searchResults: SearchBarResultState<ImmutableList<InvitableUser>> = SearchBarResultState.Initial(),
     selectedUsers: ImmutableList<MatrixUser> = persistentListOf(),
     isSearchActive: Boolean = false,
-    isFetchingSearchResults: Boolean = false,
+    showSearchLoader: Boolean = false,
 ): RoomInviteMembersState {
     return RoomInviteMembersState(
         canInvite = canInvite,
@@ -92,7 +92,7 @@ private fun aRoomInviteMembersState(
         searchResults = searchResults,
         selectedUsers = selectedUsers,
         isSearchActive = isSearchActive,
-        isFetchingSearchResults = isFetchingSearchResults,
+        showSearchLoader = showSearchLoader,
         eventSink = {},
     )
 }

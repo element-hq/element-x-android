@@ -47,7 +47,7 @@ class MatrixUserRepository @Inject constructor(
             null
         }
         if (shouldQueryProfile || shouldFetchSearchResults) {
-            emit(UserSearchResultState(isFetchingSearchResults = shouldFetchSearchResults, results = listOfNotNull(fakeSearchResult)))
+            emit(UserSearchResultState(isSearching = shouldFetchSearchResults, results = listOfNotNull(fakeSearchResult)))
         }
         if (shouldFetchSearchResults) {
             val results = fetchSearchResults(query, shouldQueryProfile)
@@ -73,7 +73,7 @@ class MatrixUserRepository @Inject constructor(
                     ?: UserSearchResult(MatrixUser(UserId(query)), isUnresolved = true))
         }
 
-        return UserSearchResultState(results = results, isFetchingSearchResults = false)
+        return UserSearchResultState(results = results, isSearching = false)
     }
 
     companion object {

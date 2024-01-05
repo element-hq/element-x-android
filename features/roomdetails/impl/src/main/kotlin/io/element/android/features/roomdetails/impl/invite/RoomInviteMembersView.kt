@@ -87,7 +87,7 @@ fun RoomInviteMembersView(
             RoomInviteMembersSearchBar(
                 modifier = Modifier.fillMaxWidth(),
                 query = state.searchQuery,
-                isSearching = state.isFetchingSearchResults,
+                showLoader = state.showSearchLoader,
                 selectedUsers = state.selectedUsers,
                 state = state.searchResults,
                 active = state.isSearchActive,
@@ -141,7 +141,7 @@ private fun RoomInviteMembersTopBar(
 private fun RoomInviteMembersSearchBar(
     query: String,
     state: SearchBarResultState<ImmutableList<InvitableUser>>,
-    isSearching: Boolean,
+    showLoader: Boolean,
     selectedUsers: ImmutableList<MatrixUser>,
     active: Boolean,
     onActiveChanged: (Boolean) -> Unit,
@@ -171,7 +171,7 @@ private fun RoomInviteMembersSearchBar(
         showBackButton = false,
         resultState = state,
         contentSuffix = {
-            if (isSearching) {
+            if (showLoader) {
                 AsyncLoading()
             }
         },

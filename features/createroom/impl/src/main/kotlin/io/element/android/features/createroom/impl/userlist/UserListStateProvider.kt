@@ -63,7 +63,7 @@ fun aUserListState() = UserListState(
     searchResults = SearchBarResultState.Initial(),
     selectedUsers = persistentListOf(),
     selectionMode = SelectionMode.Single,
-    isFetchingSearchResults = false,
+    showSearchLoader = false,
     eventSink = {}
 )
 

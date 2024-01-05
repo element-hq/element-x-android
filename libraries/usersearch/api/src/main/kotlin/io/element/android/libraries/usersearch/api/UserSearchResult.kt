@@ -25,5 +25,5 @@ data class UserSearchResult(
 
 data class UserSearchResultState(
     val results: List<UserSearchResult>,
-    val isFetchingSearchResults: Boolean,
+    val isSearching: Boolean,
 )

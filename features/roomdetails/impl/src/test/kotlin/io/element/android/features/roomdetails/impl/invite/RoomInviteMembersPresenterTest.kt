@@ -110,15 +110,15 @@ internal class RoomInviteMembersPresenterTest {
             val initialState = awaitItem()
             initialState.eventSink(RoomInviteMembersEvents.UpdateSearchQuery("some query"))
             assertThat(repository.providedQuery).isEqualTo("some query")
-            repository.emitState(UserSearchResultState(results = emptyList(), isFetchingSearchResults = true))
-            consumeItemsUntilPredicate { it.isFetchingSearchResults }.last().also { state ->
+            repository.emitState(UserSearchResultState(results = emptyList(), isSearching = true))
+            consumeItemsUntilPredicate { it.showSearchLoader }.last().also { state ->
                 assertThat(state.searchResults).isInstanceOf(SearchBarResultState.Initial::class.java)
-                assertThat(state.isFetchingSearchResults).isTrue()
+                assertThat(state.showSearchLoader).isTrue()
             }
-            repository.emitState(results = emptyList(), isFetchingSearchResults = false)
-            consumeItemsUntilPredicate { !it.isFetchingSearchResults }.last().also { state ->
+            repository.emitState(results = emptyList(), isSearching = false)
+            consumeItemsUntilPredicate { !it.showSearchLoader }.last().also { state ->
                 assertThat(state.searchResults).isInstanceOf(SearchBarResultState.NoResultsFound::class.java)
-                assertThat(state.isFetchingSearchResults).isFalse()
+                assertThat(state.showSearchLoader).isFalse()
             }
         }
     }
@@ -387,21 +387,21 @@ internal class RoomInviteMembersPresenterTest {
 
     private suspend fun FakeUserRepository.emitStateWithUsers(
         users: List<MatrixUser>,
-        isFetchingSearchResults: Boolean = false
+        isSearching: Boolean = false
     ) {
         emitState(
             results = users.map { UserSearchResult(it) },
-            isFetchingSearchResults = isFetchingSearchResults,
+            isSearching = isSearching,
         )
     }
 
     private suspend fun FakeUserRepository.emitState(
         results: List<UserSearchResult>,
-        isFetchingSearchResults: Boolean = false
+        isSearching: Boolean = false
     ) {
         val state = UserSearchResultState(
             results = results,
-            isFetchingSearchResults = isFetchingSearchResults
+            isSearching = isSearching
         )
         emitState(state)
     }

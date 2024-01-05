@@ -50,7 +50,7 @@ import kotlinx.collections.immutable.ImmutableList
 fun SearchUserBar(
     query: String,
     state: SearchBarResultState<ImmutableList<UserSearchResult>>,
-    isSearching: Boolean,
+    showLoader: Boolean,
     selectedUsers: ImmutableList<MatrixUser>,
     active: Boolean,
     isMultiSelectionEnabled: Boolean,
@@ -102,7 +102,7 @@ fun SearchUserBar(
             }
         },
         contentSuffix = {
-            if (isSearching) {
+            if (showLoader) {
                 AsyncLoading()
             }
         },

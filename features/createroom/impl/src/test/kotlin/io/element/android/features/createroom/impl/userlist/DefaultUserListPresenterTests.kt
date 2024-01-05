@@ -139,7 +139,7 @@ class DefaultUserListPresenterTests {
             // When the user repository emits a result, it's copied to the state
             val result = UserSearchResultState(
                 results = listOf(UserSearchResult(aMatrixUser())),
-                isFetchingSearchResults = false,
+                isSearching = false,
             )
             userRepository.emitState(result)
             awaitItem().also { state ->
@@ -148,12 +148,12 @@ class DefaultUserListPresenterTests {
                         persistentListOf(UserSearchResult(aMatrixUser()))
                     )
                 )
-                assertThat(state.isFetchingSearchResults).isFalse()
+                assertThat(state.showSearchLoader).isFalse()
             }
             // When the user repository emits another result, it replaces the previous value
             val newResult = UserSearchResultState(
                 results = aMatrixUserList().map { UserSearchResult(it) },
-                isFetchingSearchResults = false,
+                isSearching = false,
             )
             userRepository.emitState(newResult)
             awaitItem().also { state ->
@@ -162,7 +162,7 @@ class DefaultUserListPresenterTests {
                         aMatrixUserList().map { UserSearchResult(it) }
                     )
                 )
-                assertThat(state.isFetchingSearchResults).isFalse()
+                assertThat(state.showSearchLoader).isFalse()
             }
         }
     }
@@ -189,7 +189,7 @@ class DefaultUserListPresenterTests {
             skipItems(2)
 
             // When the results list is empty, the state is set to NoResults
-            userRepository.emitState(UserSearchResultState(results = emptyList(), isFetchingSearchResults = false))
+            userRepository.emitState(UserSearchResultState(results = emptyList(), isSearching = false))
             assertThat(awaitItem().searchResults).isInstanceOf(SearchBarResultState.NoResultsFound::class.java)
         }
     }
