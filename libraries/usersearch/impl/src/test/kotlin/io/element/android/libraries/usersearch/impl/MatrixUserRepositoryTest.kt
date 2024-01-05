@@ -54,7 +54,14 @@ internal class MatrixUserRepositoryTest {
         val result = repository.search("some query")
 
         result.test {
-            assertThat(awaitItem()).isEmpty()
+            awaitItem().also {
+                assertThat(it.isFetchingSearchResults).isTrue()
+                assertThat(it.results).isEmpty()
+            }
+            awaitItem().also {
+                assertThat(it.isFetchingSearchResults).isFalse()
+                assertThat(it.results).isEmpty()
+            }
             awaitComplete()
         }
     }
@@ -68,7 +75,14 @@ internal class MatrixUserRepositoryTest {
         val result = repository.search("some query")
 
         result.test {
-            assertThat(awaitItem()).isEqualTo(aMatrixUserList().toUserSearchResults())
+            awaitItem().also {
+                assertThat(it.isFetchingSearchResults).isTrue()
+                assertThat(it.results).isEmpty()
+            }
+            awaitItem().also {
+                assertThat(it.isFetchingSearchResults).isFalse()
+                assertThat(it.results).isEqualTo(aMatrixUserList().toUserSearchResults())
+            }
             awaitComplete()
         }
     }
@@ -81,9 +95,11 @@ internal class MatrixUserRepositoryTest {
         val result = repository.search(A_USER_ID.value)
 
         result.test {
-            assertThat(awaitItem()).isEqualTo(listOf(placeholderResult()))
-            skipItems(1)
-            awaitComplete()
+            awaitItem().also {
+                assertThat(it.isFetchingSearchResults).isTrue()
+                assertThat(it.results).isEqualTo(listOf(placeholderResult()))
+            }
+            cancelAndConsumeRemainingEvents()
         }
     }
 
@@ -95,8 +111,11 @@ internal class MatrixUserRepositoryTest {
         val result = repository.search(SESSION_ID.value)
 
         result.test {
-            assertThat(awaitItem()).isEmpty()
-            awaitComplete()
+            awaitItem().also {
+                assertThat(it.isFetchingSearchResults).isTrue()
+                assertThat(it.results).isEmpty()
+            }
+            cancelAndConsumeRemainingEvents()
         }
     }
 
@@ -110,7 +129,8 @@ internal class MatrixUserRepositoryTest {
         val result = repository.search("some text")
 
         result.test {
-            assertThat(awaitItem()).isEqualTo(aMatrixUserList().toUserSearchResults())
+            skipItems(1)
+            assertThat(awaitItem().results).isEqualTo(aMatrixUserList().toUserSearchResults())
             awaitComplete()
         }
     }
@@ -126,7 +146,7 @@ internal class MatrixUserRepositoryTest {
 
         result.test {
             skipItems(1)
-            assertThat(awaitItem()).isEqualTo(searchResults.toUserSearchResults())
+            assertThat(awaitItem().results).isEqualTo(searchResults.toUserSearchResults())
             awaitComplete()
         }
     }
@@ -145,7 +165,7 @@ internal class MatrixUserRepositoryTest {
 
         result.test {
             skipItems(1)
-            assertThat(awaitItem()).isEqualTo((listOf(userProfile) + searchResults).toUserSearchResults())
+            assertThat(awaitItem().results).isEqualTo((listOf(userProfile) + searchResults).toUserSearchResults())
             awaitComplete()
         }
     }
@@ -163,7 +183,8 @@ internal class MatrixUserRepositoryTest {
         val result = repository.search(SESSION_ID.value)
 
         result.test {
-            assertThat(awaitItem()).isEqualTo(searchResults.toUserSearchResults())
+            skipItems(1)
+            assertThat(awaitItem().results).isEqualTo(searchResults.toUserSearchResults())
             awaitComplete()
         }
     }
@@ -181,7 +202,7 @@ internal class MatrixUserRepositoryTest {
 
         result.test {
             skipItems(1)
-            assertThat(awaitItem()).isEqualTo(listOf(placeholderResult(isUnresolved = true)) + searchResults.toUserSearchResults())
+            assertThat(awaitItem().results).isEqualTo(listOf(placeholderResult(isUnresolved = true)) + searchResults.toUserSearchResults())
             awaitComplete()
         }
     }

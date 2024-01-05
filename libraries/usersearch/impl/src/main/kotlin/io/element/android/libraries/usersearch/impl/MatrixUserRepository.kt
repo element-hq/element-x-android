@@ -42,7 +42,7 @@ class MatrixUserRepository @Inject constructor(
         val shouldFetchSearchResults = query.length >= MINIMUM_SEARCH_LENGTH
         // If the search term is a MXID that's not ours, we'll show a 'fake' result for that user, then update it when we get search results.
         val fakeSearchResult = if (shouldQueryProfile) {
-            UserSearchResult(MatrixUser(UserId(query)), isUnresolved = true)
+            UserSearchResult(MatrixUser(UserId(query)))
         } else {
             null
         }
