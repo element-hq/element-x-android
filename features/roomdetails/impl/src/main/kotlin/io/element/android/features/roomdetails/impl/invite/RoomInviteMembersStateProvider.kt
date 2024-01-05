@@ -64,6 +64,17 @@ internal class RoomInviteMembersStateProvider : PreviewParameterProvider<RoomInv
                     )
                 )
             ),
+            aRoomInviteMembersState(
+                isSearchActive = true,
+                canInvite = true,
+                searchQuery = "@alice:server.org",
+                searchResults = SearchBarResultState.Results(
+                    persistentListOf(
+                        InvitableUser(aMatrixUser("@alice:server.org"), isUnresolved = true),
+                    )
+                ),
+                isFetchingSearchResults = true,
+            ),
         )
 }
 

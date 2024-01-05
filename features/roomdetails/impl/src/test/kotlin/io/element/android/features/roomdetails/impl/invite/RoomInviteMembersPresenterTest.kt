@@ -38,6 +38,8 @@ import io.element.android.libraries.usersearch.api.UserSearchResult
 import io.element.android.libraries.usersearch.api.UserSearchResults
 import io.element.android.libraries.usersearch.test.FakeUserRepository
 import io.element.android.tests.testutils.WarmUpRule
+import io.element.android.tests.testutils.awaitLastSequentialItem
+import io.element.android.tests.testutils.consumeItemsUntilPredicate
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -95,7 +97,7 @@ internal class RoomInviteMembersPresenterTest {
     }
 
     @Test
-    fun `present - performs search and handles no results`() = runTest {
+    fun `present - performs search and handles empty result list`() = runTest {
         val repository = FakeUserRepository()
         val presenter = RoomInviteMembersPresenter(
             userRepository = repository,
@@ -106,17 +108,18 @@ internal class RoomInviteMembersPresenterTest {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            skipItems(1)
-
             initialState.eventSink(RoomInviteMembersEvents.UpdateSearchQuery("some query"))
-            skipItems(1)
-
             assertThat(repository.providedQuery).isEqualTo("some query")
-            repository.emitResult(UserSearchResults(results = emptyList()))
-            skipItems(1)
-
-            val resultState = awaitItem()
-            assertThat(resultState.searchResults).isInstanceOf(SearchBarResultState.NoResultsFound::class.java)
+            repository.emitResult(UserSearchResults(results = emptyList(), isFetchingSearchResults = true))
+            consumeItemsUntilPredicate { it.isFetchingSearchResults }.last().also { state ->
+                assertThat(state.searchResults).isInstanceOf(SearchBarResultState.Empty::class.java)
+                assertThat(state.isFetchingSearchResults).isTrue()
+            }
+            repository.emitResult(UserSearchResults(results = emptyList(), isFetchingSearchResults = false))
+            consumeItemsUntilPredicate { !it.isFetchingSearchResults }.last().also { state ->
+                assertThat(state.searchResults).isInstanceOf(SearchBarResultState.NoResultsFound::class.java)
+                assertThat(state.isFetchingSearchResults).isFalse()
+            }
         }
     }
 
