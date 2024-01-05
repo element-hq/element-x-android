@@ -22,10 +22,10 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
-class AsyncKtTest {
+class AsyncDataKtTest {
     @Test
     fun `updates state when block returns success`() = runTest {
-        val state = TestableMutableState<Async<Int>>(Async.Uninitialized)
+        val state = TestableMutableState<AsyncData<Int>>(AsyncData.Uninitialized)
 
         val result = runUpdatingState(state) {
             delay(1)
@@ -35,15 +35,15 @@ class AsyncKtTest {
         assertThat(result.isSuccess).isTrue()
         assertThat(result.getOrNull()).isEqualTo(1)
 
-        assertThat(state.popFirst()).isEqualTo(Async.Uninitialized)
-        assertThat(state.popFirst()).isEqualTo(Async.Loading(null))
-        assertThat(state.popFirst()).isEqualTo(Async.Success(1))
+        assertThat(state.popFirst()).isEqualTo(AsyncData.Uninitialized)
+        assertThat(state.popFirst()).isEqualTo(AsyncData.Loading(null))
+        assertThat(state.popFirst()).isEqualTo(AsyncData.Success(1))
         state.assertNoMoreValues()
     }
 
     @Test
     fun `updates state when block returns failure`() = runTest {
-        val state = TestableMutableState<Async<Int>>(Async.Uninitialized)
+        val state = TestableMutableState<AsyncData<Int>>(AsyncData.Uninitialized)
 
         val result = runUpdatingState(state) {
             delay(1)
@@ -53,15 +53,15 @@ class AsyncKtTest {
         assertThat(result.isFailure).isTrue()
         assertThat(result.exceptionOrNull()).isEqualTo(MyThrowable("hello"))
 
-        assertThat(state.popFirst()).isEqualTo(Async.Uninitialized)
-        assertThat(state.popFirst()).isEqualTo(Async.Loading(null))
-        assertThat(state.popFirst()).isEqualTo(Async.Failure<Int>(MyThrowable("hello")))
+        assertThat(state.popFirst()).isEqualTo(AsyncData.Uninitialized)
+        assertThat(state.popFirst()).isEqualTo(AsyncData.Loading(null))
+        assertThat(state.popFirst()).isEqualTo(AsyncData.Failure<Int>(MyThrowable("hello")))
         state.assertNoMoreValues()
     }
 
     @Test
     fun `updates state when block returns failure transforming the error`() = runTest {
-        val state = TestableMutableState<Async<Int>>(Async.Uninitialized)
+        val state = TestableMutableState<AsyncData<Int>>(AsyncData.Uninitialized)
 
         val result = runUpdatingState(state, { MyThrowable(it.message + " world") }) {
             delay(1)
@@ -71,9 +71,9 @@ class AsyncKtTest {
         assertThat(result.isFailure).isTrue()
         assertThat(result.exceptionOrNull()).isEqualTo(MyThrowable("hello world"))
 
-        assertThat(state.popFirst()).isEqualTo(Async.Uninitialized)
-        assertThat(state.popFirst()).isEqualTo(Async.Loading(null))
-        assertThat(state.popFirst()).isEqualTo(Async.Failure<Int>(MyThrowable("hello world")))
+        assertThat(state.popFirst()).isEqualTo(AsyncData.Uninitialized)
+        assertThat(state.popFirst()).isEqualTo(AsyncData.Loading(null))
+        assertThat(state.popFirst()).isEqualTo(AsyncData.Failure<Int>(MyThrowable("hello world")))
         state.assertNoMoreValues()
     }
 }

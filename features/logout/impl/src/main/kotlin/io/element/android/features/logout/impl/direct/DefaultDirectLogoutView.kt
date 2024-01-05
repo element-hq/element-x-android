@@ -22,7 +22,6 @@ import io.element.android.features.logout.api.direct.DirectLogoutEvents
 import io.element.android.features.logout.api.direct.DirectLogoutState
 import io.element.android.features.logout.api.direct.DirectLogoutView
 import io.element.android.features.logout.impl.ui.LogoutActionDialog
-import io.element.android.features.logout.impl.ui.LogoutConfirmationDialog
 import io.element.android.libraries.di.SessionScope
 import javax.inject.Inject
 
@@ -34,20 +33,11 @@ class DefaultDirectLogoutView @Inject constructor() : DirectLogoutView {
         onSuccessLogout: (logoutUrlResult: String?) -> Unit,
     ) {
         val eventSink = state.eventSink
-        // Log out confirmation dialog
-        if (state.showConfirmationDialog) {
-            LogoutConfirmationDialog(
-                onSubmitClicked = {
-                    eventSink(DirectLogoutEvents.Logout(ignoreSdkError = false))
-                },
-                onDismiss = {
-                    eventSink(DirectLogoutEvents.CloseDialogs)
-                }
-            )
-        }
-
         LogoutActionDialog(
             state.logoutAction,
+            onConfirmClicked = {
+                eventSink(DirectLogoutEvents.Logout(ignoreSdkError = false))
+            },
             onForceLogoutClicked = {
                 eventSink(DirectLogoutEvents.Logout(ignoreSdkError = true))
             },

@@ -27,7 +27,7 @@ import androidx.compose.runtime.setValue
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runUpdatingState
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
@@ -60,14 +60,14 @@ class ReportMessagePresenter @AssistedInject constructor(
         val coroutineScope = rememberCoroutineScope()
         var reason by rememberSaveable { mutableStateOf("") }
         var blockUser by rememberSaveable { mutableStateOf(false) }
-        var result: MutableState<Async<Unit>> = remember { mutableStateOf(Async.Uninitialized) }
+        var result: MutableState<AsyncAction<Unit>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
 
         fun handleEvents(event: ReportMessageEvents) {
             when (event) {
                 is ReportMessageEvents.UpdateReason -> reason = event.reason
                 ReportMessageEvents.ToggleBlockUser -> blockUser = !blockUser
                 ReportMessageEvents.Report -> coroutineScope.report(inputs.eventId, inputs.senderId, reason, blockUser, result)
-                ReportMessageEvents.ClearError -> result.value = Async.Uninitialized
+                ReportMessageEvents.ClearError -> result.value = AsyncAction.Uninitialized
             }
         }
 
@@ -84,7 +84,7 @@ class ReportMessagePresenter @AssistedInject constructor(
         userId: UserId,
         reason: String,
         blockUser: Boolean,
-        result: MutableState<Async<Unit>>,
+        result: MutableState<AsyncAction<Unit>>,
     ) = launch {
         result.runUpdatingState {
             val userIdToBlock = userId.takeIf { blockUser }

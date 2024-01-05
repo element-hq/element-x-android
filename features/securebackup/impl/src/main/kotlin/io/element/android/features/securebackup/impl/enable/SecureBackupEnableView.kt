@@ -26,7 +26,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import io.element.android.features.securebackup.impl.R
-import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.atomic.pages.FlowStepPage
 import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -42,7 +42,7 @@ fun SecureBackupEnableView(
     modifier: Modifier = Modifier,
 ) {
     LaunchedEffect(state.enableAction) {
-        if (state.enableAction is Async.Success) {
+        if (state.enableAction is AsyncData.Success) {
             onDone()
         }
     }
@@ -53,7 +53,7 @@ fun SecureBackupEnableView(
         iconVector = ImageVector.vectorResource(CommonDrawables.ic_key),
         buttons = { Buttons(state = state) }
     )
-    if (state.enableAction is Async.Failure) {
+    if (state.enableAction is AsyncData.Failure) {
         ErrorDialog(
             content = state.enableAction.error.let { it.message ?: it.toString() },
             onDismiss = { state.eventSink.invoke(SecureBackupEnableEvents.DismissDialog) },

@@ -17,7 +17,7 @@
 package io.element.android.features.rageshake.impl.bugreport
 
 import android.os.Parcelable
-import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.AsyncAction
 import kotlinx.parcelize.Parcelize
 
 data class BugReportState(
@@ -25,11 +25,11 @@ data class BugReportState(
     val hasCrashLogs: Boolean,
     val screenshotUri: String?,
     val sendingProgress: Float,
-    val sending: Async<Unit>,
+    val sending: AsyncAction<Unit>,
     val eventSink: (BugReportEvents) -> Unit
 ) {
     val submitEnabled =
-        formState.description.length > 10 && sending !is Async.Loading
+        formState.description.length > 10 && sending !is AsyncAction.Loading
 }
 
 @Parcelize

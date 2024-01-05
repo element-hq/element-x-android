@@ -16,7 +16,6 @@
 
 package io.element.android.features.messages.impl.timeline.model.event
 
-import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.matrix.api.media.MediaSource
 
 data class TimelineItemStickerContent(
@@ -33,9 +32,7 @@ data class TimelineItemStickerContent(
 ) : TimelineItemEventContent {
     override val type: String = "TimelineItemStickerContent"
 
-    val preferredMediaSource = if (mimeType == MimeTypes.Gif) {
-        mediaSource
-    } else {
-        thumbnailSource ?: mediaSource
-    }
+    /* Stickers are supposed to be small images so
+       we allow using the mediaSource (unless the url is empty) */
+    val preferredMediaSource = if (mediaSource.url.isEmpty()) thumbnailSource else mediaSource
 }

@@ -23,7 +23,7 @@ import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.login.api.oidc.OidcAction
-import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.test.A_THROWABLE
 import io.element.android.libraries.matrix.test.auth.A_OIDC_DATA
 import io.element.android.libraries.matrix.test.auth.FakeAuthenticationService
@@ -49,7 +49,7 @@ class OidcPresenterTest {
         }.test {
             val initialState = awaitItem()
             assertThat(initialState.oidcDetails).isEqualTo(A_OIDC_DATA)
-            assertThat(initialState.requestState).isEqualTo(Async.Uninitialized)
+            assertThat(initialState.requestState).isEqualTo(AsyncAction.Uninitialized)
         }
     }
 
@@ -65,9 +65,9 @@ class OidcPresenterTest {
             val initialState = awaitItem()
             initialState.eventSink.invoke(OidcEvents.Cancel)
             val loadingState = awaitItem()
-            assertThat(loadingState.requestState).isEqualTo(Async.Loading<Unit>())
+            assertThat(loadingState.requestState).isEqualTo(AsyncAction.Loading)
             val finalState = awaitItem()
-            assertThat(finalState.requestState).isEqualTo(Async.Success(Unit))
+            assertThat(finalState.requestState).isEqualTo(AsyncAction.Success(Unit))
         }
     }
 
@@ -85,9 +85,9 @@ class OidcPresenterTest {
             val initialState = awaitItem()
             initialState.eventSink.invoke(OidcEvents.Cancel)
             val loadingState = awaitItem()
-            assertThat(loadingState.requestState).isEqualTo(Async.Loading<Unit>())
+            assertThat(loadingState.requestState).isEqualTo(AsyncAction.Loading)
             val finalState = awaitItem()
-            assertThat(finalState.requestState).isEqualTo(Async.Failure<Unit>(A_THROWABLE))
+            assertThat(finalState.requestState).isEqualTo(AsyncAction.Failure(A_THROWABLE))
             // Note: in real life I do not think this can happen, and the app should not block the user.
         }
     }
@@ -104,9 +104,9 @@ class OidcPresenterTest {
             val initialState = awaitItem()
             initialState.eventSink.invoke(OidcEvents.OidcActionEvent(OidcAction.GoBack))
             val loadingState = awaitItem()
-            assertThat(loadingState.requestState).isEqualTo(Async.Loading<Unit>())
+            assertThat(loadingState.requestState).isEqualTo(AsyncAction.Loading)
             val finalState = awaitItem()
-            assertThat(finalState.requestState).isEqualTo(Async.Success(Unit))
+            assertThat(finalState.requestState).isEqualTo(AsyncAction.Success(Unit))
         }
     }
 
@@ -122,7 +122,7 @@ class OidcPresenterTest {
             val initialState = awaitItem()
             initialState.eventSink.invoke(OidcEvents.OidcActionEvent(OidcAction.Success("A_URL")))
             val loadingState = awaitItem()
-            assertThat(loadingState.requestState).isEqualTo(Async.Loading<Unit>())
+            assertThat(loadingState.requestState).isEqualTo(AsyncAction.Loading)
             // In this case, no success, the session is created and the node get destroyed.
         }
     }
@@ -141,12 +141,12 @@ class OidcPresenterTest {
             val initialState = awaitItem()
             initialState.eventSink.invoke(OidcEvents.OidcActionEvent(OidcAction.Success("A_URL")))
             val loadingState = awaitItem()
-            assertThat(loadingState.requestState).isEqualTo(Async.Loading<Unit>())
+            assertThat(loadingState.requestState).isEqualTo(AsyncAction.Loading)
             val errorState = awaitItem()
-            assertThat(errorState.requestState).isEqualTo(Async.Failure<Unit>(A_THROWABLE))
+            assertThat(errorState.requestState).isEqualTo(AsyncAction.Failure(A_THROWABLE))
             errorState.eventSink.invoke(OidcEvents.ClearError)
             val finalState = awaitItem()
-            assertThat(finalState.requestState).isEqualTo(Async.Uninitialized)
+            assertThat(finalState.requestState).isEqualTo(AsyncAction.Uninitialized)
         }
     }
 }

@@ -19,8 +19,9 @@ package io.element.android.libraries.designsystem.components.async
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.tooling.preview.PreviewParameter
-import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.designsystem.components.ProgressDialog
+import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
 import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
 import io.element.android.libraries.designsystem.components.dialogs.ErrorDialogDefaults
 import io.element.android.libraries.designsystem.components.dialogs.RetryDialog
@@ -28,52 +29,28 @@ import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 
 /**
- * Render an Async object.
+ * Render an AsyncAction object.
  * - If Success, invoke the callback [onSuccess], only once.
  * - If Failure, display a dialog with the error, which can be transformed, using [errorMessage]. When
  * closed, [onErrorDismiss] will be invoked. If [onRetry] is not null, a retry button will be displayed.
- * - When loading, display a loading dialog, if [showProgressDialog] is true, with on optional [progressText].
+ * - When loading, display a loading dialog using [progressDialog]. Pass empty lambda to disable.
  */
 @Composable
-fun <T> AsyncView(
-    async: Async<T>,
+fun <T> AsyncActionView(
+    async: AsyncAction<T>,
     onSuccess: (T) -> Unit,
     onErrorDismiss: () -> Unit,
-    showProgressDialog: Boolean = true,
-    progressText: String? = null,
-    errorTitle: @Composable (Throwable) -> String = { ErrorDialogDefaults.title },
-    errorMessage: @Composable (Throwable) -> String = { it.message ?: it.toString() },
-    onRetry: (() -> Unit)? = null,
-) {
-    AsyncView(
-        async = async,
-        onSuccess = onSuccess,
-        onErrorDismiss = onErrorDismiss,
-        progressDialog = {
-            if (showProgressDialog) {
-                AsyncViewDefaults.ProgressDialog(progressText)
-            }
-        },
-        errorTitle = errorTitle,
-        errorMessage = errorMessage,
-        onRetry = onRetry,
-    )
-}
-
-@Composable
-fun <T> AsyncView(
-    async: Async<T>,
-    onSuccess: (T) -> Unit,
-    onErrorDismiss: () -> Unit,
-    progressDialog: @Composable () -> Unit = { AsyncViewDefaults.ProgressDialog() },
+    confirmationDialog: @Composable () -> Unit = { },
+    progressDialog: @Composable () -> Unit = { AsyncActionViewDefaults.ProgressDialog() },
     errorTitle: @Composable (Throwable) -> String = { ErrorDialogDefaults.title },
     errorMessage: @Composable (Throwable) -> String = { it.message ?: it.toString() },
     onRetry: (() -> Unit)? = null,
 ) {
     when (async) {
-        Async.Uninitialized -> Unit
-        is Async.Loading -> progressDialog()
-        is Async.Failure -> {
+        AsyncAction.Uninitialized -> Unit
+        AsyncAction.Confirming -> confirmationDialog()
+        is AsyncAction.Loading -> progressDialog()
+        is AsyncAction.Failure -> {
             if (onRetry == null) {
                 ErrorDialog(
                     title = errorTitle(async.error),
@@ -89,7 +66,7 @@ fun <T> AsyncView(
                 )
             }
         }
-        is Async.Success -> {
+        is AsyncAction.Success -> {
             LaunchedEffect(async) {
                 onSuccess(async.data)
             }
@@ -97,7 +74,7 @@ fun <T> AsyncView(
     }
 }
 
-object AsyncViewDefaults {
+object AsyncActionViewDefaults {
     @Composable
     fun ProgressDialog(progressText: String? = null) {
         ProgressDialog(
@@ -108,12 +85,20 @@ object AsyncViewDefaults {
 
 @PreviewsDayNight
 @Composable
-internal fun AsyncViewPreview(
-    @PreviewParameter(AsyncProvider::class) async: Async<Unit>,
+internal fun AsyncActionViewPreview(
+    @PreviewParameter(AsyncActionProvider::class) async: AsyncAction<Unit>,
 ) = ElementPreview {
-    AsyncView(
+    AsyncActionView(
         async = async,
         onSuccess = {},
         onErrorDismiss = {},
+        confirmationDialog = {
+            ConfirmationDialog(
+                title = "Confirmation",
+                content = "Are you sure?",
+                onSubmitClicked = {},
+                onDismiss = {},
+            )
+        },
     )
 }

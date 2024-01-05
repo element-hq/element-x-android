@@ -24,7 +24,9 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -41,6 +43,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
+import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.messages.impl.R
 import io.element.android.features.messages.impl.timeline.model.AggregatedReaction
 import io.element.android.features.messages.impl.timeline.model.AggregatedReactionProvider
@@ -52,7 +56,8 @@ import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Surface
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.utils.CommonDrawables
-import io.element.android.compound.theme.ElementTheme
+import io.element.android.libraries.matrix.api.media.MediaSource
+import io.element.android.libraries.matrix.ui.media.MediaRequestData
 
 @Composable
 @OptIn(ExperimentalFoundationApi::class)
@@ -114,8 +119,9 @@ sealed interface MessagesReactionsButtonContent {
     val isHighlighted get() = this is Reaction && reaction.isHighlighted
 }
 
-private val reactionEmojiLineHeight = 20.sp
-private val addEmojiSize = 16.dp
+internal val REACTION_EMOJI_LINE_HEIGHT = 20.sp
+internal const val REACTION_IMAGE_ASPECT_RATIO = 1.0f
+private val ADD_EMOJI_SIZE = 16.dp
 
 @Composable
 private fun TextContent(
@@ -123,7 +129,7 @@ private fun TextContent(
     modifier: Modifier = Modifier,
 ) = Text(
     modifier = modifier
-        .height(reactionEmojiLineHeight.toDp()),
+        .height(REACTION_EMOJI_LINE_HEIGHT.toDp()),
     text = text,
     style = ElementTheme.typography.fontBodyMdRegular,
     color = ElementTheme.materialColors.primary
@@ -138,7 +144,7 @@ private fun IconContent(
     contentDescription = stringResource(id = R.string.screen_room_timeline_add_reaction),
     tint = ElementTheme.materialColors.secondary,
     modifier = modifier
-        .size(addEmojiSize)
+        .size(ADD_EMOJI_SIZE)
 
 )
 
@@ -150,13 +156,25 @@ private fun ReactionContent(
     verticalAlignment = Alignment.CenterVertically,
     modifier = modifier,
 ) {
-    Text(
-        text = reaction.displayKey,
-        style = ElementTheme.typography.fontBodyMdRegular.copy(
-            fontSize = 15.sp,
-            lineHeight = reactionEmojiLineHeight,
-        ),
-    )
+    // Check if this is a custom reaction (MSC4027)
+    if (reaction.key.startsWith("mxc://")) {
+        AsyncImage(
+            modifier = modifier
+                .heightIn(min = REACTION_EMOJI_LINE_HEIGHT.toDp(), max = REACTION_EMOJI_LINE_HEIGHT.toDp())
+                .aspectRatio(REACTION_IMAGE_ASPECT_RATIO, false),
+            model = MediaRequestData(MediaSource(reaction.key), MediaRequestData.Kind.Content),
+            contentDescription = null
+        )
+    }
+    else {
+        Text(
+            text = reaction.displayKey,
+            style = ElementTheme.typography.fontBodyMdRegular.copy(
+                fontSize = 15.sp,
+                lineHeight = REACTION_EMOJI_LINE_HEIGHT,
+            ),
+        )
+    }
     if (reaction.count > 1) {
         Spacer(modifier = Modifier.width(4.dp))
         Text(

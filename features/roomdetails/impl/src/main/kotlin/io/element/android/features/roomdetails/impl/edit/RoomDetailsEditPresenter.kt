@@ -29,7 +29,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.core.net.toUri
-import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runCatchingUpdatingState
 import io.element.android.libraries.core.mimetype.MimeTypes
@@ -116,7 +116,7 @@ class RoomDetailsEditPresenter @Inject constructor(
             }
         }
 
-        val saveAction: MutableState<Async<Unit>> = remember { mutableStateOf(Async.Uninitialized) }
+        val saveAction: MutableState<AsyncAction<Unit>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
         val localCoroutineScope = rememberCoroutineScope()
         fun handleEvents(event: RoomDetailsEditEvents) {
             when (event) {
@@ -136,7 +136,7 @@ class RoomDetailsEditPresenter @Inject constructor(
 
                 is RoomDetailsEditEvents.UpdateRoomName -> roomName = event.name
                 is RoomDetailsEditEvents.UpdateRoomTopic -> roomTopic = event.topic.takeUnless { it.isEmpty() }
-                RoomDetailsEditEvents.CancelSaveChanges -> saveAction.value = Async.Uninitialized
+                RoomDetailsEditEvents.CancelSaveChanges -> saveAction.value = AsyncAction.Uninitialized
             }
         }
 
@@ -156,7 +156,12 @@ class RoomDetailsEditPresenter @Inject constructor(
         )
     }
 
-    private fun CoroutineScope.saveChanges(name: String, topic: String?, avatarUri: Uri?, action: MutableState<Async<Unit>>) = launch {
+    private fun CoroutineScope.saveChanges(
+        name: String,
+        topic: String?,
+        avatarUri: Uri?,
+        action: MutableState<AsyncAction<Unit>>,
+    ) = launch {
         val results = mutableListOf<Result<Unit>>()
         suspend {
             if (topic.orEmpty().trim() != room.topic.orEmpty().trim()) {

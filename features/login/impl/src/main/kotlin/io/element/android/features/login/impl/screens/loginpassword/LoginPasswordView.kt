@@ -54,7 +54,7 @@ import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.login.impl.R
 import io.element.android.features.login.impl.error.isWaitListError
 import io.element.android.features.login.impl.error.loginError
-import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
@@ -84,7 +84,7 @@ fun LoginPasswordView(
 ) {
     val isLoading by remember(state.loginAction) {
         derivedStateOf {
-            state.loginAction is Async.Loading
+            state.loginAction is AsyncData.Loading
         }
     }
     val focusManager = LocalFocusManager.current
@@ -148,7 +148,7 @@ fun LoginPasswordView(
             )
             Spacer(modifier = Modifier.height(60.dp))
 
-            if (state.loginAction is Async.Failure) {
+            if (state.loginAction is AsyncData.Failure) {
                 when {
                     state.loginAction.error.isWaitListError() -> {
                         onWaitListError(state.formState)
@@ -224,7 +224,7 @@ private fun LoginForm(
         )
 
         var passwordVisible by remember { mutableStateOf(false) }
-        if (state.loginAction is Async.Loading) {
+        if (state.loginAction is AsyncData.Loading) {
             // Ensure password is hidden when user submits the form
             passwordVisible = false
         }

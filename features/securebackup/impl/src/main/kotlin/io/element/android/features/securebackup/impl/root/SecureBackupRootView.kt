@@ -24,7 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import io.element.android.features.securebackup.impl.R
-import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.components.async.AsyncLoading
 import io.element.android.libraries.designsystem.components.list.ListItemContent
 import io.element.android.libraries.designsystem.components.preferences.PreferenceDivider
@@ -82,7 +82,7 @@ fun SecureBackupRootView(
             BackupState.WAITING_FOR_SYNC -> Unit
             BackupState.UNKNOWN -> {
                 when (state.doesBackupExistOnServer) {
-                    is Async.Success -> when (state.doesBackupExistOnServer.data) {
+                    is AsyncData.Success -> when (state.doesBackupExistOnServer.data) {
                         true -> {
                             PreferenceText(
                                 title = stringResource(id = R.string.screen_chat_backup_key_backup_action_disable),
@@ -97,8 +97,8 @@ fun SecureBackupRootView(
                             )
                         }
                     }
-                    is Async.Loading,
-                    Async.Uninitialized -> {
+                    is AsyncData.Loading,
+                    AsyncData.Uninitialized -> {
                         ListItem(headlineContent = {
                             Row(
                                 modifier = Modifier.fillMaxWidth(),
@@ -108,7 +108,7 @@ fun SecureBackupRootView(
                             }
                         })
                     }
-                    is Async.Failure -> {
+                    is AsyncData.Failure -> {
                         ListItem(
                             headlineContent = {
                                 Text(

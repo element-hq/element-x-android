@@ -17,17 +17,17 @@
 package io.element.android.features.login.impl.screens.waitlistscreen
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.core.SessionId
 
 open class WaitListStateProvider : PreviewParameterProvider<WaitListState> {
     override val values: Sequence<WaitListState>
         get() = sequenceOf(
-            aWaitListState(loginAction = Async.Uninitialized),
-            aWaitListState(loginAction = Async.Loading()),
-            aWaitListState(loginAction = Async.Failure(Throwable("error"))),
-            aWaitListState(loginAction = Async.Failure(Throwable(message = "IO_ELEMENT_X_WAIT_LIST"))),
-            aWaitListState(loginAction = Async.Success(SessionId("@alice:element.io"))),
+            aWaitListState(loginAction = AsyncData.Uninitialized),
+            aWaitListState(loginAction = AsyncData.Loading()),
+            aWaitListState(loginAction = AsyncData.Failure(Throwable("error"))),
+            aWaitListState(loginAction = AsyncData.Failure(Throwable(message = "IO_ELEMENT_X_WAIT_LIST"))),
+            aWaitListState(loginAction = AsyncData.Success(SessionId("@alice:element.io"))),
             // Add other state here
         )
 }
@@ -35,7 +35,7 @@ open class WaitListStateProvider : PreviewParameterProvider<WaitListState> {
 fun aWaitListState(
     appName: String = "Element X",
     serverName: String = "server.org",
-    loginAction: Async<SessionId> = Async.Uninitialized,
+    loginAction: AsyncData<SessionId> = AsyncData.Uninitialized,
 ) = WaitListState(
     appName = appName,
     serverName = serverName,

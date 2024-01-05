@@ -18,7 +18,7 @@ package io.element.android.features.login.impl.screens.confirmaccountprovider
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.login.impl.accountprovider.anAccountProvider
-import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.AsyncData
 
 open class ConfirmAccountProviderStateProvider : PreviewParameterProvider<ConfirmAccountProviderState> {
     override val values: Sequence<ConfirmAccountProviderState>
@@ -31,6 +31,6 @@ open class ConfirmAccountProviderStateProvider : PreviewParameterProvider<Confir
 fun aConfirmAccountProviderState() = ConfirmAccountProviderState(
     accountProvider = anAccountProvider(),
     isAccountCreation = false,
-    loginFlow = Async.Uninitialized,
+    loginFlow = AsyncData.Uninitialized,
     eventSink = {}
 )

@@ -36,7 +36,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.call.R
 import io.element.android.features.call.utils.WebViewWidgetMessageInterceptor
-import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -96,7 +96,7 @@ internal fun CallScreenView(
 
 @Composable
 private fun CallWebView(
-    url: Async<String>,
+    url: AsyncData<String>,
     userAgent: String,
     onPermissionsRequested: (PermissionRequest) -> Unit,
     onWebViewCreated: (WebView) -> Unit,
@@ -116,7 +116,7 @@ private fun CallWebView(
                 }
             },
             update = { webView ->
-                if (url is Async.Success && webView.url != url.data) {
+                if (url is AsyncData.Success && webView.url != url.data) {
                     webView.loadUrl(url.data)
                 }
             },
@@ -161,7 +161,7 @@ internal fun CallScreenViewPreview() {
     ElementPreview {
         CallScreenView(
             state = CallScreenState(
-                urlState = Async.Success("https://call.element.io/some-actual-call?with=parameters"),
+                urlState = AsyncData.Success("https://call.element.io/some-actual-call?with=parameters"),
                 isInWidgetMode = false,
                 userAgent = "",
                 eventSink = {},

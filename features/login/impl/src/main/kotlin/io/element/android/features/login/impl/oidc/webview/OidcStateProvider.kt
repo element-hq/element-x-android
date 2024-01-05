@@ -17,20 +17,20 @@
 package io.element.android.features.login.impl.oidc.webview
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.api.auth.OidcDetails
 
 open class OidcStateProvider : PreviewParameterProvider<OidcState> {
     override val values: Sequence<OidcState>
         get() = sequenceOf(
             aOidcState(),
-            aOidcState().copy(requestState = Async.Loading()),
+            aOidcState().copy(requestState = AsyncAction.Loading),
         )
 }
 
 fun aOidcState() = OidcState(
     oidcDetails = aOidcDetails(),
-    requestState = Async.Uninitialized,
+    requestState = AsyncAction.Uninitialized,
     eventSink = {}
 )
 

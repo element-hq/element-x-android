@@ -24,6 +24,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
@@ -57,19 +58,26 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
+import io.element.android.compound.theme.ElementTheme
+import io.element.android.features.messages.impl.timeline.components.REACTION_IMAGE_ASPECT_RATIO
 import io.element.android.features.messages.impl.timeline.model.AggregatedReaction
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
-import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.text.toDp
 import io.element.android.libraries.designsystem.theme.components.ModalBottomSheet
 import io.element.android.libraries.designsystem.theme.components.Surface
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.api.user.MatrixUser
+import io.element.android.libraries.matrix.ui.media.MediaRequestData
 import io.element.android.libraries.matrix.ui.model.getAvatarData
-import io.element.android.compound.theme.ElementTheme
 import kotlinx.coroutines.launch
+
+internal val REACTION_SUMMARY_LINE_HEIGHT = 25.sp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -192,13 +200,25 @@ private fun AggregatedReactionButton(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier,
         ) {
-            Text(
-                text = reaction.displayKey,
-                style = ElementTheme.typography.fontBodyMdRegular.copy(
-                    fontSize = 20.sp,
-                    lineHeight = 25.sp
-                ),
-            )
+            // Check if this is a custom reaction (MSC4027)
+            if (reaction.key.startsWith("mxc://")) {
+                AsyncImage(
+                    modifier = Modifier
+                        .heightIn(min = REACTION_SUMMARY_LINE_HEIGHT.toDp(), max = REACTION_SUMMARY_LINE_HEIGHT.toDp())
+                        .aspectRatio(REACTION_IMAGE_ASPECT_RATIO, false),
+                    model = MediaRequestData(MediaSource(reaction.key), MediaRequestData.Kind.Content),
+                    contentDescription = null
+                )
+            }
+            else {
+                Text(
+                    text = reaction.displayKey,
+                    style = ElementTheme.typography.fontBodyMdRegular.copy(
+                        fontSize = 20.sp,
+                        lineHeight = REACTION_SUMMARY_LINE_HEIGHT
+                    ),
+                )
+            }
             if (reaction.count > 1) {
                 Spacer(modifier = Modifier.width(4.dp))
                 Text(
@@ -206,7 +226,7 @@ private fun AggregatedReactionButton(
                     color = textColor,
                     style = ElementTheme.typography.fontBodyMdRegular.copy(
                         fontSize = 20.sp,
-                        lineHeight = 25.sp
+                        lineHeight = REACTION_SUMMARY_LINE_HEIGHT
                     )
                 )
             }

@@ -22,7 +22,7 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.login.impl.accountprovider.AccountProvider
 import io.element.android.features.login.impl.accountprovider.AccountProviderDataSource
-import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.test.A_HOMESERVER
 import io.element.android.libraries.matrix.test.A_HOMESERVER_URL
 import io.element.android.libraries.matrix.test.auth.FakeAuthenticationService
@@ -46,7 +46,7 @@ class ChangeServerPresenterTest {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            assertThat(initialState.changeServerAction).isEqualTo(Async.Uninitialized)
+            assertThat(initialState.changeServerAction).isEqualTo(AsyncData.Uninitialized)
         }
     }
 
@@ -61,13 +61,13 @@ class ChangeServerPresenterTest {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            assertThat(initialState.changeServerAction).isEqualTo(Async.Uninitialized)
+            assertThat(initialState.changeServerAction).isEqualTo(AsyncData.Uninitialized)
             authenticationService.givenHomeserver(A_HOMESERVER)
             initialState.eventSink.invoke(ChangeServerEvents.ChangeServer(AccountProvider(url = A_HOMESERVER_URL)))
             val loadingState = awaitItem()
-            assertThat(loadingState.changeServerAction).isInstanceOf(Async.Loading::class.java)
+            assertThat(loadingState.changeServerAction).isInstanceOf(AsyncData.Loading::class.java)
             val successState = awaitItem()
-            assertThat(successState.changeServerAction).isEqualTo(Async.Success(Unit))
+            assertThat(successState.changeServerAction).isEqualTo(AsyncData.Success(Unit))
         }
     }
 
@@ -82,16 +82,16 @@ class ChangeServerPresenterTest {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            assertThat(initialState.changeServerAction).isEqualTo(Async.Uninitialized)
+            assertThat(initialState.changeServerAction).isEqualTo(AsyncData.Uninitialized)
             initialState.eventSink.invoke(ChangeServerEvents.ChangeServer(AccountProvider(url = A_HOMESERVER_URL)))
             val loadingState = awaitItem()
-            assertThat(loadingState.changeServerAction).isInstanceOf(Async.Loading::class.java)
+            assertThat(loadingState.changeServerAction).isInstanceOf(AsyncData.Loading::class.java)
             val failureState = awaitItem()
-            assertThat(failureState.changeServerAction).isInstanceOf(Async.Failure::class.java)
+            assertThat(failureState.changeServerAction).isInstanceOf(AsyncData.Failure::class.java)
             // Clear error
             failureState.eventSink.invoke(ChangeServerEvents.ClearError)
             val finalState = awaitItem()
-            assertThat(finalState.changeServerAction).isEqualTo(Async.Uninitialized)
+            assertThat(finalState.changeServerAction).isEqualTo(AsyncData.Uninitialized)
         }
     }
 }

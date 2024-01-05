@@ -16,13 +16,12 @@
 
 package io.element.android.features.securebackup.impl.disable
 
-import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.api.encryption.BackupState
 
 data class SecureBackupDisableState(
     val backupState: BackupState,
-    val disableAction: Async<Unit>,
-    val showConfirmationDialog: Boolean,
+    val disableAction: AsyncAction<Unit>,
     val appName: String,
     val eventSink: (SecureBackupDisableEvents) -> Unit
 )

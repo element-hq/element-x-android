@@ -32,8 +32,7 @@ import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.logout.impl.tools.isBackingUp
 import io.element.android.features.logout.impl.ui.LogoutActionDialog
-import io.element.android.features.logout.impl.ui.LogoutConfirmationDialog
-import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.designsystem.atomic.pages.FlowStepPage
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -79,20 +78,11 @@ fun LogoutView(
         },
     )
 
-    // Log out confirmation dialog
-    if (state.showConfirmationDialog) {
-        LogoutConfirmationDialog(
-            onSubmitClicked = {
-                eventSink(LogoutEvents.Logout(ignoreSdkError = false))
-            },
-            onDismiss = {
-                eventSink(LogoutEvents.CloseDialogs)
-            }
-        )
-    }
-
     LogoutActionDialog(
         state.logoutAction,
+        onConfirmClicked = {
+            eventSink(LogoutEvents.Logout(ignoreSdkError = false))
+        },
         onForceLogoutClicked = {
             eventSink(LogoutEvents.Logout(ignoreSdkError = true))
         },
@@ -148,13 +138,13 @@ private fun ColumnScope.Buttons(
         )
     }
     val signOutSubmitRes = when {
-        logoutAction is Async.Loading -> R.string.screen_signout_in_progress_dialog_content
+        logoutAction is AsyncAction.Loading -> R.string.screen_signout_in_progress_dialog_content
         state.backupUploadState.isBackingUp() -> CommonStrings.action_signout_anyway
         else -> CommonStrings.action_signout
     }
     Button(
         text = stringResource(id = signOutSubmitRes),
-        showProgress = logoutAction is Async.Loading,
+        showProgress = logoutAction is AsyncAction.Loading,
         destructive = true,
         modifier = Modifier
             .fillMaxWidth()

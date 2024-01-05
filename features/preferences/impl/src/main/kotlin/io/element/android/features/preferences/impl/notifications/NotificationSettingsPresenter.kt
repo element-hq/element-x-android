@@ -23,7 +23,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runCatchingUpdatingState
 import io.element.android.libraries.matrix.api.MatrixClient
@@ -52,7 +52,7 @@ class NotificationSettingsPresenter @Inject constructor(
         val systemNotificationsEnabled: MutableState<Boolean> = remember {
             mutableStateOf(systemNotificationsEnabledProvider.notificationsEnabled())
         }
-        val changeNotificationSettingAction: MutableState<Async<Unit>> = remember { mutableStateOf(Async.Uninitialized) }
+        val changeNotificationSettingAction: MutableState<AsyncAction<Unit>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
 
         val localCoroutineScope = rememberCoroutineScope()
         val appNotificationsEnabled = userPushStore
@@ -87,7 +87,7 @@ class NotificationSettingsPresenter @Inject constructor(
                 NotificationSettingsEvents.RefreshSystemNotificationsEnabled -> {
                     systemNotificationsEnabled.value = systemNotificationsEnabledProvider.notificationsEnabled()
                 }
-                NotificationSettingsEvents.ClearNotificationChangeError -> changeNotificationSettingAction.value = Async.Uninitialized
+                NotificationSettingsEvents.ClearNotificationChangeError -> changeNotificationSettingAction.value = AsyncAction.Uninitialized
             }
         }
 
@@ -119,7 +119,7 @@ class NotificationSettingsPresenter @Inject constructor(
         val oneToOneDefaultMode = notificationSettingsService.getDefaultRoomNotificationMode(isEncrypted = false, isOneToOne = true).getOrThrow()
         val encryptedOneToOneDefaultMode = notificationSettingsService.getDefaultRoomNotificationMode(isEncrypted = true, isOneToOne = true).getOrThrow()
 
-        if(groupDefaultMode != encryptedGroupDefaultMode || oneToOneDefaultMode != encryptedOneToOneDefaultMode) {
+        if (groupDefaultMode != encryptedGroupDefaultMode || oneToOneDefaultMode != encryptedOneToOneDefaultMode) {
             target.value = NotificationSettingsState.MatrixSettings.Invalid(fixFailed = false)
             return@launch
         }
@@ -168,19 +168,19 @@ class NotificationSettingsPresenter @Inject constructor(
         )
     }
 
-    private fun CoroutineScope.setAtRoomNotificationsEnabled(enabled: Boolean, action: MutableState<Async<Unit>>) = launch {
+    private fun CoroutineScope.setAtRoomNotificationsEnabled(enabled: Boolean, action: MutableState<AsyncAction<Unit>>) = launch {
         suspend {
             notificationSettingsService.setRoomMentionEnabled(enabled).getOrThrow()
         }.runCatchingUpdatingState(action)
     }
 
-    private fun CoroutineScope.setCallNotificationsEnabled(enabled: Boolean, action: MutableState<Async<Unit>>) = launch {
+    private fun CoroutineScope.setCallNotificationsEnabled(enabled: Boolean, action: MutableState<AsyncAction<Unit>>) = launch {
         suspend {
             notificationSettingsService.setCallEnabled(enabled).getOrThrow()
         }.runCatchingUpdatingState(action)
     }
 
-    private fun CoroutineScope.setInviteForMeNotificationsEnabled(enabled: Boolean, action: MutableState<Async<Unit>>) = launch {
+    private fun CoroutineScope.setInviteForMeNotificationsEnabled(enabled: Boolean, action: MutableState<AsyncAction<Unit>>) = launch {
         suspend {
             notificationSettingsService.setInviteForMeEnabled(enabled).getOrThrow()
         }.runCatchingUpdatingState(action)

@@ -29,7 +29,7 @@ import io.element.android.features.messages.impl.timeline.components.retrysendme
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
 import io.element.android.features.messages.impl.voicemessages.composer.aVoiceMessageComposerState
 import io.element.android.features.messages.impl.voicemessages.composer.aVoiceMessagePreviewState
-import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -47,8 +47,8 @@ open class MessagesStateProvider : PreviewParameterProvider<MessagesState> {
             aMessagesState().copy(userHasPermissionToSendMessage = false),
             aMessagesState().copy(showReinvitePrompt = true),
             aMessagesState().copy(
-                roomName = Async.Uninitialized,
-                roomAvatar = Async.Uninitialized,
+                roomName = AsyncData.Uninitialized,
+                roomAvatar = AsyncData.Uninitialized,
             ),
             aMessagesState().copy(composerState = aMessageComposerState().copy(showTextFormatting = true)),
             aMessagesState().copy(
@@ -83,8 +83,8 @@ open class MessagesStateProvider : PreviewParameterProvider<MessagesState> {
 
 fun aMessagesState() = MessagesState(
     roomId = RoomId("!id:domain"),
-    roomName = Async.Success("Room name"),
-    roomAvatar = Async.Success(AvatarData("!id:domain", "Room name", size = AvatarSize.TimelineRoom)),
+    roomName = AsyncData.Success("Room name"),
+    roomAvatar = AsyncData.Success(AvatarData("!id:domain", "Room name", size = AvatarSize.TimelineRoom)),
     userHasPermissionToSendMessage = true,
     userHasPermissionToRedact = false,
     userHasPermissionToSendReaction = true,
@@ -117,7 +117,7 @@ fun aMessagesState() = MessagesState(
     ),
     hasNetworkConnection = true,
     snackbarMessage = null,
-    inviteProgress = Async.Uninitialized,
+    inviteProgress = AsyncData.Uninitialized,
     showReinvitePrompt = false,
     enableTextFormatting = true,
     enableVoiceMessages = true,
