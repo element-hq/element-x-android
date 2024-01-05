@@ -18,6 +18,7 @@ package io.element.android.features.logout.impl.direct
 
 import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
+import app.cash.turbine.ReceiveTurbine
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.logout.api.direct.DirectLogoutEvents
@@ -31,7 +32,6 @@ import io.element.android.libraries.matrix.test.A_THROWABLE
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.encryption.FakeEncryptionService
 import io.element.android.tests.testutils.WarmUpRule
-import io.element.android.tests.testutils.awaitLastSequentialItem
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
@@ -48,7 +48,7 @@ class DefaultDirectLogoutPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            val initialState = awaitLastSequentialItem()
+            val initialState = awaitFirstItem()
             assertThat(initialState.canDoDirectSignOut).isTrue()
             assertThat(initialState.logoutAction).isEqualTo(AsyncAction.Uninitialized)
         }
@@ -98,7 +98,7 @@ class DefaultDirectLogoutPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            val initialState = awaitLastSequentialItem()
+            val initialState = awaitFirstItem()
             initialState.eventSink.invoke(DirectLogoutEvents.Logout(ignoreSdkError = false))
             val confirmationState = awaitItem()
             assertThat(confirmationState.logoutAction).isEqualTo(AsyncAction.Confirming)
@@ -114,7 +114,7 @@ class DefaultDirectLogoutPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            val initialState = awaitLastSequentialItem()
+            val initialState = awaitFirstItem()
             initialState.eventSink.invoke(DirectLogoutEvents.Logout(ignoreSdkError = false))
             val confirmationState = awaitItem()
             assertThat(confirmationState.logoutAction).isEqualTo(AsyncAction.Confirming)
@@ -137,8 +137,7 @@ class DefaultDirectLogoutPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            skipItems(1)
-            val initialState = awaitItem()
+            val initialState = awaitFirstItem()
             initialState.eventSink.invoke(DirectLogoutEvents.Logout(ignoreSdkError = false))
             val confirmationState = awaitItem()
             assertThat(confirmationState.logoutAction).isEqualTo(AsyncAction.Confirming)
@@ -164,8 +163,7 @@ class DefaultDirectLogoutPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            skipItems(1)
-            val initialState = awaitItem()
+            val initialState = awaitFirstItem()
             initialState.eventSink.invoke(DirectLogoutEvents.Logout(ignoreSdkError = false))
             val confirmationState = awaitItem()
             assertThat(confirmationState.logoutAction).isEqualTo(AsyncAction.Confirming)
@@ -180,6 +178,11 @@ class DefaultDirectLogoutPresenterTest {
             val successState = awaitItem()
             assertThat(successState.logoutAction).isInstanceOf(AsyncAction.Success::class.java)
         }
+    }
+
+    private suspend fun <T> ReceiveTurbine<T>.awaitFirstItem(): T {
+        skipItems(1)
+        return awaitItem()
     }
 
     private fun createDefaultDirectLogoutPresenter(

@@ -18,6 +18,7 @@ package io.element.android.features.logout.impl
 
 import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
+import app.cash.turbine.ReceiveTurbine
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.architecture.AsyncAction
@@ -32,7 +33,6 @@ import io.element.android.libraries.matrix.test.A_THROWABLE
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.encryption.FakeEncryptionService
 import io.element.android.tests.testutils.WarmUpRule
-import io.element.android.tests.testutils.awaitLastSequentialItem
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.test.runTest
@@ -50,7 +50,7 @@ class LogoutPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            val initialState = awaitLastSequentialItem()
+            val initialState = awaitFirstItem()
             assertThat(initialState.isLastSession).isFalse()
             assertThat(initialState.backupState).isEqualTo(BackupState.UNKNOWN)
             assertThat(initialState.doesBackupExistOnServer).isTrue()
@@ -117,7 +117,7 @@ class LogoutPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            val initialState = awaitLastSequentialItem()
+            val initialState = awaitFirstItem()
             initialState.eventSink.invoke(LogoutEvents.Logout(ignoreSdkError = false))
             val confirmationState = awaitItem()
             assertThat(confirmationState.logoutAction).isEqualTo(AsyncAction.Confirming)
@@ -133,7 +133,7 @@ class LogoutPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            val initialState = awaitLastSequentialItem()
+            val initialState = awaitFirstItem()
             initialState.eventSink.invoke(LogoutEvents.Logout(ignoreSdkError = false))
             val confirmationState = awaitItem()
             assertThat(confirmationState.logoutAction).isEqualTo(AsyncAction.Confirming)
@@ -156,15 +156,13 @@ class LogoutPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            skipItems(1)
-            val initialState = awaitItem()
+            val initialState = awaitFirstItem()
             initialState.eventSink.invoke(LogoutEvents.Logout(ignoreSdkError = false))
             val confirmationState = awaitItem()
             assertThat(confirmationState.logoutAction).isEqualTo(AsyncAction.Confirming)
             confirmationState.eventSink.invoke(LogoutEvents.Logout(ignoreSdkError = false))
             val loadingState = awaitItem()
             assertThat(loadingState.logoutAction).isInstanceOf(AsyncAction.Loading::class.java)
-            skipItems(1)
             val errorState = awaitItem()
             assertThat(errorState.logoutAction).isEqualTo(AsyncAction.Failure(A_THROWABLE))
             errorState.eventSink.invoke(LogoutEvents.CloseDialogs)
@@ -184,15 +182,13 @@ class LogoutPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            skipItems(1)
-            val initialState = awaitItem()
+            val initialState = awaitFirstItem()
             initialState.eventSink.invoke(LogoutEvents.Logout(ignoreSdkError = false))
             val confirmationState = awaitItem()
             assertThat(confirmationState.logoutAction).isEqualTo(AsyncAction.Confirming)
             confirmationState.eventSink.invoke(LogoutEvents.Logout(ignoreSdkError = false))
             val loadingState = awaitItem()
             assertThat(loadingState.logoutAction).isInstanceOf(AsyncAction.Loading::class.java)
-            skipItems(1)
             val errorState = awaitItem()
             assertThat(errorState.logoutAction).isEqualTo(AsyncAction.Failure(A_THROWABLE))
             errorState.eventSink.invoke(LogoutEvents.Logout(ignoreSdkError = true))
@@ -201,6 +197,11 @@ class LogoutPresenterTest {
             val successState = awaitItem()
             assertThat(successState.logoutAction).isInstanceOf(AsyncAction.Success::class.java)
         }
+    }
+
+    private suspend fun <T> ReceiveTurbine<T>.awaitFirstItem(): T {
+        skipItems(2)
+        return awaitItem()
     }
 
     private fun createLogoutPresenter(
