@@ -212,7 +212,7 @@ anvil = { id = "com.squareup.anvil", version.ref = "anvil" }
 detekt = "io.gitlab.arturbosch.detekt:1.23.4"
 ktlint = "org.jlleitschuh.gradle.ktlint:12.0.3"
 dependencygraph = "com.savvasdalkitsis.module-dependency-graph:0.12"
-dependencycheck = "org.owasp.dependencycheck:9.0.7"
+dependencycheck = "org.owasp.dependencycheck:9.0.8"
 dependencyanalysis = { id = "com.autonomousapps.dependency-analysis", version.ref = "dependencyAnalysis" }
 paparazzi = "app.cash.paparazzi:1.3.1"
 kover = "org.jetbrains.kotlinx.kover:0.6.1"
