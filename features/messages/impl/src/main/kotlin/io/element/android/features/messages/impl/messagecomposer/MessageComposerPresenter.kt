@@ -192,7 +192,7 @@ class MessageComposerPresenter @Inject constructor(
             // This will trigger a search immediately when `@` is typed
             val mentionStartTrigger = suggestionSearchTrigger.filter { it?.text.isNullOrEmpty() }
             // This will start a search when the user changes the text after the `@` with a debounce to prevent too much wasted work
-            val mentionCompletionTrigger = suggestionSearchTrigger.filter { !it?.text.isNullOrEmpty() }.debounce(0.3.seconds)
+            val mentionCompletionTrigger = suggestionSearchTrigger.debounce(0.3.seconds).filter { !it?.text.isNullOrEmpty() }
             merge(mentionStartTrigger, mentionCompletionTrigger)
                 .combine(room.membersStateFlow) { suggestion, roomMembersState ->
                     memberSuggestions.clear()
