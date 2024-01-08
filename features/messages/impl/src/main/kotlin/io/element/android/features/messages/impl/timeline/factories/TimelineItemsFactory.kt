@@ -87,7 +87,13 @@ class TimelineItemsFactory @Inject constructor(
                     newTimelineItemStates.add(timelineItemState)
                 }
             } else {
-                newTimelineItemStates.add(cacheItem)
+                val updatedItem = when (cacheItem) {
+                    is TimelineItem.Event -> {
+                        eventItemFactory.update(timelineItems[index] as MatrixTimelineItem.Event, cacheItem, roomMembers)
+                    }
+                    else -> cacheItem
+                }
+                newTimelineItemStates.add(updatedItem)
             }
         }
         val result = timelineItemGrouper.group(newTimelineItemStates).toPersistentList()

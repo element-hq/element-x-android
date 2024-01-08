@@ -55,6 +55,7 @@ import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatu
 import io.element.android.libraries.matrix.ui.room.canSendMessageAsState
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -116,7 +117,6 @@ class TimelinePresenter @AssistedInject constructor(
         }
 
         val readReceiptsEnabled by featureFlagService.isFeatureEnabledFlow(FeatureFlags.ReadReceipts).collectAsState(initial = false)
-        val membersState by room.membersStateFlow.collectAsState()
 
         fun handleEvents(event: TimelineEvents) {
             when (event) {
@@ -154,11 +154,9 @@ class TimelinePresenter @AssistedInject constructor(
         }
 
         LaunchedEffect(Unit) {
-            timeline
-                .timelineItems
-                .onEach {
+            combine(timeline.timelineItems, room.membersStateFlow) { items, membersState ->
                     timelineItemsFactory.replaceWith(
-                        timelineItems = it,
+                        timelineItems = items,
                         roomMembers = if (readReceiptsEnabled) {
                             membersState.roomMembers().orEmpty()
                         } else {
@@ -166,6 +164,7 @@ class TimelinePresenter @AssistedInject constructor(
                             emptyList()
                         }
                     )
+                    items
                 }
                 .onEach { timelineItems ->
                     if (timelineItems.isEmpty()) {
