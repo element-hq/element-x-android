@@ -19,7 +19,7 @@
   <string name="screen_app_lock_settings_remove_pin_alert_title">"PIN entfernen?"</string>
   <string name="screen_app_lock_setup_biometric_unlock_allow_title">"%1$s zulassen"</string>
   <string name="screen_app_lock_setup_biometric_unlock_skip">"Ich möchte diese PIN verwenden."</string>
-  <string name="screen_app_lock_setup_biometric_unlock_subtitle">"Spare dir etwas Zeit und benutze %1$s, um die App jedes Mal zu entsperren"</string>
+  <string name="screen_app_lock_setup_biometric_unlock_subtitle">"Spare dir etwas Zeit und benutze %1$s, um die App zu entsperren"</string>
   <string name="screen_app_lock_setup_choose_pin">"PIN wählen"</string>
   <string name="screen_app_lock_setup_confirm_pin">"PIN bestätigen"</string>
   <string name="screen_app_lock_setup_pin_blacklisted_dialog_content">"Aus Sicherheitsgründen kann dieser PIN-Code nicht verwendet werden."</string>
