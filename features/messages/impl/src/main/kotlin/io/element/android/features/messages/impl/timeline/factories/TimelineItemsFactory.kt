@@ -89,7 +89,11 @@ class TimelineItemsFactory @Inject constructor(
             } else {
                 val updatedItem = when (cacheItem) {
                     is TimelineItem.Event -> {
-                        eventItemFactory.update(timelineItems[index] as MatrixTimelineItem.Event, cacheItem, roomMembers)
+                        if (roomMembers.isNotEmpty()) {
+                            eventItemFactory.update(timelineItems[index] as MatrixTimelineItem.Event, cacheItem, roomMembers)
+                        } else {
+                            cacheItem
+                        }
                     }
                     else -> cacheItem
                 }
