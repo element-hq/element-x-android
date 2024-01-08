@@ -17,10 +17,12 @@
 package io.element.android.libraries.designsystem.preview
 
 import androidx.compose.ui.tooling.preview.Preview
+import io.element.android.libraries.architecture.coverage.ExcludeFromJacocoGeneratedReport
 
 /**
  * Our Paparazzi tests will check components with non-null `heightDp` and use a custom rendering for them,
  * adding extra vertical space so long scrolling components can be displayed. This is a helper for that functionality.
  */
 @Preview(heightDp = 1000)
+@ExcludeFromJacocoGeneratedReport
 annotation class PreviewWithLargeHeight

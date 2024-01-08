@@ -18,6 +18,7 @@ package io.element.android.libraries.designsystem.preview
 
 import android.content.res.Configuration
 import androidx.compose.ui.tooling.preview.Preview
+import io.element.android.libraries.architecture.coverage.ExcludeFromJacocoGeneratedReport
 
 /**
  * Marker for a night mode preview.
@@ -51,4 +52,5 @@ const val DAY_MODE_NAME = "Day"
     uiMode = Configuration.UI_MODE_NIGHT_YES,
     fontScale = 1f,
 )
+@ExcludeFromJacocoGeneratedReport
 annotation class PreviewsDayNight
