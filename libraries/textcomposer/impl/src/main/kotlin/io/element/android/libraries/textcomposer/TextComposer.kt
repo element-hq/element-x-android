@@ -16,6 +16,7 @@
 
 package io.element.android.libraries.textcomposer
 
+import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -111,6 +112,7 @@ fun TextComposer(
     onDeleteVoiceMessage: () -> Unit,
     onError: (Throwable) -> Unit,
     onSuggestionReceived: (Suggestion?) -> Unit,
+    onRichContentSelected: ((Uri) -> Unit)?,
     modifier: Modifier = Modifier,
     showTextFormatting: Boolean = false,
     subcomposing: Boolean = false,
@@ -162,6 +164,7 @@ fun TextComposer(
                 resolveMentionDisplay = { text, url -> TextDisplay.Custom(mentionSpanProvider.getMentionSpanFor(text, url)) },
                 resolveRoomMentionDisplay = { TextDisplay.Custom(mentionSpanProvider.getMentionSpanFor("@room", "#")) },
                 onError = onError,
+                onRichContentSelected = onRichContentSelected,
             )
         }
     }
@@ -397,6 +400,7 @@ private fun TextInput(
     resolveMentionDisplay: (text: String, url: String) -> TextDisplay,
     modifier: Modifier = Modifier,
     onError: (Throwable) -> Unit = {},
+    onRichContentSelected: ((Uri) -> Unit)? = null,
 ) {
     val bgColor = ElementTheme.colors.bgSubtleSecondary
     val borderColor = ElementTheme.colors.borderDisabled
@@ -443,7 +447,8 @@ private fun TextInput(
                 style = ElementRichTextEditorStyle.composerStyle(hasFocus = state.hasFocus),
                 resolveMentionDisplay = resolveMentionDisplay,
                 resolveRoomMentionDisplay = resolveRoomMentionDisplay,
-                onError = onError
+                onError = onError,
+                onRichContentSelected = onRichContentSelected,
             )
         }
     }
@@ -902,5 +907,6 @@ private fun ATextComposer(
         onDeleteVoiceMessage = {},
         onError = {},
         onSuggestionReceived = {},
+        onRichContentSelected = null,
     )
 }

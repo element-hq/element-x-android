@@ -225,6 +225,18 @@ class MessageComposerPresenter @Inject constructor(
                     updateComposerMode = { messageComposerContext.composerMode = it },
                     richTextEditorState = richTextEditorState,
                 )
+                is MessageComposerEvents.SendUri -> appCoroutineScope.sendAttachment(
+                    attachment = Attachment.Media(
+                        localMedia = localMediaFactory.createFromUri(
+                            uri = event.uri,
+                            mimeType = null,
+                            name = null,
+                            formattedFileSize = null
+                        ),
+                        compressIfPossible = true
+                    ),
+                    attachmentState = attachmentsState,
+                )
                 is MessageComposerEvents.SetMode -> {
                     messageComposerContext.composerMode = event.composerMode
                     when (event.composerMode) {
