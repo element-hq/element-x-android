@@ -21,6 +21,7 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.item.event.EventContent
 import io.element.android.libraries.matrix.api.timeline.item.event.InReplyTo
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageContent
+import io.element.android.libraries.matrix.api.timeline.item.event.StickerContent
 import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageType
 import io.element.android.libraries.matrix.ui.messages.toPlainText
 
@@ -44,6 +45,10 @@ fun InReplyTo.map() = when (this) {
             is MessageContent -> {
                 val messageContent = content as MessageContent
                 (messageContent.type as? TextMessageType)?.toPlainText() ?: messageContent.body
+            }
+            is StickerContent -> {
+                val stickerContent = content as StickerContent
+                stickerContent.body
             }
             else -> null
         }

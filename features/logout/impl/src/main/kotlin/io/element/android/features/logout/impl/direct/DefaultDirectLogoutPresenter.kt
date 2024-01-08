@@ -30,7 +30,7 @@ import io.element.android.features.logout.api.direct.DirectLogoutEvents
 import io.element.android.features.logout.api.direct.DirectLogoutPresenter
 import io.element.android.features.logout.api.direct.DirectLogoutState
 import io.element.android.features.logout.impl.tools.isBackingUp
-import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.runCatchingUpdatingState
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.featureflag.api.FeatureFlagService
@@ -54,8 +54,8 @@ class DefaultDirectLogoutPresenter @Inject constructor(
     override fun present(): DirectLogoutState {
         val localCoroutineScope = rememberCoroutineScope()
 
-        val logoutAction: MutableState<Async<String?>> = remember {
-            mutableStateOf(Async.Uninitialized)
+        val logoutAction: MutableState<AsyncAction<String?>> = remember {
+            mutableStateOf(AsyncAction.Uninitialized)
         }
 
         val secureStorageFlag by featureFlagService.isFeatureEnabledFlow(FeatureFlags.SecureStorage)
@@ -70,7 +70,6 @@ class DefaultDirectLogoutPresenter @Inject constructor(
         }
             .collectAsState(initial = BackupUploadState.Unknown)
 
-        var showLogoutDialog by remember { mutableStateOf(false) }
         var isLastSession by remember { mutableStateOf(false) }
         LaunchedEffect(Unit) {
             isLastSession = encryptionService.isLastDevice().getOrNull() ?: false
@@ -79,16 +78,14 @@ class DefaultDirectLogoutPresenter @Inject constructor(
         fun handleEvents(event: DirectLogoutEvents) {
             when (event) {
                 is DirectLogoutEvents.Logout -> {
-                    if (showLogoutDialog || event.ignoreSdkError) {
-                        showLogoutDialog = false
+                    if (logoutAction.value.isConfirming() || event.ignoreSdkError) {
                         localCoroutineScope.logout(logoutAction, event.ignoreSdkError)
                     } else {
-                        showLogoutDialog = true
+                        logoutAction.value = AsyncAction.Confirming
                     }
                 }
                 DirectLogoutEvents.CloseDialogs -> {
-                    logoutAction.value = Async.Uninitialized
-                    showLogoutDialog = false
+                    logoutAction.value = AsyncAction.Uninitialized
                 }
             }
         }
@@ -96,14 +93,13 @@ class DefaultDirectLogoutPresenter @Inject constructor(
         return DirectLogoutState(
             canDoDirectSignOut = !isLastSession &&
                 !backupUploadState.isBackingUp(),
-            showConfirmationDialog = showLogoutDialog,
             logoutAction = logoutAction.value,
             eventSink = ::handleEvents
         )
     }
 
     private fun CoroutineScope.logout(
-        logoutAction: MutableState<Async<String?>>,
+        logoutAction: MutableState<AsyncAction<String?>>,
         ignoreSdkError: Boolean,
     ) = launch {
         suspend {

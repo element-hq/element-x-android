@@ -46,6 +46,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemFileContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemLocationContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStickerContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
 import io.element.android.features.poll.api.create.CreatePollEntryPoint
 import io.element.android.features.poll.api.create.CreatePollMode
@@ -252,6 +253,23 @@ class MessagesFlowNode @AssistedInject constructor(
                     thumbnailSource = event.content.thumbnailSource,
                 )
                 overlay.show(navTarget)
+            }
+            is TimelineItemStickerContent -> {
+                /* Sticker may have an empty url and no thumbnail
+                   if encrypted on certain bridges */
+                if (event.content.preferredMediaSource != null) {
+                    val navTarget = NavTarget.MediaViewer(
+                        mediaInfo = MediaInfo(
+                            name = event.content.body,
+                            mimeType = event.content.mimeType,
+                            formattedFileSize = event.content.formattedFileSize,
+                            fileExtension = event.content.fileExtension
+                        ),
+                        mediaSource = event.content.preferredMediaSource,
+                        thumbnailSource = event.content.thumbnailSource,
+                    )
+                    overlay.show(navTarget)
+                }
             }
             is TimelineItemVideoContent -> {
                 val navTarget = NavTarget.MediaViewer(

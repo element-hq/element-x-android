@@ -44,6 +44,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.RedactedConte
 import io.element.android.libraries.matrix.api.timeline.item.event.RoomMembershipContent
 import io.element.android.libraries.matrix.api.timeline.item.event.StateContent
 import io.element.android.libraries.matrix.api.timeline.item.event.StickerContent
+import io.element.android.libraries.matrix.api.timeline.item.event.StickerMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.UnableToDecryptContent
 import io.element.android.libraries.matrix.api.timeline.item.event.UnknownContent
@@ -62,47 +63,52 @@ class DefaultRoomLastMessageFormatter @Inject constructor(
     private val stateContentFormatter: StateContentFormatter,
 ) : RoomLastMessageFormatter {
 
+    companion object {
+        // Max characters to display in the last message. This works around https://github.com/element-hq/element-x-android/issues/2105
+        private const val MAX_SAFE_LENGTH = 500
+    }
+
     override fun format(event: EventTimelineItem, isDmRoom: Boolean): CharSequence? {
         val isOutgoing = event.isOwn
         val senderDisplayName = (event.senderProfile as? ProfileTimelineDetails.Ready)?.displayName ?: event.sender.value
         return when (val content = event.content) {
-            is MessageContent -> processMessageContents(content, senderDisplayName, isDmRoom)
-            RedactedContent -> {
-                val message = sp.getString(CommonStrings.common_message_removed)
-                if (!isDmRoom) {
-                    prefix(message, senderDisplayName)
-                } else {
-                    message
+                is MessageContent -> processMessageContents(content, senderDisplayName, isDmRoom)
+                RedactedContent -> {
+                    val message = sp.getString(CommonStrings.common_message_removed)
+                    if (!isDmRoom) {
+                        prefix(message, senderDisplayName)
+                    } else {
+                        message
+                    }
                 }
-            }
-            is StickerContent -> {
-                content.body
-            }
-            is UnableToDecryptContent -> {
-                val message = sp.getString(CommonStrings.common_waiting_for_decryption_key)
-                if (!isDmRoom) {
-                    prefix(message, senderDisplayName)
-                } else {
-                    message
+                is StickerContent -> {
+                    content.body
                 }
-            }
-            is RoomMembershipContent -> {
-                roomMembershipContentFormatter.format(content, senderDisplayName, isOutgoing)
-            }
-            is ProfileChangeContent -> {
-                profileChangeContentFormatter.format(content, senderDisplayName, isOutgoing)
-            }
-            is StateContent -> {
-                stateContentFormatter.format(content, senderDisplayName, isOutgoing, RenderingMode.RoomList)
-            }
-            is PollContent -> {
-                val message = sp.getString(CommonStrings.common_poll_summary, content.question)
-                prefixIfNeeded(message, senderDisplayName, isDmRoom)
-            }
-            is FailedToParseMessageLikeContent, is FailedToParseStateContent, is UnknownContent -> {
-                prefixIfNeeded(sp.getString(CommonStrings.common_unsupported_event), senderDisplayName, isDmRoom)
-            }
-        }
+                is UnableToDecryptContent -> {
+                    val message = sp.getString(CommonStrings.common_waiting_for_decryption_key)
+                    if (!isDmRoom) {
+                        prefix(message, senderDisplayName)
+                    } else {
+                        message
+                    }
+                }
+                is RoomMembershipContent -> {
+                    roomMembershipContentFormatter.format(content, senderDisplayName, isOutgoing)
+                }
+                is ProfileChangeContent -> {
+                    profileChangeContentFormatter.format(content, senderDisplayName, isOutgoing)
+                }
+                is StateContent -> {
+                    stateContentFormatter.format(content, senderDisplayName, isOutgoing, RenderingMode.RoomList)
+                }
+                is PollContent -> {
+                    val message = sp.getString(CommonStrings.common_poll_summary, content.question)
+                    prefixIfNeeded(message, senderDisplayName, isDmRoom)
+                }
+                is FailedToParseMessageLikeContent, is FailedToParseStateContent, is UnknownContent -> {
+                    prefixIfNeeded(sp.getString(CommonStrings.common_unsupported_event), senderDisplayName, isDmRoom)
+                }
+            }?.take(MAX_SAFE_LENGTH)
     }
 
     private fun processMessageContents(messageContent: MessageContent, senderDisplayName: String, isDmRoom: Boolean): CharSequence? {
@@ -119,6 +125,9 @@ class DefaultRoomLastMessageFormatter @Inject constructor(
             }
             is ImageMessageType -> {
                 sp.getString(CommonStrings.common_image)
+            }
+            is StickerMessageType -> {
+                sp.getString(CommonStrings.common_sticker)
             }
             is LocationMessageType -> {
                 sp.getString(CommonStrings.common_shared_location)

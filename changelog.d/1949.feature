@@ -1,0 +1,1 @@
+Render m.sticker events

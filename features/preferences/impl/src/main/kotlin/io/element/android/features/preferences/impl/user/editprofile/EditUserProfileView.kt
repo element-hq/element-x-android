@@ -43,7 +43,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.features.preferences.impl.R
 import io.element.android.libraries.designsystem.components.LabelledOutlinedTextField
-import io.element.android.libraries.designsystem.components.async.AsyncView
+import io.element.android.libraries.designsystem.components.async.AsyncActionView
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -57,6 +57,7 @@ import io.element.android.libraries.matrix.ui.components.AvatarActionBottomSheet
 import io.element.android.libraries.matrix.ui.components.EditableAvatarView
 import io.element.android.libraries.permissions.api.PermissionsView
 import io.element.android.compound.theme.ElementTheme
+import io.element.android.libraries.designsystem.components.async.AsyncActionViewDefaults
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.coroutines.launch
 
@@ -147,9 +148,13 @@ fun EditUserProfileView(
             onActionSelected = { state.eventSink(EditUserProfileEvents.HandleAvatarAction(it)) }
         )
 
-        AsyncView(
+        AsyncActionView(
             async = state.saveAction,
-            progressText = stringResource(R.string.screen_edit_profile_updating_details),
+            progressDialog = {
+                AsyncActionViewDefaults.ProgressDialog(
+                    progressText = stringResource(R.string.screen_edit_profile_updating_details),
+                )
+            },
             onSuccess = { onProfileEdited() },
             errorTitle = { stringResource(R.string.screen_edit_profile_error_title) },
             errorMessage = { stringResource(R.string.screen_edit_profile_error) },

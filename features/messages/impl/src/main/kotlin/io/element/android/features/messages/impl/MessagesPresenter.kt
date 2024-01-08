@@ -54,6 +54,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemPollContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemRedactedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStateContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStickerContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextBasedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemUnknownContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
@@ -64,7 +65,7 @@ import io.element.android.features.networkmonitor.api.NetworkMonitor
 import io.element.android.features.networkmonitor.api.NetworkStatus
 import io.element.android.features.preferences.api.store.PreferencesStore
 import io.element.android.libraries.androidutils.clipboard.ClipboardHelper
-import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.meta.BuildMeta
@@ -140,11 +141,11 @@ class MessagesPresenter @AssistedInject constructor(
         val userHasPermissionToSendMessage by room.canSendMessageAsState(type = MessageEventType.ROOM_MESSAGE, updateKey = syncUpdateFlow.value)
         val userHasPermissionToRedact by room.canRedactAsState(updateKey = syncUpdateFlow.value)
         val userHasPermissionToSendReaction by room.canSendMessageAsState(type = MessageEventType.REACTION_SENT, updateKey = syncUpdateFlow.value)
-        val roomName: Async<String> by remember {
-            derivedStateOf { roomInfo?.name?.let { Async.Success(it) } ?: Async.Uninitialized }
+        val roomName: AsyncData<String> by remember {
+            derivedStateOf { roomInfo?.name?.let { AsyncData.Success(it) } ?: AsyncData.Uninitialized }
         }
-        val roomAvatar: Async<AvatarData> by remember {
-            derivedStateOf { roomInfo?.avatarData()?.let { Async.Success(it) } ?: Async.Uninitialized }
+        val roomAvatar: AsyncData<AvatarData> by remember {
+            derivedStateOf { roomInfo?.avatarData()?.let { AsyncData.Success(it) } ?: AsyncData.Uninitialized }
         }
 
         var hasDismissedInviteDialog by rememberSaveable {
@@ -161,7 +162,7 @@ class MessagesPresenter @AssistedInject constructor(
             }
         }
 
-        val inviteProgress = remember { mutableStateOf<Async<Unit>>(Async.Uninitialized) }
+        val inviteProgress = remember { mutableStateOf<AsyncData<Unit>>(AsyncData.Uninitialized) }
         var showReinvitePrompt by remember { mutableStateOf(false) }
         LaunchedEffect(hasDismissedInviteDialog, composerState.hasFocus, syncUpdateFlow) {
             withContext(dispatchers.io) {
@@ -278,8 +279,8 @@ class MessagesPresenter @AssistedInject constructor(
             .onFailure { Timber.e(it) }
     }
 
-    private fun CoroutineScope.reinviteOtherUser(inviteProgress: MutableState<Async<Unit>>) = launch(dispatchers.io) {
-        inviteProgress.value = Async.Loading()
+    private fun CoroutineScope.reinviteOtherUser(inviteProgress: MutableState<AsyncData<Unit>>) = launch(dispatchers.io) {
+        inviteProgress.value = AsyncData.Loading()
         runCatching {
             room.updateMembers()
 
@@ -295,10 +296,10 @@ class MessagesPresenter @AssistedInject constructor(
             }.getOrThrow()
         }.fold(
             onSuccess = {
-                inviteProgress.value = Async.Success(Unit)
+                inviteProgress.value = AsyncData.Success(Unit)
             },
             onFailure = {
-                inviteProgress.value = Async.Failure(it)
+                inviteProgress.value = AsyncData.Failure(it)
             }
         )
     }
@@ -346,6 +347,12 @@ class MessagesPresenter @AssistedInject constructor(
         val textContent = messageSummaryFormatter.format(targetEvent)
         val attachmentThumbnailInfo = when (targetEvent.content) {
             is TimelineItemImageContent -> AttachmentThumbnailInfo(
+                thumbnailSource = targetEvent.content.thumbnailSource ?: targetEvent.content.mediaSource,
+                textContent = targetEvent.content.body,
+                type = AttachmentThumbnailType.Image,
+                blurHash = targetEvent.content.blurhash,
+            )
+            is TimelineItemStickerContent -> AttachmentThumbnailInfo(
                 thumbnailSource = targetEvent.content.thumbnailSource ?: targetEvent.content.mediaSource,
                 textContent = targetEvent.content.body,
                 type = AttachmentThumbnailType.Image,

@@ -23,7 +23,7 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.features.login.impl.DefaultLoginUserStory
 import io.element.android.features.login.impl.accountprovider.AccountProviderDataSource
 import io.element.android.features.login.impl.util.defaultAccountProvider
-import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.test.A_HOMESERVER
 import io.element.android.libraries.matrix.test.A_PASSWORD
@@ -57,7 +57,7 @@ class LoginPasswordPresenterTest {
             val initialState = awaitItem()
             assertThat(initialState.accountProvider).isEqualTo(defaultAccountProvider)
             assertThat(initialState.formState).isEqualTo(LoginFormState.Default)
-            assertThat(initialState.loginAction).isEqualTo(Async.Uninitialized)
+            assertThat(initialState.loginAction).isEqualTo(AsyncData.Uninitialized)
             assertThat(initialState.submitEnabled).isFalse()
         }
     }
@@ -110,9 +110,9 @@ class LoginPasswordPresenterTest {
             val loginAndPasswordState = awaitItem()
             loginAndPasswordState.eventSink.invoke(LoginPasswordEvents.Submit)
             val submitState = awaitItem()
-            assertThat(submitState.loginAction).isInstanceOf(Async.Loading::class.java)
+            assertThat(submitState.loginAction).isInstanceOf(AsyncData.Loading::class.java)
             val loggedInState = awaitItem()
-            assertThat(loggedInState.loginAction).isEqualTo(Async.Success(A_SESSION_ID))
+            assertThat(loggedInState.loginAction).isEqualTo(AsyncData.Success(A_SESSION_ID))
             assertThat(loginUserStory.loginFlowIsDone.value).isTrue()
         }
     }
@@ -139,9 +139,9 @@ class LoginPasswordPresenterTest {
             authenticationService.givenLoginError(A_THROWABLE)
             loginAndPasswordState.eventSink.invoke(LoginPasswordEvents.Submit)
             val submitState = awaitItem()
-            assertThat(submitState.loginAction).isInstanceOf(Async.Loading::class.java)
+            assertThat(submitState.loginAction).isInstanceOf(AsyncData.Loading::class.java)
             val loggedInState = awaitItem()
-            assertThat(loggedInState.loginAction).isEqualTo(Async.Failure<SessionId>(A_THROWABLE))
+            assertThat(loggedInState.loginAction).isEqualTo(AsyncData.Failure<SessionId>(A_THROWABLE))
         }
     }
 
@@ -167,14 +167,14 @@ class LoginPasswordPresenterTest {
             authenticationService.givenLoginError(A_THROWABLE)
             loginAndPasswordState.eventSink.invoke(LoginPasswordEvents.Submit)
             val submitState = awaitItem()
-            assertThat(submitState.loginAction).isInstanceOf(Async.Loading::class.java)
+            assertThat(submitState.loginAction).isInstanceOf(AsyncData.Loading::class.java)
             val loggedInState = awaitItem()
             // Check an error was returned
-            assertThat(loggedInState.loginAction).isEqualTo(Async.Failure<SessionId>(A_THROWABLE))
+            assertThat(loggedInState.loginAction).isEqualTo(AsyncData.Failure<SessionId>(A_THROWABLE))
             // Assert the error is then cleared
             loggedInState.eventSink(LoginPasswordEvents.ClearError)
             val clearedState = awaitItem()
-            assertThat(clearedState.loginAction).isEqualTo(Async.Uninitialized)
+            assertThat(clearedState.loginAction).isEqualTo(AsyncData.Uninitialized)
         }
     }
 }

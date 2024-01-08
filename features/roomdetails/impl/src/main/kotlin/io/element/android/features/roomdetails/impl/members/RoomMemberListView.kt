@@ -39,7 +39,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.roomdetails.impl.R
-import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -103,7 +103,7 @@ fun RoomMemberListView(
             )
 
             if (!state.isSearchActive) {
-                if (state.roomMembers is Async.Success) {
+                if (state.roomMembers is AsyncData.Success) {
                     RoomMemberList(
                         roomMembers = state.roomMembers.data,
                         showMembersCount = true,

@@ -25,8 +25,7 @@ import io.element.android.features.createroom.impl.userlist.FakeUserListPresente
 import io.element.android.features.createroom.impl.userlist.FakeUserListPresenterFactory
 import io.element.android.features.createroom.impl.userlist.UserListDataStore
 import io.element.android.features.createroom.test.FakeStartDMAction
-import io.element.android.libraries.architecture.Async
-import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.test.A_ROOM_ID
@@ -52,20 +51,20 @@ class CreateRoomRootPresenterTests {
         }.test {
             val initialState = awaitItem()
 
-            assertThat(initialState.startDmAction).isInstanceOf(Async.Uninitialized::class.java)
+            assertThat(initialState.startDmAction).isInstanceOf(AsyncAction.Uninitialized::class.java)
             assertThat(initialState.applicationName).isEqualTo(aBuildMeta().applicationName)
             assertThat(initialState.userListState.selectedUsers).isEmpty()
             assertThat(initialState.userListState.isSearchActive).isFalse()
             assertThat(initialState.userListState.isMultiSelectionEnabled).isFalse()
 
             val matrixUser = MatrixUser(UserId("@name:domain"))
-            val startDMSuccessResult = Async.Success(A_ROOM_ID)
-            val startDMFailureResult = Async.Failure<RoomId>(A_THROWABLE)
+            val startDMSuccessResult = AsyncAction.Success(A_ROOM_ID)
+            val startDMFailureResult = AsyncAction.Failure(A_THROWABLE)
 
             // Failure
             startDMAction.givenExecuteResult(startDMFailureResult)
             initialState.eventSink(CreateRoomRootEvents.StartDM(matrixUser))
-            assertThat(awaitItem().startDmAction).isInstanceOf(Async.Loading::class.java)
+            assertThat(awaitItem().startDmAction).isInstanceOf(AsyncAction.Loading::class.java)
             awaitItem().also { state ->
                 assertThat(state.startDmAction).isEqualTo(startDMFailureResult)
                 state.eventSink(CreateRoomRootEvents.CancelStartDM)
@@ -74,10 +73,10 @@ class CreateRoomRootPresenterTests {
             // Success
             startDMAction.givenExecuteResult(startDMSuccessResult)
             awaitItem().also { state ->
-                assertThat(state.startDmAction).isEqualTo(Async.Uninitialized)
+                assertThat(state.startDmAction).isEqualTo(AsyncAction.Uninitialized)
                 state.eventSink(CreateRoomRootEvents.StartDM(matrixUser))
             }
-            assertThat(awaitItem().startDmAction).isInstanceOf(Async.Loading::class.java)
+            assertThat(awaitItem().startDmAction).isInstanceOf(AsyncAction.Loading::class.java)
             awaitItem().also { state ->
                 assertThat(state.startDmAction).isEqualTo(startDMSuccessResult)
             }

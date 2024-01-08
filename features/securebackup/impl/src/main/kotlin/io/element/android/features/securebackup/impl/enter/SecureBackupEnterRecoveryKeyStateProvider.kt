@@ -20,22 +20,22 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.securebackup.impl.setup.views.RecoveryKeyUserStory
 import io.element.android.features.securebackup.impl.setup.views.RecoveryKeyViewState
 import io.element.android.features.securebackup.impl.setup.views.aFormattedRecoveryKey
-import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.AsyncAction
 
 open class SecureBackupEnterRecoveryKeyStateProvider : PreviewParameterProvider<SecureBackupEnterRecoveryKeyState> {
     override val values: Sequence<SecureBackupEnterRecoveryKeyState>
         get() = sequenceOf(
             aSecureBackupEnterRecoveryKeyState(recoveryKey = ""),
             aSecureBackupEnterRecoveryKeyState(),
-            aSecureBackupEnterRecoveryKeyState(submitAction = Async.Loading()),
-            aSecureBackupEnterRecoveryKeyState(submitAction = Async.Failure(Exception("A Failure"))),
+            aSecureBackupEnterRecoveryKeyState(submitAction = AsyncAction.Loading),
+            aSecureBackupEnterRecoveryKeyState(submitAction = AsyncAction.Failure(Exception("A Failure"))),
         )
 }
 
 fun aSecureBackupEnterRecoveryKeyState(
     recoveryKey: String = aFormattedRecoveryKey(),
     isSubmitEnabled: Boolean = recoveryKey.isNotEmpty(),
-    submitAction: Async<Unit> = Async.Uninitialized,
+    submitAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
 ) = SecureBackupEnterRecoveryKeyState(
     recoveryKeyViewState = RecoveryKeyViewState(
         recoveryKeyUserStory = RecoveryKeyUserStory.Enter,

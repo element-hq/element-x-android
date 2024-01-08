@@ -51,7 +51,7 @@ import io.element.android.features.networkmonitor.test.FakeNetworkMonitor
 import io.element.android.features.poll.test.actions.FakeEndPollAction
 import io.element.android.features.poll.test.actions.FakeSendPollResponseAction
 import io.element.android.libraries.androidutils.clipboard.FakeClipboardHelper
-import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
@@ -117,14 +117,14 @@ class MessagesPresenterTest {
         }.test {
             val initialState = consumeItemsUntilTimeout().last()
             assertThat(initialState.roomId).isEqualTo(A_ROOM_ID)
-            assertThat(initialState.roomName).isEqualTo(Async.Success(""))
+            assertThat(initialState.roomName).isEqualTo(AsyncData.Success(""))
             assertThat(initialState.roomAvatar)
-                .isEqualTo(Async.Success(AvatarData(id = A_ROOM_ID.value, name = "", url = AN_AVATAR_URL, size = AvatarSize.TimelineRoom)))
+                .isEqualTo(AsyncData.Success(AvatarData(id = A_ROOM_ID.value, name = "", url = AN_AVATAR_URL, size = AvatarSize.TimelineRoom)))
             assertThat(initialState.userHasPermissionToSendMessage).isTrue()
             assertThat(initialState.userHasPermissionToRedact).isFalse()
             assertThat(initialState.hasNetworkConnection).isTrue()
             assertThat(initialState.snackbarMessage).isNull()
-            assertThat(initialState.inviteProgress).isEqualTo(Async.Uninitialized)
+            assertThat(initialState.inviteProgress).isEqualTo(AsyncData.Uninitialized)
             assertThat(initialState.showReinvitePrompt).isFalse()
         }
     }

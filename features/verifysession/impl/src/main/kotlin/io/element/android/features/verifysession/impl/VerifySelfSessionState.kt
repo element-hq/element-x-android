@@ -18,7 +18,7 @@ package io.element.android.features.verifysession.impl
 
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
-import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.verification.SessionVerificationData
 
 @Immutable
@@ -33,7 +33,7 @@ data class VerifySelfSessionState(
         data object Canceled : VerificationStep
         data object AwaitingOtherDeviceResponse : VerificationStep
         data object Ready : VerificationStep
-        data class Verifying(val data: SessionVerificationData, val state: Async<Unit>) : VerificationStep
+        data class Verifying(val data: SessionVerificationData, val state: AsyncData<Unit>) : VerificationStep
         data object Completed : VerificationStep
     }
 }

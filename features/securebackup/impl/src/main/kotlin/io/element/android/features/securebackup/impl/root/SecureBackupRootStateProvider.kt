@@ -17,7 +17,7 @@
 package io.element.android.features.securebackup.impl.root
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
 import io.element.android.libraries.matrix.api.encryption.BackupState
 import io.element.android.libraries.matrix.api.encryption.RecoveryState
@@ -25,10 +25,10 @@ import io.element.android.libraries.matrix.api.encryption.RecoveryState
 open class SecureBackupRootStateProvider : PreviewParameterProvider<SecureBackupRootState> {
     override val values: Sequence<SecureBackupRootState>
         get() = sequenceOf(
-            aSecureBackupRootState(backupState = BackupState.UNKNOWN, doesBackupExistOnServer = Async.Uninitialized),
-            aSecureBackupRootState(backupState = BackupState.UNKNOWN, doesBackupExistOnServer = Async.Success(true)),
-            aSecureBackupRootState(backupState = BackupState.UNKNOWN, doesBackupExistOnServer = Async.Success(false)),
-            aSecureBackupRootState(backupState = BackupState.UNKNOWN, doesBackupExistOnServer = Async.Failure(Exception("An error"))),
+            aSecureBackupRootState(backupState = BackupState.UNKNOWN, doesBackupExistOnServer = AsyncData.Uninitialized),
+            aSecureBackupRootState(backupState = BackupState.UNKNOWN, doesBackupExistOnServer = AsyncData.Success(true)),
+            aSecureBackupRootState(backupState = BackupState.UNKNOWN, doesBackupExistOnServer = AsyncData.Success(false)),
+            aSecureBackupRootState(backupState = BackupState.UNKNOWN, doesBackupExistOnServer = AsyncData.Failure(Exception("An error"))),
             aSecureBackupRootState(backupState = BackupState.ENABLED),
             aSecureBackupRootState(recoveryState = RecoveryState.UNKNOWN),
             aSecureBackupRootState(recoveryState = RecoveryState.ENABLED),
@@ -40,7 +40,7 @@ open class SecureBackupRootStateProvider : PreviewParameterProvider<SecureBackup
 
 fun aSecureBackupRootState(
     backupState: BackupState = BackupState.UNKNOWN,
-    doesBackupExistOnServer: Async<Boolean> = Async.Uninitialized,
+    doesBackupExistOnServer: AsyncData<Boolean> = AsyncData.Uninitialized,
     recoveryState: RecoveryState = RecoveryState.UNKNOWN,
     snackbarMessage: SnackbarMessage? = null,
 ) = SecureBackupRootState(

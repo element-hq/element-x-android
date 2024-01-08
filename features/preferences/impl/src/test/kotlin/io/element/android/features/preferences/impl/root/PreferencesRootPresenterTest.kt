@@ -23,7 +23,7 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.logout.api.direct.DirectLogoutPresenter
 import io.element.android.features.logout.api.direct.DirectLogoutState
-import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.core.meta.BuildType
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
@@ -47,8 +47,7 @@ class PreferencesRootPresenterTest {
 
     private val aDirectLogoutState = DirectLogoutState(
         canDoDirectSignOut = true,
-        showConfirmationDialog = false,
-        logoutAction = Async.Uninitialized,
+        logoutAction = AsyncAction.Uninitialized,
         eventSink = {},
     )
 

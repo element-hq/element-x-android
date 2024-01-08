@@ -39,6 +39,8 @@
   <string name="state_event_room_name_changed_by_you">"Zmenili ste názov miestnosti na: %1$s"</string>
   <string name="state_event_room_name_removed">"%1$s odstránil/a názov miestnosti"</string>
   <string name="state_event_room_name_removed_by_you">"Odstránili ste názov miestnosti"</string>
+  <string name="state_event_room_none">"%1$s nevykonal/a žiadne zmeny"</string>
+  <string name="state_event_room_none_by_you">"Nevykonali ste žiadne zmeny"</string>
   <string name="state_event_room_reject">"%1$s odmietol/a pozvánku"</string>
   <string name="state_event_room_reject_by_you">"Odmietli ste pozvánku"</string>
   <string name="state_event_room_remove">"%1$s odstránil/a %2$s"</string>

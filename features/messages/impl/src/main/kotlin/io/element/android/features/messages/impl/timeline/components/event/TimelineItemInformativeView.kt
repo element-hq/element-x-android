@@ -25,9 +25,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
+import io.element.android.features.messages.impl.timeline.components.layout.ContentAvoidingLayoutData
 import io.element.android.libraries.designsystem.icons.CompoundDrawables
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -39,12 +41,19 @@ fun TimelineItemInformativeView(
     text: String,
     iconDescription: String,
     @DrawableRes iconResourceId: Int,
-    extraPadding: ExtraPadding,
+    onContentLayoutChanged: (ContentAvoidingLayoutData) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Row(
-        modifier = modifier,
-        verticalAlignment = Alignment.CenterVertically
+        modifier = modifier.onSizeChanged { size ->
+             onContentLayoutChanged(
+                ContentAvoidingLayoutData(
+                    contentWidth = size.width,
+                    contentHeight = size.height,
+                )
+            )
+        },
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Icon(
             resourceId = iconResourceId,
@@ -57,7 +66,7 @@ fun TimelineItemInformativeView(
             fontStyle = FontStyle.Italic,
             color = MaterialTheme.colorScheme.secondary,
             style = ElementTheme.typography.fontBodyMdRegular,
-            text = text + extraPadding.getStr(textStyle = ElementTheme.typography.fontBodyMdRegular)
+            text = text
         )
     }
 }
@@ -69,6 +78,6 @@ internal fun TimelineItemInformativeViewPreview() = ElementPreview {
         text = "Info",
         iconDescription = "",
         iconResourceId = CompoundDrawables.ic_delete,
-        extraPadding = noExtraPadding,
+        onContentLayoutChanged = {},
     )
 }

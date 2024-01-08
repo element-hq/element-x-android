@@ -1,0 +1,1 @@
+Trim whitespace at the end of messages to ensure we render the right content.

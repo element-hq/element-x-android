@@ -23,6 +23,7 @@ import kotlinx.collections.immutable.ImmutableList
 data class RoomInviteMembersState(
     val canInvite: Boolean,
     val searchQuery: String,
+    val showSearchLoader: Boolean,
     val searchResults: SearchBarResultState<ImmutableList<InvitableUser>>,
     val selectedUsers: ImmutableList<MatrixUser>,
     val isSearchActive: Boolean,

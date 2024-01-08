@@ -20,5 +20,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface UserRepository {
 
-    suspend fun search(query: String): Flow<List<UserSearchResult>>
+    fun search(query: String): Flow<UserSearchResultState>
 }

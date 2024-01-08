@@ -35,7 +35,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.invitelist.impl.components.InviteSummaryRow
-import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
 import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
@@ -56,7 +56,7 @@ fun InviteListView(
     onInviteAccepted: (RoomId) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    if (state.acceptedAction is Async.Success) {
+    if (state.acceptedAction is AsyncData.Success) {
         LaunchedEffect(state.acceptedAction) {
             onInviteAccepted(state.acceptedAction.data)
         }
@@ -89,7 +89,7 @@ fun InviteListView(
         )
     }
 
-    if (state.acceptedAction is Async.Failure) {
+    if (state.acceptedAction is AsyncData.Failure) {
         ErrorDialog(
             content = stringResource(CommonStrings.error_unknown),
             title = stringResource(CommonStrings.common_error),
@@ -98,7 +98,7 @@ fun InviteListView(
         )
     }
 
-    if (state.declinedAction is Async.Failure) {
+    if (state.declinedAction is AsyncData.Failure) {
         ErrorDialog(
             content = stringResource(CommonStrings.error_unknown),
             title = stringResource(CommonStrings.common_error),

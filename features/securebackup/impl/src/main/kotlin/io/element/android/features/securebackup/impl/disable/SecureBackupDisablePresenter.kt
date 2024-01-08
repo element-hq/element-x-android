@@ -23,9 +23,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import io.element.android.features.securebackup.impl.loggerTagDisable
-import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runCatchingUpdatingState
 import io.element.android.libraries.core.meta.BuildMeta
@@ -44,20 +43,17 @@ class SecureBackupDisablePresenter @Inject constructor(
     override fun present(): SecureBackupDisableState {
         val backupState by encryptionService.backupStateStateFlow.collectAsState()
         Timber.tag(loggerTagDisable.value).d("backupState: $backupState")
-        val disableAction = remember { mutableStateOf<Async<Unit>>(Async.Uninitialized) }
+        val disableAction: MutableState<AsyncAction<Unit>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
         val coroutineScope = rememberCoroutineScope()
-        var showDialog by remember { mutableStateOf(false) }
         fun handleEvents(event: SecureBackupDisableEvents) {
             when (event) {
-                is SecureBackupDisableEvents.DisableBackup -> if (event.force) {
-                    showDialog = false
+                is SecureBackupDisableEvents.DisableBackup -> if (disableAction.value.isConfirming()) {
                     coroutineScope.disableBackup(disableAction)
                 } else {
-                    showDialog = true
+                    disableAction.value = AsyncAction.Confirming
                 }
                 SecureBackupDisableEvents.DismissDialogs -> {
-                    showDialog = false
-                    disableAction.value = Async.Uninitialized
+                    disableAction.value = AsyncAction.Uninitialized
                 }
             }
         }
@@ -65,13 +61,12 @@ class SecureBackupDisablePresenter @Inject constructor(
         return SecureBackupDisableState(
             backupState = backupState,
             disableAction = disableAction.value,
-            showConfirmationDialog = showDialog,
             appName = buildMeta.applicationName,
             eventSink = ::handleEvents
         )
     }
 
-    private fun CoroutineScope.disableBackup(disableAction: MutableState<Async<Unit>>) = launch {
+    private fun CoroutineScope.disableBackup(disableAction: MutableState<AsyncAction<Unit>>) = launch {
         suspend {
             Timber.tag(loggerTagDisable.value).d("Calling encryptionService.disableRecovery()")
             encryptionService.disableRecovery().getOrThrow()

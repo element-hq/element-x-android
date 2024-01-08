@@ -33,7 +33,8 @@ import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.roomdetails.impl.R
 import io.element.android.features.roomdetails.impl.blockuser.BlockUserDialogs
 import io.element.android.features.roomdetails.impl.blockuser.BlockUserSection
-import io.element.android.libraries.designsystem.components.async.AsyncView
+import io.element.android.libraries.designsystem.components.async.AsyncActionView
+import io.element.android.libraries.designsystem.components.async.AsyncActionViewDefaults
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.list.ListItemContent
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
@@ -88,9 +89,13 @@ fun RoomMemberDetailsView(
                 BlockUserSection(state)
                 BlockUserDialogs(state)
             }
-            AsyncView(
+            AsyncActionView(
                 async = state.startDmActionState,
-                progressText = stringResource(CommonStrings.common_starting_chat),
+                progressDialog = {
+                    AsyncActionViewDefaults.ProgressDialog(
+                        progressText = stringResource(CommonStrings.common_starting_chat),
+                    )
+                },
                 onSuccess = onDMStarted,
                 errorMessage = { stringResource(R.string.screen_start_chat_error_starting_chat) },
                 onRetry = { state.eventSink(RoomMemberDetailsEvents.StartDM) },

@@ -17,15 +17,15 @@
 package io.element.android.features.preferences.impl.developer
 
 import io.element.android.features.rageshake.api.preferences.RageshakePreferencesState
-import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.featureflag.ui.model.FeatureUiModel
 import kotlinx.collections.immutable.ImmutableList
 
 data class DeveloperSettingsState(
     val features: ImmutableList<FeatureUiModel>,
-    val cacheSize: Async<String>,
+    val cacheSize: AsyncData<String>,
     val rageshakeState: RageshakePreferencesState,
-    val clearCacheAction: Async<Unit>,
+    val clearCacheAction: AsyncData<Unit>,
     val customElementCallBaseUrlState: CustomElementCallBaseUrlState,
     val eventSink: (DeveloperSettingsEvents) -> Unit
 )

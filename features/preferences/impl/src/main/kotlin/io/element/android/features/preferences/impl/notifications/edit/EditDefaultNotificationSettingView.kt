@@ -23,7 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import io.element.android.features.preferences.impl.R
-import io.element.android.libraries.designsystem.components.async.AsyncView
+import io.element.android.libraries.designsystem.components.async.AsyncActionView
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
@@ -117,7 +117,7 @@ fun EditDefaultNotificationSettingView(
                 }
             }
         }
-        AsyncView(
+        AsyncActionView(
             async = state.changeNotificationSettingAction,
             errorMessage = { stringResource(R.string.screen_notification_settings_edit_failed_updating_default_mode) },
             onErrorDismiss = { state.eventSink(EditDefaultNotificationSettingStateEvents.ClearError) },

@@ -20,7 +20,7 @@ import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.matrix.api.encryption.BackupState
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
@@ -65,15 +65,15 @@ class SecureBackupRootPresenterTest {
             val initialState = awaitItem()
             encryptionService.givenDoesBackupExistOnServerResult(Result.failure(AN_EXCEPTION))
             assertThat(initialState.backupState).isEqualTo(BackupState.UNKNOWN)
-            assertThat(initialState.doesBackupExistOnServer).isEqualTo(Async.Uninitialized)
+            assertThat(initialState.doesBackupExistOnServer).isEqualTo(AsyncData.Uninitialized)
             val loadingState1 = awaitItem()
-            assertThat(loadingState1.doesBackupExistOnServer).isInstanceOf(Async.Loading::class.java)
+            assertThat(loadingState1.doesBackupExistOnServer).isInstanceOf(AsyncData.Loading::class.java)
             val errorState = awaitItem()
-            assertThat(errorState.doesBackupExistOnServer).isEqualTo(Async.Failure<Boolean>(AN_EXCEPTION))
+            assertThat(errorState.doesBackupExistOnServer).isEqualTo(AsyncData.Failure<Boolean>(AN_EXCEPTION))
             encryptionService.givenDoesBackupExistOnServerResult(Result.success(false))
             errorState.eventSink.invoke(SecureBackupRootEvents.RetryKeyBackupState)
             val loadingState2 = awaitItem()
-            assertThat(loadingState2.doesBackupExistOnServer).isInstanceOf(Async.Loading::class.java)
+            assertThat(loadingState2.doesBackupExistOnServer).isInstanceOf(AsyncData.Loading::class.java)
             val finalState = awaitItem()
             assertThat(finalState.doesBackupExistOnServer.dataOrNull()).isFalse()
         }

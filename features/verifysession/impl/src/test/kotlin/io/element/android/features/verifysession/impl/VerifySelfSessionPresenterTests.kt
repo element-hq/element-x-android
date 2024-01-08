@@ -22,7 +22,7 @@ import app.cash.turbine.ReceiveTurbine
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.verifysession.impl.VerifySelfSessionState.VerificationStep
-import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.verification.SessionVerificationData
 import io.element.android.libraries.matrix.api.verification.VerificationEmoji
 import io.element.android.libraries.matrix.api.verification.VerificationFlowState
@@ -173,7 +173,7 @@ class VerifySelfSessionPresenterTests {
             assertThat(awaitItem().verificationFlowStep).isEqualTo(
                 VerificationStep.Verifying(
                     SessionVerificationData.Emojis(emojis),
-                    Async.Loading(),
+                    AsyncData.Loading(),
                 )
             )
             assertThat(awaitItem().verificationFlowStep).isEqualTo(VerificationStep.Completed)
@@ -192,7 +192,7 @@ class VerifySelfSessionPresenterTests {
             assertThat(awaitItem().verificationFlowStep).isEqualTo(
                 VerificationStep.Verifying(
                     SessionVerificationData.Emojis(emptyList()),
-                    Async.Loading(),
+                    AsyncData.Loading(),
                 )
             )
             assertThat(awaitItem().verificationFlowStep).isEqualTo(VerificationStep.Canceled)

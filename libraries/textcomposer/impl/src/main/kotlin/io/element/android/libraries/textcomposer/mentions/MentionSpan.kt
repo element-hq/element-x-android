@@ -21,6 +21,8 @@ import android.graphics.Paint
 import android.graphics.RectF
 import android.graphics.Typeface
 import android.text.style.ReplacementSpan
+import io.element.android.libraries.core.extensions.orEmpty
+import kotlin.math.min
 import kotlin.math.roundToInt
 
 class MentionSpan(
@@ -32,51 +34,63 @@ class MentionSpan(
     val typeface: Typeface = Typeface.DEFAULT,
 ) : ReplacementSpan() {
 
+    companion object {
+        private const val MAX_LENGTH = 20
+    }
+
+    private var actualText: CharSequence? = null
+    private var textWidth = 0
+    private var cachedRect: RectF = RectF()
+    private val backgroundPaint = Paint().apply {
+        isAntiAlias = true
+        color = backgroundColor
+    }
+
     override fun getSize(paint: Paint, text: CharSequence?, start: Int, end: Int, fm: Paint.FontMetricsInt?): Int {
-        val mentionText = getActualText(text, start)
-        var actualEnd = end
-        if (mentionText != text.toString()) {
-            actualEnd = end + 1
-        }
+        val mentionText = getActualText(text, start, end)
         paint.typeface = typeface
-        return paint.measureText(mentionText, start, actualEnd).roundToInt() + startPadding + endPadding
+        textWidth = paint.measureText(mentionText, 0, mentionText.length).roundToInt()
+        return textWidth + startPadding + endPadding
     }
 
     override fun draw(canvas: Canvas, text: CharSequence?, start: Int, end: Int, x: Float, top: Int, y: Int, bottom: Int, paint: Paint) {
-        val mentionText = getActualText(text, start)
-        var actualEnd = end
-        if (mentionText != text.toString()) {
-            actualEnd = end + 1
-        }
-        val textWidth = paint.measureText(mentionText, start, actualEnd)
+        val mentionText = getActualText(text, start, end)
+
         // Extra vertical space to add below the baseline (y). This helps us center the span vertically
         val extraVerticalSpace = y + paint.ascent() + paint.descent() - top
-        val rect = RectF(x, top.toFloat(), x + textWidth + startPadding + endPadding, y.toFloat() + extraVerticalSpace)
-        paint.color = backgroundColor
-        canvas.drawRoundRect(rect, rect.height() / 2, rect.height() / 2, paint)
+        if (cachedRect.isEmpty) {
+            cachedRect = RectF(x, top.toFloat(), x + textWidth + startPadding + endPadding, y.toFloat() + extraVerticalSpace)
+        }
+
+        val rect = cachedRect
+        val radius = rect.height() / 2
+        canvas.drawRoundRect(rect, radius, radius, backgroundPaint)
         paint.color = textColor
         paint.typeface = typeface
-        canvas.drawText(mentionText, start, actualEnd, x + startPadding, y.toFloat(), paint)
+        canvas.drawText(mentionText, 0, mentionText.length, x + startPadding, y.toFloat(), paint)
     }
 
-    private fun getActualText(text: CharSequence?, start: Int): String {
-        return when (type) {
-            Type.USER -> {
-                val mentionText = text.toString()
-                if (start in mentionText.indices && mentionText[start] != '@') {
-                    mentionText.replaceRange(start, start, "@")
-                } else {
-                    mentionText
+    private fun getActualText(text: CharSequence?, start: Int, end: Int): CharSequence {
+        if (actualText != null) return actualText!!
+        return buildString {
+            val mentionText = text.orEmpty()
+            when (type) {
+                Type.USER -> {
+                    if (start in mentionText.indices && mentionText[start] != '@') {
+                        append("@")
+                    }
+                }
+                Type.ROOM -> {
+                    if (start in mentionText.indices && mentionText[start] != '#') {
+                        append("#")
+                    }
                 }
             }
-            Type.ROOM -> {
-                val mentionText = text.toString()
-                if (start in mentionText.indices && mentionText[start] != '#') {
-                    mentionText.replaceRange(start, start, "#")
-                } else {
-                    mentionText
-                }
+            append(mentionText.substring(start, min(end, start + MAX_LENGTH)))
+            if (end - start > MAX_LENGTH) {
+                append("…")
             }
+            actualText = this
         }
     }
 

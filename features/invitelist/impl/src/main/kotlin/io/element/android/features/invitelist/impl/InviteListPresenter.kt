@@ -29,7 +29,7 @@ import im.vector.app.features.analytics.plan.JoinedRoom
 import io.element.android.features.invitelist.api.SeenInvitesStore
 import io.element.android.features.invitelist.impl.model.InviteListInviteSummary
 import io.element.android.features.invitelist.impl.model.InviteSender
-import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runCatchingUpdatingState
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
@@ -77,14 +77,14 @@ class InviteListPresenter @Inject constructor(
         }
 
         val localCoroutineScope = rememberCoroutineScope()
-        val acceptedAction: MutableState<Async<RoomId>> = remember { mutableStateOf(Async.Uninitialized) }
-        val declinedAction: MutableState<Async<Unit>> = remember { mutableStateOf(Async.Uninitialized) }
+        val acceptedAction: MutableState<AsyncData<RoomId>> = remember { mutableStateOf(AsyncData.Uninitialized) }
+        val declinedAction: MutableState<AsyncData<Unit>> = remember { mutableStateOf(AsyncData.Uninitialized) }
         val decliningInvite: MutableState<InviteListInviteSummary?> = remember { mutableStateOf(null) }
 
         fun handleEvent(event: InviteListEvents) {
             when (event) {
                 is InviteListEvents.AcceptInvite -> {
-                    acceptedAction.value = Async.Uninitialized
+                    acceptedAction.value = AsyncData.Uninitialized
                     localCoroutineScope.acceptInvite(event.invite.roomId, acceptedAction)
                 }
 
@@ -93,7 +93,7 @@ class InviteListPresenter @Inject constructor(
                 }
 
                 is InviteListEvents.ConfirmDeclineInvite -> {
-                    declinedAction.value = Async.Uninitialized
+                    declinedAction.value = AsyncData.Uninitialized
                     decliningInvite.value?.let {
                         localCoroutineScope.declineInvite(it.roomId, declinedAction)
                     }
@@ -105,11 +105,11 @@ class InviteListPresenter @Inject constructor(
                 }
 
                 is InviteListEvents.DismissAcceptError -> {
-                    acceptedAction.value = Async.Uninitialized
+                    acceptedAction.value = AsyncData.Uninitialized
                 }
 
                 is InviteListEvents.DismissDeclineError -> {
-                    declinedAction.value = Async.Uninitialized
+                    declinedAction.value = AsyncData.Uninitialized
                 }
             }
         }
@@ -137,7 +137,7 @@ class InviteListPresenter @Inject constructor(
         )
     }
 
-    private fun CoroutineScope.acceptInvite(roomId: RoomId, acceptedAction: MutableState<Async<RoomId>>) = launch {
+    private fun CoroutineScope.acceptInvite(roomId: RoomId, acceptedAction: MutableState<AsyncData<RoomId>>) = launch {
         suspend {
             client.getRoom(roomId)?.use {
                 it.join().getOrThrow()
@@ -148,7 +148,7 @@ class InviteListPresenter @Inject constructor(
         }.runCatchingUpdatingState(acceptedAction)
     }
 
-    private fun CoroutineScope.declineInvite(roomId: RoomId, declinedAction: MutableState<Async<Unit>>) = launch {
+    private fun CoroutineScope.declineInvite(roomId: RoomId, declinedAction: MutableState<AsyncData<Unit>>) = launch {
         suspend {
             client.getRoom(roomId)?.use {
                 it.leave().getOrThrow()
