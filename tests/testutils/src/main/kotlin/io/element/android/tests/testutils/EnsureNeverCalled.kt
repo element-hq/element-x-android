@@ -24,6 +24,6 @@ class EnsureNeverCalled : () -> Unit {
 
 class EnsureNeverCalledWithParam<T> : (T) -> Unit {
     override fun invoke(p1: T) {
-        throw AssertionError("Should not be called")
+        throw AssertionError("Should not be called and is called with $p1")
     }
 }
