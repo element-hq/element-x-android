@@ -16,17 +16,18 @@
 
 package io.element.android.features.logout.impl
 
-import androidx.compose.ui.test.hasContentDescription
-import androidx.compose.ui.test.junit4.createComposeRule
-import androidx.compose.ui.test.performClick
+import androidx.activity.ComponentActivity
+import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.element.android.libraries.architecture.AsyncAction
+import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.tests.testutils.EnsureCalledOnce
 import io.element.android.tests.testutils.EnsureCalledOnceWithParam
 import io.element.android.tests.testutils.EnsureNeverCalled
 import io.element.android.tests.testutils.EnsureNeverCalledWithParam
 import io.element.android.tests.testutils.EventsRecorder
 import io.element.android.tests.testutils.clickOn
+import io.element.android.tests.testutils.pressBack
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -34,7 +35,7 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class LogoutViewTest {
 
-    @get:Rule val rule = createComposeRule()
+    @get:Rule val rule = createAndroidComposeRule<ComponentActivity>()
 
     @Test
     fun `clicking on logout sends a LogoutEvents`() {
@@ -49,7 +50,7 @@ class LogoutViewTest {
                 onSuccessLogout = EnsureNeverCalledWithParam(),
             )
         }
-        rule.clickOn("Sign out")
+        rule.clickOn(CommonStrings.action_signout)
         eventsRecorder.assertSingle(LogoutEvents.Logout(false))
     }
 
@@ -67,7 +68,7 @@ class LogoutViewTest {
                 onSuccessLogout = EnsureNeverCalledWithParam(),
             )
         }
-        rule.onNode(hasContentDescription("Back")).performClick()
+        rule.pressBack()
         callback.assertSuccess()
     }
 
@@ -85,7 +86,7 @@ class LogoutViewTest {
                 onSuccessLogout = EnsureNeverCalledWithParam(),
             )
         }
-        rule.clickOn("Sign out anyway")
+        rule.clickOn(CommonStrings.action_signout_anyway)
         eventsRecorder.assertSingle(LogoutEvents.Logout(true))
     }
 
@@ -103,7 +104,7 @@ class LogoutViewTest {
                 onSuccessLogout = EnsureNeverCalledWithParam(),
             )
         }
-        rule.clickOn("Cancel")
+        rule.clickOn(CommonStrings.action_cancel)
         eventsRecorder.assertSingle(LogoutEvents.CloseDialogs)
     }
 
@@ -141,7 +142,7 @@ class LogoutViewTest {
                 onSuccessLogout = EnsureNeverCalledWithParam(),
             )
         }
-        rule.clickOn("Settings")
+        rule.clickOn(CommonStrings.common_settings)
         callback.assertSuccess()
     }
 }

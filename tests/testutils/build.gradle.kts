@@ -31,6 +31,7 @@ dependencies {
     implementation(libs.test.truth)
     implementation(libs.coroutines.test)
     implementation(projects.libraries.core)
+    implementation(projects.libraries.uiStrings)
     implementation(libs.test.turbine)
     implementation(libs.molecule.runtime)
     implementation(libs.androidx.compose.ui.test.junit)

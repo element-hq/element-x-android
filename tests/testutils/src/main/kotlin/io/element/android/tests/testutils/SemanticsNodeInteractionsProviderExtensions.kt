@@ -16,12 +16,23 @@
 
 package io.element.android.tests.testutils
 
-import androidx.compose.ui.test.SemanticsNodeInteractionsProvider
+import androidx.activity.ComponentActivity
+import androidx.annotation.StringRes
 import androidx.compose.ui.test.hasClickAction
+import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.hasText
+import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.compose.ui.test.performClick
+import io.element.android.libraries.ui.strings.CommonStrings
+import org.junit.rules.TestRule
 
-fun SemanticsNodeInteractionsProvider.clickOn(text: String) {
+fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.clickOn(@StringRes res: Int) {
+    val text = activity.getString(res)
     onNode(hasText(text) and hasClickAction())
         .performClick()
+}
+
+fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.pressBack() {
+    val text = activity.getString(CommonStrings.action_back)
+    onNode(hasContentDescription(text)).performClick()
 }
