@@ -20,6 +20,7 @@ import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.element.android.libraries.architecture.AsyncAction
+import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.tests.testutils.EnsureNeverCalled
 import io.element.android.tests.testutils.EnsureNeverCalledWithParam
@@ -28,6 +29,7 @@ import io.element.android.tests.testutils.clickOn
 import io.element.android.tests.testutils.ensureCalledOnce
 import io.element.android.tests.testutils.ensureCalledOnceWithParam
 import io.element.android.tests.testutils.pressBack
+import io.element.android.tests.testutils.pressTag
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -51,6 +53,24 @@ class LogoutViewTest {
             )
         }
         rule.clickOn(CommonStrings.action_signout)
+        eventsRecorder.assertSingle(LogoutEvents.Logout(false))
+    }
+
+    @Test
+    fun `confirming logout sends a LogoutEvents`() {
+        val eventsRecorder = EventsRecorder<LogoutEvents>()
+        rule.setContent {
+            LogoutView(
+                aLogoutState(
+                    logoutAction = AsyncAction.Confirming,
+                    eventSink = eventsRecorder
+                ),
+                onChangeRecoveryKeyClicked = EnsureNeverCalled(),
+                onBackClicked = EnsureNeverCalled(),
+                onSuccessLogout = EnsureNeverCalledWithParam(),
+            )
+        }
+        rule.pressTag(TestTags.dialogPositive.value)
         eventsRecorder.assertSingle(LogoutEvents.Logout(false))
     }
 
