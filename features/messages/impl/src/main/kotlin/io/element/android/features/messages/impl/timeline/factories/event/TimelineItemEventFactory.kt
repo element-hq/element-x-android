@@ -88,15 +88,12 @@ class TimelineItemEventFactory @Inject constructor(
     }
 
     fun update(
-        currentTimelineItem: MatrixTimelineItem.Event,
         timelineItem: TimelineItem.Event,
+        receivedMatrixTimelineItem: MatrixTimelineItem.Event,
         roomMembers: List<RoomMember>,
     ): TimelineItem.Event {
-        val (senderDisplayName, senderAvatarUrl) = currentTimelineItem.getSenderInfo()
         return timelineItem.copy(
-            senderDisplayName = senderDisplayName,
-            senderAvatar = timelineItem.senderAvatar.copy(url = senderAvatarUrl),
-            readReceiptState = currentTimelineItem.computeReadReceiptState(roomMembers)
+            readReceiptState = receivedMatrixTimelineItem.computeReadReceiptState(roomMembers)
         )
     }
 

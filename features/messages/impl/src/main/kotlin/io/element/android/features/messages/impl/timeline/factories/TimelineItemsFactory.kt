@@ -87,15 +87,14 @@ class TimelineItemsFactory @Inject constructor(
                     newTimelineItemStates.add(timelineItemState)
                 }
             } else {
-                val updatedItem = when (cacheItem) {
-                    is TimelineItem.Event -> {
-                        if (roomMembers.isNotEmpty()) {
-                            eventItemFactory.update(timelineItems[index] as MatrixTimelineItem.Event, cacheItem, roomMembers)
-                        } else {
-                            cacheItem
-                        }
-                    }
-                    else -> cacheItem
+                val updatedItem = if (cacheItem is TimelineItem.Event && roomMembers.isNotEmpty()) {
+                    eventItemFactory.update(
+                        timelineItem = cacheItem,
+                        receivedMatrixTimelineItem = timelineItems[index] as MatrixTimelineItem.Event,
+                        roomMembers = roomMembers
+                    )
+                } else {
+                    cacheItem
                 }
                 newTimelineItemStates.add(updatedItem)
             }
