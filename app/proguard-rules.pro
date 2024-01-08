@@ -35,3 +35,8 @@
 -dontwarn org.conscrypt.**
 -dontwarn org.bouncycastle.**
 -dontwarn org.openjsse.**
+
+# Needed for Posthog
+-keepclassmembers class android.view.JavaViewSpy {
+    static int windowAttachCount(android.view.View);
+}

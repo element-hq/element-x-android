@@ -1,0 +1,1 @@
+Fix crash sending image with latest Posthog because of an usage of an internal Android method.
