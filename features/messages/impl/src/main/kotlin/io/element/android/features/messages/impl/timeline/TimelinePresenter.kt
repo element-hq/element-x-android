@@ -247,7 +247,7 @@ class TimelinePresenter @AssistedInject constructor(
     }
 
     private fun getLastEventIdBeforeOrAt(index: Int, items: ImmutableList<TimelineItem>): EventId? {
-        for (i in index..items.count()) {
+        for (i in index until items.count()) {
             val item = items[i]
             if (item is TimelineItem.Event) {
                 return item.eventId
