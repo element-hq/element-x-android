@@ -57,19 +57,19 @@ class LogoutViewTest {
     @Test
     fun `clicking on back invoke back callback`() {
         val eventsRecorder = EventsRecorder<LogoutEvents>(expectEvents = false)
-        val callback = EnsureCalledOnce()
-        rule.setContent {
-            LogoutView(
-                aLogoutState(
-                    eventSink = eventsRecorder
-                ),
-                onChangeRecoveryKeyClicked = EnsureNeverCalled(),
-                onBackClicked = callback,
-                onSuccessLogout = EnsureNeverCalledWithParam(),
-            )
+        EnsureCalledOnce().run { callback ->
+            rule.setContent {
+                LogoutView(
+                    aLogoutState(
+                        eventSink = eventsRecorder
+                    ),
+                    onChangeRecoveryKeyClicked = EnsureNeverCalled(),
+                    onBackClicked = callback,
+                    onSuccessLogout = EnsureNeverCalledWithParam(),
+                )
+            }
+            rule.pressBack()
         }
-        rule.pressBack()
-        callback.assertSuccess()
     }
 
     @Test
@@ -112,37 +112,37 @@ class LogoutViewTest {
     fun `success logout invoke onSuccessLogout`() {
         val data = "data"
         val eventsRecorder = EventsRecorder<LogoutEvents>(expectEvents = false)
-        val callback = EnsureCalledOnceWithParam<String?>(data)
-        rule.setContent {
-            LogoutView(
-                aLogoutState(
-                    logoutAction = AsyncAction.Success(data),
-                    eventSink = eventsRecorder
-                ),
-                onChangeRecoveryKeyClicked = EnsureNeverCalled(),
-                onBackClicked = EnsureNeverCalled(),
-                onSuccessLogout = callback,
-            )
+        EnsureCalledOnceWithParam<String?>(data).run { callback ->
+            rule.setContent {
+                LogoutView(
+                    aLogoutState(
+                        logoutAction = AsyncAction.Success(data),
+                        eventSink = eventsRecorder
+                    ),
+                    onChangeRecoveryKeyClicked = EnsureNeverCalled(),
+                    onBackClicked = EnsureNeverCalled(),
+                    onSuccessLogout = callback,
+                )
+            }
         }
-        callback.assertSuccess()
     }
 
     @Test
     fun `last session setting button invoke onChangeRecoveryKeyClicked`() {
         val eventsRecorder = EventsRecorder<LogoutEvents>(expectEvents = false)
-        val callback = EnsureCalledOnce()
-        rule.setContent {
-            LogoutView(
-                aLogoutState(
-                    isLastSession = true,
-                    eventSink = eventsRecorder
-                ),
-                onChangeRecoveryKeyClicked = callback,
-                onBackClicked = EnsureNeverCalled(),
-                onSuccessLogout = EnsureNeverCalledWithParam(),
-            )
+        EnsureCalledOnce().run { callback ->
+            rule.setContent {
+                LogoutView(
+                    aLogoutState(
+                        isLastSession = true,
+                        eventSink = eventsRecorder
+                    ),
+                    onChangeRecoveryKeyClicked = callback,
+                    onBackClicked = EnsureNeverCalled(),
+                    onSuccessLogout = EnsureNeverCalledWithParam(),
+                )
+            }
+            rule.clickOn(CommonStrings.common_settings)
         }
-        rule.clickOn(CommonStrings.common_settings)
-        callback.assertSuccess()
     }
 }

@@ -27,6 +27,11 @@ class EnsureCalledOnce : () -> Unit {
             throw AssertionError("Expected to be called once, but was called $counter times")
         }
     }
+
+    fun run(block: (callback: EnsureCalledOnce) -> Unit) {
+        block(this)
+        assertSuccess()
+    }
 }
 
 class EnsureCalledOnceWithParam<T>(
@@ -44,5 +49,10 @@ class EnsureCalledOnceWithParam<T>(
         if (counter != 1) {
             throw AssertionError("Expected to be called once, but was called $counter times")
         }
+    }
+
+    fun run(block: (callback: EnsureCalledOnceWithParam<T>) -> Unit) {
+        block(this)
+        assertSuccess()
     }
 }
