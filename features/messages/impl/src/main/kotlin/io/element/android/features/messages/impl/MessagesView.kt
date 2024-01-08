@@ -148,6 +148,7 @@ fun MessagesView(
 
     fun onMessageClicked(event: TimelineItem.Event) {
         Timber.v("OnMessageClicked= ${event.id}")
+        localView.hideKeyboard()
         onEventClicked(event)
     }
 
