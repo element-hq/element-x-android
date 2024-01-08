@@ -27,11 +27,12 @@ class EnsureCalledOnce : () -> Unit {
             throw AssertionError("Expected to be called once, but was called $counter times")
         }
     }
+}
 
-    fun run(block: (callback: EnsureCalledOnce) -> Unit) {
-        block(this)
-        assertSuccess()
-    }
+fun ensureCalledOnce(block: (callback: EnsureCalledOnce) -> Unit) {
+    val callback = EnsureCalledOnce()
+    block(callback)
+    callback.assertSuccess()
 }
 
 class EnsureCalledOnceWithParam<T>(
@@ -50,9 +51,10 @@ class EnsureCalledOnceWithParam<T>(
             throw AssertionError("Expected to be called once, but was called $counter times")
         }
     }
+}
 
-    fun run(block: (callback: EnsureCalledOnceWithParam<T>) -> Unit) {
-        block(this)
-        assertSuccess()
-    }
+fun <T> ensureCalledOnceWithParam(param: T, block: (callback: EnsureCalledOnceWithParam<T>) -> Unit) {
+    val callback = EnsureCalledOnceWithParam(param)
+    block(callback)
+    callback.assertSuccess()
 }

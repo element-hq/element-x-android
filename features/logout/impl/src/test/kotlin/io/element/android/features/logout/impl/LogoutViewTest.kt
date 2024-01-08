@@ -21,12 +21,12 @@ import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.ui.strings.CommonStrings
-import io.element.android.tests.testutils.EnsureCalledOnce
-import io.element.android.tests.testutils.EnsureCalledOnceWithParam
 import io.element.android.tests.testutils.EnsureNeverCalled
 import io.element.android.tests.testutils.EnsureNeverCalledWithParam
 import io.element.android.tests.testutils.EventsRecorder
 import io.element.android.tests.testutils.clickOn
+import io.element.android.tests.testutils.ensureCalledOnce
+import io.element.android.tests.testutils.ensureCalledOnceWithParam
 import io.element.android.tests.testutils.pressBack
 import org.junit.Rule
 import org.junit.Test
@@ -57,7 +57,7 @@ class LogoutViewTest {
     @Test
     fun `clicking on back invoke back callback`() {
         val eventsRecorder = EventsRecorder<LogoutEvents>(expectEvents = false)
-        EnsureCalledOnce().run { callback ->
+        ensureCalledOnce { callback ->
             rule.setContent {
                 LogoutView(
                     aLogoutState(
@@ -112,7 +112,7 @@ class LogoutViewTest {
     fun `success logout invoke onSuccessLogout`() {
         val data = "data"
         val eventsRecorder = EventsRecorder<LogoutEvents>(expectEvents = false)
-        EnsureCalledOnceWithParam<String?>(data).run { callback ->
+        ensureCalledOnceWithParam<String?>(data) { callback ->
             rule.setContent {
                 LogoutView(
                     aLogoutState(
@@ -130,7 +130,7 @@ class LogoutViewTest {
     @Test
     fun `last session setting button invoke onChangeRecoveryKeyClicked`() {
         val eventsRecorder = EventsRecorder<LogoutEvents>(expectEvents = false)
-        EnsureCalledOnce().run { callback ->
+        ensureCalledOnce { callback ->
             rule.setContent {
                 LogoutView(
                     aLogoutState(
