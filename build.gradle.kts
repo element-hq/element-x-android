@@ -1,6 +1,5 @@
 import com.google.devtools.ksp.gradle.KspTask
 import org.apache.tools.ant.taskdefs.optional.ReplaceRegExp
-import org.jetbrains.kotlin.cli.common.toBooleanLenient
 
 buildscript {
     dependencies {
@@ -164,29 +163,6 @@ allprojects {
 
 allprojects {
     apply(plugin = "org.jetbrains.kotlinx.kover")
-}
-
-// When running on the CI, run only debug test variants
-val ciBuildProperty = "ci-build"
-val isCiBuild = if (project.hasProperty(ciBuildProperty)) {
-    val raw = project.property(ciBuildProperty) as? String
-    raw?.toBooleanLenient() == true || raw?.toIntOrNull() == 1
-} else {
-    false
-}
-if (isCiBuild) {
-    allprojects {
-        afterEvaluate {
-            tasks.withType<Test>().configureEach {
-                /* TODO
-                extensions.configure<KoverTaskExtension> {
-                    val enabled = name.contains("debug", ignoreCase = true)
-                    disabledForProject.set(!enabled)
-                }
-                 */
-            }
-        }
-    }
 }
 
 // Register quality check tasks.

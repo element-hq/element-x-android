@@ -20,6 +20,7 @@ import com.android.build.api.variant.FilterConfiguration.FilterType.ABI
 import extension.allFeaturesImpl
 import extension.allLibrariesImpl
 import extension.allServicesImpl
+import org.jetbrains.kotlin.cli.common.toBooleanLenient
 
 plugins {
     id("io.element.android-compose-application")
@@ -227,6 +228,26 @@ dependencies {
             // println("Add $it to kover")
             kover(project(it))
         }
+}
+
+val ciBuildProperty = "ci-build"
+val isCiBuild = if (project.hasProperty(ciBuildProperty)) {
+    val raw = project.property(ciBuildProperty) as? String
+    raw?.toBooleanLenient() == true || raw?.toIntOrNull() == 1
+} else {
+    false
+}
+
+kover {
+    // When running on the CI, run only debug test variants
+    if (isCiBuild) {
+        excludeTests {
+            // Disable instrumentation for debug test tasks
+            tasks(
+                "testDebugUnitTest",
+            )
+        }
+    }
 }
 
 // https://kotlin.github.io/kotlinx-kover/
