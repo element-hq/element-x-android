@@ -295,7 +295,8 @@ koverReport {
     }
 
     defaults {
-        // add reports of 'release' Android build variant to default reports
+        // add reports of both 'debug' and 'release' Android build variants to default reports
+        mergeWith("debug")
         mergeWith("release")
 
         verify {
