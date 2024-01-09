@@ -26,6 +26,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import io.element.android.features.leaveroom.api.LeaveRoomEvent
 import io.element.android.features.leaveroom.api.LeaveRoomPresenter
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsPresenter
@@ -65,7 +67,20 @@ class RoomDetailsPresenter @Inject constructor(
         val leaveRoomState = leaveRoomPresenter.present()
         val canShowNotificationSettings = remember { mutableStateOf(false) }
 
+        var roomAvatar by rememberSaveable(room.avatarUrl) { mutableStateOf(room.avatarUrl) }
+
+        var roomName by rememberSaveable { mutableStateOf((room.name ?: room.displayName).trim()) }
+        var roomTopic by rememberSaveable { mutableStateOf(room.topic?.trim()) }
+
         LaunchedEffect(Unit) {
+            room.roomInfoFlow
+                .onEach { info ->
+                    roomName = info.name.orEmpty()
+                    roomTopic = info.topic.orEmpty()
+                    roomAvatar = info.avatarUrl
+                }
+                .launchIn(this)
+
             canShowNotificationSettings.value = featureFlagService.isFeatureEnabled(FeatureFlags.NotificationSettings)
             if (canShowNotificationSettings.value) {
                 room.updateRoomNotificationSettings()
@@ -83,8 +98,8 @@ class RoomDetailsPresenter @Inject constructor(
         val roomMemberDetailsPresenter = roomMemberDetailsPresenter(dmMember)
         val roomType by getRoomType(dmMember)
 
-        val topicState = remember(canEditTopic, room.topic, roomType) {
-            val topic = room.topic
+        val topicState = remember(canEditTopic, roomTopic, roomType) {
+            val topic = roomTopic
 
             when {
                 !topic.isNullOrBlank() -> RoomTopicState.ExistingTopic(topic)
@@ -116,9 +131,9 @@ class RoomDetailsPresenter @Inject constructor(
 
         return RoomDetailsState(
             roomId = room.roomId.value,
-            roomName = room.displayName,
+            roomName = roomName,
             roomAlias = room.alias,
-            roomAvatarUrl = room.avatarUrl,
+            roomAvatarUrl = roomAvatar,
             roomTopic = topicState,
             memberCount = room.joinedMemberCount,
             isEncrypted = room.isEncrypted,
