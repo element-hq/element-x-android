@@ -31,6 +31,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.graphicsLayer
@@ -66,7 +67,6 @@ fun LiveWaveformView(
         }
     }
 
-
     Box(contentAlignment = Alignment.CenterEnd,
         modifier = modifier
             .fillMaxWidth()
@@ -79,11 +79,12 @@ fun LiveWaveformView(
                 .graphicsLayer(alpha = DEFAULT_GRAPHICS_LAYER_ALPHA)
                 .then(modifier)
         ) {
-            canvasSize = DpSize(Dp(min(waveformWidth, parentWidth.toFloat())), size.height.toDp())
+            val width = min(waveformWidth, parentWidth.toFloat())
+            canvasSize = DpSize(width.dp, size.height.toDp())
             val countThatFitsWidth = (parentWidth.toFloat() / (lineWidth.toPx() + linePadding.toPx())).toInt()
             drawWaveform(
                 waveformData = levels.takeLast(countThatFitsWidth).toPersistentList(),
-                canvasSize = canvasSize,
+                canvasSizePx = Size(canvasSize.width.toPx(), size.height),
                 brush = brush,
                 lineWidth = lineWidth,
                 linePadding = linePadding,
