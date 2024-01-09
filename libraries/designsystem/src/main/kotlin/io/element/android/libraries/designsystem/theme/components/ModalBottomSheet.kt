@@ -39,6 +39,7 @@ import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.preview.PreviewGroup
 import io.element.android.libraries.designsystem.preview.sheetStateForPreview
 import io.element.android.compound.theme.ElementTheme
+import io.element.android.libraries.architecture.coverage.ExcludeFromCoverage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -93,6 +94,7 @@ internal fun ModalBottomSheetDarkPreview() =
     ElementPreviewDark { ContentToPreview() }
 
 @OptIn(ExperimentalMaterial3Api::class)
+@ExcludeFromCoverage
 @Composable
 private fun ContentToPreview() {
     Box(

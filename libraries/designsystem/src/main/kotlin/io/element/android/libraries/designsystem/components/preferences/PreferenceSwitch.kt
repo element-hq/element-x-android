@@ -102,10 +102,7 @@ fun PreferenceSwitch(
 
 @Preview(group = PreviewGroup.Preferences)
 @Composable
-internal fun PreferenceSwitchPreview() = ElementThemedPreview { ContentToPreview() }
-
-@Composable
-private fun ContentToPreview() {
+internal fun PreferenceSwitchPreview() = ElementThemedPreview {
     PreferenceSwitch(
         title = "Switch",
         subtitle = "Subtitle Switch",

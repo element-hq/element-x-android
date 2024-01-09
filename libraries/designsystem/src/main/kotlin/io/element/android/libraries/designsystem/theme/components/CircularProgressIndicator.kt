@@ -69,10 +69,7 @@ fun CircularProgressIndicator(
 
 @Preview(group = PreviewGroup.Progress)
 @Composable
-internal fun CircularProgressIndicatorPreview() = ElementThemedPreview(vertical = false) { ContentToPreview() }
-
-@Composable
-private fun ContentToPreview() {
+internal fun CircularProgressIndicatorPreview() = ElementThemedPreview(vertical = false) {
     Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
         // Indeterminate progress
         CircularProgressIndicator(

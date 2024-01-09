@@ -53,10 +53,7 @@ fun SearchSingleUserResultItem(
 
 @Preview
 @Composable
-internal fun SearchSingleUserResultItemPreview() = ElementThemedPreview { ContentToPreview() }
-
-@Composable
-private fun ContentToPreview() {
+internal fun SearchSingleUserResultItemPreview() = ElementThemedPreview {
     Column {
         SearchSingleUserResultItem(
             searchResult = UserSearchResult(aMatrixUser(), isUnresolved = false),

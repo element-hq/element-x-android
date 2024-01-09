@@ -59,11 +59,7 @@ fun FloatingActionButton(
 
 @Preview(group = PreviewGroup.FABs)
 @Composable
-internal fun FloatingActionButtonPreview() =
-    ElementThemedPreview { ContentToPreview() }
-
-@Composable
-private fun ContentToPreview() {
+internal fun FloatingActionButtonPreview() = ElementThemedPreview {
     Box(modifier = Modifier.padding(8.dp)) {
         FloatingActionButton(onClick = {}) {
             Icon(imageVector = CompoundIcons.Close, contentDescription = null)

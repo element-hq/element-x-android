@@ -43,6 +43,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import io.element.android.libraries.architecture.coverage.ExcludeFromCoverage
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.preview.PreviewGroup
@@ -166,6 +167,7 @@ internal fun OutlinedTextFieldsPreview() = ElementPreviewLight { ContentToPrevie
 internal fun OutlinedTextFieldsDarkPreview() = ElementPreviewDark { ContentToPreview() }
 
 @Composable
+@ExcludeFromCoverage
 private fun ContentToPreview() {
     Column(modifier = Modifier.padding(4.dp)) {
         allBooleans.forEach { isError ->

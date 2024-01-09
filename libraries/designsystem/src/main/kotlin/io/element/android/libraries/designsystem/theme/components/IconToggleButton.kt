@@ -59,10 +59,7 @@ fun IconToggleButton(
 
 @Preview(group = PreviewGroup.Toggles)
 @Composable
-internal fun IconToggleButtonPreview() = ElementThemedPreview(vertical = false) { ContentToPreview() }
-
-@Composable
-private fun ContentToPreview() {
+internal fun IconToggleButtonPreview() = ElementThemedPreview(vertical = false) {
     var checked by remember { mutableStateOf(false) }
     Column {
         Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
