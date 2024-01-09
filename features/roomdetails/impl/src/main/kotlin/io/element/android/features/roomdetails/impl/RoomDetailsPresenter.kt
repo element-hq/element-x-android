@@ -26,8 +26,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import io.element.android.features.leaveroom.api.LeaveRoomEvent
 import io.element.android.features.leaveroom.api.LeaveRoomPresenter
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsPresenter
@@ -66,21 +64,14 @@ class RoomDetailsPresenter @Inject constructor(
         val scope = rememberCoroutineScope()
         val leaveRoomState = leaveRoomPresenter.present()
         val canShowNotificationSettings = remember { mutableStateOf(false) }
+        val roomInfo = room.roomInfoFlow.collectAsState(initial = null).value
 
-        var roomAvatar by rememberSaveable(room.avatarUrl) { mutableStateOf(room.avatarUrl) }
+        val roomAvatar by remember { derivedStateOf { roomInfo?.avatarUrl ?: room.avatarUrl } }
 
-        var roomName by rememberSaveable { mutableStateOf((room.name ?: room.displayName).trim()) }
-        var roomTopic by rememberSaveable { mutableStateOf(room.topic?.trim()) }
+        val roomName by remember { derivedStateOf { (roomInfo?.name ?: room.name ?: room.displayName).trim() } }
+        val roomTopic by remember { derivedStateOf { roomInfo?.topic ?: room.topic } }
 
         LaunchedEffect(Unit) {
-            room.roomInfoFlow
-                .onEach { info ->
-                    roomName = info.name.orEmpty()
-                    roomTopic = info.topic.orEmpty()
-                    roomAvatar = info.avatarUrl
-                }
-                .launchIn(this)
-
             canShowNotificationSettings.value = featureFlagService.isFeatureEnabled(FeatureFlags.NotificationSettings)
             if (canShowNotificationSettings.value) {
                 room.updateRoomNotificationSettings()
