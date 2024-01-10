@@ -18,6 +18,8 @@ ij_wrap_on_typing = false
 ktlint_standard_wrapping = disabled
 ktlint_standard_trailing-comma-on-call-site = disabled
 ktlint_standard_trailing-comma-on-declaration-site = disabled
+ktlint_standard_multiline-expression-wrapping = disabled
+ktlint_standard_string-template-indent = disabled
 ktlint_standard_spacing-between-declarations-with-annotations = disabled
 
 [*.java]
