@@ -23,6 +23,8 @@ ktlint_standard_string-template-indent = disabled
 ktlint_standard_spacing-between-declarations-with-annotations = disabled
 ktlint_standard_function-signature = disabled
 ktlint_standard_annotation = disabled
+ktlint_standard_parameter-list-wrapping = disabled
+ktlint_standard_indent = disabled
 
 [*.java]
 ij_java_align_consecutive_assignments = false
