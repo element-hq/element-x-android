@@ -25,6 +25,7 @@ ktlint_standard_function-signature = disabled
 ktlint_standard_annotation = disabled
 ktlint_standard_parameter-list-wrapping = disabled
 ktlint_standard_indent = disabled
+ktlint_standard_blank-line-before-declaration = disabled
 ktlint_function_naming_ignore_when_annotated_with=Composable
 
 [*.java]
