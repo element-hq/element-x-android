@@ -49,7 +49,6 @@ fun ElementLogoAtom(
     darkTheme: Boolean = isSystemInDarkTheme(),
 ) {
     val blur = if (darkTheme) 160.dp else 24.dp
-    // box-shadow: 0px 6.075949668884277px 24.30379867553711px 0px #1B1D2280;
     val shadowColor = if (darkTheme) size.shadowColorDark else size.shadowColorLight
     val logoShadowColor = if (darkTheme) size.logoShadowColorDark else size.logoShadowColorLight
     val backgroundColor = if (darkTheme) Color.White.copy(alpha = 0.2f) else Color.White.copy(alpha = 0.4f)

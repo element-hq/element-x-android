@@ -188,10 +188,9 @@ class InviteListPresenter @Inject constructor(
             roomAvatarData = avatarData,
             isDirect = isDirect,
             isNew = !seen,
-            sender = if (isDirect) {
-                null
-            } else {
-                inviter?.run {
+            sender = inviter
+                ?.takeIf { !isDirect }
+                ?.run {
                     InviteSender(
                         userId = userId,
                         displayName = displayName ?: "",
@@ -202,8 +201,7 @@ class InviteListPresenter @Inject constructor(
                             size = AvatarSize.InviteSender,
                         ),
                     )
-                }
-            },
+                },
         )
     }
 }

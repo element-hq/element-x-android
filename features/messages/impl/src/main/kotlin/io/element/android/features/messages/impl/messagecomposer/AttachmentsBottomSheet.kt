@@ -62,12 +62,12 @@ internal fun AttachmentsBottomSheet(
     }
 
     LaunchedEffect(state.showAttachmentSourcePicker) {
-        if (state.showAttachmentSourcePicker) {
+        isVisible = if (state.showAttachmentSourcePicker) {
             // We need to use this instead of `LocalFocusManager.clearFocus()` to hide the keyboard when focus is on an Android View
             localView.hideKeyboard()
-            isVisible = true
+            true
         } else {
-            isVisible = false
+            false
         }
     }
     // Send 'DismissAttachmentMenu' event when the bottomsheet was just hidden
@@ -122,7 +122,7 @@ private fun AttachmentSourcePickerMenu(
         )
         ListItem(
             modifier = Modifier.clickable { state.eventSink(MessageComposerEvents.PickAttachmentSource.PhotoFromCamera) },
-            leadingContent = ListItemContent.Icon(IconSource.Resource(CommonDrawables.ic_take_photo_camera,)),
+            leadingContent = ListItemContent.Icon(IconSource.Resource(CommonDrawables.ic_take_photo_camera)),
             headlineContent = { Text(stringResource(R.string.screen_room_attachment_source_camera_photo)) },
             style = ListItemStyle.Primary,
         )

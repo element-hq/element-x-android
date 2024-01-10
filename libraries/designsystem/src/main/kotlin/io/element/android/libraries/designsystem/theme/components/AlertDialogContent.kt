@@ -231,13 +231,11 @@ internal fun AlertDialogContent(
                         Box(
                             // Align the title to the center when an icon is present.
                             Modifier
-                                .then(
-                                    if (applyPaddingToContents) {
-                                        Modifier
-                                    } else {
-                                        Modifier.padding(DialogContentDefaults.externalHorizontalPadding)
+                                .apply {
+                                    if (!applyPaddingToContents) {
+                                        then(Modifier.padding(DialogContentDefaults.externalHorizontalPadding))
                                     }
-                                )
+                                }
                                 .padding(DialogContentDefaults.titlePadding)
                                 .align(
                                     if (icon == null) {

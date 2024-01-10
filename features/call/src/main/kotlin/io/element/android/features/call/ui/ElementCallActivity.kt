@@ -66,9 +66,7 @@ class ElementCallActivity : NodeComponentActivity(), CallScreenNavigator {
     }
 
     @Inject lateinit var callIntentDataParser: CallIntentDataParser
-
     @Inject lateinit var presenterFactory: CallScreenPresenter.Factory
-
     @Inject lateinit var preferencesStore: PreferencesStore
 
     private lateinit var presenter: CallScreenPresenter

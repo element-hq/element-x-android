@@ -75,12 +75,10 @@ private fun TimelineItemReactionsView(
     // In LTR languages we want an incoming message's reactions to be LTR and outgoing to be RTL.
     // For RTL languages it should be the opposite.
     val currentLayout = LocalLayoutDirection.current
-    val reactionsLayoutDirection = if (!isOutgoing) {
-        currentLayout
-    } else if (currentLayout == LayoutDirection.Ltr) {
-        LayoutDirection.Rtl
-    } else {
-        LayoutDirection.Ltr
+    val reactionsLayoutDirection = when {
+        !isOutgoing -> currentLayout
+        currentLayout == LayoutDirection.Ltr -> LayoutDirection.Rtl
+        else -> LayoutDirection.Ltr
     }
 
     return CompositionLocalProvider(LocalLayoutDirection provides reactionsLayoutDirection) {

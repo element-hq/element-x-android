@@ -59,7 +59,12 @@ class CustomReactionPresenter @Inject constructor(
             }
         }
         val event = (target.value as? CustomReactionState.Target.Success)?.event
-        val selectedEmoji = event?.reactionsState?.reactions?.mapNotNull { if (it.isHighlighted) it.key else null }.orEmpty().toImmutableSet()
+        val selectedEmoji = event
+            ?.reactionsState
+            ?.reactions
+            ?.mapNotNull { if (it.isHighlighted) it.key else null }
+            .orEmpty()
+            .toImmutableSet()
         return CustomReactionState(
             target = target.value,
             selectedEmoji = selectedEmoji,

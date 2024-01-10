@@ -40,7 +40,7 @@ import javax.inject.Inject
 @ContributesBinding(SessionScope::class)
 class DefaultFtueState @Inject constructor(
     private val sdkVersionProvider: BuildVersionSdkIntProvider,
-    private val coroutineScope: CoroutineScope,
+    coroutineScope: CoroutineScope,
     private val analyticsService: AnalyticsService,
     private val welcomeScreenState: WelcomeScreenState,
     private val migrationScreenStore: MigrationScreenStore,
@@ -71,37 +71,27 @@ class DefaultFtueState @Inject constructor(
             null -> if (shouldDisplayMigrationScreen()) {
                 FtueStep.MigrationScreen
             } else {
-                getNextStep(
-                    FtueStep.MigrationScreen
-                )
+                getNextStep(FtueStep.MigrationScreen)
             }
             FtueStep.MigrationScreen -> if (shouldDisplayWelcomeScreen()) {
                 FtueStep.WelcomeScreen
             } else {
-                getNextStep(
-                    FtueStep.WelcomeScreen
-                )
+                getNextStep(FtueStep.WelcomeScreen)
             }
             FtueStep.WelcomeScreen -> if (shouldAskNotificationPermissions()) {
                 FtueStep.NotificationsOptIn
             } else {
-                getNextStep(
-                    FtueStep.NotificationsOptIn
-                )
+                getNextStep(FtueStep.NotificationsOptIn)
             }
             FtueStep.NotificationsOptIn -> if (shouldDisplayLockscreenSetup()) {
                 FtueStep.LockscreenSetup
             } else {
-                getNextStep(
-                    FtueStep.LockscreenSetup
-                )
+                getNextStep(FtueStep.LockscreenSetup)
             }
             FtueStep.LockscreenSetup -> if (needsAnalyticsOptIn()) {
                 FtueStep.AnalyticsOptIn
             } else {
-                getNextStep(
-                    FtueStep.AnalyticsOptIn
-                )
+                getNextStep(FtueStep.AnalyticsOptIn)
             }
             FtueStep.AnalyticsOptIn -> null
         }
