@@ -54,5 +54,4 @@ class MatrixToConverterTest {
         val url = Uri.parse("https://element.io/")
         assertThat(MatrixToConverter.convert(url)).isNull()
     }
-
 }

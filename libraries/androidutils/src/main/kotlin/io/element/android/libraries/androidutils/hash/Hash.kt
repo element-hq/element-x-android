@@ -26,8 +26,8 @@ fun String.hash() = try {
     val digest = MessageDigest.getInstance("SHA-512")
     digest.update(toByteArray())
     digest.digest()
-            .joinToString("") { String.format(Locale.ROOT, "%02X", it) }
-            .lowercase(Locale.ROOT)
+        .joinToString("") { String.format(Locale.ROOT, "%02X", it) }
+        .lowercase(Locale.ROOT)
 } catch (exc: Exception) {
     // Should not happen, but just in case
     hashCode().toString()

@@ -39,4 +39,3 @@ suspend fun MatrixRoom.canSendMessage(type: MessageEventType): Result<Boolean> =
  * Shortcut for calling [MatrixRoom.canUserRedact] with our own user.
  */
 suspend fun MatrixRoom.canRedact(): Result<Boolean> = canUserRedact(sessionId)
-

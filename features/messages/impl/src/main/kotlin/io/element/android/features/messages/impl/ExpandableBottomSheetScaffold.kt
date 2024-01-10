@@ -152,7 +152,8 @@ internal fun ExpandableBottomSheetScaffold(
                                 top.place(x = 0, y = 0)
                             }
                         },
-                        content = { sheetContent(false) })
+                        content = { sheetContent(false) }
+                    )
                 }, sheetDragHandle, peekHeight)
             }.map { measurable: Measurable ->
                 measurable.measure(constraints)
@@ -161,7 +162,8 @@ internal fun ExpandableBottomSheetScaffold(
             layout(constraints.maxWidth, constraints.maxHeight) {
                 scaffoldPlaceable.place(0, 0)
             }
-        })
+        }
+    )
 }
 
 private fun CustomSheetState.getIntOffset(): Int? = try {

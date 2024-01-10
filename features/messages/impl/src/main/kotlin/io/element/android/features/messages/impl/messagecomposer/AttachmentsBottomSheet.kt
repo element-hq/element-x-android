@@ -122,7 +122,7 @@ private fun AttachmentSourcePickerMenu(
         )
         ListItem(
             modifier = Modifier.clickable { state.eventSink(MessageComposerEvents.PickAttachmentSource.PhotoFromCamera) },
-            leadingContent = ListItemContent.Icon(IconSource.Resource(CommonDrawables.ic_take_photo_camera, )),
+            leadingContent = ListItemContent.Icon(IconSource.Resource(CommonDrawables.ic_take_photo_camera,)),
             headlineContent = { Text(stringResource(R.string.screen_room_attachment_source_camera_photo)) },
             style = ListItemStyle.Primary,
         )

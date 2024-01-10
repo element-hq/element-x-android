@@ -155,7 +155,7 @@ class VoiceRecorderImplTest {
 
     companion object {
         const val FILE_ID: String = "recording"
-        const val FILE_PATH = "voice_recordings/${FILE_ID}.ogg"
+        const val FILE_PATH = "voice_recordings/$FILE_ID.ogg"
         private lateinit var AUDIO_FORMAT: AudioFormat
 
         // FakeEncoder doesn't actually encode, it just writes the data to the file

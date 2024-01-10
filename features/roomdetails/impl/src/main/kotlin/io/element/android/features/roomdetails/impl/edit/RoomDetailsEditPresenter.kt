@@ -76,9 +76,9 @@ class RoomDetailsEditPresenter @Inject constructor(
             roomAvatarUri,
         ) {
             derivedStateOf {
-                roomAvatarUri?.toString()?.trim() != room.avatarUrl?.toUri()?.toString()?.trim()
-                    || roomName.trim() != (room.name ?: room.displayName).trim()
-                    || roomTopic.orEmpty().trim() != room.topic.orEmpty().trim()
+                roomAvatarUri?.toString()?.trim() != room.avatarUrl?.toUri()?.toString()?.trim() ||
+                    roomName.trim() != (room.name ?: room.displayName).trim() ||
+                    roomTopic.orEmpty().trim() != room.topic.orEmpty().trim()
             }
         }
 

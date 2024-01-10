@@ -32,7 +32,9 @@ interface BuildVersionSdkIntProvider {
     fun <T> whenAtLeast(version: Int, result: () -> T): T? {
         return if (get() >= version) {
             result()
-        } else null
+        } else {
+            null
+        }
     }
 
     @ChecksSdkIntAtLeast(parameter = 0)

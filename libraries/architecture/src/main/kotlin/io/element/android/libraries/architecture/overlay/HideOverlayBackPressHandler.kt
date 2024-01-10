@@ -23,8 +23,8 @@ import io.element.android.libraries.architecture.overlay.operation.Hide
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-class HideOverlayBackPressHandler<NavTarget : Any>
-    : BaseBackPressHandlerStrategy<NavTarget, BackStack.State>() {
+class HideOverlayBackPressHandler<NavTarget : Any> :
+    BaseBackPressHandlerStrategy<NavTarget, BackStack.State>() {
 
     override val canHandleBackPressFlow: Flow<Boolean> by lazy {
         navModel.elements.map(::areThereElements)

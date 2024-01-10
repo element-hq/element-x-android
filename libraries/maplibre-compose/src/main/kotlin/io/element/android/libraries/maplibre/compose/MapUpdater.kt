@@ -16,6 +16,7 @@
  * limitations under the License.
  */
 @file:Suppress("MatchingDeclarationName")
+
 package io.element.android.libraries.maplibre.compose
 
 import android.annotation.SuppressLint

@@ -43,4 +43,3 @@ class DefaultLogoutEntryPoint @Inject constructor() : LogoutEntryPoint {
         }
     }
 }
-

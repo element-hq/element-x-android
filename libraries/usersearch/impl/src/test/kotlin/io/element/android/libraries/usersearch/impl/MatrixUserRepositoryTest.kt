@@ -212,5 +212,4 @@ internal class MatrixUserRepositoryTest {
     private fun List<MatrixUser>.toUserSearchResults() = map { UserSearchResult(it) }
 
     private fun placeholderResult(id: UserId = A_USER_ID, isUnresolved: Boolean = false) = UserSearchResult(MatrixUser(id), isUnresolved = isUnresolved)
-
 }

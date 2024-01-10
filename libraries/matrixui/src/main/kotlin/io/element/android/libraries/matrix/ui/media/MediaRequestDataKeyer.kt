@@ -34,5 +34,5 @@ internal class MediaRequestDataKeyer : Keyer<MediaRequestData> {
 
 private fun MediaRequestData.toKey(): String? {
     if (source == null) return null
-    return "${source.url}_${kind}"
+    return "${source.url}_$kind"
 }

@@ -31,7 +31,7 @@ object ElementRichTextEditorStyle {
     @Composable
     fun composerStyle(
         hasFocus: Boolean,
-    ) : RichTextEditorStyle {
+    ): RichTextEditorStyle {
         val baseStyle = common()
         return baseStyle.copy(
             text = baseStyle.text.copy(

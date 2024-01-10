@@ -35,4 +35,3 @@ data class CustomReactionState(
         ) : Target
     }
 }
-

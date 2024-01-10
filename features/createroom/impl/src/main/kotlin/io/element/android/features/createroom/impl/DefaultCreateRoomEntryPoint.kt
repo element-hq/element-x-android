@@ -29,7 +29,6 @@ import javax.inject.Inject
 class DefaultCreateRoomEntryPoint @Inject constructor() : CreateRoomEntryPoint {
 
     override fun nodeBuilder(parentNode: Node, buildContext: BuildContext): CreateRoomEntryPoint.NodeBuilder {
-
         val plugins = ArrayList<Plugin>()
 
         return object : CreateRoomEntryPoint.NodeBuilder {

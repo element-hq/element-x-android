@@ -29,7 +29,8 @@ import kotlinx.coroutines.isActive
 import kotlinx.coroutines.withContext
 
 class AndroidAudioReader
-@RequiresPermission(Manifest.permission.RECORD_AUDIO) private constructor(
+@RequiresPermission(Manifest.permission.RECORD_AUDIO)
+private constructor(
     private val config: AudioConfig,
     private val dispatchers: CoroutineDispatchers,
 ) : AudioReader {

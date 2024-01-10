@@ -87,7 +87,6 @@ class PollHistoryPresenter @Inject constructor(
             }
         }
 
-
         return PollHistoryState(
             isLoading = isLoading,
             hasMoreToLoad = paginationState.hasMoreToLoadBackwards,

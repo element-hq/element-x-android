@@ -33,7 +33,7 @@ class DefaultEncoder @Inject constructor(
     config: AudioConfig,
 ) : Encoder {
     private val bitRate = config.bitRate
-private val sampleRate = config.sampleRate.asEncoderModel()
+    private val sampleRate = config.sampleRate.asEncoderModel()
 
     private var encoder: OggOpusEncoder? = null
     override fun init(

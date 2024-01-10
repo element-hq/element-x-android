@@ -180,10 +180,14 @@ private fun DefaultRoomListTopBar(
                         },
                         blurSize = DpSize(avatarBloomSize, avatarBloomSize),
                         offset = DpOffset(24.dp, 24.dp + statusBarPadding),
-                        clipToSize = if (appBarHeight > 0) DpSize(
-                            avatarBloomSize,
-                            appBarHeight.toDp()
-                        ) else DpSize.Unspecified,
+                        clipToSize = if (appBarHeight > 0) {
+                            DpSize(
+                                avatarBloomSize,
+                                appBarHeight.toDp()
+                            )
+                        } else {
+                            DpSize.Unspecified
+                        },
                         bottomSoftEdgeColor = ElementTheme.materialColors.background,
                         bottomSoftEdgeAlpha = 1f - collapsedFraction,
                         alpha = if (areSearchResultsDisplayed) 0f else 1f,

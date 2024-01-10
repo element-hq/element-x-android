@@ -47,4 +47,3 @@ class DefaultRoomSelectEntryPoint @Inject constructor() : RoomSelectEntryPoint {
         }
     }
 }
-

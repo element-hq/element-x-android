@@ -31,6 +31,9 @@ interface AppComponent : NodeFactoriesBindings {
 
     @Component.Factory
     interface Factory {
-        fun create(@ApplicationContext @BindsInstance context: Context): AppComponent
+        fun create(
+            @ApplicationContext @BindsInstance
+            context: Context
+        ): AppComponent
     }
 }

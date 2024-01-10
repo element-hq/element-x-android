@@ -45,4 +45,3 @@ class AddPeoplePresenter @Inject constructor(
         return userListPresenter.present()
     }
 }
-

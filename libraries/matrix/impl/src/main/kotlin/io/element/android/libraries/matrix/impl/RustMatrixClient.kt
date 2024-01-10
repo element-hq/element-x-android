@@ -105,7 +105,7 @@ class RustMatrixClient(
     override val sessionId: UserId = UserId(client.userId())
     private val innerRoomListService = syncService.roomListService()
     private val sessionDispatcher = dispatchers.io.limitedParallelism(64)
-    private val sessionCoroutineScope = appCoroutineScope.childScope(dispatchers.main, "Session-${sessionId}")
+    private val sessionCoroutineScope = appCoroutineScope.childScope(dispatchers.main, "Session-$sessionId")
     private val rustSyncService = RustSyncService(syncService, sessionCoroutineScope)
     private val verificationService = RustSessionVerificationService(rustSyncService, sessionCoroutineScope)
     private val pushersService = RustPushersService(
@@ -137,7 +137,7 @@ class RustMatrixClient(
             Timber.w("didReceiveAuthError(isSoftLogout=$isSoftLogout)")
             if (isLoggingOut.getAndSet(true).not()) {
                 Timber.v("didReceiveAuthError -> do the cleanup")
-                //TODO handle isSoftLogout parameter.
+                // TODO handle isSoftLogout parameter.
                 appCoroutineScope.launch {
                     val existingData = sessionStore.getSession(client.userId())
                     if (existingData != null) {
@@ -204,7 +204,7 @@ class RustMatrixClient(
         // Check if already in memory...
         var cachedPairOfRoom = pairOfRoom(roomId)
         if (cachedPairOfRoom == null) {
-            //... otherwise, lets wait for the SS to load all rooms and check again.
+            // ... otherwise, lets wait for the SS to load all rooms and check again.
             roomListService.allRooms.awaitLoaded()
             cachedPairOfRoom = pairOfRoom(roomId)
         }

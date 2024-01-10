@@ -39,4 +39,3 @@ interface RoomSelectEntryPoint : FeatureEntryPoint {
         fun onCancel()
     }
 }
-

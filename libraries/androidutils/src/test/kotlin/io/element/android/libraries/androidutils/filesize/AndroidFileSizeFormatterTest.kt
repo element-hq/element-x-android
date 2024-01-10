@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package  io.element.android.libraries.androidutils.filesize
+package io.element.android.libraries.androidutils.filesize
 
 import android.os.Build
 import com.google.common.truth.Truth.assertThat

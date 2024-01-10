@@ -38,16 +38,17 @@ import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
+import io.element.android.compound.theme.ElementTheme
 import io.element.android.libraries.designsystem.components.media.drawWaveform
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.compound.theme.ElementTheme
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toPersistentList
 import java.lang.Float.min
 
 private const val DEFAULT_GRAPHICS_LAYER_ALPHA: Float = 0.99F
 private val waveFormHeight = 26.dp
+
 @Composable
 fun LiveWaveformView(
     levels: ImmutableList<Float>,
@@ -66,8 +67,8 @@ fun LiveWaveformView(
         }
     }
 
-
-    Box(contentAlignment = Alignment.CenterEnd,
+    Box(
+        contentAlignment = Alignment.CenterEnd,
         modifier = modifier
             .fillMaxWidth()
             .height(waveFormHeight)
@@ -96,7 +97,6 @@ fun LiveWaveformView(
 @Composable
 internal fun LiveWaveformViewPreview() = ElementPreview {
     Column {
-
         LiveWaveformView(
             levels = List(100) { it.toFloat() / 100 }.toPersistentList(),
             modifier = Modifier.height(34.dp),

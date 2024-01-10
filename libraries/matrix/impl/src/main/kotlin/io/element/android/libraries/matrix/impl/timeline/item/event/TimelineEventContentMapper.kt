@@ -147,7 +147,7 @@ private fun RustMembershipChange.map(): MembershipChange {
     }
 }
 
-//TODO extract state events?
+// TODO extract state events?
 private fun RustOtherState.map(): OtherState {
     return when (this) {
         is RustOtherState.Custom -> OtherState.Custom(eventType)

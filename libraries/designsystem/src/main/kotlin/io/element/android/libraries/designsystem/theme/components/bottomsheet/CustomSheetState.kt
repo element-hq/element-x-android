@@ -35,15 +35,17 @@ import kotlinx.coroutines.CancellationException
 @OptIn(ExperimentalFoundationApi::class)
 @Stable
 @ExperimentalMaterial3Api
-class CustomSheetState @Deprecated(
+class CustomSheetState
+@Deprecated(
     message = "This constructor is deprecated. " +
-            "Please use the constructor that provides a [Density]",
+        "Please use the constructor that provides a [Density]",
     replaceWith = ReplaceWith(
         "SheetState(" +
-                "skipPartiallyExpanded, LocalDensity.current, initialValue, " +
-                "confirmValueChange, skipHiddenState)"
+            "skipPartiallyExpanded, LocalDensity.current, initialValue, " +
+            "confirmValueChange, skipHiddenState)"
     )
-) constructor(
+)
+constructor(
     internal val skipPartiallyExpanded: Boolean,
     initialValue: SheetValue = Hidden,
     confirmValueChange: (SheetValue) -> Boolean = { true },
@@ -77,11 +79,12 @@ class CustomSheetState @Deprecated(
     ) : this(skipPartiallyExpanded, initialValue, confirmValueChange, skipHiddenState) {
         this.density = density
     }
+
     init {
         if (skipPartiallyExpanded) {
             require(initialValue != PartiallyExpanded) {
                 "The initial value must not be set to PartiallyExpanded if skipPartiallyExpanded " +
-                        "is set to true."
+                    "is set to true."
             }
         }
         if (skipHiddenState) {
@@ -168,7 +171,7 @@ class CustomSheetState @Deprecated(
     suspend fun partialExpand() {
         check(!skipPartiallyExpanded) {
             "Attempted to animate to partial expanded when skipPartiallyExpanded was enabled. Set" +
-                    " skipPartiallyExpanded to false to use this function."
+                " skipPartiallyExpanded to false to use this function."
         }
         animateTo(PartiallyExpanded)
     }
@@ -194,7 +197,7 @@ class CustomSheetState @Deprecated(
     suspend fun hide() {
         check(!skipHiddenState) {
             "Attempted to animate to hidden when skipHiddenState was enabled. Set skipHiddenState" +
-                    " to false to use this function."
+                " to false to use this function."
         }
         animateTo(Hidden)
     }
@@ -254,7 +257,7 @@ class CustomSheetState @Deprecated(
     internal var density: Density? = null
     private fun requireDensity() = requireNotNull(density) {
         "SheetState did not have a density attached. Are you using SheetState with " +
-                "BottomSheetScaffold or ModalBottomSheet component?"
+            "BottomSheetScaffold or ModalBottomSheet component?"
     }
 
     companion object {
@@ -278,7 +281,7 @@ class CustomSheetState @Deprecated(
          */
         @Deprecated(
             message = "This function is deprecated. Please use the overload where Density is" +
-                    " provided.",
+                " provided.",
             replaceWith = ReplaceWith(
                 "Saver(skipPartiallyExpanded, confirmValueChange, LocalDensity.current)"
             )
@@ -290,7 +293,7 @@ class CustomSheetState @Deprecated(
         ) = Saver<CustomSheetState, SheetValue>(
             save = { it.currentValue },
             restore = { savedValue ->
-               CustomSheetState(skipPartiallyExpanded, savedValue, confirmValueChange)
+                CustomSheetState(skipPartiallyExpanded, savedValue, confirmValueChange)
             }
         )
     }

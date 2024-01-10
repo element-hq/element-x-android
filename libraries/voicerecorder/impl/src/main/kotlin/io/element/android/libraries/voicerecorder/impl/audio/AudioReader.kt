@@ -33,5 +33,4 @@ interface AudioReader {
     interface Factory {
         fun create(config: AudioConfig, dispatchers: CoroutineDispatchers): AudioReader
     }
-
 }

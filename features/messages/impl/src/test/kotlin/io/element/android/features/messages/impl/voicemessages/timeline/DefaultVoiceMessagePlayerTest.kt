@@ -144,7 +144,7 @@ class DefaultVoiceMessagePlayerTest {
                 assertThat(it.currentPosition).isEqualTo(1000)
                 assertThat(it.duration).isEqualTo(1000)
             }
-            awaitItem().let {// Additional spurious state due to MediaPlayer owner change.
+            awaitItem().let { // Additional spurious state due to MediaPlayer owner change.
                 assertThat(it.isReady).isFalse()
                 assertThat(it.isPlaying).isFalse()
                 assertThat(it.isEnded).isFalse()
@@ -164,7 +164,7 @@ class DefaultVoiceMessagePlayerTest {
 
         // Play player1 again.
         player1.state.test {
-            awaitItem().let {// Last previous state/
+            awaitItem().let { // Last previous state/
                 assertThat(it.isReady).isFalse()
                 assertThat(it.isPlaying).isFalse()
                 assertThat(it.isEnded).isTrue()
@@ -172,7 +172,7 @@ class DefaultVoiceMessagePlayerTest {
                 assertThat(it.duration).isEqualTo(1000)
             }
             assertThat(player1.prepare().isSuccess).isTrue()
-            awaitItem().let {// Additional spurious state due to MediaPlayer owner change.
+            awaitItem().let { // Additional spurious state due to MediaPlayer owner change.
                 assertThat(it.isReady).isFalse()
                 assertThat(it.isPlaying).isFalse()
                 assertThat(it.isEnded).isFalse()

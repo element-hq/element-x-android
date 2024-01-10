@@ -25,6 +25,7 @@ class PollFormStateSaverTest {
     companion object {
         val CanSaveScope = SaverScope { true }
     }
+
     @Test
     fun `test save and restore`() {
         val state = PollFormState(

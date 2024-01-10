@@ -498,10 +498,10 @@ internal fun rememberSheetState(
     initialValue: SheetValue = SheetValue.Hidden,
     skipHiddenState: Boolean = false,
 ): CustomSheetState {
-
     val density = LocalDensity.current
     return rememberSaveable(
-        skipPartiallyExpanded, confirmValueChange,
+        skipPartiallyExpanded,
+        confirmValueChange,
         saver = CustomSheetState.Saver(
             skipPartiallyExpanded = skipPartiallyExpanded,
             confirmValueChange = confirmValueChange,

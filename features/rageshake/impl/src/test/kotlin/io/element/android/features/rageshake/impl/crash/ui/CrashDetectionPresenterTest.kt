@@ -58,7 +58,6 @@ class CrashDetectionPresenterTest {
             skipItems(1)
             val initialState = awaitItem()
             assertThat(initialState.crashDetected).isTrue()
-
         }
     }
 

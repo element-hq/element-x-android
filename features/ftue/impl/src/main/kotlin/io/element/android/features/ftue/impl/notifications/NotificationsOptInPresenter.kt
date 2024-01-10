@@ -77,8 +77,8 @@ class NotificationsOptInPresenter @AssistedInject constructor(
         }
 
         LaunchedEffect(notificationsPermissionsState) {
-            if (notificationsPermissionsState.permissionGranted
-                || notificationsPermissionsState.permissionAlreadyDenied) {
+            if (notificationsPermissionsState.permissionGranted ||
+                notificationsPermissionsState.permissionAlreadyDenied) {
                 callback.onNotificationsOptInFinished()
             }
         }

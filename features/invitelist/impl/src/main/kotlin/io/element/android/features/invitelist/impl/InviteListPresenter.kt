@@ -159,25 +159,27 @@ class InviteListPresenter @Inject constructor(
 
     private fun RoomSummary.Filled.toInviteSummary(seen: Boolean) = details.run {
         val i = inviter
-        val avatarData = if (isDirect && i != null)
+        val avatarData = if (isDirect && i != null) {
             AvatarData(
                 id = i.userId.value,
                 name = i.displayName,
                 url = i.avatarUrl,
                 size = AvatarSize.RoomInviteItem,
             )
-        else
+        } else {
             AvatarData(
                 id = roomId.value,
                 name = name,
                 url = avatarURLString,
                 size = AvatarSize.RoomInviteItem,
             )
+        }
 
-        val alias = if (isDirect)
+        val alias = if (isDirect) {
             inviter?.userId?.value
-        else
+        } else {
             canonicalAlias
+        }
 
         InviteListInviteSummary(
             roomId = roomId,
@@ -186,17 +188,21 @@ class InviteListPresenter @Inject constructor(
             roomAvatarData = avatarData,
             isDirect = isDirect,
             isNew = !seen,
-            sender = if (isDirect) null else inviter?.run {
-                InviteSender(
-                    userId = userId,
-                    displayName = displayName ?: "",
-                    avatarData = AvatarData(
-                        id = userId.value,
-                        name = displayName,
-                        url = avatarUrl,
-                        size = AvatarSize.InviteSender,
-                    ),
-                )
+            sender = if (isDirect) {
+                null
+            } else {
+                inviter?.run {
+                    InviteSender(
+                        userId = userId,
+                        displayName = displayName ?: "",
+                        avatarData = AvatarData(
+                            id = userId.value,
+                            name = displayName,
+                            url = avatarUrl,
+                            size = AvatarSize.InviteSender,
+                        ),
+                    )
+                }
             },
         )
     }

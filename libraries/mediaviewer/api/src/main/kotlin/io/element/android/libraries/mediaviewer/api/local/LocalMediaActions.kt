@@ -41,4 +41,3 @@ interface LocalMediaActions {
      */
     suspend fun open(localMedia: LocalMedia): Result<Unit>
 }
-

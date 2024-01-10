@@ -564,4 +564,3 @@ private fun createActionListPresenter(isDeveloperModeEnabled: Boolean): ActionLi
     val preferencesStore = InMemoryPreferencesStore(isDeveloperModeEnabled = isDeveloperModeEnabled)
     return ActionListPresenter(preferencesStore = preferencesStore)
 }
-

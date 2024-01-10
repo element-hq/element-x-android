@@ -25,8 +25,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
 
 @SingleIn(AppScope::class)
-class AccountProviderDataSource @Inject constructor(
-) {
+class AccountProviderDataSource @Inject constructor() {
     private val accountProvider: MutableStateFlow<AccountProvider> = MutableStateFlow(
         defaultAccountProvider
     )

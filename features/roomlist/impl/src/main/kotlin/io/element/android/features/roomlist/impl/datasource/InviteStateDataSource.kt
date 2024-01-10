@@ -23,5 +23,4 @@ interface InviteStateDataSource {
 
     @Composable
     fun inviteState(): InvitesState
-
 }

@@ -32,6 +32,7 @@ class ConfigureTracingPresenterTest {
 
     @get:Rule
     val warmUpRule = WarmUpRule()
+
     @Test
     fun `present - initial state`() = runTest {
         val store = InMemoryTracingConfigurationStore()

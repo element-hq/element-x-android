@@ -162,4 +162,3 @@ class RoomInviteMembersPresenter @Inject constructor(
         }.runCatchingUpdatingState(roomMembers)
     }
 }
-

@@ -26,7 +26,7 @@ import kotlinx.parcelize.Parcelize
 @Immutable
 sealed interface MessageComposerMode : Parcelable {
     @Parcelize
-    data object Normal: MessageComposerMode
+    data object Normal : MessageComposerMode
 
     sealed class Special(open val eventId: EventId?, open val defaultContent: String) :
         MessageComposerMode

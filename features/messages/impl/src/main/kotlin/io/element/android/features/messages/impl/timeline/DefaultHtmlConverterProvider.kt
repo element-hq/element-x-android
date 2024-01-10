@@ -39,7 +39,7 @@ import javax.inject.Inject
 
 @ContributesBinding(SessionScope::class)
 @SingleIn(SessionScope::class)
-class DefaultHtmlConverterProvider @Inject constructor(): HtmlConverterProvider {
+class DefaultHtmlConverterProvider @Inject constructor() : HtmlConverterProvider {
 
     private val htmlConverter: MutableState<HtmlConverter?> = mutableStateOf(null)
 
@@ -67,7 +67,7 @@ class DefaultHtmlConverterProvider @Inject constructor(): HtmlConverterProvider 
                         return TextDisplay.Custom(mentionSpanProvider.getMentionSpanFor(text, url))
                     }
                 },
-                isMention = { _, url ->  mentionDetector?.isMention(url).orFalse() }
+                isMention = { _, url -> mentionDetector?.isMention(url).orFalse() }
             ).apply {
                 configureWith(editorStyle)
             }

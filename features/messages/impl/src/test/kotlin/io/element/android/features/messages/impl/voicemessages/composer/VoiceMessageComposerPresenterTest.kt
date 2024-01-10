@@ -463,7 +463,6 @@ class VoiceMessageComposerPresenterTest {
                 assertThat(showSendFailureDialog).isFalse()
             }
 
-
             assertThat(matrixRoom.sendMediaCount).isEqualTo(0)
             testPauseAndDestroy(finalState)
         }

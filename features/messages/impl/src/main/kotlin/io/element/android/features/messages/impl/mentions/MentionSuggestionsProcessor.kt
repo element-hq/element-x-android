@@ -88,8 +88,8 @@ object MentionSuggestionsProcessor {
             }
 
             fun memberMatchesQuery(member: RoomMember, query: String): Boolean {
-                return member.userId.value.contains(query, ignoreCase = true)
-                    || member.displayName?.contains(query, ignoreCase = true) == true
+                return member.userId.value.contains(query, ignoreCase = true) ||
+                    member.displayName?.contains(query, ignoreCase = true) == true
             }
 
             val matchingMembers = roomMembers

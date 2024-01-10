@@ -25,7 +25,7 @@ data class Suggestion(
     val type: SuggestionType,
     val text: String,
 ) {
-    constructor(suggestion: SuggestionPattern): this(
+    constructor(suggestion: SuggestionPattern) : this(
         suggestion.start.toInt(),
         suggestion.end.toInt(),
         SuggestionType.fromPatternKey(suggestion.key),

@@ -147,25 +147,29 @@ private fun ButtonInternal(
     val contentPadding = when (size) {
         ButtonSize.Medium -> when (style) {
             ButtonStyle.Filled,
-            ButtonStyle.Outlined -> if (hasStartDrawable)
+            ButtonStyle.Outlined -> if (hasStartDrawable) {
                 PaddingValues(start = 16.dp, top = 10.dp, end = 24.dp, bottom = 10.dp)
-            else
+            } else {
                 PaddingValues(start = 24.dp, top = 10.dp, end = 24.dp, bottom = 10.dp)
-            ButtonStyle.Text -> if (hasStartDrawable)
+            }
+            ButtonStyle.Text -> if (hasStartDrawable) {
                 PaddingValues(start = 12.dp, top = 10.dp, end = 16.dp, bottom = 10.dp)
-            else
+            } else {
                 PaddingValues(start = 12.dp, top = 10.dp, end = 12.dp, bottom = 10.dp)
+            }
         }
         ButtonSize.Large -> when (style) {
             ButtonStyle.Filled,
-            ButtonStyle.Outlined -> if (hasStartDrawable)
+            ButtonStyle.Outlined -> if (hasStartDrawable) {
                 PaddingValues(start = 24.dp, top = 13.dp, end = 32.dp, bottom = 13.dp)
-            else
+            } else {
                 PaddingValues(start = 32.dp, top = 13.dp, end = 32.dp, bottom = 13.dp)
-            ButtonStyle.Text -> if (hasStartDrawable)
+            }
+            ButtonStyle.Text -> if (hasStartDrawable) {
                 PaddingValues(start = 12.dp, top = 13.dp, end = 16.dp, bottom = 13.dp)
-            else
+            } else {
                 PaddingValues(start = 16.dp, top = 13.dp, end = 16.dp, bottom = 13.dp)
+            }
         }
     }
 
@@ -179,12 +183,13 @@ private fun ButtonInternal(
         ButtonStyle.Filled -> null
         ButtonStyle.Outlined -> BorderStroke(
             width = 1.dp,
-            color = if (destructive)
+            color = if (destructive) {
                 ElementTheme.colors.borderCriticalPrimary.copy(
                     alpha = if (enabled) 1f else 0.5f
                 )
-            else
+            } else {
                 ElementTheme.colors.borderInteractiveSecondary
+            }
         )
         ButtonStyle.Text -> null
     }

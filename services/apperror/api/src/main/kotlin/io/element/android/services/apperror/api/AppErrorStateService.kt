@@ -23,5 +23,4 @@ interface AppErrorStateService {
     val appErrorStateFlow: StateFlow<AppErrorState>
 
     fun showError(title: String, body: String)
-
 }

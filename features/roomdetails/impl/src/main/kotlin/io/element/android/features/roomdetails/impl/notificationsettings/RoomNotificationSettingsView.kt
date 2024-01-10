@@ -31,6 +31,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.roomdetails.impl.R
 import io.element.android.libraries.core.bool.orTrue
 import io.element.android.libraries.designsystem.components.async.AsyncActionView
@@ -45,7 +46,6 @@ import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
-import io.element.android.compound.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
@@ -133,8 +133,8 @@ private fun RoomSpecificNotificationSettingsView(
                             }
                             RoomNotificationMode.MUTE -> stringResource(id = CommonStrings.common_mute)
                         }
-                        val displayMentionsOnlyDisclaimer = state.displayMentionsOnlyDisclaimer
-                            && state.defaultRoomNotificationMode == RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY
+                        val displayMentionsOnlyDisclaimer = state.displayMentionsOnlyDisclaimer &&
+                            state.defaultRoomNotificationMode == RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY
                         RoomNotificationSettingsOption(
                             roomNotificationSettingsItem = RoomNotificationSettingsItem(state.defaultRoomNotificationMode, defaultModeTitle),
                             isSelected = true,

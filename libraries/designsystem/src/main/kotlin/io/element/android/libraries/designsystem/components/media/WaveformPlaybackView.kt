@@ -43,9 +43,9 @@ import androidx.compose.ui.input.pointer.pointerInteropFilter
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
+import io.element.android.compound.theme.ElementTheme
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.compound.theme.ElementTheme
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
@@ -118,7 +118,9 @@ fun WaveformPlaybackView(
                                 requestDisallowInterceptTouchEvent.invoke(true)
                                 seekProgress.value = e.x / canvasSizePx.width
                                 true
-                            } else false
+                            } else {
+                                false
+                            }
                         }
                         MotionEvent.ACTION_MOVE -> {
                             if (e.x in 0F..canvasSizePx.width) {

@@ -68,7 +68,6 @@ class MainActivity : ComponentActivity() {
                 val loggedInState by matrixAuthenticationService.loggedInStateFlow().collectAsState(initial = LoggedInState.NotLoggedIn)
                 Content(isLoggedIn = loggedInState is LoggedInState.LoggedIn, modifier = Modifier.fillMaxSize())
             }
-
         }
     }
 

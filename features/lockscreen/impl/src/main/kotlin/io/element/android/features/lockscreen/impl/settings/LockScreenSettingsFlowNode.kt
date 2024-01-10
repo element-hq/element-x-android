@@ -125,7 +125,6 @@ class LockScreenSettingsFlowNode @AssistedInject constructor(
                 createNode<LockScreenSettingsNode>(buildContext, plugins = listOf(callback))
             }
             NavTarget.Unknown -> node(buildContext) { }
-
         }
     }
 

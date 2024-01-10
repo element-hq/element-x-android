@@ -60,7 +60,6 @@ fun NotificationSettingsView(
         onBackPressed = onBackPressed,
         title = stringResource(id = R.string.screen_notification_settings_title)
     ) {
-
         when (state.matrixSettings) {
             is NotificationSettingsState.MatrixSettings.Invalid -> InvalidNotificationSettingsView(
                 showError = state.matrixSettings.fixFailed,

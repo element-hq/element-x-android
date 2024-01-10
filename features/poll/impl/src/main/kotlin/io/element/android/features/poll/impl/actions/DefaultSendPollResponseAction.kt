@@ -40,4 +40,3 @@ class DefaultSendPollResponseAction @Inject constructor(
         }
     }
 }
-

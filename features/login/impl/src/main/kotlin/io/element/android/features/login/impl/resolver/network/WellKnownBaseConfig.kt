@@ -30,6 +30,6 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 data class WellKnownBaseConfig(
-        @SerialName("base_url")
-        val baseURL: String? = null
+    @SerialName("base_url")
+    val baseURL: String? = null
 )

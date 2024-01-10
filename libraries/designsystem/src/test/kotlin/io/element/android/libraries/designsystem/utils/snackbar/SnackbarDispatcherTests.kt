@@ -87,5 +87,4 @@ class SnackbarDispatcherTests {
             assertThat(awaitItem()).isNull()
         }
     }
-
 }

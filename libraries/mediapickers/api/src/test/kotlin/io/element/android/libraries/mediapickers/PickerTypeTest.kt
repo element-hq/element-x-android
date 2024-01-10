@@ -62,5 +62,4 @@ class PickerTypeTest {
         assertThat(pickerType.getContract()).isInstanceOf(ActivityResultContracts.CaptureVideo::class.java)
         assertThat(pickerType.getDefaultRequest()).isEqualTo(uri)
     }
-
 }

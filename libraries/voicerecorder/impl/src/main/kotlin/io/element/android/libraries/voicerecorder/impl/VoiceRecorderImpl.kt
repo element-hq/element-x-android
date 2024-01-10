@@ -104,7 +104,7 @@ class VoiceRecorderImpl @Inject constructor(
                     is Audio.Data -> {
                         val audioLevel = audioLevelCalculator.calculateAudioLevel(audio.buffer)
 
-                        lock.withLock{
+                        lock.withLock {
                             levels.add(audioLevel)
                             _state.emit(VoiceRecorderState.Recording(elapsedTime, levels.toList()))
                         }
@@ -135,7 +135,6 @@ class VoiceRecorderImpl @Inject constructor(
         audioReader?.stop()
         audioReader = null
         encoder.release()
-
 
         lock.withLock {
             if (cancelled) {

@@ -257,7 +257,7 @@ class RustMatrixTimeline(
 
     private fun List<MatrixTimelineItem>.hasEncryptionHistoryBanner(): Boolean {
         val firstItem = firstOrNull()
-        return firstItem is MatrixTimelineItem.Virtual
-            && firstItem.virtual is VirtualTimelineItem.EncryptedHistoryBanner
+        return firstItem is MatrixTimelineItem.Virtual &&
+            firstItem.virtual is VirtualTimelineItem.EncryptedHistoryBanner
     }
 }

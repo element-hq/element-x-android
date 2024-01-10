@@ -45,4 +45,3 @@ class RoomSummaryDetailsFactory(private val roomMessageFactory: RoomMessageFacto
         )
     }
 }
-

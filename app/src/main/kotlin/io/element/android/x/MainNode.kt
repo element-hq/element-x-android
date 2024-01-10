@@ -68,5 +68,4 @@ class MainNode(
 
     @Parcelize
     object RootNavTarget : Parcelable
-
 }

@@ -268,10 +268,9 @@ class RootFlowNode @AssistedInject constructor(
     }
 
     private suspend fun attachSession(sessionId: SessionId): LoggedInAppScopeFlowNode {
-        //TODO handle multi-session
+        // TODO handle multi-session
         return waitForChildAttached { navTarget ->
             navTarget is NavTarget.LoggedInFlow && navTarget.sessionId == sessionId
         }
     }
 }
-

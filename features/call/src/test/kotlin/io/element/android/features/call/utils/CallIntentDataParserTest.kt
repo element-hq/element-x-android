@@ -117,7 +117,7 @@ class CallIntentDataParserTest {
     @Test
     fun `Element Call url with url extra param appPrompt gets url extracted`() {
         doTest(
-            url = "${VALID_CALL_URL_WITH_PARAM}&appPrompt=true",
+            url = "$VALID_CALL_URL_WITH_PARAM&appPrompt=true",
             expectedResult = "$VALID_CALL_URL_WITH_PARAM#?$EXTRA_PARAMS"
         )
     }
@@ -125,7 +125,7 @@ class CallIntentDataParserTest {
     @Test
     fun `Element Call url with url extra param in fragment appPrompt gets url extracted`() {
         doTest(
-            url = "${VALID_CALL_URL_WITH_PARAM}#?appPrompt=true",
+            url = "$VALID_CALL_URL_WITH_PARAM#?appPrompt=true",
             expectedResult = "$VALID_CALL_URL_WITH_PARAM#?appPrompt=false&confineToRoom=true"
         )
     }
@@ -133,7 +133,7 @@ class CallIntentDataParserTest {
     @Test
     fun `Element Call url with url extra param in fragment appPrompt and other gets url extracted`() {
         doTest(
-            url = "${VALID_CALL_URL_WITH_PARAM}#?appPrompt=true&otherParam=maybe",
+            url = "$VALID_CALL_URL_WITH_PARAM#?appPrompt=true&otherParam=maybe",
             expectedResult = "$VALID_CALL_URL_WITH_PARAM#?appPrompt=false&otherParam=maybe&confineToRoom=true"
         )
     }
@@ -141,7 +141,7 @@ class CallIntentDataParserTest {
     @Test
     fun `Element Call url with url extra param confineToRoom gets url extracted`() {
         doTest(
-            url = "${VALID_CALL_URL_WITH_PARAM}&confineToRoom=false",
+            url = "$VALID_CALL_URL_WITH_PARAM&confineToRoom=false",
             expectedResult = "$VALID_CALL_URL_WITH_PARAM#?$EXTRA_PARAMS"
         )
     }
@@ -149,7 +149,7 @@ class CallIntentDataParserTest {
     @Test
     fun `Element Call url with url extra param in fragment confineToRoom gets url extracted`() {
         doTest(
-            url = "${VALID_CALL_URL_WITH_PARAM}#?confineToRoom=false",
+            url = "$VALID_CALL_URL_WITH_PARAM#?confineToRoom=false",
             expectedResult = "$VALID_CALL_URL_WITH_PARAM#?confineToRoom=true&appPrompt=false"
         )
     }
@@ -157,7 +157,7 @@ class CallIntentDataParserTest {
     @Test
     fun `Element Call url with url extra param in fragment confineToRoom and more gets url extracted`() {
         doTest(
-            url = "${VALID_CALL_URL_WITH_PARAM}#?confineToRoom=false&otherParam=maybe",
+            url = "$VALID_CALL_URL_WITH_PARAM#?confineToRoom=false&otherParam=maybe",
             expectedResult = "$VALID_CALL_URL_WITH_PARAM#?confineToRoom=true&otherParam=maybe&appPrompt=false"
         )
     }
@@ -165,7 +165,7 @@ class CallIntentDataParserTest {
     @Test
     fun `Element Call url with url fragment gets url extracted`() {
         doTest(
-            url = "${VALID_CALL_URL_WITH_PARAM}#fragment",
+            url = "$VALID_CALL_URL_WITH_PARAM#fragment",
             expectedResult = "$VALID_CALL_URL_WITH_PARAM#fragment?$EXTRA_PARAMS"
         )
     }
@@ -173,7 +173,7 @@ class CallIntentDataParserTest {
     @Test
     fun `Element Call url with url fragment with params gets url extracted`() {
         doTest(
-            url = "${VALID_CALL_URL_WITH_PARAM}#fragment?otherParam=maybe",
+            url = "$VALID_CALL_URL_WITH_PARAM#fragment?otherParam=maybe",
             expectedResult = "$VALID_CALL_URL_WITH_PARAM#fragment?otherParam=maybe&$EXTRA_PARAMS"
         )
     }
@@ -181,7 +181,7 @@ class CallIntentDataParserTest {
     @Test
     fun `Element Call url with url fragment with other params gets url extracted`() {
         doTest(
-            url = "${VALID_CALL_URL_WITH_PARAM}#?otherParam=maybe",
+            url = "$VALID_CALL_URL_WITH_PARAM#?otherParam=maybe",
             expectedResult = "$VALID_CALL_URL_WITH_PARAM#?otherParam=maybe&$EXTRA_PARAMS"
         )
     }
@@ -189,7 +189,7 @@ class CallIntentDataParserTest {
     @Test
     fun `Element Call url with empty fragment`() {
         doTest(
-            url = "${VALID_CALL_URL_WITH_PARAM}#",
+            url = "$VALID_CALL_URL_WITH_PARAM#",
             expectedResult = "$VALID_CALL_URL_WITH_PARAM#?$EXTRA_PARAMS"
         )
     }
@@ -197,7 +197,7 @@ class CallIntentDataParserTest {
     @Test
     fun `Element Call url with empty fragment query`() {
         doTest(
-            url = "${VALID_CALL_URL_WITH_PARAM}#?",
+            url = "$VALID_CALL_URL_WITH_PARAM#?",
             expectedResult = "$VALID_CALL_URL_WITH_PARAM#?$EXTRA_PARAMS"
         )
     }

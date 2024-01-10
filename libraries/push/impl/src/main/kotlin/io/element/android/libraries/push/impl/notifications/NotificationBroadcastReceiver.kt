@@ -35,6 +35,7 @@ private val loggerTag = LoggerTag("NotificationBroadcastReceiver", LoggerTag.Not
 class NotificationBroadcastReceiver : BroadcastReceiver() {
 
     @Inject lateinit var defaultNotificationDrawerManager: DefaultNotificationDrawerManager
+
     @Inject lateinit var actionIds: NotificationActionIds
 
     override fun onReceive(context: Context?, intent: Intent?) {

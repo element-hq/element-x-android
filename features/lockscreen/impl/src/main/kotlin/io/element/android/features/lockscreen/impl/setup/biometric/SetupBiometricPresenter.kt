@@ -33,7 +33,6 @@ class SetupBiometricPresenter @Inject constructor(
 
     @Composable
     override fun present(): SetupBiometricState {
-
         var isBiometricSetupDone by remember {
             mutableStateOf(false)
         }

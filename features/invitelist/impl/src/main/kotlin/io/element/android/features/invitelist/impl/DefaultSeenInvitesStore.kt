@@ -34,7 +34,6 @@ import javax.inject.Inject
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "elementx_seeninvites")
 private val seenInvitesKey = stringSetPreferencesKey("seenInvites")
 
-
 @ContributesBinding(SessionScope::class)
 class DefaultSeenInvitesStore @Inject constructor(
     @ApplicationContext context: Context
@@ -55,5 +54,4 @@ class DefaultSeenInvitesStore @Inject constructor(
             prefs[seenInvitesKey] = roomIds.map { it.value }.toSet()
         }
     }
-
 }

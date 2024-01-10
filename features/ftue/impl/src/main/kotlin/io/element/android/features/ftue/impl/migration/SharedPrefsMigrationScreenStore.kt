@@ -58,4 +58,3 @@ class SharedPrefsMigrationScreenStore @Inject constructor(
         private const val IS_MIGRATION_SCREEN_SHOWN_PREFIX = "is_migration_screen_shown_"
     }
 }
-

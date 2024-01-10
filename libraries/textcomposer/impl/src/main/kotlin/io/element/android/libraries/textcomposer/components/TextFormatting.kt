@@ -48,7 +48,6 @@ internal fun TextFormatting(
     state: RichTextEditorState,
     modifier: Modifier = Modifier,
 ) {
-
     val scrollState = rememberScrollState()
     val coroutineScope = rememberCoroutineScope()
 

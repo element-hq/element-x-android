@@ -165,8 +165,7 @@ private fun ReactionContent(
             model = MediaRequestData(MediaSource(reaction.key), MediaRequestData.Kind.Content),
             contentDescription = null
         )
-    }
-    else {
+    } else {
         Text(
             text = reaction.displayKey,
             style = ElementTheme.typography.fontBodyMdRegular.copy(
@@ -225,4 +224,3 @@ internal fun MessagesReactionExtraButtonsPreview() = ElementPreview {
         )
     }
 }
-

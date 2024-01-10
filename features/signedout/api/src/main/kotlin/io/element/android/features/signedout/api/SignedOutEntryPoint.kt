@@ -34,4 +34,3 @@ interface SignedOutEntryPoint : FeatureEntryPoint {
         fun build(): Node
     }
 }
-

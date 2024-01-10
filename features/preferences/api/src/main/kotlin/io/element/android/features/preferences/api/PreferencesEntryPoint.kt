@@ -30,6 +30,7 @@ interface PreferencesEntryPoint : FeatureEntryPoint {
     sealed interface InitialTarget : Parcelable {
         @Parcelize
         data object Root : InitialTarget
+
         @Parcelize
         data object NotificationSettings : InitialTarget
     }

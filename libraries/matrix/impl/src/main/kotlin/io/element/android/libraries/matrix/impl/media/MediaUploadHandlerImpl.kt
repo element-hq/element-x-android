@@ -29,7 +29,7 @@ class MediaUploadHandlerImpl(
         runCatching {
             sendAttachmentJoinHandle.join()
         }
-        .also { cleanUpFiles() }
+            .also { cleanUpFiles() }
 
     override fun cancel() {
         sendAttachmentJoinHandle.cancel()

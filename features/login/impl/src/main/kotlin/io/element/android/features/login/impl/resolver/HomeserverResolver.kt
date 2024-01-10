@@ -90,9 +90,9 @@ class HomeserverResolver @Inject constructor(
             if (data.contains(".")) {
                 // TLD detected?
             } else {
-                add("${data}.org")
-                add("${data}.com")
-                add("${data}.io")
+                add("$data.org")
+                add("$data.com")
+                add("$data.io")
             }
             // Always try what the user has entered
             add(data)

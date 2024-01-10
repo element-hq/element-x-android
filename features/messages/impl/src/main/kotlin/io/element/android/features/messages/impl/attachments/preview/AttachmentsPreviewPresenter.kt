@@ -48,7 +48,6 @@ class AttachmentsPreviewPresenter @AssistedInject constructor(
 
     @Composable
     override fun present(): AttachmentsPreviewState {
-
         val coroutineScope = rememberCoroutineScope()
 
         val sendActionState = remember {

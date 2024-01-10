@@ -27,4 +27,3 @@ data class VoiceMessageComposerState(
     val keepScreenOn: Boolean,
     val eventSink: (VoiceMessageComposerEvents) -> Unit,
 )
-

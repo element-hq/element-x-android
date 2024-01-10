@@ -75,7 +75,6 @@ class VoiceMessagePresenter @AssistedInject constructor(
 
     @Composable
     override fun present(): VoiceMessageState {
-
         val playerState by player.state.collectAsState(
             VoiceMessagePlayer.State(
                 isReady = false,

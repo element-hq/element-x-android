@@ -130,7 +130,9 @@ object PermalinkParser {
             val splitNameValue = it.split("=")
             if (splitNameValue.size == 2) {
                 Pair(splitNameValue[0], URLDecoder.decode(splitNameValue[1], "UTF-8"))
-            } else null
+            } else {
+                null
+            }
         }
 
     private fun String.getViaParameters(): List<String> {

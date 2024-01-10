@@ -31,7 +31,9 @@ private val loggerTag = LoggerTag("VectorFirebaseMessagingService", LoggerTag.Pu
 
 class VectorFirebaseMessagingService : FirebaseMessagingService() {
     @Inject lateinit var firebaseNewTokenHandler: FirebaseNewTokenHandler
+
     @Inject lateinit var pushParser: FirebasePushParser
+
     @Inject lateinit var pushHandler: PushHandler
 
     private val coroutineScope = CoroutineScope(SupervisorJob())

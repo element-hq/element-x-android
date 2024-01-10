@@ -50,5 +50,4 @@ class AESEncryptionDecryptionServiceTest {
             encryptionDecryptionService.decrypt(decryptionKey, encryptionResult)
         }
     }
-
 }

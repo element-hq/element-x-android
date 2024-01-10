@@ -224,6 +224,4 @@ class CallScreenPresenter @AssistedInject constructor(
         navigator.close()
         widgetDriver?.close()
     }
-
 }
-

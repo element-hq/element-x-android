@@ -32,7 +32,7 @@ class UnifiedPushGatewayResolver @Inject constructor(
         val gateway = UnifiedPushConfig.default_push_gateway_http_url
         val url = URL(endpoint)
         val port = if (url.port != -1) { ":${url.port}" } else { "" }
-        val customBase = "${url.protocol}://${url.host}${port}"
+        val customBase = "${url.protocol}://${url.host}$port"
         val customUrl = "$customBase/_matrix/push/v1/notify"
         Timber.i("Testing $customUrl")
         try {
