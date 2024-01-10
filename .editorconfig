@@ -17,6 +17,7 @@ ij_wrap_on_typing = false
 # Ktlint rule, for more information see https://pinterest.github.io/ktlint/faq/#why-is-editorconfig-property-disabled_rules-deprecated-and-how-do-i-resolve-this
 ktlint_standard_wrapping = disabled
 ktlint_standard_trailing-comma-on-call-site = disabled
+ktlint_standard_trailing-comma-on-declaration-site = disabled
 ktlint_standard_spacing-between-declarations-with-annotations = disabled
 
 [*.java]
