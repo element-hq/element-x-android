@@ -132,8 +132,6 @@ class MediaViewerPresenter @AssistedInject constructor(
                     val snackbarMessage = SnackbarMessage(mediaActionsError(it))
                     snackbarDispatcher.post(snackbarMessage)
                 }
-        } else {
-            Unit
         }
     }
 
@@ -144,8 +142,6 @@ class MediaViewerPresenter @AssistedInject constructor(
                     val snackbarMessage = SnackbarMessage(mediaActionsError(it))
                     snackbarDispatcher.post(snackbarMessage)
                 }
-        } else {
-            Unit
         }
     }
 
@@ -156,8 +152,6 @@ class MediaViewerPresenter @AssistedInject constructor(
                     val snackbarMessage = SnackbarMessage(mediaActionsError(it))
                     snackbarDispatcher.post(snackbarMessage)
                 }
-        } else {
-            Unit
         }
     }
 
