@@ -25,41 +25,21 @@ import kotlin.time.Duration.Companion.seconds
 
 /**
  * Configuration for the lock screen feature.
+ * @property isPinMandatory Whether the PIN is mandatory or not.
+ * @property pinBlacklist Some PINs are forbidden.
+ * @property pinSize The size of the PIN.
+ * @property maxPinCodeAttemptsBeforeLogout Number of attempts before the user is logged out.
+ * @property gracePeriod Time period before locking the app once backgrounded.
+ * @property isStrongBiometricsEnabled Authentication with strong methods (fingerprint, some face/iris unlock implementations) is supported.
+ * @property isWeakBiometricsEnabled Authentication with weak methods (most face/iris unlock implementations) is supported.
  */
 data class LockScreenConfig(
-    /**
-     * Whether the PIN is mandatory or not.
-     */
     val isPinMandatory: Boolean,
-
-    /**
-     * Some PINs are forbidden.
-     */
     val pinBlacklist: Set<String>,
-
-    /**
-     * The size of the PIN.
-     */
     val pinSize: Int,
-
-    /**
-     * Number of attempts before the user is logged out.
-     */
     val maxPinCodeAttemptsBeforeLogout: Int,
-
-    /**
-     * Time period before locking the app once backgrounded.
-     */
     val gracePeriod: Duration,
-
-    /**
-     * Authentication with strong methods (fingerprint, some face/iris unlock implementations) is supported.
-     */
     val isStrongBiometricsEnabled: Boolean,
-
-    /**
-     * Authentication with weak methods (most face/iris unlock implementations) is supported.
-     */
     val isWeakBiometricsEnabled: Boolean,
 )
 
