@@ -685,7 +685,6 @@ class MessagesPresenterTest {
             navigator = navigator,
             encryptionService = FakeEncryptionService(),
             verificationService = FakeSessionVerificationService(),
-            featureFlagService = FakeFeatureFlagService(),
             redactedVoiceMessageManager = FakeRedactedVoiceMessageManager(),
             endPollAction = FakeEndPollAction(),
             sendPollResponseAction = FakeSendPollResponseAction(),

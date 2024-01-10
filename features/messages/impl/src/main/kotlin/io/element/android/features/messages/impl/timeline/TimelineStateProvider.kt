@@ -48,7 +48,6 @@ import kotlin.random.Random
 fun aTimelineState(timelineItems: ImmutableList<TimelineItem> = persistentListOf()) = TimelineState(
     timelineItems = timelineItems,
     timelineRoomInfo = aTimelineRoomInfo(),
-    showReadReceipts = false,
     paginationState = MatrixTimeline.PaginationState(
         isBackPaginating = false,
         hasMoreToLoadBackwards = true,

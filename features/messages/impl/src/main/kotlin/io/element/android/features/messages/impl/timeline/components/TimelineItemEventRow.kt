@@ -114,7 +114,6 @@ import kotlin.math.roundToInt
 fun TimelineItemEventRow(
     event: TimelineItem.Event,
     timelineRoomInfo: TimelineRoomInfo,
-    showReadReceipts: Boolean,
     isLastOutgoingMessage: Boolean,
     isHighlighted: Boolean,
     onClick: () -> Unit,
@@ -224,7 +223,6 @@ fun TimelineItemEventRow(
                 isLastOutgoingMessage = isLastOutgoingMessage,
                 receipts = event.readReceiptState.receipts,
             ),
-            showReadReceipts = showReadReceipts,
             onReadReceiptsClicked = { onReadReceiptClick(event) },
             modifier = Modifier.padding(top = 4.dp),
         )
