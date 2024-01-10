@@ -55,7 +55,7 @@ jobs:
         run: ./gradlew verifyPaparazziDebug $CI_GRADLE_ARG_PROPERTIES
 
       - name: 📈Generate kover report and verify coverage
-        run: ./gradlew koverMergedReport koverMergedVerify $CI_GRADLE_ARG_PROPERTIES -Pci-build=true
+        run: ./gradlew :app:koverHtmlReport :app:koverXmlReport :app:koverVerify $CI_GRADLE_ARG_PROPERTIES -Pci-build=true
 
       - name: 🚫 Upload kover failed coverage reports
         if: failure()
@@ -63,7 +63,7 @@ jobs:
         with:
           name: kover-error-report
           path: |
-            **/kover/merged/verification/errors.txt
+            app/build/reports/kover/verify.err
 
       - name: ✅ Upload kover report (disabled)
         if: always()
@@ -83,4 +83,4 @@ jobs:
         if: always()
         uses: codecov/codecov-action@v3
         # with:
-        #  files: build/reports/kover/merged/xml/report.xml
+        #  files: build/reports/kover/xml/report.xml

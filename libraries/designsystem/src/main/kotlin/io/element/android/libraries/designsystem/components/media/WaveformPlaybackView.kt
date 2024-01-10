@@ -40,6 +40,7 @@ import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.RequestDisallowInterceptTouchEvent
 import androidx.compose.ui.input.pointer.pointerInteropFilter
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
@@ -58,7 +59,7 @@ private const val DEFAULT_GRAPHICS_LAYER_ALPHA: Float = 0.99F
  *
  * @param playbackProgress The current playback progress, between 0 and 1.
  * @param showCursor Whether to show the cursor or not.
- * @param waveform The waveform to display. Use [FakeWaveformFactory] to generate a fake waveform.
+ * @param waveform The waveform to display. Use [createFakeWaveform] to generate a fake waveform.
  * @param onSeek Callback when the user seeks the waveform. Called with a value between 0 and 1.
  * @param modifier The modifier to be applied to the view.
  * @param seekEnabled Whether the user can seek the waveform or not.
@@ -103,6 +104,11 @@ fun WaveformPlaybackView(
         }
     }
 
+    val density = LocalDensity.current
+    val waveformWidthPx by remember {
+        derivedStateOf { with(density) { normalizedWaveformData.size * (lineWidth + linePadding).roundToPx().toFloat() } }
+    }
+
     val requestDisallowInterceptTouchEvent = remember { RequestDisallowInterceptTouchEvent() }
     Canvas(
         modifier = Modifier
@@ -110,21 +116,20 @@ fun WaveformPlaybackView(
             .graphicsLayer(alpha = DEFAULT_GRAPHICS_LAYER_ALPHA)
             .let {
                 if (!seekEnabled) return@let it
-
                 it.pointerInteropFilter(requestDisallowInterceptTouchEvent = requestDisallowInterceptTouchEvent) { e ->
                     return@pointerInteropFilter when (e.action) {
                         MotionEvent.ACTION_DOWN -> {
-                            if (e.x in 0F..canvasSizePx.width) {
+                            if (e.x in 0F..waveformWidthPx) {
                                 requestDisallowInterceptTouchEvent.invoke(true)
-                                seekProgress.value = e.x / canvasSizePx.width
+                                seekProgress.value = e.x / waveformWidthPx
                                 true
                             } else {
                                 false
                             }
                         }
                         MotionEvent.ACTION_MOVE -> {
-                            if (e.x in 0F..canvasSizePx.width) {
-                                seekProgress.value = e.x / canvasSizePx.width
+                            if (e.x in 0F..waveformWidthPx) {
+                                seekProgress.value = e.x / waveformWidthPx
                             }
                             true
                         }
@@ -142,11 +147,11 @@ fun WaveformPlaybackView(
     ) {
         canvasSize = size.toDpSize()
         canvasSizePx = size
-        val centerY = canvasSize.height.toPx() / 2
         val cornerRadius = lineWidth / 2
+        // Calculate the size of the waveform by summing the width of all the lines and paddings
         drawWaveform(
             waveformData = normalizedWaveformData,
-            canvasSize = canvasSize,
+            canvasSizePx = canvasSizePx,
             brush = brush,
             lineWidth = lineWidth,
             linePadding = linePadding
@@ -154,8 +159,8 @@ fun WaveformPlaybackView(
         drawRect(
             brush = progressBrush,
             size = Size(
-                width = progressAnimated.value * canvasSize.width.toPx(),
-                height = canvasSize.height.toPx()
+                width = progressAnimated.value * waveformWidthPx,
+                height = canvasSizePx.height
             ),
             blendMode = BlendMode.SrcAtop
         )
@@ -163,12 +168,12 @@ fun WaveformPlaybackView(
             drawRoundRect(
                 brush = cursorBrush,
                 topLeft = Offset(
-                    x = progressAnimated.value * canvasSize.width.toPx(),
-                    y = centerY - (canvasSize.height.toPx() - 2) / 2
+                    x = progressAnimated.value * waveformWidthPx,
+                    y = 1f
                 ),
                 size = Size(
                     width = lineWidth.toPx(),
-                    height = canvasSize.height.toPx() - 2
+                    height = canvasSizePx.height - 2
                 ),
                 cornerRadius = CornerRadius(cornerRadius.toPx(), cornerRadius.toPx()),
                 style = Fill
