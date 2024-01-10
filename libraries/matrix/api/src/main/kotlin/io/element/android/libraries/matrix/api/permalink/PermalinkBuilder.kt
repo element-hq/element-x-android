@@ -26,7 +26,7 @@ object PermalinkBuilder {
     private const val ROOM_PATH = "room/"
     private const val USER_PATH = "user/"
 
-    private val permalinkBaseUrl get() = (MatrixConfiguration.clientPermalinkBaseUrl ?: MatrixConfiguration.matrixToPermalinkBaseUrl).also {
+    private val permalinkBaseUrl get() = (MatrixConfiguration.clientPermalinkBaseUrl ?: MatrixConfiguration.MATRIX_TO_PERMALINK_BASE_URL).also {
         var baseUrl = it
         if (!baseUrl.endsWith("/")) {
             baseUrl += "/"
@@ -80,7 +80,7 @@ object PermalinkBuilder {
 
     private fun escapeId(value: String) = value.replace("/", "%2F")
 
-    private fun isMatrixTo(): Boolean = permalinkBaseUrl.startsWith(MatrixConfiguration.matrixToPermalinkBaseUrl)
+    private fun isMatrixTo(): Boolean = permalinkBaseUrl.startsWith(MatrixConfiguration.MATRIX_TO_PERMALINK_BASE_URL)
 }
 
 sealed class PermalinkBuilderError : Throwable() {

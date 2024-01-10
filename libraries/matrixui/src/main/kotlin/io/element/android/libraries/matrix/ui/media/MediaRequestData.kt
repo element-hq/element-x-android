@@ -33,7 +33,6 @@ data class MediaRequestData(
     val source: MediaSource?,
     val kind: Kind
 ) {
-
     sealed interface Kind {
         data object Content : Kind
         data class File(val body: String?, val mimeType: String) : Kind

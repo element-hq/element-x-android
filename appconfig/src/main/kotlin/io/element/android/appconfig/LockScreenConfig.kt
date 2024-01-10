@@ -46,7 +46,6 @@ data class LockScreenConfig(
 @ContributesTo(AppScope::class)
 @Module
 object LockScreenConfigModule {
-
     @Provides
     fun providesLockScreenConfig(): LockScreenConfig = LockScreenConfig(
         isPinMandatory = false,

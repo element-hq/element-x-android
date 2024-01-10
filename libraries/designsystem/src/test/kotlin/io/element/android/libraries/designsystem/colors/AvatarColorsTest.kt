@@ -22,7 +22,6 @@ import io.element.android.compound.theme.avatarColorsLight
 import org.junit.Test
 
 class AvatarColorsTest {
-
     @Test
     fun `ensure the size of the avatar color are equal for light and dark theme`() {
         assertThat(avatarColorsDark.size).isEqualTo(avatarColorsLight.size)

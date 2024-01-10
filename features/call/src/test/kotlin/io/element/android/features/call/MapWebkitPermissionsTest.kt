@@ -23,7 +23,6 @@ import io.element.android.features.call.ui.mapWebkitPermissions
 import org.junit.Test
 
 class MapWebkitPermissionsTest {
-
     @Test
     fun `given Webkit's RESOURCE_AUDIO_CAPTURE returns Android's RECORD_AUDIO permission`() {
         val permission = mapWebkitPermissions(arrayOf(PermissionRequest.RESOURCE_AUDIO_CAPTURE))

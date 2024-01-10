@@ -27,7 +27,6 @@ import kotlin.contracts.contract
  */
 @Stable
 sealed interface AsyncData<out T> {
-
     /**
      * Represents a failed operation.
      *

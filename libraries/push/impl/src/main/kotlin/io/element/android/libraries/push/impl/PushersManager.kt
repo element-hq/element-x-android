@@ -50,7 +50,7 @@ class PushersManager @Inject constructor(
         pushGatewayNotifyRequest.execute(
             PushGatewayNotifyRequest.Params(
                 url = "TODO", // unifiedPushHelper.getPushGateway() ?: return,
-                appId = PushConfig.pusher_app_id,
+                appId = PushConfig.PUSHER_APP_ID,
                 pushKey = "TODO", // unifiedPushHelper.getEndpointOrToken().orEmpty(),
                 eventId = TEST_EVENT_ID
             )
@@ -85,7 +85,7 @@ class PushersManager @Inject constructor(
     ): SetHttpPusherData =
         SetHttpPusherData(
             pushKey = pushKey,
-            appId = PushConfig.pusher_app_id,
+            appId = PushConfig.PUSHER_APP_ID,
             profileTag = DEFAULT_PUSHER_FILE_TAG + "_" /* TODO + abs(activeSessionHolder.getActiveSession().myUserId.hashCode())*/,
             lang = "en", // TODO localeProvider.current().language,
             appDisplayName = buildMeta.applicationName,

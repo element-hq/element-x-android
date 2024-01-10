@@ -36,7 +36,6 @@ interface DiffCacheInvalidator<T> {
  * It invalidates the cache by setting values to null.
  */
 class DefaultDiffCacheInvalidator<T> : DiffCacheInvalidator<T> {
-
     override fun onChanged(position: Int, count: Int, cache: MutableDiffCache<T>) {
         for (i in position until position + count) {
             // Invalidate cache

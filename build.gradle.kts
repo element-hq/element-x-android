@@ -100,8 +100,8 @@ allprojects {
         kotlinOptions.allWarningsAsErrors = project.properties["allWarningsAsErrors"] == "true"
 
         kotlinOptions {
-            // Uncomment to suppress Compose Kotlin compiler compatibility warning
             /*
+            // Uncomment to suppress Compose Kotlin compiler compatibility warning
             freeCompilerArgs += listOf(
                 "-P",
                 "plugin:androidx.compose.compiler.plugins.kotlin:suppressKotlinVersionCompatibilityCheck=true"
@@ -194,7 +194,7 @@ subprojects {
 
 // Workaround for https://github.com/airbnb/Showkase/issues/335
 subprojects {
-    tasks.withType<KspTask>() {
+    tasks.withType<KspTask> {
         doLast {
             fileTree(layout.buildDirectory).apply { include("**/*ShowkaseExtension*.kt") }.files.forEach { file ->
                 ReplaceRegExp().apply {

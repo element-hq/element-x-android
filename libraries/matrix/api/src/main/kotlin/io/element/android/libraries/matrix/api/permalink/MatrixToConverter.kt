@@ -34,7 +34,7 @@ object MatrixToConverter {
      */
     fun convert(uri: Uri): Uri? {
         val uriString = uri.toString()
-        val baseUrl = MatrixConfiguration.matrixToPermalinkBaseUrl
+        val baseUrl = MatrixConfiguration.MATRIX_TO_PERMALINK_BASE_URL
 
         return when {
             // URL is already a matrix.to

@@ -20,7 +20,6 @@ import org.junit.Assert.assertEquals
 import org.junit.Test
 
 class BasicExtensionsTest {
-
     @Test(expected = IllegalArgumentException::class)
     fun `test ellipsize at 0`() {
         "1234567890".ellipsize(0)

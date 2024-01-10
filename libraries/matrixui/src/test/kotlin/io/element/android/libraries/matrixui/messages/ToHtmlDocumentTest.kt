@@ -26,7 +26,6 @@ import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
 class ToHtmlDocumentTest {
-
     @Test
     fun `toHtmlDocument - returns null if format is not HTML`() {
         val body = FormattedBody(

@@ -31,7 +31,6 @@ import javax.inject.Inject
 class AndroidClipboardHelper @Inject constructor(
     @ApplicationContext private val context: Context,
 ) : ClipboardHelper {
-
     private val clipboardManager = requireNotNull(context.getSystemService<ClipboardManager>())
 
     override fun copyPlainText(text: String) {

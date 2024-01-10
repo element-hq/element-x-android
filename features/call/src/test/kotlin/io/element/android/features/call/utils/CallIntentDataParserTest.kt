@@ -24,7 +24,6 @@ import java.net.URLEncoder
 
 @RunWith(RobolectricTestRunner::class)
 class CallIntentDataParserTest {
-
     private val callIntentDataParser = CallIntentDataParser()
 
     @Test

@@ -111,7 +111,6 @@ class LoggedInFlowNode @AssistedInject constructor(
     buildContext = buildContext,
     plugins = plugins
 ) {
-
     interface Callback : Plugin {
         fun onOpenBugReport()
     }

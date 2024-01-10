@@ -38,7 +38,8 @@ import io.element.android.libraries.designsystem.preview.PreviewGroup
 fun FloatingActionButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    shape: Shape = CircleShape, // FloatingActionButtonDefaults.shape,
+    // FloatingActionButtonDefaults.shape
+    shape: Shape = CircleShape,
     containerColor: Color = FloatingActionButtonDefaults.containerColor,
     contentColor: Color = contentColorFor(containerColor),
     elevation: FloatingActionButtonElevation = FloatingActionButtonDefaults.elevation(),
