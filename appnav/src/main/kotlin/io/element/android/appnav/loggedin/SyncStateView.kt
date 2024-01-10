@@ -59,15 +59,15 @@ fun SyncStateView(
         ) {
             Row(
                 modifier = Modifier
-                        .background(color = ElementTheme.colors.bgSubtleSecondary)
-                        .padding(horizontal = 24.dp, vertical = 10.dp),
+                    .background(color = ElementTheme.colors.bgSubtleSecondary)
+                    .padding(horizontal = 24.dp, vertical = 10.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(10.dp)
             ) {
                 CircularProgressIndicator(
                     modifier = Modifier
-                            .progressSemantics()
-                            .size(12.dp),
+                        .progressSemantics()
+                        .size(12.dp),
                     color = ElementTheme.colors.textPrimary,
                     strokeWidth = 1.5.dp,
                 )

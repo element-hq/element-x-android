@@ -29,7 +29,6 @@ import javax.inject.Inject
 class DefaultRoomListEntryPoint @Inject constructor() : RoomListEntryPoint {
 
     override fun nodeBuilder(parentNode: Node, buildContext: BuildContext): RoomListEntryPoint.NodeBuilder {
-
         val plugins = ArrayList<Plugin>()
 
         return object : RoomListEntryPoint.NodeBuilder {
@@ -45,4 +44,3 @@ class DefaultRoomListEntryPoint @Inject constructor() : RoomListEntryPoint {
         }
     }
 }
-

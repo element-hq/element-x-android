@@ -19,7 +19,6 @@ package io.element.android.features.createroom.impl.root
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.createroom.impl.userlist.aUserListState
 import io.element.android.libraries.architecture.AsyncAction
-
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
 import io.element.android.libraries.matrix.ui.components.aMatrixUser
 import io.element.android.libraries.usersearch.api.UserSearchResult

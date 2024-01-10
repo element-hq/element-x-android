@@ -232,10 +232,11 @@ internal fun AlertDialogContent(
                             // Align the title to the center when an icon is present.
                             Modifier
                                 .then(
-                                    if (applyPaddingToContents)
+                                    if (applyPaddingToContents) {
                                         Modifier
-                                    else
+                                    } else {
                                         Modifier.padding(DialogContentDefaults.externalHorizontalPadding)
+                                    }
                                 )
                                 .padding(DialogContentDefaults.titlePadding)
                                 .align(
@@ -364,8 +365,10 @@ private fun AlertDialogFlowRow(
                 val mainAxisPositions = IntArray(childrenMainAxisSizes.size) { 0 }
                 with(arrangement) {
                     arrange(
-                        mainAxisLayoutSize, childrenMainAxisSizes,
-                        layoutDirection, mainAxisPositions
+                        mainAxisLayoutSize,
+                        childrenMainAxisSizes,
+                        layoutDirection,
+                        mainAxisPositions
                     )
                 }
                 placeables.forEachIndexed { j, placeable ->
@@ -444,7 +447,8 @@ internal fun DialogWithTitleIconAndOkButtonPreview() {
                     )
                 },
                 title = "Dialog Title",
-                content = "A dialog is a type of modal window that appears in front of app content to provide critical information, or prompt for a decision to be made. Learn more",
+                content = "A dialog is a type of modal window that appears in front of app content to provide critical information," +
+                    " or prompt for a decision to be made. Learn more",
                 submitText = "OK",
                 onSubmitClicked = {},
             )
@@ -460,7 +464,8 @@ internal fun DialogWithTitleAndOkButtonPreview() {
         DialogPreview {
             SimpleAlertDialogContent(
                 title = "Dialog Title",
-                content = "A dialog is a type of modal window that appears in front of app content to provide critical information, or prompt for a decision to be made. Learn more",
+                content = "A dialog is a type of modal window that appears in front of app content to provide critical information," +
+                    " or prompt for a decision to be made. Learn more",
                 submitText = "OK",
                 onSubmitClicked = {},
             )
@@ -475,7 +480,8 @@ internal fun DialogWithOnlyMessageAndOkButtonPreview() {
     ElementThemedPreview(showBackground = false) {
         DialogPreview {
             SimpleAlertDialogContent(
-                content = "A dialog is a type of modal window that appears in front of app content to provide critical information, or prompt for a decision to be made. Learn more",
+                content = "A dialog is a type of modal window that appears in front of app content to provide critical information," +
+                    " or prompt for a decision to be made. Learn more",
                 submitText = "OK",
                 onSubmitClicked = {},
             )

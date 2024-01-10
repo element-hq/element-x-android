@@ -135,4 +135,3 @@ private fun DynamicRoomList.Filter.toRustFilter(): RoomListEntriesDynamicFilterK
         DynamicRoomList.Filter.AllNonLeft -> RoomListEntriesDynamicFilterKind.AllNonLeft
     }
 }
-

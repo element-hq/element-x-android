@@ -19,5 +19,5 @@ package io.element.android.libraries.matrix.api.timeline
 enum class ReceiptType {
     READ,
     READ_PRIVATE,
-    FULLY_READ;
+    FULLY_READ
 }

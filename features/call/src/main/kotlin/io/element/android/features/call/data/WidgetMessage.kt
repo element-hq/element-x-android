@@ -33,6 +33,7 @@ data class WidgetMessage(
     enum class Direction {
         @SerialName("fromWidget")
         FromWidget,
+
         @SerialName("toWidget")
         ToWidget
     }
@@ -41,6 +42,7 @@ data class WidgetMessage(
     enum class Action {
         @SerialName("im.vector.hangup")
         HangUp,
+
         @SerialName("send_event")
         SendEvent,
     }

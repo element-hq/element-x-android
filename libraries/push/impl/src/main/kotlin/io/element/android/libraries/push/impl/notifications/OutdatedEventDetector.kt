@@ -20,7 +20,7 @@ import io.element.android.libraries.push.impl.notifications.model.NotifiableEven
 import javax.inject.Inject
 
 class OutdatedEventDetector @Inject constructor(
-    /// private val activeSessionDataSource: ActiveSessionDataSource
+    // / private val activeSessionDataSource: ActiveSessionDataSource
 ) {
 
     /**

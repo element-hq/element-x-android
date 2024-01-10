@@ -46,7 +46,7 @@ fun TimelineItemInformativeView(
 ) {
     Row(
         modifier = modifier.onSizeChanged { size ->
-             onContentLayoutChanged(
+            onContentLayoutChanged(
                 ContentAvoidingLayoutData(
                     contentWidth = size.width,
                     contentHeight = size.height,

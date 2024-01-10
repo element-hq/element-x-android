@@ -20,6 +20,6 @@ import io.element.android.features.login.api.oidc.OidcAction
 
 sealed interface OidcEvents {
     data object Cancel : OidcEvents
-    data class OidcActionEvent(val oidcAction: OidcAction): OidcEvents
+    data class OidcActionEvent(val oidcAction: OidcAction) : OidcEvents
     data object ClearError : OidcEvents
 }

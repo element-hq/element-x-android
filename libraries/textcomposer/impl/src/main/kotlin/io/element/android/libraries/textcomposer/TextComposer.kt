@@ -591,47 +591,52 @@ private fun ReplyToModeView(
 @PreviewsDayNight
 @Composable
 internal fun TextComposerSimplePreview() = ElementPreview {
-    PreviewColumn(items = persistentListOf(
-        {
-            ATextComposer(
-                RichTextEditorState("", initialFocus = true),
-                voiceMessageState = VoiceMessageState.Idle,
-                composerMode = MessageComposerMode.Normal,
-                enableTextFormatting = true,
-                enableVoiceMessages = true,
-                currentUserId = UserId("@alice:localhost"),
-            )
-        }, {
-        ATextComposer(
-            RichTextEditorState("A message", initialFocus = true),
-            voiceMessageState = VoiceMessageState.Idle,
-            composerMode = MessageComposerMode.Normal,
-            enableTextFormatting = true,
-            enableVoiceMessages = true,
-            currentUserId = UserId("@alice:localhost")
+    PreviewColumn(
+        items = persistentListOf(
+            {
+                ATextComposer(
+                    RichTextEditorState("", initialFocus = true),
+                    voiceMessageState = VoiceMessageState.Idle,
+                    composerMode = MessageComposerMode.Normal,
+                    enableTextFormatting = true,
+                    enableVoiceMessages = true,
+                    currentUserId = UserId("@alice:localhost"),
+                )
+            },
+            {
+                ATextComposer(
+                    RichTextEditorState("A message", initialFocus = true),
+                    voiceMessageState = VoiceMessageState.Idle,
+                    composerMode = MessageComposerMode.Normal,
+                    enableTextFormatting = true,
+                    enableVoiceMessages = true,
+                    currentUserId = UserId("@alice:localhost")
+                )
+            },
+            {
+                ATextComposer(
+                    RichTextEditorState(
+                        "A message\nWith several lines\nTo preview larger textfields and long lines with overflow",
+                        initialFocus = true
+                    ),
+                    voiceMessageState = VoiceMessageState.Idle,
+                    composerMode = MessageComposerMode.Normal,
+                    enableTextFormatting = true,
+                    enableVoiceMessages = true,
+                    currentUserId = UserId("@alice:localhost")
+                )
+            },
+            {
+                ATextComposer(
+                    RichTextEditorState("A message without focus", initialFocus = false),
+                    voiceMessageState = VoiceMessageState.Idle,
+                    composerMode = MessageComposerMode.Normal,
+                    enableTextFormatting = true,
+                    enableVoiceMessages = true,
+                    currentUserId = UserId("@alice:localhost")
+                )
+            }
         )
-    }, {
-        ATextComposer(
-            RichTextEditorState(
-                "A message\nWith several lines\nTo preview larger textfields and long lines with overflow",
-                initialFocus = true
-            ),
-            voiceMessageState = VoiceMessageState.Idle,
-            composerMode = MessageComposerMode.Normal,
-            enableTextFormatting = true,
-            enableVoiceMessages = true,
-            currentUserId = UserId("@alice:localhost")
-        )
-    }, {
-        ATextComposer(
-            RichTextEditorState("A message without focus", initialFocus = false),
-            voiceMessageState = VoiceMessageState.Idle,
-            composerMode = MessageComposerMode.Normal,
-            enableTextFormatting = true,
-            enableVoiceMessages = true,
-            currentUserId = UserId("@alice:localhost")
-        )
-    })
     )
 }
 
@@ -689,122 +694,129 @@ internal fun TextComposerEditPreview() = ElementPreview {
 @PreviewsDayNight
 @Composable
 internal fun TextComposerReplyPreview() = ElementPreview {
-    PreviewColumn(items = persistentListOf({
-        ATextComposer(
-            RichTextEditorState(""),
-            voiceMessageState = VoiceMessageState.Idle,
-            composerMode = MessageComposerMode.Reply(
-                isThreaded = false,
-                senderName = "Alice",
-                eventId = EventId("$1234"),
-                attachmentThumbnailInfo = null,
-                defaultContent = "A message\n" +
-                    "With several lines\n" +
-                    "To preview larger textfields and long lines with overflow"
-            ),
-            enableTextFormatting = true,
-            enableVoiceMessages = true,
-            currentUserId = UserId("@alice:localhost")
+    PreviewColumn(
+        items = persistentListOf(
+            {
+                ATextComposer(
+                    RichTextEditorState(""),
+                    voiceMessageState = VoiceMessageState.Idle,
+                    composerMode = MessageComposerMode.Reply(
+                        isThreaded = false,
+                        senderName = "Alice",
+                        eventId = EventId("$1234"),
+                        attachmentThumbnailInfo = null,
+                        defaultContent = "A message\n" +
+                            "With several lines\n" +
+                            "To preview larger textfields and long lines with overflow"
+                    ),
+                    enableTextFormatting = true,
+                    enableVoiceMessages = true,
+                    currentUserId = UserId("@alice:localhost")
+                )
+            },
+            {
+                ATextComposer(
+                    RichTextEditorState(""),
+                    voiceMessageState = VoiceMessageState.Idle,
+                    composerMode = MessageComposerMode.Reply(
+                        isThreaded = true,
+                        senderName = "Alice",
+                        eventId = EventId("$1234"),
+                        attachmentThumbnailInfo = null,
+                        defaultContent = "A message\n" +
+                            "With several lines\n" +
+                            "To preview larger textfields and long lines with overflow"
+                    ),
+                    enableTextFormatting = true,
+                    enableVoiceMessages = true,
+                    currentUserId = UserId("@alice:localhost")
+                )
+            },
+            {
+                ATextComposer(
+                    RichTextEditorState("A message"),
+                    voiceMessageState = VoiceMessageState.Idle,
+                    composerMode = MessageComposerMode.Reply(
+                        isThreaded = true,
+                        senderName = "Alice",
+                        eventId = EventId("$1234"),
+                        attachmentThumbnailInfo = AttachmentThumbnailInfo(
+                            thumbnailSource = MediaSource("https://domain.com/image.jpg"),
+                            textContent = "image.jpg",
+                            type = AttachmentThumbnailType.Image,
+                            blurHash = A_BLUR_HASH,
+                        ),
+                        defaultContent = "image.jpg"
+                    ),
+                    enableTextFormatting = true,
+                    enableVoiceMessages = true,
+                    currentUserId = UserId("@alice:localhost")
+                )
+            },
+            {
+                ATextComposer(
+                    RichTextEditorState("A message"),
+                    voiceMessageState = VoiceMessageState.Idle,
+                    composerMode = MessageComposerMode.Reply(
+                        isThreaded = false,
+                        senderName = "Alice",
+                        eventId = EventId("$1234"),
+                        attachmentThumbnailInfo = AttachmentThumbnailInfo(
+                            thumbnailSource = MediaSource("https://domain.com/video.mp4"),
+                            textContent = "video.mp4",
+                            type = AttachmentThumbnailType.Video,
+                            blurHash = A_BLUR_HASH,
+                        ),
+                        defaultContent = "video.mp4"
+                    ),
+                    enableTextFormatting = true,
+                    enableVoiceMessages = true,
+                    currentUserId = UserId("@alice:localhost")
+                )
+            },
+            {
+                ATextComposer(
+                    RichTextEditorState("A message"),
+                    voiceMessageState = VoiceMessageState.Idle,
+                    composerMode = MessageComposerMode.Reply(
+                        isThreaded = false,
+                        senderName = "Alice",
+                        eventId = EventId("$1234"),
+                        attachmentThumbnailInfo = AttachmentThumbnailInfo(
+                            thumbnailSource = null,
+                            textContent = "logs.txt",
+                            type = AttachmentThumbnailType.File,
+                            blurHash = null,
+                        ),
+                        defaultContent = "logs.txt"
+                    ),
+                    enableTextFormatting = true,
+                    enableVoiceMessages = true,
+                    currentUserId = UserId("@alice:localhost")
+                )
+            },
+            {
+                ATextComposer(
+                    RichTextEditorState("A message", initialFocus = true),
+                    voiceMessageState = VoiceMessageState.Idle,
+                    composerMode = MessageComposerMode.Reply(
+                        isThreaded = false,
+                        senderName = "Alice",
+                        eventId = EventId("$1234"),
+                        attachmentThumbnailInfo = AttachmentThumbnailInfo(
+                            thumbnailSource = null,
+                            textContent = null,
+                            type = AttachmentThumbnailType.Location,
+                            blurHash = null,
+                        ),
+                        defaultContent = "Shared location"
+                    ),
+                    enableTextFormatting = true,
+                    enableVoiceMessages = true,
+                    currentUserId = UserId("@alice:localhost")
+                )
+            }
         )
-    },
-        {
-            ATextComposer(
-                RichTextEditorState(""),
-                voiceMessageState = VoiceMessageState.Idle,
-                composerMode = MessageComposerMode.Reply(
-                    isThreaded = true,
-                    senderName = "Alice",
-                    eventId = EventId("$1234"),
-                    attachmentThumbnailInfo = null,
-                    defaultContent = "A message\n" +
-                        "With several lines\n" +
-                        "To preview larger textfields and long lines with overflow"
-                ),
-                enableTextFormatting = true,
-                enableVoiceMessages = true,
-                currentUserId = UserId("@alice:localhost")
-            )
-        }, {
-        ATextComposer(
-            RichTextEditorState("A message"),
-            voiceMessageState = VoiceMessageState.Idle,
-            composerMode = MessageComposerMode.Reply(
-                isThreaded = true,
-                senderName = "Alice",
-                eventId = EventId("$1234"),
-                attachmentThumbnailInfo = AttachmentThumbnailInfo(
-                    thumbnailSource = MediaSource("https://domain.com/image.jpg"),
-                    textContent = "image.jpg",
-                    type = AttachmentThumbnailType.Image,
-                    blurHash = A_BLUR_HASH,
-                ),
-                defaultContent = "image.jpg"
-            ),
-            enableTextFormatting = true,
-            enableVoiceMessages = true,
-            currentUserId = UserId("@alice:localhost")
-        )
-    }, {
-        ATextComposer(
-            RichTextEditorState("A message"),
-            voiceMessageState = VoiceMessageState.Idle,
-            composerMode = MessageComposerMode.Reply(
-                isThreaded = false,
-                senderName = "Alice",
-                eventId = EventId("$1234"),
-                attachmentThumbnailInfo = AttachmentThumbnailInfo(
-                    thumbnailSource = MediaSource("https://domain.com/video.mp4"),
-                    textContent = "video.mp4",
-                    type = AttachmentThumbnailType.Video,
-                    blurHash = A_BLUR_HASH,
-                ),
-                defaultContent = "video.mp4"
-            ),
-            enableTextFormatting = true,
-            enableVoiceMessages = true,
-            currentUserId = UserId("@alice:localhost")
-        )
-    }, {
-        ATextComposer(
-            RichTextEditorState("A message"),
-            voiceMessageState = VoiceMessageState.Idle,
-            composerMode = MessageComposerMode.Reply(
-                isThreaded = false,
-                senderName = "Alice",
-                eventId = EventId("$1234"),
-                attachmentThumbnailInfo = AttachmentThumbnailInfo(
-                    thumbnailSource = null,
-                    textContent = "logs.txt",
-                    type = AttachmentThumbnailType.File,
-                    blurHash = null,
-                ),
-                defaultContent = "logs.txt"
-            ),
-            enableTextFormatting = true,
-            enableVoiceMessages = true,
-            currentUserId = UserId("@alice:localhost")
-        )
-    }, {
-        ATextComposer(
-            RichTextEditorState("A message", initialFocus = true),
-            voiceMessageState = VoiceMessageState.Idle,
-            composerMode = MessageComposerMode.Reply(
-                isThreaded = false,
-                senderName = "Alice",
-                eventId = EventId("$1234"),
-                attachmentThumbnailInfo = AttachmentThumbnailInfo(
-                    thumbnailSource = null,
-                    textContent = null,
-                    type = AttachmentThumbnailType.Location,
-                    blurHash = null,
-                ),
-                defaultContent = "Shared location"
-            ),
-            enableTextFormatting = true,
-            enableVoiceMessages = true,
-            currentUserId = UserId("@alice:localhost")
-        )
-    })
     )
 }
 

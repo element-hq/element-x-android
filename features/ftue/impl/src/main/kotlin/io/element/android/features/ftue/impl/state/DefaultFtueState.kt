@@ -40,7 +40,7 @@ import javax.inject.Inject
 @ContributesBinding(SessionScope::class)
 class DefaultFtueState @Inject constructor(
     private val sdkVersionProvider: BuildVersionSdkIntProvider,
-    private val coroutineScope: CoroutineScope,
+    coroutineScope: CoroutineScope,
     private val analyticsService: AnalyticsService,
     private val welcomeScreenState: WelcomeScreenState,
     private val migrationScreenStore: MigrationScreenStore,
@@ -68,21 +68,31 @@ class DefaultFtueState @Inject constructor(
 
     fun getNextStep(currentStep: FtueStep? = null): FtueStep? =
         when (currentStep) {
-            null -> if (shouldDisplayMigrationScreen()) FtueStep.MigrationScreen else getNextStep(
+            null -> if (shouldDisplayMigrationScreen()) {
                 FtueStep.MigrationScreen
-            )
-            FtueStep.MigrationScreen -> if (shouldDisplayWelcomeScreen()) FtueStep.WelcomeScreen else getNextStep(
+            } else {
+                getNextStep(FtueStep.MigrationScreen)
+            }
+            FtueStep.MigrationScreen -> if (shouldDisplayWelcomeScreen()) {
                 FtueStep.WelcomeScreen
-            )
-            FtueStep.WelcomeScreen -> if (shouldAskNotificationPermissions()) FtueStep.NotificationsOptIn else getNextStep(
+            } else {
+                getNextStep(FtueStep.WelcomeScreen)
+            }
+            FtueStep.WelcomeScreen -> if (shouldAskNotificationPermissions()) {
                 FtueStep.NotificationsOptIn
-            )
-            FtueStep.NotificationsOptIn -> if (shouldDisplayLockscreenSetup()) FtueStep.LockscreenSetup else getNextStep(
+            } else {
+                getNextStep(FtueStep.NotificationsOptIn)
+            }
+            FtueStep.NotificationsOptIn -> if (shouldDisplayLockscreenSetup()) {
                 FtueStep.LockscreenSetup
-            )
-            FtueStep.LockscreenSetup -> if (needsAnalyticsOptIn()) FtueStep.AnalyticsOptIn else getNextStep(
+            } else {
+                getNextStep(FtueStep.LockscreenSetup)
+            }
+            FtueStep.LockscreenSetup -> if (needsAnalyticsOptIn()) {
                 FtueStep.AnalyticsOptIn
-            )
+            } else {
+                getNextStep(FtueStep.AnalyticsOptIn)
+            }
             FtueStep.AnalyticsOptIn -> null
         }
 
@@ -115,7 +125,9 @@ class DefaultFtueState @Inject constructor(
             val isPermissionDenied = runBlocking { permissionStateProvider.isPermissionDenied(permission).first() }
             val isPermissionGranted = permissionStateProvider.isPermissionGranted(permission)
             !isPermissionGranted && !isPermissionDenied
-        } else false
+        } else {
+            false
+        }
     }
 
     private fun shouldDisplayLockscreenSetup(): Boolean {

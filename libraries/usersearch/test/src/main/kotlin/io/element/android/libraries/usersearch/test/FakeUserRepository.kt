@@ -36,5 +36,4 @@ class FakeUserRepository : UserRepository {
     suspend fun emitState(state: UserSearchResultState) {
         flow.emit(state)
     }
-
 }

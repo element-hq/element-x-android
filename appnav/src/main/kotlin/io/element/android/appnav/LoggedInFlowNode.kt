@@ -138,7 +138,7 @@ class LoggedInFlowNode @AssistedInject constructor(
             },
             onStop = {
                 coroutineScope.launch {
-                    //Counterpart startSync is done in observeSyncStateAndNetworkStatus method.
+                    // Counterpart startSync is done in observeSyncStateAndNetworkStatus method.
                     syncService.stopSync()
                 }
             },

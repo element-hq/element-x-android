@@ -19,15 +19,15 @@ package io.element.android.features.call.utils
 import kotlinx.coroutines.flow.MutableSharedFlow
 
 class FakeWidgetMessageInterceptor : WidgetMessageInterceptor {
-        val sentMessages = mutableListOf<String>()
+    val sentMessages = mutableListOf<String>()
 
-        override val interceptedMessages = MutableSharedFlow<String>(extraBufferCapacity = 1)
+    override val interceptedMessages = MutableSharedFlow<String>(extraBufferCapacity = 1)
 
-        override fun sendMessage(message: String) {
-            sentMessages += message
-        }
-
-        fun givenInterceptedMessage(message: String) {
-            interceptedMessages.tryEmit(message)
-        }
+    override fun sendMessage(message: String) {
+        sentMessages += message
     }
+
+    fun givenInterceptedMessage(message: String) {
+        interceptedMessages.tryEmit(message)
+    }
+}

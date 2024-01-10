@@ -24,8 +24,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import javax.inject.Inject
 import com.freeletics.flowredux.dsl.State as MachineState
 
-class SecureBackupSetupStateMachine @Inject constructor(
-) : FlowReduxStateMachine<SecureBackupSetupStateMachine.State, SecureBackupSetupStateMachine.Event>(
+class SecureBackupSetupStateMachine @Inject constructor() : FlowReduxStateMachine<SecureBackupSetupStateMachine.State, SecureBackupSetupStateMachine.Event>(
     initialState = State.Initial
 ) {
 

@@ -213,4 +213,3 @@ class LogoutPresenterTest {
         featureFlagService = FakeFeatureFlagService(mapOf(FeatureFlags.SecureStorage.key to true)),
     )
 }
-

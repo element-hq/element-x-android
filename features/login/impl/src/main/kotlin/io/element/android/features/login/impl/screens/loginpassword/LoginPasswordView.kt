@@ -220,7 +220,9 @@ private fun LoginForm(
                         Icon(imageVector = CompoundIcons.Close, contentDescription = stringResource(CommonStrings.action_clear))
                     }
                 }
-            } else null,
+            } else {
+                null
+            },
         )
 
         var passwordVisible by remember { mutableStateOf(false) }

@@ -27,7 +27,7 @@ class FakeLocalMediaActions : LocalMediaActions {
 
     @Composable
     override fun Configure() {
-        //NOOP
+        // NOOP
     }
 
     override suspend fun saveOnDisk(localMedia: LocalMedia): Result<Unit> = simulateLongTask {

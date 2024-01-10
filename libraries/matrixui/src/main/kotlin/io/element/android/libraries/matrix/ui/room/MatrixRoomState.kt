@@ -37,4 +37,3 @@ fun MatrixRoom.canRedactAsState(updateKey: Long): State<Boolean> {
         value = canRedact().getOrElse { false }
     }
 }
-

@@ -95,7 +95,7 @@ class DefaultLockScreenService @Inject constructor(
             override suspend fun onSessionCreated(userId: String) = Unit
 
             override suspend fun onSessionDeleted(userId: String) {
-                //TODO handle multi session at some point
+                // TODO handle multi session at some point
                 pinCodeManager.deletePinCode()
             }
         })

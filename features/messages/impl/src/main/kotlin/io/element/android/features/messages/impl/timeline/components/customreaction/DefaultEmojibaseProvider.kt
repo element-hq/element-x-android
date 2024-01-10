@@ -20,10 +20,9 @@ import android.content.Context
 import io.element.android.emojibasebindings.EmojibaseDatasource
 import io.element.android.emojibasebindings.EmojibaseStore
 
-class DefaultEmojibaseProvider(val context: Context): EmojibaseProvider {
+class DefaultEmojibaseProvider(val context: Context) : EmojibaseProvider {
 
     override val emojibaseStore: EmojibaseStore by lazy {
         EmojibaseDatasource().load(context)
     }
-
 }

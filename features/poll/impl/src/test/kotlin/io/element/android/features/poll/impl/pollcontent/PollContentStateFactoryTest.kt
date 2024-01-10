@@ -63,7 +63,8 @@ class PollContentStateFactoryTest {
     fun `Disclosed poll - not ended, some votes, including one from current user`() = runTest {
         val votes = MY_USER_WINNING_VOTES.mapKeys { it.key.id }.toImmutableMap()
         val state = factory.create(
-            eventTimelineItem, aPollContent(votes = votes)
+            eventTimelineItem,
+            aPollContent(votes = votes)
         )
         val expectedState = aPollContentState(
             answerItems = listOf(
@@ -92,7 +93,8 @@ class PollContentStateFactoryTest {
     fun `Disclosed poll - ended, some votes, including one from current user (winner)`() = runTest {
         val votes = MY_USER_WINNING_VOTES.mapKeys { it.key.id }.toImmutableMap()
         val state = factory.create(
-            eventTimelineItem, aPollContent(votes = votes, endTime = 1UL)
+            eventTimelineItem,
+            aPollContent(votes = votes, endTime = 1UL)
         )
         val expectedState = aPollContentState(
             answerItems = listOf(
@@ -110,7 +112,8 @@ class PollContentStateFactoryTest {
     fun `Disclosed poll - ended, some votes, including one from current user (not winner) and two winning votes`() = runTest {
         val votes = OTHER_WINNING_VOTES.mapKeys { it.key.id }.toImmutableMap()
         val state = factory.create(
-            eventTimelineItem, aPollContent(votes = votes, endTime = 1UL)
+            eventTimelineItem,
+            aPollContent(votes = votes, endTime = 1UL)
         )
         val expectedState = aPollContentState(
             answerItems = listOf(
@@ -139,7 +142,8 @@ class PollContentStateFactoryTest {
     fun `Undisclosed poll - not ended, some votes, including one from current user`() = runTest {
         val votes = MY_USER_WINNING_VOTES.mapKeys { it.key.id }.toImmutableMap()
         val state = factory.create(
-            eventTimelineItem, aPollContent(PollKind.Undisclosed, votes = votes)
+            eventTimelineItem,
+            aPollContent(PollKind.Undisclosed, votes = votes)
         )
         val expectedState = aPollContentState(
             pollKind = PollKind.Undisclosed,
@@ -171,7 +175,8 @@ class PollContentStateFactoryTest {
     fun `Undisclosed poll - ended, some votes, including one from current user (winner)`() = runTest {
         val votes = MY_USER_WINNING_VOTES.mapKeys { it.key.id }.toImmutableMap()
         val state = factory.create(
-            eventTimelineItem, aPollContent(PollKind.Undisclosed, votes = votes, endTime = 1UL)
+            eventTimelineItem,
+            aPollContent(PollKind.Undisclosed, votes = votes, endTime = 1UL)
         )
         val expectedState = aPollContentState(
             pollKind = PollKind.Undisclosed,
@@ -190,7 +195,8 @@ class PollContentStateFactoryTest {
     fun `Undisclosed poll - ended, some votes, including one from current user (not winner) and two winning votes`() = runTest {
         val votes = OTHER_WINNING_VOTES.mapKeys { it.key.id }.toImmutableMap()
         val state = factory.create(
-            eventTimelineItem, aPollContent(PollKind.Undisclosed, votes = votes, endTime = 1UL)
+            eventTimelineItem,
+            aPollContent(PollKind.Undisclosed, votes = votes, endTime = 1UL)
         )
         val expectedState = aPollContentState(
             pollKind = PollKind.Undisclosed,

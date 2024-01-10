@@ -18,12 +18,15 @@ package io.element.android.features.messages.impl.voicemessages
 
 internal sealed class VoiceMessageException : Exception() {
     data class FileException(
-        override val message: String?, override val cause: Throwable? = null
+        override val message: String?,
+        override val cause: Throwable? = null
     ) : VoiceMessageException()
     data class PermissionMissing(
-        override val message: String?, override val cause: Throwable?
+        override val message: String?,
+        override val cause: Throwable?
     ) : VoiceMessageException()
     data class PlayMessageError(
-        override val message: String?, override val cause: Throwable?
+        override val message: String?,
+        override val cause: Throwable?
     ) : VoiceMessageException()
 }

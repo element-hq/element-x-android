@@ -26,7 +26,7 @@ interface NotificationSettingsService {
     /**
      * State of the current room notification settings flow ([MatrixRoomNotificationSettingsState.Unknown] if not started).
      */
-    val notificationSettingsChangeFlow : SharedFlow<Unit>
+    val notificationSettingsChangeFlow: SharedFlow<Unit>
     suspend fun getRoomNotificationSettings(roomId: RoomId, isEncrypted: Boolean, isOneToOne: Boolean): Result<RoomNotificationSettings>
     suspend fun getDefaultRoomNotificationMode(isEncrypted: Boolean, isOneToOne: Boolean): Result<RoomNotificationMode>
     suspend fun setDefaultRoomNotificationMode(isEncrypted: Boolean, mode: RoomNotificationMode, isOneToOne: Boolean): Result<Unit>

@@ -19,8 +19,8 @@ package io.element.android.features.createroom.impl.configureroom
 import androidx.annotation.DrawableRes
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
-import io.element.android.libraries.designsystem.icons.CompoundDrawables
 import io.element.android.features.createroom.impl.R
+import io.element.android.libraries.designsystem.icons.CompoundDrawables
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 

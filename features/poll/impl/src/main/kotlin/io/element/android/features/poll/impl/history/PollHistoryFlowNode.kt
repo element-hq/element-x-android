@@ -83,5 +83,4 @@ class PollHistoryFlowNode @AssistedInject constructor(
     override fun View(modifier: Modifier) {
         BackstackView()
     }
-
 }

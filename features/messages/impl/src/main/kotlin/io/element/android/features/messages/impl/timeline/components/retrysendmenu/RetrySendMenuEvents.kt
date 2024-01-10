@@ -22,5 +22,5 @@ sealed interface RetrySendMenuEvents {
     data class EventSelected(val event: TimelineItem.Event) : RetrySendMenuEvents
     data object RetrySend : RetrySendMenuEvents
     data object RemoveFailed : RetrySendMenuEvents
-    data object Dismiss: RetrySendMenuEvents
+    data object Dismiss : RetrySendMenuEvents
 }

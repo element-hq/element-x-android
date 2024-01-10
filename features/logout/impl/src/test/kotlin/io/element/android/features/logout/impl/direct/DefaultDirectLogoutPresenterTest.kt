@@ -194,4 +194,3 @@ class DefaultDirectLogoutPresenterTest {
         featureFlagService = FakeFeatureFlagService(mapOf(FeatureFlags.SecureStorage.key to true)),
     )
 }
-

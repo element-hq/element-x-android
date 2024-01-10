@@ -38,7 +38,9 @@ fun SnackbarHost(hostState: SnackbarHostState, modifier: Modifier = Modifier) {
                     IconSource.Vector(CompoundIcons.Close),
                     data::dismiss
                 )
-            } else null,
+            } else {
+                null
+            },
         )
     }
 }

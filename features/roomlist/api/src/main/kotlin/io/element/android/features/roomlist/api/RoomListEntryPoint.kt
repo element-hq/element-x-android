@@ -40,4 +40,3 @@ interface RoomListEntryPoint : FeatureEntryPoint {
         fun onReportBugClicked()
     }
 }
-

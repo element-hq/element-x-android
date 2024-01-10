@@ -22,9 +22,9 @@ import io.element.android.libraries.matrix.api.media.MediaFile
 import io.element.android.libraries.mediaviewer.api.local.LocalMedia
 import io.element.android.libraries.mediaviewer.api.local.LocalMediaFactory
 import io.element.android.libraries.mediaviewer.api.local.MediaInfo
-import io.element.android.libraries.mediaviewer.test.viewer.aLocalMedia
 import io.element.android.libraries.mediaviewer.api.util.FileExtensionExtractor
 import io.element.android.libraries.mediaviewer.api.util.FileExtensionExtractorWithoutValidation
+import io.element.android.libraries.mediaviewer.test.viewer.aLocalMedia
 
 class FakeLocalMediaFactory(
     private val localMediaUri: Uri,

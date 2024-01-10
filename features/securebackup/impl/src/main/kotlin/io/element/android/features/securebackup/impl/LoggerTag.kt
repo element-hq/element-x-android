@@ -22,4 +22,3 @@ private val loggerTag = LoggerTag("SecureBackup")
 val loggerTagRoot = LoggerTag("Root", loggerTag)
 val loggerTagSetup = LoggerTag("Setup", loggerTag)
 val loggerTagDisable = LoggerTag("Disable", loggerTag)
-

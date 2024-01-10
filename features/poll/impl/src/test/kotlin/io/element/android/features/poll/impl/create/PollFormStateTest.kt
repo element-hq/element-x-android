@@ -134,7 +134,6 @@ class PollFormStateTest {
     }
 }
 
-
 private fun aValidPollFormState(): PollFormState {
     return PollFormState.Empty.copy(
         question = "question",

@@ -65,8 +65,9 @@ class MatrixClientsHolder @Inject constructor(private val authenticationService:
     @Suppress("UNCHECKED_CAST")
     fun restoreWithSavedState(state: SavedStateMap?) {
         Timber.d("Restore state")
-        if (state == null || sessionIdsToMatrixClient.isNotEmpty()) return Unit.also {
+        if (state == null || sessionIdsToMatrixClient.isNotEmpty()) {
             Timber.w("Restore with non-empty map")
+            return
         }
         val sessionIds = state[SAVE_INSTANCE_KEY] as? Array<SessionId>
         Timber.d("Restore matrix session keys = ${sessionIds?.map { it.value }}")

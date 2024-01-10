@@ -25,10 +25,10 @@ class PermalinkDataTest {
     @Test
     fun `getRoomId() returns value when isRoomAlias is false`() {
         val permalinkData = PermalinkData.RoomLink(
-                roomIdOrAlias = "!abcdef123456:matrix.org",
-                isRoomAlias = false,
-                eventId = null,
-                viaParameters = persistentListOf(),
+            roomIdOrAlias = "!abcdef123456:matrix.org",
+            isRoomAlias = false,
+            eventId = null,
+            viaParameters = persistentListOf(),
         )
         assertThat(permalinkData.getRoomId()).isNotNull()
         assertThat(permalinkData.getRoomAlias()).isNull()
@@ -45,5 +45,4 @@ class PermalinkDataTest {
         assertThat(permalinkData.getRoomId()).isNull()
         assertThat(permalinkData.getRoomAlias()).isNotNull()
     }
-
 }

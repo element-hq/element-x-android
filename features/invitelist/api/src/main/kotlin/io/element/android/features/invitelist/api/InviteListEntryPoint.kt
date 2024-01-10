@@ -37,4 +37,3 @@ interface InviteListEntryPoint : FeatureEntryPoint {
         fun onInviteAccepted(roomId: RoomId)
     }
 }
-

@@ -195,7 +195,7 @@ class TimelineItemContentMessageFactory @Inject constructor(
                 TimelineItemNoticeContent(
                     body = body,
                     htmlDocument = messageType.formatted?.toHtmlDocument(),
-                    formattedBody = parseHtml(messageType.formatted) ?:body.withLinks(),
+                    formattedBody = parseHtml(messageType.formatted) ?: body.withLinks(),
                     isEdited = content.isEdited,
                 )
             }

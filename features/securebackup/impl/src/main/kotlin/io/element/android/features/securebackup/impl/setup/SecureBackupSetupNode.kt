@@ -68,10 +68,11 @@ class SecureBackupSetupNode @AssistedInject constructor(
     private fun CoroutineScope.postSuccessSnackbar() = launch {
         snackbarDispatcher.post(
             SnackbarMessage(
-                messageResId = if (inputs.isChangeRecoveryKeyUserStory)
+                messageResId = if (inputs.isChangeRecoveryKeyUserStory) {
                     R.string.screen_recovery_key_change_success
-                else
+                } else {
                     R.string.screen_recovery_key_setup_success
+                }
             )
         )
     }

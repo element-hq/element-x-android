@@ -52,5 +52,3 @@ internal fun aVoiceMessagePreviewState() = VoiceMessageState.Preview(
 )
 
 internal var aWaveformLevels = List(100) { it.toFloat() / 100 }.toPersistentList()
-
-

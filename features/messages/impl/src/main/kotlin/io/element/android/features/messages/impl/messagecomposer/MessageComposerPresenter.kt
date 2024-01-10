@@ -456,4 +456,3 @@ class MessageComposerPresenter @Inject constructor(
             }
         }
 }
-

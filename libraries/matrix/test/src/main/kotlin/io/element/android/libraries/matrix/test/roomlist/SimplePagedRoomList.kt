@@ -33,7 +33,7 @@ data class SimplePagedRoomList(
     override val loadedPages = MutableStateFlow(1)
 
     override suspend fun loadMore() {
-        //No-op
+        // No-op
         loadedPages.getAndUpdate { it + 1 }
     }
 
@@ -46,6 +46,6 @@ data class SimplePagedRoomList(
     }
 
     override suspend fun rebuildSummaries() {
-        //No-op
+        // No-op
     }
 }

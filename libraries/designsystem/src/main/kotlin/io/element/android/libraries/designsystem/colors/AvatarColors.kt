@@ -22,4 +22,3 @@ data class AvatarColors(
     val background: Color,
     val foreground: Color,
 )
-

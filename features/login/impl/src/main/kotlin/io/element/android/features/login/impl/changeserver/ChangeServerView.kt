@@ -54,9 +54,11 @@ fun ChangeServerView(
                         onLearnMoreClicked = {
                             onLearnMoreClicked()
                             eventSink.invoke(ChangeServerEvents.ClearError)
-                        }, onDismiss = {
-                        eventSink.invoke(ChangeServerEvents.ClearError)
-                    })
+                        },
+                        onDismiss = {
+                            eventSink.invoke(ChangeServerEvents.ClearError)
+                        }
+                    )
                 }
             }
         }

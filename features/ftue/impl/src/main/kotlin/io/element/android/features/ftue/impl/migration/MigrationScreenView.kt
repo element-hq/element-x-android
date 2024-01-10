@@ -50,5 +50,6 @@ fun MigrationScreenView(
 internal fun MigrationViewPreview() = ElementPreview {
     MigrationScreenView(
         migrationState = MigrationScreenState(isMigrating = true),
-        onMigrationFinished = {})
+        onMigrationFinished = {}
+    )
 }

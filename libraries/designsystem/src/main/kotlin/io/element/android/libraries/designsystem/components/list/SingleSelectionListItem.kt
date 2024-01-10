@@ -166,7 +166,7 @@ internal fun SingleSelectionListItemCustomFormattertPreview() {
             options = listOptionOf("Option 1", "Option 2", "Option 3"),
             supportingText = "Supporting text",
             onSelectionChanged = {},
-            resultFormatter = { "Selected index: $it"},
+            resultFormatter = { "Selected index: $it" },
             selected = 1,
             displayResultInTrailingContent = true,
         )

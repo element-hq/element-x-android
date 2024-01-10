@@ -70,7 +70,8 @@ class MatrixUserRepository @Inject constructor(
                 0,
                 dataSource.getProfile(UserId(query))
                     ?.let { UserSearchResult(it) }
-                    ?: UserSearchResult(MatrixUser(UserId(query)), isUnresolved = true))
+                    ?: UserSearchResult(MatrixUser(UserId(query)), isUnresolved = true)
+            )
         }
 
         return UserSearchResultState(results = results, isSearching = false)

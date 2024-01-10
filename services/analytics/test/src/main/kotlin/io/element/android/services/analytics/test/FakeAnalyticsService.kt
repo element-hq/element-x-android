@@ -27,7 +27,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 class FakeAnalyticsService(
     isEnabled: Boolean = false,
     didAskUserConsent: Boolean = false
-): AnalyticsService {
+) : AnalyticsService {
 
     private val isEnabledFlow = MutableStateFlow(isEnabled)
     private val didAskUserConsentFlow = MutableStateFlow(didAskUserConsent)

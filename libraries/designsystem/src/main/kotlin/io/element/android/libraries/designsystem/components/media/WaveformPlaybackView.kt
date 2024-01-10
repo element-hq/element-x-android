@@ -123,7 +123,9 @@ fun WaveformPlaybackView(
                                 requestDisallowInterceptTouchEvent.invoke(true)
                                 seekProgress.value = e.x / waveformWidthPx
                                 true
-                            } else false
+                            } else {
+                                false
+                            }
                         }
                         MotionEvent.ACTION_MOVE -> {
                             if (e.x in 0F..waveformWidthPx) {

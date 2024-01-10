@@ -45,7 +45,6 @@ fun TimelineItemTextView(
         LocalContentColor provides ElementTheme.colors.textPrimary,
         LocalTextStyle provides ElementTheme.typography.fontBodyLgRegular
     ) {
-
         val formattedBody = content.formattedBody
         val body = SpannableString(formattedBody ?: content.body)
 

@@ -33,5 +33,5 @@ enum class MembershipChange {
     KNOCK_ACCEPTED,
     KNOCK_RETRACTED,
     KNOCK_DENIED,
-    NOT_IMPLEMENTED;
+    NOT_IMPLEMENTED
 }

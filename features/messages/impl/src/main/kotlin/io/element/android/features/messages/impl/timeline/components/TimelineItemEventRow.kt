@@ -419,7 +419,6 @@ private fun MessageEventBubbleContent(
     @Suppress("ModifierNaming")
     bubbleModifier: Modifier = Modifier, // need to rename this modifier to prevent linter false positives
 ) {
-
     // Long clicks are not not automatically propagated from a `clickable`
     // to its `combinedClickable` parent so we do it manually
     fun onTimestampLongClick() = onMessageLongClick()
@@ -578,7 +577,6 @@ private fun MessageEventBubbleContent(
                     .clip(RoundedCornerShape(6.dp))
                     .clickable(enabled = true, onClick = inReplyToClick),
             )
-
         }
         if (inReplyToDetails != null) {
             // Use SubComposeLayout only if necessary as it can have consequences on the performance.
@@ -669,7 +667,7 @@ internal fun TimelineItemEventRowPreview() = ElementPreview {
                     isMine = it,
                     content = aTimelineItemTextContent().copy(
                         body = "A long text which will be displayed on several lines and" +
-                        " hopefully can be manually adjusted to test different behaviors."
+                            " hopefully can be manually adjusted to test different behaviors."
                     ),
                     groupPosition = TimelineItemGroupPosition.First,
                 ),

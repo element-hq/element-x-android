@@ -42,11 +42,10 @@ class RoomMemberListDataSource @Inject constructor(
             roomMembers
         } else {
             roomMembers.filter { member ->
-                member.userId.value.contains(query, ignoreCase = true)
-                    || member.displayName?.contains(query, ignoreCase = true).orFalse()
+                member.userId.value.contains(query, ignoreCase = true) ||
+                    member.displayName?.contains(query, ignoreCase = true).orFalse()
             }
         }
         filteredMembers
     }
-
 }

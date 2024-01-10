@@ -17,8 +17,8 @@
 package io.element.android.libraries.matrix.ui.messages
 
 import io.element.android.libraries.matrix.api.timeline.item.event.FormattedBody
-import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageFormat
+import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageType
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
 import org.jsoup.nodes.Node

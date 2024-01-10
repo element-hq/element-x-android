@@ -116,7 +116,7 @@ class SetupPinPresenterTest {
         }
     }
 
-    private fun SetupPinState.onPinEntryChanged(pinEntry: String){
+    private fun SetupPinState.onPinEntryChanged(pinEntry: String) {
         eventSink(SetupPinEvents.OnPinEntryChanged(pinEntry, isConfirmationStep))
     }
 

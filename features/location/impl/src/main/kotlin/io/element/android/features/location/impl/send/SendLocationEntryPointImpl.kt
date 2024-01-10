@@ -27,6 +27,7 @@ import javax.inject.Inject
 @ContributesBinding(AppScope::class)
 class SendLocationEntryPointImpl @Inject constructor() : SendLocationEntryPoint {
     override fun createNode(
-        parentNode: Node, buildContext: BuildContext
+        parentNode: Node,
+        buildContext: BuildContext
     ): SendLocationNode = parentNode.createNode(buildContext)
 }

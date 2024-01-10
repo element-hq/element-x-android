@@ -132,7 +132,7 @@ class MediaViewerPresenter @AssistedInject constructor(
                     val snackbarMessage = SnackbarMessage(mediaActionsError(it))
                     snackbarDispatcher.post(snackbarMessage)
                 }
-        } else Unit
+        }
     }
 
     private fun CoroutineScope.share(localMedia: AsyncData<LocalMedia>) = launch {
@@ -142,7 +142,7 @@ class MediaViewerPresenter @AssistedInject constructor(
                     val snackbarMessage = SnackbarMessage(mediaActionsError(it))
                     snackbarDispatcher.post(snackbarMessage)
                 }
-        } else Unit
+        }
     }
 
     private fun CoroutineScope.open(localMedia: AsyncData<LocalMedia>) = launch {
@@ -152,7 +152,7 @@ class MediaViewerPresenter @AssistedInject constructor(
                     val snackbarMessage = SnackbarMessage(mediaActionsError(it))
                     snackbarDispatcher.post(snackbarMessage)
                 }
-        } else Unit
+        }
     }
 
     private fun mediaActionsError(throwable: Throwable): Int {
@@ -163,6 +163,3 @@ class MediaViewerPresenter @AssistedInject constructor(
         }
     }
 }
-
-
-

@@ -144,7 +144,9 @@ fun SearchAccountProviderView(
                                     )
                                 }
                             }
-                        } else null,
+                        } else {
+                            null
+                        },
                         supportingText = {
                             Text(text = stringResource(id = R.string.screen_account_provider_form_notice), color = MaterialTheme.colorScheme.secondary)
                         }

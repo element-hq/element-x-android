@@ -37,4 +37,3 @@ data class LogEventLocation(
         }
     }
 }
-

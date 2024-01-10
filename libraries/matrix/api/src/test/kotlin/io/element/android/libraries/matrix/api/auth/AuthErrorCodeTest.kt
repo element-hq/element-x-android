@@ -44,5 +44,4 @@ class AuthErrorCodeTest {
         val error = AuthenticationException.Generic("Some other error")
         assertThat(error.errorCode).isEqualTo(AuthErrorCode.UNKNOWN)
     }
-
 }

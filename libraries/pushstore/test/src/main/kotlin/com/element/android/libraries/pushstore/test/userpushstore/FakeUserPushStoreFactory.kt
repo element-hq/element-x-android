@@ -20,9 +20,8 @@ import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.pushstore.api.UserPushStore
 import io.element.android.libraries.pushstore.api.UserPushStoreFactory
 
-class FakeUserPushStoreFactory: UserPushStoreFactory {
+class FakeUserPushStoreFactory : UserPushStoreFactory {
     override fun create(userId: SessionId): UserPushStore {
         return FakeUserPushStore()
     }
 }
-

@@ -80,7 +80,6 @@ class CreateRoomRootPresenterTests {
             awaitItem().also { state ->
                 assertThat(state.startDmAction).isEqualTo(startDMSuccessResult)
             }
-
         }
     }
 

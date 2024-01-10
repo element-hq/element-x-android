@@ -75,7 +75,6 @@ class SendLocationPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             sendLocationPresenter.present()
         }.test {
-
             val initialState = awaitItem()
             assertThat(initialState.permissionDialog).isEqualTo(SendLocationState.Dialog.None)
             assertThat(initialState.mode).isEqualTo(SendLocationState.Mode.SenderLocation)
@@ -102,7 +101,6 @@ class SendLocationPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             sendLocationPresenter.present()
         }.test {
-
             val initialState = awaitItem()
             assertThat(initialState.permissionDialog).isEqualTo(SendLocationState.Dialog.None)
             assertThat(initialState.mode).isEqualTo(SendLocationState.Mode.SenderLocation)
@@ -381,7 +379,9 @@ class SendLocationPresenterTest {
         )
         fakeMessageComposerContext.apply {
             composerMode = MessageComposerMode.Edit(
-                eventId = null, defaultContent = "", transactionId = null
+                eventId = null,
+                defaultContent = "",
+                transactionId = null
             )
         }
 
@@ -427,7 +427,9 @@ class SendLocationPresenterTest {
         )
         fakeMessageComposerContext.apply {
             composerMode = MessageComposerMode.Edit(
-                eventId = null, defaultContent = "", transactionId = null
+                eventId = null,
+                defaultContent = "",
+                transactionId = null
             )
         }
 

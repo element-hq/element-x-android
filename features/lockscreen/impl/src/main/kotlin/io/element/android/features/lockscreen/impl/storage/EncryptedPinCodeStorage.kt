@@ -42,5 +42,4 @@ interface EncryptedPinCodeStorage {
      * Returns whether the PIN code is stored or not.
      */
     fun hasPinCode(): Flow<Boolean>
-
 }

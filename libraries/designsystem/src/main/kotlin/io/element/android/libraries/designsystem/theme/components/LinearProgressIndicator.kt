@@ -80,8 +80,7 @@ internal fun LinearProgressIndicatorPreview() = ElementThemedPreview(vertical = 
 private fun ContentToPreview() {
     Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
         // Indeterminate progress
-        LinearProgressIndicator(
-        )
+        LinearProgressIndicator()
         // Fixed progress
         LinearProgressIndicator(
             progress = { 0.90F }

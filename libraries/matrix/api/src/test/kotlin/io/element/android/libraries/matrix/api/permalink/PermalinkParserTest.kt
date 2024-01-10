@@ -53,9 +53,9 @@ class PermalinkParserTest {
     fun `parsing a valid user url returns a user link`() {
         val url = "https://app.element.io/#/user/@test:matrix.org"
         assertThat(PermalinkParser.parse(url)).isEqualTo(
-                PermalinkData.UserLink(
-                        userId = "@test:matrix.org"
-                )
+            PermalinkData.UserLink(
+                userId = "@test:matrix.org"
+            )
         )
     }
 
@@ -115,12 +115,12 @@ class PermalinkParserTest {
     fun `parsing a valid room alias url returns a room link`() {
         val url = "https://app.element.io/#/room/#element-android:matrix.org"
         assertThat(PermalinkParser.parse(url)).isEqualTo(
-                PermalinkData.RoomLink(
-                        roomIdOrAlias = "#element-android:matrix.org",
-                        isRoomAlias = true,
-                        eventId = null,
-                        viaParameters = persistentListOf(),
-                )
+            PermalinkData.RoomLink(
+                roomIdOrAlias = "#element-android:matrix.org",
+                isRoomAlias = true,
+                eventId = null,
+                viaParameters = persistentListOf(),
+            )
         )
     }
 

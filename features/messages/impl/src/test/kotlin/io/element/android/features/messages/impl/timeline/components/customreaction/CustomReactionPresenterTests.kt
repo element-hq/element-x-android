@@ -40,7 +40,6 @@ class CustomReactionPresenterTests {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-
             val event = aTimelineItemEvent(eventId = AN_EVENT_ID)
             val initialState = awaitItem()
             assertThat(initialState.target).isEqualTo(CustomReactionState.Target.None)

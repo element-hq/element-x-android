@@ -97,4 +97,3 @@ internal fun SetupBiometricViewPreview(@PreviewParameter(SetupBiometricStateProv
         )
     }
 }
-

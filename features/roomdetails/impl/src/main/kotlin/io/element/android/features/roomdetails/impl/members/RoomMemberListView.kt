@@ -67,7 +67,6 @@ fun RoomMemberListView(
     onMemberSelected: (UserId) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-
     fun onUserSelected(roomMember: RoomMember) {
         onMemberSelected(roomMember.userId)
     }

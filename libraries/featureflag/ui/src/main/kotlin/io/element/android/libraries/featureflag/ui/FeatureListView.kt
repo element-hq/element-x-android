@@ -20,8 +20,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import io.element.android.libraries.designsystem.components.preferences.PreferenceCheckbox
-import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.featureflag.ui.model.FeatureUiModel
 import io.element.android.libraries.featureflag.ui.model.aFeatureUiModelList
 import kotlinx.collections.immutable.ImmutableList

@@ -117,7 +117,7 @@ fun TimelineItemReactionsLayout(
             return rows
         }
 
-        /// Given a list of rows place them in the layout.
+        // Given a list of rows place them in the layout.
         fun layoutRows(rows: List<List<Placeable>>): MeasureResult {
             var width = 0
             var height = 0

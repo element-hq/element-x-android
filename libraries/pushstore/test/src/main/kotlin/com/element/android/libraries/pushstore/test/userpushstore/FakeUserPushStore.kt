@@ -20,7 +20,7 @@ import io.element.android.libraries.pushstore.api.UserPushStore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 
-class FakeUserPushStore: UserPushStore {
+class FakeUserPushStore : UserPushStore {
 
     private var pushProviderName: String? = null
     private var currentRegisteredPushKey: String? = null
@@ -54,6 +54,5 @@ class FakeUserPushStore: UserPushStore {
     }
 
     override suspend fun reset() {
-
     }
 }

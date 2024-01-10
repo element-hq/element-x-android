@@ -68,7 +68,6 @@ fun PollHistoryView(
     goBack: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-
     fun onLoadMore() {
         state.eventSink(PollHistoryEvents.LoadMore)
     }
@@ -133,7 +132,6 @@ fun PollHistoryView(
                     onLoadMore = ::onLoadMore,
                     modifier = Modifier.fillMaxSize(),
                 )
-
             }
         }
     }

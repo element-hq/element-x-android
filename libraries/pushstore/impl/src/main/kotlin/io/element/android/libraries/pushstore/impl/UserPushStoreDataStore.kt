@@ -63,7 +63,7 @@ class UserPushStoreDataStore(
     }
 
     override fun getNotificationEnabledForDevice(): Flow<Boolean> {
-        return context.dataStore.data.map{ it[notificationEnabled].orTrue() }
+        return context.dataStore.data.map { it[notificationEnabled].orTrue() }
     }
 
     override suspend fun setNotificationEnabledForDevice(enabled: Boolean) {
