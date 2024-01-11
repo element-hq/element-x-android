@@ -13,7 +13,7 @@ core = "1.12.0"
 datastore = "1.0.0"
 constraintlayout = "2.1.4"
 constraintlayout_compose = "1.0.1"
-lifecycle = "2.7.0-rc02"
+lifecycle = "2.7.0"
 activity = "1.8.2"
 media3 = "1.2.0"
 
