@@ -51,6 +51,7 @@ autoservice = "1.1.1"
 junit = "4.13.2"
 androidx-test-ext-junit = "1.1.5"
 espresso-core = "3.5.1"
+kover = "0.7.5"
 
 [libraries]
 # Project
@@ -58,6 +59,7 @@ android_gradle_plugin = { module = "com.android.tools.build:gradle", version.ref
 # https://developer.android.com/studio/write/java8-support#library-desugaring-versions
 android_desugar = "com.android.tools:desugar_jdk_libs:2.0.4"
 kotlin_gradle_plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
+kover_gradle_plugin = { module = "org.jetbrains.kotlinx:kover-gradle-plugin", version.ref = "kover" }
 gms_google_services = "com.google.gms:google-services:4.4.0"
 # https://firebase.google.com/docs/android/setup#available-libraries
 google_firebase_bom = "com.google.firebase:firebase-bom:32.7.0"
@@ -215,7 +217,7 @@ dependencygraph = "com.savvasdalkitsis.module-dependency-graph:0.12"
 dependencycheck = "org.owasp.dependencycheck:9.0.8"
 dependencyanalysis = { id = "com.autonomousapps.dependency-analysis", version.ref = "dependencyAnalysis" }
 paparazzi = "app.cash.paparazzi:1.3.1"
-kover = "org.jetbrains.kotlinx.kover:0.7.5"
+kover = { id = "org.jetbrains.kotlinx.kover", version.ref = "kover" }
 sqldelight = { id = "app.cash.sqldelight", version.ref = "sqldelight" }
 firebaseAppDistribution = { id = "com.google.firebase.appdistribution", version.ref = "firebaseAppDistribution" }
 knit = { id = "org.jetbrains.kotlinx.knit", version = "0.5.0" }
