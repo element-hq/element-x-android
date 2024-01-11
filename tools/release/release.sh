@@ -143,7 +143,7 @@ git commit -a -m "Setting version for the release ${version}"
 
 printf "\n================================================================================\n"
 printf "Building the bundle locally first...\n"
-./gradlew clean app:bundleRelease
+./gradlew clean app:bundleGplayRelease
 
 printf "\n================================================================================\n"
 printf "Running towncrier...\n"
@@ -218,7 +218,7 @@ fi
 
 printf "\n================================================================================\n"
 printf "Wait for the GitHub action https://github.com/element-hq/element-x-android/actions/workflows/release.yml?query=branch%%3Amain to build the 'main' branch.\n"
-read -p "After GHA is finished, please enter the artifact URL (for 'elementx-app-bundle-unsigned'): " artifactUrl
+read -p "After GHA is finished, please enter the artifact URL (for 'elementx-app-gplay-bundle-unsigned'): " artifactUrl
 
 printf "\n================================================================================\n"
 printf "Downloading the artifact...\n"
@@ -235,7 +235,7 @@ python3 ./tools/github/download_github_artifacts.py \
 printf "\n================================================================================\n"
 printf "Unzipping the artifact...\n"
 
-unzip ${targetPath}/elementx-app-bundle-unsigned.zip -d ${targetPath}
+unzip ${targetPath}/elementx-app-gplay-bundle-unsigned.zip -d ${targetPath}
 
 unsignedBundlePath="${targetPath}/app-release.aab"
 signedBundlePath="${targetPath}/app-release-signed.aab"
