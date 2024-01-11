@@ -150,7 +150,6 @@ android {
             isDefault = true
             buildConfigField("String", "SHORT_FLAVOR_DESCRIPTION", "\"G\"")
             buildConfigField("String", "FLAVOR_DESCRIPTION", "\"GooglePlay\"")
-
         }
         create("fdroid") {
             dimension = "store"
