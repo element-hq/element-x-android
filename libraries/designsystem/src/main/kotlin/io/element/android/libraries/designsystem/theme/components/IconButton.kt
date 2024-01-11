@@ -58,11 +58,7 @@ fun IconButton(
 
 @Preview(group = PreviewGroup.Buttons)
 @Composable
-internal fun IconButtonPreview() =
-    ElementThemedPreview { ContentToPreview() }
-
-@Composable
-private fun ContentToPreview() {
+internal fun IconButtonPreview() = ElementThemedPreview {
     Column {
         CompositionLocalProvider(LocalContentColor provides ElementTheme.colors.iconPrimary) {
             Row {

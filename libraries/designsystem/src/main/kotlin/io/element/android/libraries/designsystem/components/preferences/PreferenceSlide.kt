@@ -90,10 +90,7 @@ fun PreferenceSlide(
 
 @Preview(group = PreviewGroup.Preferences)
 @Composable
-internal fun PreferenceSlidePreview() = ElementThemedPreview { ContentToPreview() }
-
-@Composable
-private fun ContentToPreview() {
+internal fun PreferenceSlidePreview() = ElementThemedPreview {
     PreferenceSlide(
         iconResourceId = CompoundDrawables.ic_user_profile,
         title = "Slide",

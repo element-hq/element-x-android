@@ -288,6 +288,8 @@ koverReport {
                 "io.element.android.libraries.designsystem.theme.components.bottomsheet.*",
             )
             annotatedBy(
+                "androidx.compose.ui.tooling.preview.Preview",
+                "io.element.android.libraries.architecture.coverage.ExcludeFromCoverage",
                 "io.element.android.libraries.designsystem.preview.PreviewsDayNight",
                 "io.element.android.libraries.designsystem.preview.PreviewWithLargeHeight",
             )

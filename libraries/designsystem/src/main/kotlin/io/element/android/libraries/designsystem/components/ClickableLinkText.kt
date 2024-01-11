@@ -171,11 +171,7 @@ fun AnnotatedString.linkify(linkStyle: SpanStyle): AnnotatedString {
 
 @Preview(group = PreviewGroup.Text)
 @Composable
-internal fun ClickableLinkTextPreview() =
-    ElementThemedPreview { ContentToPreview() }
-
-@Composable
-private fun ContentToPreview() {
+internal fun ClickableLinkTextPreview() = ElementThemedPreview {
     ClickableLinkText(
         annotatedString = AnnotatedString("Hello", ParagraphStyle()),
         linkAnnotationTag = "",
