@@ -40,7 +40,6 @@ class StaticFeatureFlagProvider @Inject constructor() :
                 FeatureFlags.PinUnlock -> true
                 FeatureFlags.Mentions -> true
                 FeatureFlags.SecureStorage -> true
-                FeatureFlags.ReadReceipts -> true
             }
         } else {
             false

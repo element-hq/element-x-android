@@ -28,7 +28,6 @@ import kotlinx.collections.immutable.ImmutableList
 data class TimelineState(
     val timelineItems: ImmutableList<TimelineItem>,
     val timelineRoomInfo: TimelineRoomInfo,
-    val showReadReceipts: Boolean,
     val highlightedEventId: EventId?,
     val paginationState: MatrixTimeline.PaginationState,
     val newEventState: NewEventState,

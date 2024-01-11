@@ -47,7 +47,6 @@ import kotlinx.collections.immutable.toPersistentList
 @Composable
 fun TimelineItemStateEventRow(
     event: TimelineItem.Event,
-    showReadReceipts: Boolean,
     isLastOutgoingMessage: Boolean,
     isHighlighted: Boolean,
     onClick: () -> Unit,
@@ -91,7 +90,6 @@ fun TimelineItemStateEventRow(
                 isLastOutgoingMessage = isLastOutgoingMessage,
                 receipts = event.readReceiptState.receipts,
             ),
-            showReadReceipts = showReadReceipts,
             onReadReceiptsClicked = { onReadReceiptsClick(event) },
         )
     }
@@ -109,7 +107,6 @@ internal fun TimelineItemStateEventRowPreview() = ElementPreview {
                 receipts = listOf(aReadReceiptData(0)).toPersistentList(),
             )
         ),
-        showReadReceipts = true,
         isLastOutgoingMessage = false,
         isHighlighted = false,
         onClick = {},
