@@ -162,7 +162,13 @@ allprojects {
 }
 
 allprojects {
-    apply(plugin = "org.jetbrains.kotlinx.kover")
+    val localAarProjects = listOf(
+        ":libraries:rustsdk",
+        ":libraries:textcomposer:lib"
+    )
+    if (project.path !in localAarProjects) {
+        apply(plugin = "org.jetbrains.kotlinx.kover")
+    }
 }
 
 // Register quality check tasks.
