@@ -87,10 +87,6 @@ fun DependencyHandlerScope.allLibrariesImpl() {
     implementation(project(":libraries:permissions:impl"))
     implementation(project(":libraries:push:impl"))
     implementation(project(":libraries:push:impl"))
-    // Comment to not include firebase in the project
-    implementation(project(":libraries:pushproviders:firebase"))
-    // Comment to not include unified push in the project
-    implementation(project(":libraries:pushproviders:unifiedpush"))
     implementation(project(":libraries:featureflag:impl"))
     implementation(project(":libraries:pushstore:impl"))
     implementation(project(":libraries:preferences:impl"))
