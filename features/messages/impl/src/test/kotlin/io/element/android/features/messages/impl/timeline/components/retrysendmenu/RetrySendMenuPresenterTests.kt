@@ -29,7 +29,6 @@ import org.junit.Rule
 import org.junit.Test
 
 class RetrySendMenuPresenterTests {
-
     @get:Rule
     val warmUpRule = WarmUpRule()
 

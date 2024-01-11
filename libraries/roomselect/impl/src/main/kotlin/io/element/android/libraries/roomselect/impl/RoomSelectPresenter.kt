@@ -40,7 +40,6 @@ class RoomSelectPresenter @AssistedInject constructor(
     @Assisted private val mode: RoomSelectMode,
     private val client: MatrixClient,
 ) : Presenter<RoomSelectState> {
-
     @AssistedFactory
     interface Factory {
         fun create(mode: RoomSelectMode): RoomSelectPresenter

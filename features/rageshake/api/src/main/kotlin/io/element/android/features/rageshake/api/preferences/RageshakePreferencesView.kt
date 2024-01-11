@@ -56,7 +56,8 @@ fun RageshakePreferencesView(
                     // summary = stringResource(id = CommonStrings.settings_rageshake_detection_threshold_summary),
                     value = state.sensitivity,
                     enabled = state.isEnabled,
-                    steps = 3 /* 5 possible values - steps are in ]0, 1[ */,
+                    // 5 possible values - steps are in ]0, 1[
+                    steps = 3,
                     onValueChange = ::onSensitivityChanged
                 )
             } else {

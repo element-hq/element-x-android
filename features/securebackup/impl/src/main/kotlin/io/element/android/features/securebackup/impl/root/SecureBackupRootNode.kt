@@ -39,7 +39,6 @@ class SecureBackupRootNode @AssistedInject constructor(
     buildContext = buildContext,
     plugins = plugins
 ) {
-
     interface Callback : Plugin {
         fun onSetupClicked()
         fun onChangeClicked()
@@ -69,7 +68,7 @@ class SecureBackupRootNode @AssistedInject constructor(
     }
 
     private fun onLearnMoreClicked(uriHandler: UriHandler) {
-        uriHandler.openUri(SecureBackupConfig.LearnMoreUrl)
+        uriHandler.openUri(SecureBackupConfig.LEARN_MORE_URL)
     }
 
     @Composable

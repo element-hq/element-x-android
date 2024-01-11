@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-package io.element.android.appnav.loggedin
+package io.element.android.libraries.architecture.coverage
 
-// sealed interface LoggedInEvents {
-//     data object MyEvent : LoggedInEvents
-// }
+@Retention(AnnotationRetention.RUNTIME)
+@Target(AnnotationTarget.FUNCTION, AnnotationTarget.CLASS)
+annotation class ExcludeFromCoverage

@@ -115,7 +115,8 @@ internal fun VoiceMessagePreview(
 }
 
 private enum class PlayerButtonType {
-    Play, Pause
+    Play,
+    Pause
 }
 
 @Composable

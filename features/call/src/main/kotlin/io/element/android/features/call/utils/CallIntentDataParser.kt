@@ -20,7 +20,6 @@ import android.net.Uri
 import javax.inject.Inject
 
 class CallIntentDataParser @Inject constructor() {
-
     private val validHttpSchemes = sequenceOf("https")
 
     fun parse(data: String?): String? {

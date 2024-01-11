@@ -41,7 +41,6 @@ import org.junit.Rule
 import org.junit.Test
 
 class RoomFlowNodeTest {
-
     @get:Rule
     val instantTaskExecutorRule = InstantTaskExecutorRule()
 
@@ -49,7 +48,6 @@ class RoomFlowNodeTest {
     val mainDispatcherRule = MainDispatcherRule()
 
     private class FakeMessagesEntryPoint : MessagesEntryPoint {
-
         var nodeId: String? = null
         var callback: MessagesEntryPoint.Callback? = null
 
@@ -68,12 +66,10 @@ class RoomFlowNodeTest {
     }
 
     private class FakeRoomDetailsEntryPoint : RoomDetailsEntryPoint {
-
         var nodeId: String? = null
 
         override fun nodeBuilder(parentNode: Node, buildContext: BuildContext): RoomDetailsEntryPoint.NodeBuilder {
             return object : RoomDetailsEntryPoint.NodeBuilder {
-
                 override fun params(params: RoomDetailsEntryPoint.Params): RoomDetailsEntryPoint.NodeBuilder {
                     return this
                 }

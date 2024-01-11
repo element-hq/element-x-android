@@ -84,7 +84,7 @@ class AsyncDataKtTest {
 private class TestableMutableState<T>(
     value: T
 ) : MutableState<T> {
-
+    @Suppress("ktlint:standard:property-naming")
     private val _deque = ArrayDeque<T>(listOf(value))
 
     override var value: T

@@ -37,7 +37,6 @@ class DatabaseSessionStore @Inject constructor(
     private val database: SessionDatabase,
     private val dispatchers: CoroutineDispatchers,
 ) : SessionStore {
-
     override fun isLoggedIn(): Flow<LoggedInState> {
         return database.sessionDataQueries.selectFirst()
             .asFlow()

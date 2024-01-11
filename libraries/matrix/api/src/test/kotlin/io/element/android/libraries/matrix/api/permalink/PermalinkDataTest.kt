@@ -21,7 +21,6 @@ import kotlinx.collections.immutable.persistentListOf
 import org.junit.Test
 
 class PermalinkDataTest {
-
     @Test
     fun `getRoomId() returns value when isRoomAlias is false`() {
         val permalinkData = PermalinkData.RoomLink(

@@ -28,7 +28,6 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 class WebViewWidgetMessageInterceptor(
     private val webView: WebView,
 ) : WidgetMessageInterceptor {
-
     companion object {
         // We call both the WebMessageListener and the JavascriptInterface objects in JS with this
         // 'listenerName' so they can both receive the data from the WebView when

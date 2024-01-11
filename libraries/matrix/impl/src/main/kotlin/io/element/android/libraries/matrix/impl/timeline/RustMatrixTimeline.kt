@@ -65,7 +65,6 @@ class RustMatrixTimeline(
     lastLoginTimestamp: Date?,
     private val onNewSyncedEvent: () -> Unit,
 ) : MatrixTimeline {
-
     private val initLatch = CompletableDeferred<Unit>()
     private val isInit = AtomicBoolean(false)
 

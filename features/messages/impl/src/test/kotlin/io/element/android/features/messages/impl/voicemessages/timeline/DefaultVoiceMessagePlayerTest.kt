@@ -29,7 +29,6 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
 class DefaultVoiceMessagePlayerTest {
-
     @Test
     fun `initial state`() = runTest {
         createDefaultVoiceMessagePlayer().state.test {

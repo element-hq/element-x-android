@@ -24,7 +24,6 @@ import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
 class MatrixToConverterTest {
-
     @Test
     fun `converting a matrix-to url does nothing`() {
         val url = Uri.parse("https://matrix.to/#/#element-android:matrix.org")

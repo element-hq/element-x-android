@@ -30,7 +30,6 @@ class FakeMediaPlayer(
     private val fakeTotalDurationMs: Long = 10_000L,
     private val fakePlayedDurationMs: Long = 1000L,
 ) : MediaPlayer {
-
     private val _state = MutableStateFlow(
         MediaPlayer.State(
             isReady = false,

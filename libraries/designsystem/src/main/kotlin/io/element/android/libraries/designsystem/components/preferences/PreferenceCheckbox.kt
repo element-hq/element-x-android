@@ -95,10 +95,7 @@ fun PreferenceCheckbox(
 
 @Preview(group = PreviewGroup.Preferences)
 @Composable
-internal fun PreferenceCheckboxPreview() = ElementThemedPreview { ContentToPreview() }
-
-@Composable
-private fun ContentToPreview() {
+internal fun PreferenceCheckboxPreview() = ElementThemedPreview {
     Column {
         PreferenceCheckbox(
             title = "Checkbox",

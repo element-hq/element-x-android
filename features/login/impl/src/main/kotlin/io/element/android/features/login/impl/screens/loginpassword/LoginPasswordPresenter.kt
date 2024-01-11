@@ -39,7 +39,6 @@ class LoginPasswordPresenter @Inject constructor(
     private val accountProviderDataSource: AccountProviderDataSource,
     private val defaultLoginUserStory: DefaultLoginUserStory,
 ) : Presenter<LoginPasswordState> {
-
     @Composable
     override fun present(): LoginPasswordState {
         val localCoroutineScope = rememberCoroutineScope()

@@ -25,7 +25,6 @@ import javax.inject.Inject
 
 @SingleIn(RoomScope::class)
 class TimelineItemGrouper @Inject constructor() {
-
     /**
      * Keys are identifier of items in a group, only one by group will be kept.
      * Values are the actual groupIds.

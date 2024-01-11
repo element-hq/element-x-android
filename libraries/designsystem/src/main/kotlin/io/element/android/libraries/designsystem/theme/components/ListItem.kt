@@ -378,7 +378,6 @@ internal fun ListItemDisabledWithIconPreview() = PreviewItems.OneLineListItemPre
 
 @Suppress("ModifierMissing")
 private object PreviewItems {
-
     @Composable
     fun ThreeLinesListItemPreview(
         modifier: Modifier = Modifier,

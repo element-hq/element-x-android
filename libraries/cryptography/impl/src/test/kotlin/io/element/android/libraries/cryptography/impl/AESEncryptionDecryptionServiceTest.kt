@@ -24,7 +24,6 @@ import java.security.GeneralSecurityException
 import javax.crypto.KeyGenerator
 
 class AESEncryptionDecryptionServiceTest {
-
     private val encryptionDecryptionService = AESEncryptionDecryptionService()
 
     @Test

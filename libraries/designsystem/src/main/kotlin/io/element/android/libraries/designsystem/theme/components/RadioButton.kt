@@ -66,10 +66,7 @@ internal fun compoundRadioButtonColors(): RadioButtonColors {
 
 @Preview(group = PreviewGroup.Toggles)
 @Composable
-internal fun RadioButtonPreview() = ElementThemedPreview(vertical = false) { ContentToPreview() }
-
-@Composable
-private fun ContentToPreview() {
+internal fun RadioButtonPreview() = ElementThemedPreview(vertical = false) {
     var checked by remember { mutableStateOf(false) }
     Column {
         Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {

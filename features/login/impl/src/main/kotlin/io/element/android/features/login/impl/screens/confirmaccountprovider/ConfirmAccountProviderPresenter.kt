@@ -46,7 +46,6 @@ class ConfirmAccountProviderPresenter @AssistedInject constructor(
     private val defaultOidcActionFlow: DefaultOidcActionFlow,
     private val defaultLoginUserStory: DefaultLoginUserStory,
 ) : Presenter<ConfirmAccountProviderState> {
-
     data class Params(
         val isAccountCreation: Boolean,
     )

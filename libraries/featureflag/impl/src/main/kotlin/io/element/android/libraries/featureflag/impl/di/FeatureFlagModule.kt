@@ -29,7 +29,6 @@ import io.element.android.libraries.featureflag.impl.StaticFeatureFlagProvider
 @Module
 @ContributesTo(AppScope::class)
 object FeatureFlagModule {
-
     @JvmStatic
     @Provides
     @ElementsIntoSet

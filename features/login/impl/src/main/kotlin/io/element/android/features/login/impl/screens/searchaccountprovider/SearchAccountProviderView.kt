@@ -201,7 +201,8 @@ private fun HomeserverData.toAccountProvider(): AccountProvider {
     return AccountProvider(
         url = homeserverUrl,
         subtitle = if (isMatrixOrg) stringResource(id = R.string.screen_change_account_provider_matrix_org_subtitle) else null,
-        isPublic = isMatrixOrg, // There is no need to know for other servers right now
+        // There is no need to know for other servers right now
+        isPublic = isMatrixOrg,
         isMatrixOrg = isMatrixOrg,
         isValid = isWellknownValid,
         supportSlidingSync = supportSlidingSync,

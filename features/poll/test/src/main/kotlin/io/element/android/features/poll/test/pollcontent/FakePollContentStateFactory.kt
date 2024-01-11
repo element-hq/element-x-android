@@ -24,7 +24,6 @@ import io.element.android.libraries.matrix.api.timeline.item.event.PollContent
 import kotlinx.collections.immutable.toImmutableList
 
 class FakePollContentStateFactory : PollContentStateFactory {
-
     override suspend fun create(event: EventTimelineItem, content: PollContent): PollContentState {
         return PollContentState(
             eventId = event.eventId,

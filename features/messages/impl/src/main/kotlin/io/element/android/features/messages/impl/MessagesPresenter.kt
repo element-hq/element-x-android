@@ -114,7 +114,6 @@ class MessagesPresenter @AssistedInject constructor(
     private val buildMeta: BuildMeta,
     private val currentSessionIdHolder: CurrentSessionIdHolder,
 ) : Presenter<MessagesState> {
-
     private val timelinePresenter = timelinePresenterFactory.create(navigator = navigator)
 
     @AssistedFactory

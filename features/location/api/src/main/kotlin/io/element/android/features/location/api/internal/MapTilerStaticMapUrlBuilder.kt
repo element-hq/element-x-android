@@ -29,7 +29,6 @@ internal class MapTilerStaticMapUrlBuilder(
     private val lightMapId: String,
     private val darkMapId: String,
 ) : StaticMapUrlBuilder {
-
     constructor(context: Context) : this(
         apiKey = context.apiKey,
         lightMapId = context.mapId(darkMode = false),

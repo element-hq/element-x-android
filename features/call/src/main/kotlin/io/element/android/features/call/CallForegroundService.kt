@@ -30,7 +30,6 @@ import io.element.android.features.call.ui.ElementCallActivity
 import io.element.android.libraries.designsystem.utils.CommonDrawables
 
 class CallForegroundService : Service() {
-
     companion object {
         fun start(context: Context) {
             val intent = Intent(context, CallForegroundService::class.java)

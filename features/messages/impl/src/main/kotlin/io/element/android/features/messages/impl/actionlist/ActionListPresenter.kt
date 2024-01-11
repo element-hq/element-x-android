@@ -41,7 +41,6 @@ import javax.inject.Inject
 class ActionListPresenter @Inject constructor(
     private val preferencesStore: PreferencesStore,
 ) : Presenter<ActionListState> {
-
     @Composable
     override fun present(): ActionListState {
         val localCoroutineScope = rememberCoroutineScope()

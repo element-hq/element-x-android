@@ -23,7 +23,6 @@ import kotlinx.collections.immutable.toPersistentList
 import org.junit.Test
 
 class PollFormStateTest {
-
     @Test
     fun `with new answer`() {
         val state = PollFormState.Empty

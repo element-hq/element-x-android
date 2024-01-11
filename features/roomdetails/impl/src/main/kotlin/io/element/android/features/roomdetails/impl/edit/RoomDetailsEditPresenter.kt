@@ -53,7 +53,6 @@ class RoomDetailsEditPresenter @Inject constructor(
     private val mediaPreProcessor: MediaPreProcessor,
     permissionsPresenterFactory: PermissionsPresenter.Factory,
 ) : Presenter<RoomDetailsEditState> {
-
     private val cameraPermissionPresenter = permissionsPresenterFactory.create(android.Manifest.permission.CAMERA)
     private var pendingPermissionRequest = false
 

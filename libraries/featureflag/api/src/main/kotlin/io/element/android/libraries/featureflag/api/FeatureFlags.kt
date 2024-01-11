@@ -75,11 +75,4 @@ enum class FeatureFlags(
         defaultValue = true,
         isFinished = false,
     ),
-    ReadReceipts(
-        key = "feature.readreceipts",
-        title = "Show read receipts",
-        description = null,
-        defaultValue = true,
-        isFinished = false,
-    ),
 }

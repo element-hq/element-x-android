@@ -90,10 +90,7 @@ private fun compoundErrorCheckBoxColors(): CheckboxColors {
 
 @Preview(group = PreviewGroup.Toggles)
 @Composable
-internal fun CheckboxesPreview() = ElementThemedPreview(vertical = false) { ContentToPreview() }
-
-@Composable
-private fun ContentToPreview() {
+internal fun CheckboxesPreview() = ElementThemedPreview(vertical = false) {
     Column {
         // Unchecked
         Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {

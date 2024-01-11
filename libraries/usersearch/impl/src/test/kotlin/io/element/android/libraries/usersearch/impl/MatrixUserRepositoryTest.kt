@@ -33,7 +33,6 @@ import org.junit.Test
 private val SESSION_ID = SessionId("@current-user:example.com")
 
 internal class MatrixUserRepositoryTest {
-
     @Test
     fun `search - emits nothing if the search query is too short`() = runTest {
         val dataSource = FakeUserListDataSource()

@@ -33,7 +33,6 @@ private val loggerTag = LoggerTag("NotificationBroadcastReceiver", LoggerTag.Not
  * Receives actions broadcast by notification (on click, on dismiss, inline replies, etc.).
  */
 class NotificationBroadcastReceiver : BroadcastReceiver() {
-
     @Inject lateinit var defaultNotificationDrawerManager: DefaultNotificationDrawerManager
     @Inject lateinit var actionIds: NotificationActionIds
 
@@ -223,12 +222,9 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
                 VectorApp.getInstance().notificationDrawerManager.refreshNotificationDrawer(null)
             }
         })
-         */
+     */
     }
 
-     */
-
-    /*
     private fun getReplyMessage(intent: Intent?): String? {
         if (intent != null) {
             val remoteInput = RemoteInput.getResultsFromIntent(intent)

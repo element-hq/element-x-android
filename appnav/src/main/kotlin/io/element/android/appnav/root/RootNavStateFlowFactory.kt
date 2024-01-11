@@ -41,7 +41,6 @@ class RootNavStateFlowFactory @Inject constructor(
     private val matrixClientsHolder: MatrixClientsHolder,
     private val loginUserStory: LoginUserStory,
 ) {
-
     private var currentCacheIndex = 0
 
     fun create(savedStateMap: SavedStateMap?): Flow<RootNavState> {

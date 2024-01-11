@@ -38,7 +38,6 @@ class HomeserverResolver @Inject constructor(
     private val dispatchers: CoroutineDispatchers,
     private val wellknownRequest: WellknownRequest,
 ) {
-
     suspend fun resolve(userInput: String): Flow<List<HomeserverData>> = flow {
         val flowContext = currentCoroutineContext()
         val trimmedUserInput = userInput.trim()

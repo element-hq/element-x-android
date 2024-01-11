@@ -22,7 +22,6 @@ import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParse
 import javax.inject.Inject
 
 class TimelineItemContentFailedToParseMessageFactory @Inject constructor() {
-
     fun create(@Suppress("UNUSED_PARAMETER") failedToParseMessageLike: FailedToParseMessageLikeContent): TimelineItemEventContent {
         return TimelineItemUnknownContent
     }

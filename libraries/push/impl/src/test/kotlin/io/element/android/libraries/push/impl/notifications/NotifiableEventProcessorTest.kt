@@ -42,7 +42,6 @@ private val VIEWING_A_ROOM = aNavigationState(A_SESSION_ID, A_SPACE_ID, A_ROOM_I
 private val VIEWING_A_THREAD = aNavigationState(A_SESSION_ID, A_SPACE_ID, A_ROOM_ID, A_THREAD_ID)
 
 class NotifiableEventProcessorTest {
-
     private val outdatedDetector = FakeOutdatedEventDetector()
 
     @Test

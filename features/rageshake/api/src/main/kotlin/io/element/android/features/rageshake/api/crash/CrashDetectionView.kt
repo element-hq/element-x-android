@@ -56,7 +56,8 @@ private fun CrashDetectionContent(
 ) {
     ConfirmationDialog(
         title = stringResource(id = CommonStrings.action_report_bug),
-        content = stringResource(id = R.string.crash_detection_dialog_content, /* TODO App name */ "Element"),
+        // TODO Replace with app name
+        content = stringResource(id = R.string.crash_detection_dialog_content, "Element"),
         submitText = stringResource(id = CommonStrings.action_yes),
         cancelText = stringResource(id = CommonStrings.action_no),
         onCancelClicked = onNoClicked,

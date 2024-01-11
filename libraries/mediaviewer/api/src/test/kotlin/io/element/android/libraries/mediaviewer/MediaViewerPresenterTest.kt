@@ -43,7 +43,6 @@ import org.junit.Test
 private val TESTED_MEDIA_INFO = aFileInfo()
 
 class MediaViewerPresenterTest {
-
     @get:Rule
     val warmUpRule = WarmUpRule()
 

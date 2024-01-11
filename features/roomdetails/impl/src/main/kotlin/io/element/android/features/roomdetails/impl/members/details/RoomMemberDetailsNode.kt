@@ -48,7 +48,6 @@ class RoomMemberDetailsNode @AssistedInject constructor(
     private val analyticsService: AnalyticsService,
     presenterFactory: RoomMemberDetailsPresenter.Factory,
 ) : Node(buildContext, plugins = plugins) {
-
     interface Callback : NodeInputs {
         fun openAvatarPreview(username: String, avatarUrl: String)
         fun onStartDM(roomId: RoomId)

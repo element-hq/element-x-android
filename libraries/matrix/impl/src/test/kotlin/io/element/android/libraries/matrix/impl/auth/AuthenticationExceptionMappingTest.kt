@@ -23,7 +23,6 @@ import org.junit.Test
 import org.matrix.rustcomponents.sdk.AuthenticationException as RustAuthenticationException
 
 class AuthenticationExceptionMappingTest {
-
     @Test
     fun `mapping an exception with no message returns 'Unknown error' message`() {
         val exception = Exception()

@@ -81,7 +81,6 @@ class RootFlowNode @AssistedInject constructor(
     buildContext = buildContext,
     plugins = plugins
 ) {
-
     override fun onBuilt() {
         matrixClientsHolder.restoreWithSavedState(buildContext.savedStateMap)
         super.onBuilt()

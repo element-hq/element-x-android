@@ -57,7 +57,6 @@ import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 
 class VoiceMessageComposerPresenterTest {
-
     @get:Rule
     val warmUpRule = WarmUpRule()
 

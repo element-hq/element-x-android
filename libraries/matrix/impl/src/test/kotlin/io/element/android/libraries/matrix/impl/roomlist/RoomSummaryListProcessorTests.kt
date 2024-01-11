@@ -40,7 +40,6 @@ import org.matrix.rustcomponents.sdk.TaskHandle
 // NOTE: this class is using a fake implementation of a Rust SDK interface which returns actual Rust objects with pointers.
 // Since we don't access the data in those objects, this is fine for our tests, but that's as far as we can test this class.
 class RoomSummaryListProcessorTests {
-
     private val summaries = MutableStateFlow<List<RoomSummary>>(emptyList())
 
     @Test

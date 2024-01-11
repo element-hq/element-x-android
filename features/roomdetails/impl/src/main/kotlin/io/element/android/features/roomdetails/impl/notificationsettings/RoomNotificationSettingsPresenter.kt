@@ -49,7 +49,6 @@ class RoomNotificationSettingsPresenter @AssistedInject constructor(
     private val notificationSettingsService: NotificationSettingsService,
     @Assisted private val showUserDefinedSettingStyle: Boolean,
 ) : Presenter<RoomNotificationSettingsState> {
-
     @AssistedFactory
     interface Factory {
         fun create(showUserDefinedSettingStyle: Boolean): RoomNotificationSettingsPresenter

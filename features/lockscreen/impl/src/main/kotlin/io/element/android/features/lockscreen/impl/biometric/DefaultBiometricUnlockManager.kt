@@ -57,7 +57,6 @@ class DefaultBiometricUnlockManager @Inject constructor(
     private val secretKeyRepository: SecretKeyRepository,
     private val coroutineScope: CoroutineScope,
 ) : BiometricUnlockManager {
-
     private val callbacks = CopyOnWriteArrayList<BiometricUnlock.Callback>()
     private val biometricManager = BiometricManager.from(context)
     private val keyguardManager: KeyguardManager = context.getSystemService()!!

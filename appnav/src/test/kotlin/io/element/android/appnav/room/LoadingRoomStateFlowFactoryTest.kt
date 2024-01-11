@@ -28,7 +28,6 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
 class LoadingRoomStateFlowFactoryTest {
-
     @Test
     fun `flow should emit Loading and then Loaded when there is a room in cache`() = runTest {
         val room = FakeMatrixRoom(sessionId = A_SESSION_ID, roomId = A_ROOM_ID)

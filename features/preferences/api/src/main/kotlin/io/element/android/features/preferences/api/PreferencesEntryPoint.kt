@@ -26,7 +26,6 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import kotlinx.parcelize.Parcelize
 
 interface PreferencesEntryPoint : FeatureEntryPoint {
-
     sealed interface InitialTarget : Parcelable {
         @Parcelize
         data object Root : InitialTarget
@@ -39,7 +38,6 @@ interface PreferencesEntryPoint : FeatureEntryPoint {
     fun nodeBuilder(parentNode: Node, buildContext: BuildContext): NodeBuilder
 
     interface NodeBuilder {
-
         fun params(params: Params): NodeBuilder
         fun callback(callback: Callback): NodeBuilder
         fun build(): Node

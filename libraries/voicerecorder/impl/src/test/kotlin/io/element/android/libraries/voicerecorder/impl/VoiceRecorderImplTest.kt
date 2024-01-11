@@ -141,8 +141,9 @@ class VoiceRecorderImplTest {
             ),
             encoder = FakeEncoder(fakeFileSystem),
             config = AudioConfig(
-                format = AUDIO_FORMAT,
-                bitRate = 24_000, // 24 kbps
+                format = audioFormat,
+                // 24 kbps
+                bitRate = 24_000,
                 sampleRate = SampleRate,
                 source = MediaRecorder.AudioSource.MIC,
             ),
@@ -156,7 +157,7 @@ class VoiceRecorderImplTest {
     companion object {
         const val FILE_ID: String = "recording"
         const val FILE_PATH = "voice_recordings/$FILE_ID.ogg"
-        private lateinit var AUDIO_FORMAT: AudioFormat
+        private lateinit var audioFormat: AudioFormat
 
         // FakeEncoder doesn't actually encode, it just writes the data to the file
         private const val ENCODED_DATA = "[32767, 32767, 32767][32767, 32767, 32767]"
@@ -170,7 +171,7 @@ class VoiceRecorderImplTest {
         @BeforeClass
         @JvmStatic
         fun initAudioFormat() {
-            AUDIO_FORMAT = mockk()
+            audioFormat = mockk()
         }
     }
 }

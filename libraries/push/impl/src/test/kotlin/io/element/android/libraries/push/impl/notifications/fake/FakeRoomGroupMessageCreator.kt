@@ -25,7 +25,6 @@ import io.mockk.coEvery
 import io.mockk.mockk
 
 class FakeRoomGroupMessageCreator {
-
     val instance = mockk<RoomGroupMessageCreator>()
 
     fun givenCreatesRoomMessageFor(

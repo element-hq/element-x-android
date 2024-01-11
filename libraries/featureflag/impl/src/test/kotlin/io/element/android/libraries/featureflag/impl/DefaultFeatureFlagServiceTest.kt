@@ -23,7 +23,6 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
 class DefaultFeatureFlagServiceTest {
-
     @Test
     fun `given service without provider when feature is checked then it returns the default value`() = runTest {
         val featureFlagService = DefaultFeatureFlagService(emptySet())

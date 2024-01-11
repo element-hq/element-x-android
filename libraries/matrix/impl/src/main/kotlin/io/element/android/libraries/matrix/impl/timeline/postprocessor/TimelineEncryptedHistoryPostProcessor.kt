@@ -29,7 +29,6 @@ class TimelineEncryptedHistoryPostProcessor(
     private val isRoomEncrypted: Boolean,
     private val isKeyBackupEnabled: Boolean,
 ) {
-
     suspend fun process(items: List<MatrixTimelineItem>): List<MatrixTimelineItem> = withContext(dispatcher) {
         Timber.d("Process on Thread=${Thread.currentThread()}")
         if (!isRoomEncrypted || isKeyBackupEnabled || lastLoginTimestamp == null) return@withContext items

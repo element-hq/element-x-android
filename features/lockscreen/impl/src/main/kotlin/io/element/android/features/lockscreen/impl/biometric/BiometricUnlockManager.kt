@@ -19,7 +19,6 @@ package io.element.android.features.lockscreen.impl.biometric
 import androidx.compose.runtime.Composable
 
 interface BiometricUnlockManager {
-
     /**
      * If the device is secured for example with a pin, pattern or password.
      */

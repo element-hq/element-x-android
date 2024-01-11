@@ -26,7 +26,6 @@ import javax.inject.Inject
 class DefaultSessionComponentFactory @Inject constructor(
     private val sessionComponentBuilder: SessionComponent.Builder
 ) : SessionComponentFactory {
-
     override fun create(client: MatrixClient): Any {
         return sessionComponentBuilder.client(client).build()
     }

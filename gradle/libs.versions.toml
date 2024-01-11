@@ -13,7 +13,7 @@ core = "1.12.0"
 datastore = "1.0.0"
 constraintlayout = "2.1.4"
 constraintlayout_compose = "1.0.1"
-lifecycle = "2.7.0-rc02"
+lifecycle = "2.7.0"
 activity = "1.8.2"
 media3 = "1.2.0"
 
@@ -172,7 +172,7 @@ opusencoder = "io.element.android:opusencoder:1.1.0"
 kotlinpoet = "com.squareup:kotlinpoet:1.15.3"
 
 # Analytics
-posthog = "com.posthog:posthog-android:3.1.0"
+posthog = "com.posthog:posthog-android:3.1.1"
 sentry = "io.sentry:sentry-android:7.1.0"
 matrix_analytics_events = "com.github.matrix-org:matrix-analytics-events:aa14cbcdf81af2746d20a71779ec751f971e1d7f"
 

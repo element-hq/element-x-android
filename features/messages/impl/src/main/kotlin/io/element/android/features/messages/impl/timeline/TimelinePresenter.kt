@@ -40,8 +40,6 @@ import io.element.android.features.poll.api.actions.EndPollAction
 import io.element.android.features.poll.api.actions.SendPollResponseAction
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
-import io.element.android.libraries.featureflag.api.FeatureFlagService
-import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.encryption.BackupState
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
@@ -71,12 +69,10 @@ class TimelinePresenter @AssistedInject constructor(
     @Assisted private val navigator: MessagesNavigator,
     private val verificationService: SessionVerificationService,
     private val encryptionService: EncryptionService,
-    private val featureFlagService: FeatureFlagService,
     private val redactedVoiceMessageManager: RedactedVoiceMessageManager,
     private val sendPollResponseAction: SendPollResponseAction,
     private val endPollAction: EndPollAction,
 ) : Presenter<TimelineState> {
-
     @AssistedFactory
     interface Factory {
         fun create(navigator: MessagesNavigator): TimelinePresenter
@@ -115,7 +111,6 @@ class TimelinePresenter @AssistedInject constructor(
             }
         }
 
-        val readReceiptsEnabled by featureFlagService.isFeatureEnabledFlow(FeatureFlags.ReadReceipts).collectAsState(initial = false)
         val membersState by room.membersStateFlow.collectAsState()
 
         fun handleEvents(event: TimelineEvents) {
@@ -159,12 +154,7 @@ class TimelinePresenter @AssistedInject constructor(
                 .onEach {
                     timelineItemsFactory.replaceWith(
                         timelineItems = it,
-                        roomMembers = if (readReceiptsEnabled) {
-                            membersState.roomMembers().orEmpty()
-                        } else {
-                            // Give an empty list to not affect performance
-                            emptyList()
-                        }
+                        roomMembers = membersState.roomMembers().orEmpty()
                     )
                 }
                 .onEach { timelineItems ->
@@ -190,7 +180,6 @@ class TimelinePresenter @AssistedInject constructor(
             highlightedEventId = highlightedEventId.value,
             paginationState = paginationState,
             timelineItems = timelineItems,
-            showReadReceipts = readReceiptsEnabled,
             newEventState = newItemState.value,
             sessionState = sessionState,
             eventSink = { handleEvents(it) }

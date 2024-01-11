@@ -31,7 +31,6 @@ import javax.inject.Inject
 class RetrySendMenuPresenter @Inject constructor(
     private val room: MatrixRoom,
 ) : Presenter<RetrySendMenuState> {
-
     @Composable
     override fun present(): RetrySendMenuState {
         val coroutineScope = rememberCoroutineScope()

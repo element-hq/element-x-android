@@ -43,7 +43,6 @@ class TimelineItemEventFactory @Inject constructor(
     private val matrixClient: MatrixClient,
     private val lastMessageTimestampFormatter: LastMessageTimestampFormatter,
 ) {
-
     suspend fun create(
         currentTimelineItem: MatrixTimelineItem.Event,
         index: Int,
@@ -193,7 +192,8 @@ class TimelineItemEventFactory @Inject constructor(
                     }
                 }
             }
-            previousSender == currentSender /* && nextSender != currentSender (== true) */ -> {
+            // In the following case, we have nextSender != currentSender == true
+            previousSender == currentSender -> {
                 if (previousIsGroupable) {
                     TimelineItemGroupPosition.Last
                 } else {

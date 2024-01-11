@@ -35,7 +35,6 @@ import org.junit.Test
 
 @ExperimentalCoroutinesApi
 class VerifySelfSessionPresenterTests {
-
     @get:Rule
     val warmUpRule = WarmUpRule()
 

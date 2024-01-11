@@ -42,7 +42,6 @@ class CreateRoomRootNode @AssistedInject constructor(
     private val analyticsService: AnalyticsService,
     private val inviteFriendsUseCase: InviteFriendsUseCase,
 ) : Node(buildContext, plugins = plugins) {
-
     interface Callback : Plugin {
         fun onCreateNewRoom()
         fun onStartChatSuccess(roomId: RoomId)

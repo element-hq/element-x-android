@@ -30,7 +30,6 @@ import javax.inject.Inject
 class CustomReactionPresenter @Inject constructor(
     private val emojibaseProvider: EmojibaseProvider
 ) : Presenter<CustomReactionState> {
-
     @Composable
     override fun present(): CustomReactionState {
         val target: MutableState<CustomReactionState.Target> = remember {

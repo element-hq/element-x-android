@@ -31,7 +31,6 @@ import org.junit.Rule
 import org.junit.Test
 
 class AddPeoplePresenterTests {
-
     @get:Rule
     val warmUpRule = WarmUpRule()
 

@@ -31,6 +31,7 @@ data class RoomMemberDetailsState(
     val eventSink: (RoomMemberDetailsEvents) -> Unit
 ) {
     enum class ConfirmationDialog {
-        Block, Unblock
+        Block,
+        Unblock
     }
 }

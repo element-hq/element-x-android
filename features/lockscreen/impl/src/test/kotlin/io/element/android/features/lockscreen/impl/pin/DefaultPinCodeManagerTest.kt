@@ -25,7 +25,6 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
 class DefaultPinCodeManagerTest {
-
     private val lockScreenStore = InMemoryLockScreenStore()
     private val secretKeyRepository = SimpleSecretKeyRepository()
     private val encryptionDecryptionService = AESEncryptionDecryptionService()

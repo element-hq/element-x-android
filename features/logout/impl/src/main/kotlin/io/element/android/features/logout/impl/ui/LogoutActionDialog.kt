@@ -30,7 +30,8 @@ fun LogoutActionDialog(
     state: AsyncAction<String?>,
     onConfirmClicked: () -> Unit,
     onForceLogoutClicked: () -> Unit,
-    onDismissError: () -> Unit, // TODO Rename
+    // TODO Rename
+    onDismissError: () -> Unit,
     onSuccessLogout: (String?) -> Unit,
 ) {
     when (state) {

@@ -34,9 +34,7 @@ import javax.inject.Inject
  * A media player specialized in playing a single voice message.
  */
 interface VoiceMessagePlayer {
-
     fun interface Factory {
-
         /**
          * Creates a [VoiceMessagePlayer].
          *
@@ -126,7 +124,6 @@ class DefaultVoiceMessagePlayer(
     mimeType: String?,
     body: String?,
 ) : VoiceMessagePlayer {
-
     @ContributesBinding(RoomScope::class) // Scoped types can't use @AssistedInject.
     class Factory @Inject constructor(
         private val mediaPlayer: MediaPlayer,
@@ -197,7 +194,8 @@ class DefaultVoiceMessagePlayer(
             mediaPlayer.setMedia(
                 uri = mediaFile.path,
                 mediaId = eventId.value,
-                mimeType = MimeTypes.Ogg, // Files in the voice cache have no extension so we need to set the mime type manually.
+                // Files in the voice cache have no extension so we need to set the mime type manually.
+                mimeType = MimeTypes.Ogg,
                 startPositionMs = if (state.isEnded) 0L else state.currentPosition,
             )
         }

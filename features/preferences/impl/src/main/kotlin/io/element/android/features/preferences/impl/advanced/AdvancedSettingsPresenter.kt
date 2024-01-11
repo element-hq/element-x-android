@@ -33,7 +33,6 @@ import javax.inject.Inject
 class AdvancedSettingsPresenter @Inject constructor(
     private val preferencesStore: PreferencesStore,
 ) : Presenter<AdvancedSettingsState> {
-
     @Composable
     override fun present(): AdvancedSettingsState {
         val localCoroutineScope = rememberCoroutineScope()

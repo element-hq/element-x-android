@@ -20,7 +20,6 @@ import com.google.common.truth.Truth.assertThat
 import org.junit.Test
 
 class DBovAudioLevelCalculatorTest {
-
     @Test
     fun `given max values, it returns 1`() {
         val calculator = DBovAudioLevelCalculator()

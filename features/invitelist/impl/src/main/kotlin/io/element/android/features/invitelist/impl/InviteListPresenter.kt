@@ -52,7 +52,6 @@ class InviteListPresenter @Inject constructor(
     private val analyticsService: AnalyticsService,
     private val notificationDrawerManager: NotificationDrawerManager,
 ) : Presenter<InviteListState> {
-
     @Composable
     override fun present(): InviteListState {
         val invites by client

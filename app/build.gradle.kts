@@ -28,6 +28,7 @@ plugins {
     alias(libs.plugins.anvil)
     alias(libs.plugins.ksp)
     alias(libs.plugins.kapt)
+    // When using precompiled plugins, we need to apply the firebase plugin like this
     id(libs.plugins.firebaseAppDistribution.get().pluginId)
     alias(libs.plugins.knit)
     id("kotlin-parcelize")

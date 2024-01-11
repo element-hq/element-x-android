@@ -27,7 +27,6 @@ class ConfigureTracingPresenter @Inject constructor(
     private val tracingConfigurationStore: TracingConfigurationStore,
     private val targetLogLevelMapBuilder: TargetLogLevelMapBuilder,
 ) : Presenter<ConfigureTracingState> {
-
     @Composable
     override fun present(): ConfigureTracingState {
         val modifiedMap = remember { mutableStateOf(targetLogLevelMapBuilder.getCurrentMap()) }

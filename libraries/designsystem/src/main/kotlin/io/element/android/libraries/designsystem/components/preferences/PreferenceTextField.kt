@@ -55,7 +55,7 @@ fun PreferenceTextField(
     style: ListItemStyle = ListItemStyle.Default,
 ) {
     var displayTextFieldDialog by rememberSaveable { mutableStateOf(false) }
-    val valueToDisplay = if (displayValue(value)) { value } else supportingText
+    val valueToDisplay = if (displayValue(value)) value else supportingText
 
     ListItem(
         modifier = modifier,

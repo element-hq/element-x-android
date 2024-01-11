@@ -25,7 +25,6 @@ import kotlinx.coroutines.flow.StateFlow
  * It requires the SyncService to be started to receive updates.
  */
 interface RoomListService {
-
     @Immutable
     sealed interface State {
         data object Idle : State

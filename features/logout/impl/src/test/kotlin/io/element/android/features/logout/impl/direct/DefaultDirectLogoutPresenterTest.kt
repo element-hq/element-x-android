@@ -38,7 +38,6 @@ import org.junit.Rule
 import org.junit.Test
 
 class DefaultDirectLogoutPresenterTest {
-
     @get:Rule
     val warmUpRule = WarmUpRule()
 

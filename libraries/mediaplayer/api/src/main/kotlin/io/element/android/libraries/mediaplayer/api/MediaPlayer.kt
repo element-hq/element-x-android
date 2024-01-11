@@ -23,7 +23,6 @@ import kotlinx.coroutines.flow.StateFlow
  * A media player for Element X.
  */
 interface MediaPlayer : AutoCloseable {
-
     /**
      * The current state of the player.
      */

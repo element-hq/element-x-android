@@ -31,7 +31,6 @@ class RoomMemberListDataSource @Inject constructor(
     private val room: MatrixRoom,
     private val coroutineDispatchers: CoroutineDispatchers,
 ) {
-
     suspend fun search(query: String): List<RoomMember> = withContext(coroutineDispatchers.io) {
         val roomMembers = room.membersStateFlow
             .dropWhile { it !is MatrixRoomMembersState.Ready }

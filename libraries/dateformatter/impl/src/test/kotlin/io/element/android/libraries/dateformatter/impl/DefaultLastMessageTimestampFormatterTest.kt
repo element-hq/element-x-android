@@ -25,7 +25,6 @@ import org.junit.Test
 import java.util.Locale
 
 class DefaultLastMessageTimestampFormatterTest {
-
     @Test
     fun `test null`() {
         val now = "1980-04-06T18:35:24.00Z"

@@ -51,7 +51,6 @@ constructor(
     confirmValueChange: (SheetValue) -> Boolean = { true },
     internal val skipHiddenState: Boolean = false,
 ) {
-
     /**
      * State of a sheet composable, such as [ModalBottomSheet]
      *

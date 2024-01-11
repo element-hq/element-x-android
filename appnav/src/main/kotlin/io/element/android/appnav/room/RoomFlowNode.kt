@@ -66,7 +66,6 @@ class RoomFlowNode @AssistedInject constructor(
         buildContext = buildContext,
         plugins = plugins
     ) {
-
     data class Inputs(
         val roomId: RoomId,
         val initialElement: RoomLoadedFlowNode.NavTarget = RoomLoadedFlowNode.NavTarget.Messages,

@@ -28,7 +28,6 @@ class FakeAnalyticsService(
     isEnabled: Boolean = false,
     didAskUserConsent: Boolean = false
 ) : AnalyticsService {
-
     private val isEnabledFlow = MutableStateFlow(isEnabled)
     private val didAskUserConsentFlow = MutableStateFlow(didAskUserConsent)
     val capturedEvents = mutableListOf<VectorAnalyticsEvent>()

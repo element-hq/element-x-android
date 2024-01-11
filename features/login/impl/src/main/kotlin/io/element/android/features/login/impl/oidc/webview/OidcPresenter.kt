@@ -36,7 +36,6 @@ class OidcPresenter @AssistedInject constructor(
     @Assisted private val oidcDetails: OidcDetails,
     private val authenticationService: MatrixAuthenticationService,
 ) : Presenter<OidcState> {
-
     @AssistedFactory
     interface Factory {
         fun create(oidcDetails: OidcDetails): OidcPresenter

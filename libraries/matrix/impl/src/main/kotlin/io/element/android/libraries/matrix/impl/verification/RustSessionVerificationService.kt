@@ -40,7 +40,6 @@ class RustSessionVerificationService(
     private val syncService: RustSyncService,
     private val sessionCoroutineScope: CoroutineScope,
 ) : SessionVerificationService, SessionVerificationControllerDelegate {
-
     var verificationController: SessionVerificationControllerInterface? = null
         set(value) {
             field = value

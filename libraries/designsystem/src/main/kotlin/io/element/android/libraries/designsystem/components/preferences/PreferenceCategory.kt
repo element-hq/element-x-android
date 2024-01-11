@@ -68,10 +68,7 @@ private fun PreferenceCategoryTitle(title: String, modifier: Modifier = Modifier
 
 @Preview(group = PreviewGroup.Preferences)
 @Composable
-internal fun PreferenceCategoryPreview() = ElementThemedPreview { ContentToPreview() }
-
-@Composable
-private fun ContentToPreview() {
+internal fun PreferenceCategoryPreview() = ElementThemedPreview {
     PreferenceCategory(
         title = "Category title",
     ) {

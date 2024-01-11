@@ -43,7 +43,6 @@ class SummaryGroupMessageCreator @Inject constructor(
     private val stringProvider: StringProvider,
     private val notificationCreator: NotificationCreator,
 ) {
-
     fun createSummaryNotification(
         currentUser: MatrixUser,
         roomNotifications: List<RoomNotification.Message.Meta>,

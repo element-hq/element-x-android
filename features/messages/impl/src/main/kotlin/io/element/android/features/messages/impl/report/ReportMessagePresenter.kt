@@ -44,7 +44,6 @@ class ReportMessagePresenter @AssistedInject constructor(
     @Assisted private val inputs: Inputs,
     private val snackbarDispatcher: SnackbarDispatcher,
 ) : Presenter<ReportMessageState> {
-
     data class Inputs(
         val eventId: EventId,
         val senderId: UserId,
