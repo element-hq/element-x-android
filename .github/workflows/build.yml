@@ -83,7 +83,7 @@ jobs:
         run: ./gradlew compileReleaseSources -PallWarningsAsErrors=true $CI_GRADLE_ARG_PROPERTIES
       - name: Compile nightly sources
         if: ${{ matrix.variant == 'nightly' }}
-        run: ./gradlew compileNightlySources -PallWarningsAsErrors=true $CI_GRADLE_ARG_PROPERTIES
+        run: ./gradlew compileGplayNightlySources -PallWarningsAsErrors=true $CI_GRADLE_ARG_PROPERTIES
       - name: Compile samples minimal
         if: ${{ matrix.variant == 'samples' }}
         run: ./gradlew :samples:minimal:assemble $CI_GRADLE_ARG_PROPERTIES
