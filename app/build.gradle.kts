@@ -20,6 +20,8 @@ import com.android.build.api.variant.FilterConfiguration.FilterType.ABI
 import extension.allFeaturesImpl
 import extension.allLibrariesImpl
 import extension.allServicesImpl
+import extension.koverDependencies
+import extension.setupKover
 import org.jetbrains.kotlin.cli.common.toBooleanLenient
 
 plugins {
@@ -35,6 +37,8 @@ plugins {
     // To be able to update the firebase.xml files, uncomment and build the project
     // id("com.google.gms.google-services")
 }
+
+setupKover()
 
 android {
     namespace = "io.element.android.x"
@@ -270,4 +274,5 @@ dependencies {
     testImplementation(projects.libraries.matrix.test)
 
     ksp(libs.showkase.processor)
+    koverDependencies()
 }
