@@ -69,7 +69,7 @@ android {
     }
 
     signingConfigs {
-        named("debug") {
+        getByName("debug") {
             keyAlias = "androiddebugkey"
             keyPassword = "android"
             storeFile = file("./signature/debug.keystore")
@@ -87,13 +87,13 @@ android {
     }
 
     buildTypes {
-        named("debug") {
+        getByName("debug") {
             resValue("string", "app_name", "Element X dbg")
             applicationIdSuffix = ".debug"
             signingConfig = signingConfigs.getByName("debug")
         }
 
-        named("release") {
+        getByName("release") {
             resValue("string", "app_name", "Element X")
             signingConfig = signingConfigs.getByName("debug")
 
@@ -142,6 +142,21 @@ android {
 
     buildFeatures {
         buildConfig = true
+    }
+    flavorDimensions += "store"
+    productFlavors {
+        create("gplay") {
+            dimension = "store"
+            isDefault = true
+            buildConfigField("String", "SHORT_FLAVOR_DESCRIPTION", "\"G\"")
+            buildConfigField("String", "FLAVOR_DESCRIPTION", "\"GooglePlay\"")
+
+        }
+        create("fdroid") {
+            dimension = "store"
+            buildConfigField("String", "SHORT_FLAVOR_DESCRIPTION", "\"F\"")
+            buildConfigField("String", "FLAVOR_DESCRIPTION", "\"FDroid\"")
+        }
     }
 }
 

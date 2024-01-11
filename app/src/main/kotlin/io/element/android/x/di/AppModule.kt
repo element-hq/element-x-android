@@ -91,10 +91,8 @@ object AppModule {
         gitRevisionDate = "TODO",
         //  BuildConfig.GIT_BRANCH_NAME,
         gitBranchName = "TODO",
-        //  BuildConfig.FLAVOR_DESCRIPTION,
-        flavorDescription = "TODO",
-        //  BuildConfig.SHORT_FLAVOR_DESCRIPTION,
-        flavorShortDescription = "TODO",
+        flavorDescription = BuildConfig.FLAVOR_DESCRIPTION,
+        flavorShortDescription = BuildConfig.SHORT_FLAVOR_DESCRIPTION,
     )
 
     @Provides
