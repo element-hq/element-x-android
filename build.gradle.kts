@@ -26,6 +26,7 @@ buildscript {
 
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 plugins {
+    id("io.element.android-root")
     alias(libs.plugins.android.application) apply false
     alias(libs.plugins.android.library) apply false
     alias(libs.plugins.kotlin.android) apply false
@@ -39,7 +40,6 @@ plugins {
     alias(libs.plugins.ktlint)
     alias(libs.plugins.dependencygraph)
     alias(libs.plugins.sonarqube)
-    alias(libs.plugins.kover) apply false
 }
 
 tasks.register<Delete>("clean").configure {
@@ -159,10 +159,6 @@ allprojects {
             exclude("ui/S.class")
         }
     }
-}
-
-allprojects {
-    apply(plugin = "org.jetbrains.kotlinx.kover")
 }
 
 // Register quality check tasks.
