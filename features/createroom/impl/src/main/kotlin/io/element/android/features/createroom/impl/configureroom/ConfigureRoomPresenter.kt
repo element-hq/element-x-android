@@ -57,7 +57,6 @@ class ConfigureRoomPresenter @Inject constructor(
     private val analyticsService: AnalyticsService,
     permissionsPresenterFactory: PermissionsPresenter.Factory,
 ) : Presenter<ConfigureRoomState> {
-
     private val cameraPermissionPresenter: PermissionsPresenter = permissionsPresenterFactory.create(android.Manifest.permission.CAMERA)
     private var pendingPermissionRequest = false
 

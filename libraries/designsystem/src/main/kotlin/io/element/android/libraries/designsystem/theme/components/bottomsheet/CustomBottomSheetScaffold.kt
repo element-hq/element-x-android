@@ -282,11 +282,13 @@ private fun CustomStandardBottomSheet(
                                 if (anchoredDraggableState.anchors.size > 1 && sheetSwipeEnabled) {
                                     if (currentValue == SheetValue.PartiallyExpanded) {
                                         expand(expandActionLabel) {
-                                            scope.launch { expand() }; true
+                                            scope.launch { expand() }
+                                            true
                                         }
                                     } else {
                                         collapse(partialExpandActionLabel) {
-                                            scope.launch { partialExpand() }; true
+                                            scope.launch { partialExpand() }
+                                            true
                                         }
                                     }
                                     if (!state.skipHiddenState) {
@@ -314,7 +316,6 @@ private fun CustomStandardBottomSheet(
  */
 @ExperimentalFoundationApi
 class DraggableAnchorsConfig<T> {
-
     internal val anchors = mutableMapOf<T, Float>()
 
     /**
@@ -344,7 +345,6 @@ internal fun <T : Any> DraggableAnchors(
 ): DraggableAnchors<T> = MapDraggableAnchors(DraggableAnchorsConfig<T>().apply(builder).anchors)
 
 private class MapDraggableAnchors<T>(private val anchors: Map<T, Float>) : DraggableAnchors<T> {
-
     override fun positionOf(value: T): Float = anchors[value] ?: Float.NaN
     override fun hasAnchorFor(value: T) = anchors.containsKey(value)
 
@@ -498,10 +498,10 @@ internal fun rememberSheetState(
     initialValue: SheetValue = SheetValue.Hidden,
     skipHiddenState: Boolean = false,
 ): CustomSheetState {
-
     val density = LocalDensity.current
     return rememberSaveable(
-        skipPartiallyExpanded, confirmValueChange,
+        skipPartiallyExpanded,
+        confirmValueChange,
         saver = CustomSheetState.Saver(
             skipPartiallyExpanded = skipPartiallyExpanded,
             confirmValueChange = confirmValueChange,

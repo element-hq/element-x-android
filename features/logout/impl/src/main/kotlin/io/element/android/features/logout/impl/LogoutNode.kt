@@ -38,7 +38,6 @@ class LogoutNode @AssistedInject constructor(
     @Assisted plugins: List<Plugin>,
     private val presenter: LogoutPresenter,
 ) : Node(buildContext, plugins = plugins) {
-
     private fun onChangeRecoveryKeyClicked() {
         plugins<LogoutEntryPoint.Callback>().forEach { it.onChangeRecoveryKeyClicked() }
     }

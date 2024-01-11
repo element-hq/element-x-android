@@ -33,7 +33,6 @@ import javax.inject.Inject
 class VideoCompressor @Inject constructor(
     @ApplicationContext private val context: Context,
 ) {
-
     fun compress(uri: Uri) = callbackFlow {
         val tmpFile = context.createTmpFile(extension = "mp4")
         val future = Transcoder.into(tmpFile.path)

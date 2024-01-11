@@ -48,7 +48,6 @@ import org.junit.Rule
 import org.junit.Test
 
 class PollHistoryPresenterTest {
-
     @get:Rule
     val warmUpRule = WarmUpRule()
 

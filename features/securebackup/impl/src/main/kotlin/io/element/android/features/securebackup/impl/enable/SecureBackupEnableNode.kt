@@ -32,7 +32,6 @@ class SecureBackupEnableNode @AssistedInject constructor(
     @Assisted plugins: List<Plugin>,
     private val presenter: SecureBackupEnablePresenter,
 ) : Node(buildContext, plugins = plugins) {
-
     @Composable
     override fun View(modifier: Modifier) {
         val state = presenter.present()

@@ -38,5 +38,4 @@ class ComponentTestPreview(
         .replace("Preview_", "_")
         // Also for preview annotated with @ElementPreview
         .replace("Preview-", "-")
-
 }

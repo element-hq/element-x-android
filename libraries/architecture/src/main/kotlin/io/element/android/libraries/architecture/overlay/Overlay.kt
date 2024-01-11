@@ -40,7 +40,6 @@ class Overlay<NavTarget : Any>(
     savedStateMap = savedStateMap,
     key = key,
 ) {
-
     override val initialElements: NavElements<NavTarget, BackStack.State>
         get() = emptyList()
 }

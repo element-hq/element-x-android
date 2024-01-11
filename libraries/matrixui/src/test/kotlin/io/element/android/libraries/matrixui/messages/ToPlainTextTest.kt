@@ -28,7 +28,6 @@ import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
 class ToPlainTextTest {
-
     @Test
     fun `Document toPlainText - returns a plain text version of the document`() {
         val document = Jsoup.parse(
@@ -40,7 +39,8 @@ class ToPlainTextTest {
             """.trimIndent()
         )
 
-        assertThat(document.toPlainText()).isEqualTo("""
+        assertThat(document.toPlainText()).isEqualTo(
+            """
             Hello world 
             • This is an unordered list.
             1. This is an ordered list.
@@ -59,7 +59,8 @@ class ToPlainTextTest {
                 <br />
             """.trimIndent()
         )
-        assertThat(formattedBody.toPlainText()).isEqualTo("""
+        assertThat(formattedBody.toPlainText()).isEqualTo(
+            """
             Hello world 
             • This is an unordered list.
             1. This is an ordered list.
@@ -95,7 +96,8 @@ class ToPlainTextTest {
                 """.trimIndent()
             )
         )
-        assertThat(messageType.toPlainText()).isEqualTo("""
+        assertThat(messageType.toPlainText()).isEqualTo(
+            """
             Hello world 
             • This is an unordered list.
             1. This is an ordered list.

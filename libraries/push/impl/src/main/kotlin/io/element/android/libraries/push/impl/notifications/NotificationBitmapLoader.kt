@@ -35,7 +35,6 @@ class NotificationBitmapLoader @Inject constructor(
     @ApplicationContext private val context: Context,
     private val sdkIntProvider: BuildVersionSdkIntProvider,
 ) {
-
     /**
      * Get icon of a room.
      * @param path mxc url

@@ -38,7 +38,6 @@ import org.junit.Rule
 import org.junit.Test
 
 class DefaultDirectLogoutPresenterTest {
-
     @get:Rule
     val warmUpRule = WarmUpRule()
 
@@ -194,4 +193,3 @@ class DefaultDirectLogoutPresenterTest {
         featureFlagService = FakeFeatureFlagService(mapOf(FeatureFlags.SecureStorage.key to true)),
     )
 }
-

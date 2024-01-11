@@ -69,15 +69,17 @@ fun InviteListView(
     )
 
     if (state.declineConfirmationDialog is InviteDeclineConfirmationDialog.Visible) {
-        val contentResource = if (state.declineConfirmationDialog.isDirect)
+        val contentResource = if (state.declineConfirmationDialog.isDirect) {
             R.string.screen_invites_decline_direct_chat_message
-        else
+        } else {
             R.string.screen_invites_decline_chat_message
+        }
 
-        val titleResource = if (state.declineConfirmationDialog.isDirect)
+        val titleResource = if (state.declineConfirmationDialog.isDirect) {
             R.string.screen_invites_decline_direct_chat_title
-        else
+        } else {
             R.string.screen_invites_decline_chat_title
+        }
 
         ConfirmationDialog(
             content = stringResource(contentResource, state.declineConfirmationDialog.name),

@@ -23,7 +23,6 @@ import io.element.android.libraries.matrix.api.timeline.item.virtual.VirtualTime
 import javax.inject.Inject
 
 class TimelineItemDaySeparatorFactory @Inject constructor(private val daySeparatorFormatter: DaySeparatorFormatter) {
-
     fun create(virtualItem: VirtualTimelineItem.DayDivider): TimelineItemVirtualModel {
         val formattedDate = daySeparatorFormatter.format(virtualItem.timestamp)
         return TimelineItemDaySeparatorModel(

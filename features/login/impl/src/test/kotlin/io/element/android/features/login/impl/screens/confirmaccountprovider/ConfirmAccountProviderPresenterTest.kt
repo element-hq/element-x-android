@@ -38,7 +38,6 @@ import org.junit.Rule
 import org.junit.Test
 
 class ConfirmAccountProviderPresenterTest {
-
     @get:Rule
     val warmUpRule = WarmUpRule()
 

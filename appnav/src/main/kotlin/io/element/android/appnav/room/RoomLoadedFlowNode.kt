@@ -71,7 +71,6 @@ class RoomLoadedFlowNode @AssistedInject constructor(
     buildContext = buildContext,
     plugins = plugins,
 ), DaggerComponentOwner {
-
     interface Callback : Plugin {
         fun onOpenRoom(roomId: RoomId)
         fun onForwardedToSingleRoom(roomId: RoomId)

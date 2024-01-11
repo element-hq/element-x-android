@@ -32,7 +32,6 @@ class PdfRendererManager(
     private val width: Int,
     private val coroutineScope: CoroutineScope,
 ) {
-
     private val mutex = Mutex()
     private var pdfRenderer: PdfRenderer? = null
     private val mutablePdfPages = MutableStateFlow<List<PdfPage>>(emptyList())

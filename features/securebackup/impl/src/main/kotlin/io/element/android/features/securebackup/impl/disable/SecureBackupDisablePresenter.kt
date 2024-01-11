@@ -38,7 +38,6 @@ class SecureBackupDisablePresenter @Inject constructor(
     private val encryptionService: EncryptionService,
     private val buildMeta: BuildMeta,
 ) : Presenter<SecureBackupDisableState> {
-
     @Composable
     override fun present(): SecureBackupDisableState {
         val backupState by encryptionService.backupStateStateFlow.collectAsState()

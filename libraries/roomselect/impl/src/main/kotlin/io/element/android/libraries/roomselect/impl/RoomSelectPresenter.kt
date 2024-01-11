@@ -26,12 +26,12 @@ import androidx.compose.runtime.setValue
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import io.element.android.libraries.roomselect.api.RoomSelectMode
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.roomlist.RoomSummary
 import io.element.android.libraries.matrix.api.roomlist.RoomSummaryDetails
+import io.element.android.libraries.roomselect.api.RoomSelectMode
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
@@ -40,7 +40,6 @@ class RoomSelectPresenter @AssistedInject constructor(
     @Assisted private val mode: RoomSelectMode,
     private val client: MatrixClient,
 ) : Presenter<RoomSelectState> {
-
     @AssistedFactory
     interface Factory {
         fun create(mode: RoomSelectMode): RoomSelectPresenter

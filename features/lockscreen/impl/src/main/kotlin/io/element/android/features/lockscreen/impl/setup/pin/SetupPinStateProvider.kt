@@ -41,7 +41,6 @@ open class SetupPinStateProvider : PreviewParameterProvider<SetupPinState> {
                 choosePinEntry = PinEntry.createEmpty(4).fillWith("1111"),
                 creationFailure = SetupPinFailure.PinBlacklisted
             ),
-
         )
 }
 
@@ -58,4 +57,3 @@ fun aSetupPinState(
     appName = "Element",
     eventSink = {}
 )
-

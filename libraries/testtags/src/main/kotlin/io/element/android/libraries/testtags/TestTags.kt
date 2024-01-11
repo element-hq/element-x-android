@@ -65,5 +65,3 @@ object TestTags {
     val dialogNegative = TestTag("dialog-negative")
     val dialogNeutral = TestTag("dialog-neutral")
 }
-
-

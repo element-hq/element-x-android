@@ -59,7 +59,6 @@ import org.robolectric.annotation.Config
 
 @RunWith(RobolectricTestRunner::class)
 class NotifiableEventResolverTest {
-
     @Test
     fun `resolve event no session`() = runTest {
         val sut = createNotifiableEventResolver(notificationService = null)

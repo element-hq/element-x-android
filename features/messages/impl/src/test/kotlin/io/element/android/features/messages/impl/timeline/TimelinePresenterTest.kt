@@ -65,7 +65,6 @@ import java.util.Date
 private const val FAKE_UNIQUE_ID = "FAKE_UNIQUE_ID"
 
 class TimelinePresenterTest {
-
     @get:Rule
     val warmUpRule = WarmUpRule()
 

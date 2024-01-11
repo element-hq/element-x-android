@@ -35,8 +35,8 @@ class UnifiedPushProvider @Inject constructor(
     private val unRegisterUnifiedPushUseCase: UnregisterUnifiedPushUseCase,
     private val pushClientSecret: PushClientSecret,
 ) : PushProvider {
-    override val index = UnifiedPushConfig.index
-    override val name = UnifiedPushConfig.name
+    override val index = UnifiedPushConfig.INDEX
+    override val name = UnifiedPushConfig.NAME
 
     override fun getDistributors(): List<Distributor> {
         val distributors = UnifiedPush.getDistributors(context)

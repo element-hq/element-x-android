@@ -42,7 +42,6 @@ import org.matrix.rustcomponents.sdk.MembershipChange as RustMembershipChange
 import org.matrix.rustcomponents.sdk.OtherState as RustOtherState
 
 class TimelineEventContentMapper(private val eventMessageMapper: EventMessageMapper = EventMessageMapper()) {
-
     fun map(content: TimelineItemContent): EventContent {
         return content.use {
             content.kind().use { kind ->
@@ -147,7 +146,7 @@ private fun RustMembershipChange.map(): MembershipChange {
     }
 }
 
-//TODO extract state events?
+// TODO extract state events?
 private fun RustOtherState.map(): OtherState {
     return when (this) {
         is RustOtherState.Custom -> OtherState.Custom(eventType)

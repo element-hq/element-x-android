@@ -33,9 +33,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.unit.dp
+import io.element.android.compound.theme.ElementTheme
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.compound.theme.ElementTheme
 
 @Composable
 fun BottomSheetDragHandle(
@@ -67,7 +67,6 @@ fun BottomSheetDragHandle(
         )
     }
 }
-
 
 @PreviewsDayNight
 @Composable

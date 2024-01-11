@@ -31,7 +31,6 @@ class DefaultLogoutEntryPoint @Inject constructor() : LogoutEntryPoint {
         val plugins = ArrayList<Plugin>()
 
         return object : LogoutEntryPoint.NodeBuilder {
-
             override fun callback(callback: LogoutEntryPoint.Callback): LogoutEntryPoint.NodeBuilder {
                 plugins += callback
                 return this
@@ -43,4 +42,3 @@ class DefaultLogoutEntryPoint @Inject constructor() : LogoutEntryPoint {
         }
     }
 }
-

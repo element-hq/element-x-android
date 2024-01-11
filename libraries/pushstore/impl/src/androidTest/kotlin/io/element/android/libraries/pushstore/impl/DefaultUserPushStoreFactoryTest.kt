@@ -30,7 +30,6 @@ import kotlin.concurrent.thread
  * adb uninstall io.element.android.libraries.push.pushstore.impl.test
  */
 class DefaultUserPushStoreFactoryTest {
-
     /**
      * Ensure that creating UserPushStore is thread safe.
      */

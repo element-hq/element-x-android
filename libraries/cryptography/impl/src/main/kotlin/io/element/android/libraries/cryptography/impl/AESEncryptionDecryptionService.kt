@@ -31,7 +31,6 @@ import javax.inject.Inject
  */
 @ContributesBinding(AppScope::class)
 class AESEncryptionDecryptionService @Inject constructor() : EncryptionDecryptionService {
-
     override fun createEncryptionCipher(key: SecretKey): Cipher {
         return Cipher.getInstance(AESEncryptionSpecs.CIPHER_TRANSFORMATION).apply {
             init(Cipher.ENCRYPT_MODE, key)

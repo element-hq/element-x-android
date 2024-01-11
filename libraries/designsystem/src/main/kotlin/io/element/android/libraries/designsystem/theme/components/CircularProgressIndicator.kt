@@ -72,8 +72,7 @@ fun CircularProgressIndicator(
 internal fun CircularProgressIndicatorPreview() = ElementThemedPreview(vertical = false) {
     Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
         // Indeterminate progress
-        CircularProgressIndicator(
-        )
+        CircularProgressIndicator()
         // Fixed progress
         CircularProgressIndicator(
             progress = { 0.90F }

@@ -55,7 +55,7 @@ internal class OtherIconListPreviewProvider : PreviewParameterProvider<IconChunk
         get() {
             val chunks = iconsOther.chunked(36)
             return chunks.mapIndexed { index, chunk ->
-                IconChunk(index = index+1, total =  chunks.size, icons = chunk.toPersistentList())
+                IconChunk(index = index + 1, total = chunks.size, icons = chunk.toPersistentList())
             }
                 .asSequence()
         }
@@ -76,7 +76,8 @@ internal fun IconsCompoundPreview(@PreviewParameter(CompoundIconListPreviewProvi
         iconNameTransform = { name ->
             name.removePrefix("ic_compound_")
                 .replace("_", " ")
-        })
+        }
+    )
 }
 
 @PreviewsDayNight
@@ -88,7 +89,8 @@ internal fun IconsOtherPreview(@PreviewParameter(OtherIconListPreviewProvider::c
         iconNameTransform = { name ->
             name.removePrefix("ic_")
                 .replace("_", " ")
-        })
+        }
+    )
 }
 
 @Composable

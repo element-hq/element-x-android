@@ -35,7 +35,6 @@ class SearchAccountProviderNode @AssistedInject constructor(
     @Assisted plugins: List<Plugin>,
     private val presenter: SearchAccountProviderPresenter,
 ) : Node(buildContext, plugins = plugins) {
-
     interface Callback : Plugin {
         fun onDone()
     }

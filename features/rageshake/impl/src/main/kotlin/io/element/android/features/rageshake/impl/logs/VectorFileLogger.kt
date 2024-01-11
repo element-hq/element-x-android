@@ -41,7 +41,6 @@ class VectorFileLogger(
     // private val vectorPreferences: VectorPreferences
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
 ) : Timber.Tree() {
-
     companion object {
         fun getFromTimber(): VectorFileLogger? {
             return Timber.forest().filterIsInstance<VectorFileLogger>().firstOrNull()
@@ -82,7 +81,7 @@ class VectorFileLogger(
 
     init {
         for (i in 0..15) {
-            val file = File(cacheDirectory, "elementLogs.${i}.txt")
+            val file = File(cacheDirectory, "elementLogs.$i.txt")
             file.safeDelete()
         }
 
@@ -119,14 +118,12 @@ class VectorFileLogger(
     }
 
     private fun skipLog(priority: Int): Boolean {
-        /*
-        return if (vectorPreferences.labAllowedExtendedLogging()) {
-            false
-        } else {
-            // Exclude verbose logs
-            priority < Log.DEBUG
-        }
-         */
+        // return if (vectorPreferences.labAllowedExtendedLogging()) {
+        //     false
+        // } else {
+        //     // Exclude verbose logs
+        //     priority < Log.DEBUG
+        // }
         // Exclude verbose logs
         return priority < Log.DEBUG
     }
@@ -144,7 +141,7 @@ class VectorFileLogger(
                 ?.flush()
                 ?.let { 0 until logRotationCount }
                 ?.mapNotNull { index ->
-                    File(cacheDirectory, "$fileNamePrefix.${index}.txt")
+                    File(cacheDirectory, "$fileNamePrefix.$index.txt")
                         .takeIf { it.exists() }
                 }
         }

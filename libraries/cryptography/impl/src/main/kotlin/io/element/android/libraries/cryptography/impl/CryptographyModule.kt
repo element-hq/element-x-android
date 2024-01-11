@@ -27,7 +27,6 @@ internal const val ANDROID_KEYSTORE = "AndroidKeyStore"
 @ContributesTo(AppScope::class)
 @Module
 object CryptographyModule {
-
     @Provides
     fun providesAndroidKeyStore(): KeyStore {
         return KeyStore.getInstance(ANDROID_KEYSTORE).apply {

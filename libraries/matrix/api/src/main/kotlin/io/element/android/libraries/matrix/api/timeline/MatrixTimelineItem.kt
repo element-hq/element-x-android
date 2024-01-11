@@ -30,4 +30,3 @@ sealed interface MatrixTimelineItem {
     data class Virtual(val uniqueId: String, val virtual: VirtualTimelineItem) : MatrixTimelineItem
     data object Other : MatrixTimelineItem
 }
-

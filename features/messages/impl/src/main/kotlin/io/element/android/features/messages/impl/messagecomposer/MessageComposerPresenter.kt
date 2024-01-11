@@ -94,7 +94,6 @@ class MessageComposerPresenter @Inject constructor(
     private val currentSessionIdHolder: CurrentSessionIdHolder,
     permissionsPresenterFactory: PermissionsPresenter.Factory,
 ) : Presenter<MessageComposerState> {
-
     private val cameraPermissionPresenter = permissionsPresenterFactory.create(Manifest.permission.CAMERA)
     private var pendingEvent: MessageComposerEvents? = null
 
@@ -376,7 +375,8 @@ class MessageComposerPresenter @Inject constructor(
                 inThread = capturedMode.inThread,
                 isEditing = capturedMode.isEditing,
                 isReply = capturedMode.isReply,
-                messageType = Composer.MessageType.Text, // Set proper type when we'll be sending other types of messages.
+                // Set proper type when we'll be sending other types of messages.
+                messageType = Composer.MessageType.Text,
             )
         )
     }
@@ -456,4 +456,3 @@ class MessageComposerPresenter @Inject constructor(
             }
         }
 }
-

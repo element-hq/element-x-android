@@ -25,11 +25,11 @@ fun MatrixRoom.toAnalyticsViewRoom(trigger: ViewRoom.Trigger? = null, selectedSp
     val activeSpace = selectedSpace?.toActiveSpace() ?: ViewRoom.ActiveSpace.Home
 
     return ViewRoom(
-            isDM = this.isDirect.orFalse(),
-            isSpace = MatrixPatterns.isSpaceId(this.roomId.value),
-            trigger = trigger,
-            activeSpace = activeSpace,
-            viaKeyboard = viaKeyboard
+        isDM = this.isDirect.orFalse(),
+        isSpace = MatrixPatterns.isSpaceId(this.roomId.value),
+        trigger = trigger,
+        activeSpace = activeSpace,
+        viaKeyboard = viaKeyboard
     )
 }
 

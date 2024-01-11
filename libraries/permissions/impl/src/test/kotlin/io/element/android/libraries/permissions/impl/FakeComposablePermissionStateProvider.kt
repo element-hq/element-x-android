@@ -50,7 +50,6 @@ class FakePermissionState(
     override val permission: String,
     initialStatus: PermissionStatus,
 ) : PermissionState {
-
     override var status: PermissionStatus by mutableStateOf(initialStatus)
 
     var launchPermissionRequestCalled = false

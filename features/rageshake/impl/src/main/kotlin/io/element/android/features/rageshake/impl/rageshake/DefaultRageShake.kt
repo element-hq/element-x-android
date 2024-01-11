@@ -33,7 +33,6 @@ import javax.inject.Inject
 class DefaultRageShake @Inject constructor(
     @ApplicationContext context: Context,
 ) : ShakeDetector.Listener, RageShake {
-
     private var sensorManager = context.getSystemService<SensorManager>()
     private var shakeDetector: ShakeDetector? = null
     private var interceptor: (() -> Unit)? = null

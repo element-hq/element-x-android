@@ -30,7 +30,6 @@ import javax.inject.Inject
 class DefaultFeatureFlagService @Inject constructor(
     private val providers: Set<@JvmSuppressWildcards FeatureFlagProvider>
 ) : FeatureFlagService {
-
     override fun isFeatureEnabledFlow(feature: Feature): Flow<Boolean> {
         return providers.filter { it.hasFeature(feature) }
             .sortedByDescending(FeatureFlagProvider::priority)

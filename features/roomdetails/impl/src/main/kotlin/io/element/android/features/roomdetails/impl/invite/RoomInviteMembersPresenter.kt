@@ -47,7 +47,6 @@ class RoomInviteMembersPresenter @Inject constructor(
     private val roomMemberListDataSource: RoomMemberListDataSource,
     private val coroutineDispatchers: CoroutineDispatchers,
 ) : Presenter<RoomInviteMembersState> {
-
     @Composable
     override fun present(): RoomInviteMembersState {
         val roomMembers = remember { mutableStateOf<AsyncData<ImmutableList<RoomMember>>>(AsyncData.Loading()) }
@@ -162,4 +161,3 @@ class RoomInviteMembersPresenter @Inject constructor(
         }.runCatchingUpdatingState(roomMembers)
     }
 }
-

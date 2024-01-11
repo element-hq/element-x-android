@@ -40,7 +40,6 @@ class TimelineItemContentStickerFactory @Inject constructor(
     }
 
     fun create(content: StickerContent): TimelineItemEventContent {
-
         val aspectRatio = aspectRatioOf(content.info.width, content.info.height)
 
         return TimelineItemStickerContent(

@@ -35,5 +35,3 @@ fun MatrixRoomMembersState.roomMembers(): List<RoomMember>? {
         else -> null
     }
 }
-
-

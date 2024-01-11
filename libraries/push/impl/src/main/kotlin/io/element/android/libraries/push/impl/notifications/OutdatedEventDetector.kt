@@ -20,9 +20,8 @@ import io.element.android.libraries.push.impl.notifications.model.NotifiableEven
 import javax.inject.Inject
 
 class OutdatedEventDetector @Inject constructor(
-    /// private val activeSessionDataSource: ActiveSessionDataSource
+    // / private val activeSessionDataSource: ActiveSessionDataSource
 ) {
-
     /**
      * Returns true if the given event is outdated.
      * Used to clean up notifications if a displayed message has been read on an

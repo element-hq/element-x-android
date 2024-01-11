@@ -20,12 +20,12 @@ import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import io.element.android.libraries.roomselect.api.RoomSelectMode
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
 import io.element.android.libraries.matrix.api.roomlist.RoomSummary
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.room.aRoomSummaryDetail
 import io.element.android.libraries.matrix.test.roomlist.FakeRoomListService
+import io.element.android.libraries.roomselect.api.RoomSelectMode
 import io.element.android.tests.testutils.WarmUpRule
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.test.runTest
@@ -33,7 +33,6 @@ import org.junit.Rule
 import org.junit.Test
 
 class RoomSelectPresenterTests {
-
     @get:Rule
     val warmUpRule = WarmUpRule()
 

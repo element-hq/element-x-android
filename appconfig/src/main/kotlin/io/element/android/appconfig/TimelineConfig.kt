@@ -17,5 +17,5 @@
 package io.element.android.appconfig
 
 object TimelineConfig {
-    const val maxReadReceiptToDisplay = 3
+    const val MAX_READ_RECEIPT_TO_DISPLAY = 3
 }

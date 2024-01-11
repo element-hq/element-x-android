@@ -41,7 +41,6 @@ class CreateRoomRootPresenter @Inject constructor(
     private val startDMAction: StartDMAction,
     private val buildMeta: BuildMeta,
 ) : Presenter<CreateRoomRootState> {
-
     private val presenter = presenterFactory.create(
         UserListPresenterArgs(
             selectionMode = SelectionMode.Single,

@@ -69,7 +69,6 @@ class NotifiableEventResolver @Inject constructor(
     private val notificationMediaRepoFactory: NotificationMediaRepo.Factory,
     @ApplicationContext private val context: Context,
 ) {
-
     suspend fun resolveEvent(sessionId: SessionId, roomId: RoomId, eventId: EventId): NotifiableEvent? {
         // Restore session
         val client = matrixClientProvider.getOrRestore(sessionId).getOrNull() ?: return null
@@ -129,8 +128,10 @@ class NotifiableEventResolver @Inject constructor(
                         isRedacted = false,
                         isUpdated = false,
                         description = descriptionFromRoomMembershipInvite(isDirect),
-                        type = null, // TODO check if type is needed anymore
-                        title = null, // TODO check if title is needed anymore
+                        // TODO check if type is needed anymore
+                        type = null,
+                        // TODO check if title is needed anymore
+                        title = null,
                     )
                 } else {
                     Timber.tag(loggerTag.value).d("Ignoring notification state event for membership ${content.membershipState}")

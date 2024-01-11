@@ -31,7 +31,6 @@ class RoomMemberListDataSource @Inject constructor(
     private val room: MatrixRoom,
     private val coroutineDispatchers: CoroutineDispatchers,
 ) {
-
     suspend fun search(query: String): List<RoomMember> = withContext(coroutineDispatchers.io) {
         val roomMembers = room.membersStateFlow
             .dropWhile { it !is MatrixRoomMembersState.Ready }
@@ -42,11 +41,10 @@ class RoomMemberListDataSource @Inject constructor(
             roomMembers
         } else {
             roomMembers.filter { member ->
-                member.userId.value.contains(query, ignoreCase = true)
-                    || member.displayName?.contains(query, ignoreCase = true).orFalse()
+                member.userId.value.contains(query, ignoreCase = true) ||
+                    member.displayName?.contains(query, ignoreCase = true).orFalse()
             }
         }
         filteredMembers
     }
-
 }

@@ -56,9 +56,6 @@ import androidx.media3.common.util.UnstableApi
 import androidx.media3.ui.AspectRatioFrameLayout
 import androidx.media3.ui.PlayerView
 import io.element.android.compound.theme.ElementTheme
-import io.element.android.libraries.mediaviewer.api.local.exoplayer.ExoPlayerWrapper
-import io.element.android.libraries.mediaviewer.api.local.pdf.PdfViewer
-import io.element.android.libraries.mediaviewer.api.local.pdf.rememberPdfViewerState
 import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.core.mimetype.MimeTypes.isMimeTypeAudio
@@ -70,6 +67,9 @@ import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.designsystem.utils.KeepScreenOn
 import io.element.android.libraries.designsystem.utils.OnLifecycleEvent
 import io.element.android.libraries.mediaviewer.api.helper.formatFileExtensionAndSize
+import io.element.android.libraries.mediaviewer.api.local.exoplayer.ExoPlayerWrapper
+import io.element.android.libraries.mediaviewer.api.local.pdf.PdfViewer
+import io.element.android.libraries.mediaviewer.api.local.pdf.rememberPdfViewerState
 import io.element.android.libraries.ui.strings.CommonStrings
 import me.saket.telephoto.zoomable.ZoomSpec
 import me.saket.telephoto.zoomable.ZoomableState
@@ -107,7 +107,7 @@ fun LocalMediaView(
             zoomableState = zoomableState,
             modifier = modifier
         )
-        //TODO handle audio with exoplayer
+        // TODO handle audio with exoplayer
         else -> MediaFileView(
             localMediaViewState = localMediaViewState,
             uri = localMedia?.uri,

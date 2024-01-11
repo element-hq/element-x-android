@@ -27,13 +27,10 @@ import javax.inject.Inject
 
 @ContributesBinding(AppScope::class)
 class DefaultRoomListEntryPoint @Inject constructor() : RoomListEntryPoint {
-
     override fun nodeBuilder(parentNode: Node, buildContext: BuildContext): RoomListEntryPoint.NodeBuilder {
-
         val plugins = ArrayList<Plugin>()
 
         return object : RoomListEntryPoint.NodeBuilder {
-
             override fun callback(callback: RoomListEntryPoint.Callback): RoomListEntryPoint.NodeBuilder {
                 plugins += callback
                 return this
@@ -45,4 +42,3 @@ class DefaultRoomListEntryPoint @Inject constructor() : RoomListEntryPoint {
         }
     }
 }
-

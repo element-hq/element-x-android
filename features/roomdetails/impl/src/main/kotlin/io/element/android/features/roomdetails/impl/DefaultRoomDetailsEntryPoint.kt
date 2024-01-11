@@ -29,7 +29,6 @@ import javax.inject.Inject
 
 @ContributesBinding(AppScope::class)
 class DefaultRoomDetailsEntryPoint @Inject constructor() : RoomDetailsEntryPoint {
-
     override fun nodeBuilder(parentNode: Node, buildContext: BuildContext): RoomDetailsEntryPoint.NodeBuilder {
         return object : RoomDetailsEntryPoint.NodeBuilder {
             val plugins = ArrayList<Plugin>()

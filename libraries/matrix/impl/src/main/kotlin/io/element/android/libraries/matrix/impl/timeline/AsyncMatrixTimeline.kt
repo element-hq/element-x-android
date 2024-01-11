@@ -43,7 +43,6 @@ class AsyncMatrixTimeline(
     dispatcher: CoroutineDispatcher,
     private val timelineProvider: suspend () -> MatrixTimeline
 ) : MatrixTimeline {
-
     private val _timelineItems: MutableStateFlow<List<MatrixTimelineItem>> =
         MutableStateFlow(emptyList())
 

@@ -29,7 +29,6 @@ import io.element.android.libraries.di.AppScope
 class PermissionsPresenterImpl @AssistedInject constructor(
     @Assisted private val permissions: List<String>
 ) : PermissionsPresenter {
-
     @AssistedFactory
     @ContributesBinding(AppScope::class)
     interface Factory : PermissionsPresenter.Factory {

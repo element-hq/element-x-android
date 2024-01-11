@@ -36,7 +36,6 @@ internal class MapApplier(
     val style: Style,
     val symbolManager: SymbolManager,
 ) : AbstractApplier<MapNode>(MapNodeRoot) {
-
     private val decorations = mutableListOf<MapNode>()
 
     override fun onClear() {

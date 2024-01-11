@@ -48,7 +48,6 @@ import org.junit.Rule
 import org.junit.Test
 
 class CallScreenPresenterTest {
-
     @get:Rule
     val warmUpRule = WarmUpRule()
 
@@ -191,7 +190,7 @@ class CallScreenPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-           consumeItemsUntilTimeout()
+            consumeItemsUntilTimeout()
 
             assertThat(matrixClient.syncService().syncState.value).isEqualTo(SyncState.Running)
 

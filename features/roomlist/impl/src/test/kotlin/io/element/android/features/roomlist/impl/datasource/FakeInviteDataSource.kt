@@ -25,7 +25,6 @@ import kotlinx.coroutines.flow.flowOf
 class FakeInviteDataSource(
     private val flow: Flow<InvitesState> = flowOf()
 ) : InviteStateDataSource {
-
     @Composable
     override fun inviteState(): InvitesState {
         val state = flow.collectAsState(initial = InvitesState.NoInvites)

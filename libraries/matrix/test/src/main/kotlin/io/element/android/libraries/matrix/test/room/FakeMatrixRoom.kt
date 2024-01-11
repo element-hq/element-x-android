@@ -80,7 +80,6 @@ class FakeMatrixRoom(
     private val matrixTimeline: MatrixTimeline = FakeMatrixTimeline(),
     canRedact: Boolean = false,
 ) : MatrixRoom {
-
     private var ignoreResult: Result<Unit> = Result.success(Unit)
     private var unignoreResult: Result<Unit> = Result.success(Unit)
     private var userDisplayNameResult = Result.success<String?>(null)

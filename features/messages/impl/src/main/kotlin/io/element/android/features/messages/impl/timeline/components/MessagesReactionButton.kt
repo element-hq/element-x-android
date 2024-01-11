@@ -145,7 +145,6 @@ private fun IconContent(
     tint = ElementTheme.materialColors.secondary,
     modifier = modifier
         .size(ADD_EMOJI_SIZE)
-
 )
 
 @Composable
@@ -165,8 +164,7 @@ private fun ReactionContent(
             model = MediaRequestData(MediaSource(reaction.key), MediaRequestData.Kind.Content),
             contentDescription = null
         )
-    }
-    else {
+    } else {
         Text(
             text = reaction.displayKey,
             style = ElementTheme.typography.fontBodyMdRegular.copy(
@@ -225,4 +223,3 @@ internal fun MessagesReactionExtraButtonsPreview() = ElementPreview {
         )
     }
 }
-

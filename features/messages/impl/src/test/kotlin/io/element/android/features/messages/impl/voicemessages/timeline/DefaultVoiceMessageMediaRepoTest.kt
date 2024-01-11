@@ -29,7 +29,6 @@ import org.junit.rules.TemporaryFolder
 import java.io.File
 
 class DefaultVoiceMessageMediaRepoTest {
-
     @get:Rule
     val temporaryFolder = TemporaryFolder()
 

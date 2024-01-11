@@ -18,10 +18,12 @@ package io.element.android.features.poll.impl.create
 
 internal sealed class CreatePollException : Exception() {
     data class GetPollFailed(
-        override val message: String?, override val cause: Throwable?
+        override val message: String?,
+        override val cause: Throwable?
     ) : CreatePollException()
 
     data class SavePollFailed(
-        override val message: String?, override val cause: Throwable?
+        override val message: String?,
+        override val cause: Throwable?
     ) : CreatePollException()
 }

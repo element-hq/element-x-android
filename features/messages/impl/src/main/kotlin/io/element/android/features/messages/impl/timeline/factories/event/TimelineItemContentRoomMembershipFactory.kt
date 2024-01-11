@@ -26,7 +26,6 @@ import javax.inject.Inject
 class TimelineItemContentRoomMembershipFactory @Inject constructor(
     private val timelineEventFormatter: TimelineEventFormatter,
 ) {
-
     fun create(eventTimelineItem: EventTimelineItem): TimelineItemEventContent {
         val text = timelineEventFormatter.format(eventTimelineItem)
         return TimelineItemRoomMembershipContent(text.orEmpty().toString())

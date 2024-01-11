@@ -76,7 +76,6 @@ class TimelinePresenter @AssistedInject constructor(
     private val sendPollResponseAction: SendPollResponseAction,
     private val endPollAction: EndPollAction,
 ) : Presenter<TimelineState> {
-
     @AssistedFactory
     interface Factory {
         fun create(navigator: MessagesNavigator): TimelinePresenter

@@ -55,7 +55,7 @@ class FakeVoiceRecorder(
         curRecording = File("file.ogg")
 
         timeSource += recordingDuration
-        for(i in 1..levels.size) {
+        for (i in 1..levels.size) {
             _state.emit(VoiceRecorderState.Recording(startedAt.elapsedNow(), levels.take(i)))
         }
     }
@@ -90,7 +90,6 @@ class FakeVoiceRecorder(
             VoiceRecorderState.Idle
         )
     }
-
 
     fun assertCalls(
         started: Int = 0,

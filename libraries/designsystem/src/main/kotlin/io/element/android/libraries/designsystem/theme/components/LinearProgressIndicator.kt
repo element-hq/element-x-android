@@ -77,8 +77,7 @@ fun LinearProgressIndicator(
 internal fun LinearProgressIndicatorPreview() = ElementThemedPreview(vertical = false) {
     Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
         // Indeterminate progress
-        LinearProgressIndicator(
-        )
+        LinearProgressIndicator()
         // Fixed progress
         LinearProgressIndicator(
             progress = { 0.90F }

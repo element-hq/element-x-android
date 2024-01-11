@@ -23,7 +23,6 @@ import org.junit.Test
 import org.matrix.rustcomponents.sdk.AuthenticationException as RustAuthenticationException
 
 class AuthenticationExceptionMappingTest {
-
     @Test
     fun `mapping an exception with no message returns 'Unknown error' message`() {
         val exception = Exception()
@@ -41,12 +40,12 @@ class AuthenticationExceptionMappingTest {
     @Test
     fun `mapping specific exceptions map to their kotlin counterparts`() {
         assertThat(RustAuthenticationException.ClientMissing("Client missing").mapAuthenticationException())
-                .isException<AuthenticationException.ClientMissing>("Client missing")
+            .isException<AuthenticationException.ClientMissing>("Client missing")
 
         assertThat(RustAuthenticationException.Generic("Generic").mapAuthenticationException()).isException<AuthenticationException.Generic>("Generic")
 
         assertThat(RustAuthenticationException.InvalidServerName("Invalid server name").mapAuthenticationException())
-                .isException<AuthenticationException.InvalidServerName>("Invalid server name")
+            .isException<AuthenticationException.InvalidServerName>("Invalid server name")
 
         assertThat(RustAuthenticationException.SessionMissing("Session missing").mapAuthenticationException())
             .isException<AuthenticationException.SessionMissing>("Session missing")

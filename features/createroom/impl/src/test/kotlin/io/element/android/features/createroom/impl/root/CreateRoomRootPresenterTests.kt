@@ -38,7 +38,6 @@ import org.junit.Rule
 import org.junit.Test
 
 class CreateRoomRootPresenterTests {
-
     @get:Rule
     val warmUpRule = WarmUpRule()
 
@@ -80,7 +79,6 @@ class CreateRoomRootPresenterTests {
             awaitItem().also { state ->
                 assertThat(state.startDmAction).isEqualTo(startDMSuccessResult)
             }
-
         }
     }
 

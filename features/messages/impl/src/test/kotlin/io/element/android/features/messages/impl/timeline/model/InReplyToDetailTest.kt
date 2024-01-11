@@ -29,7 +29,6 @@ import io.element.android.libraries.matrix.test.A_USER_ID
 import org.junit.Test
 
 class InReplyToDetailTest {
-
     @Test
     fun `map - with a not ready InReplyTo does not work`() {
         assertThat(InReplyTo.Pending.map()).isNull()

@@ -20,7 +20,6 @@ import com.google.common.truth.Truth.assertThat
 import org.junit.Test
 
 internal class LocationKtTest {
-
     @Test
     fun `parseGeoUri - returns null for invalid urls`() {
         assertThat(Location.fromGeoUri("")).isNull()
@@ -78,7 +77,7 @@ internal class LocationKtTest {
 
     @Test
     fun `encode geoUri - returns geoUri from a Location`() {
-        assertThat(Location(1.0,2.0,3.0f).toGeoUri())
+        assertThat(Location(1.0, 2.0, 3.0f).toGeoUri())
             .isEqualTo("geo:1.0,2.0;u=3.0")
     }
 }

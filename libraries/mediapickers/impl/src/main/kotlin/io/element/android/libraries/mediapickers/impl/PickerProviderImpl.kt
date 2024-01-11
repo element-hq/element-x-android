@@ -38,9 +38,8 @@ import javax.inject.Inject
 
 @ContributesBinding(AppScope::class)
 class PickerProviderImpl(private val isInTest: Boolean) : PickerProvider {
-
     @Inject
-    constructor(): this(false)
+    constructor() : this(false)
 
     /**
      * Remembers and returns a [PickerLauncher] for a certain media/file [type].

@@ -37,11 +37,13 @@ open class AddPeopleUserListStateProvider : PreviewParameterProvider<UserListSta
                 selectionMode = SelectionMode.Multiple,
             ),
             aUserListState().copy(
-                searchResults = SearchBarResultState.Results(aMatrixUserList()
-                    .mapIndexed { index, matrixUser ->
-                        UserSearchResult(matrixUser, index % 2 == 0)
-                    }
-                    .toImmutableList()),
+                searchResults = SearchBarResultState.Results(
+                    aMatrixUserList()
+                        .mapIndexed { index, matrixUser ->
+                            UserSearchResult(matrixUser, index % 2 == 0)
+                        }
+                        .toImmutableList()
+                ),
                 selectedUsers = aListOfSelectedUsers(),
                 isSearchActive = true,
                 selectionMode = SelectionMode.Multiple,

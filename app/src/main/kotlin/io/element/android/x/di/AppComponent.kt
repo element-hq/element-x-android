@@ -28,9 +28,11 @@ import io.element.android.libraries.di.SingleIn
 @SingleIn(AppScope::class)
 @MergeComponent(AppScope::class)
 interface AppComponent : NodeFactoriesBindings {
-
     @Component.Factory
     interface Factory {
-        fun create(@ApplicationContext @BindsInstance context: Context): AppComponent
+        fun create(
+            @ApplicationContext @BindsInstance
+            context: Context
+        ): AppComponent
     }
 }

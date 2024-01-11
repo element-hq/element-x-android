@@ -21,7 +21,6 @@ import io.element.android.libraries.usersearch.api.UserRepository
 class FakeUserListPresenterFactory(
     private val fakeUserListPresenter: FakeUserListPresenter = FakeUserListPresenter()
 ) : UserListPresenter.Factory {
-
     override fun create(
         args: UserListPresenterArgs,
         userRepository: UserRepository,

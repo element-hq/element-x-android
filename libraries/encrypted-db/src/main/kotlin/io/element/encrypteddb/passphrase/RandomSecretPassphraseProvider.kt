@@ -33,7 +33,6 @@ class RandomSecretPassphraseProvider(
     private val file: File,
     private val secretSize: Int = 256,
 ) : PassphraseProvider {
-
     override fun getPassphrase(): ByteArray {
         val encryptedFile = EncryptedFileFactory(context).create(file)
         return if (!file.exists()) {

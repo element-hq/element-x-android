@@ -17,5 +17,6 @@
 package io.element.android.libraries.matrix.api.timeline.item.event
 
 enum class MessageFormat {
-    HTML, UNKNOWN
+    HTML,
+    UNKNOWN
 }

@@ -36,7 +36,6 @@ class FakeMatrixTimeline(
         beginningOfRoomReached = false,
     )
 ) : MatrixTimeline {
-
     private val _paginationState: MutableStateFlow<MatrixTimeline.PaginationState> = MutableStateFlow(initialPaginationState)
     private val _timelineItems: MutableStateFlow<List<MatrixTimelineItem>> = MutableStateFlow(initialTimelineItems)
 

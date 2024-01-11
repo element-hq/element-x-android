@@ -44,7 +44,6 @@ class RoomListNode @AssistedInject constructor(
     private val inviteFriendsUseCase: InviteFriendsUseCase,
     private val analyticsService: AnalyticsService,
 ) : Node(buildContext, plugins = plugins) {
-
     init {
         lifecycle.subscribe(
             onResume = {

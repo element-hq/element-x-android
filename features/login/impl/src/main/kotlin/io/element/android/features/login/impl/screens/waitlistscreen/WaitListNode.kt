@@ -36,7 +36,6 @@ class WaitListNode @AssistedInject constructor(
     @Assisted plugins: List<Plugin>,
     presenterFactory: WaitListPresenter.Factory,
 ) : Node(buildContext, plugins = plugins) {
-
     data class Inputs(val loginFormState: LoginFormState) : NodeInputs
 
     private val inputs: Inputs = inputs()

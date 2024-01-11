@@ -50,7 +50,6 @@ class LockScreenFlowNode @AssistedInject constructor(
     buildContext = buildContext,
     plugins = plugins,
 ) {
-
     data class Inputs(
         val initialNavTarget: NavTarget = NavTarget.Unlock,
     ) : NodeInputs

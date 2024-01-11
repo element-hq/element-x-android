@@ -17,7 +17,7 @@
 package io.element.android.libraries.textcomposer.model
 
 sealed interface VoiceMessageRecorderEvent {
-    data object Start: VoiceMessageRecorderEvent
-    data object Stop: VoiceMessageRecorderEvent
-    data object Cancel: VoiceMessageRecorderEvent
+    data object Start : VoiceMessageRecorderEvent
+    data object Stop : VoiceMessageRecorderEvent
+    data object Cancel : VoiceMessageRecorderEvent
 }

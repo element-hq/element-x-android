@@ -41,7 +41,6 @@ class RoomMemberListPresenter @Inject constructor(
     private val roomMemberListDataSource: RoomMemberListDataSource,
     private val coroutineDispatchers: CoroutineDispatchers,
 ) : Presenter<RoomMemberListState> {
-
     @Composable
     override fun present(): RoomMemberListState {
         var roomMembers by remember { mutableStateOf<AsyncData<RoomMembers>>(AsyncData.Loading()) }
@@ -74,13 +73,16 @@ class RoomMemberListPresenter @Inject constructor(
                     SearchBarResultState.Initial()
                 } else {
                     val results = roomMemberListDataSource.search(searchQuery).groupBy { it.membership }
-                    if (results.isEmpty()) SearchBarResultState.NoResultsFound()
-                    else SearchBarResultState.Results(
-                        RoomMembers(
-                            invited = results.getOrDefault(RoomMembershipState.INVITE, emptyList()).toImmutableList(),
-                            joined = results.getOrDefault(RoomMembershipState.JOIN, emptyList()).toImmutableList(),
+                    if (results.isEmpty()) {
+                        SearchBarResultState.NoResultsFound()
+                    } else {
+                        SearchBarResultState.Results(
+                            RoomMembers(
+                                invited = results.getOrDefault(RoomMembershipState.INVITE, emptyList()).toImmutableList(),
+                                joined = results.getOrDefault(RoomMembershipState.JOIN, emptyList()).toImmutableList(),
+                            )
                         )
-                    )
+                    }
                 }
             }
         }
@@ -100,4 +102,3 @@ class RoomMemberListPresenter @Inject constructor(
         )
     }
 }
-

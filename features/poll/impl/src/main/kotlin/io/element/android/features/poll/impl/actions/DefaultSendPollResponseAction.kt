@@ -30,7 +30,6 @@ class DefaultSendPollResponseAction @Inject constructor(
     private val room: MatrixRoom,
     private val analyticsService: AnalyticsService,
 ) : SendPollResponseAction {
-
     override suspend fun execute(pollStartId: EventId, answerId: String): Result<Unit> {
         return room.sendPollResponse(
             pollStartId = pollStartId,
@@ -40,4 +39,3 @@ class DefaultSendPollResponseAction @Inject constructor(
         }
     }
 }
-

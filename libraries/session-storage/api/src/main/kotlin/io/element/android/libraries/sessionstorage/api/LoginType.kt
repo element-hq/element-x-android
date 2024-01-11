@@ -28,7 +28,6 @@ enum class LoginType {
     QR;
 
     companion object {
-
         fun fromName(name: String) = when (name) {
             PASSWORD.name -> PASSWORD
             OIDC.name -> OIDC

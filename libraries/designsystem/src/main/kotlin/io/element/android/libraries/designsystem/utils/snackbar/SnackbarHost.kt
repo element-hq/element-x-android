@@ -30,7 +30,8 @@ import io.element.android.libraries.designsystem.theme.components.Snackbar
 fun SnackbarHost(hostState: SnackbarHostState, modifier: Modifier = Modifier) {
     androidx.compose.material3.SnackbarHost(hostState, modifier) { data ->
         Snackbar(
-            modifier = Modifier.padding(12.dp), // Add default padding
+            // Add default padding
+            modifier = Modifier.padding(12.dp),
             message = data.visuals.message,
             action = data.visuals.actionLabel?.let { ButtonVisuals.Text(it, data::performAction) },
             dismissAction = if (data.visuals.withDismissAction) {
@@ -38,7 +39,9 @@ fun SnackbarHost(hostState: SnackbarHostState, modifier: Modifier = Modifier) {
                     IconSource.Vector(CompoundIcons.Close),
                     data::dismiss
                 )
-            } else null,
+            } else {
+                null
+            },
         )
     }
 }

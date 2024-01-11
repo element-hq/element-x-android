@@ -28,12 +28,11 @@ data class SimplePagedRoomList(
     override val loadingState: StateFlow<RoomList.LoadingState>,
     override val currentFilter: MutableStateFlow<DynamicRoomList.Filter>
 ) : DynamicRoomList {
-
     override val pageSize: Int = Int.MAX_VALUE
     override val loadedPages = MutableStateFlow(1)
 
     override suspend fun loadMore() {
-        //No-op
+        // No-op
         loadedPages.getAndUpdate { it + 1 }
     }
 
@@ -46,6 +45,6 @@ data class SimplePagedRoomList(
     }
 
     override suspend fun rebuildSummaries() {
-        //No-op
+        // No-op
     }
 }

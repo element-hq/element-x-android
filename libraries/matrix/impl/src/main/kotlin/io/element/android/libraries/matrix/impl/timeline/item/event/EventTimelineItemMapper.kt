@@ -39,7 +39,6 @@ import org.matrix.rustcomponents.sdk.ProfileDetails as RustProfileDetails
 import org.matrix.rustcomponents.sdk.Receipt as RustReceipt
 
 class EventTimelineItemMapper(private val contentMapper: TimelineEventContentMapper = TimelineEventContentMapper()) {
-
     fun map(eventTimelineItem: RustEventTimelineItem): EventTimelineItem = eventTimelineItem.use {
         EventTimelineItem(
             eventId = it.eventId()?.let(::EventId),
@@ -100,11 +99,11 @@ private fun List<Reaction>?.map(): ImmutableList<EventReaction> {
 
 private fun Map<String, RustReceipt>.map(): ImmutableList<Receipt> {
     return map {
-            Receipt(
-                userId = UserId(it.key),
-                timestamp = it.value.timestamp?.toLong() ?: 0
-            )
-        }
+        Receipt(
+            userId = UserId(it.key),
+            timestamp = it.value.timestamp?.toLong() ?: 0
+        )
+    }
         .sortedByDescending { it.timestamp }
         .toImmutableList()
 }

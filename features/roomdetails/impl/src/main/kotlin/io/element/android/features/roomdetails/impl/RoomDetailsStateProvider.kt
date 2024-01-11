@@ -90,5 +90,6 @@ fun aRoomDetailsState() = RoomDetailsState(
 )
 
 fun aDmRoomDetailsState(isDmMemberIgnored: Boolean = false) = aRoomDetailsState().copy(
-    roomType = RoomDetailsType.Dm(aDmRoomMember(isIgnored = isDmMemberIgnored)), roomMemberDetailsState = aRoomMemberDetailsState()
+    roomType = RoomDetailsType.Dm(aDmRoomMember(isIgnored = isDmMemberIgnored)),
+    roomMemberDetailsState = aRoomMemberDetailsState()
 )

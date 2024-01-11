@@ -21,7 +21,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 
 class FakeMutableFeatureFlagProvider(override val priority: Int) : MutableFeatureFlagProvider {
-
     private val enabledFeatures = mutableMapOf<String, MutableStateFlow<Boolean>>()
 
     override suspend fun setFeatureEnabled(feature: Feature, enabled: Boolean) {

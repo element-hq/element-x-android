@@ -16,6 +16,7 @@
  * limitations under the License.
  */
 @file:Suppress("MatchingDeclarationName")
+
 package io.element.android.libraries.maplibre.compose
 
 import android.annotation.SuppressLint
@@ -41,7 +42,6 @@ internal class MapPropertiesNode(
     cameraPositionState: CameraPositionState,
     locationSettings: MapLocationSettings,
 ) : MapNode {
-
     init {
         map.locationComponent.activateLocationComponent(
             LocationComponentActivationOptions.Builder(context, style)

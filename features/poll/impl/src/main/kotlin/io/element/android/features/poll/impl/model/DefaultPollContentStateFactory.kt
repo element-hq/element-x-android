@@ -32,7 +32,6 @@ import javax.inject.Inject
 class DefaultPollContentStateFactory @Inject constructor(
     private val matrixClient: MatrixClient,
 ) : PollContentStateFactory {
-
     override suspend fun create(
         event: EventTimelineItem,
         content: PollContent

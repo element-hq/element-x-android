@@ -20,7 +20,6 @@ import io.element.android.features.call.data.WidgetMessage
 import kotlinx.serialization.json.Json
 
 object WidgetMessageSerializer {
-
     private val coder = Json { ignoreUnknownKeys = true }
 
     fun deserialize(message: String): Result<WidgetMessage> {

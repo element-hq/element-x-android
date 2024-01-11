@@ -232,7 +232,7 @@ class NotificationSettingsPresenterTests {
 
     private fun createNotificationSettingsPresenter(
         notificationSettingsService: FakeNotificationSettingsService = FakeNotificationSettingsService()
-    ) : NotificationSettingsPresenter {
+    ): NotificationSettingsPresenter {
         val matrixClient = FakeMatrixClient(notificationSettingsService = notificationSettingsService)
         return NotificationSettingsPresenter(
             notificationSettingsService = notificationSettingsService,

@@ -91,7 +91,8 @@ class NotificationChannels @Inject constructor(
                     enableVibration(true)
                     enableLights(true)
                     lightColor = accentColor
-                })
+                }
+        )
 
         /**
          * Low notification importance: shows everywhere, but is not intrusive.
@@ -107,7 +108,8 @@ class NotificationChannels @Inject constructor(
                     setSound(null, null)
                     enableLights(true)
                     lightColor = accentColor
-                })
+                }
+        )
 
         notificationManager.createNotificationChannel(
             NotificationChannel(
@@ -119,7 +121,8 @@ class NotificationChannels @Inject constructor(
                     description = stringProvider.getString(R.string.notification_channel_listening_for_events)
                     setSound(null, null)
                     setShowBadge(false)
-                })
+                }
+        )
 
         notificationManager.createNotificationChannel(
             NotificationChannel(
@@ -132,7 +135,8 @@ class NotificationChannels @Inject constructor(
                     setSound(null, null)
                     enableLights(true)
                     lightColor = accentColor
-                })
+                }
+        )
     }
 
     private fun getChannel(channelId: String): NotificationChannel? {

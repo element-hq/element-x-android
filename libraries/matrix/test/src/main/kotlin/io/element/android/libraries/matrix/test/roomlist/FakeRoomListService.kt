@@ -24,7 +24,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
 class FakeRoomListService : RoomListService {
-
     private val allRoomSummariesFlow = MutableStateFlow<List<RoomSummary>>(emptyList())
     private val inviteRoomSummariesFlow = MutableStateFlow<List<RoomSummary>>(emptyList())
     private val allRoomsLoadingStateFlow = MutableStateFlow<RoomList.LoadingState>(RoomList.LoadingState.NotLoaded)

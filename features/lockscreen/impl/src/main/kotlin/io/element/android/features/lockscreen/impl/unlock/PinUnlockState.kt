@@ -38,9 +38,9 @@ data class PinUnlockState(
     }
 
     val biometricUnlockErrorMessage = when {
-        biometricUnlockResult is BiometricUnlock.AuthenticationResult.Failure
-            && biometricUnlockResult.error is BiometricUnlockError
-            && biometricUnlockResult.error.isAuthDisabledError -> {
+        biometricUnlockResult is BiometricUnlock.AuthenticationResult.Failure &&
+            biometricUnlockResult.error is BiometricUnlockError &&
+            biometricUnlockResult.error.isAuthDisabledError -> {
             biometricUnlockResult.error.message
         }
         else -> null

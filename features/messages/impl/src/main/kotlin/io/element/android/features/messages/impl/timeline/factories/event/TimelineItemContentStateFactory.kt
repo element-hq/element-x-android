@@ -26,7 +26,6 @@ import javax.inject.Inject
 class TimelineItemContentStateFactory @Inject constructor(
     private val timelineEventFormatter: TimelineEventFormatter,
 ) {
-
     fun create(eventTimelineItem: EventTimelineItem): TimelineItemEventContent {
         val text = timelineEventFormatter.format(eventTimelineItem)
         return TimelineItemStateEventContent(text.orEmpty().toString())

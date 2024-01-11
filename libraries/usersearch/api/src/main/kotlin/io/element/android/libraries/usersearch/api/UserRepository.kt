@@ -19,6 +19,5 @@ package io.element.android.libraries.usersearch.api
 import kotlinx.coroutines.flow.Flow
 
 interface UserRepository {
-
     fun search(query: String): Flow<UserSearchResultState>
 }

@@ -30,7 +30,6 @@ class TimelineItemContentPollFactory @Inject constructor(
     private val featureFlagService: FeatureFlagService,
     private val pollContentStateFactory: PollContentStateFactory,
 ) {
-
     suspend fun create(
         event: EventTimelineItem,
         content: PollContent,
