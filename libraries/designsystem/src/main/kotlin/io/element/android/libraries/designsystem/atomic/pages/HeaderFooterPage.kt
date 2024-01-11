@@ -68,7 +68,9 @@ fun HeaderFooterPage(
                 content()
             }
             // Footer
-            footer()
+            Box(modifier = Modifier.padding(horizontal = 16.dp)) {
+                footer()
+            }
         }
     }
 }

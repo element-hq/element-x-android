@@ -186,7 +186,7 @@ private fun OnBoardingButtons(
                     .fillMaxWidth()
             )
         }
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(48.dp))
     }
 }
 
