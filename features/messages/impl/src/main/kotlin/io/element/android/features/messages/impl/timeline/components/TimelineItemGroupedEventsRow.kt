@@ -160,7 +160,7 @@ internal fun TimelineItemGroupedEventsRowContentExpandedPreview() = ElementPrevi
     TimelineItemGroupedEventsRowContent(
         isExpanded = true,
         onExpandGroupClick = {},
-        timelineItem = aGroupedEvents(),
+        timelineItem = aGroupedEvents(withReadReceipts = true),
         timelineRoomInfo = aTimelineRoomInfo(),
         highlightedItem = null,
         isLastOutgoingMessage = false,
@@ -184,7 +184,7 @@ internal fun TimelineItemGroupedEventsRowContentCollapsePreview() = ElementPrevi
     TimelineItemGroupedEventsRowContent(
         isExpanded = false,
         onExpandGroupClick = {},
-        timelineItem = aGroupedEvents(),
+        timelineItem = aGroupedEvents(withReadReceipts = true),
         timelineRoomInfo = aTimelineRoomInfo(),
         highlightedItem = null,
         isLastOutgoingMessage = false,
