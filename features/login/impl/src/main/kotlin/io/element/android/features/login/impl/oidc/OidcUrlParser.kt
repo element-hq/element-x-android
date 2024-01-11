@@ -34,7 +34,7 @@ class OidcUrlParser @Inject constructor() {
      * `io.element:/callback?state=IFF1UETGye2ZA8pO&code=y6X1GZeqA3xxOWcTeShgv8nkgFJXyzWB`
      */
     fun parse(url: String): OidcAction? {
-        if (url.startsWith(OidcConfig.redirectUri).not()) return null
+        if (url.startsWith(OidcConfig.REDIRECT_URI).not()) return null
         if (url.contains("error=access_denied")) return OidcAction.GoBack
         if (url.contains("code=")) return OidcAction.Success(url)
 

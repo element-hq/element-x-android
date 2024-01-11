@@ -49,9 +49,11 @@ class PushersManager @Inject constructor(
     suspend fun testPush() {
         pushGatewayNotifyRequest.execute(
             PushGatewayNotifyRequest.Params(
-                url = "TODO", // unifiedPushHelper.getPushGateway() ?: return,
+                // unifiedPushHelper.getPushGateway() ?: return
+                url = "TODO",
                 appId = PushConfig.PUSHER_APP_ID,
-                pushKey = "TODO", // unifiedPushHelper.getEndpointOrToken().orEmpty(),
+                // unifiedPushHelper.getEndpointOrToken().orEmpty()
+                pushKey = "TODO",
                 eventId = TEST_EVENT_ID
             )
         )
@@ -86,10 +88,13 @@ class PushersManager @Inject constructor(
         SetHttpPusherData(
             pushKey = pushKey,
             appId = PushConfig.PUSHER_APP_ID,
-            profileTag = DEFAULT_PUSHER_FILE_TAG + "_" /* TODO + abs(activeSessionHolder.getActiveSession().myUserId.hashCode())*/,
-            lang = "en", // TODO localeProvider.current().language,
+            // TODO + abs(activeSessionHolder.getActiveSession().myUserId.hashCode())
+            profileTag = DEFAULT_PUSHER_FILE_TAG + "_",
+            // TODO localeProvider.current().language
+            lang = "en",
             appDisplayName = buildMeta.applicationName,
-            deviceDisplayName = "MyDevice", // TODO getDeviceInfoUseCase.execute().displayName().orEmpty(),
+            // TODO getDeviceInfoUseCase.execute().displayName().orEmpty()
+            deviceDisplayName = "MyDevice",
             url = gateway,
             defaultPayload = createDefaultPayload(pushClientSecret.getSecretForUser(userId))
         )

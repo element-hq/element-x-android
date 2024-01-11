@@ -17,5 +17,5 @@
 package io.element.android.libraries.matrix.api.auth
 
 object OidcConfig {
-    const val redirectUri = "io.element:/callback"
+    const val REDIRECT_URI = "io.element:/callback"
 }
