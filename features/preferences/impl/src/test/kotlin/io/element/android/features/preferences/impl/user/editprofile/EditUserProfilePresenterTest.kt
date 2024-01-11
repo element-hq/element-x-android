@@ -52,7 +52,6 @@ import java.io.File
 
 @ExperimentalCoroutinesApi
 class EditUserProfilePresenterTest {
-
     @get:Rule
     val warmUpRule = WarmUpRule()
 

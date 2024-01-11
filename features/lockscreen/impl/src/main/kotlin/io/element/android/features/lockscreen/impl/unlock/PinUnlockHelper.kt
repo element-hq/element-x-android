@@ -28,7 +28,6 @@ class PinUnlockHelper @Inject constructor(
     private val biometricUnlockManager: BiometricUnlockManager,
     private val pinCodeManager: PinCodeManager
 ) {
-
     @Composable
     fun OnUnlockEffect(onUnlock: () -> Unit) {
         DisposableEffect(Unit) {

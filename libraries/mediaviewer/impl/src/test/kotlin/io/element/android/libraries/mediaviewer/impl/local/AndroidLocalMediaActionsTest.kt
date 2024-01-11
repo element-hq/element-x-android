@@ -36,7 +36,6 @@ import org.robolectric.RuntimeEnvironment
 
 @RunWith(RobolectricTestRunner::class)
 class AndroidLocalMediaActionsTest {
-
     @Test
     fun `present - AndroidLocalMediaAction configure`() = runTest {
         val sut = createAndroidLocalMediaActions()

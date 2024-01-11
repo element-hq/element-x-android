@@ -30,7 +30,6 @@ class MediaSender @Inject constructor(
     private val preProcessor: MediaPreProcessor,
     private val room: MatrixRoom,
 ) {
-
     private val ongoingUploadJobs = ConcurrentHashMap<Job.Key, MediaUploadHandler>()
     val hasOngoingMediaUploads get() = ongoingUploadJobs.isNotEmpty()
 

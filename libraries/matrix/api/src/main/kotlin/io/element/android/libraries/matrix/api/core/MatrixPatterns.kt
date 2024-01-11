@@ -24,7 +24,6 @@ import timber.log.Timber
  * Ref: https://matrix.org/docs/spec/appendices#identifier-grammar
  */
 object MatrixPatterns {
-
     // Note: TLD is not mandatory (localhost, IP address...)
     private const val DOMAIN_REGEX = ":[A-Z0-9.-]+(:[0-9]{2,5})?"
 

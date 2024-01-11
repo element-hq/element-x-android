@@ -23,7 +23,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 private const val DEFAULT_REMAINING_ATTEMPTS = 3
 
 class InMemoryLockScreenStore : LockScreenStore {
-
     private val hasPinCode = MutableStateFlow(false)
     private var pinCode: String? = null
         set(value) {

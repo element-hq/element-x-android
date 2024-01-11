@@ -37,7 +37,6 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
 class PinUnlockPresenterTest {
-
     private val halfCompletePin = "12"
     private val completePin = "1235"
 

@@ -46,7 +46,6 @@ class TimelineItemEventContentProvider : PreviewParameterProvider<TimelineItemEv
 }
 
 class TimelineItemTextBasedContentProvider : PreviewParameterProvider<TimelineItemTextBasedContent> {
-
     private fun buildSpanned(text: String) = buildSpannedString {
         inSpans(StyleSpan(Typeface.BOLD)) {
             append("Rich Text")

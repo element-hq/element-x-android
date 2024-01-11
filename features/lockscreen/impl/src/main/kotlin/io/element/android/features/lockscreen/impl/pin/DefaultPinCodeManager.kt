@@ -36,7 +36,6 @@ class DefaultPinCodeManager @Inject constructor(
     private val encryptionDecryptionService: EncryptionDecryptionService,
     private val lockScreenStore: LockScreenStore,
 ) : PinCodeManager {
-
     private val callbacks = CopyOnWriteArrayList<PinCodeManager.Callback>()
 
     override fun addCallback(callback: PinCodeManager.Callback) {

@@ -28,8 +28,7 @@ class UnregisterUnifiedPushUseCase @Inject constructor(
     private val unifiedPushStore: UnifiedPushStore,
     // private val unifiedPushGatewayResolver: UnifiedPushGatewayResolver,
 ) {
-
-    suspend fun execute(clientSecret: String /*pushersManager: PushersManager?*/) {
+    suspend fun execute(clientSecret: String) {
         // val mode = BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_FOR_REALTIME
         // pushDataStore.setFdroidSyncBackgroundMode(mode)
         try {

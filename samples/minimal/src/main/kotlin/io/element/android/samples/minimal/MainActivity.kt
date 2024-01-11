@@ -38,7 +38,6 @@ import kotlinx.coroutines.runBlocking
 import java.io.File
 
 class MainActivity : ComponentActivity() {
-
     private val matrixAuthenticationService: MatrixAuthenticationService by lazy {
         val baseDirectory = File(applicationContext.filesDir, "sessions")
         val userAgentProvider = SimpleUserAgentProvider("MinimalSample")

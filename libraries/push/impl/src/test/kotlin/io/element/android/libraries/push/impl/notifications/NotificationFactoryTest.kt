@@ -41,7 +41,6 @@ private val A_MESSAGE_EVENT = aNotifiableMessageEvent(eventId = AN_EVENT_ID, roo
 
 @RunWith(RobolectricTestRunner::class)
 class NotificationFactoryTest {
-
     private val androidNotificationFactory = FakeAndroidNotificationFactory()
     private val roomGroupMessageCreator = FakeRoomGroupMessageCreator()
     private val summaryGroupMessageCreator = FakeSummaryGroupMessageCreator()

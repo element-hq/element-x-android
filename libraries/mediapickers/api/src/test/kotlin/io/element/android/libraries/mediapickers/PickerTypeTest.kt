@@ -27,7 +27,6 @@ import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
 class PickerTypeTest {
-
     @Test
     fun `ImageAndVideo - assert types`() {
         val pickerType = PickerType.ImageAndVideo

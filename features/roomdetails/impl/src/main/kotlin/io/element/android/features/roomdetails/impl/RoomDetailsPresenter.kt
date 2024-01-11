@@ -58,7 +58,6 @@ class RoomDetailsPresenter @Inject constructor(
     private val leaveRoomPresenter: LeaveRoomPresenter,
     private val dispatchers: CoroutineDispatchers,
 ) : Presenter<RoomDetailsState> {
-
     @Composable
     override fun present(): RoomDetailsState {
         val scope = rememberCoroutineScope()

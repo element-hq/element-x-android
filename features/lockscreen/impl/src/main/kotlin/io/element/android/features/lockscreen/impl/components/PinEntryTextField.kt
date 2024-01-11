@@ -99,7 +99,6 @@ private fun PinDigitView(
             .size(48.dp)
             .then(appearanceModifier),
         contentAlignment = Alignment.Center,
-
     ) {
         if (digit is PinDigit.Filled) {
             val text = if (isSecured) {

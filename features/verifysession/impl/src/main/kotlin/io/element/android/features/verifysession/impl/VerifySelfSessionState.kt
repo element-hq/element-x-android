@@ -26,7 +26,6 @@ data class VerifySelfSessionState(
     val verificationFlowStep: VerificationStep,
     val eventSink: (VerifySelfSessionViewEvents) -> Unit,
 ) {
-
     @Stable
     sealed interface VerificationStep {
         data object Initial : VerificationStep

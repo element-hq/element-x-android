@@ -23,7 +23,6 @@ import io.element.android.appconfig.MatrixConfiguration
  * Mapping of an input URI to a matrix.to compliant URI.
  */
 object MatrixToConverter {
-
     /**
      * Try to convert a URL from an element web instance or from a client permalink to a matrix.to url.
      * To be successfully converted, URL path should contain one of the [SUPPORTED_PATHS].

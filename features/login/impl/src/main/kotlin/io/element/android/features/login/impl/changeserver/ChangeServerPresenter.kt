@@ -36,7 +36,6 @@ class ChangeServerPresenter @Inject constructor(
     private val authenticationService: MatrixAuthenticationService,
     private val accountProviderDataSource: AccountProviderDataSource,
 ) : Presenter<ChangeServerState> {
-
     @Composable
     override fun present(): ChangeServerState {
         val localCoroutineScope = rememberCoroutineScope()

@@ -24,7 +24,6 @@ import io.element.android.wysiwyg.utils.HtmlConverter
 class FakeHtmlConverterProvider(
     private val transform: (String) -> CharSequence = { it },
 ) : HtmlConverterProvider {
-
     @Composable
     override fun Update(currentUserId: UserId) = Unit
 

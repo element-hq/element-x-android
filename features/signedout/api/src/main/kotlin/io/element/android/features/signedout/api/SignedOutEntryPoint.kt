@@ -22,7 +22,6 @@ import io.element.android.libraries.architecture.FeatureEntryPoint
 import io.element.android.libraries.matrix.api.core.SessionId
 
 interface SignedOutEntryPoint : FeatureEntryPoint {
-
     data class Params(
         val sessionId: SessionId,
     )

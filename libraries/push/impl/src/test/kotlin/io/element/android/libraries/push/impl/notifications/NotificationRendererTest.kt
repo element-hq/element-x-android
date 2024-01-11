@@ -51,7 +51,6 @@ private val ONE_SHOT_META = OneShotNotification.Append.Meta(key = "ignored", sum
 
 @RunWith(RobolectricTestRunner::class)
 class NotificationRendererTest {
-
     private val notificationDisplayer = FakeNotificationDisplayer()
     private val notificationFactory = FakeNotificationFactory()
     private val notificationIdProvider = NotificationIdProvider()

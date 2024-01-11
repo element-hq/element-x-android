@@ -29,7 +29,6 @@ class RegisterUnifiedPushUseCase @Inject constructor(
     private val pusherSubscriber: PusherSubscriber,
     private val unifiedPushStore: UnifiedPushStore,
 ) {
-
     sealed interface RegisterUnifiedPushResult {
         data object Success : RegisterUnifiedPushResult
         data object NeedToAskUserForDistributor : RegisterUnifiedPushResult

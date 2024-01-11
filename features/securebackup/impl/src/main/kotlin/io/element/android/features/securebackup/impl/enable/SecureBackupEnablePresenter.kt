@@ -34,7 +34,6 @@ import javax.inject.Inject
 class SecureBackupEnablePresenter @Inject constructor(
     private val encryptionService: EncryptionService,
 ) : Presenter<SecureBackupEnableState> {
-
     @Composable
     override fun present(): SecureBackupEnableState {
         val enableAction = remember { mutableStateOf<AsyncData<Unit>>(AsyncData.Uninitialized) }

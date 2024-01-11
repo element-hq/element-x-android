@@ -38,13 +38,13 @@ class SentryAnalyticsProvider @Inject constructor(
     @ApplicationContext private val context: Context,
     private val buildMeta: BuildMeta,
 ) : AnalyticsProvider {
-    override val name = SentryConfig.name
+    override val name = SentryConfig.NAME
 
     override fun init() {
         Timber.tag(analyticsTag.value).d("Initializing Sentry")
         if (Sentry.isEnabled()) return
         SentryAndroid.init(context) { options ->
-            options.dsn = SentryConfig.dns
+            options.dsn = SentryConfig.DNS
             options.beforeSend = SentryOptions.BeforeSendCallback { event, _ -> event }
             options.tracesSampleRate = 1.0
             options.isEnableUserInteractionTracing = true
@@ -73,7 +73,7 @@ class SentryAnalyticsProvider @Inject constructor(
 }
 
 private fun BuildType.toSentryEnv() = when (this) {
-    BuildType.RELEASE -> SentryConfig.envRelease
+    BuildType.RELEASE -> SentryConfig.ENV_RELEASE
     BuildType.NIGHTLY,
-    BuildType.DEBUG -> SentryConfig.envDebug
+    BuildType.DEBUG -> SentryConfig.ENV_DEBUG
 }

@@ -37,7 +37,6 @@ class DeveloperSettingsNode @AssistedInject constructor(
     @Assisted plugins: List<Plugin>,
     private val presenter: DeveloperSettingsPresenter,
 ) : Node(buildContext, plugins = plugins) {
-
     interface Callback : Plugin {
         fun openConfigureTracing()
     }

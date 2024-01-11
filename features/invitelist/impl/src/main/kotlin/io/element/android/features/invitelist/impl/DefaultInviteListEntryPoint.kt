@@ -27,12 +27,10 @@ import javax.inject.Inject
 
 @ContributesBinding(AppScope::class)
 class DefaultInviteListEntryPoint @Inject constructor() : InviteListEntryPoint {
-
     override fun nodeBuilder(parentNode: Node, buildContext: BuildContext): InviteListEntryPoint.NodeBuilder {
         val plugins = ArrayList<Plugin>()
 
         return object : InviteListEntryPoint.NodeBuilder {
-
             override fun callback(callback: InviteListEntryPoint.Callback): InviteListEntryPoint.NodeBuilder {
                 plugins += callback
                 return this

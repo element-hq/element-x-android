@@ -20,7 +20,6 @@ import com.google.common.truth.Truth.assertThat
 import org.junit.Test
 
 class AuthErrorCodeTest {
-
     @Test
     fun `errorCode finds UNKNOWN code`() {
         val error = AuthenticationException.Generic("M_UNKNOWN")

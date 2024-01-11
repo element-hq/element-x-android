@@ -40,14 +40,13 @@ import javax.inject.Inject
 @ContributesBinding(SessionScope::class)
 @SingleIn(SessionScope::class)
 class DefaultHtmlConverterProvider @Inject constructor() : HtmlConverterProvider {
-
     private val htmlConverter: MutableState<HtmlConverter?> = mutableStateOf(null)
 
     @Composable
     override fun Update(currentUserId: UserId) {
         val isInEditMode = LocalInspectionMode.current
         val mentionDetector = remember(isInEditMode) {
-            if (isInEditMode) { null } else { newMentionDetector() }
+            if (isInEditMode) null else newMentionDetector()
         }
 
         val editorStyle = ElementRichTextEditorStyle.textStyle()

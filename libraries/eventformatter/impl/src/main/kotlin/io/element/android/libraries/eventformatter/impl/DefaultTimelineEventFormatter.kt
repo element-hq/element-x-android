@@ -46,7 +46,6 @@ class DefaultTimelineEventFormatter @Inject constructor(
     private val profileChangeContentFormatter: ProfileChangeContentFormatter,
     private val stateContentFormatter: StateContentFormatter,
 ) : TimelineEventFormatter {
-
     override fun format(event: EventTimelineItem): CharSequence? {
         val isOutgoing = event.isOwn
         val senderDisplayName = (event.senderProfile as? ProfileTimelineDetails.Ready)?.displayName ?: event.sender.value

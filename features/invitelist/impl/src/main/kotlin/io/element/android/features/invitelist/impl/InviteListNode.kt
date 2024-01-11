@@ -35,7 +35,6 @@ class InviteListNode @AssistedInject constructor(
     @Assisted plugins: List<Plugin>,
     private val presenter: InviteListPresenter,
 ) : Node(buildContext, plugins = plugins) {
-
     private fun onBackClicked() {
         plugins<InviteListEntryPoint.Callback>().forEach { it.onBackClicked() }
     }

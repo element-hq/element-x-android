@@ -21,5 +21,7 @@ package io.element.android.features.messages.impl.timeline.model
  * This can be used to scroll to the bottom of the list when a new event is added.
  */
 enum class NewEventState {
-    None, FromMe, FromOther
+    None,
+    FromMe,
+    FromOther
 }

@@ -76,7 +76,6 @@ import kotlin.time.Duration.Companion.minutes
 
 @RunWith(RobolectricTestRunner::class)
 class TimelineItemContentMessageFactoryTest {
-
     @Test
     fun `test create OtherMessageType`() = runTest {
         val sut = createTimelineItemContentMessageFactory()

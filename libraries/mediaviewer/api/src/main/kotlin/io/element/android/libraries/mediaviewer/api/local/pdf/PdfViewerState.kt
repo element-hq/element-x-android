@@ -40,7 +40,6 @@ class PdfViewerState(
     val zoomableState: ZoomableState,
     val lazyListState: LazyListState,
 ) {
-
     var isLoaded by mutableStateOf(false)
     private var pdfRendererManager by mutableStateOf<PdfRendererManager?>(null)
 

@@ -26,7 +26,6 @@ import javax.inject.Inject
 class ChangeAccountProviderPresenter @Inject constructor(
     private val changeServerPresenter: ChangeServerPresenter,
 ) : Presenter<ChangeAccountProviderState> {
-
     @Composable
     override fun present(): ChangeAccountProviderState {
         val changeServerState = changeServerPresenter.present()

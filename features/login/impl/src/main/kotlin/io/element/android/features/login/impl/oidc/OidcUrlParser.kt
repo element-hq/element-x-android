@@ -25,13 +25,13 @@ import javax.inject.Inject
  * TODO Find documentation about the format.
  */
 class OidcUrlParser @Inject constructor() {
-
-    // When user press button "Cancel", we get the url:
-    // `io.element:/callback?error=access_denied&state=IFF1UETGye2ZA8pO`
-    // On success, we get:
-    // `io.element:/callback?state=IFF1UETGye2ZA8pO&code=y6X1GZeqA3xxOWcTeShgv8nkgFJXyzWB`
     /**
      * Return a OidcAction, or null if the url is not a OidcUrl.
+     * Note:
+     * When user press button "Cancel", we get the url:
+     * `io.element:/callback?error=access_denied&state=IFF1UETGye2ZA8pO`
+     * On success, we get:
+     * `io.element:/callback?state=IFF1UETGye2ZA8pO&code=y6X1GZeqA3xxOWcTeShgv8nkgFJXyzWB`
      */
     fun parse(url: String): OidcAction? {
         if (url.startsWith(OidcConfig.redirectUri).not()) return null

@@ -62,7 +62,6 @@ class DefaultRoomLastMessageFormatter @Inject constructor(
     private val profileChangeContentFormatter: ProfileChangeContentFormatter,
     private val stateContentFormatter: StateContentFormatter,
 ) : RoomLastMessageFormatter {
-
     companion object {
         // Max characters to display in the last message. This works around https://github.com/element-hq/element-x-android/issues/2105
         private const val MAX_SAFE_LENGTH = 500

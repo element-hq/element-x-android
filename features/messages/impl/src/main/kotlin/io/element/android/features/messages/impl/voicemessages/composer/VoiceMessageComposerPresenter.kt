@@ -121,7 +121,7 @@ class VoiceMessageComposerPresenter @Inject constructor(
                 }
             }
         }
-        val onPlayerEvent = { event: VoiceMessagePlayerEvent -> localCoroutineScope.launch {
+        val onPlayerEvent = { event: VoiceMessagePlayerEvent ->
             localCoroutineScope.launch {
                 when (event) {
                     VoiceMessagePlayerEvent.Play -> player.play()
@@ -129,7 +129,7 @@ class VoiceMessageComposerPresenter @Inject constructor(
                     is VoiceMessagePlayerEvent.Seek -> player.seek(event.position)
                 }
             }
-        } }
+        }
 
         val onAcceptPermissionsRationale = {
             permissionState.eventSink(PermissionsEvents.OpenSystemSettingAndCloseDialog)

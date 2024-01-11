@@ -32,7 +32,6 @@ import javax.inject.Inject
 @ContributesBinding(AppScope::class)
 class DefaultCrashDetectionPresenter @Inject constructor(private val crashDataStore: CrashDataStore) :
     CrashDetectionPresenter {
-
     @Composable
     override fun present(): CrashDetectionState {
         val localCoroutineScope = rememberCoroutineScope()

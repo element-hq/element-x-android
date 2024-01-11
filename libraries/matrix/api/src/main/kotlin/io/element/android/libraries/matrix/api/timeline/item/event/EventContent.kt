@@ -56,7 +56,6 @@ data class PollContent(
 data class UnableToDecryptContent(
     val data: Data
 ) : EventContent {
-
     @Immutable
     sealed interface Data {
         data class OlmV1Curve25519AesSha2(

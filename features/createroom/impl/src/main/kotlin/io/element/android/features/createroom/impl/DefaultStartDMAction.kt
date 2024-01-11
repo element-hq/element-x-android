@@ -35,7 +35,6 @@ class DefaultStartDMAction @Inject constructor(
     private val matrixClient: MatrixClient,
     private val analyticsService: AnalyticsService,
 ) : StartDMAction {
-
     override suspend fun execute(userId: UserId, actionState: MutableState<AsyncAction<RoomId>>) {
         actionState.value = AsyncAction.Loading
         when (val result = matrixClient.startDM(userId)) {

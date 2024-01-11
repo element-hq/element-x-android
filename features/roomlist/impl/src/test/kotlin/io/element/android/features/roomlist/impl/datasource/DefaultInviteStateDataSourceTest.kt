@@ -32,7 +32,6 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
 internal class DefaultInviteStateDataSourceTest {
-
     @Test
     fun `emits NoInvites state if invites list is empty`() = runTest {
         val roomListService = FakeRoomListService()

@@ -39,7 +39,6 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
 class DefaultFtueStateTests {
-
     @Test
     fun `given any check being false, should display flow is true`() = runTest {
         val coroutineScope = CoroutineScope(coroutineContext + SupervisorJob())
@@ -130,7 +129,8 @@ class DefaultFtueStateTests {
             FtueStep.NotificationsOptIn,
             FtueStep.LockscreenSetup,
             FtueStep.AnalyticsOptIn,
-            null, // Final state
+            // Final state
+            null,
         )
 
         // Cleanup
@@ -204,7 +204,8 @@ class DefaultFtueStateTests {
         permissionStateProvider: FakePermissionStateProvider = FakePermissionStateProvider(permissionGranted = false),
         matrixClient: MatrixClient = FakeMatrixClient(),
         lockScreenService: LockScreenService = FakeLockScreenService(),
-        sdkIntVersion: Int = Build.VERSION_CODES.TIRAMISU, // First version where notification permission is required
+        // First version where notification permission is required
+        sdkIntVersion: Int = Build.VERSION_CODES.TIRAMISU,
     ) = DefaultFtueState(
         sdkVersionProvider = FakeBuildVersionSdkIntProvider(sdkIntVersion),
         coroutineScope = coroutineScope,

@@ -145,7 +145,6 @@ private fun IconContent(
     tint = ElementTheme.materialColors.secondary,
     modifier = modifier
         .size(ADD_EMOJI_SIZE)
-
 )
 
 @Composable

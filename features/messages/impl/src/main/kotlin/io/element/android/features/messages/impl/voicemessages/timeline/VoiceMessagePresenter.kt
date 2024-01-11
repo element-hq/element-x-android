@@ -58,7 +58,6 @@ class VoiceMessagePresenter @AssistedInject constructor(
     private val scope: CoroutineScope,
     @Assisted private val content: TimelineItemVoiceContent,
 ) : Presenter<VoiceMessageState> {
-
     @AssistedFactory
     fun interface Factory : TimelineItemPresenterFactory<TimelineItemVoiceContent, VoiceMessageState> {
         override fun create(content: TimelineItemVoiceContent): VoiceMessagePresenter

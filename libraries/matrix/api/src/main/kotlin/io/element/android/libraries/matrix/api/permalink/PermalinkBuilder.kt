@@ -22,7 +22,6 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
 
 object PermalinkBuilder {
-
     private const val ROOM_PATH = "room/"
     private const val USER_PATH = "user/"
 

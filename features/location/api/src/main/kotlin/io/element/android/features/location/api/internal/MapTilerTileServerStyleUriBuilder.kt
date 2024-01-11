@@ -25,7 +25,6 @@ internal class MapTilerTileServerStyleUriBuilder(
     private val lightMapId: String,
     private val darkMapId: String,
 ) : TileServerStyleUriBuilder {
-
     constructor(context: Context) : this(
         apiKey = context.apiKey,
         lightMapId = context.mapId(darkMode = false),

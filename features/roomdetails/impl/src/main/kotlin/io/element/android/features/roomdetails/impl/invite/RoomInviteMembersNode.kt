@@ -47,7 +47,6 @@ class RoomInviteMembersNode @AssistedInject constructor(
     private val appErrorStateService: AppErrorStateService,
     private val analyticsService: AnalyticsService,
 ) : Node(buildContext, plugins = plugins) {
-
     private val coroutineScope = CoroutineScope(SupervisorJob() + coroutineDispatchers.io)
 
     init {

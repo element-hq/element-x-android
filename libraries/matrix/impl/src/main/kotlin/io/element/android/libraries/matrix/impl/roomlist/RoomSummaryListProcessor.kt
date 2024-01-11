@@ -35,7 +35,6 @@ class RoomSummaryListProcessor(
     private val dispatcher: CoroutineDispatcher,
     private val roomSummaryDetailsFactory: RoomSummaryDetailsFactory = RoomSummaryDetailsFactory(),
 ) {
-
     private val roomSummariesByIdentifier = HashMap<String, RoomSummary>()
     private val mutex = Mutex()
 

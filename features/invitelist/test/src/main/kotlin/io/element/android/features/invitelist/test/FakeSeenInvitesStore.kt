@@ -22,7 +22,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 
 class FakeSeenInvitesStore : SeenInvitesStore {
-
     private val existing = MutableStateFlow(emptySet<RoomId>())
     private var provided: Set<RoomId>? = null
 

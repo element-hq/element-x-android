@@ -28,7 +28,6 @@ data class SimplePagedRoomList(
     override val loadingState: StateFlow<RoomList.LoadingState>,
     override val currentFilter: MutableStateFlow<DynamicRoomList.Filter>
 ) : DynamicRoomList {
-
     override val pageSize: Int = Int.MAX_VALUE
     override val loadedPages = MutableStateFlow(1)
 

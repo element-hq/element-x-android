@@ -38,7 +38,6 @@ class ConfigureRoomNode @AssistedInject constructor(
     private val presenter: ConfigureRoomPresenter,
     private val analyticsService: AnalyticsService,
 ) : Node(buildContext, plugins = plugins) {
-
     init {
         lifecycle.subscribe(
             onResume = {

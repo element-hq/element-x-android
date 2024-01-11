@@ -41,7 +41,6 @@ class SecureBackupSetupNode @AssistedInject constructor(
     presenterFactory: SecureBackupSetupPresenter.Factory,
     private val snackbarDispatcher: SnackbarDispatcher,
 ) : Node(buildContext, plugins = plugins) {
-
     data class Inputs(
         val isChangeRecoveryKeyUserStory: Boolean,
     ) : NodeInputs

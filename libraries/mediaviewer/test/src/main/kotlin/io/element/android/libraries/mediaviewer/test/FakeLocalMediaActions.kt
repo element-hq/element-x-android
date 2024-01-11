@@ -22,7 +22,6 @@ import io.element.android.libraries.mediaviewer.api.local.LocalMediaActions
 import io.element.android.tests.testutils.simulateLongTask
 
 class FakeLocalMediaActions : LocalMediaActions {
-
     var shouldFail = false
 
     @Composable

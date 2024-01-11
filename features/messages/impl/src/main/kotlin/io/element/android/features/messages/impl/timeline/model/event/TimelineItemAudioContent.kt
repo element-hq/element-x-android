@@ -28,7 +28,6 @@ data class TimelineItemAudioContent(
     val formattedFileSize: String,
     val fileExtension: String,
 ) : TimelineItemEventContent {
-
     val fileExtensionAndSize =
         formatFileExtensionAndSize(
             fileExtension,

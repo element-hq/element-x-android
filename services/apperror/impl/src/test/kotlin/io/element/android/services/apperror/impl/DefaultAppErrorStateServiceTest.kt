@@ -23,7 +23,6 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
 internal class DefaultAppErrorStateServiceTest {
-
     @Test
     fun `initial value is no error`() = runTest {
         val service = DefaultAppErrorStateService()

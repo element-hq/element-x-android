@@ -26,7 +26,6 @@ import java.util.logging.Formatter
 import java.util.logging.LogRecord
 
 internal class LogFormatter : Formatter() {
-
     override fun format(r: LogRecord): String {
         if (!isTimeZoneSet) {
             DATE_FORMAT.timeZone = TimeZone.getTimeZone("UTC")

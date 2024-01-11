@@ -104,7 +104,6 @@ class RustMatrixRoom(
     private val roomSyncSubscriber: RoomSyncSubscriber,
     private val matrixRoomInfoMapper: MatrixRoomInfoMapper,
 ) : MatrixRoom {
-
     override val roomId = RoomId(innerRoom.id())
 
     override val roomInfoFlow: Flow<MatrixRoomInfo> = mxCallbackFlow {

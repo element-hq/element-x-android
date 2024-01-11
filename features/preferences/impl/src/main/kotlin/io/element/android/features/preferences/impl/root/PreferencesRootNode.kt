@@ -42,7 +42,6 @@ class PreferencesRootNode @AssistedInject constructor(
     private val presenter: PreferencesRootPresenter,
     private val directLogoutView: DirectLogoutView,
 ) : Node(buildContext, plugins = plugins) {
-
     interface Callback : Plugin {
         fun onOpenBugReport()
         fun onVerifyClicked()

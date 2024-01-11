@@ -27,7 +27,6 @@ import org.junit.Rule
 import org.junit.Test
 
 class ReadReceiptBottomSheetPresenterTests {
-
     @get:Rule
     val warmUpRule = WarmUpRule()
 

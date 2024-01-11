@@ -36,7 +36,6 @@ class RoomDetailsEditNode @AssistedInject constructor(
     private val presenter: RoomDetailsEditPresenter,
     private val analyticsService: AnalyticsService,
 ) : Node(buildContext, plugins = plugins) {
-
     init {
         lifecycle.subscribe(
             onResume = {

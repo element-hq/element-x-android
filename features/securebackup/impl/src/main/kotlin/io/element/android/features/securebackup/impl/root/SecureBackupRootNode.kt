@@ -39,7 +39,6 @@ class SecureBackupRootNode @AssistedInject constructor(
     buildContext = buildContext,
     plugins = plugins
 ) {
-
     interface Callback : Plugin {
         fun onSetupClicked()
         fun onChangeClicked()

@@ -39,7 +39,6 @@ class PdfPage(
     private val pdfRenderer: PdfRenderer,
     private val coroutineScope: CoroutineScope,
 ) {
-
     sealed interface State {
         data class Loading(val width: Int, val height: Int) : State
         data class Loaded(val bitmap: Bitmap) : State

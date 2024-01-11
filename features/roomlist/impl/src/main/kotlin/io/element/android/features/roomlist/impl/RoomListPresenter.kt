@@ -62,7 +62,6 @@ class RoomListPresenter @Inject constructor(
     private val featureFlagService: FeatureFlagService,
     private val indicatorService: IndicatorService,
 ) : Presenter<RoomListState> {
-
     @Composable
     override fun present(): RoomListState {
         val leaveRoomState = leaveRoomPresenter.present()

@@ -20,7 +20,6 @@ import com.google.common.truth.Truth.assertThat
 import org.junit.Test
 
 internal class LocationKtTest {
-
     @Test
     fun `parseGeoUri - returns null for invalid urls`() {
         assertThat(Location.fromGeoUri("")).isNull()

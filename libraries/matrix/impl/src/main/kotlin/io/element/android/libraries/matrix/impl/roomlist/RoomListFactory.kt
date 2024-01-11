@@ -39,7 +39,6 @@ internal class RoomListFactory(
     private val dispatcher: CoroutineDispatcher,
     private val roomSummaryDetailsFactory: RoomSummaryDetailsFactory = RoomSummaryDetailsFactory(),
 ) {
-
     /**
      * Creates a room list that can be used to load more rooms and filter them dynamically.
      */
@@ -98,7 +97,6 @@ private class RustDynamicRoomList(
     private val processor: RoomSummaryListProcessor,
     override val pageSize: Int,
 ) : DynamicRoomList {
-
     override suspend fun rebuildSummaries() {
         processor.rebuildRoomSummaries()
     }
