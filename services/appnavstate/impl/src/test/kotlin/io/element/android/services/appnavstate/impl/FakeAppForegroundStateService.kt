@@ -23,7 +23,6 @@ import kotlinx.coroutines.flow.StateFlow
 class FakeAppForegroundStateService(
     initialValue: Boolean = true,
 ) : AppForegroundStateService {
-
     private val state = MutableStateFlow(initialValue)
     override val isInForeground: StateFlow<Boolean> = state
 

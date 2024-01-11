@@ -26,7 +26,6 @@ data class CustomReactionState(
     val eventSink: (CustomReactionEvents) -> Unit,
 ) {
     sealed interface Target {
-
         data object None : Target
         data class Loading(val event: TimelineItem.Event) : Target
         data class Success(

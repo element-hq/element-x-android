@@ -21,7 +21,6 @@ import kotlinx.collections.immutable.toImmutableList
 import org.matrix.rustcomponents.sdk.SearchUsersResults
 
 object UserSearchResultMapper {
-
     fun map(result: SearchUsersResults): MatrixSearchUserResults {
         return MatrixSearchUserResults(
             results = result.results.map(UserProfileMapper::map).toImmutableList(),

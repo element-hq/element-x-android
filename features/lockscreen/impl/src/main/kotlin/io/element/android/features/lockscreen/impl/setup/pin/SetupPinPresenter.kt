@@ -43,7 +43,6 @@ class SetupPinPresenter @Inject constructor(
     private val buildMeta: BuildMeta,
     private val pinCodeManager: PinCodeManager,
 ) : Presenter<SetupPinState> {
-
     @Composable
     override fun present(): SetupPinState {
         var choosePinEntry by remember {

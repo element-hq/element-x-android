@@ -34,7 +34,6 @@ class NotificationsOptInNode @AssistedInject constructor(
     @Assisted plugins: List<Plugin>,
     presenterFactory: NotificationsOptInPresenter.Factory,
 ) : Node(buildContext, plugins = plugins) {
-
     interface Callback : NodeInputs {
         fun onNotificationsOptInFinished()
     }

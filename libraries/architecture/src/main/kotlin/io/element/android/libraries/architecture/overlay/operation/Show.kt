@@ -29,7 +29,6 @@ import kotlinx.parcelize.RawValue
 data class Show<T : Any>(
     private val element: @RawValue T
 ) : OverlayOperation<T> {
-
     override fun isApplicable(elements: BackStackElements<T>): Boolean =
         element != elements.activeElement
 

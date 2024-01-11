@@ -36,7 +36,6 @@ private val fqcnIgnore = listOf(
  * A Timber tree that passes logs to the Rust SDK.
  */
 internal class RustTracingTree(private val retrieveFromStackTrace: Boolean) : Timber.Tree() {
-
     override fun log(priority: Int, tag: String?, message: String, t: Throwable?) {
         val location = if (retrieveFromStackTrace) {
             getLogEventLocationFromStackTrace()

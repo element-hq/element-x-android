@@ -26,13 +26,11 @@ import javax.inject.Inject
 
 @ContributesBinding(AppScope::class)
 class DefaultLockScreenEntryPoint @Inject constructor() : LockScreenEntryPoint {
-
     override fun nodeBuilder(parentNode: Node, buildContext: BuildContext): LockScreenEntryPoint.NodeBuilder {
         var innerTarget: LockScreenEntryPoint.Target = LockScreenEntryPoint.Target.Unlock
         val callbacks = mutableListOf<LockScreenEntryPoint.Callback>()
 
         return object : LockScreenEntryPoint.NodeBuilder {
-
             override fun callback(callback: LockScreenEntryPoint.Callback): LockScreenEntryPoint.NodeBuilder {
                 callbacks += callback
                 return this

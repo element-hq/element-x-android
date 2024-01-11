@@ -52,7 +52,6 @@ class LockScreenSetupFlowNode @AssistedInject constructor(
     buildContext = buildContext,
     plugins = plugins,
 ) {
-
     interface Callback : Plugin {
         fun onSetupDone()
     }
@@ -70,7 +69,6 @@ class LockScreenSetupFlowNode @AssistedInject constructor(
     }
 
     private val pinCodeManagerCallback = object : DefaultPinCodeManagerCallback() {
-
         override fun onPinCodeCreated() {
             backstack.newRoot(NavTarget.Biometric)
         }

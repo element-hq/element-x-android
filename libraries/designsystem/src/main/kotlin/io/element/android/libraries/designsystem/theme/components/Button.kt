@@ -259,11 +259,14 @@ sealed interface IconSource {
 }
 
 enum class ButtonSize {
-    Medium, Large
+    Medium,
+    Large
 }
 
 internal enum class ButtonStyle {
-    Filled, Outlined, Text;
+    Filled,
+    Outlined,
+    Text;
 
     @Composable
     fun getColors(destructive: Boolean): ButtonColors = when (this) {

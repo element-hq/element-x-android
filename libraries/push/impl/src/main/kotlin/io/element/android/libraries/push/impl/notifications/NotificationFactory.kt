@@ -34,7 +34,6 @@ class NotificationFactory @Inject constructor(
     private val roomGroupMessageCreator: RoomGroupMessageCreator,
     private val summaryGroupMessageCreator: SummaryGroupMessageCreator
 ) {
-
     suspend fun Map<RoomId, ProcessedMessageEvents>.toNotifications(
         currentUser: MatrixUser,
         imageLoader: ImageLoader,

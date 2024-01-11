@@ -53,7 +53,6 @@ class MessagesNode @AssistedInject constructor(
     private val timelineItemPresenterFactories: TimelineItemPresenterFactories,
     private val mediaPlayer: MediaPlayer,
 ) : Node(buildContext, plugins = plugins), MessagesNavigator {
-
     private val presenter = presenterFactory.create(this)
     private val callback = plugins<Callback>().firstOrNull()
 

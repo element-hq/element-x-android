@@ -35,7 +35,6 @@ const val A_SHORT_DESCRIPTION = "bug!"
 const val A_LONG_DESCRIPTION = "I have seen a bug!"
 
 class BugReportPresenterTest {
-
     @get:Rule
     val warmUpRule = WarmUpRule()
 

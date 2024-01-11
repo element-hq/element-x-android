@@ -23,7 +23,6 @@ import io.element.android.libraries.ui.strings.CommonStrings
 import org.junit.Test
 
 class ErrorFormatterTest {
-
     // region loginError
     @Test
     fun `loginError - invalid unknown error returns unknown error message`() {

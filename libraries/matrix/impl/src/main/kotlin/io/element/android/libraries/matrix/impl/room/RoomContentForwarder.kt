@@ -35,7 +35,6 @@ import kotlin.time.Duration.Companion.milliseconds
 class RoomContentForwarder(
     private val roomListService: RoomListService,
 ) {
-
     /**
      * Forwards the event with the given [eventId] from the [fromTimeline] to the given [toRoomIds].
      * @param fromTimeline the room to forward the event from

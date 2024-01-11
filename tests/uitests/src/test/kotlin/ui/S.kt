@@ -58,7 +58,6 @@ import java.util.Locale
  */
 @RunWith(TestParameterInjector::class)
 class S {
-
     object PreviewProvider : TestParameter.TestParameterValuesProvider {
         override fun provideValues(): List<TestPreview> {
             val metadata = Showkase.getMetadata()
@@ -88,8 +87,10 @@ class S {
     fun t(
         @TestParameter(valuesProvider = PreviewProvider::class) componentTestPreview: TestPreview,
         @TestParameter baseDeviceConfig: BaseDeviceConfig,
-        @TestParameter(value = ["1.0"/*, "1.5"*/]) fontScale: Float,
-        @TestParameter(value = ["en" /*"fr", "de", "ru"*/]) localeStr: String,
+        // @TestParameter(value = ["1.0", "1.5"]) fontScale: Float,
+        @TestParameter(value = ["1.0"]) fontScale: Float,
+        // @TestParameter(value = ["en" "fr", "de", "ru"]) localeStr: String,
+        @TestParameter(value = ["en"]) localeStr: String,
     ) {
         val locale = localeStr.toLocale()
         Locale.setDefault(locale) // Needed for regional settings, as first day of week

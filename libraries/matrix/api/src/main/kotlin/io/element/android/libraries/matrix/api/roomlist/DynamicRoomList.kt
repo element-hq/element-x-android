@@ -28,7 +28,6 @@ import kotlinx.coroutines.flow.onEach
  * It lets load rooms on demand and filter them.
  */
 interface DynamicRoomList : RoomList {
-
     sealed interface Filter {
         /**
          * No filter applied.

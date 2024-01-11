@@ -61,7 +61,6 @@ class ThumbnailFactory @Inject constructor(
     @ApplicationContext private val context: Context,
     private val sdkIntProvider: BuildVersionSdkIntProvider
 ) {
-
     @SuppressLint("NewApi")
     suspend fun createImageThumbnail(file: File): ThumbnailResult? {
         return createThumbnail { cancellationSignal ->

@@ -34,11 +34,10 @@ data class NotificationEventQueue(
      * An in memory FIFO cache of the seen events.
      * Acts as a notification debouncer to stop already dismissed push notifications from
      * displaying again when the /sync response is delayed.
+     * TODO Should be per session, so the key must be Pair<SessionId, EventId>.
      */
-    // TODO Should be per session, so the key must be Pair<SessionId, EventId>.
     private val seenEventIds: CircularCache<EventId>
 ) {
-
     fun markRedacted(eventIds: List<EventId>) {
         eventIds.forEach { redactedId ->
             queue.replace(redactedId) {

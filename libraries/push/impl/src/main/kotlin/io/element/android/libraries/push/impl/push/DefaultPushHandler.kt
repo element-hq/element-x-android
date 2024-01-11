@@ -52,7 +52,6 @@ class DefaultPushHandler @Inject constructor(
     private val buildMeta: BuildMeta,
     private val matrixAuthenticationService: MatrixAuthenticationService,
 ) : PushHandler {
-
     private val coroutineScope = CoroutineScope(SupervisorJob())
 
     // UI handler

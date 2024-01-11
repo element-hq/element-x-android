@@ -42,7 +42,6 @@ class PreferencesLockScreenStore @Inject constructor(
     @ApplicationContext private val context: Context,
     private val lockScreenConfig: LockScreenConfig,
 ) : LockScreenStore {
-
     private val pinCodeKey = stringPreferencesKey("encoded_pin_code")
     private val remainingAttemptsKey = intPreferencesKey("remaining_pin_code_attempts")
     private val biometricUnlockKey = booleanPreferencesKey("biometric_unlock_enabled")

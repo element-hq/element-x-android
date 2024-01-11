@@ -56,7 +56,8 @@ internal fun BlockUserSection(state: RoomMemberDetailsState, modifier: Modifier 
                 val event = when (state.isBlocked.prevData) {
                     true -> RoomMemberDetailsEvents.UnblockUser(needsConfirmation = false)
                     false -> RoomMemberDetailsEvents.BlockUser(needsConfirmation = false)
-                    null -> /*Should not happen */ RoomMemberDetailsEvents.ClearBlockUserError
+                    // null case Should not happen
+                    null -> RoomMemberDetailsEvents.ClearBlockUserError
                 }
                 state.eventSink(event)
             },

@@ -25,7 +25,6 @@ import timber.log.Timber
 internal class FormattedJsonHttpLogger(
     private val level: HttpLoggingInterceptor.Level
 ) : HttpLoggingInterceptor.Logger {
-
     companion object {
         private const val INDENT_SPACE = 2
     }

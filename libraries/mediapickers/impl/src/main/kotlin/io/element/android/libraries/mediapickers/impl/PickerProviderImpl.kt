@@ -38,7 +38,6 @@ import javax.inject.Inject
 
 @ContributesBinding(AppScope::class)
 class PickerProviderImpl(private val isInTest: Boolean) : PickerProvider {
-
     @Inject
     constructor() : this(false)
 

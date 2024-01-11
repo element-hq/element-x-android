@@ -32,7 +32,7 @@ android {
 // Workaround: `kover` tasks somehow trigger the screenshot tests with a broken configuration, removing
 // any previous test results and not creating new ones. This is a workaround to disable the screenshot tests
 // when the `kover` tasks are detected.
-tasks.withType<Test>() {
+tasks.withType<Test> {
     if (project.gradle.startParameter.taskNames.any { it.contains("kover", ignoreCase = true) }) {
         println("WARNING: Kover task detected, disabling screenshot test task $name.")
         isEnabled = false

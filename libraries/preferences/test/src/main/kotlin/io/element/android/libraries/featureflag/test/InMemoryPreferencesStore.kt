@@ -26,41 +26,41 @@ class InMemoryPreferencesStore(
     customElementCallBaseUrl: String? = null,
     theme: String? = null,
 ) : PreferencesStore {
-    private var _isRichTextEditorEnabled = MutableStateFlow(isRichTextEditorEnabled)
-    private var _isDeveloperModeEnabled = MutableStateFlow(isDeveloperModeEnabled)
-    private var _customElementCallBaseUrl = MutableStateFlow(customElementCallBaseUrl)
-    private var _theme = MutableStateFlow(theme)
+    private val isRichTextEditorEnabled = MutableStateFlow(isRichTextEditorEnabled)
+    private val isDeveloperModeEnabled = MutableStateFlow(isDeveloperModeEnabled)
+    private val customElementCallBaseUrl = MutableStateFlow(customElementCallBaseUrl)
+    private val theme = MutableStateFlow(theme)
 
     override suspend fun setRichTextEditorEnabled(enabled: Boolean) {
-        _isRichTextEditorEnabled.value = enabled
+        isRichTextEditorEnabled.value = enabled
     }
 
     override fun isRichTextEditorEnabledFlow(): Flow<Boolean> {
-        return _isRichTextEditorEnabled
+        return isRichTextEditorEnabled
     }
 
     override suspend fun setDeveloperModeEnabled(enabled: Boolean) {
-        _isDeveloperModeEnabled.value = enabled
+        isDeveloperModeEnabled.value = enabled
     }
 
     override fun isDeveloperModeEnabledFlow(): Flow<Boolean> {
-        return _isDeveloperModeEnabled
+        return isDeveloperModeEnabled
     }
 
     override suspend fun setCustomElementCallBaseUrl(string: String?) {
-        _customElementCallBaseUrl.tryEmit(string)
+        customElementCallBaseUrl.tryEmit(string)
     }
 
     override fun getCustomElementCallBaseUrlFlow(): Flow<String?> {
-        return _customElementCallBaseUrl
+        return customElementCallBaseUrl
     }
 
     override suspend fun setTheme(theme: String) {
-        _theme.value = theme
+        this.theme.value = theme
     }
 
     override fun getThemeFlow(): Flow<String?> {
-        return _theme
+        return theme
     }
 
     override suspend fun reset() {

@@ -20,7 +20,6 @@ import io.element.android.features.poll.api.actions.EndPollAction
 import io.element.android.libraries.matrix.api.core.EventId
 
 class FakeEndPollAction : EndPollAction {
-
     private var executionCount = 0
 
     fun verifyExecutionCount(count: Int) {

@@ -21,7 +21,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 
 class FakeUserPushStore : UserPushStore {
-
     private var pushProviderName: String? = null
     private var currentRegisteredPushKey: String? = null
     private val notificationEnabledForDevice = MutableStateFlow(true)

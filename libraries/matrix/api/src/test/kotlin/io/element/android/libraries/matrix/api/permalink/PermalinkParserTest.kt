@@ -24,7 +24,6 @@ import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
 class PermalinkParserTest {
-
     @Test
     fun `parsing an invalid url returns a fallback link`() {
         val url = "https://element.io"

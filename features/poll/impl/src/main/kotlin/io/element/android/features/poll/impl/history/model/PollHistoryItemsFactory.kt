@@ -30,7 +30,6 @@ class PollHistoryItemsFactory @Inject constructor(
     private val daySeparatorFormatter: DaySeparatorFormatter,
     private val dispatchers: CoroutineDispatchers,
 ) {
-
     suspend fun create(timelineItems: List<MatrixTimelineItem>): PollHistoryItems = withContext(dispatchers.computation) {
         val past = ArrayList<PollHistoryItem>()
         val ongoing = ArrayList<PollHistoryItem>()

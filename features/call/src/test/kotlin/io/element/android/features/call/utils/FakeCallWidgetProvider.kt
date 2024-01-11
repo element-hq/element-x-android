@@ -25,7 +25,6 @@ class FakeCallWidgetProvider(
     private val widgetDriver: FakeWidgetDriver = FakeWidgetDriver(),
     private val url: String = "https://call.element.io",
 ) : CallWidgetProvider {
-
     var getWidgetCalled = false
         private set
 

@@ -72,7 +72,7 @@ allprojects {
     configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {
         // See https://github.com/pinterest/ktlint/releases/
         // TODO Regularly check for new version here ^
-        version.set("0.48.2")
+        version.set("1.1.1")
         android.set(true)
         ignoreFailures.set(false)
         enableExperimentalRules.set(true)
@@ -100,8 +100,8 @@ allprojects {
         kotlinOptions.allWarningsAsErrors = project.properties["allWarningsAsErrors"] == "true"
 
         kotlinOptions {
-            // Uncomment to suppress Compose Kotlin compiler compatibility warning
             /*
+            // Uncomment to suppress Compose Kotlin compiler compatibility warning
             freeCompilerArgs += listOf(
                 "-P",
                 "plugin:androidx.compose.compiler.plugins.kotlin:suppressKotlinVersionCompatibilityCheck=true"
@@ -194,7 +194,7 @@ subprojects {
 
 // Workaround for https://github.com/airbnb/Showkase/issues/335
 subprojects {
-    tasks.withType<KspTask>() {
+    tasks.withType<KspTask> {
         doLast {
             fileTree(layout.buildDirectory).apply { include("**/*ShowkaseExtension*.kt") }.files.forEach { file ->
                 ReplaceRegExp().apply {

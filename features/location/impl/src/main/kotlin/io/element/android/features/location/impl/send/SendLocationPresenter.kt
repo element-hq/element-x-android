@@ -47,7 +47,6 @@ class SendLocationPresenter @Inject constructor(
     private val locationActions: LocationActions,
     private val buildMeta: BuildMeta,
 ) : Presenter<SendLocationState> {
-
     private val permissionsPresenter = permissionsPresenterFactory.create(MapDefaults.permissions)
 
     @Composable

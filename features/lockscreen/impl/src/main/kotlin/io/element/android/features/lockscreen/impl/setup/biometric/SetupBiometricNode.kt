@@ -34,7 +34,6 @@ class SetupBiometricNode @AssistedInject constructor(
     @Assisted plugins: List<Plugin>,
     private val presenter: SetupBiometricPresenter,
 ) : Node(buildContext, plugins = plugins) {
-
     interface Callback : Plugin {
         fun onBiometricSetupDone()
     }

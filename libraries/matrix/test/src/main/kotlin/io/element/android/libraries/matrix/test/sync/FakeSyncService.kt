@@ -22,7 +22,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
 class FakeSyncService : SyncService {
-
     private val syncStateFlow = MutableStateFlow(SyncState.Idle)
 
     fun simulateError() {

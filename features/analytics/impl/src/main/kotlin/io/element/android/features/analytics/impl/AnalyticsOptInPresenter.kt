@@ -30,7 +30,6 @@ class AnalyticsOptInPresenter @Inject constructor(
     private val buildMeta: BuildMeta,
     private val analyticsService: AnalyticsService,
 ) : Presenter<AnalyticsOptInState> {
-
     @Composable
     override fun present(): AnalyticsOptInState {
         val localCoroutineScope = rememberCoroutineScope()

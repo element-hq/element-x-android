@@ -28,7 +28,6 @@ import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
 class ToPlainTextTest {
-
     @Test
     fun `Document toPlainText - returns a plain text version of the document`() {
         val document = Jsoup.parse(

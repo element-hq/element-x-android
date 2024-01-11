@@ -38,7 +38,7 @@ class MarkAsReadActionFactory @Inject constructor(
     private val clock: SystemClock,
 ) {
     fun create(roomInfo: RoomEventGroupInfo): NotificationCompat.Action? {
-        if (!NotificationConfig.supportMarkAsReadAction) return null
+        if (!NotificationConfig.SUPPORT_MARK_AS_READ_ACTION) return null
         val sessionId = roomInfo.sessionId.value
         val roomId = roomInfo.roomId.value
         val intent = Intent(context, NotificationBroadcastReceiver::class.java)

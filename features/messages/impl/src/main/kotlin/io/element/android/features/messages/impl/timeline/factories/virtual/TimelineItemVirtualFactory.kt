@@ -27,7 +27,6 @@ import javax.inject.Inject
 class TimelineItemVirtualFactory @Inject constructor(
     private val daySeparatorFactory: TimelineItemDaySeparatorFactory,
 ) {
-
     fun create(
         virtualTimelineItem: MatrixTimelineItem.Virtual,
     ): TimelineItem.Virtual {

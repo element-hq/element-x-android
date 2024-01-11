@@ -22,7 +22,6 @@ import kotlinx.collections.immutable.toPersistentList
 data class PinEntry(
     val digits: ImmutableList<PinDigit>,
 ) {
-
     companion object {
         fun createEmpty(size: Int): PinEntry {
             val digits = List(size) { PinDigit.Empty }

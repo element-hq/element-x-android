@@ -20,7 +20,6 @@ import io.element.android.libraries.matrix.api.timeline.item.virtual.VirtualTime
 import org.matrix.rustcomponents.sdk.VirtualTimelineItem as RustVirtualTimelineItem
 
 class VirtualTimelineItemMapper {
-
     fun map(virtualTimelineItem: RustVirtualTimelineItem): VirtualTimelineItem {
         return when (virtualTimelineItem) {
             is RustVirtualTimelineItem.DayDivider -> VirtualTimelineItem.DayDivider(virtualTimelineItem.ts.toLong())

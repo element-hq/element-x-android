@@ -34,8 +34,8 @@ class FirebasePushProvider @Inject constructor(
     private val firebaseTroubleshooter: FirebaseTroubleshooter,
     private val pusherSubscriber: PusherSubscriber,
 ) : PushProvider {
-    override val index = FirebaseConfig.index
-    override val name = FirebaseConfig.name
+    override val index = FirebaseConfig.INDEX
+    override val name = FirebaseConfig.NAME
 
     override fun getDistributors(): List<Distributor> {
         return listOf(Distributor("Firebase", "Firebase"))
@@ -45,14 +45,14 @@ class FirebasePushProvider @Inject constructor(
         val pushKey = firebaseStore.getFcmToken() ?: return Unit.also {
             Timber.tag(loggerTag.value).w("Unable to register pusher, Firebase token is not known.")
         }
-        pusherSubscriber.registerPusher(matrixClient, pushKey, FirebaseConfig.pusher_http_url)
+        pusherSubscriber.registerPusher(matrixClient, pushKey, FirebaseConfig.PUSHER_HTTP_URL)
     }
 
     override suspend fun unregister(matrixClient: MatrixClient) {
         val pushKey = firebaseStore.getFcmToken() ?: return Unit.also {
             Timber.tag(loggerTag.value).w("Unable to unregister pusher, Firebase token is not known.")
         }
-        pusherSubscriber.unregisterPusher(matrixClient, pushKey, FirebaseConfig.pusher_http_url)
+        pusherSubscriber.unregisterPusher(matrixClient, pushKey, FirebaseConfig.PUSHER_HTTP_URL)
     }
 
     override suspend fun troubleshoot(): Result<Unit> {

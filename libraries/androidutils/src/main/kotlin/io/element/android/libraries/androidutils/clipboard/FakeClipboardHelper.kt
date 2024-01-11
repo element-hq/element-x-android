@@ -17,7 +17,6 @@
 package io.element.android.libraries.androidutils.clipboard
 
 class FakeClipboardHelper : ClipboardHelper {
-
     var clipboardContents: Any? = null
 
     override fun copyPlainText(text: String) {

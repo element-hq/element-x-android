@@ -38,7 +38,6 @@ import javax.inject.Inject
 class KeyStoreSecretKeyRepository @Inject constructor(
     private val keyStore: KeyStore,
 ) : SecretKeyRepository {
-
     // False positive lint issue
     @SuppressLint("WrongConstant")
     override fun getOrCreateKey(alias: String, requiresUserAuthentication: Boolean): SecretKey {

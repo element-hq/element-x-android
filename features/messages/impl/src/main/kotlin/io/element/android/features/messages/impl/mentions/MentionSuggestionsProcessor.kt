@@ -29,7 +29,6 @@ import io.element.android.libraries.textcomposer.model.SuggestionType
  * This class is responsible for processing mention suggestions when `@`, `/` or `#` are type in the composer.
  */
 object MentionSuggestionsProcessor {
-
     // We don't want to retrieve thousands of members
     private const val MAX_BATCH_ITEMS = 100
 

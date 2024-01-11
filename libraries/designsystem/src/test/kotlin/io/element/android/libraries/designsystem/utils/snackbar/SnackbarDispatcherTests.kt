@@ -22,7 +22,6 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
 class SnackbarDispatcherTests {
-
     @Test
     fun `given an empty queue the flow emits a null item`() = runTest {
         val snackbarDispatcher = SnackbarDispatcher()

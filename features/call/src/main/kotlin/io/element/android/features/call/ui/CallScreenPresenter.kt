@@ -63,7 +63,6 @@ class CallScreenPresenter @AssistedInject constructor(
     private val matrixClientsProvider: MatrixClientProvider,
     private val appCoroutineScope: CoroutineScope,
 ) : Presenter<CallScreenState> {
-
     @AssistedFactory
     interface Factory {
         fun create(callType: CallType, navigator: CallScreenNavigator): CallScreenPresenter

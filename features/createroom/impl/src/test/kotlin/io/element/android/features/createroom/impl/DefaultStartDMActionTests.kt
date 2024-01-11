@@ -32,7 +32,6 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
 class DefaultStartDMActionTests {
-
     @Test
     fun `when dm is found, assert state is updated with given room id`() = runTest {
         val matrixClient = FakeMatrixClient().apply {

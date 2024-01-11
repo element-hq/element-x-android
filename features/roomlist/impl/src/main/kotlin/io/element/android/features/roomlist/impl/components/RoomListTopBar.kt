@@ -229,7 +229,7 @@ private fun DefaultRoomListTopBar(
                             contentDescription = stringResource(CommonStrings.action_search),
                         )
                     }
-                    if (RoomListConfig.hasDropdownMenu) {
+                    if (RoomListConfig.HAS_DROP_DOWN_MENU) {
                         var showMenu by remember { mutableStateOf(false) }
                         IconButton(
                             onClick = { showMenu = !showMenu }
@@ -243,7 +243,7 @@ private fun DefaultRoomListTopBar(
                             expanded = showMenu,
                             onDismissRequest = { showMenu = false }
                         ) {
-                            if (RoomListConfig.showInviteMenuItem) {
+                            if (RoomListConfig.SHOW_INVITE_MENU_ITEM) {
                                 DropdownMenuItem(
                                     onClick = {
                                         showMenu = false
@@ -259,7 +259,7 @@ private fun DefaultRoomListTopBar(
                                     }
                                 )
                             }
-                            if (RoomListConfig.showReportProblemMenuItem) {
+                            if (RoomListConfig.SHOW_REPORT_PROBLEM_MENU_ITEM) {
                                 DropdownMenuItem(
                                     onClick = {
                                         showMenu = false

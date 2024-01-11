@@ -14,10 +14,19 @@ ij_smart_tabs = false
 ij_visual_guides = none
 ij_wrap_on_typing = false
 
-# Ktlint rule, for more information see https://pinterest.github.io/ktlint/faq/#why-is-editorconfig-property-disabled_rules-deprecated-and-how-do-i-resolve-this
+# Ktlint rule, for more information see https://pinterest.github.io/ktlint/1.1.1/faq/#how-do-i-enable-or-disable-a-rule
 ktlint_standard_wrapping = disabled
 ktlint_standard_trailing-comma-on-call-site = disabled
+ktlint_standard_trailing-comma-on-declaration-site = disabled
+ktlint_standard_multiline-expression-wrapping = disabled
+ktlint_standard_string-template-indent = disabled
 ktlint_standard_spacing-between-declarations-with-annotations = disabled
+ktlint_standard_function-signature = disabled
+ktlint_standard_annotation = disabled
+ktlint_standard_parameter-list-wrapping = disabled
+ktlint_standard_indent = disabled
+ktlint_standard_blank-line-before-declaration = disabled
+ktlint_function_naming_ignore_when_annotated_with=Composable
 
 [*.java]
 ij_java_align_consecutive_assignments = false

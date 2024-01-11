@@ -28,7 +28,6 @@ import io.element.android.libraries.push.impl.notifications.model.NotifiableEven
 import org.junit.Test
 
 class NotificationEventQueueTest {
-
     private val seenIdsCache = CircularCache.create<EventId>(5)
 
     @Test

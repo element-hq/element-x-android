@@ -26,7 +26,6 @@ class FakeRageshakeDataStore(
     isEnabled: Boolean = false,
     sensitivity: Float = A_SENSITIVITY,
 ) : RageshakeDataStore {
-
     private val isEnabledFlow = MutableStateFlow(isEnabled)
     override fun isEnabled(): Flow<Boolean> = isEnabledFlow
 

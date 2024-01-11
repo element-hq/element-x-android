@@ -28,7 +28,6 @@ data class WidgetMessage(
     @SerialName("action") val action: Action,
     @SerialName("data") val data: JsonElement? = null,
 ) {
-
     @Serializable
     enum class Direction {
         @SerialName("fromWidget")

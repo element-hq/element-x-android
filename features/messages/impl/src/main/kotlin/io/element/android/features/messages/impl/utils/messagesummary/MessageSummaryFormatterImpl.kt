@@ -42,7 +42,6 @@ import javax.inject.Inject
 class MessageSummaryFormatterImpl @Inject constructor(
     @ApplicationContext private val context: Context,
 ) : MessageSummaryFormatter {
-
     companion object {
         // Max characters to display in the summary message. This works around https://github.com/element-hq/element-x-android/issues/2105
         private const val MAX_SAFE_LENGTH = 500

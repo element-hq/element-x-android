@@ -26,7 +26,6 @@ import io.element.android.libraries.architecture.Presenter
 import javax.inject.Inject
 
 class ReadReceiptBottomSheetPresenter @Inject constructor() : Presenter<ReadReceiptBottomSheetState> {
-
     @Composable
     override fun present(): ReadReceiptBottomSheetState {
         var selectedEvent: TimelineItem.Event? by remember { mutableStateOf(null) }

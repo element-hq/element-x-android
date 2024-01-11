@@ -32,7 +32,6 @@ import kotlinx.collections.immutable.ImmutableList
 
 @Immutable
 sealed interface TimelineItem {
-
     fun identifier(): String = when (this) {
         is Event -> id
         is Virtual -> id
@@ -73,7 +72,6 @@ sealed interface TimelineItem {
         val debugInfo: TimelineItemDebugInfo,
         val origin: TimelineItemEventOrigin?,
     ) : TimelineItem {
-
         val showSenderInformation = groupPosition.isNew() && !isMine
 
         val safeSenderName: String = senderDisplayName ?: senderId.value

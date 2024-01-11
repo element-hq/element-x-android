@@ -41,7 +41,6 @@ internal class CoilMediaFetcher(
     private val mediaData: MediaRequestData?,
     private val options: Options
 ) : Fetcher {
-
     override suspend fun fetch(): FetchResult? {
         if (mediaData?.source == null) return null
         return when (mediaData.kind) {
@@ -126,9 +125,7 @@ internal class CoilMediaFetcher(
     class AvatarFactory(
         private val context: Context,
         private val client: MatrixClient
-    ) :
-        Fetcher.Factory<AvatarData> {
-
+    ) : Fetcher.Factory<AvatarData> {
         override fun create(
             data: AvatarData,
             options: Options,

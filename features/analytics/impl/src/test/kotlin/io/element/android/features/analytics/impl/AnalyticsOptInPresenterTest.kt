@@ -30,7 +30,6 @@ import org.junit.Rule
 import org.junit.Test
 
 class AnalyticsOptInPresenterTest {
-
     @get:Rule
     val warmUpRule = WarmUpRule()
 

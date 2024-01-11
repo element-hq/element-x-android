@@ -36,7 +36,6 @@ class MatrixUserRepository @Inject constructor(
     private val client: MatrixClient,
     private val dataSource: UserListDataSource
 ) : UserRepository {
-
     override fun search(query: String): Flow<UserSearchResultState> = flow {
         val shouldQueryProfile = MatrixPatterns.isUserId(query) && !client.isMe(UserId(query))
         val shouldFetchSearchResults = query.length >= MINIMUM_SEARCH_LENGTH

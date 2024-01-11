@@ -85,7 +85,8 @@ fun RoomPrivacyOption(
                 .align(Alignment.CenterVertically)
                 .size(48.dp),
             selected = isSelected,
-            onClick = null // null recommended for accessibility with screenreaders
+            // null recommended for accessibility with screenreaders
+            onClick = null
         )
     }
 }

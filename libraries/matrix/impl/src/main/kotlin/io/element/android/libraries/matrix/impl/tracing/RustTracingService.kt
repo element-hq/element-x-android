@@ -28,7 +28,6 @@ import javax.inject.Inject
 
 @ContributesBinding(AppScope::class)
 class RustTracingService @Inject constructor(private val buildMeta: BuildMeta) : TracingService {
-
     override fun setupTracing(tracingConfiguration: TracingConfiguration) {
         val filter = tracingConfiguration.filterConfiguration
         val rustTracingConfiguration = org.matrix.rustcomponents.sdk.TracingConfiguration(

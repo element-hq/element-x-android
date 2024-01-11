@@ -34,7 +34,6 @@ import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class LogoutViewTest {
-
     @get:Rule val rule = createAndroidComposeRule<ComponentActivity>()
 
     @Test

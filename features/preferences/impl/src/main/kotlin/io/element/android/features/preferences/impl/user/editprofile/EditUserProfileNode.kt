@@ -35,7 +35,6 @@ class EditUserProfileNode @AssistedInject constructor(
     @Assisted plugins: List<Plugin>,
     presenterFactory: EditUserProfilePresenter.Factory,
 ) : Node(buildContext, plugins = plugins) {
-
     data class Inputs(
         val matrixUser: MatrixUser
     ) : NodeInputs

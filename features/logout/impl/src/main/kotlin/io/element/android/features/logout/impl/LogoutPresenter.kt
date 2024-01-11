@@ -47,7 +47,6 @@ class LogoutPresenter @Inject constructor(
     private val encryptionService: EncryptionService,
     private val featureFlagService: FeatureFlagService,
 ) : Presenter<LogoutState> {
-
     @Composable
     override fun present(): LogoutState {
         val localCoroutineScope = rememberCoroutineScope()

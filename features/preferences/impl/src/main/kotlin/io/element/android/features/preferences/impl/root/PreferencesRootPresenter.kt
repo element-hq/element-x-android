@@ -53,7 +53,6 @@ class PreferencesRootPresenter @Inject constructor(
     private val indicatorService: IndicatorService,
     private val directLogoutPresenter: DirectLogoutPresenter,
 ) : Presenter<PreferencesRootState> {
-
     @Composable
     override fun present(): PreferencesRootState {
         val matrixUser: MutableState<MatrixUser?> = rememberSaveable {

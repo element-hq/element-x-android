@@ -19,7 +19,6 @@ package io.element.android.features.createroom.impl.userlist
 import androidx.compose.runtime.Composable
 
 class FakeUserListPresenter : UserListPresenter {
-
     private var state = aUserListState()
 
     fun givenState(state: UserListState) {

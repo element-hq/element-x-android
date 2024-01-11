@@ -25,7 +25,6 @@ import io.element.android.libraries.matrix.test.A_ROOM_ID
 import kotlinx.coroutines.delay
 
 class FakeStartDMAction : StartDMAction {
-
     private var executeResult: AsyncAction<RoomId> = AsyncAction.Success(A_ROOM_ID)
 
     fun givenExecuteResult(result: AsyncAction<RoomId>) {

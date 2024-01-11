@@ -21,7 +21,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 
 interface MatrixTimeline : AutoCloseable {
-
     data class PaginationState(
         val isBackPaginating: Boolean,
         val hasMoreToLoadBackwards: Boolean,

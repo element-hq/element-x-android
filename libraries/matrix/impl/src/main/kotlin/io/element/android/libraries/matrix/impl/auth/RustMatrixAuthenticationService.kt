@@ -52,7 +52,6 @@ class RustMatrixAuthenticationService @Inject constructor(
     userAgentProvider: UserAgentProvider,
     private val rustMatrixClientFactory: RustMatrixClientFactory,
 ) : MatrixAuthenticationService {
-
     private val authService: RustAuthenticationService = RustAuthenticationService(
         basePath = baseDirectory.absolutePath,
         passphrase = null,

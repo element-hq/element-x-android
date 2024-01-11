@@ -22,7 +22,6 @@ import io.element.android.libraries.matrix.api.timeline.item.event.UnableToDecry
 import javax.inject.Inject
 
 class TimelineItemContentUTDFactory @Inject constructor() {
-
     fun create(content: UnableToDecryptContent): TimelineItemEventContent {
         return TimelineItemEncryptedContent(content.data)
     }

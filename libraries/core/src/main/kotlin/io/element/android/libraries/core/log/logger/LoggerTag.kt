@@ -23,7 +23,6 @@ package io.element.android.libraries.core.log.logger
  * Timber.tag(loggerTag.value).v("My log message")
  */
 open class LoggerTag(name: String, parentTag: LoggerTag? = null) {
-
     object PushLoggerTag : LoggerTag("Push")
     object NotificationLoggerTag : LoggerTag("Notification", PushLoggerTag)
 

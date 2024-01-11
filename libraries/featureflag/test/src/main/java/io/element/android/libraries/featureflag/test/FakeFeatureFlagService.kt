@@ -24,7 +24,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 class FakeFeatureFlagService(
     initialState: Map<String, Boolean> = emptyMap()
 ) : FeatureFlagService {
-
     private val enabledFeatures = initialState
         .map {
             it.key to MutableStateFlow(it.value)

@@ -51,7 +51,6 @@ class MediaViewerPresenter @AssistedInject constructor(
     private val localMediaActions: LocalMediaActions,
     private val snackbarDispatcher: SnackbarDispatcher,
 ) : Presenter<MediaViewerState> {
-
     @AssistedFactory
     interface Factory {
         fun create(inputs: MediaViewerNode.Inputs): MediaViewerPresenter

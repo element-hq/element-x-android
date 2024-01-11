@@ -93,7 +93,7 @@ private constructor(
 
     private fun createOutputBuffer(sampleRate: SampleRate): ShortArray {
         val bufferSizeInShorts = AudioRecord.getMinBufferSize(
-            sampleRate.hz,
+            sampleRate.HZ,
             config.format.channelMask,
             config.format.encoding
         )

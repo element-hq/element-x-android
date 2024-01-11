@@ -41,7 +41,7 @@ class UnifiedPushNewGatewayHandler @Inject constructor(
             Timber.w("Unable to retrieve session")
         }
         val userDataStore = userPushStoreFactory.create(userId)
-        if (userDataStore.getPushProviderName() == UnifiedPushConfig.name) {
+        if (userDataStore.getPushProviderName() == UnifiedPushConfig.NAME) {
             matrixAuthenticationService.restoreSession(userId).getOrNull()?.use { client ->
                 pusherSubscriber.registerPusher(client, endpoint, pushGateway)
             }

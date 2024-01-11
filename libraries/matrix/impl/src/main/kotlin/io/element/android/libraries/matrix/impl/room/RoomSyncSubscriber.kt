@@ -31,7 +31,6 @@ class RoomSyncSubscriber(
     private val roomListService: RoomListService,
     private val dispatchers: CoroutineDispatchers,
 ) {
-
     private val subscriptionCounts = HashMap<RoomId, Int>()
     private val mutex = Mutex()
 

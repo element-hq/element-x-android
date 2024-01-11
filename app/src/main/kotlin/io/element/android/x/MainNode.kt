@@ -48,7 +48,6 @@ class MainNode(
     plugins = plugins,
 ),
     DaggerComponentOwner {
-
     override val daggerComponent = (context as DaggerComponentOwner).daggerComponent
 
     override fun resolve(navTarget: RootNavTarget, buildContext: BuildContext): Node {

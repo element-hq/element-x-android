@@ -52,7 +52,6 @@ class CreatePollPresenter @AssistedInject constructor(
     @Assisted private val navigateUp: () -> Unit,
     @Assisted private val mode: CreatePollMode,
 ) : Presenter<CreatePollState> {
-
     @AssistedFactory
     interface Factory {
         fun create(backNavigator: () -> Unit, mode: CreatePollMode): CreatePollPresenter

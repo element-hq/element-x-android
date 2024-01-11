@@ -42,7 +42,6 @@ internal class MapPropertiesNode(
     cameraPositionState: CameraPositionState,
     locationSettings: MapLocationSettings,
 ) : MapNode {
-
     init {
         map.locationComponent.activateLocationComponent(
             LocationComponentActivationOptions.Builder(context, style)

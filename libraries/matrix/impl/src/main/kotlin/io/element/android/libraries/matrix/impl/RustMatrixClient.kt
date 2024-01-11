@@ -101,7 +101,6 @@ class RustMatrixClient(
     baseCacheDirectory: File,
     private val clock: SystemClock,
 ) : MatrixClient {
-
     override val sessionId: UserId = UserId(client.userId())
     private val innerRoomListService = syncService.roomListService()
     private val sessionDispatcher = dispatchers.io.limitedParallelism(64)

@@ -48,7 +48,6 @@ class DefaultFtueState @Inject constructor(
     private val lockScreenService: LockScreenService,
     private val matrixClient: MatrixClient,
 ) : FtueState {
-
     override val shouldDisplayFlow = MutableStateFlow(isAnyStepIncomplete())
 
     override suspend fun reset() {

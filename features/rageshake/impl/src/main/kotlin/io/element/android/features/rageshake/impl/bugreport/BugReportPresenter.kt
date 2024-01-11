@@ -42,12 +42,10 @@ class BugReportPresenter @Inject constructor(
     private val screenshotHolder: ScreenshotHolder,
     private val appCoroutineScope: CoroutineScope,
 ) : Presenter<BugReportState> {
-
     private class BugReporterUploadListener(
         private val sendingProgress: MutableFloatState,
         private val sendingAction: MutableState<AsyncAction<Unit>>
     ) : BugReporterListener {
-
         override fun onUploadCancelled() {
             sendingProgress.floatValue = 0f
             sendingAction.value = AsyncAction.Uninitialized

@@ -130,7 +130,8 @@ internal fun ExpandableBottomSheetScaffold(
             contentOverflows = contentHeight > maxHeight
 
             val peekHeight = min(
-                maxHeight, // prevent the sheet from expanding beyond the screen
+                // prevent the sheet from expanding beyond the screen
+                maxHeight,
                 contentHeight
             )
 

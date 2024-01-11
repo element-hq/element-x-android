@@ -29,7 +29,6 @@ import org.matrix.rustcomponents.sdk.RoomNotificationMode as RustRoomNotificatio
 class MatrixRoomInfoMapper(
     private val timelineItemMapper: EventTimelineItemMapper = EventTimelineItemMapper(),
 ) {
-
     fun map(rustRoomInfo: RustRoomInfo): MatrixRoomInfo = rustRoomInfo.use {
         return MatrixRoomInfo(
             id = it.id,

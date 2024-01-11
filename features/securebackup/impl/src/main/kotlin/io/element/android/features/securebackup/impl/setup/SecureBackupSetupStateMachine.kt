@@ -27,7 +27,6 @@ import com.freeletics.flowredux.dsl.State as MachineState
 class SecureBackupSetupStateMachine @Inject constructor() : FlowReduxStateMachine<SecureBackupSetupStateMachine.State, SecureBackupSetupStateMachine.Event>(
     initialState = State.Initial
 ) {
-
     init {
         spec {
             inState<State.Initial> {

@@ -95,7 +95,8 @@ fun EventDebugInfoView(
                 .fillMaxWidth()
                 .padding(padding) // Window insets
                 .consumeWindowInsets(padding)
-                .padding(horizontal = 16.dp) // Internal padding
+                // Internal padding
+                .padding(horizontal = 16.dp)
         ) {
             item {
                 Column(Modifier.padding(vertical = 10.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {

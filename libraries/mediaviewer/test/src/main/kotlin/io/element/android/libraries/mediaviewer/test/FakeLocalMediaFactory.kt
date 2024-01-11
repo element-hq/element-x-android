@@ -30,7 +30,6 @@ class FakeLocalMediaFactory(
     private val localMediaUri: Uri,
     private val fileExtensionExtractor: FileExtensionExtractor = FileExtensionExtractorWithoutValidation()
 ) : LocalMediaFactory {
-
     var fallbackMimeType: String = MimeTypes.OctetStream
     var fallbackName: String = "File name"
     var fallbackFileSize = "0B"

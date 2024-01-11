@@ -32,7 +32,6 @@ class AnalyticsSettingsNode @AssistedInject constructor(
     @Assisted plugins: List<Plugin>,
     private val presenter: AnalyticsSettingsPresenter,
 ) : Node(buildContext, plugins = plugins) {
-
     @Composable
     override fun View(modifier: Modifier) {
         val state = presenter.present()

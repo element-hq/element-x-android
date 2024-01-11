@@ -31,7 +31,6 @@ import org.robolectric.RuntimeEnvironment
 
 @RunWith(RobolectricTestRunner::class)
 class IntentProviderImplTest {
-
     @Test
     fun `test getViewRoomIntent with Session`() {
         val sut = createIntentProviderImpl()

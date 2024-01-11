@@ -17,5 +17,7 @@
 package io.element.android.libraries.matrix.api.timeline.item.event
 
 enum class TimelineItemEventOrigin {
-    LOCAL, SYNC, PAGINATION
+    LOCAL,
+    SYNC,
+    PAGINATION
 }

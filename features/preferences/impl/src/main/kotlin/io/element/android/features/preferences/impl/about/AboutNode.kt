@@ -36,7 +36,6 @@ class AboutNode @AssistedInject constructor(
     @Assisted plugins: List<Plugin>,
     private val presenter: AboutPresenter,
 ) : Node(buildContext, plugins = plugins) {
-
     private fun onElementLegalClicked(
         activity: Activity,
         darkTheme: Boolean,

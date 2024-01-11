@@ -42,7 +42,6 @@ import org.junit.Test
 
 @ExperimentalCoroutinesApi
 class RoomMemberListPresenterTests {
-
     @get:Rule
     val warmUpRule = WarmUpRule()
 

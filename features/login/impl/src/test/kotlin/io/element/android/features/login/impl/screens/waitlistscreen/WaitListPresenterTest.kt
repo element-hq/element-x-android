@@ -36,7 +36,6 @@ import org.junit.Rule
 import org.junit.Test
 
 class WaitListPresenterTest {
-
     @get:Rule
     val warmUpRule = WarmUpRule()
 

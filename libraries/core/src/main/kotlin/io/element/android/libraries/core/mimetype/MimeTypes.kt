@@ -19,6 +19,7 @@ package io.element.android.libraries.core.mimetype
 import io.element.android.libraries.core.bool.orFalse
 
 // The Android SDK does not provide constant for mime type, add some of them here
+@Suppress("ktlint:standard:property-naming")
 object MimeTypes {
     const val Any: String = "*/*"
     const val OctetStream = "application/octet-stream"

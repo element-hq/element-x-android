@@ -84,7 +84,7 @@ class FakeEncryptionService : EncryptionService {
     }
 
     override suspend fun resetRecoveryKey(): Result<String> = simulateLongTask {
-        return Result.success(fakeRecoveryKey)
+        return Result.success(FAKE_RECOVERY_KEY)
     }
 
     override suspend fun enableRecovery(waitForBackupsToUpload: Boolean): Result<Unit> = simulateLongTask {
@@ -108,6 +108,6 @@ class FakeEncryptionService : EncryptionService {
     }
 
     companion object {
-        const val fakeRecoveryKey = "fake"
+        const val FAKE_RECOVERY_KEY = "fake"
     }
 }

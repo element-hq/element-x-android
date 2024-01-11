@@ -43,7 +43,6 @@ class SecureBackupRootPresenter @Inject constructor(
     private val buildMeta: BuildMeta,
     private val snackbarDispatcher: SnackbarDispatcher,
 ) : Presenter<SecureBackupRootState> {
-
     @Composable
     override fun present(): SecureBackupRootState {
         val localCoroutineScope = rememberCoroutineScope()

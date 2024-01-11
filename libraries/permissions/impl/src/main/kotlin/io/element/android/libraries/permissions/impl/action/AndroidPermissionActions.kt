@@ -27,7 +27,6 @@ import javax.inject.Inject
 class AndroidPermissionActions @Inject constructor(
     @ApplicationContext private val context: Context
 ) : PermissionActions {
-
     override fun openSettings() {
         context.openAppSettingsPage()
     }

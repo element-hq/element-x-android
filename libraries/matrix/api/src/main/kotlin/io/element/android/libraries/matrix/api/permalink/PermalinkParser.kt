@@ -30,7 +30,6 @@ import java.net.URLDecoder
  * or client permalinks (e.g. <clientPermalinkBaseUrl>user/@chagai95:matrix.org)
  */
 object PermalinkParser {
-
     /**
      * Turns a uri string to a [PermalinkData].
      */

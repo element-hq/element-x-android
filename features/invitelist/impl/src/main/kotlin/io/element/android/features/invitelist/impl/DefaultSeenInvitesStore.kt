@@ -38,7 +38,6 @@ private val seenInvitesKey = stringSetPreferencesKey("seenInvites")
 class DefaultSeenInvitesStore @Inject constructor(
     @ApplicationContext context: Context
 ) : SeenInvitesStore {
-
     private val store = context.dataStore
 
     override fun seenRoomIds(): Flow<Set<RoomId>> =

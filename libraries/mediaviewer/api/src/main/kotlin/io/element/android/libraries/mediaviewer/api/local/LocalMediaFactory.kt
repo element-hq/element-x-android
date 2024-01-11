@@ -20,7 +20,6 @@ import android.net.Uri
 import io.element.android.libraries.matrix.api.media.MediaFile
 
 interface LocalMediaFactory {
-
     /**
      * This method will create a [LocalMedia] with the given [MediaFile] and [MediaInfo].
      */

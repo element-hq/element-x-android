@@ -35,7 +35,6 @@ class LoggedInNode @AssistedInject constructor(
     buildContext = buildContext,
     plugins = plugins
 ) {
-
     @Composable
     override fun View(modifier: Modifier) {
         val loggedInState = loggedInPresenter.present()

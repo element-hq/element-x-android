@@ -26,7 +26,6 @@ import javax.inject.Inject
 class DefaultRoomComponentFactory @Inject constructor(
     private val roomComponentBuilder: RoomComponent.Builder
 ) : RoomComponentFactory {
-
     override fun create(room: MatrixRoom): Any {
         return roomComponentBuilder.room(room).build()
     }

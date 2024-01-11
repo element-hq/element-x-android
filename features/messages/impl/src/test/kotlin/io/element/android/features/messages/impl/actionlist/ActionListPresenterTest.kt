@@ -39,7 +39,6 @@ import org.junit.Rule
 import org.junit.Test
 
 class ActionListPresenterTest {
-
     @get:Rule
     val warmUpRule = WarmUpRule()
 
@@ -427,7 +426,8 @@ class ActionListPresenterTest {
         }.test {
             val initialState = awaitItem()
             val messageEvent = aMessageEvent(
-                eventId = null, // No event id, so it's not sent yet
+                // No event id, so it's not sent yet
+                eventId = null,
                 isMine = true,
                 content = TimelineItemTextContent(body = A_MESSAGE, htmlDocument = null, isEdited = false, formattedBody = null),
             )

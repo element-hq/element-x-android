@@ -40,7 +40,6 @@ class NotificationsOptInPresenter @AssistedInject constructor(
     private val permissionStateProvider: PermissionStateProvider,
     private val buildVersionSdkIntProvider: BuildVersionSdkIntProvider,
 ) : Presenter<NotificationsOptInState> {
-
     @AssistedFactory
     interface Factory {
         fun create(callback: NotificationsOptInNode.Callback): NotificationsOptInPresenter

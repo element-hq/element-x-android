@@ -29,7 +29,6 @@ class NotificationState(
      * Events are unique by their properties, we should be careful not to insert multiple events with the same event-id.
      */
     private val queuedEvents: NotificationEventQueue,
-
     /**
      * The last known rendered notifiable events.
      * We keep track of them in order to know which events have been removed from the eventList
@@ -37,7 +36,6 @@ class NotificationState(
      */
     private val renderedEvents: MutableList<ProcessedEvent<NotifiableEvent>>,
 ) {
-
     fun <T> updateQueuedEvents(
         action: (NotificationEventQueue, List<ProcessedEvent<NotifiableEvent>>) -> T
     ): T {

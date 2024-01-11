@@ -29,9 +29,9 @@ class UnifiedPushGatewayResolver @Inject constructor(
     private val coroutineDispatchers: CoroutineDispatchers,
 ) {
     suspend fun getGateway(endpoint: String): String? {
-        val gateway = UnifiedPushConfig.default_push_gateway_http_url
+        val gateway = UnifiedPushConfig.DEFAULT_PUSH_GATEWAY_HTTP_URL
         val url = URL(endpoint)
-        val port = if (url.port != -1) { ":${url.port}" } else { "" }
+        val port = if (url.port != -1) ":${url.port}" else ""
         val customBase = "${url.protocol}://${url.host}$port"
         val customUrl = "$customBase/_matrix/push/v1/notify"
         Timber.i("Testing $customUrl")

@@ -33,7 +33,6 @@ class MentionSpan(
     val endPadding: Int,
     val typeface: Typeface = Typeface.DEFAULT,
 ) : ReplacementSpan() {
-
     companion object {
         private const val MAX_LENGTH = 20
     }
