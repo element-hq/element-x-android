@@ -80,7 +80,7 @@ class DefaultBugReporterTest {
         server.shutdown()
         assertThat(onUploadCancelledCalled).isFalse()
         assertThat(onUploadFailedCalled).isFalse()
-        assertThat(progressValues.size).isEqualTo(10)
+        assertThat(progressValues.size).isEqualTo(11)
         assertThat(onUploadSucceedCalled).isTrue()
     }
 
@@ -131,7 +131,7 @@ class DefaultBugReporterTest {
         assertThat(onUploadCancelledCalled).isFalse()
         assertThat(onUploadFailedCalled).isTrue()
         assertThat(onUploadFailedReason).isEqualTo("An error body")
-        assertThat(progressValues.size).isEqualTo(10)
+        assertThat(progressValues.size).isEqualTo(11)
         assertThat(onUploadSucceedCalled).isFalse()
     }
 
