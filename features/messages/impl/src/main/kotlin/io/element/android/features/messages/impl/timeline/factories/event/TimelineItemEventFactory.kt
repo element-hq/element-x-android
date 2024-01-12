@@ -33,6 +33,7 @@ import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.item.event.ProfileTimelineDetails
+import io.element.android.libraries.matrix.api.timeline.item.event.getDisambiguatedDisplayName
 import kotlinx.collections.immutable.toImmutableList
 import java.text.DateFormat
 import java.util.Date
@@ -63,7 +64,7 @@ class TimelineItemEventFactory @Inject constructor(
                 senderAvatarUrl = null
             }
             is ProfileTimelineDetails.Ready -> {
-                senderDisplayName = senderProfile.displayName
+                senderDisplayName = senderProfile.getDisambiguatedDisplayName(currentSender)
                 senderAvatarUrl = senderProfile.avatarUrl
             }
         }
