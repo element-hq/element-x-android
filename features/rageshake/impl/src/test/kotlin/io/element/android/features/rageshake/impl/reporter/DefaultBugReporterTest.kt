@@ -48,7 +48,7 @@ class DefaultBugReporterTest {
         val sut = createDefaultBugReporter(server)
         var onUploadCancelledCalled = false
         var onUploadFailedCalled = false
-        var progressValues = mutableListOf<Int>()
+        val progressValues = mutableListOf<Int>()
         var onUploadSucceedCalled = false
         sut.sendBugReport(
             withDevicesLogs = true,
@@ -97,7 +97,7 @@ class DefaultBugReporterTest {
         var onUploadCancelledCalled = false
         var onUploadFailedCalled = false
         var onUploadFailedReason: String? = null
-        var progressValues = mutableListOf<Int>()
+        val progressValues = mutableListOf<Int>()
         var onUploadSucceedCalled = false
         sut.sendBugReport(
             withDevicesLogs = true,
