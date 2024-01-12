@@ -27,6 +27,7 @@ import io.element.android.libraries.matrix.impl.timeline.item.event.EventMessage
 import io.element.android.libraries.matrix.impl.timeline.item.event.EventTimelineItemMapper
 import io.element.android.libraries.matrix.impl.timeline.item.event.TimelineEventContentMapper
 import io.element.android.libraries.matrix.impl.timeline.item.virtual.VirtualTimelineItemMapper
+import io.element.android.libraries.matrix.impl.timeline.postprocessor.FilterHiddenStateEventsProcessor
 import io.element.android.libraries.matrix.impl.timeline.postprocessor.TimelineEncryptedHistoryPostProcessor
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineDispatcher
@@ -82,6 +83,8 @@ class RustMatrixTimeline(
         dispatcher = dispatcher,
     )
 
+    private val filterHiddenStateEventsProcessor = FilterHiddenStateEventsProcessor()
+
     private val timelineItemFactory = MatrixTimelineItemMapper(
         fetchDetailsForEvent = this::fetchDetailsForEvent,
         roomCoroutineScope = roomCoroutineScope,
@@ -101,9 +104,9 @@ class RustMatrixTimeline(
     override val paginationState: StateFlow<MatrixTimeline.PaginationState> = _paginationState.asStateFlow()
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    override val timelineItems: Flow<List<MatrixTimelineItem>> = _timelineItems.mapLatest { items ->
-        encryptedHistoryPostProcessor.process(items)
-    }
+    override val timelineItems: Flow<List<MatrixTimelineItem>> = _timelineItems
+        .mapLatest { items -> encryptedHistoryPostProcessor.process(items) }
+        .mapLatest { items -> filterHiddenStateEventsProcessor.process(items) }
 
     init {
         Timber.d("Initialize timeline for room ${matrixRoom.roomId}")
