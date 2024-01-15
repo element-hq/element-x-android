@@ -17,6 +17,7 @@
 package io.element.android.libraries.matrix.impl.timeline
 
 import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
@@ -27,6 +28,7 @@ import io.element.android.libraries.matrix.impl.timeline.item.event.EventMessage
 import io.element.android.libraries.matrix.impl.timeline.item.event.EventTimelineItemMapper
 import io.element.android.libraries.matrix.impl.timeline.item.event.TimelineEventContentMapper
 import io.element.android.libraries.matrix.impl.timeline.item.virtual.VirtualTimelineItemMapper
+import io.element.android.libraries.matrix.impl.timeline.postprocessor.DmBeginningTimelineProcessor
 import io.element.android.libraries.matrix.impl.timeline.postprocessor.FilterHiddenStateEventsProcessor
 import io.element.android.libraries.matrix.impl.timeline.postprocessor.TimelineEncryptedHistoryPostProcessor
 import kotlinx.coroutines.CompletableDeferred
@@ -63,6 +65,7 @@ class RustMatrixTimeline(
     private val matrixRoom: MatrixRoom,
     private val innerTimeline: Timeline,
     private val dispatcher: CoroutineDispatcher,
+    private val currentUserId: UserId,
     lastLoginTimestamp: Date?,
     private val onNewSyncedEvent: () -> Unit,
 ) : MatrixTimeline {
@@ -84,6 +87,8 @@ class RustMatrixTimeline(
     )
 
     private val filterHiddenStateEventsProcessor = FilterHiddenStateEventsProcessor()
+
+    private val dmBeginningTimelineProcessor = DmBeginningTimelineProcessor()
 
     private val timelineItemFactory = MatrixTimelineItemMapper(
         fetchDetailsForEvent = this::fetchDetailsForEvent,
@@ -107,6 +112,14 @@ class RustMatrixTimeline(
     override val timelineItems: Flow<List<MatrixTimelineItem>> = _timelineItems
         .mapLatest { items -> encryptedHistoryPostProcessor.process(items) }
         .mapLatest { items -> filterHiddenStateEventsProcessor.process(items) }
+        .mapLatest { items ->
+            dmBeginningTimelineProcessor.process(
+                items = items,
+                currentUserId = currentUserId,
+                isDm = matrixRoom.isDirect && matrixRoom.isOneToOne,
+                isAtStartOfTimeline = paginationState.value.beginningOfRoomReached
+            )
+        }
 
     init {
         Timber.d("Initialize timeline for room ${matrixRoom.roomId}")

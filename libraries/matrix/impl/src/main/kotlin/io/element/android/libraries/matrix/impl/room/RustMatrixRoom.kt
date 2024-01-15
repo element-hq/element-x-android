@@ -592,6 +592,7 @@ class RustMatrixRoom(
             matrixRoom = this,
             roomCoroutineScope = roomCoroutineScope,
             dispatcher = roomDispatcher,
+            currentUserId = sessionId,
             lastLoginTimestamp = sessionData.loginTimestamp,
             onNewSyncedEvent = onNewSyncedEvent,
             innerTimeline = timeline,
