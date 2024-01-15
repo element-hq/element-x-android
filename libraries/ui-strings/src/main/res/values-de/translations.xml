@@ -90,7 +90,7 @@
   <string name="action_start_chat">"Chat starten"</string>
   <string name="action_start_verification">"Verifizierung starten"</string>
   <string name="action_static_map_load">"Tippe, um die Karte zu laden"</string>
-  <string name="action_take_photo">"Foto machen"</string>
+  <string name="action_take_photo">"Foto aufnehmen"</string>
   <string name="action_tap_for_options">"Für Optionen tippen"</string>
   <string name="action_try_again">"Erneut versuchen"</string>
   <string name="action_view_source">"Quellcode anzeigen"</string>

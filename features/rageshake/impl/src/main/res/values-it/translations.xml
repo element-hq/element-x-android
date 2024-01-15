@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_bug_report_attach_screenshot">"Allega istantanea schermo"</string>
-  <string name="screen_bug_report_contact_me">"Potete contattarmi per qualsiasi altra domanda"</string>
+  <string name="screen_bug_report_contact_me">"Potete contattarmi per qualsiasi altra domanda."</string>
+  <string name="screen_bug_report_contact_me_title">"Contattami"</string>
   <string name="screen_bug_report_edit_screenshot">"Modifica istantanea schermo"</string>
-  <string name="screen_bug_report_editor_description">"Descrivi il bug. Che cosa hai fatto? Cosa ti aspettavi che accadesse? Cosa è effettivamente accaduto. Si prega di inserire il maggior numero di dettagli possibile."</string>
+  <string name="screen_bug_report_editor_description">"Descrivi il problema. Che cosa hai fatto? Cosa ti aspettavi che accadesse? Cosa è effettivamente accaduto. Si prega di inserire il maggior numero di dettagli possibile."</string>
   <string name="screen_bug_report_editor_placeholder">"Descrivi il problema…"</string>
   <string name="screen_bug_report_editor_supporting">"Se possibile, scrivere la descrizione in inglese."</string>
   <string name="screen_bug_report_include_crash_logs">"Invia i log degli arresti anomali"</string>
-  <string name="screen_bug_report_include_logs">"Invia i log per aiutarci"</string>
+  <string name="screen_bug_report_include_logs">"Consenti i log"</string>
   <string name="screen_bug_report_include_screenshot">"Invia istantanea schermo"</string>
-  <string name="screen_bug_report_logs_description">"Per verificare che le cose funzionino come previsto, i log verranno inviati con il tuo messaggio. Questi saranno privati. Per inviare solo il tuo messaggio, disattiva questa impostazione."</string>
+  <string name="screen_bug_report_logs_description">"Per verificare che le cose funzionino come previsto, i log verranno inviati con il tuo messaggio. Per inviare solo il tuo messaggio, disattiva questa impostazione."</string>
   <string name="screen_bug_report_rash_logs_alert_title">"%1$s si è chiuso inaspettatamente l\'ultima volta che è stato usato. Vuoi condividere con noi un rapporto sull\'arresto anomalo?"</string>
 </resources>

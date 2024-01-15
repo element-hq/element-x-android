@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_create_poll_add_option_btn">"Aggiungi opzione"</string>
+  <string name="screen_create_poll_anonymous_desc">"Mostra i risultati solo al termine del sondaggio"</string>
+  <string name="screen_create_poll_anonymous_headline">"Nascondi voti"</string>
+  <string name="screen_create_poll_answer_hint">"Opzione %1$d"</string>
+  <string name="screen_create_poll_cancel_confirmation_content_android">"Le modifiche non sono state salvate. Vuoi davvero tornare indietro?"</string>
+  <string name="screen_create_poll_question_desc">"Domanda o argomento"</string>
+  <string name="screen_create_poll_question_hint">"Di cosa parla il sondaggio?"</string>
+  <string name="screen_create_poll_title">"Crea sondaggio"</string>
+  <string name="screen_edit_poll_delete_confirmation">"Vuoi davvero eliminare questo sondaggio?"</string>
+  <string name="screen_edit_poll_delete_confirmation_title">"Elimina sondaggio"</string>
+  <string name="screen_edit_poll_title">"Modifica sondaggio"</string>
+  <string name="screen_polls_history_empty_ongoing">"Impossibile trovare sondaggi in corso."</string>
+  <string name="screen_polls_history_empty_past">"Impossibile trovare sondaggi passati."</string>
+  <string name="screen_polls_history_filter_ongoing">"In corso"</string>
+  <string name="screen_polls_history_filter_past">"Passato"</string>
+  <string name="screen_polls_history_title">"Sondaggi"</string>
+</resources>
