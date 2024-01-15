@@ -85,9 +85,9 @@ private suspend fun showLeaveRoomAlert(
 ) {
     matrixClient.getRoom(roomId)?.use { room ->
         confirmation.value = when {
-            !room.isPublic -> PrivateRoom(roomId)
-            room.joinedMemberCount == 1L -> LastUserInRoom(roomId)
-            else -> Generic(roomId)
+            !room.isPublic -> PrivateRoom(roomId, room.isDm)
+            room.joinedMemberCount == 1L -> LastUserInRoom(roomId, room.isDm)
+            else -> Generic(roomId, room.isDm)
         }
     }
 }

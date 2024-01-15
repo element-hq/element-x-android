@@ -48,20 +48,23 @@ private fun LeaveRoomConfirmationDialog(
     when (state.confirmation) {
         is LeaveRoomState.Confirmation.Hidden -> {}
         is LeaveRoomState.Confirmation.PrivateRoom -> LeaveRoomConfirmationDialog(
-            text = R.string.leave_room_alert_private_subtitle,
+            text = if (state.confirmation.isDm) R.string.leave_conversation_alert_private_subtitle else R.string.leave_room_alert_private_subtitle,
             roomId = state.confirmation.roomId,
+            isDm = state.confirmation.isDm,
             eventSink = state.eventSink,
         )
 
         is LeaveRoomState.Confirmation.LastUserInRoom -> LeaveRoomConfirmationDialog(
-            text = R.string.leave_room_alert_empty_subtitle,
+            text = if (state.confirmation.isDm) R.string.leave_conversation_alert_empty_subtitle else R.string.leave_room_alert_empty_subtitle,
             roomId = state.confirmation.roomId,
+            isDm = state.confirmation.isDm,
             eventSink = state.eventSink,
         )
 
         is LeaveRoomState.Confirmation.Generic -> LeaveRoomConfirmationDialog(
-            text = R.string.leave_room_alert_subtitle,
+            text = if (state.confirmation.isDm) R.string.leave_conversation_alert_subtitle else R.string.leave_room_alert_subtitle,
             roomId = state.confirmation.roomId,
+            isDm = state.confirmation.isDm,
             eventSink = state.eventSink,
         )
     }
@@ -71,10 +74,11 @@ private fun LeaveRoomConfirmationDialog(
 private fun LeaveRoomConfirmationDialog(
     @StringRes text: Int,
     roomId: RoomId,
+    isDm: Boolean,
     eventSink: (LeaveRoomEvent) -> Unit,
 ) {
     ConfirmationDialog(
-        title = stringResource(CommonStrings.action_leave_room),
+        title = stringResource(if (isDm) CommonStrings.action_leave_conversation else CommonStrings.action_leave_room),
         content = stringResource(text),
         submitText = stringResource(CommonStrings.action_leave),
         onSubmitClicked = { eventSink(LeaveRoomEvent.LeaveRoom(roomId)) },

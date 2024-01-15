@@ -183,9 +183,8 @@ class MessageComposerPresenter @Inject constructor(
             val currentUserId = currentSessionIdHolder.current
 
             suspend fun canSendRoomMention(): Boolean {
-                val roomIsDm = room.isDirect && room.isOneToOne
                 val userCanSendAtRoom = room.canUserTriggerRoomNotification(currentUserId).getOrDefault(false)
-                return !roomIsDm && userCanSendAtRoom
+                return !room.isDm && userCanSendAtRoom
             }
 
             // This will trigger a search immediately when `@` is typed

@@ -46,6 +46,7 @@ data class RoomListState(
         data class Shown(
             val roomId: RoomId,
             val roomName: String,
+            val isDm: Boolean,
         ) : ContextMenu
     }
 }
