@@ -3,7 +3,7 @@
   <string name="screen_onboarding_sign_in_manually">"Вход в систему вручную"</string>
   <string name="screen_onboarding_sign_in_with_qr_code">"Войти с помощью QR-кода"</string>
   <string name="screen_onboarding_sign_up">"Создать учетную запись"</string>
-  <string name="screen_onboarding_welcome_message">"Добро пожаловать в самый быстрый Element. Преимущество в скорости и простоте."</string>
-  <string name="screen_onboarding_welcome_subtitle">"Добро пожаловать в %1$s. Supercharged — это скорость и простота."</string>
-  <string name="screen_onboarding_welcome_title">"Будь c element"</string>
+  <string name="screen_onboarding_welcome_message">"Добро пожаловать в самый быстрый Element. Сверхзаряженность на скорость и простоту."</string>
+  <string name="screen_onboarding_welcome_subtitle">"Добро пожаловать в %1$s. Сверхзаряжен для скорости и простоты."</string>
+  <string name="screen_onboarding_welcome_title">"Будьте в своем element"</string>
 </resources>

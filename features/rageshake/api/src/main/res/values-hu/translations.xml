@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="crash_detection_dialog_content">"Az %1$s összeomlott a legutóbbi használata óta. Megosztja velünk az összeomlás-jelentést?"</string>
-  <string name="rageshake_detection_dialog_content">"Úgy tűnik, mintha mérgében a telefont rázná. Megnyitja a hibajelentési képernyőt?"</string>
+  <string name="crash_detection_dialog_content">"Az %1$s összeomlott a legutóbbi használata óta. Megosztod velünk az összeomlás-jelentést?"</string>
+  <string name="rageshake_detection_dialog_content">"Úgy tűnik, mintha dühösen ráznád a telefont. Megnyitod a hibajelentési képernyőt?"</string>
   <string name="settings_rageshake">"Ideges rázás"</string>
   <string name="settings_rageshake_detection_threshold">"Észlelési küszöb"</string>
 </resources>

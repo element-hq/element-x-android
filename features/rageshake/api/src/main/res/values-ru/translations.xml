@@ -2,6 +2,6 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="crash_detection_dialog_content">"При последнем использовании %1$s произошел сбой. Хотите поделиться отчетом о сбое?"</string>
   <string name="rageshake_detection_dialog_content">"Похоже, что вы трясете телефон. Хотите открыть экран сообщения об ошибке?"</string>
-  <string name="settings_rageshake">"Rageshake"</string>
+  <string name="settings_rageshake">"Встряхните"</string>
   <string name="settings_rageshake_detection_threshold">"Порог обнаружения"</string>
 </resources>
