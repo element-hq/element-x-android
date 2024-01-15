@@ -120,7 +120,7 @@ class RoomListPresenter @Inject constructor(
                     displaySearchResults = !displaySearchResults
                 }
                 is RoomListEvents.ShowContextMenu -> coroutineScope.launch {
-                    val isDm = client.getRoom(event.roomListRoomSummary.roomId)?.isDm.orFalse()
+                    val isDm = client.getRoom(event.roomListRoomSummary.roomId).use { it?.isDm.orFalse() }
                     contextMenu = RoomListState.ContextMenu.Shown(
                         roomId = event.roomListRoomSummary.roomId,
                         roomName = event.roomListRoomSummary.name,
