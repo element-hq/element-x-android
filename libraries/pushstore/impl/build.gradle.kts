@@ -34,6 +34,7 @@ anvil {
 dependencies {
     implementation(libs.dagger)
     implementation(projects.libraries.architecture)
+    implementation(projects.libraries.androidutils)
     implementation(projects.libraries.core)
     implementation(projects.libraries.matrix.api)
     implementation(projects.libraries.pushstore.api)
