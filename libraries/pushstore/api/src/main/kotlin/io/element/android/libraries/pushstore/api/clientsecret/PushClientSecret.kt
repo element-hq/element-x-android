@@ -29,9 +29,4 @@ interface PushClientSecret {
      * Return null if not found.
      */
     suspend fun getUserIdFromSecret(clientSecret: String): SessionId?
-
-    /**
-     * To call when the user signs out.
-     */
-    suspend fun resetSecretForUser(userId: SessionId)
 }
