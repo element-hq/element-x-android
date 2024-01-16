@@ -18,6 +18,7 @@ package io.element.android.libraries.pushstore.impl.clientsecret
 
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.di.AppScope
+import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.pushstore.api.clientsecret.PushClientSecret
 import io.element.android.libraries.pushstore.api.clientsecret.PushClientSecretFactory
@@ -26,6 +27,7 @@ import io.element.android.libraries.sessionstorage.api.observer.SessionListener
 import io.element.android.libraries.sessionstorage.api.observer.SessionObserver
 import javax.inject.Inject
 
+@SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class, boundType = PushClientSecret::class)
 class PushClientSecretImpl @Inject constructor(
     private val pushClientSecretFactory: PushClientSecretFactory,
