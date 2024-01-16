@@ -24,7 +24,6 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import io.element.android.features.leaveroom.api.LeaveRoomEvent
@@ -34,7 +33,6 @@ import io.element.android.features.networkmonitor.api.NetworkStatus
 import io.element.android.features.roomlist.impl.datasource.InviteStateDataSource
 import io.element.android.features.roomlist.impl.datasource.RoomListDataSource
 import io.element.android.libraries.architecture.Presenter
-import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.designsystem.utils.snackbar.collectSnackbarMessageAsState
 import io.element.android.libraries.featureflag.api.FeatureFlagService
@@ -66,7 +64,6 @@ class RoomListPresenter @Inject constructor(
 ) : Presenter<RoomListState> {
     @Composable
     override fun present(): RoomListState {
-        val coroutineScope = rememberCoroutineScope()
         val leaveRoomState = leaveRoomPresenter.present()
         val matrixUser: MutableState<MatrixUser?> = rememberSaveable {
             mutableStateOf(null)
@@ -119,12 +116,11 @@ class RoomListPresenter @Inject constructor(
                     }
                     displaySearchResults = !displaySearchResults
                 }
-                is RoomListEvents.ShowContextMenu -> coroutineScope.launch {
-                    val isDm = client.getRoom(event.roomListRoomSummary.roomId).use { it?.isDm.orFalse() }
+                is RoomListEvents.ShowContextMenu -> {
                     contextMenu = RoomListState.ContextMenu.Shown(
                         roomId = event.roomListRoomSummary.roomId,
                         roomName = event.roomListRoomSummary.name,
-                        isDm = isDm,
+                        isDm = event.roomListRoomSummary.isDm,
                     )
                 }
                 is RoomListEvents.HideContextMenu -> contextMenu = RoomListState.ContextMenu.Hidden

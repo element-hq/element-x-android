@@ -41,6 +41,7 @@ class RoomSummaryDetailsFactory(private val roomMessageFactory: RoomMessageFacto
             inviter = roomInfo.inviter?.let(RoomMemberMapper::map),
             notificationMode = roomInfo.userDefinedNotificationMode?.let(RoomNotificationSettingsMapper::mapMode),
             hasOngoingCall = roomInfo.hasRoomCall,
+            isDm = roomInfo.isDirect && roomInfo.activeMembersCount.toLong() == 2L,
         )
     }
 }
