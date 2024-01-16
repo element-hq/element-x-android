@@ -100,7 +100,7 @@ class UserPushStoreDataStore(
         context.dataStore.edit {
             it.clear()
         }
-    }
-
+        // Also delete the file
+        context.preferencesDataStoreFile(preferenceName).delete()
     }
 }
