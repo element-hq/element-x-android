@@ -40,7 +40,7 @@ class UserPushStoreDataStore(
     private val context: Context,
     userId: SessionId,
 ) : UserPushStore {
-    // Hash the sessionId to get ride of exotic chars and take only the first 16 chars.
+    // Hash the sessionId to get rid of exotic chars and take only the first 16 chars.
     // The risk of collision is not high.
     private val preferenceName = "push_store_${userId.value.hash().take(16)}"
 
