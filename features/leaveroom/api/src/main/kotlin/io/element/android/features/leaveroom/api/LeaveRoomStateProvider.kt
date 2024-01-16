@@ -28,17 +28,17 @@ class LeaveRoomStateProvider : PreviewParameterProvider<LeaveRoomState> {
                 error = LeaveRoomState.Error.Hidden,
             ),
             aLeaveRoomState(
-                confirmation = LeaveRoomState.Confirmation.Generic(roomId = A_ROOM_ID, isDm = false),
+                confirmation = LeaveRoomState.Confirmation.Generic(roomId = A_ROOM_ID),
                 progress = LeaveRoomState.Progress.Hidden,
                 error = LeaveRoomState.Error.Hidden,
             ),
             aLeaveRoomState(
-                confirmation = LeaveRoomState.Confirmation.PrivateRoom(roomId = A_ROOM_ID, isDm = false),
+                confirmation = LeaveRoomState.Confirmation.PrivateRoom(roomId = A_ROOM_ID),
                 progress = LeaveRoomState.Progress.Hidden,
                 error = LeaveRoomState.Error.Hidden,
             ),
             aLeaveRoomState(
-                confirmation = LeaveRoomState.Confirmation.LastUserInRoom(roomId = A_ROOM_ID, isDm = false),
+                confirmation = LeaveRoomState.Confirmation.LastUserInRoom(roomId = A_ROOM_ID),
                 progress = LeaveRoomState.Progress.Hidden,
                 error = LeaveRoomState.Error.Hidden,
             ),
@@ -53,17 +53,7 @@ class LeaveRoomStateProvider : PreviewParameterProvider<LeaveRoomState> {
                 error = LeaveRoomState.Error.Shown,
             ),
             aLeaveRoomState(
-                confirmation = LeaveRoomState.Confirmation.Generic(roomId = A_ROOM_ID, isDm = true),
-                progress = LeaveRoomState.Progress.Hidden,
-                error = LeaveRoomState.Error.Hidden,
-            ),
-            aLeaveRoomState(
-                confirmation = LeaveRoomState.Confirmation.PrivateRoom(roomId = A_ROOM_ID, isDm = true),
-                progress = LeaveRoomState.Progress.Hidden,
-                error = LeaveRoomState.Error.Hidden,
-            ),
-            aLeaveRoomState(
-                confirmation = LeaveRoomState.Confirmation.LastUserInRoom(roomId = A_ROOM_ID, isDm = true),
+                confirmation = LeaveRoomState.Confirmation.Dm(roomId = A_ROOM_ID),
                 progress = LeaveRoomState.Progress.Hidden,
                 error = LeaveRoomState.Error.Hidden,
             ),
