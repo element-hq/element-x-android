@@ -57,6 +57,7 @@
   <string name="action_join">"Join"</string>
   <string name="action_learn_more">"Learn more"</string>
   <string name="action_leave">"Leave"</string>
+  <string name="action_leave_conversation">"Leave conversation"</string>
   <string name="action_leave_room">"Leave room"</string>
   <string name="action_manage_account">"Manage account"</string>
   <string name="action_manage_devices">"Manage devices"</string>

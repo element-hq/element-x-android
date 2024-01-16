@@ -44,7 +44,8 @@ open class RoomListStateProvider : PreviewParameterProvider<RoomListState> {
             aRoomListState().copy(
                 contextMenu = RoomListState.ContextMenu.Shown(
                     roomId = RoomId("!aRoom:aDomain"),
-                    roomName = "A nice room name"
+                    roomName = "A nice room name",
+                    isDm = false,
                 )
             ),
             aRoomListState().copy(displayRecoveryKeyPrompt = true),

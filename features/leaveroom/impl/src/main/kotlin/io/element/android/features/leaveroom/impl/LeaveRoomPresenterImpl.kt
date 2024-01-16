@@ -24,6 +24,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import io.element.android.features.leaveroom.api.LeaveRoomEvent
 import io.element.android.features.leaveroom.api.LeaveRoomPresenter
 import io.element.android.features.leaveroom.api.LeaveRoomState
+import io.element.android.features.leaveroom.api.LeaveRoomState.Confirmation.Dm
 import io.element.android.features.leaveroom.api.LeaveRoomState.Confirmation.Generic
 import io.element.android.features.leaveroom.api.LeaveRoomState.Confirmation.LastUserInRoom
 import io.element.android.features.leaveroom.api.LeaveRoomState.Confirmation.PrivateRoom
@@ -85,6 +86,7 @@ private suspend fun showLeaveRoomAlert(
 ) {
     matrixClient.getRoom(roomId)?.use { room ->
         confirmation.value = when {
+            room.isDm -> Dm(roomId)
             !room.isPublic -> PrivateRoom(roomId)
             room.joinedMemberCount == 1L -> LastUserInRoom(roomId)
             else -> Generic(roomId)
