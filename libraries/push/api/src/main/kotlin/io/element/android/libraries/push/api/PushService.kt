@@ -24,6 +24,10 @@ interface PushService {
     // TODO Move away
     fun notificationStyleChanged()
 
+    /**
+     * Return the list of push providers, available at compile time, and
+     * available at runtime, sorted by index.
+     */
     fun getAvailablePushProviders(): List<PushProvider>
 
     /**
