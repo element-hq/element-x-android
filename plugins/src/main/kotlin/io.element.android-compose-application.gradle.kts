@@ -17,12 +17,10 @@
 /**
  * This will generate the plugin "io.element.android-compose-application" to use by app and samples modules
  */
-import extension.koverDependencies
 import extension.androidConfig
 import extension.commonDependencies
 import extension.composeConfig
 import extension.composeDependencies
-import extension.setupKover
 import org.gradle.accessors.dm.LibrariesForLibs
 
 val libs = the<LibrariesForLibs>()
@@ -31,8 +29,6 @@ plugins {
     id("kotlin-android")
     id("com.autonomousapps.dependency-analysis")
 }
-
-setupKover()
 
 android {
     androidConfig(project)
@@ -46,5 +42,4 @@ dependencies {
     commonDependencies(libs)
     composeDependencies(libs)
     coreLibraryDesugaring(libs.android.desugar)
-    koverDependencies()
 }

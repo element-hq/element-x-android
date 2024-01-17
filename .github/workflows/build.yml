@@ -47,14 +47,15 @@ jobs:
           ELEMENT_ANDROID_MAPTILER_API_KEY: ${{ secrets.MAPTILER_KEY }}
           ELEMENT_ANDROID_MAPTILER_LIGHT_MAP_ID: ${{ secrets.MAPTILER_LIGHT_MAP_ID }}
           ELEMENT_ANDROID_MAPTILER_DARK_MAP_ID: ${{ secrets.MAPTILER_DARK_MAP_ID }}
-        run: ./gradlew :app:assembleDebug -PallWarningsAsErrors=true $CI_GRADLE_ARG_PROPERTIES
+        run: ./gradlew :app:assembleGplayDebug :app:assembleFDroidDebug -PallWarningsAsErrors=true $CI_GRADLE_ARG_PROPERTIES
       - name: Upload APK APKs
         if: ${{ matrix.variant == 'debug' }}
         uses: actions/upload-artifact@v4
         with:
           name: elementx-debug
           path: |
-            app/build/outputs/apk/debug/*.apk
+            app/build/outputs/apk/gplay/debug/*.apk
+            app/build/outputs/apk/fdroid/debug/*.apk
       - uses: rnkdsh/action-upload-diawi@v1.5.4
         id: diawi
         # Do not fail the whole build if Diawi upload fails
@@ -64,7 +65,7 @@ jobs:
         if: ${{ matrix.variant == 'debug' && github.event_name == 'pull_request' && env.token != '' }}
         with:
           token: ${{ env.token }}
-          file: app/build/outputs/apk/debug/app-arm64-v8a-debug.apk
+          file: app/build/outputs/apk/gplay/debug/app-gplay-arm64-v8a-debug.apk
       - name: Add or update PR comment with QR Code to download APK.
         if: ${{ matrix.variant == 'debug' && github.event_name == 'pull_request' && steps.diawi.conclusion == 'success' }}
         uses: NejcZdovc/comment-pr@v2
@@ -82,7 +83,7 @@ jobs:
         run: ./gradlew compileReleaseSources -PallWarningsAsErrors=true $CI_GRADLE_ARG_PROPERTIES
       - name: Compile nightly sources
         if: ${{ matrix.variant == 'nightly' }}
-        run: ./gradlew compileNightlySources -PallWarningsAsErrors=true $CI_GRADLE_ARG_PROPERTIES
+        run: ./gradlew compileGplayNightlySources -PallWarningsAsErrors=true $CI_GRADLE_ARG_PROPERTIES
       - name: Compile samples minimal
         if: ${{ matrix.variant == 'samples' }}
         run: ./gradlew :samples:minimal:assemble $CI_GRADLE_ARG_PROPERTIES

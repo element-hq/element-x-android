@@ -43,10 +43,8 @@ object Singleton {
         gitRevisionDate = "TODO",
         //  BuildConfig.GIT_BRANCH_NAME,
         gitBranchName = "TODO",
-        //  BuildConfig.FLAVOR_DESCRIPTION,
-        flavorDescription = "TODO",
-        //  BuildConfig.SHORT_FLAVOR_DESCRIPTION,
-        flavorShortDescription = "TODO",
+        flavorDescription = "NA",
+        flavorShortDescription = "NA",
     )
 
     init {
