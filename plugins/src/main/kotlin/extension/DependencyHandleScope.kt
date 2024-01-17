@@ -17,12 +17,23 @@
 package extension
 
 import org.gradle.accessors.dm.LibrariesForLibs
+import org.gradle.api.Action
+import org.gradle.api.artifacts.ExternalModuleDependency
 import org.gradle.api.logging.Logger
+import org.gradle.api.provider.Provider
 import org.gradle.kotlin.dsl.DependencyHandlerScope
+import org.gradle.kotlin.dsl.closureOf
+import org.gradle.kotlin.dsl.exclude
 import org.gradle.kotlin.dsl.project
 import java.io.File
 
 private fun DependencyHandlerScope.implementation(dependency: Any) = dependencies.add("implementation", dependency)
+
+// Implementation + config block
+private fun DependencyHandlerScope.implementation(
+    dependency: Any,
+    config: Action<ExternalModuleDependency>
+) = dependencies.add("implementation",  dependency, closureOf<ExternalModuleDependency> { config.execute(this) })
 
 private fun DependencyHandlerScope.androidTestImplementation(dependency: Any) = dependencies.add("androidTestImplementation", dependency)
 
@@ -45,6 +56,16 @@ fun DependencyHandlerScope.composeDependencies(libs: LibrariesForLibs) {
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.material)
     implementation(libs.androidx.compose.material3)
+
+    // Remove these constraints once `material3` updates its internal dependencies
+    constraints {
+        implementation("androidx.compose.foundation:foundation:1.6.0-beta02") {
+            because("The transitive version inside `material3` (1.6.0-beta01) causes a scrolling issue. " +
+                "See https://android.googlesource.com/platform/frameworks/support/+/2d15876146ccf201f7e15cacc78bfca762060624"
+            )
+        }
+    }
+
     implementation(libs.androidx.compose.material.icons)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.activity.compose)
