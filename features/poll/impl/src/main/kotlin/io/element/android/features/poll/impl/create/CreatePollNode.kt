@@ -39,7 +39,6 @@ class CreatePollNode @AssistedInject constructor(
     presenterFactory: CreatePollPresenter.Factory,
     analyticsService: AnalyticsService,
 ) : Node(buildContext, plugins = plugins) {
-
     data class Inputs(val mode: CreatePollMode) : NodeInputs
 
     private val inputs: Inputs = inputs()

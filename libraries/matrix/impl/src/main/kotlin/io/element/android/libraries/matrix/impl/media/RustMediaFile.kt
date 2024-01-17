@@ -20,7 +20,6 @@ import io.element.android.libraries.matrix.api.media.MediaFile
 import org.matrix.rustcomponents.sdk.MediaFileHandle
 
 class RustMediaFile(private val inner: MediaFileHandle) : MediaFile {
-
     override fun path(): String {
         return inner.path()
     }

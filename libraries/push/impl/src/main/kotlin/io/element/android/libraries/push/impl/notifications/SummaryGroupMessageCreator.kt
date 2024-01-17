@@ -43,7 +43,6 @@ class SummaryGroupMessageCreator @Inject constructor(
     private val stringProvider: StringProvider,
     private val notificationCreator: NotificationCreator,
 ) {
-
     fun createSummaryNotification(
         currentUser: MatrixUser,
         roomNotifications: List<RoomNotification.Message.Meta>,
@@ -73,7 +72,7 @@ class SummaryGroupMessageCreator @Inject constructor(
         val nbEvents = roomNotifications.size + simpleNotifications.size
         val sumTitle = stringProvider.getQuantityString(R.plurals.notification_compat_summary_title, nbEvents, nbEvents)
         summaryInboxStyle.setBigContentTitle(sumTitle.annotateForDebug(43))
-            //.setSummaryText(stringProvider.getQuantityString(R.plurals.notification_unread_notified_messages, nbEvents, nbEvents).annotateForDebug(44))
+            // .setSummaryText(stringProvider.getQuantityString(R.plurals.notification_unread_notified_messages, nbEvents, nbEvents).annotateForDebug(44))
             // Use account name now, for multi-session
             .setSummaryText(currentUser.userId.value.annotateForDebug(44))
         return if (useCompleteNotificationFormat) {
@@ -119,7 +118,8 @@ class SummaryGroupMessageCreator @Inject constructor(
                 // Invitation and message
                 val messageStr = stringProvider.getQuantityString(
                     R.plurals.notification_new_messages_for_room,
-                    messageNotificationCount, messageNotificationCount
+                    messageNotificationCount,
+                    messageNotificationCount
                 )
                 if (roomCount > 1) {
                     // In several rooms

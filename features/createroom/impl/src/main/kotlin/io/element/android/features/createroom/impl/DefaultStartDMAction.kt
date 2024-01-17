@@ -20,7 +20,7 @@ import androidx.compose.runtime.MutableState
 import com.squareup.anvil.annotations.ContributesBinding
 import im.vector.app.features.analytics.plan.CreatedRoom
 import io.element.android.features.createroom.api.StartDMAction
-import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -35,18 +35,17 @@ class DefaultStartDMAction @Inject constructor(
     private val matrixClient: MatrixClient,
     private val analyticsService: AnalyticsService,
 ) : StartDMAction {
-
-    override suspend fun execute(userId: UserId, actionState: MutableState<Async<RoomId>>) {
-        actionState.value = Async.Loading()
+    override suspend fun execute(userId: UserId, actionState: MutableState<AsyncAction<RoomId>>) {
+        actionState.value = AsyncAction.Loading
         when (val result = matrixClient.startDM(userId)) {
             is StartDMResult.Success -> {
                 if (result.isNew) {
                     analyticsService.capture(CreatedRoom(isDM = true))
                 }
-                actionState.value = Async.Success(result.roomId)
+                actionState.value = AsyncAction.Success(result.roomId)
             }
             is StartDMResult.Failure -> {
-                actionState.value = Async.Failure(result.throwable)
+                actionState.value = AsyncAction.Failure(result.throwable)
             }
         }
     }

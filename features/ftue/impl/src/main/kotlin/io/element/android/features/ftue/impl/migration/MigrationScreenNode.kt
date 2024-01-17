@@ -32,7 +32,6 @@ class MigrationScreenNode @AssistedInject constructor(
     @Assisted plugins: List<Plugin>,
     private val presenter: MigrationScreenPresenter,
 ) : Node(buildContext, plugins = plugins) {
-
     interface Callback : Plugin {
         fun onMigrationFinished()
     }

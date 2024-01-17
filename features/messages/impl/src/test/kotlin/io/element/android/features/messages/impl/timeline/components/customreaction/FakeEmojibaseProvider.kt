@@ -18,7 +18,7 @@ package io.element.android.features.messages.impl.timeline.components.customreac
 
 import io.element.android.emojibasebindings.EmojibaseStore
 
-class FakeEmojibaseProvider: EmojibaseProvider {
+class FakeEmojibaseProvider : EmojibaseProvider {
     override val emojibaseStore: EmojibaseStore
         get() = EmojibaseStore(mapOf())
 }

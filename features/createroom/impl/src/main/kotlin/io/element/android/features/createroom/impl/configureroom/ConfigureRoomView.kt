@@ -21,7 +21,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.consumeWindowInsets
@@ -46,10 +45,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.createroom.impl.R
 import io.element.android.features.createroom.impl.components.RoomPrivacyOption
 import io.element.android.libraries.designsystem.components.LabelledTextField
-import io.element.android.libraries.designsystem.components.async.AsyncView
+import io.element.android.libraries.designsystem.components.async.AsyncActionView
+import io.element.android.libraries.designsystem.components.async.AsyncActionViewDefaults
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -63,11 +64,10 @@ import io.element.android.libraries.matrix.ui.components.AvatarActionBottomSheet
 import io.element.android.libraries.matrix.ui.components.SelectedUsersList
 import io.element.android.libraries.matrix.ui.components.UnsavedAvatar
 import io.element.android.libraries.permissions.api.PermissionsView
-import io.element.android.compound.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalLayoutApi::class, ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun ConfigureRoomView(
     state: ConfigureRoomState,
@@ -149,11 +149,15 @@ fun ConfigureRoomView(
         onActionSelected = { state.eventSink(ConfigureRoomEvents.HandleAvatarAction(it)) }
     )
 
-    AsyncView(
+    AsyncActionView(
         async = state.createRoomAction,
-        progressText = stringResource(CommonStrings.common_creating_room),
+        progressDialog = {
+            AsyncActionViewDefaults.ProgressDialog(
+                progressText = stringResource(CommonStrings.common_creating_room),
+            )
+        },
         onSuccess = { onRoomCreated(it) },
-        errorMessage = {  stringResource(R.string.screen_create_room_error_creating_room) },
+        errorMessage = { stringResource(R.string.screen_create_room_error_creating_room) },
         onRetry = { state.eventSink(ConfigureRoomEvents.CreateRoom(state.config)) },
         onErrorDismiss = { state.eventSink(ConfigureRoomEvents.CancelCreateRoom) },
     )

@@ -28,7 +28,6 @@ import io.element.android.features.login.impl.util.defaultAccountProvider
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 
 class LoginScreen(private val authenticationService: MatrixAuthenticationService) {
-
     @Composable
     fun Content(modifier: Modifier = Modifier) {
         val presenter = remember {

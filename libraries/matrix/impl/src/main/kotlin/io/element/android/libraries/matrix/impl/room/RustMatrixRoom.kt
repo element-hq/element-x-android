@@ -104,7 +104,6 @@ class RustMatrixRoom(
     private val roomSyncSubscriber: RoomSyncSubscriber,
     private val matrixRoomInfoMapper: MatrixRoomInfoMapper,
 ) : MatrixRoom {
-
     override val roomId = RoomId(innerRoom.id())
 
     override val roomInfoFlow: Flow<MatrixRoomInfo> = mxCallbackFlow {
@@ -122,7 +121,7 @@ class RustMatrixRoom(
     // Create a dispatcher for all room methods...
     private val roomDispatcher = coroutineDispatchers.io.limitedParallelism(32)
 
-    //...except getMember methods as it could quickly fill the roomDispatcher...
+    // ...except getMember methods as it could quickly fill the roomDispatcher...
     private val roomMembersDispatcher = coroutineDispatchers.io.limitedParallelism(8)
 
     private val roomCoroutineScope = sessionCoroutineScope.childScope(coroutineDispatchers.main, "RoomScope-$roomId")

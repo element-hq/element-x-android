@@ -33,7 +33,7 @@ import io.element.android.features.messages.impl.timeline.di.TimelineItemEventCo
 import io.element.android.features.messages.impl.timeline.di.TimelineItemPresenterFactory
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVoiceContent
 import io.element.android.features.messages.impl.voicemessages.VoiceMessageException
-import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runUpdatingState
 import io.element.android.libraries.di.RoomScope
@@ -58,7 +58,6 @@ class VoiceMessagePresenter @AssistedInject constructor(
     private val scope: CoroutineScope,
     @Assisted private val content: TimelineItemVoiceContent,
 ) : Presenter<VoiceMessageState> {
-
     @AssistedFactory
     fun interface Factory : TimelineItemPresenterFactory<TimelineItemVoiceContent, VoiceMessageState> {
         override fun create(content: TimelineItemVoiceContent): VoiceMessagePresenter
@@ -71,11 +70,10 @@ class VoiceMessagePresenter @AssistedInject constructor(
         body = content.body,
     )
 
-    private val play = mutableStateOf<Async<Unit>>(Async.Uninitialized)
+    private val play = mutableStateOf<AsyncData<Unit>>(AsyncData.Uninitialized)
 
     @Composable
     override fun present(): VoiceMessageState {
-
         val playerState by player.state.collectAsState(
             VoiceMessagePlayer.State(
                 isReady = false,
@@ -91,8 +89,8 @@ class VoiceMessagePresenter @AssistedInject constructor(
                 when {
                     content.eventId == null -> VoiceMessageState.Button.Disabled
                     playerState.isPlaying -> VoiceMessageState.Button.Pause
-                    play.value is Async.Loading -> VoiceMessageState.Button.Downloading
-                    play.value is Async.Failure -> VoiceMessageState.Button.Retry
+                    play.value is AsyncData.Loading -> VoiceMessageState.Button.Downloading
+                    play.value is AsyncData.Failure -> VoiceMessageState.Button.Retry
                     else -> VoiceMessageState.Button.Play
                 }
             }

@@ -45,14 +45,16 @@ android {
             name = "maptiler_light_map_id",
             value = System.getenv("ELEMENT_ANDROID_MAPTILER_LIGHT_MAP_ID")
                 ?: readLocalProperty("services.maptiler.lightMapId")
-                ?: "basic-v2" // fall back to maptiler's default light map.
+                // fall back to maptiler's default light map.
+                ?: "basic-v2"
         )
         resValue(
             type = "string",
             name = "maptiler_dark_map_id",
             value = System.getenv("ELEMENT_ANDROID_MAPTILER_DARK_MAP_ID")
                 ?: readLocalProperty("services.maptiler.darkMapId")
-                ?: "basic-v2-dark" // fall back to maptiler's default dark map.
+                // fall back to maptiler's default dark map.
+                ?: "basic-v2-dark"
         )
     }
 }

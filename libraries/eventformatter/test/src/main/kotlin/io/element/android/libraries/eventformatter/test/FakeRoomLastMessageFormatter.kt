@@ -20,7 +20,6 @@ import io.element.android.libraries.eventformatter.api.RoomLastMessageFormatter
 import io.element.android.libraries.matrix.api.timeline.item.event.EventTimelineItem
 
 class FakeRoomLastMessageFormatter : RoomLastMessageFormatter {
-
     private var result: CharSequence? = null
 
     override fun format(event: EventTimelineItem, isDmRoom: Boolean): CharSequence? {

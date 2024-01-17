@@ -20,7 +20,7 @@ import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
@@ -32,7 +32,6 @@ import org.junit.Rule
 import org.junit.Test
 
 class ReportMessagePresenterTests {
-
     @get:Rule
     val warmUpRule = WarmUpRule()
 
@@ -45,7 +44,7 @@ class ReportMessagePresenterTests {
             val initialState = awaitItem()
             assertThat(initialState.reason).isEmpty()
             assertThat(initialState.blockUser).isFalse()
-            assertThat(initialState.result).isInstanceOf(Async.Uninitialized::class.java)
+            assertThat(initialState.result).isInstanceOf(AsyncAction.Uninitialized::class.java)
         }
     }
 
@@ -91,8 +90,8 @@ class ReportMessagePresenterTests {
             initialState.eventSink(ReportMessageEvents.ToggleBlockUser)
             skipItems(1)
             initialState.eventSink(ReportMessageEvents.Report)
-            assertThat(awaitItem().result).isInstanceOf(Async.Loading::class.java)
-            assertThat(awaitItem().result).isInstanceOf(Async.Success::class.java)
+            assertThat(awaitItem().result).isInstanceOf(AsyncAction.Loading::class.java)
+            assertThat(awaitItem().result).isInstanceOf(AsyncAction.Success::class.java)
             assertThat(room.reportedContentCount).isEqualTo(1)
         }
     }
@@ -106,8 +105,8 @@ class ReportMessagePresenterTests {
         }.test {
             val initialState = awaitItem()
             initialState.eventSink(ReportMessageEvents.Report)
-            assertThat(awaitItem().result).isInstanceOf(Async.Loading::class.java)
-            assertThat(awaitItem().result).isInstanceOf(Async.Success::class.java)
+            assertThat(awaitItem().result).isInstanceOf(AsyncAction.Loading::class.java)
+            assertThat(awaitItem().result).isInstanceOf(AsyncAction.Success::class.java)
             assertThat(room.reportedContentCount).isEqualTo(1)
         }
     }
@@ -123,13 +122,13 @@ class ReportMessagePresenterTests {
         }.test {
             val initialState = awaitItem()
             initialState.eventSink(ReportMessageEvents.Report)
-            assertThat(awaitItem().result).isInstanceOf(Async.Loading::class.java)
+            assertThat(awaitItem().result).isInstanceOf(AsyncAction.Loading::class.java)
             val resultState = awaitItem()
-            assertThat(resultState.result).isInstanceOf(Async.Failure::class.java)
+            assertThat(resultState.result).isInstanceOf(AsyncAction.Failure::class.java)
             assertThat(room.reportedContentCount).isEqualTo(1)
 
             resultState.eventSink(ReportMessageEvents.ClearError)
-            assertThat(awaitItem().result).isInstanceOf(Async.Uninitialized::class.java)
+            assertThat(awaitItem().result).isInstanceOf(AsyncAction.Uninitialized::class.java)
         }
     }
 

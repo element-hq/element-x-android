@@ -29,7 +29,6 @@ internal class MatrixTimelineDiffProcessor(
     private val timelineItems: MutableStateFlow<List<MatrixTimelineItem>>,
     private val timelineItemFactory: MatrixTimelineItemMapper,
 ) {
-
     private val mutex = Mutex()
 
     suspend fun postItems(items: List<TimelineItem>) {

@@ -17,7 +17,6 @@
 package io.element.android.features.invitelist.impl
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -34,20 +33,20 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.invitelist.impl.components.InviteSummaryRow
-import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
 import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
-import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.aliasScreenTitle
 import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.matrix.api.core.RoomId
-import io.element.android.compound.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
@@ -57,7 +56,7 @@ fun InviteListView(
     onInviteAccepted: (RoomId) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    if (state.acceptedAction is Async.Success) {
+    if (state.acceptedAction is AsyncData.Success) {
         LaunchedEffect(state.acceptedAction) {
             onInviteAccepted(state.acceptedAction.data)
         }
@@ -70,15 +69,17 @@ fun InviteListView(
     )
 
     if (state.declineConfirmationDialog is InviteDeclineConfirmationDialog.Visible) {
-        val contentResource = if (state.declineConfirmationDialog.isDirect)
+        val contentResource = if (state.declineConfirmationDialog.isDirect) {
             R.string.screen_invites_decline_direct_chat_message
-        else
+        } else {
             R.string.screen_invites_decline_chat_message
+        }
 
-        val titleResource = if (state.declineConfirmationDialog.isDirect)
+        val titleResource = if (state.declineConfirmationDialog.isDirect) {
             R.string.screen_invites_decline_direct_chat_title
-        else
+        } else {
             R.string.screen_invites_decline_chat_title
+        }
 
         ConfirmationDialog(
             content = stringResource(contentResource, state.declineConfirmationDialog.name),
@@ -90,7 +91,7 @@ fun InviteListView(
         )
     }
 
-    if (state.acceptedAction is Async.Failure) {
+    if (state.acceptedAction is AsyncData.Failure) {
         ErrorDialog(
             content = stringResource(CommonStrings.error_unknown),
             title = stringResource(CommonStrings.common_error),
@@ -99,7 +100,7 @@ fun InviteListView(
         )
     }
 
-    if (state.declinedAction is Async.Failure) {
+    if (state.declinedAction is AsyncData.Failure) {
         ErrorDialog(
             content = stringResource(CommonStrings.error_unknown),
             title = stringResource(CommonStrings.common_error),
@@ -109,7 +110,7 @@ fun InviteListView(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun InviteListContent(
     state: InviteListState,

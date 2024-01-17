@@ -102,14 +102,16 @@ fun PollContentView(
 
     var showConfirmation: Boolean by remember { mutableStateOf(false) }
 
-    if (showConfirmation) ConfirmationDialog(
-        content = stringResource(id = CommonStrings.common_poll_end_confirmation),
-        onSubmitClicked = {
-            onPollEnd()
-            showConfirmation = false
-        },
-        onDismiss = { showConfirmation = false },
-    )
+    if (showConfirmation) {
+        ConfirmationDialog(
+            content = stringResource(id = CommonStrings.common_poll_end_confirmation),
+            onSubmitClicked = {
+                onPollEnd()
+                showConfirmation = false
+            },
+            onDismiss = { showConfirmation = false },
+        )
+    }
 
     Column(
         modifier = modifier.fillMaxWidth(),

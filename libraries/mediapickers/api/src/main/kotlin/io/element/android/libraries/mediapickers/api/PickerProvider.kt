@@ -21,7 +21,6 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.compose.runtime.Composable
 
 interface PickerProvider {
-
     @Composable
     fun registerGalleryPicker(
         onResult: (uri: Uri?, mimeType: String?) -> Unit

@@ -10,6 +10,9 @@
 -keep class com.sun.jna.** { *; }
 -keep class * implements com.sun.jna.** { *; }
 
+# TagSoup, coming from the RTE library
+-keep class org.ccil.cowan.tagsoup.** { *; }
+
 # kotlinx.serialization
 
 # Kotlin serialization looks up the generated serializer classes through a function on companion
@@ -32,3 +35,8 @@
 -dontwarn org.conscrypt.**
 -dontwarn org.bouncycastle.**
 -dontwarn org.openjsse.**
+
+# Needed for Posthog
+-keepclassmembers class android.view.JavaViewSpy {
+    static int windowAttachCount(android.view.View);
+}

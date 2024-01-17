@@ -27,12 +27,10 @@ import javax.inject.Inject
 
 @ContributesBinding(AppScope::class)
 class DefaultSignedOutEntryPoint @Inject constructor() : SignedOutEntryPoint {
-
     override fun nodeBuilder(parentNode: Node, buildContext: BuildContext): SignedOutEntryPoint.NodeBuilder {
         val plugins = ArrayList<Plugin>()
 
         return object : SignedOutEntryPoint.NodeBuilder {
-
             override fun params(params: SignedOutEntryPoint.Params): SignedOutEntryPoint.NodeBuilder {
                 plugins += SignedOutNode.Inputs(params.sessionId)
                 return this

@@ -50,8 +50,8 @@
   <string name="action_forgot_password">"Zabudnuté heslo?"</string>
   <string name="action_forward">"Preposlať"</string>
   <string name="action_invite">"Pozvať"</string>
-  <string name="action_invite_friends">"Pozvať priateľov"</string>
-  <string name="action_invite_friends_to_app">"Pozvať priateľov do %1$s"</string>
+  <string name="action_invite_friends">"Pozvať ľudí"</string>
+  <string name="action_invite_friends_to_app">"Pozvať ľudí do %1$s"</string>
   <string name="action_invite_people_to_app">"Pozvať ľudí do %1$s"</string>
   <string name="action_invites_list">"Pozvánky"</string>
   <string name="action_join">"Pripojiť sa"</string>

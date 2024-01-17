@@ -31,7 +31,6 @@ import org.robolectric.RuntimeEnvironment
 
 @RunWith(RobolectricTestRunner::class)
 class AndroidLocalMediaFactoryTest {
-
     @Test
     fun `test AndroidLocalMediaFactory`() {
         val sut = createAndroidLocalMediaFactory()

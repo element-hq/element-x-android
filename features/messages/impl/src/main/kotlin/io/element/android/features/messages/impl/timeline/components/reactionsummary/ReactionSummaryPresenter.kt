@@ -65,18 +65,17 @@ class ReactionSummaryPresenter @Inject constructor(
         derivedStateOf {
             summary?.let { summary ->
                 summary.copy(reactions = summary.reactions.map { reaction ->
-                     reaction.copy(senders = reaction.senders.map { sender ->
-                         val member = members.firstOrNull { it.userId == sender.senderId }
-                         val user = MatrixUser(
-                             userId = sender.senderId,
-                             displayName = member?.displayName,
-                             avatarUrl = member?.avatarUrl
-                         )
-                         sender.copy(user = user)
-                     })
+                    reaction.copy(senders = reaction.senders.map { sender ->
+                        val member = members.firstOrNull { it.userId == sender.senderId }
+                        val user = MatrixUser(
+                            userId = sender.senderId,
+                            displayName = member?.displayName,
+                            avatarUrl = member?.avatarUrl
+                        )
+                        sender.copy(user = user)
+                    })
                 })
             }
         }
     }
-
 }

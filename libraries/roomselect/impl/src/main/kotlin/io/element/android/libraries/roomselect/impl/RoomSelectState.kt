@@ -16,9 +16,9 @@
 
 package io.element.android.libraries.roomselect.impl
 
-import io.element.android.libraries.roomselect.api.RoomSelectMode
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
 import io.element.android.libraries.matrix.api.roomlist.RoomSummaryDetails
+import io.element.android.libraries.roomselect.api.RoomSelectMode
 import kotlinx.collections.immutable.ImmutableList
 
 data class RoomSelectState(

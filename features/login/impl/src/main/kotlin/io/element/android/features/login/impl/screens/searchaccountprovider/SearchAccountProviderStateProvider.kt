@@ -20,20 +20,20 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.appconfig.AuthenticationConfig
 import io.element.android.features.login.impl.changeserver.aChangeServerState
 import io.element.android.features.login.impl.resolver.HomeserverData
-import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.AsyncData
 
 open class SearchAccountProviderStateProvider : PreviewParameterProvider<SearchAccountProviderState> {
     override val values: Sequence<SearchAccountProviderState>
         get() = sequenceOf(
             aSearchAccountProviderState(),
-            aSearchAccountProviderState(userInputResult = Async.Success(aHomeserverDataList())),
+            aSearchAccountProviderState(userInputResult = AsyncData.Success(aHomeserverDataList())),
             // Add other state here
         )
 }
 
 fun aSearchAccountProviderState(
     userInput: String = "",
-    userInputResult: Async<List<HomeserverData>> = Async.Uninitialized,
+    userInputResult: AsyncData<List<HomeserverData>> = AsyncData.Uninitialized,
 ) = SearchAccountProviderState(
     userInput = userInput,
     userInputResult = userInputResult,

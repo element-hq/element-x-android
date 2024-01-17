@@ -42,6 +42,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.utils.toHrf
+import io.element.android.libraries.architecture.coverage.ExcludeFromCoverage
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.preview.PreviewGroup
@@ -120,6 +121,7 @@ internal fun TextLightPreview() = ElementPreviewLight { ContentToPreview() }
 @Composable
 internal fun TextDarkPreview() = ElementPreviewDark { ContentToPreview() }
 
+@ExcludeFromCoverage
 @Composable
 private fun ContentToPreview() {
     val colors = mapOf(

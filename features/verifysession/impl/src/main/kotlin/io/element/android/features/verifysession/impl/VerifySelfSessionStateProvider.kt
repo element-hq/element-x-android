@@ -17,7 +17,7 @@
 package io.element.android.features.verifysession.impl
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.verification.SessionVerificationData
 import io.element.android.libraries.matrix.api.verification.VerificationEmoji
 
@@ -29,10 +29,10 @@ open class VerifySelfSessionStateProvider : PreviewParameterProvider<VerifySelfS
                 verificationFlowStep = VerifySelfSessionState.VerificationStep.AwaitingOtherDeviceResponse
             ),
             aVerifySelfSessionState().copy(
-                verificationFlowStep = VerifySelfSessionState.VerificationStep.Verifying(aEmojisSessionVerificationData(), Async.Uninitialized)
+                verificationFlowStep = VerifySelfSessionState.VerificationStep.Verifying(aEmojisSessionVerificationData(), AsyncData.Uninitialized)
             ),
             aVerifySelfSessionState().copy(
-                verificationFlowStep = VerifySelfSessionState.VerificationStep.Verifying(aEmojisSessionVerificationData(), Async.Loading())
+                verificationFlowStep = VerifySelfSessionState.VerificationStep.Verifying(aEmojisSessionVerificationData(), AsyncData.Loading())
             ),
             aVerifySelfSessionState().copy(
                 verificationFlowStep = VerifySelfSessionState.VerificationStep.Canceled
@@ -41,7 +41,7 @@ open class VerifySelfSessionStateProvider : PreviewParameterProvider<VerifySelfS
                 verificationFlowStep = VerifySelfSessionState.VerificationStep.Ready
             ),
             aVerifySelfSessionState().copy(
-                verificationFlowStep = VerifySelfSessionState.VerificationStep.Verifying(aDecimalsSessionVerificationData(), Async.Uninitialized)
+                verificationFlowStep = VerifySelfSessionState.VerificationStep.Verifying(aDecimalsSessionVerificationData(), AsyncData.Uninitialized)
             ),
             // Add other state here
         )

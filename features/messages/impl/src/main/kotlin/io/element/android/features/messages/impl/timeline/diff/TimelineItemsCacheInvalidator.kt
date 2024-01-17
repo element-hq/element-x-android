@@ -27,7 +27,6 @@ import io.element.android.libraries.androidutils.diff.MutableDiffCache
  * This is needed because a timeline item is computed based on the previous and next items.
  */
 internal class TimelineItemsCacheInvalidator : DiffCacheInvalidator<TimelineItem> {
-
     private val delegate = DefaultDiffCacheInvalidator<TimelineItem>()
 
     override fun onChanged(position: Int, count: Int, cache: MutableDiffCache<TimelineItem>) {

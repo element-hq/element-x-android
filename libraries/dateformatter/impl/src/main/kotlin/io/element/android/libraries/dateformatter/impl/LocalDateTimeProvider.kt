@@ -27,7 +27,6 @@ class LocalDateTimeProvider @Inject constructor(
     private val clock: Clock,
     private val timezone: TimeZone,
 ) {
-
     fun providesNow(): LocalDateTime {
         val now: Instant = clock.now()
         return now.toLocalDateTime(timezone)

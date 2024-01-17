@@ -33,7 +33,7 @@ class FakeNotificationSettingsService(
     initialOneToOneDefaultMode: RoomNotificationMode = RoomNotificationMode.ALL_MESSAGES,
     initialEncryptedOneToOneDefaultMode: RoomNotificationMode = RoomNotificationMode.ALL_MESSAGES,
 ) : NotificationSettingsService {
-    private var _notificationSettingsStateFlow = MutableStateFlow(Unit)
+    private val notificationSettingsStateFlow = MutableStateFlow(Unit)
     private var defaultGroupRoomNotificationMode: RoomNotificationMode = initialGroupDefaultMode
     private var defaultEncryptedGroupRoomNotificationMode: RoomNotificationMode = initialEncryptedGroupDefaultMode
     private var defaultOneToOneRoomNotificationMode: RoomNotificationMode = initialOneToOneDefaultMode
@@ -49,7 +49,7 @@ class FakeNotificationSettingsService(
     private var setAtRoomError: Throwable? = null
     private var canHomeServerPushEncryptedEventsToDeviceResult = Result.success(true)
     override val notificationSettingsChangeFlow: SharedFlow<Unit>
-        get() = _notificationSettingsStateFlow
+        get() = notificationSettingsStateFlow
 
     override suspend fun getRoomNotificationSettings(roomId: RoomId, isEncrypted: Boolean, isOneToOne: Boolean): Result<RoomNotificationSettings> {
         return Result.success(
@@ -94,7 +94,7 @@ class FakeNotificationSettingsService(
                 defaultGroupRoomNotificationMode = mode
             }
         }
-        _notificationSettingsStateFlow.emit(Unit)
+        notificationSettingsStateFlow.emit(Unit)
         return Result.success(Unit)
     }
 
@@ -105,7 +105,7 @@ class FakeNotificationSettingsService(
         } else {
             roomNotificationModeIsDefault = false
             roomNotificationMode = mode
-            _notificationSettingsStateFlow.emit(Unit)
+            notificationSettingsStateFlow.emit(Unit)
             Result.success(Unit)
         }
     }
@@ -117,7 +117,7 @@ class FakeNotificationSettingsService(
         }
         roomNotificationModeIsDefault = true
         roomNotificationMode = defaultEncryptedGroupRoomNotificationMode
-        _notificationSettingsStateFlow.emit(Unit)
+        notificationSettingsStateFlow.emit(Unit)
         return Result.success(Unit)
     }
 

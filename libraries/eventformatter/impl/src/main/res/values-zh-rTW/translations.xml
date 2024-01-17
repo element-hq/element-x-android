@@ -31,6 +31,7 @@
   <string name="state_event_room_third_party_invite">"%1$s 邀請 %2$s 加入聊天室"</string>
   <string name="state_event_room_third_party_invite_by_you">"您邀請 %1$s 加入聊天室"</string>
   <string name="state_event_room_third_party_revoked_invite">"%1$s 撤銷了 %2$s 加入房間的邀請"</string>
+  <string name="state_event_room_third_party_revoked_invite_by_you">"您撤銷了 %1$s 加入房間的邀請"</string>
   <string name="state_event_room_topic_changed">"%1$s 將主題變更為 %2$s"</string>
   <string name="state_event_room_topic_changed_by_you">"您將主題變更為 %1$s"</string>
   <string name="state_event_room_topic_removed">"聊天室主題已被 %1$s 移除"</string>

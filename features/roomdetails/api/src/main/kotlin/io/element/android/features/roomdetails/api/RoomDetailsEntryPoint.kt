@@ -27,7 +27,6 @@ import io.element.android.libraries.matrix.api.core.UserId
 import kotlinx.parcelize.Parcelize
 
 interface RoomDetailsEntryPoint : FeatureEntryPoint {
-
     sealed interface InitialTarget : Parcelable {
         @Parcelize
         data object RoomDetails : InitialTarget

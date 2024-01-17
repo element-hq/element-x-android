@@ -50,7 +50,6 @@ class NetworkMonitorImpl @Inject constructor(
     @ApplicationContext context: Context,
     appCoroutineScope: CoroutineScope,
 ) : NetworkMonitor {
-
     private val connectivityManager: ConnectivityManager = context.getSystemService(ConnectivityManager::class.java)
 
     override val connectivity: StateFlow<NetworkStatus> = callbackFlow {
@@ -61,7 +60,6 @@ class NetworkMonitorImpl @Inject constructor(
          *  Debounce the result to avoid quick offline<->online changes.
          */
         val callback = object : ConnectivityManager.NetworkCallback() {
-
             private val activeNetworksCount = AtomicInteger(0)
 
             override fun onLost(network: Network) {

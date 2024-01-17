@@ -27,7 +27,7 @@ import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.preferences.impl.R
 import io.element.android.libraries.androidutils.system.startNotificationSettingsIntent
 import io.element.android.libraries.designsystem.atomic.molecules.DialogLikeBannerMolecule
-import io.element.android.libraries.designsystem.components.async.AsyncView
+import io.element.android.libraries.designsystem.components.async.AsyncActionView
 import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
 import io.element.android.libraries.designsystem.components.preferences.PreferenceCategory
 import io.element.android.libraries.designsystem.components.preferences.PreferencePage
@@ -60,7 +60,6 @@ fun NotificationSettingsView(
         onBackPressed = onBackPressed,
         title = stringResource(id = R.string.screen_notification_settings_title)
     ) {
-
         when (state.matrixSettings) {
             is NotificationSettingsState.MatrixSettings.Invalid -> InvalidNotificationSettingsView(
                 showError = state.matrixSettings.fixFailed,
@@ -80,7 +79,7 @@ fun NotificationSettingsView(
                 onInviteForMeNotificationsChanged = { state.eventSink(NotificationSettingsEvents.SetInviteForMeNotificationsEnabled(it)) },
             )
         }
-        AsyncView(
+        AsyncActionView(
             async = state.changeNotificationSettingAction,
             errorMessage = { stringResource(R.string.screen_notification_settings_edit_failed_updating_default_mode) },
             onErrorDismiss = { state.eventSink(NotificationSettingsEvents.ClearNotificationChangeError) },

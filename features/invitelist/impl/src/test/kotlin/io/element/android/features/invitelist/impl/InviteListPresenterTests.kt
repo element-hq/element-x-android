@@ -22,7 +22,7 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.invitelist.api.SeenInvitesStore
 import io.element.android.features.invitelist.test.FakeSeenInvitesStore
-import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.MatrixClient
@@ -245,7 +245,7 @@ class InviteListPresenterTests {
 
             val newState = awaitItem()
 
-            assertThat(newState.declinedAction).isEqualTo(Async.Failure<Unit>(ex))
+            assertThat(newState.declinedAction).isEqualTo(AsyncData.Failure<Unit>(ex))
         }
     }
 
@@ -277,7 +277,7 @@ class InviteListPresenterTests {
 
             val newState = awaitItem()
 
-            assertThat(newState.declinedAction).isEqualTo(Async.Uninitialized)
+            assertThat(newState.declinedAction).isEqualTo(AsyncData.Uninitialized)
         }
     }
 
@@ -300,7 +300,7 @@ class InviteListPresenterTests {
 
             val newState = awaitItem()
 
-            assertThat(newState.acceptedAction).isEqualTo(Async.Success(A_ROOM_ID))
+            assertThat(newState.acceptedAction).isEqualTo(AsyncData.Success(A_ROOM_ID))
             assertThat(fakeNotificationDrawerManager.getClearMembershipNotificationForRoomCount(client.sessionId, A_ROOM_ID)).isEqualTo(1)
         }
     }
@@ -323,7 +323,7 @@ class InviteListPresenterTests {
             val originalState = awaitItem()
             originalState.eventSink(InviteListEvents.AcceptInvite(originalState.inviteList[0]))
 
-            assertThat(awaitItem().acceptedAction).isEqualTo(Async.Failure<RoomId>(ex))
+            assertThat(awaitItem().acceptedAction).isEqualTo(AsyncData.Failure<RoomId>(ex))
         }
     }
 
@@ -350,7 +350,7 @@ class InviteListPresenterTests {
             originalState.eventSink(InviteListEvents.DismissAcceptError)
 
             val newState = awaitItem()
-            assertThat(newState.acceptedAction).isEqualTo(Async.Uninitialized)
+            assertThat(newState.acceptedAction).isEqualTo(AsyncData.Uninitialized)
         }
     }
 

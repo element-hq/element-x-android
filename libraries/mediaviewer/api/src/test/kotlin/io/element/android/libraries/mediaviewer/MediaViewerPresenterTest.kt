@@ -23,16 +23,16 @@ import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.matrix.test.media.FakeMediaLoader
 import io.element.android.libraries.matrix.test.media.aMediaSource
 import io.element.android.libraries.mediaviewer.api.local.aFileInfo
-import io.element.android.libraries.mediaviewer.test.FakeLocalMediaActions
-import io.element.android.libraries.mediaviewer.test.FakeLocalMediaFactory
 import io.element.android.libraries.mediaviewer.api.viewer.MediaViewerEvents
 import io.element.android.libraries.mediaviewer.api.viewer.MediaViewerNode
 import io.element.android.libraries.mediaviewer.api.viewer.MediaViewerPresenter
+import io.element.android.libraries.mediaviewer.test.FakeLocalMediaActions
+import io.element.android.libraries.mediaviewer.test.FakeLocalMediaFactory
 import io.element.android.tests.testutils.WarmUpRule
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -43,10 +43,8 @@ import org.junit.Test
 private val TESTED_MEDIA_INFO = aFileInfo()
 
 class MediaViewerPresenterTest {
-
     @get:Rule
     val warmUpRule = WarmUpRule()
-
 
     private val mockMediaUri: Uri = mockk("localMediaUri")
     private val localMediaFactory = FakeLocalMediaFactory(mockMediaUri)
@@ -60,13 +58,13 @@ class MediaViewerPresenterTest {
             presenter.present()
         }.test {
             var state = awaitItem()
-            assertThat(state.downloadedMedia).isEqualTo(Async.Uninitialized)
+            assertThat(state.downloadedMedia).isEqualTo(AsyncData.Uninitialized)
             assertThat(state.mediaInfo).isEqualTo(TESTED_MEDIA_INFO)
             state = awaitItem()
-            assertThat(state.downloadedMedia).isInstanceOf(Async.Loading::class.java)
+            assertThat(state.downloadedMedia).isInstanceOf(AsyncData.Loading::class.java)
             state = awaitItem()
             val successData = state.downloadedMedia.dataOrNull()
-            assertThat(state.downloadedMedia).isInstanceOf(Async.Success::class.java)
+            assertThat(state.downloadedMedia).isInstanceOf(AsyncData.Success::class.java)
             assertThat(successData).isNotNull()
         }
     }
@@ -81,15 +79,15 @@ class MediaViewerPresenterTest {
             presenter.present()
         }.test {
             var state = awaitItem()
-            assertThat(state.downloadedMedia).isEqualTo(Async.Uninitialized)
+            assertThat(state.downloadedMedia).isEqualTo(AsyncData.Uninitialized)
             state = awaitItem()
-            assertThat(state.downloadedMedia).isInstanceOf(Async.Loading::class.java)
+            assertThat(state.downloadedMedia).isInstanceOf(AsyncData.Loading::class.java)
             // no state changes while media is loading
             state.eventSink(MediaViewerEvents.OpenWith)
             state.eventSink(MediaViewerEvents.Share)
             state.eventSink(MediaViewerEvents.SaveOnDisk)
             state = awaitItem()
-            assertThat(state.downloadedMedia).isInstanceOf(Async.Success::class.java)
+            assertThat(state.downloadedMedia).isInstanceOf(AsyncData.Success::class.java)
             // Should succeed without change of state
             state.eventSink(MediaViewerEvents.OpenWith)
             // Should succeed without change of state
@@ -128,21 +126,21 @@ class MediaViewerPresenterTest {
         }.test {
             mediaLoader.shouldFail = true
             val initialState = awaitItem()
-            assertThat(initialState.downloadedMedia).isEqualTo(Async.Uninitialized)
+            assertThat(initialState.downloadedMedia).isEqualTo(AsyncData.Uninitialized)
             assertThat(initialState.mediaInfo).isEqualTo(TESTED_MEDIA_INFO)
             val loadingState = awaitItem()
-            assertThat(loadingState.downloadedMedia).isInstanceOf(Async.Loading::class.java)
+            assertThat(loadingState.downloadedMedia).isInstanceOf(AsyncData.Loading::class.java)
             val failureState = awaitItem()
-            assertThat(failureState.downloadedMedia).isInstanceOf(Async.Failure::class.java)
+            assertThat(failureState.downloadedMedia).isInstanceOf(AsyncData.Failure::class.java)
             mediaLoader.shouldFail = false
             failureState.eventSink(MediaViewerEvents.RetryLoading)
-            //There is one recomposition because of the retry mechanism
+            // There is one recomposition because of the retry mechanism
             skipItems(1)
             val retryLoadingState = awaitItem()
-            assertThat(retryLoadingState.downloadedMedia).isInstanceOf(Async.Loading::class.java)
+            assertThat(retryLoadingState.downloadedMedia).isInstanceOf(AsyncData.Loading::class.java)
             val successState = awaitItem()
             val successData = successState.downloadedMedia.dataOrNull()
-            assertThat(successState.downloadedMedia).isInstanceOf(Async.Success::class.java)
+            assertThat(successState.downloadedMedia).isInstanceOf(AsyncData.Success::class.java)
             assertThat(successData).isNotNull()
         }
     }

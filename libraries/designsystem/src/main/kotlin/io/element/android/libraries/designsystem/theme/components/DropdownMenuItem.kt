@@ -78,10 +78,7 @@ internal object DropDownMenuItemDefaults {
 
 @Preview(group = PreviewGroup.Menus)
 @Composable
-internal fun DropdownMenuItemPreview() = ElementThemedPreview { ContentToPreview() }
-
-@Composable
-private fun ContentToPreview() {
+internal fun DropdownMenuItemPreview() = ElementThemedPreview {
     Column {
         DropdownMenuItem(
             text = { Text(text = "Item") },

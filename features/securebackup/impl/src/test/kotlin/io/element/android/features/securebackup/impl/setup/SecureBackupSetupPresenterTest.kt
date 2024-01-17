@@ -140,11 +140,11 @@ class SecureBackupSetupPresenterTest {
                 )
             )
             val createdState = awaitItem()
-            assertThat(createdState.setupState).isEqualTo(SetupState.Created(FakeEncryptionService.fakeRecoveryKey))
+            assertThat(createdState.setupState).isEqualTo(SetupState.Created(FakeEncryptionService.FAKE_RECOVERY_KEY))
             assertThat(createdState.recoveryKeyViewState).isEqualTo(
                 RecoveryKeyViewState(
                     recoveryKeyUserStory = RecoveryKeyUserStory.Change,
-                    formattedRecoveryKey = FakeEncryptionService.fakeRecoveryKey,
+                    formattedRecoveryKey = FakeEncryptionService.FAKE_RECOVERY_KEY,
                     inProgress = false,
                 )
             )

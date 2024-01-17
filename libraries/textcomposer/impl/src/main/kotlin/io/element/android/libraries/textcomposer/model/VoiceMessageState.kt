@@ -22,7 +22,7 @@ import kotlin.time.Duration
 
 @Immutable
 sealed interface VoiceMessageState {
-    data object Idle: VoiceMessageState
+    data object Idle : VoiceMessageState
 
     data class Preview(
         val isSending: Boolean,
@@ -31,10 +31,10 @@ sealed interface VoiceMessageState {
         val playbackProgress: Float,
         val time: Duration,
         val waveform: ImmutableList<Float>,
-    ): VoiceMessageState
+    ) : VoiceMessageState
 
     data class Recording(
         val duration: Duration,
         val levels: ImmutableList<Float>,
-    ): VoiceMessageState
+    ) : VoiceMessageState
 }

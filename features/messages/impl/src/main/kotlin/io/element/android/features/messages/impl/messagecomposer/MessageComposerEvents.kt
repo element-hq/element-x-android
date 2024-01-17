@@ -16,6 +16,7 @@
 
 package io.element.android.features.messages.impl.messagecomposer
 
+import android.net.Uri
 import androidx.compose.runtime.Immutable
 import io.element.android.features.messages.impl.mentions.MentionSuggestion
 import io.element.android.libraries.textcomposer.model.Message
@@ -26,6 +27,7 @@ import io.element.android.libraries.textcomposer.model.Suggestion
 sealed interface MessageComposerEvents {
     data object ToggleFullScreenState : MessageComposerEvents
     data class SendMessage(val message: Message) : MessageComposerEvents
+    data class SendUri(val uri: Uri) : MessageComposerEvents
     data object CloseSpecialMode : MessageComposerEvents
     data class SetMode(val composerMode: MessageComposerMode) : MessageComposerEvents
     data object AddAttachment : MessageComposerEvents

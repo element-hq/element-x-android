@@ -17,6 +17,7 @@
   <string name="screen_key_backup_disable_description_point_2">"Du verlierst den Zugriff auf deine verschlüsselten Nachrichten, wenn du dich überall von %1$s abmeldest"</string>
   <string name="screen_key_backup_disable_title">"Bist du sicher, dass du das Backup ausschalten willst?"</string>
   <string name="screen_recovery_key_change_description">"Besorge dir einen neuen Wiederherstellungsschlüssel, wenn du deinen alten verloren hast. Nachdem du deinen Wiederherstellungsschlüssel geändert hast, funktioniert dein alter Schlüssel nicht mehr."</string>
+  <string name="screen_recovery_key_change_generate_key">"Erstelle einen neuen Wiederherstellungsschlüssel"</string>
   <string name="screen_recovery_key_change_generate_key_description">"Stelle sicher, dass du deinen Wiederherstellungsschlüssel an einem sicheren Ort aufbewahren kannst"</string>
   <string name="screen_recovery_key_change_success">"Wiederherstellungsschlüssel geändert"</string>
   <string name="screen_recovery_key_change_title">"Wiederherstellungsschlüssel ändern?"</string>

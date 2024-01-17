@@ -22,7 +22,6 @@ import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -31,10 +30,10 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
-import io.element.android.libraries.architecture.Async
+import io.element.android.features.logout.impl.tools.isBackingUp
+import io.element.android.features.logout.impl.ui.LogoutActionDialog
+import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.designsystem.atomic.pages.FlowStepPage
-import io.element.android.libraries.designsystem.components.ProgressDialog
-import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
@@ -79,43 +78,21 @@ fun LogoutView(
         },
     )
 
-    // Log out confirmation dialog
-    if (state.showConfirmationDialog) {
-        ConfirmationDialog(
-            title = stringResource(id = CommonStrings.action_signout),
-            content = stringResource(id = R.string.screen_signout_confirmation_dialog_content),
-            submitText = stringResource(id = CommonStrings.action_signout),
-            onSubmitClicked = {
-                eventSink(LogoutEvents.Logout(ignoreSdkError = false))
-            },
-            onDismiss = {
-                eventSink(LogoutEvents.CloseDialogs)
-            }
-        )
-    }
-
-    when (state.logoutAction) {
-        is Async.Loading ->
-            ProgressDialog(text = stringResource(id = R.string.screen_signout_in_progress_dialog_content))
-        is Async.Failure ->
-            ConfirmationDialog(
-                title = stringResource(id = CommonStrings.dialog_title_error),
-                content = stringResource(id = CommonStrings.error_unknown),
-                submitText = stringResource(id = CommonStrings.action_signout_anyway),
-                onSubmitClicked = {
-                    eventSink(LogoutEvents.Logout(ignoreSdkError = true))
-                },
-                onDismiss = {
-                    eventSink(LogoutEvents.CloseDialogs)
-                }
-            )
-        Async.Uninitialized ->
-            Unit
-        is Async.Success ->
-            LaunchedEffect(state.logoutAction) {
-                onSuccessLogout(state.logoutAction.data)
-            }
-    }
+    LogoutActionDialog(
+        state.logoutAction,
+        onConfirmClicked = {
+            eventSink(LogoutEvents.Logout(ignoreSdkError = false))
+        },
+        onForceLogoutClicked = {
+            eventSink(LogoutEvents.Logout(ignoreSdkError = true))
+        },
+        onDismissError = {
+            eventSink(LogoutEvents.CloseDialogs)
+        },
+        onSuccessLogout = {
+            onSuccessLogout(it)
+        },
+    )
 }
 
 @Composable
@@ -146,17 +123,6 @@ private fun subtitle(state: LogoutState): String? {
     }
 }
 
-private fun BackupUploadState.isBackingUp(): Boolean {
-    return when (this) {
-        BackupUploadState.Waiting,
-        is BackupUploadState.Uploading -> true
-        is BackupUploadState.SteadyException -> exception is SteadyStateException.Connection
-        BackupUploadState.Unknown,
-        BackupUploadState.Done,
-        BackupUploadState.Error -> false
-    }
-}
-
 @Composable
 private fun ColumnScope.Buttons(
     state: LogoutState,
@@ -172,13 +138,13 @@ private fun ColumnScope.Buttons(
         )
     }
     val signOutSubmitRes = when {
-        logoutAction is Async.Loading -> R.string.screen_signout_in_progress_dialog_content
+        logoutAction is AsyncAction.Loading -> R.string.screen_signout_in_progress_dialog_content
         state.backupUploadState.isBackingUp() -> CommonStrings.action_signout_anyway
         else -> CommonStrings.action_signout
     }
     Button(
         text = stringResource(id = signOutSubmitRes),
-        showProgress = logoutAction is Async.Loading,
+        showProgress = logoutAction is AsyncAction.Loading,
         destructive = true,
         modifier = Modifier
             .fillMaxWidth()

@@ -8,7 +8,7 @@
 * [Stop Synapse](#stop-synapse)
 * [Troubleshoot](#troubleshoot)
   * [Android Emulator does cannot reach the homeserver](#android-emulator-does-cannot-reach-the-homeserver)
-  * [Tests partially run but some fail with "Unable to contact localhost:8080"](#tests-partially-run-but-some-fail-with-"unable-to-contact-localhost:8080")
+  * [Tests partially run but some fail with "Unable to contact localhost:8080"](#tests-partially-run-but-some-fail-with-"unable-to-contact-localhost8080")
   * [virtualenv command fails](#virtualenv-command-fails)
 
 <!--- END -->

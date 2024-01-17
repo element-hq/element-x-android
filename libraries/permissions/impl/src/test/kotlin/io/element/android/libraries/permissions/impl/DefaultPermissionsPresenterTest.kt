@@ -35,7 +35,6 @@ import org.junit.Test
 const val A_PERMISSION = "A_PERMISSION"
 
 class DefaultPermissionsPresenterTest {
-
     @get:Rule
     val warmUpRule = WarmUpRule()
 

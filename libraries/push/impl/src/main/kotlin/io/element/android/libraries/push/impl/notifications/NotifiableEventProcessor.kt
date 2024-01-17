@@ -36,7 +36,6 @@ class NotifiableEventProcessor @Inject constructor(
     private val outdatedDetector: OutdatedEventDetector,
     private val appNavigationStateService: AppNavigationStateService,
 ) {
-
     fun process(
         queuedEvents: List<NotifiableEvent>,
         renderedEvents: ProcessedEvents,

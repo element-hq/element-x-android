@@ -26,7 +26,6 @@ import io.element.android.libraries.di.SingleIn
 @SingleIn(CreateRoomScope::class)
 @MergeSubcomponent(CreateRoomScope::class)
 interface CreateRoomComponent : NodeFactoriesBindings {
-
     @Subcomponent.Builder
     interface Builder {
         fun build(): CreateRoomComponent

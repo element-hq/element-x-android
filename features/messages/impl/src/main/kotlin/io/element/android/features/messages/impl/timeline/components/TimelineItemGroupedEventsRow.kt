@@ -24,8 +24,8 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.pluralStringResource
 import io.element.android.features.messages.impl.R
-import io.element.android.features.messages.impl.timeline.TimelineRoomInfo
 import io.element.android.features.messages.impl.timeline.TimelineEvents
+import io.element.android.features.messages.impl.timeline.TimelineRoomInfo
 import io.element.android.features.messages.impl.timeline.aGroupedEvents
 import io.element.android.features.messages.impl.timeline.aTimelineRoomInfo
 import io.element.android.features.messages.impl.timeline.components.group.GroupHeaderView
@@ -43,7 +43,6 @@ import io.element.android.libraries.matrix.api.core.UserId
 fun TimelineItemGroupedEventsRow(
     timelineItem: TimelineItem.GroupedEvents,
     timelineRoomInfo: TimelineRoomInfo,
-    showReadReceipts: Boolean,
     isLastOutgoingMessage: Boolean,
     highlightedItem: String?,
     sessionState: SessionState,
@@ -71,7 +70,6 @@ fun TimelineItemGroupedEventsRow(
         timelineItem = timelineItem,
         timelineRoomInfo = timelineRoomInfo,
         highlightedItem = highlightedItem,
-        showReadReceipts = showReadReceipts,
         isLastOutgoingMessage = isLastOutgoingMessage,
         sessionState = sessionState,
         onClick = onClick,
@@ -95,7 +93,6 @@ private fun TimelineItemGroupedEventsRowContent(
     timelineItem: TimelineItem.GroupedEvents,
     timelineRoomInfo: TimelineRoomInfo,
     highlightedItem: String?,
-    showReadReceipts: Boolean,
     isLastOutgoingMessage: Boolean,
     sessionState: SessionState,
     onClick: (TimelineItem.Event) -> Unit,
@@ -127,11 +124,9 @@ private fun TimelineItemGroupedEventsRowContent(
                     TimelineItemRow(
                         timelineItem = subGroupEvent,
                         timelineRoomInfo = timelineRoomInfo,
-                        showReadReceipts = showReadReceipts,
                         isLastOutgoingMessage = isLastOutgoingMessage,
                         highlightedItem = highlightedItem,
                         sessionState = sessionState,
-                        userHasPermissionToSendMessage = false,
                         onClick = onClick,
                         onLongClick = onLongClick,
                         inReplyToClick = inReplyToClick,
@@ -146,14 +141,13 @@ private fun TimelineItemGroupedEventsRowContent(
                     )
                 }
             }
-        } else if (showReadReceipts) {
+        } else {
             TimelineItemReadReceiptView(
                 state = ReadReceiptViewState(
                     sendState = null,
                     isLastOutgoingMessage = false,
                     receipts = timelineItem.aggregatedReadReceipts,
                 ),
-                showReadReceipts = true,
                 onReadReceiptsClicked = onExpandGroupClick
             )
         }
@@ -166,10 +160,9 @@ internal fun TimelineItemGroupedEventsRowContentExpandedPreview() = ElementPrevi
     TimelineItemGroupedEventsRowContent(
         isExpanded = true,
         onExpandGroupClick = {},
-        timelineItem = aGroupedEvents(),
+        timelineItem = aGroupedEvents(withReadReceipts = true),
         timelineRoomInfo = aTimelineRoomInfo(),
         highlightedItem = null,
-        showReadReceipts = true,
         isLastOutgoingMessage = false,
         sessionState = aSessionState(),
         onClick = {},
@@ -191,10 +184,9 @@ internal fun TimelineItemGroupedEventsRowContentCollapsePreview() = ElementPrevi
     TimelineItemGroupedEventsRowContent(
         isExpanded = false,
         onExpandGroupClick = {},
-        timelineItem = aGroupedEvents(),
+        timelineItem = aGroupedEvents(withReadReceipts = true),
         timelineRoomInfo = aTimelineRoomInfo(),
         highlightedItem = null,
-        showReadReceipts = true,
         isLastOutgoingMessage = false,
         sessionState = aSessionState(),
         onClick = {},

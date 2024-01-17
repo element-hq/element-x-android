@@ -23,7 +23,6 @@ import org.matrix.rustcomponents.sdk.MembershipState as RustMembershipState
 import org.matrix.rustcomponents.sdk.RoomMember as RustRoomMember
 
 object RoomMemberMapper {
-
     fun map(roomMember: RustRoomMember): RoomMember = roomMember.use {
         RoomMember(
             UserId(it.userId()),

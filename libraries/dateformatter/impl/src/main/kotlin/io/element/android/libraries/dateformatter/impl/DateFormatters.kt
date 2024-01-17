@@ -36,7 +36,6 @@ class DateFormatters @Inject constructor(
     private val clock: Clock,
     private val timeZone: TimeZone,
 ) {
-
     private val onlyTimeFormatter: DateTimeFormatter by lazy {
         val pattern = DateFormat.getBestDateTimePattern(locale, "HH:mm") ?: "HH:mm"
         DateTimeFormatter.ofPattern(pattern, locale)

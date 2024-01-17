@@ -29,6 +29,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemLocationContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemNoticeContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStickerContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVoiceContent
@@ -57,6 +58,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.MessageFormat
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.NoticeMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.OtherMessageType
+import io.element.android.libraries.matrix.api.timeline.item.event.StickerContent
 import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.VideoMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.VoiceMessageType
@@ -74,7 +76,6 @@ import kotlin.time.Duration.Companion.minutes
 
 @RunWith(RobolectricTestRunner::class)
 class TimelineItemContentMessageFactoryTest {
-
     @Test
     fun `test create OtherMessageType`() = runTest {
         val sut = createTimelineItemContentMessageFactory()
@@ -439,6 +440,31 @@ class TimelineItemContentMessageFactoryTest {
     }
 
     @Test
+    fun `test create StickerMessageType`() = runTest {
+        val sut = createTimelineItemContentStickerFactory()
+        val result = sut.create(
+            content = createStickerContent(
+                "body",
+                ImageInfo(32, 32, "image/webp", 8192, null, MediaSource("thumbnail://url"), null),
+                "url"
+            )
+        )
+        val expected = TimelineItemStickerContent(
+            body = "body",
+            mediaSource = MediaSource(url = "url", json = null),
+            thumbnailSource = MediaSource(url = "thumbnail://url", json = null),
+            formattedFileSize = "8192 Bytes",
+            fileExtension = "",
+            mimeType = MimeTypes.WebP,
+            blurhash = null,
+            width = 32,
+            height = 32,
+            aspectRatio = 1.0f
+        )
+        assertThat(result).isEqualTo(expected)
+    }
+
+    @Test
     fun `test create ImageMessageType with info`() = runTest {
         val sut = createTimelineItemContentMessageFactory()
         val result = sut.create(
@@ -626,5 +652,21 @@ class TimelineItemContentMessageFactoryTest {
         fileExtensionExtractor = FileExtensionExtractorWithoutValidation(),
         featureFlagService = featureFlagService,
         htmlConverterProvider = FakeHtmlConverterProvider(htmlConverterTransform),
+    )
+
+    private fun createStickerContent(
+        body: String = "Body",
+        inImageInfo: ImageInfo,
+        inUrl: String
+    ): StickerContent {
+        return StickerContent(
+            body = body,
+            info = inImageInfo,
+            url = inUrl
+        )
+    }
+    private fun createTimelineItemContentStickerFactory() = TimelineItemContentStickerFactory(
+        fileSizeFormatter = FakeFileSizeFormatter(),
+        fileExtensionExtractor = FileExtensionExtractorWithoutValidation()
     )
 }

@@ -34,6 +34,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
@@ -43,6 +44,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
+import io.element.android.features.messages.impl.timeline.components.layout.ContentAvoidingLayoutData
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVoiceContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVoiceContentProvider
 import io.element.android.features.messages.impl.voicemessages.timeline.VoiceMessageEvents
@@ -64,7 +66,7 @@ import kotlinx.coroutines.delay
 fun TimelineItemVoiceView(
     state: VoiceMessageState,
     content: TimelineItemVoiceContent,
-    extraPadding: ExtraPadding,
+    onContentLayoutChanged: (ContentAvoidingLayoutData) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     fun playPause() {
@@ -73,9 +75,18 @@ fun TimelineItemVoiceView(
 
     val a11y = stringResource(CommonStrings.common_voice_message)
     Row(
-        modifier = modifier.semantics {
-            contentDescription = a11y
-        },
+        modifier = modifier
+            .semantics {
+                contentDescription = a11y
+            }
+            .onSizeChanged {
+                onContentLayoutChanged(
+                    ContentAvoidingLayoutData(
+                        contentWidth = it.width,
+                        contentHeight = it.height,
+                    )
+                )
+            },
         verticalAlignment = Alignment.CenterVertically,
     ) {
         when (state.button) {
@@ -99,13 +110,10 @@ fun TimelineItemVoiceView(
             showCursor = state.showCursor,
             playbackProgress = state.progress,
             waveform = content.waveform,
-            modifier = Modifier
-                .height(34.dp)
-                .weight(1f),
+            modifier = Modifier.height(34.dp),
             seekEnabled = !context.isScreenReaderEnabled(),
             onSeek = { state.eventSink(VoiceMessageEvents.Seek(it)) },
         )
-        Spacer(Modifier.width(extraPadding.getDpSize()))
     }
 }
 
@@ -237,7 +245,7 @@ internal fun TimelineItemVoiceViewPreview(
     TimelineItemVoiceView(
         state = timelineItemVoiceViewParameters.state,
         content = timelineItemVoiceViewParameters.content,
-        extraPadding = noExtraPadding,
+        onContentLayoutChanged = {},
     )
 }
 
@@ -250,7 +258,7 @@ internal fun TimelineItemVoiceViewUnifiedPreview() = ElementPreview {
             TimelineItemVoiceView(
                 state = it.state,
                 content = it.content,
-                extraPadding = noExtraPadding,
+                onContentLayoutChanged = {},
             )
         }
     }

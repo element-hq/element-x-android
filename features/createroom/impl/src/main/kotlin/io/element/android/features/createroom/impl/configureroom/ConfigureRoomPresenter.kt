@@ -29,7 +29,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import im.vector.app.features.analytics.plan.CreatedRoom
 import io.element.android.features.createroom.impl.CreateRoomConfig
 import io.element.android.features.createroom.impl.CreateRoomDataStore
-import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runCatchingUpdatingState
 import io.element.android.libraries.core.mimetype.MimeTypes
@@ -57,7 +57,6 @@ class ConfigureRoomPresenter @Inject constructor(
     private val analyticsService: AnalyticsService,
     permissionsPresenterFactory: PermissionsPresenter.Factory,
 ) : Presenter<ConfigureRoomState> {
-
     private val cameraPermissionPresenter: PermissionsPresenter = permissionsPresenterFactory.create(android.Manifest.permission.CAMERA)
     private var pendingPermissionRequest = false
 
@@ -91,10 +90,10 @@ class ConfigureRoomPresenter @Inject constructor(
         }
 
         val localCoroutineScope = rememberCoroutineScope()
-        val createRoomAction: MutableState<Async<RoomId>> = remember { mutableStateOf(Async.Uninitialized) }
+        val createRoomAction: MutableState<AsyncAction<RoomId>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
 
         fun createRoom(config: CreateRoomConfig) {
-            createRoomAction.value = Async.Uninitialized
+            createRoomAction.value = AsyncAction.Uninitialized
             localCoroutineScope.createRoom(config, createRoomAction)
         }
 
@@ -118,7 +117,7 @@ class ConfigureRoomPresenter @Inject constructor(
                     }
                 }
 
-                ConfigureRoomEvents.CancelCreateRoom -> createRoomAction.value = Async.Uninitialized
+                ConfigureRoomEvents.CancelCreateRoom -> createRoomAction.value = AsyncAction.Uninitialized
             }
         }
 
@@ -133,7 +132,7 @@ class ConfigureRoomPresenter @Inject constructor(
 
     private fun CoroutineScope.createRoom(
         config: CreateRoomConfig,
-        createRoomAction: MutableState<Async<RoomId>>
+        createRoomAction: MutableState<AsyncAction<RoomId>>
     ) = launch {
         suspend {
             val avatarUrl = config.avatarUri?.let { uploadAvatar(it) }

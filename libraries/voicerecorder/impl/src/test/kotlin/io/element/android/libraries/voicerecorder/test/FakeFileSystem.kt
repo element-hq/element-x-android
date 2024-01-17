@@ -23,7 +23,7 @@ class FakeFileSystem {
     val files = mutableMapOf<File, String>()
 
     fun createFile(file: File) {
-        if(files.containsKey(file)) {
+        if (files.containsKey(file)) {
             return
         }
 

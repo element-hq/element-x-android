@@ -23,7 +23,6 @@ import java.io.File
  * A fake implementation of [VoiceMessageMediaRepo] for testing purposes.
  */
 class FakeVoiceMessageMediaRepo : VoiceMessageMediaRepo {
-
     var shouldFail = false
 
     override suspend fun getMediaFile(): Result<File> = simulateLongTask {

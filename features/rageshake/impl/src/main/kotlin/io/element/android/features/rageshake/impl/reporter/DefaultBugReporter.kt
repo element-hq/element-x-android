@@ -88,6 +88,7 @@ class DefaultBugReporter @Inject constructor(
 
     // the pending bug report call
     private var bugReportCall: Call? = null
+
     // boolean to cancel the bug report
     private val isCancelled = false
     private val logcatCommandDebug = arrayOf("logcat", "-d", "-v", "threadtime", "*:*")
@@ -187,7 +188,8 @@ class DefaultBugReporter @Inject constructor(
                                 try {
                                     builder.addFormDataPart(
                                         "file",
-                                        screenshotFile.name, screenshotFile.asRequestBody(MimeTypes.OctetStream.toMediaTypeOrNull())
+                                        screenshotFile.name,
+                                        screenshotFile.asRequestBody(MimeTypes.OctetStream.toMediaTypeOrNull())
                                     )
                                 } catch (e: Exception) {
                                     Timber.e(e, "## sendBugReport() : fail to write screenshot")

@@ -24,7 +24,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import io.element.android.features.login.impl.accountprovider.AccountProvider
 import io.element.android.features.login.impl.accountprovider.AccountProviderDataSource
 import io.element.android.features.login.impl.error.ChangeServerError
-import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runCatchingUpdatingState
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
@@ -36,19 +36,18 @@ class ChangeServerPresenter @Inject constructor(
     private val authenticationService: MatrixAuthenticationService,
     private val accountProviderDataSource: AccountProviderDataSource,
 ) : Presenter<ChangeServerState> {
-
     @Composable
     override fun present(): ChangeServerState {
         val localCoroutineScope = rememberCoroutineScope()
 
-        val changeServerAction: MutableState<Async<Unit>> = remember {
-            mutableStateOf(Async.Uninitialized)
+        val changeServerAction: MutableState<AsyncData<Unit>> = remember {
+            mutableStateOf(AsyncData.Uninitialized)
         }
 
         fun handleEvents(event: ChangeServerEvents) {
             when (event) {
                 is ChangeServerEvents.ChangeServer -> localCoroutineScope.changeServer(event.accountProvider, changeServerAction)
-                ChangeServerEvents.ClearError -> changeServerAction.value = Async.Uninitialized
+                ChangeServerEvents.ClearError -> changeServerAction.value = AsyncData.Uninitialized
             }
         }
 
@@ -60,7 +59,7 @@ class ChangeServerPresenter @Inject constructor(
 
     private fun CoroutineScope.changeServer(
         data: AccountProvider,
-        changeServerAction: MutableState<Async<Unit>>,
+        changeServerAction: MutableState<AsyncData<Unit>>,
     ) = launch {
         suspend {
             authenticationService.setHomeserver(data.url).map {

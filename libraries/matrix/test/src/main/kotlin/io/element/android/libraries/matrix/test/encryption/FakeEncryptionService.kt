@@ -36,7 +36,14 @@ class FakeEncryptionService : EncryptionService {
     private var recoverFailure: Exception? = null
     private var doesBackupExistOnServerResult: Result<Boolean> = Result.success(true)
 
+    private var enableBackupsFailure: Exception? = null
+
+    fun givenEnableBackupsFailure(exception: Exception?) {
+        enableBackupsFailure = exception
+    }
+
     override suspend fun enableBackups(): Result<Unit> = simulateLongTask {
+        enableBackupsFailure?.let { return Result.failure(it) }
         return Result.success(Unit)
     }
 
@@ -72,12 +79,12 @@ class FakeEncryptionService : EncryptionService {
         this.isLastDevice = isLastDevice
     }
 
-    override suspend fun isLastDevice(): Result<Boolean> {
+    override suspend fun isLastDevice(): Result<Boolean> = simulateLongTask {
         return Result.success(isLastDevice)
     }
 
     override suspend fun resetRecoveryKey(): Result<String> = simulateLongTask {
-        return Result.success(fakeRecoveryKey)
+        return Result.success(FAKE_RECOVERY_KEY)
     }
 
     override suspend fun enableRecovery(waitForBackupsToUpload: Boolean): Result<Unit> = simulateLongTask {
@@ -101,6 +108,6 @@ class FakeEncryptionService : EncryptionService {
     }
 
     companion object {
-        const val fakeRecoveryKey = "fake"
+        const val FAKE_RECOVERY_KEY = "fake"
     }
 }

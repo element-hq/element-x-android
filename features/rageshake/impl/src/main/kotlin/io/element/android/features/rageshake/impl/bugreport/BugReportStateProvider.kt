@@ -17,7 +17,7 @@
 package io.element.android.features.rageshake.impl.bugreport
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.AsyncAction
 
 open class BugReportStateProvider : PreviewParameterProvider<BugReportState> {
     override val values: Sequence<BugReportState>
@@ -31,8 +31,8 @@ open class BugReportStateProvider : PreviewParameterProvider<BugReportState> {
                 hasCrashLogs = true,
                 screenshotUri = "aUri"
             ),
-            aBugReportState().copy(sending = Async.Loading()),
-            aBugReportState().copy(sending = Async.Success(Unit)),
+            aBugReportState().copy(sending = AsyncAction.Loading),
+            aBugReportState().copy(sending = AsyncAction.Success(Unit)),
         )
 }
 
@@ -41,6 +41,6 @@ fun aBugReportState() = BugReportState(
     hasCrashLogs = false,
     screenshotUri = null,
     sendingProgress = 0F,
-    sending = Async.Uninitialized,
+    sending = AsyncAction.Uninitialized,
     eventSink = {}
 )

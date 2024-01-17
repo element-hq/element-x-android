@@ -26,7 +26,6 @@ class DefaultDaySeparatorFormatter @Inject constructor(
     private val localDateTimeProvider: LocalDateTimeProvider,
     private val dateFormatters: DateFormatters,
 ) : DaySeparatorFormatter {
-
     override fun format(timestamp: Long): String {
         val dateToFormat = localDateTimeProvider.providesFromTimestamp(timestamp)
         return dateFormatters.formatDateWithYear(dateToFormat)

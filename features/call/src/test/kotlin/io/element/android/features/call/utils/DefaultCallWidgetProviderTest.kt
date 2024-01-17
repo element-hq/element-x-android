@@ -32,7 +32,6 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
 class DefaultCallWidgetProviderTest {
-
     @Test
     fun `getWidget - fails if the session does not exist`() = runTest {
         val provider = createProvider(matrixClientProvider = FakeMatrixClientProvider { Result.failure(Exception("Session not found")) })

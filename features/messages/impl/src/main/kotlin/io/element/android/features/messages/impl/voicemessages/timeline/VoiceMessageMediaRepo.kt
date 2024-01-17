@@ -35,7 +35,6 @@ import java.io.File
  * Whenever a given mxc is found in the cache, it is returned immediately.
  */
 interface VoiceMessageMediaRepo {
-
     /**
      * Factory for [VoiceMessageMediaRepo].
      */
@@ -73,7 +72,6 @@ class DefaultVoiceMessageMediaRepo @AssistedInject constructor(
     @Assisted("mimeType") private val mimeType: String?,
     @Assisted("body") private val body: String?,
 ) : VoiceMessageMediaRepo {
-
     @ContributesBinding(RoomScope::class)
     @AssistedFactory
     fun interface Factory : VoiceMessageMediaRepo.Factory {

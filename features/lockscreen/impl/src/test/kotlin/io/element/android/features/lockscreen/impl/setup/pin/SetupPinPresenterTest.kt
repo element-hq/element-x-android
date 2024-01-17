@@ -37,7 +37,6 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
 class SetupPinPresenterTest {
-
     private val blacklistedPin = "1234"
     private val halfCompletePin = "12"
     private val completePin = "1235"
@@ -116,7 +115,7 @@ class SetupPinPresenterTest {
         }
     }
 
-    private fun SetupPinState.onPinEntryChanged(pinEntry: String){
+    private fun SetupPinState.onPinEntryChanged(pinEntry: String) {
         eventSink(SetupPinEvents.OnPinEntryChanged(pinEntry, isConfirmationStep))
     }
 

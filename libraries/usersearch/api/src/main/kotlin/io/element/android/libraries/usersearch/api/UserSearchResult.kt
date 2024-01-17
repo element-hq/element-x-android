@@ -22,3 +22,8 @@ data class UserSearchResult(
     val matrixUser: MatrixUser,
     val isUnresolved: Boolean = false,
 )
+
+data class UserSearchResultState(
+    val results: List<UserSearchResult>,
+    val isSearching: Boolean,
+)

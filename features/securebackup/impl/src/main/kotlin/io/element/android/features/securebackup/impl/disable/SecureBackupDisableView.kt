@@ -24,7 +24,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
@@ -34,10 +33,9 @@ import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.securebackup.impl.R
-import io.element.android.libraries.architecture.Async
 import io.element.android.libraries.designsystem.atomic.pages.FlowStepPage
+import io.element.android.libraries.designsystem.components.async.AsyncActionView
 import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
-import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
@@ -52,11 +50,6 @@ fun SecureBackupDisableView(
     onBackClicked: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    LaunchedEffect(state.disableAction) {
-        if (state.disableAction is Async.Success) {
-            onDone()
-        }
-    }
     FlowStepPage(
         modifier = modifier,
         onBackClicked = onBackClicked,
@@ -67,17 +60,19 @@ fun SecureBackupDisableView(
         buttons = { Buttons(state = state) },
     )
 
-    if (state.showConfirmationDialog) {
-        SecureBackupDisableConfirmationDialog(
-            onConfirm = { state.eventSink.invoke(SecureBackupDisableEvents.DisableBackup(force = true)) },
-            onDismiss = { state.eventSink.invoke(SecureBackupDisableEvents.DismissDialogs) },
-        )
-    } else if (state.disableAction is Async.Failure) {
-        ErrorDialog(
-            content = state.disableAction.error.let { it.message ?: it.toString() },
-            onDismiss = { state.eventSink.invoke(SecureBackupDisableEvents.DismissDialogs) },
-        )
-    }
+    AsyncActionView(
+        async = state.disableAction,
+        confirmationDialog = {
+            SecureBackupDisableConfirmationDialog(
+                onConfirm = { state.eventSink.invoke(SecureBackupDisableEvents.DisableBackup) },
+                onDismiss = { state.eventSink.invoke(SecureBackupDisableEvents.DismissDialogs) },
+            )
+        },
+        progressDialog = {},
+        errorMessage = { it.message ?: it.toString() },
+        onErrorDismiss = { state.eventSink.invoke(SecureBackupDisableEvents.DismissDialogs) },
+        onSuccess = { onDone() },
+    )
 }
 
 @Composable
@@ -101,7 +96,7 @@ private fun ColumnScope.Buttons(
         showProgress = state.disableAction.isLoading(),
         destructive = true,
         modifier = Modifier.fillMaxWidth(),
-        onClick = { state.eventSink.invoke(SecureBackupDisableEvents.DisableBackup(force = false)) }
+        onClick = { state.eventSink.invoke(SecureBackupDisableEvents.DisableBackup) }
     )
 }
 

@@ -13,6 +13,7 @@
   <string name="screen_notification_settings_edit_mode_mentions_and_keywords">"僅限提及與關鍵字"</string>
   <string name="screen_notification_settings_enable_notifications">"在這個裝置上開啟通知"</string>
   <string name="screen_notification_settings_group_chats">"群組聊天"</string>
+  <string name="screen_notification_settings_invite_for_me_label">"邀請"</string>
   <string name="screen_notification_settings_mentions_section_title">"提及"</string>
   <string name="screen_notification_settings_mode_mentions">"提及"</string>
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"系統設定"</string>

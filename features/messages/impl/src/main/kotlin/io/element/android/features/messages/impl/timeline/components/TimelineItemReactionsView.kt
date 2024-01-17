@@ -31,8 +31,8 @@ import io.element.android.features.messages.impl.R
 import io.element.android.features.messages.impl.timeline.aTimelineItemReactions
 import io.element.android.features.messages.impl.timeline.model.AggregatedReaction
 import io.element.android.features.messages.impl.timeline.model.TimelineItemReactions
-import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.utils.CommonDrawables
 import kotlinx.collections.immutable.ImmutableList
 
@@ -40,6 +40,7 @@ import kotlinx.collections.immutable.ImmutableList
 fun TimelineItemReactionsView(
     reactionsState: TimelineItemReactions,
     isOutgoing: Boolean,
+    userCanSendReaction: Boolean,
     onReactionClicked: (emoji: String) -> Unit,
     onReactionLongClicked: (emoji: String) -> Unit,
     onMoreReactionsClicked: () -> Unit,
@@ -49,6 +50,7 @@ fun TimelineItemReactionsView(
     TimelineItemReactionsView(
         modifier = modifier,
         reactions = reactionsState.reactions,
+        userCanSendReaction = userCanSendReaction,
         expanded = expanded,
         isOutgoing = isOutgoing,
         onReactionClick = onReactionClicked,
@@ -61,6 +63,7 @@ fun TimelineItemReactionsView(
 @Composable
 private fun TimelineItemReactionsView(
     reactions: ImmutableList<AggregatedReaction>,
+    userCanSendReaction: Boolean,
     isOutgoing: Boolean,
     expanded: Boolean,
     onReactionClick: (emoji: String) -> Unit,
@@ -72,11 +75,11 @@ private fun TimelineItemReactionsView(
     // In LTR languages we want an incoming message's reactions to be LTR and outgoing to be RTL.
     // For RTL languages it should be the opposite.
     val currentLayout = LocalLayoutDirection.current
-    val reactionsLayoutDirection = if (!isOutgoing) currentLayout
-    else if (currentLayout == LayoutDirection.Ltr)
-        LayoutDirection.Rtl
-    else
-        LayoutDirection.Ltr
+    val reactionsLayoutDirection = when {
+        !isOutgoing -> currentLayout
+        currentLayout == LayoutDirection.Ltr -> LayoutDirection.Rtl
+        else -> LayoutDirection.Ltr
+    }
 
     return CompositionLocalProvider(LocalLayoutDirection provides reactionsLayoutDirection) {
         TimelineItemReactionsLayout(
@@ -93,19 +96,28 @@ private fun TimelineItemReactionsView(
                     onLongClick = {}
                 )
             },
-            addMoreButton = {
-                MessagesReactionButton(
-                    content = MessagesReactionsButtonContent.Icon(CommonDrawables.ic_add_reaction),
-                    onClick = onMoreReactionsClick,
-                    onLongClick = {}
-                )
+            addMoreButton = if (userCanSendReaction) {
+                {
+                    MessagesReactionButton(
+                        content = MessagesReactionsButtonContent.Icon(CommonDrawables.ic_add_reaction),
+                        onClick = onMoreReactionsClick,
+                        onLongClick = {}
+                    )
+                }
+            } else {
+                null
             },
             reactions = {
                 reactions.forEach { reaction ->
                     CompositionLocalProvider(LocalLayoutDirection provides currentLayout) {
                         MessagesReactionButton(
                             content = MessagesReactionsButtonContent.Reaction(reaction = reaction),
-                            onClick = { onReactionClick(reaction.key) },
+                            onClick = {
+                                // Always allow user to redact their own reactions
+                                if (reaction.isHighlighted || userCanSendReaction) {
+                                    onReactionClick(reaction.key)
+                                }
+                            },
                             onLongClick = { onReactionLongClick(reaction.key) }
                         )
                     }
@@ -157,10 +169,10 @@ private fun ContentToPreview(
         reactionsState = TimelineItemReactions(
             reactions
         ),
+        userCanSendReaction = true,
         isOutgoing = isOutgoing,
         onReactionClicked = {},
         onReactionLongClicked = {},
         onMoreReactionsClicked = {},
     )
 }
-

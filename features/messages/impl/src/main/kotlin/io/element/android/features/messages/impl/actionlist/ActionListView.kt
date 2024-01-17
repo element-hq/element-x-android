@@ -63,6 +63,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemPollContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemRedactedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStateContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStickerContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextBasedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemUnknownContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
@@ -171,15 +172,16 @@ private fun SheetContent(
                 item {
                     Column {
                         MessageSummary(
-                            event = target.event, modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp)
+                            event = target.event,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 16.dp)
                         )
                         Spacer(modifier = Modifier.height(14.dp))
                         HorizontalDivider()
                     }
                 }
-                if (state.displayEmojiReactions) {
+                if (target.displayEmojiReactions) {
                     item {
                         EmojiReactionsRow(
                             highlightedEmojis = target.event.reactionsState.highlightedKeys,
@@ -239,6 +241,9 @@ private fun MessageSummary(event: TimelineItem.Event, modifier: Modifier = Modif
         is TimelineItemImageContent -> {
             content = { ContentForBody(event.content.body) }
         }
+        is TimelineItemStickerContent -> {
+            content = { ContentForBody(event.content.body) }
+        }
         is TimelineItemVideoContent -> {
             content = { ContentForBody(event.content.body) }
         }
@@ -295,7 +300,11 @@ private fun EmojiReactionsRow(
     ) {
         // TODO use most recently used emojis here when available from the Rust SDK
         val defaultEmojis = sequenceOf(
-            "👍️", "👎️", "🔥", "❤️", "👏"
+            "👍️",
+            "👎️",
+            "🔥",
+            "❤️",
+            "👏"
         )
         for (emoji in defaultEmojis) {
             val isHighlighted = highlightedEmojis.contains(emoji)

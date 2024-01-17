@@ -21,7 +21,6 @@ import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.usersearch.api.UserListDataSource
 
 class FakeUserListDataSource : UserListDataSource {
-
     private var searchResult: List<MatrixUser> = emptyList()
     private var profile: MatrixUser? = null
 

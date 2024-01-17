@@ -75,7 +75,6 @@ private fun PdfPagesView(
         modifier = modifier.fillMaxSize(),
         state = lazyListState,
         verticalArrangement = Arrangement.spacedBy(4.dp, Alignment.CenterVertically)
-
     ) {
         items(pdfPages.size) { index ->
             val pdfPage = pdfPages[index]

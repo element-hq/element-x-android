@@ -46,7 +46,6 @@ class RoomDetailsNode @AssistedInject constructor(
     private val room: MatrixRoom,
     private val analyticsService: AnalyticsService,
 ) : Node(buildContext, plugins = plugins) {
-
     interface Callback : Plugin {
         fun openRoomMemberList()
         fun openInviteMembers()

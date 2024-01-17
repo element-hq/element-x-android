@@ -28,7 +28,6 @@ import javax.inject.Inject
 @ContributesBinding(AppScope::class)
 class DefaultBugReportEntryPoint @Inject constructor() : BugReportEntryPoint {
     override fun nodeBuilder(parentNode: Node, buildContext: BuildContext): BugReportEntryPoint.NodeBuilder {
-
         val plugins = ArrayList<Plugin>()
 
         return object : BugReportEntryPoint.NodeBuilder {

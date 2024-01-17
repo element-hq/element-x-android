@@ -21,7 +21,7 @@ import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.test.AN_AVATAR_URL
@@ -52,7 +52,6 @@ import java.io.File
 
 @ExperimentalCoroutinesApi
 class EditUserProfilePresenterTest {
-
     @get:Rule
     val warmUpRule = WarmUpRule()
 
@@ -110,7 +109,7 @@ class EditUserProfilePresenterTest {
                 AvatarAction.Remove
             )
             assertThat(initialState.saveButtonEnabled).isFalse()
-            assertThat(initialState.saveAction).isInstanceOf(Async.Uninitialized::class.java)
+            assertThat(initialState.saveAction).isInstanceOf(AsyncAction.Uninitialized::class.java)
         }
     }
 
@@ -359,7 +358,7 @@ class EditUserProfilePresenterTest {
             initialState.eventSink(EditUserProfileEvents.Save)
             skipItems(2)
             assertThat(matrixClient.uploadAvatarCalled).isFalse()
-            assertThat(awaitItem().saveAction).isInstanceOf(Async.Failure::class.java)
+            assertThat(awaitItem().saveAction).isInstanceOf(AsyncAction.Failure::class.java)
         }
     }
 
@@ -406,9 +405,9 @@ class EditUserProfilePresenterTest {
             initialState.eventSink(EditUserProfileEvents.UpdateDisplayName("foo"))
             initialState.eventSink(EditUserProfileEvents.Save)
             skipItems(2)
-            assertThat(awaitItem().saveAction).isInstanceOf(Async.Failure::class.java)
+            assertThat(awaitItem().saveAction).isInstanceOf(AsyncAction.Failure::class.java)
             initialState.eventSink(EditUserProfileEvents.CancelSaveChanges)
-            assertThat(awaitItem().saveAction).isInstanceOf(Async.Uninitialized::class.java)
+            assertThat(awaitItem().saveAction).isInstanceOf(AsyncAction.Uninitialized::class.java)
         }
     }
 
@@ -421,8 +420,8 @@ class EditUserProfilePresenterTest {
             initialState.eventSink(event)
             initialState.eventSink(EditUserProfileEvents.Save)
             skipItems(1)
-            assertThat(awaitItem().saveAction).isInstanceOf(Async.Loading::class.java)
-            assertThat(awaitItem().saveAction).isInstanceOf(Async.Failure::class.java)
+            assertThat(awaitItem().saveAction).isInstanceOf(AsyncAction.Loading::class.java)
+            assertThat(awaitItem().saveAction).isInstanceOf(AsyncAction.Failure::class.java)
         }
     }
 

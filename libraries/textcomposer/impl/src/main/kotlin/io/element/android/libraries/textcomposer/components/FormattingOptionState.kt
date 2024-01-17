@@ -17,6 +17,7 @@
 package io.element.android.libraries.textcomposer.components
 
 internal enum class FormattingOptionState {
-    Default, Selected, Disabled
+    Default,
+    Selected,
+    Disabled
 }
-

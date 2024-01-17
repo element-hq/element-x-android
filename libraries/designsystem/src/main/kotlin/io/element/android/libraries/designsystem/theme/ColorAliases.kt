@@ -109,7 +109,7 @@ val SemanticColors.pinDigitBg
     }
 
 val SemanticColors.currentUserMentionPillText
-    get() =  if (isLight) {
+    get() = if (isLight) {
         // We want LightDesignTokens.colorGreen1100
         Color(0xff005c45)
     } else {
@@ -118,7 +118,7 @@ val SemanticColors.currentUserMentionPillText
     }
 
 val SemanticColors.currentUserMentionPillBackground
-    get() =  if (isLight) {
+    get() = if (isLight) {
         // We want LightDesignTokens.colorGreenAlpha400
         Color(0x3b07b661)
     } else {
@@ -130,7 +130,7 @@ val SemanticColors.mentionPillText
     get() = textPrimary
 
 val SemanticColors.mentionPillBackground
-    get() =  if (isLight) {
+    get() = if (isLight) {
         // We want LightDesignTokens.colorGray400
         Color(0x1f052e61)
     } else {

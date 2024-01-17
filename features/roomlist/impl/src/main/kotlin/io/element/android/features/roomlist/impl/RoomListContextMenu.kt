@@ -95,7 +95,14 @@ private fun RoomListModalBottomSheetContent(
             style = ListItemStyle.Primary,
         )
         ListItem(
-            headlineContent = { Text(text = stringResource(id = CommonStrings.action_leave_room)) },
+            headlineContent = {
+                val leaveText = stringResource(id = if (contextMenu.isDm) {
+                    CommonStrings.action_leave_conversation
+                } else {
+                    CommonStrings.action_leave_room
+                })
+                Text(text = leaveText)
+            },
             modifier = Modifier.clickable { onLeaveRoomClicked(contextMenu.roomId) },
             leadingContent = ListItemContent.Icon(
                 iconSource = IconSource.Vector(
@@ -117,7 +124,22 @@ internal fun RoomListModalBottomSheetContentPreview() = ElementPreview {
     RoomListModalBottomSheetContent(
         contextMenu = RoomListState.ContextMenu.Shown(
             roomId = RoomId(value = "!aRoom:aDomain"),
-            roomName = "aRoom"
+            roomName = "aRoom",
+            isDm = false,
+        ),
+        onRoomSettingsClicked = {},
+        onLeaveRoomClicked = {}
+    )
+}
+
+@PreviewsDayNight
+@Composable
+internal fun RoomListModalBottomSheetContentForDmPreview() = ElementPreview {
+    RoomListModalBottomSheetContent(
+        contextMenu = RoomListState.ContextMenu.Shown(
+            roomId = RoomId(value = "!aRoom:aDomain"),
+            roomName = "aRoom",
+            isDm = true,
         ),
         onRoomSettingsClicked = {},
         onLeaveRoomClicked = {}

@@ -37,7 +37,6 @@ class OnBoardingNode @AssistedInject constructor(
     buildContext = buildContext,
     plugins = plugins
 ) {
-
     private fun onSignIn() {
         plugins<OnBoardingEntryPoint.Callback>().forEach { it.onSignIn() }
     }

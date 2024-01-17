@@ -17,7 +17,6 @@
 package io.element.android.features.login.impl.screens.loginpassword
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
@@ -55,7 +54,7 @@ import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.login.impl.R
 import io.element.android.features.login.impl.error.isWaitListError
 import io.element.android.features.login.impl.error.loginError
-import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
@@ -75,7 +74,7 @@ import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
 import io.element.android.libraries.ui.strings.CommonStrings
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginPasswordView(
     state: LoginPasswordState,
@@ -85,7 +84,7 @@ fun LoginPasswordView(
 ) {
     val isLoading by remember(state.loginAction) {
         derivedStateOf {
-            state.loginAction is Async.Loading
+            state.loginAction is AsyncData.Loading
         }
     }
     val focusManager = LocalFocusManager.current
@@ -149,7 +148,7 @@ fun LoginPasswordView(
             )
             Spacer(modifier = Modifier.height(60.dp))
 
-            if (state.loginAction is Async.Failure) {
+            if (state.loginAction is AsyncData.Failure) {
                 when {
                     state.loginAction.error.isWaitListError() -> {
                         onWaitListError(state.formState)
@@ -221,11 +220,13 @@ private fun LoginForm(
                         Icon(imageVector = CompoundIcons.Close, contentDescription = stringResource(CommonStrings.action_clear))
                     }
                 }
-            } else null,
+            } else {
+                null
+            },
         )
 
         var passwordVisible by remember { mutableStateOf(false) }
-        if (state.loginAction is Async.Loading) {
+        if (state.loginAction is AsyncData.Loading) {
             // Ensure password is hidden when user submits the form
             passwordVisible = false
         }

@@ -26,7 +26,7 @@ import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.roomdetails.impl.R
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsEvents
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsState
-import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.designsystem.components.dialogs.RetryDialog
 import io.element.android.libraries.designsystem.components.list.ListItemContent
@@ -42,13 +42,13 @@ import io.element.android.libraries.ui.strings.CommonStrings
 internal fun BlockUserSection(state: RoomMemberDetailsState, modifier: Modifier = Modifier) {
     PreferenceCategory(showDivider = false, modifier = modifier) {
         when (state.isBlocked) {
-            is Async.Failure -> PreferenceBlockUser(isBlocked = state.isBlocked.prevData, isLoading = false, eventSink = state.eventSink)
-            is Async.Loading -> PreferenceBlockUser(isBlocked = state.isBlocked.prevData, isLoading = true, eventSink = state.eventSink)
-            is Async.Success -> PreferenceBlockUser(isBlocked = state.isBlocked.data, isLoading = false, eventSink = state.eventSink)
-            Async.Uninitialized -> PreferenceBlockUser(isBlocked = null, isLoading = true, eventSink = state.eventSink)
+            is AsyncData.Failure -> PreferenceBlockUser(isBlocked = state.isBlocked.prevData, isLoading = false, eventSink = state.eventSink)
+            is AsyncData.Loading -> PreferenceBlockUser(isBlocked = state.isBlocked.prevData, isLoading = true, eventSink = state.eventSink)
+            is AsyncData.Success -> PreferenceBlockUser(isBlocked = state.isBlocked.data, isLoading = false, eventSink = state.eventSink)
+            AsyncData.Uninitialized -> PreferenceBlockUser(isBlocked = null, isLoading = true, eventSink = state.eventSink)
         }
     }
-    if (state.isBlocked is Async.Failure) {
+    if (state.isBlocked is AsyncData.Failure) {
         RetryDialog(
             content = stringResource(CommonStrings.error_unknown),
             onDismiss = { state.eventSink(RoomMemberDetailsEvents.ClearBlockUserError) },
@@ -56,7 +56,8 @@ internal fun BlockUserSection(state: RoomMemberDetailsState, modifier: Modifier 
                 val event = when (state.isBlocked.prevData) {
                     true -> RoomMemberDetailsEvents.UnblockUser(needsConfirmation = false)
                     false -> RoomMemberDetailsEvents.BlockUser(needsConfirmation = false)
-                    null -> /*Should not happen */ RoomMemberDetailsEvents.ClearBlockUserError
+                    // null case Should not happen
+                    null -> RoomMemberDetailsEvents.ClearBlockUserError
                 }
                 state.eventSink(event)
             },

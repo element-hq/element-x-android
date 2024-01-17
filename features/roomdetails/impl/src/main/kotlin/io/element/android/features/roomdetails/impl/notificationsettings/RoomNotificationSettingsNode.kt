@@ -39,7 +39,6 @@ class RoomNotificationSettingsNode @AssistedInject constructor(
     presenterFactory: RoomNotificationSettingsPresenter.Factory,
     private val analyticsService: AnalyticsService,
 ) : Node(buildContext, plugins = plugins) {
-
     data class RoomNotificationSettingInput(
         val showUserDefinedSettingStyle: Boolean
     ) : NodeInputs

@@ -35,7 +35,6 @@ import java.io.File
  * Whenever a given mxc is found in the cache, it is returned immediately.
  */
 interface NotificationMediaRepo {
-
     /**
      * Factory for [NotificationMediaRepo].
      */
@@ -72,7 +71,6 @@ class DefaultNotificationMediaRepo @AssistedInject constructor(
     private val mxcTools: MxcTools,
     @Assisted private val client: MatrixClient,
 ) : NotificationMediaRepo {
-
     @ContributesBinding(AppScope::class)
     @AssistedFactory
     fun interface Factory : NotificationMediaRepo.Factory {

@@ -27,7 +27,7 @@ import androidx.compose.runtime.setValue
 import io.element.android.features.securebackup.impl.setup.views.RecoveryKeyUserStory
 import io.element.android.features.securebackup.impl.setup.views.RecoveryKeyViewState
 import io.element.android.features.securebackup.impl.tools.RecoveryKeyTools
-import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runCatchingUpdatingState
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
@@ -39,21 +39,20 @@ class SecureBackupEnterRecoveryKeyPresenter @Inject constructor(
     private val encryptionService: EncryptionService,
     private val recoveryKeyTools: RecoveryKeyTools,
 ) : Presenter<SecureBackupEnterRecoveryKeyState> {
-
     @Composable
     override fun present(): SecureBackupEnterRecoveryKeyState {
         val coroutineScope = rememberCoroutineScope()
         var recoveryKey by rememberSaveable {
             mutableStateOf("")
         }
-        val submitAction = remember {
-            mutableStateOf<Async<Unit>>(Async.Uninitialized)
+        val submitAction: MutableState<AsyncAction<Unit>> = remember {
+            mutableStateOf(AsyncAction.Uninitialized)
         }
 
         fun handleEvents(event: SecureBackupEnterRecoveryKeyEvents) {
             when (event) {
                 SecureBackupEnterRecoveryKeyEvents.ClearDialog -> {
-                    submitAction.value = Async.Uninitialized
+                    submitAction.value = AsyncAction.Uninitialized
                 }
                 is SecureBackupEnterRecoveryKeyEvents.OnRecoveryKeyChange -> {
                     val previousRecoveryKey = recoveryKey
@@ -86,7 +85,7 @@ class SecureBackupEnterRecoveryKeyPresenter @Inject constructor(
 
     private fun CoroutineScope.submitRecoveryKey(
         recoveryKey: String,
-        action: MutableState<Async<Unit>>
+        action: MutableState<AsyncAction<Unit>>
     ) = launch {
         suspend {
             encryptionService.recover(recoveryKey).getOrThrow()

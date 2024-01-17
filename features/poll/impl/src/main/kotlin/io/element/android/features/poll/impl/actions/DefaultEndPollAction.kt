@@ -30,7 +30,6 @@ class DefaultEndPollAction @Inject constructor(
     private val room: MatrixRoom,
     private val analyticsService: AnalyticsService,
 ) : EndPollAction {
-
     override suspend fun execute(pollStartId: EventId): Result<Unit> {
         return room.endPoll(
             pollStartId = pollStartId,

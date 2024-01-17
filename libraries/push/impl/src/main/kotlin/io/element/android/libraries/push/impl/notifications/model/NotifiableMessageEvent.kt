@@ -53,7 +53,6 @@ data class NotifiableMessageEvent(
     override val isRedacted: Boolean = false,
     override val isUpdated: Boolean = false
 ) : NotifiableEvent {
-
     val type: String = EventType.MESSAGE
     override val description: String = body ?: ""
     val title: String = senderName ?: ""
@@ -71,9 +70,9 @@ fun NotifiableEvent.shouldIgnoreEventInRoom(appNavigationState: AppNavigationSta
     val currentSessionId = appNavigationState.navigationState.currentSessionId() ?: return false
     return when (val currentRoomId = appNavigationState.navigationState.currentRoomId()) {
         null -> false
-        else -> appNavigationState.isInForeground
-            && sessionId == currentSessionId
-            && roomId == currentRoomId
-            && (this as? NotifiableMessageEvent)?.threadId == appNavigationState.navigationState.currentThreadId()
+        else -> appNavigationState.isInForeground &&
+            sessionId == currentSessionId &&
+            roomId == currentRoomId &&
+            (this as? NotifiableMessageEvent)?.threadId == appNavigationState.navigationState.currentThreadId()
     }
 }

@@ -47,7 +47,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.dialogs.RetryDialog
@@ -75,7 +75,6 @@ fun MediaViewerView(
     onBackPressed: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-
     fun onRetry() {
         state.eventSink(MediaViewerEvents.RetryLoading)
     }
@@ -93,7 +92,7 @@ fun MediaViewerView(
         modifier,
         topBar = {
             MediaViewerTopBar(
-                actionsEnabled = state.downloadedMedia is Async.Success,
+                actionsEnabled = state.downloadedMedia is AsyncData.Success,
                 mimeType = state.mediaInfo.mimeType,
                 onBackPressed = onBackPressed,
                 canDownload = state.canDownload,
@@ -121,7 +120,7 @@ fun MediaViewerView(
                 modifier = Modifier.fillMaxSize(),
                 contentAlignment = Alignment.Center
             ) {
-                if (state.downloadedMedia is Async.Failure) {
+                if (state.downloadedMedia is AsyncData.Failure) {
                     ErrorView(
                         errorMessage = stringResource(id = CommonStrings.error_unknown),
                         onRetry = ::onRetry,
@@ -144,7 +143,7 @@ fun MediaViewerView(
 }
 
 @Composable
-private fun rememberShowProgress(downloadedMedia: Async<LocalMedia>): Boolean {
+private fun rememberShowProgress(downloadedMedia: AsyncData<LocalMedia>): Boolean {
     var showProgress by remember {
         mutableStateOf(false)
     }

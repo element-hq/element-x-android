@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="confirm_recovery_key_banner_message">"La copia de seguridad del chat no está sincronizada en este momento. Debes confirmar tu clave de recuperación para mantener el acceso a la copia de seguridad del chat."</string>
+  <string name="confirm_recovery_key_banner_title">"Confirma tu clave de recuperación"</string>
   <string name="screen_roomlist_a11y_create_message">"Crear una nueva conversación o sala"</string>
+  <string name="screen_roomlist_empty_message">"Empieza enviando un mensaje a alguien."</string>
+  <string name="screen_roomlist_empty_title">"Aún no hay chats."</string>
   <string name="screen_roomlist_main_space_title">"Todos los chats"</string>
   <string name="session_verification_banner_message">"Parece que estás usando un nuevo dispositivo. Verifica que eres tú para acceder a tus mensajes cifrados."</string>
-  <string name="session_verification_banner_title">"Accede a tu historial de mensajes"</string>
+  <string name="session_verification_banner_title">"Verifica que eres tú"</string>
 </resources>

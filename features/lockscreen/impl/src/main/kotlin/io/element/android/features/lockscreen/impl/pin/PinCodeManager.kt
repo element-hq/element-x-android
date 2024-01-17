@@ -23,7 +23,6 @@ import kotlinx.coroutines.flow.Flow
  * Implementation should take care of encrypting the pin code and storing it.
  */
 interface PinCodeManager {
-
     /**
      * Callbacks for pin code management events.
      */

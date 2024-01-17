@@ -29,7 +29,7 @@ import androidx.compose.ui.unit.dp
 import io.element.android.features.securebackup.impl.R
 import io.element.android.features.securebackup.impl.setup.views.RecoveryKeyView
 import io.element.android.libraries.designsystem.atomic.pages.FlowStepPage
-import io.element.android.libraries.designsystem.components.async.AsyncView
+import io.element.android.libraries.designsystem.components.async.AsyncActionView
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
@@ -43,10 +43,10 @@ fun SecureBackupEnterRecoveryKeyView(
     onBackClicked: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    AsyncView(
+    AsyncActionView(
         async = state.submitAction,
         onSuccess = { onDone() },
-        showProgressDialog = false,
+        progressDialog = { },
         errorTitle = { stringResource(id = R.string.screen_recovery_key_confirm_error_title) },
         errorMessage = { stringResource(id = R.string.screen_recovery_key_confirm_error_content) },
         onErrorDismiss = { state.eventSink(SecureBackupEnterRecoveryKeyEvents.ClearDialog) },

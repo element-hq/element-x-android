@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_session_verification_cancelled_subtitle">"Кажется, что-то не так. Время ожидания запроса истекло, либо запрос был отклонен."</string>
-  <string name="screen_session_verification_compare_emojis_subtitle">"Убедитесь, что приведенные ниже смайлики совпадают со смайликами, показанными во время другого сеанса."</string>
+  <string name="screen_session_verification_cancelled_subtitle">"Похоже, что-то не так. Время ожидания запроса либо истекло, либо запрос был отклонен."</string>
+  <string name="screen_session_verification_compare_emojis_subtitle">"Убедитесь, что приведенные ниже емоджи совпадают с емоджи показанными во время другого сеанса."</string>
   <string name="screen_session_verification_compare_emojis_title">"Сравните емодзи"</string>
   <string name="screen_session_verification_compare_numbers_subtitle">"Убедитесь, что приведенные ниже числа совпадают с цифрами, показанными в другом сеансе."</string>
   <string name="screen_session_verification_compare_numbers_title">"Сравните числа"</string>

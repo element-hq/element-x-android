@@ -17,10 +17,10 @@
 package io.element.android.features.call.ui
 
 class FakeCallScreenNavigator : CallScreenNavigator {
-        var closeCalled = false
-            private set
+    var closeCalled = false
+        private set
 
-        override fun close() {
-            closeCalled = true
-        }
+    override fun close() {
+        closeCalled = true
     }
+}

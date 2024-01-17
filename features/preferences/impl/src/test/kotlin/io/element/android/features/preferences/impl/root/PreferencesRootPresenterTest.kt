@@ -16,10 +16,14 @@
 
 package io.element.android.features.preferences.impl.root
 
+import androidx.compose.runtime.Composable
 import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import io.element.android.features.logout.api.direct.DirectLogoutPresenter
+import io.element.android.features.logout.api.direct.DirectLogoutState
+import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.core.meta.BuildType
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
@@ -37,27 +41,36 @@ import org.junit.Rule
 import org.junit.Test
 
 class PreferencesRootPresenterTest {
-
     @get:Rule
     val warmUpRule = WarmUpRule()
+
+    private val aDirectLogoutState = DirectLogoutState(
+        canDoDirectSignOut = true,
+        logoutAction = AsyncAction.Uninitialized,
+        eventSink = {},
+    )
 
     @Test
     fun `present - initial state`() = runTest {
         val matrixClient = FakeMatrixClient()
         val sessionVerificationService = FakeSessionVerificationService()
         val presenter = PreferencesRootPresenter(
-            matrixClient,
-            sessionVerificationService,
-            FakeAnalyticsService(),
-            BuildType.DEBUG,
-            FakeVersionFormatter(),
-            SnackbarDispatcher(),
-            FakeFeatureFlagService(),
-            DefaultIndicatorService(
+            matrixClient = matrixClient,
+            sessionVerificationService = sessionVerificationService,
+            analyticsService = FakeAnalyticsService(),
+            buildType = BuildType.DEBUG,
+            versionFormatter = FakeVersionFormatter(),
+            snackbarDispatcher = SnackbarDispatcher(),
+            featureFlagService = FakeFeatureFlagService(),
+            indicatorService = DefaultIndicatorService(
                 sessionVerificationService = sessionVerificationService,
                 encryptionService = FakeEncryptionService(),
                 featureFlagService = FakeFeatureFlagService(),
             ),
+            directLogoutPresenter = object : DirectLogoutPresenter {
+                @Composable
+                override fun present() = aDirectLogoutState
+            }
         )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -73,10 +86,18 @@ class PreferencesRootPresenterTest {
                     avatarUrl = AN_AVATAR_URL
                 )
             )
-            assertThat(loadedState.showDeveloperSettings).isTrue()
-            assertThat(loadedState.showAnalyticsSettings).isFalse()
+            assertThat(initialState.version).isEqualTo("A Version")
+            assertThat(loadedState.showCompleteVerification).isTrue()
+            assertThat(loadedState.showSecureBackup).isFalse()
+            assertThat(loadedState.showSecureBackupBadge).isTrue()
             assertThat(loadedState.accountManagementUrl).isNull()
             assertThat(loadedState.devicesManagementUrl).isNull()
+            assertThat(loadedState.showAnalyticsSettings).isFalse()
+            assertThat(loadedState.showDeveloperSettings).isTrue()
+            assertThat(loadedState.showLockScreenSettings).isTrue()
+            assertThat(loadedState.showNotificationSettings).isTrue()
+            assertThat(loadedState.directLogoutState).isEqualTo(aDirectLogoutState)
+            assertThat(loadedState.snackbarMessage).isNull()
         }
     }
 }

@@ -19,9 +19,7 @@ package io.element.android.services.apperror.api
 import kotlinx.coroutines.flow.StateFlow
 
 interface AppErrorStateService {
-
     val appErrorStateFlow: StateFlow<AppErrorState>
 
     fun showError(title: String, body: String)
-
 }

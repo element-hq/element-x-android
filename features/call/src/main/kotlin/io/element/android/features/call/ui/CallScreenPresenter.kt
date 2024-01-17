@@ -34,7 +34,7 @@ import io.element.android.features.call.data.WidgetMessage
 import io.element.android.features.call.utils.CallWidgetProvider
 import io.element.android.features.call.utils.WidgetMessageInterceptor
 import io.element.android.features.call.utils.WidgetMessageSerializer
-import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runCatchingUpdatingState
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
@@ -63,7 +63,6 @@ class CallScreenPresenter @AssistedInject constructor(
     private val matrixClientsProvider: MatrixClientProvider,
     private val appCoroutineScope: CoroutineScope,
 ) : Presenter<CallScreenState> {
-
     @AssistedFactory
     interface Factory {
         fun create(callType: CallType, navigator: CallScreenNavigator): CallScreenPresenter
@@ -75,7 +74,7 @@ class CallScreenPresenter @AssistedInject constructor(
     @Composable
     override fun present(): CallScreenState {
         val coroutineScope = rememberCoroutineScope()
-        val urlState = remember { mutableStateOf<Async<String>>(Async.Uninitialized) }
+        val urlState = remember { mutableStateOf<AsyncData<String>>(AsyncData.Uninitialized) }
         val callWidgetDriver = remember { mutableStateOf<MatrixWidgetDriver?>(null) }
         val messageInterceptor = remember { mutableStateOf<WidgetMessageInterceptor?>(null) }
         var isJoinedCall by rememberSaveable { mutableStateOf(false) }
@@ -154,7 +153,7 @@ class CallScreenPresenter @AssistedInject constructor(
 
     private fun CoroutineScope.loadUrl(
         inputs: CallType,
-        urlState: MutableState<Async<String>>,
+        urlState: MutableState<AsyncData<String>>,
         callWidgetDriver: MutableState<MatrixWidgetDriver?>,
     ) = launch {
         urlState.runCatchingUpdatingState {
@@ -224,6 +223,4 @@ class CallScreenPresenter @AssistedInject constructor(
         navigator.close()
         widgetDriver?.close()
     }
-
 }
-

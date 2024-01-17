@@ -32,6 +32,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemLocationContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemNoticeContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStickerContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVoiceContent
@@ -50,6 +51,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.MessageConten
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageFormat
 import io.element.android.libraries.matrix.api.timeline.item.event.NoticeMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.OtherMessageType
+import io.element.android.libraries.matrix.api.timeline.item.event.StickerMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.VideoMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.VoiceMessageType
@@ -66,11 +68,10 @@ class TimelineItemContentMessageFactory @Inject constructor(
     private val featureFlagService: FeatureFlagService,
     private val htmlConverterProvider: HtmlConverterProvider,
 ) {
-
     suspend fun create(content: MessageContent, senderDisplayName: String, eventId: EventId?): TimelineItemEventContent {
         return when (val messageType = content.type) {
             is EmoteMessageType -> {
-                val emoteBody = "* $senderDisplayName ${messageType.body}"
+                val emoteBody = "* $senderDisplayName ${messageType.body.trimEnd()}"
                 TimelineItemEmoteContent(
                     body = emoteBody,
                     htmlDocument = messageType.formatted?.toHtmlDocument(prefix = "* $senderDisplayName"),
@@ -81,7 +82,22 @@ class TimelineItemContentMessageFactory @Inject constructor(
             is ImageMessageType -> {
                 val aspectRatio = aspectRatioOf(messageType.info?.width, messageType.info?.height)
                 TimelineItemImageContent(
-                    body = messageType.body,
+                    body = messageType.body.trimEnd(),
+                    mediaSource = messageType.source,
+                    thumbnailSource = messageType.info?.thumbnailSource,
+                    mimeType = messageType.info?.mimetype ?: MimeTypes.OctetStream,
+                    blurhash = messageType.info?.blurhash,
+                    width = messageType.info?.width?.toInt(),
+                    height = messageType.info?.height?.toInt(),
+                    aspectRatio = aspectRatio,
+                    formattedFileSize = fileSizeFormatter.format(messageType.info?.size ?: 0),
+                    fileExtension = fileExtensionExtractor.extractFromName(messageType.body)
+                )
+            }
+            is StickerMessageType -> {
+                val aspectRatio = aspectRatioOf(messageType.info?.width, messageType.info?.height)
+                TimelineItemStickerContent(
+                    body = messageType.body.trimEnd(),
                     mediaSource = messageType.source,
                     thumbnailSource = messageType.info?.thumbnailSource,
                     mimeType = messageType.info?.mimetype ?: MimeTypes.OctetStream,
@@ -96,16 +112,17 @@ class TimelineItemContentMessageFactory @Inject constructor(
             is LocationMessageType -> {
                 val location = Location.fromGeoUri(messageType.geoUri)
                 if (location == null) {
+                    val body = messageType.body.trimEnd()
                     TimelineItemTextContent(
-                        body = messageType.body,
+                        body = body,
                         htmlDocument = null,
-                        plainText = messageType.body,
+                        plainText = body,
                         formattedBody = null,
                         isEdited = content.isEdited,
                     )
                 } else {
                     TimelineItemLocationContent(
-                        body = messageType.body,
+                        body = messageType.body.trimEnd(),
                         location = location,
                         description = messageType.description
                     )
@@ -114,7 +131,7 @@ class TimelineItemContentMessageFactory @Inject constructor(
             is VideoMessageType -> {
                 val aspectRatio = aspectRatioOf(messageType.info?.width, messageType.info?.height)
                 TimelineItemVideoContent(
-                    body = messageType.body,
+                    body = messageType.body.trimEnd(),
                     thumbnailSource = messageType.info?.thumbnailSource,
                     videoSource = messageType.source,
                     mimeType = messageType.info?.mimetype ?: MimeTypes.OctetStream,
@@ -129,7 +146,7 @@ class TimelineItemContentMessageFactory @Inject constructor(
             }
             is AudioMessageType -> {
                 TimelineItemAudioContent(
-                    body = messageType.body,
+                    body = messageType.body.trimEnd(),
                     mediaSource = messageType.source,
                     duration = messageType.info?.duration ?: Duration.ZERO,
                     mimeType = messageType.info?.mimetype ?: MimeTypes.OctetStream,
@@ -142,7 +159,7 @@ class TimelineItemContentMessageFactory @Inject constructor(
                     true -> {
                         TimelineItemVoiceContent(
                             eventId = eventId,
-                            body = messageType.body,
+                            body = messageType.body.trimEnd(),
                             mediaSource = messageType.source,
                             duration = messageType.info?.duration ?: Duration.ZERO,
                             mimeType = messageType.info?.mimetype ?: MimeTypes.OctetStream,
@@ -151,7 +168,7 @@ class TimelineItemContentMessageFactory @Inject constructor(
                     }
                     false -> {
                         TimelineItemAudioContent(
-                            body = messageType.body,
+                            body = messageType.body.trimEnd(),
                             mediaSource = messageType.source,
                             duration = messageType.info?.duration ?: Duration.ZERO,
                             mimeType = messageType.info?.mimetype ?: MimeTypes.OctetStream,
@@ -164,7 +181,7 @@ class TimelineItemContentMessageFactory @Inject constructor(
             is FileMessageType -> {
                 val fileExtension = fileExtensionExtractor.extractFromName(messageType.body)
                 TimelineItemFileContent(
-                    body = messageType.body,
+                    body = messageType.body.trimEnd(),
                     thumbnailSource = messageType.info?.thumbnailSource,
                     fileSource = messageType.source,
                     mimeType = messageType.info?.mimetype ?: MimeTypes.fromFileExtension(fileExtension),
@@ -172,26 +189,33 @@ class TimelineItemContentMessageFactory @Inject constructor(
                     fileExtension = fileExtension
                 )
             }
-            is NoticeMessageType -> TimelineItemNoticeContent(
-                body = messageType.body,
-                htmlDocument = messageType.formatted?.toHtmlDocument(),
-                formattedBody = parseHtml(messageType.formatted) ?: messageType.body.withLinks(),
-                isEdited = content.isEdited,
-            )
-            is TextMessageType -> {
-                TimelineItemTextContent(
-                    body = messageType.body,
+            is NoticeMessageType -> {
+                val body = messageType.body.trimEnd()
+                TimelineItemNoticeContent(
+                    body = body,
                     htmlDocument = messageType.formatted?.toHtmlDocument(),
-                    formattedBody = parseHtml(messageType.formatted) ?: messageType.body.withLinks(),
+                    formattedBody = parseHtml(messageType.formatted) ?: body.withLinks(),
                     isEdited = content.isEdited,
                 )
             }
-            is OtherMessageType -> TimelineItemTextContent(
-                body = messageType.body,
-                htmlDocument = null,
-                formattedBody = messageType.body.withLinks(),
-                isEdited = content.isEdited,
-            )
+            is TextMessageType -> {
+                val body = messageType.body.trimEnd()
+                TimelineItemTextContent(
+                    body = body,
+                    htmlDocument = messageType.formatted?.toHtmlDocument(),
+                    formattedBody = parseHtml(messageType.formatted) ?: body.withLinks(),
+                    isEdited = content.isEdited,
+                )
+            }
+            is OtherMessageType -> {
+                val body = messageType.body.trimEnd()
+                TimelineItemTextContent(
+                    body = body,
+                    htmlDocument = null,
+                    formattedBody = body.withLinks(),
+                    isEdited = content.isEdited,
+                )
+            }
         }
     }
 
@@ -208,7 +232,7 @@ class TimelineItemContentMessageFactory @Inject constructor(
     private fun parseHtml(formattedBody: FormattedBody?, prefix: String? = null): CharSequence? {
         if (formattedBody == null || formattedBody.format != MessageFormat.HTML) return null
         val result = htmlConverterProvider.provide()
-            .fromHtmlToSpans(formattedBody.body)
+            .fromHtmlToSpans(formattedBody.body.trimEnd())
             .withFixedURLSpans()
         return if (prefix != null) {
             buildSpannedString {
@@ -244,7 +268,7 @@ class TimelineItemContentMessageFactory @Inject constructor(
 
 @Suppress("USELESS_ELVIS")
 private fun String.withLinks(): CharSequence? {
-    /* Note: toSpannable() can return null when running unit tests */
+    // Note: toSpannable() can return null when running unit tests
     val spannable = toSpannable() ?: return null
     val addedLinks = LinkifyCompat.addLinks(spannable, Linkify.WEB_URLS or Linkify.PHONE_NUMBERS or Linkify.EMAIL_ADDRESSES)
     return spannable.takeIf { addedLinks }

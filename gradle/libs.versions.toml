@@ -3,11 +3,9 @@
 
 [versions]
 # Project
-# Warning: version 8.2.0 is leading https://github.com/element-hq/element-x-android/issues/1971
-# which will only occurs in release mode, and so will not be detected by Maestro
-android_gradle_plugin = "8.1.4"
-kotlin = "1.9.20"
-ksp = "1.9.20-1.0.14"
+android_gradle_plugin = "8.2.1"
+kotlin = "1.9.21"
+ksp = "1.9.21-1.0.16"
 firebaseAppDistribution = "4.0.1"
 
 # AndroidX
@@ -15,13 +13,13 @@ core = "1.12.0"
 datastore = "1.0.0"
 constraintlayout = "2.1.4"
 constraintlayout_compose = "1.0.1"
-lifecycle = "2.7.0-rc02"
+lifecycle = "2.7.0"
 activity = "1.8.2"
-media3 = "1.2.0"
+media3 = "1.2.1"
 
 # Compose
 compose_bom = "2023.10.01"
-composecompiler = "1.5.4"
+composecompiler = "1.5.7"
 
 # Coroutines
 coroutines = "1.7.3"
@@ -34,16 +32,17 @@ test_core = "1.5.0"
 
 #other
 coil = "2.5.0"
-datetime = "0.4.1"
-serialization_json = "1.6.1"
+datetime = "0.5.0"
+dependencyAnalysis = "1.28.0"
+serialization_json = "1.6.2"
 showkase = "1.0.2"
 appyx = "1.4.0"
 sqldelight = "2.0.1"
-wysiwyg = "2.22.0"
+wysiwyg = "2.25.0"
 
 # DI
-dagger = "2.49"
-anvil = "2.4.8-1-8"
+dagger = "2.50"
+anvil = "2.4.9"
 
 # Auto service
 autoservice = "1.1.1"
@@ -52,6 +51,7 @@ autoservice = "1.1.1"
 junit = "4.13.2"
 androidx-test-ext-junit = "1.1.5"
 espresso-core = "3.5.1"
+kover = "0.7.5"
 
 [libraries]
 # Project
@@ -59,10 +59,12 @@ android_gradle_plugin = { module = "com.android.tools.build:gradle", version.ref
 # https://developer.android.com/studio/write/java8-support#library-desugaring-versions
 android_desugar = "com.android.tools:desugar_jdk_libs:2.0.4"
 kotlin_gradle_plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
+kover_gradle_plugin = { module = "org.jetbrains.kotlinx:kover-gradle-plugin", version.ref = "kover" }
 gms_google_services = "com.google.gms:google-services:4.4.0"
 # https://firebase.google.com/docs/android/setup#available-libraries
 google_firebase_bom = "com.google.firebase:firebase-bom:32.7.0"
 firebase_appdistribution_gradle = { module = "com.google.firebase:firebase-appdistribution-gradle", version.ref = "firebaseAppDistribution" }
+autonomousapps_dependencyanalysis_plugin = { module = "com.autonomousapps:dependency-analysis-gradle-plugin", version.ref = "dependencyAnalysis" }
 
 # AndroidX
 androidx_core = { module = "androidx.core:core", version.ref = "core" }
@@ -91,7 +93,7 @@ androidx_preference = "androidx.preference:preference:1.2.1"
 androidx_webkit = "androidx.webkit:webkit:1.9.0"
 
 androidx_compose_bom = { module = "androidx.compose:compose-bom", version.ref = "compose_bom" }
-androidx_compose_material3 = "androidx.compose.material3:material3:1.2.0-beta01"
+androidx_compose_material3 = "androidx.compose.material3:material3:1.2.0-alpha11" # Keep using alpha11 for now as it breaks timeline scrolling a bit.
 androidx_compose_ui = { module = "androidx.compose.ui:ui" }
 androidx_compose_ui_tooling = { module = "androidx.compose.ui:ui-tooling" }
 androidx_compose_ui_tooling_preview = { module = "androidx.compose.ui:ui-tooling-preview" }
@@ -127,7 +129,7 @@ test_arch_core = "androidx.arch.core:core-testing:2.2.0"
 test_junit = "junit:junit:4.13.2"
 test_runner = "androidx.test:runner:1.5.2"
 test_junitext = "androidx.test.ext:junit:1.1.5"
-test_mockk = "io.mockk:mockk:1.13.8"
+test_mockk = "io.mockk:mockk:1.13.9"
 test_konsist = "com.lemonappdev:konsist:0.13.0"
 test_turbine = "app.cash.turbine:turbine:1.0.0"
 test_truth = "com.google.truth:truth:1.2.0"
@@ -140,17 +142,17 @@ coil = { module = "io.coil-kt:coil", version.ref = "coil" }
 coil_compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
 coil_gif = { module = "io.coil-kt:coil-gif", version.ref = "coil" }
 coil_test = { module = "io.coil-kt:coil-test", version.ref = "coil" }
-compound = { module = "io.element.android:compound-android", version = "0.0.2" }
+compound = { module = "io.element.android:compound-android", version = "0.0.3" }
 datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "datetime" }
 serialization_json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization_json" }
-kotlinx_collections_immutable = "org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.6"
+kotlinx_collections_immutable = "org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.7"
 showkase = { module = "com.airbnb.android:showkase", version.ref = "showkase" }
 showkase_processor = { module = "com.airbnb.android:showkase-processor", version.ref = "showkase" }
-jsoup = "org.jsoup:jsoup:1.17.1"
+jsoup = "org.jsoup:jsoup:1.17.2"
 appyx_core = { module = "com.bumble.appyx:core", version.ref = "appyx" }
-molecule-runtime = "app.cash.molecule:molecule-runtime:1.3.1"
+molecule-runtime = "app.cash.molecule:molecule-runtime:1.3.2"
 timber = "com.jakewharton.timber:timber:5.0.1"
-matrix_sdk = "org.matrix.rustcomponents:sdk-android:0.1.82"
+matrix_sdk = "org.matrix.rustcomponents:sdk-android:0.1.83"
 matrix_richtexteditor = { module = "io.element.android:wysiwyg", version.ref = "wysiwyg" }
 matrix_richtexteditor_compose = { module = "io.element.android:wysiwyg-compose", version.ref = "wysiwyg" }
 sqldelight-driver-android = { module = "app.cash.sqldelight:android-driver", version.ref = "sqldelight" }
@@ -162,7 +164,7 @@ unifiedpush = "com.github.UnifiedPush:android-connector:2.1.1"
 otaliastudios_transcoder = "com.otaliastudios:transcoder:0.10.5"
 vanniktech_blurhash = "com.vanniktech:blurhash:0.2.0"
 telephoto_zoomableimage = "me.saket.telephoto:zoomable-image-coil:0.7.1"
-statemachine = "com.freeletics.flowredux:compose:1.2.0"
+statemachine = "com.freeletics.flowredux:compose:1.2.1"
 maplibre = "org.maplibre.gl:android-sdk:10.2.0"
 maplibre_ktx = "org.maplibre.gl:android-sdk-ktx-v7:2.0.2"
 maplibre_annotation = "org.maplibre.gl:android-plugin-annotation-v9:2.0.2"
@@ -170,8 +172,8 @@ opusencoder = "io.element.android:opusencoder:1.1.0"
 kotlinpoet = "com.squareup:kotlinpoet:1.15.3"
 
 # Analytics
-posthog = "com.posthog:posthog-android:3.0.0"
-sentry = "io.sentry:sentry-android:7.1.0"
+posthog = "com.posthog:posthog-android:3.1.2"
+sentry = "io.sentry:sentry-android:7.2.0"
 matrix_analytics_events = "com.github.matrix-org:matrix-analytics-events:aa14cbcdf81af2746d20a71779ec751f971e1d7f"
 
 # Emojibase
@@ -210,15 +212,15 @@ kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 anvil = { id = "com.squareup.anvil", version.ref = "anvil" }
 detekt = "io.gitlab.arturbosch.detekt:1.23.4"
-ktlint = "org.jlleitschuh.gradle.ktlint:12.0.3"
+ktlint = "org.jlleitschuh.gradle.ktlint:12.1.0"
 dependencygraph = "com.savvasdalkitsis.module-dependency-graph:0.12"
-dependencycheck = "org.owasp.dependencycheck:9.0.7"
-dependencyanalysis = "com.autonomousapps.dependency-analysis:1.27.0"
+dependencycheck = "org.owasp.dependencycheck:9.0.8"
+dependencyanalysis = { id = "com.autonomousapps.dependency-analysis", version.ref = "dependencyAnalysis" }
 paparazzi = "app.cash.paparazzi:1.3.1"
-kover = "org.jetbrains.kotlinx.kover:0.6.1"
+kover = { id = "org.jetbrains.kotlinx.kover", version.ref = "kover" }
 sqldelight = { id = "app.cash.sqldelight", version.ref = "sqldelight" }
 firebaseAppDistribution = { id = "com.google.firebase.appdistribution", version.ref = "firebaseAppDistribution" }
-knit = { id = "org.jetbrains.kotlinx.knit", version = "0.4.0" }
+knit = { id = "org.jetbrains.kotlinx.knit", version = "0.5.0" }
 
 # Version '4.3.1.3277' introduced some regressions in CI time (more than 2x slower), so make sure
 # this is no longer the case before upgrading.

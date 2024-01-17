@@ -21,6 +21,8 @@ import json
 import os
 # Run `pip3 install requests` if not installed yet
 import requests
+# Run `pip3 install re` if not installed yet
+import re
 
 # This script downloads artifacts from GitHub.
 # Ref: https://docs.github.com/en/rest/actions/artifacts#get-an-artifact
@@ -64,23 +66,22 @@ if args.verbose:
     print("Argument:")
     print(args)
 
+
 # Split the artifact URL to get information
-# Ex: https://github.com/element-hq/element-android/suites/9293388174/artifacts/435942121
+# Ex: https://github.com/element-hq/element-x-android/actions/runs/7299827320/artifacts/1131077517
 artifactUrl = args.artifactUrl
-if not artifactUrl.startswith('https://github.com/'):
-    print("❌ Invalid parameter --artifactUrl %s. Must start with 'https://github.com/'" % artifactUrl)
-    exit(1)
-if "/artifacts/" not in artifactUrl:
-    print("❌ Invalid parameter --artifactUrl %s. Must contain '/artifacts/'" % artifactUrl)
-    exit(1)
-artifactItems = artifactUrl.split("/")
-if len(artifactItems) != 9:
-    print("❌ Invalid parameter --artifactUrl %s. Please check the format." % (artifactUrl))
+
+url_regex = r"https://github.com/(.+?)/(.+?)/actions/runs/.+?/artifacts/(.+)"
+result = re.search(url_regex, artifactUrl)
+
+if result is None:
+    print(
+        "❌ Invalid parameter --artifactUrl '%s'. Please check the format.\nIt should be something like: %s" %
+        (artifactUrl, 'https://github.com/element-hq/element-x-android/actions/runs/7299827320/artifacts/1131077517')
+    )
     exit(1)
 
-gitHubRepoOwner = artifactItems[3]
-gitHubRepo = artifactItems[4]
-artifactId = artifactItems[8]
+(gitHubRepoOwner, gitHubRepo, artifactId) = result.groups()
 
 if args.verbose:
     print("gitHubRepoOwner: %s, gitHubRepo: %s, artifactId: %s" % (gitHubRepoOwner, gitHubRepo, artifactId))

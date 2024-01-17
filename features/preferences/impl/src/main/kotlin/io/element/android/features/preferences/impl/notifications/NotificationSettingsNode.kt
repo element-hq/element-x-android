@@ -33,7 +33,6 @@ class NotificationSettingsNode @AssistedInject constructor(
     @Assisted plugins: List<Plugin>,
     private val presenter: NotificationSettingsPresenter,
 ) : Node(buildContext, plugins = plugins) {
-
     interface Callback : Plugin {
         fun editDefaultNotificationMode(isOneToOne: Boolean)
     }

@@ -32,7 +32,7 @@ import io.element.android.features.preferences.api.store.PreferencesStore
 import io.element.android.features.preferences.impl.tasks.ClearCacheUseCase
 import io.element.android.features.preferences.impl.tasks.ComputeCacheSizeUseCase
 import io.element.android.features.rageshake.api.preferences.RageshakePreferencesPresenter
-import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runCatchingUpdatingState
 import io.element.android.libraries.core.bool.orFalse
@@ -53,7 +53,6 @@ class DeveloperSettingsPresenter @Inject constructor(
     private val rageshakePresenter: RageshakePreferencesPresenter,
     private val preferencesStore: PreferencesStore,
 ) : Presenter<DeveloperSettingsState> {
-
     @Composable
     override fun present(): DeveloperSettingsState {
         val rageshakeState = rageshakePresenter.present()
@@ -65,10 +64,10 @@ class DeveloperSettingsPresenter @Inject constructor(
             mutableStateMapOf<String, Boolean>()
         }
         val cacheSize = remember {
-            mutableStateOf<Async<String>>(Async.Uninitialized)
+            mutableStateOf<AsyncData<String>>(AsyncData.Uninitialized)
         }
         val clearCacheAction = remember {
-            mutableStateOf<Async<Unit>>(Async.Uninitialized)
+            mutableStateOf<AsyncData<Unit>>(AsyncData.Uninitialized)
         }
         val customElementCallBaseUrl by preferencesStore
             .getCustomElementCallBaseUrlFlow()
@@ -154,13 +153,13 @@ class DeveloperSettingsPresenter @Inject constructor(
         }
     }
 
-    private fun CoroutineScope.computeCacheSize(cacheSize: MutableState<Async<String>>) = launch {
+    private fun CoroutineScope.computeCacheSize(cacheSize: MutableState<AsyncData<String>>) = launch {
         suspend {
             computeCacheSizeUseCase()
         }.runCatchingUpdatingState(cacheSize)
     }
 
-    private fun CoroutineScope.clearCache(clearCacheAction: MutableState<Async<Unit>>) = launch {
+    private fun CoroutineScope.clearCache(clearCacheAction: MutableState<AsyncData<Unit>>) = launch {
         suspend {
             clearCacheUseCase()
         }.runCatchingUpdatingState(clearCacheAction)
@@ -175,6 +174,3 @@ private fun customElementCallUrlValidator(url: String?): Boolean {
         if (parsedUrl.host.isNullOrBlank()) error("Missing host")
     }.isSuccess
 }
-
-
-

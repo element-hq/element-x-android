@@ -17,7 +17,7 @@
 package io.element.android.features.logout.impl
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.api.encryption.BackupState
 import io.element.android.libraries.matrix.api.encryption.BackupUploadState
 import io.element.android.libraries.matrix.api.encryption.RecoveryState
@@ -30,9 +30,9 @@ open class LogoutStateProvider : PreviewParameterProvider<LogoutState> {
             aLogoutState(isLastSession = true),
             aLogoutState(isLastSession = false, backupUploadState = BackupUploadState.Uploading(66, 200)),
             aLogoutState(isLastSession = true, backupUploadState = BackupUploadState.Done),
-            aLogoutState(showConfirmationDialog = true),
-            aLogoutState(logoutAction = Async.Loading()),
-            aLogoutState(logoutAction = Async.Failure(Exception("Failed to logout"))),
+            aLogoutState(logoutAction = AsyncAction.Confirming),
+            aLogoutState(logoutAction = AsyncAction.Loading),
+            aLogoutState(logoutAction = AsyncAction.Failure(Exception("Failed to logout"))),
             aLogoutState(backupUploadState = BackupUploadState.SteadyException(SteadyStateException.Connection("No network"))),
             // Last session no recovery
             aLogoutState(isLastSession = true, recoveryState = RecoveryState.DISABLED),
@@ -47,15 +47,14 @@ fun aLogoutState(
     doesBackupExistOnServer: Boolean = true,
     recoveryState: RecoveryState = RecoveryState.ENABLED,
     backupUploadState: BackupUploadState = BackupUploadState.Unknown,
-    showConfirmationDialog: Boolean = false,
-    logoutAction: Async<String?> = Async.Uninitialized,
+    logoutAction: AsyncAction<String?> = AsyncAction.Uninitialized,
+    eventSink: (LogoutEvents) -> Unit = {},
 ) = LogoutState(
     isLastSession = isLastSession,
     backupState = backupState,
     doesBackupExistOnServer = doesBackupExistOnServer,
     recoveryState = recoveryState,
     backupUploadState = backupUploadState,
-    showConfirmationDialog = showConfirmationDialog,
     logoutAction = logoutAction,
-    eventSink = {}
+    eventSink = eventSink,
 )

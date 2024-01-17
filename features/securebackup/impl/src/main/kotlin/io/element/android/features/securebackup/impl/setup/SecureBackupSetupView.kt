@@ -80,10 +80,11 @@ private fun SecureBackupSetupState.canGoBack(): Boolean {
 private fun title(state: SecureBackupSetupState): String {
     return when (state.setupState) {
         SetupState.Init,
-        SetupState.Creating -> if (state.isChangeRecoveryKeyUserStory)
+        SetupState.Creating -> if (state.isChangeRecoveryKeyUserStory) {
             stringResource(id = R.string.screen_recovery_key_change_title)
-        else
+        } else {
             stringResource(id = R.string.screen_recovery_key_setup_title)
+        }
         is SetupState.Created,
         is SetupState.CreatedAndSaved ->
             stringResource(id = R.string.screen_recovery_key_save_title)
@@ -94,10 +95,11 @@ private fun title(state: SecureBackupSetupState): String {
 private fun subtitle(state: SecureBackupSetupState): String {
     return when (state.setupState) {
         SetupState.Init,
-        SetupState.Creating -> if (state.isChangeRecoveryKeyUserStory)
+        SetupState.Creating -> if (state.isChangeRecoveryKeyUserStory) {
             stringResource(id = R.string.screen_recovery_key_change_description)
-        else
+        } else {
             stringResource(id = R.string.screen_recovery_key_setup_description)
+        }
         is SetupState.Created,
         is SetupState.CreatedAndSaved ->
             stringResource(id = R.string.screen_recovery_key_save_description)

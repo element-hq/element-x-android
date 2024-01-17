@@ -41,13 +41,16 @@ private val A_SUMMARY_NOTIFICATION = SummaryNotification.Update(mockk())
 private val A_REMOVE_SUMMARY_NOTIFICATION = SummaryNotification.Removed
 private val A_NOTIFICATION = mockk<Notification>()
 private val MESSAGE_META = RoomNotification.Message.Meta(
-    summaryLine = "ignored", messageCount = 1, latestTimestamp = -1, roomId = A_ROOM_ID, shouldBing = false
+    summaryLine = "ignored",
+    messageCount = 1,
+    latestTimestamp = -1,
+    roomId = A_ROOM_ID,
+    shouldBing = false
 )
 private val ONE_SHOT_META = OneShotNotification.Append.Meta(key = "ignored", summaryLine = "ignored", isNoisy = false, timestamp = -1)
 
 @RunWith(RobolectricTestRunner::class)
 class NotificationRendererTest {
-
     private val notificationDisplayer = FakeNotificationDisplayer()
     private val notificationFactory = FakeNotificationFactory()
     private val notificationIdProvider = NotificationIdProvider()

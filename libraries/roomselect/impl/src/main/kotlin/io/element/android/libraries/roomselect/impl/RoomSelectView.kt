@@ -138,7 +138,8 @@ fun RoomSelectView(
                 LazyColumn {
                     item {
                         SelectedRoomsHelper(
-                            isForwarding = false, // TODO state.isForwarding,
+                            // TODO state.isForwarding
+                            isForwarding = false,
                             selectedRooms = state.selectedRooms
                         )
                     }

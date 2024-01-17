@@ -29,7 +29,6 @@ internal class MapTilerStaticMapUrlBuilder(
     private val lightMapId: String,
     private val darkMapId: String,
 ) : StaticMapUrlBuilder {
-
     constructor(context: Context) : this(
         apiKey = context.apiKey,
         lightMapId = context.mapId(darkMode = false),
@@ -65,7 +64,7 @@ internal class MapTilerStaticMapUrlBuilder(
         // image smaller than the available space in pixels.
         // The resulting image will have to be scaled to fit the available space in order
         // to keep the perceived content size constant at the expense of sharpness.
-        return "$MAPTILER_BASE_URL/${mapId}/static/${lon},${lat},${finalZoom}/${finalWidth}x${finalHeight}${scale}.webp?key=${apiKey}&attribution=bottomleft"
+        return "$MAPTILER_BASE_URL/$mapId/static/$lon,$lat,$finalZoom/${finalWidth}x${finalHeight}$scale.webp?key=$apiKey&attribution=bottomleft"
     }
 }
 

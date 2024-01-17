@@ -44,6 +44,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.RedactedConte
 import io.element.android.libraries.matrix.api.timeline.item.event.RoomMembershipContent
 import io.element.android.libraries.matrix.api.timeline.item.event.StateContent
 import io.element.android.libraries.matrix.api.timeline.item.event.StickerContent
+import io.element.android.libraries.matrix.api.timeline.item.event.StickerMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.UnableToDecryptContent
 import io.element.android.libraries.matrix.api.timeline.item.event.UnknownContent
@@ -61,6 +62,10 @@ class DefaultRoomLastMessageFormatter @Inject constructor(
     private val profileChangeContentFormatter: ProfileChangeContentFormatter,
     private val stateContentFormatter: StateContentFormatter,
 ) : RoomLastMessageFormatter {
+    companion object {
+        // Max characters to display in the last message. This works around https://github.com/element-hq/element-x-android/issues/2105
+        private const val MAX_SAFE_LENGTH = 500
+    }
 
     override fun format(event: EventTimelineItem, isDmRoom: Boolean): CharSequence? {
         val isOutgoing = event.isOwn
@@ -102,7 +107,7 @@ class DefaultRoomLastMessageFormatter @Inject constructor(
             is FailedToParseMessageLikeContent, is FailedToParseStateContent, is UnknownContent -> {
                 prefixIfNeeded(sp.getString(CommonStrings.common_unsupported_event), senderDisplayName, isDmRoom)
             }
-        }
+        }?.take(MAX_SAFE_LENGTH)
     }
 
     private fun processMessageContents(messageContent: MessageContent, senderDisplayName: String, isDmRoom: Boolean): CharSequence? {
@@ -119,6 +124,9 @@ class DefaultRoomLastMessageFormatter @Inject constructor(
             }
             is ImageMessageType -> {
                 sp.getString(CommonStrings.common_image)
+            }
+            is StickerMessageType -> {
+                sp.getString(CommonStrings.common_sticker)
             }
             is LocationMessageType -> {
                 sp.getString(CommonStrings.common_shared_location)

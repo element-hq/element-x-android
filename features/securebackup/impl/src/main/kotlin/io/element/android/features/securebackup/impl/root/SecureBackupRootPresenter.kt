@@ -25,7 +25,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import io.element.android.features.securebackup.impl.loggerTagRoot
-import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runCatchingUpdatingState
 import io.element.android.libraries.core.meta.BuildMeta
@@ -43,7 +43,6 @@ class SecureBackupRootPresenter @Inject constructor(
     private val buildMeta: BuildMeta,
     private val snackbarDispatcher: SnackbarDispatcher,
 ) : Presenter<SecureBackupRootState> {
-
     @Composable
     override fun present(): SecureBackupRootState {
         val localCoroutineScope = rememberCoroutineScope()
@@ -55,7 +54,7 @@ class SecureBackupRootPresenter @Inject constructor(
         Timber.tag(loggerTagRoot.value).d("backupState: $backupState")
         Timber.tag(loggerTagRoot.value).d("recoveryState: $recoveryState")
 
-        val doesBackupExistOnServerAction: MutableState<Async<Boolean>> = remember { mutableStateOf(Async.Uninitialized) }
+        val doesBackupExistOnServerAction: MutableState<AsyncData<Boolean>> = remember { mutableStateOf(AsyncData.Uninitialized) }
 
         LaunchedEffect(backupState) {
             if (backupState == BackupState.UNKNOWN) {
@@ -79,7 +78,7 @@ class SecureBackupRootPresenter @Inject constructor(
         )
     }
 
-    private fun CoroutineScope.getKeyBackupStatus(action: MutableState<Async<Boolean>>) = launch {
+    private fun CoroutineScope.getKeyBackupStatus(action: MutableState<AsyncData<Boolean>>) = launch {
         suspend {
             encryptionService.doesBackupExistOnServer().getOrThrow()
         }.runCatchingUpdatingState(action)

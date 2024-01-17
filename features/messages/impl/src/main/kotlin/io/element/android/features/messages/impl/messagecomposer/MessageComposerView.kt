@@ -16,6 +16,7 @@
 
 package io.element.android.features.messages.impl.messagecomposer
 
+import android.net.Uri
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.height
@@ -50,6 +51,10 @@ internal fun MessageComposerView(
     val view = LocalView.current
     fun sendMessage(message: Message) {
         state.eventSink(MessageComposerEvents.SendMessage(message))
+    }
+
+    fun sendUri(uri: Uri) {
+        state.eventSink(MessageComposerEvents.SendUri(uri))
     }
 
     fun onAddAttachment() {
@@ -117,6 +122,7 @@ internal fun MessageComposerView(
         onSuggestionReceived = ::onSuggestionReceived,
         onError = ::onError,
         currentUserId = state.currentUserId,
+        onRichContentSelected = ::sendUri,
     )
 }
 

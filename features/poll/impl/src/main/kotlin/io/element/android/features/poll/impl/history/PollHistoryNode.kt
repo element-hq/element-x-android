@@ -37,7 +37,6 @@ class PollHistoryNode @AssistedInject constructor(
     buildContext = buildContext,
     plugins = plugins,
 ) {
-
     interface Callback : Plugin {
         fun onEditPoll(pollStartEventId: EventId)
     }

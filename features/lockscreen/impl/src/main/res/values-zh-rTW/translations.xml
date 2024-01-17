@@ -5,6 +5,7 @@
   </plurals>
   <string name="screen_app_lock_biometric_authentication">"生物辨識認證"</string>
   <string name="screen_app_lock_biometric_unlock">"生物辨識解鎖"</string>
+  <string name="screen_app_lock_biometric_unlock_title_android">"使用生物辨識解鎖"</string>
   <string name="screen_app_lock_forgot_pin">"忘記 PIN 碼？"</string>
   <string name="screen_app_lock_settings_change_pin">"變更 PIN 碼"</string>
   <string name="screen_app_lock_settings_enable_biometric_unlock">"允許生物辨識解鎖"</string>
@@ -19,5 +20,7 @@
   <string name="screen_app_lock_setup_pin_mismatch_dialog_content">"請輸入相同的 PIN 碼兩次"</string>
   <string name="screen_app_lock_setup_pin_mismatch_dialog_title">"PIN 碼不一樣"</string>
   <string name="screen_app_lock_signout_alert_title">"您即將登出"</string>
+  <string name="screen_app_lock_use_biometric_android">"使用生物辨識"</string>
+  <string name="screen_app_lock_use_pin_android">"使用 PIN 碼"</string>
   <string name="screen_signout_in_progress_dialog_content">"正在登出…"</string>
 </resources>

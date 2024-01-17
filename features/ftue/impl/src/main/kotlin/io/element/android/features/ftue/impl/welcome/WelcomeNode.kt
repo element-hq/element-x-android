@@ -33,7 +33,6 @@ class WelcomeNode @AssistedInject constructor(
     @Assisted plugins: List<Plugin>,
     private val buildMeta: BuildMeta,
 ) : Node(buildContext, plugins = plugins) {
-
     interface Callback : Plugin {
         fun onContinueClicked()
     }
@@ -50,5 +49,4 @@ class WelcomeNode @AssistedInject constructor(
             modifier = modifier
         )
     }
-
 }

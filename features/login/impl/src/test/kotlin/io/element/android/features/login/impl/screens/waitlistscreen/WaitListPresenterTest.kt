@@ -22,7 +22,7 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.login.impl.DefaultLoginUserStory
 import io.element.android.features.login.impl.screens.loginpassword.LoginFormState
-import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.test.A_HOMESERVER
 import io.element.android.libraries.matrix.test.A_HOMESERVER_URL
@@ -36,7 +36,6 @@ import org.junit.Rule
 import org.junit.Test
 
 class WaitListPresenterTest {
-
     @get:Rule
     val warmUpRule = WarmUpRule()
 
@@ -58,7 +57,7 @@ class WaitListPresenterTest {
             val initialState = awaitItem()
             assertThat(initialState.appName).isEqualTo("Application Name")
             assertThat(initialState.serverName).isEqualTo(A_HOMESERVER_URL)
-            assertThat(initialState.loginAction).isEqualTo(Async.Uninitialized)
+            assertThat(initialState.loginAction).isEqualTo(AsyncData.Uninitialized)
         }
     }
 
@@ -83,13 +82,13 @@ class WaitListPresenterTest {
             expectNoEvents()
             initialState.eventSink.invoke(WaitListEvents.AttemptLogin)
             val submitState = awaitItem()
-            assertThat(submitState.loginAction).isInstanceOf(Async.Loading::class.java)
+            assertThat(submitState.loginAction).isInstanceOf(AsyncData.Loading::class.java)
             val errorState = awaitItem()
-            assertThat(errorState.loginAction).isEqualTo(Async.Failure<SessionId>(A_THROWABLE))
+            assertThat(errorState.loginAction).isEqualTo(AsyncData.Failure<SessionId>(A_THROWABLE))
             // Assert the error can be cleared
             errorState.eventSink(WaitListEvents.ClearError)
             val clearedState = awaitItem()
-            assertThat(clearedState.loginAction).isEqualTo(Async.Uninitialized)
+            assertThat(clearedState.loginAction).isEqualTo(AsyncData.Uninitialized)
         }
     }
 
@@ -113,9 +112,9 @@ class WaitListPresenterTest {
             expectNoEvents()
             initialState.eventSink.invoke(WaitListEvents.AttemptLogin)
             val submitState = awaitItem()
-            assertThat(submitState.loginAction).isInstanceOf(Async.Loading::class.java)
+            assertThat(submitState.loginAction).isInstanceOf(AsyncData.Loading::class.java)
             val successState = awaitItem()
-            assertThat(successState.loginAction).isEqualTo(Async.Success(A_USER_ID))
+            assertThat(successState.loginAction).isEqualTo(AsyncData.Success(A_USER_ID))
             assertThat(loginUserStory.loginFlowIsDone.value).isFalse()
             successState.eventSink.invoke(WaitListEvents.Continue)
             assertThat(loginUserStory.loginFlowIsDone.value).isTrue()

@@ -51,7 +51,6 @@ class DefaultPermissionsPresenter @AssistedInject constructor(
     private val composablePermissionStateProvider: ComposablePermissionStateProvider,
     private val permissionActions: PermissionActions,
 ) : PermissionsPresenter {
-
     @AssistedFactory
     @ContributesBinding(AppScope::class)
     interface Factory : PermissionsPresenter.Factory {

@@ -29,7 +29,7 @@ import io.element.android.features.lockscreen.impl.biometric.BiometricUnlockMana
 import io.element.android.features.lockscreen.impl.pin.PinCodeManager
 import io.element.android.features.lockscreen.impl.pin.model.PinEntry
 import io.element.android.features.lockscreen.impl.unlock.keypad.PinKeypadModel
-import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runCatchingUpdatingState
 import io.element.android.libraries.core.bool.orFalse
@@ -45,15 +45,14 @@ class PinUnlockPresenter @Inject constructor(
     private val coroutineScope: CoroutineScope,
     private val pinUnlockHelper: PinUnlockHelper,
 ) : Presenter<PinUnlockState> {
-
     @Composable
     override fun present(): PinUnlockState {
         val pinEntryState = remember {
-            mutableStateOf<Async<PinEntry>>(Async.Uninitialized)
+            mutableStateOf<AsyncData<PinEntry>>(AsyncData.Uninitialized)
         }
         val pinEntry by pinEntryState
         var remainingAttempts by remember {
-            mutableStateOf<Async<Int>>(Async.Uninitialized)
+            mutableStateOf<AsyncData<Int>>(AsyncData.Uninitialized)
         }
         var showWrongPinTitle by rememberSaveable {
             mutableStateOf(false)
@@ -62,7 +61,7 @@ class PinUnlockPresenter @Inject constructor(
             mutableStateOf(false)
         }
         val signOutAction = remember {
-            mutableStateOf<Async<String?>>(Async.Uninitialized)
+            mutableStateOf<AsyncData<String?>>(AsyncData.Uninitialized)
         }
         var biometricUnlockResult by remember {
             mutableStateOf<BiometricUnlock.AuthenticationResult?>(null)
@@ -91,7 +90,7 @@ class PinUnlockPresenter @Inject constructor(
                 }
             }
             val remainingAttemptsNumber = pinCodeManager.getRemainingPinCodeAttemptsNumber()
-            remainingAttempts = Async.Success(remainingAttemptsNumber)
+            remainingAttempts = AsyncData.Success(remainingAttemptsNumber)
             if (remainingAttemptsNumber == 0) {
                 showSignOutPrompt = true
             }
@@ -139,46 +138,46 @@ class PinUnlockPresenter @Inject constructor(
         )
     }
 
-    private fun Async<PinEntry>.isComplete(): Boolean {
+    private fun AsyncData<PinEntry>.isComplete(): Boolean {
         return dataOrNull()?.isComplete().orFalse()
     }
 
-    private fun Async<PinEntry>.toText(): String {
+    private fun AsyncData<PinEntry>.toText(): String {
         return dataOrNull()?.toText() ?: ""
     }
 
-    private fun Async<PinEntry>.clear(): Async<PinEntry> {
+    private fun AsyncData<PinEntry>.clear(): AsyncData<PinEntry> {
         return when (this) {
-            is Async.Success -> Async.Success(data.clear())
+            is AsyncData.Success -> AsyncData.Success(data.clear())
             else -> this
         }
     }
 
-    private fun Async<PinEntry>.process(pinKeypadModel: PinKeypadModel): Async<PinEntry> {
+    private fun AsyncData<PinEntry>.process(pinKeypadModel: PinKeypadModel): AsyncData<PinEntry> {
         return when (this) {
-            is Async.Success -> {
+            is AsyncData.Success -> {
                 val pinEntry = when (pinKeypadModel) {
                     PinKeypadModel.Back -> data.deleteLast()
                     is PinKeypadModel.Number -> data.addDigit(pinKeypadModel.number)
                     PinKeypadModel.Empty -> data
                 }
-                Async.Success(pinEntry)
+                AsyncData.Success(pinEntry)
             }
             else -> this
         }
     }
 
-    private fun Async<PinEntry>.process(pinEntryAsText: String): Async<PinEntry> {
+    private fun AsyncData<PinEntry>.process(pinEntryAsText: String): AsyncData<PinEntry> {
         return when (this) {
-            is Async.Success -> {
+            is AsyncData.Success -> {
                 val pinEntry = data.fillWith(pinEntryAsText)
-                Async.Success(pinEntry)
+                AsyncData.Success(pinEntry)
             }
             else -> this
         }
     }
 
-    private fun CoroutineScope.signOut(signOutAction: MutableState<Async<String?>>) = launch {
+    private fun CoroutineScope.signOut(signOutAction: MutableState<AsyncData<String?>>) = launch {
         suspend {
             matrixClient.logout(ignoreSdkError = true)
         }.runCatchingUpdatingState(signOutAction)

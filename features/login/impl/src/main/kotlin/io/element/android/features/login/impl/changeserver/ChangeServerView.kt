@@ -22,7 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import io.element.android.features.login.impl.dialogs.SlidingSyncNotSupportedDialog
 import io.element.android.features.login.impl.error.ChangeServerError
-import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.components.ProgressDialog
 import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -37,7 +37,7 @@ fun ChangeServerView(
 ) {
     val eventSink = state.eventSink
     when (state.changeServerAction) {
-        is Async.Failure -> {
+        is AsyncData.Failure -> {
             when (val error = state.changeServerAction.error) {
                 is ChangeServerError.Error -> {
                     ErrorDialog(
@@ -54,17 +54,19 @@ fun ChangeServerView(
                         onLearnMoreClicked = {
                             onLearnMoreClicked()
                             eventSink.invoke(ChangeServerEvents.ClearError)
-                        }, onDismiss = {
-                        eventSink.invoke(ChangeServerEvents.ClearError)
-                    })
+                        },
+                        onDismiss = {
+                            eventSink.invoke(ChangeServerEvents.ClearError)
+                        }
+                    )
                 }
             }
         }
-        is Async.Loading -> ProgressDialog()
-        is Async.Success -> LaunchedEffect(state.changeServerAction) {
+        is AsyncData.Loading -> ProgressDialog()
+        is AsyncData.Success -> LaunchedEffect(state.changeServerAction) {
             onDone()
         }
-        Async.Uninitialized -> Unit
+        AsyncData.Uninitialized -> Unit
     }
 }
 

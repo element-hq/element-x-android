@@ -19,7 +19,6 @@ package io.element.android.features.messages.impl.actionlist
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -42,7 +41,6 @@ import javax.inject.Inject
 class ActionListPresenter @Inject constructor(
     private val preferencesStore: PreferencesStore,
 ) : Presenter<ActionListState> {
-
     @Composable
     override fun present(): ActionListState {
         val localCoroutineScope = rememberCoroutineScope()
@@ -53,13 +51,6 @@ class ActionListPresenter @Inject constructor(
 
         val isDeveloperModeEnabled by preferencesStore.isDeveloperModeEnabledFlow().collectAsState(initial = false)
 
-        val displayEmojiReactions by remember {
-            derivedStateOf {
-                val event = (target.value as? ActionListState.Target.Success)?.event
-                event?.isRemote == true && event.content.canReact()
-            }
-        }
-
         fun handleEvents(event: ActionListEvents) {
             when (event) {
                 ActionListEvents.Clear -> target.value = ActionListState.Target.None
@@ -67,6 +58,7 @@ class ActionListPresenter @Inject constructor(
                     timelineItem = event.event,
                     userCanRedact = event.canRedact,
                     userCanSendMessage = event.canSendMessage,
+                    userCanSendReaction = event.canSendReaction,
                     isDeveloperModeEnabled = isDeveloperModeEnabled,
                     target = target,
                 )
@@ -75,7 +67,6 @@ class ActionListPresenter @Inject constructor(
 
         return ActionListState(
             target = target.value,
-            displayEmojiReactions = displayEmojiReactions,
             eventSink = { handleEvents(it) }
         )
     }
@@ -84,6 +75,7 @@ class ActionListPresenter @Inject constructor(
         timelineItem: TimelineItem.Event,
         userCanRedact: Boolean,
         userCanSendMessage: Boolean,
+        userCanSendReaction: Boolean,
         isDeveloperModeEnabled: Boolean,
         target: MutableState<ActionListState.Target>
     ) = launch {
@@ -159,7 +151,11 @@ class ActionListPresenter @Inject constructor(
                                 add(TimelineItemAction.Reply)
                             }
                         }
-                        add(TimelineItemAction.Forward)
+                        // Stickers can't be forwarded (yet) so we don't show the option
+                        // See https://github.com/element-hq/element-x-android/issues/2161
+                        if (!timelineItem.isSticker) {
+                            add(TimelineItemAction.Forward)
+                        }
                     }
                     if (timelineItem.isMine && timelineItem.isTextMessage) {
                         add(TimelineItemAction.Edit)
@@ -178,8 +174,15 @@ class ActionListPresenter @Inject constructor(
                     }
                 }
             }
-        if (actions.isNotEmpty()) {
-            target.value = ActionListState.Target.Success(timelineItem, actions.toImmutableList())
+        val displayEmojiReactions = userCanSendReaction &&
+            timelineItem.isRemote &&
+            timelineItem.content.canReact()
+        if (actions.isNotEmpty() || displayEmojiReactions) {
+            target.value = ActionListState.Target.Success(
+                event = timelineItem,
+                displayEmojiReactions = displayEmojiReactions,
+                actions = actions.toImmutableList()
+            )
         } else {
             target.value = ActionListState.Target.None
         }

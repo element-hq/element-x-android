@@ -18,18 +18,18 @@ package io.element.android.features.login.impl.screens.loginpassword
 
 import android.os.Parcelable
 import io.element.android.features.login.impl.accountprovider.AccountProvider
-import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.core.SessionId
 import kotlinx.parcelize.Parcelize
 
 data class LoginPasswordState(
     val accountProvider: AccountProvider,
     val formState: LoginFormState,
-    val loginAction: Async<SessionId>,
+    val loginAction: AsyncData<SessionId>,
     val eventSink: (LoginPasswordEvents) -> Unit
 ) {
     val submitEnabled: Boolean
-        get() = loginAction !is Async.Failure &&
+        get() = loginAction !is AsyncData.Failure &&
             formState.login.isNotEmpty() &&
             formState.password.isNotEmpty()
 }
@@ -39,7 +39,6 @@ data class LoginFormState(
     val login: String,
     val password: String
 ) : Parcelable {
-
     companion object {
         val Default = LoginFormState("", "")
     }

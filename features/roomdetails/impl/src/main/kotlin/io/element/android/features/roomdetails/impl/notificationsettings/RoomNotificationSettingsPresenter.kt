@@ -28,7 +28,8 @@ import androidx.compose.runtime.setValue
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.AsyncAction
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runCatchingUpdatingState
 import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsService
@@ -48,7 +49,6 @@ class RoomNotificationSettingsPresenter @AssistedInject constructor(
     private val notificationSettingsService: NotificationSettingsService,
     @Assisted private val showUserDefinedSettingStyle: Boolean,
 ) : Presenter<RoomNotificationSettingsState> {
-
     @AssistedFactory
     interface Factory {
         fun create(showUserDefinedSettingStyle: Boolean): RoomNotificationSettingsPresenter
@@ -61,11 +61,11 @@ class RoomNotificationSettingsPresenter @AssistedInject constructor(
             mutableStateOf(null)
         }
         val localCoroutineScope = rememberCoroutineScope()
-        val setNotificationSettingAction: MutableState<Async<Unit>> = remember { mutableStateOf(Async.Uninitialized) }
-        val restoreDefaultAction: MutableState<Async<Unit>> = remember { mutableStateOf(Async.Uninitialized) }
+        val setNotificationSettingAction: MutableState<AsyncAction<Unit>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
+        val restoreDefaultAction: MutableState<AsyncAction<Unit>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
 
-        val roomNotificationSettings: MutableState<Async<RoomNotificationSettings>> = remember {
-            mutableStateOf(Async.Uninitialized)
+        val roomNotificationSettings: MutableState<AsyncData<RoomNotificationSettings>> = remember {
+            mutableStateOf(AsyncData.Uninitialized)
         }
 
         // We store state of which mode the user has set via the notification service before the new push settings have been updated.
@@ -103,7 +103,7 @@ class RoomNotificationSettingsPresenter @AssistedInject constructor(
                         localCoroutineScope.restoreDefaultRoomNotificationMode(restoreDefaultAction, pendingSetDefault)
                     } else {
                         defaultRoomNotificationMode.value?.let {
-                            localCoroutineScope.setRoomNotificationMode(it, pendingRoomNotificationMode, pendingSetDefault,  setNotificationSettingAction)
+                            localCoroutineScope.setRoomNotificationMode(it, pendingRoomNotificationMode, pendingSetDefault, setNotificationSettingAction)
                         }
                     }
                 }
@@ -111,10 +111,10 @@ class RoomNotificationSettingsPresenter @AssistedInject constructor(
                     localCoroutineScope.restoreDefaultRoomNotificationMode(restoreDefaultAction, pendingSetDefault)
                 }
                 RoomNotificationSettingsEvents.ClearSetNotificationError -> {
-                    setNotificationSettingAction.value = Async.Uninitialized
+                    setNotificationSettingAction.value = AsyncAction.Uninitialized
                 }
                 RoomNotificationSettingsEvents.ClearRestoreDefaultError -> {
-                    restoreDefaultAction.value = Async.Uninitialized
+                    restoreDefaultAction.value = AsyncAction.Uninitialized
                 }
             }
         }
@@ -136,7 +136,7 @@ class RoomNotificationSettingsPresenter @AssistedInject constructor(
     @OptIn(FlowPreview::class)
     private fun CoroutineScope.observeNotificationSettings(
         pendingModeState: MutableState<RoomNotificationMode?>,
-        roomNotificationSettings: MutableState<Async<RoomNotificationSettings>>
+        roomNotificationSettings: MutableState<AsyncData<RoomNotificationSettings>>
     ) {
         notificationSettingsService.notificationSettingsChangeFlow
             .debounce(0.5.seconds)
@@ -148,7 +148,7 @@ class RoomNotificationSettingsPresenter @AssistedInject constructor(
 
     private fun CoroutineScope.fetchNotificationSettings(
         pendingModeState: MutableState<RoomNotificationMode?>,
-        roomNotificationSettings: MutableState<Async<RoomNotificationSettings>>
+        roomNotificationSettings: MutableState<AsyncData<RoomNotificationSettings>>
     ) = launch {
         suspend {
             pendingModeState.value = null
@@ -169,7 +169,7 @@ class RoomNotificationSettingsPresenter @AssistedInject constructor(
         mode: RoomNotificationMode,
         pendingModeState: MutableState<RoomNotificationMode?>,
         pendingDefaultState: MutableState<Boolean?>,
-        action: MutableState<Async<Unit>>
+        action: MutableState<AsyncAction<Unit>>
     ) = launch {
         suspend {
             pendingModeState.value = mode
@@ -184,7 +184,7 @@ class RoomNotificationSettingsPresenter @AssistedInject constructor(
     }
 
     private fun CoroutineScope.restoreDefaultRoomNotificationMode(
-        action: MutableState<Async<Unit>>,
+        action: MutableState<AsyncAction<Unit>>,
         pendingDefaultState: MutableState<Boolean?>
     ) = launch {
         suspend {

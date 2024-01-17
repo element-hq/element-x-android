@@ -24,6 +24,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
+import io.element.android.features.logout.api.direct.DirectLogoutPresenter
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.meta.BuildType
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
@@ -50,8 +51,8 @@ class PreferencesRootPresenter @Inject constructor(
     private val snackbarDispatcher: SnackbarDispatcher,
     private val featureFlagService: FeatureFlagService,
     private val indicatorService: IndicatorService,
+    private val directLogoutPresenter: DirectLogoutPresenter,
 ) : Presenter<PreferencesRootState> {
-
     @Composable
     override fun present(): PreferencesRootState {
         val matrixUser: MutableState<MatrixUser?> = rememberSaveable {
@@ -88,6 +89,8 @@ class PreferencesRootPresenter @Inject constructor(
             mutableStateOf(null)
         }
 
+        val directLogoutState = directLogoutPresenter.present()
+
         LaunchedEffect(Unit) {
             initAccountManagementUrl(accountManagementUrl, devicesManagementUrl)
         }
@@ -105,6 +108,7 @@ class PreferencesRootPresenter @Inject constructor(
             showDeveloperSettings = showDeveloperSettings,
             showNotificationSettings = showNotificationSettings.value,
             showLockScreenSettings = showLockScreenSettings.value,
+            directLogoutState = directLogoutState,
             snackbarMessage = snackbarMessage,
         )
     }

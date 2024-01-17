@@ -43,7 +43,6 @@ import org.matrix.rustcomponents.sdk.MessageFormat as RustMessageFormat
 import org.matrix.rustcomponents.sdk.MessageType as RustMessageType
 
 class EventMessageMapper {
-
     private val timelineEventContentMapper by lazy { TimelineEventContentMapper() }
 
     fun map(message: Message): MessageContent = message.use {

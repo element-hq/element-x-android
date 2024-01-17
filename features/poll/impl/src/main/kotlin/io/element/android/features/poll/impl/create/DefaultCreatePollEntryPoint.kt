@@ -31,7 +31,6 @@ class DefaultCreatePollEntryPoint @Inject constructor() : CreatePollEntryPoint {
         val plugins = ArrayList<Plugin>()
 
         return object : CreatePollEntryPoint.NodeBuilder {
-
             override fun params(params: CreatePollEntryPoint.Params): CreatePollEntryPoint.NodeBuilder {
                 plugins += CreatePollNode.Inputs(mode = params.mode)
                 return this

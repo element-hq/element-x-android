@@ -57,10 +57,7 @@ fun SearchMultipleUsersResultItem(
 
 @Preview
 @Composable
-internal fun SearchMultipleUsersResultItemPreview() = ElementThemedPreview { ContentToPreview() }
-
-@Composable
-private fun ContentToPreview() {
+internal fun SearchMultipleUsersResultItemPreview() = ElementThemedPreview {
     Column {
         SearchMultipleUsersResultItem(
             searchResult = UserSearchResult(

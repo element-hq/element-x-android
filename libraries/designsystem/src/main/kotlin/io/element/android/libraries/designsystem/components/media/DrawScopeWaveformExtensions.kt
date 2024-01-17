@@ -23,23 +23,22 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import kotlinx.collections.immutable.ImmutableList
 import kotlin.math.max
 
 fun DrawScope.drawWaveform(
     waveformData: ImmutableList<Float>,
-    canvasSize: DpSize,
+    canvasSizePx: Size,
     brush: Brush,
     minimumGraphAmplitude: Float = 2F,
     lineWidth: Dp = 2.dp,
     linePadding: Dp = 2.dp,
 ) {
-    val centerY = canvasSize.height.toPx() / 2
+    val centerY = canvasSizePx.height / 2
     val cornerRadius = lineWidth / 2
     waveformData.forEachIndexed { index, amplitude ->
-        val drawingAmplitude = max(minimumGraphAmplitude, amplitude * (canvasSize.height.toPx() - 2))
+        val drawingAmplitude = max(minimumGraphAmplitude, amplitude * (canvasSizePx.height - 2))
         drawRoundRect(
             brush = brush,
             topLeft = Offset(

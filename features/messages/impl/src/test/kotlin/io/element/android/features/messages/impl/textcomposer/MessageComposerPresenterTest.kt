@@ -90,7 +90,6 @@ import java.io.File
 
 @Suppress("LargeClass")
 class MessageComposerPresenterTest {
-
     @get:Rule
     val warmUpRule = WarmUpRule()
 

@@ -20,12 +20,12 @@ import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import io.element.android.libraries.roomselect.api.RoomSelectMode
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
 import io.element.android.libraries.matrix.api.roomlist.RoomSummary
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.room.aRoomSummaryDetail
 import io.element.android.libraries.matrix.test.roomlist.FakeRoomListService
+import io.element.android.libraries.roomselect.api.RoomSelectMode
 import io.element.android.tests.testutils.WarmUpRule
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.test.runTest
@@ -33,7 +33,6 @@ import org.junit.Rule
 import org.junit.Test
 
 class RoomSelectPresenterTests {
-
     @get:Rule
     val warmUpRule = WarmUpRule()
 
@@ -45,11 +44,11 @@ class RoomSelectPresenterTests {
         }.test {
             val initialState = awaitItem()
             assertThat(initialState.selectedRooms).isEmpty()
-            assertThat(initialState.resultState).isInstanceOf(SearchBarResultState.NotSearching::class.java)
+            assertThat(initialState.resultState).isInstanceOf(SearchBarResultState.Initial::class.java)
             assertThat(initialState.isSearchActive).isFalse()
             // Search is run automatically
             val searchState = awaitItem()
-            assertThat(searchState.resultState).isInstanceOf(SearchBarResultState.NoResults::class.java)
+            assertThat(searchState.resultState).isInstanceOf(SearchBarResultState.NoResultsFound::class.java)
         }
     }
 
@@ -85,7 +84,7 @@ class RoomSelectPresenterTests {
 
             initialState.eventSink(RoomSelectEvents.UpdateQuery("string not contained"))
             assertThat(awaitItem().query).isEqualTo("string not contained")
-            assertThat(awaitItem().resultState).isInstanceOf(SearchBarResultState.NoResults::class.java)
+            assertThat(awaitItem().resultState).isInstanceOf(SearchBarResultState.NoResultsFound::class.java)
         }
     }
 

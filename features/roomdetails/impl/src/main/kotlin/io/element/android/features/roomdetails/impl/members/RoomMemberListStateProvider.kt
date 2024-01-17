@@ -17,7 +17,7 @@
 package io.element.android.features.roomdetails.impl.members
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.RoomMember
@@ -28,14 +28,14 @@ internal class RoomMemberListStateProvider : PreviewParameterProvider<RoomMember
     override val values: Sequence<RoomMemberListState>
         get() = sequenceOf(
             aRoomMemberListState(
-                roomMembers = Async.Success(
+                roomMembers = AsyncData.Success(
                     RoomMembers(
                         invited = persistentListOf(aVictor(), aWalter()),
                         joined = persistentListOf(anAlice(), aBob()),
                     )
                 )
             ),
-            aRoomMemberListState(roomMembers = Async.Loading()),
+            aRoomMemberListState(roomMembers = AsyncData.Loading()),
             aRoomMemberListState().copy(canInvite = true),
             aRoomMemberListState().copy(isSearchActive = false),
             aRoomMemberListState().copy(isSearchActive = true),
@@ -53,14 +53,14 @@ internal class RoomMemberListStateProvider : PreviewParameterProvider<RoomMember
             aRoomMemberListState().copy(
                 isSearchActive = true,
                 searchQuery = "something-with-no-results",
-                searchResults = SearchBarResultState.NoResults()
+                searchResults = SearchBarResultState.NoResultsFound()
             ),
         )
 }
 
 internal fun aRoomMemberListState(
-    roomMembers: Async<RoomMembers> = Async.Uninitialized,
-    searchResults: SearchBarResultState<RoomMembers> = SearchBarResultState.NotSearching(),
+    roomMembers: AsyncData<RoomMembers> = AsyncData.Uninitialized,
+    searchResults: SearchBarResultState<RoomMembers> = SearchBarResultState.Initial(),
 ) = RoomMemberListState(
     roomMembers = roomMembers,
     searchQuery = "",

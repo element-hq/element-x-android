@@ -28,7 +28,6 @@ import kotlin.time.Duration
  * Can be retrieved from [RoomListService] methods.
  */
 interface RoomList {
-
     sealed interface LoadingState {
         data object NotLoaded : LoadingState
         data class Loaded(val numberOfRooms: Int) : LoadingState

@@ -30,7 +30,7 @@ import im.vector.app.features.analytics.plan.MobileScreen
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.features.roomdetails.impl.R
 import io.element.android.libraries.androidutils.system.startSharePlainTextIntent
-import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.di.RoomScope
@@ -48,7 +48,6 @@ class RoomMemberDetailsNode @AssistedInject constructor(
     private val analyticsService: AnalyticsService,
     presenterFactory: RoomMemberDetailsPresenter.Factory,
 ) : Node(buildContext, plugins = plugins) {
-
     interface Callback : NodeInputs {
         fun openAvatarPreview(username: String, avatarUrl: String)
         fun onStartDM(roomId: RoomId)
@@ -95,7 +94,7 @@ class RoomMemberDetailsNode @AssistedInject constructor(
         val state = presenter.present()
 
         LaunchedEffect(state.startDmActionState) {
-            if (state.startDmActionState is Async.Success) {
+            if (state.startDmActionState is AsyncAction.Success) {
                 onStartDM(state.startDmActionState.data)
             }
         }

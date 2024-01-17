@@ -24,7 +24,6 @@ import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextContent
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import org.jsoup.Jsoup
 
 @PreviewsDayNight
 @Composable
@@ -38,18 +37,15 @@ internal fun TimelineItemEventRowTimestampPreview(
             "Text longer, displayed on 1 line",
             "Text which should be rendered on several lines",
         ).forEach { str ->
-            listOf(false, true).forEach { useDocument ->
-                ATimelineItemEventRow(
-                    event = event.copy(
-                        content = oldContent.copy(
-                            body = str,
-                            htmlDocument = if (useDocument) Jsoup.parse(str) else null,
-                        ),
-                        reactionsState = aTimelineItemReactions(count = 0),
-                        senderDisplayName = if (useDocument) "Document case" else "Text case",
+            ATimelineItemEventRow(
+                event = event.copy(
+                    content = oldContent.copy(
+                        body = str,
                     ),
-                )
-            }
+                    reactionsState = aTimelineItemReactions(count = 0),
+                    senderDisplayName = "A sender",
+                ),
+            )
         }
     }
 }

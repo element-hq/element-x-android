@@ -18,11 +18,10 @@ package io.element.android.features.messages.impl.timeline.components
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import io.element.android.features.messages.impl.timeline.TimelineRoomInfo
 import io.element.android.features.messages.impl.timeline.TimelineEvents
+import io.element.android.features.messages.impl.timeline.TimelineRoomInfo
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStateContent
-import io.element.android.features.messages.impl.timeline.model.event.canBeRepliedTo
 import io.element.android.features.messages.impl.timeline.session.SessionState
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
@@ -31,10 +30,8 @@ import io.element.android.libraries.matrix.api.core.UserId
 internal fun TimelineItemRow(
     timelineItem: TimelineItem,
     timelineRoomInfo: TimelineRoomInfo,
-    showReadReceipts: Boolean,
     isLastOutgoingMessage: Boolean,
     highlightedItem: String?,
-    userHasPermissionToSendMessage: Boolean,
     sessionState: SessionState,
     onUserDataClick: (UserId) -> Unit,
     onClick: (TimelineItem.Event) -> Unit,
@@ -61,7 +58,6 @@ internal fun TimelineItemRow(
             if (timelineItem.content is TimelineItemStateContent) {
                 TimelineItemStateEventRow(
                     event = timelineItem,
-                    showReadReceipts = showReadReceipts,
                     isLastOutgoingMessage = isLastOutgoingMessage,
                     isHighlighted = highlightedItem == timelineItem.identifier(),
                     onClick = { onClick(timelineItem) },
@@ -74,10 +70,8 @@ internal fun TimelineItemRow(
                 TimelineItemEventRow(
                     event = timelineItem,
                     timelineRoomInfo = timelineRoomInfo,
-                    showReadReceipts = showReadReceipts,
                     isLastOutgoingMessage = isLastOutgoingMessage,
                     isHighlighted = highlightedItem == timelineItem.identifier(),
-                    canReply = userHasPermissionToSendMessage && timelineItem.content.canBeRepliedTo(),
                     onClick = { onClick(timelineItem) },
                     onLongClick = { onLongClick(timelineItem) },
                     onUserDataClick = onUserDataClick,
@@ -97,7 +91,6 @@ internal fun TimelineItemRow(
             TimelineItemGroupedEventsRow(
                 timelineItem = timelineItem,
                 timelineRoomInfo = timelineRoomInfo,
-                showReadReceipts = showReadReceipts,
                 isLastOutgoingMessage = isLastOutgoingMessage,
                 highlightedItem = highlightedItem,
                 sessionState = sessionState,

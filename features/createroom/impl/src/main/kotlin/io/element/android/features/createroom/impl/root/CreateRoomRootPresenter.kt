@@ -26,7 +26,7 @@ import io.element.android.features.createroom.impl.userlist.SelectionMode
 import io.element.android.features.createroom.impl.userlist.UserListDataStore
 import io.element.android.features.createroom.impl.userlist.UserListPresenter
 import io.element.android.features.createroom.impl.userlist.UserListPresenterArgs
-import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -41,7 +41,6 @@ class CreateRoomRootPresenter @Inject constructor(
     private val startDMAction: StartDMAction,
     private val buildMeta: BuildMeta,
 ) : Presenter<CreateRoomRootState> {
-
     private val presenter = presenterFactory.create(
         UserListPresenterArgs(
             selectionMode = SelectionMode.Single,
@@ -55,14 +54,14 @@ class CreateRoomRootPresenter @Inject constructor(
         val userListState = presenter.present()
 
         val localCoroutineScope = rememberCoroutineScope()
-        val startDmActionState: MutableState<Async<RoomId>> = remember { mutableStateOf(Async.Uninitialized) }
+        val startDmActionState: MutableState<AsyncAction<RoomId>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
 
         fun handleEvents(event: CreateRoomRootEvents) {
             when (event) {
                 is CreateRoomRootEvents.StartDM -> localCoroutineScope.launch {
                     startDMAction.execute(event.matrixUser.userId, startDmActionState)
                 }
-                CreateRoomRootEvents.CancelStartDM -> startDmActionState.value = Async.Uninitialized
+                CreateRoomRootEvents.CancelStartDM -> startDmActionState.value = AsyncAction.Uninitialized
             }
         }
 

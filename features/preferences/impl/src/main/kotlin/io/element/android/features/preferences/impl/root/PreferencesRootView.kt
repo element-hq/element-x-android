@@ -57,7 +57,7 @@ fun PreferencesRootView(
     onManageAccountClicked: (url: String) -> Unit,
     onOpenAnalytics: () -> Unit,
     onOpenRageShake: () -> Unit,
-    onOpenLockScreenSettings: ()->Unit,
+    onOpenLockScreenSettings: () -> Unit,
     onOpenAbout: () -> Unit,
     onOpenDeveloperSettings: () -> Unit,
     onOpenAdvancedSettings: () -> Unit,
@@ -91,7 +91,7 @@ fun PreferencesRootView(
         if (state.showSecureBackup) {
             ListItem(
                 headlineContent = { Text(stringResource(id = CommonStrings.common_chat_backup)) },
-                leadingContent = ListItemContent.Icon(IconSource.Resource(CommonDrawables.ic_key_filled),),
+                leadingContent = ListItemContent.Icon(IconSource.Resource(CommonDrawables.ic_key_filled)),
                 trailingContent = ListItemContent.Badge.takeIf { state.showSecureBackupBadge },
                 onClick = onSecureBackupClicked,
             )

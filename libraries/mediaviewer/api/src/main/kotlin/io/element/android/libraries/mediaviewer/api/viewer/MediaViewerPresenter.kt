@@ -29,7 +29,7 @@ import androidx.compose.runtime.setValue
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
@@ -51,7 +51,6 @@ class MediaViewerPresenter @AssistedInject constructor(
     private val localMediaActions: LocalMediaActions,
     private val snackbarDispatcher: SnackbarDispatcher,
 ) : Presenter<MediaViewerState> {
-
     @AssistedFactory
     interface Factory {
         fun create(inputs: MediaViewerNode.Inputs): MediaViewerPresenter
@@ -64,8 +63,8 @@ class MediaViewerPresenter @AssistedInject constructor(
         val mediaFile: MutableState<MediaFile?> = remember {
             mutableStateOf(null)
         }
-        val localMedia: MutableState<Async<LocalMedia>> = remember {
-            mutableStateOf(Async.Uninitialized)
+        val localMedia: MutableState<AsyncData<LocalMedia>> = remember {
+            mutableStateOf(AsyncData.Uninitialized)
         }
         val snackbarMessage by snackbarDispatcher.collectSnackbarMessageAsState()
         localMediaActions.Configure()
@@ -79,7 +78,7 @@ class MediaViewerPresenter @AssistedInject constructor(
         fun handleEvents(mediaViewerEvents: MediaViewerEvents) {
             when (mediaViewerEvents) {
                 MediaViewerEvents.RetryLoading -> loadMediaTrigger++
-                MediaViewerEvents.ClearLoadingError -> localMedia.value = Async.Uninitialized
+                MediaViewerEvents.ClearLoadingError -> localMedia.value = AsyncData.Uninitialized
                 MediaViewerEvents.SaveOnDisk -> coroutineScope.saveOnDisk(localMedia.value)
                 MediaViewerEvents.Share -> coroutineScope.share(localMedia.value)
                 MediaViewerEvents.OpenWith -> coroutineScope.open(localMedia.value)
@@ -97,8 +96,8 @@ class MediaViewerPresenter @AssistedInject constructor(
         )
     }
 
-    private fun CoroutineScope.downloadMedia(mediaFile: MutableState<MediaFile?>, localMedia: MutableState<Async<LocalMedia>>) = launch {
-        localMedia.value = Async.Loading()
+    private fun CoroutineScope.downloadMedia(mediaFile: MutableState<MediaFile?>, localMedia: MutableState<AsyncData<LocalMedia>>) = launch {
+        localMedia.value = AsyncData.Loading()
         mediaLoader.downloadMediaFile(
             source = inputs.mediaSource,
             mimeType = inputs.mediaInfo.mimeType,
@@ -114,15 +113,15 @@ class MediaViewerPresenter @AssistedInject constructor(
                 )
             }
             .onSuccess {
-                localMedia.value = Async.Success(it)
+                localMedia.value = AsyncData.Success(it)
             }
             .onFailure {
-                localMedia.value = Async.Failure(it)
+                localMedia.value = AsyncData.Failure(it)
             }
     }
 
-    private fun CoroutineScope.saveOnDisk(localMedia: Async<LocalMedia>) = launch {
-        if (localMedia is Async.Success) {
+    private fun CoroutineScope.saveOnDisk(localMedia: AsyncData<LocalMedia>) = launch {
+        if (localMedia is AsyncData.Success) {
             localMediaActions.saveOnDisk(localMedia.data)
                 .onSuccess {
                     val snackbarMessage = SnackbarMessage(CommonStrings.common_file_saved_on_disk_android)
@@ -132,27 +131,27 @@ class MediaViewerPresenter @AssistedInject constructor(
                     val snackbarMessage = SnackbarMessage(mediaActionsError(it))
                     snackbarDispatcher.post(snackbarMessage)
                 }
-        } else Unit
+        }
     }
 
-    private fun CoroutineScope.share(localMedia: Async<LocalMedia>) = launch {
-        if (localMedia is Async.Success) {
+    private fun CoroutineScope.share(localMedia: AsyncData<LocalMedia>) = launch {
+        if (localMedia is AsyncData.Success) {
             localMediaActions.share(localMedia.data)
                 .onFailure {
                     val snackbarMessage = SnackbarMessage(mediaActionsError(it))
                     snackbarDispatcher.post(snackbarMessage)
                 }
-        } else Unit
+        }
     }
 
-    private fun CoroutineScope.open(localMedia: Async<LocalMedia>) = launch {
-        if (localMedia is Async.Success) {
+    private fun CoroutineScope.open(localMedia: AsyncData<LocalMedia>) = launch {
+        if (localMedia is AsyncData.Success) {
             localMediaActions.open(localMedia.data)
                 .onFailure {
                     val snackbarMessage = SnackbarMessage(mediaActionsError(it))
                     snackbarDispatcher.post(snackbarMessage)
                 }
-        } else Unit
+        }
     }
 
     private fun mediaActionsError(throwable: Throwable): Int {
@@ -163,6 +162,3 @@ class MediaViewerPresenter @AssistedInject constructor(
         }
     }
 }
-
-
-

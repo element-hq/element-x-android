@@ -36,4 +36,3 @@ fun Context.isScreenReaderEnabled(): Boolean {
         it.isEnabled && it.isTouchExplorationEnabled
     }
 }
-

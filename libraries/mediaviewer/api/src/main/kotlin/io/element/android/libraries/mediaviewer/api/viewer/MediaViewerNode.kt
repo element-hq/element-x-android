@@ -37,7 +37,6 @@ open class MediaViewerNode @AssistedInject constructor(
     @Assisted plugins: List<Plugin>,
     presenterFactory: MediaViewerPresenter.Factory,
 ) : Node(buildContext, plugins = plugins) {
-
     data class Inputs(
         val mediaInfo: MediaInfo,
         val mediaSource: MediaSource,

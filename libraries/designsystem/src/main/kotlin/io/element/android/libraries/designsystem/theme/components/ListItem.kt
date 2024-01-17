@@ -119,9 +119,13 @@ fun ListItem(
 
     androidx.compose.material3.ListItem(
         headlineContent = decoratedHeadlineContent,
-        modifier = if (onClick != null) Modifier
-            .clickable(enabled = enabled, onClick = onClick)
-            .then(modifier) else modifier,
+        modifier = if (onClick != null) {
+            Modifier
+                .clickable(enabled = enabled, onClick = onClick)
+                .then(modifier)
+        } else {
+            modifier
+        },
         overlineContent = null,
         supportingContent = decoratedSupportingContent,
         leadingContent = decoratedLeadingContent,
@@ -374,7 +378,6 @@ internal fun ListItemDisabledWithIconPreview() = PreviewItems.OneLineListItemPre
 
 @Suppress("ModifierMissing")
 private object PreviewItems {
-
     @Composable
     fun ThreeLinesListItemPreview(
         modifier: Modifier = Modifier,

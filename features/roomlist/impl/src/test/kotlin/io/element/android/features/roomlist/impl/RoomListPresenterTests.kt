@@ -71,7 +71,6 @@ import org.junit.Rule
 import org.junit.Test
 
 class RoomListPresenterTests {
-
     @get:Rule
     val warmUpRule = WarmUpRule()
 
@@ -322,7 +321,7 @@ class RoomListPresenterTests {
 
             val shownState = awaitItem()
             assertThat(shownState.contextMenu)
-                .isEqualTo(RoomListState.ContextMenu.Shown(summary.roomId, summary.name))
+                .isEqualTo(RoomListState.ContextMenu.Shown(summary.roomId, summary.name, false))
             scope.cancel()
         }
     }
@@ -342,7 +341,7 @@ class RoomListPresenterTests {
 
             val shownState = awaitItem()
             assertThat(shownState.contextMenu)
-                .isEqualTo(RoomListState.ContextMenu.Shown(summary.roomId, summary.name))
+                .isEqualTo(RoomListState.ContextMenu.Shown(summary.roomId, summary.name, false))
             shownState.eventSink(RoomListEvents.HideContextMenu)
 
             val hiddenState = awaitItem()

@@ -39,7 +39,6 @@ class RustMatrixClientFactory @Inject constructor(
     private val userAgentProvider: UserAgentProvider,
     private val clock: SystemClock,
 ) {
-
     suspend fun create(sessionData: SessionData): RustMatrixClient = withContext(coroutineDispatchers.io) {
         val client = ClientBuilder()
             .basePath(baseDirectory.absolutePath)

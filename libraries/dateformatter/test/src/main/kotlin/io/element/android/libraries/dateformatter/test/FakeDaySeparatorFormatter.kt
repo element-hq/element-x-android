@@ -19,7 +19,6 @@ package io.element.android.libraries.dateformatter.test
 import io.element.android.libraries.dateformatter.api.DaySeparatorFormatter
 
 class FakeDaySeparatorFormatter : DaySeparatorFormatter {
-
     private var format = ""
 
     fun givenFormat(format: String) {

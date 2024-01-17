@@ -97,7 +97,8 @@
     {
       "name" : ":features:leaveroom:api",
       "includeRegex" : [
-        "leave_room_alert_.*"
+        "leave_room_alert_.*",
+        "leave_conversation_alert_.*"
       ]
     },
     {

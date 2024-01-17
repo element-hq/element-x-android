@@ -33,7 +33,6 @@ import javax.inject.Inject
 class CreateRoomDataStore @Inject constructor(
     val selectedUserListDataStore: UserListDataStore,
 ) {
-
     private val createRoomConfigFlow: MutableStateFlow<CreateRoomConfig> = MutableStateFlow(CreateRoomConfig())
     private var cachedAvatarUri: Uri? = null
         set(value) {

@@ -36,4 +36,3 @@ fun aTimelineItemLocationContent(description: String? = null) = TimelineItemLoca
     ),
     description = description,
 )
-

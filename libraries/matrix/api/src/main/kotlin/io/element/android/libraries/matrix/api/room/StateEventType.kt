@@ -38,5 +38,5 @@ enum class StateEventType {
     ROOM_TOMBSTONE,
     ROOM_TOPIC,
     SPACE_CHILD,
-    SPACE_PARENT;
+    SPACE_PARENT
 }

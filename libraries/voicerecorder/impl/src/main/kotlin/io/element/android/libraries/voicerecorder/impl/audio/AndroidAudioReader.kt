@@ -29,7 +29,8 @@ import kotlinx.coroutines.isActive
 import kotlinx.coroutines.withContext
 
 class AndroidAudioReader
-@RequiresPermission(Manifest.permission.RECORD_AUDIO) private constructor(
+@RequiresPermission(Manifest.permission.RECORD_AUDIO)
+private constructor(
     private val config: AudioConfig,
     private val dispatchers: CoroutineDispatchers,
 ) : AudioReader {
@@ -92,7 +93,7 @@ class AndroidAudioReader
 
     private fun createOutputBuffer(sampleRate: SampleRate): ShortArray {
         val bufferSizeInShorts = AudioRecord.getMinBufferSize(
-            sampleRate.hz,
+            sampleRate.HZ,
             config.format.channelMask,
             config.format.encoding
         )

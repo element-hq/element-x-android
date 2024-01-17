@@ -26,7 +26,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import io.element.android.features.login.impl.DefaultLoginUserStory
 import io.element.android.features.login.impl.accountprovider.AccountProviderDataSource
-import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import io.element.android.libraries.matrix.api.core.SessionId
@@ -39,12 +39,11 @@ class LoginPasswordPresenter @Inject constructor(
     private val accountProviderDataSource: AccountProviderDataSource,
     private val defaultLoginUserStory: DefaultLoginUserStory,
 ) : Presenter<LoginPasswordState> {
-
     @Composable
     override fun present(): LoginPasswordState {
         val localCoroutineScope = rememberCoroutineScope()
-        val loginAction: MutableState<Async<SessionId>> = remember {
-            mutableStateOf(Async.Uninitialized)
+        val loginAction: MutableState<AsyncData<SessionId>> = remember {
+            mutableStateOf(AsyncData.Uninitialized)
         }
 
         val formState = rememberSaveable {
@@ -63,7 +62,7 @@ class LoginPasswordPresenter @Inject constructor(
                 LoginPasswordEvents.Submit -> {
                     localCoroutineScope.submit(formState.value, loginAction)
                 }
-                LoginPasswordEvents.ClearError -> loginAction.value = Async.Uninitialized
+                LoginPasswordEvents.ClearError -> loginAction.value = AsyncData.Uninitialized
             }
         }
 
@@ -75,16 +74,16 @@ class LoginPasswordPresenter @Inject constructor(
         )
     }
 
-    private fun CoroutineScope.submit(formState: LoginFormState, loggedInState: MutableState<Async<SessionId>>) = launch {
-        loggedInState.value = Async.Loading()
+    private fun CoroutineScope.submit(formState: LoginFormState, loggedInState: MutableState<AsyncData<SessionId>>) = launch {
+        loggedInState.value = AsyncData.Loading()
         authenticationService.login(formState.login.trim(), formState.password)
             .onSuccess { sessionId ->
                 // We will not navigate to the WaitList screen, so the login user story is done
                 defaultLoginUserStory.setLoginFlowIsDone(true)
-                loggedInState.value = Async.Success(sessionId)
+                loggedInState.value = AsyncData.Success(sessionId)
             }
             .onFailure { failure ->
-                loggedInState.value = Async.Failure(failure)
+                loggedInState.value = AsyncData.Failure(failure)
             }
     }
 

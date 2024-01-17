@@ -26,7 +26,6 @@ import org.junit.Rule
 import org.junit.Test
 
 class NoopPermissionsPresenterTest {
-
     @get:Rule
     val warmUpRule = WarmUpRule()
 

@@ -104,7 +104,20 @@ class RoomMembershipContentFormatter @Inject constructor(
             } else {
                 sp.getString(R.string.state_event_room_knock_denied, senderDisplayName, userId.value)
             }
-            else -> {
+            MembershipChange.NONE -> if (senderIsYou) {
+                sp.getString(R.string.state_event_room_none_by_you)
+            } else {
+                sp.getString(R.string.state_event_room_none, senderDisplayName)
+            }
+            MembershipChange.ERROR -> {
+                Timber.v("Filtering timeline item for room membership: $membershipContent")
+                null
+            }
+            MembershipChange.NOT_IMPLEMENTED -> {
+                Timber.v("Filtering timeline item for room membership: $membershipContent")
+                null
+            }
+            null -> {
                 Timber.v("Filtering timeline item for room membership: $membershipContent")
                 null
             }

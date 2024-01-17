@@ -55,7 +55,7 @@ import io.element.android.features.login.impl.accountprovider.AccountProviderVie
 import io.element.android.features.login.impl.changeserver.ChangeServerEvents
 import io.element.android.features.login.impl.changeserver.ChangeServerView
 import io.element.android.features.login.impl.resolver.HomeserverData
-import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.form.textFieldState
@@ -144,7 +144,9 @@ fun SearchAccountProviderView(
                                     )
                                 }
                             }
-                        } else null,
+                        } else {
+                            null
+                        },
                         supportingText = {
                             Text(text = stringResource(id = R.string.screen_account_provider_form_notice), color = MaterialTheme.colorScheme.secondary)
                         }
@@ -152,10 +154,10 @@ fun SearchAccountProviderView(
                 }
 
                 when (state.userInputResult) {
-                    is Async.Failure -> {
+                    is AsyncData.Failure -> {
                         // Ignore errors (let the user type more chars)
                     }
-                    is Async.Loading -> {
+                    is AsyncData.Loading -> {
                         item {
                             Box(
                                 modifier = Modifier
@@ -167,7 +169,7 @@ fun SearchAccountProviderView(
                             }
                         }
                     }
-                    is Async.Success -> {
+                    is AsyncData.Success -> {
                         items(state.userInputResult.data) { homeserverData ->
                             val item = homeserverData.toAccountProvider()
                             AccountProviderView(
@@ -178,7 +180,7 @@ fun SearchAccountProviderView(
                             )
                         }
                     }
-                    Async.Uninitialized -> Unit
+                    AsyncData.Uninitialized -> Unit
                 }
                 item {
                     Spacer(Modifier.height(32.dp))
@@ -199,7 +201,8 @@ private fun HomeserverData.toAccountProvider(): AccountProvider {
     return AccountProvider(
         url = homeserverUrl,
         subtitle = if (isMatrixOrg) stringResource(id = R.string.screen_change_account_provider_matrix_org_subtitle) else null,
-        isPublic = isMatrixOrg, // There is no need to know for other servers right now
+        // There is no need to know for other servers right now
+        isPublic = isMatrixOrg,
         isMatrixOrg = isMatrixOrg,
         isValid = isWellknownValid,
         supportSlidingSync = supportSlidingSync,

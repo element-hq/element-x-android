@@ -33,7 +33,6 @@ class LoginPasswordNode @AssistedInject constructor(
     @Assisted plugins: List<Plugin>,
     private val presenter: LoginPasswordPresenter,
 ) : Node(buildContext, plugins = plugins) {
-
     interface Callback : Plugin {
         fun onWaitListError(loginFormState: LoginFormState)
     }

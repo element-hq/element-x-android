@@ -26,6 +26,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.lifecycleScope
 import com.bumble.appyx.core.modality.BuildContext
+import com.bumble.appyx.core.navigation.transition.JumpToEndTransitionHandler
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.node.node
 import com.bumble.appyx.core.plugin.Plugin
@@ -65,7 +66,6 @@ class RoomFlowNode @AssistedInject constructor(
         buildContext = buildContext,
         plugins = plugins
     ) {
-
     data class Inputs(
         val roomId: RoomId,
         val initialElement: RoomLoadedFlowNode.NavTarget = RoomLoadedFlowNode.NavTarget.Messages,
@@ -130,7 +130,8 @@ class RoomFlowNode @AssistedInject constructor(
 
     @Composable
     override fun View(modifier: Modifier) {
-        BackstackView()
+        BackstackView(
+            transitionHandler = JumpToEndTransitionHandler(),
+        )
     }
 }
-

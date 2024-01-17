@@ -26,6 +26,7 @@ data class LeaveRoomState(
 ) {
     sealed interface Confirmation {
         data object Hidden : Confirmation
+        data class Dm(val roomId: RoomId) : Confirmation
         data class Generic(val roomId: RoomId) : Confirmation
         data class PrivateRoom(val roomId: RoomId) : Confirmation
         data class LastUserInRoom(val roomId: RoomId) : Confirmation

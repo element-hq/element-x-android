@@ -20,6 +20,5 @@ import io.element.android.libraries.push.impl.notifications.SummaryGroupMessageC
 import io.mockk.mockk
 
 class FakeSummaryGroupMessageCreator {
-
     val instance = mockk<SummaryGroupMessageCreator>()
 }

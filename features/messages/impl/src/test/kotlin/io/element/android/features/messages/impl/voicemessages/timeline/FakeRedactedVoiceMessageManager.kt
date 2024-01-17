@@ -19,7 +19,6 @@ package io.element.android.features.messages.impl.voicemessages.timeline
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 
 class FakeRedactedVoiceMessageManager : RedactedVoiceMessageManager {
-
     private val _invocations: MutableList<List<MatrixTimelineItem>> = mutableListOf()
     val invocations: List<List<MatrixTimelineItem>>
         get() = _invocations

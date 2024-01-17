@@ -33,7 +33,6 @@ class AddPeopleNode @AssistedInject constructor(
     @Assisted plugins: List<Plugin>,
     private val presenter: AddPeoplePresenter,
 ) : Node(buildContext, plugins = plugins) {
-
     interface Callback : Plugin {
         fun onContinue()
     }

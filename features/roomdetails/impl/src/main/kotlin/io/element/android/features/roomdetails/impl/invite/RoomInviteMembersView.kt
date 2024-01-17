@@ -30,7 +30,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.roomdetails.impl.R
+import io.element.android.libraries.designsystem.components.async.AsyncLoading
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -49,7 +51,6 @@ import io.element.android.libraries.matrix.ui.components.CheckableUserRow
 import io.element.android.libraries.matrix.ui.components.SelectedUsersList
 import io.element.android.libraries.matrix.ui.model.getAvatarData
 import io.element.android.libraries.matrix.ui.model.getBestName
-import io.element.android.compound.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
 
@@ -86,6 +87,7 @@ fun RoomInviteMembersView(
             RoomInviteMembersSearchBar(
                 modifier = Modifier.fillMaxWidth(),
                 query = state.searchQuery,
+                showLoader = state.showSearchLoader,
                 selectedUsers = state.selectedUsers,
                 state = state.searchResults,
                 active = state.isSearchActive,
@@ -139,6 +141,7 @@ private fun RoomInviteMembersTopBar(
 private fun RoomInviteMembersSearchBar(
     query: String,
     state: SearchBarResultState<ImmutableList<InvitableUser>>,
+    showLoader: Boolean,
     selectedUsers: ImmutableList<MatrixUser>,
     active: Boolean,
     onActiveChanged: (Boolean) -> Unit,
@@ -167,6 +170,11 @@ private fun RoomInviteMembersSearchBar(
         },
         showBackButton = false,
         resultState = state,
+        contentSuffix = {
+            if (showLoader) {
+                AsyncLoading()
+            }
+        },
         resultHandler = { results ->
             Text(
                 text = stringResource(id = CommonStrings.common_search_results),

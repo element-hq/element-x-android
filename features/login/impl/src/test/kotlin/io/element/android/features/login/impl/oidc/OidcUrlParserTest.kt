@@ -38,21 +38,21 @@ class OidcUrlParserTest {
     @Test
     fun `test cancel url`() {
         val sut = OidcUrlParser()
-        val aCancelUrl = OidcConfig.redirectUri + "?error=access_denied&state=IFF1UETGye2ZA8pO"
+        val aCancelUrl = OidcConfig.REDIRECT_URI + "?error=access_denied&state=IFF1UETGye2ZA8pO"
         assertThat(sut.parse(aCancelUrl)).isEqualTo(OidcAction.GoBack)
     }
 
     @Test
     fun `test success url`() {
         val sut = OidcUrlParser()
-        val aSuccessUrl = OidcConfig.redirectUri + "?state=IFF1UETGye2ZA8pO&code=y6X1GZeqA3xxOWcTeShgv8nkgFJXyzWB"
+        val aSuccessUrl = OidcConfig.REDIRECT_URI + "?state=IFF1UETGye2ZA8pO&code=y6X1GZeqA3xxOWcTeShgv8nkgFJXyzWB"
         assertThat(sut.parse(aSuccessUrl)).isEqualTo(OidcAction.Success(aSuccessUrl))
     }
 
     @Test
     fun `test unknown url`() {
         val sut = OidcUrlParser()
-        val anUnknownUrl = OidcConfig.redirectUri + "?state=IFF1UETGye2ZA8pO&goat=y6X1GZeqA3xxOWcTeShgv8nkgFJXyzWB"
+        val anUnknownUrl = OidcConfig.REDIRECT_URI + "?state=IFF1UETGye2ZA8pO&goat=y6X1GZeqA3xxOWcTeShgv8nkgFJXyzWB"
         Assert.assertThrows(IllegalStateException::class.java) {
             assertThat(sut.parse(anUnknownUrl))
         }

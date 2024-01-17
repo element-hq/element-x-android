@@ -24,6 +24,7 @@ import io.element.android.libraries.designsystem.theme.components.SearchBarResul
 import io.element.android.libraries.matrix.ui.components.aMatrixUser
 import io.element.android.libraries.matrix.ui.components.aMatrixUserList
 import io.element.android.libraries.usersearch.api.UserSearchResult
+import io.element.android.libraries.usersearch.api.UserSearchResultState
 import io.element.android.libraries.usersearch.test.FakeUserRepository
 import io.element.android.tests.testutils.WarmUpRule
 import kotlinx.collections.immutable.persistentListOf
@@ -32,7 +33,6 @@ import org.junit.Rule
 import org.junit.Test
 
 class DefaultUserListPresenterTests {
-
     @get:Rule
     val warmUpRule = WarmUpRule()
 
@@ -55,7 +55,7 @@ class DefaultUserListPresenterTests {
             assertThat(initialState.isMultiSelectionEnabled).isFalse()
             assertThat(initialState.isSearchActive).isFalse()
             assertThat(initialState.selectedUsers).isEmpty()
-            assertThat(initialState.searchResults).isInstanceOf(SearchBarResultState.NotSearching::class.java)
+            assertThat(initialState.searchResults).isInstanceOf(SearchBarResultState.Initial::class.java)
         }
     }
 
@@ -76,7 +76,7 @@ class DefaultUserListPresenterTests {
             assertThat(initialState.isMultiSelectionEnabled).isTrue()
             assertThat(initialState.isSearchActive).isFalse()
             assertThat(initialState.selectedUsers).isEmpty()
-            assertThat(initialState.searchResults).isInstanceOf(SearchBarResultState.NotSearching::class.java)
+            assertThat(initialState.searchResults).isInstanceOf(SearchBarResultState.Initial::class.java)
         }
     }
 
@@ -131,25 +131,38 @@ class DefaultUserListPresenterTests {
             val initialState = awaitItem()
 
             initialState.eventSink(UserListEvents.UpdateSearchQuery("alice"))
-            assertThat(initialState.searchResults).isInstanceOf(SearchBarResultState.NotSearching::class.java)
+            assertThat(initialState.searchResults).isInstanceOf(SearchBarResultState.Initial::class.java)
             assertThat(userRepository.providedQuery).isEqualTo("alice")
             skipItems(2)
 
             // When the user repository emits a result, it's copied to the state
-            userRepository.emitResult(listOf(UserSearchResult(aMatrixUser())))
-            assertThat(awaitItem().searchResults).isEqualTo(
-                SearchBarResultState.Results(
-                    persistentListOf(UserSearchResult(aMatrixUser()))
-                )
+            val result = UserSearchResultState(
+                results = listOf(UserSearchResult(aMatrixUser())),
+                isSearching = false,
             )
-
+            userRepository.emitState(result)
+            awaitItem().also { state ->
+                assertThat(state.searchResults).isEqualTo(
+                    SearchBarResultState.Results(
+                        persistentListOf(UserSearchResult(aMatrixUser()))
+                    )
+                )
+                assertThat(state.showSearchLoader).isFalse()
+            }
             // When the user repository emits another result, it replaces the previous value
-            userRepository.emitResult(aMatrixUserList().map { UserSearchResult(it) })
-            assertThat(awaitItem().searchResults).isEqualTo(
-                SearchBarResultState.Results(
-                    aMatrixUserList().map { UserSearchResult(it) }
-                )
+            val newResult = UserSearchResultState(
+                results = aMatrixUserList().map { UserSearchResult(it) },
+                isSearching = false,
             )
+            userRepository.emitState(newResult)
+            awaitItem().also { state ->
+                assertThat(state.searchResults).isEqualTo(
+                    SearchBarResultState.Results(
+                        aMatrixUserList().map { UserSearchResult(it) }
+                    )
+                )
+                assertThat(state.showSearchLoader).isFalse()
+            }
         }
     }
 
@@ -170,13 +183,13 @@ class DefaultUserListPresenterTests {
             val initialState = awaitItem()
 
             initialState.eventSink(UserListEvents.UpdateSearchQuery("alice"))
-            assertThat(initialState.searchResults).isInstanceOf(SearchBarResultState.NotSearching::class.java)
+            assertThat(initialState.searchResults).isInstanceOf(SearchBarResultState.Initial::class.java)
             assertThat(userRepository.providedQuery).isEqualTo("alice")
             skipItems(2)
 
             // When the results list is empty, the state is set to NoResults
-            userRepository.emitResult(emptyList())
-            assertThat(awaitItem().searchResults).isInstanceOf(SearchBarResultState.NoResults::class.java)
+            userRepository.emitState(UserSearchResultState(results = emptyList(), isSearching = false))
+            assertThat(awaitItem().searchResults).isInstanceOf(SearchBarResultState.NoResultsFound::class.java)
         }
     }
 

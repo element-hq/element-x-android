@@ -42,6 +42,7 @@ open class ActionListStateProvider : PreviewParameterProvider<ActionListState> {
                         event = aTimelineItemEvent().copy(
                             reactionsState = reactionsState
                         ),
+                        displayEmojiReactions = true,
                         actions = aTimelineItemActionList(),
                     )
                 ),
@@ -50,6 +51,7 @@ open class ActionListStateProvider : PreviewParameterProvider<ActionListState> {
                         event = aTimelineItemEvent(content = aTimelineItemImageContent()).copy(
                             reactionsState = reactionsState
                         ),
+                        displayEmojiReactions = true,
                         actions = aTimelineItemActionList(),
                     )
                 ),
@@ -58,6 +60,7 @@ open class ActionListStateProvider : PreviewParameterProvider<ActionListState> {
                         event = aTimelineItemEvent(content = aTimelineItemVideoContent()).copy(
                             reactionsState = reactionsState
                         ),
+                        displayEmojiReactions = true,
                         actions = aTimelineItemActionList(),
                     )
                 ),
@@ -66,6 +69,7 @@ open class ActionListStateProvider : PreviewParameterProvider<ActionListState> {
                         event = aTimelineItemEvent(content = aTimelineItemFileContent()).copy(
                             reactionsState = reactionsState
                         ),
+                        displayEmojiReactions = true,
                         actions = aTimelineItemActionList(),
                     )
                 ),
@@ -74,6 +78,7 @@ open class ActionListStateProvider : PreviewParameterProvider<ActionListState> {
                         event = aTimelineItemEvent(content = aTimelineItemAudioContent()).copy(
                             reactionsState = reactionsState
                         ),
+                        displayEmojiReactions = true,
                         actions = aTimelineItemActionList(),
                     )
                 ),
@@ -82,6 +87,7 @@ open class ActionListStateProvider : PreviewParameterProvider<ActionListState> {
                         event = aTimelineItemEvent(content = aTimelineItemVoiceContent()).copy(
                             reactionsState = reactionsState
                         ),
+                        displayEmojiReactions = true,
                         actions = aTimelineItemActionList(),
                     )
                 ),
@@ -90,6 +96,7 @@ open class ActionListStateProvider : PreviewParameterProvider<ActionListState> {
                         event = aTimelineItemEvent(content = aTimelineItemLocationContent()).copy(
                             reactionsState = reactionsState
                         ),
+                        displayEmojiReactions = true,
                         actions = aTimelineItemActionList(),
                     )
                 ),
@@ -98,18 +105,18 @@ open class ActionListStateProvider : PreviewParameterProvider<ActionListState> {
                         event = aTimelineItemEvent(content = aTimelineItemLocationContent()).copy(
                             reactionsState = reactionsState
                         ),
+                        displayEmojiReactions = false,
                         actions = aTimelineItemActionList(),
                     ),
-                    displayEmojiReactions = false,
                 ),
                 anActionListState().copy(
                     target = ActionListState.Target.Success(
                         event = aTimelineItemEvent(content = aTimelineItemPollContent()).copy(
                             reactionsState = reactionsState
                         ),
+                        displayEmojiReactions = false,
                         actions = aTimelineItemPollActionList(),
                     ),
-                    displayEmojiReactions = false,
                 ),
             )
         }
@@ -117,7 +124,6 @@ open class ActionListStateProvider : PreviewParameterProvider<ActionListState> {
 
 fun anActionListState() = ActionListState(
     target = ActionListState.Target.None,
-    displayEmojiReactions = true,
     eventSink = {}
 )
 

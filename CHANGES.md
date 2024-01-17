@@ -1,3 +1,39 @@
+Changes in Element X v0.4.1 (2024-01-17)
+========================================
+
+Features ✨
+----------
+ - Render m.sticker events ([#1949](https://github.com/element-hq/element-x-android/issues/1949))
+ - Add support for sending images from the keyboard ([#1977](https://github.com/element-hq/element-x-android/issues/1977))
+ - Added support for MSC4027 (render custom images in reactions) ([#2159](https://github.com/element-hq/element-x-android/issues/2159))
+
+Bugfixes 🐛
+----------
+ - Fix crash sending image with latest Posthog because of an usage of an internal Android method. ([#+crash-sending-image-with-latest-posthog](https://github.com/element-hq/element-x-android/issues/+crash-sending-image-with-latest-posthog))
+ - Make sure the media viewer tries the main url first (if not empty) then the thumbnail url and then not open if both are missing instead of failing with an error dialog ([#1949](https://github.com/element-hq/element-x-android/issues/1949))
+ - Fix room transition animation happens twice. ([#2084](https://github.com/element-hq/element-x-android/issues/2084))
+ - Disable ability to send reaction if the user does not have the permission to. ([#2093](https://github.com/element-hq/element-x-android/issues/2093))
+ - Trim whitespace at the end of messages to ensure we render the right content. ([#2099](https://github.com/element-hq/element-x-android/issues/2099))
+ - Fix crashes in room list when the last message for a room was an extremely long one (several thousands of characters) with no line breaks. ([#2105](https://github.com/element-hq/element-x-android/issues/2105))
+ - Disable rasterisation of Vector XMLs, which was causing crashes on API 23. ([#2124](https://github.com/element-hq/element-x-android/issues/2124))
+ - Use `SubomposeLayout` for `ContentAvoidingLayout` to prevent wrong measurements in the layout process, leading to cut-off text messages in the timeline. ([#2155](https://github.com/element-hq/element-x-android/issues/2155))
+ - Improve rendering of voice messages in the timeline in large displays ([#2156](https://github.com/element-hq/element-x-android/issues/2156))
+ - Fix no indication that user list is loading when inviting to room. ([#2172](https://github.com/element-hq/element-x-android/issues/2172))
+ - Hide keyboard when tapping on a message in the timeline. ([#2182](https://github.com/element-hq/element-x-android/issues/2182))
+ - Mention selector gets stuck when quickly deleting the prompt. ([#2192](https://github.com/element-hq/element-x-android/issues/2192))
+ - Hide verbose state events from the timeline ([#2216](https://github.com/element-hq/element-x-android/issues/2216))
+
+Other changes
+-------------
+ - Only apply `com.autonomousapps.dependency-analysis` plugin in those modules that need it. ([#+only-apply-dependency-analysis-plugin-where-needed](https://github.com/element-hq/element-x-android/issues/+only-apply-dependency-analysis-plugin-where-needed))
+ - Migrate to Kover 0.7.X ([#1782](https://github.com/element-hq/element-x-android/issues/1782))
+ - Remove extra logout screen. ([#2072](https://github.com/element-hq/element-x-android/issues/2072))
+ - Handle `MembershipChange.NONE` rendering in the timeline. ([#2102](https://github.com/element-hq/element-x-android/issues/2102))
+ - Remove extra previews for timestamp view with 'document' case ([#2127](https://github.com/element-hq/element-x-android/issues/2127))
+ - Bump AGP version to 8.2.0 ([#2142](https://github.com/element-hq/element-x-android/issues/2142))
+ - Replace 'leave room' text with 'leave conversation' for DMs. ([#2218](https://github.com/element-hq/element-x-android/issues/2218))
+
+
 Changes in Element X v0.4.0 (2023-12-22)
 ========================================
 

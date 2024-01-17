@@ -17,9 +17,9 @@
 package io.element.android.libraries.mediaviewer.api.viewer
 
 sealed interface MediaViewerEvents {
-    data object SaveOnDisk: MediaViewerEvents
-    data object Share: MediaViewerEvents
-    data object OpenWith: MediaViewerEvents
+    data object SaveOnDisk : MediaViewerEvents
+    data object Share : MediaViewerEvents
+    data object OpenWith : MediaViewerEvents
     data object RetryLoading : MediaViewerEvents
     data object ClearLoadingError : MediaViewerEvents
 }

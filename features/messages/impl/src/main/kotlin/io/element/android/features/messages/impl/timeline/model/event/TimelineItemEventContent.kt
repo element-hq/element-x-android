@@ -47,6 +47,7 @@ fun TimelineItemEventContent.canBeRepliedTo(): Boolean =
 
 /**
  * Return true if user can react (i.e. send a reaction) on the event content.
+ * This does not take into account the power level of the user.
  */
 fun TimelineItemEventContent.canReact(): Boolean =
     when (this) {
@@ -55,6 +56,7 @@ fun TimelineItemEventContent.canReact(): Boolean =
         is TimelineItemEncryptedContent,
         is TimelineItemFileContent,
         is TimelineItemImageContent,
+        is TimelineItemStickerContent,
         is TimelineItemLocationContent,
         is TimelineItemPollContent,
         is TimelineItemVoiceContent,

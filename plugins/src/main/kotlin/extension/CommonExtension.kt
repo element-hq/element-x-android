@@ -28,6 +28,11 @@ fun CommonExtension<*, *, *, *, *>.androidConfig(project: Project) {
         compileSdk = Versions.compileSdk
         minSdk = Versions.minSdk
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        vectorDrawables {
+            useSupportLibrary = true
+            generatedDensities()
+        }
     }
 
     compileOptions {

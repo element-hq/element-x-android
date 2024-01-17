@@ -28,7 +28,6 @@ import javax.inject.Inject
  */
 class StaticFeatureFlagProvider @Inject constructor() :
     FeatureFlagProvider {
-
     override val priority = LOW_PRIORITY
 
     override fun isFeatureEnabledFlow(feature: Feature): Flow<Boolean> {
@@ -41,7 +40,6 @@ class StaticFeatureFlagProvider @Inject constructor() :
                 FeatureFlags.PinUnlock -> true
                 FeatureFlags.Mentions -> true
                 FeatureFlags.SecureStorage -> true
-                FeatureFlags.ReadReceipts -> true
             }
         } else {
             false

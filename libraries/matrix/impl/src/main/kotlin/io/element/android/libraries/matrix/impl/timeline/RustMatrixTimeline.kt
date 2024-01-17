@@ -27,6 +27,7 @@ import io.element.android.libraries.matrix.impl.timeline.item.event.EventMessage
 import io.element.android.libraries.matrix.impl.timeline.item.event.EventTimelineItemMapper
 import io.element.android.libraries.matrix.impl.timeline.item.event.TimelineEventContentMapper
 import io.element.android.libraries.matrix.impl.timeline.item.virtual.VirtualTimelineItemMapper
+import io.element.android.libraries.matrix.impl.timeline.postprocessor.FilterHiddenStateEventsProcessor
 import io.element.android.libraries.matrix.impl.timeline.postprocessor.TimelineEncryptedHistoryPostProcessor
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineDispatcher
@@ -65,7 +66,6 @@ class RustMatrixTimeline(
     lastLoginTimestamp: Date?,
     private val onNewSyncedEvent: () -> Unit,
 ) : MatrixTimeline {
-
     private val initLatch = CompletableDeferred<Unit>()
     private val isInit = AtomicBoolean(false)
 
@@ -82,6 +82,8 @@ class RustMatrixTimeline(
         isKeyBackupEnabled = isKeyBackupEnabled,
         dispatcher = dispatcher,
     )
+
+    private val filterHiddenStateEventsProcessor = FilterHiddenStateEventsProcessor()
 
     private val timelineItemFactory = MatrixTimelineItemMapper(
         fetchDetailsForEvent = this::fetchDetailsForEvent,
@@ -102,9 +104,9 @@ class RustMatrixTimeline(
     override val paginationState: StateFlow<MatrixTimeline.PaginationState> = _paginationState.asStateFlow()
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    override val timelineItems: Flow<List<MatrixTimelineItem>> = _timelineItems.mapLatest { items ->
-        encryptedHistoryPostProcessor.process(items)
-    }
+    override val timelineItems: Flow<List<MatrixTimelineItem>> = _timelineItems
+        .mapLatest { items -> encryptedHistoryPostProcessor.process(items) }
+        .mapLatest { items -> filterHiddenStateEventsProcessor.process(items) }
 
     init {
         Timber.d("Initialize timeline for room ${matrixRoom.roomId}")
@@ -257,7 +259,7 @@ class RustMatrixTimeline(
 
     private fun List<MatrixTimelineItem>.hasEncryptionHistoryBanner(): Boolean {
         val firstItem = firstOrNull()
-        return firstItem is MatrixTimelineItem.Virtual
-            && firstItem.virtual is VirtualTimelineItem.EncryptedHistoryBanner
+        return firstItem is MatrixTimelineItem.Virtual &&
+            firstItem.virtual is VirtualTimelineItem.EncryptedHistoryBanner
     }
 }

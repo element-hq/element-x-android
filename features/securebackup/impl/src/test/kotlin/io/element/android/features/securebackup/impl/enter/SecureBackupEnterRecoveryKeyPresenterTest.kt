@@ -23,7 +23,7 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.features.securebackup.impl.setup.views.RecoveryKeyUserStory
 import io.element.android.features.securebackup.impl.setup.views.RecoveryKeyViewState
 import io.element.android.features.securebackup.impl.tools.RecoveryKeyTools
-import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.matrix.test.encryption.FakeEncryptionService
@@ -44,7 +44,7 @@ class SecureBackupEnterRecoveryKeyPresenterTest {
         }.test {
             val initialState = awaitItem()
             assertThat(initialState.isSubmitEnabled).isFalse()
-            assertThat(initialState.submitAction).isEqualTo(Async.Uninitialized)
+            assertThat(initialState.submitAction).isEqualTo(AsyncAction.Uninitialized)
             assertThat(initialState.recoveryKeyViewState).isEqualTo(
                 RecoveryKeyViewState(
                     recoveryKeyUserStory = RecoveryKeyUserStory.Enter,
@@ -76,22 +76,22 @@ class SecureBackupEnterRecoveryKeyPresenterTest {
             encryptionService.givenRecoverFailure(AN_EXCEPTION)
             withRecoveryKeyState.eventSink(SecureBackupEnterRecoveryKeyEvents.Submit)
             val loadingState = awaitItem()
-            assertThat(loadingState.submitAction).isEqualTo(Async.Loading<Unit>())
+            assertThat(loadingState.submitAction).isEqualTo(AsyncAction.Loading)
             assertThat(loadingState.isSubmitEnabled).isFalse()
             val errorState = awaitItem()
-            assertThat(errorState.submitAction).isEqualTo(Async.Failure<Unit>(AN_EXCEPTION))
+            assertThat(errorState.submitAction).isEqualTo(AsyncAction.Failure(AN_EXCEPTION))
             assertThat(errorState.isSubmitEnabled).isFalse()
             errorState.eventSink(SecureBackupEnterRecoveryKeyEvents.ClearDialog)
             val clearedState = awaitItem()
-            assertThat(clearedState.submitAction).isEqualTo(Async.Uninitialized)
+            assertThat(clearedState.submitAction).isEqualTo(AsyncAction.Uninitialized)
             assertThat(clearedState.isSubmitEnabled).isTrue()
             encryptionService.givenRecoverFailure(null)
             clearedState.eventSink(SecureBackupEnterRecoveryKeyEvents.Submit)
             val loadingState2 = awaitItem()
-            assertThat(loadingState2.submitAction).isEqualTo(Async.Loading<Unit>())
+            assertThat(loadingState2.submitAction).isEqualTo(AsyncAction.Loading)
             assertThat(loadingState2.isSubmitEnabled).isFalse()
             val finalState = awaitItem()
-            assertThat(finalState.submitAction).isEqualTo(Async.Success(Unit))
+            assertThat(finalState.submitAction).isEqualTo(AsyncAction.Success(Unit))
             assertThat(finalState.isSubmitEnabled).isFalse()
         }
     }

@@ -46,6 +46,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemFileContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemLocationContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStickerContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
 import io.element.android.features.poll.api.create.CreatePollEntryPoint
 import io.element.android.features.poll.api.create.CreatePollMode
@@ -87,9 +88,7 @@ class MessagesFlowNode @AssistedInject constructor(
     buildContext = buildContext,
     plugins = plugins
 ) {
-
     sealed interface NavTarget : Parcelable {
-
         @Parcelize
         data object Empty : NavTarget
 
@@ -138,8 +137,8 @@ class MessagesFlowNode @AssistedInject constructor(
                         callback?.onRoomDetailsClicked()
                     }
 
-                    override fun onEventClicked(event: TimelineItem.Event) {
-                        processEventClicked(event)
+                    override fun onEventClicked(event: TimelineItem.Event): Boolean {
+                        return processEventClicked(event)
                     }
 
                     override fun onPreviewAttachments(attachments: ImmutableList<Attachment>) {
@@ -238,8 +237,8 @@ class MessagesFlowNode @AssistedInject constructor(
         }
     }
 
-    private fun processEventClicked(event: TimelineItem.Event) {
-        when (event.content) {
+    private fun processEventClicked(event: TimelineItem.Event): Boolean {
+        return when (event.content) {
             is TimelineItemImageContent -> {
                 val navTarget = NavTarget.MediaViewer(
                     mediaInfo = MediaInfo(
@@ -252,6 +251,27 @@ class MessagesFlowNode @AssistedInject constructor(
                     thumbnailSource = event.content.thumbnailSource,
                 )
                 overlay.show(navTarget)
+                true
+            }
+            is TimelineItemStickerContent -> {
+                /* Sticker may have an empty url and no thumbnail
+                   if encrypted on certain bridges */
+                if (event.content.preferredMediaSource != null) {
+                    val navTarget = NavTarget.MediaViewer(
+                        mediaInfo = MediaInfo(
+                            name = event.content.body,
+                            mimeType = event.content.mimeType,
+                            formattedFileSize = event.content.formattedFileSize,
+                            fileExtension = event.content.fileExtension
+                        ),
+                        mediaSource = event.content.preferredMediaSource,
+                        thumbnailSource = event.content.thumbnailSource,
+                    )
+                    overlay.show(navTarget)
+                    true
+                } else {
+                    false
+                }
             }
             is TimelineItemVideoContent -> {
                 val navTarget = NavTarget.MediaViewer(
@@ -265,6 +285,7 @@ class MessagesFlowNode @AssistedInject constructor(
                     thumbnailSource = event.content.thumbnailSource,
                 )
                 overlay.show(navTarget)
+                true
             }
             is TimelineItemFileContent -> {
                 val navTarget = NavTarget.MediaViewer(
@@ -278,6 +299,7 @@ class MessagesFlowNode @AssistedInject constructor(
                     thumbnailSource = event.content.thumbnailSource,
                 )
                 overlay.show(navTarget)
+                true
             }
             is TimelineItemAudioContent -> {
                 val navTarget = NavTarget.MediaViewer(
@@ -291,6 +313,7 @@ class MessagesFlowNode @AssistedInject constructor(
                     thumbnailSource = null,
                 )
                 overlay.show(navTarget)
+                true
             }
             is TimelineItemLocationContent -> {
                 val navTarget = NavTarget.LocationViewer(
@@ -298,8 +321,9 @@ class MessagesFlowNode @AssistedInject constructor(
                     description = event.content.description,
                 )
                 overlay.show(navTarget)
+                true
             }
-            else -> Unit
+            else -> false
         }
     }
 

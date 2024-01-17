@@ -23,7 +23,6 @@ import kotlinx.parcelize.Parcelize
 
 @Immutable
 sealed interface Attachment : Parcelable {
-
     @Parcelize
     data class Media(val localMedia: LocalMedia, val compressIfPossible: Boolean) : Attachment
 }

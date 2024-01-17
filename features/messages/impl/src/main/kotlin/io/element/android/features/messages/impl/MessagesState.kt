@@ -25,7 +25,7 @@ import io.element.android.features.messages.impl.timeline.components.reactionsum
 import io.element.android.features.messages.impl.timeline.components.receipt.bottomsheet.ReadReceiptBottomSheetState
 import io.element.android.features.messages.impl.timeline.components.retrysendmenu.RetrySendMenuState
 import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessageComposerState
-import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -33,10 +33,11 @@ import io.element.android.libraries.matrix.api.core.RoomId
 @Immutable
 data class MessagesState(
     val roomId: RoomId,
-    val roomName: Async<String>,
-    val roomAvatar: Async<AvatarData>,
+    val roomName: AsyncData<String>,
+    val roomAvatar: AsyncData<AvatarData>,
     val userHasPermissionToSendMessage: Boolean,
     val userHasPermissionToRedact: Boolean,
+    val userHasPermissionToSendReaction: Boolean,
     val composerState: MessageComposerState,
     val voiceMessageComposerState: VoiceMessageComposerState,
     val timelineState: TimelineState,
@@ -47,7 +48,7 @@ data class MessagesState(
     val readReceiptBottomSheetState: ReadReceiptBottomSheetState,
     val hasNetworkConnection: Boolean,
     val snackbarMessage: SnackbarMessage?,
-    val inviteProgress: Async<Unit>,
+    val inviteProgress: AsyncData<Unit>,
     val showReinvitePrompt: Boolean,
     val enableTextFormatting: Boolean,
     val enableVoiceMessages: Boolean,

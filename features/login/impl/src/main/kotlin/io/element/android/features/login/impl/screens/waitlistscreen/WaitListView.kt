@@ -33,7 +33,7 @@ import androidx.lifecycle.Lifecycle
 import io.element.android.features.login.impl.R
 import io.element.android.features.login.impl.error.isWaitListError
 import io.element.android.features.login.impl.error.loginError
-import io.element.android.libraries.architecture.Async
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.atomic.pages.SunsetPage
 import io.element.android.libraries.designsystem.components.dialogs.RetryDialog
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -89,12 +89,12 @@ private fun WaitListContent(
     ) {
         val title = stringResource(
             when (state.loginAction) {
-                is Async.Success -> R.string.screen_waitlist_title_success
+                is AsyncData.Success -> R.string.screen_waitlist_title_success
                 else -> R.string.screen_waitlist_title
             }
         )
         val subtitle = when (state.loginAction) {
-            is Async.Success -> stringResource(
+            is AsyncData.Success -> stringResource(
                 id = R.string.screen_waitlist_message_success,
                 state.appName,
             )
@@ -122,7 +122,7 @@ private fun OverallContent(
     modifier: Modifier = Modifier,
 ) {
     Box(modifier = modifier.fillMaxSize()) {
-        if (state.loginAction !is Async.Success) {
+        if (state.loginAction !is AsyncData.Success) {
             CompositionLocalProvider(LocalContentColor provides Color.Black) {
                 TextButton(
                     text = stringResource(CommonStrings.action_cancel),
@@ -130,7 +130,7 @@ private fun OverallContent(
                 )
             }
         }
-        if (state.loginAction is Async.Success) {
+        if (state.loginAction is AsyncData.Success) {
             Button(
                 text = stringResource(id = CommonStrings.action_continue),
                 onClick = { state.eventSink.invoke(WaitListEvents.Continue) },
@@ -140,7 +140,6 @@ private fun OverallContent(
                     .padding(bottom = 8.dp),
             )
         }
-
     }
 }
 

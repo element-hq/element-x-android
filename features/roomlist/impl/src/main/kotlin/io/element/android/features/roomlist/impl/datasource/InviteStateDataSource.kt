@@ -20,8 +20,6 @@ import androidx.compose.runtime.Composable
 import io.element.android.features.roomlist.impl.InvitesState
 
 interface InviteStateDataSource {
-
     @Composable
     fun inviteState(): InvitesState
-
 }

@@ -27,18 +27,21 @@ import com.bumble.appyx.core.plugin.plugins
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
+import io.element.android.compound.theme.ElementTheme
+import io.element.android.features.logout.api.direct.DirectLogoutEvents
+import io.element.android.features.logout.api.direct.DirectLogoutView
 import io.element.android.libraries.androidutils.browser.openUrlInChromeCustomTab
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.user.MatrixUser
-import io.element.android.compound.theme.ElementTheme
+import timber.log.Timber
 
 @ContributesNode(SessionScope::class)
 class PreferencesRootNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     private val presenter: PreferencesRootPresenter,
+    private val directLogoutView: DirectLogoutView,
 ) : Node(buildContext, plugins = plugins) {
-
     interface Callback : Plugin {
         fun onOpenBugReport()
         fun onVerifyClicked()
@@ -95,6 +98,13 @@ class PreferencesRootNode @AssistedInject constructor(
         }
     }
 
+    private fun onSuccessLogout(activity: Activity, url: String?) {
+        Timber.d("Success (direct) logout with result url: $url")
+        url?.let {
+            activity.openUrlInChromeCustomTab(null, false, it)
+        }
+    }
+
     private fun onOpenNotificationSettings() {
         plugins<Callback>().forEach { it.onOpenNotificationSettings() }
     }
@@ -131,7 +141,20 @@ class PreferencesRootNode @AssistedInject constructor(
             onOpenNotificationSettings = this::onOpenNotificationSettings,
             onOpenLockScreenSettings = this::onOpenLockScreenSettings,
             onOpenUserProfile = this::onOpenUserProfile,
-            onSignOutClicked = this::onSignOutClicked,
+            onSignOutClicked = {
+                if (state.directLogoutState.canDoDirectSignOut) {
+                    state.directLogoutState.eventSink(DirectLogoutEvents.Logout(ignoreSdkError = false))
+                } else {
+                    onSignOutClicked()
+                }
+            },
+        )
+
+        directLogoutView.Render(
+            state = state.directLogoutState,
+            onSuccessLogout = {
+                onSuccessLogout(activity, it)
+            }
         )
     }
 }
