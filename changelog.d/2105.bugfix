@@ -1,1 +1,0 @@
-Fix crashes in room list when the last message for a room was an extremely long one (several thousands of characters) with no line breaks.
