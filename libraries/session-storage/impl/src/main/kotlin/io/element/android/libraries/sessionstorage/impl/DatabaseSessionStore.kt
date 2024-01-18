@@ -28,6 +28,8 @@ import io.element.android.libraries.sessionstorage.api.SessionData
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -37,6 +39,8 @@ class DatabaseSessionStore @Inject constructor(
     private val database: SessionDatabase,
     private val dispatchers: CoroutineDispatchers,
 ) : SessionStore {
+    private val sessionDataMutex = Mutex()
+
     override fun isLoggedIn(): Flow<LoggedInState> {
         return database.sessionDataQueries.selectFirst()
             .asFlow()
@@ -53,7 +57,7 @@ class DatabaseSessionStore @Inject constructor(
             }
     }
 
-    override suspend fun storeData(sessionData: SessionData) {
+    override suspend fun storeData(sessionData: SessionData) = sessionDataMutex.withLock {
         database.sessionDataQueries.insertSessionData(sessionData.toDbModel())
     }
 
@@ -67,30 +71,38 @@ class DatabaseSessionStore @Inject constructor(
             return
         }
 
-        // Copy new data from SDK, but keep login timestamp
-        database.sessionDataQueries.updateSession(
-            sessionData.copy(
-                loginTimestamp = result.loginTimestamp,
-            ).toDbModel()
-        )
+        sessionDataMutex.withLock {
+            // Copy new data from SDK, but keep login timestamp
+            database.sessionDataQueries.updateSession(
+                sessionData.copy(
+                    loginTimestamp = result.loginTimestamp,
+                ).toDbModel()
+            )
+        }
     }
 
     override suspend fun getLatestSession(): SessionData? {
-        return database.sessionDataQueries.selectFirst()
-            .executeAsOneOrNull()
-            ?.toApiModel()
+        return sessionDataMutex.withLock {
+            database.sessionDataQueries.selectFirst()
+                .executeAsOneOrNull()
+                ?.toApiModel()
+        }
     }
 
     override suspend fun getSession(sessionId: String): SessionData? {
-        return database.sessionDataQueries.selectByUserId(sessionId)
-            .executeAsOneOrNull()
-            ?.toApiModel()
+        return sessionDataMutex.withLock {
+            database.sessionDataQueries.selectByUserId(sessionId)
+                .executeAsOneOrNull()
+                ?.toApiModel()
+        }
     }
 
     override suspend fun getAllSessions(): List<SessionData> {
-        return database.sessionDataQueries.selectAll()
-            .executeAsList()
-            .map { it.toApiModel() }
+        return sessionDataMutex.withLock {
+            database.sessionDataQueries.selectAll()
+                .executeAsList()
+                .map { it.toApiModel() }
+        }
     }
 
     override fun sessionsFlow(): Flow<List<SessionData>> {
@@ -102,6 +114,8 @@ class DatabaseSessionStore @Inject constructor(
     }
 
     override suspend fun removeSession(sessionId: String) {
-        database.sessionDataQueries.removeSession(sessionId)
+        sessionDataMutex.withLock {
+            database.sessionDataQueries.removeSession(sessionId)
+        }
     }
 }

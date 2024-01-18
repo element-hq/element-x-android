@@ -20,6 +20,7 @@ import io.element.android.libraries.androidutils.file.getSizeOfFiles
 import io.element.android.libraries.androidutils.file.safeDelete
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.coroutine.childScope
+import io.element.android.libraries.core.hash.md5
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -139,6 +140,8 @@ class RustMatrixClient(
                 // TODO handle isSoftLogout parameter.
                 appCoroutineScope.launch {
                     val existingData = sessionStore.getSession(client.userId())
+                    val anonymizedToken = existingData?.accessToken?.md5()
+                    Timber.d("Removing session data with token: $anonymizedToken.")
                     if (existingData != null) {
                         // Set isTokenValid to false
                         val newData = client.session().toSessionData(
@@ -146,8 +149,15 @@ class RustMatrixClient(
                             loginType = existingData.loginType,
                         )
                         sessionStore.updateData(newData)
+                        Timber.d("Removed session data with token: $anonymizedToken.")
+                    } else {
+                        Timber.d("No session data found.")
                     }
                     doLogout(doRequest = false, removeSession = false, ignoreSdkError = false)
+                }.invokeOnCompletion {
+                    if (it != null) {
+                        Timber.e(it, "Failed to remove session data.")
+                    }
                 }
             } else {
                 Timber.v("didReceiveAuthError -> already cleaning up")
@@ -158,11 +168,18 @@ class RustMatrixClient(
             Timber.w("didRefreshTokens()")
             appCoroutineScope.launch {
                 val existingData = sessionStore.getSession(client.userId()) ?: return@launch
+                val anonymizedToken = client.session().accessToken.md5()
+                Timber.d("Saving new session data with token: $anonymizedToken. Is new token valid: ${existingData.isTokenValid}")
                 val newData = client.session().toSessionData(
                     isTokenValid = existingData.isTokenValid,
                     loginType = existingData.loginType,
                 )
                 sessionStore.updateData(newData)
+                Timber.d("Saved new session data with token: $anonymizedToken.")
+            }.invokeOnCompletion {
+                if (it != null) {
+                    Timber.e(it, "Failed to save new session data.")
+                }
             }
         }
     }
