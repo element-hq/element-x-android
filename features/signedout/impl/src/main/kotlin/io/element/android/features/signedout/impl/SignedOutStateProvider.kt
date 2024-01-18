@@ -50,5 +50,6 @@ fun aSessionData(
         loginTimestamp = null,
         isTokenValid = isTokenValid,
         loginType = LoginType.UNKNOWN,
+        passphrase = null,
     )
 }
