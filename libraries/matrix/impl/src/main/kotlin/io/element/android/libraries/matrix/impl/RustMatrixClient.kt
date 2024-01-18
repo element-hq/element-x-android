@@ -144,6 +144,7 @@ class RustMatrixClient(
                         val newData = client.session().toSessionData(
                             isTokenValid = false,
                             loginType = existingData.loginType,
+                            passphrase = existingData.passphrase,
                         )
                         sessionStore.updateData(newData)
                     }
@@ -161,6 +162,7 @@ class RustMatrixClient(
                 val newData = client.session().toSessionData(
                     isTokenValid = existingData.isTokenValid,
                     loginType = existingData.loginType,
+                    passphrase = existingData.passphrase,
                 )
                 sessionStore.updateData(newData)
             }
