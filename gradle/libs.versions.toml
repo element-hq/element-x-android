@@ -93,7 +93,8 @@ androidx_preference = "androidx.preference:preference:1.2.1"
 androidx_webkit = "androidx.webkit:webkit:1.9.0"
 
 androidx_compose_bom = { module = "androidx.compose:compose-bom", version.ref = "compose_bom" }
-androidx_compose_material3 = "androidx.compose.material3:material3:1.2.0-alpha11" # Keep using alpha11 for now as it breaks timeline scrolling a bit.
+# When Material3 updates its transitive Compose dependencies, take a look at the constraints in `DependencyHandleScope.kt`. We may be able to remove the workaround there.
+androidx_compose_material3 = "androidx.compose.material3:material3:1.2.0-beta02"
 androidx_compose_ui = { module = "androidx.compose.ui:ui" }
 androidx_compose_ui_tooling = { module = "androidx.compose.ui:ui-tooling" }
 androidx_compose_ui_tooling_preview = { module = "androidx.compose.ui:ui-tooling-preview" }
