@@ -50,8 +50,12 @@ class DmBeginningTimelineProcessor {
 
         // Remove items at the indices we found
         val newItems = items.toMutableList()
-        newItems.removeAt(selfUserJoinedEventIndex)
-        newItems.removeAt(roomCreationEventIndex)
+        if (selfUserJoinedEventIndex in newItems.indices) {
+            newItems.removeAt(selfUserJoinedEventIndex)
+        }
+        if (roomCreationEventIndex in newItems.indices) {
+            newItems.removeAt(roomCreationEventIndex)
+        }
         return newItems
     }
 }
