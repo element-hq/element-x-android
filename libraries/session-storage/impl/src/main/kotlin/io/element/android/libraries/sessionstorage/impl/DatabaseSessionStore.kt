@@ -61,7 +61,7 @@ class DatabaseSessionStore @Inject constructor(
         database.sessionDataQueries.insertSessionData(sessionData.toDbModel())
     }
 
-    override suspend fun updateData(sessionData: SessionData) {
+    override suspend fun updateData(sessionData: SessionData) = sessionDataMutex.withLock {
         val result = database.sessionDataQueries.selectByUserId(sessionData.userId)
             .executeAsOneOrNull()
             ?.toApiModel()
@@ -70,15 +70,12 @@ class DatabaseSessionStore @Inject constructor(
             Timber.e("User ${sessionData.userId} not found in session database")
             return
         }
-
-        sessionDataMutex.withLock {
             // Copy new data from SDK, but keep login timestamp
-            database.sessionDataQueries.updateSession(
-                sessionData.copy(
-                    loginTimestamp = result.loginTimestamp,
-                ).toDbModel()
-            )
-        }
+        database.sessionDataQueries.updateSession(
+            sessionData.copy(
+                loginTimestamp = result.loginTimestamp,
+            ).toDbModel()
+        )
     }
 
     override suspend fun getLatestSession(): SessionData? {
