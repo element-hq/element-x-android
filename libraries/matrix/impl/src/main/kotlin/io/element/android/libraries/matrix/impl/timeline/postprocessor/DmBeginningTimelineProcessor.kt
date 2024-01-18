@@ -16,7 +16,6 @@
 
 package io.element.android.libraries.matrix.impl.timeline.postprocessor
 
-import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.item.event.MembershipChange
 import io.element.android.libraries.matrix.api.timeline.item.event.OtherState
@@ -29,29 +28,30 @@ import io.element.android.libraries.matrix.api.timeline.item.event.StateContent
 class DmBeginningTimelineProcessor {
     fun process(
         items: List<MatrixTimelineItem>,
-        currentUserId: UserId,
         isDm: Boolean,
         isAtStartOfTimeline: Boolean
     ): List<MatrixTimelineItem> {
         if (!isDm || !isAtStartOfTimeline) return items
-        // This is usually index 1
+
+        // Find room creation event. This is usually index 0
         val roomCreationEventIndex = items.indexOfFirst {
             val stateEventContent = (it as? MatrixTimelineItem.Event)?.event?.content as? StateContent
             stateEventContent?.content is OtherState.RoomCreate
         }
-        // This is usually index 2
-        val selfUserJoinedEventIndex = items.indexOfFirst {
-            val event = (it as? MatrixTimelineItem.Event)?.event
-            val stateEventContent = event?.content as? RoomMembershipContent
-            stateEventContent?.change == MembershipChange.JOINED && event.sender == currentUserId
-        }
+
+        // Find self-join event for room creator. This is usually index 1
+        val roomCreatorUserId = (items.getOrNull(roomCreationEventIndex) as? MatrixTimelineItem.Event)?.event?.sender
+        val selfUserJoinedEventIndex = roomCreatorUserId?.let { creatorUserId ->
+            items.indexOfFirst {
+                val stateEventContent = (it as? MatrixTimelineItem.Event)?.event?.content as? RoomMembershipContent
+                stateEventContent?.change == MembershipChange.JOINED && stateEventContent.userId == creatorUserId
+            }
+        } ?: -1
+
+        // Remove items at the indices we found
         val newItems = items.toMutableList()
-        if (selfUserJoinedEventIndex in 0..newItems.size) {
-            newItems.removeAt(selfUserJoinedEventIndex)
-        }
-        if (roomCreationEventIndex in 0..newItems.size) {
-            newItems.removeAt(roomCreationEventIndex)
-        }
+        newItems.removeAt(selfUserJoinedEventIndex)
+        newItems.removeAt(roomCreationEventIndex)
         return newItems
     }
 }

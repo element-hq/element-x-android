@@ -17,7 +17,6 @@
 package io.element.android.libraries.matrix.impl.timeline
 
 import io.element.android.libraries.matrix.api.core.EventId
-import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
@@ -65,7 +64,6 @@ class RustMatrixTimeline(
     private val matrixRoom: MatrixRoom,
     private val innerTimeline: Timeline,
     private val dispatcher: CoroutineDispatcher,
-    private val currentUserId: UserId,
     lastLoginTimestamp: Date?,
     private val onNewSyncedEvent: () -> Unit,
 ) : MatrixTimeline {
@@ -115,7 +113,6 @@ class RustMatrixTimeline(
         .mapLatest { items ->
             dmBeginningTimelineProcessor.process(
                 items = items,
-                currentUserId = currentUserId,
                 isDm = matrixRoom.isDirect && matrixRoom.isOneToOne,
                 isAtStartOfTimeline = paginationState.value.beginningOfRoomReached
             )
