@@ -44,6 +44,7 @@ class DatabaseSessionStoreTests {
         oidcData = "aOidcData",
         isTokenValid = 1,
         loginType = LoginType.UNKNOWN.name,
+        passphrase = null,
     )
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -137,6 +138,7 @@ class DatabaseSessionStoreTests {
             oidcData = "aOidcData",
             isTokenValid = 1,
             loginType = null,
+            passphrase = "aPassphrase",
         )
         val secondSessionData = SessionData(
             userId = "userId",
@@ -149,6 +151,7 @@ class DatabaseSessionStoreTests {
             oidcData = "aOidcDataAltered",
             isTokenValid = 1,
             loginType = null,
+            passphrase = "aPassphraseAltered",
         )
         assertThat(firstSessionData.userId).isEqualTo(secondSessionData.userId)
         assertThat(firstSessionData.loginTimestamp).isNotEqualTo(secondSessionData.loginTimestamp)
@@ -168,5 +171,6 @@ class DatabaseSessionStoreTests {
         // Check that alteredSession.loginTimestamp is not altered, so equal to firstSessionData.loginTimestamp
         assertThat(alteredSession.loginTimestamp).isEqualTo(firstSessionData.loginTimestamp)
         assertThat(alteredSession.oidcData).isEqualTo(secondSessionData.oidcData)
+        assertThat(alteredSession.passphrase).isEqualTo(secondSessionData.passphrase)
     }
 }
