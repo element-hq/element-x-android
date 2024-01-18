@@ -23,7 +23,7 @@
   <string name="screen_room_attachment_source_camera_photo">"Prendre une photo"</string>
   <string name="screen_room_attachment_source_camera_video">"Enregistrer une vidéo"</string>
   <string name="screen_room_attachment_source_files">"Pièce jointe"</string>
-  <string name="screen_room_attachment_source_gallery">"Gallerie Photo et Vidéo"</string>
+  <string name="screen_room_attachment_source_gallery">"Galerie Photo et Vidéo"</string>
   <string name="screen_room_attachment_source_location">"Position"</string>
   <string name="screen_room_attachment_source_poll">"Sondage"</string>
   <string name="screen_room_attachment_text_formatting">"Formatage du texte"</string>
