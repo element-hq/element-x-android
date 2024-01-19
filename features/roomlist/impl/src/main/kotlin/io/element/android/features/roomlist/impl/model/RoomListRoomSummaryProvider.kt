@@ -40,7 +40,7 @@ open class RoomListRoomSummaryProvider : PreviewParameterProvider<RoomListRoomSu
                 timestamp = "yesterday",
                 hasUnread = true,
             ),
-            aRoomListRoomSummary().copy(hasUnread = true, hasOngoingCall = true),
+            aRoomListRoomSummary().copy(hasUnread = true, hasRoomCall = true),
         )
 }
 
