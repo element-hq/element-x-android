@@ -146,6 +146,7 @@ class RustMatrixClient(
                         val newData = client.session().toSessionData(
                             isTokenValid = false,
                             loginType = existingData.loginType,
+                            passphrase = existingData.passphrase,
                         )
                         sessionStore.updateData(newData)
                         Timber.d("Removed session data with token: '...$anonymizedToken'.")
@@ -172,6 +173,7 @@ class RustMatrixClient(
                 val newData = client.session().toSessionData(
                     isTokenValid = true,
                     loginType = existingData.loginType,
+                    passphrase = existingData.passphrase,
                 )
                 sessionStore.updateData(newData)
                 Timber.d("Saved new session data with token: '...$anonymizedToken'.")

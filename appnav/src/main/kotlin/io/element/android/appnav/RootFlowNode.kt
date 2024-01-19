@@ -141,7 +141,7 @@ class RootFlowNode @AssistedInject constructor(
                 onSuccess(sessionId)
             }
             .onFailure {
-                Timber.v("Failed to restore session $sessionId")
+                Timber.e(it, "Failed to restore session $sessionId")
                 onFailure()
             }
     }

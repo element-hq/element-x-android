@@ -29,7 +29,7 @@ import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.plus
 
 object Singleton {
-    private val buildMeta = BuildMeta(
+    val buildMeta = BuildMeta(
         isDebuggable = true,
         buildType = BuildType.DEBUG,
         applicationName = "EAX-Minimal",
