@@ -19,7 +19,6 @@ package io.element.android.libraries.mediaviewer.api.local
 import androidx.compose.runtime.Composable
 
 interface LocalMediaActions {
-
     @Composable
     fun Configure()
 
@@ -41,4 +40,3 @@ interface LocalMediaActions {
      */
     suspend fun open(localMedia: LocalMedia): Result<Unit>
 }
-

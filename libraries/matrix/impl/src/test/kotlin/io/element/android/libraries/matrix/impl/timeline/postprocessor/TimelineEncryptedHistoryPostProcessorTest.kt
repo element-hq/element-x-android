@@ -29,7 +29,6 @@ import java.util.Date
 private const val FAKE_UNIQUE_ID = "FAKE_UNIQUE_ID"
 
 class TimelineEncryptedHistoryPostProcessorTest {
-
     private val defaultLastLoginTimestamp = Date(1_689_061_264L)
 
     @Test

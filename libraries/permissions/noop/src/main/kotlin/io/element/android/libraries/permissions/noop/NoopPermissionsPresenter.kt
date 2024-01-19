@@ -21,7 +21,6 @@ import io.element.android.libraries.permissions.api.PermissionsPresenter
 import io.element.android.libraries.permissions.api.PermissionsState
 
 class NoopPermissionsPresenter : PermissionsPresenter {
-
     @Composable
     override fun present(): PermissionsState {
         return PermissionsState(

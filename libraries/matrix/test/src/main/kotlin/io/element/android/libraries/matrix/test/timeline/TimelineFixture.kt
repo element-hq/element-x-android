@@ -119,7 +119,9 @@ fun aTimelineItemDebugInfo(
     originalJson: String? = null,
     latestEditedJson: String? = null,
 ) = TimelineItemDebugInfo(
-    model, originalJson, latestEditedJson
+    model,
+    originalJson,
+    latestEditedJson
 )
 
 fun aPollContent(

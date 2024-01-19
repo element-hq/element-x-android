@@ -19,6 +19,6 @@ package io.element.android.libraries.voicerecorder.impl.audio
 import io.element.android.opusencoder.configuration.SampleRate as LibOpusOggSampleRate
 
 data object SampleRate {
-    const val hz = 48_000
+    const val HZ = 48_000
     fun asEncoderModel() = LibOpusOggSampleRate.Rate48kHz
 }

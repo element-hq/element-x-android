@@ -78,10 +78,11 @@ fun Modifier.circularReveal(
         val path = Path()
         val center = revealFrom.mapTo(size)
         val radius = calculateRadius(revealFrom, size)
-        val scrimColor = if (showScrim)
+        val scrimColor = if (showScrim) {
             Color.Gray
-        else
+        } else {
             Color.Transparent
+        }
 
         path.addOval(Rect(center, radius * transitionProgress.value))
 

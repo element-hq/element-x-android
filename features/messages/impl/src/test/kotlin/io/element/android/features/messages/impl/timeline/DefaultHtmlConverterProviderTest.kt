@@ -28,7 +28,6 @@ import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
 class DefaultHtmlConverterProviderTest {
-
     @get:Rule val composeTestRule = createComposeRule()
 
     @Test

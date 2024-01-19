@@ -21,7 +21,6 @@ import io.element.android.features.rageshake.api.rageshake.RageShake
 class FakeRageShake(
     private var isAvailableValue: Boolean = true
 ) : RageShake {
-
     private var interceptor: (() -> Unit)? = null
 
     override fun isAvailable() = isAvailableValue

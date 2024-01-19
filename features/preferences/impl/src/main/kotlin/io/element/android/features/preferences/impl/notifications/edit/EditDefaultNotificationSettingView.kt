@@ -59,7 +59,6 @@ fun EditDefaultNotificationSettingView(
         onBackPressed = onBackPressed,
         title = stringResource(id = title)
     ) {
-
         // Only ALL_MESSAGES and MENTIONS_AND_KEYWORDS_ONLY are valid global defaults.
         val validModes = listOf(RoomNotificationMode.ALL_MESSAGES, RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY)
 
@@ -69,7 +68,6 @@ fun EditDefaultNotificationSettingView(
             R.string.screen_notification_settings_edit_screen_group_section_header
         }
         PreferenceCategory(title = stringResource(id = categoryTitle)) {
-
             if (state.mode != null) {
                 Column(modifier = Modifier.selectableGroup()) {
                     validModes.forEach { item ->

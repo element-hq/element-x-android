@@ -19,7 +19,6 @@ package io.element.android.features.lockscreen.impl.storage
 import kotlinx.coroutines.flow.Flow
 
 interface LockScreenStore : EncryptedPinCodeStorage {
-
     /**
      * Returns the remaining PIN code attempts. When this reaches 0 the PIN code access won't be available for some time.
      */

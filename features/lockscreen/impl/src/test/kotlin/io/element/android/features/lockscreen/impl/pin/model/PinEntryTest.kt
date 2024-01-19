@@ -20,7 +20,6 @@ import com.google.common.truth.Truth.assertThat
 import org.junit.Test
 
 class PinEntryTest {
-
     @Test
     fun `when using fillWith with empty string ensure pin is empty`() {
         val pinEntry = PinEntry.createEmpty(4)

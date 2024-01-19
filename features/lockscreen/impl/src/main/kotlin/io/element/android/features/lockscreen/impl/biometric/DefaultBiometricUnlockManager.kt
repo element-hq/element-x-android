@@ -57,7 +57,6 @@ class DefaultBiometricUnlockManager @Inject constructor(
     private val secretKeyRepository: SecretKeyRepository,
     private val coroutineScope: CoroutineScope,
 ) : BiometricUnlockManager {
-
     private val callbacks = CopyOnWriteArrayList<BiometricUnlock.Callback>()
     private val biometricManager = BiometricManager.from(context)
     private val keyguardManager: KeyguardManager = context.getSystemService()!!
@@ -66,15 +65,15 @@ class DefaultBiometricUnlockManager @Inject constructor(
      * Returns true if a weak biometric method (i.e.: some face or iris unlock implementations) can be used.
      */
     private val canUseWeakBiometricAuth: Boolean
-        get() = lockScreenConfig.isWeakBiometricsEnabled
-            && biometricManager.canAuthenticate(BiometricManager.Authenticators.BIOMETRIC_WEAK) == BiometricManager.BIOMETRIC_SUCCESS
+        get() = lockScreenConfig.isWeakBiometricsEnabled &&
+            biometricManager.canAuthenticate(BiometricManager.Authenticators.BIOMETRIC_WEAK) == BiometricManager.BIOMETRIC_SUCCESS
 
     /**
      * Returns true if a strong biometric method (i.e.: fingerprint, some face or iris unlock implementations) can be used.
      */
     private val canUseStrongBiometricAuth: Boolean
-        get() = lockScreenConfig.isStrongBiometricsEnabled
-            && biometricManager.canAuthenticate(BiometricManager.Authenticators.BIOMETRIC_STRONG) == BiometricManager.BIOMETRIC_SUCCESS
+        get() = lockScreenConfig.isStrongBiometricsEnabled &&
+            biometricManager.canAuthenticate(BiometricManager.Authenticators.BIOMETRIC_STRONG) == BiometricManager.BIOMETRIC_SUCCESS
 
     /**
      * Returns true if any biometric method (weak or strong) can be used.

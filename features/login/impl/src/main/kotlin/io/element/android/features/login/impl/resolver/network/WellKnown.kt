@@ -41,10 +41,8 @@ import kotlinx.serialization.Serializable
 data class WellKnown(
     @SerialName("m.homeserver")
     val homeServer: WellKnownBaseConfig? = null,
-
     @SerialName("m.identity_server")
     val identityServer: WellKnownBaseConfig? = null,
-
     @SerialName("org.matrix.msc3575.proxy")
     val slidingSyncProxy: WellKnownSlidingSyncConfig? = null,
 ) {

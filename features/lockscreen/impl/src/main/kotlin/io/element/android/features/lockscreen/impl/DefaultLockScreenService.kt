@@ -57,25 +57,24 @@ class DefaultLockScreenService @Inject constructor(
     private val appForegroundStateService: AppForegroundStateService,
     private val biometricUnlockManager: BiometricUnlockManager,
 ) : LockScreenService {
-
-    private val _lockScreenState = MutableStateFlow<LockScreenLockState>(LockScreenLockState.Unlocked)
-    override val lockState: StateFlow<LockScreenLockState> = _lockScreenState
+    private val _lockState = MutableStateFlow<LockScreenLockState>(LockScreenLockState.Unlocked)
+    override val lockState: StateFlow<LockScreenLockState> = _lockState
 
     private var lockJob: Job? = null
 
     init {
         pinCodeManager.addCallback(object : DefaultPinCodeManagerCallback() {
             override fun onPinCodeVerified() {
-                _lockScreenState.value = LockScreenLockState.Unlocked
+                _lockState.value = LockScreenLockState.Unlocked
             }
 
             override fun onPinCodeRemoved() {
-                _lockScreenState.value = LockScreenLockState.Unlocked
+                _lockState.value = LockScreenLockState.Unlocked
             }
         })
         biometricUnlockManager.addCallback(object : DefaultBiometricUnlockCallback() {
             override fun onBiometricUnlockSuccess() {
-                _lockScreenState.value = LockScreenLockState.Unlocked
+                _lockState.value = LockScreenLockState.Unlocked
                 coroutineScope.launch {
                     lockScreenStore.resetCounter()
                 }
@@ -91,11 +90,10 @@ class DefaultLockScreenService @Inject constructor(
      */
     private fun observeSessionsState() {
         sessionObserver.addListener(object : SessionListener {
-
             override suspend fun onSessionCreated(userId: String) = Unit
 
             override suspend fun onSessionDeleted(userId: String) {
-                //TODO handle multi session at some point
+                // TODO handle multi session at some point
                 pinCodeManager.deletePinCode()
             }
         })
@@ -135,7 +133,7 @@ class DefaultLockScreenService @Inject constructor(
     private fun CoroutineScope.lockIfNeeded(gracePeriod: Duration = Duration.ZERO) = launch {
         if (isPinSetup().first()) {
             delay(gracePeriod)
-            _lockScreenState.value = LockScreenLockState.Locked
+            _lockState.value = LockScreenLockState.Locked
         }
     }
 }

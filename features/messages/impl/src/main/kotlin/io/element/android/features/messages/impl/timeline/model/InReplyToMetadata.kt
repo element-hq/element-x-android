@@ -35,7 +35,6 @@ import io.element.android.libraries.ui.strings.CommonStrings
 
 @Immutable
 internal sealed interface InReplyToMetadata {
-
     val text: String?
 
     data class Thumbnail(

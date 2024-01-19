@@ -22,7 +22,6 @@ import io.element.android.libraries.matrix.api.widget.MatrixWidgetSettings
 class FakeCallWidgetSettingsProvider(
     private val provideFn: (String, String) -> MatrixWidgetSettings = { _, _ -> MatrixWidgetSettings("id", true, "url") }
 ) : CallWidgetSettingsProvider {
-
     val providedBaseUrls = mutableListOf<String>()
 
     override fun provide(baseUrl: String, widgetId: String): MatrixWidgetSettings {

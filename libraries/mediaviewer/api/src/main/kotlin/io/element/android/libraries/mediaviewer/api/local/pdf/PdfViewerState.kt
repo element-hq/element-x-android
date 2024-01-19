@@ -40,15 +40,14 @@ class PdfViewerState(
     val zoomableState: ZoomableState,
     val lazyListState: LazyListState,
 ) {
-
     var isLoaded by mutableStateOf(false)
     private var pdfRendererManager by mutableStateOf<PdfRendererManager?>(null)
 
     @Composable
-    fun getPages(): List<PdfPage>{
+    fun getPages(): List<PdfPage> {
         return pdfRendererManager?.run {
             pdfPages.collectAsState().value
-        }?: emptyList()
+        } ?: emptyList()
     }
 
     fun openForWidth(maxWidth: Int) {

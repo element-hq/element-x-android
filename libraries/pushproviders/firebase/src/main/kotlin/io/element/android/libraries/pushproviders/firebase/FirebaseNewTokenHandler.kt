@@ -45,9 +45,9 @@ class FirebaseNewTokenHandler @Inject constructor(
             .map { SessionId(it) }
             .forEach { userId ->
                 val userDataStore = userPushStoreFactory.create(userId)
-                if (userDataStore.getPushProviderName() == FirebaseConfig.name) {
+                if (userDataStore.getPushProviderName() == FirebaseConfig.NAME) {
                     matrixAuthenticationService.restoreSession(userId).getOrNull()?.use { client ->
-                        pusherSubscriber.registerPusher(client, firebaseToken, FirebaseConfig.pusher_http_url)
+                        pusherSubscriber.registerPusher(client, firebaseToken, FirebaseConfig.PUSHER_HTTP_URL)
                     }
                 } else {
                     Timber.tag(loggerTag.value).d("This session is not using Firebase pusher")

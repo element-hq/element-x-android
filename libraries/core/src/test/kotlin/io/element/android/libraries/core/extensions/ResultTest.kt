@@ -20,7 +20,6 @@ import com.google.common.truth.Truth.assertThat
 import org.junit.Test
 
 class ResultTest {
-
     @Test
     fun testFlatMap() {
         val initial = Result.success("initial")

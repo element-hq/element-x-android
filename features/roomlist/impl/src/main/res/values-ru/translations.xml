@@ -6,6 +6,6 @@
   <string name="screen_roomlist_empty_message">"Начните переписку с отправки сообщения."</string>
   <string name="screen_roomlist_empty_title">"Пока нет доступных чатов."</string>
   <string name="screen_roomlist_main_space_title">"Все чаты"</string>
-  <string name="session_verification_banner_message">"Похоже, вы используете новое устройство. Чтобы получить доступ к зашифрованным сообщениям в дальнейшем, проверьте их на другом устройстве."</string>
+  <string name="session_verification_banner_message">"Похоже, вы используете новое устройство. Чтобы получить доступ к зашифрованным сообщениям пройдите верификацию с другим устройством."</string>
   <string name="session_verification_banner_title">"Подтвердите, что это вы"</string>
 </resources>

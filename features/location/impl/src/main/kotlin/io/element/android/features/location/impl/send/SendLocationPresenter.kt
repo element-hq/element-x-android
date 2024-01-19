@@ -47,7 +47,6 @@ class SendLocationPresenter @Inject constructor(
     private val locationActions: LocationActions,
     private val buildMeta: BuildMeta,
 ) : Presenter<SendLocationState> {
-
     private val permissionsPresenter = permissionsPresenterFactory.create(MapDefaults.permissions)
 
     @Composable
@@ -55,8 +54,11 @@ class SendLocationPresenter @Inject constructor(
         val permissionsState: PermissionsState = permissionsPresenter.present()
         var mode: SendLocationState.Mode by remember {
             mutableStateOf(
-                if (permissionsState.isAnyGranted) SendLocationState.Mode.SenderLocation
-                else SendLocationState.Mode.PinLocation
+                if (permissionsState.isAnyGranted) {
+                    SendLocationState.Mode.SenderLocation
+                } else {
+                    SendLocationState.Mode.PinLocation
+                }
             )
         }
         val appName by remember { derivedStateOf { buildMeta.applicationName } }

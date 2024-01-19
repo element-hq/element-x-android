@@ -27,12 +27,10 @@ import javax.inject.Inject
 
 @ContributesBinding(AppScope::class)
 class DefaultFtueEntryPoint @Inject constructor() : FtueEntryPoint {
-
     override fun nodeBuilder(parentNode: Node, buildContext: BuildContext): FtueEntryPoint.NodeBuilder {
         val plugins = ArrayList<Plugin>()
 
         return object : FtueEntryPoint.NodeBuilder {
-
             override fun callback(callback: FtueEntryPoint.Callback): FtueEntryPoint.NodeBuilder {
                 plugins += callback
                 return this

@@ -22,7 +22,6 @@ import io.element.android.features.leaveroom.api.LeaveRoomPresenter
 import io.element.android.features.leaveroom.api.LeaveRoomState
 
 class FakeLeaveRoomPresenter : LeaveRoomPresenter {
-
     val events = mutableListOf<LeaveRoomEvent>()
 
     private fun handleEvent(event: LeaveRoomEvent) {

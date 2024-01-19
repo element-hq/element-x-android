@@ -11,11 +11,11 @@
     <item quantity="many">"Неверный PIN-код. У вас остался %1$d шанса"</item>
   </plurals>
   <string name="screen_app_lock_biometric_authentication">"биометрическая идентификация"</string>
-  <string name="screen_app_lock_biometric_unlock">"биометрическая разблокировать"</string>
+  <string name="screen_app_lock_biometric_unlock">"биометрическая разблокировка"</string>
   <string name="screen_app_lock_biometric_unlock_title_android">"Разблокировать с помощью биометрии"</string>
   <string name="screen_app_lock_forgot_pin">"Забыли PIN-код?"</string>
   <string name="screen_app_lock_settings_change_pin">"Измените PIN-код"</string>
-  <string name="screen_app_lock_settings_enable_biometric_unlock">"Разрешить биометрическую разблокировать"</string>
+  <string name="screen_app_lock_settings_enable_biometric_unlock">"Разрешить биометрическую разблокировку"</string>
   <string name="screen_app_lock_settings_remove_pin">"Удалить PIN-код"</string>
   <string name="screen_app_lock_settings_remove_pin_alert_message">"Вы действительно хотите удалить PIN-код?"</string>
   <string name="screen_app_lock_settings_remove_pin_alert_title">"Удалить PIN-код?"</string>

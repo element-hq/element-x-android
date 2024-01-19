@@ -21,7 +21,6 @@ import androidx.startup.Initializer
 import io.element.android.features.rageshake.impl.crash.VectorUncaughtExceptionHandler
 
 class CrashInitializer : Initializer<Unit> {
-
     override fun create(context: Context) {
         VectorUncaughtExceptionHandler(context).activate()
     }

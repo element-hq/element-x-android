@@ -30,7 +30,6 @@ class RootPresenter @Inject constructor(
     private val rageshakeDetectionPresenter: RageshakeDetectionPresenter,
     private val appErrorStateService: AppErrorStateService,
 ) : Presenter<RootState> {
-
     @Composable
     override fun present(): RootState {
         val rageshakeDetectionState = rageshakeDetectionPresenter.present()

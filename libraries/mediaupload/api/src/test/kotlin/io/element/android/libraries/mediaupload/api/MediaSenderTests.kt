@@ -33,7 +33,6 @@ import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
 class MediaSenderTests {
-
     @Test
     fun `given an attachment when sending it the preprocessor always runs`() = runTest {
         val preProcessor = FakeMediaPreProcessor()

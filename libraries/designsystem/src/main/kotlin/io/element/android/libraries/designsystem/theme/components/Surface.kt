@@ -56,11 +56,7 @@ fun Surface(
 
 @Preview
 @Composable
-internal fun SurfacePreview() =
-    ElementThemedPreview { ContentToPreview() }
-
-@Composable
-private fun ContentToPreview() {
+internal fun SurfacePreview() = ElementThemedPreview {
     Surface {
         Spacer(modifier = Modifier.size(64.dp))
     }

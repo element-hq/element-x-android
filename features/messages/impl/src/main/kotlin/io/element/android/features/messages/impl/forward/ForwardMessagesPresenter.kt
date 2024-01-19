@@ -40,7 +40,6 @@ class ForwardMessagesPresenter @AssistedInject constructor(
     private val room: MatrixRoom,
     private val matrixCoroutineScope: CoroutineScope,
 ) : Presenter<ForwardMessagesState> {
-
     private val eventId: EventId = EventId(eventId)
 
     @AssistedFactory

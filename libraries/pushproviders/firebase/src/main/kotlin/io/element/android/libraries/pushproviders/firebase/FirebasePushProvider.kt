@@ -16,9 +16,13 @@
 
 package io.element.android.libraries.pushproviders.firebase
 
+import android.content.Context
+import com.google.android.gms.common.ConnectionResult
+import com.google.android.gms.common.GoogleApiAvailability
 import com.squareup.anvil.annotations.ContributesMultibinding
 import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.di.AppScope
+import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.pushproviders.api.Distributor
 import io.element.android.libraries.pushproviders.api.PushProvider
@@ -30,12 +34,26 @@ private val loggerTag = LoggerTag("FirebasePushProvider", LoggerTag.PushLoggerTa
 
 @ContributesMultibinding(AppScope::class)
 class FirebasePushProvider @Inject constructor(
+    @ApplicationContext private val context: Context,
     private val firebaseStore: FirebaseStore,
     private val firebaseTroubleshooter: FirebaseTroubleshooter,
     private val pusherSubscriber: PusherSubscriber,
 ) : PushProvider {
-    override val index = FirebaseConfig.index
-    override val name = FirebaseConfig.name
+    override val index = FirebaseConfig.INDEX
+    override val name = FirebaseConfig.NAME
+
+    override fun isAvailable(): Boolean {
+        // The PlayServices has to be available
+        val apiAvailability = GoogleApiAvailability.getInstance()
+        val resultCode = apiAvailability.isGooglePlayServicesAvailable(context)
+        return if (resultCode == ConnectionResult.SUCCESS) {
+            Timber.tag(loggerTag.value).d("Google Play Services is available")
+            true
+        } else {
+            Timber.tag(loggerTag.value).w("Google Play Services is not available")
+            false
+        }
+    }
 
     override fun getDistributors(): List<Distributor> {
         return listOf(Distributor("Firebase", "Firebase"))
@@ -45,14 +63,14 @@ class FirebasePushProvider @Inject constructor(
         val pushKey = firebaseStore.getFcmToken() ?: return Unit.also {
             Timber.tag(loggerTag.value).w("Unable to register pusher, Firebase token is not known.")
         }
-        pusherSubscriber.registerPusher(matrixClient, pushKey, FirebaseConfig.pusher_http_url)
+        pusherSubscriber.registerPusher(matrixClient, pushKey, FirebaseConfig.PUSHER_HTTP_URL)
     }
 
     override suspend fun unregister(matrixClient: MatrixClient) {
         val pushKey = firebaseStore.getFcmToken() ?: return Unit.also {
             Timber.tag(loggerTag.value).w("Unable to unregister pusher, Firebase token is not known.")
         }
-        pusherSubscriber.unregisterPusher(matrixClient, pushKey, FirebaseConfig.pusher_http_url)
+        pusherSubscriber.unregisterPusher(matrixClient, pushKey, FirebaseConfig.PUSHER_HTTP_URL)
     }
 
     override suspend fun troubleshoot(): Result<Unit> {

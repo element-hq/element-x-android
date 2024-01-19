@@ -45,7 +45,7 @@ jobs:
       - name: Additionally upload Nightly APK to browserstack for testing
         continue-on-error: true # don't block anything by this upload failing (for now)
         run: |
-          curl -u "$BROWSERSTACK_USERNAME:$BROWSERSTACK_PASSWORD" -X POST "https://api-cloud.browserstack.com/app-automate/upload" -F "file=@app/build/outputs/apk/nightly/app-universal-nightly.apk" -F "custom_id=element-x-android-nightly"
+          curl -u "$BROWSERSTACK_USERNAME:$BROWSERSTACK_PASSWORD" -X POST "https://api-cloud.browserstack.com/app-automate/upload" -F "file=@app/build/outputs/apk/gplay/nightly/app-gplay-universal-nightly.apk" -F "custom_id=element-x-android-nightly"
         env:
           BROWSERSTACK_USERNAME: ${{ secrets.ELEMENT_ANDROID_BROWSERSTACK_USERNAME }}
           BROWSERSTACK_PASSWORD: ${{ secrets.ELEMENT_ANDROID_BROWSERSTACK_ACCESS_KEY }}

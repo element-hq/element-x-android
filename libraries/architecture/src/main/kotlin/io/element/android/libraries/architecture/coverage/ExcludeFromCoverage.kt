@@ -14,15 +14,8 @@
  * limitations under the License.
  */
 
-plugins {
-    id("io.element.android-compose-library")
-}
+package io.element.android.libraries.architecture.coverage
 
-android {
-    namespace = "io.element.android.libraries.textcomposer.test"
-}
-
-dependencies {
-    api(projects.libraries.textcomposer.impl)
-    implementation(projects.tests.testutils)
-}
+@Retention(AnnotationRetention.RUNTIME)
+@Target(AnnotationTarget.FUNCTION, AnnotationTarget.CLASS)
+annotation class ExcludeFromCoverage

@@ -36,7 +36,6 @@ class DefaultAnalyticsPreferencesPresenter @Inject constructor(
     private val analyticsService: AnalyticsService,
     private val buildMeta: BuildMeta,
 ) : AnalyticsPreferencesPresenter {
-
     @Composable
     override fun present(): AnalyticsPreferencesState {
         val localCoroutineScope = rememberCoroutineScope()

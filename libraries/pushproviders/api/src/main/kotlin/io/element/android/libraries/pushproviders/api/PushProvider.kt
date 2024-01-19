@@ -32,6 +32,11 @@ interface PushProvider {
      */
     val name: String
 
+    /**
+     * Return true if the push provider is available on this device.
+     */
+    fun isAvailable(): Boolean
+
     fun getDistributors(): List<Distributor>
 
     /**

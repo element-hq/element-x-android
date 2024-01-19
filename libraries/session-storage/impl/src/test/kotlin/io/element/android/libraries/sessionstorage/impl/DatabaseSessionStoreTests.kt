@@ -30,7 +30,6 @@ import org.junit.Before
 import org.junit.Test
 
 class DatabaseSessionStoreTests {
-
     private lateinit var database: SessionDatabase
     private lateinit var databaseSessionStore: DatabaseSessionStore
 
@@ -166,7 +165,8 @@ class DatabaseSessionStoreTests {
         assertThat(alteredSession.refreshToken).isEqualTo(secondSessionData.refreshToken)
         assertThat(alteredSession.homeserverUrl).isEqualTo(secondSessionData.homeserverUrl)
         assertThat(alteredSession.slidingSyncProxy).isEqualTo(secondSessionData.slidingSyncProxy)
-        assertThat(alteredSession.loginTimestamp).isEqualTo(/* Not altered! */ firstSessionData.loginTimestamp)
+        // Check that alteredSession.loginTimestamp is not altered, so equal to firstSessionData.loginTimestamp
+        assertThat(alteredSession.loginTimestamp).isEqualTo(firstSessionData.loginTimestamp)
         assertThat(alteredSession.oidcData).isEqualTo(secondSessionData.oidcData)
     }
 }

@@ -194,7 +194,6 @@ class VoiceMessageComposerPlayer @Inject constructor(
         val currentPosition: Long,
         val progress: Float,
     ) {
-
         companion object {
             val Initial = State(
                 playState = PlayState.Stopped,
@@ -247,4 +246,3 @@ class VoiceMessageComposerPlayer @Inject constructor(
         }
     }
 }
-

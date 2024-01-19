@@ -31,10 +31,10 @@ jobs:
           ELEMENT_ANDROID_MAPTILER_API_KEY: ${{ secrets.MAPTILER_KEY }}
           ELEMENT_ANDROID_MAPTILER_LIGHT_MAP_ID: ${{ secrets.MAPTILER_LIGHT_MAP_ID }}
           ELEMENT_ANDROID_MAPTILER_DARK_MAP_ID: ${{ secrets.MAPTILER_DARK_MAP_ID }}
-        run: ./gradlew bundleRelease $CI_GRADLE_ARG_PROPERTIES
+        run: ./gradlew bundleGplayRelease $CI_GRADLE_ARG_PROPERTIES
       - name: Upload bundle as artifact
         uses: actions/upload-artifact@v4
         with:
-          name: elementx-app-bundle-unsigned
+          name: elementx-app-gplay-bundle-unsigned
           path: |
-            app/build/outputs/bundle/release/app-release.aab
+            app/build/outputs/bundle/gplayRelease/app-gplay-release.aab

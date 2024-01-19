@@ -21,7 +21,6 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.core.RoomId
 
 object RoomListRoomSummaryPlaceholders {
-
     fun create(id: String): RoomListRoomSummary {
         return RoomListRoomSummary(
             id = id,

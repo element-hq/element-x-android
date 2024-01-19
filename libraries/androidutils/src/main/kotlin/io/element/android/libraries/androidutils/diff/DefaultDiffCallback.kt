@@ -26,7 +26,6 @@ internal class DefaultDiffCallback<T>(
     private val newList: List<T>,
     private val areItemsTheSame: (oldItem: T?, newItem: T?) -> Boolean,
 ) : DiffUtil.Callback() {
-
     override fun getOldListSize(): Int {
         return oldList.size
     }

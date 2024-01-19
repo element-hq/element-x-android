@@ -24,7 +24,6 @@ data class LogEventLocation(
     val file: String,
     val line: UInt?,
 ) {
-
     companion object {
         /**
          * Create a [LogEventLocation] from a [StackTraceElement].
@@ -37,4 +36,3 @@ data class LogEventLocation(
         }
     }
 }
-

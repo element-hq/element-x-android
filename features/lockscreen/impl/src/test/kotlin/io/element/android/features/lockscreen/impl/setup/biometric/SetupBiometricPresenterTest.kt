@@ -27,7 +27,6 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
 class SetupBiometricPresenterTest {
-
     @Test
     fun `present - allow flow`() = runTest {
         val lockScreenStore = InMemoryLockScreenStore()

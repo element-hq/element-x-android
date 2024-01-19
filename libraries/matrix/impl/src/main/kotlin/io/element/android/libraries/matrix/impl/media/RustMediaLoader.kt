@@ -34,7 +34,6 @@ class RustMediaLoader(
     dispatchers: CoroutineDispatchers,
     private val innerClient: Client,
 ) : MatrixMediaLoader {
-
     @OptIn(ExperimentalCoroutinesApi::class)
     private val mediaDispatcher = dispatchers.io.limitedParallelism(32)
     private val cacheDirectory

@@ -36,7 +36,6 @@ class PinUnlockNode @AssistedInject constructor(
     @Assisted plugins: List<Plugin>,
     private val presenter: PinUnlockPresenter,
 ) : Node(buildContext, plugins = plugins) {
-
     interface Callback : Plugin {
         fun onUnlock()
     }

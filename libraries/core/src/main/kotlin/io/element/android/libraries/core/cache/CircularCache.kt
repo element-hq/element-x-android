@@ -21,7 +21,6 @@ package io.element.android.libraries.core.cache
  * This class is not thread safe.
  */
 class CircularCache<T : Any>(cacheSize: Int, factory: (Int) -> Array<T?>) {
-
     companion object {
         inline fun <reified T : Any> create(cacheSize: Int) = CircularCache(cacheSize) { Array<T?>(cacheSize) { null } }
     }

@@ -47,7 +47,6 @@ open class LoadingRoomStateProvider : PreviewParameterProvider<LoadingRoomState>
 
 @SingleIn(SessionScope::class)
 class LoadingRoomStateFlowFactory @Inject constructor(private val matrixClient: MatrixClient) {
-
     fun create(lifecycleScope: CoroutineScope, roomId: RoomId): StateFlow<LoadingRoomState> =
         getRoomFlow(roomId)
             .map { room ->

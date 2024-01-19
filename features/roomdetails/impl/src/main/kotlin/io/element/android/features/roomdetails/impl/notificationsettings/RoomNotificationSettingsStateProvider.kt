@@ -45,7 +45,8 @@ internal class RoomNotificationSettingsStateProvider : PreviewParameterProvider<
             roomName = "Room 1",
             AsyncData.Success(RoomNotificationSettings(
                 mode = RoomNotificationMode.MUTE,
-                isDefault = isDefault)),
+                isDefault = isDefault
+            )),
             pendingRoomNotificationMode = null,
             pendingSetDefault = null,
             defaultRoomNotificationMode = RoomNotificationMode.ALL_MESSAGES,

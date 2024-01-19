@@ -19,7 +19,6 @@ package io.element.android.libraries.voicerecorder.impl.audio
 import java.io.File
 
 interface Encoder {
-
     fun init(file: File)
 
     fun encode(buffer: ShortArray, readSize: Int)

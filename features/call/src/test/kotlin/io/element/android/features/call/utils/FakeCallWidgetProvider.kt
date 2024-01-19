@@ -24,19 +24,18 @@ import io.element.android.libraries.matrix.test.widget.FakeWidgetDriver
 class FakeCallWidgetProvider(
     private val widgetDriver: FakeWidgetDriver = FakeWidgetDriver(),
     private val url: String = "https://call.element.io",
-    ) : CallWidgetProvider {
+) : CallWidgetProvider {
+    var getWidgetCalled = false
+        private set
 
-        var getWidgetCalled = false
-            private set
-
-        override suspend fun getWidget(
-            sessionId: SessionId,
-            roomId: RoomId,
-            clientId: String,
-            languageTag: String?,
-            theme: String?
-        ): Result<Pair<MatrixWidgetDriver, String>> {
-            getWidgetCalled = true
-            return Result.success(widgetDriver to url)
-        }
+    override suspend fun getWidget(
+        sessionId: SessionId,
+        roomId: RoomId,
+        clientId: String,
+        languageTag: String?,
+        theme: String?
+    ): Result<Pair<MatrixWidgetDriver, String>> {
+        getWidgetCalled = true
+        return Result.success(widgetDriver to url)
     }
+}

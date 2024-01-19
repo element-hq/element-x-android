@@ -58,7 +58,8 @@ class RecoveryKeyVisualTransformationTest {
 
     @Test
     fun `RecoveryKeyOffsetMapping computes correct transformedToOriginal values`() {
-        val sut = RecoveryKeyVisualTransformation.RecoveryKeyOffsetMapping("" /* Not used by transformedToOriginal */)
+        // text parameter is not used by transformedToOriginal
+        val sut = RecoveryKeyVisualTransformation.RecoveryKeyOffsetMapping("")
         assertThat(sut.transformedToOriginal(0)).isEqualTo(0)
         assertThat(sut.transformedToOriginal(1)).isEqualTo(1)
         assertThat(sut.transformedToOriginal(2)).isEqualTo(2)

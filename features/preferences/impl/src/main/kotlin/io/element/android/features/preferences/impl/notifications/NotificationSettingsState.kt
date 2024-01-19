@@ -47,7 +47,3 @@ data class NotificationSettingsState(
         val appNotificationsEnabled: Boolean,
     )
 }
-
-
-
-

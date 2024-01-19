@@ -60,7 +60,6 @@ import kotlin.time.Duration.Companion.milliseconds
 
 @ExperimentalCoroutinesApi
 class RoomDetailsPresenterTests {
-
     @get:Rule
     val warmUpRule = WarmUpRule()
 
@@ -406,7 +405,6 @@ class RoomDetailsPresenterTests {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-
             notificationSettingsService.setRoomNotificationMode(room.roomId, RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY)
             val updatedState = consumeItemsUntilPredicate {
                 it.roomNotificationSettings?.mode == RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY
@@ -475,4 +473,3 @@ fun aMatrixRoom(
     isDirect = isDirect,
     notificationSettingsService = notificationSettingsService
 )
-

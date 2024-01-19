@@ -38,7 +38,6 @@ class ShowLocationNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
 ) : Node(buildContext, plugins = plugins) {
-
     init {
         lifecycle.subscribe(
             onResume = {

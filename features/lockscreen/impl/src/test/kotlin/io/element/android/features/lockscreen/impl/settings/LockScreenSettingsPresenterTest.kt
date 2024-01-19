@@ -32,7 +32,6 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
 class LockScreenSettingsPresenterTest {
-
     @Test
     fun `present - remove pin flow`() = runTest {
         val presenter = createLockScreenSettingsPresenter(this)

@@ -22,14 +22,13 @@ import dagger.Provides
 import dagger.multibindings.ElementsIntoSet
 import io.element.android.libraries.core.meta.BuildType
 import io.element.android.libraries.di.AppScope
-import io.element.android.libraries.featureflag.impl.StaticFeatureFlagProvider
 import io.element.android.libraries.featureflag.impl.FeatureFlagProvider
 import io.element.android.libraries.featureflag.impl.PreferencesFeatureFlagProvider
+import io.element.android.libraries.featureflag.impl.StaticFeatureFlagProvider
 
 @Module
 @ContributesTo(AppScope::class)
 object FeatureFlagModule {
-
     @JvmStatic
     @Provides
     @ElementsIntoSet

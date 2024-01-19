@@ -16,6 +16,7 @@
 
 package io.element.android.libraries.designsystem.preview
 
+@Suppress("ktlint:standard:property-naming")
 object PreviewGroup {
     const val AppBars = "App Bars"
     const val Avatars = "Avatars"

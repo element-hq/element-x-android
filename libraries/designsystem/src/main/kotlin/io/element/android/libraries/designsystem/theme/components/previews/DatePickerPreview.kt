@@ -23,10 +23,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
-import io.element.android.libraries.designsystem.theme.components.AlertDialogContent
+import io.element.android.libraries.architecture.coverage.ExcludeFromCoverage
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.preview.PreviewGroup
+import io.element.android.libraries.designsystem.theme.components.AlertDialogContent
 
 @Preview(group = PreviewGroup.DateTimePickers)
 @Composable
@@ -41,6 +42,7 @@ internal fun DatePickerDarkPreview() {
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
+@ExcludeFromCoverage
 @Composable
 private fun ContentToPreview() {
     val state = rememberDatePickerState(

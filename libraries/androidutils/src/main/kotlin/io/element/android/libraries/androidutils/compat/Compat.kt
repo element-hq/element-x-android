@@ -26,6 +26,6 @@ fun PackageManager.getApplicationInfoCompat(packageName: String, flags: Int): Ap
             packageName,
             PackageManager.ApplicationInfoFlags.of(flags.toLong())
         )
-        else -> @Suppress("DEPRECATION") getApplicationInfo(packageName, flags)
+        else -> getApplicationInfo(packageName, flags)
     }
 }

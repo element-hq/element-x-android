@@ -36,7 +36,6 @@ class ReportMessageNode @AssistedInject constructor(
     @Assisted plugins: List<Plugin>,
     presenterFactory: ReportMessagePresenter.Factory,
 ) : Node(buildContext, plugins = plugins) {
-
     data class Inputs(
         val eventId: EventId,
         val senderId: UserId,

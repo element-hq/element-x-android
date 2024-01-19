@@ -37,10 +37,11 @@ class RecoveryKeyVisualTransformation : VisualTransformation {
         override fun originalToTransformed(offset: Int): Int {
             if (offset == 0) return 0
             val numberOfChunks = offset / 4
-            return if (offset == text.length && offset % 4 == 0)
+            return if (offset == text.length && offset % 4 == 0) {
                 offset + numberOfChunks - 1
-            else
+            } else {
                 offset + numberOfChunks
+            }
         }
 
         override fun transformedToOriginal(offset: Int): Int {

@@ -56,7 +56,6 @@ class LockScreenSettingsFlowNode @AssistedInject constructor(
     buildContext = buildContext,
     plugins = plugins,
 ) {
-
     sealed interface NavTarget : Parcelable {
         @Parcelize
         data object Unknown : NavTarget
@@ -72,7 +71,6 @@ class LockScreenSettingsFlowNode @AssistedInject constructor(
     }
 
     private val pinCodeManagerCallback = object : DefaultPinCodeManagerCallback() {
-
         override fun onPinCodeRemoved() {
             navigateUp()
         }
@@ -125,7 +123,6 @@ class LockScreenSettingsFlowNode @AssistedInject constructor(
                 createNode<LockScreenSettingsNode>(buildContext, plugins = listOf(callback))
             }
             NavTarget.Unknown -> node(buildContext) { }
-
         }
     }
 

@@ -47,7 +47,6 @@ class RoomMemberDetailsPresenter @AssistedInject constructor(
     private val room: MatrixRoom,
     private val startDMAction: StartDMAction,
 ) : Presenter<RoomMemberDetailsState> {
-
     interface Factory {
         fun create(roomMemberId: UserId): RoomMemberDetailsPresenter
     }

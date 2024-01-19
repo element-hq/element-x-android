@@ -42,7 +42,6 @@ class WaitListPresenter @AssistedInject constructor(
     private val authenticationService: MatrixAuthenticationService,
     private val defaultLoginUserStory: DefaultLoginUserStory,
 ) : Presenter<WaitListState> {
-
     @AssistedFactory
     interface Factory {
         fun create(loginFormState: LoginFormState): WaitListPresenter

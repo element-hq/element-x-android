@@ -38,7 +38,6 @@ class DefaultRageshakePreferencesPresenter @Inject constructor(
     private val rageshake: RageShake,
     private val rageshakeDataStore: RageshakeDataStore,
 ) : RageshakePreferencesPresenter {
-
     @Composable
     override fun present(): RageshakePreferencesState {
         val localCoroutineScope = rememberCoroutineScope()

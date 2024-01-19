@@ -41,7 +41,6 @@ class AndroidLocalMediaFactory @Inject constructor(
     private val fileSizeFormatter: FileSizeFormatter,
     private val fileExtensionExtractor: FileExtensionExtractor,
 ) : LocalMediaFactory {
-
     override fun createFromMediaFile(mediaFile: MediaFile, mediaInfo: MediaInfo): LocalMedia {
         val uri = mediaFile.toFile().toUri()
         return createFromUri(
@@ -73,4 +72,3 @@ class AndroidLocalMediaFactory @Inject constructor(
         )
     }
 }
-

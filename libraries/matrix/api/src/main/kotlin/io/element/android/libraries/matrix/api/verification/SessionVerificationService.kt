@@ -21,7 +21,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 
 interface SessionVerificationService {
-
     /**
      * State of the current verification flow ([VerificationFlowState.Initial] if not started).
      */

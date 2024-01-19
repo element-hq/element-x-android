@@ -58,7 +58,6 @@ import java.io.File
  */
 @AutoService(CodeGenerator::class)
 class ContributesNodeCodeGenerator : CodeGenerator {
-
     override fun isApplicable(context: AnvilContext): Boolean = true
 
     override fun generateCode(codeGenDir: File, module: ModuleDescriptor, projectFiles: Collection<KtFile>): Collection<GeneratedFile> {

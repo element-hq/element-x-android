@@ -25,8 +25,8 @@ import io.element.android.features.analytics.api.AnalyticsOptInEvents
 import io.element.android.features.analytics.api.R
 import io.element.android.libraries.designsystem.components.LINK_TAG
 import io.element.android.libraries.designsystem.components.list.ListItemContent
-import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.text.buildAnnotatedStringWithStyledPart
 import io.element.android.libraries.designsystem.theme.components.ListItem
 import io.element.android.libraries.designsystem.theme.components.ListSupportingText

@@ -24,7 +24,6 @@ import javax.inject.Inject
 class AnalyticsSettingsPresenter @Inject constructor(
     private val analyticsPresenter: AnalyticsPreferencesPresenter,
 ) : Presenter<AnalyticsSettingsState> {
-
     @Composable
     override fun present(): AnalyticsSettingsState {
         val analyticsState = analyticsPresenter.present()

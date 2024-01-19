@@ -28,11 +28,11 @@ import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatch
 import io.element.android.libraries.matrix.test.media.FakeMediaLoader
 import io.element.android.libraries.matrix.test.media.aMediaSource
 import io.element.android.libraries.mediaviewer.api.local.aFileInfo
-import io.element.android.libraries.mediaviewer.test.FakeLocalMediaActions
-import io.element.android.libraries.mediaviewer.test.FakeLocalMediaFactory
 import io.element.android.libraries.mediaviewer.api.viewer.MediaViewerEvents
 import io.element.android.libraries.mediaviewer.api.viewer.MediaViewerNode
 import io.element.android.libraries.mediaviewer.api.viewer.MediaViewerPresenter
+import io.element.android.libraries.mediaviewer.test.FakeLocalMediaActions
+import io.element.android.libraries.mediaviewer.test.FakeLocalMediaFactory
 import io.element.android.tests.testutils.WarmUpRule
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -43,10 +43,8 @@ import org.junit.Test
 private val TESTED_MEDIA_INFO = aFileInfo()
 
 class MediaViewerPresenterTest {
-
     @get:Rule
     val warmUpRule = WarmUpRule()
-
 
     private val mockMediaUri: Uri = mockk("localMediaUri")
     private val localMediaFactory = FakeLocalMediaFactory(mockMediaUri)
@@ -136,7 +134,7 @@ class MediaViewerPresenterTest {
             assertThat(failureState.downloadedMedia).isInstanceOf(AsyncData.Failure::class.java)
             mediaLoader.shouldFail = false
             failureState.eventSink(MediaViewerEvents.RetryLoading)
-            //There is one recomposition because of the retry mechanism
+            // There is one recomposition because of the retry mechanism
             skipItems(1)
             val retryLoadingState = awaitItem()
             assertThat(retryLoadingState.downloadedMedia).isInstanceOf(AsyncData.Loading::class.java)

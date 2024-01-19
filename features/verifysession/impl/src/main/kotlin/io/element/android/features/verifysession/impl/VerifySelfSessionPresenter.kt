@@ -40,7 +40,6 @@ class VerifySelfSessionPresenter @Inject constructor(
     private val sessionVerificationService: SessionVerificationService,
     private val stateMachine: VerifySelfSessionStateMachine,
 ) : Presenter<VerifySelfSessionState> {
-
     @Composable
     override fun present(): VerifySelfSessionState {
         LaunchedEffect(Unit) {

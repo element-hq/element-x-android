@@ -38,7 +38,6 @@ class SearchAccountProviderPresenter @Inject constructor(
     private val homeserverResolver: HomeserverResolver,
     private val changeServerPresenter: ChangeServerPresenter,
 ) : Presenter<SearchAccountProviderState> {
-
     @Composable
     override fun present(): SearchAccountProviderState {
         var userInput by rememberSaveable {

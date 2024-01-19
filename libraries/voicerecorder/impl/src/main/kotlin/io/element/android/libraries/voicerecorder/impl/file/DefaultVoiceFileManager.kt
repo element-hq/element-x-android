@@ -32,7 +32,6 @@ class DefaultVoiceFileManager @Inject constructor(
     private val config: VoiceFileConfig,
     room: MatrixRoom,
 ) : VoiceFileManager {
-
     private val roomId: RoomId = room.roomId
 
     override fun createFile(): File {

@@ -36,7 +36,6 @@ class SendLocationNode @AssistedInject constructor(
     private val presenter: SendLocationPresenter,
     analyticsService: AnalyticsService,
 ) : Node(buildContext, plugins = plugins) {
-
     init {
         lifecycle.subscribe(
             onResume = {

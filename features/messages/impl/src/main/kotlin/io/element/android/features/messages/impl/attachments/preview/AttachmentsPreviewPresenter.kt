@@ -40,7 +40,6 @@ class AttachmentsPreviewPresenter @AssistedInject constructor(
     @Assisted private val attachment: Attachment,
     private val mediaSender: MediaSender,
 ) : Presenter<AttachmentsPreviewState> {
-
     @AssistedFactory
     interface Factory {
         fun create(attachment: Attachment): AttachmentsPreviewPresenter
@@ -48,7 +47,6 @@ class AttachmentsPreviewPresenter @AssistedInject constructor(
 
     @Composable
     override fun present(): AttachmentsPreviewState {
-
         val coroutineScope = rememberCoroutineScope()
 
         val sendActionState = remember {

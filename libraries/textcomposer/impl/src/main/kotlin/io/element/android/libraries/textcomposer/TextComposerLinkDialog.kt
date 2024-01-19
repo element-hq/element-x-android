@@ -24,13 +24,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import io.element.android.compound.theme.ElementTheme
 import io.element.android.libraries.designsystem.components.dialogs.ListDialog
 import io.element.android.libraries.designsystem.components.list.TextFieldListItem
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.ListItem
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.compound.theme.ElementTheme
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.wysiwyg.view.models.LinkAction
 
@@ -234,4 +234,3 @@ internal fun TextComposerLinkDialogEditLinkPreview() = ElementPreview {
         onRemoveLinkRequest = {},
     )
 }
-

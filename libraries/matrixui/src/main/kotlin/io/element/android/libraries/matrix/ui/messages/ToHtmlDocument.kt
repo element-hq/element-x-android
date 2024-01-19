@@ -37,17 +37,17 @@ fun FormattedBody.toHtmlDocument(prefix: String? = null): Document? {
         // We don't trim the start in case it's used as indentation.
         ?.trimEnd()
         ?.let { formattedBody ->
-        val dom = if (prefix != null) {
-            Jsoup.parse("$prefix $formattedBody")
-        } else {
-            Jsoup.parse(formattedBody)
+            val dom = if (prefix != null) {
+                Jsoup.parse("$prefix $formattedBody")
+            } else {
+                Jsoup.parse(formattedBody)
+            }
+
+            // Prepend `@` to mentions
+            fixMentions(dom)
+
+            dom
         }
-
-        // Prepend `@` to mentions
-        fixMentions(dom)
-
-        dom
-    }
 }
 
 private fun fixMentions(dom: Document) {

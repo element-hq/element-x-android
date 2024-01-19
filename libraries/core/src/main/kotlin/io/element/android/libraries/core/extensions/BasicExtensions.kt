@@ -27,20 +27,6 @@ inline fun <T> T.ooi(block: (T) -> Unit): T = also(block)
 fun CharSequence?.orEmpty() = this ?: ""
 
 /**
- * Check if a CharSequence is a phone number.
- */
-/*
-fun CharSequence.isMsisdn(): Boolean {
-    return try {
-        PhoneNumberUtil.getInstance().parse(ensurePrefix("+"), null)
-        true
-    } catch (e: NumberParseException) {
-        false
-    }
-}
- */
-
-/**
  * Useful to append a String at the end of a filename but before the extension if any
  * Ex:
  * - "file.txt".insertBeforeLast("_foo") will return "file_foo.txt"

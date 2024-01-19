@@ -30,8 +30,7 @@ import javax.inject.Inject
 
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
-class NoopAnalyticsService @Inject constructor(
-) : AnalyticsService {
+class NoopAnalyticsService @Inject constructor() : AnalyticsService {
     override fun getAvailableAnalyticsProviders(): Set<AnalyticsProvider> = emptySet()
     override fun getUserConsent(): Flow<Boolean> = flowOf(false)
     override suspend fun setUserConsent(userConsent: Boolean) = Unit

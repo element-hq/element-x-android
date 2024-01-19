@@ -29,7 +29,6 @@ import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.plus
 
 object Singleton {
-
     private val buildMeta = BuildMeta(
         isDebuggable = true,
         buildType = BuildType.DEBUG,
@@ -38,11 +37,14 @@ object Singleton {
         lowPrivacyLoggingEnabled = false,
         versionName = "0.1.0",
         versionCode = 1,
-        gitRevision = "TODO", // BuildConfig.GIT_REVISION,
-        gitRevisionDate = "TODO", //  BuildConfig.GIT_REVISION_DATE,
-        gitBranchName = "TODO", //  BuildConfig.GIT_BRANCH_NAME,
-        flavorDescription = "TODO", //  BuildConfig.FLAVOR_DESCRIPTION,
-        flavorShortDescription = "TODO", //  BuildConfig.SHORT_FLAVOR_DESCRIPTION,
+        // BuildConfig.GIT_REVISION,
+        gitRevision = "TODO",
+        //  BuildConfig.GIT_REVISION_DATE,
+        gitRevisionDate = "TODO",
+        //  BuildConfig.GIT_BRANCH_NAME,
+        gitBranchName = "TODO",
+        flavorDescription = "NA",
+        flavorShortDescription = "NA",
     )
 
     init {

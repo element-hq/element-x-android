@@ -46,7 +46,6 @@ class PollHistoryPresenter @Inject constructor(
     private val endPollAction: EndPollAction,
     private val pollHistoryItemFactory: PollHistoryItemsFactory,
 ) : Presenter<PollHistoryState> {
-
     @Composable
     override fun present(): PollHistoryState {
         // TODO use room.rememberPollHistory() when working properly?
@@ -86,7 +85,6 @@ class PollHistoryPresenter @Inject constructor(
                 }
             }
         }
-
 
         return PollHistoryState(
             isLoading = isLoading,

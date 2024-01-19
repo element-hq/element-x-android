@@ -103,7 +103,6 @@ import kotlin.time.Duration.Companion.milliseconds
 
 @Suppress("LargeClass")
 class MessagesPresenterTest {
-
     @get:Rule
     val warmUpRule = WarmUpRule()
 
@@ -685,7 +684,6 @@ class MessagesPresenterTest {
             navigator = navigator,
             encryptionService = FakeEncryptionService(),
             verificationService = FakeSessionVerificationService(),
-            featureFlagService = FakeFeatureFlagService(),
             redactedVoiceMessageManager = FakeRedactedVoiceMessageManager(),
             endPollAction = FakeEndPollAction(),
             sendPollResponseAction = FakeSendPollResponseAction(),

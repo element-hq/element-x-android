@@ -128,7 +128,6 @@ data class ContentAvoidingLayoutData(
  * A scope for the [ContentAvoidingLayout].
  */
 interface ContentAvoidingLayoutScope {
-
     /**
      * It should be called when the content layout changes, so it can update the [ContentAvoidingLayoutData] and measure and layout the content properly.
      */

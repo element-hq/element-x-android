@@ -140,10 +140,6 @@ fun Icon(
 
 @Preview(group = PreviewGroup.Icons)
 @Composable
-internal fun IconImageVectorPreview() =
-    ElementThemedPreview { ContentToPreview() }
-
-@Composable
-private fun ContentToPreview() {
+internal fun IconImageVectorPreview() = ElementThemedPreview {
     Icon(imageVector = CompoundIcons.Close, contentDescription = null)
 }

@@ -22,7 +22,7 @@ import dagger.Provides
 import io.element.android.libraries.di.AppScope
 import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
-import java.util.*
+import java.util.Locale
 
 @Module
 @ContributesTo(AppScope::class)

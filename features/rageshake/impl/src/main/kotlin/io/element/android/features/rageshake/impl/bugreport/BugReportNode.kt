@@ -38,7 +38,6 @@ class BugReportNode @AssistedInject constructor(
     @Assisted plugins: List<Plugin>,
     private val presenter: BugReportPresenter,
 ) : Node(buildContext, plugins = plugins) {
-
     @Composable
     override fun View(modifier: Modifier) {
         val state = presenter.present()

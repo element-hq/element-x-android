@@ -41,6 +41,8 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import io.element.android.compound.theme.ElementTheme
+import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.securebackup.impl.R
 import io.element.android.features.securebackup.impl.tools.RecoveryKeyVisualTransformation
 import io.element.android.libraries.designsystem.modifiers.clickableIfNotNull
@@ -52,8 +54,6 @@ import io.element.android.libraries.designsystem.theme.components.OutlinedTextFi
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.autofill
 import io.element.android.libraries.designsystem.utils.CommonDrawables
-import io.element.android.compound.theme.ElementTheme
-import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
@@ -209,10 +209,11 @@ private fun RecoveryKeyFooter(state: RecoveryKeyViewState) {
                     )
                     Text(
                         text = stringResource(
-                            id = if (state.recoveryKeyUserStory == RecoveryKeyUserStory.Change)
+                            id = if (state.recoveryKeyUserStory == RecoveryKeyUserStory.Change) {
                                 R.string.screen_recovery_key_change_generate_key_description
-                            else
+                            } else {
                                 R.string.screen_recovery_key_setup_generate_key_description
+                            }
                         ),
                         color = ElementTheme.colors.textSecondary,
                         modifier = Modifier.padding(start = 8.dp),

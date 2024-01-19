@@ -47,7 +47,6 @@ class DefaultAppNavigationStateService @Inject constructor(
     private val appForegroundStateService: AppForegroundStateService,
     private val coroutineScope: CoroutineScope,
 ) : AppNavigationStateService {
-
     private val state = MutableStateFlow(
         AppNavigationState(
             navigationState = NavigationState.Root,

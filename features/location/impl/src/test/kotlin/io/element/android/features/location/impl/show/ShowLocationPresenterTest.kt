@@ -35,7 +35,6 @@ import org.junit.Rule
 import org.junit.Test
 
 class ShowLocationPresenterTest {
-
     @get:Rule
     val warmUpRule = WarmUpRule()
 

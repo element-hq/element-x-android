@@ -30,7 +30,6 @@ import org.junit.Rule
 import org.junit.Test
 
 class CrashDetectionPresenterTest {
-
     @get:Rule
     val warmUpRule = WarmUpRule()
 
@@ -58,7 +57,6 @@ class CrashDetectionPresenterTest {
             skipItems(1)
             val initialState = awaitItem()
             assertThat(initialState.crashDetected).isTrue()
-
         }
     }
 

@@ -22,5 +22,7 @@ data class RoomNotificationSettings(
 )
 
 enum class RoomNotificationMode {
-    ALL_MESSAGES, MENTIONS_AND_KEYWORDS_ONLY, MUTE
+    ALL_MESSAGES,
+    MENTIONS_AND_KEYWORDS_ONLY,
+    MUTE
 }

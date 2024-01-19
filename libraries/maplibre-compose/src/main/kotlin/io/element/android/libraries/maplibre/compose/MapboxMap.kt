@@ -24,7 +24,7 @@ import android.content.res.Configuration
 import android.os.Bundle
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.material.Text
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Composition
 import androidx.compose.runtime.CompositionContext
@@ -81,7 +81,10 @@ public fun MapboxMap(
     uiSettings: MapUiSettings = DefaultMapUiSettings,
     symbolManagerSettings: MapSymbolManagerSettings = DefaultMapSymbolManagerSettings,
     locationSettings: MapLocationSettings = DefaultMapLocationSettings,
-    content: (@Composable @MapboxMapComposable () -> Unit)? = null,
+    content: (
+        @Composable @MapboxMapComposable
+        () -> Unit
+    )? = null,
 ) {
     // When in preview, early return a Box with the received modifier preserving layout
     if (LocalInspectionMode.current) {
@@ -158,7 +161,8 @@ private suspend inline fun CompositionContext.newComposition(
     val style = map.awaitStyle(context, styleUri, images)
     val symbolManager = SymbolManager(mapView, map, style)
     return Composition(
-        MapApplier(map, style, symbolManager), this
+        MapApplier(map, style, symbolManager),
+        this
     ).apply {
         setContent(content)
     }
@@ -234,7 +238,7 @@ private fun MapView.lifecycleObserver(previousState: MutableState<Lifecycle.Even
             Lifecycle.Event.ON_PAUSE -> this.onPause()
             Lifecycle.Event.ON_STOP -> this.onStop()
             Lifecycle.Event.ON_DESTROY -> {
-                //handled in onDispose
+                // handled in onDispose
             }
             Lifecycle.Event.ON_ANY -> error("ON_ANY should never be used")
         }

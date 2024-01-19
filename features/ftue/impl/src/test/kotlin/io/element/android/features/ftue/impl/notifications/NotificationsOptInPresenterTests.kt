@@ -39,7 +39,6 @@ import org.junit.Rule
 import org.junit.Test
 
 class NotificationsOptInPresenterTests {
-
     @get:Rule
     val warmUpRule = WarmUpRule()
 

@@ -23,9 +23,8 @@ import org.json.JSONObject
 import timber.log.Timber
 
 internal class FormattedJsonHttpLogger(
-        private val level: HttpLoggingInterceptor.Level
+    private val level: HttpLoggingInterceptor.Level
 ) : HttpLoggingInterceptor.Logger {
-
     companion object {
         private const val INDENT_SPACE = 2
     }
@@ -68,8 +67,8 @@ internal class FormattedJsonHttpLogger(
 
     private fun logJson(formattedJson: String) {
         formattedJson
-                .lines()
-                .dropLastWhile { it.isEmpty() }
-                .forEach { Timber.v(it) }
+            .lines()
+            .dropLastWhile { it.isEmpty() }
+            .forEach { Timber.v(it) }
     }
 }

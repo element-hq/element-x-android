@@ -59,14 +59,10 @@ fun MediumTopAppBar(
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Preview(group = PreviewGroup.AppBars)
 @Composable
-internal fun MediumTopAppBarPreview() =
-    ElementThemedPreview { ContentToPreview() }
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun ContentToPreview() {
+internal fun MediumTopAppBarPreview() = ElementThemedPreview {
     MediumTopAppBar(
         title = { Text(text = "Title") },
         navigationIcon = { BackButton(onClick = {}) },

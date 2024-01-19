@@ -140,5 +140,4 @@ class EditDefaultNotificationSettingsPresenterTests {
             matrixClient = matrixClient
         )
     }
-
 }

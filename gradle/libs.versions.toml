@@ -13,9 +13,9 @@ core = "1.12.0"
 datastore = "1.0.0"
 constraintlayout = "2.1.4"
 constraintlayout_compose = "1.0.1"
-lifecycle = "2.7.0-rc02"
+lifecycle = "2.7.0"
 activity = "1.8.2"
-media3 = "1.2.0"
+media3 = "1.2.1"
 
 # Compose
 compose_bom = "2023.10.01"
@@ -33,12 +33,12 @@ test_core = "1.5.0"
 #other
 coil = "2.5.0"
 datetime = "0.5.0"
-dependencyAnalysis = "1.28.0"
+dependencyAnalysis = "1.29.0"
 serialization_json = "1.6.2"
 showkase = "1.0.2"
 appyx = "1.4.0"
 sqldelight = "2.0.1"
-wysiwyg = "2.24.0"
+wysiwyg = "2.25.0"
 
 # DI
 dagger = "2.50"
@@ -51,6 +51,7 @@ autoservice = "1.1.1"
 junit = "4.13.2"
 androidx-test-ext-junit = "1.1.5"
 espresso-core = "3.5.1"
+kover = "0.7.5"
 
 [libraries]
 # Project
@@ -58,9 +59,10 @@ android_gradle_plugin = { module = "com.android.tools.build:gradle", version.ref
 # https://developer.android.com/studio/write/java8-support#library-desugaring-versions
 android_desugar = "com.android.tools:desugar_jdk_libs:2.0.4"
 kotlin_gradle_plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
+kover_gradle_plugin = { module = "org.jetbrains.kotlinx:kover-gradle-plugin", version.ref = "kover" }
 gms_google_services = "com.google.gms:google-services:4.4.0"
 # https://firebase.google.com/docs/android/setup#available-libraries
-google_firebase_bom = "com.google.firebase:firebase-bom:32.7.0"
+google_firebase_bom = "com.google.firebase:firebase-bom:32.7.1"
 firebase_appdistribution_gradle = { module = "com.google.firebase:firebase-appdistribution-gradle", version.ref = "firebaseAppDistribution" }
 autonomousapps_dependencyanalysis_plugin = { module = "com.autonomousapps:dependency-analysis-gradle-plugin", version.ref = "dependencyAnalysis" }
 
@@ -91,7 +93,8 @@ androidx_preference = "androidx.preference:preference:1.2.1"
 androidx_webkit = "androidx.webkit:webkit:1.9.0"
 
 androidx_compose_bom = { module = "androidx.compose:compose-bom", version.ref = "compose_bom" }
-androidx_compose_material3 = "androidx.compose.material3:material3:1.2.0-alpha11" # Keep using alpha11 for now as it breaks timeline scrolling a bit.
+# When Material3 updates its transitive Compose dependencies, take a look at the constraints in `DependencyHandleScope.kt`. We may be able to remove the workaround there.
+androidx_compose_material3 = "androidx.compose.material3:material3:1.2.0-beta02"
 androidx_compose_ui = { module = "androidx.compose.ui:ui" }
 androidx_compose_ui_tooling = { module = "androidx.compose.ui:ui-tooling" }
 androidx_compose_ui_tooling_preview = { module = "androidx.compose.ui:ui-tooling-preview" }
@@ -131,7 +134,7 @@ test_mockk = "io.mockk:mockk:1.13.9"
 test_konsist = "com.lemonappdev:konsist:0.13.0"
 test_turbine = "app.cash.turbine:turbine:1.0.0"
 test_truth = "com.google.truth:truth:1.2.0"
-test_parameter_injector = "com.google.testparameterinjector:test-parameter-injector:1.14"
+test_parameter_injector = "com.google.testparameterinjector:test-parameter-injector:1.15"
 test_robolectric = "org.robolectric:robolectric:4.11.1"
 test_appyx_junit = { module = "com.bumble.appyx:testing-junit4", version.ref = "appyx" }
 
@@ -150,7 +153,7 @@ jsoup = "org.jsoup:jsoup:1.17.2"
 appyx_core = { module = "com.bumble.appyx:core", version.ref = "appyx" }
 molecule-runtime = "app.cash.molecule:molecule-runtime:1.3.2"
 timber = "com.jakewharton.timber:timber:5.0.1"
-matrix_sdk = "org.matrix.rustcomponents:sdk-android:0.1.83"
+matrix_sdk = "org.matrix.rustcomponents:sdk-android:0.1.84"
 matrix_richtexteditor = { module = "io.element.android:wysiwyg", version.ref = "wysiwyg" }
 matrix_richtexteditor_compose = { module = "io.element.android:wysiwyg-compose", version.ref = "wysiwyg" }
 sqldelight-driver-android = { module = "app.cash.sqldelight:android-driver", version.ref = "sqldelight" }
@@ -167,11 +170,11 @@ maplibre = "org.maplibre.gl:android-sdk:10.2.0"
 maplibre_ktx = "org.maplibre.gl:android-sdk-ktx-v7:2.0.2"
 maplibre_annotation = "org.maplibre.gl:android-plugin-annotation-v9:2.0.2"
 opusencoder = "io.element.android:opusencoder:1.1.0"
-kotlinpoet = "com.squareup:kotlinpoet:1.15.3"
+kotlinpoet = "com.squareup:kotlinpoet:1.16.0"
 
 # Analytics
-posthog = "com.posthog:posthog-android:3.1.0"
-sentry = "io.sentry:sentry-android:7.1.0"
+posthog = "com.posthog:posthog-android:3.1.3"
+sentry = "io.sentry:sentry-android:7.2.0"
 matrix_analytics_events = "com.github.matrix-org:matrix-analytics-events:aa14cbcdf81af2746d20a71779ec751f971e1d7f"
 
 # Emojibase
@@ -210,12 +213,12 @@ kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 anvil = { id = "com.squareup.anvil", version.ref = "anvil" }
 detekt = "io.gitlab.arturbosch.detekt:1.23.4"
-ktlint = "org.jlleitschuh.gradle.ktlint:12.0.3"
+ktlint = "org.jlleitschuh.gradle.ktlint:12.1.0"
 dependencygraph = "com.savvasdalkitsis.module-dependency-graph:0.12"
-dependencycheck = "org.owasp.dependencycheck:9.0.8"
+dependencycheck = "org.owasp.dependencycheck:9.0.9"
 dependencyanalysis = { id = "com.autonomousapps.dependency-analysis", version.ref = "dependencyAnalysis" }
 paparazzi = "app.cash.paparazzi:1.3.1"
-kover = "org.jetbrains.kotlinx.kover:0.6.1"
+kover = { id = "org.jetbrains.kotlinx.kover", version.ref = "kover" }
 sqldelight = { id = "app.cash.sqldelight", version.ref = "sqldelight" }
 firebaseAppDistribution = { id = "com.google.firebase.appdistribution", version.ref = "firebaseAppDistribution" }
 knit = { id = "org.jetbrains.kotlinx.knit", version = "0.5.0" }

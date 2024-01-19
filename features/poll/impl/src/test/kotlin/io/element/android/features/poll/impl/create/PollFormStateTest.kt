@@ -23,7 +23,6 @@ import kotlinx.collections.immutable.toPersistentList
 import org.junit.Test
 
 class PollFormStateTest {
-
     @Test
     fun `with new answer`() {
         val state = PollFormState.Empty
@@ -133,7 +132,6 @@ class PollFormStateTest {
         assertThat(state.pollKind).isEqualTo(PollKind.Undisclosed)
     }
 }
-
 
 private fun aValidPollFormState(): PollFormState {
     return PollFormState.Empty.copy(

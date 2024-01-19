@@ -39,7 +39,6 @@ class LockScreenSettingsPresenter @Inject constructor(
     private val biometricUnlockManager: BiometricUnlockManager,
     private val coroutineScope: CoroutineScope,
 ) : Presenter<LockScreenSettingsState> {
-
     @Composable
     override fun present(): LockScreenSettingsState {
         val showRemovePinOption by produceState(initialValue = false) {

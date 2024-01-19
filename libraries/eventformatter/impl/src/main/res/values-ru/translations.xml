@@ -55,5 +55,5 @@
   <string name="state_event_room_topic_removed_by_you">"Вы удалили тему комнаты"</string>
   <string name="state_event_room_unban">"%1$s разблокирован %2$s"</string>
   <string name="state_event_room_unban_by_you">"Вы разблокировали %1$s"</string>
-  <string name="state_event_room_unknown_membership_change">"%1$s внес неизвестное изменение в составе"</string>
+  <string name="state_event_room_unknown_membership_change">"%1$s внес неизвестное изменение для своих участников"</string>
 </resources>

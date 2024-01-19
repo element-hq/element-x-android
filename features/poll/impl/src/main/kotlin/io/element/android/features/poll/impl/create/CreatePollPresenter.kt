@@ -52,7 +52,6 @@ class CreatePollPresenter @AssistedInject constructor(
     @Assisted private val navigateUp: () -> Unit,
     @Assisted private val mode: CreatePollMode,
 ) : Presenter<CreatePollState> {
-
     @AssistedFactory
     interface Factory {
         fun create(backNavigator: () -> Unit, mode: CreatePollMode): CreatePollPresenter
@@ -144,7 +143,7 @@ class CreatePollPresenter @AssistedInject constructor(
                     poll = poll.withNewAnswer()
                 }
                 is CreatePollEvents.RemoveAnswer -> {
-                    poll= poll.withAnswerRemoved(event.index)
+                    poll = poll.withAnswerRemoved(event.index)
                 }
                 is CreatePollEvents.SetAnswer -> {
                     poll = poll.withAnswerChanged(event.index, event.text)
@@ -243,4 +242,3 @@ fun PollFormState.toUiAnswers(): ImmutableList<Answer> {
         )
     }.toImmutableList()
 }
-

@@ -17,10 +17,10 @@
 package io.element.android.libraries.textcomposer.model
 
 sealed interface VoiceMessagePlayerEvent {
-    data object Play: VoiceMessagePlayerEvent
-    data object Pause: VoiceMessagePlayerEvent
+    data object Play : VoiceMessagePlayerEvent
+    data object Pause : VoiceMessagePlayerEvent
 
     data class Seek(
         val position: Float
-    ): VoiceMessagePlayerEvent
+    ) : VoiceMessagePlayerEvent
 }

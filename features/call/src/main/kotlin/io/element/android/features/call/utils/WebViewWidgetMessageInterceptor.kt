@@ -28,7 +28,6 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 class WebViewWidgetMessageInterceptor(
     private val webView: WebView,
 ) : WidgetMessageInterceptor {
-
     companion object {
         // We call both the WebMessageListener and the JavascriptInterface objects in JS with this
         // 'listenerName' so they can both receive the data from the WebView when
@@ -56,7 +55,7 @@ class WebViewWidgetMessageInterceptor(
                                 || !message.data.response && message.data.api == "fromWidget") {
                                 let json = JSON.stringify(event.data) 
                                 ${"console.log('message sent: ' + json);".takeIf { BuildConfig.DEBUG } }
-                                ${LISTENER_NAME}.postMessage(json);
+                                $LISTENER_NAME.postMessage(json);
                             } else {
                                 ${"console.log('message received (ignored): ' + JSON.stringify(event.data));".takeIf { BuildConfig.DEBUG } }
                             }

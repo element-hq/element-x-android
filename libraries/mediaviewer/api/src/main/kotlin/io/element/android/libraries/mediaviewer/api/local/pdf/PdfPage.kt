@@ -39,7 +39,6 @@ class PdfPage(
     private val pdfRenderer: PdfRenderer,
     private val coroutineScope: CoroutineScope,
 ) {
-
     sealed interface State {
         data class Loading(val width: Int, val height: Int) : State
         data class Loaded(val bitmap: Bitmap) : State
@@ -92,7 +91,9 @@ class PdfPage(
     private fun PdfRenderer.openPageRenderAndClose(index: Int, bitmapWidth: Int, bitmapHeight: Int): Bitmap {
         fun createBitmap(bitmapWidth: Int, bitmapHeight: Int): Bitmap {
             val bitmap = Bitmap.createBitmap(
-                bitmapWidth, bitmapHeight, Bitmap.Config.ARGB_8888
+                bitmapWidth,
+                bitmapHeight,
+                Bitmap.Config.ARGB_8888
             )
             val canvas = Canvas(bitmap)
             canvas.drawColor(Color.WHITE)
@@ -106,6 +107,3 @@ class PdfPage(
         }
     }
 }
-
-
-

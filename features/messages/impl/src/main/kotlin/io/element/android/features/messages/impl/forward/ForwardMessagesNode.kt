@@ -53,7 +53,6 @@ class ForwardMessagesNode @AssistedInject constructor(
     buildContext = buildContext,
     plugins = plugins,
 ) {
-
     @Parcelize
     object NavTarget : Parcelable
 

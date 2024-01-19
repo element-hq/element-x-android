@@ -38,7 +38,6 @@ class RoomGroupMessageCreator @Inject constructor(
     private val stringProvider: StringProvider,
     private val notificationCreator: NotificationCreator
 ) {
-
     suspend fun createRoomMessage(
         currentUser: MatrixUser,
         events: List<NotifiableMessageEvent>,

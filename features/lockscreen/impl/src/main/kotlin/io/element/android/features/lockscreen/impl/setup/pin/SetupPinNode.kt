@@ -32,7 +32,6 @@ class SetupPinNode @AssistedInject constructor(
     @Assisted plugins: List<Plugin>,
     private val presenter: SetupPinPresenter,
 ) : Node(buildContext, plugins = plugins) {
-
     @Composable
     override fun View(modifier: Modifier) {
         val state = presenter.present()

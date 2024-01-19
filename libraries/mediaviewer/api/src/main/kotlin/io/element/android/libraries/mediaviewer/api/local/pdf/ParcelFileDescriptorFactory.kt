@@ -22,7 +22,6 @@ import android.os.ParcelFileDescriptor
 import java.io.File
 
 class ParcelFileDescriptorFactory(private val context: Context) {
-
     fun create(model: Any?) = runCatching {
         when (model) {
             is File -> ParcelFileDescriptor.open(model, ParcelFileDescriptor.MODE_READ_ONLY)

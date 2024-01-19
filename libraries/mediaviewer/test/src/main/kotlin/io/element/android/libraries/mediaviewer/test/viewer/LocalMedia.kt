@@ -14,8 +14,17 @@
  * limitations under the License.
  */
 
-package io.element.android.appnav.loggedin
+package io.element.android.libraries.mediaviewer.test.viewer
 
-// sealed interface LoggedInEvents {
-//     data object MyEvent : LoggedInEvents
-// }
+import android.net.Uri
+import io.element.android.libraries.mediaviewer.api.local.LocalMedia
+import io.element.android.libraries.mediaviewer.api.local.MediaInfo
+import io.element.android.libraries.mediaviewer.api.local.anImageInfo
+
+fun aLocalMedia(
+    uri: Uri,
+    mediaInfo: MediaInfo = anImageInfo(),
+) = LocalMedia(
+    uri = uri,
+    info = mediaInfo
+)

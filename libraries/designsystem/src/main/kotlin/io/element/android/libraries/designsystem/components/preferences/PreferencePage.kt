@@ -95,7 +95,6 @@ private fun PreferenceTopAppBar(
                 overflow = TextOverflow.Ellipsis
             )
         }
-
     )
 }
 

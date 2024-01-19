@@ -40,4 +40,3 @@ interface AppNavigationStateService {
     fun onNavigateToThread(owner: String, threadId: ThreadId)
     fun onLeavingThread(owner: String)
 }
-

@@ -12,7 +12,7 @@
   <string name="screen_room_details_already_a_member">"Уже зарегистрирован"</string>
   <string name="screen_room_details_already_invited">"Уже приглашены"</string>
   <string name="screen_room_details_edit_room_title">"Редактировать комнату"</string>
-  <string name="screen_room_details_edition_error">"Произошла неизвестная ошибка, и информацию нельзя было изменить."</string>
+  <string name="screen_room_details_edition_error">"Произошла неизвестная ошибка и информацию не удалось изменить."</string>
   <string name="screen_room_details_edition_error_title">"Не удалось обновить комнату"</string>
   <string name="screen_room_details_encryption_enabled_subtitle">"Сообщения зашифрованы. Только у вас и у получателей есть уникальные ключи для их разблокировки."</string>
   <string name="screen_room_details_encryption_enabled_title">"Шифрование сообщений включено"</string>

@@ -46,7 +46,6 @@ import kotlin.time.Duration.Companion.seconds
 class MediaPlayerImpl @Inject constructor(
     private val player: SimplePlayer,
 ) : MediaPlayer {
-
     private val listener = object : SimplePlayer.Listener {
         override fun onIsPlayingChanged(isPlaying: Boolean) {
             _state.update {

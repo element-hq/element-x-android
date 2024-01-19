@@ -28,7 +28,6 @@ import javax.inject.Inject
 @ContributesBinding(AppScope::class)
 @SingleIn(AppScope::class)
 class DefaultAppErrorStateService @Inject constructor() : AppErrorStateService {
-
     private val currentAppErrorState = MutableStateFlow<AppErrorState>(AppErrorState.NoError)
     override val appErrorStateFlow: StateFlow<AppErrorState> = currentAppErrorState
 

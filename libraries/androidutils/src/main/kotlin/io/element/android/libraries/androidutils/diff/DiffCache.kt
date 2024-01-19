@@ -40,7 +40,6 @@ interface MutableDiffCache<E> : DiffCache<E> {
  *
  */
 class MutableListDiffCache<E>(private val mutableList: MutableList<E?> = ArrayList()) : MutableDiffCache<E> {
-
     override fun removeAt(index: Int): E? {
         return mutableList.removeAt(index)
     }

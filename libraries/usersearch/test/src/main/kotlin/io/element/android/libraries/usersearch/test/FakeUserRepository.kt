@@ -22,7 +22,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 
 class FakeUserRepository : UserRepository {
-
     var providedQuery: String? = null
         private set
 
@@ -36,5 +35,4 @@ class FakeUserRepository : UserRepository {
     suspend fun emitState(state: UserSearchResultState) {
         flow.emit(state)
     }
-
 }

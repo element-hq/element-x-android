@@ -1,0 +1,3 @@
+Try mitigating unexpected logouts by making getting/storing session data use a Mutex for synchronization.
+
+Also added some more logs so we can understand exactly where it's failing.

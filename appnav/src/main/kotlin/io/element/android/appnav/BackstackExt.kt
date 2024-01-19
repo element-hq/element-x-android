@@ -40,4 +40,3 @@ fun <T : Any> BackStack<T>.removeLast(element: T) {
     } ?: return
     accept(Remove(lastExpectedNavElement.key))
 }
-

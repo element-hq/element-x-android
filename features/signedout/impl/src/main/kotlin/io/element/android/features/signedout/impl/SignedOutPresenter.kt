@@ -31,11 +31,11 @@ import io.element.android.libraries.sessionstorage.api.SessionStore
 import kotlinx.coroutines.launch
 
 class SignedOutPresenter @AssistedInject constructor(
-    @Assisted private val sessionId: String, /* Cannot inject SessionId */
+    // Cannot inject SessionId
+    @Assisted private val sessionId: String,
     private val sessionStore: SessionStore,
     private val buildMeta: BuildMeta,
 ) : Presenter<SignedOutState> {
-
     @AssistedFactory
     interface Factory {
         fun create(sessionId: String): SignedOutPresenter

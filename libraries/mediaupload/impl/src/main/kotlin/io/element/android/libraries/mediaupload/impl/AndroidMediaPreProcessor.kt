@@ -124,7 +124,6 @@ class AndroidMediaPreProcessor @Inject constructor(
     }
 
     private suspend fun processImage(uri: Uri, mimeType: String, shouldBeCompressed: Boolean): MediaUploadInfo {
-
         suspend fun processImageWithCompression(): MediaUploadInfo {
             // Read the orientation metadata from its own stream. Trying to reuse this stream for compression will fail.
             val orientation = contentResolver.openInputStream(uri).use { input ->
@@ -272,4 +271,3 @@ private fun MediaMetadataRetriever.extractDuration(): Duration {
     val durationInMs = extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)?.toLong() ?: 0L
     return durationInMs.milliseconds
 }
-

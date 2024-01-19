@@ -48,7 +48,6 @@ import kotlin.random.Random
 fun aTimelineState(timelineItems: ImmutableList<TimelineItem> = persistentListOf()) = TimelineState(
     timelineItems = timelineItems,
     timelineRoomInfo = aTimelineRoomInfo(),
-    showReadReceipts = false,
     paginationState = MatrixTimeline.PaginationState(
         isBackPaginating = false,
         hasMoreToLoadBackwards = true,
@@ -179,7 +178,9 @@ internal fun aTimelineItemDebugInfo(
     originalJson: String? = null,
     latestEditedJson: String? = null,
 ) = TimelineItemDebugInfo(
-    model, originalJson, latestEditedJson
+    model,
+    originalJson,
+    latestEditedJson
 )
 
 internal fun aTimelineItemReadReceipts(): TimelineItemReadReceipts {
@@ -188,13 +189,16 @@ internal fun aTimelineItemReadReceipts(): TimelineItemReadReceipts {
     )
 }
 
-internal fun aGroupedEvents(id: Long = 0): TimelineItem.GroupedEvents {
+internal fun aGroupedEvents(
+    id: Long = 0,
+    withReadReceipts: Boolean = false,
+): TimelineItem.GroupedEvents {
     val event1 = aTimelineItemEvent(
         isMine = true,
         content = aTimelineItemStateEventContent(),
         groupPosition = TimelineItemGroupPosition.None,
         readReceiptState = TimelineItemReadReceipts(
-            receipts = listOf(aReadReceiptData(0)).toPersistentList(),
+            receipts = (if (withReadReceipts) listOf(aReadReceiptData(0)) else emptyList()).toImmutableList()
         ),
     )
     val event2 = aTimelineItemEvent(
@@ -202,7 +206,7 @@ internal fun aGroupedEvents(id: Long = 0): TimelineItem.GroupedEvents {
         content = aTimelineItemStateEventContent(body = "Another state event"),
         groupPosition = TimelineItemGroupPosition.None,
         readReceiptState = TimelineItemReadReceipts(
-            receipts = listOf(aReadReceiptData(1)).toPersistentList(),
+            receipts = (if (withReadReceipts) listOf(aReadReceiptData(1)) else emptyList()).toImmutableList()
         ),
     )
     val events = listOf(event1, event2)

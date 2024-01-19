@@ -151,7 +151,6 @@ fun <T> SearchBar(
 }
 
 object ElementSearchBarDefaults {
-
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     fun inactiveColors() = SearchBarDefaults.colors(

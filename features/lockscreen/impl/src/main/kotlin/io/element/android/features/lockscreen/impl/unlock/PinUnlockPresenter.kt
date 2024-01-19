@@ -45,7 +45,6 @@ class PinUnlockPresenter @Inject constructor(
     private val coroutineScope: CoroutineScope,
     private val pinUnlockHelper: PinUnlockHelper,
 ) : Presenter<PinUnlockState> {
-
     @Composable
     override fun present(): PinUnlockState {
         val pinEntryState = remember {

@@ -59,7 +59,6 @@ class FakeMatrixClient(
     private val encryptionService: FakeEncryptionService = FakeEncryptionService(),
     private val accountManagementUrlString: Result<String?> = Result.success(null),
 ) : MatrixClient {
-
     var setDisplayNameCalled: Boolean = false
         private set
     var uploadAvatarCalled: Boolean = false

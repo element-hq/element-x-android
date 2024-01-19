@@ -31,7 +31,6 @@ import java.security.InvalidKeyException
 import javax.crypto.Cipher
 
 interface BiometricUnlock {
-
     interface Callback {
         fun onBiometricSetupError()
         fun onBiometricUnlockSuccess()
@@ -62,7 +61,6 @@ class DefaultBiometricUnlock(
     private val keyAlias: String,
     private val callbacks: List<BiometricUnlock.Callback>
 ) : BiometricUnlock {
-
     override val isActive: Boolean = true
 
     private lateinit var cryptoObject: CryptoObject
@@ -105,7 +103,6 @@ private class AuthenticationCallback(
     private val callbacks: List<BiometricUnlock.Callback>,
     private val deferredAuthenticationResult: CompletableDeferred<BiometricUnlock.AuthenticationResult>,
 ) : BiometricPrompt.AuthenticationCallback() {
-
     override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
         super.onAuthenticationError(errorCode, errString)
         val biometricUnlockError = BiometricUnlockError(errorCode, errString.toString())

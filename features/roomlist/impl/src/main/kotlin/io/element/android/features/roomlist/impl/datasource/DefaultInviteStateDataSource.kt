@@ -40,7 +40,6 @@ class DefaultInviteStateDataSource @Inject constructor(
     private val seenInvitesStore: SeenInvitesStore,
     private val coroutineDispatchers: CoroutineDispatchers,
 ) : InviteStateDataSource {
-
     @Composable
     override fun inviteState(): InvitesState {
         val invites by client

@@ -38,7 +38,6 @@ class HomeserverResolver @Inject constructor(
     private val dispatchers: CoroutineDispatchers,
     private val wellknownRequest: WellknownRequest,
 ) {
-
     suspend fun resolve(userInput: String): Flow<List<HomeserverData>> = flow {
         val flowContext = currentCoroutineContext()
         val trimmedUserInput = userInput.trim()
@@ -90,9 +89,9 @@ class HomeserverResolver @Inject constructor(
             if (data.contains(".")) {
                 // TLD detected?
             } else {
-                add("${data}.org")
-                add("${data}.com")
-                add("${data}.io")
+                add("$data.org")
+                add("$data.com")
+                add("$data.io")
             }
             // Always try what the user has entered
             add(data)

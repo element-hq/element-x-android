@@ -35,7 +35,6 @@ class NotificationRenderer @Inject constructor(
     private val notificationDisplayer: NotificationDisplayer,
     private val notificationFactory: NotificationFactory,
 ) {
-
     suspend fun render(
         currentUser: MatrixUser,
         useCompleteNotificationFormat: Boolean,
