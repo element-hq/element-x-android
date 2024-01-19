@@ -73,7 +73,7 @@ private fun TakeScreenshot(
     onScreenshotTaken: (ImageResult) -> Unit
 ) {
     val view = LocalView.current
-    LaunchedEffect(Unit) {
+    LaunchedEffect(onScreenshotTaken) {
         view.screenshot {
             onScreenshotTaken(it)
         }

@@ -53,7 +53,7 @@ fun LogoutActionDialog(
                 onDismiss = onDismissError,
             )
         is AsyncAction.Success ->
-            LaunchedEffect(state) {
+            LaunchedEffect(state, onSuccessLogout) {
                 onSuccessLogout(state.data)
             }
     }

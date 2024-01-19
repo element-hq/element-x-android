@@ -294,7 +294,7 @@ private fun AttachmentStateView(
 ) {
     when (state) {
         AttachmentsState.None -> Unit
-        is AttachmentsState.Previewing -> LaunchedEffect(state) {
+        is AttachmentsState.Previewing -> LaunchedEffect(state, onPreviewAttachments) {
             onPreviewAttachments(state.attachments)
         }
         is AttachmentsState.Sending -> {

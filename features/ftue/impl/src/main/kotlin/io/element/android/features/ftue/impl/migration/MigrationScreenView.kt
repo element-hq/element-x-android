@@ -32,7 +32,7 @@ fun MigrationScreenView(
     modifier: Modifier = Modifier,
 ) {
     if (migrationState.isMigrating.not()) {
-        LaunchedEffect(Unit) {
+        LaunchedEffect(onMigrationFinished) {
             onMigrationFinished()
         }
     }

@@ -63,7 +63,7 @@ fun ChangeServerView(
             }
         }
         is AsyncData.Loading -> ProgressDialog()
-        is AsyncData.Success -> LaunchedEffect(state.changeServerAction) {
+        is AsyncData.Success -> LaunchedEffect(state.changeServerAction, onDone) {
             onDone()
         }
         AsyncData.Uninitialized -> Unit

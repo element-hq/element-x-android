@@ -18,6 +18,8 @@ package io.element.android.features.lockscreen.impl.unlock
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberUpdatedState
 import io.element.android.features.lockscreen.impl.biometric.BiometricUnlockManager
 import io.element.android.features.lockscreen.impl.biometric.DefaultBiometricUnlockCallback
 import io.element.android.features.lockscreen.impl.pin.DefaultPinCodeManagerCallback
@@ -30,15 +32,16 @@ class PinUnlockHelper @Inject constructor(
 ) {
     @Composable
     fun OnUnlockEffect(onUnlock: () -> Unit) {
+        val latestOnUnlock by rememberUpdatedState(onUnlock)
         DisposableEffect(Unit) {
             val biometricUnlockCallback = object : DefaultBiometricUnlockCallback() {
                 override fun onBiometricUnlockSuccess() {
-                    onUnlock()
+                    latestOnUnlock()
                 }
             }
             val pinCodeVerifiedCallback = object : DefaultPinCodeManagerCallback() {
                 override fun onPinCodeVerified() {
-                    onUnlock()
+                    latestOnUnlock()
                 }
             }
             biometricUnlockManager.addCallback(biometricUnlockCallback)

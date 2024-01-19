@@ -67,7 +67,7 @@ fun <T> AsyncActionView(
             }
         }
         is AsyncAction.Success -> {
-            LaunchedEffect(async) {
+            LaunchedEffect(async, onSuccess) {
                 onSuccess(async.data)
             }
         }

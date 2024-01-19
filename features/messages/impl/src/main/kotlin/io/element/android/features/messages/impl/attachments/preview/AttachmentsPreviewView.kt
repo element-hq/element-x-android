@@ -57,7 +57,7 @@ fun AttachmentsPreviewView(
     }
 
     if (state.sendActionState is SendActionState.Done) {
-        LaunchedEffect(state.sendActionState) {
+        LaunchedEffect(state.sendActionState, onDismiss) {
             onDismiss()
         }
     }

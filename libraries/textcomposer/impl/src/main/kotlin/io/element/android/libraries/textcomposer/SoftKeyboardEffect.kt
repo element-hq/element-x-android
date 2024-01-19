@@ -18,6 +18,8 @@ package io.element.android.libraries.textcomposer
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.viewinterop.AndroidView
 import io.element.android.libraries.androidutils.ui.awaitWindowFocus
@@ -40,7 +42,8 @@ internal fun <T> SoftKeyboardEffect(
     predicate: (T) -> Boolean,
 ) {
     val view = LocalView.current
-    LaunchedEffect(key) {
+    val latestOnRequestFocus by rememberUpdatedState(onRequestFocus)
+    LaunchedEffect(key, predicate) {
         if (predicate(key)) {
             // Await window focus in case returning from a dialog
             view.awaitWindowFocus()
@@ -49,7 +52,7 @@ internal fun <T> SoftKeyboardEffect(
             view.showKeyboard(andRequestFocus = true)
 
             // Refocus to the correct view
-            onRequestFocus()
+            latestOnRequestFocus()
         }
     }
 }
