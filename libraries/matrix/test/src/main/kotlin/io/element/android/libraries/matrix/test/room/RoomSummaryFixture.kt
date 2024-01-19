@@ -65,7 +65,7 @@ fun aRoomSummaryDetails(
     avatarUrl = avatarUrl,
     lastMessage = lastMessage,
     unreadNotificationCount = unreadNotificationCount,
-    notificationMode = notificationMode
+    userDefinedNotificationMode = notificationMode
 )
 
 fun aRoomMessage(

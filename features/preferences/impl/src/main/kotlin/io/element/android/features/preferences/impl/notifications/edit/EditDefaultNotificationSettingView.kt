@@ -84,7 +84,7 @@ fun EditDefaultNotificationSettingView(
         if (state.roomsWithUserDefinedMode.isNotEmpty()) {
             PreferenceCategory(title = stringResource(id = R.string.screen_notification_settings_edit_custom_settings_section_title)) {
                 state.roomsWithUserDefinedMode.forEach { summary ->
-                    val subtitle = when (summary.details.notificationMode) {
+                    val subtitle = when (summary.details.userDefinedNotificationMode) {
                         RoomNotificationMode.ALL_MESSAGES -> stringResource(id = R.string.screen_notification_settings_edit_mode_all_messages)
                         RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY -> {
                             stringResource(id = R.string.screen_notification_settings_edit_mode_mentions_and_keywords)

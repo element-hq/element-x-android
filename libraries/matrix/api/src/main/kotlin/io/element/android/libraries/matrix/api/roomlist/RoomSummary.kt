@@ -42,7 +42,7 @@ data class RoomSummaryDetails(
     val lastMessage: RoomMessage?,
     val unreadNotificationCount: Int,
     val inviter: RoomMember? = null,
-    val notificationMode: RoomNotificationMode? = null,
+    val userDefinedNotificationMode: RoomNotificationMode? = null,
     val hasRoomCall: Boolean = false,
     val isDm: Boolean = false,
 ) {

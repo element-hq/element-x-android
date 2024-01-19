@@ -384,11 +384,11 @@ class RoomListPresenterTests {
             notificationSettingsService.setRoomNotificationMode(A_ROOM_ID, userDefinedMode)
 
             val updatedState = consumeItemsUntilPredicate { state ->
-                state.roomList.any { it.id == A_ROOM_ID.value && it.notificationMode == userDefinedMode }
+                state.roomList.any { it.id == A_ROOM_ID.value && it.userDefinedNotificationMode == userDefinedMode }
             }.last()
 
             val room = updatedState.roomList.find { it.id == A_ROOM_ID.value }
-            assertThat(room?.notificationMode).isEqualTo(userDefinedMode)
+            assertThat(room?.userDefinedNotificationMode).isEqualTo(userDefinedMode)
             cancelAndIgnoreRemainingEvents()
             scope.cancel()
         }

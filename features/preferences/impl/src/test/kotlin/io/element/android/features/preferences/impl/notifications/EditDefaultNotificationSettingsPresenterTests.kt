@@ -74,9 +74,9 @@ class EditDefaultNotificationSettingsPresenterTests {
         }.test {
             roomListService.postAllRooms(listOf(RoomSummary.Filled(aRoomSummaryDetails(notificationMode = RoomNotificationMode.ALL_MESSAGES))))
             val loadedState = consumeItemsUntilPredicate { state ->
-                state.roomsWithUserDefinedMode.any { it.details.notificationMode == RoomNotificationMode.ALL_MESSAGES }
+                state.roomsWithUserDefinedMode.any { it.details.userDefinedNotificationMode == RoomNotificationMode.ALL_MESSAGES }
             }.last()
-            assertThat(loadedState.roomsWithUserDefinedMode.any { it.details.notificationMode == RoomNotificationMode.ALL_MESSAGES }).isTrue()
+            assertThat(loadedState.roomsWithUserDefinedMode.any { it.details.userDefinedNotificationMode == RoomNotificationMode.ALL_MESSAGES }).isTrue()
         }
     }
 

@@ -27,9 +27,9 @@ open class RoomListRoomSummaryProvider : PreviewParameterProvider<RoomListRoomSu
         get() = sequenceOf(
             aRoomListRoomSummary(),
             aRoomListRoomSummary().copy(lastMessage = null),
-            aRoomListRoomSummary().copy(hasUnread = true, notificationMode = RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY),
-            aRoomListRoomSummary().copy(timestamp = "88:88", notificationMode = RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY),
-            aRoomListRoomSummary().copy(timestamp = "88:88", notificationMode = RoomNotificationMode.MUTE),
+            aRoomListRoomSummary().copy(hasUnread = true, userDefinedNotificationMode = RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY),
+            aRoomListRoomSummary().copy(timestamp = "88:88", userDefinedNotificationMode = RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY),
+            aRoomListRoomSummary().copy(timestamp = "88:88", userDefinedNotificationMode = RoomNotificationMode.MUTE),
             aRoomListRoomSummary().copy(timestamp = "88:88", hasUnread = true),
             aRoomListRoomSummary().copy(isPlaceholder = true, timestamp = "88:88"),
             aRoomListRoomSummary().copy(
