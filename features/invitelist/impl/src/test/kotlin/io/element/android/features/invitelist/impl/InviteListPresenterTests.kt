@@ -428,7 +428,7 @@ class InviteListPresenterTests {
                     RoomSummaryDetails(
                         roomId = A_ROOM_ID,
                         name = A_ROOM_NAME,
-                        avatarURLString = null,
+                        avatarUrl = null,
                         isDirect = false,
                         lastMessage = null,
                         lastMessageTimestamp = null,
@@ -457,7 +457,7 @@ class InviteListPresenterTests {
                     RoomSummaryDetails(
                         roomId = A_ROOM_ID,
                         name = A_ROOM_NAME,
-                        avatarURLString = null,
+                        avatarUrl = null,
                         isDirect = true,
                         lastMessage = null,
                         lastMessageTimestamp = null,
@@ -483,7 +483,7 @@ class InviteListPresenterTests {
         RoomSummaryDetails(
             roomId = id,
             name = A_ROOM_NAME,
-            avatarURLString = null,
+            avatarUrl = null,
             isDirect = false,
             lastMessage = null,
             lastMessageTimestamp = null,

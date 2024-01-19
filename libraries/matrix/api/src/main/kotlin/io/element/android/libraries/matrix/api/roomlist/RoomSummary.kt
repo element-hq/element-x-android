@@ -38,7 +38,7 @@ data class RoomSummaryDetails(
     val name: String,
     val canonicalAlias: String? = null,
     val isDirect: Boolean,
-    val avatarURLString: String?,
+    val avatarUrl: String?,
     val lastMessage: RoomMessage?,
     val lastMessageTimestamp: Long?,
     val unreadNotificationCount: Int,

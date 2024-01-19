@@ -146,7 +146,7 @@ class RoomListDataSource @Inject constructor(
                 val avatarData = AvatarData(
                     id = roomSummary.identifier(),
                     name = roomSummary.details.name,
-                    url = roomSummary.details.avatarURLString,
+                    url = roomSummary.details.avatarUrl,
                     size = AvatarSize.RoomListItem,
                 )
                 val roomIdentifier = roomSummary.identifier()

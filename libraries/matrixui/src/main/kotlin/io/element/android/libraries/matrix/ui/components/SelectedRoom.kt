@@ -60,7 +60,7 @@ fun SelectedRoom(
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Avatar(AvatarData(roomSummary.roomId.value, roomSummary.name, roomSummary.avatarURLString, AvatarSize.SelectedRoom))
+            Avatar(AvatarData(roomSummary.roomId.value, roomSummary.name, roomSummary.avatarUrl, AvatarSize.SelectedRoom))
             Text(
                 text = roomSummary.name,
                 overflow = TextOverflow.Ellipsis,
@@ -99,7 +99,7 @@ internal fun SelectedRoomPreview() = ElementPreview {
             name = "roomName",
             canonicalAlias = null,
             isDirect = true,
-            avatarURLString = null,
+            avatarUrl = null,
             lastMessage = null,
             lastMessageTimestamp = null,
             unreadNotificationCount = 0,

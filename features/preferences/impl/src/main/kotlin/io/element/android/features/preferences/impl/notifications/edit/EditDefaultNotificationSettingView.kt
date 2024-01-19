@@ -95,7 +95,7 @@ fun EditDefaultNotificationSettingView(
                     val avatarData = AvatarData(
                         id = summary.identifier(),
                         name = summary.details.name,
-                        url = summary.details.avatarURLString,
+                        url = summary.details.avatarUrl,
                         size = AvatarSize.CustomRoomNotificationSetting,
                     )
                     ListItem(

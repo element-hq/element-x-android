@@ -52,7 +52,7 @@ private fun aRoomSummary() = RoomSummary.Filled(
     RoomSummaryDetails(
         roomId = RoomId("!roomId:domain"),
         name = "Room",
-        avatarURLString = null,
+        avatarUrl = null,
         isDirect = false,
         lastMessage = null,
         lastMessageTimestamp = null,
