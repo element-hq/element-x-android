@@ -19,6 +19,7 @@ package io.element.android.libraries.matrix.test.room
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.api.room.message.RoomMessage
 import io.element.android.libraries.matrix.api.roomlist.RoomSummary
@@ -58,6 +59,10 @@ fun aRoomSummaryDetails(
     lastMessage: RoomMessage? = aRoomMessage(),
     unreadNotificationCount: Int = 2,
     notificationMode: RoomNotificationMode? = null,
+    inviter: RoomMember? = null,
+    canonicalAlias: String? = null,
+    hasRoomCall: Boolean = false,
+    isDm: Boolean = false,
 ) = RoomSummaryDetails(
     roomId = roomId,
     name = name,
@@ -65,7 +70,11 @@ fun aRoomSummaryDetails(
     avatarUrl = avatarUrl,
     lastMessage = lastMessage,
     unreadNotificationCount = unreadNotificationCount,
-    userDefinedNotificationMode = notificationMode
+    userDefinedNotificationMode = notificationMode,
+    inviter = inviter,
+    canonicalAlias = canonicalAlias,
+    hasRoomCall = hasRoomCall,
+    isDm = isDm,
 )
 
 fun aRoomMessage(
