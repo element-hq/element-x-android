@@ -64,7 +64,6 @@ fun aRoomDetailsState(
     isDirect: Boolean = true,
     avatarUrl: String? = null,
     lastMessage: RoomMessage? = null,
-    lastMessageTimestamp: Long? = null,
     unreadNotificationCount: Int = 0,
     inviter: RoomMember? = null,
 ) = RoomSummaryDetails(
@@ -74,7 +73,6 @@ fun aRoomDetailsState(
     isDirect = isDirect,
     avatarUrl = avatarUrl,
     lastMessage = lastMessage,
-    lastMessageTimestamp = lastMessageTimestamp,
     unreadNotificationCount = unreadNotificationCount,
     inviter = inviter,
 )

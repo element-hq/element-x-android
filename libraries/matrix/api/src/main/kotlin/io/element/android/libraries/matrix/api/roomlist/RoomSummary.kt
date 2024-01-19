@@ -40,10 +40,11 @@ data class RoomSummaryDetails(
     val isDirect: Boolean,
     val avatarUrl: String?,
     val lastMessage: RoomMessage?,
-    val lastMessageTimestamp: Long?,
     val unreadNotificationCount: Int,
     val inviter: RoomMember? = null,
     val notificationMode: RoomNotificationMode? = null,
     val hasOngoingCall: Boolean = false,
     val isDm: Boolean = false,
-)
+) {
+    val lastMessageTimestamp = lastMessage?.originServerTs
+}

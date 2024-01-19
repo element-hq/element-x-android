@@ -101,7 +101,6 @@ internal fun SelectedRoomPreview() = ElementPreview {
             isDirect = true,
             avatarUrl = null,
             lastMessage = null,
-            lastMessageTimestamp = null,
             unreadNotificationCount = 0,
             inviter = null,
         ),
