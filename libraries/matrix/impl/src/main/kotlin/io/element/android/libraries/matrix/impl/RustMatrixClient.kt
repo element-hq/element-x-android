@@ -242,10 +242,10 @@ class RustMatrixClient(
         }
     }
 
-    private fun pairOfRoom(roomId: RoomId): Pair<RoomListItem, Room>? {
+    private suspend fun pairOfRoom(roomId: RoomId): Pair<RoomListItem, Room>? {
         val cachedRoomListItem = innerRoomListService.roomOrNull(roomId.value)
         // Keep using fullRoomBlocking for now as it's faster.
-        val fullRoom = cachedRoomListItem?.fullRoomBlocking()
+        val fullRoom = cachedRoomListItem?.fullRoom()
         return if (cachedRoomListItem == null || fullRoom == null) {
             Timber.d("No room cached for $roomId")
             null

@@ -45,13 +45,13 @@ import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.matrix.rustcomponents.sdk.BackPaginationStatus
-import org.matrix.rustcomponents.sdk.EventItemOrigin
 import org.matrix.rustcomponents.sdk.PaginationOptions
 import org.matrix.rustcomponents.sdk.Timeline
 import org.matrix.rustcomponents.sdk.TimelineDiff
 import org.matrix.rustcomponents.sdk.TimelineItem
 import timber.log.Timber
+import uniffi.matrix_sdk_ui.BackPaginationStatus
+import uniffi.matrix_sdk_ui.EventItemOrigin
 import java.util.Date
 import java.util.concurrent.atomic.AtomicBoolean
 
