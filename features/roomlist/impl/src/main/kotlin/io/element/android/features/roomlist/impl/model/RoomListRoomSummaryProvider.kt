@@ -45,7 +45,7 @@ open class RoomListRoomSummaryProvider : PreviewParameterProvider<RoomListRoomSu
 }
 
 fun aRoomListRoomSummary(
-    lastMessage: String? = null,
+    lastMessage: String? = "Last message",
     notificationMode: RoomNotificationMode? = null,
     hasUnread: Boolean = false,
     timestamp: String? = "88:88",
