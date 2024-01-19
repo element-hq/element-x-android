@@ -63,6 +63,12 @@ class RoomDetailsPresenter @Inject constructor(
         val scope = rememberCoroutineScope()
         val leaveRoomState = leaveRoomPresenter.present()
         val canShowNotificationSettings = remember { mutableStateOf(false) }
+        val roomInfo = room.roomInfoFlow.collectAsState(initial = null).value
+
+        val roomAvatar by remember { derivedStateOf { roomInfo?.avatarUrl ?: room.avatarUrl } }
+
+        val roomName by remember { derivedStateOf { (roomInfo?.name ?: room.name ?: room.displayName).trim() } }
+        val roomTopic by remember { derivedStateOf { roomInfo?.topic ?: room.topic } }
 
         LaunchedEffect(Unit) {
             canShowNotificationSettings.value = featureFlagService.isFeatureEnabled(FeatureFlags.NotificationSettings)
@@ -82,8 +88,8 @@ class RoomDetailsPresenter @Inject constructor(
         val roomMemberDetailsPresenter = roomMemberDetailsPresenter(dmMember)
         val roomType by getRoomType(dmMember)
 
-        val topicState = remember(canEditTopic, room.topic, roomType) {
-            val topic = room.topic
+        val topicState = remember(canEditTopic, roomTopic, roomType) {
+            val topic = roomTopic
 
             when {
                 !topic.isNullOrBlank() -> RoomTopicState.ExistingTopic(topic)
@@ -115,9 +121,9 @@ class RoomDetailsPresenter @Inject constructor(
 
         return RoomDetailsState(
             roomId = room.roomId.value,
-            roomName = room.displayName,
+            roomName = roomName,
             roomAlias = room.alias,
-            roomAvatarUrl = room.avatarUrl,
+            roomAvatarUrl = roomAvatar,
             roomTopic = topicState,
             memberCount = room.joinedMemberCount,
             isEncrypted = room.isEncrypted,

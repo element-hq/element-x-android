@@ -161,7 +161,7 @@ class FakeMatrixRoom(
 
     private var leaveRoomError: Throwable? = null
 
-    private val _roomInfoFlow: MutableSharedFlow<MatrixRoomInfo> = MutableStateFlow(aRoomInfo())
+    private val _roomInfoFlow: MutableSharedFlow<MatrixRoomInfo> = MutableSharedFlow(replay = 1)
     override val roomInfoFlow: Flow<MatrixRoomInfo> = _roomInfoFlow
 
     override val membersStateFlow: MutableStateFlow<MatrixRoomMembersState> = MutableStateFlow(MatrixRoomMembersState.Unknown)

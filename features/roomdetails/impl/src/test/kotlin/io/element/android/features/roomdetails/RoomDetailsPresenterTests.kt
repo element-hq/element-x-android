@@ -46,6 +46,7 @@ import io.element.android.libraries.matrix.test.A_USER_ID_2
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.notificationsettings.FakeNotificationSettingsService
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
+import io.element.android.libraries.matrix.test.room.aRoomInfo
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.consumeItemsUntilPredicate
 import io.element.android.tests.testutils.testCoroutineDispatchers
@@ -89,7 +90,7 @@ class RoomDetailsPresenterTests {
     }
 
     @Test
-    fun `present - initial state is created from room info`() = runTest {
+    fun `present - initial state is created from room if roomInfo is null`() = runTest {
         val room = aMatrixRoom()
         val presenter = createRoomDetailsPresenter(room)
         moleculeFlow(RecompositionMode.Immediate) {
@@ -97,11 +98,31 @@ class RoomDetailsPresenterTests {
         }.test {
             val initialState = awaitItem()
             assertThat(initialState.roomId).isEqualTo(room.roomId.value)
-            assertThat(initialState.roomName).isEqualTo(room.displayName)
+            assertThat(initialState.roomName).isEqualTo(room.name)
             assertThat(initialState.roomAvatarUrl).isEqualTo(room.avatarUrl)
             assertThat(initialState.roomTopic).isEqualTo(RoomTopicState.ExistingTopic(room.topic!!))
             assertThat(initialState.memberCount).isEqualTo(room.joinedMemberCount)
             assertThat(initialState.isEncrypted).isEqualTo(room.isEncrypted)
+
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - initial state is updated with roomInfo if it exists`() = runTest {
+        val roomInfo = aRoomInfo(name = "A room name", topic = "A topic", avatarUrl = "https://matrix.org/avatar.jpg")
+        val room = aMatrixRoom().apply {
+            givenRoomInfo(roomInfo)
+        }
+        val presenter = createRoomDetailsPresenter(room)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            skipItems(1)
+            val updatedState = awaitItem()
+            assertThat(updatedState.roomName).isEqualTo(roomInfo.name)
+            assertThat(updatedState.roomAvatarUrl).isEqualTo(roomInfo.avatarUrl)
+            assertThat(updatedState.roomTopic).isEqualTo(RoomTopicState.ExistingTopic(roomInfo.topic!!))
 
             cancelAndIgnoreRemainingEvents()
         }
@@ -334,6 +355,7 @@ class RoomDetailsPresenterTests {
         val room = aMatrixRoom(topic = null).apply {
             givenCanSendStateResult(StateEventType.ROOM_TOPIC, Result.success(true))
             givenCanInviteResult(Result.success(false))
+            givenRoomInfo(aRoomInfo(topic = null))
         }
 
         val presenter = createRoomDetailsPresenter(room)
