@@ -55,7 +55,6 @@ private fun aRoomSummary() = RoomSummary.Filled(
         avatarUrl = null,
         isDirect = false,
         lastMessage = null,
-        unreadNotificationCount = 0,
         notificationMode = RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY,
     )
 )

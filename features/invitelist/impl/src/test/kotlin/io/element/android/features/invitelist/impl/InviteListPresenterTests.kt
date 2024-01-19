@@ -431,7 +431,6 @@ class InviteListPresenterTests {
                         avatarUrl = null,
                         isDirect = false,
                         lastMessage = null,
-                        unreadNotificationCount = 0,
                         inviter = RoomMember(
                             userId = A_USER_ID,
                             displayName = A_USER_NAME,
@@ -459,7 +458,6 @@ class InviteListPresenterTests {
                         avatarUrl = null,
                         isDirect = true,
                         lastMessage = null,
-                        unreadNotificationCount = 0,
                         inviter = RoomMember(
                             userId = A_USER_ID,
                             displayName = A_USER_NAME,
@@ -484,7 +482,6 @@ class InviteListPresenterTests {
             avatarUrl = null,
             isDirect = false,
             lastMessage = null,
-            unreadNotificationCount = 0,
         )
     )
 

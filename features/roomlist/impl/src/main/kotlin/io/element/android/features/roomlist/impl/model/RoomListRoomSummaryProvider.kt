@@ -25,29 +25,69 @@ import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 open class RoomListRoomSummaryProvider : PreviewParameterProvider<RoomListRoomSummary> {
     override val values: Sequence<RoomListRoomSummary>
         get() = sequenceOf(
-            aRoomListRoomSummary(),
-            aRoomListRoomSummary(lastMessage = null),
-            aRoomListRoomSummary(hasUnread = true, notificationMode = RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY),
-            aRoomListRoomSummary(notificationMode = RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY),
-            aRoomListRoomSummary(notificationMode = RoomNotificationMode.MUTE),
-            aRoomListRoomSummary(hasUnread = true),
-            aRoomListRoomSummary(isPlaceholder = true),
-            aRoomListRoomSummary(
-                name = "A very long room name that should be truncated",
-                lastMessage = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt" +
-                    " ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea com" +
-                    "modo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
-                timestamp = "yesterday",
-                hasUnread = true,
+            listOf(
+                aRoomListRoomSummary(isPlaceholder = true),
+                aRoomListRoomSummary(),
+                aRoomListRoomSummary(lastMessage = null),
+                aRoomListRoomSummary(
+                    name = "A very long room name that should be truncated",
+                    lastMessage = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt" +
+                        " ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea com" +
+                        "modo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
+                    timestamp = "yesterday",
+                    numberOfUnreadMessages = 1,
+                ),
             ),
-            aRoomListRoomSummary(hasUnread = true, hasRoomCall = true),
-        )
+            listOf(false, true).map { hasCall ->
+                listOf(
+                    RoomNotificationMode.ALL_MESSAGES,
+                    RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY,
+                    RoomNotificationMode.MUTE,
+                ).map { roomNotificationMode ->
+                    listOf(
+                        aRoomListRoomSummary(
+                            name = roomNotificationMode.name,
+                            lastMessage = "No activity" + if (hasCall) ", call" else "",
+                            notificationMode = roomNotificationMode,
+                            numberOfUnreadMessages = 0,
+                            numberOfUnreadMentions = 0,
+                            hasRoomCall = hasCall,
+                        ),
+                        aRoomListRoomSummary(
+                            name = roomNotificationMode.name,
+                            lastMessage = "New messages" + if (hasCall) ", call" else "",
+                            notificationMode = roomNotificationMode,
+                            numberOfUnreadMessages = 1,
+                            numberOfUnreadMentions = 0,
+                            hasRoomCall = hasCall,
+                        ),
+                        aRoomListRoomSummary(
+                            name = roomNotificationMode.name,
+                            lastMessage = "New messages, mentions" + if (hasCall) ", call" else "",
+                            notificationMode = roomNotificationMode,
+                            numberOfUnreadMessages = 1,
+                            numberOfUnreadMentions = 1,
+                            hasRoomCall = hasCall,
+                        ),
+                        aRoomListRoomSummary(
+                            name = roomNotificationMode.name,
+                            lastMessage = "New mentions" + if (hasCall) ", call" else "",
+                            notificationMode = roomNotificationMode,
+                            numberOfUnreadMessages = 0,
+                            numberOfUnreadMentions = 1,
+                            hasRoomCall = hasCall,
+                        ),
+                    )
+                }.flatten()
+            }.flatten(),
+        ).flatten()
 }
 
 internal fun aRoomListRoomSummary(
     id: String = "!roomId:domain",
     name: String = "Room name",
-    hasUnread: Boolean = false,
+    numberOfUnreadMessages: Int = 0,
+    numberOfUnreadMentions: Int = 0,
     lastMessage: String? = "Last message",
     timestamp: String? = lastMessage?.let { "88:88" },
     isPlaceholder: Boolean = false,
@@ -59,7 +99,8 @@ internal fun aRoomListRoomSummary(
     id = id,
     roomId = RoomId(id),
     name = name,
-    hasUnread = hasUnread,
+    numberOfUnreadMessages = numberOfUnreadMessages,
+    numberOfUnreadMentions = numberOfUnreadMentions,
     timestamp = timestamp,
     lastMessage = lastMessage,
     avatarData = avatarData,
