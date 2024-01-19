@@ -24,13 +24,13 @@ import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParse
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageContent
 import io.element.android.libraries.matrix.api.timeline.item.event.PollContent
 import io.element.android.libraries.matrix.api.timeline.item.event.ProfileChangeContent
-import io.element.android.libraries.matrix.api.timeline.item.event.ProfileTimelineDetails
 import io.element.android.libraries.matrix.api.timeline.item.event.RedactedContent
 import io.element.android.libraries.matrix.api.timeline.item.event.RoomMembershipContent
 import io.element.android.libraries.matrix.api.timeline.item.event.StateContent
 import io.element.android.libraries.matrix.api.timeline.item.event.StickerContent
 import io.element.android.libraries.matrix.api.timeline.item.event.UnableToDecryptContent
 import io.element.android.libraries.matrix.api.timeline.item.event.UnknownContent
+import io.element.android.libraries.matrix.api.timeline.item.event.getDisambiguatedDisplayName
 import javax.inject.Inject
 
 class TimelineItemContentFactory @Inject constructor(
@@ -50,7 +50,7 @@ class TimelineItemContentFactory @Inject constructor(
             is FailedToParseMessageLikeContent -> failedToParseMessageFactory.create(itemContent)
             is FailedToParseStateContent -> failedToParseStateFactory.create(itemContent)
             is MessageContent -> {
-                val senderDisplayName = (eventTimelineItem.senderProfile as? ProfileTimelineDetails.Ready)?.displayName ?: eventTimelineItem.sender.value
+                val senderDisplayName = eventTimelineItem.senderProfile.getDisambiguatedDisplayName(eventTimelineItem.sender)
                 messageFactory.create(itemContent, senderDisplayName, eventTimelineItem.eventId)
             }
             is ProfileChangeContent -> profileChangeFactory.create(eventTimelineItem)
