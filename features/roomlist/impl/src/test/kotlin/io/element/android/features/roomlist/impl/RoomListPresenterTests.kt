@@ -122,7 +122,7 @@ class RoomListPresenterTests {
     fun `present - should start with no user and then load user with error`() = runTest {
         val matrixClient = FakeMatrixClient(
             userDisplayName = Result.failure(AN_EXCEPTION),
-            userAvatarURLString = Result.failure(AN_EXCEPTION),
+            userAvatarUrl = Result.failure(AN_EXCEPTION),
         )
         val scope = CoroutineScope(coroutineContext + SupervisorJob())
         val presenter = createRoomListPresenter(client = matrixClient, coroutineScope = scope)
