@@ -16,9 +16,9 @@
 
 package io.element.android.features.securebackup.impl.enable
 
-import io.element.android.libraries.architecture.AsyncData
+import io.element.android.libraries.architecture.AsyncAction
 
 data class SecureBackupEnableState(
-    val enableAction: AsyncData<Unit>,
+    val enableAction: AsyncAction<Unit>,
     val eventSink: (SecureBackupEnableEvents) -> Unit
 )
