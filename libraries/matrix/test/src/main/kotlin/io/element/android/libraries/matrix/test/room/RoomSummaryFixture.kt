@@ -40,7 +40,7 @@ fun aRoomSummaryFilled(
     unreadNotificationCount: Int = 2,
     notificationMode: RoomNotificationMode? = null,
 ) = RoomSummary.Filled(
-    aRoomSummaryDetail(
+    aRoomSummaryDetails(
         roomId = roomId,
         name = name,
         isDirect = isDirect,
@@ -52,7 +52,7 @@ fun aRoomSummaryFilled(
     )
 )
 
-fun aRoomSummaryDetail(
+fun aRoomSummaryDetails(
     roomId: RoomId = A_ROOM_ID,
     name: String = A_ROOM_NAME,
     isDirect: Boolean = false,

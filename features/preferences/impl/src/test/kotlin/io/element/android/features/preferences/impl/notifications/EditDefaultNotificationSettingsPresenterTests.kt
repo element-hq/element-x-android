@@ -29,7 +29,7 @@ import io.element.android.libraries.matrix.test.A_THROWABLE
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.notificationsettings.FakeNotificationSettingsService
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
-import io.element.android.libraries.matrix.test.room.aRoomSummaryDetail
+import io.element.android.libraries.matrix.test.room.aRoomSummaryDetails
 import io.element.android.libraries.matrix.test.roomlist.FakeRoomListService
 import io.element.android.tests.testutils.awaitLastSequentialItem
 import io.element.android.tests.testutils.consumeItemsUntilPredicate
@@ -72,7 +72,7 @@ class EditDefaultNotificationSettingsPresenterTests {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            roomListService.postAllRooms(listOf(RoomSummary.Filled(aRoomSummaryDetail(notificationMode = RoomNotificationMode.ALL_MESSAGES))))
+            roomListService.postAllRooms(listOf(RoomSummary.Filled(aRoomSummaryDetails(notificationMode = RoomNotificationMode.ALL_MESSAGES))))
             val loadedState = consumeItemsUntilPredicate { state ->
                 state.roomsWithUserDefinedMode.any { it.details.notificationMode == RoomNotificationMode.ALL_MESSAGES }
             }.last()
