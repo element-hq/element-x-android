@@ -18,10 +18,11 @@ package io.element.android.features.messages.impl.timeline.components.layout
 
 import android.text.Layout
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.Layout
-import androidx.compose.ui.layout.SubcomposeLayout
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.unit.Constraints
@@ -59,23 +60,27 @@ fun ContentAvoidingLayout(
 ) {
     val scope = remember { ContentAvoidingLayoutScopeInstance() }
 
-    SubcomposeLayout(
+    Layout(
         modifier = modifier,
-    ) { constraints ->
+        content = {
+            scope.content()
+            overlay()
+        }
+    ) { measurables, constraints ->
 
         // Measure the `overlay` view first, in case we need to shrink the `content`
-        val overlayPlaceable = subcompose(0, overlay).first().measure(Constraints(minWidth = 0, maxWidth = constraints.maxWidth))
+        val overlayPlaceable = measurables.last().measure(Constraints(minWidth = 0, maxWidth = constraints.maxWidth))
         val contentConstraints = if (shrinkContent) {
             Constraints(minWidth = 0, maxWidth = constraints.maxWidth - overlayPlaceable.width)
         } else {
             Constraints(minWidth = 0, maxWidth = constraints.maxWidth)
         }
-        val contentPlaceable = subcompose(1) { scope.content() }.first().measure(contentConstraints)
+        val contentPlaceable = measurables.first().measure(contentConstraints)
 
         var layoutWidth = contentPlaceable.width
         var layoutHeight = contentPlaceable.height
 
-        val data = scope.data
+        val data = scope.data.value
 
         // Free space = width of the whole component - width of its non overlapping contents
         val freeSpace = max(contentPlaceable.width - data.nonOverlappingContentWidth, 0)
@@ -135,13 +140,10 @@ interface ContentAvoidingLayoutScope {
 }
 
 private class ContentAvoidingLayoutScopeInstance(
-    val data: ContentAvoidingLayoutData = ContentAvoidingLayoutData(),
+    val data: MutableState<ContentAvoidingLayoutData> = mutableStateOf(ContentAvoidingLayoutData()),
 ) : ContentAvoidingLayoutScope {
     override fun onContentLayoutChanged(data: ContentAvoidingLayoutData) {
-        this.data.contentWidth = data.contentWidth
-        this.data.contentHeight = data.contentHeight
-        this.data.nonOverlappingContentWidth = data.nonOverlappingContentWidth
-        this.data.nonOverlappingContentHeight = data.nonOverlappingContentHeight
+        this.data.value = data
     }
 }
 
