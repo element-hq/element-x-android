@@ -57,6 +57,7 @@
   <string name="action_join">"Присоединиться"</string>
   <string name="action_learn_more">"Подробнее"</string>
   <string name="action_leave">"Выйти"</string>
+  <string name="action_leave_conversation">"Покинуть беседу"</string>
   <string name="action_leave_room">"Покинуть комнату"</string>
   <string name="action_manage_account">"Настройки аккаунта"</string>
   <string name="action_manage_devices">"Управление устройствами"</string>
