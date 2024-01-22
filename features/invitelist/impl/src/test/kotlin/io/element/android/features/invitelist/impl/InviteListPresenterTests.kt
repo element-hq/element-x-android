@@ -30,7 +30,6 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
 import io.element.android.libraries.matrix.api.roomlist.RoomSummary
-import io.element.android.libraries.matrix.api.roomlist.RoomSummaryDetails
 import io.element.android.libraries.matrix.test.AN_AVATAR_URL
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID_2
@@ -39,6 +38,7 @@ import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.A_USER_NAME
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
+import io.element.android.libraries.matrix.test.room.aRoomSummaryDetails
 import io.element.android.libraries.matrix.test.roomlist.FakeRoomListService
 import io.element.android.libraries.push.api.notifications.NotificationDrawerManager
 import io.element.android.libraries.push.test.notifications.FakeNotificationDrawerManager
@@ -425,13 +425,12 @@ class InviteListPresenterTests {
         postInviteRooms(
             listOf(
                 RoomSummary.Filled(
-                    RoomSummaryDetails(
+                    aRoomSummaryDetails(
                         roomId = A_ROOM_ID,
                         name = A_ROOM_NAME,
-                        avatarURLString = null,
+                        avatarUrl = null,
                         isDirect = false,
                         lastMessage = null,
-                        lastMessageTimestamp = null,
                         unreadNotificationCount = 0,
                         inviter = RoomMember(
                             userId = A_USER_ID,
@@ -454,13 +453,12 @@ class InviteListPresenterTests {
         postInviteRooms(
             listOf(
                 RoomSummary.Filled(
-                    RoomSummaryDetails(
+                    aRoomSummaryDetails(
                         roomId = A_ROOM_ID,
                         name = A_ROOM_NAME,
-                        avatarURLString = null,
+                        avatarUrl = null,
                         isDirect = true,
                         lastMessage = null,
-                        lastMessageTimestamp = null,
                         unreadNotificationCount = 0,
                         inviter = RoomMember(
                             userId = A_USER_ID,
@@ -480,13 +478,12 @@ class InviteListPresenterTests {
     }
 
     private fun aRoomSummary(id: RoomId = A_ROOM_ID) = RoomSummary.Filled(
-        RoomSummaryDetails(
+        aRoomSummaryDetails(
             roomId = id,
             name = A_ROOM_NAME,
-            avatarURLString = null,
+            avatarUrl = null,
             isDirect = false,
             lastMessage = null,
-            lastMessageTimestamp = null,
             unreadNotificationCount = 0,
         )
     )

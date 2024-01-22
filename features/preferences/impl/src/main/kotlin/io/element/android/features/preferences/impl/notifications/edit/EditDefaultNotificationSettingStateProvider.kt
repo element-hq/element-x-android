@@ -21,7 +21,7 @@ import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.api.roomlist.RoomSummary
-import io.element.android.libraries.matrix.api.roomlist.RoomSummaryDetails
+import io.element.android.libraries.matrix.ui.components.aRoomSummaryDetails
 import kotlinx.collections.immutable.persistentListOf
 
 open class EditDefaultNotificationSettingStateProvider : PreviewParameterProvider<EditDefaultNotificationSettingState> {
@@ -49,13 +49,12 @@ private fun anEditDefaultNotificationSettingsState(
 )
 
 private fun aRoomSummary() = RoomSummary.Filled(
-    RoomSummaryDetails(
+    aRoomSummaryDetails(
         roomId = RoomId("!roomId:domain"),
         name = "Room",
-        avatarURLString = null,
+        avatarUrl = null,
         isDirect = false,
         lastMessage = null,
-        lastMessageTimestamp = null,
         unreadNotificationCount = 0,
         notificationMode = RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY,
     )

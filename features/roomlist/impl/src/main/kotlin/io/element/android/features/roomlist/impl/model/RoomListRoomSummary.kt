@@ -32,7 +32,7 @@ data class RoomListRoomSummary(
     val lastMessage: CharSequence? = null,
     val avatarData: AvatarData = AvatarData(id, name, size = AvatarSize.RoomListItem),
     val isPlaceholder: Boolean = false,
-    val notificationMode: RoomNotificationMode? = null,
-    val hasOngoingCall: Boolean = false,
+    val userDefinedNotificationMode: RoomNotificationMode? = null,
+    val hasRoomCall: Boolean = false,
     val isDm: Boolean = false,
 )

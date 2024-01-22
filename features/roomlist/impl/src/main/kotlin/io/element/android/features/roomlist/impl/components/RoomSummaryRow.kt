@@ -173,7 +173,7 @@ private fun RowScope.LastMessageAndIndicatorRow(room: RoomListRoomSummary) {
         verticalAlignment = Alignment.CenterVertically,
     ) {
         // Video call
-        if (room.hasOngoingCall) {
+        if (room.hasRoomCall) {
             Icon(
                 modifier = Modifier.size(16.dp),
                 imageVector = CompoundIcons.VideoCallSolid,
@@ -191,7 +191,7 @@ private fun RowScope.LastMessageAndIndicatorRow(room: RoomListRoomSummary) {
 @Composable
 private fun NotificationIcon(room: RoomListRoomSummary) {
     val tint = if (room.hasUnread) ElementTheme.colors.unreadIndicator else ElementTheme.colors.iconQuaternary
-    when (room.notificationMode) {
+    when (room.userDefinedNotificationMode) {
         null, RoomNotificationMode.ALL_MESSAGES -> return
         RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY ->
             Icon(

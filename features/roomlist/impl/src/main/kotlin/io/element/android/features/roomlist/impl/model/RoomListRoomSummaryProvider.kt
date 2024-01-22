@@ -26,13 +26,13 @@ open class RoomListRoomSummaryProvider : PreviewParameterProvider<RoomListRoomSu
     override val values: Sequence<RoomListRoomSummary>
         get() = sequenceOf(
             aRoomListRoomSummary(),
-            aRoomListRoomSummary().copy(lastMessage = null),
-            aRoomListRoomSummary().copy(hasUnread = true, notificationMode = RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY),
-            aRoomListRoomSummary().copy(timestamp = "88:88", notificationMode = RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY),
-            aRoomListRoomSummary().copy(timestamp = "88:88", notificationMode = RoomNotificationMode.MUTE),
-            aRoomListRoomSummary().copy(timestamp = "88:88", hasUnread = true),
-            aRoomListRoomSummary().copy(isPlaceholder = true, timestamp = "88:88"),
-            aRoomListRoomSummary().copy(
+            aRoomListRoomSummary(lastMessage = null),
+            aRoomListRoomSummary(hasUnread = true, notificationMode = RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY),
+            aRoomListRoomSummary(timestamp = "88:88", notificationMode = RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY),
+            aRoomListRoomSummary(timestamp = "88:88", notificationMode = RoomNotificationMode.MUTE),
+            aRoomListRoomSummary(timestamp = "88:88", hasUnread = true),
+            aRoomListRoomSummary(isPlaceholder = true, timestamp = "88:88"),
+            aRoomListRoomSummary(
                 name = "A very long room name that should be truncated",
                 lastMessage = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt" +
                     " ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea com" +
@@ -40,17 +40,27 @@ open class RoomListRoomSummaryProvider : PreviewParameterProvider<RoomListRoomSu
                 timestamp = "yesterday",
                 hasUnread = true,
             ),
-            aRoomListRoomSummary().copy(hasUnread = true, hasOngoingCall = true),
+            aRoomListRoomSummary(hasUnread = true, hasRoomCall = true),
         )
 }
 
-fun aRoomListRoomSummary() = RoomListRoomSummary(
+fun aRoomListRoomSummary(
+    lastMessage: String? = "Last message",
+    notificationMode: RoomNotificationMode? = null,
+    hasUnread: Boolean = false,
+    timestamp: String? = "88:88",
+    hasRoomCall: Boolean = false,
+    isPlaceholder: Boolean = false,
+    name: String = "Room name",
+) = RoomListRoomSummary(
     id = "!roomId",
     roomId = RoomId("!roomId:domain"),
-    name = "Room name",
-    hasUnread = false,
-    timestamp = null,
-    lastMessage = "Last message",
+    name = name,
+    hasUnread = hasUnread,
+    timestamp = timestamp,
+    lastMessage = lastMessage,
     avatarData = AvatarData("!roomId", "Room name", size = AvatarSize.RoomListItem),
-    isPlaceholder = false,
+    isPlaceholder = isPlaceholder,
+    userDefinedNotificationMode = notificationMode,
+    hasRoomCall = hasRoomCall,
 )

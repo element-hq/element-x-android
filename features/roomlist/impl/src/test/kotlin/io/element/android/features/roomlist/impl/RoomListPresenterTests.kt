@@ -122,7 +122,7 @@ class RoomListPresenterTests {
     fun `present - should start with no user and then load user with error`() = runTest {
         val matrixClient = FakeMatrixClient(
             userDisplayName = Result.failure(AN_EXCEPTION),
-            userAvatarURLString = Result.failure(AN_EXCEPTION),
+            userAvatarUrl = Result.failure(AN_EXCEPTION),
         )
         val scope = CoroutineScope(coroutineContext + SupervisorJob())
         val presenter = createRoomListPresenter(client = matrixClient, coroutineScope = scope)
@@ -384,11 +384,11 @@ class RoomListPresenterTests {
             notificationSettingsService.setRoomNotificationMode(A_ROOM_ID, userDefinedMode)
 
             val updatedState = consumeItemsUntilPredicate { state ->
-                state.roomList.any { it.id == A_ROOM_ID.value && it.notificationMode == userDefinedMode }
+                state.roomList.any { it.id == A_ROOM_ID.value && it.userDefinedNotificationMode == userDefinedMode }
             }.last()
 
             val room = updatedState.roomList.find { it.id == A_ROOM_ID.value }
-            assertThat(room?.notificationMode).isEqualTo(userDefinedMode)
+            assertThat(room?.userDefinedNotificationMode).isEqualTo(userDefinedMode)
             cancelAndIgnoreRemainingEvents()
             scope.cancel()
         }

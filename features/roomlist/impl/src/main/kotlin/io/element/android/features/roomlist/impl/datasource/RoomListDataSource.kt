@@ -146,7 +146,7 @@ class RoomListDataSource @Inject constructor(
                 val avatarData = AvatarData(
                     id = roomSummary.identifier(),
                     name = roomSummary.details.name,
-                    url = roomSummary.details.avatarURLString,
+                    url = roomSummary.details.avatarUrl,
                     size = AvatarSize.RoomListItem,
                 )
                 val roomIdentifier = roomSummary.identifier()
@@ -160,8 +160,8 @@ class RoomListDataSource @Inject constructor(
                         roomLastMessageFormatter.format(message.event, roomSummary.details.isDirect)
                     }.orEmpty(),
                     avatarData = avatarData,
-                    notificationMode = roomSummary.details.notificationMode,
-                    hasOngoingCall = roomSummary.details.hasOngoingCall,
+                    userDefinedNotificationMode = roomSummary.details.userDefinedNotificationMode,
+                    hasRoomCall = roomSummary.details.hasRoomCall,
                     isDm = roomSummary.details.isDm,
                 )
             }
