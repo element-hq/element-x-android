@@ -27,7 +27,6 @@ import io.element.android.libraries.matrix.test.A_USER_ID_2
 import io.element.android.libraries.matrix.test.A_USER_ID_3
 import io.element.android.libraries.matrix.test.A_USER_ID_4
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import org.matrix.rustcomponents.sdk.MembershipState
@@ -36,7 +35,6 @@ import org.matrix.rustcomponents.sdk.Room
 import org.matrix.rustcomponents.sdk.RoomMember
 import org.matrix.rustcomponents.sdk.RoomMembersIterator
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class RoomMemberListFetcherTest {
     @Test
     fun `getCachedRoomMembers - emits cached members, if any`() = runTest {
