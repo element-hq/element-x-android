@@ -28,6 +28,7 @@ import io.element.android.features.networkmonitor.test.FakeNetworkMonitor
 import io.element.android.features.roomlist.impl.datasource.FakeInviteDataSource
 import io.element.android.features.roomlist.impl.datasource.InviteStateDataSource
 import io.element.android.features.roomlist.impl.datasource.RoomListDataSource
+import io.element.android.features.roomlist.impl.datasource.RoomListRoomSummaryFactory
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
 import io.element.android.libraries.dateformatter.api.LastMessageTimestampFormatter
 import io.element.android.libraries.dateformatter.test.FakeLastMessageTimestampFormatter
@@ -414,9 +415,11 @@ class RoomListPresenterTests {
         inviteStateDataSource = inviteStateDataSource,
         leaveRoomPresenter = leaveRoomPresenter,
         roomListDataSource = RoomListDataSource(
-            client.roomListService,
-            lastMessageTimestampFormatter,
-            roomLastMessageFormatter,
+            roomListService = client.roomListService,
+            roomListRoomSummaryFactory = RoomListRoomSummaryFactory(
+                lastMessageTimestampFormatter = lastMessageTimestampFormatter,
+                roomLastMessageFormatter = roomLastMessageFormatter,
+            ),
             coroutineDispatchers = testCoroutineDispatchers(),
             notificationSettingsService = client.notificationSettingsService(),
             appScope = coroutineScope

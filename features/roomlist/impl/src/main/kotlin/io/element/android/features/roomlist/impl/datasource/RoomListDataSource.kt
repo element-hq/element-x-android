@@ -17,16 +17,9 @@
 package io.element.android.features.roomlist.impl.datasource
 
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
-import io.element.android.features.roomlist.impl.model.RoomListRoomSummaryPlaceholders
 import io.element.android.libraries.androidutils.diff.DiffCacheUpdater
 import io.element.android.libraries.androidutils.diff.MutableListDiffCache
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
-import io.element.android.libraries.core.extensions.orEmpty
-import io.element.android.libraries.dateformatter.api.LastMessageTimestampFormatter
-import io.element.android.libraries.designsystem.components.avatar.AvatarData
-import io.element.android.libraries.designsystem.components.avatar.AvatarSize
-import io.element.android.libraries.eventformatter.api.RoomLastMessageFormatter
-import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsService
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.api.roomlist.RoomSummary
@@ -49,8 +42,7 @@ import kotlin.time.Duration.Companion.seconds
 
 class RoomListDataSource @Inject constructor(
     private val roomListService: RoomListService,
-    private val lastMessageTimestampFormatter: LastMessageTimestampFormatter,
-    private val roomLastMessageFormatter: RoomLastMessageFormatter,
+    private val roomListRoomSummaryFactory: RoomListRoomSummaryFactory,
     private val coroutineDispatchers: CoroutineDispatchers,
     private val notificationSettingsService: NotificationSettingsService,
     private val appScope: CoroutineScope,
@@ -121,7 +113,7 @@ class RoomListDataSource @Inject constructor(
     private suspend fun buildAndEmitAllRooms(roomSummaries: List<RoomSummary>) {
         if (diffCache.isEmpty()) {
             _allRooms.emit(
-                RoomListRoomSummaryPlaceholders.createFakeList(16).toImmutableList()
+                roomListRoomSummaryFactory.createFakeList()
             )
         } else {
             val roomListRoomSummaries = ArrayList<RoomListRoomSummary>()
@@ -141,34 +133,10 @@ class RoomListDataSource @Inject constructor(
 
     private fun buildAndCacheItem(roomSummaries: List<RoomSummary>, index: Int): RoomListRoomSummary? {
         val roomListRoomSummary = when (val roomSummary = roomSummaries.getOrNull(index)) {
-            is RoomSummary.Empty -> RoomListRoomSummaryPlaceholders.create(roomSummary.identifier)
-            is RoomSummary.Filled -> {
-                val avatarData = AvatarData(
-                    id = roomSummary.identifier(),
-                    name = roomSummary.details.name,
-                    url = roomSummary.details.avatarUrl,
-                    size = AvatarSize.RoomListItem,
-                )
-                val roomIdentifier = roomSummary.identifier()
-                RoomListRoomSummary(
-                    id = roomSummary.identifier(),
-                    roomId = RoomId(roomIdentifier),
-                    name = roomSummary.details.name,
-                    hasUnread = roomSummary.details.unreadNotificationCount > 0,
-                    timestamp = lastMessageTimestampFormatter.format(roomSummary.details.lastMessageTimestamp),
-                    lastMessage = roomSummary.details.lastMessage?.let { message ->
-                        roomLastMessageFormatter.format(message.event, roomSummary.details.isDirect)
-                    }.orEmpty(),
-                    avatarData = avatarData,
-                    isPlaceholder = false,
-                    userDefinedNotificationMode = roomSummary.details.userDefinedNotificationMode,
-                    hasRoomCall = roomSummary.details.hasRoomCall,
-                    isDm = roomSummary.details.isDm,
-                )
-            }
+            is RoomSummary.Empty -> roomListRoomSummaryFactory.createPlaceholder(roomSummary.identifier)
+            is RoomSummary.Filled -> roomListRoomSummaryFactory.create(roomSummary)
             null -> null
         }
-
         diffCache[index] = roomListRoomSummary
         return roomListRoomSummary
     }
