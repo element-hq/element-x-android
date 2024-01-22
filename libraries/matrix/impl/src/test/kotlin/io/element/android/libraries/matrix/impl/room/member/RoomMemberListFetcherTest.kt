@@ -16,6 +16,7 @@
 
 package io.element.android.libraries.matrix.impl.room.member
 
+import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
@@ -27,11 +28,6 @@ import io.element.android.libraries.matrix.test.A_USER_ID_3
 import io.element.android.libraries.matrix.test.A_USER_ID_4
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.async
-import kotlinx.coroutines.flow.take
-import kotlinx.coroutines.flow.toList
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import org.matrix.rustcomponents.sdk.MembershipState
@@ -43,7 +39,7 @@ import org.matrix.rustcomponents.sdk.RoomMembersIterator
 @OptIn(ExperimentalCoroutinesApi::class)
 class RoomMemberListFetcherTest {
     @Test
-    fun `getCachedRoomMembers - emits cached members, if any`() = runTest(StandardTestDispatcher()) {
+    fun `getCachedRoomMembers - emits cached members, if any`() = runTest {
         val room = FakeRustRoom(getMembersNoSync = {
             FakeRoomMembersIterator(
                 listOf(
@@ -55,52 +51,47 @@ class RoomMemberListFetcherTest {
         })
 
         val fetcher = RoomMemberListFetcher(room, Dispatchers.Default)
-        val asyncMembers = async { fetcher.membersFlow.take(2).toList() }
-        runCurrent()
-        fetcher.getCachedRoomMembers()
-        val memberStates = asyncMembers.await()
+        fetcher.membersFlow.test {
+            assertThat(awaitItem()).isInstanceOf(MatrixRoomMembersState.Unknown::class.java)
 
-        assertThat(memberStates).hasSize(2)
-        assertThat(memberStates[0]).isInstanceOf(MatrixRoomMembersState.Unknown::class.java)
-        assertThat(memberStates[1]).isInstanceOf(MatrixRoomMembersState.Ready::class.java)
-        assertThat((memberStates[1] as? MatrixRoomMembersState.Ready)?.roomMembers?.size).isEqualTo(3)
+            fetcher.getCachedRoomMembers()
+
+            val readyItem = awaitItem()
+            assertThat(readyItem).isInstanceOf(MatrixRoomMembersState.Ready::class.java)
+            assertThat((readyItem as? MatrixRoomMembersState.Ready)?.roomMembers?.size).isEqualTo(3)
+        }
     }
 
     @Test
-    fun `getCachedRoomMembers - emits empty list, if no members exist`() = runTest(StandardTestDispatcher()) {
+    fun `getCachedRoomMembers - emits empty list, if no members exist`() = runTest {
         val room = FakeRustRoom(getMembersNoSync = {
             FakeRoomMembersIterator(emptyList())
         })
 
         val fetcher = RoomMemberListFetcher(room, Dispatchers.Default)
-        val asyncMembers = async { fetcher.membersFlow.take(2).toList() }
-        runCurrent()
-        fetcher.getCachedRoomMembers()
-        val memberStates = asyncMembers.await()
-
-        assertThat(memberStates).hasSize(2)
-        assertThat(memberStates[0]).isInstanceOf(MatrixRoomMembersState.Unknown::class.java)
-        assertThat(memberStates[1].roomMembers()).isEmpty()
+        fetcher.membersFlow.test {
+            fetcher.getCachedRoomMembers()
+            assertThat(awaitItem()).isInstanceOf(MatrixRoomMembersState.Unknown::class.java)
+            assertThat(awaitItem().roomMembers()).isEmpty()
+        }
     }
 
     @Test
-    fun `getCachedRoomMembers - emits Error on error found`() = runTest(StandardTestDispatcher()) {
+    fun `getCachedRoomMembers - emits Error on error found`() = runTest {
         val room = FakeRustRoom(getMembersNoSync = {
             error("Some unexpected issue")
         })
 
         val fetcher = RoomMemberListFetcher(room, Dispatchers.Default)
-        val asyncMembers = async { fetcher.membersFlow.take(2).toList() }
-        runCurrent()
-        fetcher.getCachedRoomMembers()
-        val memberStates = asyncMembers.await()
-
-        assertThat(memberStates).hasSize(2)
-        assertThat(memberStates.last()).isInstanceOf(MatrixRoomMembersState.Error::class.java)
+        fetcher.membersFlow.test {
+            fetcher.getCachedRoomMembers()
+            assertThat(awaitItem()).isInstanceOf(MatrixRoomMembersState.Unknown::class.java)
+            assertThat(awaitItem()).isInstanceOf(MatrixRoomMembersState.Error::class.java)
+        }
     }
 
     @Test
-    fun `getCachedRoomMembers - emits items using page size`() = runTest(StandardTestDispatcher()) {
+    fun `getCachedRoomMembers - emits items using page size`() = runTest {
         val room = FakeRustRoom(getMembersNoSync = {
             FakeRoomMembersIterator(
                 listOf(
@@ -112,20 +103,19 @@ class RoomMemberListFetcherTest {
         })
 
         val fetcher = RoomMemberListFetcher(room, Dispatchers.Default, pageSize = 2)
-        val asyncMembers = async { fetcher.membersFlow.take(3).toList() }
-        runCurrent()
-        fetcher.getCachedRoomMembers()
-        val memberStates = asyncMembers.await()
+        fetcher.membersFlow.test {
+            fetcher.getCachedRoomMembers()
 
-        assertThat(memberStates).hasSize(3)
-        assertThat(memberStates[0]).isInstanceOf(MatrixRoomMembersState.Unknown::class.java)
-        assertThat(memberStates.drop(1).all { it is MatrixRoomMembersState.Ready }).isTrue()
-        assertThat((memberStates[1] as? MatrixRoomMembersState.Ready)?.roomMembers?.size).isEqualTo(2)
-        assertThat((memberStates[2] as? MatrixRoomMembersState.Ready)?.roomMembers?.size).isEqualTo(3)
+            assertThat(awaitItem()).isInstanceOf(MatrixRoomMembersState.Unknown::class.java)
+            assertThat((awaitItem() as? MatrixRoomMembersState.Ready)?.roomMembers?.size).isEqualTo(2)
+            assertThat((awaitItem() as? MatrixRoomMembersState.Ready)?.roomMembers?.size).isEqualTo(3)
+
+            ensureAllEventsConsumed()
+        }
     }
 
     @Test
-    fun `getUpdatedRoomMembers - with 'withCache' set to false emits only new members, if any`() = runTest(StandardTestDispatcher()) {
+    fun `getUpdatedRoomMembers - with 'withCache' set to false emits only new members, if any`() = runTest {
         val room = FakeRustRoom(getMembers = {
             FakeRoomMembersIterator(
                 listOf(
@@ -137,36 +127,31 @@ class RoomMemberListFetcherTest {
         })
 
         val fetcher = RoomMemberListFetcher(room, Dispatchers.Default)
-        val asyncMembers = async { fetcher.membersFlow.take(3).toList() }
-        runCurrent()
-        fetcher.getUpdatedRoomMembers(withCache = false)
-        val memberStates = asyncMembers.await()
+        fetcher.membersFlow.test {
+            fetcher.getUpdatedRoomMembers(withCache = false)
 
-        assertThat(memberStates).hasSize(3)
-        assertThat(memberStates[0]).isInstanceOf(MatrixRoomMembersState.Unknown::class.java)
-        assertThat(memberStates[1]).isInstanceOf(MatrixRoomMembersState.Pending::class.java)
-        assertThat(memberStates[2]).isInstanceOf(MatrixRoomMembersState.Ready::class.java)
-        assertThat((memberStates[2] as? MatrixRoomMembersState.Ready)?.roomMembers?.size).isEqualTo(3)
+            assertThat(awaitItem()).isInstanceOf(MatrixRoomMembersState.Unknown::class.java)
+            assertThat(awaitItem()).isInstanceOf(MatrixRoomMembersState.Pending::class.java)
+            assertThat((awaitItem() as? MatrixRoomMembersState.Ready)?.roomMembers?.size).isEqualTo(3)
+        }
     }
 
     @Test
-    fun `getUpdatedRoomMembers - on error it emits an Error item`() = runTest(StandardTestDispatcher()) {
+    fun `getUpdatedRoomMembers - on error it emits an Error item`() = runTest {
         val room = FakeRustRoom(getMembers = { error("An unexpected error") })
 
         val fetcher = RoomMemberListFetcher(room, Dispatchers.Default)
-        val asyncMembers = async { fetcher.membersFlow.take(3).toList() }
-        runCurrent()
-        fetcher.getUpdatedRoomMembers(withCache = false)
-        val memberStates = asyncMembers.await()
+        fetcher.membersFlow.test {
+            fetcher.getUpdatedRoomMembers(withCache = false)
 
-        assertThat(memberStates).hasSize(3)
-        assertThat(memberStates[0]).isInstanceOf(MatrixRoomMembersState.Unknown::class.java)
-        assertThat(memberStates[1]).isInstanceOf(MatrixRoomMembersState.Pending::class.java)
-        assertThat(memberStates[2]).isInstanceOf(MatrixRoomMembersState.Error::class.java)
+            assertThat(awaitItem()).isInstanceOf(MatrixRoomMembersState.Unknown::class.java)
+            assertThat(awaitItem()).isInstanceOf(MatrixRoomMembersState.Pending::class.java)
+            assertThat(awaitItem()).isInstanceOf(MatrixRoomMembersState.Error::class.java)
+        }
     }
 
     @Test
-    fun `getUpdatedRoomMembers - with 'withCache' returns cached items first, then new ones`() = runTest(StandardTestDispatcher()) {
+    fun `getUpdatedRoomMembers - with 'withCache' returns cached items first, then new ones`() = runTest {
         val room = FakeRustRoom(
             getMembersNoSync = {
                 FakeRoomMembersIterator(listOf(FakeRustRoomMember(A_USER_ID_4)))
@@ -183,25 +168,26 @@ class RoomMemberListFetcherTest {
         )
 
         val fetcher = RoomMemberListFetcher(room, Dispatchers.Default)
-        val asyncMembers = async { fetcher.membersFlow.take(4).toList() }
-        runCurrent()
-        fetcher.getUpdatedRoomMembers(withCache = true)
-        val memberStates = asyncMembers.await()
-
-        assertThat(memberStates).hasSize(4)
-        // Initial
-        assertThat(memberStates[0]).isInstanceOf(MatrixRoomMembersState.Unknown::class.java)
-        // Loaded cached
-        assertThat(memberStates[1]).isInstanceOf(MatrixRoomMembersState.Ready::class.java)
-        assertThat(memberStates[1].roomMembers()).hasSize(1)
-        // Start loading new
-        assertThat(memberStates[2]).isInstanceOf(MatrixRoomMembersState.Pending::class.java)
-        assertThat(memberStates[3]).isInstanceOf(MatrixRoomMembersState.Ready::class.java)
-        assertThat(memberStates[3].roomMembers()).hasSize(3)
+        fetcher.membersFlow.test {
+            fetcher.getUpdatedRoomMembers(withCache = true)
+            // Initial
+            assertThat(awaitItem()).isInstanceOf(MatrixRoomMembersState.Unknown::class.java)
+            // Loaded cached
+            awaitItem().let { cached ->
+                assertThat(cached).isInstanceOf(MatrixRoomMembersState.Ready::class.java)
+                assertThat(cached.roomMembers()).hasSize(1)
+            }
+            // Start loading new
+            assertThat(awaitItem()).isInstanceOf(MatrixRoomMembersState.Pending::class.java)
+            awaitItem().let { ready ->
+                assertThat(ready).isInstanceOf(MatrixRoomMembersState.Ready::class.java)
+                assertThat(ready.roomMembers()).hasSize(3)
+            }
+        }
     }
 
     @Test
-    fun `getUpdatedRoomMembers - with 'withCache' skips cache if there is already a ready state`() = runTest(StandardTestDispatcher()) {
+    fun `getUpdatedRoomMembers - with 'withCache' skips cache if there is already a ready state`() = runTest {
         val room = FakeRustRoom(
             getMembersNoSync = {
                 FakeRoomMembersIterator(listOf(FakeRustRoomMember(A_USER_ID_4)))
@@ -221,20 +207,19 @@ class RoomMemberListFetcherTest {
         // Set a ready state
         fetcher.getUpdatedRoomMembers(withCache = false)
 
-        val asyncMembers = async { fetcher.membersFlow.take(3).toList() }
-        runCurrent()
-        // Start loading new members
-        fetcher.getUpdatedRoomMembers(withCache = true)
-        val memberStates = asyncMembers.await()
-
-        assertThat(memberStates).hasSize(3)
-        // Previous ready state
-        assertThat(memberStates[0]).isInstanceOf(MatrixRoomMembersState.Ready::class.java)
-        // New pending state
-        assertThat(memberStates[1]).isInstanceOf(MatrixRoomMembersState.Pending::class.java)
-        // New ready state
-        assertThat(memberStates[2]).isInstanceOf(MatrixRoomMembersState.Ready::class.java)
-        assertThat(memberStates[2].roomMembers()).hasSize(3)
+        fetcher.membersFlow.test {
+            // Start loading new members
+            fetcher.getUpdatedRoomMembers(withCache = true)
+            // Previous ready state
+            assertThat(awaitItem()).isInstanceOf(MatrixRoomMembersState.Ready::class.java)
+            // New pending state
+            assertThat(awaitItem()).isInstanceOf(MatrixRoomMembersState.Pending::class.java)
+            // New ready state
+            awaitItem().let { ready ->
+                assertThat(ready).isInstanceOf(MatrixRoomMembersState.Ready::class.java)
+                assertThat(ready.roomMembers()).hasSize(3)
+            }
+        }
     }
 }
 
