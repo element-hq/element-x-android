@@ -160,6 +160,7 @@ class RoomListDataSource @Inject constructor(
                         roomLastMessageFormatter.format(message.event, roomSummary.details.isDirect)
                     }.orEmpty(),
                     avatarData = avatarData,
+                    isPlaceholder = false,
                     userDefinedNotificationMode = roomSummary.details.userDefinedNotificationMode,
                     hasRoomCall = roomSummary.details.hasRoomCall,
                     isDm = roomSummary.details.isDm,

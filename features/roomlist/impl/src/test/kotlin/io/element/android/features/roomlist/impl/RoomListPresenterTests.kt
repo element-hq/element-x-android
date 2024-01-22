@@ -442,4 +442,7 @@ private val aRoomListRoomSummary = RoomListRoomSummary(
     lastMessage = "",
     avatarData = AvatarData(id = A_ROOM_ID.value, name = A_ROOM_NAME, size = AvatarSize.RoomListItem),
     isPlaceholder = false,
+    userDefinedNotificationMode = null,
+    hasRoomCall = false,
+    isDm = false,
 )

@@ -29,7 +29,11 @@ object RoomListRoomSummaryPlaceholders {
             name = "Short name",
             timestamp = "hh:mm",
             lastMessage = "Last message for placeholder",
-            avatarData = AvatarData(id, "S", size = AvatarSize.RoomListItem)
+            avatarData = AvatarData(id, "S", size = AvatarSize.RoomListItem),
+            hasUnread = false,
+            userDefinedNotificationMode = null,
+            hasRoomCall = false,
+            isDm = false,
         )
     }
 
