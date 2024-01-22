@@ -29,7 +29,6 @@ import io.element.android.features.roomlist.impl.datasource.FakeInviteDataSource
 import io.element.android.features.roomlist.impl.datasource.InviteStateDataSource
 import io.element.android.features.roomlist.impl.datasource.RoomListDataSource
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
-import io.element.android.features.roomlist.impl.model.aRoomListRoomSummary
 import io.element.android.libraries.dateformatter.api.LastMessageTimestampFormatter
 import io.element.android.libraries.dateformatter.test.FakeLastMessageTimestampFormatter
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
@@ -316,7 +315,7 @@ class RoomListPresenterTests {
             skipItems(1)
 
             val initialState = awaitItem()
-            val summary = aRoomListRoomSummary()
+            val summary = aRoomListRoomSummary
             initialState.eventSink(RoomListEvents.ShowContextMenu(summary))
 
             val shownState = awaitItem()
@@ -336,7 +335,7 @@ class RoomListPresenterTests {
             skipItems(1)
 
             val initialState = awaitItem()
-            val summary = aRoomListRoomSummary()
+            val summary = aRoomListRoomSummary
             initialState.eventSink(RoomListEvents.ShowContextMenu(summary))
 
             val shownState = awaitItem()
