@@ -18,7 +18,6 @@ package io.element.android.libraries.matrix.impl.room
 
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.coroutine.childScope
-import io.element.android.libraries.core.coroutine.parallelMap
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -37,7 +36,6 @@ import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.api.room.MatrixRoomNotificationSettingsState
 import io.element.android.libraries.matrix.api.room.Mention
 import io.element.android.libraries.matrix.api.room.MessageEventType
-import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.StateEventType
 import io.element.android.libraries.matrix.api.room.location.AssetType
 import io.element.android.libraries.matrix.api.room.roomNotificationSettings
@@ -51,6 +49,7 @@ import io.element.android.libraries.matrix.impl.media.toMSC3246range
 import io.element.android.libraries.matrix.impl.notificationsettings.RustNotificationSettingsService
 import io.element.android.libraries.matrix.impl.poll.toInner
 import io.element.android.libraries.matrix.impl.room.location.toInner
+import io.element.android.libraries.matrix.impl.room.member.RoomMemberListFetcher
 import io.element.android.libraries.matrix.impl.timeline.AsyncMatrixTimeline
 import io.element.android.libraries.matrix.impl.timeline.RustMatrixTimeline
 import io.element.android.libraries.matrix.impl.util.mxCallbackFlow
@@ -58,25 +57,19 @@ import io.element.android.libraries.matrix.impl.widget.RustWidgetDriver
 import io.element.android.libraries.matrix.impl.widget.generateWidgetWebViewUrl
 import io.element.android.libraries.sessionstorage.api.SessionData
 import io.element.android.services.toolbox.api.systemclock.SystemClock
-import kotlinx.collections.immutable.toImmutableList
-import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.cancel
-import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.EventTimelineItem
 import org.matrix.rustcomponents.sdk.RoomInfo
 import org.matrix.rustcomponents.sdk.RoomInfoListener
 import org.matrix.rustcomponents.sdk.RoomListItem
-import org.matrix.rustcomponents.sdk.RoomMembersIterator
 import org.matrix.rustcomponents.sdk.RoomMessageEventContentWithoutRelation
 import org.matrix.rustcomponents.sdk.SendAttachmentJoinHandle
 import org.matrix.rustcomponents.sdk.WidgetCapabilities
@@ -105,9 +98,6 @@ class RustMatrixRoom(
     private val roomSyncSubscriber: RoomSyncSubscriber,
     private val matrixRoomInfoMapper: MatrixRoomInfoMapper,
 ) : MatrixRoom {
-
-    private val roomMemberMutex = Mutex()
-
     override val roomId = RoomId(innerRoom.id())
 
     override val roomInfoFlow: Flow<MatrixRoomInfo> = mxCallbackFlow {
@@ -129,8 +119,8 @@ class RustMatrixRoom(
     private val roomMembersDispatcher = coroutineDispatchers.io.limitedParallelism(8)
 
     private val roomCoroutineScope = sessionCoroutineScope.childScope(coroutineDispatchers.main, "RoomScope-$roomId")
-    private val _membersStateFlow = MutableStateFlow<MatrixRoomMembersState>(MatrixRoomMembersState.Unknown)
     private val _syncUpdateFlow = MutableStateFlow(0L)
+    private val roomMemberListFetcher = RoomMemberListFetcher(innerRoom, roomMembersDispatcher)
 
     private val _roomNotificationSettingsStateFlow = MutableStateFlow<MatrixRoomNotificationSettingsState>(MatrixRoomNotificationSettingsState.Unknown)
     override val roomNotificationSettingsStateFlow: StateFlow<MatrixRoomNotificationSettingsState> = _roomNotificationSettingsStateFlow
@@ -139,7 +129,7 @@ class RustMatrixRoom(
         _syncUpdateFlow.value = systemClock.epochMillis()
     }
 
-    override val membersStateFlow: StateFlow<MatrixRoomMembersState> = _membersStateFlow.asStateFlow()
+    override val membersStateFlow: StateFlow<MatrixRoomMembersState> = roomMemberListFetcher.membersFlow
 
     override val syncUpdateFlow: StateFlow<Long> = _syncUpdateFlow.asStateFlow()
 
@@ -196,47 +186,7 @@ class RustMatrixRoom(
     override val activeMemberCount: Long
         get() = innerRoom.activeMembersCount().toLong()
 
-    override suspend fun updateMembers(): Result<Unit> {
-        if (roomMemberMutex.isLocked) {
-            Timber.i("Room members are already being updated for room $roomId")
-            return Result.success(Unit)
-        }
-        return roomMemberMutex.withLock {
-            withContext(roomMembersDispatcher) {
-                // Load cached members as fallback and to get faster results
-                val cachedMembers = try {
-                    if (membersStateFlow.value !is MatrixRoomMembersState.Ready) {
-                        Timber.i("Loading cached members for room $roomId")
-                        parseAndEmitMembers(innerRoom.membersNoSync()).toImmutableList()
-                    } else {
-                        Timber.i("No need to load cached members found for room $roomId")
-                        null
-                    }
-                } catch (exception: Exception) {
-                    Timber.e(exception, "Failed to load cached members for room $roomId")
-                    if (exception is CancellationException) {
-                        throw exception
-                    }
-                    null
-                }
-
-                // Start loading new members
-                _membersStateFlow.value = MatrixRoomMembersState.Pending(prevRoomMembers = cachedMembers)
-                try {
-                    Timber.i("Loading updated members for room $roomId")
-                    parseAndEmitMembers(innerRoom.members()).toImmutableList()
-                    Timber.i("Loaded updated members for room $roomId")
-                    Result.success(Unit)
-                } catch (exception: CancellationException) {
-                    _membersStateFlow.value = MatrixRoomMembersState.Error(prevRoomMembers = cachedMembers, failure = exception)
-                    throw exception
-                } catch (exception: Exception) {
-                    _membersStateFlow.value = MatrixRoomMembersState.Error(prevRoomMembers = cachedMembers, failure = exception)
-                    Result.failure(exception)
-                }
-            }
-        }
-    }
+    override suspend fun updateMembers(): Result<Unit> = roomMemberListFetcher.getUpdatedRoomMembers()
 
     override suspend fun userDisplayName(userId: UserId): Result<String?> = withContext(roomDispatcher) {
         runCatching {
@@ -620,19 +570,4 @@ class RustMatrixRoom(
         } else {
             messageEventContentFromMarkdown(body)
         }
-
-    private suspend fun CoroutineScope.parseAndEmitMembers(roomMembersIterator: RoomMembersIterator): List<RoomMember> {
-        return roomMembersIterator.use { iterator ->
-            buildList {
-                while (true) {
-                    // Loading the whole membersIterator as a stop-gap measure.
-                    // We should probably implement some sort of paging in the future.
-                    ensureActive()
-                    addAll(iterator.nextChunk(1000u)?.parallelMap(RoomMemberMapper::map) ?: break)
-                    Timber.i("Emitting first $size members for room $roomId")
-                    _membersStateFlow.value = MatrixRoomMembersState.Ready(toImmutableList())
-                }
-            }
-        }
-    }
 }
