@@ -34,6 +34,9 @@ import org.matrix.rustcomponents.sdk.use
 import timber.log.Timber
 import kotlin.coroutines.cancellation.CancellationException
 
+/**
+ * This class fetches the room members for a given room in a 'paginated' way, and taking into account previous cached values.
+ */
 internal class RoomMemberListFetcher(
     private val room: RoomInterface,
     private val dispatcher: CoroutineDispatcher,
@@ -45,6 +48,11 @@ internal class RoomMemberListFetcher(
     private val _membersFlow = MutableStateFlow<MatrixRoomMembersState>(MatrixRoomMembersState.Unknown)
     val membersFlow: StateFlow<MatrixRoomMembersState> = _membersFlow
 
+    /**
+     * Fetches the room members for the given room.
+     * It will emit the cached members first, and then the updated members in batches of [pageSize] items, through [membersFlow].
+     * @param withCache Whether to load the cached members first. Defaults to true.
+     */
     @Suppress("InstanceOfCheckForException")
     suspend fun getUpdatedRoomMembers(withCache: Boolean = true) {
         if (updatedRoomMemberMutex.isLocked) {
