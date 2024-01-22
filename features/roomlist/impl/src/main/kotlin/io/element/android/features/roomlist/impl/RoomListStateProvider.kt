@@ -88,7 +88,7 @@ internal fun aRoomListRoomSummaryList(): ImmutableList<RoomListRoomSummary> {
             avatarData = AvatarData("!id", "Z", size = AvatarSize.RoomListItem),
             id = "!roomId2:domain",
         ),
-        RoomListRoomSummaryPlaceholders.create("!roomId2:domain"),
         RoomListRoomSummaryPlaceholders.create("!roomId3:domain"),
+        RoomListRoomSummaryPlaceholders.create("!roomId4:domain"),
     )
 }
