@@ -28,10 +28,10 @@ open class RoomListRoomSummaryProvider : PreviewParameterProvider<RoomListRoomSu
             aRoomListRoomSummary(),
             aRoomListRoomSummary(lastMessage = null),
             aRoomListRoomSummary(hasUnread = true, notificationMode = RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY),
-            aRoomListRoomSummary(timestamp = "88:88", notificationMode = RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY),
-            aRoomListRoomSummary(timestamp = "88:88", notificationMode = RoomNotificationMode.MUTE),
-            aRoomListRoomSummary(timestamp = "88:88", hasUnread = true),
-            aRoomListRoomSummary(isPlaceholder = true, timestamp = "88:88"),
+            aRoomListRoomSummary(notificationMode = RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY),
+            aRoomListRoomSummary(notificationMode = RoomNotificationMode.MUTE),
+            aRoomListRoomSummary(hasUnread = true),
+            aRoomListRoomSummary(isPlaceholder = true),
             aRoomListRoomSummary(
                 name = "A very long room name that should be truncated",
                 lastMessage = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt" +
@@ -44,23 +44,27 @@ open class RoomListRoomSummaryProvider : PreviewParameterProvider<RoomListRoomSu
         )
 }
 
-fun aRoomListRoomSummary(
-    lastMessage: String? = "Last message",
-    notificationMode: RoomNotificationMode? = null,
-    hasUnread: Boolean = false,
-    timestamp: String? = "88:88",
-    hasRoomCall: Boolean = false,
-    isPlaceholder: Boolean = false,
+internal fun aRoomListRoomSummary(
+    id: String = "!roomId:domain",
     name: String = "Room name",
+    hasUnread: Boolean = false,
+    lastMessage: String? = "Last message",
+    timestamp: String? = lastMessage?.let { "88:88" },
+    isPlaceholder: Boolean = false,
+    notificationMode: RoomNotificationMode? = null,
+    hasRoomCall: Boolean = false,
+    avatarData: AvatarData = AvatarData(id, name, size = AvatarSize.RoomListItem),
+    isDm: Boolean = false,
 ) = RoomListRoomSummary(
-    id = "!roomId",
-    roomId = RoomId("!roomId:domain"),
+    id = id,
+    roomId = RoomId(id),
     name = name,
     hasUnread = hasUnread,
     timestamp = timestamp,
     lastMessage = lastMessage,
-    avatarData = AvatarData("!roomId", "Room name", size = AvatarSize.RoomListItem),
+    avatarData = avatarData,
     isPlaceholder = isPlaceholder,
     userDefinedNotificationMode = notificationMode,
     hasRoomCall = hasRoomCall,
+    isDm = isDm,
 )

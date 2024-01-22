@@ -19,7 +19,7 @@ package io.element.android.features.roomlist.impl
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.leaveroom.api.aLeaveRoomState
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
-import io.element.android.features.roomlist.impl.model.RoomListRoomSummaryPlaceholders
+import io.element.android.features.roomlist.impl.model.aRoomListRoomSummary
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
@@ -71,25 +71,29 @@ internal fun aRoomListState() = RoomListState(
 
 internal fun aRoomListRoomSummaryList(): ImmutableList<RoomListRoomSummary> {
     return persistentListOf(
-        RoomListRoomSummary(
+        aRoomListRoomSummary(
             name = "Room",
             hasUnread = true,
             timestamp = "14:18",
             lastMessage = "A very very very very long message which suites on two lines",
             avatarData = AvatarData("!id", "R", size = AvatarSize.RoomListItem),
             id = "!roomId:domain",
-            roomId = RoomId("!roomId:domain")
         ),
-        RoomListRoomSummary(
+        aRoomListRoomSummary(
             name = "Room#2",
             hasUnread = false,
             timestamp = "14:16",
             lastMessage = "A short message",
             avatarData = AvatarData("!id", "Z", size = AvatarSize.RoomListItem),
             id = "!roomId2:domain",
-            roomId = RoomId("!roomId2:domain")
         ),
-        RoomListRoomSummaryPlaceholders.create("!roomId2:domain"),
-        RoomListRoomSummaryPlaceholders.create("!roomId3:domain"),
+        aRoomListRoomSummary(
+            id = "!roomId3:domain",
+            isPlaceholder = true,
+        ),
+        aRoomListRoomSummary(
+            id = "!roomId4:domain",
+            isPlaceholder = true,
+        ),
     )
 }
