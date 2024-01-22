@@ -44,23 +44,27 @@ open class RoomListRoomSummaryProvider : PreviewParameterProvider<RoomListRoomSu
         )
 }
 
-fun aRoomListRoomSummary(
-    lastMessage: String? = "Last message",
-    notificationMode: RoomNotificationMode? = null,
+internal fun aRoomListRoomSummary(
+    id: String = "!roomId:domain",
+    name: String = "Room name",
     hasUnread: Boolean = false,
     timestamp: String? = "88:88",
-    hasRoomCall: Boolean = false,
+    lastMessage: String? = "Last message",
     isPlaceholder: Boolean = false,
-    name: String = "Room name",
+    notificationMode: RoomNotificationMode? = null,
+    hasRoomCall: Boolean = false,
+    avatarData: AvatarData = AvatarData(id, name, size = AvatarSize.RoomListItem),
+    isDm: Boolean = false,
 ) = RoomListRoomSummary(
-    id = "!roomId",
-    roomId = RoomId("!roomId:domain"),
+    id = id,
+    roomId = RoomId(id),
     name = name,
     hasUnread = hasUnread,
     timestamp = timestamp,
     lastMessage = lastMessage,
-    avatarData = AvatarData("!roomId", "Room name", size = AvatarSize.RoomListItem),
+    avatarData = avatarData,
     isPlaceholder = isPlaceholder,
     userDefinedNotificationMode = notificationMode,
     hasRoomCall = hasRoomCall,
+    isDm = isDm,
 )
