@@ -169,9 +169,7 @@ class FakeMatrixRoom(
     override val roomNotificationSettingsStateFlow: MutableStateFlow<MatrixRoomNotificationSettingsState> =
         MutableStateFlow(MatrixRoomNotificationSettingsState.Unknown)
 
-    override suspend fun updateMembers(): Result<Unit> = simulateLongTask {
-        updateMembersResult
-    }
+    override suspend fun updateMembers() = Unit
 
     override suspend fun updateRoomNotificationSettings(): Result<Unit> = simulateLongTask {
         val notificationSettings = notificationSettingsService.getRoomNotificationSettings(roomId, isEncrypted, isOneToOne).getOrThrow()

@@ -522,9 +522,10 @@ fun aMatrixRoom(
 
 @Composable
 private fun <T> withFakeLifecycleOwner(lifecycleOwner: LifecycleOwner? = null, block: @Composable () -> T): T {
-    val actualLifecycleOwner = lifecycleOwner ?: remember { object : LifecycleOwner {
-        override val lifecycle: Lifecycle
-            get() = LifecycleRegistry.createUnsafe(this)
+    val actualLifecycleOwner = lifecycleOwner ?: remember {
+        object : LifecycleOwner {
+            override val lifecycle: Lifecycle
+                get() = LifecycleRegistry.createUnsafe(this)
         }
     }
 

@@ -80,6 +80,7 @@ class RoomDetailsPresenter @Inject constructor(
             }
         }
 
+        // Update room members only when first presenting the node
         OnLifecycleEvent { _, event ->
             if (event == Lifecycle.Event.ON_CREATE) {
                 scope.launch { room.updateMembers() }
