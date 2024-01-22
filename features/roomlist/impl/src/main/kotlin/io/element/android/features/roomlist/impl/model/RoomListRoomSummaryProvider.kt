@@ -49,7 +49,7 @@ internal fun aRoomListRoomSummary(
     name: String = "Room name",
     hasUnread: Boolean = false,
     lastMessage: String? = "Last message",
-    timestamp: String? = if (lastMessage != null) "88:88" else null,
+    timestamp: String? = lastMessage?.let { "88:88" },
     isPlaceholder: Boolean = false,
     notificationMode: RoomNotificationMode? = null,
     hasRoomCall: Boolean = false,
