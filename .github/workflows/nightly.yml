@@ -33,7 +33,7 @@ jobs:
           yes n | towncrier build --version nightly
       - name: Build and upload Nightly application
         run: |
-          ./gradlew assembleNightly appDistributionUploadNightly $CI_GRADLE_ARG_PROPERTIES
+          ./gradlew assembleGplayNightly appDistributionUploadGplayNightly $CI_GRADLE_ARG_PROPERTIES
         env:
           ELEMENT_ANDROID_MAPTILER_API_KEY: ${{ secrets.MAPTILER_KEY }}
           ELEMENT_ANDROID_MAPTILER_LIGHT_MAP_ID: ${{ secrets.MAPTILER_LIGHT_MAP_ID }}
