@@ -57,6 +57,7 @@
   <string name="action_join">"Rejoindre"</string>
   <string name="action_learn_more">"En savoir plus"</string>
   <string name="action_leave">"Quitter"</string>
+  <string name="action_leave_conversation">"Quitter la discussion"</string>
   <string name="action_leave_room">"Quitter le salon"</string>
   <string name="action_manage_account">"Gérer le compte"</string>
   <string name="action_manage_devices">"Gérez les sessions"</string>

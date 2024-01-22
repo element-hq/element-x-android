@@ -57,6 +57,7 @@
   <string name="action_join">"Pripojiť sa"</string>
   <string name="action_learn_more">"Zistiť viac"</string>
   <string name="action_leave">"Opustiť"</string>
+  <string name="action_leave_conversation">"Opustiť konverzáciu"</string>
   <string name="action_leave_room">"Opustiť miestnosť"</string>
   <string name="action_manage_account">"Spravovať účet"</string>
   <string name="action_manage_devices">"Spravovať zariadenia"</string>
