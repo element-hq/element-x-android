@@ -56,7 +56,8 @@ class ActionListPresenter @Inject constructor(
                 ActionListEvents.Clear -> target.value = ActionListState.Target.None
                 is ActionListEvents.ComputeForMessage -> localCoroutineScope.computeForMessage(
                     timelineItem = event.event,
-                    userCanRedact = event.canRedact,
+                    userCanRedactOwn = event.canRedactOwn,
+                    userCanRedactOther = event.canRedactOther,
                     userCanSendMessage = event.canSendMessage,
                     userCanSendReaction = event.canSendReaction,
                     isDeveloperModeEnabled = isDeveloperModeEnabled,
@@ -73,13 +74,16 @@ class ActionListPresenter @Inject constructor(
 
     private fun CoroutineScope.computeForMessage(
         timelineItem: TimelineItem.Event,
-        userCanRedact: Boolean,
+        userCanRedactOwn: Boolean,
+        userCanRedactOther: Boolean,
         userCanSendMessage: Boolean,
         userCanSendReaction: Boolean,
         isDeveloperModeEnabled: Boolean,
         target: MutableState<ActionListState.Target>
     ) = launch {
         target.value = ActionListState.Target.Loading(timelineItem)
+        val canRedact = (timelineItem.isMine && userCanRedactOwn) ||
+            (!timelineItem.isMine && userCanRedactOther)
         val actions =
             when (timelineItem.content) {
                 is TimelineItemRedactedContent -> {
@@ -99,7 +103,6 @@ class ActionListPresenter @Inject constructor(
                 }
                 is TimelineItemPollContent -> {
                     buildList {
-                        val isMineOrCanRedact = timelineItem.isMine || userCanRedact
                         if (timelineItem.isRemote) {
                             // Can only reply or forward messages already uploaded to the server
                             add(TimelineItemAction.Reply)
@@ -107,7 +110,7 @@ class ActionListPresenter @Inject constructor(
                         if (timelineItem.isRemote && timelineItem.isEditable) {
                             add(TimelineItemAction.Edit)
                         }
-                        if (timelineItem.isRemote && !timelineItem.content.isEnded && isMineOrCanRedact) {
+                        if (timelineItem.isRemote && !timelineItem.content.isEnded && (timelineItem.isMine || canRedact)) {
                             add(TimelineItemAction.EndPoll)
                         }
                         if (timelineItem.content.canBeCopied()) {
@@ -119,7 +122,7 @@ class ActionListPresenter @Inject constructor(
                         if (!timelineItem.isMine) {
                             add(TimelineItemAction.ReportContent)
                         }
-                        if (isMineOrCanRedact) {
+                        if (canRedact) {
                             add(TimelineItemAction.Redact)
                         }
                     }
@@ -136,7 +139,7 @@ class ActionListPresenter @Inject constructor(
                         if (!timelineItem.isMine) {
                             add(TimelineItemAction.ReportContent)
                         }
-                        if (timelineItem.isMine || userCanRedact) {
+                        if (canRedact) {
                             add(TimelineItemAction.Redact)
                         }
                     }
@@ -169,7 +172,7 @@ class ActionListPresenter @Inject constructor(
                     if (!timelineItem.isMine) {
                         add(TimelineItemAction.ReportContent)
                     }
-                    if (timelineItem.isMine || userCanRedact) {
+                    if (canRedact) {
                         add(TimelineItemAction.Redact)
                     }
                 }

@@ -160,7 +160,8 @@ fun MessagesView(
         state.actionListState.eventSink(
             ActionListEvents.ComputeForMessage(
                 event = event,
-                canRedact = state.userHasPermissionToRedact,
+                canRedactOwn = state.userHasPermissionToRedactOwn,
+                canRedactOther = state.userHasPermissionToRedactOther,
                 canSendMessage = state.userHasPermissionToSendMessage,
                 canSendReaction = state.userHasPermissionToSendReaction,
             )
