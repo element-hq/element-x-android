@@ -38,6 +38,7 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
 
+@Suppress("LargeClass")
 class ActionListPresenterTest {
     @get:Rule
     val warmUpRule = WarmUpRule()
