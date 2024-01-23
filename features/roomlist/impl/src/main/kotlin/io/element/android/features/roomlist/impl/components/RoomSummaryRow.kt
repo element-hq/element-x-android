@@ -43,7 +43,6 @@ import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummaryProvider
-import io.element.android.features.roomlist.impl.model.isTimestampHighlighted
 import io.element.android.libraries.core.extensions.orEmpty
 import io.element.android.libraries.designsystem.atomic.atoms.UnreadIndicatorAtom
 import io.element.android.libraries.designsystem.components.avatar.Avatar
@@ -142,7 +141,7 @@ private fun RowScope.NameAndTimestampRow(room: RoomListRoomSummary) {
     Text(
         text = room.timestamp ?: "",
         style = ElementTheme.typography.fontBodySmMedium,
-        color = if (room.isTimestampHighlighted()) {
+        color = if (room.isTimestampHighlighted) {
             ElementTheme.colors.unreadIndicator
         } else {
             MaterialTheme.roomListRoomMessageDate()
