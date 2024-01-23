@@ -30,6 +30,7 @@ import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
 import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
 import io.element.android.libraries.matrix.api.room.powerlevels.canInvite
 import io.element.android.libraries.matrix.api.room.roomMembers
@@ -57,6 +58,9 @@ class RoomMemberListPresenter @Inject constructor(
         }
 
         LaunchedEffect(membersState) {
+            if (membersState is MatrixRoomMembersState.Unknown) {
+                return@LaunchedEffect
+            }
             withContext(coroutineDispatchers.io) {
                 val members = membersState.roomMembers().orEmpty().groupBy { it.membership }
                 roomMembers = AsyncData.Success(
