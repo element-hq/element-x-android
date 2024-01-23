@@ -16,6 +16,7 @@
 
 package io.element.android.features.roomdetails
 
+import androidx.lifecycle.Lifecycle
 import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
@@ -47,9 +48,11 @@ import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.notificationsettings.FakeNotificationSettingsService
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.matrix.test.room.aRoomInfo
+import io.element.android.tests.testutils.FakeLifecycleOwner
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.consumeItemsUntilPredicate
 import io.element.android.tests.testutils.testCoroutineDispatchers
+import io.element.android.tests.testutils.withFakeLifecycleOwner
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestScope
@@ -62,6 +65,10 @@ import kotlin.time.Duration.Companion.milliseconds
 class RoomDetailsPresenterTests {
     @get:Rule
     val warmUpRule = WarmUpRule()
+
+    private val fakeLifecycleOwner = FakeLifecycleOwner().apply {
+        givenState(Lifecycle.State.RESUMED)
+    }
 
     private fun TestScope.createRoomDetailsPresenter(
         room: MatrixRoom,
@@ -94,7 +101,9 @@ class RoomDetailsPresenterTests {
         val room = aMatrixRoom()
         val presenter = createRoomDetailsPresenter(room)
         moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
+            withFakeLifecycleOwner(fakeLifecycleOwner) {
+                presenter.present()
+            }
         }.test {
             val initialState = awaitItem()
             assertThat(initialState.roomId).isEqualTo(room.roomId.value)
@@ -116,7 +125,9 @@ class RoomDetailsPresenterTests {
         }
         val presenter = createRoomDetailsPresenter(room)
         moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
+            withFakeLifecycleOwner(fakeLifecycleOwner) {
+                presenter.present()
+            }
         }.test {
             skipItems(1)
             val updatedState = awaitItem()
@@ -133,7 +144,9 @@ class RoomDetailsPresenterTests {
         val room = aMatrixRoom(name = null)
         val presenter = createRoomDetailsPresenter(room)
         moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
+            withFakeLifecycleOwner(fakeLifecycleOwner) {
+                presenter.present()
+            }
         }.test {
             val initialState = awaitItem()
             assertThat(initialState.roomName).isEqualTo(room.displayName)
@@ -155,7 +168,9 @@ class RoomDetailsPresenterTests {
         }
         val presenter = createRoomDetailsPresenter(room)
         moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
+            withFakeLifecycleOwner(fakeLifecycleOwner) {
+                presenter.present()
+            }
         }.test {
             val initialState = awaitItem()
             assertThat(initialState.roomType).isEqualTo(RoomDetailsType.Dm(otherRoomMember))
@@ -171,7 +186,9 @@ class RoomDetailsPresenterTests {
         }
         val presenter = createRoomDetailsPresenter(room, dispatchers = testCoroutineDispatchers())
         moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
+            withFakeLifecycleOwner(fakeLifecycleOwner) {
+                presenter.present()
+            }
         }.test {
             // Initially false
             assertThat(awaitItem().canInvite).isFalse()
@@ -189,7 +206,9 @@ class RoomDetailsPresenterTests {
         }
         val presenter = createRoomDetailsPresenter(room)
         moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
+            withFakeLifecycleOwner(fakeLifecycleOwner) {
+                presenter.present()
+            }
         }.test {
             assertThat(awaitItem().canInvite).isFalse()
 
@@ -204,7 +223,9 @@ class RoomDetailsPresenterTests {
         }
         val presenter = createRoomDetailsPresenter(room)
         moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
+            withFakeLifecycleOwner(fakeLifecycleOwner) {
+                presenter.present()
+            }
         }.test {
             assertThat(awaitItem().canInvite).isFalse()
 
@@ -222,7 +243,9 @@ class RoomDetailsPresenterTests {
         }
         val presenter = createRoomDetailsPresenter(room)
         moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
+            withFakeLifecycleOwner(fakeLifecycleOwner) {
+                presenter.present()
+            }
         }.test {
             // Initially false
             assertThat(awaitItem().canEdit).isFalse()
@@ -251,7 +274,9 @@ class RoomDetailsPresenterTests {
         }
         val presenter = createRoomDetailsPresenter(room)
         moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
+            withFakeLifecycleOwner(fakeLifecycleOwner) {
+                presenter.present()
+            }
         }.test {
             // Initially false
             assertThat(awaitItem().canEdit).isFalse()
@@ -281,7 +306,9 @@ class RoomDetailsPresenterTests {
         }
         val presenter = createRoomDetailsPresenter(room)
         moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
+            withFakeLifecycleOwner(fakeLifecycleOwner) {
+                presenter.present()
+            }
         }.test {
             skipItems(1)
 
@@ -302,7 +329,9 @@ class RoomDetailsPresenterTests {
         }
         val presenter = createRoomDetailsPresenter(room)
         moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
+            withFakeLifecycleOwner(fakeLifecycleOwner) {
+                presenter.present()
+            }
         }.test {
             // Initially false
             assertThat(awaitItem().canEdit).isFalse()
@@ -323,7 +352,9 @@ class RoomDetailsPresenterTests {
         }
         val presenter = createRoomDetailsPresenter(room)
         moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
+            withFakeLifecycleOwner(fakeLifecycleOwner) {
+                presenter.present()
+            }
         }.test {
             // Initially false, and no further events
             assertThat(awaitItem().canEdit).isFalse()
@@ -341,7 +372,9 @@ class RoomDetailsPresenterTests {
 
         val presenter = createRoomDetailsPresenter(room)
         moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
+            withFakeLifecycleOwner(fakeLifecycleOwner) {
+                presenter.present()
+            }
         }.test {
             // The initial state is "hidden" and no further state changes happen
             assertThat(awaitItem().roomTopic).isEqualTo(RoomTopicState.Hidden)
@@ -360,7 +393,9 @@ class RoomDetailsPresenterTests {
 
         val presenter = createRoomDetailsPresenter(room)
         moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
+            withFakeLifecycleOwner(fakeLifecycleOwner) {
+                presenter.present()
+            }
         }.test {
             // Ignore the initial state
             skipItems(1)
@@ -382,7 +417,9 @@ class RoomDetailsPresenterTests {
             dispatchers = testCoroutineDispatchers()
         )
         moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
+            withFakeLifecycleOwner(fakeLifecycleOwner) {
+                presenter.present()
+            }
         }.test {
             awaitItem().eventSink(RoomDetailsEvent.LeaveRoom)
 
@@ -403,7 +440,9 @@ class RoomDetailsPresenterTests {
             notificationSettingsService = notificationSettingsService,
         )
         moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
+            withFakeLifecycleOwner(fakeLifecycleOwner) {
+                presenter.present()
+            }
         }.test {
             notificationSettingsService.setRoomNotificationMode(room.roomId, RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY)
             val updatedState = consumeItemsUntilPredicate {
@@ -420,7 +459,9 @@ class RoomDetailsPresenterTests {
         val room = aMatrixRoom(notificationSettingsService = notificationSettingsService)
         val presenter = createRoomDetailsPresenter(room = room, notificationSettingsService = notificationSettingsService)
         moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
+            withFakeLifecycleOwner(fakeLifecycleOwner) {
+                presenter.present()
+            }
         }.test {
             awaitItem().eventSink(RoomDetailsEvent.MuteNotification)
             val updatedState = consumeItemsUntilPredicate(timeout = 250.milliseconds) {
@@ -440,7 +481,9 @@ class RoomDetailsPresenterTests {
         val room = aMatrixRoom(notificationSettingsService = notificationSettingsService)
         val presenter = createRoomDetailsPresenter(room = room, notificationSettingsService = notificationSettingsService)
         moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
+            withFakeLifecycleOwner(fakeLifecycleOwner) {
+                presenter.present()
+            }
         }.test {
             awaitItem().eventSink(RoomDetailsEvent.UnmuteNotification)
             val updatedState = consumeItemsUntilPredicate {

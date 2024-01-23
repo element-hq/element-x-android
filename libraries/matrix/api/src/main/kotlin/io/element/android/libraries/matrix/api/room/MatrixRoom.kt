@@ -75,7 +75,7 @@ interface MatrixRoom : Closeable {
     /**
      * Try to load the room members and update the membersFlow.
      */
-    suspend fun updateMembers(): Result<Unit>
+    suspend fun updateMembers()
 
     suspend fun updateRoomNotificationSettings(): Result<Unit>
 
