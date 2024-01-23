@@ -102,6 +102,9 @@ class ActionListPresenter @Inject constructor(
                     }
                 }
                 is TimelineItemPollContent -> {
+                    val canEndPoll = timelineItem.isRemote &&
+                        !timelineItem.content.isEnded &&
+                        (timelineItem.isMine || canRedact)
                     buildList {
                         if (timelineItem.isRemote) {
                             // Can only reply or forward messages already uploaded to the server
@@ -110,7 +113,7 @@ class ActionListPresenter @Inject constructor(
                         if (timelineItem.isRemote && timelineItem.isEditable) {
                             add(TimelineItemAction.Edit)
                         }
-                        if (timelineItem.isRemote && !timelineItem.content.isEnded && (timelineItem.isMine || canRedact)) {
+                        if (canEndPoll) {
                             add(TimelineItemAction.EndPoll)
                         }
                         if (timelineItem.content.canBeCopied()) {
