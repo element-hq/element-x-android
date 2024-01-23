@@ -18,6 +18,8 @@ package io.element.android.features.ftue.impl.migration
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import io.element.android.features.ftue.impl.R
@@ -32,8 +34,9 @@ fun MigrationScreenView(
     modifier: Modifier = Modifier,
 ) {
     if (migrationState.isMigrating.not()) {
-        LaunchedEffect(onMigrationFinished) {
-            onMigrationFinished()
+        val latestOnMigrationFinished by rememberUpdatedState(onMigrationFinished)
+        LaunchedEffect(Unit) {
+            latestOnMigrationFinished()
         }
     }
     SunsetPage(

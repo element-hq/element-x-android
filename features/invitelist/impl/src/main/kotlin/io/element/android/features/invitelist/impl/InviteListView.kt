@@ -28,6 +28,8 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -57,8 +59,9 @@ fun InviteListView(
     modifier: Modifier = Modifier,
 ) {
     if (state.acceptedAction is AsyncData.Success) {
-        LaunchedEffect(state.acceptedAction, onInviteAccepted) {
-            onInviteAccepted(state.acceptedAction.data)
+        val latestOnInviteAccepted by rememberUpdatedState(onInviteAccepted)
+        LaunchedEffect(state.acceptedAction) {
+            latestOnInviteAccepted(state.acceptedAction.data)
         }
     }
 

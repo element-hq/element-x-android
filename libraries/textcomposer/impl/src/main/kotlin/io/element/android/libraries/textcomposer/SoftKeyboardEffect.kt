@@ -43,8 +43,9 @@ internal fun <T> SoftKeyboardEffect(
 ) {
     val view = LocalView.current
     val latestOnRequestFocus by rememberUpdatedState(onRequestFocus)
-    LaunchedEffect(key, predicate) {
-        if (predicate(key)) {
+    val latestPredicate by rememberUpdatedState(predicate)
+    LaunchedEffect(key) {
+        if (latestPredicate(key)) {
             // Await window focus in case returning from a dialog
             view.awaitWindowFocus()
 
