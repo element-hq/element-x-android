@@ -49,6 +49,10 @@ class OnBoardingNode @AssistedInject constructor(
         plugins<OnBoardingEntryPoint.Callback>().forEach { it.onOpenDeveloperSettings() }
     }
 
+    private fun onReportProblem() {
+        plugins<OnBoardingEntryPoint.Callback>().forEach { it.onReportProblem() }
+    }
+
     @Composable
     override fun View(modifier: Modifier) {
         val state = presenter.present()
@@ -59,6 +63,7 @@ class OnBoardingNode @AssistedInject constructor(
             onCreateAccount = ::onSignUp,
             onSignInWithQrCode = { /* Not supported yet */ },
             onOpenDeveloperSettings = ::onOpenDeveloperSettings,
+            onReportProblem = ::onReportProblem,
         )
     }
 }

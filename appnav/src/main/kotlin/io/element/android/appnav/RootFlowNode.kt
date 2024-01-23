@@ -210,7 +210,14 @@ class RootFlowNode @AssistedInject constructor(
                 }
                 createNode<LoggedInAppScopeFlowNode>(buildContext, plugins = listOf(inputs, callback))
             }
-            NavTarget.NotLoggedInFlow -> createNode<NotLoggedInFlowNode>(buildContext)
+            NavTarget.NotLoggedInFlow -> {
+                val callback = object : NotLoggedInFlowNode.Callback {
+                    override fun onOpenBugReport() {
+                        backstack.push(NavTarget.BugReport)
+                    }
+                }
+                createNode<NotLoggedInFlowNode>(buildContext, plugins = listOf(callback))
+            }
             is NavTarget.SignedOutFlow -> {
                 signedOutEntryPoint.nodeBuilder(this, buildContext)
                     .params(

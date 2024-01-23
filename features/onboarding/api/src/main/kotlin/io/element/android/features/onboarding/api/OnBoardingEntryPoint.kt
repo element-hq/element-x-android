@@ -33,5 +33,6 @@ interface OnBoardingEntryPoint : FeatureEntryPoint {
         fun onSignUp()
         fun onSignIn()
         fun onOpenDeveloperSettings()
+        fun onReportProblem()
     }
 }
