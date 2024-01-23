@@ -75,14 +75,12 @@ internal class RoomMemberListFetcher(
                 try {
                     // Start loading new members
                     parseAndEmitMembers(room.members())
-                    Result.success(Unit)
+                } catch (exception: CancellationException) {
+                    Timber.d("Cancelled loading updated members for room $roomId")
+                    throw exception
                 } catch (exception: Exception) {
                     Timber.e(exception, "Failed to load updated members for room $roomId")
                     _membersFlow.value = MatrixRoomMembersState.Error(exception, prevRoomMembers)
-                    if (exception is CancellationException) {
-                        throw exception
-                    }
-                    Result.failure(exception)
                 }
             }
         }
@@ -93,12 +91,12 @@ internal class RoomMemberListFetcher(
         try {
             val iterator = room.membersNoSync()
             parseAndEmitMembers(iterator)
+        } catch (exception: CancellationException) {
+            Timber.d("Cancelled loading cached members for room $roomId")
+            throw exception
         } catch (exception: Exception) {
             Timber.e(exception, "Failed to load cached members for room $roomId")
             _membersFlow.value = MatrixRoomMembersState.Error(exception, _membersFlow.value.roomMembers()?.toImmutableList())
-            if (exception is CancellationException) {
-                throw exception
-            }
         }
     }
 
