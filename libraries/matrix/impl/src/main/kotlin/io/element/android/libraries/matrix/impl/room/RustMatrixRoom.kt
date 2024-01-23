@@ -186,7 +186,7 @@ class RustMatrixRoom(
     override val activeMemberCount: Long
         get() = innerRoom.activeMembersCount().toLong()
 
-    override suspend fun updateMembers() = roomMemberListFetcher.getUpdatedRoomMembers()
+    override suspend fun updateMembers() = roomMemberListFetcher.fetchRoomMembers()
 
     override suspend fun userDisplayName(userId: UserId): Result<String?> = withContext(roomDispatcher) {
         runCatching {

@@ -53,8 +53,7 @@ internal class RoomMemberListFetcher(
      * It will emit the cached members first, and then the updated members in batches of [pageSize] items, through [membersFlow].
      * @param withCache Whether to load the cached members first. Defaults to true.
      */
-    @Suppress("InstanceOfCheckForException")
-    suspend fun getUpdatedRoomMembers(withCache: Boolean = true) {
+    suspend fun fetchRoomMembers(withCache: Boolean = true) {
         if (updatedRoomMemberMutex.isLocked) {
             Timber.i("Room members are already being updated for room $roomId")
             return
@@ -64,7 +63,7 @@ internal class RoomMemberListFetcher(
                 // Load cached members as fallback and to get faster results
                 if (withCache) {
                     if (_membersFlow.value !is MatrixRoomMembersState.Ready) {
-                        getCachedRoomMembers()
+                        fetchCachedRoomMembers()
                     } else {
                         Timber.i("No need to load cached members found for room $roomId")
                     }
@@ -89,8 +88,7 @@ internal class RoomMemberListFetcher(
         }
     }
 
-    @Suppress("InstanceOfCheckForException")
-    internal suspend fun getCachedRoomMembers() = withContext(dispatcher) {
+    internal suspend fun fetchCachedRoomMembers() = withContext(dispatcher) {
         Timber.i("Loading cached members for room $roomId")
         try {
             val iterator = room.membersNoSync()
