@@ -21,7 +21,6 @@ import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.api.room.roomMembers
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -33,6 +32,7 @@ import org.matrix.rustcomponents.sdk.RoomMembersIterator
 import org.matrix.rustcomponents.sdk.use
 import timber.log.Timber
 import kotlin.coroutines.cancellation.CancellationException
+import kotlin.coroutines.coroutineContext
 
 /**
  * This class fetches the room members for a given room in a 'paginated' way, and taking into account previous cached values.
@@ -100,13 +100,13 @@ internal class RoomMemberListFetcher(
         }
     }
 
-    private suspend fun CoroutineScope.parseAndEmitMembers(roomMembersIterator: RoomMembersIterator) {
+    private suspend fun parseAndEmitMembers(roomMembersIterator: RoomMembersIterator) {
         roomMembersIterator.use { iterator ->
             val results = buildList {
                 while (true) {
                     // Loading the whole membersIterator as a stop-gap measure.
                     // We should probably implement some sort of paging in the future.
-                    ensureActive()
+                    coroutineContext.ensureActive()
                     addAll(iterator.nextChunk(pageSize.toUInt())?.parallelMap(RoomMemberMapper::map) ?: break)
                     Timber.i("Emitting first $size members for room $roomId")
                     _membersFlow.value = MatrixRoomMembersState.Ready(toImmutableList())
