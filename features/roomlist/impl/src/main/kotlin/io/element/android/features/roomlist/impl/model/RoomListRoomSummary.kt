@@ -26,7 +26,8 @@ data class RoomListRoomSummary(
     val id: String,
     val roomId: RoomId,
     val name: String,
-    val hasUnread: Boolean,
+    val numberOfUnreadMessages: Int,
+    val numberOfUnreadMentions: Int,
     val timestamp: String?,
     val lastMessage: CharSequence?,
     val avatarData: AvatarData,
@@ -34,4 +35,12 @@ data class RoomListRoomSummary(
     val userDefinedNotificationMode: RoomNotificationMode?,
     val hasRoomCall: Boolean,
     val isDm: Boolean,
-)
+) {
+    val isTimestampHighlighted = hasRoomCall ||
+        when (userDefinedNotificationMode) {
+            null,
+            RoomNotificationMode.ALL_MESSAGES -> numberOfUnreadMessages > 0 || numberOfUnreadMentions > 0
+            RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY -> numberOfUnreadMentions > 0
+            RoomNotificationMode.MUTE -> false
+        }
+}

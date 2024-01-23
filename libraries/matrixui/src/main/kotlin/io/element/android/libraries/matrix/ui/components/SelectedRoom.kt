@@ -113,7 +113,8 @@ fun aRoomSummaryDetails(
     notificationMode: RoomNotificationMode? = null,
     hasRoomCall: Boolean = false,
     isDm: Boolean = false,
-    unreadNotificationCount: Int = 0
+    numUnreadMentions: Int = 0,
+    numUnreadMessages: Int = 0,
 ) = RoomSummaryDetails(
     roomId = roomId,
     name = name,
@@ -125,5 +126,6 @@ fun aRoomSummaryDetails(
     userDefinedNotificationMode = notificationMode,
     hasRoomCall = hasRoomCall,
     isDm = isDm,
-    unreadNotificationCount = unreadNotificationCount,
+    numUnreadMentions = numUnreadMentions,
+    numUnreadMessages = numUnreadMessages,
 )
