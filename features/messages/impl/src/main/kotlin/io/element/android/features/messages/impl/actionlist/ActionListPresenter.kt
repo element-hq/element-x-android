@@ -82,8 +82,7 @@ class ActionListPresenter @Inject constructor(
         target: MutableState<ActionListState.Target>
     ) = launch {
         target.value = ActionListState.Target.Loading(timelineItem)
-        val canRedact = (timelineItem.isMine && userCanRedactOwn) ||
-            (!timelineItem.isMine && userCanRedactOther)
+        val canRedact = timelineItem.isMine && userCanRedactOwn || !timelineItem.isMine && userCanRedactOther
         val actions =
             when (timelineItem.content) {
                 is TimelineItemRedactedContent -> {
