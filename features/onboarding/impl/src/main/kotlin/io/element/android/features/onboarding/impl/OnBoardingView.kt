@@ -16,6 +16,7 @@
 
 package io.element.android.features.onboarding.impl
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -65,6 +66,7 @@ fun OnBoardingView(
     onSignIn: () -> Unit,
     onCreateAccount: () -> Unit,
     onOpenDeveloperSettings: () -> Unit,
+    onReportProblem: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     OnBoardingPage(
@@ -81,6 +83,7 @@ fun OnBoardingView(
                 onSignInWithQrCode = onSignInWithQrCode,
                 onSignIn = onSignIn,
                 onCreateAccount = onCreateAccount,
+                onReportProblem = onReportProblem,
             )
         }
     )
@@ -154,6 +157,7 @@ private fun OnBoardingButtons(
     onSignInWithQrCode: () -> Unit,
     onSignIn: () -> Unit,
     onCreateAccount: () -> Unit,
+    onReportProblem: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     ButtonColumnMolecule(modifier = modifier) {
@@ -187,6 +191,15 @@ private fun OnBoardingButtons(
             )
         }
         Spacer(modifier = Modifier.height(16.dp))
+        // Add a report problem text button. Use a Text since we need a special theme here.
+        Text(
+            modifier = Modifier
+                .padding(8.dp)
+                .clickable(onClick = onReportProblem),
+            text = stringResource(id = CommonStrings.common_report_a_problem),
+            style = ElementTheme.typography.fontBodySmRegular,
+            color = ElementTheme.colors.textSecondary,
+        )
     }
 }
 
@@ -200,6 +213,7 @@ internal fun OnBoardingScreenPreview(
         onSignInWithQrCode = {},
         onSignIn = {},
         onCreateAccount = {},
-        onOpenDeveloperSettings = {}
+        onOpenDeveloperSettings = {},
+        onReportProblem = {},
     )
 }
