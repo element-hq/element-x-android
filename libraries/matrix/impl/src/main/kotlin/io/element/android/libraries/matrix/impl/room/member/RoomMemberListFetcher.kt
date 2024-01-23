@@ -107,7 +107,8 @@ internal class RoomMemberListFetcher(
                     // Loading the whole membersIterator as a stop-gap measure.
                     // We should probably implement some sort of paging in the future.
                     coroutineContext.ensureActive()
-                    addAll(iterator.nextChunk(pageSize.toUInt())?.parallelMap(RoomMemberMapper::map) ?: break)
+                    val chunk = iterator.nextChunk(pageSize.toUInt())?.parallelMap(RoomMemberMapper::map) ?: break
+                    addAll(chunk)
                     Timber.i("Emitting first $size members for room $roomId")
                     _membersFlow.value = MatrixRoomMembersState.Ready(toImmutableList())
                 }
