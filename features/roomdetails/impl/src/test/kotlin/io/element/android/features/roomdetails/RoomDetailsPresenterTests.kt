@@ -57,9 +57,11 @@ import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.notificationsettings.FakeNotificationSettingsService
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.matrix.test.room.aRoomInfo
+import io.element.android.tests.testutils.FakeLifecycleOwner
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.consumeItemsUntilPredicate
 import io.element.android.tests.testutils.testCoroutineDispatchers
+import io.element.android.tests.testutils.withFakeLifecycleOwner
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestScope
@@ -72,6 +74,10 @@ import kotlin.time.Duration.Companion.milliseconds
 class RoomDetailsPresenterTests {
     @get:Rule
     val warmUpRule = WarmUpRule()
+
+    private val fakeLifecycleOwner = FakeLifecycleOwner().apply {
+        givenState(Lifecycle.State.RESUMED)
+    }
 
     private fun TestScope.createRoomDetailsPresenter(
         room: MatrixRoom,
@@ -104,7 +110,7 @@ class RoomDetailsPresenterTests {
         val room = aMatrixRoom()
         val presenter = createRoomDetailsPresenter(room)
         moleculeFlow(RecompositionMode.Immediate) {
-            withFakeLifecycleOwner {
+            withFakeLifecycleOwner(fakeLifecycleOwner) {
                 presenter.present()
             }
         }.test {
@@ -128,7 +134,7 @@ class RoomDetailsPresenterTests {
         }
         val presenter = createRoomDetailsPresenter(room)
         moleculeFlow(RecompositionMode.Immediate) {
-            withFakeLifecycleOwner {
+            withFakeLifecycleOwner(fakeLifecycleOwner) {
                 presenter.present()
             }
         }.test {
@@ -147,7 +153,7 @@ class RoomDetailsPresenterTests {
         val room = aMatrixRoom(name = null)
         val presenter = createRoomDetailsPresenter(room)
         moleculeFlow(RecompositionMode.Immediate) {
-            withFakeLifecycleOwner {
+            withFakeLifecycleOwner(fakeLifecycleOwner) {
                 presenter.present()
             }
         }.test {
@@ -171,7 +177,7 @@ class RoomDetailsPresenterTests {
         }
         val presenter = createRoomDetailsPresenter(room)
         moleculeFlow(RecompositionMode.Immediate) {
-            withFakeLifecycleOwner {
+            withFakeLifecycleOwner(fakeLifecycleOwner) {
                 presenter.present()
             }
         }.test {
@@ -189,7 +195,7 @@ class RoomDetailsPresenterTests {
         }
         val presenter = createRoomDetailsPresenter(room, dispatchers = testCoroutineDispatchers())
         moleculeFlow(RecompositionMode.Immediate) {
-            withFakeLifecycleOwner {
+            withFakeLifecycleOwner(fakeLifecycleOwner) {
                 presenter.present()
             }
         }.test {
@@ -209,7 +215,7 @@ class RoomDetailsPresenterTests {
         }
         val presenter = createRoomDetailsPresenter(room)
         moleculeFlow(RecompositionMode.Immediate) {
-            withFakeLifecycleOwner {
+            withFakeLifecycleOwner(fakeLifecycleOwner) {
                 presenter.present()
             }
         }.test {
@@ -226,7 +232,7 @@ class RoomDetailsPresenterTests {
         }
         val presenter = createRoomDetailsPresenter(room)
         moleculeFlow(RecompositionMode.Immediate) {
-            withFakeLifecycleOwner {
+            withFakeLifecycleOwner(fakeLifecycleOwner) {
                 presenter.present()
             }
         }.test {
@@ -246,7 +252,7 @@ class RoomDetailsPresenterTests {
         }
         val presenter = createRoomDetailsPresenter(room)
         moleculeFlow(RecompositionMode.Immediate) {
-            withFakeLifecycleOwner {
+            withFakeLifecycleOwner(fakeLifecycleOwner) {
                 presenter.present()
             }
         }.test {
@@ -277,7 +283,7 @@ class RoomDetailsPresenterTests {
         }
         val presenter = createRoomDetailsPresenter(room)
         moleculeFlow(RecompositionMode.Immediate) {
-            withFakeLifecycleOwner {
+            withFakeLifecycleOwner(fakeLifecycleOwner) {
                 presenter.present()
             }
         }.test {
@@ -309,7 +315,7 @@ class RoomDetailsPresenterTests {
         }
         val presenter = createRoomDetailsPresenter(room)
         moleculeFlow(RecompositionMode.Immediate) {
-            withFakeLifecycleOwner {
+            withFakeLifecycleOwner(fakeLifecycleOwner) {
                 presenter.present()
             }
         }.test {
@@ -332,7 +338,7 @@ class RoomDetailsPresenterTests {
         }
         val presenter = createRoomDetailsPresenter(room)
         moleculeFlow(RecompositionMode.Immediate) {
-            withFakeLifecycleOwner {
+            withFakeLifecycleOwner(fakeLifecycleOwner) {
                 presenter.present()
             }
         }.test {
@@ -355,7 +361,7 @@ class RoomDetailsPresenterTests {
         }
         val presenter = createRoomDetailsPresenter(room)
         moleculeFlow(RecompositionMode.Immediate) {
-            withFakeLifecycleOwner {
+            withFakeLifecycleOwner(fakeLifecycleOwner) {
                 presenter.present()
             }
         }.test {
@@ -375,7 +381,7 @@ class RoomDetailsPresenterTests {
 
         val presenter = createRoomDetailsPresenter(room)
         moleculeFlow(RecompositionMode.Immediate) {
-            withFakeLifecycleOwner {
+            withFakeLifecycleOwner(fakeLifecycleOwner) {
                 presenter.present()
             }
         }.test {
@@ -396,7 +402,7 @@ class RoomDetailsPresenterTests {
 
         val presenter = createRoomDetailsPresenter(room)
         moleculeFlow(RecompositionMode.Immediate) {
-            withFakeLifecycleOwner {
+            withFakeLifecycleOwner(fakeLifecycleOwner) {
                 presenter.present()
             }
         }.test {
@@ -420,7 +426,7 @@ class RoomDetailsPresenterTests {
             dispatchers = testCoroutineDispatchers()
         )
         moleculeFlow(RecompositionMode.Immediate) {
-            withFakeLifecycleOwner {
+            withFakeLifecycleOwner(fakeLifecycleOwner) {
                 presenter.present()
             }
         }.test {
@@ -443,7 +449,7 @@ class RoomDetailsPresenterTests {
             notificationSettingsService = notificationSettingsService,
         )
         moleculeFlow(RecompositionMode.Immediate) {
-            withFakeLifecycleOwner {
+            withFakeLifecycleOwner(fakeLifecycleOwner) {
                 presenter.present()
             }
         }.test {
@@ -462,7 +468,7 @@ class RoomDetailsPresenterTests {
         val room = aMatrixRoom(notificationSettingsService = notificationSettingsService)
         val presenter = createRoomDetailsPresenter(room = room, notificationSettingsService = notificationSettingsService)
         moleculeFlow(RecompositionMode.Immediate) {
-            withFakeLifecycleOwner {
+            withFakeLifecycleOwner(fakeLifecycleOwner) {
                 presenter.present()
             }
         }.test {
@@ -484,7 +490,7 @@ class RoomDetailsPresenterTests {
         val room = aMatrixRoom(notificationSettingsService = notificationSettingsService)
         val presenter = createRoomDetailsPresenter(room = room, notificationSettingsService = notificationSettingsService)
         moleculeFlow(RecompositionMode.Immediate) {
-            withFakeLifecycleOwner {
+            withFakeLifecycleOwner(fakeLifecycleOwner) {
                 presenter.present()
             }
         }.test {
@@ -519,19 +525,3 @@ fun aMatrixRoom(
     isDirect = isDirect,
     notificationSettingsService = notificationSettingsService
 )
-
-@Composable
-private fun <T> withFakeLifecycleOwner(lifecycleOwner: LifecycleOwner? = null, block: @Composable () -> T): T {
-    val actualLifecycleOwner = lifecycleOwner ?: remember {
-        object : LifecycleOwner {
-            override val lifecycle: Lifecycle
-                get() = LifecycleRegistry.createUnsafe(this)
-        }
-    }
-
-    var state: T? by remember { mutableStateOf(null) }
-    CompositionLocalProvider(LocalLifecycleOwner provides actualLifecycleOwner) {
-        state = block()
-    }
-    return state!!
-}
