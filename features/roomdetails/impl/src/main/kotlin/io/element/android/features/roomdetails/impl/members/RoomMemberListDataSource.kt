@@ -29,7 +29,8 @@ class RoomMemberListDataSource @Inject constructor(
     private val coroutineDispatchers: CoroutineDispatchers,
 ) {
     suspend fun search(query: String): List<RoomMember> = withContext(coroutineDispatchers.io) {
-        val roomMembers = room.membersStateFlow.value.roomMembers().orEmpty()
+        val roomMembersState = room.membersStateFlow.value
+        val roomMembers = roomMembersState.roomMembers().orEmpty()
         val filteredMembers = if (query.isBlank()) {
             roomMembers
         } else {

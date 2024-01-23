@@ -32,6 +32,7 @@ import io.element.android.libraries.designsystem.theme.components.SearchBarResul
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
 import io.element.android.libraries.matrix.api.room.powerlevels.canInvite
+import io.element.android.libraries.matrix.api.room.roomMembers
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -55,9 +56,9 @@ class RoomMemberListPresenter @Inject constructor(
             value = room.canInvite().getOrElse { false }
         }
 
-        LaunchedEffect(Unit) {
+        LaunchedEffect(membersState) {
             withContext(coroutineDispatchers.io) {
-                val members = roomMemberListDataSource.search("").groupBy { it.membership }
+                val members = membersState.roomMembers().orEmpty().groupBy { it.membership }
                 roomMembers = AsyncData.Success(
                     RoomMembers(
                         invited = members.getOrDefault(RoomMembershipState.INVITE, emptyList()).toImmutableList(),
