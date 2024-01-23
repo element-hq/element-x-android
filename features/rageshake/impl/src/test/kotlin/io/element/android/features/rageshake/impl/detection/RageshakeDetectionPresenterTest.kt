@@ -37,7 +37,6 @@ import org.junit.Rule
 import org.junit.Test
 
 class RageshakeDetectionPresenterTest {
-
     @get:Rule
     val warmUpRule = WarmUpRule()
 
@@ -202,4 +201,3 @@ class RageshakeDetectionPresenterTest {
         }
     }
 }
-

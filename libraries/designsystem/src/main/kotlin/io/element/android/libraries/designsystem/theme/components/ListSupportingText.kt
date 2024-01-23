@@ -81,7 +81,6 @@ fun ListSupportingText(
 }
 
 object ListSupportingTextDefaults {
-
     /** Specifies the padding to use for the supporting text. */
     @Immutable
     sealed interface Padding {

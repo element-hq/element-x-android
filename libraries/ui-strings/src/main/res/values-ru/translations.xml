@@ -57,6 +57,7 @@
   <string name="action_join">"Присоединиться"</string>
   <string name="action_learn_more">"Подробнее"</string>
   <string name="action_leave">"Выйти"</string>
+  <string name="action_leave_conversation">"Покинуть беседу"</string>
   <string name="action_leave_room">"Покинуть комнату"</string>
   <string name="action_manage_account">"Настройки аккаунта"</string>
   <string name="action_manage_devices">"Управление устройствами"</string>
@@ -98,9 +99,9 @@
   <string name="action_load_more">"Загрузить еще"</string>
   <string name="common_about">"О приложении"</string>
   <string name="common_acceptable_use_policy">"Политика допустимого использования"</string>
-  <string name="common_advanced_settings">"Дополнительные параметры"</string>
+  <string name="common_advanced_settings">"Дополнительные настройки"</string>
   <string name="common_analytics">"Аналитика"</string>
-  <string name="common_appearance">"Оформление"</string>
+  <string name="common_appearance">"Внешний вид"</string>
   <string name="common_audio">"Аудио"</string>
   <string name="common_bubbles">"Пузыри"</string>
   <string name="common_chat_backup">"Резервная копия чатов"</string>
@@ -139,7 +140,7 @@
   <string name="common_no_results">"Ничего не найдено"</string>
   <string name="common_offline">"Не в сети"</string>
   <string name="common_password">"Пароль"</string>
-  <string name="common_people">"Пользователи"</string>
+  <string name="common_people">"Люди"</string>
   <string name="common_permalink">"Постоянная ссылка"</string>
   <string name="common_permission">"Разрешение"</string>
   <string name="common_poll_total_votes">"Всего голосов: %1$s"</string>
@@ -173,7 +174,7 @@
   <string name="common_starting_chat">"Начало чата…"</string>
   <string name="common_sticker">"Стикер"</string>
   <string name="common_success">"Успешно"</string>
-  <string name="common_suggestions">"Рекомендации"</string>
+  <string name="common_suggestions">"Предложения"</string>
   <string name="common_syncing">"Синхронизация"</string>
   <string name="common_system">"Системная"</string>
   <string name="common_text">"Текст"</string>
@@ -232,7 +233,7 @@
     <item quantity="few">"%d голоса"</item>
     <item quantity="many">"%d голосов"</item>
   </plurals>
-  <string name="preference_rageshake">"Rageshake сообщит об ошибке"</string>
+  <string name="preference_rageshake">"Встряхните устройство, чтобы сообщить об ошибке"</string>
   <string name="screen_media_picker_error_failed_selection">"Не удалось выбрать носитель, попробуйте еще раз."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Не удалось обработать медиафайл для загрузки, попробуйте еще раз."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Не удалось загрузить медиафайлы, попробуйте еще раз."</string>

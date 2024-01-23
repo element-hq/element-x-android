@@ -20,7 +20,6 @@ import io.element.android.features.poll.api.actions.SendPollResponseAction
 import io.element.android.libraries.matrix.api.core.EventId
 
 class FakeSendPollResponseAction : SendPollResponseAction {
-
     private var executionCount = 0
 
     fun verifyExecutionCount(count: Int) {

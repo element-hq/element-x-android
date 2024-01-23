@@ -17,20 +17,20 @@
 package io.element.android.features.messages.impl.voicemessages.composer
 
 import androidx.lifecycle.Lifecycle
-import io.element.android.libraries.textcomposer.model.VoiceMessageRecorderEvent
 import io.element.android.libraries.textcomposer.model.VoiceMessagePlayerEvent
+import io.element.android.libraries.textcomposer.model.VoiceMessageRecorderEvent
 
 sealed interface VoiceMessageComposerEvents {
     data class RecorderEvent(
         val recorderEvent: VoiceMessageRecorderEvent
-    ): VoiceMessageComposerEvents
+    ) : VoiceMessageComposerEvents
     data class PlayerEvent(
         val playerEvent: VoiceMessagePlayerEvent,
-    ): VoiceMessageComposerEvents
-    data object SendVoiceMessage: VoiceMessageComposerEvents
-    data object DeleteVoiceMessage: VoiceMessageComposerEvents
-    data object AcceptPermissionRationale: VoiceMessageComposerEvents
-    data object DismissPermissionsRationale: VoiceMessageComposerEvents
-    data class LifecycleEvent(val event: Lifecycle.Event): VoiceMessageComposerEvents
-    data object DismissSendFailureDialog: VoiceMessageComposerEvents
+    ) : VoiceMessageComposerEvents
+    data object SendVoiceMessage : VoiceMessageComposerEvents
+    data object DeleteVoiceMessage : VoiceMessageComposerEvents
+    data object AcceptPermissionRationale : VoiceMessageComposerEvents
+    data object DismissPermissionsRationale : VoiceMessageComposerEvents
+    data class LifecycleEvent(val event: Lifecycle.Event) : VoiceMessageComposerEvents
+    data object DismissSendFailureDialog : VoiceMessageComposerEvents
 }

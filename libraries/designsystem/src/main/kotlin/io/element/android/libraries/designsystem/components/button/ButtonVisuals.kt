@@ -29,7 +29,6 @@ import io.element.android.libraries.designsystem.theme.components.TextButton
  */
 @Immutable
 sealed interface ButtonVisuals {
-
     val action: () -> Unit
 
     /**

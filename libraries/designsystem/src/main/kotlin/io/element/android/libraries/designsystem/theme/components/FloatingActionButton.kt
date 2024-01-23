@@ -38,7 +38,8 @@ import io.element.android.libraries.designsystem.preview.PreviewGroup
 fun FloatingActionButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    shape: Shape = CircleShape, // FloatingActionButtonDefaults.shape,
+    // FloatingActionButtonDefaults.shape
+    shape: Shape = CircleShape,
     containerColor: Color = FloatingActionButtonDefaults.containerColor,
     contentColor: Color = contentColorFor(containerColor),
     elevation: FloatingActionButtonElevation = FloatingActionButtonDefaults.elevation(),
@@ -59,11 +60,7 @@ fun FloatingActionButton(
 
 @Preview(group = PreviewGroup.FABs)
 @Composable
-internal fun FloatingActionButtonPreview() =
-    ElementThemedPreview { ContentToPreview() }
-
-@Composable
-private fun ContentToPreview() {
+internal fun FloatingActionButtonPreview() = ElementThemedPreview {
     Box(modifier = Modifier.padding(8.dp)) {
         FloatingActionButton(onClick = {}) {
             Icon(imageVector = CompoundIcons.Close, contentDescription = null)

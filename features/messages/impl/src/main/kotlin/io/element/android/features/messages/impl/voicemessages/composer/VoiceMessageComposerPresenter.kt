@@ -37,8 +37,8 @@ import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.mediaupload.api.MediaSender
 import io.element.android.libraries.permissions.api.PermissionsEvents
 import io.element.android.libraries.permissions.api.PermissionsPresenter
-import io.element.android.libraries.textcomposer.model.VoiceMessageRecorderEvent
 import io.element.android.libraries.textcomposer.model.VoiceMessagePlayerEvent
+import io.element.android.libraries.textcomposer.model.VoiceMessageRecorderEvent
 import io.element.android.libraries.textcomposer.model.VoiceMessageState
 import io.element.android.libraries.voicerecorder.api.VoiceRecorder
 import io.element.android.libraries.voicerecorder.api.VoiceRecorderState
@@ -121,7 +121,7 @@ class VoiceMessageComposerPresenter @Inject constructor(
                 }
             }
         }
-        val onPlayerEvent = { event: VoiceMessagePlayerEvent -> localCoroutineScope.launch {
+        val onPlayerEvent = { event: VoiceMessagePlayerEvent ->
             localCoroutineScope.launch {
                 when (event) {
                     VoiceMessagePlayerEvent.Play -> player.play()
@@ -129,7 +129,7 @@ class VoiceMessageComposerPresenter @Inject constructor(
                     is VoiceMessagePlayerEvent.Seek -> player.seek(event.position)
                 }
             }
-        } }
+        }
 
         val onAcceptPermissionsRationale = {
             permissionState.eventSink(PermissionsEvents.OpenSystemSettingAndCloseDialog)
@@ -216,7 +216,7 @@ class VoiceMessageComposerPresenter @Inject constructor(
         recorderState: VoiceRecorderState,
         isSending: Boolean,
     ): VoiceMessageState {
-        val showCursor by remember(playerState.isStopped, isSending) { derivedStateOf { !playerState.isStopped && !isSending }}
+        val showCursor by remember(playerState.isStopped, isSending) { derivedStateOf { !playerState.isStopped && !isSending } }
         val playerTime by remember(playerState, recorderState) { derivedStateOf { displayTime(playerState, recorderState) } }
         val waveform by remember(recorderState) { derivedStateOf { recorderState.finishedWaveform() } }
 

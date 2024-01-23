@@ -21,7 +21,6 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.wysiwyg.utils.HtmlConverter
 
 interface HtmlConverterProvider {
-
     @Composable
     fun Update(currentUserId: UserId)
 

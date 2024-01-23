@@ -23,8 +23,8 @@ import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
-import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.core.bool.orFalse
+import io.element.android.libraries.di.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
@@ -42,23 +42,23 @@ private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(na
  * - analytics Id (String).
  */
 class AnalyticsStore @Inject constructor(
-        @ApplicationContext private val context: Context
+    @ApplicationContext private val context: Context
 ) {
     private val userConsent = booleanPreferencesKey("user_consent")
     private val didAskUserConsent = booleanPreferencesKey("did_ask_user_consent")
     private val analyticsId = stringPreferencesKey("analytics_id")
 
     val userConsentFlow: Flow<Boolean> = context.dataStore.data
-            .map { preferences -> preferences[userConsent].orFalse() }
-            .distinctUntilChanged()
+        .map { preferences -> preferences[userConsent].orFalse() }
+        .distinctUntilChanged()
 
     val didAskUserConsentFlow: Flow<Boolean> = context.dataStore.data
-            .map { preferences -> preferences[didAskUserConsent].orFalse() }
-            .distinctUntilChanged()
+        .map { preferences -> preferences[didAskUserConsent].orFalse() }
+        .distinctUntilChanged()
 
     val analyticsIdFlow: Flow<String> = context.dataStore.data
-            .map { preferences -> preferences[analyticsId].orEmpty() }
-            .distinctUntilChanged()
+        .map { preferences -> preferences[analyticsId].orEmpty() }
+        .distinctUntilChanged()
 
     suspend fun setUserConsent(newUserConsent: Boolean) {
         context.dataStore.edit { settings ->

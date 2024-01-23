@@ -24,7 +24,6 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 class Hide<T : Any> : OverlayOperation<T> {
-
     override fun isApplicable(elements: BackStackElements<T>): Boolean =
         elements.any { it.targetState == BackStack.State.ACTIVE }
 

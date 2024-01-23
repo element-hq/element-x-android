@@ -56,7 +56,6 @@ data class PollContent(
 data class UnableToDecryptContent(
     val data: Data
 ) : EventContent {
-
     @Immutable
     sealed interface Data {
         data class OlmV1Curve25519AesSha2(
@@ -86,7 +85,11 @@ data class ProfileChangeContent(
 data class StateContent(
     val stateKey: String,
     val content: OtherState
-) : EventContent
+) : EventContent {
+    fun isVisibleInTimeline(): Boolean {
+        return content.isVisibleInTimeline()
+    }
+}
 
 data class FailedToParseMessageLikeContent(
     val eventType: String,

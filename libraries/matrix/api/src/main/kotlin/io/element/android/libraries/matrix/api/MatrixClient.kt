@@ -72,7 +72,7 @@ interface MatrixClient : Closeable {
      */
     suspend fun logout(ignoreSdkError: Boolean): String?
     suspend fun loadUserDisplayName(): Result<String>
-    suspend fun loadUserAvatarURLString(): Result<String?>
+    suspend fun loadUserAvatarUrl(): Result<String?>
     suspend fun getAccountManagementUrl(action: AccountManagementAction?): Result<String?>
     suspend fun uploadMedia(mimeType: String, data: ByteArray, progressCallback: ProgressCallback?): Result<String>
     fun roomMembershipObserver(): RoomMembershipObserver

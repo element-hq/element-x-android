@@ -24,7 +24,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
 
 class InMemorySessionStore : SessionStore {
-
     private var sessionDataFlow = MutableStateFlow<SessionData?>(null)
 
     override fun isLoggedIn(): Flow<LoggedInState> {

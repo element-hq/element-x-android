@@ -39,7 +39,6 @@ class SecureBackupEnterRecoveryKeyNode @AssistedInject constructor(
     private val presenter: SecureBackupEnterRecoveryKeyPresenter,
     private val snackbarDispatcher: SnackbarDispatcher,
 ) : Node(buildContext, plugins = plugins) {
-
     @Composable
     override fun View(modifier: Modifier) {
         val coroutineScope = rememberCoroutineScope()

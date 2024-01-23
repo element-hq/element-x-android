@@ -344,26 +344,26 @@ implementation of our interfaces. Mocking can be used to mock Android framework 
 [kover](https://github.com/Kotlin/kotlinx-kover) is used to compute code coverage. Only have unit tests can produce code coverage result. Running Maestro does
 not participate to the code coverage results.
 
-Kover configuration is defined in the main [build.gradle.kts](../build.gradle.kts) file.
+Kover configuration is defined in the app [build.gradle.kts](../app/build.gradle.kts) file.
 
 To compute the code coverage, run:
 
 ```bash
-./gradlew koverMergedReport
+./gradlew :app:koverHtmlReport
 ```
 
-and open the Html report: [../build/reports/kover/merged/html/index.html](../build/reports/kover/merged/html/index.html)
+and open the Html report: [../app/build/reports/kover/html/index.html](../app/build/reports/kover/html/index.html)
 
 To ensure that the code coverage threshold are OK, you can run
 
 ```bash
-./gradlew koverMergedVerify
+./gradlew :app:koverVerify
 ```
 
 Note that the CI performs this check on every pull requests.
 
 Also, if the rule `Global minimum code coverage.` is in error because code coverage is `> maxValue`, `minValue` and `maxValue` can be updated for this rule in
-the file [build.gradle.kts](../build.gradle.kts) (you will see further instructions there).
+the file [build.gradle.kts](../app/build.gradle.kts) (you will see further instructions there).
 
 ### Other points
 

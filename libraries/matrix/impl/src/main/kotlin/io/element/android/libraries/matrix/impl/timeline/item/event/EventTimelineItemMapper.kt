@@ -31,15 +31,14 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import org.matrix.rustcomponents.sdk.Reaction
-import org.matrix.rustcomponents.sdk.EventItemOrigin as RustEventItemOrigin
 import org.matrix.rustcomponents.sdk.EventSendState as RustEventSendState
 import org.matrix.rustcomponents.sdk.EventTimelineItem as RustEventTimelineItem
 import org.matrix.rustcomponents.sdk.EventTimelineItemDebugInfo as RustEventTimelineItemDebugInfo
 import org.matrix.rustcomponents.sdk.ProfileDetails as RustProfileDetails
 import org.matrix.rustcomponents.sdk.Receipt as RustReceipt
+import uniffi.matrix_sdk_ui.EventItemOrigin as RustEventItemOrigin
 
 class EventTimelineItemMapper(private val contentMapper: TimelineEventContentMapper = TimelineEventContentMapper()) {
-
     fun map(eventTimelineItem: RustEventTimelineItem): EventTimelineItem = eventTimelineItem.use {
         EventTimelineItem(
             eventId = it.eventId()?.let(::EventId),
@@ -100,11 +99,11 @@ private fun List<Reaction>?.map(): ImmutableList<EventReaction> {
 
 private fun Map<String, RustReceipt>.map(): ImmutableList<Receipt> {
     return map {
-            Receipt(
-                userId = UserId(it.key),
-                timestamp = it.value.timestamp?.toLong() ?: 0
-            )
-        }
+        Receipt(
+            userId = UserId(it.key),
+            timestamp = it.value.timestamp?.toLong() ?: 0
+        )
+    }
         .sortedByDescending { it.timestamp }
         .toImmutableList()
 }

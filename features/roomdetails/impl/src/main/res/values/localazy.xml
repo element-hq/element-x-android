@@ -47,6 +47,7 @@
   <string name="screen_dm_details_unblock_alert_action">"Unblock"</string>
   <string name="screen_dm_details_unblock_alert_description">"You\'ll be able to see all messages from them again."</string>
   <string name="screen_dm_details_unblock_user">"Unblock user"</string>
+  <string name="screen_room_details_leave_conversation_title">"Leave conversation"</string>
   <string name="screen_room_details_leave_room_title">"Leave room"</string>
   <string name="screen_room_details_security_title">"Security"</string>
   <string name="screen_room_details_topic_title">"Topic"</string>

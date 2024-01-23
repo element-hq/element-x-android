@@ -31,7 +31,6 @@ import io.element.android.x.di.AppBindings
 import timber.log.Timber
 
 class TracingInitializer : Initializer<Unit> {
-
     override fun create(context: Context) {
         val appBindings = context.bindings<AppBindings>()
         val tracingService = appBindings.tracingService()

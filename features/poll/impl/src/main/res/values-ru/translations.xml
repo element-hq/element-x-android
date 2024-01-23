@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_create_poll_add_option_btn">"Добавить опцию"</string>
+  <string name="screen_create_poll_add_option_btn">"Добавить вариант"</string>
   <string name="screen_create_poll_anonymous_desc">"Показывать результаты только после окончания опроса"</string>
   <string name="screen_create_poll_anonymous_headline">"Анонимный опрос"</string>
   <string name="screen_create_poll_answer_hint">"Настройка %1$d"</string>
@@ -14,6 +14,6 @@
   <string name="screen_polls_history_empty_ongoing">"Не найдено текущих опросов."</string>
   <string name="screen_polls_history_empty_past">"Не найдено предыдущих опросов."</string>
   <string name="screen_polls_history_filter_ongoing">"Текущие"</string>
-  <string name="screen_polls_history_filter_past">"Прошедшие"</string>
+  <string name="screen_polls_history_filter_past">"Прошлые"</string>
   <string name="screen_polls_history_title">"Опросы"</string>
 </resources>

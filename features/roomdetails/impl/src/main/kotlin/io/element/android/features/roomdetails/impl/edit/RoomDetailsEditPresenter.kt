@@ -53,7 +53,6 @@ class RoomDetailsEditPresenter @Inject constructor(
     private val mediaPreProcessor: MediaPreProcessor,
     permissionsPresenterFactory: PermissionsPresenter.Factory,
 ) : Presenter<RoomDetailsEditState> {
-
     private val cameraPermissionPresenter = permissionsPresenterFactory.create(android.Manifest.permission.CAMERA)
     private var pendingPermissionRequest = false
 
@@ -76,9 +75,9 @@ class RoomDetailsEditPresenter @Inject constructor(
             roomAvatarUri,
         ) {
             derivedStateOf {
-                roomAvatarUri?.toString()?.trim() != room.avatarUrl?.toUri()?.toString()?.trim()
-                    || roomName.trim() != (room.name ?: room.displayName).trim()
-                    || roomTopic.orEmpty().trim() != room.topic.orEmpty().trim()
+                roomAvatarUri?.toString()?.trim() != room.avatarUrl?.toUri()?.toString()?.trim() ||
+                    roomName.trim() != (room.name ?: room.displayName).trim() ||
+                    roomTopic.orEmpty().trim() != room.topic.orEmpty().trim()
             }
         }
 

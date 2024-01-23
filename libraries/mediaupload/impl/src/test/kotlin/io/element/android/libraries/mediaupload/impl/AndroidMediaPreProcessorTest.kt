@@ -230,7 +230,8 @@ class AndroidMediaPreProcessorTest {
         assertThat(info.thumbnailFile).isNotNull()
         assertThat(info.videoInfo).isEqualTo(
             VideoInfo(
-                duration = Duration.ZERO, // Not available with Robolectric?
+                // Not available with Robolectric?
+                duration = Duration.ZERO,
                 height = 1_178,
                 width = 1_818,
                 mimetype = MimeTypes.Mp4,
@@ -260,9 +261,12 @@ class AndroidMediaPreProcessorTest {
         assertThat(info.thumbnailFile).isNull()
         assertThat(info.videoInfo).isEqualTo(
             VideoInfo(
-                duration = Duration.ZERO, // Not available with Robolectric?
-                height = 0, // Not available with Robolectric?
-                width = 0, // Not available with Robolectric?
+                // Not available with Robolectric?
+                duration = Duration.ZERO,
+                // Not available with Robolectric?
+                height = 0,
+                // Not available with Robolectric?
+                width = 0,
                 mimetype = MimeTypes.Mp4,
                 size = 1_673_712,
                 thumbnailInfo = null,
@@ -288,7 +292,8 @@ class AndroidMediaPreProcessorTest {
         val info = result as MediaUploadInfo.Audio
         assertThat(info.audioInfo).isEqualTo(
             AudioInfo(
-                duration = Duration.ZERO, // Not available with Robolectric?
+                // Not available with Robolectric?
+                duration = Duration.ZERO,
                 size = 52_079,
                 mimetype = MimeTypes.Mp3,
             )

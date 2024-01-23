@@ -42,7 +42,6 @@ class DefaultUserListPresenter @AssistedInject constructor(
     @Assisted val userRepository: UserRepository,
     @Assisted val userListDataStore: UserListDataStore,
 ) : UserListPresenter {
-
     @AssistedFactory
     @ContributesBinding(SessionScope::class)
     interface DefaultUserListFactory : UserListPresenter.Factory {

@@ -33,7 +33,6 @@ class LockScreenSettingsNode @AssistedInject constructor(
     @Assisted plugins: List<Plugin>,
     private val presenter: LockScreenSettingsPresenter,
 ) : Node(buildContext, plugins = plugins) {
-
     interface Callback : Plugin {
         fun onChangePinClicked()
     }

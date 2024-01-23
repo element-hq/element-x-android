@@ -29,7 +29,8 @@ import androidx.lifecycle.Lifecycle
  * Inspired from https://stackoverflow.com/questions/68847559/how-can-i-detect-keyboard-opening-and-closing-in-jetpack-compose
  */
 enum class Keyboard {
-    Opened, Closed
+    Opened,
+    Closed
 }
 
 // Note: it does not work as expected...

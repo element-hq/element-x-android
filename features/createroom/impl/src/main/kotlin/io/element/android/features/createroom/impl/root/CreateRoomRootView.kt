@@ -106,7 +106,7 @@ fun CreateRoomRootView(
         onRetry = {
             state.userListState.selectedUsers.firstOrNull()
                 ?.let { state.eventSink(CreateRoomRootEvents.StartDM(it)) }
-            // Cancel start DM if there is no more selected user (should not happen)
+                // Cancel start DM if there is no more selected user (should not happen)
                 ?: state.eventSink(CreateRoomRootEvents.CancelStartDM)
         },
         onErrorDismiss = { state.eventSink(CreateRoomRootEvents.CancelStartDM) },

@@ -59,4 +59,3 @@ internal fun TimelineItemEventRowForDirectRoomPreview() = ElementPreview {
         }
     }
 }
-

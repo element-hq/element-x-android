@@ -25,7 +25,6 @@ data class AvatarData(
     val url: String? = null,
     val size: AvatarSize,
 ) {
-
     val initial by lazy {
         (name?.takeIf { it.isNotBlank() } ?: id)
             .let { dn ->

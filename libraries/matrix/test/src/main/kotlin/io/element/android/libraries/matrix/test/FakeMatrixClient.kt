@@ -48,7 +48,7 @@ import kotlinx.coroutines.delay
 class FakeMatrixClient(
     override val sessionId: SessionId = A_SESSION_ID,
     private val userDisplayName: Result<String> = Result.success(A_USER_NAME),
-    private val userAvatarURLString: Result<String> = Result.success(AN_AVATAR_URL),
+    private val userAvatarUrl: Result<String> = Result.success(AN_AVATAR_URL),
     override val roomListService: RoomListService = FakeRoomListService(),
     override val mediaLoader: MatrixMediaLoader = FakeMediaLoader(),
     private val sessionVerificationService: FakeSessionVerificationService = FakeSessionVerificationService(),
@@ -59,7 +59,6 @@ class FakeMatrixClient(
     private val encryptionService: FakeEncryptionService = FakeEncryptionService(),
     private val accountManagementUrlString: Result<String?> = Result.success(null),
 ) : MatrixClient {
-
     var setDisplayNameCalled: Boolean = false
         private set
     var uploadAvatarCalled: Boolean = false
@@ -136,8 +135,8 @@ class FakeMatrixClient(
         return userDisplayName
     }
 
-    override suspend fun loadUserAvatarURLString(): Result<String?> {
-        return userAvatarURLString
+    override suspend fun loadUserAvatarUrl(): Result<String?> {
+        return userAvatarUrl
     }
 
     override suspend fun getAccountManagementUrl(action: AccountManagementAction?): Result<String?> {

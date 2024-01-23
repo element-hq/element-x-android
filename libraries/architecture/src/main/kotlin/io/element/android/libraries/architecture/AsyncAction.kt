@@ -27,7 +27,6 @@ import kotlin.contracts.contract
  */
 @Stable
 sealed interface AsyncAction<out T> {
-
     /**
      * Represents an uninitialized operation (i.e. yet to be run by the user).
      */

@@ -17,7 +17,6 @@
 package io.element.android.libraries.pushstore.api
 import kotlinx.coroutines.flow.Flow
 
-
 /**
  * Store data related to push about a user.
  */

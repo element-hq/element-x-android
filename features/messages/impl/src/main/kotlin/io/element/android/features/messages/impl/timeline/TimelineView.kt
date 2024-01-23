@@ -119,9 +119,8 @@ fun TimelineView(
                 TimelineItemRow(
                     timelineItem = timelineItem,
                     timelineRoomInfo = state.timelineRoomInfo,
-                    showReadReceipts = state.showReadReceipts,
-                    isLastOutgoingMessage = (timelineItem as? TimelineItem.Event)?.isMine == true
-                        && state.timelineItems.first().identifier() == timelineItem.identifier(),
+                    isLastOutgoingMessage = (timelineItem as? TimelineItem.Event)?.isMine == true &&
+                        state.timelineItems.first().identifier() == timelineItem.identifier(),
                     highlightedItem = state.highlightedEventId?.value,
                     onClick = onMessageClicked,
                     onLongClick = onMessageLongClicked,
@@ -146,7 +145,7 @@ fun TimelineView(
                     }
                 }
             }
-            if (state.paginationState.beginningOfRoomReached) {
+            if (state.paginationState.beginningOfRoomReached && !state.timelineRoomInfo.isDirect) {
                 item(contentType = "BeginningOfRoomReached") {
                     TimelineItemRoomBeginningView(roomName = roomName)
                 }

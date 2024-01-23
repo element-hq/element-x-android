@@ -74,14 +74,10 @@ fun LinearProgressIndicator(
 
 @Preview(group = PreviewGroup.Progress)
 @Composable
-internal fun LinearProgressIndicatorPreview() = ElementThemedPreview(vertical = false) { ContentToPreview() }
-
-@Composable
-private fun ContentToPreview() {
+internal fun LinearProgressIndicatorPreview() = ElementThemedPreview(vertical = false) {
     Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
         // Indeterminate progress
-        LinearProgressIndicator(
-        )
+        LinearProgressIndicator()
         // Fixed progress
         LinearProgressIndicator(
             progress = { 0.90F }

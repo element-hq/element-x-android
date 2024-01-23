@@ -34,10 +34,10 @@ object SessionStorageModule {
     @SingleIn(AppScope::class)
     fun provideMatrixDatabase(@ApplicationContext context: Context): SessionDatabase {
         val name = "session_database"
-        val secretFile = context.getDatabasePath("${name}.key")
+        val secretFile = context.getDatabasePath("$name.key")
         val passphraseProvider = RandomSecretPassphraseProvider(context, secretFile)
         val driver = SqlCipherDriverFactory(passphraseProvider)
-            .create(SessionDatabase.Schema, "${name}.db", context)
+            .create(SessionDatabase.Schema, "$name.db", context)
         return SessionDatabase(driver)
     }
 }

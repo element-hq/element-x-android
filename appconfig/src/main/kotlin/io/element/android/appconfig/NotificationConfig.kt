@@ -18,8 +18,8 @@ package io.element.android.appconfig
 
 object NotificationConfig {
     // TODO EAx Implement and set to true at some point
-    const val supportMarkAsReadAction = false
+    const val SUPPORT_MARK_AS_READ_ACTION = false
 
     // TODO EAx Implement and set to true at some point
-    const val supportQuickReplyAction = false
+    const val SUPPORT_QUICK_REPLY_ACTION = false
 }

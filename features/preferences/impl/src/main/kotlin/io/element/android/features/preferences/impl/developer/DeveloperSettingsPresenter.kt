@@ -53,7 +53,6 @@ class DeveloperSettingsPresenter @Inject constructor(
     private val rageshakePresenter: RageshakePreferencesPresenter,
     private val preferencesStore: PreferencesStore,
 ) : Presenter<DeveloperSettingsState> {
-
     @Composable
     override fun present(): DeveloperSettingsState {
         val rageshakeState = rageshakePresenter.present()
@@ -175,6 +174,3 @@ private fun customElementCallUrlValidator(url: String?): Boolean {
         if (parsedUrl.host.isNullOrBlank()) error("Missing host")
     }.isSuccess
 }
-
-
-

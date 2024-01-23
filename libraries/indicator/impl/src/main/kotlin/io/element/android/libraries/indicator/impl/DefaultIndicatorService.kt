@@ -39,7 +39,6 @@ class DefaultIndicatorService @Inject constructor(
     private val encryptionService: EncryptionService,
     private val featureFlagService: FeatureFlagService,
 ) : IndicatorService {
-
     @Composable
     override fun showRoomListTopBarIndicator(): State<Boolean> {
         val canVerifySession by sessionVerificationService.canVerifySessionFlow.collectAsState(initial = false)

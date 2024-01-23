@@ -33,7 +33,6 @@ class RustSyncService(
     private val innerSyncService: SyncServiceInterface,
     sessionCoroutineScope: CoroutineScope
 ) : SyncService {
-
     override suspend fun startSync() = runCatching {
         Timber.i("Start sync")
         innerSyncService.start()

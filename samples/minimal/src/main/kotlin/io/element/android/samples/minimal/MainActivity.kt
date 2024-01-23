@@ -38,7 +38,6 @@ import kotlinx.coroutines.runBlocking
 import java.io.File
 
 class MainActivity : ComponentActivity() {
-
     private val matrixAuthenticationService: MatrixAuthenticationService by lazy {
         val baseDirectory = File(applicationContext.filesDir, "sessions")
         val userAgentProvider = SimpleUserAgentProvider("MinimalSample")
@@ -56,7 +55,9 @@ class MainActivity : ComponentActivity() {
                 sessionStore = sessionStore,
                 userAgentProvider = userAgentProvider,
                 clock = DefaultSystemClock(),
-            )
+            ),
+            passphraseGenerator = NullPassphraseGenerator(),
+            buildMeta = Singleton.buildMeta,
         )
     }
 
@@ -68,7 +69,6 @@ class MainActivity : ComponentActivity() {
                 val loggedInState by matrixAuthenticationService.loggedInStateFlow().collectAsState(initial = LoggedInState.NotLoggedIn)
                 Content(isLoggedIn = loggedInState is LoggedInState.LoggedIn, modifier = Modifier.fillMaxSize())
             }
-
         }
     }
 

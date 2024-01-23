@@ -23,7 +23,6 @@ import javax.inject.Inject
 
 @ContributesBinding(AppScope::class)
 class DefaultSystemClock @Inject constructor() : SystemClock {
-
     /**
      * Provides a UTC epoch in milliseconds
      *

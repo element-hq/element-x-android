@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_create_room_action_create_room">"Nuova stanza"</string>
-  <string name="screen_create_room_action_invite_people">"Invita persone"</string>
-  <string name="screen_create_room_add_people_title">"Aggiungi persone"</string>
+  <string name="screen_create_room_action_invite_people">"Invita persone su Element"</string>
+  <string name="screen_create_room_add_people_title">"Invita persone"</string>
+  <string name="screen_create_room_error_creating_room">"Si è verificato un errore durante la creazione della stanza"</string>
+  <string name="screen_create_room_private_option_description">"I messaggi in questa stanza sono cifrati. La crittografia non può essere disattivata in seguito."</string>
+  <string name="screen_create_room_private_option_title">"Stanza privata (solo su invito)"</string>
+  <string name="screen_create_room_public_option_description">"I messaggi non sono cifrati e chiunque può leggerli. Puoi attivare la crittografia in un secondo momento."</string>
+  <string name="screen_create_room_public_option_title">"Stanza pubblica (chiunque)"</string>
+  <string name="screen_create_room_room_name_label">"Nome stanza"</string>
+  <string name="screen_create_room_topic_label">"Argomento (facoltativo)"</string>
   <string name="screen_start_chat_error_starting_chat">"Si è verificato un errore durante il tentativo di avviare una chat"</string>
   <string name="screen_create_room_title">"Crea una stanza"</string>
 </resources>

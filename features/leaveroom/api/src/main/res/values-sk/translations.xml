@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="leave_conversation_alert_subtitle">"Ste si istí, že chcete opustiť konverzáciu?"</string>
   <string name="leave_room_alert_empty_subtitle">"Ste si istí, že chcete opustiť túto miestnosť? Ste tu jediná osoba. Ak odídete, nikto sa do nej nebude môcť v budúcnosti pripojiť, vrátane vás."</string>
   <string name="leave_room_alert_private_subtitle">"Ste si istí, že chcete opustiť túto miestnosť? Táto miestnosť nie je verejná a bez pozvania sa do nej nebudete môcť vrátiť."</string>
   <string name="leave_room_alert_subtitle">"Ste si istí, že chcete opustiť miestnosť?"</string>

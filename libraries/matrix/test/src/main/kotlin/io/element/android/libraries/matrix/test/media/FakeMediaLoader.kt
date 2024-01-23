@@ -22,7 +22,6 @@ import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.tests.testutils.simulateLongTask
 
 class FakeMediaLoader : MatrixMediaLoader {
-
     var shouldFail = false
     var path: String = ""
 

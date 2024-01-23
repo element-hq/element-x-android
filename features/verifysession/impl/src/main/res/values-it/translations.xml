@@ -3,12 +3,15 @@
   <string name="screen_session_verification_cancelled_subtitle">"C\'è qualcosa che non va. La richiesta è scaduta o è stata rifiutata."</string>
   <string name="screen_session_verification_compare_emojis_subtitle">"Verifica che gli emoji sottostanti corrispondano a quelli mostrati nell\'altra sessione."</string>
   <string name="screen_session_verification_compare_emojis_title">"Confronta le emoji"</string>
+  <string name="screen_session_verification_compare_numbers_subtitle">"Conferma che i numeri seguenti corrispondano a quelli mostrati nell\'altra sessione."</string>
+  <string name="screen_session_verification_compare_numbers_title">"Confronta i numeri"</string>
   <string name="screen_session_verification_complete_subtitle">"La tua nuova sessione è ora verificata. Ha accesso ai tuoi messaggi crittografati e gli altri utenti la vedranno come attendibile."</string>
   <string name="screen_session_verification_open_existing_session_subtitle">"Dimostra la tua identità per accedere alla cronologia dei messaggi crittografati."</string>
   <string name="screen_session_verification_open_existing_session_title">"Apri una sessione esistente"</string>
   <string name="screen_session_verification_positive_button_canceled">"Riprova la verifica"</string>
   <string name="screen_session_verification_positive_button_initial">"Sono pronto"</string>
   <string name="screen_session_verification_positive_button_verifying_ongoing">"In attesa di un riscontro"</string>
+  <string name="screen_session_verification_ready_subtitle">"Confronta un set unico di emoji."</string>
   <string name="screen_session_verification_request_accepted_subtitle">"Confronta le emoji uniche, assicurandoti che appaiano nello stesso ordine."</string>
   <string name="screen_session_verification_they_dont_match">"Non corrispondono"</string>
   <string name="screen_session_verification_they_match">"Corrispondono"</string>

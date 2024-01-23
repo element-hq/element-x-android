@@ -27,7 +27,6 @@ import kotlinx.collections.immutable.ImmutableList
  */
 @Immutable
 sealed interface PermalinkData {
-
     data class RoomLink(
         val roomIdOrAlias: String,
         val isRoomAlias: Boolean,

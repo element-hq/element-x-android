@@ -84,7 +84,8 @@ import io.element.android.libraries.matrix.api.room.MessageEventType
 import io.element.android.libraries.matrix.api.user.CurrentSessionIdHolder
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailInfo
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailType
-import io.element.android.libraries.matrix.ui.room.canRedactAsState
+import io.element.android.libraries.matrix.ui.room.canRedactOtherAsState
+import io.element.android.libraries.matrix.ui.room.canRedactOwnAsState
 import io.element.android.libraries.matrix.ui.room.canSendMessageAsState
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
 import kotlinx.coroutines.CoroutineScope
@@ -114,7 +115,6 @@ class MessagesPresenter @AssistedInject constructor(
     private val buildMeta: BuildMeta,
     private val currentSessionIdHolder: CurrentSessionIdHolder,
 ) : Presenter<MessagesState> {
-
     private val timelinePresenter = timelinePresenterFactory.create(navigator = navigator)
 
     @AssistedFactory
@@ -139,7 +139,8 @@ class MessagesPresenter @AssistedInject constructor(
 
         val syncUpdateFlow = room.syncUpdateFlow.collectAsState()
         val userHasPermissionToSendMessage by room.canSendMessageAsState(type = MessageEventType.ROOM_MESSAGE, updateKey = syncUpdateFlow.value)
-        val userHasPermissionToRedact by room.canRedactAsState(updateKey = syncUpdateFlow.value)
+        val userHasPermissionToRedactOwn by room.canRedactOwnAsState(updateKey = syncUpdateFlow.value)
+        val userHasPermissionToRedactOther by room.canRedactOtherAsState(updateKey = syncUpdateFlow.value)
         val userHasPermissionToSendReaction by room.canSendMessageAsState(type = MessageEventType.REACTION_SENT, updateKey = syncUpdateFlow.value)
         val roomName: AsyncData<String> by remember {
             derivedStateOf { roomInfo?.name?.let { AsyncData.Success(it) } ?: AsyncData.Uninitialized }
@@ -220,7 +221,8 @@ class MessagesPresenter @AssistedInject constructor(
             roomName = roomName,
             roomAvatar = roomAvatar,
             userHasPermissionToSendMessage = userHasPermissionToSendMessage,
-            userHasPermissionToRedact = userHasPermissionToRedact,
+            userHasPermissionToRedactOwn = userHasPermissionToRedactOwn,
+            userHasPermissionToRedactOther = userHasPermissionToRedactOther,
             userHasPermissionToSendReaction = userHasPermissionToSendReaction,
             composerState = composerState,
             voiceMessageComposerState = voiceMessageComposerState,

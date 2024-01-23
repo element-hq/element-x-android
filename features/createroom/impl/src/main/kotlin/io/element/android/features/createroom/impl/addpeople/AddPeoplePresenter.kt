@@ -31,7 +31,6 @@ class AddPeoplePresenter @Inject constructor(
     userRepository: UserRepository,
     dataStore: CreateRoomDataStore,
 ) : Presenter<UserListState> {
-
     private val userListPresenter = userListPresenterFactory.create(
         UserListPresenterArgs(
             selectionMode = SelectionMode.Multiple,
@@ -45,4 +44,3 @@ class AddPeoplePresenter @Inject constructor(
         return userListPresenter.present()
     }
 }
-

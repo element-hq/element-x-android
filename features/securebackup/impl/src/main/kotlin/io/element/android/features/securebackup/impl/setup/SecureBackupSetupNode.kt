@@ -41,7 +41,6 @@ class SecureBackupSetupNode @AssistedInject constructor(
     presenterFactory: SecureBackupSetupPresenter.Factory,
     private val snackbarDispatcher: SnackbarDispatcher,
 ) : Node(buildContext, plugins = plugins) {
-
     data class Inputs(
         val isChangeRecoveryKeyUserStory: Boolean,
     ) : NodeInputs
@@ -68,10 +67,11 @@ class SecureBackupSetupNode @AssistedInject constructor(
     private fun CoroutineScope.postSuccessSnackbar() = launch {
         snackbarDispatcher.post(
             SnackbarMessage(
-                messageResId = if (inputs.isChangeRecoveryKeyUserStory)
+                messageResId = if (inputs.isChangeRecoveryKeyUserStory) {
                     R.string.screen_recovery_key_change_success
-                else
+                } else {
                     R.string.screen_recovery_key_setup_success
+                }
             )
         )
     }

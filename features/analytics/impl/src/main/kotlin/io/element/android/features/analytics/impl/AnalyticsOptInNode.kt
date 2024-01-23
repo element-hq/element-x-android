@@ -37,7 +37,6 @@ class AnalyticsOptInNode @AssistedInject constructor(
     @Assisted plugins: List<Plugin>,
     private val presenter: AnalyticsOptInPresenter,
 ) : Node(buildContext, plugins = plugins) {
-
     private fun onClickTerms(activity: Activity, darkTheme: Boolean) {
         activity.openUrlInChromeCustomTab(null, darkTheme, AnalyticsConfig.POLICY_LINK)
     }

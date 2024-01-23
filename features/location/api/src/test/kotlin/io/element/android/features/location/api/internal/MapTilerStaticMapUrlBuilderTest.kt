@@ -20,7 +20,6 @@ import com.google.common.truth.Truth.assertThat
 import org.junit.Test
 
 class MapTilerStaticMapUrlBuilderTest {
-
     private val builder = MapTilerStaticMapUrlBuilder(
         apiKey = "anApiKey",
         lightMapId = "aLightMapId",

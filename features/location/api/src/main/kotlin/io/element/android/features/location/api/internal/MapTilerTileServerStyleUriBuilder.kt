@@ -25,7 +25,6 @@ internal class MapTilerTileServerStyleUriBuilder(
     private val lightMapId: String,
     private val darkMapId: String,
 ) : TileServerStyleUriBuilder {
-
     constructor(context: Context) : this(
         apiKey = context.apiKey,
         lightMapId = context.mapId(darkMode = false),
@@ -34,6 +33,6 @@ internal class MapTilerTileServerStyleUriBuilder(
 
     override fun build(darkMode: Boolean): String {
         val mapId = if (darkMode) darkMapId else lightMapId
-        return "${MAPTILER_BASE_URL}/${mapId}/style.json?key=${apiKey}"
+        return "$MAPTILER_BASE_URL/$mapId/style.json?key=$apiKey"
     }
 }

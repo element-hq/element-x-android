@@ -23,7 +23,6 @@ import io.element.android.libraries.matrix.test.A_THREAD_ID
 import org.junit.Test
 
 class DeepLinkCreatorTest {
-
     @Test
     fun room() {
         val sut = DeepLinkCreator()

@@ -21,6 +21,5 @@ import io.element.android.libraries.matrix.api.core.RoomId
 class ForwardEventException(
     val roomIds: List<RoomId>
 ) : Exception() {
-
     override val message: String? = "Failed to deliver event to $roomIds rooms"
 }

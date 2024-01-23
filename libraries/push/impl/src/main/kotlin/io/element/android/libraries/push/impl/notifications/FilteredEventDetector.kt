@@ -20,9 +20,8 @@ import io.element.android.libraries.push.impl.notifications.model.NotifiableEven
 import javax.inject.Inject
 
 class FilteredEventDetector @Inject constructor(
-    //private val activeSessionDataSource: ActiveSessionDataSource
+    // private val activeSessionDataSource: ActiveSessionDataSource
 ) {
-
     /**
      * Returns true if the given event should be ignored.
      * Used to skip notifications if a non expected message is received.
@@ -41,10 +40,10 @@ class FilteredEventDetector @Inject constructor(
         return false
     }
 
+    /*
     /**
      * Whether the timeline event should be ignored.
      */
-    /*
     private fun TimelineEvent.shouldBeIgnored(): Boolean {
         if (root.isVoiceMessage()) {
             val audioEvent = root.asMessageAudioEvent()

@@ -44,6 +44,9 @@ import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Surface
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.room.RoomMember
+import io.element.android.libraries.matrix.api.room.RoomNotificationMode
+import io.element.android.libraries.matrix.api.room.message.RoomMessage
 import io.element.android.libraries.matrix.api.roomlist.RoomSummaryDetails
 import io.element.android.libraries.ui.strings.CommonStrings
 
@@ -60,7 +63,7 @@ fun SelectedRoom(
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Avatar(AvatarData(roomSummary.roomId.value, roomSummary.name, roomSummary.avatarURLString, AvatarSize.SelectedRoom))
+            Avatar(AvatarData(roomSummary.roomId.value, roomSummary.name, roomSummary.avatarUrl, AvatarSize.SelectedRoom))
             Text(
                 text = roomSummary.name,
                 overflow = TextOverflow.Ellipsis,
@@ -94,17 +97,35 @@ fun SelectedRoom(
 @Composable
 internal fun SelectedRoomPreview() = ElementPreview {
     SelectedRoom(
-        roomSummary = RoomSummaryDetails(
-            roomId = RoomId("!room:domain"),
-            name = "roomName",
-            canonicalAlias = null,
-            isDirect = true,
-            avatarURLString = null,
-            lastMessage = null,
-            lastMessageTimestamp = null,
-            unreadNotificationCount = 0,
-            inviter = null,
-        ),
+        roomSummary = aRoomSummaryDetails(),
         onRoomRemoved = {},
     )
 }
+
+fun aRoomSummaryDetails(
+    roomId: RoomId = RoomId("!room:domain"),
+    name: String = "roomName",
+    canonicalAlias: String? = null,
+    isDirect: Boolean = true,
+    avatarUrl: String? = null,
+    lastMessage: RoomMessage? = null,
+    inviter: RoomMember? = null,
+    notificationMode: RoomNotificationMode? = null,
+    hasRoomCall: Boolean = false,
+    isDm: Boolean = false,
+    numUnreadMentions: Int = 0,
+    numUnreadMessages: Int = 0,
+) = RoomSummaryDetails(
+    roomId = roomId,
+    name = name,
+    canonicalAlias = canonicalAlias,
+    isDirect = isDirect,
+    avatarUrl = avatarUrl,
+    lastMessage = lastMessage,
+    inviter = inviter,
+    userDefinedNotificationMode = notificationMode,
+    hasRoomCall = hasRoomCall,
+    isDm = isDm,
+    numUnreadMentions = numUnreadMentions,
+    numUnreadMessages = numUnreadMessages,
+)

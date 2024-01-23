@@ -46,7 +46,6 @@ class SecureBackupSetupPresenter @AssistedInject constructor(
     private val stateMachine: SecureBackupSetupStateMachine,
     private val encryptionService: EncryptionService,
 ) : Presenter<SecureBackupSetupState> {
-
     @AssistedFactory
     interface Factory {
         fun create(isChangeRecoveryKeyUserStory: Boolean): SecureBackupSetupPresenter

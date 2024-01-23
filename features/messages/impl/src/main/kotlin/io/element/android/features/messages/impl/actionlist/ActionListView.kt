@@ -172,9 +172,10 @@ private fun SheetContent(
                 item {
                     Column {
                         MessageSummary(
-                            event = target.event, modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp)
+                            event = target.event,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 16.dp)
                         )
                         Spacer(modifier = Modifier.height(14.dp))
                         HorizontalDivider()
@@ -299,7 +300,11 @@ private fun EmojiReactionsRow(
     ) {
         // TODO use most recently used emojis here when available from the Rust SDK
         val defaultEmojis = sequenceOf(
-            "👍️", "👎️", "🔥", "❤️", "👏"
+            "👍️",
+            "👎️",
+            "🔥",
+            "❤️",
+            "👏"
         )
         for (emoji in defaultEmojis) {
             val isHighlighted = highlightedEmojis.contains(emoji)

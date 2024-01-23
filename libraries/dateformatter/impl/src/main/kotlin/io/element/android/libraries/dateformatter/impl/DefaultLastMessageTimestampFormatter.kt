@@ -26,7 +26,6 @@ class DefaultLastMessageTimestampFormatter @Inject constructor(
     private val localDateTimeProvider: LocalDateTimeProvider,
     private val dateFormatters: DateFormatters,
 ) : LastMessageTimestampFormatter {
-
     override fun format(timestamp: Long?): String {
         if (timestamp == null) return ""
         val currentDate = localDateTimeProvider.providesNow()

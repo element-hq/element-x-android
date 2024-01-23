@@ -42,21 +42,25 @@ import org.junit.Test
 
 @ExperimentalCoroutinesApi
 class RoomMemberListPresenterTests {
-
     @get:Rule
     val warmUpRule = WarmUpRule()
 
     @Test
     fun `search is done automatically on start, but is async`() = runTest {
-        val presenter = createPresenter()
+        val room = FakeMatrixRoom()
+        val presenter = createPresenter(matrixRoom = room)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
+            skipItems(1)
             val initialState = awaitItem()
             assertThat(initialState.roomMembers).isInstanceOf(AsyncData.Loading::class.java)
             assertThat(initialState.searchQuery).isEmpty()
             assertThat(initialState.searchResults).isInstanceOf(SearchBarResultState.Initial::class.java)
             assertThat(initialState.isSearchActive).isFalse()
+            room.givenRoomMembersState(MatrixRoomMembersState.Ready(aRoomMemberList()))
+            // Skip item while the new members state is processed
+            skipItems(1)
             val loadedState = awaitItem()
             assertThat(loadedState.roomMembers).isInstanceOf(AsyncData.Success::class.java)
             assertThat((loadedState.roomMembers as AsyncData.Success).data.invited).isEqualTo(listOf(aVictor(), aWalter()))

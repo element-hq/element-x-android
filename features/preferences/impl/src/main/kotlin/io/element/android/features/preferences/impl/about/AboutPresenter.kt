@@ -21,10 +21,8 @@ import io.element.android.libraries.architecture.Presenter
 import javax.inject.Inject
 
 class AboutPresenter @Inject constructor() : Presenter<AboutState> {
-
     @Composable
     override fun present(): AboutState {
-
         return AboutState(
             elementLegals = getAllLegals(),
         )

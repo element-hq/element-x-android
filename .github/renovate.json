@@ -19,12 +19,6 @@
       "groupName" : "kotlin"
     },
     {
-      "matchPackageNames" : [
-        "org.jetbrains.kotlinx.kover"
-      ],
-      "enabled" : false
-    },
-    {
       "matchPackagePatterns" : [
         "^org.maplibre"
       ],

@@ -35,7 +35,6 @@ class EventDebugInfoNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
 ) : Node(buildContext, plugins = plugins) {
-
     data class Inputs(
         val eventId: EventId?,
         val timelineItemDebugInfo: TimelineItemDebugInfo,

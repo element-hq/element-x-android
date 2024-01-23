@@ -41,4 +41,30 @@ sealed interface OtherState {
     data object SpaceChild : OtherState
     data object SpaceParent : OtherState
     data class Custom(val eventType: String) : OtherState
+
+    fun isVisibleInTimeline() = when (this) {
+        // Visible
+        is RoomAvatar,
+        is RoomName,
+        is RoomTopic,
+        is RoomThirdPartyInvite,
+        is RoomCreate,
+        is RoomEncryption,
+        is Custom -> true
+        // Hidden
+        is RoomAliases,
+        is RoomCanonicalAlias,
+        is RoomGuestAccess,
+        is RoomHistoryVisibility,
+        is RoomJoinRules,
+        is RoomPinnedEvents,
+        is RoomPowerLevels,
+        is RoomServerAcl,
+        is RoomTombstone,
+        is SpaceChild,
+        is SpaceParent,
+        is PolicyRuleRoom,
+        is PolicyRuleServer,
+        is PolicyRuleUser -> false
+    }
 }

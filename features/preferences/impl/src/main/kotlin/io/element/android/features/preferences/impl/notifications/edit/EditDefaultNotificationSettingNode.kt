@@ -36,7 +36,6 @@ class EditDefaultNotificationSettingNode @AssistedInject constructor(
     @Assisted plugins: List<Plugin>,
     presenterFactory: EditDefaultNotificationSettingPresenter.Factory
 ) : Node(buildContext, plugins = plugins) {
-
     interface Callback : Plugin {
         fun openRoomNotificationSettings(roomId: RoomId)
     }

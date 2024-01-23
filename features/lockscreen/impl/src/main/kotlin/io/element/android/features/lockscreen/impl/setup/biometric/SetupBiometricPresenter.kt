@@ -30,10 +30,8 @@ import javax.inject.Inject
 class SetupBiometricPresenter @Inject constructor(
     private val lockScreenStore: LockScreenStore,
 ) : Presenter<SetupBiometricState> {
-
     @Composable
     override fun present(): SetupBiometricState {
-
         var isBiometricSetupDone by remember {
             mutableStateOf(false)
         }

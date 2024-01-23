@@ -103,7 +103,6 @@ import kotlin.time.Duration.Companion.milliseconds
 
 @Suppress("LargeClass")
 class MessagesPresenterTest {
-
     @get:Rule
     val warmUpRule = WarmUpRule()
 
@@ -121,7 +120,7 @@ class MessagesPresenterTest {
             assertThat(initialState.roomAvatar)
                 .isEqualTo(AsyncData.Success(AvatarData(id = A_ROOM_ID.value, name = "", url = AN_AVATAR_URL, size = AvatarSize.TimelineRoom)))
             assertThat(initialState.userHasPermissionToSendMessage).isTrue()
-            assertThat(initialState.userHasPermissionToRedact).isFalse()
+            assertThat(initialState.userHasPermissionToRedactOwn).isFalse()
             assertThat(initialState.hasNetworkConnection).isTrue()
             assertThat(initialState.snackbarMessage).isNull()
             assertThat(initialState.inviteProgress).isEqualTo(AsyncData.Uninitialized)
@@ -602,14 +601,29 @@ class MessagesPresenterTest {
     }
 
     @Test
-    fun `present - permission to redact`() = runTest {
-        val matrixRoom = FakeMatrixRoom(canRedact = true)
+    fun `present - permission to redact own`() = runTest {
+        val matrixRoom = FakeMatrixRoom(canRedactOwn = true)
         val presenter = createMessagesPresenter(matrixRoom = matrixRoom)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            val initialState = consumeItemsUntilPredicate { it.userHasPermissionToRedact }.last()
-            assertThat(initialState.userHasPermissionToRedact).isTrue()
+            val initialState = consumeItemsUntilPredicate { it.userHasPermissionToRedactOwn }.last()
+            assertThat(initialState.userHasPermissionToRedactOwn).isTrue()
+            assertThat(initialState.userHasPermissionToRedactOther).isFalse()
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - permission to redact other`() = runTest {
+        val matrixRoom = FakeMatrixRoom(canRedactOther = true)
+        val presenter = createMessagesPresenter(matrixRoom = matrixRoom)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = consumeItemsUntilPredicate { it.userHasPermissionToRedactOther }.last()
+            assertThat(initialState.userHasPermissionToRedactOwn).isFalse()
+            assertThat(initialState.userHasPermissionToRedactOther).isTrue()
             cancelAndIgnoreRemainingEvents()
         }
     }
@@ -685,7 +699,6 @@ class MessagesPresenterTest {
             navigator = navigator,
             encryptionService = FakeEncryptionService(),
             verificationService = FakeSessionVerificationService(),
-            featureFlagService = FakeFeatureFlagService(),
             redactedVoiceMessageManager = FakeRedactedVoiceMessageManager(),
             endPollAction = FakeEndPollAction(),
             sendPollResponseAction = FakeSendPollResponseAction(),

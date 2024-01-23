@@ -31,13 +31,14 @@ import io.element.android.features.messages.impl.attachments.Attachment
 import io.element.android.features.messages.impl.timeline.di.LocalTimelineItemPresenterFactories
 import io.element.android.features.messages.impl.timeline.di.TimelineItemPresenterFactories
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
-import io.element.android.libraries.mediaplayer.api.MediaPlayer
+import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
+import io.element.android.libraries.mediaplayer.api.MediaPlayer
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analytics.api.extensions.toAnalyticsViewRoom
 import kotlinx.collections.immutable.ImmutableList
@@ -48,17 +49,16 @@ class MessagesNode @AssistedInject constructor(
     @Assisted plugins: List<Plugin>,
     private val room: MatrixRoom,
     private val analyticsService: AnalyticsService,
-    private val presenterFactory: MessagesPresenter.Factory,
+    presenterFactory: MessagesPresenter.Factory,
     private val timelineItemPresenterFactories: TimelineItemPresenterFactories,
     private val mediaPlayer: MediaPlayer,
 ) : Node(buildContext, plugins = plugins), MessagesNavigator {
-
     private val presenter = presenterFactory.create(this)
     private val callback = plugins<Callback>().firstOrNull()
 
     interface Callback : Plugin {
         fun onRoomDetailsClicked()
-        fun onEventClicked(event: TimelineItem.Event)
+        fun onEventClicked(event: TimelineItem.Event): Boolean
         fun onPreviewAttachments(attachments: ImmutableList<Attachment>)
         fun onUserDataClicked(userId: UserId)
         fun onShowEventDebugInfoClicked(eventId: EventId?, debugInfo: TimelineItemDebugInfo)
@@ -85,8 +85,8 @@ class MessagesNode @AssistedInject constructor(
         callback?.onRoomDetailsClicked()
     }
 
-    private fun onEventClicked(event: TimelineItem.Event) {
-        callback?.onEventClicked(event)
+    private fun onEventClicked(event: TimelineItem.Event): Boolean {
+        return callback?.onEventClicked(event).orFalse()
     }
 
     private fun onPreviewAttachments(attachments: ImmutableList<Attachment>) {

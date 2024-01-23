@@ -24,7 +24,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 
 class FakeLockScreenService : LockScreenService {
-
     private var isPinSetup = MutableStateFlow(false)
     private val _lockState: MutableStateFlow<LockScreenLockState> = MutableStateFlow(LockScreenLockState.Locked)
     override val lockState: StateFlow<LockScreenLockState> = _lockState

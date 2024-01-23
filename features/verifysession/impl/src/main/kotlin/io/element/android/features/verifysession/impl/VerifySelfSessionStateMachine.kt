@@ -31,7 +31,6 @@ class VerifySelfSessionStateMachine @Inject constructor(
 ) : FlowReduxStateMachine<VerifySelfSessionStateMachine.State, VerifySelfSessionStateMachine.Event>(
     initialState = State.Initial
 ) {
-
     init {
         spec {
             inState<State.Initial> {

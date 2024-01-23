@@ -26,6 +26,7 @@ repositories {
 dependencies {
     implementation(libs.android.gradle.plugin)
     implementation(libs.kotlin.gradle.plugin)
+    implementation(libs.kover.gradle.plugin)
     implementation(platform(libs.google.firebase.bom))
     implementation(libs.firebase.appdistribution.gradle)
     implementation(files(libs.javaClass.superclass.protectionDomain.codeSource.location))

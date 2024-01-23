@@ -30,7 +30,6 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
 internal class MatrixUserListDataSourceTest {
-
     @Test
     fun `search - returns users on success`() = runTest {
         val matrixClient = FakeMatrixClient()

@@ -49,7 +49,6 @@ class PollHistoryFlowNode @AssistedInject constructor(
     buildContext = buildContext,
     plugins = plugins
 ) {
-
     sealed interface NavTarget : Parcelable {
         @Parcelize
         data object Root : NavTarget
@@ -83,5 +82,4 @@ class PollHistoryFlowNode @AssistedInject constructor(
     override fun View(modifier: Modifier) {
         BackstackView()
     }
-
 }

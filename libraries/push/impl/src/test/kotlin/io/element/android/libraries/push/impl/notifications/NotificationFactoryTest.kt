@@ -41,7 +41,6 @@ private val A_MESSAGE_EVENT = aNotifiableMessageEvent(eventId = AN_EVENT_ID, roo
 
 @RunWith(RobolectricTestRunner::class)
 class NotificationFactoryTest {
-
     private val androidNotificationFactory = FakeAndroidNotificationFactory()
     private val roomGroupMessageCreator = FakeRoomGroupMessageCreator()
     private val summaryGroupMessageCreator = FakeSummaryGroupMessageCreator()
@@ -130,7 +129,9 @@ class NotificationFactoryTest {
     fun `given room with message when mapping to notification then delegates to room group message creator`() = testWith(notificationFactory) {
         val events = listOf(A_MESSAGE_EVENT)
         val expectedNotification = roomGroupMessageCreator.givenCreatesRoomMessageFor(
-            MatrixUser(A_SESSION_ID, A_SESSION_ID.value, MY_AVATAR_URL), events, A_ROOM_ID
+            MatrixUser(A_SESSION_ID, A_SESSION_ID.value, MY_AVATAR_URL),
+            events,
+            A_ROOM_ID
         )
         val roomWithMessage = mapOf(A_ROOM_ID to listOf(ProcessedEvent(ProcessedEvent.Type.KEEP, A_MESSAGE_EVENT)))
 

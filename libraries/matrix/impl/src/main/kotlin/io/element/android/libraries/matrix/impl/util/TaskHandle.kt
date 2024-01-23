@@ -25,7 +25,6 @@ fun TaskHandle.cancelAndDestroy() {
 }
 
 class TaskHandleBag(private val taskHandles: MutableSet<TaskHandle> = CopyOnWriteArraySet()) : Set<TaskHandle> by taskHandles {
-
     operator fun plusAssign(taskHandle: TaskHandle?) {
         if (taskHandle == null) return
         taskHandles += taskHandle

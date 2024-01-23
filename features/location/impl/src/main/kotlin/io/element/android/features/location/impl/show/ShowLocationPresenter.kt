@@ -42,7 +42,6 @@ class ShowLocationPresenter @AssistedInject constructor(
     @Assisted private val location: Location,
     @Assisted private val description: String?
 ) : Presenter<ShowLocationState> {
-
     @AssistedFactory
     interface Factory {
         fun create(location: Location, description: String?): ShowLocationPresenter

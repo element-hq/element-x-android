@@ -28,4 +28,3 @@ data class ReactionSender(
     val senderId: UserId,
     val timestamp: Long
 )
-

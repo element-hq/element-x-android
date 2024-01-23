@@ -27,7 +27,6 @@ import java.io.File
 import kotlin.time.Duration.Companion.seconds
 
 class FakeMediaPreProcessor : MediaPreProcessor {
-
     var processCallCount = 0
         private set
 

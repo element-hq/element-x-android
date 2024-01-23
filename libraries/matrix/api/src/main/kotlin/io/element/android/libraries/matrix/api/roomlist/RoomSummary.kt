@@ -36,13 +36,16 @@ sealed interface RoomSummary {
 data class RoomSummaryDetails(
     val roomId: RoomId,
     val name: String,
-    val canonicalAlias: String? = null,
+    val canonicalAlias: String?,
     val isDirect: Boolean,
-    val avatarURLString: String?,
+    val avatarUrl: String?,
     val lastMessage: RoomMessage?,
-    val lastMessageTimestamp: Long?,
-    val unreadNotificationCount: Int,
-    val inviter: RoomMember? = null,
-    val notificationMode: RoomNotificationMode? = null,
-    val hasOngoingCall: Boolean = false,
-)
+    val numUnreadMessages: Int,
+    val numUnreadMentions: Int,
+    val inviter: RoomMember?,
+    val userDefinedNotificationMode: RoomNotificationMode?,
+    val hasRoomCall: Boolean,
+    val isDm: Boolean,
+) {
+    val lastMessageTimestamp = lastMessage?.originServerTs
+}

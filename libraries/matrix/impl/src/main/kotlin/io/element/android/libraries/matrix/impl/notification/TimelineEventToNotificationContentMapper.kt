@@ -18,7 +18,7 @@ package io.element.android.libraries.matrix.impl.notification
 
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.notification.NotificationContent
-import io.element.android.libraries.matrix.impl.room.RoomMemberMapper
+import io.element.android.libraries.matrix.impl.room.member.RoomMemberMapper
 import io.element.android.libraries.matrix.impl.timeline.item.event.EventMessageMapper
 import org.matrix.rustcomponents.sdk.MessageLikeEventContent
 import org.matrix.rustcomponents.sdk.StateEventContent
@@ -28,7 +28,6 @@ import org.matrix.rustcomponents.sdk.use
 import javax.inject.Inject
 
 class TimelineEventToNotificationContentMapper @Inject constructor() {
-
     fun map(timelineEvent: TimelineEvent): NotificationContent {
         return timelineEvent.use {
             timelineEvent.eventType().use { eventType ->

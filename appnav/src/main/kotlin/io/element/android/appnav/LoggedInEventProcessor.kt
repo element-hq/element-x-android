@@ -36,7 +36,6 @@ class LoggedInEventProcessor @Inject constructor(
     roomMembershipObserver: RoomMembershipObserver,
     sessionVerificationService: SessionVerificationService,
 ) {
-
     private var observingJob: Job? = null
 
     private val displayLeftRoomMessage = roomMembershipObserver.updates

@@ -31,7 +31,7 @@ import javax.inject.Inject
 class DefaultPermissionStateProvider @Inject constructor(
     @ApplicationContext private val context: Context,
     private val permissionsStore: PermissionsStore,
-): PermissionStateProvider {
+) : PermissionStateProvider {
     override fun isPermissionGranted(permission: String): Boolean {
         return context.checkSelfPermission(permission) == android.content.pm.PackageManager.PERMISSION_GRANTED
     }

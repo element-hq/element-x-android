@@ -35,7 +35,6 @@ class SignedOutNode @AssistedInject constructor(
     @Assisted plugins: List<Plugin>,
     presenterFactory: SignedOutPresenter.Factory,
 ) : Node(buildContext, plugins = plugins) {
-
     data class Inputs(
         val sessionId: SessionId,
     ) : NodeInputs

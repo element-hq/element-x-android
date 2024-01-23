@@ -27,7 +27,6 @@ import androidx.media3.exoplayer.ExoPlayer
  */
 @UnstableApi
 class ExoPlayerWrapper(private val exoPlayer: ExoPlayer) : ExoPlayer by exoPlayer {
-
     override fun isCommandAvailable(command: Int): Boolean {
         return availableCommands.contains(command)
     }

@@ -52,7 +52,6 @@ class ConfigureRoomFlowNode @AssistedInject constructor(
         buildContext = buildContext,
         plugins = plugins
     ) {
-
     private val component by lazy {
         parent!!.bindings<CreateRoomComponent.ParentBindings>().createRoomComponentBuilder().build()
     }

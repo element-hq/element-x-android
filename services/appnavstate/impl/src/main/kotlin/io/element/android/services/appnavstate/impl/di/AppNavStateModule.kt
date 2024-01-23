@@ -29,11 +29,9 @@ import io.element.android.services.appnavstate.impl.initializer.AppForegroundSta
 @Module
 @ContributesTo(AppScope::class)
 object AppNavStateModule {
-
     @Provides
     fun provideAppForegroundStateService(
         @ApplicationContext context: Context
     ): AppForegroundStateService =
         AppInitializer.getInstance(context).initializeComponent(AppForegroundStateServiceInitializer::class.java)
-
 }

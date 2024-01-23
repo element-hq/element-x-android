@@ -35,4 +35,3 @@ class DefaultRichTextEditorStateFactory @Inject constructor() : RichTextEditorSt
         return rememberRichTextEditorState()
     }
 }
-

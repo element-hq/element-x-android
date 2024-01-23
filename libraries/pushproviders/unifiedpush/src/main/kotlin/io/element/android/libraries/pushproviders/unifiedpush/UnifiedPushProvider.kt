@@ -19,6 +19,7 @@ package io.element.android.libraries.pushproviders.unifiedpush
 import android.content.Context
 import com.squareup.anvil.annotations.ContributesMultibinding
 import io.element.android.libraries.androidutils.system.getApplicationLabel
+import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.matrix.api.MatrixClient
@@ -26,7 +27,10 @@ import io.element.android.libraries.pushproviders.api.Distributor
 import io.element.android.libraries.pushproviders.api.PushProvider
 import io.element.android.libraries.pushstore.api.clientsecret.PushClientSecret
 import org.unifiedpush.android.connector.UnifiedPush
+import timber.log.Timber
 import javax.inject.Inject
+
+private val loggerTag = LoggerTag("UnifiedPushProvider", LoggerTag.PushLoggerTag)
 
 @ContributesMultibinding(AppScope::class)
 class UnifiedPushProvider @Inject constructor(
@@ -35,8 +39,19 @@ class UnifiedPushProvider @Inject constructor(
     private val unRegisterUnifiedPushUseCase: UnregisterUnifiedPushUseCase,
     private val pushClientSecret: PushClientSecret,
 ) : PushProvider {
-    override val index = UnifiedPushConfig.index
-    override val name = UnifiedPushConfig.name
+    override val index = UnifiedPushConfig.INDEX
+    override val name = UnifiedPushConfig.NAME
+
+    override fun isAvailable(): Boolean {
+        val isAvailable = getDistributors().isNotEmpty()
+        return if (isAvailable) {
+            Timber.tag(loggerTag.value).d("UnifiedPush is available")
+            true
+        } else {
+            Timber.tag(loggerTag.value).w("UnifiedPush is not available")
+            false
+        }
+    }
 
     override fun getDistributors(): List<Distributor> {
         val distributors = UnifiedPush.getDistributors(context)

@@ -48,6 +48,7 @@ fun aLogoutState(
     recoveryState: RecoveryState = RecoveryState.ENABLED,
     backupUploadState: BackupUploadState = BackupUploadState.Unknown,
     logoutAction: AsyncAction<String?> = AsyncAction.Uninitialized,
+    eventSink: (LogoutEvents) -> Unit = {},
 ) = LogoutState(
     isLastSession = isLastSession,
     backupState = backupState,
@@ -55,5 +56,5 @@ fun aLogoutState(
     recoveryState = recoveryState,
     backupUploadState = backupUploadState,
     logoutAction = logoutAction,
-    eventSink = {}
+    eventSink = eventSink,
 )

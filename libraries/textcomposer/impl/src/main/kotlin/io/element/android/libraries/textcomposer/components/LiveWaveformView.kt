@@ -31,6 +31,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.graphicsLayer
@@ -38,16 +39,17 @@ import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
+import io.element.android.compound.theme.ElementTheme
 import io.element.android.libraries.designsystem.components.media.drawWaveform
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.compound.theme.ElementTheme
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toPersistentList
 import java.lang.Float.min
 
 private const val DEFAULT_GRAPHICS_LAYER_ALPHA: Float = 0.99F
 private val waveFormHeight = 26.dp
+
 @Composable
 fun LiveWaveformView(
     levels: ImmutableList<Float>,
@@ -66,8 +68,8 @@ fun LiveWaveformView(
         }
     }
 
-
-    Box(contentAlignment = Alignment.CenterEnd,
+    Box(
+        contentAlignment = Alignment.CenterEnd,
         modifier = modifier
             .fillMaxWidth()
             .height(waveFormHeight)
@@ -79,11 +81,12 @@ fun LiveWaveformView(
                 .graphicsLayer(alpha = DEFAULT_GRAPHICS_LAYER_ALPHA)
                 .then(modifier)
         ) {
-            canvasSize = DpSize(Dp(min(waveformWidth, parentWidth.toFloat())), size.height.toDp())
+            val width = min(waveformWidth, parentWidth.toFloat())
+            canvasSize = DpSize(width.dp, size.height.toDp())
             val countThatFitsWidth = (parentWidth.toFloat() / (lineWidth.toPx() + linePadding.toPx())).toInt()
             drawWaveform(
                 waveformData = levels.takeLast(countThatFitsWidth).toPersistentList(),
-                canvasSize = canvasSize,
+                canvasSizePx = Size(canvasSize.width.toPx(), size.height),
                 brush = brush,
                 lineWidth = lineWidth,
                 linePadding = linePadding,
@@ -96,7 +99,6 @@ fun LiveWaveformView(
 @Composable
 internal fun LiveWaveformViewPreview() = ElementPreview {
     Column {
-
         LiveWaveformView(
             levels = List(100) { it.toFloat() / 100 }.toPersistentList(),
             modifier = Modifier.height(34.dp),

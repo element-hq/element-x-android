@@ -24,7 +24,6 @@ import io.element.android.tests.testutils.isInDebug
 import org.junit.Test
 
 class PermalinkBuilderTest {
-
     fun `building a permalink for an invalid user id throws when verifying the id`() {
         assertThrowsInDebug {
             val userId = UserId("some invalid user id")

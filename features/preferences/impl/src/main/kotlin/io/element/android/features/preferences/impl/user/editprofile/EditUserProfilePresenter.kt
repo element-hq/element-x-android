@@ -54,7 +54,6 @@ class EditUserProfilePresenter @AssistedInject constructor(
     private val mediaPreProcessor: MediaPreProcessor,
     permissionsPresenterFactory: PermissionsPresenter.Factory,
 ) : Presenter<EditUserProfileState> {
-
     private val cameraPermissionPresenter: PermissionsPresenter = permissionsPresenterFactory.create(android.Manifest.permission.CAMERA)
     private var pendingPermissionRequest = false
 

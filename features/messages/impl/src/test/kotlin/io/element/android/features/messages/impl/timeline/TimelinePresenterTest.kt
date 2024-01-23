@@ -35,7 +35,6 @@ import io.element.android.features.poll.api.actions.SendPollResponseAction
 import io.element.android.features.poll.test.actions.FakeEndPollAction
 import io.element.android.features.poll.test.actions.FakeSendPollResponseAction
 import io.element.android.libraries.featureflag.api.FeatureFlags
-import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
@@ -70,7 +69,6 @@ import kotlin.time.Duration.Companion.seconds
 private const val FAKE_UNIQUE_ID = "FAKE_UNIQUE_ID"
 
 class TimelinePresenterTest {
-
     @get:Rule
     val warmUpRule = WarmUpRule()
 
@@ -94,7 +92,7 @@ class TimelinePresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            val initialState = awaitFirstItem()
+            val initialState = awaitItem()
             assertThat(initialState.paginationState.hasMoreToLoadBackwards).isTrue()
             assertThat(initialState.paginationState.isBackPaginating).isFalse()
             initialState.eventSink.invoke(TimelineEvents.LoadMore)
@@ -138,8 +136,6 @@ class TimelinePresenterTest {
         }.test {
             assertThat(timeline.sendReadReceiptCount).isEqualTo(0)
             val initialState = awaitFirstItem()
-            // Wait for timeline items to be populated
-            skipItems(1)
             awaitWithLatch { latch ->
                 timeline.sendReadReceiptLatch = latch
                 initialState.eventSink.invoke(TimelineEvents.OnScrollFinished(0))
@@ -162,8 +158,6 @@ class TimelinePresenterTest {
         }.test {
             assertThat(timeline.sendReadReceiptCount).isEqualTo(0)
             val initialState = awaitFirstItem()
-            // Wait for timeline items to be populated
-            skipItems(1)
             awaitWithLatch { latch ->
                 timeline.sendReadReceiptLatch = latch
                 initialState.eventSink.invoke(TimelineEvents.OnScrollFinished(1))
@@ -186,8 +180,6 @@ class TimelinePresenterTest {
         }.test {
             assertThat(timeline.sendReadReceiptCount).isEqualTo(0)
             val initialState = awaitFirstItem()
-            // Wait for timeline items to be populated
-            skipItems(1)
             awaitWithLatch { latch ->
                 timeline.sendReadReceiptLatch = latch
                 initialState.eventSink.invoke(TimelineEvents.OnScrollFinished(0))
@@ -359,8 +351,7 @@ class TimelinePresenterTest {
             presenter.present()
         }.test {
             assertThat(redactedVoiceMessageManager.invocations.size).isEqualTo(0)
-            awaitFirstItem()
-            awaitItem().let {
+            awaitFirstItem().let {
                 assertThat(it.timelineItems).isNotEmpty()
             }
             assertThat(redactedVoiceMessageManager.invocations.size).isEqualTo(1)
@@ -436,7 +427,6 @@ class TimelinePresenterTest {
             navigator = messagesNavigator,
             encryptionService = FakeEncryptionService(),
             verificationService = FakeSessionVerificationService(),
-            featureFlagService = FakeFeatureFlagService(),
             redactedVoiceMessageManager = redactedVoiceMessageManager,
             endPollAction = endPollAction,
             sendPollResponseAction = sendPollResponseAction,

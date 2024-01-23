@@ -62,7 +62,6 @@ class PreferencesFlowNode @AssistedInject constructor(
     buildContext = buildContext,
     plugins = plugins
 ) {
-
     sealed interface NavTarget : Parcelable {
         @Parcelize
         data object Root : NavTarget

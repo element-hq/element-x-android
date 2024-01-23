@@ -34,8 +34,7 @@ class RustWidgetDriver(
     widgetSettings: MatrixWidgetSettings,
     private val room: Room,
     private val widgetCapabilitiesProvider: WidgetCapabilitiesProvider,
-): MatrixWidgetDriver {
-
+) : MatrixWidgetDriver {
     // It's important to have extra capacity here to make sure we don't drop any messages
     override val incomingMessages = MutableSharedFlow<String>(extraBufferCapacity = 10)
 

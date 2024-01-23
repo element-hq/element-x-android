@@ -23,7 +23,6 @@ import java.util.UUID
 class FakeWidgetDriver(
     override val id: String = UUID.randomUUID().toString(),
 ) : MatrixWidgetDriver {
-
     private val _sentMessages = mutableListOf<String>()
     val sentMessages: List<String> = _sentMessages
 

@@ -22,7 +22,6 @@ import io.element.android.libraries.matrix.api.timeline.item.event.RedactedConte
 import javax.inject.Inject
 
 class TimelineItemContentRedactedFactory @Inject constructor() {
-
     fun create(@Suppress("UNUSED_PARAMETER") content: RedactedContent): TimelineItemEventContent {
         return TimelineItemRedactedContent
     }

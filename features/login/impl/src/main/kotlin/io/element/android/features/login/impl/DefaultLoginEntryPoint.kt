@@ -31,7 +31,6 @@ class DefaultLoginEntryPoint @Inject constructor() : LoginEntryPoint {
         val plugins = ArrayList<Plugin>()
 
         return object : LoginEntryPoint.NodeBuilder {
-
             override fun params(params: LoginEntryPoint.Params): LoginEntryPoint.NodeBuilder {
                 plugins += LoginFlowNode.Inputs(isAccountCreation = params.isAccountCreation)
                 return this

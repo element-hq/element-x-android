@@ -34,6 +34,7 @@ anvil {
 dependencies {
     implementation(libs.dagger)
     implementation(projects.libraries.architecture)
+    implementation(projects.libraries.androidutils)
     implementation(projects.libraries.core)
     implementation(projects.libraries.matrix.api)
     implementation(projects.libraries.pushstore.api)
@@ -48,6 +49,7 @@ dependencies {
     testImplementation(libs.coroutines.test)
     testImplementation(projects.libraries.matrix.test)
     testImplementation(projects.services.appnavstate.test)
+    testImplementation(projects.libraries.sessionStorage.test)
 
     androidTestImplementation(libs.coroutines.test)
     androidTestImplementation(libs.test.core)

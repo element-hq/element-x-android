@@ -33,6 +33,7 @@ import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.item.event.ProfileTimelineDetails
+import io.element.android.libraries.matrix.api.timeline.item.event.getDisambiguatedDisplayName
 import kotlinx.collections.immutable.toImmutableList
 import java.text.DateFormat
 import java.util.Date
@@ -43,7 +44,6 @@ class TimelineItemEventFactory @Inject constructor(
     private val matrixClient: MatrixClient,
     private val lastMessageTimestampFormatter: LastMessageTimestampFormatter,
 ) {
-
     suspend fun create(
         currentTimelineItem: MatrixTimelineItem.Event,
         index: Int,
@@ -109,7 +109,7 @@ class TimelineItemEventFactory @Inject constructor(
                 senderAvatarUrl = null
             }
             is ProfileTimelineDetails.Ready -> {
-                senderDisplayName = senderProfile.displayName
+                senderDisplayName = senderProfile.getDisambiguatedDisplayName(event.sender)
                 senderAvatarUrl = senderProfile.avatarUrl
             }
         }
@@ -209,7 +209,8 @@ class TimelineItemEventFactory @Inject constructor(
                     }
                 }
             }
-            previousSender == currentSender /* && nextSender != currentSender (== true) */ -> {
+            // In the following case, we have nextSender != currentSender == true
+            previousSender == currentSender -> {
                 if (previousIsGroupable) {
                     TimelineItemGroupPosition.Last
                 } else {

@@ -26,7 +26,6 @@ import io.element.android.libraries.permissions.api.aPermissionsState
 class FakePermissionsPresenter(
     private val initialState: PermissionsState = aPermissionsState(showDialog = false),
 ) : PermissionsPresenter {
-
     private fun eventSink(events: PermissionsEvents) {
         when (events) {
             PermissionsEvents.RequestPermissions -> state.value = state.value.copy(showDialog = true, permissionAlreadyAsked = true)

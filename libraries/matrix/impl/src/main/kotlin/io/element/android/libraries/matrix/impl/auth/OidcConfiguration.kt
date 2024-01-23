@@ -21,7 +21,7 @@ import org.matrix.rustcomponents.sdk.OidcConfiguration
 
 val oidcConfiguration: OidcConfiguration = OidcConfiguration(
     clientName = "Element",
-    redirectUri = OidcConfig.redirectUri,
+    redirectUri = OidcConfig.REDIRECT_URI,
     clientUri = "https://element.io",
     logoUri = "https://element.io/mobile-icon.png",
     tosUri = "https://element.io/acceptable-use-policy-terms",
@@ -29,9 +29,7 @@ val oidcConfiguration: OidcConfiguration = OidcConfiguration(
     contacts = listOf(
         "support@element.io",
     ),
-    /**
-     * Some homeservers/auth issuers don't support dynamic client registration, and have to be registered manually
-     */
+    // Some homeservers/auth issuers don't support dynamic client registration, and have to be registered manually
     staticRegistrations = mapOf(
         "https://id.thirdroom.io/realms/thirdroom" to "elementx",
     ),

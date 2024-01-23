@@ -20,10 +20,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import com.squareup.anvil.annotations.ContributesBinding
+import io.element.android.features.rageshake.api.crash.CrashDataStore
 import io.element.android.features.rageshake.api.crash.CrashDetectionEvents
 import io.element.android.features.rageshake.api.crash.CrashDetectionPresenter
 import io.element.android.features.rageshake.api.crash.CrashDetectionState
-import io.element.android.features.rageshake.api.crash.CrashDataStore
 import io.element.android.libraries.di.AppScope
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -32,7 +32,6 @@ import javax.inject.Inject
 @ContributesBinding(AppScope::class)
 class DefaultCrashDetectionPresenter @Inject constructor(private val crashDataStore: CrashDataStore) :
     CrashDetectionPresenter {
-
     @Composable
     override fun present(): CrashDetectionState {
         val localCoroutineScope = rememberCoroutineScope()

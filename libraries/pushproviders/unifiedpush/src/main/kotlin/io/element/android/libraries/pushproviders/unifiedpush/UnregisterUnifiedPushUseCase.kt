@@ -24,14 +24,13 @@ import javax.inject.Inject
 
 class UnregisterUnifiedPushUseCase @Inject constructor(
     @ApplicationContext private val context: Context,
-    //private val pushDataStore: PushDataStore,
+    // private val pushDataStore: PushDataStore,
     private val unifiedPushStore: UnifiedPushStore,
     // private val unifiedPushGatewayResolver: UnifiedPushGatewayResolver,
 ) {
-
-    suspend fun execute(clientSecret: String /*pushersManager: PushersManager?*/) {
-        //val mode = BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_FOR_REALTIME
-        //pushDataStore.setFdroidSyncBackgroundMode(mode)
+    suspend fun execute(clientSecret: String) {
+        // val mode = BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_FOR_REALTIME
+        // pushDataStore.setFdroidSyncBackgroundMode(mode)
         try {
             unifiedPushStore.getEndpoint(clientSecret)?.let {
                 Timber.d("Removing $it")

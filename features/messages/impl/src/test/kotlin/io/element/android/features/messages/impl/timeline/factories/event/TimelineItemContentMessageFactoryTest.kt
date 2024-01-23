@@ -76,7 +76,6 @@ import kotlin.time.Duration.Companion.minutes
 
 @RunWith(RobolectricTestRunner::class)
 class TimelineItemContentMessageFactoryTest {
-
     @Test
     fun `test create OtherMessageType`() = runTest {
         val sut = createTimelineItemContentMessageFactory()
@@ -447,7 +446,8 @@ class TimelineItemContentMessageFactoryTest {
             content = createStickerContent(
                 "body",
                 ImageInfo(32, 32, "image/webp", 8192, null, MediaSource("thumbnail://url"), null),
-                "url")
+                "url"
+            )
         )
         val expected = TimelineItemStickerContent(
             body = "body",
@@ -659,7 +659,7 @@ class TimelineItemContentMessageFactoryTest {
         inImageInfo: ImageInfo,
         inUrl: String
     ): StickerContent {
-        return StickerContent (
+        return StickerContent(
             body = body,
             info = inImageInfo,
             url = inUrl

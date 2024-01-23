@@ -20,7 +20,6 @@ import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.usersearch.api.UserRepository
 
 interface UserListPresenter : Presenter<UserListState> {
-
     interface Factory {
         fun create(
             args: UserListPresenterArgs,

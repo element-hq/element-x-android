@@ -37,7 +37,7 @@ fun Slider(
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     valueRange: ClosedFloatingPointRange<Float> = 0f..1f,
-    /*@IntRange(from = 0)*/
+    // @IntRange(from = 0)
     steps: Int = 0,
     onValueChangeFinished: (() -> Unit)? = null,
     colors: SliderColors = SliderDefaults.colors(),
@@ -58,10 +58,7 @@ fun Slider(
 
 @Preview(group = PreviewGroup.Sliders)
 @Composable
-internal fun SlidersPreview() = ElementThemedPreview { ContentToPreview() }
-
-@Composable
-private fun ContentToPreview() {
+internal fun SlidersPreview() = ElementThemedPreview {
     var value by remember { mutableFloatStateOf(0.33f) }
     Column {
         Slider(onValueChange = { value = it }, value = value, enabled = true)

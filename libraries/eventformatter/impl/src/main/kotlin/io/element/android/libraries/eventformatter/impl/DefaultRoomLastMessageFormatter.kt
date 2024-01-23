@@ -62,7 +62,6 @@ class DefaultRoomLastMessageFormatter @Inject constructor(
     private val profileChangeContentFormatter: ProfileChangeContentFormatter,
     private val stateContentFormatter: StateContentFormatter,
 ) : RoomLastMessageFormatter {
-
     companion object {
         // Max characters to display in the last message. This works around https://github.com/element-hq/element-x-android/issues/2105
         private const val MAX_SAFE_LENGTH = 500
@@ -70,45 +69,47 @@ class DefaultRoomLastMessageFormatter @Inject constructor(
 
     override fun format(event: EventTimelineItem, isDmRoom: Boolean): CharSequence? {
         val isOutgoing = event.isOwn
+        // Note: we do not use disambiguated display name here, see
+        // https://github.com/element-hq/element-x-ios/issues/1845#issuecomment-1888707428
         val senderDisplayName = (event.senderProfile as? ProfileTimelineDetails.Ready)?.displayName ?: event.sender.value
         return when (val content = event.content) {
-                is MessageContent -> processMessageContents(content, senderDisplayName, isDmRoom)
-                RedactedContent -> {
-                    val message = sp.getString(CommonStrings.common_message_removed)
-                    if (!isDmRoom) {
-                        prefix(message, senderDisplayName)
-                    } else {
-                        message
-                    }
+            is MessageContent -> processMessageContents(content, senderDisplayName, isDmRoom)
+            RedactedContent -> {
+                val message = sp.getString(CommonStrings.common_message_removed)
+                if (!isDmRoom) {
+                    prefix(message, senderDisplayName)
+                } else {
+                    message
                 }
-                is StickerContent -> {
-                    content.body
+            }
+            is StickerContent -> {
+                content.body
+            }
+            is UnableToDecryptContent -> {
+                val message = sp.getString(CommonStrings.common_waiting_for_decryption_key)
+                if (!isDmRoom) {
+                    prefix(message, senderDisplayName)
+                } else {
+                    message
                 }
-                is UnableToDecryptContent -> {
-                    val message = sp.getString(CommonStrings.common_waiting_for_decryption_key)
-                    if (!isDmRoom) {
-                        prefix(message, senderDisplayName)
-                    } else {
-                        message
-                    }
-                }
-                is RoomMembershipContent -> {
-                    roomMembershipContentFormatter.format(content, senderDisplayName, isOutgoing)
-                }
-                is ProfileChangeContent -> {
-                    profileChangeContentFormatter.format(content, senderDisplayName, isOutgoing)
-                }
-                is StateContent -> {
-                    stateContentFormatter.format(content, senderDisplayName, isOutgoing, RenderingMode.RoomList)
-                }
-                is PollContent -> {
-                    val message = sp.getString(CommonStrings.common_poll_summary, content.question)
-                    prefixIfNeeded(message, senderDisplayName, isDmRoom)
-                }
-                is FailedToParseMessageLikeContent, is FailedToParseStateContent, is UnknownContent -> {
-                    prefixIfNeeded(sp.getString(CommonStrings.common_unsupported_event), senderDisplayName, isDmRoom)
-                }
-            }?.take(MAX_SAFE_LENGTH)
+            }
+            is RoomMembershipContent -> {
+                roomMembershipContentFormatter.format(content, senderDisplayName, isOutgoing)
+            }
+            is ProfileChangeContent -> {
+                profileChangeContentFormatter.format(content, senderDisplayName, isOutgoing)
+            }
+            is StateContent -> {
+                stateContentFormatter.format(content, senderDisplayName, isOutgoing, RenderingMode.RoomList)
+            }
+            is PollContent -> {
+                val message = sp.getString(CommonStrings.common_poll_summary, content.question)
+                prefixIfNeeded(message, senderDisplayName, isDmRoom)
+            }
+            is FailedToParseMessageLikeContent, is FailedToParseStateContent, is UnknownContent -> {
+                prefixIfNeeded(sp.getString(CommonStrings.common_unsupported_event), senderDisplayName, isDmRoom)
+            }
+        }?.take(MAX_SAFE_LENGTH)
     }
 
     private fun processMessageContents(messageContent: MessageContent, senderDisplayName: String, isDmRoom: Boolean): CharSequence? {

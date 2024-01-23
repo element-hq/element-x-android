@@ -27,13 +27,13 @@ import javax.inject.Inject
 interface SystemNotificationsEnabledProvider {
     fun notificationsEnabled(): Boolean
 }
+
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class, boundType = SystemNotificationsEnabledProvider::class)
 class DefaultSystemNotificationsEnabledProvider @Inject constructor(
     @ApplicationContext private val context: Context,
-): SystemNotificationsEnabledProvider {
+) : SystemNotificationsEnabledProvider {
     override fun notificationsEnabled(): Boolean {
         return NotificationManagerCompat.from(context).areNotificationsEnabled()
     }
 }
-

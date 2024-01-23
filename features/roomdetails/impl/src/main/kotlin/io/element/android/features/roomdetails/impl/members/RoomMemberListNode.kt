@@ -38,7 +38,6 @@ class RoomMemberListNode @AssistedInject constructor(
     private val presenter: RoomMemberListPresenter,
     private val analyticsService: AnalyticsService,
 ) : Node(buildContext, plugins = plugins) {
-
     interface Callback : Plugin {
         fun openRoomMemberDetails(roomMemberId: UserId)
         fun openInviteMembers()

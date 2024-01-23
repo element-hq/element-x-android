@@ -29,7 +29,6 @@ import io.element.android.libraries.textcomposer.model.SuggestionType
  * This class is responsible for processing mention suggestions when `@`, `/` or `#` are type in the composer.
  */
 object MentionSuggestionsProcessor {
-
     // We don't want to retrieve thousands of members
     private const val MAX_BATCH_ITEMS = 100
 
@@ -88,8 +87,8 @@ object MentionSuggestionsProcessor {
             }
 
             fun memberMatchesQuery(member: RoomMember, query: String): Boolean {
-                return member.userId.value.contains(query, ignoreCase = true)
-                    || member.displayName?.contains(query, ignoreCase = true) == true
+                return member.userId.value.contains(query, ignoreCase = true) ||
+                    member.displayName?.contains(query, ignoreCase = true) == true
             }
 
             val matchingMembers = roomMembers

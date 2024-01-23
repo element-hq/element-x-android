@@ -50,10 +50,7 @@ fun PreferenceRow(
 
 @Preview(group = PreviewGroup.Preferences)
 @Composable
-internal fun PreferenceRowPreview() = ElementThemedPreview { ContentToPreview() }
-
-@Composable
-private fun ContentToPreview() {
+internal fun PreferenceRowPreview() = ElementThemedPreview {
     PreferenceRow {
         Text(text = "Content")
     }

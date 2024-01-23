@@ -21,7 +21,6 @@ import android.content.Context
 import android.content.Intent
 
 class TestNotificationReceiver : BroadcastReceiver() {
-
     override fun onReceive(context: Context, intent: Intent) {
         // TODO The test notification has been clicked, notify the ui
     }

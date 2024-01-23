@@ -120,7 +120,7 @@ private fun SheetContent(
 
     LaunchedEffect(pagerState.currentPage) {
         selectedReactionKey = summary.reactions[pagerState.currentPage].key
-        val visibleInfo =  reactionListState.layoutInfo.visibleItemsInfo
+        val visibleInfo = reactionListState.layoutInfo.visibleItemsInfo
         if (selectedReactionIndex <= visibleInfo.first().index || selectedReactionIndex >= visibleInfo.last().index) {
             reactionListState.animateScrollToItem(selectedReactionIndex)
         }
@@ -174,7 +174,6 @@ private fun AggregatedReactionButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-
     val buttonColor = if (isHighlighted) {
         ElementTheme.colors.bgActionPrimaryRest
     } else {
@@ -209,8 +208,7 @@ private fun AggregatedReactionButton(
                     model = MediaRequestData(MediaSource(reaction.key), MediaRequestData.Kind.Content),
                     contentDescription = null
                 )
-            }
-            else {
+            } else {
                 Text(
                     text = reaction.displayKey,
                     style = ElementTheme.typography.fontBodyMdRegular.copy(

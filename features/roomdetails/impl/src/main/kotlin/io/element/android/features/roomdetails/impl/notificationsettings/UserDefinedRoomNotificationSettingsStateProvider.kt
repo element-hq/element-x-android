@@ -31,7 +31,8 @@ internal class UserDefinedRoomNotificationSettingsStateProvider : PreviewParamet
                 AsyncData.Success(
                     RoomNotificationSettings(
                         mode = RoomNotificationMode.MUTE,
-                        isDefault = false)
+                        isDefault = false
+                    )
                 ),
                 pendingRoomNotificationMode = null,
                 pendingSetDefault = null,

@@ -27,8 +27,12 @@ import io.element.android.libraries.matrix.api.tracing.TracingService
 @ContributesTo(AppScope::class)
 interface AppBindings {
     fun snackbarDispatcher(): SnackbarDispatcher
+
     fun tracingService(): TracingService
+
     fun bugReporter(): BugReporter
+
     fun lockScreenService(): LockScreenService
+
     fun preferencesStore(): PreferencesStore
 }

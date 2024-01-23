@@ -28,7 +28,6 @@ import javax.inject.Inject
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
 class DefaultCacheService @Inject constructor() : CacheService {
-
     private val _clearedCacheEventFlow = MutableSharedFlow<SessionId>(0)
     override val clearedCacheEventFlow: Flow<SessionId> = _clearedCacheEventFlow
 

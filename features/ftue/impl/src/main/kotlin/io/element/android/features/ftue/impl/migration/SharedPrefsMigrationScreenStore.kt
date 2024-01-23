@@ -29,7 +29,6 @@ import javax.inject.Inject
 class SharedPrefsMigrationScreenStore @Inject constructor(
     @DefaultPreferences private val sharedPreferences: SharedPreferences,
 ) : MigrationScreenStore {
-
     override fun isMigrationScreenNeeded(sessionId: SessionId): Boolean {
         return sharedPreferences.getBoolean(sessionId.toKey(), false).not()
     }
@@ -58,4 +57,3 @@ class SharedPrefsMigrationScreenStore @Inject constructor(
         private const val IS_MIGRATION_SCREEN_SHOWN_PREFIX = "is_migration_screen_shown_"
     }
 }
-

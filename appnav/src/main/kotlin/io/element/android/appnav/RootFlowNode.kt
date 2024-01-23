@@ -81,7 +81,6 @@ class RootFlowNode @AssistedInject constructor(
     buildContext = buildContext,
     plugins = plugins
 ) {
-
     override fun onBuilt() {
         matrixClientsHolder.restoreWithSavedState(buildContext.savedStateMap)
         super.onBuilt()
@@ -142,7 +141,7 @@ class RootFlowNode @AssistedInject constructor(
                 onSuccess(sessionId)
             }
             .onFailure {
-                Timber.v("Failed to restore session $sessionId")
+                Timber.e(it, "Failed to restore session $sessionId")
                 onFailure()
             }
     }
@@ -211,7 +210,14 @@ class RootFlowNode @AssistedInject constructor(
                 }
                 createNode<LoggedInAppScopeFlowNode>(buildContext, plugins = listOf(inputs, callback))
             }
-            NavTarget.NotLoggedInFlow -> createNode<NotLoggedInFlowNode>(buildContext)
+            NavTarget.NotLoggedInFlow -> {
+                val callback = object : NotLoggedInFlowNode.Callback {
+                    override fun onOpenBugReport() {
+                        backstack.push(NavTarget.BugReport)
+                    }
+                }
+                createNode<NotLoggedInFlowNode>(buildContext, plugins = listOf(callback))
+            }
             is NavTarget.SignedOutFlow -> {
                 signedOutEntryPoint.nodeBuilder(this, buildContext)
                     .params(
@@ -268,10 +274,9 @@ class RootFlowNode @AssistedInject constructor(
     }
 
     private suspend fun attachSession(sessionId: SessionId): LoggedInAppScopeFlowNode {
-        //TODO handle multi-session
+        // TODO handle multi-session
         return waitForChildAttached { navTarget ->
             navTarget is NavTarget.LoggedInFlow && navTarget.sessionId == sessionId
         }
     }
 }
-

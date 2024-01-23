@@ -57,7 +57,6 @@ import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 
 class VoiceMessageComposerPresenterTest {
-
     @get:Rule
     val warmUpRule = WarmUpRule()
 
@@ -462,7 +461,6 @@ class VoiceMessageComposerPresenterTest {
                 assertThat(voiceMessageState).isEqualTo(aPreviewState())
                 assertThat(showSendFailureDialog).isFalse()
             }
-
 
             assertThat(matrixRoom.sendMediaCount).isEqualTo(0)
             testPauseAndDestroy(finalState)

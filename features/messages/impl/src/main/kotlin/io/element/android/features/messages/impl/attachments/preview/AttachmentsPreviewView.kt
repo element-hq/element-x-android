@@ -48,7 +48,6 @@ fun AttachmentsPreviewView(
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-
     fun postSendAttachment() {
         state.eventSink(AttachmentsPreviewEvents.SendAttachment)
     }
@@ -88,7 +87,6 @@ private fun AttachmentSendStateView(
     onDismissClicked: () -> Unit,
     onRetryClicked: () -> Unit
 ) {
-
     when (sendActionState) {
         is SendActionState.Sending -> {
             ProgressDialog(

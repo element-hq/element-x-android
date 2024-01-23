@@ -26,11 +26,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.lifecycle.Lifecycle
 import io.element.android.features.leaveroom.api.LeaveRoomEvent
 import io.element.android.features.leaveroom.api.LeaveRoomPresenter
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsPresenter
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.designsystem.utils.OnLifecycleEvent
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.MatrixClient
@@ -58,12 +60,17 @@ class RoomDetailsPresenter @Inject constructor(
     private val leaveRoomPresenter: LeaveRoomPresenter,
     private val dispatchers: CoroutineDispatchers,
 ) : Presenter<RoomDetailsState> {
-
     @Composable
     override fun present(): RoomDetailsState {
         val scope = rememberCoroutineScope()
         val leaveRoomState = leaveRoomPresenter.present()
         val canShowNotificationSettings = remember { mutableStateOf(false) }
+        val roomInfo = room.roomInfoFlow.collectAsState(initial = null).value
+
+        val roomAvatar by remember { derivedStateOf { roomInfo?.avatarUrl ?: room.avatarUrl } }
+
+        val roomName by remember { derivedStateOf { (roomInfo?.name ?: room.name ?: room.displayName).trim() } }
+        val roomTopic by remember { derivedStateOf { roomInfo?.topic ?: room.topic } }
 
         LaunchedEffect(Unit) {
             canShowNotificationSettings.value = featureFlagService.isFeatureEnabled(FeatureFlags.NotificationSettings)
@@ -71,7 +78,13 @@ class RoomDetailsPresenter @Inject constructor(
                 room.updateRoomNotificationSettings()
                 observeNotificationSettings()
             }
-            room.updateMembers()
+        }
+
+        // Update room members only when first presenting the node
+        OnLifecycleEvent { _, event ->
+            if (event == Lifecycle.Event.ON_CREATE) {
+                scope.launch { room.updateMembers() }
+            }
         }
 
         val membersState by room.membersStateFlow.collectAsState()
@@ -83,8 +96,8 @@ class RoomDetailsPresenter @Inject constructor(
         val roomMemberDetailsPresenter = roomMemberDetailsPresenter(dmMember)
         val roomType by getRoomType(dmMember)
 
-        val topicState = remember(canEditTopic, room.topic, roomType) {
-            val topic = room.topic
+        val topicState = remember(canEditTopic, roomTopic, roomType) {
+            val topic = roomTopic
 
             when {
                 !topic.isNullOrBlank() -> RoomTopicState.ExistingTopic(topic)
@@ -116,9 +129,9 @@ class RoomDetailsPresenter @Inject constructor(
 
         return RoomDetailsState(
             roomId = room.roomId.value,
-            roomName = room.displayName,
+            roomName = roomName,
             roomAlias = room.alias,
-            roomAvatarUrl = room.avatarUrl,
+            roomAvatarUrl = roomAvatar,
             roomTopic = topicState,
             memberCount = room.joinedMemberCount,
             isEncrypted = room.isEncrypted,

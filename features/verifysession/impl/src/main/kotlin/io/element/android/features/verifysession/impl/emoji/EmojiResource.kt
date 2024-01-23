@@ -89,6 +89,7 @@ internal fun Int.toEmojiResource(): EmojiResource {
         60 -> EmojiResource(R.drawable.ic_verification_60, R.string.verification_emoji_60)
         61 -> EmojiResource(R.drawable.ic_verification_61, R.string.verification_emoji_61)
         62 -> EmojiResource(R.drawable.ic_verification_62, R.string.verification_emoji_62)
-        /* 63 */ else -> EmojiResource(R.drawable.ic_verification_63, R.string.verification_emoji_63)
+        63 -> EmojiResource(R.drawable.ic_verification_63, R.string.verification_emoji_63)
+        else -> error("Cannot happen ($this)!")
     }
 }

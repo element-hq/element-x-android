@@ -19,7 +19,6 @@ package io.element.android.features.location.impl.common.actions
 import io.element.android.features.location.api.Location
 
 class FakeLocationActions : LocationActions {
-
     var sharedLocation: Location? = null
         private set
 

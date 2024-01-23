@@ -17,7 +17,6 @@
 package io.element.android.libraries.matrix.api.timeline.item.virtual
 
 sealed interface VirtualTimelineItem {
-
     data class DayDivider(
         val timestamp: Long
     ) : VirtualTimelineItem

@@ -19,6 +19,8 @@ package io.element.android.libraries.matrix.impl.auth
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.extensions.mapFailure
+import io.element.android.libraries.core.meta.BuildMeta
+import io.element.android.libraries.core.meta.BuildType
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.matrix.api.MatrixClient
@@ -28,6 +30,7 @@ import io.element.android.libraries.matrix.api.auth.OidcDetails
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.impl.RustMatrixClientFactory
 import io.element.android.libraries.matrix.impl.exception.mapClientException
+import io.element.android.libraries.matrix.impl.keys.PassphraseGenerator
 import io.element.android.libraries.matrix.impl.mapper.toSessionData
 import io.element.android.libraries.network.useragent.UserAgentProvider
 import io.element.android.libraries.sessionstorage.api.LoggedInState
@@ -39,6 +42,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.OidcAuthenticationData
 import org.matrix.rustcomponents.sdk.use
+import timber.log.Timber
 import java.io.File
 import javax.inject.Inject
 import org.matrix.rustcomponents.sdk.AuthenticationService as RustAuthenticationService
@@ -51,11 +55,15 @@ class RustMatrixAuthenticationService @Inject constructor(
     private val sessionStore: SessionStore,
     userAgentProvider: UserAgentProvider,
     private val rustMatrixClientFactory: RustMatrixClientFactory,
+    private val passphraseGenerator: PassphraseGenerator,
+    private val buildMeta: BuildMeta,
 ) : MatrixAuthenticationService {
-
+    // Passphrase which will be used for new sessions. Existing sessions will use the passphrase
+    // stored in the SessionData.
+    private val pendingPassphrase = getDatabasePassphrase()
     private val authService: RustAuthenticationService = RustAuthenticationService(
         basePath = baseDirectory.absolutePath,
-        passphrase = null,
+        passphrase = pendingPassphrase,
         userAgent = userAgentProvider.provide(),
         oidcConfiguration = oidcConfiguration,
         customSlidingSyncProxy = null,
@@ -77,6 +85,12 @@ class RustMatrixAuthenticationService @Inject constructor(
             val sessionData = sessionStore.getSession(sessionId.value)
             if (sessionData != null) {
                 if (sessionData.isTokenValid) {
+                    // Use the sessionData.passphrase, which can be null for a previously created session
+                    if (sessionData.passphrase == null) {
+                        Timber.w("Restoring a session without a passphrase")
+                    } else {
+                        Timber.w("Restoring a session with a passphrase")
+                    }
                     rustMatrixClientFactory.create(sessionData)
                 } else {
                     error("Token is not valid")
@@ -87,6 +101,21 @@ class RustMatrixAuthenticationService @Inject constructor(
         }.mapFailure { failure ->
             failure.mapClientException()
         }
+    }
+
+    private fun getDatabasePassphrase(): String? {
+        // TODO Remove this if block at some point
+        // Return a passphrase only for debug and nightly build for now
+        if (buildMeta.buildType == BuildType.RELEASE) {
+            Timber.w("New sessions will not be encrypted with a passphrase (release build)")
+            return null
+        }
+
+        val passphrase = passphraseGenerator.generatePassphrase()
+        if (passphrase != null) {
+            Timber.w("New sessions will be encrypted with a passphrase")
+        }
+        return passphrase
     }
 
     override fun getHomeserverDetails(): StateFlow<MatrixHomeServerDetails?> = currentHomeserver
@@ -112,6 +141,7 @@ class RustMatrixAuthenticationService @Inject constructor(
                     it.session().toSessionData(
                         isTokenValid = true,
                         loginType = LoginType.PASSWORD,
+                        passphrase = pendingPassphrase,
                     )
                 }
                 sessionStore.storeData(sessionData)
@@ -159,6 +189,7 @@ class RustMatrixAuthenticationService @Inject constructor(
                     it.session().toSessionData(
                         isTokenValid = true,
                         loginType = LoginType.OIDC,
+                        passphrase = pendingPassphrase
                     )
                 }
                 pendingOidcAuthenticationData?.close()

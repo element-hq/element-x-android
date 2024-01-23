@@ -17,5 +17,7 @@
 package io.element.android.libraries.matrix.api.room
 
 enum class CurrentUserMembership {
-    INVITED, JOINED, LEFT
+    INVITED,
+    JOINED,
+    LEFT
 }

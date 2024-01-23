@@ -59,7 +59,6 @@ class AndroidLocalMediaActions @Inject constructor(
     private val coroutineDispatchers: CoroutineDispatchers,
     private val buildMeta: BuildMeta,
 ) : LocalMediaActions {
-
     private var activityContext: Context? = null
     private var apkInstallLauncher: ManagedActivityResultLauncher<Intent, ActivityResult>? = null
     private var pendingMedia: LocalMedia? = null

@@ -28,17 +28,17 @@ class LeaveRoomStateProvider : PreviewParameterProvider<LeaveRoomState> {
                 error = LeaveRoomState.Error.Hidden,
             ),
             aLeaveRoomState(
-                confirmation = LeaveRoomState.Confirmation.Generic(A_ROOM_ID),
+                confirmation = LeaveRoomState.Confirmation.Generic(roomId = A_ROOM_ID),
                 progress = LeaveRoomState.Progress.Hidden,
                 error = LeaveRoomState.Error.Hidden,
             ),
             aLeaveRoomState(
-                confirmation = LeaveRoomState.Confirmation.PrivateRoom(A_ROOM_ID),
+                confirmation = LeaveRoomState.Confirmation.PrivateRoom(roomId = A_ROOM_ID),
                 progress = LeaveRoomState.Progress.Hidden,
                 error = LeaveRoomState.Error.Hidden,
             ),
             aLeaveRoomState(
-                confirmation = LeaveRoomState.Confirmation.LastUserInRoom(A_ROOM_ID),
+                confirmation = LeaveRoomState.Confirmation.LastUserInRoom(roomId = A_ROOM_ID),
                 progress = LeaveRoomState.Progress.Hidden,
                 error = LeaveRoomState.Error.Hidden,
             ),
@@ -51,6 +51,11 @@ class LeaveRoomStateProvider : PreviewParameterProvider<LeaveRoomState> {
                 confirmation = LeaveRoomState.Confirmation.Hidden,
                 progress = LeaveRoomState.Progress.Hidden,
                 error = LeaveRoomState.Error.Shown,
+            ),
+            aLeaveRoomState(
+                confirmation = LeaveRoomState.Confirmation.Dm(roomId = A_ROOM_ID),
+                progress = LeaveRoomState.Progress.Hidden,
+                error = LeaveRoomState.Error.Hidden,
             ),
         )
 }

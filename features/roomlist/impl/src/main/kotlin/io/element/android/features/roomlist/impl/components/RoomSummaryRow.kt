@@ -141,7 +141,7 @@ private fun RowScope.NameAndTimestampRow(room: RoomListRoomSummary) {
     Text(
         text = room.timestamp ?: "",
         style = ElementTheme.typography.fontBodySmMedium,
-        color = if (room.hasUnread) {
+        color = if (room.isTimestampHighlighted) {
             ElementTheme.colors.unreadIndicator
         } else {
             MaterialTheme.roomListRoomMessageDate()
@@ -173,40 +173,77 @@ private fun RowScope.LastMessageAndIndicatorRow(room: RoomListRoomSummary) {
         verticalAlignment = Alignment.CenterVertically,
     ) {
         // Video call
-        if (room.hasOngoingCall) {
-            Icon(
-                modifier = Modifier.size(16.dp),
-                imageVector = CompoundIcons.VideoCallSolid,
-                contentDescription = null,
-                tint = ElementTheme.colors.unreadIndicator,
-            )
-        }
-        NotificationIcon(room)
-        if (room.hasUnread) {
-            UnreadIndicatorAtom()
-        }
+        OnGoingCallIcon(
+            room.hasRoomCall,
+        )
+        // Other indicators
+        NotificationIcons(
+            room.userDefinedNotificationMode,
+            room.numberOfUnreadMessages,
+            room.numberOfUnreadMentions,
+        )
     }
 }
 
 @Composable
-private fun NotificationIcon(room: RoomListRoomSummary) {
-    val tint = if (room.hasUnread) ElementTheme.colors.unreadIndicator else ElementTheme.colors.iconQuaternary
-    when (room.notificationMode) {
-        null, RoomNotificationMode.ALL_MESSAGES -> return
-        RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY ->
-            Icon(
-                modifier = Modifier.size(16.dp),
-                contentDescription = null,
-                imageVector = CompoundIcons.Mention,
-                tint = tint,
-            )
-        RoomNotificationMode.MUTE ->
+private fun OnGoingCallIcon(
+    hasRoomCall: Boolean,
+) {
+    if (hasRoomCall) {
+        Icon(
+            modifier = Modifier.size(16.dp),
+            imageVector = CompoundIcons.VideoCallSolid,
+            contentDescription = null,
+            tint = ElementTheme.colors.unreadIndicator,
+        )
+    }
+}
+
+@Composable
+private fun RowScope.NotificationIcons(
+    userDefinedNotificationMode: RoomNotificationMode?,
+    numberOfUnreadMessages: Int,
+    numberOfUnreadMentions: Int,
+) {
+    when (userDefinedNotificationMode) {
+        null,
+        RoomNotificationMode.ALL_MESSAGES -> {
+            if (numberOfUnreadMentions > 0) {
+                Icon(
+                    modifier = Modifier.size(16.dp),
+                    contentDescription = null,
+                    imageVector = CompoundIcons.Mention,
+                    tint = ElementTheme.colors.unreadIndicator,
+                )
+                UnreadIndicatorAtom()
+            } else if (numberOfUnreadMessages > 0) {
+                UnreadIndicatorAtom()
+            }
+        }
+        RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY -> {
+            if (numberOfUnreadMentions > 0) {
+                Icon(
+                    modifier = Modifier.size(16.dp),
+                    contentDescription = null,
+                    imageVector = CompoundIcons.Mention,
+                    tint = ElementTheme.colors.unreadIndicator,
+                )
+                UnreadIndicatorAtom()
+            } else if (numberOfUnreadMessages > 0) {
+                UnreadIndicatorAtom(color = ElementTheme.colors.iconQuaternary)
+            }
+        }
+        RoomNotificationMode.MUTE -> {
             Icon(
                 modifier = Modifier.size(16.dp),
                 contentDescription = null,
                 imageVector = CompoundIcons.NotificationsSolidOff,
-                tint = tint,
+                tint = ElementTheme.colors.iconQuaternary,
             )
+            if (numberOfUnreadMessages > 0 || numberOfUnreadMentions > 0) {
+                UnreadIndicatorAtom(color = ElementTheme.colors.iconQuaternary)
+            }
+        }
     }
 }
 

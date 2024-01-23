@@ -40,8 +40,6 @@ import io.element.android.features.poll.api.actions.EndPollAction
 import io.element.android.features.poll.api.actions.SendPollResponseAction
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
-import io.element.android.libraries.featureflag.api.FeatureFlagService
-import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.encryption.BackupState
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
@@ -72,12 +70,10 @@ class TimelinePresenter @AssistedInject constructor(
     @Assisted private val navigator: MessagesNavigator,
     private val verificationService: SessionVerificationService,
     private val encryptionService: EncryptionService,
-    private val featureFlagService: FeatureFlagService,
     private val redactedVoiceMessageManager: RedactedVoiceMessageManager,
     private val sendPollResponseAction: SendPollResponseAction,
     private val endPollAction: EndPollAction,
 ) : Presenter<TimelineState> {
-
     @AssistedFactory
     interface Factory {
         fun create(navigator: MessagesNavigator): TimelinePresenter
@@ -115,8 +111,6 @@ class TimelinePresenter @AssistedInject constructor(
                 )
             }
         }
-
-        val readReceiptsEnabled by featureFlagService.isFeatureEnabledFlow(FeatureFlags.ReadReceipts).collectAsState(initial = false)
 
         fun handleEvents(event: TimelineEvents) {
             when (event) {
@@ -157,12 +151,7 @@ class TimelinePresenter @AssistedInject constructor(
             combine(timeline.timelineItems, room.membersStateFlow) { items, membersState ->
                     timelineItemsFactory.replaceWith(
                         timelineItems = items,
-                        roomMembers = if (readReceiptsEnabled) {
-                            membersState.roomMembers().orEmpty()
-                        } else {
-                            // Give an empty list to not affect performance
-                            emptyList()
-                        }
+                        roomMembers = membersState.roomMembers().orEmpty()
                     )
                     items
                 }
@@ -189,7 +178,6 @@ class TimelinePresenter @AssistedInject constructor(
             highlightedEventId = highlightedEventId.value,
             paginationState = paginationState,
             timelineItems = timelineItems,
-            showReadReceipts = readReceiptsEnabled,
             newEventState = newItemState.value,
             sessionState = sessionState,
             eventSink = { handleEvents(it) }
@@ -246,7 +234,8 @@ class TimelinePresenter @AssistedInject constructor(
     }
 
     private fun getLastEventIdBeforeOrAt(index: Int, items: ImmutableList<TimelineItem>): EventId? {
-        for (item in items.subList(index, items.count())) {
+        for (i in index until items.count()) {
+            val item = items[i]
             if (item is TimelineItem.Event) {
                 return item.eventId
             }

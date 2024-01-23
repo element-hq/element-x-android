@@ -50,7 +50,6 @@ import java.io.File
 
 @ExperimentalCoroutinesApi
 class RoomDetailsEditPresenterTest {
-
     @get:Rule
     val warmUpRule = WarmUpRule()
 

@@ -22,12 +22,11 @@ import io.element.android.libraries.mediaviewer.api.local.LocalMediaActions
 import io.element.android.tests.testutils.simulateLongTask
 
 class FakeLocalMediaActions : LocalMediaActions {
-
     var shouldFail = false
 
     @Composable
     override fun Configure() {
-        //NOOP
+        // NOOP
     }
 
     override suspend fun saveOnDisk(localMedia: LocalMedia): Result<Unit> = simulateLongTask {

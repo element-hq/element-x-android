@@ -27,6 +27,8 @@ import io.element.android.libraries.matrix.impl.timeline.item.event.EventMessage
 import io.element.android.libraries.matrix.impl.timeline.item.event.EventTimelineItemMapper
 import io.element.android.libraries.matrix.impl.timeline.item.event.TimelineEventContentMapper
 import io.element.android.libraries.matrix.impl.timeline.item.virtual.VirtualTimelineItemMapper
+import io.element.android.libraries.matrix.impl.timeline.postprocessor.DmBeginningTimelineProcessor
+import io.element.android.libraries.matrix.impl.timeline.postprocessor.FilterHiddenStateEventsProcessor
 import io.element.android.libraries.matrix.impl.timeline.postprocessor.TimelineEncryptedHistoryPostProcessor
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineDispatcher
@@ -44,13 +46,13 @@ import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.matrix.rustcomponents.sdk.BackPaginationStatus
-import org.matrix.rustcomponents.sdk.EventItemOrigin
 import org.matrix.rustcomponents.sdk.PaginationOptions
 import org.matrix.rustcomponents.sdk.Timeline
 import org.matrix.rustcomponents.sdk.TimelineDiff
 import org.matrix.rustcomponents.sdk.TimelineItem
 import timber.log.Timber
+import uniffi.matrix_sdk_ui.BackPaginationStatus
+import uniffi.matrix_sdk_ui.EventItemOrigin
 import java.util.Date
 import java.util.concurrent.atomic.AtomicBoolean
 
@@ -65,7 +67,6 @@ class RustMatrixTimeline(
     lastLoginTimestamp: Date?,
     private val onNewSyncedEvent: () -> Unit,
 ) : MatrixTimeline {
-
     private val initLatch = CompletableDeferred<Unit>()
     private val isInit = AtomicBoolean(false)
 
@@ -82,6 +83,10 @@ class RustMatrixTimeline(
         isKeyBackupEnabled = isKeyBackupEnabled,
         dispatcher = dispatcher,
     )
+
+    private val filterHiddenStateEventsProcessor = FilterHiddenStateEventsProcessor()
+
+    private val dmBeginningTimelineProcessor = DmBeginningTimelineProcessor()
 
     private val timelineItemFactory = MatrixTimelineItemMapper(
         fetchDetailsForEvent = this::fetchDetailsForEvent,
@@ -102,9 +107,16 @@ class RustMatrixTimeline(
     override val paginationState: StateFlow<MatrixTimeline.PaginationState> = _paginationState.asStateFlow()
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    override val timelineItems: Flow<List<MatrixTimelineItem>> = _timelineItems.mapLatest { items ->
-        encryptedHistoryPostProcessor.process(items)
-    }
+    override val timelineItems: Flow<List<MatrixTimelineItem>> = _timelineItems
+        .mapLatest { items -> encryptedHistoryPostProcessor.process(items) }
+        .mapLatest { items -> filterHiddenStateEventsProcessor.process(items) }
+        .mapLatest { items ->
+            dmBeginningTimelineProcessor.process(
+                items = items,
+                isDm = matrixRoom.isDirect && matrixRoom.isOneToOne,
+                isAtStartOfTimeline = paginationState.value.beginningOfRoomReached
+            )
+        }
 
     init {
         Timber.d("Initialize timeline for room ${matrixRoom.roomId}")
@@ -257,7 +269,7 @@ class RustMatrixTimeline(
 
     private fun List<MatrixTimelineItem>.hasEncryptionHistoryBanner(): Boolean {
         val firstItem = firstOrNull()
-        return firstItem is MatrixTimelineItem.Virtual
-            && firstItem.virtual is VirtualTimelineItem.EncryptedHistoryBanner
+        return firstItem is MatrixTimelineItem.Virtual &&
+            firstItem.virtual is VirtualTimelineItem.EncryptedHistoryBanner
     }
 }

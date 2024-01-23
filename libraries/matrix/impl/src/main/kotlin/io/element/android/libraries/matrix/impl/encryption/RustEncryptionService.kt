@@ -52,7 +52,6 @@ internal class RustEncryptionService(
     sessionCoroutineScope: CoroutineScope,
     private val dispatchers: CoroutineDispatchers,
 ) : EncryptionService {
-
     private val service: Encryption = client.encryption()
 
     private val backupStateMapper = BackupStateMapper()

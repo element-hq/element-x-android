@@ -35,7 +35,6 @@ class LoggedInPresenter @Inject constructor(
     private val networkMonitor: NetworkMonitor,
     private val pushService: PushService,
 ) : Presenter<LoggedInState> {
-
     @Composable
     override fun present(): LoggedInState {
         LaunchedEffect(Unit) {

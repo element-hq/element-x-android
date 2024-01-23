@@ -32,7 +32,6 @@ class NotificationPermissionManager @Inject constructor(
     private val sdkIntProvider: BuildVersionSdkIntProvider,
     @ApplicationContext private val context: Context,
 ) {
-
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     fun isPermissionGranted(): Boolean {
         return ContextCompat.checkSelfPermission(
@@ -57,7 +56,7 @@ class NotificationPermissionManager @Inject constructor(
                 if (showRationale) R.string.permissions_rationale_msg_notification else 0
         )
     }
-    */
+     */
 
     fun eventuallyRevokePermission(
         activity: Activity,

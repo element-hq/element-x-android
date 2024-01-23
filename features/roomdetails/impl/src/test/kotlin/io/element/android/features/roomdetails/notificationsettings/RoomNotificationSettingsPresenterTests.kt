@@ -57,7 +57,7 @@ class RoomNotificationSettingsPresenterTests {
         }.test {
             awaitItem().eventSink(RoomNotificationSettingsEvents.RoomNotificationModeChanged(RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY))
             val updatedState = consumeItemsUntilPredicate {
-                it.roomNotificationSettings.dataOrNull()?.mode ==  RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY
+                it.roomNotificationSettings.dataOrNull()?.mode == RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY
             }.last()
             assertThat(updatedState.roomNotificationSettings.dataOrNull()?.mode).isEqualTo(RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY)
             cancelAndIgnoreRemainingEvents()
@@ -73,7 +73,7 @@ class RoomNotificationSettingsPresenterTests {
         }.test {
             notificationSettingsService.setRoomNotificationMode(A_ROOM_ID, RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY)
             val updatedState = consumeItemsUntilPredicate {
-                it.roomNotificationSettings.dataOrNull()?.mode ==  RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY
+                it.roomNotificationSettings.dataOrNull()?.mode == RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY
             }.last()
             assertThat(updatedState.roomNotificationSettings.dataOrNull()?.mode).isEqualTo(RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY)
         }
@@ -195,7 +195,7 @@ class RoomNotificationSettingsPresenterTests {
     private fun createRoomNotificationSettingsPresenter(
         notificationSettingsService: FakeNotificationSettingsService = FakeNotificationSettingsService(),
         room: FakeMatrixRoom = aMatrixRoom(notificationSettingsService = notificationSettingsService),
-    ): RoomNotificationSettingsPresenter{
+    ): RoomNotificationSettingsPresenter {
         return RoomNotificationSettingsPresenter(
             room = room,
             notificationSettingsService = notificationSettingsService,

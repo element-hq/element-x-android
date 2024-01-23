@@ -75,7 +75,6 @@ fun MediaViewerView(
     onBackPressed: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-
     fun onRetry() {
         state.eventSink(MediaViewerEvents.RetryLoading)
     }

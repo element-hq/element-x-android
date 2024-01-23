@@ -23,7 +23,6 @@ import io.element.android.libraries.architecture.FeatureEntryPoint
 import io.element.android.libraries.matrix.api.core.RoomId
 
 interface InviteListEntryPoint : FeatureEntryPoint {
-
     fun nodeBuilder(parentNode: Node, buildContext: BuildContext): NodeBuilder
 
     interface NodeBuilder {
@@ -37,4 +36,3 @@ interface InviteListEntryPoint : FeatureEntryPoint {
         fun onInviteAccepted(roomId: RoomId)
     }
 }
-

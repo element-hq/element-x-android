@@ -50,9 +50,11 @@ fun AccountProviderView(
     modifier: Modifier = Modifier,
     onClick: () -> Unit,
 ) {
-    Column(modifier = modifier
-        .fillMaxWidth()
-        .clickable { onClick() }) {
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .clickable { onClick() }
+    ) {
         HorizontalDivider()
         Column(
             modifier = Modifier

@@ -37,10 +37,11 @@ object VoiceRecorderModule {
         return AudioConfig(
             format = AudioFormat.Builder()
                 .setEncoding(AudioFormat.ENCODING_PCM_16BIT)
-                .setSampleRate(sampleRate.hz)
+                .setSampleRate(sampleRate.HZ)
                 .setChannelMask(AudioFormat.CHANNEL_IN_MONO)
                 .build(),
-            bitRate = 24_000, // 24 kbps
+            // 24 kbps
+            bitRate = 24_000,
             sampleRate = sampleRate,
             source = MediaRecorder.AudioSource.MIC,
         )

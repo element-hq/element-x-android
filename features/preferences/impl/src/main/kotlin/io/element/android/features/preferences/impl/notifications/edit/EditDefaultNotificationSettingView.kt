@@ -59,7 +59,6 @@ fun EditDefaultNotificationSettingView(
         onBackPressed = onBackPressed,
         title = stringResource(id = title)
     ) {
-
         // Only ALL_MESSAGES and MENTIONS_AND_KEYWORDS_ONLY are valid global defaults.
         val validModes = listOf(RoomNotificationMode.ALL_MESSAGES, RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY)
 
@@ -69,7 +68,6 @@ fun EditDefaultNotificationSettingView(
             R.string.screen_notification_settings_edit_screen_group_section_header
         }
         PreferenceCategory(title = stringResource(id = categoryTitle)) {
-
             if (state.mode != null) {
                 Column(modifier = Modifier.selectableGroup()) {
                     validModes.forEach { item ->
@@ -86,7 +84,7 @@ fun EditDefaultNotificationSettingView(
         if (state.roomsWithUserDefinedMode.isNotEmpty()) {
             PreferenceCategory(title = stringResource(id = R.string.screen_notification_settings_edit_custom_settings_section_title)) {
                 state.roomsWithUserDefinedMode.forEach { summary ->
-                    val subtitle = when (summary.details.notificationMode) {
+                    val subtitle = when (summary.details.userDefinedNotificationMode) {
                         RoomNotificationMode.ALL_MESSAGES -> stringResource(id = R.string.screen_notification_settings_edit_mode_all_messages)
                         RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY -> {
                             stringResource(id = R.string.screen_notification_settings_edit_mode_mentions_and_keywords)
@@ -97,7 +95,7 @@ fun EditDefaultNotificationSettingView(
                     val avatarData = AvatarData(
                         id = summary.identifier(),
                         name = summary.details.name,
-                        url = summary.details.avatarURLString,
+                        url = summary.details.avatarUrl,
                         size = AvatarSize.CustomRoomNotificationSetting,
                     )
                     ListItem(

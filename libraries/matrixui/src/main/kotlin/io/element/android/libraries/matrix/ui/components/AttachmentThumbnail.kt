@@ -136,7 +136,13 @@ fun AttachmentThumbnail(
 
 @Parcelize
 enum class AttachmentThumbnailType : Parcelable {
-    Image, Video, File, Audio, Location, Voice, Poll
+    Image,
+    Video,
+    File,
+    Audio,
+    Location,
+    Voice,
+    Poll,
 }
 
 @Parcelize

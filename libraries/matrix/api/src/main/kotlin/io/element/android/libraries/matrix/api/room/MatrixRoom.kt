@@ -52,6 +52,9 @@ interface MatrixRoom : Closeable {
     val activeMemberCount: Long
     val joinedMemberCount: Long
 
+    /** Whether the room is a direct message. */
+    val isDm: Boolean get() = isDirect && isOneToOne
+
     val roomInfoFlow: Flow<MatrixRoomInfo>
 
     /**
@@ -72,7 +75,7 @@ interface MatrixRoom : Closeable {
     /**
      * Try to load the room members and update the membersFlow.
      */
-    suspend fun updateMembers(): Result<Unit>
+    suspend fun updateMembers()
 
     suspend fun updateRoomNotificationSettings(): Result<Unit>
 
@@ -124,7 +127,9 @@ interface MatrixRoom : Closeable {
 
     suspend fun canUserInvite(userId: UserId): Result<Boolean>
 
-    suspend fun canUserRedact(userId: UserId): Result<Boolean>
+    suspend fun canUserRedactOwn(userId: UserId): Result<Boolean>
+
+    suspend fun canUserRedactOther(userId: UserId): Result<Boolean>
 
     suspend fun canUserSendState(userId: UserId, type: StateEventType): Result<Boolean>
 

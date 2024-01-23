@@ -20,7 +20,6 @@ import com.google.common.truth.Truth.assertThat
 import org.junit.Test
 
 class RecoveryKeyToolsTest {
-
     @Test
     fun `isRecoveryKeyFormatValid return false for invalid key`() {
         val sut = RecoveryKeyTools()

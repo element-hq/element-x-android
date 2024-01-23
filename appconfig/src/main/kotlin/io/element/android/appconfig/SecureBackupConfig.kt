@@ -17,5 +17,5 @@
 package io.element.android.appconfig
 
 object SecureBackupConfig {
-    const val LearnMoreUrl: String = "https://element.io/help#encryption5"
+    const val LEARN_MORE_URL: String = "https://element.io/help#encryption5"
 }

@@ -140,7 +140,6 @@ private fun OverallContent(
                     .padding(bottom = 8.dp),
             )
         }
-
     }
 }
 

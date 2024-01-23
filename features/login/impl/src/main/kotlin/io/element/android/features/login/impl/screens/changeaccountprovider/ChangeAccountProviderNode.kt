@@ -35,7 +35,6 @@ class ChangeAccountProviderNode @AssistedInject constructor(
     @Assisted plugins: List<Plugin>,
     private val presenter: ChangeAccountProviderPresenter,
 ) : Node(buildContext, plugins = plugins) {
-
     interface Callback : Plugin {
         fun onDone()
         fun onOtherClicked()
