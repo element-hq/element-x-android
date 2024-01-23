@@ -16,6 +16,7 @@
 
 package io.element.android.tests.testutils
 
+import android.annotation.SuppressLint
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.Stable
@@ -38,6 +39,7 @@ fun <T> withFakeLifecycleOwner(lifecycleOwner: FakeLifecycleOwner = FakeLifecycl
     return state!!
 }
 
+@SuppressLint("VisibleForTests")
 class FakeLifecycleOwner : LifecycleOwner {
     override val lifecycle: Lifecycle = LifecycleRegistry.createUnsafe(this)
 
