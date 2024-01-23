@@ -42,6 +42,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -274,12 +275,13 @@ fun TextComposer(
     }
 
     val menuAction = state.menuAction
+    val latestOnSuggestionReceived by rememberUpdatedState(onSuggestionReceived)
     LaunchedEffect(menuAction) {
         if (menuAction is MenuAction.Suggestion) {
             val suggestion = Suggestion(menuAction.suggestionPattern)
-            onSuggestionReceived(suggestion)
+            latestOnSuggestionReceived(suggestion)
         } else {
-            onSuggestionReceived(null)
+            latestOnSuggestionReceived(null)
         }
     }
 }

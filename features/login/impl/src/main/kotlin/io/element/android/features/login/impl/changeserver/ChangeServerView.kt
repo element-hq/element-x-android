@@ -18,6 +18,8 @@ package io.element.android.features.login.impl.changeserver
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import io.element.android.features.login.impl.dialogs.SlidingSyncNotSupportedDialog
@@ -63,8 +65,11 @@ fun ChangeServerView(
             }
         }
         is AsyncData.Loading -> ProgressDialog()
-        is AsyncData.Success -> LaunchedEffect(state.changeServerAction) {
-            onDone()
+        is AsyncData.Success -> {
+            val latestOnDone by rememberUpdatedState(onDone)
+            LaunchedEffect(state.changeServerAction) {
+                latestOnDone()
+            }
         }
         AsyncData.Uninitialized -> Unit
     }

@@ -19,16 +19,14 @@ package io.element.android.features.securebackup.impl.enable
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import io.element.android.features.securebackup.impl.R
-import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.atomic.pages.FlowStepPage
-import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
+import io.element.android.libraries.designsystem.components.async.AsyncActionView
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
@@ -41,11 +39,6 @@ fun SecureBackupEnableView(
     onBackClicked: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    LaunchedEffect(state.enableAction) {
-        if (state.enableAction is AsyncData.Success) {
-            onDone()
-        }
-    }
     FlowStepPage(
         modifier = modifier,
         onBackClicked = onBackClicked,
@@ -53,12 +46,12 @@ fun SecureBackupEnableView(
         iconVector = ImageVector.vectorResource(CommonDrawables.ic_key),
         buttons = { Buttons(state = state) }
     )
-    if (state.enableAction is AsyncData.Failure) {
-        ErrorDialog(
-            content = state.enableAction.error.let { it.message ?: it.toString() },
-            onDismiss = { state.eventSink.invoke(SecureBackupEnableEvents.DismissDialog) },
-        )
-    }
+    AsyncActionView(
+        async = state.enableAction,
+        progressDialog = { },
+        onSuccess = { onDone() },
+        onErrorDismiss = { state.eventSink.invoke(SecureBackupEnableEvents.DismissDialog) }
+    )
 }
 
 @Composable

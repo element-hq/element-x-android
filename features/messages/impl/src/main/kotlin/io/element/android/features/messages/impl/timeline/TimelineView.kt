@@ -42,6 +42,7 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -193,10 +194,11 @@ private fun BoxScope.TimelineScrollHelper(
         }
     }
 
+    val latestOnScrollFinishedAt by rememberUpdatedState(onScrollFinishedAt)
     LaunchedEffect(isScrollFinished, isTimelineEmpty) {
         if (isScrollFinished && !isTimelineEmpty) {
             // Notify the parent composable about the first visible item index when scrolling finishes
-            onScrollFinishedAt(lazyListState.firstVisibleItemIndex)
+            latestOnScrollFinishedAt(lazyListState.firstVisibleItemIndex)
         }
     }
 

@@ -18,6 +18,8 @@ package io.element.android.libraries.designsystem.components.async
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.designsystem.components.ProgressDialog
@@ -67,8 +69,9 @@ fun <T> AsyncActionView(
             }
         }
         is AsyncAction.Success -> {
+            val latestOnSuccess by rememberUpdatedState(onSuccess)
             LaunchedEffect(async) {
-                onSuccess(async.data)
+                latestOnSuccess(async.data)
             }
         }
     }

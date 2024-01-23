@@ -18,6 +18,8 @@ package io.element.android.features.rageshake.api.detection
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
@@ -73,9 +75,10 @@ private fun TakeScreenshot(
     onScreenshotTaken: (ImageResult) -> Unit
 ) {
     val view = LocalView.current
+    val latestOnScreenshotTaken by rememberUpdatedState(onScreenshotTaken)
     LaunchedEffect(Unit) {
         view.screenshot {
-            onScreenshotTaken(it)
+            latestOnScreenshotTaken(it)
         }
     }
 }

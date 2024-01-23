@@ -41,8 +41,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -294,8 +296,11 @@ private fun AttachmentStateView(
 ) {
     when (state) {
         AttachmentsState.None -> Unit
-        is AttachmentsState.Previewing -> LaunchedEffect(state) {
-            onPreviewAttachments(state.attachments)
+        is AttachmentsState.Previewing -> {
+            val latestOnPreviewAttachments by rememberUpdatedState(onPreviewAttachments)
+            LaunchedEffect(state) {
+                latestOnPreviewAttachments(state.attachments)
+            }
         }
         is AttachmentsState.Sending -> {
             ProgressDialog(

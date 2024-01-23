@@ -17,20 +17,20 @@
 package io.element.android.features.securebackup.impl.enable
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import io.element.android.libraries.architecture.AsyncData
+import io.element.android.libraries.architecture.AsyncAction
 
 open class SecureBackupEnableStateProvider : PreviewParameterProvider<SecureBackupEnableState> {
     override val values: Sequence<SecureBackupEnableState>
         get() = sequenceOf(
             aSecureBackupEnableState(),
-            aSecureBackupEnableState(enableAction = AsyncData.Loading()),
-            aSecureBackupEnableState(enableAction = AsyncData.Failure(Exception("Failed to enable"))),
+            aSecureBackupEnableState(enableAction = AsyncAction.Loading),
+            aSecureBackupEnableState(enableAction = AsyncAction.Failure(Exception("Failed to enable"))),
             // Add other states here
         )
 }
 
 fun aSecureBackupEnableState(
-    enableAction: AsyncData<Unit> = AsyncData.Uninitialized,
+    enableAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
 ) = SecureBackupEnableState(
     enableAction = enableAction,
     eventSink = {}
