@@ -28,6 +28,9 @@ interface PreferencesStore {
     suspend fun setCustomElementCallBaseUrl(string: String?)
     fun getCustomElementCallBaseUrlFlow(): Flow<String?>
 
+    suspend fun setPrivateReadReceiptsEnabled(enabled: Boolean)
+    fun isPrivateReadReceiptsEnabled(): Flow<Boolean>
+
     suspend fun setTheme(theme: String)
     fun getThemeFlow(): Flow<String?>
 

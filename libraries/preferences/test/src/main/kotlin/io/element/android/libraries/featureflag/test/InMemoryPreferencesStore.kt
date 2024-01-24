@@ -23,11 +23,13 @@ import kotlinx.coroutines.flow.MutableStateFlow
 class InMemoryPreferencesStore(
     isRichTextEditorEnabled: Boolean = false,
     isDeveloperModeEnabled: Boolean = false,
+    isPrivateReadReceiptsEnabled: Boolean = false,
     customElementCallBaseUrl: String? = null,
     theme: String? = null,
 ) : PreferencesStore {
     private val isRichTextEditorEnabled = MutableStateFlow(isRichTextEditorEnabled)
     private val isDeveloperModeEnabled = MutableStateFlow(isDeveloperModeEnabled)
+    private val isPrivateReadReceiptsEnabled = MutableStateFlow(isPrivateReadReceiptsEnabled)
     private val customElementCallBaseUrl = MutableStateFlow(customElementCallBaseUrl)
     private val theme = MutableStateFlow(theme)
 
@@ -53,6 +55,14 @@ class InMemoryPreferencesStore(
 
     override fun getCustomElementCallBaseUrlFlow(): Flow<String?> {
         return customElementCallBaseUrl
+    }
+
+    override suspend fun setPrivateReadReceiptsEnabled(enabled: Boolean) {
+        isPrivateReadReceiptsEnabled.tryEmit(enabled)
+    }
+
+    override fun isPrivateReadReceiptsEnabled(): Flow<Boolean> {
+        return isPrivateReadReceiptsEnabled
     }
 
     override suspend fun setTheme(theme: String) {

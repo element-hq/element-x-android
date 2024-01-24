@@ -42,6 +42,9 @@ class AdvancedSettingsPresenter @Inject constructor(
         val isDeveloperModeEnabled by preferencesStore
             .isDeveloperModeEnabledFlow()
             .collectAsState(initial = false)
+        val isPrivateReadReceiptsEnabled by preferencesStore
+            .isPrivateReadReceiptsEnabled()
+            .collectAsState(initial = false)
         val theme by remember {
             preferencesStore.getThemeFlow().mapToTheme()
         }
@@ -55,6 +58,9 @@ class AdvancedSettingsPresenter @Inject constructor(
                 is AdvancedSettingsEvents.SetDeveloperModeEnabled -> localCoroutineScope.launch {
                     preferencesStore.setDeveloperModeEnabled(event.enabled)
                 }
+                is AdvancedSettingsEvents.SetPrivateReadReceiptsEnabled -> localCoroutineScope.launch {
+                    preferencesStore.setPrivateReadReceiptsEnabled(event.enabled)
+                }
                 AdvancedSettingsEvents.CancelChangeTheme -> showChangeThemeDialog = false
                 AdvancedSettingsEvents.ChangeTheme -> showChangeThemeDialog = true
                 is AdvancedSettingsEvents.SetTheme -> localCoroutineScope.launch {
@@ -67,6 +73,7 @@ class AdvancedSettingsPresenter @Inject constructor(
         return AdvancedSettingsState(
             isRichTextEditorEnabled = isRichTextEditorEnabled,
             isDeveloperModeEnabled = isDeveloperModeEnabled,
+            isPrivateReadReceiptsEnabled = isPrivateReadReceiptsEnabled,
             theme = theme,
             showChangeThemeDialog = showChangeThemeDialog,
             eventSink = { handleEvents(it) }

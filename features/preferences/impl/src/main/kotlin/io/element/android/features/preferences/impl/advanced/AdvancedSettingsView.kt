@@ -81,6 +81,18 @@ fun AdvancedSettingsView(
                 onChange = { state.eventSink(AdvancedSettingsEvents.SetDeveloperModeEnabled(it)) },
             ),
         )
+        ListItem(
+            headlineContent = {
+                Text(text = "Send read receipts")
+            },
+            supportingContent = {
+                Text(text = "On disabling, others won't see your read receipt.")
+            },
+            trailingContent = ListItemContent.Switch(
+                checked = state.isPrivateReadReceiptsEnabled,
+                onChange = { state.eventSink(AdvancedSettingsEvents.SetPrivateReadReceiptsEnabled(it)) },
+            ),
+        )
     }
 
     if (state.showChangeThemeDialog) {

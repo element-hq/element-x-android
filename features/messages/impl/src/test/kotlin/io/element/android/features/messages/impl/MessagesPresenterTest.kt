@@ -668,6 +668,7 @@ class MessagesPresenterTest {
     ): MessagesPresenter {
         val mediaSender = MediaSender(FakeMediaPreProcessor(), matrixRoom)
         val permissionsPresenterFactory = FakePermissionsPresenterFactory(permissionsPresenter)
+        val preferencesStore = InMemoryPreferencesStore(isRichTextEditorEnabled = true)
         val messageComposerPresenter = MessageComposerPresenter(
             appCoroutineScope = this,
             room = matrixRoom,
@@ -702,13 +703,13 @@ class MessagesPresenterTest {
             redactedVoiceMessageManager = FakeRedactedVoiceMessageManager(),
             endPollAction = FakeEndPollAction(),
             sendPollResponseAction = FakeSendPollResponseAction(),
+            preferencesStore = preferencesStore,
         )
         val timelinePresenterFactory = object : TimelinePresenter.Factory {
             override fun create(navigator: MessagesNavigator): TimelinePresenter {
                 return timelinePresenter
             }
         }
-        val preferencesStore = InMemoryPreferencesStore(isRichTextEditorEnabled = true)
         val actionListPresenter = ActionListPresenter(preferencesStore = preferencesStore)
         val readReceiptBottomSheetPresenter = ReadReceiptBottomSheetPresenter()
         val customReactionPresenter = CustomReactionPresenter(emojibaseProvider = FakeEmojibaseProvider())
