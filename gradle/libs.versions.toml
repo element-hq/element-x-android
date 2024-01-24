@@ -173,7 +173,7 @@ opusencoder = "io.element.android:opusencoder:1.1.0"
 kotlinpoet = "com.squareup:kotlinpoet:1.16.0"
 
 # Analytics
-posthog = "com.posthog:posthog-android:3.1.4"
+posthog = "com.posthog:posthog-android:3.1.5"
 sentry = "io.sentry:sentry-android:7.2.0"
 matrix_analytics_events = "com.github.matrix-org:matrix-analytics-events:aa14cbcdf81af2746d20a71779ec751f971e1d7f"
 
