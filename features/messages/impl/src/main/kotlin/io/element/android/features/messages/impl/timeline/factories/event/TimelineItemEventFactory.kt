@@ -53,21 +53,7 @@ class TimelineItemEventFactory @Inject constructor(
         val currentSender = currentTimelineItem.event.sender
         val groupPosition =
             computeGroupPosition(currentTimelineItem, timelineItems, index)
-        val senderDisplayName: String?
-        val senderAvatarUrl: String?
-
-        when (val senderProfile = currentTimelineItem.event.senderProfile) {
-            ProfileTimelineDetails.Unavailable,
-            ProfileTimelineDetails.Pending,
-            is ProfileTimelineDetails.Error -> {
-                senderDisplayName = null
-                senderAvatarUrl = null
-            }
-            is ProfileTimelineDetails.Ready -> {
-                senderDisplayName = senderProfile.getDisambiguatedDisplayName(currentSender)
-                senderAvatarUrl = senderProfile.avatarUrl
-            }
-        }
+        val (senderDisplayName, senderAvatarUrl) = currentTimelineItem.getSenderInfo()
 
         val timeFormatter = DateFormat.getTimeInstance(DateFormat.SHORT)
         val sentTime = timeFormatter.format(Date(currentTimelineItem.event.timestamp))
@@ -99,6 +85,36 @@ class TimelineItemEventFactory @Inject constructor(
             debugInfo = currentTimelineItem.event.debugInfo,
             origin = currentTimelineItem.event.origin,
         )
+    }
+
+    fun update(
+        timelineItem: TimelineItem.Event,
+        receivedMatrixTimelineItem: MatrixTimelineItem.Event,
+        roomMembers: List<RoomMember>,
+    ): TimelineItem.Event {
+        return timelineItem.copy(
+            readReceiptState = receivedMatrixTimelineItem.computeReadReceiptState(roomMembers)
+        )
+    }
+
+    private fun MatrixTimelineItem.Event.getSenderInfo(): Pair<String?, String?> {
+        val senderDisplayName: String?
+        val senderAvatarUrl: String?
+
+        when (val senderProfile = event.senderProfile) {
+            ProfileTimelineDetails.Unavailable,
+            ProfileTimelineDetails.Pending,
+            is ProfileTimelineDetails.Error -> {
+                senderDisplayName = null
+                senderAvatarUrl = null
+            }
+            is ProfileTimelineDetails.Ready -> {
+                senderDisplayName = senderProfile.getDisambiguatedDisplayName(event.sender)
+                senderAvatarUrl = senderProfile.avatarUrl
+            }
+        }
+
+        return senderDisplayName to senderAvatarUrl
     }
 
     private fun MatrixTimelineItem.Event.computeReactionsState(): TimelineItemReactions {

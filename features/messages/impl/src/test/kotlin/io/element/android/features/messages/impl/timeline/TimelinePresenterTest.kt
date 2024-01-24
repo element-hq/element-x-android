@@ -35,14 +35,18 @@ import io.element.android.features.poll.api.actions.SendPollResponseAction
 import io.element.android.features.poll.test.actions.FakeEndPollAction
 import io.element.android.features.poll.test.actions.FakeSendPollResponseAction
 import io.element.android.libraries.featureflag.api.FeatureFlags
+import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.item.event.EventReaction
 import io.element.android.libraries.matrix.api.timeline.item.event.ReactionSender
+import io.element.android.libraries.matrix.api.timeline.item.event.Receipt
 import io.element.android.libraries.matrix.api.timeline.item.virtual.VirtualTimelineItem
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
+import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.encryption.FakeEncryptionService
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
+import io.element.android.libraries.matrix.test.room.aRoomMember
 import io.element.android.libraries.matrix.test.timeline.FakeMatrixTimeline
 import io.element.android.libraries.matrix.test.timeline.aMessageContent
 import io.element.android.libraries.matrix.test.timeline.anEventTimelineItem
@@ -60,6 +64,7 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
 import java.util.Date
+import kotlin.time.Duration.Companion.seconds
 
 private const val FAKE_UNIQUE_ID = "FAKE_UNIQUE_ID"
 
@@ -353,6 +358,50 @@ class TimelinePresenterTest {
         }
     }
 
+    @Test
+    fun `present - when room member info is loaded, read receipts info should be updated`() = runTest {
+        val timeline = FakeMatrixTimeline(
+            listOf(
+                MatrixTimelineItem.Event(
+                    FAKE_UNIQUE_ID,
+                    anEventTimelineItem(
+                        sender = A_USER_ID,
+                        receipts = persistentListOf(
+                            Receipt(
+                                userId = A_USER_ID,
+                                timestamp = 0L,
+                            )
+                        )
+                    )
+                )
+            )
+        )
+        val room = FakeMatrixRoom(matrixTimeline = timeline).apply {
+            givenRoomMembersState(MatrixRoomMembersState.Unknown)
+        }
+
+        val avatarUrl = "https://domain.com/avatar.jpg"
+
+        val presenter = createTimelinePresenter(timeline, room)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = consumeItemsUntilPredicate(30.seconds) { it.timelineItems.isNotEmpty() }.last()
+            val event = initialState.timelineItems.first() as TimelineItem.Event
+            assertThat(event.senderAvatar.url).isNull()
+            assertThat(event.readReceiptState.receipts.first().avatarData.url).isNull()
+
+            room.givenRoomMembersState(
+                MatrixRoomMembersState.Ready(
+                    persistentListOf(aRoomMember(userId = A_USER_ID, avatarUrl = avatarUrl))
+                )
+            )
+
+            val updatedEvent = awaitItem().timelineItems.first() as TimelineItem.Event
+            assertThat(updatedEvent.readReceiptState.receipts.first().avatarData.url).isEqualTo(avatarUrl)
+        }
+    }
+
     private suspend fun <T> ReceiveTurbine<T>.awaitFirstItem(): T {
         // Skip 1 item if Mentions feature is enabled
         if (FeatureFlags.Mentions.defaultValue) {
@@ -363,6 +412,7 @@ class TimelinePresenterTest {
 
     private fun TestScope.createTimelinePresenter(
         timeline: MatrixTimeline = FakeMatrixTimeline(),
+        room: FakeMatrixRoom = FakeMatrixRoom(matrixTimeline = timeline),
         timelineItemsFactory: TimelineItemsFactory = aTimelineItemsFactory(),
         redactedVoiceMessageManager: RedactedVoiceMessageManager = FakeRedactedVoiceMessageManager(),
         messagesNavigator: FakeMessagesNavigator = FakeMessagesNavigator(),
@@ -371,7 +421,7 @@ class TimelinePresenterTest {
     ): TimelinePresenter {
         return TimelinePresenter(
             timelineItemsFactory = timelineItemsFactory,
-            room = FakeMatrixRoom(matrixTimeline = timeline),
+            room = room,
             dispatchers = testCoroutineDispatchers(),
             appScope = this,
             navigator = messagesNavigator,

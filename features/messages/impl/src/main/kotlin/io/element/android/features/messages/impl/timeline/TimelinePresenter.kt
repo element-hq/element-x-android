@@ -53,6 +53,7 @@ import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatu
 import io.element.android.libraries.matrix.ui.room.canSendMessageAsState
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -111,8 +112,6 @@ class TimelinePresenter @AssistedInject constructor(
             }
         }
 
-        val membersState by room.membersStateFlow.collectAsState()
-
         fun handleEvents(event: TimelineEvents) {
             when (event) {
                 TimelineEvents.LoadMore -> localScope.paginateBackwards()
@@ -149,13 +148,12 @@ class TimelinePresenter @AssistedInject constructor(
         }
 
         LaunchedEffect(Unit) {
-            timeline
-                .timelineItems
-                .onEach {
+            combine(timeline.timelineItems, room.membersStateFlow) { items, membersState ->
                     timelineItemsFactory.replaceWith(
-                        timelineItems = it,
+                        timelineItems = items,
                         roomMembers = membersState.roomMembers().orEmpty()
                     )
+                    items
                 }
                 .onEach { timelineItems ->
                     if (timelineItems.isEmpty()) {
