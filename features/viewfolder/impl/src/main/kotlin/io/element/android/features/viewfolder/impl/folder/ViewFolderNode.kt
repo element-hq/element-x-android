@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright (c) 2024 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,12 +14,10 @@
  * limitations under the License.
  */
 
-package io.element.android.features.rageshake.impl.bugreport
+package io.element.android.features.viewfolder.impl.folder
 
-import android.app.Activity
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
@@ -27,44 +25,50 @@ import com.bumble.appyx.core.plugin.plugins
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
-import io.element.android.features.rageshake.api.bugreport.BugReportEntryPoint
-import io.element.android.features.rageshake.api.reporter.BugReporter
-import io.element.android.libraries.androidutils.system.toast
+import io.element.android.features.viewfolder.impl.model.Item
+import io.element.android.libraries.architecture.NodeInputs
+import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.di.AppScope
-import io.element.android.libraries.ui.strings.CommonStrings
 
 @ContributesNode(AppScope::class)
-class BugReportNode @AssistedInject constructor(
+class ViewFolderNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
-    private val presenter: BugReportPresenter,
-    private val bugReporter: BugReporter,
+    presenterFactory: ViewFolderPresenter.Factory,
 ) : Node(buildContext, plugins = plugins) {
-    private fun onViewLogs(basePath: String) {
-        plugins<BugReportEntryPoint.Callback>().forEach { it.onViewLogs(basePath) }
+    data class Inputs(
+        val canGoUp: Boolean,
+        val path: String,
+    ) : NodeInputs
+
+    interface Callback : Plugin {
+        fun onBackPressed()
+        fun onNavigateTo(item: Item)
+    }
+
+    private val inputs: Inputs = inputs()
+
+    private val presenter = presenterFactory.create(
+        canGoUp = inputs.canGoUp,
+        path = inputs.path,
+    )
+
+    private fun onBackPressed() {
+        plugins<Callback>().forEach { it.onBackPressed() }
+    }
+
+    private fun onNavigateTo(item: Item) {
+        plugins<Callback>().forEach { it.onNavigateTo(item) }
     }
 
     @Composable
     override fun View(modifier: Modifier) {
         val state = presenter.present()
-        val activity = LocalContext.current as? Activity
-        BugReportView(
+        ViewFolderView(
             state = state,
             modifier = modifier,
-            onBackPressed = { navigateUp() },
-            onDone = {
-                activity?.toast(CommonStrings.common_report_submitted)
-                onDone()
-            },
-            onViewLogs = {
-                // Force a logcat dump
-                bugReporter.saveLogCat()
-                onViewLogs(bugReporter.logDirectory().absolutePath)
-            }
+            onNavigateTo = ::onNavigateTo,
+            onBackPressed = ::onBackPressed,
         )
-    }
-
-    private fun onDone() {
-        plugins<BugReportEntryPoint.Callback>().forEach { it.onBugReportSent() }
     }
 }

@@ -45,6 +45,7 @@ import io.element.android.features.login.api.oidc.OidcAction
 import io.element.android.features.login.api.oidc.OidcActionFlow
 import io.element.android.features.rageshake.api.bugreport.BugReportEntryPoint
 import io.element.android.features.signedout.api.SignedOutEntryPoint
+import io.element.android.features.viewfolder.api.ViewFolderEntryPoint
 import io.element.android.libraries.architecture.BackstackView
 import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.architecture.createNode
@@ -70,6 +71,7 @@ class RootFlowNode @AssistedInject constructor(
     private val matrixClientsHolder: MatrixClientsHolder,
     private val presenter: RootPresenter,
     private val bugReportEntryPoint: BugReportEntryPoint,
+    private val viewFolderEntryPoint: ViewFolderEntryPoint,
     private val signedOutEntryPoint: SignedOutEntryPoint,
     private val intentResolver: IntentResolver,
     private val oidcActionFlow: OidcActionFlow,
@@ -194,6 +196,11 @@ class RootFlowNode @AssistedInject constructor(
 
         @Parcelize
         data object BugReport : NavTarget
+
+        @Parcelize
+        data class ViewLogs(
+            val rootPath: String,
+        ) : NavTarget
     }
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
@@ -233,9 +240,28 @@ class RootFlowNode @AssistedInject constructor(
                     override fun onBugReportSent() {
                         backstack.pop()
                     }
+
+                    override fun onViewLogs(basePath: String) {
+                        backstack.push(NavTarget.ViewLogs(rootPath = basePath))
+                    }
                 }
                 bugReportEntryPoint
                     .nodeBuilder(this, buildContext)
+                    .callback(callback)
+                    .build()
+            }
+            is NavTarget.ViewLogs -> {
+                val callback = object : ViewFolderEntryPoint.Callback {
+                    override fun onDone() {
+                        backstack.pop()
+                    }
+                }
+                val params = ViewFolderEntryPoint.Params(
+                    rootPath = navTarget.rootPath,
+                )
+                viewFolderEntryPoint
+                    .nodeBuilder(this, buildContext)
+                    .params(params)
                     .callback(callback)
                     .build()
             }

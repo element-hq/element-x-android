@@ -43,6 +43,7 @@ import io.element.android.libraries.designsystem.components.form.textFieldState
 import io.element.android.libraries.designsystem.components.preferences.PreferencePage
 import io.element.android.libraries.designsystem.components.preferences.PreferenceRow
 import io.element.android.libraries.designsystem.components.preferences.PreferenceSwitch
+import io.element.android.libraries.designsystem.components.preferences.PreferenceText
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.debugPlaceholderBackground
@@ -55,6 +56,7 @@ import io.element.android.libraries.ui.strings.CommonStrings
 @Composable
 fun BugReportView(
     state: BugReportState,
+    onViewLogs: () -> Unit,
     onDone: () -> Unit,
     onBackPressed: () -> Unit,
     modifier: Modifier = Modifier,
@@ -97,6 +99,11 @@ fun BugReportView(
                 )
             }
             Spacer(modifier = Modifier.height(16.dp))
+            PreferenceText(
+                title = stringResource(id = R.string.screen_bug_report_view_logs),
+                enabled = isFormEnabled,
+                onClick = onViewLogs,
+            )
             PreferenceSwitch(
                 isChecked = state.formState.sendLogs,
                 onCheckedChange = { eventSink(BugReportEvents.SetSendLog(it)) },
@@ -169,5 +176,6 @@ internal fun BugReportViewPreview(@PreviewParameter(BugReportStateProvider::clas
         state = state,
         onDone = {},
         onBackPressed = {},
+        onViewLogs = {},
     )
 }

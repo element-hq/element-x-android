@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright (c) 2024 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,23 +14,27 @@
  * limitations under the License.
  */
 
-package io.element.android.features.rageshake.api.bugreport
+package io.element.android.features.viewfolder.api
 
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
 import io.element.android.libraries.architecture.FeatureEntryPoint
 
-interface BugReportEntryPoint : FeatureEntryPoint {
+interface ViewFolderEntryPoint : FeatureEntryPoint {
+    data class Params(
+        val rootPath: String,
+    )
+
     fun nodeBuilder(parentNode: Node, buildContext: BuildContext): NodeBuilder
 
     interface NodeBuilder {
+        fun params(params: Params): NodeBuilder
         fun callback(callback: Callback): NodeBuilder
         fun build(): Node
     }
 
     interface Callback : Plugin {
-        fun onBugReportSent()
-        fun onViewLogs(basePath: String)
+        fun onDone()
     }
 }
