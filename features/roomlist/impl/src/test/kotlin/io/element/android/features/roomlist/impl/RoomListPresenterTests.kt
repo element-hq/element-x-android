@@ -442,6 +442,7 @@ private val aRoomListRoomSummary = RoomListRoomSummary(
     name = A_ROOM_NAME,
     numberOfUnreadMentions = 1,
     numberOfUnreadMessages = 2,
+    numberOfUnreadNotifications = 0,
     timestamp = A_FORMATTED_DATE,
     lastMessage = "",
     avatarData = AvatarData(id = A_ROOM_ID.value, name = A_ROOM_NAME, size = AvatarSize.RoomListItem),
