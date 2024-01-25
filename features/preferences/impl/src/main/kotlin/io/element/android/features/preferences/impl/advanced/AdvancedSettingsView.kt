@@ -83,10 +83,10 @@ fun AdvancedSettingsView(
         )
         ListItem(
             headlineContent = {
-                Text(text = "Send read receipts")
+                Text(text = stringResource(id = R.string.screen_advanced_settings_send_read_receipts))
             },
             supportingContent = {
-                Text(text = "On disabling, others won't see your read receipt.")
+                Text(text = stringResource(id = R.string.screen_advanced_settings_send_read_receipts_description))
             },
             trailingContent = ListItemContent.Switch(
                 checked = state.isSendPublicReadReceiptsEnabled,
