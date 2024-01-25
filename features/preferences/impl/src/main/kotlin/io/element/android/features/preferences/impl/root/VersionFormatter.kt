@@ -33,11 +33,17 @@ class DefaultVersionFormatter @Inject constructor(
     private val buildMeta: BuildMeta,
 ) : VersionFormatter {
     override fun get(): String {
-        return stringProvider.getString(
+        val base = stringProvider.getString(
             CommonStrings.settings_version_number,
             buildMeta.versionName,
             buildMeta.versionCode.toString()
         )
+        return if (buildMeta.gitBranchName == "main") {
+            base
+        } else {
+            // In case of a build not from main, we display the branch name and the revision
+            "$base\n${buildMeta.gitBranchName}\n${buildMeta.gitRevision}"
+        }
     }
 }
 
