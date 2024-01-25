@@ -209,12 +209,7 @@ private fun RowScope.NotificationIcons(
         null,
         RoomNotificationMode.ALL_MESSAGES -> {
             if (numberOfUnreadMentions > 0) {
-                Icon(
-                    modifier = Modifier.size(16.dp),
-                    contentDescription = null,
-                    imageVector = CompoundIcons.Mention,
-                    tint = ElementTheme.colors.unreadIndicator,
-                )
+                MentionIndicatorAtom()
                 UnreadIndicatorAtom()
             } else if (numberOfUnreadMessages > 0) {
                 UnreadIndicatorAtom()
@@ -222,29 +217,39 @@ private fun RowScope.NotificationIcons(
         }
         RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY -> {
             if (numberOfUnreadMentions > 0) {
-                Icon(
-                    modifier = Modifier.size(16.dp),
-                    contentDescription = null,
-                    imageVector = CompoundIcons.Mention,
-                    tint = ElementTheme.colors.unreadIndicator,
-                )
+                MentionIndicatorAtom()
                 UnreadIndicatorAtom()
             } else if (numberOfUnreadMessages > 0) {
                 UnreadIndicatorAtom(color = ElementTheme.colors.iconQuaternary)
             }
         }
         RoomNotificationMode.MUTE -> {
-            Icon(
-                modifier = Modifier.size(16.dp),
-                contentDescription = null,
-                imageVector = CompoundIcons.NotificationsSolidOff,
-                tint = ElementTheme.colors.iconQuaternary,
-            )
+            NotificationOffIndicatorAtom()
             if (numberOfUnreadMessages > 0 || numberOfUnreadMentions > 0) {
                 UnreadIndicatorAtom(color = ElementTheme.colors.iconQuaternary)
             }
         }
     }
+}
+
+@Composable
+private fun NotificationOffIndicatorAtom() {
+    Icon(
+        modifier = Modifier.size(16.dp),
+        contentDescription = null,
+        imageVector = CompoundIcons.NotificationsSolidOff,
+        tint = ElementTheme.colors.iconQuaternary,
+    )
+}
+
+@Composable
+private fun MentionIndicatorAtom() {
+    Icon(
+        modifier = Modifier.size(16.dp),
+        contentDescription = null,
+        imageVector = CompoundIcons.Mention,
+        tint = ElementTheme.colors.unreadIndicator,
+    )
 }
 
 @PreviewsDayNight
