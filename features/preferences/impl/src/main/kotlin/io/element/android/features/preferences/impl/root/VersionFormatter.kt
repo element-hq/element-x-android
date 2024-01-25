@@ -47,8 +47,3 @@ class DefaultVersionFormatter @Inject constructor(
     }
 }
 
-class FakeVersionFormatter : VersionFormatter {
-    override fun get(): String {
-        return "A Version"
-    }
-}
