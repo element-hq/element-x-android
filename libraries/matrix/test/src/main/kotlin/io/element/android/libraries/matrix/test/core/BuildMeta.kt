@@ -28,7 +28,6 @@ fun aBuildMeta(
     versionName: String = "",
     versionCode: Int = 0,
     gitRevision: String = "",
-    gitRevisionDate: String = "",
     gitBranchName: String = "",
     flavorDescription: String = "",
     flavorShortDescription: String = "",
@@ -41,7 +40,6 @@ fun aBuildMeta(
     versionName,
     versionCode,
     gitRevision,
-    gitRevisionDate,
     gitBranchName,
     flavorDescription,
     flavorShortDescription

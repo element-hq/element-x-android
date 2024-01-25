@@ -39,6 +39,7 @@ fun logApplicationInfo() {
     Timber.d("----------------------------------------------------------------")
     Timber.d("----------------------------------------------------------------")
     Timber.d(" Application version: $appVersion")
+    Timber.d(" Git SHA: ${BuildConfig.GIT_REVISION}")
     Timber.d(" SDK version: $sdkVersion")
     Timber.d(" Local time: $date")
     Timber.d("----------------------------------------------------------------")
