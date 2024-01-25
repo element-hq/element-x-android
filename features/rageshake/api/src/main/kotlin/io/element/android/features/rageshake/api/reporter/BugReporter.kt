@@ -52,4 +52,9 @@ interface BugReporter {
      * Set the current tracing filter.
      */
     fun setCurrentTracingFilter(tracingFilter: String)
+
+    /**
+     * Save the logcat.
+     */
+    fun saveLogCat()
 }

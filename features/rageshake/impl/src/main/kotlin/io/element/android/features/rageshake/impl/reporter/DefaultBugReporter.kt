@@ -94,6 +94,8 @@ class DefaultBugReporter @Inject constructor(
     private val logcatCommandDebug = arrayOf("logcat", "-d", "-v", "threadtime", "*:*")
     private var currentTracingFilter: String? = null
 
+    private val logCatErrFile = File(logDirectory().absolutePath, LOG_CAT_FILENAME)
+
     override suspend fun sendBugReport(
         withDevicesLogs: Boolean,
         withCrashLogs: Boolean,
@@ -130,8 +132,8 @@ class DefaultBugReporter @Inject constructor(
                 }
 
                 if (!isCancelled && (withCrashLogs || withDevicesLogs)) {
-                    val gzippedLogcat = saveLogCat()
-
+                    saveLogCat()
+                    val gzippedLogcat = compressFile(logCatErrFile)
                     if (null != gzippedLogcat) {
                         if (gzippedFiles.size == 0) {
                             gzippedFiles.add(gzippedLogcat)
@@ -321,7 +323,9 @@ class DefaultBugReporter @Inject constructor(
     }
 
     override fun logDirectory(): File {
-        return File(context.cacheDir, LOG_DIRECTORY_NAME)
+        return File(context.cacheDir, LOG_DIRECTORY_NAME).apply {
+            mkdirs()
+        }
     }
 
     override fun cleanLogDirectoryIfNeeded() {
@@ -381,30 +385,19 @@ class DefaultBugReporter @Inject constructor(
      *
      * @return the file if the operation succeeds
      */
-    private fun saveLogCat(): File? {
-        val logCatErrFile = File(context.cacheDir.absolutePath, LOG_CAT_FILENAME)
-
+    override fun saveLogCat() {
         if (logCatErrFile.exists()) {
             logCatErrFile.safeDelete()
         }
-
         try {
             logCatErrFile.writer().use {
                 getLogCatError(it)
             }
-
-            return compressFile(logCatErrFile)
         } catch (error: OutOfMemoryError) {
             Timber.e(error, "## saveLogCat() : fail to write logcat OOM")
         } catch (e: Exception) {
             Timber.e(e, "## saveLogCat() : fail to write logcat")
-        } finally {
-            if (logCatErrFile.exists()) {
-                logCatErrFile.safeDelete()
-            }
         }
-
-        return null
     }
 
     /**

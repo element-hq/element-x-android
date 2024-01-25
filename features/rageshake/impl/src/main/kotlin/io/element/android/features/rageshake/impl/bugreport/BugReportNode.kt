@@ -28,6 +28,7 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.features.rageshake.api.bugreport.BugReportEntryPoint
+import io.element.android.features.rageshake.api.reporter.BugReporter
 import io.element.android.libraries.androidutils.system.toast
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -37,7 +38,12 @@ class BugReportNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     private val presenter: BugReportPresenter,
+    private val bugReporter: BugReporter,
 ) : Node(buildContext, plugins = plugins) {
+    private fun onViewLogs(basePath: String) {
+        plugins<BugReportEntryPoint.Callback>().forEach { it.onViewLogs(basePath) }
+    }
+
     @Composable
     override fun View(modifier: Modifier) {
         val state = presenter.present()
@@ -50,6 +56,11 @@ class BugReportNode @AssistedInject constructor(
                 activity?.toast(CommonStrings.common_report_submitted)
                 onDone()
             },
+            onViewLogs = {
+                // Force a logcat dump
+                bugReporter.saveLogCat()
+                onViewLogs(bugReporter.logDirectory().absolutePath)
+            }
         )
     }
 
