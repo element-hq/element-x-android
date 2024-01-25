@@ -55,6 +55,8 @@ import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.ui.strings.CommonStrings
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -110,8 +112,8 @@ fun ViewFileView(
                     AsyncData.Uninitialized,
                     is AsyncData.Loading -> AsyncLoading()
                     is AsyncData.Success -> FileContent(
-                        modifier = modifier.weight(1f),
-                        lines = state.lines.data,
+                        modifier = Modifier.weight(1f),
+                        lines = state.lines.data.toImmutableList(),
                     )
                     is AsyncData.Failure -> AsyncFailure(throwable = state.lines.error, onRetry = null)
                 }
@@ -122,7 +124,7 @@ fun ViewFileView(
 
 @Composable
 private fun FileContent(
-    lines: List<String>,
+    lines: ImmutableList<String>,
     modifier: Modifier = Modifier,
 ) {
     LazyColumn(
