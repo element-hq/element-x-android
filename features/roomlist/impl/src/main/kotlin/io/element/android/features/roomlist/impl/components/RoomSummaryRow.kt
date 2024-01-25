@@ -173,9 +173,9 @@ private fun RowScope.LastMessageAndIndicatorRow(room: RoomListRoomSummary) {
         verticalAlignment = Alignment.CenterVertically,
     ) {
         // Video call
-        OnGoingCallIcon(
-            room.hasRoomCall,
-        )
+        if (room.hasRoomCall) {
+            OnGoingCallIcon()
+        }
         // Other indicators
         NotificationIcons(
             room.userDefinedNotificationMode,
@@ -186,17 +186,13 @@ private fun RowScope.LastMessageAndIndicatorRow(room: RoomListRoomSummary) {
 }
 
 @Composable
-private fun OnGoingCallIcon(
-    hasRoomCall: Boolean,
-) {
-    if (hasRoomCall) {
-        Icon(
-            modifier = Modifier.size(16.dp),
-            imageVector = CompoundIcons.VideoCallSolid,
-            contentDescription = null,
-            tint = ElementTheme.colors.unreadIndicator,
-        )
-    }
+private fun OnGoingCallIcon() {
+    Icon(
+        modifier = Modifier.size(16.dp),
+        imageVector = CompoundIcons.VideoCallSolid,
+        contentDescription = null,
+        tint = ElementTheme.colors.unreadIndicator,
+    )
 }
 
 @Composable
