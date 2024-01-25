@@ -46,4 +46,3 @@ class DefaultVersionFormatter @Inject constructor(
         }
     }
 }
-
