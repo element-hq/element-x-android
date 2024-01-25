@@ -20,6 +20,8 @@ import com.android.build.api.variant.FilterConfiguration.FilterType.ABI
 import extension.allFeaturesImpl
 import extension.allLibrariesImpl
 import extension.allServicesImpl
+import extension.gitBranchName
+import extension.gitRevision
 import extension.koverDependencies
 import extension.setupKover
 import org.jetbrains.kotlin.cli.common.toBooleanLenient
@@ -53,6 +55,9 @@ android {
         ndk {
             abiFilters += listOf("armeabi-v7a", "x86", "arm64-v8a", "x86_64")
         }
+
+        buildConfigField("String", "GIT_REVISION", "\"${gitRevision()}\"")
+        buildConfigField("String", "GIT_BRANCH_NAME", "\"${gitBranchName()}\"")
 
         // Ref: https://developer.android.com/studio/build/configure-apk-splits.html#configure-abi-split
         splits {

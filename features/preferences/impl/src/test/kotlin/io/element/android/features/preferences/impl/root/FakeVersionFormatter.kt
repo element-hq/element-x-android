@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright (c) 2024 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,18 +14,10 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.core.meta
+package io.element.android.features.preferences.impl.root
 
-data class BuildMeta(
-    val buildType: BuildType,
-    val isDebuggable: Boolean,
-    val applicationName: String,
-    val applicationId: String,
-    val lowPrivacyLoggingEnabled: Boolean,
-    val versionName: String,
-    val versionCode: Int,
-    val gitRevision: String,
-    val gitBranchName: String,
-    val flavorDescription: String,
-    val flavorShortDescription: String,
-)
+class FakeVersionFormatter : VersionFormatter {
+    override fun get(): String {
+        return "A Version"
+    }
+}

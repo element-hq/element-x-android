@@ -202,6 +202,8 @@ class DefaultBugReporter @Inject constructor(
                     // add some github labels
                     builder.addFormDataPart("label", buildMeta.versionName)
                     builder.addFormDataPart("label", buildMeta.flavorDescription)
+                    builder.addFormDataPart("branch_name", buildMeta.gitBranchName)
+
                     if (crashCallStack.isNotEmpty() && withCrashLogs) {
                         builder.addFormDataPart("label", "crash")
                     }
