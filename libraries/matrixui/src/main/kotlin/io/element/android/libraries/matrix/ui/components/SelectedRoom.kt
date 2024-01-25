@@ -115,6 +115,7 @@ fun aRoomSummaryDetails(
     isDm: Boolean = false,
     numUnreadMentions: Int = 0,
     numUnreadMessages: Int = 0,
+    numUnreadNotifications: Int = 0,
 ) = RoomSummaryDetails(
     roomId = roomId,
     name = name,
@@ -128,4 +129,5 @@ fun aRoomSummaryDetails(
     isDm = isDm,
     numUnreadMentions = numUnreadMentions,
     numUnreadMessages = numUnreadMessages,
+    numUnreadNotifications = numUnreadNotifications,
 )

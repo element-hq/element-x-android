@@ -28,6 +28,7 @@ data class RoomListRoomSummary(
     val name: String,
     val numberOfUnreadMessages: Int,
     val numberOfUnreadMentions: Int,
+    val numberOfUnreadNotifications: Int,
     val timestamp: String?,
     val lastMessage: CharSequence?,
     val avatarData: AvatarData,
