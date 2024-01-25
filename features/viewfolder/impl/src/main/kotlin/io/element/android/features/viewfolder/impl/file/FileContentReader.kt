@@ -24,21 +24,16 @@ import java.io.File
 import javax.inject.Inject
 
 interface FileContentReader {
-    suspend fun getLines(path: String): List<String>
+    suspend fun getLines(path: String): Result<List<String>>
 }
 
 @ContributesBinding(AppScope::class)
 class DefaultFileContentReader @Inject constructor(
     private val dispatchers: CoroutineDispatchers,
 ) : FileContentReader {
-    override suspend fun getLines(path: String): List<String> = withContext(dispatchers.io) {
-        try {
+    override suspend fun getLines(path: String): Result<List<String>> = withContext(dispatchers.io) {
+        runCatching {
             File(path).readLines()
-        } catch (exception: Exception) {
-            buildList {
-                add("Error reading file $path")
-                add(exception.toString())
-            }
         }
     }
 }

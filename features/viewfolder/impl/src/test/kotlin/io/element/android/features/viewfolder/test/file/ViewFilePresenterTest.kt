@@ -25,6 +25,8 @@ import io.element.android.features.viewfolder.impl.file.FileSave
 import io.element.android.features.viewfolder.impl.file.FileShare
 import io.element.android.features.viewfolder.impl.file.ViewFileEvents
 import io.element.android.features.viewfolder.impl.file.ViewFilePresenter
+import io.element.android.libraries.architecture.AsyncData
+import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.tests.testutils.WarmUpRule
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
@@ -37,24 +39,26 @@ class ViewFilePresenterTest {
     @Test
     fun `present - initial state`() = runTest {
         val fileContentReader = FakeFileContentReader().apply {
-            givenResult(listOf("aLine"))
+            givenResult(Result.success(listOf("aLine")))
         }
         val presenter = createPresenter(fileContentReader = fileContentReader)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            skipItems(1)
             val initialState = awaitItem()
             assertThat(initialState.name).isEqualTo("aName")
-            assertThat(initialState.lines.size).isEqualTo(1)
-            assertThat(initialState.lines.first()).isEqualTo("aLine")
+            assertThat(initialState.lines).isInstanceOf(AsyncData.Loading::class.java)
+            val loadedState = awaitItem()
+            val lines = (loadedState.lines as AsyncData.Success).data
+            assertThat(lines.size).isEqualTo(1)
+            assertThat(lines.first()).isEqualTo("aLine")
         }
     }
 
     @Test
     fun `present - share should not have any side effect`() = runTest {
         val fileContentReader = FakeFileContentReader().apply {
-            givenResult(listOf("aLine"))
+            givenResult(Result.success(listOf("aLine")))
         }
         val fileShare = FakeFileShare()
         val fileSave = FakeFileSave()
@@ -71,9 +75,24 @@ class ViewFilePresenterTest {
     }
 
     @Test
+    fun `present - with error loading file`() = runTest {
+        val fileContentReader = FakeFileContentReader().apply {
+            givenResult(Result.failure(AN_EXCEPTION))
+        }
+        val presenter = createPresenter(fileContentReader = fileContentReader)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            skipItems(1)
+            val errorState = awaitItem()
+            assertThat(errorState.lines).isInstanceOf(AsyncData.Failure::class.java)
+        }
+    }
+
+    @Test
     fun `present - save should not have any side effect`() = runTest {
         val fileContentReader = FakeFileContentReader().apply {
-            givenResult(listOf("aLine"))
+            givenResult(Result.success(listOf("aLine")))
         }
         val fileShare = FakeFileShare()
         val fileSave = FakeFileSave()

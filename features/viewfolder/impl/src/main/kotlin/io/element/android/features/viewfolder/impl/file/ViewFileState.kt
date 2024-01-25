@@ -16,10 +16,10 @@
 
 package io.element.android.features.viewfolder.impl.file
 
-import kotlinx.collections.immutable.ImmutableList
+import io.element.android.libraries.architecture.AsyncData
 
 data class ViewFileState(
     val name: String,
-    val lines: ImmutableList<String>,
+    val lines: AsyncData<List<String>>,
     val eventSink: (ViewFileEvents) -> Unit,
 )

@@ -26,8 +26,8 @@ import androidx.compose.runtime.setValue
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
-import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -57,13 +57,16 @@ class ViewFilePresenter @AssistedInject constructor(
             }
         }
 
-        var lines by remember { mutableStateOf(emptyList<String>()) }
+        var lines: AsyncData<List<String>> by remember { mutableStateOf(AsyncData.Loading()) }
         LaunchedEffect(Unit) {
-            lines = fileContentReader.getLines(path)
+            lines = fileContentReader.getLines(path).fold(
+                onSuccess = { AsyncData.Success(it) },
+                onFailure = { AsyncData.Failure(it) }
+            )
         }
         return ViewFileState(
             name = name,
-            lines = lines.toImmutableList(),
+            lines = lines,
             eventSink = ::handleEvent,
         )
     }

@@ -19,11 +19,11 @@ package io.element.android.features.viewfolder.test.file
 import io.element.android.features.viewfolder.impl.file.FileContentReader
 
 class FakeFileContentReader : FileContentReader {
-    private var result: List<String> = emptyList()
+    private var result: Result<List<String>> = Result.success(emptyList())
 
-    fun givenResult(result: List<String>) {
+    fun givenResult(result: Result<List<String>>) {
         this.result = result
     }
 
-    override suspend fun getLines(path: String): List<String> = result
+    override suspend fun getLines(path: String): Result<List<String>> = result
 }

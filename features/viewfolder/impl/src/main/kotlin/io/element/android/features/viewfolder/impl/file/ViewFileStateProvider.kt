@@ -17,24 +17,29 @@
 package io.element.android.features.viewfolder.impl.file
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import kotlinx.collections.immutable.toImmutableList
+import io.element.android.libraries.architecture.AsyncData
 
 open class ViewFileStateProvider : PreviewParameterProvider<ViewFileState> {
     override val values: Sequence<ViewFileState>
         get() = sequenceOf(
             aViewFileState(),
+            aViewFileState(lines = AsyncData.Loading()),
+            aViewFileState(lines = AsyncData.Failure(Exception("A failure"))),
+            aViewFileState(lines = AsyncData.Success(emptyList())),
             aViewFileState(
-                lines = listOf(
-                    "Line 1",
-                    "Line 2",
-                    "Line 3 lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor" +
-                        " incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,",
-                    "01-23 13:14:50.740 25818 25818 V verbose",
-                    "01-23 13:14:50.740 25818 25818 D debug",
-                    "01-23 13:14:50.740 25818 25818 I info",
-                    "01-23 13:14:50.740 25818 25818 W warning",
-                    "01-23 13:14:50.740 25818 25818 E error",
-                    "01-23 13:14:50.740 25818 25818 A assertion",
+                lines = AsyncData.Success(
+                    listOf(
+                        "Line 1",
+                        "Line 2",
+                        "Line 3 lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor" +
+                            " incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,",
+                        "01-23 13:14:50.740 25818 25818 V verbose",
+                        "01-23 13:14:50.740 25818 25818 D debug",
+                        "01-23 13:14:50.740 25818 25818 I info",
+                        "01-23 13:14:50.740 25818 25818 W warning",
+                        "01-23 13:14:50.740 25818 25818 E error",
+                        "01-23 13:14:50.740 25818 25818 A assertion",
+                    )
                 )
             )
         )
@@ -42,9 +47,9 @@ open class ViewFileStateProvider : PreviewParameterProvider<ViewFileState> {
 
 fun aViewFileState(
     name: String = "aName",
-    lines: List<String> = emptyList(),
+    lines: AsyncData<List<String>> = AsyncData.Uninitialized,
 ) = ViewFileState(
     name = name,
-    lines = lines.toImmutableList(),
+    lines = lines,
     eventSink = {},
 )

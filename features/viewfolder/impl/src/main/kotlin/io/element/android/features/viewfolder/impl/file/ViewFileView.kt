@@ -41,6 +41,9 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.libraries.androidutils.system.copyToClipboard
+import io.element.android.libraries.architecture.AsyncData
+import io.element.android.libraries.designsystem.components.async.AsyncFailure
+import io.element.android.libraries.designsystem.components.async.AsyncLoading
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.icons.CompoundDrawables
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -103,33 +106,49 @@ fun ViewFileView(
                     .padding(padding)
                     .consumeWindowInsets(padding)
             ) {
-                LazyColumn(
-                    modifier = Modifier.weight(1f)
-                ) {
-                    if (state.lines.isEmpty()) {
-                        item {
-                            Spacer(Modifier.size(80.dp))
-                            Text(
-                                text = "Empty file",
-                                textAlign = TextAlign.Center,
-                                color = MaterialTheme.colorScheme.tertiary,
-                                modifier = Modifier.fillMaxWidth()
-                            )
-                        }
-                    } else {
-                        itemsIndexed(
-                            items = state.lines,
-                        ) { index, line ->
-                            LineRow(
-                                lineNumber = index + 1,
-                                line = line,
-                            )
-                        }
-                    }
+                when (state.lines) {
+                    AsyncData.Uninitialized,
+                    is AsyncData.Loading -> AsyncLoading()
+                    is AsyncData.Success -> FileContent(
+                        modifier = modifier.weight(1f),
+                        lines = state.lines.data,
+                    )
+                    is AsyncData.Failure -> AsyncFailure(throwable = state.lines.error, onRetry = null)
                 }
             }
         }
     )
+}
+
+@Composable
+private fun FileContent(
+    lines: List<String>,
+    modifier: Modifier = Modifier,
+) {
+    LazyColumn(
+        modifier = modifier
+    ) {
+        if (lines.isEmpty()) {
+            item {
+                Spacer(Modifier.size(80.dp))
+                Text(
+                    text = "Empty file",
+                    textAlign = TextAlign.Center,
+                    color = MaterialTheme.colorScheme.tertiary,
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
+        } else {
+            itemsIndexed(
+                items = lines,
+            ) { index, line ->
+                LineRow(
+                    lineNumber = index + 1,
+                    line = line,
+                )
+            }
+        }
+    }
 }
 
 @Composable
