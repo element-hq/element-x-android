@@ -40,6 +40,7 @@ import io.element.android.features.rageshake.impl.R
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.designsystem.components.async.AsyncActionView
 import io.element.android.libraries.designsystem.components.form.textFieldState
+import io.element.android.libraries.designsystem.components.preferences.PreferenceDivider
 import io.element.android.libraries.designsystem.components.preferences.PreferencePage
 import io.element.android.libraries.designsystem.components.preferences.PreferenceRow
 import io.element.android.libraries.designsystem.components.preferences.PreferenceSwitch
@@ -99,11 +100,13 @@ fun BugReportView(
                 )
             }
             Spacer(modifier = Modifier.height(16.dp))
+            PreferenceDivider()
             PreferenceText(
                 title = stringResource(id = R.string.screen_bug_report_view_logs),
                 enabled = isFormEnabled,
                 onClick = onViewLogs,
             )
+            PreferenceDivider()
             PreferenceSwitch(
                 isChecked = state.formState.sendLogs,
                 onCheckedChange = { eventSink(BugReportEvents.SetSendLog(it)) },
