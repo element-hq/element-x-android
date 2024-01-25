@@ -29,6 +29,8 @@ fun logApplicationInfo() {
         append(BuildConfig.VERSION_CODE)
         append(") - ")
         append(BuildConfig.BUILD_TYPE)
+        append(" / ")
+        append(BuildConfig.FLAVOR)
     }
     // TODO Get SDK version somehow
     val sdkVersion = "SDK VERSION (TODO)"
