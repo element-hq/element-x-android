@@ -38,7 +38,7 @@ import io.element.android.features.messages.impl.timeline.session.SessionState
 import io.element.android.features.messages.impl.voicemessages.timeline.RedactedVoiceMessageManager
 import io.element.android.features.poll.api.actions.EndPollAction
 import io.element.android.features.poll.api.actions.SendPollResponseAction
-import io.element.android.features.preferences.api.store.PreferencesStore
+import io.element.android.features.preferences.api.store.SessionPreferencesStore
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.api.core.EventId
@@ -74,7 +74,7 @@ class TimelinePresenter @AssistedInject constructor(
     private val redactedVoiceMessageManager: RedactedVoiceMessageManager,
     private val sendPollResponseAction: SendPollResponseAction,
     private val endPollAction: EndPollAction,
-    private val preferencesStore: PreferencesStore,
+    private val sessionPreferencesStore: SessionPreferencesStore,
 ) : Presenter<TimelineState> {
     @AssistedFactory
     interface Factory {
@@ -105,7 +105,7 @@ class TimelinePresenter @AssistedInject constructor(
         val sessionVerifiedStatus by verificationService.sessionVerifiedStatus.collectAsState()
         val keyBackupState by encryptionService.backupStateStateFlow.collectAsState()
 
-        val isPrivateReadReceiptsEnabled by preferencesStore.isPrivateReadReceiptsEnabled().collectAsState(initial = false)
+        val isSendPublicReadReceiptsEnabled by sessionPreferencesStore.isSendPublicReadReceiptsEnabled().collectAsState(initial = true)
 
         val sessionState by remember {
             derivedStateOf {
@@ -129,7 +129,7 @@ class TimelinePresenter @AssistedInject constructor(
                         timelineItems = timelineItems,
                         lastReadReceiptIndex = lastReadReceiptIndex,
                         lastReadReceiptId = lastReadReceiptId,
-                        readReceiptType = if (isPrivateReadReceiptsEnabled) ReceiptType.READ_PRIVATE else ReceiptType.READ,
+                        readReceiptType = if (isSendPublicReadReceiptsEnabled) ReceiptType.READ else ReceiptType.READ_PRIVATE,
                     )
                 }
                 is TimelineEvents.PollAnswerSelected -> appScope.launch {

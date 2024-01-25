@@ -24,8 +24,7 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.squareup.anvil.annotations.ContributesBinding
-import io.element.android.features.preferences.api.store.PreferencesStore
-import io.element.android.libraries.core.bool.orFalse
+import io.element.android.features.preferences.api.store.AppPreferencesStore
 import io.element.android.libraries.core.bool.orTrue
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.core.meta.BuildType
@@ -40,14 +39,13 @@ private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(na
 private val richTextEditorKey = booleanPreferencesKey("richTextEditor")
 private val developerModeKey = booleanPreferencesKey("developerMode")
 private val customElementCallBaseUrlKey = stringPreferencesKey("elementCallBaseUrl")
-private val privateReadReceiptsKey = booleanPreferencesKey("privateReadReceipts")
 private val themeKey = stringPreferencesKey("theme")
 
 @ContributesBinding(AppScope::class)
-class DefaultPreferencesStore @Inject constructor(
+class DefaultAppPreferencesStore @Inject constructor(
     @ApplicationContext context: Context,
     private val buildMeta: BuildMeta,
-) : PreferencesStore {
+) : AppPreferencesStore {
     private val store = context.dataStore
 
     override suspend fun setRichTextEditorEnabled(enabled: Boolean) {
@@ -89,18 +87,6 @@ class DefaultPreferencesStore @Inject constructor(
     override fun getCustomElementCallBaseUrlFlow(): Flow<String?> {
         return store.data.map { prefs ->
             prefs[customElementCallBaseUrlKey]
-        }
-    }
-
-    override suspend fun setPrivateReadReceiptsEnabled(enabled: Boolean) {
-        store.edit { prefs ->
-            prefs[privateReadReceiptsKey] = enabled
-        }
-    }
-
-    override fun isPrivateReadReceiptsEnabled(): Flow<Boolean> {
-        return store.data.map { prefs ->
-            prefs[privateReadReceiptsKey].orFalse()
         }
     }
 

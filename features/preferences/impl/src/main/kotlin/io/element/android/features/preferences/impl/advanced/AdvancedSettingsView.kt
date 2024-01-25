@@ -89,8 +89,8 @@ fun AdvancedSettingsView(
                 Text(text = "On disabling, others won't see your read receipt.")
             },
             trailingContent = ListItemContent.Switch(
-                checked = state.isPrivateReadReceiptsEnabled,
-                onChange = { state.eventSink(AdvancedSettingsEvents.SetPrivateReadReceiptsEnabled(it)) },
+                checked = state.isSendPublicReadReceiptsEnabled,
+                onChange = { state.eventSink(AdvancedSettingsEvents.SetSendPublicReadReceiptsEnabled(it)) },
             ),
         )
     }

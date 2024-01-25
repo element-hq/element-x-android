@@ -17,8 +17,8 @@
 package io.element.android.features.call.utils
 
 import com.google.common.truth.Truth.assertThat
-import io.element.android.features.preferences.api.store.PreferencesStore
-import io.element.android.libraries.featureflag.test.InMemoryPreferencesStore
+import io.element.android.features.preferences.api.store.AppPreferencesStore
+import io.element.android.libraries.featureflag.test.InMemoryAppPreferencesStore
 import io.element.android.libraries.matrix.api.MatrixClientProvider
 import io.element.android.libraries.matrix.api.widget.CallWidgetSettingsProvider
 import io.element.android.libraries.matrix.test.A_ROOM_ID
@@ -94,14 +94,14 @@ class DefaultCallWidgetProviderTest {
         val client = FakeMatrixClient().apply {
             givenGetRoomResult(A_ROOM_ID, room)
         }
-        val preferencesStore = InMemoryPreferencesStore().apply {
+        val preferencesStore = InMemoryAppPreferencesStore().apply {
             setCustomElementCallBaseUrl("https://custom.element.io")
         }
         val settingsProvider = FakeCallWidgetSettingsProvider()
         val provider = createProvider(
             matrixClientProvider = FakeMatrixClientProvider { Result.success(client) },
             callWidgetSettingsProvider = settingsProvider,
-            preferencesStore = preferencesStore,
+            appPreferencesStore = preferencesStore,
         )
         provider.getWidget(A_SESSION_ID, A_ROOM_ID, "clientId", "languageTag", "theme")
 
@@ -110,11 +110,11 @@ class DefaultCallWidgetProviderTest {
 
     private fun createProvider(
         matrixClientProvider: MatrixClientProvider = FakeMatrixClientProvider(),
-        preferencesStore: PreferencesStore = InMemoryPreferencesStore(),
+        appPreferencesStore: AppPreferencesStore = InMemoryAppPreferencesStore(),
         callWidgetSettingsProvider: CallWidgetSettingsProvider = FakeCallWidgetSettingsProvider()
     ) = DefaultCallWidgetProvider(
         matrixClientProvider,
-        preferencesStore,
+        appPreferencesStore,
         callWidgetSettingsProvider,
     )
 }

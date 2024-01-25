@@ -14,15 +14,22 @@
  * limitations under the License.
  */
 
-package io.element.android.features.preferences.impl.advanced
+package io.element.android.features.preferences.api.store
 
-import io.element.android.compound.theme.Theme
+import kotlinx.coroutines.flow.Flow
 
-data class AdvancedSettingsState(
-    val isRichTextEditorEnabled: Boolean,
-    val isDeveloperModeEnabled: Boolean,
-    val isSendPublicReadReceiptsEnabled: Boolean,
-    val theme: Theme,
-    val showChangeThemeDialog: Boolean,
-    val eventSink: (AdvancedSettingsEvents) -> Unit
-)
+interface AppPreferencesStore {
+    suspend fun setRichTextEditorEnabled(enabled: Boolean)
+    fun isRichTextEditorEnabledFlow(): Flow<Boolean>
+
+    suspend fun setDeveloperModeEnabled(enabled: Boolean)
+    fun isDeveloperModeEnabledFlow(): Flow<Boolean>
+
+    suspend fun setCustomElementCallBaseUrl(string: String?)
+    fun getCustomElementCallBaseUrlFlow(): Flow<String?>
+
+    suspend fun setTheme(theme: String)
+    fun getThemeFlow(): Flow<String?>
+
+    suspend fun reset()
+}

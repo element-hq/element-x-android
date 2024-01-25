@@ -25,46 +25,48 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import io.element.android.compound.theme.Theme
 import io.element.android.compound.theme.mapToTheme
-import io.element.android.features.preferences.api.store.PreferencesStore
+import io.element.android.features.preferences.api.store.AppPreferencesStore
+import io.element.android.features.preferences.api.store.SessionPreferencesStore
 import io.element.android.libraries.architecture.Presenter
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class AdvancedSettingsPresenter @Inject constructor(
-    private val preferencesStore: PreferencesStore,
+    private val appPreferencesStore: AppPreferencesStore,
+    private val sessionPreferencesStore: SessionPreferencesStore,
 ) : Presenter<AdvancedSettingsState> {
     @Composable
     override fun present(): AdvancedSettingsState {
         val localCoroutineScope = rememberCoroutineScope()
-        val isRichTextEditorEnabled by preferencesStore
+        val isRichTextEditorEnabled by appPreferencesStore
             .isRichTextEditorEnabledFlow()
             .collectAsState(initial = false)
-        val isDeveloperModeEnabled by preferencesStore
+        val isDeveloperModeEnabled by appPreferencesStore
             .isDeveloperModeEnabledFlow()
             .collectAsState(initial = false)
-        val isPrivateReadReceiptsEnabled by preferencesStore
-            .isPrivateReadReceiptsEnabled()
-            .collectAsState(initial = false)
+        val isSendPublicReadReceiptsEnabled by sessionPreferencesStore
+            .isSendPublicReadReceiptsEnabled()
+            .collectAsState(initial = true)
         val theme by remember {
-            preferencesStore.getThemeFlow().mapToTheme()
+            appPreferencesStore.getThemeFlow().mapToTheme()
         }
             .collectAsState(initial = Theme.System)
         var showChangeThemeDialog by remember { mutableStateOf(false) }
         fun handleEvents(event: AdvancedSettingsEvents) {
             when (event) {
                 is AdvancedSettingsEvents.SetRichTextEditorEnabled -> localCoroutineScope.launch {
-                    preferencesStore.setRichTextEditorEnabled(event.enabled)
+                    appPreferencesStore.setRichTextEditorEnabled(event.enabled)
                 }
                 is AdvancedSettingsEvents.SetDeveloperModeEnabled -> localCoroutineScope.launch {
-                    preferencesStore.setDeveloperModeEnabled(event.enabled)
+                    appPreferencesStore.setDeveloperModeEnabled(event.enabled)
                 }
-                is AdvancedSettingsEvents.SetPrivateReadReceiptsEnabled -> localCoroutineScope.launch {
-                    preferencesStore.setPrivateReadReceiptsEnabled(event.enabled)
+                is AdvancedSettingsEvents.SetSendPublicReadReceiptsEnabled -> localCoroutineScope.launch {
+                    sessionPreferencesStore.setSendPublicReadReceipts(event.enabled)
                 }
                 AdvancedSettingsEvents.CancelChangeTheme -> showChangeThemeDialog = false
                 AdvancedSettingsEvents.ChangeTheme -> showChangeThemeDialog = true
                 is AdvancedSettingsEvents.SetTheme -> localCoroutineScope.launch {
-                    preferencesStore.setTheme(event.theme.name)
+                    appPreferencesStore.setTheme(event.theme.name)
                     showChangeThemeDialog = false
                 }
             }
@@ -73,7 +75,7 @@ class AdvancedSettingsPresenter @Inject constructor(
         return AdvancedSettingsState(
             isRichTextEditorEnabled = isRichTextEditorEnabled,
             isDeveloperModeEnabled = isDeveloperModeEnabled,
-            isPrivateReadReceiptsEnabled = isPrivateReadReceiptsEnabled,
+            isSendPublicReadReceiptsEnabled = isSendPublicReadReceiptsEnabled,
             theme = theme,
             showChangeThemeDialog = showChangeThemeDialog,
             eventSink = { handleEvents(it) }
