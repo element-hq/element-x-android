@@ -91,7 +91,8 @@ class NotifiableEventResolver @Inject constructor(
     ): NotifiableEvent? {
         return when (val content = this.content) {
             is NotificationContent.MessageLike.RoomMessage -> {
-                val messageBody = descriptionFromMessageContent(content, senderDisplayName ?: content.senderId.value)
+                val senderName = getSenderName(content.senderId)
+                val messageBody = descriptionFromMessageContent(content, senderName)
                 val notificationBody = if (hasMention) {
                     stringProvider.getString(R.string.notification_mentioned_you_body, messageBody)
                 } else {
@@ -104,7 +105,7 @@ class NotifiableEventResolver @Inject constructor(
                     eventId = eventId,
                     noisy = isNoisy,
                     timestamp = this.timestamp,
-                    senderName = senderDisplayName,
+                    senderName = senderName,
                     body = notificationBody,
                     imageUriString = fetchImageIfPresent(client)?.toString(),
                     roomName = roomDisplayName,
@@ -161,7 +162,7 @@ class NotifiableEventResolver @Inject constructor(
                     eventId = eventId,
                     noisy = isNoisy,
                     timestamp = this.timestamp,
-                    senderName = senderDisplayName,
+                    senderName = getSenderName(content.senderId),
                     body = stringProvider.getString(CommonStrings.common_poll_summary, content.question),
                     imageUriString = null,
                     roomName = roomDisplayName,

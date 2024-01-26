@@ -27,7 +27,9 @@ data class NotificationData(
     val roomId: RoomId,
     // mxc url
     val senderAvatarUrl: String?,
-    val senderDisplayName: String?,
+    // private, must use `getSenderName`
+    private val senderDisplayName: String?,
+    private val senderIsNameAmbiguous: Boolean,
     val roomAvatarUrl: String?,
     val roomDisplayName: String?,
     val isDirect: Boolean,
@@ -36,7 +38,13 @@ data class NotificationData(
     val timestamp: Long,
     val content: NotificationContent,
     val hasMention: Boolean,
-)
+) {
+    fun getSenderName(userId: UserId): String = when {
+        senderDisplayName.isNullOrBlank() -> userId.value
+        senderIsNameAmbiguous -> "$senderDisplayName ($userId)"
+        else -> senderDisplayName
+    }
+}
 
 sealed interface NotificationContent {
     sealed interface MessageLike : NotificationContent {
@@ -54,11 +62,13 @@ sealed interface NotificationContent {
         data class ReactionContent(
             val relatedEventId: String
         ) : MessageLike
+
         data object RoomEncrypted : MessageLike
         data class RoomMessage(
             val senderId: UserId,
             val messageType: MessageType
         ) : MessageLike
+
         data object RoomRedaction : MessageLike
         data object Sticker : MessageLike
         data class Poll(
@@ -83,6 +93,7 @@ sealed interface NotificationContent {
             val userId: String,
             val membershipState: RoomMembershipState
         ) : StateEvent
+
         data object RoomName : StateEvent
         data object RoomPinnedEvents : StateEvent
         data object RoomPowerLevels : StateEvent
