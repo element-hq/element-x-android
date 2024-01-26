@@ -24,6 +24,7 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.preferencesDataStoreFile
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.features.preferences.api.store.SessionPreferencesStore
+import io.element.android.libraries.androidutils.hash.hash
 import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.di.SingleIn
@@ -41,9 +42,8 @@ class DefaultSessionPreferencesStore @Inject constructor(
     private val sendPublicReadReceiptsKey = booleanPreferencesKey("sendPublicReadReceipts")
     private val hashedUserId = currentSessionIdHolder.current.value.hash().take(16)
 
-    private val store = PreferenceDataStoreFactory.create {
-        context.preferencesDataStoreFile("session_${currentSessionIdHolder.current}_preferences")
-    }
+    private val dataStoreFile = context.preferencesDataStoreFile("session_${hashedUserId}_preferences")
+    private val store = PreferenceDataStoreFactory.create { dataStoreFile }
 
     override suspend fun setSendPublicReadReceipts(enabled: Boolean) = update(sendPublicReadReceiptsKey, enabled)
     override fun isSendPublicReadReceiptsEnabled(): Flow<Boolean> = get(sendPublicReadReceiptsKey, true)
