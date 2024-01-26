@@ -38,14 +38,15 @@ class DefaultSessionPreferencesStore @Inject constructor(
     @ApplicationContext context: Context,
     currentSessionIdHolder: CurrentSessionIdHolder,
 ) : SessionPreferencesStore {
-    private val privateReadReceiptsKey = booleanPreferencesKey("privateReadReceipts")
+    private val sendPublicReadReceiptsKey = booleanPreferencesKey("sendPublicReadReceipts")
+    private val hashedUserId = currentSessionIdHolder.current.value.hash().take(16)
 
     private val store = PreferenceDataStoreFactory.create {
         context.preferencesDataStoreFile("session_${currentSessionIdHolder.current}_preferences")
     }
 
-    override suspend fun setSendPublicReadReceipts(enabled: Boolean) = update(privateReadReceiptsKey, enabled)
-    override fun isSendPublicReadReceiptsEnabled(): Flow<Boolean> = get(privateReadReceiptsKey, true)
+    override suspend fun setSendPublicReadReceipts(enabled: Boolean) = update(sendPublicReadReceiptsKey, enabled)
+    override fun isSendPublicReadReceiptsEnabled(): Flow<Boolean> = get(sendPublicReadReceiptsKey, true)
 
     override suspend fun clear() {
         store.edit { it.clear() }
