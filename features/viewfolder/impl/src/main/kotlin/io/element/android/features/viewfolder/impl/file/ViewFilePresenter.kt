@@ -49,6 +49,7 @@ class ViewFilePresenter @AssistedInject constructor(
     @Composable
     override fun present(): ViewFileState {
         val coroutineScope = rememberCoroutineScope()
+        val colorationMode = remember { name.toColorationMode() }
 
         fun handleEvent(event: ViewFileEvents) {
             when (event) {
@@ -67,6 +68,7 @@ class ViewFilePresenter @AssistedInject constructor(
         return ViewFileState(
             name = name,
             lines = lines,
+            colorationMode = colorationMode,
             eventSink = ::handleEvent,
         )
     }
@@ -77,5 +79,13 @@ class ViewFilePresenter @AssistedInject constructor(
 
     private fun CoroutineScope.save(path: String) = launch {
         fileSave.save(path)
+    }
+}
+
+private fun String.toColorationMode(): ColorationMode {
+    return when {
+        equals("logcat.log") -> ColorationMode.Logcat
+        startsWith("logs.") -> ColorationMode.RustLogs
+        else -> ColorationMode.None
     }
 }

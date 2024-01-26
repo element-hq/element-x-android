@@ -114,6 +114,7 @@ fun ViewFileView(
                     is AsyncData.Success -> FileContent(
                         modifier = Modifier.weight(1f),
                         lines = state.lines.data.toImmutableList(),
+                        colorationMode = state.colorationMode,
                     )
                     is AsyncData.Failure -> AsyncFailure(throwable = state.lines.error, onRetry = null)
                 }
@@ -125,6 +126,7 @@ fun ViewFileView(
 @Composable
 private fun FileContent(
     lines: ImmutableList<String>,
+    colorationMode: ColorationMode,
     modifier: Modifier = Modifier,
 ) {
     LazyColumn(
@@ -147,6 +149,7 @@ private fun FileContent(
                 LineRow(
                     lineNumber = index + 1,
                     line = line,
+                    colorationMode = colorationMode,
                 )
             }
         }
@@ -157,6 +160,7 @@ private fun FileContent(
 private fun LineRow(
     lineNumber: Int,
     line: String,
+    colorationMode: ColorationMode,
 ) {
     val context = LocalContext.current
     Row(
@@ -195,27 +199,48 @@ private fun LineRow(
                 }
                 .padding(horizontal = 4.dp),
             text = line,
-            color = line.toColor(),
+            color = line.toColor(colorationMode),
             style = ElementTheme.typography.fontBodyMdRegular
         )
     }
 }
 
 /**
- * Convert a logcat line to a color.
- * Ex: `01-23 13:14:50.740 25818 25818 D org.matrix.rust.sdk: elementx: SyncIndicator = Hide | RustRoomListService.kt:81`
+ * Convert a line to a color.
+ * Ex for logcat:
+ * `01-23 13:14:50.740 25818 25818 D org.matrix.rust.sdk: elementx: SyncIndicator = Hide | RustRoomListService.kt:81`
+ *                                 ^ use this char to determine the color
+ * Ex for Rust logs:
+ * `2024-01-26T10:22:26.947416Z  WARN elementx: Restore with non-empty map | MatrixClientsHolder.kt:68`
+ *                                  ^ use this char to determine the color, see [LogLevel]
  */
 @Composable
-private fun String.toColor(): Color {
-    return when (getOrNull(31)) {
-        'D' -> Color(0xFF299999)
-        'I' -> Color(0xFFABC023)
-        'W' -> Color(0xFFBBB529)
-        'E' -> Color(0xFFFF6B68)
-        'A' -> Color(0xFFFF6B68)
-        else -> ElementTheme.colors.textPrimary
+private fun String.toColor(colorationMode: ColorationMode): Color {
+    return when (colorationMode) {
+        ColorationMode.Logcat -> when (getOrNull(31)) {
+            'D' -> colorDebug
+            'I' -> colorInfo
+            'W' -> colorWarning
+            'E' -> colorError
+            'A' -> colorError
+            else -> ElementTheme.colors.textPrimary
+        }
+        ColorationMode.RustLogs -> when (getOrNull(32)) {
+            'E' -> ElementTheme.colors.textPrimary
+            'G' -> colorDebug
+            'O' -> colorInfo
+            'N' -> colorWarning
+            'R' -> colorError
+            else -> ElementTheme.colors.textPrimary
+        }
+        ColorationMode.None -> ElementTheme.colors.textPrimary
     }
 }
+
+private val colorDebug = Color(0xFF299999)
+private val colorInfo = Color(0xFFABC023)
+private val colorWarning = Color(0xFFBBB529)
+private val colorError = Color(0xFFFF6B68)
 
 @PreviewsDayNight
 @Composable
