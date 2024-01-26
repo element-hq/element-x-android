@@ -85,7 +85,7 @@ class ViewFilePresenter @AssistedInject constructor(
 private fun String.toColorationMode(): ColorationMode {
     return when {
         equals("logcat.log") -> ColorationMode.Logcat
-        startsWith("logs.") -> ColorationMode.Logs
+        startsWith("logs.") -> ColorationMode.RustLogs
         else -> ColorationMode.None
     }
 }

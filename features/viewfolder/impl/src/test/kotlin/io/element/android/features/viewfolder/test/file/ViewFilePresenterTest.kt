@@ -76,7 +76,7 @@ class ViewFilePresenterTest {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            assertThat(initialState.colorationMode).isEqualTo(ColorationMode.Logs)
+            assertThat(initialState.colorationMode).isEqualTo(ColorationMode.RustLogs)
             cancelAndConsumeRemainingEvents()
         }
     }

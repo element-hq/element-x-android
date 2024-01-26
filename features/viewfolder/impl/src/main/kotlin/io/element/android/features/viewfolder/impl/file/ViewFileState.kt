@@ -27,6 +27,6 @@ data class ViewFileState(
 
 enum class ColorationMode {
     Logcat,
-    Logs,
+    RustLogs,
     None,
 }
