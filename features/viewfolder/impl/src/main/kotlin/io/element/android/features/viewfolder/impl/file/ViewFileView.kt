@@ -228,7 +228,7 @@ private fun String.toColor(colorationMode: ColorationMode): Color {
         ColorationMode.RustLogs -> when (getOrNull(32)) {
             'E' -> ElementTheme.colors.textPrimary
             'G' -> colorDebug
-            '0' -> colorInfo
+            'O' -> colorInfo
             'N' -> colorWarning
             'R' -> colorError
             else -> ElementTheme.colors.textPrimary
