@@ -63,7 +63,7 @@ import io.element.android.features.messages.impl.utils.messagesummary.MessageSum
 import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessageComposerPresenter
 import io.element.android.features.networkmonitor.api.NetworkMonitor
 import io.element.android.features.networkmonitor.api.NetworkStatus
-import io.element.android.features.preferences.api.store.PreferencesStore
+import io.element.android.features.preferences.api.store.AppPreferencesStore
 import io.element.android.libraries.androidutils.clipboard.ClipboardHelper
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
@@ -108,7 +108,7 @@ class MessagesPresenter @AssistedInject constructor(
     private val messageSummaryFormatter: MessageSummaryFormatter,
     private val dispatchers: CoroutineDispatchers,
     private val clipboardHelper: ClipboardHelper,
-    private val preferencesStore: PreferencesStore,
+    private val appPreferencesStore: AppPreferencesStore,
     private val featureFlagsService: FeatureFlagService,
     private val htmlConverterProvider: HtmlConverterProvider,
     @Assisted private val navigator: MessagesNavigator,
@@ -178,7 +178,7 @@ class MessagesPresenter @AssistedInject constructor(
             timelineState.eventSink(TimelineEvents.SetHighlightedEvent(composerState.mode.relatedEventId))
         }
 
-        val enableTextFormatting by preferencesStore.isRichTextEditorEnabledFlow().collectAsState(initial = true)
+        val enableTextFormatting by appPreferencesStore.isRichTextEditorEnabledFlow().collectAsState(initial = true)
 
         var enableVoiceMessages by remember { mutableStateOf(false) }
         LaunchedEffect(featureFlagsService) {

@@ -31,7 +31,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVoiceContent
 import io.element.android.features.messages.impl.timeline.model.event.canBeCopied
 import io.element.android.features.messages.impl.timeline.model.event.canReact
-import io.element.android.features.preferences.api.store.PreferencesStore
+import io.element.android.features.preferences.api.store.AppPreferencesStore
 import io.element.android.libraries.architecture.Presenter
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
@@ -39,7 +39,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class ActionListPresenter @Inject constructor(
-    private val preferencesStore: PreferencesStore,
+    private val appPreferencesStore: AppPreferencesStore,
 ) : Presenter<ActionListState> {
     @Composable
     override fun present(): ActionListState {
@@ -49,7 +49,7 @@ class ActionListPresenter @Inject constructor(
             mutableStateOf(ActionListState.Target.None)
         }
 
-        val isDeveloperModeEnabled by preferencesStore.isDeveloperModeEnabledFlow().collectAsState(initial = false)
+        val isDeveloperModeEnabled by appPreferencesStore.isDeveloperModeEnabledFlow().collectAsState(initial = false)
 
         fun handleEvents(event: ActionListEvents) {
             when (event) {

@@ -26,16 +26,19 @@ open class AdvancedSettingsStateProvider : PreviewParameterProvider<AdvancedSett
             aAdvancedSettingsState(isRichTextEditorEnabled = true),
             aAdvancedSettingsState(isDeveloperModeEnabled = true),
             aAdvancedSettingsState(showChangeThemeDialog = true),
+            aAdvancedSettingsState(isSendPublicReadReceiptsEnabled = true),
         )
 }
 
 fun aAdvancedSettingsState(
     isRichTextEditorEnabled: Boolean = false,
     isDeveloperModeEnabled: Boolean = false,
+    isSendPublicReadReceiptsEnabled: Boolean = false,
     showChangeThemeDialog: Boolean = false,
 ) = AdvancedSettingsState(
     isRichTextEditorEnabled = isRichTextEditorEnabled,
     isDeveloperModeEnabled = isDeveloperModeEnabled,
+    isSendPublicReadReceiptsEnabled = isSendPublicReadReceiptsEnabled,
     theme = Theme.System,
     showChangeThemeDialog = showChangeThemeDialog,
     eventSink = {}

@@ -81,6 +81,18 @@ fun AdvancedSettingsView(
                 onChange = { state.eventSink(AdvancedSettingsEvents.SetDeveloperModeEnabled(it)) },
             ),
         )
+        ListItem(
+            headlineContent = {
+                Text(text = stringResource(id = R.string.screen_advanced_settings_send_read_receipts))
+            },
+            supportingContent = {
+                Text(text = stringResource(id = R.string.screen_advanced_settings_send_read_receipts_description))
+            },
+            trailingContent = ListItemContent.Switch(
+                checked = state.isSendPublicReadReceiptsEnabled,
+                onChange = { state.eventSink(AdvancedSettingsEvents.SetSendPublicReadReceiptsEnabled(it)) },
+            ),
+        )
     }
 
     if (state.showChangeThemeDialog) {

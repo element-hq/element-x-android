@@ -16,16 +16,16 @@
 
 package io.element.android.libraries.featureflag.test
 
-import io.element.android.features.preferences.api.store.PreferencesStore
+import io.element.android.features.preferences.api.store.AppPreferencesStore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 
-class InMemoryPreferencesStore(
+class InMemoryAppPreferencesStore(
     isRichTextEditorEnabled: Boolean = false,
     isDeveloperModeEnabled: Boolean = false,
     customElementCallBaseUrl: String? = null,
     theme: String? = null,
-) : PreferencesStore {
+) : AppPreferencesStore {
     private val isRichTextEditorEnabled = MutableStateFlow(isRichTextEditorEnabled)
     private val isDeveloperModeEnabled = MutableStateFlow(isDeveloperModeEnabled)
     private val customElementCallBaseUrl = MutableStateFlow(customElementCallBaseUrl)

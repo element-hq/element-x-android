@@ -35,9 +35,11 @@ import io.element.android.features.poll.api.actions.SendPollResponseAction
 import io.element.android.features.poll.test.actions.FakeEndPollAction
 import io.element.android.features.poll.test.actions.FakeSendPollResponseAction
 import io.element.android.libraries.featureflag.api.FeatureFlags
+import io.element.android.libraries.featureflag.test.InMemorySessionPreferencesStore
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
+import io.element.android.libraries.matrix.api.timeline.ReceiptType
 import io.element.android.libraries.matrix.api.timeline.item.event.EventReaction
 import io.element.android.libraries.matrix.api.timeline.item.event.ReactionSender
 import io.element.android.libraries.matrix.api.timeline.item.event.Receipt
@@ -134,13 +136,41 @@ class TimelinePresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            assertThat(timeline.sendReadReceiptCount).isEqualTo(0)
+            assertThat(timeline.sentReadReceipts).isEmpty()
             val initialState = awaitFirstItem()
             awaitWithLatch { latch ->
                 timeline.sendReadReceiptLatch = latch
                 initialState.eventSink.invoke(TimelineEvents.OnScrollFinished(0))
             }
-            assertThat(timeline.sendReadReceiptCount).isEqualTo(1)
+            assertThat(timeline.sentReadReceipts).isNotEmpty()
+            assertThat(timeline.sentReadReceipts.first().second).isEqualTo(ReceiptType.READ)
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - on scroll finished send a private read receipt if an event is before the index and public read receipts are disabled`() = runTest {
+        val timeline = FakeMatrixTimeline(
+            initialTimelineItems = listOf(
+                MatrixTimelineItem.Event(FAKE_UNIQUE_ID, anEventTimelineItem())
+            )
+        )
+        val sessionPreferencesStore = InMemorySessionPreferencesStore(isSendPublicReadReceiptsEnabled = false)
+        val presenter = createTimelinePresenter(
+            timeline = timeline,
+            sessionPreferencesStore = sessionPreferencesStore,
+        )
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            assertThat(timeline.sentReadReceipts).isEmpty()
+            val initialState = awaitFirstItem()
+            awaitWithLatch { latch ->
+                timeline.sendReadReceiptLatch = latch
+                initialState.eventSink.invoke(TimelineEvents.OnScrollFinished(0))
+            }
+            assertThat(timeline.sentReadReceipts).isNotEmpty()
+            assertThat(timeline.sentReadReceipts.first().second).isEqualTo(ReceiptType.READ_PRIVATE)
             cancelAndIgnoreRemainingEvents()
         }
     }
@@ -156,13 +186,13 @@ class TimelinePresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            assertThat(timeline.sendReadReceiptCount).isEqualTo(0)
+            assertThat(timeline.sentReadReceipts).isEmpty()
             val initialState = awaitFirstItem()
             awaitWithLatch { latch ->
                 timeline.sendReadReceiptLatch = latch
                 initialState.eventSink.invoke(TimelineEvents.OnScrollFinished(1))
             }
-            assertThat(timeline.sendReadReceiptCount).isEqualTo(0)
+            assertThat(timeline.sentReadReceipts).isEmpty()
             cancelAndIgnoreRemainingEvents()
         }
     }
@@ -178,13 +208,13 @@ class TimelinePresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            assertThat(timeline.sendReadReceiptCount).isEqualTo(0)
+            assertThat(timeline.sentReadReceipts).isEmpty()
             val initialState = awaitFirstItem()
             awaitWithLatch { latch ->
                 timeline.sendReadReceiptLatch = latch
                 initialState.eventSink.invoke(TimelineEvents.OnScrollFinished(0))
             }
-            assertThat(timeline.sendReadReceiptCount).isEqualTo(0)
+            assertThat(timeline.sentReadReceipts).isEmpty()
             cancelAndIgnoreRemainingEvents()
         }
     }
@@ -418,6 +448,7 @@ class TimelinePresenterTest {
         messagesNavigator: FakeMessagesNavigator = FakeMessagesNavigator(),
         endPollAction: EndPollAction = FakeEndPollAction(),
         sendPollResponseAction: SendPollResponseAction = FakeSendPollResponseAction(),
+        sessionPreferencesStore: InMemorySessionPreferencesStore = InMemorySessionPreferencesStore(),
     ): TimelinePresenter {
         return TimelinePresenter(
             timelineItemsFactory = timelineItemsFactory,
@@ -430,6 +461,7 @@ class TimelinePresenterTest {
             redactedVoiceMessageManager = redactedVoiceMessageManager,
             endPollAction = endPollAction,
             sendPollResponseAction = sendPollResponseAction,
+            sessionPreferencesStore = sessionPreferencesStore,
         )
     }
 }

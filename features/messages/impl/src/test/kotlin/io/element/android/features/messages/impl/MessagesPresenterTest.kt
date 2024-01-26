@@ -59,7 +59,8 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
-import io.element.android.libraries.featureflag.test.InMemoryPreferencesStore
+import io.element.android.libraries.featureflag.test.InMemoryAppPreferencesStore
+import io.element.android.libraries.featureflag.test.InMemorySessionPreferencesStore
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
@@ -668,6 +669,8 @@ class MessagesPresenterTest {
     ): MessagesPresenter {
         val mediaSender = MediaSender(FakeMediaPreProcessor(), matrixRoom)
         val permissionsPresenterFactory = FakePermissionsPresenterFactory(permissionsPresenter)
+        val appPreferencesStore = InMemoryAppPreferencesStore(isRichTextEditorEnabled = true)
+        val sessionPreferencesStore = InMemorySessionPreferencesStore()
         val messageComposerPresenter = MessageComposerPresenter(
             appCoroutineScope = this,
             room = matrixRoom,
@@ -702,14 +705,14 @@ class MessagesPresenterTest {
             redactedVoiceMessageManager = FakeRedactedVoiceMessageManager(),
             endPollAction = FakeEndPollAction(),
             sendPollResponseAction = FakeSendPollResponseAction(),
+            sessionPreferencesStore = sessionPreferencesStore,
         )
         val timelinePresenterFactory = object : TimelinePresenter.Factory {
             override fun create(navigator: MessagesNavigator): TimelinePresenter {
                 return timelinePresenter
             }
         }
-        val preferencesStore = InMemoryPreferencesStore(isRichTextEditorEnabled = true)
-        val actionListPresenter = ActionListPresenter(preferencesStore = preferencesStore)
+        val actionListPresenter = ActionListPresenter(appPreferencesStore = appPreferencesStore)
         val readReceiptBottomSheetPresenter = ReadReceiptBottomSheetPresenter()
         val customReactionPresenter = CustomReactionPresenter(emojibaseProvider = FakeEmojibaseProvider())
         val reactionSummaryPresenter = ReactionSummaryPresenter(room = matrixRoom)
@@ -729,7 +732,7 @@ class MessagesPresenterTest {
             messageSummaryFormatter = FakeMessageSummaryFormatter(),
             navigator = navigator,
             clipboardHelper = clipboardHelper,
-            preferencesStore = preferencesStore,
+            appPreferencesStore = appPreferencesStore,
             featureFlagsService = FakeFeatureFlagService(),
             buildMeta = aBuildMeta(),
             dispatchers = coroutineDispatchers,

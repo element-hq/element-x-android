@@ -28,7 +28,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.snapshots.SnapshotStateMap
 import io.element.android.appconfig.ElementCallConfig
-import io.element.android.features.preferences.api.store.PreferencesStore
+import io.element.android.features.preferences.api.store.AppPreferencesStore
 import io.element.android.features.preferences.impl.tasks.ClearCacheUseCase
 import io.element.android.features.preferences.impl.tasks.ComputeCacheSizeUseCase
 import io.element.android.features.rageshake.api.preferences.RageshakePreferencesPresenter
@@ -51,7 +51,7 @@ class DeveloperSettingsPresenter @Inject constructor(
     private val computeCacheSizeUseCase: ComputeCacheSizeUseCase,
     private val clearCacheUseCase: ClearCacheUseCase,
     private val rageshakePresenter: RageshakePreferencesPresenter,
-    private val preferencesStore: PreferencesStore,
+    private val appPreferencesStore: AppPreferencesStore,
 ) : Presenter<DeveloperSettingsState> {
     @Composable
     override fun present(): DeveloperSettingsState {
@@ -69,7 +69,7 @@ class DeveloperSettingsPresenter @Inject constructor(
         val clearCacheAction = remember {
             mutableStateOf<AsyncData<Unit>>(AsyncData.Uninitialized)
         }
-        val customElementCallBaseUrl by preferencesStore
+        val customElementCallBaseUrl by appPreferencesStore
             .getCustomElementCallBaseUrlFlow()
             .collectAsState(initial = null)
 
@@ -100,7 +100,7 @@ class DeveloperSettingsPresenter @Inject constructor(
                 is DeveloperSettingsEvents.SetCustomElementCallBaseUrl -> coroutineScope.launch {
                     // If the URL is either empty or the default one, we want to save 'null' to remove the custom URL
                     val urlToSave = event.baseUrl.takeIf { !it.isNullOrEmpty() && it != ElementCallConfig.DEFAULT_BASE_URL }
-                    preferencesStore.setCustomElementCallBaseUrl(urlToSave)
+                    appPreferencesStore.setCustomElementCallBaseUrl(urlToSave)
                 }
                 DeveloperSettingsEvents.ClearCache -> coroutineScope.clearCache(clearCacheAction)
             }
