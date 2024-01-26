@@ -46,8 +46,13 @@ class TracingInitializer : Initializer<Unit> {
                 writesToFilesConfiguration = WriteToFilesConfiguration.Disabled
             )
         } else {
+            val config = if (BuildConfig.BUILD_TYPE == "nightly") {
+                TracingFilterConfigurations.nightly
+            } else {
+                TracingFilterConfigurations.release
+            }
             TracingConfiguration(
-                filterConfiguration = TracingFilterConfigurations.release,
+                filterConfiguration = config,
                 writesToLogcat = false,
                 writesToFilesConfiguration = WriteToFilesConfiguration.Enabled(
                     directory = bugReporter.logDirectory().absolutePath,
