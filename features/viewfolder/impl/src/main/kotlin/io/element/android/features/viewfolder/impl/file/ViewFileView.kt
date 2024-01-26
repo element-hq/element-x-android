@@ -218,24 +218,29 @@ private fun LineRow(
 private fun String.toColor(colorationMode: ColorationMode): Color {
     return when (colorationMode) {
         ColorationMode.Logcat -> when (getOrNull(31)) {
-            'D' -> Color(0xFF299999)
-            'I' -> Color(0xFFABC023)
-            'W' -> Color(0xFFBBB529)
-            'E' -> Color(0xFFFF6B68)
-            'A' -> Color(0xFFFF6B68)
+            'D' -> colorDebug
+            'I' -> colorInfo
+            'W' -> colorWarning
+            'E' -> colorError
+            'A' -> colorError
             else -> ElementTheme.colors.textPrimary
         }
         ColorationMode.RustLogs -> when (getOrNull(32)) {
             'E' -> ElementTheme.colors.textPrimary
-            'G' -> Color(0xFF299999)
-            '0' -> Color(0xFFABC023)
-            'N' -> Color(0xFFBBB529)
-            'R' -> Color(0xFFFF6B68)
+            'G' -> colorDebug
+            '0' -> colorInfo
+            'N' -> colorWarning
+            'R' -> colorError
             else -> ElementTheme.colors.textPrimary
         }
         ColorationMode.None -> ElementTheme.colors.textPrimary
     }
 }
+
+private val colorDebug = Color(0xFF299999)
+private val colorInfo = Color(0xFFABC023)
+private val colorWarning = Color(0xFFBBB529)
+private val colorError = Color(0xFFFF6B68)
 
 @PreviewsDayNight
 @Composable
