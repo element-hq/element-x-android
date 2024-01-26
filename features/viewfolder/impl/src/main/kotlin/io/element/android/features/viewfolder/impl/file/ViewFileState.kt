@@ -21,5 +21,12 @@ import io.element.android.libraries.architecture.AsyncData
 data class ViewFileState(
     val name: String,
     val lines: AsyncData<List<String>>,
+    val colorationMode: ColorationMode,
     val eventSink: (ViewFileEvents) -> Unit,
 )
+
+enum class ColorationMode {
+    Logcat,
+    Logs,
+    None,
+}

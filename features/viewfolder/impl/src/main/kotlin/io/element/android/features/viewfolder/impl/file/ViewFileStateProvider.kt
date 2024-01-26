@@ -51,5 +51,6 @@ fun aViewFileState(
 ) = ViewFileState(
     name = name,
     lines = lines,
+    colorationMode = ColorationMode.Logcat,
     eventSink = {},
 )

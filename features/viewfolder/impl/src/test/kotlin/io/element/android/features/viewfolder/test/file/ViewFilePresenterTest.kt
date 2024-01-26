@@ -20,6 +20,7 @@ import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import io.element.android.features.viewfolder.impl.file.ColorationMode
 import io.element.android.features.viewfolder.impl.file.FileContentReader
 import io.element.android.features.viewfolder.impl.file.FileSave
 import io.element.android.features.viewfolder.impl.file.FileShare
@@ -48,10 +49,35 @@ class ViewFilePresenterTest {
             val initialState = awaitItem()
             assertThat(initialState.name).isEqualTo("aName")
             assertThat(initialState.lines).isInstanceOf(AsyncData.Loading::class.java)
+            assertThat(initialState.colorationMode).isEqualTo(ColorationMode.None)
             val loadedState = awaitItem()
             val lines = (loadedState.lines as AsyncData.Success).data
             assertThat(lines.size).isEqualTo(1)
             assertThat(lines.first()).isEqualTo("aLine")
+        }
+    }
+
+    @Test
+    fun `present - coloration mode for logcat`() = runTest {
+        val presenter = createPresenter(name = "logcat.log")
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            assertThat(initialState.colorationMode).isEqualTo(ColorationMode.Logcat)
+            cancelAndConsumeRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - coloration mode for logs`() = runTest {
+        val presenter = createPresenter(name = "logs.date")
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            assertThat(initialState.colorationMode).isEqualTo(ColorationMode.Logs)
+            cancelAndConsumeRemainingEvents()
         }
     }
 
