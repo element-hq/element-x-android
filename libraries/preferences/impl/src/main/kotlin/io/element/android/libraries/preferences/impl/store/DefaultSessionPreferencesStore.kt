@@ -24,6 +24,7 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.preferencesDataStoreFile
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.features.preferences.api.store.SessionPreferencesStore
+import io.element.android.libraries.androidutils.file.safeDelete
 import io.element.android.libraries.androidutils.hash.hash
 import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.di.SessionScope
@@ -49,7 +50,7 @@ class DefaultSessionPreferencesStore @Inject constructor(
     override fun isSendPublicReadReceiptsEnabled(): Flow<Boolean> = get(sendPublicReadReceiptsKey, true)
 
     override suspend fun clear() {
-        store.edit { it.clear() }
+        dataStoreFile.safeDelete()
     }
 
     private suspend fun <T> update(key: Preferences.Key<T>, value: T) {
