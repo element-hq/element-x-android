@@ -115,6 +115,9 @@ class FakeMatrixRoom(
     private var canUserJoinCallResult: Result<Boolean> = Result.success(true)
     var sendMessageMentions = emptyList<Mention>()
     val editMessageCalls = mutableListOf<Pair<String, String?>>()
+    private val _typingRecord = mutableListOf<Boolean>()
+    val typingRecord: List<Boolean>
+        get() = _typingRecord
 
     var sendMediaCount = 0
         private set
@@ -425,6 +428,11 @@ class FakeMatrixRoom(
         waveform: List<Float>,
         progressCallback: ProgressCallback?
     ): Result<MediaUploadHandler> = fakeSendMedia(progressCallback)
+
+    override suspend fun typingNotice(isTyping: Boolean): Result<Unit> {
+        _typingRecord += isTyping
+        return Result.success(Unit)
+    }
 
     override suspend fun generateWidgetWebViewUrl(
         widgetSettings: MatrixWidgetSettings,
