@@ -210,7 +210,7 @@
   <string name="error_some_messages_have_not_been_sent">"Néhány üzenet nem került elküldésre"</string>
   <string name="error_unknown">"Elnézést, hiba történt"</string>
   <string name="invite_friends_rich_title">"🔐️ Csatlakozz hozzám itt: %1$s"</string>
-  <string name="invite_friends_text">"Beszélj velem az %1$s használatával: %2$s"</string>
+  <string name="invite_friends_text">"Beszélgessünk a(z) %1$s: %2$s -n"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <plurals name="a11y_digits_entered">
     <item quantity="one">"%1$d megadott számjegy"</item>

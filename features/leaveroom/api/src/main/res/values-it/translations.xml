@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="leave_conversation_alert_subtitle">"Vuoi davvero abbandonare questa conversazione? La conversazione non è pubblica e non potrai rientrare senza un invito."</string>
   <string name="leave_room_alert_empty_subtitle">"Sei sicuro di voler lasciare questa stanza? Sei l\'unica persona presente. Se esci, nessuno potrà unirsi in futuro, te compreso."</string>
   <string name="leave_room_alert_private_subtitle">"Sei sicuro di voler lasciare questa stanza? Questa stanza non è pubblica e non potrai rientrare senza un invito."</string>
   <string name="leave_room_alert_subtitle">"Sei sicuro di voler lasciare la stanza?"</string>
