@@ -27,9 +27,6 @@ class DefaultSessionComponentFactory @Inject constructor(
     private val sessionComponentBuilder: SessionComponent.Builder
 ) : SessionComponentFactory {
     override fun create(client: MatrixClient): Any {
-        return sessionComponentBuilder
-            .client(client)
-            .sessionCoroutineScope(client.sessionCoroutineScope)
-            .build()
+        return sessionComponentBuilder.client(client).build()
     }
 }
