@@ -38,6 +38,7 @@ import timber.log.Timber
 /**
  * This class is a wrapper around a [MatrixTimeline] that will be created asynchronously.
  */
+@Suppress("unused")
 class AsyncMatrixTimeline(
     coroutineScope: CoroutineScope,
     dispatcher: CoroutineDispatcher,

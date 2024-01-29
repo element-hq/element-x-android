@@ -50,7 +50,6 @@ import io.element.android.libraries.matrix.impl.notificationsettings.RustNotific
 import io.element.android.libraries.matrix.impl.poll.toInner
 import io.element.android.libraries.matrix.impl.room.location.toInner
 import io.element.android.libraries.matrix.impl.room.member.RoomMemberListFetcher
-import io.element.android.libraries.matrix.impl.timeline.AsyncMatrixTimeline
 import io.element.android.libraries.matrix.impl.timeline.RustMatrixTimeline
 import io.element.android.libraries.matrix.impl.util.mxCallbackFlow
 import io.element.android.libraries.matrix.impl.widget.RustWidgetDriver
@@ -543,14 +542,6 @@ class RustMatrixRoom(
                 }
             },
         )
-    }
-
-    override fun pollHistory() = AsyncMatrixTimeline(
-        coroutineScope = roomCoroutineScope,
-        dispatcher = roomDispatcher
-    ) {
-        val innerTimeline = innerRoom.pollHistory()
-        createMatrixTimeline(innerTimeline)
     }
 
     private fun sendAttachment(files: List<File>, handle: () -> SendAttachmentJoinHandle): Result<MediaUploadHandler> {
