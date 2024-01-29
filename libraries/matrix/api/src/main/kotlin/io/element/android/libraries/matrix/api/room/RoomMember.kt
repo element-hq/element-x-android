@@ -27,7 +27,19 @@ data class RoomMember(
     val powerLevel: Long,
     val normalizedPowerLevel: Long,
     val isIgnored: Boolean,
-)
+) {
+    /**
+     * Disambiguated display name for the RoomMember.
+     * If the display name is null, the user ID is returned.
+     * If the display name is ambiguous, the user ID is appended in parentheses.
+     * Otherwise, the display name is returned.
+     */
+    val disambiguatedDisplayName: String = when {
+        displayName == null -> userId.value
+        isNameAmbiguous -> "$displayName ($userId)"
+        else -> displayName
+    }
+}
 
 enum class RoomMembershipState {
     BAN,

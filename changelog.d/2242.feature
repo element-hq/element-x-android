@@ -1,0 +1,1 @@
+Rendering typing notification

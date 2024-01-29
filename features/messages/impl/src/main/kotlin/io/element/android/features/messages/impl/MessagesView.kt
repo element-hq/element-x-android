@@ -384,6 +384,7 @@ private fun MessagesViewContent(
                     modifier = Modifier.padding(paddingValues),
                     state = state.timelineState,
                     roomName = state.roomName.dataOrNull(),
+                    typingNotificationState = state.typingNotificationState,
                     onMessageClicked = onMessageClicked,
                     onMessageLongClicked = onMessageLongClicked,
                     onUserDataClicked = onUserDataClicked,

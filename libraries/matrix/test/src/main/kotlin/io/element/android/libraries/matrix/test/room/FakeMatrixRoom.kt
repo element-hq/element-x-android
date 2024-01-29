@@ -170,6 +170,9 @@ class FakeMatrixRoom(
     private val _roomInfoFlow: MutableSharedFlow<MatrixRoomInfo> = MutableSharedFlow(replay = 1)
     override val roomInfoFlow: Flow<MatrixRoomInfo> = _roomInfoFlow
 
+    private val _roomTypingMembersFlow: MutableSharedFlow<List<UserId>> = MutableSharedFlow(replay = 1)
+    override val roomTypingMembersFlow: Flow<List<UserId>> = _roomTypingMembersFlow
+
     override val membersStateFlow: MutableStateFlow<MatrixRoomMembersState> = MutableStateFlow(MatrixRoomMembersState.Unknown)
 
     override val roomNotificationSettingsStateFlow: MutableStateFlow<MatrixRoomNotificationSettingsState> =
@@ -588,6 +591,10 @@ class FakeMatrixRoom(
 
     fun givenRoomInfo(roomInfo: MatrixRoomInfo) {
         _roomInfoFlow.tryEmit(roomInfo)
+    }
+
+    fun givenRoomTypingMembers(typingMembers: List<UserId>) {
+        _roomTypingMembersFlow.tryEmit(typingMembers)
     }
 }
 
