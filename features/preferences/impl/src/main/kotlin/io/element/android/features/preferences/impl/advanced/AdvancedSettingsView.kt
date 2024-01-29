@@ -66,8 +66,8 @@ fun AdvancedSettingsView(
             },
             trailingContent = ListItemContent.Switch(
                 checked = state.isRichTextEditorEnabled,
-                onChange = { state.eventSink(AdvancedSettingsEvents.SetRichTextEditorEnabled(it)) },
             ),
+            onClick = { state.eventSink(AdvancedSettingsEvents.SetRichTextEditorEnabled(!state.isRichTextEditorEnabled)) }
         )
         ListItem(
             headlineContent = {
@@ -78,8 +78,8 @@ fun AdvancedSettingsView(
             },
             trailingContent = ListItemContent.Switch(
                 checked = state.isDeveloperModeEnabled,
-                onChange = { state.eventSink(AdvancedSettingsEvents.SetDeveloperModeEnabled(it)) },
             ),
+            onClick = { state.eventSink(AdvancedSettingsEvents.SetDeveloperModeEnabled(!state.isDeveloperModeEnabled)) }
         )
         ListItem(
             headlineContent = {
@@ -90,8 +90,8 @@ fun AdvancedSettingsView(
             },
             trailingContent = ListItemContent.Switch(
                 checked = state.isSendPublicReadReceiptsEnabled,
-                onChange = { state.eventSink(AdvancedSettingsEvents.SetSendPublicReadReceiptsEnabled(it)) },
             ),
+            onClick = { state.eventSink(AdvancedSettingsEvents.SetSendPublicReadReceiptsEnabled(!state.isSendPublicReadReceiptsEnabled)) }
         )
     }
 
