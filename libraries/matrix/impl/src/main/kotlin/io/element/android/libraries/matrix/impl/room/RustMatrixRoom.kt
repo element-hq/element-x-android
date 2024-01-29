@@ -520,6 +520,10 @@ class RustMatrixRoom(
         )
     }
 
+    override suspend fun typingNotice(isTyping: Boolean) = runCatching {
+        innerRoom.typingNotice(isTyping)
+    }
+
     override suspend fun generateWidgetWebViewUrl(
         widgetSettings: MatrixWidgetSettings,
         clientId: String,

@@ -225,6 +225,12 @@ interface MatrixRoom : Closeable {
     ): Result<MediaUploadHandler>
 
     /**
+     * Send a typing notification.
+     * @param isTyping True if the user is typing, false otherwise.
+     */
+    suspend fun typingNotice(isTyping: Boolean): Result<Unit>
+
+    /**
      * Generates a Widget url to display in a [android.webkit.WebView] given the provided parameters.
      * @param widgetSettings The widget settings to use.
      * @param clientId The client id to use. It should be unique per app install.

@@ -112,6 +112,7 @@ fun TextComposer(
     onSendVoiceMessage: () -> Unit,
     onDeleteVoiceMessage: () -> Unit,
     onError: (Throwable) -> Unit,
+    onTyping: (Boolean) -> Unit,
     onSuggestionReceived: (Suggestion?) -> Unit,
     onRichContentSelected: ((Uri) -> Unit)?,
     modifier: Modifier = Modifier,
@@ -165,6 +166,7 @@ fun TextComposer(
                 resolveMentionDisplay = { text, url -> TextDisplay.Custom(mentionSpanProvider.getMentionSpanFor(text, url)) },
                 resolveRoomMentionDisplay = { TextDisplay.Custom(mentionSpanProvider.getMentionSpanFor("@room", "#")) },
                 onError = onError,
+                onTyping = onTyping,
                 onRichContentSelected = onRichContentSelected,
             )
         }
@@ -400,9 +402,10 @@ private fun TextInput(
     onResetComposerMode: () -> Unit,
     resolveRoomMentionDisplay: () -> TextDisplay,
     resolveMentionDisplay: (text: String, url: String) -> TextDisplay,
+    onError: (Throwable) -> Unit,
+    onTyping: (Boolean) -> Unit,
+    onRichContentSelected: ((Uri) -> Unit)?,
     modifier: Modifier = Modifier,
-    onError: (Throwable) -> Unit = {},
-    onRichContentSelected: ((Uri) -> Unit)? = null,
 ) {
     val bgColor = ElementTheme.colors.bgSubtleSecondary
     val borderColor = ElementTheme.colors.borderDisabled
@@ -451,6 +454,7 @@ private fun TextInput(
                 resolveRoomMentionDisplay = resolveRoomMentionDisplay,
                 onError = onError,
                 onRichContentSelected = onRichContentSelected,
+                onTyping = onTyping,
             )
         }
     }
@@ -920,6 +924,7 @@ private fun ATextComposer(
         onSendVoiceMessage = {},
         onDeleteVoiceMessage = {},
         onError = {},
+        onTyping = {},
         onSuggestionReceived = {},
         onRichContentSelected = null,
     )
