@@ -54,8 +54,6 @@ fun CheckableUserRow(
         )
 
         Checkbox(
-            modifier = Modifier
-                .padding(end = 16.dp),
             checked = checked,
             onCheckedChange = null,
             enabled = enabled,
