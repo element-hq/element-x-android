@@ -102,9 +102,10 @@ class RustMatrixClient(
     private val clock: SystemClock,
 ) : MatrixClient {
     override val sessionId: UserId = UserId(client.userId())
+    override val sessionCoroutineScope = appCoroutineScope.childScope(dispatchers.main, "Session-$sessionId")
+
     private val innerRoomListService = syncService.roomListService()
     private val sessionDispatcher = dispatchers.io.limitedParallelism(64)
-    private val sessionCoroutineScope = appCoroutineScope.childScope(dispatchers.main, "Session-$sessionId")
     private val rustSyncService = RustSyncService(syncService, sessionCoroutineScope)
     private val verificationService = RustSessionVerificationService(rustSyncService, sessionCoroutineScope)
     private val pushersService = RustPushersService(

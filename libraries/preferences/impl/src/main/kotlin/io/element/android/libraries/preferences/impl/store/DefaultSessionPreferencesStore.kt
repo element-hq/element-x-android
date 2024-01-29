@@ -29,9 +29,13 @@ import io.element.android.libraries.androidutils.hash.hash
 import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.di.SingleIn
+import io.element.android.libraries.di.annotations.SessionCoroutineScope
+import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.user.CurrentSessionIdHolder
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import java.io.File
 import javax.inject.Inject
 
 @ContributesBinding(SessionScope::class)
@@ -39,12 +43,18 @@ import javax.inject.Inject
 class DefaultSessionPreferencesStore @Inject constructor(
     @ApplicationContext context: Context,
     currentSessionIdHolder: CurrentSessionIdHolder,
+    @SessionCoroutineScope sessionCoroutineScope: CoroutineScope,
 ) : SessionPreferencesStore {
+    companion object {
+        fun storeFile(context: Context, sessionId: SessionId): File {
+            val hashedUserId = sessionId.value.hash().take(16)
+            return context.preferencesDataStoreFile("session_${hashedUserId}_preferences")
+        }
+    }
     private val sendPublicReadReceiptsKey = booleanPreferencesKey("sendPublicReadReceipts")
-    private val hashedUserId = currentSessionIdHolder.current.value.hash().take(16)
 
-    private val dataStoreFile = context.preferencesDataStoreFile("session_${hashedUserId}_preferences")
-    private val store = PreferenceDataStoreFactory.create { dataStoreFile }
+    private val dataStoreFile = storeFile(context, currentSessionIdHolder.current)
+    private val store = PreferenceDataStoreFactory.create(scope = sessionCoroutineScope) { dataStoreFile }
 
     override suspend fun setSendPublicReadReceipts(enabled: Boolean) = update(sendPublicReadReceiptsKey, enabled)
     override fun isSendPublicReadReceiptsEnabled(): Flow<Boolean> = get(sendPublicReadReceiptsKey, true)

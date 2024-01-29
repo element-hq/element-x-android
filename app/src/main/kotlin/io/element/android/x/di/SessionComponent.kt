@@ -24,7 +24,9 @@ import io.element.android.libraries.architecture.NodeFactoriesBindings
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.di.SingleIn
+import io.element.android.libraries.di.annotations.SessionCoroutineScope
 import io.element.android.libraries.matrix.api.MatrixClient
+import kotlinx.coroutines.CoroutineScope
 
 @SingleIn(SessionScope::class)
 @MergeSubcomponent(SessionScope::class)
@@ -33,6 +35,10 @@ interface SessionComponent : NodeFactoriesBindings {
     interface Builder {
         @BindsInstance
         fun client(matrixClient: MatrixClient): Builder
+
+        @BindsInstance
+        fun sessionCoroutineScope(@SessionCoroutineScope coroutineScope: CoroutineScope): Builder
+
         fun build(): SessionComponent
     }
 
