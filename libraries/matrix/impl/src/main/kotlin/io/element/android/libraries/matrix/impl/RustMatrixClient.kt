@@ -76,11 +76,15 @@ import kotlinx.coroutines.withTimeout
 import org.matrix.rustcomponents.sdk.BackupState
 import org.matrix.rustcomponents.sdk.Client
 import org.matrix.rustcomponents.sdk.ClientDelegate
+import org.matrix.rustcomponents.sdk.FilterStateEventType
+import org.matrix.rustcomponents.sdk.FilterTimelineEventType
 import org.matrix.rustcomponents.sdk.NotificationProcessSetup
 import org.matrix.rustcomponents.sdk.PowerLevels
 import org.matrix.rustcomponents.sdk.Room
 import org.matrix.rustcomponents.sdk.RoomListItem
 import org.matrix.rustcomponents.sdk.TaskHandle
+import org.matrix.rustcomponents.sdk.TimelineEventType
+import org.matrix.rustcomponents.sdk.TimelineEventTypeFilter
 import org.matrix.rustcomponents.sdk.use
 import timber.log.Timber
 import java.io.File
@@ -196,6 +200,25 @@ class RustMatrixClient(
             ),
         )
 
+    private val eventFilters = TimelineEventTypeFilter.exclude(
+        listOf(
+            FilterStateEventType.ROOM_ALIASES,
+            FilterStateEventType.ROOM_CANONICAL_ALIAS,
+            FilterStateEventType.ROOM_GUEST_ACCESS,
+            FilterStateEventType.ROOM_HISTORY_VISIBILITY,
+            FilterStateEventType.ROOM_JOIN_RULES,
+            FilterStateEventType.ROOM_PINNED_EVENTS,
+            FilterStateEventType.ROOM_POWER_LEVELS,
+            FilterStateEventType.ROOM_SERVER_ACL,
+            FilterStateEventType.ROOM_TOMBSTONE,
+            FilterStateEventType.SPACE_CHILD,
+            FilterStateEventType.SPACE_PARENT,
+            FilterStateEventType.POLICY_RULE_ROOM,
+            FilterStateEventType.POLICY_RULE_SERVER,
+            FilterStateEventType.POLICY_RULE_USER,
+        ).map(FilterTimelineEventType::State)
+    )
+
     override val roomListService: RoomListService
         get() = rustRoomListService
 
@@ -246,7 +269,12 @@ class RustMatrixClient(
 
     private suspend fun pairOfRoom(roomId: RoomId): Pair<RoomListItem, Room>? {
         val cachedRoomListItem = innerRoomListService.roomOrNull(roomId.value)
-        val fullRoom = cachedRoomListItem?.fullRoom()
+        val fullRoom = cachedRoomListItem?.let { roomListItem ->
+            if (!roomListItem.isTimelineInitialized()) {
+                roomListItem.initTimeline(eventFilters)
+            }
+            roomListItem.fullRoom()
+        }
         return if (cachedRoomListItem == null || fullRoom == null) {
             Timber.d("No room cached for $roomId")
             null
