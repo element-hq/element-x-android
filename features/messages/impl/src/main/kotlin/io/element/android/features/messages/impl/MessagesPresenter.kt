@@ -155,7 +155,7 @@ class MessagesPresenter @AssistedInject constructor(
             mutableStateOf(false)
         }
 
-        LaunchedEffect(Unit) {
+        LaunchedEffect(syncUpdateFlow) {
             withContext(dispatchers.io) {
                 canJoinCall = room.canUserJoinCall(room.sessionId).getOrDefault(false)
             }
