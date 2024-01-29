@@ -47,7 +47,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -90,6 +89,7 @@ fun TimelineView(
     onMoreReactionsClicked: (TimelineItem.Event) -> Unit,
     onReadReceiptClick: (TimelineItem.Event) -> Unit,
     modifier: Modifier = Modifier,
+    forceJumpToBottomVisibility: Boolean = false
 ) {
     fun onReachedLoadMore() {
         state.eventSink(TimelineEvents.LoadMore)
@@ -164,6 +164,7 @@ fun TimelineView(
         TimelineScrollHelper(
             isTimelineEmpty = state.timelineItems.isEmpty(),
             lazyListState = lazyListState,
+            forceJumpToBottomVisibility = forceJumpToBottomVisibility,
             newEventState = state.newEventState,
             onScrollFinishedAt = ::onScrollFinishedAt
         )
@@ -175,6 +176,7 @@ private fun BoxScope.TimelineScrollHelper(
     isTimelineEmpty: Boolean,
     lazyListState: LazyListState,
     newEventState: NewEventState,
+    forceJumpToBottomVisibility: Boolean,
     onScrollFinishedAt: (Int) -> Unit,
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -212,7 +214,7 @@ private fun BoxScope.TimelineScrollHelper(
 
     JumpToBottomButton(
         // Use inverse of canAutoScroll otherwise we might briefly see the before the scroll animation is triggered
-        isVisible = !canAutoScroll,
+        isVisible = !canAutoScroll || forceJumpToBottomVisibility,
         modifier = Modifier
             .align(Alignment.BottomEnd)
             .padding(end = 24.dp, bottom = 12.dp),
@@ -228,7 +230,7 @@ private fun JumpToBottomButton(
 ) {
     AnimatedVisibility(
         modifier = modifier,
-        visible = isVisible || LocalInspectionMode.current,
+        visible = isVisible,
         enter = scaleIn(animationSpec = tween(100)),
         exit = scaleOut(animationSpec = tween(100)),
     ) {
@@ -273,6 +275,7 @@ internal fun TimelineViewPreview(
             onMoreReactionsClicked = {},
             onSwipeToReply = {},
             onReadReceiptClick = {},
+            forceJumpToBottomVisibility = true,
         )
     }
 }
