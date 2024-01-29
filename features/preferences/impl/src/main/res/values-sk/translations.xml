@@ -6,6 +6,8 @@
   <string name="screen_advanced_settings_developer_mode">"Vývojársky režim"</string>
   <string name="screen_advanced_settings_developer_mode_description">"Umožniť prístup k možnostiam a funkciám pre vývojárov."</string>
   <string name="screen_advanced_settings_rich_text_editor_description">"Vypnite rozšírený textový editor na ručné písanie Markdown."</string>
+  <string name="screen_advanced_settings_send_read_receipts">"Potvrdenia o prečítaní"</string>
+  <string name="screen_advanced_settings_send_read_receipts_description">"Ak je táto funkcia vypnutá, vaše potvrdenia o prečítaní sa nebudú nikomu odosielať. Stále budete dostávať potvrdenia o prečítaní od ostatných používateľov."</string>
   <string name="screen_advanced_settings_view_source_description">"Povoliť možnosť zobrazenia zdroja správy na časovej osi."</string>
   <string name="screen_edit_profile_display_name">"Zobrazované meno"</string>
   <string name="screen_edit_profile_display_name_placeholder">"Vaše zobrazované meno"</string>
