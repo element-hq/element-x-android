@@ -22,6 +22,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.material3.CheckboxColors
 import androidx.compose.material3.CheckboxDefaults
+import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -57,7 +58,7 @@ fun Checkbox(
                 onCheckedChange(!checked)
             }
         },
-        modifier = modifier,
+        modifier = modifier.minimumInteractiveComponentSize(),
         enabled = enabled,
         colors = colors,
         interactionSource = interactionSource,
