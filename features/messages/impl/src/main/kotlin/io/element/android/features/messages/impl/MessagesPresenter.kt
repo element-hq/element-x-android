@@ -155,7 +155,7 @@ class MessagesPresenter @AssistedInject constructor(
             mutableStateOf(false)
         }
 
-        LaunchedEffect(syncUpdateFlow) {
+        LaunchedEffect(syncUpdateFlow.value) {
             withContext(dispatchers.io) {
                 canJoinCall = room.canUserJoinCall(room.sessionId).getOrDefault(false)
             }
@@ -163,7 +163,7 @@ class MessagesPresenter @AssistedInject constructor(
 
         val inviteProgress = remember { mutableStateOf<AsyncData<Unit>>(AsyncData.Uninitialized) }
         var showReinvitePrompt by remember { mutableStateOf(false) }
-        LaunchedEffect(hasDismissedInviteDialog, composerState.hasFocus, syncUpdateFlow) {
+        LaunchedEffect(hasDismissedInviteDialog, composerState.hasFocus, syncUpdateFlow.value) {
             withContext(dispatchers.io) {
                 showReinvitePrompt = !hasDismissedInviteDialog && composerState.hasFocus && room.isDirect && room.activeMemberCount == 1L
             }
