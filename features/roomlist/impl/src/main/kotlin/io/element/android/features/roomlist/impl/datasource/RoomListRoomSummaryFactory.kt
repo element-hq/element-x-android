@@ -43,6 +43,7 @@ class RoomListRoomSummaryFactory @Inject constructor(
             avatarData = AvatarData(id, "S", size = AvatarSize.RoomListItem),
             numberOfUnreadMessages = 0,
             numberOfUnreadMentions = 0,
+            numberOfUnreadNotifications = 0,
             userDefinedNotificationMode = null,
             hasRoomCall = false,
             isDm = false,
@@ -69,6 +70,7 @@ class RoomListRoomSummaryFactory @Inject constructor(
             name = roomSummary.details.name,
             numberOfUnreadMessages = roomSummary.details.numUnreadMessages,
             numberOfUnreadMentions = roomSummary.details.numUnreadMentions,
+            numberOfUnreadNotifications = roomSummary.details.numUnreadNotifications,
             timestamp = lastMessageTimestampFormatter.format(roomSummary.details.lastMessageTimestamp),
             lastMessage = roomSummary.details.lastMessage?.let { message ->
                 roomLastMessageFormatter.format(message.event, roomSummary.details.isDirect)
