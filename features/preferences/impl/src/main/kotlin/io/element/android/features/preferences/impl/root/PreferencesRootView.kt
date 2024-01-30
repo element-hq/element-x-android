@@ -22,6 +22,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.InsertChart
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -164,16 +165,36 @@ fun PreferencesRootView(
             style = ListItemStyle.Destructive,
             onClick = onSignOutClicked,
         )
-        Text(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 40.dp, bottom = 24.dp),
-            textAlign = TextAlign.Center,
-            text = "${state.version}\n${state.deviceId}",
-            style = ElementTheme.typography.fontBodySmRegular,
-            color = ElementTheme.materialColors.secondary,
+        Footer(
+            version = state.version,
+            deviceId = state.deviceId,
         )
     }
+}
+
+@Composable
+private fun Footer(
+    version: String,
+    deviceId: String?
+) {
+    val text = remember(version, deviceId) {
+        buildString {
+            append(version)
+            if (deviceId != null) {
+                append("\n")
+                append(deviceId)
+            }
+        }
+    }
+    Text(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 40.dp, bottom = 24.dp),
+        textAlign = TextAlign.Center,
+        text = text,
+        style = ElementTheme.typography.fontBodySmRegular,
+        color = ElementTheme.materialColors.secondary,
+    )
 }
 
 @Composable
