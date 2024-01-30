@@ -665,7 +665,6 @@ class MessagesPresenterTest {
         clipboardHelper: FakeClipboardHelper = FakeClipboardHelper(),
         analyticsService: FakeAnalyticsService = FakeAnalyticsService(),
         permissionsPresenter: PermissionsPresenter = FakePermissionsPresenter(),
-        currentSessionIdHolder: CurrentSessionIdHolder = CurrentSessionIdHolder(FakeMatrixClient(A_SESSION_ID)),
     ): MessagesPresenter {
         val mediaSender = MediaSender(FakeMediaPreProcessor(), matrixRoom)
         val permissionsPresenterFactory = FakePermissionsPresenterFactory(permissionsPresenter)
@@ -736,7 +735,6 @@ class MessagesPresenterTest {
             featureFlagsService = FakeFeatureFlagService(),
             buildMeta = aBuildMeta(),
             dispatchers = coroutineDispatchers,
-            currentSessionIdHolder = currentSessionIdHolder,
             htmlConverterProvider = FakeHtmlConverterProvider(),
         )
     }

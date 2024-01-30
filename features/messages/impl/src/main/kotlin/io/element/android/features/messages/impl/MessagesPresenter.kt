@@ -81,7 +81,6 @@ import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomInfo
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.api.room.MessageEventType
-import io.element.android.libraries.matrix.api.user.CurrentSessionIdHolder
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailInfo
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailType
 import io.element.android.libraries.matrix.ui.room.canRedactOtherAsState
@@ -113,7 +112,6 @@ class MessagesPresenter @AssistedInject constructor(
     private val htmlConverterProvider: HtmlConverterProvider,
     @Assisted private val navigator: MessagesNavigator,
     private val buildMeta: BuildMeta,
-    private val currentSessionIdHolder: CurrentSessionIdHolder,
 ) : Presenter<MessagesState> {
     private val timelinePresenter = timelinePresenterFactory.create(navigator = navigator)
 
@@ -124,7 +122,7 @@ class MessagesPresenter @AssistedInject constructor(
 
     @Composable
     override fun present(): MessagesState {
-        htmlConverterProvider.Update(currentUserId = currentSessionIdHolder.current)
+        htmlConverterProvider.Update(currentUserId = room.sessionId)
 
         val roomInfo by room.roomInfoFlow.collectAsState(null)
         val localCoroutineScope = rememberCoroutineScope()
@@ -157,15 +155,15 @@ class MessagesPresenter @AssistedInject constructor(
             mutableStateOf(false)
         }
 
-        LaunchedEffect(currentSessionIdHolder.current) {
+        LaunchedEffect(syncUpdateFlow.value) {
             withContext(dispatchers.io) {
-                canJoinCall = room.canUserJoinCall(userId = currentSessionIdHolder.current).getOrDefault(false)
+                canJoinCall = room.canUserJoinCall(room.sessionId).getOrDefault(false)
             }
         }
 
         val inviteProgress = remember { mutableStateOf<AsyncData<Unit>>(AsyncData.Uninitialized) }
         var showReinvitePrompt by remember { mutableStateOf(false) }
-        LaunchedEffect(hasDismissedInviteDialog, composerState.hasFocus, syncUpdateFlow) {
+        LaunchedEffect(hasDismissedInviteDialog, composerState.hasFocus, syncUpdateFlow.value) {
             withContext(dispatchers.io) {
                 showReinvitePrompt = !hasDismissedInviteDialog && composerState.hasFocus && room.isDirect && room.activeMemberCount == 1L
             }
@@ -315,7 +313,7 @@ class MessagesPresenter @AssistedInject constructor(
         }
     }
 
-    private suspend fun handleActionEdit(
+    private fun handleActionEdit(
         targetEvent: TimelineItem.Event,
         composerState: MessageComposerState,
         enableTextFormatting: Boolean,
