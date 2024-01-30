@@ -22,29 +22,31 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.preferencesDataStoreFile
-import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.features.preferences.api.store.SessionPreferencesStore
 import io.element.android.libraries.androidutils.file.safeDelete
 import io.element.android.libraries.androidutils.hash.hash
-import io.element.android.libraries.di.ApplicationContext
-import io.element.android.libraries.di.SessionScope
-import io.element.android.libraries.di.SingleIn
-import io.element.android.libraries.matrix.api.user.CurrentSessionIdHolder
+import io.element.android.libraries.di.annotations.SessionCoroutineScope
+import io.element.android.libraries.matrix.api.core.SessionId
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import javax.inject.Inject
+import java.io.File
 
-@ContributesBinding(SessionScope::class)
-@SingleIn(SessionScope::class)
-class DefaultSessionPreferencesStore @Inject constructor(
-    @ApplicationContext context: Context,
-    currentSessionIdHolder: CurrentSessionIdHolder,
+class DefaultSessionPreferencesStore(
+    context: Context,
+    sessionId: SessionId,
+    @SessionCoroutineScope sessionCoroutineScope: CoroutineScope,
 ) : SessionPreferencesStore {
+    companion object {
+        fun storeFile(context: Context, sessionId: SessionId): File {
+            val hashedUserId = sessionId.value.hash().take(16)
+            return context.preferencesDataStoreFile("session_${hashedUserId}_preferences")
+        }
+    }
     private val sendPublicReadReceiptsKey = booleanPreferencesKey("sendPublicReadReceipts")
-    private val hashedUserId = currentSessionIdHolder.current.value.hash().take(16)
 
-    private val dataStoreFile = context.preferencesDataStoreFile("session_${hashedUserId}_preferences")
-    private val store = PreferenceDataStoreFactory.create { dataStoreFile }
+    private val dataStoreFile = storeFile(context, sessionId)
+    private val store = PreferenceDataStoreFactory.create(scope = sessionCoroutineScope) { dataStoreFile }
 
     override suspend fun setSendPublicReadReceipts(enabled: Boolean) = update(sendPublicReadReceiptsKey, enabled)
     override fun isSendPublicReadReceiptsEnabled(): Flow<Boolean> = get(sendPublicReadReceiptsKey, true)
