@@ -46,8 +46,8 @@ import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.matrix.api.user.MatrixUser
-import io.element.android.libraries.matrix.ui.components.CheckableUnresolvedUserRow
 import io.element.android.libraries.matrix.ui.components.CheckableUserRow
+import io.element.android.libraries.matrix.ui.components.CheckableUserRowData
 import io.element.android.libraries.matrix.ui.components.SelectedUsersList
 import io.element.android.libraries.matrix.ui.model.getAvatarData
 import io.element.android.libraries.matrix.ui.model.getBestName
@@ -186,18 +186,16 @@ private fun RoomInviteMembersSearchBar(
 
             LazyColumn {
                 itemsIndexed(results) { index, invitableUser ->
-                    if (invitableUser.isUnresolved && !invitableUser.isAlreadyInvited && !invitableUser.isAlreadyJoined) {
-                        CheckableUnresolvedUserRow(
-                            checked = invitableUser.isSelected,
+                    val notInvitedOrJoined = !(invitableUser.isAlreadyInvited || invitableUser.isAlreadyJoined)
+                    val isUnresolved = invitableUser.isUnresolved && notInvitedOrJoined
+                    val enabled = isUnresolved || notInvitedOrJoined
+                    val data = if (isUnresolved) {
+                        CheckableUserRowData.Unresolved(
                             avatarData = invitableUser.matrixUser.getAvatarData(AvatarSize.UserListItem),
                             id = invitableUser.matrixUser.userId.value,
-                            onCheckedChange = { onUserToggled(invitableUser.matrixUser) },
-                            modifier = Modifier.fillMaxWidth()
                         )
                     } else {
-                        CheckableUserRow(
-                            checked = invitableUser.isSelected,
-                            enabled = !invitableUser.isAlreadyInvited && !invitableUser.isAlreadyJoined,
+                        CheckableUserRowData.Resolved(
                             avatarData = invitableUser.matrixUser.getAvatarData(AvatarSize.UserListItem),
                             name = invitableUser.matrixUser.getBestName(),
                             subtext = when {
@@ -207,11 +205,16 @@ private fun RoomInviteMembersSearchBar(
                                 // Otherwise show the ID, unless that's already used for their name
                                 invitableUser.matrixUser.displayName.isNullOrEmpty().not() -> invitableUser.matrixUser.userId.value
                                 else -> null
-                            },
-                            onCheckedChange = { onUserToggled(invitableUser.matrixUser) },
-                            modifier = Modifier.fillMaxWidth()
+                            }
                         )
                     }
+                    CheckableUserRow(
+                        checked = invitableUser.isSelected,
+                        enabled = enabled,
+                        data = data,
+                        onCheckedChange = { onUserToggled(invitableUser.matrixUser) },
+                        modifier = Modifier.fillMaxWidth()
+                    )
 
                     if (index < results.lastIndex) {
                         HorizontalDivider()
