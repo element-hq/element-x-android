@@ -169,7 +169,7 @@ fun PreferencesRootView(
                 .fillMaxWidth()
                 .padding(top = 40.dp, bottom = 24.dp),
             textAlign = TextAlign.Center,
-            text = state.version,
+            text = "${state.version}\n${state.deviceId}",
             style = ElementTheme.typography.fontBodySmRegular,
             color = ElementTheme.materialColors.secondary,
         )

@@ -22,6 +22,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import io.element.android.features.logout.api.direct.DirectLogoutPresenter
@@ -37,6 +38,7 @@ import io.element.android.libraries.matrix.api.oidc.AccountManagementAction
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.api.user.getCurrentUser
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
+import io.element.android.libraries.sessionstorage.api.SessionStore
 import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -52,6 +54,7 @@ class PreferencesRootPresenter @Inject constructor(
     private val featureFlagService: FeatureFlagService,
     private val indicatorService: IndicatorService,
     private val directLogoutPresenter: DirectLogoutPresenter,
+    private val sessionStore: SessionStore,
 ) : Presenter<PreferencesRootState> {
     @Composable
     override fun present(): PreferencesRootState {
@@ -60,6 +63,10 @@ class PreferencesRootPresenter @Inject constructor(
         }
         LaunchedEffect(Unit) {
             initialLoad(matrixUser)
+        }
+
+        val deviceId by produceState<String?>(initialValue = null) {
+            value = sessionStore.getSession(matrixClient.sessionId.value)?.deviceId
         }
 
         val snackbarMessage by snackbarDispatcher.collectSnackbarMessageAsState()
@@ -99,6 +106,7 @@ class PreferencesRootPresenter @Inject constructor(
         return PreferencesRootState(
             myUser = matrixUser.value,
             version = versionFormatter.get(),
+            deviceId = deviceId,
             showCompleteVerification = showCompleteVerification,
             showSecureBackup = !showCompleteVerification && secureStorageFlag == true,
             showSecureBackupBadge = showSecureBackupIndicator,
