@@ -20,13 +20,17 @@ import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.appnav.di.SessionComponentFactory
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.matrix.api.MatrixClient
+import kotlinx.coroutines.CoroutineScope
 import javax.inject.Inject
 
 @ContributesBinding(AppScope::class)
 class DefaultSessionComponentFactory @Inject constructor(
     private val sessionComponentBuilder: SessionComponent.Builder
 ) : SessionComponentFactory {
-    override fun create(client: MatrixClient): Any {
-        return sessionComponentBuilder.client(client).build()
+    override fun create(client: MatrixClient, coroutineScope: CoroutineScope): Any {
+        return sessionComponentBuilder
+            .client(client)
+            .coroutineScope(coroutineScope)
+            .build()
     }
 }

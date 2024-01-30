@@ -22,20 +22,28 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.preferencesDataStoreFile
+import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.features.preferences.api.store.SessionPreferencesStore
 import io.element.android.libraries.androidutils.file.safeDelete
 import io.element.android.libraries.androidutils.hash.hash
+import io.element.android.libraries.di.ApplicationContext
+import io.element.android.libraries.di.SessionScope
+import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.di.annotations.SessionCoroutineScope
 import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.matrix.api.user.CurrentSessionIdHolder
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import java.io.File
+import javax.inject.Inject
 
-class DefaultSessionPreferencesStore(
-    context: Context,
-    sessionId: SessionId,
-    @SessionCoroutineScope sessionCoroutineScope: CoroutineScope,
+@SingleIn(SessionScope::class)
+@ContributesBinding(SessionScope::class)
+class DefaultSessionPreferencesStore @Inject constructor(
+    @ApplicationContext context: Context,
+    currentSessionIdHolder: CurrentSessionIdHolder,
+    @SessionCoroutineScope private val sessionCoroutineScope: CoroutineScope,
 ) : SessionPreferencesStore {
     companion object {
         fun storeFile(context: Context, sessionId: SessionId): File {
@@ -45,7 +53,7 @@ class DefaultSessionPreferencesStore(
     }
     private val sendPublicReadReceiptsKey = booleanPreferencesKey("sendPublicReadReceipts")
 
-    private val dataStoreFile = storeFile(context, sessionId)
+    private val dataStoreFile = storeFile(context, currentSessionIdHolder.current)
     private val store = PreferenceDataStoreFactory.create(scope = sessionCoroutineScope) { dataStoreFile }
 
     override suspend fun setSendPublicReadReceipts(enabled: Boolean) = update(sendPublicReadReceiptsKey, enabled)

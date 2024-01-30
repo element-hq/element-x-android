@@ -20,6 +20,7 @@ import javax.inject.Qualifier
 
 /**
  * Qualifies a [CoroutineScope] object which represents the base coroutine scope to use for an active session.
+ * This scope is bound to the ui and not to the matrix session lifecycle.
  */
 @Retention(AnnotationRetention.RUNTIME)
 @MustBeDocumented

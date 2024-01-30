@@ -20,7 +20,6 @@ import com.squareup.anvil.annotations.ContributesTo
 import dagger.Module
 import dagger.Provides
 import io.element.android.libraries.di.SessionScope
-import io.element.android.libraries.di.annotations.SessionCoroutineScope
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import io.element.android.libraries.matrix.api.media.MatrixMediaLoader
@@ -28,7 +27,6 @@ import io.element.android.libraries.matrix.api.notificationsettings.Notification
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
-import kotlinx.coroutines.CoroutineScope
 
 @Module
 @ContributesTo(SessionScope::class)
@@ -61,11 +59,5 @@ object SessionMatrixModule {
     @Provides
     fun provideMediaLoader(matrixClient: MatrixClient): MatrixMediaLoader {
         return matrixClient.mediaLoader
-    }
-
-    @SessionCoroutineScope
-    @Provides
-    fun provideSessionCoroutineScope(matrixClient: MatrixClient): CoroutineScope {
-        return matrixClient.sessionCoroutineScope
     }
 }

@@ -17,7 +17,8 @@
 package io.element.android.appnav.di
 
 import io.element.android.libraries.matrix.api.MatrixClient
+import kotlinx.coroutines.CoroutineScope
 
 interface SessionComponentFactory {
-    fun create(client: MatrixClient): Any
+    fun create(client: MatrixClient, coroutineScope: CoroutineScope): Any
 }

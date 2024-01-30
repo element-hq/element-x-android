@@ -43,13 +43,10 @@ import io.element.android.libraries.matrix.test.roomlist.FakeRoomListService
 import io.element.android.libraries.matrix.test.sync.FakeSyncService
 import io.element.android.libraries.matrix.test.verification.FakeSessionVerificationService
 import io.element.android.tests.testutils.simulateLongTask
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.test.TestScope
 
 class FakeMatrixClient(
     override val sessionId: SessionId = A_SESSION_ID,
-    override val sessionCoroutineScope: CoroutineScope = TestScope(),
     private val userDisplayName: Result<String> = Result.success(A_USER_NAME),
     private val userAvatarUrl: Result<String> = Result.success(AN_AVATAR_URL),
     override val roomListService: RoomListService = FakeRoomListService(),

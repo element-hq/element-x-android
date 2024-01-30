@@ -19,6 +19,7 @@ package io.element.android.appnav
 import android.os.Parcelable
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.lifecycleScope
 import coil.Coil
 import com.bumble.appyx.core.composable.Children
 import com.bumble.appyx.core.lifecycle.subscribe
@@ -72,7 +73,7 @@ class LoggedInAppScopeFlowNode @AssistedInject constructor(
     ) : NodeInputs
 
     private val inputs: Inputs = inputs()
-    override val daggerComponent = sessionComponentFactory.create(inputs.matrixClient)
+    override val daggerComponent = sessionComponentFactory.create(inputs.matrixClient, lifecycleScope)
 
     override fun onBuilt() {
         super.onBuilt()
