@@ -70,7 +70,7 @@ fun CheckableUserRow(
         }
 
         Checkbox(
-            modifier = Modifier.padding(end = 8.dp),
+            modifier = Modifier.padding(end = 4.dp),
             checked = checked,
             onCheckedChange = null,
             enabled = enabled,
