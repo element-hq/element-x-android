@@ -31,11 +31,7 @@ class DefaultSessionPreferencesStoreFactory @Inject constructor(
 ) {
     private val cache = ConcurrentHashMap<SessionId, DefaultSessionPreferencesStore>()
 
-    fun get(sessionId: SessionId, sessionCoroutineScope: CoroutineScope) = cache.getOrPut(sessionId) {
+    fun get(sessionId: SessionId, sessionCoroutineScope: CoroutineScope): DefaultSessionPreferencesStore = cache.getOrPut(sessionId) {
         DefaultSessionPreferencesStore(context, sessionId, sessionCoroutineScope)
     }
-
-    fun remove(sessionId: SessionId) = cache.remove(sessionId)
-
-    fun clear() = cache.clear()
 }

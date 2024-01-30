@@ -21,7 +21,6 @@ import dagger.Module
 import dagger.Provides
 import io.element.android.features.preferences.api.store.SessionPreferencesStore
 import io.element.android.libraries.di.SessionScope
-import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.di.annotations.SessionCoroutineScope
 import io.element.android.libraries.matrix.api.user.CurrentSessionIdHolder
 import kotlinx.coroutines.CoroutineScope
@@ -30,7 +29,6 @@ import kotlinx.coroutines.CoroutineScope
 @ContributesTo(SessionScope::class)
 object SessionPreferencesModule {
     @Provides
-    @SingleIn(SessionScope::class)
     fun providesSessionPreferencesStore(
         defaultSessionPreferencesStoreFactory: DefaultSessionPreferencesStoreFactory,
         currentSessionIdHolder: CurrentSessionIdHolder,
