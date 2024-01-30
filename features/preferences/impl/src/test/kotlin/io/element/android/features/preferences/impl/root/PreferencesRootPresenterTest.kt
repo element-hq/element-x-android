@@ -34,6 +34,7 @@ import io.element.android.libraries.matrix.test.A_USER_NAME
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.encryption.FakeEncryptionService
 import io.element.android.libraries.matrix.test.verification.FakeSessionVerificationService
+import io.element.android.libraries.sessionstorage.impl.memory.InMemorySessionStore
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.tests.testutils.WarmUpRule
 import kotlinx.coroutines.test.runTest
@@ -70,7 +71,8 @@ class PreferencesRootPresenterTest {
             directLogoutPresenter = object : DirectLogoutPresenter {
                 @Composable
                 override fun present() = aDirectLogoutState
-            }
+            },
+            sessionStore = InMemorySessionStore()
         )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
