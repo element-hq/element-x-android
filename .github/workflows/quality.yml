@@ -40,7 +40,7 @@ jobs:
           distribution: 'temurin' # See 'Supported distributions' for available options
           java-version: '17'
       - name: Configure gradle
-        uses: gradle/gradle-build-action@v2.12.0
+        uses: gradle/gradle-build-action@v3.0.0
         with:
           cache-read-only: ${{ github.ref != 'refs/heads/develop' }}
       - name: Run code quality check suite
