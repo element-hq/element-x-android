@@ -317,7 +317,7 @@ read -p ". Press enter to continue. "
 
 printf "\n================================================================================\n"
 printf "Message for the Android internal room:\n\n"
-message="@room Element X Android ${version} is ready to be tested. You can get it from https://github.com/element-hq/element-x-android/releases/tag/v${version}. Installation instructions can be found [here](https://github.com/element-hq/element-x-android/blob/develop/docs/install_from_github_release.md). Please report any feedback. Thanks!"
+message="@room Element X Android ${version} is ready to be tested. You can get it from https://github.com/element-hq/element-x-android/releases/tag/v${version}. You can install the universal APK. If you want to install the application from the app bundle, you can follow instructions [here](https://github.com/element-hq/element-x-android/blob/develop/docs/install_from_github_release.md). Please report any feedback. Thanks!"
 printf "${message}\n\n"
 
 if [[ -z "${elementBotToken}" ]]; then
