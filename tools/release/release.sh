@@ -292,6 +292,19 @@ else
 fi
 
 printf "\n================================================================================\n"
+printf "Create the open testing release on GooglePlay.\n"
+
+printf "On GooglePlay console, go the the open testing section and click on \"Create new release\" button, then:\n"
+printf " - upload the file ${signedBundlePath}.\n"
+printf " - copy the release note from the fastlane file.\n"
+printf " - download the universal APK, to be able to provide it to the GitHub release: click on the right arrow next to the \"App bundle\", then click on the \"Download\" tab, and download the \"Signed, universal APK\".\n"
+printf " - submit the release.\n"
+read -p "Press enter to continue. "
+
+printf "You can then go to \"Publishing overview\" and send the new release for a review by Google.\n"
+read -p "Press enter to continue. "
+
+printf "\n================================================================================\n"
 githubCreateReleaseLink="https://github.com/element-hq/element-x-android/releases/new?tag=v${version}&title=Element%20X%20Android%20v${version}&body=${changelogUrlEncoded}"
 printf "Creating the release on gitHub.\n"
 printf -- "Open this link: %s\n" ${githubCreateReleaseLink}
@@ -299,6 +312,7 @@ printf "Then\n"
 printf " - copy paste the section of the file CHANGES.md for this release (if not there yet)\n"
 printf " - click on the 'Generate releases notes' button\n"
 printf " - Add the file ${signedBundlePath} to the GitHub release.\n"
+printf " - Add the universal APK, downloaded from the GooglePlay console to the GitHub release.\n"
 read -p ". Press enter to continue. "
 
 printf "\n================================================================================\n"
