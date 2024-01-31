@@ -4,13 +4,43 @@ This document explains how to install Element X Android from a Github Release.
 
 <!--- TOC -->
 
-* [Requirements](#requirements)
-* [Steps](#steps)
-* [I already have the application on my phone](#i-already-have-the-application-on-my-phone)
+* [Installing the universal APK](#installing-the-universal-apk)
+  * [Instructions](#instructions)
+  * [Steps](#steps)
+  * [I already have the application on my phone](#i-already-have-the-application-on-my-phone)
+* [Installing from the App Bundle](#installing-from-the-app-bundle)
+  * [Requirements](#requirements)
+  * [Steps](#steps)
+  * [I already have the application on my phone](#i-already-have-the-application-on-my-phone)
 
 <!--- END -->
 
-## Requirements
+## Installing the universal APK
+
+### Instructions
+
+The easiest way to install the application from the application from a GitHub release is to use the universal APK which is attached to the release. This APK is compatible with all Android devices, but it is not optimized for any of them. So it may not be as fast as it could be on your device, and it may not be as small as it could be.
+
+Alternatively, you can generate an APK that is optimized for your device. This is explained in the next section.
+
+### Steps
+
+- Open the GitHub release that you want to install from using the Web browser of your phone.
+- Download the APK
+- Open the APK file from the download notification, or from the file manager
+- Follow the steps to install the application
+
+###  I already have the application on my phone
+
+If the application was already installed on your phone, there are several cases:
+
+- it was installed from the PlayStore, you can install the universal APK as soon as the version is more recent. The existing data should not be lost.
+- it was installed from a previous GitHub release, this is like an application upgrade.
+- it was installed from a more recent GitHub release, or from the PlayStore with a later version, you will have to uninstall it first.
+
+## Installing from the App Bundle
+
+### Requirements
 
 The Github release will contain an Android App Bundle (with `aab` extension) file, unlike in the Element Android project where releases directly provide the APKs. So there are some steps to perform to generate and sign App Bundle APKs. An APK suitable for the targeted device will then be generated.
 
@@ -31,7 +61,7 @@ You will also need to install [bundletool](https://developer.android.com/studio/
 brew install bundletool
 ```
 
-## Steps
+### Steps
 
 1. Open the GitHub release that you want to install from https://github.com/element-hq/element-x-android/releases
 2. Download the asset `app-release-signed.aab`
@@ -55,7 +85,7 @@ bundletool install-apks --apks=./tmp/elementx.apks
 
 That's it, the application should be installed on your device, you can start it from the launcher icon.
 
-##  I already have the application on my phone
+###  I already have the application on my phone
 
 If the application was already installed on your phone, there are several cases:
 
