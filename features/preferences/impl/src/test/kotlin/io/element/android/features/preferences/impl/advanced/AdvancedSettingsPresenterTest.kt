@@ -21,7 +21,8 @@ import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.compound.theme.Theme
-import io.element.android.libraries.featureflag.test.InMemoryPreferencesStore
+import io.element.android.libraries.featureflag.test.InMemoryAppPreferencesStore
+import io.element.android.libraries.featureflag.test.InMemorySessionPreferencesStore
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.awaitLastSequentialItem
 import kotlinx.coroutines.test.runTest
@@ -34,8 +35,7 @@ class AdvancedSettingsPresenterTest {
 
     @Test
     fun `present - initial state`() = runTest {
-        val store = InMemoryPreferencesStore()
-        val presenter = AdvancedSettingsPresenter(store)
+        val presenter = createAdvancedSettingsPresenter()
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -43,14 +43,14 @@ class AdvancedSettingsPresenterTest {
             assertThat(initialState.isDeveloperModeEnabled).isFalse()
             assertThat(initialState.isRichTextEditorEnabled).isFalse()
             assertThat(initialState.showChangeThemeDialog).isFalse()
+            assertThat(initialState.isSendPublicReadReceiptsEnabled).isTrue()
             assertThat(initialState.theme).isEqualTo(Theme.System)
         }
     }
 
     @Test
     fun `present - developer mode on off`() = runTest {
-        val store = InMemoryPreferencesStore()
-        val presenter = AdvancedSettingsPresenter(store)
+        val presenter = createAdvancedSettingsPresenter()
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -65,8 +65,7 @@ class AdvancedSettingsPresenterTest {
 
     @Test
     fun `present - rich text editor on off`() = runTest {
-        val store = InMemoryPreferencesStore()
-        val presenter = AdvancedSettingsPresenter(store)
+        val presenter = createAdvancedSettingsPresenter()
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -80,9 +79,23 @@ class AdvancedSettingsPresenterTest {
     }
 
     @Test
+    fun `present - send public read receipts off on`() = runTest {
+        val presenter = createAdvancedSettingsPresenter()
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitLastSequentialItem()
+            assertThat(initialState.isSendPublicReadReceiptsEnabled).isTrue()
+            initialState.eventSink.invoke(AdvancedSettingsEvents.SetSendPublicReadReceiptsEnabled(false))
+            assertThat(awaitItem().isSendPublicReadReceiptsEnabled).isFalse()
+            initialState.eventSink.invoke(AdvancedSettingsEvents.SetSendPublicReadReceiptsEnabled(true))
+            assertThat(awaitItem().isSendPublicReadReceiptsEnabled).isTrue()
+        }
+    }
+
+    @Test
     fun `present - change theme`() = runTest {
-        val store = InMemoryPreferencesStore()
-        val presenter = AdvancedSettingsPresenter(store)
+        val presenter = createAdvancedSettingsPresenter()
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -102,4 +115,12 @@ class AdvancedSettingsPresenterTest {
             assertThat(withNewTheme.theme).isEqualTo(Theme.Light)
         }
     }
+
+    private fun createAdvancedSettingsPresenter(
+        appPreferencesStore: InMemoryAppPreferencesStore = InMemoryAppPreferencesStore(),
+        sessionPreferencesStore: InMemorySessionPreferencesStore = InMemorySessionPreferencesStore(),
+    ) = AdvancedSettingsPresenter(
+        appPreferencesStore = appPreferencesStore,
+        sessionPreferencesStore = sessionPreferencesStore,
+    )
 }

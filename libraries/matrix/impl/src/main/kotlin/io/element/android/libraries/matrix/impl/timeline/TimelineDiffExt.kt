@@ -16,10 +16,10 @@
 
 package io.element.android.libraries.matrix.impl.timeline
 
-import org.matrix.rustcomponents.sdk.EventItemOrigin
 import org.matrix.rustcomponents.sdk.TimelineChange
 import org.matrix.rustcomponents.sdk.TimelineDiff
 import org.matrix.rustcomponents.sdk.TimelineItem
+import uniffi.matrix_sdk_ui.EventItemOrigin
 
 /**
  * Tries to get an event origin from the TimelineDiff.

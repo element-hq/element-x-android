@@ -873,6 +873,21 @@ class MessageComposerPresenterTest {
         }
     }
 
+    @Test
+    fun `present - handle typing notice event`() = runTest {
+        val room = FakeMatrixRoom()
+        val presenter = createPresenter(room = room, coroutineScope = this)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitFirstItem()
+            assertThat(room.typingRecord).isEmpty()
+            initialState.eventSink.invoke(MessageComposerEvents.TypingNotice(true))
+            initialState.eventSink.invoke(MessageComposerEvents.TypingNotice(false))
+            assertThat(room.typingRecord).isEqualTo(listOf(true, false))
+        }
+    }
+
     private suspend fun ReceiveTurbine<MessageComposerState>.backToNormalMode(state: MessageComposerState, skipCount: Int = 0): MessageComposerState {
         state.eventSink.invoke(MessageComposerEvents.CloseSpecialMode)
         skipItems(skipCount)

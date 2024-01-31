@@ -223,7 +223,7 @@ private fun RoomSummaryView(
             avatarData = AvatarData(
                 id = summary.roomId.value,
                 name = summary.name,
-                url = summary.avatarURLString,
+                url = summary.avatarUrl,
                 size = AvatarSize.RoomSelectRoomListItem,
             ),
         )

@@ -24,6 +24,7 @@ import java.util.Date
 internal fun Session.toSessionData(
     isTokenValid: Boolean,
     loginType: LoginType,
+    passphrase: String?,
 ) = SessionData(
     userId = userId,
     deviceId = deviceId,
@@ -35,4 +36,5 @@ internal fun Session.toSessionData(
     loginTimestamp = Date(),
     isTokenValid = isTokenValid,
     loginType = loginType,
+    passphrase = passphrase,
 )

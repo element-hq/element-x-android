@@ -1,3 +1,37 @@
+Changes in Element X v0.4.2 (2024-01-31)
+========================================
+
+Matrix SDK 🦀 v0.1.95
+
+Features ✨
+----------
+ - Add 'send private read receipts' option in advanced settings ([#2204](https://github.com/element-hq/element-x-android/issues/2204))
+ - Send typing notification ([#2240](https://github.com/element-hq/element-x-android/issues/2240)). Disabling the sending of typing notification and rendering typing notification will come soon.
+
+Bugfixes 🐛
+----------
+ - Make the room settings screen update automatically when new room info (name, avatar, topic) is available. ([#921](https://github.com/element-hq/element-x-android/issues/921))
+ - Update timeline items' read receipts when the room members info is loaded. ([#2176](https://github.com/element-hq/element-x-android/issues/2176))
+ - Edited text message bubbles should resize when edited ([#2260](https://github.com/element-hq/element-x-android/issues/2260))
+ - Ensure login and password exclude `\n` ([#2263](https://github.com/element-hq/element-x-android/issues/2263))
+ - Room list Ensure the indicators stay grey if the global setting is set to mention only and a regular message is received. ([#2282](https://github.com/element-hq/element-x-android/issues/2282))
+
+Other changes
+-------------
+ - Add a special logging configuration for nightlies so we can get more detailed info for existing issues. ([#+add-special-tracing-configuration-for-nightlies](https://github.com/element-hq/element-x-android/issues/+add-special-tracing-configuration-for-nightlies))
+ - Try mitigating unexpected logouts by making getting/storing session data use a Mutex for synchronization.
+  Also added some more logs so we can understand exactly where it's failing. ([#+try-mitigating-unexpected-logouts](https://github.com/element-hq/element-x-android/issues/+try-mitigating-unexpected-logouts))
+ - Upgrade Material3 Compose to `1.2.0-beta02`.
+  There is also a constraint on a transitive Compose Foundation dependency version (1.6.0-beta02) that fixes the timeline scrolling issue. ([#0-beta02](https://github.com/element-hq/element-x-android/issues/0-beta02))
+ - Disambiguate display name in the timeline. ([#2215](https://github.com/element-hq/element-x-android/issues/2215))
+- Disambiguate display name in notifications ([#2224](https://github.com/element-hq/element-x-android/issues/2224))
+ - Remove room creation, self-join of room creator and 'this is the beginning of X' timeline items for DMs. ([#2217](https://github.com/element-hq/element-x-android/issues/2217))
+ - Encrypt databases used by the Rust SDK on Nightly and Debug builds. ([#2219](https://github.com/element-hq/element-x-android/issues/2219))
+ - Fallback to UnifiedPush (if available) if the PlayServices are not installed on the device. ([#2248](https://github.com/element-hq/element-x-android/issues/2248))
+ - Add "Report a problem" button to the onboarding screen ([#2275](https://github.com/element-hq/element-x-android/issues/2275))
+ - Add in app logs viewer to the "Report a problem" screen. ([#2276](https://github.com/element-hq/element-x-android/issues/2276))
+
+
 Changes in Element X v0.4.1 (2024-01-17)
 ========================================
 

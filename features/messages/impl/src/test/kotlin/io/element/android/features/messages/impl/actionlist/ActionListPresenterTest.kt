@@ -30,7 +30,7 @@ import io.element.android.features.messages.impl.timeline.model.event.aTimelineI
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemStateEventContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemVoiceContent
 import io.element.android.features.poll.api.pollcontent.aPollAnswerItemList
-import io.element.android.libraries.featureflag.test.InMemoryPreferencesStore
+import io.element.android.libraries.featureflag.test.InMemoryAppPreferencesStore
 import io.element.android.libraries.matrix.test.A_MESSAGE
 import io.element.android.tests.testutils.WarmUpRule
 import kotlinx.collections.immutable.persistentListOf
@@ -38,6 +38,7 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
 
+@Suppress("LargeClass")
 class ActionListPresenterTest {
     @get:Rule
     val warmUpRule = WarmUpRule()
@@ -61,7 +62,15 @@ class ActionListPresenterTest {
         }.test {
             val initialState = awaitItem()
             val messageEvent = aMessageEvent(isMine = true, content = TimelineItemRedactedContent)
-            initialState.eventSink.invoke(ActionListEvents.ComputeForMessage(messageEvent, canRedact = false, canSendMessage = true, canSendReaction = true))
+            initialState.eventSink.invoke(
+                ActionListEvents.ComputeForMessage(
+                    event = messageEvent,
+                    canRedactOwn = false,
+                    canRedactOther = false,
+                    canSendMessage = true,
+                    canSendReaction = true,
+                )
+            )
             // val loadingState = awaitItem()
             // assertThat(loadingState.target).isEqualTo(ActionListState.Target.Loading(messageEvent))
             val successState = awaitItem()
@@ -87,7 +96,15 @@ class ActionListPresenterTest {
         }.test {
             val initialState = awaitItem()
             val messageEvent = aMessageEvent(isMine = false, content = TimelineItemRedactedContent)
-            initialState.eventSink.invoke(ActionListEvents.ComputeForMessage(messageEvent, canRedact = false, canSendMessage = true, canSendReaction = true))
+            initialState.eventSink.invoke(
+                ActionListEvents.ComputeForMessage(
+                    event = messageEvent,
+                    canRedactOwn = false,
+                    canRedactOther = false,
+                    canSendMessage = true,
+                    canSendReaction = true,
+                )
+            )
             // val loadingState = awaitItem()
             // assertThat(loadingState.target).isEqualTo(ActionListState.Target.Loading(messageEvent))
             val successState = awaitItem()
@@ -116,7 +133,15 @@ class ActionListPresenterTest {
                 isMine = false,
                 content = TimelineItemTextContent(body = A_MESSAGE, htmlDocument = null, isEdited = false, formattedBody = null)
             )
-            initialState.eventSink.invoke(ActionListEvents.ComputeForMessage(messageEvent, canRedact = false, canSendMessage = true, canSendReaction = true))
+            initialState.eventSink.invoke(
+                ActionListEvents.ComputeForMessage(
+                    event = messageEvent,
+                    canRedactOwn = false,
+                    canRedactOther = false,
+                    canSendMessage = true,
+                    canSendReaction = true,
+                )
+            )
             // val loadingState = awaitItem()
             // assertThat(loadingState.target).isEqualTo(ActionListState.Target.Loading(messageEvent))
             val successState = awaitItem()
@@ -149,7 +174,15 @@ class ActionListPresenterTest {
                 isMine = false,
                 content = TimelineItemTextContent(body = A_MESSAGE, htmlDocument = null, isEdited = false, formattedBody = null)
             )
-            initialState.eventSink.invoke(ActionListEvents.ComputeForMessage(messageEvent, canRedact = false, canSendMessage = false, canSendReaction = true))
+            initialState.eventSink.invoke(
+                ActionListEvents.ComputeForMessage(
+                    event = messageEvent,
+                    canRedactOwn = true,
+                    canRedactOther = false,
+                    canSendMessage = false,
+                    canSendReaction = true
+                )
+            )
             // val loadingState = awaitItem()
             // assertThat(loadingState.target).isEqualTo(ActionListState.Target.Loading(messageEvent))
             val successState = awaitItem()
@@ -181,7 +214,15 @@ class ActionListPresenterTest {
                 isMine = false,
                 content = TimelineItemTextContent(body = A_MESSAGE, htmlDocument = null, isEdited = false, formattedBody = null)
             )
-            initialState.eventSink.invoke(ActionListEvents.ComputeForMessage(messageEvent, canRedact = true, canSendMessage = true, canSendReaction = true))
+            initialState.eventSink.invoke(
+                ActionListEvents.ComputeForMessage(
+                    event = messageEvent,
+                    canRedactOwn = false,
+                    canRedactOther = true,
+                    canSendMessage = true,
+                    canSendReaction = true,
+                )
+            )
             val successState = awaitItem()
             assertThat(successState.target).isEqualTo(
                 ActionListState.Target.Success(
@@ -213,7 +254,15 @@ class ActionListPresenterTest {
                 isMine = false,
                 content = TimelineItemTextContent(body = A_MESSAGE, htmlDocument = null, isEdited = false, formattedBody = null)
             )
-            initialState.eventSink.invoke(ActionListEvents.ComputeForMessage(messageEvent, canRedact = true, canSendMessage = true, canSendReaction = false))
+            initialState.eventSink.invoke(
+                ActionListEvents.ComputeForMessage(
+                    event = messageEvent,
+                    canRedactOwn = false,
+                    canRedactOther = true,
+                    canSendMessage = true,
+                    canSendReaction = false
+                )
+            )
             val successState = awaitItem()
             assertThat(successState.target).isEqualTo(
                 ActionListState.Target.Success(
@@ -245,7 +294,15 @@ class ActionListPresenterTest {
                 isMine = true,
                 content = TimelineItemTextContent(body = A_MESSAGE, htmlDocument = null, isEdited = false, formattedBody = null)
             )
-            initialState.eventSink.invoke(ActionListEvents.ComputeForMessage(messageEvent, canRedact = false, canSendMessage = true, canSendReaction = true))
+            initialState.eventSink.invoke(
+                ActionListEvents.ComputeForMessage(
+                    event = messageEvent,
+                    canRedactOwn = true,
+                    canRedactOther = false,
+                    canSendMessage = true,
+                    canSendReaction = true,
+                )
+            )
             // val loadingState = awaitItem()
             // assertThat(loadingState.target).isEqualTo(ActionListState.Target.Loading(messageEvent))
             val successState = awaitItem()
@@ -269,6 +326,47 @@ class ActionListPresenterTest {
     }
 
     @Test
+    fun `present - compute for my message cannot redact`() = runTest {
+        val presenter = createActionListPresenter(isDeveloperModeEnabled = true)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            val messageEvent = aMessageEvent(
+                isMine = true,
+                content = TimelineItemTextContent(body = A_MESSAGE, htmlDocument = null, isEdited = false, formattedBody = null)
+            )
+            initialState.eventSink.invoke(
+                ActionListEvents.ComputeForMessage(
+                    event = messageEvent,
+                    canRedactOwn = false,
+                    canRedactOther = false,
+                    canSendMessage = true,
+                    canSendReaction = true,
+                )
+            )
+            // val loadingState = awaitItem()
+            // assertThat(loadingState.target).isEqualTo(ActionListState.Target.Loading(messageEvent))
+            val successState = awaitItem()
+            assertThat(successState.target).isEqualTo(
+                ActionListState.Target.Success(
+                    event = messageEvent,
+                    displayEmojiReactions = true,
+                    actions = persistentListOf(
+                        TimelineItemAction.Reply,
+                        TimelineItemAction.Forward,
+                        TimelineItemAction.Edit,
+                        TimelineItemAction.Copy,
+                        TimelineItemAction.ViewSource,
+                    )
+                )
+            )
+            initialState.eventSink.invoke(ActionListEvents.Clear)
+            assertThat(awaitItem().target).isEqualTo(ActionListState.Target.None)
+        }
+    }
+
+    @Test
     fun `present - compute for a media item`() = runTest {
         val presenter = createActionListPresenter(isDeveloperModeEnabled = true)
         moleculeFlow(RecompositionMode.Immediate) {
@@ -279,7 +377,15 @@ class ActionListPresenterTest {
                 isMine = true,
                 content = aTimelineItemImageContent(),
             )
-            initialState.eventSink.invoke(ActionListEvents.ComputeForMessage(messageEvent, canRedact = false, canSendMessage = true, canSendReaction = true))
+            initialState.eventSink.invoke(
+                ActionListEvents.ComputeForMessage(
+                    event = messageEvent,
+                    canRedactOwn = true,
+                    canRedactOther = false,
+                    canSendMessage = true,
+                    canSendReaction = true,
+                )
+            )
             // val loadingState = awaitItem()
             // assertThat(loadingState.target).isEqualTo(ActionListState.Target.Loading(messageEvent))
             val successState = awaitItem()
@@ -311,7 +417,15 @@ class ActionListPresenterTest {
                 isMine = true,
                 content = aTimelineItemStateEventContent(),
             )
-            initialState.eventSink.invoke(ActionListEvents.ComputeForMessage(stateEvent, canRedact = false, canSendMessage = true, canSendReaction = true))
+            initialState.eventSink.invoke(
+                ActionListEvents.ComputeForMessage(
+                    event = stateEvent,
+                    canRedactOwn = false,
+                    canRedactOther = false,
+                    canSendMessage = true,
+                    canSendReaction = true,
+                )
+            )
             // val loadingState = awaitItem()
             // assertThat(loadingState.target).isEqualTo(ActionListState.Target.Loading(messageEvent))
             val successState = awaitItem()
@@ -341,7 +455,15 @@ class ActionListPresenterTest {
                 isMine = true,
                 content = aTimelineItemStateEventContent(),
             )
-            initialState.eventSink.invoke(ActionListEvents.ComputeForMessage(stateEvent, canRedact = false, canSendMessage = true, canSendReaction = true))
+            initialState.eventSink.invoke(
+                ActionListEvents.ComputeForMessage(
+                    event = stateEvent,
+                    canRedactOwn = false,
+                    canRedactOther = false,
+                    canSendMessage = true,
+                    canSendReaction = true,
+                )
+            )
             // val loadingState = awaitItem()
             // assertThat(loadingState.target).isEqualTo(ActionListState.Target.Loading(messageEvent))
             val successState = awaitItem()
@@ -370,7 +492,15 @@ class ActionListPresenterTest {
                 isMine = true,
                 content = TimelineItemTextContent(body = A_MESSAGE, htmlDocument = null, isEdited = false, formattedBody = null)
             )
-            initialState.eventSink.invoke(ActionListEvents.ComputeForMessage(messageEvent, canRedact = false, canSendMessage = true, canSendReaction = true))
+            initialState.eventSink.invoke(
+                ActionListEvents.ComputeForMessage(
+                    event = messageEvent,
+                    canRedactOwn = true,
+                    canRedactOther = false,
+                    canSendMessage = true,
+                    canSendReaction = true,
+                )
+            )
             // val loadingState = awaitItem()
             // assertThat(loadingState.target).isEqualTo(ActionListState.Target.Loading(messageEvent))
             val successState = awaitItem()
@@ -408,10 +538,26 @@ class ActionListPresenterTest {
                 content = TimelineItemRedactedContent,
             )
 
-            initialState.eventSink.invoke(ActionListEvents.ComputeForMessage(messageEvent, canRedact = false, canSendMessage = true, canSendReaction = true))
+            initialState.eventSink.invoke(
+                ActionListEvents.ComputeForMessage(
+                    event = messageEvent,
+                    canRedactOwn = false,
+                    canRedactOther = false,
+                    canSendMessage = true,
+                    canSendReaction = true,
+                )
+            )
             assertThat(awaitItem().target).isInstanceOf(ActionListState.Target.Success::class.java)
 
-            initialState.eventSink.invoke(ActionListEvents.ComputeForMessage(redactedEvent, canRedact = false, canSendMessage = true, canSendReaction = true))
+            initialState.eventSink.invoke(
+                ActionListEvents.ComputeForMessage(
+                    event = redactedEvent,
+                    canRedactOwn = false,
+                    canRedactOther = false,
+                    canSendMessage = true,
+                    canSendReaction = true,
+                )
+            )
             awaitItem().run {
                 assertThat(target).isEqualTo(ActionListState.Target.None)
             }
@@ -432,7 +578,15 @@ class ActionListPresenterTest {
                 content = TimelineItemTextContent(body = A_MESSAGE, htmlDocument = null, isEdited = false, formattedBody = null),
             )
 
-            initialState.eventSink.invoke(ActionListEvents.ComputeForMessage(messageEvent, canRedact = false, canSendMessage = true, canSendReaction = true))
+            initialState.eventSink.invoke(
+                ActionListEvents.ComputeForMessage(
+                    event = messageEvent,
+                    canRedactOwn = true,
+                    canRedactOther = false,
+                    canSendMessage = true,
+                    canSendReaction = true,
+                )
+            )
             val successState = awaitItem()
             assertThat(successState.target).isEqualTo(
                 ActionListState.Target.Success(
@@ -460,7 +614,15 @@ class ActionListPresenterTest {
                 isEditable = true,
                 content = aTimelineItemPollContent(answerItems = aPollAnswerItemList(hasVotes = false)),
             )
-            initialState.eventSink.invoke(ActionListEvents.ComputeForMessage(messageEvent, canRedact = false, canSendMessage = true, canSendReaction = true))
+            initialState.eventSink.invoke(
+                ActionListEvents.ComputeForMessage(
+                    event = messageEvent,
+                    canRedactOwn = true,
+                    canRedactOther = false,
+                    canSendMessage = true,
+                    canSendReaction = true,
+                )
+            )
             val successState = awaitItem()
             assertThat(successState.target).isEqualTo(
                 ActionListState.Target.Success(
@@ -489,7 +651,15 @@ class ActionListPresenterTest {
                 isEditable = false,
                 content = aTimelineItemPollContent(answerItems = aPollAnswerItemList(hasVotes = true)),
             )
-            initialState.eventSink.invoke(ActionListEvents.ComputeForMessage(messageEvent, canRedact = false, canSendMessage = true, canSendReaction = true))
+            initialState.eventSink.invoke(
+                ActionListEvents.ComputeForMessage(
+                    event = messageEvent,
+                    canRedactOwn = true,
+                    canRedactOther = false,
+                    canSendMessage = true,
+                    canSendReaction = true,
+                )
+            )
             val successState = awaitItem()
             assertThat(successState.target).isEqualTo(
                 ActionListState.Target.Success(
@@ -517,7 +687,15 @@ class ActionListPresenterTest {
                 isEditable = false,
                 content = aTimelineItemPollContent(isEnded = true),
             )
-            initialState.eventSink.invoke(ActionListEvents.ComputeForMessage(messageEvent, canRedact = false, canSendMessage = true, canSendReaction = true))
+            initialState.eventSink.invoke(
+                ActionListEvents.ComputeForMessage(
+                    event = messageEvent,
+                    canRedactOwn = true,
+                    canRedactOther = false,
+                    canSendMessage = true,
+                    canSendReaction = true,
+                )
+            )
             val successState = awaitItem()
             assertThat(successState.target).isEqualTo(
                 ActionListState.Target.Success(
@@ -543,7 +721,15 @@ class ActionListPresenterTest {
                 isMine = true,
                 content = aTimelineItemVoiceContent(),
             )
-            initialState.eventSink.invoke(ActionListEvents.ComputeForMessage(messageEvent, canRedact = false, canSendMessage = true, canSendReaction = true))
+            initialState.eventSink.invoke(
+                ActionListEvents.ComputeForMessage(
+                    event = messageEvent,
+                    canRedactOwn = true,
+                    canRedactOther = false,
+                    canSendMessage = true,
+                    canSendReaction = true,
+                )
+            )
             val successState = awaitItem()
             assertThat(successState.target).isEqualTo(
                 ActionListState.Target.Success(
@@ -561,6 +747,6 @@ class ActionListPresenterTest {
 }
 
 private fun createActionListPresenter(isDeveloperModeEnabled: Boolean): ActionListPresenter {
-    val preferencesStore = InMemoryPreferencesStore(isDeveloperModeEnabled = isDeveloperModeEnabled)
-    return ActionListPresenter(preferencesStore = preferencesStore)
+    val preferencesStore = InMemoryAppPreferencesStore(isDeveloperModeEnabled = isDeveloperModeEnabled)
+    return ActionListPresenter(appPreferencesStore = preferencesStore)
 }

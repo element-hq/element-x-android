@@ -42,6 +42,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -111,6 +112,7 @@ fun TextComposer(
     onSendVoiceMessage: () -> Unit,
     onDeleteVoiceMessage: () -> Unit,
     onError: (Throwable) -> Unit,
+    onTyping: (Boolean) -> Unit,
     onSuggestionReceived: (Suggestion?) -> Unit,
     onRichContentSelected: ((Uri) -> Unit)?,
     modifier: Modifier = Modifier,
@@ -164,6 +166,7 @@ fun TextComposer(
                 resolveMentionDisplay = { text, url -> TextDisplay.Custom(mentionSpanProvider.getMentionSpanFor(text, url)) },
                 resolveRoomMentionDisplay = { TextDisplay.Custom(mentionSpanProvider.getMentionSpanFor("@room", "#")) },
                 onError = onError,
+                onTyping = onTyping,
                 onRichContentSelected = onRichContentSelected,
             )
         }
@@ -274,12 +277,13 @@ fun TextComposer(
     }
 
     val menuAction = state.menuAction
+    val latestOnSuggestionReceived by rememberUpdatedState(onSuggestionReceived)
     LaunchedEffect(menuAction) {
         if (menuAction is MenuAction.Suggestion) {
             val suggestion = Suggestion(menuAction.suggestionPattern)
-            onSuggestionReceived(suggestion)
+            latestOnSuggestionReceived(suggestion)
         } else {
-            onSuggestionReceived(null)
+            latestOnSuggestionReceived(null)
         }
     }
 }
@@ -398,9 +402,10 @@ private fun TextInput(
     onResetComposerMode: () -> Unit,
     resolveRoomMentionDisplay: () -> TextDisplay,
     resolveMentionDisplay: (text: String, url: String) -> TextDisplay,
+    onError: (Throwable) -> Unit,
+    onTyping: (Boolean) -> Unit,
+    onRichContentSelected: ((Uri) -> Unit)?,
     modifier: Modifier = Modifier,
-    onError: (Throwable) -> Unit = {},
-    onRichContentSelected: ((Uri) -> Unit)? = null,
 ) {
     val bgColor = ElementTheme.colors.bgSubtleSecondary
     val borderColor = ElementTheme.colors.borderDisabled
@@ -449,6 +454,7 @@ private fun TextInput(
                 resolveRoomMentionDisplay = resolveRoomMentionDisplay,
                 onError = onError,
                 onRichContentSelected = onRichContentSelected,
+                onTyping = onTyping,
             )
         }
     }
@@ -918,6 +924,7 @@ private fun ATextComposer(
         onSendVoiceMessage = {},
         onDeleteVoiceMessage = {},
         onError = {},
+        onTyping = {},
         onSuggestionReceived = {},
         onRichContentSelected = null,
     )

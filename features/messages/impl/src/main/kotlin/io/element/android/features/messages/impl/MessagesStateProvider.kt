@@ -86,7 +86,8 @@ fun aMessagesState() = MessagesState(
     roomName = AsyncData.Success("Room name"),
     roomAvatar = AsyncData.Success(AvatarData("!id:domain", "Room name", size = AvatarSize.TimelineRoom)),
     userHasPermissionToSendMessage = true,
-    userHasPermissionToRedact = false,
+    userHasPermissionToRedactOwn = false,
+    userHasPermissionToRedactOther = false,
     userHasPermissionToSendReaction = true,
     composerState = aMessageComposerState().copy(
         richTextEditorState = RichTextEditorState("Hello", initialFocus = true),

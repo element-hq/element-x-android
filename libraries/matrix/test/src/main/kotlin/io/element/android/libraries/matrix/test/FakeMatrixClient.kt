@@ -43,12 +43,15 @@ import io.element.android.libraries.matrix.test.roomlist.FakeRoomListService
 import io.element.android.libraries.matrix.test.sync.FakeSyncService
 import io.element.android.libraries.matrix.test.verification.FakeSessionVerificationService
 import io.element.android.tests.testutils.simulateLongTask
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.test.TestScope
 
 class FakeMatrixClient(
     override val sessionId: SessionId = A_SESSION_ID,
+    override val sessionCoroutineScope: CoroutineScope = TestScope(),
     private val userDisplayName: Result<String> = Result.success(A_USER_NAME),
-    private val userAvatarURLString: Result<String> = Result.success(AN_AVATAR_URL),
+    private val userAvatarUrl: Result<String> = Result.success(AN_AVATAR_URL),
     override val roomListService: RoomListService = FakeRoomListService(),
     override val mediaLoader: MatrixMediaLoader = FakeMediaLoader(),
     private val sessionVerificationService: FakeSessionVerificationService = FakeSessionVerificationService(),
@@ -135,8 +138,8 @@ class FakeMatrixClient(
         return userDisplayName
     }
 
-    override suspend fun loadUserAvatarURLString(): Result<String?> {
-        return userAvatarURLString
+    override suspend fun loadUserAvatarUrl(): Result<String?> {
+        return userAvatarUrl
     }
 
     override suspend fun getAccountManagementUrl(action: AccountManagementAction?): Result<String?> {

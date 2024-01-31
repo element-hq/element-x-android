@@ -47,6 +47,7 @@
   <string name="screen_dm_details_unblock_alert_action">"Sblocca"</string>
   <string name="screen_dm_details_unblock_alert_description">"Potrai vedere di nuovo tutti i suoi messaggi."</string>
   <string name="screen_dm_details_unblock_user">"Sblocca utente"</string>
+  <string name="screen_room_details_leave_conversation_title">"Abbandona la conversazione"</string>
   <string name="screen_room_details_leave_room_title">"Esci dalla stanza"</string>
   <string name="screen_room_details_security_title">"Sicurezza"</string>
   <string name="screen_room_details_topic_title">"Oggetto"</string>

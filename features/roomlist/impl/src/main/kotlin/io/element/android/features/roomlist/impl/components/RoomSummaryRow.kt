@@ -35,6 +35,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -141,7 +142,7 @@ private fun RowScope.NameAndTimestampRow(room: RoomListRoomSummary) {
     Text(
         text = room.timestamp ?: "",
         style = ElementTheme.typography.fontBodySmMedium,
-        color = if (room.hasUnread) {
+        color = if (room.isHighlighted) {
             ElementTheme.colors.unreadIndicator
         } else {
             MaterialTheme.roomListRoomMessageDate()
@@ -165,49 +166,61 @@ private fun RowScope.LastMessageAndIndicatorRow(room: RoomListRoomSummary) {
         maxLines = 2,
         overflow = TextOverflow.Ellipsis
     )
-
-    // Unread
+    // Call and unread
     Row(
         modifier = Modifier.height(16.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        // Video call
-        if (room.hasOngoingCall) {
-            Icon(
-                modifier = Modifier.size(16.dp),
-                imageVector = CompoundIcons.VideoCallSolid,
-                contentDescription = null,
-                tint = ElementTheme.colors.unreadIndicator,
+        val tint = if (room.isHighlighted) ElementTheme.colors.unreadIndicator else ElementTheme.colors.iconQuaternary
+        if (room.hasRoomCall) {
+            OnGoingCallIcon(
+                color = tint,
             )
         }
-        NotificationIcon(room)
-        if (room.hasUnread) {
-            UnreadIndicatorAtom()
+        if (room.userDefinedNotificationMode == RoomNotificationMode.MUTE) {
+            NotificationOffIndicatorAtom()
+        } else if (room.numberOfUnreadMentions > 0) {
+            MentionIndicatorAtom()
+        }
+        if (room.hasNewContent) {
+            UnreadIndicatorAtom(
+                color = tint
+            )
         }
     }
 }
 
 @Composable
-private fun NotificationIcon(room: RoomListRoomSummary) {
-    val tint = if (room.hasUnread) ElementTheme.colors.unreadIndicator else ElementTheme.colors.iconQuaternary
-    when (room.notificationMode) {
-        null, RoomNotificationMode.ALL_MESSAGES -> return
-        RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY ->
-            Icon(
-                modifier = Modifier.size(16.dp),
-                contentDescription = null,
-                imageVector = CompoundIcons.Mention,
-                tint = tint,
-            )
-        RoomNotificationMode.MUTE ->
-            Icon(
-                modifier = Modifier.size(16.dp),
-                contentDescription = null,
-                imageVector = CompoundIcons.NotificationsSolidOff,
-                tint = tint,
-            )
-    }
+private fun OnGoingCallIcon(
+    color: Color,
+) {
+    Icon(
+        modifier = Modifier.size(16.dp),
+        imageVector = CompoundIcons.VideoCallSolid,
+        contentDescription = null,
+        tint = color,
+    )
+}
+
+@Composable
+private fun NotificationOffIndicatorAtom() {
+    Icon(
+        modifier = Modifier.size(16.dp),
+        contentDescription = null,
+        imageVector = CompoundIcons.NotificationsSolidOff,
+        tint = ElementTheme.colors.iconQuaternary,
+    )
+}
+
+@Composable
+private fun MentionIndicatorAtom() {
+    Icon(
+        modifier = Modifier.size(16.dp),
+        contentDescription = null,
+        imageVector = CompoundIcons.Mention,
+        tint = ElementTheme.colors.unreadIndicator,
+    )
 }
 
 @PreviewsDayNight

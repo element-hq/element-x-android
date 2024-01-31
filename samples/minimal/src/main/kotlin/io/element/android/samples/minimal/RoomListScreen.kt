@@ -27,6 +27,7 @@ import io.element.android.features.roomlist.impl.RoomListPresenter
 import io.element.android.features.roomlist.impl.RoomListView
 import io.element.android.features.roomlist.impl.datasource.DefaultInviteStateDataSource
 import io.element.android.features.roomlist.impl.datasource.RoomListDataSource
+import io.element.android.features.roomlist.impl.datasource.RoomListRoomSummaryFactory
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.dateformatter.impl.DateFormatters
 import io.element.android.libraries.dateformatter.impl.DefaultLastMessageTimestampFormatter
@@ -76,12 +77,20 @@ class RoomListScreen(
         leaveRoomPresenter = LeaveRoomPresenterImpl(matrixClient, RoomMembershipObserver(), coroutineDispatchers),
         roomListDataSource = RoomListDataSource(
             roomListService = matrixClient.roomListService,
-            lastMessageTimestampFormatter = DefaultLastMessageTimestampFormatter(dateTimeProvider, dateFormatters),
-            roomLastMessageFormatter = DefaultRoomLastMessageFormatter(
-                sp = stringProvider,
-                roomMembershipContentFormatter = RoomMembershipContentFormatter(matrixClient, stringProvider),
-                profileChangeContentFormatter = ProfileChangeContentFormatter(stringProvider),
-                stateContentFormatter = StateContentFormatter(stringProvider),
+            roomListRoomSummaryFactory = RoomListRoomSummaryFactory(
+                lastMessageTimestampFormatter = DefaultLastMessageTimestampFormatter(
+                    localDateTimeProvider = dateTimeProvider,
+                    dateFormatters = dateFormatters
+                ),
+                roomLastMessageFormatter = DefaultRoomLastMessageFormatter(
+                    sp = stringProvider,
+                    roomMembershipContentFormatter = RoomMembershipContentFormatter(
+                        matrixClient = matrixClient,
+                        sp = stringProvider
+                    ),
+                    profileChangeContentFormatter = ProfileChangeContentFormatter(stringProvider),
+                    stateContentFormatter = StateContentFormatter(stringProvider),
+                ),
             ),
             coroutineDispatchers = coroutineDispatchers,
             notificationSettingsService = matrixClient.notificationSettingsService(),

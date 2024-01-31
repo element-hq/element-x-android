@@ -53,4 +53,5 @@ dependencies {
     testImplementation(libs.test.truth)
     testImplementation(projects.libraries.matrix.test)
     testImplementation(libs.coroutines.test)
+    testImplementation(libs.test.turbine)
 }

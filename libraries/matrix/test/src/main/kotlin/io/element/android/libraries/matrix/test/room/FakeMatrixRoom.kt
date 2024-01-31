@@ -78,7 +78,8 @@ class FakeMatrixRoom(
     override val activeMemberCount: Long = 234L,
     val notificationSettingsService: NotificationSettingsService = FakeNotificationSettingsService(),
     private val matrixTimeline: MatrixTimeline = FakeMatrixTimeline(),
-    canRedact: Boolean = false,
+    canRedactOwn: Boolean = false,
+    canRedactOther: Boolean = false,
 ) : MatrixRoom {
     private var ignoreResult: Result<Unit> = Result.success(Unit)
     private var unignoreResult: Result<Unit> = Result.success(Unit)
@@ -88,7 +89,8 @@ class FakeMatrixRoom(
     private var joinRoomResult = Result.success(Unit)
     private var inviteUserResult = Result.success(Unit)
     private var canInviteResult = Result.success(true)
-    private var canRedactResult = Result.success(canRedact)
+    private var canRedactOwnResult = Result.success(canRedactOwn)
+    private var canRedactOtherResult = Result.success(canRedactOther)
     private val canSendStateResults = mutableMapOf<StateEventType, Result<Boolean>>()
     private val canSendEventResults = mutableMapOf<MessageEventType, Result<Boolean>>()
     private var sendMediaResult = Result.success(FakeMediaUploadHandler())
@@ -113,6 +115,9 @@ class FakeMatrixRoom(
     private var canUserJoinCallResult: Result<Boolean> = Result.success(true)
     var sendMessageMentions = emptyList<Mention>()
     val editMessageCalls = mutableListOf<Pair<String, String?>>()
+    private val _typingRecord = mutableListOf<Boolean>()
+    val typingRecord: List<Boolean>
+        get() = _typingRecord
 
     var sendMediaCount = 0
         private set
@@ -161,7 +166,7 @@ class FakeMatrixRoom(
 
     private var leaveRoomError: Throwable? = null
 
-    private val _roomInfoFlow: MutableSharedFlow<MatrixRoomInfo> = MutableStateFlow(aRoomInfo())
+    private val _roomInfoFlow: MutableSharedFlow<MatrixRoomInfo> = MutableSharedFlow(replay = 1)
     override val roomInfoFlow: Flow<MatrixRoomInfo> = _roomInfoFlow
 
     override val membersStateFlow: MutableStateFlow<MatrixRoomMembersState> = MutableStateFlow(MatrixRoomMembersState.Unknown)
@@ -169,9 +174,7 @@ class FakeMatrixRoom(
     override val roomNotificationSettingsStateFlow: MutableStateFlow<MatrixRoomNotificationSettingsState> =
         MutableStateFlow(MatrixRoomNotificationSettingsState.Unknown)
 
-    override suspend fun updateMembers(): Result<Unit> = simulateLongTask {
-        updateMembersResult
-    }
+    override suspend fun updateMembers() = Unit
 
     override suspend fun updateRoomNotificationSettings(): Result<Unit> = simulateLongTask {
         val notificationSettings = notificationSettingsService.getRoomNotificationSettings(roomId, isEncrypted, isOneToOne).getOrThrow()
@@ -276,8 +279,12 @@ class FakeMatrixRoom(
         return canInviteResult
     }
 
-    override suspend fun canUserRedact(userId: UserId): Result<Boolean> {
-        return canRedactResult
+    override suspend fun canUserRedactOwn(userId: UserId): Result<Boolean> {
+        return canRedactOwnResult
+    }
+
+    override suspend fun canUserRedactOther(userId: UserId): Result<Boolean> {
+        return canRedactOtherResult
     }
 
     override suspend fun canUserSendState(userId: UserId, type: StateEventType): Result<Boolean> {
@@ -421,6 +428,11 @@ class FakeMatrixRoom(
         waveform: List<Float>,
         progressCallback: ProgressCallback?
     ): Result<MediaUploadHandler> = fakeSendMedia(progressCallback)
+
+    override suspend fun typingNotice(isTyping: Boolean): Result<Unit> {
+        _typingRecord += isTyping
+        return Result.success(Unit)
+    }
 
     override suspend fun generateWidgetWebViewUrl(
         widgetSettings: MatrixWidgetSettings,

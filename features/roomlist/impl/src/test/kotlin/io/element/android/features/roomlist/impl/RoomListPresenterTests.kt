@@ -28,8 +28,8 @@ import io.element.android.features.networkmonitor.test.FakeNetworkMonitor
 import io.element.android.features.roomlist.impl.datasource.FakeInviteDataSource
 import io.element.android.features.roomlist.impl.datasource.InviteStateDataSource
 import io.element.android.features.roomlist.impl.datasource.RoomListDataSource
+import io.element.android.features.roomlist.impl.datasource.RoomListRoomSummaryFactory
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
-import io.element.android.features.roomlist.impl.model.aRoomListRoomSummary
 import io.element.android.libraries.dateformatter.api.LastMessageTimestampFormatter
 import io.element.android.libraries.dateformatter.test.FakeLastMessageTimestampFormatter
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
@@ -122,7 +122,7 @@ class RoomListPresenterTests {
     fun `present - should start with no user and then load user with error`() = runTest {
         val matrixClient = FakeMatrixClient(
             userDisplayName = Result.failure(AN_EXCEPTION),
-            userAvatarURLString = Result.failure(AN_EXCEPTION),
+            userAvatarUrl = Result.failure(AN_EXCEPTION),
         )
         val scope = CoroutineScope(coroutineContext + SupervisorJob())
         val presenter = createRoomListPresenter(client = matrixClient, coroutineScope = scope)
@@ -316,7 +316,7 @@ class RoomListPresenterTests {
             skipItems(1)
 
             val initialState = awaitItem()
-            val summary = aRoomListRoomSummary()
+            val summary = aRoomListRoomSummary
             initialState.eventSink(RoomListEvents.ShowContextMenu(summary))
 
             val shownState = awaitItem()
@@ -336,7 +336,7 @@ class RoomListPresenterTests {
             skipItems(1)
 
             val initialState = awaitItem()
-            val summary = aRoomListRoomSummary()
+            val summary = aRoomListRoomSummary
             initialState.eventSink(RoomListEvents.ShowContextMenu(summary))
 
             val shownState = awaitItem()
@@ -384,11 +384,11 @@ class RoomListPresenterTests {
             notificationSettingsService.setRoomNotificationMode(A_ROOM_ID, userDefinedMode)
 
             val updatedState = consumeItemsUntilPredicate { state ->
-                state.roomList.any { it.id == A_ROOM_ID.value && it.notificationMode == userDefinedMode }
+                state.roomList.any { it.id == A_ROOM_ID.value && it.userDefinedNotificationMode == userDefinedMode }
             }.last()
 
             val room = updatedState.roomList.find { it.id == A_ROOM_ID.value }
-            assertThat(room?.notificationMode).isEqualTo(userDefinedMode)
+            assertThat(room?.userDefinedNotificationMode).isEqualTo(userDefinedMode)
             cancelAndIgnoreRemainingEvents()
             scope.cancel()
         }
@@ -415,9 +415,11 @@ class RoomListPresenterTests {
         inviteStateDataSource = inviteStateDataSource,
         leaveRoomPresenter = leaveRoomPresenter,
         roomListDataSource = RoomListDataSource(
-            client.roomListService,
-            lastMessageTimestampFormatter,
-            roomLastMessageFormatter,
+            roomListService = client.roomListService,
+            roomListRoomSummaryFactory = RoomListRoomSummaryFactory(
+                lastMessageTimestampFormatter = lastMessageTimestampFormatter,
+                roomLastMessageFormatter = roomLastMessageFormatter,
+            ),
             coroutineDispatchers = testCoroutineDispatchers(),
             notificationSettingsService = client.notificationSettingsService(),
             appScope = coroutineScope
@@ -438,9 +440,14 @@ private val aRoomListRoomSummary = RoomListRoomSummary(
     id = A_ROOM_ID.value,
     roomId = A_ROOM_ID,
     name = A_ROOM_NAME,
-    hasUnread = true,
+    numberOfUnreadMentions = 1,
+    numberOfUnreadMessages = 2,
+    numberOfUnreadNotifications = 0,
     timestamp = A_FORMATTED_DATE,
     lastMessage = "",
     avatarData = AvatarData(id = A_ROOM_ID.value, name = A_ROOM_NAME, size = AvatarSize.RoomListItem),
     isPlaceholder = false,
+    userDefinedNotificationMode = null,
+    hasRoomCall = false,
+    isDm = false,
 )

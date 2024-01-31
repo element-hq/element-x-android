@@ -48,6 +48,7 @@
   <string name="screen_dm_details_unblock_alert_action">"Разблокировать"</string>
   <string name="screen_dm_details_unblock_alert_description">"Вы снова сможете увидеть все сообщения."</string>
   <string name="screen_dm_details_unblock_user">"Разблокировать пользователя"</string>
+  <string name="screen_room_details_leave_conversation_title">"Покинуть беседу"</string>
   <string name="screen_room_details_leave_room_title">"Покинуть комнату"</string>
   <string name="screen_room_details_security_title">"Безопасность"</string>
   <string name="screen_room_details_topic_title">"Тема"</string>

@@ -22,7 +22,8 @@ sealed interface ActionListEvents {
     data object Clear : ActionListEvents
     data class ComputeForMessage(
         val event: TimelineItem.Event,
-        val canRedact: Boolean,
+        val canRedactOwn: Boolean,
+        val canRedactOther: Boolean,
         val canSendMessage: Boolean,
         val canSendReaction: Boolean,
     ) : ActionListEvents

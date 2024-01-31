@@ -45,6 +45,7 @@ class NotificationMapper(
                 roomId = roomId,
                 senderAvatarUrl = item.senderInfo.avatarUrl,
                 senderDisplayName = item.senderInfo.displayName,
+                senderIsNameAmbiguous = item.senderInfo.isNameAmbiguous,
                 roomAvatarUrl = item.roomInfo.avatarUrl ?: item.senderInfo.avatarUrl.takeIf { item.roomInfo.isDirect },
                 roomDisplayName = item.roomInfo.displayName,
                 isDirect = item.roomInfo.isDirect,

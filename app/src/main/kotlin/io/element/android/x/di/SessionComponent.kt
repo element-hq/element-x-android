@@ -33,6 +33,7 @@ interface SessionComponent : NodeFactoriesBindings {
     interface Builder {
         @BindsInstance
         fun client(matrixClient: MatrixClient): Builder
+
         fun build(): SessionComponent
     }
 

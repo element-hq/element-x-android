@@ -48,6 +48,7 @@
   <string name="screen_dm_details_unblock_alert_action">"Odblokovat"</string>
   <string name="screen_dm_details_unblock_alert_description">"Znovu uvidíte všechny zprávy od nich."</string>
   <string name="screen_dm_details_unblock_user">"Odblokovat uživatele"</string>
+  <string name="screen_room_details_leave_conversation_title">"Opustit konverzaci"</string>
   <string name="screen_room_details_leave_room_title">"Opustit místnost"</string>
   <string name="screen_room_details_security_title">"Zabezpečení"</string>
   <string name="screen_room_details_topic_title">"Téma"</string>

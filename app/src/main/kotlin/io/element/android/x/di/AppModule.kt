@@ -85,16 +85,10 @@ object AppModule {
         lowPrivacyLoggingEnabled = false,
         versionName = BuildConfig.VERSION_NAME,
         versionCode = BuildConfig.VERSION_CODE,
-        // BuildConfig.GIT_REVISION,
-        gitRevision = "TODO",
-        //  BuildConfig.GIT_REVISION_DATE,
-        gitRevisionDate = "TODO",
-        //  BuildConfig.GIT_BRANCH_NAME,
-        gitBranchName = "TODO",
-        //  BuildConfig.FLAVOR_DESCRIPTION,
-        flavorDescription = "TODO",
-        //  BuildConfig.SHORT_FLAVOR_DESCRIPTION,
-        flavorShortDescription = "TODO",
+        gitRevision = BuildConfig.GIT_REVISION,
+        gitBranchName = BuildConfig.GIT_BRANCH_NAME,
+        flavorDescription = BuildConfig.FLAVOR_DESCRIPTION,
+        flavorShortDescription = BuildConfig.SHORT_FLAVOR_DESCRIPTION,
     )
 
     @Provides

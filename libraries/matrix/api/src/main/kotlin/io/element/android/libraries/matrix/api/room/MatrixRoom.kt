@@ -75,7 +75,7 @@ interface MatrixRoom : Closeable {
     /**
      * Try to load the room members and update the membersFlow.
      */
-    suspend fun updateMembers(): Result<Unit>
+    suspend fun updateMembers()
 
     suspend fun updateRoomNotificationSettings(): Result<Unit>
 
@@ -127,7 +127,9 @@ interface MatrixRoom : Closeable {
 
     suspend fun canUserInvite(userId: UserId): Result<Boolean>
 
-    suspend fun canUserRedact(userId: UserId): Result<Boolean>
+    suspend fun canUserRedactOwn(userId: UserId): Result<Boolean>
+
+    suspend fun canUserRedactOther(userId: UserId): Result<Boolean>
 
     suspend fun canUserSendState(userId: UserId, type: StateEventType): Result<Boolean>
 
@@ -221,6 +223,12 @@ interface MatrixRoom : Closeable {
         waveform: List<Float>,
         progressCallback: ProgressCallback?
     ): Result<MediaUploadHandler>
+
+    /**
+     * Send a typing notification.
+     * @param isTyping True if the user is typing, false otherwise.
+     */
+    suspend fun typingNotice(isTyping: Boolean): Result<Unit>
 
     /**
      * Generates a Widget url to display in a [android.webkit.WebView] given the provided parameters.
