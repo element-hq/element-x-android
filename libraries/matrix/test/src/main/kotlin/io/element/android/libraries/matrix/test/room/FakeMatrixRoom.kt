@@ -443,10 +443,6 @@ class FakeMatrixRoom(
 
     override fun getWidgetDriver(widgetSettings: MatrixWidgetSettings): Result<MatrixWidgetDriver> = getWidgetDriverResult
 
-    override fun pollHistory(): MatrixTimeline {
-        return FakeMatrixTimeline()
-    }
-
     fun givenLeaveRoomError(throwable: Throwable?) {
         this.leaveRoomError = throwable
     }

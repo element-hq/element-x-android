@@ -252,7 +252,5 @@ interface MatrixRoom : Closeable {
      */
     fun getWidgetDriver(widgetSettings: MatrixWidgetSettings): Result<MatrixWidgetDriver>
 
-    fun pollHistory(): MatrixTimeline
-
     override fun close() = destroy()
 }
