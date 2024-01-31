@@ -99,6 +99,7 @@ class PreferencesRootPresenter @Inject constructor(
         return PreferencesRootState(
             myUser = matrixUser.value,
             version = versionFormatter.get(),
+            deviceId = matrixClient.deviceId,
             showCompleteVerification = showCompleteVerification,
             showSecureBackup = !showCompleteVerification && secureStorageFlag == true,
             showSecureBackupBadge = showSecureBackupIndicator,

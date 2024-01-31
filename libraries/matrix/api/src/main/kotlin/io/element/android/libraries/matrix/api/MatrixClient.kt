@@ -39,6 +39,7 @@ import java.io.Closeable
 
 interface MatrixClient : Closeable {
     val sessionId: SessionId
+    val deviceId: String
     val roomListService: RoomListService
     val mediaLoader: MatrixMediaLoader
     val sessionCoroutineScope: CoroutineScope
