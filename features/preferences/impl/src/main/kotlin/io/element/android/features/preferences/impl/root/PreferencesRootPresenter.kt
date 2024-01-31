@@ -54,7 +54,6 @@ class PreferencesRootPresenter @Inject constructor(
     private val featureFlagService: FeatureFlagService,
     private val indicatorService: IndicatorService,
     private val directLogoutPresenter: DirectLogoutPresenter,
-    private val sessionStore: SessionStore,
 ) : Presenter<PreferencesRootState> {
     @Composable
     override fun present(): PreferencesRootState {
@@ -63,10 +62,6 @@ class PreferencesRootPresenter @Inject constructor(
         }
         LaunchedEffect(Unit) {
             initialLoad(matrixUser)
-        }
-
-        val deviceId by produceState<String?>(initialValue = null) {
-            value = sessionStore.getSession(matrixClient.sessionId.value)?.deviceId
         }
 
         val snackbarMessage by snackbarDispatcher.collectSnackbarMessageAsState()
@@ -106,7 +101,7 @@ class PreferencesRootPresenter @Inject constructor(
         return PreferencesRootState(
             myUser = matrixUser.value,
             version = versionFormatter.get(),
-            deviceId = deviceId,
+            deviceId = matrixClient.deviceId,
             showCompleteVerification = showCompleteVerification,
             showSecureBackup = !showCompleteVerification && secureStorageFlag == true,
             showSecureBackupBadge = showSecureBackupIndicator,

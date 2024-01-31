@@ -64,6 +64,7 @@ class RustMatrixClientFactory @Inject constructor(
             baseDirectory = baseDirectory,
             baseCacheDirectory = cacheDirectory,
             clock = clock,
+            deviceId = sessionData.deviceId,
         )
     }
 }

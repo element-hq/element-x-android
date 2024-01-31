@@ -77,7 +77,6 @@ dependencies {
     testImplementation(projects.libraries.permissions.test)
     testImplementation(projects.libraries.preferences.test)
     testImplementation(projects.libraries.pushstore.test)
-    testImplementation(projects.libraries.sessionStorage.implMemory)
     testImplementation(projects.features.rageshake.test)
     testImplementation(projects.features.rageshake.impl)
     testImplementation(projects.libraries.indicator.impl)
