@@ -237,8 +237,8 @@ printf "Unzipping the artifact...\n"
 
 unzip ${targetPath}/elementx-app-gplay-bundle-unsigned.zip -d ${targetPath}
 
-unsignedBundlePath="${targetPath}/app-release.aab"
-signedBundlePath="${targetPath}/app-release-signed.aab"
+unsignedBundlePath="${targetPath}/app-gplay-release.aab"
+signedBundlePath="${targetPath}/app-gplay-release-signed.aab"
 
 printf "\n================================================================================\n"
 printf "Signing file ${unsignedBundlePath} with build-tools version ${buildToolsVersion} for min SDK version ${minSdkVersion}...\n"
