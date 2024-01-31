@@ -1,1 +1,0 @@
-Send typing notification

@@ -1,1 +1,0 @@
-Fallback to UnifiedPush (if available) if the PlayServices are not installed on the device.
