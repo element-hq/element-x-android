@@ -46,7 +46,7 @@
   <string name="action_edit_poll">"Szavazás szerkesztése"</string>
   <string name="action_enable">"Engedélyezés"</string>
   <string name="action_end_poll">"Szavazás lezárása"</string>
-  <string name="action_enter_pin">"Adja meg a PIN-kódot"</string>
+  <string name="action_enter_pin">"Add meg a PIN-kódot"</string>
   <string name="action_forgot_password">"Elfelejtetted a jelszavadat?"</string>
   <string name="action_forward">"Tovább"</string>
   <string name="action_invite">"Meghívás"</string>
@@ -200,13 +200,13 @@
   <string name="dialog_title_confirmation">"Megerősítés"</string>
   <string name="dialog_title_warning">"Figyelmeztetés"</string>
   <string name="error_failed_creating_the_permalink">"Nem sikerült létrehozni az állandó hivatkozást"</string>
-  <string name="error_failed_loading_map">"Az %1$s nem tudta betölteni a térképet. Próbálja meg újra később."</string>
+  <string name="error_failed_loading_map">"A(z) %1$s nem tudta betölteni a térképet. Próbáld meg újra később."</string>
   <string name="error_failed_loading_messages">"Nem sikerült betölteni az üzeneteket"</string>
   <string name="error_failed_locating_user">"A(z) %1$s nem tudta elérni a tartózkodási helyét. Próbáld meg újra később."</string>
   <string name="error_failed_uploading_voice_message">"Nem sikerült feltölteni a hangüzenetét."</string>
   <string name="error_missing_location_auth_android">"Az %1$snek nincs engedélye, hogy hozzáférjen a tartózkodási helyedhez. Ezt a beállításokban engedélyezheted."</string>
   <string name="error_missing_location_rationale_android">"Az %1$snek nincs engedélye, hogy hozzáférjen a tartózkodási helyéhez. Engedélyezze alább az elérését."</string>
-  <string name="error_missing_microphone_voice_rationale_android">"Az %1$snek nincs engedélye, hogy hozzáférjen a mikrofonjához. Engedélyezze, hogy tudjon hangüzenetet felvenni."</string>
+  <string name="error_missing_microphone_voice_rationale_android">"Az %1$snek nincs engedélye, hogy hozzáférjen a mikrofonhoz. Engedélyezd, hogy tudjon hangüzenetet felvenni."</string>
   <string name="error_some_messages_have_not_been_sent">"Néhány üzenet nem került elküldésre"</string>
   <string name="error_unknown">"Elnézést, hiba történt"</string>
   <string name="invite_friends_rich_title">"🔐️ Csatlakozz hozzám itt: %1$s"</string>
