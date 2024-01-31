@@ -61,6 +61,7 @@ import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.button.MainActionButton
 import io.element.android.libraries.designsystem.components.list.ListItemContent
 import io.element.android.libraries.designsystem.components.preferences.PreferenceCategory
+import io.element.android.libraries.designsystem.components.preferences.PreferenceSwitch
 import io.element.android.libraries.designsystem.components.preferences.PreferenceText
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
@@ -162,6 +163,13 @@ fun RoomDetailsView(
                     openRoomNotificationSettings = openRoomNotificationSettings
                 )
             }
+
+            FavoriteSection(
+                isFavorite = state.isFavorite,
+                onFavoriteChanges = {
+                    state.eventSink(RoomDetailsEvent.SetIsFavorite(it))
+                }
+            )
 
             if (state.roomType is RoomDetailsType.Room) {
                 MembersSection(
@@ -351,6 +359,22 @@ private fun NotificationSection(
             supportingContent = { Text(text = subtitle) },
             leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Notifications)),
             onClick = openRoomNotificationSettings,
+        )
+    }
+}
+
+@Composable
+private fun FavoriteSection(
+    isFavorite: Boolean,
+    onFavoriteChanges: (Boolean) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    PreferenceCategory(modifier = modifier) {
+        PreferenceSwitch(
+            icon = CompoundIcons.FavouriteOff,
+            title = "Favorite",
+            isChecked = isFavorite,
+            onCheckedChange = onFavoriteChanges
         )
     }
 }

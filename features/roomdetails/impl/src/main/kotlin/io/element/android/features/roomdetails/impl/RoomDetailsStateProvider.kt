@@ -36,6 +36,7 @@ open class RoomDetailsStateProvider : PreviewParameterProvider<RoomDetailsState>
             aDmRoomDetailsState().copy(roomName = "Daniel"),
             aDmRoomDetailsState(isDmMemberIgnored = true).copy(roomName = "Daniel"),
             aRoomDetailsState().copy(canInvite = true),
+            aRoomDetailsState().copy(isFavorite = true),
             aRoomDetailsState().copy(
                 canEdit = true,
                 // Also test the roomNotificationSettings ALL_MESSAGES in the same screenshot. Icon 'Mute' should be displayed
@@ -86,6 +87,7 @@ fun aRoomDetailsState() = RoomDetailsState(
     roomMemberDetailsState = null,
     leaveRoomState = aLeaveRoomState(),
     roomNotificationSettings = RoomNotificationSettings(mode = RoomNotificationMode.MUTE, isDefault = false),
+    isFavorite = false,
     eventSink = {}
 )
 

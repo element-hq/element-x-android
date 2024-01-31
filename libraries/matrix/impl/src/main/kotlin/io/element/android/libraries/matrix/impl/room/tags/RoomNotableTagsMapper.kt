@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright (c) 2024 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,11 +14,15 @@
  * limitations under the License.
  */
 
-package io.element.android.features.roomdetails.impl
+package io.element.android.libraries.matrix.impl.room.tags
 
-sealed interface RoomDetailsEvent {
-    data object LeaveRoom : RoomDetailsEvent
-    data object MuteNotification : RoomDetailsEvent
-    data object UnmuteNotification : RoomDetailsEvent
-    data class SetIsFavorite(val isFavorite: Boolean) : RoomDetailsEvent
-}
+import io.element.android.libraries.matrix.api.room.tags.RoomNotableTags
+import uniffi.matrix_sdk_base.RoomNotableTags as RustRoomNotableTags
+
+fun RustRoomNotableTags.map() = RoomNotableTags(
+    isFavorite = isFavorite
+)
+
+fun RoomNotableTags.map() = RustRoomNotableTags(
+    isFavorite = isFavorite
+)

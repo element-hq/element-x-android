@@ -29,6 +29,7 @@ import io.element.android.libraries.matrix.api.media.MediaUploadHandler
 import io.element.android.libraries.matrix.api.media.VideoInfo
 import io.element.android.libraries.matrix.api.poll.PollKind
 import io.element.android.libraries.matrix.api.room.location.AssetType
+import io.element.android.libraries.matrix.api.room.tags.RoomNotableTags
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
 import io.element.android.libraries.matrix.api.widget.MatrixWidgetDriver
 import io.element.android.libraries.matrix.api.widget.MatrixWidgetSettings
@@ -56,6 +57,8 @@ interface MatrixRoom : Closeable {
     val isDm: Boolean get() = isDirect && isOneToOne
 
     val roomInfoFlow: Flow<MatrixRoomInfo>
+
+    val notableTagsFlow: Flow<RoomNotableTags>
 
     /**
      * A one-to-one is a room with exactly 2 members.
@@ -149,6 +152,8 @@ interface MatrixRoom : Closeable {
     suspend fun setTopic(topic: String): Result<Unit>
 
     suspend fun reportContent(eventId: EventId, reason: String, blockUserId: UserId?): Result<Unit>
+
+    suspend fun updateNotableTags(notableTags: RoomNotableTags): Result<Unit>
 
     /**
      * Share a location message in the room.

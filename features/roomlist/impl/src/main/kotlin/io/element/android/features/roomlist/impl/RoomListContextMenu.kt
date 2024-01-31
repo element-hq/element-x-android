@@ -26,6 +26,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
+import io.element.android.libraries.architecture.AsyncData
+import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.designsystem.components.list.ListItemContent
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -56,7 +58,10 @@ fun RoomListContextMenu(
             onLeaveRoomClicked = {
                 eventSink(RoomListEvents.HideContextMenu)
                 eventSink(RoomListEvents.LeaveRoom(contextMenu.roomId))
-            }
+            },
+            onFavoriteChanged = { isFavorite ->
+                eventSink(RoomListEvents.MarkRoomAsFavorite(contextMenu.roomId, isFavorite))
+            },
         )
     }
 }
@@ -66,6 +71,7 @@ private fun RoomListModalBottomSheetContent(
     contextMenu: RoomListState.ContextMenu.Shown,
     onRoomSettingsClicked: (roomId: RoomId) -> Unit,
     onLeaveRoomClicked: (roomId: RoomId) -> Unit,
+    onFavoriteChanged: (isFavorite: Boolean) -> Unit,
 ) {
     Column(
         modifier = Modifier.fillMaxWidth()
@@ -77,6 +83,31 @@ private fun RoomListModalBottomSheetContent(
                     style = ElementTheme.typography.fontBodyLgMedium,
                 )
             }
+        )
+        ListItem(
+            headlineContent = {
+                Text(
+                    text = "Favourite",
+                    style = MaterialTheme.typography.bodyLarge,
+                )
+            },
+            leadingContent = ListItemContent.Icon(
+                iconSource = IconSource.Vector(
+                    CompoundIcons.FavouriteOff,
+                    contentDescription = "Favourite"
+                )
+            ),
+            trailingContent = ListItemContent.Switch(
+                checked = contextMenu.isFavorite.dataOrNull().orFalse(),
+                enabled = contextMenu.isFavorite is AsyncData.Success,
+                onChange = { isFavorite ->
+                    onFavoriteChanged(isFavorite)
+                },
+            ),
+            onClick = {
+                onFavoriteChanged(!contextMenu.isFavorite.dataOrNull().orFalse())
+            },
+            style = ListItemStyle.Primary,
         )
         ListItem(
             headlineContent = {
@@ -96,11 +127,13 @@ private fun RoomListModalBottomSheetContent(
         )
         ListItem(
             headlineContent = {
-                val leaveText = stringResource(id = if (contextMenu.isDm) {
-                    CommonStrings.action_leave_conversation
-                } else {
-                    CommonStrings.action_leave_room
-                })
+                val leaveText = stringResource(
+                    id = if (contextMenu.isDm) {
+                        CommonStrings.action_leave_conversation
+                    } else {
+                        CommonStrings.action_leave_room
+                    }
+                )
                 Text(text = leaveText)
             },
             modifier = Modifier.clickable { onLeaveRoomClicked(contextMenu.roomId) },
@@ -126,9 +159,11 @@ internal fun RoomListModalBottomSheetContentPreview() = ElementPreview {
             roomId = RoomId(value = "!aRoom:aDomain"),
             roomName = "aRoom",
             isDm = false,
+            isFavorite = AsyncData.Success(false),
         ),
         onRoomSettingsClicked = {},
-        onLeaveRoomClicked = {}
+        onLeaveRoomClicked = {},
+        onFavoriteChanged = {},
     )
 }
 
@@ -140,8 +175,10 @@ internal fun RoomListModalBottomSheetContentForDmPreview() = ElementPreview {
             roomId = RoomId(value = "!aRoom:aDomain"),
             roomName = "aRoom",
             isDm = true,
+            isFavorite = AsyncData.Success(false),
         ),
         onRoomSettingsClicked = {},
-        onLeaveRoomClicked = {}
+        onLeaveRoomClicked = {},
+        onFavoriteChanged = {},
     )
 }

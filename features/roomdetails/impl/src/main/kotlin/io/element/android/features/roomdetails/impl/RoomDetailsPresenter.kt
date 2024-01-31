@@ -44,9 +44,11 @@ import io.element.android.libraries.matrix.api.room.StateEventType
 import io.element.android.libraries.matrix.api.room.powerlevels.canInvite
 import io.element.android.libraries.matrix.api.room.powerlevels.canSendState
 import io.element.android.libraries.matrix.api.room.roomNotificationSettings
+import io.element.android.libraries.matrix.api.room.tags.RoomNotableTags
 import io.element.android.libraries.matrix.ui.room.getDirectRoomMember
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -95,6 +97,7 @@ class RoomDetailsPresenter @Inject constructor(
         val dmMember by room.getDirectRoomMember(membersState)
         val roomMemberDetailsPresenter = roomMemberDetailsPresenter(dmMember)
         val roomType by getRoomType(dmMember)
+        val isFavorite by isFavorite()
 
         val topicState = remember(canEditTopic, roomTopic, roomType) {
             val topic = roomTopic
@@ -122,6 +125,12 @@ class RoomDetailsPresenter @Inject constructor(
                         client.notificationSettingsService().unmuteRoom(room.roomId, room.isEncrypted, room.isOneToOne)
                     }
                 }
+                is RoomDetailsEvent.SetIsFavorite -> {
+                    scope.launch(dispatchers.io) {
+                        val tags = RoomNotableTags(isFavorite = event.isFavorite)
+                        room.updateNotableTags(tags)
+                    }
+                }
             }
         }
 
@@ -142,6 +151,7 @@ class RoomDetailsPresenter @Inject constructor(
             roomMemberDetailsState = roomMemberDetailsState,
             leaveRoomState = leaveRoomState,
             roomNotificationSettings = roomNotificationSettingsState.roomNotificationSettings(),
+            isFavorite = isFavorite,
             eventSink = ::handleEvents,
         )
     }
@@ -163,6 +173,11 @@ class RoomDetailsPresenter @Inject constructor(
             }
         }
     }
+
+    @Composable
+    private fun isFavorite() = remember {
+        room.notableTagsFlow.map { it.isFavorite }
+    }.collectAsState(initial = false)
 
     @Composable
     private fun getCanInvite(membersState: MatrixRoomMembersState) = produceState(false, membersState) {

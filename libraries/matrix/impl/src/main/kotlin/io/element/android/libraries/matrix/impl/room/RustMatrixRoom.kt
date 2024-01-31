@@ -39,6 +39,7 @@ import io.element.android.libraries.matrix.api.room.MessageEventType
 import io.element.android.libraries.matrix.api.room.StateEventType
 import io.element.android.libraries.matrix.api.room.location.AssetType
 import io.element.android.libraries.matrix.api.room.roomNotificationSettings
+import io.element.android.libraries.matrix.api.room.tags.RoomNotableTags
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
 import io.element.android.libraries.matrix.api.widget.MatrixWidgetDriver
 import io.element.android.libraries.matrix.api.widget.MatrixWidgetSettings
@@ -50,6 +51,7 @@ import io.element.android.libraries.matrix.impl.notificationsettings.RustNotific
 import io.element.android.libraries.matrix.impl.poll.toInner
 import io.element.android.libraries.matrix.impl.room.location.toInner
 import io.element.android.libraries.matrix.impl.room.member.RoomMemberListFetcher
+import io.element.android.libraries.matrix.impl.room.tags.map
 import io.element.android.libraries.matrix.impl.timeline.RustMatrixTimeline
 import io.element.android.libraries.matrix.impl.util.mxCallbackFlow
 import io.element.android.libraries.matrix.impl.widget.RustWidgetDriver
@@ -70,6 +72,7 @@ import org.matrix.rustcomponents.sdk.RoomInfo
 import org.matrix.rustcomponents.sdk.RoomInfoListener
 import org.matrix.rustcomponents.sdk.RoomListItem
 import org.matrix.rustcomponents.sdk.RoomMessageEventContentWithoutRelation
+import org.matrix.rustcomponents.sdk.RoomNotableTagsListener
 import org.matrix.rustcomponents.sdk.SendAttachmentJoinHandle
 import org.matrix.rustcomponents.sdk.WidgetCapabilities
 import org.matrix.rustcomponents.sdk.WidgetCapabilitiesProvider
@@ -79,6 +82,7 @@ import org.matrix.rustcomponents.sdk.use
 import timber.log.Timber
 import java.io.File
 import org.matrix.rustcomponents.sdk.Room as InnerRoom
+import uniffi.matrix_sdk_base.RoomNotableTags as RustRoomNotableTags
 import org.matrix.rustcomponents.sdk.Timeline as InnerTimeline
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -107,6 +111,15 @@ class RustMatrixRoom(
         innerRoom.subscribeToRoomInfoUpdates(object : RoomInfoListener {
             override fun call(roomInfo: RoomInfo) {
                 channel.trySend(matrixRoomInfoMapper.map(roomInfo))
+            }
+        })
+    }
+
+    override val notableTagsFlow: Flow<RoomNotableTags> = mxCallbackFlow {
+        innerRoom.subscribeToNotableTags(object : RoomNotableTagsListener {
+            override fun call(notableTags: RustRoomNotableTags) {
+                Timber.d("On notable tags update: $notableTags")
+                channel.trySend(notableTags.map())
             }
         })
     }
@@ -420,6 +433,17 @@ class RustMatrixRoom(
             if (blockUserId != null) {
                 innerRoom.ignoreUser(blockUserId.value)
             }
+        }
+    }
+
+    override suspend fun updateNotableTags(notableTags: RoomNotableTags): Result<Unit> = withContext(roomDispatcher) {
+        runCatching {
+            Timber.i("Update notable tags with : $notableTags")
+            innerRoom.updateNotableTags(notableTags.map())
+        }.onFailure {
+            Timber.w("Failed to update notable tags: $it")
+        }.onSuccess {
+            Timber.i("Successfully updated notable tags")
         }
     }
 

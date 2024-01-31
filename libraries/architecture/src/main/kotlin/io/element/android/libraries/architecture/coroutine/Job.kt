@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright (c) 2024 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,11 +14,21 @@
  * limitations under the License.
  */
 
-package io.element.android.features.roomdetails.impl
+package io.element.android.libraries.architecture.coroutine
 
-sealed interface RoomDetailsEvent {
-    data object LeaveRoom : RoomDetailsEvent
-    data object MuteNotification : RoomDetailsEvent
-    data object UnmuteNotification : RoomDetailsEvent
-    data class SetIsFavorite(val isFavorite: Boolean) : RoomDetailsEvent
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import kotlinx.coroutines.Job
+import kotlin.coroutines.cancellation.CancellationException
+
+@Composable
+fun rememberJob(): MutableState<Job?> = remember {
+    mutableStateOf(null)
+}
+
+fun MutableState<Job?>.cancel(cause: CancellationException? = null) {
+    value?.cancel(cause)
+    value = null
 }

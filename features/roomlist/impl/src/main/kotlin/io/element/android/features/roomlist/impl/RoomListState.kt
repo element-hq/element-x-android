@@ -19,6 +19,7 @@ package io.element.android.features.roomlist.impl
 import androidx.compose.runtime.Immutable
 import io.element.android.features.leaveroom.api.LeaveRoomState
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.user.MatrixUser
@@ -47,6 +48,7 @@ data class RoomListState(
             val roomId: RoomId,
             val roomName: String,
             val isDm: Boolean,
+            val isFavorite: AsyncData<Boolean>,
         ) : ContextMenu
     }
 }

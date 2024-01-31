@@ -20,6 +20,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.leaveroom.api.aLeaveRoomState
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
 import io.element.android.features.roomlist.impl.model.aRoomListRoomSummary
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
@@ -46,6 +47,7 @@ open class RoomListStateProvider : PreviewParameterProvider<RoomListState> {
                     roomId = RoomId("!aRoom:aDomain"),
                     roomName = "A nice room name",
                     isDm = false,
+                    isFavorite = AsyncData.Success(true),
                 )
             ),
             aRoomListState().copy(displayRecoveryKeyPrompt = true),
