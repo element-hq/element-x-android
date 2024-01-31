@@ -100,9 +100,9 @@ class RustMatrixClient(
     private val baseDirectory: File,
     baseCacheDirectory: File,
     private val clock: SystemClock,
-    override val deviceId: String,
 ) : MatrixClient {
     override val sessionId: UserId = UserId(client.userId())
+    override val deviceId: String = client.deviceId()
     override val sessionCoroutineScope = appCoroutineScope.childScope(dispatchers.main, "Session-$sessionId")
 
     private val innerRoomListService = syncService.roomListService()
