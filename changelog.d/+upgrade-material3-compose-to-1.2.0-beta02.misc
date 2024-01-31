@@ -1,3 +1,0 @@
-Upgrade Material3 Compose to `1.2.0-beta02`.
-
-There is also a constraint on a transitive Compose Foundation dependency version (1.6.0-beta02) that fixes the timeline scrolling issue.
