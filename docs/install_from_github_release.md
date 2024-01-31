@@ -19,7 +19,7 @@ This document explains how to install Element X Android from a Github Release.
 
 ### Instructions
 
-The easiest way to install the application from the application from a GitHub release is to use the universal APK which is attached to the release. This APK is compatible with all Android devices, but it is not optimized for any of them. So it may not be as fast as it could be on your device, and it may not be as small as it could be.
+The easiest way to install the application from a GitHub release is to use the universal APK which is attached to the release. This APK is compatible with all Android devices, but it is not optimized for any of them. So it may not be as fast as it could be on your device, and it may not be as small as it could be.
 
 Alternatively, you can generate an APK that is optimized for your device. This is explained in the next section.
 
@@ -34,7 +34,7 @@ Alternatively, you can generate an APK that is optimized for your device. This i
 
 If the application was already installed on your phone, there are several cases:
 
-- it was installed from the PlayStore, you can install the universal APK as soon as the version is more recent. The existing data should not be lost.
+- it was installed from the PlayStore, you can install the universal APK as long as the version is more recent. The existing data should not be lost.
 - it was installed from a previous GitHub release, this is like an application upgrade.
 - it was installed from a more recent GitHub release, or from the PlayStore with a later version, you will have to uninstall it first.
 
