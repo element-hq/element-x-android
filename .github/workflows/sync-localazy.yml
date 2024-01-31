@@ -24,7 +24,7 @@ jobs:
       - name: Run Localazy script
         run: ./tools/localazy/downloadStrings.sh --all
       - name: Create Pull Request for Strings
-        uses: peter-evans/create-pull-request@v5
+        uses: peter-evans/create-pull-request@v6
         with:
           token: ${{ secrets.DANGER_GITHUB_API_TOKEN }}
           commit-message: Sync Strings from Localazy
