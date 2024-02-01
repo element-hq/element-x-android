@@ -13,6 +13,16 @@
     <item quantity="few">"%1$d изменения в комнате"</item>
     <item quantity="many">"%1$d изменений в комнате"</item>
   </plurals>
+  <plurals name="screen_room_typing_many_members">
+    <item quantity="one">"%1$s, %2$s и %3$d"</item>
+    <item quantity="few">"%1$s, %2$s и другие %3$d"</item>
+    <item quantity="many">"%1$s, %2$s и другие %3$d"</item>
+  </plurals>
+  <plurals name="screen_room_typing_notification">
+    <item quantity="one">"%1$s набирает сообщение"</item>
+    <item quantity="few">"%1$s набирают сообщения"</item>
+    <item quantity="many">"%1$s набирают сообщения"</item>
+  </plurals>
   <string name="report_content_explanation">"Это сообщение будет передано администратору вашего домашнего сервера. Они не смогут прочитать зашифрованные сообщения."</string>
   <string name="report_content_hint">"Причина, по которой вы пожаловались на этот контент"</string>
   <string name="room_timeline_beginning_of_room">"Это начало %1$s."</string>
@@ -54,6 +64,7 @@
   <string name="screen_room_retry_send_menu_title">"Не удалось отправить ваше сообщение"</string>
   <string name="screen_room_timeline_add_reaction">"Добавить эмодзи"</string>
   <string name="screen_room_timeline_less_reactions">"Показать меньше"</string>
+  <string name="screen_room_typing_two_members">"%1$s и %2$s"</string>
   <string name="screen_room_voice_message_tooltip">"Удерживайте для записи"</string>
   <string name="screen_room_mentions_at_room_title">"Для всех"</string>
   <string name="screen_report_content_block_user">"Заблокировать пользователя"</string>

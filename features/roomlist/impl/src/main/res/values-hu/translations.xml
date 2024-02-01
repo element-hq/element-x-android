@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="confirm_recovery_key_banner_message">"A csevegés biztonsági mentés nincs szinkronban. Meg kell erősítenie a helyreállítási kulcsát, hogy továbbra is hozzáférjen a csevegés biztonsági mentéséhez."</string>
+  <string name="confirm_recovery_key_banner_message">"A csevegés biztonsági mentése nincs szinkronban. Meg kell erősítened a helyreállítási kulcsát, hogy továbbra is hozzáférj a csevegés biztonsági mentéséhez."</string>
   <string name="confirm_recovery_key_banner_title">"Helyreállítási kulcs megerősítése"</string>
   <string name="screen_roomlist_a11y_create_message">"Új beszélgetés vagy szoba létrehozása"</string>
   <string name="screen_roomlist_empty_message">"Kezdje azzal, hogy üzenetet küld valakinek."</string>
