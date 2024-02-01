@@ -29,4 +29,5 @@ data class SessionData(
     val loginTimestamp: Date?,
     val isTokenValid: Boolean,
     val loginType: LoginType,
+    val passphrase: String?,
 )

@@ -59,7 +59,8 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
-import io.element.android.libraries.featureflag.test.InMemoryPreferencesStore
+import io.element.android.libraries.featureflag.test.InMemoryAppPreferencesStore
+import io.element.android.libraries.featureflag.test.InMemorySessionPreferencesStore
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
@@ -120,7 +121,7 @@ class MessagesPresenterTest {
             assertThat(initialState.roomAvatar)
                 .isEqualTo(AsyncData.Success(AvatarData(id = A_ROOM_ID.value, name = "", url = AN_AVATAR_URL, size = AvatarSize.TimelineRoom)))
             assertThat(initialState.userHasPermissionToSendMessage).isTrue()
-            assertThat(initialState.userHasPermissionToRedact).isFalse()
+            assertThat(initialState.userHasPermissionToRedactOwn).isFalse()
             assertThat(initialState.hasNetworkConnection).isTrue()
             assertThat(initialState.snackbarMessage).isNull()
             assertThat(initialState.inviteProgress).isEqualTo(AsyncData.Uninitialized)
@@ -601,14 +602,29 @@ class MessagesPresenterTest {
     }
 
     @Test
-    fun `present - permission to redact`() = runTest {
-        val matrixRoom = FakeMatrixRoom(canRedact = true)
+    fun `present - permission to redact own`() = runTest {
+        val matrixRoom = FakeMatrixRoom(canRedactOwn = true)
         val presenter = createMessagesPresenter(matrixRoom = matrixRoom)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            val initialState = consumeItemsUntilPredicate { it.userHasPermissionToRedact }.last()
-            assertThat(initialState.userHasPermissionToRedact).isTrue()
+            val initialState = consumeItemsUntilPredicate { it.userHasPermissionToRedactOwn }.last()
+            assertThat(initialState.userHasPermissionToRedactOwn).isTrue()
+            assertThat(initialState.userHasPermissionToRedactOther).isFalse()
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - permission to redact other`() = runTest {
+        val matrixRoom = FakeMatrixRoom(canRedactOther = true)
+        val presenter = createMessagesPresenter(matrixRoom = matrixRoom)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = consumeItemsUntilPredicate { it.userHasPermissionToRedactOther }.last()
+            assertThat(initialState.userHasPermissionToRedactOwn).isFalse()
+            assertThat(initialState.userHasPermissionToRedactOther).isTrue()
             cancelAndIgnoreRemainingEvents()
         }
     }
@@ -649,10 +665,11 @@ class MessagesPresenterTest {
         clipboardHelper: FakeClipboardHelper = FakeClipboardHelper(),
         analyticsService: FakeAnalyticsService = FakeAnalyticsService(),
         permissionsPresenter: PermissionsPresenter = FakePermissionsPresenter(),
-        currentSessionIdHolder: CurrentSessionIdHolder = CurrentSessionIdHolder(FakeMatrixClient(A_SESSION_ID)),
     ): MessagesPresenter {
         val mediaSender = MediaSender(FakeMediaPreProcessor(), matrixRoom)
         val permissionsPresenterFactory = FakePermissionsPresenterFactory(permissionsPresenter)
+        val appPreferencesStore = InMemoryAppPreferencesStore(isRichTextEditorEnabled = true)
+        val sessionPreferencesStore = InMemorySessionPreferencesStore()
         val messageComposerPresenter = MessageComposerPresenter(
             appCoroutineScope = this,
             room = matrixRoom,
@@ -687,14 +704,14 @@ class MessagesPresenterTest {
             redactedVoiceMessageManager = FakeRedactedVoiceMessageManager(),
             endPollAction = FakeEndPollAction(),
             sendPollResponseAction = FakeSendPollResponseAction(),
+            sessionPreferencesStore = sessionPreferencesStore,
         )
         val timelinePresenterFactory = object : TimelinePresenter.Factory {
             override fun create(navigator: MessagesNavigator): TimelinePresenter {
                 return timelinePresenter
             }
         }
-        val preferencesStore = InMemoryPreferencesStore(isRichTextEditorEnabled = true)
-        val actionListPresenter = ActionListPresenter(preferencesStore = preferencesStore)
+        val actionListPresenter = ActionListPresenter(appPreferencesStore = appPreferencesStore)
         val readReceiptBottomSheetPresenter = ReadReceiptBottomSheetPresenter()
         val customReactionPresenter = CustomReactionPresenter(emojibaseProvider = FakeEmojibaseProvider())
         val reactionSummaryPresenter = ReactionSummaryPresenter(room = matrixRoom)
@@ -714,11 +731,10 @@ class MessagesPresenterTest {
             messageSummaryFormatter = FakeMessageSummaryFormatter(),
             navigator = navigator,
             clipboardHelper = clipboardHelper,
-            preferencesStore = preferencesStore,
+            appPreferencesStore = appPreferencesStore,
             featureFlagsService = FakeFeatureFlagService(),
             buildMeta = aBuildMeta(),
             dispatchers = coroutineDispatchers,
-            currentSessionIdHolder = currentSessionIdHolder,
             htmlConverterProvider = FakeHtmlConverterProvider(),
         )
     }

@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_invites_decline_chat_message">"Vuoi davvero rifiutare l\'invito ad entrare in %1$s?"</string>
+  <string name="screen_invites_decline_chat_title">"Rifiuta l\'invito"</string>
+  <string name="screen_invites_decline_direct_chat_message">"Vuoi davvero rifiutare questa chat privata con %1$s?"</string>
+  <string name="screen_invites_decline_direct_chat_title">"Rifiuta la chat"</string>
+  <string name="screen_invites_empty_list">"Nessun invito"</string>
   <string name="screen_invites_invited_you">"%1$s (%2$s) ti ha invitato"</string>
 </resources>

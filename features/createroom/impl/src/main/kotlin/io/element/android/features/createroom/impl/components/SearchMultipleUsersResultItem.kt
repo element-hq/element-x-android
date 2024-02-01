@@ -23,10 +23,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
-import io.element.android.libraries.matrix.ui.components.CheckableMatrixUserRow
-import io.element.android.libraries.matrix.ui.components.CheckableUnresolvedUserRow
+import io.element.android.libraries.matrix.ui.components.CheckableUserRow
+import io.element.android.libraries.matrix.ui.components.CheckableUserRowData
 import io.element.android.libraries.matrix.ui.components.aMatrixUser
 import io.element.android.libraries.matrix.ui.model.getAvatarData
+import io.element.android.libraries.matrix.ui.model.getBestName
 import io.element.android.libraries.usersearch.api.UserSearchResult
 
 @Composable
@@ -36,23 +37,24 @@ fun SearchMultipleUsersResultItem(
     onCheckedChange: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    if (searchResult.isUnresolved) {
-        CheckableUnresolvedUserRow(
-            checked = isUserSelected,
-            modifier = modifier,
+    val data = if (searchResult.isUnresolved) {
+        CheckableUserRowData.Unresolved(
             avatarData = searchResult.matrixUser.getAvatarData(AvatarSize.UserListItem),
             id = searchResult.matrixUser.userId.value,
-            onCheckedChange = onCheckedChange,
         )
     } else {
-        CheckableMatrixUserRow(
-            checked = isUserSelected,
-            modifier = modifier,
-            matrixUser = searchResult.matrixUser,
-            avatarSize = AvatarSize.UserListItem,
-            onCheckedChange = onCheckedChange,
+        CheckableUserRowData.Resolved(
+            name = searchResult.matrixUser.getBestName(),
+            subtext = if (searchResult.matrixUser.displayName.isNullOrEmpty()) null else searchResult.matrixUser.userId.value,
+            avatarData = searchResult.matrixUser.getAvatarData(AvatarSize.UserListItem),
         )
     }
+    CheckableUserRow(
+        checked = isUserSelected,
+        modifier = modifier,
+        data = data,
+        onCheckedChange = onCheckedChange,
+    )
 }
 
 @Preview

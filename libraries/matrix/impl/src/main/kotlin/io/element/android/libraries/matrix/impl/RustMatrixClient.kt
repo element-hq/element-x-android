@@ -76,11 +76,14 @@ import kotlinx.coroutines.withTimeout
 import org.matrix.rustcomponents.sdk.BackupState
 import org.matrix.rustcomponents.sdk.Client
 import org.matrix.rustcomponents.sdk.ClientDelegate
+import org.matrix.rustcomponents.sdk.FilterStateEventType
+import org.matrix.rustcomponents.sdk.FilterTimelineEventType
 import org.matrix.rustcomponents.sdk.NotificationProcessSetup
 import org.matrix.rustcomponents.sdk.PowerLevels
 import org.matrix.rustcomponents.sdk.Room
 import org.matrix.rustcomponents.sdk.RoomListItem
 import org.matrix.rustcomponents.sdk.TaskHandle
+import org.matrix.rustcomponents.sdk.TimelineEventTypeFilter
 import org.matrix.rustcomponents.sdk.use
 import timber.log.Timber
 import java.io.File
@@ -102,9 +105,11 @@ class RustMatrixClient(
     private val clock: SystemClock,
 ) : MatrixClient {
     override val sessionId: UserId = UserId(client.userId())
+    override val deviceId: String = client.deviceId()
+    override val sessionCoroutineScope = appCoroutineScope.childScope(dispatchers.main, "Session-$sessionId")
+
     private val innerRoomListService = syncService.roomListService()
     private val sessionDispatcher = dispatchers.io.limitedParallelism(64)
-    private val sessionCoroutineScope = appCoroutineScope.childScope(dispatchers.main, "Session-$sessionId")
     private val rustSyncService = RustSyncService(syncService, sessionCoroutineScope)
     private val verificationService = RustSessionVerificationService(rustSyncService, sessionCoroutineScope)
     private val pushersService = RustPushersService(
@@ -139,15 +144,25 @@ class RustMatrixClient(
                 // TODO handle isSoftLogout parameter.
                 appCoroutineScope.launch {
                     val existingData = sessionStore.getSession(client.userId())
+                    val anonymizedToken = existingData?.accessToken?.takeLast(4)
+                    Timber.d("Removing session data with token: '...$anonymizedToken'.")
                     if (existingData != null) {
                         // Set isTokenValid to false
                         val newData = client.session().toSessionData(
                             isTokenValid = false,
                             loginType = existingData.loginType,
+                            passphrase = existingData.passphrase,
                         )
                         sessionStore.updateData(newData)
+                        Timber.d("Removed session data with token: '...$anonymizedToken'.")
+                    } else {
+                        Timber.d("No session data found.")
                     }
                     doLogout(doRequest = false, removeSession = false, ignoreSdkError = false)
+                }.invokeOnCompletion {
+                    if (it != null) {
+                        Timber.e(it, "Failed to remove session data.")
+                    }
                 }
             } else {
                 Timber.v("didReceiveAuthError -> already cleaning up")
@@ -158,11 +173,19 @@ class RustMatrixClient(
             Timber.w("didRefreshTokens()")
             appCoroutineScope.launch {
                 val existingData = sessionStore.getSession(client.userId()) ?: return@launch
+                val anonymizedToken = client.session().accessToken.takeLast(4)
+                Timber.d("Saving new session data with token: '...$anonymizedToken'. Was token valid: ${existingData.isTokenValid}")
                 val newData = client.session().toSessionData(
-                    isTokenValid = existingData.isTokenValid,
+                    isTokenValid = true,
                     loginType = existingData.loginType,
+                    passphrase = existingData.passphrase,
                 )
                 sessionStore.updateData(newData)
+                Timber.d("Saved new session data with token: '...$anonymizedToken'.")
+            }.invokeOnCompletion {
+                if (it != null) {
+                    Timber.e(it, "Failed to save new session data.")
+                }
             }
         }
     }
@@ -177,6 +200,25 @@ class RustMatrixClient(
                 dispatcher = sessionDispatcher,
             ),
         )
+
+    private val eventFilters = TimelineEventTypeFilter.exclude(
+        listOf(
+            FilterStateEventType.ROOM_ALIASES,
+            FilterStateEventType.ROOM_CANONICAL_ALIAS,
+            FilterStateEventType.ROOM_GUEST_ACCESS,
+            FilterStateEventType.ROOM_HISTORY_VISIBILITY,
+            FilterStateEventType.ROOM_JOIN_RULES,
+            FilterStateEventType.ROOM_PINNED_EVENTS,
+            FilterStateEventType.ROOM_POWER_LEVELS,
+            FilterStateEventType.ROOM_SERVER_ACL,
+            FilterStateEventType.ROOM_TOMBSTONE,
+            FilterStateEventType.SPACE_CHILD,
+            FilterStateEventType.SPACE_PARENT,
+            FilterStateEventType.POLICY_RULE_ROOM,
+            FilterStateEventType.POLICY_RULE_SERVER,
+            FilterStateEventType.POLICY_RULE_USER,
+        ).map(FilterTimelineEventType::State)
+    )
 
     override val roomListService: RoomListService
         get() = rustRoomListService
@@ -226,10 +268,14 @@ class RustMatrixClient(
         }
     }
 
-    private fun pairOfRoom(roomId: RoomId): Pair<RoomListItem, Room>? {
+    private suspend fun pairOfRoom(roomId: RoomId): Pair<RoomListItem, Room>? {
         val cachedRoomListItem = innerRoomListService.roomOrNull(roomId.value)
-        // Keep using fullRoomBlocking for now as it's faster.
-        val fullRoom = cachedRoomListItem?.fullRoomBlocking()
+        val fullRoom = cachedRoomListItem?.let { roomListItem ->
+            if (!roomListItem.isTimelineInitialized()) {
+                roomListItem.initTimeline(eventFilters)
+            }
+            roomListItem.fullRoom()
+        }
         return if (cachedRoomListItem == null || fullRoom == null) {
             Timber.d("No room cached for $roomId")
             null
@@ -411,7 +457,7 @@ class RustMatrixClient(
         }
     }
 
-    override suspend fun loadUserAvatarURLString(): Result<String?> = withContext(sessionDispatcher) {
+    override suspend fun loadUserAvatarUrl(): Result<String?> = withContext(sessionDispatcher) {
         runCatching {
             client.avatarUrl()
         }

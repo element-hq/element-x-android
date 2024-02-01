@@ -29,7 +29,7 @@ import io.element.android.features.rageshake.test.rageshake.FakeRageshakeDataSto
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
-import io.element.android.libraries.featureflag.test.InMemoryPreferencesStore
+import io.element.android.libraries.featureflag.test.InMemoryAppPreferencesStore
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.awaitLastSequentialItem
 import kotlinx.coroutines.test.runTest
@@ -114,7 +114,7 @@ class DeveloperSettingsPresenterTest {
 
     @Test
     fun `present - custom element call base url`() = runTest {
-        val preferencesStore = InMemoryPreferencesStore()
+        val preferencesStore = InMemoryAppPreferencesStore()
         val presenter = createDeveloperSettingsPresenter(preferencesStore = preferencesStore)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -149,14 +149,14 @@ class DeveloperSettingsPresenterTest {
         cacheSizeUseCase: FakeComputeCacheSizeUseCase = FakeComputeCacheSizeUseCase(),
         clearCacheUseCase: FakeClearCacheUseCase = FakeClearCacheUseCase(),
         rageshakePresenter: DefaultRageshakePreferencesPresenter = DefaultRageshakePreferencesPresenter(FakeRageShake(), FakeRageshakeDataStore()),
-        preferencesStore: InMemoryPreferencesStore = InMemoryPreferencesStore(),
+        preferencesStore: InMemoryAppPreferencesStore = InMemoryAppPreferencesStore(),
     ): DeveloperSettingsPresenter {
         return DeveloperSettingsPresenter(
             featureFlagService = featureFlagService,
             computeCacheSizeUseCase = cacheSizeUseCase,
             clearCacheUseCase = clearCacheUseCase,
             rageshakePresenter = rageshakePresenter,
-            preferencesStore = preferencesStore,
+            appPreferencesStore = preferencesStore,
         )
     }
 }

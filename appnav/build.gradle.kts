@@ -52,6 +52,7 @@ dependencies {
     implementation(libs.coil)
 
     implementation(projects.features.ftue.api)
+    implementation(projects.features.viewfolder.api)
 
     implementation(projects.services.apperror.impl)
     implementation(projects.services.appnavstate.api)

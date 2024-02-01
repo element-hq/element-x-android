@@ -39,7 +39,7 @@ class FakeMatrixTimeline(
     private val _paginationState: MutableStateFlow<MatrixTimeline.PaginationState> = MutableStateFlow(initialPaginationState)
     private val _timelineItems: MutableStateFlow<List<MatrixTimelineItem>> = MutableStateFlow(initialTimelineItems)
 
-    var sendReadReceiptCount = 0
+    var sentReadReceipts = mutableListOf<Pair<EventId, ReceiptType>>()
         private set
 
     var sendReadReceiptLatch: CompletableDeferred<Unit>? = null
@@ -81,7 +81,7 @@ class FakeMatrixTimeline(
         eventId: EventId,
         receiptType: ReceiptType,
     ): Result<Unit> = simulateLongTask {
-        sendReadReceiptCount++
+        sentReadReceipts.add(eventId to receiptType)
         sendReadReceiptLatch?.complete(Unit)
         Result.success(Unit)
     }

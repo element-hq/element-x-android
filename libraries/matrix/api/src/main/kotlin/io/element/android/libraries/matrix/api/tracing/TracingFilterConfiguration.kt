@@ -29,6 +29,7 @@ data class TracingFilterConfiguration(
         Target.MATRIX_SDK_SLIDING_SYNC to LogLevel.TRACE,
         Target.MATRIX_SDK_BASE_SLIDING_SYNC to LogLevel.TRACE,
         Target.MATRIX_SDK_UI_TIMELINE to LogLevel.TRACE,
+        Target.MATRIX_SDK_BASE_READ_RECEIPTS to LogLevel.TRACE,
     )
 
     fun getLogLevel(target: Target): LogLevel {
@@ -37,7 +38,7 @@ data class TracingFilterConfiguration(
 
     val filter: String
         get() {
-            val fullMap = Target.values().associateWith {
+            val fullMap = Target.entries.associateWith {
                 overrides[it] ?: targetsToLogLevel[it] ?: defaultLogLevel
             }
             return fullMap.map {
@@ -64,6 +65,7 @@ enum class Target(open val filter: String) {
     MATRIX_SDK_SLIDING_SYNC("matrix_sdk::sliding_sync"),
     MATRIX_SDK_BASE_SLIDING_SYNC("matrix_sdk_base::sliding_sync"),
     MATRIX_SDK_UI_TIMELINE("matrix_sdk_ui::timeline"),
+    MATRIX_SDK_BASE_READ_RECEIPTS("matrix_sdk_base::read_receipts"),
 }
 
 enum class LogLevel(open val filter: String) {
@@ -80,6 +82,12 @@ object TracingFilterConfigurations {
             Target.ELEMENT to LogLevel.DEBUG
         ),
     )
+    val nightly = TracingFilterConfiguration(
+        overrides = mapOf(
+            Target.ELEMENT to LogLevel.TRACE,
+            Target.MATRIX_SDK_BASE_READ_RECEIPTS to LogLevel.TRACE,
+        ),
+    )
     val debug = TracingFilterConfiguration(
         overrides = mapOf(
             Target.ELEMENT to LogLevel.TRACE
@@ -89,7 +97,7 @@ object TracingFilterConfigurations {
     /**
      *  Use this method to create a custom configuration where all targets will have the same log level.
      */
-    fun custom(logLevel: LogLevel) = TracingFilterConfiguration(overrides = Target.values().associateWith { logLevel })
+    fun custom(logLevel: LogLevel) = TracingFilterConfiguration(overrides = Target.entries.associateWith { logLevel })
 
     /**
      * Use this method to override the log level of specific targets.

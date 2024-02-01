@@ -48,7 +48,7 @@ class DefaultBugReporterTest {
         val sut = createDefaultBugReporter(server)
         var onUploadCancelledCalled = false
         var onUploadFailedCalled = false
-        var progressValues = mutableListOf<Int>()
+        val progressValues = mutableListOf<Int>()
         var onUploadSucceedCalled = false
         sut.sendBugReport(
             withDevicesLogs = true,
@@ -80,7 +80,7 @@ class DefaultBugReporterTest {
         server.shutdown()
         assertThat(onUploadCancelledCalled).isFalse()
         assertThat(onUploadFailedCalled).isFalse()
-        assertThat(progressValues.size).isEqualTo(10)
+        assertThat(progressValues.size).isEqualTo(EXPECTED_NUMBER_OF_PROGRESS_VALUE)
         assertThat(onUploadSucceedCalled).isTrue()
     }
 
@@ -97,7 +97,7 @@ class DefaultBugReporterTest {
         var onUploadCancelledCalled = false
         var onUploadFailedCalled = false
         var onUploadFailedReason: String? = null
-        var progressValues = mutableListOf<Int>()
+        val progressValues = mutableListOf<Int>()
         var onUploadSucceedCalled = false
         sut.sendBugReport(
             withDevicesLogs = true,
@@ -131,7 +131,7 @@ class DefaultBugReporterTest {
         assertThat(onUploadCancelledCalled).isFalse()
         assertThat(onUploadFailedCalled).isTrue()
         assertThat(onUploadFailedReason).isEqualTo("An error body")
-        assertThat(progressValues.size).isEqualTo(10)
+        assertThat(progressValues.size).isEqualTo(EXPECTED_NUMBER_OF_PROGRESS_VALUE)
         assertThat(onUploadSucceedCalled).isFalse()
     }
 
@@ -152,5 +152,9 @@ class DefaultBugReporterTest {
             buildMeta = buildMeta,
             bugReporterUrlProvider = { server.url("/") }
         )
+    }
+
+    companion object {
+        private const val EXPECTED_NUMBER_OF_PROGRESS_VALUE = 12
     }
 }

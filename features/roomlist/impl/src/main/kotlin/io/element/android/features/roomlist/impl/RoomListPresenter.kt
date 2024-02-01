@@ -119,7 +119,8 @@ class RoomListPresenter @Inject constructor(
                 is RoomListEvents.ShowContextMenu -> {
                     contextMenu = RoomListState.ContextMenu.Shown(
                         roomId = event.roomListRoomSummary.roomId,
-                        roomName = event.roomListRoomSummary.name
+                        roomName = event.roomListRoomSummary.name,
+                        isDm = event.roomListRoomSummary.isDm,
                     )
                 }
                 is RoomListEvents.HideContextMenu -> contextMenu = RoomListState.ContextMenu.Hidden

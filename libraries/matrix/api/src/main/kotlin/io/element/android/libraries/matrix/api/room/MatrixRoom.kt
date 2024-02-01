@@ -52,6 +52,9 @@ interface MatrixRoom : Closeable {
     val activeMemberCount: Long
     val joinedMemberCount: Long
 
+    /** Whether the room is a direct message. */
+    val isDm: Boolean get() = isDirect && isOneToOne
+
     val roomInfoFlow: Flow<MatrixRoomInfo>
 
     /**
@@ -72,7 +75,7 @@ interface MatrixRoom : Closeable {
     /**
      * Try to load the room members and update the membersFlow.
      */
-    suspend fun updateMembers(): Result<Unit>
+    suspend fun updateMembers()
 
     suspend fun updateRoomNotificationSettings(): Result<Unit>
 
@@ -124,7 +127,9 @@ interface MatrixRoom : Closeable {
 
     suspend fun canUserInvite(userId: UserId): Result<Boolean>
 
-    suspend fun canUserRedact(userId: UserId): Result<Boolean>
+    suspend fun canUserRedactOwn(userId: UserId): Result<Boolean>
+
+    suspend fun canUserRedactOther(userId: UserId): Result<Boolean>
 
     suspend fun canUserSendState(userId: UserId, type: StateEventType): Result<Boolean>
 
@@ -220,6 +225,12 @@ interface MatrixRoom : Closeable {
     ): Result<MediaUploadHandler>
 
     /**
+     * Send a typing notification.
+     * @param isTyping True if the user is typing, false otherwise.
+     */
+    suspend fun typingNotice(isTyping: Boolean): Result<Unit>
+
+    /**
      * Generates a Widget url to display in a [android.webkit.WebView] given the provided parameters.
      * @param widgetSettings The widget settings to use.
      * @param clientId The client id to use. It should be unique per app install.
@@ -240,8 +251,6 @@ interface MatrixRoom : Closeable {
      * @return The resulting [MatrixWidgetDriver], or a failure.
      */
     fun getWidgetDriver(widgetSettings: MatrixWidgetSettings): Result<MatrixWidgetDriver>
-
-    fun pollHistory(): MatrixTimeline
 
     override fun close() = destroy()
 }

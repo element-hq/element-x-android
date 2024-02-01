@@ -2,4 +2,17 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_signout_confirmation_dialog_content">"Sei sicuro di voler uscire?"</string>
   <string name="screen_signout_in_progress_dialog_content">"Uscita in corso…"</string>
+  <string name="screen_signout_key_backup_disabled_subtitle">"Stai per disconnettere la tua ultima sessione. Se esci ora, perderai l\'accesso ai tuoi messaggi cifrati."</string>
+  <string name="screen_signout_key_backup_disabled_title">"Hai disattivato il backup"</string>
+  <string name="screen_signout_key_backup_offline_subtitle">"Il backup delle chiavi era ancora in corso quando sei andato offline. Riconnettiti per eseguire il backup delle chiavi prima di uscire."</string>
+  <string name="screen_signout_key_backup_offline_title">"Il backup delle chiavi è ancora in corso"</string>
+  <string name="screen_signout_key_backup_ongoing_subtitle">"Attendi il completamento dell\'operazione prima di uscire."</string>
+  <string name="screen_signout_key_backup_ongoing_title">"Il backup delle chiavi è ancora in corso"</string>
+  <string name="screen_signout_recovery_disabled_subtitle">"Stai per disconnettere la tua ultima sessione. Se esci ora, perderai l\'accesso ai tuoi messaggi cifrati."</string>
+  <string name="screen_signout_recovery_disabled_title">"Recupero non impostato"</string>
+  <string name="screen_signout_save_recovery_key_subtitle">"Stai per disconnettere la tua ultima sessione. Se esci ora, potresti perdere l\'accesso ai tuoi messaggi cifrati."</string>
+  <string name="screen_signout_save_recovery_key_title">"Hai salvato la chiave di recupero?"</string>
+  <string name="screen_signout_confirmation_dialog_submit">"Disconnetti"</string>
+  <string name="screen_signout_confirmation_dialog_title">"Disconnetti"</string>
+  <string name="screen_signout_preference_item">"Disconnetti"</string>
 </resources>

@@ -69,6 +69,8 @@ class DefaultRoomLastMessageFormatter @Inject constructor(
 
     override fun format(event: EventTimelineItem, isDmRoom: Boolean): CharSequence? {
         val isOutgoing = event.isOwn
+        // Note: we do not use disambiguated display name here, see
+        // https://github.com/element-hq/element-x-ios/issues/1845#issuecomment-1888707428
         val senderDisplayName = (event.senderProfile as? ProfileTimelineDetails.Ready)?.displayName ?: event.sender.value
         return when (val content = event.content) {
             is MessageContent -> processMessageContents(content, senderDisplayName, isDmRoom)

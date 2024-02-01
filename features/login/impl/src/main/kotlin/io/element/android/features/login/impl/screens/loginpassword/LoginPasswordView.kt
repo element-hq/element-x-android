@@ -203,15 +203,17 @@ private fun LoginForm(
                 .onTabOrEnterKeyFocusNext(focusManager)
                 .testTag(TestTags.loginEmailUsername)
                 .autofill(autofillTypes = listOf(AutofillType.Username), onFill = {
-                    loginFieldState = it
-                    eventSink(LoginPasswordEvents.SetLogin(it))
+                    val sanitized = it.sanitize()
+                    loginFieldState = sanitized
+                    eventSink(LoginPasswordEvents.SetLogin(sanitized))
                 }),
             placeholder = {
                 Text(text = stringResource(CommonStrings.common_username))
             },
             onValueChange = {
-                loginFieldState = it
-                eventSink(LoginPasswordEvents.SetLogin(it))
+                val sanitized = it.sanitize()
+                loginFieldState = sanitized
+                eventSink(LoginPasswordEvents.SetLogin(sanitized))
             },
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Email,
@@ -233,7 +235,6 @@ private fun LoginForm(
                 null
             },
         )
-
         var passwordVisible by remember { mutableStateOf(false) }
         if (state.loginAction is AsyncData.Loading) {
             // Ensure password is hidden when user submits the form
@@ -248,12 +249,14 @@ private fun LoginForm(
                 .onTabOrEnterKeyFocusNext(focusManager)
                 .testTag(TestTags.loginPassword)
                 .autofill(autofillTypes = listOf(AutofillType.Password), onFill = {
-                    passwordFieldState = it
-                    eventSink(LoginPasswordEvents.SetPassword(it))
+                    val sanitized = it.sanitize()
+                    passwordFieldState = sanitized
+                    eventSink(LoginPasswordEvents.SetPassword(sanitized))
                 }),
             onValueChange = {
-                passwordFieldState = it
-                eventSink(LoginPasswordEvents.SetPassword(it))
+                val sanitized = it.sanitize()
+                passwordFieldState = sanitized
+                eventSink(LoginPasswordEvents.SetPassword(sanitized))
             },
             placeholder = {
                 Text(text = stringResource(CommonStrings.common_password))
@@ -279,6 +282,13 @@ private fun LoginForm(
             singleLine = true,
         )
     }
+}
+
+/**
+ * Ensure that the string does not contain any new line characters, which can happen when pasting values.
+ */
+private fun String.sanitize(): String {
+    return replace("\n", "")
 }
 
 @Composable

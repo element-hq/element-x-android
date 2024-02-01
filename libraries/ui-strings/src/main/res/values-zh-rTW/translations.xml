@@ -48,7 +48,7 @@
   <string name="action_forgot_password">"忘記密碼？"</string>
   <string name="action_forward">"轉寄"</string>
   <string name="action_invite">"邀請"</string>
-  <string name="action_invite_friends">"邀請朋友"</string>
+  <string name="action_invite_friends">"邀請夥伴"</string>
   <string name="action_invite_friends_to_app">"邀請朋友使用 %1$s"</string>
   <string name="action_invite_people_to_app">"邀請夥伴使用 %1$s"</string>
   <string name="action_invites_list">"邀請"</string>

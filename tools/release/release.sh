@@ -143,7 +143,7 @@ git commit -a -m "Setting version for the release ${version}"
 
 printf "\n================================================================================\n"
 printf "Building the bundle locally first...\n"
-./gradlew clean app:bundleRelease
+./gradlew clean app:bundleGplayRelease
 
 printf "\n================================================================================\n"
 printf "Running towncrier...\n"
@@ -218,7 +218,7 @@ fi
 
 printf "\n================================================================================\n"
 printf "Wait for the GitHub action https://github.com/element-hq/element-x-android/actions/workflows/release.yml?query=branch%%3Amain to build the 'main' branch.\n"
-read -p "After GHA is finished, please enter the artifact URL (for 'elementx-app-bundle-unsigned'): " artifactUrl
+read -p "After GHA is finished, please enter the artifact URL (for 'elementx-app-gplay-bundle-unsigned'): " artifactUrl
 
 printf "\n================================================================================\n"
 printf "Downloading the artifact...\n"
@@ -235,10 +235,10 @@ python3 ./tools/github/download_github_artifacts.py \
 printf "\n================================================================================\n"
 printf "Unzipping the artifact...\n"
 
-unzip ${targetPath}/elementx-app-bundle-unsigned.zip -d ${targetPath}
+unzip ${targetPath}/elementx-app-gplay-bundle-unsigned.zip -d ${targetPath}
 
-unsignedBundlePath="${targetPath}/app-release.aab"
-signedBundlePath="${targetPath}/app-release-signed.aab"
+unsignedBundlePath="${targetPath}/app-gplay-release.aab"
+signedBundlePath="${targetPath}/app-gplay-release-signed.aab"
 
 printf "\n================================================================================\n"
 printf "Signing file ${unsignedBundlePath} with build-tools version ${buildToolsVersion} for min SDK version ${minSdkVersion}...\n"
@@ -292,6 +292,19 @@ else
 fi
 
 printf "\n================================================================================\n"
+printf "Create the open testing release on GooglePlay.\n"
+
+printf "On GooglePlay console, go the the open testing section and click on \"Create new release\" button, then:\n"
+printf " - upload the file ${signedBundlePath}.\n"
+printf " - copy the release note from the fastlane file.\n"
+printf " - download the universal APK, to be able to provide it to the GitHub release: click on the right arrow next to the \"App bundle\", then click on the \"Download\" tab, and download the \"Signed, universal APK\".\n"
+printf " - submit the release.\n"
+read -p "Press enter to continue. "
+
+printf "You can then go to \"Publishing overview\" and send the new release for a review by Google.\n"
+read -p "Press enter to continue. "
+
+printf "\n================================================================================\n"
 githubCreateReleaseLink="https://github.com/element-hq/element-x-android/releases/new?tag=v${version}&title=Element%20X%20Android%20v${version}&body=${changelogUrlEncoded}"
 printf "Creating the release on gitHub.\n"
 printf -- "Open this link: %s\n" ${githubCreateReleaseLink}
@@ -299,11 +312,12 @@ printf "Then\n"
 printf " - copy paste the section of the file CHANGES.md for this release (if not there yet)\n"
 printf " - click on the 'Generate releases notes' button\n"
 printf " - Add the file ${signedBundlePath} to the GitHub release.\n"
+printf " - Add the universal APK, downloaded from the GooglePlay console to the GitHub release.\n"
 read -p ". Press enter to continue. "
 
 printf "\n================================================================================\n"
 printf "Message for the Android internal room:\n\n"
-message="@room Element X Android ${version} is ready to be tested. You can get it from https://github.com/element-hq/element-x-android/releases/tag/v${version}. Installation instructions can be found [here](https://github.com/element-hq/element-x-android/blob/develop/docs/install_from_github_release.md). Please report any feedback. Thanks!"
+message="@room Element X Android ${version} is ready to be tested. You can get it from https://github.com/element-hq/element-x-android/releases/tag/v${version}. You can install the universal APK. If you want to install the application from the app bundle, you can follow instructions [here](https://github.com/element-hq/element-x-android/blob/develop/docs/install_from_github_release.md). Please report any feedback. Thanks!"
 printf "${message}\n\n"
 
 if [[ -z "${elementBotToken}" ]]; then

@@ -63,6 +63,10 @@ class FakeBugReporter(val mode: FakeBugReporterMode = FakeBugReporterMode.Succes
     override fun setCurrentTracingFilter(tracingFilter: String) {
         // No op
     }
+
+    override fun saveLogCat() {
+        // No op
+    }
 }
 
 enum class FakeBugReporterMode {

@@ -31,5 +31,6 @@ interface BugReportEntryPoint : FeatureEntryPoint {
 
     interface Callback : Plugin {
         fun onBugReportSent()
+        fun onViewLogs(basePath: String)
     }
 }

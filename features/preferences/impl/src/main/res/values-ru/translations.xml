@@ -6,7 +6,9 @@
   <string name="screen_advanced_settings_developer_mode">"Режим разработчика"</string>
   <string name="screen_advanced_settings_developer_mode_description">"Предоставьте разработчикам доступ к функциям и функциональным возможностям."</string>
   <string name="screen_advanced_settings_rich_text_editor_description">"Отключить редактор форматированного текста и включить Markdown."</string>
-  <string name="screen_advanced_settings_view_source_description">"Включить опцию просмотра источника сообщения на временной шкале."</string>
+  <string name="screen_advanced_settings_send_read_receipts">"Уведомления о прочтении"</string>
+  <string name="screen_advanced_settings_send_read_receipts_description">"Если этот параметр выключен, ваш статус о прочтении не будет отображаться. Вы по-прежнему будете видеть статус о прочтении от других пользователей."</string>
+  <string name="screen_advanced_settings_view_source_description">"Включить опцию просмотра источника сообщения в ленте."</string>
   <string name="screen_edit_profile_display_name">"Отображаемое имя"</string>
   <string name="screen_edit_profile_display_name_placeholder">"Ваше отображаемое имя"</string>
   <string name="screen_edit_profile_error">"Произошла неизвестная ошибка, изменить информацию не удалось."</string>
@@ -20,7 +22,7 @@
 
 Если вы продолжите, некоторые настройки могут быть изменены."</string>
   <string name="screen_notification_settings_direct_chats">"Прямые чаты"</string>
-  <string name="screen_notification_settings_edit_custom_settings_section_title">"Индивидуальные настройки для каждого чата"</string>
+  <string name="screen_notification_settings_edit_custom_settings_section_title">"Персональные настройки для каждого чата"</string>
   <string name="screen_notification_settings_edit_failed_updating_default_mode">"При обновлении настроек уведомления произошла ошибка."</string>
   <string name="screen_notification_settings_edit_mode_all_messages">"Все сообщения"</string>
   <string name="screen_notification_settings_edit_mode_mentions_and_keywords">"Только упоминания и ключевые слова"</string>

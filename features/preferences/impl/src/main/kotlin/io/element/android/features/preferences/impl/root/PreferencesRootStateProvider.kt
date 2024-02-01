@@ -24,6 +24,7 @@ import io.element.android.libraries.ui.strings.CommonStrings
 fun aPreferencesRootState() = PreferencesRootState(
     myUser = null,
     version = "Version 1.1 (1)",
+    deviceId = "ILAKNDNASDLK",
     showCompleteVerification = true,
     showSecureBackup = true,
     showSecureBackupBadge = true,

@@ -115,6 +115,26 @@ class LeaveRoomPresenterImplTest {
     }
 
     @Test
+    fun `present - show DM confirmation`() = runTest {
+        val presenter = createLeaveRoomPresenter(
+            client = FakeMatrixClient().apply {
+                givenGetRoomResult(
+                    roomId = A_ROOM_ID,
+                    result = FakeMatrixRoom(activeMemberCount = 2, isDirect = true, isOneToOne = true),
+                )
+            }
+        )
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            initialState.eventSink(LeaveRoomEvent.ShowConfirmation(A_ROOM_ID))
+            val confirmationState = awaitItem()
+            assertThat(confirmationState.confirmation).isEqualTo(LeaveRoomState.Confirmation.Dm(A_ROOM_ID))
+        }
+    }
+
+    @Test
     fun `present - leaving a room leaves the room`() = runTest {
         val roomMembershipObserver = RoomMembershipObserver()
         val presenter = createLeaveRoomPresenter(

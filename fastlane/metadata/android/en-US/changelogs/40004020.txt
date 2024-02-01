@@ -1,0 +1,2 @@
+Main changes in this version: be able to send a problem from the first screen, and add an internal log viewer. Be able to send private read receipt, send typing notification, improve performance.
+Full changelog: https://github.com/element-hq/element-x-android/releases

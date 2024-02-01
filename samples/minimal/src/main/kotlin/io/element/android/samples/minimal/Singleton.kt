@@ -29,7 +29,7 @@ import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.plus
 
 object Singleton {
-    private val buildMeta = BuildMeta(
+    val buildMeta = BuildMeta(
         isDebuggable = true,
         buildType = BuildType.DEBUG,
         applicationName = "EAX-Minimal",
@@ -37,16 +37,10 @@ object Singleton {
         lowPrivacyLoggingEnabled = false,
         versionName = "0.1.0",
         versionCode = 1,
-        // BuildConfig.GIT_REVISION,
-        gitRevision = "TODO",
-        //  BuildConfig.GIT_REVISION_DATE,
-        gitRevisionDate = "TODO",
-        //  BuildConfig.GIT_BRANCH_NAME,
-        gitBranchName = "TODO",
-        //  BuildConfig.FLAVOR_DESCRIPTION,
-        flavorDescription = "TODO",
-        //  BuildConfig.SHORT_FLAVOR_DESCRIPTION,
-        flavorShortDescription = "TODO",
+        gitRevision = "",
+        gitBranchName = "",
+        flavorDescription = "NA",
+        flavorShortDescription = "NA",
     )
 
     init {

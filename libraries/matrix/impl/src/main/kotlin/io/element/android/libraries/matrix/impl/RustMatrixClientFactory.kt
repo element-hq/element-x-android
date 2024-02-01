@@ -44,6 +44,7 @@ class RustMatrixClientFactory @Inject constructor(
             .basePath(baseDirectory.absolutePath)
             .homeserverUrl(sessionData.homeserverUrl)
             .username(sessionData.userId)
+            .passphrase(sessionData.passphrase)
             .userAgent(userAgentProvider.provide())
             // FIXME Quick and dirty fix for stopping version requests on startup https://github.com/matrix-org/matrix-rust-sdk/pull/1376
             .serverVersions(listOf("v1.0", "v1.1", "v1.2", "v1.3", "v1.4", "v1.5"))

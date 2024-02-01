@@ -527,6 +527,7 @@ class NotifiableEventResolverTest {
             roomId = A_ROOM_ID,
             senderAvatarUrl = null,
             senderDisplayName = "Bob",
+            senderIsNameAmbiguous = false,
             roomAvatarUrl = null,
             roomDisplayName = null,
             isDirect = isDirect,

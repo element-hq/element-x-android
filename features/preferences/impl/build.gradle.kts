@@ -82,6 +82,7 @@ dependencies {
     testImplementation(projects.libraries.indicator.impl)
     testImplementation(projects.features.logout.impl)
     testImplementation(projects.services.analytics.test)
+    testImplementation(projects.services.toolbox.test)
     testImplementation(projects.features.analytics.impl)
     testImplementation(projects.tests.testutils)
 }

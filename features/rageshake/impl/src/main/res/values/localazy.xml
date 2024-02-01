@@ -11,5 +11,6 @@
   <string name="screen_bug_report_include_logs">"Allow logs"</string>
   <string name="screen_bug_report_include_screenshot">"Send screenshot"</string>
   <string name="screen_bug_report_logs_description">"Logs will be included with your message to make sure that everything is working properly. To send your message without logs, turn off this setting."</string>
+  <string name="screen_bug_report_view_logs">"View logs"</string>
   <string name="screen_bug_report_rash_logs_alert_title">"%1$s crashed the last time it was used. Would you like to share a crash report with us?"</string>
 </resources>

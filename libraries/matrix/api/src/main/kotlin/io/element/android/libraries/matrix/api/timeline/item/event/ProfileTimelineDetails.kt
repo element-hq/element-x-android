@@ -17,6 +17,7 @@
 package io.element.android.libraries.matrix.api.timeline.item.event
 
 import androidx.compose.runtime.Immutable
+import io.element.android.libraries.matrix.api.core.UserId
 
 @Immutable
 sealed interface ProfileTimelineDetails {
@@ -33,4 +34,21 @@ sealed interface ProfileTimelineDetails {
     data class Error(
         val message: String
     ) : ProfileTimelineDetails
+}
+
+/**
+ * Returns a disambiguated display name for the user.
+ * If the display name is null, or profile is not Ready, the user ID is returned.
+ * If the display name is ambiguous, the user ID is appended in parentheses.
+ * Otherwise, the display name is returned.
+ */
+fun ProfileTimelineDetails.getDisambiguatedDisplayName(userId: UserId): String {
+    return when (this) {
+        is ProfileTimelineDetails.Ready -> when {
+            displayName == null -> userId.value
+            displayNameAmbiguous -> "$displayName ($userId)"
+            else -> displayName
+        }
+        else -> userId.value
+    }
 }

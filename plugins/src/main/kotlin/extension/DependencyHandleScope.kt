@@ -17,12 +17,23 @@
 package extension
 
 import org.gradle.accessors.dm.LibrariesForLibs
+import org.gradle.api.Action
+import org.gradle.api.artifacts.ExternalModuleDependency
 import org.gradle.api.logging.Logger
+import org.gradle.api.provider.Provider
 import org.gradle.kotlin.dsl.DependencyHandlerScope
+import org.gradle.kotlin.dsl.closureOf
+import org.gradle.kotlin.dsl.exclude
 import org.gradle.kotlin.dsl.project
 import java.io.File
 
 private fun DependencyHandlerScope.implementation(dependency: Any) = dependencies.add("implementation", dependency)
+
+// Implementation + config block
+private fun DependencyHandlerScope.implementation(
+    dependency: Any,
+    config: Action<ExternalModuleDependency>
+) = dependencies.add("implementation",  dependency, closureOf<ExternalModuleDependency> { config.execute(this) })
 
 private fun DependencyHandlerScope.androidTestImplementation(dependency: Any) = dependencies.add("androidTestImplementation", dependency)
 
@@ -87,10 +98,6 @@ fun DependencyHandlerScope.allLibrariesImpl() {
     implementation(project(":libraries:permissions:impl"))
     implementation(project(":libraries:push:impl"))
     implementation(project(":libraries:push:impl"))
-    // Comment to not include firebase in the project
-    implementation(project(":libraries:pushproviders:firebase"))
-    // Comment to not include unified push in the project
-    implementation(project(":libraries:pushproviders:unifiedpush"))
     implementation(project(":libraries:featureflag:impl"))
     implementation(project(":libraries:pushstore:impl"))
     implementation(project(":libraries:preferences:impl"))

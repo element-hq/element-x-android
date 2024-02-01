@@ -2,11 +2,11 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_advanced_settings_element_call_base_url">"Egyéni Element Call alapwebcím"</string>
   <string name="screen_advanced_settings_element_call_base_url_description">"Egyéni alapwebcím beállítása az Element Callhoz."</string>
-  <string name="screen_advanced_settings_element_call_base_url_validation_error">"Érvénytelen webcím, győződjön meg arról, hogy szerepel benne a protokoll (http/https), és hogy helyes a cím."</string>
+  <string name="screen_advanced_settings_element_call_base_url_validation_error">"Érvénytelen webcím, győződj meg arról, hogy szerepel-e benne a protokoll (http/https), és hogy helyes-e a cím."</string>
   <string name="screen_advanced_settings_developer_mode">"Fejlesztői mód"</string>
-  <string name="screen_advanced_settings_developer_mode_description">"Engedélyezze, hogy elérje a fejlesztőknek szánt funkciókat."</string>
-  <string name="screen_advanced_settings_rich_text_editor_description">"A formázott szöveges szerkesztő letiltása, hogy kézzel írhasson Markdownt."</string>
-  <string name="screen_advanced_settings_view_source_description">"Engedélyezze a beállítást az üzenet forrásának megjelenítéséhez az idővonalon."</string>
+  <string name="screen_advanced_settings_developer_mode_description">"Engedélyezd, hogy elérd a fejlesztőknek szánt funkciókat."</string>
+  <string name="screen_advanced_settings_rich_text_editor_description">"A formázott szöveges szerkesztő letiltása, hogy kézzel írhass Markdownt."</string>
+  <string name="screen_advanced_settings_view_source_description">"Engedélyezd a beállítást az üzenet forrásának megjelenítéséhez az idővonalon."</string>
   <string name="screen_edit_profile_display_name">"Megjelenítendő név"</string>
   <string name="screen_edit_profile_display_name_placeholder">"Saját megjelenítendő név"</string>
   <string name="screen_edit_profile_error">"Ismeretlen hiba történt, és az információ módosítása nem sikerült."</string>

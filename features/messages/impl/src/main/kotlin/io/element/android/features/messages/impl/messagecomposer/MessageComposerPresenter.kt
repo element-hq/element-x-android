@@ -20,6 +20,7 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.net.Uri
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
@@ -183,9 +184,8 @@ class MessageComposerPresenter @Inject constructor(
             val currentUserId = currentSessionIdHolder.current
 
             suspend fun canSendRoomMention(): Boolean {
-                val roomIsDm = room.isDirect && room.isOneToOne
                 val userCanSendAtRoom = room.canUserTriggerRoomNotification(currentUserId).getOrDefault(false)
-                return !roomIsDm && userCanSendAtRoom
+                return !room.isDm && userCanSendAtRoom
             }
 
             // This will trigger a search immediately when `@` is typed
@@ -206,6 +206,15 @@ class MessageComposerPresenter @Inject constructor(
                     }
                 }
                 .collect()
+        }
+
+        DisposableEffect(Unit) {
+            // Declare that the user is not typing anymore when the composer is disposed
+            onDispose {
+                appCoroutineScope.launch {
+                    room.typingNotice(false)
+                }
+            }
         }
 
         fun handleEvents(event: MessageComposerEvents) {
@@ -299,6 +308,11 @@ class MessageComposerPresenter @Inject constructor(
                 }
                 is MessageComposerEvents.Error -> {
                     analyticsService.trackError(event.error)
+                }
+                is MessageComposerEvents.TypingNotice -> {
+                    localCoroutineScope.launch {
+                        room.typingNotice(event.isTyping)
+                    }
                 }
                 is MessageComposerEvents.SuggestionReceived -> {
                     suggestionSearchTrigger.value = event.suggestion

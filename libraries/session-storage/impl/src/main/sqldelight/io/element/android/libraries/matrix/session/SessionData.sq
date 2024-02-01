@@ -21,7 +21,9 @@ CREATE TABLE SessionData (
     oidcData TEXT,
     -- added in version 4
     isTokenValid INTEGER NOT NULL DEFAULT 1,
-    loginType TEXT
+    loginType TEXT,
+    -- added in version 5
+    passphrase TEXT
 );
 
 

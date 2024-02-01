@@ -24,6 +24,7 @@ import com.bumble.appyx.core.lifecycle.subscribe
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
+import com.bumble.appyx.core.plugin.plugins
 import com.bumble.appyx.navmodel.backstack.BackStack
 import com.bumble.appyx.navmodel.backstack.operation.push
 import dagger.assisted.Assisted
@@ -54,6 +55,10 @@ class NotLoggedInFlowNode @AssistedInject constructor(
     buildContext = buildContext,
     plugins = plugins,
 ) {
+    interface Callback : Plugin {
+        fun onOpenBugReport()
+    }
+
     override fun onBuilt() {
         super.onBuilt()
         lifecycle.subscribe(
@@ -90,6 +95,10 @@ class NotLoggedInFlowNode @AssistedInject constructor(
 
                     override fun onOpenDeveloperSettings() {
                         backstack.push(NavTarget.ConfigureTracing)
+                    }
+
+                    override fun onReportProblem() {
+                        plugins<Callback>().forEach { it.onOpenBugReport() }
                     }
                 }
                 onBoardingEntryPoint

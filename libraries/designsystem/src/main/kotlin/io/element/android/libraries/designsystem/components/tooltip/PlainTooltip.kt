@@ -16,6 +16,7 @@
 
 package io.element.android.libraries.designsystem.components.tooltip
 
+import androidx.compose.material3.CaretScope
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.TooltipDefaults
 import androidx.compose.runtime.Composable
@@ -27,7 +28,7 @@ import androidx.compose.material3.PlainTooltip as M3PlainTooltip
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PlainTooltip(
+fun CaretScope.PlainTooltip(
     modifier: Modifier = Modifier,
     contentColor: Color = ElementTheme.colors.textOnSolidPrimary,
     containerColor: Color = ElementTheme.colors.bgActionPrimaryRest,

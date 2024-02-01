@@ -55,7 +55,9 @@ class MainActivity : ComponentActivity() {
                 sessionStore = sessionStore,
                 userAgentProvider = userAgentProvider,
                 clock = DefaultSystemClock(),
-            )
+            ),
+            passphraseGenerator = NullPassphraseGenerator(),
+            buildMeta = Singleton.buildMeta,
         )
     }
 

@@ -44,7 +44,7 @@ jobs:
           distribution: 'temurin' # See 'Supported distributions' for available options
           java-version: '17'
       - name: Configure gradle
-        uses: gradle/gradle-build-action@v2.11.1
+        uses: gradle/actions/setup-gradle@v3
         with:
           cache-read-only: ${{ github.ref != 'refs/heads/develop' }}
 
@@ -81,6 +81,8 @@ jobs:
       # https://github.com/codecov/codecov-action
       - name: ☂️ Upload coverage reports to codecov
         if: always()
-        uses: codecov/codecov-action@v3
-        # with:
-        #  files: build/reports/kover/xml/report.xml
+        uses: codecov/codecov-action@v4
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+#        with:
+#          files: build/reports/kover/xml/report.xml

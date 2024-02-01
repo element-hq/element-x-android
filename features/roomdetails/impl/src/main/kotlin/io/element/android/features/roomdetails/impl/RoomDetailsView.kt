@@ -190,9 +190,10 @@ fun RoomDetailsView(
                 BlockUserDialogs(roomMemberState)
             }
 
-            OtherActionsSection(onLeaveRoom = {
-                state.eventSink(RoomDetailsEvent.LeaveRoom)
-            })
+            OtherActionsSection(
+                isDm = state.roomType is RoomDetailsType.Dm,
+                onLeaveRoom = { state.eventSink(RoomDetailsEvent.LeaveRoom) }
+            )
         }
     }
 }
@@ -410,10 +411,17 @@ private fun SecuritySection(modifier: Modifier = Modifier) {
 }
 
 @Composable
-private fun OtherActionsSection(onLeaveRoom: () -> Unit, modifier: Modifier = Modifier) {
+private fun OtherActionsSection(isDm: Boolean, onLeaveRoom: () -> Unit, modifier: Modifier = Modifier) {
     PreferenceCategory(showDivider = false, modifier = modifier) {
         ListItem(
-            headlineContent = { Text(stringResource(R.string.screen_room_details_leave_room_title)) },
+            headlineContent = {
+                val leaveText = stringResource(id = if (isDm) {
+                    R.string.screen_room_details_leave_conversation_title
+                } else {
+                    R.string.screen_room_details_leave_room_title
+                })
+                Text(leaveText)
+            },
             leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Leave)),
             style = ListItemStyle.Destructive,
             onClick = onLeaveRoom,

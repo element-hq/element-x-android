@@ -78,6 +78,10 @@ internal fun MessageComposerView(
         state.eventSink(MessageComposerEvents.Error(error))
     }
 
+    fun onTyping(typing: Boolean) {
+        state.eventSink(MessageComposerEvents.TypingNotice(typing))
+    }
+
     val coroutineScope = rememberCoroutineScope()
     fun onRequestFocus() {
         coroutineScope.launch {
@@ -121,6 +125,7 @@ internal fun MessageComposerView(
         onDeleteVoiceMessage = onDeleteVoiceMessage,
         onSuggestionReceived = ::onSuggestionReceived,
         onError = ::onError,
+        onTyping = ::onTyping,
         currentUserId = state.currentUserId,
         onRichContentSelected = ::sendUri,
     )

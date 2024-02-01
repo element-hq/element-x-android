@@ -33,6 +33,7 @@ internal fun SessionData.toDbModel(): DbSessionData {
         loginTimestamp = loginTimestamp?.time,
         isTokenValid = if (isTokenValid) 1L else 0L,
         loginType = loginType.name,
+        passphrase = passphrase,
     )
 }
 
@@ -48,5 +49,6 @@ internal fun DbSessionData.toApiModel(): SessionData {
         loginTimestamp = loginTimestamp?.let { Date(it) },
         isTokenValid = isTokenValid == 1L,
         loginType = LoginType.fromName(loginType ?: LoginType.UNKNOWN.name),
+        passphrase = passphrase,
     )
 }

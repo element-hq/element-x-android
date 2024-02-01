@@ -1,4 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <plurals name="screen_app_lock_subtitle">
+    <item quantity="one">"Hai %1$d tentativo di sblocco"</item>
+    <item quantity="other">"Hai %1$d tentativi di sblocco"</item>
+  </plurals>
+  <plurals name="screen_app_lock_subtitle_wrong_pin">
+    <item quantity="one">"PIN sbagliato. Hai %1$d altro tentativo"</item>
+    <item quantity="other">"PIN sbagliato. Hai altri %1$d tentativi"</item>
+  </plurals>
+  <string name="screen_app_lock_biometric_authentication">"autenticazione biometrica"</string>
+  <string name="screen_app_lock_biometric_unlock">"sblocco biometrico"</string>
+  <string name="screen_app_lock_biometric_unlock_title_android">"Sblocca con la biometria"</string>
+  <string name="screen_app_lock_forgot_pin">"PIN dimenticato?"</string>
+  <string name="screen_app_lock_settings_change_pin">"Modifica il codice PIN"</string>
+  <string name="screen_app_lock_settings_enable_biometric_unlock">"Consenti lo sblocco biometrico"</string>
+  <string name="screen_app_lock_settings_remove_pin">"Rimuovi PIN"</string>
+  <string name="screen_app_lock_settings_remove_pin_alert_message">"Vuoi davvero rimuovere il PIN?"</string>
+  <string name="screen_app_lock_settings_remove_pin_alert_title">"Rimuovere il PIN?"</string>
+  <string name="screen_app_lock_setup_biometric_unlock_allow_title">"Consenti %1$s"</string>
+  <string name="screen_app_lock_setup_biometric_unlock_skip">"Preferisco usare il PIN"</string>
+  <string name="screen_app_lock_setup_biometric_unlock_subtitle">"Risparmia un po\' di tempo e usa %1$s per sbloccare l\'app ogni volta"</string>
+  <string name="screen_app_lock_setup_choose_pin">"Scegli il PIN"</string>
+  <string name="screen_app_lock_setup_confirm_pin">"Conferma il PIN"</string>
+  <string name="screen_app_lock_setup_pin_blacklisted_dialog_content">"Non puoi scegliere questo codice PIN per motivi di sicurezza"</string>
+  <string name="screen_app_lock_setup_pin_blacklisted_dialog_title">"Scegli un PIN diverso"</string>
+  <string name="screen_app_lock_setup_pin_context">"Blocca %1$s per aggiungere ulteriore sicurezza alle tue chat.
+
+Scegli qualcosa che puoi ricordare. Se dimentichi questo PIN, verrai disconnesso dall\'app."</string>
+  <string name="screen_app_lock_setup_pin_mismatch_dialog_content">"Inserisci lo stesso PIN due volte"</string>
+  <string name="screen_app_lock_setup_pin_mismatch_dialog_title">"I PIN non corrispondono"</string>
+  <string name="screen_app_lock_signout_alert_message">"Dovrai effettuare nuovamente l\'accesso e creare un nuovo PIN per procedere"</string>
+  <string name="screen_app_lock_signout_alert_title">"Stai per essere disconnesso"</string>
+  <string name="screen_app_lock_use_biometric_android">"Usa la biometria"</string>
+  <string name="screen_app_lock_use_pin_android">"Usa il PIN"</string>
   <string name="screen_signout_in_progress_dialog_content">"Uscita in corso…"</string>
 </resources>

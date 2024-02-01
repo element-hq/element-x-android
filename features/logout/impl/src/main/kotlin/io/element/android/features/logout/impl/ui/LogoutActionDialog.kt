@@ -18,6 +18,8 @@ package io.element.android.features.logout.impl.ui
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.res.stringResource
 import io.element.android.features.logout.impl.R
 import io.element.android.libraries.architecture.AsyncAction
@@ -52,9 +54,11 @@ fun LogoutActionDialog(
                 onRetry = onForceLogoutClicked,
                 onDismiss = onDismissError,
             )
-        is AsyncAction.Success ->
+        is AsyncAction.Success -> {
+            val latestOnSuccessLogout by rememberUpdatedState(onSuccessLogout)
             LaunchedEffect(state) {
-                onSuccessLogout(state.data)
+                latestOnSuccessLogout(state.data)
             }
+        }
     }
 }

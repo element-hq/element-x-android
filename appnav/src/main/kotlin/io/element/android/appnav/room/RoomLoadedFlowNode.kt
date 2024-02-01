@@ -118,14 +118,7 @@ class RoomLoadedFlowNode @AssistedInject constructor(
     }
 
     private fun fetchRoomMembers() = lifecycleScope.launch {
-        val room = inputs.room
-        room.updateMembers()
-            .onFailure {
-                Timber.e(it, "Fail to fetch members for room ${room.roomId}")
-            }
-            .onSuccess {
-                Timber.v("Success fetching members for room ${room.roomId}")
-            }
+        inputs.room.updateMembers()
     }
 
     private fun createRoomDetailsNode(buildContext: BuildContext, initialTarget: RoomDetailsEntryPoint.InitialTarget): Node {

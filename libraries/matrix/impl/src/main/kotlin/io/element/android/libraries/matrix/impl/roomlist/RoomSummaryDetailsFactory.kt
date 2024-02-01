@@ -19,7 +19,7 @@ package io.element.android.libraries.matrix.impl.roomlist
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.roomlist.RoomSummaryDetails
 import io.element.android.libraries.matrix.impl.notificationsettings.RoomNotificationSettingsMapper
-import io.element.android.libraries.matrix.impl.room.RoomMemberMapper
+import io.element.android.libraries.matrix.impl.room.member.RoomMemberMapper
 import io.element.android.libraries.matrix.impl.room.message.RoomMessageFactory
 import org.matrix.rustcomponents.sdk.RoomInfo
 import org.matrix.rustcomponents.sdk.use
@@ -34,13 +34,15 @@ class RoomSummaryDetailsFactory(private val roomMessageFactory: RoomMessageFacto
             name = roomInfo.name ?: roomInfo.id,
             canonicalAlias = roomInfo.canonicalAlias,
             isDirect = roomInfo.isDirect,
-            avatarURLString = roomInfo.avatarUrl,
-            unreadNotificationCount = roomInfo.notificationCount.toInt(),
+            avatarUrl = roomInfo.avatarUrl,
+            numUnreadMentions = roomInfo.numUnreadMentions.toInt(),
+            numUnreadMessages = roomInfo.numUnreadMessages.toInt(),
+            numUnreadNotifications = roomInfo.numUnreadNotifications.toInt(),
             lastMessage = latestRoomMessage,
-            lastMessageTimestamp = latestRoomMessage?.originServerTs,
             inviter = roomInfo.inviter?.let(RoomMemberMapper::map),
-            notificationMode = roomInfo.userDefinedNotificationMode?.let(RoomNotificationSettingsMapper::mapMode),
-            hasOngoingCall = roomInfo.hasRoomCall,
+            userDefinedNotificationMode = roomInfo.userDefinedNotificationMode?.let(RoomNotificationSettingsMapper::mapMode),
+            hasRoomCall = roomInfo.hasRoomCall,
+            isDm = roomInfo.isDirect && roomInfo.activeMembersCount.toLong() == 2L,
         )
     }
 }
