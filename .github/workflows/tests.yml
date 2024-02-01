@@ -81,6 +81,8 @@ jobs:
       # https://github.com/codecov/codecov-action
       - name: ☂️ Upload coverage reports to codecov
         if: always()
-        uses: codecov/codecov-action@v3
-        # with:
-        #  files: build/reports/kover/xml/report.xml
+        uses: codecov/codecov-action@v4
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+#        with:
+#          files: build/reports/kover/xml/report.xml
