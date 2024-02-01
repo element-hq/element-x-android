@@ -1,1 +1,1 @@
-Remove Compose Foundation version pinning workaround. This was done to avoid a bug introduced in the default foundation version used by the material3 library, but that has been already been fixed.
+Remove Compose Foundation version pinning workaround. This was done to avoid a bug introduced in the default foundation version used by the material3 library, but that has already been fixed.
