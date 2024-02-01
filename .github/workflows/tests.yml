@@ -82,5 +82,7 @@ jobs:
       - name: ☂️ Upload coverage reports to codecov
         if: always()
         uses: codecov/codecov-action@v4
-        # with:
-        #  files: build/reports/kover/xml/report.xml
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+#        with:
+#          files: build/reports/kover/xml/report.xml
