@@ -21,6 +21,7 @@ import java.util.UUID
 interface CallWidgetSettingsProvider {
     fun provide(
         baseUrl: String,
-        widgetId: String = UUID.randomUUID().toString()
+        widgetId: String = UUID.randomUUID().toString(),
+        encrypted: Boolean,
     ): MatrixWidgetSettings
 }
