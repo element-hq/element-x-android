@@ -221,7 +221,4 @@ kover = { id = "org.jetbrains.kotlinx.kover", version.ref = "kover" }
 sqldelight = { id = "app.cash.sqldelight", version.ref = "sqldelight" }
 firebaseAppDistribution = { id = "com.google.firebase.appdistribution", version.ref = "firebaseAppDistribution" }
 knit = { id = "org.jetbrains.kotlinx.knit", version = "0.5.0" }
-
-# Version '4.3.1.3277' introduced some regressions in CI time (more than 2x slower), so make sure
-# this is no longer the case before upgrading.
-sonarqube = "org.sonarqube:4.2.1.3168"
+sonarqube = "org.sonarqube:4.4.1.3373"
