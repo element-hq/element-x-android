@@ -11,7 +11,7 @@ jobs:
   welcome:
     runs-on: ubuntu-latest
     name: Welcome comment
-    if: github.event.pull_request.fork != null
+    if: github.event.pull_request.head.repo.full_name == "element-hq/element-x-android"
     steps:
       - name: Add auto-generated commit warning
         uses: actions/github-script@v7
