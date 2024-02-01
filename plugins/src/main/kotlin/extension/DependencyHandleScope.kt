@@ -56,16 +56,6 @@ fun DependencyHandlerScope.composeDependencies(libs: LibrariesForLibs) {
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.material)
     implementation(libs.androidx.compose.material3)
-
-    // Remove these constraints once `material3` updates its internal dependencies
-    constraints {
-        implementation("androidx.compose.foundation:foundation:1.6.0-beta02") {
-            because("The transitive version inside `material3` (1.6.0-beta01) causes a scrolling issue. " +
-                "See https://android.googlesource.com/platform/frameworks/support/+/2d15876146ccf201f7e15cacc78bfca762060624"
-            )
-        }
-    }
-
     implementation(libs.androidx.compose.material.icons)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.activity.compose)
