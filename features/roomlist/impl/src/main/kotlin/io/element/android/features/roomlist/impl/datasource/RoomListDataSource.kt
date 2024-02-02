@@ -28,7 +28,9 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
@@ -52,7 +54,7 @@ class RoomListDataSource @Inject constructor(
     }
 
     private val _filter = MutableStateFlow("")
-    private val _allRooms = MutableStateFlow<ImmutableList<RoomListRoomSummary>>(persistentListOf())
+    private val _allRooms = MutableSharedFlow<ImmutableList<RoomListRoomSummary>>(replay = 1)
     private val _filteredRooms = MutableStateFlow<ImmutableList<RoomListRoomSummary>>(persistentListOf())
 
     private val lock = Mutex()
@@ -90,7 +92,7 @@ class RoomListDataSource @Inject constructor(
     }
 
     val filter: StateFlow<String> = _filter
-    val allRooms: StateFlow<ImmutableList<RoomListRoomSummary>> = _allRooms
+    val allRooms: SharedFlow<ImmutableList<RoomListRoomSummary>> = _allRooms
     val filteredRooms: StateFlow<ImmutableList<RoomListRoomSummary>> = _filteredRooms
 
     @OptIn(FlowPreview::class)

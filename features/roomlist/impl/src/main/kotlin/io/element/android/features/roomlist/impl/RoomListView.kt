@@ -17,7 +17,9 @@
 package io.element.android.features.roomlist.impl
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
@@ -35,6 +37,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -42,6 +45,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.Velocity
 import androidx.compose.ui.unit.dp
+import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.leaveroom.api.LeaveRoomView
 import io.element.android.features.networkmonitor.api.ui.ConnectivityIndicatorContainer
 import io.element.android.features.roomlist.impl.components.ConfirmRecoveryKeyBanner
@@ -51,17 +55,22 @@ import io.element.android.features.roomlist.impl.components.RoomListTopBar
 import io.element.android.features.roomlist.impl.components.RoomSummaryRow
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
 import io.element.android.features.roomlist.impl.search.RoomListSearchResultView
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.FloatingActionButton
 import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
 import io.element.android.libraries.designsystem.theme.components.Icon
+import io.element.android.libraries.designsystem.theme.components.IconSource
 import io.element.android.libraries.designsystem.theme.components.Scaffold
+import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.designsystem.utils.LogCompositions
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarHost
 import io.element.android.libraries.designsystem.utils.snackbar.rememberSnackbarHostState
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
 fun RoomListView(
@@ -119,6 +128,35 @@ fun RoomListView(
                     .background(MaterialTheme.colorScheme.background)
             )
         }
+    }
+}
+
+@Composable
+private fun EmptyRoomListView(
+    onCreateRoomClicked: () -> Unit,
+) {
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Text(
+            text = stringResource(R.string.screen_roomlist_empty_title),
+            style = ElementTheme.typography.fontBodyLgRegular,
+            color = ElementTheme.colors.textSecondary,
+        )
+        Spacer(modifier = Modifier.height(4.dp))
+        Text(
+            text = stringResource(R.string.screen_roomlist_empty_message),
+            style = ElementTheme.typography.fontBodyLgRegular,
+            color = ElementTheme.colors.textSecondary,
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+        Button(
+            text = stringResource(CommonStrings.action_start_chat),
+            leadingIcon = IconSource.Resource(CommonDrawables.ic_new_message),
+            onClick = onCreateRoomClicked,
+        )
     }
 }
 
@@ -182,55 +220,61 @@ private fun RoomListContent(
             )
         },
         content = { padding ->
-            LazyColumn(
-                modifier = Modifier
-                    .padding(padding)
-                    .consumeWindowInsets(padding)
-                    .nestedScroll(nestedScrollConnection),
-                state = lazyListState,
-            ) {
-                when {
-                    state.displayVerificationPrompt -> {
-                        item {
-                            RequestVerificationHeader(
-                                onVerifyClicked = onVerifyClicked,
-                                onDismissClicked = { state.eventSink(RoomListEvents.DismissRequestVerificationPrompt) }
-                            )
+            println(state.roomList)
+            if (state.roomList is AsyncData.Success && state.roomList.data.isEmpty()) {
+                EmptyRoomListView(onCreateRoomClicked)
+            } else {
+                LazyColumn(
+                    modifier = Modifier
+                        .padding(padding)
+                        .consumeWindowInsets(padding)
+                        .nestedScroll(nestedScrollConnection),
+                    state = lazyListState,
+                ) {
+                    when {
+                        state.displayVerificationPrompt -> {
+                            item {
+                                RequestVerificationHeader(
+                                    onVerifyClicked = onVerifyClicked,
+                                    onDismissClicked = { state.eventSink(RoomListEvents.DismissRequestVerificationPrompt) }
+                                )
+                            }
+                        }
+                        state.displayRecoveryKeyPrompt -> {
+                            item {
+                                ConfirmRecoveryKeyBanner(
+                                    onContinueClicked = onOpenSettings,
+                                    onDismissClicked = { state.eventSink(RoomListEvents.DismissRecoveryKeyPrompt) }
+                                )
+                            }
                         }
                     }
-                    state.displayRecoveryKeyPrompt -> {
-                        item {
-                            ConfirmRecoveryKeyBanner(
-                                onContinueClicked = onOpenSettings,
-                                onDismissClicked = { state.eventSink(RoomListEvents.DismissRecoveryKeyPrompt) }
-                            )
-                        }
-                    }
-                }
 
-                if (state.invitesState != InvitesState.NoInvites) {
+                    if (state.invitesState != InvitesState.NoInvites) {
+                        item {
+                            InvitesEntryPointView(onInvitesClicked, state.invitesState)
+                        }
+                    }
+
+                    val roomList = state.roomList.dataOrNull().orEmpty()
+                    itemsIndexed(
+                        items = roomList,
+                        contentType = { _, room -> room.contentType() },
+                    ) { index, room ->
+                        RoomSummaryRow(
+                            room = room,
+                            onClick = ::onRoomClicked,
+                            onLongClick = onRoomLongClicked,
+                        )
+                        if (index != roomList.lastIndex) {
+                            HorizontalDivider()
+                        }
+                    }
+                    // Add a last Spacer item to ensure that the FAB does not hide the last room item
+                    // FAB height is 56dp, bottom padding is 16dp, we add 8dp as extra margin -> 56+16+8 = 80
                     item {
-                        InvitesEntryPointView(onInvitesClicked, state.invitesState)
+                        Spacer(modifier = Modifier.height(80.dp))
                     }
-                }
-
-                itemsIndexed(
-                    items = state.roomList,
-                    contentType = { _, room -> room.contentType() },
-                ) { index, room ->
-                    RoomSummaryRow(
-                        room = room,
-                        onClick = ::onRoomClicked,
-                        onLongClick = onRoomLongClicked,
-                    )
-                    if (index != state.roomList.lastIndex) {
-                        HorizontalDivider()
-                    }
-                }
-                // Add a last Spacer item to ensure that the FAB does not hide the last room item
-                // FAB height is 56dp, bottom padding is 16dp, we add 8dp as extra margin -> 56+16+8 = 80
-                item {
-                    Spacer(modifier = Modifier.height(80.dp))
                 }
             }
         },

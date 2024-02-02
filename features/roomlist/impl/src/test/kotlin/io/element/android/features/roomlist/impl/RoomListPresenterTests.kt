@@ -166,14 +166,16 @@ class RoomListPresenterTests {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            val initialState = consumeItemsUntilPredicate { state -> state.roomList.size == 16 }.last()
+            val initialState = consumeItemsUntilPredicate { state -> state.roomList.dataOrNull()?.size == 16 }.last()
             // Room list is loaded with 16 placeholders
-            assertThat(initialState.roomList.size).isEqualTo(16)
-            assertThat(initialState.roomList.all { it.isPlaceholder }).isTrue()
+            val initialItems = initialState.roomList.dataOrNull().orEmpty()
+            assertThat(initialItems.size).isEqualTo(16)
+            assertThat(initialItems.all { it.isPlaceholder }).isTrue()
             roomListService.postAllRooms(listOf(aRoomSummaryFilled()))
-            val withRoomState = consumeItemsUntilPredicate { state -> state.roomList.size == 1 }.last()
-            assertThat(withRoomState.roomList.size).isEqualTo(1)
-            assertThat(withRoomState.roomList.first())
+            val withRoomState = consumeItemsUntilPredicate { state -> state.roomList.dataOrNull()?.size == 1 }.last()
+            val withRoomStateItems = withRoomState.roomList.dataOrNull().orEmpty()
+            assertThat(withRoomStateItems.size).isEqualTo(1)
+            assertThat(withRoomStateItems.first())
                 .isEqualTo(aRoomListRoomSummary)
             scope.cancel()
         }
@@ -194,7 +196,7 @@ class RoomListPresenterTests {
             skipItems(3)
             val loadedState = awaitItem()
             // Test filtering with result
-            assertThat(loadedState.roomList.size).isEqualTo(1)
+            assertThat(loadedState.roomList.dataOrNull().orEmpty().size).isEqualTo(1)
             loadedState.eventSink.invoke(RoomListEvents.UpdateFilter(A_ROOM_NAME.substring(0, 3)))
             skipItems(1)
             val withFilteredRoomState = awaitItem()
@@ -384,10 +386,10 @@ class RoomListPresenterTests {
             notificationSettingsService.setRoomNotificationMode(A_ROOM_ID, userDefinedMode)
 
             val updatedState = consumeItemsUntilPredicate { state ->
-                state.roomList.any { it.id == A_ROOM_ID.value && it.userDefinedNotificationMode == userDefinedMode }
+                state.roomList.dataOrNull().orEmpty().any { it.id == A_ROOM_ID.value && it.userDefinedNotificationMode == userDefinedMode }
             }.last()
 
-            val room = updatedState.roomList.find { it.id == A_ROOM_ID.value }
+            val room = updatedState.roomList.dataOrNull()?.find { it.id == A_ROOM_ID.value }
             assertThat(room?.userDefinedNotificationMode).isEqualTo(userDefinedMode)
             cancelAndIgnoreRemainingEvents()
             scope.cancel()
