@@ -20,6 +20,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
@@ -220,7 +221,6 @@ private fun RoomListContent(
             )
         },
         content = { padding ->
-            println(state.roomList)
             if (state.roomList is AsyncData.Success && state.roomList.data.isEmpty()) {
                 EmptyRoomListView(onCreateRoomClicked)
             } else {
@@ -230,6 +230,8 @@ private fun RoomListContent(
                         .consumeWindowInsets(padding)
                         .nestedScroll(nestedScrollConnection),
                     state = lazyListState,
+                    // FAB height is 56dp, bottom padding is 16dp, we add 8dp as extra margin -> 56+16+8 = 80
+                    contentPadding = PaddingValues(bottom = 80.dp)
                 ) {
                     when {
                         state.displayVerificationPrompt -> {
@@ -260,6 +262,7 @@ private fun RoomListContent(
                     itemsIndexed(
                         items = roomList,
                         contentType = { _, room -> room.contentType() },
+                        key = { _, room -> room.roomId.value }
                     ) { index, room ->
                         RoomSummaryRow(
                             room = room,
@@ -269,11 +272,6 @@ private fun RoomListContent(
                         if (index != roomList.lastIndex) {
                             HorizontalDivider()
                         }
-                    }
-                    // Add a last Spacer item to ensure that the FAB does not hide the last room item
-                    // FAB height is 56dp, bottom padding is 16dp, we add 8dp as extra margin -> 56+16+8 = 80
-                    item {
-                        Spacer(modifier = Modifier.height(80.dp))
                     }
                 }
             }
