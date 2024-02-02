@@ -67,13 +67,12 @@ fun OnBoardingPage(
             modifier = Modifier
                 .fillMaxSize()
                 .systemBarsPadding()
-                .padding(vertical = 16.dp),
+                .padding(all = 20.dp),
         ) {
             // Content
             Column(
                 modifier = Modifier
                     .weight(1f)
-                    .padding(horizontal = 24.dp)
                     .fillMaxWidth(),
                 horizontalAlignment = contentAlignment,
             ) {
