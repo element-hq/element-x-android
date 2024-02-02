@@ -60,7 +60,7 @@ fun RoomListContextMenu(
                 eventSink(RoomListEvents.LeaveRoom(contextMenu.roomId))
             },
             onFavoriteChanged = { isFavorite ->
-                eventSink(RoomListEvents.MarkRoomAsFavorite(contextMenu.roomId, isFavorite))
+                eventSink(RoomListEvents.SetRoomIsFavorite(contextMenu.roomId, isFavorite))
             },
         )
     }

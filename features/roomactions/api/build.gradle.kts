@@ -14,12 +14,14 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.matrix.api.room.tags
+plugins {
+    id("io.element.android-library")
+}
 
-/**
- * Represents the notable tags of a room.
- * @param isFavorite true if the room is marked as favorite.
- */
-data class RoomNotableTags(
-    val isFavorite: Boolean = false,
-)
+android {
+    namespace = "io.element.android.features.roomactions.api"
+}
+
+dependencies {
+    implementation(projects.libraries.matrix.api)
+}

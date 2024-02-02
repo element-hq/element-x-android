@@ -31,6 +31,7 @@ import io.element.android.features.leaveroom.api.LeaveRoomEvent
 import io.element.android.features.leaveroom.api.LeaveRoomPresenter
 import io.element.android.features.networkmonitor.api.NetworkMonitor
 import io.element.android.features.networkmonitor.api.NetworkStatus
+import io.element.android.features.roomactions.api.SetRoomIsFavoriteAction
 import io.element.android.features.roomlist.impl.datasource.InviteStateDataSource
 import io.element.android.features.roomlist.impl.datasource.RoomListDataSource
 import io.element.android.libraries.architecture.AsyncData
@@ -45,17 +46,14 @@ import io.element.android.libraries.indicator.api.IndicatorService
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import io.element.android.libraries.matrix.api.encryption.RecoveryState
-import io.element.android.libraries.matrix.api.room.tags.RoomNotableTags
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.api.user.getCurrentUser
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import javax.inject.Inject
 
 private const val EXTENDED_RANGE_SIZE = 40
@@ -71,6 +69,7 @@ class RoomListPresenter @Inject constructor(
     private val encryptionService: EncryptionService,
     private val featureFlagService: FeatureFlagService,
     private val indicatorService: IndicatorService,
+    private val setRoomIsFavorite: SetRoomIsFavoriteAction,
 ) : Presenter<RoomListState> {
     @Composable
     override fun present(): RoomListState {
@@ -134,7 +133,7 @@ class RoomListPresenter @Inject constructor(
                     contextMenu.value = RoomListState.ContextMenu.Hidden
                 }
                 is RoomListEvents.LeaveRoom -> leaveRoomState.eventSink(LeaveRoomEvent.ShowConfirmation(event.roomId))
-                is RoomListEvents.MarkRoomAsFavorite -> coroutineScope.markRoomAsFavorite(event)
+                is RoomListEvents.SetRoomIsFavorite -> coroutineScope.setRoomIsFavorite(event)
             }
         }
 
@@ -170,28 +169,23 @@ class RoomListPresenter @Inject constructor(
             isFavorite = AsyncData.Loading(),
         )
         contextMenuState.value = initialState
-        val room = client.getRoom(event.roomListRoomSummary.roomId)
-        if (room != null) {
-            room.notableTagsFlow
-                .distinctUntilChanged()
-                .onEach { tags ->
-                    val newState = initialState.copy(isFavorite = AsyncData.Success(tags.isFavorite))
-                    contextMenuState.value = newState
-                }
-                .launchIn(this)
-        } else {
-            contextMenuState.value = initialState.copy(isFavorite = AsyncData.Failure(IllegalStateException("Room not found")))
+        client.getRoom(event.roomListRoomSummary.roomId).use { room ->
+            if (room != null) {
+                room.notableTagsFlow
+                    .distinctUntilChanged()
+                    .onEach { tags ->
+                        val newState = initialState.copy(isFavorite = AsyncData.Success(tags.isFavorite))
+                        contextMenuState.value = newState
+                    }
+                    .collect()
+            } else {
+                contextMenuState.value = initialState.copy(isFavorite = AsyncData.Failure(IllegalStateException("Room not found")))
+            }
         }
     }
 
-    private fun CoroutineScope.markRoomAsFavorite(event: RoomListEvents.MarkRoomAsFavorite) = launch {
-        val room = client.getRoom(event.roomId)
-        if (room != null) {
-            val notableTags = RoomNotableTags(isFavorite = event.isFavorite);
-            room.updateNotableTags(notableTags)
-        }else {
-            Timber.w("Room ${event.roomId} not found, can't mark as favorite");
-        }
+    private fun CoroutineScope.setRoomIsFavorite(event: RoomListEvents.SetRoomIsFavorite) = launch {
+        setRoomIsFavorite(event.roomId, event.isFavorite)
     }
 
     private fun updateVisibleRange(range: IntRange) {
@@ -204,5 +198,3 @@ class RoomListPresenter @Inject constructor(
         client.roomListService.updateAllRoomsVisibleRange(extendedRange)
     }
 }
-
-

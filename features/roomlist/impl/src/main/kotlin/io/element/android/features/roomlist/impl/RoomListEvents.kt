@@ -28,5 +28,5 @@ sealed interface RoomListEvents {
     data class ShowContextMenu(val roomListRoomSummary: RoomListRoomSummary) : RoomListEvents
     data object HideContextMenu : RoomListEvents
     data class LeaveRoom(val roomId: RoomId) : RoomListEvents
-    data class MarkRoomAsFavorite(val roomId: RoomId, val isFavorite: Boolean) : RoomListEvents
+    data class SetRoomIsFavorite(val roomId: RoomId, val isFavorite: Boolean) : RoomListEvents
 }

@@ -25,11 +25,14 @@ import io.element.android.features.leaveroom.api.LeaveRoomPresenter
 import io.element.android.features.leaveroom.fake.FakeLeaveRoomPresenter
 import io.element.android.features.networkmonitor.api.NetworkMonitor
 import io.element.android.features.networkmonitor.test.FakeNetworkMonitor
+import io.element.android.features.roomactions.api.SetRoomIsFavoriteAction
+import io.element.android.features.roomactions.test.FakeSetRoomIsFavoriteAction
 import io.element.android.features.roomlist.impl.datasource.FakeInviteDataSource
 import io.element.android.features.roomlist.impl.datasource.InviteStateDataSource
 import io.element.android.features.roomlist.impl.datasource.RoomListDataSource
 import io.element.android.features.roomlist.impl.datasource.RoomListRoomSummaryFactory
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.dateformatter.api.LastMessageTimestampFormatter
 import io.element.android.libraries.dateformatter.test.FakeLastMessageTimestampFormatter
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
@@ -44,6 +47,7 @@ import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.encryption.BackupState
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
+import io.element.android.libraries.matrix.api.room.tags.RoomNotableTags
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatus
 import io.element.android.libraries.matrix.test.AN_AVATAR_URL
@@ -55,6 +59,7 @@ import io.element.android.libraries.matrix.test.A_USER_NAME
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.encryption.FakeEncryptionService
 import io.element.android.libraries.matrix.test.notificationsettings.FakeNotificationSettingsService
+import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.matrix.test.room.aRoomSummaryFilled
 import io.element.android.libraries.matrix.test.roomlist.FakeRoomListService
 import io.element.android.libraries.matrix.test.verification.FakeSessionVerificationService
@@ -309,19 +314,29 @@ class RoomListPresenterTests {
     @Test
     fun `present - show context menu`() = runTest {
         val scope = CoroutineScope(coroutineContext + SupervisorJob())
-        val presenter = createRoomListPresenter(coroutineScope = scope)
+        val room = FakeMatrixRoom()
+        val client = FakeMatrixClient().apply {
+            givenGetRoomResult(A_ROOM_ID, room)
+        }
+        val presenter = createRoomListPresenter(client = client, coroutineScope = scope)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             skipItems(1)
-
             val initialState = awaitItem()
             val summary = aRoomListRoomSummary
             initialState.eventSink(RoomListEvents.ShowContextMenu(summary))
 
-            val shownState = awaitItem()
-            assertThat(shownState.contextMenu)
-                .isEqualTo(RoomListState.ContextMenu.Shown(summary.roomId, summary.name, false))
+            awaitItem().also { state ->
+                assertThat(state.contextMenu)
+                    .isEqualTo(RoomListState.ContextMenu.Shown(summary.roomId, summary.name, false, AsyncData.Success(false)))
+            }
+
+            room.updateNotableTags(RoomNotableTags(isFavorite = true))
+            awaitItem().also { state ->
+                assertThat(state.contextMenu)
+                    .isEqualTo(RoomListState.ContextMenu.Shown(summary.roomId, summary.name, false, AsyncData.Success(true)))
+            }
             scope.cancel()
         }
     }
@@ -329,7 +344,11 @@ class RoomListPresenterTests {
     @Test
     fun `present - hide context menu`() = runTest {
         val scope = CoroutineScope(coroutineContext + SupervisorJob())
-        val presenter = createRoomListPresenter(coroutineScope = scope)
+        val room = FakeMatrixRoom()
+        val client = FakeMatrixClient().apply {
+            givenGetRoomResult(A_ROOM_ID, room)
+        }
+        val presenter = createRoomListPresenter(client = client, coroutineScope = scope)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -341,7 +360,7 @@ class RoomListPresenterTests {
 
             val shownState = awaitItem()
             assertThat(shownState.contextMenu)
-                .isEqualTo(RoomListState.ContextMenu.Shown(summary.roomId, summary.name, false))
+                .isEqualTo(RoomListState.ContextMenu.Shown(summary.roomId, summary.name, false, AsyncData.Success(false)))
             shownState.eventSink(RoomListEvents.HideContextMenu)
 
             val hiddenState = awaitItem()
@@ -394,6 +413,22 @@ class RoomListPresenterTests {
         }
     }
 
+    @Test
+    fun `present - when set is favorite event is emitted, then the action is called`() = runTest {
+        val scope = CoroutineScope(coroutineContext + SupervisorJob())
+        val setRoomIsFavoriteAction = FakeSetRoomIsFavoriteAction()
+        val presenter = createRoomListPresenter(setRoomIsFavoriteAction = setRoomIsFavoriteAction, coroutineScope = scope)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            initialState.eventSink(RoomListEvents.SetRoomIsFavorite(A_ROOM_ID, true))
+            setRoomIsFavoriteAction.assertCalled(1)
+            cancelAndIgnoreRemainingEvents()
+            scope.cancel()
+        }
+    }
+
     private fun TestScope.createRoomListPresenter(
         client: MatrixClient = FakeMatrixClient(),
         sessionVerificationService: SessionVerificationService = FakeSessionVerificationService(),
@@ -407,6 +442,7 @@ class RoomListPresenterTests {
         roomLastMessageFormatter: RoomLastMessageFormatter = FakeRoomLastMessageFormatter(),
         encryptionService: EncryptionService = FakeEncryptionService(),
         coroutineScope: CoroutineScope,
+        setRoomIsFavoriteAction: SetRoomIsFavoriteAction = FakeSetRoomIsFavoriteAction(),
     ) = RoomListPresenter(
         client = client,
         sessionVerificationService = sessionVerificationService,
@@ -431,6 +467,7 @@ class RoomListPresenterTests {
             encryptionService = encryptionService,
             featureFlagService = FakeFeatureFlagService(mapOf(FeatureFlags.SecureStorage.key to true)),
         ),
+        setRoomIsFavorite = setRoomIsFavoriteAction,
     )
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024 New Vector Ltd
+ * Copyright (c) 2023 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,13 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+plugins {
+    id("io.element.android-library")
+}
 
-package io.element.android.libraries.matrix.api.room.tags
+android {
+    namespace = "io.element.android.features.roomactions.test"
+}
 
-/**
- * Represents the notable tags of a room.
- * @param isFavorite true if the room is marked as favorite.
- */
-data class RoomNotableTags(
-    val isFavorite: Boolean = false,
-)
+dependencies {
+    implementation(projects.features.roomactions.api)
+    implementation(projects.libraries.matrix.api)
+    implementation(libs.coroutines.core)
+}

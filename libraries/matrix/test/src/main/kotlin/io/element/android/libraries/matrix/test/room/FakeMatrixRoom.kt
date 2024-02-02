@@ -627,7 +627,6 @@ fun aRoomInfo(
     isPublic: Boolean = true,
     isSpace: Boolean = false,
     isTombstoned: Boolean = false,
-    isFavorite: Boolean = false,
     canonicalAlias: String? = null,
     alternativeAliases: List<String> = emptyList(),
     currentUserMembership: CurrentUserMembership = CurrentUserMembership.JOINED,

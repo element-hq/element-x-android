@@ -82,8 +82,8 @@ import org.matrix.rustcomponents.sdk.use
 import timber.log.Timber
 import java.io.File
 import org.matrix.rustcomponents.sdk.Room as InnerRoom
-import uniffi.matrix_sdk_base.RoomNotableTags as RustRoomNotableTags
 import org.matrix.rustcomponents.sdk.Timeline as InnerTimeline
+import uniffi.matrix_sdk_base.RoomNotableTags as RustRoomNotableTags
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class RustMatrixRoom(
@@ -118,7 +118,6 @@ class RustMatrixRoom(
     override val notableTagsFlow: Flow<RoomNotableTags> = mxCallbackFlow {
         innerRoom.subscribeToNotableTags(object : RoomNotableTagsListener {
             override fun call(notableTags: RustRoomNotableTags) {
-                Timber.d("On notable tags update: $notableTags")
                 channel.trySend(notableTags.map())
             }
         })

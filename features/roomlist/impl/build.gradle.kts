@@ -56,6 +56,7 @@ dependencies {
     implementation(projects.features.networkmonitor.api)
     implementation(projects.features.leaveroom.api)
     implementation(projects.services.analytics.api)
+    implementation(projects.features.roomactions.api)
     api(projects.features.roomlist.api)
     ksp(libs.showkase.processor)
 
@@ -75,4 +76,5 @@ dependencies {
     testImplementation(projects.features.networkmonitor.test)
     testImplementation(projects.tests.testutils)
     testImplementation(projects.features.leaveroom.test)
+    testImplementation(projects.features.roomactions.test)
 }

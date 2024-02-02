@@ -29,6 +29,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.lifecycle.Lifecycle
 import io.element.android.features.leaveroom.api.LeaveRoomEvent
 import io.element.android.features.leaveroom.api.LeaveRoomPresenter
+import io.element.android.features.roomactions.api.SetRoomIsFavoriteAction
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsPresenter
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
@@ -44,7 +45,6 @@ import io.element.android.libraries.matrix.api.room.StateEventType
 import io.element.android.libraries.matrix.api.room.powerlevels.canInvite
 import io.element.android.libraries.matrix.api.room.powerlevels.canSendState
 import io.element.android.libraries.matrix.api.room.roomNotificationSettings
-import io.element.android.libraries.matrix.api.room.tags.RoomNotableTags
 import io.element.android.libraries.matrix.ui.room.getDirectRoomMember
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.launchIn
@@ -61,6 +61,7 @@ class RoomDetailsPresenter @Inject constructor(
     private val roomMembersDetailsPresenterFactory: RoomMemberDetailsPresenter.Factory,
     private val leaveRoomPresenter: LeaveRoomPresenter,
     private val dispatchers: CoroutineDispatchers,
+    private val setRoomIsFavorite: SetRoomIsFavoriteAction,
 ) : Presenter<RoomDetailsState> {
     @Composable
     override fun present(): RoomDetailsState {
@@ -126,9 +127,8 @@ class RoomDetailsPresenter @Inject constructor(
                     }
                 }
                 is RoomDetailsEvent.SetIsFavorite -> {
-                    scope.launch(dispatchers.io) {
-                        val tags = RoomNotableTags(isFavorite = event.isFavorite)
-                        room.updateNotableTags(tags)
+                    scope.launch {
+                       setRoomIsFavorite(room, event.isFavorite)
                     }
                 }
             }

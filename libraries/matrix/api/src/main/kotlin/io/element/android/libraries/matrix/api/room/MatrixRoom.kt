@@ -58,6 +58,9 @@ interface MatrixRoom : Closeable {
 
     val roomInfoFlow: Flow<MatrixRoomInfo>
 
+    /**
+     * The current notable tags as a Flow.
+     */
     val notableTagsFlow: Flow<RoomNotableTags>
 
     /**
