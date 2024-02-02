@@ -18,6 +18,7 @@ package io.element.android.features.roomlist.impl
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.leaveroom.api.aLeaveRoomState
+import io.element.android.features.roomlist.impl.datasource.RoomListRoomSummaryFactory
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
 import io.element.android.features.roomlist.impl.model.aRoomListRoomSummary
 import io.element.android.libraries.architecture.AsyncData
@@ -51,7 +52,7 @@ open class RoomListStateProvider : PreviewParameterProvider<RoomListState> {
             ),
             aRoomListState().copy(displayRecoveryKeyPrompt = true),
             aRoomListState().copy(roomList = AsyncData.Success(persistentListOf())),
-            aRoomListState().copy(roomList = AsyncData.Loading()),
+            aRoomListState().copy(roomList = AsyncData.Loading(prevData = RoomListRoomSummaryFactory.createFakeList())),
         )
 }
 
