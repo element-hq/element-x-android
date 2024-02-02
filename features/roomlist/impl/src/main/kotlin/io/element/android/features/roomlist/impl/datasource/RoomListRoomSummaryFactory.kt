@@ -32,28 +32,30 @@ class RoomListRoomSummaryFactory @Inject constructor(
     private val lastMessageTimestampFormatter: LastMessageTimestampFormatter,
     private val roomLastMessageFormatter: RoomLastMessageFormatter,
 ) {
-    fun createPlaceholder(id: String): RoomListRoomSummary {
-        return RoomListRoomSummary(
-            id = id,
-            roomId = RoomId("!aRoom:domain"),
-            isPlaceholder = true,
-            name = "Short name",
-            timestamp = "hh:mm",
-            lastMessage = "Last message for placeholder",
-            avatarData = AvatarData(id, "S", size = AvatarSize.RoomListItem),
-            numberOfUnreadMessages = 0,
-            numberOfUnreadMentions = 0,
-            numberOfUnreadNotifications = 0,
-            userDefinedNotificationMode = null,
-            hasRoomCall = false,
-            isDm = false,
-        )
-    }
+    companion object {
+        fun createPlaceholder(id: String): RoomListRoomSummary {
+            return RoomListRoomSummary(
+                id = id,
+                roomId = RoomId(id),
+                isPlaceholder = true,
+                name = "Short name",
+                timestamp = "hh:mm",
+                lastMessage = "Last message for placeholder",
+                avatarData = AvatarData(id, "S", size = AvatarSize.RoomListItem),
+                numberOfUnreadMessages = 0,
+                numberOfUnreadMentions = 0,
+                numberOfUnreadNotifications = 0,
+                userDefinedNotificationMode = null,
+                hasRoomCall = false,
+                isDm = false,
+            )
+        }
 
-    fun createFakeList(): ImmutableList<RoomListRoomSummary> {
-        return List(16) {
-            createPlaceholder("!fakeRoom$it:domain")
-        }.toImmutableList()
+        fun createFakeList(): ImmutableList<RoomListRoomSummary> {
+            return List(16) {
+                createPlaceholder("!fakeRoom$it:domain")
+            }.toImmutableList()
+        }
     }
 
     fun create(roomSummary: RoomSummary.Filled): RoomListRoomSummary {

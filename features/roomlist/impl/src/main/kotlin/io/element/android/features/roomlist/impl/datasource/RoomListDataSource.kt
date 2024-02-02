@@ -115,7 +115,7 @@ class RoomListDataSource @Inject constructor(
     private suspend fun buildAndEmitAllRooms(roomSummaries: List<RoomSummary>) {
         if (diffCache.isEmpty()) {
             _allRooms.emit(
-                roomListRoomSummaryFactory.createFakeList()
+                RoomListRoomSummaryFactory.createFakeList()
             )
         } else {
             val roomListRoomSummaries = ArrayList<RoomListRoomSummary>()
@@ -135,7 +135,7 @@ class RoomListDataSource @Inject constructor(
 
     private fun buildAndCacheItem(roomSummaries: List<RoomSummary>, index: Int): RoomListRoomSummary? {
         val roomListRoomSummary = when (val roomSummary = roomSummaries.getOrNull(index)) {
-            is RoomSummary.Empty -> roomListRoomSummaryFactory.createPlaceholder(roomSummary.identifier)
+            is RoomSummary.Empty -> RoomListRoomSummaryFactory.createPlaceholder(roomSummary.identifier)
             is RoomSummary.Filled -> roomListRoomSummaryFactory.create(roomSummary)
             null -> null
         }
