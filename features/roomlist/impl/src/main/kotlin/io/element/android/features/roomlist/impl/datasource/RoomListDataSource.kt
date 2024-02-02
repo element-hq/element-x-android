@@ -21,6 +21,7 @@ import io.element.android.libraries.androidutils.diff.DiffCacheUpdater
 import io.element.android.libraries.androidutils.diff.MutableListDiffCache
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsService
+import io.element.android.libraries.matrix.api.roomlist.RoomList
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.api.roomlist.RoomSummary
 import kotlinx.collections.immutable.ImmutableList
@@ -113,10 +114,9 @@ class RoomListDataSource @Inject constructor(
     }
 
     private suspend fun buildAndEmitAllRooms(roomSummaries: List<RoomSummary>) {
-        if (diffCache.isEmpty()) {
-            _allRooms.emit(
-                RoomListRoomSummaryFactory.createFakeList()
-            )
+        if (diffCache.isEmpty() && roomListService.allRooms.loadingState.value is RoomList.LoadingState.NotLoaded) {
+            // If the room list is not loaded, we emit a fake placeholders list
+            _allRooms.emit(RoomListRoomSummaryFactory.createFakeList())
         } else {
             val roomListRoomSummaries = ArrayList<RoomListRoomSummary>()
             for (index in diffCache.indices()) {
