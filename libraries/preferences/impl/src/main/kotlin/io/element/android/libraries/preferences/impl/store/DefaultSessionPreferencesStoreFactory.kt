@@ -21,6 +21,8 @@ import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.sessionstorage.api.observer.SessionListener
+import io.element.android.libraries.sessionstorage.api.observer.SessionObserver
 import kotlinx.coroutines.CoroutineScope
 import java.util.concurrent.ConcurrentHashMap
 import javax.inject.Inject
@@ -28,8 +30,19 @@ import javax.inject.Inject
 @SingleIn(AppScope::class)
 class DefaultSessionPreferencesStoreFactory @Inject constructor(
     @ApplicationContext private val context: Context,
+    sessionObserver: SessionObserver,
 ) {
     private val cache = ConcurrentHashMap<SessionId, DefaultSessionPreferencesStore>()
+
+    init {
+        sessionObserver.addListener(object : SessionListener {
+            override suspend fun onSessionCreated(userId: String) = Unit
+            override suspend fun onSessionDeleted(userId: String) {
+                val sessionPreferences = cache.remove(SessionId(userId))
+                sessionPreferences?.clear()
+            }
+        })
+    }
 
     fun get(sessionId: SessionId, sessionCoroutineScope: CoroutineScope): DefaultSessionPreferencesStore = cache.getOrPut(sessionId) {
         DefaultSessionPreferencesStore(context, sessionId, sessionCoroutineScope)
