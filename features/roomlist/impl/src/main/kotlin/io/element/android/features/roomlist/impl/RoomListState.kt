@@ -19,6 +19,7 @@ package io.element.android.features.roomlist.impl
 import androidx.compose.runtime.Immutable
 import io.element.android.features.leaveroom.api.LeaveRoomState
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.user.MatrixUser
@@ -28,7 +29,7 @@ import kotlinx.collections.immutable.ImmutableList
 data class RoomListState(
     val matrixUser: MatrixUser?,
     val showAvatarIndicator: Boolean,
-    val roomList: ImmutableList<RoomListRoomSummary>,
+    val roomList: AsyncData<ImmutableList<RoomListRoomSummary>>,
     val filter: String?,
     val filteredRoomList: ImmutableList<RoomListRoomSummary>,
     val displayVerificationPrompt: Boolean,
