@@ -21,18 +21,49 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 
 class InMemorySessionPreferencesStore(
+    isSharePresenceEnabled: Boolean = true,
     isSendPublicReadReceiptsEnabled: Boolean = true,
+    isRenderReadReceiptsEnabled: Boolean = true,
+    isSendTypingNotificationsEnabled: Boolean = true,
+    isRenderTypingNotificationsEnabled: Boolean = true,
 ) : SessionPreferencesStore {
+    private val isSharePresenceEnabled = MutableStateFlow(isSharePresenceEnabled)
     private val isSendPublicReadReceiptsEnabled = MutableStateFlow(isSendPublicReadReceiptsEnabled)
+    private val isRenderReadReceiptsEnabled = MutableStateFlow(isRenderReadReceiptsEnabled)
+    private val isSendTypingNotificationsEnabled = MutableStateFlow(isSendTypingNotificationsEnabled)
+    private val isRenderTypingNotificationsEnabled = MutableStateFlow(isRenderTypingNotificationsEnabled)
     var clearCallCount = 0
         private set
+
+    override suspend fun setSharePresence(enabled: Boolean) {
+        isSharePresenceEnabled.tryEmit(enabled)
+    }
+
+    override fun isSharePresenceEnabled(): Flow<Boolean> = isSharePresenceEnabled
 
     override suspend fun setSendPublicReadReceipts(enabled: Boolean) {
         isSendPublicReadReceiptsEnabled.tryEmit(enabled)
     }
-    override fun isSendPublicReadReceiptsEnabled(): Flow<Boolean> {
-        return isSendPublicReadReceiptsEnabled
+
+    override fun isSendPublicReadReceiptsEnabled(): Flow<Boolean> = isSendPublicReadReceiptsEnabled
+
+    override suspend fun setRenderReadReceipts(enabled: Boolean) {
+        isRenderReadReceiptsEnabled.tryEmit(enabled)
     }
+
+    override fun isRenderReadReceiptsEnabled(): Flow<Boolean> = isRenderReadReceiptsEnabled
+
+    override suspend fun setSendTypingNotifications(enabled: Boolean) {
+        isSendTypingNotificationsEnabled.tryEmit(enabled)
+    }
+
+    override fun isSendTypingNotificationsEnabled(): Flow<Boolean> = isSendTypingNotificationsEnabled
+
+    override suspend fun setRenderTypingNotifications(enabled: Boolean) {
+        isRenderTypingNotificationsEnabled.tryEmit(enabled)
+    }
+
+    override fun isRenderTypingNotificationsEnabled(): Flow<Boolean> = isRenderTypingNotificationsEnabled
 
     override suspend fun clear() {
         clearCallCount++
