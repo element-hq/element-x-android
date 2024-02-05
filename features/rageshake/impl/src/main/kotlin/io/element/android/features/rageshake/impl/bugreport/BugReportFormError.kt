@@ -16,6 +16,6 @@
 
 package io.element.android.features.rageshake.impl.bugreport
 
-sealed class BugReportFormError: Exception() {
+sealed class BugReportFormError : Exception() {
     data object DescriptionTooShort : BugReportFormError()
 }
