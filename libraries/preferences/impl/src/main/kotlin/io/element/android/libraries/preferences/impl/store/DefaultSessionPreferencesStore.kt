@@ -66,21 +66,20 @@ class DefaultSessionPreferencesStore(
 
     override fun isSharePresenceEnabled(): Flow<Boolean> {
         // Migration, if sendPublicReadReceiptsKey was false, consider that sharing presence is false.
-        val defaultValue = runBlocking { isSendPublicReadReceiptsEnabled().first() }
-        return get(sharePresenceKey, defaultValue)
+        return get(sharePresenceKey) { runBlocking { isSendPublicReadReceiptsEnabled().first() } }
     }
 
     override suspend fun setSendPublicReadReceipts(enabled: Boolean) = update(sendPublicReadReceiptsKey, enabled)
-    override fun isSendPublicReadReceiptsEnabled(): Flow<Boolean> = get(sendPublicReadReceiptsKey, true)
+    override fun isSendPublicReadReceiptsEnabled(): Flow<Boolean> = get(sendPublicReadReceiptsKey) { true }
 
     override suspend fun setRenderReadReceipts(enabled: Boolean) = update(renderReadReceiptsKey, enabled)
-    override fun isRenderReadReceiptsEnabled(): Flow<Boolean> = get(renderReadReceiptsKey, true)
+    override fun isRenderReadReceiptsEnabled(): Flow<Boolean> = get(renderReadReceiptsKey) { true }
 
     override suspend fun setSendTypingNotifications(enabled: Boolean) = update(sendTypingNotificationsKey, enabled)
-    override fun isSendTypingNotificationsEnabled(): Flow<Boolean> = get(sendTypingNotificationsKey, true)
+    override fun isSendTypingNotificationsEnabled(): Flow<Boolean> = get(sendTypingNotificationsKey) { true }
 
     override suspend fun setRenderTypingNotifications(enabled: Boolean) = update(renderTypingNotificationsKey, enabled)
-    override fun isRenderTypingNotificationsEnabled(): Flow<Boolean> = get(renderTypingNotificationsKey, true)
+    override fun isRenderTypingNotificationsEnabled(): Flow<Boolean> = get(renderTypingNotificationsKey) { true }
 
     override suspend fun clear() {
         dataStoreFile.safeDelete()
@@ -90,7 +89,7 @@ class DefaultSessionPreferencesStore(
         store.edit { prefs -> prefs[key] = value }
     }
 
-    private fun <T> get(key: Preferences.Key<T>, default: T): Flow<T> {
-        return store.data.map { prefs -> prefs[key] ?: default }
+    private fun <T> get(key: Preferences.Key<T>, default: () -> T): Flow<T> {
+        return store.data.map { prefs -> prefs[key] ?: default() }
     }
 }
