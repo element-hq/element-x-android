@@ -106,6 +106,7 @@ class TimelinePresenter @AssistedInject constructor(
         val keyBackupState by encryptionService.backupStateStateFlow.collectAsState()
 
         val isSendPublicReadReceiptsEnabled by sessionPreferencesStore.isSendPublicReadReceiptsEnabled().collectAsState(initial = true)
+        val renderReadReceipts by sessionPreferencesStore.isRenderReadReceiptsEnabled().collectAsState(initial = true)
 
         val sessionState by remember {
             derivedStateOf {
@@ -183,6 +184,7 @@ class TimelinePresenter @AssistedInject constructor(
             highlightedEventId = highlightedEventId.value,
             paginationState = paginationState,
             timelineItems = timelineItems,
+            renderReadReceipts = renderReadReceipts,
             newEventState = newItemState.value,
             sessionState = sessionState,
             eventSink = { handleEvents(it) }
