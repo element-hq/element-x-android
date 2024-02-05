@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_session_verification_cancelled_subtitle">"Здаецца, нешта не так. Альбо час чакання запыту скончыўся, альбо запыт быў адхілены."</string>
+  <string name="screen_session_verification_compare_emojis_subtitle">"Пераканайцеся, што прыведзеныя ніжэй эмодзі супадаюць з эмодзі, паказанымі ў вашым іншым сеансе."</string>
+  <string name="screen_session_verification_compare_emojis_title">"Параўнайце эмодзі"</string>
+  <string name="screen_session_verification_compare_numbers_subtitle">"Пераканайцеся, што прыведзеныя ніжэй лічбы супадаюць з лічбамі, паказанымі ў іншым сеансе."</string>
+  <string name="screen_session_verification_compare_numbers_title">"Параўнайце лічбы"</string>
+  <string name="screen_session_verification_complete_subtitle">"Ваш новы сеанс пацверджаны. Ён мае доступ да вашых зашыфраваных паведамленняў, і іншыя карыстальнікі будуць лічыць яго давераным."</string>
+  <string name="screen_session_verification_open_existing_session_subtitle">"Дакажыце, што гэта вы, каб атрымаць доступ да вашай зашыфраванай гісторыі паведамленняў."</string>
+  <string name="screen_session_verification_open_existing_session_title">"Адкрыйце існуючы сеанс"</string>
+  <string name="screen_session_verification_positive_button_canceled">"Паўтарыце праверку"</string>
+  <string name="screen_session_verification_positive_button_initial">"Я гатовы"</string>
+  <string name="screen_session_verification_positive_button_verifying_ongoing">"Чаканне супадзення"</string>
+  <string name="screen_session_verification_ready_subtitle">"Параўнайце ўнікальны набор эмодзі."</string>
+  <string name="screen_session_verification_request_accepted_subtitle">"Параўнайце ўнікальныя эмодзі, пераканаўшыся, што яны размешчаны ў тым жа парадку."</string>
+  <string name="screen_session_verification_they_dont_match">"Яны не супадаюць"</string>
+  <string name="screen_session_verification_they_match">"Яны супадаюць"</string>
+  <string name="screen_session_verification_waiting_to_accept_subtitle">"Для працягу працы прыміце запыт на запуск працэсу праверкі ў іншым сеансе."</string>
+  <string name="screen_session_verification_waiting_to_accept_title">"Чаканне прыняцця запыту"</string>
+</resources>

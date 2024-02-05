@@ -23,7 +23,6 @@
   <string name="screen_room_details_notification_mode_custom">"Vlastní"</string>
   <string name="screen_room_details_notification_mode_default">"Výchozí"</string>
   <string name="screen_room_details_notification_title">"Oznámení"</string>
-  <string name="screen_room_details_room_name_label">"Název místnosti"</string>
   <string name="screen_room_details_share_room_title">"Sdílet místnost"</string>
   <string name="screen_room_details_updating_room">"Aktualizace místnosti…"</string>
   <string name="screen_room_member_list_pending_header_title">"Nevyřízeno"</string>
@@ -50,6 +49,7 @@
   <string name="screen_dm_details_unblock_user">"Odblokovat uživatele"</string>
   <string name="screen_room_details_leave_conversation_title">"Opustit konverzaci"</string>
   <string name="screen_room_details_leave_room_title">"Opustit místnost"</string>
+  <string name="screen_room_details_room_name_label">"Název místnosti"</string>
   <string name="screen_room_details_security_title">"Zabezpečení"</string>
   <string name="screen_room_details_topic_title">"Téma"</string>
   <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Pouze zmínky a klíčová slova"</string>

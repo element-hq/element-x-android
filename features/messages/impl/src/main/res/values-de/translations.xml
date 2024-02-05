@@ -20,7 +20,6 @@
   <string name="screen_room_mentions_at_room_subtitle">"Den ganzen Raum benachrichtigen"</string>
   <string name="screen_report_content_block_user_hint">"Prüfe, ob du alle aktuellen und zukünftigen Nachrichten dieses Benutzers ausblenden möchtest"</string>
   <string name="screen_room_attachment_source_camera">"Kamera"</string>
-  <string name="screen_room_attachment_source_camera_photo">"Foto aufnehmen"</string>
   <string name="screen_room_attachment_source_camera_video">"Video aufnehmen"</string>
   <string name="screen_room_attachment_source_files">"Anhang"</string>
   <string name="screen_room_attachment_source_gallery">"Foto- und Videobibliothek"</string>
@@ -56,6 +55,7 @@
   <string name="screen_room_voice_message_tooltip">"Zum Aufnehmen gedrückt halten"</string>
   <string name="screen_room_mentions_at_room_title">"Alle"</string>
   <string name="screen_report_content_block_user">"Benutzer blockieren"</string>
+  <string name="screen_room_attachment_source_camera_photo">"Foto aufnehmen"</string>
   <string name="screen_room_error_failed_processing_media">"Fehler beim Verarbeiten des hochgeladenen Mediums. Bitte versuche es erneut."</string>
   <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Nur Erwähnungen und Schlüsselwörter"</string>
 </resources>

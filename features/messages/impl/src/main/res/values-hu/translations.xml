@@ -17,10 +17,9 @@
   <string name="room_timeline_beginning_of_room">"Ez a(z) %1$s kezdete."</string>
   <string name="room_timeline_beginning_of_room_no_name">"Ez a beszélgetés kezdete."</string>
   <string name="room_timeline_read_marker_title">"Új"</string>
-  <string name="screen_room_mentions_at_room_subtitle">"Teljes szoba értesítése"</string>
+  <string name="screen_room_mentions_at_room_subtitle">"Az egész szoba értesítése"</string>
   <string name="screen_report_content_block_user_hint">"Jelölje be, ha el akarja rejteni az összes jelenlegi és jövőbeli üzenetet ettől a felhasználótól"</string>
   <string name="screen_room_attachment_source_camera">"Kamera"</string>
-  <string name="screen_room_attachment_source_camera_photo">"Fénykép készítése"</string>
   <string name="screen_room_attachment_source_camera_video">"Videó rögzítése"</string>
   <string name="screen_room_attachment_source_files">"Melléklet"</string>
   <string name="screen_room_attachment_source_gallery">"Fénykép- és videótár"</string>
@@ -56,6 +55,7 @@
   <string name="screen_room_voice_message_tooltip">"Tartsa a rögzítéshez"</string>
   <string name="screen_room_mentions_at_room_title">"Mindenki"</string>
   <string name="screen_report_content_block_user">"Felhasználó letiltása"</string>
+  <string name="screen_room_attachment_source_camera_photo">"Fénykép készítése"</string>
   <string name="screen_room_error_failed_processing_media">"Nem sikerült feldolgozni a feltöltendő médiát, próbálja újra."</string>
   <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Csak említések és kulcsszavak"</string>
 </resources>

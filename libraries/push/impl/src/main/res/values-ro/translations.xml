@@ -5,12 +5,10 @@
   <string name="notification_channel_noisy">"Notificări zgomotoase"</string>
   <string name="notification_channel_silent">"Notificări silențioase"</string>
   <string name="notification_inline_reply_failed">"** Trimiterea eșuată - vă rugăm să deschideți camera"</string>
-  <string name="notification_invitation_action_join">"Alăturați-vă"</string>
   <string name="notification_invitation_action_reject">"Respingeți"</string>
   <string name="notification_invite_body">"V-a invitat la o discuție"</string>
   <string name="notification_new_messages">"Mesaje noi"</string>
   <string name="notification_reaction_body">"A reacționat cu %1$s"</string>
-  <string name="notification_room_action_mark_as_read">"Marcați ca citit"</string>
   <string name="notification_room_invite_body">"V-a invitat să vă alăturați camerei"</string>
   <string name="notification_sender_me">"Eu"</string>
   <string name="notification_test_push_notification_content">"Vizualizați o notificare! Faceți clic pe mine!"</string>

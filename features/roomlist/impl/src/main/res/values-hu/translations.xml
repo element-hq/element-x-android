@@ -8,4 +8,5 @@
   <string name="screen_roomlist_main_space_title">"Összes csevegés"</string>
   <string name="session_verification_banner_message">"Úgy tűnik, hogy új eszközt használ. Ellenőrizze egy másik eszközzel, hogy a továbbiakban elérje a titkosított üzeneteket."</string>
   <string name="session_verification_banner_title">"Ellenőrizze, hogy Ön az"</string>
+  <string name="screen_roomlist_filter_people">"Emberek"</string>
 </resources>

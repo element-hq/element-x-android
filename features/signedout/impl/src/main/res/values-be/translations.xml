@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_signed_out_reason_1">"Вы змянілі свой пароль на іншым сеансе"</string>
+  <string name="screen_signed_out_reason_2">"Вы выдалілі сеанс з іншага сеансу"</string>
+  <string name="screen_signed_out_reason_3">"Адміністратар вашага сервера ануляваў ваш доступ"</string>
+  <string name="screen_signed_out_subtitle">"Магчыма, вы выйшлі з сістэмы па адной з прычын, пералічаных ніжэй. Калі ласка, увайдзіце яшчэ раз, каб працягнуць выкарыстанне %s."</string>
+  <string name="screen_signed_out_title">"Вы выйшлі з сістэмы"</string>
+</resources>

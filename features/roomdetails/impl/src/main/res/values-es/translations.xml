@@ -22,7 +22,6 @@
   <string name="screen_room_details_notification_mode_custom">"Personalizado"</string>
   <string name="screen_room_details_notification_mode_default">"Por defecto"</string>
   <string name="screen_room_details_notification_title">"Notificaciones"</string>
-  <string name="screen_room_details_room_name_label">"Nombre de la sala"</string>
   <string name="screen_room_details_share_room_title">"Compartir sala"</string>
   <string name="screen_room_details_updating_room">"Actualizando la sala…"</string>
   <string name="screen_room_member_list_pending_header_title">"Pendiente"</string>
@@ -48,6 +47,7 @@
   <string name="screen_dm_details_unblock_alert_description">"Podrás ver todos sus mensajes de nuevo."</string>
   <string name="screen_dm_details_unblock_user">"Desbloquear usuario"</string>
   <string name="screen_room_details_leave_room_title">"Salir de la sala"</string>
+  <string name="screen_room_details_room_name_label">"Nombre de la sala"</string>
   <string name="screen_room_details_security_title">"Seguridad"</string>
   <string name="screen_room_details_topic_title">"Tema"</string>
   <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Únicamente Menciones y Palabras clave"</string>

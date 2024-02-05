@@ -20,7 +20,6 @@
   <string name="screen_room_details_notification_mode_custom">"Personalizat"</string>
   <string name="screen_room_details_notification_mode_default">"Implicit"</string>
   <string name="screen_room_details_notification_title">"Notificări"</string>
-  <string name="screen_room_details_room_name_label">"Numele camerei"</string>
   <string name="screen_room_details_share_room_title">"Partajați camera"</string>
   <string name="screen_room_details_updating_room">"Se actualizează camera…"</string>
   <string name="screen_room_member_list_pending_header_title">"În așteptare"</string>
@@ -45,6 +44,7 @@
   <string name="screen_dm_details_unblock_alert_description">"La deblocarea utilizatorului, veți putea vedea din nou toate mesajele de la acesta."</string>
   <string name="screen_dm_details_unblock_user">"Deblocați utilizatorul"</string>
   <string name="screen_room_details_leave_room_title">"Părăsiți camera"</string>
+  <string name="screen_room_details_room_name_label">"Numele camerei"</string>
   <string name="screen_room_details_security_title">"Securitate"</string>
   <string name="screen_room_details_topic_title">"Subiect"</string>
   <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Numai mențiuni și cuvinte cheie"</string>

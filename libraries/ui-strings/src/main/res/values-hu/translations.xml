@@ -91,7 +91,7 @@
   <string name="action_start_verification">"Ellenőrzés elindítása"</string>
   <string name="action_static_map_load">"Koppints a térkép betöltéséhez"</string>
   <string name="action_take_photo">"Fénykép készítése"</string>
-  <string name="action_tap_for_options">"Koppintson a lehetőségekért"</string>
+  <string name="action_tap_for_options">"Koppints a beállításokért"</string>
   <string name="action_try_again">"Próbáld újra"</string>
   <string name="action_view_source">"Forrás megtekintése"</string>
   <string name="action_yes">"Igen"</string>

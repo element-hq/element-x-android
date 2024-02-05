@@ -39,6 +39,8 @@
   <string name="state_event_room_name_changed_by_you">"Megváltoztatta a szoba nevét: %1$s"</string>
   <string name="state_event_room_name_removed">"%1$s eltávolította a szoba nevét"</string>
   <string name="state_event_room_name_removed_by_you">"Eltávolította a szoba nevét"</string>
+  <string name="state_event_room_none">"%1$s nem változtatott semmin"</string>
+  <string name="state_event_room_none_by_you">"Nem változtatott semmin"</string>
   <string name="state_event_room_reject">"%1$s elutasította a meghívást"</string>
   <string name="state_event_room_reject_by_you">"Elutasította a meghívást"</string>
   <string name="state_event_room_remove">"%1$s eltávolította: %2$s"</string>

@@ -8,8 +8,8 @@
   <string name="screen_create_room_private_option_title">"Приватная комната (только по приглашению)"</string>
   <string name="screen_create_room_public_option_description">"Сообщения не зашифрованы, каждый может их прочитать. Вы можете включить шифрование позже."</string>
   <string name="screen_create_room_public_option_title">"Публичная комната (любой)"</string>
-  <string name="screen_create_room_room_name_label">"Название комнаты"</string>
   <string name="screen_create_room_topic_label">"Тема (необязательно)"</string>
   <string name="screen_start_chat_error_starting_chat">"Произошла ошибка при попытке открытия комнаты"</string>
+  <string name="screen_create_room_room_name_label">"Название комнаты"</string>
   <string name="screen_create_room_title">"Создать комнату"</string>
 </resources>

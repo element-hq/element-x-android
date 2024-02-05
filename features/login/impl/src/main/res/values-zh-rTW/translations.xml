@@ -5,9 +5,7 @@
   <string name="screen_account_provider_form_notice">"輸入關鍵字或網域名稱。"</string>
   <string name="screen_account_provider_form_subtitle">"搜尋公司、社群、私有伺服器。"</string>
   <string name="screen_account_provider_form_title">"尋找帳號提供者"</string>
-  <string name="screen_account_provider_signin_subtitle">"您的所有對話將保存於此，就如同您的電子郵件供應商會保存您的電子郵件一樣。"</string>
   <string name="screen_account_provider_signin_title">"您即將登入 %s"</string>
-  <string name="screen_account_provider_signup_subtitle">"您的所有對話將保存於此，就如同您的電子郵件供應商會保存您的電子郵件一樣。"</string>
   <string name="screen_account_provider_signup_title">"您即將在 %s 建立帳號"</string>
   <string name="screen_change_account_provider_matrix_org_subtitle">"Matrix.org 由 Matrix.org 基金會營運，是用於安全、去中心化通訊的公共 Matrix 網路上的大型免費伺服器。"</string>
   <string name="screen_change_account_provider_other">"其他"</string>
@@ -27,6 +25,8 @@
   <string name="screen_server_confirmation_message_register">"您的所有對話將保存於此，就如同您的電子郵件供應商會保存您的電子郵件一樣。"</string>
   <string name="screen_server_confirmation_title_login">"您即將登入 %1$s"</string>
   <string name="screen_server_confirmation_title_register">"您即將在 %1$s 建立帳號"</string>
+  <string name="screen_account_provider_signin_subtitle">"您的所有對話將保存於此，就如同您的電子郵件供應商會保存您的電子郵件一樣。"</string>
+  <string name="screen_account_provider_signup_subtitle">"您的所有對話將保存於此，就如同您的電子郵件供應商會保存您的電子郵件一樣。"</string>
   <string name="screen_login_subtitle">"Matrix 是一個開放網路，為了安全且去中心化的通訊而生。"</string>
   <string name="screen_waitlist_message_success">"歡迎使用 %1$s！"</string>
 </resources>

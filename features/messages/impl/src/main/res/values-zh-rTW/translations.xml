@@ -14,7 +14,6 @@
   <string name="report_content_hint">"檢舉這個內容的原因"</string>
   <string name="room_timeline_read_marker_title">"新訊息"</string>
   <string name="screen_room_attachment_source_camera">"照相機"</string>
-  <string name="screen_room_attachment_source_camera_photo">"拍照"</string>
   <string name="screen_room_attachment_source_camera_video">"錄影"</string>
   <string name="screen_room_attachment_source_files">"附件"</string>
   <string name="screen_room_attachment_source_gallery">"照片與影片庫"</string>
@@ -38,5 +37,6 @@
   <string name="screen_room_timeline_less_reactions">"較少"</string>
   <string name="screen_room_mentions_at_room_title">"所有人"</string>
   <string name="screen_report_content_block_user">"封鎖使用者"</string>
+  <string name="screen_room_attachment_source_camera_photo">"拍照"</string>
   <string name="screen_room_notification_settings_mode_mentions_and_keywords">"僅限提及與關鍵字"</string>
 </resources>

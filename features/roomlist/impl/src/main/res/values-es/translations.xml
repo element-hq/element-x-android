@@ -8,4 +8,5 @@
   <string name="screen_roomlist_main_space_title">"Todos los chats"</string>
   <string name="session_verification_banner_message">"Parece que estás usando un nuevo dispositivo. Verifica que eres tú para acceder a tus mensajes cifrados."</string>
   <string name="session_verification_banner_title">"Verifica que eres tú"</string>
+  <string name="screen_roomlist_filter_people">"Personas"</string>
 </resources>

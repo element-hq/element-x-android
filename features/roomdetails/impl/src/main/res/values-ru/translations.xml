@@ -23,7 +23,6 @@
   <string name="screen_room_details_notification_mode_custom">"Пользовательский"</string>
   <string name="screen_room_details_notification_mode_default">"По умолчанию"</string>
   <string name="screen_room_details_notification_title">"Уведомления"</string>
-  <string name="screen_room_details_room_name_label">"Название комнаты"</string>
   <string name="screen_room_details_share_room_title">"Поделиться комнатой"</string>
   <string name="screen_room_details_updating_room">"Обновление комнаты…"</string>
   <string name="screen_room_member_list_pending_header_title">"В ожидании"</string>
@@ -50,6 +49,7 @@
   <string name="screen_dm_details_unblock_user">"Разблокировать пользователя"</string>
   <string name="screen_room_details_leave_conversation_title">"Покинуть беседу"</string>
   <string name="screen_room_details_leave_room_title">"Покинуть комнату"</string>
+  <string name="screen_room_details_room_name_label">"Название комнаты"</string>
   <string name="screen_room_details_security_title">"Безопасность"</string>
   <string name="screen_room_details_topic_title">"Тема"</string>
   <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Только упоминания и ключевые слова"</string>

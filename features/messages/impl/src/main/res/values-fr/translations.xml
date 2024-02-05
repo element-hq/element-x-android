@@ -28,7 +28,6 @@
   <string name="screen_room_mentions_at_room_subtitle">"Notifier tout le salon"</string>
   <string name="screen_report_content_block_user_hint">"Cochez si vous souhaitez masquer tous les messages actuels et futurs de cet utilisateur."</string>
   <string name="screen_room_attachment_source_camera">"Appareil photo"</string>
-  <string name="screen_room_attachment_source_camera_photo">"Prendre une photo"</string>
   <string name="screen_room_attachment_source_camera_video">"Enregistrer une vidéo"</string>
   <string name="screen_room_attachment_source_files">"Pièce jointe"</string>
   <string name="screen_room_attachment_source_gallery">"Galerie Photo et Vidéo"</string>
@@ -65,6 +64,7 @@
   <string name="screen_room_voice_message_tooltip">"Maintenir pour enregistrer"</string>
   <string name="screen_room_mentions_at_room_title">"Tout le monde"</string>
   <string name="screen_report_content_block_user">"Bloquer l’utilisateur"</string>
+  <string name="screen_room_attachment_source_camera_photo">"Prendre une photo"</string>
   <string name="screen_room_error_failed_processing_media">"Échec du traitement des médias à télécharger, veuillez réessayer."</string>
   <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Mentions et mots clés uniquement"</string>
 </resources>

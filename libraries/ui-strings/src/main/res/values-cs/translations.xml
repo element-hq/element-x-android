@@ -119,6 +119,7 @@
   <string name="common_enter_your_pin">"Zadejte svůj PIN"</string>
   <string name="common_error">"Chyba"</string>
   <string name="common_everyone">"Všichni"</string>
+  <string name="common_favourite">"Oblíbené"</string>
   <string name="common_file">"Soubor"</string>
   <string name="common_file_saved_on_disk_android">"Soubor byl uložen do složky Stažené soubory"</string>
   <string name="common_forward_message">"Přeposlat zprávu"</string>

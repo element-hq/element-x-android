@@ -5,13 +5,11 @@
   <string name="notification_channel_noisy">"Pemberitahuan berisik"</string>
   <string name="notification_channel_silent">"Pemberitahuan diam"</string>
   <string name="notification_inline_reply_failed">"** Gagal mengirim — silakan buka ruangan"</string>
-  <string name="notification_invitation_action_join">"Bergabung"</string>
   <string name="notification_invitation_action_reject">"Tolak"</string>
   <string name="notification_invite_body">"Mengundang Anda untuk mengobrol"</string>
   <string name="notification_mentioned_you_body">"Menyebutkan Anda: %1$s"</string>
   <string name="notification_new_messages">"Pesan Baru"</string>
   <string name="notification_reaction_body">"Menghapus dengan %1$s"</string>
-  <string name="notification_room_action_mark_as_read">"Tandai sebagai dibaca"</string>
   <string name="notification_room_invite_body">"Mengundang Anda untuk bergabung ke ruangan"</string>
   <string name="notification_sender_me">"Saya"</string>
   <string name="notification_test_push_notification_content">"Anda sedang melihat pemberitahuan ini! Klik saya!"</string>
@@ -43,5 +41,6 @@
   <string name="push_distributor_firebase_android">"Layanan Google"</string>
   <string name="push_no_valid_google_play_services_apk_android">"Tidak ditemukan Layanan Google Play yang valid. Pemberitahuan mungkin tidak berfungsi dengan baik."</string>
   <string name="notification_fallback_content">"Notifikasi"</string>
+  <string name="notification_invitation_action_join">"Gabung"</string>
   <string name="notification_room_action_quick_reply">"Balas cepat"</string>
 </resources>
