@@ -41,6 +41,7 @@ fun CrashDetectionView(
 
     if (state.crashDetected) {
         CrashDetectionContent(
+            appName = state.appName,
             onYesClicked = onOpenBugReport,
             onNoClicked = ::onPopupDismissed,
             onDismiss = ::onPopupDismissed,
@@ -50,14 +51,14 @@ fun CrashDetectionView(
 
 @Composable
 private fun CrashDetectionContent(
+    appName: String,
     onNoClicked: () -> Unit = { },
     onYesClicked: () -> Unit = { },
     onDismiss: () -> Unit = { },
 ) {
     ConfirmationDialog(
         title = stringResource(id = CommonStrings.action_report_bug),
-        // TODO Replace with app name
-        content = stringResource(id = R.string.crash_detection_dialog_content, "Element"),
+        content = stringResource(id = R.string.crash_detection_dialog_content, appName),
         submitText = stringResource(id = CommonStrings.action_yes),
         cancelText = stringResource(id = CommonStrings.action_no),
         onCancelClicked = onNoClicked,

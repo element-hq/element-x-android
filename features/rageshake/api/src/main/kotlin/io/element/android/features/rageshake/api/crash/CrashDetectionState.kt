@@ -20,6 +20,7 @@ import androidx.compose.runtime.Immutable
 
 @Immutable
 data class CrashDetectionState(
+    val appName: String,
     val crashDetected: Boolean,
     val eventSink: (CrashDetectionEvents) -> Unit
 )
