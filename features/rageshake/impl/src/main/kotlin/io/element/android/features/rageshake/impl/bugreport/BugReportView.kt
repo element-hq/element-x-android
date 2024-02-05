@@ -96,7 +96,7 @@ fun BugReportView(
                         imeAction = ImeAction.Next
                     ),
                     minLines = 3,
-                    // TODO Error text too short
+                    isError = state.isDescriptionInError,
                 )
             }
             Spacer(modifier = Modifier.height(16.dp))
@@ -166,6 +166,12 @@ fun BugReportView(
             onSuccess = {
                 eventSink(BugReportEvents.ResetAll)
                 onDone()
+            },
+            errorMessage = { error ->
+                when (error) {
+                    BugReportFormError.DescriptionTooShort -> stringResource(id = R.string.screen_bug_report_error_description_too_short)
+                    else -> error.message ?: error.toString()
+                }
             },
             onErrorDismiss = { eventSink(BugReportEvents.ClearError) },
         )

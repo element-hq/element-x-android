@@ -7,6 +7,7 @@
   <string name="screen_bug_report_editor_description">"Please describe the problem. What did you do? What did you expect to happen? What actually happened. Please go into as much detail as you can."</string>
   <string name="screen_bug_report_editor_placeholder">"Describe the problem…"</string>
   <string name="screen_bug_report_editor_supporting">"If possible, please write the description in English."</string>
+  <string name="screen_bug_report_error_description_too_short">"The description is too short, please provide more details about what happened. Thanks!"</string>
   <string name="screen_bug_report_include_crash_logs">"Send crash logs"</string>
   <string name="screen_bug_report_include_logs">"Allow logs"</string>
   <string name="screen_bug_report_include_screenshot">"Send screenshot"</string>
