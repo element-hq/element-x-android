@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_analytics_prompt_data_usage">"Мы не будзем запісваць або прафіляваць любыя асабістыя даныя"</string>
+  <string name="screen_analytics_prompt_help_us_improve">"Даваць ананімныя дадзеныя аб выкарыстанні, каб дапамагчы нам выявіць праблемы."</string>
+  <string name="screen_analytics_prompt_read_terms">"Вы можаце азнаёміцца з усімі нашымі ўмовамі %1$s."</string>
+  <string name="screen_analytics_prompt_read_terms_content_link">"тут"</string>
+  <string name="screen_analytics_prompt_settings">"Вы можаце адключыць гэта ў любы час"</string>
+  <string name="screen_analytics_prompt_third_party_sharing">"Мы не будзем перадаваць вашыя дадзеныя трэцім асобам"</string>
+  <string name="screen_analytics_prompt_title">"Дапамажыце палепшыць %1$s"</string>
+</resources>

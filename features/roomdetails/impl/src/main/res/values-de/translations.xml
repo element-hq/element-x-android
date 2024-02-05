@@ -22,7 +22,6 @@
   <string name="screen_room_details_notification_mode_custom">"Benutzerdefiniert"</string>
   <string name="screen_room_details_notification_mode_default">"Standard"</string>
   <string name="screen_room_details_notification_title">"Benachrichtigungen"</string>
-  <string name="screen_room_details_room_name_label">"Raumname"</string>
   <string name="screen_room_details_share_room_title">"Raum teilen"</string>
   <string name="screen_room_details_updating_room">"Raum wird aktualisiert…"</string>
   <string name="screen_room_member_list_pending_header_title">"Ausstehend"</string>
@@ -48,6 +47,7 @@
   <string name="screen_dm_details_unblock_alert_description">"Du kannst dann wieder alle Nachrichten von ihnen sehen."</string>
   <string name="screen_dm_details_unblock_user">"Blockierung aufheben"</string>
   <string name="screen_room_details_leave_room_title">"Raum verlassen"</string>
+  <string name="screen_room_details_room_name_label">"Raumname"</string>
   <string name="screen_room_details_security_title">"Sicherheit"</string>
   <string name="screen_room_details_topic_title">"Thema"</string>
   <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Nur Erwähnungen und Schlüsselwörter"</string>

@@ -8,8 +8,8 @@
   <string name="screen_create_room_private_option_title">"Ruangan pribadi (hanya undangan)"</string>
   <string name="screen_create_room_public_option_description">"Pesan tidak dienkripsi dan siapa pun dapat membacanya. Anda dapat mengaktifkan enkripsi di kemudian hari."</string>
   <string name="screen_create_room_public_option_title">"Ruang publik (siapa saja)"</string>
-  <string name="screen_create_room_room_name_label">"Nama ruangan"</string>
   <string name="screen_create_room_topic_label">"Topik (opsional)"</string>
   <string name="screen_start_chat_error_starting_chat">"Terjadi kesalahan saat mencoba memulai obrolan"</string>
+  <string name="screen_create_room_room_name_label">"Nama ruangan"</string>
   <string name="screen_create_room_title">"Buat ruangan"</string>
 </resources>

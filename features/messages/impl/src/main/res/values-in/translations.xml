@@ -19,7 +19,6 @@
   <string name="screen_room_mentions_at_room_subtitle">"Beri tahu seluruh ruangan"</string>
   <string name="screen_report_content_block_user_hint">"Centang jika Anda ingin menyembunyikan semua pesan saat ini dan yang akan datang dari pengguna ini"</string>
   <string name="screen_room_attachment_source_camera">"Kamera"</string>
-  <string name="screen_room_attachment_source_camera_photo">"Ambil foto"</string>
   <string name="screen_room_attachment_source_camera_video">"Rekam video"</string>
   <string name="screen_room_attachment_source_files">"Lampiran"</string>
   <string name="screen_room_attachment_source_gallery">"Pustaka Foto &amp; Video"</string>
@@ -55,6 +54,7 @@
   <string name="screen_room_voice_message_tooltip">"Tahan untuk merekam"</string>
   <string name="screen_room_mentions_at_room_title">"Semua orang"</string>
   <string name="screen_report_content_block_user">"Blokir pengguna"</string>
+  <string name="screen_room_attachment_source_camera_photo">"Ambil foto"</string>
   <string name="screen_room_error_failed_processing_media">"Gagal memproses media untuk diunggah, silakan coba lagi."</string>
   <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Sebutan dan Kata Kunci saja"</string>
 </resources>

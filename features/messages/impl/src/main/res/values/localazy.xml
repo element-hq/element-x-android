@@ -28,7 +28,6 @@
   <string name="screen_room_mentions_at_room_subtitle">"Notify the whole room"</string>
   <string name="screen_report_content_block_user_hint">"Check if you want to hide all current and future messages from this user"</string>
   <string name="screen_room_attachment_source_camera">"Camera"</string>
-  <string name="screen_room_attachment_source_camera_photo">"Take photo"</string>
   <string name="screen_room_attachment_source_camera_video">"Record video"</string>
   <string name="screen_room_attachment_source_files">"Attachment"</string>
   <string name="screen_room_attachment_source_gallery">"Photo &amp; Video Library"</string>
@@ -65,6 +64,7 @@
   <string name="screen_room_voice_message_tooltip">"Hold to record"</string>
   <string name="screen_room_mentions_at_room_title">"Everyone"</string>
   <string name="screen_report_content_block_user">"Block user"</string>
+  <string name="screen_room_attachment_source_camera_photo">"Take photo"</string>
   <string name="screen_room_error_failed_processing_media">"Failed processing media to upload, please try again."</string>
   <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Mentions and Keywords only"</string>
 </resources>

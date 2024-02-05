@@ -119,6 +119,7 @@
   <string name="common_enter_your_pin">"Введите свой PIN-код"</string>
   <string name="common_error">"Ошибка"</string>
   <string name="common_everyone">"Для всех"</string>
+  <string name="common_favourite">"Избранное"</string>
   <string name="common_file">"Файл"</string>
   <string name="common_file_saved_on_disk_android">"Файл сохранен в «Загрузки»"</string>
   <string name="common_forward_message">"Переслать сообщение"</string>

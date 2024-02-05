@@ -9,11 +9,11 @@
   <string name="screen_create_poll_question_hint">"Čeho se hlasování týká?"</string>
   <string name="screen_create_poll_title">"Vytvořit hlasování"</string>
   <string name="screen_edit_poll_delete_confirmation">"Opravdu chcete odstranit toto hlasování?"</string>
-  <string name="screen_edit_poll_delete_confirmation_title">"Odstranit hlasování"</string>
-  <string name="screen_edit_poll_title">"Upravit hlasování"</string>
   <string name="screen_polls_history_empty_ongoing">"Nelze najít žádná probíhající hlasování."</string>
   <string name="screen_polls_history_empty_past">"Nelze najít žádná minulá hlasování."</string>
   <string name="screen_polls_history_filter_ongoing">"Probíhající"</string>
   <string name="screen_polls_history_filter_past">"Minulé"</string>
   <string name="screen_polls_history_title">"Hlasování"</string>
+  <string name="screen_edit_poll_delete_confirmation_title">"Odstranit hlasování"</string>
+  <string name="screen_edit_poll_title">"Upravit hlasování"</string>
 </resources>

@@ -31,7 +31,6 @@
   <string name="screen_room_mentions_at_room_subtitle">"Уведомить всю комнату"</string>
   <string name="screen_report_content_block_user_hint">"Отметьте, хотите ли вы скрыть все текущие и будущие сообщения от этого пользователя"</string>
   <string name="screen_room_attachment_source_camera">"Камера"</string>
-  <string name="screen_room_attachment_source_camera_photo">"Сделать фото"</string>
   <string name="screen_room_attachment_source_camera_video">"Записать видео"</string>
   <string name="screen_room_attachment_source_files">"Вложение"</string>
   <string name="screen_room_attachment_source_gallery">"Фото и видео"</string>
@@ -68,6 +67,7 @@
   <string name="screen_room_voice_message_tooltip">"Удерживайте для записи"</string>
   <string name="screen_room_mentions_at_room_title">"Для всех"</string>
   <string name="screen_report_content_block_user">"Заблокировать пользователя"</string>
+  <string name="screen_room_attachment_source_camera_photo">"Сделать фото"</string>
   <string name="screen_room_error_failed_processing_media">"Не удалось обработать медиафайл для загрузки, попробуйте еще раз."</string>
   <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Только упоминания и ключевые слова"</string>
 </resources>

@@ -4,4 +4,5 @@
   <string name="screen_roomlist_main_space_title">"所有聊天室"</string>
   <string name="session_verification_banner_message">"您似乎正在使用新的裝置。請使用另一個裝置進行驗證，以存取您的加密訊息。"</string>
   <string name="session_verification_banner_title">"驗證這是您本人"</string>
+  <string name="screen_roomlist_filter_people">"夥伴"</string>
 </resources>

@@ -7,10 +7,12 @@
   <string name="screen_roomlist_empty_title">"Пока нет доступных чатов."</string>
   <string name="screen_roomlist_filter_favourites">"Избранное"</string>
   <string name="screen_roomlist_filter_low_priority">"Низкий приоритет"</string>
-  <string name="screen_roomlist_filter_people">"Люди"</string>
   <string name="screen_roomlist_filter_rooms">"Комнаты"</string>
   <string name="screen_roomlist_filter_unreads">"Непрочитанные"</string>
   <string name="screen_roomlist_main_space_title">"Все чаты"</string>
+  <string name="screen_roomlist_mark_as_read">"Пометить как прочитанное"</string>
+  <string name="screen_roomlist_mark_as_unread">"Пометить как непрочитанное"</string>
   <string name="session_verification_banner_message">"Похоже, вы используете новое устройство. Чтобы получить доступ к зашифрованным сообщениям пройдите верификацию с другим устройством."</string>
   <string name="session_verification_banner_title">"Подтвердите, что это вы"</string>
+  <string name="screen_roomlist_filter_people">"Люди"</string>
 </resources>

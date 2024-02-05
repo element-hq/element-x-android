@@ -7,10 +7,10 @@
   <string name="screen_roomlist_empty_title">"Zatiaľ žiadne konverzácie."</string>
   <string name="screen_roomlist_filter_favourites">"Obľúbené"</string>
   <string name="screen_roomlist_filter_low_priority">"Nízka priorita"</string>
-  <string name="screen_roomlist_filter_people">"Ľudia"</string>
   <string name="screen_roomlist_filter_rooms">"Miestnosti"</string>
   <string name="screen_roomlist_filter_unreads">"Neprečítané"</string>
   <string name="screen_roomlist_main_space_title">"Všetky konverzácie"</string>
   <string name="session_verification_banner_message">"Vyzerá to tak, že používate nové zariadenie. Overte svoj prístup k zašifrovaným správam pomocou vášho druhého zariadenia."</string>
   <string name="session_verification_banner_title">"Overte, že ste to vy"</string>
+  <string name="screen_roomlist_filter_people">"Ľudia"</string>
 </resources>

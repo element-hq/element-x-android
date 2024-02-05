@@ -31,7 +31,6 @@
   <string name="screen_room_mentions_at_room_subtitle">"Informujte celou místnost"</string>
   <string name="screen_report_content_block_user_hint">"Zaškrtněte, pokud chcete skrýt všechny aktuální a budoucí zprávy od tohoto uživatele"</string>
   <string name="screen_room_attachment_source_camera">"Fotoaparát"</string>
-  <string name="screen_room_attachment_source_camera_photo">"Vyfotit"</string>
   <string name="screen_room_attachment_source_camera_video">"Natočit video"</string>
   <string name="screen_room_attachment_source_files">"Příloha"</string>
   <string name="screen_room_attachment_source_gallery">"Knihovna fotografií a videí"</string>
@@ -68,6 +67,7 @@
   <string name="screen_room_voice_message_tooltip">"Držte pro nahrávání"</string>
   <string name="screen_room_mentions_at_room_title">"Všichni"</string>
   <string name="screen_report_content_block_user">"Zablokovat uživatele"</string>
+  <string name="screen_room_attachment_source_camera_photo">"Vyfotit"</string>
   <string name="screen_room_error_failed_processing_media">"Nahrání média se nezdařilo, zkuste to prosím znovu."</string>
   <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Pouze zmínky a klíčová slova"</string>
 </resources>

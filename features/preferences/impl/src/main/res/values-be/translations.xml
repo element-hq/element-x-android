@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_advanced_settings_element_call_base_url">"Базавы URL сервера званкоў Element"</string>
+  <string name="screen_advanced_settings_element_call_base_url_description">"Задайце свой сервер Element Call."</string>
+  <string name="screen_advanced_settings_element_call_base_url_validation_error">"Адрас пазначаны няправільна, пераканайцеся, што вы ўказалі пратакол (http/https) і правільны адрас."</string>
+  <string name="screen_advanced_settings_developer_mode">"Рэжым распрацоўніка"</string>
+  <string name="screen_advanced_settings_developer_mode_description">"Падайце распрацоўнікам доступ да функцый і функцыянальным магчымасцям."</string>
+  <string name="screen_advanced_settings_rich_text_editor_description">"Адключыць рэдактар фарматаванага тэксту і ўключыць Markdown."</string>
+  <string name="screen_advanced_settings_view_source_description">"Уключыце опцыю для прагляду крыніцы паведамлення на часовай шкале."</string>
+  <string name="screen_edit_profile_display_name">"Бачнае імя"</string>
+  <string name="screen_edit_profile_display_name_placeholder">"Ваша бачнае імя"</string>
+  <string name="screen_edit_profile_error">"Узнікла невядомая памылка, і інфармацыю не ўдалося змяніць."</string>
+  <string name="screen_edit_profile_error_title">"Немагчыма абнавіць профіль"</string>
+  <string name="screen_edit_profile_title">"Рэдагаваць профіль"</string>
+  <string name="screen_edit_profile_updating_details">"Абнаўленне профілю…"</string>
+  <string name="screen_notification_settings_additional_settings_section_title">"Дадатковыя налады"</string>
+  <string name="screen_notification_settings_calls_label">"Аўдыё і відэа званкі"</string>
+  <string name="screen_notification_settings_configuration_mismatch">"Неадпаведнасць канфігурацыі"</string>
+  <string name="screen_notification_settings_configuration_mismatch_description">"Мы спрасцілі налады апавяшчэнняў, каб спрасціць пошук опцый. Некаторыя карыстальніцкія наладкі, абраныя вамі раней, не адлюстроўваюцца ў дадзеным меню, але яны ўсё яшчэ актыўныя.
+
+Калі вы працягнеце, некаторыя налады могуць быць зменены."</string>
+  <string name="screen_notification_settings_direct_chats">"Прамыя чаты"</string>
+  <string name="screen_notification_settings_edit_custom_settings_section_title">"Карыстальніцкія налады для кожнага чата"</string>
+  <string name="screen_notification_settings_edit_failed_updating_default_mode">"Пры абнаўленні налад апавяшчэнняў адбылася памылка."</string>
+  <string name="screen_notification_settings_edit_mode_all_messages">"Усе паведамленні"</string>
+  <string name="screen_notification_settings_edit_mode_mentions_and_keywords">"Толькі згадванні і ключавыя словы"</string>
+  <string name="screen_notification_settings_edit_screen_direct_section_header">"Апавяшчаць мяне ў асабістых чатах"</string>
+  <string name="screen_notification_settings_edit_screen_group_section_header">"Апавяшчаць мяне ў групавых чатах"</string>
+  <string name="screen_notification_settings_enable_notifications">"Уключыць апавяшчэнні на гэтай прыладзе"</string>
+  <string name="screen_notification_settings_failed_fixing_configuration">"Канфігурацыя не была выпраўлена, паспрабуйце яшчэ раз."</string>
+  <string name="screen_notification_settings_group_chats">"Групавыя чаты"</string>
+  <string name="screen_notification_settings_invite_for_me_label">"Запрашэнні"</string>
+  <string name="screen_notification_settings_mentions_only_disclaimer">"Ваш хатні сервер не падтрымлівае гэтую опцыю ў зашыфраваных пакоях, вы можаце не атрымаць апавяшчэнне ў некаторых пакоях."</string>
+  <string name="screen_notification_settings_mentions_section_title">"Згадванні"</string>
+  <string name="screen_notification_settings_mode_all">"Усе"</string>
+  <string name="screen_notification_settings_mode_mentions">"Згадванні"</string>
+  <string name="screen_notification_settings_notification_section_title">"Апавясціць мяне"</string>
+  <string name="screen_notification_settings_room_mention_label">"Апавясціць мяне ў @room"</string>
+  <string name="screen_notification_settings_system_notifications_action_required">"Каб атрымліваць апавяшчэнні, змяніце свой %1$s."</string>
+  <string name="screen_notification_settings_system_notifications_action_required_content_link">"налады сістэмы"</string>
+  <string name="screen_notification_settings_system_notifications_turned_off">"Сістэмныя апавяшчэнні выключаны"</string>
+  <string name="screen_notification_settings_title">"Апавяшчэнні"</string>
+</resources>
