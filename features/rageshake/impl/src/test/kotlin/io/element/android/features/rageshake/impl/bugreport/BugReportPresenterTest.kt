@@ -54,7 +54,7 @@ class BugReportPresenterTest {
             assertThat(initialState.sending).isEqualTo(AsyncAction.Uninitialized)
             assertThat(initialState.screenshotUri).isNull()
             assertThat(initialState.sendingProgress).isEqualTo(0f)
-            assertThat(initialState.submitEnabled).isFalse()
+            assertThat(initialState.submitEnabled).isTrue()
         }
     }
 
@@ -66,7 +66,7 @@ class BugReportPresenterTest {
         }.test {
             val initialState = awaitItem()
             initialState.eventSink.invoke(BugReportEvents.SetDescription(A_SHORT_DESCRIPTION))
-            assertThat(awaitItem().submitEnabled).isFalse()
+            assertThat(awaitItem().submitEnabled).isTrue()
             initialState.eventSink.invoke(BugReportEvents.SetDescription(A_LONG_DESCRIPTION))
             assertThat(awaitItem().submitEnabled).isTrue()
         }
@@ -146,6 +146,8 @@ class BugReportPresenterTest {
             presenter.present()
         }.test {
             val initialState = awaitItem()
+            initialState.eventSink.invoke(BugReportEvents.SetDescription(A_LONG_DESCRIPTION))
+            skipItems(1)
             initialState.eventSink.invoke(BugReportEvents.SendBugReport)
             skipItems(1)
             val progressState = awaitItem()
@@ -170,6 +172,8 @@ class BugReportPresenterTest {
             presenter.present()
         }.test {
             val initialState = awaitItem()
+            initialState.eventSink.invoke(BugReportEvents.SetDescription(A_LONG_DESCRIPTION))
+            skipItems(1)
             initialState.eventSink.invoke(BugReportEvents.SendBugReport)
             skipItems(1)
             val progressState = awaitItem()
@@ -188,6 +192,25 @@ class BugReportPresenterTest {
     }
 
     @Test
+    fun `present - send failure description too short`() = runTest {
+        val presenter = createPresenter()
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            initialState.eventSink.invoke(BugReportEvents.SetDescription(A_SHORT_DESCRIPTION))
+            skipItems(1)
+            initialState.eventSink.invoke(BugReportEvents.SendBugReport)
+            val errorState = awaitItem()
+            assertThat(errorState.sending).isEqualTo(AsyncAction.Failure(BugReportFormError.DescriptionTooShort))
+            // Reset failure
+            initialState.eventSink.invoke(BugReportEvents.ClearError)
+            val lastItem = awaitItem()
+            assertThat(lastItem.sending).isInstanceOf(AsyncAction.Uninitialized::class.java)
+        }
+    }
+
+    @Test
     fun `present - send cancel`() = runTest {
         val presenter = createPresenter(
             FakeBugReporter(mode = FakeBugReporterMode.Cancel),
@@ -198,6 +221,8 @@ class BugReportPresenterTest {
             presenter.present()
         }.test {
             val initialState = awaitItem()
+            initialState.eventSink.invoke(BugReportEvents.SetDescription(A_LONG_DESCRIPTION))
+            skipItems(1)
             initialState.eventSink.invoke(BugReportEvents.SendBugReport)
             skipItems(1)
             val progressState = awaitItem()
