@@ -259,10 +259,11 @@ private fun RoomListContent(
                     }
 
                     val roomList = state.roomList.dataOrNull().orEmpty()
+                    // Note: do not use a key for the LazyColumn, or the scroll will not behave as expected if a room
+                    // is moved to the top of the list.
                     itemsIndexed(
                         items = roomList,
                         contentType = { _, room -> room.contentType() },
-                        key = { _, room -> room.roomId.value }
                     ) { index, room ->
                         RoomSummaryRow(
                             room = room,
