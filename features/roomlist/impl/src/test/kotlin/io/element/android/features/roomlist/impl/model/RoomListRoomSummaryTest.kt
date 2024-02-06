@@ -16,34 +16,62 @@
 
 package io.element.android.features.roomlist.impl.model
 
+import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.dateformatter.test.A_FORMATTED_DATE
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
+import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_ROOM_NAME
 import org.junit.Test
 
 class RoomListRoomSummaryTest {
     @Test
-    fun `todo`() {
+    fun `test default value`() {
+        val sut = createRoomListRoomSummary(
+            numberOfUnreadMentions = 0,
+            numberOfUnreadMessages = 0,
+            numberOfUnreadNotifications = 0,
+            isMarkedUnread = false,
+            userDefinedNotificationMode = null,
+        )
+        assertThat(sut.isHighlighted).isFalse()
+        assertThat(sut.hasNewContent).isFalse()
+    }
 
+    @Test
+    fun `test isMarkedUnread set to true`() {
+        val sut = createRoomListRoomSummary(
+            numberOfUnreadMentions = 0,
+            numberOfUnreadMessages = 0,
+            numberOfUnreadNotifications = 0,
+            isMarkedUnread = true,
+            userDefinedNotificationMode = null,
+        )
+        assertThat(sut.isHighlighted).isTrue()
+        assertThat(sut.hasNewContent).isTrue()
     }
 }
 
 internal fun createRoomListRoomSummary(
+    numberOfUnreadMentions: Int = 1,
+    numberOfUnreadMessages: Int = 2,
+    numberOfUnreadNotifications: Int = 0,
+    isMarkedUnread: Boolean = false,
+    userDefinedNotificationMode: RoomNotificationMode? = null,
 ) = RoomListRoomSummary(
     id = A_ROOM_ID.value,
     roomId = A_ROOM_ID,
     name = A_ROOM_NAME,
-    numberOfUnreadMentions = 1,
-    numberOfUnreadMessages = 2,
-    numberOfUnreadNotifications = 0,
-    isMarkedUnread = false,
+    numberOfUnreadMentions = numberOfUnreadMentions,
+    numberOfUnreadMessages = numberOfUnreadMessages,
+    numberOfUnreadNotifications = numberOfUnreadNotifications,
+    isMarkedUnread = isMarkedUnread,
     timestamp = A_FORMATTED_DATE,
     lastMessage = "",
     avatarData = AvatarData(id = A_ROOM_ID.value, name = A_ROOM_NAME, size = AvatarSize.RoomListItem),
     isPlaceholder = false,
-    userDefinedNotificationMode = null,
+    userDefinedNotificationMode = userDefinedNotificationMode,
     hasRoomCall = false,
     isDm = false,
 )
