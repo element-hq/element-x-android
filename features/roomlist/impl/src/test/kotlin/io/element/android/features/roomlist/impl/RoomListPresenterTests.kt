@@ -32,11 +32,10 @@ import io.element.android.features.roomlist.impl.datasource.RoomListDataSource
 import io.element.android.features.roomlist.impl.datasource.RoomListRoomSummaryFactory
 import io.element.android.features.roomlist.impl.migration.InMemoryMigrationScreenStore
 import io.element.android.features.roomlist.impl.migration.MigrationScreenPresenter
-import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
+import io.element.android.features.roomlist.impl.model.createRoomListRoomSummary
 import io.element.android.libraries.dateformatter.api.LastMessageTimestampFormatter
+import io.element.android.libraries.dateformatter.test.A_FORMATTED_DATE
 import io.element.android.libraries.dateformatter.test.FakeLastMessageTimestampFormatter
-import io.element.android.libraries.designsystem.components.avatar.AvatarData
-import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.eventformatter.api.RoomLastMessageFormatter
 import io.element.android.libraries.eventformatter.test.FakeRoomLastMessageFormatter
@@ -184,7 +183,7 @@ class RoomListPresenterTests {
             val withRoomStateItems = withRoomState.roomList.dataOrNull().orEmpty()
             assertThat(withRoomStateItems.size).isEqualTo(1)
             assertThat(withRoomStateItems.first())
-                .isEqualTo(aRoomListRoomSummary)
+                .isEqualTo(createRoomListRoomSummary())
             scope.cancel()
         }
     }
@@ -212,7 +211,7 @@ class RoomListPresenterTests {
             assertThat(withFilteredRoomState.filter).isEqualTo(A_ROOM_NAME.substring(0, 3))
             assertThat(withFilteredRoomState.filteredRoomList.size).isEqualTo(1)
             assertThat(withFilteredRoomState.filteredRoomList.first())
-                .isEqualTo(aRoomListRoomSummary)
+                .isEqualTo(createRoomListRoomSummary())
             // Test filtering without result
             withFilteredRoomState.eventSink.invoke(RoomListEvents.UpdateFilter("tada"))
             skipItems(1)
@@ -326,7 +325,7 @@ class RoomListPresenterTests {
             skipItems(1)
 
             val initialState = awaitItem()
-            val summary = aRoomListRoomSummary
+            val summary = createRoomListRoomSummary()
             initialState.eventSink(RoomListEvents.ShowContextMenu(summary))
 
             val shownState = awaitItem()
@@ -352,7 +351,7 @@ class RoomListPresenterTests {
             skipItems(1)
 
             val initialState = awaitItem()
-            val summary = aRoomListRoomSummary
+            val summary = createRoomListRoomSummary()
             initialState.eventSink(RoomListEvents.ShowContextMenu(summary))
 
             val shownState = awaitItem()
@@ -527,22 +526,3 @@ class RoomListPresenterTests {
         sessionPreferencesStore = sessionPreferencesStore,
     )
 }
-
-private const val A_FORMATTED_DATE = "formatted_date"
-
-private val aRoomListRoomSummary = RoomListRoomSummary(
-    id = A_ROOM_ID.value,
-    roomId = A_ROOM_ID,
-    name = A_ROOM_NAME,
-    numberOfUnreadMentions = 1,
-    numberOfUnreadMessages = 2,
-    numberOfUnreadNotifications = 0,
-    isMarkedUnread = false,
-    timestamp = A_FORMATTED_DATE,
-    lastMessage = "",
-    avatarData = AvatarData(id = A_ROOM_ID.value, name = A_ROOM_NAME, size = AvatarSize.RoomListItem),
-    isPlaceholder = false,
-    userDefinedNotificationMode = null,
-    hasRoomCall = false,
-    isDm = false,
-)

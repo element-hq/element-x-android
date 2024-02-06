@@ -18,6 +18,8 @@ package io.element.android.libraries.dateformatter.test
 
 import io.element.android.libraries.dateformatter.api.LastMessageTimestampFormatter
 
+const val A_FORMATTED_DATE = "formatted_date"
+
 class FakeLastMessageTimestampFormatter : LastMessageTimestampFormatter {
     private var format = ""
     fun givenFormat(format: String) {
