@@ -38,8 +38,8 @@ data class RoomListRoomSummary(
     val hasRoomCall: Boolean,
     val isDm: Boolean,
 ) {
-    val isHighlighted = (userDefinedNotificationMode != RoomNotificationMode.MUTE &&
-        (numberOfUnreadNotifications > 0 || numberOfUnreadMentions > 0)) ||
+    val isHighlighted = userDefinedNotificationMode != RoomNotificationMode.MUTE &&
+        (numberOfUnreadNotifications > 0 || numberOfUnreadMentions > 0) ||
         isMarkedUnread
 
     val hasNewContent = numberOfUnreadMessages > 0 ||
