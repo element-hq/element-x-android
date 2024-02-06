@@ -36,6 +36,35 @@ class RoomListRoomSummaryTest {
     }
 
     @Test
+    fun `test muted room`() {
+        val sut = createRoomListRoomSummary(
+            userDefinedNotificationMode = RoomNotificationMode.MUTE,
+        )
+        assertThat(sut.isHighlighted).isFalse()
+        assertThat(sut.hasNewContent).isFalse()
+    }
+
+    @Test
+    fun `test muted room isMarkedUnread set to true`() {
+        val sut = createRoomListRoomSummary(
+            isMarkedUnread = true,
+            userDefinedNotificationMode = RoomNotificationMode.MUTE,
+        )
+        assertThat(sut.isHighlighted).isTrue()
+        assertThat(sut.hasNewContent).isTrue()
+    }
+
+    @Test
+    fun `test muted room with unread message`() {
+        val sut = createRoomListRoomSummary(
+            numberOfUnreadNotifications = 1,
+            userDefinedNotificationMode = RoomNotificationMode.MUTE,
+        )
+        assertThat(sut.isHighlighted).isFalse()
+        assertThat(sut.hasNewContent).isTrue()
+    }
+
+    @Test
     fun `test isMarkedUnread set to true`() {
         val sut = createRoomListRoomSummary(
             isMarkedUnread = true,
