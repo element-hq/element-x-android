@@ -139,7 +139,7 @@ class MessagesPresenter @AssistedInject constructor(
         val userHasPermissionToSendMessage by room.canSendMessageAsState(type = MessageEventType.ROOM_MESSAGE, updateKey = syncUpdateFlow.value)
         val userHasPermissionToRedactOwn by room.canRedactOwnAsState(updateKey = syncUpdateFlow.value)
         val userHasPermissionToRedactOther by room.canRedactOtherAsState(updateKey = syncUpdateFlow.value)
-        val userHasPermissionToSendReaction by room.canSendMessageAsState(type = MessageEventType.REACTION_SENT, updateKey = syncUpdateFlow.value)
+        val userHasPermissionToSendReaction by room.canSendMessageAsState(type = MessageEventType.REACTION, updateKey = syncUpdateFlow.value)
         val roomName: AsyncData<String> by remember {
             derivedStateOf { roomInfo?.name?.let { AsyncData.Success(it) } ?: AsyncData.Uninitialized }
         }
