@@ -76,12 +76,12 @@ import kotlinx.coroutines.withTimeout
 import org.matrix.rustcomponents.sdk.BackupState
 import org.matrix.rustcomponents.sdk.Client
 import org.matrix.rustcomponents.sdk.ClientDelegate
-import org.matrix.rustcomponents.sdk.FilterStateEventType
 import org.matrix.rustcomponents.sdk.FilterTimelineEventType
 import org.matrix.rustcomponents.sdk.NotificationProcessSetup
 import org.matrix.rustcomponents.sdk.PowerLevels
 import org.matrix.rustcomponents.sdk.Room
 import org.matrix.rustcomponents.sdk.RoomListItem
+import org.matrix.rustcomponents.sdk.StateEventType
 import org.matrix.rustcomponents.sdk.TaskHandle
 import org.matrix.rustcomponents.sdk.TimelineEventTypeFilter
 import org.matrix.rustcomponents.sdk.use
@@ -203,20 +203,20 @@ class RustMatrixClient(
 
     private val eventFilters = TimelineEventTypeFilter.exclude(
         listOf(
-            FilterStateEventType.ROOM_ALIASES,
-            FilterStateEventType.ROOM_CANONICAL_ALIAS,
-            FilterStateEventType.ROOM_GUEST_ACCESS,
-            FilterStateEventType.ROOM_HISTORY_VISIBILITY,
-            FilterStateEventType.ROOM_JOIN_RULES,
-            FilterStateEventType.ROOM_PINNED_EVENTS,
-            FilterStateEventType.ROOM_POWER_LEVELS,
-            FilterStateEventType.ROOM_SERVER_ACL,
-            FilterStateEventType.ROOM_TOMBSTONE,
-            FilterStateEventType.SPACE_CHILD,
-            FilterStateEventType.SPACE_PARENT,
-            FilterStateEventType.POLICY_RULE_ROOM,
-            FilterStateEventType.POLICY_RULE_SERVER,
-            FilterStateEventType.POLICY_RULE_USER,
+            StateEventType.ROOM_ALIASES,
+            StateEventType.ROOM_CANONICAL_ALIAS,
+            StateEventType.ROOM_GUEST_ACCESS,
+            StateEventType.ROOM_HISTORY_VISIBILITY,
+            StateEventType.ROOM_JOIN_RULES,
+            StateEventType.ROOM_PINNED_EVENTS,
+            StateEventType.ROOM_POWER_LEVELS,
+            StateEventType.ROOM_SERVER_ACL,
+            StateEventType.ROOM_TOMBSTONE,
+            StateEventType.SPACE_CHILD,
+            StateEventType.SPACE_PARENT,
+            StateEventType.POLICY_RULE_ROOM,
+            StateEventType.POLICY_RULE_SERVER,
+            StateEventType.POLICY_RULE_USER,
         ).map(FilterTimelineEventType::State)
     )
 
