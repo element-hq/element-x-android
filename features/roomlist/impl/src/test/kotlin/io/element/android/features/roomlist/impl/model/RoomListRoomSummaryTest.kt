@@ -29,11 +29,7 @@ class RoomListRoomSummaryTest {
     @Test
     fun `test default value`() {
         val sut = createRoomListRoomSummary(
-            numberOfUnreadMentions = 0,
-            numberOfUnreadMessages = 0,
-            numberOfUnreadNotifications = 0,
             isMarkedUnread = false,
-            userDefinedNotificationMode = null,
         )
         assertThat(sut.isHighlighted).isFalse()
         assertThat(sut.hasNewContent).isFalse()
@@ -42,11 +38,7 @@ class RoomListRoomSummaryTest {
     @Test
     fun `test isMarkedUnread set to true`() {
         val sut = createRoomListRoomSummary(
-            numberOfUnreadMentions = 0,
-            numberOfUnreadMessages = 0,
-            numberOfUnreadNotifications = 0,
             isMarkedUnread = true,
-            userDefinedNotificationMode = null,
         )
         assertThat(sut.isHighlighted).isTrue()
         assertThat(sut.hasNewContent).isTrue()
@@ -54,8 +46,8 @@ class RoomListRoomSummaryTest {
 }
 
 internal fun createRoomListRoomSummary(
-    numberOfUnreadMentions: Int = 1,
-    numberOfUnreadMessages: Int = 2,
+    numberOfUnreadMentions: Int = 0,
+    numberOfUnreadMessages: Int = 0,
     numberOfUnreadNotifications: Int = 0,
     isMarkedUnread: Boolean = false,
     userDefinedNotificationMode: RoomNotificationMode? = null,

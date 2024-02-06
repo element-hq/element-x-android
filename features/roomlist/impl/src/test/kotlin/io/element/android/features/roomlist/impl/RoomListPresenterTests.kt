@@ -178,12 +178,23 @@ class RoomListPresenterTests {
             val initialItems = initialState.roomList.dataOrNull().orEmpty()
             assertThat(initialItems.size).isEqualTo(16)
             assertThat(initialItems.all { it.isPlaceholder }).isTrue()
-            roomListService.postAllRooms(listOf(aRoomSummaryFilled()))
+            roomListService.postAllRooms(
+                listOf(
+                    aRoomSummaryFilled(
+                        numUnreadMentions = 1,
+                        numUnreadMessages = 2,
+                    )
+                )
+            )
             val withRoomState = consumeItemsUntilPredicate { state -> state.roomList.dataOrNull()?.size == 1 }.last()
             val withRoomStateItems = withRoomState.roomList.dataOrNull().orEmpty()
             assertThat(withRoomStateItems.size).isEqualTo(1)
-            assertThat(withRoomStateItems.first())
-                .isEqualTo(createRoomListRoomSummary())
+            assertThat(withRoomStateItems.first()).isEqualTo(
+                createRoomListRoomSummary(
+                    numberOfUnreadMentions = 1,
+                    numberOfUnreadMessages = 2,
+                )
+            )
             scope.cancel()
         }
     }
@@ -199,7 +210,14 @@ class RoomListPresenterTests {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            roomListService.postAllRooms(listOf(aRoomSummaryFilled()))
+            roomListService.postAllRooms(
+                listOf(
+                    aRoomSummaryFilled(
+                        numUnreadMentions = 1,
+                        numUnreadMessages = 2,
+                    )
+                )
+            )
             skipItems(3)
             val loadedState = awaitItem()
             // Test filtering with result
@@ -210,8 +228,12 @@ class RoomListPresenterTests {
             assertThat(withFilteredRoomState.filteredRoomList.size).isEqualTo(1)
             assertThat(withFilteredRoomState.filter).isEqualTo(A_ROOM_NAME.substring(0, 3))
             assertThat(withFilteredRoomState.filteredRoomList.size).isEqualTo(1)
-            assertThat(withFilteredRoomState.filteredRoomList.first())
-                .isEqualTo(createRoomListRoomSummary())
+            assertThat(withFilteredRoomState.filteredRoomList.first()).isEqualTo(
+                createRoomListRoomSummary(
+                    numberOfUnreadMentions = 1,
+                    numberOfUnreadMessages = 2,
+                )
+            )
             // Test filtering without result
             withFilteredRoomState.eventSink.invoke(RoomListEvents.UpdateFilter("tada"))
             skipItems(1)
