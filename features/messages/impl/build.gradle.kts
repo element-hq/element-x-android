@@ -94,6 +94,7 @@ dependencies {
     testImplementation(projects.libraries.voicerecorder.test)
     testImplementation(projects.libraries.mediaplayer.test)
     testImplementation(projects.libraries.mediaviewer.test)
+    testImplementation(projects.libraries.testtags)
     testImplementation(libs.test.mockk)
     testImplementation(libs.test.junitext)
     testImplementation(libs.test.robolectric)
