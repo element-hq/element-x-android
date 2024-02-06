@@ -28,8 +28,9 @@ data class BugReportState(
     val sending: AsyncAction<Unit>,
     val eventSink: (BugReportEvents) -> Unit
 ) {
-    val submitEnabled =
-        formState.description.length > 10 && sending !is AsyncAction.Loading
+    val submitEnabled = sending !is AsyncAction.Loading
+    val isDescriptionInError = sending is AsyncAction.Failure &&
+        sending.error is BugReportFormError.DescriptionTooShort
 }
 
 @Parcelize

@@ -91,7 +91,13 @@ class BugReportPresenter @Inject constructor(
 
         fun handleEvents(event: BugReportEvents) {
             when (event) {
-                BugReportEvents.SendBugReport -> appCoroutineScope.sendBugReport(formState.value, crashInfo.isNotEmpty(), uploadListener)
+                BugReportEvents.SendBugReport -> {
+                    if (formState.value.description.length < 10) {
+                        sendingAction.value = AsyncAction.Failure(BugReportFormError.DescriptionTooShort)
+                    } else {
+                        appCoroutineScope.sendBugReport(formState.value, crashInfo.isNotEmpty(), uploadListener)
+                    }
+                }
                 BugReportEvents.ResetAll -> appCoroutineScope.resetAll()
                 is BugReportEvents.SetDescription -> updateFormState(formState) {
                     copy(description = event.description)
