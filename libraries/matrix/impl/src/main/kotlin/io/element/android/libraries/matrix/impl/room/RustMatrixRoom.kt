@@ -435,14 +435,9 @@ class RustMatrixRoom(
         }
     }
 
-    override suspend fun updateNotableTags(notableTags: RoomNotableTags): Result<Unit> = withContext(roomDispatcher) {
+    override suspend fun setIsFavorite(isFavorite: Boolean): Result<Unit> = withContext(roomDispatcher) {
         runCatching {
-            Timber.i("Update notable tags with : $notableTags")
-            innerRoom.updateNotableTags(notableTags.map())
-        }.onFailure {
-            Timber.w("Failed to update notable tags: $it")
-        }.onSuccess {
-            Timber.i("Successfully updated notable tags")
+            innerRoom.setIsFavorite(isFavorite, null)
         }
     }
 

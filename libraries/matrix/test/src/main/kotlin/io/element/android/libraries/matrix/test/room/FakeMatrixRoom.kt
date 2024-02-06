@@ -114,7 +114,7 @@ class FakeMatrixRoom(
     private var getWidgetDriverResult: Result<MatrixWidgetDriver> = Result.success(FakeWidgetDriver())
     private var canUserTriggerRoomNotificationResult: Result<Boolean> = Result.success(true)
     private var canUserJoinCallResult: Result<Boolean> = Result.success(true)
-    private var updateNotableTagsResult = Result.success(Unit)
+    private var setIsFavoriteResult = Result.success(Unit)
     var sendMessageMentions = emptyList<Mention>()
     val editMessageCalls = mutableListOf<Pair<String, String?>>()
     private val _typingRecord = mutableListOf<Boolean>()
@@ -171,7 +171,7 @@ class FakeMatrixRoom(
     private val _roomInfoFlow: MutableSharedFlow<MatrixRoomInfo> = MutableSharedFlow(replay = 1)
     override val roomInfoFlow: Flow<MatrixRoomInfo> = _roomInfoFlow
 
-    private val _notableTagsFlow: MutableSharedFlow<RoomNotableTags> = MutableStateFlow(aRoomNotableTags())
+    private val _notableTagsFlow: MutableStateFlow<RoomNotableTags> = MutableStateFlow(aRoomNotableTags())
     override val notableTagsFlow: Flow<RoomNotableTags> = _notableTagsFlow
 
     override val membersStateFlow: MutableStateFlow<MatrixRoomMembersState> = MutableStateFlow(MatrixRoomMembersState.Unknown)
@@ -379,9 +379,15 @@ class FakeMatrixRoom(
         return reportContentResult
     }
 
-    override suspend fun updateNotableTags(notableTags: RoomNotableTags): Result<Unit> {
-        return updateNotableTagsResult.also { result ->
+    override suspend fun setIsFavorite(isFavorite: Boolean): Result<Unit> {
+        return setIsFavoriteResult.also { result ->
             if (result.isSuccess) {
+                val lowPriority = if (isFavorite) {
+                    false
+                } else {
+                    _notableTagsFlow.value.isLowPriority
+                }
+                val notableTags = RoomNotableTags(isFavorite, lowPriority)
                 _notableTagsFlow.emit(notableTags)
             }
         }
@@ -584,8 +590,8 @@ class FakeMatrixRoom(
         getWidgetDriverResult = result
     }
 
-    fun givenUpdateNotableTagsResult(result: Result<Unit>) {
-        updateNotableTagsResult = result
+    fun givenSetIsFavoriteResult(result: Result<Unit>) {
+        setIsFavoriteResult = result
     }
 
     fun givenRoomInfo(roomInfo: MatrixRoomInfo) {

@@ -52,7 +52,7 @@ class DefaultSetRoomIsFavoriteActionTests {
     @Test
     fun `given a room, when action is invoked and fail, then it returns Result_Exception`() = runTest {
         val action = DefaultSetRoomIsFavoriteAction(FakeMatrixClient())
-        room.givenUpdateNotableTagsResult(Result.failure(Exception()))
+        room.givenSetIsFavoriteResult(Result.failure(Exception()))
         val result = action(room, true)
         assert(result is SetRoomIsFavoriteAction.Result.Exception)
     }

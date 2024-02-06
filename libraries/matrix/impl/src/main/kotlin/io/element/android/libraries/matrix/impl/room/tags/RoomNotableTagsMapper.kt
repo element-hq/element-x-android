@@ -20,9 +20,11 @@ import io.element.android.libraries.matrix.api.room.tags.RoomNotableTags
 import uniffi.matrix_sdk_base.RoomNotableTags as RustRoomNotableTags
 
 fun RustRoomNotableTags.map() = RoomNotableTags(
-    isFavorite = isFavorite
+    isFavorite = isFavorite,
+    isLowPriority = isLowPriority
 )
 
 fun RoomNotableTags.map() = RustRoomNotableTags(
-    isFavorite = isFavorite
+    isFavorite = isFavorite,
+    isLowPriority = isLowPriority
 )

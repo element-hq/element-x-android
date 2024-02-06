@@ -156,7 +156,7 @@ interface MatrixRoom : Closeable {
 
     suspend fun reportContent(eventId: EventId, reason: String, blockUserId: UserId?): Result<Unit>
 
-    suspend fun updateNotableTags(notableTags: RoomNotableTags): Result<Unit>
+    suspend fun setIsFavorite(isFavorite: Boolean): Result<Unit>
 
     /**
      * Share a location message in the room.

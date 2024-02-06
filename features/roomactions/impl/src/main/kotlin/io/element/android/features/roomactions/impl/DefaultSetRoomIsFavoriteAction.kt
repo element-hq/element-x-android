@@ -22,25 +22,20 @@ import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
-import kotlinx.coroutines.flow.first
 import javax.inject.Inject
 import kotlin.coroutines.cancellation.CancellationException
 
 @ContributesBinding(SessionScope::class)
 class DefaultSetRoomIsFavoriteAction @Inject constructor(private val client: MatrixClient) : SetRoomIsFavoriteAction {
+
     override suspend operator fun invoke(roomId: RoomId, isFavorite: Boolean): SetRoomIsFavoriteAction.Result {
-        return client.getRoom(roomId).use { room ->
-            room?.setIsFavorite(isFavorite) ?: SetRoomIsFavoriteAction.Result.RoomNotFound
-        }
+        return client.getRoom(roomId)?.use { room ->
+            invoke(room, isFavorite)
+        } ?: SetRoomIsFavoriteAction.Result.RoomNotFound
     }
 
     override suspend fun invoke(room: MatrixRoom, isFavorite: Boolean): SetRoomIsFavoriteAction.Result {
-        return room.setIsFavorite(isFavorite)
-    }
-
-    private suspend fun MatrixRoom.setIsFavorite(isFavorite: Boolean): SetRoomIsFavoriteAction.Result {
-        val notableTags = notableTagsFlow.first().copy(isFavorite = isFavorite)
-        return updateNotableTags(notableTags).fold(
+        return room.setIsFavorite(isFavorite).fold(
             onSuccess = {
                 SetRoomIsFavoriteAction.Result.Success
             },
@@ -53,4 +48,5 @@ class DefaultSetRoomIsFavoriteAction @Inject constructor(private val client: Mat
             }
         )
     }
+
 }
