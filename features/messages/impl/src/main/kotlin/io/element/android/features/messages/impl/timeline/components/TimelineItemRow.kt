@@ -43,7 +43,7 @@ internal fun TimelineItemRow(
     onReadReceiptClick: (TimelineItem.Event) -> Unit,
     onTimestampClicked: (TimelineItem.Event) -> Unit,
     onSwipeToReply: (TimelineItem.Event) -> Unit,
-    eventSink: (TimelineEvents) -> Unit,
+    eventSink: (TimelineEvents.EventFromTimelineItem) -> Unit,
     modifier: Modifier = Modifier
 ) {
     when (timelineItem) {

@@ -55,7 +55,7 @@ fun TimelineItemGroupedEventsRow(
     onReactionLongClick: (key: String, TimelineItem.Event) -> Unit,
     onMoreReactionsClick: (TimelineItem.Event) -> Unit,
     onReadReceiptClick: (TimelineItem.Event) -> Unit,
-    eventSink: (TimelineEvents) -> Unit,
+    eventSink: (TimelineEvents.EventFromTimelineItem) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val isExpanded = rememberSaveable(key = timelineItem.identifier()) { mutableStateOf(false) }
@@ -104,7 +104,7 @@ private fun TimelineItemGroupedEventsRowContent(
     onReactionLongClick: (key: String, TimelineItem.Event) -> Unit,
     onMoreReactionsClick: (TimelineItem.Event) -> Unit,
     onReadReceiptClick: (TimelineItem.Event) -> Unit,
-    eventSink: (TimelineEvents) -> Unit,
+    eventSink: (TimelineEvents.EventFromTimelineItem) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(modifier = modifier.animateContentSize()) {
