@@ -49,6 +49,14 @@ fun RoomListContextMenu(
     ) {
         RoomListModalBottomSheetContent(
             contextMenu = contextMenu,
+            onRoomMarkReadClicked = {
+                eventSink(RoomListEvents.HideContextMenu)
+                eventSink(RoomListEvents.MarkAsRead(it))
+            },
+            onRoomMarkUnreadClicked = {
+                eventSink(RoomListEvents.HideContextMenu)
+                eventSink(RoomListEvents.MarkAsUnread(it))
+            },
             onRoomSettingsClicked = {
                 eventSink(RoomListEvents.HideContextMenu)
                 onRoomSettingsClicked(it)
@@ -64,6 +72,8 @@ fun RoomListContextMenu(
 @Composable
 private fun RoomListModalBottomSheetContent(
     contextMenu: RoomListState.ContextMenu.Shown,
+    onRoomMarkReadClicked: (roomId: RoomId) -> Unit,
+    onRoomMarkUnreadClicked: (roomId: RoomId) -> Unit,
     onRoomSettingsClicked: (roomId: RoomId) -> Unit,
     onLeaveRoomClicked: (roomId: RoomId) -> Unit,
 ) {
@@ -77,6 +87,36 @@ private fun RoomListModalBottomSheetContent(
                     style = ElementTheme.typography.fontBodyLgMedium,
                 )
             }
+        )
+        ListItem(
+            headlineContent = {
+                Text(
+                    text = stringResource(
+                        id = if (contextMenu.hasNewContent) {
+                            R.string.screen_roomlist_mark_as_read
+                        } else {
+                            R.string.screen_roomlist_mark_as_unread
+                        }
+                    ),
+                    style = MaterialTheme.typography.bodyLarge,
+                )
+            },
+            modifier = Modifier.clickable {
+                if (contextMenu.hasNewContent) {
+                    onRoomMarkReadClicked(contextMenu.roomId)
+                } else {
+                    onRoomMarkUnreadClicked(contextMenu.roomId)
+                }
+            },
+            /* TODO Design
+            leadingContent = ListItemContent.Icon(
+                iconSource = IconSource.Vector(
+                    CompoundIcons.Settings,
+                    contentDescription = stringResource(id = CommonStrings.common_settings)
+                )
+            ),
+             */
+            style = ListItemStyle.Primary,
         )
         ListItem(
             headlineContent = {
@@ -96,11 +136,13 @@ private fun RoomListModalBottomSheetContent(
         )
         ListItem(
             headlineContent = {
-                val leaveText = stringResource(id = if (contextMenu.isDm) {
-                    CommonStrings.action_leave_conversation
-                } else {
-                    CommonStrings.action_leave_room
-                })
+                val leaveText = stringResource(
+                    id = if (contextMenu.isDm) {
+                        CommonStrings.action_leave_conversation
+                    } else {
+                        CommonStrings.action_leave_room
+                    }
+                )
                 Text(text = leaveText)
             },
             modifier = Modifier.clickable { onLeaveRoomClicked(contextMenu.roomId) },
@@ -126,7 +168,10 @@ internal fun RoomListModalBottomSheetContentPreview() = ElementPreview {
             roomId = RoomId(value = "!aRoom:aDomain"),
             roomName = "aRoom",
             isDm = false,
+            hasNewContent = true,
         ),
+        onRoomMarkReadClicked = {},
+        onRoomMarkUnreadClicked = {},
         onRoomSettingsClicked = {},
         onLeaveRoomClicked = {}
     )
@@ -140,7 +185,10 @@ internal fun RoomListModalBottomSheetContentForDmPreview() = ElementPreview {
             roomId = RoomId(value = "!aRoom:aDomain"),
             roomName = "aRoom",
             isDm = true,
+            hasNewContent = false,
         ),
+        onRoomMarkReadClicked = {},
+        onRoomMarkUnreadClicked = {},
         onRoomSettingsClicked = {},
         onLeaveRoomClicked = {}
     )

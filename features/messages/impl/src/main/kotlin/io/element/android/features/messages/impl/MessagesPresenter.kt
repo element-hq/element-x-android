@@ -155,6 +155,14 @@ class MessagesPresenter @AssistedInject constructor(
             mutableStateOf(false)
         }
 
+        LaunchedEffect(Unit) {
+            // Mark the room as read on entering but don't send read receipts
+            // as those will be handled by the timeline.
+            withContext(dispatchers.io) {
+                room.markAsRead(null)
+            }
+        }
+
         LaunchedEffect(syncUpdateFlow.value) {
             withContext(dispatchers.io) {
                 canJoinCall = room.canUserJoinCall(room.sessionId).getOrDefault(false)

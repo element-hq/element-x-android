@@ -45,6 +45,7 @@ import io.element.android.libraries.indicator.impl.DefaultIndicatorService
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
+import io.element.android.libraries.preferences.impl.store.DefaultSessionPreferencesStore
 import io.element.android.services.toolbox.impl.strings.AndroidStringProvider
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -108,7 +109,12 @@ class RoomListScreen(
         migrationScreenPresenter = MigrationScreenPresenter(
             matrixClient = matrixClient,
             migrationScreenStore = SharedPrefsMigrationScreenStore(context.getSharedPreferences("migration", Context.MODE_PRIVATE))
-        )
+        ),
+        sessionPreferencesStore = DefaultSessionPreferencesStore(
+            context = context,
+            sessionId = matrixClient.sessionId,
+            sessionCoroutineScope = Singleton.appScope
+        ),
     )
 
     @Composable

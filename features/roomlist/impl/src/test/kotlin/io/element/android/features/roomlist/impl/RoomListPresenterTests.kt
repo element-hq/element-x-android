@@ -25,6 +25,7 @@ import io.element.android.features.leaveroom.api.LeaveRoomPresenter
 import io.element.android.features.leaveroom.fake.FakeLeaveRoomPresenter
 import io.element.android.features.networkmonitor.api.NetworkMonitor
 import io.element.android.features.networkmonitor.test.FakeNetworkMonitor
+import io.element.android.features.preferences.api.store.SessionPreferencesStore
 import io.element.android.features.roomlist.impl.datasource.FakeInviteDataSource
 import io.element.android.features.roomlist.impl.datasource.InviteStateDataSource
 import io.element.android.features.roomlist.impl.datasource.RoomListDataSource
@@ -41,12 +42,14 @@ import io.element.android.libraries.eventformatter.api.RoomLastMessageFormatter
 import io.element.android.libraries.eventformatter.test.FakeRoomLastMessageFormatter
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
+import io.element.android.libraries.featureflag.test.InMemorySessionPreferencesStore
 import io.element.android.libraries.indicator.impl.DefaultIndicatorService
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.encryption.BackupState
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
+import io.element.android.libraries.matrix.api.timeline.ReceiptType
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatus
 import io.element.android.libraries.matrix.test.AN_AVATAR_URL
@@ -59,6 +62,7 @@ import io.element.android.libraries.matrix.test.A_USER_NAME
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.encryption.FakeEncryptionService
 import io.element.android.libraries.matrix.test.notificationsettings.FakeNotificationSettingsService
+import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.matrix.test.room.aRoomSummaryFilled
 import io.element.android.libraries.matrix.test.roomlist.FakeRoomListService
 import io.element.android.libraries.matrix.test.verification.FakeSessionVerificationService
@@ -326,8 +330,14 @@ class RoomListPresenterTests {
             initialState.eventSink(RoomListEvents.ShowContextMenu(summary))
 
             val shownState = awaitItem()
-            assertThat(shownState.contextMenu)
-                .isEqualTo(RoomListState.ContextMenu.Shown(summary.roomId, summary.name, false))
+            assertThat(shownState.contextMenu).isEqualTo(
+                RoomListState.ContextMenu.Shown(
+                    roomId = summary.roomId,
+                    roomName = summary.name,
+                    isDm = false,
+                    hasNewContent = true,
+                )
+            )
             scope.cancel()
         }
     }
@@ -346,8 +356,14 @@ class RoomListPresenterTests {
             initialState.eventSink(RoomListEvents.ShowContextMenu(summary))
 
             val shownState = awaitItem()
-            assertThat(shownState.contextMenu)
-                .isEqualTo(RoomListState.ContextMenu.Shown(summary.roomId, summary.name, false))
+            assertThat(shownState.contextMenu).isEqualTo(
+                RoomListState.ContextMenu.Shown(
+                    roomId = summary.roomId,
+                    roomName = summary.name,
+                    isDm = false,
+                    hasNewContent = true,
+                )
+            )
             shownState.eventSink(RoomListEvents.HideContextMenu)
 
             val hiddenState = awaitItem()
@@ -430,6 +446,41 @@ class RoomListPresenterTests {
         }
     }
 
+    @Test
+    fun `present - check that the room is marked as read with correct RR and as unread`() = runTest {
+        val room = FakeMatrixRoom()
+        val sessionPreferencesStore = InMemorySessionPreferencesStore()
+        val matrixClient = FakeMatrixClient().apply {
+            givenGetRoomResult(A_ROOM_ID, room)
+        }
+        val scope = CoroutineScope(coroutineContext + SupervisorJob())
+        val presenter = createRoomListPresenter(
+            client = matrixClient,
+            coroutineScope = scope,
+            sessionPreferencesStore = sessionPreferencesStore,
+        )
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            assertThat(room.markAsReadCalls).isEmpty()
+            assertThat(room.markAsUnreadReadCallCount).isEqualTo(0)
+            initialState.eventSink.invoke(RoomListEvents.MarkAsRead(A_ROOM_ID))
+            assertThat(room.markAsReadCalls).isEqualTo(listOf(ReceiptType.READ))
+            assertThat(room.markAsUnreadReadCallCount).isEqualTo(0)
+            initialState.eventSink.invoke(RoomListEvents.MarkAsUnread(A_ROOM_ID))
+            assertThat(room.markAsReadCalls).isEqualTo(listOf(ReceiptType.READ))
+            assertThat(room.markAsUnreadReadCallCount).isEqualTo(1)
+            // Test again with private read receipts
+            sessionPreferencesStore.setSendPublicReadReceipts(false)
+            initialState.eventSink.invoke(RoomListEvents.MarkAsRead(A_ROOM_ID))
+            assertThat(room.markAsReadCalls).isEqualTo(listOf(ReceiptType.READ, ReceiptType.READ_PRIVATE))
+            assertThat(room.markAsUnreadReadCallCount).isEqualTo(1)
+            cancelAndIgnoreRemainingEvents()
+            scope.cancel()
+        }
+    }
+
     private fun TestScope.createRoomListPresenter(
         client: MatrixClient = FakeMatrixClient(),
         sessionVerificationService: SessionVerificationService = FakeSessionVerificationService(),
@@ -442,6 +493,7 @@ class RoomListPresenterTests {
         },
         roomLastMessageFormatter: RoomLastMessageFormatter = FakeRoomLastMessageFormatter(),
         encryptionService: EncryptionService = FakeEncryptionService(),
+        sessionPreferencesStore: SessionPreferencesStore = InMemorySessionPreferencesStore(),
         coroutineScope: CoroutineScope,
         migrationScreenPresenter: MigrationScreenPresenter = MigrationScreenPresenter(
             matrixClient = client,
@@ -472,6 +524,7 @@ class RoomListPresenterTests {
             featureFlagService = FakeFeatureFlagService(mapOf(FeatureFlags.SecureStorage.key to true)),
         ),
         migrationScreenPresenter = migrationScreenPresenter,
+        sessionPreferencesStore = sessionPreferencesStore,
     )
 }
 
@@ -484,6 +537,7 @@ private val aRoomListRoomSummary = RoomListRoomSummary(
     numberOfUnreadMentions = 1,
     numberOfUnreadMessages = 2,
     numberOfUnreadNotifications = 0,
+    isMarkedUnread = false,
     timestamp = A_FORMATTED_DATE,
     lastMessage = "",
     avatarData = AvatarData(id = A_ROOM_ID.value, name = A_ROOM_NAME, size = AvatarSize.RoomListItem),

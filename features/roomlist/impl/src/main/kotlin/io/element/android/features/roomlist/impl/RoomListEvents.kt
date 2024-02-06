@@ -28,4 +28,6 @@ sealed interface RoomListEvents {
     data class ShowContextMenu(val roomListRoomSummary: RoomListRoomSummary) : RoomListEvents
     data object HideContextMenu : RoomListEvents
     data class LeaveRoom(val roomId: RoomId) : RoomListEvents
+    data class MarkAsRead(val roomId: RoomId) : RoomListEvents
+    data class MarkAsUnread(val roomId: RoomId) : RoomListEvents
 }

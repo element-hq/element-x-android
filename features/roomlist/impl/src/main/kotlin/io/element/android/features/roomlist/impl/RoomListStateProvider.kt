@@ -48,6 +48,7 @@ open class RoomListStateProvider : PreviewParameterProvider<RoomListState> {
                     roomId = RoomId("!aRoom:aDomain"),
                     roomName = "A nice room name",
                     isDm = false,
+                    hasNewContent = false,
                 )
             ),
             aRoomListState().copy(displayRecoveryKeyPrompt = true),

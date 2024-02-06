@@ -40,6 +40,7 @@ import io.element.android.libraries.matrix.api.room.StateEventType
 import io.element.android.libraries.matrix.api.room.location.AssetType
 import io.element.android.libraries.matrix.api.room.roomNotificationSettings
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
+import io.element.android.libraries.matrix.api.timeline.ReceiptType
 import io.element.android.libraries.matrix.api.widget.MatrixWidgetDriver
 import io.element.android.libraries.matrix.api.widget.MatrixWidgetSettings
 import io.element.android.libraries.matrix.impl.core.toProgressWatcher
@@ -51,6 +52,7 @@ import io.element.android.libraries.matrix.impl.poll.toInner
 import io.element.android.libraries.matrix.impl.room.location.toInner
 import io.element.android.libraries.matrix.impl.room.member.RoomMemberListFetcher
 import io.element.android.libraries.matrix.impl.timeline.RustMatrixTimeline
+import io.element.android.libraries.matrix.impl.timeline.toRustReceiptType
 import io.element.android.libraries.matrix.impl.util.mxCallbackFlow
 import io.element.android.libraries.matrix.impl.widget.RustWidgetDriver
 import io.element.android.libraries.matrix.impl.widget.generateWidgetWebViewUrl
@@ -420,6 +422,22 @@ class RustMatrixRoom(
             if (blockUserId != null) {
                 innerRoom.ignoreUser(blockUserId.value)
             }
+        }
+    }
+
+    override suspend fun markAsRead(receiptType: ReceiptType?): Result<Unit> = withContext(roomDispatcher) {
+        runCatching {
+            if (receiptType != null) {
+                innerRoom.markAsReadAndSendReadReceipt(receiptType.toRustReceiptType())
+            } else {
+                innerRoom.markAsRead()
+            }
+        }
+    }
+
+    override suspend fun markAsUnread(): Result<Unit> = withContext(roomDispatcher) {
+        runCatching {
+            innerRoom.markAsUnread()
         }
     }
 

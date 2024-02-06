@@ -30,6 +30,7 @@ import io.element.android.libraries.matrix.api.media.VideoInfo
 import io.element.android.libraries.matrix.api.poll.PollKind
 import io.element.android.libraries.matrix.api.room.location.AssetType
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
+import io.element.android.libraries.matrix.api.timeline.ReceiptType
 import io.element.android.libraries.matrix.api.widget.MatrixWidgetDriver
 import io.element.android.libraries.matrix.api.widget.MatrixWidgetSettings
 import kotlinx.coroutines.flow.Flow
@@ -149,6 +150,17 @@ interface MatrixRoom : Closeable {
     suspend fun setTopic(topic: String): Result<Unit>
 
     suspend fun reportContent(eventId: EventId, reason: String, blockUserId: UserId?): Result<Unit>
+
+    /**
+     * Reverts a previously set unread flag, and eventually send a Read Receipt.
+     * @param receiptType The type of receipt to send. If null, no Read Receipt will be sent.
+     */
+    suspend fun markAsRead(receiptType: ReceiptType?): Result<Unit>
+
+    /**
+     * Sets a flag on the room to indicate that the user has explicitly marked it as unread.
+     */
+    suspend fun markAsUnread(): Result<Unit>
 
     /**
      * Share a location message in the room.
