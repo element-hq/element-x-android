@@ -154,12 +154,12 @@ class TimelinePresenter @AssistedInject constructor(
 
         LaunchedEffect(Unit) {
             combine(timeline.timelineItems, room.membersStateFlow) { items, membersState ->
-                    timelineItemsFactory.replaceWith(
-                        timelineItems = items,
-                        roomMembers = membersState.roomMembers().orEmpty()
-                    )
-                    items
-                }
+                timelineItemsFactory.replaceWith(
+                    timelineItems = items,
+                    roomMembers = membersState.roomMembers().orEmpty()
+                )
+                items
+            }
                 .onEach { timelineItems ->
                     if (timelineItems.isEmpty()) {
                         paginateBackwards()
