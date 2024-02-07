@@ -29,6 +29,8 @@ import io.element.android.features.roomlist.impl.datasource.FakeInviteDataSource
 import io.element.android.features.roomlist.impl.datasource.InviteStateDataSource
 import io.element.android.features.roomlist.impl.datasource.RoomListDataSource
 import io.element.android.features.roomlist.impl.datasource.RoomListRoomSummaryFactory
+import io.element.android.features.roomlist.impl.migration.InMemoryMigrationScreenStore
+import io.element.android.features.roomlist.impl.migration.MigrationScreenPresenter
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
 import io.element.android.libraries.dateformatter.api.LastMessageTimestampFormatter
 import io.element.android.libraries.dateformatter.test.FakeLastMessageTimestampFormatter
@@ -44,12 +46,14 @@ import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.encryption.BackupState
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
+import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatus
 import io.element.android.libraries.matrix.test.AN_AVATAR_URL
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_ROOM_NAME
+import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.A_USER_NAME
 import io.element.android.libraries.matrix.test.FakeMatrixClient
@@ -396,6 +400,36 @@ class RoomListPresenterTests {
         }
     }
 
+    @Test
+    fun `present - change in migration presenter state modifies isMigrating`() = runTest {
+        val client = FakeMatrixClient(sessionId = A_SESSION_ID)
+        val migrationStore = InMemoryMigrationScreenStore()
+        val migrationScreenPresenter = MigrationScreenPresenter(client, migrationStore)
+        val scope = CoroutineScope(coroutineContext + SupervisorJob())
+        val presenter = createRoomListPresenter(
+            client = client,
+            coroutineScope = scope,
+            migrationScreenPresenter = migrationScreenPresenter,
+        )
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            // The migration screen is shown if the migration screen has not been shown before
+            assertThat(initialState.displayMigrationStatus).isTrue()
+            skipItems(2)
+
+            // Set migration as done and set the room list service as running to trigger a refresh of the presenter value
+            (client.roomListService as FakeRoomListService).postState(RoomListService.State.Running)
+            migrationStore.setMigrationScreenShown(A_SESSION_ID)
+
+            // The migration screen is not shown anymore
+            assertThat(awaitItem().displayMigrationStatus).isFalse()
+            cancelAndIgnoreRemainingEvents()
+            scope.cancel()
+        }
+    }
+
     private fun TestScope.createRoomListPresenter(
         client: MatrixClient = FakeMatrixClient(),
         sessionVerificationService: SessionVerificationService = FakeSessionVerificationService(),
@@ -409,6 +443,10 @@ class RoomListPresenterTests {
         roomLastMessageFormatter: RoomLastMessageFormatter = FakeRoomLastMessageFormatter(),
         encryptionService: EncryptionService = FakeEncryptionService(),
         coroutineScope: CoroutineScope,
+        migrationScreenPresenter: MigrationScreenPresenter = MigrationScreenPresenter(
+            matrixClient = client,
+            migrationScreenStore = InMemoryMigrationScreenStore(),
+        )
     ) = RoomListPresenter(
         client = client,
         sessionVerificationService = sessionVerificationService,
@@ -433,6 +471,7 @@ class RoomListPresenterTests {
             encryptionService = encryptionService,
             featureFlagService = FakeFeatureFlagService(mapOf(FeatureFlags.SecureStorage.key to true)),
         ),
+        migrationScreenPresenter = migrationScreenPresenter,
     )
 }
 
