@@ -35,15 +35,17 @@ fun ensureCalledOnce(block: (callback: EnsureCalledOnce) -> Unit) {
     callback.assertSuccess()
 }
 
-class EnsureCalledOnceWithParam<T>(
-    private val expectedParam: T
-) : (T) -> Unit {
+class EnsureCalledOnceWithParam<T, R>(
+    private val expectedParam: T,
+    private val result: R,
+) : (T) -> R {
     private var counter = 0
-    override fun invoke(p1: T) {
+    override fun invoke(p1: T): R {
         if (p1 != expectedParam) {
             throw AssertionError("Expected to be called with $expectedParam, but was called with $p1")
         }
         counter++
+        return result
     }
 
     fun assertSuccess() {
@@ -53,8 +55,15 @@ class EnsureCalledOnceWithParam<T>(
     }
 }
 
-fun <T> ensureCalledOnceWithParam(param: T, block: (callback: EnsureCalledOnceWithParam<T>) -> Unit) {
-    val callback = EnsureCalledOnceWithParam(param)
+/**
+ * Shortcut for [<T, R> ensureCalledOnceWithParam] with Unit result
+ */
+fun <T> ensureCalledOnceWithParam(param: T, block: (callback: EnsureCalledOnceWithParam<T, Unit>) -> Unit) {
+    ensureCalledOnceWithParam(param, block, Unit)
+}
+
+fun <T, R> ensureCalledOnceWithParam(param: T, block: (callback: EnsureCalledOnceWithParam<T, R>) -> R, result: R) {
+    val callback = EnsureCalledOnceWithParam(param, result)
     block(callback)
     callback.assertSuccess()
 }
