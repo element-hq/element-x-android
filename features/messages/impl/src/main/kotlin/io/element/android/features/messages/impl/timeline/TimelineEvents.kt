@@ -23,10 +23,14 @@ sealed interface TimelineEvents {
     data class SetHighlightedEvent(val eventId: EventId?) : TimelineEvents
     data class OnScrollFinished(val firstIndex: Int) : TimelineEvents
 
-    // Events coming from a timeline item
+    /**
+     * Events coming from a timeline item.
+     */
     sealed interface EventFromTimelineItem : TimelineEvents
 
-    // Events coming from a poll item
+    /**
+     * Events coming from a poll item.
+     */
     sealed interface TimelineItemPollEvents : EventFromTimelineItem
 
     data class PollAnswerSelected(
