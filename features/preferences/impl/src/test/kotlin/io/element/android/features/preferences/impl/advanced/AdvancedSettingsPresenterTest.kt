@@ -43,7 +43,7 @@ class AdvancedSettingsPresenterTest {
             assertThat(initialState.isDeveloperModeEnabled).isFalse()
             assertThat(initialState.isRichTextEditorEnabled).isFalse()
             assertThat(initialState.showChangeThemeDialog).isFalse()
-            assertThat(initialState.isSendPublicReadReceiptsEnabled).isTrue()
+            assertThat(initialState.isSharePresenceEnabled).isTrue()
             assertThat(initialState.theme).isEqualTo(Theme.System)
         }
     }
@@ -79,17 +79,17 @@ class AdvancedSettingsPresenterTest {
     }
 
     @Test
-    fun `present - send public read receipts off on`() = runTest {
+    fun `present - share presence off on`() = runTest {
         val presenter = createAdvancedSettingsPresenter()
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitLastSequentialItem()
-            assertThat(initialState.isSendPublicReadReceiptsEnabled).isTrue()
-            initialState.eventSink.invoke(AdvancedSettingsEvents.SetSendPublicReadReceiptsEnabled(false))
-            assertThat(awaitItem().isSendPublicReadReceiptsEnabled).isFalse()
-            initialState.eventSink.invoke(AdvancedSettingsEvents.SetSendPublicReadReceiptsEnabled(true))
-            assertThat(awaitItem().isSendPublicReadReceiptsEnabled).isTrue()
+            assertThat(initialState.isSharePresenceEnabled).isTrue()
+            initialState.eventSink.invoke(AdvancedSettingsEvents.SetSharePresenceEnabled(false))
+            assertThat(awaitItem().isSharePresenceEnabled).isFalse()
+            initialState.eventSink.invoke(AdvancedSettingsEvents.SetSharePresenceEnabled(true))
+            assertThat(awaitItem().isSharePresenceEnabled).isTrue()
         }
     }
 

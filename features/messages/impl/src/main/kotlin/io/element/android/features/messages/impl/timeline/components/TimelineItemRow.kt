@@ -30,6 +30,7 @@ import io.element.android.libraries.matrix.api.core.UserId
 internal fun TimelineItemRow(
     timelineItem: TimelineItem,
     timelineRoomInfo: TimelineRoomInfo,
+    renderReadReceipts: Boolean,
     isLastOutgoingMessage: Boolean,
     highlightedItem: String?,
     sessionState: SessionState,
@@ -58,6 +59,7 @@ internal fun TimelineItemRow(
             if (timelineItem.content is TimelineItemStateContent) {
                 TimelineItemStateEventRow(
                     event = timelineItem,
+                    renderReadReceipts = renderReadReceipts,
                     isLastOutgoingMessage = isLastOutgoingMessage,
                     isHighlighted = highlightedItem == timelineItem.identifier(),
                     onClick = { onClick(timelineItem) },
@@ -70,6 +72,7 @@ internal fun TimelineItemRow(
                 TimelineItemEventRow(
                     event = timelineItem,
                     timelineRoomInfo = timelineRoomInfo,
+                    renderReadReceipts = renderReadReceipts,
                     isLastOutgoingMessage = isLastOutgoingMessage,
                     isHighlighted = highlightedItem == timelineItem.identifier(),
                     onClick = { onClick(timelineItem) },
@@ -91,6 +94,7 @@ internal fun TimelineItemRow(
             TimelineItemGroupedEventsRow(
                 timelineItem = timelineItem,
                 timelineRoomInfo = timelineRoomInfo,
+                renderReadReceipts = renderReadReceipts,
                 isLastOutgoingMessage = isLastOutgoingMessage,
                 highlightedItem = highlightedItem,
                 sessionState = sessionState,

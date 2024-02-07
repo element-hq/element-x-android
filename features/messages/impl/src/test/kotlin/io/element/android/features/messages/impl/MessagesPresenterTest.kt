@@ -675,6 +675,7 @@ class MessagesPresenterTest {
             room = matrixRoom,
             mediaPickerProvider = FakePickerProvider(),
             featureFlagService = FakeFeatureFlagService(mapOf(FeatureFlags.NotificationSettings.key to true)),
+            sessionPreferencesStore = InMemorySessionPreferencesStore(),
             localMediaFactory = FakeLocalMediaFactory(mockMediaUrl),
             mediaSender = mediaSender,
             snackbarDispatcher = SnackbarDispatcher(),

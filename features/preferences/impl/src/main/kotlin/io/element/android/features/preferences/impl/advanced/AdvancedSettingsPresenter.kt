@@ -44,8 +44,8 @@ class AdvancedSettingsPresenter @Inject constructor(
         val isDeveloperModeEnabled by appPreferencesStore
             .isDeveloperModeEnabledFlow()
             .collectAsState(initial = false)
-        val isSendPublicReadReceiptsEnabled by sessionPreferencesStore
-            .isSendPublicReadReceiptsEnabled()
+        val isSharePresenceEnabled by sessionPreferencesStore
+            .isSharePresenceEnabled()
             .collectAsState(initial = true)
         val theme by remember {
             appPreferencesStore.getThemeFlow().mapToTheme()
@@ -60,8 +60,8 @@ class AdvancedSettingsPresenter @Inject constructor(
                 is AdvancedSettingsEvents.SetDeveloperModeEnabled -> localCoroutineScope.launch {
                     appPreferencesStore.setDeveloperModeEnabled(event.enabled)
                 }
-                is AdvancedSettingsEvents.SetSendPublicReadReceiptsEnabled -> localCoroutineScope.launch {
-                    sessionPreferencesStore.setSendPublicReadReceipts(event.enabled)
+                is AdvancedSettingsEvents.SetSharePresenceEnabled -> localCoroutineScope.launch {
+                    sessionPreferencesStore.setSharePresence(event.enabled)
                 }
                 AdvancedSettingsEvents.CancelChangeTheme -> showChangeThemeDialog = false
                 AdvancedSettingsEvents.ChangeTheme -> showChangeThemeDialog = true
@@ -75,7 +75,7 @@ class AdvancedSettingsPresenter @Inject constructor(
         return AdvancedSettingsState(
             isRichTextEditorEnabled = isRichTextEditorEnabled,
             isDeveloperModeEnabled = isDeveloperModeEnabled,
-            isSendPublicReadReceiptsEnabled = isSendPublicReadReceiptsEnabled,
+            isSharePresenceEnabled = isSharePresenceEnabled,
             theme = theme,
             showChangeThemeDialog = showChangeThemeDialog,
             eventSink = { handleEvents(it) }

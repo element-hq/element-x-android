@@ -120,6 +120,7 @@ fun TimelineView(
                 TimelineItemRow(
                     timelineItem = timelineItem,
                     timelineRoomInfo = state.timelineRoomInfo,
+                    renderReadReceipts = state.renderReadReceipts,
                     isLastOutgoingMessage = (timelineItem as? TimelineItem.Event)?.isMine == true &&
                         state.timelineItems.first().identifier() == timelineItem.identifier(),
                     highlightedItem = state.highlightedEventId?.value,
