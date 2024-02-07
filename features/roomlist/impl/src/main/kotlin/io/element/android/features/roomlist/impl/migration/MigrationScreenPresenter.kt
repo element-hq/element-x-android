@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright (c) 2024 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,12 +14,15 @@
  * limitations under the License.
  */
 
-package io.element.android.features.ftue.impl.migration
+package io.element.android.features.roomlist.impl.migration
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
@@ -32,13 +35,15 @@ class MigrationScreenPresenter @Inject constructor(
     @Composable
     override fun present(): MigrationScreenState {
         val roomListState by matrixClient.roomListService.state.collectAsState()
+        var needsMigration by remember { mutableStateOf(migrationScreenStore.isMigrationScreenNeeded(matrixClient.sessionId)) }
         if (roomListState == RoomListService.State.Running) {
             LaunchedEffect(Unit) {
+                needsMigration = false
                 migrationScreenStore.setMigrationScreenShown(matrixClient.sessionId)
             }
         }
         return MigrationScreenState(
-            isMigrating = roomListState != RoomListService.State.Running
+            isMigrating = needsMigration && roomListState != RoomListService.State.Running
         )
     }
 }

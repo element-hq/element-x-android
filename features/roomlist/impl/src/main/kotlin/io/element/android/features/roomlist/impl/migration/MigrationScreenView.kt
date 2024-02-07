@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright (c) 2024 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,45 +14,43 @@
  * limitations under the License.
  */
 
-package io.element.android.features.ftue.impl.migration
+package io.element.android.features.roomlist.impl.migration
 
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.res.stringResource
-import io.element.android.features.ftue.impl.R
+import io.element.android.features.roomlist.impl.R
 import io.element.android.libraries.designsystem.atomic.pages.SunsetPage
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 
 @Composable
 fun MigrationScreenView(
-    migrationState: MigrationScreenState,
-    onMigrationFinished: () -> Unit,
+    isMigrating: Boolean,
     modifier: Modifier = Modifier,
 ) {
-    if (migrationState.isMigrating.not()) {
-        val latestOnMigrationFinished by rememberUpdatedState(onMigrationFinished)
-        LaunchedEffect(Unit) {
-            latestOnMigrationFinished()
-        }
-    }
-    SunsetPage(
-        modifier = modifier,
-        isLoading = true,
-        title = stringResource(id = R.string.screen_migration_title),
-        subtitle = stringResource(id = R.string.screen_migration_message),
-        overallContent = {}
+    val displayMigrationStatusFadeProgress by animateFloatAsState(
+        targetValue = if (isMigrating) 1f else 0f,
+        animationSpec = tween(durationMillis = 1000),
+        label = "Migration view fade"
     )
+    if (displayMigrationStatusFadeProgress > 0f) {
+        SunsetPage(
+            modifier = modifier.alpha(displayMigrationStatusFadeProgress),
+            isLoading = true,
+            title = stringResource(id = R.string.screen_migration_title),
+            subtitle = stringResource(id = R.string.screen_migration_message),
+            overallContent = {}
+        )
+    }
 }
 
-@PreviewsDayNight
 @Composable
+@PreviewsDayNight
 internal fun MigrationViewPreview() = ElementPreview {
-    MigrationScreenView(
-        migrationState = MigrationScreenState(isMigrating = true),
-        onMigrationFinished = {}
-    )
+    MigrationScreenView(isMigrating = true)
 }

@@ -14,8 +14,12 @@
  * limitations under the License.
  */
 
-package io.element.android.features.ftue.impl.migration
+package io.element.android.features.roomlist.impl.migration
 
-data class MigrationScreenState(
-    val isMigrating: Boolean
-)
+import io.element.android.libraries.matrix.api.core.SessionId
+
+interface MigrationScreenStore {
+    fun isMigrationScreenNeeded(sessionId: SessionId): Boolean
+    fun setMigrationScreenShown(sessionId: SessionId)
+    fun reset()
+}
