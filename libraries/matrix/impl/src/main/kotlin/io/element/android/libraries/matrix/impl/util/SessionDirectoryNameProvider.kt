@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright (c) 2024 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package io.element.android.features.rageshake.api.crash
+package io.element.android.libraries.matrix.impl.util
 
-import androidx.compose.runtime.Immutable
+import io.element.android.libraries.matrix.api.core.SessionId
 
-@Immutable
-data class CrashDetectionState(
-    val appName: String,
-    val crashDetected: Boolean,
-    val eventSink: (CrashDetectionEvents) -> Unit
-)
+class SessionDirectoryNameProvider {
+    // Rust sanitises the user ID replacing invalid characters with an _
+    fun provides(sessionId: SessionId): String {
+        return sessionId.value.replace(":", "_")
+    }
+}
