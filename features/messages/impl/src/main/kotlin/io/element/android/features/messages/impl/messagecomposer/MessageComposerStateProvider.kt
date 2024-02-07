@@ -32,7 +32,7 @@ open class MessageComposerStateProvider : PreviewParameterProvider<MessageCompos
 }
 
 fun aMessageComposerState(
-    composerState: RichTextEditorState = RichTextEditorState(""),
+    richTextEditorState: RichTextEditorState = RichTextEditorState(""),
     isFullScreen: Boolean = false,
     mode: MessageComposerMode = MessageComposerMode.Normal,
     showTextFormatting: Boolean = false,
@@ -42,7 +42,7 @@ fun aMessageComposerState(
     attachmentsState: AttachmentsState = AttachmentsState.None,
     memberSuggestions: ImmutableList<MentionSuggestion> = persistentListOf(),
 ) = MessageComposerState(
-    richTextEditorState = composerState,
+    richTextEditorState = richTextEditorState,
     isFullScreen = isFullScreen,
     mode = mode,
     showTextFormatting = showTextFormatting,

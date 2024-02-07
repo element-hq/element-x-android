@@ -19,6 +19,7 @@ package io.element.android.features.messages.impl
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.messages.impl.actionlist.anActionListState
 import io.element.android.features.messages.impl.messagecomposer.AttachmentsState
+import io.element.android.features.messages.impl.messagecomposer.MessageComposerState
 import io.element.android.features.messages.impl.messagecomposer.aMessageComposerState
 import io.element.android.features.messages.impl.timeline.aTimelineItemList
 import io.element.android.features.messages.impl.timeline.aTimelineState
@@ -27,6 +28,7 @@ import io.element.android.features.messages.impl.timeline.components.reactionsum
 import io.element.android.features.messages.impl.timeline.components.receipt.bottomsheet.ReadReceiptBottomSheetState
 import io.element.android.features.messages.impl.timeline.components.retrysendmenu.RetrySendMenuState
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
+import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessageComposerState
 import io.element.android.features.messages.impl.voicemessages.composer.aVoiceMessageComposerState
 import io.element.android.features.messages.impl.voicemessages.composer.aVoiceMessagePreviewState
 import io.element.android.libraries.architecture.AsyncData
@@ -42,60 +44,70 @@ open class MessagesStateProvider : PreviewParameterProvider<MessagesState> {
     override val values: Sequence<MessagesState>
         get() = sequenceOf(
             aMessagesState(),
-            aMessagesState().copy(hasNetworkConnection = false),
-            aMessagesState().copy(composerState = aMessageComposerState().copy(showAttachmentSourcePicker = true)),
-            aMessagesState().copy(userHasPermissionToSendMessage = false),
-            aMessagesState().copy(showReinvitePrompt = true),
-            aMessagesState().copy(
+            aMessagesState(hasNetworkConnection = false),
+            aMessagesState(composerState = aMessageComposerState(showAttachmentSourcePicker = true)),
+            aMessagesState(userHasPermissionToSendMessage = false),
+            aMessagesState(showReinvitePrompt = true),
+            aMessagesState(
                 roomName = AsyncData.Uninitialized,
                 roomAvatar = AsyncData.Uninitialized,
             ),
-            aMessagesState().copy(composerState = aMessageComposerState().copy(showTextFormatting = true)),
-            aMessagesState().copy(
+            aMessagesState(composerState = aMessageComposerState(showTextFormatting = true)),
+            aMessagesState(
                 enableVoiceMessages = true,
                 voiceMessageComposerState = aVoiceMessageComposerState(showPermissionRationaleDialog = true),
             ),
-            aMessagesState().copy(
-                composerState = aMessageComposerState().copy(
+            aMessagesState(
+                composerState = aMessageComposerState(
                     attachmentsState = AttachmentsState.Sending.Processing(persistentListOf())
                 ),
             ),
-            aMessagesState().copy(
-                composerState = aMessageComposerState().copy(
+            aMessagesState(
+                composerState = aMessageComposerState(
                     attachmentsState = AttachmentsState.Sending.Uploading(0.33f)
                 ),
             ),
-            aMessagesState().copy(
+            aMessagesState(
                 callState = RoomCallState.ONGOING,
             ),
-            aMessagesState().copy(
+            aMessagesState(
                 enableVoiceMessages = true,
                 voiceMessageComposerState = aVoiceMessageComposerState(
                     voiceMessageState = aVoiceMessagePreviewState(),
                     showSendFailureDialog = true
                 ),
             ),
-            aMessagesState().copy(
+            aMessagesState(
                 callState = RoomCallState.DISABLED,
             ),
         )
 }
 
-fun aMessagesState() = MessagesState(
-    roomId = RoomId("!id:domain"),
-    roomName = AsyncData.Success("Room name"),
-    roomAvatar = AsyncData.Success(AvatarData("!id:domain", "Room name", size = AvatarSize.TimelineRoom)),
-    userHasPermissionToSendMessage = true,
-    userHasPermissionToRedactOwn = false,
-    userHasPermissionToRedactOther = false,
-    userHasPermissionToSendReaction = true,
-    composerState = aMessageComposerState().copy(
+fun aMessagesState(
+    roomName: AsyncData<String> = AsyncData.Success("Room name"),
+    roomAvatar: AsyncData<AvatarData> = AsyncData.Success(AvatarData("!id:domain", "Room name", size = AvatarSize.TimelineRoom)),
+    userHasPermissionToSendMessage: Boolean = true,
+    composerState: MessageComposerState = aMessageComposerState(
         richTextEditorState = RichTextEditorState("Hello", initialFocus = true),
         isFullScreen = false,
         mode = MessageComposerMode.Normal,
     ),
-    voiceMessageComposerState = aVoiceMessageComposerState(),
-    timelineState = aTimelineState().copy(
+    voiceMessageComposerState: VoiceMessageComposerState = aVoiceMessageComposerState(),
+    hasNetworkConnection: Boolean = true,
+    showReinvitePrompt: Boolean = false,
+    enableVoiceMessages: Boolean = true,
+    callState: RoomCallState = RoomCallState.ENABLED,
+) = MessagesState(
+    roomId = RoomId("!id:domain"),
+    roomName = roomName,
+    roomAvatar = roomAvatar,
+    userHasPermissionToSendMessage = userHasPermissionToSendMessage,
+    userHasPermissionToRedactOwn = false,
+    userHasPermissionToRedactOther = false,
+    userHasPermissionToSendReaction = true,
+    composerState = composerState,
+    voiceMessageComposerState = voiceMessageComposerState,
+    timelineState = aTimelineState(
         timelineItems = aTimelineItemList(aTimelineItemTextContent()),
     ),
     retrySendMenuState = RetrySendMenuState(
@@ -116,13 +128,13 @@ fun aMessagesState() = MessagesState(
         target = null,
         eventSink = {},
     ),
-    hasNetworkConnection = true,
+    hasNetworkConnection = hasNetworkConnection,
     snackbarMessage = null,
     inviteProgress = AsyncData.Uninitialized,
-    showReinvitePrompt = false,
+    showReinvitePrompt = showReinvitePrompt,
     enableTextFormatting = true,
-    enableVoiceMessages = true,
-    callState = RoomCallState.ENABLED,
+    enableVoiceMessages = enableVoiceMessages,
+    callState = callState,
     appName = "Element",
     eventSink = {}
 )
