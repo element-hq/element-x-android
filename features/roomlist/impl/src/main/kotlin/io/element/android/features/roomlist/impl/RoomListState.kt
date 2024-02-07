@@ -18,6 +18,7 @@ package io.element.android.features.roomlist.impl
 
 import androidx.compose.runtime.Immutable
 import io.element.android.features.leaveroom.api.LeaveRoomState
+import io.element.android.features.roomlist.impl.filters.RoomListFiltersState
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
@@ -40,6 +41,7 @@ data class RoomListState(
     val displaySearchResults: Boolean,
     val contextMenu: ContextMenu,
     val leaveRoomState: LeaveRoomState,
+    val filtersState: RoomListFiltersState,
     val eventSink: (RoomListEvents) -> Unit,
 ) {
     sealed interface ContextMenu {

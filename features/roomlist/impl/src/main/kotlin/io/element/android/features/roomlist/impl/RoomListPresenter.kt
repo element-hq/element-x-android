@@ -33,6 +33,7 @@ import io.element.android.features.networkmonitor.api.NetworkMonitor
 import io.element.android.features.networkmonitor.api.NetworkStatus
 import io.element.android.features.roomlist.impl.datasource.InviteStateDataSource
 import io.element.android.features.roomlist.impl.datasource.RoomListDataSource
+import io.element.android.features.roomlist.impl.filters.RoomListFiltersPresenter
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
@@ -63,6 +64,7 @@ class RoomListPresenter @Inject constructor(
     private val encryptionService: EncryptionService,
     private val featureFlagService: FeatureFlagService,
     private val indicatorService: IndicatorService,
+    private val filtersPresenter: RoomListFiltersPresenter,
 ) : Presenter<RoomListState> {
     @Composable
     override fun present(): RoomListState {
@@ -76,6 +78,7 @@ class RoomListPresenter @Inject constructor(
         val filteredRoomList by roomListDataSource.filteredRooms.collectAsState()
         val filter by roomListDataSource.filter.collectAsState()
         val networkConnectionStatus by networkMonitor.connectivity.collectAsState()
+        val filtersState = filtersPresenter.present()
 
         LaunchedEffect(Unit) {
             roomListDataSource.launchIn(this)
@@ -148,6 +151,7 @@ class RoomListPresenter @Inject constructor(
             displaySearchResults = displaySearchResults,
             contextMenu = contextMenu,
             leaveRoomState = leaveRoomState,
+            filtersState = filtersState,
             eventSink = ::handleEvents
         )
     }

@@ -19,6 +19,7 @@ package io.element.android.features.roomlist.impl
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.leaveroom.api.aLeaveRoomState
 import io.element.android.features.roomlist.impl.datasource.RoomListRoomSummaryFactory
+import io.element.android.features.roomlist.impl.filters.aRoomListFiltersState
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
 import io.element.android.features.roomlist.impl.model.aRoomListRoomSummary
 import io.element.android.libraries.architecture.AsyncData
@@ -70,6 +71,7 @@ internal fun aRoomListState() = RoomListState(
     displaySearchResults = false,
     contextMenu = RoomListState.ContextMenu.Hidden,
     leaveRoomState = aLeaveRoomState(),
+    filtersState = aRoomListFiltersState(),
     eventSink = {}
 )
 
