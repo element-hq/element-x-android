@@ -51,15 +51,15 @@ fun RoomListContextMenu(
             contextMenu = contextMenu,
             onRoomMarkReadClicked = {
                 eventSink(RoomListEvents.HideContextMenu)
-                eventSink(RoomListEvents.MarkAsRead(it))
+                eventSink(RoomListEvents.MarkAsRead(contextMenu.roomId))
             },
             onRoomMarkUnreadClicked = {
                 eventSink(RoomListEvents.HideContextMenu)
-                eventSink(RoomListEvents.MarkAsUnread(it))
+                eventSink(RoomListEvents.MarkAsUnread(contextMenu.roomId))
             },
             onRoomSettingsClicked = {
                 eventSink(RoomListEvents.HideContextMenu)
-                onRoomSettingsClicked(it)
+                onRoomSettingsClicked(contextMenu.roomId)
             },
             onLeaveRoomClicked = {
                 eventSink(RoomListEvents.HideContextMenu)
@@ -72,10 +72,10 @@ fun RoomListContextMenu(
 @Composable
 private fun RoomListModalBottomSheetContent(
     contextMenu: RoomListState.ContextMenu.Shown,
-    onRoomMarkReadClicked: (roomId: RoomId) -> Unit,
-    onRoomMarkUnreadClicked: (roomId: RoomId) -> Unit,
-    onRoomSettingsClicked: (roomId: RoomId) -> Unit,
-    onLeaveRoomClicked: (roomId: RoomId) -> Unit,
+    onRoomMarkReadClicked: () -> Unit,
+    onRoomMarkUnreadClicked: () -> Unit,
+    onRoomSettingsClicked: () -> Unit,
+    onLeaveRoomClicked: () -> Unit,
 ) {
     Column(
         modifier = Modifier.fillMaxWidth()
@@ -103,9 +103,9 @@ private fun RoomListModalBottomSheetContent(
             },
             modifier = Modifier.clickable {
                 if (contextMenu.hasNewContent) {
-                    onRoomMarkReadClicked(contextMenu.roomId)
+                    onRoomMarkReadClicked()
                 } else {
-                    onRoomMarkUnreadClicked(contextMenu.roomId)
+                    onRoomMarkUnreadClicked()
                 }
             },
             /* TODO Design
@@ -125,7 +125,7 @@ private fun RoomListModalBottomSheetContent(
                     style = MaterialTheme.typography.bodyLarge,
                 )
             },
-            modifier = Modifier.clickable { onRoomSettingsClicked(contextMenu.roomId) },
+            modifier = Modifier.clickable { onRoomSettingsClicked() },
             leadingContent = ListItemContent.Icon(
                 iconSource = IconSource.Vector(
                     CompoundIcons.Settings,
@@ -145,7 +145,7 @@ private fun RoomListModalBottomSheetContent(
                 )
                 Text(text = leaveText)
             },
-            modifier = Modifier.clickable { onLeaveRoomClicked(contextMenu.roomId) },
+            modifier = Modifier.clickable { onLeaveRoomClicked() },
             leadingContent = ListItemContent.Icon(
                 iconSource = IconSource.Vector(
                     CompoundIcons.Leave,
