@@ -17,13 +17,16 @@
 package io.element.android.features.messages.impl
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import io.element.android.features.messages.impl.actionlist.ActionListState
 import io.element.android.features.messages.impl.actionlist.anActionListState
 import io.element.android.features.messages.impl.messagecomposer.AttachmentsState
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerState
 import io.element.android.features.messages.impl.messagecomposer.aMessageComposerState
 import io.element.android.features.messages.impl.timeline.aTimelineItemList
 import io.element.android.features.messages.impl.timeline.aTimelineState
+import io.element.android.features.messages.impl.timeline.components.customreaction.CustomReactionEvents
 import io.element.android.features.messages.impl.timeline.components.customreaction.CustomReactionState
+import io.element.android.features.messages.impl.timeline.components.reactionsummary.ReactionSummaryEvents
 import io.element.android.features.messages.impl.timeline.components.reactionsummary.ReactionSummaryState
 import io.element.android.features.messages.impl.timeline.components.receipt.bottomsheet.ReadReceiptBottomSheetState
 import io.element.android.features.messages.impl.timeline.components.retrysendmenu.RetrySendMenuState
@@ -93,10 +96,14 @@ fun aMessagesState(
         mode = MessageComposerMode.Normal,
     ),
     voiceMessageComposerState: VoiceMessageComposerState = aVoiceMessageComposerState(),
+    actionListState: ActionListState = anActionListState(),
+    customReactionState: CustomReactionState = aCustomReactionState(),
+    reactionSummaryState: ReactionSummaryState = aReactionSummaryState(),
     hasNetworkConnection: Boolean = true,
     showReinvitePrompt: Boolean = false,
     enableVoiceMessages: Boolean = true,
     callState: RoomCallState = RoomCallState.ENABLED,
+    eventSink: (MessagesEvents) -> Unit = {},
 ) = MessagesState(
     roomId = RoomId("!id:domain"),
     roomName = roomName,
@@ -118,16 +125,9 @@ fun aMessagesState(
         selectedEvent = null,
         eventSink = {},
     ),
-    actionListState = anActionListState(),
-    customReactionState = CustomReactionState(
-        target = CustomReactionState.Target.None,
-        eventSink = {},
-        selectedEmoji = persistentSetOf(),
-    ),
-    reactionSummaryState = ReactionSummaryState(
-        target = null,
-        eventSink = {},
-    ),
+    actionListState = actionListState,
+    customReactionState = customReactionState,
+    reactionSummaryState = reactionSummaryState,
     hasNetworkConnection = hasNetworkConnection,
     snackbarMessage = null,
     inviteProgress = AsyncData.Uninitialized,
@@ -136,5 +136,21 @@ fun aMessagesState(
     enableVoiceMessages = enableVoiceMessages,
     callState = callState,
     appName = "Element",
-    eventSink = {}
+    eventSink = eventSink,
+)
+
+fun aReactionSummaryState(
+    target: ReactionSummaryState.Summary? = null,
+    eventSink: (ReactionSummaryEvents) -> Unit = {}
+) = ReactionSummaryState(
+    target = target,
+    eventSink = eventSink,
+)
+
+fun aCustomReactionState(
+    eventSink: (CustomReactionEvents) -> Unit = {},
+) = CustomReactionState(
+    target = CustomReactionState.Target.None,
+    selectedEmoji = persistentSetOf(),
+    eventSink = eventSink,
 )
