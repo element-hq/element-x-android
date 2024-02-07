@@ -127,7 +127,7 @@ fun TimelineItemEventRow(
     onMoreReactionsClick: (eventId: TimelineItem.Event) -> Unit,
     onReadReceiptClick: (event: TimelineItem.Event) -> Unit,
     onSwipeToReply: () -> Unit,
-    eventSink: (TimelineEvents) -> Unit,
+    eventSink: (TimelineEvents.EventFromTimelineItem) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -269,7 +269,7 @@ private fun TimelineItemEventRowContent(
     onReactionLongClicked: (emoji: String) -> Unit,
     onMoreReactionsClicked: (event: TimelineItem.Event) -> Unit,
     onMentionClicked: (Mention) -> Unit,
-    eventSink: (TimelineEvents) -> Unit,
+    eventSink: (TimelineEvents.EventFromTimelineItem) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     fun ConstrainScope.linkStartOrEnd(event: TimelineItem.Event) = if (event.isMine) {
@@ -414,7 +414,7 @@ private fun MessageEventBubbleContent(
     inReplyToClick: () -> Unit,
     onTimestampClicked: () -> Unit,
     onMentionClicked: (Mention) -> Unit,
-    eventSink: (TimelineEvents) -> Unit,
+    eventSink: (TimelineEvents.EventFromTimelineItem) -> Unit,
     @SuppressLint("ModifierParameter")
     // need to rename this modifier to prevent linter false positives
     @Suppress("ModifierNaming")
