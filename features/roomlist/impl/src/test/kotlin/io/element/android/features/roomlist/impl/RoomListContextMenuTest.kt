@@ -129,5 +129,3 @@ class RoomListContextMenuTest {
         callback.assertSuccess()
     }
 }
-
-
