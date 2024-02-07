@@ -56,7 +56,7 @@ class EnsureCalledOnceWithParam<T, R>(
 }
 
 /**
- * Shortcut for [<T, R> ensureCalledOnceWithParam] with Unit result
+ * Shortcut for [<T, R> ensureCalledOnceWithParam] with Unit result.
  */
 fun <T> ensureCalledOnceWithParam(param: T, block: (callback: EnsureCalledOnceWithParam<T, Unit>) -> Unit) {
     ensureCalledOnceWithParam(param, block, Unit)
