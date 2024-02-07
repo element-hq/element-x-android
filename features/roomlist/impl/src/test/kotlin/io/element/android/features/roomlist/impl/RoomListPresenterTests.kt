@@ -356,7 +356,7 @@ class RoomListPresenterTests {
                     roomId = summary.roomId,
                     roomName = summary.name,
                     isDm = false,
-                    hasNewContent = true,
+                    hasNewContent = false,
                 )
             )
             scope.cancel()
@@ -382,7 +382,7 @@ class RoomListPresenterTests {
                     roomId = summary.roomId,
                     roomName = summary.name,
                     isDm = false,
-                    hasNewContent = true,
+                    hasNewContent = false,
                 )
             )
             shownState.eventSink(RoomListEvents.HideContextMenu)
