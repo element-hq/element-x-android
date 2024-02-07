@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_migration_message">"Ez egy egyszeri folyamat, köszönjük a türelmét."</string>
-  <string name="screen_migration_title">"A fiók beállítása."</string>
-  <string name="screen_notification_optin_subtitle">"A beállításokat később is módosíthatja."</string>
+    <string name="screen_notification_optin_subtitle">"A beállításokat később is módosíthatja."</string>
   <string name="screen_notification_optin_title">"Értesítések engedélyezése, hogy soha ne maradjon le egyetlen üzenetről sem"</string>
   <string name="screen_welcome_bullet_1">"A hívások, szavazások, keresések és egyebek az év további részében kerülnek hozzáadásra."</string>
   <string name="screen_welcome_bullet_2">"A titkosított szobák üzenetelőzményei nem lesznek elérhetők ebben a frissítésben."</string>

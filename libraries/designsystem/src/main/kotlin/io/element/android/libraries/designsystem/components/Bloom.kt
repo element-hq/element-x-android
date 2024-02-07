@@ -23,7 +23,6 @@ import android.os.Build
 import android.text.TextPaint
 import androidx.annotation.FloatRange
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.consumeWindowInsets

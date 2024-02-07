@@ -207,7 +207,6 @@ private fun DefaultRoomListTopBar(
                     Text(text = stringResource(id = R.string.screen_roomlist_main_space_title))
                 },
                 navigationIcon = {
-
                     IconButton(
                         modifier = Modifier.testTag(TestTags.homeScreenSettings),
                         onClick = onOpenSettings
