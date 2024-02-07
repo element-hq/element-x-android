@@ -164,12 +164,7 @@ private fun RoomListModalBottomSheetContent(
 @Composable
 internal fun RoomListModalBottomSheetContentPreview() = ElementPreview {
     RoomListModalBottomSheetContent(
-        contextMenu = RoomListState.ContextMenu.Shown(
-            roomId = RoomId(value = "!aRoom:aDomain"),
-            roomName = "aRoom",
-            isDm = false,
-            hasNewContent = true,
-        ),
+        contextMenu = aContextMenuShown(hasNewContent = true),
         onRoomMarkReadClicked = {},
         onRoomMarkUnreadClicked = {},
         onRoomSettingsClicked = {},
@@ -181,12 +176,7 @@ internal fun RoomListModalBottomSheetContentPreview() = ElementPreview {
 @Composable
 internal fun RoomListModalBottomSheetContentForDmPreview() = ElementPreview {
     RoomListModalBottomSheetContent(
-        contextMenu = RoomListState.ContextMenu.Shown(
-            roomId = RoomId(value = "!aRoom:aDomain"),
-            roomName = "aRoom",
-            isDm = true,
-            hasNewContent = false,
-        ),
+        contextMenu = aContextMenuShown(isDm = true),
         onRoomMarkReadClicked = {},
         onRoomMarkUnreadClicked = {},
         onRoomSettingsClicked = {},
