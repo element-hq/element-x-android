@@ -106,7 +106,8 @@
       "includeRegex" : [
         "screen_roomlist_.*",
         "session_verification_banner_.*",
-        "confirm_recovery_key_banner_.*"
+        "confirm_recovery_key_banner_.*",
+        "screen_migration_.*"
       ]
     },
     {
@@ -154,7 +155,6 @@
       "name" : ":features:ftue:impl",
       "includeRegex" : [
         "screen_welcome_.*",
-        "screen_migration_.*",
         "screen_notification_optin_.*"
       ]
     },
