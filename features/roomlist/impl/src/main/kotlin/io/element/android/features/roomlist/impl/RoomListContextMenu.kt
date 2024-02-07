@@ -41,7 +41,7 @@ import io.element.android.libraries.ui.strings.CommonStrings
 @Composable
 fun RoomListContextMenu(
     contextMenu: RoomListState.ContextMenu.Shown,
-    eventSink: (RoomListEvents) -> Unit,
+    eventSink: (RoomListEvents.RoomListBottomSheetEvents) -> Unit,
     onRoomSettingsClicked: (roomId: RoomId) -> Unit,
 ) {
     ModalBottomSheet(
