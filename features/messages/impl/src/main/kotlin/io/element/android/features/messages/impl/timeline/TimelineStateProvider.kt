@@ -53,6 +53,7 @@ fun aTimelineState(
     timelineItems = timelineItems,
     timelineRoomInfo = aTimelineRoomInfo(),
     paginationState = paginationState,
+    renderReadReceipts = false,
     highlightedEventId = null,
     newEventState = NewEventState.None,
     sessionState = aSessionState(

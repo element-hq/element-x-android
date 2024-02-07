@@ -38,7 +38,7 @@ fun aAdvancedSettingsState(
 ) = AdvancedSettingsState(
     isRichTextEditorEnabled = isRichTextEditorEnabled,
     isDeveloperModeEnabled = isDeveloperModeEnabled,
-    isSendPublicReadReceiptsEnabled = isSendPublicReadReceiptsEnabled,
+    isSharePresenceEnabled = isSendPublicReadReceiptsEnabled,
     theme = Theme.System,
     showChangeThemeDialog = showChangeThemeDialog,
     eventSink = {}

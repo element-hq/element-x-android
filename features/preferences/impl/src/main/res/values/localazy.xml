@@ -8,6 +8,8 @@
   <string name="screen_advanced_settings_rich_text_editor_description">"Disable the rich text editor to type Markdown manually."</string>
   <string name="screen_advanced_settings_send_read_receipts">"Read receipts"</string>
   <string name="screen_advanced_settings_send_read_receipts_description">"If turned off, your read receipts won\'t be sent to anyone. You will still receive read receipts from other users."</string>
+  <string name="screen_advanced_settings_share_presence">"Share presence"</string>
+  <string name="screen_advanced_settings_share_presence_description">"If turned off, you won’t be able to send or receive read receipts or typing notifications"</string>
   <string name="screen_advanced_settings_view_source_description">"Enable option to view message source in the timeline."</string>
   <string name="screen_edit_profile_display_name">"Display name"</string>
   <string name="screen_edit_profile_display_name_placeholder">"Your display name"</string>

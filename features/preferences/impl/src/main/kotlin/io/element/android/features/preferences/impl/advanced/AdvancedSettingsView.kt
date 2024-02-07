@@ -83,15 +83,15 @@ fun AdvancedSettingsView(
         )
         ListItem(
             headlineContent = {
-                Text(text = stringResource(id = R.string.screen_advanced_settings_send_read_receipts))
+                Text(text = stringResource(id = R.string.screen_advanced_settings_share_presence))
             },
             supportingContent = {
-                Text(text = stringResource(id = R.string.screen_advanced_settings_send_read_receipts_description))
+                Text(text = stringResource(id = R.string.screen_advanced_settings_share_presence_description))
             },
             trailingContent = ListItemContent.Switch(
-                checked = state.isSendPublicReadReceiptsEnabled,
+                checked = state.isSharePresenceEnabled,
             ),
-            onClick = { state.eventSink(AdvancedSettingsEvents.SetSendPublicReadReceiptsEnabled(!state.isSendPublicReadReceiptsEnabled)) }
+            onClick = { state.eventSink(AdvancedSettingsEvents.SetSharePresenceEnabled(!state.isSharePresenceEnabled)) }
         )
     }
 
