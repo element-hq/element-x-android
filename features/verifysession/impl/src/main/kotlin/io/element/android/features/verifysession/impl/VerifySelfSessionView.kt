@@ -94,7 +94,7 @@ fun VerifySelfSessionView(
 }
 
 @Composable
-private fun HeaderContent(verificationFlowStep: FlowStep, modifier: Modifier = Modifier) {
+private fun HeaderContent(verificationFlowStep: FlowStep) {
     val iconResourceId = when (verificationFlowStep) {
         FlowStep.Initial -> R.drawable.ic_verification_devices
         FlowStep.Canceled -> R.drawable.ic_verification_warning
@@ -125,7 +125,7 @@ private fun HeaderContent(verificationFlowStep: FlowStep, modifier: Modifier = M
     }
 
     IconTitleSubtitleMolecule(
-        modifier = modifier.padding(top = 60.dp),
+        modifier = Modifier.padding(top = 60.dp),
         iconResourceId = iconResourceId,
         title = stringResource(id = titleTextId),
         subTitle = stringResource(id = subtitleTextId)
@@ -133,8 +133,8 @@ private fun HeaderContent(verificationFlowStep: FlowStep, modifier: Modifier = M
 }
 
 @Composable
-private fun Content(flowState: FlowStep, modifier: Modifier = Modifier) {
-    Column(modifier.fillMaxHeight(), verticalArrangement = Arrangement.Center) {
+private fun Content(flowState: FlowStep) {
+    Column(Modifier.fillMaxHeight(), verticalArrangement = Arrangement.Center) {
         when (flowState) {
             FlowStep.Initial, FlowStep.Ready, FlowStep.Canceled, FlowStep.Completed -> Unit
             FlowStep.AwaitingOtherDeviceResponse -> ContentWaiting()
@@ -144,19 +144,19 @@ private fun Content(flowState: FlowStep, modifier: Modifier = Modifier) {
 }
 
 @Composable
-private fun ContentWaiting(modifier: Modifier = Modifier) {
-    Row(modifier = modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
+private fun ContentWaiting() {
+    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
         CircularProgressIndicator()
     }
 }
 
 @Composable
-private fun ContentVerifying(verificationFlowStep: FlowStep.Verifying, modifier: Modifier = Modifier) {
+private fun ContentVerifying(verificationFlowStep: FlowStep.Verifying) {
     when (verificationFlowStep.data) {
         is SessionVerificationData.Decimals -> {
             val text = verificationFlowStep.data.decimals.joinToString(separator = " - ") { it.toString() }
             Text(
-                modifier = modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth(),
                 text = text,
                 style = ElementTheme.typography.fontHeadingLgBold,
                 color = MaterialTheme.colorScheme.primary,
@@ -167,7 +167,7 @@ private fun ContentVerifying(verificationFlowStep: FlowStep.Verifying, modifier:
             // We want each row to have up to 4 emojis
             val rows = verificationFlowStep.data.emojis.chunked(4)
             Column(
-                modifier = modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth(),
                 verticalArrangement = Arrangement.spacedBy(40.dp),
             ) {
                 rows.forEach { emojis ->

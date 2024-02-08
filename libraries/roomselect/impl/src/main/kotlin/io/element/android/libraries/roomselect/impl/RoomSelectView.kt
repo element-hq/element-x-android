@@ -209,10 +209,9 @@ private fun RoomSummaryView(
     summary: RoomSummaryDetails,
     isSelected: Boolean,
     onSelection: (RoomSummaryDetails) -> Unit,
-    modifier: Modifier = Modifier
 ) {
     Row(
-        modifier = modifier
+        modifier = Modifier
             .clickable { onSelection(summary) }
             .fillMaxWidth()
             .padding(start = 16.dp, end = 4.dp)

@@ -143,10 +143,8 @@ fun PollContentView(
 private fun PollTitle(
     title: String,
     isPollEnded: Boolean,
-    modifier: Modifier = Modifier
 ) {
     Row(
-        modifier = modifier,
         horizontalArrangement = Arrangement.spacedBy(12.dp),
     ) {
         if (isPollEnded) {
@@ -173,10 +171,9 @@ private fun PollTitle(
 private fun PollAnswers(
     answerItems: ImmutableList<PollAnswerItem>,
     onAnswerSelected: (PollAnswer) -> Unit,
-    modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = modifier.selectableGroup(),
+        modifier = Modifier.selectableGroup(),
         verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
         answerItems.forEach {
@@ -197,10 +194,9 @@ private fun PollAnswers(
 @Composable
 private fun ColumnScope.DisclosedPollBottomNotice(
     votesCount: Int,
-    modifier: Modifier = Modifier
 ) {
     Text(
-        modifier = modifier.align(Alignment.End),
+        modifier = Modifier.align(Alignment.End),
         style = ElementTheme.typography.fontBodyXsRegular,
         color = ElementTheme.colors.textSecondary,
         text = stringResource(CommonStrings.common_poll_total_votes, votesCount),
@@ -208,11 +204,9 @@ private fun ColumnScope.DisclosedPollBottomNotice(
 }
 
 @Composable
-private fun ColumnScope.UndisclosedPollBottomNotice(
-    modifier: Modifier = Modifier
-) {
+private fun ColumnScope.UndisclosedPollBottomNotice() {
     Text(
-        modifier = modifier
+        modifier = Modifier
             .align(Alignment.Start)
             .padding(start = 34.dp),
         style = ElementTheme.typography.fontBodyXsRegular,

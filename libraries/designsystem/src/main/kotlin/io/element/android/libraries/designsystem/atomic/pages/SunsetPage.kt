@@ -115,10 +115,8 @@ fun SunsetPage(
 
 @OptIn(CoreColorToken::class)
 @Composable
-private fun SunsetBackground(
-    modifier: Modifier = Modifier,
-) {
-    Column(modifier = modifier.fillMaxSize()) {
+private fun SunsetBackground() {
+    Column(modifier = Modifier.fillMaxSize()) {
         // The top background colors are the opposite of the current theme ones
         val topBackgroundColor = if (ElementTheme.isLightTheme) {
             DarkColorTokens.colorThemeBg

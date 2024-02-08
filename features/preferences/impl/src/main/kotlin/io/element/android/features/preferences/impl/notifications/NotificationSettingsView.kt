@@ -99,7 +99,6 @@ private fun NotificationSettingsContentView(
     // TODO We are removing the call notification toggle until support for call notifications has been added
 //    onCallsNotificationsChanged: (Boolean) -> Unit,
     onInviteForMeNotificationsChanged: (Boolean) -> Unit,
-    modifier: Modifier = Modifier,
 ) {
     val context = LocalContext.current
     if (systemSettings.appNotificationsEnabled && !systemSettings.systemNotificationsEnabled) {
@@ -117,7 +116,6 @@ private fun NotificationSettingsContentView(
     }
 
     PreferenceSwitch(
-        modifier = modifier,
         title = stringResource(id = R.string.screen_notification_settings_enable_notifications),
         isChecked = systemSettings.appNotificationsEnabled,
         switchAlignment = Alignment.Top,
@@ -182,10 +180,8 @@ private fun InvalidNotificationSettingsView(
     showError: Boolean,
     onContinueClicked: () -> Unit,
     onDismissError: () -> Unit,
-    modifier: Modifier = Modifier
 ) {
     DialogLikeBannerMolecule(
-        modifier = modifier,
         title = stringResource(R.string.screen_notification_settings_configuration_mismatch),
         content = stringResource(R.string.screen_notification_settings_configuration_mismatch_description),
         onSubmitClicked = onContinueClicked,

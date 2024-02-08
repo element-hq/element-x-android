@@ -193,10 +193,8 @@ fun RoomDetailsEditView(
 private fun LabelledReadOnlyField(
     title: String,
     value: String,
-    modifier: Modifier = Modifier
 ) {
     Column(
-        modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         Text(

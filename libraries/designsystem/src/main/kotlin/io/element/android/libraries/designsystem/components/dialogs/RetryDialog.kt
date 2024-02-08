@@ -56,13 +56,11 @@ private fun RetryDialogContent(
     content: String,
     onRetry: () -> Unit,
     onDismiss: () -> Unit,
-    modifier: Modifier = Modifier,
     title: String = RetryDialogDefaults.title,
     retryText: String = RetryDialogDefaults.retryText,
     dismissText: String = RetryDialogDefaults.dismissText,
 ) {
     SimpleAlertDialogContent(
-        modifier = modifier,
         title = title,
         content = content,
         submitText = retryText,

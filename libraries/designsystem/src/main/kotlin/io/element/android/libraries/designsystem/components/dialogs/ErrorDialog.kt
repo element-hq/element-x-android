@@ -51,12 +51,10 @@ fun ErrorDialog(
 private fun ErrorDialogContent(
     content: String,
     onSubmitClicked: () -> Unit,
-    modifier: Modifier = Modifier,
     title: String = ErrorDialogDefaults.title,
     submitText: String = ErrorDialogDefaults.submitText,
 ) {
     SimpleAlertDialogContent(
-        modifier = modifier,
         title = title,
         content = content,
         submitText = submitText,

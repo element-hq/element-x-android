@@ -119,9 +119,8 @@ private fun WaitListContent(
 private fun OverallContent(
     state: WaitListState,
     onCancelClicked: () -> Unit,
-    modifier: Modifier = Modifier,
 ) {
-    Box(modifier = modifier.fillMaxSize()) {
+    Box(modifier = Modifier.fillMaxSize()) {
         if (state.loginAction !is AsyncData.Success) {
             CompositionLocalProvider(LocalContentColor provides ElementTheme.colors.textOnSolidPrimary) {
                 TextButton(

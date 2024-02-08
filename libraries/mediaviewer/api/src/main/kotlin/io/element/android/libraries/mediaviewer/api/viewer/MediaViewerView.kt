@@ -259,10 +259,8 @@ private fun ErrorView(
     errorMessage: String,
     onRetry: () -> Unit,
     onDismiss: () -> Unit,
-    modifier: Modifier = Modifier,
 ) {
     RetryDialog(
-        modifier = modifier,
         content = errorMessage,
         onRetry = onRetry,
         onDismiss = onDismiss

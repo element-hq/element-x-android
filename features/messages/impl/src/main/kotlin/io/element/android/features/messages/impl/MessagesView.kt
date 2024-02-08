@@ -412,10 +412,9 @@ private fun MessagesViewContent(
 private fun MessagesViewComposerBottomSheetContents(
     subcomposing: Boolean,
     state: MessagesState,
-    modifier: Modifier = Modifier,
 ) {
     if (state.userHasPermissionToSendMessage) {
-        Column(modifier = modifier.fillMaxWidth()) {
+        Column(modifier = Modifier.fillMaxWidth()) {
             MentionSuggestionsPickerView(
                 modifier = Modifier
                     .heightIn(max = 230.dp)
@@ -443,7 +442,7 @@ private fun MessagesViewComposerBottomSheetContents(
             )
         }
     } else {
-        CantSendMessageBanner(modifier = modifier)
+        CantSendMessageBanner()
     }
 }
 
@@ -456,10 +455,8 @@ private fun MessagesViewTopBar(
     onRoomDetailsClicked: () -> Unit,
     onJoinCallClicked: () -> Unit,
     onBackPressed: () -> Unit,
-    modifier: Modifier = Modifier,
 ) {
     TopAppBar(
-        modifier = modifier,
         navigationIcon = {
             BackButton(onClick = onBackPressed)
         },
@@ -497,7 +494,6 @@ private fun MessagesViewTopBar(
 
 @Composable
 private fun JoinCallMenuItem(
-    modifier: Modifier = Modifier,
     onJoinCallClicked: () -> Unit,
 ) {
     Material3Button(
@@ -507,7 +503,7 @@ private fun JoinCallMenuItem(
             containerColor = ElementTheme.colors.iconAccentTertiary
         ),
         contentPadding = PaddingValues(horizontal = 10.dp, vertical = 0.dp),
-        modifier = modifier.heightIn(min = 36.dp),
+        modifier = Modifier.heightIn(min = 36.dp),
     ) {
         Icon(
             modifier = Modifier.size(20.dp),
@@ -545,11 +541,9 @@ private fun RoomAvatarAndNameRow(
 }
 
 @Composable
-private fun CantSendMessageBanner(
-    modifier: Modifier = Modifier,
-) {
+private fun CantSendMessageBanner() {
     Row(
-        modifier = modifier
+        modifier = Modifier
             .fillMaxWidth()
             .background(MaterialTheme.colorScheme.secondary)
             .padding(16.dp),

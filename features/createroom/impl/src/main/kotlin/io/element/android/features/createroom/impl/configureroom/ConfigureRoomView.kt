@@ -173,10 +173,8 @@ private fun ConfigureRoomToolbar(
     isNextActionEnabled: Boolean,
     onBackPressed: () -> Unit,
     onNextPressed: () -> Unit,
-    modifier: Modifier = Modifier,
 ) {
     TopAppBar(
-        modifier = modifier,
         title = {
             Text(
                 text = stringResource(R.string.screen_create_room_title),

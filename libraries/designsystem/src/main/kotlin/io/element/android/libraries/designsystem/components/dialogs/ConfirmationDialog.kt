@@ -65,7 +65,6 @@ private fun ConfirmationDialogContent(
     cancelText: String,
     onSubmitClicked: () -> Unit,
     onCancelClicked: () -> Unit,
-    modifier: Modifier = Modifier,
     title: String? = null,
     thirdButtonText: String? = null,
     onThirdButtonClicked: () -> Unit = {},
@@ -73,7 +72,6 @@ private fun ConfirmationDialogContent(
     icon: @Composable (() -> Unit)? = null,
 ) {
     SimpleAlertDialogContent(
-        modifier = modifier,
         title = title,
         content = content,
         submitText = submitText,

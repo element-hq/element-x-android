@@ -115,10 +115,8 @@ private fun RoomInviteMembersTopBar(
     canSend: Boolean,
     onBackPressed: () -> Unit,
     onSubmitPressed: () -> Unit,
-    modifier: Modifier = Modifier,
 ) {
     TopAppBar(
-        modifier = modifier,
         title = {
             Text(
                 text = stringResource(R.string.screen_room_details_invite_people_title),
