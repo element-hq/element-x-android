@@ -59,6 +59,11 @@ object TestTags {
     val richTextEditor = TestTag("rich_text_editor")
 
     /**
+     * Message bubble.
+     */
+    val messageBubble = TestTag("message_bubble")
+
+    /**
      * Dialogs.
      */
     val dialogPositive = TestTag("dialog-positive")
