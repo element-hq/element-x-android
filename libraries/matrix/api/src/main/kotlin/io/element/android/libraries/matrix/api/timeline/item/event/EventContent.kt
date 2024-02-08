@@ -85,11 +85,7 @@ data class ProfileChangeContent(
 data class StateContent(
     val stateKey: String,
     val content: OtherState
-) : EventContent {
-    fun isVisibleInTimeline(): Boolean {
-        return content.isVisibleInTimeline()
-    }
-}
+) : EventContent
 
 data class FailedToParseMessageLikeContent(
     val eventType: String,
