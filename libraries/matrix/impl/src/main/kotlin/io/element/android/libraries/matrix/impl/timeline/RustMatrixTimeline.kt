@@ -28,7 +28,6 @@ import io.element.android.libraries.matrix.impl.timeline.item.event.EventTimelin
 import io.element.android.libraries.matrix.impl.timeline.item.event.TimelineEventContentMapper
 import io.element.android.libraries.matrix.impl.timeline.item.virtual.VirtualTimelineItemMapper
 import io.element.android.libraries.matrix.impl.timeline.postprocessor.DmBeginningTimelineProcessor
-import io.element.android.libraries.matrix.impl.timeline.postprocessor.FilterHiddenStateEventsProcessor
 import io.element.android.libraries.matrix.impl.timeline.postprocessor.TimelineEncryptedHistoryPostProcessor
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineDispatcher
@@ -84,8 +83,6 @@ class RustMatrixTimeline(
         dispatcher = dispatcher,
     )
 
-    private val filterHiddenStateEventsProcessor = FilterHiddenStateEventsProcessor()
-
     private val dmBeginningTimelineProcessor = DmBeginningTimelineProcessor()
 
     private val timelineItemFactory = MatrixTimelineItemMapper(
@@ -109,7 +106,6 @@ class RustMatrixTimeline(
     @OptIn(ExperimentalCoroutinesApi::class)
     override val timelineItems: Flow<List<MatrixTimelineItem>> = _timelineItems
         .mapLatest { items -> encryptedHistoryPostProcessor.process(items) }
-        .mapLatest { items -> filterHiddenStateEventsProcessor.process(items) }
         .mapLatest { items ->
             dmBeginningTimelineProcessor.process(
                 items = items,
