@@ -41,7 +41,7 @@ class DefaultDirectLogoutView @Inject constructor() : DirectLogoutView {
             onForceLogoutClicked = {
                 eventSink(DirectLogoutEvents.Logout(ignoreSdkError = true))
             },
-            onDismissError = {
+            onDismissDialog = {
                 eventSink(DirectLogoutEvents.CloseDialogs)
             },
             onSuccessLogout = {

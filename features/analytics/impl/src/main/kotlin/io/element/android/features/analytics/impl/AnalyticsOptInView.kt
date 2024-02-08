@@ -57,7 +57,6 @@ import io.element.android.libraries.designsystem.theme.components.ButtonSize
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.designsystem.theme.temporaryColorBgSpecial
-import io.element.android.libraries.designsystem.utils.LogCompositions
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.persistentListOf
 
@@ -67,7 +66,6 @@ fun AnalyticsOptInView(
     onClickTerms: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    LogCompositions(tag = "Analytics", msg = "Root")
     val eventSink = state.eventSink
 
     fun onTermsAccepted() {

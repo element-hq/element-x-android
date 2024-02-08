@@ -102,7 +102,6 @@ import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.designsystem.utils.KeepScreenOn
-import io.element.android.libraries.designsystem.utils.LogCompositions
 import io.element.android.libraries.designsystem.utils.OnLifecycleEvent
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarHost
 import io.element.android.libraries.designsystem.utils.snackbar.rememberSnackbarHostState
@@ -127,8 +126,6 @@ fun MessagesView(
     onJoinCallClicked: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    LogCompositions(tag = "MessagesScreen", msg = "Root")
-
     OnLifecycleEvent { _, event ->
         state.voiceMessageComposerState.eventSink(VoiceMessageComposerEvents.LifecycleEvent(event))
     }
@@ -145,8 +142,6 @@ fun MessagesView(
 
     // This is needed because the composer is inside an AndroidView that can't be affected by the FocusManager in Compose
     val localView = LocalView.current
-
-    LogCompositions(tag = "MessagesScreen", msg = "Content")
 
     fun onMessageClicked(event: TimelineItem.Event) {
         Timber.v("OnMessageClicked= ${event.id}")
