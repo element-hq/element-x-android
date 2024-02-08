@@ -35,7 +35,7 @@ fun MigrationScreenView(
 ) {
     val displayMigrationStatusFadeProgress by animateFloatAsState(
         targetValue = if (isMigrating) 1f else 0f,
-        animationSpec = tween(durationMillis = 1000),
+        animationSpec = tween(durationMillis = 200),
         label = "Migration view fade"
     )
     if (displayMigrationStatusFadeProgress > 0f) {
