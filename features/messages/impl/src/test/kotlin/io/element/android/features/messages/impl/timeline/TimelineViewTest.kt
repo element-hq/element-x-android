@@ -19,6 +19,7 @@ package io.element.android.features.messages.impl.timeline
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import io.element.android.features.messages.impl.typing.aTypingNotificationState
 import io.element.android.tests.testutils.EnsureNeverCalledWithParam
 import io.element.android.tests.testutils.EnsureNeverCalledWithTwoParams
 import io.element.android.tests.testutils.EventsRecorder
@@ -41,6 +42,7 @@ class TimelineViewTest {
                         hasMoreToLoadBackwards = true,
                     )
                 ),
+                typingNotificationState = aTypingNotificationState(),
                 roomName = null,
                 onUserDataClicked = EnsureNeverCalledWithParam(),
                 onMessageClicked = EnsureNeverCalledWithParam(),
@@ -67,6 +69,7 @@ class TimelineViewTest {
                         hasMoreToLoadBackwards = false,
                     )
                 ),
+                typingNotificationState = aTypingNotificationState(),
                 roomName = null,
                 onUserDataClicked = EnsureNeverCalledWithParam(),
                 onMessageClicked = EnsureNeverCalledWithParam(),
