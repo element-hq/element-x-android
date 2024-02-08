@@ -94,10 +94,6 @@ class DefaultFtueState @Inject constructor(
         ).any { it() }
     }
 
-//    private fun shouldDisplayMigrationScreen(): Boolean {
-//        return migrationScreenStore.isMigrationScreenNeeded(matrixClient.sessionId)
-//    }
-
     private fun needsAnalyticsOptIn(): Boolean {
         // We need this function to not be suspend, so we need to load the value through runBlocking
         return runBlocking { analyticsService.didAskUserConsent().first().not() }
