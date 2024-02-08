@@ -18,6 +18,7 @@ package io.element.android.libraries.matrix.impl.roomlist
 
 import io.element.android.libraries.matrix.api.roomlist.DynamicRoomList
 import io.element.android.libraries.matrix.api.roomlist.RoomList
+import io.element.android.libraries.matrix.api.roomlist.RoomListFilter
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.api.roomlist.loadAllIncrementally
 import kotlinx.coroutines.CoroutineScope
@@ -45,7 +46,7 @@ internal class RustRoomListService(
 ) : RoomListService {
     override val allRooms: DynamicRoomList = roomListFactory.createRoomList(
         pageSize = DEFAULT_PAGE_SIZE,
-        initialFilter = DynamicRoomList.Filter.AllNonLeft,
+        initialFilter = RoomListFilter.all(RoomListFilter.NonLeft),
     ) {
         innerRoomListService.allRooms()
     }
