@@ -45,7 +45,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
@@ -87,7 +86,6 @@ import io.element.android.libraries.designsystem.theme.components.hide
 import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
-import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -103,52 +101,28 @@ fun ActionListView(
     val targetItem = (state.target as? ActionListState.Target.Success)?.event
 
     fun onItemActionClicked(
-        itemAction: TimelineItemAction,
-        immediate: Boolean,
+        itemAction: TimelineItemAction
     ) {
         if (targetItem == null) return
-        if (immediate) {
-            coroutineScope.launch { sheetState.hide() }
+        sheetState.hide(coroutineScope) {
             state.eventSink(ActionListEvents.Clear)
             onActionSelected(itemAction, targetItem)
-        } else {
-            sheetState.hide(coroutineScope) {
-                state.eventSink(ActionListEvents.Clear)
-                onActionSelected(itemAction, targetItem)
-            }
         }
     }
 
-    fun onEmojiReactionClicked(
-        emoji: String,
-        immediate: Boolean,
-    ) {
+    fun onEmojiReactionClicked(emoji: String) {
         if (targetItem == null) return
-        if (immediate) {
-            coroutineScope.launch { sheetState.hide() }
+        sheetState.hide(coroutineScope) {
             state.eventSink(ActionListEvents.Clear)
             onEmojiReactionClicked(emoji, targetItem)
-        } else {
-            sheetState.hide(coroutineScope) {
-                state.eventSink(ActionListEvents.Clear)
-                onEmojiReactionClicked(emoji, targetItem)
-            }
         }
     }
 
-    fun onCustomReactionClicked(
-        immediate: Boolean,
-    ) {
+    fun onCustomReactionClicked() {
         if (targetItem == null) return
-        if (immediate) {
-            coroutineScope.launch { sheetState.hide() }
+        sheetState.hide(coroutineScope) {
             state.eventSink(ActionListEvents.Clear)
             onCustomReactionClicked(targetItem)
-        } else {
-            sheetState.hide(coroutineScope) {
-                state.eventSink(ActionListEvents.Clear)
-                onCustomReactionClicked(targetItem)
-            }
         }
     }
 
@@ -162,18 +136,11 @@ fun ActionListView(
             onDismissRequest = ::onDismiss,
             modifier = modifier,
         ) {
-            val immediate = LocalInspectionMode.current
             SheetContent(
                 state = state,
-                onActionClicked = {
-                    onItemActionClicked(it, immediate)
-                },
-                onEmojiReactionClicked = {
-                    onEmojiReactionClicked(it, immediate)
-                },
-                onCustomReactionClicked = {
-                    onCustomReactionClicked(immediate)
-                },
+                onActionClicked = ::onItemActionClicked,
+                onEmojiReactionClicked = ::onEmojiReactionClicked,
+                onCustomReactionClicked = ::onCustomReactionClicked,
                 modifier = Modifier
                     .navigationBarsPadding()
                     .imePadding()

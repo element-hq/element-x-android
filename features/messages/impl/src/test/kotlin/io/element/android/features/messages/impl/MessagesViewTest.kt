@@ -204,6 +204,8 @@ class MessagesViewTest {
             state = stateWithMessageAction,
         )
         rule.clickOn(CommonStrings.action_edit)
+        // Give time for the close animation to complete
+        rule.mainClock.advanceTimeBy(milliseconds = 1_000)
         eventsRecorder.assertSingle(MessagesEvents.HandleAction(TimelineItemAction.Edit, timelineItem))
     }
 
