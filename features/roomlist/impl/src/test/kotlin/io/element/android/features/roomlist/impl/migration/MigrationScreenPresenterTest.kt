@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright (c) 2024 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,12 +14,13 @@
  * limitations under the License.
  */
 
-package io.element.android.features.ftue.impl.migration
+package io.element.android.features.roomlist.impl.migration
 
 import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import io.element.android.features.roomlist.api.migration.MigrationScreenStore
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.test.A_SESSION_ID
@@ -61,6 +62,7 @@ class MigrationScreenPresenterTest {
             val nextState = awaitItem()
             assertThat(nextState.isMigrating).isFalse()
             assertThat(migrationScreenStore.isMigrationScreenNeeded(A_SESSION_ID)).isFalse()
+            cancelAndIgnoreRemainingEvents()
         }
     }
 

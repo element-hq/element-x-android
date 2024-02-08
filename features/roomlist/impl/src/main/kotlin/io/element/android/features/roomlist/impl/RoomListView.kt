@@ -54,6 +54,7 @@ import io.element.android.features.roomlist.impl.components.RequestVerificationH
 import io.element.android.features.roomlist.impl.components.RoomListMenuAction
 import io.element.android.features.roomlist.impl.components.RoomListTopBar
 import io.element.android.features.roomlist.impl.components.RoomSummaryRow
+import io.element.android.features.roomlist.impl.migration.MigrationScreenView
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
 import io.element.android.features.roomlist.impl.search.RoomListSearchResultView
 import io.element.android.libraries.architecture.AsyncData
@@ -212,6 +213,7 @@ private fun RoomListContent(
                 onMenuActionClicked = onMenuActionClicked,
                 onOpenSettings = onOpenSettings,
                 scrollBehavior = scrollBehavior,
+                displayMenuItems = !state.displayMigrationStatus,
             )
         },
         content = { padding ->
@@ -270,18 +272,22 @@ private fun RoomListContent(
                     }
                 }
             }
+
+            MigrationScreenView(isMigrating = state.displayMigrationStatus)
         },
         floatingActionButton = {
-            FloatingActionButton(
-                // FIXME align on Design system theme
-                containerColor = MaterialTheme.colorScheme.primary,
-                onClick = onCreateRoomClicked
-            ) {
-                Icon(
-                    // Note cannot use Icons.Outlined.EditSquare, it does not exist :/
-                    resourceId = CommonDrawables.ic_new_message,
-                    contentDescription = stringResource(id = R.string.screen_roomlist_a11y_create_message)
-                )
+            if (!state.displayMigrationStatus) {
+                FloatingActionButton(
+                    // FIXME align on Design system theme
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    onClick = onCreateRoomClicked
+                ) {
+                    Icon(
+                        // Note cannot use Icons.Outlined.EditSquare, it does not exist :/
+                        resourceId = CommonDrawables.ic_new_message,
+                        contentDescription = stringResource(id = R.string.screen_roomlist_a11y_create_message)
+                    )
+                }
             }
         },
         snackbarHost = { SnackbarHost(snackbarHostState) },

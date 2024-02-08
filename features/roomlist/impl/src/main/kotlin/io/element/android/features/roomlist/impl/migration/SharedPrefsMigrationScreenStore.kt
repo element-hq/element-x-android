@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright (c) 2024 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,11 +14,12 @@
  * limitations under the License.
  */
 
-package io.element.android.features.ftue.impl.migration
+package io.element.android.features.roomlist.impl.migration
 
 import android.content.SharedPreferences
 import androidx.core.content.edit
 import com.squareup.anvil.annotations.ContributesBinding
+import io.element.android.features.roomlist.api.migration.MigrationScreenStore
 import io.element.android.libraries.androidutils.hash.hash
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.DefaultPreferences

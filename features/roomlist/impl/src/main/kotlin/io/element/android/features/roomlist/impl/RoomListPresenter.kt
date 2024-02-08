@@ -33,6 +33,7 @@ import io.element.android.features.networkmonitor.api.NetworkMonitor
 import io.element.android.features.networkmonitor.api.NetworkStatus
 import io.element.android.features.roomlist.impl.datasource.InviteStateDataSource
 import io.element.android.features.roomlist.impl.datasource.RoomListDataSource
+import io.element.android.features.roomlist.impl.migration.MigrationScreenPresenter
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
@@ -63,6 +64,7 @@ class RoomListPresenter @Inject constructor(
     private val encryptionService: EncryptionService,
     private val featureFlagService: FeatureFlagService,
     private val indicatorService: IndicatorService,
+    private val migrationScreenPresenter: MigrationScreenPresenter,
 ) : Presenter<RoomListState> {
     @Composable
     override fun present(): RoomListState {
@@ -81,6 +83,8 @@ class RoomListPresenter @Inject constructor(
             roomListDataSource.launchIn(this)
             initialLoad(matrixUser)
         }
+
+        val isMigrating = migrationScreenPresenter.present().isMigrating
 
         // Session verification status (unknown, not verified, verified)
         val canVerifySession by sessionVerificationService.canVerifySessionFlow.collectAsState(initial = false)
@@ -148,6 +152,7 @@ class RoomListPresenter @Inject constructor(
             displaySearchResults = displaySearchResults,
             contextMenu = contextMenu,
             leaveRoomState = leaveRoomState,
+            displayMigrationStatus = isMigrating,
             eventSink = ::handleEvents
         )
     }

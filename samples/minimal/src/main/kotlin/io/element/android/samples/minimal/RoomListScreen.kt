@@ -28,6 +28,8 @@ import io.element.android.features.roomlist.impl.RoomListView
 import io.element.android.features.roomlist.impl.datasource.DefaultInviteStateDataSource
 import io.element.android.features.roomlist.impl.datasource.RoomListDataSource
 import io.element.android.features.roomlist.impl.datasource.RoomListRoomSummaryFactory
+import io.element.android.features.roomlist.impl.migration.MigrationScreenPresenter
+import io.element.android.features.roomlist.impl.migration.SharedPrefsMigrationScreenStore
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.dateformatter.impl.DateFormatters
 import io.element.android.libraries.dateformatter.impl.DefaultLastMessageTimestampFormatter
@@ -103,6 +105,10 @@ class RoomListScreen(
             featureFlagService = featureFlagService,
         ),
         featureFlagService = featureFlagService,
+        migrationScreenPresenter = MigrationScreenPresenter(
+            matrixClient = matrixClient,
+            migrationScreenStore = SharedPrefsMigrationScreenStore(context.getSharedPreferences("migration", Context.MODE_PRIVATE))
+        )
     )
 
     @Composable

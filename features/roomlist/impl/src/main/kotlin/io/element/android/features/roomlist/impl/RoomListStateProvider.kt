@@ -53,6 +53,7 @@ open class RoomListStateProvider : PreviewParameterProvider<RoomListState> {
             aRoomListState().copy(displayRecoveryKeyPrompt = true),
             aRoomListState().copy(roomList = AsyncData.Success(persistentListOf())),
             aRoomListState().copy(roomList = AsyncData.Loading(prevData = RoomListRoomSummaryFactory.createFakeList())),
+            aRoomListState().copy(matrixUser = null, displayMigrationStatus = true),
         )
 }
 
@@ -70,6 +71,7 @@ internal fun aRoomListState() = RoomListState(
     displaySearchResults = false,
     contextMenu = RoomListState.ContextMenu.Hidden,
     leaveRoomState = aLeaveRoomState(),
+    displayMigrationStatus = false,
     eventSink = {}
 )
 

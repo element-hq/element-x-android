@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_migration_message">"Il s’agit d’une opération ponctuelle, merci d’attendre quelques instants."</string>
-  <string name="screen_migration_title">"Configuration de votre compte."</string>
-  <string name="screen_notification_optin_subtitle">"Vous pourrez modifier vos paramètres ultérieurement."</string>
+    <string name="screen_notification_optin_subtitle">"Vous pourrez modifier vos paramètres ultérieurement."</string>
   <string name="screen_notification_optin_title">"Autorisez les notifications et ne manquez aucun message"</string>
   <string name="screen_welcome_bullet_1">"Les appels, les sondages, les recherches et plus encore seront ajoutés plus tard cette année."</string>
   <string name="screen_welcome_bullet_2">"L’historique des messages pour les salons chiffrés ne sera pas disponible dans cette mise à jour."</string>

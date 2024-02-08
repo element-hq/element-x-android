@@ -40,6 +40,7 @@ data class RoomListState(
     val displaySearchResults: Boolean,
     val contextMenu: ContextMenu,
     val leaveRoomState: LeaveRoomState,
+    val displayMigrationStatus: Boolean,
     val eventSink: (RoomListEvents) -> Unit,
 ) {
     sealed interface ContextMenu {

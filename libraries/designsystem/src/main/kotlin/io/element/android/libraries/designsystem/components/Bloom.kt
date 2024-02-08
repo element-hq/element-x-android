@@ -23,7 +23,6 @@ import android.os.Build
 import android.text.TextPaint
 import androidx.annotation.FloatRange
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.consumeWindowInsets
@@ -136,13 +135,13 @@ object BloomDefaults {
     @Composable
     fun defaultLayers() = persistentListOf(
         // Bottom layer
-        if (isSystemInDarkTheme()) {
-            BloomLayer(0.5f, BlendMode.Exclusion)
-        } else {
+        if (ElementTheme.isLightTheme) {
             BloomLayer(0.2f, BlendMode.Hardlight)
+        } else {
+            BloomLayer(0.5f, BlendMode.Exclusion)
         },
         // Top layer
-        BloomLayer(if (isSystemInDarkTheme()) 0.2f else 0.8f, BlendMode.Color),
+        BloomLayer(if (ElementTheme.isLightTheme) 0.8f else 0.2f, BlendMode.Color),
     )
 }
 
