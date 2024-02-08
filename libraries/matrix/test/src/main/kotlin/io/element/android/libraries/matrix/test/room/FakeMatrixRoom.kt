@@ -41,6 +41,7 @@ import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.api.room.StateEventType
 import io.element.android.libraries.matrix.api.room.location.AssetType
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
+import io.element.android.libraries.matrix.api.timeline.ReceiptType
 import io.element.android.libraries.matrix.api.timeline.item.event.EventTimelineItem
 import io.element.android.libraries.matrix.api.widget.MatrixWidgetDriver
 import io.element.android.libraries.matrix.api.widget.MatrixWidgetSettings
@@ -372,6 +373,20 @@ class FakeMatrixRoom(
     ): Result<Unit> = simulateLongTask {
         reportedContentCount++
         return reportContentResult
+    }
+
+    val markAsReadCalls = mutableListOf<ReceiptType?>()
+    override suspend fun markAsRead(receiptType: ReceiptType?): Result<Unit> {
+        markAsReadCalls.add(receiptType)
+        return Result.success(Unit)
+    }
+
+    var markAsUnreadReadCallCount = 0
+        private set
+
+    override suspend fun markAsUnread(): Result<Unit> {
+        markAsUnreadReadCallCount++
+        return Result.success(Unit)
     }
 
     override suspend fun sendLocation(

@@ -96,7 +96,9 @@ import io.element.android.tests.testutils.consumeItemsUntilTimeout
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import io.mockk.mockk
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
@@ -126,6 +128,21 @@ class MessagesPresenterTest {
             assertThat(initialState.snackbarMessage).isNull()
             assertThat(initialState.inviteProgress).isEqualTo(AsyncData.Uninitialized)
             assertThat(initialState.showReinvitePrompt).isFalse()
+        }
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun `present - check that the room is marked as read`() = runTest {
+        val room = FakeMatrixRoom()
+        assertThat(room.markAsReadCalls).isEmpty()
+        val presenter = createMessagesPresenter(matrixRoom = room)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            runCurrent()
+            assertThat(room.markAsReadCalls).isEqualTo(listOf(null))
+            cancelAndIgnoreRemainingEvents()
         }
     }
 
