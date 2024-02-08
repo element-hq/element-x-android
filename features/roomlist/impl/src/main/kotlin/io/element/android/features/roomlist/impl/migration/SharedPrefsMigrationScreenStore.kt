@@ -19,6 +19,7 @@ package io.element.android.features.roomlist.impl.migration
 import android.content.SharedPreferences
 import androidx.core.content.edit
 import com.squareup.anvil.annotations.ContributesBinding
+import io.element.android.features.roomlist.api.migration.MigrationScreenStore
 import io.element.android.libraries.androidutils.hash.hash
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.DefaultPreferences

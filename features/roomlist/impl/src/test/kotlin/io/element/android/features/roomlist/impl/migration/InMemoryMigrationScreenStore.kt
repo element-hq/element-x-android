@@ -16,6 +16,7 @@
 
 package io.element.android.features.roomlist.impl.migration
 
+import io.element.android.features.roomlist.api.migration.MigrationScreenStore
 import io.element.android.libraries.matrix.api.core.SessionId
 
 class InMemoryMigrationScreenStore : MigrationScreenStore {

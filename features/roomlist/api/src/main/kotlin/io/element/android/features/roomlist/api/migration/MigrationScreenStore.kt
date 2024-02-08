@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.features.roomlist.impl.migration
+package io.element.android.features.roomlist.api.migration
 
 import io.element.android.libraries.matrix.api.core.SessionId
 
