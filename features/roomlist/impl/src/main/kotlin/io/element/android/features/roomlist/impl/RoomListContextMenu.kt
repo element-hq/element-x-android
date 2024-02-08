@@ -88,36 +88,38 @@ private fun RoomListModalBottomSheetContent(
                 )
             }
         )
-        ListItem(
-            headlineContent = {
-                Text(
-                    text = stringResource(
-                        id = if (contextMenu.hasNewContent) {
-                            R.string.screen_roomlist_mark_as_read
-                        } else {
-                            R.string.screen_roomlist_mark_as_unread
-                        }
-                    ),
-                    style = MaterialTheme.typography.bodyLarge,
-                )
-            },
-            modifier = Modifier.clickable {
-                if (contextMenu.hasNewContent) {
-                    onRoomMarkReadClicked()
-                } else {
-                    onRoomMarkUnreadClicked()
-                }
-            },
-            /* TODO Design
-            leadingContent = ListItemContent.Icon(
-                iconSource = IconSource.Vector(
-                    CompoundIcons.Settings,
-                    contentDescription = stringResource(id = CommonStrings.common_settings)
-                )
-            ),
-             */
-            style = ListItemStyle.Primary,
-        )
+        if (contextMenu.markAsUnreadFeatureFlagEnabled) {
+            ListItem(
+                headlineContent = {
+                    Text(
+                        text = stringResource(
+                            id = if (contextMenu.hasNewContent) {
+                                R.string.screen_roomlist_mark_as_read
+                            } else {
+                                R.string.screen_roomlist_mark_as_unread
+                            }
+                        ),
+                        style = MaterialTheme.typography.bodyLarge,
+                    )
+                },
+                modifier = Modifier.clickable {
+                    if (contextMenu.hasNewContent) {
+                        onRoomMarkReadClicked()
+                    } else {
+                        onRoomMarkUnreadClicked()
+                    }
+                },
+                /* TODO Design
+                leadingContent = ListItemContent.Icon(
+                    iconSource = IconSource.Vector(
+                        CompoundIcons.Settings,
+                        contentDescription = stringResource(id = CommonStrings.common_settings)
+                    )
+                ),
+                 */
+                style = ListItemStyle.Primary,
+            )
+        }
         ListItem(
             headlineContent = {
                 Text(

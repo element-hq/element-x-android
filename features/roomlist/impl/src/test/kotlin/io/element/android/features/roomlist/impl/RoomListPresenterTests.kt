@@ -356,6 +356,7 @@ class RoomListPresenterTests {
                     roomId = summary.roomId,
                     roomName = summary.name,
                     isDm = false,
+                    markAsUnreadFeatureFlagEnabled = true,
                     hasNewContent = false,
                 )
             )
@@ -382,6 +383,7 @@ class RoomListPresenterTests {
                     roomId = summary.roomId,
                     roomName = summary.name,
                     isDm = false,
+                    markAsUnreadFeatureFlagEnabled = true,
                     hasNewContent = false,
                 )
             )

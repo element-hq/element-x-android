@@ -106,5 +106,6 @@ internal fun aContextMenuShown(
     roomId = RoomId("!aRoom:aDomain"),
     roomName = roomName,
     isDm = isDm,
+    markAsUnreadFeatureFlagEnabled = true,
     hasNewContent = hasNewContent,
 )

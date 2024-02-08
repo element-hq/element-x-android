@@ -111,6 +111,9 @@ class RoomListPresenter @Inject constructor(
             }
         }
 
+        val markAsUnreadFeatureFlagEnabled by featureFlagService.isFeatureEnabledFlow(FeatureFlags.MarkAsUnread)
+            .collectAsState(initial = null)
+
         // Avatar indicator
         val showAvatarIndicator by indicatorService.showRoomListTopBarIndicator()
 
@@ -135,6 +138,7 @@ class RoomListPresenter @Inject constructor(
                         roomId = event.roomListRoomSummary.roomId,
                         roomName = event.roomListRoomSummary.name,
                         isDm = event.roomListRoomSummary.isDm,
+                        markAsUnreadFeatureFlagEnabled = markAsUnreadFeatureFlagEnabled == true,
                         hasNewContent = event.roomListRoomSummary.hasNewContent
                     )
                 }
