@@ -65,7 +65,7 @@ class TypingNotificationStateProvider : PreviewParameterProvider<TypingNotificat
             ),
             aTypingNotificationState(
                 typingMembers = listOf(
-                    aTypingRoomMember(displayName = "Alice with a very long display name"),
+                    aTypingRoomMember(displayName = "Alice with a very long display name which means that it will be truncated"),
                 ),
             ),
         )

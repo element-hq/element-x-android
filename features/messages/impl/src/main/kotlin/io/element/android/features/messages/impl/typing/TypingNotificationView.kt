@@ -47,7 +47,7 @@ fun TypingNotificationView(
     Text(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 68.dp, vertical = 2.dp),
+            .padding(horizontal = 24.dp, vertical = 2.dp),
         text = typingNotificationText,
         overflow = TextOverflow.Ellipsis,
         maxLines = 1,
