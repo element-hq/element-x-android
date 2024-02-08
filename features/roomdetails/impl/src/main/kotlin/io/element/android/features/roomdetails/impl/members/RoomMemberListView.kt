@@ -194,10 +194,8 @@ private fun RoomMemberListTopBar(
     canInvite: Boolean,
     onBackPressed: () -> Unit,
     onInvitePressed: () -> Unit,
-    modifier: Modifier = Modifier,
 ) {
     TopAppBar(
-        modifier = modifier,
         title = {
             Text(
                 text = stringResource(CommonStrings.common_people),

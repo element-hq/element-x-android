@@ -124,11 +124,10 @@ private fun PlayerButton(
     type: PlayerButtonType,
     enabled: Boolean,
     onClick: () -> Unit,
-    modifier: Modifier = Modifier,
 ) {
     IconButton(
         onClick = onClick,
-        modifier = modifier
+        modifier = Modifier
             .background(color = ElementTheme.colors.bgCanvasDefault, shape = CircleShape)
             .size(30.dp),
         enabled = enabled,

@@ -86,10 +86,8 @@ fun SetupPinView(
 private fun SetupPinHeader(
     isValidationStep: Boolean,
     appName: String,
-    modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         IconTitleSubtitleMolecule(
@@ -107,7 +105,6 @@ private fun SetupPinHeader(
 @Composable
 private fun SetupPinContent(
     state: SetupPinState,
-    modifier: Modifier = Modifier,
 ) {
     val focusRequester = remember { FocusRequester() }
     LaunchedEffect(Unit) {
@@ -119,14 +116,13 @@ private fun SetupPinContent(
         onValueChange = { entry ->
             state.eventSink(SetupPinEvents.OnPinEntryChanged(entry, state.isConfirmationStep))
         },
-        modifier = modifier
+        modifier = Modifier
             .focusRequester(focusRequester)
             .padding(top = 36.dp)
             .fillMaxWidth()
     )
     if (state.setupPinFailure != null) {
         ErrorDialog(
-            modifier = modifier,
             title = state.setupPinFailure.title(),
             content = state.setupPinFailure.content(),
             onDismiss = {

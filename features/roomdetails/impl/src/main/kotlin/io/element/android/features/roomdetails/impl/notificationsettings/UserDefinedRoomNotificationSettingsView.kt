@@ -103,10 +103,8 @@ fun UserDefinedRoomNotificationSettingsView(
 private fun UserDefinedRoomNotificationSettingsTopBar(
     roomName: String,
     onBackPressed: () -> Unit,
-    modifier: Modifier = Modifier,
 ) {
     TopAppBar(
-        modifier = modifier,
         title = {
             Text(
                 text = roomName,

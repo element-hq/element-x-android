@@ -88,10 +88,8 @@ private fun AddPeopleViewTopBar(
     hasSelectedUsers: Boolean,
     onBackPressed: () -> Unit,
     onNextPressed: () -> Unit,
-    modifier: Modifier = Modifier,
 ) {
     TopAppBar(
-        modifier = modifier,
         title = {
             Text(
                 text = stringResource(id = R.string.screen_create_room_add_people_title),

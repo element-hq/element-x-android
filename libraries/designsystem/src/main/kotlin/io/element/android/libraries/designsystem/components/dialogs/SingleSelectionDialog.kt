@@ -79,7 +79,6 @@ private fun SingleSelectionDialogContent(
     onOptionSelected: (Int) -> Unit,
     dismissButtonTitle: String,
     onDismissRequest: () -> Unit,
-    modifier: Modifier = Modifier,
     title: String? = null,
     initialSelection: Int? = null,
     subtitle: @Composable (() -> Unit)? = null,
@@ -87,7 +86,6 @@ private fun SingleSelectionDialogContent(
     SimpleAlertDialogContent(
         title = title,
         subtitle = subtitle,
-        modifier = modifier,
         submitText = dismissButtonTitle,
         onSubmitClicked = onDismissRequest,
         applyPaddingToContents = false,

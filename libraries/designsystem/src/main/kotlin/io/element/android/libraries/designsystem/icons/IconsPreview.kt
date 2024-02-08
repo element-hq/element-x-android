@@ -98,11 +98,9 @@ private fun IconsPreview(
     title: String,
     iconsList: ImmutableList<Int>,
     iconNameTransform: (String) -> String,
-    modifier: Modifier = Modifier,
 ) = ElementPreview {
     val context = LocalContext.current
     Column(
-        modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(2.dp),
     ) {
         Text(

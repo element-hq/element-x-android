@@ -126,9 +126,8 @@ private val ADD_EMOJI_SIZE = 16.dp
 @Composable
 private fun TextContent(
     text: String,
-    modifier: Modifier = Modifier,
 ) = Text(
-    modifier = modifier
+    modifier = Modifier
         .height(REACTION_EMOJI_LINE_HEIGHT.toDp()),
     text = text,
     style = ElementTheme.typography.fontBodyMdRegular,
@@ -138,27 +137,24 @@ private fun TextContent(
 @Composable
 private fun IconContent(
     @DrawableRes resourceId: Int,
-    modifier: Modifier = Modifier
 ) = Icon(
     resourceId = resourceId,
     contentDescription = stringResource(id = R.string.screen_room_timeline_add_reaction),
     tint = ElementTheme.materialColors.secondary,
-    modifier = modifier
+    modifier = Modifier
         .size(ADD_EMOJI_SIZE)
 )
 
 @Composable
 private fun ReactionContent(
     reaction: AggregatedReaction,
-    modifier: Modifier = Modifier,
 ) = Row(
     verticalAlignment = Alignment.CenterVertically,
-    modifier = modifier,
 ) {
     // Check if this is a custom reaction (MSC4027)
     if (reaction.key.startsWith("mxc://")) {
         AsyncImage(
-            modifier = modifier
+            modifier = Modifier
                 .heightIn(min = REACTION_EMOJI_LINE_HEIGHT.toDp(), max = REACTION_EMOJI_LINE_HEIGHT.toDp())
                 .aspectRatio(REACTION_IMAGE_ASPECT_RATIO, false),
             model = MediaRequestData(MediaSource(reaction.key), MediaRequestData.Kind.Content),

@@ -101,10 +101,9 @@ private fun AttachmentSourcePickerMenu(
     onSendLocationClicked: () -> Unit,
     onCreatePollClicked: () -> Unit,
     enableTextFormatting: Boolean,
-    modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = modifier
+        modifier = Modifier
             .navigationBarsPadding()
             .imePadding()
     ) {

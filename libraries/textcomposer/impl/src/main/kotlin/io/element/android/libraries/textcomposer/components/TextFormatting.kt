@@ -43,6 +43,7 @@ import io.element.android.wysiwyg.view.models.LinkAction
 import kotlinx.coroutines.launch
 import uniffi.wysiwyg_composer.ActionState
 import uniffi.wysiwyg_composer.ComposerAction
+
 @Composable
 internal fun TextFormatting(
     state: RichTextEditorState,

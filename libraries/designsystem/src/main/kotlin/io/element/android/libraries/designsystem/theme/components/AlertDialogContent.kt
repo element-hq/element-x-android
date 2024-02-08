@@ -55,7 +55,6 @@ internal fun SimpleAlertDialogContent(
     content: String,
     submitText: String,
     onSubmitClicked: () -> Unit,
-    modifier: Modifier = Modifier,
     title: String? = null,
     subtitle: @Composable (() -> Unit)? = null,
     destructiveSubmit: Boolean = false,
@@ -67,7 +66,6 @@ internal fun SimpleAlertDialogContent(
     icon: @Composable (() -> Unit)? = null,
 ) {
     SimpleAlertDialogContent(
-        modifier = modifier,
         icon = icon,
         title = title,
         subtitle = subtitle,
@@ -92,7 +90,6 @@ internal fun SimpleAlertDialogContent(
 internal fun SimpleAlertDialogContent(
     submitText: String,
     onSubmitClicked: () -> Unit,
-    modifier: Modifier = Modifier,
     title: String? = null,
     subtitle: @Composable (() -> Unit)? = null,
     destructiveSubmit: Boolean = false,
@@ -148,7 +145,6 @@ internal fun SimpleAlertDialogContent(
                 }
             }
         },
-        modifier = modifier,
         title = title?.let { titleText ->
             @Composable {
                 Text(
@@ -192,11 +188,9 @@ internal fun AlertDialogContent(
     iconContentColor: Color,
     titleContentColor: Color,
     textContentColor: Color,
-    modifier: Modifier = Modifier,
     applyPaddingToContents: Boolean = true,
 ) {
     Surface(
-        modifier = modifier,
         shape = shape,
         color = containerColor,
         tonalElevation = tonalElevation,

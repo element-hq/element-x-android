@@ -78,11 +78,9 @@ private fun SignedOutHeader(state: SignedOutState) {
 }
 
 @Composable
-private fun SignedOutContent(
-    modifier: Modifier = Modifier,
-) {
+private fun SignedOutContent() {
     Box(
-        modifier = modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxSize(),
         contentAlignment = BiasAlignment(
             horizontalBias = 0f,
             verticalBias = -0.4f
@@ -112,12 +110,9 @@ private fun SignedOutContent(
 
 @Composable
 private fun SignedOutFooter(
-    modifier: Modifier = Modifier,
     onSignInAgain: () -> Unit,
 ) {
-    ButtonColumnMolecule(
-        modifier = modifier,
-    ) {
+    ButtonColumnMolecule {
         Button(
             text = stringResource(id = CommonStrings.action_sign_in_again),
             onClick = onSignInAgain,

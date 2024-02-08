@@ -80,7 +80,6 @@ private fun ListDialogContent(
     onSubmitClicked: () -> Unit,
     cancelText: String,
     submitText: String,
-    modifier: Modifier = Modifier,
     title: String? = null,
     enabled: Boolean = true,
     subtitle: @Composable (() -> Unit)? = null,
@@ -88,7 +87,6 @@ private fun ListDialogContent(
     SimpleAlertDialogContent(
         title = title,
         subtitle = subtitle,
-        modifier = modifier,
         cancelText = cancelText,
         submitText = submitText,
         onCancelClicked = onDismissRequest,

@@ -35,10 +35,8 @@ import io.element.android.x.R
 
 @Preview
 @Composable
-internal fun IconPreview(
-    modifier: Modifier = Modifier,
-) {
-    Box(modifier = modifier) {
+internal fun IconPreview() {
+    Box {
         Image(painter = painterResource(id = R.mipmap.ic_launcher_background), contentDescription = null)
         Image(painter = painterResource(id = R.mipmap.ic_launcher_foreground), contentDescription = null)
     }
@@ -46,10 +44,8 @@ internal fun IconPreview(
 
 @Preview
 @Composable
-internal fun RoundIconPreview(
-    modifier: Modifier = Modifier,
-) {
-    Box(modifier = modifier.clip(shape = CircleShape)) {
+internal fun RoundIconPreview() {
+    Box(modifier = Modifier.clip(shape = CircleShape)) {
         Image(painter = painterResource(id = R.mipmap.ic_launcher_background), contentDescription = null)
         Image(painter = painterResource(id = R.mipmap.ic_launcher_foreground), contentDescription = null)
     }
@@ -57,11 +53,9 @@ internal fun RoundIconPreview(
 
 @Preview
 @Composable
-internal fun MonochromeIconPreview(
-    modifier: Modifier = Modifier,
-) {
+internal fun MonochromeIconPreview() {
     Box(
-        modifier = modifier
+        modifier = Modifier
             .size(108.dp)
             .background(Color(0xFF2F3133))
             .clip(shape = RoundedCornerShape(32.dp)),

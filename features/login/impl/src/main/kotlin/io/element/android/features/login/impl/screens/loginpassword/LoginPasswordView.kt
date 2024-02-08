@@ -179,7 +179,6 @@ private fun LoginForm(
     state: LoginPasswordState,
     isLoading: Boolean,
     onSubmit: () -> Unit,
-    modifier: Modifier = Modifier
 ) {
     var loginFieldState by textFieldState(stateValue = state.formState.login)
     var passwordFieldState by textFieldState(stateValue = state.formState.password)
@@ -187,7 +186,7 @@ private fun LoginForm(
     val focusManager = LocalFocusManager.current
     val eventSink = state.eventSink
 
-    Column(modifier) {
+    Column {
         Text(
             text = stringResource(R.string.screen_login_form_header),
             modifier = Modifier.padding(start = 16.dp),
