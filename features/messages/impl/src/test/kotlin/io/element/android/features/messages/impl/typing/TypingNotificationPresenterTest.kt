@@ -178,12 +178,10 @@ class TypingNotificationPresenterTest {
         sessionPreferencesStore: SessionPreferencesStore = InMemorySessionPreferencesStore(
             isRenderTypingNotificationsEnabled = true
         ),
-    ): TypingNotificationPresenter {
-        return TypingNotificationPresenter(
-            room = matrixRoom,
-            sessionPreferencesStore = sessionPreferencesStore,
-        )
-    }
+    ) = TypingNotificationPresenter(
+        room = matrixRoom,
+        sessionPreferencesStore = sessionPreferencesStore,
+    )
 
     private fun createDefaultRoomMember(
         userId: UserId,
