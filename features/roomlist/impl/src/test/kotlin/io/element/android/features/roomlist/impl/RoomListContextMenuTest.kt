@@ -116,7 +116,7 @@ class RoomListContextMenuTest {
     fun `clicking on Settings invokes the expected callback and generates expected Event`() {
         val eventsRecorder = EventsRecorder<RoomListEvents>()
         val contextMenu = aContextMenuShown()
-        val callback = EnsureCalledOnceWithParam(contextMenu.roomId)
+        val callback = EnsureCalledOnceWithParam(contextMenu.roomId, Unit)
         rule.setContent {
             RoomListContextMenu(
                 contextMenu = contextMenu,
