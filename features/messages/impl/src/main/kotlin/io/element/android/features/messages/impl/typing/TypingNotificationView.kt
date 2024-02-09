@@ -36,6 +36,7 @@ import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.room.RoomMember
+import kotlinx.collections.immutable.ImmutableList
 
 @Composable
 fun TypingNotificationView(
@@ -57,7 +58,7 @@ fun TypingNotificationView(
 }
 
 @Composable
-private fun computeTypingNotificationText(typingMembers: List<RoomMember>): AnnotatedString {
+private fun computeTypingNotificationText(typingMembers: ImmutableList<RoomMember>): AnnotatedString {
     val names = when (typingMembers.size) {
         0 -> "" // Cannot happen
         1 -> typingMembers[0].disambiguatedDisplayName
