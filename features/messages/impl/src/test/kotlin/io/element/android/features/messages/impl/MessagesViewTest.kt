@@ -38,6 +38,8 @@ import io.element.android.features.messages.impl.attachments.Attachment
 import io.element.android.features.messages.impl.messagecomposer.aMessageComposerState
 import io.element.android.features.messages.impl.timeline.components.customreaction.CustomReactionEvents
 import io.element.android.features.messages.impl.timeline.components.reactionsummary.ReactionSummaryEvents
+import io.element.android.features.messages.impl.timeline.components.retrysendmenu.RetrySendMenuEvents
+import io.element.android.features.messages.impl.timeline.components.retrysendmenu.aRetrySendMenuState
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.testtags.TestTags
@@ -126,6 +128,22 @@ class MessagesViewTest {
         // Cannot perform click on "Text", it's not detected. Use tag instead
         rule.onAllNodesWithTag(TestTags.messageBubble.value).onFirst().performClick()
         callback.assertSuccess()
+    }
+
+    @Test
+    fun `clicking on an Event timestamp in error emits the expected Event`() {
+        val eventsRecorder = EventsRecorder<RetrySendMenuEvents>()
+        val state = aMessagesState(
+            retrySendMenuState = aRetrySendMenuState(
+                eventSink = eventsRecorder
+            ),
+        )
+        val timelineItem = state.timelineState.timelineItems[1] as TimelineItem.Event
+        rule.setMessagesView(
+            state = state,
+        )
+        rule.onAllNodesWithText(timelineItem.sentTime)[1].performClick()
+        eventsRecorder.assertSingle(RetrySendMenuEvents.EventSelected(timelineItem))
     }
 
     @Test
