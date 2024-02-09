@@ -154,9 +154,10 @@ fun aReactionSummaryState(
 )
 
 fun aCustomReactionState(
+    target: CustomReactionState.Target = CustomReactionState.Target.None,
     eventSink: (CustomReactionEvents) -> Unit = {},
 ) = CustomReactionState(
-    target = CustomReactionState.Target.None,
+    target = target,
     selectedEmoji = persistentSetOf(),
     eventSink = eventSink,
 )

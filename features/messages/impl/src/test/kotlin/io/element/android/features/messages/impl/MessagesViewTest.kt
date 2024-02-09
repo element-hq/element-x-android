@@ -33,6 +33,9 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.swipeRight
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import io.element.android.emojibasebindings.Emoji
+import io.element.android.emojibasebindings.EmojibaseCategory
+import io.element.android.emojibasebindings.EmojibaseStore
 import io.element.android.features.messages.impl.actionlist.ActionListEvents
 import io.element.android.features.messages.impl.actionlist.ActionListState
 import io.element.android.features.messages.impl.actionlist.anActionListState
@@ -45,6 +48,7 @@ import io.element.android.features.messages.impl.timeline.aTimelineItemReadRecei
 import io.element.android.features.messages.impl.timeline.aTimelineRoomInfo
 import io.element.android.features.messages.impl.timeline.aTimelineState
 import io.element.android.features.messages.impl.timeline.components.customreaction.CustomReactionEvents
+import io.element.android.features.messages.impl.timeline.components.customreaction.CustomReactionState
 import io.element.android.features.messages.impl.timeline.components.reactionsummary.ReactionSummaryEvents
 import io.element.android.features.messages.impl.timeline.components.receipt.aReadReceiptData
 import io.element.android.features.messages.impl.timeline.components.receipt.bottomsheet.ReadReceiptBottomSheetEvents
@@ -425,6 +429,47 @@ class MessagesViewTest {
         // Give time for the close animation to complete
         rule.mainClock.advanceTimeBy(milliseconds = 1_000)
         eventsRecorder.assertSingle(CustomReactionEvents.ShowCustomReactionSheet(timelineItem))
+    }
+
+    @Test
+    fun `clicking on a custom emoji emits the expected Events`() {
+        val aUnicode = "🙈"
+        val customReactionStateEventsRecorder = EventsRecorder<CustomReactionEvents>()
+        val eventsRecorder = EventsRecorder<MessagesEvents>()
+        val state = aMessagesState(
+            eventSink = eventsRecorder,
+        )
+        val timelineItem = state.timelineState.timelineItems.first() as TimelineItem.Event
+        val stateWithCustomReactionState = state.copy(
+            customReactionState = aCustomReactionState(
+                target = CustomReactionState.Target.Success(
+                    event = timelineItem,
+                    emojibaseStore = EmojibaseStore(
+                        categories = mapOf(
+                            EmojibaseCategory.People to listOf(
+                                Emoji(
+                                    hexcode = "",
+                                    label = "",
+                                    tags = emptyList(),
+                                    shortcodes = emptyList(),
+                                    unicode = aUnicode,
+                                    skins = null,
+                                )
+                            )
+                        )
+                    ),
+                ),
+                eventSink = customReactionStateEventsRecorder
+            ),
+        )
+        rule.setMessagesView(
+            state = stateWithCustomReactionState,
+        )
+        rule.onNodeWithText(aUnicode, useUnmergedTree = true).performClick()
+        // Give time for the close animation to complete
+        rule.mainClock.advanceTimeBy(milliseconds = 1_000)
+        customReactionStateEventsRecorder.assertSingle(CustomReactionEvents.DismissCustomReactionSheet)
+        eventsRecorder.assertSingle(MessagesEvents.ToggleReaction(aUnicode, timelineItem.eventId!!))
     }
 }
 

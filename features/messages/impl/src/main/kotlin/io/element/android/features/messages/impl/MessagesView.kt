@@ -250,7 +250,6 @@ fun MessagesView(
         state = state.customReactionState,
         onEmojiSelected = { eventId, emoji ->
             state.eventSink(MessagesEvents.ToggleReaction(emoji.unicode, eventId))
-            state.customReactionState.eventSink(CustomReactionEvents.DismissCustomReactionSheet)
         }
     )
 
