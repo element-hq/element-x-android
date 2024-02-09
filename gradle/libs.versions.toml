@@ -60,7 +60,7 @@ android_gradle_plugin = { module = "com.android.tools.build:gradle", version.ref
 android_desugar = "com.android.tools:desugar_jdk_libs:2.0.4"
 kotlin_gradle_plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 kover_gradle_plugin = { module = "org.jetbrains.kotlinx:kover-gradle-plugin", version.ref = "kover" }
-gms_google_services = "com.google.gms:google-services:4.4.0"
+gms_google_services = "com.google.gms:google-services:4.4.1"
 # https://firebase.google.com/docs/android/setup#available-libraries
 google_firebase_bom = "com.google.firebase:firebase-bom:32.7.2"
 firebase_appdistribution_gradle = { module = "com.google.firebase:firebase-appdistribution-gradle", version.ref = "firebaseAppDistribution" }
