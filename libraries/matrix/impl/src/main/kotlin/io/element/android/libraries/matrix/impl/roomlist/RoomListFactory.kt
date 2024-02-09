@@ -18,6 +18,7 @@ package io.element.android.libraries.matrix.impl.roomlist
 
 import io.element.android.libraries.matrix.api.roomlist.DynamicRoomList
 import io.element.android.libraries.matrix.api.roomlist.RoomList
+import io.element.android.libraries.matrix.api.roomlist.RoomListFilter
 import io.element.android.libraries.matrix.api.roomlist.RoomSummary
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
@@ -28,7 +29,6 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import org.matrix.rustcomponents.sdk.RoomListEntriesDynamicFilterKind
 import org.matrix.rustcomponents.sdk.RoomListLoadingState
 import org.matrix.rustcomponents.sdk.RoomList as InnerRoomList
 import org.matrix.rustcomponents.sdk.RoomListService as InnerRoomListService
@@ -44,7 +44,7 @@ internal class RoomListFactory(
      */
     fun createRoomList(
         pageSize: Int,
-        initialFilter: DynamicRoomList.Filter = DynamicRoomList.Filter.All,
+        initialFilter: RoomListFilter = RoomListFilter.all(),
         innerProvider: suspend () -> InnerRoomList
     ): DynamicRoomList {
         val loadingStateFlow: MutableStateFlow<RoomList.LoadingState> = MutableStateFlow(RoomList.LoadingState.NotLoaded)
@@ -91,7 +91,7 @@ internal class RoomListFactory(
 private class RustDynamicRoomList(
     override val summaries: MutableStateFlow<List<RoomSummary>>,
     override val loadingState: MutableStateFlow<RoomList.LoadingState>,
-    override val currentFilter: MutableStateFlow<DynamicRoomList.Filter>,
+    override val currentFilter: MutableStateFlow<RoomListFilter>,
     override val loadedPages: MutableStateFlow<Int>,
     private val dynamicEvents: MutableSharedFlow<RoomListDynamicEvents>,
     private val processor: RoomSummaryListProcessor,
@@ -101,7 +101,7 @@ private class RustDynamicRoomList(
         processor.rebuildRoomSummaries()
     }
 
-    override suspend fun updateFilter(filter: DynamicRoomList.Filter) {
+    override suspend fun updateFilter(filter: RoomListFilter) {
         currentFilter.emit(filter)
         val filterEvent = RoomListDynamicEvents.SetFilter(filter.toRustFilter())
         dynamicEvents.emit(filterEvent)
@@ -122,14 +122,5 @@ private fun RoomListLoadingState.toLoadingState(): RoomList.LoadingState {
     return when (this) {
         is RoomListLoadingState.Loaded -> RoomList.LoadingState.Loaded(maximumNumberOfRooms?.toInt() ?: 0)
         RoomListLoadingState.NotLoaded -> RoomList.LoadingState.NotLoaded
-    }
-}
-
-private fun DynamicRoomList.Filter.toRustFilter(): RoomListEntriesDynamicFilterKind {
-    return when (this) {
-        DynamicRoomList.Filter.All -> RoomListEntriesDynamicFilterKind.All
-        is DynamicRoomList.Filter.NormalizedMatchRoomName -> RoomListEntriesDynamicFilterKind.NormalizedMatchRoomName(this.pattern)
-        DynamicRoomList.Filter.None -> RoomListEntriesDynamicFilterKind.None
-        DynamicRoomList.Filter.AllNonLeft -> RoomListEntriesDynamicFilterKind.AllNonLeft
     }
 }
