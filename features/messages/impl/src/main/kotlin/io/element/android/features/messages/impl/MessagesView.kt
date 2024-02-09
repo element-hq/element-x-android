@@ -125,6 +125,7 @@ fun MessagesView(
     onCreatePollClicked: () -> Unit,
     onJoinCallClicked: () -> Unit,
     modifier: Modifier = Modifier,
+    forceJumpToBottomVisibility: Boolean = false
 ) {
     OnLifecycleEvent { _, event ->
         state.voiceMessageComposerState.eventSink(VoiceMessageComposerEvents.LifecycleEvent(event))
@@ -224,6 +225,7 @@ fun MessagesView(
                 onSwipeToReply = { targetEvent ->
                     state.eventSink(MessagesEvents.HandleAction(TimelineItemAction.Reply, targetEvent))
                 },
+                forceJumpToBottomVisibility = forceJumpToBottomVisibility,
             )
         },
         snackbarHost = {
@@ -324,6 +326,7 @@ private fun MessagesViewContent(
     onTimestampClicked: (TimelineItem.Event) -> Unit,
     onSendLocationClicked: () -> Unit,
     onCreatePollClicked: () -> Unit,
+    forceJumpToBottomVisibility: Boolean,
     modifier: Modifier = Modifier,
     onSwipeToReply: (TimelineItem.Event) -> Unit,
 ) {
@@ -384,6 +387,7 @@ private fun MessagesViewContent(
                     modifier = Modifier.padding(paddingValues),
                     state = state.timelineState,
                     roomName = state.roomName.dataOrNull(),
+                    typingNotificationState = state.typingNotificationState,
                     onMessageClicked = onMessageClicked,
                     onMessageLongClicked = onMessageLongClicked,
                     onUserDataClicked = onUserDataClicked,
@@ -393,6 +397,7 @@ private fun MessagesViewContent(
                     onMoreReactionsClicked = onMoreReactionsClicked,
                     onReadReceiptClick = onReadReceiptClick,
                     onSwipeToReply = onSwipeToReply,
+                    forceJumpToBottomVisibility = forceJumpToBottomVisibility,
                 )
             },
             sheetContent = { subcomposing: Boolean ->
@@ -573,5 +578,6 @@ internal fun MessagesViewPreview(@PreviewParameter(MessagesStateProvider::class)
         onSendLocationClicked = {},
         onCreatePollClicked = {},
         onJoinCallClicked = {},
+        forceJumpToBottomVisibility = true,
     )
 }

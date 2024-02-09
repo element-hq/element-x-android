@@ -42,6 +42,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemPollContent
+import io.element.android.features.messages.impl.typing.TypingNotificationPresenter
 import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessageComposerPlayer
 import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessageComposerPresenter
 import io.element.android.features.messages.impl.voicemessages.timeline.FakeRedactedVoiceMessageManager
@@ -730,6 +731,10 @@ class MessagesPresenterTest {
             }
         }
         val actionListPresenter = ActionListPresenter(appPreferencesStore = appPreferencesStore)
+        val typingNotificationPresenter = TypingNotificationPresenter(
+            room = matrixRoom,
+            sessionPreferencesStore = sessionPreferencesStore,
+        )
         val readReceiptBottomSheetPresenter = ReadReceiptBottomSheetPresenter()
         val customReactionPresenter = CustomReactionPresenter(emojibaseProvider = FakeEmojibaseProvider())
         val reactionSummaryPresenter = ReactionSummaryPresenter(room = matrixRoom)
@@ -739,6 +744,7 @@ class MessagesPresenterTest {
             composerPresenter = messageComposerPresenter,
             voiceMessageComposerPresenter = voiceMessageComposerPresenter,
             timelinePresenterFactory = timelinePresenterFactory,
+            typingNotificationPresenter = typingNotificationPresenter,
             actionListPresenter = actionListPresenter,
             customReactionPresenter = customReactionPresenter,
             reactionSummaryPresenter = reactionSummaryPresenter,
