@@ -31,6 +31,7 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTouchInput
+import androidx.compose.ui.test.swipeRight
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.element.android.features.messages.impl.actionlist.ActionListEvents
 import io.element.android.features.messages.impl.actionlist.ActionListState
@@ -39,7 +40,9 @@ import io.element.android.features.messages.impl.actionlist.model.TimelineItemAc
 import io.element.android.features.messages.impl.attachments.Attachment
 import io.element.android.features.messages.impl.messagecomposer.aMessageComposerState
 import io.element.android.features.messages.impl.timeline.aTimelineItemEvent
+import io.element.android.features.messages.impl.timeline.aTimelineItemList
 import io.element.android.features.messages.impl.timeline.aTimelineItemReadReceipts
+import io.element.android.features.messages.impl.timeline.aTimelineRoomInfo
 import io.element.android.features.messages.impl.timeline.aTimelineState
 import io.element.android.features.messages.impl.timeline.components.customreaction.CustomReactionEvents
 import io.element.android.features.messages.impl.timeline.components.reactionsummary.ReactionSummaryEvents
@@ -48,6 +51,7 @@ import io.element.android.features.messages.impl.timeline.components.receipt.bot
 import io.element.android.features.messages.impl.timeline.components.retrysendmenu.RetrySendMenuEvents
 import io.element.android.features.messages.impl.timeline.components.retrysendmenu.aRetrySendMenuState
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
+import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -232,6 +236,39 @@ class MessagesViewTest {
         )
         rule.onNodeWithTag(TestTags.messageReadReceipts.value).performClick()
         eventsRecorder.assertSingle(ReadReceiptBottomSheetEvents.EventSelected(timelineItem))
+    }
+
+    @Test
+    fun `swiping on an Event emits the expected Event`() {
+        swipeTest(userHasPermissionToSendMessage = true)
+    }
+
+    @Test
+    fun `swiping on an Event emits no Event if user does not have permission to send message`() {
+        swipeTest(userHasPermissionToSendMessage = false)
+    }
+
+    private fun swipeTest(userHasPermissionToSendMessage: Boolean) {
+        val eventsRecorder = EventsRecorder<MessagesEvents>()
+        val state = aMessagesState(
+            timelineState = aTimelineState(
+                timelineItems = aTimelineItemList(aTimelineItemTextContent()),
+                timelineRoomInfo = aTimelineRoomInfo(
+                    userHasPermissionToSendMessage = userHasPermissionToSendMessage
+                ),
+            ),
+            eventSink = eventsRecorder,
+        )
+        rule.setMessagesView(
+            state = state,
+        )
+        rule.onAllNodesWithTag(TestTags.messageBubble.value).onFirst().performTouchInput { swipeRight(endX = 200f) }
+        if (userHasPermissionToSendMessage) {
+            val timelineItem = state.timelineState.timelineItems.first() as TimelineItem.Event
+            eventsRecorder.assertSingle(MessagesEvents.HandleAction(TimelineItemAction.Reply, timelineItem))
+        } else {
+            eventsRecorder.assertEmpty()
+        }
     }
 
     @Test

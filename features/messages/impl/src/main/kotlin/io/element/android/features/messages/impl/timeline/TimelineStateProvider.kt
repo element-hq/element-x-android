@@ -49,10 +49,11 @@ fun aTimelineState(
     timelineItems: ImmutableList<TimelineItem> = persistentListOf(),
     paginationState: MatrixTimeline.PaginationState = aPaginationState(),
     renderReadReceipts: Boolean = false,
+    timelineRoomInfo: TimelineRoomInfo = aTimelineRoomInfo(),
     eventSink: (TimelineEvents) -> Unit = {},
 ) = TimelineState(
     timelineItems = timelineItems,
-    timelineRoomInfo = aTimelineRoomInfo(),
+    timelineRoomInfo = timelineRoomInfo,
     paginationState = paginationState,
     renderReadReceipts = renderReadReceipts,
     highlightedEventId = null,
@@ -235,8 +236,9 @@ internal fun aGroupedEvents(
 
 internal fun aTimelineRoomInfo(
     isDirect: Boolean = false,
+    userHasPermissionToSendMessage: Boolean = true,
 ) = TimelineRoomInfo(
     isDirect = isDirect,
-    userHasPermissionToSendMessage = true,
+    userHasPermissionToSendMessage = userHasPermissionToSendMessage,
     userHasPermissionToSendReaction = true,
 )
