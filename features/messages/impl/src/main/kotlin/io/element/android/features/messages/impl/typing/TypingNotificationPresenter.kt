@@ -18,10 +18,12 @@ package io.element.android.features.messages.impl.typing
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import io.element.android.features.preferences.api.store.SessionPreferencesStore
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
@@ -29,6 +31,7 @@ import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
 import io.element.android.libraries.matrix.api.room.roomMembers
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
@@ -37,29 +40,40 @@ import javax.inject.Inject
 
 class TypingNotificationPresenter @Inject constructor(
     private val room: MatrixRoom,
+    private val sessionPreferencesStore: SessionPreferencesStore,
 ) : Presenter<TypingNotificationState> {
     @Composable
     override fun present(): TypingNotificationState {
-        var typingMembers by remember { mutableStateOf(emptyList<RoomMember>()) }
-        LaunchedEffect(Unit) {
-            combine(room.roomTypingMembersFlow, room.membersStateFlow) { typingMembers, membersState ->
-                typingMembers
-                    .map { userId ->
-                        membersState.roomMembers()
-                            ?.firstOrNull { roomMember -> roomMember.userId == userId }
-                            ?: createDefaultRoomMemberForTyping(userId)
-                    }
+        val typingMembersState = remember { mutableStateOf(emptyList<RoomMember>()) }
+        val renderTypingNotifications by sessionPreferencesStore.isRenderTypingNotificationsEnabled().collectAsState(initial = true)
+        LaunchedEffect(renderTypingNotifications) {
+            if (renderTypingNotifications) {
+                observeRoomTypingMembers(typingMembersState)
+            } else {
+                typingMembersState.value = emptyList()
             }
-                .distinctUntilChanged()
-                .onEach { members ->
-                    typingMembers = members
-                }
-                .launchIn(this)
         }
 
         return TypingNotificationState(
-            typingMembers = typingMembers.toImmutableList(),
+            renderTypingNotifications = renderTypingNotifications,
+            typingMembers = typingMembersState.value.toImmutableList(),
         )
+    }
+
+    private fun CoroutineScope.observeRoomTypingMembers(typingMembersState: MutableState<List<RoomMember>>) {
+        combine(room.roomTypingMembersFlow, room.membersStateFlow) { typingMembers, membersState ->
+            typingMembers
+                .map { userId ->
+                    membersState.roomMembers()
+                        ?.firstOrNull { roomMember -> roomMember.userId == userId }
+                        ?: createDefaultRoomMemberForTyping(userId)
+                }
+        }
+            .distinctUntilChanged()
+            .onEach { members ->
+                typingMembersState.value = members
+            }
+            .launchIn(this)
     }
 }
 

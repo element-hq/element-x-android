@@ -731,7 +731,10 @@ class MessagesPresenterTest {
             }
         }
         val actionListPresenter = ActionListPresenter(appPreferencesStore = appPreferencesStore)
-        val typingNotificationPresenter = TypingNotificationPresenter(matrixRoom)
+        val typingNotificationPresenter = TypingNotificationPresenter(
+            room = matrixRoom,
+            sessionPreferencesStore = sessionPreferencesStore,
+        )
         val readReceiptBottomSheetPresenter = ReadReceiptBottomSheetPresenter()
         val customReactionPresenter = CustomReactionPresenter(emojibaseProvider = FakeEmojibaseProvider())
         val reactionSummaryPresenter = ReactionSummaryPresenter(room = matrixRoom)

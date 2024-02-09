@@ -20,5 +20,6 @@ import io.element.android.libraries.matrix.api.room.RoomMember
 import kotlinx.collections.immutable.ImmutableList
 
 data class TypingNotificationState(
+    val renderTypingNotifications: Boolean,
     val typingMembers: ImmutableList<RoomMember>,
 )

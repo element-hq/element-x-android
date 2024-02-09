@@ -20,6 +20,8 @@ import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import io.element.android.features.preferences.api.store.SessionPreferencesStore
+import io.element.android.libraries.featureflag.test.InMemorySessionPreferencesStore
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
@@ -49,7 +51,44 @@ class TypingNotificationPresenterTest {
             presenter.present()
         }.test {
             val initialState = awaitItem()
+            assertThat(initialState.renderTypingNotifications).isTrue()
             assertThat(initialState.typingMembers).isEmpty()
+        }
+    }
+
+    @Test
+    fun `present - typing notification disabled`() = runTest {
+        val aDefaultRoomMember = createDefaultRoomMember(A_USER_ID_2)
+        val room = FakeMatrixRoom()
+        val sessionPreferencesStore = InMemorySessionPreferencesStore(
+            isRenderTypingNotificationsEnabled = false
+        )
+        val presenter = createPresenter(
+            matrixRoom = room,
+            sessionPreferencesStore = sessionPreferencesStore,
+        )
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            skipItems(1)
+            val initialState = awaitItem()
+            assertThat(initialState.renderTypingNotifications).isFalse()
+            assertThat(initialState.typingMembers).isEmpty()
+            room.givenRoomTypingMembers(listOf(A_USER_ID_2))
+            expectNoEvents()
+            // Preferences changes
+            sessionPreferencesStore.setRenderTypingNotifications(true)
+            skipItems(1)
+            val oneMemberTypingState = awaitItem()
+            assertThat(oneMemberTypingState.renderTypingNotifications).isTrue()
+            assertThat(oneMemberTypingState.typingMembers.size).isEqualTo(1)
+            assertThat(oneMemberTypingState.typingMembers.first()).isEqualTo(aDefaultRoomMember)
+            // Preferences changes again
+            sessionPreferencesStore.setRenderTypingNotifications(false)
+            skipItems(1)
+            val finalState = awaitItem()
+            assertThat(finalState.renderTypingNotifications).isFalse()
+            assertThat(finalState.typingMembers).isEmpty()
         }
     }
 
@@ -136,9 +175,13 @@ class TypingNotificationPresenterTest {
         matrixRoom: MatrixRoom = FakeMatrixRoom().apply {
             givenRoomInfo(aRoomInfo(id = roomId.value, name = ""))
         },
+        sessionPreferencesStore: SessionPreferencesStore = InMemorySessionPreferencesStore(
+            isRenderTypingNotificationsEnabled = true
+        ),
     ): TypingNotificationPresenter {
         return TypingNotificationPresenter(
             room = matrixRoom,
+            sessionPreferencesStore = sessionPreferencesStore,
         )
     }
 

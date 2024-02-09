@@ -74,6 +74,7 @@ class TypingNotificationStateProvider : PreviewParameterProvider<TypingNotificat
 internal fun aTypingNotificationState(
     typingMembers: List<RoomMember> = emptyList(),
 ) = TypingNotificationState(
+    renderTypingNotifications = true,
     typingMembers = typingMembers.toImmutableList(),
 )
 

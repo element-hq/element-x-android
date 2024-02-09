@@ -42,7 +42,7 @@ fun TypingNotificationView(
     state: TypingNotificationState,
     modifier: Modifier = Modifier,
 ) {
-    if (state.typingMembers.isEmpty()) return
+    if (state.typingMembers.isEmpty() || !state.renderTypingNotifications) return
     val typingNotificationText = computeTypingNotificationText(state.typingMembers)
     Text(
         modifier = modifier
