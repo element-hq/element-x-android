@@ -399,6 +399,33 @@ class MessagesViewTest {
         rule.onAllNodesWithContentDescription(moreReactionContentDescription).onFirst().performClick()
         eventsRecorder.assertSingle(CustomReactionEvents.ShowCustomReactionSheet(timelineItem))
     }
+
+    @Test
+    fun `clicking on more reaction from action list emits the expected Event`() {
+        val eventsRecorder = EventsRecorder<CustomReactionEvents>()
+        val state = aMessagesState()
+        val timelineItem = state.timelineState.timelineItems.first() as TimelineItem.Event
+        val stateWithActionListState = state.copy(
+            actionListState = anActionListState(
+                target = ActionListState.Target.Success(
+                    event = timelineItem,
+                    displayEmojiReactions = true,
+                    actions = persistentListOf(TimelineItemAction.Edit),
+                ),
+            ),
+            customReactionState = aCustomReactionState(
+                eventSink = eventsRecorder
+            ),
+        )
+        rule.setMessagesView(
+            state = stateWithActionListState,
+        )
+        val moreReactionContentDescription = rule.activity.getString(CommonStrings.a11y_react_with_other_emojis)
+        rule.onNodeWithContentDescription(moreReactionContentDescription).performClick()
+        // Give time for the close animation to complete
+        rule.mainClock.advanceTimeBy(milliseconds = 1_000)
+        eventsRecorder.assertSingle(CustomReactionEvents.ShowCustomReactionSheet(timelineItem))
+    }
 }
 
 private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setMessagesView(
