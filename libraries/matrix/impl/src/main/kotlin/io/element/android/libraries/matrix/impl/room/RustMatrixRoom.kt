@@ -124,7 +124,8 @@ class RustMatrixRoom(
                 channel.trySend(
                     typingUserIds
                         .filter { it != sessionData.userId }
-                        .map(::UserId))
+                        .map(::UserId)
+                )
             }
         })
     }
