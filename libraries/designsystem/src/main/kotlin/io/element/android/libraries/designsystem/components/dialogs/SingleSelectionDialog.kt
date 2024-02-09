@@ -24,8 +24,8 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.airbnb.android.showkase.annotation.ShowkaseComposable
 import io.element.android.libraries.designsystem.components.list.RadioButtonListItem
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
@@ -105,8 +105,7 @@ private fun SingleSelectionDialogContent(
     }
 }
 
-@PreviewsDayNight
-@ShowkaseComposable(group = PreviewGroup.Dialogs)
+@Preview(group = PreviewGroup.Dialogs)
 @Composable
 internal fun SingleSelectionDialogContentPreview() {
     ElementPreview(showBackground = false) {
@@ -126,4 +125,22 @@ internal fun SingleSelectionDialogContentPreview() {
             )
         }
     }
+}
+
+@PreviewsDayNight
+@Composable
+internal fun SingleSelectionDialogPreview() = ElementPreview {
+    val options = persistentListOf(
+        ListOption("Option 1"),
+        ListOption("Option 2"),
+        ListOption("Option 3"),
+    )
+    SingleSelectionDialog(
+        title = "Dialog title",
+        options = options,
+        onOptionSelected = {},
+        onDismissRequest = {},
+        dismissButtonTitle = "Cancel",
+        initialSelection = 0
+    )
 }

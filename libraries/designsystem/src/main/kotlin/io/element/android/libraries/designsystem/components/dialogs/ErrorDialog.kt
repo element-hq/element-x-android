@@ -22,8 +22,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.DialogPreview
 import io.element.android.libraries.designsystem.theme.components.SimpleAlertDialogContent
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -69,7 +71,7 @@ object ErrorDialogDefaults {
 
 @Preview(group = PreviewGroup.Dialogs)
 @Composable
-internal fun ErrorDialogPreview() {
+internal fun ErrorDialogContentPreview() {
     ElementThemedPreview(showBackground = false) {
         DialogPreview {
             ErrorDialogContent(
@@ -78,4 +80,13 @@ internal fun ErrorDialogPreview() {
             )
         }
     }
+}
+
+@PreviewsDayNight
+@Composable
+internal fun ErrorDialogPreview() = ElementPreview {
+    ErrorDialog(
+        content = "Content",
+        onDismiss = {},
+    )
 }

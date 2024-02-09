@@ -26,10 +26,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.airbnb.android.showkase.annotation.ShowkaseComposable
 import io.element.android.libraries.designsystem.components.list.CheckboxListItem
 import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.DialogPreview
@@ -124,11 +125,10 @@ private fun MultipleSelectionDialogContent(
     }
 }
 
-@PreviewsDayNight
-@ShowkaseComposable(group = PreviewGroup.Dialogs)
+@Preview(group = PreviewGroup.Dialogs)
 @Composable
 internal fun MultipleSelectionDialogContentPreview() {
-    ElementPreview(showBackground = false) {
+    ElementThemedPreview(showBackground = false) {
         DialogPreview {
             val options = persistentListOf(
                 ListOption("Option 1", "Supporting line text lorem ipsum dolor sit amet, consectetur."),
@@ -146,4 +146,23 @@ internal fun MultipleSelectionDialogContentPreview() {
             )
         }
     }
+}
+
+@PreviewsDayNight
+@Composable
+internal fun MultipleSelectionDialogPreview() = ElementPreview {
+    val options = persistentListOf(
+        ListOption("Option 1", "Supporting line text lorem ipsum dolor sit amet, consectetur."),
+        ListOption("Option 2"),
+        ListOption("Option 3"),
+    )
+    MultipleSelectionDialog(
+        title = "Dialog title",
+        options = options,
+        onConfirmClicked = {},
+        onDismissRequest = {},
+        confirmButtonTitle = "Save",
+        dismissButtonTitle = "Cancel",
+        initialSelection = persistentListOf(0),
+    )
 }

@@ -22,8 +22,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.DialogPreview
 import io.element.android.libraries.designsystem.theme.components.SimpleAlertDialogContent
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -78,7 +80,7 @@ object RetryDialogDefaults {
 
 @Preview(group = PreviewGroup.Dialogs)
 @Composable
-internal fun RetryDialogPreview() {
+internal fun RetryDialogContentPreview() {
     ElementThemedPreview(showBackground = false) {
         DialogPreview {
             RetryDialogContent(
@@ -88,4 +90,14 @@ internal fun RetryDialogPreview() {
             )
         }
     }
+}
+
+@PreviewsDayNight
+@Composable
+internal fun RetryDialogPreview() = ElementPreview {
+    RetryDialog(
+        content = "Content",
+        onRetry = {},
+        onDismiss = {},
+    )
 }
