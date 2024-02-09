@@ -27,6 +27,7 @@ import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onNodeWithContentDescription
+import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTouchInput
@@ -37,8 +38,13 @@ import io.element.android.features.messages.impl.actionlist.anActionListState
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
 import io.element.android.features.messages.impl.attachments.Attachment
 import io.element.android.features.messages.impl.messagecomposer.aMessageComposerState
+import io.element.android.features.messages.impl.timeline.aTimelineItemEvent
+import io.element.android.features.messages.impl.timeline.aTimelineItemReadReceipts
+import io.element.android.features.messages.impl.timeline.aTimelineState
 import io.element.android.features.messages.impl.timeline.components.customreaction.CustomReactionEvents
 import io.element.android.features.messages.impl.timeline.components.reactionsummary.ReactionSummaryEvents
+import io.element.android.features.messages.impl.timeline.components.receipt.aReadReceiptData
+import io.element.android.features.messages.impl.timeline.components.receipt.bottomsheet.ReadReceiptBottomSheetEvents
 import io.element.android.features.messages.impl.timeline.components.retrysendmenu.RetrySendMenuEvents
 import io.element.android.features.messages.impl.timeline.components.retrysendmenu.aRetrySendMenuState
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
@@ -198,6 +204,34 @@ class MessagesViewTest {
                 canSendReaction = state.userHasPermissionToSendReaction,
             )
         )
+    }
+
+    @Test
+    fun `clicking on a read receipt list emits the expected Event`() {
+        val eventsRecorder = EventsRecorder<ReadReceiptBottomSheetEvents>()
+        val state = aMessagesState(
+            timelineState = aTimelineState(
+                renderReadReceipts = true,
+                timelineItems = persistentListOf(
+                    aTimelineItemEvent(
+                        readReceiptState = aTimelineItemReadReceipts(
+                            receipts = listOf(
+                                aReadReceiptData(0),
+                            ),
+                        ),
+                    ),
+                ),
+            ),
+            readReceiptBottomSheetState = aReadReceiptBottomSheetState(
+                eventSink = eventsRecorder
+            ),
+        )
+        val timelineItem = state.timelineState.timelineItems.first() as TimelineItem.Event
+        rule.setMessagesView(
+            state = state,
+        )
+        rule.onNodeWithTag(TestTags.messageReadReceipts.value).performClick()
+        eventsRecorder.assertSingle(ReadReceiptBottomSheetEvents.EventSelected(timelineItem))
     }
 
     @Test
