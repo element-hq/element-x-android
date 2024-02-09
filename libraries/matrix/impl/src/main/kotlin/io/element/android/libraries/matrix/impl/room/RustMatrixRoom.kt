@@ -120,9 +120,9 @@ class RustMatrixRoom(
             channel.trySend(initial)
         }
         innerRoom.subscribeToTypingNotifications(object : TypingNotificationsListener {
-            override fun call(typingUsers: List<String>) {
+            override fun call(typingUserIds: List<String>) {
                 channel.trySend(
-                    typingUsers
+                    typingUserIds
                         .filter { it != sessionData.userId }
                         .map(::UserId))
             }
