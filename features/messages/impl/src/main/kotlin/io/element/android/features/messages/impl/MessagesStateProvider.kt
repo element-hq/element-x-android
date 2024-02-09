@@ -92,6 +92,9 @@ fun aMessagesState(
     roomName: AsyncData<String> = AsyncData.Success("Room name"),
     roomAvatar: AsyncData<AvatarData> = AsyncData.Success(AvatarData("!id:domain", "Room name", size = AvatarSize.TimelineRoom)),
     userHasPermissionToSendMessage: Boolean = true,
+    userHasPermissionToRedactOwn: Boolean = false,
+    userHasPermissionToRedactOther: Boolean = false,
+    userHasPermissionToSendReaction: Boolean = true,
     composerState: MessageComposerState = aMessageComposerState(
         richTextEditorState = RichTextEditorState("Hello", initialFocus = true),
         isFullScreen = false,
@@ -112,9 +115,9 @@ fun aMessagesState(
     roomName = roomName,
     roomAvatar = roomAvatar,
     userHasPermissionToSendMessage = userHasPermissionToSendMessage,
-    userHasPermissionToRedactOwn = false,
-    userHasPermissionToRedactOther = false,
-    userHasPermissionToSendReaction = true,
+    userHasPermissionToRedactOwn = userHasPermissionToRedactOwn,
+    userHasPermissionToRedactOther = userHasPermissionToRedactOther,
+    userHasPermissionToSendReaction = userHasPermissionToSendReaction,
     composerState = composerState,
     voiceMessageComposerState = voiceMessageComposerState,
     timelineState = aTimelineState(

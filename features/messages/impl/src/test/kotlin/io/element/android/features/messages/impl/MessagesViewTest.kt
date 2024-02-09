@@ -31,6 +31,7 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTouchInput
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import io.element.android.features.messages.impl.actionlist.ActionListEvents
 import io.element.android.features.messages.impl.actionlist.ActionListState
 import io.element.android.features.messages.impl.actionlist.anActionListState
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
@@ -144,6 +145,59 @@ class MessagesViewTest {
         )
         rule.onAllNodesWithText(timelineItem.sentTime)[1].performClick()
         eventsRecorder.assertSingle(RetrySendMenuEvents.EventSelected(timelineItem))
+    }
+
+    @Test
+    fun `long clicking on an Event emits the expected Event userHasPermissionToSendMessage`() {
+        `long clicking on an Event emits the expected Event`(userHasPermissionToSendMessage = true)
+    }
+
+    @Test
+    fun `long clicking on an Event emits the expected Event userHasPermissionToRedactOwn`() {
+        `long clicking on an Event emits the expected Event`(userHasPermissionToRedactOwn = true)
+    }
+
+    @Test
+    fun `long clicking on an Event emits the expected Event userHasPermissionToRedactOther`() {
+        `long clicking on an Event emits the expected Event`(userHasPermissionToRedactOther = true)
+    }
+
+    @Test
+    fun `long clicking on an Event emits the expected Event userHasPermissionToSendReaction`() {
+        `long clicking on an Event emits the expected Event`(userHasPermissionToSendReaction = true)
+    }
+
+    private fun `long clicking on an Event emits the expected Event`(
+        userHasPermissionToSendMessage: Boolean = false,
+        userHasPermissionToRedactOwn: Boolean = false,
+        userHasPermissionToRedactOther: Boolean = false,
+        userHasPermissionToSendReaction: Boolean = false,
+    ) {
+        val eventsRecorder = EventsRecorder<ActionListEvents>()
+        val state = aMessagesState(
+            actionListState = anActionListState(
+                eventSink = eventsRecorder
+            ),
+            userHasPermissionToSendMessage = userHasPermissionToSendMessage,
+            userHasPermissionToRedactOwn = userHasPermissionToRedactOwn,
+            userHasPermissionToRedactOther = userHasPermissionToRedactOther,
+            userHasPermissionToSendReaction = userHasPermissionToSendReaction,
+        )
+        val timelineItem = state.timelineState.timelineItems.first() as TimelineItem.Event
+        rule.setMessagesView(
+            state = state,
+        )
+        // Cannot perform click on "Text", it's not detected. Use tag instead
+        rule.onAllNodesWithTag(TestTags.messageBubble.value).onFirst().performTouchInput { longClick() }
+        eventsRecorder.assertSingle(
+            ActionListEvents.ComputeForMessage(
+                event = timelineItem,
+                canRedactOwn = state.userHasPermissionToRedactOwn,
+                canRedactOther = state.userHasPermissionToRedactOther,
+                canSendMessage = state.userHasPermissionToSendMessage,
+                canSendReaction = state.userHasPermissionToSendReaction,
+            )
+        )
     }
 
     @Test
