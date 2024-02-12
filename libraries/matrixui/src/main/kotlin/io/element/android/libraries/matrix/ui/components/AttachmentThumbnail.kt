@@ -97,7 +97,7 @@ fun AttachmentThumbnail(
                 }
                 AttachmentThumbnailType.Voice -> {
                     Icon(
-                        imageVector = CompoundIcons.MicOn(),
+                        imageVector = CompoundIcons.MicOnSolid(),
                         contentDescription = info.textContent,
                     )
                 }
