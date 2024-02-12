@@ -55,10 +55,12 @@ import io.element.android.libraries.matrix.impl.room.RoomSyncSubscriber
 import io.element.android.libraries.matrix.impl.room.RustMatrixRoom
 import io.element.android.libraries.matrix.impl.roomlist.RoomListFactory
 import io.element.android.libraries.matrix.impl.roomlist.RustRoomListService
+import io.element.android.libraries.matrix.impl.roomlist.fullRoomWithTimeline
 import io.element.android.libraries.matrix.impl.roomlist.roomOrNull
 import io.element.android.libraries.matrix.impl.sync.RustSyncService
 import io.element.android.libraries.matrix.impl.usersearch.UserProfileMapper
 import io.element.android.libraries.matrix.impl.usersearch.UserSearchResultMapper
+import io.element.android.libraries.matrix.impl.util.SessionDirectoryNameProvider
 import io.element.android.libraries.matrix.impl.util.cancelAndDestroy
 import io.element.android.libraries.matrix.impl.verification.RustSessionVerificationService
 import io.element.android.libraries.sessionstorage.api.SessionStore
@@ -76,12 +78,12 @@ import kotlinx.coroutines.withTimeout
 import org.matrix.rustcomponents.sdk.BackupState
 import org.matrix.rustcomponents.sdk.Client
 import org.matrix.rustcomponents.sdk.ClientDelegate
-import org.matrix.rustcomponents.sdk.FilterStateEventType
 import org.matrix.rustcomponents.sdk.FilterTimelineEventType
 import org.matrix.rustcomponents.sdk.NotificationProcessSetup
 import org.matrix.rustcomponents.sdk.PowerLevels
 import org.matrix.rustcomponents.sdk.Room
 import org.matrix.rustcomponents.sdk.RoomListItem
+import org.matrix.rustcomponents.sdk.StateEventType
 import org.matrix.rustcomponents.sdk.TaskHandle
 import org.matrix.rustcomponents.sdk.TimelineEventTypeFilter
 import org.matrix.rustcomponents.sdk.use
@@ -133,6 +135,7 @@ class RustMatrixClient(
         sessionCoroutineScope = sessionCoroutineScope,
         dispatchers = dispatchers,
     ).apply { start() }
+    private val sessionDirectoryNameProvider = SessionDirectoryNameProvider()
 
     private val isLoggingOut = AtomicBoolean(false)
 
@@ -203,20 +206,20 @@ class RustMatrixClient(
 
     private val eventFilters = TimelineEventTypeFilter.exclude(
         listOf(
-            FilterStateEventType.ROOM_ALIASES,
-            FilterStateEventType.ROOM_CANONICAL_ALIAS,
-            FilterStateEventType.ROOM_GUEST_ACCESS,
-            FilterStateEventType.ROOM_HISTORY_VISIBILITY,
-            FilterStateEventType.ROOM_JOIN_RULES,
-            FilterStateEventType.ROOM_PINNED_EVENTS,
-            FilterStateEventType.ROOM_POWER_LEVELS,
-            FilterStateEventType.ROOM_SERVER_ACL,
-            FilterStateEventType.ROOM_TOMBSTONE,
-            FilterStateEventType.SPACE_CHILD,
-            FilterStateEventType.SPACE_PARENT,
-            FilterStateEventType.POLICY_RULE_ROOM,
-            FilterStateEventType.POLICY_RULE_SERVER,
-            FilterStateEventType.POLICY_RULE_USER,
+            StateEventType.ROOM_ALIASES,
+            StateEventType.ROOM_CANONICAL_ALIAS,
+            StateEventType.ROOM_GUEST_ACCESS,
+            StateEventType.ROOM_HISTORY_VISIBILITY,
+            StateEventType.ROOM_JOIN_RULES,
+            StateEventType.ROOM_PINNED_EVENTS,
+            StateEventType.ROOM_POWER_LEVELS,
+            StateEventType.ROOM_SERVER_ACL,
+            StateEventType.ROOM_TOMBSTONE,
+            StateEventType.SPACE_CHILD,
+            StateEventType.SPACE_PARENT,
+            StateEventType.POLICY_RULE_ROOM,
+            StateEventType.POLICY_RULE_SERVER,
+            StateEventType.POLICY_RULE_USER,
         ).map(FilterTimelineEventType::State)
     )
 
@@ -270,12 +273,7 @@ class RustMatrixClient(
 
     private suspend fun pairOfRoom(roomId: RoomId): Pair<RoomListItem, Room>? {
         val cachedRoomListItem = innerRoomListService.roomOrNull(roomId.value)
-        val fullRoom = cachedRoomListItem?.let { roomListItem ->
-            if (!roomListItem.isTimelineInitialized()) {
-                roomListItem.initTimeline(eventFilters)
-            }
-            roomListItem.fullRoom()
-        }
+        val fullRoom = cachedRoomListItem?.fullRoomWithTimeline(filter = eventFilters)
         return if (cachedRoomListItem == null || fullRoom == null) {
             Timber.d("No room cached for $roomId")
             null
@@ -401,13 +399,12 @@ class RustMatrixClient(
     }
 
     override suspend fun getCacheSize(): Long {
-        // Do not use client.userId since it can throw if client has been closed (during clear cache)
-        return baseDirectory.getCacheSize(userID = sessionId.value)
+        return baseDirectory.getCacheSize()
     }
 
     override suspend fun clearCache() {
         close()
-        baseDirectory.deleteSessionDirectory(userID = sessionId.value, deleteCryptoDb = false)
+        baseDirectory.deleteSessionDirectory(deleteCryptoDb = false)
     }
 
     override suspend fun logout(ignoreSdkError: Boolean): String? = doLogout(
@@ -436,7 +433,7 @@ class RustMatrixClient(
                 }
             }
             close()
-            baseDirectory.deleteSessionDirectory(userID = sessionId.value, deleteCryptoDb = true)
+            baseDirectory.deleteSessionDirectory(deleteCryptoDb = true)
             if (removeSession) {
                 sessionStore.removeSession(sessionId.value)
             }
@@ -482,12 +479,10 @@ class RustMatrixClient(
     override fun roomMembershipObserver(): RoomMembershipObserver = roomMembershipObserver
 
     private suspend fun File.getCacheSize(
-        userID: String,
         includeCryptoDb: Boolean = false,
     ): Long = withContext(sessionDispatcher) {
-        // Rust sanitises the user ID replacing invalid characters with an _
-        val sanitisedUserID = userID.replace(":", "_")
-        val sessionDirectory = File(this@getCacheSize, sanitisedUserID)
+        val sessionDirectoryName = sessionDirectoryNameProvider.provides(sessionId)
+        val sessionDirectory = File(this@getCacheSize, sessionDirectoryName)
         if (includeCryptoDb) {
             sessionDirectory.getSizeOfFiles()
         } else {
@@ -504,12 +499,10 @@ class RustMatrixClient(
     }
 
     private suspend fun File.deleteSessionDirectory(
-        userID: String,
         deleteCryptoDb: Boolean = false,
     ): Boolean = withContext(sessionDispatcher) {
-        // Rust sanitises the user ID replacing invalid characters with an _
-        val sanitisedUserID = userID.replace(":", "_")
-        val sessionDirectory = File(this@deleteSessionDirectory, sanitisedUserID)
+        val sessionDirectoryName = sessionDirectoryNameProvider.provides(sessionId)
+        val sessionDirectory = File(this@deleteSessionDirectory, sessionDirectoryName)
         if (deleteCryptoDb) {
             // Delete the folder and all its content
             sessionDirectory.deleteRecursively()

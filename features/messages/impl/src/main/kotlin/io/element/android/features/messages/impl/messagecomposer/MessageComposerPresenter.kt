@@ -23,6 +23,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -37,6 +38,7 @@ import io.element.android.features.messages.impl.attachments.Attachment
 import io.element.android.features.messages.impl.attachments.preview.error.sendAttachmentError
 import io.element.android.features.messages.impl.mentions.MentionSuggestion
 import io.element.android.features.messages.impl.mentions.MentionSuggestionsProcessor
+import io.element.android.features.preferences.api.store.SessionPreferencesStore
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
@@ -86,6 +88,7 @@ class MessageComposerPresenter @Inject constructor(
     private val room: MatrixRoom,
     private val mediaPickerProvider: PickerProvider,
     private val featureFlagService: FeatureFlagService,
+    private val sessionPreferencesStore: SessionPreferencesStore,
     private val localMediaFactory: LocalMediaFactory,
     private val mediaSender: MediaSender,
     private val snackbarDispatcher: SnackbarDispatcher,
@@ -146,6 +149,8 @@ class MessageComposerPresenter @Inject constructor(
 
         var showAttachmentSourcePicker: Boolean by remember { mutableStateOf(false) }
         var showTextFormatting: Boolean by remember { mutableStateOf(false) }
+
+        val sendTypingNotifications by sessionPreferencesStore.isSendTypingNotificationsEnabled().collectAsState(initial = true)
 
         LaunchedEffect(messageComposerContext.composerMode) {
             when (val modeValue = messageComposerContext.composerMode) {
@@ -212,7 +217,9 @@ class MessageComposerPresenter @Inject constructor(
             // Declare that the user is not typing anymore when the composer is disposed
             onDispose {
                 appCoroutineScope.launch {
-                    room.typingNotice(false)
+                    if (sendTypingNotifications) {
+                        room.typingNotice(false)
+                    }
                 }
             }
         }
@@ -310,8 +317,10 @@ class MessageComposerPresenter @Inject constructor(
                     analyticsService.trackError(event.error)
                 }
                 is MessageComposerEvents.TypingNotice -> {
-                    localCoroutineScope.launch {
-                        room.typingNotice(event.isTyping)
+                    if (sendTypingNotifications) {
+                        localCoroutineScope.launch {
+                            room.typingNotice(event.isTyping)
+                        }
                     }
                 }
                 is MessageComposerEvents.SuggestionReceived -> {

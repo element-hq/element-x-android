@@ -97,7 +97,7 @@ class TimelinePresenter @AssistedInject constructor(
         val paginationState by timeline.paginationState.collectAsState()
         val syncUpdateFlow = room.syncUpdateFlow.collectAsState()
         val userHasPermissionToSendMessage by room.canSendMessageAsState(type = MessageEventType.ROOM_MESSAGE, updateKey = syncUpdateFlow.value)
-        val userHasPermissionToSendReaction by room.canSendMessageAsState(type = MessageEventType.REACTION_SENT, updateKey = syncUpdateFlow.value)
+        val userHasPermissionToSendReaction by room.canSendMessageAsState(type = MessageEventType.REACTION, updateKey = syncUpdateFlow.value)
 
         val prevMostRecentItemId = rememberSaveable { mutableStateOf<String?>(null) }
         val newItemState = remember { mutableStateOf(NewEventState.None) }
@@ -106,6 +106,7 @@ class TimelinePresenter @AssistedInject constructor(
         val keyBackupState by encryptionService.backupStateStateFlow.collectAsState()
 
         val isSendPublicReadReceiptsEnabled by sessionPreferencesStore.isSendPublicReadReceiptsEnabled().collectAsState(initial = true)
+        val renderReadReceipts by sessionPreferencesStore.isRenderReadReceiptsEnabled().collectAsState(initial = true)
 
         val sessionState by remember {
             derivedStateOf {
@@ -154,12 +155,12 @@ class TimelinePresenter @AssistedInject constructor(
 
         LaunchedEffect(Unit) {
             combine(timeline.timelineItems, room.membersStateFlow) { items, membersState ->
-                    timelineItemsFactory.replaceWith(
-                        timelineItems = items,
-                        roomMembers = membersState.roomMembers().orEmpty()
-                    )
-                    items
-                }
+                timelineItemsFactory.replaceWith(
+                    timelineItems = items,
+                    roomMembers = membersState.roomMembers().orEmpty()
+                )
+                items
+            }
                 .onEach { timelineItems ->
                     if (timelineItems.isEmpty()) {
                         paginateBackwards()
@@ -183,6 +184,7 @@ class TimelinePresenter @AssistedInject constructor(
             highlightedEventId = highlightedEventId.value,
             paginationState = paginationState,
             timelineItems = timelineItems,
+            renderReadReceipts = renderReadReceipts,
             newEventState = newItemState.value,
             sessionState = sessionState,
             eventSink = { handleEvents(it) }

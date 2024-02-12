@@ -119,6 +119,7 @@
   <string name="common_enter_your_pin">"Inserisci il PIN"</string>
   <string name="common_error">"Errore"</string>
   <string name="common_everyone">"Tutti"</string>
+  <string name="common_favourite">"Preferiti"</string>
   <string name="common_file">"File"</string>
   <string name="common_file_saved_on_disk_android">"File salvato in Download"</string>
   <string name="common_forward_message">"Inoltra messaggio"</string>

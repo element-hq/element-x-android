@@ -8,8 +8,8 @@
   <string name="screen_create_room_private_option_title">"Soukromá místnost (jen pro pozvané)"</string>
   <string name="screen_create_room_public_option_description">"Zprávy nejsou šifrované a může si je přečíst kdokoli. Šifrování můžete povolit později."</string>
   <string name="screen_create_room_public_option_title">"Veřejná místnost (kdokoli)"</string>
-  <string name="screen_create_room_room_name_label">"Název místnosti"</string>
   <string name="screen_create_room_topic_label">"Téma (nepovinné)"</string>
   <string name="screen_start_chat_error_starting_chat">"Při pokusu o zahájení chatu došlo k chybě"</string>
+  <string name="screen_create_room_room_name_label">"Název místnosti"</string>
   <string name="screen_create_room_title">"Vytvořit místnost"</string>
 </resources>

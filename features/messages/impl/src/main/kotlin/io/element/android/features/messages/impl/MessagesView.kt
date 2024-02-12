@@ -102,7 +102,6 @@ import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.designsystem.utils.KeepScreenOn
-import io.element.android.libraries.designsystem.utils.LogCompositions
 import io.element.android.libraries.designsystem.utils.OnLifecycleEvent
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarHost
 import io.element.android.libraries.designsystem.utils.snackbar.rememberSnackbarHostState
@@ -126,9 +125,8 @@ fun MessagesView(
     onCreatePollClicked: () -> Unit,
     onJoinCallClicked: () -> Unit,
     modifier: Modifier = Modifier,
+    forceJumpToBottomVisibility: Boolean = false
 ) {
-    LogCompositions(tag = "MessagesScreen", msg = "Root")
-
     OnLifecycleEvent { _, event ->
         state.voiceMessageComposerState.eventSink(VoiceMessageComposerEvents.LifecycleEvent(event))
     }
@@ -145,8 +143,6 @@ fun MessagesView(
 
     // This is needed because the composer is inside an AndroidView that can't be affected by the FocusManager in Compose
     val localView = LocalView.current
-
-    LogCompositions(tag = "MessagesScreen", msg = "Content")
 
     fun onMessageClicked(event: TimelineItem.Event) {
         Timber.v("OnMessageClicked= ${event.id}")
@@ -229,6 +225,7 @@ fun MessagesView(
                 onSwipeToReply = { targetEvent ->
                     state.eventSink(MessagesEvents.HandleAction(TimelineItemAction.Reply, targetEvent))
                 },
+                forceJumpToBottomVisibility = forceJumpToBottomVisibility,
             )
         },
         snackbarHost = {
@@ -329,6 +326,7 @@ private fun MessagesViewContent(
     onTimestampClicked: (TimelineItem.Event) -> Unit,
     onSendLocationClicked: () -> Unit,
     onCreatePollClicked: () -> Unit,
+    forceJumpToBottomVisibility: Boolean,
     modifier: Modifier = Modifier,
     onSwipeToReply: (TimelineItem.Event) -> Unit,
 ) {
@@ -389,6 +387,7 @@ private fun MessagesViewContent(
                     modifier = Modifier.padding(paddingValues),
                     state = state.timelineState,
                     roomName = state.roomName.dataOrNull(),
+                    typingNotificationState = state.typingNotificationState,
                     onMessageClicked = onMessageClicked,
                     onMessageLongClicked = onMessageLongClicked,
                     onUserDataClicked = onUserDataClicked,
@@ -398,6 +397,7 @@ private fun MessagesViewContent(
                     onMoreReactionsClicked = onMoreReactionsClicked,
                     onReadReceiptClick = onReadReceiptClick,
                     onSwipeToReply = onSwipeToReply,
+                    forceJumpToBottomVisibility = forceJumpToBottomVisibility,
                 )
             },
             sheetContent = { subcomposing: Boolean ->
@@ -417,10 +417,9 @@ private fun MessagesViewContent(
 private fun MessagesViewComposerBottomSheetContents(
     subcomposing: Boolean,
     state: MessagesState,
-    modifier: Modifier = Modifier,
 ) {
     if (state.userHasPermissionToSendMessage) {
-        Column(modifier = modifier.fillMaxWidth()) {
+        Column(modifier = Modifier.fillMaxWidth()) {
             MentionSuggestionsPickerView(
                 modifier = Modifier
                     .heightIn(max = 230.dp)
@@ -448,7 +447,7 @@ private fun MessagesViewComposerBottomSheetContents(
             )
         }
     } else {
-        CantSendMessageBanner(modifier = modifier)
+        CantSendMessageBanner()
     }
 }
 
@@ -461,10 +460,8 @@ private fun MessagesViewTopBar(
     onRoomDetailsClicked: () -> Unit,
     onJoinCallClicked: () -> Unit,
     onBackPressed: () -> Unit,
-    modifier: Modifier = Modifier,
 ) {
     TopAppBar(
-        modifier = modifier,
         navigationIcon = {
             BackButton(onClick = onBackPressed)
         },
@@ -502,7 +499,6 @@ private fun MessagesViewTopBar(
 
 @Composable
 private fun JoinCallMenuItem(
-    modifier: Modifier = Modifier,
     onJoinCallClicked: () -> Unit,
 ) {
     Material3Button(
@@ -512,7 +508,7 @@ private fun JoinCallMenuItem(
             containerColor = ElementTheme.colors.iconAccentTertiary
         ),
         contentPadding = PaddingValues(horizontal = 10.dp, vertical = 0.dp),
-        modifier = modifier.heightIn(min = 36.dp),
+        modifier = Modifier.heightIn(min = 36.dp),
     ) {
         Icon(
             modifier = Modifier.size(20.dp),
@@ -550,11 +546,9 @@ private fun RoomAvatarAndNameRow(
 }
 
 @Composable
-private fun CantSendMessageBanner(
-    modifier: Modifier = Modifier,
-) {
+private fun CantSendMessageBanner() {
     Row(
-        modifier = modifier
+        modifier = Modifier
             .fillMaxWidth()
             .background(MaterialTheme.colorScheme.secondary)
             .padding(16.dp),
@@ -584,5 +578,6 @@ internal fun MessagesViewPreview(@PreviewParameter(MessagesStateProvider::class)
         onSendLocationClicked = {},
         onCreatePollClicked = {},
         onJoinCallClicked = {},
+        forceJumpToBottomVisibility = true,
     )
 }

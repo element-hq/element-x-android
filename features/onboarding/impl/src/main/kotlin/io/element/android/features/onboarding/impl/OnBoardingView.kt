@@ -93,10 +93,9 @@ fun OnBoardingView(
 private fun OnBoardingContent(
     state: OnBoardingState,
     onOpenDeveloperSettings: () -> Unit,
-    modifier: Modifier = Modifier
 ) {
     Box(
-        modifier = modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxSize(),
     ) {
         Box(
             modifier = Modifier.fillMaxSize(),
@@ -158,9 +157,8 @@ private fun OnBoardingButtons(
     onSignIn: () -> Unit,
     onCreateAccount: () -> Unit,
     onReportProblem: () -> Unit,
-    modifier: Modifier = Modifier,
 ) {
-    ButtonColumnMolecule(modifier = modifier) {
+    ButtonColumnMolecule {
         val signInButtonStringRes = if (state.canLoginWithQrCode || state.canCreateAccount) {
             R.string.screen_onboarding_sign_in_manually
         } else {
@@ -190,11 +188,10 @@ private fun OnBoardingButtons(
                     .fillMaxWidth()
             )
         }
-        Spacer(modifier = Modifier.height(16.dp))
         // Add a report problem text button. Use a Text since we need a special theme here.
         Text(
             modifier = Modifier
-                .padding(8.dp)
+                .padding(16.dp)
                 .clickable(onClick = onReportProblem),
             text = stringResource(id = CommonStrings.common_report_a_problem),
             style = ElementTheme.typography.fontBodySmRegular,

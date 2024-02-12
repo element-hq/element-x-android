@@ -8,8 +8,8 @@
   <string name="screen_create_room_private_option_title">"Stanza privata (solo su invito)"</string>
   <string name="screen_create_room_public_option_description">"I messaggi non sono cifrati e chiunque può leggerli. Puoi attivare la crittografia in un secondo momento."</string>
   <string name="screen_create_room_public_option_title">"Stanza pubblica (chiunque)"</string>
-  <string name="screen_create_room_room_name_label">"Nome stanza"</string>
   <string name="screen_create_room_topic_label">"Argomento (facoltativo)"</string>
   <string name="screen_start_chat_error_starting_chat">"Si è verificato un errore durante il tentativo di avviare una chat"</string>
+  <string name="screen_create_room_room_name_label">"Nome stanza"</string>
   <string name="screen_create_room_title">"Crea una stanza"</string>
 </resources>

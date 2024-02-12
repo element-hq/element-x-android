@@ -2,15 +2,19 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="confirm_recovery_key_banner_message">"Vaša záloha konverzácie nie je momentálne synchronizovaná. Na zachovanie prístupu k zálohe konverzácie musíte potvrdiť svoj kľúč na obnovu."</string>
   <string name="confirm_recovery_key_banner_title">"Potvrďte svoj kľúč na obnovenie"</string>
+  <string name="screen_migration_message">"Ide o jednorazový proces, ďakujeme za trpezlivosť."</string>
+  <string name="screen_migration_title">"Nastavenie vášho účtu."</string>
   <string name="screen_roomlist_a11y_create_message">"Vytvorte novú konverzáciu alebo miestnosť"</string>
   <string name="screen_roomlist_empty_message">"Začnite tým, že niekomu pošlete správu."</string>
   <string name="screen_roomlist_empty_title">"Zatiaľ žiadne konverzácie."</string>
   <string name="screen_roomlist_filter_favourites">"Obľúbené"</string>
   <string name="screen_roomlist_filter_low_priority">"Nízka priorita"</string>
-  <string name="screen_roomlist_filter_people">"Ľudia"</string>
   <string name="screen_roomlist_filter_rooms">"Miestnosti"</string>
   <string name="screen_roomlist_filter_unreads">"Neprečítané"</string>
   <string name="screen_roomlist_main_space_title">"Všetky konverzácie"</string>
+  <string name="screen_roomlist_mark_as_read">"Označiť ako prečítané"</string>
+  <string name="screen_roomlist_mark_as_unread">"Označiť ako neprečítané"</string>
   <string name="session_verification_banner_message">"Vyzerá to tak, že používate nové zariadenie. Overte svoj prístup k zašifrovaným správam pomocou vášho druhého zariadenia."</string>
   <string name="session_verification_banner_title">"Overte, že ste to vy"</string>
+  <string name="screen_roomlist_filter_people">"Ľudia"</string>
 </resources>

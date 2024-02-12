@@ -2,10 +2,19 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="confirm_recovery_key_banner_message">"Dein Chat-Backup ist derzeit nicht synchronisiert. Du musst deinen Wiederherstellungsschlüssel bestätigen, um Zugriff auf dein Chat-Backup zu erhalten."</string>
   <string name="confirm_recovery_key_banner_title">"Wiederherstellungsschlüssel bestätigen."</string>
+  <string name="screen_migration_message">"Dies ist ein einmaliger Vorgang, danke fürs Warten."</string>
+  <string name="screen_migration_title">"Dein Konto wird eingerichtet."</string>
   <string name="screen_roomlist_a11y_create_message">"Eine neue Unterhaltung oder einen neuen Raum erstellen"</string>
   <string name="screen_roomlist_empty_message">"Beginne, indem du jemandem eine Nachricht sendest."</string>
   <string name="screen_roomlist_empty_title">"Noch keine Chats."</string>
+  <string name="screen_roomlist_filter_favourites">"Favoriten"</string>
+  <string name="screen_roomlist_filter_low_priority">"Niedrige Priorität"</string>
+  <string name="screen_roomlist_filter_rooms">"Räume"</string>
+  <string name="screen_roomlist_filter_unreads">"Ungelesen"</string>
   <string name="screen_roomlist_main_space_title">"Alle Chats"</string>
+  <string name="screen_roomlist_mark_as_read">"Als gelesen markieren"</string>
+  <string name="screen_roomlist_mark_as_unread">"Als ungelesen markieren"</string>
   <string name="session_verification_banner_message">"Es sieht aus, als würdest du ein neues Gerät verwenden. Verifiziere es mit einem anderen Gerät, damit du auf deine verschlüsselten Nachrichten zugreifen kannst."</string>
   <string name="session_verification_banner_title">"Bestätige deine Identität"</string>
+  <string name="screen_roomlist_filter_people">"Personen"</string>
 </resources>

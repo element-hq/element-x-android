@@ -29,7 +29,7 @@ import kotlinx.collections.immutable.ImmutableList
 data class RoomListState(
     val matrixUser: MatrixUser?,
     val showAvatarIndicator: Boolean,
-    val roomList: ImmutableList<RoomListRoomSummary>,
+    val roomList: AsyncData<ImmutableList<RoomListRoomSummary>>,
     val filter: String?,
     val filteredRoomList: ImmutableList<RoomListRoomSummary>,
     val displayVerificationPrompt: Boolean,
@@ -40,6 +40,7 @@ data class RoomListState(
     val displaySearchResults: Boolean,
     val contextMenu: ContextMenu,
     val leaveRoomState: LeaveRoomState,
+    val displayMigrationStatus: Boolean,
     val eventSink: (RoomListEvents) -> Unit,
 ) {
     sealed interface ContextMenu {
@@ -49,6 +50,8 @@ data class RoomListState(
             val roomName: String,
             val isDm: Boolean,
             val isFavorite: AsyncData<Boolean>,
+            val markAsUnreadFeatureFlagEnabled: Boolean,
+            val hasNewContent: Boolean,
         ) : ContextMenu
     }
 }

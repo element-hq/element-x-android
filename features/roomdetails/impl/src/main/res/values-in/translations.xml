@@ -21,7 +21,6 @@
   <string name="screen_room_details_notification_mode_custom">"Khusus"</string>
   <string name="screen_room_details_notification_mode_default">"Bawaan"</string>
   <string name="screen_room_details_notification_title">"Pemberitahuan"</string>
-  <string name="screen_room_details_room_name_label">"Nama ruangan"</string>
   <string name="screen_room_details_share_room_title">"Bagikan ruangan"</string>
   <string name="screen_room_details_updating_room">"Memperbarui ruangan…"</string>
   <string name="screen_room_member_list_pending_header_title">"Tertunda"</string>
@@ -47,6 +46,7 @@
   <string name="screen_dm_details_unblock_alert_description">"Anda akan dapat melihat semua pesan dari mereka lagi."</string>
   <string name="screen_dm_details_unblock_user">"Buka blokir pengguna"</string>
   <string name="screen_room_details_leave_room_title">"Tinggalkan ruangan"</string>
+  <string name="screen_room_details_room_name_label">"Nama ruangan"</string>
   <string name="screen_room_details_security_title">"Keamanan"</string>
   <string name="screen_room_details_topic_title">"Topik"</string>
   <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Sebutan dan Kata Kunci saja"</string>

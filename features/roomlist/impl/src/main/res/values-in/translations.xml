@@ -2,10 +2,13 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="confirm_recovery_key_banner_message">"Cadangan percakapan Anda saat ini tidak tersinkron. Anda perlu mengonfirmasi kunci pemulihan Anda untuk tetap memiliki akses ke cadangan percakapan Anda."</string>
   <string name="confirm_recovery_key_banner_title">"Konfirmasi kunci pemulihan Anda"</string>
+  <string name="screen_migration_message">"Ini adalah proses satu kali, terima kasih telah menunggu."</string>
+  <string name="screen_migration_title">"Menyiapkan akun Anda."</string>
   <string name="screen_roomlist_a11y_create_message">"Buat percakapan atau ruangan baru"</string>
   <string name="screen_roomlist_empty_message">"Mulailah dengan mengirim pesan kepada seseorang."</string>
   <string name="screen_roomlist_empty_title">"Belum ada obrolan."</string>
   <string name="screen_roomlist_main_space_title">"Semua Obrolan"</string>
   <string name="session_verification_banner_message">"Sepertinya Anda menggunakan perangkat baru. Verifikasi dengan perangkat lain untuk mengakses pesan terenkripsi Anda selanjutnya."</string>
   <string name="session_verification_banner_title">"Verifikasi bahwa ini Anda"</string>
+  <string name="screen_roomlist_filter_people">"Orang"</string>
 </resources>

@@ -22,7 +22,6 @@
   <string name="screen_room_details_notification_mode_custom">"Personalizzato"</string>
   <string name="screen_room_details_notification_mode_default">"Predefinito"</string>
   <string name="screen_room_details_notification_title">"Notifiche"</string>
-  <string name="screen_room_details_room_name_label">"Nome stanza"</string>
   <string name="screen_room_details_share_room_title">"Condividi stanza"</string>
   <string name="screen_room_details_updating_room">"Aggiornamento della stanza…"</string>
   <string name="screen_room_member_list_pending_header_title">"In attesa"</string>
@@ -49,6 +48,7 @@
   <string name="screen_dm_details_unblock_user">"Sblocca utente"</string>
   <string name="screen_room_details_leave_conversation_title">"Abbandona la conversazione"</string>
   <string name="screen_room_details_leave_room_title">"Esci dalla stanza"</string>
+  <string name="screen_room_details_room_name_label">"Nome stanza"</string>
   <string name="screen_room_details_security_title">"Sicurezza"</string>
   <string name="screen_room_details_topic_title">"Oggetto"</string>
   <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Solo menzioni e parole chiave"</string>

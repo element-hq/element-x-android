@@ -41,6 +41,7 @@ import io.element.android.libraries.matrix.api.room.location.AssetType
 import io.element.android.libraries.matrix.api.room.roomNotificationSettings
 import io.element.android.libraries.matrix.api.room.tags.RoomNotableTags
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
+import io.element.android.libraries.matrix.api.timeline.ReceiptType
 import io.element.android.libraries.matrix.api.widget.MatrixWidgetDriver
 import io.element.android.libraries.matrix.api.widget.MatrixWidgetSettings
 import io.element.android.libraries.matrix.impl.core.toProgressWatcher
@@ -53,6 +54,7 @@ import io.element.android.libraries.matrix.impl.room.location.toInner
 import io.element.android.libraries.matrix.impl.room.member.RoomMemberListFetcher
 import io.element.android.libraries.matrix.impl.room.tags.map
 import io.element.android.libraries.matrix.impl.timeline.RustMatrixTimeline
+import io.element.android.libraries.matrix.impl.timeline.toRustReceiptType
 import io.element.android.libraries.matrix.impl.util.mxCallbackFlow
 import io.element.android.libraries.matrix.impl.widget.RustWidgetDriver
 import io.element.android.libraries.matrix.impl.widget.generateWidgetWebViewUrl
@@ -74,6 +76,7 @@ import org.matrix.rustcomponents.sdk.RoomListItem
 import org.matrix.rustcomponents.sdk.RoomMessageEventContentWithoutRelation
 import org.matrix.rustcomponents.sdk.RoomNotableTagsListener
 import org.matrix.rustcomponents.sdk.SendAttachmentJoinHandle
+import org.matrix.rustcomponents.sdk.TypingNotificationsListener
 import org.matrix.rustcomponents.sdk.WidgetCapabilities
 import org.matrix.rustcomponents.sdk.WidgetCapabilitiesProvider
 import org.matrix.rustcomponents.sdk.messageEventContentFromHtml
@@ -115,10 +118,27 @@ class RustMatrixRoom(
         })
     }
 
+
     override val notableTagsFlow: Flow<RoomNotableTags> = mxCallbackFlow {
         innerRoom.subscribeToNotableTags(object : RoomNotableTagsListener {
             override fun call(notableTags: RustRoomNotableTags) {
                 channel.trySend(notableTags.map())
+            }
+        })
+    }
+
+    override val roomTypingMembersFlow: Flow<List<UserId>> = mxCallbackFlow {
+        launch {
+            val initial = emptyList<UserId>()
+            channel.trySend(initial)
+        }
+        innerRoom.subscribeToTypingNotifications(object : TypingNotificationsListener {
+            override fun call(typingUserIds: List<String>) {
+                channel.trySend(
+                    typingUserIds
+                        .filter { it != sessionData.userId }
+                        .map(::UserId)
+                )
             }
         })
     }
@@ -438,6 +458,22 @@ class RustMatrixRoom(
     override suspend fun setIsFavorite(isFavorite: Boolean): Result<Unit> = withContext(roomDispatcher) {
         runCatching {
             innerRoom.setIsFavorite(isFavorite, null)
+        }
+    }
+
+    override suspend fun markAsRead(receiptType: ReceiptType?): Result<Unit> = withContext(roomDispatcher) {
+        runCatching {
+            if (receiptType != null) {
+                innerRoom.markAsReadAndSendReadReceipt(receiptType.toRustReceiptType())
+            } else {
+                innerRoom.markAsRead()
+            }
+        }
+    }
+
+    override suspend fun markAsUnread(): Result<Unit> = withContext(roomDispatcher) {
+        runCatching {
+            innerRoom.markAsUnread()
         }
     }
 

@@ -42,6 +42,7 @@ import io.element.android.libraries.matrix.api.room.StateEventType
 import io.element.android.libraries.matrix.api.room.location.AssetType
 import io.element.android.libraries.matrix.api.room.tags.RoomNotableTags
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
+import io.element.android.libraries.matrix.api.timeline.ReceiptType
 import io.element.android.libraries.matrix.api.timeline.item.event.EventTimelineItem
 import io.element.android.libraries.matrix.api.widget.MatrixWidgetDriver
 import io.element.android.libraries.matrix.api.widget.MatrixWidgetSettings
@@ -173,6 +174,9 @@ class FakeMatrixRoom(
 
     private val _notableTagsFlow: MutableStateFlow<RoomNotableTags> = MutableStateFlow(aRoomNotableTags())
     override val notableTagsFlow: Flow<RoomNotableTags> = _notableTagsFlow
+
+    private val _roomTypingMembersFlow: MutableSharedFlow<List<UserId>> = MutableSharedFlow(replay = 1)
+    override val roomTypingMembersFlow: Flow<List<UserId>> = _roomTypingMembersFlow
 
     override val membersStateFlow: MutableStateFlow<MatrixRoomMembersState> = MutableStateFlow(MatrixRoomMembersState.Unknown)
 
@@ -393,6 +397,22 @@ class FakeMatrixRoom(
         }
     }
 
+
+    val markAsReadCalls = mutableListOf<ReceiptType?>()
+
+    override suspend fun markAsRead(receiptType: ReceiptType?): Result<Unit> {
+        markAsReadCalls.add(receiptType)
+        return Result.success(Unit)
+    }
+
+    var markAsUnreadReadCallCount = 0
+        private set
+
+    override suspend fun markAsUnread(): Result<Unit> {
+        markAsUnreadReadCallCount++
+        return Result.success(Unit)
+    }
+
     override suspend fun sendLocation(
         body: String,
         geoUri: String,
@@ -596,6 +616,10 @@ class FakeMatrixRoom(
 
     fun givenRoomInfo(roomInfo: MatrixRoomInfo) {
         _roomInfoFlow.tryEmit(roomInfo)
+    }
+
+    fun givenRoomTypingMembers(typingMembers: List<UserId>) {
+        _roomTypingMembersFlow.tryEmit(typingMembers)
     }
 }
 

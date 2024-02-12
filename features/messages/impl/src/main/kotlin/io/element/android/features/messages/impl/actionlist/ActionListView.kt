@@ -337,7 +337,6 @@ private fun EmojiButton(
     emoji: String,
     isHighlighted: Boolean,
     onClicked: (String) -> Unit,
-    modifier: Modifier = Modifier,
 ) {
     val backgroundColor = if (isHighlighted) {
         ElementTheme.colors.bgActionPrimaryRest
@@ -350,7 +349,7 @@ private fun EmojiButton(
         stringResource(id = CommonStrings.a11y_react_with, emoji)
     }
     Box(
-        modifier = modifier
+        modifier = Modifier
             .size(48.dp)
             .background(backgroundColor, CircleShape)
             .clearAndSetSemantics {

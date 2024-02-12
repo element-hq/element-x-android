@@ -66,10 +66,8 @@ fun PinEntryTextField(
 private fun PinEntryRow(
     pinEntry: PinEntry,
     isSecured: Boolean,
-    modifier: Modifier = Modifier,
 ) {
     FlowRow(
-        modifier = modifier,
         horizontalArrangement = Arrangement.spacedBy(8.dp, alignment = Alignment.CenterHorizontally),
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
@@ -83,7 +81,6 @@ private fun PinEntryRow(
 private fun PinDigitView(
     digit: PinDigit,
     isSecured: Boolean,
-    modifier: Modifier = Modifier,
 ) {
     val shape = RoundedCornerShape(8.dp)
     val appearanceModifier = when (digit) {
@@ -95,7 +92,7 @@ private fun PinDigitView(
         }
     }
     Box(
-        modifier = modifier
+        modifier = Modifier
             .size(48.dp)
             .then(appearanceModifier),
         contentAlignment = Alignment.Center,

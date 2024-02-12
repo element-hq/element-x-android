@@ -27,7 +27,7 @@ import javax.inject.Inject
 
 @ContributesBinding(AppScope::class)
 class DefaultCallWidgetSettingsProvider @Inject constructor() : CallWidgetSettingsProvider {
-    override fun provide(baseUrl: String, widgetId: String): MatrixWidgetSettings {
+    override fun provide(baseUrl: String, widgetId: String, encrypted: Boolean): MatrixWidgetSettings {
         val options = VirtualElementCallWidgetOptions(
             elementCallUrl = baseUrl,
             widgetId = widgetId,
@@ -40,7 +40,7 @@ class DefaultCallWidgetSettingsProvider @Inject constructor() : CallWidgetSettin
             confineToRoom = true,
             font = null,
             analyticsId = null,
-            encryption = EncryptionSystem.PerParticipantKeys,
+            encryption = if (encrypted) EncryptionSystem.PerParticipantKeys else EncryptionSystem.Unencrypted,
         )
         val rustWidgetSettings = newVirtualElementCallWidget(options)
         return MatrixWidgetSettings.fromRustWidgetSettings(rustWidgetSettings)

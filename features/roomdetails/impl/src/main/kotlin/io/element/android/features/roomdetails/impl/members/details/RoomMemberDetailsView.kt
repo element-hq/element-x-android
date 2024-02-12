@@ -108,14 +108,12 @@ fun RoomMemberDetailsView(
 @Composable
 private fun StartDMSection(
     onStartDMClicked: () -> Unit,
-    modifier: Modifier = Modifier
 ) {
     ListItem(
         headlineContent = { Text(stringResource(CommonStrings.common_direct_chat)) },
         leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Chat)),
         style = ListItemStyle.Primary,
         onClick = onStartDMClicked,
-        modifier = modifier,
     )
 }
 

@@ -91,7 +91,6 @@ private fun TextFieldDialog(
     onDismissRequest: () -> Unit,
     value: String?,
     placeholder: String?,
-    modifier: Modifier = Modifier,
     validation: (String?) -> Boolean = { true },
     onValidationErrorMessage: String? = null,
     autoSelectOnDisplay: Boolean = true,
@@ -110,7 +109,6 @@ private fun TextFieldDialog(
         onSubmit = { onSubmit(textFieldContents.text) },
         onDismissRequest = onDismissRequest,
         enabled = canSubmit,
-        modifier = modifier,
     ) {
         item {
             TextFieldListItem(

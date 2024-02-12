@@ -31,11 +31,17 @@ fun MessageEventType.map(): MessageLikeEventType = when (this) {
     MessageEventType.KEY_VERIFICATION_KEY -> MessageLikeEventType.KEY_VERIFICATION_KEY
     MessageEventType.KEY_VERIFICATION_MAC -> MessageLikeEventType.KEY_VERIFICATION_MAC
     MessageEventType.KEY_VERIFICATION_DONE -> MessageLikeEventType.KEY_VERIFICATION_DONE
-    MessageEventType.REACTION_SENT -> MessageLikeEventType.REACTION_SENT
+    MessageEventType.REACTION -> MessageLikeEventType.REACTION
     MessageEventType.ROOM_ENCRYPTED -> MessageLikeEventType.ROOM_ENCRYPTED
     MessageEventType.ROOM_MESSAGE -> MessageLikeEventType.ROOM_MESSAGE
     MessageEventType.ROOM_REDACTION -> MessageLikeEventType.ROOM_REDACTION
     MessageEventType.STICKER -> MessageLikeEventType.STICKER
+    MessageEventType.POLL_END -> MessageLikeEventType.POLL_END
+    MessageEventType.POLL_RESPONSE -> MessageLikeEventType.POLL_RESPONSE
+    MessageEventType.POLL_START -> MessageLikeEventType.POLL_START
+    MessageEventType.UNSTABLE_POLL_END -> MessageLikeEventType.UNSTABLE_POLL_END
+    MessageEventType.UNSTABLE_POLL_RESPONSE -> MessageLikeEventType.UNSTABLE_POLL_RESPONSE
+    MessageEventType.UNSTABLE_POLL_START -> MessageLikeEventType.UNSTABLE_POLL_START
 }
 
 fun MessageLikeEventType.map(): MessageEventType = when (this) {
@@ -50,9 +56,15 @@ fun MessageLikeEventType.map(): MessageEventType = when (this) {
     MessageLikeEventType.KEY_VERIFICATION_KEY -> MessageEventType.KEY_VERIFICATION_KEY
     MessageLikeEventType.KEY_VERIFICATION_MAC -> MessageEventType.KEY_VERIFICATION_MAC
     MessageLikeEventType.KEY_VERIFICATION_DONE -> MessageEventType.KEY_VERIFICATION_DONE
-    MessageLikeEventType.REACTION_SENT -> MessageEventType.REACTION_SENT
+    MessageLikeEventType.REACTION -> MessageEventType.REACTION
     MessageLikeEventType.ROOM_ENCRYPTED -> MessageEventType.ROOM_ENCRYPTED
     MessageLikeEventType.ROOM_MESSAGE -> MessageEventType.ROOM_MESSAGE
     MessageLikeEventType.ROOM_REDACTION -> MessageEventType.ROOM_REDACTION
     MessageLikeEventType.STICKER -> MessageEventType.STICKER
+    MessageLikeEventType.POLL_END -> MessageEventType.POLL_END
+    MessageLikeEventType.POLL_RESPONSE -> MessageEventType.POLL_RESPONSE
+    MessageLikeEventType.POLL_START -> MessageEventType.POLL_START
+    MessageLikeEventType.UNSTABLE_POLL_END -> MessageEventType.UNSTABLE_POLL_END
+    MessageLikeEventType.UNSTABLE_POLL_RESPONSE -> MessageEventType.UNSTABLE_POLL_RESPONSE
+    MessageLikeEventType.UNSTABLE_POLL_START -> MessageEventType.UNSTABLE_POLL_START
 }

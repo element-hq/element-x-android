@@ -23,6 +23,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -31,9 +32,11 @@ import io.element.android.features.leaveroom.api.LeaveRoomEvent
 import io.element.android.features.leaveroom.api.LeaveRoomPresenter
 import io.element.android.features.networkmonitor.api.NetworkMonitor
 import io.element.android.features.networkmonitor.api.NetworkStatus
+import io.element.android.features.preferences.api.store.SessionPreferencesStore
 import io.element.android.features.roomactions.api.SetRoomIsFavoriteAction
 import io.element.android.features.roomlist.impl.datasource.InviteStateDataSource
 import io.element.android.features.roomlist.impl.datasource.RoomListDataSource
+import io.element.android.features.roomlist.impl.migration.MigrationScreenPresenter
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.coroutine.cancel
@@ -46,12 +49,14 @@ import io.element.android.libraries.indicator.api.IndicatorService
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import io.element.android.libraries.matrix.api.encryption.RecoveryState
+import io.element.android.libraries.matrix.api.timeline.ReceiptType
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.api.user.getCurrentUser
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -70,23 +75,30 @@ class RoomListPresenter @Inject constructor(
     private val featureFlagService: FeatureFlagService,
     private val indicatorService: IndicatorService,
     private val setRoomIsFavorite: SetRoomIsFavoriteAction,
+    private val migrationScreenPresenter: MigrationScreenPresenter,
+    private val sessionPreferencesStore: SessionPreferencesStore,
 ) : Presenter<RoomListState> {
     @Composable
     override fun present(): RoomListState {
+        val coroutineScope = rememberCoroutineScope()
         val leaveRoomState = leaveRoomPresenter.present()
         val matrixUser: MutableState<MatrixUser?> = rememberSaveable {
             mutableStateOf(null)
         }
-        val roomList by roomListDataSource.allRooms.collectAsState()
+        val roomList by produceState(initialValue = AsyncData.Loading()) {
+            roomListDataSource.allRooms.collect { value = AsyncData.Success(it) }
+        }
         val filteredRoomList by roomListDataSource.filteredRooms.collectAsState()
         val filter by roomListDataSource.filter.collectAsState()
         val networkConnectionStatus by networkMonitor.connectivity.collectAsState()
-        val coroutineScope = rememberCoroutineScope()
 
         LaunchedEffect(Unit) {
             roomListDataSource.launchIn(this)
             initialLoad(matrixUser)
         }
+
+        val isMigrating = migrationScreenPresenter.present().isMigrating
+
         // Session verification status (unknown, not verified, verified)
         val canVerifySession by sessionVerificationService.canVerifySessionFlow.collectAsState(initial = false)
         var verificationPromptDismissed by rememberSaveable { mutableStateOf(false) }
@@ -133,7 +145,19 @@ class RoomListPresenter @Inject constructor(
                     contextMenu.value = RoomListState.ContextMenu.Hidden
                 }
                 is RoomListEvents.LeaveRoom -> leaveRoomState.eventSink(LeaveRoomEvent.ShowConfirmation(event.roomId))
+
                 is RoomListEvents.SetRoomIsFavorite -> coroutineScope.setRoomIsFavorite(event)
+                is RoomListEvents.MarkAsRead -> coroutineScope.launch {
+                    val receiptType = if (sessionPreferencesStore.isSendPublicReadReceiptsEnabled().first()) {
+                        ReceiptType.READ
+                    } else {
+                        ReceiptType.READ_PRIVATE
+                    }
+                    client.getRoom(event.roomId)?.markAsRead(receiptType)
+                }
+                is RoomListEvents.MarkAsUnread -> coroutineScope.launch {
+                    client.getRoom(event.roomId)?.markAsUnread()
+                }
             }
         }
 
@@ -153,6 +177,7 @@ class RoomListPresenter @Inject constructor(
             displaySearchResults = displaySearchResults,
             contextMenu = contextMenu.value,
             leaveRoomState = leaveRoomState,
+            displayMigrationStatus = isMigrating,
             eventSink = ::handleEvents
         )
     }
@@ -167,6 +192,8 @@ class RoomListPresenter @Inject constructor(
             roomName = event.roomListRoomSummary.name,
             isDm = event.roomListRoomSummary.isDm,
             isFavorite = AsyncData.Loading(),
+            markAsUnreadFeatureFlagEnabled = featureFlagService.isFeatureEnabled(FeatureFlags.MarkAsUnread),
+            hasNewContent = event.roomListRoomSummary.hasNewContent
         )
         contextMenuState.value = initialState
         client.getRoom(event.roomListRoomSummary.roomId).use { room ->

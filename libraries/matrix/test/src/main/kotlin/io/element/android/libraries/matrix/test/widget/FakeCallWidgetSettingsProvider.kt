@@ -24,7 +24,7 @@ class FakeCallWidgetSettingsProvider(
 ) : CallWidgetSettingsProvider {
     val providedBaseUrls = mutableListOf<String>()
 
-    override fun provide(baseUrl: String, widgetId: String): MatrixWidgetSettings {
+    override fun provide(baseUrl: String, widgetId: String, encrypted: Boolean): MatrixWidgetSettings {
         providedBaseUrls += baseUrl
         return provideFn(baseUrl, widgetId)
     }

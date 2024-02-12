@@ -75,4 +75,11 @@ enum class FeatureFlags(
         defaultValue = true,
         isFinished = false,
     ),
+    MarkAsUnread(
+        key = "feature.markAsUnread",
+        title = "Mark as unread",
+        description = "Allow user to mark a room as unread",
+        defaultValue = true,
+        isFinished = false,
+    ),
 }

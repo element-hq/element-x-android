@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_migration_message">"Este proceso solo se hace una vez, gracias por esperar."</string>
-  <string name="screen_migration_title">"Configura tu cuenta"</string>
   <string name="screen_notification_optin_subtitle">"Puedes cambiar la configuración más tarde."</string>
   <string name="screen_notification_optin_title">"Activa las notificaciones y nunca te pierdas un mensaje"</string>
   <string name="screen_welcome_bullet_1">"Las llamadas, las encuestas, la búsqueda y más se agregarán más adelante este año."</string>

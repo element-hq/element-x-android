@@ -9,11 +9,11 @@
   <string name="screen_create_poll_question_hint">"Di cosa parla il sondaggio?"</string>
   <string name="screen_create_poll_title">"Crea sondaggio"</string>
   <string name="screen_edit_poll_delete_confirmation">"Vuoi davvero eliminare questo sondaggio?"</string>
-  <string name="screen_edit_poll_delete_confirmation_title">"Elimina sondaggio"</string>
-  <string name="screen_edit_poll_title">"Modifica sondaggio"</string>
   <string name="screen_polls_history_empty_ongoing">"Impossibile trovare sondaggi in corso."</string>
   <string name="screen_polls_history_empty_past">"Impossibile trovare sondaggi passati."</string>
   <string name="screen_polls_history_filter_ongoing">"In corso"</string>
   <string name="screen_polls_history_filter_past">"Passato"</string>
   <string name="screen_polls_history_title">"Sondaggi"</string>
+  <string name="screen_edit_poll_delete_confirmation_title">"Elimina sondaggio"</string>
+  <string name="screen_edit_poll_title">"Modifica sondaggio"</string>
 </resources>

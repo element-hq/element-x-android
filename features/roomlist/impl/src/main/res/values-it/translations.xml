@@ -2,10 +2,19 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="confirm_recovery_key_banner_message">"Il backup della chat non è attualmente sincronizzato. Devi confermare la chiave di recupero per mantenere l\'accesso al backup della chat."</string>
   <string name="confirm_recovery_key_banner_title">"Conferma la chiave di recupero"</string>
+  <string name="screen_migration_message">"Si tratta di una procedura che si effettua una sola volta, grazie per l\'attesa."</string>
+  <string name="screen_migration_title">"Configurazione del tuo account."</string>
   <string name="screen_roomlist_a11y_create_message">"Crea una nuova conversazione o stanza"</string>
   <string name="screen_roomlist_empty_message">"Inizia inviando un messaggio a qualcuno."</string>
   <string name="screen_roomlist_empty_title">"Ancora nessuna chat."</string>
+  <string name="screen_roomlist_filter_favourites">"Preferiti"</string>
+  <string name="screen_roomlist_filter_low_priority">"Bassa priorità"</string>
+  <string name="screen_roomlist_filter_rooms">"Stanze"</string>
+  <string name="screen_roomlist_filter_unreads">"Non letti"</string>
   <string name="screen_roomlist_main_space_title">"Tutte le conversazioni"</string>
+  <string name="screen_roomlist_mark_as_read">"Segna come letto"</string>
+  <string name="screen_roomlist_mark_as_unread">"Segna come non letto"</string>
   <string name="session_verification_banner_message">"Sembra che tu stia usando un nuovo dispositivo. Verificati con un altro dispositivo per accedere ai tuoi messaggi cifrati."</string>
   <string name="session_verification_banner_title">"Verifica che sei tu"</string>
+  <string name="screen_roomlist_filter_people">"Persone"</string>
 </resources>

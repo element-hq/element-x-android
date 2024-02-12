@@ -33,6 +33,7 @@ open class BugReportStateProvider : PreviewParameterProvider<BugReportState> {
             ),
             aBugReportState().copy(sending = AsyncAction.Loading),
             aBugReportState().copy(sending = AsyncAction.Success(Unit)),
+            aBugReportState().copy(sending = AsyncAction.Failure(BugReportFormError.DescriptionTooShort)),
         )
 }
 

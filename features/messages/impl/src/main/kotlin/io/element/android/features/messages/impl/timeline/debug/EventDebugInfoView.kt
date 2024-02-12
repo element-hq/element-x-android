@@ -125,11 +125,10 @@ fun EventDebugInfoView(
 private fun CollapsibleSection(
     title: String,
     text: String,
-    modifier: Modifier = Modifier,
     initiallyExpanded: Boolean = false,
 ) {
     var isExpanded by remember { mutableStateOf(initiallyExpanded) }
-    Column(modifier = modifier.fillMaxWidth()) {
+    Column(modifier = Modifier.fillMaxWidth()) {
         Row(
             modifier = Modifier
                 .clickable { isExpanded = !isExpanded }

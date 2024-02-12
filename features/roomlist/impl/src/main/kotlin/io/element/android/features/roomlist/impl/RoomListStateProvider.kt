@@ -18,6 +18,7 @@ package io.element.android.features.roomlist.impl
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.leaveroom.api.aLeaveRoomState
+import io.element.android.features.roomlist.impl.datasource.RoomListRoomSummaryFactory
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
 import io.element.android.features.roomlist.impl.model.aRoomListRoomSummary
 import io.element.android.libraries.architecture.AsyncData
@@ -42,22 +43,19 @@ open class RoomListStateProvider : PreviewParameterProvider<RoomListState> {
             aRoomListState().copy(invitesState = InvitesState.NewInvites),
             aRoomListState().copy(displaySearchResults = true, filter = "", filteredRoomList = persistentListOf()),
             aRoomListState().copy(displaySearchResults = true),
-            aRoomListState().copy(
-                contextMenu = RoomListState.ContextMenu.Shown(
-                    roomId = RoomId("!aRoom:aDomain"),
-                    roomName = "A nice room name",
-                    isDm = false,
-                    isFavorite = AsyncData.Success(true),
-                )
-            ),
+            aRoomListState().copy(contextMenu = aContextMenuShown(roomName = "A nice room name")),
+            aRoomListState().copy(contextMenu = aContextMenuShown(isFavorite = AsyncData.Success(true))),
             aRoomListState().copy(displayRecoveryKeyPrompt = true),
+            aRoomListState().copy(roomList = AsyncData.Success(persistentListOf())),
+            aRoomListState().copy(roomList = AsyncData.Loading(prevData = RoomListRoomSummaryFactory.createFakeList())),
+            aRoomListState().copy(matrixUser = null, displayMigrationStatus = true),
         )
 }
 
 internal fun aRoomListState() = RoomListState(
     matrixUser = MatrixUser(userId = UserId("@id:domain"), displayName = "User#1"),
     showAvatarIndicator = false,
-    roomList = aRoomListRoomSummaryList(),
+    roomList = AsyncData.Success(aRoomListRoomSummaryList()),
     filter = "filter",
     filteredRoomList = aRoomListRoomSummaryList(),
     hasNetworkConnection = true,
@@ -68,6 +66,7 @@ internal fun aRoomListState() = RoomListState(
     displaySearchResults = false,
     contextMenu = RoomListState.ContextMenu.Hidden,
     leaveRoomState = aLeaveRoomState(),
+    displayMigrationStatus = false,
     eventSink = {}
 )
 
@@ -99,3 +98,17 @@ internal fun aRoomListRoomSummaryList(): ImmutableList<RoomListRoomSummary> {
         ),
     )
 }
+
+internal fun aContextMenuShown(
+    roomName: String = "aRoom",
+    isDm: Boolean = false,
+    hasNewContent: Boolean = false,
+    isFavorite: AsyncData<Boolean> = AsyncData.Success(false),
+) = RoomListState.ContextMenu.Shown(
+    roomId = RoomId("!aRoom:aDomain"),
+    roomName = roomName,
+    isDm = isDm,
+    markAsUnreadFeatureFlagEnabled = true,
+    hasNewContent = hasNewContent,
+    isFavorite = isFavorite,
+)

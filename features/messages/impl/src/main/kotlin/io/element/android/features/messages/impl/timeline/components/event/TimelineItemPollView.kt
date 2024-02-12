@@ -31,7 +31,7 @@ import kotlinx.collections.immutable.toImmutableList
 @Composable
 fun TimelineItemPollView(
     content: TimelineItemPollContent,
-    eventSink: (TimelineEvents) -> Unit,
+    eventSink: (TimelineEvents.TimelineItemPollEvents) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     fun onAnswerSelected(pollStartId: EventId, answerId: String) {

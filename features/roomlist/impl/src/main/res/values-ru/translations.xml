@@ -2,10 +2,19 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="confirm_recovery_key_banner_message">"В настоящее время резервная копия вашего чата не синхронизирована. Требуется подтвердить вашим ключом восстановления, чтобы сохранить доступ к резервной копии чата."</string>
   <string name="confirm_recovery_key_banner_title">"Подтвердите ключ восстановления"</string>
+  <string name="screen_migration_message">"Это одноразовый процесс, спасибо, что подождали."</string>
+  <string name="screen_migration_title">"Настройка учетной записи."</string>
   <string name="screen_roomlist_a11y_create_message">"Создайте новую беседу или комнату"</string>
   <string name="screen_roomlist_empty_message">"Начните переписку с отправки сообщения."</string>
   <string name="screen_roomlist_empty_title">"Пока нет доступных чатов."</string>
+  <string name="screen_roomlist_filter_favourites">"Избранное"</string>
+  <string name="screen_roomlist_filter_low_priority">"Низкий приоритет"</string>
+  <string name="screen_roomlist_filter_rooms">"Комнаты"</string>
+  <string name="screen_roomlist_filter_unreads">"Непрочитанные"</string>
   <string name="screen_roomlist_main_space_title">"Все чаты"</string>
+  <string name="screen_roomlist_mark_as_read">"Пометить как прочитанное"</string>
+  <string name="screen_roomlist_mark_as_unread">"Пометить как непрочитанное"</string>
   <string name="session_verification_banner_message">"Похоже, вы используете новое устройство. Чтобы получить доступ к зашифрованным сообщениям пройдите верификацию с другим устройством."</string>
   <string name="session_verification_banner_title">"Подтвердите, что это вы"</string>
+  <string name="screen_roomlist_filter_people">"Люди"</string>
 </resources>

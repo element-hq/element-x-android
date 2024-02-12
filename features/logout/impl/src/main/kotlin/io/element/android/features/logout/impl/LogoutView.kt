@@ -86,7 +86,7 @@ fun LogoutView(
         onForceLogoutClicked = {
             eventSink(LogoutEvents.Logout(ignoreSdkError = true))
         },
-        onDismissError = {
+        onDismissDialog = {
             eventSink(LogoutEvents.CloseDialogs)
         },
         onSuccessLogout = {

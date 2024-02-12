@@ -26,11 +26,13 @@ import io.element.android.features.messages.impl.timeline.model.TimelineItem
 internal fun ATimelineItemEventRow(
     event: TimelineItem.Event,
     timelineRoomInfo: TimelineRoomInfo = aTimelineRoomInfo(),
+    renderReadReceipts: Boolean = false,
     isLastOutgoingMessage: Boolean = false,
     isHighlighted: Boolean = false,
 ) = TimelineItemEventRow(
     event = event,
     timelineRoomInfo = timelineRoomInfo,
+    renderReadReceipts = renderReadReceipts,
     isLastOutgoingMessage = isLastOutgoingMessage,
     isHighlighted = isHighlighted,
     onClick = {},

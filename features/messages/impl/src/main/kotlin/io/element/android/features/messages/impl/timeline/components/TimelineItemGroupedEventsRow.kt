@@ -43,6 +43,7 @@ import io.element.android.libraries.matrix.api.core.UserId
 fun TimelineItemGroupedEventsRow(
     timelineItem: TimelineItem.GroupedEvents,
     timelineRoomInfo: TimelineRoomInfo,
+    renderReadReceipts: Boolean,
     isLastOutgoingMessage: Boolean,
     highlightedItem: String?,
     sessionState: SessionState,
@@ -55,7 +56,7 @@ fun TimelineItemGroupedEventsRow(
     onReactionLongClick: (key: String, TimelineItem.Event) -> Unit,
     onMoreReactionsClick: (TimelineItem.Event) -> Unit,
     onReadReceiptClick: (TimelineItem.Event) -> Unit,
-    eventSink: (TimelineEvents) -> Unit,
+    eventSink: (TimelineEvents.EventFromTimelineItem) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val isExpanded = rememberSaveable(key = timelineItem.identifier()) { mutableStateOf(false) }
@@ -70,6 +71,7 @@ fun TimelineItemGroupedEventsRow(
         timelineItem = timelineItem,
         timelineRoomInfo = timelineRoomInfo,
         highlightedItem = highlightedItem,
+        renderReadReceipts = renderReadReceipts,
         isLastOutgoingMessage = isLastOutgoingMessage,
         sessionState = sessionState,
         onClick = onClick,
@@ -93,6 +95,7 @@ private fun TimelineItemGroupedEventsRowContent(
     timelineItem: TimelineItem.GroupedEvents,
     timelineRoomInfo: TimelineRoomInfo,
     highlightedItem: String?,
+    renderReadReceipts: Boolean,
     isLastOutgoingMessage: Boolean,
     sessionState: SessionState,
     onClick: (TimelineItem.Event) -> Unit,
@@ -104,7 +107,7 @@ private fun TimelineItemGroupedEventsRowContent(
     onReactionLongClick: (key: String, TimelineItem.Event) -> Unit,
     onMoreReactionsClick: (TimelineItem.Event) -> Unit,
     onReadReceiptClick: (TimelineItem.Event) -> Unit,
-    eventSink: (TimelineEvents) -> Unit,
+    eventSink: (TimelineEvents.EventFromTimelineItem) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(modifier = modifier.animateContentSize()) {
@@ -124,6 +127,7 @@ private fun TimelineItemGroupedEventsRowContent(
                     TimelineItemRow(
                         timelineItem = subGroupEvent,
                         timelineRoomInfo = timelineRoomInfo,
+                        renderReadReceipts = renderReadReceipts,
                         isLastOutgoingMessage = isLastOutgoingMessage,
                         highlightedItem = highlightedItem,
                         sessionState = sessionState,
@@ -141,13 +145,14 @@ private fun TimelineItemGroupedEventsRowContent(
                     )
                 }
             }
-        } else {
+        } else if (renderReadReceipts) {
             TimelineItemReadReceiptView(
                 state = ReadReceiptViewState(
                     sendState = null,
                     isLastOutgoingMessage = false,
                     receipts = timelineItem.aggregatedReadReceipts,
                 ),
+                renderReadReceipts = true,
                 onReadReceiptsClicked = onExpandGroupClick
             )
         }
@@ -163,6 +168,7 @@ internal fun TimelineItemGroupedEventsRowContentExpandedPreview() = ElementPrevi
         timelineItem = aGroupedEvents(withReadReceipts = true),
         timelineRoomInfo = aTimelineRoomInfo(),
         highlightedItem = null,
+        renderReadReceipts = true,
         isLastOutgoingMessage = false,
         sessionState = aSessionState(),
         onClick = {},
@@ -187,6 +193,7 @@ internal fun TimelineItemGroupedEventsRowContentCollapsePreview() = ElementPrevi
         timelineItem = aGroupedEvents(withReadReceipts = true),
         timelineRoomInfo = aTimelineRoomInfo(),
         highlightedItem = null,
+        renderReadReceipts = true,
         isLastOutgoingMessage = false,
         sessionState = aSessionState(),
         onClick = {},

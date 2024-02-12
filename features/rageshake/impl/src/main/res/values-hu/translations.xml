@@ -7,9 +7,11 @@
   <string name="screen_bug_report_editor_description">"Írja le a hibát. Mit csinált? Mire számított, hogy mi fog történni? Mi történt valójában? Fogalmazzon a lehető legrészletesebben."</string>
   <string name="screen_bug_report_editor_placeholder">"Írja le a problémát…"</string>
   <string name="screen_bug_report_editor_supporting">"Ha lehetséges, a leírást angolul írja meg."</string>
+  <string name="screen_bug_report_error_description_too_short">"A leírás túl rövid, adjon meg további részleteket a történtekről. Köszönjük!"</string>
   <string name="screen_bug_report_include_crash_logs">"Összeomlásnaplók küldése"</string>
   <string name="screen_bug_report_include_logs">"Naplók engedélyezése"</string>
   <string name="screen_bug_report_include_screenshot">"Képernyőkép küldése"</string>
   <string name="screen_bug_report_logs_description">"A naplók szerepelni fognak az üzenetben, hogy megbizonyosodhassunk arról, hogy minden megfelelően működik-e. Ha naplók nélkül szeretné elküldeni az üzenetet, akkor kapcsolja ki ezt a beállítást."</string>
+  <string name="screen_bug_report_view_logs">"Naplók megtekintése"</string>
   <string name="screen_bug_report_rash_logs_alert_title">"Az %1$s összeomlott a legutóbbi használata óta. Megosztod velünk az összeomlás-jelentést?"</string>
 </resources>

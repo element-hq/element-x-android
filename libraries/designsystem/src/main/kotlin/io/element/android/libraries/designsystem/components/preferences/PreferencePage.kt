@@ -80,10 +80,8 @@ fun PreferencePage(
 private fun PreferenceTopAppBar(
     title: String,
     onBackPressed: () -> Unit,
-    modifier: Modifier = Modifier,
 ) {
     TopAppBar(
-        modifier = modifier,
         navigationIcon = {
             BackButton(onClick = onBackPressed)
         },

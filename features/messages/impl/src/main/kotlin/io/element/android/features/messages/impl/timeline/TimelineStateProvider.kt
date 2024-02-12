@@ -45,22 +45,35 @@ import kotlinx.collections.immutable.toPersistentList
 import java.util.UUID
 import kotlin.random.Random
 
-fun aTimelineState(timelineItems: ImmutableList<TimelineItem> = persistentListOf()) = TimelineState(
+fun aTimelineState(
+    timelineItems: ImmutableList<TimelineItem> = persistentListOf(),
+    paginationState: MatrixTimeline.PaginationState = aPaginationState(),
+    eventSink: (TimelineEvents) -> Unit = {},
+) = TimelineState(
     timelineItems = timelineItems,
     timelineRoomInfo = aTimelineRoomInfo(),
-    paginationState = MatrixTimeline.PaginationState(
-        isBackPaginating = false,
-        hasMoreToLoadBackwards = true,
-        beginningOfRoomReached = false,
-    ),
+    paginationState = paginationState,
+    renderReadReceipts = false,
     highlightedEventId = null,
     newEventState = NewEventState.None,
     sessionState = aSessionState(
         isSessionVerified = true,
         isKeyBackupEnabled = true,
     ),
-    eventSink = {},
+    eventSink = eventSink,
 )
+
+fun aPaginationState(
+    isBackPaginating: Boolean = false,
+    hasMoreToLoadBackwards: Boolean = true,
+    beginningOfRoomReached: Boolean = false,
+): MatrixTimeline.PaginationState {
+    return MatrixTimeline.PaginationState(
+        isBackPaginating = isBackPaginating,
+        hasMoreToLoadBackwards = hasMoreToLoadBackwards,
+        beginningOfRoomReached = beginningOfRoomReached,
+    )
+}
 
 internal fun aTimelineItemList(content: TimelineItemEventContent): ImmutableList<TimelineItem> {
     return persistentListOf(

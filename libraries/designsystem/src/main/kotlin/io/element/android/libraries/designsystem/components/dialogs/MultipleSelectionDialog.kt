@@ -84,7 +84,6 @@ private fun MultipleSelectionDialogContent(
     onConfirmClicked: (List<Int>) -> Unit,
     dismissButtonTitle: String,
     onDismissRequest: () -> Unit,
-    modifier: Modifier = Modifier,
     title: String? = null,
     initialSelected: ImmutableList<Int> = persistentListOf(),
     subtitle: @Composable (() -> Unit)? = null,
@@ -96,7 +95,6 @@ private fun MultipleSelectionDialogContent(
     SimpleAlertDialogContent(
         title = title,
         subtitle = subtitle,
-        modifier = modifier,
         submitText = confirmButtonTitle,
         onSubmitClicked = {
             onConfirmClicked(selectedOptionIndexes.toList())

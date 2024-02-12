@@ -3,13 +3,11 @@
   <string name="notification_channel_call">"通話"</string>
   <string name="notification_channel_silent">"無聲通知"</string>
   <string name="notification_inline_reply_failed">"** 無法傳送，請開啟聊天室"</string>
-  <string name="notification_invitation_action_join">"加入"</string>
   <string name="notification_invitation_action_reject">"拒絕"</string>
   <string name="notification_invite_body">"邀請您聊天"</string>
   <string name="notification_mentioned_you_body">"提及您：%1$s"</string>
   <string name="notification_new_messages">"新訊息"</string>
   <string name="notification_reaction_body">"回應 %1$s"</string>
-  <string name="notification_room_action_mark_as_read">"標示為已讀"</string>
   <string name="notification_room_invite_body">"邀請您加入聊天室"</string>
   <string name="notification_sender_me">"我"</string>
   <string name="notification_test_push_notification_content">"您正在查看通知！點我！"</string>
@@ -34,5 +32,6 @@
   <string name="push_distributor_background_sync_android">"背景同步"</string>
   <string name="push_distributor_firebase_android">"Google 服務"</string>
   <string name="notification_fallback_content">"通知"</string>
+  <string name="notification_invitation_action_join">"加入"</string>
   <string name="notification_room_action_quick_reply">"快速回覆"</string>
 </resources>

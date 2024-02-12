@@ -20,6 +20,9 @@ import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import io.element.android.features.rageshake.api.crash.CrashDataStore
+import io.element.android.features.rageshake.api.reporter.BugReporter
+import io.element.android.features.rageshake.api.screenshot.ScreenshotHolder
 import io.element.android.features.rageshake.test.crash.A_CRASH_DATA
 import io.element.android.features.rageshake.test.crash.FakeCrashDataStore
 import io.element.android.features.rageshake.test.screenshot.A_SCREENSHOT_URI
@@ -27,6 +30,7 @@ import io.element.android.features.rageshake.test.screenshot.FakeScreenshotHolde
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.test.A_FAILURE_REASON
 import io.element.android.tests.testutils.WarmUpRule
+import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
@@ -40,12 +44,7 @@ class BugReportPresenterTest {
 
     @Test
     fun `present - initial state`() = runTest {
-        val presenter = BugReportPresenter(
-            FakeBugReporter(),
-            FakeCrashDataStore(),
-            FakeScreenshotHolder(),
-            this,
-        )
+        val presenter = createPresenter()
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -55,24 +54,19 @@ class BugReportPresenterTest {
             assertThat(initialState.sending).isEqualTo(AsyncAction.Uninitialized)
             assertThat(initialState.screenshotUri).isNull()
             assertThat(initialState.sendingProgress).isEqualTo(0f)
-            assertThat(initialState.submitEnabled).isFalse()
+            assertThat(initialState.submitEnabled).isTrue()
         }
     }
 
     @Test
     fun `present - set description`() = runTest {
-        val presenter = BugReportPresenter(
-            FakeBugReporter(),
-            FakeCrashDataStore(),
-            FakeScreenshotHolder(),
-            this,
-        )
+        val presenter = createPresenter()
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
             initialState.eventSink.invoke(BugReportEvents.SetDescription(A_SHORT_DESCRIPTION))
-            assertThat(awaitItem().submitEnabled).isFalse()
+            assertThat(awaitItem().submitEnabled).isTrue()
             initialState.eventSink.invoke(BugReportEvents.SetDescription(A_LONG_DESCRIPTION))
             assertThat(awaitItem().submitEnabled).isTrue()
         }
@@ -80,12 +74,7 @@ class BugReportPresenterTest {
 
     @Test
     fun `present - can contact`() = runTest {
-        val presenter = BugReportPresenter(
-            FakeBugReporter(),
-            FakeCrashDataStore(),
-            FakeScreenshotHolder(),
-            this,
-        )
+        val presenter = createPresenter()
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -99,12 +88,7 @@ class BugReportPresenterTest {
 
     @Test
     fun `present - send logs`() = runTest {
-        val presenter = BugReportPresenter(
-            FakeBugReporter(),
-            FakeCrashDataStore(),
-            FakeScreenshotHolder(),
-            this,
-        )
+        val presenter = createPresenter()
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -119,12 +103,7 @@ class BugReportPresenterTest {
 
     @Test
     fun `present - send screenshot`() = runTest {
-        val presenter = BugReportPresenter(
-            FakeBugReporter(),
-            FakeCrashDataStore(),
-            FakeScreenshotHolder(),
-            this,
-        )
+        val presenter = createPresenter()
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -138,11 +117,9 @@ class BugReportPresenterTest {
 
     @Test
     fun `present - reset all`() = runTest {
-        val presenter = BugReportPresenter(
-            FakeBugReporter(),
-            FakeCrashDataStore(crashData = A_CRASH_DATA, appHasCrashed = true),
-            FakeScreenshotHolder(screenshotUri = A_SCREENSHOT_URI),
-            this,
+        val presenter = createPresenter(
+            crashDataStore = FakeCrashDataStore(crashData = A_CRASH_DATA, appHasCrashed = true),
+            screenshotHolder = FakeScreenshotHolder(screenshotUri = A_SCREENSHOT_URI),
         )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -160,16 +137,17 @@ class BugReportPresenterTest {
 
     @Test
     fun `present - send success`() = runTest {
-        val presenter = BugReportPresenter(
+        val presenter = createPresenter(
             FakeBugReporter(mode = FakeBugReporterMode.Success),
             FakeCrashDataStore(crashData = A_CRASH_DATA, appHasCrashed = true),
             FakeScreenshotHolder(screenshotUri = A_SCREENSHOT_URI),
-            this,
         )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
+            initialState.eventSink.invoke(BugReportEvents.SetDescription(A_LONG_DESCRIPTION))
+            skipItems(1)
             initialState.eventSink.invoke(BugReportEvents.SendBugReport)
             skipItems(1)
             val progressState = awaitItem()
@@ -185,16 +163,17 @@ class BugReportPresenterTest {
 
     @Test
     fun `present - send failure`() = runTest {
-        val presenter = BugReportPresenter(
+        val presenter = createPresenter(
             FakeBugReporter(mode = FakeBugReporterMode.Failure),
             FakeCrashDataStore(crashData = A_CRASH_DATA, appHasCrashed = true),
             FakeScreenshotHolder(screenshotUri = A_SCREENSHOT_URI),
-            this,
         )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
+            initialState.eventSink.invoke(BugReportEvents.SetDescription(A_LONG_DESCRIPTION))
+            skipItems(1)
             initialState.eventSink.invoke(BugReportEvents.SendBugReport)
             skipItems(1)
             val progressState = awaitItem()
@@ -213,17 +192,37 @@ class BugReportPresenterTest {
     }
 
     @Test
+    fun `present - send failure description too short`() = runTest {
+        val presenter = createPresenter()
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            initialState.eventSink.invoke(BugReportEvents.SetDescription(A_SHORT_DESCRIPTION))
+            skipItems(1)
+            initialState.eventSink.invoke(BugReportEvents.SendBugReport)
+            val errorState = awaitItem()
+            assertThat(errorState.sending).isEqualTo(AsyncAction.Failure(BugReportFormError.DescriptionTooShort))
+            // Reset failure
+            initialState.eventSink.invoke(BugReportEvents.ClearError)
+            val lastItem = awaitItem()
+            assertThat(lastItem.sending).isInstanceOf(AsyncAction.Uninitialized::class.java)
+        }
+    }
+
+    @Test
     fun `present - send cancel`() = runTest {
-        val presenter = BugReportPresenter(
+        val presenter = createPresenter(
             FakeBugReporter(mode = FakeBugReporterMode.Cancel),
             FakeCrashDataStore(crashData = A_CRASH_DATA, appHasCrashed = true),
             FakeScreenshotHolder(screenshotUri = A_SCREENSHOT_URI),
-            this,
         )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
+            initialState.eventSink.invoke(BugReportEvents.SetDescription(A_LONG_DESCRIPTION))
+            skipItems(1)
             initialState.eventSink.invoke(BugReportEvents.SendBugReport)
             skipItems(1)
             val progressState = awaitItem()
@@ -235,4 +234,15 @@ class BugReportPresenterTest {
             assertThat(awaitItem().sending).isEqualTo(AsyncAction.Uninitialized)
         }
     }
+
+    private fun TestScope.createPresenter(
+        bugReporter: BugReporter = FakeBugReporter(),
+        crashDataStore: CrashDataStore = FakeCrashDataStore(),
+        screenshotHolder: ScreenshotHolder = FakeScreenshotHolder(),
+    ) = BugReportPresenter(
+        bugReporter,
+        crashDataStore,
+        screenshotHolder,
+        this,
+    )
 }

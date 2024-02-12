@@ -11,5 +11,6 @@
   <string name="screen_bug_report_include_logs">"Consenti i log"</string>
   <string name="screen_bug_report_include_screenshot">"Invia istantanea schermo"</string>
   <string name="screen_bug_report_logs_description">"Per verificare che le cose funzionino come previsto, i log verranno inviati con il tuo messaggio. Per inviare solo il tuo messaggio, disattiva questa impostazione."</string>
+  <string name="screen_bug_report_view_logs">"Visualizza i log"</string>
   <string name="screen_bug_report_rash_logs_alert_title">"%1$s si è chiuso inaspettatamente l\'ultima volta che è stato usato. Vuoi condividere con noi un rapporto sull\'arresto anomalo?"</string>
 </resources>

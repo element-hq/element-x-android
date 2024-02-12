@@ -8,8 +8,8 @@
   <string name="screen_create_room_private_option_title">"Salon privé (sur invitation seulement)"</string>
   <string name="screen_create_room_public_option_description">"Les messages ne sont pas chiffrés et n’importe qui peut les lire. Vous pouvez activer le chiffrement ultérieurement."</string>
   <string name="screen_create_room_public_option_title">"Salon public (tout le monde)"</string>
-  <string name="screen_create_room_room_name_label">"Nom du salon"</string>
   <string name="screen_create_room_topic_label">"Sujet (facultatif)"</string>
   <string name="screen_start_chat_error_starting_chat">"Une erreur s’est produite lors de la tentative de création de la discussion"</string>
+  <string name="screen_create_room_room_name_label">"Nom du salon"</string>
   <string name="screen_create_room_title">"Créer un salon"</string>
 </resources>

@@ -47,6 +47,7 @@ internal fun TimelineItemEventRowWithRRPreview(
                 timelineItemReactions = aTimelineItemReactions(count = 0),
                 readReceiptState = TimelineItemReadReceipts(state.receipts),
             ),
+            renderReadReceipts = true,
             isLastOutgoingMessage = false,
         )
         // A message from current user
@@ -60,6 +61,7 @@ internal fun TimelineItemEventRowWithRRPreview(
                 timelineItemReactions = aTimelineItemReactions(count = 0),
                 readReceiptState = TimelineItemReadReceipts(state.receipts),
             ),
+            renderReadReceipts = true,
             isLastOutgoingMessage = false,
         )
         // Another message from current user
@@ -73,6 +75,7 @@ internal fun TimelineItemEventRowWithRRPreview(
                 timelineItemReactions = aTimelineItemReactions(count = 0),
                 readReceiptState = TimelineItemReadReceipts(state.receipts),
             ),
+            renderReadReceipts = true,
             isLastOutgoingMessage = true,
         )
     }

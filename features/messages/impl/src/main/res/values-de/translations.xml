@@ -12,6 +12,14 @@
     <item quantity="one">"%1$d Raumänderung"</item>
     <item quantity="other">"%1$d Raumänderungen"</item>
   </plurals>
+  <plurals name="screen_room_typing_many_members">
+    <item quantity="one">"%1$s, %2$s und %3$d weitere Person"</item>
+    <item quantity="other">"%1$s, %2$s und %3$d weitere Person"</item>
+  </plurals>
+  <plurals name="screen_room_typing_notification">
+    <item quantity="one">"%1$s schreibt…"</item>
+    <item quantity="other">"%1$s schreiben…"</item>
+  </plurals>
   <string name="report_content_explanation">"Diese Meldung wird an den Administrator deines Homeservers weitergeleitet. Dieser kann keine verschlüsselten Nachrichten lesen."</string>
   <string name="report_content_hint">"Grund für die Meldung dieses Inhalts"</string>
   <string name="room_timeline_beginning_of_room">"Dies ist der Anfang von %1$s."</string>
@@ -20,7 +28,6 @@
   <string name="screen_room_mentions_at_room_subtitle">"Den ganzen Raum benachrichtigen"</string>
   <string name="screen_report_content_block_user_hint">"Prüfe, ob du alle aktuellen und zukünftigen Nachrichten dieses Benutzers ausblenden möchtest"</string>
   <string name="screen_room_attachment_source_camera">"Kamera"</string>
-  <string name="screen_room_attachment_source_camera_photo">"Foto aufnehmen"</string>
   <string name="screen_room_attachment_source_camera_video">"Video aufnehmen"</string>
   <string name="screen_room_attachment_source_files">"Anhang"</string>
   <string name="screen_room_attachment_source_gallery">"Foto- und Videobibliothek"</string>
@@ -53,9 +60,11 @@
   <string name="screen_room_retry_send_menu_title">"Deine Nachricht konnte nicht gesendet werden"</string>
   <string name="screen_room_timeline_add_reaction">"Emoji hinzufügen"</string>
   <string name="screen_room_timeline_less_reactions">"Weniger anzeigen"</string>
+  <string name="screen_room_typing_two_members">"%1$s und %2$s"</string>
   <string name="screen_room_voice_message_tooltip">"Zum Aufnehmen gedrückt halten"</string>
   <string name="screen_room_mentions_at_room_title">"Alle"</string>
   <string name="screen_report_content_block_user">"Benutzer blockieren"</string>
+  <string name="screen_room_attachment_source_camera_photo">"Foto aufnehmen"</string>
   <string name="screen_room_error_failed_processing_media">"Fehler beim Verarbeiten des hochgeladenen Mediums. Bitte versuche es erneut."</string>
   <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Nur Erwähnungen und Schlüsselwörter"</string>
 </resources>

@@ -5,14 +5,12 @@
   <string name="notification_channel_noisy">"Zajos értesítések"</string>
   <string name="notification_channel_silent">"Csendes értesítések"</string>
   <string name="notification_inline_reply_failed">"** Nem sikerült elküldeni – kérlek nyisd meg a szobát"</string>
-  <string name="notification_invitation_action_join">"Csatlakozás"</string>
   <string name="notification_invitation_action_reject">"Elutasítás"</string>
   <string name="notification_invite_body">"Meghívta, hogy csevegjen"</string>
   <string name="notification_mentioned_you_body">"Megemlítette Önt: %1$s"</string>
   <string name="notification_new_messages">"Új üzenetek"</string>
   <string name="notification_reaction_body">"Ezzel reagált: %1$s"</string>
-  <string name="notification_room_action_mark_as_read">"Megjelölés olvasottként"</string>
-  <string name="notification_room_invite_body">"Meghívta, hogy csatlakozzon a szobához"</string>
+  <string name="notification_room_invite_body">"Meghívott, hogy csatlakozz a szobához"</string>
   <string name="notification_sender_me">"Én"</string>
   <string name="notification_test_push_notification_content">"Az értesítést nézed! Kattints ide!"</string>
   <string name="notification_ticker_text_dm">"%1$s: %2$s"</string>
@@ -49,5 +47,7 @@
   <string name="push_distributor_firebase_android">"Google szolgáltatások"</string>
   <string name="push_no_valid_google_play_services_apk_android">"A Google Play szolgáltatások nem találhatók. Előfordulhat, hogy az értesítések nem működnek megfelelően."</string>
   <string name="notification_fallback_content">"Értesítés"</string>
+  <string name="notification_invitation_action_join">"Csatlakozás"</string>
+  <string name="notification_room_action_mark_as_read">"Megjelölés olvasottként"</string>
   <string name="notification_room_action_quick_reply">"Gyors válasz"</string>
 </resources>

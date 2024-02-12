@@ -18,6 +18,7 @@ package io.element.android.libraries.matrix.test.roomlist
 
 import io.element.android.libraries.matrix.api.roomlist.DynamicRoomList
 import io.element.android.libraries.matrix.api.roomlist.RoomList
+import io.element.android.libraries.matrix.api.roomlist.RoomListFilter
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.api.roomlist.RoomSummary
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -61,13 +62,13 @@ class FakeRoomListService : RoomListService {
     override val allRooms: DynamicRoomList = SimplePagedRoomList(
         allRoomSummariesFlow,
         allRoomsLoadingStateFlow,
-        MutableStateFlow(DynamicRoomList.Filter.None)
+        MutableStateFlow(RoomListFilter.all())
     )
 
     override val invites: RoomList = SimplePagedRoomList(
         inviteRoomSummariesFlow,
         inviteRoomsLoadingStateFlow,
-        MutableStateFlow(DynamicRoomList.Filter.None)
+        MutableStateFlow(RoomListFilter.all())
     )
 
     override fun updateAllRoomsVisibleRange(range: IntRange) {

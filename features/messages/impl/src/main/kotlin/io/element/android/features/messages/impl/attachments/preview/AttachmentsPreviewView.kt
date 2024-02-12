@@ -118,10 +118,9 @@ private fun AttachmentPreviewContent(
     attachment: Attachment,
     onSendClicked: () -> Unit,
     onDismiss: () -> Unit,
-    modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = modifier
+        modifier = Modifier
             .fillMaxSize()
             .padding(top = 24.dp)
     ) {

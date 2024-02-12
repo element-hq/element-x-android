@@ -49,13 +49,11 @@ fun FeatureListView(
 private fun FeaturePreferenceView(
     feature: FeatureUiModel,
     onCheckedChange: (Boolean) -> Unit,
-    modifier: Modifier = Modifier
 ) {
     PreferenceCheckbox(
         title = feature.title,
         supportingText = feature.description,
         isChecked = feature.isEnabled,
-        modifier = modifier,
         onCheckedChange = onCheckedChange
     )
 }

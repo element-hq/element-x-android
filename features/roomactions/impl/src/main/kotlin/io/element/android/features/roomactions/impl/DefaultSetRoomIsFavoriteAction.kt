@@ -48,5 +48,4 @@ class DefaultSetRoomIsFavoriteAction @Inject constructor(private val client: Mat
             }
         )
     }
-
 }

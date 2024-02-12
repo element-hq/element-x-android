@@ -26,7 +26,11 @@ sealed interface RoomListEvents {
     data object DismissRecoveryKeyPrompt : RoomListEvents
     data object ToggleSearchResults : RoomListEvents
     data class ShowContextMenu(val roomListRoomSummary: RoomListRoomSummary) : RoomListEvents
-    data object HideContextMenu : RoomListEvents
-    data class LeaveRoom(val roomId: RoomId) : RoomListEvents
-    data class SetRoomIsFavorite(val roomId: RoomId, val isFavorite: Boolean) : RoomListEvents
+
+    sealed interface RoomListBottomSheetEvents : RoomListEvents
+    data object HideContextMenu : RoomListBottomSheetEvents
+    data class LeaveRoom(val roomId: RoomId) : RoomListBottomSheetEvents
+    data class MarkAsRead(val roomId: RoomId) : RoomListBottomSheetEvents
+    data class MarkAsUnread(val roomId: RoomId) : RoomListBottomSheetEvents
+    data class SetRoomIsFavorite(val roomId: RoomId, val isFavorite: Boolean) : RoomListBottomSheetEvents
 }

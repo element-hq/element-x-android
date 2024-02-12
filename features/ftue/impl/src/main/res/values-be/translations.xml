@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_notification_optin_subtitle">"Вы можаце змяніць налады пазней."</string>
+  <string name="screen_notification_optin_title">"Дазвольце апавяшчэнні і ніколі не прапускайце іх"</string>
+  <string name="screen_welcome_bullet_1">"Званкі, апытанні, пошук і многае іншае будзе дададзена пазней у гэтым годзе."</string>
+  <string name="screen_welcome_bullet_2">"Гісторыя паведамленняў для зашыфраваных пакояў пакуль недаступна."</string>
+  <string name="screen_welcome_bullet_3">"Мы будзем рады пачуць вашае меркаванне, паведаміце нам аб гэтым праз старонку налад."</string>
+  <string name="screen_welcome_button">"Пачнём!"</string>
+  <string name="screen_welcome_subtitle">"Вось што вам трэба ведаць:"</string>
+  <string name="screen_welcome_title">"Вітаем у %1$s!"</string>
+</resources>

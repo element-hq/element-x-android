@@ -7,6 +7,7 @@
   <string name="screen_bug_report_editor_description">"Пожалуйста, опишите ошибку. Что вы сделали? Какое поведение вы ожидали? Что произошло на самом деле. Пожалуйста, опишите все как можно подробнее."</string>
   <string name="screen_bug_report_editor_placeholder">"Опишите проблему…"</string>
   <string name="screen_bug_report_editor_supporting">"Если возможно, пожалуйста, напишите описание на английском языке."</string>
+  <string name="screen_bug_report_error_description_too_short">"Описание слишком короткое, пожалуйста, расскажите подробнее о том, что произошло. Спасибо!"</string>
   <string name="screen_bug_report_include_crash_logs">"Отправка журналов сбоев"</string>
   <string name="screen_bug_report_include_logs">"Разрешить ведение журналов"</string>
   <string name="screen_bug_report_include_screenshot">"Отправить снимок экрана"</string>

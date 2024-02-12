@@ -32,11 +32,13 @@ import io.element.android.features.messages.impl.messagecomposer.MessageComposer
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerEvents
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerPresenter
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerState
+import io.element.android.features.preferences.api.store.SessionPreferencesStore
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
+import io.element.android.libraries.featureflag.test.InMemorySessionPreferencesStore
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.TransactionId
 import io.element.android.libraries.matrix.api.media.ImageInfo
@@ -888,6 +890,24 @@ class MessageComposerPresenterTest {
         }
     }
 
+    @Test
+    fun `present - handle typing notice event when sending typing notice is disabled`() = runTest {
+        val room = FakeMatrixRoom()
+        val store = InMemorySessionPreferencesStore(
+            isSendTypingNotificationsEnabled = false
+        )
+        val presenter = createPresenter(room = room, sessionPreferencesStore = store, coroutineScope = this)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitFirstItem()
+            assertThat(room.typingRecord).isEmpty()
+            initialState.eventSink.invoke(MessageComposerEvents.TypingNotice(true))
+            initialState.eventSink.invoke(MessageComposerEvents.TypingNotice(false))
+            assertThat(room.typingRecord).isEmpty()
+        }
+    }
+
     private suspend fun ReceiveTurbine<MessageComposerState>.backToNormalMode(state: MessageComposerState, skipCount: Int = 0): MessageComposerState {
         state.eventSink.invoke(MessageComposerEvents.CloseSpecialMode)
         skipItems(skipCount)
@@ -901,6 +921,7 @@ class MessageComposerPresenterTest {
         room: MatrixRoom = FakeMatrixRoom(),
         pickerProvider: PickerProvider = this.pickerProvider,
         featureFlagService: FeatureFlagService = this.featureFlagService,
+        sessionPreferencesStore: SessionPreferencesStore = InMemorySessionPreferencesStore(),
         mediaPreProcessor: MediaPreProcessor = this.mediaPreProcessor,
         snackbarDispatcher: SnackbarDispatcher = this.snackbarDispatcher,
         permissionPresenter: PermissionsPresenter = FakePermissionsPresenter(),
@@ -909,6 +930,7 @@ class MessageComposerPresenterTest {
         room,
         pickerProvider,
         featureFlagService,
+        sessionPreferencesStore,
         localMediaFactory,
         MediaSender(mediaPreProcessor, room),
         snackbarDispatcher,

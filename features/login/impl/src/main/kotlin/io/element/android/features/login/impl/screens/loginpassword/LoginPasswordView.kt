@@ -16,6 +16,7 @@
 
 package io.element.android.features.login.impl.screens.loginpassword
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.consumeWindowInsets
@@ -55,6 +56,7 @@ import io.element.android.features.login.impl.R
 import io.element.android.features.login.impl.error.isWaitListError
 import io.element.android.features.login.impl.error.loginError
 import io.element.android.libraries.architecture.AsyncData
+import io.element.android.libraries.designsystem.atomic.molecules.ButtonColumnMolecule
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
@@ -114,7 +116,7 @@ fun LoginPasswordView(
                 .padding(padding)
                 .consumeWindowInsets(padding)
                 .verticalScroll(state = scrollState)
-                .padding(horizontal = 16.dp),
+                .padding(start = 20.dp, end = 20.dp, bottom = 20.dp),
         ) {
             // Title
             IconTitleSubtitleMolecule(
@@ -137,16 +139,23 @@ fun LoginPasswordView(
             // Flexible spacing to keep the submit button at the bottom
             Spacer(modifier = Modifier.weight(1f))
             // Submit
-            Button(
-                text = stringResource(CommonStrings.action_continue),
-                showProgress = isLoading,
-                onClick = ::submit,
-                enabled = state.submitEnabled || isLoading,
+            Box(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .testTag(TestTags.loginContinue)
-            )
-            Spacer(modifier = Modifier.height(60.dp))
+                .padding(horizontal = 16.dp)
+            ) {
+                ButtonColumnMolecule {
+                    Button(
+                        text = stringResource(CommonStrings.action_continue),
+                        showProgress = isLoading,
+                        onClick = ::submit,
+                        enabled = state.submitEnabled || isLoading,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .testTag(TestTags.loginContinue)
+                    )
+                    Spacer(modifier = Modifier.height(48.dp))
+                }
+            }
 
             if (state.loginAction is AsyncData.Failure) {
                 when {
@@ -170,7 +179,6 @@ private fun LoginForm(
     state: LoginPasswordState,
     isLoading: Boolean,
     onSubmit: () -> Unit,
-    modifier: Modifier = Modifier
 ) {
     var loginFieldState by textFieldState(stateValue = state.formState.login)
     var passwordFieldState by textFieldState(stateValue = state.formState.password)
@@ -178,7 +186,7 @@ private fun LoginForm(
     val focusManager = LocalFocusManager.current
     val eventSink = state.eventSink
 
-    Column(modifier) {
+    Column {
         Text(
             text = stringResource(R.string.screen_login_form_header),
             modifier = Modifier.padding(start = 16.dp),

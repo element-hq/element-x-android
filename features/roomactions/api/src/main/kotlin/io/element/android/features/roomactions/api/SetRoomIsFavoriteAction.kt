@@ -21,9 +21,13 @@ import io.element.android.libraries.matrix.api.room.MatrixRoom
 
 /**
  * Set the favorite status of a room.
- * This will update the notable tags of the room.
+ * Use either the room id or the room instance with the desired favorite status.
  */
 interface SetRoomIsFavoriteAction {
+
+    /**
+     * The result of the action?
+     */
     sealed interface Result {
         data object Success : Result
         data object RoomNotFound : Result

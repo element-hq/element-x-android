@@ -5,13 +5,11 @@
   <string name="notification_channel_noisy">"Notifications bruyantes"</string>
   <string name="notification_channel_silent">"Notifications silencieuses"</string>
   <string name="notification_inline_reply_failed">"** Échec de l’envoi - veuillez ouvrir le salon"</string>
-  <string name="notification_invitation_action_join">"Rejoindre"</string>
   <string name="notification_invitation_action_reject">"Rejeter"</string>
   <string name="notification_invite_body">"Vous a invité(e) à discuter"</string>
   <string name="notification_mentioned_you_body">"Mentionné(e): %1$s"</string>
   <string name="notification_new_messages">"Nouveaux messages"</string>
   <string name="notification_reaction_body">"A réagi avec %1$s"</string>
-  <string name="notification_room_action_mark_as_read">"Marquer comme lu"</string>
   <string name="notification_room_invite_body">"Vous a invité(e) à rejoindre le salon"</string>
   <string name="notification_sender_me">"Moi"</string>
   <string name="notification_test_push_notification_content">"Vous êtes en train de voir la notification ! Cliquez-moi !"</string>
@@ -49,5 +47,7 @@
   <string name="push_distributor_firebase_android">"Services Google"</string>
   <string name="push_no_valid_google_play_services_apk_android">"Aucun service Google Play valide n’a été trouvé. Les notifications peuvent ne pas fonctionner correctement."</string>
   <string name="notification_fallback_content">"Notification"</string>
+  <string name="notification_invitation_action_join">"Rejoindre"</string>
+  <string name="notification_room_action_mark_as_read">"Marquer comme lu"</string>
   <string name="notification_room_action_quick_reply">"Réponse rapide"</string>
 </resources>
