@@ -147,14 +147,14 @@ private fun PlayerButton(
 private fun PauseIcon() = Icon(
     imageVector = CompoundIcons.PauseSolid(),
     contentDescription = stringResource(id = CommonStrings.a11y_pause),
-    modifier = Modifier.size(20.dp),
+    modifier = Modifier.size(20.dp).padding(2.dp),
 )
 
 @Composable
 private fun PlayIcon() = Icon(
     imageVector = CompoundIcons.PlaySolid(),
     contentDescription = stringResource(id = CommonStrings.a11y_play),
-    modifier = Modifier.size(20.dp),
+    modifier = Modifier.size(20.dp).padding(2.dp),
 )
 
 @PreviewsDayNight
