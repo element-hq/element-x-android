@@ -33,12 +33,12 @@ data class RoomPrivacyItem(
 
 @Composable
 fun roomPrivacyItems(): ImmutableList<RoomPrivacyItem> {
-    return RoomPrivacy.values()
+    return RoomPrivacy.entries
         .map {
             when (it) {
                 RoomPrivacy.Private -> RoomPrivacyItem(
                     privacy = it,
-                    icon = CompoundDrawables.ic_compound_lock,
+                    icon = CompoundDrawables.ic_compound_lock_solid,
                     title = stringResource(R.string.screen_create_room_private_option_title),
                     description = stringResource(R.string.screen_create_room_private_option_description),
                 )
