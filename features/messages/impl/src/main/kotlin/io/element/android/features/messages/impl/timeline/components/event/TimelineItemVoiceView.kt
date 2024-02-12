@@ -34,6 +34,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -126,7 +127,7 @@ private fun PlayButton(
         onClick = onClick,
         enabled = enabled,
     ) {
-        Icon(
+        ControlIcon(
             imageVector = CompoundIcons.PlaySolid(),
             contentDescription = stringResource(id = CommonStrings.a11y_play),
         )
@@ -140,7 +141,7 @@ private fun PauseButton(
     CustomIconButton(
         onClick = onClick,
     ) {
-        Icon(
+        ControlIcon(
             imageVector = CompoundIcons.PauseSolid(),
             contentDescription = stringResource(id = CommonStrings.a11y_pause),
         )
@@ -154,11 +155,23 @@ private fun RetryButton(
     CustomIconButton(
         onClick = onClick,
     ) {
-        Icon(
+        ControlIcon(
             imageVector = CompoundIcons.Restart(),
             contentDescription = stringResource(id = CommonStrings.action_retry),
         )
     }
+}
+
+@Composable
+private fun ControlIcon(
+    imageVector: ImageVector,
+    contentDescription: String?,
+) {
+    Icon(
+        modifier = Modifier.padding(vertical = 10.dp),
+        imageVector = imageVector,
+        contentDescription = contentDescription,
+    )
 }
 
 /**
@@ -190,7 +203,7 @@ private fun ProgressButton(
                 strokeWidth = 2.dp,
             )
         } else {
-            Icon(
+            ControlIcon(
                 imageVector = CompoundIcons.PauseSolid(),
                 contentDescription = stringResource(id = CommonStrings.a11y_pause),
             )
