@@ -21,12 +21,20 @@ import androidx.compose.runtime.Immutable
 import androidx.compose.ui.res.stringResource
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.api.timeline.item.event.AudioMessageType
+import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParseMessageLikeContent
+import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParseStateContent
 import io.element.android.libraries.matrix.api.timeline.item.event.FileMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.ImageMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.LocationMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageContent
 import io.element.android.libraries.matrix.api.timeline.item.event.PollContent
+import io.element.android.libraries.matrix.api.timeline.item.event.ProfileChangeContent
+import io.element.android.libraries.matrix.api.timeline.item.event.RedactedContent
+import io.element.android.libraries.matrix.api.timeline.item.event.RoomMembershipContent
+import io.element.android.libraries.matrix.api.timeline.item.event.StateContent
 import io.element.android.libraries.matrix.api.timeline.item.event.StickerContent
+import io.element.android.libraries.matrix.api.timeline.item.event.UnableToDecryptContent
+import io.element.android.libraries.matrix.api.timeline.item.event.UnknownContent
 import io.element.android.libraries.matrix.api.timeline.item.event.VideoMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.VoiceMessageType
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailInfo
@@ -46,6 +54,13 @@ internal sealed interface InReplyToMetadata {
     data class Text(
         override val text: String
     ) : InReplyToMetadata
+
+    abstract class Informative : InReplyToMetadata {
+        override val text: String? = null
+    }
+
+    data object Redacted : Informative()
+    data object UnableToDecrypt : Informative()
 }
 
 /**
@@ -112,5 +127,13 @@ internal fun InReplyToDetails.metadata(): InReplyToMetadata? = when (eventConten
             type = AttachmentThumbnailType.Poll,
         )
     )
-    else -> null
+    is RedactedContent -> InReplyToMetadata.Redacted
+    is UnableToDecryptContent -> InReplyToMetadata.UnableToDecrypt
+    is FailedToParseMessageLikeContent,
+    is FailedToParseStateContent,
+    is ProfileChangeContent,
+    is RoomMembershipContent,
+    is StateContent,
+    UnknownContent,
+    null -> null
 }

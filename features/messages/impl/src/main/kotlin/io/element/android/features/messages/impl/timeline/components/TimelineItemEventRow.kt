@@ -53,6 +53,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalViewConfiguration
 import androidx.compose.ui.platform.ViewConfiguration
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
@@ -92,6 +93,7 @@ import io.element.android.libraries.designsystem.colors.AvatarColorsProvider
 import io.element.android.libraries.designsystem.components.EqualWidthColumn
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
+import io.element.android.libraries.designsystem.icons.CompoundDrawables
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.swipe.SwipeableActionsState
@@ -99,6 +101,7 @@ import io.element.android.libraries.designsystem.swipe.rememberSwipeableActionsS
 import io.element.android.libraries.designsystem.text.toPx
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
@@ -648,15 +651,48 @@ private fun ReplyToContent(
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
             )
-            Text(
-                text = metadata?.text.orEmpty(),
-                style = ElementTheme.typography.fontBodyMdRegular,
-                textAlign = TextAlign.Start,
-                color = ElementTheme.materialColors.secondary,
-                maxLines = 2,
-                overflow = TextOverflow.Ellipsis,
-            )
+            ReplyToContentText(metadata)
         }
+    }
+}
+
+@Composable
+private fun ReplyToContentText(metadata: InReplyToMetadata?) {
+    val text = when (metadata) {
+        InReplyToMetadata.Redacted -> stringResource(id = CommonStrings.common_message_removed)
+        InReplyToMetadata.UnableToDecrypt -> stringResource(id = CommonStrings.common_waiting_for_decryption_key)
+        else -> metadata?.text.orEmpty()
+    }
+    val iconResourceId = when (metadata) {
+        InReplyToMetadata.Redacted -> CompoundDrawables.ic_compound_delete
+        InReplyToMetadata.UnableToDecrypt -> CompoundDrawables.ic_compound_time
+        else -> null
+    }
+    val fontStyle = when (metadata) {
+        is InReplyToMetadata.Informative -> FontStyle.Italic
+        else -> FontStyle.Normal
+    }
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        if (iconResourceId != null) {
+            Icon(
+                resourceId = iconResourceId,
+                tint = MaterialTheme.colorScheme.secondary,
+                contentDescription = null,
+                modifier = Modifier.size(16.dp)
+            )
+            Spacer(modifier = Modifier.width(4.dp))
+        }
+        Text(
+            text = text,
+            style = ElementTheme.typography.fontBodyMdRegular,
+            fontStyle = fontStyle,
+            textAlign = TextAlign.Start,
+            color = MaterialTheme.colorScheme.secondary,
+            maxLines = 2,
+            overflow = TextOverflow.Ellipsis,
+        )
     }
 }
 
