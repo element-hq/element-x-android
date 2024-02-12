@@ -19,6 +19,8 @@ package io.element.android.features.roomlist.impl
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import io.element.android.libraries.architecture.AsyncData
+import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.tests.testutils.EnsureCalledOnceWithParam
 import io.element.android.tests.testutils.EnsureNeverCalledWithParam
@@ -127,5 +129,25 @@ class RoomListContextMenuTest {
         rule.clickOn(CommonStrings.common_settings)
         eventsRecorder.assertSingle(RoomListEvents.HideContextMenu)
         callback.assertSuccess()
+    }
+
+    @Test
+    fun `clicking on Favourites generates expected Event`() {
+        val eventsRecorder = EventsRecorder<RoomListEvents>()
+        val contextMenu = aContextMenuShown(isDm = false, isFavorite = AsyncData.Success(false))
+        val callback = EnsureNeverCalledWithParam<RoomId>()
+        rule.setContent {
+            RoomListContextMenu(
+                contextMenu = contextMenu,
+                eventSink = eventsRecorder,
+                onRoomSettingsClicked = callback,
+            )
+        }
+        rule.clickOn(CommonStrings.common_favourite)
+        eventsRecorder.assertList(
+            listOf(
+                RoomListEvents.SetRoomIsFavorite(contextMenu.roomId, true),
+            )
+        )
     }
 }
