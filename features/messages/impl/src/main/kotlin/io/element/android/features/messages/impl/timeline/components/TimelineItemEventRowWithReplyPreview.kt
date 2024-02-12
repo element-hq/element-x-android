@@ -53,10 +53,12 @@ import kotlinx.collections.immutable.persistentMapOf
 @Composable
 internal fun TimelineItemEventRowWithReplyPreview(
     @PreviewParameter(InReplyToDetailsProvider::class) inReplyToDetails: InReplyToDetails,
-) = TimelineItemEventRowWithReplyContentToPreview(inReplyToDetails)
+) = ElementPreview {
+    TimelineItemEventRowWithReplyContentToPreview(inReplyToDetails)
+}
 
 @Composable
-internal fun TimelineItemEventRowWithReplyContentToPreview(inReplyToDetails: InReplyToDetails) = ElementPreview {
+internal fun TimelineItemEventRowWithReplyContentToPreview(inReplyToDetails: InReplyToDetails) {
     Column {
         sequenceOf(false, true).forEach {
             ATimelineItemEventRow(

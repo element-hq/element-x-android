@@ -19,6 +19,7 @@ package io.element.android.features.messages.impl.timeline.components
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import io.element.android.features.messages.impl.timeline.model.InReplyToDetails
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.matrix.api.timeline.item.event.RedactedContent
 import io.element.android.libraries.matrix.api.timeline.item.event.UnableToDecryptContent
@@ -27,7 +28,9 @@ import io.element.android.libraries.matrix.api.timeline.item.event.UnableToDecry
 @Composable
 internal fun TimelineItemEventRowWithReplyInformativePreview(
     @PreviewParameter(InReplyToDetailsInformativeProvider::class) inReplyToDetails: InReplyToDetails,
-) = TimelineItemEventRowWithReplyContentToPreview(inReplyToDetails)
+) = ElementPreview {
+    TimelineItemEventRowWithReplyContentToPreview(inReplyToDetails)
+}
 
 class InReplyToDetailsInformativeProvider : InReplyToDetailsProvider() {
     override val values: Sequence<InReplyToDetails>
