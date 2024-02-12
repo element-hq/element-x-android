@@ -61,6 +61,7 @@ import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailType
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import org.junit.runner.RunWith
+import kotlin.time.Duration.Companion.minutes
 
 @RunWith(AndroidJUnit4::class)
 class InReplyToMetadataKtTest {
@@ -137,16 +138,7 @@ class InReplyToMetadataKtTest {
                     messageType = VideoMessageType(
                         body = "body",
                         source = aMediaSource(),
-                        info = VideoInfo(
-                            duration = null,
-                            height = null,
-                            width = null,
-                            mimetype = null,
-                            size = null,
-                            thumbnailInfo = null,
-                            thumbnailSource = aMediaSource(),
-                            blurhash = A_BLUR_HASH
-                        ),
+                        info = aVideoInfo(),
                     )
                 )
             ).metadata()
@@ -446,6 +438,19 @@ fun anInReplyToDetails(
     eventContent = eventContent,
     textContent = textContent,
 )
+
+fun aVideoInfo(): VideoInfo {
+    return VideoInfo(
+        duration = 1.minutes,
+        height = 100,
+        width = 100,
+        mimetype = "video/mp4",
+        size = 1000,
+        thumbnailInfo = null,
+        thumbnailSource = aMediaSource(),
+        blurhash = A_BLUR_HASH,
+    )
+}
 
 fun anImageInfo(): ImageInfo {
     return ImageInfo(
