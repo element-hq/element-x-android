@@ -47,11 +47,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.dialogs.RetryDialog
-import io.element.android.libraries.designsystem.icons.CompoundDrawables
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
@@ -202,7 +202,7 @@ private fun MediaViewerTopBar(
                     },
                 ) {
                     Icon(
-                        resourceId = CompoundDrawables.ic_compound_download,
+                        imageVector = CompoundIcons.Download(),
                         contentDescription = stringResource(id = CommonStrings.action_save),
                     )
                 }
@@ -215,7 +215,7 @@ private fun MediaViewerTopBar(
                     },
                 ) {
                     Icon(
-                        resourceId = CompoundDrawables.ic_compound_share_android,
+                        imageVector = CompoundIcons.ShareAndroid(),
                         contentDescription = stringResource(id = CommonStrings.action_share)
                     )
                 }

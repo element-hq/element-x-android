@@ -90,7 +90,7 @@ fun PreferencesRootView(
         if (state.showSecureBackup) {
             ListItem(
                 headlineContent = { Text(stringResource(id = CommonStrings.common_chat_backup)) },
-                leadingContent = ListItemContent.Icon(IconSource.Resource(CommonDrawables.ic_key_filled)),
+                leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.KeySolid())),
                 trailingContent = ListItemContent.Badge.takeIf { state.showSecureBackupBadge },
                 onClick = onSecureBackupClicked,
             )
@@ -134,7 +134,7 @@ fun PreferencesRootView(
         if (state.showLockScreenSettings) {
             ListItem(
                 headlineContent = { Text(stringResource(id = CommonStrings.common_screen_lock)) },
-                leadingContent = ListItemContent.Icon(IconSource.Resource(CommonDrawables.ic_lock_outline)),
+                leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Lock())),
                 onClick = onOpenLockScreenSettings,
             )
         }

@@ -39,6 +39,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import com.mapbox.mapboxsdk.camera.CameraPosition
 import io.element.android.compound.theme.ElementTheme
+import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.location.api.Location
 import io.element.android.features.location.api.internal.centerBottomEdge
 import io.element.android.features.location.api.internal.rememberTileStyleUrl
@@ -211,8 +212,8 @@ fun SendLocationView(
                     .padding(end = 16.dp, bottom = 72.dp + navBarPadding),
             ) {
                 when (state.mode) {
-                    SendLocationState.Mode.PinLocation -> Icon(resourceId = CommonDrawables.ic_location_navigator, contentDescription = null)
-                    SendLocationState.Mode.SenderLocation -> Icon(resourceId = CommonDrawables.ic_location_navigator_centered, contentDescription = null)
+                    SendLocationState.Mode.PinLocation -> Icon(imageVector = CompoundIcons.LocationNavigator(), contentDescription = null)
+                    SendLocationState.Mode.SenderLocation -> Icon(imageVector = CompoundIcons.LocationNavigatorCentred(), contentDescription = null)
                 }
             }
         }

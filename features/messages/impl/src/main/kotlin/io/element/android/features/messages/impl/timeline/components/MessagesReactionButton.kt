@@ -49,13 +49,13 @@ import io.element.android.features.messages.impl.R
 import io.element.android.features.messages.impl.timeline.model.AggregatedReaction
 import io.element.android.features.messages.impl.timeline.model.AggregatedReactionProvider
 import io.element.android.features.messages.impl.timeline.model.aTimelineItemReactions
+import io.element.android.libraries.designsystem.icons.CompoundDrawables
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.text.toDp
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Surface
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.ui.media.MediaRequestData
 
@@ -193,7 +193,7 @@ internal fun MessagesReactionButtonPreview(@PreviewParameter(AggregatedReactionP
 @Composable
 internal fun MessagesAddReactionButtonPreview() = ElementPreview {
     MessagesReactionButton(
-        content = MessagesReactionsButtonContent.Icon(CommonDrawables.ic_add_reaction),
+        content = MessagesReactionsButtonContent.Icon(CompoundDrawables.ic_compound_reaction_add),
         onClick = {},
         onLongClick = {}
     )

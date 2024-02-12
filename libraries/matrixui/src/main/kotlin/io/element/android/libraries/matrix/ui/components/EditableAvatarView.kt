@@ -34,11 +34,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
+import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.theme.components.Icon
-import io.element.android.libraries.designsystem.utils.CommonDrawables
 
 @Composable
 fun EditableAvatarView(
@@ -86,7 +86,7 @@ fun EditableAvatarView(
             ) {
                 Icon(
                     modifier = Modifier.size(16.dp),
-                    resourceId = CommonDrawables.ic_edit,
+                    imageVector = CompoundIcons.EditSolid(),
                     contentDescription = null,
                     tint = MaterialTheme.colorScheme.onPrimary,
                 )

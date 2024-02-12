@@ -47,6 +47,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.Velocity
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
+import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.leaveroom.api.LeaveRoomView
 import io.element.android.features.networkmonitor.api.ui.ConnectivityIndicatorContainer
 import io.element.android.features.roomlist.impl.components.ConfirmRecoveryKeyBanner
@@ -67,7 +68,6 @@ import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconSource
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarHost
 import io.element.android.libraries.designsystem.utils.snackbar.rememberSnackbarHostState
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -155,7 +155,7 @@ private fun EmptyRoomListView(
         Spacer(modifier = Modifier.height(16.dp))
         Button(
             text = stringResource(CommonStrings.action_start_chat),
-            leadingIcon = IconSource.Resource(CommonDrawables.ic_new_message),
+            leadingIcon = IconSource.Vector(CompoundIcons.Compose()),
             onClick = onCreateRoomClicked,
         )
     }
@@ -284,7 +284,7 @@ private fun RoomListContent(
                 ) {
                     Icon(
                         // Note cannot use Icons.Outlined.EditSquare, it does not exist :/
-                        resourceId = CommonDrawables.ic_new_message,
+                        imageVector = CompoundIcons.Compose(),
                         contentDescription = stringResource(id = R.string.screen_roomlist_a11y_create_message)
                     )
                 }

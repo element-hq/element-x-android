@@ -44,6 +44,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
+import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.messages.impl.timeline.components.layout.ContentAvoidingLayoutData
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVoiceContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVoiceContentProvider
@@ -58,7 +59,6 @@ import io.element.android.libraries.designsystem.theme.components.CircularProgre
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.coroutines.delay
 
@@ -127,7 +127,7 @@ private fun PlayButton(
         enabled = enabled,
     ) {
         Icon(
-            resourceId = CommonDrawables.ic_play,
+            imageVector = CompoundIcons.PlaySolid(),
             contentDescription = stringResource(id = CommonStrings.a11y_play),
         )
     }
@@ -141,7 +141,7 @@ private fun PauseButton(
         onClick = onClick,
     ) {
         Icon(
-            resourceId = CommonDrawables.ic_pause,
+            imageVector = CompoundIcons.PauseSolid(),
             contentDescription = stringResource(id = CommonStrings.a11y_pause),
         )
     }
@@ -155,7 +155,7 @@ private fun RetryButton(
         onClick = onClick,
     ) {
         Icon(
-            resourceId = CommonDrawables.ic_retry,
+            imageVector = CompoundIcons.Restart(),
             contentDescription = stringResource(id = CommonStrings.action_retry),
         )
     }
@@ -191,7 +191,7 @@ private fun ProgressButton(
             )
         } else {
             Icon(
-                resourceId = CommonDrawables.ic_pause,
+                imageVector = CompoundIcons.PauseSolid(),
                 contentDescription = stringResource(id = CommonStrings.a11y_pause),
             )
         }

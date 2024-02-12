@@ -364,7 +364,7 @@ private fun MembersSection(
     PreferenceCategory {
         ListItem(
             headlineContent = { Text(stringResource(CommonStrings.common_people)) },
-            leadingContent = ListItemContent.Icon(IconSource.Resource(CommonDrawables.ic_user)),
+            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.User())),
             trailingContent = ListItemContent.Text(memberCount.toString()),
             onClick = openRoomMemberList,
         )
@@ -378,7 +378,7 @@ private fun InviteSection(
     PreferenceCategory {
         ListItem(
             headlineContent = { Text(stringResource(R.string.screen_room_details_invite_people_title)) },
-            leadingContent = ListItemContent.Icon(IconSource.Resource(CommonDrawables.ic_user_add)),
+            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.UserAdd())),
             onClick = invitePeople,
         )
     }

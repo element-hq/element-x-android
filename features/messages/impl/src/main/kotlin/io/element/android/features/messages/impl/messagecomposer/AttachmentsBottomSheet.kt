@@ -43,7 +43,6 @@ import io.element.android.libraries.designsystem.theme.components.ListItem
 import io.element.android.libraries.designsystem.theme.components.ListItemStyle
 import io.element.android.libraries.designsystem.theme.components.ModalBottomSheet
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.designsystem.utils.CommonDrawables
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -109,19 +108,19 @@ private fun AttachmentSourcePickerMenu(
     ) {
         ListItem(
             modifier = Modifier.clickable { state.eventSink(MessageComposerEvents.PickAttachmentSource.FromGallery) },
-            leadingContent = ListItemContent.Icon(IconSource.Resource(CommonDrawables.ic_image)),
+            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Image())),
             headlineContent = { Text(stringResource(R.string.screen_room_attachment_source_gallery)) },
             style = ListItemStyle.Primary,
         )
         ListItem(
             modifier = Modifier.clickable { state.eventSink(MessageComposerEvents.PickAttachmentSource.FromFiles) },
-            leadingContent = ListItemContent.Icon(IconSource.Resource(CommonDrawables.ic_attachment)),
+            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Attachment())),
             headlineContent = { Text(stringResource(R.string.screen_room_attachment_source_files)) },
             style = ListItemStyle.Primary,
         )
         ListItem(
             modifier = Modifier.clickable { state.eventSink(MessageComposerEvents.PickAttachmentSource.PhotoFromCamera) },
-            leadingContent = ListItemContent.Icon(IconSource.Resource(CommonDrawables.ic_take_photo_camera)),
+            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.TakePhoto())),
             headlineContent = { Text(stringResource(R.string.screen_room_attachment_source_camera_photo)) },
             style = ListItemStyle.Primary,
         )
@@ -137,7 +136,7 @@ private fun AttachmentSourcePickerMenu(
                     state.eventSink(MessageComposerEvents.PickAttachmentSource.Location)
                     onSendLocationClicked()
                 },
-                leadingContent = ListItemContent.Icon(IconSource.Resource(CommonDrawables.ic_location_pin)),
+                leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.LocationPin())),
                 headlineContent = { Text(stringResource(R.string.screen_room_attachment_source_location)) },
                 style = ListItemStyle.Primary,
             )
@@ -156,7 +155,7 @@ private fun AttachmentSourcePickerMenu(
         if (enableTextFormatting) {
             ListItem(
                 modifier = Modifier.clickable { state.eventSink(MessageComposerEvents.ToggleTextFormatting(enabled = true)) },
-                leadingContent = ListItemContent.Icon(IconSource.Resource(CommonDrawables.ic_text_formatting, null)),
+                leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.TextFormatting())),
                 headlineContent = { Text(stringResource(R.string.screen_room_attachment_text_formatting)) },
                 style = ListItemStyle.Primary,
             )

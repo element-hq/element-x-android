@@ -21,11 +21,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.securebackup.impl.R
 import io.element.android.features.securebackup.impl.setup.views.RecoveryKeyView
 import io.element.android.libraries.designsystem.atomic.pages.FlowStepPage
@@ -33,7 +32,6 @@ import io.element.android.libraries.designsystem.components.async.AsyncActionVie
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
-import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
@@ -55,7 +53,7 @@ fun SecureBackupEnterRecoveryKeyView(
     FlowStepPage(
         modifier = modifier,
         onBackClicked = onBackClicked,
-        iconVector = ImageVector.vectorResource(CommonDrawables.ic_key),
+        iconVector = CompoundIcons.Key(),
         title = stringResource(id = R.string.screen_recovery_key_confirm_title),
         subTitle = stringResource(id = R.string.screen_recovery_key_confirm_description),
         content = { Content(state = state) },

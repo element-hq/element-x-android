@@ -24,8 +24,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.GraphicEq
-import androidx.compose.material.icons.outlined.Image
-import androidx.compose.material.icons.outlined.VideoCameraBack
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -42,7 +40,6 @@ import io.element.android.libraries.designsystem.components.PinIcon
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Icon
-import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.ui.media.MediaRequestData
 import kotlinx.parcelize.Parcelize
@@ -82,13 +79,13 @@ fun AttachmentThumbnail(
             when (info.type) {
                 AttachmentThumbnailType.Image -> {
                     Icon(
-                        imageVector = Icons.Outlined.Image,
+                        imageVector = CompoundIcons.Image(),
                         contentDescription = info.textContent,
                     )
                 }
                 AttachmentThumbnailType.Video -> {
                     Icon(
-                        imageVector = Icons.Outlined.VideoCameraBack,
+                        imageVector = CompoundIcons.VideoCall(),
                         contentDescription = info.textContent,
                     )
                 }
@@ -100,13 +97,13 @@ fun AttachmentThumbnail(
                 }
                 AttachmentThumbnailType.Voice -> {
                     Icon(
-                        resourceId = CommonDrawables.ic_voice_attachment,
+                        imageVector = CompoundIcons.MicOn(),
                         contentDescription = info.textContent,
                     )
                 }
                 AttachmentThumbnailType.File -> {
                     Icon(
-                        resourceId = CommonDrawables.ic_attachment,
+                        imageVector = CompoundIcons.Attachment(),
                         contentDescription = info.textContent,
                         modifier = Modifier.rotate(-45f)
                     )

@@ -21,10 +21,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.tokens.generated.CompoundIcons
@@ -39,7 +37,6 @@ import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.IconSource
 import io.element.android.libraries.designsystem.theme.components.OutlinedButton
-import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
@@ -54,7 +51,7 @@ fun SecureBackupSetupView(
         onBackClicked = onBackClicked.takeIf { state.canGoBack() },
         title = title(state),
         subTitle = subtitle(state),
-        iconVector = ImageVector.vectorResource(CommonDrawables.ic_key),
+        iconVector = CompoundIcons.Key(),
         content = { Content(state) },
         buttons = { Buttons(state, onDone = onDone) },
     )

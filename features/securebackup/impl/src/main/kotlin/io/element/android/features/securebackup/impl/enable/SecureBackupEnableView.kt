@@ -20,17 +20,15 @@ import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.securebackup.impl.R
 import io.element.android.libraries.designsystem.atomic.pages.FlowStepPage
 import io.element.android.libraries.designsystem.components.async.AsyncActionView
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
-import io.element.android.libraries.designsystem.utils.CommonDrawables
 
 @Composable
 fun SecureBackupEnableView(
@@ -43,7 +41,7 @@ fun SecureBackupEnableView(
         modifier = modifier,
         onBackClicked = onBackClicked,
         title = stringResource(id = R.string.screen_chat_backup_key_backup_action_enable),
-        iconVector = ImageVector.vectorResource(CommonDrawables.ic_key),
+        iconVector = CompoundIcons.Key(),
         buttons = { Buttons(state = state) }
     )
     AsyncActionView(
