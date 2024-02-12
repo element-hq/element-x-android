@@ -51,7 +51,7 @@ fun SecureBackupSetupView(
         onBackClicked = onBackClicked.takeIf { state.canGoBack() },
         title = title(state),
         subTitle = subtitle(state),
-        iconVector = CompoundIcons.Key(),
+        iconVector = CompoundIcons.KeySolid(),
         content = { Content(state) },
         buttons = { Buttons(state, onDone = onDone) },
     )

@@ -41,7 +41,7 @@ fun SecureBackupEnableView(
         modifier = modifier,
         onBackClicked = onBackClicked,
         title = stringResource(id = R.string.screen_chat_backup_key_backup_action_enable),
-        iconVector = CompoundIcons.Key(),
+        iconVector = CompoundIcons.KeySolid(),
         buttons = { Buttons(state = state) }
     )
     AsyncActionView(

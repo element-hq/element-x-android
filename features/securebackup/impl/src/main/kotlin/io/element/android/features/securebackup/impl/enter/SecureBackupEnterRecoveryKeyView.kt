@@ -53,7 +53,7 @@ fun SecureBackupEnterRecoveryKeyView(
     FlowStepPage(
         modifier = modifier,
         onBackClicked = onBackClicked,
-        iconVector = CompoundIcons.Key(),
+        iconVector = CompoundIcons.KeySolid(),
         title = stringResource(id = R.string.screen_recovery_key_confirm_title),
         subTitle = stringResource(id = R.string.screen_recovery_key_confirm_description),
         content = { Content(state = state) },
