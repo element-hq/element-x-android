@@ -34,10 +34,18 @@ import io.element.android.libraries.matrix.api.media.FileInfo
 import io.element.android.libraries.matrix.api.media.VideoInfo
 import io.element.android.libraries.matrix.api.timeline.item.event.AudioMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.EventContent
+import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParseMessageLikeContent
+import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParseStateContent
 import io.element.android.libraries.matrix.api.timeline.item.event.FileMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.ImageMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.LocationMessageType
+import io.element.android.libraries.matrix.api.timeline.item.event.OtherState
+import io.element.android.libraries.matrix.api.timeline.item.event.ProfileChangeContent
 import io.element.android.libraries.matrix.api.timeline.item.event.RedactedContent
+import io.element.android.libraries.matrix.api.timeline.item.event.RoomMembershipContent
+import io.element.android.libraries.matrix.api.timeline.item.event.StateContent
+import io.element.android.libraries.matrix.api.timeline.item.event.UnableToDecryptContent
+import io.element.android.libraries.matrix.api.timeline.item.event.UnknownContent
 import io.element.android.libraries.matrix.api.timeline.item.event.VideoMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.VoiceMessageType
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
@@ -277,10 +285,114 @@ class InReplyToMetadataKtTest {
     }
 
     @Test
-    fun `any other content`() = runTest {
+    fun `redacted content`() = runTest {
         moleculeFlow(RecompositionMode.Immediate) {
             anInReplyToDetails(
                 eventContent = RedactedContent
+            ).metadata()
+        }.test {
+            awaitItem().let {
+                assertThat(it).isEqualTo(InReplyToMetadata.Redacted)
+            }
+        }
+    }
+
+    @Test
+    fun `unable to decrypt content`() = runTest {
+        moleculeFlow(RecompositionMode.Immediate) {
+            anInReplyToDetails(
+                eventContent = UnableToDecryptContent(UnableToDecryptContent.Data.Unknown)
+            ).metadata()
+        }.test {
+            awaitItem().let {
+                assertThat(it).isEqualTo(InReplyToMetadata.UnableToDecrypt)
+            }
+        }
+    }
+
+    @Test
+    fun `failed to parse message content`() = runTest {
+        moleculeFlow(RecompositionMode.Immediate) {
+            anInReplyToDetails(
+                eventContent = FailedToParseMessageLikeContent("", "")
+            ).metadata()
+        }.test {
+            awaitItem().let {
+                assertThat(it).isNull()
+            }
+        }
+    }
+
+    @Test
+    fun `failed to parse state content`() = runTest {
+        moleculeFlow(RecompositionMode.Immediate) {
+            anInReplyToDetails(
+                eventContent = FailedToParseStateContent("", "", "")
+            ).metadata()
+        }.test {
+            awaitItem().let {
+                assertThat(it).isNull()
+            }
+        }
+    }
+
+    @Test
+    fun `profile change content`() = runTest {
+        moleculeFlow(RecompositionMode.Immediate) {
+            anInReplyToDetails(
+                eventContent = ProfileChangeContent("", "", "", "")
+            ).metadata()
+        }.test {
+            awaitItem().let {
+                assertThat(it).isNull()
+            }
+        }
+    }
+
+    @Test
+    fun `room membership content`() = runTest {
+        moleculeFlow(RecompositionMode.Immediate) {
+            anInReplyToDetails(
+                eventContent = RoomMembershipContent(A_USER_ID, null)
+            ).metadata()
+        }.test {
+            awaitItem().let {
+                assertThat(it).isNull()
+            }
+        }
+    }
+
+    @Test
+    fun `state content`() = runTest {
+        moleculeFlow(RecompositionMode.Immediate) {
+            anInReplyToDetails(
+                eventContent = StateContent("", OtherState.RoomJoinRules)
+            ).metadata()
+        }.test {
+            awaitItem().let {
+                assertThat(it).isNull()
+            }
+        }
+    }
+
+    @Test
+    fun `unknown content`() = runTest {
+        moleculeFlow(RecompositionMode.Immediate) {
+            anInReplyToDetails(
+                eventContent = UnknownContent
+            ).metadata()
+        }.test {
+            awaitItem().let {
+                assertThat(it).isNull()
+            }
+        }
+    }
+
+    @Test
+    fun `null content`() = runTest {
+        moleculeFlow(RecompositionMode.Immediate) {
+            anInReplyToDetails(
+                eventContent = null
             ).metadata()
         }.test {
             awaitItem().let {
