@@ -508,7 +508,7 @@ internal fun BloomPreview() {
                         actions = {
                             IconButton(onClick = {}) {
                                 Icon(
-                                    imageVector = CompoundIcons.ShareAndroid,
+                                    imageVector = CompoundIcons.ShareAndroid(),
                                     contentDescription = null,
                                 )
                             }

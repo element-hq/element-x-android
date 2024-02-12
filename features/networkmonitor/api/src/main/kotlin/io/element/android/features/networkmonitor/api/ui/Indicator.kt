@@ -54,7 +54,7 @@ internal fun Indicator(
     ) {
         val tint = MaterialTheme.colorScheme.primary
         Icon(
-            imageVector = CompoundIcons.Offline,
+            imageVector = CompoundIcons.Offline(),
             contentDescription = null,
             tint = tint,
             modifier = Modifier.size(16.sp.toDp()),

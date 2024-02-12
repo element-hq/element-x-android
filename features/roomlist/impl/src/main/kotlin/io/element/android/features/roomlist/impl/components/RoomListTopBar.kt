@@ -234,7 +234,7 @@ private fun DefaultRoomListTopBar(
                             onClick = onSearchClicked,
                         ) {
                             Icon(
-                                imageVector = CompoundIcons.Search,
+                                imageVector = CompoundIcons.Search(),
                                 contentDescription = stringResource(CommonStrings.action_search),
                             )
                         }
@@ -244,7 +244,7 @@ private fun DefaultRoomListTopBar(
                                 onClick = { showMenu = !showMenu }
                             ) {
                                 Icon(
-                                    imageVector = CompoundIcons.OverflowVertical,
+                                    imageVector = CompoundIcons.OverflowVertical(),
                                     contentDescription = null,
                                 )
                             }
@@ -261,7 +261,7 @@ private fun DefaultRoomListTopBar(
                                         text = { Text(stringResource(id = CommonStrings.action_invite)) },
                                         leadingIcon = {
                                             Icon(
-                                                imageVector = CompoundIcons.ShareAndroid,
+                                                imageVector = CompoundIcons.ShareAndroid(),
                                                 tint = ElementTheme.materialColors.secondary,
                                                 contentDescription = null,
                                             )
@@ -277,7 +277,7 @@ private fun DefaultRoomListTopBar(
                                         text = { Text(stringResource(id = CommonStrings.common_report_a_problem)) },
                                         leadingIcon = {
                                             Icon(
-                                                imageVector = CompoundIcons.ChatProblem,
+                                                imageVector = CompoundIcons.ChatProblem(),
                                                 tint = ElementTheme.materialColors.secondary,
                                                 contentDescription = null,
                                             )

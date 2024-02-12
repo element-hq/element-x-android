@@ -83,32 +83,32 @@ internal fun DropdownMenuItemPreview() = ElementThemedPreview {
         DropdownMenuItem(
             text = { Text(text = "Item") },
             onClick = {},
-            trailingIcon = { Icon(imageVector = CompoundIcons.ChevronRight, contentDescription = null) },
+            trailingIcon = { Icon(imageVector = CompoundIcons.ChevronRight(), contentDescription = null) },
         )
         HorizontalDivider()
         DropdownMenuItem(
             text = { Text(text = "Item") },
             onClick = {},
-            leadingIcon = { Icon(imageVector = CompoundIcons.ChatProblem, contentDescription = null) },
+            leadingIcon = { Icon(imageVector = CompoundIcons.ChatProblem(), contentDescription = null) },
         )
         DropdownMenuItem(
             text = { Text(text = "Item") },
             onClick = {},
-            leadingIcon = { Icon(imageVector = CompoundIcons.ChatProblem, contentDescription = null) },
-            trailingIcon = { Icon(imageVector = CompoundIcons.ChevronRight, contentDescription = null) },
+            leadingIcon = { Icon(imageVector = CompoundIcons.ChatProblem(), contentDescription = null) },
+            trailingIcon = { Icon(imageVector = CompoundIcons.ChevronRight(), contentDescription = null) },
         )
         DropdownMenuItem(
             text = { Text(text = "Item") },
             onClick = {},
             enabled = false,
-            leadingIcon = { Icon(imageVector = CompoundIcons.ChatProblem, contentDescription = null) },
-            trailingIcon = { Icon(imageVector = CompoundIcons.ChevronRight, contentDescription = null) },
+            leadingIcon = { Icon(imageVector = CompoundIcons.ChatProblem(), contentDescription = null) },
+            trailingIcon = { Icon(imageVector = CompoundIcons.ChevronRight(), contentDescription = null) },
         )
         HorizontalDivider()
         DropdownMenuItem(
             text = { Text(text = "Multiline\nItem") },
             onClick = {},
-            trailingIcon = { Icon(imageVector = CompoundIcons.ChevronRight, contentDescription = null) },
+            trailingIcon = { Icon(imageVector = CompoundIcons.ChevronRight(), contentDescription = null) },
         )
     }
 }

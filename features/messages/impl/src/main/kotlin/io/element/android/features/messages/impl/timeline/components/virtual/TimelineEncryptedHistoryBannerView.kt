@@ -56,7 +56,7 @@ fun TimelineEncryptedHistoryBannerView(
     ) {
         Icon(
             modifier = Modifier.size(20.dp),
-            imageVector = CompoundIcons.InfoSolid,
+            imageVector = CompoundIcons.InfoSolid(),
             contentDescription = null,
             tint = ElementTheme.colors.iconInfoPrimary
         )

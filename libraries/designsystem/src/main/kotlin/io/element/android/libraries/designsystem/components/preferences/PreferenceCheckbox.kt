@@ -99,7 +99,7 @@ internal fun PreferenceCheckboxPreview() = ElementThemedPreview {
     Column {
         PreferenceCheckbox(
             title = "Checkbox",
-            iconResourceId = CompoundDrawables.ic_threads,
+            iconResourceId = CompoundDrawables.ic_compound_threads,
             enabled = true,
             isChecked = true,
             onCheckedChange = {},
@@ -107,7 +107,7 @@ internal fun PreferenceCheckboxPreview() = ElementThemedPreview {
         PreferenceCheckbox(
             title = "Checkbox with supporting text",
             supportingText = "Supporting text",
-            iconResourceId = CompoundDrawables.ic_threads,
+            iconResourceId = CompoundDrawables.ic_compound_threads,
             enabled = true,
             isChecked = true,
             onCheckedChange = {},

@@ -35,9 +35,9 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
+import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.designsystem.atomic.atoms.RedIndicatorAtom
 import io.element.android.libraries.designsystem.components.preferences.components.PreferenceIcon
-import io.element.android.libraries.designsystem.icons.CompoundDrawables
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.preview.PreviewGroup
@@ -169,26 +169,26 @@ private fun ContentToPreview(showEndBadge: Boolean) {
     ) {
         PreferenceText(
             title = "Title",
-            iconResourceId = CompoundDrawables.ic_chat_problem,
+            icon = CompoundIcons.ChatProblem(),
             showEndBadge = showEndBadge,
         )
         PreferenceText(
             title = "Title",
             subtitle = "Some content",
-            iconResourceId = CompoundDrawables.ic_chat_problem,
+            icon = CompoundIcons.ChatProblem(),
             showEndBadge = showEndBadge,
         )
         PreferenceText(
             title = "Title",
             subtitle = "Some content",
-            iconResourceId = CompoundDrawables.ic_chat_problem,
+            icon = CompoundIcons.ChatProblem(),
             currentValue = "123",
             showEndBadge = showEndBadge,
         )
         PreferenceText(
             title = "Title",
             subtitle = "Some content",
-            iconResourceId = CompoundDrawables.ic_chat_problem,
+            icon = CompoundIcons.ChatProblem(),
             currentValue = "123",
             enabled = false,
             showEndBadge = showEndBadge,
@@ -196,19 +196,19 @@ private fun ContentToPreview(showEndBadge: Boolean) {
         PreferenceText(
             title = "Title",
             subtitle = "Some content",
-            iconResourceId = CompoundDrawables.ic_chat_problem,
+            icon = CompoundIcons.ChatProblem(),
             loadingCurrentValue = true,
             showEndBadge = showEndBadge,
         )
         PreferenceText(
             title = "Title",
-            iconResourceId = CompoundDrawables.ic_chat_problem,
+            icon = CompoundIcons.ChatProblem(),
             currentValue = "123",
             showEndBadge = showEndBadge,
         )
         PreferenceText(
             title = "Title",
-            iconResourceId = CompoundDrawables.ic_chat_problem,
+            icon = CompoundIcons.ChatProblem(),
             loadingCurrentValue = true,
             showEndBadge = showEndBadge,
         )

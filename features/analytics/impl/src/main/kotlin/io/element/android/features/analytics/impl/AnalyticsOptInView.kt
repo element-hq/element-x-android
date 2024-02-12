@@ -143,7 +143,7 @@ private fun CheckIcon() {
             .size(20.dp)
             .background(color = MaterialTheme.colorScheme.background, shape = CircleShape)
             .padding(2.dp),
-        imageVector = CompoundIcons.Check,
+        imageVector = CompoundIcons.Check(),
         contentDescription = null,
         tint = ElementTheme.colors.textActionAccent,
     )

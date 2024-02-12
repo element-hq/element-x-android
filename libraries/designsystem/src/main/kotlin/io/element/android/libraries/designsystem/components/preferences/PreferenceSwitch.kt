@@ -33,8 +33,8 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
+import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.designsystem.components.preferences.components.PreferenceIcon
-import io.element.android.libraries.designsystem.icons.CompoundDrawables
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
 import io.element.android.libraries.designsystem.theme.components.Switch
@@ -106,7 +106,7 @@ internal fun PreferenceSwitchPreview() = ElementThemedPreview {
     PreferenceSwitch(
         title = "Switch",
         subtitle = "Subtitle Switch",
-        iconResourceId = CompoundDrawables.ic_threads,
+        icon = CompoundIcons.Threads(),
         enabled = true,
         isChecked = true,
         onCheckedChange = {},

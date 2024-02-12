@@ -89,13 +89,13 @@ private fun ContentsToPreview() {
     Row(Modifier.padding(10.dp)) {
         MainActionButton(
             title = "Share",
-            imageVector = CompoundIcons.ShareAndroid,
+            imageVector = CompoundIcons.ShareAndroid(),
             onClick = { },
         )
         Spacer(modifier = Modifier.width(20.dp))
         MainActionButton(
             title = "Share",
-            imageVector = CompoundIcons.ShareAndroid,
+            imageVector = CompoundIcons.ShareAndroid(),
             onClick = { },
             enabled = false,
         )

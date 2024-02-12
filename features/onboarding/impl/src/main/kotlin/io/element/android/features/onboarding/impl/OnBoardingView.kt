@@ -142,7 +142,7 @@ private fun OnBoardingContent(
                 onClick = onOpenDeveloperSettings,
             ) {
                 Icon(
-                    imageVector = CompoundIcons.SettingsSolid,
+                    imageVector = CompoundIcons.SettingsSolid(),
                     contentDescription = stringResource(CommonStrings.common_settings)
                 )
             }

@@ -162,7 +162,7 @@ fun CreatePollView(
                     },
                     trailingContent = ListItemContent.Custom {
                         Icon(
-                            imageVector = CompoundIcons.Delete,
+                            imageVector = CompoundIcons.Delete(),
                             contentDescription = null,
                             modifier = Modifier.clickable(answer.canDelete) {
                                 state.eventSink(CreatePollEvents.RemoveAnswer(index))

@@ -31,7 +31,7 @@ fun RoomMemberMainActionsSection(onShareUser: () -> Unit, modifier: Modifier = M
     Row(modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
         MainActionButton(
             title = stringResource(CommonStrings.action_share),
-            imageVector = CompoundIcons.ShareAndroid,
+            imageVector = CompoundIcons.ShareAndroid(),
             onClick = onShareUser
         )
     }

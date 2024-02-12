@@ -139,7 +139,7 @@ private fun CollapsibleSection(
             Text(title, modifier = Modifier.weight(1f))
             Icon(
                 modifier = Modifier.rotate(if (isExpanded) 180f else 0f),
-                imageVector = CompoundIcons.ChevronDown,
+                imageVector = CompoundIcons.ChevronDown(),
                 contentDescription = null
             )
         }

@@ -78,7 +78,7 @@ private fun StartButton(
 ) {
     Icon(
         modifier = Modifier.size(24.dp),
-        imageVector = CompoundIcons.MicOnOutline,
+        imageVector = CompoundIcons.MicOn(),
         contentDescription = stringResource(CommonStrings.a11y_voice_message_record),
         tint = ElementTheme.colors.iconSecondary,
     )

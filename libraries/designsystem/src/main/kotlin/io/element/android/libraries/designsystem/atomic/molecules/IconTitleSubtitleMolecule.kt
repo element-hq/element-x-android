@@ -90,7 +90,7 @@ fun IconTitleSubtitleMolecule(
 @Composable
 internal fun IconTitleSubtitleMoleculePreview() = ElementPreview {
     IconTitleSubtitleMolecule(
-        iconImageVector = CompoundIcons.Chat,
+        iconImageVector = CompoundIcons.Chat(),
         title = "Title",
         subTitle = "Subtitle",
     )

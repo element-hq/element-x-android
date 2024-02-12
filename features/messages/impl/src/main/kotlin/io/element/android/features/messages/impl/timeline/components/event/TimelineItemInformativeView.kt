@@ -77,7 +77,7 @@ internal fun TimelineItemInformativeViewPreview() = ElementPreview {
     TimelineItemInformativeView(
         text = "Info",
         iconDescription = "",
-        iconResourceId = CompoundDrawables.ic_delete,
+        iconResourceId = CompoundDrawables.ic_compound_delete,
         onContentLayoutChanged = {},
     )
 }

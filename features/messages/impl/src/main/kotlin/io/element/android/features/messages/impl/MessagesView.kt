@@ -481,7 +481,7 @@ private fun MessagesViewTopBar(
             } else {
                 IconButton(onClick = onJoinCallClicked, enabled = callState != RoomCallState.DISABLED) {
                     Icon(
-                        imageVector = CompoundIcons.VideoCallSolid,
+                        imageVector = CompoundIcons.VideoCallSolid(),
                         contentDescription = stringResource(CommonStrings.a11y_start_call),
                     )
                 }
@@ -507,7 +507,7 @@ private fun JoinCallMenuItem(
     ) {
         Icon(
             modifier = Modifier.size(20.dp),
-            imageVector = CompoundIcons.VideoCallSolid,
+            imageVector = CompoundIcons.VideoCallSolid(),
             contentDescription = null
         )
         Spacer(Modifier.width(8.dp))

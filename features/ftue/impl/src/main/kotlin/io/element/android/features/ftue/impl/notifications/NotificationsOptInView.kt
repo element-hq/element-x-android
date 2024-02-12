@@ -79,7 +79,7 @@ private fun NotificationsOptInHeader(
         modifier = modifier,
         title = stringResource(R.string.screen_notification_optin_title),
         subTitle = stringResource(R.string.screen_notification_optin_subtitle),
-        iconImageVector = CompoundIcons.NotificationsSolid,
+        iconImageVector = CompoundIcons.NotificationsSolid(),
     )
 }
 

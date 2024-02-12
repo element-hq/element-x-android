@@ -20,7 +20,6 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.runtime.Immutable
 import io.element.android.libraries.designsystem.icons.CompoundDrawables
-import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @Immutable
@@ -31,17 +30,17 @@ sealed class AvatarAction(
 ) {
     data object TakePhoto : AvatarAction(
         titleResId = CommonStrings.action_take_photo,
-        iconResourceId = CommonDrawables.ic_take_photo_camera,
+        iconResourceId = CompoundDrawables.ic_compound_take_photo,
     )
 
     data object ChoosePhoto : AvatarAction(
         titleResId = CommonStrings.action_choose_photo,
-        iconResourceId = CommonDrawables.ic_image,
+        iconResourceId = CompoundDrawables.ic_compound_image,
     )
 
     data object Remove : AvatarAction(
         titleResId = CommonStrings.action_remove,
-        iconResourceId = CompoundDrawables.ic_delete,
+        iconResourceId = CompoundDrawables.ic_compound_delete,
         destructive = true
     )
 }

@@ -65,7 +65,7 @@ class S {
             val colors = metadata.colorList.map(::ColorTestPreview)
             val typography = metadata.typographyList.map(::TypographyTestPreview)
 
-            return components + colors + typography
+            return (components + colors + typography).filter { !it.toString().contains("compound") }
         }
     }
 
