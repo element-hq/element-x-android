@@ -31,6 +31,7 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.media.AudioInfo
 import io.element.android.libraries.matrix.api.media.FileInfo
+import io.element.android.libraries.matrix.api.media.ImageInfo
 import io.element.android.libraries.matrix.api.media.VideoInfo
 import io.element.android.libraries.matrix.api.timeline.item.event.AudioMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.EventContent
@@ -44,6 +45,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.ProfileChange
 import io.element.android.libraries.matrix.api.timeline.item.event.RedactedContent
 import io.element.android.libraries.matrix.api.timeline.item.event.RoomMembershipContent
 import io.element.android.libraries.matrix.api.timeline.item.event.StateContent
+import io.element.android.libraries.matrix.api.timeline.item.event.StickerContent
 import io.element.android.libraries.matrix.api.timeline.item.event.UnableToDecryptContent
 import io.element.android.libraries.matrix.api.timeline.item.event.UnknownContent
 import io.element.android.libraries.matrix.api.timeline.item.event.VideoMessageType
@@ -90,6 +92,40 @@ class InReplyToMetadataKtTest {
                     InReplyToMetadata.Thumbnail(
                         attachmentThumbnailInfo = AttachmentThumbnailInfo(
                             thumbnailSource = aMediaSource(),
+                            textContent = "body",
+                            type = AttachmentThumbnailType.Image,
+                            blurHash = null,
+                        )
+                    )
+                )
+            }
+        }
+    }
+
+    @Test
+    fun `a sticker message content`() = runTest {
+        moleculeFlow(RecompositionMode.Immediate) {
+            anInReplyToDetails(
+                eventContent = StickerContent(
+                    body = "body",
+                    info = ImageInfo(
+                        height = null,
+                        width = null,
+                        mimetype = null,
+                        size = null,
+                        thumbnailInfo = null,
+                        thumbnailSource = aMediaSource(),
+                        blurhash = null
+                    ),
+                    url = "url"
+                )
+            ).metadata()
+        }.test {
+            awaitItem().let {
+                assertThat(it).isEqualTo(
+                    InReplyToMetadata.Thumbnail(
+                        attachmentThumbnailInfo = AttachmentThumbnailInfo(
+                            thumbnailSource = aMediaSource(url = "url"),
                             textContent = "body",
                             type = AttachmentThumbnailType.Image,
                             blurHash = null,
