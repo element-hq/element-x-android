@@ -22,14 +22,18 @@ import io.element.android.features.messages.impl.actionlist.anActionListState
 import io.element.android.features.messages.impl.messagecomposer.AttachmentsState
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerState
 import io.element.android.features.messages.impl.messagecomposer.aMessageComposerState
+import io.element.android.features.messages.impl.timeline.TimelineState
 import io.element.android.features.messages.impl.timeline.aTimelineItemList
 import io.element.android.features.messages.impl.timeline.aTimelineState
 import io.element.android.features.messages.impl.timeline.components.customreaction.CustomReactionEvents
 import io.element.android.features.messages.impl.timeline.components.customreaction.CustomReactionState
 import io.element.android.features.messages.impl.timeline.components.reactionsummary.ReactionSummaryEvents
 import io.element.android.features.messages.impl.timeline.components.reactionsummary.ReactionSummaryState
+import io.element.android.features.messages.impl.timeline.components.receipt.bottomsheet.ReadReceiptBottomSheetEvents
 import io.element.android.features.messages.impl.timeline.components.receipt.bottomsheet.ReadReceiptBottomSheetState
 import io.element.android.features.messages.impl.timeline.components.retrysendmenu.RetrySendMenuState
+import io.element.android.features.messages.impl.timeline.components.retrysendmenu.aRetrySendMenuState
+import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
 import io.element.android.features.messages.impl.typing.aTypingNotificationState
 import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessageComposerState
@@ -91,12 +95,20 @@ fun aMessagesState(
     roomName: AsyncData<String> = AsyncData.Success("Room name"),
     roomAvatar: AsyncData<AvatarData> = AsyncData.Success(AvatarData("!id:domain", "Room name", size = AvatarSize.TimelineRoom)),
     userHasPermissionToSendMessage: Boolean = true,
+    userHasPermissionToRedactOwn: Boolean = false,
+    userHasPermissionToRedactOther: Boolean = false,
+    userHasPermissionToSendReaction: Boolean = true,
     composerState: MessageComposerState = aMessageComposerState(
         richTextEditorState = RichTextEditorState("Hello", initialFocus = true),
         isFullScreen = false,
         mode = MessageComposerMode.Normal,
     ),
     voiceMessageComposerState: VoiceMessageComposerState = aVoiceMessageComposerState(),
+    timelineState: TimelineState = aTimelineState(
+        timelineItems = aTimelineItemList(aTimelineItemTextContent()),
+    ),
+    retrySendMenuState: RetrySendMenuState = aRetrySendMenuState(),
+    readReceiptBottomSheetState: ReadReceiptBottomSheetState = aReadReceiptBottomSheetState(),
     actionListState: ActionListState = anActionListState(),
     customReactionState: CustomReactionState = aCustomReactionState(),
     reactionSummaryState: ReactionSummaryState = aReactionSummaryState(),
@@ -110,23 +122,15 @@ fun aMessagesState(
     roomName = roomName,
     roomAvatar = roomAvatar,
     userHasPermissionToSendMessage = userHasPermissionToSendMessage,
-    userHasPermissionToRedactOwn = false,
-    userHasPermissionToRedactOther = false,
-    userHasPermissionToSendReaction = true,
+    userHasPermissionToRedactOwn = userHasPermissionToRedactOwn,
+    userHasPermissionToRedactOther = userHasPermissionToRedactOther,
+    userHasPermissionToSendReaction = userHasPermissionToSendReaction,
     composerState = composerState,
     voiceMessageComposerState = voiceMessageComposerState,
-    timelineState = aTimelineState(
-        timelineItems = aTimelineItemList(aTimelineItemTextContent()),
-    ),
     typingNotificationState = aTypingNotificationState(),
-    retrySendMenuState = RetrySendMenuState(
-        selectedEvent = null,
-        eventSink = {},
-    ),
-    readReceiptBottomSheetState = ReadReceiptBottomSheetState(
-        selectedEvent = null,
-        eventSink = {},
-    ),
+    timelineState = timelineState,
+    retrySendMenuState = retrySendMenuState,
+    readReceiptBottomSheetState = readReceiptBottomSheetState,
     actionListState = actionListState,
     customReactionState = customReactionState,
     reactionSummaryState = reactionSummaryState,
@@ -150,9 +154,18 @@ fun aReactionSummaryState(
 )
 
 fun aCustomReactionState(
+    target: CustomReactionState.Target = CustomReactionState.Target.None,
     eventSink: (CustomReactionEvents) -> Unit = {},
 ) = CustomReactionState(
-    target = CustomReactionState.Target.None,
+    target = target,
     selectedEmoji = persistentSetOf(),
+    eventSink = eventSink,
+)
+
+fun aReadReceiptBottomSheetState(
+    selectedEvent: TimelineItem.Event? = null,
+    eventSink: (ReadReceiptBottomSheetEvents) -> Unit = {},
+) = ReadReceiptBottomSheetState(
+    selectedEvent = selectedEvent,
     eventSink = eventSink,
 )

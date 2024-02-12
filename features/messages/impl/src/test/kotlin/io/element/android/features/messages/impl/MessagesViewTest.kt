@@ -27,18 +27,35 @@ import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onNodeWithContentDescription
+import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTouchInput
+import androidx.compose.ui.test.swipeRight
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import io.element.android.emojibasebindings.Emoji
+import io.element.android.emojibasebindings.EmojibaseCategory
+import io.element.android.emojibasebindings.EmojibaseStore
+import io.element.android.features.messages.impl.actionlist.ActionListEvents
 import io.element.android.features.messages.impl.actionlist.ActionListState
 import io.element.android.features.messages.impl.actionlist.anActionListState
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
 import io.element.android.features.messages.impl.attachments.Attachment
 import io.element.android.features.messages.impl.messagecomposer.aMessageComposerState
+import io.element.android.features.messages.impl.timeline.aTimelineItemEvent
+import io.element.android.features.messages.impl.timeline.aTimelineItemList
+import io.element.android.features.messages.impl.timeline.aTimelineItemReadReceipts
+import io.element.android.features.messages.impl.timeline.aTimelineRoomInfo
+import io.element.android.features.messages.impl.timeline.aTimelineState
 import io.element.android.features.messages.impl.timeline.components.customreaction.CustomReactionEvents
+import io.element.android.features.messages.impl.timeline.components.customreaction.CustomReactionState
 import io.element.android.features.messages.impl.timeline.components.reactionsummary.ReactionSummaryEvents
+import io.element.android.features.messages.impl.timeline.components.receipt.aReadReceiptData
+import io.element.android.features.messages.impl.timeline.components.receipt.bottomsheet.ReadReceiptBottomSheetEvents
+import io.element.android.features.messages.impl.timeline.components.retrysendmenu.RetrySendMenuEvents
+import io.element.android.features.messages.impl.timeline.components.retrysendmenu.aRetrySendMenuState
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
+import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -126,6 +143,136 @@ class MessagesViewTest {
         // Cannot perform click on "Text", it's not detected. Use tag instead
         rule.onAllNodesWithTag(TestTags.messageBubble.value).onFirst().performClick()
         callback.assertSuccess()
+    }
+
+    @Test
+    fun `clicking on an Event timestamp in error emits the expected Event`() {
+        val eventsRecorder = EventsRecorder<RetrySendMenuEvents>()
+        val state = aMessagesState(
+            retrySendMenuState = aRetrySendMenuState(
+                eventSink = eventsRecorder
+            ),
+        )
+        val timelineItem = state.timelineState.timelineItems[1] as TimelineItem.Event
+        rule.setMessagesView(
+            state = state,
+        )
+        rule.onAllNodesWithText(timelineItem.sentTime)[1].performClick()
+        eventsRecorder.assertSingle(RetrySendMenuEvents.EventSelected(timelineItem))
+    }
+
+    @Test
+    fun `long clicking on an Event emits the expected Event userHasPermissionToSendMessage`() {
+        `long clicking on an Event emits the expected Event`(userHasPermissionToSendMessage = true)
+    }
+
+    @Test
+    fun `long clicking on an Event emits the expected Event userHasPermissionToRedactOwn`() {
+        `long clicking on an Event emits the expected Event`(userHasPermissionToRedactOwn = true)
+    }
+
+    @Test
+    fun `long clicking on an Event emits the expected Event userHasPermissionToRedactOther`() {
+        `long clicking on an Event emits the expected Event`(userHasPermissionToRedactOther = true)
+    }
+
+    @Test
+    fun `long clicking on an Event emits the expected Event userHasPermissionToSendReaction`() {
+        `long clicking on an Event emits the expected Event`(userHasPermissionToSendReaction = true)
+    }
+
+    private fun `long clicking on an Event emits the expected Event`(
+        userHasPermissionToSendMessage: Boolean = false,
+        userHasPermissionToRedactOwn: Boolean = false,
+        userHasPermissionToRedactOther: Boolean = false,
+        userHasPermissionToSendReaction: Boolean = false,
+    ) {
+        val eventsRecorder = EventsRecorder<ActionListEvents>()
+        val state = aMessagesState(
+            actionListState = anActionListState(
+                eventSink = eventsRecorder
+            ),
+            userHasPermissionToSendMessage = userHasPermissionToSendMessage,
+            userHasPermissionToRedactOwn = userHasPermissionToRedactOwn,
+            userHasPermissionToRedactOther = userHasPermissionToRedactOther,
+            userHasPermissionToSendReaction = userHasPermissionToSendReaction,
+        )
+        val timelineItem = state.timelineState.timelineItems.first() as TimelineItem.Event
+        rule.setMessagesView(
+            state = state,
+        )
+        // Cannot perform click on "Text", it's not detected. Use tag instead
+        rule.onAllNodesWithTag(TestTags.messageBubble.value).onFirst().performTouchInput { longClick() }
+        eventsRecorder.assertSingle(
+            ActionListEvents.ComputeForMessage(
+                event = timelineItem,
+                canRedactOwn = state.userHasPermissionToRedactOwn,
+                canRedactOther = state.userHasPermissionToRedactOther,
+                canSendMessage = state.userHasPermissionToSendMessage,
+                canSendReaction = state.userHasPermissionToSendReaction,
+            )
+        )
+    }
+
+    @Test
+    fun `clicking on a read receipt list emits the expected Event`() {
+        val eventsRecorder = EventsRecorder<ReadReceiptBottomSheetEvents>()
+        val state = aMessagesState(
+            timelineState = aTimelineState(
+                renderReadReceipts = true,
+                timelineItems = persistentListOf(
+                    aTimelineItemEvent(
+                        readReceiptState = aTimelineItemReadReceipts(
+                            receipts = listOf(
+                                aReadReceiptData(0),
+                            ),
+                        ),
+                    ),
+                ),
+            ),
+            readReceiptBottomSheetState = aReadReceiptBottomSheetState(
+                eventSink = eventsRecorder
+            ),
+        )
+        val timelineItem = state.timelineState.timelineItems.first() as TimelineItem.Event
+        rule.setMessagesView(
+            state = state,
+        )
+        rule.onNodeWithTag(TestTags.messageReadReceipts.value).performClick()
+        eventsRecorder.assertSingle(ReadReceiptBottomSheetEvents.EventSelected(timelineItem))
+    }
+
+    @Test
+    fun `swiping on an Event emits the expected Event`() {
+        swipeTest(userHasPermissionToSendMessage = true)
+    }
+
+    @Test
+    fun `swiping on an Event emits no Event if user does not have permission to send message`() {
+        swipeTest(userHasPermissionToSendMessage = false)
+    }
+
+    private fun swipeTest(userHasPermissionToSendMessage: Boolean) {
+        val eventsRecorder = EventsRecorder<MessagesEvents>()
+        val state = aMessagesState(
+            timelineState = aTimelineState(
+                timelineItems = aTimelineItemList(aTimelineItemTextContent()),
+                timelineRoomInfo = aTimelineRoomInfo(
+                    userHasPermissionToSendMessage = userHasPermissionToSendMessage
+                ),
+            ),
+            eventSink = eventsRecorder,
+        )
+        rule.setMessagesView(
+            state = state,
+        )
+        rule.onAllNodesWithTag(TestTags.messageBubble.value).onFirst().performTouchInput { swipeRight(endX = 200f) }
+        if (userHasPermissionToSendMessage) {
+            val timelineItem = state.timelineState.timelineItems.first() as TimelineItem.Event
+            eventsRecorder.assertSingle(MessagesEvents.HandleAction(TimelineItemAction.Reply, timelineItem))
+        } else {
+            eventsRecorder.assertEmpty()
+        }
     }
 
     @Test
@@ -255,6 +402,74 @@ class MessagesViewTest {
         val moreReactionContentDescription = rule.activity.getString(R.string.screen_room_timeline_add_reaction)
         rule.onAllNodesWithContentDescription(moreReactionContentDescription).onFirst().performClick()
         eventsRecorder.assertSingle(CustomReactionEvents.ShowCustomReactionSheet(timelineItem))
+    }
+
+    @Test
+    fun `clicking on more reaction from action list emits the expected Event`() {
+        val eventsRecorder = EventsRecorder<CustomReactionEvents>()
+        val state = aMessagesState()
+        val timelineItem = state.timelineState.timelineItems.first() as TimelineItem.Event
+        val stateWithActionListState = state.copy(
+            actionListState = anActionListState(
+                target = ActionListState.Target.Success(
+                    event = timelineItem,
+                    displayEmojiReactions = true,
+                    actions = persistentListOf(TimelineItemAction.Edit),
+                ),
+            ),
+            customReactionState = aCustomReactionState(
+                eventSink = eventsRecorder
+            ),
+        )
+        rule.setMessagesView(
+            state = stateWithActionListState,
+        )
+        val moreReactionContentDescription = rule.activity.getString(CommonStrings.a11y_react_with_other_emojis)
+        rule.onNodeWithContentDescription(moreReactionContentDescription).performClick()
+        // Give time for the close animation to complete
+        rule.mainClock.advanceTimeBy(milliseconds = 1_000)
+        eventsRecorder.assertSingle(CustomReactionEvents.ShowCustomReactionSheet(timelineItem))
+    }
+
+    @Test
+    fun `clicking on a custom emoji emits the expected Events`() {
+        val aUnicode = "🙈"
+        val customReactionStateEventsRecorder = EventsRecorder<CustomReactionEvents>()
+        val eventsRecorder = EventsRecorder<MessagesEvents>()
+        val state = aMessagesState(
+            eventSink = eventsRecorder,
+        )
+        val timelineItem = state.timelineState.timelineItems.first() as TimelineItem.Event
+        val stateWithCustomReactionState = state.copy(
+            customReactionState = aCustomReactionState(
+                target = CustomReactionState.Target.Success(
+                    event = timelineItem,
+                    emojibaseStore = EmojibaseStore(
+                        categories = mapOf(
+                            EmojibaseCategory.People to listOf(
+                                Emoji(
+                                    hexcode = "",
+                                    label = "",
+                                    tags = emptyList(),
+                                    shortcodes = emptyList(),
+                                    unicode = aUnicode,
+                                    skins = null,
+                                )
+                            )
+                        )
+                    ),
+                ),
+                eventSink = customReactionStateEventsRecorder
+            ),
+        )
+        rule.setMessagesView(
+            state = stateWithCustomReactionState,
+        )
+        rule.onNodeWithText(aUnicode, useUnmergedTree = true).performClick()
+        // Give time for the close animation to complete
+        rule.mainClock.advanceTimeBy(milliseconds = 1_000)
+        customReactionStateEventsRecorder.assertSingle(CustomReactionEvents.DismissCustomReactionSheet)
+        eventsRecorder.assertSingle(MessagesEvents.ToggleReaction(aUnicode, timelineItem.eventId!!))
     }
 }
 
