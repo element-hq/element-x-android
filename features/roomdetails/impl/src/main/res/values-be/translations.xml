@@ -47,6 +47,7 @@
   <string name="screen_dm_details_unblock_alert_action">"Разблакіраваць"</string>
   <string name="screen_dm_details_unblock_alert_description">"Вы зноў зможаце ўбачыць усе паведамленні."</string>
   <string name="screen_dm_details_unblock_user">"Разблакіраваць карыстальніка"</string>
+  <string name="screen_room_details_leave_conversation_title">"Пакінуць размову"</string>
   <string name="screen_room_details_leave_room_title">"Пакінуць пакой"</string>
   <string name="screen_room_details_room_name_label">"Назва пакоя"</string>
   <string name="screen_room_details_security_title">"Бяспека"</string>

@@ -46,6 +46,7 @@
   <string name="screen_dm_details_unblock_alert_action">"Letiltás feloldása"</string>
   <string name="screen_dm_details_unblock_alert_description">"Újra láthatja az összes üzenetét."</string>
   <string name="screen_dm_details_unblock_user">"Felhasználó kitiltásának feloldása"</string>
+  <string name="screen_room_details_leave_conversation_title">"Beszélgetés elhagyása"</string>
   <string name="screen_room_details_leave_room_title">"Szoba elhagyása"</string>
   <string name="screen_room_details_room_name_label">"Szoba neve"</string>
   <string name="screen_room_details_security_title">"Biztonság"</string>

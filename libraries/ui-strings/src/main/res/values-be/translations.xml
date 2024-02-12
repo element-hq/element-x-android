@@ -57,6 +57,7 @@
   <string name="action_join">"Далучыцца"</string>
   <string name="action_learn_more">"Падрабязней"</string>
   <string name="action_leave">"Пакінуць"</string>
+  <string name="action_leave_conversation">"Пакінуць размову"</string>
   <string name="action_leave_room">"Пакінуць пакой"</string>
   <string name="action_manage_account">"Кіраванне ўліковым запісам"</string>
   <string name="action_manage_devices">"Кіраванне прыладамі"</string>
@@ -100,6 +101,7 @@
   <string name="common_acceptable_use_policy">"Палітыка дапушчальнага выкарыстання"</string>
   <string name="common_advanced_settings">"Пашыраныя налады"</string>
   <string name="common_analytics">"Аналітыка"</string>
+  <string name="common_appearance">"Знешні выгляд"</string>
   <string name="common_audio">"Аўдыё"</string>
   <string name="common_bubbles">"Бурбалкі"</string>
   <string name="common_chat_backup">"Рэзервовае капіраванне чата"</string>
@@ -137,6 +139,7 @@
   <string name="common_no_results">"Вынікаў няма"</string>
   <string name="common_offline">"Па-за сеткай"</string>
   <string name="common_password">"Пароль"</string>
+  <string name="common_people">"Людзі"</string>
   <string name="common_permalink">"Пастаянная спасылка"</string>
   <string name="common_permission">"Дазвол"</string>
   <string name="common_poll_total_votes">"Усяго галасоў: %1$s"</string>

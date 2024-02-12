@@ -48,5 +48,6 @@
   <string name="push_no_valid_google_play_services_apk_android">"Keine gültigen Google Play-Dienste gefunden. Benachrichtigungen funktionieren möglicherweise nicht richtig."</string>
   <string name="notification_fallback_content">"Mitteilung"</string>
   <string name="notification_invitation_action_join">"Beitreten"</string>
+  <string name="notification_room_action_mark_as_read">"Als gelesen markieren"</string>
   <string name="notification_room_action_quick_reply">"Schnelle Antwort"</string>
 </resources>

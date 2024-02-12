@@ -48,5 +48,6 @@
   <string name="push_no_valid_google_play_services_apk_android">"A Google Play szolgáltatások nem találhatók. Előfordulhat, hogy az értesítések nem működnek megfelelően."</string>
   <string name="notification_fallback_content">"Értesítés"</string>
   <string name="notification_invitation_action_join">"Csatlakozás"</string>
+  <string name="notification_room_action_mark_as_read">"Megjelölés olvasottként"</string>
   <string name="notification_room_action_quick_reply">"Gyors válasz"</string>
 </resources>
