@@ -57,6 +57,7 @@
   <string name="action_join">"Csatlakozás"</string>
   <string name="action_learn_more">"További tudnivalók"</string>
   <string name="action_leave">"Elhagyás"</string>
+  <string name="action_leave_conversation">"Beszélgetés elhagyása"</string>
   <string name="action_leave_room">"Szoba elhagyása"</string>
   <string name="action_manage_account">"Fiók kezelése"</string>
   <string name="action_manage_devices">"Eszközök kezelése"</string>
@@ -118,6 +119,7 @@
   <string name="common_enter_your_pin">"Add meg a PIN-kódodat"</string>
   <string name="common_error">"Hiba"</string>
   <string name="common_everyone">"Mindenki"</string>
+  <string name="common_favourite">"Kedvenc"</string>
   <string name="common_file">"Fájl"</string>
   <string name="common_file_saved_on_disk_android">"A fájl a Letöltések mappába mentve"</string>
   <string name="common_forward_message">"Üzenet továbbítása"</string>

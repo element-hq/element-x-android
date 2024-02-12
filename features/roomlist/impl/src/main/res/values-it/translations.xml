@@ -2,6 +2,8 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="confirm_recovery_key_banner_message">"Il backup della chat non è attualmente sincronizzato. Devi confermare la chiave di recupero per mantenere l\'accesso al backup della chat."</string>
   <string name="confirm_recovery_key_banner_title">"Conferma la chiave di recupero"</string>
+  <string name="screen_migration_message">"Si tratta di una procedura che si effettua una sola volta, grazie per l\'attesa."</string>
+  <string name="screen_migration_title">"Configurazione del tuo account."</string>
   <string name="screen_roomlist_a11y_create_message">"Crea una nuova conversazione o stanza"</string>
   <string name="screen_roomlist_empty_message">"Inizia inviando un messaggio a qualcuno."</string>
   <string name="screen_roomlist_empty_title">"Ancora nessuna chat."</string>

@@ -54,5 +54,6 @@
   <string name="push_no_valid_google_play_services_apk_android">"Nenašli sa žiadne platné služby Google Play. Oznámenia nemusia fungovať správne."</string>
   <string name="notification_fallback_content">"Oznámenie"</string>
   <string name="notification_invitation_action_join">"Pripojiť sa"</string>
+  <string name="notification_room_action_mark_as_read">"Označiť ako prečítané"</string>
   <string name="notification_room_action_quick_reply">"Rýchla odpoveď"</string>
 </resources>

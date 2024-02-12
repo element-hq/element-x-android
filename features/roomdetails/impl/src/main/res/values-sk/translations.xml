@@ -26,6 +26,8 @@
   <string name="screen_room_details_share_room_title">"Zdieľať miestnosť"</string>
   <string name="screen_room_details_updating_room">"Aktualizácia miestnosti…"</string>
   <string name="screen_room_member_list_pending_header_title">"Čaká sa"</string>
+  <string name="screen_room_member_list_role_administrator">"Administrátor"</string>
+  <string name="screen_room_member_list_role_moderator">"Moderátor"</string>
   <string name="screen_room_member_list_room_members_header_title">"Členovia miestnosti"</string>
   <string name="screen_room_notification_settings_allow_custom">"Povoliť vlastné nastavenie"</string>
   <string name="screen_room_notification_settings_allow_custom_footnote">"Zapnutím tohto nastavenia sa prepíše vaše predvolené nastavenie"</string>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="screen_notification_optin_subtitle">"Anda dapat mengubah pengaturan Anda nanti."</string>
+  <string name="screen_notification_optin_subtitle">"Anda dapat mengubah pengaturan Anda nanti."</string>
   <string name="screen_notification_optin_title">"Izinkan pemberitahuan dan jangan pernah melewatkan pesan"</string>
   <string name="screen_welcome_bullet_1">"Panggilan, pemungutan suara, pencarian, dan lainnya akan ditambahkan di tahun ini."</string>
   <string name="screen_welcome_bullet_2">"Riwayat pesan untuk ruangan terenkripsi tidak akan tersedia dalam pembaruan ini."</string>

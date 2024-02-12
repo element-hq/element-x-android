@@ -2,6 +2,8 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="confirm_recovery_key_banner_message">"В настоящее время резервная копия вашего чата не синхронизирована. Требуется подтвердить вашим ключом восстановления, чтобы сохранить доступ к резервной копии чата."</string>
   <string name="confirm_recovery_key_banner_title">"Подтвердите ключ восстановления"</string>
+  <string name="screen_migration_message">"Это одноразовый процесс, спасибо, что подождали."</string>
+  <string name="screen_migration_title">"Настройка учетной записи."</string>
   <string name="screen_roomlist_a11y_create_message">"Создайте новую беседу или комнату"</string>
   <string name="screen_roomlist_empty_message">"Начните переписку с отправки сообщения."</string>
   <string name="screen_roomlist_empty_title">"Пока нет доступных чатов."</string>

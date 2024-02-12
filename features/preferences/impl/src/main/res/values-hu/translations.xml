@@ -6,6 +6,10 @@
   <string name="screen_advanced_settings_developer_mode">"Fejlesztői mód"</string>
   <string name="screen_advanced_settings_developer_mode_description">"Engedélyezd, hogy elérd a fejlesztőknek szánt funkciókat."</string>
   <string name="screen_advanced_settings_rich_text_editor_description">"A formázott szöveges szerkesztő letiltása, hogy kézzel írhass Markdownt."</string>
+  <string name="screen_advanced_settings_send_read_receipts">"Olvasási visszaigazolások"</string>
+  <string name="screen_advanced_settings_send_read_receipts_description">"Ha ki van kapcsolva, az olvasási visszaigazolások nem lesznek elküldve senkinek. A többi felhasználó olvasási visszaigazolását továbbra is meg fogja kapni."</string>
+  <string name="screen_advanced_settings_share_presence">"Jelenlét megosztása"</string>
+  <string name="screen_advanced_settings_share_presence_description">"Ha ki van kapcsolva, nem tud olvasási visszaigazolást vagy írási értesítést küldeni és fogadni"</string>
   <string name="screen_advanced_settings_view_source_description">"Engedélyezd a beállítást az üzenet forrásának megjelenítéséhez az idővonalon."</string>
   <string name="screen_edit_profile_display_name">"Megjelenítendő név"</string>
   <string name="screen_edit_profile_display_name_placeholder">"Saját megjelenítendő név"</string>
