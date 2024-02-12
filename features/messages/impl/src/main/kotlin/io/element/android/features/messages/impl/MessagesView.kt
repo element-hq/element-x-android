@@ -39,7 +39,6 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -194,7 +193,12 @@ fun MessagesView(
                     roomName = state.roomName.dataOrNull(),
                     roomAvatar = state.roomAvatar.dataOrNull(),
                     callState = state.callState,
-                    onBackPressed = onBackPressed,
+                    onBackPressed = {
+                        // Since the textfield is now based on an Android view, this is no longer done automatically.
+                        // We need to hide the keyboard when navigating out of this screen.
+                        localView.hideKeyboard()
+                        onBackPressed()
+                    },
                     onRoomDetailsClicked = onRoomDetailsClicked,
                     onJoinCallClicked = onJoinCallClicked,
                 )
@@ -260,14 +264,6 @@ fun MessagesView(
         onUserDataClicked = onUserDataClicked,
     )
     ReinviteDialog(state = state)
-
-    // Since the textfield is now based on an Android view, this is no longer done automatically.
-    // We need to hide the keyboard automatically when navigating out of this screen.
-    DisposableEffect(Unit) {
-        onDispose {
-            localView.hideKeyboard()
-        }
-    }
 }
 
 @Composable
