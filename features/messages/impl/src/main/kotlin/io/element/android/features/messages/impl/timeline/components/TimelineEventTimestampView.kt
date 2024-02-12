@@ -91,7 +91,7 @@ fun TimelineEventTimestampView(
         if (hasMessageSendingFailed && tint != null) {
             Spacer(modifier = Modifier.width(2.dp))
             Icon(
-                imageVector = CompoundIcons.Error,
+                imageVector = CompoundIcons.Error(),
                 contentDescription = stringResource(id = CommonStrings.common_sending_failed),
                 tint = tint,
                 modifier = Modifier.size(15.dp, 18.dp),

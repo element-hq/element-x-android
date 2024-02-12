@@ -149,13 +149,13 @@ private fun PollTitle(
     ) {
         if (isPollEnded) {
             Icon(
-                imageVector = CompoundIcons.PollsEnd,
+                imageVector = CompoundIcons.PollsEnd(),
                 contentDescription = stringResource(id = CommonStrings.a11y_poll_end),
                 modifier = Modifier.size(22.dp)
             )
         } else {
             Icon(
-                imageVector = CompoundIcons.Polls,
+                imageVector = CompoundIcons.Polls(),
                 contentDescription = stringResource(id = CommonStrings.a11y_poll),
                 modifier = Modifier.size(22.dp)
             )

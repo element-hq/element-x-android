@@ -74,11 +74,11 @@ internal fun PreferenceCategoryPreview() = ElementThemedPreview {
     ) {
         PreferenceText(
             title = "Title",
-            iconResourceId = CompoundDrawables.ic_chat_problem,
+            iconResourceId = CompoundDrawables.ic_compound_chat_problem,
         )
         PreferenceSwitch(
             title = "Switch",
-            iconResourceId = CompoundDrawables.ic_threads,
+            iconResourceId = CompoundDrawables.ic_compound_threads,
             isChecked = true,
             onCheckedChange = {},
         )

@@ -127,7 +127,7 @@ private fun CreateRoomRootViewTopBar(
         },
         navigationIcon = {
             BackButton(
-                imageVector = CompoundIcons.Close,
+                imageVector = CompoundIcons.Close(),
                 onClick = onClosePressed,
             )
         }
@@ -142,12 +142,12 @@ private fun CreateRoomActionButtonsList(
 ) {
     Column {
         CreateRoomActionButton(
-            iconRes = CompoundDrawables.ic_plus,
+            iconRes = CompoundDrawables.ic_compound_plus,
             text = stringResource(id = R.string.screen_create_room_action_create_room),
             onClick = onNewRoomClicked,
         )
         CreateRoomActionButton(
-            iconRes = CompoundDrawables.ic_share_android,
+            iconRes = CompoundDrawables.ic_compound_share_android,
             text = stringResource(id = CommonStrings.action_invite_friends_to_app, state.applicationName),
             onClick = onInvitePeopleClicked,
         )

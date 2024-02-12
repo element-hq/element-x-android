@@ -169,26 +169,26 @@ private fun ContentToPreview(showEndBadge: Boolean) {
     ) {
         PreferenceText(
             title = "Title",
-            iconResourceId = CompoundDrawables.ic_chat_problem,
+            iconResourceId = CompoundDrawables.ic_compound_chat_problem,
             showEndBadge = showEndBadge,
         )
         PreferenceText(
             title = "Title",
             subtitle = "Some content",
-            iconResourceId = CompoundDrawables.ic_chat_problem,
+            iconResourceId = CompoundDrawables.ic_compound_chat_problem,
             showEndBadge = showEndBadge,
         )
         PreferenceText(
             title = "Title",
             subtitle = "Some content",
-            iconResourceId = CompoundDrawables.ic_chat_problem,
+            iconResourceId = CompoundDrawables.ic_compound_chat_problem,
             currentValue = "123",
             showEndBadge = showEndBadge,
         )
         PreferenceText(
             title = "Title",
             subtitle = "Some content",
-            iconResourceId = CompoundDrawables.ic_chat_problem,
+            iconResourceId = CompoundDrawables.ic_compound_chat_problem,
             currentValue = "123",
             enabled = false,
             showEndBadge = showEndBadge,
@@ -196,19 +196,19 @@ private fun ContentToPreview(showEndBadge: Boolean) {
         PreferenceText(
             title = "Title",
             subtitle = "Some content",
-            iconResourceId = CompoundDrawables.ic_chat_problem,
+            iconResourceId = CompoundDrawables.ic_compound_chat_problem,
             loadingCurrentValue = true,
             showEndBadge = showEndBadge,
         )
         PreferenceText(
             title = "Title",
-            iconResourceId = CompoundDrawables.ic_chat_problem,
+            iconResourceId = CompoundDrawables.ic_compound_chat_problem,
             currentValue = "123",
             showEndBadge = showEndBadge,
         )
         PreferenceText(
             title = "Title",
-            iconResourceId = CompoundDrawables.ic_chat_problem,
+            iconResourceId = CompoundDrawables.ic_compound_chat_problem,
             loadingCurrentValue = true,
             showEndBadge = showEndBadge,
         )

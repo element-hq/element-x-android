@@ -63,20 +63,20 @@ internal fun IconButtonPreview() = ElementThemedPreview {
         CompositionLocalProvider(LocalContentColor provides ElementTheme.colors.iconPrimary) {
             Row {
                 IconButton(onClick = {}) {
-                    Icon(imageVector = CompoundIcons.Close, contentDescription = null)
+                    Icon(imageVector = CompoundIcons.Close(), contentDescription = null)
                 }
                 IconButton(enabled = false, onClick = {}) {
-                    Icon(imageVector = CompoundIcons.Close, contentDescription = null)
+                    Icon(imageVector = CompoundIcons.Close(), contentDescription = null)
                 }
             }
         }
         CompositionLocalProvider(LocalContentColor provides ElementTheme.colors.iconSecondary) {
             Row {
                 IconButton(onClick = {}) {
-                    Icon(imageVector = CompoundIcons.Close, contentDescription = null)
+                    Icon(imageVector = CompoundIcons.Close(), contentDescription = null)
                 }
                 IconButton(enabled = false, onClick = {}) {
-                    Icon(imageVector = CompoundIcons.Close, contentDescription = null)
+                    Icon(imageVector = CompoundIcons.Close(), contentDescription = null)
                 }
             }
         }

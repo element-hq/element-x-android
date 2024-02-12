@@ -92,7 +92,7 @@ fun PreferenceSlide(
 @Composable
 internal fun PreferenceSlidePreview() = ElementThemedPreview {
     PreferenceSlide(
-        iconResourceId = CompoundDrawables.ic_user_profile,
+        iconResourceId = CompoundDrawables.ic_compound_user_profile,
         title = "Slide",
         summary = "Summary",
         value = 0.75F,

@@ -41,7 +41,7 @@ sealed class AvatarAction(
 
     data object Remove : AvatarAction(
         titleResId = CommonStrings.action_remove,
-        iconResourceId = CompoundDrawables.ic_delete,
+        iconResourceId = CompoundDrawables.ic_compound_delete,
         destructive = true
     )
 }

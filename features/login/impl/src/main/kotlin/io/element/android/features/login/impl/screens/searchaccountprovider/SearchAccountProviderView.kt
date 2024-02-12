@@ -103,7 +103,7 @@ fun SearchAccountProviderView(
                 item {
                     IconTitleSubtitleMolecule(
                         modifier = Modifier.padding(top = 16.dp, bottom = 40.dp, start = 16.dp, end = 16.dp),
-                        iconImageVector = CompoundIcons.Search,
+                        iconImageVector = CompoundIcons.Search(),
                         title = stringResource(id = R.string.screen_account_provider_form_title),
                         subTitle = stringResource(id = R.string.screen_account_provider_form_subtitle),
                     )
@@ -139,7 +139,7 @@ fun SearchAccountProviderView(
                                     eventSink(SearchAccountProviderEvents.UserInput(""))
                                 }) {
                                     Icon(
-                                        imageVector = CompoundIcons.Close,
+                                        imageVector = CompoundIcons.Close(),
                                         contentDescription = stringResource(CommonStrings.action_clear)
                                     )
                                 }

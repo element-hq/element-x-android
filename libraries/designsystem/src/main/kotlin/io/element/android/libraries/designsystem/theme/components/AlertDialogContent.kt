@@ -436,7 +436,7 @@ internal fun DialogWithTitleIconAndOkButtonPreview() {
             SimpleAlertDialogContent(
                 icon = {
                     Icon(
-                        imageVector = CompoundIcons.NotificationsSolid,
+                        imageVector = CompoundIcons.NotificationsSolid(),
                         contentDescription = null
                     )
                 },

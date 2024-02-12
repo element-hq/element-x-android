@@ -103,7 +103,7 @@ private fun NotificationSettingsContentView(
     val context = LocalContext.current
     if (systemSettings.appNotificationsEnabled && !systemSettings.systemNotificationsEnabled) {
         PreferenceText(
-            icon = CompoundIcons.NotificationsSolidOff,
+            icon = CompoundIcons.NotificationsOffSolid(),
             title = stringResource(id = R.string.screen_notification_settings_system_notifications_turned_off),
             subtitle = stringResource(
                 id = R.string.screen_notification_settings_system_notifications_action_required,

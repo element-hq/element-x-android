@@ -106,7 +106,7 @@ internal fun PreferenceSwitchPreview() = ElementThemedPreview {
     PreferenceSwitch(
         title = "Switch",
         subtitle = "Subtitle Switch",
-        iconResourceId = CompoundDrawables.ic_threads,
+        iconResourceId = CompoundDrawables.ic_compound_threads,
         enabled = true,
         isChecked = true,
         onCheckedChange = {},

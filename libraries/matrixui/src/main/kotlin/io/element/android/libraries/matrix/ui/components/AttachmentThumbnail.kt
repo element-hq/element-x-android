@@ -125,7 +125,7 @@ fun AttachmentThumbnail(
                 }
                 AttachmentThumbnailType.Poll -> {
                     Icon(
-                        imageVector = CompoundIcons.Polls,
+                        imageVector = CompoundIcons.Polls(),
                         contentDescription = info.textContent,
                     )
                 }

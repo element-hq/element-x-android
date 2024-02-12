@@ -109,19 +109,19 @@ internal fun PreferenceViewPreview() = ElementPreview {
             PreferenceText(
                 title = "Title",
                 subtitle = "Some other text",
-                iconResourceId = CompoundDrawables.ic_chat_problem,
+                iconResourceId = CompoundDrawables.ic_compound_chat_problem,
             )
             PreferenceDivider()
             PreferenceSwitch(
                 title = "Switch",
-                iconResourceId = CompoundDrawables.ic_threads,
+                iconResourceId = CompoundDrawables.ic_compound_threads,
                 isChecked = true,
                 onCheckedChange = {},
             )
             PreferenceDivider()
             PreferenceCheckbox(
                 title = "Checkbox",
-                iconResourceId = CompoundDrawables.ic_notifications,
+                iconResourceId = CompoundDrawables.ic_compound_notifications,
                 isChecked = true,
                 onCheckedChange = {},
             )

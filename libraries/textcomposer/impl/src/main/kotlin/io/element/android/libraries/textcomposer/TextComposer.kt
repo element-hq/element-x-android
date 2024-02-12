@@ -493,7 +493,7 @@ private fun EditingModeView(
             .padding(start = 12.dp)
     ) {
         Icon(
-            imageVector = CompoundIcons.Edit,
+            imageVector = CompoundIcons.Edit(),
             contentDescription = stringResource(CommonStrings.common_editing),
             tint = ElementTheme.materialColors.secondary,
             modifier = Modifier
@@ -510,7 +510,7 @@ private fun EditingModeView(
                 .weight(1f)
         )
         Icon(
-            imageVector = CompoundIcons.Close,
+            imageVector = CompoundIcons.Close(),
             contentDescription = stringResource(CommonStrings.action_close),
             tint = ElementTheme.materialColors.secondary,
             modifier = Modifier
@@ -575,7 +575,7 @@ private fun ReplyToModeView(
             )
         }
         Icon(
-            imageVector = CompoundIcons.Close,
+            imageVector = CompoundIcons.Close(),
             contentDescription = stringResource(CommonStrings.action_close),
             tint = MaterialTheme.colorScheme.secondary,
             modifier = Modifier

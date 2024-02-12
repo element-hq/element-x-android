@@ -246,7 +246,7 @@ private fun JumpToBottomButton(
                 modifier = Modifier
                     .size(24.dp)
                     .rotate(90f),
-                imageVector = CompoundIcons.ArrowRight,
+                imageVector = CompoundIcons.ArrowRight(),
                 contentDescription = stringResource(id = CommonStrings.a11y_jump_to_bottom)
             )
         }

@@ -150,7 +150,7 @@ private fun RoomListSearchResultContent(
                                     state.eventSink(RoomListEvents.UpdateFilter(""))
                                 }) {
                                     Icon(
-                                        imageVector = CompoundIcons.Close,
+                                        imageVector = CompoundIcons.Close(),
                                         contentDescription = stringResource(CommonStrings.action_cancel)
                                     )
                                 }

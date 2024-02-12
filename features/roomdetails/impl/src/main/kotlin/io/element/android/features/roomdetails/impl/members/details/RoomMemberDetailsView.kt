@@ -111,7 +111,7 @@ private fun StartDMSection(
 ) {
     ListItem(
         headlineContent = { Text(stringResource(CommonStrings.common_direct_chat)) },
-        leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Chat)),
+        leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Chat())),
         style = ListItemStyle.Primary,
         onClick = onStartDMClicked,
     )

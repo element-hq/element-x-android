@@ -106,7 +106,7 @@ private fun listItems() = persistentListOf(
     ),
     InfoListItem(
         message = stringResource(R.string.screen_welcome_bullet_3),
-        iconVector = CompoundIcons.ChatProblem,
+        iconVector = CompoundIcons.ChatProblem(),
     ),
 )
 

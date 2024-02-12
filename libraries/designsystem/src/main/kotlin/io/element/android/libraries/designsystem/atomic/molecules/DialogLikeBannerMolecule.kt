@@ -71,7 +71,7 @@ fun DialogLikeBannerMolecule(
                     if (onDismissClicked != null) {
                         Icon(
                             modifier = Modifier.clickable(onClick = onDismissClicked),
-                            imageVector = CompoundIcons.Close,
+                            imageVector = CompoundIcons.Close(),
                             contentDescription = stringResource(CommonStrings.action_close)
                         )
                     }

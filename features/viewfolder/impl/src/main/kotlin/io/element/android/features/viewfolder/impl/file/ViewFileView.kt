@@ -85,7 +85,7 @@ fun ViewFileView(
                         },
                     ) {
                         Icon(
-                            resourceId = CompoundDrawables.ic_share_android,
+                            resourceId = CompoundDrawables.ic_compound_share_android,
                             contentDescription = stringResource(id = CommonStrings.action_share),
                         )
                     }
@@ -95,7 +95,7 @@ fun ViewFileView(
                         },
                     ) {
                         Icon(
-                            resourceId = CompoundDrawables.ic_download,
+                            resourceId = CompoundDrawables.ic_compound_download,
                             contentDescription = stringResource(id = CommonStrings.action_save),
                         )
                     }

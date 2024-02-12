@@ -117,7 +117,7 @@ private fun Content(state: SecureBackupDisableState) {
 private fun SecureBackupDisableItem(text: String) {
     Row(modifier = Modifier.fillMaxWidth()) {
         Icon(
-            imageVector = CompoundIcons.Close,
+            imageVector = CompoundIcons.Close(),
             contentDescription = null,
             tint = ElementTheme.colors.iconCriticalPrimary,
             modifier = Modifier.size(20.dp)

@@ -200,7 +200,7 @@ private fun RecoveryKeyFooter(state: RecoveryKeyViewState) {
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Icon(
-                        imageVector = CompoundIcons.InfoSolid,
+                        imageVector = CompoundIcons.InfoSolid(),
                         contentDescription = null,
                         tint = ElementTheme.colors.iconSecondary,
                         modifier = Modifier

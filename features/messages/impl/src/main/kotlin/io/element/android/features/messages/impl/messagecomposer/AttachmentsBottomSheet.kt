@@ -127,7 +127,7 @@ private fun AttachmentSourcePickerMenu(
         )
         ListItem(
             modifier = Modifier.clickable { state.eventSink(MessageComposerEvents.PickAttachmentSource.VideoFromCamera) },
-            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.VideoCall)),
+            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.VideoCall())),
             headlineContent = { Text(stringResource(R.string.screen_room_attachment_source_camera_video)) },
             style = ListItemStyle.Primary,
         )
@@ -148,7 +148,7 @@ private fun AttachmentSourcePickerMenu(
                     state.eventSink(MessageComposerEvents.PickAttachmentSource.Poll)
                     onCreatePollClicked()
                 },
-                leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Polls)),
+                leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Polls())),
                 headlineContent = { Text(stringResource(R.string.screen_room_attachment_source_poll)) },
                 style = ListItemStyle.Primary,
             )

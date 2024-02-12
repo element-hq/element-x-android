@@ -90,7 +90,7 @@ fun ConfigureTracingView(
                         onClick = { showMenu = !showMenu }
                     ) {
                         Icon(
-                            imageVector = CompoundIcons.OverflowVertical,
+                            imageVector = CompoundIcons.OverflowVertical(),
                             tint = ElementTheme.materialColors.secondary,
                             contentDescription = null,
                         )
@@ -107,7 +107,7 @@ fun ConfigureTracingView(
                             text = { Text("Reset to default") },
                             leadingIcon = {
                                 Icon(
-                                    imageVector = CompoundIcons.Delete,
+                                    imageVector = CompoundIcons.Delete(),
                                     tint = ElementTheme.materialColors.secondary,
                                     contentDescription = null,
                                 )
@@ -203,7 +203,7 @@ private fun LogLevelDropdownMenu(
             trailingIcon = {
                 Icon(
                     modifier = Modifier.rotate(if (expanded) 180f else 0f),
-                    imageVector = CompoundIcons.ChevronDown,
+                    imageVector = CompoundIcons.ChevronDown(),
                     contentDescription = null,
                 )
             },

@@ -38,13 +38,13 @@ fun roomPrivacyItems(): ImmutableList<RoomPrivacyItem> {
             when (it) {
                 RoomPrivacy.Private -> RoomPrivacyItem(
                     privacy = it,
-                    icon = CompoundDrawables.ic_lock,
+                    icon = CompoundDrawables.ic_compound_lock,
                     title = stringResource(R.string.screen_create_room_private_option_title),
                     description = stringResource(R.string.screen_create_room_private_option_description),
                 )
                 RoomPrivacy.Public -> RoomPrivacyItem(
                     privacy = it,
-                    icon = CompoundDrawables.ic_public,
+                    icon = CompoundDrawables.ic_compound_public,
                     title = stringResource(R.string.screen_create_room_public_option_title),
                     description = stringResource(R.string.screen_create_room_public_option_description),
                 )

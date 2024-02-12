@@ -435,7 +435,7 @@ private fun MessageEventBubbleContent(
         ) {
             Icon(
                 modifier = Modifier.height(14.dp),
-                imageVector = CompoundIcons.Threads,
+                imageVector = CompoundIcons.Threads(),
                 contentDescription = null,
                 tint = ElementTheme.colors.iconSecondary,
             )

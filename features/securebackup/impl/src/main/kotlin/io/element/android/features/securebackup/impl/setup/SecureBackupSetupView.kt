@@ -159,7 +159,7 @@ private fun ColumnScope.Buttons(
         is SetupState.CreatedAndSaved -> {
             OutlinedButton(
                 text = stringResource(id = R.string.screen_recovery_key_save_action),
-                leadingIcon = IconSource.Vector(CompoundIcons.Download),
+                leadingIcon = IconSource.Vector(CompoundIcons.Download()),
                 modifier = Modifier.fillMaxWidth(),
                 onClick = {
                     context.startSharePlainTextIntent(
