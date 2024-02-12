@@ -114,7 +114,8 @@ internal fun InReplyToDetails.metadata(): InReplyToMetadata? = when (eventConten
         AttachmentThumbnailInfo(
             thumbnailSource = MediaSource(eventContent.url),
             textContent = eventContent.body,
-            type = AttachmentThumbnailType.Image
+            type = AttachmentThumbnailType.Image,
+            blurHash = eventContent.info.blurhash,
         )
     )
     is PollContent -> InReplyToMetadata.Thumbnail(

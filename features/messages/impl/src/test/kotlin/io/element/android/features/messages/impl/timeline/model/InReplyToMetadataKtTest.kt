@@ -55,6 +55,7 @@ import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.media.aMediaSource
 import io.element.android.libraries.matrix.test.timeline.aMessageContent
 import io.element.android.libraries.matrix.test.timeline.aPollContent
+import io.element.android.libraries.matrix.ui.components.A_BLUR_HASH
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailInfo
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailType
 import kotlinx.coroutines.test.runTest
@@ -82,7 +83,7 @@ class InReplyToMetadataKtTest {
                     messageType = ImageMessageType(
                         body = "body",
                         source = aMediaSource(),
-                        info = null,
+                        info = anImageInfo(),
                     )
                 )
             ).metadata()
@@ -94,7 +95,7 @@ class InReplyToMetadataKtTest {
                             thumbnailSource = aMediaSource(),
                             textContent = "body",
                             type = AttachmentThumbnailType.Image,
-                            blurHash = null,
+                            blurHash = A_BLUR_HASH,
                         )
                     )
                 )
@@ -108,15 +109,7 @@ class InReplyToMetadataKtTest {
             anInReplyToDetails(
                 eventContent = StickerContent(
                     body = "body",
-                    info = ImageInfo(
-                        height = null,
-                        width = null,
-                        mimetype = null,
-                        size = null,
-                        thumbnailInfo = null,
-                        thumbnailSource = aMediaSource(),
-                        blurhash = null
-                    ),
+                    info = anImageInfo(),
                     url = "url"
                 )
             ).metadata()
@@ -128,7 +121,7 @@ class InReplyToMetadataKtTest {
                             thumbnailSource = aMediaSource(url = "url"),
                             textContent = "body",
                             type = AttachmentThumbnailType.Image,
-                            blurHash = null,
+                            blurHash = A_BLUR_HASH,
                         )
                     )
                 )
@@ -152,7 +145,7 @@ class InReplyToMetadataKtTest {
                             size = null,
                             thumbnailInfo = null,
                             thumbnailSource = aMediaSource(),
-                            blurhash = null
+                            blurhash = A_BLUR_HASH
                         ),
                     )
                 )
@@ -165,7 +158,7 @@ class InReplyToMetadataKtTest {
                             thumbnailSource = aMediaSource(),
                             textContent = "body",
                             type = AttachmentThumbnailType.Video,
-                            blurHash = null,
+                            blurHash = A_BLUR_HASH,
                         )
                     )
                 )
@@ -453,6 +446,18 @@ fun anInReplyToDetails(
     eventContent = eventContent,
     textContent = textContent,
 )
+
+fun anImageInfo(): ImageInfo {
+    return ImageInfo(
+        height = 100,
+        width = 100,
+        mimetype = "image/jpeg",
+        size = 1000,
+        thumbnailInfo = null,
+        thumbnailSource = aMediaSource(),
+        blurhash = A_BLUR_HASH,
+    )
+}
 
 @Composable
 private fun testEnv(content: @Composable () -> Any?): Any? {
