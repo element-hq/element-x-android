@@ -660,7 +660,9 @@ private fun ReplyToContentText(metadata: InReplyToMetadata?) {
     val text = when (metadata) {
         InReplyToMetadata.Redacted -> stringResource(id = CommonStrings.common_message_removed)
         InReplyToMetadata.UnableToDecrypt -> stringResource(id = CommonStrings.common_waiting_for_decryption_key)
-        else -> metadata?.text.orEmpty()
+        is InReplyToMetadata.Text -> metadata.text
+        is InReplyToMetadata.Thumbnail -> metadata.text
+        null -> ""
     }
     val iconResourceId = when (metadata) {
         InReplyToMetadata.Redacted -> CompoundDrawables.ic_compound_delete

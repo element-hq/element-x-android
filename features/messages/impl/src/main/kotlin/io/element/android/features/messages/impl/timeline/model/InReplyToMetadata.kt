@@ -43,24 +43,20 @@ import io.element.android.libraries.ui.strings.CommonStrings
 
 @Immutable
 internal sealed interface InReplyToMetadata {
-    val text: String?
-
     data class Thumbnail(
         val attachmentThumbnailInfo: AttachmentThumbnailInfo
     ) : InReplyToMetadata {
-        override val text: String? = attachmentThumbnailInfo.textContent
+        val text: String = attachmentThumbnailInfo.textContent.orEmpty()
     }
 
     data class Text(
-        override val text: String
+        val text: String
     ) : InReplyToMetadata
 
-    abstract class Informative : InReplyToMetadata {
-        override val text: String? = null
-    }
+    sealed interface Informative : InReplyToMetadata
 
-    data object Redacted : Informative()
-    data object UnableToDecrypt : Informative()
+    data object Redacted : Informative
+    data object UnableToDecrypt : Informative
 }
 
 /**
