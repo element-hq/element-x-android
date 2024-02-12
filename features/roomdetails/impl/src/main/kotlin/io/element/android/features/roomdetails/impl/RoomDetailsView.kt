@@ -373,7 +373,7 @@ private fun FavoriteSection(
     PreferenceCategory(modifier = modifier) {
         PreferenceSwitch(
             icon = CompoundIcons.FavouriteOff,
-            title = "Favorite",
+            title = stringResource(id = CommonStrings.common_favourite),
             isChecked = isFavorite,
             onCheckedChange = onFavoriteChanges
         )

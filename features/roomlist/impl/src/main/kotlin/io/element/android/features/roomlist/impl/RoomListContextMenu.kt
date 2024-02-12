@@ -129,14 +129,14 @@ private fun RoomListModalBottomSheetContent(
         ListItem(
             headlineContent = {
                 Text(
-                    text = "Favourite",
+                    text = stringResource(id = CommonStrings.common_favourite),
                     style = MaterialTheme.typography.bodyLarge,
                 )
             },
             leadingContent = ListItemContent.Icon(
                 iconSource = IconSource.Vector(
                     CompoundIcons.FavouriteOff,
-                    contentDescription = "Favourite"
+                    contentDescription = stringResource(id = CommonStrings.common_favourite),
                 )
             ),
             trailingContent = ListItemContent.Switch(
