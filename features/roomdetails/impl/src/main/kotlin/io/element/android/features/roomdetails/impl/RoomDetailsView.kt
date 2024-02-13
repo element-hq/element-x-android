@@ -256,7 +256,7 @@ private fun MainActionsSection(
             if (roomNotificationSettings.mode == RoomNotificationMode.MUTE) {
                 MainActionButton(
                     title = stringResource(CommonStrings.common_unmute),
-                    imageVector = CompoundIcons.NotificationsOff,
+                    imageVector = CompoundIcons.NotificationsOff(),
                     onClick = {
                         state.eventSink(RoomDetailsEvent.UnmuteNotification)
                     },
@@ -264,7 +264,7 @@ private fun MainActionsSection(
             } else {
                 MainActionButton(
                     title = stringResource(CommonStrings.common_mute),
-                    imageVector = CompoundIcons.Notifications,
+                    imageVector = CompoundIcons.Notifications(),
                     onClick = {
                         state.eventSink(RoomDetailsEvent.MuteNotification)
                     },
@@ -274,7 +274,7 @@ private fun MainActionsSection(
         Spacer(modifier = Modifier.width(20.dp))
         MainActionButton(
             title = stringResource(R.string.screen_room_details_share_room_title),
-            imageVector = CompoundIcons.ShareAndroid,
+            imageVector = CompoundIcons.ShareAndroid(),
             onClick = onShareRoom
         )
     }
@@ -358,7 +358,7 @@ private fun NotificationSection(
         ListItem(
             headlineContent = { Text(text = stringResource(R.string.screen_room_details_notification_title)) },
             supportingContent = { Text(text = subtitle) },
-            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Notifications)),
+            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Notifications())),
             onClick = openRoomNotificationSettings,
         )
     }
@@ -388,7 +388,7 @@ private fun MembersSection(
     PreferenceCategory {
         ListItem(
             headlineContent = { Text(stringResource(CommonStrings.common_people)) },
-            leadingContent = ListItemContent.Icon(IconSource.Resource(CommonDrawables.ic_user)),
+            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.User())),
             trailingContent = ListItemContent.Text(memberCount.toString()),
             onClick = openRoomMemberList,
         )
@@ -402,7 +402,7 @@ private fun InviteSection(
     PreferenceCategory {
         ListItem(
             headlineContent = { Text(stringResource(R.string.screen_room_details_invite_people_title)) },
-            leadingContent = ListItemContent.Icon(IconSource.Resource(CommonDrawables.ic_user_add)),
+            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.UserAdd())),
             onClick = invitePeople,
         )
     }
@@ -415,7 +415,7 @@ private fun PollsSection(
     PreferenceCategory {
         ListItem(
             headlineContent = { Text(stringResource(R.string.screen_polls_history_title)) },
-            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Polls)),
+            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Polls())),
             onClick = openPollHistory,
         )
     }
@@ -446,7 +446,7 @@ private fun OtherActionsSection(isDm: Boolean, onLeaveRoom: () -> Unit) {
                 )
                 Text(leaveText)
             },
-            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Leave)),
+            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Leave())),
             style = ListItemStyle.Destructive,
             onClick = onLeaveRoom,
         )

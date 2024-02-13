@@ -227,7 +227,7 @@ private fun LoginForm(
                     IconButton(onClick = {
                         loginFieldState = ""
                     }) {
-                        Icon(imageVector = CompoundIcons.Close, contentDescription = stringResource(CommonStrings.action_clear))
+                        Icon(imageVector = CompoundIcons.Close(), contentDescription = stringResource(CommonStrings.action_clear))
                     }
                 }
             } else {
@@ -263,7 +263,7 @@ private fun LoginForm(
             visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
             trailingIcon = {
                 val image =
-                    if (passwordVisible) CompoundIcons.VisibilityOn else CompoundIcons.VisibilityOff
+                    if (passwordVisible) CompoundIcons.VisibilityOn() else CompoundIcons.VisibilityOff()
                 val description =
                     if (passwordVisible) stringResource(CommonStrings.a11y_hide_password) else stringResource(CommonStrings.a11y_show_password)
 

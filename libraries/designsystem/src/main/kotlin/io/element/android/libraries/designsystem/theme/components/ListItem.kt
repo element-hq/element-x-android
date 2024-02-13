@@ -471,6 +471,6 @@ private object PreviewItems {
 
     @Composable
     fun icon() = ListItemContent.Icon(
-        iconSource = IconSource.Vector(CompoundIcons.ShareAndroid)
+        iconSource = IconSource.Vector(CompoundIcons.ShareAndroid())
     )
 }

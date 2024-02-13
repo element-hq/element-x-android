@@ -31,9 +31,9 @@ import io.element.android.features.messages.impl.R
 import io.element.android.features.messages.impl.timeline.aTimelineItemReactions
 import io.element.android.features.messages.impl.timeline.model.AggregatedReaction
 import io.element.android.features.messages.impl.timeline.model.TimelineItemReactions
+import io.element.android.libraries.designsystem.icons.CompoundDrawables
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.designsystem.utils.CommonDrawables
 import kotlinx.collections.immutable.ImmutableList
 
 @Composable
@@ -99,7 +99,7 @@ private fun TimelineItemReactionsView(
             addMoreButton = if (userCanSendReaction) {
                 {
                     MessagesReactionButton(
-                        content = MessagesReactionsButtonContent.Icon(CommonDrawables.ic_add_reaction),
+                        content = MessagesReactionsButtonContent.Icon(CompoundDrawables.ic_compound_reaction_add),
                         onClick = onMoreReactionsClick,
                         onLongClick = {}
                     )

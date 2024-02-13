@@ -53,7 +53,6 @@ import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.OutlinedTextField
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.autofill
-import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
@@ -115,7 +114,7 @@ private fun RecoveryKeyStaticContent(
                 modifier = Modifier.weight(1f),
             )
             Icon(
-                resourceId = CommonDrawables.ic_copy,
+                imageVector = CompoundIcons.Copy(),
                 contentDescription = stringResource(id = CommonStrings.action_copy),
                 tint = ElementTheme.colors.iconSecondary,
             )
@@ -200,7 +199,7 @@ private fun RecoveryKeyFooter(state: RecoveryKeyViewState) {
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Icon(
-                        imageVector = CompoundIcons.InfoSolid,
+                        imageVector = CompoundIcons.InfoSolid(),
                         contentDescription = null,
                         tint = ElementTheme.colors.iconSecondary,
                         modifier = Modifier

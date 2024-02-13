@@ -63,7 +63,7 @@ fun FloatingActionButton(
 internal fun FloatingActionButtonPreview() = ElementThemedPreview {
     Box(modifier = Modifier.padding(8.dp)) {
         FloatingActionButton(onClick = {}) {
-            Icon(imageVector = CompoundIcons.Close, contentDescription = null)
+            Icon(imageVector = CompoundIcons.Close(), contentDescription = null)
         }
     }
 }

@@ -34,7 +34,7 @@ fun BackButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     // TODO Handle RTL languages
-    imageVector: ImageVector = CompoundIcons.ArrowLeft,
+    imageVector: ImageVector = CompoundIcons.ArrowLeft(),
     contentDescription: String = stringResource(CommonStrings.action_back),
     enabled: Boolean = true,
 ) {

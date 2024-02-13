@@ -97,7 +97,7 @@ internal fun FlowStepPagePreview() = ElementPreview {
         onBackClicked = {},
         title = "Title",
         subTitle = "Subtitle",
-        iconVector = CompoundIcons.Computer,
+        iconVector = CompoundIcons.Computer(),
         content = {
             Box(
                 Modifier

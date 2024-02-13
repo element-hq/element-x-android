@@ -53,6 +53,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
+import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemAudioContent
@@ -83,7 +84,6 @@ import io.element.android.libraries.designsystem.theme.components.ListItemStyle
 import io.element.android.libraries.designsystem.theme.components.ModalBottomSheet
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.hide
-import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
 
@@ -316,7 +316,7 @@ private fun EmojiReactionsRow(
             contentAlignment = Alignment.Center
         ) {
             Icon(
-                resourceId = CommonDrawables.ic_add_reaction,
+                imageVector = CompoundIcons.ReactionAdd(),
                 contentDescription = stringResource(id = CommonStrings.a11y_react_with_other_emojis),
                 tint = MaterialTheme.colorScheme.secondary,
                 modifier = Modifier

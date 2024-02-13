@@ -28,13 +28,11 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
+import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.textcomposer.R
 import io.element.android.libraries.textcomposer.TextComposerLinkDialog
 import io.element.android.wysiwyg.compose.RichTextEditorState
@@ -115,25 +113,25 @@ internal fun TextFormatting(
         FormattingOption(
             state = state.actions[ComposerAction.BOLD].toButtonState(),
             onClick = { onInlineFormatClick(InlineFormat.Bold) },
-            imageVector = ImageVector.vectorResource(CommonDrawables.ic_bold),
+            imageVector = CompoundIcons.Bold(),
             contentDescription = stringResource(R.string.rich_text_editor_format_bold)
         )
         FormattingOption(
             state = state.actions[ComposerAction.ITALIC].toButtonState(),
             onClick = { onInlineFormatClick(InlineFormat.Italic) },
-            imageVector = ImageVector.vectorResource(CommonDrawables.ic_italic),
+            imageVector = CompoundIcons.Italic(),
             contentDescription = stringResource(R.string.rich_text_editor_format_italic)
         )
         FormattingOption(
             state = state.actions[ComposerAction.UNDERLINE].toButtonState(),
             onClick = { onInlineFormatClick(InlineFormat.Underline) },
-            imageVector = ImageVector.vectorResource(CommonDrawables.ic_underline),
+            imageVector = CompoundIcons.Underline(),
             contentDescription = stringResource(R.string.rich_text_editor_format_underline)
         )
         FormattingOption(
             state = state.actions[ComposerAction.STRIKE_THROUGH].toButtonState(),
             onClick = { onInlineFormatClick(InlineFormat.StrikeThrough) },
-            imageVector = ImageVector.vectorResource(CommonDrawables.ic_strikethrough),
+            imageVector = CompoundIcons.Strikethrough(),
             contentDescription = stringResource(R.string.rich_text_editor_format_strikethrough)
         )
 
@@ -152,50 +150,50 @@ internal fun TextFormatting(
         FormattingOption(
             state = state.actions[ComposerAction.LINK].toButtonState(),
             onClick = { linkDialogAction = state.linkAction },
-            imageVector = ImageVector.vectorResource(CommonDrawables.ic_link),
+            imageVector = CompoundIcons.Link(),
             contentDescription = stringResource(R.string.rich_text_editor_link)
         )
 
         FormattingOption(
             state = state.actions[ComposerAction.UNORDERED_LIST].toButtonState(),
             onClick = { onToggleListClick(ordered = false) },
-            imageVector = ImageVector.vectorResource(CommonDrawables.ic_bullet_list),
+            imageVector = CompoundIcons.ListBulleted(),
             contentDescription = stringResource(R.string.rich_text_editor_bullet_list)
         )
         FormattingOption(
             state = state.actions[ComposerAction.ORDERED_LIST].toButtonState(),
             onClick = { onToggleListClick(ordered = true) },
-            imageVector = ImageVector.vectorResource(CommonDrawables.ic_numbered_list),
+            imageVector = CompoundIcons.ListNumbered(),
             contentDescription = stringResource(R.string.rich_text_editor_numbered_list)
         )
         FormattingOption(
             state = state.actions[ComposerAction.INDENT].toButtonState(),
             onClick = { onIndentClick() },
-            imageVector = ImageVector.vectorResource(CommonDrawables.ic_indent_increase),
+            imageVector = CompoundIcons.IndentIncrease(),
             contentDescription = stringResource(R.string.rich_text_editor_indent)
         )
         FormattingOption(
             state = state.actions[ComposerAction.UNINDENT].toButtonState(),
             onClick = { onUnindentClick() },
-            imageVector = ImageVector.vectorResource(CommonDrawables.ic_indent_decrease),
+            imageVector = CompoundIcons.IndentDecrease(),
             contentDescription = stringResource(R.string.rich_text_editor_unindent)
         )
         FormattingOption(
             state = state.actions[ComposerAction.INLINE_CODE].toButtonState(),
             onClick = { onInlineFormatClick(InlineFormat.InlineCode) },
-            imageVector = ImageVector.vectorResource(CommonDrawables.ic_inline_code),
+            imageVector = CompoundIcons.InlineCode(),
             contentDescription = stringResource(R.string.rich_text_editor_inline_code)
         )
         FormattingOption(
             state = state.actions[ComposerAction.CODE_BLOCK].toButtonState(),
             onClick = { onCodeBlockClick() },
-            imageVector = ImageVector.vectorResource(CommonDrawables.ic_code_block),
+            imageVector = CompoundIcons.Code(),
             contentDescription = stringResource(R.string.rich_text_editor_code_block)
         )
         FormattingOption(
             state = state.actions[ComposerAction.QUOTE].toButtonState(),
             onClick = { onQuoteClick() },
-            imageVector = ImageVector.vectorResource(CommonDrawables.ic_quote),
+            imageVector = CompoundIcons.Quote(),
             contentDescription = stringResource(R.string.rich_text_editor_quote)
         )
     }

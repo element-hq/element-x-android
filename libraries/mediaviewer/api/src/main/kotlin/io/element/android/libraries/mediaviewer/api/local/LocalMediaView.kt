@@ -56,6 +56,7 @@ import androidx.media3.common.util.UnstableApi
 import androidx.media3.ui.AspectRatioFrameLayout
 import androidx.media3.ui.PlayerView
 import io.element.android.compound.theme.ElementTheme
+import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.core.mimetype.MimeTypes.isMimeTypeAudio
@@ -237,8 +238,7 @@ private fun MediaFileView(
                 contentAlignment = Alignment.Center,
             ) {
                 Icon(
-                    imageVector = if (isAudio) Icons.Outlined.GraphicEq else null,
-                    resourceId = if (isAudio) null else CommonDrawables.ic_attachment,
+                    imageVector = if (isAudio) Icons.Outlined.GraphicEq else CompoundIcons.Attachment(),
                     contentDescription = null,
                     tint = MaterialTheme.colorScheme.background,
                     modifier = Modifier

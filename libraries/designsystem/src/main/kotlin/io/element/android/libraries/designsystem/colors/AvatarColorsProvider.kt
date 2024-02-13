@@ -17,6 +17,7 @@
 package io.element.android.libraries.designsystem.colors
 
 import androidx.collection.LruCache
+import io.element.android.compound.theme.AvatarColors
 import io.element.android.compound.theme.avatarColorsDark
 import io.element.android.compound.theme.avatarColorsLight
 
@@ -46,10 +47,7 @@ object AvatarColorsProvider {
         } else {
             avatarColorsDark[hash]
         }
-        return AvatarColors(
-            background = colors.first,
-            foreground = colors.second,
-        )
+        return colors
     }
 }
 

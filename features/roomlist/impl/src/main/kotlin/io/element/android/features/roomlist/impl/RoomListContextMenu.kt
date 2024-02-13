@@ -161,7 +161,7 @@ private fun RoomListModalBottomSheetContent(
             modifier = Modifier.clickable { onRoomSettingsClicked() },
             leadingContent = ListItemContent.Icon(
                 iconSource = IconSource.Vector(
-                    CompoundIcons.Settings,
+                    CompoundIcons.Settings(),
                     contentDescription = stringResource(id = CommonStrings.common_settings)
                 )
             ),
@@ -181,7 +181,7 @@ private fun RoomListModalBottomSheetContent(
             modifier = Modifier.clickable { onLeaveRoomClicked() },
             leadingContent = ListItemContent.Icon(
                 iconSource = IconSource.Vector(
-                    CompoundIcons.Leave,
+                    CompoundIcons.Leave(),
                     contentDescription = stringResource(id = CommonStrings.action_leave_room)
                 )
             ),

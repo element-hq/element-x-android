@@ -158,7 +158,7 @@ internal fun ListSupportingTextSmallPaddingPreview() {
         Column {
             ListItem(
                 headlineContent = { Text("A title") },
-                leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.ShareAndroid))
+                leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.ShareAndroid()))
             )
             ListSupportingText(
                 text = "Supporting line text lorem ipsum dolor sit amet, consectetur. Read more",

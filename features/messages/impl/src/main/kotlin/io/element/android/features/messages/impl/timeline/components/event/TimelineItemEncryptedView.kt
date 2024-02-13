@@ -21,9 +21,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import io.element.android.features.messages.impl.timeline.components.layout.ContentAvoidingLayoutData
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEncryptedContent
+import io.element.android.libraries.designsystem.icons.CompoundDrawables
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.matrix.api.timeline.item.event.UnableToDecryptContent
 import io.element.android.libraries.ui.strings.CommonStrings
 
@@ -36,7 +36,7 @@ fun TimelineItemEncryptedView(
     TimelineItemInformativeView(
         text = stringResource(id = CommonStrings.common_waiting_for_decryption_key),
         iconDescription = stringResource(id = CommonStrings.dialog_title_warning),
-        iconResourceId = CommonDrawables.ic_waiting_to_decrypt,
+        iconResourceId = CompoundDrawables.ic_compound_time,
         onContentLayoutChanged = onContentLayoutChanged,
         modifier = modifier
     )
