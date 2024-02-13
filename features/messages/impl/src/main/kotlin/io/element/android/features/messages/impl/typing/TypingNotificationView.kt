@@ -36,6 +36,7 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -81,7 +82,13 @@ fun TypingNotificationView(
         val typingNotificationText = computeTypingNotificationText(state.typingMembers)
         Box(contentAlignment = Alignment.BottomStart) {
             // Reserve the space for the typing notification by adding an invisible text
-            TypingText(text = typingNotificationText, textModifier = Modifier.alpha(0f))
+            TypingText(
+                text = typingNotificationText,
+                textModifier = Modifier
+                    .alpha(0f)
+                    // Remove the semantics of the text to avoid screen readers to read it
+                    .clearAndSetSemantics { }
+            )
 
             // Display the actual notification
             AnimatedVisibility(
@@ -142,7 +149,7 @@ internal fun TypingNotificationViewPreview(
     @PreviewParameter(TypingNotificationStateProvider::class) state: TypingNotificationState,
 ) = ElementPreview {
     TypingNotificationView(
-        modifier = Modifier.border(1.dp, Color.Blue),
+        modifier = if (state.reserveSpace) Modifier.border(1.dp, Color.Blue) else Modifier,
         state = state,
     )
 }
