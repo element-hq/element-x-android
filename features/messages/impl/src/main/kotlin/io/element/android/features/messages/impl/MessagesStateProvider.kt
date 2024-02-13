@@ -35,7 +35,9 @@ import io.element.android.features.messages.impl.timeline.components.retrysendme
 import io.element.android.features.messages.impl.timeline.components.retrysendmenu.aRetrySendMenuState
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
+import io.element.android.features.messages.impl.typing.TypingNotificationState
 import io.element.android.features.messages.impl.typing.aTypingNotificationState
+import io.element.android.features.messages.impl.typing.aTypingRoomMember
 import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessageComposerState
 import io.element.android.features.messages.impl.voicemessages.composer.aVoiceMessageComposerState
 import io.element.android.features.messages.impl.voicemessages.composer.aVoiceMessagePreviewState
@@ -88,6 +90,15 @@ open class MessagesStateProvider : PreviewParameterProvider<MessagesState> {
             aMessagesState(
                 callState = RoomCallState.DISABLED,
             ),
+            aMessagesState(
+                typingNotificationState = aTypingNotificationState(
+                    typingMembers = listOf(aTypingRoomMember()),
+                    reserveSpace = true
+                ),
+            ),
+            aMessagesState(
+                typingNotificationState = aTypingNotificationState(reserveSpace = true),
+            )
         )
 }
 
@@ -104,6 +115,7 @@ fun aMessagesState(
         mode = MessageComposerMode.Normal,
     ),
     voiceMessageComposerState: VoiceMessageComposerState = aVoiceMessageComposerState(),
+    typingNotificationState: TypingNotificationState = aTypingNotificationState(),
     timelineState: TimelineState = aTimelineState(
         timelineItems = aTimelineItemList(aTimelineItemTextContent()),
     ),
@@ -127,7 +139,7 @@ fun aMessagesState(
     userHasPermissionToSendReaction = userHasPermissionToSendReaction,
     composerState = composerState,
     voiceMessageComposerState = voiceMessageComposerState,
-    typingNotificationState = aTypingNotificationState(),
+    typingNotificationState = typingNotificationState,
     timelineState = timelineState,
     retrySendMenuState = retrySendMenuState,
     readReceiptBottomSheetState = readReceiptBottomSheetState,
