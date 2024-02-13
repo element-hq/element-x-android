@@ -54,6 +54,11 @@ import kotlinx.collections.immutable.persistentMapOf
 internal fun TimelineItemEventRowWithReplyPreview(
     @PreviewParameter(InReplyToDetailsProvider::class) inReplyToDetails: InReplyToDetails,
 ) = ElementPreview {
+    TimelineItemEventRowWithReplyContentToPreview(inReplyToDetails)
+}
+
+@Composable
+internal fun TimelineItemEventRowWithReplyContentToPreview(inReplyToDetails: InReplyToDetails) {
     Column {
         sequenceOf(false, true).forEach {
             ATimelineItemEventRow(
@@ -83,7 +88,7 @@ internal fun TimelineItemEventRowWithReplyPreview(
     }
 }
 
-class InReplyToDetailsProvider : PreviewParameterProvider<InReplyToDetails> {
+open class InReplyToDetailsProvider : PreviewParameterProvider<InReplyToDetails> {
     override val values: Sequence<InReplyToDetails>
         get() = sequenceOf(
             aMessageContent(
@@ -156,7 +161,7 @@ class InReplyToDetailsProvider : PreviewParameterProvider<InReplyToDetails> {
         type = type,
     )
 
-    private fun aInReplyToDetails(
+    protected fun aInReplyToDetails(
         eventContent: EventContent,
     ) = InReplyToDetails(
         eventId = EventId("\$event"),
