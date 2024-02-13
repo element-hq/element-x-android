@@ -16,10 +16,22 @@
 
 package io.element.android.features.messages.impl.typing
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
@@ -43,54 +55,83 @@ fun TypingNotificationView(
     state: TypingNotificationState,
     modifier: Modifier = Modifier,
 ) {
-    if (state.typingMembers.isEmpty() || !state.renderTypingNotifications) return
-    val typingNotificationText = computeTypingNotificationText(state.typingMembers)
-    Text(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(horizontal = 24.dp, vertical = 2.dp),
-        text = typingNotificationText,
-        overflow = TextOverflow.Ellipsis,
-        maxLines = 1,
-        style = ElementTheme.typography.fontBodySmRegular,
-        color = ElementTheme.colors.textSecondary,
-    )
+    val displayNotifications = state.typingMembers.isNotEmpty() && state.renderTypingNotifications
+
+    @Suppress("ModifierNaming")
+    @Composable fun TypingText(text: AnnotatedString, textModifier: Modifier = Modifier) {
+        Text(
+            modifier = textModifier,
+            text = text,
+            overflow = TextOverflow.Ellipsis,
+            maxLines = 1,
+            style = ElementTheme.typography.fontBodySmRegular,
+            color = ElementTheme.colors.textSecondary,
+        )
+    }
+
+    // Display the typing notification space when either a typing notification needs to be displayed or a previous one already was
+    AnimatedVisibility(
+        modifier = modifier.fillMaxWidth().padding(vertical = 2.dp),
+        visible = displayNotifications || state.reserveSpace,
+        enter = fadeIn() + expandVertically(),
+        exit = fadeOut() + shrinkVertically(),
+    ) {
+        val typingNotificationText = computeTypingNotificationText(state.typingMembers)
+        Box(contentAlignment = Alignment.BottomStart) {
+            // Reserve the space for the typing notification by adding an invisible text
+            TypingText(text = typingNotificationText, textModifier = Modifier.alpha(0f))
+
+            // Display the actual notification
+            AnimatedVisibility(
+                visible = displayNotifications,
+                enter = fadeIn(),
+                exit = fadeOut(),
+            ) {
+                TypingText(text = typingNotificationText, textModifier = Modifier.padding(horizontal = 24.dp))
+            }
+        }
+    }
 }
 
 @Composable
 private fun computeTypingNotificationText(typingMembers: ImmutableList<RoomMember>): AnnotatedString {
-    val names = when (typingMembers.size) {
-        0 -> "" // Cannot happen
-        1 -> typingMembers[0].disambiguatedDisplayName
-        2 -> stringResource(
-            id = R.string.screen_room_typing_two_members,
-            typingMembers[0].disambiguatedDisplayName,
-            typingMembers[1].disambiguatedDisplayName,
-        )
-        else -> pluralStringResource(
-            id = R.plurals.screen_room_typing_many_members,
-            count = typingMembers.size - 2,
-            typingMembers[0].disambiguatedDisplayName,
-            typingMembers[1].disambiguatedDisplayName,
-            typingMembers.size - 2,
-        )
-    }
-    // Get the translated string with a fake pattern
-    val tmpString = pluralStringResource(
-        id = R.plurals.screen_room_typing_notification,
-        count = typingMembers.size,
-        "<>",
-    )
-    // Split the string in 3 parts
-    val parts = tmpString.split("<>")
-    // And rebuild the string with the names
-    return buildAnnotatedString {
-        append(parts[0])
-        withStyle(SpanStyle(fontWeight = FontWeight.Bold)) {
-            append(names)
+    // Remember the last value to avoid empty typing messages while animating
+    var result by remember { mutableStateOf(AnnotatedString("")) }
+    if (typingMembers.isNotEmpty()) {
+        val names = when (typingMembers.size) {
+            0 -> "" // Cannot happen
+            1 -> typingMembers[0].disambiguatedDisplayName
+            2 -> stringResource(
+                id = R.string.screen_room_typing_two_members,
+                typingMembers[0].disambiguatedDisplayName,
+                typingMembers[1].disambiguatedDisplayName,
+            )
+            else -> pluralStringResource(
+                id = R.plurals.screen_room_typing_many_members,
+                count = typingMembers.size - 2,
+                typingMembers[0].disambiguatedDisplayName,
+                typingMembers[1].disambiguatedDisplayName,
+                typingMembers.size - 2,
+            )
         }
-        append(parts[1])
+        // Get the translated string with a fake pattern
+        val tmpString = pluralStringResource(
+            id = R.plurals.screen_room_typing_notification,
+            count = typingMembers.size,
+            "<>",
+        )
+        // Split the string in 3 parts
+        val parts = tmpString.split("<>")
+        // And rebuild the string with the names
+        result = buildAnnotatedString {
+            append(parts[0])
+            withStyle(SpanStyle(fontWeight = FontWeight.Bold)) {
+                append(names)
+            }
+            append(parts[1])
+        }
     }
+    return result
 }
 
 @PreviewsDayNight

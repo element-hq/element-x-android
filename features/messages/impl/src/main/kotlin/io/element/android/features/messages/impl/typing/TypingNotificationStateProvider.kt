@@ -68,14 +68,20 @@ class TypingNotificationStateProvider : PreviewParameterProvider<TypingNotificat
                     aTypingRoomMember(displayName = "Alice with a very long display name which means that it will be truncated"),
                 ),
             ),
+            aTypingNotificationState(
+                typingMembers = emptyList(),
+                reserveSpace = true,
+            ),
         )
 }
 
 internal fun aTypingNotificationState(
     typingMembers: List<RoomMember> = emptyList(),
+    reserveSpace: Boolean = false,
 ) = TypingNotificationState(
     renderTypingNotifications = true,
     typingMembers = typingMembers.toImmutableList(),
+    reserveSpace = reserveSpace,
 )
 
 internal fun aTypingRoomMember(

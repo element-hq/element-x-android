@@ -18,6 +18,7 @@ package io.element.android.features.messages.impl.typing
 
 import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
+import app.cash.turbine.Event
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.preferences.api.store.SessionPreferencesStore
@@ -53,6 +54,7 @@ class TypingNotificationPresenterTest {
             val initialState = awaitItem()
             assertThat(initialState.renderTypingNotifications).isTrue()
             assertThat(initialState.typingMembers).isEmpty()
+            assertThat(initialState.reserveSpace).isFalse()
         }
     }
 
@@ -85,7 +87,7 @@ class TypingNotificationPresenterTest {
             assertThat(oneMemberTypingState.typingMembers.first()).isEqualTo(aDefaultRoomMember)
             // Preferences changes again
             sessionPreferencesStore.setRenderTypingNotifications(false)
-            skipItems(1)
+            skipItems(2)
             val finalState = awaitItem()
             assertThat(finalState.renderTypingNotifications).isFalse()
             assertThat(finalState.typingMembers).isEmpty()
@@ -108,6 +110,7 @@ class TypingNotificationPresenterTest {
             assertThat(oneMemberTypingState.typingMembers.first()).isEqualTo(aDefaultRoomMember)
             // User stops typing
             room.givenRoomTypingMembers(emptyList())
+            skipItems(1)
             val finalState = awaitItem()
             assertThat(finalState.typingMembers).isEmpty()
         }
@@ -140,6 +143,7 @@ class TypingNotificationPresenterTest {
             assertThat(oneMemberTypingState.typingMembers.first()).isEqualTo(aKnownRoomMember)
             // User stops typing
             room.givenRoomTypingMembers(emptyList())
+            skipItems(1)
             val finalState = awaitItem()
             assertThat(finalState.typingMembers).isEmpty()
         }
@@ -166,8 +170,35 @@ class TypingNotificationPresenterTest {
                     listOf(aKnownRoomMember).toImmutableList()
                 )
             )
+            skipItems(1)
             val finalState = awaitItem()
             assertThat(finalState.typingMembers.first()).isEqualTo(aKnownRoomMember)
+        }
+    }
+
+    @Test
+    fun `present - reserveSpace becomes true once we get the first typing notification with room members`() = runTest {
+        val aDefaultRoomMember = createDefaultRoomMember(A_USER_ID_2)
+        val room = FakeMatrixRoom()
+        val presenter = createPresenter(matrixRoom = room)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            assertThat(initialState.typingMembers).isEmpty()
+            room.givenRoomTypingMembers(listOf(A_USER_ID_2))
+            skipItems(1)
+            val updatedTypingState = awaitItem()
+            assertThat(updatedTypingState.reserveSpace).isTrue()
+            // User stops typing
+            room.givenRoomTypingMembers(emptyList())
+            // Is still true for all future events
+            val futureEvents = cancelAndConsumeRemainingEvents()
+            for (event in futureEvents) {
+                if (event is Event.Item) {
+                    assertThat(event.value.reserveSpace).isTrue()
+                }
+            }
         }
     }
 
