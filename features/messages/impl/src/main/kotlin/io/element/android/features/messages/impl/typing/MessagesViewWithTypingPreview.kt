@@ -26,7 +26,7 @@ import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 @PreviewsDayNight
 @Composable
 internal fun MessagesViewWithTypingPreview(
-    @PreviewParameter(MessagesStateForTypingProvider::class) typingState: TypingNotificationState
+    @PreviewParameter(TypingNotificationStateForMessagesProvider::class) typingState: TypingNotificationState
 ) = ElementPreview {
     MessagesView(
         state = aMessagesState().copy(typingNotificationState = typingState),

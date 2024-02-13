@@ -18,7 +18,7 @@ package io.element.android.features.messages.impl.typing
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 
-class MessagesStateForTypingProvider : PreviewParameterProvider<TypingNotificationState> {
+class TypingNotificationStateForMessagesProvider : PreviewParameterProvider<TypingNotificationState> {
     override val values: Sequence<TypingNotificationState>
         get() = sequenceOf(
             aTypingNotificationState(
