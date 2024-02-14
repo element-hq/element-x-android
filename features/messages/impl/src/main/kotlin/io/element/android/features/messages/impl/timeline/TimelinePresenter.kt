@@ -22,7 +22,6 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -90,7 +89,6 @@ class TimelinePresenter @AssistedInject constructor(
             mutableStateOf(null)
         }
 
-        val lastReadReceiptIndex = rememberSaveable { mutableIntStateOf(Int.MAX_VALUE) }
         val lastReadReceiptId = rememberSaveable { mutableStateOf<EventId?>(null) }
 
         val timelineItems by timelineItemsFactory.collectItemsAsState()
@@ -128,7 +126,6 @@ class TimelinePresenter @AssistedInject constructor(
                     appScope.sendReadReceiptIfNeeded(
                         firstVisibleIndex = event.firstIndex,
                         timelineItems = timelineItems,
-                        lastReadReceiptIndex = lastReadReceiptIndex,
                         lastReadReceiptId = lastReadReceiptId,
                         readReceiptType = if (isSendPublicReadReceiptsEnabled) ReceiptType.READ else ReceiptType.READ_PRIVATE,
                     )
@@ -228,7 +225,6 @@ class TimelinePresenter @AssistedInject constructor(
     private fun CoroutineScope.sendReadReceiptIfNeeded(
         firstVisibleIndex: Int,
         timelineItems: ImmutableList<TimelineItem>,
-        lastReadReceiptIndex: MutableState<Int>,
         lastReadReceiptId: MutableState<EventId?>,
         readReceiptType: ReceiptType,
     ) = launch(dispatchers.computation) {
@@ -239,7 +235,6 @@ class TimelinePresenter @AssistedInject constructor(
             // Get last valid EventId seen by the user, as the first index might refer to a Virtual item
             val eventId = getLastEventIdBeforeOrAt(firstVisibleIndex, timelineItems)
             if (eventId != null && eventId != lastReadReceiptId.value) {
-                lastReadReceiptIndex.value = firstVisibleIndex
                 lastReadReceiptId.value = eventId
                 timeline.sendReadReceipt(eventId = eventId, receiptType = readReceiptType)
             }

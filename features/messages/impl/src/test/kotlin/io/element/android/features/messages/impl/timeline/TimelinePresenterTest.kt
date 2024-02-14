@@ -139,7 +139,7 @@ class TimelinePresenterTest {
             )
         )
         val sessionPreferencesStore = InMemorySessionPreferencesStore(isSendPublicReadReceiptsEnabled = false)
-        val room = FakeMatrixRoom(matrixTimeline =  timeline)
+        val room = FakeMatrixRoom(matrixTimeline = timeline)
         val presenter = createTimelinePresenter(
             timeline = timeline,
             room = room,
