@@ -30,6 +30,7 @@ import io.element.android.libraries.matrix.api.auth.OidcDetails
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.impl.RustMatrixClientFactory
 import io.element.android.libraries.matrix.impl.exception.mapClientException
+import io.element.android.libraries.matrix.impl.getAdditionalCertificates
 import io.element.android.libraries.matrix.impl.keys.PassphraseGenerator
 import io.element.android.libraries.matrix.impl.mapper.toSessionData
 import io.element.android.libraries.network.useragent.UserAgentProvider
@@ -61,11 +62,12 @@ class RustMatrixAuthenticationService @Inject constructor(
     // Passphrase which will be used for new sessions. Existing sessions will use the passphrase
     // stored in the SessionData.
     private val pendingPassphrase = getDatabasePassphrase()
+    private val additionalCertificates = getAdditionalCertificates()
     private val authService: RustAuthenticationService = RustAuthenticationService(
         basePath = baseDirectory.absolutePath,
         passphrase = pendingPassphrase,
         userAgent = userAgentProvider.provide(),
-        additionalRootCertificates = emptyList(),
+        additionalRootCertificates = additionalCertificates,
         oidcConfiguration = oidcConfiguration,
         customSlidingSyncProxy = null,
         sessionDelegate = null,
