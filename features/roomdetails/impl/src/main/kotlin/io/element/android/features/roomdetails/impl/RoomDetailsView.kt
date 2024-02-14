@@ -204,12 +204,10 @@ private fun RoomDetailsTopBar(
     goBack: () -> Unit,
     onActionClicked: (RoomDetailsAction) -> Unit,
     showEdit: Boolean,
-    modifier: Modifier = Modifier,
 ) {
     var showMenu by remember { mutableStateOf(false) }
 
     TopAppBar(
-        modifier = modifier,
         title = { },
         navigationIcon = { BackButton(onClick = goBack) },
         actions = {
@@ -237,14 +235,20 @@ private fun RoomDetailsTopBar(
 }
 
 @Composable
-private fun MainActionsSection(state: RoomDetailsState, onShareRoom: () -> Unit, modifier: Modifier = Modifier) {
-    Row(modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
+private fun MainActionsSection(
+    state: RoomDetailsState,
+    onShareRoom: () -> Unit,
+) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.Center,
+    ) {
         val roomNotificationSettings = state.roomNotificationSettings
         if (state.canShowNotificationSettings && roomNotificationSettings != null) {
             if (roomNotificationSettings.mode == RoomNotificationMode.MUTE) {
                 MainActionButton(
                     title = stringResource(CommonStrings.common_unmute),
-                    imageVector = CompoundIcons.NotificationsOff,
+                    imageVector = CompoundIcons.NotificationsOff(),
                     onClick = {
                         state.eventSink(RoomDetailsEvent.UnmuteNotification)
                     },
@@ -252,7 +256,7 @@ private fun MainActionsSection(state: RoomDetailsState, onShareRoom: () -> Unit,
             } else {
                 MainActionButton(
                     title = stringResource(CommonStrings.common_mute),
-                    imageVector = CompoundIcons.Notifications,
+                    imageVector = CompoundIcons.Notifications(),
                     onClick = {
                         state.eventSink(RoomDetailsEvent.MuteNotification)
                     },
@@ -262,7 +266,7 @@ private fun MainActionsSection(state: RoomDetailsState, onShareRoom: () -> Unit,
         Spacer(modifier = Modifier.width(20.dp))
         MainActionButton(
             title = stringResource(R.string.screen_room_details_share_room_title),
-            imageVector = CompoundIcons.ShareAndroid,
+            imageVector = CompoundIcons.ShareAndroid(),
             onClick = onShareRoom
         )
     }
@@ -275,10 +279,9 @@ private fun RoomHeaderSection(
     roomName: String,
     roomAlias: String?,
     openAvatarPreview: (url: String) -> Unit,
-    modifier: Modifier = Modifier
 ) {
     Column(
-        modifier = modifier
+        modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -312,9 +315,8 @@ private fun RoomHeaderSection(
 private fun TopicSection(
     roomTopic: RoomTopicState,
     onActionClicked: (RoomDetailsAction) -> Unit,
-    modifier: Modifier = Modifier
 ) {
-    PreferenceCategory(title = stringResource(CommonStrings.common_topic), modifier = modifier) {
+    PreferenceCategory(title = stringResource(CommonStrings.common_topic)) {
         if (roomTopic is RoomTopicState.CanAddTopic) {
             PreferenceText(
                 title = stringResource(R.string.screen_room_details_add_topic_title),
@@ -338,18 +340,17 @@ private fun TopicSection(
 private fun NotificationSection(
     isDefaultMode: Boolean,
     openRoomNotificationSettings: () -> Unit,
-    modifier: Modifier = Modifier
 ) {
     val subtitle = if (isDefaultMode) {
         stringResource(R.string.screen_room_details_notification_mode_default)
     } else {
         stringResource(R.string.screen_room_details_notification_mode_custom)
     }
-    PreferenceCategory(modifier = modifier) {
+    PreferenceCategory {
         ListItem(
             headlineContent = { Text(text = stringResource(R.string.screen_room_details_notification_title)) },
             supportingContent = { Text(text = subtitle) },
-            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Notifications)),
+            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Notifications())),
             onClick = openRoomNotificationSettings,
         )
     }
@@ -359,12 +360,11 @@ private fun NotificationSection(
 private fun MembersSection(
     memberCount: Long,
     openRoomMemberList: () -> Unit,
-    modifier: Modifier = Modifier,
 ) {
-    PreferenceCategory(modifier = modifier) {
+    PreferenceCategory {
         ListItem(
             headlineContent = { Text(stringResource(CommonStrings.common_people)) },
-            leadingContent = ListItemContent.Icon(IconSource.Resource(CommonDrawables.ic_user)),
+            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.User())),
             trailingContent = ListItemContent.Text(memberCount.toString()),
             onClick = openRoomMemberList,
         )
@@ -374,12 +374,11 @@ private fun MembersSection(
 @Composable
 private fun InviteSection(
     invitePeople: () -> Unit,
-    modifier: Modifier = Modifier,
 ) {
-    PreferenceCategory(modifier = modifier) {
+    PreferenceCategory {
         ListItem(
             headlineContent = { Text(stringResource(R.string.screen_room_details_invite_people_title)) },
-            leadingContent = ListItemContent.Icon(IconSource.Resource(CommonDrawables.ic_user_add)),
+            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.UserAdd())),
             onClick = invitePeople,
         )
     }
@@ -388,20 +387,19 @@ private fun InviteSection(
 @Composable
 private fun PollsSection(
     openPollHistory: () -> Unit,
-    modifier: Modifier = Modifier,
 ) {
-    PreferenceCategory(modifier = modifier) {
+    PreferenceCategory {
         ListItem(
             headlineContent = { Text(stringResource(R.string.screen_polls_history_title)) },
-            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Polls)),
+            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Polls())),
             onClick = openPollHistory,
         )
     }
 }
 
 @Composable
-private fun SecuritySection(modifier: Modifier = Modifier) {
-    PreferenceCategory(title = stringResource(R.string.screen_room_details_security_title), modifier = modifier) {
+private fun SecuritySection() {
+    PreferenceCategory(title = stringResource(R.string.screen_room_details_security_title)) {
         ListItem(
             headlineContent = { Text(stringResource(R.string.screen_room_details_encryption_enabled_title)) },
             supportingContent = { Text(stringResource(R.string.screen_room_details_encryption_enabled_subtitle)) },
@@ -411,18 +409,20 @@ private fun SecuritySection(modifier: Modifier = Modifier) {
 }
 
 @Composable
-private fun OtherActionsSection(isDm: Boolean, onLeaveRoom: () -> Unit, modifier: Modifier = Modifier) {
-    PreferenceCategory(showDivider = false, modifier = modifier) {
+private fun OtherActionsSection(isDm: Boolean, onLeaveRoom: () -> Unit) {
+    PreferenceCategory(showDivider = false) {
         ListItem(
             headlineContent = {
-                val leaveText = stringResource(id = if (isDm) {
-                    R.string.screen_room_details_leave_conversation_title
-                } else {
-                    R.string.screen_room_details_leave_room_title
-                })
+                val leaveText = stringResource(
+                    id = if (isDm) {
+                        R.string.screen_room_details_leave_conversation_title
+                    } else {
+                        R.string.screen_room_details_leave_room_title
+                    }
+                )
                 Text(leaveText)
             },
-            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Leave)),
+            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Leave())),
             style = ListItemStyle.Destructive,
             onClick = onLeaveRoom,
         )

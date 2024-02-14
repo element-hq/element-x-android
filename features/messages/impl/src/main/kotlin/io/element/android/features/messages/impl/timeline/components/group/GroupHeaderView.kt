@@ -89,7 +89,7 @@ fun GroupHeaderView(
                 )
                 Icon(
                     modifier = Modifier.rotate(rotation),
-                    imageVector = CompoundIcons.ChevronRight,
+                    imageVector = CompoundIcons.ChevronRight(),
                     contentDescription = null,
                     tint = MaterialTheme.colorScheme.secondary
                 )

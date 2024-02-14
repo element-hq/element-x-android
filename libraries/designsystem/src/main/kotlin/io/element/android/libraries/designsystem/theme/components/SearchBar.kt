@@ -98,7 +98,7 @@ fun <T> SearchBar(
                 {
                     IconButton(onClick = { onQueryChange("") }) {
                         Icon(
-                            imageVector = CompoundIcons.Close,
+                            imageVector = CompoundIcons.Close(),
                             contentDescription = stringResource(CommonStrings.action_clear),
                         )
                     }
@@ -108,7 +108,7 @@ fun <T> SearchBar(
             !active -> {
                 {
                     Icon(
-                        imageVector = CompoundIcons.Search,
+                        imageVector = CompoundIcons.Search(),
                         contentDescription = stringResource(CommonStrings.action_search),
                         tint = MaterialTheme.colorScheme.tertiary,
                     )

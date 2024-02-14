@@ -21,7 +21,7 @@ import io.element.android.compound.theme.Theme
 data class AdvancedSettingsState(
     val isRichTextEditorEnabled: Boolean,
     val isDeveloperModeEnabled: Boolean,
-    val isSendPublicReadReceiptsEnabled: Boolean,
+    val isSharePresenceEnabled: Boolean,
     val theme: Theme,
     val showChangeThemeDialog: Boolean,
     val eventSink: (AdvancedSettingsEvents) -> Unit

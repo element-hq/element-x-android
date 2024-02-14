@@ -42,6 +42,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemPollContent
+import io.element.android.features.messages.impl.typing.TypingNotificationPresenter
 import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessageComposerPlayer
 import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessageComposerPresenter
 import io.element.android.features.messages.impl.voicemessages.timeline.FakeRedactedVoiceMessageManager
@@ -96,7 +97,9 @@ import io.element.android.tests.testutils.consumeItemsUntilTimeout
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import io.mockk.mockk
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
@@ -126,6 +129,21 @@ class MessagesPresenterTest {
             assertThat(initialState.snackbarMessage).isNull()
             assertThat(initialState.inviteProgress).isEqualTo(AsyncData.Uninitialized)
             assertThat(initialState.showReinvitePrompt).isFalse()
+        }
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun `present - check that the room's unread flag is removed`() = runTest {
+        val room = FakeMatrixRoom()
+        assertThat(room.markAsReadCalls).isEmpty()
+        val presenter = createMessagesPresenter(matrixRoom = room)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            runCurrent()
+            assertThat(room.setUnreadFlagCalls).isEqualTo(listOf(false))
+            cancelAndIgnoreRemainingEvents()
         }
     }
 
@@ -675,6 +693,7 @@ class MessagesPresenterTest {
             room = matrixRoom,
             mediaPickerProvider = FakePickerProvider(),
             featureFlagService = FakeFeatureFlagService(mapOf(FeatureFlags.NotificationSettings.key to true)),
+            sessionPreferencesStore = InMemorySessionPreferencesStore(),
             localMediaFactory = FakeLocalMediaFactory(mockMediaUrl),
             mediaSender = mediaSender,
             snackbarDispatcher = SnackbarDispatcher(),
@@ -712,6 +731,10 @@ class MessagesPresenterTest {
             }
         }
         val actionListPresenter = ActionListPresenter(appPreferencesStore = appPreferencesStore)
+        val typingNotificationPresenter = TypingNotificationPresenter(
+            room = matrixRoom,
+            sessionPreferencesStore = sessionPreferencesStore,
+        )
         val readReceiptBottomSheetPresenter = ReadReceiptBottomSheetPresenter()
         val customReactionPresenter = CustomReactionPresenter(emojibaseProvider = FakeEmojibaseProvider())
         val reactionSummaryPresenter = ReactionSummaryPresenter(room = matrixRoom)
@@ -721,6 +744,7 @@ class MessagesPresenterTest {
             composerPresenter = messageComposerPresenter,
             voiceMessageComposerPresenter = voiceMessageComposerPresenter,
             timelinePresenterFactory = timelinePresenterFactory,
+            typingNotificationPresenter = typingNotificationPresenter,
             actionListPresenter = actionListPresenter,
             customReactionPresenter = customReactionPresenter,
             reactionSummaryPresenter = reactionSummaryPresenter,

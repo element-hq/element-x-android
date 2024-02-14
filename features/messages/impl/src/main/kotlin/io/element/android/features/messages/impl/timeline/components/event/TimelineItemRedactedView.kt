@@ -35,7 +35,7 @@ fun TimelineItemRedactedView(
     TimelineItemInformativeView(
         text = stringResource(id = CommonStrings.common_message_removed),
         iconDescription = stringResource(id = CommonStrings.common_message_removed),
-        iconResourceId = CompoundDrawables.ic_delete,
+        iconResourceId = CompoundDrawables.ic_compound_delete,
         onContentLayoutChanged = onContentLayoutChanged,
         modifier = modifier
     )

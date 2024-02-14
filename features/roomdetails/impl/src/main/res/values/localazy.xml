@@ -22,10 +22,11 @@
   <string name="screen_room_details_notification_mode_custom">"Custom"</string>
   <string name="screen_room_details_notification_mode_default">"Default"</string>
   <string name="screen_room_details_notification_title">"Notifications"</string>
-  <string name="screen_room_details_room_name_label">"Room name"</string>
   <string name="screen_room_details_share_room_title">"Share room"</string>
   <string name="screen_room_details_updating_room">"Updating room…"</string>
   <string name="screen_room_member_list_pending_header_title">"Pending"</string>
+  <string name="screen_room_member_list_role_administrator">"Admin"</string>
+  <string name="screen_room_member_list_role_moderator">"Moderator"</string>
   <string name="screen_room_member_list_room_members_header_title">"Room members"</string>
   <string name="screen_room_notification_settings_allow_custom">"Allow custom setting"</string>
   <string name="screen_room_notification_settings_allow_custom_footnote">"Turning this on will override your default setting"</string>
@@ -49,6 +50,7 @@
   <string name="screen_dm_details_unblock_user">"Unblock user"</string>
   <string name="screen_room_details_leave_conversation_title">"Leave conversation"</string>
   <string name="screen_room_details_leave_room_title">"Leave room"</string>
+  <string name="screen_room_details_room_name_label">"Room name"</string>
   <string name="screen_room_details_security_title">"Security"</string>
   <string name="screen_room_details_topic_title">"Topic"</string>
   <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Mentions and Keywords only"</string>

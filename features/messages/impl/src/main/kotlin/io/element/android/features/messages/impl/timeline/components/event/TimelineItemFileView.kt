@@ -37,11 +37,11 @@ import io.element.android.features.messages.impl.timeline.components.layout.Cont
 import io.element.android.features.messages.impl.timeline.components.layout.ContentAvoidingLayoutData
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemFileContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemFileContentProvider
+import io.element.android.libraries.designsystem.icons.CompoundDrawables
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.designsystem.utils.CommonDrawables
 
 @Composable
 fun TimelineItemFileView(
@@ -62,7 +62,7 @@ fun TimelineItemFileView(
             contentAlignment = Alignment.Center,
         ) {
             Icon(
-                resourceId = CommonDrawables.ic_attachment,
+                resourceId = CompoundDrawables.ic_compound_attachment,
                 contentDescription = null,
                 tint = ElementTheme.materialColors.primary,
                 modifier = Modifier

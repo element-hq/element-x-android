@@ -70,7 +70,7 @@ internal fun TopAppBarPreview() = ElementThemedPreview {
             TextButton(text = "Action", onClick = {})
             IconButton(onClick = {}) {
                 Icon(
-                    imageVector = CompoundIcons.ShareAndroid,
+                    imageVector = CompoundIcons.ShareAndroid(),
                     contentDescription = null,
                 )
             }

@@ -41,7 +41,7 @@ class VersionFormatterTest {
                 gitRevision = "1234567890",
             )
         )
-        assertThat(sut.get()).isEqualTo("$VERSION\nbranch\n1234567890")
+        assertThat(sut.get()).isEqualTo("$VERSION\nbranch (1234567890)")
     }
 
     companion object {

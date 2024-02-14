@@ -403,7 +403,7 @@ private fun ColumnScope.ButtonMatrixPreview(
     )
     // With icon
     ButtonRowPreview(
-        leadingIcon = IconSource.Vector(CompoundIcons.ShareAndroid),
+        leadingIcon = IconSource.Vector(CompoundIcons.ShareAndroid()),
         style = style,
         size = size,
         destructive = destructive,

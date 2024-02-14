@@ -86,7 +86,6 @@ private fun PdfPagesView(
 @Composable
 private fun PdfPageView(
     pdfPage: PdfPage,
-    modifier: Modifier = Modifier,
 ) {
     val pdfPageState by pdfPage.stateFlow.collectAsState()
     DisposableEffect(pdfPage) {
@@ -101,12 +100,12 @@ private fun PdfPageView(
                 bitmap = state.bitmap.asImageBitmap(),
                 contentDescription = stringResource(id = CommonStrings.a11y_page_n, pdfPage.pageIndex),
                 contentScale = ContentScale.FillWidth,
-                modifier = modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth()
             )
         }
         is PdfPage.State.Loading -> {
             Box(
-                modifier = modifier
+                modifier = Modifier
                     .fillMaxWidth()
                     .height(state.height.toDp())
                     .background(color = Color.White)

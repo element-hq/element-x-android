@@ -30,14 +30,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
+import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.iconSuccessPrimaryBackground
-import io.element.android.libraries.designsystem.utils.CommonDrawables
 
 @Composable
 internal fun FormattingOption(
@@ -95,19 +94,19 @@ internal fun FormattingButtonPreview() = ElementPreview {
         FormattingOption(
             state = FormattingOptionState.Default,
             onClick = { },
-            imageVector = ImageVector.vectorResource(CommonDrawables.ic_bold),
+            imageVector = CompoundIcons.Bold(),
             contentDescription = null,
         )
         FormattingOption(
             state = FormattingOptionState.Selected,
             onClick = { },
-            imageVector = ImageVector.vectorResource(CommonDrawables.ic_italic),
+            imageVector = CompoundIcons.Italic(),
             contentDescription = null,
         )
         FormattingOption(
             state = FormattingOptionState.Disabled,
             onClick = { },
-            imageVector = ImageVector.vectorResource(CommonDrawables.ic_underline),
+            imageVector = CompoundIcons.Underline(),
             contentDescription = null,
         )
     }

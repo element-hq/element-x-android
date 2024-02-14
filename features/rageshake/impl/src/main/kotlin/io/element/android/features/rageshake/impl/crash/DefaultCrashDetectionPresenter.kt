@@ -24,13 +24,17 @@ import io.element.android.features.rageshake.api.crash.CrashDataStore
 import io.element.android.features.rageshake.api.crash.CrashDetectionEvents
 import io.element.android.features.rageshake.api.crash.CrashDetectionPresenter
 import io.element.android.features.rageshake.api.crash.CrashDetectionState
+import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.di.AppScope
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @ContributesBinding(AppScope::class)
-class DefaultCrashDetectionPresenter @Inject constructor(private val crashDataStore: CrashDataStore) :
+class DefaultCrashDetectionPresenter @Inject constructor(
+    private val buildMeta: BuildMeta,
+    private val crashDataStore: CrashDataStore,
+) :
     CrashDetectionPresenter {
     @Composable
     override fun present(): CrashDetectionState {
@@ -45,6 +49,7 @@ class DefaultCrashDetectionPresenter @Inject constructor(private val crashDataSt
         }
 
         return CrashDetectionState(
+            appName = buildMeta.applicationName,
             crashDetected = crashDetected.value,
             eventSink = ::handleEvents
         )

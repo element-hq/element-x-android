@@ -37,7 +37,6 @@ import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 @Composable
 fun ConnectivityIndicatorView(
     isOnline: Boolean,
-    modifier: Modifier = Modifier,
 ) {
     val isIndicatorVisible = remember { MutableTransitionState(!isOnline) }.apply { targetState = !isOnline }
     val isStatusBarPaddingVisible = remember { MutableTransitionState(isOnline) }.apply { targetState = isOnline }
@@ -48,7 +47,7 @@ fun ConnectivityIndicatorView(
         enter = fadeIn() + expandVertically(),
         exit = fadeOut() + shrinkVertically(),
     ) {
-        Indicator(modifier)
+        Indicator()
     }
 
     // Show missing status bar padding when the indicator is not visible
@@ -57,7 +56,7 @@ fun ConnectivityIndicatorView(
         enter = fadeIn() + expandVertically(),
         exit = fadeOut() + shrinkVertically(),
     ) {
-        StatusBarPaddingSpacer(modifier)
+        StatusBarPaddingSpacer()
     }
 }
 

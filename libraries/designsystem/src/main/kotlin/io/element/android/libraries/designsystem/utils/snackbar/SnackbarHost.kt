@@ -36,7 +36,7 @@ fun SnackbarHost(hostState: SnackbarHostState, modifier: Modifier = Modifier) {
             action = data.visuals.actionLabel?.let { ButtonVisuals.Text(it, data::performAction) },
             dismissAction = if (data.visuals.withDismissAction) {
                 ButtonVisuals.Icon(
-                    IconSource.Vector(CompoundIcons.Close),
+                    IconSource.Vector(CompoundIcons.Close()),
                     data::dismiss
                 )
             } else {

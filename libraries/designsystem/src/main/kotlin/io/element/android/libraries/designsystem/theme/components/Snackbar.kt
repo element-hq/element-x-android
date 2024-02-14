@@ -120,7 +120,7 @@ internal fun SnackbarWithActionAndCloseButtonPreview() {
             message = "Snackbar supporting text",
             action = ButtonVisuals.Text("Action") {},
             dismissAction = ButtonVisuals.Icon(
-                IconSource.Vector(CompoundIcons.Close)
+                IconSource.Vector(CompoundIcons.Close())
             ) {}
         )
     }
@@ -142,7 +142,7 @@ internal fun SnackbarWithActionOnNewLineAndCloseButtonPreview() {
             message = "Snackbar supporting text",
             action = ButtonVisuals.Text("Action", {}),
             dismissAction = ButtonVisuals.Icon(
-                IconSource.Vector(CompoundIcons.Close)
+                IconSource.Vector(CompoundIcons.Close())
             ) {},
             actionOnNewLine = true
         )

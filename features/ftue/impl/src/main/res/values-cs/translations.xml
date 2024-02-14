@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_migration_message">"Jedná se o jednorázový proces, prosíme o strpení."</string>
-  <string name="screen_migration_title">"Nastavení vašeho účtu"</string>
   <string name="screen_notification_optin_subtitle">"Nastavení můžete později změnit."</string>
   <string name="screen_notification_optin_title">"Povolte oznámení a nezmeškejte žádnou zprávu"</string>
   <string name="screen_welcome_bullet_1">"Hovory, hlasování, vyhledávání a další budou přidány koncem tohoto roku."</string>

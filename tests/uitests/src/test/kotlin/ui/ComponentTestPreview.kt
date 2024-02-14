@@ -17,6 +17,7 @@
 package ui
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.unit.Dp
 import com.airbnb.android.showkase.models.ShowkaseBrowserComponent
 
 class ComponentTestPreview(
@@ -26,6 +27,10 @@ class ComponentTestPreview(
     override fun Content() = showkaseBrowserComponent.component()
 
     override val name: String = showkaseBrowserComponent.componentName
+
+    override fun customHeightDp(): Dp? {
+        return showkaseBrowserComponent.heightDp?.let { Dp(it.toFloat()) }
+    }
 
     override fun toString(): String = showkaseBrowserComponent.componentKey
         // Strip common package beginning

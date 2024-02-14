@@ -40,12 +40,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
+import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.androidutils.system.copyToClipboard
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.components.async.AsyncFailure
 import io.element.android.libraries.designsystem.components.async.AsyncLoading
 import io.element.android.libraries.designsystem.components.button.BackButton
-import io.element.android.libraries.designsystem.icons.CompoundDrawables
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.aliasScreenTitle
@@ -85,7 +85,7 @@ fun ViewFileView(
                         },
                     ) {
                         Icon(
-                            resourceId = CompoundDrawables.ic_share_android,
+                            imageVector = CompoundIcons.ShareAndroid(),
                             contentDescription = stringResource(id = CommonStrings.action_share),
                         )
                     }
@@ -95,7 +95,7 @@ fun ViewFileView(
                         },
                     ) {
                         Icon(
-                            resourceId = CompoundDrawables.ic_download,
+                            imageVector = CompoundIcons.Download(),
                             contentDescription = stringResource(id = CommonStrings.action_save),
                         )
                     }

@@ -405,14 +405,13 @@ private fun TextInput(
     onError: (Throwable) -> Unit,
     onTyping: (Boolean) -> Unit,
     onRichContentSelected: ((Uri) -> Unit)?,
-    modifier: Modifier = Modifier,
 ) {
     val bgColor = ElementTheme.colors.bgSubtleSecondary
     val borderColor = ElementTheme.colors.borderDisabled
     val roundedCorners = textInputRoundedCornerShape(composerMode = composerMode)
 
     Column(
-        modifier = modifier
+        modifier = Modifier
             .clip(roundedCorners)
             .border(0.5.dp, borderColor, roundedCorners)
             .background(color = bgColor)
@@ -464,15 +463,14 @@ private fun TextInput(
 private fun ComposerModeView(
     composerMode: MessageComposerMode,
     onResetComposerMode: () -> Unit,
-    modifier: Modifier = Modifier,
 ) {
     when (composerMode) {
         is MessageComposerMode.Edit -> {
-            EditingModeView(onResetComposerMode = onResetComposerMode, modifier = modifier)
+            EditingModeView(onResetComposerMode = onResetComposerMode)
         }
         is MessageComposerMode.Reply -> {
             ReplyToModeView(
-                modifier = modifier.padding(8.dp),
+                modifier = Modifier.padding(8.dp),
                 senderName = composerMode.senderName,
                 text = composerMode.defaultContent,
                 attachmentThumbnailInfo = composerMode.attachmentThumbnailInfo,
@@ -486,17 +484,16 @@ private fun ComposerModeView(
 @Composable
 private fun EditingModeView(
     onResetComposerMode: () -> Unit,
-    modifier: Modifier = Modifier,
 ) {
     Row(
         horizontalArrangement = Arrangement.spacedBy(4.dp),
         verticalAlignment = Alignment.CenterVertically,
-        modifier = modifier
+        modifier = Modifier
             .fillMaxWidth()
             .padding(start = 12.dp)
     ) {
         Icon(
-            imageVector = CompoundIcons.Edit,
+            imageVector = CompoundIcons.Edit(),
             contentDescription = stringResource(CommonStrings.common_editing),
             tint = ElementTheme.materialColors.secondary,
             modifier = Modifier
@@ -513,7 +510,7 @@ private fun EditingModeView(
                 .weight(1f)
         )
         Icon(
-            imageVector = CompoundIcons.Close,
+            imageVector = CompoundIcons.Close(),
             contentDescription = stringResource(CommonStrings.action_close),
             tint = ElementTheme.materialColors.secondary,
             modifier = Modifier
@@ -578,7 +575,7 @@ private fun ReplyToModeView(
             )
         }
         Icon(
-            imageVector = CompoundIcons.Close,
+            imageVector = CompoundIcons.Close(),
             contentDescription = stringResource(CommonStrings.action_close),
             tint = MaterialTheme.colorScheme.secondary,
             modifier = Modifier
@@ -881,11 +878,8 @@ internal fun TextComposerVoicePreview() = ElementPreview {
 @Composable
 private fun PreviewColumn(
     items: ImmutableList<@Composable () -> Unit>,
-    modifier: Modifier = Modifier,
 ) {
-    Column(
-        modifier = modifier
-    ) {
+    Column {
         items.forEach { item ->
             Box(
                 modifier = Modifier.height(IntrinsicSize.Min)

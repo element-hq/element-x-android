@@ -22,7 +22,6 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -90,14 +89,13 @@ class TimelinePresenter @AssistedInject constructor(
             mutableStateOf(null)
         }
 
-        val lastReadReceiptIndex = rememberSaveable { mutableIntStateOf(Int.MAX_VALUE) }
         val lastReadReceiptId = rememberSaveable { mutableStateOf<EventId?>(null) }
 
         val timelineItems by timelineItemsFactory.collectItemsAsState()
         val paginationState by timeline.paginationState.collectAsState()
         val syncUpdateFlow = room.syncUpdateFlow.collectAsState()
         val userHasPermissionToSendMessage by room.canSendMessageAsState(type = MessageEventType.ROOM_MESSAGE, updateKey = syncUpdateFlow.value)
-        val userHasPermissionToSendReaction by room.canSendMessageAsState(type = MessageEventType.REACTION_SENT, updateKey = syncUpdateFlow.value)
+        val userHasPermissionToSendReaction by room.canSendMessageAsState(type = MessageEventType.REACTION, updateKey = syncUpdateFlow.value)
 
         val prevMostRecentItemId = rememberSaveable { mutableStateOf<String?>(null) }
         val newItemState = remember { mutableStateOf(NewEventState.None) }
@@ -106,6 +104,7 @@ class TimelinePresenter @AssistedInject constructor(
         val keyBackupState by encryptionService.backupStateStateFlow.collectAsState()
 
         val isSendPublicReadReceiptsEnabled by sessionPreferencesStore.isSendPublicReadReceiptsEnabled().collectAsState(initial = true)
+        val renderReadReceipts by sessionPreferencesStore.isRenderReadReceiptsEnabled().collectAsState(initial = true)
 
         val sessionState by remember {
             derivedStateOf {
@@ -127,7 +126,6 @@ class TimelinePresenter @AssistedInject constructor(
                     appScope.sendReadReceiptIfNeeded(
                         firstVisibleIndex = event.firstIndex,
                         timelineItems = timelineItems,
-                        lastReadReceiptIndex = lastReadReceiptIndex,
                         lastReadReceiptId = lastReadReceiptId,
                         readReceiptType = if (isSendPublicReadReceiptsEnabled) ReceiptType.READ else ReceiptType.READ_PRIVATE,
                     )
@@ -154,12 +152,12 @@ class TimelinePresenter @AssistedInject constructor(
 
         LaunchedEffect(Unit) {
             combine(timeline.timelineItems, room.membersStateFlow) { items, membersState ->
-                    timelineItemsFactory.replaceWith(
-                        timelineItems = items,
-                        roomMembers = membersState.roomMembers().orEmpty()
-                    )
-                    items
-                }
+                timelineItemsFactory.replaceWith(
+                    timelineItems = items,
+                    roomMembers = membersState.roomMembers().orEmpty()
+                )
+                items
+            }
                 .onEach { timelineItems ->
                     if (timelineItems.isEmpty()) {
                         paginateBackwards()
@@ -183,6 +181,7 @@ class TimelinePresenter @AssistedInject constructor(
             highlightedEventId = highlightedEventId.value,
             paginationState = paginationState,
             timelineItems = timelineItems,
+            renderReadReceipts = renderReadReceipts,
             newEventState = newItemState.value,
             sessionState = sessionState,
             eventSink = { handleEvents(it) }
@@ -226,16 +225,19 @@ class TimelinePresenter @AssistedInject constructor(
     private fun CoroutineScope.sendReadReceiptIfNeeded(
         firstVisibleIndex: Int,
         timelineItems: ImmutableList<TimelineItem>,
-        lastReadReceiptIndex: MutableState<Int>,
         lastReadReceiptId: MutableState<EventId?>,
         readReceiptType: ReceiptType,
     ) = launch(dispatchers.computation) {
-        // Get last valid EventId seen by the user, as the first index might refer to a Virtual item
-        val eventId = getLastEventIdBeforeOrAt(firstVisibleIndex, timelineItems)
-        if (eventId != null && firstVisibleIndex <= lastReadReceiptIndex.value && eventId != lastReadReceiptId.value) {
-            lastReadReceiptIndex.value = firstVisibleIndex
-            lastReadReceiptId.value = eventId
-            timeline.sendReadReceipt(eventId = eventId, receiptType = readReceiptType)
+        // If we are at the bottom of timeline, we mark the room as read.
+        if (firstVisibleIndex == 0) {
+            room.markAsRead(receiptType = readReceiptType)
+        } else {
+            // Get last valid EventId seen by the user, as the first index might refer to a Virtual item
+            val eventId = getLastEventIdBeforeOrAt(firstVisibleIndex, timelineItems)
+            if (eventId != null && eventId != lastReadReceiptId.value) {
+                lastReadReceiptId.value = eventId
+                timeline.sendReadReceipt(eventId = eventId, receiptType = readReceiptType)
+            }
         }
     }
 

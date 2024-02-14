@@ -59,6 +59,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemUnknownContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVoiceContent
+import io.element.android.features.messages.impl.typing.TypingNotificationPresenter
 import io.element.android.features.messages.impl.utils.messagesummary.MessageSummaryFormatter
 import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessageComposerPresenter
 import io.element.android.features.networkmonitor.api.NetworkMonitor
@@ -97,6 +98,7 @@ class MessagesPresenter @AssistedInject constructor(
     private val composerPresenter: MessageComposerPresenter,
     private val voiceMessageComposerPresenter: VoiceMessageComposerPresenter,
     timelinePresenterFactory: TimelinePresenter.Factory,
+    private val typingNotificationPresenter: TypingNotificationPresenter,
     private val actionListPresenter: ActionListPresenter,
     private val customReactionPresenter: CustomReactionPresenter,
     private val reactionSummaryPresenter: ReactionSummaryPresenter,
@@ -129,6 +131,7 @@ class MessagesPresenter @AssistedInject constructor(
         val composerState = composerPresenter.present()
         val voiceMessageComposerState = voiceMessageComposerPresenter.present()
         val timelineState = timelinePresenter.present()
+        val typingNotificationState = typingNotificationPresenter.present()
         val actionListState = actionListPresenter.present()
         val customReactionState = customReactionPresenter.present()
         val reactionSummaryState = reactionSummaryPresenter.present()
@@ -139,7 +142,7 @@ class MessagesPresenter @AssistedInject constructor(
         val userHasPermissionToSendMessage by room.canSendMessageAsState(type = MessageEventType.ROOM_MESSAGE, updateKey = syncUpdateFlow.value)
         val userHasPermissionToRedactOwn by room.canRedactOwnAsState(updateKey = syncUpdateFlow.value)
         val userHasPermissionToRedactOther by room.canRedactOtherAsState(updateKey = syncUpdateFlow.value)
-        val userHasPermissionToSendReaction by room.canSendMessageAsState(type = MessageEventType.REACTION_SENT, updateKey = syncUpdateFlow.value)
+        val userHasPermissionToSendReaction by room.canSendMessageAsState(type = MessageEventType.REACTION, updateKey = syncUpdateFlow.value)
         val roomName: AsyncData<String> by remember {
             derivedStateOf { roomInfo?.name?.let { AsyncData.Success(it) } ?: AsyncData.Uninitialized }
         }
@@ -153,6 +156,14 @@ class MessagesPresenter @AssistedInject constructor(
 
         var canJoinCall by rememberSaveable {
             mutableStateOf(false)
+        }
+
+        LaunchedEffect(Unit) {
+            // Remove the unread flag on entering but don't send read receipts
+            // as those will be handled by the timeline.
+            withContext(dispatchers.io) {
+                room.setUnreadFlag(isUnread = false)
+            }
         }
 
         LaunchedEffect(syncUpdateFlow.value) {
@@ -225,6 +236,7 @@ class MessagesPresenter @AssistedInject constructor(
             composerState = composerState,
             voiceMessageComposerState = voiceMessageComposerState,
             timelineState = timelineState,
+            typingNotificationState = typingNotificationState,
             actionListState = actionListState,
             customReactionState = customReactionState,
             reactionSummaryState = reactionSummaryState,

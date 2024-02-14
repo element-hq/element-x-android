@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="dialog_permission_camera">"Каб дазволіць праграме выкарыстоўваць камеру, дайце дазвол у наладах сістэмы."</string>
+  <string name="dialog_permission_generic">"Калі ласка, дайце дазвол у наладах сістэмы."</string>
+  <string name="dialog_permission_microphone">"Каб дазволіць праграме выкарыстоўваць мікрафон, дайце дазвол у наладах сістэмы."</string>
+  <string name="dialog_permission_notification">"Каб дазволіць праграме паказваць апавяшчэнні, дайце дазвол у наладах сістэмы."</string>
+</resources>

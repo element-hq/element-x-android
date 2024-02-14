@@ -31,6 +31,10 @@ class EventsRecorder<T>(
         }
     }
 
+    fun assertEmpty() {
+        assertThat(events).isEmpty()
+    }
+
     fun assertSingle(event: T) {
         assertList(listOf(event))
     }

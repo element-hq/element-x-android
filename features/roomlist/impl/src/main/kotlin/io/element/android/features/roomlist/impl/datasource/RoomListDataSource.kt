@@ -21,6 +21,7 @@ import io.element.android.libraries.androidutils.diff.DiffCacheUpdater
 import io.element.android.libraries.androidutils.diff.MutableListDiffCache
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsService
+import io.element.android.libraries.matrix.api.roomlist.RoomList
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.api.roomlist.RoomSummary
 import kotlinx.collections.immutable.ImmutableList
@@ -28,7 +29,9 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
@@ -52,7 +55,7 @@ class RoomListDataSource @Inject constructor(
     }
 
     private val _filter = MutableStateFlow("")
-    private val _allRooms = MutableStateFlow<ImmutableList<RoomListRoomSummary>>(persistentListOf())
+    private val _allRooms = MutableSharedFlow<ImmutableList<RoomListRoomSummary>>(replay = 1)
     private val _filteredRooms = MutableStateFlow<ImmutableList<RoomListRoomSummary>>(persistentListOf())
 
     private val lock = Mutex()
@@ -90,7 +93,7 @@ class RoomListDataSource @Inject constructor(
     }
 
     val filter: StateFlow<String> = _filter
-    val allRooms: StateFlow<ImmutableList<RoomListRoomSummary>> = _allRooms
+    val allRooms: SharedFlow<ImmutableList<RoomListRoomSummary>> = _allRooms
     val filteredRooms: StateFlow<ImmutableList<RoomListRoomSummary>> = _filteredRooms
 
     @OptIn(FlowPreview::class)
@@ -111,10 +114,9 @@ class RoomListDataSource @Inject constructor(
     }
 
     private suspend fun buildAndEmitAllRooms(roomSummaries: List<RoomSummary>) {
-        if (diffCache.isEmpty()) {
-            _allRooms.emit(
-                roomListRoomSummaryFactory.createFakeList()
-            )
+        if (diffCache.isEmpty() && roomListService.allRooms.loadingState.value is RoomList.LoadingState.NotLoaded) {
+            // If the room list is not loaded, we emit a fake placeholders list
+            _allRooms.emit(RoomListRoomSummaryFactory.createFakeList())
         } else {
             val roomListRoomSummaries = ArrayList<RoomListRoomSummary>()
             for (index in diffCache.indices()) {
@@ -133,7 +135,7 @@ class RoomListDataSource @Inject constructor(
 
     private fun buildAndCacheItem(roomSummaries: List<RoomSummary>, index: Int): RoomListRoomSummary? {
         val roomListRoomSummary = when (val roomSummary = roomSummaries.getOrNull(index)) {
-            is RoomSummary.Empty -> roomListRoomSummaryFactory.createPlaceholder(roomSummary.identifier)
+            is RoomSummary.Empty -> RoomListRoomSummaryFactory.createPlaceholder(roomSummary.identifier)
             is RoomSummary.Filled -> roomListRoomSummaryFactory.create(roomSummary)
             null -> null
         }

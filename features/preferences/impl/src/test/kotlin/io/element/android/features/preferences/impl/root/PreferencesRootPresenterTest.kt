@@ -70,7 +70,7 @@ class PreferencesRootPresenterTest {
             directLogoutPresenter = object : DirectLogoutPresenter {
                 @Composable
                 override fun present() = aDirectLogoutState
-            }
+            },
         )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()

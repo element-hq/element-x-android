@@ -23,15 +23,20 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import io.element.android.features.leaveroom.api.LeaveRoomEvent
 import io.element.android.features.leaveroom.api.LeaveRoomPresenter
 import io.element.android.features.networkmonitor.api.NetworkMonitor
 import io.element.android.features.networkmonitor.api.NetworkStatus
+import io.element.android.features.preferences.api.store.SessionPreferencesStore
 import io.element.android.features.roomlist.impl.datasource.InviteStateDataSource
 import io.element.android.features.roomlist.impl.datasource.RoomListDataSource
+import io.element.android.features.roomlist.impl.migration.MigrationScreenPresenter
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.designsystem.utils.snackbar.collectSnackbarMessageAsState
@@ -41,10 +46,12 @@ import io.element.android.libraries.indicator.api.IndicatorService
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import io.element.android.libraries.matrix.api.encryption.RecoveryState
+import io.element.android.libraries.matrix.api.timeline.ReceiptType
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.api.user.getCurrentUser
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -61,14 +68,19 @@ class RoomListPresenter @Inject constructor(
     private val encryptionService: EncryptionService,
     private val featureFlagService: FeatureFlagService,
     private val indicatorService: IndicatorService,
+    private val migrationScreenPresenter: MigrationScreenPresenter,
+    private val sessionPreferencesStore: SessionPreferencesStore,
 ) : Presenter<RoomListState> {
     @Composable
     override fun present(): RoomListState {
+        val coroutineScope = rememberCoroutineScope()
         val leaveRoomState = leaveRoomPresenter.present()
         val matrixUser: MutableState<MatrixUser?> = rememberSaveable {
             mutableStateOf(null)
         }
-        val roomList by roomListDataSource.allRooms.collectAsState()
+        val roomList by produceState(initialValue = AsyncData.Loading()) {
+            roomListDataSource.allRooms.collect { value = AsyncData.Success(it) }
+        }
         val filteredRoomList by roomListDataSource.filteredRooms.collectAsState()
         val filter by roomListDataSource.filter.collectAsState()
         val networkConnectionStatus by networkMonitor.connectivity.collectAsState()
@@ -77,6 +89,8 @@ class RoomListPresenter @Inject constructor(
             roomListDataSource.launchIn(this)
             initialLoad(matrixUser)
         }
+
+        val isMigrating = migrationScreenPresenter.present().isMigrating
 
         // Session verification status (unknown, not verified, verified)
         val canVerifySession by sessionVerificationService.canVerifySessionFlow.collectAsState(initial = false)
@@ -96,6 +110,9 @@ class RoomListPresenter @Inject constructor(
                     !recoveryKeyPromptDismissed
             }
         }
+
+        val markAsUnreadFeatureFlagEnabled by featureFlagService.isFeatureEnabledFlow(FeatureFlags.MarkAsUnread)
+            .collectAsState(initial = null)
 
         // Avatar indicator
         val showAvatarIndicator by indicatorService.showRoomListTopBarIndicator()
@@ -121,10 +138,28 @@ class RoomListPresenter @Inject constructor(
                         roomId = event.roomListRoomSummary.roomId,
                         roomName = event.roomListRoomSummary.name,
                         isDm = event.roomListRoomSummary.isDm,
+                        markAsUnreadFeatureFlagEnabled = markAsUnreadFeatureFlagEnabled == true,
+                        hasNewContent = event.roomListRoomSummary.hasNewContent
                     )
                 }
                 is RoomListEvents.HideContextMenu -> contextMenu = RoomListState.ContextMenu.Hidden
                 is RoomListEvents.LeaveRoom -> leaveRoomState.eventSink(LeaveRoomEvent.ShowConfirmation(event.roomId))
+                is RoomListEvents.MarkAsRead -> coroutineScope.launch {
+                    client.getRoom(event.roomId)?.use { room ->
+                        room.setUnreadFlag(isUnread = false)
+                        val receiptType = if (sessionPreferencesStore.isSendPublicReadReceiptsEnabled().first()) {
+                            ReceiptType.READ
+                        } else {
+                            ReceiptType.READ_PRIVATE
+                        }
+                        room.markAsRead(receiptType)
+                    }
+                }
+                is RoomListEvents.MarkAsUnread -> coroutineScope.launch {
+                    client.getRoom(event.roomId)?.use { room ->
+                        room.setUnreadFlag(isUnread = true)
+                    }
+                }
             }
         }
 
@@ -144,6 +179,7 @@ class RoomListPresenter @Inject constructor(
             displaySearchResults = displaySearchResults,
             contextMenu = contextMenu,
             leaveRoomState = leaveRoomState,
+            displayMigrationStatus = isMigrating,
             eventSink = ::handleEvents
         )
     }

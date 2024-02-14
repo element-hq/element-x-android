@@ -197,7 +197,7 @@ private fun OnGoingCallIcon(
 ) {
     Icon(
         modifier = Modifier.size(16.dp),
-        imageVector = CompoundIcons.VideoCallSolid,
+        imageVector = CompoundIcons.VideoCallSolid(),
         contentDescription = null,
         tint = color,
     )
@@ -208,7 +208,7 @@ private fun NotificationOffIndicatorAtom() {
     Icon(
         modifier = Modifier.size(16.dp),
         contentDescription = null,
-        imageVector = CompoundIcons.NotificationsSolidOff,
+        imageVector = CompoundIcons.NotificationsOffSolid(),
         tint = ElementTheme.colors.iconQuaternary,
     )
 }
@@ -218,7 +218,7 @@ private fun MentionIndicatorAtom() {
     Icon(
         modifier = Modifier.size(16.dp),
         contentDescription = null,
-        imageVector = CompoundIcons.Mention,
+        imageVector = CompoundIcons.Mention(),
         tint = ElementTheme.colors.unreadIndicator,
     )
 }

@@ -51,7 +51,6 @@ import io.element.android.libraries.designsystem.preview.debugPlaceholderBackgro
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.OutlinedTextField
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.designsystem.utils.LogCompositions
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
@@ -62,7 +61,6 @@ fun BugReportView(
     onBackPressed: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    LogCompositions(tag = "Rageshake", msg = "Root")
     val eventSink = state.eventSink
 
     Box(modifier = modifier) {
@@ -96,7 +94,7 @@ fun BugReportView(
                         imeAction = ImeAction.Next
                     ),
                     minLines = 3,
-                    // TODO Error text too short
+                    isError = state.isDescriptionInError,
                 )
             }
             Spacer(modifier = Modifier.height(16.dp))
@@ -166,6 +164,12 @@ fun BugReportView(
             onSuccess = {
                 eventSink(BugReportEvents.ResetAll)
                 onDone()
+            },
+            errorMessage = { error ->
+                when (error) {
+                    BugReportFormError.DescriptionTooShort -> stringResource(id = R.string.screen_bug_report_error_description_too_short)
+                    else -> error.message ?: error.toString()
+                }
             },
             onErrorDismiss = { eventSink(BugReportEvents.ClearError) },
         )

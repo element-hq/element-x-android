@@ -45,22 +45,37 @@ import kotlinx.collections.immutable.toPersistentList
 import java.util.UUID
 import kotlin.random.Random
 
-fun aTimelineState(timelineItems: ImmutableList<TimelineItem> = persistentListOf()) = TimelineState(
+fun aTimelineState(
+    timelineItems: ImmutableList<TimelineItem> = persistentListOf(),
+    paginationState: MatrixTimeline.PaginationState = aPaginationState(),
+    renderReadReceipts: Boolean = false,
+    timelineRoomInfo: TimelineRoomInfo = aTimelineRoomInfo(),
+    eventSink: (TimelineEvents) -> Unit = {},
+) = TimelineState(
     timelineItems = timelineItems,
-    timelineRoomInfo = aTimelineRoomInfo(),
-    paginationState = MatrixTimeline.PaginationState(
-        isBackPaginating = false,
-        hasMoreToLoadBackwards = true,
-        beginningOfRoomReached = false,
-    ),
+    timelineRoomInfo = timelineRoomInfo,
+    paginationState = paginationState,
+    renderReadReceipts = renderReadReceipts,
     highlightedEventId = null,
     newEventState = NewEventState.None,
     sessionState = aSessionState(
         isSessionVerified = true,
         isKeyBackupEnabled = true,
     ),
-    eventSink = {},
+    eventSink = eventSink,
 )
+
+fun aPaginationState(
+    isBackPaginating: Boolean = false,
+    hasMoreToLoadBackwards: Boolean = true,
+    beginningOfRoomReached: Boolean = false,
+): MatrixTimeline.PaginationState {
+    return MatrixTimeline.PaginationState(
+        isBackPaginating = isBackPaginating,
+        hasMoreToLoadBackwards = hasMoreToLoadBackwards,
+        beginningOfRoomReached = beginningOfRoomReached,
+    )
+}
 
 internal fun aTimelineItemList(content: TimelineItemEventContent): ImmutableList<TimelineItem> {
     return persistentListOf(
@@ -183,9 +198,11 @@ internal fun aTimelineItemDebugInfo(
     latestEditedJson
 )
 
-internal fun aTimelineItemReadReceipts(): TimelineItemReadReceipts {
+internal fun aTimelineItemReadReceipts(
+    receipts: List<ReadReceiptData> = emptyList(),
+): TimelineItemReadReceipts {
     return TimelineItemReadReceipts(
-        receipts = emptyList<ReadReceiptData>().toImmutableList(),
+        receipts = receipts.toImmutableList(),
     )
 }
 
@@ -219,8 +236,9 @@ internal fun aGroupedEvents(
 
 internal fun aTimelineRoomInfo(
     isDirect: Boolean = false,
+    userHasPermissionToSendMessage: Boolean = true,
 ) = TimelineRoomInfo(
     isDirect = isDirect,
-    userHasPermissionToSendMessage = true,
+    userHasPermissionToSendMessage = userHasPermissionToSendMessage,
     userHasPermissionToSendReaction = true,
 )

@@ -24,12 +24,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
+import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.logout.impl.tools.isBackingUp
 import io.element.android.features.logout.impl.ui.LogoutActionDialog
 import io.element.android.libraries.architecture.AsyncAction
@@ -41,7 +40,6 @@ import io.element.android.libraries.designsystem.theme.components.LinearProgress
 import io.element.android.libraries.designsystem.theme.components.OutlinedButton
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.progressIndicatorTrackColor
-import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.matrix.api.encryption.BackupState
 import io.element.android.libraries.matrix.api.encryption.BackupUploadState
 import io.element.android.libraries.matrix.api.encryption.RecoveryState
@@ -64,7 +62,7 @@ fun LogoutView(
         onBackClicked = onBackClicked,
         title = title(state),
         subTitle = subtitle(state),
-        iconVector = ImageVector.vectorResource(CommonDrawables.ic_key),
+        iconVector = CompoundIcons.KeySolid(),
         modifier = modifier,
         content = { Content(state) },
         buttons = {
@@ -86,7 +84,7 @@ fun LogoutView(
         onForceLogoutClicked = {
             eventSink(LogoutEvents.Logout(ignoreSdkError = true))
         },
-        onDismissError = {
+        onDismissDialog = {
             eventSink(LogoutEvents.CloseDialogs)
         },
         onSuccessLogout = {

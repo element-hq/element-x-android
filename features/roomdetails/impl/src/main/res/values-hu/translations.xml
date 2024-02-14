@@ -22,7 +22,6 @@
   <string name="screen_room_details_notification_mode_custom">"Egyéni"</string>
   <string name="screen_room_details_notification_mode_default">"Alapértelmezett"</string>
   <string name="screen_room_details_notification_title">"Értesítések"</string>
-  <string name="screen_room_details_room_name_label">"Szoba neve"</string>
   <string name="screen_room_details_share_room_title">"Szoba megosztása"</string>
   <string name="screen_room_details_updating_room">"Szoba frissítése…"</string>
   <string name="screen_room_member_list_pending_header_title">"Függőben"</string>
@@ -47,7 +46,9 @@
   <string name="screen_dm_details_unblock_alert_action">"Letiltás feloldása"</string>
   <string name="screen_dm_details_unblock_alert_description">"Újra láthatja az összes üzenetét."</string>
   <string name="screen_dm_details_unblock_user">"Felhasználó kitiltásának feloldása"</string>
+  <string name="screen_room_details_leave_conversation_title">"Beszélgetés elhagyása"</string>
   <string name="screen_room_details_leave_room_title">"Szoba elhagyása"</string>
+  <string name="screen_room_details_room_name_label">"Szoba neve"</string>
   <string name="screen_room_details_security_title">"Biztonság"</string>
   <string name="screen_room_details_topic_title">"Téma"</string>
   <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Csak említések és kulcsszavak"</string>

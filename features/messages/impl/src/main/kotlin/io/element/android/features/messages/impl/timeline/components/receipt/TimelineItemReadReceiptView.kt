@@ -41,6 +41,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import io.element.android.appconfig.TimelineConfig
 import io.element.android.compound.theme.ElementTheme
+import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.messages.impl.timeline.model.ReadReceiptData
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
@@ -49,8 +50,9 @@ import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
+import io.element.android.libraries.testtags.TestTags
+import io.element.android.libraries.testtags.testTag
 import io.element.android.libraries.ui.strings.CommonPlurals
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
@@ -58,20 +60,24 @@ import kotlinx.collections.immutable.ImmutableList
 @Composable
 fun TimelineItemReadReceiptView(
     state: ReadReceiptViewState,
+    renderReadReceipts: Boolean,
     onReadReceiptsClicked: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     if (state.receipts.isNotEmpty()) {
-        ReadReceiptsRow(modifier = modifier) {
-            ReadReceiptsAvatars(
-                receipts = state.receipts,
-                modifier = Modifier
-                    .clip(RoundedCornerShape(4.dp))
-                    .clickable {
-                        onReadReceiptsClicked()
-                    }
-                    .padding(2.dp)
-            )
+        if (renderReadReceipts) {
+            ReadReceiptsRow(modifier = modifier) {
+                ReadReceiptsAvatars(
+                    receipts = state.receipts,
+                    modifier = Modifier
+                        .testTag(TestTags.messageReadReceipts)
+                        .clip(RoundedCornerShape(4.dp))
+                        .clickable {
+                            onReadReceiptsClicked()
+                        }
+                        .padding(2.dp)
+                )
+            }
         }
     } else {
         when (state.sendState) {
@@ -79,7 +85,7 @@ fun TimelineItemReadReceiptView(
                 ReadReceiptsRow(modifier) {
                     Icon(
                         modifier = Modifier.padding(2.dp),
-                        resourceId = CommonDrawables.ic_sending,
+                        imageVector = CompoundIcons.Circle(),
                         contentDescription = stringResource(id = CommonStrings.common_sending),
                         tint = ElementTheme.colors.iconSecondary
                     )
@@ -95,7 +101,7 @@ fun TimelineItemReadReceiptView(
                     ReadReceiptsRow(modifier = modifier) {
                         Icon(
                             modifier = Modifier.padding(2.dp),
-                            resourceId = CommonDrawables.ic_sent,
+                            imageVector = CompoundIcons.CheckCircle(),
                             contentDescription = stringResource(id = CommonStrings.common_sent),
                             tint = ElementTheme.colors.iconSecondary
                         )
@@ -206,6 +212,7 @@ internal fun TimelineItemReactionsViewPreview(
 ) = ElementPreview {
     TimelineItemReadReceiptView(
         state = state,
+        renderReadReceipts = true,
         onReadReceiptsClicked = {},
     )
 }

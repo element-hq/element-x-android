@@ -92,9 +92,8 @@ fun DeveloperSettingsView(
 @Composable
 private fun ElementCallCategory(
     state: DeveloperSettingsState,
-    modifier: Modifier = Modifier,
 ) {
-    PreferenceCategory(modifier = modifier, title = "Element Call", showDivider = true) {
+    PreferenceCategory(title = "Element Call", showDivider = true) {
         val callUrlState = state.customElementCallBaseUrlState
         fun isUsingDefaultUrl(value: String?): Boolean {
             return value.isNullOrEmpty() || value == callUrlState.defaultUrl
@@ -120,14 +119,12 @@ private fun ElementCallCategory(
 @Composable
 private fun FeatureListContent(
     state: DeveloperSettingsState,
-    modifier: Modifier = Modifier
 ) {
     fun onFeatureEnabled(feature: FeatureUiModel, isEnabled: Boolean) {
         state.eventSink(DeveloperSettingsEvents.UpdateEnabledFeature(feature, isEnabled))
     }
 
     FeatureListView(
-        modifier = modifier,
         features = state.features,
         onCheckedChange = ::onFeatureEnabled,
     )

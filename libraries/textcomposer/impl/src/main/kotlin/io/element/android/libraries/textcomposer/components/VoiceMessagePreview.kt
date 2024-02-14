@@ -37,6 +37,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
+import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.designsystem.components.media.WaveformPlaybackView
 import io.element.android.libraries.designsystem.components.media.createFakeWaveform
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -44,7 +45,6 @@ import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.libraries.ui.utils.time.formatShort
 import kotlinx.collections.immutable.ImmutableList
@@ -124,11 +124,10 @@ private fun PlayerButton(
     type: PlayerButtonType,
     enabled: Boolean,
     onClick: () -> Unit,
-    modifier: Modifier = Modifier,
 ) {
     IconButton(
         onClick = onClick,
-        modifier = modifier
+        modifier = Modifier
             .background(color = ElementTheme.colors.bgCanvasDefault, shape = CircleShape)
             .size(30.dp),
         enabled = enabled,
@@ -146,16 +145,16 @@ private fun PlayerButton(
 
 @Composable
 private fun PauseIcon() = Icon(
-    resourceId = CommonDrawables.ic_pause,
+    imageVector = CompoundIcons.PauseSolid(),
     contentDescription = stringResource(id = CommonStrings.a11y_pause),
-    modifier = Modifier.size(20.dp),
+    modifier = Modifier.size(20.dp).padding(2.dp),
 )
 
 @Composable
 private fun PlayIcon() = Icon(
-    resourceId = CommonDrawables.ic_play,
+    imageVector = CompoundIcons.PlaySolid(),
     contentDescription = stringResource(id = CommonStrings.a11y_play),
-    modifier = Modifier.size(20.dp),
+    modifier = Modifier.size(20.dp).padding(2.dp),
 )
 
 @PreviewsDayNight

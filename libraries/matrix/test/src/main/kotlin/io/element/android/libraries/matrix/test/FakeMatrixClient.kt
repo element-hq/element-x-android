@@ -49,6 +49,7 @@ import kotlinx.coroutines.test.TestScope
 
 class FakeMatrixClient(
     override val sessionId: SessionId = A_SESSION_ID,
+    override val deviceId: String = "A_DEVICE_ID",
     override val sessionCoroutineScope: CoroutineScope = TestScope(),
     private val userDisplayName: Result<String> = Result.success(A_USER_NAME),
     private val userAvatarUrl: Result<String> = Result.success(AN_AVATAR_URL),

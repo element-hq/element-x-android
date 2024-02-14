@@ -64,7 +64,7 @@ internal fun CallScreenView(
                 title = { Text(stringResource(R.string.element_call)) },
                 navigationIcon = {
                     BackButton(
-                        imageVector = CompoundIcons.Close,
+                        imageVector = CompoundIcons.Close(),
                         onClick = { state.eventSink(CallScreenEvents.Hangup) }
                     )
                 }

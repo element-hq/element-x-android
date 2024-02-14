@@ -122,9 +122,12 @@ open class ActionListStateProvider : PreviewParameterProvider<ActionListState> {
         }
 }
 
-fun anActionListState() = ActionListState(
-    target = ActionListState.Target.None,
-    eventSink = {}
+fun anActionListState(
+    target: ActionListState.Target = ActionListState.Target.None,
+    eventSink: (ActionListEvents) -> Unit = {},
+) = ActionListState(
+    target = target,
+    eventSink = eventSink
 )
 
 fun aTimelineItemActionList(): ImmutableList<TimelineItemAction> {

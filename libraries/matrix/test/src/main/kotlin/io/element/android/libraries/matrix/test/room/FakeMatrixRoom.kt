@@ -41,6 +41,7 @@ import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.api.room.StateEventType
 import io.element.android.libraries.matrix.api.room.location.AssetType
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
+import io.element.android.libraries.matrix.api.timeline.ReceiptType
 import io.element.android.libraries.matrix.api.timeline.item.event.EventTimelineItem
 import io.element.android.libraries.matrix.api.widget.MatrixWidgetDriver
 import io.element.android.libraries.matrix.api.widget.MatrixWidgetSettings
@@ -168,6 +169,9 @@ class FakeMatrixRoom(
 
     private val _roomInfoFlow: MutableSharedFlow<MatrixRoomInfo> = MutableSharedFlow(replay = 1)
     override val roomInfoFlow: Flow<MatrixRoomInfo> = _roomInfoFlow
+
+    private val _roomTypingMembersFlow: MutableSharedFlow<List<UserId>> = MutableSharedFlow(replay = 1)
+    override val roomTypingMembersFlow: Flow<List<UserId>> = _roomTypingMembersFlow
 
     override val membersStateFlow: MutableStateFlow<MatrixRoomMembersState> = MutableStateFlow(MatrixRoomMembersState.Unknown)
 
@@ -374,6 +378,21 @@ class FakeMatrixRoom(
         return reportContentResult
     }
 
+    val markAsReadCalls = mutableListOf<ReceiptType>()
+
+    override suspend fun markAsRead(receiptType: ReceiptType): Result<Unit> {
+        markAsReadCalls.add(receiptType)
+        return Result.success(Unit)
+    }
+
+    var setUnreadFlagCalls = mutableListOf<Boolean>()
+        private set
+
+    override suspend fun setUnreadFlag(isUnread: Boolean): Result<Unit> {
+        setUnreadFlagCalls.add(isUnread)
+        return Result.success(Unit)
+    }
+
     override suspend fun sendLocation(
         body: String,
         geoUri: String,
@@ -442,10 +461,6 @@ class FakeMatrixRoom(
     ): Result<String> = generateWidgetWebViewUrlResult
 
     override fun getWidgetDriver(widgetSettings: MatrixWidgetSettings): Result<MatrixWidgetDriver> = getWidgetDriverResult
-
-    override fun pollHistory(): MatrixTimeline {
-        return FakeMatrixTimeline()
-    }
 
     fun givenLeaveRoomError(throwable: Throwable?) {
         this.leaveRoomError = throwable
@@ -577,6 +592,10 @@ class FakeMatrixRoom(
 
     fun givenRoomInfo(roomInfo: MatrixRoomInfo) {
         _roomInfoFlow.tryEmit(roomInfo)
+    }
+
+    fun givenRoomTypingMembers(typingMembers: List<UserId>) {
+        _roomTypingMembersFlow.tryEmit(typingMembers)
     }
 }
 

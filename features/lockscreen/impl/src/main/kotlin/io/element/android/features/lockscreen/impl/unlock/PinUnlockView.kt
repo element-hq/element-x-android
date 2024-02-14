@@ -107,10 +107,9 @@ fun PinUnlockView(
 private fun PinUnlockPage(
     state: PinUnlockState,
     isInAppUnlock: Boolean,
-    modifier: Modifier = Modifier
 ) {
     BoxWithConstraints {
-        val commonModifier = modifier
+        val commonModifier = Modifier
             .fillMaxSize()
             .systemBarsPadding()
             .imePadding()
@@ -188,7 +187,6 @@ private fun SignOutPrompt(
     isCancellable: Boolean,
     onSignOut: () -> Unit,
     onDismiss: () -> Unit,
-    modifier: Modifier = Modifier
 ) {
     if (isCancellable) {
         ConfirmationDialog(
@@ -196,14 +194,12 @@ private fun SignOutPrompt(
             content = stringResource(id = R.string.screen_app_lock_signout_alert_message),
             onSubmitClicked = onSignOut,
             onDismiss = onDismiss,
-            modifier = modifier,
         )
     } else {
         ErrorDialog(
             title = stringResource(id = R.string.screen_app_lock_signout_alert_title),
             content = stringResource(id = R.string.screen_app_lock_signout_alert_message),
             onDismiss = onSignOut,
-            modifier = modifier,
         )
     }
 }
@@ -258,9 +254,11 @@ private fun PinUnlockExpandedView(
 @Composable
 private fun PinDotsRow(
     pinEntry: PinEntry,
-    modifier: Modifier = Modifier,
 ) {
-    Row(modifier, horizontalArrangement = spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
+    Row(
+        horizontalArrangement = spacedBy(8.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
         for (digit in pinEntry.digits) {
             PinDot(isFilled = digit is PinDigit.Filled)
         }
@@ -270,7 +268,6 @@ private fun PinDotsRow(
 @Composable
 private fun PinDot(
     isFilled: Boolean,
-    modifier: Modifier = Modifier,
 ) {
     val backgroundColor = if (isFilled) {
         ElementTheme.colors.iconPrimary
@@ -278,7 +275,7 @@ private fun PinDot(
         ElementTheme.colors.bgSubtlePrimary
     }
     Box(
-        modifier = modifier
+        modifier = Modifier
             .size(14.dp)
             .background(backgroundColor, CircleShape)
     )
@@ -290,7 +287,10 @@ private fun PinUnlockHeader(
     isInAppUnlock: Boolean,
     modifier: Modifier = Modifier,
 ) {
-    Column(modifier, horizontalAlignment = Alignment.CenterHorizontally) {
+    Column(
+        modifier = modifier,
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
         if (isInAppUnlock) {
             RoundedIconAtom(imageVector = Icons.Filled.Lock)
         } else {

@@ -125,7 +125,7 @@ fun ShowLocationView(
                 actions = {
                     IconButton(onClick = { state.eventSink(ShowLocationEvents.Share) }) {
                         Icon(
-                            imageVector = CompoundIcons.ShareAndroid,
+                            imageVector = CompoundIcons.ShareAndroid(),
                             contentDescription = stringResource(CommonStrings.action_share),
                         )
                     }

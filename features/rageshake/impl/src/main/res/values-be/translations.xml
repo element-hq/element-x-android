@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_bug_report_attach_screenshot">"Далучыць здымак экрана"</string>
+  <string name="screen_bug_report_contact_me">"Вы можаце звязацца са мной, калі ў Вас узнікнуць якія-небудзь дадатковыя пытанні."</string>
+  <string name="screen_bug_report_contact_me_title">"Звяжыцеся са мной"</string>
+  <string name="screen_bug_report_edit_screenshot">"Рэдагаваць здымак экрана"</string>
+  <string name="screen_bug_report_editor_description">"Калі ласка, апішыце памылку. Што вы зрабілі? Якія паводзіны вы чакалі? Што адбылося насамрэч. Калі ласка, апішыце ўсё як магчыма падрабязней."</string>
+  <string name="screen_bug_report_editor_placeholder">"Апішыце праблему…"</string>
+  <string name="screen_bug_report_editor_supporting">"Калі магчыма, калі ласка, напішыце апісанне на англійскай мове."</string>
+  <string name="screen_bug_report_include_crash_logs">"Адправіць часопісы збояў"</string>
+  <string name="screen_bug_report_include_logs">"Дазволіць часопісы"</string>
+  <string name="screen_bug_report_include_screenshot">"Адправіць здымак экрана"</string>
+  <string name="screen_bug_report_logs_description">"Каб пераканацца, што ўсё працуе правільна, у паведамленне будуць уключаны часопісы. Каб адправіць паведамленне без часопісаў, адключыце гэтую наладу."</string>
+  <string name="screen_bug_report_rash_logs_alert_title">"Пры апошнім выкарыстанні %1$s адбыўся збой. Жадаеце падзяліцца справаздачай аб збоі?"</string>
+</resources>

@@ -42,7 +42,7 @@ class DefaultVersionFormatter @Inject constructor(
             base
         } else {
             // In case of a build not from main, we display the branch name and the revision
-            "$base\n${buildMeta.gitBranchName}\n${buildMeta.gitRevision}"
+            "$base\n${buildMeta.gitBranchName} (${buildMeta.gitRevision})"
         }
     }
 }

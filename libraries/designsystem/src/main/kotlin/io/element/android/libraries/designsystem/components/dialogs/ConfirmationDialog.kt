@@ -22,8 +22,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.DialogPreview
 import io.element.android.libraries.designsystem.theme.components.SimpleAlertDialogContent
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -65,7 +67,6 @@ private fun ConfirmationDialogContent(
     cancelText: String,
     onSubmitClicked: () -> Unit,
     onCancelClicked: () -> Unit,
-    modifier: Modifier = Modifier,
     title: String? = null,
     thirdButtonText: String? = null,
     onThirdButtonClicked: () -> Unit = {},
@@ -73,7 +74,6 @@ private fun ConfirmationDialogContent(
     icon: @Composable (() -> Unit)? = null,
 ) {
     SimpleAlertDialogContent(
-        modifier = modifier,
         title = title,
         content = content,
         submitText = submitText,
@@ -89,7 +89,7 @@ private fun ConfirmationDialogContent(
 
 @Preview(group = PreviewGroup.Dialogs)
 @Composable
-internal fun ConfirmationDialogPreview() =
+internal fun ConfirmationDialogContentPreview() =
     ElementThemedPreview(showBackground = false) {
         DialogPreview {
             ConfirmationDialogContent(
@@ -104,3 +104,17 @@ internal fun ConfirmationDialogPreview() =
             )
         }
     }
+
+@PreviewsDayNight
+@Composable
+internal fun ConfirmationDialogPreview() = ElementPreview {
+    ConfirmationDialog(
+        content = "Content",
+        title = "Title",
+        submitText = "OK",
+        cancelText = "Cancel",
+        thirdButtonText = "Disable",
+        onSubmitClicked = {},
+        onDismiss = {}
+    )
+}

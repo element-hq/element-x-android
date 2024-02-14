@@ -178,10 +178,8 @@ private fun RoomSpecificNotificationSettingsView(
 @Composable
 private fun RoomNotificationSettingsTopBar(
     onBackPressed: () -> Unit,
-    modifier: Modifier = Modifier,
 ) {
     TopAppBar(
-        modifier = modifier,
         title = {
             Text(
                 text = stringResource(R.string.screen_room_details_notification_title),

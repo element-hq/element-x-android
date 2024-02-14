@@ -46,7 +46,7 @@
   <string name="action_edit_poll">"Szavazás szerkesztése"</string>
   <string name="action_enable">"Engedélyezés"</string>
   <string name="action_end_poll">"Szavazás lezárása"</string>
-  <string name="action_enter_pin">"Adja meg a PIN-kódot"</string>
+  <string name="action_enter_pin">"Add meg a PIN-kódot"</string>
   <string name="action_forgot_password">"Elfelejtetted a jelszavadat?"</string>
   <string name="action_forward">"Tovább"</string>
   <string name="action_invite">"Meghívás"</string>
@@ -57,6 +57,7 @@
   <string name="action_join">"Csatlakozás"</string>
   <string name="action_learn_more">"További tudnivalók"</string>
   <string name="action_leave">"Elhagyás"</string>
+  <string name="action_leave_conversation">"Beszélgetés elhagyása"</string>
   <string name="action_leave_room">"Szoba elhagyása"</string>
   <string name="action_manage_account">"Fiók kezelése"</string>
   <string name="action_manage_devices">"Eszközök kezelése"</string>
@@ -91,7 +92,7 @@
   <string name="action_start_verification">"Ellenőrzés elindítása"</string>
   <string name="action_static_map_load">"Koppints a térkép betöltéséhez"</string>
   <string name="action_take_photo">"Fénykép készítése"</string>
-  <string name="action_tap_for_options">"Koppintson a lehetőségekért"</string>
+  <string name="action_tap_for_options">"Koppints a beállításokért"</string>
   <string name="action_try_again">"Próbáld újra"</string>
   <string name="action_view_source">"Forrás megtekintése"</string>
   <string name="action_yes">"Igen"</string>
@@ -118,6 +119,7 @@
   <string name="common_enter_your_pin">"Add meg a PIN-kódodat"</string>
   <string name="common_error">"Hiba"</string>
   <string name="common_everyone">"Mindenki"</string>
+  <string name="common_favourite">"Kedvenc"</string>
   <string name="common_file">"Fájl"</string>
   <string name="common_file_saved_on_disk_android">"A fájl a Letöltések mappába mentve"</string>
   <string name="common_forward_message">"Üzenet továbbítása"</string>
@@ -200,13 +202,13 @@
   <string name="dialog_title_confirmation">"Megerősítés"</string>
   <string name="dialog_title_warning">"Figyelmeztetés"</string>
   <string name="error_failed_creating_the_permalink">"Nem sikerült létrehozni az állandó hivatkozást"</string>
-  <string name="error_failed_loading_map">"Az %1$s nem tudta betölteni a térképet. Próbálja meg újra később."</string>
+  <string name="error_failed_loading_map">"A(z) %1$s nem tudta betölteni a térképet. Próbáld meg újra később."</string>
   <string name="error_failed_loading_messages">"Nem sikerült betölteni az üzeneteket"</string>
   <string name="error_failed_locating_user">"A(z) %1$s nem tudta elérni a tartózkodási helyét. Próbáld meg újra később."</string>
   <string name="error_failed_uploading_voice_message">"Nem sikerült feltölteni a hangüzenetét."</string>
   <string name="error_missing_location_auth_android">"Az %1$snek nincs engedélye, hogy hozzáférjen a tartózkodási helyedhez. Ezt a beállításokban engedélyezheted."</string>
   <string name="error_missing_location_rationale_android">"Az %1$snek nincs engedélye, hogy hozzáférjen a tartózkodási helyéhez. Engedélyezze alább az elérését."</string>
-  <string name="error_missing_microphone_voice_rationale_android">"Az %1$snek nincs engedélye, hogy hozzáférjen a mikrofonjához. Engedélyezze, hogy tudjon hangüzenetet felvenni."</string>
+  <string name="error_missing_microphone_voice_rationale_android">"Az %1$snek nincs engedélye, hogy hozzáférjen a mikrofonhoz. Engedélyezd, hogy tudjon hangüzenetet felvenni."</string>
   <string name="error_some_messages_have_not_been_sent">"Néhány üzenet nem került elküldésre"</string>
   <string name="error_unknown">"Elnézést, hiba történt"</string>
   <string name="invite_friends_rich_title">"🔐️ Csatlakozz hozzám itt: %1$s"</string>

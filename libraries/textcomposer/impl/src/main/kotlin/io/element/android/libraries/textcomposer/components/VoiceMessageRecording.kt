@@ -88,9 +88,7 @@ internal fun VoiceMessageRecording(
 }
 
 @Composable
-private fun RedRecordingDot(
-    modifier: Modifier = Modifier,
-) {
+private fun RedRecordingDot() {
     val infiniteTransition = rememberInfiniteTransition("RedRecordingDot")
     val alpha by infiniteTransition.animateFloat(
         initialValue = 1f,
@@ -102,7 +100,7 @@ private fun RedRecordingDot(
         label = "RedRecordingDotAlpha",
     )
     Box(
-        modifier = modifier
+        modifier = Modifier
             .size(8.dp)
             .alpha(alpha)
             .background(color = ElementTheme.colors.textCriticalPrimary, shape = CircleShape)

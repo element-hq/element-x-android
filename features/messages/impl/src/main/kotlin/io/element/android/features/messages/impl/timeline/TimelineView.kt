@@ -47,7 +47,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -62,6 +61,9 @@ import io.element.android.features.messages.impl.timeline.model.NewEventState
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContentProvider
+import io.element.android.features.messages.impl.typing.TypingNotificationState
+import io.element.android.features.messages.impl.typing.TypingNotificationView
+import io.element.android.features.messages.impl.typing.aTypingNotificationState
 import io.element.android.libraries.designsystem.animation.alphaAnimation
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -75,6 +77,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun TimelineView(
     state: TimelineState,
+    typingNotificationState: TypingNotificationState,
     roomName: String?,
     onUserDataClicked: (UserId) -> Unit,
     onMessageClicked: (TimelineItem.Event) -> Unit,
@@ -86,6 +89,7 @@ fun TimelineView(
     onMoreReactionsClicked: (TimelineItem.Event) -> Unit,
     onReadReceiptClick: (TimelineItem.Event) -> Unit,
     modifier: Modifier = Modifier,
+    forceJumpToBottomVisibility: Boolean = false
 ) {
     fun onReachedLoadMore() {
         state.eventSink(TimelineEvents.LoadMore)
@@ -112,6 +116,9 @@ fun TimelineView(
             reverseLayout = true,
             contentPadding = PaddingValues(vertical = 8.dp),
         ) {
+            item {
+                TypingNotificationView(state = typingNotificationState)
+            }
             items(
                 items = state.timelineItems,
                 contentType = { timelineItem -> timelineItem.contentType() },
@@ -120,6 +127,7 @@ fun TimelineView(
                 TimelineItemRow(
                     timelineItem = timelineItem,
                     timelineRoomInfo = state.timelineRoomInfo,
+                    renderReadReceipts = state.renderReadReceipts,
                     isLastOutgoingMessage = (timelineItem as? TimelineItem.Event)?.isMine == true &&
                         state.timelineItems.first().identifier() == timelineItem.identifier(),
                     highlightedItem = state.highlightedEventId?.value,
@@ -156,6 +164,7 @@ fun TimelineView(
         TimelineScrollHelper(
             isTimelineEmpty = state.timelineItems.isEmpty(),
             lazyListState = lazyListState,
+            forceJumpToBottomVisibility = forceJumpToBottomVisibility,
             newEventState = state.newEventState,
             onScrollFinishedAt = ::onScrollFinishedAt
         )
@@ -167,6 +176,7 @@ private fun BoxScope.TimelineScrollHelper(
     isTimelineEmpty: Boolean,
     lazyListState: LazyListState,
     newEventState: NewEventState,
+    forceJumpToBottomVisibility: Boolean,
     onScrollFinishedAt: (Int) -> Unit,
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -204,7 +214,7 @@ private fun BoxScope.TimelineScrollHelper(
 
     JumpToBottomButton(
         // Use inverse of canAutoScroll otherwise we might briefly see the before the scroll animation is triggered
-        isVisible = !canAutoScroll,
+        isVisible = !canAutoScroll || forceJumpToBottomVisibility,
         modifier = Modifier
             .align(Alignment.BottomEnd)
             .padding(end = 24.dp, bottom = 12.dp),
@@ -220,7 +230,7 @@ private fun JumpToBottomButton(
 ) {
     AnimatedVisibility(
         modifier = modifier,
-        visible = isVisible || LocalInspectionMode.current,
+        visible = isVisible,
         enter = scaleIn(animationSpec = tween(100)),
         exit = scaleOut(animationSpec = tween(100)),
     ) {
@@ -236,7 +246,7 @@ private fun JumpToBottomButton(
                 modifier = Modifier
                     .size(24.dp)
                     .rotate(90f),
-                imageVector = CompoundIcons.ArrowRight,
+                imageVector = CompoundIcons.ArrowRight(),
                 contentDescription = stringResource(id = CommonStrings.a11y_jump_to_bottom)
             )
         }
@@ -255,6 +265,7 @@ internal fun TimelineViewPreview(
         TimelineView(
             state = aTimelineState(timelineItems),
             roomName = null,
+            typingNotificationState = aTypingNotificationState(),
             onMessageClicked = {},
             onTimestampClicked = {},
             onUserDataClicked = {},
@@ -264,6 +275,7 @@ internal fun TimelineViewPreview(
             onMoreReactionsClicked = {},
             onSwipeToReply = {},
             onReadReceiptClick = {},
+            forceJumpToBottomVisibility = true,
         )
     }
 }

@@ -43,7 +43,7 @@ import io.element.android.libraries.architecture.Presenter
 fun TimelineItemEventContentView(
     content: TimelineItemEventContent,
     onLinkClicked: (url: String) -> Unit,
-    eventSink: (TimelineEvents) -> Unit,
+    eventSink: (TimelineEvents.EventFromTimelineItem) -> Unit,
     modifier: Modifier = Modifier,
     onContentLayoutChanged: (ContentAvoidingLayoutData) -> Unit = {},
 ) {

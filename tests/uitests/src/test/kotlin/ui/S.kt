@@ -65,7 +65,7 @@ class S {
             val colors = metadata.colorList.map(::ColorTestPreview)
             val typography = metadata.typographyList.map(::TypographyTestPreview)
 
-            return components + colors + typography
+            return (components + colors + typography).filter { !it.toString().contains("compound") }
         }
     }
 
@@ -94,6 +94,8 @@ class S {
     ) {
         val locale = localeStr.toLocale()
         Locale.setDefault(locale) // Needed for regional settings, as first day of week
+        val densityScale = baseDeviceConfig.deviceConfig.density.dpiValue / 160f
+        val customScreenHeight = componentTestPreview.customHeightDp()?.value?.let { it * densityScale }?.toInt()
         paparazzi.unsafeUpdateConfig(
             deviceConfig = baseDeviceConfig.deviceConfig.copy(
                 softButtons = false,
@@ -104,6 +106,7 @@ class S {
                         false -> NightMode.NOTNIGHT
                     }
                 },
+                screenHeight = customScreenHeight ?: baseDeviceConfig.deviceConfig.screenHeight,
             ),
         )
         paparazzi.snapshot {

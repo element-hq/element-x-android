@@ -26,6 +26,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
@@ -106,7 +107,6 @@ fun ReactionSummaryView(
 @Composable
 private fun SheetContent(
     summary: ReactionSummaryState.Summary,
-    modifier: Modifier = Modifier,
 ) {
     val animationScope = rememberCoroutineScope()
     var selectedReactionKey: String by rememberSaveable { mutableStateOf(summary.selectedKey) }
@@ -127,9 +127,8 @@ private fun SheetContent(
     }
 
     Column(
-        modifier = modifier
-            .fillMaxWidth()
-            .fillMaxHeight()
+        modifier = Modifier
+            .fillMaxSize()
     ) {
         LazyRow(
             state = reactionListState,
@@ -172,7 +171,6 @@ private fun AggregatedReactionButton(
     reaction: AggregatedReaction,
     isHighlighted: Boolean,
     onClick: () -> Unit,
-    modifier: Modifier = Modifier,
 ) {
     val buttonColor = if (isHighlighted) {
         ElementTheme.colors.bgActionPrimaryRest
@@ -188,7 +186,7 @@ private fun AggregatedReactionButton(
 
     val roundedCornerShape = RoundedCornerShape(corner = CornerSize(percent = 50))
     Surface(
-        modifier = modifier
+        modifier = Modifier
             .background(buttonColor, roundedCornerShape)
             .clip(roundedCornerShape)
             .clickable(onClick = onClick)
@@ -238,10 +236,9 @@ private fun SenderRow(
     name: String,
     userId: String,
     sentTime: String,
-    modifier: Modifier = Modifier,
 ) {
     Row(
-        modifier = modifier
+        modifier = Modifier
             .fillMaxWidth()
             .heightIn(min = 56.dp)
             .padding(start = 16.dp, top = 4.dp, end = 16.dp, bottom = 4.dp),

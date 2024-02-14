@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_migration_message">"Acesta este un proces care se desfășoară o singură dată, vă mulțumim pentru așteptare."</string>
-  <string name="screen_migration_title">"Contul dumneavoastră se configurează"</string>
   <string name="screen_welcome_bullet_1">"Apelurile, sondajele, căutare și multe altele vor fi adăugate în cursul acestui an."</string>
   <string name="screen_welcome_bullet_2">"Istoricul mesajelor pentru camerele criptate nu va fi disponibil în această actualizare."</string>
   <string name="screen_welcome_bullet_3">"Ne-ar plăcea să auzim de la dumneavoastră, spuneți-ne ce părere aveți prin intermediul paginii de setări."</string>

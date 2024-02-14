@@ -24,6 +24,8 @@ import io.element.android.features.rageshake.api.crash.CrashDetectionEvents
 import io.element.android.features.rageshake.impl.crash.DefaultCrashDetectionPresenter
 import io.element.android.features.rageshake.test.crash.A_CRASH_DATA
 import io.element.android.features.rageshake.test.crash.FakeCrashDataStore
+import io.element.android.libraries.core.meta.BuildMeta
+import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.tests.testutils.WarmUpRule
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
@@ -35,9 +37,7 @@ class CrashDetectionPresenterTest {
 
     @Test
     fun `present - initial state no crash`() = runTest {
-        val presenter = DefaultCrashDetectionPresenter(
-            FakeCrashDataStore()
-        )
+        val presenter = createPresenter()
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -48,7 +48,7 @@ class CrashDetectionPresenterTest {
 
     @Test
     fun `present - initial state crash`() = runTest {
-        val presenter = DefaultCrashDetectionPresenter(
+        val presenter = createPresenter(
             FakeCrashDataStore(appHasCrashed = true)
         )
         moleculeFlow(RecompositionMode.Immediate) {
@@ -62,7 +62,7 @@ class CrashDetectionPresenterTest {
 
     @Test
     fun `present - reset app has crashed`() = runTest {
-        val presenter = DefaultCrashDetectionPresenter(
+        val presenter = createPresenter(
             FakeCrashDataStore(appHasCrashed = true)
         )
         moleculeFlow(RecompositionMode.Immediate) {
@@ -78,7 +78,7 @@ class CrashDetectionPresenterTest {
 
     @Test
     fun `present - reset all crash data`() = runTest {
-        val presenter = DefaultCrashDetectionPresenter(
+        val presenter = createPresenter(
             FakeCrashDataStore(appHasCrashed = true, crashData = A_CRASH_DATA)
         )
         moleculeFlow(RecompositionMode.Immediate) {
@@ -91,4 +91,12 @@ class CrashDetectionPresenterTest {
             assertThat(awaitItem().crashDetected).isFalse()
         }
     }
+
+    private fun createPresenter(
+        crashDataStore: FakeCrashDataStore = FakeCrashDataStore(),
+        buildMeta: BuildMeta = aBuildMeta(),
+    ) = DefaultCrashDetectionPresenter(
+        buildMeta = buildMeta,
+        crashDataStore = crashDataStore,
+    )
 }

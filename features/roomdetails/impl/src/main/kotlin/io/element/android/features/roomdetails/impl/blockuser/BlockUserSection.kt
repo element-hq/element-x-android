@@ -39,8 +39,8 @@ import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
-internal fun BlockUserSection(state: RoomMemberDetailsState, modifier: Modifier = Modifier) {
-    PreferenceCategory(showDivider = false, modifier = modifier) {
+internal fun BlockUserSection(state: RoomMemberDetailsState) {
+    PreferenceCategory(showDivider = false) {
         when (state.isBlocked) {
             is AsyncData.Failure -> PreferenceBlockUser(isBlocked = state.isBlocked.prevData, isLoading = false, eventSink = state.eventSink)
             is AsyncData.Loading -> PreferenceBlockUser(isBlocked = state.isBlocked.prevData, isLoading = true, eventSink = state.eventSink)
@@ -70,7 +70,6 @@ private fun PreferenceBlockUser(
     isBlocked: Boolean?,
     isLoading: Boolean,
     eventSink: (RoomMemberDetailsEvents) -> Unit,
-    modifier: Modifier = Modifier,
 ) {
     val loadingCurrentValue = @Composable {
         CircularProgressIndicator(
@@ -83,20 +82,18 @@ private fun PreferenceBlockUser(
     if (isBlocked.orFalse()) {
         ListItem(
             headlineContent = { Text(stringResource(R.string.screen_dm_details_unblock_user)) },
-            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Block)),
+            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Block())),
             onClick = { if (!isLoading) eventSink(RoomMemberDetailsEvents.UnblockUser(needsConfirmation = true)) },
             trailingContent = if (isLoading) ListItemContent.Custom(loadingCurrentValue) else null,
             style = ListItemStyle.Primary,
-            modifier = modifier,
         )
     } else {
         ListItem(
             headlineContent = { Text(stringResource(R.string.screen_dm_details_block_user)) },
-            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Block)),
+            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Block())),
             style = ListItemStyle.Destructive,
             onClick = { if (!isLoading) eventSink(RoomMemberDetailsEvents.BlockUser(needsConfirmation = true)) },
             trailingContent = if (isLoading) ListItemContent.Custom(loadingCurrentValue) else null,
-            modifier = modifier,
         )
     }
 }

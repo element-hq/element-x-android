@@ -18,6 +18,7 @@ package ui
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import com.airbnb.android.showkase.models.ShowkaseElementsMetadata
 import io.element.android.libraries.designsystem.preview.NIGHT_MODE_NAME
 
@@ -26,6 +27,8 @@ interface TestPreview {
     fun Content()
 
     val name: String
+
+    fun customHeightDp(): Dp? = null
 }
 
 /**

@@ -26,9 +26,9 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import io.element.android.features.messages.impl.R
+import io.element.android.libraries.designsystem.icons.CompoundDrawables
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.designsystem.utils.CommonDrawables
 
 /**
  * A flow layout for reactions that will show a collapse/expand button when the layout wraps over a defined number of rows.
@@ -195,7 +195,7 @@ internal fun TimelineItemReactionsLayoutPreview() = ElementPreview {
         },
         addMoreButton = {
             MessagesReactionButton(
-                content = MessagesReactionsButtonContent.Icon(CommonDrawables.ic_add_reaction),
+                content = MessagesReactionsButtonContent.Icon(CompoundDrawables.ic_compound_reaction_add),
                 onClick = {},
                 onLongClick = {}
             )
