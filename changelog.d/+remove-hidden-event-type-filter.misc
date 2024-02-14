@@ -1,2 +1,0 @@
-Remove `FilterHiddenStateEventsProcessor`, as this is already handled by the Rust SDK.
-
