@@ -442,19 +442,15 @@ class RustMatrixRoom(
         }
     }
 
-    override suspend fun markAsRead(receiptType: ReceiptType?): Result<Unit> = withContext(roomDispatcher) {
+    override suspend fun markAsRead(receiptType: ReceiptType): Result<Unit> = withContext(roomDispatcher) {
         runCatching {
-            if (receiptType != null) {
-                innerRoom.markAsReadAndSendReadReceipt(receiptType.toRustReceiptType())
-            } else {
-                innerRoom.markAsRead()
-            }
+            innerRoom.markAsRead(receiptType.toRustReceiptType())
         }
     }
 
-    override suspend fun markAsUnread(): Result<Unit> = withContext(roomDispatcher) {
+    override suspend fun setUnreadFlag(isUnread: Boolean): Result<Unit> = withContext(roomDispatcher) {
         runCatching {
-            innerRoom.markAsUnread()
+            innerRoom.setUnreadFlag(isUnread)
         }
     }
 

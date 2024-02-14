@@ -134,7 +134,7 @@ class MessagesPresenterTest {
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun `present - check that the room is marked as read`() = runTest {
+    fun `present - check that the room's unread flag is removed`() = runTest {
         val room = FakeMatrixRoom()
         assertThat(room.markAsReadCalls).isEmpty()
         val presenter = createMessagesPresenter(matrixRoom = room)
@@ -142,7 +142,7 @@ class MessagesPresenterTest {
             presenter.present()
         }.test {
             runCurrent()
-            assertThat(room.markAsReadCalls).isEqualTo(listOf(null))
+            assertThat(room.setUnreadFlagCalls).isEqualTo(listOf(false))
             cancelAndIgnoreRemainingEvents()
         }
     }

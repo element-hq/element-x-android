@@ -153,15 +153,17 @@ interface MatrixRoom : Closeable {
     suspend fun reportContent(eventId: EventId, reason: String, blockUserId: UserId?): Result<Unit>
 
     /**
-     * Reverts a previously set unread flag, and eventually send a Read Receipt.
-     * @param receiptType The type of receipt to send. If null, no Read Receipt will be sent.
+     * Mark the room as read by trying to attach an unthreaded read receipt to the latest room event.
+     * @param receiptType The type of receipt to send.
      */
-    suspend fun markAsRead(receiptType: ReceiptType?): Result<Unit>
+    suspend fun markAsRead(receiptType: ReceiptType): Result<Unit>
 
     /**
-     * Sets a flag on the room to indicate that the user has explicitly marked it as unread.
+     * Sets a flag on the room to indicate that the user has explicitly marked it as unread, or reverts the flag.
+     * @param isUnread true to mark the room as unread, false to remove the flag.
+     *
      */
-    suspend fun markAsUnread(): Result<Unit>
+    suspend fun setUnreadFlag(isUnread: Boolean): Result<Unit>
 
     /**
      * Share a location message in the room.

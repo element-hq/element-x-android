@@ -145,15 +145,20 @@ class RoomListPresenter @Inject constructor(
                 is RoomListEvents.HideContextMenu -> contextMenu = RoomListState.ContextMenu.Hidden
                 is RoomListEvents.LeaveRoom -> leaveRoomState.eventSink(LeaveRoomEvent.ShowConfirmation(event.roomId))
                 is RoomListEvents.MarkAsRead -> coroutineScope.launch {
-                    val receiptType = if (sessionPreferencesStore.isSendPublicReadReceiptsEnabled().first()) {
-                        ReceiptType.READ
-                    } else {
-                        ReceiptType.READ_PRIVATE
+                    client.getRoom(event.roomId)?.use { room ->
+                        room.setUnreadFlag(isUnread = false)
+                        val receiptType = if (sessionPreferencesStore.isSendPublicReadReceiptsEnabled().first()) {
+                            ReceiptType.READ
+                        } else {
+                            ReceiptType.READ_PRIVATE
+                        }
+                        room.markAsRead(receiptType)
                     }
-                    client.getRoom(event.roomId)?.markAsRead(receiptType)
                 }
                 is RoomListEvents.MarkAsUnread -> coroutineScope.launch {
-                    client.getRoom(event.roomId)?.markAsUnread()
+                    client.getRoom(event.roomId)?.use { room ->
+                        room.setUnreadFlag(isUnread = true)
+                    }
                 }
             }
         }
