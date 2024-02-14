@@ -1,0 +1,10 @@
+Main changes in this version:
+- Added share presence toggle.
+- Render typing notifications.
+- Manually mark a room as unread.
+- Add an empty state to the room list.
+- Allow joining unencrypted video calls in non encrypted rooms.
+
+And several other bugfixes.
+
+Full changelog: https://github.com/element-hq/element-x-android/releases
