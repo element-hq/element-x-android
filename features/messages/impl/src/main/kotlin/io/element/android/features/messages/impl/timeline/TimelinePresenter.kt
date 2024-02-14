@@ -232,12 +232,17 @@ class TimelinePresenter @AssistedInject constructor(
         lastReadReceiptId: MutableState<EventId?>,
         readReceiptType: ReceiptType,
     ) = launch(dispatchers.computation) {
-        // Get last valid EventId seen by the user, as the first index might refer to a Virtual item
-        val eventId = getLastEventIdBeforeOrAt(firstVisibleIndex, timelineItems)
-        if (eventId != null && firstVisibleIndex <= lastReadReceiptIndex.value && eventId != lastReadReceiptId.value) {
-            lastReadReceiptIndex.value = firstVisibleIndex
-            lastReadReceiptId.value = eventId
-            timeline.sendReadReceipt(eventId = eventId, receiptType = readReceiptType)
+        // If we are at the bottom of timeline, we mark the room as read.
+        if (firstVisibleIndex == 0) {
+            room.markAsRead(receiptType = readReceiptType)
+        } else {
+            // Get last valid EventId seen by the user, as the first index might refer to a Virtual item
+            val eventId = getLastEventIdBeforeOrAt(firstVisibleIndex, timelineItems)
+            if (eventId != null && firstVisibleIndex <= lastReadReceiptIndex.value && eventId != lastReadReceiptId.value) {
+                lastReadReceiptIndex.value = firstVisibleIndex
+                lastReadReceiptId.value = eventId
+                timeline.sendReadReceipt(eventId = eventId, receiptType = readReceiptType)
+            }
         }
     }
 

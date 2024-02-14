@@ -378,17 +378,18 @@ class FakeMatrixRoom(
         return reportContentResult
     }
 
-    val markAsReadCalls = mutableListOf<ReceiptType?>()
-    override suspend fun markAsRead(receiptType: ReceiptType?): Result<Unit> {
+    val markAsReadCalls = mutableListOf<ReceiptType>()
+
+    override suspend fun markAsRead(receiptType: ReceiptType): Result<Unit> {
         markAsReadCalls.add(receiptType)
         return Result.success(Unit)
     }
 
-    var markAsUnreadReadCallCount = 0
+    var setUnreadFlagCalls = mutableListOf<Boolean>()
         private set
 
-    override suspend fun markAsUnread(): Result<Unit> {
-        markAsUnreadReadCallCount++
+    override suspend fun setUnreadFlag(isUnread: Boolean): Result<Unit> {
+        setUnreadFlagCalls.add(isUnread)
         return Result.success(Unit)
     }
 
