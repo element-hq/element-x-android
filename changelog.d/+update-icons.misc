@@ -1,1 +1,0 @@
-Update Compound icons in the project. **This is a breaking change** since the icon prefix changed to `ic_compound_` and the `CompoundIcons` helper now contains the vector icons as composable functions.
