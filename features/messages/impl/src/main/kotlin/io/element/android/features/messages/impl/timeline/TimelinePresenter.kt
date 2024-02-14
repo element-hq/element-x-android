@@ -238,7 +238,7 @@ class TimelinePresenter @AssistedInject constructor(
         } else {
             // Get last valid EventId seen by the user, as the first index might refer to a Virtual item
             val eventId = getLastEventIdBeforeOrAt(firstVisibleIndex, timelineItems)
-            if (eventId != null && firstVisibleIndex <= lastReadReceiptIndex.value && eventId != lastReadReceiptId.value) {
+            if (eventId != null && eventId != lastReadReceiptId.value) {
                 lastReadReceiptIndex.value = firstVisibleIndex
                 lastReadReceiptId.value = eventId
                 timeline.sendReadReceipt(eventId = eventId, receiptType = readReceiptType)
