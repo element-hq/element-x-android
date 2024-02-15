@@ -50,7 +50,7 @@ internal class RoomListFactory(
         innerProvider: suspend () -> InnerRoomList
     ): DynamicRoomList {
         val loadingStateFlow: MutableStateFlow<RoomList.LoadingState> = MutableStateFlow(RoomList.LoadingState.NotLoaded)
-        val summariesFlow = MutableStateFlow<List<RoomSummary>>(emptyList())
+        val summariesFlow = MutableSharedFlow<List<RoomSummary>>(replay = 1, extraBufferCapacity = 1)
         val processor = RoomSummaryListProcessor(summariesFlow, innerRoomListService, coroutineContext, roomSummaryDetailsFactory)
         // Makes sure we don't miss any events
         val dynamicEvents = MutableSharedFlow<RoomListDynamicEvents>(replay = 100)
@@ -92,7 +92,7 @@ internal class RoomListFactory(
 }
 
 private class RustDynamicRoomList(
-    override val summaries: MutableStateFlow<List<RoomSummary>>,
+    override val summaries: MutableSharedFlow<List<RoomSummary>>,
     override val loadingState: MutableStateFlow<RoomList.LoadingState>,
     override val currentFilter: MutableStateFlow<RoomListFilter>,
     override val loadedPages: MutableStateFlow<Int>,

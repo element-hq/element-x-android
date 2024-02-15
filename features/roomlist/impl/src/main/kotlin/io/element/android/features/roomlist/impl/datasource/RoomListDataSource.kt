@@ -21,7 +21,6 @@ import io.element.android.libraries.androidutils.diff.DiffCacheUpdater
 import io.element.android.libraries.androidutils.diff.MutableListDiffCache
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsService
-import io.element.android.libraries.matrix.api.roomlist.RoomList
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.api.roomlist.RoomSummary
 import kotlinx.collections.immutable.ImmutableList
@@ -33,6 +32,7 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
@@ -62,6 +62,12 @@ class RoomListDataSource @Inject constructor(
         roomListService
             .allRooms
             .summaries
+            .onStart {
+                // If we have no cached results, display a placeholder loading state
+                if (diffCache.isEmpty()) {
+                    _allRooms.emit(RoomListRoomSummaryFactory.createFakeList())
+                }
+            }
             .onEach { roomSummaries ->
                 replaceWith(roomSummaries)
             }
@@ -88,23 +94,10 @@ class RoomListDataSource @Inject constructor(
     }
 
     private suspend fun buildAndEmitAllRooms(roomSummaries: List<RoomSummary>) {
-        if (diffCache.isEmpty() && roomListService.allRooms.loadingState.value is RoomList.LoadingState.NotLoaded) {
-            // If the room list is not loaded, we emit a fake placeholders list
-            _allRooms.emit(RoomListRoomSummaryFactory.createFakeList())
-        } else {
-            val roomListRoomSummaries = ArrayList<RoomListRoomSummary>()
-            for (index in diffCache.indices()) {
-                val cacheItem = diffCache.get(index)
-                if (cacheItem == null) {
-                    buildAndCacheItem(roomSummaries, index)?.also { timelineItemState ->
-                        roomListRoomSummaries.add(timelineItemState)
-                    }
-                } else {
-                    roomListRoomSummaries.add(cacheItem)
-                }
-            }
-            _allRooms.emit(roomListRoomSummaries.toImmutableList())
+        val roomListRoomSummaries = diffCache.indices().mapNotNull { index ->
+            diffCache.get(index) ?: buildAndCacheItem(roomSummaries, index)
         }
+        _allRooms.emit(roomListRoomSummaries.toImmutableList())
     }
 
     private fun buildAndCacheItem(roomSummaries: List<RoomSummary>, index: Int): RoomListRoomSummary? {

@@ -17,7 +17,7 @@
 package io.element.android.libraries.matrix.impl.roomlist
 
 import io.element.android.libraries.matrix.api.roomlist.RoomSummary
-import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
@@ -30,7 +30,7 @@ import java.util.UUID
 import kotlin.coroutines.CoroutineContext
 
 class RoomSummaryListProcessor(
-    private val roomSummaries: MutableStateFlow<List<RoomSummary>>,
+    private val roomSummaries: MutableSharedFlow<List<RoomSummary>>,
     private val roomListService: RoomListServiceInterface,
     private val coroutineContext: CoroutineContext,
     private val roomSummaryDetailsFactory: RoomSummaryDetailsFactory = RoomSummaryDetailsFactory(),
@@ -132,9 +132,10 @@ class RoomSummaryListProcessor(
 
     private suspend fun updateRoomSummaries(block: suspend MutableList<RoomSummary>.() -> Unit) = withContext(coroutineContext) {
         mutex.withLock {
-            val mutableRoomSummaries = roomSummaries.value.toMutableList()
+            val current = roomSummaries.replayCache.lastOrNull()
+            val mutableRoomSummaries = current.orEmpty().toMutableList()
             block(mutableRoomSummaries)
-            roomSummaries.value = mutableRoomSummaries
+            roomSummaries.emit(mutableRoomSummaries)
         }
     }
 }
