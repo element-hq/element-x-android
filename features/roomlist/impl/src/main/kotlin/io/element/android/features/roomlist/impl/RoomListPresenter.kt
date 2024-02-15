@@ -54,8 +54,10 @@ import io.element.android.libraries.matrix.api.verification.SessionVerificationS
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.takeWhile
 import kotlinx.coroutines.launch
@@ -206,23 +208,21 @@ class RoomListPresenter @Inject constructor(
 
         client.getRoom(event.roomListRoomSummary.roomId)?.use { room ->
 
-            val isContextMenuShownFlow = snapshotFlow {
-                contextMenuState.value is RoomListState.ContextMenu.Shown
-            }
+            val isShowingContextMenuFlow = snapshotFlow { contextMenuState.value is RoomListState.ContextMenu.Shown }
+                .distinctUntilChanged()
 
-            room.roomInfoFlow
-                .onEach { roomInfo ->
-                    contextMenuState.value = initialState.copy(
-                        isFavorite = roomInfo.isFavorite,
-                    )
+            val isFavoriteFlow = room.roomInfoFlow
+                .map { it.isFavorite }
+                .distinctUntilChanged()
+
+            isFavoriteFlow
+                .onEach { isFavorite ->
+                    contextMenuState.value = initialState.copy(isFavorite = isFavorite)
                 }
-                .flatMapLatest {
-                    isContextMenuShownFlow
-                }
-                .takeWhile { isContextMenuShown ->
-                    isContextMenuShown
-                }
+                .flatMapLatest { isShowingContextMenuFlow }
+                .takeWhile { isShowingContextMenu -> isShowingContextMenu }
                 .collect()
+
         }
     }
 
