@@ -22,7 +22,7 @@ compose_bom = "2024.02.00"
 composecompiler = "1.5.9"
 
 # Coroutines
-coroutines = "1.7.3"
+coroutines = "1.8.0"
 
 # Accompanist
 accompanist = "0.34.0"
