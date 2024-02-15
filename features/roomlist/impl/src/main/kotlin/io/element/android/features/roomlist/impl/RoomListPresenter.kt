@@ -222,7 +222,6 @@ class RoomListPresenter @Inject constructor(
                 .flatMapLatest { isShowingContextMenuFlow }
                 .takeWhile { isShowingContextMenu -> isShowingContextMenu }
                 .collect()
-
         }
     }
 
