@@ -438,9 +438,9 @@ class RoomDetailsPresenterTests {
         val presenter = createRoomDetailsPresenter(room = room)
         presenter.test {
             val initialState = awaitItem()
-            initialState.eventSink(RoomDetailsEvent.SetIsFavorite(true))
+            initialState.eventSink(RoomDetailsEvent.SetFavorite(true))
             assertThat(room.setIsFavoriteCalls).isEqualTo(listOf(true))
-            initialState.eventSink(RoomDetailsEvent.SetIsFavorite(false))
+            initialState.eventSink(RoomDetailsEvent.SetFavorite(false))
             assertThat(room.setIsFavoriteCalls).isEqualTo(listOf(true, false))
             cancelAndIgnoreRemainingEvents()
         }

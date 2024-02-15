@@ -124,7 +124,7 @@ class RoomDetailsPresenter @Inject constructor(
                         client.notificationSettingsService().unmuteRoom(room.roomId, room.isEncrypted, room.isOneToOne)
                     }
                 }
-                is RoomDetailsEvent.SetIsFavorite -> {
+                is RoomDetailsEvent.SetFavorite -> {
                     scope.launch {
                        room.setIsFavorite(event.isFavorite)
                     }

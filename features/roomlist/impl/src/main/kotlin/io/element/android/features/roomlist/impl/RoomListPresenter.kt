@@ -28,6 +28,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import io.element.android.features.leaveroom.api.LeaveRoomEvent
 import io.element.android.features.leaveroom.api.LeaveRoomPresenter
 import io.element.android.features.networkmonitor.api.NetworkMonitor
@@ -38,8 +39,6 @@ import io.element.android.features.roomlist.impl.datasource.RoomListDataSource
 import io.element.android.features.roomlist.impl.migration.MigrationScreenPresenter
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
-import io.element.android.libraries.architecture.coroutine.cancel
-import io.element.android.libraries.architecture.coroutine.rememberJob
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.designsystem.utils.snackbar.collectSnackbarMessageAsState
 import io.element.android.libraries.featureflag.api.FeatureFlagService
@@ -53,9 +52,12 @@ import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.api.user.getCurrentUser
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.takeWhile
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -120,7 +122,6 @@ class RoomListPresenter @Inject constructor(
 
         var displaySearchResults by rememberSaveable { mutableStateOf(false) }
         val contextMenu = remember { mutableStateOf<RoomListState.ContextMenu>(RoomListState.ContextMenu.Hidden) }
-        val showContextMenuJob = rememberJob()
 
         fun handleEvents(event: RoomListEvents) {
             when (event) {
@@ -135,10 +136,9 @@ class RoomListPresenter @Inject constructor(
                     displaySearchResults = !displaySearchResults
                 }
                 is RoomListEvents.ShowContextMenu -> {
-                    showContextMenuJob.value = coroutineScope.showContextMenu(event, contextMenu)
+                    coroutineScope.showContextMenu(event, contextMenu)
                 }
                 is RoomListEvents.HideContextMenu -> {
-                    showContextMenuJob.cancel()
                     contextMenu.value = RoomListState.ContextMenu.Hidden
                 }
                 is RoomListEvents.LeaveRoom -> leaveRoomState.eventSink(LeaveRoomEvent.ShowConfirmation(event.roomId))
@@ -192,6 +192,7 @@ class RoomListPresenter @Inject constructor(
         matrixUser.value = client.getCurrentUser()
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     private fun CoroutineScope.showContextMenu(event: RoomListEvents.ShowContextMenu, contextMenuState: MutableState<RoomListState.ContextMenu>) = launch {
         val initialState = RoomListState.ContextMenu.Shown(
             roomId = event.roomListRoomSummary.roomId,
@@ -202,12 +203,24 @@ class RoomListPresenter @Inject constructor(
             hasNewContent = event.roomListRoomSummary.hasNewContent
         )
         contextMenuState.value = initialState
+
         client.getRoom(event.roomListRoomSummary.roomId)?.use { room ->
+
+            val isContextMenuShownFlow = snapshotFlow {
+                contextMenuState.value is RoomListState.ContextMenu.Shown
+            }
+
             room.roomInfoFlow
                 .onEach { roomInfo ->
                     contextMenuState.value = initialState.copy(
                         isFavorite = roomInfo.isFavorite,
                     )
+                }
+                .flatMapLatest {
+                    isContextMenuShownFlow
+                }
+                .takeWhile { isContextMenuShown ->
+                    isContextMenuShown
                 }
                 .collect()
         }

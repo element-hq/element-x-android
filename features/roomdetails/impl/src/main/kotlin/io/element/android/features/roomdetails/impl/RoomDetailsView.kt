@@ -167,7 +167,7 @@ fun RoomDetailsView(
             FavoriteSection(
                 isFavorite = state.isFavorite,
                 onFavoriteChanges = {
-                    state.eventSink(RoomDetailsEvent.SetIsFavorite(it))
+                    state.eventSink(RoomDetailsEvent.SetFavorite(it))
                 }
             )
 
