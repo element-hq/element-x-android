@@ -1,0 +1,4 @@
+Main changes in this version:
+- Fix decryption of previous messages after session verification not working.
+
+Full changelog: https://github.com/element-hq/element-x-android/releases
