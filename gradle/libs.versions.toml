@@ -36,7 +36,7 @@ datetime = "0.5.0"
 dependencyAnalysis = "1.29.0"
 serialization_json = "1.6.2"
 showkase = "1.0.2"
-appyx = "1.4.0"
+appyx = "1.4.1-migrate-2.x"
 sqldelight = "2.0.1"
 wysiwyg = "2.29.0"
 
