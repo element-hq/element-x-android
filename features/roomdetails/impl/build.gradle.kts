@@ -54,7 +54,6 @@ dependencies {
     implementation(projects.features.createroom.api)
     implementation(projects.services.analytics.api)
     implementation(projects.features.poll.api)
-    implementation(projects.features.roomactions.api)
 
     testImplementation(libs.test.junit)
     testImplementation(libs.coroutines.test)
@@ -71,7 +70,6 @@ dependencies {
     testImplementation(projects.tests.testutils)
     testImplementation(projects.features.leaveroom.test)
     testImplementation(projects.features.createroom.test)
-    testImplementation(projects.features.roomactions.test)
 
     ksp(libs.showkase.processor)
 }

@@ -33,7 +33,6 @@ import io.element.android.features.leaveroom.api.LeaveRoomPresenter
 import io.element.android.features.networkmonitor.api.NetworkMonitor
 import io.element.android.features.networkmonitor.api.NetworkStatus
 import io.element.android.features.preferences.api.store.SessionPreferencesStore
-import io.element.android.features.roomactions.api.SetRoomIsFavoriteAction
 import io.element.android.features.roomlist.impl.datasource.InviteStateDataSource
 import io.element.android.features.roomlist.impl.datasource.RoomListDataSource
 import io.element.android.features.roomlist.impl.migration.MigrationScreenPresenter
@@ -54,8 +53,12 @@ import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.api.user.getCurrentUser
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 private const val EXTENDED_RANGE_SIZE = 40
@@ -201,6 +204,15 @@ class RoomListPresenter @Inject constructor(
             hasNewContent = event.roomListRoomSummary.hasNewContent
         )
         contextMenuState.value = initialState
+        client.getRoom(event.roomListRoomSummary.roomId)?.use { room ->
+            room.roomInfoFlow
+                .onEach { roomInfo ->
+                    contextMenuState.value = initialState.copy(
+                        isFavorite = roomInfo.isFavorite,
+                    )
+                }
+                .collect()
+        }
     }
 
     private fun updateVisibleRange(range: IntRange) {

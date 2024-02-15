@@ -134,7 +134,7 @@ class RoomListContextMenuTest {
     @Test
     fun `clicking on Favourites generates expected Event`() {
         val eventsRecorder = EventsRecorder<RoomListEvents>()
-        val contextMenu = aContextMenuShown(isDm = false, isFavorite = AsyncData.Success(false))
+        val contextMenu = aContextMenuShown(isDm = false, isFavorite = false)
         val callback = EnsureNeverCalledWithParam<RoomId>()
         rule.setContent {
             RoomListContextMenu(

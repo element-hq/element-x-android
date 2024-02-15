@@ -26,8 +26,6 @@ import io.element.android.features.leaveroom.fake.FakeLeaveRoomPresenter
 import io.element.android.features.networkmonitor.api.NetworkMonitor
 import io.element.android.features.networkmonitor.test.FakeNetworkMonitor
 import io.element.android.features.preferences.api.store.SessionPreferencesStore
-import io.element.android.features.roomactions.api.SetRoomIsFavoriteAction
-import io.element.android.features.roomactions.test.FakeSetRoomIsFavoriteAction
 import io.element.android.features.roomlist.impl.datasource.FakeInviteDataSource
 import io.element.android.features.roomlist.impl.datasource.InviteStateDataSource
 import io.element.android.features.roomlist.impl.datasource.RoomListDataSource
@@ -35,7 +33,6 @@ import io.element.android.features.roomlist.impl.datasource.RoomListRoomSummaryF
 import io.element.android.features.roomlist.impl.migration.InMemoryMigrationScreenStore
 import io.element.android.features.roomlist.impl.migration.MigrationScreenPresenter
 import io.element.android.features.roomlist.impl.model.createRoomListRoomSummary
-import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.dateformatter.api.LastMessageTimestampFormatter
 import io.element.android.libraries.dateformatter.test.A_FORMATTED_DATE
 import io.element.android.libraries.dateformatter.test.FakeLastMessageTimestampFormatter
@@ -363,10 +360,11 @@ class RoomListPresenterTests {
                             roomId = summary.roomId,
                             roomName = summary.name,
                             isDm = false,
-                            isFavorite = AsyncData.Success(false),
+                            isFavorite = false,
                             markAsUnreadFeatureFlagEnabled = true,
                             hasNewContent = false,
-                        ))
+                        )
+                    )
             }
 
             room.setIsFavorite(isFavorite = true)
@@ -377,10 +375,11 @@ class RoomListPresenterTests {
                             roomId = summary.roomId,
                             roomName = summary.name,
                             isDm = false,
-                            isFavorite = AsyncData.Success(true),
+                            isFavorite = true,
                             markAsUnreadFeatureFlagEnabled = true,
                             hasNewContent = false,
-                        ))
+                        )
+                    )
             }
             scope.cancel()
         }
@@ -405,14 +404,16 @@ class RoomListPresenterTests {
 
             val shownState = awaitItem()
             assertThat(shownState.contextMenu)
-                .isEqualTo(RoomListState.ContextMenu.Shown(
-                    roomId = summary.roomId,
-                    roomName = summary.name,
-                    isDm = false,
-                    isFavorite = AsyncData.Success(false),
-                    markAsUnreadFeatureFlagEnabled = true,
-                    hasNewContent = false,
-                ))
+                .isEqualTo(
+                    RoomListState.ContextMenu.Shown(
+                        roomId = summary.roomId,
+                        roomName = summary.name,
+                        isDm = false,
+                        isFavorite = false,
+                        markAsUnreadFeatureFlagEnabled = true,
+                        hasNewContent = false,
+                    )
+                )
 
             shownState.eventSink(RoomListEvents.HideContextMenu)
 
@@ -469,14 +470,19 @@ class RoomListPresenterTests {
     @Test
     fun `present - when set is favorite event is emitted, then the action is called`() = runTest {
         val scope = CoroutineScope(coroutineContext + SupervisorJob())
-        val setRoomIsFavoriteAction = FakeSetRoomIsFavoriteAction()
-        val presenter = createRoomListPresenter(setRoomIsFavoriteAction = setRoomIsFavoriteAction, coroutineScope = scope)
+        val room = FakeMatrixRoom()
+        val client = FakeMatrixClient().apply {
+            givenGetRoomResult(A_ROOM_ID, room)
+        }
+        val presenter = createRoomListPresenter(client = client, coroutineScope = scope)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
             initialState.eventSink(RoomListEvents.SetRoomIsFavorite(A_ROOM_ID, true))
-            setRoomIsFavoriteAction.assertCalled(1)
+            assertThat(room.setIsFavoriteCalls).isEqualTo(listOf(true))
+            initialState.eventSink(RoomListEvents.SetRoomIsFavorite(A_ROOM_ID, false))
+            assertThat(room.setIsFavoriteCalls).isEqualTo(listOf(true, false))
             cancelAndIgnoreRemainingEvents()
             scope.cancel()
         }
@@ -560,7 +566,6 @@ class RoomListPresenterTests {
         encryptionService: EncryptionService = FakeEncryptionService(),
         sessionPreferencesStore: SessionPreferencesStore = InMemorySessionPreferencesStore(),
         coroutineScope: CoroutineScope,
-        setRoomIsFavoriteAction: SetRoomIsFavoriteAction = FakeSetRoomIsFavoriteAction(),
         migrationScreenPresenter: MigrationScreenPresenter = MigrationScreenPresenter(
             matrixClient = client,
             migrationScreenStore = InMemoryMigrationScreenStore(),
@@ -589,7 +594,6 @@ class RoomListPresenterTests {
             encryptionService = encryptionService,
             featureFlagService = FakeFeatureFlagService(mapOf(FeatureFlags.SecureStorage.key to true)),
         ),
-        setRoomIsFavorite = setRoomIsFavoriteAction,
         migrationScreenPresenter = migrationScreenPresenter,
         sessionPreferencesStore = sessionPreferencesStore,
     )

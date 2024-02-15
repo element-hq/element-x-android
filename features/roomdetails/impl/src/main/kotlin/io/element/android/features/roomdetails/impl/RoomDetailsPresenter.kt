@@ -29,7 +29,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.lifecycle.Lifecycle
 import io.element.android.features.leaveroom.api.LeaveRoomEvent
 import io.element.android.features.leaveroom.api.LeaveRoomPresenter
-import io.element.android.features.roomactions.api.SetRoomIsFavoriteAction
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsPresenter
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.bool.orFalse
@@ -62,19 +61,19 @@ class RoomDetailsPresenter @Inject constructor(
     private val roomMembersDetailsPresenterFactory: RoomMemberDetailsPresenter.Factory,
     private val leaveRoomPresenter: LeaveRoomPresenter,
     private val dispatchers: CoroutineDispatchers,
-    private val setRoomIsFavorite: SetRoomIsFavoriteAction,
 ) : Presenter<RoomDetailsState> {
     @Composable
     override fun present(): RoomDetailsState {
         val scope = rememberCoroutineScope()
         val leaveRoomState = leaveRoomPresenter.present()
         val canShowNotificationSettings = remember { mutableStateOf(false) }
-        val roomInfo = room.roomInfoFlow.collectAsState(initial = null).value
+        val roomInfo by room.roomInfoFlow.collectAsState(initial = null)
 
         val roomAvatar by remember { derivedStateOf { roomInfo?.avatarUrl ?: room.avatarUrl } }
 
         val roomName by remember { derivedStateOf { (roomInfo?.name ?: room.name ?: room.displayName).trim() } }
         val roomTopic by remember { derivedStateOf { roomInfo?.topic ?: room.topic } }
+        val isFavorite by remember { derivedStateOf { roomInfo?.isFavorite.orFalse() } }
 
         LaunchedEffect(Unit) {
             canShowNotificationSettings.value = featureFlagService.isFeatureEnabled(FeatureFlags.NotificationSettings)
@@ -99,9 +98,6 @@ class RoomDetailsPresenter @Inject constructor(
         val dmMember by room.getDirectRoomMember(membersState)
         val roomMemberDetailsPresenter = roomMemberDetailsPresenter(dmMember)
         val roomType by getRoomType(dmMember)
-        val isFavorite by remember {
-            derivedStateOf { roomInfo?.isFavorite.orFalse() }
-        }
 
         val topicState = remember(canEditTopic, roomTopic, roomType) {
             val topic = roomTopic
@@ -131,7 +127,7 @@ class RoomDetailsPresenter @Inject constructor(
                 }
                 is RoomDetailsEvent.SetIsFavorite -> {
                     scope.launch {
-                       setRoomIsFavorite(room, event.isFavorite)
+                       room.setIsFavorite(event.isFavorite)
                     }
                 }
             }
