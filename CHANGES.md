@@ -1,3 +1,11 @@
+Changes in Element X v0.4.4 (2024-02-15)
+========================================
+
+Bugfixes 🐛
+----------
+
+- Fix decryption of previous messages after session verification not working.
+
 Changes in Element X v0.4.3 (2024-02-14)
 ========================================
 
