@@ -55,10 +55,8 @@ import io.element.android.libraries.matrix.api.verification.SessionVerificationS
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import javax.inject.Inject
 
 private const val EXTENDED_RANGE_SIZE = 40

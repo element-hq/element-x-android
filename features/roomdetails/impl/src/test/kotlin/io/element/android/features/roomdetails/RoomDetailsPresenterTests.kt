@@ -26,8 +26,6 @@ import io.element.android.features.createroom.test.FakeStartDMAction
 import io.element.android.features.leaveroom.api.LeaveRoomEvent
 import io.element.android.features.leaveroom.api.LeaveRoomPresenter
 import io.element.android.features.leaveroom.fake.FakeLeaveRoomPresenter
-import io.element.android.features.roomactions.api.SetRoomIsFavoriteAction
-import io.element.android.features.roomactions.test.FakeSetRoomIsFavoriteAction
 import io.element.android.features.roomdetails.impl.RoomDetailsEvent
 import io.element.android.features.roomdetails.impl.RoomDetailsPresenter
 import io.element.android.features.roomdetails.impl.RoomDetailsState
@@ -41,10 +39,10 @@ import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.MatrixRoomInfo
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.api.room.StateEventType
-import io.element.android.libraries.matrix.api.room.tags.RoomNotableTags
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_ROOM_NAME
 import io.element.android.libraries.matrix.test.A_SESSION_ID
@@ -80,7 +78,6 @@ class RoomDetailsPresenterTests {
         leaveRoomPresenter: LeaveRoomPresenter = FakeLeaveRoomPresenter(),
         dispatchers: CoroutineDispatchers = testCoroutineDispatchers(),
         notificationSettingsService: FakeNotificationSettingsService = FakeNotificationSettingsService(),
-        setRoomIsFavoriteAction: SetRoomIsFavoriteAction = FakeSetRoomIsFavoriteAction(),
     ): RoomDetailsPresenter {
         val matrixClient = FakeMatrixClient(notificationSettingsService = notificationSettingsService)
         val roomMemberDetailsPresenterFactory = object : RoomMemberDetailsPresenter.Factory {
@@ -99,7 +96,6 @@ class RoomDetailsPresenterTests {
             roomMembersDetailsPresenterFactory = roomMemberDetailsPresenterFactory,
             leaveRoomPresenter = leaveRoomPresenter,
             dispatchers = dispatchers,
-            setRoomIsFavorite = setRoomIsFavoriteAction,
         )
     }
 
@@ -439,26 +435,28 @@ class RoomDetailsPresenterTests {
 
     @Test
     fun `present - when set is favorite event is emitted, then the action is called`() = runTest {
-        val setRoomIsFavoriteAction = FakeSetRoomIsFavoriteAction()
-        val presenter = createRoomDetailsPresenter(setRoomIsFavoriteAction = setRoomIsFavoriteAction)
+        val room = FakeMatrixRoom()
+        val presenter = createRoomDetailsPresenter(room = room)
         presenter.test {
             val initialState = awaitItem()
             initialState.eventSink(RoomDetailsEvent.SetIsFavorite(true))
-            setRoomIsFavoriteAction.assertCalled(1)
+            assertThat(room.setIsFavoriteCalls).isEqualTo(listOf(true))
+            initialState.eventSink(RoomDetailsEvent.SetIsFavorite(false))
+            assertThat(room.setIsFavoriteCalls).isEqualTo(listOf(true, false))
             cancelAndIgnoreRemainingEvents()
         }
     }
 
     @Test
-    fun `present - changes in notable tags updates is favorite flag`() = runTest {
+    fun `present - changes in room info updates the is favorite flag`() = runTest {
         val room = aMatrixRoom()
         val presenter = createRoomDetailsPresenter(room = room)
         presenter.test {
-            room.updateNotableTags(RoomNotableTags(true))
+            room.givenRoomInfo(aRoomInfo(isFavorite = true))
             consumeItemsUntilPredicate { it.isFavorite }.last().let { state ->
                 assertThat(state.isFavorite).isTrue()
             }
-            room.updateNotableTags(RoomNotableTags(false))
+            room.givenRoomInfo(aRoomInfo(isFavorite = false))
             consumeItemsUntilPredicate { !it.isFavorite }.last().let { state ->
                 assertThat(state.isFavorite).isFalse()
             }
