@@ -54,10 +54,7 @@ import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.api.user.getCurrentUser
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -74,7 +71,6 @@ class RoomListPresenter @Inject constructor(
     private val encryptionService: EncryptionService,
     private val featureFlagService: FeatureFlagService,
     private val indicatorService: IndicatorService,
-    private val setRoomIsFavorite: SetRoomIsFavoriteAction,
     private val migrationScreenPresenter: MigrationScreenPresenter,
     private val sessionPreferencesStore: SessionPreferencesStore,
 ) : Presenter<RoomListState> {
@@ -146,17 +142,26 @@ class RoomListPresenter @Inject constructor(
                 }
                 is RoomListEvents.LeaveRoom -> leaveRoomState.eventSink(LeaveRoomEvent.ShowConfirmation(event.roomId))
 
-                is RoomListEvents.SetRoomIsFavorite -> coroutineScope.setRoomIsFavorite(event)
-                is RoomListEvents.MarkAsRead -> coroutineScope.launch {
-                    val receiptType = if (sessionPreferencesStore.isSendPublicReadReceiptsEnabled().first()) {
-                        ReceiptType.READ
-                    } else {
-                        ReceiptType.READ_PRIVATE
+                is RoomListEvents.SetRoomIsFavorite -> coroutineScope.launch {
+                    client.getRoom(event.roomId)?.use { room ->
+                        room.setIsFavorite(event.isFavorite)
                     }
-                    client.getRoom(event.roomId)?.markAsRead(receiptType)
+                }
+                is RoomListEvents.MarkAsRead -> coroutineScope.launch {
+                    client.getRoom(event.roomId)?.use { room ->
+                        room.setUnreadFlag(isUnread = false)
+                        val receiptType = if (sessionPreferencesStore.isSendPublicReadReceiptsEnabled().first()) {
+                            ReceiptType.READ
+                        } else {
+                            ReceiptType.READ_PRIVATE
+                        }
+                        room.markAsRead(receiptType)
+                    }
                 }
                 is RoomListEvents.MarkAsUnread -> coroutineScope.launch {
-                    client.getRoom(event.roomId)?.markAsUnread()
+                    client.getRoom(event.roomId)?.use { room ->
+                        room.setUnreadFlag(isUnread = true)
+                    }
                 }
             }
         }
@@ -191,28 +196,11 @@ class RoomListPresenter @Inject constructor(
             roomId = event.roomListRoomSummary.roomId,
             roomName = event.roomListRoomSummary.name,
             isDm = event.roomListRoomSummary.isDm,
-            isFavorite = AsyncData.Loading(),
+            isFavorite = event.roomListRoomSummary.isFavorite,
             markAsUnreadFeatureFlagEnabled = featureFlagService.isFeatureEnabled(FeatureFlags.MarkAsUnread),
             hasNewContent = event.roomListRoomSummary.hasNewContent
         )
         contextMenuState.value = initialState
-        client.getRoom(event.roomListRoomSummary.roomId).use { room ->
-            if (room != null) {
-                room.notableTagsFlow
-                    .distinctUntilChanged()
-                    .onEach { tags ->
-                        val newState = initialState.copy(isFavorite = AsyncData.Success(tags.isFavorite))
-                        contextMenuState.value = newState
-                    }
-                    .collect()
-            } else {
-                contextMenuState.value = initialState.copy(isFavorite = AsyncData.Failure(IllegalStateException("Room not found")))
-            }
-        }
-    }
-
-    private fun CoroutineScope.setRoomIsFavorite(event: RoomListEvents.SetRoomIsFavorite) = launch {
-        setRoomIsFavorite(event.roomId, event.isFavorite)
     }
 
     private fun updateVisibleRange(range: IntRange) {

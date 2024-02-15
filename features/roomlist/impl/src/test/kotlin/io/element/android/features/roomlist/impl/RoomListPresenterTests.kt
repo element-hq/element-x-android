@@ -529,19 +529,18 @@ class RoomListPresenterTests {
         }.test {
             val initialState = awaitItem()
             assertThat(room.markAsReadCalls).isEmpty()
-            assertThat(room.markAsUnreadReadCallCount).isEqualTo(0)
+            assertThat(room.setUnreadFlagCalls).isEmpty()
             initialState.eventSink.invoke(RoomListEvents.MarkAsRead(A_ROOM_ID))
             assertThat(room.markAsReadCalls).isEqualTo(listOf(ReceiptType.READ))
-            assertThat(room.markAsUnreadReadCallCount).isEqualTo(0)
+            assertThat(room.setUnreadFlagCalls).isEqualTo(listOf(false))
             initialState.eventSink.invoke(RoomListEvents.MarkAsUnread(A_ROOM_ID))
             assertThat(room.markAsReadCalls).isEqualTo(listOf(ReceiptType.READ))
-            assertThat(room.markAsUnreadReadCallCount).isEqualTo(1)
+            assertThat(room.setUnreadFlagCalls).isEqualTo(listOf(false, true))
             // Test again with private read receipts
             sessionPreferencesStore.setSendPublicReadReceipts(false)
             initialState.eventSink.invoke(RoomListEvents.MarkAsRead(A_ROOM_ID))
             assertThat(room.markAsReadCalls).isEqualTo(listOf(ReceiptType.READ, ReceiptType.READ_PRIVATE))
-            assertThat(room.markAsUnreadReadCallCount).isEqualTo(1)
-
+            assertThat(room.setUnreadFlagCalls).isEqualTo(listOf(false, true, false))
             cancelAndIgnoreRemainingEvents()
             scope.cancel()
         }

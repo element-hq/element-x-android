@@ -68,6 +68,7 @@ fun aRoomSummaryDetails(
     canonicalAlias: String? = null,
     hasRoomCall: Boolean = false,
     isDm: Boolean = false,
+    isFavorite: Boolean = false,
 ) = RoomSummaryDetails(
     roomId = roomId,
     name = name,
@@ -83,6 +84,7 @@ fun aRoomSummaryDetails(
     canonicalAlias = canonicalAlias,
     hasRoomCall = hasRoomCall,
     isDm = isDm,
+    isFavorite = isFavorite,
 )
 
 fun aRoomMessage(

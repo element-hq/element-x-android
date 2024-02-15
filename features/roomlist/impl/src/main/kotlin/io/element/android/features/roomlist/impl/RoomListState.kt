@@ -49,7 +49,7 @@ data class RoomListState(
             val roomId: RoomId,
             val roomName: String,
             val isDm: Boolean,
-            val isFavorite: AsyncData<Boolean>,
+            val isFavorite: Boolean,
             val markAsUnreadFeatureFlagEnabled: Boolean,
             val hasNewContent: Boolean,
         ) : ContextMenu

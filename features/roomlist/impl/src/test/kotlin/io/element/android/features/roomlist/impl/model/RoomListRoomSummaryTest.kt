@@ -80,6 +80,7 @@ internal fun createRoomListRoomSummary(
     numberOfUnreadNotifications: Int = 0,
     isMarkedUnread: Boolean = false,
     userDefinedNotificationMode: RoomNotificationMode? = null,
+    isFavorite: Boolean = false,
 ) = RoomListRoomSummary(
     id = A_ROOM_ID.value,
     roomId = A_ROOM_ID,
@@ -95,4 +96,5 @@ internal fun createRoomListRoomSummary(
     userDefinedNotificationMode = userDefinedNotificationMode,
     hasRoomCall = false,
     isDm = false,
+    isFavorite = isFavorite,
 )

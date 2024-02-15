@@ -32,6 +32,7 @@ import io.element.android.features.leaveroom.api.LeaveRoomPresenter
 import io.element.android.features.roomactions.api.SetRoomIsFavoriteAction
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsPresenter
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.designsystem.utils.OnLifecycleEvent
 import io.element.android.libraries.featureflag.api.FeatureFlagService
@@ -98,7 +99,9 @@ class RoomDetailsPresenter @Inject constructor(
         val dmMember by room.getDirectRoomMember(membersState)
         val roomMemberDetailsPresenter = roomMemberDetailsPresenter(dmMember)
         val roomType by getRoomType(dmMember)
-        val isFavorite by isFavorite()
+        val isFavorite by remember {
+            derivedStateOf { roomInfo?.isFavorite.orFalse() }
+        }
 
         val topicState = remember(canEditTopic, roomTopic, roomType) {
             val topic = roomTopic
@@ -173,11 +176,6 @@ class RoomDetailsPresenter @Inject constructor(
             }
         }
     }
-
-    @Composable
-    private fun isFavorite() = remember {
-        room.notableTagsFlow.map { it.isFavorite }
-    }.collectAsState(initial = false)
 
     @Composable
     private fun getCanInvite(membersState: MatrixRoomMembersState) = produceState(false, membersState) {

@@ -135,19 +135,18 @@ private fun RoomListModalBottomSheetContent(
             },
             leadingContent = ListItemContent.Icon(
                 iconSource = IconSource.Vector(
-                    CompoundIcons.FavouriteOff,
+                    CompoundIcons.Favourite(),
                     contentDescription = stringResource(id = CommonStrings.common_favourite),
                 )
             ),
             trailingContent = ListItemContent.Switch(
-                checked = contextMenu.isFavorite.dataOrNull().orFalse(),
-                enabled = contextMenu.isFavorite is AsyncData.Success,
+                checked = contextMenu.isFavorite,
                 onChange = { isFavorite ->
                     onFavoriteChanged(isFavorite)
                 },
             ),
             onClick = {
-                onFavoriteChanged(!contextMenu.isFavorite.dataOrNull().orFalse())
+                onFavoriteChanged(!contextMenu.isFavorite)
             },
             style = ListItemStyle.Primary,
         )

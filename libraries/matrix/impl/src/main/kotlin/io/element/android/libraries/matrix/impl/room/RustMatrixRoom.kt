@@ -39,7 +39,6 @@ import io.element.android.libraries.matrix.api.room.MessageEventType
 import io.element.android.libraries.matrix.api.room.StateEventType
 import io.element.android.libraries.matrix.api.room.location.AssetType
 import io.element.android.libraries.matrix.api.room.roomNotificationSettings
-import io.element.android.libraries.matrix.api.room.tags.RoomNotableTags
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
 import io.element.android.libraries.matrix.api.timeline.ReceiptType
 import io.element.android.libraries.matrix.api.widget.MatrixWidgetDriver
@@ -52,7 +51,6 @@ import io.element.android.libraries.matrix.impl.notificationsettings.RustNotific
 import io.element.android.libraries.matrix.impl.poll.toInner
 import io.element.android.libraries.matrix.impl.room.location.toInner
 import io.element.android.libraries.matrix.impl.room.member.RoomMemberListFetcher
-import io.element.android.libraries.matrix.impl.room.tags.map
 import io.element.android.libraries.matrix.impl.timeline.RustMatrixTimeline
 import io.element.android.libraries.matrix.impl.timeline.toRustReceiptType
 import io.element.android.libraries.matrix.impl.util.mxCallbackFlow
@@ -74,7 +72,6 @@ import org.matrix.rustcomponents.sdk.RoomInfo
 import org.matrix.rustcomponents.sdk.RoomInfoListener
 import org.matrix.rustcomponents.sdk.RoomListItem
 import org.matrix.rustcomponents.sdk.RoomMessageEventContentWithoutRelation
-import org.matrix.rustcomponents.sdk.RoomNotableTagsListener
 import org.matrix.rustcomponents.sdk.SendAttachmentJoinHandle
 import org.matrix.rustcomponents.sdk.TypingNotificationsListener
 import org.matrix.rustcomponents.sdk.WidgetCapabilities
@@ -86,7 +83,6 @@ import timber.log.Timber
 import java.io.File
 import org.matrix.rustcomponents.sdk.Room as InnerRoom
 import org.matrix.rustcomponents.sdk.Timeline as InnerTimeline
-import uniffi.matrix_sdk_base.RoomNotableTags as RustRoomNotableTags
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class RustMatrixRoom(
@@ -114,15 +110,6 @@ class RustMatrixRoom(
         innerRoom.subscribeToRoomInfoUpdates(object : RoomInfoListener {
             override fun call(roomInfo: RoomInfo) {
                 channel.trySend(matrixRoomInfoMapper.map(roomInfo))
-            }
-        })
-    }
-
-
-    override val notableTagsFlow: Flow<RoomNotableTags> = mxCallbackFlow {
-        innerRoom.subscribeToNotableTags(object : RoomNotableTagsListener {
-            override fun call(notableTags: RustRoomNotableTags) {
-                channel.trySend(notableTags.map())
             }
         })
     }
@@ -457,23 +444,19 @@ class RustMatrixRoom(
 
     override suspend fun setIsFavorite(isFavorite: Boolean): Result<Unit> = withContext(roomDispatcher) {
         runCatching {
-            innerRoom.setIsFavorite(isFavorite, null)
+            innerRoom.setIsFavourite(isFavorite, null)
         }
     }
 
-    override suspend fun markAsRead(receiptType: ReceiptType?): Result<Unit> = withContext(roomDispatcher) {
+    override suspend fun markAsRead(receiptType: ReceiptType): Result<Unit> = withContext(roomDispatcher) {
         runCatching {
-            if (receiptType != null) {
-                innerRoom.markAsReadAndSendReadReceipt(receiptType.toRustReceiptType())
-            } else {
-                innerRoom.markAsRead()
-            }
+            innerRoom.markAsRead(receiptType.toRustReceiptType())
         }
     }
 
-    override suspend fun markAsUnread(): Result<Unit> = withContext(roomDispatcher) {
+    override suspend fun setUnreadFlag(isUnread: Boolean): Result<Unit> = withContext(roomDispatcher) {
         runCatching {
-            innerRoom.markAsUnread()
+            innerRoom.setUnreadFlag(isUnread)
         }
     }
 

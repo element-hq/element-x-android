@@ -159,10 +159,10 @@ class MessagesPresenter @AssistedInject constructor(
         }
 
         LaunchedEffect(Unit) {
-            // Mark the room as read on entering but don't send read receipts
+            // Remove the unread flag on entering but don't send read receipts
             // as those will be handled by the timeline.
             withContext(dispatchers.io) {
-                room.markAsRead(null)
+                room.setUnreadFlag(isUnread = false)
             }
         }
 

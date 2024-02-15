@@ -23,6 +23,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import io.element.android.features.preferences.api.store.SessionPreferencesStore
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.api.core.UserId
@@ -46,6 +47,7 @@ class TypingNotificationPresenter @Inject constructor(
     override fun present(): TypingNotificationState {
         val typingMembersState = remember { mutableStateOf(emptyList<RoomMember>()) }
         val renderTypingNotifications by sessionPreferencesStore.isRenderTypingNotificationsEnabled().collectAsState(initial = true)
+
         LaunchedEffect(renderTypingNotifications) {
             if (renderTypingNotifications) {
                 observeRoomTypingMembers(typingMembersState)
@@ -54,9 +56,18 @@ class TypingNotificationPresenter @Inject constructor(
             }
         }
 
+        // This will keep the space reserved for the typing notifications after the first one is displayed
+        var reserveSpace by remember { mutableStateOf(false) }
+        LaunchedEffect(renderTypingNotifications, typingMembersState.value) {
+            if (renderTypingNotifications && typingMembersState.value.isNotEmpty()) {
+                reserveSpace = true
+            }
+        }
+
         return TypingNotificationState(
             renderTypingNotifications = renderTypingNotifications,
             typingMembers = typingMembersState.value.toImmutableList(),
+            reserveSpace = reserveSpace,
         )
     }
 

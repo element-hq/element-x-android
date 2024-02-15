@@ -16,12 +16,11 @@
 
 package io.element.android.features.roomlist.impl.migration
 
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.tween
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.res.stringResource
 import io.element.android.features.roomlist.impl.R
 import io.element.android.libraries.designsystem.atomic.pages.SunsetPage
@@ -33,14 +32,14 @@ fun MigrationScreenView(
     isMigrating: Boolean,
     modifier: Modifier = Modifier,
 ) {
-    val displayMigrationStatusFadeProgress by animateFloatAsState(
-        targetValue = if (isMigrating) 1f else 0f,
-        animationSpec = tween(durationMillis = 200),
-        label = "Migration view fade"
-    )
-    if (displayMigrationStatusFadeProgress > 0f) {
+    AnimatedVisibility(
+        visible = isMigrating,
+        enter = fadeIn(),
+        exit = fadeOut(),
+        label = "Migration view fade",
+    ) {
         SunsetPage(
-            modifier = modifier.alpha(displayMigrationStatusFadeProgress),
+            modifier = modifier,
             isLoading = true,
             title = stringResource(id = R.string.screen_migration_title),
             subtitle = stringResource(id = R.string.screen_migration_message),

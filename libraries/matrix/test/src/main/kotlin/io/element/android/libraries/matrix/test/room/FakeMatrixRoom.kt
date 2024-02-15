@@ -40,7 +40,6 @@ import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.api.room.StateEventType
 import io.element.android.libraries.matrix.api.room.location.AssetType
-import io.element.android.libraries.matrix.api.room.tags.RoomNotableTags
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
 import io.element.android.libraries.matrix.api.timeline.ReceiptType
 import io.element.android.libraries.matrix.api.timeline.item.event.EventTimelineItem
@@ -171,9 +170,6 @@ class FakeMatrixRoom(
 
     private val _roomInfoFlow: MutableSharedFlow<MatrixRoomInfo> = MutableSharedFlow(replay = 1)
     override val roomInfoFlow: Flow<MatrixRoomInfo> = _roomInfoFlow
-
-    private val _notableTagsFlow: MutableStateFlow<RoomNotableTags> = MutableStateFlow(aRoomNotableTags())
-    override val notableTagsFlow: Flow<RoomNotableTags> = _notableTagsFlow
 
     private val _roomTypingMembersFlow: MutableSharedFlow<List<UserId>> = MutableSharedFlow(replay = 1)
     override val roomTypingMembersFlow: Flow<List<UserId>> = _roomTypingMembersFlow
@@ -383,33 +379,26 @@ class FakeMatrixRoom(
         return reportContentResult
     }
 
+    val setIsFavoriteCalls = mutableListOf<Boolean>()
+
     override suspend fun setIsFavorite(isFavorite: Boolean): Result<Unit> {
-        return setIsFavoriteResult.also { result ->
-            if (result.isSuccess) {
-                val lowPriority = if (isFavorite) {
-                    false
-                } else {
-                    _notableTagsFlow.value.isLowPriority
-                }
-                val notableTags = RoomNotableTags(isFavorite, lowPriority)
-                _notableTagsFlow.emit(notableTags)
-            }
+        return setIsFavoriteResult.also {
+            setIsFavoriteCalls.add(isFavorite)
         }
     }
 
+    val markAsReadCalls = mutableListOf<ReceiptType>()
 
-    val markAsReadCalls = mutableListOf<ReceiptType?>()
-
-    override suspend fun markAsRead(receiptType: ReceiptType?): Result<Unit> {
+    override suspend fun markAsRead(receiptType: ReceiptType): Result<Unit> {
         markAsReadCalls.add(receiptType)
         return Result.success(Unit)
     }
 
-    var markAsUnreadReadCallCount = 0
+    var setUnreadFlagCalls = mutableListOf<Boolean>()
         private set
 
-    override suspend fun markAsUnread(): Result<Unit> {
-        markAsUnreadReadCallCount++
+    override suspend fun setUnreadFlag(isUnread: Boolean): Result<Unit> {
+        setUnreadFlagCalls.add(isUnread)
         return Result.success(Unit)
     }
 
@@ -657,6 +646,7 @@ fun aRoomInfo(
     isPublic: Boolean = true,
     isSpace: Boolean = false,
     isTombstoned: Boolean = false,
+    isFavorite: Boolean = false,
     canonicalAlias: String? = null,
     alternativeAliases: List<String> = emptyList(),
     currentUserMembership: CurrentUserMembership = CurrentUserMembership.JOINED,
@@ -679,6 +669,7 @@ fun aRoomInfo(
     isPublic = isPublic,
     isSpace = isSpace,
     isTombstoned = isTombstoned,
+    isFavorite = isFavorite,
     canonicalAlias = canonicalAlias,
     alternativeAliases = alternativeAliases.toImmutableList(),
     currentUserMembership = currentUserMembership,
@@ -692,10 +683,4 @@ fun aRoomInfo(
     userDefinedNotificationMode = userDefinedNotificationMode,
     hasRoomCall = hasRoomCall,
     activeRoomCallParticipants = activeRoomCallParticipants.toImmutableList(),
-)
-
-fun aRoomNotableTags(
-    isFavorite: Boolean = false,
-) = RoomNotableTags(
-    isFavorite = isFavorite,
 )
