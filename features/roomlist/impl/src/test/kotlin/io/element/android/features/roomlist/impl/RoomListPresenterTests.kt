@@ -62,6 +62,7 @@ import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.encryption.FakeEncryptionService
 import io.element.android.libraries.matrix.test.notificationsettings.FakeNotificationSettingsService
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
+import io.element.android.libraries.matrix.test.room.aRoomInfo
 import io.element.android.libraries.matrix.test.room.aRoomSummaryFilled
 import io.element.android.libraries.matrix.test.roomlist.FakeRoomListService
 import io.element.android.libraries.matrix.test.verification.FakeSessionVerificationService
@@ -340,26 +341,49 @@ class RoomListPresenterTests {
     @Test
     fun `present - show context menu`() = runTest {
         val scope = CoroutineScope(coroutineContext + SupervisorJob())
-        val presenter = createRoomListPresenter(coroutineScope = scope)
+        val room = FakeMatrixRoom()
+        val client = FakeMatrixClient().apply {
+            givenGetRoomResult(A_ROOM_ID, room)
+        }
+        val presenter = createRoomListPresenter(client = client, coroutineScope = scope)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             skipItems(1)
-
             val initialState = awaitItem()
             val summary = createRoomListRoomSummary()
             initialState.eventSink(RoomListEvents.ShowContextMenu(summary))
 
-            val shownState = awaitItem()
-            assertThat(shownState.contextMenu).isEqualTo(
-                RoomListState.ContextMenu.Shown(
-                    roomId = summary.roomId,
-                    roomName = summary.name,
-                    isDm = false,
-                    markAsUnreadFeatureFlagEnabled = true,
-                    hasNewContent = false,
-                )
+            awaitItem().also { state ->
+                assertThat(state.contextMenu)
+                    .isEqualTo(
+                        RoomListState.ContextMenu.Shown(
+                            roomId = summary.roomId,
+                            roomName = summary.name,
+                            isDm = false,
+                            isFavorite = false,
+                            markAsUnreadFeatureFlagEnabled = true,
+                            hasNewContent = false,
+                        )
+                    )
+            }
+
+            room.givenRoomInfo(
+                aRoomInfo(isFavorite = true)
             )
+            awaitItem().also { state ->
+                assertThat(state.contextMenu)
+                    .isEqualTo(
+                        RoomListState.ContextMenu.Shown(
+                            roomId = summary.roomId,
+                            roomName = summary.name,
+                            isDm = false,
+                            isFavorite = true,
+                            markAsUnreadFeatureFlagEnabled = true,
+                            hasNewContent = false,
+                        )
+                    )
+            }
             scope.cancel()
         }
     }
@@ -367,7 +391,11 @@ class RoomListPresenterTests {
     @Test
     fun `present - hide context menu`() = runTest {
         val scope = CoroutineScope(coroutineContext + SupervisorJob())
-        val presenter = createRoomListPresenter(coroutineScope = scope)
+        val room = FakeMatrixRoom()
+        val client = FakeMatrixClient().apply {
+            givenGetRoomResult(A_ROOM_ID, room)
+        }
+        val presenter = createRoomListPresenter(client = client, coroutineScope = scope)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -378,15 +406,18 @@ class RoomListPresenterTests {
             initialState.eventSink(RoomListEvents.ShowContextMenu(summary))
 
             val shownState = awaitItem()
-            assertThat(shownState.contextMenu).isEqualTo(
-                RoomListState.ContextMenu.Shown(
-                    roomId = summary.roomId,
-                    roomName = summary.name,
-                    isDm = false,
-                    markAsUnreadFeatureFlagEnabled = true,
-                    hasNewContent = false,
+            assertThat(shownState.contextMenu)
+                .isEqualTo(
+                    RoomListState.ContextMenu.Shown(
+                        roomId = summary.roomId,
+                        roomName = summary.name,
+                        isDm = false,
+                        isFavorite = false,
+                        markAsUnreadFeatureFlagEnabled = true,
+                        hasNewContent = false,
+                    )
                 )
-            )
+
             shownState.eventSink(RoomListEvents.HideContextMenu)
 
             val hiddenState = awaitItem()
@@ -440,6 +471,26 @@ class RoomListPresenterTests {
     }
 
     @Test
+    fun `present - when set is favorite event is emitted, then the action is called`() = runTest {
+        val scope = CoroutineScope(coroutineContext + SupervisorJob())
+        val room = FakeMatrixRoom()
+        val client = FakeMatrixClient().apply {
+            givenGetRoomResult(A_ROOM_ID, room)
+        }
+        val presenter = createRoomListPresenter(client = client, coroutineScope = scope)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            initialState.eventSink(RoomListEvents.SetRoomIsFavorite(A_ROOM_ID, true))
+            assertThat(room.setIsFavoriteCalls).isEqualTo(listOf(true))
+            initialState.eventSink(RoomListEvents.SetRoomIsFavorite(A_ROOM_ID, false))
+            assertThat(room.setIsFavoriteCalls).isEqualTo(listOf(true, false))
+            cancelAndIgnoreRemainingEvents()
+            scope.cancel()
+        }
+    }
+
     fun `present - change in migration presenter state modifies isMigrating`() = runTest {
         val client = FakeMatrixClient(sessionId = A_SESSION_ID)
         val migrationStore = InMemoryMigrationScreenStore()

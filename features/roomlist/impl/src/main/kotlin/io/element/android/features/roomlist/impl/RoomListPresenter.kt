@@ -28,6 +28,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import io.element.android.features.leaveroom.api.LeaveRoomEvent
 import io.element.android.features.leaveroom.api.LeaveRoomPresenter
 import io.element.android.features.networkmonitor.api.NetworkMonitor
@@ -51,7 +52,14 @@ import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.api.user.getCurrentUser
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.takeWhile
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -111,15 +119,11 @@ class RoomListPresenter @Inject constructor(
             }
         }
 
-        val markAsUnreadFeatureFlagEnabled by featureFlagService.isFeatureEnabledFlow(FeatureFlags.MarkAsUnread)
-            .collectAsState(initial = null)
-
         // Avatar indicator
         val showAvatarIndicator by indicatorService.showRoomListTopBarIndicator()
 
         var displaySearchResults by rememberSaveable { mutableStateOf(false) }
-
-        var contextMenu by remember { mutableStateOf<RoomListState.ContextMenu>(RoomListState.ContextMenu.Hidden) }
+        val contextMenu = remember { mutableStateOf<RoomListState.ContextMenu>(RoomListState.ContextMenu.Hidden) }
 
         fun handleEvents(event: RoomListEvents) {
             when (event) {
@@ -134,16 +138,18 @@ class RoomListPresenter @Inject constructor(
                     displaySearchResults = !displaySearchResults
                 }
                 is RoomListEvents.ShowContextMenu -> {
-                    contextMenu = RoomListState.ContextMenu.Shown(
-                        roomId = event.roomListRoomSummary.roomId,
-                        roomName = event.roomListRoomSummary.name,
-                        isDm = event.roomListRoomSummary.isDm,
-                        markAsUnreadFeatureFlagEnabled = markAsUnreadFeatureFlagEnabled == true,
-                        hasNewContent = event.roomListRoomSummary.hasNewContent
-                    )
+                    coroutineScope.showContextMenu(event, contextMenu)
                 }
-                is RoomListEvents.HideContextMenu -> contextMenu = RoomListState.ContextMenu.Hidden
+                is RoomListEvents.HideContextMenu -> {
+                    contextMenu.value = RoomListState.ContextMenu.Hidden
+                }
                 is RoomListEvents.LeaveRoom -> leaveRoomState.eventSink(LeaveRoomEvent.ShowConfirmation(event.roomId))
+
+                is RoomListEvents.SetRoomIsFavorite -> coroutineScope.launch {
+                    client.getRoom(event.roomId)?.use { room ->
+                        room.setIsFavorite(event.isFavorite)
+                    }
+                }
                 is RoomListEvents.MarkAsRead -> coroutineScope.launch {
                     client.getRoom(event.roomId)?.use { room ->
                         room.setUnreadFlag(isUnread = false)
@@ -177,7 +183,7 @@ class RoomListPresenter @Inject constructor(
             hasNetworkConnection = networkConnectionStatus == NetworkStatus.Online,
             invitesState = inviteStateDataSource.inviteState(),
             displaySearchResults = displaySearchResults,
-            contextMenu = contextMenu,
+            contextMenu = contextMenu.value,
             leaveRoomState = leaveRoomState,
             displayMigrationStatus = isMigrating,
             eventSink = ::handleEvents
@@ -186,6 +192,37 @@ class RoomListPresenter @Inject constructor(
 
     private fun CoroutineScope.initialLoad(matrixUser: MutableState<MatrixUser?>) = launch {
         matrixUser.value = client.getCurrentUser()
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    private fun CoroutineScope.showContextMenu(event: RoomListEvents.ShowContextMenu, contextMenuState: MutableState<RoomListState.ContextMenu>) = launch {
+        val initialState = RoomListState.ContextMenu.Shown(
+            roomId = event.roomListRoomSummary.roomId,
+            roomName = event.roomListRoomSummary.name,
+            isDm = event.roomListRoomSummary.isDm,
+            isFavorite = event.roomListRoomSummary.isFavorite,
+            markAsUnreadFeatureFlagEnabled = featureFlagService.isFeatureEnabled(FeatureFlags.MarkAsUnread),
+            hasNewContent = event.roomListRoomSummary.hasNewContent
+        )
+        contextMenuState.value = initialState
+
+        client.getRoom(event.roomListRoomSummary.roomId)?.use { room ->
+
+            val isShowingContextMenuFlow = snapshotFlow { contextMenuState.value is RoomListState.ContextMenu.Shown }
+                .distinctUntilChanged()
+
+            val isFavoriteFlow = room.roomInfoFlow
+                .map { it.isFavorite }
+                .distinctUntilChanged()
+
+            isFavoriteFlow
+                .onEach { isFavorite ->
+                    contextMenuState.value = initialState.copy(isFavorite = isFavorite)
+                }
+                .flatMapLatest { isShowingContextMenuFlow }
+                .takeWhile { isShowingContextMenu -> isShowingContextMenu }
+                .collect()
+        }
     }
 
     private fun updateVisibleRange(range: IntRange) {

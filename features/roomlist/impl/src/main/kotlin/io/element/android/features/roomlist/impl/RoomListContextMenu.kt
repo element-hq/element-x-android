@@ -41,7 +41,7 @@ import io.element.android.libraries.ui.strings.CommonStrings
 @Composable
 fun RoomListContextMenu(
     contextMenu: RoomListState.ContextMenu.Shown,
-    eventSink: (RoomListEvents.RoomListBottomSheetEvents) -> Unit,
+    eventSink: (RoomListEvents.ContextMenuEvents) -> Unit,
     onRoomSettingsClicked: (roomId: RoomId) -> Unit,
 ) {
     ModalBottomSheet(
@@ -64,7 +64,10 @@ fun RoomListContextMenu(
             onLeaveRoomClicked = {
                 eventSink(RoomListEvents.HideContextMenu)
                 eventSink(RoomListEvents.LeaveRoom(contextMenu.roomId))
-            }
+            },
+            onFavoriteChanged = { isFavorite ->
+                eventSink(RoomListEvents.SetRoomIsFavorite(contextMenu.roomId, isFavorite))
+            },
         )
     }
 }
@@ -72,10 +75,11 @@ fun RoomListContextMenu(
 @Composable
 private fun RoomListModalBottomSheetContent(
     contextMenu: RoomListState.ContextMenu.Shown,
-    onRoomMarkReadClicked: () -> Unit,
-    onRoomMarkUnreadClicked: () -> Unit,
     onRoomSettingsClicked: () -> Unit,
     onLeaveRoomClicked: () -> Unit,
+    onFavoriteChanged: (isFavorite: Boolean) -> Unit,
+    onRoomMarkReadClicked: () -> Unit,
+    onRoomMarkUnreadClicked: () -> Unit,
 ) {
     Column(
         modifier = Modifier.fillMaxWidth()
@@ -120,6 +124,30 @@ private fun RoomListModalBottomSheetContent(
                 style = ListItemStyle.Primary,
             )
         }
+        ListItem(
+            headlineContent = {
+                Text(
+                    text = stringResource(id = CommonStrings.common_favourite),
+                    style = MaterialTheme.typography.bodyLarge,
+                )
+            },
+            leadingContent = ListItemContent.Icon(
+                iconSource = IconSource.Vector(
+                    CompoundIcons.Favourite(),
+                    contentDescription = stringResource(id = CommonStrings.common_favourite),
+                )
+            ),
+            trailingContent = ListItemContent.Switch(
+                checked = contextMenu.isFavorite,
+                onChange = { isFavorite ->
+                    onFavoriteChanged(isFavorite)
+                },
+            ),
+            onClick = {
+                onFavoriteChanged(!contextMenu.isFavorite)
+            },
+            style = ListItemStyle.Primary,
+        )
         ListItem(
             headlineContent = {
                 Text(
@@ -170,7 +198,8 @@ internal fun RoomListModalBottomSheetContentPreview() = ElementPreview {
         onRoomMarkReadClicked = {},
         onRoomMarkUnreadClicked = {},
         onRoomSettingsClicked = {},
-        onLeaveRoomClicked = {}
+        onLeaveRoomClicked = {},
+        onFavoriteChanged = {},
     )
 }
 
@@ -182,6 +211,7 @@ internal fun RoomListModalBottomSheetContentForDmPreview() = ElementPreview {
         onRoomMarkReadClicked = {},
         onRoomMarkUnreadClicked = {},
         onRoomSettingsClicked = {},
-        onLeaveRoomClicked = {}
+        onLeaveRoomClicked = {},
+        onFavoriteChanged = {},
     )
 }

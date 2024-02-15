@@ -48,6 +48,7 @@ data class RoomSummaryDetails(
     val userDefinedNotificationMode: RoomNotificationMode?,
     val hasRoomCall: Boolean,
     val isDm: Boolean,
+    val isFavorite: Boolean,
 ) {
     val lastMessageTimestamp = lastMessage?.originServerTs
 }

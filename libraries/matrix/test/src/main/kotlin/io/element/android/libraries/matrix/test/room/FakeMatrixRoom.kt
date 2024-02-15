@@ -114,6 +114,7 @@ class FakeMatrixRoom(
     private var getWidgetDriverResult: Result<MatrixWidgetDriver> = Result.success(FakeWidgetDriver())
     private var canUserTriggerRoomNotificationResult: Result<Boolean> = Result.success(true)
     private var canUserJoinCallResult: Result<Boolean> = Result.success(true)
+    private var setIsFavoriteResult = Result.success(Unit)
     var sendMessageMentions = emptyList<Mention>()
     val editMessageCalls = mutableListOf<Pair<String, String?>>()
     private val _typingRecord = mutableListOf<Boolean>()
@@ -378,6 +379,14 @@ class FakeMatrixRoom(
         return reportContentResult
     }
 
+    val setIsFavoriteCalls = mutableListOf<Boolean>()
+
+    override suspend fun setIsFavorite(isFavorite: Boolean): Result<Unit> {
+        return setIsFavoriteResult.also {
+            setIsFavoriteCalls.add(isFavorite)
+        }
+    }
+
     val markAsReadCalls = mutableListOf<ReceiptType>()
 
     override suspend fun markAsRead(receiptType: ReceiptType): Result<Unit> {
@@ -590,6 +599,10 @@ class FakeMatrixRoom(
         getWidgetDriverResult = result
     }
 
+    fun givenSetIsFavoriteResult(result: Result<Unit>) {
+        setIsFavoriteResult = result
+    }
+
     fun givenRoomInfo(roomInfo: MatrixRoomInfo) {
         _roomInfoFlow.tryEmit(roomInfo)
     }
@@ -633,6 +646,7 @@ fun aRoomInfo(
     isPublic: Boolean = true,
     isSpace: Boolean = false,
     isTombstoned: Boolean = false,
+    isFavorite: Boolean = false,
     canonicalAlias: String? = null,
     alternativeAliases: List<String> = emptyList(),
     currentUserMembership: CurrentUserMembership = CurrentUserMembership.JOINED,
@@ -655,6 +669,7 @@ fun aRoomInfo(
     isPublic = isPublic,
     isSpace = isSpace,
     isTombstoned = isTombstoned,
+    isFavorite = isFavorite,
     canonicalAlias = canonicalAlias,
     alternativeAliases = alternativeAliases.toImmutableList(),
     currentUserMembership = currentUserMembership,

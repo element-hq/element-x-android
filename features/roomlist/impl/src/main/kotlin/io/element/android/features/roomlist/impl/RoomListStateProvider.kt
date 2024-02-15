@@ -44,6 +44,7 @@ open class RoomListStateProvider : PreviewParameterProvider<RoomListState> {
             aRoomListState().copy(displaySearchResults = true, filter = "", filteredRoomList = persistentListOf()),
             aRoomListState().copy(displaySearchResults = true),
             aRoomListState().copy(contextMenu = aContextMenuShown(roomName = "A nice room name")),
+            aRoomListState().copy(contextMenu = aContextMenuShown(isFavorite = true)),
             aRoomListState().copy(displayRecoveryKeyPrompt = true),
             aRoomListState().copy(roomList = AsyncData.Success(persistentListOf())),
             aRoomListState().copy(roomList = AsyncData.Loading(prevData = RoomListRoomSummaryFactory.createFakeList())),
@@ -102,10 +103,12 @@ internal fun aContextMenuShown(
     roomName: String = "aRoom",
     isDm: Boolean = false,
     hasNewContent: Boolean = false,
+    isFavorite: Boolean = false,
 ) = RoomListState.ContextMenu.Shown(
     roomId = RoomId("!aRoom:aDomain"),
     roomName = roomName,
     isDm = isDm,
     markAsUnreadFeatureFlagEnabled = true,
     hasNewContent = hasNewContent,
+    isFavorite = isFavorite,
 )

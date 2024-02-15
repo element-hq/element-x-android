@@ -117,6 +117,7 @@ fun aRoomSummaryDetails(
     numUnreadMessages: Int = 0,
     numUnreadNotifications: Int = 0,
     isMarkedUnread: Boolean = false,
+    isFavorite: Boolean = false,
 ) = RoomSummaryDetails(
     roomId = roomId,
     name = name,
@@ -132,4 +133,5 @@ fun aRoomSummaryDetails(
     numUnreadMessages = numUnreadMessages,
     numUnreadNotifications = numUnreadNotifications,
     isMarkedUnread = isMarkedUnread,
+    isFavorite = isFavorite,
 )

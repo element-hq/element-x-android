@@ -31,6 +31,7 @@ import io.element.android.features.leaveroom.api.LeaveRoomEvent
 import io.element.android.features.leaveroom.api.LeaveRoomPresenter
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsPresenter
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.designsystem.utils.OnLifecycleEvent
 import io.element.android.libraries.featureflag.api.FeatureFlagService
@@ -65,12 +66,13 @@ class RoomDetailsPresenter @Inject constructor(
         val scope = rememberCoroutineScope()
         val leaveRoomState = leaveRoomPresenter.present()
         val canShowNotificationSettings = remember { mutableStateOf(false) }
-        val roomInfo = room.roomInfoFlow.collectAsState(initial = null).value
+        val roomInfo by room.roomInfoFlow.collectAsState(initial = null)
 
         val roomAvatar by remember { derivedStateOf { roomInfo?.avatarUrl ?: room.avatarUrl } }
 
         val roomName by remember { derivedStateOf { (roomInfo?.name ?: room.name ?: room.displayName).trim() } }
         val roomTopic by remember { derivedStateOf { roomInfo?.topic ?: room.topic } }
+        val isFavorite by remember { derivedStateOf { roomInfo?.isFavorite.orFalse() } }
 
         LaunchedEffect(Unit) {
             canShowNotificationSettings.value = featureFlagService.isFeatureEnabled(FeatureFlags.NotificationSettings)
@@ -122,6 +124,11 @@ class RoomDetailsPresenter @Inject constructor(
                         client.notificationSettingsService().unmuteRoom(room.roomId, room.isEncrypted, room.isOneToOne)
                     }
                 }
+                is RoomDetailsEvent.SetFavorite -> {
+                    scope.launch {
+                       room.setIsFavorite(event.isFavorite)
+                    }
+                }
             }
         }
 
@@ -142,6 +149,7 @@ class RoomDetailsPresenter @Inject constructor(
             roomMemberDetailsState = roomMemberDetailsState,
             leaveRoomState = leaveRoomState,
             roomNotificationSettings = roomNotificationSettingsState.roomNotificationSettings(),
+            isFavorite = isFavorite,
             eventSink = ::handleEvents,
         )
     }

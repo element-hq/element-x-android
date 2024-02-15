@@ -442,6 +442,12 @@ class RustMatrixRoom(
         }
     }
 
+    override suspend fun setIsFavorite(isFavorite: Boolean): Result<Unit> = withContext(roomDispatcher) {
+        runCatching {
+            innerRoom.setIsFavourite(isFavorite, null)
+        }
+    }
+
     override suspend fun markAsRead(receiptType: ReceiptType): Result<Unit> = withContext(roomDispatcher) {
         runCatching {
             innerRoom.markAsRead(receiptType.toRustReceiptType())

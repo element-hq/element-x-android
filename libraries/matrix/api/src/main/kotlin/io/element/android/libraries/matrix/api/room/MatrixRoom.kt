@@ -152,6 +152,8 @@ interface MatrixRoom : Closeable {
 
     suspend fun reportContent(eventId: EventId, reason: String, blockUserId: UserId?): Result<Unit>
 
+    suspend fun setIsFavorite(isFavorite: Boolean): Result<Unit>
+
     /**
      * Mark the room as read by trying to attach an unthreaded read receipt to the latest room event.
      * @param receiptType The type of receipt to send.
