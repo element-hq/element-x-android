@@ -62,6 +62,7 @@ import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.encryption.FakeEncryptionService
 import io.element.android.libraries.matrix.test.notificationsettings.FakeNotificationSettingsService
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
+import io.element.android.libraries.matrix.test.room.aRoomInfo
 import io.element.android.libraries.matrix.test.room.aRoomSummaryFilled
 import io.element.android.libraries.matrix.test.roomlist.FakeRoomListService
 import io.element.android.libraries.matrix.test.verification.FakeSessionVerificationService
@@ -367,7 +368,9 @@ class RoomListPresenterTests {
                     )
             }
 
-            room.setIsFavorite(isFavorite = true)
+            room.givenRoomInfo(
+                aRoomInfo(isFavorite = true)
+            )
             awaitItem().also { state ->
                 assertThat(state.contextMenu)
                     .isEqualTo(
