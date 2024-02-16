@@ -79,6 +79,7 @@ import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
+import kotlin.time.Duration.Companion.seconds
 
 class RoomListPresenterTests {
     @get:Rule
@@ -158,7 +159,7 @@ class RoomListPresenterTests {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            val initialState = consumeItemsUntilPredicate { state -> state.roomList.dataOrNull()?.size == 16 }.last()
+            val initialState = consumeItemsUntilPredicate(timeout = 3.seconds) { state -> state.roomList.dataOrNull()?.size == 16 }.last()
             // Room list is loaded with 16 placeholders
             val initialItems = initialState.roomList.dataOrNull().orEmpty()
             assertThat(initialItems.size).isEqualTo(16)
