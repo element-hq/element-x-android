@@ -57,7 +57,7 @@ import io.element.android.features.roomlist.impl.components.RoomListTopBar
 import io.element.android.features.roomlist.impl.components.RoomSummaryRow
 import io.element.android.features.roomlist.impl.migration.MigrationScreenView
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
-import io.element.android.features.roomlist.impl.search.RoomListSearchResultView
+import io.element.android.features.roomlist.impl.search.RoomListSearchView
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -118,8 +118,8 @@ fun RoomListView(
                 onMenuActionClicked = onMenuActionClicked,
             )
             // This overlaid view will only be visible when state.displaySearchResults is true
-            RoomListSearchResultView(
-                state = state,
+            RoomListSearchView(
+                state = state.searchState,
                 onRoomClicked = onRoomClicked,
                 onRoomLongClicked = { onRoomLongClicked(it) },
                 modifier = Modifier
@@ -207,8 +207,7 @@ private fun RoomListContent(
             RoomListTopBar(
                 matrixUser = state.matrixUser,
                 showAvatarIndicator = state.showAvatarIndicator,
-                areSearchResultsDisplayed = state.displaySearchResults,
-                onFilterChanged = { state.eventSink(RoomListEvents.UpdateFilter(it)) },
+                areSearchResultsDisplayed = state.searchState.isSearchActive,
                 onToggleSearch = { state.eventSink(RoomListEvents.ToggleSearchResults) },
                 onMenuActionClicked = onMenuActionClicked,
                 onOpenSettings = onOpenSettings,

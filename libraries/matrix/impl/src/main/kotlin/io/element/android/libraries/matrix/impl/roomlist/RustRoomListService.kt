@@ -42,8 +42,26 @@ private const val DEFAULT_PAGE_SIZE = 20
 internal class RustRoomListService(
     private val innerRoomListService: InnerRustRoomListService,
     private val sessionCoroutineScope: CoroutineScope,
-    roomListFactory: RoomListFactory,
+    private val roomListFactory: RoomListFactory,
 ) : RoomListService {
+    override fun createRoomList(
+        coroutineScope: CoroutineScope,
+        pageSize: Int,
+        initialFilter: RoomListFilter,
+        source: RoomList.Source
+    ): DynamicRoomList {
+        return roomListFactory.createRoomList(
+            pageSize = pageSize,
+            initialFilter = initialFilter,
+            coroutineScope = coroutineScope,
+        ) {
+            when (source) {
+                RoomList.Source.All -> innerRoomListService.allRooms()
+                RoomList.Source.Invites -> innerRoomListService.invites()
+            }
+        }
+    }
+
     override val allRooms: DynamicRoomList = roomListFactory.createRoomList(
         pageSize = DEFAULT_PAGE_SIZE,
         initialFilter = RoomListFilter.all(RoomListFilter.NonLeft),

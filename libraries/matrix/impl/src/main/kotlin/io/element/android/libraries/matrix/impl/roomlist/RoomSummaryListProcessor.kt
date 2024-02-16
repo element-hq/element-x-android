@@ -17,7 +17,6 @@
 package io.element.android.libraries.matrix.impl.roomlist
 
 import io.element.android.libraries.matrix.api.roomlist.RoomSummary
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -28,11 +27,12 @@ import org.matrix.rustcomponents.sdk.RoomListServiceInterface
 import org.matrix.rustcomponents.sdk.use
 import timber.log.Timber
 import java.util.UUID
+import kotlin.coroutines.CoroutineContext
 
 class RoomSummaryListProcessor(
     private val roomSummaries: MutableStateFlow<List<RoomSummary>>,
     private val roomListService: RoomListServiceInterface,
-    private val dispatcher: CoroutineDispatcher,
+    private val coroutineContext: CoroutineContext,
     private val roomSummaryDetailsFactory: RoomSummaryDetailsFactory = RoomSummaryDetailsFactory(),
 ) {
     private val roomSummariesByIdentifier = HashMap<String, RoomSummary>()
@@ -130,7 +130,7 @@ class RoomSummaryListProcessor(
         return builtRoomSummary
     }
 
-    private suspend fun updateRoomSummaries(block: suspend MutableList<RoomSummary>.() -> Unit) = withContext(dispatcher) {
+    private suspend fun updateRoomSummaries(block: suspend MutableList<RoomSummary>.() -> Unit) = withContext(coroutineContext) {
         mutex.withLock {
             val mutableRoomSummaries = roomSummaries.value.toMutableList()
             block(mutableRoomSummaries)

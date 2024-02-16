@@ -33,6 +33,11 @@ interface RoomList {
         data class Loaded(val numberOfRooms: Int) : LoadingState
     }
 
+    enum class Source {
+        All,
+        Invites,
+    }
+
     /**
      * The list of room summaries as a flow.
      */

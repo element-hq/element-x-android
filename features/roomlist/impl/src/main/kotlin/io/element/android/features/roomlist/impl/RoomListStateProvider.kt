@@ -21,6 +21,7 @@ import io.element.android.features.leaveroom.api.aLeaveRoomState
 import io.element.android.features.roomlist.impl.datasource.RoomListRoomSummaryFactory
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
 import io.element.android.features.roomlist.impl.model.aRoomListRoomSummary
+import io.element.android.features.roomlist.impl.search.aRoomListSearchState
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
@@ -41,14 +42,13 @@ open class RoomListStateProvider : PreviewParameterProvider<RoomListState> {
             aRoomListState().copy(hasNetworkConnection = false),
             aRoomListState().copy(invitesState = InvitesState.SeenInvites),
             aRoomListState().copy(invitesState = InvitesState.NewInvites),
-            aRoomListState().copy(displaySearchResults = true, filter = "", filteredRoomList = persistentListOf()),
-            aRoomListState().copy(displaySearchResults = true),
             aRoomListState().copy(contextMenu = aContextMenuShown(roomName = "A nice room name")),
             aRoomListState().copy(contextMenu = aContextMenuShown(isFavorite = true)),
             aRoomListState().copy(displayRecoveryKeyPrompt = true),
             aRoomListState().copy(roomList = AsyncData.Success(persistentListOf())),
             aRoomListState().copy(roomList = AsyncData.Loading(prevData = RoomListRoomSummaryFactory.createFakeList())),
             aRoomListState().copy(matrixUser = null, displayMigrationStatus = true),
+            aRoomListState().copy(searchState = aRoomListSearchState(isSearchActive = true, query = "Test")),
         )
 }
 
@@ -56,16 +56,14 @@ internal fun aRoomListState() = RoomListState(
     matrixUser = MatrixUser(userId = UserId("@id:domain"), displayName = "User#1"),
     showAvatarIndicator = false,
     roomList = AsyncData.Success(aRoomListRoomSummaryList()),
-    filter = "filter",
-    filteredRoomList = aRoomListRoomSummaryList(),
     hasNetworkConnection = true,
     snackbarMessage = null,
     displayVerificationPrompt = false,
     displayRecoveryKeyPrompt = false,
     invitesState = InvitesState.NoInvites,
-    displaySearchResults = false,
     contextMenu = RoomListState.ContextMenu.Hidden,
     leaveRoomState = aLeaveRoomState(),
+    searchState = aRoomListSearchState(),
     displayMigrationStatus = false,
     eventSink = {}
 )
