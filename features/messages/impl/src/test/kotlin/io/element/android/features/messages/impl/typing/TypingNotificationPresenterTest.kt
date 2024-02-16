@@ -178,7 +178,6 @@ class TypingNotificationPresenterTest {
 
     @Test
     fun `present - reserveSpace becomes true once we get the first typing notification with room members`() = runTest {
-        val aDefaultRoomMember = createDefaultRoomMember(A_USER_ID_2)
         val room = FakeMatrixRoom()
         val presenter = createPresenter(matrixRoom = room)
         moleculeFlow(RecompositionMode.Immediate) {
