@@ -45,9 +45,11 @@ class RoomListRoomSummaryFactory @Inject constructor(
                 numberOfUnreadMessages = 0,
                 numberOfUnreadMentions = 0,
                 numberOfUnreadNotifications = 0,
+                isMarkedUnread = false,
                 userDefinedNotificationMode = null,
                 hasRoomCall = false,
                 isDm = false,
+                isFavorite = false,
             )
         }
 
@@ -73,6 +75,7 @@ class RoomListRoomSummaryFactory @Inject constructor(
             numberOfUnreadMessages = roomSummary.details.numUnreadMessages,
             numberOfUnreadMentions = roomSummary.details.numUnreadMentions,
             numberOfUnreadNotifications = roomSummary.details.numUnreadNotifications,
+            isMarkedUnread = roomSummary.details.isMarkedUnread,
             timestamp = lastMessageTimestampFormatter.format(roomSummary.details.lastMessageTimestamp),
             lastMessage = roomSummary.details.lastMessage?.let { message ->
                 roomLastMessageFormatter.format(message.event, roomSummary.details.isDirect)
@@ -82,6 +85,7 @@ class RoomListRoomSummaryFactory @Inject constructor(
             userDefinedNotificationMode = roomSummary.details.userDefinedNotificationMode,
             hasRoomCall = roomSummary.details.hasRoomCall,
             isDm = roomSummary.details.isDm,
+            isFavorite = roomSummary.details.isFavorite,
         )
     }
 }

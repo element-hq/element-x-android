@@ -73,7 +73,6 @@ fun BlurHashAsyncImage(
 @Composable
 private fun BlurHashImage(
     blurHash: String?,
-    modifier: Modifier = Modifier,
     contentDescription: String? = null,
     contentScale: ContentScale = ContentScale.Fit,
 ) {
@@ -91,7 +90,7 @@ private fun BlurHashImage(
     }
     bitmapState.value?.let { bitmap ->
         Image(
-            modifier = modifier.fillMaxSize(),
+            modifier = Modifier.fillMaxSize(),
             bitmap = bitmap.asImageBitmap(),
             contentScale = contentScale,
             contentDescription = contentDescription

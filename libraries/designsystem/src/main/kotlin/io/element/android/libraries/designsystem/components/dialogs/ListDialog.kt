@@ -24,10 +24,11 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.airbnb.android.showkase.annotation.ShowkaseComposable
 import io.element.android.libraries.designsystem.components.list.TextFieldListItem
 import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.DialogPreview
@@ -80,7 +81,6 @@ private fun ListDialogContent(
     onSubmitClicked: () -> Unit,
     cancelText: String,
     submitText: String,
-    modifier: Modifier = Modifier,
     title: String? = null,
     enabled: Boolean = true,
     subtitle: @Composable (() -> Unit)? = null,
@@ -88,7 +88,6 @@ private fun ListDialogContent(
     SimpleAlertDialogContent(
         title = title,
         subtitle = subtitle,
-        modifier = modifier,
         cancelText = cancelText,
         submitText = submitText,
         onCancelClicked = onDismissRequest,
@@ -102,11 +101,10 @@ private fun ListDialogContent(
     }
 }
 
-@PreviewsDayNight
-@ShowkaseComposable(group = PreviewGroup.Dialogs)
+@Preview(group = PreviewGroup.Dialogs)
 @Composable
 internal fun ListDialogContentPreview() {
-    ElementPreview(showBackground = false) {
+    ElementThemedPreview(showBackground = false) {
         DialogPreview {
             ListDialogContent(
                 listItems = {
@@ -125,4 +123,24 @@ internal fun ListDialogContentPreview() {
             )
         }
     }
+}
+
+@PreviewsDayNight
+@Composable
+internal fun ListDialogPreview() = ElementPreview {
+    ListDialog(
+        listItems = {
+            item {
+                TextFieldListItem(placeholder = "Text input", text = "", onTextChanged = {})
+            }
+            item {
+                TextFieldListItem(placeholder = "Another text input", text = "", onTextChanged = {})
+            }
+        },
+        title = "Dialog title",
+        onDismissRequest = {},
+        onSubmit = {},
+        cancelText = "Cancel",
+        submitText = "Save",
+    )
 }

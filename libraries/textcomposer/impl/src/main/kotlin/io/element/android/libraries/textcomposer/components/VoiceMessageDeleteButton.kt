@@ -44,7 +44,7 @@ fun VoiceMessageDeleteButton(
     ) {
         Icon(
             modifier = Modifier.size(24.dp),
-            imageVector = CompoundIcons.Delete,
+            imageVector = CompoundIcons.Delete(),
             contentDescription = stringResource(CommonStrings.a11y_delete),
             tint = if (enabled) {
                 ElementTheme.colors.iconCriticalPrimary

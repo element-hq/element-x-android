@@ -47,6 +47,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.Velocity
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
+import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.leaveroom.api.LeaveRoomView
 import io.element.android.features.networkmonitor.api.ui.ConnectivityIndicatorContainer
 import io.element.android.features.roomlist.impl.components.ConfirmRecoveryKeyBanner
@@ -55,6 +56,7 @@ import io.element.android.features.roomlist.impl.components.RoomListMenuAction
 import io.element.android.features.roomlist.impl.components.RoomListTopBar
 import io.element.android.features.roomlist.impl.components.RoomSummaryRow
 import io.element.android.features.roomlist.impl.filters.RoomListFiltersView
+import io.element.android.features.roomlist.impl.migration.MigrationScreenView
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
 import io.element.android.features.roomlist.impl.search.RoomListSearchResultView
 import io.element.android.libraries.architecture.AsyncData
@@ -67,8 +69,6 @@ import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconSource
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.designsystem.utils.CommonDrawables
-import io.element.android.libraries.designsystem.utils.LogCompositions
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarHost
 import io.element.android.libraries.designsystem.utils.snackbar.rememberSnackbarHostState
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -156,7 +156,7 @@ private fun EmptyRoomListView(
         Spacer(modifier = Modifier.height(16.dp))
         Button(
             text = stringResource(CommonStrings.action_start_chat),
-            leadingIcon = IconSource.Resource(CommonDrawables.ic_new_message),
+            leadingIcon = IconSource.Vector(CompoundIcons.Compose()),
             onClick = onCreateRoomClicked,
         )
     }
@@ -191,11 +191,6 @@ private fun RoomListContent(
         }
     }
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(appBarState)
-    LogCompositions(
-        tag = "RoomListScreen",
-        msg = "Content"
-    )
-
     val nestedScrollConnection = remember {
         object : NestedScrollConnection {
             override suspend fun onPostFling(consumed: Velocity, available: Velocity): Velocity {
@@ -220,6 +215,7 @@ private fun RoomListContent(
                     onMenuActionClicked = onMenuActionClicked,
                     onOpenSettings = onOpenSettings,
                     scrollBehavior = scrollBehavior,
+                    displayMenuItems = !state.displayMigrationStatus,
                 )
                 RoomListFiltersView(state = state.filtersState)
             }
@@ -280,18 +276,22 @@ private fun RoomListContent(
                     }
                 }
             }
+
+            MigrationScreenView(isMigrating = state.displayMigrationStatus)
         },
         floatingActionButton = {
-            FloatingActionButton(
-                // FIXME align on Design system theme
-                containerColor = MaterialTheme.colorScheme.primary,
-                onClick = onCreateRoomClicked
-            ) {
-                Icon(
-                    // Note cannot use Icons.Outlined.EditSquare, it does not exist :/
-                    resourceId = CommonDrawables.ic_new_message,
-                    contentDescription = stringResource(id = R.string.screen_roomlist_a11y_create_message)
-                )
+            if (!state.displayMigrationStatus) {
+                FloatingActionButton(
+                    // FIXME align on Design system theme
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    onClick = onCreateRoomClicked
+                ) {
+                    Icon(
+                        // Note cannot use Icons.Outlined.EditSquare, it does not exist :/
+                        imageVector = CompoundIcons.Compose(),
+                        contentDescription = stringResource(id = R.string.screen_roomlist_a11y_create_message)
+                    )
+                }
             }
         },
         snackbarHost = { SnackbarHost(snackbarHostState) },

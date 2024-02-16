@@ -29,10 +29,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import io.element.android.compound.icons.CompoundIcons
-import io.element.android.compound.icons.compoundicons.Check
-import io.element.android.compound.icons.compoundicons.Send
 import io.element.android.compound.theme.ElementTheme
+import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Icon
@@ -54,8 +52,8 @@ internal fun SendButton(
         enabled = canSendMessage,
     ) {
         val iconVector = when (composerMode) {
-            is MessageComposerMode.Edit -> CompoundIcons.Check
-            else -> CompoundIcons.Send
+            is MessageComposerMode.Edit -> CompoundIcons.Check()
+            else -> CompoundIcons.Send()
         }
         val iconStartPadding = when (composerMode) {
             is MessageComposerMode.Edit -> 0.dp

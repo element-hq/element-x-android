@@ -55,7 +55,7 @@ internal fun MenuPreview() {
                 val trailingIcon: @Composable (() -> Unit)? = if (i in 3..4) {
                     @Composable {
                         Icon(
-                            imageVector = CompoundIcons.ChevronRight,
+                            imageVector = CompoundIcons.ChevronRight(),
                             contentDescription = null,
                         )
                     }

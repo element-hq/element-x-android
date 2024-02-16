@@ -90,7 +90,7 @@ fun ConfigureTracingView(
                         onClick = { showMenu = !showMenu }
                     ) {
                         Icon(
-                            imageVector = CompoundIcons.OverflowVertical,
+                            imageVector = CompoundIcons.OverflowVertical(),
                             tint = ElementTheme.materialColors.secondary,
                             contentDescription = null,
                         )
@@ -107,7 +107,7 @@ fun ConfigureTracingView(
                             text = { Text("Reset to default") },
                             leadingIcon = {
                                 Icon(
-                                    imageVector = CompoundIcons.Delete,
+                                    imageVector = CompoundIcons.Delete(),
                                     tint = ElementTheme.materialColors.secondary,
                                     contentDescription = null,
                                 )
@@ -141,14 +141,12 @@ fun ConfigureTracingView(
 @Composable
 private fun CrateListContent(
     state: ConfigureTracingState,
-    modifier: Modifier = Modifier
 ) {
     fun onLogLevelChange(target: Target, logLevel: LogLevel) {
         state.eventSink(ConfigureTracingEvents.UpdateFilter(target, logLevel))
     }
 
     TargetAndLogLevelListView(
-        modifier = modifier,
         data = state.targetsToLogLevel,
         onLogLevelChange = ::onLogLevelChange,
     )
@@ -158,11 +156,8 @@ private fun CrateListContent(
 private fun TargetAndLogLevelListView(
     data: ImmutableMap<Target, LogLevel>,
     onLogLevelChange: (Target, LogLevel) -> Unit,
-    modifier: Modifier = Modifier,
 ) {
-    Column(
-        modifier = modifier,
-    ) {
+    Column {
         data.forEach { item ->
             fun onLogLevelChange(logLevel: LogLevel) {
                 onLogLevelChange(item.key, logLevel)
@@ -182,10 +177,8 @@ private fun TargetAndLogLevelView(
     target: Target,
     logLevel: LogLevel,
     onLogLevelChange: (LogLevel) -> Unit,
-    modifier: Modifier = Modifier
 ) {
     ListItem(
-        modifier = modifier,
         headlineContent = { Text(text = target.filter.takeIf { it.isNotEmpty() } ?: "(common)") },
         trailingContent = ListItemContent.Custom {
             LogLevelDropdownMenu(
@@ -200,10 +193,9 @@ private fun TargetAndLogLevelView(
 private fun LogLevelDropdownMenu(
     logLevel: LogLevel,
     onLogLevelChange: (LogLevel) -> Unit,
-    modifier: Modifier = Modifier,
 ) {
     var expanded by remember { mutableStateOf(false) }
-    Box(modifier = modifier) {
+    Box {
         DropdownMenuItem(
             modifier = Modifier.widthIn(max = 120.dp),
             text = { Text(text = logLevel.filter) },
@@ -211,7 +203,7 @@ private fun LogLevelDropdownMenu(
             trailingIcon = {
                 Icon(
                     modifier = Modifier.rotate(if (expanded) 180f else 0f),
-                    imageVector = CompoundIcons.ChevronDown,
+                    imageVector = CompoundIcons.ChevronDown(),
                     contentDescription = null,
                 )
             },

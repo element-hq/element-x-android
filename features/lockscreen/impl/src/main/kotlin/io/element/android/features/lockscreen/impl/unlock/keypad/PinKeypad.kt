@@ -108,14 +108,13 @@ private fun PinKeypadRow(
     models: ImmutableList<PinKeypadModel>,
     onClick: (PinKeypadModel) -> Unit,
     pinKeySize: Dp,
-    modifier: Modifier = Modifier,
     horizontalArrangement: Arrangement.Horizontal = Arrangement.Start,
     verticalAlignment: Alignment.Vertical = Alignment.Top,
 ) {
     Row(
         horizontalArrangement = horizontalArrangement,
         verticalAlignment = verticalAlignment,
-        modifier = modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth(),
     ) {
         val commonModifier = Modifier.size(pinKeySize)
         for (model in models) {

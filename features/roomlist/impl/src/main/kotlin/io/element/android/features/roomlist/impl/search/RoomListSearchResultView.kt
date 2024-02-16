@@ -103,7 +103,6 @@ private fun RoomListSearchResultContent(
     state: RoomListState,
     onRoomClicked: (RoomId) -> Unit,
     onRoomLongClicked: (RoomListRoomSummary) -> Unit,
-    modifier: Modifier = Modifier,
 ) {
     val borderColor = MaterialTheme.colorScheme.tertiary
     val strokeWidth = 1.dp
@@ -115,7 +114,6 @@ private fun RoomListSearchResultContent(
         onRoomClicked(room.roomId)
     }
     Scaffold(
-        modifier = modifier,
         topBar = {
             TopAppBar(
                 modifier = Modifier.drawBehind {
@@ -152,7 +150,7 @@ private fun RoomListSearchResultContent(
                                     state.eventSink(RoomListEvents.UpdateFilter(""))
                                 }) {
                                     Icon(
-                                        imageVector = CompoundIcons.Close,
+                                        imageVector = CompoundIcons.Close(),
                                         contentDescription = stringResource(CommonStrings.action_cancel)
                                     )
                                 }

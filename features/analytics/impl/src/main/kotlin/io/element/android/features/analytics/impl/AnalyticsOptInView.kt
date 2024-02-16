@@ -57,7 +57,6 @@ import io.element.android.libraries.designsystem.theme.components.ButtonSize
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.designsystem.theme.temporaryColorBgSpecial
-import io.element.android.libraries.designsystem.utils.LogCompositions
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.persistentListOf
 
@@ -67,7 +66,6 @@ fun AnalyticsOptInView(
     onClickTerms: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    LogCompositions(tag = "Analytics", msg = "Root")
     val eventSink = state.eventSink
 
     fun onTermsAccepted() {
@@ -101,10 +99,8 @@ private const val LINK_TAG = "link"
 private fun AnalyticsOptInHeader(
     state: AnalyticsOptInState,
     onClickTerms: () -> Unit,
-    modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         IconTitleSubtitleMolecule(
@@ -141,24 +137,22 @@ private fun AnalyticsOptInHeader(
 }
 
 @Composable
-private fun CheckIcon(modifier: Modifier = Modifier) {
+private fun CheckIcon() {
     Icon(
-        modifier = modifier
+        modifier = Modifier
             .size(20.dp)
             .background(color = MaterialTheme.colorScheme.background, shape = CircleShape)
             .padding(2.dp),
-        imageVector = CompoundIcons.Check,
+        imageVector = CompoundIcons.Check(),
         contentDescription = null,
         tint = ElementTheme.colors.textActionAccent,
     )
 }
 
 @Composable
-private fun AnalyticsOptInContent(
-    modifier: Modifier = Modifier,
-) {
+private fun AnalyticsOptInContent() {
     Box(
-        modifier = modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxSize(),
         contentAlignment = BiasAlignment(
             horizontalBias = 0f,
             verticalBias = -0.4f
@@ -190,11 +184,8 @@ private fun AnalyticsOptInContent(
 private fun AnalyticsOptInFooter(
     onTermsAccepted: () -> Unit,
     onTermsDeclined: () -> Unit,
-    modifier: Modifier = Modifier,
 ) {
-    ButtonColumnMolecule(
-        modifier = modifier,
-    ) {
+    ButtonColumnMolecule {
         Button(
             text = stringResource(id = CommonStrings.action_ok),
             onClick = onTermsAccepted,

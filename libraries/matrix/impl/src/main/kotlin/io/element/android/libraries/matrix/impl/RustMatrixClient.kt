@@ -60,6 +60,7 @@ import io.element.android.libraries.matrix.impl.roomlist.roomOrNull
 import io.element.android.libraries.matrix.impl.sync.RustSyncService
 import io.element.android.libraries.matrix.impl.usersearch.UserProfileMapper
 import io.element.android.libraries.matrix.impl.usersearch.UserSearchResultMapper
+import io.element.android.libraries.matrix.impl.util.SessionDirectoryNameProvider
 import io.element.android.libraries.matrix.impl.util.cancelAndDestroy
 import io.element.android.libraries.matrix.impl.verification.RustSessionVerificationService
 import io.element.android.libraries.sessionstorage.api.SessionStore
@@ -134,6 +135,7 @@ class RustMatrixClient(
         sessionCoroutineScope = sessionCoroutineScope,
         dispatchers = dispatchers,
     ).apply { start() }
+    private val sessionDirectoryNameProvider = SessionDirectoryNameProvider()
 
     private val isLoggingOut = AtomicBoolean(false)
 
@@ -397,13 +399,12 @@ class RustMatrixClient(
     }
 
     override suspend fun getCacheSize(): Long {
-        // Do not use client.userId since it can throw if client has been closed (during clear cache)
-        return baseDirectory.getCacheSize(userID = sessionId.value)
+        return baseDirectory.getCacheSize()
     }
 
     override suspend fun clearCache() {
         close()
-        baseDirectory.deleteSessionDirectory(userID = sessionId.value, deleteCryptoDb = false)
+        baseDirectory.deleteSessionDirectory(deleteCryptoDb = false)
     }
 
     override suspend fun logout(ignoreSdkError: Boolean): String? = doLogout(
@@ -432,7 +433,7 @@ class RustMatrixClient(
                 }
             }
             close()
-            baseDirectory.deleteSessionDirectory(userID = sessionId.value, deleteCryptoDb = true)
+            baseDirectory.deleteSessionDirectory(deleteCryptoDb = true)
             if (removeSession) {
                 sessionStore.removeSession(sessionId.value)
             }
@@ -478,12 +479,10 @@ class RustMatrixClient(
     override fun roomMembershipObserver(): RoomMembershipObserver = roomMembershipObserver
 
     private suspend fun File.getCacheSize(
-        userID: String,
         includeCryptoDb: Boolean = false,
     ): Long = withContext(sessionDispatcher) {
-        // Rust sanitises the user ID replacing invalid characters with an _
-        val sanitisedUserID = userID.replace(":", "_")
-        val sessionDirectory = File(this@getCacheSize, sanitisedUserID)
+        val sessionDirectoryName = sessionDirectoryNameProvider.provides(sessionId)
+        val sessionDirectory = File(this@getCacheSize, sessionDirectoryName)
         if (includeCryptoDb) {
             sessionDirectory.getSizeOfFiles()
         } else {
@@ -500,12 +499,10 @@ class RustMatrixClient(
     }
 
     private suspend fun File.deleteSessionDirectory(
-        userID: String,
         deleteCryptoDb: Boolean = false,
     ): Boolean = withContext(sessionDispatcher) {
-        // Rust sanitises the user ID replacing invalid characters with an _
-        val sanitisedUserID = userID.replace(":", "_")
-        val sessionDirectory = File(this@deleteSessionDirectory, sanitisedUserID)
+        val sessionDirectoryName = sessionDirectoryNameProvider.provides(sessionId)
+        val sessionDirectory = File(this@deleteSessionDirectory, sessionDirectoryName)
         if (deleteCryptoDb) {
             // Delete the folder and all its content
             sessionDirectory.deleteRecursively()

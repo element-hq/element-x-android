@@ -57,13 +57,12 @@ fun SetupBiometricView(
 }
 
 @Composable
-private fun SetupBiometricHeader(modifier: Modifier = Modifier) {
+private fun SetupBiometricHeader() {
     val biometricAuth = stringResource(id = R.string.screen_app_lock_biometric_authentication)
     IconTitleSubtitleMolecule(
         iconImageVector = Icons.Default.Fingerprint,
         title = stringResource(id = R.string.screen_app_lock_settings_enable_biometric_unlock),
         subTitle = stringResource(id = R.string.screen_app_lock_setup_biometric_unlock_subtitle, biometricAuth),
-        modifier = modifier
     )
 }
 
@@ -71,11 +70,8 @@ private fun SetupBiometricHeader(modifier: Modifier = Modifier) {
 private fun SetupBiometricFooter(
     onAllowClicked: () -> Unit,
     onSkipClicked: () -> Unit,
-    modifier: Modifier = Modifier
 ) {
-    ButtonColumnMolecule(
-        modifier = modifier,
-    ) {
+    ButtonColumnMolecule {
         val biometricAuth = stringResource(id = R.string.screen_app_lock_biometric_authentication)
         Button(
             text = stringResource(id = R.string.screen_app_lock_setup_biometric_unlock_allow_title, biometricAuth),

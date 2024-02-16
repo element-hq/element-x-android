@@ -25,6 +25,7 @@ data class TracingFilterConfiguration(
     private val targetsToLogLevel: Map<Target, LogLevel> = mapOf(
         Target.HYPER to LogLevel.WARN,
         Target.MATRIX_SDK_CRYPTO to LogLevel.DEBUG,
+        Target.MATRIX_SDK_CRYPTO_ACCOUNT to LogLevel.TRACE,
         Target.MATRIX_SDK_HTTP_CLIENT to LogLevel.DEBUG,
         Target.MATRIX_SDK_SLIDING_SYNC to LogLevel.TRACE,
         Target.MATRIX_SDK_BASE_SLIDING_SYNC to LogLevel.TRACE,
@@ -58,6 +59,7 @@ enum class Target(open val filter: String) {
     MATRIX_SDK_FFI("matrix_sdk_ffi"),
     MATRIX_SDK_UNIFFI_API("matrix_sdk_ffi::uniffi_api"),
     MATRIX_SDK_CRYPTO("matrix_sdk_crypto"),
+    MATRIX_SDK_CRYPTO_ACCOUNT("matrix_sdk_crypto::olm::account"),
     MATRIX_SDK("matrix_sdk"),
     MATRIX_SDK_HTTP_CLIENT("matrix_sdk::http_client"),
     MATRIX_SDK_CLIENT("matrix_sdk::client"),

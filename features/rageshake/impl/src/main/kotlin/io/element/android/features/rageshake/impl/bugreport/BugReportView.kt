@@ -51,7 +51,6 @@ import io.element.android.libraries.designsystem.preview.debugPlaceholderBackgro
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.OutlinedTextField
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.designsystem.utils.LogCompositions
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
@@ -62,7 +61,6 @@ fun BugReportView(
     onBackPressed: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    LogCompositions(tag = "Rageshake", msg = "Root")
     val eventSink = state.eventSink
 
     Box(modifier = modifier) {

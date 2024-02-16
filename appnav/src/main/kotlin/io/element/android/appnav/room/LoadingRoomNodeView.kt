@@ -84,10 +84,8 @@ fun LoadingRoomNodeView(
 @Composable
 private fun LoadingRoomTopBar(
     onBackClicked: () -> Unit,
-    modifier: Modifier = Modifier
 ) {
     TopAppBar(
-        modifier = modifier,
         navigationIcon = {
             BackButton(onClick = onBackClicked)
         },

@@ -1,3 +1,42 @@
+Changes in Element X v0.4.4 (2024-02-15)
+========================================
+
+Bugfixes 🐛
+----------
+
+- Fix decryption of previous messages after session verification not working.
+
+Changes in Element X v0.4.3 (2024-02-14)
+========================================
+
+Features ✨
+----------
+ - Change "Read receipts" advanced setting used to send private Read Receipt to "Share presence" settings. When disabled, private Read Receipts will be sent, and no typing notification will be sent. Also Read Receipts and typing notifications will not be rendered in the timeline. ([#2241](https://github.com/element-hq/element-x-android/issues/2241))
+ - Render typing notifications. ([#2242](https://github.com/element-hq/element-x-android/issues/2242))
+ - Manually mark a room as unread. ([#2261](https://github.com/element-hq/element-x-android/issues/2261))
+ - Add empty state to the room list. ([#2330](https://github.com/element-hq/element-x-android/issues/2330))
+ - Allow joining unencrypted video calls in non encrypted rooms. ([#2333](https://github.com/element-hq/element-x-android/issues/2333))
+
+Bugfixes 🐛
+----------
+ - Fix crash after unregistering UnifiedPush distributor ([#2304](https://github.com/element-hq/element-x-android/issues/2304))
+ - Add missing device id to settings screen. ([#2316](https://github.com/element-hq/element-x-android/issues/2316))
+ - Open the keyboard (and keep it opened) when creating a poll. ([#2329](https://github.com/element-hq/element-x-android/issues/2329))
+ - Fix message forwarding after SDK API change related to Timeline intitialization.
+
+Other changes
+-------------
+ - Adjusted the login flow buttons so the continue button is always at the same height ([#825](https://github.com/element-hq/element-x-android/issues/825))
+ - Move migration screen to within the room list ([#2310](https://github.com/element-hq/element-x-android/issues/2310))
+ - Render correctly in reply to data when Event cannot be decrypted or has been redacted ([#2318](https://github.com/element-hq/element-x-android/issues/2318))
+ - Remove Compose Foundation version pinning workaround. This was done to avoid a bug introduced in the default foundation version used by the material3 library, but that has already been fixed.
+ - Remove `FilterHiddenStateEventsProcessor`, as this is already handled by the Rust SDK.
+ - Remove session preferences on user log out.
+
+Breaking changes 🚨
+-------------------
+ - Update Compound icons in the project. Since the icon prefix changed to `ic_compound_` and the `CompoundIcons` helper now contains the vector icons as composable functions.
+
 Changes in Element X v0.4.2 (2024-01-31)
 ========================================
 

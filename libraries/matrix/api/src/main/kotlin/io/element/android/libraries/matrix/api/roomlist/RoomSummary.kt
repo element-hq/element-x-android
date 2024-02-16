@@ -43,10 +43,12 @@ data class RoomSummaryDetails(
     val numUnreadMessages: Int,
     val numUnreadMentions: Int,
     val numUnreadNotifications: Int,
+    val isMarkedUnread: Boolean,
     val inviter: RoomMember?,
     val userDefinedNotificationMode: RoomNotificationMode?,
     val hasRoomCall: Boolean,
     val isDm: Boolean,
+    val isFavorite: Boolean,
 ) {
     val lastMessageTimestamp = lastMessage?.originServerTs
 }

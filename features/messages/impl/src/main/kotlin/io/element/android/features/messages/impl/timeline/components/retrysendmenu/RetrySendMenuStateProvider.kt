@@ -22,10 +22,15 @@ import io.element.android.features.messages.impl.timeline.model.TimelineItem
 
 class RetrySendMenuStateProvider : PreviewParameterProvider<RetrySendMenuState> {
     override val values: Sequence<RetrySendMenuState> = sequenceOf(
-        aRetrySendMenuState(event = null),
+        aRetrySendMenuState(),
         aRetrySendMenuState(event = aTimelineItemEvent()),
     )
 }
 
-fun aRetrySendMenuState(event: TimelineItem.Event? = aTimelineItemEvent()) =
-    RetrySendMenuState(selectedEvent = event, eventSink = {})
+fun aRetrySendMenuState(
+    event: TimelineItem.Event? = null,
+    eventSink: (RetrySendMenuEvents) -> Unit = {},
+) = RetrySendMenuState(
+    selectedEvent = event,
+    eventSink = eventSink,
+)

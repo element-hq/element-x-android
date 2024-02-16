@@ -41,6 +41,7 @@ import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.api.room.StateEventType
 import io.element.android.libraries.matrix.api.room.location.AssetType
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
+import io.element.android.libraries.matrix.api.timeline.ReceiptType
 import io.element.android.libraries.matrix.api.timeline.item.event.EventTimelineItem
 import io.element.android.libraries.matrix.api.widget.MatrixWidgetDriver
 import io.element.android.libraries.matrix.api.widget.MatrixWidgetSettings
@@ -113,6 +114,7 @@ class FakeMatrixRoom(
     private var getWidgetDriverResult: Result<MatrixWidgetDriver> = Result.success(FakeWidgetDriver())
     private var canUserTriggerRoomNotificationResult: Result<Boolean> = Result.success(true)
     private var canUserJoinCallResult: Result<Boolean> = Result.success(true)
+    private var setIsFavoriteResult = Result.success(Unit)
     var sendMessageMentions = emptyList<Mention>()
     val editMessageCalls = mutableListOf<Pair<String, String?>>()
     private val _typingRecord = mutableListOf<Boolean>()
@@ -168,6 +170,9 @@ class FakeMatrixRoom(
 
     private val _roomInfoFlow: MutableSharedFlow<MatrixRoomInfo> = MutableSharedFlow(replay = 1)
     override val roomInfoFlow: Flow<MatrixRoomInfo> = _roomInfoFlow
+
+    private val _roomTypingMembersFlow: MutableSharedFlow<List<UserId>> = MutableSharedFlow(replay = 1)
+    override val roomTypingMembersFlow: Flow<List<UserId>> = _roomTypingMembersFlow
 
     override val membersStateFlow: MutableStateFlow<MatrixRoomMembersState> = MutableStateFlow(MatrixRoomMembersState.Unknown)
 
@@ -374,6 +379,29 @@ class FakeMatrixRoom(
         return reportContentResult
     }
 
+    val setIsFavoriteCalls = mutableListOf<Boolean>()
+
+    override suspend fun setIsFavorite(isFavorite: Boolean): Result<Unit> {
+        return setIsFavoriteResult.also {
+            setIsFavoriteCalls.add(isFavorite)
+        }
+    }
+
+    val markAsReadCalls = mutableListOf<ReceiptType>()
+
+    override suspend fun markAsRead(receiptType: ReceiptType): Result<Unit> {
+        markAsReadCalls.add(receiptType)
+        return Result.success(Unit)
+    }
+
+    var setUnreadFlagCalls = mutableListOf<Boolean>()
+        private set
+
+    override suspend fun setUnreadFlag(isUnread: Boolean): Result<Unit> {
+        setUnreadFlagCalls.add(isUnread)
+        return Result.success(Unit)
+    }
+
     override suspend fun sendLocation(
         body: String,
         geoUri: String,
@@ -571,8 +599,16 @@ class FakeMatrixRoom(
         getWidgetDriverResult = result
     }
 
+    fun givenSetIsFavoriteResult(result: Result<Unit>) {
+        setIsFavoriteResult = result
+    }
+
     fun givenRoomInfo(roomInfo: MatrixRoomInfo) {
         _roomInfoFlow.tryEmit(roomInfo)
+    }
+
+    fun givenRoomTypingMembers(typingMembers: List<UserId>) {
+        _roomTypingMembersFlow.tryEmit(typingMembers)
     }
 }
 
@@ -610,6 +646,7 @@ fun aRoomInfo(
     isPublic: Boolean = true,
     isSpace: Boolean = false,
     isTombstoned: Boolean = false,
+    isFavorite: Boolean = false,
     canonicalAlias: String? = null,
     alternativeAliases: List<String> = emptyList(),
     currentUserMembership: CurrentUserMembership = CurrentUserMembership.JOINED,
@@ -632,6 +669,7 @@ fun aRoomInfo(
     isPublic = isPublic,
     isSpace = isSpace,
     isTombstoned = isTombstoned,
+    isFavorite = isFavorite,
     canonicalAlias = canonicalAlias,
     alternativeAliases = alternativeAliases.toImmutableList(),
     currentUserMembership = currentUserMembership,

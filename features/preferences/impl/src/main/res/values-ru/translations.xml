@@ -8,6 +8,8 @@
   <string name="screen_advanced_settings_rich_text_editor_description">"Отключить редактор форматированного текста и включить Markdown."</string>
   <string name="screen_advanced_settings_send_read_receipts">"Уведомления о прочтении"</string>
   <string name="screen_advanced_settings_send_read_receipts_description">"Если этот параметр выключен, ваш статус о прочтении не будет отображаться. Вы по-прежнему будете видеть статус о прочтении от других пользователей."</string>
+  <string name="screen_advanced_settings_share_presence">"Поделиться присутствием"</string>
+  <string name="screen_advanced_settings_share_presence_description">"Если выключено, вы не сможете отправлять, получать уведомления о прочтении и наборе текста"</string>
   <string name="screen_advanced_settings_view_source_description">"Включить опцию просмотра источника сообщения в ленте."</string>
   <string name="screen_edit_profile_display_name">"Отображаемое имя"</string>
   <string name="screen_edit_profile_display_name_placeholder">"Ваше отображаемое имя"</string>

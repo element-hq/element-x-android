@@ -25,36 +25,45 @@ import io.element.android.features.leaveroom.api.LeaveRoomPresenter
 import io.element.android.features.leaveroom.fake.FakeLeaveRoomPresenter
 import io.element.android.features.networkmonitor.api.NetworkMonitor
 import io.element.android.features.networkmonitor.test.FakeNetworkMonitor
+import io.element.android.features.preferences.api.store.SessionPreferencesStore
 import io.element.android.features.roomlist.impl.datasource.FakeInviteDataSource
 import io.element.android.features.roomlist.impl.datasource.InviteStateDataSource
 import io.element.android.features.roomlist.impl.datasource.RoomListDataSource
 import io.element.android.features.roomlist.impl.datasource.RoomListRoomSummaryFactory
-import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
+import io.element.android.features.roomlist.impl.filters.RoomListFiltersPresenter
+import io.element.android.features.roomlist.impl.migration.InMemoryMigrationScreenStore
+import io.element.android.features.roomlist.impl.migration.MigrationScreenPresenter
+import io.element.android.features.roomlist.impl.model.createRoomListRoomSummary
 import io.element.android.libraries.dateformatter.api.LastMessageTimestampFormatter
+import io.element.android.libraries.dateformatter.test.A_FORMATTED_DATE
 import io.element.android.libraries.dateformatter.test.FakeLastMessageTimestampFormatter
-import io.element.android.libraries.designsystem.components.avatar.AvatarData
-import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.eventformatter.api.RoomLastMessageFormatter
 import io.element.android.libraries.eventformatter.test.FakeRoomLastMessageFormatter
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
+import io.element.android.libraries.featureflag.test.InMemorySessionPreferencesStore
 import io.element.android.libraries.indicator.impl.DefaultIndicatorService
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.encryption.BackupState
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
+import io.element.android.libraries.matrix.api.roomlist.RoomListService
+import io.element.android.libraries.matrix.api.timeline.ReceiptType
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatus
 import io.element.android.libraries.matrix.test.AN_AVATAR_URL
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_ROOM_NAME
+import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.A_USER_NAME
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.encryption.FakeEncryptionService
 import io.element.android.libraries.matrix.test.notificationsettings.FakeNotificationSettingsService
+import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
+import io.element.android.libraries.matrix.test.room.aRoomInfo
 import io.element.android.libraries.matrix.test.room.aRoomSummaryFilled
 import io.element.android.libraries.matrix.test.roomlist.FakeRoomListService
 import io.element.android.libraries.matrix.test.verification.FakeSessionVerificationService
@@ -171,12 +180,23 @@ class RoomListPresenterTests {
             val initialItems = initialState.roomList.dataOrNull().orEmpty()
             assertThat(initialItems.size).isEqualTo(16)
             assertThat(initialItems.all { it.isPlaceholder }).isTrue()
-            roomListService.postAllRooms(listOf(aRoomSummaryFilled()))
+            roomListService.postAllRooms(
+                listOf(
+                    aRoomSummaryFilled(
+                        numUnreadMentions = 1,
+                        numUnreadMessages = 2,
+                    )
+                )
+            )
             val withRoomState = consumeItemsUntilPredicate { state -> state.roomList.dataOrNull()?.size == 1 }.last()
             val withRoomStateItems = withRoomState.roomList.dataOrNull().orEmpty()
             assertThat(withRoomStateItems.size).isEqualTo(1)
-            assertThat(withRoomStateItems.first())
-                .isEqualTo(aRoomListRoomSummary)
+            assertThat(withRoomStateItems.first()).isEqualTo(
+                createRoomListRoomSummary(
+                    numberOfUnreadMentions = 1,
+                    numberOfUnreadMessages = 2,
+                )
+            )
             scope.cancel()
         }
     }
@@ -192,7 +212,14 @@ class RoomListPresenterTests {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            roomListService.postAllRooms(listOf(aRoomSummaryFilled()))
+            roomListService.postAllRooms(
+                listOf(
+                    aRoomSummaryFilled(
+                        numUnreadMentions = 1,
+                        numUnreadMessages = 2,
+                    )
+                )
+            )
             skipItems(3)
             val loadedState = awaitItem()
             // Test filtering with result
@@ -203,8 +230,12 @@ class RoomListPresenterTests {
             assertThat(withFilteredRoomState.filteredRoomList.size).isEqualTo(1)
             assertThat(withFilteredRoomState.filter).isEqualTo(A_ROOM_NAME.substring(0, 3))
             assertThat(withFilteredRoomState.filteredRoomList.size).isEqualTo(1)
-            assertThat(withFilteredRoomState.filteredRoomList.first())
-                .isEqualTo(aRoomListRoomSummary)
+            assertThat(withFilteredRoomState.filteredRoomList.first()).isEqualTo(
+                createRoomListRoomSummary(
+                    numberOfUnreadMentions = 1,
+                    numberOfUnreadMessages = 2,
+                )
+            )
             // Test filtering without result
             withFilteredRoomState.eventSink.invoke(RoomListEvents.UpdateFilter("tada"))
             skipItems(1)
@@ -311,19 +342,49 @@ class RoomListPresenterTests {
     @Test
     fun `present - show context menu`() = runTest {
         val scope = CoroutineScope(coroutineContext + SupervisorJob())
-        val presenter = createRoomListPresenter(coroutineScope = scope)
+        val room = FakeMatrixRoom()
+        val client = FakeMatrixClient().apply {
+            givenGetRoomResult(A_ROOM_ID, room)
+        }
+        val presenter = createRoomListPresenter(client = client, coroutineScope = scope)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             skipItems(1)
-
             val initialState = awaitItem()
-            val summary = aRoomListRoomSummary
+            val summary = createRoomListRoomSummary()
             initialState.eventSink(RoomListEvents.ShowContextMenu(summary))
 
-            val shownState = awaitItem()
-            assertThat(shownState.contextMenu)
-                .isEqualTo(RoomListState.ContextMenu.Shown(summary.roomId, summary.name, false))
+            awaitItem().also { state ->
+                assertThat(state.contextMenu)
+                    .isEqualTo(
+                        RoomListState.ContextMenu.Shown(
+                            roomId = summary.roomId,
+                            roomName = summary.name,
+                            isDm = false,
+                            isFavorite = false,
+                            markAsUnreadFeatureFlagEnabled = true,
+                            hasNewContent = false,
+                        )
+                    )
+            }
+
+            room.givenRoomInfo(
+                aRoomInfo(isFavorite = true)
+            )
+            awaitItem().also { state ->
+                assertThat(state.contextMenu)
+                    .isEqualTo(
+                        RoomListState.ContextMenu.Shown(
+                            roomId = summary.roomId,
+                            roomName = summary.name,
+                            isDm = false,
+                            isFavorite = true,
+                            markAsUnreadFeatureFlagEnabled = true,
+                            hasNewContent = false,
+                        )
+                    )
+            }
             scope.cancel()
         }
     }
@@ -331,19 +392,33 @@ class RoomListPresenterTests {
     @Test
     fun `present - hide context menu`() = runTest {
         val scope = CoroutineScope(coroutineContext + SupervisorJob())
-        val presenter = createRoomListPresenter(coroutineScope = scope)
+        val room = FakeMatrixRoom()
+        val client = FakeMatrixClient().apply {
+            givenGetRoomResult(A_ROOM_ID, room)
+        }
+        val presenter = createRoomListPresenter(client = client, coroutineScope = scope)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             skipItems(1)
 
             val initialState = awaitItem()
-            val summary = aRoomListRoomSummary
+            val summary = createRoomListRoomSummary()
             initialState.eventSink(RoomListEvents.ShowContextMenu(summary))
 
             val shownState = awaitItem()
             assertThat(shownState.contextMenu)
-                .isEqualTo(RoomListState.ContextMenu.Shown(summary.roomId, summary.name, false))
+                .isEqualTo(
+                    RoomListState.ContextMenu.Shown(
+                        roomId = summary.roomId,
+                        roomName = summary.name,
+                        isDm = false,
+                        isFavorite = false,
+                        markAsUnreadFeatureFlagEnabled = true,
+                        hasNewContent = false,
+                    )
+                )
+
             shownState.eventSink(RoomListEvents.HideContextMenu)
 
             val hiddenState = awaitItem()
@@ -396,6 +471,91 @@ class RoomListPresenterTests {
         }
     }
 
+    @Test
+    fun `present - when set is favorite event is emitted, then the action is called`() = runTest {
+        val scope = CoroutineScope(coroutineContext + SupervisorJob())
+        val room = FakeMatrixRoom()
+        val client = FakeMatrixClient().apply {
+            givenGetRoomResult(A_ROOM_ID, room)
+        }
+        val presenter = createRoomListPresenter(client = client, coroutineScope = scope)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            initialState.eventSink(RoomListEvents.SetRoomIsFavorite(A_ROOM_ID, true))
+            assertThat(room.setIsFavoriteCalls).isEqualTo(listOf(true))
+            initialState.eventSink(RoomListEvents.SetRoomIsFavorite(A_ROOM_ID, false))
+            assertThat(room.setIsFavoriteCalls).isEqualTo(listOf(true, false))
+            cancelAndIgnoreRemainingEvents()
+            scope.cancel()
+        }
+    }
+
+    fun `present - change in migration presenter state modifies isMigrating`() = runTest {
+        val client = FakeMatrixClient(sessionId = A_SESSION_ID)
+        val migrationStore = InMemoryMigrationScreenStore()
+        val migrationScreenPresenter = MigrationScreenPresenter(client, migrationStore)
+        val scope = CoroutineScope(coroutineContext + SupervisorJob())
+        val presenter = createRoomListPresenter(
+            client = client,
+            coroutineScope = scope,
+            migrationScreenPresenter = migrationScreenPresenter,
+        )
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            // The migration screen is shown if the migration screen has not been shown before
+            assertThat(initialState.displayMigrationStatus).isTrue()
+            skipItems(2)
+
+            // Set migration as done and set the room list service as running to trigger a refresh of the presenter value
+            (client.roomListService as FakeRoomListService).postState(RoomListService.State.Running)
+            migrationStore.setMigrationScreenShown(A_SESSION_ID)
+
+            // The migration screen is not shown anymore
+            assertThat(awaitItem().displayMigrationStatus).isFalse()
+            cancelAndIgnoreRemainingEvents()
+            scope.cancel()
+        }
+    }
+
+    @Test
+    fun `present - check that the room is marked as read with correct RR and as unread`() = runTest {
+        val room = FakeMatrixRoom()
+        val sessionPreferencesStore = InMemorySessionPreferencesStore()
+        val matrixClient = FakeMatrixClient().apply {
+            givenGetRoomResult(A_ROOM_ID, room)
+        }
+        val scope = CoroutineScope(coroutineContext + SupervisorJob())
+        val presenter = createRoomListPresenter(
+            client = matrixClient,
+            coroutineScope = scope,
+            sessionPreferencesStore = sessionPreferencesStore,
+        )
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            assertThat(room.markAsReadCalls).isEmpty()
+            assertThat(room.setUnreadFlagCalls).isEmpty()
+            initialState.eventSink.invoke(RoomListEvents.MarkAsRead(A_ROOM_ID))
+            assertThat(room.markAsReadCalls).isEqualTo(listOf(ReceiptType.READ))
+            assertThat(room.setUnreadFlagCalls).isEqualTo(listOf(false))
+            initialState.eventSink.invoke(RoomListEvents.MarkAsUnread(A_ROOM_ID))
+            assertThat(room.markAsReadCalls).isEqualTo(listOf(ReceiptType.READ))
+            assertThat(room.setUnreadFlagCalls).isEqualTo(listOf(false, true))
+            // Test again with private read receipts
+            sessionPreferencesStore.setSendPublicReadReceipts(false)
+            initialState.eventSink.invoke(RoomListEvents.MarkAsRead(A_ROOM_ID))
+            assertThat(room.markAsReadCalls).isEqualTo(listOf(ReceiptType.READ, ReceiptType.READ_PRIVATE))
+            assertThat(room.setUnreadFlagCalls).isEqualTo(listOf(false, true, false))
+            cancelAndIgnoreRemainingEvents()
+            scope.cancel()
+        }
+    }
+
     private fun TestScope.createRoomListPresenter(
         client: MatrixClient = FakeMatrixClient(),
         sessionVerificationService: SessionVerificationService = FakeSessionVerificationService(),
@@ -408,7 +568,13 @@ class RoomListPresenterTests {
         },
         roomLastMessageFormatter: RoomLastMessageFormatter = FakeRoomLastMessageFormatter(),
         encryptionService: EncryptionService = FakeEncryptionService(),
+        sessionPreferencesStore: SessionPreferencesStore = InMemorySessionPreferencesStore(),
         coroutineScope: CoroutineScope,
+        migrationScreenPresenter: MigrationScreenPresenter = MigrationScreenPresenter(
+            matrixClient = client,
+            migrationScreenStore = InMemoryMigrationScreenStore(),
+        ),
+        filtersPresenter: RoomListFiltersPresenter = RoomListFiltersPresenter(),
     ) = RoomListPresenter(
         client = client,
         sessionVerificationService = sessionVerificationService,
@@ -433,23 +599,8 @@ class RoomListPresenterTests {
             encryptionService = encryptionService,
             featureFlagService = FakeFeatureFlagService(mapOf(FeatureFlags.SecureStorage.key to true)),
         ),
+        migrationScreenPresenter = migrationScreenPresenter,
+        sessionPreferencesStore = sessionPreferencesStore,
+        filtersPresenter = filtersPresenter,
     )
 }
-
-private const val A_FORMATTED_DATE = "formatted_date"
-
-private val aRoomListRoomSummary = RoomListRoomSummary(
-    id = A_ROOM_ID.value,
-    roomId = A_ROOM_ID,
-    name = A_ROOM_NAME,
-    numberOfUnreadMentions = 1,
-    numberOfUnreadMessages = 2,
-    numberOfUnreadNotifications = 0,
-    timestamp = A_FORMATTED_DATE,
-    lastMessage = "",
-    avatarData = AvatarData(id = A_ROOM_ID.value, name = A_ROOM_NAME, size = AvatarSize.RoomListItem),
-    isPlaceholder = false,
-    userDefinedNotificationMode = null,
-    hasRoomCall = false,
-    isDm = false,
-)

@@ -37,8 +37,8 @@ fun aRoomSummaryFilled(
     isDirect: Boolean = false,
     avatarUrl: String? = null,
     lastMessage: RoomMessage? = aRoomMessage(),
-    numUnreadMentions: Int = 1,
-    numUnreadMessages: Int = 2,
+    numUnreadMentions: Int = 0,
+    numUnreadMessages: Int = 0,
     notificationMode: RoomNotificationMode? = null,
 ) = RoomSummary.Filled(
     aRoomSummaryDetails(
@@ -62,11 +62,13 @@ fun aRoomSummaryDetails(
     numUnreadMentions: Int = 0,
     numUnreadMessages: Int = 0,
     numUnreadNotifications: Int = 0,
+    isMarkedUnread: Boolean = false,
     notificationMode: RoomNotificationMode? = null,
     inviter: RoomMember? = null,
     canonicalAlias: String? = null,
     hasRoomCall: Boolean = false,
     isDm: Boolean = false,
+    isFavorite: Boolean = false,
 ) = RoomSummaryDetails(
     roomId = roomId,
     name = name,
@@ -76,11 +78,13 @@ fun aRoomSummaryDetails(
     numUnreadMentions = numUnreadMentions,
     numUnreadMessages = numUnreadMessages,
     numUnreadNotifications = numUnreadNotifications,
+    isMarkedUnread = isMarkedUnread,
     userDefinedNotificationMode = notificationMode,
     inviter = inviter,
     canonicalAlias = canonicalAlias,
     hasRoomCall = hasRoomCall,
     isDm = isDm,
+    isFavorite = isFavorite,
 )
 
 fun aRoomMessage(

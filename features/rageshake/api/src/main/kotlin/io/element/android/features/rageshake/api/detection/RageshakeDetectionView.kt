@@ -31,7 +31,6 @@ import io.element.android.libraries.androidutils.hardware.vibrate
 import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.designsystem.utils.LogCompositions
 import io.element.android.libraries.designsystem.utils.OnLifecycleEvent
 import io.element.android.libraries.ui.strings.CommonStrings
 
@@ -40,10 +39,6 @@ fun RageshakeDetectionView(
     state: RageshakeDetectionState,
     onOpenBugReport: () -> Unit = { },
 ) {
-    LogCompositions(
-        tag = "Rageshake",
-        msg = "RageshakeDetectionScreen"
-    )
     val eventSink = state.eventSink
     val context = LocalContext.current
     OnLifecycleEvent { _, event ->

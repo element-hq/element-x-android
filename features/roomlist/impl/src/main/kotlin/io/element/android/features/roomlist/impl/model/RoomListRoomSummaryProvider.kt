@@ -89,6 +89,7 @@ internal fun aRoomListRoomSummary(
     numberOfUnreadMessages: Int = 0,
     numberOfUnreadMentions: Int = 0,
     numberOfUnreadNotifications: Int = 0,
+    isMarkedUnread: Boolean = false,
     lastMessage: String? = "Last message",
     timestamp: String? = lastMessage?.let { "88:88" },
     isPlaceholder: Boolean = false,
@@ -96,6 +97,7 @@ internal fun aRoomListRoomSummary(
     hasRoomCall: Boolean = false,
     avatarData: AvatarData = AvatarData(id, name, size = AvatarSize.RoomListItem),
     isDm: Boolean = false,
+    isFavorite: Boolean = false,
 ) = RoomListRoomSummary(
     id = id,
     roomId = RoomId(id),
@@ -103,6 +105,7 @@ internal fun aRoomListRoomSummary(
     numberOfUnreadMessages = numberOfUnreadMessages,
     numberOfUnreadMentions = numberOfUnreadMentions,
     numberOfUnreadNotifications = numberOfUnreadNotifications,
+    isMarkedUnread = isMarkedUnread,
     timestamp = timestamp,
     lastMessage = lastMessage,
     avatarData = avatarData,
@@ -110,4 +113,5 @@ internal fun aRoomListRoomSummary(
     userDefinedNotificationMode = notificationMode,
     hasRoomCall = hasRoomCall,
     isDm = isDm,
+    isFavorite = isFavorite,
 )

@@ -83,7 +83,7 @@ fun SelectedUser(
                 ),
         ) {
             Icon(
-                imageVector = CompoundIcons.Close,
+                imageVector = CompoundIcons.Close(),
                 contentDescription = stringResource(id = CommonStrings.action_remove),
                 tint = MaterialTheme.colorScheme.onPrimary,
                 modifier = Modifier.padding(2.dp)

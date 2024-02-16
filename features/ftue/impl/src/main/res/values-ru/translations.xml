@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_migration_message">"Это одноразовый процесс, спасибо, что подождали."</string>
-  <string name="screen_migration_title">"Настройка учетной записи."</string>
   <string name="screen_notification_optin_subtitle">"Вы можете изменить настройки позже."</string>
   <string name="screen_notification_optin_title">"Разрешите уведомления и никогда не пропустите сообщение"</string>
   <string name="screen_welcome_bullet_1">"Звонки, опросы, поиск и многое другое будут добавлены позже в этом году."</string>

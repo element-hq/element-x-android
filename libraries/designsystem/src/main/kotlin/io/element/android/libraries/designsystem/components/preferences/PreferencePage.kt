@@ -32,8 +32,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import io.element.android.compound.theme.ElementTheme
+import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.designsystem.components.button.BackButton
-import io.element.android.libraries.designsystem.icons.CompoundDrawables
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.aliasScreenTitle
@@ -80,10 +80,8 @@ fun PreferencePage(
 private fun PreferenceTopAppBar(
     title: String,
     onBackPressed: () -> Unit,
-    modifier: Modifier = Modifier,
 ) {
     TopAppBar(
-        modifier = modifier,
         navigationIcon = {
             BackButton(onClick = onBackPressed)
         },
@@ -111,19 +109,19 @@ internal fun PreferenceViewPreview() = ElementPreview {
             PreferenceText(
                 title = "Title",
                 subtitle = "Some other text",
-                iconResourceId = CompoundDrawables.ic_chat_problem,
+                icon = CompoundIcons.ChatProblem(),
             )
             PreferenceDivider()
             PreferenceSwitch(
                 title = "Switch",
-                iconResourceId = CompoundDrawables.ic_threads,
+                icon = CompoundIcons.Threads(),
                 isChecked = true,
                 onCheckedChange = {},
             )
             PreferenceDivider()
             PreferenceCheckbox(
                 title = "Checkbox",
-                iconResourceId = CompoundDrawables.ic_notifications,
+                icon = CompoundIcons.Notifications(),
                 isChecked = true,
                 onCheckedChange = {},
             )

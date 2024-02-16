@@ -21,11 +21,9 @@ import android.os.Build
 import androidx.annotation.VisibleForTesting
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.features.ftue.api.state.FtueState
-import io.element.android.features.ftue.impl.migration.MigrationScreenStore
 import io.element.android.features.ftue.impl.welcome.state.WelcomeScreenState
 import io.element.android.features.lockscreen.api.LockScreenService
 import io.element.android.libraries.di.SessionScope
-import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.permissions.api.PermissionStateProvider
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.toolbox.api.sdk.BuildVersionSdkIntProvider
@@ -43,17 +41,14 @@ class DefaultFtueState @Inject constructor(
     coroutineScope: CoroutineScope,
     private val analyticsService: AnalyticsService,
     private val welcomeScreenState: WelcomeScreenState,
-    private val migrationScreenStore: MigrationScreenStore,
     private val permissionStateProvider: PermissionStateProvider,
     private val lockScreenService: LockScreenService,
-    private val matrixClient: MatrixClient,
 ) : FtueState {
     override val shouldDisplayFlow = MutableStateFlow(isAnyStepIncomplete())
 
     override suspend fun reset() {
         welcomeScreenState.reset()
         analyticsService.reset()
-        migrationScreenStore.reset()
         if (sdkVersionProvider.isAtLeast(Build.VERSION_CODES.TIRAMISU)) {
             permissionStateProvider.resetPermission(Manifest.permission.POST_NOTIFICATIONS)
         }
@@ -67,12 +62,7 @@ class DefaultFtueState @Inject constructor(
 
     fun getNextStep(currentStep: FtueStep? = null): FtueStep? =
         when (currentStep) {
-            null -> if (shouldDisplayMigrationScreen()) {
-                FtueStep.MigrationScreen
-            } else {
-                getNextStep(FtueStep.MigrationScreen)
-            }
-            FtueStep.MigrationScreen -> if (shouldDisplayWelcomeScreen()) {
+            null -> if (shouldDisplayWelcomeScreen()) {
                 FtueStep.WelcomeScreen
             } else {
                 getNextStep(FtueStep.WelcomeScreen)
@@ -97,16 +87,11 @@ class DefaultFtueState @Inject constructor(
 
     private fun isAnyStepIncomplete(): Boolean {
         return listOf(
-            { shouldDisplayMigrationScreen() },
             { shouldDisplayWelcomeScreen() },
             { shouldAskNotificationPermissions() },
             { needsAnalyticsOptIn() },
             { shouldDisplayLockscreenSetup() },
         ).any { it() }
-    }
-
-    private fun shouldDisplayMigrationScreen(): Boolean {
-        return migrationScreenStore.isMigrationScreenNeeded(matrixClient.sessionId)
     }
 
     private fun needsAnalyticsOptIn(): Boolean {
@@ -147,7 +132,6 @@ class DefaultFtueState @Inject constructor(
 }
 
 sealed interface FtueStep {
-    data object MigrationScreen : FtueStep
     data object WelcomeScreen : FtueStep
     data object NotificationsOptIn : FtueStep
     data object AnalyticsOptIn : FtueStep

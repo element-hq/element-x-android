@@ -125,11 +125,10 @@ fun EventDebugInfoView(
 private fun CollapsibleSection(
     title: String,
     text: String,
-    modifier: Modifier = Modifier,
     initiallyExpanded: Boolean = false,
 ) {
     var isExpanded by remember { mutableStateOf(initiallyExpanded) }
-    Column(modifier = modifier.fillMaxWidth()) {
+    Column(modifier = Modifier.fillMaxWidth()) {
         Row(
             modifier = Modifier
                 .clickable { isExpanded = !isExpanded }
@@ -140,7 +139,7 @@ private fun CollapsibleSection(
             Text(title, modifier = Modifier.weight(1f))
             Icon(
                 modifier = Modifier.rotate(if (isExpanded) 180f else 0f),
-                imageVector = CompoundIcons.ChevronDown,
+                imageVector = CompoundIcons.ChevronDown(),
                 contentDescription = null
             )
         }

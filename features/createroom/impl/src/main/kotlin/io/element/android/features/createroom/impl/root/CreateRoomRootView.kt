@@ -117,10 +117,8 @@ fun CreateRoomRootView(
 @Composable
 private fun CreateRoomRootViewTopBar(
     onClosePressed: () -> Unit,
-    modifier: Modifier = Modifier,
 ) {
     TopAppBar(
-        modifier = modifier,
         title = {
             Text(
                 text = stringResource(id = CommonStrings.action_start_chat),
@@ -129,7 +127,7 @@ private fun CreateRoomRootViewTopBar(
         },
         navigationIcon = {
             BackButton(
-                imageVector = CompoundIcons.Close,
+                imageVector = CompoundIcons.Close(),
                 onClick = onClosePressed,
             )
         }
@@ -141,16 +139,15 @@ private fun CreateRoomActionButtonsList(
     state: CreateRoomRootState,
     onNewRoomClicked: () -> Unit,
     onInvitePeopleClicked: () -> Unit,
-    modifier: Modifier = Modifier,
 ) {
-    Column(modifier = modifier) {
+    Column {
         CreateRoomActionButton(
-            iconRes = CompoundDrawables.ic_plus,
+            iconRes = CompoundDrawables.ic_compound_plus,
             text = stringResource(id = R.string.screen_create_room_action_create_room),
             onClick = onNewRoomClicked,
         )
         CreateRoomActionButton(
-            iconRes = CompoundDrawables.ic_share_android,
+            iconRes = CompoundDrawables.ic_compound_share_android,
             text = stringResource(id = CommonStrings.action_invite_friends_to_app, state.applicationName),
             onClick = onInvitePeopleClicked,
         )
@@ -162,10 +159,9 @@ private fun CreateRoomActionButton(
     @DrawableRes iconRes: Int,
     text: String,
     onClick: () -> Unit,
-    modifier: Modifier = Modifier,
 ) {
     Row(
-        modifier = modifier
+        modifier = Modifier
             .fillMaxWidth()
             .height(56.dp)
             .clickable { onClick() }

@@ -179,7 +179,6 @@ private fun LoginForm(
     state: LoginPasswordState,
     isLoading: Boolean,
     onSubmit: () -> Unit,
-    modifier: Modifier = Modifier
 ) {
     var loginFieldState by textFieldState(stateValue = state.formState.login)
     var passwordFieldState by textFieldState(stateValue = state.formState.password)
@@ -187,7 +186,7 @@ private fun LoginForm(
     val focusManager = LocalFocusManager.current
     val eventSink = state.eventSink
 
-    Column(modifier) {
+    Column {
         Text(
             text = stringResource(R.string.screen_login_form_header),
             modifier = Modifier.padding(start = 16.dp),
@@ -228,7 +227,7 @@ private fun LoginForm(
                     IconButton(onClick = {
                         loginFieldState = ""
                     }) {
-                        Icon(imageVector = CompoundIcons.Close, contentDescription = stringResource(CommonStrings.action_clear))
+                        Icon(imageVector = CompoundIcons.Close(), contentDescription = stringResource(CommonStrings.action_clear))
                     }
                 }
             } else {
@@ -264,7 +263,7 @@ private fun LoginForm(
             visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
             trailingIcon = {
                 val image =
-                    if (passwordVisible) CompoundIcons.VisibilityOn else CompoundIcons.VisibilityOff
+                    if (passwordVisible) CompoundIcons.VisibilityOn() else CompoundIcons.VisibilityOff()
                 val description =
                     if (passwordVisible) stringResource(CommonStrings.a11y_hide_password) else stringResource(CommonStrings.a11y_show_password)
 

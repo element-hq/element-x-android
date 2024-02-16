@@ -2,6 +2,8 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="confirm_recovery_key_banner_message">"La sauvegarde des conversations est désynchronisée. Vous devez confirmer la clé de récupération pour accéder à votre historique."</string>
   <string name="confirm_recovery_key_banner_title">"Confirmer votre clé de récupération"</string>
+  <string name="screen_migration_message">"Il s’agit d’une opération ponctuelle, merci d’attendre quelques instants."</string>
+  <string name="screen_migration_title">"Configuration de votre compte."</string>
   <string name="screen_roomlist_a11y_create_message">"Créer une nouvelle discussion ou un nouveau salon"</string>
   <string name="screen_roomlist_empty_message">"Commencez par envoyer un message à quelqu’un."</string>
   <string name="screen_roomlist_empty_title">"Aucune discussion pour le moment."</string>

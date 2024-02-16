@@ -93,10 +93,9 @@ fun OnBoardingView(
 private fun OnBoardingContent(
     state: OnBoardingState,
     onOpenDeveloperSettings: () -> Unit,
-    modifier: Modifier = Modifier
 ) {
     Box(
-        modifier = modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxSize(),
     ) {
         Box(
             modifier = Modifier.fillMaxSize(),
@@ -143,7 +142,7 @@ private fun OnBoardingContent(
                 onClick = onOpenDeveloperSettings,
             ) {
                 Icon(
-                    imageVector = CompoundIcons.SettingsSolid,
+                    imageVector = CompoundIcons.SettingsSolid(),
                     contentDescription = stringResource(CommonStrings.common_settings)
                 )
             }
@@ -158,9 +157,8 @@ private fun OnBoardingButtons(
     onSignIn: () -> Unit,
     onCreateAccount: () -> Unit,
     onReportProblem: () -> Unit,
-    modifier: Modifier = Modifier,
 ) {
-    ButtonColumnMolecule(modifier = modifier) {
+    ButtonColumnMolecule {
         val signInButtonStringRes = if (state.canLoginWithQrCode || state.canCreateAccount) {
             R.string.screen_onboarding_sign_in_manually
         } else {

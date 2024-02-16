@@ -44,16 +44,12 @@ open class RoomListStateProvider : PreviewParameterProvider<RoomListState> {
             aRoomListState().copy(invitesState = InvitesState.NewInvites),
             aRoomListState().copy(displaySearchResults = true, filter = "", filteredRoomList = persistentListOf()),
             aRoomListState().copy(displaySearchResults = true),
-            aRoomListState().copy(
-                contextMenu = RoomListState.ContextMenu.Shown(
-                    roomId = RoomId("!aRoom:aDomain"),
-                    roomName = "A nice room name",
-                    isDm = false,
-                )
-            ),
+            aRoomListState().copy(contextMenu = aContextMenuShown(roomName = "A nice room name")),
+            aRoomListState().copy(contextMenu = aContextMenuShown(isFavorite = true)),
             aRoomListState().copy(displayRecoveryKeyPrompt = true),
             aRoomListState().copy(roomList = AsyncData.Success(persistentListOf())),
             aRoomListState().copy(roomList = AsyncData.Loading(prevData = RoomListRoomSummaryFactory.createFakeList())),
+            aRoomListState().copy(matrixUser = null, displayMigrationStatus = true),
         )
 }
 
@@ -72,6 +68,7 @@ internal fun aRoomListState() = RoomListState(
     contextMenu = RoomListState.ContextMenu.Hidden,
     leaveRoomState = aLeaveRoomState(),
     filtersState = aRoomListFiltersState(),
+    displayMigrationStatus = false,
     eventSink = {}
 )
 
@@ -103,3 +100,17 @@ internal fun aRoomListRoomSummaryList(): ImmutableList<RoomListRoomSummary> {
         ),
     )
 }
+
+internal fun aContextMenuShown(
+    roomName: String = "aRoom",
+    isDm: Boolean = false,
+    hasNewContent: Boolean = false,
+    isFavorite: Boolean = false,
+) = RoomListState.ContextMenu.Shown(
+    roomId = RoomId("!aRoom:aDomain"),
+    roomName = roomName,
+    isDm = isDm,
+    markAsUnreadFeatureFlagEnabled = true,
+    hasNewContent = hasNewContent,
+    isFavorite = isFavorite,
+)

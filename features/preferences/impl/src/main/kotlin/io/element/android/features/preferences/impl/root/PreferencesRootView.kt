@@ -19,8 +19,6 @@ package io.element.android.features.preferences.impl.root
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.InsertChart
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -85,14 +83,14 @@ fun PreferencesRootView(
         if (state.showCompleteVerification) {
             ListItem(
                 headlineContent = { Text(text = stringResource(CommonStrings.common_verify_device)) },
-                leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.CheckCircle)),
+                leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.CheckCircle())),
                 onClick = onVerifyClicked
             )
         }
         if (state.showSecureBackup) {
             ListItem(
                 headlineContent = { Text(stringResource(id = CommonStrings.common_chat_backup)) },
-                leadingContent = ListItemContent.Icon(IconSource.Resource(CommonDrawables.ic_key_filled)),
+                leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.KeySolid())),
                 trailingContent = ListItemContent.Badge.takeIf { state.showSecureBackupBadge },
                 onClick = onSecureBackupClicked,
             )
@@ -103,8 +101,8 @@ fun PreferencesRootView(
         if (state.accountManagementUrl != null) {
             ListItem(
                 headlineContent = { Text(stringResource(id = CommonStrings.action_manage_account)) },
-                leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.UserProfile)),
-                trailingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.PopOut)),
+                leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.UserProfile())),
+                trailingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.PopOut())),
                 onClick = { onManageAccountClicked(state.accountManagementUrl) },
             )
             HorizontalDivider()
@@ -112,31 +110,31 @@ fun PreferencesRootView(
         if (state.showAnalyticsSettings) {
             ListItem(
                 headlineContent = { Text(stringResource(id = CommonStrings.common_analytics)) },
-                leadingContent = ListItemContent.Icon(IconSource.Vector(Icons.Outlined.InsertChart)),
+                leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Chart())),
                 onClick = onOpenAnalytics,
             )
         }
         if (state.showNotificationSettings) {
             ListItem(
                 headlineContent = { Text(stringResource(id = R.string.screen_notification_settings_title)) },
-                leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Notifications)),
+                leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Notifications())),
                 onClick = onOpenNotificationSettings,
             )
         }
         ListItem(
             headlineContent = { Text(stringResource(id = CommonStrings.common_report_a_problem)) },
-            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.ChatProblem)),
+            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.ChatProblem())),
             onClick = onOpenRageShake
         )
         ListItem(
             headlineContent = { Text(stringResource(id = CommonStrings.common_about)) },
-            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Info)),
+            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Info())),
             onClick = onOpenAbout,
         )
         if (state.showLockScreenSettings) {
             ListItem(
                 headlineContent = { Text(stringResource(id = CommonStrings.common_screen_lock)) },
-                leadingContent = ListItemContent.Icon(IconSource.Resource(CommonDrawables.ic_lock_outline)),
+                leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Lock())),
                 onClick = onOpenLockScreenSettings,
             )
         }
@@ -144,15 +142,15 @@ fun PreferencesRootView(
         if (state.devicesManagementUrl != null) {
             ListItem(
                 headlineContent = { Text(stringResource(id = CommonStrings.action_manage_devices)) },
-                leadingContent = ListItemContent.Icon(IconSource.Resource(CommonDrawables.ic_devices)),
-                trailingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.PopOut)),
+                leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Devices())),
+                trailingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.PopOut())),
                 onClick = { onManageAccountClicked(state.devicesManagementUrl) },
             )
             HorizontalDivider()
         }
         ListItem(
             headlineContent = { Text(stringResource(id = CommonStrings.common_advanced_settings)) },
-            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Settings)),
+            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Settings())),
             onClick = onOpenAdvancedSettings,
         )
         if (state.showDeveloperSettings) {
@@ -161,7 +159,7 @@ fun PreferencesRootView(
         HorizontalDivider()
         ListItem(
             headlineContent = { Text(stringResource(id = CommonStrings.action_signout)) },
-            leadingContent = ListItemContent.Icon(IconSource.Resource(CommonDrawables.ic_sign_out)),
+            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.SignOut())),
             style = ListItemStyle.Destructive,
             onClick = onSignOutClicked,
         )

@@ -84,7 +84,7 @@ fun SelectedRoom(
                 ),
         ) {
             Icon(
-                imageVector = CompoundIcons.Close,
+                imageVector = CompoundIcons.Close(),
                 contentDescription = stringResource(id = CommonStrings.action_remove),
                 tint = MaterialTheme.colorScheme.onPrimary,
                 modifier = Modifier.padding(2.dp)
@@ -116,6 +116,8 @@ fun aRoomSummaryDetails(
     numUnreadMentions: Int = 0,
     numUnreadMessages: Int = 0,
     numUnreadNotifications: Int = 0,
+    isMarkedUnread: Boolean = false,
+    isFavorite: Boolean = false,
 ) = RoomSummaryDetails(
     roomId = roomId,
     name = name,
@@ -130,4 +132,6 @@ fun aRoomSummaryDetails(
     numUnreadMentions = numUnreadMentions,
     numUnreadMessages = numUnreadMessages,
     numUnreadNotifications = numUnreadNotifications,
+    isMarkedUnread = isMarkedUnread,
+    isFavorite = isFavorite,
 )

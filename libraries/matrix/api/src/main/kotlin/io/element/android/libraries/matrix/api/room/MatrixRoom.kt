@@ -30,6 +30,7 @@ import io.element.android.libraries.matrix.api.media.VideoInfo
 import io.element.android.libraries.matrix.api.poll.PollKind
 import io.element.android.libraries.matrix.api.room.location.AssetType
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
+import io.element.android.libraries.matrix.api.timeline.ReceiptType
 import io.element.android.libraries.matrix.api.widget.MatrixWidgetDriver
 import io.element.android.libraries.matrix.api.widget.MatrixWidgetSettings
 import kotlinx.coroutines.flow.Flow
@@ -56,6 +57,7 @@ interface MatrixRoom : Closeable {
     val isDm: Boolean get() = isDirect && isOneToOne
 
     val roomInfoFlow: Flow<MatrixRoomInfo>
+    val roomTypingMembersFlow: Flow<List<UserId>>
 
     /**
      * A one-to-one is a room with exactly 2 members.
@@ -149,6 +151,21 @@ interface MatrixRoom : Closeable {
     suspend fun setTopic(topic: String): Result<Unit>
 
     suspend fun reportContent(eventId: EventId, reason: String, blockUserId: UserId?): Result<Unit>
+
+    suspend fun setIsFavorite(isFavorite: Boolean): Result<Unit>
+
+    /**
+     * Mark the room as read by trying to attach an unthreaded read receipt to the latest room event.
+     * @param receiptType The type of receipt to send.
+     */
+    suspend fun markAsRead(receiptType: ReceiptType): Result<Unit>
+
+    /**
+     * Sets a flag on the room to indicate that the user has explicitly marked it as unread, or reverts the flag.
+     * @param isUnread true to mark the room as unread, false to remove the flag.
+     *
+     */
+    suspend fun setUnreadFlag(isUnread: Boolean): Result<Unit>
 
     /**
      * Share a location message in the room.

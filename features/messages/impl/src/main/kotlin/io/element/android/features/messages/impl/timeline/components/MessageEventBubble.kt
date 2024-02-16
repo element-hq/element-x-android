@@ -46,6 +46,8 @@ import io.element.android.libraries.designsystem.theme.components.Surface
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.messageFromMeBackground
 import io.element.android.libraries.designsystem.theme.messageFromOtherBackground
+import io.element.android.libraries.testtags.TestTags
+import io.element.android.libraries.testtags.testTag
 
 private val BUBBLE_RADIUS = 12.dp
 internal val BUBBLE_INCOMING_OFFSET = 16.dp
@@ -115,6 +117,7 @@ fun MessageEventBubble(
     ) {
         Surface(
             modifier = Modifier
+                .testTag(TestTags.messageBubble)
                 .widthIn(min = 80.dp)
                 .clip(bubbleShape)
                 .combinedClickable(

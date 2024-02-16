@@ -32,8 +32,7 @@ fun LogoutActionDialog(
     state: AsyncAction<String?>,
     onConfirmClicked: () -> Unit,
     onForceLogoutClicked: () -> Unit,
-    // TODO Rename
-    onDismissError: () -> Unit,
+    onDismissDialog: () -> Unit,
     onSuccessLogout: (String?) -> Unit,
 ) {
     when (state) {
@@ -42,7 +41,7 @@ fun LogoutActionDialog(
         AsyncAction.Confirming ->
             LogoutConfirmationDialog(
                 onSubmitClicked = onConfirmClicked,
-                onDismiss = onDismissError
+                onDismiss = onDismissDialog
             )
         is AsyncAction.Loading ->
             ProgressDialog(text = stringResource(id = R.string.screen_signout_in_progress_dialog_content))
@@ -52,7 +51,7 @@ fun LogoutActionDialog(
                 content = stringResource(id = CommonStrings.error_unknown),
                 retryText = stringResource(id = CommonStrings.action_signout_anyway),
                 onRetry = onForceLogoutClicked,
-                onDismiss = onDismissError,
+                onDismiss = onDismissDialog,
             )
         is AsyncAction.Success -> {
             val latestOnSuccessLogout by rememberUpdatedState(onSuccessLogout)

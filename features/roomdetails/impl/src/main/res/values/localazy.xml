@@ -25,6 +25,8 @@
   <string name="screen_room_details_share_room_title">"Share room"</string>
   <string name="screen_room_details_updating_room">"Updating room…"</string>
   <string name="screen_room_member_list_pending_header_title">"Pending"</string>
+  <string name="screen_room_member_list_role_administrator">"Admin"</string>
+  <string name="screen_room_member_list_role_moderator">"Moderator"</string>
   <string name="screen_room_member_list_room_members_header_title">"Room members"</string>
   <string name="screen_room_notification_settings_allow_custom">"Allow custom setting"</string>
   <string name="screen_room_notification_settings_allow_custom_footnote">"Turning this on will override your default setting"</string>

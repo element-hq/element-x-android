@@ -28,29 +28,7 @@ import kotlinx.coroutines.flow.onEach
  * It lets load rooms on demand and filter them.
  */
 interface DynamicRoomList : RoomList {
-    sealed interface Filter {
-        /**
-         * No filter applied.
-         */
-        data object All : Filter
-
-        /**
-         * Filter only the left rooms.
-         */
-        data object AllNonLeft : Filter
-
-        /**
-         * Filter all rooms.
-         */
-        data object None : Filter
-
-        /**
-         * Filter rooms by normalized room name.
-         */
-        data class NormalizedMatchRoomName(val pattern: String) : Filter
-    }
-
-    val currentFilter: StateFlow<Filter>
+    val currentFilter: StateFlow<RoomListFilter>
     val loadedPages: StateFlow<Int>
     val pageSize: Int
 
@@ -68,7 +46,7 @@ interface DynamicRoomList : RoomList {
      * Update the filter to apply to the list.
      * @param filter the filter to apply.
      */
-    suspend fun updateFilter(filter: Filter)
+    suspend fun updateFilter(filter: RoomListFilter)
 }
 
 /**

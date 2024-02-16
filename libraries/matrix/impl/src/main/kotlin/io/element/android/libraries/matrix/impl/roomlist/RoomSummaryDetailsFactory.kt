@@ -38,11 +38,13 @@ class RoomSummaryDetailsFactory(private val roomMessageFactory: RoomMessageFacto
             numUnreadMentions = roomInfo.numUnreadMentions.toInt(),
             numUnreadMessages = roomInfo.numUnreadMessages.toInt(),
             numUnreadNotifications = roomInfo.numUnreadNotifications.toInt(),
+            isMarkedUnread = roomInfo.isMarkedUnread,
             lastMessage = latestRoomMessage,
             inviter = roomInfo.inviter?.let(RoomMemberMapper::map),
             userDefinedNotificationMode = roomInfo.userDefinedNotificationMode?.let(RoomNotificationSettingsMapper::mapMode),
             hasRoomCall = roomInfo.hasRoomCall,
             isDm = roomInfo.isDirect && roomInfo.activeMembersCount.toLong() == 2L,
+            isFavorite = roomInfo.isFavourite,
         )
     }
 }

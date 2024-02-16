@@ -45,6 +45,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.ReactionSende
 import io.element.android.libraries.matrix.api.timeline.item.event.Receipt
 import io.element.android.libraries.matrix.api.timeline.item.virtual.VirtualTimelineItem
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
+import io.element.android.libraries.matrix.test.AN_EVENT_ID_2
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.encryption.FakeEncryptionService
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
@@ -60,8 +61,11 @@ import io.element.android.tests.testutils.awaitWithLatch
 import io.element.android.tests.testutils.consumeItemsUntilPredicate
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
@@ -69,6 +73,7 @@ import java.util.Date
 import kotlin.time.Duration.Companion.seconds
 
 private const val FAKE_UNIQUE_ID = "FAKE_UNIQUE_ID"
+private const val FAKE_UNIQUE_ID_2 = "FAKE_UNIQUE_ID_2"
 
 class TimelinePresenterTest {
     @get:Rule
@@ -125,11 +130,45 @@ class TimelinePresenterTest {
         }
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun `present - on scroll finished mark a room as read if the first visible index is 0`() = runTest(StandardTestDispatcher()) {
+        val timeline = FakeMatrixTimeline(
+            initialTimelineItems = listOf(
+                MatrixTimelineItem.Event(FAKE_UNIQUE_ID, anEventTimelineItem())
+            )
+        )
+        val sessionPreferencesStore = InMemorySessionPreferencesStore(isSendPublicReadReceiptsEnabled = false)
+        val room = FakeMatrixRoom(matrixTimeline = timeline)
+        val presenter = createTimelinePresenter(
+            timeline = timeline,
+            room = room,
+            sessionPreferencesStore = sessionPreferencesStore,
+        )
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            assertThat(timeline.sentReadReceipts).isEmpty()
+            val initialState = awaitFirstItem()
+            initialState.eventSink.invoke(TimelineEvents.OnScrollFinished(0))
+            runCurrent()
+            assertThat(room.markAsReadCalls).isNotEmpty()
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
     @Test
     fun `present - on scroll finished send read receipt if an event is before the index`() = runTest {
         val timeline = FakeMatrixTimeline(
             initialTimelineItems = listOf(
-                MatrixTimelineItem.Event(FAKE_UNIQUE_ID, anEventTimelineItem())
+                MatrixTimelineItem.Event(FAKE_UNIQUE_ID, anEventTimelineItem()),
+                MatrixTimelineItem.Event(
+                    uniqueId = FAKE_UNIQUE_ID_2,
+                    event = anEventTimelineItem(
+                        eventId = AN_EVENT_ID_2,
+                        content = aMessageContent("Test message")
+                    )
+                )
             )
         )
         val presenter = createTimelinePresenter(timeline)
@@ -140,7 +179,7 @@ class TimelinePresenterTest {
             val initialState = awaitFirstItem()
             awaitWithLatch { latch ->
                 timeline.sendReadReceiptLatch = latch
-                initialState.eventSink.invoke(TimelineEvents.OnScrollFinished(0))
+                initialState.eventSink.invoke(TimelineEvents.OnScrollFinished(1))
             }
             assertThat(timeline.sentReadReceipts).isNotEmpty()
             assertThat(timeline.sentReadReceipts.first().second).isEqualTo(ReceiptType.READ)
@@ -149,10 +188,17 @@ class TimelinePresenterTest {
     }
 
     @Test
-    fun `present - on scroll finished send a private read receipt if an event is before the index and public read receipts are disabled`() = runTest {
+    fun `present - on scroll finished send a private read receipt if an event is at an index other than 0 and public read receipts are disabled`() = runTest {
         val timeline = FakeMatrixTimeline(
             initialTimelineItems = listOf(
-                MatrixTimelineItem.Event(FAKE_UNIQUE_ID, anEventTimelineItem())
+                MatrixTimelineItem.Event(FAKE_UNIQUE_ID, anEventTimelineItem()),
+                MatrixTimelineItem.Event(
+                    uniqueId = FAKE_UNIQUE_ID_2,
+                    event = anEventTimelineItem(
+                        eventId = AN_EVENT_ID_2,
+                        content = aMessageContent("Test message")
+                    )
+                )
             )
         )
         val sessionPreferencesStore = InMemorySessionPreferencesStore(isSendPublicReadReceiptsEnabled = false)
@@ -168,6 +214,7 @@ class TimelinePresenterTest {
             awaitWithLatch { latch ->
                 timeline.sendReadReceiptLatch = latch
                 initialState.eventSink.invoke(TimelineEvents.OnScrollFinished(0))
+                initialState.eventSink.invoke(TimelineEvents.OnScrollFinished(1))
             }
             assertThat(timeline.sentReadReceipts).isNotEmpty()
             assertThat(timeline.sentReadReceipts.first().second).isEqualTo(ReceiptType.READ_PRIVATE)
@@ -176,10 +223,17 @@ class TimelinePresenterTest {
     }
 
     @Test
-    fun `present - on scroll finished will not send read receipt if no event is before the index`() = runTest {
+    fun `present - on scroll finished will not send read receipt the first visible event is the same as before`() = runTest {
         val timeline = FakeMatrixTimeline(
             initialTimelineItems = listOf(
-                MatrixTimelineItem.Event(FAKE_UNIQUE_ID, anEventTimelineItem())
+                MatrixTimelineItem.Event(FAKE_UNIQUE_ID, anEventTimelineItem()),
+                MatrixTimelineItem.Event(
+                    uniqueId = FAKE_UNIQUE_ID_2,
+                    event = anEventTimelineItem(
+                        eventId = AN_EVENT_ID_2,
+                        content = aMessageContent("Test message")
+                    )
+                )
             )
         )
         val presenter = createTimelinePresenter(timeline)
@@ -191,8 +245,9 @@ class TimelinePresenterTest {
             awaitWithLatch { latch ->
                 timeline.sendReadReceiptLatch = latch
                 initialState.eventSink.invoke(TimelineEvents.OnScrollFinished(1))
+                initialState.eventSink.invoke(TimelineEvents.OnScrollFinished(1))
             }
-            assertThat(timeline.sentReadReceipts).isEmpty()
+            assertThat(timeline.sentReadReceipts).hasSize(1)
             cancelAndIgnoreRemainingEvents()
         }
     }
@@ -201,6 +256,7 @@ class TimelinePresenterTest {
     fun `present - on scroll finished will not send read receipt only virtual events exist before the index`() = runTest {
         val timeline = FakeMatrixTimeline(
             initialTimelineItems = listOf(
+                MatrixTimelineItem.Virtual(FAKE_UNIQUE_ID, VirtualTimelineItem.ReadMarker),
                 MatrixTimelineItem.Virtual(FAKE_UNIQUE_ID, VirtualTimelineItem.ReadMarker)
             )
         )
@@ -212,7 +268,7 @@ class TimelinePresenterTest {
             val initialState = awaitFirstItem()
             awaitWithLatch { latch ->
                 timeline.sendReadReceiptLatch = latch
-                initialState.eventSink.invoke(TimelineEvents.OnScrollFinished(0))
+                initialState.eventSink.invoke(TimelineEvents.OnScrollFinished(1))
             }
             assertThat(timeline.sentReadReceipts).isEmpty()
             cancelAndIgnoreRemainingEvents()

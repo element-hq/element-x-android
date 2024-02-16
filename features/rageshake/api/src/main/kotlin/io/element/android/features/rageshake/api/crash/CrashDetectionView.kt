@@ -22,7 +22,6 @@ import io.element.android.features.rageshake.api.R
 import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.designsystem.utils.LogCompositions
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
@@ -30,17 +29,13 @@ fun CrashDetectionView(
     state: CrashDetectionState,
     onOpenBugReport: () -> Unit = { },
 ) {
-    LogCompositions(
-        tag = "Crash",
-        msg = "CrashDetectionScreen"
-    )
-
     fun onPopupDismissed() {
         state.eventSink(CrashDetectionEvents.ResetAllCrashData)
     }
 
     if (state.crashDetected) {
         CrashDetectionContent(
+            appName = state.appName,
             onYesClicked = onOpenBugReport,
             onNoClicked = ::onPopupDismissed,
             onDismiss = ::onPopupDismissed,
@@ -50,14 +45,14 @@ fun CrashDetectionView(
 
 @Composable
 private fun CrashDetectionContent(
+    appName: String,
     onNoClicked: () -> Unit = { },
     onYesClicked: () -> Unit = { },
     onDismiss: () -> Unit = { },
 ) {
     ConfirmationDialog(
         title = stringResource(id = CommonStrings.action_report_bug),
-        // TODO Replace with app name
-        content = stringResource(id = R.string.crash_detection_dialog_content, "Element"),
+        content = stringResource(id = R.string.crash_detection_dialog_content, appName),
         submitText = stringResource(id = CommonStrings.action_yes),
         cancelText = stringResource(id = CommonStrings.action_no),
         onCancelClicked = onNoClicked,

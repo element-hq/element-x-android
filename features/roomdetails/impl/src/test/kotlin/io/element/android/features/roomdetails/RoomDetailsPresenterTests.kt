@@ -19,6 +19,7 @@ package io.element.android.features.roomdetails
 import androidx.lifecycle.Lifecycle
 import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
+import app.cash.turbine.TurbineTestContext
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.createroom.test.FakeStartDMAction
@@ -27,6 +28,7 @@ import io.element.android.features.leaveroom.api.LeaveRoomPresenter
 import io.element.android.features.leaveroom.fake.FakeLeaveRoomPresenter
 import io.element.android.features.roomdetails.impl.RoomDetailsEvent
 import io.element.android.features.roomdetails.impl.RoomDetailsPresenter
+import io.element.android.features.roomdetails.impl.RoomDetailsState
 import io.element.android.features.roomdetails.impl.RoomDetailsType
 import io.element.android.features.roomdetails.impl.RoomTopicState
 import io.element.android.features.roomdetails.impl.members.aRoomMember
@@ -71,10 +73,10 @@ class RoomDetailsPresenterTests {
     }
 
     private fun TestScope.createRoomDetailsPresenter(
-        room: MatrixRoom,
+        room: MatrixRoom = aMatrixRoom(),
         leaveRoomPresenter: LeaveRoomPresenter = FakeLeaveRoomPresenter(),
         dispatchers: CoroutineDispatchers = testCoroutineDispatchers(),
-        notificationSettingsService: FakeNotificationSettingsService = FakeNotificationSettingsService()
+        notificationSettingsService: FakeNotificationSettingsService = FakeNotificationSettingsService(),
     ): RoomDetailsPresenter {
         val matrixClient = FakeMatrixClient(notificationSettingsService = notificationSettingsService)
         val roomMemberDetailsPresenterFactory = object : RoomMemberDetailsPresenter.Factory {
@@ -86,25 +88,29 @@ class RoomDetailsPresenterTests {
             mapOf(FeatureFlags.NotificationSettings.key to true)
         )
         return RoomDetailsPresenter(
-            matrixClient,
-            room,
-            featureFlagService,
-            matrixClient.notificationSettingsService(),
-            roomMemberDetailsPresenterFactory,
-            leaveRoomPresenter,
-            dispatchers
+            client = matrixClient,
+            room = room,
+            featureFlagService = featureFlagService,
+            notificationSettingsService = matrixClient.notificationSettingsService(),
+            roomMembersDetailsPresenterFactory = roomMemberDetailsPresenterFactory,
+            leaveRoomPresenter = leaveRoomPresenter,
+            dispatchers = dispatchers,
         )
+    }
+
+    private suspend fun RoomDetailsPresenter.test(validate: suspend TurbineTestContext<RoomDetailsState>.() -> Unit) {
+        moleculeFlow(RecompositionMode.Immediate) {
+            withFakeLifecycleOwner(fakeLifecycleOwner) {
+                present()
+            }
+        }.test(validate = validate)
     }
 
     @Test
     fun `present - initial state is created from room if roomInfo is null`() = runTest {
         val room = aMatrixRoom()
         val presenter = createRoomDetailsPresenter(room)
-        moleculeFlow(RecompositionMode.Immediate) {
-            withFakeLifecycleOwner(fakeLifecycleOwner) {
-                presenter.present()
-            }
-        }.test {
+        presenter.test {
             val initialState = awaitItem()
             assertThat(initialState.roomId).isEqualTo(room.roomId.value)
             assertThat(initialState.roomName).isEqualTo(room.name)
@@ -124,11 +130,7 @@ class RoomDetailsPresenterTests {
             givenRoomInfo(roomInfo)
         }
         val presenter = createRoomDetailsPresenter(room)
-        moleculeFlow(RecompositionMode.Immediate) {
-            withFakeLifecycleOwner(fakeLifecycleOwner) {
-                presenter.present()
-            }
-        }.test {
+        presenter.test {
             skipItems(1)
             val updatedState = awaitItem()
             assertThat(updatedState.roomName).isEqualTo(roomInfo.name)
@@ -143,11 +145,7 @@ class RoomDetailsPresenterTests {
     fun `present - initial state with no room name`() = runTest {
         val room = aMatrixRoom(name = null)
         val presenter = createRoomDetailsPresenter(room)
-        moleculeFlow(RecompositionMode.Immediate) {
-            withFakeLifecycleOwner(fakeLifecycleOwner) {
-                presenter.present()
-            }
-        }.test {
+        presenter.test {
             val initialState = awaitItem()
             assertThat(initialState.roomName).isEqualTo(room.displayName)
 
@@ -167,11 +165,7 @@ class RoomDetailsPresenterTests {
             givenRoomMembersState(MatrixRoomMembersState.Ready(roomMembers))
         }
         val presenter = createRoomDetailsPresenter(room)
-        moleculeFlow(RecompositionMode.Immediate) {
-            withFakeLifecycleOwner(fakeLifecycleOwner) {
-                presenter.present()
-            }
-        }.test {
+        presenter.test {
             val initialState = awaitItem()
             assertThat(initialState.roomType).isEqualTo(RoomDetailsType.Dm(otherRoomMember))
 
@@ -185,11 +179,7 @@ class RoomDetailsPresenterTests {
             givenCanInviteResult(Result.success(true))
         }
         val presenter = createRoomDetailsPresenter(room, dispatchers = testCoroutineDispatchers())
-        moleculeFlow(RecompositionMode.Immediate) {
-            withFakeLifecycleOwner(fakeLifecycleOwner) {
-                presenter.present()
-            }
-        }.test {
+        presenter.test {
             // Initially false
             assertThat(awaitItem().canInvite).isFalse()
             // Then the asynchronous check completes and it becomes true
@@ -205,11 +195,7 @@ class RoomDetailsPresenterTests {
             givenCanInviteResult(Result.success(false))
         }
         val presenter = createRoomDetailsPresenter(room)
-        moleculeFlow(RecompositionMode.Immediate) {
-            withFakeLifecycleOwner(fakeLifecycleOwner) {
-                presenter.present()
-            }
-        }.test {
+        presenter.test {
             assertThat(awaitItem().canInvite).isFalse()
 
             cancelAndIgnoreRemainingEvents()
@@ -222,11 +208,7 @@ class RoomDetailsPresenterTests {
             givenCanInviteResult(Result.failure(Throwable("Whoops")))
         }
         val presenter = createRoomDetailsPresenter(room)
-        moleculeFlow(RecompositionMode.Immediate) {
-            withFakeLifecycleOwner(fakeLifecycleOwner) {
-                presenter.present()
-            }
-        }.test {
+        presenter.test {
             assertThat(awaitItem().canInvite).isFalse()
 
             cancelAndIgnoreRemainingEvents()
@@ -242,11 +224,7 @@ class RoomDetailsPresenterTests {
             givenCanInviteResult(Result.success(false))
         }
         val presenter = createRoomDetailsPresenter(room)
-        moleculeFlow(RecompositionMode.Immediate) {
-            withFakeLifecycleOwner(fakeLifecycleOwner) {
-                presenter.present()
-            }
-        }.test {
+        presenter.test {
             // Initially false
             assertThat(awaitItem().canEdit).isFalse()
             // Then the asynchronous check completes and it becomes true
@@ -273,11 +251,7 @@ class RoomDetailsPresenterTests {
             givenCanInviteResult(Result.success(false))
         }
         val presenter = createRoomDetailsPresenter(room)
-        moleculeFlow(RecompositionMode.Immediate) {
-            withFakeLifecycleOwner(fakeLifecycleOwner) {
-                presenter.present()
-            }
-        }.test {
+        presenter.test {
             // Initially false
             assertThat(awaitItem().canEdit).isFalse()
             // Then the asynchronous check completes, but editing is still disallowed because it's a DM
@@ -305,11 +279,7 @@ class RoomDetailsPresenterTests {
             givenCanSendStateResult(StateEventType.ROOM_TOPIC, Result.success(true))
         }
         val presenter = createRoomDetailsPresenter(room)
-        moleculeFlow(RecompositionMode.Immediate) {
-            withFakeLifecycleOwner(fakeLifecycleOwner) {
-                presenter.present()
-            }
-        }.test {
+        presenter.test {
             skipItems(1)
 
             // There's no topic, so we hide the entire UI for DMs
@@ -328,11 +298,7 @@ class RoomDetailsPresenterTests {
             givenCanInviteResult(Result.success(false))
         }
         val presenter = createRoomDetailsPresenter(room)
-        moleculeFlow(RecompositionMode.Immediate) {
-            withFakeLifecycleOwner(fakeLifecycleOwner) {
-                presenter.present()
-            }
-        }.test {
+        presenter.test {
             // Initially false
             assertThat(awaitItem().canEdit).isFalse()
             // Then the asynchronous check completes and it becomes true
@@ -351,11 +317,7 @@ class RoomDetailsPresenterTests {
             givenCanInviteResult(Result.success(false))
         }
         val presenter = createRoomDetailsPresenter(room)
-        moleculeFlow(RecompositionMode.Immediate) {
-            withFakeLifecycleOwner(fakeLifecycleOwner) {
-                presenter.present()
-            }
-        }.test {
+        presenter.test {
             // Initially false, and no further events
             assertThat(awaitItem().canEdit).isFalse()
 
@@ -371,11 +333,7 @@ class RoomDetailsPresenterTests {
         }
 
         val presenter = createRoomDetailsPresenter(room)
-        moleculeFlow(RecompositionMode.Immediate) {
-            withFakeLifecycleOwner(fakeLifecycleOwner) {
-                presenter.present()
-            }
-        }.test {
+        presenter.test {
             // The initial state is "hidden" and no further state changes happen
             assertThat(awaitItem().roomTopic).isEqualTo(RoomTopicState.Hidden)
 
@@ -392,11 +350,7 @@ class RoomDetailsPresenterTests {
         }
 
         val presenter = createRoomDetailsPresenter(room)
-        moleculeFlow(RecompositionMode.Immediate) {
-            withFakeLifecycleOwner(fakeLifecycleOwner) {
-                presenter.present()
-            }
-        }.test {
+        presenter.test {
             // Ignore the initial state
             skipItems(1)
 
@@ -416,11 +370,7 @@ class RoomDetailsPresenterTests {
             leaveRoomPresenter = leaveRoomPresenter,
             dispatchers = testCoroutineDispatchers()
         )
-        moleculeFlow(RecompositionMode.Immediate) {
-            withFakeLifecycleOwner(fakeLifecycleOwner) {
-                presenter.present()
-            }
-        }.test {
+        presenter.test {
             awaitItem().eventSink(RoomDetailsEvent.LeaveRoom)
 
             assertThat(leaveRoomPresenter.events).contains(LeaveRoomEvent.ShowConfirmation(room.roomId))
@@ -439,11 +389,7 @@ class RoomDetailsPresenterTests {
             leaveRoomPresenter = leaveRoomPresenter,
             notificationSettingsService = notificationSettingsService,
         )
-        moleculeFlow(RecompositionMode.Immediate) {
-            withFakeLifecycleOwner(fakeLifecycleOwner) {
-                presenter.present()
-            }
-        }.test {
+        presenter.test {
             notificationSettingsService.setRoomNotificationMode(room.roomId, RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY)
             val updatedState = consumeItemsUntilPredicate {
                 it.roomNotificationSettings?.mode == RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY
@@ -458,11 +404,7 @@ class RoomDetailsPresenterTests {
         val notificationSettingsService = FakeNotificationSettingsService(initialRoomMode = RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY)
         val room = aMatrixRoom(notificationSettingsService = notificationSettingsService)
         val presenter = createRoomDetailsPresenter(room = room, notificationSettingsService = notificationSettingsService)
-        moleculeFlow(RecompositionMode.Immediate) {
-            withFakeLifecycleOwner(fakeLifecycleOwner) {
-                presenter.present()
-            }
-        }.test {
+        presenter.test {
             awaitItem().eventSink(RoomDetailsEvent.MuteNotification)
             val updatedState = consumeItemsUntilPredicate(timeout = 250.milliseconds) {
                 it.roomNotificationSettings?.mode == RoomNotificationMode.MUTE
@@ -480,16 +422,43 @@ class RoomDetailsPresenterTests {
         )
         val room = aMatrixRoom(notificationSettingsService = notificationSettingsService)
         val presenter = createRoomDetailsPresenter(room = room, notificationSettingsService = notificationSettingsService)
-        moleculeFlow(RecompositionMode.Immediate) {
-            withFakeLifecycleOwner(fakeLifecycleOwner) {
-                presenter.present()
-            }
-        }.test {
+        presenter.test {
             awaitItem().eventSink(RoomDetailsEvent.UnmuteNotification)
             val updatedState = consumeItemsUntilPredicate {
                 it.roomNotificationSettings?.mode == RoomNotificationMode.ALL_MESSAGES
             }.last()
             assertThat(updatedState.roomNotificationSettings?.mode).isEqualTo(RoomNotificationMode.ALL_MESSAGES)
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - when set is favorite event is emitted, then the action is called`() = runTest {
+        val room = FakeMatrixRoom()
+        val presenter = createRoomDetailsPresenter(room = room)
+        presenter.test {
+            val initialState = awaitItem()
+            initialState.eventSink(RoomDetailsEvent.SetFavorite(true))
+            assertThat(room.setIsFavoriteCalls).isEqualTo(listOf(true))
+            initialState.eventSink(RoomDetailsEvent.SetFavorite(false))
+            assertThat(room.setIsFavoriteCalls).isEqualTo(listOf(true, false))
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - changes in room info updates the is favorite flag`() = runTest {
+        val room = aMatrixRoom()
+        val presenter = createRoomDetailsPresenter(room = room)
+        presenter.test {
+            room.givenRoomInfo(aRoomInfo(isFavorite = true))
+            consumeItemsUntilPredicate { it.isFavorite }.last().let { state ->
+                assertThat(state.isFavorite).isTrue()
+            }
+            room.givenRoomInfo(aRoomInfo(isFavorite = false))
+            consumeItemsUntilPredicate { !it.isFavorite }.last().let { state ->
+                assertThat(state.isFavorite).isFalse()
+            }
             cancelAndIgnoreRemainingEvents()
         }
     }

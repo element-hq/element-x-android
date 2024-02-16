@@ -34,6 +34,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -44,6 +45,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
+import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.messages.impl.timeline.components.layout.ContentAvoidingLayoutData
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVoiceContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVoiceContentProvider
@@ -58,7 +60,6 @@ import io.element.android.libraries.designsystem.theme.components.CircularProgre
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.coroutines.delay
 
@@ -126,8 +127,8 @@ private fun PlayButton(
         onClick = onClick,
         enabled = enabled,
     ) {
-        Icon(
-            resourceId = CommonDrawables.ic_play,
+        ControlIcon(
+            imageVector = CompoundIcons.PlaySolid(),
             contentDescription = stringResource(id = CommonStrings.a11y_play),
         )
     }
@@ -140,8 +141,8 @@ private fun PauseButton(
     CustomIconButton(
         onClick = onClick,
     ) {
-        Icon(
-            resourceId = CommonDrawables.ic_pause,
+        ControlIcon(
+            imageVector = CompoundIcons.PauseSolid(),
             contentDescription = stringResource(id = CommonStrings.a11y_pause),
         )
     }
@@ -154,11 +155,23 @@ private fun RetryButton(
     CustomIconButton(
         onClick = onClick,
     ) {
-        Icon(
-            resourceId = CommonDrawables.ic_retry,
+        ControlIcon(
+            imageVector = CompoundIcons.Restart(),
             contentDescription = stringResource(id = CommonStrings.action_retry),
         )
     }
+}
+
+@Composable
+private fun ControlIcon(
+    imageVector: ImageVector,
+    contentDescription: String?,
+) {
+    Icon(
+        modifier = Modifier.padding(vertical = 10.dp),
+        imageVector = imageVector,
+        contentDescription = contentDescription,
+    )
 }
 
 /**
@@ -190,8 +203,8 @@ private fun ProgressButton(
                 strokeWidth = 2.dp,
             )
         } else {
-            Icon(
-                resourceId = CommonDrawables.ic_pause,
+            ControlIcon(
+                imageVector = CompoundIcons.PauseSolid(),
                 contentDescription = stringResource(id = CommonStrings.a11y_pause),
             )
         }

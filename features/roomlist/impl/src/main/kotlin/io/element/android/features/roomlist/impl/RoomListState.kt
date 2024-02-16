@@ -42,6 +42,7 @@ data class RoomListState(
     val contextMenu: ContextMenu,
     val leaveRoomState: LeaveRoomState,
     val filtersState: RoomListFiltersState,
+    val displayMigrationStatus: Boolean,
     val eventSink: (RoomListEvents) -> Unit,
 ) {
     sealed interface ContextMenu {
@@ -50,6 +51,9 @@ data class RoomListState(
             val roomId: RoomId,
             val roomName: String,
             val isDm: Boolean,
+            val isFavorite: Boolean,
+            val markAsUnreadFeatureFlagEnabled: Boolean,
+            val hasNewContent: Boolean,
         ) : ContextMenu
     }
 }

@@ -7,6 +7,7 @@
   <string name="screen_bug_report_editor_description">"Popište prosím chybu. Co jste udělali? Co jste očekávali, že se stane? Co se ve skutečnosti stalo? Uveďte co nejvíce podrobností."</string>
   <string name="screen_bug_report_editor_placeholder">"Popište chybu…"</string>
   <string name="screen_bug_report_editor_supporting">"Pokud je to možné, prosím, napište popis anglicky."</string>
+  <string name="screen_bug_report_error_description_too_short">"Popis je příliš krátký, uveďte prosím více podrobností o tom, co se stalo. Děkujeme!"</string>
   <string name="screen_bug_report_include_crash_logs">"Odeslat záznamy o selhání"</string>
   <string name="screen_bug_report_include_logs">"Povolit protokoly"</string>
   <string name="screen_bug_report_include_screenshot">"Odeslat snímek obrazovky"</string>

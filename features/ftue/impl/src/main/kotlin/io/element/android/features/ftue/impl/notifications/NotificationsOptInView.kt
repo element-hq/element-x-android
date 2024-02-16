@@ -67,7 +67,7 @@ fun NotificationsOptInView(
         header = { NotificationsOptInHeader(modifier = Modifier.padding(top = 60.dp, bottom = 12.dp)) },
         footer = { NotificationsOptInFooter(state) },
     ) {
-        NotificationsOptInContent(modifier = Modifier.fillMaxWidth())
+        NotificationsOptInContent()
     }
 }
 
@@ -79,7 +79,7 @@ private fun NotificationsOptInHeader(
         modifier = modifier,
         title = stringResource(R.string.screen_notification_optin_title),
         subTitle = stringResource(R.string.screen_notification_optin_subtitle),
-        iconImageVector = CompoundIcons.NotificationsSolid,
+        iconImageVector = CompoundIcons.NotificationsSolid(),
     )
 }
 
@@ -104,10 +104,8 @@ private fun NotificationsOptInFooter(state: NotificationsOptInState) {
 }
 
 @Composable
-private fun NotificationsOptInContent(
-    modifier: Modifier = Modifier,
-) {
-    Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+private fun NotificationsOptInContent() {
+    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         Column(
             verticalArrangement = Arrangement.spacedBy(
                 16.dp,
@@ -144,10 +142,8 @@ private fun NotificationRow(
     avatarColorsId: String,
     firstRowPercent: Float,
     secondRowPercent: Float,
-    modifier: Modifier = Modifier
 ) {
     Surface(
-        modifier = modifier,
         color = ElementTheme.colors.bgCanvasDisabled,
         shape = RoundedCornerShape(14.dp),
         shadowElevation = 2.dp,

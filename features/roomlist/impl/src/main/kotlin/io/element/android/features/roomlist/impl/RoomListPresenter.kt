@@ -25,15 +25,19 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import io.element.android.features.leaveroom.api.LeaveRoomEvent
 import io.element.android.features.leaveroom.api.LeaveRoomPresenter
 import io.element.android.features.networkmonitor.api.NetworkMonitor
 import io.element.android.features.networkmonitor.api.NetworkStatus
+import io.element.android.features.preferences.api.store.SessionPreferencesStore
 import io.element.android.features.roomlist.impl.datasource.InviteStateDataSource
 import io.element.android.features.roomlist.impl.datasource.RoomListDataSource
 import io.element.android.features.roomlist.impl.filters.RoomListFiltersPresenter
+import io.element.android.features.roomlist.impl.migration.MigrationScreenPresenter
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
@@ -44,10 +48,19 @@ import io.element.android.libraries.indicator.api.IndicatorService
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import io.element.android.libraries.matrix.api.encryption.RecoveryState
+import io.element.android.libraries.matrix.api.timeline.ReceiptType
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.api.user.getCurrentUser
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.takeWhile
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -65,9 +78,12 @@ class RoomListPresenter @Inject constructor(
     private val featureFlagService: FeatureFlagService,
     private val indicatorService: IndicatorService,
     private val filtersPresenter: RoomListFiltersPresenter,
+    private val migrationScreenPresenter: MigrationScreenPresenter,
+    private val sessionPreferencesStore: SessionPreferencesStore,
 ) : Presenter<RoomListState> {
     @Composable
     override fun present(): RoomListState {
+        val coroutineScope = rememberCoroutineScope()
         val leaveRoomState = leaveRoomPresenter.present()
         val matrixUser: MutableState<MatrixUser?> = rememberSaveable {
             mutableStateOf(null)
@@ -84,6 +100,8 @@ class RoomListPresenter @Inject constructor(
             roomListDataSource.launchIn(this)
             initialLoad(matrixUser)
         }
+
+        val isMigrating = migrationScreenPresenter.present().isMigrating
 
         // Session verification status (unknown, not verified, verified)
         val canVerifySession by sessionVerificationService.canVerifySessionFlow.collectAsState(initial = false)
@@ -108,8 +126,7 @@ class RoomListPresenter @Inject constructor(
         val showAvatarIndicator by indicatorService.showRoomListTopBarIndicator()
 
         var displaySearchResults by rememberSaveable { mutableStateOf(false) }
-
-        var contextMenu by remember { mutableStateOf<RoomListState.ContextMenu>(RoomListState.ContextMenu.Hidden) }
+        val contextMenu = remember { mutableStateOf<RoomListState.ContextMenu>(RoomListState.ContextMenu.Hidden) }
 
         fun handleEvents(event: RoomListEvents) {
             when (event) {
@@ -124,14 +141,34 @@ class RoomListPresenter @Inject constructor(
                     displaySearchResults = !displaySearchResults
                 }
                 is RoomListEvents.ShowContextMenu -> {
-                    contextMenu = RoomListState.ContextMenu.Shown(
-                        roomId = event.roomListRoomSummary.roomId,
-                        roomName = event.roomListRoomSummary.name,
-                        isDm = event.roomListRoomSummary.isDm,
-                    )
+                    coroutineScope.showContextMenu(event, contextMenu)
                 }
-                is RoomListEvents.HideContextMenu -> contextMenu = RoomListState.ContextMenu.Hidden
+                is RoomListEvents.HideContextMenu -> {
+                    contextMenu.value = RoomListState.ContextMenu.Hidden
+                }
                 is RoomListEvents.LeaveRoom -> leaveRoomState.eventSink(LeaveRoomEvent.ShowConfirmation(event.roomId))
+
+                is RoomListEvents.SetRoomIsFavorite -> coroutineScope.launch {
+                    client.getRoom(event.roomId)?.use { room ->
+                        room.setIsFavorite(event.isFavorite)
+                    }
+                }
+                is RoomListEvents.MarkAsRead -> coroutineScope.launch {
+                    client.getRoom(event.roomId)?.use { room ->
+                        room.setUnreadFlag(isUnread = false)
+                        val receiptType = if (sessionPreferencesStore.isSendPublicReadReceiptsEnabled().first()) {
+                            ReceiptType.READ
+                        } else {
+                            ReceiptType.READ_PRIVATE
+                        }
+                        room.markAsRead(receiptType)
+                    }
+                }
+                is RoomListEvents.MarkAsUnread -> coroutineScope.launch {
+                    client.getRoom(event.roomId)?.use { room ->
+                        room.setUnreadFlag(isUnread = true)
+                    }
+                }
             }
         }
 
@@ -149,15 +186,47 @@ class RoomListPresenter @Inject constructor(
             hasNetworkConnection = networkConnectionStatus == NetworkStatus.Online,
             invitesState = inviteStateDataSource.inviteState(),
             displaySearchResults = displaySearchResults,
-            contextMenu = contextMenu,
+            contextMenu = contextMenu.value,
             leaveRoomState = leaveRoomState,
             filtersState = filtersState,
-            eventSink = ::handleEvents
+            displayMigrationStatus = isMigrating,
+            eventSink = ::handleEvents,
         )
     }
 
     private fun CoroutineScope.initialLoad(matrixUser: MutableState<MatrixUser?>) = launch {
         matrixUser.value = client.getCurrentUser()
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    private fun CoroutineScope.showContextMenu(event: RoomListEvents.ShowContextMenu, contextMenuState: MutableState<RoomListState.ContextMenu>) = launch {
+        val initialState = RoomListState.ContextMenu.Shown(
+            roomId = event.roomListRoomSummary.roomId,
+            roomName = event.roomListRoomSummary.name,
+            isDm = event.roomListRoomSummary.isDm,
+            isFavorite = event.roomListRoomSummary.isFavorite,
+            markAsUnreadFeatureFlagEnabled = featureFlagService.isFeatureEnabled(FeatureFlags.MarkAsUnread),
+            hasNewContent = event.roomListRoomSummary.hasNewContent
+        )
+        contextMenuState.value = initialState
+
+        client.getRoom(event.roomListRoomSummary.roomId)?.use { room ->
+
+            val isShowingContextMenuFlow = snapshotFlow { contextMenuState.value is RoomListState.ContextMenu.Shown }
+                .distinctUntilChanged()
+
+            val isFavoriteFlow = room.roomInfoFlow
+                .map { it.isFavorite }
+                .distinctUntilChanged()
+
+            isFavoriteFlow
+                .onEach { isFavorite ->
+                    contextMenuState.value = initialState.copy(isFavorite = isFavorite)
+                }
+                .flatMapLatest { isShowingContextMenuFlow }
+                .takeWhile { isShowingContextMenu -> isShowingContextMenu }
+                .collect()
+        }
     }
 
     private fun updateVisibleRange(range: IntRange) {
