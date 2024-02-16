@@ -17,14 +17,13 @@
 package io.element.android.features.roomlist.impl.filters
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
@@ -43,7 +42,6 @@ import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.Text
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun RoomListFiltersView(
     state: RoomListFiltersState,
@@ -58,31 +56,30 @@ fun RoomListFiltersView(
         state.eventSink(RoomListFiltersEvents.ToggleFilter(filter))
     }
 
-    val horizontalPadding = if(state.showClearFilterButton) 4.dp else 16.dp
-
-    Row(modifier.padding(horizontal = horizontalPadding)) {
+    val horizontalPadding = if (state.showClearFilterButton) 4.dp else 16.dp
+    val scrollState = rememberScrollState()
+    Row(
+        modifier = modifier
+            .padding(horizontal = horizontalPadding)
+            .horizontalScroll(scrollState),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+    ) {
         AnimatedVisibility(visible = state.showClearFilterButton) {
             RoomListClearFiltersButton(onClick = ::onClearFiltersClicked)
         }
-        LazyRow(
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-        ) {
-            items(state.selectedFilters) { filter ->
-                RoomListFilterView(
-                    roomListFilter = filter,
-                    selected = true,
-                    onClick = ::onFilterClicked,
-                    modifier = Modifier.animateItemPlacement(),
-                )
-            }
-            items(state.unselectedFilters) { filter ->
-                RoomListFilterView(
-                    roomListFilter = filter,
-                    selected = false,
-                    onClick = ::onFilterClicked,
-                    modifier = Modifier.animateItemPlacement(),
-                )
-            }
+        for (filter in state.selectedFilters) {
+            RoomListFilterView(
+                roomListFilter = filter,
+                selected = true,
+                onClick = ::onFilterClicked,
+            )
+        }
+        for (filter in state.unselectedFilters) {
+            RoomListFilterView(
+                roomListFilter = filter,
+                selected = false,
+                onClick = ::onFilterClicked,
+            )
         }
     }
 }
@@ -103,7 +100,7 @@ private fun RoomListClearFiltersButton(
         ) {
             Icon(
                 modifier = Modifier.align(Alignment.Center),
-                imageVector = CompoundIcons.Close,
+                imageVector = CompoundIcons.Close(),
                 tint = ElementTheme.colors.iconOnSolidPrimary,
                 contentDescription = null,
             )
