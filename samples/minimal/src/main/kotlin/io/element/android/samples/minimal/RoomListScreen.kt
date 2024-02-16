@@ -30,6 +30,7 @@ import io.element.android.features.roomlist.impl.datasource.RoomListDataSource
 import io.element.android.features.roomlist.impl.datasource.RoomListRoomSummaryFactory
 import io.element.android.features.roomlist.impl.migration.MigrationScreenPresenter
 import io.element.android.features.roomlist.impl.migration.SharedPrefsMigrationScreenStore
+import io.element.android.features.roomlist.impl.search.RoomListSearchPresenter
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.dateformatter.impl.DateFormatters
 import io.element.android.libraries.dateformatter.impl.DefaultLastMessageTimestampFormatter
@@ -71,6 +72,21 @@ class RoomListScreen(
     private val featureFlagService = DefaultFeatureFlagService(
         providers = setOf(StaticFeatureFlagProvider())
     )
+    private val roomListRoomSummaryFactory = RoomListRoomSummaryFactory(
+        lastMessageTimestampFormatter = DefaultLastMessageTimestampFormatter(
+            localDateTimeProvider = dateTimeProvider,
+            dateFormatters = dateFormatters
+        ),
+        roomLastMessageFormatter = DefaultRoomLastMessageFormatter(
+            sp = stringProvider,
+            roomMembershipContentFormatter = RoomMembershipContentFormatter(
+                matrixClient = matrixClient,
+                sp = stringProvider
+            ),
+            profileChangeContentFormatter = ProfileChangeContentFormatter(stringProvider),
+            stateContentFormatter = StateContentFormatter(stringProvider),
+        ),
+    )
     private val presenter = RoomListPresenter(
         client = matrixClient,
         sessionVerificationService = sessionVerificationService,
@@ -80,21 +96,7 @@ class RoomListScreen(
         leaveRoomPresenter = LeaveRoomPresenterImpl(matrixClient, RoomMembershipObserver(), coroutineDispatchers),
         roomListDataSource = RoomListDataSource(
             roomListService = matrixClient.roomListService,
-            roomListRoomSummaryFactory = RoomListRoomSummaryFactory(
-                lastMessageTimestampFormatter = DefaultLastMessageTimestampFormatter(
-                    localDateTimeProvider = dateTimeProvider,
-                    dateFormatters = dateFormatters
-                ),
-                roomLastMessageFormatter = DefaultRoomLastMessageFormatter(
-                    sp = stringProvider,
-                    roomMembershipContentFormatter = RoomMembershipContentFormatter(
-                        matrixClient = matrixClient,
-                        sp = stringProvider
-                    ),
-                    profileChangeContentFormatter = ProfileChangeContentFormatter(stringProvider),
-                    stateContentFormatter = StateContentFormatter(stringProvider),
-                ),
-            ),
+            roomListRoomSummaryFactory = roomListRoomSummaryFactory,
             coroutineDispatchers = coroutineDispatchers,
             notificationSettingsService = matrixClient.notificationSettingsService(),
             appScope = Singleton.appScope
@@ -109,6 +111,11 @@ class RoomListScreen(
         migrationScreenPresenter = MigrationScreenPresenter(
             matrixClient = matrixClient,
             migrationScreenStore = SharedPrefsMigrationScreenStore(context.getSharedPreferences("migration", Context.MODE_PRIVATE))
+        ),
+        searchPresenter = RoomListSearchPresenter(
+            roomListService = matrixClient.roomListService,
+            roomSummaryFactory = roomListRoomSummaryFactory,
+            coroutineDispatchers = coroutineDispatchers,
         ),
         sessionPreferencesStore = DefaultSessionPreferencesStore(
             context = context,
