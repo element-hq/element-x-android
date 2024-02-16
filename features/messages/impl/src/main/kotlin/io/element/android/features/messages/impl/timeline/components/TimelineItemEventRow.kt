@@ -45,6 +45,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.clipToBounds
@@ -53,6 +54,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalViewConfiguration
 import androidx.compose.ui.platform.ViewConfiguration
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.clearAndSetSemantics
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.invisibleToUser
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -256,6 +261,7 @@ private fun SwipeSensitivity(
     }
 }
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 private fun TimelineItemEventRowContent(
     event: TimelineItem.Event,
@@ -305,6 +311,8 @@ private fun TimelineItemEventRowContent(
                     .padding(horizontal = 16.dp)
                     .zIndex(1f)
                     .clickable(onClick = onUserDataClicked)
+                    // This is redundant when using talkback
+                    .clearAndSetSemantics { invisibleToUser() }
             )
         }
 
@@ -413,6 +421,7 @@ private fun MessageSenderInformation(
 private fun MessageEventBubbleContent(
     event: TimelineItem.Event,
     onMessageLongClick: () -> Unit,
+    @Suppress("UNUSED_PARAMETER")
     inReplyToClick: () -> Unit,
     onTimestampClicked: () -> Unit,
     onMentionClicked: (Mention) -> Unit,
@@ -445,6 +454,7 @@ private fun MessageEventBubbleContent(
                 text = stringResource(CommonStrings.common_thread),
                 style = ElementTheme.typography.fontBodyXsRegular,
                 color = ElementTheme.colors.textPrimary,
+                modifier = Modifier.clearAndSetSemantics { }
             )
         }
     }
@@ -580,7 +590,8 @@ private fun MessageEventBubbleContent(
                 modifier = Modifier
                     .padding(top = topPadding, start = 8.dp, end = 8.dp)
                     .clip(RoundedCornerShape(6.dp))
-                    .clickable(enabled = true, onClick = inReplyToClick),
+                // FIXME when a node is clickable, its contents won't be added to the semantics tree of its parent
+//                    .clickable(enabled = true, onClick = inReplyToClick)
             )
         }
         if (inReplyToDetails != null) {
@@ -611,7 +622,9 @@ private fun MessageEventBubbleContent(
         timestampPosition = timestampPosition,
         inReplyToDetails = event.inReplyTo,
         canShrinkContent = event.content is TimelineItemVoiceContent,
-        modifier = bubbleModifier
+        modifier = bubbleModifier.semantics(mergeDescendants = true) {
+            contentDescription = event.safeSenderName
+        }
     )
 }
 
@@ -641,8 +654,12 @@ private fun ReplyToContent(
             )
             Spacer(modifier = Modifier.width(8.dp))
         }
+        val a11InReplyToText = stringResource(CommonStrings.common_in_reply_to, senderName)
         Column(verticalArrangement = Arrangement.SpaceBetween) {
             Text(
+                modifier = Modifier.semantics {
+                    contentDescription = a11InReplyToText
+                },
                 text = senderName,
                 style = ElementTheme.typography.fontBodySmMedium,
                 textAlign = TextAlign.Start,
