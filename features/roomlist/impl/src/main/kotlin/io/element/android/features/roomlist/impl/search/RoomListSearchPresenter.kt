@@ -46,10 +46,8 @@ class RoomListSearchPresenter @Inject constructor(
     private val roomSummaryFactory: RoomListRoomSummaryFactory,
     private val coroutineDispatchers: CoroutineDispatchers,
 ) : Presenter<RoomListSearchState> {
-
     @Composable
     override fun present(): RoomListSearchState {
-
         var isSearchActive by rememberSaveable {
             mutableStateOf(false)
         }
