@@ -33,8 +33,9 @@ import io.element.android.features.roomlist.impl.datasource.RoomListRoomSummaryF
 import io.element.android.features.roomlist.impl.migration.InMemoryMigrationScreenStore
 import io.element.android.features.roomlist.impl.migration.MigrationScreenPresenter
 import io.element.android.features.roomlist.impl.model.createRoomListRoomSummary
-import io.element.android.features.roomlist.impl.search.RoomListSearchPresenter
-import io.element.android.features.roomlist.impl.search.createRoomListSearchPresenter
+import io.element.android.features.roomlist.impl.search.RoomListSearchState
+import io.element.android.features.roomlist.impl.search.aRoomListSearchState
+import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.dateformatter.api.LastMessageTimestampFormatter
 import io.element.android.libraries.dateformatter.test.A_FORMATTED_DATE
 import io.element.android.libraries.dateformatter.test.FakeLastMessageTimestampFormatter
@@ -454,7 +455,6 @@ class RoomListPresenterTests {
 
             // The migration screen is not shown anymore
             assertThat(awaitItem().displayMigrationStatus).isFalse()
-            cancelAndIgnoreRemainingEvents()
             scope.cancel()
         }
     }
@@ -512,7 +512,7 @@ class RoomListPresenterTests {
             matrixClient = client,
             migrationScreenStore = InMemoryMigrationScreenStore(),
         ),
-        searchPresenter: RoomListSearchPresenter = createRoomListSearchPresenter(roomListService = client.roomListService)
+        searchPresenter: Presenter<RoomListSearchState> = Presenter { aRoomListSearchState() },
     ) = RoomListPresenter(
         client = client,
         sessionVerificationService = sessionVerificationService,

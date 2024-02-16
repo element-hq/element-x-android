@@ -38,7 +38,7 @@ import io.element.android.features.roomlist.impl.datasource.InviteStateDataSourc
 import io.element.android.features.roomlist.impl.datasource.RoomListDataSource
 import io.element.android.features.roomlist.impl.migration.MigrationScreenPresenter
 import io.element.android.features.roomlist.impl.search.RoomListSearchEvents
-import io.element.android.features.roomlist.impl.search.RoomListSearchPresenter
+import io.element.android.features.roomlist.impl.search.RoomListSearchState
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
@@ -78,7 +78,7 @@ class RoomListPresenter @Inject constructor(
     private val encryptionService: EncryptionService,
     private val featureFlagService: FeatureFlagService,
     private val indicatorService: IndicatorService,
-    private val searchPresenter: RoomListSearchPresenter,
+    private val searchPresenter: Presenter<RoomListSearchState>,
     private val migrationScreenPresenter: MigrationScreenPresenter,
     private val sessionPreferencesStore: SessionPreferencesStore,
 ) : Presenter<RoomListState> {
