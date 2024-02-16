@@ -58,6 +58,7 @@ import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.invisibleToUser
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -112,6 +113,7 @@ import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
 import io.element.android.libraries.matrix.api.room.Mention
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnail
+import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.coroutines.launch
 import kotlin.math.abs
@@ -312,7 +314,10 @@ private fun TimelineItemEventRowContent(
                     .zIndex(1f)
                     .clickable(onClick = onUserDataClicked)
                     // This is redundant when using talkback
-                    .clearAndSetSemantics { invisibleToUser() }
+                    .clearAndSetSemantics {
+                        invisibleToUser()
+                        testTag = TestTags.timelineItemSenderInfo.value
+                    }
             )
         }
 
