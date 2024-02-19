@@ -18,7 +18,6 @@
 
 package io.element.android.features.messages.impl.timeline
 
-import android.content.Context
 import android.view.accessibility.AccessibilityManager
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
@@ -105,7 +104,7 @@ fun TimelineView(
     val lazyListState = rememberLazyListState()
     // Disable reverse layout when TalkBack is enabled to avoid incorrect ordering issues seen in the current Compose UI version
     val useReverseLayout = remember {
-        val accessibilityManager = context.getSystemService(Context.ACCESSIBILITY_SERVICE) as AccessibilityManager
+        val accessibilityManager = context.getSystemService(AccessibilityManager::class.java)
         accessibilityManager.isTouchExplorationEnabled.not()
     }
 
