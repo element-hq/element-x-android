@@ -197,10 +197,10 @@ class RustMatrixClient(
         RustRoomListService(
             innerRoomListService = innerRoomListService,
             sessionCoroutineScope = sessionCoroutineScope,
+            sessionDispatcher = sessionDispatcher,
             roomListFactory = RoomListFactory(
                 innerRoomListService = innerRoomListService,
-                defaultCoroutineScope = sessionCoroutineScope,
-                defaultCoroutineContext = sessionDispatcher,
+                sessionCoroutineScope = sessionCoroutineScope,
             ),
         )
 

@@ -28,11 +28,21 @@ import kotlin.time.Duration
  * Can be retrieved from [RoomListService] methods.
  */
 interface RoomList {
+    /**
+     * The loading state of the room list.
+     */
     sealed interface LoadingState {
         data object NotLoaded : LoadingState
         data class Loaded(val numberOfRooms: Int) : LoadingState
     }
 
+    /**
+     * The source of the room list data.
+     * All: all rooms except invites.
+     * Invites: only invites.
+     *
+     * To apply some dynamic filtering on top of that, use [DynamicRoomList].
+     */
     enum class Source {
         All,
         Invites,

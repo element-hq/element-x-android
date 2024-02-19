@@ -29,15 +29,14 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import org.matrix.rustcomponents.sdk.RoomListLoadingState
+import org.matrix.rustcomponents.sdk.RoomListService
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
 import org.matrix.rustcomponents.sdk.RoomList as InnerRoomList
-import org.matrix.rustcomponents.sdk.RoomListService as InnerRoomListService
 
 internal class RoomListFactory(
-    private val innerRoomListService: InnerRoomListService,
-    private val defaultCoroutineScope: CoroutineScope,
-    private val defaultCoroutineContext: CoroutineContext = EmptyCoroutineContext,
+    private val innerRoomListService: RoomListService,
+    private val sessionCoroutineScope: CoroutineScope,
     private val roomSummaryDetailsFactory: RoomSummaryDetailsFactory = RoomSummaryDetailsFactory(),
 ) {
     /**
@@ -45,8 +44,8 @@ internal class RoomListFactory(
      */
     fun createRoomList(
         pageSize: Int,
-        coroutineScope: CoroutineScope = defaultCoroutineScope,
-        coroutineContext: CoroutineContext = defaultCoroutineContext,
+        coroutineScope: CoroutineScope = sessionCoroutineScope,
+        coroutineContext: CoroutineContext = EmptyCoroutineContext,
         initialFilter: RoomListFilter = RoomListFilter.all(),
         innerProvider: suspend () -> InnerRoomList
     ): DynamicRoomList {
