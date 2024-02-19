@@ -87,10 +87,13 @@ import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
+import org.junit.runner.RunWith
+import org.robolectric.RobolectricTestRunner
 import uniffi.wysiwyg_composer.MentionsState
 import java.io.File
 
 @Suppress("LargeClass")
+@RunWith(RobolectricTestRunner::class)
 class MessageComposerPresenterTest {
     @get:Rule
     val warmUpRule = WarmUpRule()
@@ -872,6 +875,19 @@ class MessageComposerPresenterTest {
             assertThat(room.sendMessageMentions).isEqualTo(listOf(Mention.User(A_USER_ID_3)))
 
             skipItems(1)
+        }
+    }
+
+    @Test
+    fun `present - send uri`() = runTest {
+        val presenter = createPresenter(this)
+        moleculeFlow(RecompositionMode.Immediate) {
+            val state = presenter.present()
+            remember(state, state.richTextEditorState.messageHtml) { state }
+        }.test {
+            val initialState = awaitFirstItem()
+            initialState.eventSink.invoke(MessageComposerEvents.SendUri(Uri.parse("content://uri")))
+            waitForPredicate { mediaPreProcessor.processCallCount == 1 }
         }
     }
 

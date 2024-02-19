@@ -16,7 +16,6 @@
 
 package io.element.android.features.roomlist.impl.components
 
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -87,7 +86,6 @@ fun RoomListTopBar(
     matrixUser: MatrixUser?,
     showAvatarIndicator: Boolean,
     areSearchResultsDisplayed: Boolean,
-    onFilterChanged: (String) -> Unit,
     onToggleSearch: () -> Unit,
     onMenuActionClicked: (RoomListMenuAction) -> Unit,
     onOpenSettings: () -> Unit,
@@ -95,15 +93,6 @@ fun RoomListTopBar(
     displayMenuItems: Boolean,
     modifier: Modifier = Modifier,
 ) {
-    fun closeFilter() {
-        onFilterChanged("")
-    }
-
-    BackHandler(enabled = areSearchResultsDisplayed) {
-        closeFilter()
-        onToggleSearch()
-    }
-
     DefaultRoomListTopBar(
         matrixUser = matrixUser,
         showAvatarIndicator = showAvatarIndicator,

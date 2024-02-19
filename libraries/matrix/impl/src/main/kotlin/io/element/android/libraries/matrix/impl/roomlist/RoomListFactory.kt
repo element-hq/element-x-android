@@ -20,7 +20,6 @@ import io.element.android.libraries.matrix.api.roomlist.DynamicRoomList
 import io.element.android.libraries.matrix.api.roomlist.RoomList
 import io.element.android.libraries.matrix.api.roomlist.RoomListFilter
 import io.element.android.libraries.matrix.api.roomlist.RoomSummary
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -30,13 +29,14 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import org.matrix.rustcomponents.sdk.RoomListLoadingState
+import org.matrix.rustcomponents.sdk.RoomListService
+import kotlin.coroutines.CoroutineContext
+import kotlin.coroutines.EmptyCoroutineContext
 import org.matrix.rustcomponents.sdk.RoomList as InnerRoomList
-import org.matrix.rustcomponents.sdk.RoomListService as InnerRoomListService
 
 internal class RoomListFactory(
-    private val innerRoomListService: InnerRoomListService,
-    private val coroutineScope: CoroutineScope,
-    private val dispatcher: CoroutineDispatcher,
+    private val innerRoomListService: RoomListService,
+    private val sessionCoroutineScope: CoroutineScope,
     private val roomSummaryDetailsFactory: RoomSummaryDetailsFactory = RoomSummaryDetailsFactory(),
 ) {
     /**
@@ -44,18 +44,21 @@ internal class RoomListFactory(
      */
     fun createRoomList(
         pageSize: Int,
+        coroutineScope: CoroutineScope = sessionCoroutineScope,
+        coroutineContext: CoroutineContext = EmptyCoroutineContext,
         initialFilter: RoomListFilter = RoomListFilter.all(),
         innerProvider: suspend () -> InnerRoomList
     ): DynamicRoomList {
         val loadingStateFlow: MutableStateFlow<RoomList.LoadingState> = MutableStateFlow(RoomList.LoadingState.NotLoaded)
         val summariesFlow = MutableStateFlow<List<RoomSummary>>(emptyList())
-        val processor = RoomSummaryListProcessor(summariesFlow, innerRoomListService, dispatcher, roomSummaryDetailsFactory)
+        val processor = RoomSummaryListProcessor(summariesFlow, innerRoomListService, coroutineContext, roomSummaryDetailsFactory)
         // Makes sure we don't miss any events
         val dynamicEvents = MutableSharedFlow<RoomListDynamicEvents>(replay = 100)
         val currentFilter = MutableStateFlow(initialFilter)
         val loadedPages = MutableStateFlow(1)
         var innerRoomList: InnerRoomList? = null
-        coroutineScope.launch(dispatcher) {
+
+        coroutineScope.launch(coroutineContext) {
             innerRoomList = innerProvider()
             innerRoomList?.let { innerRoomList ->
                 innerRoomList.entriesFlow(

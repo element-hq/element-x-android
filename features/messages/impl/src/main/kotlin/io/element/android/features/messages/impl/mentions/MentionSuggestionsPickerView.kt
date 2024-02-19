@@ -152,6 +152,7 @@ internal fun MentionSuggestionsPickerView_Preview() {
             powerLevel = 0L,
             normalizedPowerLevel = 0L,
             isIgnored = false,
+            role = RoomMember.Role.USER,
         )
         MentionSuggestionsPickerView(
             roomId = RoomId("!room:matrix.org"),

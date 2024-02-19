@@ -53,6 +53,10 @@ fun aRoomSummaryFilled(
     )
 )
 
+fun aRoomSummaryFilled(
+    details: RoomSummaryDetails = aRoomSummaryDetails(),
+) = RoomSummary.Filled(details)
+
 fun aRoomSummaryDetails(
     roomId: RoomId = A_ROOM_ID,
     name: String = A_ROOM_NAME,

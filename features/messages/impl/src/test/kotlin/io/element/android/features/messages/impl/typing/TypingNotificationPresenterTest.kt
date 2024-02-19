@@ -26,8 +26,6 @@ import io.element.android.libraries.featureflag.test.InMemorySessionPreferencesS
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
-import io.element.android.libraries.matrix.api.room.RoomMember
-import io.element.android.libraries.matrix.api.room.RoomMembershipState
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.A_USER_ID_2
 import io.element.android.libraries.matrix.test.A_USER_ID_3
@@ -178,7 +176,6 @@ class TypingNotificationPresenterTest {
 
     @Test
     fun `present - reserveSpace becomes true once we get the first typing notification with room members`() = runTest {
-        val aDefaultRoomMember = createDefaultRoomMember(A_USER_ID_2)
         val room = FakeMatrixRoom()
         val presenter = createPresenter(matrixRoom = room)
         moleculeFlow(RecompositionMode.Immediate) {
@@ -216,27 +213,17 @@ class TypingNotificationPresenterTest {
 
     private fun createDefaultRoomMember(
         userId: UserId,
-    ) = RoomMember(
+    ) = aTypingRoomMember(
         userId = userId,
         displayName = null,
-        avatarUrl = null,
-        membership = RoomMembershipState.JOIN,
         isNameAmbiguous = false,
-        powerLevel = 0,
-        normalizedPowerLevel = 0,
-        isIgnored = false,
     )
 
     private fun createKnownRoomMember(
         userId: UserId,
-    ) = RoomMember(
+    ) = aTypingRoomMember(
         userId = userId,
         displayName = "Alice Doe",
-        avatarUrl = "an_avatar_url",
-        membership = RoomMembershipState.JOIN,
         isNameAmbiguous = true,
-        powerLevel = 0,
-        normalizedPowerLevel = 0,
-        isIgnored = false,
     )
 }

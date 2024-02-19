@@ -177,14 +177,28 @@ private fun RoomMemberListItem(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val roleText = when (roomMember.role) {
+        RoomMember.Role.ADMIN -> stringResource(R.string.screen_room_member_list_role_administrator)
+        RoomMember.Role.MODERATOR -> stringResource(R.string.screen_room_member_list_role_moderator)
+        RoomMember.Role.USER -> null
+    }
     MatrixUserRow(
         modifier = modifier.clickable(onClick = onClick),
         matrixUser = MatrixUser(
             userId = roomMember.userId,
             displayName = roomMember.displayName,
-            avatarUrl = roomMember.avatarUrl
+            avatarUrl = roomMember.avatarUrl,
         ),
         avatarSize = AvatarSize.UserListItem,
+        trailingContent = roleText?.let {
+            @Composable {
+                Text(
+                    text = it,
+                    style = ElementTheme.typography.fontBodySmRegular,
+                    color = ElementTheme.colors.textSecondary,
+                )
+            }
+        }
     )
 }
 

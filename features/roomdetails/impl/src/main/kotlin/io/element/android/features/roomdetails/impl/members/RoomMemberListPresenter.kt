@@ -66,7 +66,9 @@ class RoomMemberListPresenter @Inject constructor(
                 roomMembers = AsyncData.Success(
                     RoomMembers(
                         invited = members.getOrDefault(RoomMembershipState.INVITE, emptyList()).toImmutableList(),
-                        joined = members.getOrDefault(RoomMembershipState.JOIN, emptyList()).toImmutableList(),
+                        joined = members.getOrDefault(RoomMembershipState.JOIN, emptyList())
+                            .sortedWith(PowerLevelRoomMemberComparator())
+                            .toImmutableList(),
                     )
                 )
             }
@@ -84,7 +86,9 @@ class RoomMemberListPresenter @Inject constructor(
                         SearchBarResultState.Results(
                             RoomMembers(
                                 invited = results.getOrDefault(RoomMembershipState.INVITE, emptyList()).toImmutableList(),
-                                joined = results.getOrDefault(RoomMembershipState.JOIN, emptyList()).toImmutableList(),
+                                joined = results.getOrDefault(RoomMembershipState.JOIN, emptyList())
+                                    .sortedWith(PowerLevelRoomMemberComparator())
+                                    .toImmutableList(),
                             )
                         )
                     }

@@ -34,7 +34,7 @@ test_core = "1.5.0"
 coil = "2.5.0"
 datetime = "0.5.0"
 dependencyAnalysis = "1.30.0"
-serialization_json = "1.6.2"
+serialization_json = "1.6.3"
 showkase = "1.0.2"
 appyx = "1.4.0"
 sqldelight = "2.0.1"
@@ -51,7 +51,7 @@ autoservice = "1.1.1"
 junit = "4.13.2"
 androidx-test-ext-junit = "1.1.5"
 espresso-core = "3.5.1"
-kover = "0.7.5"
+kover = "0.7.6"
 
 [libraries]
 # Project
@@ -172,7 +172,7 @@ opusencoder = "io.element.android:opusencoder:1.1.0"
 kotlinpoet = "com.squareup:kotlinpoet:1.16.0"
 
 # Analytics
-posthog = "com.posthog:posthog-android:3.1.7"
+posthog = "com.posthog:posthog-android:3.1.8"
 sentry = "io.sentry:sentry-android:7.3.0"
 matrix_analytics_events = "com.github.matrix-org:matrix-analytics-events:0.11.0"
 
