@@ -29,6 +29,9 @@ data class RoomMember(
     val isIgnored: Boolean,
     val role: Role,
 ) {
+    /**
+     * Role of the RoomMember, based on its [powerLevel].
+     */
     enum class Role {
         ADMIN,
         MODERATOR,
@@ -56,10 +59,20 @@ enum class RoomMembershipState {
     LEAVE
 }
 
+/**
+ * Returns the best name value to display for the RoomMember.
+ * If the [RoomMember.displayName] is present and not empty it'll be used, otherwise the [RoomMember.userId] will be used.
+ */
 fun RoomMember.getBestName(): String {
     return displayName?.takeIf { it.isNotEmpty() } ?: userId.value
 }
 
-fun RoomMember.sortName(): String {
+/**
+ * Returns the name value to use when sorting room members.
+ *
+ * If the display name is not null and not empty, it is returned.
+ * Otherwise, the user ID is returned without the initial "@".
+ */
+fun RoomMember.sortingName(): String {
     return displayName?.takeIf { it.isNotEmpty() } ?: userId.value.drop(1)
 }
