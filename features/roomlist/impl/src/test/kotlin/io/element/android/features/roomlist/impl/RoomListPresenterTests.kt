@@ -20,6 +20,7 @@ import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import im.vector.app.features.analytics.plan.Interaction
 import io.element.android.features.leaveroom.api.LeaveRoomEvent
 import io.element.android.features.leaveroom.api.LeaveRoomPresenter
 import io.element.android.features.leaveroom.fake.FakeLeaveRoomPresenter
@@ -66,6 +67,8 @@ import io.element.android.libraries.matrix.test.room.aRoomInfo
 import io.element.android.libraries.matrix.test.room.aRoomSummaryFilled
 import io.element.android.libraries.matrix.test.roomlist.FakeRoomListService
 import io.element.android.libraries.matrix.test.verification.FakeSessionVerificationService
+import io.element.android.services.analytics.api.AnalyticsService
+import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.consumeItemsUntilPredicate
 import io.element.android.tests.testutils.testCoroutineDispatchers
@@ -474,10 +477,11 @@ class RoomListPresenterTests {
     fun `present - when set is favorite event is emitted, then the action is called`() = runTest {
         val scope = CoroutineScope(coroutineContext + SupervisorJob())
         val room = FakeMatrixRoom()
+        val analyticsService = FakeAnalyticsService()
         val client = FakeMatrixClient().apply {
             givenGetRoomResult(A_ROOM_ID, room)
         }
-        val presenter = createRoomListPresenter(client = client, coroutineScope = scope)
+        val presenter = createRoomListPresenter(client = client, coroutineScope = scope, analyticsService = analyticsService)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -486,6 +490,10 @@ class RoomListPresenterTests {
             assertThat(room.setIsFavoriteCalls).isEqualTo(listOf(true))
             initialState.eventSink(RoomListEvents.SetRoomIsFavorite(A_ROOM_ID, false))
             assertThat(room.setIsFavoriteCalls).isEqualTo(listOf(true, false))
+            assertThat(analyticsService.capturedEvents).containsExactly(
+                Interaction(name = Interaction.Name.MobileRoomListRoomContextMenuFavouriteToggle),
+                Interaction(name = Interaction.Name.MobileRoomListRoomContextMenuFavouriteToggle)
+            )
             cancelAndIgnoreRemainingEvents()
             scope.cancel()
         }
@@ -527,11 +535,13 @@ class RoomListPresenterTests {
         val matrixClient = FakeMatrixClient().apply {
             givenGetRoomResult(A_ROOM_ID, room)
         }
+        val analyticsService = FakeAnalyticsService()
         val scope = CoroutineScope(coroutineContext + SupervisorJob())
         val presenter = createRoomListPresenter(
             client = matrixClient,
             coroutineScope = scope,
             sessionPreferencesStore = sessionPreferencesStore,
+            analyticsService = analyticsService,
         )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -550,6 +560,11 @@ class RoomListPresenterTests {
             initialState.eventSink.invoke(RoomListEvents.MarkAsRead(A_ROOM_ID))
             assertThat(room.markAsReadCalls).isEqualTo(listOf(ReceiptType.READ, ReceiptType.READ_PRIVATE))
             assertThat(room.setUnreadFlagCalls).isEqualTo(listOf(false, true, false))
+            assertThat(analyticsService.capturedEvents).containsExactly(
+                Interaction(name = Interaction.Name.MobileRoomListRoomContextMenuUnreadToggle),
+                Interaction(name = Interaction.Name.MobileRoomListRoomContextMenuUnreadToggle),
+                Interaction(name = Interaction.Name.MobileRoomListRoomContextMenuUnreadToggle),
+            )
             cancelAndIgnoreRemainingEvents()
             scope.cancel()
         }
@@ -572,7 +587,8 @@ class RoomListPresenterTests {
         migrationScreenPresenter: MigrationScreenPresenter = MigrationScreenPresenter(
             matrixClient = client,
             migrationScreenStore = InMemoryMigrationScreenStore(),
-        )
+        ),
+        analyticsService: AnalyticsService = FakeAnalyticsService(),
     ) = RoomListPresenter(
         client = client,
         sessionVerificationService = sessionVerificationService,
@@ -599,5 +615,6 @@ class RoomListPresenterTests {
         ),
         migrationScreenPresenter = migrationScreenPresenter,
         sessionPreferencesStore = sessionPreferencesStore,
+        analyticsService = analyticsService,
     )
 }

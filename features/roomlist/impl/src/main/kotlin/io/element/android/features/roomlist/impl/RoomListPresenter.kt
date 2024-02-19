@@ -29,6 +29,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
+import im.vector.app.features.analytics.plan.Interaction
 import io.element.android.features.leaveroom.api.LeaveRoomEvent
 import io.element.android.features.leaveroom.api.LeaveRoomPresenter
 import io.element.android.features.networkmonitor.api.NetworkMonitor
@@ -45,12 +46,15 @@ import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.indicator.api.IndicatorService
 import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import io.element.android.libraries.matrix.api.encryption.RecoveryState
 import io.element.android.libraries.matrix.api.timeline.ReceiptType
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.api.user.getCurrentUser
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
+import io.element.android.services.analytics.api.AnalyticsService
+import io.element.android.services.analyticsproviders.api.trackers.captureInteraction
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
@@ -78,6 +82,7 @@ class RoomListPresenter @Inject constructor(
     private val indicatorService: IndicatorService,
     private val migrationScreenPresenter: MigrationScreenPresenter,
     private val sessionPreferencesStore: SessionPreferencesStore,
+    private val analyticsService: AnalyticsService,
 ) : Presenter<RoomListState> {
     @Composable
     override fun present(): RoomListState {
@@ -145,27 +150,9 @@ class RoomListPresenter @Inject constructor(
                 }
                 is RoomListEvents.LeaveRoom -> leaveRoomState.eventSink(LeaveRoomEvent.ShowConfirmation(event.roomId))
 
-                is RoomListEvents.SetRoomIsFavorite -> coroutineScope.launch {
-                    client.getRoom(event.roomId)?.use { room ->
-                        room.setIsFavorite(event.isFavorite)
-                    }
-                }
-                is RoomListEvents.MarkAsRead -> coroutineScope.launch {
-                    client.getRoom(event.roomId)?.use { room ->
-                        room.setUnreadFlag(isUnread = false)
-                        val receiptType = if (sessionPreferencesStore.isSendPublicReadReceiptsEnabled().first()) {
-                            ReceiptType.READ
-                        } else {
-                            ReceiptType.READ_PRIVATE
-                        }
-                        room.markAsRead(receiptType)
-                    }
-                }
-                is RoomListEvents.MarkAsUnread -> coroutineScope.launch {
-                    client.getRoom(event.roomId)?.use { room ->
-                        room.setUnreadFlag(isUnread = true)
-                    }
-                }
+                is RoomListEvents.SetRoomIsFavorite -> coroutineScope.setRoomIsFavorite(event.roomId, event.isFavorite)
+                is RoomListEvents.MarkAsRead -> coroutineScope.markAsRead(event.roomId)
+                is RoomListEvents.MarkAsUnread -> coroutineScope.markAsUnread(event.roomId)
             }
         }
 
@@ -222,6 +209,39 @@ class RoomListPresenter @Inject constructor(
                 .flatMapLatest { isShowingContextMenuFlow }
                 .takeWhile { isShowingContextMenu -> isShowingContextMenu }
                 .collect()
+        }
+    }
+
+    private fun CoroutineScope.setRoomIsFavorite(roomId: RoomId, isFavorite: Boolean) = launch {
+        client.getRoom(roomId)?.use { room ->
+            room.setIsFavorite(isFavorite)
+                .onSuccess {
+                    analyticsService.captureInteraction(name = Interaction.Name.MobileRoomListRoomContextMenuFavouriteToggle)
+                }
+        }
+    }
+
+    private fun CoroutineScope.markAsRead(roomId: RoomId) = launch {
+        client.getRoom(roomId)?.use { room ->
+            room.setUnreadFlag(isUnread = false)
+            val receiptType = if (sessionPreferencesStore.isSendPublicReadReceiptsEnabled().first()) {
+                ReceiptType.READ
+            } else {
+                ReceiptType.READ_PRIVATE
+            }
+            room.markAsRead(receiptType)
+                .onSuccess {
+                    analyticsService.captureInteraction(name = Interaction.Name.MobileRoomListRoomContextMenuUnreadToggle)
+                }
+        }
+    }
+
+    private fun CoroutineScope.markAsUnread(roomId: RoomId) = launch {
+        client.getRoom(roomId)?.use { room ->
+            room.setUnreadFlag(isUnread = true)
+                .onSuccess {
+                    analyticsService.captureInteraction(name = Interaction.Name.MobileRoomListRoomContextMenuUnreadToggle)
+                }
         }
     }
 

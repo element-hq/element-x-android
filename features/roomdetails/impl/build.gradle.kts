@@ -70,6 +70,7 @@ dependencies {
     testImplementation(projects.tests.testutils)
     testImplementation(projects.features.leaveroom.test)
     testImplementation(projects.features.createroom.test)
+    testImplementation(projects.services.analytics.test)
 
     ksp(libs.showkase.processor)
 }

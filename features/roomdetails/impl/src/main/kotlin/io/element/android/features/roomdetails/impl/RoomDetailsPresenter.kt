@@ -27,6 +27,7 @@ import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.lifecycle.Lifecycle
+import im.vector.app.features.analytics.plan.Interaction
 import io.element.android.features.leaveroom.api.LeaveRoomEvent
 import io.element.android.features.leaveroom.api.LeaveRoomPresenter
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsPresenter
@@ -46,6 +47,8 @@ import io.element.android.libraries.matrix.api.room.powerlevels.canInvite
 import io.element.android.libraries.matrix.api.room.powerlevels.canSendState
 import io.element.android.libraries.matrix.api.room.roomNotificationSettings
 import io.element.android.libraries.matrix.ui.room.getDirectRoomMember
+import io.element.android.services.analytics.api.AnalyticsService
+import io.element.android.services.analyticsproviders.api.trackers.captureInteraction
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -60,6 +63,7 @@ class RoomDetailsPresenter @Inject constructor(
     private val roomMembersDetailsPresenterFactory: RoomMemberDetailsPresenter.Factory,
     private val leaveRoomPresenter: LeaveRoomPresenter,
     private val dispatchers: CoroutineDispatchers,
+    private val analyticsService: AnalyticsService,
 ) : Presenter<RoomDetailsState> {
     @Composable
     override fun present(): RoomDetailsState {
@@ -124,11 +128,7 @@ class RoomDetailsPresenter @Inject constructor(
                         client.notificationSettingsService().unmuteRoom(room.roomId, room.isEncrypted, room.isOneToOne)
                     }
                 }
-                is RoomDetailsEvent.SetFavorite -> {
-                    scope.launch {
-                       room.setIsFavorite(event.isFavorite)
-                    }
-                }
+                is RoomDetailsEvent.SetFavorite -> scope.setFavorite(event.isFavorite)
             }
         }
 
@@ -186,5 +186,12 @@ class RoomDetailsPresenter @Inject constructor(
         notificationSettingsService.notificationSettingsChangeFlow.onEach {
             room.updateRoomNotificationSettings()
         }.launchIn(this)
+    }
+
+    private fun CoroutineScope.setFavorite(isFavorite: Boolean) = launch {
+        room.setIsFavorite(isFavorite)
+            .onSuccess {
+                analyticsService.captureInteraction(Interaction.Name.MobileRoomFavouriteToggle)
+            }
     }
 }
