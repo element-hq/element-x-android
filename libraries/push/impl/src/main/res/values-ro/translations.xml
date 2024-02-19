@@ -7,6 +7,7 @@
   <string name="notification_inline_reply_failed">"** Trimiterea eșuată - vă rugăm să deschideți camera"</string>
   <string name="notification_invitation_action_reject">"Respingeți"</string>
   <string name="notification_invite_body">"V-a invitat la o discuție"</string>
+  <string name="notification_mentioned_you_body">"%1$s v-a menționat"</string>
   <string name="notification_new_messages">"Mesaje noi"</string>
   <string name="notification_reaction_body">"A reacționat cu %1$s"</string>
   <string name="notification_room_invite_body">"V-a invitat să vă alăturați camerei"</string>
@@ -46,5 +47,7 @@
   <string name="push_distributor_firebase_android">"Servicii Google"</string>
   <string name="push_no_valid_google_play_services_apk_android">"Nu au fost găsite servicii Google Play valide. Este posibil ca notificările să nu funcționeze corect."</string>
   <string name="notification_fallback_content">"Notificare"</string>
+  <string name="notification_invitation_action_join">"Alăturați-vă"</string>
+  <string name="notification_room_action_mark_as_read">"Marcați ca citită"</string>
   <string name="notification_room_action_quick_reply">"Raspuns rapid"</string>
 </resources>

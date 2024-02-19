@@ -25,7 +25,11 @@
   <string name="screen_room_details_notification_title">"Oznámení"</string>
   <string name="screen_room_details_share_room_title">"Sdílet místnost"</string>
   <string name="screen_room_details_updating_room">"Aktualizace místnosti…"</string>
+  <string name="screen_room_member_list_mode_banned">"Vykázaní"</string>
+  <string name="screen_room_member_list_mode_members">"Členové"</string>
   <string name="screen_room_member_list_pending_header_title">"Nevyřízeno"</string>
+  <string name="screen_room_member_list_role_administrator">"Správce"</string>
+  <string name="screen_room_member_list_role_moderator">"Moderátor"</string>
   <string name="screen_room_member_list_room_members_header_title">"Členové místnosti"</string>
   <string name="screen_room_notification_settings_allow_custom">"Povolit vlastní nastavení"</string>
   <string name="screen_room_notification_settings_allow_custom_footnote">"Zapnutím této funkce přepíšete výchozí nastavení"</string>

@@ -25,6 +25,8 @@
   <string name="screen_room_details_share_room_title">"Condividi stanza"</string>
   <string name="screen_room_details_updating_room">"Aggiornamento della stanza…"</string>
   <string name="screen_room_member_list_pending_header_title">"In attesa"</string>
+  <string name="screen_room_member_list_role_administrator">"Amministratore"</string>
+  <string name="screen_room_member_list_role_moderator">"Moderatore"</string>
   <string name="screen_room_member_list_room_members_header_title">"Membri della stanza"</string>
   <string name="screen_room_notification_settings_allow_custom">"Consenti impostazione personalizzata"</string>
   <string name="screen_room_notification_settings_allow_custom_footnote">"L\'attivazione di questa opzione sovrascriverà l\'impostazione predefinita"</string>

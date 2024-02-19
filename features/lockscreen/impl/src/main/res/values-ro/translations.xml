@@ -1,4 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <plurals name="screen_app_lock_subtitle">
+    <item quantity="one">"Aveți %1$d încercare de deblocare"</item>
+    <item quantity="few"></item>
+    <item quantity="other">"Aveți %1$d încercări de deblocare"</item>
+  </plurals>
+  <plurals name="screen_app_lock_subtitle_wrong_pin">
+    <item quantity="one">"PIN greșit. Mai aveți %1$d sansa"</item>
+    <item quantity="few"></item>
+    <item quantity="other">"PIN greșit. Mai aveți %1$d sanse"</item>
+  </plurals>
+  <string name="screen_app_lock_biometric_authentication">"autentificare biometrică"</string>
+  <string name="screen_app_lock_biometric_unlock">"deblocare biometrică"</string>
+  <string name="screen_app_lock_biometric_unlock_title_android">"Deblocați cu biometrice"</string>
+  <string name="screen_app_lock_forgot_pin">"Ați uitat codul PIN?"</string>
+  <string name="screen_app_lock_settings_change_pin">"Schimbați codul PIN"</string>
+  <string name="screen_app_lock_settings_enable_biometric_unlock">"Permite deblocarea biometrică"</string>
+  <string name="screen_app_lock_settings_remove_pin">"Eliminați codul PIN"</string>
+  <string name="screen_app_lock_settings_remove_pin_alert_message">"Sunteți sigur că doriți să eliminați codul PIN?"</string>
+  <string name="screen_app_lock_settings_remove_pin_alert_title">"Eliminați codul PIN?"</string>
+  <string name="screen_app_lock_setup_biometric_unlock_allow_title">"Permiteți %1$s"</string>
+  <string name="screen_app_lock_setup_biometric_unlock_skip">"Prefer să folosesc un cod PIN"</string>
+  <string name="screen_app_lock_setup_biometric_unlock_subtitle">"Economisiți timp și utilizați %1$s pentru a debloca aplicația de fiecare dată."</string>
+  <string name="screen_app_lock_setup_choose_pin">"Alegeți codul PIN"</string>
+  <string name="screen_app_lock_setup_confirm_pin">"Confirmare PIN"</string>
+  <string name="screen_app_lock_setup_pin_blacklisted_dialog_content">"Nu puteți alege acest cod PIN din motive de securitate"</string>
+  <string name="screen_app_lock_setup_pin_blacklisted_dialog_title">"Alegeți un alt cod PIN"</string>
+  <string name="screen_app_lock_setup_pin_context">"Blocați %1$s pentru a adăuga un plus de securitate la conversațiile dvs.
+
+Alegeți ceva memorabil. Dacă uitați acest PIN, veți fi deconectat din aplicație."</string>
+  <string name="screen_app_lock_setup_pin_mismatch_dialog_content">"Vă rugăm să introduceți același cod PIN de două ori"</string>
+  <string name="screen_app_lock_setup_pin_mismatch_dialog_title">"Codurile PIN nu corespund"</string>
+  <string name="screen_app_lock_signout_alert_message">"Va trebui să vă reconectați și să creați un cod PIN nou pentru a continua"</string>
+  <string name="screen_app_lock_signout_alert_title">"Sunteți deconectat"</string>
+  <string name="screen_app_lock_use_biometric_android">"Utilizați biometrice"</string>
+  <string name="screen_app_lock_use_pin_android">"Utilizați codul PIN"</string>
   <string name="screen_signout_in_progress_dialog_content">"Deconectare în curs…"</string>
 </resources>

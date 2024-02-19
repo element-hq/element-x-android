@@ -39,6 +39,8 @@
   <string name="state_event_room_name_changed_by_you">"Ați schimbat numele camerei în: %1$s"</string>
   <string name="state_event_room_name_removed">"%1$s a sters numele camerei"</string>
   <string name="state_event_room_name_removed_by_you">"Ați șters numele camerei"</string>
+  <string name="state_event_room_none">"%1$s nu a făcut nicio modificare"</string>
+  <string name="state_event_room_none_by_you">"Nu ați făcut nicio modificare"</string>
   <string name="state_event_room_reject">"%1$s a respins invitația"</string>
   <string name="state_event_room_reject_by_you">"Ați respins invitația"</string>
   <string name="state_event_room_remove">"%1$s l-a îndepărtat pe %2$s"</string>

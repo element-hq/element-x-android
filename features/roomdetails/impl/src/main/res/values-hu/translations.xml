@@ -24,7 +24,11 @@
   <string name="screen_room_details_notification_title">"Értesítések"</string>
   <string name="screen_room_details_share_room_title">"Szoba megosztása"</string>
   <string name="screen_room_details_updating_room">"Szoba frissítése…"</string>
+  <string name="screen_room_member_list_mode_banned">"Kitiltva"</string>
+  <string name="screen_room_member_list_mode_members">"Tagok"</string>
   <string name="screen_room_member_list_pending_header_title">"Függőben"</string>
+  <string name="screen_room_member_list_role_administrator">"Rendszergazda"</string>
+  <string name="screen_room_member_list_role_moderator">"Moderátor"</string>
   <string name="screen_room_member_list_room_members_header_title">"Szoba tagjai"</string>
   <string name="screen_room_notification_settings_allow_custom">"Egyéni beállítás engedélyezése"</string>
   <string name="screen_room_notification_settings_allow_custom_footnote">"Ennek bekapcsolása felülírja az alapértelmezett beállítást"</string>

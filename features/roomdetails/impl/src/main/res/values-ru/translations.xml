@@ -25,6 +25,8 @@
   <string name="screen_room_details_notification_title">"Уведомления"</string>
   <string name="screen_room_details_share_room_title">"Поделиться комнатой"</string>
   <string name="screen_room_details_updating_room">"Обновление комнаты…"</string>
+  <string name="screen_room_member_list_mode_banned">"Заблокирован"</string>
+  <string name="screen_room_member_list_mode_members">"Участники"</string>
   <string name="screen_room_member_list_pending_header_title">"В ожидании"</string>
   <string name="screen_room_member_list_role_administrator">"Администратор"</string>
   <string name="screen_room_member_list_role_moderator">"Модератор"</string>

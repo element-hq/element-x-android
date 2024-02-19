@@ -48,7 +48,7 @@
   <string name="action_end_poll">"Umfrage beenden"</string>
   <string name="action_enter_pin">"PIN eingeben"</string>
   <string name="action_forgot_password">"Passwort vergessen?"</string>
-  <string name="action_forward">"Weiter"</string>
+  <string name="action_forward">"Weiterleiten"</string>
   <string name="action_invite">"Einladen"</string>
   <string name="action_invite_friends">"Personen einladen"</string>
   <string name="action_invite_friends_to_app">"Zu %1$s einladen"</string>

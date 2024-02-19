@@ -1,5 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_advanced_settings_element_call_base_url">"Adresa URL de bază Element Call"</string>
+  <string name="screen_advanced_settings_element_call_base_url_description">"Setați o adresă URL de bază personalizată pentru Element Call."</string>
+  <string name="screen_advanced_settings_element_call_base_url_validation_error">"URL invalid, vă rugăm să vă asigurați că includeți protocolul (http/https) și adresa corectă."</string>
+  <string name="screen_advanced_settings_developer_mode">"Modul dezvoltator"</string>
+  <string name="screen_advanced_settings_developer_mode_description">"Activați pentru a avea acces la funcționalități pentru dezvoltatori."</string>
+  <string name="screen_advanced_settings_rich_text_editor_description">"Dezactivați editorul avansat pentru a tasta manual Markdown."</string>
+  <string name="screen_advanced_settings_send_read_receipts">"Chitanțe de citire"</string>
+  <string name="screen_advanced_settings_send_read_receipts_description">"Dacă dezactivată, chitanțele dumneavoastră de citire nu vor fi trimise nimănui. Veți primi în continuare chitanțe de citire de la alți utilizatori."</string>
+  <string name="screen_advanced_settings_share_presence">"Împărtășiți prezența"</string>
+  <string name="screen_advanced_settings_share_presence_description">"Dacă dezactivată, nu veți putea trimite sau primi chitanțe de citire sau notificări de tastare."</string>
+  <string name="screen_advanced_settings_view_source_description">"Activați opțiunea pentru a vizualiza sursa mesajelor."</string>
+  <string name="screen_edit_profile_display_name">"Nume"</string>
+  <string name="screen_edit_profile_display_name_placeholder">"Numele dumneavoastra"</string>
+  <string name="screen_edit_profile_error">"A fost întâlnită o eroare necunoscută și informațiile nu au putut fi modificate."</string>
+  <string name="screen_edit_profile_error_title">"Nu s-a putut actualiza profilul"</string>
+  <string name="screen_edit_profile_title">"Editați profilul"</string>
+  <string name="screen_edit_profile_updating_details">"Se actualizează profilul…"</string>
   <string name="screen_notification_settings_additional_settings_section_title">"Setări adiționale"</string>
   <string name="screen_notification_settings_calls_label">"Apeluri audio și video"</string>
   <string name="screen_notification_settings_configuration_mismatch">"Nepotrivire de configurație"</string>
@@ -18,6 +35,8 @@ Dacă continuați, unele dintre setările dumneavoastră pot fi modificate."</st
   <string name="screen_notification_settings_enable_notifications">"Activați notificările pe acest dispozitiv"</string>
   <string name="screen_notification_settings_failed_fixing_configuration">"Configurația nu a fost corectată, vă rugăm să încercați din nou."</string>
   <string name="screen_notification_settings_group_chats">"Discuții de grup"</string>
+  <string name="screen_notification_settings_invite_for_me_label">"Invitații"</string>
+  <string name="screen_notification_settings_mentions_only_disclaimer">"Serverul dumneavoastră nu acceptă această opțiune în camerele criptate, este posibil să nu primiți notificări în unele camere."</string>
   <string name="screen_notification_settings_mentions_section_title">"Mențiuni"</string>
   <string name="screen_notification_settings_mode_all">"Toate"</string>
   <string name="screen_notification_settings_mode_mentions">"Mențiuni"</string>

@@ -25,6 +25,8 @@
   <string name="screen_room_details_notification_title">"Oznámenia"</string>
   <string name="screen_room_details_share_room_title">"Zdieľať miestnosť"</string>
   <string name="screen_room_details_updating_room">"Aktualizácia miestnosti…"</string>
+  <string name="screen_room_member_list_mode_banned">"Zakázaní"</string>
+  <string name="screen_room_member_list_mode_members">"Členovia"</string>
   <string name="screen_room_member_list_pending_header_title">"Čaká sa"</string>
   <string name="screen_room_member_list_role_administrator">"Administrátor"</string>
   <string name="screen_room_member_list_role_moderator">"Moderátor"</string>

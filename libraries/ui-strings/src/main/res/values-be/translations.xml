@@ -119,6 +119,7 @@
   <string name="common_enter_your_pin">"Увядзіце свой PIN-код"</string>
   <string name="common_error">"Памылка"</string>
   <string name="common_everyone">"Усе"</string>
+  <string name="common_favourite">"Захаванае"</string>
   <string name="common_file">"Файл"</string>
   <string name="common_file_saved_on_disk_android">"Файл захаваны ў папку Спампоўкі"</string>
   <string name="common_forward_message">"Перасылка паведамлення"</string>
@@ -133,6 +134,7 @@
   <string name="common_loading">"Загрузка…"</string>
   <string name="common_message">"Паведамленне"</string>
   <string name="common_message_actions">"Дзеянні з паведамленням"</string>
+  <string name="common_message_layout">"Выгляд паведамлення"</string>
   <string name="common_message_removed">"Паведамленне выдалена"</string>
   <string name="common_modern">"Сучасны"</string>
   <string name="common_mute">"Адключыць гук"</string>
