@@ -31,9 +31,11 @@ import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
+import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
 import io.element.android.libraries.matrix.api.room.powerlevels.canInvite
 import io.element.android.libraries.matrix.api.room.roomMembers
+import io.element.android.libraries.matrix.api.room.sortName
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -66,7 +68,9 @@ class RoomMemberListPresenter @Inject constructor(
                 roomMembers = AsyncData.Success(
                     RoomMembers(
                         invited = members.getOrDefault(RoomMembershipState.INVITE, emptyList()).toImmutableList(),
-                        joined = members.getOrDefault(RoomMembershipState.JOIN, emptyList()).toImmutableList(),
+                        joined = members.getOrDefault(RoomMembershipState.JOIN, emptyList())
+                            .sortedWith(PowerLevelRoomMemberComparator())
+                            .toImmutableList(),
                     )
                 )
             }
@@ -84,7 +88,9 @@ class RoomMemberListPresenter @Inject constructor(
                         SearchBarResultState.Results(
                             RoomMembers(
                                 invited = results.getOrDefault(RoomMembershipState.INVITE, emptyList()).toImmutableList(),
-                                joined = results.getOrDefault(RoomMembershipState.JOIN, emptyList()).toImmutableList(),
+                                joined = results.getOrDefault(RoomMembershipState.JOIN, emptyList())
+                                    .sortedWith(PowerLevelRoomMemberComparator())
+                                    .toImmutableList(),
                             )
                         )
                     }
@@ -105,5 +111,17 @@ class RoomMemberListPresenter @Inject constructor(
                 }
             },
         )
+    }
+}
+
+private class PowerLevelRoomMemberComparator : Comparator<RoomMember> {
+    override fun compare(o1: RoomMember, o2: RoomMember): Int {
+        return when {
+            o1.powerLevel > o2.powerLevel -> return -1
+            o1.powerLevel < o2.powerLevel -> return 1
+            else -> {
+                o1.sortName().compareTo(o2.sortName(), ignoreCase = true)
+            }
+        }
     }
 }

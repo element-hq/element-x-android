@@ -182,9 +182,23 @@ private fun RoomMemberListItem(
         matrixUser = MatrixUser(
             userId = roomMember.userId,
             displayName = roomMember.displayName,
-            avatarUrl = roomMember.avatarUrl
+            avatarUrl = roomMember.avatarUrl,
         ),
         avatarSize = AvatarSize.UserListItem,
+        trailingContent = {
+            val roleText = when (roomMember.role) {
+                RoomMember.Role.ADMIN -> stringResource(R.string.screen_room_member_list_role_administrator)
+                RoomMember.Role.MODERATOR -> stringResource(R.string.screen_room_member_list_role_moderator)
+                RoomMember.Role.USER -> null
+            }
+            roleText?.let {
+                Text(
+                    text = it,
+                    style = ElementTheme.typography.fontBodySmRegular,
+                    color = ElementTheme.colors.textSecondary,
+                )
+            }
+        }
     )
 }
 

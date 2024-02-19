@@ -55,6 +55,7 @@ fun aDmRoomMember(
     powerLevel: Long = 0,
     normalizedPowerLevel: Long = powerLevel,
     isIgnored: Boolean = false,
+    role: RoomMember.Role = RoomMember.Role.USER,
 ) = RoomMember(
     userId = userId,
     displayName = displayName,
@@ -64,6 +65,7 @@ fun aDmRoomMember(
     powerLevel = powerLevel,
     normalizedPowerLevel = normalizedPowerLevel,
     isIgnored = isIgnored,
+    role = role,
 )
 
 fun aRoomDetailsState() = RoomDetailsState(

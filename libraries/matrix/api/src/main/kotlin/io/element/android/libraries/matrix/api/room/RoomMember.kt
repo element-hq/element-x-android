@@ -27,7 +27,14 @@ data class RoomMember(
     val powerLevel: Long,
     val normalizedPowerLevel: Long,
     val isIgnored: Boolean,
+    val role: Role,
 ) {
+    enum class Role {
+        ADMIN,
+        MODERATOR,
+        USER
+    }
+
     /**
      * Disambiguated display name for the RoomMember.
      * If the display name is null, the user ID is returned.
@@ -51,4 +58,8 @@ enum class RoomMembershipState {
 
 fun RoomMember.getBestName(): String {
     return displayName?.takeIf { it.isNotEmpty() } ?: userId.value
+}
+
+fun RoomMember.sortName(): String {
+    return displayName?.takeIf { it.isNotEmpty() } ?: userId.value.drop(1)
 }

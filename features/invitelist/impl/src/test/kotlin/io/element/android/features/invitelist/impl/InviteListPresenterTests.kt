@@ -27,7 +27,6 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
-import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
 import io.element.android.libraries.matrix.api.roomlist.RoomSummary
 import io.element.android.libraries.matrix.test.AN_AVATAR_URL
@@ -38,6 +37,7 @@ import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.A_USER_NAME
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
+import io.element.android.libraries.matrix.test.room.aRoomMember
 import io.element.android.libraries.matrix.test.room.aRoomSummaryDetails
 import io.element.android.libraries.matrix.test.roomlist.FakeRoomListService
 import io.element.android.libraries.push.api.notifications.NotificationDrawerManager
@@ -431,7 +431,7 @@ class InviteListPresenterTests {
                         avatarUrl = null,
                         isDirect = false,
                         lastMessage = null,
-                        inviter = RoomMember(
+                        inviter = aRoomMember(
                             userId = A_USER_ID,
                             displayName = A_USER_NAME,
                             avatarUrl = AN_AVATAR_URL,
@@ -458,7 +458,7 @@ class InviteListPresenterTests {
                         avatarUrl = null,
                         isDirect = true,
                         lastMessage = null,
-                        inviter = RoomMember(
+                        inviter = aRoomMember(
                             userId = A_USER_ID,
                             displayName = A_USER_NAME,
                             avatarUrl = AN_AVATAR_URL,

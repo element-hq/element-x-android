@@ -34,6 +34,7 @@ import org.matrix.rustcomponents.sdk.NoPointer
 import org.matrix.rustcomponents.sdk.Room
 import org.matrix.rustcomponents.sdk.RoomMember
 import org.matrix.rustcomponents.sdk.RoomMembersIterator
+import uniffi.matrix_sdk.RoomMemberRole
 
 class RoomMemberListFetcherTest {
     @Test
@@ -268,6 +269,7 @@ class FakeRustRoomMember(
     private val membership: MembershipState = MembershipState.JOIN,
     private val isNameAmbiguous: Boolean = false,
     private val powerLevel: Long = 0L,
+    private val role: RoomMemberRole = RoomMemberRole.USER,
 ) : RoomMember(NoPointer) {
     override fun userId(): String {
         return userId.value
@@ -299,5 +301,9 @@ class FakeRustRoomMember(
 
     override fun isIgnored(): Boolean {
         return false
+    }
+
+    override fun suggestedRoleForPowerLevel(): RoomMemberRole {
+        return role
     }
 }
