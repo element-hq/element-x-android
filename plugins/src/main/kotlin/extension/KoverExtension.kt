@@ -85,6 +85,8 @@ fun Project.setupKover() {
                     "*Presenter\$present\$*",
                     // Forked from compose
                     "io.element.android.libraries.designsystem.theme.components.bottomsheet.*",
+                    // Test presenter
+                    "io.element.android.features.leaveroom.fake.FakeLeaveRoomPresenter",
                 )
                 annotatedBy(
                     "androidx.compose.ui.tooling.preview.Preview",
