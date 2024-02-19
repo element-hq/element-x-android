@@ -120,10 +120,14 @@ fun ShowLocationView(
                     )
                 },
                 navigationIcon = {
-                    BackButton(onClick = onBackPressed)
+                    BackButton(
+                        onClick = onBackPressed,
+                    )
                 },
                 actions = {
-                    IconButton(onClick = { state.eventSink(ShowLocationEvents.Share) }) {
+                    IconButton(
+                        onClick = { state.eventSink(ShowLocationEvents.Share) }
+                    ) {
                         Icon(
                             imageVector = CompoundIcons.ShareAndroid(),
                             contentDescription = stringResource(CommonStrings.action_share),

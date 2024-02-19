@@ -75,13 +75,14 @@ class RoomListPresenter @Inject constructor(
     private val inviteStateDataSource: InviteStateDataSource,
     private val leaveRoomPresenter: LeaveRoomPresenter,
     private val roomListDataSource: RoomListDataSource,
-    private val encryptionService: EncryptionService,
     private val featureFlagService: FeatureFlagService,
     private val indicatorService: IndicatorService,
     private val searchPresenter: Presenter<RoomListSearchState>,
     private val migrationScreenPresenter: MigrationScreenPresenter,
     private val sessionPreferencesStore: SessionPreferencesStore,
 ) : Presenter<RoomListState> {
+    private val encryptionService: EncryptionService = client.encryptionService()
+
     @Composable
     override fun present(): RoomListState {
         val coroutineScope = rememberCoroutineScope()
@@ -139,7 +140,6 @@ class RoomListPresenter @Inject constructor(
                     contextMenu.value = RoomListState.ContextMenu.Hidden
                 }
                 is RoomListEvents.LeaveRoom -> leaveRoomState.eventSink(LeaveRoomEvent.ShowConfirmation(event.roomId))
-
                 is RoomListEvents.SetRoomIsFavorite -> coroutineScope.launch {
                     client.getRoom(event.roomId)?.use { room ->
                         room.setIsFavorite(event.isFavorite)

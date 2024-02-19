@@ -103,6 +103,10 @@ class FakeEncryptionService : EncryptionService {
         backupStateStateFlow.emit(state)
     }
 
+    suspend fun emitRecoveryState(state: RecoveryState) {
+        recoveryStateStateFlow.emit(state)
+    }
+
     suspend fun emitEnableRecoveryProgress(state: EnableRecoveryProgress) {
         enableRecoveryProgressStateFlow.emit(state)
     }

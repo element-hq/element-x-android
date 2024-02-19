@@ -24,78 +24,47 @@ private const val APP_NAME = "ApplicationName"
 class ShowLocationStateProvider : PreviewParameterProvider<ShowLocationState> {
     override val values: Sequence<ShowLocationState>
         get() = sequenceOf(
-            ShowLocationState(
-                ShowLocationState.Dialog.None,
-                Location(1.23, 2.34, 4f),
-                description = null,
-                hasLocationPermission = false,
-                isTrackMyLocation = false,
-                appName = APP_NAME,
-                eventSink = {},
+            aShowLocationState(),
+            aShowLocationState(
+                permissionDialog = ShowLocationState.Dialog.PermissionDenied,
             ),
-            ShowLocationState(
-                ShowLocationState.Dialog.PermissionDenied,
-                Location(1.23, 2.34, 4f),
-                description = null,
-                hasLocationPermission = false,
-                isTrackMyLocation = false,
-                appName = APP_NAME,
-                eventSink = {},
+            aShowLocationState(
+                permissionDialog = ShowLocationState.Dialog.PermissionRationale,
             ),
-            ShowLocationState(
-                ShowLocationState.Dialog.PermissionRationale,
-                Location(1.23, 2.34, 4f),
-                description = null,
-                hasLocationPermission = false,
-                isTrackMyLocation = false,
-                appName = APP_NAME,
-                eventSink = {},
-            ),
-            ShowLocationState(
-                ShowLocationState.Dialog.None,
-                Location(1.23, 2.34, 4f),
-                description = null,
+            aShowLocationState(
                 hasLocationPermission = true,
-                isTrackMyLocation = false,
-                appName = APP_NAME,
-                eventSink = {},
             ),
-            ShowLocationState(
-                ShowLocationState.Dialog.None,
-                Location(1.23, 2.34, 4f),
-                description = null,
+            aShowLocationState(
                 hasLocationPermission = true,
                 isTrackMyLocation = true,
-                appName = APP_NAME,
-                eventSink = {},
             ),
-            ShowLocationState(
-                ShowLocationState.Dialog.None,
-                Location(1.23, 2.34, 4f),
+            aShowLocationState(
                 description = "My favourite place!",
-                hasLocationPermission = false,
-                isTrackMyLocation = false,
-                appName = APP_NAME,
-                eventSink = {},
             ),
-            ShowLocationState(
-                ShowLocationState.Dialog.None,
-                Location(1.23, 2.34, 4f),
+            aShowLocationState(
                 description = "For some reason I decided to to write a small essay that wraps at just two lines!",
-                hasLocationPermission = false,
-                isTrackMyLocation = false,
-                appName = APP_NAME,
-                eventSink = {},
             ),
-            ShowLocationState(
-                ShowLocationState.Dialog.None,
-                Location(1.23, 2.34, 4f),
+            aShowLocationState(
                 description = "For some reason I decided to write a small essay in the location description. " +
                     "It is so long that it will wrap onto more than two lines!",
-                hasLocationPermission = false,
-                isTrackMyLocation = false,
-                appName = APP_NAME,
-                eventSink = {},
             ),
         )
 }
+
+fun aShowLocationState(
+    permissionDialog: ShowLocationState.Dialog = ShowLocationState.Dialog.None,
+    location: Location = Location(1.23, 2.34, 4f),
+    description: String? = null,
+    hasLocationPermission: Boolean = false,
+    isTrackMyLocation: Boolean = false,
+    appName: String = APP_NAME,
+    eventSink: (ShowLocationEvents) -> Unit = {},
+) = ShowLocationState(
+    permissionDialog = permissionDialog,
+    location = location,
+    description = description,
+    hasLocationPermission = hasLocationPermission,
+    isTrackMyLocation = isTrackMyLocation,
+    appName = appName,
+    eventSink = eventSink,
+)
