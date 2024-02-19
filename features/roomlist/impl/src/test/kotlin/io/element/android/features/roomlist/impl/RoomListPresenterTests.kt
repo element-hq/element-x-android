@@ -33,6 +33,7 @@ import io.element.android.features.roomlist.impl.datasource.RoomListRoomSummaryF
 import io.element.android.features.roomlist.impl.migration.InMemoryMigrationScreenStore
 import io.element.android.features.roomlist.impl.migration.MigrationScreenPresenter
 import io.element.android.features.roomlist.impl.model.createRoomListRoomSummary
+import io.element.android.features.roomlist.impl.search.RoomListSearchEvents
 import io.element.android.features.roomlist.impl.search.RoomListSearchState
 import io.element.android.features.roomlist.impl.search.aRoomListSearchState
 import io.element.android.libraries.architecture.Presenter
@@ -69,6 +70,7 @@ import io.element.android.libraries.matrix.test.room.aRoomInfo
 import io.element.android.libraries.matrix.test.room.aRoomSummaryFilled
 import io.element.android.libraries.matrix.test.roomlist.FakeRoomListService
 import io.element.android.libraries.matrix.test.verification.FakeSessionVerificationService
+import io.element.android.tests.testutils.EventsRecorder
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.consumeItemsUntilPredicate
 import io.element.android.tests.testutils.testCoroutineDispatchers
@@ -410,6 +412,40 @@ class RoomListPresenterTests {
             initialState.eventSink(RoomListEvents.LeaveRoom(A_ROOM_ID))
             assertThat(leaveRoomPresenter.events).containsExactly(LeaveRoomEvent.ShowConfirmation(A_ROOM_ID))
             cancelAndIgnoreRemainingEvents()
+            scope.cancel()
+        }
+    }
+
+    @Test
+    fun `present - toggle search menu`() = runTest {
+        val eventRecorder = EventsRecorder<RoomListSearchEvents>()
+        val searchPresenter: Presenter<RoomListSearchState> = Presenter {
+            aRoomListSearchState(
+                eventSink = eventRecorder
+            )
+        }
+        val scope = CoroutineScope(coroutineContext + SupervisorJob())
+        val presenter = createRoomListPresenter(
+            coroutineScope = scope,
+            searchPresenter = searchPresenter,
+        )
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            skipItems(1)
+            val initialState = awaitItem()
+            eventRecorder.assertEmpty()
+            initialState.eventSink(RoomListEvents.ToggleSearchResults)
+            eventRecorder.assertSingle(
+                RoomListSearchEvents.ToggleSearchVisibility
+            )
+            initialState.eventSink(RoomListEvents.ToggleSearchResults)
+            eventRecorder.assertList(
+                listOf(
+                    RoomListSearchEvents.ToggleSearchVisibility,
+                    RoomListSearchEvents.ToggleSearchVisibility
+                )
+            )
             scope.cancel()
         }
     }
