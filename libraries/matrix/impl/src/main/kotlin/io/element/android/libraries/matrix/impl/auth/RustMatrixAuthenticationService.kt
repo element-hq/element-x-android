@@ -65,6 +65,7 @@ class RustMatrixAuthenticationService @Inject constructor(
         basePath = baseDirectory.absolutePath,
         passphrase = pendingPassphrase,
         userAgent = userAgentProvider.provide(),
+        additionalRootCertificates = emptyList(),
         oidcConfiguration = oidcConfiguration,
         customSlidingSyncProxy = null,
         sessionDelegate = null,

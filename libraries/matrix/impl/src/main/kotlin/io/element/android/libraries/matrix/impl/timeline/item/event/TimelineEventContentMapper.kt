@@ -163,7 +163,7 @@ private fun RustOtherState.map(): OtherState {
         RustOtherState.RoomJoinRules -> OtherState.RoomJoinRules
         is RustOtherState.RoomName -> OtherState.RoomName(name)
         RustOtherState.RoomPinnedEvents -> OtherState.RoomPinnedEvents
-        RustOtherState.RoomPowerLevels -> OtherState.RoomPowerLevels
+        is RustOtherState.RoomPowerLevels -> OtherState.RoomPowerLevels(users)
         RustOtherState.RoomServerAcl -> OtherState.RoomServerAcl
         is RustOtherState.RoomThirdPartyInvite -> OtherState.RoomThirdPartyInvite(displayName)
         RustOtherState.RoomTombstone -> OtherState.RoomTombstone
