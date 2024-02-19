@@ -326,8 +326,7 @@ class MessagesViewTest {
                 state = state,
                 onUserDataClicked = callback,
             )
-            val senderName = (timelineItem as? TimelineItem.Event)?.senderDisplayName.orEmpty()
-            rule.onNodeWithText(senderName).performClick()
+            rule.onNodeWithTag(TestTags.timelineItemSenderInfo.value).performClick()
         }
     }
 

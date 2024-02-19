@@ -74,4 +74,9 @@ object TestTags {
     val dialogPositive = TestTag("dialog-positive")
     val dialogNegative = TestTag("dialog-negative")
     val dialogNeutral = TestTag("dialog-neutral")
+
+    /**
+     * Timeline item.
+     */
+    val timelineItemSenderInfo = TestTag("timeline_item-sender_info")
 }

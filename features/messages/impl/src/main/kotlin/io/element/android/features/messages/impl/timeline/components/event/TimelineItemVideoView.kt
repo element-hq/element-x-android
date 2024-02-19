@@ -27,6 +27,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContentProvider
@@ -42,9 +44,10 @@ fun TimelineItemVideoView(
     content: TimelineItemVideoContent,
     modifier: Modifier = Modifier,
 ) {
+    val description = stringResource(CommonStrings.common_image)
     TimelineItemAspectRatioBox(
         aspectRatio = content.aspectRatio,
-        modifier = modifier,
+        modifier = modifier.semantics { contentDescription = description },
         contentAlignment = Alignment.Center,
     ) {
         BlurHashAsyncImage(
