@@ -31,11 +31,9 @@ import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
-import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
 import io.element.android.libraries.matrix.api.room.powerlevels.canInvite
 import io.element.android.libraries.matrix.api.room.roomMembers
-import io.element.android.libraries.matrix.api.room.sortingName
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -111,18 +109,5 @@ class RoomMemberListPresenter @Inject constructor(
                 }
             },
         )
-    }
-}
-
-// Comparator used to sort room members by power level (descending) and then by name (ascending)
-private class PowerLevelRoomMemberComparator : Comparator<RoomMember> {
-    override fun compare(o1: RoomMember, o2: RoomMember): Int {
-        return when {
-            o1.powerLevel > o2.powerLevel -> return -1
-            o1.powerLevel < o2.powerLevel -> return 1
-            else -> {
-                o1.sortingName().compareTo(o2.sortingName(), ignoreCase = true)
-            }
-        }
     }
 }

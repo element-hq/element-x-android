@@ -66,13 +66,3 @@ enum class RoomMembershipState {
 fun RoomMember.getBestName(): String {
     return displayName?.takeIf { it.isNotEmpty() } ?: userId.value
 }
-
-/**
- * Returns the name value to use when sorting room members.
- *
- * If the display name is not null and not empty, it is returned.
- * Otherwise, the user ID is returned without the initial "@".
- */
-fun RoomMember.sortingName(): String {
-    return displayName?.takeIf { it.isNotEmpty() } ?: userId.value.drop(1)
-}
