@@ -76,6 +76,11 @@ object TestTags {
     val dialogNeutral = TestTag("dialog-neutral")
 
     /**
+     * Floating Action Button.
+     */
+    val floatingActionButton = TestTag("floating-action-button")
+
+    /**
      * Timeline item.
      */
     val timelineItemSenderInfo = TestTag("timeline_item-sender_info")

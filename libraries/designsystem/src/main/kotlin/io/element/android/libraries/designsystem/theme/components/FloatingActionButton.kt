@@ -33,6 +33,8 @@ import androidx.compose.ui.unit.dp
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
+import io.element.android.libraries.testtags.TestTags
+import io.element.android.libraries.testtags.testTag
 
 @Composable
 fun FloatingActionButton(
@@ -48,7 +50,7 @@ fun FloatingActionButton(
 ) {
     androidx.compose.material3.FloatingActionButton(
         onClick = onClick,
-        modifier = modifier,
+        modifier = modifier.testTag(TestTags.floatingActionButton),
         shape = shape,
         containerColor = containerColor,
         contentColor = contentColor,
