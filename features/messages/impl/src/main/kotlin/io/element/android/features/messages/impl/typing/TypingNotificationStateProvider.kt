@@ -98,5 +98,6 @@ internal fun aTypingRoomMember(
         powerLevel = 0,
         normalizedPowerLevel = 0,
         isIgnored = false,
+        role = RoomMember.Role.USER,
     )
 }
