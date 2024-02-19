@@ -57,8 +57,14 @@ internal class RoomMemberListStateProvider : PreviewParameterProvider<RoomMember
                 searchQuery = "something-with-no-results",
                 searchResults = SearchBarResultState.NoResultsFound()
             ),
-
             aRoomMemberListState().copy(
+                roomMembers = AsyncData.Success(
+                    RoomMembers(
+                        invited = persistentListOf(aVictor(), aWalter()),
+                        joined = persistentListOf(anAlice(), aBob(), aWalter()),
+                        banned = persistentListOf(),
+                    )
+                ),
                 canDisplayBannedUsers = true,
             ),
         )
