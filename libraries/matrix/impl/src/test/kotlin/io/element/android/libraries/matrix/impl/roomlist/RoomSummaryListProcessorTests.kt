@@ -158,7 +158,7 @@ class RoomSummaryListProcessorTests {
     private fun TestScope.createProcessor() = RoomSummaryListProcessor(
         summaries,
         fakeRoomListService,
-        dispatcher = StandardTestDispatcher(testScheduler),
+        coroutineContext = StandardTestDispatcher(testScheduler),
         roomSummaryDetailsFactory = RoomSummaryDetailsFactory(),
     )
 

@@ -37,6 +37,8 @@ import io.element.android.features.preferences.api.store.SessionPreferencesStore
 import io.element.android.features.roomlist.impl.datasource.InviteStateDataSource
 import io.element.android.features.roomlist.impl.datasource.RoomListDataSource
 import io.element.android.features.roomlist.impl.migration.MigrationScreenPresenter
+import io.element.android.features.roomlist.impl.search.RoomListSearchEvents
+import io.element.android.features.roomlist.impl.search.RoomListSearchState
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
@@ -76,6 +78,7 @@ class RoomListPresenter @Inject constructor(
     private val encryptionService: EncryptionService,
     private val featureFlagService: FeatureFlagService,
     private val indicatorService: IndicatorService,
+    private val searchPresenter: Presenter<RoomListSearchState>,
     private val migrationScreenPresenter: MigrationScreenPresenter,
     private val sessionPreferencesStore: SessionPreferencesStore,
 ) : Presenter<RoomListState> {
@@ -89,9 +92,8 @@ class RoomListPresenter @Inject constructor(
         val roomList by produceState(initialValue = AsyncData.Loading()) {
             roomListDataSource.allRooms.collect { value = AsyncData.Success(it) }
         }
-        val filteredRoomList by roomListDataSource.filteredRooms.collectAsState()
-        val filter by roomListDataSource.filter.collectAsState()
         val networkConnectionStatus by networkMonitor.connectivity.collectAsState()
+        val searchState = searchPresenter.present()
 
         LaunchedEffect(Unit) {
             roomListDataSource.launchIn(this)
@@ -122,21 +124,14 @@ class RoomListPresenter @Inject constructor(
         // Avatar indicator
         val showAvatarIndicator by indicatorService.showRoomListTopBarIndicator()
 
-        var displaySearchResults by rememberSaveable { mutableStateOf(false) }
         val contextMenu = remember { mutableStateOf<RoomListState.ContextMenu>(RoomListState.ContextMenu.Hidden) }
 
         fun handleEvents(event: RoomListEvents) {
             when (event) {
-                is RoomListEvents.UpdateFilter -> roomListDataSource.updateFilter(event.newFilter)
                 is RoomListEvents.UpdateVisibleRange -> updateVisibleRange(event.range)
                 RoomListEvents.DismissRequestVerificationPrompt -> verificationPromptDismissed = true
                 RoomListEvents.DismissRecoveryKeyPrompt -> recoveryKeyPromptDismissed = true
-                RoomListEvents.ToggleSearchResults -> {
-                    if (displaySearchResults) {
-                        roomListDataSource.updateFilter("")
-                    }
-                    displaySearchResults = !displaySearchResults
-                }
+                RoomListEvents.ToggleSearchResults -> searchState.eventSink(RoomListSearchEvents.ToggleSearchVisibility)
                 is RoomListEvents.ShowContextMenu -> {
                     coroutineScope.showContextMenu(event, contextMenu)
                 }
@@ -175,16 +170,14 @@ class RoomListPresenter @Inject constructor(
             matrixUser = matrixUser.value,
             showAvatarIndicator = showAvatarIndicator,
             roomList = roomList,
-            filter = filter,
-            filteredRoomList = filteredRoomList,
             displayVerificationPrompt = displayVerificationPrompt,
             displayRecoveryKeyPrompt = displayRecoveryKeyPrompt,
             snackbarMessage = snackbarMessage,
             hasNetworkConnection = networkConnectionStatus == NetworkStatus.Online,
             invitesState = inviteStateDataSource.inviteState(),
-            displaySearchResults = displaySearchResults,
             contextMenu = contextMenu.value,
             leaveRoomState = leaveRoomState,
+            searchState = searchState,
             displayMigrationStatus = isMigrating,
             eventSink = ::handleEvents
         )

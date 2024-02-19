@@ -21,6 +21,7 @@ import io.element.android.libraries.matrix.api.roomlist.RoomList
 import io.element.android.libraries.matrix.api.roomlist.RoomListFilter
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.api.roomlist.loadAllIncrementally
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -42,10 +43,31 @@ private const val DEFAULT_PAGE_SIZE = 20
 internal class RustRoomListService(
     private val innerRoomListService: InnerRustRoomListService,
     private val sessionCoroutineScope: CoroutineScope,
-    roomListFactory: RoomListFactory,
+    private val sessionDispatcher: CoroutineDispatcher,
+    private val roomListFactory: RoomListFactory,
 ) : RoomListService {
+    override fun createRoomList(
+        coroutineScope: CoroutineScope,
+        pageSize: Int,
+        initialFilter: RoomListFilter,
+        source: RoomList.Source
+    ): DynamicRoomList {
+        return roomListFactory.createRoomList(
+            pageSize = pageSize,
+            initialFilter = initialFilter,
+            coroutineScope = coroutineScope,
+            coroutineContext = sessionDispatcher,
+        ) {
+            when (source) {
+                RoomList.Source.All -> innerRoomListService.allRooms()
+                RoomList.Source.Invites -> innerRoomListService.invites()
+            }
+        }
+    }
+
     override val allRooms: DynamicRoomList = roomListFactory.createRoomList(
         pageSize = DEFAULT_PAGE_SIZE,
+        coroutineContext = sessionDispatcher,
         initialFilter = RoomListFilter.all(RoomListFilter.NonLeft),
     ) {
         innerRoomListService.allRooms()
@@ -53,6 +75,7 @@ internal class RustRoomListService(
 
     override val invites: RoomList = roomListFactory.createRoomList(
         pageSize = Int.MAX_VALUE,
+        coroutineContext = sessionDispatcher,
     ) {
         innerRoomListService.invites()
     }
