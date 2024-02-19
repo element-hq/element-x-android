@@ -19,28 +19,38 @@ package io.element.android.features.roomdetails.impl.members.details
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
+import io.element.android.libraries.matrix.api.core.RoomId
 
 open class RoomMemberDetailsStateProvider : PreviewParameterProvider<RoomMemberDetailsState> {
     override val values: Sequence<RoomMemberDetailsState>
         get() = sequenceOf(
             aRoomMemberDetailsState(),
-            aRoomMemberDetailsState().copy(userName = null),
-            aRoomMemberDetailsState().copy(isBlocked = AsyncData.Success(true)),
-            aRoomMemberDetailsState().copy(displayConfirmationDialog = RoomMemberDetailsState.ConfirmationDialog.Block),
-            aRoomMemberDetailsState().copy(displayConfirmationDialog = RoomMemberDetailsState.ConfirmationDialog.Unblock),
-            aRoomMemberDetailsState().copy(isBlocked = AsyncData.Loading(true)),
-            aRoomMemberDetailsState().copy(startDmActionState = AsyncAction.Loading),
+            aRoomMemberDetailsState(userName = null),
+            aRoomMemberDetailsState(isBlocked = AsyncData.Success(true)),
+            aRoomMemberDetailsState(displayConfirmationDialog = RoomMemberDetailsState.ConfirmationDialog.Block),
+            aRoomMemberDetailsState(displayConfirmationDialog = RoomMemberDetailsState.ConfirmationDialog.Unblock),
+            aRoomMemberDetailsState(isBlocked = AsyncData.Loading(true)),
+            aRoomMemberDetailsState(startDmActionState = AsyncAction.Loading),
             // Add other states here
         )
 }
 
-fun aRoomMemberDetailsState() = RoomMemberDetailsState(
-    userId = "@daniel:domain.com",
-    userName = "Daniel",
-    avatarUrl = null,
-    isBlocked = AsyncData.Success(false),
-    startDmActionState = AsyncAction.Uninitialized,
-    displayConfirmationDialog = null,
-    isCurrentUser = false,
-    eventSink = {},
+fun aRoomMemberDetailsState(
+    userId: String = "@daniel:domain.com",
+    userName: String? = "Daniel",
+    avatarUrl: String? = null,
+    isBlocked: AsyncData<Boolean> = AsyncData.Success(false),
+    startDmActionState: AsyncAction<RoomId> = AsyncAction.Uninitialized,
+    displayConfirmationDialog: RoomMemberDetailsState.ConfirmationDialog? = null,
+    isCurrentUser: Boolean = false,
+    eventSink: (RoomMemberDetailsEvents) -> Unit = {},
+) = RoomMemberDetailsState(
+    userId = userId,
+    userName = userName,
+    avatarUrl = avatarUrl,
+    isBlocked = isBlocked,
+    startDmActionState = startDmActionState,
+    displayConfirmationDialog = displayConfirmationDialog,
+    isCurrentUser = isCurrentUser,
+    eventSink = eventSink,
 )
