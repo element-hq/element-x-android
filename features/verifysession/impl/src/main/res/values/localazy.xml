@@ -6,6 +6,7 @@
   <string name="screen_session_verification_compare_numbers_subtitle">"Confirm that the numbers below match those shown on your other session."</string>
   <string name="screen_session_verification_compare_numbers_title">"Compare numbers"</string>
   <string name="screen_session_verification_complete_subtitle">"Your new session is now verified. It has access to your encrypted messages, and other users will see it as trusted."</string>
+  <string name="screen_session_verification_enter_recovery_key">"Enter recovery key"</string>
   <string name="screen_session_verification_open_existing_session_subtitle">"Prove it’s you in order to access your encrypted message history."</string>
   <string name="screen_session_verification_open_existing_session_title">"Open an existing session"</string>
   <string name="screen_session_verification_positive_button_canceled">"Retry verification"</string>

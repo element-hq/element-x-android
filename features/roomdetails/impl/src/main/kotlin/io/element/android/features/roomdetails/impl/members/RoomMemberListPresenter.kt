@@ -27,14 +27,19 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
+import io.element.android.libraries.matrix.api.room.powerlevels.canBan
 import io.element.android.libraries.matrix.api.room.powerlevels.canInvite
 import io.element.android.libraries.matrix.api.room.roomMembers
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
@@ -57,6 +62,13 @@ class RoomMemberListPresenter @Inject constructor(
             value = room.canInvite().getOrElse { false }
         }
 
+        val canDisplayBannedUsers by produceState(initialValue = false) {
+            room.membersStateFlow
+                .map { members -> members.roomMembers()?.any { it.membership == RoomMembershipState.BAN }.orFalse() }
+                .onEach { hasBannedUsers -> value = hasBannedUsers && room.canBan().getOrElse { false } && !room.isDm }
+                .collect()
+        }
+
         LaunchedEffect(membersState) {
             if (membersState is MatrixRoomMembersState.Unknown) {
                 return@LaunchedEffect
@@ -69,6 +81,7 @@ class RoomMemberListPresenter @Inject constructor(
                         joined = members.getOrDefault(RoomMembershipState.JOIN, emptyList())
                             .sortedWith(PowerLevelRoomMemberComparator())
                             .toImmutableList(),
+                        banned = members.getOrDefault(RoomMembershipState.BAN, emptyList()).sortedBy { it.userId.value }.toImmutableList(),
                     )
                 )
             }
@@ -89,6 +102,7 @@ class RoomMemberListPresenter @Inject constructor(
                                 joined = results.getOrDefault(RoomMembershipState.JOIN, emptyList())
                                     .sortedWith(PowerLevelRoomMemberComparator())
                                     .toImmutableList(),
+                                banned = results.getOrDefault(RoomMembershipState.BAN, emptyList()).sortedBy { it.userId.value }.toImmutableList(),
                             )
                         )
                     }
@@ -102,6 +116,7 @@ class RoomMemberListPresenter @Inject constructor(
             searchResults = searchResults,
             isSearchActive = isSearchActive,
             canInvite = canInvite,
+            canDisplayBannedUsers = canDisplayBannedUsers,
             eventSink = { event ->
                 when (event) {
                     is RoomMemberListEvents.OnSearchActiveChanged -> isSearchActive = event.active
