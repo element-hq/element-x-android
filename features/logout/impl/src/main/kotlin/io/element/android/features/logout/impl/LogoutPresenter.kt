@@ -66,9 +66,9 @@ class LogoutPresenter @Inject constructor(
         }
             .collectAsState(initial = BackupUploadState.Unknown)
 
-        var isLastSession by remember { mutableStateOf(false) }
+        var isLastDevice by remember { mutableStateOf(false) }
         LaunchedEffect(Unit) {
-            isLastSession = encryptionService.isLastDevice().getOrNull() ?: false
+            isLastDevice = encryptionService.isLastDevice().getOrNull() ?: false
         }
 
         val backupState by encryptionService.backupStateStateFlow.collectAsState()
@@ -100,7 +100,7 @@ class LogoutPresenter @Inject constructor(
         }
 
         return LogoutState(
-            isLastSession = isLastSession,
+            isLastDevice = isLastDevice,
             backupState = backupState,
             doesBackupExistOnServer = doesBackupExistOnServerAction.value.dataOrNull().orTrue(),
             recoveryState = recoveryState,

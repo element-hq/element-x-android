@@ -153,7 +153,7 @@ class LogoutViewTest {
             rule.setContent {
                 LogoutView(
                     aLogoutState(
-                        isLastSession = true,
+                        isLastDevice = true,
                         eventSink = eventsRecorder
                     ),
                     onChangeRecoveryKeyClicked = callback,

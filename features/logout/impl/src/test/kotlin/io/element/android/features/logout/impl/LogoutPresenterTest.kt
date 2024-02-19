@@ -50,7 +50,7 @@ class LogoutPresenterTest {
             presenter.present()
         }.test {
             val initialState = awaitFirstItem()
-            assertThat(initialState.isLastSession).isFalse()
+            assertThat(initialState.isLastDevice).isFalse()
             assertThat(initialState.backupState).isEqualTo(BackupState.UNKNOWN)
             assertThat(initialState.doesBackupExistOnServer).isTrue()
             assertThat(initialState.recoveryState).isEqualTo(RecoveryState.UNKNOWN)
@@ -71,7 +71,7 @@ class LogoutPresenterTest {
         }.test {
             skipItems(3)
             val initialState = awaitItem()
-            assertThat(initialState.isLastSession).isTrue()
+            assertThat(initialState.isLastDevice).isTrue()
             assertThat(initialState.backupUploadState).isEqualTo(BackupUploadState.Unknown)
             assertThat(initialState.logoutAction).isEqualTo(AsyncAction.Uninitialized)
         }
@@ -96,7 +96,7 @@ class LogoutPresenterTest {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            assertThat(initialState.isLastSession).isFalse()
+            assertThat(initialState.isLastDevice).isFalse()
             assertThat(initialState.backupUploadState).isEqualTo(BackupUploadState.Unknown)
             assertThat(initialState.logoutAction).isEqualTo(AsyncAction.Uninitialized)
             skipItems(1)

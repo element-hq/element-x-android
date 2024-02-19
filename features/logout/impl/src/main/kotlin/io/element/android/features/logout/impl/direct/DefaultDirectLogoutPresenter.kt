@@ -70,9 +70,9 @@ class DefaultDirectLogoutPresenter @Inject constructor(
         }
             .collectAsState(initial = BackupUploadState.Unknown)
 
-        var isLastSession by remember { mutableStateOf(false) }
+        var isLastDevice by remember { mutableStateOf(false) }
         LaunchedEffect(Unit) {
-            isLastSession = encryptionService.isLastDevice().getOrNull() ?: false
+            isLastDevice = encryptionService.isLastDevice().getOrNull() ?: false
         }
 
         fun handleEvents(event: DirectLogoutEvents) {
@@ -91,7 +91,7 @@ class DefaultDirectLogoutPresenter @Inject constructor(
         }
 
         return DirectLogoutState(
-            canDoDirectSignOut = !isLastSession &&
+            canDoDirectSignOut = !isLastDevice &&
                 !backupUploadState.isBackingUp(),
             logoutAction = logoutAction.value,
             eventSink = ::handleEvents
