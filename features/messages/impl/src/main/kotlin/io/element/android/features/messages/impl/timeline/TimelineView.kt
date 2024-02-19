@@ -18,9 +18,11 @@
 
 package io.element.android.features.messages.impl.timeline
 
+import android.view.accessibility.AccessibilityManager
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.layout.Box
@@ -45,8 +47,8 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -64,7 +66,6 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.typing.TypingNotificationState
 import io.element.android.features.messages.impl.typing.TypingNotificationView
 import io.element.android.features.messages.impl.typing.aTypingNotificationState
-import io.element.android.libraries.designsystem.animation.alphaAnimation
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.FloatingActionButton
@@ -99,7 +100,13 @@ fun TimelineView(
         state.eventSink(TimelineEvents.OnScrollFinished(firstVisibleIndex))
     }
 
+    val context = LocalContext.current
     val lazyListState = rememberLazyListState()
+    // Disable reverse layout when TalkBack is enabled to avoid incorrect ordering issues seen in the current Compose UI version
+    val useReverseLayout = remember {
+        val accessibilityManager = context.getSystemService(AccessibilityManager::class.java)
+        accessibilityManager.isTouchExplorationEnabled.not()
+    }
 
     @Suppress("UNUSED_PARAMETER")
     fun inReplyToClicked(eventId: EventId) {
@@ -107,67 +114,67 @@ fun TimelineView(
     }
 
     // Animate alpha when timeline is first displayed, to avoid flashes or glitching when viewing rooms
-    val alpha by alphaAnimation(label = "alpha for timeline")
-
-    Box(modifier = modifier.alpha(alpha)) {
-        LazyColumn(
-            modifier = Modifier.fillMaxSize(),
-            state = lazyListState,
-            reverseLayout = true,
-            contentPadding = PaddingValues(vertical = 8.dp),
-        ) {
-            item {
-                TypingNotificationView(state = typingNotificationState)
-            }
-            items(
-                items = state.timelineItems,
-                contentType = { timelineItem -> timelineItem.contentType() },
-                key = { timelineItem -> timelineItem.identifier() },
-            ) { timelineItem ->
-                TimelineItemRow(
-                    timelineItem = timelineItem,
-                    timelineRoomInfo = state.timelineRoomInfo,
-                    renderReadReceipts = state.renderReadReceipts,
-                    isLastOutgoingMessage = (timelineItem as? TimelineItem.Event)?.isMine == true &&
-                        state.timelineItems.first().identifier() == timelineItem.identifier(),
-                    highlightedItem = state.highlightedEventId?.value,
-                    onClick = onMessageClicked,
-                    onLongClick = onMessageLongClicked,
-                    onUserDataClick = onUserDataClicked,
-                    inReplyToClick = ::inReplyToClicked,
-                    onReactionClick = onReactionClicked,
-                    onReactionLongClick = onReactionLongClicked,
-                    onMoreReactionsClick = onMoreReactionsClicked,
-                    onReadReceiptClick = onReadReceiptClick,
-                    onTimestampClicked = onTimestampClicked,
-                    sessionState = state.sessionState,
-                    eventSink = state.eventSink,
-                    onSwipeToReply = onSwipeToReply,
-                )
-            }
-            if (state.paginationState.hasMoreToLoadBackwards) {
-                // Do not use key parameter to avoid wrong positioning
-                item(contentType = "TimelineLoadingMoreIndicator") {
-                    TimelineLoadingMoreIndicator()
-                    LaunchedEffect(Unit) {
-                        onReachedLoadMore()
+    AnimatedVisibility(visible = true, enter = fadeIn()) {
+        Box(modifier) {
+            LazyColumn(
+                modifier = Modifier.fillMaxSize(),
+                state = lazyListState,
+                reverseLayout = useReverseLayout,
+                contentPadding = PaddingValues(vertical = 8.dp),
+            ) {
+                item {
+                    TypingNotificationView(state = typingNotificationState)
+                }
+                items(
+                    items = state.timelineItems,
+                    contentType = { timelineItem -> timelineItem.contentType() },
+                    key = { timelineItem -> timelineItem.identifier() },
+                ) { timelineItem ->
+                    TimelineItemRow(
+                        timelineItem = timelineItem,
+                        timelineRoomInfo = state.timelineRoomInfo,
+                        renderReadReceipts = state.renderReadReceipts,
+                        isLastOutgoingMessage = (timelineItem as? TimelineItem.Event)?.isMine == true &&
+                            state.timelineItems.first().identifier() == timelineItem.identifier(),
+                        highlightedItem = state.highlightedEventId?.value,
+                        onClick = onMessageClicked,
+                        onLongClick = onMessageLongClicked,
+                        onUserDataClick = onUserDataClicked,
+                        inReplyToClick = ::inReplyToClicked,
+                        onReactionClick = onReactionClicked,
+                        onReactionLongClick = onReactionLongClicked,
+                        onMoreReactionsClick = onMoreReactionsClicked,
+                        onReadReceiptClick = onReadReceiptClick,
+                        onTimestampClicked = onTimestampClicked,
+                        sessionState = state.sessionState,
+                        eventSink = state.eventSink,
+                        onSwipeToReply = onSwipeToReply,
+                    )
+                }
+                if (state.paginationState.hasMoreToLoadBackwards) {
+                    // Do not use key parameter to avoid wrong positioning
+                    item(contentType = "TimelineLoadingMoreIndicator") {
+                        TimelineLoadingMoreIndicator()
+                        LaunchedEffect(Unit) {
+                            onReachedLoadMore()
+                        }
+                    }
+                }
+                if (state.paginationState.beginningOfRoomReached && !state.timelineRoomInfo.isDirect) {
+                    item(contentType = "BeginningOfRoomReached") {
+                        TimelineItemRoomBeginningView(roomName = roomName)
                     }
                 }
             }
-            if (state.paginationState.beginningOfRoomReached && !state.timelineRoomInfo.isDirect) {
-                item(contentType = "BeginningOfRoomReached") {
-                    TimelineItemRoomBeginningView(roomName = roomName)
-                }
-            }
-        }
 
-        TimelineScrollHelper(
-            isTimelineEmpty = state.timelineItems.isEmpty(),
-            lazyListState = lazyListState,
-            forceJumpToBottomVisibility = forceJumpToBottomVisibility,
-            newEventState = state.newEventState,
-            onScrollFinishedAt = ::onScrollFinishedAt
-        )
+            TimelineScrollHelper(
+                isTimelineEmpty = state.timelineItems.isEmpty(),
+                lazyListState = lazyListState,
+                forceJumpToBottomVisibility = forceJumpToBottomVisibility,
+                newEventState = state.newEventState,
+                onScrollFinishedAt = ::onScrollFinishedAt
+            )
+        }
     }
 }
 

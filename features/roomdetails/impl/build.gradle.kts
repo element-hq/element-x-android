@@ -23,6 +23,11 @@ plugins {
 
 android {
     namespace = "io.element.android.features.roomdetails.impl"
+    testOptions {
+        unitTests {
+            isIncludeAndroidResources = true
+        }
+    }
 }
 
 anvil {
@@ -61,6 +66,7 @@ dependencies {
     testImplementation(libs.test.truth)
     testImplementation(libs.test.turbine)
     testImplementation(libs.test.mockk)
+    testImplementation(libs.test.robolectric)
     testImplementation(projects.libraries.matrix.test)
     testImplementation(projects.libraries.mediaupload.test)
     testImplementation(projects.libraries.mediapickers.test)
@@ -70,6 +76,8 @@ dependencies {
     testImplementation(projects.tests.testutils)
     testImplementation(projects.features.leaveroom.test)
     testImplementation(projects.features.createroom.test)
+    testImplementation(libs.androidx.compose.ui.test.junit)
+    testReleaseImplementation(libs.androidx.compose.ui.test.manifest)
 
     ksp(libs.showkase.processor)
 }

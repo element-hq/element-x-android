@@ -55,7 +55,10 @@ fun BlockUserDialogs(state: RoomMemberDetailsState) {
 }
 
 @Composable
-private fun BlockConfirmationDialog(onBlockAction: () -> Unit, onDismiss: () -> Unit) {
+private fun BlockConfirmationDialog(
+    onBlockAction: () -> Unit,
+    onDismiss: () -> Unit,
+) {
     ConfirmationDialog(
         title = stringResource(R.string.screen_dm_details_block_user),
         content = stringResource(R.string.screen_dm_details_block_alert_description),
@@ -66,7 +69,10 @@ private fun BlockConfirmationDialog(onBlockAction: () -> Unit, onDismiss: () -> 
 }
 
 @Composable
-private fun UnblockConfirmationDialog(onUnblockAction: () -> Unit, onDismiss: () -> Unit) {
+private fun UnblockConfirmationDialog(
+    onUnblockAction: () -> Unit,
+    onDismiss: () -> Unit,
+) {
     ConfirmationDialog(
         title = stringResource(R.string.screen_dm_details_unblock_user),
         content = stringResource(R.string.screen_dm_details_unblock_alert_description),

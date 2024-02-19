@@ -34,19 +34,24 @@ import io.element.android.features.roomlist.impl.filters.RoomListFiltersPresente
 import io.element.android.features.roomlist.impl.migration.InMemoryMigrationScreenStore
 import io.element.android.features.roomlist.impl.migration.MigrationScreenPresenter
 import io.element.android.features.roomlist.impl.model.createRoomListRoomSummary
+import io.element.android.features.roomlist.impl.search.RoomListSearchEvents
+import io.element.android.features.roomlist.impl.search.RoomListSearchState
+import io.element.android.features.roomlist.impl.search.aRoomListSearchState
+import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.dateformatter.api.LastMessageTimestampFormatter
 import io.element.android.libraries.dateformatter.test.A_FORMATTED_DATE
 import io.element.android.libraries.dateformatter.test.FakeLastMessageTimestampFormatter
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.eventformatter.api.RoomLastMessageFormatter
 import io.element.android.libraries.eventformatter.test.FakeRoomLastMessageFormatter
+import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.featureflag.test.InMemorySessionPreferencesStore
 import io.element.android.libraries.indicator.impl.DefaultIndicatorService
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.encryption.BackupState
-import io.element.android.libraries.matrix.api.encryption.EncryptionService
+import io.element.android.libraries.matrix.api.encryption.RecoveryState
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.api.timeline.ReceiptType
@@ -55,7 +60,6 @@ import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatu
 import io.element.android.libraries.matrix.test.AN_AVATAR_URL
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.matrix.test.A_ROOM_ID
-import io.element.android.libraries.matrix.test.A_ROOM_NAME
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.A_USER_NAME
@@ -67,6 +71,7 @@ import io.element.android.libraries.matrix.test.room.aRoomInfo
 import io.element.android.libraries.matrix.test.room.aRoomSummaryFilled
 import io.element.android.libraries.matrix.test.roomlist.FakeRoomListService
 import io.element.android.libraries.matrix.test.verification.FakeSessionVerificationService
+import io.element.android.tests.testutils.EventsRecorder
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.consumeItemsUntilPredicate
 import io.element.android.tests.testutils.testCoroutineDispatchers
@@ -78,6 +83,7 @@ import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
+import kotlin.time.Duration.Companion.seconds
 
 class RoomListPresenterTests {
     @get:Rule
@@ -106,9 +112,12 @@ class RoomListPresenterTests {
     fun `present - show avatar indicator`() = runTest {
         val scope = CoroutineScope(coroutineContext + SupervisorJob())
         val encryptionService = FakeEncryptionService()
+        val matrixClient = FakeMatrixClient(
+            encryptionService = encryptionService,
+        )
         val sessionVerificationService = FakeSessionVerificationService()
         val presenter = createRoomListPresenter(
-            encryptionService = encryptionService,
+            client = matrixClient,
             sessionVerificationService = sessionVerificationService,
             coroutineScope = scope
         )
@@ -147,24 +156,6 @@ class RoomListPresenterTests {
     }
 
     @Test
-    fun `present - should filter room with success`() = runTest {
-        val scope = CoroutineScope(coroutineContext + SupervisorJob())
-        val presenter = createRoomListPresenter(coroutineScope = scope)
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
-            skipItems(1)
-            val withUserState = awaitItem()
-            assertThat(withUserState.filter).isEqualTo("")
-            withUserState.eventSink.invoke(RoomListEvents.UpdateFilter("t"))
-            val withFilterState = awaitItem()
-            assertThat(withFilterState.filter).isEqualTo("t")
-            cancelAndIgnoreRemainingEvents()
-            scope.cancel()
-        }
-    }
-
-    @Test
     fun `present - load 1 room with success`() = runTest {
         val roomListService = FakeRoomListService()
         val matrixClient = FakeMatrixClient(
@@ -175,7 +166,7 @@ class RoomListPresenterTests {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            val initialState = consumeItemsUntilPredicate { state -> state.roomList.dataOrNull()?.size == 16 }.last()
+            val initialState = consumeItemsUntilPredicate(timeout = 3.seconds) { state -> state.roomList.dataOrNull()?.size == 16 }.last()
             // Room list is loaded with 16 placeholders
             val initialItems = initialState.roomList.dataOrNull().orEmpty()
             assertThat(initialItems.size).isEqualTo(16)
@@ -197,51 +188,7 @@ class RoomListPresenterTests {
                     numberOfUnreadMessages = 2,
                 )
             )
-            scope.cancel()
-        }
-    }
-
-    @Test
-    fun `present - load 1 room with success and filter rooms`() = runTest {
-        val roomListService = FakeRoomListService()
-        val matrixClient = FakeMatrixClient(
-            roomListService = roomListService
-        )
-        val scope = CoroutineScope(coroutineContext + SupervisorJob())
-        val presenter = createRoomListPresenter(client = matrixClient, coroutineScope = scope)
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
-            roomListService.postAllRooms(
-                listOf(
-                    aRoomSummaryFilled(
-                        numUnreadMentions = 1,
-                        numUnreadMessages = 2,
-                    )
-                )
-            )
-            skipItems(3)
-            val loadedState = awaitItem()
-            // Test filtering with result
-            assertThat(loadedState.roomList.dataOrNull().orEmpty().size).isEqualTo(1)
-            loadedState.eventSink.invoke(RoomListEvents.UpdateFilter(A_ROOM_NAME.substring(0, 3)))
-            skipItems(1)
-            val withFilteredRoomState = awaitItem()
-            assertThat(withFilteredRoomState.filteredRoomList.size).isEqualTo(1)
-            assertThat(withFilteredRoomState.filter).isEqualTo(A_ROOM_NAME.substring(0, 3))
-            assertThat(withFilteredRoomState.filteredRoomList.size).isEqualTo(1)
-            assertThat(withFilteredRoomState.filteredRoomList.first()).isEqualTo(
-                createRoomListRoomSummary(
-                    numberOfUnreadMentions = 1,
-                    numberOfUnreadMessages = 2,
-                )
-            )
-            // Test filtering without result
-            withFilteredRoomState.eventSink.invoke(RoomListEvents.UpdateFilter("tada"))
-            skipItems(1)
-            val withNotFilteredRoomState = awaitItem()
-            assertThat(withNotFilteredRoomState.filter).isEqualTo("tada")
-            assertThat(withNotFilteredRoomState.filteredRoomList).isEmpty()
+            cancelAndIgnoreRemainingEvents()
             scope.cancel()
         }
     }
@@ -311,6 +258,33 @@ class RoomListPresenterTests {
 
             eventSink(RoomListEvents.DismissRequestVerificationPrompt)
             assertThat(awaitItem().displayVerificationPrompt).isFalse()
+            scope.cancel()
+        }
+    }
+
+    @Test
+    fun `present - handle DismissRecoveryKeyPrompt`() = runTest {
+        val encryptionService = FakeEncryptionService()
+        val matrixClient = FakeMatrixClient(
+            encryptionService = encryptionService,
+        )
+        val scope = CoroutineScope(context = coroutineContext + SupervisorJob())
+        val presenter = createRoomListPresenter(
+            client = matrixClient,
+            coroutineScope = scope,
+        )
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            skipItems(1)
+            val initialState = awaitItem()
+            assertThat(initialState.displayRecoveryKeyPrompt).isFalse()
+            encryptionService.emitRecoveryState(RecoveryState.INCOMPLETE)
+            val nextState = awaitItem()
+            assertThat(nextState.displayRecoveryKeyPrompt).isTrue()
+            nextState.eventSink(RoomListEvents.DismissRecoveryKeyPrompt)
+            val finalState = awaitItem()
+            assertThat(finalState.displayRecoveryKeyPrompt).isFalse()
             scope.cancel()
         }
     }
@@ -444,6 +418,40 @@ class RoomListPresenterTests {
     }
 
     @Test
+    fun `present - toggle search menu`() = runTest {
+        val eventRecorder = EventsRecorder<RoomListSearchEvents>()
+        val searchPresenter: Presenter<RoomListSearchState> = Presenter {
+            aRoomListSearchState(
+                eventSink = eventRecorder
+            )
+        }
+        val scope = CoroutineScope(coroutineContext + SupervisorJob())
+        val presenter = createRoomListPresenter(
+            coroutineScope = scope,
+            searchPresenter = searchPresenter,
+        )
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            skipItems(1)
+            val initialState = awaitItem()
+            eventRecorder.assertEmpty()
+            initialState.eventSink(RoomListEvents.ToggleSearchResults)
+            eventRecorder.assertSingle(
+                RoomListSearchEvents.ToggleSearchVisibility
+            )
+            initialState.eventSink(RoomListEvents.ToggleSearchResults)
+            eventRecorder.assertList(
+                listOf(
+                    RoomListSearchEvents.ToggleSearchVisibility,
+                    RoomListSearchEvents.ToggleSearchVisibility
+                )
+            )
+            scope.cancel()
+        }
+    }
+
+    @Test
     fun `present - change in notification settings updates the summary for decorations`() = runTest {
         val userDefinedMode = RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY
         val notificationSettingsService = FakeNotificationSettingsService()
@@ -516,7 +524,6 @@ class RoomListPresenterTests {
 
             // The migration screen is not shown anymore
             assertThat(awaitItem().displayMigrationStatus).isFalse()
-            cancelAndIgnoreRemainingEvents()
             scope.cancel()
         }
     }
@@ -567,14 +574,15 @@ class RoomListPresenterTests {
             givenFormat(A_FORMATTED_DATE)
         },
         roomLastMessageFormatter: RoomLastMessageFormatter = FakeRoomLastMessageFormatter(),
-        encryptionService: EncryptionService = FakeEncryptionService(),
         sessionPreferencesStore: SessionPreferencesStore = InMemorySessionPreferencesStore(),
+        featureFlagService: FeatureFlagService = FakeFeatureFlagService(mapOf(FeatureFlags.SecureStorage.key to true)),
         coroutineScope: CoroutineScope,
         migrationScreenPresenter: MigrationScreenPresenter = MigrationScreenPresenter(
             matrixClient = client,
             migrationScreenStore = InMemoryMigrationScreenStore(),
         ),
         filtersPresenter: RoomListFiltersPresenter = RoomListFiltersPresenter(),
+        searchPresenter: Presenter<RoomListSearchState> = Presenter { aRoomListSearchState() },
     ) = RoomListPresenter(
         client = client,
         sessionVerificationService = sessionVerificationService,
@@ -592,14 +600,14 @@ class RoomListPresenterTests {
             notificationSettingsService = client.notificationSettingsService(),
             appScope = coroutineScope
         ),
-        encryptionService = encryptionService,
-        featureFlagService = FakeFeatureFlagService(mapOf(FeatureFlags.SecureStorage.key to true)),
+        featureFlagService = featureFlagService,
         indicatorService = DefaultIndicatorService(
             sessionVerificationService = sessionVerificationService,
-            encryptionService = encryptionService,
-            featureFlagService = FakeFeatureFlagService(mapOf(FeatureFlags.SecureStorage.key to true)),
+            encryptionService = client.encryptionService(),
+            featureFlagService = featureFlagService,
         ),
         migrationScreenPresenter = migrationScreenPresenter,
+        searchPresenter = searchPresenter,
         sessionPreferencesStore = sessionPreferencesStore,
         filtersPresenter = filtersPresenter,
     )

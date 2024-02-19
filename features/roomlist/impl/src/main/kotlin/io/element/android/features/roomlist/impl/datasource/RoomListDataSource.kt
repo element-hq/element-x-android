@@ -25,15 +25,11 @@ import io.element.android.libraries.matrix.api.roomlist.RoomList
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.api.roomlist.RoomSummary
 import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -54,9 +50,7 @@ class RoomListDataSource @Inject constructor(
         observeNotificationSettings()
     }
 
-    private val _filter = MutableStateFlow("")
     private val _allRooms = MutableSharedFlow<ImmutableList<RoomListRoomSummary>>(replay = 1)
-    private val _filteredRooms = MutableStateFlow<ImmutableList<RoomListRoomSummary>>(persistentListOf())
 
     private val lock = Mutex()
     private val diffCache = MutableListDiffCache<RoomListRoomSummary>()
@@ -72,29 +66,9 @@ class RoomListDataSource @Inject constructor(
                 replaceWith(roomSummaries)
             }
             .launchIn(coroutineScope)
-
-        combine(
-            _filter,
-            _allRooms
-        ) { filterValue, allRoomsValue ->
-            when {
-                filterValue.isEmpty() -> emptyList()
-                else -> allRoomsValue.filter { it.name.contains(filterValue, ignoreCase = true) }
-            }.toImmutableList()
-        }
-            .onEach {
-                _filteredRooms.value = it
-            }
-            .launchIn(coroutineScope)
     }
 
-    fun updateFilter(filterValue: String) {
-        _filter.value = filterValue
-    }
-
-    val filter: StateFlow<String> = _filter
     val allRooms: SharedFlow<ImmutableList<RoomListRoomSummary>> = _allRooms
-    val filteredRooms: StateFlow<ImmutableList<RoomListRoomSummary>> = _filteredRooms
 
     @OptIn(FlowPreview::class)
     private fun observeNotificationSettings() {

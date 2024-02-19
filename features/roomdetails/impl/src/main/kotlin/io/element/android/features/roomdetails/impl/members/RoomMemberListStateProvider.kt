@@ -31,7 +31,7 @@ internal class RoomMemberListStateProvider : PreviewParameterProvider<RoomMember
                 roomMembers = AsyncData.Success(
                     RoomMembers(
                         invited = persistentListOf(aVictor(), aWalter()),
-                        joined = persistentListOf(anAlice(), aBob()),
+                        joined = persistentListOf(anAlice(), aBob(), aWalter()),
                     )
                 )
             ),
@@ -79,6 +79,7 @@ fun aRoomMember(
     powerLevel: Long = 0L,
     normalizedPowerLevel: Long = 0L,
     isIgnored: Boolean = false,
+    role: RoomMember.Role = RoomMember.Role.USER,
 ) = RoomMember(
     userId = userId,
     displayName = displayName,
@@ -88,6 +89,7 @@ fun aRoomMember(
     powerLevel = powerLevel,
     normalizedPowerLevel = normalizedPowerLevel,
     isIgnored = isIgnored,
+    role = role,
 )
 
 fun aRoomMemberList() = persistentListOf(
@@ -103,8 +105,8 @@ fun aRoomMemberList() = persistentListOf(
     aWalter(),
 )
 
-fun anAlice() = aRoomMember(UserId("@alice:server.org"), "Alice")
-fun aBob() = aRoomMember(UserId("@bob:server.org"), "Bob")
+fun anAlice() = aRoomMember(UserId("@alice:server.org"), "Alice", role = RoomMember.Role.ADMIN)
+fun aBob() = aRoomMember(UserId("@bob:server.org"), "Bob", role = RoomMember.Role.MODERATOR)
 
 fun aVictor() = aRoomMember(UserId("@victor:server.org"), "Victor", membership = RoomMembershipState.INVITE)
 

@@ -25,7 +25,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.getAndUpdate
 
 data class SimplePagedRoomList(
-    override val summaries: StateFlow<List<RoomSummary>>,
+    override val summaries: MutableStateFlow<List<RoomSummary>>,
     override val loadingState: StateFlow<RoomList.LoadingState>,
     override val currentFilter: MutableStateFlow<RoomListFilter>
 ) : DynamicRoomList {

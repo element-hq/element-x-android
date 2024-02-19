@@ -23,6 +23,8 @@ import androidx.compose.material3.LocalTextStyle
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.messages.impl.timeline.components.layout.ContentAvoidingLayout
@@ -48,7 +50,7 @@ fun TimelineItemTextView(
         val formattedBody = content.formattedBody
         val body = SpannableString(formattedBody ?: content.body)
 
-        Box(modifier) {
+        Box(modifier.semantics { contentDescription = body.toString() }) {
             EditorStyledText(
                 text = body,
                 onLinkClickedListener = onLinkClicked,

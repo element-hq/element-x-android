@@ -103,5 +103,6 @@ private fun createDefaultRoomMemberForTyping(userId: UserId): RoomMember {
         powerLevel = 0,
         normalizedPowerLevel = 0,
         isIgnored = false,
+        role = RoomMember.Role.USER,
     )
 }

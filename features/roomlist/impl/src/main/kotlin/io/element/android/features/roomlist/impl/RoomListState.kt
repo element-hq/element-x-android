@@ -20,6 +20,7 @@ import androidx.compose.runtime.Immutable
 import io.element.android.features.leaveroom.api.LeaveRoomState
 import io.element.android.features.roomlist.impl.filters.RoomListFiltersState
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
+import io.element.android.features.roomlist.impl.search.RoomListSearchState
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -31,17 +32,15 @@ data class RoomListState(
     val matrixUser: MatrixUser?,
     val showAvatarIndicator: Boolean,
     val roomList: AsyncData<ImmutableList<RoomListRoomSummary>>,
-    val filter: String?,
-    val filteredRoomList: ImmutableList<RoomListRoomSummary>,
     val displayVerificationPrompt: Boolean,
     val displayRecoveryKeyPrompt: Boolean,
     val hasNetworkConnection: Boolean,
     val snackbarMessage: SnackbarMessage?,
     val invitesState: InvitesState,
-    val displaySearchResults: Boolean,
     val contextMenu: ContextMenu,
     val leaveRoomState: LeaveRoomState,
     val filtersState: RoomListFiltersState,
+    val searchState: RoomListSearchState,
     val displayMigrationStatus: Boolean,
     val eventSink: (RoomListEvents) -> Unit,
 ) {

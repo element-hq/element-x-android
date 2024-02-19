@@ -16,6 +16,7 @@
 
 package io.element.android.features.roomlist.impl.search
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -25,32 +26,23 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.Velocity
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.tokens.generated.CompoundIcons
-import io.element.android.features.roomlist.impl.RoomListEvents
-import io.element.android.features.roomlist.impl.RoomListState
-import io.element.android.features.roomlist.impl.aRoomListState
 import io.element.android.features.roomlist.impl.components.RoomSummaryRow
 import io.element.android.features.roomlist.impl.contentType
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
@@ -68,26 +60,30 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
-internal fun RoomListSearchResultView(
-    state: RoomListState,
+internal fun RoomListSearchView(
+    state: RoomListSearchState,
     onRoomClicked: (RoomId) -> Unit,
     onRoomLongClicked: (RoomListRoomSummary) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    BackHandler(enabled = state.isSearchActive) {
+        state.eventSink(RoomListSearchEvents.ToggleSearchVisibility)
+    }
+
     AnimatedVisibility(
-        visible = state.displaySearchResults,
+        visible = state.isSearchActive,
         enter = fadeIn(),
         exit = fadeOut(),
     ) {
         Column(
             modifier = modifier
-                .applyIf(state.displaySearchResults, ifTrue = {
+                .applyIf(state.isSearchActive, ifTrue = {
                     // Disable input interaction to underlying views
                     pointerInput(Unit) {}
                 })
         ) {
-            if (state.displaySearchResults) {
-                RoomListSearchResultContent(
+            if (state.isSearchActive) {
+                RoomListSearchContent(
                     state = state,
                     onRoomClicked = onRoomClicked,
                     onRoomLongClicked = onRoomLongClicked,
@@ -99,15 +95,15 @@ internal fun RoomListSearchResultView(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun RoomListSearchResultContent(
-    state: RoomListState,
+private fun RoomListSearchContent(
+    state: RoomListSearchState,
     onRoomClicked: (RoomId) -> Unit,
     onRoomLongClicked: (RoomListRoomSummary) -> Unit,
 ) {
     val borderColor = MaterialTheme.colorScheme.tertiary
     val strokeWidth = 1.dp
     fun onBackButtonPressed() {
-        state.eventSink(RoomListEvents.ToggleSearchResults)
+        state.eventSink(RoomListSearchEvents.ToggleSearchVisibility)
     }
 
     fun onRoomClicked(room: RoomListRoomSummary) {
@@ -126,7 +122,7 @@ private fun RoomListSearchResultContent(
                 },
                 navigationIcon = { BackButton(onClick = ::onBackButtonPressed) },
                 title = {
-                    val filter = state.filter.orEmpty()
+                    val filter = state.query
                     val focusRequester = FocusRequester()
                     TextField(
                         modifier = Modifier
@@ -134,7 +130,7 @@ private fun RoomListSearchResultContent(
                             .focusRequester(focusRequester),
                         value = filter,
                         singleLine = true,
-                        onValueChange = { state.eventSink(RoomListEvents.UpdateFilter(it)) },
+                        onValueChange = { state.eventSink(RoomListSearchEvents.QueryChanged(it)) },
                         colors = TextFieldDefaults.colors(
                             focusedContainerColor = Color.Transparent,
                             unfocusedContainerColor = Color.Transparent,
@@ -147,7 +143,7 @@ private fun RoomListSearchResultContent(
                         trailingIcon = {
                             if (filter.isNotEmpty()) {
                                 IconButton(onClick = {
-                                    state.eventSink(RoomListEvents.UpdateFilter(""))
+                                    state.eventSink(RoomListSearchEvents.ClearQuery)
                                 }) {
                                     Icon(
                                         imageVector = CompoundIcons.Close(),
@@ -158,8 +154,8 @@ private fun RoomListSearchResultContent(
                         }
                     )
 
-                    LaunchedEffect(state.displaySearchResults) {
-                        if (state.displaySearchResults) {
+                    LaunchedEffect(state.isSearchActive) {
+                        if (state.isSearchActive) {
                             focusRequester.requestFocus()
                         }
                     }
@@ -168,39 +164,16 @@ private fun RoomListSearchResultContent(
             )
         }
     ) { padding ->
-        val lazyListState = rememberLazyListState()
-        val visibleRange by remember {
-            derivedStateOf {
-                val layoutInfo = lazyListState.layoutInfo
-                val firstItemIndex = layoutInfo.visibleItemsInfo.firstOrNull()?.index ?: 0
-                val size = layoutInfo.visibleItemsInfo.size
-                firstItemIndex until firstItemIndex + size
-            }
-        }
-        val nestedScrollConnection = remember {
-            object : NestedScrollConnection {
-                override suspend fun onPostFling(
-                    consumed: Velocity,
-                    available: Velocity
-                ): Velocity {
-                    state.eventSink(RoomListEvents.UpdateVisibleRange(visibleRange))
-                    return super.onPostFling(consumed, available)
-                }
-            }
-        }
         Column(
             modifier = Modifier
                 .padding(padding)
                 .consumeWindowInsets(padding)
         ) {
             LazyColumn(
-                modifier = Modifier
-                    .weight(1f)
-                    .nestedScroll(nestedScrollConnection),
-                state = lazyListState,
+                modifier = Modifier.weight(1f),
             ) {
                 items(
-                    items = state.filteredRoomList,
+                    items = state.results,
                     contentType = { room -> room.contentType() },
                 ) { room ->
                     RoomSummaryRow(
@@ -216,9 +189,9 @@ private fun RoomListSearchResultContent(
 
 @PreviewsDayNight
 @Composable
-internal fun RoomListSearchResultContentPreview() = ElementPreview {
-    RoomListSearchResultContent(
-        state = aRoomListState(),
+internal fun RoomListSearchResultContentPreview(@PreviewParameter(RoomListSearchStateProvider::class) state: RoomListSearchState) = ElementPreview {
+    RoomListSearchContent(
+        state = state,
         onRoomClicked = {},
         onRoomLongClicked = {}
     )
