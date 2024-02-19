@@ -101,7 +101,6 @@ class RoomListScreen(
             notificationSettingsService = matrixClient.notificationSettingsService(),
             appScope = Singleton.appScope
         ),
-        encryptionService = encryptionService,
         indicatorService = DefaultIndicatorService(
             sessionVerificationService = sessionVerificationService,
             encryptionService = encryptionService,

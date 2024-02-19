@@ -42,13 +42,14 @@ import io.element.android.libraries.dateformatter.test.FakeLastMessageTimestampF
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.eventformatter.api.RoomLastMessageFormatter
 import io.element.android.libraries.eventformatter.test.FakeRoomLastMessageFormatter
+import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.featureflag.test.InMemorySessionPreferencesStore
 import io.element.android.libraries.indicator.impl.DefaultIndicatorService
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.encryption.BackupState
-import io.element.android.libraries.matrix.api.encryption.EncryptionService
+import io.element.android.libraries.matrix.api.encryption.RecoveryState
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.api.timeline.ReceiptType
@@ -108,9 +109,12 @@ class RoomListPresenterTests {
     fun `present - show avatar indicator`() = runTest {
         val scope = CoroutineScope(coroutineContext + SupervisorJob())
         val encryptionService = FakeEncryptionService()
+        val matrixClient = FakeMatrixClient(
+            encryptionService = encryptionService,
+        )
         val sessionVerificationService = FakeSessionVerificationService()
         val presenter = createRoomListPresenter(
-            encryptionService = encryptionService,
+            client = matrixClient,
             sessionVerificationService = sessionVerificationService,
             coroutineScope = scope
         )
@@ -251,6 +255,33 @@ class RoomListPresenterTests {
 
             eventSink(RoomListEvents.DismissRequestVerificationPrompt)
             assertThat(awaitItem().displayVerificationPrompt).isFalse()
+            scope.cancel()
+        }
+    }
+
+    @Test
+    fun `present - handle DismissRecoveryKeyPrompt`() = runTest {
+        val encryptionService = FakeEncryptionService()
+        val matrixClient = FakeMatrixClient(
+            encryptionService = encryptionService,
+        )
+        val scope = CoroutineScope(context = coroutineContext + SupervisorJob())
+        val presenter = createRoomListPresenter(
+            client = matrixClient,
+            coroutineScope = scope,
+        )
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            skipItems(1)
+            val initialState = awaitItem()
+            assertThat(initialState.displayRecoveryKeyPrompt).isFalse()
+            encryptionService.emitRecoveryState(RecoveryState.INCOMPLETE)
+            val nextState = awaitItem()
+            assertThat(nextState.displayRecoveryKeyPrompt).isTrue()
+            nextState.eventSink(RoomListEvents.DismissRecoveryKeyPrompt)
+            val finalState = awaitItem()
+            assertThat(finalState.displayRecoveryKeyPrompt).isFalse()
             scope.cancel()
         }
     }
@@ -506,8 +537,8 @@ class RoomListPresenterTests {
             givenFormat(A_FORMATTED_DATE)
         },
         roomLastMessageFormatter: RoomLastMessageFormatter = FakeRoomLastMessageFormatter(),
-        encryptionService: EncryptionService = FakeEncryptionService(),
         sessionPreferencesStore: SessionPreferencesStore = InMemorySessionPreferencesStore(),
+        featureFlagService: FeatureFlagService = FakeFeatureFlagService(mapOf(FeatureFlags.SecureStorage.key to true)),
         coroutineScope: CoroutineScope,
         migrationScreenPresenter: MigrationScreenPresenter = MigrationScreenPresenter(
             matrixClient = client,
@@ -531,12 +562,11 @@ class RoomListPresenterTests {
             notificationSettingsService = client.notificationSettingsService(),
             appScope = coroutineScope
         ),
-        encryptionService = encryptionService,
-        featureFlagService = FakeFeatureFlagService(mapOf(FeatureFlags.SecureStorage.key to true)),
+        featureFlagService = featureFlagService,
         indicatorService = DefaultIndicatorService(
             sessionVerificationService = sessionVerificationService,
-            encryptionService = encryptionService,
-            featureFlagService = FakeFeatureFlagService(mapOf(FeatureFlags.SecureStorage.key to true)),
+            encryptionService = client.encryptionService(),
+            featureFlagService = featureFlagService,
         ),
         migrationScreenPresenter = migrationScreenPresenter,
         searchPresenter = searchPresenter,
