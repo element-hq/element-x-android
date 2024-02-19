@@ -94,4 +94,3 @@ class BlockUserDialogsTest {
         eventsRecorder.assertSingle(RoomMemberDetailsEvents.ClearConfirmationDialog)
     }
 }
-
