@@ -28,6 +28,7 @@ import io.element.android.features.roomlist.impl.RoomListView
 import io.element.android.features.roomlist.impl.datasource.DefaultInviteStateDataSource
 import io.element.android.features.roomlist.impl.datasource.RoomListDataSource
 import io.element.android.features.roomlist.impl.datasource.RoomListRoomSummaryFactory
+import io.element.android.features.roomlist.impl.filters.RoomListFiltersPresenter
 import io.element.android.features.roomlist.impl.migration.MigrationScreenPresenter
 import io.element.android.features.roomlist.impl.migration.SharedPrefsMigrationScreenStore
 import io.element.android.features.roomlist.impl.search.RoomListSearchPresenter
@@ -120,6 +121,10 @@ class RoomListScreen(
             context = context,
             sessionId = matrixClient.sessionId,
             sessionCoroutineScope = Singleton.appScope
+        ),
+        filtersPresenter = RoomListFiltersPresenter(
+            roomListService = matrixClient.roomListService,
+            featureFlagService = featureFlagService,
         ),
     )
 
