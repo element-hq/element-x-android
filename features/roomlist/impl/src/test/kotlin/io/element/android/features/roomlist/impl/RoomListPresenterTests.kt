@@ -55,8 +55,6 @@ import io.element.android.libraries.matrix.api.encryption.RecoveryState
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.api.timeline.ReceiptType
-import io.element.android.libraries.matrix.api.verification.SessionVerificationService
-import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatus
 import io.element.android.libraries.matrix.test.AN_AVATAR_URL
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.matrix.test.A_ROOM_ID
@@ -114,13 +112,13 @@ class RoomListPresenterTests {
     fun `present - show avatar indicator`() = runTest {
         val scope = CoroutineScope(coroutineContext + SupervisorJob())
         val encryptionService = FakeEncryptionService()
+        val sessionVerificationService = FakeSessionVerificationService()
         val matrixClient = FakeMatrixClient(
             encryptionService = encryptionService,
+            sessionVerificationService = sessionVerificationService,
         )
-        val sessionVerificationService = FakeSessionVerificationService()
         val presenter = createRoomListPresenter(
             client = matrixClient,
-            sessionVerificationService = sessionVerificationService,
             coroutineScope = scope
         )
         moleculeFlow(RecompositionMode.Immediate) {
@@ -239,27 +237,17 @@ class RoomListPresenterTests {
 
     @Test
     fun `present - handle DismissRequestVerificationPrompt`() = runTest {
-        val roomListService = FakeRoomListService()
-        val matrixClient = FakeMatrixClient(
-            roomListService = roomListService,
-        )
         val scope = CoroutineScope(context = coroutineContext + SupervisorJob())
         val presenter = createRoomListPresenter(
-            client = matrixClient,
-            sessionVerificationService = FakeSessionVerificationService().apply {
-                givenIsReady(true)
-                givenVerifiedStatus(SessionVerifiedStatus.NotVerified)
-            },
             coroutineScope = scope,
         )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val eventSink = awaitItem().eventSink
-            assertThat(awaitItem().displayVerificationPrompt).isTrue()
-
+            assertThat(awaitItem().securityBannerState).isEqualTo(SecurityBannerState.SessionVerification)
             eventSink(RoomListEvents.DismissRequestVerificationPrompt)
-            assertThat(awaitItem().displayVerificationPrompt).isFalse()
+            assertThat(awaitItem().securityBannerState).isEqualTo(SecurityBannerState.None)
             scope.cancel()
         }
     }
@@ -269,6 +257,9 @@ class RoomListPresenterTests {
         val encryptionService = FakeEncryptionService()
         val matrixClient = FakeMatrixClient(
             encryptionService = encryptionService,
+            sessionVerificationService = FakeSessionVerificationService().apply {
+                givenCanVerifySession(false)
+            },
         )
         val scope = CoroutineScope(context = coroutineContext + SupervisorJob())
         val presenter = createRoomListPresenter(
@@ -280,13 +271,13 @@ class RoomListPresenterTests {
         }.test {
             skipItems(1)
             val initialState = awaitItem()
-            assertThat(initialState.displayRecoveryKeyPrompt).isFalse()
+            assertThat(initialState.securityBannerState).isEqualTo(SecurityBannerState.None)
             encryptionService.emitRecoveryState(RecoveryState.INCOMPLETE)
             val nextState = awaitItem()
-            assertThat(nextState.displayRecoveryKeyPrompt).isTrue()
+            assertThat(nextState.securityBannerState).isEqualTo(SecurityBannerState.RecoveryKeyConfirmation)
             nextState.eventSink(RoomListEvents.DismissRecoveryKeyPrompt)
             val finalState = awaitItem()
-            assertThat(finalState.displayRecoveryKeyPrompt).isFalse()
+            assertThat(finalState.securityBannerState).isEqualTo(SecurityBannerState.None)
             scope.cancel()
         }
     }
@@ -579,7 +570,6 @@ class RoomListPresenterTests {
 
     private fun TestScope.createRoomListPresenter(
         client: MatrixClient = FakeMatrixClient(),
-        sessionVerificationService: SessionVerificationService = FakeSessionVerificationService(),
         networkMonitor: NetworkMonitor = FakeNetworkMonitor(),
         snackbarDispatcher: SnackbarDispatcher = SnackbarDispatcher(),
         inviteStateDataSource: InviteStateDataSource = FakeInviteDataSource(),
@@ -599,7 +589,6 @@ class RoomListPresenterTests {
         searchPresenter: Presenter<RoomListSearchState> = Presenter { aRoomListSearchState() },
     ) = RoomListPresenter(
         client = client,
-        sessionVerificationService = sessionVerificationService,
         networkMonitor = networkMonitor,
         snackbarDispatcher = snackbarDispatcher,
         inviteStateDataSource = inviteStateDataSource,
@@ -616,7 +605,7 @@ class RoomListPresenterTests {
         ),
         featureFlagService = featureFlagService,
         indicatorService = DefaultIndicatorService(
-            sessionVerificationService = sessionVerificationService,
+            sessionVerificationService = client.sessionVerificationService(),
             encryptionService = client.encryptionService(),
             featureFlagService = featureFlagService,
         ),

@@ -225,23 +225,25 @@ private fun RoomListContent(
                 // FAB height is 56dp, bottom padding is 16dp, we add 8dp as extra margin -> 56+16+8 = 80
                 contentPadding = PaddingValues(bottom = 80.dp)
             ) {
-                when {
-                    state.displayEmptyState -> Unit
-                    state.displayVerificationPrompt -> {
-                        item {
-                            RequestVerificationHeader(
-                                onVerifyClicked = onVerifyClicked,
-                                onDismissClicked = { state.eventSink(RoomListEvents.DismissRequestVerificationPrompt) }
-                            )
+                if (state.displayEmptyState.not()) {
+                    when (state.securityBannerState) {
+                        SecurityBannerState.SessionVerification -> {
+                            item {
+                                RequestVerificationHeader(
+                                    onVerifyClicked = onVerifyClicked,
+                                    onDismissClicked = { state.eventSink(RoomListEvents.DismissRequestVerificationPrompt) }
+                                )
+                            }
                         }
-                    }
-                    state.displayRecoveryKeyPrompt -> {
-                        item {
-                            ConfirmRecoveryKeyBanner(
-                                onContinueClicked = onOpenSettings,
-                                onDismissClicked = { state.eventSink(RoomListEvents.DismissRecoveryKeyPrompt) }
-                            )
+                        SecurityBannerState.RecoveryKeyConfirmation -> {
+                            item {
+                                ConfirmRecoveryKeyBanner(
+                                    onContinueClicked = onOpenSettings,
+                                    onDismissClicked = { state.eventSink(RoomListEvents.DismissRecoveryKeyPrompt) }
+                                )
+                            }
                         }
+                        SecurityBannerState.None -> Unit
                     }
                 }
 

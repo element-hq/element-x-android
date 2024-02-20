@@ -90,7 +90,6 @@ class RoomListScreen(
     )
     private val presenter = RoomListPresenter(
         client = matrixClient,
-        sessionVerificationService = sessionVerificationService,
         networkMonitor = NetworkMonitorImpl(context, Singleton.appScope),
         snackbarDispatcher = SnackbarDispatcher(),
         inviteStateDataSource = DefaultInviteStateDataSource(matrixClient, DefaultSeenInvitesStore(context), coroutineDispatchers),

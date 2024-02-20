@@ -73,7 +73,6 @@ private const val EXTENDED_RANGE_SIZE = 40
 
 class RoomListPresenter @Inject constructor(
     private val client: MatrixClient,
-    private val sessionVerificationService: SessionVerificationService,
     private val networkMonitor: NetworkMonitor,
     private val snackbarDispatcher: SnackbarDispatcher,
     private val inviteStateDataSource: InviteStateDataSource,
@@ -87,6 +86,7 @@ class RoomListPresenter @Inject constructor(
     private val analyticsService: AnalyticsService,
 ) : Presenter<RoomListState> {
     private val encryptionService: EncryptionService = client.encryptionService()
+    private val sessionVerificationService: SessionVerificationService = client.sessionVerificationService()
 
     @Composable
     override fun present(): RoomListState {
@@ -108,22 +108,25 @@ class RoomListPresenter @Inject constructor(
 
         val isMigrating = migrationScreenPresenter.present().isMigrating
 
-        // Session verification status (unknown, not verified, verified)
-        val canVerifySession by sessionVerificationService.canVerifySessionFlow.collectAsState(initial = false)
-        var verificationPromptDismissed by rememberSaveable { mutableStateOf(false) }
-        // We combine both values to only display the prompt if the session is not verified and it wasn't dismissed
-        val displayVerificationPrompt by remember {
-            derivedStateOf { canVerifySession && !verificationPromptDismissed }
-        }
+        var securityBannerDismissed by rememberSaveable { mutableStateOf(false) }
+        val displayVerificationPrompt by sessionVerificationService.canVerifySessionFlow.collectAsState(initial = false)
         val recoveryState by encryptionService.recoveryStateStateFlow.collectAsState()
         val secureStorageFlag by featureFlagService.isFeatureEnabledFlow(FeatureFlags.SecureStorage)
             .collectAsState(initial = null)
-        var recoveryKeyPromptDismissed by rememberSaveable { mutableStateOf(false) }
         val displayRecoveryKeyPrompt by remember {
             derivedStateOf {
                 secureStorageFlag == true &&
-                    recoveryState == RecoveryState.INCOMPLETE &&
-                    !recoveryKeyPromptDismissed
+                    recoveryState == RecoveryState.INCOMPLETE
+            }
+        }
+        val securityBannerState by remember {
+            derivedStateOf {
+                when {
+                    securityBannerDismissed -> SecurityBannerState.None
+                    displayVerificationPrompt -> SecurityBannerState.SessionVerification
+                    displayRecoveryKeyPrompt -> SecurityBannerState.RecoveryKeyConfirmation
+                    else -> SecurityBannerState.None
+                }
             }
         }
 
@@ -135,8 +138,8 @@ class RoomListPresenter @Inject constructor(
         fun handleEvents(event: RoomListEvents) {
             when (event) {
                 is RoomListEvents.UpdateVisibleRange -> updateVisibleRange(event.range)
-                RoomListEvents.DismissRequestVerificationPrompt -> verificationPromptDismissed = true
-                RoomListEvents.DismissRecoveryKeyPrompt -> recoveryKeyPromptDismissed = true
+                RoomListEvents.DismissRequestVerificationPrompt -> securityBannerDismissed = true
+                RoomListEvents.DismissRecoveryKeyPrompt -> securityBannerDismissed = true
                 RoomListEvents.ToggleSearchResults -> searchState.eventSink(RoomListSearchEvents.ToggleSearchVisibility)
                 is RoomListEvents.ShowContextMenu -> {
                     coroutineScope.showContextMenu(event, contextMenu)
@@ -157,8 +160,7 @@ class RoomListPresenter @Inject constructor(
             matrixUser = matrixUser.value,
             showAvatarIndicator = showAvatarIndicator,
             roomList = roomList,
-            displayVerificationPrompt = displayVerificationPrompt,
-            displayRecoveryKeyPrompt = displayRecoveryKeyPrompt,
+            securityBannerState = securityBannerState,
             snackbarMessage = snackbarMessage,
             hasNetworkConnection = networkConnectionStatus == NetworkStatus.Online,
             invitesState = inviteStateDataSource.inviteState(),
