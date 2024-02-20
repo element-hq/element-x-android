@@ -38,7 +38,6 @@ import io.element.android.libraries.matrix.api.room.powerlevels.canInvite
 import io.element.android.libraries.matrix.api.room.roomMembers
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -63,10 +62,17 @@ class RoomMemberListPresenter @Inject constructor(
         }
 
         val canDisplayBannedUsers by produceState(initialValue = false) {
-            room.membersStateFlow
-                .map { members -> members.roomMembers()?.any { it.membership == RoomMembershipState.BAN }.orFalse() }
-                .onEach { hasBannedUsers -> value = hasBannedUsers && room.canBan().getOrElse { false } && !room.isDm }
-                .collect()
+            val roomIsNotDmAndUserCanBan = !room.isDm && room.canBan().getOrElse { false }
+            if (roomIsNotDmAndUserCanBan) {
+                room.membersStateFlow
+                    .onEach { members ->
+                        val hasBannedUsers = members.roomMembers()?.any { it.membership == RoomMembershipState.BAN }.orFalse()
+                        value = hasBannedUsers
+                    }
+                    .collect()
+            } else {
+                value = false
+            }
         }
 
         LaunchedEffect(membersState) {
