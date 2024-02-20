@@ -51,6 +51,8 @@ import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import io.element.android.libraries.matrix.api.encryption.RecoveryState
+import io.element.android.libraries.matrix.api.sync.SyncService
+import io.element.android.libraries.matrix.api.sync.SyncState
 import io.element.android.libraries.matrix.api.timeline.ReceiptType
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.api.user.getCurrentUser
@@ -87,6 +89,7 @@ class RoomListPresenter @Inject constructor(
 ) : Presenter<RoomListState> {
     private val encryptionService: EncryptionService = client.encryptionService()
     private val sessionVerificationService: SessionVerificationService = client.sessionVerificationService()
+    private val syncService: SyncService = client.syncService()
 
     @Composable
     override fun present(): RoomListState {
@@ -115,6 +118,7 @@ class RoomListPresenter @Inject constructor(
             isLastDevice = encryptionService.isLastDevice().getOrNull() ?: false
         }
         val recoveryState by encryptionService.recoveryStateStateFlow.collectAsState()
+        val syncState by syncService.syncState.collectAsState()
         val secureStorageFlag by featureFlagService.isFeatureEnabledFlow(FeatureFlags.SecureStorage).collectAsState(initial = null)
         val securityBannerState by remember {
             derivedStateOf {
@@ -125,7 +129,9 @@ class RoomListPresenter @Inject constructor(
                     } else {
                         SecurityBannerState.SessionVerification
                     }
-                    secureStorageFlag == true && recoveryState == RecoveryState.INCOMPLETE -> SecurityBannerState.RecoveryKeyConfirmation
+                    secureStorageFlag == true &&
+                        recoveryState == RecoveryState.INCOMPLETE &&
+                        syncState == SyncState.Running -> SecurityBannerState.RecoveryKeyConfirmation
                     else -> SecurityBannerState.None
                 }
             }
