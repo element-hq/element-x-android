@@ -30,7 +30,6 @@ import io.element.android.features.roomlist.impl.datasource.FakeInviteDataSource
 import io.element.android.features.roomlist.impl.datasource.InviteStateDataSource
 import io.element.android.features.roomlist.impl.datasource.RoomListDataSource
 import io.element.android.features.roomlist.impl.datasource.RoomListRoomSummaryFactory
-import io.element.android.features.roomlist.impl.filters.RoomListFiltersPresenter
 import io.element.android.features.roomlist.impl.filters.RoomListFiltersState
 import io.element.android.features.roomlist.impl.filters.aRoomListFiltersState
 import io.element.android.features.roomlist.impl.migration.InMemoryMigrationScreenStore

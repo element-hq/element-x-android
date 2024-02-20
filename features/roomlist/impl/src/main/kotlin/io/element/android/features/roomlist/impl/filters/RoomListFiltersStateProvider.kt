@@ -22,7 +22,6 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 
 class RoomListFiltersStateProvider : PreviewParameterProvider<RoomListFiltersState> {
-
     override val values: Sequence<RoomListFiltersState>
         get() = sequenceOf(
             aRoomListFiltersState(),

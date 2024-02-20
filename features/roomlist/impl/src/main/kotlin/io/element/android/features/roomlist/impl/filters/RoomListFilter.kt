@@ -22,7 +22,7 @@ import io.element.android.features.roomlist.impl.R
  * Enum class representing the different filters that can be applied to the room list.
  * Order is important.
  */
-enum class RoomListFilter(val stringResource: Int){
+enum class RoomListFilter(val stringResource: Int) {
     Rooms(R.string.screen_roomlist_filter_rooms),
     People(R.string.screen_roomlist_filter_people),
     Unread(R.string.screen_roomlist_filter_unreads),

@@ -36,7 +36,6 @@ import io.element.android.features.networkmonitor.api.NetworkStatus
 import io.element.android.features.preferences.api.store.SessionPreferencesStore
 import io.element.android.features.roomlist.impl.datasource.InviteStateDataSource
 import io.element.android.features.roomlist.impl.datasource.RoomListDataSource
-import io.element.android.features.roomlist.impl.filters.RoomListFiltersPresenter
 import io.element.android.features.roomlist.impl.filters.RoomListFiltersState
 import io.element.android.features.roomlist.impl.migration.MigrationScreenPresenter
 import io.element.android.features.roomlist.impl.search.RoomListSearchEvents

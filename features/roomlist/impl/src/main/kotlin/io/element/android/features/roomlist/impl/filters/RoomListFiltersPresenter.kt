@@ -35,7 +35,6 @@ class RoomListFiltersPresenter @Inject constructor(
     private val roomListService: RoomListService,
     private val featureFlagService: FeatureFlagService,
 ) : Presenter<RoomListFiltersState> {
-
     @Composable
     override fun present(): RoomListFiltersState {
         val isFeatureEnabled by featureFlagService.isFeatureEnabledFlow(FeatureFlags.RoomListFilters).collectAsState(false)
@@ -91,4 +90,3 @@ class RoomListFiltersPresenter @Inject constructor(
         )
     }
 }
-

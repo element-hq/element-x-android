@@ -30,7 +30,6 @@ import org.junit.Test
 import io.element.android.libraries.matrix.api.roomlist.RoomListFilter as MatrixRoomListFilter
 
 class RoomListFiltersPresenterTests {
-
     @Test
     fun `present - initial state`() = runTest {
         val presenter = createRoomListFiltersPresenter()

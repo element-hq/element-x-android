@@ -17,13 +17,17 @@
 package io.element.android.features.roomlist.impl.filters
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.lazy.LazyListScope
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
@@ -36,11 +40,14 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
+import io.element.android.libraries.designsystem.modifiers.fadingEdge
+import io.element.android.libraries.designsystem.modifiers.horizontalFadingEdgesBrush
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.Text
+import kotlinx.collections.immutable.ImmutableList
 import timber.log.Timber
 
 @Composable
@@ -61,31 +68,47 @@ fun RoomListFiltersView(
         state.eventSink(RoomListFiltersEvents.ToggleFilter(filter))
     }
 
-    val horizontalPadding = if (state.showClearFilterButton) 4.dp else 16.dp
-    val scrollState = rememberScrollState()
+    val startPadding = if (state.showClearFilterButton) 4.dp else 16.dp
     Row(
-        modifier = modifier
-            .padding(horizontal = horizontalPadding)
-            .horizontalScroll(scrollState),
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        modifier = modifier.padding(start = startPadding, end = 16.dp),
     ) {
         AnimatedVisibility(visible = state.showClearFilterButton) {
             RoomListClearFiltersButton(onClick = ::onClearFiltersClicked)
         }
-        for (filter in state.selectedFilters) {
-            RoomListFilterView(
-                roomListFilter = filter,
-                selected = true,
-                onClick = ::onFilterClicked,
-            )
+        val lazyListState = rememberLazyListState()
+        val fadingEdgesBrush = horizontalFadingEdgesBrush(
+            showLeft = lazyListState.canScrollBackward,
+            showRight = lazyListState.canScrollForward
+        )
+        LazyRow(
+            modifier = Modifier
+                .fillMaxWidth()
+                .fadingEdge(fadingEdgesBrush),
+            state = lazyListState,
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            roomListFilters(state.selectedFilters, selected = true, onClick = ::onFilterClicked)
+            roomListFilters(state.unselectedFilters, selected = false, onClick = ::onFilterClicked)
         }
-        for (filter in state.unselectedFilters) {
-            RoomListFilterView(
-                roomListFilter = filter,
-                selected = false,
-                onClick = ::onFilterClicked,
-            )
-        }
+    }
+}
+
+@OptIn(ExperimentalFoundationApi::class)
+private fun LazyListScope.roomListFilters(
+    filters: ImmutableList<RoomListFilter>,
+    selected: Boolean,
+    onClick: (RoomListFilter) -> Unit,
+) {
+    items(
+        items = filters,
+        key = { it.ordinal },
+    ) { filter ->
+        RoomListFilterView(
+            modifier = Modifier.animateItemPlacement(),
+            roomListFilter = filter,
+            selected = selected,
+            onClick = onClick,
+        )
     }
 }
 
