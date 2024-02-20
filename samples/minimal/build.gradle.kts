@@ -63,5 +63,6 @@ dependencies {
     implementation(projects.features.networkmonitor.impl)
     implementation(projects.services.toolbox.impl)
     implementation(projects.libraries.featureflag.impl)
+    implementation(projects.services.analytics.noop)
     implementation(libs.coroutines.core)
 }
