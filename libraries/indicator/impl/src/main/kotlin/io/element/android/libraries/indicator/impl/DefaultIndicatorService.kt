@@ -46,7 +46,7 @@ class DefaultIndicatorService @Inject constructor(
 
         return remember {
             derivedStateOf {
-                !canVerifySession && settingChatBackupIndicator.value
+                canVerifySession || settingChatBackupIndicator.value
             }
         }
     }
