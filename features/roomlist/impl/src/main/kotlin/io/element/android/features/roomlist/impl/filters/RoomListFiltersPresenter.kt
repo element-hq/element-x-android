@@ -17,15 +17,20 @@
 package io.element.android.features.roomlist.impl.filters
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import kotlinx.collections.immutable.toPersistentList
 import javax.inject.Inject
+import io.element.android.libraries.matrix.api.roomlist.RoomListFilter as MatrixRoomListFilter
 
-class RoomListFiltersPresenter @Inject constructor() : Presenter<RoomListFiltersState> {
+class RoomListFiltersPresenter @Inject constructor(
+    private val roomListService: RoomListService,
+) : Presenter<RoomListFiltersState> {
 
     @Composable
     override fun present(): RoomListFiltersState {
@@ -57,6 +62,20 @@ class RoomListFiltersPresenter @Inject constructor() : Presenter<RoomListFilters
                     updateFilters(newSelectedFilters = emptySet())
                 }
             }
+        }
+
+        LaunchedEffect(selectedFilters) {
+            val allRoomsFilter = MatrixRoomListFilter.All(
+                selectedFilters.map { roomListFilter ->
+                    when (roomListFilter) {
+                        RoomListFilter.Rooms -> MatrixRoomListFilter.Category.Group
+                        RoomListFilter.People -> MatrixRoomListFilter.Category.People
+                        RoomListFilter.Unread -> MatrixRoomListFilter.Unread
+                        RoomListFilter.Favourites -> MatrixRoomListFilter.Favorite
+                    }
+                }.plus(MatrixRoomListFilter.NonLeft)
+            )
+            roomListService.allRooms.updateFilter(allRoomsFilter)
         }
 
         return RoomListFiltersState(

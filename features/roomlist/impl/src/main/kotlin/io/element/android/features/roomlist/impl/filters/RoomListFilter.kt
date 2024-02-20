@@ -26,15 +26,13 @@ enum class RoomListFilter(val stringResource: Int){
     Rooms(R.string.screen_roomlist_filter_rooms),
     People(R.string.screen_roomlist_filter_people),
     Unread(R.string.screen_roomlist_filter_unreads),
-    Favourites(R.string.screen_roomlist_filter_favourites),
-    LowPriority(R.string.screen_roomlist_filter_low_priority);
+    Favourites(R.string.screen_roomlist_filter_favourites);
 
     val oppositeFilter: RoomListFilter?
         get() = when (this) {
             Rooms -> People
             People -> Rooms
             Unread -> null
-            Favourites -> LowPriority
-            LowPriority -> Favourites
+            Favourites -> null
         }
 }

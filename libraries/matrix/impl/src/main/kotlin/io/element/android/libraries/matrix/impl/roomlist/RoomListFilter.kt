@@ -31,5 +31,6 @@ fun RoomListFilter.toRustFilter(): RoomListEntriesDynamicFilterKind {
         RoomListFilter.None -> RoomListEntriesDynamicFilterKind.None
         is RoomListFilter.NormalizedMatchRoomName -> RoomListEntriesDynamicFilterKind.NormalizedMatchRoomName(pattern)
         RoomListFilter.Unread -> RoomListEntriesDynamicFilterKind.Unread
+        RoomListFilter.Favorite -> RoomListEntriesDynamicFilterKind.Favourite
     }
 }
