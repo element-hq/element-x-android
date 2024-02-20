@@ -41,12 +41,17 @@ import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.Text
+import timber.log.Timber
 
 @Composable
 fun RoomListFiltersView(
     state: RoomListFiltersState,
     modifier: Modifier = Modifier
 ) {
+    if (!state.isFeatureEnabled) {
+        Timber.d("RoomListFiltersView: Feature is disabled, hide the view")
+        return
+    }
 
     fun onClearFiltersClicked() {
         state.eventSink(RoomListFiltersEvents.ClearSelectedFilters)

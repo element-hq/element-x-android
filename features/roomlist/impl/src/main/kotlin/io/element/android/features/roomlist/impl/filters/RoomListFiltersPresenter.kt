@@ -18,11 +18,14 @@ package io.element.android.features.roomlist.impl.filters
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.featureflag.api.FeatureFlagService
+import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import kotlinx.collections.immutable.toPersistentList
 import javax.inject.Inject
@@ -30,10 +33,12 @@ import io.element.android.libraries.matrix.api.roomlist.RoomListFilter as Matrix
 
 class RoomListFiltersPresenter @Inject constructor(
     private val roomListService: RoomListService,
+    private val featureFlagService: FeatureFlagService,
 ) : Presenter<RoomListFiltersState> {
 
     @Composable
     override fun present(): RoomListFiltersState {
+        val isFeatureEnabled by featureFlagService.isFeatureEnabledFlow(FeatureFlags.RoomListFilters).collectAsState(false)
         var unselectedFilters: Set<RoomListFilter> by rememberSaveable {
             mutableStateOf(RoomListFilter.entries.toSet())
         }
@@ -81,6 +86,7 @@ class RoomListFiltersPresenter @Inject constructor(
         return RoomListFiltersState(
             unselectedFilters = unselectedFilters.toPersistentList(),
             selectedFilters = selectedFilters.toPersistentList(),
+            isFeatureEnabled = isFeatureEnabled,
             eventSink = ::handleEvents
         )
     }

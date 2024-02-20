@@ -29,14 +29,19 @@ class RoomListFiltersStateProvider : PreviewParameterProvider<RoomListFiltersSta
             aRoomListFiltersState(
                 selectedFilters = persistentListOf(RoomListFilter.Rooms, RoomListFilter.Favourites),
                 unselectedFilters = persistentListOf(RoomListFilter.Unread),
-            )
+            ),
+            aRoomListFiltersState(
+                isFeatureEnabled = false,
+            ),
         )
 }
 
 fun aRoomListFiltersState(
     unselectedFilters: ImmutableList<RoomListFilter> = RoomListFilter.entries.toImmutableList(),
     selectedFilters: ImmutableList<RoomListFilter> = persistentListOf(),
+    isFeatureEnabled: Boolean = true,
 ) = RoomListFiltersState(
     unselectedFilters = unselectedFilters,
     selectedFilters = selectedFilters,
+    isFeatureEnabled = isFeatureEnabled,
 ) {}

@@ -21,6 +21,7 @@ import kotlinx.collections.immutable.ImmutableList
 data class RoomListFiltersState(
     val unselectedFilters: ImmutableList<RoomListFilter>,
     val selectedFilters: ImmutableList<RoomListFilter>,
+    val isFeatureEnabled: Boolean,
     val eventSink: (RoomListFiltersEvents) -> Unit,
 ) {
     val showClearFilterButton = selectedFilters.isNotEmpty()

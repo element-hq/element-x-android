@@ -41,6 +41,7 @@ class StaticFeatureFlagProvider @Inject constructor() :
                 FeatureFlags.Mentions -> true
                 FeatureFlags.SecureStorage -> true
                 FeatureFlags.MarkAsUnread -> false
+                FeatureFlags.RoomListFilters -> false
             }
         } else {
             false
