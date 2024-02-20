@@ -129,6 +129,8 @@ interface MatrixRoom : Closeable {
 
     suspend fun canUserInvite(userId: UserId): Result<Boolean>
 
+    suspend fun canUserBan(userId: UserId): Result<Boolean>
+
     suspend fun canUserRedactOwn(userId: UserId): Result<Boolean>
 
     suspend fun canUserRedactOther(userId: UserId): Result<Boolean>

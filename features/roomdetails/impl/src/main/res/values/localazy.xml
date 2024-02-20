@@ -24,6 +24,8 @@
   <string name="screen_room_details_notification_title">"Notifications"</string>
   <string name="screen_room_details_share_room_title">"Share room"</string>
   <string name="screen_room_details_updating_room">"Updating room…"</string>
+  <string name="screen_room_member_list_mode_banned">"Banned"</string>
+  <string name="screen_room_member_list_mode_members">"Members"</string>
   <string name="screen_room_member_list_pending_header_title">"Pending"</string>
   <string name="screen_room_member_list_role_administrator">"Admin"</string>
   <string name="screen_room_member_list_role_moderator">"Moderator"</string>
