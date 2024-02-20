@@ -22,6 +22,7 @@ import app.cash.molecule.moleculeFlow
 import app.cash.turbine.TurbineTestContext
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import im.vector.app.features.analytics.plan.Interaction
 import io.element.android.features.createroom.test.FakeStartDMAction
 import io.element.android.features.leaveroom.api.LeaveRoomEvent
 import io.element.android.features.leaveroom.api.LeaveRoomPresenter
@@ -50,6 +51,8 @@ import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.notificationsettings.FakeNotificationSettingsService
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.matrix.test.room.aRoomInfo
+import io.element.android.services.analytics.api.AnalyticsService
+import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.tests.testutils.FakeLifecycleOwner
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.consumeItemsUntilPredicate
@@ -77,6 +80,7 @@ class RoomDetailsPresenterTests {
         leaveRoomPresenter: LeaveRoomPresenter = FakeLeaveRoomPresenter(),
         dispatchers: CoroutineDispatchers = testCoroutineDispatchers(),
         notificationSettingsService: FakeNotificationSettingsService = FakeNotificationSettingsService(),
+        analyticsService: AnalyticsService = FakeAnalyticsService(),
     ): RoomDetailsPresenter {
         val matrixClient = FakeMatrixClient(notificationSettingsService = notificationSettingsService)
         val roomMemberDetailsPresenterFactory = object : RoomMemberDetailsPresenter.Factory {
@@ -95,6 +99,7 @@ class RoomDetailsPresenterTests {
             roomMembersDetailsPresenterFactory = roomMemberDetailsPresenterFactory,
             leaveRoomPresenter = leaveRoomPresenter,
             dispatchers = dispatchers,
+            analyticsService = analyticsService,
         )
     }
 
@@ -435,13 +440,18 @@ class RoomDetailsPresenterTests {
     @Test
     fun `present - when set is favorite event is emitted, then the action is called`() = runTest {
         val room = FakeMatrixRoom()
-        val presenter = createRoomDetailsPresenter(room = room)
+        val analyticsService = FakeAnalyticsService()
+        val presenter = createRoomDetailsPresenter(room = room, analyticsService = analyticsService)
         presenter.test {
             val initialState = awaitItem()
             initialState.eventSink(RoomDetailsEvent.SetFavorite(true))
             assertThat(room.setIsFavoriteCalls).isEqualTo(listOf(true))
             initialState.eventSink(RoomDetailsEvent.SetFavorite(false))
             assertThat(room.setIsFavoriteCalls).isEqualTo(listOf(true, false))
+            assertThat(analyticsService.capturedEvents).containsExactly(
+                Interaction(name = Interaction.Name.MobileRoomFavouriteToggle),
+                Interaction(name = Interaction.Name.MobileRoomFavouriteToggle)
+            )
             cancelAndIgnoreRemainingEvents()
         }
     }
