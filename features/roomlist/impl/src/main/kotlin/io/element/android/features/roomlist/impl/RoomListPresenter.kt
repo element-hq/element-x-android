@@ -37,6 +37,7 @@ import io.element.android.features.preferences.api.store.SessionPreferencesStore
 import io.element.android.features.roomlist.impl.datasource.InviteStateDataSource
 import io.element.android.features.roomlist.impl.datasource.RoomListDataSource
 import io.element.android.features.roomlist.impl.filters.RoomListFiltersPresenter
+import io.element.android.features.roomlist.impl.filters.RoomListFiltersState
 import io.element.android.features.roomlist.impl.migration.MigrationScreenPresenter
 import io.element.android.features.roomlist.impl.search.RoomListSearchEvents
 import io.element.android.features.roomlist.impl.search.RoomListSearchState
@@ -78,7 +79,7 @@ class RoomListPresenter @Inject constructor(
     private val roomListDataSource: RoomListDataSource,
     private val featureFlagService: FeatureFlagService,
     private val indicatorService: IndicatorService,
-    private val filtersPresenter: RoomListFiltersPresenter,
+    private val filtersPresenter: Presenter<RoomListFiltersState>,
     private val searchPresenter: Presenter<RoomListSearchState>,
     private val migrationScreenPresenter: MigrationScreenPresenter,
     private val sessionPreferencesStore: SessionPreferencesStore,

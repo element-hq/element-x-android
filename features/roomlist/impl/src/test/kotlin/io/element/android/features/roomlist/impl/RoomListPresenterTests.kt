@@ -31,6 +31,8 @@ import io.element.android.features.roomlist.impl.datasource.InviteStateDataSourc
 import io.element.android.features.roomlist.impl.datasource.RoomListDataSource
 import io.element.android.features.roomlist.impl.datasource.RoomListRoomSummaryFactory
 import io.element.android.features.roomlist.impl.filters.RoomListFiltersPresenter
+import io.element.android.features.roomlist.impl.filters.RoomListFiltersState
+import io.element.android.features.roomlist.impl.filters.aRoomListFiltersState
 import io.element.android.features.roomlist.impl.migration.InMemoryMigrationScreenStore
 import io.element.android.features.roomlist.impl.migration.MigrationScreenPresenter
 import io.element.android.features.roomlist.impl.model.createRoomListRoomSummary
@@ -581,7 +583,7 @@ class RoomListPresenterTests {
             matrixClient = client,
             migrationScreenStore = InMemoryMigrationScreenStore(),
         ),
-        filtersPresenter: RoomListFiltersPresenter = RoomListFiltersPresenter(),
+        filtersPresenter: Presenter<RoomListFiltersState> = Presenter { aRoomListFiltersState() },
         searchPresenter: Presenter<RoomListSearchState> = Presenter { aRoomListSearchState() },
     ) = RoomListPresenter(
         client = client,
