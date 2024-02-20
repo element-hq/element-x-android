@@ -108,6 +108,7 @@ internal class RoomMemberListFetcher(
                     // We should probably implement some sort of paging in the future.
                     coroutineContext.ensureActive()
                     val chunk = iterator.nextChunk(pageSize.toUInt())
+                    // Load next chunk. If null (no more items), exit the loop
                     val members = chunk?.parallelMap(RoomMemberMapper::map) ?: break
                     addAll(members)
                     Timber.i("Emitting first $size members for room $roomId")
