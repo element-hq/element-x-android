@@ -18,6 +18,7 @@ package io.element.android.services.analyticsproviders.api.trackers
 
 import im.vector.app.features.analytics.itf.VectorAnalyticsEvent
 import im.vector.app.features.analytics.itf.VectorAnalyticsScreen
+import im.vector.app.features.analytics.plan.Interaction
 import im.vector.app.features.analytics.plan.UserProperties
 
 interface AnalyticsTracker {
@@ -35,4 +36,8 @@ interface AnalyticsTracker {
      * Update user specific properties.
      */
     fun updateUserProperties(userProperties: UserProperties)
+}
+
+fun AnalyticsTracker.captureInteraction(name: Interaction.Name, type: Interaction.InteractionType? = null) {
+    capture(Interaction(interactionType = type, name = name))
 }

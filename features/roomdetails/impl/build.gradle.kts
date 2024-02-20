@@ -76,6 +76,7 @@ dependencies {
     testImplementation(projects.tests.testutils)
     testImplementation(projects.features.leaveroom.test)
     testImplementation(projects.features.createroom.test)
+    testImplementation(projects.services.analytics.test)
     testImplementation(libs.androidx.compose.ui.test.junit)
     testReleaseImplementation(libs.androidx.compose.ui.test.manifest)
 

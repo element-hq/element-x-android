@@ -47,6 +47,7 @@ import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
 import io.element.android.libraries.preferences.impl.store.DefaultSessionPreferencesStore
+import io.element.android.services.analytics.noop.NoopAnalyticsService
 import io.element.android.services.toolbox.impl.strings.AndroidStringProvider
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -121,6 +122,7 @@ class RoomListScreen(
             sessionId = matrixClient.sessionId,
             sessionCoroutineScope = Singleton.appScope
         ),
+        analyticsService = NoopAnalyticsService(),
     )
 
     @Composable
