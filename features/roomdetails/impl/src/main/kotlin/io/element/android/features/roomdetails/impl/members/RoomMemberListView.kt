@@ -80,6 +80,7 @@ fun RoomMemberListView(
     onInvitePressed: () -> Unit,
     onMemberSelected: (UserId) -> Unit,
     modifier: Modifier = Modifier,
+    initialSelectedSectionIndex: Int = 0,
 ) {
     fun onUserSelected(roomMember: RoomMember) {
         onMemberSelected(roomMember.userId)
@@ -97,7 +98,7 @@ fun RoomMemberListView(
             }
         }
     ) { padding ->
-        var selectedSection by remember { mutableStateOf(SelectedSection.MEMBERS) }
+        var selectedSection by remember { mutableStateOf(SelectedSection.entries[initialSelectedSectionIndex]) }
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -158,7 +159,7 @@ private fun RoomMemberList(
                     modifier = Modifier
                         .background(ElementTheme.colors.bgCanvasDefault)
                         .fillMaxWidth()
-                        .padding(horizontal = 16.dp),
+                        .padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
                 ) {
                     for ((index, title) in segmentedButtonTitles.withIndex()) {
                         SegmentedButton(
@@ -327,6 +328,31 @@ private fun RoomMemberSearchBar(
 internal fun RoomMemberListPreview(@PreviewParameter(RoomMemberListStateProvider::class) state: RoomMemberListState) = ElementPreview {
     RoomMemberListView(
         state = state,
+        onBackPressed = {},
+        onMemberSelected = {},
+        onInvitePressed = {},
+    )
+}
+
+@PreviewsDayNight
+@Composable
+internal fun RoomMemberBannedListPreview() = ElementPreview {
+    RoomMemberListView(
+        initialSelectedSectionIndex = 1,
+        state = aRoomMemberListState(
+            roomMembers = AsyncData.Success(
+                RoomMembers(
+                    invited = persistentListOf(),
+                    joined = persistentListOf(),
+                    banned = persistentListOf(
+                        aRoomMember(userId = UserId("@alice:example.com"), displayName = "Alice"),
+                        aRoomMember(userId = UserId("@bob:example.com"), displayName = "Bob"),
+                        aRoomMember(userId = UserId("@charlie:example.com"), displayName = "Charlie"),
+                    ),
+                )
+            ),
+            canDisplayBannedUsers = true,
+        ),
         onBackPressed = {},
         onMemberSelected = {},
         onInvitePressed = {},
