@@ -27,6 +27,7 @@ import com.bumble.appyx.navmodel.backstack.operation.push
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
+import io.element.android.features.securebackup.api.SecureBackupEntryPoint
 import io.element.android.features.securebackup.impl.disable.SecureBackupDisableNode
 import io.element.android.features.securebackup.impl.enable.SecureBackupEnableNode
 import io.element.android.features.securebackup.impl.enter.SecureBackupEnterRecoveryKeyNode
@@ -44,7 +45,10 @@ class SecureBackupFlowNode @AssistedInject constructor(
     @Assisted plugins: List<Plugin>,
 ) : BaseFlowNode<SecureBackupFlowNode.NavTarget>(
     backstack = BackStack(
-        initialElement = NavTarget.Root,
+        initialElement = when (plugins.filterIsInstance(SecureBackupEntryPoint.Params::class.java).first().initialElement) {
+            SecureBackupEntryPoint.InitialTarget.Root -> NavTarget.Root
+            SecureBackupEntryPoint.InitialTarget.EnterRecoveryKey -> NavTarget.EnterRecoveryKey
+        },
         savedStateMap = buildContext.savedStateMap,
     ),
     buildContext = buildContext,

@@ -216,7 +216,9 @@ class LoggedInFlowNode @AssistedInject constructor(
         data object VerifySession : NavTarget
 
         @Parcelize
-        data object SecureBackup : NavTarget
+        data class SecureBackup(
+            val initialElement: SecureBackupEntryPoint.InitialTarget = SecureBackupEntryPoint.InitialTarget.Root
+        ) : NavTarget
 
         @Parcelize
         data object InviteList : NavTarget
@@ -298,7 +300,7 @@ class LoggedInFlowNode @AssistedInject constructor(
                     }
 
                     override fun onSecureBackupClicked() {
-                        backstack.push(NavTarget.SecureBackup)
+                        backstack.push(NavTarget.SecureBackup())
                     }
 
                     override fun onOpenRoomNotificationSettings(roomId: RoomId) {
@@ -324,10 +326,24 @@ class LoggedInFlowNode @AssistedInject constructor(
                     .build()
             }
             NavTarget.VerifySession -> {
-                verifySessionEntryPoint.createNode(this, buildContext)
+                val callback = object : VerifySessionEntryPoint.Callback {
+                    override fun onEnterRecoveryKey() {
+                        backstack.replace(
+                            NavTarget.SecureBackup(
+                                initialElement = SecureBackupEntryPoint.InitialTarget.EnterRecoveryKey
+                            )
+                        )
+                    }
+                }
+                verifySessionEntryPoint
+                    .nodeBuilder(this, buildContext)
+                    .callback(callback)
+                    .build()
             }
-            NavTarget.SecureBackup -> {
-                secureBackupEntryPoint.createNode(this, buildContext)
+            is NavTarget.SecureBackup -> {
+                secureBackupEntryPoint.nodeBuilder(this, buildContext)
+                    .params(SecureBackupEntryPoint.Params(initialElement = navTarget.initialElement))
+                    .build()
             }
             NavTarget.InviteList -> {
                 val callback = object : InviteListEntryPoint.Callback {

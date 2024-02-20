@@ -20,12 +20,15 @@ package io.element.android.features.verifysession.impl
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import com.freeletics.flowredux.compose.rememberStateAndDispatch
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.matrix.api.encryption.EncryptionService
+import io.element.android.libraries.matrix.api.encryption.RecoveryState
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import io.element.android.libraries.matrix.api.verification.VerificationFlowState
 import kotlinx.coroutines.CoroutineScope
@@ -38,6 +41,7 @@ import io.element.android.features.verifysession.impl.VerifySelfSessionStateMach
 
 class VerifySelfSessionPresenter @Inject constructor(
     private val sessionVerificationService: SessionVerificationService,
+    private val encryptionService: EncryptionService,
     private val stateMachine: VerifySelfSessionStateMachine,
 ) : Presenter<VerifySelfSessionState> {
     @Composable
@@ -46,9 +50,14 @@ class VerifySelfSessionPresenter @Inject constructor(
             // Force reset, just in case the service was left in a broken state
             sessionVerificationService.reset()
         }
+        val recoveryState by encryptionService.recoveryStateStateFlow.collectAsState()
         val stateAndDispatch = stateMachine.rememberStateAndDispatch()
         val verificationFlowStep by remember {
-            derivedStateOf { stateAndDispatch.state.value.toVerificationStep() }
+            derivedStateOf {
+                stateAndDispatch.state.value.toVerificationStep(
+                    canEnterRecoveryKey = recoveryState == RecoveryState.INCOMPLETE
+                )
+            }
         }
         // Start this after observing state machine
         LaunchedEffect(Unit) {
@@ -71,10 +80,12 @@ class VerifySelfSessionPresenter @Inject constructor(
         )
     }
 
-    private fun StateMachineState?.toVerificationStep(): VerifySelfSessionState.VerificationStep =
+    private fun StateMachineState?.toVerificationStep(
+        canEnterRecoveryKey: Boolean
+    ): VerifySelfSessionState.VerificationStep =
         when (val machineState = this) {
             StateMachineState.Initial, null -> {
-                VerifySelfSessionState.VerificationStep.Initial
+                VerifySelfSessionState.VerificationStep.Initial(canEnterRecoveryKey = canEnterRecoveryKey)
             }
             StateMachineState.RequestingVerification,
             StateMachineState.StartingSasVerification,
