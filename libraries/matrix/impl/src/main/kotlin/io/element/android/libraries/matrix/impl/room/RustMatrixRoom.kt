@@ -319,6 +319,12 @@ class RustMatrixRoom(
         }
     }
 
+    override suspend fun canUserBan(userId: UserId): Result<Boolean> {
+        return runCatching {
+            innerRoom.canUserBan(userId.value)
+        }
+    }
+
     override suspend fun canUserRedactOwn(userId: UserId): Result<Boolean> {
         return runCatching {
             innerRoom.canUserRedactOwn(userId.value)

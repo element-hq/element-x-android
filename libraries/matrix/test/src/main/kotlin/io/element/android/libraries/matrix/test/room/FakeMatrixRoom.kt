@@ -90,6 +90,7 @@ class FakeMatrixRoom(
     private var joinRoomResult = Result.success(Unit)
     private var inviteUserResult = Result.success(Unit)
     private var canInviteResult = Result.success(true)
+    private var canBanResult = Result.success(false)
     private var canRedactOwnResult = Result.success(canRedactOwn)
     private var canRedactOtherResult = Result.success(canRedactOther)
     private val canSendStateResults = mutableMapOf<StateEventType, Result<Boolean>>()
@@ -278,6 +279,10 @@ class FakeMatrixRoom(
     override suspend fun inviteUserById(id: UserId): Result<Unit> = simulateLongTask {
         invitedUserId = id
         inviteUserResult
+    }
+
+    override suspend fun canUserBan(userId: UserId): Result<Boolean> {
+        return canBanResult
     }
 
     override suspend fun canUserInvite(userId: UserId): Result<Boolean> {
@@ -493,6 +498,10 @@ class FakeMatrixRoom(
 
     fun givenJoinRoomResult(result: Result<Unit>) {
         joinRoomResult = result
+    }
+
+    fun givenCanBanResult(result: Result<Boolean>) {
+        canBanResult = result
     }
 
     fun givenInviteUserResult(result: Result<Unit>) {

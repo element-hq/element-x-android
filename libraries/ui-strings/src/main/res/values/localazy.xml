@@ -120,6 +120,7 @@
   <string name="common_error">"Error"</string>
   <string name="common_everyone">"Everyone"</string>
   <string name="common_favourite">"Favourite"</string>
+  <string name="common_favourited">"Favourited"</string>
   <string name="common_file">"File"</string>
   <string name="common_file_saved_on_disk_android">"File saved to Downloads"</string>
   <string name="common_forward_message">"Forward message"</string>
