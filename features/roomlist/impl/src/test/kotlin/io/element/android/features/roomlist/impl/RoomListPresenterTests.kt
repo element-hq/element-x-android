@@ -236,6 +236,30 @@ class RoomListPresenterTests {
     }
 
     @Test
+    fun `present - handle RecoveryKeyConfirmation last session`() = runTest {
+        val scope = CoroutineScope(context = coroutineContext + SupervisorJob())
+        val presenter = createRoomListPresenter(
+            coroutineScope = scope,
+            client = FakeMatrixClient(
+                encryptionService = FakeEncryptionService().apply {
+                    givenIsLastDevice(true)
+                }
+            ),
+        )
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            skipItems(2)
+            val eventSink = awaitItem().eventSink
+            // For the last session, the state is not SessionVerification, but RecoveryKeyConfirmation
+            assertThat(awaitItem().securityBannerState).isEqualTo(SecurityBannerState.RecoveryKeyConfirmation)
+            eventSink(RoomListEvents.DismissRequestVerificationPrompt)
+            assertThat(awaitItem().securityBannerState).isEqualTo(SecurityBannerState.None)
+            scope.cancel()
+        }
+    }
+
+    @Test
     fun `present - handle DismissRequestVerificationPrompt`() = runTest {
         val scope = CoroutineScope(context = coroutineContext + SupervisorJob())
         val presenter = createRoomListPresenter(

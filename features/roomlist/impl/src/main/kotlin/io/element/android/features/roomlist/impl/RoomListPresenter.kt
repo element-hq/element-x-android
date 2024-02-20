@@ -109,22 +109,23 @@ class RoomListPresenter @Inject constructor(
         val isMigrating = migrationScreenPresenter.present().isMigrating
 
         var securityBannerDismissed by rememberSaveable { mutableStateOf(false) }
-        val displayVerificationPrompt by sessionVerificationService.canVerifySessionFlow.collectAsState(initial = false)
-        val recoveryState by encryptionService.recoveryStateStateFlow.collectAsState()
-        val secureStorageFlag by featureFlagService.isFeatureEnabledFlow(FeatureFlags.SecureStorage)
-            .collectAsState(initial = null)
-        val displayRecoveryKeyPrompt by remember {
-            derivedStateOf {
-                secureStorageFlag == true &&
-                    recoveryState == RecoveryState.INCOMPLETE
-            }
+        val canVerifySession by sessionVerificationService.canVerifySessionFlow.collectAsState(initial = false)
+        var isLastDevice by remember { mutableStateOf(false) }
+        LaunchedEffect(Unit) {
+            isLastDevice = encryptionService.isLastDevice().getOrNull() ?: false
         }
+        val recoveryState by encryptionService.recoveryStateStateFlow.collectAsState()
+        val secureStorageFlag by featureFlagService.isFeatureEnabledFlow(FeatureFlags.SecureStorage).collectAsState(initial = null)
         val securityBannerState by remember {
             derivedStateOf {
                 when {
                     securityBannerDismissed -> SecurityBannerState.None
-                    displayVerificationPrompt -> SecurityBannerState.SessionVerification
-                    displayRecoveryKeyPrompt -> SecurityBannerState.RecoveryKeyConfirmation
+                    canVerifySession -> if (isLastDevice) {
+                        SecurityBannerState.RecoveryKeyConfirmation
+                    } else {
+                        SecurityBannerState.SessionVerification
+                    }
+                    secureStorageFlag == true && recoveryState == RecoveryState.INCOMPLETE -> SecurityBannerState.RecoveryKeyConfirmation
                     else -> SecurityBannerState.None
                 }
             }
