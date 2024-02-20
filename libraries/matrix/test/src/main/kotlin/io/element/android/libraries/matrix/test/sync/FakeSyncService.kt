@@ -21,8 +21,10 @@ import io.element.android.libraries.matrix.api.sync.SyncState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
-class FakeSyncService : SyncService {
-    private val syncStateFlow = MutableStateFlow(SyncState.Idle)
+class FakeSyncService(
+    initialState: SyncState = SyncState.Idle
+) : SyncService {
+    private val syncStateFlow = MutableStateFlow(initialState)
 
     fun simulateError() {
         syncStateFlow.value = SyncState.Error

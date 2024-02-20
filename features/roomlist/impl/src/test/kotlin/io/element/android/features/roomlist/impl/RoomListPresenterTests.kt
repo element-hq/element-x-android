@@ -54,6 +54,7 @@ import io.element.android.libraries.matrix.api.encryption.BackupState
 import io.element.android.libraries.matrix.api.encryption.RecoveryState
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
+import io.element.android.libraries.matrix.api.sync.SyncState
 import io.element.android.libraries.matrix.api.timeline.ReceiptType
 import io.element.android.libraries.matrix.test.AN_AVATAR_URL
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
@@ -68,6 +69,7 @@ import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.matrix.test.room.aRoomInfo
 import io.element.android.libraries.matrix.test.room.aRoomSummaryFilled
 import io.element.android.libraries.matrix.test.roomlist.FakeRoomListService
+import io.element.android.libraries.matrix.test.sync.FakeSyncService
 import io.element.android.libraries.matrix.test.verification.FakeSessionVerificationService
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analytics.test.FakeAnalyticsService
@@ -103,7 +105,7 @@ class RoomListPresenterTests {
             assertThat(withUserState.matrixUser!!.userId).isEqualTo(A_USER_ID)
             assertThat(withUserState.matrixUser!!.displayName).isEqualTo(A_USER_NAME)
             assertThat(withUserState.matrixUser!!.avatarUrl).isEqualTo(AN_AVATAR_URL)
-            assertThat(withUserState.showAvatarIndicator).isFalse()
+            assertThat(withUserState.showAvatarIndicator).isTrue()
             scope.cancel()
         }
     }
@@ -126,12 +128,12 @@ class RoomListPresenterTests {
         }.test {
             skipItems(1)
             val initialState = awaitItem()
-            assertThat(initialState.showAvatarIndicator).isFalse()
+            assertThat(initialState.showAvatarIndicator).isTrue()
             sessionVerificationService.givenCanVerifySession(false)
-            assertThat(awaitItem().showAvatarIndicator).isFalse()
-            encryptionService.emitBackupState(BackupState.UNKNOWN)
+            assertThat(awaitItem().showAvatarIndicator).isTrue()
+            encryptionService.emitBackupState(BackupState.ENABLED)
             val finalState = awaitItem()
-            assertThat(finalState.showAvatarIndicator).isTrue()
+            assertThat(finalState.showAvatarIndicator).isFalse()
             scope.cancel()
         }
     }
@@ -284,6 +286,7 @@ class RoomListPresenterTests {
             sessionVerificationService = FakeSessionVerificationService().apply {
                 givenCanVerifySession(false)
             },
+            syncService = FakeSyncService(initialState = SyncState.Running)
         )
         val scope = CoroutineScope(context = coroutineContext + SupervisorJob())
         val presenter = createRoomListPresenter(
