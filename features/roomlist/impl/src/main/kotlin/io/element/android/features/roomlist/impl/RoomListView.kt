@@ -58,7 +58,6 @@ import io.element.android.features.roomlist.impl.components.RoomSummaryRow
 import io.element.android.features.roomlist.impl.migration.MigrationScreenView
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
 import io.element.android.features.roomlist.impl.search.RoomListSearchView
-import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
@@ -135,9 +134,10 @@ fun RoomListView(
 @Composable
 private fun EmptyRoomListView(
     onCreateRoomClicked: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     Column(
-        modifier = Modifier.fillMaxSize(),
+        modifier = modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
@@ -216,62 +216,61 @@ private fun RoomListContent(
             )
         },
         content = { padding ->
-            if (state.roomList is AsyncData.Success && state.roomList.data.isEmpty()) {
-                EmptyRoomListView(onCreateRoomClicked)
-            } else {
-                LazyColumn(
-                    modifier = Modifier
-                        .padding(padding)
-                        .consumeWindowInsets(padding)
-                        .nestedScroll(nestedScrollConnection),
-                    state = lazyListState,
-                    // FAB height is 56dp, bottom padding is 16dp, we add 8dp as extra margin -> 56+16+8 = 80
-                    contentPadding = PaddingValues(bottom = 80.dp)
-                ) {
-                    when {
-                        state.displayVerificationPrompt -> {
-                            item {
-                                RequestVerificationHeader(
-                                    onVerifyClicked = onVerifyClicked,
-                                    onDismissClicked = { state.eventSink(RoomListEvents.DismissRequestVerificationPrompt) }
-                                )
-                            }
-                        }
-                        state.displayRecoveryKeyPrompt -> {
-                            item {
-                                ConfirmRecoveryKeyBanner(
-                                    onContinueClicked = onOpenSettings,
-                                    onDismissClicked = { state.eventSink(RoomListEvents.DismissRecoveryKeyPrompt) }
-                                )
-                            }
-                        }
-                    }
-
-                    if (state.invitesState != InvitesState.NoInvites) {
+            LazyColumn(
+                modifier = Modifier
+                    .padding(padding)
+                    .consumeWindowInsets(padding)
+                    .nestedScroll(nestedScrollConnection),
+                state = lazyListState,
+                // FAB height is 56dp, bottom padding is 16dp, we add 8dp as extra margin -> 56+16+8 = 80
+                contentPadding = PaddingValues(bottom = 80.dp)
+            ) {
+                when {
+                    state.displayEmptyState -> Unit
+                    state.displayVerificationPrompt -> {
                         item {
-                            InvitesEntryPointView(onInvitesClicked, state.invitesState)
+                            RequestVerificationHeader(
+                                onVerifyClicked = onVerifyClicked,
+                                onDismissClicked = { state.eventSink(RoomListEvents.DismissRequestVerificationPrompt) }
+                            )
                         }
                     }
-
-                    val roomList = state.roomList.dataOrNull().orEmpty()
-                    // Note: do not use a key for the LazyColumn, or the scroll will not behave as expected if a room
-                    // is moved to the top of the list.
-                    itemsIndexed(
-                        items = roomList,
-                        contentType = { _, room -> room.contentType() },
-                    ) { index, room ->
-                        RoomSummaryRow(
-                            room = room,
-                            onClick = ::onRoomClicked,
-                            onLongClick = onRoomLongClicked,
-                        )
-                        if (index != roomList.lastIndex) {
-                            HorizontalDivider()
+                    state.displayRecoveryKeyPrompt -> {
+                        item {
+                            ConfirmRecoveryKeyBanner(
+                                onContinueClicked = onOpenSettings,
+                                onDismissClicked = { state.eventSink(RoomListEvents.DismissRecoveryKeyPrompt) }
+                            )
                         }
                     }
                 }
-            }
 
+                if (state.invitesState != InvitesState.NoInvites) {
+                    item {
+                        InvitesEntryPointView(onInvitesClicked, state.invitesState)
+                    }
+                }
+
+                val roomList = state.roomList.dataOrNull().orEmpty()
+                // Note: do not use a key for the LazyColumn, or the scroll will not behave as expected if a room
+                // is moved to the top of the list.
+                itemsIndexed(
+                    items = roomList,
+                    contentType = { _, room -> room.contentType() },
+                ) { index, room ->
+                    RoomSummaryRow(
+                        room = room,
+                        onClick = ::onRoomClicked,
+                        onLongClick = onRoomLongClicked,
+                    )
+                    if (index != roomList.lastIndex) {
+                        HorizontalDivider()
+                    }
+                }
+            }
+            if (state.displayEmptyState) {
+                EmptyRoomListView(onCreateRoomClicked)
+            }
             MigrationScreenView(isMigrating = state.displayMigrationStatus)
         },
         floatingActionButton = {

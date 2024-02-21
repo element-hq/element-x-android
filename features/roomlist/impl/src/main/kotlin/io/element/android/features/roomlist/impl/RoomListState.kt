@@ -42,6 +42,8 @@ data class RoomListState(
     val displayMigrationStatus: Boolean,
     val eventSink: (RoomListEvents) -> Unit,
 ) {
+    val displayEmptyState = roomList is AsyncData.Success && roomList.data.isEmpty()
+
     sealed interface ContextMenu {
         data object Hidden : ContextMenu
         data class Shown(
