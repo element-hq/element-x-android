@@ -29,6 +29,7 @@ import io.element.android.tests.testutils.pressBackKey
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.robolectric.annotation.Config
 
 @RunWith(AndroidJUnit4::class)
 class VerifySelfSessionViewTest {
@@ -89,6 +90,7 @@ class VerifySelfSessionViewTest {
         }
     }
 
+    @Config(qualifiers = "h1024dp")
     @Test
     fun `clicking on enter recovery key calls the expected callback`() {
         val eventsRecorder = EventsRecorder<VerifySelfSessionViewEvents>(expectEvents = false)
