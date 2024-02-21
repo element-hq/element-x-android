@@ -57,7 +57,7 @@ internal class DefaultInviteStateDataSourceTest {
         moleculeFlow(RecompositionMode.Immediate) {
             dataSource.inviteState()
         }.test {
-            skipItems(1)
+            skipItems(2)
             assertThat(awaitItem()).isEqualTo(InvitesState.NewInvites)
         }
     }
