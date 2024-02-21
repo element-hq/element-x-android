@@ -49,6 +49,8 @@ import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.testtags.TestTags
+import io.element.android.libraries.testtags.testTag
 import kotlinx.collections.immutable.ImmutableList
 
 @Composable
@@ -70,7 +72,10 @@ fun RoomListFiltersView(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         AnimatedVisibility(visible = state.hasAnyFilterSelected) {
-            RoomListClearFiltersButton(onClick = ::onClearFiltersClicked)
+            RoomListClearFiltersButton(
+                modifier = Modifier.testTag(TestTags.homeScreenClearFilters),
+                onClick = ::onClearFiltersClicked
+            )
         }
         val lazyListState = rememberLazyListState()
         val fadingEdgesBrush = horizontalFadingEdgesBrush(

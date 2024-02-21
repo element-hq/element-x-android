@@ -36,8 +36,10 @@ fun aRoomListFiltersState(
     unselectedFilters: ImmutableList<RoomListFilter> = RoomListFilter.entries.toImmutableList(),
     selectedFilters: ImmutableList<RoomListFilter> = persistentListOf(),
     isFeatureEnabled: Boolean = true,
+    eventSink: (RoomListFiltersEvents) -> Unit = {},
 ) = RoomListFiltersState(
     unselectedFilters = unselectedFilters,
     selectedFilters = selectedFilters,
     isFeatureEnabled = isFeatureEnabled,
-) {}
+    eventSink = eventSink,
+)

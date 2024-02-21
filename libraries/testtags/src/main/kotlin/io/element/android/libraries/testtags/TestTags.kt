@@ -47,6 +47,7 @@ object TestTags {
      * Room list / Home screen.
      */
     val homeScreenSettings = TestTag("home_screen-settings")
+    val homeScreenClearFilters = TestTag("home_screen-clear_filters")
 
     /**
      * Welcome screen.
