@@ -17,6 +17,7 @@
 package io.element.android.libraries.matrix.api.roomlist
 
 import kotlinx.coroutines.TimeoutCancellationException
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.withTimeout
@@ -51,7 +52,7 @@ interface RoomList {
     /**
      * The list of room summaries as a flow.
      */
-    val summaries: StateFlow<List<RoomSummary>>
+    val summaries: SharedFlow<List<RoomSummary>>
 
     /**
      * The loading state of the room list as a flow.
