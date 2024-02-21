@@ -58,7 +58,7 @@ class InviteListPresenter @Inject constructor(
             .roomListService
             .invites
             .summaries
-            .collectAsState()
+            .collectAsState(initial = emptyList())
 
         var seenInvites by remember { mutableStateOf<Set<RoomId>>(emptySet()) }
 

@@ -52,7 +52,7 @@ class RoomSelectPresenter @AssistedInject constructor(
         var isSearchActive by remember { mutableStateOf(false) }
         var results: SearchBarResultState<ImmutableList<RoomSummaryDetails>> by remember { mutableStateOf(SearchBarResultState.Initial()) }
 
-        val summaries by client.roomListService.allRooms.summaries.collectAsState()
+        val summaries by client.roomListService.allRooms.summaries.collectAsState(initial = emptyList())
 
         LaunchedEffect(query, summaries) {
             val filteredSummaries = summaries.filterIsInstance<RoomSummary.Filled>()
