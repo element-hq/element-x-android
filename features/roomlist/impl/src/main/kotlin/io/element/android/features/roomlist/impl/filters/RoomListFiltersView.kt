@@ -64,12 +64,12 @@ fun RoomListFiltersView(
         state.eventSink(RoomListFiltersEvents.ToggleFilter(filter))
     }
 
-    val startPadding = if (state.showClearFilterButton) 4.dp else 16.dp
+    val startPadding = if (state.hasAnyFilterSelected) 4.dp else 16.dp
     Row(
         modifier = modifier.padding(start = startPadding, end = 16.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        AnimatedVisibility(visible = state.showClearFilterButton) {
+        AnimatedVisibility(visible = state.hasAnyFilterSelected) {
             RoomListClearFiltersButton(onClick = ::onClearFiltersClicked)
         }
         val lazyListState = rememberLazyListState()

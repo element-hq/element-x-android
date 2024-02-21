@@ -24,5 +24,5 @@ data class RoomListFiltersState(
     val isFeatureEnabled: Boolean,
     val eventSink: (RoomListFiltersEvents) -> Unit,
 ) {
-    val showClearFilterButton = selectedFilters.isNotEmpty()
+    val hasAnyFilterSelected = selectedFilters.isNotEmpty()
 }

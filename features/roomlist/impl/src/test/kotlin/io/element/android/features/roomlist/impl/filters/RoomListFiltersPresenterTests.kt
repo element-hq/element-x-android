@@ -38,7 +38,7 @@ class RoomListFiltersPresenterTests {
         }.test {
             awaitItem().let { state ->
                 assertThat(state.selectedFilters).isEmpty()
-                assertThat(state.showClearFilterButton).isFalse()
+                assertThat(state.hasAnyFilterSelected).isFalse()
                 assertThat(state.unselectedFilters).containsExactly(
                     RoomListFilter.Rooms,
                     RoomListFilter.People,
@@ -62,7 +62,7 @@ class RoomListFiltersPresenterTests {
             awaitLastSequentialItem().let { state ->
 
                 assertThat(state.selectedFilters).containsExactly(RoomListFilter.Rooms)
-                assertThat(state.showClearFilterButton).isTrue()
+                assertThat(state.hasAnyFilterSelected).isTrue()
                 assertThat(state.unselectedFilters).containsExactly(
                     RoomListFilter.Unread,
                     RoomListFilter.Favourites,
@@ -78,7 +78,7 @@ class RoomListFiltersPresenterTests {
 
             awaitLastSequentialItem().let { state ->
                 assertThat(state.selectedFilters).isEmpty()
-                assertThat(state.showClearFilterButton).isFalse()
+                assertThat(state.hasAnyFilterSelected).isFalse()
                 assertThat(state.unselectedFilters).containsExactly(
                     RoomListFilter.Rooms,
                     RoomListFilter.People,
@@ -103,12 +103,12 @@ class RoomListFiltersPresenterTests {
             awaitItem().eventSink.invoke(RoomListFiltersEvents.ToggleFilter(RoomListFilter.Rooms))
             awaitLastSequentialItem().let { state ->
                 assertThat(state.selectedFilters).isNotEmpty()
-                assertThat(state.showClearFilterButton).isTrue()
+                assertThat(state.hasAnyFilterSelected).isTrue()
                 state.eventSink.invoke(RoomListFiltersEvents.ClearSelectedFilters)
             }
             awaitLastSequentialItem().let { state ->
                 assertThat(state.selectedFilters).isEmpty()
-                assertThat(state.showClearFilterButton).isFalse()
+                assertThat(state.hasAnyFilterSelected).isFalse()
             }
         }
     }
