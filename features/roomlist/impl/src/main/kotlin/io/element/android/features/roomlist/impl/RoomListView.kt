@@ -275,7 +275,11 @@ private fun RoomListContent(
                 }
             }
             if (state.displayEmptyState) {
-                EmptyRoomListView(onCreateRoomClicked)
+                if (state.filtersState.hasAnyFilterSelected) {
+                    // TODO add empty state for filtered rooms
+                } else {
+                    EmptyRoomListView(onCreateRoomClicked)
+                }
             }
             MigrationScreenView(isMigrating = state.displayMigrationStatus)
         },

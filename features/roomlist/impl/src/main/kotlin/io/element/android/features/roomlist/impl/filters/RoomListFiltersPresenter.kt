@@ -68,6 +68,12 @@ class RoomListFiltersPresenter @Inject constructor(
             }
         }
 
+        LaunchedEffect(isFeatureEnabled) {
+            if (!isFeatureEnabled) {
+                updateFilters(emptySet())
+            }
+        }
+
         LaunchedEffect(selectedFilters) {
             val allRoomsFilter = MatrixRoomListFilter.All(
                 selectedFilters.map { roomListFilter ->
