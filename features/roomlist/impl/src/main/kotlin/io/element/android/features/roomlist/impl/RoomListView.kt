@@ -55,7 +55,6 @@ import io.element.android.features.roomlist.impl.components.RequestVerificationH
 import io.element.android.features.roomlist.impl.components.RoomListMenuAction
 import io.element.android.features.roomlist.impl.components.RoomListTopBar
 import io.element.android.features.roomlist.impl.components.RoomSummaryRow
-import io.element.android.features.roomlist.impl.filters.RoomListFiltersView
 import io.element.android.features.roomlist.impl.migration.MigrationScreenView
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
 import io.element.android.features.roomlist.impl.search.RoomListSearchView
@@ -205,21 +204,18 @@ private fun RoomListContent(
     Scaffold(
         modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
-            Column {
-                RoomListTopBar(
-                    matrixUser = state.matrixUser,
-                    showAvatarIndicator = state.showAvatarIndicator,
-                    areSearchResultsDisplayed = state.searchState.isSearchActive,
-                    onToggleSearch = { state.eventSink(RoomListEvents.ToggleSearchResults) },
-                    onMenuActionClicked = onMenuActionClicked,
-                    onOpenSettings = onOpenSettings,
-                    scrollBehavior = scrollBehavior,
-                    displayMenuItems = !state.displayMigrationStatus,
-                )
-                if (state.displayFilters) {
-                    RoomListFiltersView(state = state.filtersState)
-                }
-            }
+            RoomListTopBar(
+                matrixUser = state.matrixUser,
+                showAvatarIndicator = state.showAvatarIndicator,
+                areSearchResultsDisplayed = state.searchState.isSearchActive,
+                onToggleSearch = { state.eventSink(RoomListEvents.ToggleSearchResults) },
+                onMenuActionClicked = onMenuActionClicked,
+                onOpenSettings = onOpenSettings,
+                scrollBehavior = scrollBehavior,
+                displayMenuItems = !state.displayMigrationStatus,
+                displayFilters = state.displayFilters,
+                filtersState = state.filtersState,
+            )
         },
         content = { padding ->
             if (state.roomList is AsyncData.Success && state.roomList.data.isEmpty()) {
