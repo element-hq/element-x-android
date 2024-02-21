@@ -61,9 +61,9 @@ import io.element.android.features.verifysession.impl.VerifySelfSessionState.Ver
 @Composable
 fun VerifySelfSessionView(
     state: VerifySelfSessionState,
-    modifier: Modifier = Modifier,
     onEnterRecoveryKey: () -> Unit,
     goBack: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     fun goBackAndCancelIfNeeded() {
         state.eventSink(VerifySelfSessionViewEvents.CancelAndClose)
