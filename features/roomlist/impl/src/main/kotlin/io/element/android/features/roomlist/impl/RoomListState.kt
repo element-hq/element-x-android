@@ -45,6 +45,7 @@ data class RoomListState(
     val eventSink: (RoomListEvents) -> Unit,
 ) {
     val displayFilters = filtersState.isFeatureEnabled && !displayMigrationStatus
+    val displayEmptyState = roomList is AsyncData.Success && roomList.data.isEmpty()
 
     sealed interface ContextMenu {
         data object Hidden : ContextMenu
