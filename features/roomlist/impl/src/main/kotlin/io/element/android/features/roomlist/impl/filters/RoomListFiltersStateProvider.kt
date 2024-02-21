@@ -29,9 +29,6 @@ class RoomListFiltersStateProvider : PreviewParameterProvider<RoomListFiltersSta
                 selectedFilters = persistentListOf(RoomListFilter.Rooms, RoomListFilter.Favourites),
                 unselectedFilters = persistentListOf(RoomListFilter.Unread),
             ),
-            aRoomListFiltersState(
-                isFeatureEnabled = false,
-            ),
         )
 }
 

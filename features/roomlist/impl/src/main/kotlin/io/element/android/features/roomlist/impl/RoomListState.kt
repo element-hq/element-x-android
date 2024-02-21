@@ -44,6 +44,8 @@ data class RoomListState(
     val displayMigrationStatus: Boolean,
     val eventSink: (RoomListEvents) -> Unit,
 ) {
+    val displayFilters = filtersState.isFeatureEnabled && !displayMigrationStatus
+
     sealed interface ContextMenu {
         data object Hidden : ContextMenu
         data class Shown(

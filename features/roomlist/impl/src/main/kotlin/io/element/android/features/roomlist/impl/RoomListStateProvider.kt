@@ -50,6 +50,7 @@ open class RoomListStateProvider : PreviewParameterProvider<RoomListState> {
             aRoomListState().copy(roomList = AsyncData.Loading(prevData = RoomListRoomSummaryFactory.createFakeList())),
             aRoomListState().copy(matrixUser = null, displayMigrationStatus = true),
             aRoomListState().copy(searchState = aRoomListSearchState(isSearchActive = true, query = "Test")),
+            aRoomListState().copy(filtersState = aRoomListFiltersState(isFeatureEnabled = true)),
         )
 }
 
@@ -64,7 +65,7 @@ internal fun aRoomListState() = RoomListState(
     invitesState = InvitesState.NoInvites,
     contextMenu = RoomListState.ContextMenu.Hidden,
     leaveRoomState = aLeaveRoomState(),
-    filtersState = aRoomListFiltersState(),
+    filtersState = aRoomListFiltersState(isFeatureEnabled = false),
     searchState = aRoomListSearchState(),
     displayMigrationStatus = false,
     eventSink = {}

@@ -216,7 +216,9 @@ private fun RoomListContent(
                     scrollBehavior = scrollBehavior,
                     displayMenuItems = !state.displayMigrationStatus,
                 )
-                RoomListFiltersView(state = state.filtersState)
+                if (state.displayFilters) {
+                    RoomListFiltersView(state = state.filtersState)
+                }
             }
         },
         content = { padding ->

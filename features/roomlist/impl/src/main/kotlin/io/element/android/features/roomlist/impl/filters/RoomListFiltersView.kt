@@ -23,6 +23,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.LazyRow
@@ -31,6 +32,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
+import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -48,18 +50,12 @@ import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.Text
 import kotlinx.collections.immutable.ImmutableList
-import timber.log.Timber
 
 @Composable
 fun RoomListFiltersView(
     state: RoomListFiltersState,
     modifier: Modifier = Modifier
 ) {
-    if (!state.isFeatureEnabled) {
-        Timber.d("RoomListFiltersView: Feature is disabled, hide the view")
-        return
-    }
-
     fun onClearFiltersClicked() {
         state.eventSink(RoomListFiltersEvents.ClearSelectedFilters)
     }
@@ -71,6 +67,7 @@ fun RoomListFiltersView(
     val startPadding = if (state.showClearFilterButton) 4.dp else 16.dp
     Row(
         modifier = modifier.padding(start = startPadding, end = 16.dp),
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         AnimatedVisibility(visible = state.showClearFilterButton) {
             RoomListClearFiltersButton(onClick = ::onClearFiltersClicked)
@@ -130,7 +127,7 @@ private fun RoomListClearFiltersButton(
                 modifier = Modifier.align(Alignment.Center),
                 imageVector = CompoundIcons.Close(),
                 tint = ElementTheme.colors.iconOnSolidPrimary,
-                contentDescription = null,
+                contentDescription = stringResource(id = io.element.android.libraries.ui.strings.R.string.action_clear),
             )
         }
     }
@@ -146,7 +143,9 @@ private fun RoomListFilterView(
     FilterChip(
         selected = selected,
         onClick = { onClick(roomListFilter) },
-        modifier = modifier,
+        modifier = modifier
+            .minimumInteractiveComponentSize()
+            .height(36.dp),
         shape = CircleShape,
         colors = FilterChipDefaults.filterChipColors(
             containerColor = ElementTheme.colors.bgCanvasDefault,
