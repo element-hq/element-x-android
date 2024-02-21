@@ -228,25 +228,23 @@ private fun RoomListContent(
                 // FAB height is 56dp, bottom padding is 16dp, we add 8dp as extra margin -> 56+16+8 = 80
                 contentPadding = PaddingValues(bottom = 80.dp)
             ) {
-                if (state.displayEmptyState.not()) {
-                    when (state.securityBannerState) {
-                        SecurityBannerState.SessionVerification -> {
-                            item {
-                                RequestVerificationHeader(
-                                    onVerifyClicked = onVerifyClicked,
-                                    onDismissClicked = { state.eventSink(RoomListEvents.DismissRequestVerificationPrompt) }
-                                )
-                            }
+                when {
+                    state.displayEmptyState -> Unit
+                    state.securityBannerState == SecurityBannerState.SessionVerification -> {
+                        item {
+                            RequestVerificationHeader(
+                                onVerifyClicked = onVerifyClicked,
+                                onDismissClicked = { state.eventSink(RoomListEvents.DismissRequestVerificationPrompt) }
+                            )
                         }
-                        SecurityBannerState.RecoveryKeyConfirmation -> {
-                            item {
-                                ConfirmRecoveryKeyBanner(
-                                    onContinueClicked = onConfirmRecoveryKeyClicked,
-                                    onDismissClicked = { state.eventSink(RoomListEvents.DismissRecoveryKeyPrompt) }
-                                )
-                            }
+                    }
+                    state.securityBannerState == SecurityBannerState.RecoveryKeyConfirmation -> {
+                        item {
+                            ConfirmRecoveryKeyBanner(
+                                onContinueClicked = onConfirmRecoveryKeyClicked,
+                                onDismissClicked = { state.eventSink(RoomListEvents.DismissRecoveryKeyPrompt) }
+                            )
                         }
-                        SecurityBannerState.None -> Unit
                     }
                 }
 
