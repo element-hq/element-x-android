@@ -39,7 +39,6 @@ class StaticFeatureFlagProvider @Inject constructor() :
                 FeatureFlags.VoiceMessages -> true
                 FeatureFlags.PinUnlock -> true
                 FeatureFlags.Mentions -> true
-                FeatureFlags.SecureStorage -> true
                 FeatureFlags.MarkAsUnread -> false
             }
         } else {

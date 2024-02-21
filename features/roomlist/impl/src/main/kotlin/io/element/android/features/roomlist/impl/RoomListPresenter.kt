@@ -119,7 +119,6 @@ class RoomListPresenter @Inject constructor(
         }
         val recoveryState by encryptionService.recoveryStateStateFlow.collectAsState()
         val syncState by syncService.syncState.collectAsState()
-        val secureStorageFlag by featureFlagService.isFeatureEnabledFlow(FeatureFlags.SecureStorage).collectAsState(initial = null)
         val securityBannerState by remember {
             derivedStateOf {
                 when {
@@ -129,8 +128,7 @@ class RoomListPresenter @Inject constructor(
                     } else {
                         SecurityBannerState.SessionVerification
                     }
-                    secureStorageFlag == true &&
-                        recoveryState == RecoveryState.INCOMPLETE &&
+                    recoveryState == RecoveryState.INCOMPLETE &&
                         syncState == SyncState.Running -> SecurityBannerState.RecoveryKeyConfirmation
                     else -> SecurityBannerState.None
                 }

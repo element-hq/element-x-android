@@ -22,8 +22,6 @@ import app.cash.turbine.ReceiveTurbine
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.architecture.AsyncAction
-import io.element.android.libraries.featureflag.api.FeatureFlags
-import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.encryption.BackupState
 import io.element.android.libraries.matrix.api.encryption.BackupUploadState
@@ -99,7 +97,6 @@ class LogoutPresenterTest {
             assertThat(initialState.isLastDevice).isFalse()
             assertThat(initialState.backupUploadState).isEqualTo(BackupUploadState.Unknown)
             assertThat(initialState.logoutAction).isEqualTo(AsyncAction.Uninitialized)
-            skipItems(1)
             val waitingState = awaitItem()
             assertThat(waitingState.backupUploadState).isEqualTo(BackupUploadState.Waiting)
             skipItems(1)
@@ -209,6 +206,5 @@ class LogoutPresenterTest {
     ): LogoutPresenter = LogoutPresenter(
         matrixClient = matrixClient,
         encryptionService = encryptionService,
-        featureFlagService = FakeFeatureFlagService(mapOf(FeatureFlags.SecureStorage.key to true)),
     )
 }

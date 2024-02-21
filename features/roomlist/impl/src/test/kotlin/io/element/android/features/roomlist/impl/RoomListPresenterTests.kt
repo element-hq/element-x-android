@@ -45,7 +45,6 @@ import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatch
 import io.element.android.libraries.eventformatter.api.RoomLastMessageFormatter
 import io.element.android.libraries.eventformatter.test.FakeRoomLastMessageFormatter
 import io.element.android.libraries.featureflag.api.FeatureFlagService
-import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.featureflag.test.InMemorySessionPreferencesStore
 import io.element.android.libraries.indicator.impl.DefaultIndicatorService
@@ -606,7 +605,7 @@ class RoomListPresenterTests {
         },
         roomLastMessageFormatter: RoomLastMessageFormatter = FakeRoomLastMessageFormatter(),
         sessionPreferencesStore: SessionPreferencesStore = InMemorySessionPreferencesStore(),
-        featureFlagService: FeatureFlagService = FakeFeatureFlagService(mapOf(FeatureFlags.SecureStorage.key to true)),
+        featureFlagService: FeatureFlagService = FakeFeatureFlagService(),
         coroutineScope: CoroutineScope,
         migrationScreenPresenter: MigrationScreenPresenter = MigrationScreenPresenter(
             matrixClient = client,
@@ -634,7 +633,6 @@ class RoomListPresenterTests {
         indicatorService = DefaultIndicatorService(
             sessionVerificationService = client.sessionVerificationService(),
             encryptionService = client.encryptionService(),
-            featureFlagService = featureFlagService,
         ),
         migrationScreenPresenter = migrationScreenPresenter,
         searchPresenter = searchPresenter,

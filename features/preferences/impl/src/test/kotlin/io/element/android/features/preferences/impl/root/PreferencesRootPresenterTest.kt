@@ -65,7 +65,6 @@ class PreferencesRootPresenterTest {
             indicatorService = DefaultIndicatorService(
                 sessionVerificationService = sessionVerificationService,
                 encryptionService = FakeEncryptionService(),
-                featureFlagService = FakeFeatureFlagService(),
             ),
             directLogoutPresenter = object : DirectLogoutPresenter {
                 @Composable
