@@ -34,7 +34,6 @@ class VerifySelfSessionNode @AssistedInject constructor(
     @Assisted plugins: List<Plugin>,
     private val presenter: VerifySelfSessionPresenter,
 ) : Node(buildContext, plugins = plugins) {
-
     private fun onEnterRecoveryKey() {
         plugins<VerifySessionEntryPoint.Callback>().forEach {
             it.onEnterRecoveryKey()
