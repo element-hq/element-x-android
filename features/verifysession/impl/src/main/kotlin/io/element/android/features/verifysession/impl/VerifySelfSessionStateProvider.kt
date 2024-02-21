@@ -50,7 +50,7 @@ open class VerifySelfSessionStateProvider : PreviewParameterProvider<VerifySelfS
         )
 }
 
-private fun aEmojisSessionVerificationData(
+internal fun aEmojisSessionVerificationData(
     emojiList: List<VerificationEmoji> = aVerificationEmojiList(),
 ): SessionVerificationData {
     return SessionVerificationData.Emojis(emojiList)
@@ -62,11 +62,12 @@ private fun aDecimalsSessionVerificationData(
     return SessionVerificationData.Decimals(decimals)
 }
 
-private fun aVerifySelfSessionState(
+internal fun aVerifySelfSessionState(
     verificationFlowStep: VerifySelfSessionState.VerificationStep = VerifySelfSessionState.VerificationStep.Initial(false),
+    eventSink: (VerifySelfSessionViewEvents) -> Unit = {},
 ) = VerifySelfSessionState(
     verificationFlowStep = verificationFlowStep,
-    eventSink = {},
+    eventSink = eventSink,
 )
 
 private fun aVerificationEmojiList() = listOf(
