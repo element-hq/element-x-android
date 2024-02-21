@@ -55,13 +55,12 @@ class DefaultDirectLogoutPresenterTest {
     fun `present - initial state - last session`() = runTest {
         val presenter = createDefaultDirectLogoutPresenter(
             encryptionService = FakeEncryptionService().apply {
-                givenIsLastDevice(true)
+                emitIsLastDevice(true)
             }
         )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            skipItems(1)
             val initialState = awaitFirstItem()
             assertThat(initialState.canDoDirectSignOut).isFalse()
             assertThat(initialState.logoutAction).isEqualTo(AsyncAction.Uninitialized)

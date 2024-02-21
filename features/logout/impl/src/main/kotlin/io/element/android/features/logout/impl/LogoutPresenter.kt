@@ -24,7 +24,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
@@ -54,11 +53,7 @@ class LogoutPresenter @Inject constructor(
         }
             .collectAsState(initial = BackupUploadState.Unknown)
 
-        var isLastDevice by remember { mutableStateOf(false) }
-        LaunchedEffect(Unit) {
-            isLastDevice = encryptionService.isLastDevice().getOrNull() ?: false
-        }
-
+        val isLastDevice by encryptionService.isLastDevice.collectAsState()
         val backupState by encryptionService.backupStateStateFlow.collectAsState()
         val recoveryState by encryptionService.recoveryStateStateFlow.collectAsState()
 

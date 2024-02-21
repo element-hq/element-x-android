@@ -17,14 +17,12 @@
 package io.element.android.features.logout.impl.direct
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.features.logout.api.direct.DirectLogoutEvents
 import io.element.android.features.logout.api.direct.DirectLogoutPresenter
@@ -58,10 +56,7 @@ class DefaultDirectLogoutPresenter @Inject constructor(
         }
             .collectAsState(initial = BackupUploadState.Unknown)
 
-        var isLastDevice by remember { mutableStateOf(false) }
-        LaunchedEffect(Unit) {
-            isLastDevice = encryptionService.isLastDevice().getOrNull() ?: false
-        }
+        val isLastDevice by encryptionService.isLastDevice.collectAsState()
 
         fun handleEvents(event: DirectLogoutEvents) {
             when (event) {

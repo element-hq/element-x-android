@@ -61,13 +61,13 @@ class LogoutPresenterTest {
     fun `present - initial state - last session`() = runTest {
         val presenter = createLogoutPresenter(
             encryptionService = FakeEncryptionService().apply {
-                givenIsLastDevice(true)
+                emitIsLastDevice(true)
             }
         )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            skipItems(3)
+            skipItems(2)
             val initialState = awaitItem()
             assertThat(initialState.isLastDevice).isTrue()
             assertThat(initialState.backupUploadState).isEqualTo(BackupUploadState.Unknown)

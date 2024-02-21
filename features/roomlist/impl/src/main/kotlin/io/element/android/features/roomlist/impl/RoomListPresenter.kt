@@ -113,10 +113,7 @@ class RoomListPresenter @Inject constructor(
 
         var securityBannerDismissed by rememberSaveable { mutableStateOf(false) }
         val canVerifySession by sessionVerificationService.canVerifySessionFlow.collectAsState(initial = false)
-        var isLastDevice by remember { mutableStateOf(false) }
-        LaunchedEffect(Unit) {
-            isLastDevice = encryptionService.isLastDevice().getOrNull() ?: false
-        }
+        val isLastDevice by encryptionService.isLastDevice.collectAsState()
         val recoveryState by encryptionService.recoveryStateStateFlow.collectAsState()
         val syncState by syncService.syncState.collectAsState()
         val securityBannerState by remember {

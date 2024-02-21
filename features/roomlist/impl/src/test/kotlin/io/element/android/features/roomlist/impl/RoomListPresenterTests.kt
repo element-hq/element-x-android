@@ -243,14 +243,14 @@ class RoomListPresenterTests {
             coroutineScope = scope,
             client = FakeMatrixClient(
                 encryptionService = FakeEncryptionService().apply {
-                    givenIsLastDevice(true)
+                    emitIsLastDevice(true)
                 }
             ),
         )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            skipItems(2)
+            skipItems(1)
             val eventSink = awaitItem().eventSink
             // For the last session, the state is not SessionVerification, but RecoveryKeyConfirmation
             assertThat(awaitItem().securityBannerState).isEqualTo(SecurityBannerState.RecoveryKeyConfirmation)

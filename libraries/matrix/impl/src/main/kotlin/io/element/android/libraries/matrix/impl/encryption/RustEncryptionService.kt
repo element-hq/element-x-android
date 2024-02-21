@@ -27,12 +27,17 @@ import io.element.android.libraries.matrix.api.sync.SyncState
 import io.element.android.libraries.matrix.impl.sync.RustSyncService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.currentCoroutineContext
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.BackupStateListener
 import org.matrix.rustcomponents.sdk.BackupSteadyStateListener
@@ -87,6 +92,20 @@ internal class RustEncryptionService(
     }.stateIn(sessionCoroutineScope, SharingStarted.Eagerly, RecoveryState.WAITING_FOR_SYNC)
 
     override val enableRecoveryProgressStateFlow: MutableStateFlow<EnableRecoveryProgress> = MutableStateFlow(EnableRecoveryProgress.Starting)
+
+    /**
+     * Check if the session is the last session every 5 seconds.
+     * TODO This is a temporary workaround, when we will have a way to observe
+     * the sessions, this code will have to be updated.
+     */
+    override val isLastDevice: StateFlow<Boolean> = flow {
+        while (currentCoroutineContext().isActive) {
+            val result = isLastDevice().getOrDefault(false)
+            emit(result)
+            delay(5_000)
+        }
+    }
+        .stateIn(sessionCoroutineScope, SharingStarted.Eagerly, false)
 
     fun start() {
         service.backupStateListener(object : BackupStateListener {
@@ -173,7 +192,7 @@ internal class RustEncryptionService(
         }
     }
 
-    override suspend fun isLastDevice(): Result<Boolean> = withContext(dispatchers.io) {
+    private suspend fun isLastDevice(): Result<Boolean> = withContext(dispatchers.io) {
         runCatching {
             service.isLastDevice()
         }.mapFailure {
