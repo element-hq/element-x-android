@@ -19,10 +19,14 @@ package io.element.android.features.roomlist.impl
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.longClick
 import androidx.compose.ui.test.onNodeWithContentDescription
+import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performTouchInput
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.element.android.features.roomlist.impl.components.RoomListMenuAction
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.tests.testutils.EnsureNeverCalled
@@ -30,6 +34,8 @@ import io.element.android.tests.testutils.EnsureNeverCalledWithParam
 import io.element.android.tests.testutils.EventsRecorder
 import io.element.android.tests.testutils.clickOn
 import io.element.android.tests.testutils.ensureCalledOnce
+import io.element.android.tests.testutils.ensureCalledOnceWithParam
+import kotlinx.collections.immutable.persistentListOf
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
@@ -94,6 +100,85 @@ class RoomListViewTest {
                 onConfirmRecoveryKeyClicked = callback,
             )
             rule.clickOn(CommonStrings.action_continue)
+        }
+    }
+
+    @Test
+    fun `clicking on start chat when the session has no room invokes the expected callback`() {
+        val eventsRecorder = EventsRecorder<RoomListEvents>(expectEvents = false)
+        ensureCalledOnce { callback ->
+            rule.setRoomListView(
+                state = aRoomListState(
+                    eventSink = eventsRecorder,
+                    roomList = AsyncData.Success(persistentListOf()),
+                ),
+                onCreateRoomClicked = callback,
+            )
+            rule.clickOn(CommonStrings.action_start_chat)
+        }
+    }
+
+    @Test
+    fun `clicking on a room invokes the expected callback`() {
+        val eventsRecorder = EventsRecorder<RoomListEvents>(expectEvents = false)
+        val state = aRoomListState(
+            eventSink = eventsRecorder,
+        )
+        val room0 = state.roomList.dataOrNull()!!.first()
+        ensureCalledOnceWithParam(room0.roomId) { callback ->
+            rule.setRoomListView(
+                state = state,
+                onRoomClicked = callback,
+            )
+            rule.onNodeWithText(room0.lastMessage!!.toString()).performClick()
+        }
+    }
+
+    @Test
+    fun `long clicking on a room emits the expected Event`() {
+        val eventsRecorder = EventsRecorder<RoomListEvents>()
+        val state = aRoomListState(
+            eventSink = eventsRecorder,
+        )
+        val room0 = state.roomList.dataOrNull()!!.first()
+        rule.setRoomListView(
+            state = state,
+        )
+        rule.onNodeWithText(room0.lastMessage!!.toString()).performTouchInput { longClick() }
+        eventsRecorder.assertSingle(RoomListEvents.ShowContextMenu(room0))
+    }
+
+    @Test
+    fun `clicking on a room setting invokes the expected callback and emits expected Event`() {
+        val eventsRecorder = EventsRecorder<RoomListEvents>()
+        val state = aRoomListState(
+            contextMenu = aContextMenuShown(),
+            eventSink = eventsRecorder,
+        )
+        val room0 = (state.contextMenu as RoomListState.ContextMenu.Shown).roomId
+        ensureCalledOnceWithParam(room0) { callback ->
+            rule.setRoomListView(
+                state = state,
+                onRoomSettingsClicked = callback,
+            )
+            rule.clickOn(CommonStrings.common_settings)
+        }
+        eventsRecorder.assertSingle(RoomListEvents.HideContextMenu)
+    }
+
+    @Test
+    fun `clicking on invites invokes the expected callback`() {
+        val eventsRecorder = EventsRecorder<RoomListEvents>()
+        val state = aRoomListState(
+            invitesState = InvitesState.NewInvites,
+            eventSink = eventsRecorder,
+        )
+        ensureCalledOnce { callback ->
+            rule.setRoomListView(
+                state = state,
+                onInvitesClicked = callback,
+            )
+            rule.clickOn(CommonStrings.action_invites_list)
         }
     }
 }
