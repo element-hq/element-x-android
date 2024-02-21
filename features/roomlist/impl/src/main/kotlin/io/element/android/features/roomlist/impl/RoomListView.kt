@@ -78,6 +78,7 @@ fun RoomListView(
     onRoomClicked: (RoomId) -> Unit,
     onSettingsClicked: () -> Unit,
     onVerifyClicked: () -> Unit,
+    onConfirmRecoveryKeyClicked: () -> Unit,
     onCreateRoomClicked: () -> Unit,
     onInvitesClicked: () -> Unit,
     onRoomSettingsClicked: (roomId: RoomId) -> Unit,
@@ -109,6 +110,7 @@ fun RoomListView(
                 modifier = Modifier.padding(top = topPadding),
                 state = state,
                 onVerifyClicked = onVerifyClicked,
+                onConfirmRecoveryKeyClicked = onConfirmRecoveryKeyClicked,
                 onRoomClicked = onRoomClicked,
                 onRoomLongClicked = { onRoomLongClicked(it) },
                 onOpenSettings = onSettingsClicked,
@@ -166,6 +168,7 @@ private fun EmptyRoomListView(
 private fun RoomListContent(
     state: RoomListState,
     onVerifyClicked: () -> Unit,
+    onConfirmRecoveryKeyClicked: () -> Unit,
     onRoomClicked: (RoomId) -> Unit,
     onRoomLongClicked: (RoomListRoomSummary) -> Unit,
     onOpenSettings: () -> Unit,
@@ -238,7 +241,7 @@ private fun RoomListContent(
                         SecurityBannerState.RecoveryKeyConfirmation -> {
                             item {
                                 ConfirmRecoveryKeyBanner(
-                                    onContinueClicked = onOpenSettings,
+                                    onContinueClicked = onConfirmRecoveryKeyClicked,
                                     onDismissClicked = { state.eventSink(RoomListEvents.DismissRecoveryKeyPrompt) }
                                 )
                             }
@@ -304,6 +307,7 @@ internal fun RoomListViewPreview(@PreviewParameter(RoomListStateProvider::class)
         onRoomClicked = {},
         onSettingsClicked = {},
         onVerifyClicked = {},
+        onConfirmRecoveryKeyClicked = {},
         onCreateRoomClicked = {},
         onInvitesClicked = {},
         onRoomSettingsClicked = {},

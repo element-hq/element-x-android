@@ -142,6 +142,7 @@ class RoomListScreen(
             onRoomClicked = ::onRoomClicked,
             onSettingsClicked = {},
             onVerifyClicked = {},
+            onConfirmRecoveryKeyClicked = {},
             onCreateRoomClicked = {},
             onInvitesClicked = {},
             onRoomSettingsClicked = {},

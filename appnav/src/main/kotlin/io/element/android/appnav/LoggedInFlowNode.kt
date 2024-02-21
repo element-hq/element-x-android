@@ -255,6 +255,10 @@ class LoggedInFlowNode @AssistedInject constructor(
                         backstack.push(NavTarget.VerifySession)
                     }
 
+                    override fun onSessionConfirmRecoveryKeyClicked() {
+                        backstack.push(NavTarget.SecureBackup(initialElement = SecureBackupEntryPoint.InitialTarget.EnterRecoveryKey))
+                    }
+
                     override fun onInvitesClicked() {
                         backstack.push(NavTarget.InviteList)
                     }
