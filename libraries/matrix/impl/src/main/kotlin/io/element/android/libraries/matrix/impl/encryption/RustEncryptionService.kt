@@ -25,6 +25,7 @@ import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import io.element.android.libraries.matrix.api.encryption.RecoveryState
 import io.element.android.libraries.matrix.api.sync.SyncState
 import io.element.android.libraries.matrix.impl.sync.RustSyncService
+import io.element.android.libraries.matrix.impl.util.cancelAndDestroy
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.currentCoroutineContext
@@ -45,6 +46,7 @@ import org.matrix.rustcomponents.sdk.Client
 import org.matrix.rustcomponents.sdk.EnableRecoveryProgressListener
 import org.matrix.rustcomponents.sdk.Encryption
 import org.matrix.rustcomponents.sdk.RecoveryStateListener
+import org.matrix.rustcomponents.sdk.TaskHandle
 import org.matrix.rustcomponents.sdk.BackupState as RustBackupState
 import org.matrix.rustcomponents.sdk.BackupUploadState as RustBackupUploadState
 import org.matrix.rustcomponents.sdk.EnableRecoveryProgress as RustEnableRecoveryProgress
@@ -64,6 +66,8 @@ internal class RustEncryptionService(
     private val enableRecoveryProgressMapper = EnableRecoveryProgressMapper()
     private val backupUploadStateMapper = BackupUploadStateMapper()
     private val steadyStateExceptionMapper = SteadyStateExceptionMapper()
+    private var backupStateListenerTaskHandle: TaskHandle? = null
+    private var recoveryStateListenerTaskHandle: TaskHandle? = null
 
     private val backupStateFlow = MutableStateFlow(service.backupState().let(backupStateMapper::map))
 
@@ -108,13 +112,13 @@ internal class RustEncryptionService(
         .stateIn(sessionCoroutineScope, SharingStarted.Eagerly, false)
 
     fun start() {
-        service.backupStateListener(object : BackupStateListener {
+        backupStateListenerTaskHandle = service.backupStateListener(object : BackupStateListener {
             override fun onUpdate(status: RustBackupState) {
                 backupStateFlow.value = backupStateMapper.map(status)
             }
         })
 
-        service.recoveryStateListener(object : RecoveryStateListener {
+        recoveryStateListenerTaskHandle = service.recoveryStateListener(object : RecoveryStateListener {
             override fun onUpdate(status: RustRecoveryState) {
                 recoveryStateFlow.value = recoveryStateMapper.map(status)
             }
@@ -122,7 +126,8 @@ internal class RustEncryptionService(
     }
 
     fun destroy() {
-        // No way to remove the listeners...
+        backupStateListenerTaskHandle?.cancelAndDestroy()
+        recoveryStateListenerTaskHandle?.cancelAndDestroy()
         service.destroy()
     }
 
