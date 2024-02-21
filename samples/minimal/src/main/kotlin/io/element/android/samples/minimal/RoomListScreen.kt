@@ -104,7 +104,6 @@ class RoomListScreen(
         indicatorService = DefaultIndicatorService(
             sessionVerificationService = sessionVerificationService,
             encryptionService = encryptionService,
-            featureFlagService = featureFlagService,
         ),
         featureFlagService = featureFlagService,
         migrationScreenPresenter = MigrationScreenPresenter(
