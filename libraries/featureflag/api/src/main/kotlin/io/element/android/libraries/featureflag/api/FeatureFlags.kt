@@ -68,13 +68,6 @@ enum class FeatureFlags(
         defaultValue = true,
         isFinished = false,
     ),
-    SecureStorage(
-        key = "feature.securestorage",
-        title = "Chat backup",
-        description = "Allow access to backup and restore chat history settings",
-        defaultValue = true,
-        isFinished = false,
-    ),
     MarkAsUnread(
         key = "feature.markAsUnread",
         title = "Mark as unread",

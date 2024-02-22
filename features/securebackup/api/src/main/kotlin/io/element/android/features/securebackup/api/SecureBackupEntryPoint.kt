@@ -16,6 +16,28 @@
 
 package io.element.android.features.securebackup.api
 
-import io.element.android.libraries.architecture.SimpleFeatureEntryPoint
+import android.os.Parcelable
+import com.bumble.appyx.core.modality.BuildContext
+import com.bumble.appyx.core.node.Node
+import io.element.android.libraries.architecture.FeatureEntryPoint
+import io.element.android.libraries.architecture.NodeInputs
+import kotlinx.parcelize.Parcelize
 
-interface SecureBackupEntryPoint : SimpleFeatureEntryPoint
+interface SecureBackupEntryPoint : FeatureEntryPoint {
+    sealed interface InitialTarget : Parcelable {
+        @Parcelize
+        data object Root : InitialTarget
+
+        @Parcelize
+        data object EnterRecoveryKey : InitialTarget
+    }
+
+    data class Params(val initialElement: InitialTarget) : NodeInputs
+
+    fun nodeBuilder(parentNode: Node, buildContext: BuildContext): NodeBuilder
+
+    interface NodeBuilder {
+        fun params(params: Params): NodeBuilder
+        fun build(): Node
+    }
+}

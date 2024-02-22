@@ -79,9 +79,6 @@ class PreferencesRootPresenter @Inject constructor(
 
         val showSecureBackupIndicator by indicatorService.showSettingChatBackupIndicator()
 
-        val secureStorageFlag by featureFlagService.isFeatureEnabledFlow(FeatureFlags.SecureStorage)
-            .collectAsState(initial = null)
-
         val accountManagementUrl: MutableState<String?> = remember {
             mutableStateOf(null)
         }
@@ -101,7 +98,7 @@ class PreferencesRootPresenter @Inject constructor(
             version = versionFormatter.get(),
             deviceId = matrixClient.deviceId,
             showCompleteVerification = showCompleteVerification,
-            showSecureBackup = !showCompleteVerification && secureStorageFlag == true,
+            showSecureBackup = !showCompleteVerification,
             showSecureBackupBadge = showSecureBackupIndicator,
             accountManagementUrl = accountManagementUrl.value,
             devicesManagementUrl = devicesManagementUrl.value,

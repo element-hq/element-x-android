@@ -16,6 +16,7 @@
 
 package io.element.android.libraries.matrix.impl.verification
 
+import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.core.data.tryOrNull
 import io.element.android.libraries.matrix.api.sync.SyncState
 import io.element.android.libraries.matrix.api.verification.SessionVerificationData
@@ -24,22 +25,31 @@ import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatu
 import io.element.android.libraries.matrix.api.verification.VerificationEmoji
 import io.element.android.libraries.matrix.api.verification.VerificationFlowState
 import io.element.android.libraries.matrix.impl.sync.RustSyncService
+import io.element.android.libraries.matrix.impl.util.cancelAndDestroy
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
+import org.matrix.rustcomponents.sdk.Client
+import org.matrix.rustcomponents.sdk.Encryption
+import org.matrix.rustcomponents.sdk.RecoveryState
+import org.matrix.rustcomponents.sdk.RecoveryStateListener
 import org.matrix.rustcomponents.sdk.SessionVerificationController
 import org.matrix.rustcomponents.sdk.SessionVerificationControllerDelegate
 import org.matrix.rustcomponents.sdk.SessionVerificationControllerInterface
+import org.matrix.rustcomponents.sdk.TaskHandle
 import org.matrix.rustcomponents.sdk.use
 import org.matrix.rustcomponents.sdk.SessionVerificationData as RustSessionVerificationData
 
 class RustSessionVerificationService(
+    client: Client,
     private val syncService: RustSyncService,
     private val sessionCoroutineScope: CoroutineScope,
 ) : SessionVerificationService, SessionVerificationControllerDelegate {
+    private var recoveryStateListenerTaskHandle: TaskHandle? = null
+    private val encryptionService: Encryption = client.encryption()
     var verificationController: SessionVerificationControllerInterface? = null
         set(value) {
             field = value
@@ -62,6 +72,16 @@ class RustSessionVerificationService(
 
     override val canVerifySessionFlow = combine(sessionVerifiedStatus, syncService.syncState) { verificationStatus, syncState ->
         syncState == SyncState.Running && verificationStatus == SessionVerifiedStatus.NotVerified
+    }
+
+    fun start() {
+        recoveryStateListenerTaskHandle = encryptionService.recoveryStateListener(object : RecoveryStateListener {
+            override fun onUpdate(status: RecoveryState) {
+                sessionCoroutineScope.launch {
+                    updateVerificationStatus(verificationController?.isVerified().orFalse())
+                }
+            }
+        })
     }
 
     override suspend fun requestVerification() = tryOrFail {
@@ -125,6 +145,8 @@ class RustSessionVerificationService(
     }
 
     fun destroy() {
+        recoveryStateListenerTaskHandle?.cancelAndDestroy()
+        verificationController?.setDelegate(null)
         (verificationController as? SessionVerificationController)?.destroy()
         verificationController = null
     }

@@ -23,10 +23,9 @@ interface EncryptionService {
     val backupStateStateFlow: StateFlow<BackupState>
     val recoveryStateStateFlow: StateFlow<RecoveryState>
     val enableRecoveryProgressStateFlow: StateFlow<EnableRecoveryProgress>
+    val isLastDevice: StateFlow<Boolean>
 
     suspend fun enableBackups(): Result<Unit>
-
-    suspend fun isLastDevice(): Result<Boolean>
 
     /**
      * Enable recovery. Observe enableProgressStateFlow to get progress and recovery key.
