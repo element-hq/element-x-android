@@ -22,7 +22,11 @@ import io.element.android.libraries.architecture.AsyncAction
 open class DirectLogoutStateProvider : PreviewParameterProvider<DirectLogoutState> {
     override val values: Sequence<DirectLogoutState>
         get() = sequenceOf(
-            aDirectLogoutState()
+            aDirectLogoutState(),
+            aDirectLogoutState(logoutAction = AsyncAction.Confirming),
+            aDirectLogoutState(logoutAction = AsyncAction.Loading),
+            aDirectLogoutState(logoutAction = AsyncAction.Failure(Exception("Error"))),
+            aDirectLogoutState(logoutAction = AsyncAction.Success("success")),
         )
 }
 
