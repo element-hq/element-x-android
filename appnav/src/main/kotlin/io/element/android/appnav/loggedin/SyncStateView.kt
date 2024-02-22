@@ -20,25 +20,15 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.progressSemantics
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import io.element.android.compound.theme.ElementTheme
+import io.element.android.libraries.designsystem.components.async.AsyncIndicator
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
-import io.element.android.libraries.designsystem.theme.components.Surface
-import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
@@ -46,38 +36,15 @@ fun SyncStateView(
     isVisible: Boolean,
     modifier: Modifier = Modifier
 ) {
-    val animationSpec = spring<Float>(stiffness = 500F)
     AnimatedVisibility(
-        modifier = modifier,
         visible = isVisible,
-        enter = fadeIn(animationSpec = animationSpec),
-        exit = fadeOut(animationSpec = animationSpec),
+        modifier = modifier,
+        enter = fadeIn(spring(stiffness = 500F)),
+        exit = fadeOut(spring(stiffness = 500F)),
     ) {
-        Surface(
-            shape = RoundedCornerShape(24.dp),
-            shadowElevation = 8.dp,
-        ) {
-            Row(
-                modifier = Modifier
-                    .background(color = ElementTheme.colors.bgSubtleSecondary)
-                    .padding(horizontal = 24.dp, vertical = 10.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(10.dp)
-            ) {
-                CircularProgressIndicator(
-                    modifier = Modifier
-                        .progressSemantics()
-                        .size(12.dp),
-                    color = ElementTheme.colors.textPrimary,
-                    strokeWidth = 1.5.dp,
-                )
-                Text(
-                    text = stringResource(id = CommonStrings.common_syncing),
-                    color = ElementTheme.colors.textPrimary,
-                    style = ElementTheme.typography.fontBodyMdMedium
-                )
-            }
-        }
+        AsyncIndicator.Loading(
+            text = stringResource(id = CommonStrings.common_syncing),
+        )
     }
 }
 

@@ -28,6 +28,8 @@ class BlockedUsersStatePreviewProvider : PreviewParameterProvider<BlockedUsersSt
             aBlockedUsersState(),
             aBlockedUsersState(blockedUsers = emptyList()),
             aBlockedUsersState(unblockUserAction = AsyncAction.Confirming),
+            // Sadly there's no good way to preview Loading or Failure states since they're presented with an animation
+            // All these 3 screen states will be displayed as the Uninitialized one
             aBlockedUsersState(unblockUserAction = AsyncAction.Loading),
             aBlockedUsersState(unblockUserAction = AsyncAction.Failure(Throwable("Failed to unblock user"))),
             aBlockedUsersState(unblockUserAction = AsyncAction.Success(Unit)),

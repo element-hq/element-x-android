@@ -20,6 +20,7 @@
   <string name="screen_login_error_deactivated_account">"This account has been deactivated."</string>
   <string name="screen_login_error_invalid_credentials">"Incorrect username and/or password"</string>
   <string name="screen_login_error_invalid_user_id">"This is not a valid user identifier. Expected format: ‘@user:homeserver.org’"</string>
+  <string name="screen_login_error_refresh_tokens">"This server is configured to use refresh tokens. These aren\'t supported for password based login."</string>
   <string name="screen_login_error_unsupported_authentication">"The selected homeserver doesn\'t support password or OIDC login. Please contact your admin or choose another homeserver."</string>
   <string name="screen_login_form_header">"Enter your details"</string>
   <string name="screen_login_title">"Welcome back!"</string>

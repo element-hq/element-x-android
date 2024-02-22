@@ -11,6 +11,7 @@
   <string name="screen_advanced_settings_share_presence">"Share presence"</string>
   <string name="screen_advanced_settings_share_presence_description">"If turned off, you won’t be able to send or receive read receipts or typing notifications"</string>
   <string name="screen_advanced_settings_view_source_description">"Enable option to view message source in the timeline."</string>
+  <string name="screen_blocked_users_unblocking">"Unblocking…"</string>
   <string name="screen_edit_profile_display_name">"Display name"</string>
   <string name="screen_edit_profile_display_name_placeholder">"Your display name"</string>
   <string name="screen_edit_profile_error">"An unknown error was encountered and the information couldn\'t be changed."</string>

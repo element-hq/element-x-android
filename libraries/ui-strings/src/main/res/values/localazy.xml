@@ -120,6 +120,7 @@
   <string name="common_enter_your_pin">"Enter your PIN"</string>
   <string name="common_error">"Error"</string>
   <string name="common_everyone">"Everyone"</string>
+  <string name="common_failed">"Failed"</string>
   <string name="common_favourite">"Favourite"</string>
   <string name="common_favourited">"Favourited"</string>
   <string name="common_file">"File"</string>
