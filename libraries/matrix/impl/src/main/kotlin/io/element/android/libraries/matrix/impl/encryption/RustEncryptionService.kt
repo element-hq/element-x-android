@@ -25,7 +25,6 @@ import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import io.element.android.libraries.matrix.api.encryption.RecoveryState
 import io.element.android.libraries.matrix.api.sync.SyncState
 import io.element.android.libraries.matrix.impl.sync.RustSyncService
-import io.element.android.libraries.matrix.impl.util.mxCallbackFlow
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.currentCoroutineContext
@@ -40,16 +39,12 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.withContext
-import org.matrix.rustcomponents.sdk.BackupStateListener
 import org.matrix.rustcomponents.sdk.BackupSteadyStateListener
 import org.matrix.rustcomponents.sdk.Client
 import org.matrix.rustcomponents.sdk.EnableRecoveryProgressListener
 import org.matrix.rustcomponents.sdk.Encryption
-import org.matrix.rustcomponents.sdk.RecoveryStateListener
-import org.matrix.rustcomponents.sdk.BackupState as RustBackupState
 import org.matrix.rustcomponents.sdk.BackupUploadState as RustBackupUploadState
 import org.matrix.rustcomponents.sdk.EnableRecoveryProgress as RustEnableRecoveryProgress
-import org.matrix.rustcomponents.sdk.RecoveryState as RustRecoveryState
 import org.matrix.rustcomponents.sdk.SteadyStateException as RustSteadyStateException
 
 internal class RustEncryptionService(
@@ -60,23 +55,12 @@ internal class RustEncryptionService(
 ) : EncryptionService {
     private val service: Encryption = client.encryption()
 
-    private val backupStateMapper = BackupStateMapper()
-    private val recoveryStateMapper = RecoveryStateMapper()
     private val enableRecoveryProgressMapper = EnableRecoveryProgressMapper()
     private val backupUploadStateMapper = BackupUploadStateMapper()
     private val steadyStateExceptionMapper = SteadyStateExceptionMapper()
 
-    private val backupStateFlow = mxCallbackFlow {
-        val listener = object : BackupStateListener {
-            override fun onUpdate(status: RustBackupState) {
-                trySend(backupStateMapper.map(status))
-            }
-        }
-        service.backupStateListener(listener)
-    }.stateIn(sessionCoroutineScope, SharingStarted.Eagerly, service.backupState().let(backupStateMapper::map))
-
     override val backupStateStateFlow = combine(
-        backupStateFlow,
+        service.backupStateFlow(),
         syncService.syncState,
     ) { backupState, syncState ->
         if (syncState == SyncState.Running) {
@@ -86,17 +70,8 @@ internal class RustEncryptionService(
         }
     }.stateIn(sessionCoroutineScope, SharingStarted.Eagerly, BackupState.WAITING_FOR_SYNC)
 
-    private val recoveryStateFlow = mxCallbackFlow {
-        val listener = object : RecoveryStateListener {
-            override fun onUpdate(status: RustRecoveryState) {
-                trySend(recoveryStateMapper.map(status))
-            }
-        }
-        service.recoveryStateListener(listener)
-    }.stateIn(sessionCoroutineScope, SharingStarted.Eagerly, service.recoveryState().let(recoveryStateMapper::map))
-
     override val recoveryStateStateFlow = combine(
-        recoveryStateFlow,
+        service.recoveryStateFlow(),
         syncService.syncState,
     ) { recoveryState, syncState ->
         if (syncState == SyncState.Running) {
