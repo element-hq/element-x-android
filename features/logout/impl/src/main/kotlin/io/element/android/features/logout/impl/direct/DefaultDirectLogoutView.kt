@@ -57,7 +57,7 @@ class DefaultDirectLogoutView @Inject constructor() : DirectLogoutView {
 
 @PreviewsDayNight
 @Composable
-fun DefaultDirectLogoutViewPreview(
+internal fun DefaultDirectLogoutViewPreview(
     @PreviewParameter(DirectLogoutStateProvider::class) state: DirectLogoutState,
 ) = ElementPreview {
     DefaultDirectLogoutView().Render(
