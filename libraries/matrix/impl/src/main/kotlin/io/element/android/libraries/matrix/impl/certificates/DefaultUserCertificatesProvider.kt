@@ -46,16 +46,11 @@ class DefaultUserCertificatesProvider @Inject constructor() : UserCertificatesPr
             Timber.w(e, "Failed to get AndroidCAStore keystore")
             return emptyList()
         }
-        try {
-            keyStore.load(null)
-        } catch (e: Exception) {
-            Timber.w(e, "Failed to load AndroidCAStore keystore")
-            return emptyList()
-        }
         val aliases = try {
+            keyStore.load(null)
             keyStore.aliases()
         } catch (e: Exception) {
-            Timber.w(e, "Failed to get aliases from AndroidCAStore keystore")
+            Timber.w(e, "Failed to load and get aliases AndroidCAStore keystore")
             return emptyList()
         }
         return aliases.toList()
