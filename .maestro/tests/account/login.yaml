@@ -28,3 +28,4 @@ appId: ${MAESTRO_APP_ID}
 - runFlow: ../assertions/assertAnalyticsDisplayed.yaml
 - tapOn: "Not now"
 - runFlow: ../assertions/assertHomeDisplayed.yaml
+- runFlow: ./verifySession.yaml
