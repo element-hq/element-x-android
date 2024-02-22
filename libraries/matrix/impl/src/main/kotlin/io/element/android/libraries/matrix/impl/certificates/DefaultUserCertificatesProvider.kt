@@ -20,6 +20,7 @@ import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.di.AppScope
 import timber.log.Timber
 import java.security.KeyStore
+import java.security.KeyStoreException
 import javax.inject.Inject
 
 @ContributesBinding(AppScope::class)
@@ -37,21 +38,28 @@ class DefaultUserCertificatesProvider @Inject constructor() : UserCertificatesPr
      *         in encoded form.
      */
     override fun provides(): List<ByteArray> {
-        val certs = mutableListOf<ByteArray>()
-
         // At least for API 34 the `AndroidCAStore` `Keystore` type contained user certificates as well.
         // I have not found this to be documented anywhere.
-        val keyStore: KeyStore = KeyStore.getInstance("AndroidCAStore").apply {
-            load(null)
+        val keyStore: KeyStore = try {
+            KeyStore.getInstance("AndroidCAStore")
+        } catch (e: KeyStoreException) {
+            Timber.w(e, "Failed to get AndroidCAStore keystore")
+            return emptyList()
         }
-
-        val aliases = keyStore.aliases()
-
-        while (aliases.hasMoreElements()) {
-            val alias = aliases.nextElement()
-            val entry = keyStore.getEntry(alias, null)
-
-            if (entry is KeyStore.TrustedCertificateEntry) {
+        try {
+            keyStore.load(null)
+        } catch (e: Exception) {
+            Timber.w(e, "Failed to load AndroidCAStore keystore")
+            return emptyList()
+        }
+        val aliases = try {
+            keyStore.aliases()
+        } catch (e: Exception) {
+            Timber.w(e, "Failed to get aliases from AndroidCAStore keystore")
+            return emptyList()
+        }
+        return aliases.toList()
+            .filter { alias ->
                 // The certificate alias always contains the prefix `system` or
                 // `user` and the MD5 subject hash separated by a colon.
                 //
@@ -59,19 +67,25 @@ class DefaultUserCertificatesProvider @Inject constructor() : UserCertificatesPr
                 //     openssl x509 -subject_hash_old -noout -in mycert.cer
                 //
                 // Again, I have not found this to be documented somewhere.
-                if (alias.startsWith("user")) {
-                    certs.add(entry.trustedCertificate.encoded)
+                alias.startsWith("user")
+            }
+            .mapNotNull { alias ->
+                try {
+                    keyStore.getEntry(alias, null)
+                } catch (e: Exception) {
+                    Timber.w(e, "Failed to get entry for alias $alias")
+                    null
                 }
             }
-        }
-
-        // Let's at least log the number of user-installed certificates we found,
-        // since the alias isn't particularly useful nor does the issuer seem to
-        // be easily available.
-        val certCount = certs.count()
-
-        Timber.i("Found $certCount additional user-provided certificates.")
-
-        return certs
+            .filterIsInstance<KeyStore.TrustedCertificateEntry>()
+            .map { trustedCertificateEntry ->
+                trustedCertificateEntry.trustedCertificate.encoded
+            }
+            .also {
+                // Let's at least log the number of user-installed certificates we found,
+                // since the alias isn't particularly useful nor does the issuer seem to
+                // be easily available.
+                Timber.i("Found ${it.size} additional user-provided certificates.")
+            }
     }
 }
