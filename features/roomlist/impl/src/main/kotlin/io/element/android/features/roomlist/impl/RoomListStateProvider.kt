@@ -20,6 +20,8 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.leaveroom.api.LeaveRoomState
 import io.element.android.features.leaveroom.api.aLeaveRoomState
 import io.element.android.features.roomlist.impl.datasource.RoomListRoomSummaryFactory
+import io.element.android.features.roomlist.impl.filters.RoomListFiltersState
+import io.element.android.features.roomlist.impl.filters.aRoomListFiltersState
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
 import io.element.android.features.roomlist.impl.model.aRoomListRoomSummary
 import io.element.android.features.roomlist.impl.search.RoomListSearchState
@@ -39,18 +41,19 @@ open class RoomListStateProvider : PreviewParameterProvider<RoomListState> {
     override val values: Sequence<RoomListState>
         get() = sequenceOf(
             aRoomListState(),
-            aRoomListState(securityBannerState = SecurityBannerState.SessionVerification),
             aRoomListState(snackbarMessage = SnackbarMessage(CommonStrings.common_verification_complete)),
             aRoomListState(hasNetworkConnection = false),
             aRoomListState(invitesState = InvitesState.SeenInvites),
             aRoomListState(invitesState = InvitesState.NewInvites),
             aRoomListState(contextMenu = aContextMenuShown(roomName = "A nice room name")),
             aRoomListState(contextMenu = aContextMenuShown(isFavorite = true)),
+            aRoomListState(securityBannerState = SecurityBannerState.SessionVerification),
             aRoomListState(securityBannerState = SecurityBannerState.RecoveryKeyConfirmation),
             aRoomListState(roomList = AsyncData.Success(persistentListOf())),
             aRoomListState(roomList = AsyncData.Loading(prevData = RoomListRoomSummaryFactory.createFakeList())),
             aRoomListState(matrixUser = null, displayMigrationStatus = true),
             aRoomListState(searchState = aRoomListSearchState(isSearchActive = true, query = "Test")),
+            aRoomListState(filtersState = aRoomListFiltersState(isFeatureEnabled = true)),
         )
 }
 
@@ -65,6 +68,7 @@ internal fun aRoomListState(
     contextMenu: RoomListState.ContextMenu = RoomListState.ContextMenu.Hidden,
     leaveRoomState: LeaveRoomState = aLeaveRoomState(),
     searchState: RoomListSearchState = aRoomListSearchState(),
+    filtersState: RoomListFiltersState = aRoomListFiltersState(isFeatureEnabled = false),
     displayMigrationStatus: Boolean = false,
     eventSink: (RoomListEvents) -> Unit = {}
 ) = RoomListState(
@@ -78,6 +82,7 @@ internal fun aRoomListState(
     contextMenu = contextMenu,
     leaveRoomState = leaveRoomState,
     searchState = searchState,
+    filtersState = filtersState,
     displayMigrationStatus = displayMigrationStatus,
     eventSink = eventSink,
 )

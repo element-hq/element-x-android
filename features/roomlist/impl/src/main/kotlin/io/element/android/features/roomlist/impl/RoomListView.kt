@@ -55,6 +55,7 @@ import io.element.android.features.roomlist.impl.components.RequestVerificationH
 import io.element.android.features.roomlist.impl.components.RoomListMenuAction
 import io.element.android.features.roomlist.impl.components.RoomListTopBar
 import io.element.android.features.roomlist.impl.components.RoomSummaryRow
+import io.element.android.features.roomlist.impl.filters.RoomListFiltersView
 import io.element.android.features.roomlist.impl.migration.MigrationScreenView
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
 import io.element.android.features.roomlist.impl.search.RoomListSearchView
@@ -207,16 +208,21 @@ private fun RoomListContent(
     Scaffold(
         modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
-            RoomListTopBar(
-                matrixUser = state.matrixUser,
-                showAvatarIndicator = state.showAvatarIndicator,
-                areSearchResultsDisplayed = state.searchState.isSearchActive,
-                onToggleSearch = { state.eventSink(RoomListEvents.ToggleSearchResults) },
-                onMenuActionClicked = onMenuActionClicked,
-                onOpenSettings = onOpenSettings,
-                scrollBehavior = scrollBehavior,
-                displayMenuItems = !state.displayMigrationStatus,
-            )
+            Column {
+                RoomListTopBar(
+                    matrixUser = state.matrixUser,
+                    showAvatarIndicator = state.showAvatarIndicator,
+                    areSearchResultsDisplayed = state.searchState.isSearchActive,
+                    onToggleSearch = { state.eventSink(RoomListEvents.ToggleSearchResults) },
+                    onMenuActionClicked = onMenuActionClicked,
+                    onOpenSettings = onOpenSettings,
+                    scrollBehavior = scrollBehavior,
+                    displayMenuItems = !state.displayMigrationStatus,
+                )
+                if (state.displayFilters) {
+                    RoomListFiltersView(state = state.filtersState)
+                }
+            }
         },
         content = { padding ->
             LazyColumn(
@@ -272,7 +278,11 @@ private fun RoomListContent(
                 }
             }
             if (state.displayEmptyState) {
-                EmptyRoomListView(onCreateRoomClicked)
+                if (state.filtersState.hasAnyFilterSelected) {
+                    // TODO add empty state for filtered rooms
+                } else {
+                    EmptyRoomListView(onCreateRoomClicked)
+                }
             }
             MigrationScreenView(isMigrating = state.displayMigrationStatus)
         },

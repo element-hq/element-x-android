@@ -18,6 +18,7 @@ package io.element.android.features.roomlist.impl
 
 import androidx.compose.runtime.Immutable
 import io.element.android.features.leaveroom.api.LeaveRoomState
+import io.element.android.features.roomlist.impl.filters.RoomListFiltersState
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
 import io.element.android.features.roomlist.impl.search.RoomListSearchState
 import io.element.android.libraries.architecture.AsyncData
@@ -37,10 +38,12 @@ data class RoomListState(
     val invitesState: InvitesState,
     val contextMenu: ContextMenu,
     val leaveRoomState: LeaveRoomState,
+    val filtersState: RoomListFiltersState,
     val searchState: RoomListSearchState,
     val displayMigrationStatus: Boolean,
     val eventSink: (RoomListEvents) -> Unit,
 ) {
+    val displayFilters = filtersState.isFeatureEnabled && !displayMigrationStatus
     val displayEmptyState = roomList is AsyncData.Success && roomList.data.isEmpty()
 
     sealed interface ContextMenu {

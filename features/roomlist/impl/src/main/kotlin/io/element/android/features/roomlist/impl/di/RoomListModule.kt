@@ -19,6 +19,8 @@ package io.element.android.features.roomlist.impl.di
 import com.squareup.anvil.annotations.ContributesTo
 import dagger.Binds
 import dagger.Module
+import io.element.android.features.roomlist.impl.filters.RoomListFiltersPresenter
+import io.element.android.features.roomlist.impl.filters.RoomListFiltersState
 import io.element.android.features.roomlist.impl.search.RoomListSearchPresenter
 import io.element.android.features.roomlist.impl.search.RoomListSearchState
 import io.element.android.libraries.architecture.Presenter
@@ -29,4 +31,7 @@ import io.element.android.libraries.di.SessionScope
 interface RoomListModule {
     @Binds
     fun bindSearchPresenter(presenter: RoomListSearchPresenter): Presenter<RoomListSearchState>
+
+    @Binds
+    fun bindFiltersPresenter(presenter: RoomListFiltersPresenter): Presenter<RoomListFiltersState>
 }

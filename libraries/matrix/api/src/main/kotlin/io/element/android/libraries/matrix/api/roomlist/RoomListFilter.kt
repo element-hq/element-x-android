@@ -58,6 +58,11 @@ sealed interface RoomListFilter {
     data object Unread : RoomListFilter
 
     /**
+     * A filter that matches rooms that are marked as favorite.
+     */
+    data object Favorite : RoomListFilter
+
+    /**
      * A filter that matches either Group or People rooms.
      */
     sealed interface Category : RoomListFilter {

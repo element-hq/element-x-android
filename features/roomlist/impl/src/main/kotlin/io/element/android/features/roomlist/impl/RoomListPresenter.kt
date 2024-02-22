@@ -37,6 +37,7 @@ import io.element.android.features.networkmonitor.api.NetworkStatus
 import io.element.android.features.preferences.api.store.SessionPreferencesStore
 import io.element.android.features.roomlist.impl.datasource.InviteStateDataSource
 import io.element.android.features.roomlist.impl.datasource.RoomListDataSource
+import io.element.android.features.roomlist.impl.filters.RoomListFiltersState
 import io.element.android.features.roomlist.impl.migration.MigrationScreenPresenter
 import io.element.android.features.roomlist.impl.search.RoomListSearchEvents
 import io.element.android.features.roomlist.impl.search.RoomListSearchState
@@ -82,6 +83,7 @@ class RoomListPresenter @Inject constructor(
     private val roomListDataSource: RoomListDataSource,
     private val featureFlagService: FeatureFlagService,
     private val indicatorService: IndicatorService,
+    private val filtersPresenter: Presenter<RoomListFiltersState>,
     private val searchPresenter: Presenter<RoomListSearchState>,
     private val migrationScreenPresenter: MigrationScreenPresenter,
     private val sessionPreferencesStore: SessionPreferencesStore,
@@ -102,6 +104,8 @@ class RoomListPresenter @Inject constructor(
             roomListDataSource.allRooms.collect { value = AsyncData.Success(it) }
         }
         val networkConnectionStatus by networkMonitor.connectivity.collectAsState()
+
+        val filtersState = filtersPresenter.present()
         val searchState = searchPresenter.present()
 
         LaunchedEffect(Unit) {
@@ -168,9 +172,10 @@ class RoomListPresenter @Inject constructor(
             invitesState = inviteStateDataSource.inviteState(),
             contextMenu = contextMenu.value,
             leaveRoomState = leaveRoomState,
+            filtersState = filtersState,
             searchState = searchState,
             displayMigrationStatus = isMigrating,
-            eventSink = ::handleEvents
+            eventSink = ::handleEvents,
         )
     }
 
