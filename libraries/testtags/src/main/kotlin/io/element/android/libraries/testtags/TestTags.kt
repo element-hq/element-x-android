@@ -54,6 +54,11 @@ object TestTags {
     val roomDetailAvatar = TestTag("room_detail-avatar")
 
     /**
+     * Room member screen.
+     */
+    val memberDetailAvatar = TestTag("member_detail-avatar")
+
+    /**
      * Welcome screen.
      */
     val welcomeScreenTitle = TestTag("welcome_screen-title")

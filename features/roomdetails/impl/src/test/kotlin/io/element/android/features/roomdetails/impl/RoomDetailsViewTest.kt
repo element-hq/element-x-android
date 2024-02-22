@@ -174,6 +174,22 @@ class RoomDetailsViewTest {
     }
 
     @Test
+    fun `click on avatar test on DM`() {
+        val eventsRecorder = EventsRecorder<RoomDetailsEvent>(expectEvents = false)
+        val state = aRoomDetailsState(
+            roomType = RoomDetailsType.Dm(aDmRoomMember(avatarUrl = "an_avatar_url")),
+            eventSink = eventsRecorder,
+        )
+        val callback = EnsureCalledOnceWithTwoParams("Daniel", "an_avatar_url")
+        rule.setRoomDetailView(
+            state = state,
+            openAvatarPreview = callback,
+        )
+        rule.onNodeWithTag(TestTags.memberDetailAvatar.value).performClick()
+        callback.assertSuccess()
+    }
+
+    @Test
     fun `click on mute emit expected event`() {
         val eventsRecorder = EventsRecorder<RoomDetailsEvent>()
         val state = aRoomDetailsState(
