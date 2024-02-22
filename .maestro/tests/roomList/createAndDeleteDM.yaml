@@ -9,5 +9,6 @@ appId: ${MAESTRO_APP_ID}
     index: 1
 - takeScreenshot: build/maestro/330-createAndDeleteDM
 - tapOn: "maestroelement2"
+- scroll
 - tapOn: "Leave conversation"
 - tapOn: "Leave"
