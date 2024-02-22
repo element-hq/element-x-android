@@ -33,6 +33,7 @@ import io.element.android.tests.testutils.EnsureNeverCalledWithTwoParams
 import io.element.android.tests.testutils.EventsRecorder
 import io.element.android.tests.testutils.clickOn
 import io.element.android.tests.testutils.ensureCalledOnce
+import io.element.android.tests.testutils.ensureCalledOnceWithParam
 import io.element.android.tests.testutils.pressBack
 import org.junit.Rule
 import org.junit.Test
@@ -61,6 +62,19 @@ class RoomDetailsViewTest {
                 onShareRoom = callback,
             )
             rule.clickOn(R.string.screen_room_details_share_room_title)
+        }
+    }
+
+    @Test
+    fun `click on share member invokes expected callback`() {
+        val state = aDmRoomDetailsState()
+        val roomMember = (state.roomType as RoomDetailsType.Dm).roomMember
+        ensureCalledOnceWithParam(roomMember) { callback ->
+            rule.setRoomDetailView(
+                state = aDmRoomDetailsState(),
+                onShareMember = callback,
+            )
+            rule.clickOn(CommonStrings.action_share)
         }
     }
 
