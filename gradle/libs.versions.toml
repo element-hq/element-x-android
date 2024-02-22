@@ -19,7 +19,7 @@ media3 = "1.2.1"
 
 # Compose
 compose_bom = "2024.02.00"
-composecompiler = "1.5.9"
+composecompiler = "1.5.10"
 
 # Coroutines
 coroutines = "1.8.0"
