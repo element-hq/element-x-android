@@ -55,10 +55,10 @@ jobs:
           # app-file should point to an x86 compatible APK file, so upload the x86_64 one (much smaller than the universal APK).
           app-file: app/build/outputs/apk/gplay/debug/app-gplay-x86_64-debug.apk
           env: |
-            USERNAME=maestroelement
-            PASSWORD=${{ secrets.MATRIX_MAESTRO_ACCOUNT_PASSWORD }}
-            RECOVERY_KEY=${{ secrets.MATRIX_MAESTRO_ACCOUNT_RECOVERY_KEY }}
-            ROOM_NAME=MyRoom
-            INVITEE1_MXID=@maestroelement2:matrix.org
-            INVITEE2_MXID=@maestroelement3:matrix.org
-            APP_ID=io.element.android.x.debug
+            MAESTRO_USERNAME=maestroelement
+            MAESTRO_PASSWORD=${{ secrets.MATRIX_MAESTRO_ACCOUNT_PASSWORD }}
+            MAESTRO_RECOVERY_KEY=${{ secrets.MATRIX_MAESTRO_ACCOUNT_RECOVERY_KEY }}
+            MAESTRO_ROOM_NAME=MyRoom
+            MAESTRO_INVITEE1_MXID=@maestroelement2:matrix.org
+            MAESTRO_INVITEE2_MXID=@maestroelement3:matrix.org
+            MAESTRO_APP_ID=io.element.android.x.debug

@@ -1,4 +1,4 @@
-appId: ${APP_ID}
+appId: ${MAESTRO_APP_ID}
 ---
 - tapOn:
     id: "home_screen-settings"

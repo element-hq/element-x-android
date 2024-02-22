@@ -1,4 +1,4 @@
-appId: ${APP_ID}
+appId: ${MAESTRO_APP_ID}
 ---
 - extendedWaitUntil:
     visible: "Help improve Element X dbg"

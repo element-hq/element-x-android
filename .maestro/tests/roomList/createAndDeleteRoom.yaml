@@ -1,12 +1,12 @@
-appId: ${APP_ID}
+appId: ${MAESTRO_APP_ID}
 ---
 # Purpose: Test the creation and deletion of a room
 - tapOn: "Create a new conversation or room"
 - tapOn: "New room"
 - tapOn: "Search for someone"
-- inputText: ${INVITEE1_MXID}
+- inputText: ${MAESTRO_INVITEE1_MXID}
 - tapOn:
-    text: ${INVITEE1_MXID}
+    text: ${MAESTRO_INVITEE1_MXID}
     index: 1
 - tapOn: "Next"
 - tapOn: "e.g. your project name"
@@ -19,9 +19,9 @@ appId: ${APP_ID}
 - tapOn: "Invite people"
 # assert there's 1 member and 1 invitee
 - tapOn: "Search for someone"
-- inputText: ${INVITEE2_MXID}
+- inputText: ${MAESTRO_INVITEE2_MXID}
 - tapOn:
-    text: ${INVITEE2_MXID}
+    text: ${MAESTRO_INVITEE2_MXID}
     index: 1
 - tapOn: "Invite"
 - tapOn: "Back"

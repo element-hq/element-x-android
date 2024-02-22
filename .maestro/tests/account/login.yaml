@@ -1,4 +1,4 @@
-appId: ${APP_ID}
+appId: ${MAESTRO_APP_ID}
 ---
 - tapOn: "Continue"
 - runFlow: ../assertions/assertLoginDisplayed.yaml
@@ -9,7 +9,7 @@ appId: ${APP_ID}
     id: "login-continue"
 - tapOn:
     id: "login-email_username"
-- inputText: ${USERNAME}
+- inputText: ${MAESTRO_USERNAME}
 - pressKey: Enter
 - tapOn:
     id: "login-password"
@@ -20,7 +20,7 @@ appId: ${APP_ID}
 - tapOn:
     id: "login-password"
 - eraseText: 20
-- inputText: ${PASSWORD}
+- inputText: ${MAESTRO_PASSWORD}
 - pressKey: Enter
 - tapOn: "Continue"
 - runFlow: ../assertions/assertWelcomeScreenDisplayed.yaml
