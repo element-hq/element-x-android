@@ -19,6 +19,7 @@ package io.element.android.features.roomdetails.impl
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -123,6 +124,36 @@ class RoomDetailsViewTest {
                 invitePeople = callback,
             )
             rule.clickOn(R.string.screen_room_details_invite_people_title)
+        }
+    }
+
+    @Test
+    fun `click on add topic emit expected event`() {
+        ensureCalledOnceWithParam<RoomDetailsAction>(RoomDetailsAction.AddTopic) { callback ->
+            rule.setRoomDetailView(
+                state = aRoomDetailsState(
+                    eventSink = EventsRecorder(expectEvents = false),
+                    roomTopic = RoomTopicState.CanAddTopic,
+                ),
+                onActionClicked = callback,
+            )
+            rule.clickOn(R.string.screen_room_details_add_topic_title)
+        }
+    }
+
+    @Test
+    fun `click on menu edit emit expected event`() {
+        ensureCalledOnceWithParam<RoomDetailsAction>(RoomDetailsAction.Edit) { callback ->
+            rule.setRoomDetailView(
+                state = aRoomDetailsState(
+                    eventSink = EventsRecorder(expectEvents = false),
+                    canEdit = true,
+                ),
+                onActionClicked = callback,
+            )
+            val menuContentDescription = rule.activity.getString(CommonStrings.a11y_user_menu)
+            rule.onNodeWithContentDescription(menuContentDescription).performClick()
+            rule.clickOn(CommonStrings.action_edit)
         }
     }
 

@@ -223,7 +223,7 @@ private fun RoomDetailsTopBar(
         actions = {
             if (showEdit) {
                 IconButton(onClick = { showMenu = !showMenu }) {
-                    Icon(Icons.Default.MoreVert, "")
+                    Icon(Icons.Default.MoreVert, stringResource(id = CommonStrings.a11y_user_menu))
                 }
                 DropdownMenu(
                     expanded = showMenu,
