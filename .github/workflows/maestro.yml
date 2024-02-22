@@ -57,6 +57,7 @@ jobs:
           env: |
             USERNAME=maestroelement
             PASSWORD=${{ secrets.MATRIX_MAESTRO_ACCOUNT_PASSWORD }}
+            RECOVERY_KEY=${{ secrets.MATRIX_MAESTRO_ACCOUNT_RECOVERY_KEY }}
             ROOM_NAME=MyRoom
             INVITEE1_MXID=@maestroelement2:matrix.org
             INVITEE2_MXID=@maestroelement3:matrix.org

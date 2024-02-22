@@ -25,6 +25,7 @@ maestro test \
     -e APP_ID=io.element.android.x.debug \
     -e USERNAME=user1 \
     -e PASSWORD=123 \
+    -e RECOVERY_KEY=ABC \
     -e ROOM_NAME="MyRoom" \
     -e INVITEE1_MXID=user2 \
     -e INVITEE2_MXID=user3 \
