@@ -1,13 +1,13 @@
-appId: ${APP_ID}
+appId: ${MAESTRO_APP_ID}
 ---
 # Purpose: Test the context menu of a room in the room list
-- longPressOn: ${ROOM_NAME}
+- longPressOn: ${MAESTRO_ROOM_NAME}
 - takeScreenshot: build/maestro/310-RoomList-ContextMenu
 - tapOn:
     text: "Settings"
     index: 0
 - tapOn: "Back"
-- longPressOn: ${ROOM_NAME}
+- longPressOn: ${MAESTRO_ROOM_NAME}
 - tapOn:
     text: "Leave room"
     index: 0

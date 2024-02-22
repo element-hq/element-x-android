@@ -53,6 +53,8 @@ import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.OutlinedTextField
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.autofill
+import io.element.android.libraries.testtags.TestTags
+import io.element.android.libraries.testtags.testTag
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
@@ -169,6 +171,7 @@ private fun RecoveryKeyFormContent(
     OutlinedTextField(
         modifier = Modifier
             .fillMaxWidth()
+            .testTag(TestTags.recoveryKey)
             .autofill(
                 autofillTypes = listOf(AutofillType.Password),
                 onFill = { onChange(it) },

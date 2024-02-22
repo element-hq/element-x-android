@@ -34,6 +34,11 @@ object TestTags {
     val loginContinue = TestTag("login-continue")
 
     /**
+     * Verification screen.
+     */
+    val recoveryKey = TestTag("verification-recovery_key")
+
+    /**
      * Sign out screen.
      */
     val signOut = TestTag("sign-out-submit")

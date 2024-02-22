@@ -138,7 +138,7 @@ class RustMatrixClient(
         syncService = rustSyncService,
         sessionCoroutineScope = sessionCoroutineScope,
         dispatchers = dispatchers,
-    ).apply { start() }
+    )
     private val sessionDirectoryNameProvider = SessionDirectoryNameProvider()
 
     private val isLoggingOut = AtomicBoolean(false)

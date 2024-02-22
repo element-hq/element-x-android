@@ -42,6 +42,7 @@ dependencies {
     implementation(projects.libraries.matrixui)
     implementation(projects.libraries.designsystem)
     implementation(projects.libraries.uiStrings)
+    implementation(projects.libraries.testtags)
     api(libs.statemachine)
     api(projects.features.securebackup.api)
 

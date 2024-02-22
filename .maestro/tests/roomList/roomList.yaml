@@ -1,4 +1,4 @@
-appId: ${APP_ID}
+appId: ${MAESTRO_APP_ID}
 ---
 - runFlow: searchRoomList.yaml
 - takeScreenshot: build/maestro/300-RoomList

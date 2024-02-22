@@ -338,6 +338,10 @@ class LoggedInFlowNode @AssistedInject constructor(
                             )
                         )
                     }
+
+                    override fun onDone() {
+                        backstack.pop()
+                    }
                 }
                 verifySessionEntryPoint
                     .nodeBuilder(this, buildContext)

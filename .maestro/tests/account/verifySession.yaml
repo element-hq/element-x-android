@@ -1,0 +1,11 @@
+appId: ${MAESTRO_APP_ID}
+---
+- tapOn: "Continue"
+- takeScreenshot: build/maestro/150-Verify
+- tapOn: "Enter recovery key"
+- tapOn:
+    id: "verification-recovery_key"
+- inputText: ${MAESTRO_RECOVERY_KEY}
+- hideKeyboard
+- tapOn: "Confirm"
+- runFlow: ../assertions/assertHomeDisplayed.yaml
