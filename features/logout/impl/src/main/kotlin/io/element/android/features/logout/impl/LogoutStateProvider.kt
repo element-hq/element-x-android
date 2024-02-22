@@ -27,22 +27,22 @@ open class LogoutStateProvider : PreviewParameterProvider<LogoutState> {
     override val values: Sequence<LogoutState>
         get() = sequenceOf(
             aLogoutState(),
-            aLogoutState(isLastSession = true),
-            aLogoutState(isLastSession = false, backupUploadState = BackupUploadState.Uploading(66, 200)),
-            aLogoutState(isLastSession = true, backupUploadState = BackupUploadState.Done),
+            aLogoutState(isLastDevice = true),
+            aLogoutState(isLastDevice = false, backupUploadState = BackupUploadState.Uploading(66, 200)),
+            aLogoutState(isLastDevice = true, backupUploadState = BackupUploadState.Done),
             aLogoutState(logoutAction = AsyncAction.Confirming),
             aLogoutState(logoutAction = AsyncAction.Loading),
             aLogoutState(logoutAction = AsyncAction.Failure(Exception("Failed to logout"))),
             aLogoutState(backupUploadState = BackupUploadState.SteadyException(SteadyStateException.Connection("No network"))),
             // Last session no recovery
-            aLogoutState(isLastSession = true, recoveryState = RecoveryState.DISABLED),
+            aLogoutState(isLastDevice = true, recoveryState = RecoveryState.DISABLED),
             // Last session no backup
-            aLogoutState(isLastSession = true, backupState = BackupState.UNKNOWN, doesBackupExistOnServer = false),
+            aLogoutState(isLastDevice = true, backupState = BackupState.UNKNOWN, doesBackupExistOnServer = false),
         )
 }
 
 fun aLogoutState(
-    isLastSession: Boolean = false,
+    isLastDevice: Boolean = false,
     backupState: BackupState = BackupState.ENABLED,
     doesBackupExistOnServer: Boolean = true,
     recoveryState: RecoveryState = RecoveryState.ENABLED,
@@ -50,7 +50,7 @@ fun aLogoutState(
     logoutAction: AsyncAction<String?> = AsyncAction.Uninitialized,
     eventSink: (LogoutEvents) -> Unit = {},
 ) = LogoutState(
-    isLastSession = isLastSession,
+    isLastDevice = isLastDevice,
     backupState = backupState,
     doesBackupExistOnServer = doesBackupExistOnServer,
     recoveryState = recoveryState,

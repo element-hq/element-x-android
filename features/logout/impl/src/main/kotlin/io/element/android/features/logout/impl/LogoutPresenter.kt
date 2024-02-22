@@ -24,28 +24,22 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runCatchingUpdatingState
 import io.element.android.libraries.core.bool.orTrue
-import io.element.android.libraries.featureflag.api.FeatureFlagService
-import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.encryption.BackupState
 import io.element.android.libraries.matrix.api.encryption.BackupUploadState
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.emptyFlow
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class LogoutPresenter @Inject constructor(
     private val matrixClient: MatrixClient,
     private val encryptionService: EncryptionService,
-    private val featureFlagService: FeatureFlagService,
 ) : Presenter<LogoutState> {
     @Composable
     override fun present(): LogoutState {
@@ -54,23 +48,12 @@ class LogoutPresenter @Inject constructor(
             mutableStateOf(AsyncAction.Uninitialized)
         }
 
-        val secureStorageFlag by featureFlagService.isFeatureEnabledFlow(FeatureFlags.SecureStorage)
-            .collectAsState(initial = null)
-
-        val backupUploadState: BackupUploadState by remember(secureStorageFlag) {
-            when (secureStorageFlag) {
-                true -> encryptionService.waitForBackupUploadSteadyState()
-                false -> flowOf(BackupUploadState.Done)
-                else -> emptyFlow()
-            }
+        val backupUploadState: BackupUploadState by remember {
+            encryptionService.waitForBackupUploadSteadyState()
         }
             .collectAsState(initial = BackupUploadState.Unknown)
 
-        var isLastSession by remember { mutableStateOf(false) }
-        LaunchedEffect(Unit) {
-            isLastSession = encryptionService.isLastDevice().getOrNull() ?: false
-        }
-
+        val isLastDevice by encryptionService.isLastDevice.collectAsState()
         val backupState by encryptionService.backupStateStateFlow.collectAsState()
         val recoveryState by encryptionService.recoveryStateStateFlow.collectAsState()
 
@@ -100,7 +83,7 @@ class LogoutPresenter @Inject constructor(
         }
 
         return LogoutState(
-            isLastSession = isLastSession,
+            isLastDevice = isLastDevice,
             backupState = backupState,
             doesBackupExistOnServer = doesBackupExistOnServerAction.value.dataOrNull().orTrue(),
             recoveryState = recoveryState,

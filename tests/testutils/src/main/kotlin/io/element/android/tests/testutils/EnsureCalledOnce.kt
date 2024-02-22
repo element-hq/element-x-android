@@ -29,7 +29,7 @@ class EnsureCalledOnce : () -> Unit {
     }
 }
 
-fun ensureCalledOnce(block: (callback: EnsureCalledOnce) -> Unit) {
+fun ensureCalledOnce(block: (callback: () -> Unit) -> Unit) {
     val callback = EnsureCalledOnce()
     block(callback)
     callback.assertSuccess()

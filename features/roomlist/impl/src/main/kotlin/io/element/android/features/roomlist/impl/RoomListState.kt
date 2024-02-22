@@ -32,8 +32,7 @@ data class RoomListState(
     val matrixUser: MatrixUser?,
     val showAvatarIndicator: Boolean,
     val roomList: AsyncData<ImmutableList<RoomListRoomSummary>>,
-    val displayVerificationPrompt: Boolean,
-    val displayRecoveryKeyPrompt: Boolean,
+    val securityBannerState: SecurityBannerState,
     val hasNetworkConnection: Boolean,
     val snackbarMessage: SnackbarMessage?,
     val invitesState: InvitesState,
@@ -64,4 +63,10 @@ enum class InvitesState {
     NoInvites,
     SeenInvites,
     NewInvites,
+}
+
+enum class SecurityBannerState {
+    None,
+    SessionVerification,
+    RecoveryKeyConfirmation,
 }

@@ -91,7 +91,6 @@ class RoomListScreen(
     )
     private val presenter = RoomListPresenter(
         client = matrixClient,
-        sessionVerificationService = sessionVerificationService,
         networkMonitor = NetworkMonitorImpl(context, Singleton.appScope),
         snackbarDispatcher = SnackbarDispatcher(),
         inviteStateDataSource = DefaultInviteStateDataSource(matrixClient, DefaultSeenInvitesStore(context), coroutineDispatchers),
@@ -106,7 +105,6 @@ class RoomListScreen(
         indicatorService = DefaultIndicatorService(
             sessionVerificationService = sessionVerificationService,
             encryptionService = encryptionService,
-            featureFlagService = featureFlagService,
         ),
         featureFlagService = featureFlagService,
         migrationScreenPresenter = MigrationScreenPresenter(
@@ -148,6 +146,7 @@ class RoomListScreen(
             onRoomClicked = ::onRoomClicked,
             onSettingsClicked = {},
             onVerifyClicked = {},
+            onConfirmRecoveryKeyClicked = {},
             onCreateRoomClicked = {},
             onInvitesClicked = {},
             onRoomSettingsClicked = {},
