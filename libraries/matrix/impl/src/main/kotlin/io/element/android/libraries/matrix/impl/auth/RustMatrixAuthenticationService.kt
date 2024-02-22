@@ -29,6 +29,7 @@ import io.element.android.libraries.matrix.api.auth.MatrixHomeServerDetails
 import io.element.android.libraries.matrix.api.auth.OidcDetails
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.impl.RustMatrixClientFactory
+import io.element.android.libraries.matrix.impl.certificates.UserCertificatesProvider
 import io.element.android.libraries.matrix.impl.exception.mapClientException
 import io.element.android.libraries.matrix.impl.keys.PassphraseGenerator
 import io.element.android.libraries.matrix.impl.mapper.toSessionData
@@ -56,6 +57,7 @@ class RustMatrixAuthenticationService @Inject constructor(
     userAgentProvider: UserAgentProvider,
     private val rustMatrixClientFactory: RustMatrixClientFactory,
     private val passphraseGenerator: PassphraseGenerator,
+    userCertificatesProvider: UserCertificatesProvider,
     private val buildMeta: BuildMeta,
 ) : MatrixAuthenticationService {
     // Passphrase which will be used for new sessions. Existing sessions will use the passphrase
@@ -65,7 +67,7 @@ class RustMatrixAuthenticationService @Inject constructor(
         basePath = baseDirectory.absolutePath,
         passphrase = pendingPassphrase,
         userAgent = userAgentProvider.provide(),
-        additionalRootCertificates = emptyList(),
+        additionalRootCertificates = userCertificatesProvider.provides(),
         oidcConfiguration = oidcConfiguration,
         customSlidingSyncProxy = null,
         sessionDelegate = null,
