@@ -22,7 +22,7 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.ui.components.aMatrixUserList
 import kotlinx.collections.immutable.toPersistentList
 
-class BlockedUsersPreviewProvider : PreviewParameterProvider<BlockedUsersState> {
+class BlockedUsersStatePreviewProvider : PreviewParameterProvider<BlockedUsersState> {
     override val values: Sequence<BlockedUsersState>
         get() = sequenceOf(
             aBlockedUsersState(),

@@ -32,7 +32,6 @@ class BlockedUsersNode @AssistedInject constructor(
     @Assisted plugins: List<Plugin>,
     private val presenter: BlockedUsersPresenter,
 ) : Node(buildContext = buildContext, plugins = plugins) {
-
     @Composable
     override fun View(modifier: Modifier) {
         val state = presenter.present()

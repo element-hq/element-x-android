@@ -41,9 +41,7 @@ import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.components.MatrixUserRow
-import io.element.android.libraries.matrix.ui.components.aMatrixUserList
 import io.element.android.libraries.ui.strings.CommonStrings
-import kotlinx.collections.immutable.toPersistentList
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -74,7 +72,7 @@ fun BlockedUsersView(
             items(state.blockedUsers) { userId ->
                 BlockedUserItem(
                     userId = userId,
-                    onClick = { state.eventSink(BlockedUsersEvents.Unblock(it))}
+                    onClick = { state.eventSink(BlockedUsersEvents.Unblock(it)) }
                 )
             }
         }
@@ -113,7 +111,7 @@ private fun BlockedUserItem(
 
 @PreviewsDayNight
 @Composable
-fun BlockedUsersViewPreview(@PreviewParameter(BlockedUsersPreviewProvider::class) state: BlockedUsersState) {
+internal fun BlockedUsersViewPreview(@PreviewParameter(BlockedUsersStatePreviewProvider::class) state: BlockedUsersState) {
     ElementPreview {
         BlockedUsersView(
             state = state,

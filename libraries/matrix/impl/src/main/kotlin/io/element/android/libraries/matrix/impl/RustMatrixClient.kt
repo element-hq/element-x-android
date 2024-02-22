@@ -390,7 +390,6 @@ class RustMatrixClient(
 
     override fun notificationSettingsService(): NotificationSettingsService = notificationSettingsService
 
-
     override fun close() {
         sessionCoroutineScope.cancel()
         clientDelegateTaskHandle?.cancelAndDestroy()

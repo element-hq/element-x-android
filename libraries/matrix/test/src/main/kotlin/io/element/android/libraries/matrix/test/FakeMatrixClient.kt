@@ -83,6 +83,7 @@ class FakeMatrixClient(
     private var setDisplayNameResult: Result<Unit> = Result.success(Unit)
     private var uploadAvatarResult: Result<Unit> = Result.success(Unit)
     private var removeAvatarResult: Result<Unit> = Result.success(Unit)
+    private var ignoredUsersResult: Result<List<UserId>> = Result.success(emptyList())
 
     override suspend fun getRoom(roomId: RoomId): MatrixRoom? {
         return getRoomResults[roomId]
@@ -182,6 +183,10 @@ class FakeMatrixClient(
         return RoomMembershipObserver()
     }
 
+    override suspend fun ignoredUserIds(): Result<List<UserId>> {
+        return ignoredUsersResult
+    }
+
     // Mocks
 
     fun givenLogoutError(failure: Throwable?) {
@@ -238,5 +243,9 @@ class FakeMatrixClient(
 
     fun givenRemoveAvatarResult(result: Result<Unit>) {
         removeAvatarResult = result
+    }
+
+    fun givenIgnoredUsersResult(result: Result<List<UserId>>) {
+        ignoredUsersResult = result
     }
 }
