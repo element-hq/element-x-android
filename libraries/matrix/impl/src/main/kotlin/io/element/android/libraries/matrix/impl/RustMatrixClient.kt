@@ -373,6 +373,11 @@ class RustMatrixClient(
             runCatching { client.removeAvatar() }
         }
 
+    override suspend fun ignoredUserIds(): Result<List<UserId>> =
+        withContext(sessionDispatcher) {
+            runCatching { client.ignoredUsers().map(::UserId) }
+        }
+
     override fun syncService(): SyncService = rustSyncService
 
     override fun sessionVerificationService(): SessionVerificationService = verificationService
@@ -384,6 +389,7 @@ class RustMatrixClient(
     override fun encryptionService(): EncryptionService = encryptionService
 
     override fun notificationSettingsService(): NotificationSettingsService = notificationSettingsService
+
 
     override fun close() {
         sessionCoroutineScope.cancel()

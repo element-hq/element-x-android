@@ -103,6 +103,7 @@
   <string name="common_analytics">"Analytics"</string>
   <string name="common_appearance">"Appearance"</string>
   <string name="common_audio">"Audio"</string>
+  <string name="common_blocked_users">"Blocked users"</string>
   <string name="common_bubbles">"Bubbles"</string>
   <string name="common_chat_backup">"Chat backup"</string>
   <string name="common_copyright">"Copyright"</string>
@@ -141,6 +142,7 @@
   <string name="common_mute">"Mute"</string>
   <string name="common_no_results">"No results"</string>
   <string name="common_offline">"Offline"</string>
+  <string name="common_or">"or"</string>
   <string name="common_password">"Password"</string>
   <string name="common_people">"People"</string>
   <string name="common_permalink">"Permalink"</string>

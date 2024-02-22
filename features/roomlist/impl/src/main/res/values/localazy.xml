@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="confirm_recovery_key_banner_message">"Your chat backup is currently out of sync. You need to confirm your recovery key to maintain access to your chat backup."</string>
-  <string name="confirm_recovery_key_banner_title">"Confirm your recovery key"</string>
+  <string name="confirm_recovery_key_banner_message">"Your chat backup is currently out of sync. You need to enter your recovery key to maintain access to your chat backup."</string>
+  <string name="confirm_recovery_key_banner_title">"Enter your recovery key"</string>
   <string name="screen_migration_message">"This is a one time process, thanks for waiting."</string>
   <string name="screen_migration_title">"Setting up your account."</string>
   <string name="screen_roomlist_a11y_create_message">"Create a new conversation or room"</string>

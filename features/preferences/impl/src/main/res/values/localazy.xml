@@ -44,4 +44,7 @@ If you proceed, some of your settings may change."</string>
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"system settings"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"System notifications turned off"</string>
   <string name="screen_notification_settings_title">"Notifications"</string>
+  <string name="screen_blocked_users_unblock_alert_action">"Unblock"</string>
+  <string name="screen_blocked_users_unblock_alert_description">"You\'ll be able to see all messages from them again."</string>
+  <string name="screen_blocked_users_unblock_alert_title">"Unblock user"</string>
 </resources>
