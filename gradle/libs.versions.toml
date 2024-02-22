@@ -18,7 +18,7 @@ activity = "1.8.2"
 media3 = "1.2.1"
 
 # Compose
-compose_bom = "2024.02.00"
+compose_bom = "2024.02.01"
 composecompiler = "1.5.10"
 
 # Coroutines
