@@ -55,6 +55,25 @@ class EnsureCalledOnceWithParam<T, R>(
     }
 }
 
+class EnsureCalledOnceWithTwoParams<T, U>(
+    private val expectedParam1: T,
+    private val expectedParam2: U,
+) : (T, U) -> Unit {
+    private var counter = 0
+    override fun invoke(p1: T, p2: U) {
+        if (p1 != expectedParam1 || p2 != expectedParam2) {
+            throw AssertionError("Expected to be called with $expectedParam1 and $expectedParam2, but was called with $p1 and $p2")
+        }
+        counter++
+    }
+
+    fun assertSuccess() {
+        if (counter != 1) {
+            throw AssertionError("Expected to be called once, but was called $counter times")
+        }
+    }
+}
+
 /**
  * Shortcut for [<T, R> ensureCalledOnceWithParam] with Unit result.
  */
