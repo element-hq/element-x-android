@@ -42,7 +42,7 @@ open class RoomDetailsStateProvider : PreviewParameterProvider<RoomDetailsState>
             aRoomDetailsState(
                 canEdit = true,
                 // Also test the roomNotificationSettings ALL_MESSAGES in the same screenshot. Icon 'Mute' should be displayed
-                roomNotificationSettings = RoomNotificationSettings(mode = RoomNotificationMode.ALL_MESSAGES, isDefault = true)
+                roomNotificationSettings = aRoomNotificationSettings(mode = RoomNotificationMode.ALL_MESSAGES, isDefault = true)
             ),
             // Add other state here
         )
