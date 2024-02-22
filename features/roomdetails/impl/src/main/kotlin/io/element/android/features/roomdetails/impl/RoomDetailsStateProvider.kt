@@ -90,7 +90,7 @@ fun aRoomDetailsState(
     roomType: RoomDetailsType = RoomDetailsType.Room,
     roomMemberDetailsState: RoomMemberDetailsState? = null,
     leaveRoomState: LeaveRoomState = aLeaveRoomState(),
-    roomNotificationSettings: RoomNotificationSettings = RoomNotificationSettings(mode = RoomNotificationMode.MUTE, isDefault = false),
+    roomNotificationSettings: RoomNotificationSettings = aRoomNotificationSettings(),
     isFavorite: Boolean = false,
     eventSink: (RoomDetailsEvent) -> Unit = {},
 ) = RoomDetailsState(
@@ -110,6 +110,14 @@ fun aRoomDetailsState(
     roomNotificationSettings = roomNotificationSettings,
     isFavorite = isFavorite,
     eventSink = eventSink
+)
+
+fun aRoomNotificationSettings(
+    mode: RoomNotificationMode = RoomNotificationMode.MUTE,
+    isDefault: Boolean = false,
+) = RoomNotificationSettings(
+    mode = mode,
+    isDefault = isDefault
 )
 
 fun aDmRoomDetailsState(

@@ -80,6 +80,8 @@ import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.api.room.getBestName
+import io.element.android.libraries.testtags.TestTags
+import io.element.android.libraries.testtags.testTag
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
@@ -299,6 +301,7 @@ private fun RoomHeaderSection(
             modifier = Modifier
                 .size(70.dp)
                 .clickable(enabled = avatarUrl != null) { openAvatarPreview(avatarUrl!!) }
+                .testTag(TestTags.roomDetailAvatar)
         )
         Spacer(modifier = Modifier.height(24.dp))
         Text(

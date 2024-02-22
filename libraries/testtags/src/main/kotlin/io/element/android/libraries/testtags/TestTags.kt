@@ -49,6 +49,11 @@ object TestTags {
     val homeScreenSettings = TestTag("home_screen-settings")
 
     /**
+     * Room detail screen.
+     */
+    val roomDetailAvatar = TestTag("room_detail-avatar")
+
+    /**
      * Welcome screen.
      */
     val welcomeScreenTitle = TestTag("welcome_screen-title")
