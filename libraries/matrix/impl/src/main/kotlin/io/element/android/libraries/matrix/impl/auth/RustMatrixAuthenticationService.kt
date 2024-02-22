@@ -66,6 +66,7 @@ class RustMatrixAuthenticationService @Inject constructor(
     private val authService: RustAuthenticationService = RustAuthenticationService(
         basePath = baseDirectory.absolutePath,
         passphrase = pendingPassphrase,
+        proxy = null,
         userAgent = userAgentProvider.provide(),
         additionalRootCertificates = userCertificatesProvider.provides(),
         oidcConfiguration = oidcConfiguration,
