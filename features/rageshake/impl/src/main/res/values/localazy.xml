@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_bug_report_attach_screenshot">"Attach screenshot"</string>
+  <string name="screen_bug_report_contact_me">"You may contact me if you have any follow up questions."</string>
   <string name="screen_bug_report_contact_me_title">"Contact me"</string>
   <string name="screen_bug_report_edit_screenshot">"Edit screenshot"</string>
-  <string name="screen_bug_report_error_description_too_short">"The description is too short, please provide more details about what happened. Thanks!"</string>
-  <string name="screen_bug_report_view_logs">"View logs"</string>
-  <string name="screen_bug_report_contact_me">"You may contact me if you have any follow up questions."</string>
   <string name="screen_bug_report_editor_description">"Please describe the problem. What did you do? What did you expect to happen? What actually happened. Please go into as much detail as you can."</string>
   <string name="screen_bug_report_editor_placeholder">"Describe the problem…"</string>
   <string name="screen_bug_report_editor_supporting">"If possible, please write the description in English."</string>
+  <string name="screen_bug_report_error_description_too_short">"The description is too short, please provide more details about what happened. Thanks!"</string>
   <string name="screen_bug_report_include_crash_logs">"Send crash logs"</string>
   <string name="screen_bug_report_include_logs">"Allow logs"</string>
   <string name="screen_bug_report_include_screenshot">"Send screenshot"</string>
   <string name="screen_bug_report_logs_description">"Logs will be included with your message to make sure that everything is working properly. To send your message without logs, turn off this setting."</string>
+  <string name="screen_bug_report_view_logs">"View logs"</string>
   <string name="screen_bug_report_rash_logs_alert_title">"%1$s crashed the last time it was used. Would you like to share a crash report with us?"</string>
 </resources>

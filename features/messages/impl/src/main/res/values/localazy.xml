@@ -34,6 +34,11 @@
   <string name="screen_room_attachment_source_location">"Location"</string>
   <string name="screen_room_attachment_source_poll">"Poll"</string>
   <string name="screen_room_attachment_text_formatting">"Text Formatting"</string>
+  <string name="screen_room_change_role_confirm_add_admin_description">"You will not be able to undo this action. You are promoting the user to have the same power level as you."</string>
+  <string name="screen_room_change_role_confirm_add_admin_title">"Add Admin?"</string>
+  <string name="screen_room_change_role_confirm_demote_self_action">"Demote"</string>
+  <string name="screen_room_change_role_confirm_demote_self_description">"You will not be able to undo this change as you are demoting yourself, if you are the last privileged user in the room it will be impossible to regain privileges."</string>
+  <string name="screen_room_change_role_confirm_demote_self_title">"Demote yourself?"</string>
   <string name="screen_room_encrypted_history_banner">"Message history is currently unavailable."</string>
   <string name="screen_room_encrypted_history_banner_unverified">"Message history is unavailable in this room. Verify this device to see your message history."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Could not retrieve user details"</string>

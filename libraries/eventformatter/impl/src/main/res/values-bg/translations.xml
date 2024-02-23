@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="state_event_room_none">"%1$s не направи промени"</string>
-  <string name="state_event_room_none_by_you">"Не направихте промени"</string>
   <string name="state_event_avatar_changed_too">"(профилната снимка също е променена)"</string>
   <string name="state_event_avatar_url_changed">"%1$s промени своята профилна снимка"</string>
   <string name="state_event_avatar_url_changed_by_you">"Вие променихте своята профилна снимка"</string>
@@ -35,6 +33,8 @@
   <string name="state_event_room_name_changed_by_you">"Вие променихте името на стаята на: %1$s"</string>
   <string name="state_event_room_name_removed">"%1$s премахна името на стаята"</string>
   <string name="state_event_room_name_removed_by_you">"Вие премахнахте името на стаята"</string>
+  <string name="state_event_room_none">"%1$s не направи промени"</string>
+  <string name="state_event_room_none_by_you">"Не направихте промени"</string>
   <string name="state_event_room_reject">"%1$s отхвърли поканата"</string>
   <string name="state_event_room_reject_by_you">"Вие отхвърлихте поканата"</string>
   <string name="state_event_room_remove">"%1$s премахна %2$s"</string>

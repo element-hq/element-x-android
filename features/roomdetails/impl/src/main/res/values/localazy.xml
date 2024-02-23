@@ -13,6 +13,8 @@
   <string name="screen_room_details_edit_room_title">"Edit Room"</string>
   <string name="screen_room_details_edition_error">"There was an unknown error and the information couldn\'t be changed."</string>
   <string name="screen_room_details_edition_error_title">"Unable to update room"</string>
+  <string name="screen_room_details_encryption_enabled_subtitle">"Messages are secured with locks. Only you and the recipients have the unique keys to unlock them."</string>
+  <string name="screen_room_details_encryption_enabled_title">"Message encryption enabled"</string>
   <string name="screen_room_details_error_loading_notification_settings">"An error occurred when loading notification settings."</string>
   <string name="screen_room_details_error_muting">"Failed muting this room, please try again."</string>
   <string name="screen_room_details_error_unmuting">"Failed unmuting this room, please try again."</string>
@@ -48,19 +50,17 @@
   <string name="screen_room_notification_settings_mode_all_messages">"All messages"</string>
   <string name="screen_room_notification_settings_room_custom_settings_title">"In this room, notify me for"</string>
   <string name="screen_start_chat_error_starting_chat">"An error occurred when trying to start a chat"</string>
-  <string name="screen_room_details_encryption_enabled_subtitle">"Messages are secured with locks. Only you and the recipients have the unique keys to unlock them."</string>
-  <string name="screen_room_details_encryption_enabled_title">"Message encryption enabled"</string>
   <string name="screen_dm_details_block_alert_action">"Block"</string>
   <string name="screen_dm_details_block_alert_description">"Blocked users won\'t be able to send you messages and all their messages will be hidden. You can unblock them anytime."</string>
   <string name="screen_dm_details_block_user">"Block user"</string>
   <string name="screen_dm_details_unblock_alert_action">"Unblock"</string>
   <string name="screen_dm_details_unblock_alert_description">"You\'ll be able to see all messages from them again."</string>
   <string name="screen_dm_details_unblock_user">"Unblock user"</string>
-  <string name="screen_room_details_leave_conversation_title">"Leave conversation"</string>
-  <string name="screen_room_details_room_name_label">"Room name"</string>
-  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Mentions and Keywords only"</string>
   <string name="screen_room_details_invite_people_title">"Invite people"</string>
+  <string name="screen_room_details_leave_conversation_title">"Leave conversation"</string>
   <string name="screen_room_details_leave_room_title">"Leave room"</string>
+  <string name="screen_room_details_room_name_label">"Room name"</string>
   <string name="screen_room_details_security_title">"Security"</string>
   <string name="screen_room_details_topic_title">"Topic"</string>
+  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Mentions and Keywords only"</string>
 </resources>

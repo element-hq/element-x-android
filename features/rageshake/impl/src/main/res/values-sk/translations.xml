@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_bug_report_attach_screenshot">"Priložiť snímku obrazovky"</string>
+  <string name="screen_bug_report_contact_me">"V prípade ďalších otázok ma môžete kontaktovať."</string>
   <string name="screen_bug_report_contact_me_title">"Kontaktujte ma"</string>
   <string name="screen_bug_report_edit_screenshot">"Upraviť snímku obrazovky"</string>
-  <string name="screen_bug_report_error_description_too_short">"Popis je príliš krátky, uveďte viac podrobností o tom, čo sa stalo. Ďakujeme!"</string>
-  <string name="screen_bug_report_view_logs">"Zobraziť záznamy"</string>
-  <string name="screen_bug_report_contact_me">"V prípade ďalších otázok ma môžete kontaktovať."</string>
   <string name="screen_bug_report_editor_description">"Popíšte prosím chybu. Čo ste urobili? Čo ste očakávali, že sa stane? Čo sa skutočne stalo. Prosím, uveďte čo najviac podrobností."</string>
   <string name="screen_bug_report_editor_placeholder">"Popíšte chybu…"</string>
   <string name="screen_bug_report_editor_supporting">"Ak je to možné, napíšte popis v angličtine."</string>
+  <string name="screen_bug_report_error_description_too_short">"Popis je príliš krátky, uveďte viac podrobností o tom, čo sa stalo. Ďakujeme!"</string>
   <string name="screen_bug_report_include_crash_logs">"Odoslať záznamy o zlyhaní"</string>
   <string name="screen_bug_report_include_logs">"Povoliť záznamy"</string>
   <string name="screen_bug_report_include_screenshot">"Odoslať snímku obrazovky"</string>
   <string name="screen_bug_report_logs_description">"K vašej správe budú priložené záznamy o chybe, aby sme sa uistili, že všetko funguje správne. Ak chcete odoslať správu bez záznamov o chybe, vypnite toto nastavenie."</string>
+  <string name="screen_bug_report_view_logs">"Zobraziť záznamy"</string>
   <string name="screen_bug_report_rash_logs_alert_title">"%1$s zlyhal pri poslednom použití. Chcete zdieľať správu o páde s našim tímom?"</string>
 </resources>

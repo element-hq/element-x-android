@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_bug_report_attach_screenshot">"Atașați o captură de ecran"</string>
+  <string name="screen_bug_report_contact_me">"Puteți să mă contactați dacă aveți întrebări suplimentare"</string>
   <string name="screen_bug_report_contact_me_title">"Contactați-mă"</string>
   <string name="screen_bug_report_edit_screenshot">"Editați captura de ecran"</string>
-  <string name="screen_bug_report_error_description_too_short">"Descrierea este prea scurtă, vă rugăm să oferiți mai multe detalii despre ceea ce s-a întâmplat. Vă mulțumim!"</string>
-  <string name="screen_bug_report_view_logs">"Vizualizați log-urile"</string>
-  <string name="screen_bug_report_contact_me">"Puteți să mă contactați dacă aveți întrebări suplimentare"</string>
   <string name="screen_bug_report_editor_description">"Vă rugăm să descrieți problema. Ce ați făcut? Ce vă aşteptați să se întâmple? Ce s-a întâmplat de fapt. Vă rugam să oferiți cât mai multe detalii cu putință."</string>
   <string name="screen_bug_report_editor_placeholder">"Descrieți problema…"</string>
   <string name="screen_bug_report_editor_supporting">"Dacă posibil, vă rugăm să scrieți descrierea în engleză."</string>
+  <string name="screen_bug_report_error_description_too_short">"Descrierea este prea scurtă, vă rugăm să oferiți mai multe detalii despre ceea ce s-a întâmplat. Vă mulțumim!"</string>
   <string name="screen_bug_report_include_crash_logs">"Trimiteți log-uri"</string>
   <string name="screen_bug_report_include_logs">"Permiteți log-uri"</string>
   <string name="screen_bug_report_include_screenshot">"Trimiteți captură de ecran"</string>
   <string name="screen_bug_report_logs_description">"Pentru a verifica că lucrurile funcționează conform așteptărilor, log-uri vor fi trimise împreună cu mesajul. Acestea vor fi private. Pentru a trimite doar mesajul, dezactivați această setare."</string>
+  <string name="screen_bug_report_view_logs">"Vizualizați log-urile"</string>
   <string name="screen_bug_report_rash_logs_alert_title">"%1$s s-a blocat ultima dată când a fost folosit. Doriți să ne trimiteți un raport?"</string>
 </resources>

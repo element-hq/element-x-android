@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_create_room_action_create_room">"Nouveau salon"</string>
+  <string name="screen_create_room_action_invite_people">"Inviter des amis sur Element"</string>
   <string name="screen_create_room_error_creating_room">"Une erreur s’est produite lors de la création du salon"</string>
   <string name="screen_create_room_private_option_description">"Les messages dans ce salon sont chiffrés. Le chiffrement ne pourra pas être désactivé par la suite."</string>
   <string name="screen_create_room_private_option_title">"Salon privé (sur invitation seulement)"</string>
@@ -7,8 +9,6 @@
   <string name="screen_create_room_public_option_title">"Salon public (tout le monde)"</string>
   <string name="screen_create_room_topic_label">"Sujet (facultatif)"</string>
   <string name="screen_start_chat_error_starting_chat">"Une erreur s’est produite lors de la tentative de création de la discussion"</string>
-  <string name="screen_create_room_action_create_room">"Nouveau salon"</string>
-  <string name="screen_create_room_action_invite_people">"Inviter des amis sur Element"</string>
   <string name="screen_create_room_add_people_title">"Inviter des amis"</string>
   <string name="screen_create_room_room_name_label">"Nom du salon"</string>
   <string name="screen_create_room_title">"Créer un salon"</string>

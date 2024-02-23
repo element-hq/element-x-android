@@ -13,6 +13,8 @@
   <string name="screen_room_details_edit_room_title">"Modifier le salon"</string>
   <string name="screen_room_details_edition_error">"Une erreur inconnue s’est produite et les informations n’ont pas pu être modifiées."</string>
   <string name="screen_room_details_edition_error_title">"Impossible de mettre à jour le salon"</string>
+  <string name="screen_room_details_encryption_enabled_subtitle">"Les messages sont sécurisés par des clés de chiffrement. Seuls vous et les destinataires possédez les clés uniques pour les déverrouiller."</string>
+  <string name="screen_room_details_encryption_enabled_title">"Chiffrement des messages activé"</string>
   <string name="screen_room_details_error_loading_notification_settings">"Une erreur s’est produite lors du chargement des paramètres de notification."</string>
   <string name="screen_room_details_error_muting">"Échec de la mise en sourdine de ce salon, veuillez réessayer."</string>
   <string name="screen_room_details_error_unmuting">"Échec de la désactivation de la mise en sourdine de ce salon, veuillez réessayer."</string>
@@ -37,19 +39,17 @@
   <string name="screen_room_notification_settings_mode_all_messages">"Tous les messages"</string>
   <string name="screen_room_notification_settings_room_custom_settings_title">"Dans ce salon, prévenez-moi pour"</string>
   <string name="screen_start_chat_error_starting_chat">"Une erreur s’est produite lors de la tentative de création de la discussion"</string>
-  <string name="screen_room_details_encryption_enabled_subtitle">"Les messages sont sécurisés par des clés de chiffrement. Seuls vous et les destinataires possédez les clés uniques pour les déverrouiller."</string>
-  <string name="screen_room_details_encryption_enabled_title">"Chiffrement des messages activé"</string>
   <string name="screen_dm_details_block_alert_action">"Bloquer"</string>
   <string name="screen_dm_details_block_alert_description">"Les utilisateurs bloqués ne pourront pas vous envoyer de messages et tous leurs messages seront masqués. Vous pouvez les débloquer à tout moment."</string>
   <string name="screen_dm_details_block_user">"Bloquer l’utilisateur"</string>
   <string name="screen_dm_details_unblock_alert_action">"Débloquer"</string>
   <string name="screen_dm_details_unblock_alert_description">"Vous pourrez à nouveau voir tous ses messages."</string>
   <string name="screen_dm_details_unblock_user">"Débloquer l’utilisateur"</string>
-  <string name="screen_room_details_leave_conversation_title">"Quitter la discussion"</string>
-  <string name="screen_room_details_room_name_label">"Nom du salon"</string>
-  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Mentions et mots clés uniquement"</string>
   <string name="screen_room_details_invite_people_title">"Inviter des amis"</string>
+  <string name="screen_room_details_leave_conversation_title">"Quitter la discussion"</string>
   <string name="screen_room_details_leave_room_title">"Quitter le salon"</string>
+  <string name="screen_room_details_room_name_label">"Nom du salon"</string>
   <string name="screen_room_details_security_title">"Sécurité"</string>
   <string name="screen_room_details_topic_title">"Sujet"</string>
+  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Mentions et mots clés uniquement"</string>
 </resources>

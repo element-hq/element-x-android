@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_bug_report_attach_screenshot">"Lampirkan tangkapan layar"</string>
+  <string name="screen_bug_report_contact_me">"Anda dapat menghubungi saya jika Anda memiliki pertanyaan lebih lanjut."</string>
   <string name="screen_bug_report_contact_me_title">"Hubungi saya"</string>
   <string name="screen_bug_report_edit_screenshot">"Sunting tangkapan layar"</string>
-  <string name="screen_bug_report_contact_me">"Anda dapat menghubungi saya jika Anda memiliki pertanyaan lebih lanjut."</string>
   <string name="screen_bug_report_editor_description">"Silakan jelaskan masalah tersebut. Apa yang Anda lakukan? Apa yang Anda harapkan untuk terjadi? Apa yang sebenarnya terjadi? Jelaskan sedetail mungkin."</string>
   <string name="screen_bug_report_editor_placeholder">"Jelaskan masalah tersebut…"</string>
   <string name="screen_bug_report_editor_supporting">"Jika memungkinkan, silakan tulis deskripsi dalam bahasa Inggris."</string>

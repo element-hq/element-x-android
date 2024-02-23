@@ -16,12 +16,12 @@
   <plurals name="screen_room_typing_many_members">
     <item quantity="one">"%1$s%2$s та %3$d інший"</item>
     <item quantity="few">"%1$s%2$s та %3$d інші"</item>
-    <item quantity="many"></item>
+    <item quantity="many">"%1$s%2$s та %3$d інші"</item>
   </plurals>
   <plurals name="screen_room_typing_notification">
     <item quantity="one">"%1$s пише"</item>
     <item quantity="few">"%1$s пишуть"</item>
-    <item quantity="many"></item>
+    <item quantity="many">"%1$s пишуть"</item>
   </plurals>
   <string name="report_content_explanation">"Це повідомлення буде надіслано адміністратору вашого домашнього сервера. Він (вона) не зможе прочитати жодні зашифровані повідомлення."</string>
   <string name="report_content_hint">"Причина скарги на цей вміст"</string>

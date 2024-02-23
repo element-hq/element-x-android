@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_create_room_action_create_room">"Nová miestnosť"</string>
+  <string name="screen_create_room_action_invite_people">"Pozvať ľudí na Element"</string>
   <string name="screen_create_room_error_creating_room">"Pri vytváraní miestnosti došlo k chybe"</string>
   <string name="screen_create_room_private_option_description">"Správy v tejto miestnosti sú šifrované. Šifrovanie už potom nie je možné vypnúť."</string>
   <string name="screen_create_room_private_option_title">"Súkromná miestnosť (len pre pozvaných)"</string>
@@ -7,8 +9,6 @@
   <string name="screen_create_room_public_option_title">"Verejná miestnosť (ktokoľvek)"</string>
   <string name="screen_create_room_topic_label">"Téma (voliteľné)"</string>
   <string name="screen_start_chat_error_starting_chat">"Pri pokuse o spustenie konverzácie sa vyskytla chyba"</string>
-  <string name="screen_create_room_action_create_room">"Nová miestnosť"</string>
-  <string name="screen_create_room_action_invite_people">"Pozvať ľudí na Element"</string>
   <string name="screen_create_room_add_people_title">"Pozvať ľudí"</string>
   <string name="screen_create_room_room_name_label">"Názov miestnosti"</string>
   <string name="screen_create_room_title">"Vytvoriť miestnosť"</string>

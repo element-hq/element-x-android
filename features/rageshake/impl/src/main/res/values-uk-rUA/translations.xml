@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_bug_report_attach_screenshot">"Прикріпити знімок екрану"</string>
+  <string name="screen_bug_report_contact_me">"Ви можете зв\'язатися зі мною, якщо у вас виникнуть додаткові запитання."</string>
   <string name="screen_bug_report_contact_me_title">"Звʼязатися з нами"</string>
   <string name="screen_bug_report_edit_screenshot">"Редагувати знімок екрану"</string>
-  <string name="screen_bug_report_error_description_too_short">"Опис занадто короткий, будь ласка, надайте докладнішу інформацію про те, що сталося. Дякую!"</string>
-  <string name="screen_bug_report_view_logs">"Переглянути журнали"</string>
-  <string name="screen_bug_report_contact_me">"Ви можете зв\'язатися зі мною, якщо у вас виникнуть додаткові запитання."</string>
   <string name="screen_bug_report_editor_description">"Опишіть, будь ласка, проблему. Що Ви зробили? Чого Ви очікували? Що сталося? Будь ласка, опишіть якомога детальніше."</string>
   <string name="screen_bug_report_editor_placeholder">"Опишіть проблему…"</string>
   <string name="screen_bug_report_editor_supporting">"Якщо можливо, будь ласка, напишіть опис англійською мовою."</string>
+  <string name="screen_bug_report_error_description_too_short">"Опис занадто короткий, будь ласка, надайте докладнішу інформацію про те, що сталося. Дякую!"</string>
   <string name="screen_bug_report_include_crash_logs">"Надіслати журнали збоїв"</string>
   <string name="screen_bug_report_include_logs">"Дозволити журнали"</string>
   <string name="screen_bug_report_include_screenshot">"Надіслати знімок екрана"</string>
   <string name="screen_bug_report_logs_description">"Журнали будуть додані до вашого повідомлення, щоб переконатися, що все працює належним чином. Щоб надіслати повідомлення без журналів, вимкніть це налаштування."</string>
+  <string name="screen_bug_report_view_logs">"Переглянути журнали"</string>
   <string name="screen_bug_report_rash_logs_alert_title">"%1$s аварійно завершив роботу під час останнього використання. Бажаєте поділитися з нами звітом про збій?"</string>
 </resources>

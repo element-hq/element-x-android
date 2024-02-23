@@ -14,6 +14,8 @@
   <string name="screen_room_details_edit_room_title">"Upraviť miestnosť"</string>
   <string name="screen_room_details_edition_error">"Vyskytla sa neznáma chyba a informácie nebolo možné zmeniť."</string>
   <string name="screen_room_details_edition_error_title">"Nepodarilo sa aktualizovať miestnosť"</string>
+  <string name="screen_room_details_encryption_enabled_subtitle">"Správy sú zabezpečené zámkami. Jedine vy a príjemcovia máte jedinečné kľúče na ich odomknutie."</string>
+  <string name="screen_room_details_encryption_enabled_title">"Šifrovanie správ je zapnuté"</string>
   <string name="screen_room_details_error_loading_notification_settings">"Pri načítaní nastavení oznámení došlo k chybe."</string>
   <string name="screen_room_details_error_muting">"Nepodarilo sa stlmiť túto miestnosť, skúste to prosím znova."</string>
   <string name="screen_room_details_error_unmuting">"Nepodarilo sa zrušiť stlmenie tejto miestnosti, skúste to prosím znova."</string>
@@ -42,19 +44,17 @@
   <string name="screen_room_notification_settings_mode_all_messages">"Všetky správy"</string>
   <string name="screen_room_notification_settings_room_custom_settings_title">"V tejto miestnosti ma upozorniť na"</string>
   <string name="screen_start_chat_error_starting_chat">"Pri pokuse o spustenie konverzácie sa vyskytla chyba"</string>
-  <string name="screen_room_details_encryption_enabled_subtitle">"Správy sú zabezpečené zámkami. Jedine vy a príjemcovia máte jedinečné kľúče na ich odomknutie."</string>
-  <string name="screen_room_details_encryption_enabled_title">"Šifrovanie správ je zapnuté"</string>
   <string name="screen_dm_details_block_alert_action">"Zablokovať"</string>
   <string name="screen_dm_details_block_alert_description">"Blokovaní používatelia vám nebudú môcť posielať správy a všetky ich správy budú skryté. Môžete ich kedykoľvek odblokovať."</string>
   <string name="screen_dm_details_block_user">"Zablokovať používateľa"</string>
   <string name="screen_dm_details_unblock_alert_action">"Odblokovať"</string>
   <string name="screen_dm_details_unblock_alert_description">"Všetky správy od nich budete môcť opäť vidieť."</string>
   <string name="screen_dm_details_unblock_user">"Odblokovať používateľa"</string>
-  <string name="screen_room_details_leave_conversation_title">"Opustiť konverzáciu"</string>
-  <string name="screen_room_details_room_name_label">"Názov miestnosti"</string>
-  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Iba zmienky a kľúčové slová"</string>
   <string name="screen_room_details_invite_people_title">"Pozvať ľudí"</string>
+  <string name="screen_room_details_leave_conversation_title">"Opustiť konverzáciu"</string>
   <string name="screen_room_details_leave_room_title">"Opustiť miestnosť"</string>
+  <string name="screen_room_details_room_name_label">"Názov miestnosti"</string>
   <string name="screen_room_details_security_title">"Bezpečnosť"</string>
   <string name="screen_room_details_topic_title">"Téma"</string>
+  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Iba zmienky a kľúčové slová"</string>
 </resources>

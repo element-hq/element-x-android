@@ -12,6 +12,8 @@
   <string name="screen_change_account_provider_subtitle">"Use a different account provider, such as your own private server or a work account."</string>
   <string name="screen_change_account_provider_title">"Change account provider"</string>
   <string name="screen_change_server_error_invalid_homeserver">"We couldn\'t reach this homeserver. Please check that you have entered the homeserver URL correctly. If the URL is correct, contact your homeserver administrator for further help."</string>
+  <string name="screen_change_server_error_invalid_well_known">"Sliding sync isn\'t available due to an issue in the well-known file:
+%1$s"</string>
   <string name="screen_change_server_error_no_sliding_sync_message">"This server currently doesn’t support sliding sync."</string>
   <string name="screen_change_server_form_header">"Homeserver URL"</string>
   <string name="screen_change_server_form_notice">"You can only connect to an existing server that supports sliding sync. Your homeserver admin will need to configure it. %1$s"</string>
@@ -20,7 +22,7 @@
   <string name="screen_login_error_deactivated_account">"This account has been deactivated."</string>
   <string name="screen_login_error_invalid_credentials">"Incorrect username and/or password"</string>
   <string name="screen_login_error_invalid_user_id">"This is not a valid user identifier. Expected format: ‘@user:homeserver.org’"</string>
-  <string name="screen_login_error_refresh_tokens">"This server is configured to use refresh tokens. These aren\'t supported for password based login."</string>
+  <string name="screen_login_error_refresh_tokens">"This server is configured to use refresh tokens. These aren\'t supported when using password based login."</string>
   <string name="screen_login_error_unsupported_authentication">"The selected homeserver doesn\'t support password or OIDC login. Please contact your admin or choose another homeserver."</string>
   <string name="screen_login_form_header">"Enter your details"</string>
   <string name="screen_login_title">"Welcome back!"</string>

@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_create_room_action_create_room">"建立聊天室"</string>
+  <string name="screen_create_room_action_invite_people">"邀請朋友使用 Element"</string>
   <string name="screen_create_room_error_creating_room">"建立聊天室時發生錯誤"</string>
   <string name="screen_create_room_private_option_description">"聊天室裡的訊息會被加密。聊天室建立後，無法停用加密功能。"</string>
   <string name="screen_create_room_private_option_title">"私密聊天室（僅限邀請）"</string>
   <string name="screen_create_room_public_option_description">"訊息未加密，任何人都可以查看。您可以在之後啟用加密功能。"</string>
   <string name="screen_create_room_public_option_title">"公開聊天室（任何人）"</string>
   <string name="screen_create_room_topic_label">"主題（非必填）"</string>
-  <string name="screen_create_room_action_create_room">"建立聊天室"</string>
-  <string name="screen_create_room_action_invite_people">"邀請朋友使用 Element"</string>
   <string name="screen_create_room_add_people_title">"邀請夥伴"</string>
   <string name="screen_create_room_room_name_label">"聊天室名稱"</string>
   <string name="screen_create_room_title">"建立聊天室"</string>

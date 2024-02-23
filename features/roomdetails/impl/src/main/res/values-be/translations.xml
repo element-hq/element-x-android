@@ -14,6 +14,8 @@
   <string name="screen_room_details_edit_room_title">"Рэдагаваць пакой"</string>
   <string name="screen_room_details_edition_error">"Адбылася невядомая памылка, і інфармацыю нельга было змяніць."</string>
   <string name="screen_room_details_edition_error_title">"Немагчыма абнавіць пакой"</string>
+  <string name="screen_room_details_encryption_enabled_subtitle">"Паведамленні абаронены замкамі. Толькі ў вас і атрымальнікаў ёсць унікальныя ключы, каб разблакіраваць іх."</string>
+  <string name="screen_room_details_encryption_enabled_title">"Шыфраванне паведамленняў уключана"</string>
   <string name="screen_room_details_error_loading_notification_settings">"Пры загрузцы налад апавяшчэнняў адбылася памылка."</string>
   <string name="screen_room_details_error_muting">"Не атрымалася адключыць гук у гэтым пакоі, паўтарыце спробу."</string>
   <string name="screen_room_details_error_unmuting">"Не ўдалося ўключыць гук у гэтым пакоі. Паўтарыце спробу."</string>
@@ -38,19 +40,17 @@
   <string name="screen_room_notification_settings_mode_all_messages">"Усе паведамленні"</string>
   <string name="screen_room_notification_settings_room_custom_settings_title">"У гэтым пакоі паведаміце мяне пра"</string>
   <string name="screen_start_chat_error_starting_chat">"Пры спробе пачаць чат адбылася памылка"</string>
-  <string name="screen_room_details_encryption_enabled_subtitle">"Паведамленні абаронены замкамі. Толькі ў вас і атрымальнікаў ёсць унікальныя ключы, каб разблакіраваць іх."</string>
-  <string name="screen_room_details_encryption_enabled_title">"Шыфраванне паведамленняў уключана"</string>
   <string name="screen_dm_details_block_alert_action">"Заблакіраваць"</string>
   <string name="screen_dm_details_block_alert_description">"Заблакіраваныя карыстальнікі не змогуць адпраўляць вам паведамленні, і ўсе іх паведамленні будуць схаваны. Вы можаце разблакіраваць іх у любы час."</string>
   <string name="screen_dm_details_block_user">"Заблакіраваць карыстальніка"</string>
   <string name="screen_dm_details_unblock_alert_action">"Разблакіраваць"</string>
   <string name="screen_dm_details_unblock_alert_description">"Вы зноў зможаце ўбачыць усе паведамленні."</string>
   <string name="screen_dm_details_unblock_user">"Разблакіраваць карыстальніка"</string>
-  <string name="screen_room_details_leave_conversation_title">"Пакінуць размову"</string>
-  <string name="screen_room_details_room_name_label">"Назва пакоя"</string>
-  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Толькі згадванні і ключавыя словы"</string>
   <string name="screen_room_details_invite_people_title">"Запрасіць карыстальникаў"</string>
+  <string name="screen_room_details_leave_conversation_title">"Пакінуць размову"</string>
   <string name="screen_room_details_leave_room_title">"Пакінуць пакой"</string>
+  <string name="screen_room_details_room_name_label">"Назва пакоя"</string>
   <string name="screen_room_details_security_title">"Бяспека"</string>
   <string name="screen_room_details_topic_title">"Тэма"</string>
+  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Толькі згадванні і ключавыя словы"</string>
 </resources>

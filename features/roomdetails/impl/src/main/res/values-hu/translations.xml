@@ -13,6 +13,8 @@
   <string name="screen_room_details_edit_room_title">"Szoba szerkesztése"</string>
   <string name="screen_room_details_edition_error">"Ismeretlen hiba történt, és az információkat nem lehetett megváltoztatni."</string>
   <string name="screen_room_details_edition_error_title">"Nem sikerült frissíteni a szobát"</string>
+  <string name="screen_room_details_encryption_enabled_subtitle">"Az üzeneteket kulcsok védik. Csak Ön és a címzett rendelkezik a feloldásukhoz szükséges egyedi kulcsokkal."</string>
+  <string name="screen_room_details_encryption_enabled_title">"Az üzenettitkosítás engedélyezve"</string>
   <string name="screen_room_details_error_loading_notification_settings">"Hiba történt az értesítési beállítások betöltésekor."</string>
   <string name="screen_room_details_error_muting">"Nem sikerült elnémítani ezt a szobát, próbálja újra."</string>
   <string name="screen_room_details_error_unmuting">"Nem sikerült feloldani a szoba némítását, próbálja újra."</string>
@@ -41,19 +43,17 @@
   <string name="screen_room_notification_settings_mode_all_messages">"Összes üzenet"</string>
   <string name="screen_room_notification_settings_room_custom_settings_title">"Ebben a szobában, értesítés ezekről:"</string>
   <string name="screen_start_chat_error_starting_chat">"Hiba történt a csevegés indításakor"</string>
-  <string name="screen_room_details_encryption_enabled_subtitle">"Az üzeneteket kulcsok védik. Csak Ön és a címzett rendelkezik a feloldásukhoz szükséges egyedi kulcsokkal."</string>
-  <string name="screen_room_details_encryption_enabled_title">"Az üzenettitkosítás engedélyezve"</string>
   <string name="screen_dm_details_block_alert_action">"Letiltás"</string>
   <string name="screen_dm_details_block_alert_description">"A letiltott felhasználók nem fognak tudni üzeneteket küldeni, és az összes üzenetük rejtve lesz. Bármikor feloldhatja a letiltásukat."</string>
   <string name="screen_dm_details_block_user">"Felhasználó letiltása"</string>
   <string name="screen_dm_details_unblock_alert_action">"Letiltás feloldása"</string>
   <string name="screen_dm_details_unblock_alert_description">"Újra láthatja az összes üzenetét."</string>
   <string name="screen_dm_details_unblock_user">"Felhasználó kitiltásának feloldása"</string>
-  <string name="screen_room_details_leave_conversation_title">"Beszélgetés elhagyása"</string>
-  <string name="screen_room_details_room_name_label">"Szoba neve"</string>
-  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Csak említések és kulcsszavak"</string>
   <string name="screen_room_details_invite_people_title">"Ismerősök meghívása"</string>
+  <string name="screen_room_details_leave_conversation_title">"Beszélgetés elhagyása"</string>
   <string name="screen_room_details_leave_room_title">"Szoba elhagyása"</string>
+  <string name="screen_room_details_room_name_label">"Szoba neve"</string>
   <string name="screen_room_details_security_title">"Biztonság"</string>
   <string name="screen_room_details_topic_title">"Téma"</string>
+  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Csak említések és kulcsszavak"</string>
 </resources>

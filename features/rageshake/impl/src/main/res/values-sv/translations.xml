@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_bug_report_attach_screenshot">"Bifoga skärmdump"</string>
+  <string name="screen_bug_report_contact_me">"Ni kan kontakta mig om ni har några följdfrågor."</string>
   <string name="screen_bug_report_contact_me_title">"Kontakta mig"</string>
   <string name="screen_bug_report_edit_screenshot">"Redigera skärmdump"</string>
-  <string name="screen_bug_report_contact_me">"Ni kan kontakta mig om ni har några följdfrågor."</string>
   <string name="screen_bug_report_editor_description">"Vänligen beskriv problemet. Vad gjorde du? Vad förväntade du dig skulle hända? Vad hände istället? Vänligen gå in i så mycket detaljer som möjligt."</string>
   <string name="screen_bug_report_editor_placeholder">"Beskriv problemet …"</string>
   <string name="screen_bug_report_editor_supporting">"Om möjligt, skriv beskrivningen på engelska."</string>
