@@ -132,7 +132,8 @@ private fun AttachmentPreviewContent(
         ) {
             when (attachment) {
                 is Attachment.Media -> LocalMediaView(
-                    localMedia = attachment.localMedia
+                    localMedia = attachment.localMedia,
+                    onClick = {}
                 )
             }
         }

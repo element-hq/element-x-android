@@ -39,6 +39,7 @@ showkase = "1.0.2"
 appyx = "1.4.0"
 sqldelight = "2.0.1"
 wysiwyg = "2.29.0"
+telephoto = "0.8.0"
 
 # DI
 dagger = "2.50"
@@ -163,7 +164,8 @@ sqlite = "androidx.sqlite:sqlite-ktx:2.4.0"
 unifiedpush = "com.github.UnifiedPush:android-connector:2.1.1"
 otaliastudios_transcoder = "com.otaliastudios:transcoder:0.10.5"
 vanniktech_blurhash = "com.vanniktech:blurhash:0.2.0"
-telephoto_zoomableimage = "me.saket.telephoto:zoomable-image-coil:0.8.0"
+telephoto_zoomableimage = { module = "me.saket.telephoto:zoomable-image-coil", version.ref = "telephoto" }
+telephoto_flick = { module = "me.saket.telephoto:flick-android", version.ref = "telephoto" }
 statemachine = "com.freeletics.flowredux:compose:1.2.1"
 maplibre = "org.maplibre.gl:android-sdk:10.2.0"
 maplibre_ktx = "org.maplibre.gl:android-sdk-ktx-v7:2.0.2"
