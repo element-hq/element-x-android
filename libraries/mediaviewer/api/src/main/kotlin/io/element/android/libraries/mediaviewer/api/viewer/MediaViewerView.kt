@@ -119,7 +119,7 @@ fun MediaViewerView(
 }
 
 @Composable
-fun MediaViewerPage(
+private fun MediaViewerPage(
     showOverlay: Boolean,
     state: MediaViewerState,
     onDismiss: () -> Unit,
