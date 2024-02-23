@@ -4,19 +4,6 @@
   <string name="notification_channel_listening_for_events">"Lyssnar efter händelser"</string>
   <string name="notification_channel_noisy">"Högljudda aviseringar"</string>
   <string name="notification_channel_silent">"Tysta aviseringar"</string>
-  <string name="notification_inline_reply_failed">"** Misslyckades att skicka - vänligen öppna rummet"</string>
-  <string name="notification_invitation_action_reject">"Avvisa"</string>
-  <string name="notification_invite_body">"Bjöd in dig att chatta"</string>
-  <string name="notification_new_messages">"Nya meddelanden"</string>
-  <string name="notification_reaction_body">"Reagerade med %1$s"</string>
-  <string name="notification_room_invite_body">"Bjöd in dig att gå med i rummet"</string>
-  <string name="notification_sender_me">"Jag"</string>
-  <string name="notification_test_push_notification_content">"Du tittar på aviseringen! Klicka på mig!"</string>
-  <string name="notification_ticker_text_dm">"%1$s: %2$s"</string>
-  <string name="notification_ticker_text_group">"%1$s: %2$s %3$s"</string>
-  <string name="notification_unread_notified_messages_and_invitation">"%1$s och %2$s"</string>
-  <string name="notification_unread_notified_messages_in_room">"%1$s i %2$s"</string>
-  <string name="notification_unread_notified_messages_in_room_and_invitation">"%1$s i %2$s och %3$s"</string>
   <plurals name="notification_compat_summary_line_for_room">
     <item quantity="one">"%1$s: %2$d meddelande"</item>
     <item quantity="other">"%1$s: %2$d meddelanden"</item>
@@ -25,18 +12,32 @@
     <item quantity="one">"%d avisering"</item>
     <item quantity="other">"%d aviseringar"</item>
   </plurals>
+  <string name="notification_inline_reply_failed">"** Misslyckades att skicka - vänligen öppna rummet"</string>
+  <string name="notification_invitation_action_reject">"Avvisa"</string>
   <plurals name="notification_invitations">
     <item quantity="one">"%d inbjudan"</item>
     <item quantity="other">"%d inbjudningar"</item>
   </plurals>
+  <string name="notification_invite_body">"Bjöd in dig att chatta"</string>
+  <string name="notification_new_messages">"Nya meddelanden"</string>
   <plurals name="notification_new_messages_for_room">
     <item quantity="one">"%d nytt meddelande"</item>
     <item quantity="other">"%d nya meddelanden"</item>
   </plurals>
+  <string name="notification_reaction_body">"Reagerade med %1$s"</string>
+  <string name="notification_room_action_quick_reply">"Snabbsvar"</string>
+  <string name="notification_room_invite_body">"Bjöd in dig att gå med i rummet"</string>
+  <string name="notification_sender_me">"Jag"</string>
+  <string name="notification_test_push_notification_content">"Du tittar på aviseringen! Klicka på mig!"</string>
+  <string name="notification_ticker_text_dm">"%1$s: %2$s"</string>
+  <string name="notification_ticker_text_group">"%1$s: %2$s %3$s"</string>
   <plurals name="notification_unread_notified_messages">
     <item quantity="one">"%d oläst aviserat meddelande"</item>
     <item quantity="other">"%d olästa aviserade meddelanden"</item>
   </plurals>
+  <string name="notification_unread_notified_messages_and_invitation">"%1$s och %2$s"</string>
+  <string name="notification_unread_notified_messages_in_room">"%1$s i %2$s"</string>
+  <string name="notification_unread_notified_messages_in_room_and_invitation">"%1$s i %2$s och %3$s"</string>
   <plurals name="notification_unread_notified_messages_in_room_rooms">
     <item quantity="one">"%d rum"</item>
     <item quantity="other">"%d rum"</item>
@@ -45,5 +46,4 @@
   <string name="push_distributor_background_sync_android">"Bakgrundssynkronisering"</string>
   <string name="push_distributor_firebase_android">"Google-tjänster"</string>
   <string name="push_no_valid_google_play_services_apk_android">"Inga giltiga Google Play-tjänster hittades. Aviseringar kanske inte fungerar korrekt."</string>
-  <string name="notification_room_action_quick_reply">"Snabbsvar"</string>
 </resources>

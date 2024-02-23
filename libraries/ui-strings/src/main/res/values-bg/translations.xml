@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="a11y_delete">"Изтриване"</string>
+  <plurals name="a11y_digits_entered">
+    <item quantity="one">"%1$d въведена цифра"</item>
+    <item quantity="other">"%1$d въведени цифри"</item>
+  </plurals>
   <string name="a11y_hide_password">"Скриване на паролата"</string>
   <string name="a11y_jump_to_bottom">"Скок към най-долу"</string>
   <string name="a11y_notifications_mentions_only">"Само споменавания"</string>
@@ -14,6 +18,10 @@
   <string name="a11y_react_with">"Реакция с %1$s"</string>
   <string name="a11y_react_with_other_emojis">"Реакция с други емоджита"</string>
   <string name="a11y_read_receipts_multiple">"Прочетено от %1$s и %2$s"</string>
+  <plurals name="a11y_read_receipts_multiple_with_others">
+    <item quantity="one">"Прочетено от %1$s и %2$d друг"</item>
+    <item quantity="other">"Прочетено от %1$s и %2$d други"</item>
+  </plurals>
   <string name="a11y_read_receipts_single">"Прочетено от %1$s"</string>
   <string name="a11y_remove_reaction_with">"Премахване на реакция с %1$s"</string>
   <string name="a11y_send_files">"Изпращане на файлове"</string>
@@ -54,6 +62,7 @@
   <string name="action_leave">"Напускане"</string>
   <string name="action_leave_conversation">"Напускане на разговора"</string>
   <string name="action_leave_room">"Напускане на стаята"</string>
+  <string name="action_load_more">"Зареждане на още"</string>
   <string name="action_manage_account">"Управление на профила"</string>
   <string name="action_manage_devices">"Управление на устройства"</string>
   <string name="action_no">"Не"</string>
@@ -88,7 +97,6 @@
   <string name="action_try_again">"Повторен опит"</string>
   <string name="action_view_source">"Преглед на източника"</string>
   <string name="action_yes">"Да"</string>
-  <string name="action_load_more">"Зареждане на още"</string>
   <string name="common_about">"Относно"</string>
   <string name="common_advanced_settings">"Разширени настройки"</string>
   <string name="common_analytics">"Статистика"</string>
@@ -115,6 +123,10 @@
   <string name="common_light">"Светъл"</string>
   <string name="common_link_copied_to_clipboard">"Връзката е копирана в клипборда"</string>
   <string name="common_loading">"Зарежда се…"</string>
+  <plurals name="common_member_count">
+    <item quantity="one">"%1$d член"</item>
+    <item quantity="other">"%1$d членове"</item>
+  </plurals>
   <string name="common_message">"Съобщение"</string>
   <string name="common_message_layout">"Оформление на съобщенията"</string>
   <string name="common_message_removed">"Съобщението е премахнато"</string>
@@ -126,8 +138,14 @@
   <string name="common_people">"Хора"</string>
   <string name="common_permalink">"Постоянна връзка"</string>
   <string name="common_permission">"Разрешение"</string>
+  <string name="common_poll_end_confirmation">"Сигурни ли сте, че искате да приключите тази анкета?"</string>
+  <string name="common_poll_summary">"Анкета: %1$s"</string>
   <string name="common_poll_total_votes">"Общо гласове: %1$s"</string>
   <string name="common_poll_undisclosed_text">"Резултатите ще се покажат след приключване на анкетата"</string>
+  <plurals name="common_poll_votes_count">
+    <item quantity="one">"%d глас"</item>
+    <item quantity="other">"%d гласа"</item>
+  </plurals>
   <string name="common_privacy_policy">"Политика за поверителност"</string>
   <string name="common_reaction">"Реакция"</string>
   <string name="common_reactions">"Реакции"</string>
@@ -170,28 +188,14 @@
   <string name="common_video">"Видео"</string>
   <string name="common_voice_message">"Гласово съобщение"</string>
   <string name="common_waiting_for_decryption_key">"В очакване на това съобщение"</string>
-  <string name="common_poll_end_confirmation">"Сигурни ли сте, че искате да приключите тази анкета?"</string>
-  <string name="common_poll_summary">"Анкета: %1$s"</string>
+  <string name="dialog_title_error">"Грешка"</string>
+  <string name="dialog_title_success">"Успешно"</string>
   <string name="dialog_title_warning">"Внимание"</string>
   <string name="invite_friends_rich_title">"🔐️ Присъединете се към мен в %1$s"</string>
   <string name="invite_friends_text">"Хей, говорете с мен в %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
-  <plurals name="a11y_digits_entered">
-    <item quantity="one">"%1$d въведена цифра"</item>
-    <item quantity="other">"%1$d въведени цифри"</item>
-  </plurals>
-  <plurals name="a11y_read_receipts_multiple_with_others">
-    <item quantity="one">"Прочетено от %1$s и %2$d друг"</item>
-    <item quantity="other">"Прочетено от %1$s и %2$d други"</item>
-  </plurals>
-  <plurals name="common_member_count">
-    <item quantity="one">"%1$d член"</item>
-    <item quantity="other">"%1$d членове"</item>
-  </plurals>
-  <plurals name="common_poll_votes_count">
-    <item quantity="one">"%d глас"</item>
-    <item quantity="other">"%d гласа"</item>
-  </plurals>
+  <string name="screen_blocked_users_unblock_alert_action">"Отблокиране"</string>
+  <string name="screen_blocked_users_unblock_alert_title">"Отблокиране на потребителя"</string>
   <string name="screen_share_location_title">"Споделяне на местоположение"</string>
   <string name="screen_share_my_location_action">"Споделяне на моето местоположение"</string>
   <string name="screen_share_open_apple_maps">"Отваряне в Apple Maps"</string>
@@ -201,8 +205,4 @@
   <string name="screen_view_location_title">"Местоположение"</string>
   <string name="settings_version_number">"Версия: %1$s (%2$s)"</string>
   <string name="test_language_identifier">"bg"</string>
-  <string name="dialog_title_error">"Грешка"</string>
-  <string name="dialog_title_success">"Успешно"</string>
-  <string name="screen_blocked_users_unblock_alert_action">"Отблокиране"</string>
-  <string name="screen_blocked_users_unblock_alert_title">"Отблокиране на потребителя"</string>
 </resources>

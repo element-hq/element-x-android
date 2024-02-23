@@ -9,6 +9,7 @@
   <string name="screen_roomlist_empty_title">"Ancora nessuna chat."</string>
   <string name="screen_roomlist_filter_favourites">"Preferiti"</string>
   <string name="screen_roomlist_filter_low_priority">"Bassa priorità"</string>
+  <string name="screen_roomlist_filter_people">"Persone"</string>
   <string name="screen_roomlist_filter_rooms">"Stanze"</string>
   <string name="screen_roomlist_filter_unreads">"Non letti"</string>
   <string name="screen_roomlist_main_space_title">"Tutte le conversazioni"</string>
@@ -16,5 +17,4 @@
   <string name="screen_roomlist_mark_as_unread">"Segna come non letto"</string>
   <string name="session_verification_banner_message">"Sembra che tu stia usando un nuovo dispositivo. Verificati con un altro dispositivo per accedere ai tuoi messaggi cifrati."</string>
   <string name="session_verification_banner_title">"Verifica che sei tu"</string>
-  <string name="screen_roomlist_filter_people">"Persone"</string>
 </resources>

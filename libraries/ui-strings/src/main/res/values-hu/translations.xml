@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="a11y_delete">"Törlés"</string>
+  <plurals name="a11y_digits_entered">
+    <item quantity="one">"%1$d megadott számjegy"</item>
+    <item quantity="other">"%1$d megadott számjegy"</item>
+  </plurals>
   <string name="a11y_hide_password">"Jelszó elrejtése"</string>
   <string name="a11y_jump_to_bottom">"Ugrás az aljára"</string>
   <string name="a11y_notifications_mentions_only">"Csak megemlítések"</string>
@@ -14,6 +18,10 @@
   <string name="a11y_react_with">"Reagálás a következővel: %1$s"</string>
   <string name="a11y_react_with_other_emojis">"Reagálás más emodzsikkal"</string>
   <string name="a11y_read_receipts_multiple">"Olvasta: %1$s és %2$s"</string>
+  <plurals name="a11y_read_receipts_multiple_with_others">
+    <item quantity="one">"Olvasta: %1$s és még %2$d felhasználó"</item>
+    <item quantity="other">"Olvasta: %1$s és még %2$d felhasználó"</item>
+  </plurals>
   <string name="a11y_read_receipts_single">"Olvasta: %1$s"</string>
   <string name="a11y_read_receipts_tap_to_show_all">"Koppintson az összes megjelenítéséhez"</string>
   <string name="a11y_remove_reaction_with">"Reakció eltávolítása: %1$s"</string>
@@ -59,6 +67,7 @@
   <string name="action_leave">"Elhagyás"</string>
   <string name="action_leave_conversation">"Beszélgetés elhagyása"</string>
   <string name="action_leave_room">"Szoba elhagyása"</string>
+  <string name="action_load_more">"Továbbiak betöltése"</string>
   <string name="action_manage_account">"Fiók kezelése"</string>
   <string name="action_manage_devices">"Eszközök kezelése"</string>
   <string name="action_next">"Következő"</string>
@@ -96,7 +105,6 @@
   <string name="action_try_again">"Próbáld újra"</string>
   <string name="action_view_source">"Forrás megtekintése"</string>
   <string name="action_yes">"Igen"</string>
-  <string name="action_load_more">"Továbbiak betöltése"</string>
   <string name="common_about">"Névjegy"</string>
   <string name="common_acceptable_use_policy">"Elfogadható használatra vonatkozó szabályzat"</string>
   <string name="common_advanced_settings">"Speciális beállítások"</string>
@@ -132,6 +140,10 @@
   <string name="common_light">"Világos"</string>
   <string name="common_link_copied_to_clipboard">"Hivatkozás a vágólapra másolva"</string>
   <string name="common_loading">"Betöltés…"</string>
+  <plurals name="common_member_count">
+    <item quantity="one">"%1$d tag"</item>
+    <item quantity="other">"%1$d tag"</item>
+  </plurals>
   <string name="common_message">"Üzenet"</string>
   <string name="common_message_actions">"Üzenetműveletek"</string>
   <string name="common_message_layout">"Üzenet elrendezése"</string>
@@ -144,8 +156,14 @@
   <string name="common_people">"Emberek"</string>
   <string name="common_permalink">"Állandó hivatkozás"</string>
   <string name="common_permission">"Engedély"</string>
+  <string name="common_poll_end_confirmation">"Biztos, hogy befejezi ezt a szavazást?"</string>
+  <string name="common_poll_summary">"Szavazás: %1$s"</string>
   <string name="common_poll_total_votes">"Összes szavazat: %1$s"</string>
   <string name="common_poll_undisclosed_text">"Az eredmények a szavazás befejezése után jelennek meg"</string>
+  <plurals name="common_poll_votes_count">
+    <item quantity="one">"%d szavazat"</item>
+    <item quantity="other">"%d szavazat"</item>
+  </plurals>
   <string name="common_privacy_policy">"Adatvédelmi nyilatkozat"</string>
   <string name="common_reaction">"Reakció"</string>
   <string name="common_reactions">"Reakciók"</string>
@@ -192,14 +210,14 @@
   <string name="common_username">"Felhasználónév"</string>
   <string name="common_verification_cancelled">"Az ellenőrzés megszakítva"</string>
   <string name="common_verification_complete">"Az ellenőrzés befejeződött"</string>
+  <string name="common_verify_device">"Eszköz ellenőrzése"</string>
   <string name="common_video">"Videó"</string>
   <string name="common_voice_message">"Hangüzenet"</string>
   <string name="common_waiting">"Várakozás…"</string>
   <string name="common_waiting_for_decryption_key">"Várakozás a visszafejtési kulcsra"</string>
-  <string name="common_poll_end_confirmation">"Biztos, hogy befejezi ezt a szavazást?"</string>
-  <string name="common_poll_summary">"Szavazás: %1$s"</string>
-  <string name="common_verify_device">"Eszköz ellenőrzése"</string>
   <string name="dialog_title_confirmation">"Megerősítés"</string>
+  <string name="dialog_title_error">"Hiba"</string>
+  <string name="dialog_title_success">"Sikeres"</string>
   <string name="dialog_title_warning">"Figyelmeztetés"</string>
   <string name="error_failed_creating_the_permalink">"Nem sikerült létrehozni az állandó hivatkozást"</string>
   <string name="error_failed_loading_map">"A(z) %1$s nem tudta betölteni a térképet. Próbáld meg újra később."</string>
@@ -214,23 +232,10 @@
   <string name="invite_friends_rich_title">"🔐️ Csatlakozz hozzám itt: %1$s"</string>
   <string name="invite_friends_text">"Beszélgessünk a(z) %1$s: %2$s -n"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
-  <plurals name="a11y_digits_entered">
-    <item quantity="one">"%1$d megadott számjegy"</item>
-    <item quantity="other">"%1$d megadott számjegy"</item>
-  </plurals>
-  <plurals name="a11y_read_receipts_multiple_with_others">
-    <item quantity="one">"Olvasta: %1$s és még %2$d felhasználó"</item>
-    <item quantity="other">"Olvasta: %1$s és még %2$d felhasználó"</item>
-  </plurals>
-  <plurals name="common_member_count">
-    <item quantity="one">"%1$d tag"</item>
-    <item quantity="other">"%1$d tag"</item>
-  </plurals>
-  <plurals name="common_poll_votes_count">
-    <item quantity="one">"%d szavazat"</item>
-    <item quantity="other">"%d szavazat"</item>
-  </plurals>
   <string name="preference_rageshake">"Az eszköz rázása a hibajelentéshez"</string>
+  <string name="screen_blocked_users_unblock_alert_action">"Letiltás feloldása"</string>
+  <string name="screen_blocked_users_unblock_alert_description">"Újra láthatja az összes üzenetét."</string>
+  <string name="screen_blocked_users_unblock_alert_title">"Felhasználó kitiltásának feloldása"</string>
   <string name="screen_media_picker_error_failed_selection">"Nem sikerült kiválasztani a médiát, próbálja újra."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Nem sikerült feldolgozni a feltöltendő médiát, próbálja újra."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Nem sikerült a média feltöltése, próbálja újra."</string>
@@ -243,9 +248,4 @@
   <string name="screen_view_location_title">"Hely"</string>
   <string name="settings_version_number">"Verzió: %1$s (%2$s)"</string>
   <string name="test_language_identifier">"hu"</string>
-  <string name="dialog_title_error">"Hiba"</string>
-  <string name="dialog_title_success">"Sikeres"</string>
-  <string name="screen_blocked_users_unblock_alert_action">"Letiltás feloldása"</string>
-  <string name="screen_blocked_users_unblock_alert_description">"Újra láthatja az összes üzenetét."</string>
-  <string name="screen_blocked_users_unblock_alert_title">"Felhasználó kitiltásának feloldása"</string>
 </resources>

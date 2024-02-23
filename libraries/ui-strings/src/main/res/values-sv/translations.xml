@@ -97,6 +97,10 @@
   <string name="common_leaving_room">"Lämnar rummet"</string>
   <string name="common_link_copied_to_clipboard">"Länk kopierad till klippbordet"</string>
   <string name="common_loading">"Laddar …"</string>
+  <plurals name="common_member_count">
+    <item quantity="one">"%1$d medlem"</item>
+    <item quantity="other">"%1$d medlemmar"</item>
+  </plurals>
   <string name="common_message">"Meddelande"</string>
   <string name="common_message_layout">"Meddelandearrangemang"</string>
   <string name="common_message_removed">"Meddelande borttaget"</string>
@@ -108,8 +112,13 @@
   <string name="common_people">"Personer"</string>
   <string name="common_permalink">"Permalänk"</string>
   <string name="common_permission">"Behörighet"</string>
+  <string name="common_poll_summary">"Omröstning: %1$s"</string>
   <string name="common_poll_total_votes">"Totalt antal röster: %1$s"</string>
   <string name="common_poll_undisclosed_text">"Resultaten visas efter att omröstningen har avslutats"</string>
+  <plurals name="common_poll_votes_count">
+    <item quantity="one">"%d röst"</item>
+    <item quantity="other">"%d röster"</item>
+  </plurals>
   <string name="common_privacy_policy">"Integritetspolicy"</string>
   <string name="common_reaction">"Reaktion"</string>
   <string name="common_reactions">"Reaktioner"</string>
@@ -148,8 +157,9 @@
   <string name="common_verification_complete">"Verifieringen slutförd"</string>
   <string name="common_video">"Video"</string>
   <string name="common_waiting">"Väntar …"</string>
-  <string name="common_poll_summary">"Omröstning: %1$s"</string>
   <string name="dialog_title_confirmation">"Bekräftelse"</string>
+  <string name="dialog_title_error">"Fel"</string>
+  <string name="dialog_title_success">"Lyckades"</string>
   <string name="dialog_title_warning">"Varning"</string>
   <string name="error_failed_creating_the_permalink">"Misslyckades att skapa permalänken"</string>
   <string name="error_failed_loading_map">"%1$s kunde inte ladda kartan. Vänligen försök igen senare."</string>
@@ -162,15 +172,10 @@
   <string name="invite_friends_rich_title">"🔐️ Häng med mig på %1$s"</string>
   <string name="invite_friends_text">"Hallå, prata med mig på %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
-  <plurals name="common_member_count">
-    <item quantity="one">"%1$d medlem"</item>
-    <item quantity="other">"%1$d medlemmar"</item>
-  </plurals>
-  <plurals name="common_poll_votes_count">
-    <item quantity="one">"%d röst"</item>
-    <item quantity="other">"%d röster"</item>
-  </plurals>
   <string name="preference_rageshake">"Raseriskaka för att rapportera bugg"</string>
+  <string name="screen_blocked_users_unblock_alert_action">"Avblockera"</string>
+  <string name="screen_blocked_users_unblock_alert_description">"Du kommer att kunna se alla meddelanden från dem igen."</string>
+  <string name="screen_blocked_users_unblock_alert_title">"Avblockera användare"</string>
   <string name="screen_media_picker_error_failed_selection">"Misslyckades att välja media, vänligen pröva igen."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Misslyckades att bearbeta media för uppladdning, vänligen pröva igen."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Misslyckades att ladda upp media, vänligen pröva igen."</string>
@@ -183,9 +188,4 @@
   <string name="screen_view_location_title">"Plats"</string>
   <string name="settings_version_number">"Version: %1$s (%2$s)"</string>
   <string name="test_language_identifier">"sv"</string>
-  <string name="dialog_title_error">"Fel"</string>
-  <string name="dialog_title_success">"Lyckades"</string>
-  <string name="screen_blocked_users_unblock_alert_action">"Avblockera"</string>
-  <string name="screen_blocked_users_unblock_alert_description">"Du kommer att kunna se alla meddelanden från dem igen."</string>
-  <string name="screen_blocked_users_unblock_alert_title">"Avblockera användare"</string>
 </resources>

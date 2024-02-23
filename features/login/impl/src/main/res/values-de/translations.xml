@@ -5,7 +5,9 @@
   <string name="screen_account_provider_form_notice">"Gib einen Suchbegriff oder eine Domainadresse ein."</string>
   <string name="screen_account_provider_form_subtitle">"Suche nach einem Unternehmen, einer Community oder einem privaten Server."</string>
   <string name="screen_account_provider_form_title">"Kontoanbieter finden"</string>
+  <string name="screen_account_provider_signin_subtitle">"Hier werden deine Gespräche gespeichert - so wie du deine E-Mails bei einem E-Mail-Anbieter aufbewahren würden."</string>
   <string name="screen_account_provider_signin_title">"Du bist dabei, dich bei %s anzumelden"</string>
+  <string name="screen_account_provider_signup_subtitle">"Hier werden deine Gespräche gespeichert - so wie du deine E-Mails bei einem E-Mail-Anbieter aufbewahren würden."</string>
   <string name="screen_account_provider_signup_title">"Du bist dabei, ein Konto bei %s zu erstellen"</string>
   <string name="screen_change_account_provider_matrix_org_subtitle">"Matrix.org ist ein großer, kostenloser Server im öffentlichen Matrix-Netzwerk für eine sichere, dezentralisierte Kommunikation, der von der Matrix.org Foundation betrieben wird."</string>
   <string name="screen_change_account_provider_other">"Sonstige"</string>
@@ -23,6 +25,7 @@
   <string name="screen_login_error_refresh_tokens">"Dieser Server ist so konfiguriert, dass er Refresh-Tokens verwendet. Diese werden für die passwortbasierte Anmeldung nicht unterstützt."</string>
   <string name="screen_login_error_unsupported_authentication">"Der ausgewählte Homeserver unterstützt weder den Login per Passwort noch per OIDC. Bitte kontaktiere deinen Administrator oder wähle einen anderen Homeserver."</string>
   <string name="screen_login_form_header">"Gebe deine Daten ein"</string>
+  <string name="screen_login_subtitle">"Matrix ist ein offenes Netzwerk für eine sichere, dezentrale Kommunikation."</string>
   <string name="screen_login_title">"Willkommen zurück!"</string>
   <string name="screen_login_title_with_homeserver">"Anmelden bei %1$s"</string>
   <string name="screen_server_confirmation_change_server">"Kontoanbieter wechseln"</string>
@@ -34,10 +37,7 @@
   <string name="screen_waitlist_message">"Derzeit besteht eine hohe Nachfrage nach %1$s auf %2$s. Kehre in ein paar Tagen zur App zurück und versuche es erneut.
 
 Danke für deine Geduld!"</string>
+  <string name="screen_waitlist_message_success">"Willkommen bei %1$s!"</string>
   <string name="screen_waitlist_title">"Du bist fast am Ziel."</string>
   <string name="screen_waitlist_title_success">"Du bist dabei."</string>
-  <string name="screen_account_provider_signin_subtitle">"Hier werden deine Gespräche gespeichert - so wie du deine E-Mails bei einem E-Mail-Anbieter aufbewahren würden."</string>
-  <string name="screen_account_provider_signup_subtitle">"Hier werden deine Gespräche gespeichert - so wie du deine E-Mails bei einem E-Mail-Anbieter aufbewahren würden."</string>
-  <string name="screen_login_subtitle">"Matrix ist ein offenes Netzwerk für eine sichere, dezentrale Kommunikation."</string>
-  <string name="screen_waitlist_message_success">"Willkommen bei %1$s!"</string>
 </resources>

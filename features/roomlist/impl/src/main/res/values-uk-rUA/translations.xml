@@ -9,6 +9,7 @@
   <string name="screen_roomlist_empty_title">"Ще немає чатів."</string>
   <string name="screen_roomlist_filter_favourites">"Улюблені"</string>
   <string name="screen_roomlist_filter_low_priority">"Низький пріоритет"</string>
+  <string name="screen_roomlist_filter_people">"Люди"</string>
   <string name="screen_roomlist_filter_rooms">"Кімнати"</string>
   <string name="screen_roomlist_filter_unreads">"Непрочитані"</string>
   <string name="screen_roomlist_main_space_title">"Усі чати"</string>
@@ -16,5 +17,4 @@
   <string name="screen_roomlist_mark_as_unread">"Позначити як непрочитане"</string>
   <string name="session_verification_banner_message">"Схоже, Ви використовуєте новий пристрій. Щоб отримати доступ до зашифрованих повідомлень, підтвердьте особу за допомогою іншого пристрою."</string>
   <string name="session_verification_banner_title">"Підтвердьте, що це Ви"</string>
-  <string name="screen_roomlist_filter_people">"Люди"</string>
 </resources>

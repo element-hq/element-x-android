@@ -1,13 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <plurals name="screen_app_lock_subtitle">
-    <item quantity="one">"Hai %1$d tentativo di sblocco"</item>
-    <item quantity="other">"Hai %1$d tentativi di sblocco"</item>
-  </plurals>
-  <plurals name="screen_app_lock_subtitle_wrong_pin">
-    <item quantity="one">"PIN sbagliato. Hai %1$d altro tentativo"</item>
-    <item quantity="other">"PIN sbagliato. Hai altri %1$d tentativi"</item>
-  </plurals>
   <string name="screen_app_lock_biometric_authentication">"autenticazione biometrica"</string>
   <string name="screen_app_lock_biometric_unlock">"sblocco biometrico"</string>
   <string name="screen_app_lock_biometric_unlock_title_android">"Sblocca con la biometria"</string>
@@ -31,6 +23,14 @@ Scegli qualcosa che puoi ricordare. Se dimentichi questo PIN, verrai disconnesso
   <string name="screen_app_lock_setup_pin_mismatch_dialog_title">"I PIN non corrispondono"</string>
   <string name="screen_app_lock_signout_alert_message">"Dovrai effettuare nuovamente l\'accesso e creare un nuovo PIN per procedere"</string>
   <string name="screen_app_lock_signout_alert_title">"Stai per essere disconnesso"</string>
+  <plurals name="screen_app_lock_subtitle">
+    <item quantity="one">"Hai %1$d tentativo di sblocco"</item>
+    <item quantity="other">"Hai %1$d tentativi di sblocco"</item>
+  </plurals>
+  <plurals name="screen_app_lock_subtitle_wrong_pin">
+    <item quantity="one">"PIN sbagliato. Hai %1$d altro tentativo"</item>
+    <item quantity="other">"PIN sbagliato. Hai altri %1$d tentativi"</item>
+  </plurals>
   <string name="screen_app_lock_use_biometric_android">"Usa la biometria"</string>
   <string name="screen_app_lock_use_pin_android">"Usa il PIN"</string>
   <string name="screen_signout_in_progress_dialog_content">"Uscita in corso…"</string>

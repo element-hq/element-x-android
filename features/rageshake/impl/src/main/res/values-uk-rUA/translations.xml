@@ -12,6 +12,6 @@
   <string name="screen_bug_report_include_logs">"Дозволити журнали"</string>
   <string name="screen_bug_report_include_screenshot">"Надіслати знімок екрана"</string>
   <string name="screen_bug_report_logs_description">"Журнали будуть додані до вашого повідомлення, щоб переконатися, що все працює належним чином. Щоб надіслати повідомлення без журналів, вимкніть це налаштування."</string>
-  <string name="screen_bug_report_view_logs">"Переглянути журнали"</string>
   <string name="screen_bug_report_rash_logs_alert_title">"%1$s аварійно завершив роботу під час останнього використання. Бажаєте поділитися з нами звітом про збій?"</string>
+  <string name="screen_bug_report_view_logs">"Переглянути журнали"</string>
 </resources>

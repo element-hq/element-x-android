@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <plurals name="screen_room_member_list_header_title">
-    <item quantity="one">"%1$d osoba"</item>
-    <item quantity="few">"%1$d osoby"</item>
-    <item quantity="other">"%1$d osob"</item>
-  </plurals>
+  <string name="screen_dm_details_block_alert_action">"Zablokovat"</string>
+  <string name="screen_dm_details_block_alert_description">"Blokovaní uživatelé vám nebudou moci posílat zprávy a všechny jejich zprávy budou skryty. Můžete je kdykoli odblokovat."</string>
+  <string name="screen_dm_details_block_user">"Zablokovat uživatele"</string>
+  <string name="screen_dm_details_unblock_alert_action">"Odblokovat"</string>
+  <string name="screen_dm_details_unblock_alert_description">"Znovu uvidíte všechny zprávy od nich."</string>
+  <string name="screen_dm_details_unblock_user">"Odblokovat uživatele"</string>
   <string name="screen_notification_settings_edit_failed_updating_default_mode">"Při aktualizaci nastavení oznámení došlo k chybě."</string>
   <string name="screen_notification_settings_mentions_only_disclaimer">"Váš domovský server tuto možnost v zašifrovaných místnostech nepodporuje, v některých místnostech nemusíte být upozorněni."</string>
   <string name="screen_polls_history_title">"Hlasování"</string>
@@ -19,11 +20,22 @@
   <string name="screen_room_details_error_loading_notification_settings">"Při načítání nastavení oznámení došlo k chybě."</string>
   <string name="screen_room_details_error_muting">"Ztišení této místnosti se nezdařilo, zkuste to prosím znovu."</string>
   <string name="screen_room_details_error_unmuting">"Nepodařilo se zrušit ztišení této místnosti, zkuste to prosím znovu."</string>
+  <string name="screen_room_details_invite_people_title">"Pozvat přátele"</string>
+  <string name="screen_room_details_leave_conversation_title">"Opustit konverzaci"</string>
+  <string name="screen_room_details_leave_room_title">"Opustit místnost"</string>
   <string name="screen_room_details_notification_mode_custom">"Vlastní"</string>
   <string name="screen_room_details_notification_mode_default">"Výchozí"</string>
   <string name="screen_room_details_notification_title">"Oznámení"</string>
+  <string name="screen_room_details_room_name_label">"Název místnosti"</string>
+  <string name="screen_room_details_security_title">"Zabezpečení"</string>
   <string name="screen_room_details_share_room_title">"Sdílet místnost"</string>
+  <string name="screen_room_details_topic_title">"Téma"</string>
   <string name="screen_room_details_updating_room">"Aktualizace místnosti…"</string>
+  <plurals name="screen_room_member_list_header_title">
+    <item quantity="one">"%1$d osoba"</item>
+    <item quantity="few">"%1$d osoby"</item>
+    <item quantity="other">"%1$d osob"</item>
+  </plurals>
   <string name="screen_room_member_list_mode_banned">"Vykázaní"</string>
   <string name="screen_room_member_list_mode_members">"Členové"</string>
   <string name="screen_room_member_list_pending_header_title">"Nevyřízeno"</string>
@@ -42,19 +54,7 @@
   <string name="screen_room_notification_settings_error_setting_mode">"Nastavení režimu se nezdařilo, zkuste to prosím znovu."</string>
   <string name="screen_room_notification_settings_mentions_only_disclaimer">"Váš domovský server tuto možnost nepodporuje v šifrovaných místnostech, v této místnosti nebudete dostávat upozornění."</string>
   <string name="screen_room_notification_settings_mode_all_messages">"Všechny zprávy"</string>
+  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Pouze zmínky a klíčová slova"</string>
   <string name="screen_room_notification_settings_room_custom_settings_title">"V této místnosti mě upozornit na"</string>
   <string name="screen_start_chat_error_starting_chat">"Při pokusu o zahájení chatu došlo k chybě"</string>
-  <string name="screen_dm_details_block_alert_action">"Zablokovat"</string>
-  <string name="screen_dm_details_block_alert_description">"Blokovaní uživatelé vám nebudou moci posílat zprávy a všechny jejich zprávy budou skryty. Můžete je kdykoli odblokovat."</string>
-  <string name="screen_dm_details_block_user">"Zablokovat uživatele"</string>
-  <string name="screen_dm_details_unblock_alert_action">"Odblokovat"</string>
-  <string name="screen_dm_details_unblock_alert_description">"Znovu uvidíte všechny zprávy od nich."</string>
-  <string name="screen_dm_details_unblock_user">"Odblokovat uživatele"</string>
-  <string name="screen_room_details_invite_people_title">"Pozvat přátele"</string>
-  <string name="screen_room_details_leave_conversation_title">"Opustit konverzaci"</string>
-  <string name="screen_room_details_leave_room_title">"Opustit místnost"</string>
-  <string name="screen_room_details_room_name_label">"Název místnosti"</string>
-  <string name="screen_room_details_security_title">"Zabezpečení"</string>
-  <string name="screen_room_details_topic_title">"Téma"</string>
-  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Pouze zmínky a klíčová slova"</string>
 </resources>

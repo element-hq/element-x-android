@@ -5,7 +5,9 @@
   <string name="screen_account_provider_form_notice">"Enter a search term or a domain address."</string>
   <string name="screen_account_provider_form_subtitle">"Search for a company, community, or private server."</string>
   <string name="screen_account_provider_form_title">"Find an account provider"</string>
+  <string name="screen_account_provider_signin_subtitle">"This is where your conversations will live — just like you would use an email provider to keep your emails."</string>
   <string name="screen_account_provider_signin_title">"You’re about to sign in to %s"</string>
+  <string name="screen_account_provider_signup_subtitle">"This is where your conversations will live — just like you would use an email provider to keep your emails."</string>
   <string name="screen_account_provider_signup_title">"You’re about to create an account on %s"</string>
   <string name="screen_change_account_provider_matrix_org_subtitle">"Matrix.org is a large, free server on the public Matrix network for secure, decentralised communication, run by the Matrix.org Foundation."</string>
   <string name="screen_change_account_provider_other">"Other"</string>
@@ -25,6 +27,7 @@
   <string name="screen_login_error_refresh_tokens">"This server is configured to use refresh tokens. These aren\'t supported when using password based login."</string>
   <string name="screen_login_error_unsupported_authentication">"The selected homeserver doesn\'t support password or OIDC login. Please contact your admin or choose another homeserver."</string>
   <string name="screen_login_form_header">"Enter your details"</string>
+  <string name="screen_login_subtitle">"Matrix is an open network for secure, decentralised communication."</string>
   <string name="screen_login_title">"Welcome back!"</string>
   <string name="screen_login_title_with_homeserver">"Sign in to %1$s"</string>
   <string name="screen_server_confirmation_change_server">"Change account provider"</string>
@@ -36,10 +39,7 @@
   <string name="screen_waitlist_message">"There\'s a high demand for %1$s on %2$s at the moment. Come back to the app in a few days and try again.
 
 Thanks for your patience!"</string>
+  <string name="screen_waitlist_message_success">"Welcome to %1$s!"</string>
   <string name="screen_waitlist_title">"You’re almost there."</string>
   <string name="screen_waitlist_title_success">"You\'re in."</string>
-  <string name="screen_account_provider_signin_subtitle">"This is where your conversations will live — just like you would use an email provider to keep your emails."</string>
-  <string name="screen_account_provider_signup_subtitle">"This is where your conversations will live — just like you would use an email provider to keep your emails."</string>
-  <string name="screen_login_subtitle">"Matrix is an open network for secure, decentralised communication."</string>
-  <string name="screen_waitlist_message_success">"Welcome to %1$s!"</string>
 </resources>

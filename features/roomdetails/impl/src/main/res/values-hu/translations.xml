@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <plurals name="screen_room_member_list_header_title">
-    <item quantity="one">"%1$d személy"</item>
-    <item quantity="other">"%1$d személy"</item>
-  </plurals>
+  <string name="screen_dm_details_block_alert_action">"Letiltás"</string>
+  <string name="screen_dm_details_block_alert_description">"A letiltott felhasználók nem fognak tudni üzeneteket küldeni, és az összes üzenetük rejtve lesz. Bármikor feloldhatja a letiltásukat."</string>
+  <string name="screen_dm_details_block_user">"Felhasználó letiltása"</string>
+  <string name="screen_dm_details_unblock_alert_action">"Letiltás feloldása"</string>
+  <string name="screen_dm_details_unblock_alert_description">"Újra láthatja az összes üzenetét."</string>
+  <string name="screen_dm_details_unblock_user">"Felhasználó kitiltásának feloldása"</string>
   <string name="screen_notification_settings_edit_failed_updating_default_mode">"Hiba történt az értesítési beállítás frissítésekor."</string>
   <string name="screen_notification_settings_mentions_only_disclaimer">"A Matrix-kiszolgálója nem támogatja ezt a beállítást a titkosított szobákban, előfordulhat, hogy egyes szobákban nem kap értesítést."</string>
   <string name="screen_polls_history_title">"Szavazások"</string>
@@ -18,11 +20,21 @@
   <string name="screen_room_details_error_loading_notification_settings">"Hiba történt az értesítési beállítások betöltésekor."</string>
   <string name="screen_room_details_error_muting">"Nem sikerült elnémítani ezt a szobát, próbálja újra."</string>
   <string name="screen_room_details_error_unmuting">"Nem sikerült feloldani a szoba némítását, próbálja újra."</string>
+  <string name="screen_room_details_invite_people_title">"Ismerősök meghívása"</string>
+  <string name="screen_room_details_leave_conversation_title">"Beszélgetés elhagyása"</string>
+  <string name="screen_room_details_leave_room_title">"Szoba elhagyása"</string>
   <string name="screen_room_details_notification_mode_custom">"Egyéni"</string>
   <string name="screen_room_details_notification_mode_default">"Alapértelmezett"</string>
   <string name="screen_room_details_notification_title">"Értesítések"</string>
+  <string name="screen_room_details_room_name_label">"Szoba neve"</string>
+  <string name="screen_room_details_security_title">"Biztonság"</string>
   <string name="screen_room_details_share_room_title">"Szoba megosztása"</string>
+  <string name="screen_room_details_topic_title">"Téma"</string>
   <string name="screen_room_details_updating_room">"Szoba frissítése…"</string>
+  <plurals name="screen_room_member_list_header_title">
+    <item quantity="one">"%1$d személy"</item>
+    <item quantity="other">"%1$d személy"</item>
+  </plurals>
   <string name="screen_room_member_list_mode_banned">"Kitiltva"</string>
   <string name="screen_room_member_list_mode_members">"Tagok"</string>
   <string name="screen_room_member_list_pending_header_title">"Függőben"</string>
@@ -41,19 +53,7 @@
   <string name="screen_room_notification_settings_error_setting_mode">"Nem sikerült a mód beállítása, próbálja újra."</string>
   <string name="screen_room_notification_settings_mentions_only_disclaimer">"A Matrix-kiszolgálója nem támogatja ezt a beállítást a titkosított szobákban, egyes szobákban nem fog értesítéseket kapni."</string>
   <string name="screen_room_notification_settings_mode_all_messages">"Összes üzenet"</string>
+  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Csak említések és kulcsszavak"</string>
   <string name="screen_room_notification_settings_room_custom_settings_title">"Ebben a szobában, értesítés ezekről:"</string>
   <string name="screen_start_chat_error_starting_chat">"Hiba történt a csevegés indításakor"</string>
-  <string name="screen_dm_details_block_alert_action">"Letiltás"</string>
-  <string name="screen_dm_details_block_alert_description">"A letiltott felhasználók nem fognak tudni üzeneteket küldeni, és az összes üzenetük rejtve lesz. Bármikor feloldhatja a letiltásukat."</string>
-  <string name="screen_dm_details_block_user">"Felhasználó letiltása"</string>
-  <string name="screen_dm_details_unblock_alert_action">"Letiltás feloldása"</string>
-  <string name="screen_dm_details_unblock_alert_description">"Újra láthatja az összes üzenetét."</string>
-  <string name="screen_dm_details_unblock_user">"Felhasználó kitiltásának feloldása"</string>
-  <string name="screen_room_details_invite_people_title">"Ismerősök meghívása"</string>
-  <string name="screen_room_details_leave_conversation_title">"Beszélgetés elhagyása"</string>
-  <string name="screen_room_details_leave_room_title">"Szoba elhagyása"</string>
-  <string name="screen_room_details_room_name_label">"Szoba neve"</string>
-  <string name="screen_room_details_security_title">"Biztonság"</string>
-  <string name="screen_room_details_topic_title">"Téma"</string>
-  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Csak említések és kulcsszavak"</string>
 </resources>

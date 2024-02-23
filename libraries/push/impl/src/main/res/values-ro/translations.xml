@@ -4,20 +4,6 @@
   <string name="notification_channel_listening_for_events">"Ascultare evenimente"</string>
   <string name="notification_channel_noisy">"Notificări zgomotoase"</string>
   <string name="notification_channel_silent">"Notificări silențioase"</string>
-  <string name="notification_inline_reply_failed">"** Trimiterea eșuată - vă rugăm să deschideți camera"</string>
-  <string name="notification_invitation_action_reject">"Respingeți"</string>
-  <string name="notification_invite_body">"V-a invitat la o discuție"</string>
-  <string name="notification_mentioned_you_body">"%1$s v-a menționat"</string>
-  <string name="notification_new_messages">"Mesaje noi"</string>
-  <string name="notification_reaction_body">"A reacționat cu %1$s"</string>
-  <string name="notification_room_invite_body">"V-a invitat să vă alăturați camerei"</string>
-  <string name="notification_sender_me">"Eu"</string>
-  <string name="notification_test_push_notification_content">"Vizualizați o notificare! Faceți clic pe mine!"</string>
-  <string name="notification_ticker_text_dm">"%1$s: %2$s"</string>
-  <string name="notification_ticker_text_group">"%1$s: %2$s %3$s"</string>
-  <string name="notification_unread_notified_messages_and_invitation">"%1$s și %2$s"</string>
-  <string name="notification_unread_notified_messages_in_room">"%1$s în %2$s"</string>
-  <string name="notification_unread_notified_messages_in_room_and_invitation">"%1$s în %2$s și %3$s"</string>
   <plurals name="notification_compat_summary_line_for_room">
     <item quantity="one">"%1$s: %2$d mesaj"</item>
     <item quantity="other">"%1$s: %2$d mesaje"</item>
@@ -26,18 +12,36 @@
     <item quantity="one">"%d notificare"</item>
     <item quantity="other">"%d notificări"</item>
   </plurals>
+  <string name="notification_fallback_content">"Notificare"</string>
+  <string name="notification_inline_reply_failed">"** Trimiterea eșuată - vă rugăm să deschideți camera"</string>
+  <string name="notification_invitation_action_join">"Alăturați-vă"</string>
+  <string name="notification_invitation_action_reject">"Respingeți"</string>
   <plurals name="notification_invitations">
     <item quantity="one">"%d invitație"</item>
     <item quantity="other">"%d invitații"</item>
   </plurals>
+  <string name="notification_invite_body">"V-a invitat la o discuție"</string>
+  <string name="notification_mentioned_you_body">"%1$s v-a menționat"</string>
+  <string name="notification_new_messages">"Mesaje noi"</string>
   <plurals name="notification_new_messages_for_room">
     <item quantity="one">"%d mesaj nou"</item>
     <item quantity="other">"%d mesaje noi"</item>
   </plurals>
+  <string name="notification_reaction_body">"A reacționat cu %1$s"</string>
+  <string name="notification_room_action_mark_as_read">"Marcați ca citită"</string>
+  <string name="notification_room_action_quick_reply">"Raspuns rapid"</string>
+  <string name="notification_room_invite_body">"V-a invitat să vă alăturați camerei"</string>
+  <string name="notification_sender_me">"Eu"</string>
+  <string name="notification_test_push_notification_content">"Vizualizați o notificare! Faceți clic pe mine!"</string>
+  <string name="notification_ticker_text_dm">"%1$s: %2$s"</string>
+  <string name="notification_ticker_text_group">"%1$s: %2$s %3$s"</string>
   <plurals name="notification_unread_notified_messages">
     <item quantity="one">"%d mesaj notificat necitit"</item>
     <item quantity="other">"%d mesaje notificate necitite"</item>
   </plurals>
+  <string name="notification_unread_notified_messages_and_invitation">"%1$s și %2$s"</string>
+  <string name="notification_unread_notified_messages_in_room">"%1$s în %2$s"</string>
+  <string name="notification_unread_notified_messages_in_room_and_invitation">"%1$s în %2$s și %3$s"</string>
   <plurals name="notification_unread_notified_messages_in_room_rooms">
     <item quantity="one">"%d cameră"</item>
     <item quantity="other">"%d camere"</item>
@@ -46,8 +50,4 @@
   <string name="push_distributor_background_sync_android">"Sincronizare în fundal"</string>
   <string name="push_distributor_firebase_android">"Servicii Google"</string>
   <string name="push_no_valid_google_play_services_apk_android">"Nu au fost găsite servicii Google Play valide. Este posibil ca notificările să nu funcționeze corect."</string>
-  <string name="notification_fallback_content">"Notificare"</string>
-  <string name="notification_invitation_action_join">"Alăturați-vă"</string>
-  <string name="notification_room_action_mark_as_read">"Marcați ca citită"</string>
-  <string name="notification_room_action_quick_reply">"Raspuns rapid"</string>
 </resources>

@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <plurals name="screen_room_member_list_header_title">
-    <item quantity="one">"%1$d особа"</item>
-    <item quantity="few">"%1$d особи"</item>
-    <item quantity="many">"%1$d осіб"</item>
-  </plurals>
+  <string name="screen_dm_details_block_alert_action">"Заблокувати"</string>
+  <string name="screen_dm_details_block_alert_description">"Заблоковані користувачі не зможуть надсилати Вам повідомлення, і всі їхні повідомлення будуть приховані. Ви можете розблокувати їх у будь-який час."</string>
+  <string name="screen_dm_details_block_user">"Заблокувати користувача"</string>
+  <string name="screen_dm_details_unblock_alert_action">"Розблокувати"</string>
+  <string name="screen_dm_details_unblock_alert_description">"Ви знову зможете бачити всі повідомлення від них."</string>
+  <string name="screen_dm_details_unblock_user">"Розблокувати користувача"</string>
   <string name="screen_notification_settings_edit_failed_updating_default_mode">"Під час оновлення налаштувань сповіщень сталася помилка."</string>
   <string name="screen_notification_settings_mentions_only_disclaimer">"Ваш домашній сервер не підтримує цю опцію в зашифрованих кімнатах, ви можете не отримати сповіщення в деяких кімнатах."</string>
   <string name="screen_polls_history_title">"Опитування"</string>
@@ -19,11 +20,22 @@
   <string name="screen_room_details_error_loading_notification_settings">"Виникла помилка при завантаженні налаштувань сповіщень."</string>
   <string name="screen_room_details_error_muting">"Не вдалося вимкнути цю кімнату. Будь ласка, спробуйте ще раз."</string>
   <string name="screen_room_details_error_unmuting">"Не вдалося ввімкнути звук цієї кімнати. Повторіть спробу."</string>
+  <string name="screen_room_details_invite_people_title">"Запросити людей"</string>
+  <string name="screen_room_details_leave_conversation_title">"Залишити розмову"</string>
+  <string name="screen_room_details_leave_room_title">"Вийти з кімнати"</string>
   <string name="screen_room_details_notification_mode_custom">"Власні"</string>
   <string name="screen_room_details_notification_mode_default">"За замовчуванням"</string>
   <string name="screen_room_details_notification_title">"Сповіщення"</string>
+  <string name="screen_room_details_room_name_label">"Назва кімнати"</string>
+  <string name="screen_room_details_security_title">"Безпека"</string>
   <string name="screen_room_details_share_room_title">"Поділитися кімнатою"</string>
+  <string name="screen_room_details_topic_title">"Тема"</string>
   <string name="screen_room_details_updating_room">"Оновлення кімнати…"</string>
+  <plurals name="screen_room_member_list_header_title">
+    <item quantity="one">"%1$d особа"</item>
+    <item quantity="few">"%1$d особи"</item>
+    <item quantity="many">"%1$d осіб"</item>
+  </plurals>
   <string name="screen_room_member_list_manage_member_remove">"Вилучити учасника"</string>
   <string name="screen_room_member_list_manage_member_remove_confirmation_ban">"Видалити та заблокувати учасника"</string>
   <string name="screen_room_member_list_manage_member_remove_confirmation_kick">"Лише видалити учасника"</string>
@@ -48,19 +60,7 @@
   <string name="screen_room_notification_settings_error_setting_mode">"Не вдалося встановити режим, спробуйте ще раз."</string>
   <string name="screen_room_notification_settings_mentions_only_disclaimer">"Ваш домашній сервер не підтримує цю опцію в зашифрованих кімнатах, ви не отримаєте сповіщення в цій кімнаті."</string>
   <string name="screen_room_notification_settings_mode_all_messages">"Всі повідомлення"</string>
+  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Тільки згадки та ключові слова"</string>
   <string name="screen_room_notification_settings_room_custom_settings_title">"У цій кімнаті повідомляти мене про"</string>
   <string name="screen_start_chat_error_starting_chat">"Під час спроби почати чат сталася помилка"</string>
-  <string name="screen_dm_details_block_alert_action">"Заблокувати"</string>
-  <string name="screen_dm_details_block_alert_description">"Заблоковані користувачі не зможуть надсилати Вам повідомлення, і всі їхні повідомлення будуть приховані. Ви можете розблокувати їх у будь-який час."</string>
-  <string name="screen_dm_details_block_user">"Заблокувати користувача"</string>
-  <string name="screen_dm_details_unblock_alert_action">"Розблокувати"</string>
-  <string name="screen_dm_details_unblock_alert_description">"Ви знову зможете бачити всі повідомлення від них."</string>
-  <string name="screen_dm_details_unblock_user">"Розблокувати користувача"</string>
-  <string name="screen_room_details_invite_people_title">"Запросити людей"</string>
-  <string name="screen_room_details_leave_conversation_title">"Залишити розмову"</string>
-  <string name="screen_room_details_leave_room_title">"Вийти з кімнати"</string>
-  <string name="screen_room_details_room_name_label">"Назва кімнати"</string>
-  <string name="screen_room_details_security_title">"Безпека"</string>
-  <string name="screen_room_details_topic_title">"Тема"</string>
-  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Тільки згадки та ключові слова"</string>
 </resources>

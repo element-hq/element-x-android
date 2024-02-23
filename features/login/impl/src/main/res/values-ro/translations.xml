@@ -5,7 +5,9 @@
   <string name="screen_account_provider_form_notice">"Introduceţi un termen de căutare sau o adresă de domeniu."</string>
   <string name="screen_account_provider_form_subtitle">"Căutați o companie, o comunitate sau un server privat."</string>
   <string name="screen_account_provider_form_title">"Găsiți un furnizor de cont"</string>
+  <string name="screen_account_provider_signin_subtitle">"Aici vor trăi conversațiile dvs. - la fel cum ați folosi un furnizor de e-mail pentru a vă păstra e-mailurile."</string>
   <string name="screen_account_provider_signin_title">"Sunteți pe cale să vă conectați la %s"</string>
+  <string name="screen_account_provider_signup_subtitle">"Aici vor trăi conversațiile dvs. - la fel cum ați folosi un furnizor de e-mail pentru a vă păstra e-mailurile."</string>
   <string name="screen_account_provider_signup_title">"Sunteți pe cale să creați un cont pe %s"</string>
   <string name="screen_change_account_provider_matrix_org_subtitle">"Matrix.org este un server mare și gratuit din rețeaua publică Matrix pentru comunicații sigure și descentralizate, administrat de Fundația Matrix.org."</string>
   <string name="screen_change_account_provider_other">"Altul"</string>
@@ -22,6 +24,7 @@
   <string name="screen_login_error_invalid_user_id">"Acesta nu este un identificator de utilizator valid. Format așteptat: „@user:homeserver.org”"</string>
   <string name="screen_login_error_unsupported_authentication">"Homeserver-ul selectat nu acceptă autentificarea prin parola sau OIDC. Te rugăm să contactezi administratorul sau să alegi un alt homeserver."</string>
   <string name="screen_login_form_header">"Introduceți detaliile"</string>
+  <string name="screen_login_subtitle">"Matrix este o rețea deschisă pentru o comunicare sigură și descentralizată."</string>
   <string name="screen_login_title">"Bine ați revenit!"</string>
   <string name="screen_login_title_with_homeserver">"Conectați-vă la %1$s"</string>
   <string name="screen_server_confirmation_change_server">"Schimbați furnizorul contului"</string>
@@ -33,10 +36,7 @@
   <string name="screen_waitlist_message">"Există o cerere mare pentru %1$s pentru %2$s în acest moment. Reveniți la aplicație în câteva zile și încercați din nou.
 
 Vă mulțumim pentru răbdare!"</string>
+  <string name="screen_waitlist_message_success">"Bun venit la%1$s!"</string>
   <string name="screen_waitlist_title">"Sunteți pe lista de așteptare"</string>
   <string name="screen_waitlist_title_success">"Sunteți conectat!"</string>
-  <string name="screen_account_provider_signin_subtitle">"Aici vor trăi conversațiile dvs. - la fel cum ați folosi un furnizor de e-mail pentru a vă păstra e-mailurile."</string>
-  <string name="screen_account_provider_signup_subtitle">"Aici vor trăi conversațiile dvs. - la fel cum ați folosi un furnizor de e-mail pentru a vă păstra e-mailurile."</string>
-  <string name="screen_login_subtitle">"Matrix este o rețea deschisă pentru o comunicare sigură și descentralizată."</string>
-  <string name="screen_waitlist_message_success">"Bun venit la%1$s!"</string>
 </resources>

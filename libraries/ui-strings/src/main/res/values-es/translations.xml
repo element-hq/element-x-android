@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="a11y_delete">"Borrar"</string>
+  <plurals name="a11y_digits_entered">
+    <item quantity="one">"%1$d dígito introducido"</item>
+    <item quantity="other">"%1$d dígitos introducidos"</item>
+  </plurals>
   <string name="a11y_hide_password">"Ocultar contraseña"</string>
   <string name="a11y_jump_to_bottom">"Ir al final"</string>
   <string name="a11y_notifications_mentions_only">"Sólo menciones"</string>
@@ -14,6 +18,10 @@
   <string name="a11y_react_with">"Reacciona con %1$s"</string>
   <string name="a11y_react_with_other_emojis">"Reacciona con otros emojis"</string>
   <string name="a11y_read_receipts_multiple">"Leído por %1$s y %2$s"</string>
+  <plurals name="a11y_read_receipts_multiple_with_others">
+    <item quantity="one">"Leído por %1$s y %2$d otro"</item>
+    <item quantity="other">"Leído por %1$s y %2$d otros"</item>
+  </plurals>
   <string name="a11y_read_receipts_single">"Leído por %1$s"</string>
   <string name="a11y_read_receipts_tap_to_show_all">"Pulsa para mostrar todo"</string>
   <string name="a11y_remove_reaction_with">"Elimina la reacción con %1$s"</string>
@@ -58,6 +66,7 @@
   <string name="action_learn_more">"Más información"</string>
   <string name="action_leave">"Salir"</string>
   <string name="action_leave_room">"Salir de la sala"</string>
+  <string name="action_load_more">"Cargar más"</string>
   <string name="action_manage_account">"Gestionar cuenta"</string>
   <string name="action_manage_devices">"Administrar dispositivos"</string>
   <string name="action_next">"Siguiente"</string>
@@ -95,7 +104,6 @@
   <string name="action_try_again">"Inténtalo de nuevo"</string>
   <string name="action_view_source">"Ver Fuente"</string>
   <string name="action_yes">"Sí"</string>
-  <string name="action_load_more">"Cargar más"</string>
   <string name="common_about">"Acerca de"</string>
   <string name="common_acceptable_use_policy">"Política de uso aceptable"</string>
   <string name="common_advanced_settings">"Ajustes avanzados"</string>
@@ -130,6 +138,10 @@
   <string name="common_light">"Claro"</string>
   <string name="common_link_copied_to_clipboard">"Enlace copiado al portapapeles"</string>
   <string name="common_loading">"Cargando…"</string>
+  <plurals name="common_member_count">
+    <item quantity="one">"%1$d miembro"</item>
+    <item quantity="other">"%1$d miembros"</item>
+  </plurals>
   <string name="common_message">"Mensaje"</string>
   <string name="common_message_actions">"Acciones del mensaje"</string>
   <string name="common_message_layout">"Diseño de los mensajes"</string>
@@ -142,8 +154,14 @@
   <string name="common_people">"Personas"</string>
   <string name="common_permalink">"Enlace permanente"</string>
   <string name="common_permission">"Permiso"</string>
+  <string name="common_poll_end_confirmation">"¿Estás seguro de que quieres finalizar esta encuesta?"</string>
+  <string name="common_poll_summary">"Encuesta: %1$s"</string>
   <string name="common_poll_total_votes">"Total de votos: %1$s"</string>
   <string name="common_poll_undisclosed_text">"Los resultados se mostrarán una vez finalizada la encuesta"</string>
+  <plurals name="common_poll_votes_count">
+    <item quantity="one">"%d voto"</item>
+    <item quantity="other">"%d votos"</item>
+  </plurals>
   <string name="common_privacy_policy">"Política de privacidad"</string>
   <string name="common_reaction">"Reacción"</string>
   <string name="common_reactions">"Reacciones"</string>
@@ -190,14 +208,14 @@
   <string name="common_username">"Usuario"</string>
   <string name="common_verification_cancelled">"Verificación cancelada"</string>
   <string name="common_verification_complete">"Verificación completada"</string>
+  <string name="common_verify_device">"Verificar dispositivo"</string>
   <string name="common_video">"Vídeo"</string>
   <string name="common_voice_message">"Mensaje de voz"</string>
   <string name="common_waiting">"Esperando…"</string>
   <string name="common_waiting_for_decryption_key">"Esperando este mensaje"</string>
-  <string name="common_poll_end_confirmation">"¿Estás seguro de que quieres finalizar esta encuesta?"</string>
-  <string name="common_poll_summary">"Encuesta: %1$s"</string>
-  <string name="common_verify_device">"Verificar dispositivo"</string>
   <string name="dialog_title_confirmation">"Confirmar"</string>
+  <string name="dialog_title_error">"Error"</string>
+  <string name="dialog_title_success">"Terminado"</string>
   <string name="dialog_title_warning">"Atención"</string>
   <string name="error_failed_creating_the_permalink">"No se pudo crear el enlace permanente"</string>
   <string name="error_failed_loading_map">"%1$s no pudo cargar el mapa. Por favor vuelve a intentarlo más tarde."</string>
@@ -212,23 +230,10 @@
   <string name="invite_friends_rich_title">"🔐️ Únete a mí en %1$s"</string>
   <string name="invite_friends_text">"Hola, puedes hablar conmigo en %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
-  <plurals name="a11y_digits_entered">
-    <item quantity="one">"%1$d dígito introducido"</item>
-    <item quantity="other">"%1$d dígitos introducidos"</item>
-  </plurals>
-  <plurals name="a11y_read_receipts_multiple_with_others">
-    <item quantity="one">"Leído por %1$s y %2$d otro"</item>
-    <item quantity="other">"Leído por %1$s y %2$d otros"</item>
-  </plurals>
-  <plurals name="common_member_count">
-    <item quantity="one">"%1$d miembro"</item>
-    <item quantity="other">"%1$d miembros"</item>
-  </plurals>
-  <plurals name="common_poll_votes_count">
-    <item quantity="one">"%d voto"</item>
-    <item quantity="other">"%d votos"</item>
-  </plurals>
   <string name="preference_rageshake">"Agitar con fuerza para informar de un error"</string>
+  <string name="screen_blocked_users_unblock_alert_action">"Desbloquear"</string>
+  <string name="screen_blocked_users_unblock_alert_description">"Podrás ver todos sus mensajes de nuevo."</string>
+  <string name="screen_blocked_users_unblock_alert_title">"Desbloquear usuario"</string>
   <string name="screen_media_picker_error_failed_selection">"Error al seleccionar archivos multimedia, por favor inténtalo de nuevo."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Error al procesar el contenido multimedia, por favor inténtalo de nuevo."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Error al subir el contenido multimedia, por favor inténtalo de nuevo."</string>
@@ -241,9 +246,4 @@
   <string name="screen_view_location_title">"Ubicación"</string>
   <string name="settings_version_number">"Versión: %1$s (%2$s)"</string>
   <string name="test_language_identifier">"es"</string>
-  <string name="dialog_title_error">"Error"</string>
-  <string name="dialog_title_success">"Terminado"</string>
-  <string name="screen_blocked_users_unblock_alert_action">"Desbloquear"</string>
-  <string name="screen_blocked_users_unblock_alert_description">"Podrás ver todos sus mensajes de nuevo."</string>
-  <string name="screen_blocked_users_unblock_alert_title">"Desbloquear usuario"</string>
 </resources>

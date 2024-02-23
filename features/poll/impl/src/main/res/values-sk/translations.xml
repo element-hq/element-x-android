@@ -9,11 +9,11 @@
   <string name="screen_create_poll_question_hint">"O čom je anketa?"</string>
   <string name="screen_create_poll_title">"Vytvoriť anketu"</string>
   <string name="screen_edit_poll_delete_confirmation">"Ste si istý, že chcete odstrániť túto anketu?"</string>
+  <string name="screen_edit_poll_delete_confirmation_title">"Odstrániť anketu"</string>
+  <string name="screen_edit_poll_title">"Upraviť anketu"</string>
   <string name="screen_polls_history_empty_ongoing">"Nepodarilo sa nájsť žiadne prebiehajúce ankety."</string>
   <string name="screen_polls_history_empty_past">"Nie je možné nájsť žiadne predchádzajúce ankety."</string>
   <string name="screen_polls_history_filter_ongoing">"Prebiehajúce"</string>
   <string name="screen_polls_history_filter_past">"Minulé"</string>
   <string name="screen_polls_history_title">"Ankety"</string>
-  <string name="screen_edit_poll_delete_confirmation_title">"Odstrániť anketu"</string>
-  <string name="screen_edit_poll_title">"Upraviť anketu"</string>
 </resources>

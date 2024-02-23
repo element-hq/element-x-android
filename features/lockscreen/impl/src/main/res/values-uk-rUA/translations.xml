@@ -1,15 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <plurals name="screen_app_lock_subtitle">
-    <item quantity="one">"Ви маєте %1$d спробу"</item>
-    <item quantity="few">"Ви маєте %1$d спроби"</item>
-    <item quantity="many">"Ви маєте %1$d спроб"</item>
-  </plurals>
-  <plurals name="screen_app_lock_subtitle_wrong_pin">
-    <item quantity="one">"Хибний PIN-код. Ви маєте ще %1$d шанс"</item>
-    <item quantity="few">"Хибний PIN-код. Ви маєте ще %1$d шанси"</item>
-    <item quantity="many">"Хибний PIN-код. Ви маєте ще %1$d шансів"</item>
-  </plurals>
   <string name="screen_app_lock_biometric_authentication">"біометрична аутентифікація"</string>
   <string name="screen_app_lock_biometric_unlock">"біометричне розблокування"</string>
   <string name="screen_app_lock_biometric_unlock_title_android">"Розблокуйте за допомогою біометрії"</string>
@@ -33,6 +23,16 @@
   <string name="screen_app_lock_setup_pin_mismatch_dialog_title">"PIN-коди не збігаються"</string>
   <string name="screen_app_lock_signout_alert_message">"Щоб продовжити, вам потрібно буде повторно увійти та створити новий PIN-код"</string>
   <string name="screen_app_lock_signout_alert_title">"Ви виходите з системи"</string>
+  <plurals name="screen_app_lock_subtitle">
+    <item quantity="one">"Ви маєте %1$d спробу"</item>
+    <item quantity="few">"Ви маєте %1$d спроби"</item>
+    <item quantity="many">"Ви маєте %1$d спроб"</item>
+  </plurals>
+  <plurals name="screen_app_lock_subtitle_wrong_pin">
+    <item quantity="one">"Хибний PIN-код. Ви маєте ще %1$d шанс"</item>
+    <item quantity="few">"Хибний PIN-код. Ви маєте ще %1$d шанси"</item>
+    <item quantity="many">"Хибний PIN-код. Ви маєте ще %1$d шансів"</item>
+  </plurals>
   <string name="screen_app_lock_use_biometric_android">"Використовуйте біометрію"</string>
   <string name="screen_app_lock_use_pin_android">"Використовуйте PIN-код"</string>
   <string name="screen_signout_in_progress_dialog_content">"Вихід…"</string>

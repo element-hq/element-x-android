@@ -12,6 +12,6 @@
   <string name="screen_bug_report_include_logs">"Permiteți log-uri"</string>
   <string name="screen_bug_report_include_screenshot">"Trimiteți captură de ecran"</string>
   <string name="screen_bug_report_logs_description">"Pentru a verifica că lucrurile funcționează conform așteptărilor, log-uri vor fi trimise împreună cu mesajul. Acestea vor fi private. Pentru a trimite doar mesajul, dezactivați această setare."</string>
-  <string name="screen_bug_report_view_logs">"Vizualizați log-urile"</string>
   <string name="screen_bug_report_rash_logs_alert_title">"%1$s s-a blocat ultima dată când a fost folosit. Doriți să ne trimiteți un raport?"</string>
+  <string name="screen_bug_report_view_logs">"Vizualizați log-urile"</string>
 </resources>

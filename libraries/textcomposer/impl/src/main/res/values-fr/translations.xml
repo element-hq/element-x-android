@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="rich_text_editor_a11y_add_attachment">"Ajouter une pièce jointe"</string>
   <string name="rich_text_editor_bullet_list">"Afficher une liste à puces"</string>
   <string name="rich_text_editor_close_formatting_options">"Fermer les options de formatage"</string>
   <string name="rich_text_editor_code_block">"Afficher le bloc de code"</string>
@@ -20,6 +21,5 @@
   <string name="rich_text_editor_remove_link">"Supprimer le lien"</string>
   <string name="rich_text_editor_unindent">"Décaler vers la gauche"</string>
   <string name="rich_text_editor_url_placeholder">"Lien"</string>
-  <string name="rich_text_editor_a11y_add_attachment">"Ajouter une pièce jointe"</string>
   <string name="screen_room_voice_message_tooltip">"Maintenir pour enregistrer"</string>
 </resources>

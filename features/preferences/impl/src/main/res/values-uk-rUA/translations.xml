@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_advanced_settings_developer_mode">"Режим розробника"</string>
+  <string name="screen_advanced_settings_developer_mode_description">"Увімкніть доступ до функцій і можливостей для розробників."</string>
   <string name="screen_advanced_settings_element_call_base_url">"Користувацька URL-адреса Element Call"</string>
   <string name="screen_advanced_settings_element_call_base_url_description">"Встановіть URL-адресу для Element Call."</string>
   <string name="screen_advanced_settings_element_call_base_url_validation_error">"Неправильна URL-адреса, будь ласка, переконайтеся, що ви вказали протокол (http/https) та правильну адресу."</string>
-  <string name="screen_advanced_settings_developer_mode">"Режим розробника"</string>
-  <string name="screen_advanced_settings_developer_mode_description">"Увімкніть доступ до функцій і можливостей для розробників."</string>
   <string name="screen_advanced_settings_rich_text_editor_description">"Вимкніть редактор розширеного тексту, щоб вводити Markdown вручну."</string>
   <string name="screen_advanced_settings_send_read_receipts">"Читати журнали"</string>
   <string name="screen_advanced_settings_send_read_receipts_description">"Якщо вимкнено, ваші сповіщення про прочитання нікому не надсилатимуться. Ви все одно отримуватимете сповіщення про прочитання від інших користувачів."</string>

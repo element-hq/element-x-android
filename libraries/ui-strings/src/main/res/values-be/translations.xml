@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="a11y_delete">"Выдаліць"</string>
+  <plurals name="a11y_digits_entered">
+    <item quantity="one">"Уведзеная лічба %1$d"</item>
+    <item quantity="few">"Уведзена %1$d лічбы"</item>
+    <item quantity="many">"Уведзена %1$d лічб"</item>
+  </plurals>
   <string name="a11y_hide_password">"Схаваць пароль"</string>
   <string name="a11y_jump_to_bottom">"Перайсці ўніз"</string>
   <string name="a11y_notifications_mentions_only">"Толькі згадкі"</string>
@@ -14,6 +19,11 @@
   <string name="a11y_react_with">"Рэагаваць з %1$s"</string>
   <string name="a11y_react_with_other_emojis">"Рэагаваць з іншымі эмодзі"</string>
   <string name="a11y_read_receipts_multiple">"Прачытана %1$s і %2$s"</string>
+  <plurals name="a11y_read_receipts_multiple_with_others">
+    <item quantity="one">"Прачытана %1$s і %2$d іншым"</item>
+    <item quantity="few">"Прачытана %1$s і %2$d іншымі"</item>
+    <item quantity="many">"Прачытана %1$s і %2$d іншымі"</item>
+  </plurals>
   <string name="a11y_read_receipts_single">"Прачытана %1$s"</string>
   <string name="a11y_read_receipts_tap_to_show_all">"Націсніце, каб паказаць усе"</string>
   <string name="a11y_remove_reaction_with">"Выдаліць рэакцыю з %1$s"</string>
@@ -59,6 +69,7 @@
   <string name="action_leave">"Пакінуць"</string>
   <string name="action_leave_conversation">"Пакінуць размову"</string>
   <string name="action_leave_room">"Пакінуць пакой"</string>
+  <string name="action_load_more">"Загрузіць больш"</string>
   <string name="action_manage_account">"Кіраванне ўліковым запісам"</string>
   <string name="action_manage_devices">"Кіраванне прыладамі"</string>
   <string name="action_next">"Далей"</string>
@@ -96,7 +107,6 @@
   <string name="action_try_again">"Паўтарыць спробу"</string>
   <string name="action_view_source">"Паказаць крыніцу"</string>
   <string name="action_yes">"Так"</string>
-  <string name="action_load_more">"Загрузіць больш"</string>
   <string name="common_about">"Аб праграме"</string>
   <string name="common_acceptable_use_policy">"Палітыка дапушчальнага выкарыстання"</string>
   <string name="common_advanced_settings">"Пашыраныя налады"</string>
@@ -132,6 +142,11 @@
   <string name="common_light">"Светлая"</string>
   <string name="common_link_copied_to_clipboard">"Спасылка скапіравана ў буфер абмену"</string>
   <string name="common_loading">"Загрузка…"</string>
+  <plurals name="common_member_count">
+    <item quantity="one">"%1$d карыстальнік"</item>
+    <item quantity="few">"%1$d карыстальнікаў"</item>
+    <item quantity="many">"%1$d карыстальнікаў"</item>
+  </plurals>
   <string name="common_message">"Паведамленне"</string>
   <string name="common_message_actions">"Дзеянні з паведамленням"</string>
   <string name="common_message_layout">"Выгляд паведамлення"</string>
@@ -144,8 +159,15 @@
   <string name="common_people">"Людзі"</string>
   <string name="common_permalink">"Пастаянная спасылка"</string>
   <string name="common_permission">"Дазвол"</string>
+  <string name="common_poll_end_confirmation">"Вы ўпэўнены, што хочаце скончыць гэтае апытанне?"</string>
+  <string name="common_poll_summary">"Апытанне: %1$s"</string>
   <string name="common_poll_total_votes">"Усяго галасоў: %1$s"</string>
   <string name="common_poll_undisclosed_text">"Вынікі будуць паказаны пасля завяршэння апытання"</string>
+  <plurals name="common_poll_votes_count">
+    <item quantity="one">"%d голас"</item>
+    <item quantity="few">"%d галасоў"</item>
+    <item quantity="many">"%d галасоў"</item>
+  </plurals>
   <string name="common_privacy_policy">"Палітыка прыватнасці"</string>
   <string name="common_reaction">"Рэакцыя"</string>
   <string name="common_reactions">"Рэакцыі"</string>
@@ -191,14 +213,14 @@
   <string name="common_username">"Імя карыстальніка"</string>
   <string name="common_verification_cancelled">"Праверка адменена"</string>
   <string name="common_verification_complete">"Праверка завершана"</string>
+  <string name="common_verify_device">"Праверце прыладу"</string>
   <string name="common_video">"Відэа"</string>
   <string name="common_voice_message">"Галасавое паведамленне"</string>
   <string name="common_waiting">"Чакаем…"</string>
   <string name="common_waiting_for_decryption_key">"Чакаю гэтага паведамлення"</string>
-  <string name="common_poll_end_confirmation">"Вы ўпэўнены, што хочаце скончыць гэтае апытанне?"</string>
-  <string name="common_poll_summary">"Апытанне: %1$s"</string>
-  <string name="common_verify_device">"Праверце прыладу"</string>
   <string name="dialog_title_confirmation">"Пацвярджэнне"</string>
+  <string name="dialog_title_error">"Памылка"</string>
+  <string name="dialog_title_success">"Поспех"</string>
   <string name="dialog_title_warning">"Папярэджанне"</string>
   <string name="error_failed_creating_the_permalink">"Не атрымалася стварыць пастаянную спасылку"</string>
   <string name="error_failed_loading_map">"%1$s не атрымалася загрузіць карту. Калі ласка паспрабуйце зноў пазней."</string>
@@ -213,27 +235,10 @@
   <string name="invite_friends_rich_title">"🔐️ Далучайцеся да мяне %1$s"</string>
   <string name="invite_friends_text">"Гэй, пагавары са мной у %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
-  <plurals name="a11y_digits_entered">
-    <item quantity="one">"Уведзеная лічба %1$d"</item>
-    <item quantity="few">"Уведзена %1$d лічбы"</item>
-    <item quantity="many">"Уведзена %1$d лічб"</item>
-  </plurals>
-  <plurals name="a11y_read_receipts_multiple_with_others">
-    <item quantity="one">"Прачытана %1$s і %2$d іншым"</item>
-    <item quantity="few">"Прачытана %1$s і %2$d іншымі"</item>
-    <item quantity="many">"Прачытана %1$s і %2$d іншымі"</item>
-  </plurals>
-  <plurals name="common_member_count">
-    <item quantity="one">"%1$d карыстальнік"</item>
-    <item quantity="few">"%1$d карыстальнікаў"</item>
-    <item quantity="many">"%1$d карыстальнікаў"</item>
-  </plurals>
-  <plurals name="common_poll_votes_count">
-    <item quantity="one">"%d голас"</item>
-    <item quantity="few">"%d галасоў"</item>
-    <item quantity="many">"%d галасоў"</item>
-  </plurals>
   <string name="preference_rageshake">"Rageshake паведаміць пра памылку"</string>
+  <string name="screen_blocked_users_unblock_alert_action">"Разблакіраваць"</string>
+  <string name="screen_blocked_users_unblock_alert_description">"Вы зноў зможаце ўбачыць усе паведамленні."</string>
+  <string name="screen_blocked_users_unblock_alert_title">"Разблакіраваць карыстальніка"</string>
   <string name="screen_media_picker_error_failed_selection">"Не ўдалося выбраць носьбіт, паўтарыце спробу."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Не атрымалася апрацаваць медыяфайл для загрузкі, паспрабуйце яшчэ раз."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Не атрымалася загрузіць медыяфайлы, паспрабуйце яшчэ раз."</string>
@@ -246,9 +251,4 @@
   <string name="screen_view_location_title">"Месцазнаходжанне"</string>
   <string name="settings_version_number">"Версія: %1$s (%2$s)"</string>
   <string name="test_language_identifier">"be"</string>
-  <string name="dialog_title_error">"Памылка"</string>
-  <string name="dialog_title_success">"Поспех"</string>
-  <string name="screen_blocked_users_unblock_alert_action">"Разблакіраваць"</string>
-  <string name="screen_blocked_users_unblock_alert_description">"Вы зноў зможаце ўбачыць усе паведамленні."</string>
-  <string name="screen_blocked_users_unblock_alert_title">"Разблакіраваць карыстальніка"</string>
 </resources>

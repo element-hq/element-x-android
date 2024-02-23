@@ -4,35 +4,38 @@
   <string name="notification_channel_listening_for_events">"Mendengarkan peristiwa"</string>
   <string name="notification_channel_noisy">"Pemberitahuan berisik"</string>
   <string name="notification_channel_silent">"Pemberitahuan diam"</string>
-  <string name="notification_inline_reply_failed">"** Gagal mengirim — silakan buka ruangan"</string>
-  <string name="notification_invitation_action_reject">"Tolak"</string>
-  <string name="notification_invite_body">"Mengundang Anda untuk mengobrol"</string>
-  <string name="notification_mentioned_you_body">"Menyebutkan Anda: %1$s"</string>
-  <string name="notification_new_messages">"Pesan Baru"</string>
-  <string name="notification_reaction_body">"Menghapus dengan %1$s"</string>
-  <string name="notification_room_invite_body">"Mengundang Anda untuk bergabung ke ruangan"</string>
-  <string name="notification_sender_me">"Saya"</string>
-  <string name="notification_test_push_notification_content">"Anda sedang melihat pemberitahuan ini! Klik saya!"</string>
-  <string name="notification_ticker_text_dm">"%1$s: %2$s"</string>
-  <string name="notification_ticker_text_group">"%1$s: %2$s %3$s"</string>
-  <string name="notification_unread_notified_messages_and_invitation">"%1$s dan %2$s"</string>
-  <string name="notification_unread_notified_messages_in_room">"%1$s di %2$s"</string>
-  <string name="notification_unread_notified_messages_in_room_and_invitation">"%1$s di %2$s dan %3$s"</string>
   <plurals name="notification_compat_summary_line_for_room">
     <item quantity="other">"%1$s: %2$d pesan"</item>
   </plurals>
   <plurals name="notification_compat_summary_title">
     <item quantity="other">"%d pemberitahuan"</item>
   </plurals>
+  <string name="notification_fallback_content">"Notifikasi"</string>
+  <string name="notification_inline_reply_failed">"** Gagal mengirim — silakan buka ruangan"</string>
+  <string name="notification_invitation_action_join">"Gabung"</string>
+  <string name="notification_invitation_action_reject">"Tolak"</string>
   <plurals name="notification_invitations">
     <item quantity="other">"%d undangan"</item>
   </plurals>
+  <string name="notification_invite_body">"Mengundang Anda untuk mengobrol"</string>
+  <string name="notification_mentioned_you_body">"Menyebutkan Anda: %1$s"</string>
+  <string name="notification_new_messages">"Pesan Baru"</string>
   <plurals name="notification_new_messages_for_room">
     <item quantity="other">"%d pesan baru"</item>
   </plurals>
+  <string name="notification_reaction_body">"Menghapus dengan %1$s"</string>
+  <string name="notification_room_action_quick_reply">"Balas cepat"</string>
+  <string name="notification_room_invite_body">"Mengundang Anda untuk bergabung ke ruangan"</string>
+  <string name="notification_sender_me">"Saya"</string>
+  <string name="notification_test_push_notification_content">"Anda sedang melihat pemberitahuan ini! Klik saya!"</string>
+  <string name="notification_ticker_text_dm">"%1$s: %2$s"</string>
+  <string name="notification_ticker_text_group">"%1$s: %2$s %3$s"</string>
   <plurals name="notification_unread_notified_messages">
     <item quantity="other">"%d pesan pemberitahuan yang belum dibaca"</item>
   </plurals>
+  <string name="notification_unread_notified_messages_and_invitation">"%1$s dan %2$s"</string>
+  <string name="notification_unread_notified_messages_in_room">"%1$s di %2$s"</string>
+  <string name="notification_unread_notified_messages_in_room_and_invitation">"%1$s di %2$s dan %3$s"</string>
   <plurals name="notification_unread_notified_messages_in_room_rooms">
     <item quantity="other">"%d ruangan"</item>
   </plurals>
@@ -40,7 +43,4 @@
   <string name="push_distributor_background_sync_android">"Sinkronisasi latar belakang"</string>
   <string name="push_distributor_firebase_android">"Layanan Google"</string>
   <string name="push_no_valid_google_play_services_apk_android">"Tidak ditemukan Layanan Google Play yang valid. Pemberitahuan mungkin tidak berfungsi dengan baik."</string>
-  <string name="notification_fallback_content">"Notifikasi"</string>
-  <string name="notification_invitation_action_join">"Gabung"</string>
-  <string name="notification_room_action_quick_reply">"Balas cepat"</string>
 </resources>

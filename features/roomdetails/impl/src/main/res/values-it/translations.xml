@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <plurals name="screen_room_member_list_header_title">
-    <item quantity="one">"1 persona"</item>
-    <item quantity="other">"%1$d persone"</item>
-  </plurals>
+  <string name="screen_dm_details_block_alert_action">"Blocca"</string>
+  <string name="screen_dm_details_block_alert_description">"Gli utenti bloccati non saranno in grado di inviarti messaggi e tutti quelli già ricevuti saranno nascosti. Puoi sbloccarli in qualsiasi momento."</string>
+  <string name="screen_dm_details_block_user">"Blocca utente"</string>
+  <string name="screen_dm_details_unblock_alert_action">"Sblocca"</string>
+  <string name="screen_dm_details_unblock_alert_description">"Potrai vedere di nuovo tutti i suoi messaggi."</string>
+  <string name="screen_dm_details_unblock_user">"Sblocca utente"</string>
   <string name="screen_notification_settings_edit_failed_updating_default_mode">"Si è verificato un errore durante l\'aggiornamento delle impostazioni di notifica."</string>
   <string name="screen_notification_settings_mentions_only_disclaimer">"Il tuo homeserver non supporta questa opzione nelle stanze criptate, quindi potresti non ricevere notifiche in alcune stanze."</string>
   <string name="screen_polls_history_title">"Sondaggi"</string>
@@ -18,11 +20,21 @@
   <string name="screen_room_details_error_loading_notification_settings">"Si è verificato un errore durante il caricamento delle impostazioni di notifica."</string>
   <string name="screen_room_details_error_muting">"Impostazione del silenzioso fallita per questa stanza, riprova."</string>
   <string name="screen_room_details_error_unmuting">"Disattivazione del silenzioso di questa stanza fallita, riprova."</string>
+  <string name="screen_room_details_invite_people_title">"Invita persone"</string>
+  <string name="screen_room_details_leave_conversation_title">"Abbandona la conversazione"</string>
+  <string name="screen_room_details_leave_room_title">"Esci dalla stanza"</string>
   <string name="screen_room_details_notification_mode_custom">"Personalizzato"</string>
   <string name="screen_room_details_notification_mode_default">"Predefinito"</string>
   <string name="screen_room_details_notification_title">"Notifiche"</string>
+  <string name="screen_room_details_room_name_label">"Nome stanza"</string>
+  <string name="screen_room_details_security_title">"Sicurezza"</string>
   <string name="screen_room_details_share_room_title">"Condividi stanza"</string>
+  <string name="screen_room_details_topic_title">"Oggetto"</string>
   <string name="screen_room_details_updating_room">"Aggiornamento della stanza…"</string>
+  <plurals name="screen_room_member_list_header_title">
+    <item quantity="one">"1 persona"</item>
+    <item quantity="other">"%1$d persone"</item>
+  </plurals>
   <string name="screen_room_member_list_pending_header_title">"In attesa"</string>
   <string name="screen_room_member_list_role_administrator">"Amministratore"</string>
   <string name="screen_room_member_list_role_moderator">"Moderatore"</string>
@@ -39,19 +51,7 @@
   <string name="screen_room_notification_settings_error_setting_mode">"Impossibile impostare la modalità, riprova."</string>
   <string name="screen_room_notification_settings_mentions_only_disclaimer">"Il tuo homeserver non supporta questa opzione nelle stanze criptate, quindi non riceverai notifiche in questa stanza."</string>
   <string name="screen_room_notification_settings_mode_all_messages">"Tutti i messaggi"</string>
+  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Solo menzioni e parole chiave"</string>
   <string name="screen_room_notification_settings_room_custom_settings_title">"In questa stanza, avvisami per"</string>
   <string name="screen_start_chat_error_starting_chat">"Si è verificato un errore durante il tentativo di avviare una chat"</string>
-  <string name="screen_dm_details_block_alert_action">"Blocca"</string>
-  <string name="screen_dm_details_block_alert_description">"Gli utenti bloccati non saranno in grado di inviarti messaggi e tutti quelli già ricevuti saranno nascosti. Puoi sbloccarli in qualsiasi momento."</string>
-  <string name="screen_dm_details_block_user">"Blocca utente"</string>
-  <string name="screen_dm_details_unblock_alert_action">"Sblocca"</string>
-  <string name="screen_dm_details_unblock_alert_description">"Potrai vedere di nuovo tutti i suoi messaggi."</string>
-  <string name="screen_dm_details_unblock_user">"Sblocca utente"</string>
-  <string name="screen_room_details_invite_people_title">"Invita persone"</string>
-  <string name="screen_room_details_leave_conversation_title">"Abbandona la conversazione"</string>
-  <string name="screen_room_details_leave_room_title">"Esci dalla stanza"</string>
-  <string name="screen_room_details_room_name_label">"Nome stanza"</string>
-  <string name="screen_room_details_security_title">"Sicurezza"</string>
-  <string name="screen_room_details_topic_title">"Oggetto"</string>
-  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Solo menzioni e parole chiave"</string>
 </resources>

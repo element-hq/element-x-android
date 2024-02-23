@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <plurals name="screen_room_member_list_header_title">
-    <item quantity="one">"%1$d карыстальнік"</item>
-    <item quantity="few">"%1$d карыстальнікаў"</item>
-    <item quantity="many">"%1$d карыстальнікаў"</item>
-  </plurals>
+  <string name="screen_dm_details_block_alert_action">"Заблакіраваць"</string>
+  <string name="screen_dm_details_block_alert_description">"Заблакіраваныя карыстальнікі не змогуць адпраўляць вам паведамленні, і ўсе іх паведамленні будуць схаваны. Вы можаце разблакіраваць іх у любы час."</string>
+  <string name="screen_dm_details_block_user">"Заблакіраваць карыстальніка"</string>
+  <string name="screen_dm_details_unblock_alert_action">"Разблакіраваць"</string>
+  <string name="screen_dm_details_unblock_alert_description">"Вы зноў зможаце ўбачыць усе паведамленні."</string>
+  <string name="screen_dm_details_unblock_user">"Разблакіраваць карыстальніка"</string>
   <string name="screen_notification_settings_edit_failed_updating_default_mode">"Пры абнаўленні налад апавяшчэнняў адбылася памылка."</string>
   <string name="screen_notification_settings_mentions_only_disclaimer">"Ваш хатні сервер не падтрымлівае гэтую опцыю ў зашыфраваных пакоях, вы можаце не атрымаць апавяшчэнне ў некаторых пакоях."</string>
   <string name="screen_polls_history_title">"Апытанні"</string>
@@ -19,11 +20,22 @@
   <string name="screen_room_details_error_loading_notification_settings">"Пры загрузцы налад апавяшчэнняў адбылася памылка."</string>
   <string name="screen_room_details_error_muting">"Не атрымалася адключыць гук у гэтым пакоі, паўтарыце спробу."</string>
   <string name="screen_room_details_error_unmuting">"Не ўдалося ўключыць гук у гэтым пакоі. Паўтарыце спробу."</string>
+  <string name="screen_room_details_invite_people_title">"Запрасіць карыстальникаў"</string>
+  <string name="screen_room_details_leave_conversation_title">"Пакінуць размову"</string>
+  <string name="screen_room_details_leave_room_title">"Пакінуць пакой"</string>
   <string name="screen_room_details_notification_mode_custom">"Карыстальніцкі"</string>
   <string name="screen_room_details_notification_mode_default">"Па змаўчанні"</string>
   <string name="screen_room_details_notification_title">"Апавяшчэнні"</string>
+  <string name="screen_room_details_room_name_label">"Назва пакоя"</string>
+  <string name="screen_room_details_security_title">"Бяспека"</string>
   <string name="screen_room_details_share_room_title">"Падзяліцца пакоем"</string>
+  <string name="screen_room_details_topic_title">"Тэма"</string>
   <string name="screen_room_details_updating_room">"Ідзе абнаўленне пакоя…"</string>
+  <plurals name="screen_room_member_list_header_title">
+    <item quantity="one">"%1$d карыстальнік"</item>
+    <item quantity="few">"%1$d карыстальнікаў"</item>
+    <item quantity="many">"%1$d карыстальнікаў"</item>
+  </plurals>
   <string name="screen_room_member_list_pending_header_title">"У чаканні"</string>
   <string name="screen_room_member_list_room_members_header_title">"Карыстальнікі пакоя"</string>
   <string name="screen_room_notification_settings_allow_custom">"Дазволіць карыстальніцкую наладу"</string>
@@ -38,19 +50,7 @@
   <string name="screen_room_notification_settings_error_setting_mode">"Не ўдалося наладзіць рэжым, паспрабуйце яшчэ раз."</string>
   <string name="screen_room_notification_settings_mentions_only_disclaimer">"Ваш хатні сервер не падтрымлівае гэту опцыю ў зашыфраваных пакоях, вы не атрымаеце апавяшчэнне ў гэтым пакоі."</string>
   <string name="screen_room_notification_settings_mode_all_messages">"Усе паведамленні"</string>
+  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Толькі згадванні і ключавыя словы"</string>
   <string name="screen_room_notification_settings_room_custom_settings_title">"У гэтым пакоі паведаміце мяне пра"</string>
   <string name="screen_start_chat_error_starting_chat">"Пры спробе пачаць чат адбылася памылка"</string>
-  <string name="screen_dm_details_block_alert_action">"Заблакіраваць"</string>
-  <string name="screen_dm_details_block_alert_description">"Заблакіраваныя карыстальнікі не змогуць адпраўляць вам паведамленні, і ўсе іх паведамленні будуць схаваны. Вы можаце разблакіраваць іх у любы час."</string>
-  <string name="screen_dm_details_block_user">"Заблакіраваць карыстальніка"</string>
-  <string name="screen_dm_details_unblock_alert_action">"Разблакіраваць"</string>
-  <string name="screen_dm_details_unblock_alert_description">"Вы зноў зможаце ўбачыць усе паведамленні."</string>
-  <string name="screen_dm_details_unblock_user">"Разблакіраваць карыстальніка"</string>
-  <string name="screen_room_details_invite_people_title">"Запрасіць карыстальникаў"</string>
-  <string name="screen_room_details_leave_conversation_title">"Пакінуць размову"</string>
-  <string name="screen_room_details_leave_room_title">"Пакінуць пакой"</string>
-  <string name="screen_room_details_room_name_label">"Назва пакоя"</string>
-  <string name="screen_room_details_security_title">"Бяспека"</string>
-  <string name="screen_room_details_topic_title">"Тэма"</string>
-  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Толькі згадванні і ключавыя словы"</string>
 </resources>

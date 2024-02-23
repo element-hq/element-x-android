@@ -2,36 +2,36 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="notification_channel_call">"通話"</string>
   <string name="notification_channel_silent">"無聲通知"</string>
-  <string name="notification_inline_reply_failed">"** 無法傳送，請開啟聊天室"</string>
-  <string name="notification_invitation_action_reject">"拒絕"</string>
-  <string name="notification_invite_body">"邀請您聊天"</string>
-  <string name="notification_mentioned_you_body">"提及您：%1$s"</string>
-  <string name="notification_new_messages">"新訊息"</string>
-  <string name="notification_reaction_body">"回應 %1$s"</string>
-  <string name="notification_room_invite_body">"邀請您加入聊天室"</string>
-  <string name="notification_sender_me">"我"</string>
-  <string name="notification_test_push_notification_content">"您正在查看通知！點我！"</string>
-  <string name="notification_ticker_text_dm">"%1$s：%2$s"</string>
-  <string name="notification_ticker_text_group">"%1$s：%2$s %3$s"</string>
   <plurals name="notification_compat_summary_line_for_room">
     <item quantity="other">"%1$s：%2$d 則訊息"</item>
   </plurals>
   <plurals name="notification_compat_summary_title">
     <item quantity="other">"%d 個通知"</item>
   </plurals>
+  <string name="notification_fallback_content">"通知"</string>
+  <string name="notification_inline_reply_failed">"** 無法傳送，請開啟聊天室"</string>
+  <string name="notification_invitation_action_join">"加入"</string>
+  <string name="notification_invitation_action_reject">"拒絕"</string>
   <plurals name="notification_invitations">
     <item quantity="other">"%d 個邀請"</item>
   </plurals>
+  <string name="notification_invite_body">"邀請您聊天"</string>
+  <string name="notification_mentioned_you_body">"提及您：%1$s"</string>
+  <string name="notification_new_messages">"新訊息"</string>
   <plurals name="notification_new_messages_for_room">
     <item quantity="other">"%d 則新訊息"</item>
   </plurals>
+  <string name="notification_reaction_body">"回應 %1$s"</string>
+  <string name="notification_room_action_quick_reply">"快速回覆"</string>
+  <string name="notification_room_invite_body">"邀請您加入聊天室"</string>
+  <string name="notification_sender_me">"我"</string>
+  <string name="notification_test_push_notification_content">"您正在查看通知！點我！"</string>
+  <string name="notification_ticker_text_dm">"%1$s：%2$s"</string>
+  <string name="notification_ticker_text_group">"%1$s：%2$s %3$s"</string>
   <plurals name="notification_unread_notified_messages_in_room_rooms">
     <item quantity="other">"%d 個聊天室"</item>
   </plurals>
   <string name="push_choose_distributor_dialog_title_android">"選擇接收通知的機制"</string>
   <string name="push_distributor_background_sync_android">"背景同步"</string>
   <string name="push_distributor_firebase_android">"Google 服務"</string>
-  <string name="notification_fallback_content">"通知"</string>
-  <string name="notification_invitation_action_join">"加入"</string>
-  <string name="notification_room_action_quick_reply">"快速回覆"</string>
 </resources>

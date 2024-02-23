@@ -5,7 +5,9 @@
   <string name="screen_account_provider_form_notice">"Masukkan istilah pencarian atau alamat domain."</string>
   <string name="screen_account_provider_form_subtitle">"Cari perusahaan, komunitas, atau server pribadi."</string>
   <string name="screen_account_provider_form_title">"Cari penyedia akun"</string>
+  <string name="screen_account_provider_signin_subtitle">"Di sinilah percakapan Anda akan berlangsung — sama seperti Anda menggunakan penyedia surel untuk menyimpan surel Anda."</string>
   <string name="screen_account_provider_signin_title">"Anda akan masuk ke %s"</string>
+  <string name="screen_account_provider_signup_subtitle">"Di sinilah percakapan Anda akan berlangsung — sama seperti Anda menggunakan penyedia surel untuk menyimpan surel Anda."</string>
   <string name="screen_account_provider_signup_title">"Anda akan membuat akun di %s"</string>
   <string name="screen_change_account_provider_matrix_org_subtitle">"Matrix.org adalah server besar dan gratis di jaringan Matrix publik untuk komunikasi yang aman dan terdesentralisasi, disediakan oleh Yayasan Matrix.org."</string>
   <string name="screen_change_account_provider_other">"Lainnya"</string>
@@ -22,6 +24,7 @@
   <string name="screen_login_error_invalid_user_id">"Ini bukan pengenal pengguna yang valid. Format yang diharapkan: \'@pengguna:homeserver.org\'"</string>
   <string name="screen_login_error_unsupported_authentication">"Homeserver yang dipilih tidak mendukung log masuk kata sandi atau OIDC. Silakan hubungi admin Anda atau pilih homeserver yang lain."</string>
   <string name="screen_login_form_header">"Masukkan detail Anda"</string>
+  <string name="screen_login_subtitle">"Matrix adalah jaringan terbuka untuk komunikasi yang aman dan terdesentralisasi."</string>
   <string name="screen_login_title">"Selamat datang kembali!"</string>
   <string name="screen_login_title_with_homeserver">"Masuk ke %1$s"</string>
   <string name="screen_server_confirmation_change_server">"Ubah penyedia akun"</string>
@@ -33,10 +36,7 @@
   <string name="screen_waitlist_message">"Ada permintaan tinggi untuk %1$s di %2$s saat ini. Kembalilah ke aplikasi dalam beberapa hari dan coba lagi.
 
 Terima kasih atas kesabaran Anda!"</string>
+  <string name="screen_waitlist_message_success">"Selamat datang di %1$s!"</string>
   <string name="screen_waitlist_title">"Anda hampir selesai."</string>
   <string name="screen_waitlist_title_success">"Anda sudah masuk."</string>
-  <string name="screen_account_provider_signin_subtitle">"Di sinilah percakapan Anda akan berlangsung — sama seperti Anda menggunakan penyedia surel untuk menyimpan surel Anda."</string>
-  <string name="screen_account_provider_signup_subtitle">"Di sinilah percakapan Anda akan berlangsung — sama seperti Anda menggunakan penyedia surel untuk menyimpan surel Anda."</string>
-  <string name="screen_login_subtitle">"Matrix adalah jaringan terbuka untuk komunikasi yang aman dan terdesentralisasi."</string>
-  <string name="screen_waitlist_message_success">"Selamat datang di %1$s!"</string>
 </resources>

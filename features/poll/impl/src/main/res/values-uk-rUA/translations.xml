@@ -9,11 +9,11 @@
   <string name="screen_create_poll_question_hint">"Про що йдеться в опитуванні?"</string>
   <string name="screen_create_poll_title">"Створити опитування"</string>
   <string name="screen_edit_poll_delete_confirmation">"Ви впевнені, що хочете видалити це опитування?"</string>
+  <string name="screen_edit_poll_delete_confirmation_title">"Видалити опитування"</string>
+  <string name="screen_edit_poll_title">"Редагувати опитування"</string>
   <string name="screen_polls_history_empty_ongoing">"Не можу знайти жодних поточних опитувань."</string>
   <string name="screen_polls_history_empty_past">"Не можу знайти жодних минулих опитувань."</string>
   <string name="screen_polls_history_filter_ongoing">"Поточні"</string>
   <string name="screen_polls_history_filter_past">"Минулі"</string>
   <string name="screen_polls_history_title">"Опитування"</string>
-  <string name="screen_edit_poll_delete_confirmation_title">"Видалити опитування"</string>
-  <string name="screen_edit_poll_title">"Редагувати опитування"</string>
 </resources>

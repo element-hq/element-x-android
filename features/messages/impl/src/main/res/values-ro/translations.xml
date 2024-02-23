@@ -8,29 +8,20 @@
   <string name="emoji_picker_category_people">"Fețe zâmbitoare &amp; Oameni"</string>
   <string name="emoji_picker_category_places">"Călătorii &amp; Locuri"</string>
   <string name="emoji_picker_category_symbols">"Simboluri"</string>
-  <plurals name="room_timeline_state_changes">
-    <item quantity="one">"%1$d schimbare a camerii"</item>
-    <item quantity="few">"%1$d schimbări ale camerei"</item>
-    <item quantity="other">"%1$d schimbări ale camerei"</item>
-  </plurals>
-  <plurals name="screen_room_typing_many_members">
-    <item quantity="one">"%1$s, %2$s și încă %3$d"</item>
-    <item quantity="few">"%1$s, %2$s și încă %3$d"</item>
-    <item quantity="other">"%1$s, %2$s și încă %3$d"</item>
-  </plurals>
-  <plurals name="screen_room_typing_notification">
-    <item quantity="one">"%1$s scrie"</item>
-    <item quantity="few">"%1$s scriu"</item>
-    <item quantity="other">"%1$s scriu"</item>
-  </plurals>
   <string name="report_content_explanation">"Acest mesaj va fi raportat administratorilor homeserver-ului tau. Ei nu vor putea citi niciun mesaj criptat."</string>
   <string name="report_content_hint">"Motivul raportării acestui conținut"</string>
   <string name="room_timeline_beginning_of_room">"Acesta este începutul conversației %1$s."</string>
   <string name="room_timeline_beginning_of_room_no_name">"Acesta este începutul acestei conversații."</string>
   <string name="room_timeline_read_marker_title">"Nou"</string>
-  <string name="screen_room_mentions_at_room_subtitle">"Notificați întreaga cameră"</string>
+  <plurals name="room_timeline_state_changes">
+    <item quantity="one">"%1$d schimbare a camerii"</item>
+    <item quantity="few">"%1$d schimbări ale camerei"</item>
+    <item quantity="other">"%1$d schimbări ale camerei"</item>
+  </plurals>
+  <string name="screen_report_content_block_user">"Blocați utilizatorul"</string>
   <string name="screen_report_content_block_user_hint">"Confirmați că doriți să ascundeți toate mesajele curente și viitoare de la acest utilizator"</string>
   <string name="screen_room_attachment_source_camera">"Cameră foto"</string>
+  <string name="screen_room_attachment_source_camera_photo">"Faceți o fotografie"</string>
   <string name="screen_room_attachment_source_camera_video">"Înregistrați un videoclip"</string>
   <string name="screen_room_attachment_source_files">"Atașament"</string>
   <string name="screen_room_attachment_source_gallery">"Bibliotecă foto și video"</string>
@@ -39,9 +30,12 @@
   <string name="screen_room_attachment_text_formatting">"Formatarea textului"</string>
   <string name="screen_room_encrypted_history_banner">"Istoricul mesajelor este momentan indisponibil în această cameră"</string>
   <string name="screen_room_encrypted_history_banner_unverified">"Istoricul mesajelor nu este disponibil în această cameră. Verificați acest dispozitiv pentru a vedea istoricul mesajelor."</string>
+  <string name="screen_room_error_failed_processing_media">"Procesarea datelor media a eșuat, vă rugăm să încercați din nou."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Nu am putut găsi detaliile utilizatorului"</string>
   <string name="screen_room_invite_again_alert_message">"Doriți să îi invitați înapoi?"</string>
   <string name="screen_room_invite_again_alert_title">"Sunteți singur în această cameră"</string>
+  <string name="screen_room_mentions_at_room_subtitle">"Notificați întreaga cameră"</string>
+  <string name="screen_room_mentions_at_room_title">"Toți"</string>
   <string name="screen_room_message_copied">"Mesaj copiat"</string>
   <string name="screen_room_no_permission_to_post">"Nu aveți permisiunea de a posta în această cameră"</string>
   <string name="screen_room_notification_settings_allow_custom">"Permiteți setări personalizate"</string>
@@ -56,6 +50,7 @@
   <string name="screen_room_notification_settings_error_setting_mode">"Nu s-a reușit setarea modului, vă rugăm să încercați din nou."</string>
   <string name="screen_room_notification_settings_mentions_only_disclaimer">"Serverul dumneavoastră nu acceptă această opțiune în camerele criptate, nu veți primi notificări în această cameră."</string>
   <string name="screen_room_notification_settings_mode_all_messages">"Toate mesajele"</string>
+  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Numai mențiuni și cuvinte cheie"</string>
   <string name="screen_room_notification_settings_room_custom_settings_title">"În această cameră, anunțați-mă pentru"</string>
   <string name="screen_room_reactions_show_less">"Afișați mai puțin"</string>
   <string name="screen_room_reactions_show_more">"Afișați mai mult"</string>
@@ -63,11 +58,16 @@
   <string name="screen_room_retry_send_menu_title">"Mesajul dvs. nu a putut fi trimis"</string>
   <string name="screen_room_timeline_add_reaction">"Adăugați emoji"</string>
   <string name="screen_room_timeline_less_reactions">"Afișați mai puțin"</string>
+  <plurals name="screen_room_typing_many_members">
+    <item quantity="one">"%1$s, %2$s și încă %3$d"</item>
+    <item quantity="few">"%1$s, %2$s și încă %3$d"</item>
+    <item quantity="other">"%1$s, %2$s și încă %3$d"</item>
+  </plurals>
+  <plurals name="screen_room_typing_notification">
+    <item quantity="one">"%1$s scrie"</item>
+    <item quantity="few">"%1$s scriu"</item>
+    <item quantity="other">"%1$s scriu"</item>
+  </plurals>
   <string name="screen_room_typing_two_members">"%1$s și %2$s"</string>
   <string name="screen_room_voice_message_tooltip">"Țineți apăsat pentru a înregistra"</string>
-  <string name="screen_room_mentions_at_room_title">"Toți"</string>
-  <string name="screen_report_content_block_user">"Blocați utilizatorul"</string>
-  <string name="screen_room_attachment_source_camera_photo">"Faceți o fotografie"</string>
-  <string name="screen_room_error_failed_processing_media">"Procesarea datelor media a eșuat, vă rugăm să încercați din nou."</string>
-  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Numai mențiuni și cuvinte cheie"</string>
 </resources>

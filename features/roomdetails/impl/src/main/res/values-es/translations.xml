@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <plurals name="screen_room_member_list_header_title">
-    <item quantity="one">"Una persona"</item>
-    <item quantity="other">"%1$d personas"</item>
-  </plurals>
+  <string name="screen_dm_details_block_alert_action">"Bloquear"</string>
+  <string name="screen_dm_details_block_alert_description">"Los usuarios bloqueados no podrán enviarte mensajes y todos sus mensajes se ocultarán. Puedes desbloquearlos cuando quieras."</string>
+  <string name="screen_dm_details_block_user">"Bloquear usuario"</string>
+  <string name="screen_dm_details_unblock_alert_action">"Desbloquear"</string>
+  <string name="screen_dm_details_unblock_alert_description">"Podrás ver todos sus mensajes de nuevo."</string>
+  <string name="screen_dm_details_unblock_user">"Desbloquear usuario"</string>
   <string name="screen_notification_settings_edit_failed_updating_default_mode">"Se ha producido un error al actualizar la configuración de notificaciones."</string>
   <string name="screen_notification_settings_mentions_only_disclaimer">"Tu servidor principal no admite esta opción en salas cifradas, puede que no recibas notificaciones en algunas salas."</string>
   <string name="screen_polls_history_title">"Encuestas"</string>
@@ -18,11 +20,20 @@
   <string name="screen_room_details_error_loading_notification_settings">"Se ha producido un error al cargar la configuración de las notificaciones."</string>
   <string name="screen_room_details_error_muting">"No se ha podido silenciar esta sala, inténtalo de nuevo."</string>
   <string name="screen_room_details_error_unmuting">"Error al dejar de silenciar esta sala, por favor inténtalo de nuevo."</string>
+  <string name="screen_room_details_invite_people_title">"Invitar personas"</string>
+  <string name="screen_room_details_leave_room_title">"Salir de la sala"</string>
   <string name="screen_room_details_notification_mode_custom">"Personalizado"</string>
   <string name="screen_room_details_notification_mode_default">"Por defecto"</string>
   <string name="screen_room_details_notification_title">"Notificaciones"</string>
+  <string name="screen_room_details_room_name_label">"Nombre de la sala"</string>
+  <string name="screen_room_details_security_title">"Seguridad"</string>
   <string name="screen_room_details_share_room_title">"Compartir sala"</string>
+  <string name="screen_room_details_topic_title">"Tema"</string>
   <string name="screen_room_details_updating_room">"Actualizando la sala…"</string>
+  <plurals name="screen_room_member_list_header_title">
+    <item quantity="one">"Una persona"</item>
+    <item quantity="other">"%1$d personas"</item>
+  </plurals>
   <string name="screen_room_member_list_pending_header_title">"Pendiente"</string>
   <string name="screen_room_member_list_room_members_header_title">"Miembros de la sala"</string>
   <string name="screen_room_notification_settings_allow_custom">"Permitir configuración personalizada"</string>
@@ -37,18 +48,7 @@
   <string name="screen_room_notification_settings_error_setting_mode">"No se pudo cambiar el modo, por favor inténtalo de nuevo."</string>
   <string name="screen_room_notification_settings_mentions_only_disclaimer">"Tu servidor principal no admite esta opción en salas cifradas, no recibirás notificaciones en esta sala."</string>
   <string name="screen_room_notification_settings_mode_all_messages">"Todos los mensajes"</string>
+  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Únicamente Menciones y Palabras clave"</string>
   <string name="screen_room_notification_settings_room_custom_settings_title">"En esta sala, notificarme por"</string>
   <string name="screen_start_chat_error_starting_chat">"Se ha producido un error al intentar iniciar un chat"</string>
-  <string name="screen_dm_details_block_alert_action">"Bloquear"</string>
-  <string name="screen_dm_details_block_alert_description">"Los usuarios bloqueados no podrán enviarte mensajes y todos sus mensajes se ocultarán. Puedes desbloquearlos cuando quieras."</string>
-  <string name="screen_dm_details_block_user">"Bloquear usuario"</string>
-  <string name="screen_dm_details_unblock_alert_action">"Desbloquear"</string>
-  <string name="screen_dm_details_unblock_alert_description">"Podrás ver todos sus mensajes de nuevo."</string>
-  <string name="screen_dm_details_unblock_user">"Desbloquear usuario"</string>
-  <string name="screen_room_details_invite_people_title">"Invitar personas"</string>
-  <string name="screen_room_details_leave_room_title">"Salir de la sala"</string>
-  <string name="screen_room_details_room_name_label">"Nombre de la sala"</string>
-  <string name="screen_room_details_security_title">"Seguridad"</string>
-  <string name="screen_room_details_topic_title">"Tema"</string>
-  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Únicamente Menciones y Palabras clave"</string>
 </resources>

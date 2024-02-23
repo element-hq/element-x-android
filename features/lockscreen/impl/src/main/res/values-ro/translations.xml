@@ -1,15 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <plurals name="screen_app_lock_subtitle">
-    <item quantity="one">"Aveți %1$d încercare de deblocare"</item>
-    <item quantity="few">"Aveți %1$d încercări de deblocare"</item>
-    <item quantity="other">"Aveți %1$d încercări de deblocare"</item>
-  </plurals>
-  <plurals name="screen_app_lock_subtitle_wrong_pin">
-    <item quantity="one">"PIN greșit. Mai aveți %1$d sansa"</item>
-    <item quantity="few">"PIN greșit. Mai aveți %1$d sanse"</item>
-    <item quantity="other">"PIN greșit. Mai aveți %1$d sanse"</item>
-  </plurals>
   <string name="screen_app_lock_biometric_authentication">"autentificare biometrică"</string>
   <string name="screen_app_lock_biometric_unlock">"deblocare biometrică"</string>
   <string name="screen_app_lock_biometric_unlock_title_android">"Deblocați cu biometrice"</string>
@@ -33,6 +23,16 @@ Alegeți ceva memorabil. Dacă uitați acest PIN, veți fi deconectat din aplica
   <string name="screen_app_lock_setup_pin_mismatch_dialog_title">"Codurile PIN nu corespund"</string>
   <string name="screen_app_lock_signout_alert_message">"Va trebui să vă reconectați și să creați un cod PIN nou pentru a continua"</string>
   <string name="screen_app_lock_signout_alert_title">"Sunteți deconectat"</string>
+  <plurals name="screen_app_lock_subtitle">
+    <item quantity="one">"Aveți %1$d încercare de deblocare"</item>
+    <item quantity="few">"Aveți %1$d încercări de deblocare"</item>
+    <item quantity="other">"Aveți %1$d încercări de deblocare"</item>
+  </plurals>
+  <plurals name="screen_app_lock_subtitle_wrong_pin">
+    <item quantity="one">"PIN greșit. Mai aveți %1$d sansa"</item>
+    <item quantity="few">"PIN greșit. Mai aveți %1$d sanse"</item>
+    <item quantity="other">"PIN greșit. Mai aveți %1$d sanse"</item>
+  </plurals>
   <string name="screen_app_lock_use_biometric_android">"Utilizați biometrice"</string>
   <string name="screen_app_lock_use_pin_android">"Utilizați codul PIN"</string>
   <string name="screen_signout_in_progress_dialog_content">"Deconectare în curs…"</string>

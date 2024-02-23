@@ -1,13 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <plurals name="screen_app_lock_subtitle">
-    <item quantity="one">"Имате %1$d опит да отключите"</item>
-    <item quantity="other">"Имате %1$d опита да отключите"</item>
-  </plurals>
-  <plurals name="screen_app_lock_subtitle_wrong_pin">
-    <item quantity="one">"Грешен PIN. Имате още %1$d шанс"</item>
-    <item quantity="other">"Грешен PIN. Имате още %1$d шанса"</item>
-  </plurals>
   <string name="screen_app_lock_forgot_pin">"Забравихте PIN?"</string>
   <string name="screen_app_lock_settings_change_pin">"Промяна на PIN кода"</string>
   <string name="screen_app_lock_settings_remove_pin">"Премахване на PIN"</string>
@@ -20,6 +12,14 @@
   <string name="screen_app_lock_setup_pin_blacklisted_dialog_title">"Избор на различен PIN"</string>
   <string name="screen_app_lock_setup_pin_mismatch_dialog_content">"Моля, въведете един и същ PIN два пъти"</string>
   <string name="screen_app_lock_setup_pin_mismatch_dialog_title">"PINs не съвпадат"</string>
+  <plurals name="screen_app_lock_subtitle">
+    <item quantity="one">"Имате %1$d опит да отключите"</item>
+    <item quantity="other">"Имате %1$d опита да отключите"</item>
+  </plurals>
+  <plurals name="screen_app_lock_subtitle_wrong_pin">
+    <item quantity="one">"Грешен PIN. Имате още %1$d шанс"</item>
+    <item quantity="other">"Грешен PIN. Имате още %1$d шанса"</item>
+  </plurals>
   <string name="screen_app_lock_use_pin_android">"Използване на PIN"</string>
   <string name="screen_signout_in_progress_dialog_content">"Излизане…"</string>
 </resources>

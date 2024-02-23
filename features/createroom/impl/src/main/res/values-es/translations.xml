@@ -2,14 +2,14 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_create_room_action_create_room">"Nueva sala"</string>
   <string name="screen_create_room_action_invite_people">"Invita a alguien a Element"</string>
+  <string name="screen_create_room_add_people_title">"Invitar personas"</string>
   <string name="screen_create_room_error_creating_room">"Se ha producido un error al crear la sala"</string>
   <string name="screen_create_room_private_option_description">"Los mensajes de esta sala están cifrados. La encriptación no se puede desactivar después."</string>
   <string name="screen_create_room_private_option_title">"Sala privada (sólo con invitación)"</string>
   <string name="screen_create_room_public_option_description">"Los mensajes no están cifrados y cualquiera puede leerlos. Puedes activar la encriptación más adelante."</string>
   <string name="screen_create_room_public_option_title">"Sala pública (cualquiera)"</string>
-  <string name="screen_create_room_topic_label">"Tema (opcional)"</string>
-  <string name="screen_start_chat_error_starting_chat">"Se ha producido un error al intentar iniciar un chat"</string>
-  <string name="screen_create_room_add_people_title">"Invitar personas"</string>
   <string name="screen_create_room_room_name_label">"Nombre de la sala"</string>
   <string name="screen_create_room_title">"Crear una sala"</string>
+  <string name="screen_create_room_topic_label">"Tema (opcional)"</string>
+  <string name="screen_start_chat_error_starting_chat">"Se ha producido un error al intentar iniciar un chat"</string>
 </resources>

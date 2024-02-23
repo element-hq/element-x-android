@@ -1,13 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <plurals name="screen_app_lock_subtitle">
-    <item quantity="one">"You have %1$d attempt to unlock"</item>
-    <item quantity="other">"You have %1$d attempts to unlock"</item>
-  </plurals>
-  <plurals name="screen_app_lock_subtitle_wrong_pin">
-    <item quantity="one">"Wrong PIN. You have %1$d more chance"</item>
-    <item quantity="other">"Wrong PIN. You have %1$d more chances"</item>
-  </plurals>
   <string name="screen_app_lock_biometric_authentication">"biometric authentication"</string>
   <string name="screen_app_lock_biometric_unlock">"biometric unlock"</string>
   <string name="screen_app_lock_biometric_unlock_title_android">"Unlock with biometric"</string>
@@ -31,6 +23,14 @@ Choose something memorable. If you forget this PIN, you will be logged out of th
   <string name="screen_app_lock_setup_pin_mismatch_dialog_title">"PINs don\'t match"</string>
   <string name="screen_app_lock_signout_alert_message">"You’ll need to re-login and create a new PIN to proceed"</string>
   <string name="screen_app_lock_signout_alert_title">"You are being signed out"</string>
+  <plurals name="screen_app_lock_subtitle">
+    <item quantity="one">"You have %1$d attempt to unlock"</item>
+    <item quantity="other">"You have %1$d attempts to unlock"</item>
+  </plurals>
+  <plurals name="screen_app_lock_subtitle_wrong_pin">
+    <item quantity="one">"Wrong PIN. You have %1$d more chance"</item>
+    <item quantity="other">"Wrong PIN. You have %1$d more chances"</item>
+  </plurals>
   <string name="screen_app_lock_use_biometric_android">"Use biometric"</string>
   <string name="screen_app_lock_use_pin_android">"Use PIN"</string>
   <string name="screen_signout_in_progress_dialog_content">"Signing out…"</string>

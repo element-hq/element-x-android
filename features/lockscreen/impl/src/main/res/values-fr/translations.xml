@@ -1,13 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <plurals name="screen_app_lock_subtitle">
-    <item quantity="one">"Il reste %1$d tentative pour déverrouiller"</item>
-    <item quantity="other">"Il reste %1$d tentatives pour déverrouiller"</item>
-  </plurals>
-  <plurals name="screen_app_lock_subtitle_wrong_pin">
-    <item quantity="one">"Code PIN incorrect. Il reste %1$d tentative"</item>
-    <item quantity="other">"Code PIN incorrect. Il reste %1$d tentatives"</item>
-  </plurals>
   <string name="screen_app_lock_biometric_authentication">"Authentification biométrique"</string>
   <string name="screen_app_lock_biometric_unlock">"Déverrouillage biométrique"</string>
   <string name="screen_app_lock_biometric_unlock_title_android">"Déverrouiller avec la biométrie"</string>
@@ -29,6 +21,14 @@
   <string name="screen_app_lock_setup_pin_mismatch_dialog_title">"Les codes PIN ne correspondent pas"</string>
   <string name="screen_app_lock_signout_alert_message">"Pour continuer, vous devrez vous connecter à nouveau et créer un nouveau code PIN."</string>
   <string name="screen_app_lock_signout_alert_title">"Vous êtes en train de vous déconnecter"</string>
+  <plurals name="screen_app_lock_subtitle">
+    <item quantity="one">"Il reste %1$d tentative pour déverrouiller"</item>
+    <item quantity="other">"Il reste %1$d tentatives pour déverrouiller"</item>
+  </plurals>
+  <plurals name="screen_app_lock_subtitle_wrong_pin">
+    <item quantity="one">"Code PIN incorrect. Il reste %1$d tentative"</item>
+    <item quantity="other">"Code PIN incorrect. Il reste %1$d tentatives"</item>
+  </plurals>
   <string name="screen_app_lock_use_biometric_android">"Utiliser la biométrie"</string>
   <string name="screen_app_lock_use_pin_android">"Utiliser le code PIN"</string>
   <string name="screen_signout_in_progress_dialog_content">"Déconnexion…"</string>

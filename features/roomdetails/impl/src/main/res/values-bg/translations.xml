@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <plurals name="screen_room_member_list_header_title">
-    <item quantity="one">"%1$d човек"</item>
-    <item quantity="other">"%1$d души"</item>
-  </plurals>
+  <string name="screen_dm_details_block_alert_action">"Блокиране"</string>
+  <string name="screen_dm_details_block_user">"Блокиране на потребителя"</string>
+  <string name="screen_dm_details_unblock_alert_action">"Отблокиране"</string>
+  <string name="screen_dm_details_unblock_user">"Отблокиране на потребителя"</string>
   <string name="screen_polls_history_title">"Анкети"</string>
   <string name="screen_room_details_add_topic_title">"Добавяне на тема"</string>
   <string name="screen_room_details_already_a_member">"Вече е член"</string>
@@ -12,27 +12,27 @@
   <string name="screen_room_details_edition_error_title">"Не може да се обнови стаята"</string>
   <string name="screen_room_details_encryption_enabled_subtitle">"Съобщенията са защитени с ключове. Само вие и получателите имате уникалните ключове, за да ги отключите."</string>
   <string name="screen_room_details_encryption_enabled_title">"Шифроването на съобщенията е включено"</string>
+  <string name="screen_room_details_invite_people_title">"Поканване на хора"</string>
+  <string name="screen_room_details_leave_conversation_title">"Напускане на разговора"</string>
+  <string name="screen_room_details_leave_room_title">"Напускане на стаята"</string>
   <string name="screen_room_details_notification_mode_custom">"Персонализирани"</string>
   <string name="screen_room_details_notification_mode_default">"По подразбиране"</string>
   <string name="screen_room_details_notification_title">"Известия"</string>
+  <string name="screen_room_details_room_name_label">"Име на стаята"</string>
+  <string name="screen_room_details_security_title">"Защита"</string>
   <string name="screen_room_details_share_room_title">"Споделяне на стаята"</string>
+  <string name="screen_room_details_topic_title">"Тема"</string>
   <string name="screen_room_details_updating_room">"Обновяване на стаята…"</string>
+  <plurals name="screen_room_member_list_header_title">
+    <item quantity="one">"%1$d човек"</item>
+    <item quantity="other">"%1$d души"</item>
+  </plurals>
   <string name="screen_room_member_list_mode_members">"Членове"</string>
   <string name="screen_room_member_list_role_administrator">"Администратор"</string>
   <string name="screen_room_member_list_role_moderator">"Модератор"</string>
   <string name="screen_room_member_list_room_members_header_title">"Членове на стаята"</string>
   <string name="screen_room_notification_settings_custom_settings_title">"Да бъда известяван в този чат за"</string>
   <string name="screen_room_notification_settings_mode_all_messages">"Всички съобщения"</string>
-  <string name="screen_room_notification_settings_room_custom_settings_title">"В тази стая, да бъда известяван за"</string>
-  <string name="screen_dm_details_block_alert_action">"Блокиране"</string>
-  <string name="screen_dm_details_block_user">"Блокиране на потребителя"</string>
-  <string name="screen_dm_details_unblock_alert_action">"Отблокиране"</string>
-  <string name="screen_dm_details_unblock_user">"Отблокиране на потребителя"</string>
-  <string name="screen_room_details_invite_people_title">"Поканване на хора"</string>
-  <string name="screen_room_details_leave_conversation_title">"Напускане на разговора"</string>
-  <string name="screen_room_details_leave_room_title">"Напускане на стаята"</string>
-  <string name="screen_room_details_room_name_label">"Име на стаята"</string>
-  <string name="screen_room_details_security_title">"Защита"</string>
-  <string name="screen_room_details_topic_title">"Тема"</string>
   <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Само споменавания и ключови думи"</string>
+  <string name="screen_room_notification_settings_room_custom_settings_title">"В тази стая, да бъда известяван за"</string>
 </resources>

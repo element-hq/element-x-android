@@ -8,18 +8,19 @@
   <string name="emoji_picker_category_people">"Emojis y personas"</string>
   <string name="emoji_picker_category_places">"Viajes y lugares"</string>
   <string name="emoji_picker_category_symbols">"Símbolos"</string>
-  <plurals name="room_timeline_state_changes">
-    <item quantity="one">"%1$d cambio en la sala"</item>
-    <item quantity="other">"%1$d cambios en la sala"</item>
-  </plurals>
   <string name="report_content_explanation">"Este mensaje se notificará al administrador de su homeserver. No podrán leer ningún mensaje cifrado."</string>
   <string name="report_content_hint">"Motivo para denunciar este contenido"</string>
   <string name="room_timeline_beginning_of_room">"Este es el principio de %1$s."</string>
   <string name="room_timeline_beginning_of_room_no_name">"Este es el principio de esta conversación."</string>
   <string name="room_timeline_read_marker_title">"Nuevos"</string>
-  <string name="screen_room_mentions_at_room_subtitle">"Notificar a toda la sala"</string>
+  <plurals name="room_timeline_state_changes">
+    <item quantity="one">"%1$d cambio en la sala"</item>
+    <item quantity="other">"%1$d cambios en la sala"</item>
+  </plurals>
+  <string name="screen_report_content_block_user">"Bloquear usuario"</string>
   <string name="screen_report_content_block_user_hint">"Marque si quieres ocultar todos los mensajes actuales y futuros de este usuario"</string>
   <string name="screen_room_attachment_source_camera">"Cámara"</string>
+  <string name="screen_room_attachment_source_camera_photo">"Hacer foto"</string>
   <string name="screen_room_attachment_source_camera_video">"Grabar video"</string>
   <string name="screen_room_attachment_source_files">"Archivo adjunto"</string>
   <string name="screen_room_attachment_source_gallery">"Biblioteca de fotos y vídeos"</string>
@@ -28,9 +29,12 @@
   <string name="screen_room_attachment_text_formatting">"Formato de Texto"</string>
   <string name="screen_room_encrypted_history_banner">"El historial de mensajes no está disponible en este momento."</string>
   <string name="screen_room_encrypted_history_banner_unverified">"El historial de mensajes no está disponible en esta sala. Verifica este dispositivo para ver tu historial de mensajes."</string>
+  <string name="screen_room_error_failed_processing_media">"Error al procesar el contenido multimedia, por favor inténtalo de nuevo."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"No se pudieron recuperar los detalles del usuario"</string>
   <string name="screen_room_invite_again_alert_message">"¿Quieres volver a invitarlos?"</string>
   <string name="screen_room_invite_again_alert_title">"Estás solo en este chat"</string>
+  <string name="screen_room_mentions_at_room_subtitle">"Notificar a toda la sala"</string>
+  <string name="screen_room_mentions_at_room_title">"Todos"</string>
   <string name="screen_room_message_copied">"Mensaje copiado"</string>
   <string name="screen_room_no_permission_to_post">"No tienes permiso para publicar en esta sala"</string>
   <string name="screen_room_notification_settings_allow_custom">"Permitir configuración personalizada"</string>
@@ -45,6 +49,7 @@
   <string name="screen_room_notification_settings_error_setting_mode">"No se pudo cambiar el modo, por favor inténtalo de nuevo."</string>
   <string name="screen_room_notification_settings_mentions_only_disclaimer">"Tu servidor principal no admite esta opción en salas cifradas, no recibirás notificaciones en esta sala."</string>
   <string name="screen_room_notification_settings_mode_all_messages">"Todos los mensajes"</string>
+  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Únicamente Menciones y Palabras clave"</string>
   <string name="screen_room_notification_settings_room_custom_settings_title">"En esta sala, notificarme por"</string>
   <string name="screen_room_reactions_show_less">"Mostrar menos"</string>
   <string name="screen_room_reactions_show_more">"Mostrar más"</string>
@@ -53,9 +58,4 @@
   <string name="screen_room_timeline_add_reaction">"Añadir emoji"</string>
   <string name="screen_room_timeline_less_reactions">"Mostrar menos"</string>
   <string name="screen_room_voice_message_tooltip">"Mantén pulsado para grabar"</string>
-  <string name="screen_room_mentions_at_room_title">"Todos"</string>
-  <string name="screen_report_content_block_user">"Bloquear usuario"</string>
-  <string name="screen_room_attachment_source_camera_photo">"Hacer foto"</string>
-  <string name="screen_room_error_failed_processing_media">"Error al procesar el contenido multimedia, por favor inténtalo de nuevo."</string>
-  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Únicamente Menciones y Palabras clave"</string>
 </resources>

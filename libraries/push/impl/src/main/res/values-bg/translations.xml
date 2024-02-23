@@ -2,16 +2,6 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="notification_channel_noisy">"Шумни известия"</string>
   <string name="notification_channel_silent">"Безшумни известия"</string>
-  <string name="notification_inline_reply_failed">"** Неуспешно изпращане - моля, отворете стаята"</string>
-  <string name="notification_mentioned_you_body">"Ви спомена: %1$s"</string>
-  <string name="notification_new_messages">"Нови съобщения"</string>
-  <string name="notification_reaction_body">"Реагира с %1$s"</string>
-  <string name="notification_room_invite_body">"Ви покани да се присъедините към стаята"</string>
-  <string name="notification_ticker_text_dm">"%1$s: %2$s"</string>
-  <string name="notification_ticker_text_group">"%1$s: %2$s %3$s"</string>
-  <string name="notification_unread_notified_messages_and_invitation">"%1$s и %2$s"</string>
-  <string name="notification_unread_notified_messages_in_room">"%1$s в %2$s"</string>
-  <string name="notification_unread_notified_messages_in_room_and_invitation">"%1$s в %2$s и %3$s"</string>
   <plurals name="notification_compat_summary_line_for_room">
     <item quantity="one">"%1$s: %2$d съобщение"</item>
     <item quantity="other">"%1$s: %2$d съобщения"</item>
@@ -20,20 +10,30 @@
     <item quantity="one">"%d известие"</item>
     <item quantity="other">"%d известия"</item>
   </plurals>
+  <string name="notification_fallback_content">"Известие"</string>
+  <string name="notification_inline_reply_failed">"** Неуспешно изпращане - моля, отворете стаята"</string>
+  <string name="notification_invitation_action_join">"Присъединяване"</string>
   <plurals name="notification_invitations">
     <item quantity="one">"%d покана"</item>
     <item quantity="other">"%d покани"</item>
   </plurals>
+  <string name="notification_mentioned_you_body">"Ви спомена: %1$s"</string>
+  <string name="notification_new_messages">"Нови съобщения"</string>
   <plurals name="notification_new_messages_for_room">
     <item quantity="one">"%d ново съобщение"</item>
     <item quantity="other">"%d нови съобщения"</item>
   </plurals>
+  <string name="notification_reaction_body">"Реагира с %1$s"</string>
+  <string name="notification_room_action_mark_as_read">"Отбелязване като прочетено"</string>
+  <string name="notification_room_action_quick_reply">"Бърз отговор"</string>
+  <string name="notification_room_invite_body">"Ви покани да се присъедините към стаята"</string>
+  <string name="notification_ticker_text_dm">"%1$s: %2$s"</string>
+  <string name="notification_ticker_text_group">"%1$s: %2$s %3$s"</string>
+  <string name="notification_unread_notified_messages_and_invitation">"%1$s и %2$s"</string>
+  <string name="notification_unread_notified_messages_in_room">"%1$s в %2$s"</string>
+  <string name="notification_unread_notified_messages_in_room_and_invitation">"%1$s в %2$s и %3$s"</string>
   <plurals name="notification_unread_notified_messages_in_room_rooms">
     <item quantity="one">"%d стая"</item>
     <item quantity="other">"%d стаи"</item>
   </plurals>
-  <string name="notification_fallback_content">"Известие"</string>
-  <string name="notification_invitation_action_join">"Присъединяване"</string>
-  <string name="notification_room_action_mark_as_read">"Отбелязване като прочетено"</string>
-  <string name="notification_room_action_quick_reply">"Бърз отговор"</string>
 </resources>
