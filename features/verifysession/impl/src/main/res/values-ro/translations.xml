@@ -3,12 +3,16 @@
   <string name="screen_session_verification_cancelled_subtitle">"Ceva nu este în regulă. Fie cererea a expirat, fie a fost respinsă."</string>
   <string name="screen_session_verification_compare_emojis_subtitle">"Confirmați că emoticoanele de mai jos se potrivesc cu cele afișate în cealaltă sesiune."</string>
   <string name="screen_session_verification_compare_emojis_title">"Comparați emoticoanele"</string>
+  <string name="screen_session_verification_compare_numbers_subtitle">"Confirmați că numerele de mai jos se potrivesc cu cele afișate în cealaltă sesiune."</string>
+  <string name="screen_session_verification_compare_numbers_title">"Comparați numerele"</string>
   <string name="screen_session_verification_complete_subtitle">"Noua dumneavoastră sesiune este acum verificată. Are acces la mesajele dumneavoastră criptate, iar alți utilizatori vă vor vedea ca fiind de încredere."</string>
+  <string name="screen_session_verification_enter_recovery_key">"Introduceți cheia de recuperare"</string>
   <string name="screen_session_verification_open_existing_session_subtitle">"Demonstrați-vă identitatea pentru a accesa istoricul mesajelor criptate."</string>
   <string name="screen_session_verification_open_existing_session_title">"Deschideți o sesiune existentă"</string>
   <string name="screen_session_verification_positive_button_canceled">"Reîncercați verificarea"</string>
   <string name="screen_session_verification_positive_button_initial">"Sunt pregătit"</string>
   <string name="screen_session_verification_positive_button_verifying_ongoing">"Se așteaptă confirmarea"</string>
+  <string name="screen_session_verification_ready_subtitle">"Comparați un set unic de emoji-uri."</string>
   <string name="screen_session_verification_request_accepted_subtitle">"Comparăți emoticoalene asigurându-vă că apar în aceeași ordine."</string>
   <string name="screen_session_verification_they_dont_match">"Nu se potrivesc"</string>
   <string name="screen_session_verification_they_match">"Se potrivesc"</string>

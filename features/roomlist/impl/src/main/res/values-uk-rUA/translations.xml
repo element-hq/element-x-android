@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="confirm_recovery_key_banner_message">"Ваша резервна копія чату наразі не синхронізована. Вам потрібно підтвердити ключ відновлення, щоб зберегти доступ до резервної копії чату."</string>
+  <string name="confirm_recovery_key_banner_title">"Підтвердіть ключ відновлення"</string>
+  <string name="screen_migration_message">"Це одноразовий процес, дякую за очікування."</string>
+  <string name="screen_migration_title">"Налаштування облікового запису."</string>
+  <string name="screen_roomlist_a11y_create_message">"Створити нову розмову або кімнату"</string>
+  <string name="screen_roomlist_empty_message">"Почніть з обміну повідомленнями з кимось."</string>
+  <string name="screen_roomlist_empty_title">"Ще немає чатів."</string>
+  <string name="screen_roomlist_filter_favourites">"Улюблені"</string>
+  <string name="screen_roomlist_filter_low_priority">"Низький пріоритет"</string>
+  <string name="screen_roomlist_filter_rooms">"Кімнати"</string>
+  <string name="screen_roomlist_filter_unreads">"Непрочитані"</string>
+  <string name="screen_roomlist_main_space_title">"Усі чати"</string>
+  <string name="screen_roomlist_mark_as_read">"Позначити як прочитане"</string>
+  <string name="screen_roomlist_mark_as_unread">"Позначити як непрочитане"</string>
+  <string name="session_verification_banner_message">"Схоже, Ви використовуєте новий пристрій. Щоб отримати доступ до зашифрованих повідомлень, підтвердьте особу за допомогою іншого пристрою."</string>
+  <string name="session_verification_banner_title">"Підтвердьте, що це Ви"</string>
+  <string name="screen_roomlist_filter_people">"Люди"</string>
+</resources>

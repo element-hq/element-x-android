@@ -11,7 +11,7 @@
   <string name="screen_roomlist_filter_low_priority">"Low Priority"</string>
   <string name="screen_roomlist_filter_rooms">"Rooms"</string>
   <string name="screen_roomlist_filter_unreads">"Unreads"</string>
-  <string name="screen_roomlist_main_space_title">"All Chats"</string>
+  <string name="screen_roomlist_main_space_title">"Chats"</string>
   <string name="screen_roomlist_mark_as_read">"Mark as read"</string>
   <string name="screen_roomlist_mark_as_unread">"Mark as unread"</string>
   <string name="session_verification_banner_message">"Looks like you’re using a new device. Verify with another device to access your encrypted messages."</string>

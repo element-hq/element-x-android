@@ -12,12 +12,9 @@
   <string name="screen_room_details_edit_room_title">"Sunting Ruangan"</string>
   <string name="screen_room_details_edition_error">"Terjadi kesalahan yang tidak diketahui dan informasinya tidak dapat diubah."</string>
   <string name="screen_room_details_edition_error_title">"Tidak dapat memperbarui ruangan"</string>
-  <string name="screen_room_details_encryption_enabled_subtitle">"Pesan diamankan dengan kunci. Hanya Anda dan penerima yang memiliki kunci unik untuk membukanya."</string>
-  <string name="screen_room_details_encryption_enabled_title">"Enkripsi pesan diaktifkan"</string>
   <string name="screen_room_details_error_loading_notification_settings">"Terjadi kesalahan saat memuat pengaturan notifikasi."</string>
   <string name="screen_room_details_error_muting">"Gagal membisukan ruangan ini, silakan coba lagi."</string>
   <string name="screen_room_details_error_unmuting">"Gagal membunyikan ruangan ini, silakan coba lagi."</string>
-  <string name="screen_room_details_invite_people_title">"Undang seseorang"</string>
   <string name="screen_room_details_notification_mode_custom">"Khusus"</string>
   <string name="screen_room_details_notification_mode_default">"Bawaan"</string>
   <string name="screen_room_details_notification_title">"Pemberitahuan"</string>
@@ -39,15 +36,18 @@
   <string name="screen_room_notification_settings_mode_all_messages">"Semua pesan"</string>
   <string name="screen_room_notification_settings_room_custom_settings_title">"Di ruangan ini, beri tahu saya tentang"</string>
   <string name="screen_start_chat_error_starting_chat">"Terjadi kesalahan saat mencoba memulai obrolan"</string>
+  <string name="screen_room_details_encryption_enabled_subtitle">"Pesan diamankan dengan kunci. Hanya Anda dan penerima yang memiliki kunci unik untuk membukanya."</string>
+  <string name="screen_room_details_encryption_enabled_title">"Enkripsi pesan diaktifkan"</string>
   <string name="screen_dm_details_block_alert_action">"Blokir"</string>
   <string name="screen_dm_details_block_alert_description">"Pengguna yang diblokir tidak akan dapat mengirim Anda pesan dan semua pesan mereka akan disembunyikan. Anda dapat membuka blokirnya kapan saja."</string>
   <string name="screen_dm_details_block_user">"Blokir pengguna"</string>
   <string name="screen_dm_details_unblock_alert_action">"Buka blokir"</string>
   <string name="screen_dm_details_unblock_alert_description">"Anda akan dapat melihat semua pesan dari mereka lagi."</string>
   <string name="screen_dm_details_unblock_user">"Buka blokir pengguna"</string>
-  <string name="screen_room_details_leave_room_title">"Tinggalkan ruangan"</string>
   <string name="screen_room_details_room_name_label">"Nama ruangan"</string>
+  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Sebutan dan Kata Kunci saja"</string>
+  <string name="screen_room_details_invite_people_title">"Undang orang-orang"</string>
+  <string name="screen_room_details_leave_room_title">"Tinggalkan ruangan"</string>
   <string name="screen_room_details_security_title">"Keamanan"</string>
   <string name="screen_room_details_topic_title">"Topik"</string>
-  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Sebutan dan Kata Kunci saja"</string>
 </resources>

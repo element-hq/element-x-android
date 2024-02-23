@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="state_event_room_none">"%1$s non ha apportato modifiche"</string>
+  <string name="state_event_room_none_by_you">"Non hai apportato modifiche"</string>
   <string name="state_event_avatar_changed_too">"(anche l\'avatar è stato cambiato)"</string>
   <string name="state_event_avatar_url_changed">"%1$s ha cambiato il proprio avatar"</string>
   <string name="state_event_avatar_url_changed_by_you">"Hai cambiato il tuo avatar"</string>
@@ -39,8 +41,6 @@
   <string name="state_event_room_name_changed_by_you">"Hai cambiato il nome della stanza in: %1$s"</string>
   <string name="state_event_room_name_removed">"%1$s ha rimosso il nome della stanza"</string>
   <string name="state_event_room_name_removed_by_you">"Hai rimosso il nome della stanza"</string>
-  <string name="state_event_room_none">"%1$s non ha apportato modifiche"</string>
-  <string name="state_event_room_none_by_you">"Non hai apportato modifiche"</string>
   <string name="state_event_room_reject">"%1$s ha rifiutato l\'invito"</string>
   <string name="state_event_room_reject_by_you">"Hai rifiutato l\'invito"</string>
   <string name="state_event_room_remove">"%1$s ha rimosso %2$s"</string>

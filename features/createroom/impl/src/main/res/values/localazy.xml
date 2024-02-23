@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_create_room_action_create_room">"New room"</string>
-  <string name="screen_create_room_action_invite_people">"Invite people to Element"</string>
-  <string name="screen_create_room_add_people_title">"Invite people"</string>
   <string name="screen_create_room_error_creating_room">"An error occurred when creating the room"</string>
   <string name="screen_create_room_private_option_description">"Messages in this room are encrypted. Encryption can’t be disabled afterwards."</string>
   <string name="screen_create_room_private_option_title">"Private room (invite only)"</string>
@@ -10,6 +7,9 @@
   <string name="screen_create_room_public_option_title">"Public room (anyone)"</string>
   <string name="screen_create_room_topic_label">"Topic (optional)"</string>
   <string name="screen_start_chat_error_starting_chat">"An error occurred when trying to start a chat"</string>
+  <string name="screen_create_room_action_create_room">"New room"</string>
+  <string name="screen_create_room_action_invite_people">"Invite people to Element"</string>
+  <string name="screen_create_room_add_people_title">"Invite people"</string>
   <string name="screen_create_room_room_name_label">"Room name"</string>
   <string name="screen_create_room_title">"Create a room"</string>
 </resources>

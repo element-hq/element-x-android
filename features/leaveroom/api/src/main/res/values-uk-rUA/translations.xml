@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="leave_conversation_alert_subtitle">"Ви впевнені, що хочете залишити цю розмову? Ця розмова не є загальнодоступною, і ви не зможете знову приєднатися без запрошення."</string>
+  <string name="leave_room_alert_empty_subtitle">"Ви впевнені, що хочете вийти з цієї кімнати? Ви тут єдина людина. Якщо Ви вийдете, ніхто в майбутньому не зможе приєднатися, у тому числі і Ви."</string>
+  <string name="leave_room_alert_private_subtitle">"Ви впевнені, що хочете вийти з цієї кімнати? Ця кімната не є публічною, і ви не зможете повернутися до неї без запрошення."</string>
+  <string name="leave_room_alert_subtitle">"Ви впевнені, що хочете вийти з кімнати?"</string>
+</resources>

@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="state_event_room_none">"%1$s nevykonal/a žiadne zmeny"</string>
+  <string name="state_event_room_none_by_you">"Nevykonali ste žiadne zmeny"</string>
   <string name="state_event_avatar_changed_too">"(obrázok bol tiež zmenený)"</string>
   <string name="state_event_avatar_url_changed">"%1$s zmenili svoj obrázok"</string>
   <string name="state_event_avatar_url_changed_by_you">"Zmenili ste svoj obrázok"</string>
@@ -39,8 +41,6 @@
   <string name="state_event_room_name_changed_by_you">"Zmenili ste názov miestnosti na: %1$s"</string>
   <string name="state_event_room_name_removed">"%1$s odstránil/a názov miestnosti"</string>
   <string name="state_event_room_name_removed_by_you">"Odstránili ste názov miestnosti"</string>
-  <string name="state_event_room_none">"%1$s nevykonal/a žiadne zmeny"</string>
-  <string name="state_event_room_none_by_you">"Nevykonali ste žiadne zmeny"</string>
   <string name="state_event_room_reject">"%1$s odmietol/a pozvánku"</string>
   <string name="state_event_room_reject_by_you">"Odmietli ste pozvánku"</string>
   <string name="state_event_room_remove">"%1$s odstránil/a %2$s"</string>

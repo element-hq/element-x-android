@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="confirm_recovery_key_banner_title">"Потвърдете ключа си за възстановяване"</string>
+  <string name="screen_roomlist_a11y_create_message">"Създаване на нов разговор или стая"</string>
+  <string name="screen_roomlist_empty_message">"Започнете, като изпратите съобщение на някого."</string>
+  <string name="screen_roomlist_empty_title">"Все още няма чатове."</string>
+  <string name="screen_roomlist_filter_low_priority">"Нисък приоритет"</string>
+  <string name="screen_roomlist_filter_rooms">"Стаи"</string>
+  <string name="screen_roomlist_main_space_title">"Всички чатове"</string>
+  <string name="screen_roomlist_mark_as_read">"Отбелязване като прочетено"</string>
+  <string name="screen_roomlist_mark_as_unread">"Отбелязване като непрочетено"</string>
+  <string name="session_verification_banner_message">"Изглежда, че използвате ново устройство. Потвърдете с друго устройство за достъп до вашите шифровани съобщения."</string>
+  <string name="session_verification_banner_title">"Потвърдете, че сте вие"</string>
+  <string name="screen_roomlist_filter_people">"Хора"</string>
+</resources>

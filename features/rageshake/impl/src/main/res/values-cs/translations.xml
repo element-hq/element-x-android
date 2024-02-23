@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_bug_report_attach_screenshot">"Připojit snímek obrazovky"</string>
-  <string name="screen_bug_report_contact_me">"V případě dalších dotazů se na mě můžete obrátit."</string>
   <string name="screen_bug_report_contact_me_title">"Kontaktujte mě"</string>
   <string name="screen_bug_report_edit_screenshot">"Upravit snímek obrazovky"</string>
+  <string name="screen_bug_report_error_description_too_short">"Popis je příliš krátký, uveďte prosím více podrobností o tom, co se stalo. Děkujeme!"</string>
+  <string name="screen_bug_report_view_logs">"Zobrazit protokoly"</string>
+  <string name="screen_bug_report_contact_me">"V případě dalších dotazů se na mě můžete obrátit."</string>
   <string name="screen_bug_report_editor_description">"Popište prosím chybu. Co jste udělali? Co jste očekávali, že se stane? Co se ve skutečnosti stalo? Uveďte co nejvíce podrobností."</string>
   <string name="screen_bug_report_editor_placeholder">"Popište chybu…"</string>
   <string name="screen_bug_report_editor_supporting">"Pokud je to možné, prosím, napište popis anglicky."</string>
-  <string name="screen_bug_report_error_description_too_short">"Popis je příliš krátký, uveďte prosím více podrobností o tom, co se stalo. Děkujeme!"</string>
   <string name="screen_bug_report_include_crash_logs">"Odeslat záznamy o selhání"</string>
   <string name="screen_bug_report_include_logs">"Povolit protokoly"</string>
   <string name="screen_bug_report_include_screenshot">"Odeslat snímek obrazovky"</string>
   <string name="screen_bug_report_logs_description">"Protokoly budou součástí vaší zprávy, aby se zajistilo že vše funguje správně. Chcete-li odeslat zprávu bez protokolů, vypněte toto nastavení."</string>
-  <string name="screen_bug_report_view_logs">"Zobrazit protokoly"</string>
   <string name="screen_bug_report_rash_logs_alert_title">"%1$s havaroval při posledním použití. Chcete se s námi podělit o zprávu o selhání?"</string>
 </resources>

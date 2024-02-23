@@ -14,17 +14,16 @@
   <string name="screen_room_details_edit_room_title">"Редактировать комнату"</string>
   <string name="screen_room_details_edition_error">"Произошла неизвестная ошибка и информацию не удалось изменить."</string>
   <string name="screen_room_details_edition_error_title">"Не удалось обновить комнату"</string>
-  <string name="screen_room_details_encryption_enabled_subtitle">"Сообщения зашифрованы. Только у вас и у получателей есть уникальные ключи для их разблокировки."</string>
-  <string name="screen_room_details_encryption_enabled_title">"Шифрование сообщений включено"</string>
   <string name="screen_room_details_error_loading_notification_settings">"При загрузке настроек уведомлений произошла ошибка."</string>
   <string name="screen_room_details_error_muting">"Не удалось отключить звук в этой комнате, попробуйте еще раз."</string>
   <string name="screen_room_details_error_unmuting">"Не удалось включить звук в эту комнату, попробуйте еще раз."</string>
-  <string name="screen_room_details_invite_people_title">"Пригласить участника"</string>
   <string name="screen_room_details_notification_mode_custom">"Пользовательский"</string>
   <string name="screen_room_details_notification_mode_default">"По умолчанию"</string>
   <string name="screen_room_details_notification_title">"Уведомления"</string>
   <string name="screen_room_details_share_room_title">"Поделиться комнатой"</string>
   <string name="screen_room_details_updating_room">"Обновление комнаты…"</string>
+  <string name="screen_room_member_list_mode_banned">"Заблокирован"</string>
+  <string name="screen_room_member_list_mode_members">"Участники"</string>
   <string name="screen_room_member_list_pending_header_title">"В ожидании"</string>
   <string name="screen_room_member_list_role_administrator">"Администратор"</string>
   <string name="screen_room_member_list_role_moderator">"Модератор"</string>
@@ -43,6 +42,8 @@
   <string name="screen_room_notification_settings_mode_all_messages">"Все сообщения"</string>
   <string name="screen_room_notification_settings_room_custom_settings_title">"В этой комнате уведомить меня о"</string>
   <string name="screen_start_chat_error_starting_chat">"Произошла ошибка при попытке открытия комнаты"</string>
+  <string name="screen_room_details_encryption_enabled_subtitle">"Сообщения зашифрованы. Только у вас и у получателей есть уникальные ключи для их разблокировки."</string>
+  <string name="screen_room_details_encryption_enabled_title">"Шифрование сообщений включено"</string>
   <string name="screen_dm_details_block_alert_action">"Заблокировать"</string>
   <string name="screen_dm_details_block_alert_description">"Заблокированные пользователи не смогут отправлять вам сообщения, а все их сообщения будут скрыты. Вы можете разблокировать их в любое время."</string>
   <string name="screen_dm_details_block_user">"Заблокировать пользователя"</string>
@@ -50,9 +51,10 @@
   <string name="screen_dm_details_unblock_alert_description">"Вы снова сможете увидеть все сообщения."</string>
   <string name="screen_dm_details_unblock_user">"Разблокировать пользователя"</string>
   <string name="screen_room_details_leave_conversation_title">"Покинуть беседу"</string>
-  <string name="screen_room_details_leave_room_title">"Покинуть комнату"</string>
   <string name="screen_room_details_room_name_label">"Название комнаты"</string>
+  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Только упоминания и ключевые слова"</string>
+  <string name="screen_room_details_invite_people_title">"Пригласить друзей"</string>
+  <string name="screen_room_details_leave_room_title">"Покинуть комнату"</string>
   <string name="screen_room_details_security_title">"Безопасность"</string>
   <string name="screen_room_details_topic_title">"Тема"</string>
-  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Только упоминания и ключевые слова"</string>
 </resources>

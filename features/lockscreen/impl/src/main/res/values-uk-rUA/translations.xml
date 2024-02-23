@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <plurals name="screen_app_lock_subtitle">
+    <item quantity="one">"Ви маєте %1$d спробу"</item>
+    <item quantity="few">"Ви маєте %1$d спроби"</item>
+    <item quantity="many">"Ви маєте %1$d спроб"</item>
+  </plurals>
+  <plurals name="screen_app_lock_subtitle_wrong_pin">
+    <item quantity="one">"Хибний PIN-код. Ви маєте ще %1$d шанс"</item>
+    <item quantity="few">"Хибний PIN-код. Ви маєте ще %1$d шанси"</item>
+    <item quantity="many">"Хибний PIN-код. Ви маєте ще %1$d шансів"</item>
+  </plurals>
+  <string name="screen_app_lock_biometric_authentication">"біометрична аутентифікація"</string>
+  <string name="screen_app_lock_biometric_unlock">"біометричне розблокування"</string>
+  <string name="screen_app_lock_biometric_unlock_title_android">"Розблокуйте за допомогою біометрії"</string>
+  <string name="screen_app_lock_forgot_pin">"Забули PIN-код?"</string>
+  <string name="screen_app_lock_settings_change_pin">"Змінити PIN-код"</string>
+  <string name="screen_app_lock_settings_enable_biometric_unlock">"Дозволити біометричне розблокування"</string>
+  <string name="screen_app_lock_settings_remove_pin">"Вилучити PIN-код"</string>
+  <string name="screen_app_lock_settings_remove_pin_alert_message">"Ви впевнені, що хочете видалити PIN-код?"</string>
+  <string name="screen_app_lock_settings_remove_pin_alert_title">"Видалити PIN-код?"</string>
+  <string name="screen_app_lock_setup_biometric_unlock_allow_title">"Дозволити %1$s"</string>
+  <string name="screen_app_lock_setup_biometric_unlock_skip">"Я б краще використав PIN-код"</string>
+  <string name="screen_app_lock_setup_biometric_unlock_subtitle">"Заощаджуйте час і використовуйте %1$s для розблокування застосунку щоразу"</string>
+  <string name="screen_app_lock_setup_choose_pin">"Виберіть PIN-код"</string>
+  <string name="screen_app_lock_setup_confirm_pin">"Підтвердити PIN-код"</string>
+  <string name="screen_app_lock_setup_pin_blacklisted_dialog_content">"Ви не можете вибрати його як свій PIN-код з міркувань безпеки"</string>
+  <string name="screen_app_lock_setup_pin_blacklisted_dialog_title">"Виберіть інший PIN-код"</string>
+  <string name="screen_app_lock_setup_pin_context">"Заблокуйте %1$s, щоб додати додаткову безпеку вашим чатам.
+
+Виберіть щось, що запам\'ятовується. Але якщо ви забудете PIN-код, ви вийдете з застосунку."</string>
+  <string name="screen_app_lock_setup_pin_mismatch_dialog_content">"Будь ласка, введіть один і той самий PIN-код двічі"</string>
+  <string name="screen_app_lock_setup_pin_mismatch_dialog_title">"PIN-коди не збігаються"</string>
+  <string name="screen_app_lock_signout_alert_message">"Щоб продовжити, вам потрібно буде повторно увійти та створити новий PIN-код"</string>
+  <string name="screen_app_lock_signout_alert_title">"Ви виходите з системи"</string>
+  <string name="screen_app_lock_use_biometric_android">"Використовуйте біометрію"</string>
+  <string name="screen_app_lock_use_pin_android">"Використовуйте PIN-код"</string>
+  <string name="screen_signout_in_progress_dialog_content">"Вихід…"</string>
+</resources>

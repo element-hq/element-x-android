@@ -16,6 +16,7 @@
   <string name="screen_change_server_form_header">"Adresa URL a homeserver-ului"</string>
   <string name="screen_change_server_form_notice">"Vă putețo conecta numai la un server existent care oferă suport pentru sliding sync. Administratorul homeserver-ului dumneavoastră va trebui să îl configureze. %1$s"</string>
   <string name="screen_change_server_subtitle">"Care este adresa serverului dumneavoastră?"</string>
+  <string name="screen_change_server_title">"Selectați serverul dumneavoastra"</string>
   <string name="screen_login_error_deactivated_account">"Acest cont a fost dezactivat."</string>
   <string name="screen_login_error_invalid_credentials">"Utilizator și/sau parolă incorecte"</string>
   <string name="screen_login_error_invalid_user_id">"Acesta nu este un identificator de utilizator valid. Format așteptat: „@user:homeserver.org”"</string>

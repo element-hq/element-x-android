@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_advanced_settings_send_read_receipts">"Потвърждения за прочитане"</string>
+  <string name="screen_edit_profile_display_name">"Име"</string>
+  <string name="screen_edit_profile_display_name_placeholder">"Вашето Име"</string>
+  <string name="screen_edit_profile_error">"Възникна неизвестна грешка и информацията не можа да бъде променена."</string>
+  <string name="screen_edit_profile_error_title">"Не може да се обнови профила"</string>
+  <string name="screen_edit_profile_title">"Редактиране на профила"</string>
+  <string name="screen_edit_profile_updating_details">"Обновяване на профила…"</string>
+  <string name="screen_notification_settings_additional_settings_section_title">"Допълнителни настройки"</string>
+  <string name="screen_notification_settings_direct_chats">"Директни чатове"</string>
+  <string name="screen_notification_settings_edit_custom_settings_section_title">"Персонализирана настройка за чат"</string>
+  <string name="screen_notification_settings_edit_mode_all_messages">"Всички съобщения"</string>
+  <string name="screen_notification_settings_edit_mode_mentions_and_keywords">"Само споменавания и ключови думи"</string>
+  <string name="screen_notification_settings_edit_screen_direct_section_header">"В директни чатове да бъда известяван за"</string>
+  <string name="screen_notification_settings_edit_screen_group_section_header">"В групови чатове да бъда известяван за"</string>
+  <string name="screen_notification_settings_enable_notifications">"Включване на известията на това устройство"</string>
+  <string name="screen_notification_settings_group_chats">"Групови чатове"</string>
+  <string name="screen_notification_settings_invite_for_me_label">"Покани"</string>
+  <string name="screen_notification_settings_mentions_section_title">"Споменавания"</string>
+  <string name="screen_notification_settings_mode_mentions">"Споменавания"</string>
+  <string name="screen_notification_settings_notification_section_title">"Да бъда известяван за"</string>
+  <string name="screen_notification_settings_room_mention_label">"Известяване за @room"</string>
+  <string name="screen_notification_settings_system_notifications_action_required">"За да получавате известия, моля, променете своя %1$s"</string>
+  <string name="screen_notification_settings_system_notifications_action_required_content_link">"системни настройки"</string>
+  <string name="screen_notification_settings_title">"Известия"</string>
+</resources>

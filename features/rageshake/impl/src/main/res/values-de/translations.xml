@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_bug_report_attach_screenshot">"Bildschirmfoto anhängen"</string>
-  <string name="screen_bug_report_contact_me">"Sie können mich kontaktieren, wenn Sie weitere Fragen haben."</string>
   <string name="screen_bug_report_contact_me_title">"Kontaktieren Sie mich"</string>
   <string name="screen_bug_report_edit_screenshot">"Bildschirmfoto bearbeiten"</string>
+  <string name="screen_bug_report_error_description_too_short">"Die Beschreibung ist zu kurz. Bitte geben Sie weitere Informationen darüber an, was passiert ist."</string>
+  <string name="screen_bug_report_view_logs">"Logs ansehen"</string>
+  <string name="screen_bug_report_contact_me">"Sie können mich kontaktieren, wenn Sie weitere Fragen haben."</string>
   <string name="screen_bug_report_editor_description">"Bitte beschreibe den Fehler. Was hast du getan? Was hast du erwartet, was passiert? Was ist tatsächlich passiert? Bitte gehe so detailliert wie möglich vor."</string>
   <string name="screen_bug_report_editor_placeholder">"Beschreibe den Fehler…"</string>
   <string name="screen_bug_report_editor_supporting">"Wenn möglich, verfasse die Beschreibung bitte auf Englisch."</string>
@@ -11,6 +13,5 @@
   <string name="screen_bug_report_include_logs">"Protokolle zulassen"</string>
   <string name="screen_bug_report_include_screenshot">"Bildschirmfoto senden"</string>
   <string name="screen_bug_report_logs_description">"Die Protokolle werden deiner Nachricht beigefügt, um sicherzustellen, dass alles ordnungsgemäß funktioniert. Um deine Nachricht ohne Protokolle zu senden, deaktiviere diese Einstellung."</string>
-  <string name="screen_bug_report_view_logs">"Logs ansehen"</string>
   <string name="screen_bug_report_rash_logs_alert_title">"%1$s ist bei der letzten Nutzung abgestürzt. Möchtest du einen Absturzbericht mit uns teilen?"</string>
 </resources>

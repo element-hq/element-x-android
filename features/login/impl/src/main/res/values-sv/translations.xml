@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_account_provider_change">"Byt kontoleverantör"</string>
+  <string name="screen_account_provider_form_hint">"Hemserveradress"</string>
+  <string name="screen_account_provider_form_notice">"Ange ett sökord eller en domänadress."</string>
+  <string name="screen_account_provider_form_subtitle">"Sök efter ett företag, en gemenskap eller en privat server."</string>
+  <string name="screen_account_provider_form_title">"Hitta en kontoleverantör"</string>
+  <string name="screen_account_provider_signin_title">"Du är på väg att logga in på %s"</string>
+  <string name="screen_account_provider_signup_title">"Du är på väg att skapa ett konto på %s"</string>
+  <string name="screen_change_account_provider_matrix_org_subtitle">"Matrix.org är en stor gratisserver på det offentliga Matrix-nätverket för säker, decentraliserad kommunikation, som drivs av Matrix.org Foundation."</string>
+  <string name="screen_change_account_provider_other">"Annan"</string>
+  <string name="screen_change_account_provider_subtitle">"Använd en annan kontoleverantör, till exempel din egen privata server eller ett jobbkonto."</string>
+  <string name="screen_change_account_provider_title">"Byt kontoleverantör"</string>
+  <string name="screen_change_server_error_invalid_homeserver">"Vi kunde inte nå den här hemservern. Kontrollera att du har angett hemserverns URL korrekt. Om URL:en är korrekt kontaktar du administratören för hemservern för ytterligare hjälp."</string>
+  <string name="screen_change_server_error_no_sliding_sync_message">"Den här servern stöder för närvarande inte sliding sync."</string>
+  <string name="screen_change_server_form_header">"Hemserverns URL"</string>
+  <string name="screen_change_server_form_notice">"Du kan bara ansluta till en befintlig server som stöder sliding sync. Din hemserveradministratör måste konfigurera det. %1$s"</string>
+  <string name="screen_change_server_subtitle">"Vad är adressen till din server?"</string>
+  <string name="screen_login_error_deactivated_account">"Detta konto har avaktiverats."</string>
+  <string name="screen_login_error_invalid_credentials">"Felaktigt användarnamn och/eller lösenord"</string>
+  <string name="screen_login_error_invalid_user_id">"Detta är inte en giltig användaridentifierare. Förväntat format: \'@användare:hemserver.org\'"</string>
+  <string name="screen_login_error_unsupported_authentication">"Den valda hemservern stöder inte lösenord eller OIDC-inloggning. Kontakta administratören eller välj en annan hemserver."</string>
+  <string name="screen_login_form_header">"Ange dina uppgifter"</string>
+  <string name="screen_login_title">"Välkommen tillbaka!"</string>
+  <string name="screen_login_title_with_homeserver">"Logga in på %1$s"</string>
+  <string name="screen_server_confirmation_change_server">"Byt kontoleverantör"</string>
+  <string name="screen_server_confirmation_message_login_element_dot_io">"En privat server för Element-anställda."</string>
+  <string name="screen_server_confirmation_message_login_matrix_dot_org">"Matrix är ett öppet nätverk för säker, decentraliserad kommunikation."</string>
+  <string name="screen_server_confirmation_message_register">"Det är här dina konversationer kommer att sparas - precis som du skulle använda en e-postleverantör för att spara dina e-brev."</string>
+  <string name="screen_server_confirmation_title_login">"Du är på väg att logga in på %1$s"</string>
+  <string name="screen_server_confirmation_title_register">"Du är på väg att skapa ett konto på %1$s"</string>
+  <string name="screen_waitlist_message">"Det finns en stor efterfrågan på %1$s på %2$s just nu. Kom tillbaka till appen om några dagar och försök igen.
+
+Tack för ditt tålamod!"</string>
+  <string name="screen_waitlist_title">"Du är nästan framme."</string>
+  <string name="screen_waitlist_title_success">"Du är inne."</string>
+  <string name="screen_account_provider_signin_subtitle">"Det är här dina konversationer kommer att sparas - precis som du skulle använda en e-postleverantör för att spara dina e-brev."</string>
+  <string name="screen_account_provider_signup_subtitle">"Det är här dina konversationer kommer att sparas - precis som du skulle använda en e-postleverantör för att spara dina e-brev."</string>
+  <string name="screen_login_subtitle">"Matrix är ett öppet nätverk för säker, decentraliserad kommunikation."</string>
+  <string name="screen_waitlist_message_success">"Välkommen till %1$s!"</string>
+</resources>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_migration_message">"Detta är en engångsprocess, tack för att du väntar."</string>
+  <string name="screen_migration_title">"Konfigurerar ditt konto"</string>
+  <string name="screen_roomlist_a11y_create_message">"Skapa en ny konversation eller ett nytt rum"</string>
+  <string name="screen_roomlist_empty_message">"Kom igång genom att skicka meddelanden till någon."</string>
+  <string name="screen_roomlist_empty_title">"Inga chattar än."</string>
+  <string name="screen_roomlist_main_space_title">"Alla chattar"</string>
+  <string name="session_verification_banner_message">"Det verkar som om du använder en ny enhet. Verifiera med en annan enhet för att komma åt dina krypterade meddelanden."</string>
+  <string name="session_verification_banner_title">"Verifiera att det är du"</string>
+  <string name="screen_roomlist_filter_people">"Personer"</string>
+</resources>

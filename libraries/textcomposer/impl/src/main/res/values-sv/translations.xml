@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="rich_text_editor_bullet_list">"Växla punktlista"</string>
+  <string name="rich_text_editor_close_formatting_options">"Stäng formateringsalternativ"</string>
+  <string name="rich_text_editor_code_block">"Växla kodblock"</string>
+  <string name="rich_text_editor_composer_placeholder">"Meddelande …"</string>
+  <string name="rich_text_editor_create_link">"Skapa en länk"</string>
+  <string name="rich_text_editor_edit_link">"Redigera länk"</string>
+  <string name="rich_text_editor_format_bold">"Använd fetstil"</string>
+  <string name="rich_text_editor_format_italic">"Använd kursiv stil"</string>
+  <string name="rich_text_editor_format_strikethrough">"Använda genomstryken stil"</string>
+  <string name="rich_text_editor_format_underline">"Använd understruken stil"</string>
+  <string name="rich_text_editor_full_screen_toggle">"Växla helskärmsläge"</string>
+  <string name="rich_text_editor_indent">"Gör indrag"</string>
+  <string name="rich_text_editor_inline_code">"Använd kodformat i löptext"</string>
+  <string name="rich_text_editor_link">"Ange länk"</string>
+  <string name="rich_text_editor_numbered_list">"Växla numrerad lista"</string>
+  <string name="rich_text_editor_open_compose_options">"Öppna skrivalternativ"</string>
+  <string name="rich_text_editor_quote">"Växla citat"</string>
+  <string name="rich_text_editor_remove_link">"Ta bort länk"</string>
+  <string name="rich_text_editor_unindent">"Ta bort indrag"</string>
+  <string name="rich_text_editor_url_placeholder">"Länk"</string>
+  <string name="rich_text_editor_a11y_add_attachment">"Lägg till bilaga"</string>
+</resources>

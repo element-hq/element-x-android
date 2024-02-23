@@ -13,12 +13,9 @@
   <string name="screen_room_details_edit_room_title">"Editar sala"</string>
   <string name="screen_room_details_edition_error">"Se ha producido un error desconocido y no se ha podido cambiar la información."</string>
   <string name="screen_room_details_edition_error_title">"No se puede actualizar la sala"</string>
-  <string name="screen_room_details_encryption_enabled_subtitle">"Los mensajes están protegidos con \"candados\". Sólo tú y los destinatarios tenéis las llaves únicas para abrirlos."</string>
-  <string name="screen_room_details_encryption_enabled_title">"Cifrado de mensajes activado"</string>
   <string name="screen_room_details_error_loading_notification_settings">"Se ha producido un error al cargar la configuración de las notificaciones."</string>
   <string name="screen_room_details_error_muting">"No se ha podido silenciar esta sala, inténtalo de nuevo."</string>
   <string name="screen_room_details_error_unmuting">"Error al dejar de silenciar esta sala, por favor inténtalo de nuevo."</string>
-  <string name="screen_room_details_invite_people_title">"Invitar a otras personas"</string>
   <string name="screen_room_details_notification_mode_custom">"Personalizado"</string>
   <string name="screen_room_details_notification_mode_default">"Por defecto"</string>
   <string name="screen_room_details_notification_title">"Notificaciones"</string>
@@ -40,15 +37,18 @@
   <string name="screen_room_notification_settings_mode_all_messages">"Todos los mensajes"</string>
   <string name="screen_room_notification_settings_room_custom_settings_title">"En esta sala, notificarme por"</string>
   <string name="screen_start_chat_error_starting_chat">"Se ha producido un error al intentar iniciar un chat"</string>
+  <string name="screen_room_details_encryption_enabled_subtitle">"Los mensajes están protegidos con \"candados\". Sólo tú y los destinatarios tenéis las llaves únicas para abrirlos."</string>
+  <string name="screen_room_details_encryption_enabled_title">"Cifrado de mensajes activado"</string>
   <string name="screen_dm_details_block_alert_action">"Bloquear"</string>
   <string name="screen_dm_details_block_alert_description">"Los usuarios bloqueados no podrán enviarte mensajes y todos sus mensajes se ocultarán. Puedes desbloquearlos cuando quieras."</string>
   <string name="screen_dm_details_block_user">"Bloquear usuario"</string>
   <string name="screen_dm_details_unblock_alert_action">"Desbloquear"</string>
   <string name="screen_dm_details_unblock_alert_description">"Podrás ver todos sus mensajes de nuevo."</string>
   <string name="screen_dm_details_unblock_user">"Desbloquear usuario"</string>
-  <string name="screen_room_details_leave_room_title">"Salir de la sala"</string>
   <string name="screen_room_details_room_name_label">"Nombre de la sala"</string>
+  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Únicamente Menciones y Palabras clave"</string>
+  <string name="screen_room_details_invite_people_title">"Invitar personas"</string>
+  <string name="screen_room_details_leave_room_title">"Salir de la sala"</string>
   <string name="screen_room_details_security_title">"Seguridad"</string>
   <string name="screen_room_details_topic_title">"Tema"</string>
-  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Únicamente Menciones y Palabras clave"</string>
 </resources>

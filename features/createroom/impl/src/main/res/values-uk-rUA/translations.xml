@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_create_room_error_creating_room">"Під час створення кімнати сталася помилка"</string>
+  <string name="screen_create_room_private_option_description">"Повідомлення в цій кімнаті зашифровані. Пізніше шифрування вимкнути не можна."</string>
+  <string name="screen_create_room_private_option_title">"Приватна кімната (тільки за запрошенням)"</string>
+  <string name="screen_create_room_public_option_description">"Повідомлення не шифруються, і будь-хто може їх прочитати. Шифрування можна ввімкнути пізніше."</string>
+  <string name="screen_create_room_public_option_title">"Загальна кімната (будь-хто)"</string>
+  <string name="screen_create_room_topic_label">"Тема (необов\'язково)"</string>
+  <string name="screen_start_chat_error_starting_chat">"Під час спроби почати чат сталася помилка"</string>
+  <string name="screen_create_room_action_create_room">"Нова кімната"</string>
+  <string name="screen_create_room_action_invite_people">"Запросити людей до Element"</string>
+  <string name="screen_create_room_add_people_title">"Запросити людей"</string>
+  <string name="screen_create_room_room_name_label">"Назва кімнати"</string>
+  <string name="screen_create_room_title">"Створити кімнату"</string>
+</resources>
