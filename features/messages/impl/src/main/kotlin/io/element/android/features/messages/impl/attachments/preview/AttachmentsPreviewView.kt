@@ -44,7 +44,10 @@ import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.mediaviewer.api.local.LocalMediaView
+import io.element.android.libraries.mediaviewer.api.local.rememberLocalMediaViewState
 import io.element.android.libraries.ui.strings.CommonStrings
+import me.saket.telephoto.zoomable.ZoomSpec
+import me.saket.telephoto.zoomable.rememberZoomableState
 
 @Composable
 fun AttachmentsPreviewView(
@@ -127,11 +130,19 @@ private fun AttachmentPreviewContent(
             contentAlignment = Alignment.Center
         ) {
             when (attachment) {
-                is Attachment.Media -> LocalMediaView(
-                    modifier = Modifier.fillMaxSize(),
-                    localMedia = attachment.localMedia,
-                    onClick = {}
-                )
+                is Attachment.Media -> {
+                    val localMediaViewState = rememberLocalMediaViewState(
+                        zoomableState = rememberZoomableState(
+                            zoomSpec = ZoomSpec(maxZoomFactor = 4f, preventOverOrUnderZoom = false)
+                        )
+                    )
+                    LocalMediaView(
+                        modifier = Modifier.fillMaxSize(),
+                        localMedia = attachment.localMedia,
+                        localMediaViewState = localMediaViewState,
+                        onClick = {}
+                    )
+                }
             }
         }
         AttachmentsPreviewBottomActions(
