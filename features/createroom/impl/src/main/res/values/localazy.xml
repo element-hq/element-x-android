@@ -8,8 +8,8 @@
   <string name="screen_create_room_private_option_title">"Private room (invite only)"</string>
   <string name="screen_create_room_public_option_description">"Messages are not encrypted and anyone can read them. You can enable encryption at a later date."</string>
   <string name="screen_create_room_public_option_title">"Public room (anyone)"</string>
-  <string name="screen_create_room_topic_label">"Topic (optional)"</string>
-  <string name="screen_start_chat_error_starting_chat">"An error occurred when trying to start a chat"</string>
   <string name="screen_create_room_room_name_label">"Room name"</string>
   <string name="screen_create_room_title">"Create a room"</string>
+  <string name="screen_create_room_topic_label">"Topic (optional)"</string>
+  <string name="screen_start_chat_error_starting_chat">"An error occurred when trying to start a chat"</string>
 </resources>

@@ -2,14 +2,14 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_create_room_action_create_room">"Új szoba"</string>
   <string name="screen_create_room_action_invite_people">"Hívja meg ismerőseit az Elementbe"</string>
-  <string name="screen_create_room_add_people_title">"Emberek meghívása"</string>
+  <string name="screen_create_room_add_people_title">"Ismerősök meghívása"</string>
   <string name="screen_create_room_error_creating_room">"Hiba történt a szoba létrehozásakor"</string>
   <string name="screen_create_room_private_option_description">"A szobában lévő üzenetek titkosítottak. A titkosítást utólag nem lehet kikapcsolni."</string>
   <string name="screen_create_room_private_option_title">"Privát szoba (csak meghívással)"</string>
   <string name="screen_create_room_public_option_description">"Az üzenetek nincsenek titkosítva, és bárki elolvashatja őket. A titkosítást később is engedélyezheti."</string>
   <string name="screen_create_room_public_option_title">"Nyilvános szoba (bárki)"</string>
-  <string name="screen_create_room_topic_label">"Téma (nem kötelező)"</string>
-  <string name="screen_start_chat_error_starting_chat">"Hiba történt a csevegés indításakor"</string>
   <string name="screen_create_room_room_name_label">"Szoba neve"</string>
   <string name="screen_create_room_title">"Szoba létrehozása"</string>
+  <string name="screen_create_room_topic_label">"Téma (nem kötelező)"</string>
+  <string name="screen_start_chat_error_starting_chat">"Hiba történt a csevegés indításakor"</string>
 </resources>

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="rich_text_editor_a11y_add_attachment">"Přidat přílohu"</string>
   <string name="rich_text_editor_bullet_list">"Přepnout seznam s odrážkami"</string>
   <string name="rich_text_editor_close_formatting_options">"Zavřít možnosti formátování"</string>
   <string name="rich_text_editor_code_block">"Přepnout blok kódu"</string>
@@ -20,6 +21,5 @@
   <string name="rich_text_editor_remove_link">"Odstranit odkaz"</string>
   <string name="rich_text_editor_unindent">"Zrušit odsazení"</string>
   <string name="rich_text_editor_url_placeholder">"Odkaz"</string>
-  <string name="rich_text_editor_a11y_add_attachment">"Přidat přílohu"</string>
   <string name="screen_room_voice_message_tooltip">"Držte pro nahrávání"</string>
 </resources>

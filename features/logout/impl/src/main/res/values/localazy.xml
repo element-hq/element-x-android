@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_signout_confirmation_dialog_content">"Are you sure you want to sign out?"</string>
+  <string name="screen_signout_confirmation_dialog_submit">"Sign out"</string>
+  <string name="screen_signout_confirmation_dialog_title">"Sign out"</string>
   <string name="screen_signout_in_progress_dialog_content">"Signing out…"</string>
   <string name="screen_signout_key_backup_disabled_subtitle">"You are about to sign out of your last session. If you sign out now, you will lose access to your encrypted messages."</string>
   <string name="screen_signout_key_backup_disabled_title">"You have turned off backup"</string>
@@ -8,11 +10,9 @@
   <string name="screen_signout_key_backup_offline_title">"Your keys are still being backed up"</string>
   <string name="screen_signout_key_backup_ongoing_subtitle">"Please wait for this to complete before signing out."</string>
   <string name="screen_signout_key_backup_ongoing_title">"Your keys are still being backed up"</string>
+  <string name="screen_signout_preference_item">"Sign out"</string>
   <string name="screen_signout_recovery_disabled_subtitle">"You are about to sign out of your last session. If you sign out now, you\'ll lose access to your encrypted messages."</string>
   <string name="screen_signout_recovery_disabled_title">"Recovery not set up"</string>
   <string name="screen_signout_save_recovery_key_subtitle">"You are about to sign out of your last session. If you sign out now, you might lose access to your encrypted messages."</string>
   <string name="screen_signout_save_recovery_key_title">"Have you saved your recovery key?"</string>
-  <string name="screen_signout_confirmation_dialog_submit">"Sign out"</string>
-  <string name="screen_signout_confirmation_dialog_title">"Sign out"</string>
-  <string name="screen_signout_preference_item">"Sign out"</string>
 </resources>

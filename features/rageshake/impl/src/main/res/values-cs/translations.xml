@@ -12,6 +12,6 @@
   <string name="screen_bug_report_include_logs">"Povolit protokoly"</string>
   <string name="screen_bug_report_include_screenshot">"Odeslat snímek obrazovky"</string>
   <string name="screen_bug_report_logs_description">"Protokoly budou součástí vaší zprávy, aby se zajistilo že vše funguje správně. Chcete-li odeslat zprávu bez protokolů, vypněte toto nastavení."</string>
-  <string name="screen_bug_report_view_logs">"Zobrazit protokoly"</string>
   <string name="screen_bug_report_rash_logs_alert_title">"%1$s havaroval při posledním použití. Chcete se s námi podělit o zprávu o selhání?"</string>
+  <string name="screen_bug_report_view_logs">"Zobrazit protokoly"</string>
 </resources>

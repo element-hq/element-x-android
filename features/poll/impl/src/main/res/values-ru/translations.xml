@@ -9,11 +9,11 @@
   <string name="screen_create_poll_question_hint">"Тема опроса?"</string>
   <string name="screen_create_poll_title">"Создать опрос"</string>
   <string name="screen_edit_poll_delete_confirmation">"Вы уверены, что хотите удалить этот опрос?"</string>
+  <string name="screen_edit_poll_delete_confirmation_title">"Удалить опрос"</string>
+  <string name="screen_edit_poll_title">"Редактировать опрос"</string>
   <string name="screen_polls_history_empty_ongoing">"Не найдено текущих опросов."</string>
   <string name="screen_polls_history_empty_past">"Не найдено предыдущих опросов."</string>
   <string name="screen_polls_history_filter_ongoing">"Текущие"</string>
   <string name="screen_polls_history_filter_past">"Прошлые"</string>
   <string name="screen_polls_history_title">"Опросы"</string>
-  <string name="screen_edit_poll_delete_confirmation_title">"Удалить опрос"</string>
-  <string name="screen_edit_poll_title">"Редактировать опрос"</string>
 </resources>

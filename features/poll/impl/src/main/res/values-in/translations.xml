@@ -9,11 +9,11 @@
   <string name="screen_create_poll_question_hint">"Tentang apa pemungutan suara ini?"</string>
   <string name="screen_create_poll_title">"Buat pemungutan suara"</string>
   <string name="screen_edit_poll_delete_confirmation">"Apakah Anda yakin ingin menghapus pemungutan suara ini?"</string>
+  <string name="screen_edit_poll_delete_confirmation_title">"Hapus pemungutan suara"</string>
+  <string name="screen_edit_poll_title">"Sunting pemungutan suara"</string>
   <string name="screen_polls_history_empty_ongoing">"Tidak dapat menemukan pemungutan suara yang sedang berlangsung."</string>
   <string name="screen_polls_history_empty_past">"Tidak dapat menemukan pemungutan suara sebelumnya."</string>
   <string name="screen_polls_history_filter_ongoing">"Sedang berlangsung"</string>
   <string name="screen_polls_history_filter_past">"Masa lalu"</string>
   <string name="screen_polls_history_title">"Pemungutan suara"</string>
-  <string name="screen_edit_poll_delete_confirmation_title">"Hapus pemungutan suara"</string>
-  <string name="screen_edit_poll_title">"Sunting pemungutan suara"</string>
 </resources>

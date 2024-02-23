@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <plurals name="screen_room_member_list_header_title">
-    <item quantity="one">"o persoană"</item>
-    <item quantity="other">"%1$d persoane"</item>
-  </plurals>
+  <string name="screen_dm_details_block_alert_action">"Blocați"</string>
+  <string name="screen_dm_details_block_alert_description">"Utilizatorii blocați nu vă vor putea trimite mesaje și toate mesajele lor vor fi ascunse. Puteți anula această acțiune oricând."</string>
+  <string name="screen_dm_details_block_user">"Blocați utilizatorul"</string>
+  <string name="screen_dm_details_unblock_alert_action">"Deblocați"</string>
+  <string name="screen_dm_details_unblock_alert_description">"La deblocarea utilizatorului, veți putea vedea din nou toate mesajele de la acesta."</string>
+  <string name="screen_dm_details_unblock_user">"Deblocați utilizatorul"</string>
   <string name="screen_notification_settings_edit_failed_updating_default_mode">"A apărut o eroare în timpul actualizării setărilor pentru notificari."</string>
+  <string name="screen_notification_settings_mentions_only_disclaimer">"Serverul dumneavoastră nu acceptă această opțiune în camerele criptate, este posibil să nu primiți notificări în unele camere."</string>
+  <string name="screen_polls_history_title">"Sondaje"</string>
   <string name="screen_room_details_add_topic_title">"Adăugare subiect"</string>
   <string name="screen_room_details_already_a_member">"Deja membru"</string>
   <string name="screen_room_details_already_invited">"Deja invitat"</string>
@@ -16,13 +20,32 @@
   <string name="screen_room_details_error_loading_notification_settings">"A apărut o eroare la încărcarea setărilor pentru notificari."</string>
   <string name="screen_room_details_error_muting">"Dezactivarea notificarilor pentru această cameră a eșuat, încercați din nou."</string>
   <string name="screen_room_details_error_unmuting">"Activarea notificarilor pentru această cameră a eșuat, încercați din nou."</string>
-  <string name="screen_room_details_invite_people_title">"Invitați persoane"</string>
+  <string name="screen_room_details_invite_people_title">"Invitați prieteni"</string>
+  <string name="screen_room_details_leave_conversation_title">"Părăsiți conversația"</string>
+  <string name="screen_room_details_leave_room_title">"Părăsiți camera"</string>
   <string name="screen_room_details_notification_mode_custom">"Personalizat"</string>
   <string name="screen_room_details_notification_mode_default">"Implicit"</string>
   <string name="screen_room_details_notification_title">"Notificări"</string>
+  <string name="screen_room_details_room_name_label">"Numele camerei"</string>
+  <string name="screen_room_details_security_title">"Securitate"</string>
   <string name="screen_room_details_share_room_title">"Partajați camera"</string>
+  <string name="screen_room_details_topic_title">"Subiect"</string>
   <string name="screen_room_details_updating_room">"Se actualizează camera…"</string>
+  <plurals name="screen_room_member_list_header_title">
+    <item quantity="one">"o persoană"</item>
+    <item quantity="other">"%1$d persoane"</item>
+  </plurals>
+  <string name="screen_room_member_list_manage_member_remove">"Înlăturați membrul"</string>
+  <string name="screen_room_member_list_manage_member_remove_confirmation_ban">"Înlăturați și interziceți membrul"</string>
+  <string name="screen_room_member_list_manage_member_remove_confirmation_kick">"Doar înlăturare"</string>
+  <string name="screen_room_member_list_manage_member_remove_confirmation_title">"Înlăturați membrul și interziceți-i să se alăture în viitor?"</string>
+  <string name="screen_room_member_list_manage_member_unban">"Anulare excludere"</string>
+  <string name="screen_room_member_list_manage_member_user_info">"Vedeți informații despre utilizator"</string>
+  <string name="screen_room_member_list_mode_banned">"Excluși"</string>
+  <string name="screen_room_member_list_mode_members">"Membri"</string>
   <string name="screen_room_member_list_pending_header_title">"În așteptare"</string>
+  <string name="screen_room_member_list_role_administrator">"Administrator"</string>
+  <string name="screen_room_member_list_role_moderator">"Moderator"</string>
   <string name="screen_room_member_list_room_members_header_title">"Membrii camerei"</string>
   <string name="screen_room_notification_settings_allow_custom">"Permiteți setări personalizate"</string>
   <string name="screen_room_notification_settings_allow_custom_footnote">"Activarea acestei opțiuni va anula setările implicite."</string>
@@ -34,18 +57,9 @@
   <string name="screen_room_notification_settings_error_loading_settings">"A apărut o eroare la încărcarea setărilor pentry notificari."</string>
   <string name="screen_room_notification_settings_error_restoring_default">"Nu s-a reușit restaurarea modului implicit, vă rugăm să încercați din nou."</string>
   <string name="screen_room_notification_settings_error_setting_mode">"Nu s-a reușit setarea modului, vă rugăm să încercați din nou."</string>
+  <string name="screen_room_notification_settings_mentions_only_disclaimer">"Serverul dumneavoastră nu acceptă această opțiune în camerele criptate, nu veți primi notificări în această cameră."</string>
   <string name="screen_room_notification_settings_mode_all_messages">"Toate mesajele"</string>
+  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Numai mențiuni și cuvinte cheie"</string>
   <string name="screen_room_notification_settings_room_custom_settings_title">"În această cameră, anunțați-mă pentru"</string>
   <string name="screen_start_chat_error_starting_chat">"A apărut o eroare la încercarea începerii conversației"</string>
-  <string name="screen_dm_details_block_alert_action">"Blocați"</string>
-  <string name="screen_dm_details_block_alert_description">"Utilizatorii blocați nu vă vor putea trimite mesaje și toate mesajele lor vor fi ascunse. Puteți anula această acțiune oricând."</string>
-  <string name="screen_dm_details_block_user">"Blocați utilizatorul"</string>
-  <string name="screen_dm_details_unblock_alert_action">"Deblocați"</string>
-  <string name="screen_dm_details_unblock_alert_description">"La deblocarea utilizatorului, veți putea vedea din nou toate mesajele de la acesta."</string>
-  <string name="screen_dm_details_unblock_user">"Deblocați utilizatorul"</string>
-  <string name="screen_room_details_leave_room_title">"Părăsiți camera"</string>
-  <string name="screen_room_details_room_name_label">"Numele camerei"</string>
-  <string name="screen_room_details_security_title">"Securitate"</string>
-  <string name="screen_room_details_topic_title">"Subiect"</string>
-  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Numai mențiuni și cuvinte cheie"</string>
 </resources>

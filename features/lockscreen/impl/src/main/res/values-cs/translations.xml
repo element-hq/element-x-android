@@ -1,15 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <plurals name="screen_app_lock_subtitle">
-    <item quantity="one">"Máte %1$d pokus pro odemknutí"</item>
-    <item quantity="few">"Máte %1$d pokusy pro odemknutí"</item>
-    <item quantity="other">"Máte %1$d pokusů pro odemknutí"</item>
-  </plurals>
-  <plurals name="screen_app_lock_subtitle_wrong_pin">
-    <item quantity="one">"Špatný PIN. Máte %1$d další pokus"</item>
-    <item quantity="few">"Špatný PIN. Máte %1$d další pokusy"</item>
-    <item quantity="other">"Špatný PIN. Máte %1$d dalších pokusů"</item>
-  </plurals>
   <string name="screen_app_lock_biometric_authentication">"Biometrické ověřování"</string>
   <string name="screen_app_lock_biometric_unlock">"biometrické odemknutí"</string>
   <string name="screen_app_lock_biometric_unlock_title_android">"Odemkněte pomocí biometrie"</string>
@@ -33,6 +23,16 @@ Vyberte si něco zapamatovatelného. Pokud tento kód PIN zapomenete, budete z a
   <string name="screen_app_lock_setup_pin_mismatch_dialog_title">"PIN kódy se neshodují."</string>
   <string name="screen_app_lock_signout_alert_message">"Abyste mohli pokračovat, budete se muset znovu přihlásit a vytvořit nový PIN"</string>
   <string name="screen_app_lock_signout_alert_title">"Jste odhlášeni"</string>
+  <plurals name="screen_app_lock_subtitle">
+    <item quantity="one">"Máte %1$d pokus pro odemknutí"</item>
+    <item quantity="few">"Máte %1$d pokusy pro odemknutí"</item>
+    <item quantity="other">"Máte %1$d pokusů pro odemknutí"</item>
+  </plurals>
+  <plurals name="screen_app_lock_subtitle_wrong_pin">
+    <item quantity="one">"Špatný PIN. Máte %1$d další pokus"</item>
+    <item quantity="few">"Špatný PIN. Máte %1$d další pokusy"</item>
+    <item quantity="other">"Špatný PIN. Máte %1$d dalších pokusů"</item>
+  </plurals>
   <string name="screen_app_lock_use_biometric_android">"Použijte biometrické údaje"</string>
   <string name="screen_app_lock_use_pin_android">"Použít PIN"</string>
   <string name="screen_signout_in_progress_dialog_content">"Odhlašování…"</string>

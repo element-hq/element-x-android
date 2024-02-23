@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="a11y_delete">"Удалить"</string>
+  <plurals name="a11y_digits_entered">
+    <item quantity="one">"Введена цифра %1$d"</item>
+    <item quantity="few">"Ведено %1$d цифр"</item>
+    <item quantity="many">"Введено много цифр"</item>
+  </plurals>
   <string name="a11y_hide_password">"Скрыть пароль"</string>
   <string name="a11y_jump_to_bottom">"Перейти вниз"</string>
   <string name="a11y_notifications_mentions_only">"Только упоминания"</string>
@@ -14,6 +19,11 @@
   <string name="a11y_react_with">"Реагировать вместе с %1$s"</string>
   <string name="a11y_react_with_other_emojis">"Реакция с помощью эмодзи"</string>
   <string name="a11y_read_receipts_multiple">"Прочитано %1$s и %2$s"</string>
+  <plurals name="a11y_read_receipts_multiple_with_others">
+    <item quantity="one">"Прочитано %1$s и %2$d другим"</item>
+    <item quantity="few">"Прочитано %1$s и %2$d другими"</item>
+    <item quantity="many">"Прочитано %1$s и %2$d другими"</item>
+  </plurals>
   <string name="a11y_read_receipts_single">"Прочитано %1$s"</string>
   <string name="a11y_read_receipts_tap_to_show_all">"Нажмите, чтобы показать все"</string>
   <string name="a11y_remove_reaction_with">"Удалить реакцию с %1$s"</string>
@@ -59,6 +69,7 @@
   <string name="action_leave">"Выйти"</string>
   <string name="action_leave_conversation">"Покинуть беседу"</string>
   <string name="action_leave_room">"Покинуть комнату"</string>
+  <string name="action_load_more">"Загрузить еще"</string>
   <string name="action_manage_account">"Настройки аккаунта"</string>
   <string name="action_manage_devices">"Управление устройствами"</string>
   <string name="action_next">"Далее"</string>
@@ -96,7 +107,6 @@
   <string name="action_try_again">"Повторить попытку"</string>
   <string name="action_view_source">"Показать источник"</string>
   <string name="action_yes">"Да"</string>
-  <string name="action_load_more">"Загрузить еще"</string>
   <string name="common_about">"О приложении"</string>
   <string name="common_acceptable_use_policy">"Политика допустимого использования"</string>
   <string name="common_advanced_settings">"Дополнительные настройки"</string>
@@ -132,6 +142,11 @@
   <string name="common_light">"Светлая"</string>
   <string name="common_link_copied_to_clipboard">"Ссылка скопирована в буфер обмена"</string>
   <string name="common_loading">"Загрузка…"</string>
+  <plurals name="common_member_count">
+    <item quantity="one">"%1$d участник"</item>
+    <item quantity="few">"%1$d участников"</item>
+    <item quantity="many">"%1$d участников"</item>
+  </plurals>
   <string name="common_message">"Сообщение"</string>
   <string name="common_message_actions">"Действия с сообщением"</string>
   <string name="common_message_layout">"Оформление сообщения"</string>
@@ -144,8 +159,15 @@
   <string name="common_people">"Люди"</string>
   <string name="common_permalink">"Постоянная ссылка"</string>
   <string name="common_permission">"Разрешение"</string>
+  <string name="common_poll_end_confirmation">"Вы действительно хотите завершить данный опрос?"</string>
+  <string name="common_poll_summary">"Опрос: %1$s"</string>
   <string name="common_poll_total_votes">"Всего голосов: %1$s"</string>
   <string name="common_poll_undisclosed_text">"Результаты будут показаны после завершения опроса"</string>
+  <plurals name="common_poll_votes_count">
+    <item quantity="one">"%d голос"</item>
+    <item quantity="few">"%d голоса"</item>
+    <item quantity="many">"%d голосов"</item>
+  </plurals>
   <string name="common_privacy_policy">"Политика конфиденциальности"</string>
   <string name="common_reaction">"Реакция"</string>
   <string name="common_reactions">"Реакции"</string>
@@ -192,14 +214,14 @@
   <string name="common_username">"Имя пользователя"</string>
   <string name="common_verification_cancelled">"Проверка отменена"</string>
   <string name="common_verification_complete">"Проверка завершена"</string>
+  <string name="common_verify_device">"Подтверждение устройства"</string>
   <string name="common_video">"Видео"</string>
   <string name="common_voice_message">"Голосовое сообщение"</string>
   <string name="common_waiting">"Ожидание…"</string>
   <string name="common_waiting_for_decryption_key">"Ожидание ключа расшифровки"</string>
-  <string name="common_poll_end_confirmation">"Вы действительно хотите завершить данный опрос?"</string>
-  <string name="common_poll_summary">"Опрос: %1$s"</string>
-  <string name="common_verify_device">"Подтверждение устройства"</string>
   <string name="dialog_title_confirmation">"Подтверждение"</string>
+  <string name="dialog_title_error">"Ошибка"</string>
+  <string name="dialog_title_success">"Успешно"</string>
   <string name="dialog_title_warning">"Предупреждение"</string>
   <string name="error_failed_creating_the_permalink">"Не удалось создать постоянную ссылку"</string>
   <string name="error_failed_loading_map">"Не удалось загрузить карту %1$s. Пожалуйста, повторите попытку позже."</string>
@@ -214,27 +236,10 @@
   <string name="invite_friends_rich_title">"🔐️ Присоединяйтесь ко мне в %1$s"</string>
   <string name="invite_friends_text">"Привет, поговори со мной по %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
-  <plurals name="a11y_digits_entered">
-    <item quantity="one">"Введена цифра %1$d"</item>
-    <item quantity="few">"Ведено %1$d цифр"</item>
-    <item quantity="many">"Введено много цифр"</item>
-  </plurals>
-  <plurals name="a11y_read_receipts_multiple_with_others">
-    <item quantity="one">"Прочитано %1$s и %2$d другим"</item>
-    <item quantity="few">"Прочитано %1$s и %2$d другими"</item>
-    <item quantity="many">"Прочитано %1$s и %2$d другими"</item>
-  </plurals>
-  <plurals name="common_member_count">
-    <item quantity="one">"%1$d участник"</item>
-    <item quantity="few">"%1$d участников"</item>
-    <item quantity="many">"%1$d участников"</item>
-  </plurals>
-  <plurals name="common_poll_votes_count">
-    <item quantity="one">"%d голос"</item>
-    <item quantity="few">"%d голоса"</item>
-    <item quantity="many">"%d голосов"</item>
-  </plurals>
   <string name="preference_rageshake">"Встряхните устройство, чтобы сообщить об ошибке"</string>
+  <string name="screen_blocked_users_unblock_alert_action">"Разблокировать"</string>
+  <string name="screen_blocked_users_unblock_alert_description">"Вы снова сможете увидеть все сообщения."</string>
+  <string name="screen_blocked_users_unblock_alert_title">"Разблокировать пользователя"</string>
   <string name="screen_media_picker_error_failed_selection">"Не удалось выбрать носитель, попробуйте еще раз."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Не удалось обработать медиафайл для загрузки, попробуйте еще раз."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Не удалось загрузить медиафайлы, попробуйте еще раз."</string>
@@ -247,6 +252,4 @@
   <string name="screen_view_location_title">"Местоположение"</string>
   <string name="settings_version_number">"Версия: %1$s (%2$s)"</string>
   <string name="test_language_identifier">"en"</string>
-  <string name="dialog_title_error">"Ошибка"</string>
-  <string name="dialog_title_success">"Успешно"</string>
 </resources>

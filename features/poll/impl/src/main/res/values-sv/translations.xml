@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_create_poll_add_option_btn">"Lägg till alternativ"</string>
+  <string name="screen_create_poll_anonymous_desc">"Visa resultat först efter att omröstningen avslutats"</string>
+  <string name="screen_create_poll_anonymous_headline">"Dölj röster"</string>
+  <string name="screen_create_poll_answer_hint">"Alternativ %1$d"</string>
+  <string name="screen_create_poll_question_desc">"Fråga eller ämne"</string>
+  <string name="screen_create_poll_question_hint">"Vad handlar omröstningen om?"</string>
+  <string name="screen_create_poll_title">"Skapa omröstning"</string>
+</resources>

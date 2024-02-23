@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_signout_confirmation_dialog_content">"Opravdu se chcete odhlásit?"</string>
+  <string name="screen_signout_confirmation_dialog_submit">"Odhlásit se"</string>
+  <string name="screen_signout_confirmation_dialog_title">"Odhlásit se"</string>
   <string name="screen_signout_in_progress_dialog_content">"Odhlašování…"</string>
   <string name="screen_signout_key_backup_disabled_subtitle">"Chystáte se odhlásit z poslední relace. Pokud se nyní odhlásíte, ztratíte přístup ke svým šifrovaným zprávám."</string>
   <string name="screen_signout_key_backup_disabled_title">"Vypnuli jste zálohování"</string>
@@ -8,11 +10,9 @@
   <string name="screen_signout_key_backup_offline_title">"Vaše klíče jsou stále zálohovány"</string>
   <string name="screen_signout_key_backup_ongoing_subtitle">"Před odhlášením prosím počkejte na dokončení."</string>
   <string name="screen_signout_key_backup_ongoing_title">"Vaše klíče jsou stále zálohovány"</string>
+  <string name="screen_signout_preference_item">"Odhlásit se"</string>
   <string name="screen_signout_recovery_disabled_subtitle">"Chystáte se odhlásit z poslední relace. Pokud se nyní odhlásíte, ztratíte přístup ke svým šifrovaným zprávám."</string>
   <string name="screen_signout_recovery_disabled_title">"Obnovení není nastaveno"</string>
   <string name="screen_signout_save_recovery_key_subtitle">"Chystáte se odhlásit z poslední relace. Pokud se nyní odhlásíte, můžete ztratit přístup k šifrovaným zprávám."</string>
   <string name="screen_signout_save_recovery_key_title">"Uložili jste si klíč pro obnovení?"</string>
-  <string name="screen_signout_confirmation_dialog_submit">"Odhlásit se"</string>
-  <string name="screen_signout_confirmation_dialog_title">"Odhlásit se"</string>
-  <string name="screen_signout_preference_item">"Odhlásit se"</string>
 </resources>

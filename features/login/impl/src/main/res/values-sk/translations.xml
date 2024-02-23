@@ -5,7 +5,9 @@
   <string name="screen_account_provider_form_notice">"Zadajte hľadaný výraz alebo adresu domény."</string>
   <string name="screen_account_provider_form_subtitle">"Vyhľadať spoločnosť, komunitu alebo súkromný server."</string>
   <string name="screen_account_provider_form_title">"Nájsť poskytovateľa účtu"</string>
+  <string name="screen_account_provider_signin_subtitle">"Tu budú žiť vaše konverzácie - podobne ako používate poskytovateľa e-mailových služieb na uchovávanie e-mailov."</string>
   <string name="screen_account_provider_signin_title">"Chystáte sa prihlásiť do %s"</string>
+  <string name="screen_account_provider_signup_subtitle">"Tu budú žiť vaše konverzácie - podobne ako používate poskytovateľa e-mailových služieb na uchovávanie e-mailov."</string>
   <string name="screen_account_provider_signup_title">"Chystáte sa vytvoriť účet na %s"</string>
   <string name="screen_change_account_provider_matrix_org_subtitle">"Matrix.org je veľký bezplatný server vo verejnej sieti Matrix na bezpečnú, decentralizovanú komunikáciu, ktorý prevádzkuje nadácia Matrix.org."</string>
   <string name="screen_change_account_provider_other">"Iný"</string>
@@ -22,6 +24,7 @@
   <string name="screen_login_error_invalid_user_id">"Toto nie je platný identifikátor používateľa. Očakávaný formát: \'@pouzivatel:homeserver.sk\'"</string>
   <string name="screen_login_error_unsupported_authentication">"Vybraný domovský server nepodporuje prihlásenie pomocou hesla alebo OIDC. Obráťte sa na správcu alebo vyberte iný domovský server."</string>
   <string name="screen_login_form_header">"Zadajte svoje údaje"</string>
+  <string name="screen_login_subtitle">"Matrix je otvorená sieť pre bezpečnú a decentralizovanú komunikáciu."</string>
   <string name="screen_login_title">"Vitajte späť!"</string>
   <string name="screen_login_title_with_homeserver">"Prihlásiť sa do %1$s"</string>
   <string name="screen_server_confirmation_change_server">"Zmeniť poskytovateľa účtu"</string>
@@ -33,10 +36,7 @@
   <string name="screen_waitlist_message">"Momentálne je veľký dopyt po %1$s na %2$s. Vráťte sa do aplikácie za pár dní a skúste to znova.
 
 Ďakujeme za trpezlivosť!"</string>
+  <string name="screen_waitlist_message_success">"Vitajte v %1$s!"</string>
   <string name="screen_waitlist_title">"Ste na čakanej listine!"</string>
   <string name="screen_waitlist_title_success">"Ste dnu!"</string>
-  <string name="screen_account_provider_signin_subtitle">"Tu budú žiť vaše konverzácie - podobne ako používate poskytovateľa e-mailových služieb na uchovávanie e-mailov."</string>
-  <string name="screen_account_provider_signup_subtitle">"Tu budú žiť vaše konverzácie - podobne ako používate poskytovateľa e-mailových služieb na uchovávanie e-mailov."</string>
-  <string name="screen_login_subtitle">"Matrix je otvorená sieť pre bezpečnú a decentralizovanú komunikáciu."</string>
-  <string name="screen_waitlist_message_success">"Vitajte v %1$s!"</string>
 </resources>
