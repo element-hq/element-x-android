@@ -18,14 +18,16 @@ package io.element.android.libraries.mediaviewer.api.local
 
 import android.annotation.SuppressLint
 import android.net.Uri
+import android.view.View
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.widget.FrameLayout
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -35,7 +37,10 @@ import androidx.compose.material.icons.outlined.GraphicEq
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -72,48 +77,45 @@ import io.element.android.libraries.mediaviewer.api.local.exoplayer.ExoPlayerWra
 import io.element.android.libraries.mediaviewer.api.local.pdf.PdfViewer
 import io.element.android.libraries.mediaviewer.api.local.pdf.rememberPdfViewerState
 import io.element.android.libraries.ui.strings.CommonStrings
-import me.saket.telephoto.zoomable.ZoomSpec
-import me.saket.telephoto.zoomable.ZoomableState
 import me.saket.telephoto.zoomable.coil.ZoomableAsyncImage
 import me.saket.telephoto.zoomable.rememberZoomableImageState
-import me.saket.telephoto.zoomable.rememberZoomableState
 
 @SuppressLint("UnsafeOptInUsageError")
 @Composable
 fun LocalMediaView(
     localMedia: LocalMedia?,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier,
     localMediaViewState: LocalMediaViewState = rememberLocalMediaViewState(),
     mediaInfo: MediaInfo? = localMedia?.info,
 ) {
-    val zoomableState = rememberZoomableState(
-        zoomSpec = ZoomSpec(maxZoomFactor = 5f)
-    )
     val mimeType = mediaInfo?.mimeType
     when {
         mimeType.isMimeTypeImage() -> MediaImageView(
             localMediaViewState = localMediaViewState,
             localMedia = localMedia,
-            zoomableState = zoomableState,
-            modifier = modifier
+            modifier = modifier,
+            onClick = onClick,
         )
         mimeType.isMimeTypeVideo() -> MediaVideoView(
             localMediaViewState = localMediaViewState,
             localMedia = localMedia,
-            modifier = modifier
+            modifier = modifier,
+            onClick = onClick,
         )
         mimeType == MimeTypes.Pdf -> MediaPDFView(
             localMediaViewState = localMediaViewState,
             localMedia = localMedia,
-            zoomableState = zoomableState,
-            modifier = modifier
+            modifier = modifier,
+            onClick = onClick,
         )
         // TODO handle audio with exoplayer
         else -> MediaFileView(
             localMediaViewState = localMediaViewState,
             uri = localMedia?.uri,
             info = mediaInfo,
-            modifier = modifier
+            modifier = modifier,
+            onClick = onClick,
         )
     }
 }
@@ -122,24 +124,25 @@ fun LocalMediaView(
 private fun MediaImageView(
     localMediaViewState: LocalMediaViewState,
     localMedia: LocalMedia?,
-    zoomableState: ZoomableState,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     if (LocalInspectionMode.current) {
         Image(
             painter = painterResource(id = CommonDrawables.sample_background),
-            modifier = modifier.fillMaxSize(),
+            modifier = modifier,
             contentDescription = null,
         )
     } else {
-        val zoomableImageState = rememberZoomableImageState(zoomableState)
+        val zoomableImageState = rememberZoomableImageState(localMediaViewState.zoomableState)
         localMediaViewState.isReady = zoomableImageState.isImageDisplayed
         ZoomableAsyncImage(
-            modifier = modifier.fillMaxSize(),
+            modifier = modifier,
             state = zoomableImageState,
             model = localMedia?.uri,
             contentDescription = stringResource(id = CommonStrings.common_image),
             contentScale = ContentScale.Fit,
+            onClick = { onClick() }
         )
     }
 }
@@ -149,8 +152,14 @@ private fun MediaImageView(
 private fun MediaVideoView(
     localMediaViewState: LocalMediaViewState,
     localMedia: LocalMedia?,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    var playableState: PlayableState.Playable by remember {
+        mutableStateOf(PlayableState.Playable(isPlaying = false, isShowingControls = false))
+    }
+    localMediaViewState.playableState = playableState
+
     val context = LocalContext.current
     val playerListener = object : Player.Listener {
         override fun onRenderedFirstFrame() {
@@ -158,7 +167,7 @@ private fun MediaVideoView(
         }
 
         override fun onIsPlayingChanged(isPlaying: Boolean) {
-            localMediaViewState.isPlaying = isPlaying
+            playableState = playableState.copy(isPlaying = isPlaying)
         }
     }
     val exoPlayer = remember {
@@ -176,19 +185,34 @@ private fun MediaVideoView(
     } else {
         exoPlayer.setMediaItems(emptyList())
     }
-    KeepScreenOn(localMediaViewState.isPlaying)
+    KeepScreenOn(playableState.isPlaying)
     AndroidView(
         factory = {
             PlayerView(context).apply {
                 player = exoPlayer
-                setShowPreviousButton(false)
-                setShowNextButton(false)
                 resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FIT
                 layoutParams = FrameLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT)
-                controllerShowTimeoutMs = 3000
+                setOnClickListener {
+                    onClick()
+                }
+                setControllerVisibilityListener(PlayerView.ControllerVisibilityListener { visibility ->
+                    val isShowingControls = visibility == View.VISIBLE
+                    playableState = playableState.copy(isShowingControls = isShowingControls)
+                })
+                controllerShowTimeoutMs = 1500
+                setShowPreviousButton(false)
+                setShowFastForwardButton(false)
+                setShowRewindButton(false)
+                setShowNextButton(false)
+                showController()
             }
         },
-        modifier = modifier.fillMaxSize()
+        onRelease = { playerView ->
+            playerView.setOnClickListener(null)
+            playerView.setControllerVisibilityListener(null as PlayerView.ControllerVisibilityListener?)
+            playerView.player = null
+        },
+        modifier = modifier
     )
 
     OnLifecycleEvent { _, event ->
@@ -208,15 +232,19 @@ private fun MediaVideoView(
 private fun MediaPDFView(
     localMediaViewState: LocalMediaViewState,
     localMedia: LocalMedia?,
-    zoomableState: ZoomableState,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val pdfViewerState = rememberPdfViewerState(
         model = localMedia?.uri,
-        zoomableState = zoomableState
+        zoomableState = localMediaViewState.zoomableState,
     )
     localMediaViewState.isReady = pdfViewerState.isLoaded
-    PdfViewer(pdfViewerState = pdfViewerState, modifier = modifier)
+    PdfViewer(
+        pdfViewerState = pdfViewerState,
+        onClick = onClick,
+        modifier = modifier,
+    )
 }
 
 @Composable
@@ -224,11 +252,23 @@ private fun MediaFileView(
     localMediaViewState: LocalMediaViewState,
     uri: Uri?,
     info: MediaInfo?,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val isAudio = info?.mimeType.isMimeTypeAudio().orFalse()
     localMediaViewState.isReady = uri != null
-    Box(modifier = modifier.padding(horizontal = 8.dp), contentAlignment = Alignment.Center) {
+
+    val interactionSource = remember { MutableInteractionSource() }
+    Box(
+        modifier = modifier
+            .padding(horizontal = 8.dp)
+            .clickable(
+                onClick = onClick,
+                interactionSource = interactionSource,
+                indication = null
+            ),
+        contentAlignment = Alignment.Center
+    ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Box(
                 modifier = Modifier

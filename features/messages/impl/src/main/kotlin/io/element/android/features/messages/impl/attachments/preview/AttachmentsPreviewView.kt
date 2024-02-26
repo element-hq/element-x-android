@@ -16,11 +16,12 @@
 
 package io.element.android.features.messages.impl.attachments.preview
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -28,6 +29,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -42,7 +44,10 @@ import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.mediaviewer.api.local.LocalMediaView
+import io.element.android.libraries.mediaviewer.api.local.rememberLocalMediaViewState
 import io.element.android.libraries.ui.strings.CommonStrings
+import me.saket.telephoto.zoomable.ZoomSpec
+import me.saket.telephoto.zoomable.rememberZoomableState
 
 @Composable
 fun AttachmentsPreviewView(
@@ -66,16 +71,11 @@ fun AttachmentsPreviewView(
     }
 
     Scaffold(modifier) {
-        Box(
-            modifier = Modifier.padding(it),
-            contentAlignment = Alignment.Center
-        ) {
-            AttachmentPreviewContent(
-                attachment = state.attachment,
-                onSendClicked = ::postSendAttachment,
-                onDismiss = onDismiss
-            )
-        }
+        AttachmentPreviewContent(
+            attachment = state.attachment,
+            onSendClicked = ::postSendAttachment,
+            onDismiss = onDismiss
+        )
     }
     AttachmentSendStateView(
         sendActionState = state.sendActionState,
@@ -119,21 +119,30 @@ private fun AttachmentPreviewContent(
     onSendClicked: () -> Unit,
     onDismiss: () -> Unit,
 ) {
-    Column(
+    Box(
         modifier = Modifier
             .fillMaxSize()
-            .padding(top = 24.dp)
+            .navigationBarsPadding(),
+        contentAlignment = Alignment.BottomCenter
     ) {
         Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .weight(1f),
-            contentAlignment = Alignment.Center,
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
         ) {
             when (attachment) {
-                is Attachment.Media -> LocalMediaView(
-                    localMedia = attachment.localMedia
-                )
+                is Attachment.Media -> {
+                    val localMediaViewState = rememberLocalMediaViewState(
+                        zoomableState = rememberZoomableState(
+                            zoomSpec = ZoomSpec(maxZoomFactor = 4f, preventOverOrUnderZoom = false)
+                        )
+                    )
+                    LocalMediaView(
+                        modifier = Modifier.fillMaxSize(),
+                        localMedia = attachment.localMedia,
+                        localMediaViewState = localMediaViewState,
+                        onClick = {}
+                    )
+                }
             }
         }
         AttachmentsPreviewBottomActions(
@@ -141,8 +150,9 @@ private fun AttachmentPreviewContent(
             onSendClicked = onSendClicked,
             modifier = Modifier
                 .fillMaxWidth()
-                .defaultMinSize(minHeight = 120.dp)
-                .padding(all = 24.dp)
+                .background(Color.Black.copy(alpha = 0.7f))
+                .padding(horizontal = 24.dp)
+                .defaultMinSize(minHeight = 80.dp)
         )
     }
 }
@@ -153,9 +163,7 @@ private fun AttachmentsPreviewBottomActions(
     onSendClicked: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    ButtonRowMolecule(
-        modifier = modifier,
-    ) {
+    ButtonRowMolecule(modifier = modifier) {
         TextButton(stringResource(id = CommonStrings.action_cancel), onClick = onCancelClicked)
         TextButton(stringResource(id = CommonStrings.action_send), onClick = onSendClicked)
     }
