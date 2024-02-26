@@ -21,6 +21,7 @@ import android.provider.Settings
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
+import timber.log.Timber
 import javax.inject.Inject
 
 /**
@@ -41,5 +42,8 @@ class DefaultProxyProvider @Inject constructor(
 ) : ProxyProvider {
     override fun provides(): String? {
         return Settings.Global.getString(context.contentResolver, Settings.Global.HTTP_PROXY)
+            ?.also {
+                Timber.d("Using global proxy")
+            }
     }
 }
