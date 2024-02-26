@@ -202,7 +202,7 @@ class PreferencesFlowNode @AssistedInject constructor(
                     .build()
             }
             NavTarget.BlockedUsers -> {
-                createNode<BlockedUsersNode>(buildContext, emptyList())
+                createNode<BlockedUsersNode>(buildContext)
             }
             NavTarget.SignOut -> {
                 val callBack: LogoutEntryPoint.Callback = object : LogoutEntryPoint.Callback {
