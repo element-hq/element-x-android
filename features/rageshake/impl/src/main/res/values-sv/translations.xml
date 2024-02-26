@@ -5,7 +5,7 @@
   <string name="screen_bug_report_contact_me_title">"Kontakta mig"</string>
   <string name="screen_bug_report_edit_screenshot">"Redigera skärmdump"</string>
   <string name="screen_bug_report_editor_description">"Vänligen beskriv problemet. Vad gjorde du? Vad förväntade du dig skulle hända? Vad hände istället? Vänligen gå in i så mycket detaljer som möjligt."</string>
-  <string name="screen_bug_report_editor_placeholder">"Beskriv problemet …"</string>
+  <string name="screen_bug_report_editor_placeholder">"Beskriv problemet …"</string>
   <string name="screen_bug_report_editor_supporting">"Om möjligt, skriv beskrivningen på engelska."</string>
   <string name="screen_bug_report_include_crash_logs">"Skicka kraschloggar"</string>
   <string name="screen_bug_report_include_logs">"Tillåt loggar"</string>

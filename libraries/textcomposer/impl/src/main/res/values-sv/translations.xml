@@ -4,7 +4,7 @@
   <string name="rich_text_editor_bullet_list">"Växla punktlista"</string>
   <string name="rich_text_editor_close_formatting_options">"Stäng formateringsalternativ"</string>
   <string name="rich_text_editor_code_block">"Växla kodblock"</string>
-  <string name="rich_text_editor_composer_placeholder">"Meddelande …"</string>
+  <string name="rich_text_editor_composer_placeholder">"Meddelande …"</string>
   <string name="rich_text_editor_create_link">"Skapa en länk"</string>
   <string name="rich_text_editor_edit_link">"Redigera länk"</string>
   <string name="rich_text_editor_format_bold">"Använd fetstil"</string>

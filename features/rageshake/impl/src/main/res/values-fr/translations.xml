@@ -7,7 +7,7 @@
   <string name="screen_bug_report_editor_description">"S’il vous plait, veuillez décrire le problème. Qu’avez-vous fait ? À quoi vous attendiez-vous ? Que s’est-il réellement passé ? Veuillez ajouter le plus de détails possible."</string>
   <string name="screen_bug_report_editor_placeholder">"Décrire le problème…"</string>
   <string name="screen_bug_report_editor_supporting">"Si possible, veuillez rédiger la description en anglais."</string>
-  <string name="screen_bug_report_error_description_too_short">"La description est trop courte, veuillez fournir plus de détails sur ce qui s\'est passé. Merci !"</string>
+  <string name="screen_bug_report_error_description_too_short">"La description est trop courte, veuillez fournir plus de détails sur ce qui s’est passé. Merci !"</string>
   <string name="screen_bug_report_include_crash_logs">"Envoyer des journaux d’incident"</string>
   <string name="screen_bug_report_include_logs">"Autoriser à inclure les journaux techniques"</string>
   <string name="screen_bug_report_include_screenshot">"Envoyer une capture d’écran"</string>

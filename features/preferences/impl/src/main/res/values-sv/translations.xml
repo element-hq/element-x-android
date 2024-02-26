@@ -8,7 +8,7 @@
   <string name="screen_edit_profile_error">"Ett okänt fel påträffades och informationen kunde inte ändras."</string>
   <string name="screen_edit_profile_error_title">"Kunde inte uppdatera profilen"</string>
   <string name="screen_edit_profile_title">"Redigera profil"</string>
-  <string name="screen_edit_profile_updating_details">"Uppdaterar profil …"</string>
+  <string name="screen_edit_profile_updating_details">"Uppdaterar profil …"</string>
   <string name="screen_notification_settings_additional_settings_section_title">"Ytterligare inställningar"</string>
   <string name="screen_notification_settings_calls_label">"Ljud- och videosamtal"</string>
   <string name="screen_notification_settings_configuration_mismatch">"Konfigurationen matchar inte"</string>

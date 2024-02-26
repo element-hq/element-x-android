@@ -27,7 +27,7 @@
   <string name="screen_room_details_security_title">"Säkerhet"</string>
   <string name="screen_room_details_share_room_title">"Dela rum"</string>
   <string name="screen_room_details_topic_title">"Ämne"</string>
-  <string name="screen_room_details_updating_room">"Uppdaterar rummet …"</string>
+  <string name="screen_room_details_updating_room">"Uppdaterar rummet …"</string>
   <plurals name="screen_room_member_list_header_title">
     <item quantity="one">"%1$d person"</item>
     <item quantity="other">"%1$d personer"</item>

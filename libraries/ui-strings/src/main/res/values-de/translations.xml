@@ -67,7 +67,7 @@
   <string name="action_leave">"Verlassen"</string>
   <string name="action_leave_conversation">"Unterhaltung verlassen"</string>
   <string name="action_leave_room">"Raum verlassen"</string>
-  <string name="action_load_more">"Mehr laden …"</string>
+  <string name="action_load_more">"Mehr laden …"</string>
   <string name="action_manage_account">"Konto verwalten"</string>
   <string name="action_manage_devices">"Geräte verwalten"</string>
   <string name="action_next">"Weiter"</string>
