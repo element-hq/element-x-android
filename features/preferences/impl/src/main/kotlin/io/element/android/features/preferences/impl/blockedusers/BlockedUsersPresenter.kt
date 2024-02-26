@@ -17,8 +17,8 @@
 package io.element.android.features.preferences.impl.blockedusers
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -29,9 +29,7 @@ import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runUpdatingState
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.UserId
-import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.persistentListOf
-import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -46,23 +44,11 @@ class BlockedUsersPresenter @Inject constructor(
         var pendingUserToUnblock by remember {
             mutableStateOf<UserId?>(null)
         }
-        var ignoredUserIds by remember {
-            mutableStateOf(persistentListOf<UserId>())
-        }
         val unblockUserAction: MutableState<AsyncAction<Unit>> = remember {
             mutableStateOf(AsyncAction.Uninitialized)
         }
 
-        // Load initial list of blocked users
-        LaunchedEffect(Unit) {
-            loadIgnoredUserIds().onSuccess { ignoredUserIds = it }
-        }
-
-        // When a user is unblocked, reload the list of ignored users
-        LaunchedEffect(unblockUserAction.value is AsyncAction.Success) {
-            loadIgnoredUserIds().onSuccess { ignoredUserIds = it }
-            unblockUserAction.value = AsyncAction.Uninitialized
-        }
+        val ignoredUserIds by matrixClient.ignoredUsersFlow.collectAsState(initial = persistentListOf())
 
         fun handleEvents(event: BlockedUsersEvents) {
             when (event) {
@@ -87,10 +73,6 @@ class BlockedUsersPresenter @Inject constructor(
             unblockUserAction = unblockUserAction.value,
             eventSink = ::handleEvents
         )
-    }
-
-    private suspend fun loadIgnoredUserIds(): Result<PersistentList<UserId>> {
-        return matrixClient.ignoredUserIds().map { it.toPersistentList() }
     }
 
     private fun CoroutineScope.unblockUser(userId: UserId, asyncAction: MutableState<AsyncAction<Unit>>) = launch {

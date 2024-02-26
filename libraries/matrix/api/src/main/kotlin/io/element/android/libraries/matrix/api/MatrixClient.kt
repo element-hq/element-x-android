@@ -34,7 +34,9 @@ import io.element.android.libraries.matrix.api.sync.SyncService
 import io.element.android.libraries.matrix.api.user.MatrixSearchUserResults
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.Flow
 import java.io.Closeable
 
 interface MatrixClient : Closeable {
@@ -43,6 +45,7 @@ interface MatrixClient : Closeable {
     val roomListService: RoomListService
     val mediaLoader: MatrixMediaLoader
     val sessionCoroutineScope: CoroutineScope
+    val ignoredUsersFlow: Flow<ImmutableList<UserId>>
     suspend fun getRoom(roomId: RoomId): MatrixRoom?
     suspend fun findDM(userId: UserId): RoomId?
     suspend fun ignoreUser(userId: UserId): Result<Unit>
@@ -54,7 +57,6 @@ interface MatrixClient : Closeable {
     suspend fun setDisplayName(displayName: String): Result<Unit>
     suspend fun uploadAvatar(mimeType: String, data: ByteArray): Result<Unit>
     suspend fun removeAvatar(): Result<Unit>
-    suspend fun ignoredUserIds(): Result<List<UserId>>
     fun syncService(): SyncService
     fun sessionVerificationService(): SessionVerificationService
     fun pushersService(): PushersService

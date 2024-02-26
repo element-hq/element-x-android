@@ -43,8 +43,11 @@ import io.element.android.libraries.matrix.test.roomlist.FakeRoomListService
 import io.element.android.libraries.matrix.test.sync.FakeSyncService
 import io.element.android.libraries.matrix.test.verification.FakeSessionVerificationService
 import io.element.android.tests.testutils.simulateLongTask
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.TestScope
 
 class FakeMatrixClient(
@@ -70,6 +73,8 @@ class FakeMatrixClient(
     var removeAvatarCalled: Boolean = false
         private set
 
+    override val ignoredUsersFlow: MutableStateFlow<ImmutableList<UserId>> = MutableStateFlow(persistentListOf())
+
     private var ignoreUserResult: Result<Unit> = Result.success(Unit)
     private var unignoreUserResult: Result<Unit> = Result.success(Unit)
     private var createRoomResult: Result<RoomId> = Result.success(A_ROOM_ID)
@@ -83,7 +88,6 @@ class FakeMatrixClient(
     private var setDisplayNameResult: Result<Unit> = Result.success(Unit)
     private var uploadAvatarResult: Result<Unit> = Result.success(Unit)
     private var removeAvatarResult: Result<Unit> = Result.success(Unit)
-    private var ignoredUsersResult: Result<List<UserId>> = Result.success(emptyList())
 
     override suspend fun getRoom(roomId: RoomId): MatrixRoom? {
         return getRoomResults[roomId]
@@ -183,10 +187,6 @@ class FakeMatrixClient(
         return RoomMembershipObserver()
     }
 
-    override suspend fun ignoredUserIds(): Result<List<UserId>> {
-        return ignoredUsersResult
-    }
-
     // Mocks
 
     fun givenLogoutError(failure: Throwable?) {
@@ -243,9 +243,5 @@ class FakeMatrixClient(
 
     fun givenRemoveAvatarResult(result: Result<Unit>) {
         removeAvatarResult = result
-    }
-
-    fun givenIgnoredUsersResult(result: Result<List<UserId>>) {
-        ignoredUsersResult = result
     }
 }
