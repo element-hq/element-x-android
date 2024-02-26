@@ -11,6 +11,9 @@
   <string name="screen_advanced_settings_share_presence">"Share presence"</string>
   <string name="screen_advanced_settings_share_presence_description">"If turned off, you won’t be able to send or receive read receipts or typing notifications"</string>
   <string name="screen_advanced_settings_view_source_description">"Enable option to view message source in the timeline."</string>
+  <string name="screen_blocked_users_unblock_alert_action">"Unblock"</string>
+  <string name="screen_blocked_users_unblock_alert_description">"You\'ll be able to see all messages from them again."</string>
+  <string name="screen_blocked_users_unblock_alert_title">"Unblock user"</string>
   <string name="screen_blocked_users_unblocking">"Unblocking…"</string>
   <string name="screen_edit_profile_display_name">"Display name"</string>
   <string name="screen_edit_profile_display_name_placeholder">"Your display name"</string>
@@ -45,7 +48,4 @@ If you proceed, some of your settings may change."</string>
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"system settings"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"System notifications turned off"</string>
   <string name="screen_notification_settings_title">"Notifications"</string>
-  <string name="screen_blocked_users_unblock_alert_action">"Unblock"</string>
-  <string name="screen_blocked_users_unblock_alert_description">"You\'ll be able to see all messages from them again."</string>
-  <string name="screen_blocked_users_unblock_alert_title">"Unblock user"</string>
 </resources>

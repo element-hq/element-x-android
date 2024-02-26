@@ -237,10 +237,6 @@
   <string name="invite_friends_text">"Hey, talk to me on %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Rageshake to report bug"</string>
-  <string name="screen_blocked_users_unblock_alert_action">"Unblock"</string>
-  <string name="screen_blocked_users_unblock_alert_description">"You\'ll be able to see all messages from them again."</string>
-  <string name="screen_blocked_users_unblock_alert_title">"Unblock user"</string>
-  <string name="screen_blocked_users_unblocking">"Unblocking…"</string>
   <string name="screen_media_picker_error_failed_selection">"Failed selecting media, please try again."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Failed processing media to upload, please try again."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Failed uploading media, please try again."</string>
