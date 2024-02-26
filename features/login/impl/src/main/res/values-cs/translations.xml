@@ -14,6 +14,8 @@
   <string name="screen_change_account_provider_subtitle">"Použijte jiného poskytovatele účtu, například vlastní soukromý server nebo pracovní účet."</string>
   <string name="screen_change_account_provider_title">"Změnit poskytovatele účtu"</string>
   <string name="screen_change_server_error_invalid_homeserver">"Nepodařilo se nám připojit k tomuto domovskému serveru. Zkontrolujte prosím, zda jste správně zadali adresu URL domovského serveru. Pokud je adresa URL správná, obraťte se na správce domovského serveru, který vám poskytne další pomoc."</string>
+  <string name="screen_change_server_error_invalid_well_known">"Klouzavá synchronizace není k dispozici kvůli problému se souborem well-known:
+%1$s"</string>
   <string name="screen_change_server_error_no_sliding_sync_message">"Tento server v současné době nepodporuje klouzavou synchronizaci."</string>
   <string name="screen_change_server_form_header">"Adresa URL domovského serveru"</string>
   <string name="screen_change_server_form_notice">"Můžete se připojit pouze k serveru, který podporuje klouzavou synchronizaci. Správce vašeho domovského serveru jej bude muset nakonfigurovat. %1$s"</string>
@@ -22,6 +24,7 @@
   <string name="screen_login_error_deactivated_account">"Tento účet byl deaktivován."</string>
   <string name="screen_login_error_invalid_credentials">"Nesprávné uživatelské jméno nebo heslo"</string>
   <string name="screen_login_error_invalid_user_id">"Toto není platný identifikátor uživatele. Očekávaný formát: \'@user:homeserver.org\'"</string>
+  <string name="screen_login_error_refresh_tokens">"Tento server je nakonfigurován tak, aby používal obnovovací tokeny. Ty nejsou podporovány při použití přihlašovacích údajů založených na hesle."</string>
   <string name="screen_login_error_unsupported_authentication">"Vybraný domovský server nepodporuje přihlášení pomocí hesla nebo OIDC. Kontaktujte prosím svého správce nebo vyberte jiný domovský server."</string>
   <string name="screen_login_form_header">"Zadejte své údaje"</string>
   <string name="screen_login_subtitle">"Matrix je otevřená síť pro bezpečnou a decentralizovanou komunikaci."</string>

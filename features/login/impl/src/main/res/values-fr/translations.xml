@@ -14,6 +14,7 @@
   <string name="screen_change_account_provider_subtitle">"Utilisez un autre fournisseur de compte, tel que votre propre serveur privé ou un serveur professionnel."</string>
   <string name="screen_change_account_provider_title">"Changer de fournisseur de compte"</string>
   <string name="screen_change_server_error_invalid_homeserver">"Nous n’avons pas pu atteindre ce serveur d’accueil. Vérifiez que vous avez correctement saisi l’URL du serveur d’accueil. Si l’URL est correcte, contactez l’administrateur de votre serveur d’accueil pour obtenir de l’aide."</string>
+  <string name="screen_change_server_error_invalid_well_known">"Sliding sync n\'est pas disponible en raison d\'un problème dans le well-known file : %1$s"</string>
   <string name="screen_change_server_error_no_sliding_sync_message">"Ce serveur ne prend actuellement pas en charge la synchronisation glissante."</string>
   <string name="screen_change_server_form_header">"URL du serveur d’accueil"</string>
   <string name="screen_change_server_form_notice">"Vous ne pouvez vous connecter qu’à un serveur existant qui prend en charge le sliding sync. L’administrateur de votre serveur d’accueil devra le configurer. %1$s"</string>
@@ -22,6 +23,7 @@
   <string name="screen_login_error_deactivated_account">"Ce compte a été désactivé."</string>
   <string name="screen_login_error_invalid_credentials">"Nom d’utilisateur et/ou mot de passe incorrects"</string>
   <string name="screen_login_error_invalid_user_id">"Il ne s’agit pas d’un identifiant utilisateur valide. Format attendu : « @user:homeserver.org »"</string>
+  <string name="screen_login_error_refresh_tokens">"Ce serveur est configuré pour utiliser des tokens d\'actualisation. Ils ne sont pas pris en charge lors de l\'utilisation d\'une connexion basée sur un mot de passe."</string>
   <string name="screen_login_error_unsupported_authentication">"Le serveur d’accueil sélectionné ne prend pas en charge le mot de passe ou la connexion OIDC. Contactez votre administrateur ou choisissez un autre serveur d’accueil."</string>
   <string name="screen_login_form_header">"Saisissez vos identifiants"</string>
   <string name="screen_login_subtitle">"Matrix est un réseau ouvert pour une communication sécurisée et décentralisée."</string>

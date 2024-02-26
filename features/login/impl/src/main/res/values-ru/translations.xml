@@ -14,6 +14,8 @@
   <string name="screen_change_account_provider_subtitle">"Используйте другого поставщика учетных записей, например, собственный частный сервер или рабочую учетную запись."</string>
   <string name="screen_change_account_provider_title">"Сменить поставщика учетной записи"</string>
   <string name="screen_change_server_error_invalid_homeserver">"Нам не удалось связаться с этим домашним сервером. Убедитесь, что вы правильно ввели URL-адрес домашнего сервера. Если URL-адрес указан правильно, обратитесь к администратору домашнего сервера за дополнительной помощью."</string>
+  <string name="screen_change_server_error_invalid_well_known">"Sliding sync недоступен из-за проблемы в известном файле:
+%1$s"</string>
   <string name="screen_change_server_error_no_sliding_sync_message">"К сожалению данный сервер не поддерживает sliding sync."</string>
   <string name="screen_change_server_form_header">"URL-адрес домашнего сервера"</string>
   <string name="screen_change_server_form_notice">"Вы можете подключиться только к существующему серверу, поддерживающему sliding sync. Администратору домашнего сервера потребуется настроить его. %1$s"</string>
@@ -22,6 +24,7 @@
   <string name="screen_login_error_deactivated_account">"Данная учетная запись была деактивирована."</string>
   <string name="screen_login_error_invalid_credentials">"Неверное имя пользователя и/или пароль"</string>
   <string name="screen_login_error_invalid_user_id">"Это не корректный идентификатор пользователя. Ожидаемый формат: \'@user:homeserver.org\'"</string>
+  <string name="screen_login_error_refresh_tokens">"Этот сервер настроен на использование токенов обновления. Они не поддерживаются при использовании входа на основе пароля."</string>
   <string name="screen_login_error_unsupported_authentication">"Выбранный домашний сервер не поддерживает пароль или логин OIDC. Пожалуйста, свяжитесь с администратором или выберите другой домашний сервер."</string>
   <string name="screen_login_form_header">"Введите сведения о себе"</string>
   <string name="screen_login_subtitle">"Matrix — это открытая сеть для безопасной децентрализованной связи."</string>

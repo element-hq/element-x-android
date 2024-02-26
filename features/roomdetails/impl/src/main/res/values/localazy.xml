@@ -26,11 +26,13 @@
   <string name="screen_room_details_notification_mode_custom">"Custom"</string>
   <string name="screen_room_details_notification_mode_default">"Default"</string>
   <string name="screen_room_details_notification_title">"Notifications"</string>
+  <string name="screen_room_details_roles_and_permissions">"Roles and permissions"</string>
   <string name="screen_room_details_room_name_label">"Room name"</string>
   <string name="screen_room_details_security_title">"Security"</string>
   <string name="screen_room_details_share_room_title">"Share room"</string>
   <string name="screen_room_details_topic_title">"Topic"</string>
   <string name="screen_room_details_updating_room">"Updating room…"</string>
+  <string name="screen_room_member_list_banning_user">"Banning %1$s"</string>
   <plurals name="screen_room_member_list_header_title">
     <item quantity="one">"%1$d person"</item>
     <item quantity="other">"%1$d people"</item>
@@ -39,7 +41,9 @@
   <string name="screen_room_member_list_manage_member_remove_confirmation_ban">"Remove and ban member"</string>
   <string name="screen_room_member_list_manage_member_remove_confirmation_kick">"Only remove member"</string>
   <string name="screen_room_member_list_manage_member_remove_confirmation_title">"Remove member and ban from joining in the future?"</string>
-  <string name="screen_room_member_list_manage_member_unban">"Unban"</string>
+  <string name="screen_room_member_list_manage_member_unban_action">"Unban"</string>
+  <string name="screen_room_member_list_manage_member_unban_message">"They will be able to join this room again if invited."</string>
+  <string name="screen_room_member_list_manage_member_unban_title">"Unban user"</string>
   <string name="screen_room_member_list_manage_member_user_info">"See user info"</string>
   <string name="screen_room_member_list_mode_banned">"Banned"</string>
   <string name="screen_room_member_list_mode_members">"Members"</string>
@@ -48,6 +52,7 @@
   <string name="screen_room_member_list_role_administrator">"Admin"</string>
   <string name="screen_room_member_list_role_moderator">"Moderator"</string>
   <string name="screen_room_member_list_room_members_header_title">"Room members"</string>
+  <string name="screen_room_member_list_unbanning_user">"Unbanning %1$s"</string>
   <string name="screen_room_notification_settings_allow_custom">"Allow custom setting"</string>
   <string name="screen_room_notification_settings_allow_custom_footnote">"Turning this on will override your default setting"</string>
   <string name="screen_room_notification_settings_custom_settings_title">"Notify me in this chat for"</string>

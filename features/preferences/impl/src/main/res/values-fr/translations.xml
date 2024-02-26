@@ -14,6 +14,7 @@
   <string name="screen_blocked_users_unblock_alert_action">"Débloquer"</string>
   <string name="screen_blocked_users_unblock_alert_description">"Vous pourrez à nouveau voir tous ses messages."</string>
   <string name="screen_blocked_users_unblock_alert_title">"Débloquer l’utilisateur"</string>
+  <string name="screen_blocked_users_unblocking">"Déblocage…"</string>
   <string name="screen_edit_profile_display_name">"Pseudonyme"</string>
   <string name="screen_edit_profile_display_name_placeholder">"Votre pseudonyme"</string>
   <string name="screen_edit_profile_error">"Une erreur inconnue s’est produite et les informations n’ont pas pu être modifiées."</string>

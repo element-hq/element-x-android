@@ -6,6 +6,7 @@
   <string name="screen_session_verification_compare_numbers_subtitle">"Potvrďte, že níže uvedená čísla odpovídají číslům zobrazeným na vaší druhé relaci."</string>
   <string name="screen_session_verification_compare_numbers_title">"Porovnejte čísla"</string>
   <string name="screen_session_verification_complete_subtitle">"Vaše nová relace je nyní ověřena. Má přístup k vašim zašifrovaným zprávám a ostatní uživatelé ji uvidí jako důvěryhodnou."</string>
+  <string name="screen_session_verification_enter_recovery_key">"Zadejte klíč pro obnovení"</string>
   <string name="screen_session_verification_open_existing_session_subtitle">"Pro přístup k historii zašifrovaných zpráv prokažte, že jste to vy."</string>
   <string name="screen_session_verification_open_existing_session_title">"Otevřete existující relaci"</string>
   <string name="screen_session_verification_positive_button_canceled">"Opakovat ověření"</string>

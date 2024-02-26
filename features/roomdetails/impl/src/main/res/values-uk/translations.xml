@@ -40,7 +40,7 @@
   <string name="screen_room_member_list_manage_member_remove_confirmation_ban">"Видалити та заблокувати учасника"</string>
   <string name="screen_room_member_list_manage_member_remove_confirmation_kick">"Лише видалити учасника"</string>
   <string name="screen_room_member_list_manage_member_remove_confirmation_title">"Видалити учасника та заборонити приєднання в майбутньому?"</string>
-  <string name="screen_room_member_list_manage_member_unban">"Розблокувати"</string>
+  <string name="screen_room_member_list_manage_member_unban_action">"Розблокувати"</string>
   <string name="screen_room_member_list_manage_member_user_info">"Переглянути інформацію про користувача"</string>
   <string name="screen_room_member_list_mode_banned">"Заблоковано"</string>
   <string name="screen_room_member_list_mode_members">"Учасники"</string>

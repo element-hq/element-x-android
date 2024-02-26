@@ -60,6 +60,15 @@
   <string name="screen_room_reactions_show_more">"Show more"</string>
   <string name="screen_room_retry_send_menu_send_again_action">"Send again"</string>
   <string name="screen_room_retry_send_menu_title">"Your message failed to send"</string>
+  <string name="screen_room_roles_and_permissions_admins">"Admins"</string>
+  <string name="screen_room_roles_and_permissions_member_moderation">"Member moderation"</string>
+  <string name="screen_room_roles_and_permissions_messages_and_content">"Messages and content"</string>
+  <string name="screen_room_roles_and_permissions_moderators">"Moderators"</string>
+  <string name="screen_room_roles_and_permissions_permissions_header">"Permissions"</string>
+  <string name="screen_room_roles_and_permissions_reset">"Reset roles and permissions"</string>
+  <string name="screen_room_roles_and_permissions_roles_header">"Roles"</string>
+  <string name="screen_room_roles_and_permissions_room_details">"Room details"</string>
+  <string name="screen_room_roles_and_permissions_title">"Roles and permissions"</string>
   <string name="screen_room_timeline_add_reaction">"Add emoji"</string>
   <string name="screen_room_timeline_less_reactions">"Show less"</string>
   <plurals name="screen_room_typing_many_members">
