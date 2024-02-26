@@ -233,9 +233,6 @@
   <string name="invite_friends_text">"Beszélgessünk a(z) %1$s: %2$s -n"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Az eszköz rázása a hibajelentéshez"</string>
-  <string name="screen_blocked_users_unblock_alert_action">"Letiltás feloldása"</string>
-  <string name="screen_blocked_users_unblock_alert_description">"Újra láthatja az összes üzenetét."</string>
-  <string name="screen_blocked_users_unblock_alert_title">"Felhasználó kitiltásának feloldása"</string>
   <string name="screen_media_picker_error_failed_selection">"Nem sikerült kiválasztani a médiát, próbálja újra."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Nem sikerült feldolgozni a feltöltendő médiát, próbálja újra."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Nem sikerült a média feltöltése, próbálja újra."</string>

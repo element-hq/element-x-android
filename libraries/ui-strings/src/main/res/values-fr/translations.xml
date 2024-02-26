@@ -234,9 +234,6 @@
   <string name="invite_friends_text">"Salut, parle-moi sur %1$s : %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Rageshake pour signaler un problème"</string>
-  <string name="screen_blocked_users_unblock_alert_action">"Débloquer"</string>
-  <string name="screen_blocked_users_unblock_alert_description">"Vous pourrez à nouveau voir tous ses messages."</string>
-  <string name="screen_blocked_users_unblock_alert_title">"Débloquer l’utilisateur"</string>
   <string name="screen_media_picker_error_failed_selection">"Échec de la sélection du média, veuillez réessayer."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Échec du traitement des médias à télécharger, veuillez réessayer."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Échec du téléchargement du média, veuillez réessayer."</string>

@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_blocked_users_unblock_alert_action">"Avblockera"</string>
+  <string name="screen_blocked_users_unblock_alert_description">"Du kommer att kunna se alla meddelanden från dem igen."</string>
+  <string name="screen_blocked_users_unblock_alert_title">"Avblockera användare"</string>
   <string name="screen_edit_profile_display_name">"Visningsnamn"</string>
   <string name="screen_edit_profile_display_name_placeholder">"Ditt visningsnamn"</string>
   <string name="screen_edit_profile_error">"Ett okänt fel påträffades och informationen kunde inte ändras."</string>

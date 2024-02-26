@@ -237,10 +237,6 @@
   <string name="invite_friends_text">"Hey, sprich mit mir auf %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Schüttel heftig zum Melden von Fehlern"</string>
-  <string name="screen_blocked_users_unblock_alert_action">"Blockierung aufheben"</string>
-  <string name="screen_blocked_users_unblock_alert_description">"Du kannst dann wieder alle Nachrichten von ihnen sehen."</string>
-  <string name="screen_blocked_users_unblock_alert_title">"Blockierung aufheben"</string>
-  <string name="screen_blocked_users_unblocking">"Blockierung wird aufgehoben…"</string>
   <string name="screen_media_picker_error_failed_selection">"Medienauswahl fehlgeschlagen, bitte versuche es erneut."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Fehler beim Verarbeiten des hochgeladenen Mediums. Bitte versuche es erneut."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Das Hochladen der Medien ist fehlgeschlagen. Bitte versuche es erneut."</string>

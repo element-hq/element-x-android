@@ -7,6 +7,9 @@
   <string name="screen_advanced_settings_element_call_base_url_validation_error">"Адрас пазначаны няправільна, пераканайцеся, што вы ўказалі пратакол (http/https) і правільны адрас."</string>
   <string name="screen_advanced_settings_rich_text_editor_description">"Адключыць рэдактар фарматаванага тэксту і ўключыць Markdown."</string>
   <string name="screen_advanced_settings_view_source_description">"Уключыце опцыю для прагляду крыніцы паведамлення на часовай шкале."</string>
+  <string name="screen_blocked_users_unblock_alert_action">"Разблакіраваць"</string>
+  <string name="screen_blocked_users_unblock_alert_description">"Вы зноў зможаце ўбачыць усе паведамленні."</string>
+  <string name="screen_blocked_users_unblock_alert_title">"Разблакіраваць карыстальніка"</string>
   <string name="screen_edit_profile_display_name">"Бачнае імя"</string>
   <string name="screen_edit_profile_display_name_placeholder">"Ваша бачнае імя"</string>
   <string name="screen_edit_profile_error">"Узнікла невядомая памылка, і інфармацыю не ўдалося змяніць."</string>

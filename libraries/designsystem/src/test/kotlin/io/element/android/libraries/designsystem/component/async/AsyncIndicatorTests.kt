@@ -53,7 +53,6 @@ class AsyncIndicatorTests {
         }.test {
             with(awaitItem()) {
                 assertThat(currentItem).isNull()
-                assertThat(currentAnimationState.isRunning).isFalse()
                 assertThat(currentAnimationState.currentState).isFalse()
                 assertThat(currentAnimationState.targetState).isFalse()
             }
@@ -245,11 +244,9 @@ class AsyncIndicatorTests {
     @Composable
     private fun fakeAsyncIndicatorHost(state: AsyncIndicatorState): Transition<Boolean>? {
         val coroutineScope = rememberCoroutineScope()
-        val transition = if (state.currentItem.value != null) {
+        val transition = state.currentItem.value?.let {
             // If there is an item, update its transition state to simulate an animation
             updateTransition(state.currentAnimationState, label = "")
-        } else {
-            null
         }
         if (state.currentAnimationState.hasEntered() && state.currentItem.value?.durationMs != null) {
             SideEffect {
@@ -272,12 +269,10 @@ class AsyncIndicatorTests {
     )
 
     private data class TransitionStateSnapshot(
-        val isRunning: Boolean,
         val currentState: Boolean,
         val targetState: Boolean,
     ) {
         constructor(transition: Transition<Boolean>?) : this(
-            isRunning = transition?.isRunning ?: false,
             currentState = transition?.currentState ?: false,
             targetState = transition?.targetState ?: false,
         )

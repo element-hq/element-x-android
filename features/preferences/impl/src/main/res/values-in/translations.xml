@@ -7,6 +7,9 @@
   <string name="screen_advanced_settings_element_call_base_url_validation_error">"URL tidak valid, pastikan Anda menyertakan protokol (http/https) dan alamat yang benar."</string>
   <string name="screen_advanced_settings_rich_text_editor_description">"Nonaktifkan penyunting teks kaya untuk mengetik Markdown secara manual."</string>
   <string name="screen_advanced_settings_view_source_description">"Aktifkan opsi untuk melihat sumber pesan dalam lini masa."</string>
+  <string name="screen_blocked_users_unblock_alert_action">"Buka blokir"</string>
+  <string name="screen_blocked_users_unblock_alert_description">"Anda akan dapat melihat semua pesan dari mereka lagi."</string>
+  <string name="screen_blocked_users_unblock_alert_title">"Buka blokir pengguna"</string>
   <string name="screen_edit_profile_display_name">"Nama tampilan"</string>
   <string name="screen_edit_profile_display_name_placeholder">"Nama tampilan Anda"</string>
   <string name="screen_edit_profile_error">"Terjadi kesalahan yang tidak diketahui dan informasi tidak dapat diubah."</string>

@@ -11,6 +11,9 @@
   <string name="screen_advanced_settings_share_presence">"Condividi presenza online"</string>
   <string name="screen_advanced_settings_share_presence_description">"Se disattivato, non potrai inviare o ricevere ricevute di lettura o notifiche di digitazione."</string>
   <string name="screen_advanced_settings_view_source_description">"Attiva l\'opzione per visualizzare il sorgente del messaggio nella linea temporale."</string>
+  <string name="screen_blocked_users_unblock_alert_action">"Sblocca"</string>
+  <string name="screen_blocked_users_unblock_alert_description">"Potrai vedere di nuovo tutti i suoi messaggi."</string>
+  <string name="screen_blocked_users_unblock_alert_title">"Sblocca utente"</string>
   <string name="screen_edit_profile_display_name">"Nome da mostrare"</string>
   <string name="screen_edit_profile_display_name_placeholder">"Il tuo nome da mostrare"</string>
   <string name="screen_edit_profile_error">"Si è verificato un errore sconosciuto e non è stato possibile modificare le informazioni."</string>
