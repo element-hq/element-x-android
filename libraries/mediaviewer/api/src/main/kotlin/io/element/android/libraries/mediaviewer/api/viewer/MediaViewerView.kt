@@ -19,34 +19,36 @@
 package io.element.android.libraries.mediaviewer.api.viewer
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.OpenInNew
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.core.mimetype.MimeTypes
@@ -65,14 +67,63 @@ import io.element.android.libraries.mediaviewer.api.R
 import io.element.android.libraries.mediaviewer.api.local.LocalMedia
 import io.element.android.libraries.mediaviewer.api.local.LocalMediaView
 import io.element.android.libraries.mediaviewer.api.local.MediaInfo
+import io.element.android.libraries.mediaviewer.api.local.PlayableState
 import io.element.android.libraries.mediaviewer.api.local.rememberLocalMediaViewState
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.coroutines.delay
+import me.saket.telephoto.flick.FlickToDismiss
+import me.saket.telephoto.flick.FlickToDismissState
+import me.saket.telephoto.flick.rememberFlickToDismissState
+import me.saket.telephoto.zoomable.ZoomSpec
+import me.saket.telephoto.zoomable.ZoomableState
+import me.saket.telephoto.zoomable.coil.ZoomableAsyncImage
+import me.saket.telephoto.zoomable.rememberZoomableImageState
+import me.saket.telephoto.zoomable.rememberZoomableState
+import kotlin.time.Duration
 
 @Composable
 fun MediaViewerView(
     state: MediaViewerState,
     onBackPressed: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    val snackbarHostState = rememberSnackbarHostState(snackbarMessage = state.snackbarMessage)
+    var showOverlay by remember { mutableStateOf(true) }
+
+    Scaffold(
+        modifier,
+        containerColor = Color.Transparent,
+        snackbarHost = { SnackbarHost(snackbarHostState) },
+    ) {
+        MediaViewerPage(
+            showOverlay = showOverlay,
+            state = state,
+            onDismiss = {
+                onBackPressed()
+            },
+            onShowOverlayChanged = {
+                showOverlay = it
+            }
+        )
+        AnimatedVisibility(visible = showOverlay, enter = fadeIn(), exit = fadeOut()) {
+            MediaViewerTopBar(
+                actionsEnabled = state.downloadedMedia is AsyncData.Success,
+                mimeType = state.mediaInfo.mimeType,
+                onBackPressed = onBackPressed,
+                canDownload = state.canDownload,
+                canShare = state.canShare,
+                eventSink = state.eventSink
+            )
+        }
+    }
+}
+
+@Composable
+private fun MediaViewerPage(
+    showOverlay: Boolean,
+    state: MediaViewerState,
+    onDismiss: () -> Unit,
+    onShowOverlayChanged: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     fun onRetry() {
@@ -83,62 +134,104 @@ fun MediaViewerView(
         state.eventSink(MediaViewerEvents.ClearLoadingError)
     }
 
-    val localMediaViewState = rememberLocalMediaViewState()
-    val showThumbnail = !localMediaViewState.isReady
-    val showProgress = rememberShowProgress(state.downloadedMedia)
-    val snackbarHostState = rememberSnackbarHostState(snackbarMessage = state.snackbarMessage)
+    val currentShowOverlay by rememberUpdatedState(showOverlay)
+    val currentOnShowOverlayChanged by rememberUpdatedState(onShowOverlayChanged)
+    val flickState = rememberFlickToDismissState(dismissThresholdRatio = 0.1f, rotateOnDrag = false)
 
-    Scaffold(
-        modifier,
-        topBar = {
-            MediaViewerTopBar(
-                actionsEnabled = state.downloadedMedia is AsyncData.Success,
-                mimeType = state.mediaInfo.mimeType,
-                onBackPressed = onBackPressed,
-                canDownload = state.canDownload,
-                canShare = state.canShare,
-                eventSink = state.eventSink
-            )
+    DismissFlickEffects(
+        flickState = flickState,
+        onDismissing = { animationDuration ->
+            delay(animationDuration / 3)
+            onDismiss()
         },
-        snackbarHost = { SnackbarHost(snackbarHostState) },
+        onDragging = {
+            currentOnShowOverlayChanged(false)
+        }
+    )
+
+    FlickToDismiss(
+        state = flickState,
+        modifier = modifier.background(backgroundColorFor(flickState))
     ) {
-        Column(
+        val showProgress = rememberShowProgress(state.downloadedMedia)
+
+        Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(it),
+                .navigationBarsPadding()
         ) {
-            if (showProgress) {
-                LinearProgressIndicator(
-                    Modifier
-                        .fillMaxWidth()
-                        .height(2.dp)
+            Box(contentAlignment = Alignment.Center) {
+                val zoomableState = rememberZoomableState(
+                    zoomSpec = ZoomSpec(maxZoomFactor = 4f, preventOverOrUnderZoom = false)
                 )
-            } else {
-                Spacer(Modifier.height(2.dp))
-            }
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
-                if (state.downloadedMedia is AsyncData.Failure) {
+                val localMediaViewState = rememberLocalMediaViewState(zoomableState)
+                val showThumbnail = !localMediaViewState.isReady
+                val playableState = localMediaViewState.playableState
+                val showError = state.downloadedMedia is AsyncData.Failure
+
+                LaunchedEffect(playableState) {
+                    if (playableState is PlayableState.Playable) {
+                        currentOnShowOverlayChanged(playableState.isShowingControls)
+                    }
+                }
+
+                LocalMediaView(
+                    modifier = Modifier.fillMaxSize(),
+                    localMediaViewState = localMediaViewState,
+                    localMedia = state.downloadedMedia.dataOrNull(),
+                    mediaInfo = state.mediaInfo,
+                    onClick = {
+                        if (playableState is PlayableState.NotPlayable) {
+                            currentOnShowOverlayChanged(!currentShowOverlay)
+                        }
+                    },
+                )
+                ThumbnailView(
+                    mediaInfo = state.mediaInfo,
+                    thumbnailSource = state.thumbnailSource,
+                    isVisible = showThumbnail,
+                    zoomableState = zoomableState
+                )
+                if (showError) {
                     ErrorView(
                         errorMessage = stringResource(id = CommonStrings.error_unknown),
                         onRetry = ::onRetry,
                         onDismiss = ::onDismissError
                     )
                 }
-                LocalMediaView(
-                    localMediaViewState = localMediaViewState,
-                    localMedia = state.downloadedMedia.dataOrNull(),
-                    mediaInfo = state.mediaInfo,
-                )
-                ThumbnailView(
-                    mediaInfo = state.mediaInfo,
-                    thumbnailSource = state.thumbnailSource,
-                    showThumbnail = showThumbnail,
+            }
+            if (showProgress) {
+                LinearProgressIndicator(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(2.dp)
                 )
             }
         }
+    }
+}
+
+@Composable
+private fun DismissFlickEffects(
+    flickState: FlickToDismissState,
+    onDismissing: suspend (Duration) -> Unit,
+    onDragging: suspend () -> Unit,
+) {
+    val currentOnDismissing by rememberUpdatedState(onDismissing)
+    val currentOnDragging by rememberUpdatedState(onDragging)
+
+    when (val gestureState = flickState.gestureState) {
+        is FlickToDismissState.GestureState.Dismissing -> {
+            LaunchedEffect(Unit) {
+                currentOnDismissing(gestureState.animationDuration)
+            }
+        }
+        is FlickToDismissState.GestureState.Dragging -> {
+            LaunchedEffect(Unit) {
+                currentOnDragging()
+            }
+        }
+        else -> Unit
     }
 }
 
@@ -175,6 +268,9 @@ private fun MediaViewerTopBar(
 ) {
     TopAppBar(
         title = {},
+        colors = TopAppBarDefaults.topAppBarColors(
+            containerColor = Color.Transparent.copy(0.6f),
+        ),
         navigationIcon = { BackButton(onClick = onBackPressed) },
         actions = {
             IconButton(
@@ -227,26 +323,28 @@ private fun MediaViewerTopBar(
 @Composable
 private fun ThumbnailView(
     thumbnailSource: MediaSource?,
-    showThumbnail: Boolean,
+    isVisible: Boolean,
     mediaInfo: MediaInfo,
+    zoomableState: ZoomableState,
+    modifier: Modifier = Modifier,
 ) {
     AnimatedVisibility(
-        visible = showThumbnail,
+        visible = isVisible,
         enter = fadeIn(),
         exit = fadeOut()
     ) {
         Box(
-            modifier = Modifier.fillMaxSize(),
+            modifier = modifier.fillMaxSize(),
             contentAlignment = Alignment.Center
         ) {
             val mediaRequestData = MediaRequestData(
                 source = thumbnailSource,
                 kind = MediaRequestData.Kind.File(mediaInfo.name, mediaInfo.mimeType)
             )
-            AsyncImage(
+            ZoomableAsyncImage(
+                state = rememberZoomableImageState(zoomableState),
                 modifier = Modifier.fillMaxSize(),
                 model = mediaRequestData,
-                alpha = 0.8f,
                 contentScale = ContentScale.Fit,
                 contentDescription = null,
             )
@@ -265,6 +363,21 @@ private fun ErrorView(
         onRetry = onRetry,
         onDismiss = onDismiss
     )
+}
+
+@Composable
+private fun backgroundColorFor(flickState: FlickToDismissState): Color {
+    val animatedAlpha by animateFloatAsState(
+        targetValue = when (flickState.gestureState) {
+            is FlickToDismissState.GestureState.Dismissed,
+            is FlickToDismissState.GestureState.Dismissing -> 0f
+            is FlickToDismissState.GestureState.Dragging,
+            is FlickToDismissState.GestureState.Idle,
+            is FlickToDismissState.GestureState.Resetting -> 1f - flickState.offsetFraction
+        },
+        label = "Background alpha",
+    )
+    return Color.Black.copy(alpha = animatedAlpha)
 }
 
 // Only preview in dark, dark theme is forced on the Node.

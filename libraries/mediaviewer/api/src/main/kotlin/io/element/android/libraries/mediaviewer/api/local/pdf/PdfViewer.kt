@@ -21,6 +21,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -47,10 +48,15 @@ import me.saket.telephoto.zoomable.zoomable
 @Composable
 fun PdfViewer(
     pdfViewerState: PdfViewerState,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     BoxWithConstraints(
-        modifier = modifier.zoomable(pdfViewerState.zoomableState),
+        modifier = modifier
+            .zoomable(
+                state = pdfViewerState.zoomableState,
+                onClick = { onClick() }
+            ),
         contentAlignment = Alignment.Center
     ) {
         val maxWidthInPx = maxWidth.roundToPx()
@@ -61,7 +67,10 @@ fun PdfViewer(
             }
         }
         val pdfPages = pdfViewerState.getPages()
-        PdfPagesView(pdfPages.toImmutableList(), pdfViewerState.lazyListState)
+        PdfPagesView(
+            pdfPages = pdfPages.toImmutableList(),
+            lazyListState = pdfViewerState.lazyListState,
+        )
     }
 }
 
@@ -74,8 +83,12 @@ private fun PdfPagesView(
     LazyColumn(
         modifier = modifier.fillMaxSize(),
         state = lazyListState,
-        verticalArrangement = Arrangement.spacedBy(4.dp, Alignment.CenterVertically)
+        verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterVertically)
     ) {
+        // Add a fake item to the top so that the first item is not at the top of the screen.
+        item {
+            Spacer(modifier = Modifier.height(80.dp))
+        }
         items(pdfPages.size) { index ->
             val pdfPage = pdfPages[index]
             PdfPageView(pdfPage)

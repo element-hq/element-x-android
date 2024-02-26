@@ -39,6 +39,7 @@ dependencies {
     implementation(libs.dagger)
     implementation(libs.telephoto.zoomableimage)
     implementation(libs.vanniktech.blurhash)
+    implementation(libs.telephoto.flick)
 
     implementation(projects.libraries.androidutils)
     implementation(projects.libraries.architecture)
