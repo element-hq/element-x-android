@@ -1,0 +1,285 @@
+/*
+ * Copyright (c) 2024 New Vector Ltd
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package io.element.android.libraries.designsystem.component.async
+
+import androidx.compose.animation.core.Transition
+import androidx.compose.animation.core.updateTransition
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.rememberCoroutineScope
+import app.cash.molecule.RecompositionMode
+import app.cash.molecule.moleculeFlow
+import app.cash.turbine.test
+import com.google.common.truth.Truth.assertThat
+import io.element.android.libraries.designsystem.components.async.AsyncIndicatorItem
+import io.element.android.libraries.designsystem.components.async.AsyncIndicatorState
+import io.element.android.libraries.designsystem.components.async.hasEntered
+import io.element.android.libraries.designsystem.components.async.hasExited
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.advanceTimeBy
+import kotlinx.coroutines.test.runCurrent
+import kotlinx.coroutines.test.runTest
+import org.junit.Test
+
+@OptIn(ExperimentalCoroutinesApi::class)
+class AsyncIndicatorTests {
+    @Test
+    fun `initial state`() = runTest {
+        val state = AsyncIndicatorState()
+        moleculeFlow(RecompositionMode.Immediate) {
+            val transitionState = fakeAsyncIndicatorHost(state = state)
+            val item = state.currentItem.value
+            Snapshot(
+                currentItem = item,
+                currentAnimationState = TransitionStateSnapshot(transitionState),
+            )
+        }.test {
+            with(awaitItem()) {
+                assertThat(currentItem).isNull()
+                assertThat(currentAnimationState.isRunning).isFalse()
+                assertThat(currentAnimationState.currentState).isFalse()
+                assertThat(currentAnimationState.targetState).isFalse()
+            }
+        }
+    }
+
+    @Test
+    fun `add item with timeout`() = runTest(StandardTestDispatcher()) {
+        val state = AsyncIndicatorState()
+        moleculeFlow(RecompositionMode.Immediate) {
+            val transitionState = fakeAsyncIndicatorHost(state = state)
+            val item = state.currentItem.value
+            Snapshot(
+                currentItem = item,
+                currentAnimationState = TransitionStateSnapshot(transitionState),
+            )
+        }.test {
+            skipItems(1)
+            state.enqueue(durationMs = 1000, composable = {})
+            // Give it some time to pre-load the events
+            advanceTimeBy(1000)
+            runCurrent()
+            // First, item is invisible but the target state is visible (will start animating)
+            with(awaitItem()) {
+                assertThat(currentItem).isNotNull()
+                assertThat(currentAnimationState.currentState).isFalse()
+                assertThat(currentAnimationState.targetState).isTrue()
+            }
+            // Then, item is visible and the target state is visible (stopped animating)
+            with(awaitItem()) {
+                assertThat(currentItem).isNotNull()
+                assertThat(currentAnimationState.currentState).isTrue()
+                assertThat(currentAnimationState.targetState).isTrue()
+            }
+            // Then, item is visible and the target state is not visible (will start animating)
+            with(awaitItem()) {
+                assertThat(currentItem).isNotNull()
+                assertThat(currentAnimationState.currentState).isTrue()
+                assertThat(currentAnimationState.targetState).isFalse()
+            }
+            // Then, item is not visible and the target state is not visible (stopped animating)
+            with(awaitItem()) {
+                assertThat(currentItem).isNotNull()
+                assertThat(currentAnimationState.currentState).isFalse()
+                assertThat(currentAnimationState.targetState).isFalse()
+            }
+            // Finally, the current item is removed
+            with(awaitItem()) {
+                assertThat(currentItem).isNull()
+            }
+        }
+    }
+
+    @Test
+    fun `add item without timeout`() = runTest(StandardTestDispatcher()) {
+        val state = AsyncIndicatorState()
+        moleculeFlow(RecompositionMode.Immediate) {
+            val transitionState = fakeAsyncIndicatorHost(state = state)
+            val item = state.currentItem.value
+            Snapshot(
+                currentItem = item,
+                currentAnimationState = TransitionStateSnapshot(transitionState),
+            )
+        }.test {
+            skipItems(1)
+            state.enqueue(composable = {})
+            // First, item is invisible but the target state is visible (will start animating)
+            with(awaitItem()) {
+                assertThat(currentItem).isNotNull()
+                assertThat(currentAnimationState.currentState).isFalse()
+                assertThat(currentAnimationState.targetState).isTrue()
+            }
+            // Then, item is visible and the target state is visible (stopped animating)
+            with(awaitItem()) {
+                assertThat(currentItem).isNotNull()
+                assertThat(currentAnimationState.currentState).isTrue()
+                assertThat(currentAnimationState.targetState).isTrue()
+            }
+            // That's all, the current item will be displayed indefinitely
+            ensureAllEventsConsumed()
+        }
+    }
+
+    @Test
+    fun `add item without timeout then clear`() = runTest(StandardTestDispatcher()) {
+        val state = AsyncIndicatorState()
+        moleculeFlow(RecompositionMode.Immediate) {
+            val transitionState = fakeAsyncIndicatorHost(state = state)
+            val item = state.currentItem.value
+            Snapshot(
+                currentItem = item,
+                currentAnimationState = TransitionStateSnapshot(transitionState),
+            )
+        }.test {
+            skipItems(1)
+            state.enqueue(composable = {})
+            // First, item is invisible but the target state is visible (will start animating)
+            with(awaitItem()) {
+                assertThat(currentItem).isNotNull()
+                assertThat(currentAnimationState.currentState).isFalse()
+                assertThat(currentAnimationState.targetState).isTrue()
+            }
+            // Then, item is visible and the target state is visible (stopped animating)
+            with(awaitItem()) {
+                assertThat(currentItem).isNotNull()
+                assertThat(currentAnimationState.currentState).isTrue()
+                assertThat(currentAnimationState.targetState).isTrue()
+            }
+            // Clear the current item
+            state.clear()
+            // Animating the exit animation
+            with(awaitItem()) {
+                assertThat(currentItem).isNotNull()
+                assertThat(currentAnimationState.currentState).isTrue()
+                assertThat(currentAnimationState.targetState).isFalse()
+            }
+            // Current item is no longer visible
+            with(awaitItem()) {
+                assertThat(currentItem).isNotNull()
+                assertThat(currentAnimationState.currentState).isFalse()
+                assertThat(currentAnimationState.targetState).isFalse()
+            }
+            // Finally, the current item is removed
+            with(awaitItem()) {
+                assertThat(currentItem).isNull()
+            }
+        }
+    }
+
+    @Test
+    fun `add item without timeout, then another one`() = runTest(StandardTestDispatcher()) {
+        val state = AsyncIndicatorState()
+        moleculeFlow(RecompositionMode.Immediate) {
+            val transitionState = fakeAsyncIndicatorHost(state = state)
+            val item = state.currentItem.value
+            Snapshot(
+                currentItem = item,
+                currentAnimationState = TransitionStateSnapshot(transitionState),
+            )
+        }.test {
+            var firstItem: Any? = null
+            skipItems(1)
+            state.enqueue(composable = {})
+            state.enqueue(composable = {})
+            // First, item is invisible but the target state is visible (will start animating)
+            with(awaitItem()) {
+                firstItem = currentItem
+                assertThat(currentItem).isNotNull()
+                assertThat(currentAnimationState.currentState).isFalse()
+                assertThat(currentAnimationState.targetState).isTrue()
+            }
+            // Then, item is visible and the target state is visible (stopped animating)
+            with(awaitItem()) {
+                assertThat(currentItem).isNotNull()
+                assertThat(currentAnimationState.currentState).isTrue()
+                assertThat(currentAnimationState.targetState).isTrue()
+            }
+            // Then, item is visible and the target state is not visible (will start animating)
+            with(awaitItem()) {
+                assertThat(currentItem).isNotNull()
+                assertThat(currentAnimationState.currentState).isTrue()
+                assertThat(currentAnimationState.targetState).isFalse()
+            }
+            // Then, item is not visible and the target state is not visible (stopped animating)
+            with(awaitItem()) {
+                assertThat(currentItem).isNotNull()
+                assertThat(currentAnimationState.currentState).isFalse()
+                assertThat(currentAnimationState.targetState).isFalse()
+            }
+            // Then a new item will be not visible and its target animation visible
+            with(awaitItem()) {
+                assertThat(currentItem).isNotNull()
+                assertThat(firstItem).isNotEqualTo(currentItem)
+                assertThat(currentAnimationState.currentState).isFalse()
+                assertThat(currentAnimationState.targetState).isTrue()
+            }
+            // Finally, the second item is visible and not animating
+            with(awaitItem()) {
+                assertThat(currentItem).isNotNull()
+                assertThat(firstItem).isNotEqualTo(currentItem)
+                assertThat(currentAnimationState.currentState).isTrue()
+                assertThat(currentAnimationState.targetState).isTrue()
+            }
+            // That's all, the current item will be displayed indefinitely
+            ensureAllEventsConsumed()
+        }
+    }
+
+    @Composable
+    private fun fakeAsyncIndicatorHost(state: AsyncIndicatorState): Transition<Boolean>? {
+        val coroutineScope = rememberCoroutineScope()
+        val transition = if (state.currentItem.value != null) {
+            // If there is an item, update its transition state to simulate an animation
+            updateTransition(state.currentAnimationState, label = "")
+        } else {
+            null
+        }
+        if (state.currentAnimationState.hasEntered() && state.currentItem.value?.durationMs != null) {
+            SideEffect {
+                coroutineScope.launch {
+                    delay(state.currentItem.value!!.durationMs!!)
+                    state.nextState()
+                }
+            }
+        } else if (state.currentItem.value != null && state.currentAnimationState.hasExited()) {
+            SideEffect {
+                state.nextState()
+            }
+        }
+        return transition
+    }
+
+    private data class Snapshot(
+        val currentItem: AsyncIndicatorItem?,
+        val currentAnimationState: TransitionStateSnapshot,
+    )
+
+    private data class TransitionStateSnapshot(
+        val isRunning: Boolean,
+        val currentState: Boolean,
+        val targetState: Boolean,
+    ) {
+        constructor(transition: Transition<Boolean>?) : this(
+            isRunning = transition?.isRunning ?: false,
+            currentState = transition?.currentState ?: false,
+            targetState = transition?.targetState ?: false,
+        )
+    }
+}
