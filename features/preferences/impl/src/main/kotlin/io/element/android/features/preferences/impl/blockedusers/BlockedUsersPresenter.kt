@@ -29,7 +29,6 @@ import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runUpdatingState
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.UserId
-import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -48,7 +47,7 @@ class BlockedUsersPresenter @Inject constructor(
             mutableStateOf(AsyncAction.Uninitialized)
         }
 
-        val ignoredUserIds by matrixClient.ignoredUsersFlow.collectAsState(initial = persistentListOf())
+        val ignoredUserIds by matrixClient.ignoredUsersFlow.collectAsState()
 
         fun handleEvents(event: BlockedUsersEvents) {
             when (event) {

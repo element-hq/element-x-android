@@ -51,7 +51,6 @@ class BlockedUsersPresenterTests {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            skipItems(1) // Empty state
             with(awaitItem()) {
                 assertThat(blockedUsers).isEqualTo(persistentListOf(A_USER_ID))
                 assertThat(unblockUserAction).isEqualTo(AsyncAction.Uninitialized)
@@ -68,7 +67,6 @@ class BlockedUsersPresenterTests {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            skipItems(1) // Empty state
             with(awaitItem()) {
                 assertThat(blockedUsers).containsAtLeastElementsIn(persistentListOf(A_USER_ID))
                 assertThat(unblockUserAction).isEqualTo(AsyncAction.Uninitialized)
@@ -91,7 +89,6 @@ class BlockedUsersPresenterTests {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            skipItems(1)
             val initialState = awaitItem()
             initialState.eventSink(BlockedUsersEvents.Unblock(A_USER_ID))
 
@@ -115,7 +112,6 @@ class BlockedUsersPresenterTests {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            skipItems(1)
             val initialState = awaitItem()
             initialState.eventSink(BlockedUsersEvents.Unblock(A_USER_ID))
 
@@ -138,7 +134,6 @@ class BlockedUsersPresenterTests {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            skipItems(1)
             val initialState = awaitItem()
             initialState.eventSink(BlockedUsersEvents.Unblock(A_USER_ID))
 
