@@ -87,6 +87,7 @@ fun aMediaViewerState(
     mediaInfo: MediaInfo = anImageInfo(),
     canDownload: Boolean = true,
     canShare: Boolean = true,
+    eventSink: (MediaViewerEvents) -> Unit = {},
 ) = MediaViewerState(
     mediaInfo = mediaInfo,
     thumbnailSource = null,
@@ -94,4 +95,5 @@ fun aMediaViewerState(
     snackbarMessage = null,
     canDownload = canDownload,
     canShare = canShare,
-) {}
+    eventSink = eventSink,
+)
