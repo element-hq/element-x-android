@@ -36,6 +36,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalInspectionMode
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -118,25 +119,29 @@ fun AsyncIndicatorHost(
         modifier = modifier.fillMaxWidth(),
         contentAlignment = Alignment.TopCenter,
     ) {
-        state.currentItem.value?.let { item ->
-            AnimatedVisibility(
-                visibleState = state.currentAnimationState,
-                enter = enterTransition,
-                exit = exitTransition,
-            ) {
-                item.composable()
-            }
+        if (LocalInspectionMode.current) {
+            state.currentItem.value?.composable?.invoke()
+        } else {
+            state.currentItem.value?.let { item ->
+                AnimatedVisibility(
+                    visibleState = state.currentAnimationState,
+                    enter = enterTransition,
+                    exit = exitTransition,
+                ) {
+                    item.composable()
+                }
 
-            if (state.currentAnimationState.hasEntered() && item.durationMs != null) {
-                SideEffect {
-                    coroutineScope.launch {
-                        delay(item.durationMs)
+                if (state.currentAnimationState.hasEntered() && item.durationMs != null) {
+                    SideEffect {
+                        coroutineScope.launch {
+                            delay(item.durationMs)
+                            state.nextState()
+                        }
+                    }
+                } else if (state.currentAnimationState.hasExited()) {
+                    SideEffect {
                         state.nextState()
                     }
-                }
-            } else if (state.currentAnimationState.hasExited()) {
-                SideEffect {
-                    state.nextState()
                 }
             }
         }
