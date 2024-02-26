@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import sys
+import re
 from xml.dom import minidom
 
 file = sys.argv[1]
@@ -49,7 +50,16 @@ for key in sorted(resource.keys()):
 
 result = newContent.toprettyxml(indent="  ") \
     .replace('<?xml version="1.0" ?>', '<?xml version="1.0" encoding="utf-8"?>') \
-    .replace('&quot;', '"')
+    .replace('&quot;', '"') \
+    .replace('...', '…')
+
+## Replace space by unbreakable space before punctuation
+result = re.sub(r" ([\?\!\:…])", r" \1", result)
+
+# Special treatment for French wording
+if 'values-fr' in file:
+    ## Replace ' with ’
+    result = re.sub(r"([cdjlmnsu])\\\'", r"\1’", result, flags = re.IGNORECASE)
 
 with open(file, "w") as text_file:
     text_file.write(result)

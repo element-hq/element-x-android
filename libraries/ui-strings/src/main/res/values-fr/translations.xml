@@ -30,7 +30,7 @@
   <string name="a11y_start_call">"Démarrer un appel"</string>
   <string name="a11y_user_menu">"Menu utilisateur"</string>
   <string name="a11y_voice_message_record">"Enregistrer un message vocal."</string>
-  <string name="a11y_voice_message_stop_recording">"Arrêter l\'enregistrement"</string>
+  <string name="a11y_voice_message_stop_recording">"Arrêter l’enregistrement"</string>
   <string name="action_accept">"Accepter"</string>
   <string name="action_add_to_timeline">"Ajouter à la discussion"</string>
   <string name="action_back">"Retour"</string>
@@ -187,7 +187,7 @@
   <string name="common_security">"Sécurité"</string>
   <string name="common_seen_by">"Vu par"</string>
   <string name="common_sending">"Envoi en cours…"</string>
-  <string name="common_sending_failed">"Échec de l\'envoi"</string>
+  <string name="common_sending_failed">"Échec de l’envoi"</string>
   <string name="common_sent">"Envoyé"</string>
   <string name="common_server_not_supported">"Serveur non pris en charge"</string>
   <string name="common_server_url">"URL du serveur"</string>

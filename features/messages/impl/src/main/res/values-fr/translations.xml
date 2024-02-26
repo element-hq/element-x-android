@@ -27,7 +27,7 @@
   <string name="screen_room_attachment_source_location">"Position"</string>
   <string name="screen_room_attachment_source_poll">"Sondage"</string>
   <string name="screen_room_attachment_text_formatting">"Formatage du texte"</string>
-  <string name="screen_room_change_role_confirm_add_admin_description">"Vous ne pourrez pas annuler cette action. Vous êtes entrain de promouvoir l\'utilisateur pour qu\'il ait le même niveau que vous."</string>
+  <string name="screen_room_change_role_confirm_add_admin_description">"Vous ne pourrez pas annuler cette action. Vous êtes en train de promouvoir l’utilisateur pour qu’il ait le même niveau que vous."</string>
   <string name="screen_room_change_role_confirm_add_admin_title">"Ajouter un administrateur ?"</string>
   <string name="screen_room_change_role_confirm_demote_self_action">"Rétrograder"</string>
   <string name="screen_room_change_role_confirm_demote_self_description">"Vous ne pourrez pas annuler ce changement car vous vous rétrogradez, si vous êtes le dernier utilisateur privilégié du salon il sera impossible de retrouver les privilèges."</string>
