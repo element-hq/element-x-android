@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_advanced_settings_developer_mode">"Entwickler-Modus"</string>
+  <string name="screen_advanced_settings_developer_mode_description">"Aktivieren, um Zugriff auf Features und Funktionen für Entwickler zu aktivieren."</string>
   <string name="screen_advanced_settings_element_call_base_url">"Benutzerdefinierte Element-Aufruf-Basis-URL"</string>
   <string name="screen_advanced_settings_element_call_base_url_description">"Lege eine eigene Basis-URL für Element Call fest."</string>
   <string name="screen_advanced_settings_element_call_base_url_validation_error">"Ungültige URL, bitte stelle sicher, dass du das Protokoll (http/https) und die richtige Adresse angibst."</string>
-  <string name="screen_advanced_settings_developer_mode">"Entwickler-Modus"</string>
-  <string name="screen_advanced_settings_developer_mode_description">"Aktivieren, um Zugriff auf Features und Funktionen für Entwickler zu aktivieren."</string>
   <string name="screen_advanced_settings_rich_text_editor_description">"Deaktiviere den Rich-Text-Editor, um Markdown manuell einzugeben."</string>
   <string name="screen_advanced_settings_send_read_receipts">"Lesebestätigungen"</string>
   <string name="screen_advanced_settings_send_read_receipts_description">"Wenn diese Option deaktiviert ist, werden Ihre Lesebestätigungen an niemanden gesendet. Du erhältst weiterhin Lesebestätigungen von anderen Benutzern."</string>
+  <string name="screen_advanced_settings_share_presence">"Präsenz teilen"</string>
+  <string name="screen_advanced_settings_share_presence_description">"Wenn diese Option deaktiviert ist, kannst du keine Lesebestätigungen oder Tipp-Benachrichtigungen senden oder empfangen."</string>
   <string name="screen_advanced_settings_view_source_description">"Option aktiveren, um Nachrichtenquelle in der Zeitleiste anzuzeigen."</string>
   <string name="screen_edit_profile_display_name">"Anzeigename"</string>
   <string name="screen_edit_profile_display_name_placeholder">"Dein Anzeigename"</string>

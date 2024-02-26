@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_session_verification_cancelled_subtitle">"Нещо не изглежда наред. Или времето за изчакване на заявката е изтекло, или заявката е отхвърлена."</string>
+  <string name="screen_session_verification_compare_emojis_subtitle">"Потвърдете, че емоджитата по-долу съвпадат с показаните в другата ви сесия."</string>
+  <string name="screen_session_verification_compare_emojis_title">"Сравнете емоджита"</string>
+  <string name="screen_session_verification_open_existing_session_subtitle">"Докажете, че сте вие, за да получите достъп до хронологията на шифрованите си съобщения."</string>
+  <string name="screen_session_verification_open_existing_session_title">"Отворете съществуваща сесия"</string>
+  <string name="screen_session_verification_positive_button_canceled">"Повторен опит за потвърждаване"</string>
+  <string name="screen_session_verification_positive_button_initial">"Готов съм"</string>
+  <string name="screen_session_verification_positive_button_verifying_ongoing">"В очакване на съвпадение"</string>
+  <string name="screen_session_verification_ready_subtitle">"Сравнете уникален набор от емоджита."</string>
+  <string name="screen_session_verification_they_dont_match">"Те не съвпадат"</string>
+  <string name="screen_session_verification_they_match">"Те съвпадат"</string>
+  <string name="screen_session_verification_waiting_to_accept_subtitle">"Приемете заявката, за да започнете процеса на потвърждаване в другата си сесия, за да продължите."</string>
+  <string name="screen_session_verification_waiting_to_accept_title">"В очакване на приемане на заявка"</string>
+</resources>

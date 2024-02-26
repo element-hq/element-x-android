@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <plurals name="screen_app_lock_subtitle_wrong_pin">
-    <item quantity="other">"PIN 碼錯誤。您還有 %1$d 次機會"</item>
-  </plurals>
   <string name="screen_app_lock_biometric_authentication">"生物辨識認證"</string>
   <string name="screen_app_lock_biometric_unlock">"生物辨識解鎖"</string>
   <string name="screen_app_lock_biometric_unlock_title_android">"使用生物辨識解鎖"</string>
@@ -20,6 +17,9 @@
   <string name="screen_app_lock_setup_pin_mismatch_dialog_content">"請輸入相同的 PIN 碼兩次"</string>
   <string name="screen_app_lock_setup_pin_mismatch_dialog_title">"PIN 碼不一樣"</string>
   <string name="screen_app_lock_signout_alert_title">"您即將登出"</string>
+  <plurals name="screen_app_lock_subtitle_wrong_pin">
+    <item quantity="other">"PIN 碼錯誤。您還有 %1$d 次機會"</item>
+  </plurals>
   <string name="screen_app_lock_use_biometric_android">"使用生物辨識"</string>
   <string name="screen_app_lock_use_pin_android">"使用 PIN 碼"</string>
   <string name="screen_signout_in_progress_dialog_content">"正在登出…"</string>

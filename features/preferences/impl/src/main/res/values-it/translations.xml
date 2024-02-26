@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_advanced_settings_developer_mode">"Modalità sviluppatore"</string>
+  <string name="screen_advanced_settings_developer_mode_description">"Attiva per avere accesso a caratteristiche e funzionalità per sviluppatori."</string>
   <string name="screen_advanced_settings_element_call_base_url">"URL base di Element Call personalizzato"</string>
   <string name="screen_advanced_settings_element_call_base_url_description">"Imposta un URL di base personalizzato per Element Call."</string>
   <string name="screen_advanced_settings_element_call_base_url_validation_error">"URL non valido, assicurati di includere il protocollo (http/https) e l\'indirizzo corretto."</string>
-  <string name="screen_advanced_settings_developer_mode">"Modalità sviluppatore"</string>
-  <string name="screen_advanced_settings_developer_mode_description">"Attiva per avere accesso a caratteristiche e funzionalità per sviluppatori."</string>
   <string name="screen_advanced_settings_rich_text_editor_description">"Disattiva l\'editor in rich text per digitare Markdown manualmente."</string>
   <string name="screen_advanced_settings_send_read_receipts">"Conferme di lettura"</string>
   <string name="screen_advanced_settings_send_read_receipts_description">"Se disattivato, le tue conferme di lettura non verranno inviate a nessuno. Riceverai comunque conferme di lettura da altri utenti."</string>
+  <string name="screen_advanced_settings_share_presence">"Condividi presenza online"</string>
+  <string name="screen_advanced_settings_share_presence_description">"Se disattivato, non potrai inviare o ricevere ricevute di lettura o notifiche di digitazione."</string>
   <string name="screen_advanced_settings_view_source_description">"Attiva l\'opzione per visualizzare il sorgente del messaggio nella linea temporale."</string>
   <string name="screen_edit_profile_display_name">"Nome da mostrare"</string>
   <string name="screen_edit_profile_display_name_placeholder">"Il tuo nome da mostrare"</string>

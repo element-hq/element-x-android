@@ -9,6 +9,7 @@
   <string name="screen_roomlist_empty_title">"Még nincsenek csevegések."</string>
   <string name="screen_roomlist_filter_favourites">"Kedvencek"</string>
   <string name="screen_roomlist_filter_low_priority">"Alacsony prioritás"</string>
+  <string name="screen_roomlist_filter_people">"Emberek"</string>
   <string name="screen_roomlist_filter_rooms">"Szobák"</string>
   <string name="screen_roomlist_filter_unreads">"Olvasatlan"</string>
   <string name="screen_roomlist_main_space_title">"Összes csevegés"</string>
@@ -16,5 +17,4 @@
   <string name="screen_roomlist_mark_as_unread">"Megjelölés olvasatlanként"</string>
   <string name="session_verification_banner_message">"Úgy tűnik, hogy új eszközt használ. Ellenőrizze egy másik eszközzel, hogy a továbbiakban elérje a titkosított üzeneteket."</string>
   <string name="session_verification_banner_title">"Ellenőrizze, hogy Ön az"</string>
-  <string name="screen_roomlist_filter_people">"Emberek"</string>
 </resources>

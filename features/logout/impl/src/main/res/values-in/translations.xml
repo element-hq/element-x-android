@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_signout_confirmation_dialog_content">"Apakah Anda yakin ingin keluar dari akun?"</string>
+  <string name="screen_signout_confirmation_dialog_submit">"Keluar dari akun"</string>
+  <string name="screen_signout_confirmation_dialog_title">"Keluar dari akun"</string>
   <string name="screen_signout_in_progress_dialog_content">"Mengeluarkan dari akun…"</string>
   <string name="screen_signout_key_backup_disabled_subtitle">"Anda akan keluar dari sesi terakhir Anda. Jika Anda keluar sekarang, Anda akan kehilangan akses ke pesan terenkripsi Anda."</string>
   <string name="screen_signout_key_backup_disabled_title">"Anda telah menonaktifkan pencadangan"</string>
@@ -8,11 +10,9 @@
   <string name="screen_signout_key_backup_offline_title">"Kunci Anda masih dicadangkan"</string>
   <string name="screen_signout_key_backup_ongoing_subtitle">"Mohon tunggu hingga proses ini selesai sebelum keluar."</string>
   <string name="screen_signout_key_backup_ongoing_title">"Kunci Anda masih dicadangkan"</string>
+  <string name="screen_signout_preference_item">"Keluar dari akun"</string>
   <string name="screen_signout_recovery_disabled_subtitle">"Anda akan keluar dari sesi Anda yang terakhir. Jika Anda keluar sekarang, Anda akan kehilangan akses ke pesan terenkripsi Anda."</string>
   <string name="screen_signout_recovery_disabled_title">"Pemulihan belum disiapkan"</string>
   <string name="screen_signout_save_recovery_key_subtitle">"Anda akan keluar dari sesi terakhir Anda. Jika Anda keluar sekarang, Anda mungkin kehilangan akses ke pesan terenkripsi Anda."</string>
   <string name="screen_signout_save_recovery_key_title">"Apakah Anda sudah menyimpan kunci pemulihan Anda?"</string>
-  <string name="screen_signout_confirmation_dialog_submit">"Keluar dari akun"</string>
-  <string name="screen_signout_confirmation_dialog_title">"Keluar dari akun"</string>
-  <string name="screen_signout_preference_item">"Keluar dari akun"</string>
 </resources>

@@ -61,8 +61,9 @@ import io.element.android.features.verifysession.impl.VerifySelfSessionState.Ver
 @Composable
 fun VerifySelfSessionView(
     state: VerifySelfSessionState,
-    modifier: Modifier = Modifier,
+    onEnterRecoveryKey: () -> Unit,
     goBack: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     fun goBackAndCancelIfNeeded() {
         state.eventSink(VerifySelfSessionViewEvents.CancelAndClose)
@@ -85,7 +86,11 @@ fun VerifySelfSessionView(
         },
         footer = {
             if (buttonsVisible) {
-                BottomMenu(screenState = state, goBack = ::goBackAndCancelIfNeeded)
+                BottomMenu(
+                    screenState = state,
+                    goBack = ::goBackAndCancelIfNeeded,
+                    onEnterRecoveryKey = onEnterRecoveryKey
+                )
             }
         }
     ) {
@@ -96,13 +101,13 @@ fun VerifySelfSessionView(
 @Composable
 private fun HeaderContent(verificationFlowStep: FlowStep) {
     val iconResourceId = when (verificationFlowStep) {
-        FlowStep.Initial -> R.drawable.ic_verification_devices
+        is FlowStep.Initial -> R.drawable.ic_verification_devices
         FlowStep.Canceled -> R.drawable.ic_verification_warning
         FlowStep.AwaitingOtherDeviceResponse -> R.drawable.ic_verification_waiting
         FlowStep.Ready, is FlowStep.Verifying, FlowStep.Completed -> R.drawable.ic_verification_emoji
     }
     val titleTextId = when (verificationFlowStep) {
-        FlowStep.Initial -> R.string.screen_session_verification_open_existing_session_title
+        is FlowStep.Initial -> R.string.screen_session_verification_open_existing_session_title
         FlowStep.Canceled -> CommonStrings.common_verification_cancelled
         FlowStep.AwaitingOtherDeviceResponse -> R.string.screen_session_verification_waiting_to_accept_title
         FlowStep.Ready,
@@ -113,7 +118,7 @@ private fun HeaderContent(verificationFlowStep: FlowStep) {
         }
     }
     val subtitleTextId = when (verificationFlowStep) {
-        FlowStep.Initial -> R.string.screen_session_verification_open_existing_session_subtitle
+        is FlowStep.Initial -> R.string.screen_session_verification_open_existing_session_subtitle
         FlowStep.Canceled -> R.string.screen_session_verification_cancelled_subtitle
         FlowStep.AwaitingOtherDeviceResponse -> R.string.screen_session_verification_waiting_to_accept_subtitle
         FlowStep.Ready -> R.string.screen_session_verification_ready_subtitle
@@ -136,7 +141,7 @@ private fun HeaderContent(verificationFlowStep: FlowStep) {
 private fun Content(flowState: FlowStep) {
     Column(Modifier.fillMaxHeight(), verticalArrangement = Arrangement.Center) {
         when (flowState) {
-            FlowStep.Initial, FlowStep.Ready, FlowStep.Canceled, FlowStep.Completed -> Unit
+            is FlowStep.Initial, FlowStep.Ready, FlowStep.Canceled, FlowStep.Completed -> Unit
             FlowStep.AwaitingOtherDeviceResponse -> ContentWaiting()
             is FlowStep.Verifying -> ContentVerifying(flowState)
         }
@@ -203,13 +208,17 @@ private fun EmojiItemView(emoji: VerificationEmoji, modifier: Modifier = Modifie
 }
 
 @Composable
-private fun BottomMenu(screenState: VerifySelfSessionState, goBack: () -> Unit) {
+private fun BottomMenu(
+    screenState: VerifySelfSessionState,
+    onEnterRecoveryKey: () -> Unit,
+    goBack: () -> Unit,
+) {
     val verificationViewState = screenState.verificationFlowStep
     val eventSink = screenState.eventSink
 
     val isVerifying = (verificationViewState as? FlowStep.Verifying)?.state is AsyncData.Loading<Unit>
     val positiveButtonTitle = when (verificationViewState) {
-        FlowStep.Initial -> R.string.screen_session_verification_positive_button_initial
+        is FlowStep.Initial -> R.string.screen_session_verification_positive_button_initial
         FlowStep.Canceled -> R.string.screen_session_verification_positive_button_canceled
         is FlowStep.Verifying -> {
             if (isVerifying) {
@@ -222,7 +231,7 @@ private fun BottomMenu(screenState: VerifySelfSessionState, goBack: () -> Unit) 
         else -> null
     }
     val negativeButtonTitle = when (verificationViewState) {
-        FlowStep.Initial -> CommonStrings.action_cancel
+        is FlowStep.Initial -> CommonStrings.action_cancel
         FlowStep.Canceled -> CommonStrings.action_cancel
         is FlowStep.Verifying -> R.string.screen_session_verification_they_dont_match
         else -> null
@@ -230,7 +239,7 @@ private fun BottomMenu(screenState: VerifySelfSessionState, goBack: () -> Unit) 
     val negativeButtonEnabled = !isVerifying
 
     val positiveButtonEvent = when (verificationViewState) {
-        FlowStep.Initial -> VerifySelfSessionViewEvents.RequestVerification
+        is FlowStep.Initial -> VerifySelfSessionViewEvents.RequestVerification
         FlowStep.Ready -> VerifySelfSessionViewEvents.StartSasVerification
         is FlowStep.Verifying -> if (!isVerifying) VerifySelfSessionViewEvents.ConfirmVerification else null
         FlowStep.Canceled -> VerifySelfSessionViewEvents.Restart
@@ -263,6 +272,17 @@ private fun BottomMenu(screenState: VerifySelfSessionState, goBack: () -> Unit) 
                 enabled = negativeButtonEnabled,
             )
         }
+        if (verificationViewState is FlowStep.Initial && verificationViewState.canEnterRecoveryKey) {
+            Text(
+                text = stringResource(id = CommonStrings.common_or),
+                color = ElementTheme.colors.textSecondary,
+            )
+            TextButton(
+                text = stringResource(R.string.screen_session_verification_enter_recovery_key),
+                modifier = Modifier.fillMaxWidth(),
+                onClick = onEnterRecoveryKey,
+            )
+        }
     }
 }
 
@@ -271,6 +291,7 @@ private fun BottomMenu(screenState: VerifySelfSessionState, goBack: () -> Unit) 
 internal fun VerifySelfSessionViewPreview(@PreviewParameter(VerifySelfSessionStateProvider::class) state: VerifySelfSessionState) = ElementPreview {
     VerifySelfSessionView(
         state = state,
+        onEnterRecoveryKey = {},
         goBack = {},
     )
 }

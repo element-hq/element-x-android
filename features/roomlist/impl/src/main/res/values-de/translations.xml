@@ -9,12 +9,12 @@
   <string name="screen_roomlist_empty_title">"Noch keine Chats."</string>
   <string name="screen_roomlist_filter_favourites">"Favoriten"</string>
   <string name="screen_roomlist_filter_low_priority">"Niedrige Priorität"</string>
+  <string name="screen_roomlist_filter_people">"Personen"</string>
   <string name="screen_roomlist_filter_rooms">"Räume"</string>
   <string name="screen_roomlist_filter_unreads">"Ungelesen"</string>
-  <string name="screen_roomlist_main_space_title">"Alle Chats"</string>
+  <string name="screen_roomlist_main_space_title">"Chats"</string>
   <string name="screen_roomlist_mark_as_read">"Als gelesen markieren"</string>
   <string name="screen_roomlist_mark_as_unread">"Als ungelesen markieren"</string>
   <string name="session_verification_banner_message">"Es sieht aus, als würdest du ein neues Gerät verwenden. Verifiziere es mit einem anderen Gerät, damit du auf deine verschlüsselten Nachrichten zugreifen kannst."</string>
   <string name="session_verification_banner_title">"Bestätige deine Identität"</string>
-  <string name="screen_roomlist_filter_people">"Personen"</string>
 </resources>

@@ -42,6 +42,7 @@ class MainActivity : ComponentActivity() {
         val baseDirectory = File(applicationContext.filesDir, "sessions")
         val userAgentProvider = SimpleUserAgentProvider("MinimalSample")
         val sessionStore = InMemorySessionStore()
+        val userCertificatesProvider = NoOpUserCertificatesProvider()
         RustMatrixAuthenticationService(
             baseDirectory = baseDirectory,
             coroutineDispatchers = Singleton.coroutineDispatchers,
@@ -54,10 +55,12 @@ class MainActivity : ComponentActivity() {
                 coroutineDispatchers = Singleton.coroutineDispatchers,
                 sessionStore = sessionStore,
                 userAgentProvider = userAgentProvider,
+                userCertificatesProvider = userCertificatesProvider,
                 clock = DefaultSystemClock(),
             ),
             passphraseGenerator = NullPassphraseGenerator(),
             buildMeta = Singleton.buildMeta,
+            userCertificatesProvider = userCertificatesProvider,
         )
     }
 

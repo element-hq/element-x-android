@@ -17,7 +17,9 @@
 package io.element.android.features.roomdetails.impl
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import io.element.android.features.leaveroom.api.LeaveRoomState
 import io.element.android.features.leaveroom.api.aLeaveRoomState
+import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsState
 import io.element.android.features.roomdetails.impl.members.details.aRoomMemberDetailsState
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.RoomMember
@@ -29,18 +31,18 @@ open class RoomDetailsStateProvider : PreviewParameterProvider<RoomDetailsState>
     override val values: Sequence<RoomDetailsState>
         get() = sequenceOf(
             aRoomDetailsState(),
-            aRoomDetailsState().copy(roomTopic = RoomTopicState.Hidden),
-            aRoomDetailsState().copy(roomTopic = RoomTopicState.CanAddTopic),
-            aRoomDetailsState().copy(isEncrypted = false),
-            aRoomDetailsState().copy(roomAlias = null),
-            aDmRoomDetailsState().copy(roomName = "Daniel"),
-            aDmRoomDetailsState(isDmMemberIgnored = true).copy(roomName = "Daniel"),
-            aRoomDetailsState().copy(canInvite = true),
-            aRoomDetailsState().copy(isFavorite = true),
-            aRoomDetailsState().copy(
+            aRoomDetailsState(roomTopic = RoomTopicState.Hidden),
+            aRoomDetailsState(roomTopic = RoomTopicState.CanAddTopic),
+            aRoomDetailsState(isEncrypted = false),
+            aRoomDetailsState(roomAlias = null),
+            aDmRoomDetailsState(),
+            aDmRoomDetailsState(isDmMemberIgnored = true),
+            aRoomDetailsState(canInvite = true),
+            aRoomDetailsState(isFavorite = true),
+            aRoomDetailsState(
                 canEdit = true,
                 // Also test the roomNotificationSettings ALL_MESSAGES in the same screenshot. Icon 'Mute' should be displayed
-                roomNotificationSettings = RoomNotificationSettings(mode = RoomNotificationMode.ALL_MESSAGES, isDefault = true)
+                roomNotificationSettings = aRoomNotificationSettings(mode = RoomNotificationMode.ALL_MESSAGES, isDefault = true)
             ),
             // Add other state here
         )
@@ -68,32 +70,61 @@ fun aDmRoomMember(
     role = role,
 )
 
-fun aRoomDetailsState() = RoomDetailsState(
-    roomId = "a room id",
-    roomName = "Marketing",
-    roomAlias = "#marketing:domain.com",
-    roomAvatarUrl = null,
-    roomTopic = RoomTopicState.ExistingTopic(
+fun aRoomDetailsState(
+    roomId: String = "a room id",
+    roomName: String = "Marketing",
+    roomAlias: String? = "#marketing:domain.com",
+    roomAvatarUrl: String? = null,
+    roomTopic: RoomTopicState = RoomTopicState.ExistingTopic(
         "Welcome to #marketing, home of the Marketing team " +
             "|| WIKI PAGE: https://domain.org/wiki/Marketing " +
             "|| MAIL iki/Marketing " +
             "|| MAI iki/Marketing " +
             "|| MAI iki/Marketing..."
     ),
-    memberCount = 32,
-    isEncrypted = true,
-    canInvite = false,
-    canEdit = false,
-    canShowNotificationSettings = true,
-    roomType = RoomDetailsType.Room,
-    roomMemberDetailsState = null,
-    leaveRoomState = aLeaveRoomState(),
-    roomNotificationSettings = RoomNotificationSettings(mode = RoomNotificationMode.MUTE, isDefault = false),
-    isFavorite = false,
-    eventSink = {}
+    memberCount: Long = 32,
+    isEncrypted: Boolean = true,
+    canInvite: Boolean = false,
+    canEdit: Boolean = false,
+    canShowNotificationSettings: Boolean = true,
+    roomType: RoomDetailsType = RoomDetailsType.Room,
+    roomMemberDetailsState: RoomMemberDetailsState? = null,
+    leaveRoomState: LeaveRoomState = aLeaveRoomState(),
+    roomNotificationSettings: RoomNotificationSettings = aRoomNotificationSettings(),
+    isFavorite: Boolean = false,
+    eventSink: (RoomDetailsEvent) -> Unit = {},
+) = RoomDetailsState(
+    roomId = roomId,
+    roomName = roomName,
+    roomAlias = roomAlias,
+    roomAvatarUrl = roomAvatarUrl,
+    roomTopic = roomTopic,
+    memberCount = memberCount,
+    isEncrypted = isEncrypted,
+    canInvite = canInvite,
+    canEdit = canEdit,
+    canShowNotificationSettings = canShowNotificationSettings,
+    roomType = roomType,
+    roomMemberDetailsState = roomMemberDetailsState,
+    leaveRoomState = leaveRoomState,
+    roomNotificationSettings = roomNotificationSettings,
+    isFavorite = isFavorite,
+    eventSink = eventSink
 )
 
-fun aDmRoomDetailsState(isDmMemberIgnored: Boolean = false) = aRoomDetailsState().copy(
+fun aRoomNotificationSettings(
+    mode: RoomNotificationMode = RoomNotificationMode.MUTE,
+    isDefault: Boolean = false,
+) = RoomNotificationSettings(
+    mode = mode,
+    isDefault = isDefault
+)
+
+fun aDmRoomDetailsState(
+    isDmMemberIgnored: Boolean = false,
+    roomName: String = "Daniel",
+) = aRoomDetailsState(
+    roomName = roomName,
     roomType = RoomDetailsType.Dm(aDmRoomMember(isIgnored = isDmMemberIgnored)),
     roomMemberDetailsState = aRoomMemberDetailsState()
 )

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="rich_text_editor_a11y_add_attachment">"Додати вкладення"</string>
+  <string name="rich_text_editor_bullet_list">"Перемкнути маркований список"</string>
+  <string name="rich_text_editor_close_formatting_options">"Закрити параметри форматування"</string>
+  <string name="rich_text_editor_code_block">"Перемкнути блок коду"</string>
+  <string name="rich_text_editor_composer_placeholder">"Повідомлення…"</string>
+  <string name="rich_text_editor_create_link">"Створити посилання"</string>
+  <string name="rich_text_editor_edit_link">"Редагувати посилання"</string>
+  <string name="rich_text_editor_format_bold">"Жирний формат"</string>
+  <string name="rich_text_editor_format_italic">"Курсивний формат"</string>
+  <string name="rich_text_editor_format_strikethrough">"Застосувати формат закреслення"</string>
+  <string name="rich_text_editor_format_underline">"Застосувати формат підкреслення"</string>
+  <string name="rich_text_editor_full_screen_toggle">"Перемкнути повноекранний режим"</string>
+  <string name="rich_text_editor_indent">"Відступ"</string>
+  <string name="rich_text_editor_inline_code">"Застосувати вбудований формат коду"</string>
+  <string name="rich_text_editor_link">"Установити посилання"</string>
+  <string name="rich_text_editor_numbered_list">"Перемкнути нумерований список"</string>
+  <string name="rich_text_editor_open_compose_options">"Відкрити параметри складання"</string>
+  <string name="rich_text_editor_quote">"Перемкнути цитату"</string>
+  <string name="rich_text_editor_remove_link">"Видалити посилання"</string>
+  <string name="rich_text_editor_unindent">"Без відступу"</string>
+  <string name="rich_text_editor_url_placeholder">"Посилання"</string>
+  <string name="screen_room_voice_message_tooltip">"Тримати, щоб записати"</string>
+</resources>

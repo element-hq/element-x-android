@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_signout_confirmation_dialog_content">"Сигурни ли сте, че искате да излезете?"</string>
+  <string name="screen_signout_confirmation_dialog_submit">"Изход"</string>
+  <string name="screen_signout_confirmation_dialog_title">"Изход"</string>
+  <string name="screen_signout_in_progress_dialog_content">"Излизане…"</string>
+  <string name="screen_signout_preference_item">"Изход"</string>
+</resources>

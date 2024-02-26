@@ -22,12 +22,13 @@ From root dir of the project
 
 ```shell
 maestro test \
-    -e APP_ID=io.element.android.x.debug \
-    -e USERNAME=user1 \
-    -e PASSWORD=123 \
-    -e ROOM_NAME="MyRoom" \
-    -e INVITEE1_MXID=user2 \
-    -e INVITEE2_MXID=user3 \
+    -e MAESTRO_APP_ID=io.element.android.x.debug \
+    -e MAESTRO_USERNAME=user1 \
+    -e MAESTRO_PASSWORD=123 \
+    -e MAESTRO_RECOVERY_KEY=ABC \
+    -e MAESTRO_ROOM_NAME="MyRoom" \
+    -e MAESTRO_INVITEE1_MXID=user2 \
+    -e MAESTRO_INVITEE2_MXID=user3 \
     .maestro/allTests.yaml
 ```
 

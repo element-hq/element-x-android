@@ -12,6 +12,6 @@
   <string name="screen_bug_report_include_logs">"Разрешить ведение журналов"</string>
   <string name="screen_bug_report_include_screenshot">"Отправить снимок экрана"</string>
   <string name="screen_bug_report_logs_description">"Чтобы убедиться, что все работает правильно, в сообщение будут включены журналы. Чтобы отправить сообщение без журналов, отключите эту настройку."</string>
-  <string name="screen_bug_report_view_logs">"Просмотр журналов"</string>
   <string name="screen_bug_report_rash_logs_alert_title">"При последнем использовании %1$s произошел сбой. Хотите поделиться отчетом о сбое?"</string>
+  <string name="screen_bug_report_view_logs">"Просмотр журналов"</string>
 </resources>

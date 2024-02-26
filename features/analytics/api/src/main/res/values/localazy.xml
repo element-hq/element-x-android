@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_analytics_settings_share_data">"Share analytics data"</string>
   <string name="screen_analytics_settings_help_us_improve">"Share anonymous usage data to help us identify issues."</string>
   <string name="screen_analytics_settings_read_terms">"You can read all our terms %1$s."</string>
   <string name="screen_analytics_settings_read_terms_content_link">"here"</string>
+  <string name="screen_analytics_settings_share_data">"Share analytics data"</string>
 </resources>

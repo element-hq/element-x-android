@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="dialog_permission_notification">"För att låta applikationen visa aviseringar, vänligen bevilja behörighet i systeminställningarna."</string>
+</resources>

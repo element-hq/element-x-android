@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <plurals name="screen_room_member_list_header_title">
-    <item quantity="other">"%1$d 位夥伴"</item>
-  </plurals>
+  <string name="screen_dm_details_block_alert_action">"封鎖"</string>
+  <string name="screen_dm_details_block_user">"封鎖使用者"</string>
+  <string name="screen_dm_details_unblock_alert_action">"解除封鎖"</string>
+  <string name="screen_dm_details_unblock_user">"解除封鎖使用者"</string>
   <string name="screen_notification_settings_edit_failed_updating_default_mode">"更新通知設定時發生錯誤。"</string>
   <string name="screen_room_details_add_topic_title">"新增主題"</string>
   <string name="screen_room_details_already_a_member">"已是成員"</string>
@@ -14,11 +15,18 @@
   <string name="screen_room_details_error_muting">"無法關閉聊天室通知，請再試一次。"</string>
   <string name="screen_room_details_error_unmuting">"無法開啟聊天室通知，請再試一次。"</string>
   <string name="screen_room_details_invite_people_title">"邀請夥伴"</string>
+  <string name="screen_room_details_leave_room_title">"離開聊天室"</string>
   <string name="screen_room_details_notification_mode_custom">"自訂"</string>
   <string name="screen_room_details_notification_mode_default">"預設"</string>
   <string name="screen_room_details_notification_title">"通知"</string>
+  <string name="screen_room_details_room_name_label">"聊天室名稱"</string>
+  <string name="screen_room_details_security_title">"安全性"</string>
   <string name="screen_room_details_share_room_title">"分享聊天室"</string>
+  <string name="screen_room_details_topic_title">"主題"</string>
   <string name="screen_room_details_updating_room">"正在更新聊天室…"</string>
+  <plurals name="screen_room_member_list_header_title">
+    <item quantity="other">"%1$d 位夥伴"</item>
+  </plurals>
   <string name="screen_room_member_list_pending_header_title">"待定"</string>
   <string name="screen_room_member_list_room_members_header_title">"聊天室成員"</string>
   <string name="screen_room_notification_settings_default_setting_footnote_content_link">"全域設定"</string>
@@ -26,13 +34,5 @@
   <string name="screen_room_notification_settings_error_restoring_default">"無法重設為預設模式，請再試一次。"</string>
   <string name="screen_room_notification_settings_error_setting_mode">"無法設定模式，請再試一次。"</string>
   <string name="screen_room_notification_settings_mode_all_messages">"所有訊息"</string>
-  <string name="screen_dm_details_block_alert_action">"封鎖"</string>
-  <string name="screen_dm_details_block_user">"封鎖使用者"</string>
-  <string name="screen_dm_details_unblock_alert_action">"解除封鎖"</string>
-  <string name="screen_dm_details_unblock_user">"解除封鎖使用者"</string>
-  <string name="screen_room_details_leave_room_title">"離開聊天室"</string>
-  <string name="screen_room_details_room_name_label">"聊天室名稱"</string>
-  <string name="screen_room_details_security_title">"安全性"</string>
-  <string name="screen_room_details_topic_title">"主題"</string>
   <string name="screen_room_notification_settings_mode_mentions_and_keywords">"僅限提及與關鍵字"</string>
 </resources>

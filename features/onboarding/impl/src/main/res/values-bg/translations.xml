@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_onboarding_sign_in_manually">"Влизане ръчно"</string>
+  <string name="screen_onboarding_sign_in_with_qr_code">"Влизане с QR код"</string>
+  <string name="screen_onboarding_sign_up">"Създаване на акаунт"</string>
+  <string name="screen_onboarding_welcome_message">"Добре дошли в най-бързия Element досега. Супер зареден за скорост и простота."</string>
+  <string name="screen_onboarding_welcome_subtitle">"Добре дошли в %1$s. Супер зареден за скорост и простота."</string>
+  <string name="screen_onboarding_welcome_title">"Бъдете в стихията си"</string>
+</resources>

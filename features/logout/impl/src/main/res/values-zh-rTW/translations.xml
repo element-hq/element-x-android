@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_signout_confirmation_dialog_content">"您確定要登出嗎？"</string>
-  <string name="screen_signout_in_progress_dialog_content">"正在登出…"</string>
   <string name="screen_signout_confirmation_dialog_submit">"登出"</string>
   <string name="screen_signout_confirmation_dialog_title">"登出"</string>
+  <string name="screen_signout_in_progress_dialog_content">"正在登出…"</string>
   <string name="screen_signout_preference_item">"登出"</string>
 </resources>

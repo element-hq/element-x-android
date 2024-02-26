@@ -27,23 +27,24 @@ import io.element.android.libraries.matrix.api.sync.SyncState
 import io.element.android.libraries.matrix.impl.sync.RustSyncService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.currentCoroutineContext
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.withContext
-import org.matrix.rustcomponents.sdk.BackupStateListener
 import org.matrix.rustcomponents.sdk.BackupSteadyStateListener
 import org.matrix.rustcomponents.sdk.Client
 import org.matrix.rustcomponents.sdk.EnableRecoveryProgressListener
 import org.matrix.rustcomponents.sdk.Encryption
-import org.matrix.rustcomponents.sdk.RecoveryStateListener
-import org.matrix.rustcomponents.sdk.BackupState as RustBackupState
 import org.matrix.rustcomponents.sdk.BackupUploadState as RustBackupUploadState
 import org.matrix.rustcomponents.sdk.EnableRecoveryProgress as RustEnableRecoveryProgress
-import org.matrix.rustcomponents.sdk.RecoveryState as RustRecoveryState
 import org.matrix.rustcomponents.sdk.SteadyStateException as RustSteadyStateException
 
 internal class RustEncryptionService(
@@ -54,16 +55,12 @@ internal class RustEncryptionService(
 ) : EncryptionService {
     private val service: Encryption = client.encryption()
 
-    private val backupStateMapper = BackupStateMapper()
-    private val recoveryStateMapper = RecoveryStateMapper()
     private val enableRecoveryProgressMapper = EnableRecoveryProgressMapper()
     private val backupUploadStateMapper = BackupUploadStateMapper()
     private val steadyStateExceptionMapper = SteadyStateExceptionMapper()
 
-    private val backupStateFlow = MutableStateFlow(service.backupState().let(backupStateMapper::map))
-
     override val backupStateStateFlow = combine(
-        backupStateFlow,
+        service.backupStateFlow(),
         syncService.syncState,
     ) { backupState, syncState ->
         if (syncState == SyncState.Running) {
@@ -73,10 +70,8 @@ internal class RustEncryptionService(
         }
     }.stateIn(sessionCoroutineScope, SharingStarted.Eagerly, BackupState.WAITING_FOR_SYNC)
 
-    private val recoveryStateFlow: MutableStateFlow<RecoveryState> = MutableStateFlow(service.recoveryState().let(recoveryStateMapper::map))
-
     override val recoveryStateStateFlow = combine(
-        recoveryStateFlow,
+        service.recoveryStateFlow(),
         syncService.syncState,
     ) { recoveryState, syncState ->
         if (syncState == SyncState.Running) {
@@ -88,22 +83,21 @@ internal class RustEncryptionService(
 
     override val enableRecoveryProgressStateFlow: MutableStateFlow<EnableRecoveryProgress> = MutableStateFlow(EnableRecoveryProgress.Starting)
 
-    fun start() {
-        service.backupStateListener(object : BackupStateListener {
-            override fun onUpdate(status: RustBackupState) {
-                backupStateFlow.value = backupStateMapper.map(status)
-            }
-        })
-
-        service.recoveryStateListener(object : RecoveryStateListener {
-            override fun onUpdate(status: RustRecoveryState) {
-                recoveryStateFlow.value = recoveryStateMapper.map(status)
-            }
-        })
+    /**
+     * Check if the session is the last session every 5 seconds.
+     * TODO This is a temporary workaround, when we will have a way to observe
+     * the sessions, this code will have to be updated.
+     */
+    override val isLastDevice: StateFlow<Boolean> = flow {
+        while (currentCoroutineContext().isActive) {
+            val result = isLastDevice().getOrDefault(false)
+            emit(result)
+            delay(5_000)
+        }
     }
+        .stateIn(sessionCoroutineScope, SharingStarted.Eagerly, false)
 
     fun destroy() {
-        // No way to remove the listeners...
         service.destroy()
     }
 
@@ -173,7 +167,7 @@ internal class RustEncryptionService(
         }
     }
 
-    override suspend fun isLastDevice(): Result<Boolean> = withContext(dispatchers.io) {
+    private suspend fun isLastDevice(): Result<Boolean> = withContext(dispatchers.io) {
         runCatching {
             service.isLastDevice()
         }.mapFailure {

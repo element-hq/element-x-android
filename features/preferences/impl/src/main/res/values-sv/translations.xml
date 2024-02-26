@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_edit_profile_display_name">"Visningsnamn"</string>
+  <string name="screen_edit_profile_display_name_placeholder">"Ditt visningsnamn"</string>
+  <string name="screen_edit_profile_error">"Ett okänt fel påträffades och informationen kunde inte ändras."</string>
+  <string name="screen_edit_profile_error_title">"Kunde inte uppdatera profilen"</string>
+  <string name="screen_edit_profile_title">"Redigera profil"</string>
+  <string name="screen_edit_profile_updating_details">"Uppdaterar profil …"</string>
+  <string name="screen_notification_settings_additional_settings_section_title">"Ytterligare inställningar"</string>
+  <string name="screen_notification_settings_calls_label">"Ljud- och videosamtal"</string>
+  <string name="screen_notification_settings_configuration_mismatch">"Konfigurationen matchar inte"</string>
+  <string name="screen_notification_settings_configuration_mismatch_description">"Vi har förenklat aviseringsinställningarna för att göra alternativen enklare att hitta. Vissa anpassade inställningar som du har valt tidigare visas inte här, men de är fortfarande aktiva.
+
+Om du fortsätter kan vissa av dina inställningar ändras."</string>
+  <string name="screen_notification_settings_direct_chats">"Direktchattar"</string>
+  <string name="screen_notification_settings_edit_custom_settings_section_title">"Anpassad inställning per chatt"</string>
+  <string name="screen_notification_settings_edit_failed_updating_default_mode">"Ett fel uppstod vid uppdatering av aviseringsinställningen."</string>
+  <string name="screen_notification_settings_edit_mode_all_messages">"Alla meddelanden"</string>
+  <string name="screen_notification_settings_edit_mode_mentions_and_keywords">"Endast omnämnanden och nyckelord"</string>
+  <string name="screen_notification_settings_edit_screen_direct_section_header">"På direktchattar, meddela mig för"</string>
+  <string name="screen_notification_settings_edit_screen_group_section_header">"På gruppchattar, meddela mig för"</string>
+  <string name="screen_notification_settings_enable_notifications">"Aktivera aviseringar på den här enheten"</string>
+  <string name="screen_notification_settings_failed_fixing_configuration">"Konfigurationen har inte korrigerats, vänligen pröva igen."</string>
+  <string name="screen_notification_settings_group_chats">"Gruppchattar"</string>
+  <string name="screen_notification_settings_mentions_section_title">"Omnämnanden"</string>
+  <string name="screen_notification_settings_mode_all">"Alla"</string>
+  <string name="screen_notification_settings_mode_mentions">"Omnämnanden"</string>
+  <string name="screen_notification_settings_notification_section_title">"Meddela mig för"</string>
+  <string name="screen_notification_settings_room_mention_label">"Meddela mig på @room"</string>
+  <string name="screen_notification_settings_system_notifications_action_required">"För att få aviseringar, vänligen ändra dina %1$s."</string>
+  <string name="screen_notification_settings_system_notifications_action_required_content_link">"systeminställningar"</string>
+  <string name="screen_notification_settings_system_notifications_turned_off">"Systemaviseringar avstängda"</string>
+  <string name="screen_notification_settings_title">"Aviseringar"</string>
+</resources>

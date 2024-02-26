@@ -23,8 +23,6 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.logout.api.direct.DirectLogoutEvents
 import io.element.android.libraries.architecture.AsyncAction
-import io.element.android.libraries.featureflag.api.FeatureFlags
-import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.encryption.BackupUploadState
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
@@ -57,14 +55,13 @@ class DefaultDirectLogoutPresenterTest {
     fun `present - initial state - last session`() = runTest {
         val presenter = createDefaultDirectLogoutPresenter(
             encryptionService = FakeEncryptionService().apply {
-                givenIsLastDevice(true)
+                emitIsLastDevice(true)
             }
         )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            skipItems(2)
-            val initialState = awaitItem()
+            val initialState = awaitFirstItem()
             assertThat(initialState.canDoDirectSignOut).isFalse()
             assertThat(initialState.logoutAction).isEqualTo(AsyncAction.Uninitialized)
         }
@@ -84,8 +81,8 @@ class DefaultDirectLogoutPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            skipItems(2)
-            val initialState = awaitItem()
+            skipItems(1)
+            val initialState = awaitFirstItem()
             assertThat(initialState.canDoDirectSignOut).isFalse()
             assertThat(initialState.logoutAction).isEqualTo(AsyncAction.Uninitialized)
         }
@@ -180,7 +177,6 @@ class DefaultDirectLogoutPresenterTest {
     }
 
     private suspend fun <T> ReceiveTurbine<T>.awaitFirstItem(): T {
-        skipItems(1)
         return awaitItem()
     }
 
@@ -190,6 +186,5 @@ class DefaultDirectLogoutPresenterTest {
     ): DefaultDirectLogoutPresenter = DefaultDirectLogoutPresenter(
         matrixClient = matrixClient,
         encryptionService = encryptionService,
-        featureFlagService = FakeFeatureFlagService(mapOf(FeatureFlags.SecureStorage.key to true)),
     )
 }

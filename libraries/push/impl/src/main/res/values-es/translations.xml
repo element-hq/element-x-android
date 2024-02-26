@@ -4,20 +4,6 @@
   <string name="notification_channel_listening_for_events">"Esperando eventos"</string>
   <string name="notification_channel_noisy">"Notificaciones ruidosas"</string>
   <string name="notification_channel_silent">"Notificaciones silenciosas"</string>
-  <string name="notification_inline_reply_failed">"** No se ha podido enviar - por favor, abre la sala"</string>
-  <string name="notification_invitation_action_reject">"Rechazar"</string>
-  <string name="notification_invite_body">"Te invitó a chatear"</string>
-  <string name="notification_mentioned_you_body">"Te mencionó: %1$s"</string>
-  <string name="notification_new_messages">"Mensajes nuevos"</string>
-  <string name="notification_reaction_body">"Reaccionó con %1$s"</string>
-  <string name="notification_room_invite_body">"Te invitó a unirte a la sala"</string>
-  <string name="notification_sender_me">"Yo"</string>
-  <string name="notification_test_push_notification_content">"¡Estás viendo la notificación! ¡Haz clic en mí!"</string>
-  <string name="notification_ticker_text_dm">"%1$s: %2$s"</string>
-  <string name="notification_ticker_text_group">"%1$s: %2$s %3$s"</string>
-  <string name="notification_unread_notified_messages_and_invitation">"%1$s y %2$s"</string>
-  <string name="notification_unread_notified_messages_in_room">"%1$s en %2$s"</string>
-  <string name="notification_unread_notified_messages_in_room_and_invitation">"%1$s en %2$s y %3$s"</string>
   <plurals name="notification_compat_summary_line_for_room">
     <item quantity="one">"%1$s: %2$d mensaje"</item>
     <item quantity="other">"%1$s: %2$d mensajes"</item>
@@ -26,18 +12,35 @@
     <item quantity="one">"%d notificación"</item>
     <item quantity="other">"%d notificaciones"</item>
   </plurals>
+  <string name="notification_fallback_content">"Notificación"</string>
+  <string name="notification_inline_reply_failed">"** No se ha podido enviar - por favor, abre la sala"</string>
+  <string name="notification_invitation_action_join">"Unirse"</string>
+  <string name="notification_invitation_action_reject">"Rechazar"</string>
   <plurals name="notification_invitations">
     <item quantity="one">"%d invitación"</item>
     <item quantity="other">"%d invitaciones"</item>
   </plurals>
+  <string name="notification_invite_body">"Te invitó a chatear"</string>
+  <string name="notification_mentioned_you_body">"Te mencionó: %1$s"</string>
+  <string name="notification_new_messages">"Mensajes nuevos"</string>
   <plurals name="notification_new_messages_for_room">
     <item quantity="one">"%d mensaje nuevo"</item>
     <item quantity="other">"%d mensajes nuevos"</item>
   </plurals>
+  <string name="notification_reaction_body">"Reaccionó con %1$s"</string>
+  <string name="notification_room_action_quick_reply">"Respuesta rápida"</string>
+  <string name="notification_room_invite_body">"Te invitó a unirte a la sala"</string>
+  <string name="notification_sender_me">"Yo"</string>
+  <string name="notification_test_push_notification_content">"¡Estás viendo la notificación! ¡Haz clic en mí!"</string>
+  <string name="notification_ticker_text_dm">"%1$s: %2$s"</string>
+  <string name="notification_ticker_text_group">"%1$s: %2$s %3$s"</string>
   <plurals name="notification_unread_notified_messages">
     <item quantity="one">"%d mensaje notificado no leído"</item>
     <item quantity="other">"%d mensajes notificados no leídos"</item>
   </plurals>
+  <string name="notification_unread_notified_messages_and_invitation">"%1$s y %2$s"</string>
+  <string name="notification_unread_notified_messages_in_room">"%1$s en %2$s"</string>
+  <string name="notification_unread_notified_messages_in_room_and_invitation">"%1$s en %2$s y %3$s"</string>
   <plurals name="notification_unread_notified_messages_in_room_rooms">
     <item quantity="one">"%d sala"</item>
     <item quantity="other">"%d salas"</item>
@@ -46,7 +49,4 @@
   <string name="push_distributor_background_sync_android">"Sincronización en segundo plano"</string>
   <string name="push_distributor_firebase_android">"Servicios de Google"</string>
   <string name="push_no_valid_google_play_services_apk_android">"No se han encontrado Servicios de Google Play válidos. Es posible que las notificaciones no funcionen correctamente."</string>
-  <string name="notification_fallback_content">"Notificación"</string>
-  <string name="notification_invitation_action_join">"Unirse"</string>
-  <string name="notification_room_action_quick_reply">"Respuesta rápida"</string>
 </resources>

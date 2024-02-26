@@ -1,4 +1,4 @@
-appId: ${APP_ID}
+appId: ${MAESTRO_APP_ID}
 ---
 ## Check that all env variables required in the whole test suite are declared (to fail faster)
 - runScript: ./scripts/checkEnv.js

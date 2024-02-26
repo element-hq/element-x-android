@@ -28,6 +28,7 @@ import io.element.android.features.roomlist.impl.RoomListView
 import io.element.android.features.roomlist.impl.datasource.DefaultInviteStateDataSource
 import io.element.android.features.roomlist.impl.datasource.RoomListDataSource
 import io.element.android.features.roomlist.impl.datasource.RoomListRoomSummaryFactory
+import io.element.android.features.roomlist.impl.filters.RoomListFiltersPresenter
 import io.element.android.features.roomlist.impl.migration.MigrationScreenPresenter
 import io.element.android.features.roomlist.impl.migration.SharedPrefsMigrationScreenStore
 import io.element.android.features.roomlist.impl.search.RoomListSearchPresenter
@@ -90,7 +91,6 @@ class RoomListScreen(
     )
     private val presenter = RoomListPresenter(
         client = matrixClient,
-        sessionVerificationService = sessionVerificationService,
         networkMonitor = NetworkMonitorImpl(context, Singleton.appScope),
         snackbarDispatcher = SnackbarDispatcher(),
         inviteStateDataSource = DefaultInviteStateDataSource(matrixClient, DefaultSeenInvitesStore(context), coroutineDispatchers),
@@ -105,7 +105,6 @@ class RoomListScreen(
         indicatorService = DefaultIndicatorService(
             sessionVerificationService = sessionVerificationService,
             encryptionService = encryptionService,
-            featureFlagService = featureFlagService,
         ),
         featureFlagService = featureFlagService,
         migrationScreenPresenter = MigrationScreenPresenter(
@@ -121,6 +120,10 @@ class RoomListScreen(
             context = context,
             sessionId = matrixClient.sessionId,
             sessionCoroutineScope = Singleton.appScope
+        ),
+        filtersPresenter = RoomListFiltersPresenter(
+            roomListService = matrixClient.roomListService,
+            featureFlagService = featureFlagService,
         ),
         analyticsService = NoopAnalyticsService(),
     )
@@ -143,6 +146,7 @@ class RoomListScreen(
             onRoomClicked = ::onRoomClicked,
             onSettingsClicked = {},
             onVerifyClicked = {},
+            onConfirmRecoveryKeyClicked = {},
             onCreateRoomClicked = {},
             onInvitesClicked = {},
             onRoomSettingsClicked = {},

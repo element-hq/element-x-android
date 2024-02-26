@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="a11y_delete">"Hapus"</string>
+  <plurals name="a11y_digits_entered">
+    <item quantity="other">"%1$d digit dimasukkan"</item>
+  </plurals>
   <string name="a11y_hide_password">"Sembunyikan kata sandi"</string>
   <string name="a11y_jump_to_bottom">"Lompat ke bawah"</string>
   <string name="a11y_notifications_mentions_only">"Hanya sebutan"</string>
@@ -14,6 +17,9 @@
   <string name="a11y_react_with">"Bereaksi dengan %1$s"</string>
   <string name="a11y_react_with_other_emojis">"Reaksi dengan emoji lain"</string>
   <string name="a11y_read_receipts_multiple">"Dibaca oleh %1$s dan %2$s"</string>
+  <plurals name="a11y_read_receipts_multiple_with_others">
+    <item quantity="other">"Dibaca oleh %1$s dan %2$d lainnya"</item>
+  </plurals>
   <string name="a11y_read_receipts_single">"Dibaca oleh %1$s"</string>
   <string name="a11y_read_receipts_tap_to_show_all">"Ketuk untuk melihat semua"</string>
   <string name="a11y_remove_reaction_with">"Hapus reaksi dengan %1$s"</string>
@@ -58,6 +64,7 @@
   <string name="action_learn_more">"Pelajari lebih lanjut"</string>
   <string name="action_leave">"Tinggalkan"</string>
   <string name="action_leave_room">"Tinggalkan ruangan"</string>
+  <string name="action_load_more">"Muat lainnya"</string>
   <string name="action_manage_account">"Kelola akun"</string>
   <string name="action_manage_devices">"Kelola perangkat"</string>
   <string name="action_next">"Berikutnya"</string>
@@ -95,7 +102,6 @@
   <string name="action_try_again">"Coba lagi"</string>
   <string name="action_view_source">"Tampilkan sumber"</string>
   <string name="action_yes">"Ya"</string>
-  <string name="action_load_more">"Muat lainnya"</string>
   <string name="common_about">"Tentang"</string>
   <string name="common_acceptable_use_policy">"Kebijakan penggunaan wajar"</string>
   <string name="common_advanced_settings">"Pengaturan tingkat lanjut"</string>
@@ -130,6 +136,9 @@
   <string name="common_light">"Terang"</string>
   <string name="common_link_copied_to_clipboard">"Tautan disalin ke papan klip"</string>
   <string name="common_loading">"Memuat…"</string>
+  <plurals name="common_member_count">
+    <item quantity="other">"%1$d anggota"</item>
+  </plurals>
   <string name="common_message">"Pesan"</string>
   <string name="common_message_actions">"Tindakan pesan"</string>
   <string name="common_message_layout">"Tata letak pesan"</string>
@@ -142,8 +151,13 @@
   <string name="common_people">"Orang"</string>
   <string name="common_permalink">"Tautan Permanen"</string>
   <string name="common_permission">"Perizinan"</string>
+  <string name="common_poll_end_confirmation">"Apakah Anda yakin ingin mengakhiri pemungutan suara ini?"</string>
+  <string name="common_poll_summary">"Pemungutan suara: %1$s"</string>
   <string name="common_poll_total_votes">"Total suara: %1$s"</string>
   <string name="common_poll_undisclosed_text">"Hasil akan terlihat setelah pemungutan suara berakhir"</string>
+  <plurals name="common_poll_votes_count">
+    <item quantity="other">"%d suara"</item>
+  </plurals>
   <string name="common_privacy_policy">"Kebijakan privasi"</string>
   <string name="common_reaction">"Reaksi"</string>
   <string name="common_reactions">"Reaksi"</string>
@@ -190,14 +204,14 @@
   <string name="common_username">"Nama pengguna"</string>
   <string name="common_verification_cancelled">"Verifikasi dibatalkan"</string>
   <string name="common_verification_complete">"Verifikasi selesai"</string>
+  <string name="common_verify_device">"Verifikasi perangkat"</string>
   <string name="common_video">"Video"</string>
   <string name="common_voice_message">"Pesan suara"</string>
   <string name="common_waiting">"Menunggu…"</string>
   <string name="common_waiting_for_decryption_key">"Menunggu pesan ini"</string>
-  <string name="common_poll_end_confirmation">"Apakah Anda yakin ingin mengakhiri pemungutan suara ini?"</string>
-  <string name="common_poll_summary">"Pemungutan suara: %1$s"</string>
-  <string name="common_verify_device">"Verifikasi perangkat"</string>
   <string name="dialog_title_confirmation">"Konfirmasi"</string>
+  <string name="dialog_title_error">"Eror"</string>
+  <string name="dialog_title_success">"Berhasil"</string>
   <string name="dialog_title_warning">"Peringatan"</string>
   <string name="error_failed_creating_the_permalink">"Gagal membuat tautan permanen"</string>
   <string name="error_failed_loading_map">"%1$s tidak dapat memuat peta. Silakan coba lagi nanti."</string>
@@ -212,19 +226,10 @@
   <string name="invite_friends_rich_title">"🔐️ Bergabunglah dengan saya di %1$s"</string>
   <string name="invite_friends_text">"Hai, bicaralah dengan saya di %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
-  <plurals name="a11y_digits_entered">
-    <item quantity="other">"%1$d digit dimasukkan"</item>
-  </plurals>
-  <plurals name="a11y_read_receipts_multiple_with_others">
-    <item quantity="other">"Dibaca oleh %1$s dan %2$d lainnya"</item>
-  </plurals>
-  <plurals name="common_member_count">
-    <item quantity="other">"%1$d anggota"</item>
-  </plurals>
-  <plurals name="common_poll_votes_count">
-    <item quantity="other">"%d suara"</item>
-  </plurals>
   <string name="preference_rageshake">"Rageshake untuk melaporkan kutu"</string>
+  <string name="screen_blocked_users_unblock_alert_action">"Buka blokir"</string>
+  <string name="screen_blocked_users_unblock_alert_description">"Anda akan dapat melihat semua pesan dari mereka lagi."</string>
+  <string name="screen_blocked_users_unblock_alert_title">"Buka blokir pengguna"</string>
   <string name="screen_media_picker_error_failed_selection">"Gagal memilih media, silakan coba lagi."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Gagal memproses media untuk diunggah, silakan coba lagi."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Gagal mengunggah media, silakan coba lagi."</string>
@@ -237,6 +242,4 @@
   <string name="screen_view_location_title">"Lokasi"</string>
   <string name="settings_version_number">"Versi: %1$s (%2$s)"</string>
   <string name="test_language_identifier">"id"</string>
-  <string name="dialog_title_error">"Eror"</string>
-  <string name="dialog_title_success">"Berhasil"</string>
 </resources>

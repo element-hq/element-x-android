@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_advanced_settings_developer_mode">"Mode pengembang"</string>
+  <string name="screen_advanced_settings_developer_mode_description">"Aktifkan untuk mengakses fitur dan fungsi untuk para pengembang."</string>
   <string name="screen_advanced_settings_element_call_base_url">"URL dasar Element Call khusus"</string>
   <string name="screen_advanced_settings_element_call_base_url_description">"Tetapkan URL dasar khusus untuk Element Call."</string>
   <string name="screen_advanced_settings_element_call_base_url_validation_error">"URL tidak valid, pastikan Anda menyertakan protokol (http/https) dan alamat yang benar."</string>
-  <string name="screen_advanced_settings_developer_mode">"Mode pengembang"</string>
-  <string name="screen_advanced_settings_developer_mode_description">"Aktifkan untuk mengakses fitur dan fungsi untuk para pengembang."</string>
   <string name="screen_advanced_settings_rich_text_editor_description">"Nonaktifkan penyunting teks kaya untuk mengetik Markdown secara manual."</string>
   <string name="screen_advanced_settings_view_source_description">"Aktifkan opsi untuk melihat sumber pesan dalam lini masa."</string>
   <string name="screen_edit_profile_display_name">"Nama tampilan"</string>

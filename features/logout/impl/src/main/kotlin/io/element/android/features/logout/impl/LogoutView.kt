@@ -97,7 +97,7 @@ fun LogoutView(
 private fun title(state: LogoutState): String {
     return when {
         state.backupUploadState.isBackingUp() -> stringResource(id = R.string.screen_signout_key_backup_ongoing_title)
-        state.isLastSession -> {
+        state.isLastDevice -> {
             if (state.recoveryState != RecoveryState.ENABLED) {
                 stringResource(id = R.string.screen_signout_recovery_disabled_title)
             } else if (state.backupState == BackupState.UNKNOWN && state.doesBackupExistOnServer.not()) {
@@ -116,7 +116,7 @@ private fun subtitle(state: LogoutState): String? {
         (state.backupUploadState as? BackupUploadState.SteadyException)?.exception is SteadyStateException.Connection ->
             stringResource(id = R.string.screen_signout_key_backup_offline_subtitle)
         state.backupUploadState.isBackingUp() -> stringResource(id = R.string.screen_signout_key_backup_ongoing_subtitle)
-        state.isLastSession -> stringResource(id = R.string.screen_signout_key_backup_disabled_subtitle)
+        state.isLastDevice -> stringResource(id = R.string.screen_signout_key_backup_disabled_subtitle)
         else -> null
     }
 }
@@ -128,7 +128,7 @@ private fun ColumnScope.Buttons(
     onChangeRecoveryKeyClicked: () -> Unit,
 ) {
     val logoutAction = state.logoutAction
-    if (state.isLastSession) {
+    if (state.isLastDevice) {
         OutlinedButton(
             text = stringResource(id = CommonStrings.common_settings),
             modifier = Modifier.fillMaxWidth(),

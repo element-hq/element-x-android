@@ -1,15 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <plurals name="screen_app_lock_subtitle">
-    <item quantity="one">"Máte %1$d pokus na odomknutie"</item>
-    <item quantity="few">"Máte %1$d pokusy na odomknutie"</item>
-    <item quantity="other">"Máte %1$d pokusov na odomknutie"</item>
-  </plurals>
-  <plurals name="screen_app_lock_subtitle_wrong_pin">
-    <item quantity="one">"Nesprávny PIN kód. Máte ešte %1$d pokus"</item>
-    <item quantity="few">"Nesprávny PIN kód. Máte ešte %1$d pokusy"</item>
-    <item quantity="other">"Nesprávny PIN kód. Máte ešte %1$d pokusov"</item>
-  </plurals>
   <string name="screen_app_lock_biometric_authentication">"biometrické overenie"</string>
   <string name="screen_app_lock_biometric_unlock">"biometrické odomknutie"</string>
   <string name="screen_app_lock_biometric_unlock_title_android">"Odomknúť pomocou biometrie"</string>
@@ -33,6 +23,16 @@ Vyberte si niečo zapamätateľné. Ak tento kód PIN zabudnete, budete z aplik�
   <string name="screen_app_lock_setup_pin_mismatch_dialog_title">"PIN kódy sa nezhodujú"</string>
   <string name="screen_app_lock_signout_alert_message">"Ak chcete pokračovať, musíte sa znovu prihlásiť a vytvoriť nový PIN kód."</string>
   <string name="screen_app_lock_signout_alert_title">"Prebieha odhlasovanie"</string>
+  <plurals name="screen_app_lock_subtitle">
+    <item quantity="one">"Máte %1$d pokus na odomknutie"</item>
+    <item quantity="few">"Máte %1$d pokusy na odomknutie"</item>
+    <item quantity="other">"Máte %1$d pokusov na odomknutie"</item>
+  </plurals>
+  <plurals name="screen_app_lock_subtitle_wrong_pin">
+    <item quantity="one">"Nesprávny PIN kód. Máte ešte %1$d pokus"</item>
+    <item quantity="few">"Nesprávny PIN kód. Máte ešte %1$d pokusy"</item>
+    <item quantity="other">"Nesprávny PIN kód. Máte ešte %1$d pokusov"</item>
+  </plurals>
   <string name="screen_app_lock_use_biometric_android">"Použiť biometrické údaje"</string>
   <string name="screen_app_lock_use_pin_android">"Použiť PIN"</string>
   <string name="screen_signout_in_progress_dialog_content">"Prebieha odhlasovanie…"</string>

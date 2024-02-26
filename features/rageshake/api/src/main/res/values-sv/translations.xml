@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="crash_detection_dialog_content">"%1$s kraschade senast den användes. Vill du dela en kraschrapport med oss?"</string>
+  <string name="rageshake_detection_dialog_content">"Du verkar skaka telefonen i frustration. Vill du öppna felrapporteringsskärmen?"</string>
+  <string name="settings_rageshake">"Raseriskaka"</string>
+  <string name="settings_rageshake_detection_threshold">"Detektionströskel"</string>
+</resources>

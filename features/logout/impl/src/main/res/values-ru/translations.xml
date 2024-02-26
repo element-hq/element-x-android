@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_signout_confirmation_dialog_content">"Вы уверены, что вы хотите выйти?"</string>
+  <string name="screen_signout_confirmation_dialog_submit">"Выйти"</string>
+  <string name="screen_signout_confirmation_dialog_title">"Выйти"</string>
   <string name="screen_signout_in_progress_dialog_content">"Выполняется выход…"</string>
   <string name="screen_signout_key_backup_disabled_subtitle">"Вы собираетесь выйти из последнего сеанса. Если вы выйдете из системы сейчас, вы потеряете доступ к зашифрованным сообщениям."</string>
   <string name="screen_signout_key_backup_disabled_title">"Вы отключили резервное копирование"</string>
@@ -8,11 +10,9 @@
   <string name="screen_signout_key_backup_offline_title">"Резервное копирование ключей все еще продолжается"</string>
   <string name="screen_signout_key_backup_ongoing_subtitle">"Пожалуйста, дождитесь завершения процесса, прежде чем выходить из системы."</string>
   <string name="screen_signout_key_backup_ongoing_title">"Резервное копирование ключей все еще продолжается"</string>
+  <string name="screen_signout_preference_item">"Выйти"</string>
   <string name="screen_signout_recovery_disabled_subtitle">"Вы собираетесь выйти из последнего сеанса. Если вы выйдете из системы сейчас, вы потеряете доступ к зашифрованным сообщениям."</string>
   <string name="screen_signout_recovery_disabled_title">"Восстановление не настроено"</string>
   <string name="screen_signout_save_recovery_key_subtitle">"Вы собираетесь выйти из последнего сеанса. Если вы выйдете из системы сейчас, вы можете потерять доступ к зашифрованным сообщениям."</string>
   <string name="screen_signout_save_recovery_key_title">"Вы сохранили свой ключ восстановления?"</string>
-  <string name="screen_signout_confirmation_dialog_submit">"Выйти"</string>
-  <string name="screen_signout_confirmation_dialog_title">"Выйти"</string>
-  <string name="screen_signout_preference_item">"Выйти"</string>
 </resources>

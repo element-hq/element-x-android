@@ -1,15 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <plurals name="screen_app_lock_subtitle">
-    <item quantity="one">"Вы попытались разблокировать %1$d раз"</item>
-    <item quantity="few">"Вы попытались разблокировать %1$d раз"</item>
-    <item quantity="many">"Вы попытались разблокировать много раз"</item>
-  </plurals>
-  <plurals name="screen_app_lock_subtitle_wrong_pin">
-    <item quantity="one">"Неверный PIN-код. У вас остался %1$d шанс"</item>
-    <item quantity="few">"Неверный PIN-код. У вас остался %1$d шансов"</item>
-    <item quantity="many">"Неверный PIN-код. У вас остался %1$d шанса"</item>
-  </plurals>
   <string name="screen_app_lock_biometric_authentication">"биометрическая идентификация"</string>
   <string name="screen_app_lock_biometric_unlock">"биометрическая разблокировка"</string>
   <string name="screen_app_lock_biometric_unlock_title_android">"Разблокировать с помощью биометрии"</string>
@@ -33,6 +23,16 @@
   <string name="screen_app_lock_setup_pin_mismatch_dialog_title">"PIN-коды не совпадают"</string>
   <string name="screen_app_lock_signout_alert_message">"Чтобы продолжить, вам необходимо повторно войти в систему и создать новый PIN-код"</string>
   <string name="screen_app_lock_signout_alert_title">"Вы выходите из системы"</string>
+  <plurals name="screen_app_lock_subtitle">
+    <item quantity="one">"Вы попытались разблокировать %1$d раз"</item>
+    <item quantity="few">"Вы попытались разблокировать %1$d раз"</item>
+    <item quantity="many">"Вы попытались разблокировать много раз"</item>
+  </plurals>
+  <plurals name="screen_app_lock_subtitle_wrong_pin">
+    <item quantity="one">"Неверный PIN-код. У вас остался %1$d шанс"</item>
+    <item quantity="few">"Неверный PIN-код. У вас остался %1$d шансов"</item>
+    <item quantity="many">"Неверный PIN-код. У вас остался %1$d шанса"</item>
+  </plurals>
   <string name="screen_app_lock_use_biometric_android">"Использовать биометрию"</string>
   <string name="screen_app_lock_use_pin_android">"Использовать PIN-код"</string>
   <string name="screen_signout_in_progress_dialog_content">"Выполняется выход…"</string>

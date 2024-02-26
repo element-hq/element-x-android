@@ -17,6 +17,7 @@
 package io.element.android.features.logout.impl
 
 import androidx.activity.ComponentActivity
+import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.element.android.libraries.architecture.AsyncAction
@@ -32,6 +33,7 @@ import io.element.android.tests.testutils.pressBack
 import io.element.android.tests.testutils.pressTag
 import org.junit.Rule
 import org.junit.Test
+import org.junit.rules.TestRule
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
@@ -41,16 +43,11 @@ class LogoutViewTest {
     @Test
     fun `clicking on logout sends a LogoutEvents`() {
         val eventsRecorder = EventsRecorder<LogoutEvents>()
-        rule.setContent {
-            LogoutView(
-                aLogoutState(
-                    eventSink = eventsRecorder
-                ),
-                onChangeRecoveryKeyClicked = EnsureNeverCalled(),
-                onBackClicked = EnsureNeverCalled(),
-                onSuccessLogout = EnsureNeverCalledWithParam(),
-            )
-        }
+        rule.setLogoutView(
+            aLogoutState(
+                eventSink = eventsRecorder
+            ),
+        )
         rule.clickOn(CommonStrings.action_signout)
         eventsRecorder.assertSingle(LogoutEvents.Logout(false))
     }
@@ -58,17 +55,12 @@ class LogoutViewTest {
     @Test
     fun `confirming logout sends a LogoutEvents`() {
         val eventsRecorder = EventsRecorder<LogoutEvents>()
-        rule.setContent {
-            LogoutView(
-                aLogoutState(
-                    logoutAction = AsyncAction.Confirming,
-                    eventSink = eventsRecorder
-                ),
-                onChangeRecoveryKeyClicked = EnsureNeverCalled(),
-                onBackClicked = EnsureNeverCalled(),
-                onSuccessLogout = EnsureNeverCalledWithParam(),
-            )
-        }
+        rule.setLogoutView(
+            aLogoutState(
+                logoutAction = AsyncAction.Confirming,
+                eventSink = eventsRecorder
+            ),
+        )
         rule.pressTag(TestTags.dialogPositive.value)
         eventsRecorder.assertSingle(LogoutEvents.Logout(false))
     }
@@ -77,16 +69,12 @@ class LogoutViewTest {
     fun `clicking on back invoke back callback`() {
         val eventsRecorder = EventsRecorder<LogoutEvents>(expectEvents = false)
         ensureCalledOnce { callback ->
-            rule.setContent {
-                LogoutView(
-                    aLogoutState(
-                        eventSink = eventsRecorder
-                    ),
-                    onChangeRecoveryKeyClicked = EnsureNeverCalled(),
-                    onBackClicked = callback,
-                    onSuccessLogout = EnsureNeverCalledWithParam(),
-                )
-            }
+            rule.setLogoutView(
+                aLogoutState(
+                    eventSink = eventsRecorder
+                ),
+                onBackClicked = callback,
+            )
             rule.pressBack()
         }
     }
@@ -94,17 +82,12 @@ class LogoutViewTest {
     @Test
     fun `clicking on confirm after error sends a LogoutEvents`() {
         val eventsRecorder = EventsRecorder<LogoutEvents>()
-        rule.setContent {
-            LogoutView(
-                aLogoutState(
-                    logoutAction = AsyncAction.Failure(Exception("Failed to logout")),
-                    eventSink = eventsRecorder
-                ),
-                onChangeRecoveryKeyClicked = EnsureNeverCalled(),
-                onBackClicked = EnsureNeverCalled(),
-                onSuccessLogout = EnsureNeverCalledWithParam(),
-            )
-        }
+        rule.setLogoutView(
+            aLogoutState(
+                logoutAction = AsyncAction.Failure(Exception("Failed to logout")),
+                eventSink = eventsRecorder
+            ),
+        )
         rule.clickOn(CommonStrings.action_signout_anyway)
         eventsRecorder.assertSingle(LogoutEvents.Logout(true))
     }
@@ -112,17 +95,12 @@ class LogoutViewTest {
     @Test
     fun `clicking on cancel after error sends a LogoutEvents`() {
         val eventsRecorder = EventsRecorder<LogoutEvents>()
-        rule.setContent {
-            LogoutView(
-                aLogoutState(
-                    logoutAction = AsyncAction.Failure(Exception("Failed to logout")),
-                    eventSink = eventsRecorder
-                ),
-                onChangeRecoveryKeyClicked = EnsureNeverCalled(),
-                onBackClicked = EnsureNeverCalled(),
-                onSuccessLogout = EnsureNeverCalledWithParam(),
-            )
-        }
+        rule.setLogoutView(
+            aLogoutState(
+                logoutAction = AsyncAction.Failure(Exception("Failed to logout")),
+                eventSink = eventsRecorder
+            ),
+        )
         rule.clickOn(CommonStrings.action_cancel)
         eventsRecorder.assertSingle(LogoutEvents.CloseDialogs)
     }
@@ -132,17 +110,13 @@ class LogoutViewTest {
         val data = "data"
         val eventsRecorder = EventsRecorder<LogoutEvents>(expectEvents = false)
         ensureCalledOnceWithParam<String?>(data) { callback ->
-            rule.setContent {
-                LogoutView(
-                    aLogoutState(
-                        logoutAction = AsyncAction.Success(data),
-                        eventSink = eventsRecorder
-                    ),
-                    onChangeRecoveryKeyClicked = EnsureNeverCalled(),
-                    onBackClicked = EnsureNeverCalled(),
-                    onSuccessLogout = callback,
-                )
-            }
+            rule.setLogoutView(
+                aLogoutState(
+                    logoutAction = AsyncAction.Success(data),
+                    eventSink = eventsRecorder
+                ),
+                onSuccessLogout = callback,
+            )
         }
     }
 
@@ -150,18 +124,30 @@ class LogoutViewTest {
     fun `last session setting button invoke onChangeRecoveryKeyClicked`() {
         val eventsRecorder = EventsRecorder<LogoutEvents>(expectEvents = false)
         ensureCalledOnce { callback ->
-            rule.setContent {
-                LogoutView(
-                    aLogoutState(
-                        isLastSession = true,
-                        eventSink = eventsRecorder
-                    ),
-                    onChangeRecoveryKeyClicked = callback,
-                    onBackClicked = EnsureNeverCalled(),
-                    onSuccessLogout = EnsureNeverCalledWithParam(),
-                )
-            }
+            rule.setLogoutView(
+                aLogoutState(
+                    isLastDevice = true,
+                    eventSink = eventsRecorder
+                ),
+                onChangeRecoveryKeyClicked = callback,
+            )
             rule.clickOn(CommonStrings.common_settings)
         }
+    }
+}
+
+private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setLogoutView(
+    state: LogoutState,
+    onChangeRecoveryKeyClicked: () -> Unit = EnsureNeverCalled(),
+    onBackClicked: () -> Unit = EnsureNeverCalled(),
+    onSuccessLogout: (logoutUrlResult: String?) -> Unit = EnsureNeverCalledWithParam()
+) {
+    setContent {
+        LogoutView(
+            state = state,
+            onChangeRecoveryKeyClicked = onChangeRecoveryKeyClicked,
+            onBackClicked = onBackClicked,
+            onSuccessLogout = onSuccessLogout,
+        )
     }
 }

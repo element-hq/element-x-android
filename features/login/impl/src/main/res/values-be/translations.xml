@@ -5,7 +5,9 @@
   <string name="screen_account_provider_form_notice">"Увядзіце пошукавы запыт або адрас дамена."</string>
   <string name="screen_account_provider_form_subtitle">"Пошук кампаніі, супольнасці або прыватнага сервера."</string>
   <string name="screen_account_provider_form_title">"Знайдзіце правайдара ўліковых запісаў"</string>
+  <string name="screen_account_provider_signin_subtitle">"Тут будуць захоўвацца вашыя размовы - сапраўды гэтак жа, як вы выкарыстоўваеце паштовага правайдара для захоўвання сваіх лістоў."</string>
   <string name="screen_account_provider_signin_title">"Вы збіраецеся ўвайсці ў %s"</string>
+  <string name="screen_account_provider_signup_subtitle">"Тут будуць захоўвацца вашыя размовы - сапраўды гэтак жа, як вы выкарыстоўваеце паштовага правайдара для захоўвання сваіх лістоў."</string>
   <string name="screen_account_provider_signup_title">"Вы збіраецеся стварыць уліковы запіс на %s"</string>
   <string name="screen_change_account_provider_matrix_org_subtitle">"Matrix.org - гэта вялікі бясплатны сервер у агульнадаступнай сетцы Matrix для бяспечнай дэцэнтралізаванай сувязі, якім кіруе фонд Matrix.org."</string>
   <string name="screen_change_account_provider_other">"Іншае"</string>
@@ -22,6 +24,7 @@
   <string name="screen_login_error_invalid_user_id">"Гэта несапраўдны ідэнтыфікатар карыстальніка. Чаканы фармат: ‘@user:homeserver.org’"</string>
   <string name="screen_login_error_unsupported_authentication">"Выбраны хатні сервер не падтрымлівае пароль або ўваход у OIDC. Калі ласка, звярніцеся да адміністратара або абярыце іншы хатні сервер."</string>
   <string name="screen_login_form_header">"Увядзіце свае даныя"</string>
+  <string name="screen_login_subtitle">"Matrix - гэта адкрытая сетка для бяспечнай, дэцэнтралізаванай сувязі."</string>
   <string name="screen_login_title">"Сардэчна запрашаем!"</string>
   <string name="screen_login_title_with_homeserver">"Увайдзіце ў %1$s"</string>
   <string name="screen_server_confirmation_change_server">"Змяніць правайдара ўліковага запісу"</string>
@@ -33,9 +36,6 @@
   <string name="screen_waitlist_message">"Зараз існуе высокі попыт на %1$s на %2$s. Калі ласка, вярніцеся ў дадатак праз некалькі дзён і паспрабуйце зноў.
 
 Дзякуй за цярпенне!"</string>
-  <string name="screen_waitlist_title">"Амаль гатова."</string>
-  <string name="screen_account_provider_signin_subtitle">"Тут будуць захоўвацца вашыя размовы - сапраўды гэтак жа, як вы выкарыстоўваеце паштовага правайдара для захоўвання сваіх лістоў."</string>
-  <string name="screen_account_provider_signup_subtitle">"Тут будуць захоўвацца вашыя размовы - сапраўды гэтак жа, як вы выкарыстоўваеце паштовага правайдара для захоўвання сваіх лістоў."</string>
-  <string name="screen_login_subtitle">"Matrix - гэта адкрытая сетка для бяспечнай, дэцэнтралізаванай сувязі."</string>
   <string name="screen_waitlist_message_success">"Вітаем у %1$s!"</string>
+  <string name="screen_waitlist_title">"Амаль гатова."</string>
 </resources>

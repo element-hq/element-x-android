@@ -78,7 +78,6 @@ class ShowLocationViewTest {
             ),
             onBackPressed = EnsureNeverCalled(),
         )
-        val shareContentDescription = rule.activity.getString(CommonStrings.action_share)
         rule.onNodeWithTag(TestTags.floatingActionButton.value).performClick()
         eventsRecorder.assertSingle(ShowLocationEvents.TrackMyLocation(true))
     }

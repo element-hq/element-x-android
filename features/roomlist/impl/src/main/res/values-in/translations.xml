@@ -7,8 +7,8 @@
   <string name="screen_roomlist_a11y_create_message">"Buat percakapan atau ruangan baru"</string>
   <string name="screen_roomlist_empty_message">"Mulailah dengan mengirim pesan kepada seseorang."</string>
   <string name="screen_roomlist_empty_title">"Belum ada obrolan."</string>
+  <string name="screen_roomlist_filter_people">"Orang"</string>
   <string name="screen_roomlist_main_space_title">"Semua Obrolan"</string>
   <string name="session_verification_banner_message">"Sepertinya Anda menggunakan perangkat baru. Verifikasi dengan perangkat lain untuk mengakses pesan terenkripsi Anda selanjutnya."</string>
   <string name="session_verification_banner_title">"Verifikasi bahwa ini Anda"</string>
-  <string name="screen_roomlist_filter_people">"Orang"</string>
 </resources>

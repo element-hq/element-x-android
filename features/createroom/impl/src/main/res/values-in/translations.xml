@@ -2,14 +2,14 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_create_room_action_create_room">"Ruangan baru"</string>
   <string name="screen_create_room_action_invite_people">"Undang orang-orang ke Element"</string>
-  <string name="screen_create_room_add_people_title">"Undang seseorang"</string>
+  <string name="screen_create_room_add_people_title">"Undang orang-orang"</string>
   <string name="screen_create_room_error_creating_room">"Terjadi kesalahan saat membuat ruangan"</string>
   <string name="screen_create_room_private_option_description">"Pesan di ruangan ini dienkripsi. Enkripsi tidak dapat dinonaktifkan setelahnya."</string>
   <string name="screen_create_room_private_option_title">"Ruangan pribadi (hanya undangan)"</string>
   <string name="screen_create_room_public_option_description">"Pesan tidak dienkripsi dan siapa pun dapat membacanya. Anda dapat mengaktifkan enkripsi di kemudian hari."</string>
   <string name="screen_create_room_public_option_title">"Ruang publik (siapa saja)"</string>
-  <string name="screen_create_room_topic_label">"Topik (opsional)"</string>
-  <string name="screen_start_chat_error_starting_chat">"Terjadi kesalahan saat mencoba memulai obrolan"</string>
   <string name="screen_create_room_room_name_label">"Nama ruangan"</string>
   <string name="screen_create_room_title">"Buat ruangan"</string>
+  <string name="screen_create_room_topic_label">"Topik (opsional)"</string>
+  <string name="screen_start_chat_error_starting_chat">"Terjadi kesalahan saat mencoba memulai obrolan"</string>
 </resources>

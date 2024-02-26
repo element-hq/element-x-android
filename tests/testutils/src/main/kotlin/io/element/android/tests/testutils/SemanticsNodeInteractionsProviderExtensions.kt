@@ -34,9 +34,19 @@ fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.clickOn(@StringR
         .performClick()
 }
 
+/**
+ * Press the back button in the app bar.
+ */
 fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.pressBack() {
     val text = activity.getString(CommonStrings.action_back)
     onNode(hasContentDescription(text)).performClick()
+}
+
+/**
+ * Press the back key.
+ */
+fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.pressBackKey() {
+    activity.onBackPressedDispatcher.onBackPressed()
 }
 
 fun SemanticsNodeInteractionsProvider.pressTag(tag: String) {

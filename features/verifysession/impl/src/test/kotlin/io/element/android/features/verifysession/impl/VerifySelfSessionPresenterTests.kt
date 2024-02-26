@@ -23,9 +23,13 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.verifysession.impl.VerifySelfSessionState.VerificationStep
 import io.element.android.libraries.architecture.AsyncData
+import io.element.android.libraries.matrix.api.encryption.EncryptionService
+import io.element.android.libraries.matrix.api.encryption.RecoveryState
 import io.element.android.libraries.matrix.api.verification.SessionVerificationData
+import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import io.element.android.libraries.matrix.api.verification.VerificationEmoji
 import io.element.android.libraries.matrix.api.verification.VerificationFlowState
+import io.element.android.libraries.matrix.test.encryption.FakeEncryptionService
 import io.element.android.libraries.matrix.test.verification.FakeSessionVerificationService
 import io.element.android.tests.testutils.WarmUpRule
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -44,7 +48,21 @@ class VerifySelfSessionPresenterTests {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            assertThat(awaitItem().verificationFlowStep).isEqualTo(VerificationStep.Initial)
+            assertThat(awaitItem().verificationFlowStep).isEqualTo(VerificationStep.Initial(false))
+        }
+    }
+
+    @Test
+    fun `present - Initial state is received, can use recovery key`() = runTest {
+        val presenter = createVerifySelfSessionPresenter(
+            encryptionService = FakeEncryptionService().apply {
+                emitRecoveryState(RecoveryState.INCOMPLETE)
+            }
+        )
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            assertThat(awaitItem().verificationFlowStep).isEqualTo(VerificationStep.Initial(true))
         }
     }
 
@@ -67,7 +85,7 @@ class VerifySelfSessionPresenterTests {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            assertThat(initialState.verificationFlowStep).isEqualTo(VerificationStep.Initial)
+            assertThat(initialState.verificationFlowStep).isEqualTo(VerificationStep.Initial(false))
             val eventSink = initialState.eventSink
             eventSink(VerifySelfSessionViewEvents.StartSasVerification)
             // Await for other device response:
@@ -86,7 +104,7 @@ class VerifySelfSessionPresenterTests {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            assertThat(initialState.verificationFlowStep).isEqualTo(VerificationStep.Initial)
+            assertThat(initialState.verificationFlowStep).isEqualTo(VerificationStep.Initial(false))
             val eventSink = initialState.eventSink
             eventSink(VerifySelfSessionViewEvents.CancelAndClose)
             expectNoEvents()
@@ -203,7 +221,7 @@ class VerifySelfSessionPresenterTests {
         sessionVerificationData: SessionVerificationData = SessionVerificationData.Emojis(emptyList()),
     ): VerifySelfSessionState {
         var state = awaitItem()
-        assertThat(state.verificationFlowStep).isEqualTo(VerificationStep.Initial)
+        assertThat(state.verificationFlowStep).isEqualTo(VerificationStep.Initial(false))
         state.eventSink(VerifySelfSessionViewEvents.RequestVerification)
         // Await for other device response:
         state = awaitItem()
@@ -223,8 +241,13 @@ class VerifySelfSessionPresenterTests {
     }
 
     private fun createVerifySelfSessionPresenter(
-        service: FakeSessionVerificationService = FakeSessionVerificationService()
+        service: SessionVerificationService = FakeSessionVerificationService(),
+        encryptionService: EncryptionService = FakeEncryptionService(),
     ): VerifySelfSessionPresenter {
-        return VerifySelfSessionPresenter(service, VerifySelfSessionStateMachine(service))
+        return VerifySelfSessionPresenter(
+            sessionVerificationService = service,
+            encryptionService = encryptionService,
+            stateMachine = VerifySelfSessionStateMachine(service),
+        )
     }
 }

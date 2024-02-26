@@ -18,8 +18,8 @@ activity = "1.8.2"
 media3 = "1.2.1"
 
 # Compose
-compose_bom = "2024.02.00"
-composecompiler = "1.5.9"
+compose_bom = "2024.02.01"
+composecompiler = "1.5.10"
 
 # Coroutines
 coroutines = "1.8.0"
@@ -172,8 +172,8 @@ opusencoder = "io.element.android:opusencoder:1.1.0"
 kotlinpoet = "com.squareup:kotlinpoet:1.16.0"
 
 # Analytics
-posthog = "com.posthog:posthog-android:3.1.8"
-sentry = "io.sentry:sentry-android:7.3.0"
+posthog = "com.posthog:posthog-android:3.1.9"
+sentry = "io.sentry:sentry-android:7.4.0"
 matrix_analytics_events = "com.github.matrix-org:matrix-analytics-events:0.11.0"
 
 # Emojibase

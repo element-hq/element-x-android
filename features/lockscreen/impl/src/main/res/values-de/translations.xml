@@ -1,13 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <plurals name="screen_app_lock_subtitle">
-    <item quantity="one">"Du hast %1$d Versuch zu entsperren"</item>
-    <item quantity="other">"Du hast %1$d Versuche zum Entsperren"</item>
-  </plurals>
-  <plurals name="screen_app_lock_subtitle_wrong_pin">
-    <item quantity="one">"Falsche PIN. Du hast %1$d weitere Chance"</item>
-    <item quantity="other">"Falsche PIN. Du hast %1$d weitere Chancen"</item>
-  </plurals>
   <string name="screen_app_lock_biometric_authentication">"biometrische Authentifizierung"</string>
   <string name="screen_app_lock_biometric_unlock">"biometrisches Entsperren"</string>
   <string name="screen_app_lock_biometric_unlock_title_android">"Mit Biometrie entsperren"</string>
@@ -31,6 +23,14 @@ Wähle etwas Einprägsames. Bei falscher Eingabe wirst du aus der App ausgeloggt
   <string name="screen_app_lock_setup_pin_mismatch_dialog_title">"Die PINs stimmen nicht überein"</string>
   <string name="screen_app_lock_signout_alert_message">"Um fortzufahren, musst du dich erneut anmelden und eine neue PIN erstellen"</string>
   <string name="screen_app_lock_signout_alert_title">"Du wirst abgemeldet"</string>
+  <plurals name="screen_app_lock_subtitle">
+    <item quantity="one">"Du hast %1$d Versuch zu entsperren"</item>
+    <item quantity="other">"Du hast %1$d Versuche zum Entsperren"</item>
+  </plurals>
+  <plurals name="screen_app_lock_subtitle_wrong_pin">
+    <item quantity="one">"Falsche PIN. Du hast %1$d weitere Chance"</item>
+    <item quantity="other">"Falsche PIN. Du hast %1$d weitere Chancen"</item>
+  </plurals>
   <string name="screen_app_lock_use_biometric_android">"Biometrie verwenden"</string>
   <string name="screen_app_lock_use_pin_android">"PIN verwenden"</string>
   <string name="screen_signout_in_progress_dialog_content">"Abmelden…"</string>

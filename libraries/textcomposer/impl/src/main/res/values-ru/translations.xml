@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="rich_text_editor_a11y_add_attachment">"Прикрепить файл"</string>
   <string name="rich_text_editor_bullet_list">"Переключить список маркеров"</string>
   <string name="rich_text_editor_close_formatting_options">"Закрыть параметры форматирования"</string>
   <string name="rich_text_editor_code_block">"Переключить блок кода"</string>
@@ -20,6 +21,5 @@
   <string name="rich_text_editor_remove_link">"Удалить ссылку"</string>
   <string name="rich_text_editor_unindent">"Без отступа"</string>
   <string name="rich_text_editor_url_placeholder">"Ссылка"</string>
-  <string name="rich_text_editor_a11y_add_attachment">"Прикрепить файл"</string>
   <string name="screen_room_voice_message_tooltip">"Удерживайте для записи"</string>
 </resources>

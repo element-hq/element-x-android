@@ -113,7 +113,11 @@ class RustMatrixClient(
     private val innerRoomListService = syncService.roomListService()
     private val sessionDispatcher = dispatchers.io.limitedParallelism(64)
     private val rustSyncService = RustSyncService(syncService, sessionCoroutineScope)
-    private val verificationService = RustSessionVerificationService(rustSyncService, sessionCoroutineScope)
+    private val verificationService = RustSessionVerificationService(
+        client = client,
+        syncService = rustSyncService,
+        sessionCoroutineScope = sessionCoroutineScope,
+    ).apply { start() }
     private val pushersService = RustPushersService(
         client = client,
         dispatchers = dispatchers,
@@ -134,7 +138,7 @@ class RustMatrixClient(
         syncService = rustSyncService,
         sessionCoroutineScope = sessionCoroutineScope,
         dispatchers = dispatchers,
-    ).apply { start() }
+    )
     private val sessionDirectoryNameProvider = SessionDirectoryNameProvider()
 
     private val isLoggingOut = AtomicBoolean(false)

@@ -18,6 +18,7 @@ package io.element.android.features.verifysession.impl
 
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
+import com.bumble.appyx.core.plugin.Plugin
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.features.verifysession.api.VerifySessionEntryPoint
 import io.element.android.libraries.architecture.createNode
@@ -26,7 +27,18 @@ import javax.inject.Inject
 
 @ContributesBinding(AppScope::class)
 class DefaultVerifySessionEntryPoint @Inject constructor() : VerifySessionEntryPoint {
-    override fun createNode(parentNode: Node, buildContext: BuildContext): Node {
-        return parentNode.createNode<VerifySelfSessionNode>(buildContext)
+    override fun nodeBuilder(parentNode: Node, buildContext: BuildContext): VerifySessionEntryPoint.NodeBuilder {
+        val plugins = ArrayList<Plugin>()
+
+        return object : VerifySessionEntryPoint.NodeBuilder {
+            override fun callback(callback: VerifySessionEntryPoint.Callback): VerifySessionEntryPoint.NodeBuilder {
+                plugins += callback
+                return this
+            }
+
+            override fun build(): Node {
+                return parentNode.createNode<VerifySelfSessionNode>(buildContext, plugins)
+            }
+        }
     }
 }
