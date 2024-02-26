@@ -53,6 +53,7 @@ class PreferencesRootNode @AssistedInject constructor(
         fun onOpenLockScreenSettings()
         fun onOpenAdvancedSettings()
         fun onOpenUserProfile(matrixUser: MatrixUser)
+        fun onOpenBlockedUsers()
         fun onSignOutClicked()
     }
 
@@ -117,6 +118,10 @@ class PreferencesRootNode @AssistedInject constructor(
         plugins<Callback>().forEach { it.onOpenUserProfile(matrixUser) }
     }
 
+    private fun onOpenBlockedUsers() {
+        plugins<Callback>().forEach { it.onOpenBlockedUsers() }
+    }
+
     private fun onSignOutClicked() {
         plugins<Callback>().forEach { it.onSignOutClicked() }
     }
@@ -141,6 +146,7 @@ class PreferencesRootNode @AssistedInject constructor(
             onOpenNotificationSettings = this::onOpenNotificationSettings,
             onOpenLockScreenSettings = this::onOpenLockScreenSettings,
             onOpenUserProfile = this::onOpenUserProfile,
+            onOpenBlockedUsers = this::onOpenBlockedUsers,
             onSignOutClicked = {
                 if (state.directLogoutState.canDoDirectSignOut) {
                     state.directLogoutState.eventSink(DirectLogoutEvents.Logout(ignoreSdkError = false))

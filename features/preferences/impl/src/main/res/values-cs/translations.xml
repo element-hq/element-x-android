@@ -11,6 +11,9 @@
   <string name="screen_advanced_settings_share_presence">"Sdílejte přítomnost"</string>
   <string name="screen_advanced_settings_share_presence_description">"Pokud je tato funkce vypnutá, nebudete moci odesílat ani přijímat potvrzení o přečtení ani upozornění na psaní"</string>
   <string name="screen_advanced_settings_view_source_description">"Povolit možnost zobrazení zdroje zprávy na časové ose."</string>
+  <string name="screen_blocked_users_unblock_alert_action">"Odblokovat"</string>
+  <string name="screen_blocked_users_unblock_alert_description">"Znovu uvidíte všechny zprávy od nich."</string>
+  <string name="screen_blocked_users_unblock_alert_title">"Odblokovat uživatele"</string>
   <string name="screen_edit_profile_display_name">"Zobrazované jméno"</string>
   <string name="screen_edit_profile_display_name_placeholder">"Vaše zobrazované jméno"</string>
   <string name="screen_edit_profile_error">"Došlo k neznámé chybě a informace nelze změnit."</string>

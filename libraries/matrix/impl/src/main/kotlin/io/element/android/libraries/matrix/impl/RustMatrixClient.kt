@@ -62,16 +62,24 @@ import io.element.android.libraries.matrix.impl.usersearch.UserProfileMapper
 import io.element.android.libraries.matrix.impl.usersearch.UserSearchResultMapper
 import io.element.android.libraries.matrix.impl.util.SessionDirectoryNameProvider
 import io.element.android.libraries.matrix.impl.util.cancelAndDestroy
+import io.element.android.libraries.matrix.impl.util.mxCallbackFlow
 import io.element.android.libraries.matrix.impl.verification.RustSessionVerificationService
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import io.element.android.services.toolbox.api.systemclock.SystemClock
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.buffer
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeout
@@ -79,6 +87,7 @@ import org.matrix.rustcomponents.sdk.BackupState
 import org.matrix.rustcomponents.sdk.Client
 import org.matrix.rustcomponents.sdk.ClientDelegate
 import org.matrix.rustcomponents.sdk.FilterTimelineEventType
+import org.matrix.rustcomponents.sdk.IgnoredUsersListener
 import org.matrix.rustcomponents.sdk.NotificationProcessSetup
 import org.matrix.rustcomponents.sdk.PowerLevels
 import org.matrix.rustcomponents.sdk.Room
@@ -239,6 +248,16 @@ class RustMatrixClient(
     private val roomContentForwarder = RoomContentForwarder(innerRoomListService)
 
     private val clientDelegateTaskHandle: TaskHandle? = client.setDelegate(clientDelegate)
+
+    override val ignoredUsersFlow = mxCallbackFlow<ImmutableList<UserId>> {
+        client.subscribeToIgnoredUsers(object : IgnoredUsersListener {
+            override fun call(ignoredUserIds: List<String>) {
+                channel.trySend(ignoredUserIds.map(::UserId).toPersistentList())
+            }
+        })
+    }
+        .buffer(Channel.UNLIMITED)
+        .stateIn(sessionCoroutineScope, started = SharingStarted.Eagerly, initialValue = persistentListOf())
 
     init {
         roomListService.state.onEach { state ->

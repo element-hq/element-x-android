@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_advanced_settings_send_read_receipts">"Потвърждения за прочитане"</string>
+  <string name="screen_blocked_users_unblock_alert_action">"Отблокиране"</string>
+  <string name="screen_blocked_users_unblock_alert_title">"Отблокиране на потребителя"</string>
   <string name="screen_edit_profile_display_name">"Име"</string>
   <string name="screen_edit_profile_display_name_placeholder">"Вашето Име"</string>
   <string name="screen_edit_profile_error">"Възникна неизвестна грешка и информацията не можа да бъде променена."</string>

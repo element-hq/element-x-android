@@ -43,8 +43,11 @@ import io.element.android.libraries.matrix.test.roomlist.FakeRoomListService
 import io.element.android.libraries.matrix.test.sync.FakeSyncService
 import io.element.android.libraries.matrix.test.verification.FakeSessionVerificationService
 import io.element.android.tests.testutils.simulateLongTask
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.TestScope
 
 class FakeMatrixClient(
@@ -69,6 +72,8 @@ class FakeMatrixClient(
         private set
     var removeAvatarCalled: Boolean = false
         private set
+
+    override val ignoredUsersFlow: MutableStateFlow<ImmutableList<UserId>> = MutableStateFlow(persistentListOf())
 
     private var ignoreUserResult: Result<Unit> = Result.success(Unit)
     private var unignoreUserResult: Result<Unit> = Result.success(Unit)

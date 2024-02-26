@@ -238,9 +238,6 @@
   <string name="invite_friends_text">"Hei, vorbește cu mine pe %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Rageshake pentru a raporta erori"</string>
-  <string name="screen_blocked_users_unblock_alert_action">"Deblocați"</string>
-  <string name="screen_blocked_users_unblock_alert_description">"La deblocarea utilizatorului, veți putea vedea din nou toate mesajele de la acesta."</string>
-  <string name="screen_blocked_users_unblock_alert_title">"Deblocați utilizatorul"</string>
   <string name="screen_media_picker_error_failed_selection">"Selectarea fișierelor media a eșuat, încercați din nou."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Procesarea datelor media a eșuat, vă rugăm să încercați din nou."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Încărcarea fișierelor media a eșuat, încercați din nou."</string>

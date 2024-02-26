@@ -236,9 +236,6 @@
   <string name="invite_friends_text">"Гэй, пагавары са мной у %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Rageshake паведаміць пра памылку"</string>
-  <string name="screen_blocked_users_unblock_alert_action">"Разблакіраваць"</string>
-  <string name="screen_blocked_users_unblock_alert_description">"Вы зноў зможаце ўбачыць усе паведамленні."</string>
-  <string name="screen_blocked_users_unblock_alert_title">"Разблакіраваць карыстальніка"</string>
   <string name="screen_media_picker_error_failed_selection">"Не ўдалося выбраць носьбіт, паўтарыце спробу."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Не атрымалася апрацаваць медыяфайл для загрузкі, паспрабуйце яшчэ раз."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Не атрымалася загрузіць медыяфайлы, паспрабуйце яшчэ раз."</string>

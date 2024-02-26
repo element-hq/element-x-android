@@ -11,6 +11,9 @@
   <string name="screen_advanced_settings_share_presence">"Împărtășiți prezența"</string>
   <string name="screen_advanced_settings_share_presence_description">"Dacă dezactivată, nu veți putea trimite sau primi chitanțe de citire sau notificări de tastare."</string>
   <string name="screen_advanced_settings_view_source_description">"Activați opțiunea pentru a vizualiza sursa mesajelor."</string>
+  <string name="screen_blocked_users_unblock_alert_action">"Deblocați"</string>
+  <string name="screen_blocked_users_unblock_alert_description">"La deblocarea utilizatorului, veți putea vedea din nou toate mesajele de la acesta."</string>
+  <string name="screen_blocked_users_unblock_alert_title">"Deblocați utilizatorul"</string>
   <string name="screen_edit_profile_display_name">"Nume"</string>
   <string name="screen_edit_profile_display_name_placeholder">"Numele dumneavoastra"</string>
   <string name="screen_edit_profile_error">"A fost întâlnită o eroare necunoscută și informațiile nu au putut fi modificate."</string>

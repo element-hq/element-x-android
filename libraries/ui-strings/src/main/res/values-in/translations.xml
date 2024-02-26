@@ -227,9 +227,6 @@
   <string name="invite_friends_text">"Hai, bicaralah dengan saya di %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Rageshake untuk melaporkan kutu"</string>
-  <string name="screen_blocked_users_unblock_alert_action">"Buka blokir"</string>
-  <string name="screen_blocked_users_unblock_alert_description">"Anda akan dapat melihat semua pesan dari mereka lagi."</string>
-  <string name="screen_blocked_users_unblock_alert_title">"Buka blokir pengguna"</string>
   <string name="screen_media_picker_error_failed_selection">"Gagal memilih media, silakan coba lagi."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Gagal memproses media untuk diunggah, silakan coba lagi."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Gagal mengunggah media, silakan coba lagi."</string>

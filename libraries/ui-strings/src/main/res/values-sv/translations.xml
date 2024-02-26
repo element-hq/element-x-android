@@ -173,9 +173,6 @@
   <string name="invite_friends_text">"Hallå, prata med mig på %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Raseriskaka för att rapportera bugg"</string>
-  <string name="screen_blocked_users_unblock_alert_action">"Avblockera"</string>
-  <string name="screen_blocked_users_unblock_alert_description">"Du kommer att kunna se alla meddelanden från dem igen."</string>
-  <string name="screen_blocked_users_unblock_alert_title">"Avblockera användare"</string>
   <string name="screen_media_picker_error_failed_selection">"Misslyckades att välja media, vänligen pröva igen."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Misslyckades att bearbeta media för uppladdning, vänligen pröva igen."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Misslyckades att ladda upp media, vänligen pröva igen."</string>
