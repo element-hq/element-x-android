@@ -111,6 +111,7 @@
   <string name="common_analytics">"Statistiques d’utilisation"</string>
   <string name="common_appearance">"Apparence"</string>
   <string name="common_audio">"Audio"</string>
+  <string name="common_blocked_users">"Utilisateurs bloqués"</string>
   <string name="common_bubbles">"Bulles"</string>
   <string name="common_chat_backup">"Sauvegarde des discussions"</string>
   <string name="common_copyright">"Droits d’auteur"</string>
@@ -127,6 +128,7 @@
   <string name="common_enter_your_pin">"Saisissez votre code PIN"</string>
   <string name="common_error">"Erreur"</string>
   <string name="common_everyone">"Tout le monde"</string>
+  <string name="common_failed">"Échec"</string>
   <string name="common_favourite">"Favori"</string>
   <string name="common_favourited">"Favorisé"</string>
   <string name="common_file">"Fichier"</string>
@@ -153,6 +155,7 @@
   <string name="common_mute">"Mettre en sourdine"</string>
   <string name="common_no_results">"Aucun résultat"</string>
   <string name="common_offline">"Hors ligne"</string>
+  <string name="common_or">"ou"</string>
   <string name="common_password">"Mot de passe"</string>
   <string name="common_people">"Personnes"</string>
   <string name="common_permalink">"Permalien"</string>

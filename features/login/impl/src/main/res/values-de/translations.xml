@@ -14,6 +14,8 @@
   <string name="screen_change_account_provider_subtitle">"Verwende einen anderen Kontoanbieter, z. B. deinen eigenen privaten Server oder ein Geschäftskonto."</string>
   <string name="screen_change_account_provider_title">"Kontoanbieter wechseln"</string>
   <string name="screen_change_server_error_invalid_homeserver">"Wir konnten diesen Homeserver nicht erreichen. Bitte überprüfe, ob du die Homeserver-URL korrekt eingegeben hast. Wenn die URL korrekt ist, wende dich an deinen Homeserver-Administrator, um weitere Hilfe zu erhalten."</string>
+  <string name="screen_change_server_error_invalid_well_known">"Sliding Sync ist aufgrund eines Problems im \"well-known file\" nicht verfügbar:
+%1$s"</string>
   <string name="screen_change_server_error_no_sliding_sync_message">"Dieser Server unterstützt derzeit kein Sliding Sync."</string>
   <string name="screen_change_server_form_header">"Homeserver-URL"</string>
   <string name="screen_change_server_form_notice">"Du kannst nur eine Verbindung zu einem vorhandenen Server herstellen, der Sliding Sync unterstützt. Dein Homeserver-Administrator muss das konfigurieren. %1$s"</string>

@@ -28,6 +28,11 @@
   <string name="screen_room_attachment_source_location">"Poloha"</string>
   <string name="screen_room_attachment_source_poll">"Hlasování"</string>
   <string name="screen_room_attachment_text_formatting">"Formátování textu"</string>
+  <string name="screen_room_change_role_confirm_add_admin_description">"Tuto akci nebudete moci vrátit zpět. Upravujete oprávnění uživatele, tak aby měl stejnou úroveň jako vy."</string>
+  <string name="screen_room_change_role_confirm_add_admin_title">"Přidat správce?"</string>
+  <string name="screen_room_change_role_confirm_demote_self_action">"Degradovat"</string>
+  <string name="screen_room_change_role_confirm_demote_self_description">"Tuto změnu nebudete moci vrátit zpět, protože sami degradujete, pokud jste posledním privilegovaným uživatelem v místnosti, nebude možné znovu získat oprávnění."</string>
+  <string name="screen_room_change_role_confirm_demote_self_title">"Degradovat se?"</string>
   <string name="screen_room_encrypted_history_banner">"Historie zpráv je momentálně v této místnosti nedostupná"</string>
   <string name="screen_room_encrypted_history_banner_unverified">"Historie zpráv není v této místnosti k dispozici. Ověřte toto zařízení, abyste viděli historii zpráv."</string>
   <string name="screen_room_error_failed_processing_media">"Nahrání média se nezdařilo, zkuste to prosím znovu."</string>

@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_advanced_settings_developer_mode">"開發者模式"</string>
+  <string name="screen_blocked_users_unblock_alert_action">"解除封鎖"</string>
+  <string name="screen_blocked_users_unblock_alert_title">"解除封鎖使用者"</string>
   <string name="screen_edit_profile_display_name">"顯示名稱"</string>
   <string name="screen_edit_profile_display_name_placeholder">"您的顯示名稱"</string>
   <string name="screen_edit_profile_error_title">"無法更新個人檔案"</string>

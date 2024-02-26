@@ -28,6 +28,11 @@
   <string name="screen_room_attachment_source_location">"Местоположение"</string>
   <string name="screen_room_attachment_source_poll">"Опрос"</string>
   <string name="screen_room_attachment_text_formatting">"Форматирование текста"</string>
+  <string name="screen_room_change_role_confirm_add_admin_description">"Вы не сможете отменить это действие. Вы устанавливаете уровень пользователю соответствующий вашему."</string>
+  <string name="screen_room_change_role_confirm_add_admin_title">"Добавить администратора?"</string>
+  <string name="screen_room_change_role_confirm_demote_self_action">"Понизить уровень"</string>
+  <string name="screen_room_change_role_confirm_demote_self_description">"Вы не сможете отменить это изменение, так как понижаете себя статус. Если вы являетесь последним привилегированным пользователем в комнате, восстановить привилегии будет невозможно."</string>
+  <string name="screen_room_change_role_confirm_demote_self_title">"Понизить свой уровень?"</string>
   <string name="screen_room_encrypted_history_banner">"В настоящее время история сообщений недоступна в этой комнате."</string>
   <string name="screen_room_encrypted_history_banner_unverified">"История сообщений в этой комнате недоступна. Проверьте это устройство, чтобы увидеть историю сообщений."</string>
   <string name="screen_room_error_failed_processing_media">"Не удалось обработать медиафайл для загрузки, попробуйте еще раз."</string>
