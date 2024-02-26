@@ -39,9 +39,7 @@ fun LoggedInView(
             .systemBarsPadding()
     ) {
         SyncStateView(
-            modifier = Modifier
-                .padding(top = 8.dp)
-                .align(Alignment.TopCenter),
+            modifier = Modifier.align(Alignment.TopCenter),
             isVisible = state.showSyncSpinner,
         )
     }
