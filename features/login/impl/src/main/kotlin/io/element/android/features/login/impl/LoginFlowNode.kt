@@ -30,6 +30,7 @@ import com.bumble.appyx.core.plugin.Plugin
 import com.bumble.appyx.core.plugin.plugins
 import com.bumble.appyx.navmodel.backstack.BackStack
 import com.bumble.appyx.navmodel.backstack.operation.newRoot
+import com.bumble.appyx.navmodel.backstack.operation.pop
 import com.bumble.appyx.navmodel.backstack.operation.push
 import com.bumble.appyx.navmodel.backstack.operation.singleTop
 import dagger.assisted.Assisted
@@ -47,6 +48,7 @@ import io.element.android.features.login.impl.screens.confirmaccountprovider.Con
 import io.element.android.features.login.impl.screens.loginpassword.LoginFormState
 import io.element.android.features.login.impl.screens.loginpassword.LoginPasswordNode
 import io.element.android.features.login.impl.screens.qrcode.intro.QrCodeIntroNode
+import io.element.android.features.login.impl.screens.qrcode.scan.QrCodeScanNode
 import io.element.android.features.login.impl.screens.searchaccountprovider.SearchAccountProviderNode
 import io.element.android.features.login.impl.screens.waitlistscreen.WaitListNode
 import io.element.android.libraries.architecture.BackstackView
@@ -235,7 +237,12 @@ class LoginFlowNode @AssistedInject constructor(
                 createNode<QrCodeIntroNode>(buildContext, plugins = listOf(callback))
             }
             NavTarget.QrCodeScan -> {
-                TODO()
+                val callback = object : QrCodeScanNode.Callback {
+                    override fun onCancelClicked() {
+                        backstack.pop()
+                    }
+                }
+                createNode<QrCodeScanNode>(buildContext, plugins = listOf(callback))
             }
         }
     }

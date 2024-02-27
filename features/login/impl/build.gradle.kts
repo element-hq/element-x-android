@@ -50,6 +50,7 @@ dependencies {
     implementation(projects.libraries.testtags)
     implementation(projects.libraries.uiStrings)
     implementation(projects.libraries.permissions.api)
+    implementation(projects.libraries.qrcode)
     implementation(libs.androidx.browser)
     implementation(platform(libs.network.retrofit.bom))
     implementation(libs.network.retrofit)
