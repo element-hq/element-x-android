@@ -21,30 +21,14 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import io.element.android.features.roomlist.impl.datasource.RoomListRoomSummaryFactory
 import io.element.android.libraries.architecture.Presenter
-import io.element.android.libraries.core.coroutine.CoroutineDispatchers
-import io.element.android.libraries.matrix.api.roomlist.RoomList
-import io.element.android.libraries.matrix.api.roomlist.RoomListFilter
-import io.element.android.libraries.matrix.api.roomlist.RoomListService
-import io.element.android.libraries.matrix.api.roomlist.RoomSummary
-import io.element.android.libraries.matrix.api.roomlist.loadAllIncrementally
 import kotlinx.collections.immutable.persistentListOf
-import kotlinx.collections.immutable.toPersistentList
-import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
-private const val PAGE_SIZE = 50
-
 class RoomListSearchPresenter @Inject constructor(
-    private val roomListService: RoomListService,
-    private val roomSummaryFactory: RoomListRoomSummaryFactory,
-    private val coroutineDispatchers: CoroutineDispatchers,
+    private val dataSource: RoomListSearchDataSource,
 ) : Presenter<RoomListSearchState> {
     @Composable
     override fun present(): RoomListSearchState {
@@ -54,27 +38,13 @@ class RoomListSearchPresenter @Inject constructor(
         var searchQuery by rememberSaveable {
             mutableStateOf("")
         }
-        val coroutineScope = rememberCoroutineScope()
 
-        val roomList = remember {
-            roomListService.createRoomList(
-                coroutineScope = coroutineScope,
-                pageSize = PAGE_SIZE,
-                initialFilter = RoomListFilter.all(RoomListFilter.None),
-                source = RoomList.Source.All,
-            )
+        LaunchedEffect(isSearchActive) {
+            dataSource.setIsActive(isSearchActive)
         }
 
-        LaunchedEffect(Unit) {
-            roomList.loadAllIncrementally(this)
-        }
-        LaunchedEffect(key1 = searchQuery) {
-            val filter = if (searchQuery.isBlank()) {
-                RoomListFilter.all(RoomListFilter.None)
-            } else {
-                RoomListFilter.all(RoomListFilter.NonLeft, RoomListFilter.NormalizedMatchRoomName(searchQuery))
-            }
-            roomList.updateFilter(filter)
+        LaunchedEffect(searchQuery) {
+            dataSource.setSearchQuery(searchQuery)
         }
 
         fun handleEvents(event: RoomListSearchEvents) {
@@ -92,9 +62,7 @@ class RoomListSearchPresenter @Inject constructor(
             }
         }
 
-        val searchResults by roomList
-            .rememberMappedSummaries()
-            .collectAsState(initial = persistentListOf())
+        val searchResults by dataSource.roomSummaries.collectAsState(initial = persistentListOf())
 
         return RoomListSearchState(
             isSearchActive = isSearchActive,
@@ -102,17 +70,5 @@ class RoomListSearchPresenter @Inject constructor(
             results = searchResults,
             eventSink = ::handleEvents
         )
-    }
-
-    @Composable
-    private fun RoomList.rememberMappedSummaries() = remember {
-        summaries
-            .map { roomSummaries ->
-                roomSummaries
-                    .filterIsInstance<RoomSummary.Filled>()
-                    .map(roomSummaryFactory::create)
-                    .toPersistentList()
-            }
-            .flowOn(coroutineDispatchers.computation)
     }
 }

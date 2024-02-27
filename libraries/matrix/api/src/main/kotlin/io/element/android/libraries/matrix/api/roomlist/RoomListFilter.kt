@@ -48,11 +48,6 @@ sealed interface RoomListFilter {
     ) : RoomListFilter
 
     /**
-     * A filter that matches rooms that are not left.
-     */
-    data object NonLeft : RoomListFilter
-
-    /**
      * A filter that matches rooms that are unread.
      */
     data object Unread : RoomListFilter
@@ -79,13 +74,6 @@ sealed interface RoomListFilter {
      * A filter that matches rooms with a name using a normalized match.
      */
     data class NormalizedMatchRoomName(
-        val pattern: String
-    ) : RoomListFilter
-
-    /**
-     * A filter that matches rooms with a name using a fuzzy match.
-     */
-    data class FuzzyMatchRoomName(
         val pattern: String
     ) : RoomListFilter
 }

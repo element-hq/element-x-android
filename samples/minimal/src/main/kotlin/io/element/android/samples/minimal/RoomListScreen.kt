@@ -31,6 +31,7 @@ import io.element.android.features.roomlist.impl.datasource.RoomListRoomSummaryF
 import io.element.android.features.roomlist.impl.filters.RoomListFiltersPresenter
 import io.element.android.features.roomlist.impl.migration.MigrationScreenPresenter
 import io.element.android.features.roomlist.impl.migration.SharedPrefsMigrationScreenStore
+import io.element.android.features.roomlist.impl.search.RoomListSearchDataSource
 import io.element.android.features.roomlist.impl.search.RoomListSearchPresenter
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.dateformatter.impl.DateFormatters
@@ -112,9 +113,11 @@ class RoomListScreen(
             migrationScreenStore = SharedPrefsMigrationScreenStore(context.getSharedPreferences("migration", Context.MODE_PRIVATE))
         ),
         searchPresenter = RoomListSearchPresenter(
-            roomListService = matrixClient.roomListService,
-            roomSummaryFactory = roomListRoomSummaryFactory,
-            coroutineDispatchers = coroutineDispatchers,
+            RoomListSearchDataSource(
+                roomListService = matrixClient.roomListService,
+                roomSummaryFactory = roomListRoomSummaryFactory,
+                coroutineDispatchers = coroutineDispatchers,
+            )
         ),
         sessionPreferencesStore = DefaultSessionPreferencesStore(
             context = context,

@@ -23,11 +23,13 @@ import io.element.android.libraries.matrix.api.roomlist.RoomSummary
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.getAndUpdate
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import org.matrix.rustcomponents.sdk.RoomListEntriesDynamicFilterKind
 import org.matrix.rustcomponents.sdk.RoomListLoadingState
 import org.matrix.rustcomponents.sdk.RoomListService
 import kotlin.coroutines.CoroutineContext
@@ -50,6 +52,7 @@ internal class RoomListFactory(
         innerProvider: suspend () -> InnerRoomList
     ): DynamicRoomList {
         val loadingStateFlow: MutableStateFlow<RoomList.LoadingState> = MutableStateFlow(RoomList.LoadingState.NotLoaded)
+        val filteredSummariesFlow = MutableSharedFlow<List<RoomSummary>>(replay = 1, extraBufferCapacity = 1)
         val summariesFlow = MutableSharedFlow<List<RoomSummary>>(replay = 1, extraBufferCapacity = 1)
         val processor = RoomSummaryListProcessor(summariesFlow, innerRoomListService, coroutineContext, roomSummaryDetailsFactory)
         // Makes sure we don't miss any events
@@ -63,8 +66,8 @@ internal class RoomListFactory(
             innerRoomList?.let { innerRoomList ->
                 innerRoomList.entriesFlow(
                     pageSize = pageSize,
-                    initialFilterKind = initialFilter.toRustFilter(),
-                    roomListDynamicEvents = dynamicEvents
+                    roomListDynamicEvents = dynamicEvents,
+                    initialFilterKind = RoomListEntriesDynamicFilterKind.NonLeft
                 ).onEach { update ->
                     processor.postUpdate(update)
                 }.launchIn(this)
@@ -75,12 +78,21 @@ internal class RoomListFactory(
                         loadingStateFlow.value = it
                     }
                     .launchIn(this)
+
+                combine(
+                    currentFilter,
+                    summariesFlow
+                ) { filter, summaries ->
+                    summaries.filter(filter)
+                }.onEach {
+                    filteredSummariesFlow.emit(it)
+                }.launchIn(this)
             }
         }.invokeOnCompletion {
             innerRoomList?.destroy()
         }
         return RustDynamicRoomList(
-            summaries = summariesFlow,
+            summaries = filteredSummariesFlow,
             loadingState = loadingStateFlow,
             currentFilter = currentFilter,
             loadedPages = loadedPages,
@@ -106,8 +118,6 @@ private class RustDynamicRoomList(
 
     override suspend fun updateFilter(filter: RoomListFilter) {
         currentFilter.emit(filter)
-        val filterEvent = RoomListDynamicEvents.SetFilter(filter.toRustFilter())
-        dynamicEvents.emit(filterEvent)
     }
 
     override suspend fun loadMore() {

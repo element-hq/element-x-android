@@ -79,9 +79,7 @@ class RoomListSearchPresenterTests {
                 assertThat(
                     roomListService.allRooms.currentFilter.value
                 ).isEqualTo(
-                    RoomListFilter.all(
-                        RoomListFilter.None,
-                    )
+                    RoomListFilter.None,
                 )
                 state.eventSink(RoomListSearchEvents.QueryChanged("Search"))
             }
@@ -90,10 +88,7 @@ class RoomListSearchPresenterTests {
                 assertThat(
                     roomListService.allRooms.currentFilter.value
                 ).isEqualTo(
-                    RoomListFilter.all(
-                        RoomListFilter.NonLeft,
-                        RoomListFilter.NormalizedMatchRoomName("Search")
-                    )
+                    RoomListFilter.NormalizedMatchRoomName("Search")
                 )
                 state.eventSink(RoomListSearchEvents.ClearQuery)
             }
@@ -102,9 +97,7 @@ class RoomListSearchPresenterTests {
                 assertThat(
                     roomListService.allRooms.currentFilter.value
                 ).isEqualTo(
-                    RoomListFilter.all(
-                        RoomListFilter.None,
-                    )
+                    RoomListFilter.None,
                 )
             }
         }
@@ -141,11 +134,13 @@ fun TestScope.createRoomListSearchPresenter(
     roomListService: RoomListService = FakeRoomListService(),
 ): RoomListSearchPresenter {
     return RoomListSearchPresenter(
-        roomListService = roomListService,
-        roomSummaryFactory = RoomListRoomSummaryFactory(
-            lastMessageTimestampFormatter = FakeLastMessageTimestampFormatter(),
-            roomLastMessageFormatter = FakeRoomLastMessageFormatter(),
+        dataSource = RoomListSearchDataSource(
+            roomListService = roomListService,
+            roomSummaryFactory = RoomListRoomSummaryFactory(
+                lastMessageTimestampFormatter = FakeLastMessageTimestampFormatter(),
+                roomLastMessageFormatter = FakeRoomLastMessageFormatter(),
             ),
-        coroutineDispatchers = testCoroutineDispatchers(),
+            coroutineDispatchers = testCoroutineDispatchers(),
+        )
     )
 }
