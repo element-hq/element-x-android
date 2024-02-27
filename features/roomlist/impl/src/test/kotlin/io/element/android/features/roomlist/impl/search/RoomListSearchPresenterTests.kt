@@ -79,7 +79,7 @@ class RoomListSearchPresenterTests {
                 assertThat(
                     roomListService.allRooms.currentFilter.value
                 ).isEqualTo(
-                    RoomListFilter.None,
+                    RoomListFilter.None
                 )
                 state.eventSink(RoomListSearchEvents.QueryChanged("Search"))
             }
@@ -97,7 +97,7 @@ class RoomListSearchPresenterTests {
                 assertThat(
                     roomListService.allRooms.currentFilter.value
                 ).isEqualTo(
-                    RoomListFilter.None,
+                    RoomListFilter.None
                 )
             }
         }
