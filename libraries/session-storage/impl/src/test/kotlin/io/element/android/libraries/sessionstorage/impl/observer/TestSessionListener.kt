@@ -20,9 +20,9 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.sessionstorage.api.observer.SessionListener
 
 class TestSessionListener : SessionListener {
-    sealed class Event {
-        data class Created(val userId: String) : Event()
-        data class Deleted(val userId: String) : Event()
+    sealed interface Event {
+        data class Created(val userId: String) : Event
+        data class Deleted(val userId: String) : Event
     }
 
     private val trackRecord: MutableList<Event> = mutableListOf()
