@@ -84,6 +84,24 @@ class DatabaseSessionStoreTests {
     }
 
     @Test
+    fun `getAllSessions should return all the sessions`() = runTest {
+        val noSessions = databaseSessionStore.getAllSessions()
+        assertThat(noSessions).isEmpty()
+        database.sessionDataQueries.insertSessionData(aSessionData)
+        val otherSessionData = aSessionData.copy(userId = "otherUserId")
+        database.sessionDataQueries.insertSessionData(otherSessionData)
+        val allSessions = databaseSessionStore.getAllSessions().map {
+            it.toDbModel()
+        }
+        assertThat(allSessions).isEqualTo(
+            listOf(
+                aSessionData,
+                otherSessionData,
+            )
+        )
+    }
+
+    @Test
     fun `getSession returns a matching session in DB if exists`() = runTest {
         database.sessionDataQueries.insertSessionData(aSessionData)
         database.sessionDataQueries.insertSessionData(aSessionData.copy(userId = "otherUserId"))
@@ -159,5 +177,52 @@ class DatabaseSessionStoreTests {
         assertThat(alteredSession.loginTimestamp).isEqualTo(firstSessionData.loginTimestamp)
         assertThat(alteredSession.oidcData).isEqualTo(secondSessionData.oidcData)
         assertThat(alteredSession.passphrase).isEqualTo(secondSessionData.passphrase)
+    }
+
+    @Test
+    fun `update data, session not found`() = runTest {
+        val firstSessionData = SessionData(
+            userId = "userId",
+            deviceId = "deviceId",
+            accessToken = "accessToken",
+            refreshToken = "refreshToken",
+            homeserverUrl = "homeserverUrl",
+            slidingSyncProxy = "slidingSyncProxy",
+            loginTimestamp = 1,
+            oidcData = "aOidcData",
+            isTokenValid = 1,
+            loginType = null,
+            passphrase = "aPassphrase",
+        )
+        val secondSessionData = SessionData(
+            userId = "userIdUnknown",
+            deviceId = "deviceIdAltered",
+            accessToken = "accessTokenAltered",
+            refreshToken = "refreshTokenAltered",
+            homeserverUrl = "homeserverUrlAltered",
+            slidingSyncProxy = "slidingSyncProxyAltered",
+            loginTimestamp = 2,
+            oidcData = "aOidcDataAltered",
+            isTokenValid = 1,
+            loginType = null,
+            passphrase = "aPassphraseAltered",
+        )
+        assertThat(firstSessionData.userId).isNotEqualTo(secondSessionData.userId)
+
+        database.sessionDataQueries.insertSessionData(firstSessionData)
+        databaseSessionStore.updateData(secondSessionData.toApiModel())
+
+        // Get the session and check that it has not been altered
+        val notAlteredSession = databaseSessionStore.getSession(firstSessionData.userId)!!.toDbModel()
+
+        assertThat(notAlteredSession.userId).isEqualTo(firstSessionData.userId)
+        assertThat(notAlteredSession.deviceId).isEqualTo(firstSessionData.deviceId)
+        assertThat(notAlteredSession.accessToken).isEqualTo(firstSessionData.accessToken)
+        assertThat(notAlteredSession.refreshToken).isEqualTo(firstSessionData.refreshToken)
+        assertThat(notAlteredSession.homeserverUrl).isEqualTo(firstSessionData.homeserverUrl)
+        assertThat(notAlteredSession.slidingSyncProxy).isEqualTo(firstSessionData.slidingSyncProxy)
+        assertThat(notAlteredSession.loginTimestamp).isEqualTo(firstSessionData.loginTimestamp)
+        assertThat(notAlteredSession.oidcData).isEqualTo(firstSessionData.oidcData)
+        assertThat(notAlteredSession.passphrase).isEqualTo(firstSessionData.passphrase)
     }
 }
