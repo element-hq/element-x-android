@@ -40,7 +40,7 @@ import kotlin.coroutines.coroutineContext
 internal class RoomMemberListFetcher(
     private val room: RoomInterface,
     private val dispatcher: CoroutineDispatcher,
-    private val pageSize: Int = 1000,
+    private val pageSize: Int = 10000,
 ) {
     private val updatedRoomMemberMutex = Mutex()
     private val roomId = room.id()
