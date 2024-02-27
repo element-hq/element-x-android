@@ -83,7 +83,7 @@ class RoomListFiltersPresenter @Inject constructor(
                         RoomListFilter.Unread -> MatrixRoomListFilter.Unread
                         RoomListFilter.Favourites -> MatrixRoomListFilter.Favorite
                     }
-                }.plus(MatrixRoomListFilter.NonLeft)
+                }
             )
             roomListService.allRooms.updateFilter(allRoomsFilter)
         }

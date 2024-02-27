@@ -17,20 +17,41 @@
 package io.element.android.libraries.matrix.impl.roomlist
 
 import io.element.android.libraries.matrix.api.roomlist.RoomListFilter
-import org.matrix.rustcomponents.sdk.RoomListEntriesDynamicFilterKind
-import org.matrix.rustcomponents.sdk.RoomListFilterCategory
+import io.element.android.libraries.matrix.api.roomlist.RoomSummary
 
-fun RoomListFilter.toRustFilter(): RoomListEntriesDynamicFilterKind {
-    return when (this) {
-        is RoomListFilter.All -> RoomListEntriesDynamicFilterKind.All(filters.map { it.toRustFilter() })
-        is RoomListFilter.Any -> RoomListEntriesDynamicFilterKind.Any(filters.map { it.toRustFilter() })
-        RoomListFilter.Category.Group -> RoomListEntriesDynamicFilterKind.Category(RoomListFilterCategory.GROUP)
-        RoomListFilter.Category.People -> RoomListEntriesDynamicFilterKind.Category(RoomListFilterCategory.PEOPLE)
-        is RoomListFilter.FuzzyMatchRoomName -> RoomListEntriesDynamicFilterKind.FuzzyMatchRoomName(pattern)
-        RoomListFilter.NonLeft -> RoomListEntriesDynamicFilterKind.NonLeft
-        RoomListFilter.None -> RoomListEntriesDynamicFilterKind.None
-        is RoomListFilter.NormalizedMatchRoomName -> RoomListEntriesDynamicFilterKind.NormalizedMatchRoomName(pattern)
-        RoomListFilter.Unread -> RoomListEntriesDynamicFilterKind.Unread
-        RoomListFilter.Favorite -> RoomListEntriesDynamicFilterKind.Favourite
+val RoomListFilter.predicate
+    get() = when (this) {
+        is RoomListFilter.All -> { _: RoomSummary -> true }
+        is RoomListFilter.Any -> { _: RoomSummary -> true }
+        RoomListFilter.None -> { _: RoomSummary -> false }
+        RoomListFilter.Category.Group -> { roomSummary: RoomSummary ->
+            roomSummary is RoomSummary.Filled && !roomSummary.details.isDirect
+        }
+        RoomListFilter.Category.People -> { roomSummary: RoomSummary ->
+            roomSummary is RoomSummary.Filled && roomSummary.details.isDirect
+        }
+        RoomListFilter.Favorite -> { roomSummary: RoomSummary ->
+            roomSummary is RoomSummary.Filled && roomSummary.details.isFavorite
+        }
+        RoomListFilter.Unread -> { roomSummary: RoomSummary ->
+            roomSummary is RoomSummary.Filled &&
+                (roomSummary.details.numUnreadNotifications > 0 || roomSummary.details.isMarkedUnread)
+        }
+        is RoomListFilter.NormalizedMatchRoomName -> { roomSummary: RoomSummary ->
+            roomSummary is RoomSummary.Filled && roomSummary.details.name.contains(pattern, ignoreCase = true)
+        }
+    }
+
+fun List<RoomSummary>.filter(filter: RoomListFilter): List<RoomSummary> {
+    return when (filter) {
+        is RoomListFilter.All -> {
+            val predicates = filter.filters.map { it.predicate }
+            filter { roomSummary -> predicates.all { it(roomSummary) } }
+        }
+        is RoomListFilter.Any -> {
+            val predicates = filter.filters.map { it.predicate }
+            filter { roomSummary -> predicates.any { it(roomSummary) } }
+        }
+        else -> filter(filter.predicate)
     }
 }

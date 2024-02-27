@@ -21,7 +21,6 @@ import io.element.android.libraries.matrix.api.roomlist.RoomList
 import io.element.android.libraries.matrix.api.roomlist.RoomListFilter
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.api.roomlist.RoomSummary
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
@@ -60,7 +59,11 @@ class FakeRoomListService : RoomListService {
     var latestSlidingSyncRange: IntRange? = null
         private set
 
-    override fun createRoomList(coroutineScope: CoroutineScope, pageSize: Int, initialFilter: RoomListFilter, source: RoomList.Source): DynamicRoomList {
+    override fun createRoomList(
+        pageSize: Int,
+        initialFilter: RoomListFilter,
+        source: RoomList.Source
+    ): DynamicRoomList {
         return when (source) {
             RoomList.Source.All -> allRooms
             RoomList.Source.Invites -> invites

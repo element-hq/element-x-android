@@ -30,8 +30,6 @@ import io.element.android.features.lockscreen.impl.pin.model.assertText
 import io.element.android.features.lockscreen.impl.unlock.keypad.PinKeypadModel
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.test.FakeMatrixClient
-import io.element.android.tests.testutils.awaitLastSequentialItem
-import io.element.android.tests.testutils.consumeItemsUntilPredicate
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -54,13 +52,14 @@ class PinUnlockPresenterTest {
                 assertThat(state.signOutAction).isInstanceOf(AsyncData.Uninitialized::class.java)
                 assertThat(state.remainingAttempts).isInstanceOf(AsyncData.Uninitialized::class.java)
             }
-            consumeItemsUntilPredicate {
-                it.pinEntry is AsyncData.Success && it.remainingAttempts is AsyncData.Success
-            }.last().also { state ->
+            awaitItem().also { state ->
+                assertThat(state.pinEntry).isInstanceOf(AsyncData.Success::class.java)
+                assertThat(state.remainingAttempts).isInstanceOf(AsyncData.Success::class.java)
                 state.eventSink(PinUnlockEvents.OnPinKeypadPressed(PinKeypadModel.Number('1')))
                 state.eventSink(PinUnlockEvents.OnPinKeypadPressed(PinKeypadModel.Number('2')))
             }
-            awaitLastSequentialItem().also { state ->
+            skipItems(1)
+            awaitItem().also { state ->
                 state.pinEntry.assertText(halfCompletePin)
                 state.eventSink(PinUnlockEvents.OnPinKeypadPressed(PinKeypadModel.Number('3')))
                 state.eventSink(PinUnlockEvents.OnPinKeypadPressed(PinKeypadModel.Back))
@@ -68,7 +67,8 @@ class PinUnlockPresenterTest {
                 state.eventSink(PinUnlockEvents.OnPinKeypadPressed(PinKeypadModel.Number('3')))
                 state.eventSink(PinUnlockEvents.OnPinKeypadPressed(PinKeypadModel.Number('5')))
             }
-            awaitLastSequentialItem().also { state ->
+            skipItems(4)
+            awaitItem().also { state ->
                 state.pinEntry.assertText(completePin)
                 assertThat(state.isUnlocked).isTrue()
             }
@@ -81,9 +81,11 @@ class PinUnlockPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            val initialState = consumeItemsUntilPredicate {
-                it.pinEntry is AsyncData.Success && it.remainingAttempts is AsyncData.Success
-            }.last()
+            skipItems(1)
+            val initialState = awaitItem().also { state ->
+                assertThat(state.pinEntry).isInstanceOf(AsyncData.Success::class.java)
+                assertThat(state.remainingAttempts).isInstanceOf(AsyncData.Success::class.java)
+            }
             val numberOfAttempts = initialState.remainingAttempts.dataOrNull() ?: 0
             repeat(numberOfAttempts) {
                 initialState.eventSink(PinUnlockEvents.OnPinKeypadPressed(PinKeypadModel.Number('1')))
@@ -91,7 +93,8 @@ class PinUnlockPresenterTest {
                 initialState.eventSink(PinUnlockEvents.OnPinKeypadPressed(PinKeypadModel.Number('3')))
                 initialState.eventSink(PinUnlockEvents.OnPinKeypadPressed(PinKeypadModel.Number('4')))
             }
-            awaitLastSequentialItem().also { state ->
+            skipItems(4 * numberOfAttempts + 2)
+            awaitItem().also { state ->
                 assertThat(state.remainingAttempts.dataOrNull()).isEqualTo(0)
                 assertThat(state.showSignOutPrompt).isTrue()
                 assertThat(state.isSignOutPromptCancellable).isFalse()
@@ -105,26 +108,28 @@ class PinUnlockPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            consumeItemsUntilPredicate {
-                it.pinEntry is AsyncData.Success && it.remainingAttempts is AsyncData.Success
-            }.last().also { state ->
+            skipItems(1)
+            awaitItem().also { state ->
+                assertThat(state.pinEntry).isInstanceOf(AsyncData.Success::class.java)
+                assertThat(state.remainingAttempts).isInstanceOf(AsyncData.Success::class.java)
                 state.eventSink(PinUnlockEvents.OnForgetPin)
             }
-            awaitLastSequentialItem().also { state ->
+            awaitItem().also { state ->
                 assertThat(state.showSignOutPrompt).isTrue()
                 assertThat(state.isSignOutPromptCancellable).isTrue()
                 state.eventSink(PinUnlockEvents.ClearSignOutPrompt)
             }
-            awaitLastSequentialItem().also { state ->
+            awaitItem().also { state ->
                 assertThat(state.showSignOutPrompt).isFalse()
                 state.eventSink(PinUnlockEvents.OnForgetPin)
             }
-            awaitLastSequentialItem().also { state ->
+            awaitItem().also { state ->
                 assertThat(state.showSignOutPrompt).isTrue()
                 state.eventSink(PinUnlockEvents.SignOut)
             }
-            consumeItemsUntilPredicate { state ->
-                state.signOutAction is AsyncData.Success
+            skipItems(2)
+            awaitItem().also { state ->
+                assertThat(state.signOutAction).isInstanceOf(AsyncData.Success::class.java)
             }
         }
     }

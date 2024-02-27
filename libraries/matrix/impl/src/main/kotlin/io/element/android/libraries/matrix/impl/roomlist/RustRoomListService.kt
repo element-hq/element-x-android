@@ -47,7 +47,6 @@ internal class RustRoomListService(
     private val roomListFactory: RoomListFactory,
 ) : RoomListService {
     override fun createRoomList(
-        coroutineScope: CoroutineScope,
         pageSize: Int,
         initialFilter: RoomListFilter,
         source: RoomList.Source
@@ -55,7 +54,6 @@ internal class RustRoomListService(
         return roomListFactory.createRoomList(
             pageSize = pageSize,
             initialFilter = initialFilter,
-            coroutineScope = coroutineScope,
             coroutineContext = sessionDispatcher,
         ) {
             when (source) {
@@ -68,7 +66,6 @@ internal class RustRoomListService(
     override val allRooms: DynamicRoomList = roomListFactory.createRoomList(
         pageSize = DEFAULT_PAGE_SIZE,
         coroutineContext = sessionDispatcher,
-        initialFilter = RoomListFilter.all(RoomListFilter.NonLeft),
     ) {
         innerRoomListService.allRooms()
     }
