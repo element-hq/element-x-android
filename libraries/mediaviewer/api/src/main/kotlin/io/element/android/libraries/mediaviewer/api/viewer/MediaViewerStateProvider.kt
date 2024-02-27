@@ -21,11 +21,11 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.mediaviewer.api.local.LocalMedia
 import io.element.android.libraries.mediaviewer.api.local.MediaInfo
-import io.element.android.libraries.mediaviewer.api.local.aFileInfo
-import io.element.android.libraries.mediaviewer.api.local.aPdfInfo
-import io.element.android.libraries.mediaviewer.api.local.aVideoInfo
-import io.element.android.libraries.mediaviewer.api.local.anAudioInfo
-import io.element.android.libraries.mediaviewer.api.local.anImageInfo
+import io.element.android.libraries.mediaviewer.api.local.aPdfMediaInfo
+import io.element.android.libraries.mediaviewer.api.local.aVideoMediaInfo
+import io.element.android.libraries.mediaviewer.api.local.anApkMediaInfo
+import io.element.android.libraries.mediaviewer.api.local.anAudioMediaInfo
+import io.element.android.libraries.mediaviewer.api.local.anImageMediaInfo
 
 open class MediaViewerStateProvider : PreviewParameterProvider<MediaViewerState> {
     override val values: Sequence<MediaViewerState>
@@ -35,47 +35,47 @@ open class MediaViewerStateProvider : PreviewParameterProvider<MediaViewerState>
             aMediaViewerState(AsyncData.Failure(IllegalStateException("error"))),
             aMediaViewerState(
                 AsyncData.Success(
-                    LocalMedia(Uri.EMPTY, anImageInfo())
+                    LocalMedia(Uri.EMPTY, anImageMediaInfo())
                 ),
-                anImageInfo(),
+                anImageMediaInfo(),
             ),
             aMediaViewerState(
                 AsyncData.Success(
-                    LocalMedia(Uri.EMPTY, aVideoInfo())
+                    LocalMedia(Uri.EMPTY, aVideoMediaInfo())
                 ),
-                aVideoInfo(),
+                aVideoMediaInfo(),
             ),
             aMediaViewerState(
                 AsyncData.Success(
-                    LocalMedia(Uri.EMPTY, aPdfInfo())
+                    LocalMedia(Uri.EMPTY, aPdfMediaInfo())
                 ),
-                aPdfInfo(),
+                aPdfMediaInfo(),
             ),
             aMediaViewerState(
                 AsyncData.Loading(),
-                aFileInfo(),
+                anApkMediaInfo(),
             ),
             aMediaViewerState(
                 AsyncData.Success(
-                    LocalMedia(Uri.EMPTY, aFileInfo())
+                    LocalMedia(Uri.EMPTY, anApkMediaInfo())
                 ),
-                aFileInfo(),
+                anApkMediaInfo(),
             ),
             aMediaViewerState(
                 AsyncData.Loading(),
-                anAudioInfo(),
+                anAudioMediaInfo(),
             ),
             aMediaViewerState(
                 AsyncData.Success(
-                    LocalMedia(Uri.EMPTY, anAudioInfo())
+                    LocalMedia(Uri.EMPTY, anAudioMediaInfo())
                 ),
-                anAudioInfo(),
+                anAudioMediaInfo(),
             ),
             aMediaViewerState(
                 AsyncData.Success(
-                    LocalMedia(Uri.EMPTY, anImageInfo())
+                    LocalMedia(Uri.EMPTY, anImageMediaInfo())
                 ),
-                anImageInfo(),
+                anImageMediaInfo(),
                 canDownload = false,
                 canShare = false,
             ),
@@ -84,9 +84,10 @@ open class MediaViewerStateProvider : PreviewParameterProvider<MediaViewerState>
 
 fun aMediaViewerState(
     downloadedMedia: AsyncData<LocalMedia> = AsyncData.Uninitialized,
-    mediaInfo: MediaInfo = anImageInfo(),
+    mediaInfo: MediaInfo = anImageMediaInfo(),
     canDownload: Boolean = true,
     canShare: Boolean = true,
+    eventSink: (MediaViewerEvents) -> Unit = {},
 ) = MediaViewerState(
     mediaInfo = mediaInfo,
     thumbnailSource = null,
@@ -94,4 +95,5 @@ fun aMediaViewerState(
     snackbarMessage = null,
     canDownload = canDownload,
     canShare = canShare,
-) {}
+    eventSink = eventSink,
+)

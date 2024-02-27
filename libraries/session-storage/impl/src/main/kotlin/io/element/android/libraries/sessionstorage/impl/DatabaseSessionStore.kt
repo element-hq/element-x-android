@@ -103,7 +103,6 @@ class DatabaseSessionStore @Inject constructor(
     }
 
     override fun sessionsFlow(): Flow<List<SessionData>> {
-        Timber.w("Observing session list!")
         return database.sessionDataQueries.selectAll()
             .asFlow()
             .mapToList(dispatchers.io)
