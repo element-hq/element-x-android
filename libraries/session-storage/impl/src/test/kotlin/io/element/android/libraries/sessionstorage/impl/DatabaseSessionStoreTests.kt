@@ -22,7 +22,6 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.session.SessionData
 import io.element.android.libraries.sessionstorage.api.LoggedInState
-import io.element.android.libraries.sessionstorage.api.LoginType
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
@@ -33,19 +32,7 @@ class DatabaseSessionStoreTests {
     private lateinit var database: SessionDatabase
     private lateinit var databaseSessionStore: DatabaseSessionStore
 
-    private val aSessionData = SessionData(
-        userId = "userId",
-        deviceId = "deviceId",
-        accessToken = "accessToken",
-        refreshToken = "refreshToken",
-        homeserverUrl = "homeserverUrl",
-        slidingSyncProxy = null,
-        loginTimestamp = null,
-        oidcData = "aOidcData",
-        isTokenValid = 1,
-        loginType = LoginType.UNKNOWN.name,
-        passphrase = null,
-    )
+    private val aSessionData = aSessionData()
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Before
