@@ -30,7 +30,6 @@ import io.element.android.features.lockscreen.impl.pin.model.assertText
 import io.element.android.features.lockscreen.impl.unlock.keypad.PinKeypadModel
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.test.FakeMatrixClient
-import io.element.android.tests.testutils.awaitLastSequentialItem
 import io.element.android.tests.testutils.consumeItemsUntilPredicate
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.test.runTest
@@ -60,15 +59,18 @@ class PinUnlockPresenterTest {
                 state.eventSink(PinUnlockEvents.OnPinKeypadPressed(PinKeypadModel.Number('1')))
                 state.eventSink(PinUnlockEvents.OnPinKeypadPressed(PinKeypadModel.Number('2')))
             }
-            awaitLastSequentialItem().also { state ->
-                state.pinEntry.assertText(halfCompletePin)
+            consumeItemsUntilPredicate { state ->
+                state.pinEntry.equalsTo(halfCompletePin)
+            }.last().also { state ->
                 state.eventSink(PinUnlockEvents.OnPinKeypadPressed(PinKeypadModel.Number('3')))
                 state.eventSink(PinUnlockEvents.OnPinKeypadPressed(PinKeypadModel.Back))
                 state.eventSink(PinUnlockEvents.OnPinKeypadPressed(PinKeypadModel.Empty))
                 state.eventSink(PinUnlockEvents.OnPinKeypadPressed(PinKeypadModel.Number('3')))
                 state.eventSink(PinUnlockEvents.OnPinKeypadPressed(PinKeypadModel.Number('5')))
             }
-            awaitLastSequentialItem().also { state ->
+            consumeItemsUntilPredicate { state ->
+                state.pinEntry.equalsTo(completePin) && state.isUnlocked
+            }.last().also { state ->
                 state.pinEntry.assertText(completePin)
                 assertThat(state.isUnlocked).isTrue()
             }
@@ -91,7 +93,9 @@ class PinUnlockPresenterTest {
                 initialState.eventSink(PinUnlockEvents.OnPinKeypadPressed(PinKeypadModel.Number('3')))
                 initialState.eventSink(PinUnlockEvents.OnPinKeypadPressed(PinKeypadModel.Number('4')))
             }
-            awaitLastSequentialItem().also { state ->
+            consumeItemsUntilPredicate { state ->
+                state.remainingAttempts.dataOrNull() == 0
+            }.last().also { state ->
                 assertThat(state.remainingAttempts.dataOrNull()).isEqualTo(0)
                 assertThat(state.showSignOutPrompt).isTrue()
                 assertThat(state.isSignOutPromptCancellable).isFalse()
@@ -110,17 +114,19 @@ class PinUnlockPresenterTest {
             }.last().also { state ->
                 state.eventSink(PinUnlockEvents.OnForgetPin)
             }
-            awaitLastSequentialItem().also { state ->
-                assertThat(state.showSignOutPrompt).isTrue()
-                assertThat(state.isSignOutPromptCancellable).isTrue()
+            consumeItemsUntilPredicate { state ->
+                state.showSignOutPrompt && state.isSignOutPromptCancellable
+            }.last().also { state ->
                 state.eventSink(PinUnlockEvents.ClearSignOutPrompt)
             }
-            awaitLastSequentialItem().also { state ->
-                assertThat(state.showSignOutPrompt).isFalse()
+            consumeItemsUntilPredicate { state ->
+                !state.showSignOutPrompt
+            }.last().also { state ->
                 state.eventSink(PinUnlockEvents.OnForgetPin)
             }
-            awaitLastSequentialItem().also { state ->
-                assertThat(state.showSignOutPrompt).isTrue()
+            consumeItemsUntilPredicate { state ->
+                state.showSignOutPrompt
+            }.last().also { state ->
                 state.eventSink(PinUnlockEvents.SignOut)
             }
             consumeItemsUntilPredicate { state ->
@@ -131,6 +137,10 @@ class PinUnlockPresenterTest {
 
     private fun AsyncData<PinEntry>.assertText(text: String) {
         dataOrNull()?.assertText(text)
+    }
+
+    private fun AsyncData<PinEntry>.equalsTo(text: String): Boolean {
+        return dataOrNull()?.toText() == text
     }
 
     private suspend fun createPinUnlockPresenter(
