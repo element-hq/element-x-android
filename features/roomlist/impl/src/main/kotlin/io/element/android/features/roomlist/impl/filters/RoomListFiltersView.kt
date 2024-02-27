@@ -103,10 +103,8 @@ private fun LazyListScope.roomListFilters(
 ) {
     items(
         items = filters,
-        key = { it.ordinal },
     ) { filter ->
         RoomListFilterView(
-            modifier = Modifier.animateItemPlacement(),
             roomListFilter = filter,
             selected = selected,
             onClick = onClick,
