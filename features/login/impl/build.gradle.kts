@@ -49,6 +49,7 @@ dependencies {
     implementation(projects.libraries.designsystem)
     implementation(projects.libraries.testtags)
     implementation(projects.libraries.uiStrings)
+    implementation(projects.libraries.permissions.api)
     implementation(libs.androidx.browser)
     implementation(platform(libs.network.retrofit.bom))
     implementation(libs.network.retrofit)

@@ -46,6 +46,7 @@ import io.element.android.features.login.impl.screens.changeaccountprovider.Chan
 import io.element.android.features.login.impl.screens.confirmaccountprovider.ConfirmAccountProviderNode
 import io.element.android.features.login.impl.screens.loginpassword.LoginFormState
 import io.element.android.features.login.impl.screens.loginpassword.LoginPasswordNode
+import io.element.android.features.login.impl.screens.qrcode.intro.QrCodeIntroNode
 import io.element.android.features.login.impl.screens.searchaccountprovider.SearchAccountProviderNode
 import io.element.android.features.login.impl.screens.waitlistscreen.WaitListNode
 import io.element.android.libraries.architecture.BackstackView
@@ -113,7 +114,10 @@ class LoginFlowNode @AssistedInject constructor(
         data object Root : NavTarget
 
         @Parcelize
-        data object QrCode : NavTarget
+        data object QrCodeIntro : NavTarget
+
+        @Parcelize
+        data object QrCodeScan : NavTarget
 
         @Parcelize
         data object ConfirmAccountProvider : NavTarget
@@ -138,7 +142,7 @@ class LoginFlowNode @AssistedInject constructor(
         return when (navTarget) {
             NavTarget.Root -> {
                 if (plugins<Inputs>().first().isQrCode) {
-                    resolve(NavTarget.QrCode, buildContext)
+                    resolve(NavTarget.QrCodeIntro, buildContext)
                 } else {
                     resolve(NavTarget.ConfirmAccountProvider, buildContext)
                 }
@@ -218,7 +222,21 @@ class LoginFlowNode @AssistedInject constructor(
                 }
                 createNode<WaitListNode>(buildContext, plugins = listOf(callback, inputs))
             }
-            NavTarget.QrCode -> TODO()
+            NavTarget.QrCodeIntro -> {
+                val callback = object : QrCodeIntroNode.Callback {
+                    override fun onCancelClicked() {
+                        navigateUp()
+                    }
+
+                    override fun onContinue() {
+                        backstack.push(NavTarget.QrCodeScan)
+                    }
+                }
+                createNode<QrCodeIntroNode>(buildContext, plugins = listOf(callback))
+            }
+            NavTarget.QrCodeScan -> {
+                TODO()
+            }
         }
     }
 
