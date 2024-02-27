@@ -39,6 +39,7 @@ import androidx.compose.ui.layout.boundsInWindow
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalAutofill
 import androidx.compose.ui.platform.LocalAutofillTree
+import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
@@ -116,7 +117,7 @@ fun TextField(
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
     singleLine: Boolean = false,
-    maxLines: Int = Int.MAX_VALUE,
+    maxLines: Int = if (singleLine) 1 else Int.MAX_VALUE,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     shape: Shape = TextFieldDefaults.shape,
     colors: TextFieldColors = TextFieldDefaults.colors()
@@ -163,9 +164,44 @@ private fun ContentToPreview() {
             allBooleans.forEach { enabled ->
                 allBooleans.forEach { readonly ->
                     TextField(
+                        value = "Hello er=${isError.asInt()}, en=${enabled.asInt()}, ro=${readonly.asInt()}",
                         onValueChange = {},
                         label = { Text(text = "label") },
-                        value = "Hello er=${isError.asInt()}, en=${enabled.asInt()}, ro=${readonly.asInt()}",
+                        isError = isError,
+                        enabled = enabled,
+                        readOnly = readonly,
+                    )
+                    Spacer(modifier = Modifier.height(2.dp))
+                }
+            }
+        }
+    }
+}
+
+@Preview(group = PreviewGroup.TextFields)
+@Composable
+internal fun TextFieldValueLightPreview() =
+    ElementPreviewLight { TextFieldValueContentToPreview() }
+
+@Preview(group = PreviewGroup.TextFields)
+@Composable
+internal fun TextFieldValueTextFieldDarkPreview() =
+    ElementPreviewDark { TextFieldValueContentToPreview() }
+
+@ExcludeFromCoverage
+@Composable
+private fun TextFieldValueContentToPreview() {
+    Column(modifier = Modifier.padding(4.dp)) {
+        allBooleans.forEach { isError ->
+            allBooleans.forEach { enabled ->
+                allBooleans.forEach { readonly ->
+                    TextField(
+                        value = TextFieldValue(
+                            text = "Hello er=${isError.asInt()}, en=${enabled.asInt()}, ro=${readonly.asInt()}",
+                            selection = TextRange(0, "Hello".length),
+                        ),
+                        onValueChange = {},
+                        label = { Text(text = "label") },
                         isError = isError,
                         enabled = enabled,
                         readOnly = readonly,
