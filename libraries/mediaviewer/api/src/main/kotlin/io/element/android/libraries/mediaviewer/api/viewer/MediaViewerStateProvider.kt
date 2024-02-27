@@ -21,9 +21,9 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.mediaviewer.api.local.LocalMedia
 import io.element.android.libraries.mediaviewer.api.local.MediaInfo
-import io.element.android.libraries.mediaviewer.api.local.anApkMediaInfo
 import io.element.android.libraries.mediaviewer.api.local.aPdfMediaInfo
 import io.element.android.libraries.mediaviewer.api.local.aVideoMediaInfo
+import io.element.android.libraries.mediaviewer.api.local.anApkMediaInfo
 import io.element.android.libraries.mediaviewer.api.local.anAudioMediaInfo
 import io.element.android.libraries.mediaviewer.api.local.anImageMediaInfo
 
