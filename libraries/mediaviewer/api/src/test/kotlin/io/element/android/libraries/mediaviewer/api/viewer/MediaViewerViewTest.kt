@@ -28,7 +28,7 @@ import androidx.compose.ui.test.swipeDown
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.mediaviewer.api.local.LocalMedia
-import io.element.android.libraries.mediaviewer.api.local.anImageInfo
+import io.element.android.libraries.mediaviewer.api.local.anImageMediaInfo
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.tests.testutils.EnsureNeverCalled
 import io.element.android.tests.testutils.EventsRecorder
@@ -79,9 +79,9 @@ class MediaViewerViewTest {
         rule.setMediaViewerView(
             aMediaViewerState(
                 downloadedMedia = AsyncData.Success(
-                    LocalMedia(Uri.EMPTY, anImageInfo())
+                    LocalMedia(Uri.EMPTY, anImageMediaInfo())
                 ),
-                mediaInfo = anImageInfo(),
+                mediaInfo = anImageMediaInfo(),
                 eventSink = eventsRecorder
             ),
         )
@@ -97,9 +97,9 @@ class MediaViewerViewTest {
         rule.setMediaViewerView(
             aMediaViewerState(
                 downloadedMedia = AsyncData.Success(
-                    LocalMedia(Uri.EMPTY, anImageInfo())
+                    LocalMedia(Uri.EMPTY, anImageMediaInfo())
                 ),
-                mediaInfo = anImageInfo(),
+                mediaInfo = anImageMediaInfo(),
                 eventSink = eventsRecorder
             ),
         )
@@ -122,9 +122,9 @@ class MediaViewerViewTest {
             rule.setMediaViewerView(
                 aMediaViewerState(
                     downloadedMedia = AsyncData.Success(
-                        LocalMedia(Uri.EMPTY, anImageInfo())
+                        LocalMedia(Uri.EMPTY, anImageMediaInfo())
                     ),
-                    mediaInfo = anImageInfo(),
+                    mediaInfo = anImageMediaInfo(),
                     eventSink = eventsRecorder
                 ),
                 onBackPressed = callback,
@@ -141,7 +141,7 @@ class MediaViewerViewTest {
         rule.setMediaViewerView(
             aMediaViewerState(
                 downloadedMedia = AsyncData.Failure(IllegalStateException("error")),
-                mediaInfo = anImageInfo(),
+                mediaInfo = anImageMediaInfo(),
                 eventSink = eventsRecorder
             ),
         )
@@ -155,7 +155,7 @@ class MediaViewerViewTest {
         rule.setMediaViewerView(
             aMediaViewerState(
                 downloadedMedia = AsyncData.Failure(IllegalStateException("error")),
-                mediaInfo = anImageInfo(),
+                mediaInfo = anImageMediaInfo(),
                 eventSink = eventsRecorder
             ),
         )

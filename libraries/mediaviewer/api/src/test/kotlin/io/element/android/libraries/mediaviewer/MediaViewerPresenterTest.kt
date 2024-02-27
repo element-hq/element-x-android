@@ -27,7 +27,7 @@ import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.matrix.test.media.FakeMediaLoader
 import io.element.android.libraries.matrix.test.media.aMediaSource
-import io.element.android.libraries.mediaviewer.api.local.aFileInfo
+import io.element.android.libraries.mediaviewer.api.local.anApkMediaInfo
 import io.element.android.libraries.mediaviewer.api.viewer.MediaViewerEvents
 import io.element.android.libraries.mediaviewer.api.viewer.MediaViewerNode
 import io.element.android.libraries.mediaviewer.api.viewer.MediaViewerPresenter
@@ -40,7 +40,7 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
 
-private val TESTED_MEDIA_INFO = aFileInfo()
+private val TESTED_MEDIA_INFO = anApkMediaInfo()
 
 class MediaViewerPresenterTest {
     @get:Rule

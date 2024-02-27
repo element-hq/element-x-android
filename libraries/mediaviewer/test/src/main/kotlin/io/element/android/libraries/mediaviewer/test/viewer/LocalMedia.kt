@@ -19,11 +19,11 @@ package io.element.android.libraries.mediaviewer.test.viewer
 import android.net.Uri
 import io.element.android.libraries.mediaviewer.api.local.LocalMedia
 import io.element.android.libraries.mediaviewer.api.local.MediaInfo
-import io.element.android.libraries.mediaviewer.api.local.anImageInfo
+import io.element.android.libraries.mediaviewer.api.local.anImageMediaInfo
 
 fun aLocalMedia(
     uri: Uri,
-    mediaInfo: MediaInfo = anImageInfo(),
+    mediaInfo: MediaInfo = anImageMediaInfo(),
 ) = LocalMedia(
     uri = uri,
     info = mediaInfo
