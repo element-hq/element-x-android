@@ -17,6 +17,6 @@
 package io.element.android.features.onboarding.impl
 
 object OnBoardingConfig {
-    const val CAN_LOGIN_WITH_QR_CODE = false
+    const val CAN_LOGIN_WITH_QR_CODE = true
     const val CAN_CREATE_ACCOUNT = false
 }

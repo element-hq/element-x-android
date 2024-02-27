@@ -27,6 +27,7 @@ import com.bumble.appyx.core.lifecycle.subscribe
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
+import com.bumble.appyx.core.plugin.plugins
 import com.bumble.appyx.navmodel.backstack.BackStack
 import com.bumble.appyx.navmodel.backstack.operation.newRoot
 import com.bumble.appyx.navmodel.backstack.operation.push
@@ -69,7 +70,7 @@ class LoginFlowNode @AssistedInject constructor(
     private val oidcActionFlow: OidcActionFlow,
 ) : BaseFlowNode<LoginFlowNode.NavTarget>(
     backstack = BackStack(
-        initialElement = NavTarget.ConfirmAccountProvider,
+        initialElement = NavTarget.Root,
         savedStateMap = buildContext.savedStateMap,
     ),
     buildContext = buildContext,
@@ -80,6 +81,7 @@ class LoginFlowNode @AssistedInject constructor(
 
     data class Inputs(
         val isAccountCreation: Boolean,
+        val isQrCode: Boolean,
     ) : NodeInputs
 
     private val inputs: Inputs = inputs()
@@ -108,6 +110,12 @@ class LoginFlowNode @AssistedInject constructor(
 
     sealed interface NavTarget : Parcelable {
         @Parcelize
+        data object Root : NavTarget
+
+        @Parcelize
+        data object QrCode : NavTarget
+
+        @Parcelize
         data object ConfirmAccountProvider : NavTarget
 
         @Parcelize
@@ -128,6 +136,13 @@ class LoginFlowNode @AssistedInject constructor(
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
         return when (navTarget) {
+            NavTarget.Root -> {
+                if (plugins<Inputs>().first().isQrCode) {
+                    resolve(NavTarget.QrCode, buildContext)
+                } else {
+                    resolve(NavTarget.ConfirmAccountProvider, buildContext)
+                }
+            }
             NavTarget.ConfirmAccountProvider -> {
                 val inputs = ConfirmAccountProviderNode.Inputs(
                     isAccountCreation = inputs.isAccountCreation
@@ -203,6 +218,7 @@ class LoginFlowNode @AssistedInject constructor(
                 }
                 createNode<WaitListNode>(buildContext, plugins = listOf(callback, inputs))
             }
+            NavTarget.QrCode -> TODO()
         }
     }
 

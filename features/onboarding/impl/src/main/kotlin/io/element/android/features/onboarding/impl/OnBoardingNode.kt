@@ -45,6 +45,10 @@ class OnBoardingNode @AssistedInject constructor(
         plugins<OnBoardingEntryPoint.Callback>().forEach { it.onSignUp() }
     }
 
+    private fun onSignInWithQrCode() {
+        plugins<OnBoardingEntryPoint.Callback>().forEach { it.onSignInWithQrCode() }
+    }
+
     private fun onOpenDeveloperSettings() {
         plugins<OnBoardingEntryPoint.Callback>().forEach { it.onOpenDeveloperSettings() }
     }
@@ -61,7 +65,7 @@ class OnBoardingNode @AssistedInject constructor(
             modifier = modifier,
             onSignIn = ::onSignIn,
             onCreateAccount = ::onSignUp,
-            onSignInWithQrCode = { /* Not supported yet */ },
+            onSignInWithQrCode = ::onSignInWithQrCode,
             onOpenDeveloperSettings = ::onOpenDeveloperSettings,
             onReportProblem = ::onReportProblem,
         )

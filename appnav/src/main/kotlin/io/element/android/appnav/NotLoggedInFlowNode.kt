@@ -75,6 +75,7 @@ class NotLoggedInFlowNode @AssistedInject constructor(
         @Parcelize
         data class LoginFlow(
             val isAccountCreation: Boolean,
+            val isQrCode: Boolean,
         ) : NavTarget
 
         @Parcelize
@@ -86,11 +87,15 @@ class NotLoggedInFlowNode @AssistedInject constructor(
             NavTarget.OnBoarding -> {
                 val callback = object : OnBoardingEntryPoint.Callback {
                     override fun onSignUp() {
-                        backstack.push(NavTarget.LoginFlow(isAccountCreation = true))
+                        backstack.push(NavTarget.LoginFlow(isAccountCreation = true, isQrCode = false))
                     }
 
                     override fun onSignIn() {
-                        backstack.push(NavTarget.LoginFlow(isAccountCreation = false))
+                        backstack.push(NavTarget.LoginFlow(isAccountCreation = false, isQrCode = false))
+                    }
+
+                    override fun onSignInWithQrCode() {
+                        backstack.push(NavTarget.LoginFlow(isAccountCreation = false, isQrCode = true))
                     }
 
                     override fun onOpenDeveloperSettings() {
@@ -108,7 +113,7 @@ class NotLoggedInFlowNode @AssistedInject constructor(
             }
             is NavTarget.LoginFlow -> {
                 loginEntryPoint.nodeBuilder(this, buildContext)
-                    .params(LoginEntryPoint.Params(isAccountCreation = navTarget.isAccountCreation))
+                    .params(LoginEntryPoint.Params(isAccountCreation = navTarget.isAccountCreation, isQrCode = navTarget.isQrCode))
                     .build()
             }
             NavTarget.ConfigureTracing -> {

@@ -23,6 +23,7 @@ import io.element.android.libraries.architecture.FeatureEntryPoint
 interface LoginEntryPoint : FeatureEntryPoint {
     data class Params(
         val isAccountCreation: Boolean,
+        val isQrCode: Boolean,
     )
 
     fun nodeBuilder(parentNode: Node, buildContext: BuildContext): NodeBuilder
