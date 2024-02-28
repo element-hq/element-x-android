@@ -37,7 +37,6 @@ import io.element.android.libraries.matrix.test.AN_EVENT_ID_2
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.tests.testutils.WarmUpRule
-import io.element.android.tests.testutils.consumeItemsUntilPredicate
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -67,15 +66,14 @@ class PollHistoryPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
+            skipItems(1)
             awaitItem().also { state ->
                 assertThat(state.activeFilter).isEqualTo(PollHistoryFilter.ONGOING)
                 assertThat(state.pollHistoryItems.size).isEqualTo(0)
                 assertThat(state.isLoading).isTrue()
                 assertThat(state.hasMoreToLoad).isTrue()
             }
-            consumeItemsUntilPredicate {
-                it.pollHistoryItems.size == 2
-            }.last().also { state ->
+            awaitItem().also { state ->
                 assertThat(state.pollHistoryItems.size).isEqualTo(2)
                 assertThat(state.pollHistoryItems.ongoing).hasSize(1)
                 assertThat(state.pollHistoryItems.past).hasSize(1)
@@ -93,13 +91,13 @@ class PollHistoryPresenterTest {
                 assertThat(state.activeFilter).isEqualTo(PollHistoryFilter.ONGOING)
                 state.eventSink(PollHistoryEvents.OnFilterSelected(PollHistoryFilter.PAST))
             }
-            consumeItemsUntilPredicate {
-                it.activeFilter == PollHistoryFilter.PAST
-            }.last().also { state ->
+            skipItems(1)
+            awaitItem().also { state ->
+                assertThat(state.activeFilter).isEqualTo(PollHistoryFilter.PAST)
                 state.eventSink(PollHistoryEvents.OnFilterSelected(PollHistoryFilter.ONGOING))
             }
-            consumeItemsUntilPredicate {
-                it.activeFilter == PollHistoryFilter.ONGOING
+            awaitItem().also { state ->
+                assertThat(state.activeFilter).isEqualTo(PollHistoryFilter.ONGOING)
             }
         }
     }
@@ -133,8 +131,9 @@ class PollHistoryPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            consumeItemsUntilPredicate {
-                it.pollHistoryItems.size == 2
+            skipItems(2)
+            awaitItem().also { state ->
+                assertThat(state.pollHistoryItems.size).isEqualTo(2)
             }
             timeline.updatePaginationState {
                 copy(isBackPaginating = false)
@@ -142,11 +141,11 @@ class PollHistoryPresenterTest {
             val loadedState = awaitItem()
             assertThat(loadedState.isLoading).isFalse()
             loadedState.eventSink(PollHistoryEvents.LoadMore)
-            consumeItemsUntilPredicate {
-                it.isLoading
+            awaitItem().also { state ->
+                assertThat(state.isLoading).isTrue()
             }
-            consumeItemsUntilPredicate {
-                !it.isLoading
+            awaitItem().also { state ->
+                assertThat(state.isLoading).isFalse()
             }
         }
     }
