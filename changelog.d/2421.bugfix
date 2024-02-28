@@ -1,1 +1,0 @@
-Add ability to enter a recovery key to verify the session. Also fixes some refresh issues with the verification session state.

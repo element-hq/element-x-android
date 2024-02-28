@@ -1,3 +1,26 @@
+Changes in Element X v0.4.5 (2024-02-28)
+========================================
+
+Features ✨
+----------
+ - Mark a room or dm as favourite. ([#2208](https://github.com/element-hq/element-x-android/issues/2208))
+ - Add moderation to rooms:
+   - Sort member in room member list by powerlevel, display their roles.
+   - Display banner users in room member list for users with enough power level to ban/unban. ([#2256](https://github.com/element-hq/element-x-android/issues/2256))
+ - MediaViewer : introduce fullscreen and flick to dismiss behavior. ([#2390](https://github.com/element-hq/element-x-android/issues/2390))
+ - Allow user-installed certificates to be used by the HTTP client ([#2992](https://github.com/element-hq/element-x-android/issues/2992))
+
+Bugfixes 🐛
+----------
+ - Do not display empty room list state before the loading one when we still don't have any items ([#+do-not-display-empty-state-before-loading-roomlist](https://github.com/element-hq/element-x-android/issues/+do-not-display-empty-state-before-loading-roomlist))
+ - Improve how Talkback works with the timeline. Sadly, it's still not 100% working, but there is some issue with the `LazyColumn` using `reverseLayout` that only Google can fix. ([#+improve-accessibility-in-timeline](https://github.com/element-hq/element-x-android/issues/+improve-accessibility-in-timeline))
+ - Add ability to enter a recovery key to verify the session. Also fixes some refresh issues with the verification session state. ([#2421](https://github.com/element-hq/element-x-android/issues/2421))
+
+Other changes
+-------------
+ - Provide the current system proxy setting to the Rust SDK. ([#2420](https://github.com/element-hq/element-x-android/issues/2420))
+
+
 Changes in Element X v0.4.4 (2024-02-15)
 ========================================
 
