@@ -1,12 +1,11 @@
 /*
- * Copyright 2022 The Android Open Source Project
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright (c) 2024 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     https://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -23,22 +22,26 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 /**
- * Screenshot test for the English version only.
+ * Screenshot test for the Locale other then English.
  */
 @RunWith(TestParameterInjector::class)
-class S : ScreenshotTest() {
+class T : ScreenshotTest() {
     /**
      * *Note*: keep the method name as short as possible to get shorter filename for generated screenshot.
      * Long name was preview_test.
      */
+    @SuppressWarnings("MemberNameEqualsClassName")
     @Test
     fun t(
         @TestParameter(valuesProvider = PreviewProvider::class) componentTestPreview: TestPreview,
         @TestParameter baseDeviceConfig: BaseDeviceConfig,
         @TestParameter(value = ["1.0"]) fontScale: Float,
-        // Need to keep the TestParameter to have filename including the language.
-        @TestParameter(value = ["en"]) localeStr: String,
+        @TestParameter(value = ["fr", "de"]) localeStr: String,
     ) {
+        // Only test ComponentTestPreview, and only with the light theme
+        if (componentTestPreview.isNightMode() || componentTestPreview !is ComponentTestPreview) {
+            return
+        }
         doTest(
             componentTestPreview = componentTestPreview,
             baseDeviceConfig = baseDeviceConfig,
