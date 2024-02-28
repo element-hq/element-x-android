@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_account_provider_change">"Змінити провайдера облікового запису"</string>
+  <string name="screen_account_provider_form_hint">"Адреса домашнього сервера"</string>
+  <string name="screen_account_provider_form_notice">"Уведіть пошуковий термін або адресу домену."</string>
+  <string name="screen_account_provider_form_subtitle">"Пошук компанії, спільноти або приватного сервера."</string>
+  <string name="screen_account_provider_form_title">"Знайти провайдера облікового запису"</string>
+  <string name="screen_account_provider_signin_subtitle">"Тут будуть зберігатися Ваші розмови - так само, як Ви використовуєте поштову скриньку для зберігання своїх електронних листів."</string>
+  <string name="screen_account_provider_signin_title">"Ви збираєтесь увійти в %s"</string>
+  <string name="screen_account_provider_signup_subtitle">"Тут будуть зберігатися Ваші розмови - так само, як Ви використовуєте поштову скриньку для зберігання своїх електронних листів."</string>
+  <string name="screen_account_provider_signup_title">"Ви збираєтеся створити обліковий запис на %s"</string>
+  <string name="screen_change_account_provider_matrix_org_subtitle">"Matrix.org — це великий безплатний сервер у загальнодоступній мережі Matrix для безпечного децентралізованого зв’язку, яким керує Matrix.org Foundation."</string>
+  <string name="screen_change_account_provider_other">"Інше"</string>
+  <string name="screen_change_account_provider_subtitle">"Використати іншого провайдера облікових записів, наприклад, власний приватний сервер або робочий обліковий запис."</string>
+  <string name="screen_change_account_provider_title">"Змінити провайдера облікового запису"</string>
+  <string name="screen_change_server_error_invalid_homeserver">"Не вдалося підключитися до цього домашнього сервера. Будь ласка, перевірте, чи правильно Ви ввели URL-адресу домашнього сервера. Якщо URL-адреса правильна, зверніться за додатковою допомогою до адміністратора домашнього сервера."</string>
+  <string name="screen_change_server_error_no_sliding_sync_message">"Наразі цей сервер не підтримує sliding sync."</string>
+  <string name="screen_change_server_form_header">"URL-адреса домашнього сервера"</string>
+  <string name="screen_change_server_form_notice">"Ви можете підключитися лише до наявного сервера, який підтримує sliding sync. Ваш адміністратор домашнього сервера повинен буде налаштувати його. %1$s"</string>
+  <string name="screen_change_server_subtitle">"Яка адреса Вашого сервера?"</string>
+  <string name="screen_change_server_title">"Виберіть свій сервер"</string>
+  <string name="screen_login_error_deactivated_account">"Цей обліковий запис було деактивовано."</string>
+  <string name="screen_login_error_invalid_credentials">"Неправильне ім\'я користувача та/або пароль"</string>
+  <string name="screen_login_error_invalid_user_id">"Це недійсний ідентифікатор користувача. Очікуваний формат: \'@user:homeserver.org\'"</string>
+  <string name="screen_login_error_unsupported_authentication">"Обраний домашній сервер не підтримує вхід за допомогою пароля або OIDC. Зверніться до адміністратора або виберіть інший домашній сервер."</string>
+  <string name="screen_login_form_header">"Введіть свої дані"</string>
+  <string name="screen_login_subtitle">"Matrix — це відкрита мережа для безпечної, децентралізованої комунікації."</string>
+  <string name="screen_login_title">"З поверненням!"</string>
+  <string name="screen_login_title_with_homeserver">"Увійти в %1$s"</string>
+  <string name="screen_server_confirmation_change_server">"Змінити провайдера облікового запису"</string>
+  <string name="screen_server_confirmation_message_login_element_dot_io">"Приватний сервер для співробітників Element."</string>
+  <string name="screen_server_confirmation_message_login_matrix_dot_org">"Matrix — це відкрита мережа для безпечної, децентралізованої комунікації."</string>
+  <string name="screen_server_confirmation_message_register">"Тут будуть зберігатися Ваші розмови - так само, як Ви використовуєте поштову скриньку для зберігання своїх електронних листів."</string>
+  <string name="screen_server_confirmation_title_login">"Ви збираєтесь увійти в %1$s"</string>
+  <string name="screen_server_confirmation_title_register">"Ви збираєтеся створити обліковий запис на %1$s"</string>
+  <string name="screen_waitlist_message">"На цей момент існує високий попит на %1$s в %2$s. Поверніться до застосунку через кілька днів і спробуйте ще раз.
+
+Дякуємо за терпіння!"</string>
+  <string name="screen_waitlist_message_success">"Ласкаво просимо до %1$s!"</string>
+  <string name="screen_waitlist_title">"Майже готово."</string>
+  <string name="screen_waitlist_title_success">"Готово."</string>
+</resources>

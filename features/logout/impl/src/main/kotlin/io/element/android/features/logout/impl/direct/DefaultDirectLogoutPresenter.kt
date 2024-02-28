@@ -17,14 +17,12 @@
 package io.element.android.features.logout.impl.direct
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.features.logout.api.direct.DirectLogoutEvents
 import io.element.android.features.logout.api.direct.DirectLogoutPresenter
@@ -33,14 +31,10 @@ import io.element.android.features.logout.impl.tools.isBackingUp
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.runCatchingUpdatingState
 import io.element.android.libraries.di.SessionScope
-import io.element.android.libraries.featureflag.api.FeatureFlagService
-import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.encryption.BackupUploadState
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.emptyFlow
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -48,7 +42,6 @@ import javax.inject.Inject
 class DefaultDirectLogoutPresenter @Inject constructor(
     private val matrixClient: MatrixClient,
     private val encryptionService: EncryptionService,
-    private val featureFlagService: FeatureFlagService,
 ) : DirectLogoutPresenter {
     @Composable
     override fun present(): DirectLogoutState {
@@ -58,22 +51,12 @@ class DefaultDirectLogoutPresenter @Inject constructor(
             mutableStateOf(AsyncAction.Uninitialized)
         }
 
-        val secureStorageFlag by featureFlagService.isFeatureEnabledFlow(FeatureFlags.SecureStorage)
-            .collectAsState(initial = null)
-
-        val backupUploadState: BackupUploadState by remember(secureStorageFlag) {
-            when (secureStorageFlag) {
-                true -> encryptionService.waitForBackupUploadSteadyState()
-                false -> flowOf(BackupUploadState.Done)
-                else -> emptyFlow()
-            }
+        val backupUploadState: BackupUploadState by remember {
+            encryptionService.waitForBackupUploadSteadyState()
         }
             .collectAsState(initial = BackupUploadState.Unknown)
 
-        var isLastSession by remember { mutableStateOf(false) }
-        LaunchedEffect(Unit) {
-            isLastSession = encryptionService.isLastDevice().getOrNull() ?: false
-        }
+        val isLastDevice by encryptionService.isLastDevice.collectAsState()
 
         fun handleEvents(event: DirectLogoutEvents) {
             when (event) {
@@ -91,7 +74,7 @@ class DefaultDirectLogoutPresenter @Inject constructor(
         }
 
         return DirectLogoutState(
-            canDoDirectSignOut = !isLastSession &&
+            canDoDirectSignOut = !isLastDevice &&
                 !backupUploadState.isBackingUp(),
             logoutAction = logoutAction.value,
             eventSink = ::handleEvents

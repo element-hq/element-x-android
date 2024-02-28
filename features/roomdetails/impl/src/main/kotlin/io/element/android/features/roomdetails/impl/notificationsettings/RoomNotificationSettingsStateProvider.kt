@@ -17,10 +17,10 @@
 package io.element.android.features.roomdetails.impl.notificationsettings
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import io.element.android.features.roomdetails.impl.aRoomNotificationSettings
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
-import io.element.android.libraries.matrix.api.room.RoomNotificationSettings
 
 internal class RoomNotificationSettingsStateProvider : PreviewParameterProvider<RoomNotificationSettingsState> {
     override val values: Sequence<RoomNotificationSettingsState>
@@ -43,7 +43,7 @@ internal class RoomNotificationSettingsStateProvider : PreviewParameterProvider<
         return RoomNotificationSettingsState(
             showUserDefinedSettingStyle = false,
             roomName = "Room 1",
-            AsyncData.Success(RoomNotificationSettings(
+            AsyncData.Success(aRoomNotificationSettings(
                 mode = RoomNotificationMode.MUTE,
                 isDefault = isDefault
             )),

@@ -59,13 +59,24 @@ class FakeRoomListService : RoomListService {
     var latestSlidingSyncRange: IntRange? = null
         private set
 
-    override val allRooms: DynamicRoomList = SimplePagedRoomList(
+    override fun createRoomList(
+        pageSize: Int,
+        initialFilter: RoomListFilter,
+        source: RoomList.Source
+    ): DynamicRoomList {
+        return when (source) {
+            RoomList.Source.All -> allRooms
+            RoomList.Source.Invites -> invites
+        }
+    }
+
+    override val allRooms = SimplePagedRoomList(
         allRoomSummariesFlow,
         allRoomsLoadingStateFlow,
         MutableStateFlow(RoomListFilter.all())
     )
 
-    override val invites: RoomList = SimplePagedRoomList(
+    override val invites = SimplePagedRoomList(
         inviteRoomSummariesFlow,
         inviteRoomsLoadingStateFlow,
         MutableStateFlow(RoomListFilter.all())

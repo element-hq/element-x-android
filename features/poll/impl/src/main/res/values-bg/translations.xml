@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_create_poll_add_option_btn">"Добавяне на опция"</string>
+  <string name="screen_create_poll_anonymous_desc">"Показване на резултатите само след приключване на анкетата"</string>
+  <string name="screen_create_poll_anonymous_headline">"Скриване на гласовете"</string>
+  <string name="screen_create_poll_answer_hint">"Опция %1$d"</string>
+  <string name="screen_create_poll_cancel_confirmation_content_android">"Промените ви не са запазени. Сигурни ли сте, че искате да се върнете назад?"</string>
+  <string name="screen_create_poll_question_desc">"Въпрос или тема"</string>
+  <string name="screen_create_poll_question_hint">"За какво се отнася анкетата?"</string>
+  <string name="screen_create_poll_title">"Създаване на анкета"</string>
+  <string name="screen_edit_poll_delete_confirmation">"Сигурни ли сте, че искате да изтриете тази анкета?"</string>
+  <string name="screen_edit_poll_delete_confirmation_title">"Изтриване на анкетата"</string>
+  <string name="screen_edit_poll_title">"Редактиране на анкетата"</string>
+  <string name="screen_polls_history_empty_ongoing">"Не се намират текущи анкети."</string>
+  <string name="screen_polls_history_empty_past">"Не се намират приключили анкети."</string>
+  <string name="screen_polls_history_filter_ongoing">"Текущи"</string>
+  <string name="screen_polls_history_filter_past">"Приключили"</string>
+  <string name="screen_polls_history_title">"Анкети"</string>
+</resources>

@@ -28,8 +28,11 @@ import io.element.android.features.roomlist.impl.RoomListView
 import io.element.android.features.roomlist.impl.datasource.DefaultInviteStateDataSource
 import io.element.android.features.roomlist.impl.datasource.RoomListDataSource
 import io.element.android.features.roomlist.impl.datasource.RoomListRoomSummaryFactory
+import io.element.android.features.roomlist.impl.filters.RoomListFiltersPresenter
 import io.element.android.features.roomlist.impl.migration.MigrationScreenPresenter
 import io.element.android.features.roomlist.impl.migration.SharedPrefsMigrationScreenStore
+import io.element.android.features.roomlist.impl.search.RoomListSearchDataSource
+import io.element.android.features.roomlist.impl.search.RoomListSearchPresenter
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.dateformatter.impl.DateFormatters
 import io.element.android.libraries.dateformatter.impl.DefaultLastMessageTimestampFormatter
@@ -46,6 +49,7 @@ import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
 import io.element.android.libraries.preferences.impl.store.DefaultSessionPreferencesStore
+import io.element.android.services.analytics.noop.NoopAnalyticsService
 import io.element.android.services.toolbox.impl.strings.AndroidStringProvider
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -71,50 +75,60 @@ class RoomListScreen(
     private val featureFlagService = DefaultFeatureFlagService(
         providers = setOf(StaticFeatureFlagProvider())
     )
+    private val roomListRoomSummaryFactory = RoomListRoomSummaryFactory(
+        lastMessageTimestampFormatter = DefaultLastMessageTimestampFormatter(
+            localDateTimeProvider = dateTimeProvider,
+            dateFormatters = dateFormatters
+        ),
+        roomLastMessageFormatter = DefaultRoomLastMessageFormatter(
+            sp = stringProvider,
+            roomMembershipContentFormatter = RoomMembershipContentFormatter(
+                matrixClient = matrixClient,
+                sp = stringProvider
+            ),
+            profileChangeContentFormatter = ProfileChangeContentFormatter(stringProvider),
+            stateContentFormatter = StateContentFormatter(stringProvider),
+        ),
+    )
     private val presenter = RoomListPresenter(
         client = matrixClient,
-        sessionVerificationService = sessionVerificationService,
         networkMonitor = NetworkMonitorImpl(context, Singleton.appScope),
         snackbarDispatcher = SnackbarDispatcher(),
         inviteStateDataSource = DefaultInviteStateDataSource(matrixClient, DefaultSeenInvitesStore(context), coroutineDispatchers),
         leaveRoomPresenter = LeaveRoomPresenterImpl(matrixClient, RoomMembershipObserver(), coroutineDispatchers),
         roomListDataSource = RoomListDataSource(
             roomListService = matrixClient.roomListService,
-            roomListRoomSummaryFactory = RoomListRoomSummaryFactory(
-                lastMessageTimestampFormatter = DefaultLastMessageTimestampFormatter(
-                    localDateTimeProvider = dateTimeProvider,
-                    dateFormatters = dateFormatters
-                ),
-                roomLastMessageFormatter = DefaultRoomLastMessageFormatter(
-                    sp = stringProvider,
-                    roomMembershipContentFormatter = RoomMembershipContentFormatter(
-                        matrixClient = matrixClient,
-                        sp = stringProvider
-                    ),
-                    profileChangeContentFormatter = ProfileChangeContentFormatter(stringProvider),
-                    stateContentFormatter = StateContentFormatter(stringProvider),
-                ),
-            ),
+            roomListRoomSummaryFactory = roomListRoomSummaryFactory,
             coroutineDispatchers = coroutineDispatchers,
             notificationSettingsService = matrixClient.notificationSettingsService(),
             appScope = Singleton.appScope
         ),
-        encryptionService = encryptionService,
         indicatorService = DefaultIndicatorService(
             sessionVerificationService = sessionVerificationService,
             encryptionService = encryptionService,
-            featureFlagService = featureFlagService,
         ),
         featureFlagService = featureFlagService,
         migrationScreenPresenter = MigrationScreenPresenter(
             matrixClient = matrixClient,
             migrationScreenStore = SharedPrefsMigrationScreenStore(context.getSharedPreferences("migration", Context.MODE_PRIVATE))
         ),
+        searchPresenter = RoomListSearchPresenter(
+            RoomListSearchDataSource(
+                roomListService = matrixClient.roomListService,
+                roomSummaryFactory = roomListRoomSummaryFactory,
+                coroutineDispatchers = coroutineDispatchers,
+            )
+        ),
         sessionPreferencesStore = DefaultSessionPreferencesStore(
             context = context,
             sessionId = matrixClient.sessionId,
             sessionCoroutineScope = Singleton.appScope
         ),
+        filtersPresenter = RoomListFiltersPresenter(
+            roomListService = matrixClient.roomListService,
+            featureFlagService = featureFlagService,
+        ),
+        analyticsService = NoopAnalyticsService(),
     )
 
     @Composable
@@ -135,6 +149,7 @@ class RoomListScreen(
             onRoomClicked = ::onRoomClicked,
             onSettingsClicked = {},
             onVerifyClicked = {},
+            onConfirmRecoveryKeyClicked = {},
             onCreateRoomClicked = {},
             onInvitesClicked = {},
             onRoomSettingsClicked = {},

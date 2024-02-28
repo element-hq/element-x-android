@@ -129,6 +129,8 @@ interface MatrixRoom : Closeable {
 
     suspend fun canUserInvite(userId: UserId): Result<Boolean>
 
+    suspend fun canUserBan(userId: UserId): Result<Boolean>
+
     suspend fun canUserRedactOwn(userId: UserId): Result<Boolean>
 
     suspend fun canUserRedactOther(userId: UserId): Result<Boolean>
@@ -151,6 +153,8 @@ interface MatrixRoom : Closeable {
     suspend fun setTopic(topic: String): Result<Unit>
 
     suspend fun reportContent(eventId: EventId, reason: String, blockUserId: UserId?): Result<Unit>
+
+    suspend fun setIsFavorite(isFavorite: Boolean): Result<Unit>
 
     /**
      * Mark the room as read by trying to attach an unthreaded read receipt to the latest room event.

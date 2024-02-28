@@ -27,10 +27,12 @@ data class RoomMemberListState(
     val searchResults: SearchBarResultState<RoomMembers>,
     val isSearchActive: Boolean,
     val canInvite: Boolean,
+    val canDisplayBannedUsers: Boolean,
     val eventSink: (RoomMemberListEvents) -> Unit,
 )
 
 data class RoomMembers(
     val invited: ImmutableList<RoomMember>,
-    val joined: ImmutableList<RoomMember>
+    val joined: ImmutableList<RoomMember>,
+    val banned: ImmutableList<RoomMember>,
 )

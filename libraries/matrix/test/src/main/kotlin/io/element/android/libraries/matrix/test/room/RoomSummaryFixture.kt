@@ -53,6 +53,10 @@ fun aRoomSummaryFilled(
     )
 )
 
+fun aRoomSummaryFilled(
+    details: RoomSummaryDetails = aRoomSummaryDetails(),
+) = RoomSummary.Filled(details)
+
 fun aRoomSummaryDetails(
     roomId: RoomId = A_ROOM_ID,
     name: String = A_ROOM_NAME,
@@ -68,6 +72,7 @@ fun aRoomSummaryDetails(
     canonicalAlias: String? = null,
     hasRoomCall: Boolean = false,
     isDm: Boolean = false,
+    isFavorite: Boolean = false,
 ) = RoomSummaryDetails(
     roomId = roomId,
     name = name,
@@ -83,6 +88,7 @@ fun aRoomSummaryDetails(
     canonicalAlias = canonicalAlias,
     hasRoomCall = hasRoomCall,
     isDm = isDm,
+    isFavorite = isFavorite,
 )
 
 fun aRoomMessage(

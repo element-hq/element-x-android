@@ -1,11 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <plurals name="screen_app_lock_subtitle">
-    <item quantity="other">"Anda memiliki %1$d percobaan lagi untuk membuka kunci"</item>
-  </plurals>
-  <plurals name="screen_app_lock_subtitle_wrong_pin">
-    <item quantity="other">"PIN salah. Anda memiliki %1$d percobaan lagi"</item>
-  </plurals>
   <string name="screen_app_lock_biometric_authentication">"autentikasi biometrik"</string>
   <string name="screen_app_lock_biometric_unlock">"pembukaan biometrik"</string>
   <string name="screen_app_lock_biometric_unlock_title_android">"Buka kunci dengan biometrik"</string>
@@ -29,6 +23,12 @@ Pilih sesuatu yang mudah untuk diingat. Jika Anda lupa PIN ini, Anda akan dikelu
   <string name="screen_app_lock_setup_pin_mismatch_dialog_title">"PIN tidak cocok"</string>
   <string name="screen_app_lock_signout_alert_message">"Anda harus masuk ulang dan membuat PIN baru untuk melanjutkan"</string>
   <string name="screen_app_lock_signout_alert_title">"Anda sedang dikeluarkan"</string>
+  <plurals name="screen_app_lock_subtitle">
+    <item quantity="other">"Anda memiliki %1$d percobaan lagi untuk membuka kunci"</item>
+  </plurals>
+  <plurals name="screen_app_lock_subtitle_wrong_pin">
+    <item quantity="other">"PIN salah. Anda memiliki %1$d percobaan lagi"</item>
+  </plurals>
   <string name="screen_app_lock_use_biometric_android">"Gunakan biometrik"</string>
   <string name="screen_app_lock_use_pin_android">"Gunakan PIN"</string>
   <string name="screen_signout_in_progress_dialog_content">"Mengeluarkan dari akun…"</string>

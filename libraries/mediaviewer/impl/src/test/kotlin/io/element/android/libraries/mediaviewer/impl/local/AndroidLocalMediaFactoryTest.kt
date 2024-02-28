@@ -22,7 +22,7 @@ import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.matrix.api.media.MediaFile
 import io.element.android.libraries.matrix.test.media.FakeMediaFile
 import io.element.android.libraries.mediaviewer.api.local.MediaInfo
-import io.element.android.libraries.mediaviewer.api.local.anImageInfo
+import io.element.android.libraries.mediaviewer.api.local.anImageMediaInfo
 import io.element.android.libraries.mediaviewer.api.util.FileExtensionExtractorWithoutValidation
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -34,7 +34,7 @@ class AndroidLocalMediaFactoryTest {
     @Test
     fun `test AndroidLocalMediaFactory`() {
         val sut = createAndroidLocalMediaFactory()
-        val result = sut.createFromMediaFile(aMediaFile(), anImageInfo())
+        val result = sut.createFromMediaFile(aMediaFile(), anImageMediaInfo())
         assertThat(result.uri.toString()).endsWith("aPath")
         assertThat(result.info).isEqualTo(
             MediaInfo(

@@ -53,6 +53,7 @@ import io.element.android.features.roomdetails.impl.blockuser.BlockUserDialogs
 import io.element.android.features.roomdetails.impl.blockuser.BlockUserSection
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberHeaderSection
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberMainActionsSection
+import io.element.android.libraries.architecture.coverage.ExcludeFromCoverage
 import io.element.android.libraries.designsystem.components.ClickableLinkText
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
@@ -61,6 +62,7 @@ import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.button.MainActionButton
 import io.element.android.libraries.designsystem.components.list.ListItemContent
 import io.element.android.libraries.designsystem.components.preferences.PreferenceCategory
+import io.element.android.libraries.designsystem.components.preferences.PreferenceSwitch
 import io.element.android.libraries.designsystem.components.preferences.PreferenceText
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
@@ -79,6 +81,8 @@ import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.api.room.getBestName
+import io.element.android.libraries.testtags.TestTags
+import io.element.android.libraries.testtags.testTag
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
@@ -163,6 +167,13 @@ fun RoomDetailsView(
                 )
             }
 
+            FavoriteSection(
+                isFavorite = state.isFavorite,
+                onFavoriteChanges = {
+                    state.eventSink(RoomDetailsEvent.SetFavorite(it))
+                }
+            )
+
             if (state.roomType is RoomDetailsType.Room) {
                 MembersSection(
                     memberCount = state.memberCount,
@@ -213,7 +224,7 @@ private fun RoomDetailsTopBar(
         actions = {
             if (showEdit) {
                 IconButton(onClick = { showMenu = !showMenu }) {
-                    Icon(Icons.Default.MoreVert, "")
+                    Icon(Icons.Default.MoreVert, stringResource(id = CommonStrings.a11y_user_menu))
                 }
                 DropdownMenu(
                     expanded = showMenu,
@@ -291,6 +302,7 @@ private fun RoomHeaderSection(
             modifier = Modifier
                 .size(70.dp)
                 .clickable(enabled = avatarUrl != null) { openAvatarPreview(avatarUrl!!) }
+                .testTag(TestTags.roomDetailAvatar)
         )
         Spacer(modifier = Modifier.height(24.dp))
         Text(
@@ -352,6 +364,22 @@ private fun NotificationSection(
             supportingContent = { Text(text = subtitle) },
             leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Notifications())),
             onClick = openRoomNotificationSettings,
+        )
+    }
+}
+
+@Composable
+private fun FavoriteSection(
+    isFavorite: Boolean,
+    onFavoriteChanges: (Boolean) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    PreferenceCategory(modifier = modifier) {
+        PreferenceSwitch(
+            icon = CompoundIcons.Favourite(),
+            title = stringResource(id = CommonStrings.common_favourite),
+            isChecked = isFavorite,
+            onCheckedChange = onFavoriteChanges
         )
     }
 }
@@ -439,6 +467,7 @@ internal fun RoomDetailsPreview(@PreviewParameter(RoomDetailsStateProvider::clas
 internal fun RoomDetailsDarkPreview(@PreviewParameter(RoomDetailsStateProvider::class) state: RoomDetailsState) =
     ElementPreviewDark { ContentToPreview(state) }
 
+@ExcludeFromCoverage
 @Composable
 private fun ContentToPreview(state: RoomDetailsState) {
     RoomDetailsView(

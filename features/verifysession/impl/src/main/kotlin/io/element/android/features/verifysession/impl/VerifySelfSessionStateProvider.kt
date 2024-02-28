@@ -25,29 +25,32 @@ open class VerifySelfSessionStateProvider : PreviewParameterProvider<VerifySelfS
     override val values: Sequence<VerifySelfSessionState>
         get() = sequenceOf(
             aVerifySelfSessionState(),
-            aVerifySelfSessionState().copy(
+            aVerifySelfSessionState(
                 verificationFlowStep = VerifySelfSessionState.VerificationStep.AwaitingOtherDeviceResponse
             ),
-            aVerifySelfSessionState().copy(
+            aVerifySelfSessionState(
                 verificationFlowStep = VerifySelfSessionState.VerificationStep.Verifying(aEmojisSessionVerificationData(), AsyncData.Uninitialized)
             ),
-            aVerifySelfSessionState().copy(
+            aVerifySelfSessionState(
                 verificationFlowStep = VerifySelfSessionState.VerificationStep.Verifying(aEmojisSessionVerificationData(), AsyncData.Loading())
             ),
-            aVerifySelfSessionState().copy(
+            aVerifySelfSessionState(
                 verificationFlowStep = VerifySelfSessionState.VerificationStep.Canceled
             ),
-            aVerifySelfSessionState().copy(
+            aVerifySelfSessionState(
                 verificationFlowStep = VerifySelfSessionState.VerificationStep.Ready
             ),
-            aVerifySelfSessionState().copy(
+            aVerifySelfSessionState(
                 verificationFlowStep = VerifySelfSessionState.VerificationStep.Verifying(aDecimalsSessionVerificationData(), AsyncData.Uninitialized)
+            ),
+            aVerifySelfSessionState(
+                verificationFlowStep = VerifySelfSessionState.VerificationStep.Initial(true)
             ),
             // Add other state here
         )
 }
 
-private fun aEmojisSessionVerificationData(
+internal fun aEmojisSessionVerificationData(
     emojiList: List<VerificationEmoji> = aVerificationEmojiList(),
 ): SessionVerificationData {
     return SessionVerificationData.Emojis(emojiList)
@@ -59,9 +62,12 @@ private fun aDecimalsSessionVerificationData(
     return SessionVerificationData.Decimals(decimals)
 }
 
-private fun aVerifySelfSessionState() = VerifySelfSessionState(
-    verificationFlowStep = VerifySelfSessionState.VerificationStep.Initial,
-    eventSink = {},
+internal fun aVerifySelfSessionState(
+    verificationFlowStep: VerifySelfSessionState.VerificationStep = VerifySelfSessionState.VerificationStep.Initial(false),
+    eventSink: (VerifySelfSessionViewEvents) -> Unit = {},
+) = VerifySelfSessionState(
+    verificationFlowStep = verificationFlowStep,
+    eventSink = eventSink,
 )
 
 private fun aVerificationEmojiList() = listOf(

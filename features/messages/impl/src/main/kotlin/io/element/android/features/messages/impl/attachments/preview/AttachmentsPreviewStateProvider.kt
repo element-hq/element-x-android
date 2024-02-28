@@ -21,21 +21,21 @@ import androidx.core.net.toUri
 import io.element.android.features.messages.impl.attachments.Attachment
 import io.element.android.libraries.mediaviewer.api.local.LocalMedia
 import io.element.android.libraries.mediaviewer.api.local.MediaInfo
-import io.element.android.libraries.mediaviewer.api.local.aFileInfo
-import io.element.android.libraries.mediaviewer.api.local.anImageInfo
+import io.element.android.libraries.mediaviewer.api.local.anApkMediaInfo
+import io.element.android.libraries.mediaviewer.api.local.anImageMediaInfo
 
 open class AttachmentsPreviewStateProvider : PreviewParameterProvider<AttachmentsPreviewState> {
     override val values: Sequence<AttachmentsPreviewState>
         get() = sequenceOf(
             anAttachmentsPreviewState(),
-            anAttachmentsPreviewState(mediaInfo = aFileInfo()),
+            anAttachmentsPreviewState(mediaInfo = anApkMediaInfo()),
             anAttachmentsPreviewState(sendActionState = SendActionState.Sending.Uploading(0.5f)),
             anAttachmentsPreviewState(sendActionState = SendActionState.Failure(RuntimeException("error"))),
         )
 }
 
 fun anAttachmentsPreviewState(
-    mediaInfo: MediaInfo = anImageInfo(),
+    mediaInfo: MediaInfo = anImageMediaInfo(),
     sendActionState: SendActionState = SendActionState.Idle
 ) = AttachmentsPreviewState(
     attachment = Attachment.Media(

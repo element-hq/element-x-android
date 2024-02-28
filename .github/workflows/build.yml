@@ -9,8 +9,8 @@ on:
 
 # Enrich gradle.properties for CI/CD
 env:
-  GRADLE_OPTS: -Dorg.gradle.jvmargs="-Xmx3584m -Dfile.encoding=UTF-8 -XX:+HeapDumpOnOutOfMemoryError" -Dkotlin.incremental=false -XX:+UseParallelGC
-  CI_GRADLE_ARG_PROPERTIES: --stacktrace -PpreDexEnable=false --max-workers 2 --no-daemon
+  GRADLE_OPTS: -Dorg.gradle.jvmargs="-Xmx8g -Dfile.encoding=UTF-8 -XX:+HeapDumpOnOutOfMemoryError" -Dkotlin.incremental=false -XX:+UseParallelGC
+  CI_GRADLE_ARG_PROPERTIES: --stacktrace -PpreDexEnable=false --max-workers 8 --no-daemon
 
 jobs:
   debug:
@@ -56,7 +56,7 @@ jobs:
           path: |
             app/build/outputs/apk/gplay/debug/*.apk
             app/build/outputs/apk/fdroid/debug/*.apk
-      - uses: rnkdsh/action-upload-diawi@v1.5.4
+      - uses: rnkdsh/action-upload-diawi@v1.5.5
         id: diawi
         # Do not fail the whole build if Diawi upload fails
         continue-on-error: true

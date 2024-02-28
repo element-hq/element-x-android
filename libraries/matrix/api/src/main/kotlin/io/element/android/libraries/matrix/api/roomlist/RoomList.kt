@@ -17,6 +17,7 @@
 package io.element.android.libraries.matrix.api.roomlist
 
 import kotlinx.coroutines.TimeoutCancellationException
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.withTimeout
@@ -28,15 +29,30 @@ import kotlin.time.Duration
  * Can be retrieved from [RoomListService] methods.
  */
 interface RoomList {
+    /**
+     * The loading state of the room list.
+     */
     sealed interface LoadingState {
         data object NotLoaded : LoadingState
         data class Loaded(val numberOfRooms: Int) : LoadingState
     }
 
     /**
+     * The source of the room list data.
+     * All: all rooms except invites.
+     * Invites: only invites.
+     *
+     * To apply some dynamic filtering on top of that, use [DynamicRoomList].
+     */
+    enum class Source {
+        All,
+        Invites,
+    }
+
+    /**
      * The list of room summaries as a flow.
      */
-    val summaries: StateFlow<List<RoomSummary>>
+    val summaries: SharedFlow<List<RoomSummary>>
 
     /**
      * The loading state of the room list as a flow.

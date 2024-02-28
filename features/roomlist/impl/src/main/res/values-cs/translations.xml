@@ -9,6 +9,7 @@
   <string name="screen_roomlist_empty_title">"Zatím žádné konverzace."</string>
   <string name="screen_roomlist_filter_favourites">"Oblíbené"</string>
   <string name="screen_roomlist_filter_low_priority">"Nízká priorita"</string>
+  <string name="screen_roomlist_filter_people">"Lidé"</string>
   <string name="screen_roomlist_filter_rooms">"Místnosti"</string>
   <string name="screen_roomlist_filter_unreads">"Nepřečtené"</string>
   <string name="screen_roomlist_main_space_title">"Všechny chaty"</string>
@@ -16,5 +17,4 @@
   <string name="screen_roomlist_mark_as_unread">"Označit jako nepřečtené"</string>
   <string name="session_verification_banner_message">"Zdá se, že používáte nové zařízení. Ověřte přihlášení, abyste měli přístup k zašifrovaným zprávám."</string>
   <string name="session_verification_banner_title">"Ověřte, že jste to vy"</string>
-  <string name="screen_roomlist_filter_people">"Lidé"</string>
 </resources>

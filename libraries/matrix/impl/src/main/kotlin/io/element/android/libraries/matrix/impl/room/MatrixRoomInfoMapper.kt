@@ -40,6 +40,7 @@ class MatrixRoomInfoMapper(
             isPublic = it.isPublic,
             isSpace = it.isSpace,
             isTombstoned = it.isTombstoned,
+            isFavorite = it.isFavourite,
             canonicalAlias = it.canonicalAlias,
             alternativeAliases = it.alternativeAliases.toImmutableList(),
             currentUserMembership = it.membership.map(),

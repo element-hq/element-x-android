@@ -40,10 +40,10 @@ fi
 echo "Importing the strings..."
 localazy download --config ./tools/localazy/localazy.json
 
-echo "Add new lines to the end of the files..."
-find . -name 'localazy.xml' -print0 -exec bash -c "echo \"\" >> \"{}\"" \; >> /dev/null
+echo "Formatting the resources files..."
+find . -name 'localazy.xml' -exec ./tools/localazy/formatXmlResourcesFile.py {} \; >> /dev/null
 if [[ $allFiles == 1 ]]; then
-  find . -name 'translations.xml' -print0 -exec bash -c "echo \"\" >> \"{}\"" \; >> /dev/null
+  find . -name 'translations.xml' -exec ./tools/localazy/formatXmlResourcesFile.py {} \; >> /dev/null
 fi
 
 set +e

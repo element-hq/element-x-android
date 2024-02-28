@@ -42,7 +42,7 @@ class RustTracingService @Inject constructor(private val buildMeta: BuildMeta) :
             },
         )
         org.matrix.rustcomponents.sdk.setupTracing(rustTracingConfiguration)
-        Timber.v("Tracing config filter = $filter")
+        Timber.v("Tracing config filter = $filter: ${filter.filter}")
     }
 
     override fun createTimberTree(): Timber.Tree {

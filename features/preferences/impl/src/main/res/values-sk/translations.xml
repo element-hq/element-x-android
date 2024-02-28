@@ -1,16 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_advanced_settings_developer_mode">"Vývojársky režim"</string>
+  <string name="screen_advanced_settings_developer_mode_description">"Umožniť prístup k možnostiam a funkciám pre vývojárov."</string>
   <string name="screen_advanced_settings_element_call_base_url">"Vlastná Element Call základná URL adresa"</string>
   <string name="screen_advanced_settings_element_call_base_url_description">"Nastaviť vlastnú základnú URL adresu pre Element Call."</string>
   <string name="screen_advanced_settings_element_call_base_url_validation_error">"Neplatná adresa URL, uistite sa, že ste uviedli protokol (http/https) a správnu adresu."</string>
-  <string name="screen_advanced_settings_developer_mode">"Vývojársky režim"</string>
-  <string name="screen_advanced_settings_developer_mode_description">"Umožniť prístup k možnostiam a funkciám pre vývojárov."</string>
   <string name="screen_advanced_settings_rich_text_editor_description">"Vypnite rozšírený textový editor na ručné písanie Markdown."</string>
   <string name="screen_advanced_settings_send_read_receipts">"Potvrdenia o prečítaní"</string>
   <string name="screen_advanced_settings_send_read_receipts_description">"Ak je táto funkcia vypnutá, vaše potvrdenia o prečítaní sa nebudú nikomu odosielať. Stále budete dostávať potvrdenia o prečítaní od ostatných používateľov."</string>
   <string name="screen_advanced_settings_share_presence">"Zdieľať prítomnosť"</string>
   <string name="screen_advanced_settings_share_presence_description">"Ak je vypnuté, nebudete môcť odosielať ani prijímať potvrdenia o prečítaní alebo písať upozornenia"</string>
   <string name="screen_advanced_settings_view_source_description">"Povoliť možnosť zobrazenia zdroja správy na časovej osi."</string>
+  <string name="screen_blocked_users_unblock_alert_action">"Odblokovať"</string>
+  <string name="screen_blocked_users_unblock_alert_description">"Všetky správy od nich budete môcť opäť vidieť."</string>
+  <string name="screen_blocked_users_unblock_alert_title">"Odblokovať používateľa"</string>
   <string name="screen_edit_profile_display_name">"Zobrazované meno"</string>
   <string name="screen_edit_profile_display_name_placeholder">"Vaše zobrazované meno"</string>
   <string name="screen_edit_profile_error">"Vyskytla sa neznáma chyba a informácie nebolo možné zmeniť."</string>

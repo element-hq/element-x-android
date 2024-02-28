@@ -37,6 +37,8 @@ import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.testtags.TestTags
+import io.element.android.libraries.testtags.testTag
 
 @Composable
 fun RoomMemberHeaderSection(
@@ -53,6 +55,7 @@ fun RoomMemberHeaderSection(
                 modifier = Modifier
                     .clickable(enabled = avatarUrl != null) { openAvatarPreview(avatarUrl!!) }
                     .fillMaxSize()
+                    .testTag(TestTags.memberDetailAvatar)
             )
         }
         Spacer(modifier = Modifier.height(24.dp))

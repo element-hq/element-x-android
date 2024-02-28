@@ -180,7 +180,8 @@
         "screen_advanced_settings_.*",
         "screen\\.advanced_settings\\..*",
         "screen_edit_profile_.*",
-        "screen_notification_settings_.*"
+        "screen_notification_settings_.*",
+        "screen_blocked_users_.*"
       ]
     },
     {

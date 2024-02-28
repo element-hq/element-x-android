@@ -1,16 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_advanced_settings_developer_mode">"Режим разработчика"</string>
+  <string name="screen_advanced_settings_developer_mode_description">"Предоставьте разработчикам доступ к функциям и функциональным возможностям."</string>
   <string name="screen_advanced_settings_element_call_base_url">"Базовый URL сервера звонков Element"</string>
   <string name="screen_advanced_settings_element_call_base_url_description">"Задайте свой сервер Element Call."</string>
   <string name="screen_advanced_settings_element_call_base_url_validation_error">"Адрес указан неверно, удостоверьтесь, что вы указали протокол (http/https) и правильный адрес."</string>
-  <string name="screen_advanced_settings_developer_mode">"Режим разработчика"</string>
-  <string name="screen_advanced_settings_developer_mode_description">"Предоставьте разработчикам доступ к функциям и функциональным возможностям."</string>
   <string name="screen_advanced_settings_rich_text_editor_description">"Отключить редактор форматированного текста и включить Markdown."</string>
   <string name="screen_advanced_settings_send_read_receipts">"Уведомления о прочтении"</string>
   <string name="screen_advanced_settings_send_read_receipts_description">"Если этот параметр выключен, ваш статус о прочтении не будет отображаться. Вы по-прежнему будете видеть статус о прочтении от других пользователей."</string>
   <string name="screen_advanced_settings_share_presence">"Поделиться присутствием"</string>
   <string name="screen_advanced_settings_share_presence_description">"Если выключено, вы не сможете отправлять, получать уведомления о прочтении и наборе текста"</string>
   <string name="screen_advanced_settings_view_source_description">"Включить опцию просмотра источника сообщения в ленте."</string>
+  <string name="screen_blocked_users_unblock_alert_action">"Разблокировать"</string>
+  <string name="screen_blocked_users_unblock_alert_description">"Вы снова сможете увидеть все сообщения."</string>
+  <string name="screen_blocked_users_unblock_alert_title">"Разблокировать пользователя"</string>
+  <string name="screen_blocked_users_unblocking">"Разблокировка…"</string>
   <string name="screen_edit_profile_display_name">"Отображаемое имя"</string>
   <string name="screen_edit_profile_display_name_placeholder">"Ваше отображаемое имя"</string>
   <string name="screen_edit_profile_error">"Произошла неизвестная ошибка, изменить информацию не удалось."</string>

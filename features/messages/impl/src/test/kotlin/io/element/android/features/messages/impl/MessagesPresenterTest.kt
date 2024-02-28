@@ -49,6 +49,7 @@ import io.element.android.features.messages.impl.voicemessages.timeline.FakeReda
 import io.element.android.features.messages.test.FakeMessageComposerContext
 import io.element.android.features.messages.test.timeline.FakeHtmlConverterProvider
 import io.element.android.features.networkmonitor.test.FakeNetworkMonitor
+import io.element.android.features.poll.api.actions.EndPollAction
 import io.element.android.features.poll.test.actions.FakeEndPollAction
 import io.element.android.features.poll.test.actions.FakeSendPollResponseAction
 import io.element.android.libraries.androidutils.clipboard.FakeClipboardHelper
@@ -98,6 +99,7 @@ import io.element.android.tests.testutils.testCoroutineDispatchers
 import io.mockk.mockk
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
@@ -369,6 +371,22 @@ class MessagesPresenterTest {
             val initialState = awaitFirstItem()
             initialState.eventSink.invoke(MessagesEvents.HandleAction(TimelineItemAction.Edit, aMessageEvent(content = aTimelineItemPollContent())))
             assertThat(navigator.onEditPollClickedCount).isEqualTo(1)
+        }
+    }
+
+    @Test
+    fun `present - handle action end poll`() = runTest {
+        val endPollAction = FakeEndPollAction()
+        val presenter = createMessagesPresenter(endPollAction = endPollAction)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitFirstItem()
+            endPollAction.verifyExecutionCount(0)
+            initialState.eventSink.invoke(MessagesEvents.HandleAction(TimelineItemAction.EndPoll, aMessageEvent(content = aTimelineItemPollContent())))
+            delay(1)
+            endPollAction.verifyExecutionCount(1)
+            cancelAndIgnoreRemainingEvents()
         }
     }
 
@@ -683,6 +701,7 @@ class MessagesPresenterTest {
         clipboardHelper: FakeClipboardHelper = FakeClipboardHelper(),
         analyticsService: FakeAnalyticsService = FakeAnalyticsService(),
         permissionsPresenter: PermissionsPresenter = FakePermissionsPresenter(),
+        endPollAction: EndPollAction = FakeEndPollAction(),
     ): MessagesPresenter {
         val mediaSender = MediaSender(FakeMediaPreProcessor(), matrixRoom)
         val permissionsPresenterFactory = FakePermissionsPresenterFactory(permissionsPresenter)
@@ -721,7 +740,7 @@ class MessagesPresenterTest {
             encryptionService = FakeEncryptionService(),
             verificationService = FakeSessionVerificationService(),
             redactedVoiceMessageManager = FakeRedactedVoiceMessageManager(),
-            endPollAction = FakeEndPollAction(),
+            endPollAction = endPollAction,
             sendPollResponseAction = FakeSendPollResponseAction(),
             sessionPreferencesStore = sessionPreferencesStore,
         )

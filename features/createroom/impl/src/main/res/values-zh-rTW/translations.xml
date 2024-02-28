@@ -8,7 +8,7 @@
   <string name="screen_create_room_private_option_title">"私密聊天室（僅限邀請）"</string>
   <string name="screen_create_room_public_option_description">"訊息未加密，任何人都可以查看。您可以在之後啟用加密功能。"</string>
   <string name="screen_create_room_public_option_title">"公開聊天室（任何人）"</string>
-  <string name="screen_create_room_topic_label">"主題（非必填）"</string>
   <string name="screen_create_room_room_name_label">"聊天室名稱"</string>
   <string name="screen_create_room_title">"建立聊天室"</string>
+  <string name="screen_create_room_topic_label">"主題（非必填）"</string>
 </resources>

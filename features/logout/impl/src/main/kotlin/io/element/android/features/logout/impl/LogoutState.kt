@@ -22,7 +22,7 @@ import io.element.android.libraries.matrix.api.encryption.BackupUploadState
 import io.element.android.libraries.matrix.api.encryption.RecoveryState
 
 data class LogoutState(
-    val isLastSession: Boolean,
+    val isLastDevice: Boolean,
     val backupState: BackupState,
     val doesBackupExistOnServer: Boolean,
     val recoveryState: RecoveryState,

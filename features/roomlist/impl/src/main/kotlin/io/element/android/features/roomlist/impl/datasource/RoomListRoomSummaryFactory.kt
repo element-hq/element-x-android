@@ -49,6 +49,7 @@ class RoomListRoomSummaryFactory @Inject constructor(
                 userDefinedNotificationMode = null,
                 hasRoomCall = false,
                 isDm = false,
+                isFavorite = false,
             )
         }
 
@@ -84,6 +85,7 @@ class RoomListRoomSummaryFactory @Inject constructor(
             userDefinedNotificationMode = roomSummary.details.userDefinedNotificationMode,
             hasRoomCall = roomSummary.details.hasRoomCall,
             isDm = roomSummary.details.isDm,
+            isFavorite = roomSummary.details.isFavorite,
         )
     }
 }

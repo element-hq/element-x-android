@@ -1,14 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_advanced_settings_developer_mode">"Mode développeur"</string>
+  <string name="screen_advanced_settings_developer_mode_description">"Activer pour pouvoir accéder aux fonctionnalités destinées aux développeurs."</string>
   <string name="screen_advanced_settings_element_call_base_url">"URL de base pour Element Call personnalisée"</string>
   <string name="screen_advanced_settings_element_call_base_url_description">"Configurer une URL de base pour Element Call."</string>
   <string name="screen_advanced_settings_element_call_base_url_validation_error">"URL invalide, assurez-vous d’inclure le protocol (http/https) et l’adresse correcte."</string>
-  <string name="screen_advanced_settings_developer_mode">"Mode développeur"</string>
-  <string name="screen_advanced_settings_developer_mode_description">"Activer pour pouvoir accéder aux fonctionnalités destinées aux développeurs."</string>
   <string name="screen_advanced_settings_rich_text_editor_description">"Désactivez l’éditeur de texte enrichi pour saisir manuellement du Markdown."</string>
   <string name="screen_advanced_settings_send_read_receipts">"Accusés de lecture"</string>
   <string name="screen_advanced_settings_send_read_receipts_description">"En cas de désactivation, vos accusés de lecture ne seront pas envoyés aux autres membres. Vous verrez toujours les accusés des autres membres."</string>
+  <string name="screen_advanced_settings_share_presence">"Partager la présence"</string>
+  <string name="screen_advanced_settings_share_presence_description">"Si cette option est désactivée, vous ne pourrez ni envoyer ni recevoir de confirmations de lecture ni de notifications de saisie"</string>
   <string name="screen_advanced_settings_view_source_description">"Activer cette option pour pouvoir voir la source des messages dans la discussion."</string>
+  <string name="screen_blocked_users_unblock_alert_action">"Débloquer"</string>
+  <string name="screen_blocked_users_unblock_alert_description">"Vous pourrez à nouveau voir tous ses messages."</string>
+  <string name="screen_blocked_users_unblock_alert_title">"Débloquer l’utilisateur"</string>
+  <string name="screen_blocked_users_unblocking">"Déblocage…"</string>
   <string name="screen_edit_profile_display_name">"Pseudonyme"</string>
   <string name="screen_edit_profile_display_name_placeholder">"Votre pseudonyme"</string>
   <string name="screen_edit_profile_error">"Une erreur inconnue s’est produite et les informations n’ont pas pu être modifiées."</string>

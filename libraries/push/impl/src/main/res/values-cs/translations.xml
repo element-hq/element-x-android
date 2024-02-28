@@ -4,20 +4,6 @@
   <string name="notification_channel_listening_for_events">"Naslouchání událostem"</string>
   <string name="notification_channel_noisy">"Hlasitá oznámení"</string>
   <string name="notification_channel_silent">"Tichá oznámení"</string>
-  <string name="notification_inline_reply_failed">"** Nepodařilo se odeslat - otevřete prosím místnost"</string>
-  <string name="notification_invitation_action_reject">"Odmítnout"</string>
-  <string name="notification_invite_body">"Vás pozval(a) do chatu"</string>
-  <string name="notification_mentioned_you_body">"Zmínili vás: %1$s"</string>
-  <string name="notification_new_messages">"Nové zprávy"</string>
-  <string name="notification_reaction_body">"Reagoval(a) s %1$s"</string>
-  <string name="notification_room_invite_body">"Vás pozval(a) do místnosti"</string>
-  <string name="notification_sender_me">"Já"</string>
-  <string name="notification_test_push_notification_content">"Prohlížíte si oznámení! Klikněte na mě!"</string>
-  <string name="notification_ticker_text_dm">"%1$s: %2$s"</string>
-  <string name="notification_ticker_text_group">"%1$s: %2$s %3$s"</string>
-  <string name="notification_unread_notified_messages_and_invitation">"%1$s a %2$s"</string>
-  <string name="notification_unread_notified_messages_in_room">"%1$s in %2$s"</string>
-  <string name="notification_unread_notified_messages_in_room_and_invitation">"%1$s v %2$s a %3$s"</string>
   <plurals name="notification_compat_summary_line_for_room">
     <item quantity="one">"%1$s: %2$d zpráva"</item>
     <item quantity="few">"%1$s: %2$d zprávy"</item>
@@ -28,21 +14,39 @@
     <item quantity="few">"%d oznámení"</item>
     <item quantity="other">"%d oznámení"</item>
   </plurals>
+  <string name="notification_fallback_content">"Oznámení"</string>
+  <string name="notification_inline_reply_failed">"** Nepodařilo se odeslat - otevřete prosím místnost"</string>
+  <string name="notification_invitation_action_join">"Vstoupit"</string>
+  <string name="notification_invitation_action_reject">"Odmítnout"</string>
   <plurals name="notification_invitations">
     <item quantity="one">"%d pozvánka"</item>
     <item quantity="few">"%d pozvánky"</item>
     <item quantity="other">"%d pozvánek"</item>
   </plurals>
+  <string name="notification_invite_body">"Vás pozval(a) do chatu"</string>
+  <string name="notification_mentioned_you_body">"Zmínili vás: %1$s"</string>
+  <string name="notification_new_messages">"Nové zprávy"</string>
   <plurals name="notification_new_messages_for_room">
     <item quantity="one">"%d nová zpráva"</item>
     <item quantity="few">"%d nové zprávy"</item>
     <item quantity="other">"%d nových zpráv"</item>
   </plurals>
+  <string name="notification_reaction_body">"Reagoval(a) s %1$s"</string>
+  <string name="notification_room_action_mark_as_read">"Označit jako přečtené"</string>
+  <string name="notification_room_action_quick_reply">"Rychlá odpověď"</string>
+  <string name="notification_room_invite_body">"Vás pozval(a) do místnosti"</string>
+  <string name="notification_sender_me">"Já"</string>
+  <string name="notification_test_push_notification_content">"Prohlížíte si oznámení! Klikněte na mě!"</string>
+  <string name="notification_ticker_text_dm">"%1$s: %2$s"</string>
+  <string name="notification_ticker_text_group">"%1$s: %2$s %3$s"</string>
   <plurals name="notification_unread_notified_messages">
     <item quantity="one">"%d nepřečtená oznámená zpráva"</item>
     <item quantity="few">"%d nepřečtené oznámené zprávy"</item>
     <item quantity="other">"%d nepřečtených oznámených zpráv"</item>
   </plurals>
+  <string name="notification_unread_notified_messages_and_invitation">"%1$s a %2$s"</string>
+  <string name="notification_unread_notified_messages_in_room">"%1$s in %2$s"</string>
+  <string name="notification_unread_notified_messages_in_room_and_invitation">"%1$s v %2$s a %3$s"</string>
   <plurals name="notification_unread_notified_messages_in_room_rooms">
     <item quantity="one">"%d místnost"</item>
     <item quantity="few">"%d místnosti"</item>
@@ -52,8 +56,4 @@
   <string name="push_distributor_background_sync_android">"Synchronizace na pozadí"</string>
   <string name="push_distributor_firebase_android">"Služby Google"</string>
   <string name="push_no_valid_google_play_services_apk_android">"Nebyly nalezeny žádné funkční služby Google Play. Oznámení nemusí fungovat správně."</string>
-  <string name="notification_fallback_content">"Oznámení"</string>
-  <string name="notification_invitation_action_join">"Vstoupit"</string>
-  <string name="notification_room_action_mark_as_read">"Označit jako přečtené"</string>
-  <string name="notification_room_action_quick_reply">"Rychlá odpověď"</string>
 </resources>

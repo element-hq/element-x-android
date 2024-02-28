@@ -641,9 +641,21 @@ class DefaultRoomLastMessageFormatterTest {
     @Config(qualifiers = "en")
     fun `Room state change - others must return null`() {
         val otherStates = arrayOf(
-            OtherState.PolicyRuleRoom, OtherState.PolicyRuleServer, OtherState.PolicyRuleUser, OtherState.RoomAliases, OtherState.RoomCanonicalAlias,
-            OtherState.RoomGuestAccess, OtherState.RoomHistoryVisibility, OtherState.RoomJoinRules, OtherState.RoomPinnedEvents, OtherState.RoomPowerLevels,
-            OtherState.RoomServerAcl, OtherState.RoomTombstone, OtherState.SpaceChild, OtherState.SpaceParent, OtherState.Custom("custom_event_type")
+            OtherState.PolicyRuleRoom,
+            OtherState.PolicyRuleServer,
+            OtherState.PolicyRuleUser,
+            OtherState.RoomAliases,
+            OtherState.RoomCanonicalAlias,
+            OtherState.RoomGuestAccess,
+            OtherState.RoomHistoryVisibility,
+            OtherState.RoomJoinRules,
+            OtherState.RoomPinnedEvents,
+            OtherState.RoomPowerLevels(emptyMap()),
+            OtherState.RoomServerAcl,
+            OtherState.RoomTombstone,
+            OtherState.SpaceChild,
+            OtherState.SpaceParent,
+            OtherState.Custom("custom_event_type")
         )
 
         val results = otherStates.map { state ->

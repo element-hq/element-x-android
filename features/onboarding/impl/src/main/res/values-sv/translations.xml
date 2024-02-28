@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_onboarding_sign_in_manually">"Logga in manuellt"</string>
+  <string name="screen_onboarding_sign_in_with_qr_code">"Logga in med QR-kod"</string>
+  <string name="screen_onboarding_sign_up">"Skapa konto"</string>
+  <string name="screen_onboarding_welcome_message">"Välkommen till den snabbaste Element någonsin. Superladdad för snabbhet och enkelhet."</string>
+  <string name="screen_onboarding_welcome_subtitle">"Välkommen till %1$s. Superladdad, för snabbhet och enkelhet."</string>
+  <string name="screen_onboarding_welcome_title">"Var i ditt rätta element"</string>
+</resources>

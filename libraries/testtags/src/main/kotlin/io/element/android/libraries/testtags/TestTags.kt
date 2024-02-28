@@ -34,6 +34,11 @@ object TestTags {
     val loginContinue = TestTag("login-continue")
 
     /**
+     * Verification screen.
+     */
+    val recoveryKey = TestTag("verification-recovery_key")
+
+    /**
      * Sign out screen.
      */
     val signOut = TestTag("sign-out-submit")
@@ -47,6 +52,17 @@ object TestTags {
      * Room list / Home screen.
      */
     val homeScreenSettings = TestTag("home_screen-settings")
+    val homeScreenClearFilters = TestTag("home_screen-clear_filters")
+
+    /**
+     * Room detail screen.
+     */
+    val roomDetailAvatar = TestTag("room_detail-avatar")
+
+    /**
+     * Room member screen.
+     */
+    val memberDetailAvatar = TestTag("member_detail-avatar")
 
     /**
      * Welcome screen.
@@ -74,4 +90,14 @@ object TestTags {
     val dialogPositive = TestTag("dialog-positive")
     val dialogNegative = TestTag("dialog-negative")
     val dialogNeutral = TestTag("dialog-neutral")
+
+    /**
+     * Floating Action Button.
+     */
+    val floatingActionButton = TestTag("floating-action-button")
+
+    /**
+     * Timeline item.
+     */
+    val timelineItemSenderInfo = TestTag("timeline_item-sender_info")
 }

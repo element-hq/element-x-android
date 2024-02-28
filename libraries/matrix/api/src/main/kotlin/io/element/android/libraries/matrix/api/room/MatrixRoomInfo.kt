@@ -30,6 +30,7 @@ data class MatrixRoomInfo(
     val isPublic: Boolean,
     val isSpace: Boolean,
     val isTombstoned: Boolean,
+    val isFavorite: Boolean,
     val canonicalAlias: String?,
     val alternativeAliases: ImmutableList<String>,
     val currentUserMembership: CurrentUserMembership,

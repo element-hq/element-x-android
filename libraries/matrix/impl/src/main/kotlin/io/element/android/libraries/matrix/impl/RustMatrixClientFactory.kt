@@ -18,6 +18,8 @@ package io.element.android.libraries.matrix.impl
 
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.di.CacheDirectory
+import io.element.android.libraries.matrix.impl.certificates.UserCertificatesProvider
+import io.element.android.libraries.matrix.impl.proxy.ProxyProvider
 import io.element.android.libraries.network.useragent.UserAgentProvider
 import io.element.android.libraries.sessionstorage.api.SessionData
 import io.element.android.libraries.sessionstorage.api.SessionStore
@@ -37,6 +39,8 @@ class RustMatrixClientFactory @Inject constructor(
     private val coroutineDispatchers: CoroutineDispatchers,
     private val sessionStore: SessionStore,
     private val userAgentProvider: UserAgentProvider,
+    private val userCertificatesProvider: UserCertificatesProvider,
+    private val proxyProvider: ProxyProvider,
     private val clock: SystemClock,
 ) {
     suspend fun create(sessionData: SessionData): RustMatrixClient = withContext(coroutineDispatchers.io) {
@@ -46,6 +50,17 @@ class RustMatrixClientFactory @Inject constructor(
             .username(sessionData.userId)
             .passphrase(sessionData.passphrase)
             .userAgent(userAgentProvider.provide())
+            .let {
+                // Sadly ClientBuilder.proxy() does not accept null :/
+                // Tracked by https://github.com/matrix-org/matrix-rust-sdk/issues/3159
+                val proxy = proxyProvider.provides()
+                if (proxy != null) {
+                    it.proxy(proxy)
+                } else {
+                    it
+                }
+            }
+            .addRootCertificates(userCertificatesProvider.provides())
             // FIXME Quick and dirty fix for stopping version requests on startup https://github.com/matrix-org/matrix-rust-sdk/pull/1376
             .serverVersions(listOf("v1.0", "v1.1", "v1.2", "v1.3", "v1.4", "v1.5"))
             .use { it.build() }

@@ -1,13 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <plurals name="screen_app_lock_subtitle">
-    <item quantity="one">"Tienes %1$d intento de desbloqueo"</item>
-    <item quantity="other">"Tienes %1$d intentos de desbloqueo"</item>
-  </plurals>
-  <plurals name="screen_app_lock_subtitle_wrong_pin">
-    <item quantity="one">"PIN incorrecto. Tienes %1$d oportunidad más"</item>
-    <item quantity="other">"PIN incorrecto. Tienes %1$d oportunidades más"</item>
-  </plurals>
   <string name="screen_app_lock_biometric_authentication">"autenticación biométrica"</string>
   <string name="screen_app_lock_biometric_unlock">"desbloqueo biométrico"</string>
   <string name="screen_app_lock_biometric_unlock_title_android">"Desbloquear con biométrico"</string>
@@ -31,6 +23,14 @@ Elige algo que puedas recordar. Si olvidas este PIN, se cerrará la sesión de l
   <string name="screen_app_lock_setup_pin_mismatch_dialog_title">"Los PINs no coinciden"</string>
   <string name="screen_app_lock_signout_alert_message">"Tendrás que volver a iniciar sesión y crear un nuevo PIN para continuar"</string>
   <string name="screen_app_lock_signout_alert_title">"Se está cerrando tu sesión"</string>
+  <plurals name="screen_app_lock_subtitle">
+    <item quantity="one">"Tienes %1$d intento de desbloqueo"</item>
+    <item quantity="other">"Tienes %1$d intentos de desbloqueo"</item>
+  </plurals>
+  <plurals name="screen_app_lock_subtitle_wrong_pin">
+    <item quantity="one">"PIN incorrecto. Tienes %1$d oportunidad más"</item>
+    <item quantity="other">"PIN incorrecto. Tienes %1$d oportunidades más"</item>
+  </plurals>
   <string name="screen_app_lock_use_biometric_android">"Usar desbloqueo biométrico"</string>
   <string name="screen_app_lock_use_pin_android">"Usar PIN"</string>
   <string name="screen_signout_in_progress_dialog_content">"Cerrando sesión…"</string>

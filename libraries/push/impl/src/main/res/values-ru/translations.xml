@@ -4,20 +4,6 @@
   <string name="notification_channel_listening_for_events">"Прослушивание событий"</string>
   <string name="notification_channel_noisy">"Шумные уведомления"</string>
   <string name="notification_channel_silent">"Бесшумные уведомления"</string>
-  <string name="notification_inline_reply_failed">"** Не удалось отправить - пожалуйста, откройте комнату"</string>
-  <string name="notification_invitation_action_reject">"Отклонить"</string>
-  <string name="notification_invite_body">"Пригласил вас в чат"</string>
-  <string name="notification_mentioned_you_body">"Упомянул вас: %1$s"</string>
-  <string name="notification_new_messages">"Новые сообщения"</string>
-  <string name="notification_reaction_body">"Отреагировал на %1$s"</string>
-  <string name="notification_room_invite_body">"Пригласил вас в комнату"</string>
-  <string name="notification_sender_me">"Я"</string>
-  <string name="notification_test_push_notification_content">"Вы просматриваете уведомление! Нажмите на меня!"</string>
-  <string name="notification_ticker_text_dm">"%1$s: %2$s"</string>
-  <string name="notification_ticker_text_group">"%1$s: %2$s %3$s"</string>
-  <string name="notification_unread_notified_messages_and_invitation">"%1$s и %2$s"</string>
-  <string name="notification_unread_notified_messages_in_room">"%1$s в %2$s"</string>
-  <string name="notification_unread_notified_messages_in_room_and_invitation">"%1$s в %2$s и %3$s"</string>
   <plurals name="notification_compat_summary_line_for_room">
     <item quantity="one">"%1$s: %2$d сообщение"</item>
     <item quantity="few">"%1$s: %2$d сообщения"</item>
@@ -28,21 +14,39 @@
     <item quantity="few">"%d уведомления"</item>
     <item quantity="many">"%d уведомлений"</item>
   </plurals>
+  <string name="notification_fallback_content">"Уведомление"</string>
+  <string name="notification_inline_reply_failed">"** Не удалось отправить - пожалуйста, откройте комнату"</string>
+  <string name="notification_invitation_action_join">"Присоединиться"</string>
+  <string name="notification_invitation_action_reject">"Отклонить"</string>
   <plurals name="notification_invitations">
     <item quantity="one">"%d приглашение"</item>
     <item quantity="few">"%d приглашения"</item>
     <item quantity="many">"%d приглашений"</item>
   </plurals>
+  <string name="notification_invite_body">"Пригласил вас в чат"</string>
+  <string name="notification_mentioned_you_body">"Упомянул вас: %1$s"</string>
+  <string name="notification_new_messages">"Новые сообщения"</string>
   <plurals name="notification_new_messages_for_room">
     <item quantity="one">"%d новое сообщение"</item>
     <item quantity="few">"%d новых сообщения"</item>
     <item quantity="many">"%d новых сообщений"</item>
   </plurals>
+  <string name="notification_reaction_body">"Отреагировал на %1$s"</string>
+  <string name="notification_room_action_mark_as_read">"Пометить как прочитанное"</string>
+  <string name="notification_room_action_quick_reply">"Быстрый ответ"</string>
+  <string name="notification_room_invite_body">"Пригласил вас в комнату"</string>
+  <string name="notification_sender_me">"Я"</string>
+  <string name="notification_test_push_notification_content">"Вы просматриваете уведомление! Нажмите на меня!"</string>
+  <string name="notification_ticker_text_dm">"%1$s: %2$s"</string>
+  <string name="notification_ticker_text_group">"%1$s: %2$s %3$s"</string>
   <plurals name="notification_unread_notified_messages">
     <item quantity="one">"%d непрочитанное уведомление"</item>
     <item quantity="few">"%d непрочитанных уведомления"</item>
     <item quantity="many">"%d непрочитанных уведомлений"</item>
   </plurals>
+  <string name="notification_unread_notified_messages_and_invitation">"%1$s и %2$s"</string>
+  <string name="notification_unread_notified_messages_in_room">"%1$s в %2$s"</string>
+  <string name="notification_unread_notified_messages_in_room_and_invitation">"%1$s в %2$s и %3$s"</string>
   <plurals name="notification_unread_notified_messages_in_room_rooms">
     <item quantity="one">"%d комната"</item>
     <item quantity="few">"%d комнаты"</item>
@@ -52,8 +56,4 @@
   <string name="push_distributor_background_sync_android">"Фоновая синхронизация"</string>
   <string name="push_distributor_firebase_android">"Сервисы Google"</string>
   <string name="push_no_valid_google_play_services_apk_android">"Не найдены действующие службы Google Play. Уведомления могут работать некорректно."</string>
-  <string name="notification_fallback_content">"Уведомление"</string>
-  <string name="notification_invitation_action_join">"Присоединиться"</string>
-  <string name="notification_room_action_mark_as_read">"Пометить как прочитанное"</string>
-  <string name="notification_room_action_quick_reply">"Быстрый ответ"</string>
 </resources>

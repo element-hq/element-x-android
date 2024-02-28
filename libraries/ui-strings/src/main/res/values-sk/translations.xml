@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="a11y_delete">"Vymazať"</string>
+  <plurals name="a11y_digits_entered">
+    <item quantity="one">"%1$d zadaná číslica"</item>
+    <item quantity="few">"%1$d zadané číslice"</item>
+    <item quantity="other">"%1$d zadaných číslic"</item>
+  </plurals>
   <string name="a11y_hide_password">"Skryť heslo"</string>
   <string name="a11y_jump_to_bottom">"Prejsť na spodok"</string>
   <string name="a11y_notifications_mentions_only">"Iba zmienky"</string>
@@ -14,6 +19,11 @@
   <string name="a11y_react_with">"Reagovať s %1$s"</string>
   <string name="a11y_react_with_other_emojis">"Reagovať s inými emotikonmi"</string>
   <string name="a11y_read_receipts_multiple">"Prečítal/a %1$s a %2$s"</string>
+  <plurals name="a11y_read_receipts_multiple_with_others">
+    <item quantity="one">"Prečítal/a %1$s a %2$d ďalší"</item>
+    <item quantity="few">"Prečítal/a %1$s a %2$d ďalší"</item>
+    <item quantity="other">"Prečítal/a %1$s a %2$d ďalších"</item>
+  </plurals>
   <string name="a11y_read_receipts_single">"Prečítal/a %1$s"</string>
   <string name="a11y_read_receipts_tap_to_show_all">"Ťuknutím zobrazíte všetko"</string>
   <string name="a11y_remove_reaction_with">"Odstrániť reakciu s %1$s"</string>
@@ -59,6 +69,7 @@
   <string name="action_leave">"Opustiť"</string>
   <string name="action_leave_conversation">"Opustiť konverzáciu"</string>
   <string name="action_leave_room">"Opustiť miestnosť"</string>
+  <string name="action_load_more">"Načítať viac"</string>
   <string name="action_manage_account">"Spravovať účet"</string>
   <string name="action_manage_devices">"Spravovať zariadenia"</string>
   <string name="action_next">"Ďalej"</string>
@@ -96,7 +107,6 @@
   <string name="action_try_again">"Skúste to znova"</string>
   <string name="action_view_source">"Zobraziť zdroj"</string>
   <string name="action_yes">"Áno"</string>
-  <string name="action_load_more">"Načítať viac"</string>
   <string name="common_about">"O aplikácii"</string>
   <string name="common_acceptable_use_policy">"Zásady prijateľného používania"</string>
   <string name="common_advanced_settings">"Pokročilé nastavenia"</string>
@@ -132,6 +142,11 @@
   <string name="common_light">"Svetlý"</string>
   <string name="common_link_copied_to_clipboard">"Odkaz bol skopírovaný do schránky"</string>
   <string name="common_loading">"Načítava sa…"</string>
+  <plurals name="common_member_count">
+    <item quantity="one">"%1$d člen"</item>
+    <item quantity="few">"%1$d členovia"</item>
+    <item quantity="other">"%1$d členov"</item>
+  </plurals>
   <string name="common_message">"Správa"</string>
   <string name="common_message_actions">"Akcie správy"</string>
   <string name="common_message_layout">"Štýl správ"</string>
@@ -144,8 +159,15 @@
   <string name="common_people">"Ľudia"</string>
   <string name="common_permalink">"Trvalý odkaz"</string>
   <string name="common_permission">"Povolenie"</string>
+  <string name="common_poll_end_confirmation">"Ste si istí, že chcete ukončiť túto anketu?"</string>
+  <string name="common_poll_summary">"Anketa: %1$s"</string>
   <string name="common_poll_total_votes">"Celkový počet hlasov: %1$s"</string>
   <string name="common_poll_undisclosed_text">"Výsledky sa zobrazia po ukončení ankety"</string>
+  <plurals name="common_poll_votes_count">
+    <item quantity="one">"%d hlas"</item>
+    <item quantity="few">"%d hlasy"</item>
+    <item quantity="other">"%d hlasov"</item>
+  </plurals>
   <string name="common_privacy_policy">"Zásady ochrany osobných údajov"</string>
   <string name="common_reaction">"Reakcia"</string>
   <string name="common_reactions">"Reakcie"</string>
@@ -192,14 +214,14 @@
   <string name="common_username">"Používateľské meno"</string>
   <string name="common_verification_cancelled">"Overovanie zrušené"</string>
   <string name="common_verification_complete">"Overovanie je dokončené"</string>
+  <string name="common_verify_device">"Overiť zariadenie"</string>
   <string name="common_video">"Video"</string>
   <string name="common_voice_message">"Hlasová správa"</string>
   <string name="common_waiting">"Čaká sa…"</string>
   <string name="common_waiting_for_decryption_key">"Čaká sa na dešifrovací kľúč"</string>
-  <string name="common_poll_end_confirmation">"Ste si istí, že chcete ukončiť túto anketu?"</string>
-  <string name="common_poll_summary">"Anketa: %1$s"</string>
-  <string name="common_verify_device">"Overiť zariadenie"</string>
   <string name="dialog_title_confirmation">"Potvrdenie"</string>
+  <string name="dialog_title_error">"Chyba"</string>
+  <string name="dialog_title_success">"Úspech"</string>
   <string name="dialog_title_warning">"Upozornenie"</string>
   <string name="error_failed_creating_the_permalink">"Nepodarilo sa vytvoriť trvalý odkaz"</string>
   <string name="error_failed_loading_map">"%1$s nedokázal načítať mapu. Skúste to prosím neskôr."</string>
@@ -214,26 +236,6 @@
   <string name="invite_friends_rich_title">"🔐️ Pripojte sa ku mne na %1$s"</string>
   <string name="invite_friends_text">"Ahoj, porozprávajte sa so mnou na %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
-  <plurals name="a11y_digits_entered">
-    <item quantity="one">"%1$d zadaná číslica"</item>
-    <item quantity="few">"%1$d zadané číslice"</item>
-    <item quantity="other">"%1$d zadaných číslic"</item>
-  </plurals>
-  <plurals name="a11y_read_receipts_multiple_with_others">
-    <item quantity="one">"Prečítal/a %1$s a %2$d ďalší"</item>
-    <item quantity="few">"Prečítal/a %1$s a %2$d ďalší"</item>
-    <item quantity="other">"Prečítal/a %1$s a %2$d ďalších"</item>
-  </plurals>
-  <plurals name="common_member_count">
-    <item quantity="one">"%1$d člen"</item>
-    <item quantity="few">"%1$d členovia"</item>
-    <item quantity="other">"%1$d členov"</item>
-  </plurals>
-  <plurals name="common_poll_votes_count">
-    <item quantity="one">"%d hlas"</item>
-    <item quantity="few">"%d hlasy"</item>
-    <item quantity="other">"%d hlasov"</item>
-  </plurals>
   <string name="preference_rageshake">"Zúrivo potriasť pre nahlásenie chyby"</string>
   <string name="screen_media_picker_error_failed_selection">"Nepodarilo sa vybrať médium, skúste to prosím znova."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Nepodarilo sa spracovať médiá na odoslanie, skúste to prosím znova."</string>
@@ -247,6 +249,4 @@
   <string name="screen_view_location_title">"Poloha"</string>
   <string name="settings_version_number">"Verzia: %1$s (%2$s)"</string>
   <string name="test_language_identifier">"sk"</string>
-  <string name="dialog_title_error">"Chyba"</string>
-  <string name="dialog_title_success">"Úspech"</string>
 </resources>

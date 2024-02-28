@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_advanced_settings_developer_mode">"Режим розробника"</string>
+  <string name="screen_advanced_settings_developer_mode_description">"Увімкніть доступ до функцій і можливостей для розробників."</string>
+  <string name="screen_advanced_settings_element_call_base_url">"Користувацька URL-адреса Element Call"</string>
+  <string name="screen_advanced_settings_element_call_base_url_description">"Встановіть URL-адресу для Element Call."</string>
+  <string name="screen_advanced_settings_element_call_base_url_validation_error">"Неправильна URL-адреса, будь ласка, переконайтеся, що ви вказали протокол (http/https) та правильну адресу."</string>
+  <string name="screen_advanced_settings_rich_text_editor_description">"Вимкніть редактор розширеного тексту, щоб вводити Markdown вручну."</string>
+  <string name="screen_advanced_settings_send_read_receipts">"Читати журнали"</string>
+  <string name="screen_advanced_settings_send_read_receipts_description">"Якщо вимкнено, ваші сповіщення про прочитання нікому не надсилатимуться. Ви все одно отримуватимете сповіщення про прочитання від інших користувачів."</string>
+  <string name="screen_advanced_settings_share_presence">"Поділіться присутністю"</string>
+  <string name="screen_advanced_settings_share_presence_description">"Якщо вимкнено, ви не зможете надсилати або отримувати сповіщення про прочитання або сповіщення про введення тексту"</string>
+  <string name="screen_advanced_settings_view_source_description">"Увімкнути опцію для перегляду коду повідомлення в стрічці"</string>
+  <string name="screen_blocked_users_unblock_alert_action">"Розблокувати"</string>
+  <string name="screen_blocked_users_unblock_alert_description">"Ви знову зможете бачити всі повідомлення від них."</string>
+  <string name="screen_blocked_users_unblock_alert_title">"Розблокувати користувача"</string>
+  <string name="screen_edit_profile_display_name">"Відображуване ім\'я"</string>
+  <string name="screen_edit_profile_display_name_placeholder">"Ваше відображуване ім\'я"</string>
+  <string name="screen_edit_profile_error">"Була виявлена невідома помилка, і інформацію не вдалося змінити."</string>
+  <string name="screen_edit_profile_error_title">"Неможливо оновити профіль"</string>
+  <string name="screen_edit_profile_title">"Редагувати профіль"</string>
+  <string name="screen_edit_profile_updating_details">"Оновлення профілю…"</string>
+  <string name="screen_notification_settings_additional_settings_section_title">"Додаткові налаштування"</string>
+  <string name="screen_notification_settings_calls_label">"Аудіо та відеодзвінки"</string>
+  <string name="screen_notification_settings_configuration_mismatch">"Невідповідність конфігурації"</string>
+  <string name="screen_notification_settings_configuration_mismatch_description">"Ми спростили налаштування сповіщень, щоб полегшити пошук параметрів. Деякі користувацькі налаштування, які ви вибрали раніше, тут не відображаються, але вони все ще активні.
+
+Якщо ви продовжите, деякі з ваших налаштувань можуть змінитися."</string>
+  <string name="screen_notification_settings_direct_chats">"Прямі чати"</string>
+  <string name="screen_notification_settings_edit_custom_settings_section_title">"Користувальницькі налаштування для чату"</string>
+  <string name="screen_notification_settings_edit_failed_updating_default_mode">"Під час оновлення налаштувань сповіщень сталася помилка."</string>
+  <string name="screen_notification_settings_edit_mode_all_messages">"Всі повідомлення"</string>
+  <string name="screen_notification_settings_edit_mode_mentions_and_keywords">"Тільки згадки та ключові слова"</string>
+  <string name="screen_notification_settings_edit_screen_direct_section_header">"У прямих чатах повідомляти мене про"</string>
+  <string name="screen_notification_settings_edit_screen_group_section_header">"У групових чатах повідомляти мене про"</string>
+  <string name="screen_notification_settings_enable_notifications">"Увімкнути сповіщення на цьому пристрої"</string>
+  <string name="screen_notification_settings_failed_fixing_configuration">"Конфігурацію не виправлено, спробуйте ще раз."</string>
+  <string name="screen_notification_settings_group_chats">"Групові чати"</string>
+  <string name="screen_notification_settings_invite_for_me_label">"Запрошення"</string>
+  <string name="screen_notification_settings_mentions_only_disclaimer">"Ваш домашній сервер не підтримує цю опцію в зашифрованих кімнатах, ви можете не отримати сповіщення в деяких кімнатах."</string>
+  <string name="screen_notification_settings_mentions_section_title">"Згадки"</string>
+  <string name="screen_notification_settings_mode_all">"Усі"</string>
+  <string name="screen_notification_settings_mode_mentions">"Згадки"</string>
+  <string name="screen_notification_settings_notification_section_title">"Повідомити мене про"</string>
+  <string name="screen_notification_settings_room_mention_label">"Повідомити мене в @room"</string>
+  <string name="screen_notification_settings_system_notifications_action_required">"Щоб отримувати сповіщення, будь ласка, змініть свої %1$s."</string>
+  <string name="screen_notification_settings_system_notifications_action_required_content_link">"системні налаштування"</string>
+  <string name="screen_notification_settings_system_notifications_turned_off">"Системні сповіщення вимкнені"</string>
+  <string name="screen_notification_settings_title">"Сповіщення"</string>
+</resources>

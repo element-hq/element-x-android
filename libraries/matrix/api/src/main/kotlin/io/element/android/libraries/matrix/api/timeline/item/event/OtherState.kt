@@ -33,7 +33,7 @@ sealed interface OtherState {
     data object RoomJoinRules : OtherState
     data class RoomName(val name: String?) : OtherState
     data object RoomPinnedEvents : OtherState
-    data object RoomPowerLevels : OtherState
+    data class RoomPowerLevels(val users: Map<String, Long>) : OtherState
     data object RoomServerAcl : OtherState
     data class RoomThirdPartyInvite(val displayName: String?) : OtherState
     data object RoomTombstone : OtherState

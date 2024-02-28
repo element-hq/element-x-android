@@ -28,6 +28,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
+import im.vector.app.features.analytics.plan.Interaction
 import io.element.android.features.leaveroom.api.LeaveRoomEvent
 import io.element.android.features.leaveroom.api.LeaveRoomPresenter
 import io.element.android.features.networkmonitor.api.NetworkMonitor
@@ -35,7 +37,10 @@ import io.element.android.features.networkmonitor.api.NetworkStatus
 import io.element.android.features.preferences.api.store.SessionPreferencesStore
 import io.element.android.features.roomlist.impl.datasource.InviteStateDataSource
 import io.element.android.features.roomlist.impl.datasource.RoomListDataSource
+import io.element.android.features.roomlist.impl.filters.RoomListFiltersState
 import io.element.android.features.roomlist.impl.migration.MigrationScreenPresenter
+import io.element.android.features.roomlist.impl.search.RoomListSearchEvents
+import io.element.android.features.roomlist.impl.search.RoomListSearchState
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
@@ -44,14 +49,26 @@ import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.indicator.api.IndicatorService
 import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import io.element.android.libraries.matrix.api.encryption.RecoveryState
+import io.element.android.libraries.matrix.api.sync.SyncService
+import io.element.android.libraries.matrix.api.sync.SyncState
 import io.element.android.libraries.matrix.api.timeline.ReceiptType
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.api.user.getCurrentUser
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
+import io.element.android.services.analytics.api.AnalyticsService
+import io.element.android.services.analyticsproviders.api.trackers.captureInteraction
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.takeWhile
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -59,18 +76,23 @@ private const val EXTENDED_RANGE_SIZE = 40
 
 class RoomListPresenter @Inject constructor(
     private val client: MatrixClient,
-    private val sessionVerificationService: SessionVerificationService,
     private val networkMonitor: NetworkMonitor,
     private val snackbarDispatcher: SnackbarDispatcher,
     private val inviteStateDataSource: InviteStateDataSource,
     private val leaveRoomPresenter: LeaveRoomPresenter,
     private val roomListDataSource: RoomListDataSource,
-    private val encryptionService: EncryptionService,
     private val featureFlagService: FeatureFlagService,
     private val indicatorService: IndicatorService,
+    private val filtersPresenter: Presenter<RoomListFiltersState>,
+    private val searchPresenter: Presenter<RoomListSearchState>,
     private val migrationScreenPresenter: MigrationScreenPresenter,
     private val sessionPreferencesStore: SessionPreferencesStore,
+    private val analyticsService: AnalyticsService,
 ) : Presenter<RoomListState> {
+    private val encryptionService: EncryptionService = client.encryptionService()
+    private val sessionVerificationService: SessionVerificationService = client.sessionVerificationService()
+    private val syncService: SyncService = client.syncService()
+
     @Composable
     override fun present(): RoomListState {
         val coroutineScope = rememberCoroutineScope()
@@ -81,9 +103,10 @@ class RoomListPresenter @Inject constructor(
         val roomList by produceState(initialValue = AsyncData.Loading()) {
             roomListDataSource.allRooms.collect { value = AsyncData.Success(it) }
         }
-        val filteredRoomList by roomListDataSource.filteredRooms.collectAsState()
-        val filter by roomListDataSource.filter.collectAsState()
         val networkConnectionStatus by networkMonitor.connectivity.collectAsState()
+
+        val filtersState = filtersPresenter.present()
+        val searchState = searchPresenter.present()
 
         LaunchedEffect(Unit) {
             roomListDataSource.launchIn(this)
@@ -92,74 +115,48 @@ class RoomListPresenter @Inject constructor(
 
         val isMigrating = migrationScreenPresenter.present().isMigrating
 
-        // Session verification status (unknown, not verified, verified)
+        var securityBannerDismissed by rememberSaveable { mutableStateOf(false) }
         val canVerifySession by sessionVerificationService.canVerifySessionFlow.collectAsState(initial = false)
-        var verificationPromptDismissed by rememberSaveable { mutableStateOf(false) }
-        // We combine both values to only display the prompt if the session is not verified and it wasn't dismissed
-        val displayVerificationPrompt by remember {
-            derivedStateOf { canVerifySession && !verificationPromptDismissed }
-        }
+        val isLastDevice by encryptionService.isLastDevice.collectAsState()
         val recoveryState by encryptionService.recoveryStateStateFlow.collectAsState()
-        val secureStorageFlag by featureFlagService.isFeatureEnabledFlow(FeatureFlags.SecureStorage)
-            .collectAsState(initial = null)
-        var recoveryKeyPromptDismissed by rememberSaveable { mutableStateOf(false) }
-        val displayRecoveryKeyPrompt by remember {
+        val syncState by syncService.syncState.collectAsState()
+        val securityBannerState by remember {
             derivedStateOf {
-                secureStorageFlag == true &&
+                when {
+                    securityBannerDismissed -> SecurityBannerState.None
+                    canVerifySession -> if (isLastDevice) {
+                        SecurityBannerState.RecoveryKeyConfirmation
+                    } else {
+                        SecurityBannerState.SessionVerification
+                    }
                     recoveryState == RecoveryState.INCOMPLETE &&
-                    !recoveryKeyPromptDismissed
+                        syncState == SyncState.Running -> SecurityBannerState.RecoveryKeyConfirmation
+                    else -> SecurityBannerState.None
+                }
             }
         }
-
-        val markAsUnreadFeatureFlagEnabled by featureFlagService.isFeatureEnabledFlow(FeatureFlags.MarkAsUnread)
-            .collectAsState(initial = null)
 
         // Avatar indicator
         val showAvatarIndicator by indicatorService.showRoomListTopBarIndicator()
 
-        var displaySearchResults by rememberSaveable { mutableStateOf(false) }
-
-        var contextMenu by remember { mutableStateOf<RoomListState.ContextMenu>(RoomListState.ContextMenu.Hidden) }
+        val contextMenu = remember { mutableStateOf<RoomListState.ContextMenu>(RoomListState.ContextMenu.Hidden) }
 
         fun handleEvents(event: RoomListEvents) {
             when (event) {
-                is RoomListEvents.UpdateFilter -> roomListDataSource.updateFilter(event.newFilter)
                 is RoomListEvents.UpdateVisibleRange -> updateVisibleRange(event.range)
-                RoomListEvents.DismissRequestVerificationPrompt -> verificationPromptDismissed = true
-                RoomListEvents.DismissRecoveryKeyPrompt -> recoveryKeyPromptDismissed = true
-                RoomListEvents.ToggleSearchResults -> {
-                    if (displaySearchResults) {
-                        roomListDataSource.updateFilter("")
-                    }
-                    displaySearchResults = !displaySearchResults
-                }
+                RoomListEvents.DismissRequestVerificationPrompt -> securityBannerDismissed = true
+                RoomListEvents.DismissRecoveryKeyPrompt -> securityBannerDismissed = true
+                RoomListEvents.ToggleSearchResults -> searchState.eventSink(RoomListSearchEvents.ToggleSearchVisibility)
                 is RoomListEvents.ShowContextMenu -> {
-                    contextMenu = RoomListState.ContextMenu.Shown(
-                        roomId = event.roomListRoomSummary.roomId,
-                        roomName = event.roomListRoomSummary.name,
-                        isDm = event.roomListRoomSummary.isDm,
-                        markAsUnreadFeatureFlagEnabled = markAsUnreadFeatureFlagEnabled == true,
-                        hasNewContent = event.roomListRoomSummary.hasNewContent
-                    )
+                    coroutineScope.showContextMenu(event, contextMenu)
                 }
-                is RoomListEvents.HideContextMenu -> contextMenu = RoomListState.ContextMenu.Hidden
+                is RoomListEvents.HideContextMenu -> {
+                    contextMenu.value = RoomListState.ContextMenu.Hidden
+                }
                 is RoomListEvents.LeaveRoom -> leaveRoomState.eventSink(LeaveRoomEvent.ShowConfirmation(event.roomId))
-                is RoomListEvents.MarkAsRead -> coroutineScope.launch {
-                    client.getRoom(event.roomId)?.use { room ->
-                        room.setUnreadFlag(isUnread = false)
-                        val receiptType = if (sessionPreferencesStore.isSendPublicReadReceiptsEnabled().first()) {
-                            ReceiptType.READ
-                        } else {
-                            ReceiptType.READ_PRIVATE
-                        }
-                        room.markAsRead(receiptType)
-                    }
-                }
-                is RoomListEvents.MarkAsUnread -> coroutineScope.launch {
-                    client.getRoom(event.roomId)?.use { room ->
-                        room.setUnreadFlag(isUnread = true)
-                    }
-                }
+                is RoomListEvents.SetRoomIsFavorite -> coroutineScope.setRoomIsFavorite(event.roomId, event.isFavorite)
+                is RoomListEvents.MarkAsRead -> coroutineScope.markAsRead(event.roomId)
+                is RoomListEvents.MarkAsUnread -> coroutineScope.markAsUnread(event.roomId)
             }
         }
 
@@ -169,23 +166,85 @@ class RoomListPresenter @Inject constructor(
             matrixUser = matrixUser.value,
             showAvatarIndicator = showAvatarIndicator,
             roomList = roomList,
-            filter = filter,
-            filteredRoomList = filteredRoomList,
-            displayVerificationPrompt = displayVerificationPrompt,
-            displayRecoveryKeyPrompt = displayRecoveryKeyPrompt,
+            securityBannerState = securityBannerState,
             snackbarMessage = snackbarMessage,
             hasNetworkConnection = networkConnectionStatus == NetworkStatus.Online,
             invitesState = inviteStateDataSource.inviteState(),
-            displaySearchResults = displaySearchResults,
-            contextMenu = contextMenu,
+            contextMenu = contextMenu.value,
             leaveRoomState = leaveRoomState,
+            filtersState = filtersState,
+            searchState = searchState,
             displayMigrationStatus = isMigrating,
-            eventSink = ::handleEvents
+            eventSink = ::handleEvents,
         )
     }
 
     private fun CoroutineScope.initialLoad(matrixUser: MutableState<MatrixUser?>) = launch {
         matrixUser.value = client.getCurrentUser()
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    private fun CoroutineScope.showContextMenu(event: RoomListEvents.ShowContextMenu, contextMenuState: MutableState<RoomListState.ContextMenu>) = launch {
+        val initialState = RoomListState.ContextMenu.Shown(
+            roomId = event.roomListRoomSummary.roomId,
+            roomName = event.roomListRoomSummary.name,
+            isDm = event.roomListRoomSummary.isDm,
+            isFavorite = event.roomListRoomSummary.isFavorite,
+            markAsUnreadFeatureFlagEnabled = featureFlagService.isFeatureEnabled(FeatureFlags.MarkAsUnread),
+            hasNewContent = event.roomListRoomSummary.hasNewContent
+        )
+        contextMenuState.value = initialState
+
+        client.getRoom(event.roomListRoomSummary.roomId)?.use { room ->
+
+            val isShowingContextMenuFlow = snapshotFlow { contextMenuState.value is RoomListState.ContextMenu.Shown }
+                .distinctUntilChanged()
+
+            val isFavoriteFlow = room.roomInfoFlow
+                .map { it.isFavorite }
+                .distinctUntilChanged()
+
+            isFavoriteFlow
+                .onEach { isFavorite ->
+                    contextMenuState.value = initialState.copy(isFavorite = isFavorite)
+                }
+                .flatMapLatest { isShowingContextMenuFlow }
+                .takeWhile { isShowingContextMenu -> isShowingContextMenu }
+                .collect()
+        }
+    }
+
+    private fun CoroutineScope.setRoomIsFavorite(roomId: RoomId, isFavorite: Boolean) = launch {
+        client.getRoom(roomId)?.use { room ->
+            room.setIsFavorite(isFavorite)
+                .onSuccess {
+                    analyticsService.captureInteraction(name = Interaction.Name.MobileRoomListRoomContextMenuFavouriteToggle)
+                }
+        }
+    }
+
+    private fun CoroutineScope.markAsRead(roomId: RoomId) = launch {
+        client.getRoom(roomId)?.use { room ->
+            room.setUnreadFlag(isUnread = false)
+            val receiptType = if (sessionPreferencesStore.isSendPublicReadReceiptsEnabled().first()) {
+                ReceiptType.READ
+            } else {
+                ReceiptType.READ_PRIVATE
+            }
+            room.markAsRead(receiptType)
+                .onSuccess {
+                    analyticsService.captureInteraction(name = Interaction.Name.MobileRoomListRoomContextMenuUnreadToggle)
+                }
+        }
+    }
+
+    private fun CoroutineScope.markAsUnread(roomId: RoomId) = launch {
+        client.getRoom(roomId)?.use { room ->
+            room.setUnreadFlag(isUnread = true)
+                .onSuccess {
+                    analyticsService.captureInteraction(name = Interaction.Name.MobileRoomListRoomContextMenuUnreadToggle)
+                }
+        }
     }
 
     private fun updateVisibleRange(range: IntRange) {

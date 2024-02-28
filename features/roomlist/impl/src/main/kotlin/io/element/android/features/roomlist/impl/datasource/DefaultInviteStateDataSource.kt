@@ -46,7 +46,7 @@ class DefaultInviteStateDataSource @Inject constructor(
             .roomListService
             .invites
             .summaries
-            .collectAsState()
+            .collectAsState(initial = emptyList())
 
         val seenInvites by seenInvitesStore
             .seenRoomIds()

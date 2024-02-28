@@ -27,10 +27,12 @@ import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.lifecycle.Lifecycle
+import im.vector.app.features.analytics.plan.Interaction
 import io.element.android.features.leaveroom.api.LeaveRoomEvent
 import io.element.android.features.leaveroom.api.LeaveRoomPresenter
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsPresenter
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.designsystem.utils.OnLifecycleEvent
 import io.element.android.libraries.featureflag.api.FeatureFlagService
@@ -45,6 +47,8 @@ import io.element.android.libraries.matrix.api.room.powerlevels.canInvite
 import io.element.android.libraries.matrix.api.room.powerlevels.canSendState
 import io.element.android.libraries.matrix.api.room.roomNotificationSettings
 import io.element.android.libraries.matrix.ui.room.getDirectRoomMember
+import io.element.android.services.analytics.api.AnalyticsService
+import io.element.android.services.analyticsproviders.api.trackers.captureInteraction
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -59,18 +63,20 @@ class RoomDetailsPresenter @Inject constructor(
     private val roomMembersDetailsPresenterFactory: RoomMemberDetailsPresenter.Factory,
     private val leaveRoomPresenter: LeaveRoomPresenter,
     private val dispatchers: CoroutineDispatchers,
+    private val analyticsService: AnalyticsService,
 ) : Presenter<RoomDetailsState> {
     @Composable
     override fun present(): RoomDetailsState {
         val scope = rememberCoroutineScope()
         val leaveRoomState = leaveRoomPresenter.present()
         val canShowNotificationSettings = remember { mutableStateOf(false) }
-        val roomInfo = room.roomInfoFlow.collectAsState(initial = null).value
+        val roomInfo by room.roomInfoFlow.collectAsState(initial = null)
 
         val roomAvatar by remember { derivedStateOf { roomInfo?.avatarUrl ?: room.avatarUrl } }
 
         val roomName by remember { derivedStateOf { (roomInfo?.name ?: room.name ?: room.displayName).trim() } }
         val roomTopic by remember { derivedStateOf { roomInfo?.topic ?: room.topic } }
+        val isFavorite by remember { derivedStateOf { roomInfo?.isFavorite.orFalse() } }
 
         LaunchedEffect(Unit) {
             canShowNotificationSettings.value = featureFlagService.isFeatureEnabled(FeatureFlags.NotificationSettings)
@@ -122,6 +128,7 @@ class RoomDetailsPresenter @Inject constructor(
                         client.notificationSettingsService().unmuteRoom(room.roomId, room.isEncrypted, room.isOneToOne)
                     }
                 }
+                is RoomDetailsEvent.SetFavorite -> scope.setFavorite(event.isFavorite)
             }
         }
 
@@ -142,6 +149,7 @@ class RoomDetailsPresenter @Inject constructor(
             roomMemberDetailsState = roomMemberDetailsState,
             leaveRoomState = leaveRoomState,
             roomNotificationSettings = roomNotificationSettingsState.roomNotificationSettings(),
+            isFavorite = isFavorite,
             eventSink = ::handleEvents,
         )
     }
@@ -178,5 +186,12 @@ class RoomDetailsPresenter @Inject constructor(
         notificationSettingsService.notificationSettingsChangeFlow.onEach {
             room.updateRoomNotificationSettings()
         }.launchIn(this)
+    }
+
+    private fun CoroutineScope.setFavorite(isFavorite: Boolean) = launch {
+        room.setIsFavorite(isFavorite)
+            .onSuccess {
+                analyticsService.captureInteraction(Interaction.Name.MobileRoomFavouriteToggle)
+            }
     }
 }

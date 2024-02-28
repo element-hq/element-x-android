@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="rich_text_editor_a11y_add_attachment">"新增附件"</string>
   <string name="rich_text_editor_bullet_list">"切換項目編號"</string>
   <string name="rich_text_editor_code_block">"切換程式碼區塊"</string>
   <string name="rich_text_editor_composer_placeholder">"訊息"</string>
@@ -17,5 +18,4 @@
   <string name="rich_text_editor_remove_link">"移除連結"</string>
   <string name="rich_text_editor_unindent">"減少縮排"</string>
   <string name="rich_text_editor_url_placeholder">"連結"</string>
-  <string name="rich_text_editor_a11y_add_attachment">"新增附件"</string>
 </resources>

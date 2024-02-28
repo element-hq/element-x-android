@@ -170,7 +170,7 @@ class StateContentFormatter @Inject constructor(
                     "RoomPinnedEvents"
                 }
             }
-            OtherState.RoomPowerLevels -> when (renderingMode) {
+            is OtherState.RoomPowerLevels -> when (renderingMode) {
                 RenderingMode.RoomList -> {
                     Timber.v("Filtering timeline item for room state change: $content")
                     null

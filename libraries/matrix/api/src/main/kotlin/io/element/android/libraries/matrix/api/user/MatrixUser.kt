@@ -24,5 +24,5 @@ import kotlinx.parcelize.Parcelize
 data class MatrixUser(
     val userId: UserId,
     val displayName: String? = null,
-    val avatarUrl: String? = null
+    val avatarUrl: String? = null,
 ) : Parcelable

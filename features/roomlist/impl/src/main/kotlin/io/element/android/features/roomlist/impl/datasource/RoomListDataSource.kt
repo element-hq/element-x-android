@@ -21,22 +21,18 @@ import io.element.android.libraries.androidutils.diff.DiffCacheUpdater
 import io.element.android.libraries.androidutils.diff.MutableListDiffCache
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsService
-import io.element.android.libraries.matrix.api.roomlist.RoomList
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.api.roomlist.RoomSummary
 import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
@@ -54,9 +50,7 @@ class RoomListDataSource @Inject constructor(
         observeNotificationSettings()
     }
 
-    private val _filter = MutableStateFlow("")
     private val _allRooms = MutableSharedFlow<ImmutableList<RoomListRoomSummary>>(replay = 1)
-    private val _filteredRooms = MutableStateFlow<ImmutableList<RoomListRoomSummary>>(persistentListOf())
 
     private val lock = Mutex()
     private val diffCache = MutableListDiffCache<RoomListRoomSummary>()
@@ -68,33 +62,19 @@ class RoomListDataSource @Inject constructor(
         roomListService
             .allRooms
             .summaries
+            .onStart {
+                // If we have no cached results, display a placeholder loading state
+                if (diffCache.isEmpty()) {
+                    _allRooms.emit(RoomListRoomSummaryFactory.createFakeList())
+                }
+            }
             .onEach { roomSummaries ->
                 replaceWith(roomSummaries)
             }
             .launchIn(coroutineScope)
-
-        combine(
-            _filter,
-            _allRooms
-        ) { filterValue, allRoomsValue ->
-            when {
-                filterValue.isEmpty() -> emptyList()
-                else -> allRoomsValue.filter { it.name.contains(filterValue, ignoreCase = true) }
-            }.toImmutableList()
-        }
-            .onEach {
-                _filteredRooms.value = it
-            }
-            .launchIn(coroutineScope)
     }
 
-    fun updateFilter(filterValue: String) {
-        _filter.value = filterValue
-    }
-
-    val filter: StateFlow<String> = _filter
     val allRooms: SharedFlow<ImmutableList<RoomListRoomSummary>> = _allRooms
-    val filteredRooms: StateFlow<ImmutableList<RoomListRoomSummary>> = _filteredRooms
 
     @OptIn(FlowPreview::class)
     private fun observeNotificationSettings() {
@@ -114,23 +94,10 @@ class RoomListDataSource @Inject constructor(
     }
 
     private suspend fun buildAndEmitAllRooms(roomSummaries: List<RoomSummary>) {
-        if (diffCache.isEmpty() && roomListService.allRooms.loadingState.value is RoomList.LoadingState.NotLoaded) {
-            // If the room list is not loaded, we emit a fake placeholders list
-            _allRooms.emit(RoomListRoomSummaryFactory.createFakeList())
-        } else {
-            val roomListRoomSummaries = ArrayList<RoomListRoomSummary>()
-            for (index in diffCache.indices()) {
-                val cacheItem = diffCache.get(index)
-                if (cacheItem == null) {
-                    buildAndCacheItem(roomSummaries, index)?.also { timelineItemState ->
-                        roomListRoomSummaries.add(timelineItemState)
-                    }
-                } else {
-                    roomListRoomSummaries.add(cacheItem)
-                }
-            }
-            _allRooms.emit(roomListRoomSummaries.toImmutableList())
+        val roomListRoomSummaries = diffCache.indices().mapNotNull { index ->
+            diffCache.get(index) ?: buildAndCacheItem(roomSummaries, index)
         }
+        _allRooms.emit(roomListRoomSummaries.toImmutableList())
     }
 
     private fun buildAndCacheItem(roomSummaries: List<RoomSummary>, index: Int): RoomListRoomSummary? {

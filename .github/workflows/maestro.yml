@@ -8,8 +8,8 @@ on:
 
 # Enrich gradle.properties for CI/CD
 env:
-  GRADLE_OPTS: -Dorg.gradle.jvmargs="-Xmx3584m -Dfile.encoding=UTF-8 -XX:+HeapDumpOnOutOfMemoryError" -Dkotlin.incremental=false -XX:+UseParallelGC
-  CI_GRADLE_ARG_PROPERTIES: --stacktrace -PpreDexEnable=false --max-workers 2 --no-daemon
+  GRADLE_OPTS: -Dorg.gradle.jvmargs="-Xmx6g -Dfile.encoding=UTF-8 -XX:+HeapDumpOnOutOfMemoryError" -Dkotlin.incremental=false -XX:+UseParallelGC
+  CI_GRADLE_ARG_PROPERTIES: --stacktrace -PpreDexEnable=false --max-workers 8 --no-daemon
 
 jobs:
   maestro-cloud:
@@ -47,7 +47,7 @@ jobs:
           ELEMENT_ANDROID_MAPTILER_API_KEY: ${{ secrets.MAPTILER_KEY }}
           ELEMENT_ANDROID_MAPTILER_LIGHT_MAP_ID: ${{ secrets.MAPTILER_LIGHT_MAP_ID }}
           ELEMENT_ANDROID_MAPTILER_DARK_MAP_ID: ${{ secrets.MAPTILER_DARK_MAP_ID }}
-      - uses: mobile-dev-inc/action-maestro-cloud@v1.8.0
+      - uses: mobile-dev-inc/action-maestro-cloud@v1.8.1
         if: (github.event_name == 'pull_request' && github.event.pull_request.fork == null) || github.event_name == 'workflow_dispatch'
         with:
           api-key: ${{ secrets.MAESTRO_CLOUD_API_KEY }}
@@ -55,9 +55,10 @@ jobs:
           # app-file should point to an x86 compatible APK file, so upload the x86_64 one (much smaller than the universal APK).
           app-file: app/build/outputs/apk/gplay/debug/app-gplay-x86_64-debug.apk
           env: |
-            USERNAME=maestroelement
-            PASSWORD=${{ secrets.MATRIX_MAESTRO_ACCOUNT_PASSWORD }}
-            ROOM_NAME=MyRoom
-            INVITEE1_MXID=@maestroelement2:matrix.org
-            INVITEE2_MXID=@maestroelement3:matrix.org
-            APP_ID=io.element.android.x.debug
+            MAESTRO_USERNAME=maestroelement
+            MAESTRO_PASSWORD=${{ secrets.MATRIX_MAESTRO_ACCOUNT_PASSWORD }}
+            MAESTRO_RECOVERY_KEY=${{ secrets.MATRIX_MAESTRO_ACCOUNT_RECOVERY_KEY }}
+            MAESTRO_ROOM_NAME=MyRoom
+            MAESTRO_INVITEE1_MXID=@maestroelement2:matrix.org
+            MAESTRO_INVITEE2_MXID=@maestroelement3:matrix.org
+            MAESTRO_APP_ID=io.element.android.x.debug

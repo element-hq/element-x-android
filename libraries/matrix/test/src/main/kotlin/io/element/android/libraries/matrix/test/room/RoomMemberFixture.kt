@@ -29,6 +29,7 @@ fun aRoomMember(
     powerLevel: Long = 0L,
     normalizedPowerLevel: Long = 0L,
     isIgnored: Boolean = false,
+    role: RoomMember.Role = RoomMember.Role.USER,
 ) = RoomMember(
     userId = userId,
     displayName = displayName,
@@ -38,4 +39,5 @@ fun aRoomMember(
     powerLevel = powerLevel,
     normalizedPowerLevel = normalizedPowerLevel,
     isIgnored = isIgnored,
+    role = role,
 )

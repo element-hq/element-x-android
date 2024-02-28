@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="rich_text_editor_a11y_add_attachment">"Anhang hinzufügen"</string>
   <string name="rich_text_editor_bullet_list">"Aufzählungsliste umschalten"</string>
   <string name="rich_text_editor_close_formatting_options">"Formatierungsoptionen schließen"</string>
   <string name="rich_text_editor_code_block">"Codeblock umschalten"</string>
@@ -20,6 +21,5 @@
   <string name="rich_text_editor_remove_link">"Link entfernen"</string>
   <string name="rich_text_editor_unindent">"Ohne Einrückung"</string>
   <string name="rich_text_editor_url_placeholder">"Link"</string>
-  <string name="rich_text_editor_a11y_add_attachment">"Anhang hinzufügen"</string>
   <string name="screen_room_voice_message_tooltip">"Zum Aufnehmen gedrückt halten"</string>
 </resources>

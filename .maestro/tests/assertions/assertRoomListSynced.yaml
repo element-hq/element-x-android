@@ -1,5 +1,5 @@
-appId: ${APP_ID}
+appId: ${MAESTRO_APP_ID}
 ---
 - extendedWaitUntil:
-    visible: ${ROOM_NAME}
+    visible: ${MAESTRO_ROOM_NAME}
     timeout: 10000

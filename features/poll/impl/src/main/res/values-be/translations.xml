@@ -9,11 +9,11 @@
   <string name="screen_create_poll_question_hint">"Пра што апытанне?"</string>
   <string name="screen_create_poll_title">"Стварэнне апытання"</string>
   <string name="screen_edit_poll_delete_confirmation">"Вы ўпэўнены, што жадаеце выдаліць гэтае апытанне?"</string>
+  <string name="screen_edit_poll_delete_confirmation_title">"Выдаліць апытанне"</string>
+  <string name="screen_edit_poll_title">"Рэдагаваць апытанне"</string>
   <string name="screen_polls_history_empty_ongoing">"Немагчыма знайсці бягучыя апытанні."</string>
   <string name="screen_polls_history_empty_past">"Немагчыма знайсці мінулыя апытанні."</string>
   <string name="screen_polls_history_filter_ongoing">"Бягучыя"</string>
   <string name="screen_polls_history_filter_past">"Мінулыя"</string>
   <string name="screen_polls_history_title">"Апытанні"</string>
-  <string name="screen_edit_poll_delete_confirmation_title">"Выдаліць апытанне"</string>
-  <string name="screen_edit_poll_title">"Рэдагаваць апытанне"</string>
 </resources>

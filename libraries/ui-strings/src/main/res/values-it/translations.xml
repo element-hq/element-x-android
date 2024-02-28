@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="a11y_delete">"Elimina"</string>
+  <plurals name="a11y_digits_entered">
+    <item quantity="one">"%1$d cifra inserita"</item>
+    <item quantity="other">"%1$d cifre inserite"</item>
+  </plurals>
   <string name="a11y_hide_password">"Nascondi password"</string>
   <string name="a11y_jump_to_bottom">"Vai alla fine"</string>
   <string name="a11y_notifications_mentions_only">"Solo menzioni"</string>
@@ -14,6 +18,10 @@
   <string name="a11y_react_with">"Reagisci con %1$s"</string>
   <string name="a11y_react_with_other_emojis">"Reagisci con altri emoji"</string>
   <string name="a11y_read_receipts_multiple">"Letto da %1$s e %2$s"</string>
+  <plurals name="a11y_read_receipts_multiple_with_others">
+    <item quantity="one">"Letto da %1$s e %2$d altro"</item>
+    <item quantity="other">"Letto da %1$s e altri %2$d"</item>
+  </plurals>
   <string name="a11y_read_receipts_single">"Letto da %1$s"</string>
   <string name="a11y_read_receipts_tap_to_show_all">"Tocca per mostrare tutti"</string>
   <string name="a11y_remove_reaction_with">"Rimuovi la reazione con %1$s"</string>
@@ -59,6 +67,7 @@
   <string name="action_leave">"Esci"</string>
   <string name="action_leave_conversation">"Abbandona la conversazione"</string>
   <string name="action_leave_room">"Esci dalla stanza"</string>
+  <string name="action_load_more">"Carica di più"</string>
   <string name="action_manage_account">"Gestisci account"</string>
   <string name="action_manage_devices">"Gestisci dispositivi"</string>
   <string name="action_next">"Avanti"</string>
@@ -96,7 +105,6 @@
   <string name="action_try_again">"Riprova"</string>
   <string name="action_view_source">"Vedi Sorgente"</string>
   <string name="action_yes">"Sì"</string>
-  <string name="action_load_more">"Carica di più"</string>
   <string name="common_about">"Informazioni"</string>
   <string name="common_acceptable_use_policy">"Regole sull\'utilizzo consentito"</string>
   <string name="common_advanced_settings">"Impostazioni avanzate"</string>
@@ -132,6 +140,10 @@
   <string name="common_light">"Chiaro"</string>
   <string name="common_link_copied_to_clipboard">"Collegamento copiato negli appunti"</string>
   <string name="common_loading">"Caricamento…"</string>
+  <plurals name="common_member_count">
+    <item quantity="one">"%1$d membro"</item>
+    <item quantity="other">"%1$d membri"</item>
+  </plurals>
   <string name="common_message">"Messaggio"</string>
   <string name="common_message_actions">"Azioni del messaggio"</string>
   <string name="common_message_layout">"Impaginazione del messaggio"</string>
@@ -144,8 +156,14 @@
   <string name="common_people">"Persone"</string>
   <string name="common_permalink">"Collegamento permanente"</string>
   <string name="common_permission">"Autorizzazione"</string>
+  <string name="common_poll_end_confirmation">"Vuoi davvero terminare questo sondaggio?"</string>
+  <string name="common_poll_summary">"Sondaggio: %1$s"</string>
   <string name="common_poll_total_votes">"Voti totali: %1$s"</string>
   <string name="common_poll_undisclosed_text">"I risultati verranno mostrati al termine del sondaggio"</string>
+  <plurals name="common_poll_votes_count">
+    <item quantity="one">"%d voto"</item>
+    <item quantity="other">"%d voti"</item>
+  </plurals>
   <string name="common_privacy_policy">"Informativa sulla privacy"</string>
   <string name="common_reaction">"Reazione"</string>
   <string name="common_reactions">"Reazioni"</string>
@@ -192,14 +210,14 @@
   <string name="common_username">"Nome utente"</string>
   <string name="common_verification_cancelled">"Verifica annullata"</string>
   <string name="common_verification_complete">"Verifica completata"</string>
+  <string name="common_verify_device">"Verifica dispositivo"</string>
   <string name="common_video">"Video"</string>
   <string name="common_voice_message">"Messaggio vocale"</string>
   <string name="common_waiting">"In attesa…"</string>
   <string name="common_waiting_for_decryption_key">"In attesa di questo messaggio"</string>
-  <string name="common_poll_end_confirmation">"Vuoi davvero terminare questo sondaggio?"</string>
-  <string name="common_poll_summary">"Sondaggio: %1$s"</string>
-  <string name="common_verify_device">"Verifica dispositivo"</string>
   <string name="dialog_title_confirmation">"Conferma"</string>
+  <string name="dialog_title_error">"Errore"</string>
+  <string name="dialog_title_success">"Operazione riuscita"</string>
   <string name="dialog_title_warning">"Attenzione"</string>
   <string name="error_failed_creating_the_permalink">"Impossibile creare il collegamento permanente"</string>
   <string name="error_failed_loading_map">"%1$s non è riuscito a caricare la mappa. Riprova più tardi."</string>
@@ -214,22 +232,6 @@
   <string name="invite_friends_rich_title">"🔐️ Unisciti a me su %1$s"</string>
   <string name="invite_friends_text">"Ehi, parlami su %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
-  <plurals name="a11y_digits_entered">
-    <item quantity="one">"%1$d cifra inserita"</item>
-    <item quantity="other">"%1$d cifre inserite"</item>
-  </plurals>
-  <plurals name="a11y_read_receipts_multiple_with_others">
-    <item quantity="one">"Letto da %1$s e %2$d altro"</item>
-    <item quantity="other">"Letto da %1$s e altri %2$d"</item>
-  </plurals>
-  <plurals name="common_member_count">
-    <item quantity="one">"%1$d membro"</item>
-    <item quantity="other">"%1$d membri"</item>
-  </plurals>
-  <plurals name="common_poll_votes_count">
-    <item quantity="one">"%d voto"</item>
-    <item quantity="other">"%d voti"</item>
-  </plurals>
   <string name="preference_rageshake">"Scuoti per segnalare un problema"</string>
   <string name="screen_media_picker_error_failed_selection">"Selezione del file multimediale fallita, riprova."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Elaborazione del file multimediale da caricare fallita, riprova."</string>
@@ -243,6 +245,4 @@
   <string name="screen_view_location_title">"Posizione"</string>
   <string name="settings_version_number">"Versione: %1$s (%2$s)"</string>
   <string name="test_language_identifier">"it"</string>
-  <string name="dialog_title_error">"Errore"</string>
-  <string name="dialog_title_success">"Operazione riuscita"</string>
 </resources>

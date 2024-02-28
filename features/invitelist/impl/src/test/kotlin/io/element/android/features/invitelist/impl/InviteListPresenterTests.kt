@@ -18,6 +18,7 @@ package io.element.android.features.invitelist.impl
 
 import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
+import app.cash.turbine.TurbineTestContext
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.invitelist.api.SeenInvitesStore
@@ -27,7 +28,6 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
-import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
 import io.element.android.libraries.matrix.api.roomlist.RoomSummary
 import io.element.android.libraries.matrix.test.AN_AVATAR_URL
@@ -38,6 +38,7 @@ import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.A_USER_NAME
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
+import io.element.android.libraries.matrix.test.room.aRoomMember
 import io.element.android.libraries.matrix.test.room.aRoomSummaryDetails
 import io.element.android.libraries.matrix.test.roomlist.FakeRoomListService
 import io.element.android.libraries.push.api.notifications.NotificationDrawerManager
@@ -83,7 +84,7 @@ class InviteListPresenterTests {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            val withInviteState = awaitItem()
+            val withInviteState = awaitInitialItem()
             assertThat(withInviteState.inviteList.size).isEqualTo(1)
             assertThat(withInviteState.inviteList[0].roomId).isEqualTo(A_ROOM_ID)
             assertThat(withInviteState.inviteList[0].roomAlias).isEqualTo(A_USER_ID.value)
@@ -109,7 +110,7 @@ class InviteListPresenterTests {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            val withInviteState = awaitItem()
+            val withInviteState = awaitInitialItem()
             assertThat(withInviteState.inviteList.size).isEqualTo(1)
             assertThat(withInviteState.inviteList[0].sender?.displayName).isEqualTo(A_USER_NAME)
             assertThat(withInviteState.inviteList[0].sender?.userId).isEqualTo(A_USER_ID)
@@ -138,7 +139,7 @@ class InviteListPresenterTests {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            val originalState = awaitItem()
+            val originalState = awaitInitialItem()
             originalState.eventSink(InviteListEvents.DeclineInvite(originalState.inviteList[0]))
 
             val newState = awaitItem()
@@ -159,7 +160,7 @@ class InviteListPresenterTests {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            val originalState = awaitItem()
+            val originalState = awaitInitialItem()
             originalState.eventSink(InviteListEvents.DeclineInvite(originalState.inviteList[0]))
 
             val newState = awaitItem()
@@ -180,7 +181,7 @@ class InviteListPresenterTests {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            val originalState = awaitItem()
+            val originalState = awaitInitialItem()
             originalState.eventSink(InviteListEvents.DeclineInvite(originalState.inviteList[0]))
 
             skipItems(1)
@@ -206,7 +207,7 @@ class InviteListPresenterTests {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            val originalState = awaitItem()
+            val originalState = awaitInitialItem()
             originalState.eventSink(InviteListEvents.DeclineInvite(originalState.inviteList[0]))
 
             skipItems(1)
@@ -234,7 +235,7 @@ class InviteListPresenterTests {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            val originalState = awaitItem()
+            val originalState = awaitInitialItem()
             originalState.eventSink(InviteListEvents.DeclineInvite(originalState.inviteList[0]))
 
             skipItems(1)
@@ -264,7 +265,7 @@ class InviteListPresenterTests {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            val originalState = awaitItem()
+            val originalState = awaitInitialItem()
             originalState.eventSink(InviteListEvents.DeclineInvite(originalState.inviteList[0]))
 
             skipItems(1)
@@ -295,7 +296,7 @@ class InviteListPresenterTests {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            val originalState = awaitItem()
+            val originalState = awaitInitialItem()
             originalState.eventSink(InviteListEvents.AcceptInvite(originalState.inviteList[0]))
 
             val newState = awaitItem()
@@ -320,7 +321,7 @@ class InviteListPresenterTests {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            val originalState = awaitItem()
+            val originalState = awaitInitialItem()
             originalState.eventSink(InviteListEvents.AcceptInvite(originalState.inviteList[0]))
 
             assertThat(awaitItem().acceptedAction).isEqualTo(AsyncData.Failure<RoomId>(ex))
@@ -342,7 +343,7 @@ class InviteListPresenterTests {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            val originalState = awaitItem()
+            val originalState = awaitInitialItem()
             originalState.eventSink(InviteListEvents.AcceptInvite(originalState.inviteList[0]))
 
             skipItems(1)
@@ -431,7 +432,7 @@ class InviteListPresenterTests {
                         avatarUrl = null,
                         isDirect = false,
                         lastMessage = null,
-                        inviter = RoomMember(
+                        inviter = aRoomMember(
                             userId = A_USER_ID,
                             displayName = A_USER_NAME,
                             avatarUrl = AN_AVATAR_URL,
@@ -458,7 +459,7 @@ class InviteListPresenterTests {
                         avatarUrl = null,
                         isDirect = true,
                         lastMessage = null,
-                        inviter = RoomMember(
+                        inviter = aRoomMember(
                             userId = A_USER_ID,
                             displayName = A_USER_NAME,
                             avatarUrl = AN_AVATAR_URL,
@@ -484,6 +485,11 @@ class InviteListPresenterTests {
             lastMessage = null,
         )
     )
+
+    private suspend fun TurbineTestContext<InviteListState>.awaitInitialItem(): InviteListState {
+        skipItems(1)
+        return awaitItem()
+    }
 
     private fun createPresenter(
         client: MatrixClient,

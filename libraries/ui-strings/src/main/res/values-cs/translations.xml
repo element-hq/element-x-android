@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="a11y_delete">"Smazat"</string>
+  <plurals name="a11y_digits_entered">
+    <item quantity="one">"zadána %1$d číslice"</item>
+    <item quantity="few">"zadány %1$d číslice"</item>
+    <item quantity="other">"zadáno %1$d číslic"</item>
+  </plurals>
   <string name="a11y_hide_password">"Skrýt heslo"</string>
   <string name="a11y_jump_to_bottom">"Přejít dolů"</string>
   <string name="a11y_notifications_mentions_only">"Pouze zmínky"</string>
@@ -14,6 +19,11 @@
   <string name="a11y_react_with">"Reagovat s %1$s"</string>
   <string name="a11y_react_with_other_emojis">"Reagovat s dalšími emoji"</string>
   <string name="a11y_read_receipts_multiple">"%1$s a %2$s přečetli"</string>
+  <plurals name="a11y_read_receipts_multiple_with_others">
+    <item quantity="one">"Přečetl(a) %1$s a %2$d další"</item>
+    <item quantity="few">"Přečetl(a) %1$s a %2$d další"</item>
+    <item quantity="other">"Přečetl(a) %1$s a %2$d dalších"</item>
+  </plurals>
   <string name="a11y_read_receipts_single">"%1$s přečetl(a)"</string>
   <string name="a11y_read_receipts_tap_to_show_all">"Klepnutím zobrazíte vše"</string>
   <string name="a11y_remove_reaction_with">"Odstraňit reakci s %1$s"</string>
@@ -59,6 +69,7 @@
   <string name="action_leave">"Odejít"</string>
   <string name="action_leave_conversation">"Opustit konverzaci"</string>
   <string name="action_leave_room">"Opustit místnost"</string>
+  <string name="action_load_more">"Načíst více"</string>
   <string name="action_manage_account">"Spravovat účet"</string>
   <string name="action_manage_devices">"Spravovat zařízení"</string>
   <string name="action_next">"Další"</string>
@@ -96,13 +107,13 @@
   <string name="action_try_again">"Zkusit znovu"</string>
   <string name="action_view_source">"Zobrazit zdroj"</string>
   <string name="action_yes">"Ano"</string>
-  <string name="action_load_more">"Načíst více"</string>
   <string name="common_about">"O aplikaci"</string>
   <string name="common_acceptable_use_policy">"Zásady používání"</string>
   <string name="common_advanced_settings">"Pokročilá nastavení"</string>
   <string name="common_analytics">"Analytika"</string>
   <string name="common_appearance">"Vzhled"</string>
   <string name="common_audio">"Zvuk"</string>
+  <string name="common_blocked_users">"Blokovaní uživatelé"</string>
   <string name="common_bubbles">"Bubliny"</string>
   <string name="common_chat_backup">"Záloha chatu"</string>
   <string name="common_copyright">"Autorská práva"</string>
@@ -119,7 +130,9 @@
   <string name="common_enter_your_pin">"Zadejte svůj PIN"</string>
   <string name="common_error">"Chyba"</string>
   <string name="common_everyone">"Všichni"</string>
+  <string name="common_failed">"Selhalo"</string>
   <string name="common_favourite">"Oblíbené"</string>
+  <string name="common_favourited">"Oblíbené"</string>
   <string name="common_file">"Soubor"</string>
   <string name="common_file_saved_on_disk_android">"Soubor byl uložen do složky Stažené soubory"</string>
   <string name="common_forward_message">"Přeposlat zprávu"</string>
@@ -132,6 +145,11 @@
   <string name="common_light">"Světlý"</string>
   <string name="common_link_copied_to_clipboard">"Odkaz zkopírován do schránky"</string>
   <string name="common_loading">"Načítání…"</string>
+  <plurals name="common_member_count">
+    <item quantity="one">"%1$d člen"</item>
+    <item quantity="few">"%1$d členové"</item>
+    <item quantity="other">"%1$d členů"</item>
+  </plurals>
   <string name="common_message">"Zpráva"</string>
   <string name="common_message_actions">"Akce zprávy"</string>
   <string name="common_message_layout">"Zobrazení zpráv"</string>
@@ -140,12 +158,20 @@
   <string name="common_mute">"Ztlumit"</string>
   <string name="common_no_results">"Žádné výsledky"</string>
   <string name="common_offline">"Offline"</string>
+  <string name="common_or">"nebo"</string>
   <string name="common_password">"Heslo"</string>
   <string name="common_people">"Lidé"</string>
   <string name="common_permalink">"Trvalý odkaz"</string>
   <string name="common_permission">"Oprávnění"</string>
+  <string name="common_poll_end_confirmation">"Opravdu chcete ukončit toto hlasování?"</string>
+  <string name="common_poll_summary">"Hlasování: %1$s"</string>
   <string name="common_poll_total_votes">"Celkový počet hlasů: %1$s"</string>
   <string name="common_poll_undisclosed_text">"Výsledky se zobrazí po skončení hlasování"</string>
+  <plurals name="common_poll_votes_count">
+    <item quantity="one">"%d hlas"</item>
+    <item quantity="few">"%d hlasy"</item>
+    <item quantity="other">"%d hlasů"</item>
+  </plurals>
   <string name="common_privacy_policy">"Zásady ochrany osobních údajů"</string>
   <string name="common_reaction">"Reakce"</string>
   <string name="common_reactions">"Reakce"</string>
@@ -192,14 +218,14 @@
   <string name="common_username">"Uživatelské jméno"</string>
   <string name="common_verification_cancelled">"Ověření zrušeno"</string>
   <string name="common_verification_complete">"Ověření dokončeno"</string>
+  <string name="common_verify_device">"Ověřit zařízení"</string>
   <string name="common_video">"Video"</string>
   <string name="common_voice_message">"Hlasová zpráva"</string>
   <string name="common_waiting">"Čekání…"</string>
   <string name="common_waiting_for_decryption_key">"Čekání na dešifrovací klíč"</string>
-  <string name="common_poll_end_confirmation">"Opravdu chcete ukončit toto hlasování?"</string>
-  <string name="common_poll_summary">"Hlasování: %1$s"</string>
-  <string name="common_verify_device">"Ověřit zařízení"</string>
   <string name="dialog_title_confirmation">"Potvrzení"</string>
+  <string name="dialog_title_error">"Chyba"</string>
+  <string name="dialog_title_success">"Úspěch"</string>
   <string name="dialog_title_warning">"Upozornění"</string>
   <string name="error_failed_creating_the_permalink">"Vytvoření trvalého odkazu se nezdařilo"</string>
   <string name="error_failed_loading_map">"%1$s nemohl načíst mapu. Zkuste to prosím později."</string>
@@ -214,26 +240,6 @@
   <string name="invite_friends_rich_title">"🔐️ Připojte se ke mně na %1$s"</string>
   <string name="invite_friends_text">"Ahoj, ozvi se mi na %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
-  <plurals name="a11y_digits_entered">
-    <item quantity="one">"zadána %1$d číslice"</item>
-    <item quantity="few">"zadány %1$d číslice"</item>
-    <item quantity="other">"zadáno %1$d číslic"</item>
-  </plurals>
-  <plurals name="a11y_read_receipts_multiple_with_others">
-    <item quantity="one">"Přečetl(a) %1$s a %2$d další"</item>
-    <item quantity="few">"Přečetl(a) %1$s a %2$d další"</item>
-    <item quantity="other">"Přečetl(a) %1$s a %2$d dalších"</item>
-  </plurals>
-  <plurals name="common_member_count">
-    <item quantity="one">"%1$d člen"</item>
-    <item quantity="few">"%1$d členové"</item>
-    <item quantity="other">"%1$d členů"</item>
-  </plurals>
-  <plurals name="common_poll_votes_count">
-    <item quantity="one">"%d hlas"</item>
-    <item quantity="few">"%d hlasy"</item>
-    <item quantity="other">"%d hlasů"</item>
-  </plurals>
   <string name="preference_rageshake">"Zatřeste zařízením pro nahlášení chyby"</string>
   <string name="screen_media_picker_error_failed_selection">"Výběr média se nezdařil, zkuste to prosím znovu."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Nahrání média se nezdařilo, zkuste to prosím znovu."</string>
@@ -247,6 +253,4 @@
   <string name="screen_view_location_title">"Poloha"</string>
   <string name="settings_version_number">"Verze: %1$s (%2$s)"</string>
   <string name="test_language_identifier">"en"</string>
-  <string name="dialog_title_error">"Chyba"</string>
-  <string name="dialog_title_success">"Úspěch"</string>
 </resources>

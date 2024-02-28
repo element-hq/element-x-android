@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="a11y_delete">"刪除"</string>
+  <plurals name="a11y_digits_entered">
+    <item quantity="other">"已輸入 %1$d 個位數"</item>
+  </plurals>
   <string name="a11y_hide_password">"隱藏密碼"</string>
   <string name="a11y_jump_to_bottom">"跳至底部"</string>
   <string name="a11y_notifications_mentions_only">"僅限提及"</string>
@@ -14,6 +17,9 @@
   <string name="a11y_react_with">"使用 %1$s 回應"</string>
   <string name="a11y_react_with_other_emojis">"用其他表情符號回應"</string>
   <string name="a11y_read_receipts_multiple">"%1$s 和 %2$s 已讀"</string>
+  <plurals name="a11y_read_receipts_multiple_with_others">
+    <item quantity="other">"%1$s 與其他 %2$d 個人已讀"</item>
+  </plurals>
   <string name="a11y_read_receipts_single">"%1$s 已讀"</string>
   <string name="a11y_read_receipts_tap_to_show_all">"點擊以顯示全部"</string>
   <string name="a11y_send_files">"傳送檔案"</string>
@@ -56,6 +62,7 @@
   <string name="action_learn_more">"了解更多"</string>
   <string name="action_leave">"離開"</string>
   <string name="action_leave_room">"離開聊天室"</string>
+  <string name="action_load_more">"載入更多"</string>
   <string name="action_manage_account">"管理帳號"</string>
   <string name="action_manage_devices">"管理裝置"</string>
   <string name="action_next">"下一步"</string>
@@ -92,7 +99,6 @@
   <string name="action_try_again">"再試一次"</string>
   <string name="action_view_source">"檢視原始碼"</string>
   <string name="action_yes">"是"</string>
-  <string name="action_load_more">"載入更多"</string>
   <string name="common_about">"關於"</string>
   <string name="common_acceptable_use_policy">"可接受使用政策"</string>
   <string name="common_advanced_settings">"進階設定"</string>
@@ -127,6 +133,9 @@
   <string name="common_light">"淺色"</string>
   <string name="common_link_copied_to_clipboard">"連結已複製到剪貼簿"</string>
   <string name="common_loading">"載入中…"</string>
+  <plurals name="common_member_count">
+    <item quantity="other">"%1$d 位成員"</item>
+  </plurals>
   <string name="common_message">"訊息"</string>
   <string name="common_message_layout">"訊息佈局"</string>
   <string name="common_message_removed">"訊息已移除"</string>
@@ -138,8 +147,13 @@
   <string name="common_people">"夥伴"</string>
   <string name="common_permalink">"永久連結"</string>
   <string name="common_permission">"權限"</string>
+  <string name="common_poll_end_confirmation">"您確定要結束這項投票嗎？"</string>
+  <string name="common_poll_summary">"投票：%1$s"</string>
   <string name="common_poll_total_votes">"總票數：%1$s"</string>
   <string name="common_poll_undisclosed_text">"結果將在投票結束後公佈"</string>
+  <plurals name="common_poll_votes_count">
+    <item quantity="other">"%d 票"</item>
+  </plurals>
   <string name="common_privacy_policy">"隱私權政策"</string>
   <string name="common_reaction">"回應"</string>
   <string name="common_reactions">"回應"</string>
@@ -180,14 +194,14 @@
   <string name="common_username">"使用者名稱"</string>
   <string name="common_verification_cancelled">"驗證已取消"</string>
   <string name="common_verification_complete">"驗證完成"</string>
+  <string name="common_verify_device">"驗證裝置"</string>
   <string name="common_video">"影片"</string>
   <string name="common_voice_message">"語音訊息"</string>
   <string name="common_waiting">"等待中…"</string>
   <string name="common_waiting_for_decryption_key">"等待此則訊息"</string>
-  <string name="common_poll_end_confirmation">"您確定要結束這項投票嗎？"</string>
-  <string name="common_poll_summary">"投票：%1$s"</string>
-  <string name="common_verify_device">"驗證裝置"</string>
   <string name="dialog_title_confirmation">"確認"</string>
+  <string name="dialog_title_error">"錯誤"</string>
+  <string name="dialog_title_success">"成功"</string>
   <string name="dialog_title_warning">"警告"</string>
   <string name="error_failed_creating_the_permalink">"無法建立永久連結"</string>
   <string name="error_failed_loading_map">"%1$s無法載入地圖。請稍後再試。"</string>
@@ -199,18 +213,6 @@
   <string name="error_some_messages_have_not_been_sent">"有些訊息尚未傳送"</string>
   <string name="invite_friends_text">"嘿，來 %1$s 和我聊天：%2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
-  <plurals name="a11y_digits_entered">
-    <item quantity="other">"已輸入 %1$d 個位數"</item>
-  </plurals>
-  <plurals name="a11y_read_receipts_multiple_with_others">
-    <item quantity="other">"%1$s 與其他 %2$d 個人已讀"</item>
-  </plurals>
-  <plurals name="common_member_count">
-    <item quantity="other">"%1$d 位成員"</item>
-  </plurals>
-  <plurals name="common_poll_votes_count">
-    <item quantity="other">"%d 票"</item>
-  </plurals>
   <string name="screen_media_upload_preview_error_failed_sending">"無法上傳媒體檔案，請稍後再試。"</string>
   <string name="screen_share_location_title">"分享位置"</string>
   <string name="screen_share_my_location_action">"分享我的位置"</string>
@@ -221,6 +223,4 @@
   <string name="screen_view_location_title">"位置"</string>
   <string name="settings_version_number">"版本：%1$s（%2$s）"</string>
   <string name="test_language_identifier">"zh-tw"</string>
-  <string name="dialog_title_error">"錯誤"</string>
-  <string name="dialog_title_success">"成功"</string>
 </resources>

@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_signout_confirmation_dialog_content">"Вы ўпэўнены, што жадаеце выйсці?"</string>
+  <string name="screen_signout_confirmation_dialog_submit">"Выйсці"</string>
+  <string name="screen_signout_confirmation_dialog_title">"Выйсці"</string>
   <string name="screen_signout_in_progress_dialog_content">"Выхад…"</string>
   <string name="screen_signout_key_backup_disabled_subtitle">"Вы збіраецеся выйсці з апошняга сеанса. Калі вы выйдзеце з сістэмы зараз, вы страціце доступ да зашыфраваных паведамленняў."</string>
   <string name="screen_signout_key_backup_disabled_title">"Вы адключылі рэзервовае капіраванне"</string>
@@ -8,11 +10,9 @@
   <string name="screen_signout_key_backup_offline_title">"Рэзервовае капіраванне ключоў усё яшчэ працягваецца"</string>
   <string name="screen_signout_key_backup_ongoing_subtitle">"Калі ласка, дачакайцеся завяршэння працэсу, перш чым выходзіць з сістэмы."</string>
   <string name="screen_signout_key_backup_ongoing_title">"Вашы ключы ўсё яшчэ ствараюцца"</string>
+  <string name="screen_signout_preference_item">"Выйсці"</string>
   <string name="screen_signout_recovery_disabled_subtitle">"Вы збіраецеся выйсці з апошняга сеанса. Калі вы выйдзеце з сістэмы зараз, вы страціце доступ да зашыфраваных паведамленняў."</string>
   <string name="screen_signout_recovery_disabled_title">"Аднаўленне не наладжана"</string>
   <string name="screen_signout_save_recovery_key_subtitle">"Вы збіраецеся выйсці з апошняга сеанса. Калі вы выйдзеце з сістэмы зараз, вы страціце доступ да зашыфраваных паведамленняў."</string>
   <string name="screen_signout_save_recovery_key_title">"Вы захавалі свой ключ аднаўлення?"</string>
-  <string name="screen_signout_confirmation_dialog_submit">"Выйсці"</string>
-  <string name="screen_signout_confirmation_dialog_title">"Выйсці"</string>
-  <string name="screen_signout_preference_item">"Выйсці"</string>
 </resources>

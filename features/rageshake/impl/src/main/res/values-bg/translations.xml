@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_bug_report_attach_screenshot">"Прикачване на екранна снимка"</string>
+  <string name="screen_bug_report_contact_me">"Можеш да се свържеш с мен, ако има допълнителни въпроси."</string>
+  <string name="screen_bug_report_contact_me_title">"Свързване с мен"</string>
+  <string name="screen_bug_report_edit_screenshot">"Редактиране на екранната снимка"</string>
+  <string name="screen_bug_report_editor_description">"Моля, опишете проблема. Какво направихте? Какво очаквахте да се случи? Какво се случи в действителност. Моля, изложете колкото се може повече подробности."</string>
+  <string name="screen_bug_report_editor_placeholder">"Опишете проблема…"</string>
+  <string name="screen_bug_report_editor_supporting">"Ако е възможно, моля, напишете описанието на английски език."</string>
+  <string name="screen_bug_report_error_description_too_short">"Описанието е твърде кратко, моля, дайте повече подробности за случилото се. Благодаря!"</string>
+  <string name="screen_bug_report_include_crash_logs">"Изпращане на дневниците за сривове"</string>
+  <string name="screen_bug_report_include_logs">"Разрешаване на дневниците"</string>
+  <string name="screen_bug_report_include_screenshot">"Изпращане на екранна снимка"</string>
+  <string name="screen_bug_report_view_logs">"Преглед на дневниците"</string>
+</resources>

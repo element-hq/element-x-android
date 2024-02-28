@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="a11y_delete">"Löschen"</string>
+  <plurals name="a11y_digits_entered">
+    <item quantity="one">"%1$d eingegebene Ziffer"</item>
+    <item quantity="other">"%1$d eingegebene Ziffern"</item>
+  </plurals>
   <string name="a11y_hide_password">"Passwort verbergen"</string>
   <string name="a11y_jump_to_bottom">"Nach unten springen"</string>
   <string name="a11y_notifications_mentions_only">"Nur Erwähnungen"</string>
@@ -14,6 +18,10 @@
   <string name="a11y_react_with">"Reagiere mit %1$s"</string>
   <string name="a11y_react_with_other_emojis">"Mit anderen Emojis reagieren"</string>
   <string name="a11y_read_receipts_multiple">"Gelesen von %1$s und %2$s"</string>
+  <plurals name="a11y_read_receipts_multiple_with_others">
+    <item quantity="one">"Gelesen von %1$s und %2$d anderen"</item>
+    <item quantity="other">"Gelesen von %1$s und %2$d anderen"</item>
+  </plurals>
   <string name="a11y_read_receipts_single">"Gelesen von %1$s"</string>
   <string name="a11y_read_receipts_tap_to_show_all">"Tippe, um alle anzuzeigen"</string>
   <string name="a11y_remove_reaction_with">"Reaktion mit %1$s entfernen"</string>
@@ -48,7 +56,7 @@
   <string name="action_end_poll">"Umfrage beenden"</string>
   <string name="action_enter_pin">"PIN eingeben"</string>
   <string name="action_forgot_password">"Passwort vergessen?"</string>
-  <string name="action_forward">"Weiter"</string>
+  <string name="action_forward">"Weiterleiten"</string>
   <string name="action_invite">"Einladen"</string>
   <string name="action_invite_friends">"Personen einladen"</string>
   <string name="action_invite_friends_to_app">"Zu %1$s einladen"</string>
@@ -59,6 +67,7 @@
   <string name="action_leave">"Verlassen"</string>
   <string name="action_leave_conversation">"Unterhaltung verlassen"</string>
   <string name="action_leave_room">"Raum verlassen"</string>
+  <string name="action_load_more">"Mehr laden …"</string>
   <string name="action_manage_account">"Konto verwalten"</string>
   <string name="action_manage_devices">"Geräte verwalten"</string>
   <string name="action_next">"Weiter"</string>
@@ -96,13 +105,13 @@
   <string name="action_try_again">"Erneut versuchen"</string>
   <string name="action_view_source">"Quellcode anzeigen"</string>
   <string name="action_yes">"Ja"</string>
-  <string name="action_load_more">"Mehr laden …"</string>
   <string name="common_about">"Über"</string>
   <string name="common_acceptable_use_policy">"Nutzungsrichtlinie"</string>
   <string name="common_advanced_settings">"Erweiterte Einstellungen"</string>
   <string name="common_analytics">"Analysedaten"</string>
   <string name="common_appearance">"Erscheinungsbild"</string>
   <string name="common_audio">"Audio"</string>
+  <string name="common_blocked_users">"Blockierte Nutzer"</string>
   <string name="common_bubbles">"Sprechblasen"</string>
   <string name="common_chat_backup">"Chat-Backup"</string>
   <string name="common_copyright">"Copyright"</string>
@@ -119,7 +128,9 @@
   <string name="common_enter_your_pin">"PIN eingeben"</string>
   <string name="common_error">"Fehler"</string>
   <string name="common_everyone">"Alle"</string>
+  <string name="common_failed">"Fehlgeschlagen"</string>
   <string name="common_favourite">"Favorit"</string>
+  <string name="common_favourited">"Favorit"</string>
   <string name="common_file">"Datei"</string>
   <string name="common_file_saved_on_disk_android">"Datei wurde unter Downloads gespeichert"</string>
   <string name="common_forward_message">"Nachricht weiterleiten"</string>
@@ -132,6 +143,10 @@
   <string name="common_light">"Hell"</string>
   <string name="common_link_copied_to_clipboard">"Link in die Zwischenablage kopiert"</string>
   <string name="common_loading">"Laden…"</string>
+  <plurals name="common_member_count">
+    <item quantity="one">"%1$d Mitglied"</item>
+    <item quantity="other">"%1$d Mitglieder"</item>
+  </plurals>
   <string name="common_message">"Nachricht"</string>
   <string name="common_message_actions">"Nachrichtenaktionen"</string>
   <string name="common_message_layout">"Nachrichtenlayout"</string>
@@ -140,12 +155,19 @@
   <string name="common_mute">"Stummschalten"</string>
   <string name="common_no_results">"Keine Ergebnisse"</string>
   <string name="common_offline">"Offline"</string>
+  <string name="common_or">"oder"</string>
   <string name="common_password">"Passwort"</string>
   <string name="common_people">"Personen"</string>
   <string name="common_permalink">"Permalink"</string>
   <string name="common_permission">"Erlaubnis"</string>
+  <string name="common_poll_end_confirmation">"Bist du sicher, dass du diese Umfrage beenden möchtest?"</string>
+  <string name="common_poll_summary">"Umfrage: %1$s"</string>
   <string name="common_poll_total_votes">"Stimmen insgesamt: %1$s"</string>
   <string name="common_poll_undisclosed_text">"Die Ergebnisse werden nach Ende der Umfrage angezeigt"</string>
+  <plurals name="common_poll_votes_count">
+    <item quantity="one">"%d Stimme"</item>
+    <item quantity="other">"%d Stimmen"</item>
+  </plurals>
   <string name="common_privacy_policy">"Datenschutz­erklärung"</string>
   <string name="common_reaction">"Reaktion"</string>
   <string name="common_reactions">"Reaktionen"</string>
@@ -192,14 +214,14 @@
   <string name="common_username">"Benutzername"</string>
   <string name="common_verification_cancelled">"Verifizierung abgebrochen"</string>
   <string name="common_verification_complete">"Verifizierung abgeschlossen"</string>
+  <string name="common_verify_device">"Gerät verifizieren"</string>
   <string name="common_video">"Video"</string>
   <string name="common_voice_message">"Sprachnachricht"</string>
   <string name="common_waiting">"Warten…"</string>
   <string name="common_waiting_for_decryption_key">"Warte auf diese Nachricht"</string>
-  <string name="common_poll_end_confirmation">"Bist du sicher, dass du diese Umfrage beenden möchtest?"</string>
-  <string name="common_poll_summary">"Umfrage: %1$s"</string>
-  <string name="common_verify_device">"Gerät verifizieren"</string>
   <string name="dialog_title_confirmation">"Bestätigung"</string>
+  <string name="dialog_title_error">"Fehler"</string>
+  <string name="dialog_title_success">"Erfolg"</string>
   <string name="dialog_title_warning">"Warnung"</string>
   <string name="error_failed_creating_the_permalink">"Fehler beim Erstellen des Permalinks"</string>
   <string name="error_failed_loading_map">"%1$s konnte die Karte nicht laden. Bitte versuche es später erneut."</string>
@@ -214,22 +236,6 @@
   <string name="invite_friends_rich_title">"🔐️ Begleite mich auf %1$s"</string>
   <string name="invite_friends_text">"Hey, sprich mit mir auf %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
-  <plurals name="a11y_digits_entered">
-    <item quantity="one">"%1$d eingegebene Ziffer"</item>
-    <item quantity="other">"%1$d eingegebene Ziffern"</item>
-  </plurals>
-  <plurals name="a11y_read_receipts_multiple_with_others">
-    <item quantity="one">"Gelesen von %1$s und %2$d anderen"</item>
-    <item quantity="other">"Gelesen von %1$s und %2$d anderen"</item>
-  </plurals>
-  <plurals name="common_member_count">
-    <item quantity="one">"%1$d Mitglied"</item>
-    <item quantity="other">"%1$d Mitglieder"</item>
-  </plurals>
-  <plurals name="common_poll_votes_count">
-    <item quantity="one">"%d Stimme"</item>
-    <item quantity="other">"%d Stimmen"</item>
-  </plurals>
   <string name="preference_rageshake">"Schüttel heftig zum Melden von Fehlern"</string>
   <string name="screen_media_picker_error_failed_selection">"Medienauswahl fehlgeschlagen, bitte versuche es erneut."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Fehler beim Verarbeiten des hochgeladenen Mediums. Bitte versuche es erneut."</string>
@@ -243,6 +249,4 @@
   <string name="screen_view_location_title">"Standort"</string>
   <string name="settings_version_number">"Version: %1$s (%2$s)"</string>
   <string name="test_language_identifier">"en"</string>
-  <string name="dialog_title_error">"Fehler"</string>
-  <string name="dialog_title_success">"Erfolg"</string>
 </resources>
