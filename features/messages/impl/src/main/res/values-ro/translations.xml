@@ -28,6 +28,7 @@
   <string name="screen_room_attachment_source_location">"Locație"</string>
   <string name="screen_room_attachment_source_poll">"Sondaj"</string>
   <string name="screen_room_attachment_text_formatting">"Formatarea textului"</string>
+  <string name="screen_room_change_permissions_everyone">"Toți"</string>
   <string name="screen_room_encrypted_history_banner">"Istoricul mesajelor este momentan indisponibil în această cameră"</string>
   <string name="screen_room_encrypted_history_banner_unverified">"Istoricul mesajelor nu este disponibil în această cameră. Verificați acest dispozitiv pentru a vedea istoricul mesajelor."</string>
   <string name="screen_room_error_failed_processing_media">"Procesarea datelor media a eșuat, vă rugăm să încercați din nou."</string>

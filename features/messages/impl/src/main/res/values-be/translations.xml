@@ -28,6 +28,7 @@
   <string name="screen_room_attachment_source_location">"Месцазнаходжанне"</string>
   <string name="screen_room_attachment_source_poll">"Апытанне"</string>
   <string name="screen_room_attachment_text_formatting">"Фармаціраванне тэксту"</string>
+  <string name="screen_room_change_permissions_everyone">"Усе"</string>
   <string name="screen_room_encrypted_history_banner">"Гісторыя паведамленняў зараз недаступна."</string>
   <string name="screen_room_encrypted_history_banner_unverified">"Гісторыя паведамленняў у гэтым пакоі недаступная. Праверце гэтую прыладу, каб убачыць гісторыю паведамленняў."</string>
   <string name="screen_room_error_failed_processing_media">"Не атрымалася апрацаваць медыяфайл для загрузкі, паспрабуйце яшчэ раз."</string>

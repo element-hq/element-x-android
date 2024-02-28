@@ -127,7 +127,9 @@
   <string name="common_enter_your_pin">"Add meg a PIN-kódodat"</string>
   <string name="common_error">"Hiba"</string>
   <string name="common_everyone">"Mindenki"</string>
+  <string name="common_failed">"Sikertelen"</string>
   <string name="common_favourite">"Kedvenc"</string>
+  <string name="common_favourited">"Kedvencnek jelölve"</string>
   <string name="common_file">"Fájl"</string>
   <string name="common_file_saved_on_disk_android">"A fájl a Letöltések mappába mentve"</string>
   <string name="common_forward_message">"Üzenet továbbítása"</string>
@@ -152,6 +154,7 @@
   <string name="common_mute">"Némítás"</string>
   <string name="common_no_results">"Nincs találat"</string>
   <string name="common_offline">"Kapcsolat nélkül"</string>
+  <string name="common_or">"vagy"</string>
   <string name="common_password">"Jelszó"</string>
   <string name="common_people">"Emberek"</string>
   <string name="common_permalink">"Állandó hivatkozás"</string>

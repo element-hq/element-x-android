@@ -6,6 +6,7 @@
   <string name="screen_session_verification_compare_numbers_subtitle">"Ellenőrizze, hogy az alábbi számok megegyeznek-e a másik munkamenetben feltüntetett számokkal."</string>
   <string name="screen_session_verification_compare_numbers_title">"Számok összehasonlítása"</string>
   <string name="screen_session_verification_complete_subtitle">"Az új munkamenete most már ellenőrizve van. Eléri a titkosított üzeneteit, és a többi felhasználó is megbízhatónak fogja látni."</string>
+  <string name="screen_session_verification_enter_recovery_key">"Adja meg a helyreállítási kulcsot"</string>
   <string name="screen_session_verification_open_existing_session_subtitle">"Bizonyítsa, hogy valóban Ön az, hogy elérje a titkosított üzeneteinek előzményeit."</string>
   <string name="screen_session_verification_open_existing_session_title">"Meglévő munkamenet megnyitása"</string>
   <string name="screen_session_verification_positive_button_canceled">"Ellenőrzés újrapróbálása"</string>

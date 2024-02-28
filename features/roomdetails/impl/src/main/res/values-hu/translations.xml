@@ -35,9 +35,16 @@
     <item quantity="one">"%1$d személy"</item>
     <item quantity="other">"%1$d személy"</item>
   </plurals>
+  <string name="screen_room_member_list_manage_member_remove">"Tag eltávolítása"</string>
+  <string name="screen_room_member_list_manage_member_remove_confirmation_ban">"Tag eltávolítása és kitiltása"</string>
+  <string name="screen_room_member_list_manage_member_remove_confirmation_kick">"Csak a tag eltávolítása"</string>
+  <string name="screen_room_member_list_manage_member_remove_confirmation_title">"Eltávolítja a tagot, és megtiltja a jövőbeni csatlakozást?"</string>
+  <string name="screen_room_member_list_manage_member_unban_action">"Tiltás feloldása"</string>
+  <string name="screen_room_member_list_manage_member_user_info">"Felhasználói információk megtekintése"</string>
   <string name="screen_room_member_list_mode_banned">"Kitiltva"</string>
   <string name="screen_room_member_list_mode_members">"Tagok"</string>
   <string name="screen_room_member_list_pending_header_title">"Függőben"</string>
+  <string name="screen_room_member_list_removing_user">"%1$s eltávolítása…"</string>
   <string name="screen_room_member_list_role_administrator">"Rendszergazda"</string>
   <string name="screen_room_member_list_role_moderator">"Moderátor"</string>
   <string name="screen_room_member_list_room_members_header_title">"Szoba tagjai"</string>
