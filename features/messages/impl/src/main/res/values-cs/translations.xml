@@ -28,6 +28,7 @@
   <string name="screen_room_attachment_source_location">"Poloha"</string>
   <string name="screen_room_attachment_source_poll">"Hlasování"</string>
   <string name="screen_room_attachment_text_formatting">"Formátování textu"</string>
+  <string name="screen_room_change_permissions_everyone">"Všichni"</string>
   <string name="screen_room_change_role_confirm_add_admin_description">"Tuto akci nebudete moci vrátit zpět. Upravujete oprávnění uživatele, tak aby měl stejnou úroveň jako vy."</string>
   <string name="screen_room_change_role_confirm_add_admin_title">"Přidat správce?"</string>
   <string name="screen_room_change_role_confirm_demote_self_action">"Degradovat"</string>

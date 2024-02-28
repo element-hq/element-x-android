@@ -113,6 +113,7 @@
   <string name="common_analytics">"Аналітика"</string>
   <string name="common_appearance">"Вигляд"</string>
   <string name="common_audio">"Аудіо"</string>
+  <string name="common_blocked_users">"Заблоковані користувачі"</string>
   <string name="common_bubbles">"Бульбашки"</string>
   <string name="common_chat_backup">"Резервне копіювання чату"</string>
   <string name="common_copyright">"Авторське право"</string>
@@ -129,6 +130,7 @@
   <string name="common_enter_your_pin">"Введіть свій PIN-код"</string>
   <string name="common_error">"Помилка"</string>
   <string name="common_everyone">"Усі"</string>
+  <string name="common_failed">"Невдало"</string>
   <string name="common_favourite">"Вибрані"</string>
   <string name="common_favourited">"Вибране"</string>
   <string name="common_file">"Файл"</string>
@@ -156,6 +158,7 @@
   <string name="common_mute">"Вимкнути звук"</string>
   <string name="common_no_results">"Немає результатів"</string>
   <string name="common_offline">"Не в мережі"</string>
+  <string name="common_or">"або"</string>
   <string name="common_password">"Пароль"</string>
   <string name="common_people">"Люди"</string>
   <string name="common_permalink">"Постійне посилання"</string>

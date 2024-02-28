@@ -28,6 +28,7 @@
   <string name="screen_room_attachment_source_location">"Местоположение"</string>
   <string name="screen_room_attachment_source_poll">"Опрос"</string>
   <string name="screen_room_attachment_text_formatting">"Форматирование текста"</string>
+  <string name="screen_room_change_permissions_everyone">"Для всех"</string>
   <string name="screen_room_change_role_confirm_add_admin_description">"Вы не сможете отменить это действие. Вы устанавливаете уровень пользователю соответствующий вашему."</string>
   <string name="screen_room_change_role_confirm_add_admin_title">"Добавить администратора?"</string>
   <string name="screen_room_change_role_confirm_demote_self_action">"Понизить уровень"</string>

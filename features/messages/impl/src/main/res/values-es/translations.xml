@@ -27,6 +27,7 @@
   <string name="screen_room_attachment_source_location">"Ubicación"</string>
   <string name="screen_room_attachment_source_poll">"Encuesta"</string>
   <string name="screen_room_attachment_text_formatting">"Formato de Texto"</string>
+  <string name="screen_room_change_permissions_everyone">"Todos"</string>
   <string name="screen_room_encrypted_history_banner">"El historial de mensajes no está disponible en este momento."</string>
   <string name="screen_room_encrypted_history_banner_unverified">"El historial de mensajes no está disponible en esta sala. Verifica este dispositivo para ver tu historial de mensajes."</string>
   <string name="screen_room_error_failed_processing_media">"Error al procesar el contenido multimedia, por favor inténtalo de nuevo."</string>

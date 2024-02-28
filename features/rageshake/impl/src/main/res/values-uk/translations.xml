@@ -2,7 +2,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_bug_report_attach_screenshot">"Прикріпити знімок екрану"</string>
   <string name="screen_bug_report_contact_me">"Ви можете зв\'язатися зі мною, якщо у вас виникнуть додаткові запитання."</string>
-  <string name="screen_bug_report_contact_me_title">"Звʼязатися з нами"</string>
+  <string name="screen_bug_report_contact_me_title">"Звʼязатися зі мною"</string>
   <string name="screen_bug_report_edit_screenshot">"Редагувати знімок екрану"</string>
   <string name="screen_bug_report_editor_description">"Опишіть, будь ласка, проблему. Що Ви зробили? Чого Ви очікували? Що сталося? Будь ласка, опишіть якомога детальніше."</string>
   <string name="screen_bug_report_editor_placeholder">"Опишіть проблему…"</string>

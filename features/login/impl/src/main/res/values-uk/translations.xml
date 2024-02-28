@@ -14,6 +14,8 @@
   <string name="screen_change_account_provider_subtitle">"Використати іншого провайдера облікових записів, наприклад, власний приватний сервер або робочий обліковий запис."</string>
   <string name="screen_change_account_provider_title">"Змінити провайдера облікового запису"</string>
   <string name="screen_change_server_error_invalid_homeserver">"Не вдалося підключитися до цього домашнього сервера. Будь ласка, перевірте, чи правильно Ви ввели URL-адресу домашнього сервера. Якщо URL-адреса правильна, зверніться за додатковою допомогою до адміністратора домашнього сервера."</string>
+  <string name="screen_change_server_error_invalid_well_known">"Sliding sync недоступний через проблему у well-known файлі:
+%1$s"</string>
   <string name="screen_change_server_error_no_sliding_sync_message">"Наразі цей сервер не підтримує sliding sync."</string>
   <string name="screen_change_server_form_header">"URL-адреса домашнього сервера"</string>
   <string name="screen_change_server_form_notice">"Ви можете підключитися лише до наявного сервера, який підтримує sliding sync. Ваш адміністратор домашнього сервера повинен буде налаштувати його. %1$s"</string>
@@ -22,6 +24,7 @@
   <string name="screen_login_error_deactivated_account">"Цей обліковий запис було деактивовано."</string>
   <string name="screen_login_error_invalid_credentials">"Неправильне ім\'я користувача та/або пароль"</string>
   <string name="screen_login_error_invalid_user_id">"Це недійсний ідентифікатор користувача. Очікуваний формат: \'@user:homeserver.org\'"</string>
+  <string name="screen_login_error_refresh_tokens">"Цей сервер налаштований на використання токенів оновлення. Вони не підтримуються при використанні входу на основі пароля."</string>
   <string name="screen_login_error_unsupported_authentication">"Обраний домашній сервер не підтримує вхід за допомогою пароля або OIDC. Зверніться до адміністратора або виберіть інший домашній сервер."</string>
   <string name="screen_login_form_header">"Введіть свої дані"</string>
   <string name="screen_login_subtitle">"Matrix — це відкрита мережа для безпечної, децентралізованої комунікації."</string>

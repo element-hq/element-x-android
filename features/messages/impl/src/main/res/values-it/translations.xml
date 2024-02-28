@@ -27,6 +27,7 @@
   <string name="screen_room_attachment_source_location">"Posizione"</string>
   <string name="screen_room_attachment_source_poll">"Sondaggio"</string>
   <string name="screen_room_attachment_text_formatting">"Formattazione del testo"</string>
+  <string name="screen_room_change_permissions_everyone">"Tutti"</string>
   <string name="screen_room_encrypted_history_banner">"La cronologia dei messaggi non è attualmente disponibile."</string>
   <string name="screen_room_encrypted_history_banner_unverified">"La cronologia dei messaggi non è disponibile in questa stanza. Verifica questo dispositivo per vedere la cronologia dei messaggi."</string>
   <string name="screen_room_error_failed_processing_media">"Elaborazione del file multimediale da caricare fallita, riprova."</string>

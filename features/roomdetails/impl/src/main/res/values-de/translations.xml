@@ -26,11 +26,13 @@
   <string name="screen_room_details_notification_mode_custom">"Benutzerdefiniert"</string>
   <string name="screen_room_details_notification_mode_default">"Standard"</string>
   <string name="screen_room_details_notification_title">"Benachrichtigungen"</string>
+  <string name="screen_room_details_roles_and_permissions">"Rollen und Berechtigungen"</string>
   <string name="screen_room_details_room_name_label">"Raumname"</string>
   <string name="screen_room_details_security_title">"Sicherheit"</string>
   <string name="screen_room_details_share_room_title">"Raum teilen"</string>
   <string name="screen_room_details_topic_title">"Thema"</string>
   <string name="screen_room_details_updating_room">"Raum wird aktualisiert…"</string>
+  <string name="screen_room_member_list_banning_user">"%1$s wird gesperrt."</string>
   <plurals name="screen_room_member_list_header_title">
     <item quantity="one">"%1$d Person"</item>
     <item quantity="other">"%1$d Personen"</item>
@@ -40,6 +42,8 @@
   <string name="screen_room_member_list_manage_member_remove_confirmation_kick">"Mitglied nur entfernen"</string>
   <string name="screen_room_member_list_manage_member_remove_confirmation_title">"Mitglied entfernen und den erneuten Beitritt sperren?"</string>
   <string name="screen_room_member_list_manage_member_unban_action">"Sperre aufheben"</string>
+  <string name="screen_room_member_list_manage_member_unban_message">"Die Nutzer können den Raum wieder beitreten, wenn sie dazu eingeladen werden."</string>
+  <string name="screen_room_member_list_manage_member_unban_title">"Benutzer entsperren"</string>
   <string name="screen_room_member_list_manage_member_user_info">"Benutzerinformationen anzeigen"</string>
   <string name="screen_room_member_list_mode_banned">"Gesperrt"</string>
   <string name="screen_room_member_list_mode_members">"Mitglieder"</string>
@@ -48,6 +52,7 @@
   <string name="screen_room_member_list_role_administrator">"Administrator"</string>
   <string name="screen_room_member_list_role_moderator">"Moderator"</string>
   <string name="screen_room_member_list_room_members_header_title">"Raummitglieder"</string>
+  <string name="screen_room_member_list_unbanning_user">"%1$s wird entsperrt."</string>
   <string name="screen_room_notification_settings_allow_custom">"Benutzerdefinierte Einstellungen verwenden"</string>
   <string name="screen_room_notification_settings_allow_custom_footnote">"Wenn du diese Option aktivierst, wird deine Standardeinstellung außer Kraft gesetzt."</string>
   <string name="screen_room_notification_settings_custom_settings_title">"Benachrichtige mich in diesem Chat bei"</string>

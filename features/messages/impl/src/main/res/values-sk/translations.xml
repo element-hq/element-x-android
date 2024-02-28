@@ -28,6 +28,7 @@
   <string name="screen_room_attachment_source_location">"Poloha"</string>
   <string name="screen_room_attachment_source_poll">"Anketa"</string>
   <string name="screen_room_attachment_text_formatting">"Formátovanie textu"</string>
+  <string name="screen_room_change_permissions_everyone">"Všetci"</string>
   <string name="screen_room_encrypted_history_banner">"História správ v tejto miestnosti nie je momentálne k dispozícii"</string>
   <string name="screen_room_encrypted_history_banner_unverified">"História správ nie je v tejto miestnosti k dispozícii. Ak chcete zobraziť históriu správ, overte toto zariadenie."</string>
   <string name="screen_room_error_failed_processing_media">"Nepodarilo sa spracovať médiá na odoslanie, skúste to prosím znova."</string>

@@ -14,6 +14,7 @@
   <string name="screen_blocked_users_unblock_alert_action">"Letiltás feloldása"</string>
   <string name="screen_blocked_users_unblock_alert_description">"Újra láthatja az összes üzenetét."</string>
   <string name="screen_blocked_users_unblock_alert_title">"Felhasználó kitiltásának feloldása"</string>
+  <string name="screen_blocked_users_unblocking">"Tiltás feloldása…"</string>
   <string name="screen_edit_profile_display_name">"Megjelenítendő név"</string>
   <string name="screen_edit_profile_display_name_placeholder">"Saját megjelenítendő név"</string>
   <string name="screen_edit_profile_error">"Ismeretlen hiba történt, és az információ módosítása nem sikerült."</string>
