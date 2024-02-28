@@ -1,1 +1,0 @@
-Improve how Talkback works with the timeline. Sadly, it's still not 100% working, but there is some issue with the `LazyColumn` using `reverseLayout` that only Google can fix.
