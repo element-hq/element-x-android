@@ -6,6 +6,7 @@
   <string name="screen_session_verification_compare_numbers_subtitle">"Skontrolujte, či sa nižšie uvedené čísla zhodujú s číslami zobrazenými na vašej druhej relácii."</string>
   <string name="screen_session_verification_compare_numbers_title">"Porovnať čísla"</string>
   <string name="screen_session_verification_complete_subtitle">"Vaša nová relácia je teraz overená. Má prístup k vašim zašifrovaným správam a ostatní používatelia ju budú vidieť ako dôveryhodnú."</string>
+  <string name="screen_session_verification_enter_recovery_key">"Zadajte kľúč na obnovenie"</string>
   <string name="screen_session_verification_open_existing_session_subtitle">"Dokážte, že ste to vy, aby ste získali prístup k histórii vašich zašifrovaných správ."</string>
   <string name="screen_session_verification_open_existing_session_title">"Otvoriť existujúcu reláciu"</string>
   <string name="screen_session_verification_positive_button_canceled">"Zopakovať overenie"</string>

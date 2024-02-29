@@ -24,7 +24,7 @@
     <item quantity="many">"%d запрошень"</item>
   </plurals>
   <string name="notification_invite_body">"Запросив (-ла) Вас до чату"</string>
-  <string name="notification_mentioned_you_body">"Згадав вас:%1$s"</string>
+  <string name="notification_mentioned_you_body">"Згадав(-ла) вас: %1$s"</string>
   <string name="notification_new_messages">"Нові повідомлення"</string>
   <plurals name="notification_new_messages_for_room">
     <item quantity="one">"%d нове повідомлення"</item>

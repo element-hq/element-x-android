@@ -27,6 +27,7 @@
   <string name="action_disable">"Inaktivera"</string>
   <string name="action_done">"Klar"</string>
   <string name="action_edit">"Redigera"</string>
+  <string name="action_edit_poll">"Redigera omröstning"</string>
   <string name="action_enable">"Aktivera"</string>
   <string name="action_end_poll">"Avsluta omröstning"</string>
   <string name="action_forgot_password">"Glömt lösenordet?"</string>
@@ -36,6 +37,7 @@
   <string name="action_invite_friends_to_app">"Bjud in personer till %1$s"</string>
   <string name="action_invite_people_to_app">"Bjud in personer till %1$s"</string>
   <string name="action_invites_list">"Inbjudningar"</string>
+  <string name="action_join">"Gå med"</string>
   <string name="action_learn_more">"Läs mer"</string>
   <string name="action_leave">"Lämna"</string>
   <string name="action_leave_room">"Lämna rum"</string>
@@ -93,6 +95,7 @@
   <string name="common_gif">"GIF"</string>
   <string name="common_image">"Bild"</string>
   <string name="common_in_reply_to">"Som svar på %1$s"</string>
+  <string name="common_install_apk_android">"Installera APK"</string>
   <string name="common_invite_unknown_profile">"Det här Matrix-ID:t kan inte hittas, så inbjudan kanske inte tas emot."</string>
   <string name="common_leaving_room">"Lämnar rummet"</string>
   <string name="common_link_copied_to_clipboard">"Länk kopierad till klippbordet"</string>
@@ -112,6 +115,7 @@
   <string name="common_people">"Personer"</string>
   <string name="common_permalink">"Permalänk"</string>
   <string name="common_permission">"Behörighet"</string>
+  <string name="common_poll_end_confirmation">"Är du säker på att du vill avsluta den här omröstningen?"</string>
   <string name="common_poll_summary">"Omröstning: %1$s"</string>
   <string name="common_poll_total_votes">"Totalt antal röster: %1$s"</string>
   <string name="common_poll_undisclosed_text">"Resultaten visas efter att omröstningen har avslutats"</string>
