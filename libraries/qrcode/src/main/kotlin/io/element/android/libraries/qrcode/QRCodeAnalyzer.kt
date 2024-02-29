@@ -19,19 +19,19 @@ package io.element.android.libraries.qrcode
 import android.graphics.ImageFormat
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageProxy
-import com.google.zxing.BarcodeFormat
 import com.google.zxing.BinaryBitmap
-import com.google.zxing.DecodeHintType
-import com.google.zxing.MultiFormatReader
 import com.google.zxing.NotFoundException
 import com.google.zxing.PlanarYUVLuminanceSource
 import com.google.zxing.common.HybridBinarizer
+import com.google.zxing.qrcode.QRCodeReader
 import timber.log.Timber
 import java.nio.ByteBuffer
 
 internal class QRCodeAnalyzer(
     private val onQrCodeScanned: (result: String?) -> Unit
 ) : ImageAnalysis.Analyzer {
+    private val reader = QRCodeReader()
+
     override fun analyze(image: ImageProxy) {
         if (image.format in SUPPORTED_IMAGE_FORMATS) {
             val bytes = image.planes.first().buffer.toByteArray()
@@ -47,13 +47,7 @@ internal class QRCodeAnalyzer(
             )
             val binaryBitmap = BinaryBitmap(HybridBinarizer(source))
             try {
-                val result = MultiFormatReader().apply {
-                    setHints(
-                        mapOf(
-                            DecodeHintType.POSSIBLE_FORMATS to listOf(BarcodeFormat.QR_CODE)
-                        )
-                    )
-                }.decode(binaryBitmap)
+                val result = reader.decode(binaryBitmap)
                 onQrCodeScanned(result.text)
             } catch (_: NotFoundException) {
                 // No QR code found in the image
