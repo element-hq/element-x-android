@@ -1,3 +1,4 @@
+screenshots/**/*.png filter=lfs diff=lfs merge=lfs -text
 **/snapshots/**/*.png filter=lfs diff=lfs merge=lfs -text
 **/docs/images-lfs/*.png filter=lfs diff=lfs merge=lfs -text
 libraries/mediaupload/impl/src/test/assets/* filter=lfs diff=lfs merge=lfs -text

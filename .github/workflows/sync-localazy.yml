@@ -22,7 +22,9 @@ jobs:
           echo "deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/localazy.gpg] https://maven.localazy.com/repository/apt/ stable main" | sudo tee /etc/apt/sources.list.d/localazy.list
           sudo apt-get update && sudo apt-get install localazy
       - name: Run Localazy script
-        run: ./tools/localazy/downloadStrings.sh --all
+        run: |
+          ./tools/localazy/downloadStrings.sh --all
+          ./tools/test/generateAllScreenshots.py
       - name: Create Pull Request for Strings
         uses: peter-evans/create-pull-request@v6
         with:

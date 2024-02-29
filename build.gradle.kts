@@ -154,9 +154,14 @@ allprojects {
         if (isScreenshotTest) {
             // Increase heap size for screenshot tests
             maxHeapSize = "2g"
+            // Record all the languages?
+            if (project.hasProperty("allLanguages").not()) {
+                exclude("ui/T.class")
+            }
         } else {
             // Disable screenshot tests by default
             exclude("ui/S.class")
+            exclude("ui/T.class")
         }
     }
 }
