@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
-import sys
 import re
+import sys
 from xml.dom import minidom
 
 file = sys.argv[1]
@@ -19,8 +19,14 @@ resource = dict()
 ### Strings
 for elem in content.getElementsByTagName('string'):
     name = elem.attributes['name'].value
-    value = elem.firstChild.nodeValue
     # Continue if value is empty
+    child = elem.firstChild
+    if child is None:
+        # Print an error to stderr
+        print('Warning: Empty content for string: ' + name + " in file " + file, file=sys.stderr)
+        continue
+    value = child.nodeValue
+    # Continue if string is empty
     if value == '""':
         # Print an error to stderr
         print('Warning: Empty string value for string: ' + name + " in file " + file, file=sys.stderr)
@@ -35,11 +41,17 @@ for elem in content.getElementsByTagName('plurals'):
     for it in elem.childNodes:
         if it.nodeType != it.ELEMENT_NODE:
             continue
-        value = it.firstChild.nodeValue
         # Continue if value is empty
+        child = it.firstChild
+        if child is None:
+            # Print an error to stderr
+            print('Warning: Empty content for plurals: ' + name + " in file " + file, file=sys.stderr)
+            continue
+        value = child.nodeValue
+        # Continue if string is empty
         if value == '""':
             # Print an error to stderr
-            print('Warning: Empty item value for plural: ' + name + " in file " + file, file=sys.stderr)
+            print('Warning: Empty item value for plurals: ' + name + " in file " + file, file=sys.stderr)
             continue
         plural.appendChild(it.cloneNode(True))
     if plural.hasChildNodes():
@@ -59,7 +71,7 @@ result = re.sub(r" ([\?\!\:…])", r" \1", result)
 # Special treatment for French wording
 if 'values-fr' in file:
     ## Replace ' with ’
-    result = re.sub(r"([cdjlmnsu])\\\'", r"\1’", result, flags = re.IGNORECASE)
+    result = re.sub(r"([cdjlmnsu])\\\'", r"\1’", result, flags=re.IGNORECASE)
 
 with open(file, "w") as text_file:
     text_file.write(result)
