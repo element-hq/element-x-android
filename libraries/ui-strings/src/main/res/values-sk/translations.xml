@@ -113,6 +113,7 @@
   <string name="common_analytics">"Analytika"</string>
   <string name="common_appearance">"Vzhľad"</string>
   <string name="common_audio">"Zvuk"</string>
+  <string name="common_blocked_users">"Blokovaní používatelia"</string>
   <string name="common_bubbles">"Bubliny"</string>
   <string name="common_chat_backup">"Záloha konverzácie"</string>
   <string name="common_copyright">"Autorské práva"</string>
@@ -129,6 +130,7 @@
   <string name="common_enter_your_pin">"Zadajte svoj PIN"</string>
   <string name="common_error">"Chyba"</string>
   <string name="common_everyone">"Všetci"</string>
+  <string name="common_failed">"Zlyhalo"</string>
   <string name="common_favourite">"Obľúbené"</string>
   <string name="common_file">"Súbor"</string>
   <string name="common_file_saved_on_disk_android">"Súbor bol uložený do priečinka Stiahnuté súbory"</string>
@@ -155,6 +157,7 @@
   <string name="common_mute">"Stlmiť"</string>
   <string name="common_no_results">"Žiadne výsledky"</string>
   <string name="common_offline">"Offline"</string>
+  <string name="common_or">"alebo"</string>
   <string name="common_password">"Heslo"</string>
   <string name="common_people">"Ľudia"</string>
   <string name="common_permalink">"Trvalý odkaz"</string>

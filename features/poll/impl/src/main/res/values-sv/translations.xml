@@ -7,4 +7,5 @@
   <string name="screen_create_poll_question_desc">"Fråga eller ämne"</string>
   <string name="screen_create_poll_question_hint">"Vad handlar omröstningen om?"</string>
   <string name="screen_create_poll_title">"Skapa omröstning"</string>
+  <string name="screen_edit_poll_title">"Redigera omröstning"</string>
 </resources>
