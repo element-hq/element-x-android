@@ -1,7 +1,7 @@
 ## Screenshots viewer
 
-The screenshots in German and French are getting generated on a regular basis, each time there is a sync with Localazy. You can open the
-page [index.html](./index.html) in a browser to see the screenshots in English, and their translations into French and German.
+The screenshots in German are getting generated on a regular basis, each time there is a sync with Localazy. You can open the
+page [index.html](./index.html) in a browser to see the screenshots in English, and their translations into German.
 
 ## Generate screenshots for other languages
 
