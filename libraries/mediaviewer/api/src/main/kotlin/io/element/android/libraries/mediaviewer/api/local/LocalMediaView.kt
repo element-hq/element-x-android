@@ -176,7 +176,7 @@ private fun ExoPlayerMediaVideoView(
     localMediaViewState: LocalMediaViewState,
     localMedia: LocalMedia?,
     onClick: () -> Unit,
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
 ) {
     var playableState: PlayableState.Playable by remember {
         mutableStateOf(PlayableState.Playable(isPlaying = false, isShowingControls = false))
