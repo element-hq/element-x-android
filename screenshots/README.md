@@ -13,5 +13,5 @@ Generating screenshots for other languages can be done locally. Here are the ste
 ```bash
 generateAllScreenshots.py fr es
 ```
-- 
+
 - Open the page `index.html` in a browser to see the new screenshots.
