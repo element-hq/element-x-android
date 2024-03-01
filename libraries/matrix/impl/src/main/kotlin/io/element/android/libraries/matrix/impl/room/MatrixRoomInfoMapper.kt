@@ -45,7 +45,7 @@ class MatrixRoomInfoMapper(
             alternativeAliases = it.alternativeAliases.toImmutableList(),
             currentUserMembership = it.membership.map(),
             latestEvent = it.latestEvent?.use(timelineItemMapper::map),
-            inviter = it.inviter?.use(RoomMemberMapper::map),
+            inviter = it.inviter?.let(RoomMemberMapper::map),
             activeMembersCount = it.activeMembersCount.toLong(),
             invitedMembersCount = it.invitedMembersCount.toLong(),
             joinedMembersCount = it.joinedMembersCount.toLong(),

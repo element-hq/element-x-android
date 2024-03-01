@@ -19,7 +19,6 @@ package io.element.android.libraries.matrix.impl.room.member
 import io.element.android.libraries.core.coroutine.parallelMap
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.api.room.roomMembers
-import io.element.android.libraries.matrix.impl.util.destroyAll
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ensureActive
@@ -109,13 +108,7 @@ internal class RoomMemberListFetcher(
                     // We should probably implement some sort of paging in the future.
                     coroutineContext.ensureActive()
                     val chunk = iterator.nextChunk(pageSize.toUInt())
-                    val members = try {
-                        // Load next chunk. If null (no more items), exit the loop
-                        chunk?.parallelMap(RoomMemberMapper::map) ?: break
-                    } finally {
-                        // Make sure we clear all member references
-                        chunk?.destroyAll()
-                    }
+                    val members = chunk?.parallelMap(RoomMemberMapper::map) ?: break
                     addAll(members)
                     Timber.i("Emitting first $size members for room $roomId")
                     _membersFlow.value = MatrixRoomMembersState.Ready(toImmutableList())
