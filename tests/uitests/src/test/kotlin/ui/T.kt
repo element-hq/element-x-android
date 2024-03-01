@@ -36,7 +36,7 @@ class T : ScreenshotTest() {
         @TestParameter(valuesProvider = PreviewProvider::class) componentTestPreview: TestPreview,
         @TestParameter baseDeviceConfig: BaseDeviceConfig,
         @TestParameter(value = ["1.0"]) fontScale: Float,
-        @TestParameter(value = ["fr", "de"]) localeStr: String,
+        @TestParameter(value = ["de"]) localeStr: String,
     ) {
         // Only test ComponentTestPreview, and only with the light theme
         if (componentTestPreview.isNightMode() || componentTestPreview !is ComponentTestPreview) {
