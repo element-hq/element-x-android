@@ -155,7 +155,11 @@ allprojects {
             // Increase heap size for screenshot tests
             maxHeapSize = "2g"
             // Record all the languages?
-            if (project.hasProperty("allLanguages").not()) {
+            if (project.hasProperty("allLanguagesNoEnglish")) {
+                // Do not record English language
+                exclude("ui/S.class")
+            } else if (project.hasProperty("allLanguages").not()) {
+                // Do not record other languages
                 exclude("ui/T.class")
             }
         } else {
