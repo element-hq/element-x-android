@@ -13,6 +13,8 @@
   <string name="screen_advanced_settings_share_presence">"Share presence"</string>
   <string name="screen_advanced_settings_share_presence_description">"If turned off, you won’t be able to send or receive read receipts or typing notifications"</string>
   <string name="screen_advanced_settings_view_source_description">"Enable option to view message source in the timeline."</string>
+  <string name="screen_advanced_settings_reaction_search">"Emoji reaction search"</string>
+  <string name="screen_advanced_settings_reaction_search_description">"Highlight the reaction search box by default when opening the reaction picker"</string>
   <string name="screen_blocked_users_empty">"You have no blocked users"</string>
   <string name="screen_blocked_users_unblock_alert_action">"Unblock"</string>
   <string name="screen_blocked_users_unblock_alert_description">"You\'ll be able to see all messages from them again."</string>

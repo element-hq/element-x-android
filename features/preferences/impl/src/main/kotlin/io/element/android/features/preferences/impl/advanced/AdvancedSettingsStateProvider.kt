@@ -37,6 +37,7 @@ open class AdvancedSettingsStateProvider : PreviewParameterProvider<AdvancedSett
 fun aAdvancedSettingsState(
     isDeveloperModeEnabled: Boolean = false,
     isSendPublicReadReceiptsEnabled: Boolean = false,
+    isReactionPickerSearchEnabled: Boolean = false,
     showChangeThemeDialog: Boolean = false,
     currentPushDistributor: AsyncAction<String> = AsyncAction.Success("Firebase"),
     availablePushDistributors: List<String> = listOf("Firebase", "ntfy"),
@@ -45,6 +46,7 @@ fun aAdvancedSettingsState(
 ) = AdvancedSettingsState(
     isDeveloperModeEnabled = isDeveloperModeEnabled,
     isSharePresenceEnabled = isSendPublicReadReceiptsEnabled,
+    isReactionPickerSearchEnabled = isReactionPickerSearchEnabled,
     theme = Theme.System,
     showChangeThemeDialog = showChangeThemeDialog,
     currentPushDistributor = currentPushDistributor,

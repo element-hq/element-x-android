@@ -23,6 +23,7 @@ import kotlinx.collections.immutable.ImmutableList
 data class AdvancedSettingsState(
     val isDeveloperModeEnabled: Boolean,
     val isSharePresenceEnabled: Boolean,
+    val isReactionPickerSearchEnabled: Boolean,
     val theme: Theme,
     val showChangeThemeDialog: Boolean,
     val currentPushDistributor: AsyncAction<String>,

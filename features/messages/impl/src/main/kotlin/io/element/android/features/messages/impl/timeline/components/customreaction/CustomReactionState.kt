@@ -24,6 +24,7 @@ data class CustomReactionState(
     val target: Target,
     val selectedEmoji: ImmutableSet<String>,
     val eventSink: (CustomReactionEvents) -> Unit,
+    val searchState: EmojiPickerState,
 ) {
     sealed interface Target {
         data object None : Target

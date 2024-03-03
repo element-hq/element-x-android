@@ -49,6 +49,7 @@ class DefaultSessionPreferencesStore(
     private val renderReadReceiptsKey = booleanPreferencesKey("renderReadReceipts")
     private val sendTypingNotificationsKey = booleanPreferencesKey("sendTypingNotifications")
     private val renderTypingNotificationsKey = booleanPreferencesKey("renderTypingNotifications")
+    private val reactionPickerSearchKey = booleanPreferencesKey("reactionPickerSearch")
     private val skipSessionVerification = booleanPreferencesKey("skipSessionVerification")
 
     private val dataStoreFile = storeFile(context, sessionId)
@@ -86,6 +87,9 @@ class DefaultSessionPreferencesStore(
 
     override suspend fun setRenderTypingNotifications(enabled: Boolean) = update(renderTypingNotificationsKey, enabled)
     override fun isRenderTypingNotificationsEnabled(): Flow<Boolean> = get(renderTypingNotificationsKey) { true }
+
+    override suspend fun setReactionPickerSearch(enabled: Boolean) = update(reactionPickerSearchKey, enabled)
+    override fun isReactionPickerSearchEnabled(): Flow<Boolean> = get(reactionPickerSearchKey) { false }
 
     override suspend fun setSkipSessionVerification(skip: Boolean) = update(skipSessionVerification, skip)
     override fun isSessionVerificationSkipped(): Flow<Boolean> = get(skipSessionVerification) { false }
