@@ -184,6 +184,7 @@
   <string name="common_room">"Miestnosť"</string>
   <string name="common_room_name">"Názov miestnosti"</string>
   <string name="common_room_name_placeholder">"napr. názov vášho projektu"</string>
+  <string name="common_saving">"Ukladá sa"</string>
   <string name="common_screen_lock">"Zámok obrazovky"</string>
   <string name="common_search_for_someone">"Vyhľadať niekoho"</string>
   <string name="common_search_results">"Výsledky hľadania"</string>

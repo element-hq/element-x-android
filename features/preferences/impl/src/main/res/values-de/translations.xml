@@ -25,7 +25,9 @@
   <string name="screen_notification_settings_additional_settings_section_title">"Zusätzliche Einstellungen"</string>
   <string name="screen_notification_settings_calls_label">"Audio- und Videoanrufe"</string>
   <string name="screen_notification_settings_configuration_mismatch">"Konfiguration stimmt nicht überein"</string>
-  <string name="screen_notification_settings_configuration_mismatch_description">"Wir haben die Einstellungen für Benachrichtigungen vereinfacht. Einige Einstellungen, die du gewählt hast, werden hier nicht angezeigt, sind aber immer noch aktiv. Wenn du fortfährst, können sich einige deiner Einstellungen ändern."</string>
+  <string name="screen_notification_settings_configuration_mismatch_description">"Wir haben die Einstellungen für Benachrichtigungen vereinfacht. Einige Einstellungen, die du gewählt hast, werden hier nicht angezeigt, sind aber immer noch aktiv.
+
+Wenn du fortfährst, können sich einige deiner Einstellungen ändern."</string>
   <string name="screen_notification_settings_direct_chats">"Direktnachrichten"</string>
   <string name="screen_notification_settings_edit_custom_settings_section_title">"Benutzerdefinierte Einstellung pro Chat"</string>
   <string name="screen_notification_settings_edit_failed_updating_default_mode">"Beim Aktualisieren der Benachrichtigungseinstellungen ist ein Fehler aufgetreten."</string>

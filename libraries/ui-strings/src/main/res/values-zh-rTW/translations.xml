@@ -121,6 +121,8 @@
   <string name="common_enter_your_pin">"輸入您的 PIN 碼"</string>
   <string name="common_error">"錯誤"</string>
   <string name="common_everyone">"所有人"</string>
+  <string name="common_favourite">"我的最愛"</string>
+  <string name="common_favourited">"我的最愛"</string>
   <string name="common_file">"檔案"</string>
   <string name="common_file_saved_on_disk_android">"檔案已儲存至 Downloads"</string>
   <string name="common_forward_message">"訊息轉寄"</string>
@@ -167,6 +169,7 @@
   <string name="common_room_name">"聊天室名稱"</string>
   <string name="common_room_name_placeholder">"範例：您的計畫名稱"</string>
   <string name="common_screen_lock">"螢幕鎖定"</string>
+  <string name="common_search_for_someone">"搜尋使用者"</string>
   <string name="common_search_results">"搜尋結果"</string>
   <string name="common_security">"安全性"</string>
   <string name="common_seen_by">"已讀"</string>
