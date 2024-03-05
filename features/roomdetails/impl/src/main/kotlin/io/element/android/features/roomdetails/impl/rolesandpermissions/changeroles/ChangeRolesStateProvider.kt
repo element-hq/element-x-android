@@ -40,10 +40,12 @@ class ChangeRolesStateProvider : PreviewParameterProvider<ChangeRolesState> {
             ),
             aChangeRolesStateWithSelectedUsers().copy(
                 query = "Alice",
+                isSearchActive = true,
                 searchResults = SearchBarResultState.Results(aRoomMemberList().take(1).toImmutableList()),
                 selectedUsers = aMatrixUserList().take(1).toImmutableList(),
             ),
-            aChangeRolesStateWithSelectedUsers().copy(exitState = AsyncAction.Confirming,),
+            aChangeRolesStateWithSelectedUsers().copy(exitState = AsyncAction.Confirming),
+            aChangeRolesStateWithSelectedUsers().copy(savingState = AsyncAction.Confirming),
             aChangeRolesStateWithSelectedUsers().copy(savingState = AsyncAction.Loading),
             aChangeRolesStateWithSelectedUsers().copy(savingState = AsyncAction.Success(Unit)),
             aChangeRolesStateWithSelectedUsers().copy(savingState = AsyncAction.Failure(Exception("boom"))),

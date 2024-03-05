@@ -286,7 +286,7 @@ private fun SearchResultsList(
 
 @PreviewsDayNight
 @Composable
-internal fun ChangeRolesAdminViewPreview(@PreviewParameter(ChangeRolesStateProvider::class) state: ChangeRolesState) {
+internal fun ChangeRolesViewPreview(@PreviewParameter(ChangeRolesStateProvider::class) state: ChangeRolesState) {
     ElementPreview {
         ChangeRolesView(
             state = state,
