@@ -29,7 +29,7 @@ open class UserListStateProvider : PreviewParameterProvider<UserListState> {
             aUserListState(),
             aUserListState().copy(
                 isSearchActive = false,
-                selectedUsers = aListOfSelectedUsers(),
+                selectedUsers = aMatrixUserList().toImmutableList(),
                 selectionMode = SelectionMode.Multiple,
             ),
             aUserListState().copy(isSearchActive = true),
@@ -38,14 +38,14 @@ open class UserListStateProvider : PreviewParameterProvider<UserListState> {
             aUserListState().copy(
                 isSearchActive = true,
                 searchQuery = "@someone:matrix.org",
-                selectedUsers = aListOfSelectedUsers(),
+                selectedUsers = aMatrixUserList().toImmutableList(),
                 searchResults = SearchBarResultState.Results(aMatrixUserList().map { UserSearchResult(it) }.toImmutableList()),
             ),
             aUserListState().copy(
                 isSearchActive = true,
                 searchQuery = "@someone:matrix.org",
                 selectionMode = SelectionMode.Multiple,
-                selectedUsers = aListOfSelectedUsers(),
+                selectedUsers = aMatrixUserList().toImmutableList(),
                 searchResults = SearchBarResultState.Results(aMatrixUserList().map { UserSearchResult(it) }.toImmutableList()),
             ),
             aUserListState().copy(
@@ -66,5 +66,3 @@ fun aUserListState() = UserListState(
     showSearchLoader = false,
     eventSink = {}
 )
-
-fun aListOfSelectedUsers() = aMatrixUserList().take(6).toImmutableList()

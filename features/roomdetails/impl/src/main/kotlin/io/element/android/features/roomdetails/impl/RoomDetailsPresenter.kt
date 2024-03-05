@@ -71,6 +71,9 @@ class RoomDetailsPresenter @Inject constructor(
         val leaveRoomState = leaveRoomPresenter.present()
         val canShowNotificationSettings = remember { mutableStateOf(false) }
         val roomInfo by room.roomInfoFlow.collectAsState(initial = null)
+        val isUserAdmin by produceState(initialValue = false) {
+            value = room.userRole(room.sessionId).getOrNull() == RoomMember.Role.ADMIN
+        }
 
         val roomAvatar by remember { derivedStateOf { roomInfo?.avatarUrl ?: room.avatarUrl } }
 
@@ -150,6 +153,7 @@ class RoomDetailsPresenter @Inject constructor(
             leaveRoomState = leaveRoomState,
             roomNotificationSettings = roomNotificationSettingsState.roomNotificationSettings(),
             isFavorite = isFavorite,
+            displayAdminSettings = !room.isDm && isUserAdmin,
             eventSink = ::handleEvents,
         )
     }

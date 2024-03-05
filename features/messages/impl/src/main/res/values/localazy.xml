@@ -48,6 +48,8 @@
   <string name="screen_room_change_role_confirm_demote_self_description">"You will not be able to undo this change as you are demoting yourself, if you are the last privileged user in the room it will be impossible to regain privileges."</string>
   <string name="screen_room_change_role_confirm_demote_self_title">"Demote yourself?"</string>
   <string name="screen_room_change_role_moderators_title">"Edit Moderators"</string>
+  <string name="screen_room_change_role_unsaved_changes_description">"You have unsaved changes."</string>
+  <string name="screen_room_change_role_unsaved_changes_title">"Save changes?"</string>
   <string name="screen_room_encrypted_history_banner">"Message history is currently unavailable."</string>
   <string name="screen_room_encrypted_history_banner_unverified">"Message history is unavailable in this room. Verify this device to see your message history."</string>
   <string name="screen_room_error_failed_processing_media">"Failed processing media to upload, please try again."</string>
@@ -77,6 +79,9 @@
   <string name="screen_room_retry_send_menu_send_again_action">"Send again"</string>
   <string name="screen_room_retry_send_menu_title">"Your message failed to send"</string>
   <string name="screen_room_roles_and_permissions_admins">"Admins"</string>
+  <string name="screen_room_roles_and_permissions_change_my_role">"Change my role"</string>
+  <string name="screen_room_roles_and_permissions_change_role_demote_to_member">"Demote to member"</string>
+  <string name="screen_room_roles_and_permissions_change_role_demote_to_moderator">"Demote to moderator"</string>
   <string name="screen_room_roles_and_permissions_member_moderation">"Member moderation"</string>
   <string name="screen_room_roles_and_permissions_messages_and_content">"Messages and content"</string>
   <string name="screen_room_roles_and_permissions_moderators">"Moderators"</string>

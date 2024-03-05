@@ -46,11 +46,12 @@ import kotlinx.collections.immutable.toImmutableList
 import kotlin.math.floor
 
 @Composable
-fun SelectedUsersList(
+fun SelectedUsersRowList(
     selectedUsers: ImmutableList<MatrixUser>,
     onUserRemoved: (MatrixUser) -> Unit,
     modifier: Modifier = Modifier,
     autoScroll: Boolean = false,
+    canDeselect: (MatrixUser) -> Boolean = { true },
     contentPadding: PaddingValues = PaddingValues(0.dp),
 ) {
     val lazyListState = rememberLazyListState()
@@ -105,11 +106,12 @@ fun SelectedUsersList(
             .fillMaxWidth(),
         contentPadding = contentPadding,
     ) {
-        itemsIndexed(selectedUsers.toList()) { index, matrixUser ->
+        itemsIndexed(selectedUsers.toList()) { index, selectedUser ->
             Layout(
                 content = {
                     SelectedUser(
-                        matrixUser = matrixUser,
+                        matrixUser = selectedUser,
+                        canRemove = canDeselect(selectedUser),
                         onUserRemoved = onUserRemoved,
                     )
                 },
@@ -133,7 +135,7 @@ fun SelectedUsersList(
 internal fun SelectedUsersListPreview() = ElementPreview {
     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
         // Two users that will be visible with no scrolling
-        SelectedUsersList(
+        SelectedUsersRowList(
             selectedUsers = aMatrixUserList().take(2).toImmutableList(),
             onUserRemoved = {},
             modifier = Modifier
@@ -143,7 +145,7 @@ internal fun SelectedUsersListPreview() = ElementPreview {
 
         // Multiple users that don't fit, so will be spaced out per the measure policy
         for (i in 0..5) {
-            SelectedUsersList(
+            SelectedUsersRowList(
                 selectedUsers = aMatrixUserList().take(6).toImmutableList(),
                 onUserRemoved = {},
                 modifier = Modifier

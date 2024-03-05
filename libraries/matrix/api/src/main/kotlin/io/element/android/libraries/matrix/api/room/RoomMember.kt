@@ -35,7 +35,25 @@ data class RoomMember(
     enum class Role {
         ADMIN,
         MODERATOR,
-        USER
+        USER;
+
+        fun powerLevel(): Long {
+            return when (this) {
+                ADMIN -> 100
+                MODERATOR -> 50
+                USER -> 0
+            }
+        }
+
+        companion object {
+            fun forPowerLevel(powerLevel: Long): Role {
+                return when {
+                    powerLevel >= 100 -> ADMIN
+                    powerLevel >= 50 -> MODERATOR
+                    else -> USER
+                }
+            }
+        }
     }
 
     /**

@@ -29,11 +29,13 @@ import io.element.android.libraries.matrix.api.media.MediaUploadHandler
 import io.element.android.libraries.matrix.api.media.VideoInfo
 import io.element.android.libraries.matrix.api.poll.PollKind
 import io.element.android.libraries.matrix.api.room.location.AssetType
+import io.element.android.libraries.matrix.api.room.powerlevels.UserRoleChange
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
 import io.element.android.libraries.matrix.api.timeline.ReceiptType
 import io.element.android.libraries.matrix.api.widget.MatrixWidgetDriver
 import io.element.android.libraries.matrix.api.widget.MatrixWidgetSettings
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import java.io.Closeable
 import java.io.File
@@ -56,7 +58,7 @@ interface MatrixRoom : Closeable {
     /** Whether the room is a direct message. */
     val isDm: Boolean get() = isDirect && isOneToOne
 
-    val roomInfoFlow: Flow<MatrixRoomInfo>
+    val roomInfoFlow: SharedFlow<MatrixRoomInfo>
     val roomTypingMembersFlow: Flow<List<UserId>>
 
     /**
@@ -90,6 +92,10 @@ interface MatrixRoom : Closeable {
     suspend fun subscribeToSync()
 
     suspend fun unsubscribeFromSync()
+
+    suspend fun userRole(userId: UserId): Result<RoomMember.Role>
+
+    suspend fun updateUsersRoles(changes: List<UserRoleChange>): Result<Unit>
 
     suspend fun userDisplayName(userId: UserId): Result<String?>
 

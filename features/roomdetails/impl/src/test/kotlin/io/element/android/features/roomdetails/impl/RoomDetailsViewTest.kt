@@ -257,6 +257,7 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setRoomD
     invitePeople: () -> Unit = EnsureNeverCalled(),
     openAvatarPreview: (name: String, url: String) -> Unit = EnsureNeverCalledWithTwoParams(),
     openPollHistory: () -> Unit = EnsureNeverCalled(),
+    openAdminSettings: () -> Unit = EnsureNeverCalled(),
 ) {
     setContent {
         RoomDetailsView(
@@ -270,6 +271,7 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setRoomD
             invitePeople = invitePeople,
             openAvatarPreview = openAvatarPreview,
             openPollHistory = openPollHistory,
+            openAdminSettings = openAdminSettings,
         )
     }
 }
