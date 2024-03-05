@@ -24,9 +24,7 @@
   <string name="screen_notification_settings_additional_settings_section_title">"Réglages supplémentaires"</string>
   <string name="screen_notification_settings_calls_label">"Appels audio et vidéo"</string>
   <string name="screen_notification_settings_configuration_mismatch">"Incompatibilité de configuration"</string>
-  <string name="screen_notification_settings_configuration_mismatch_description">"Nous avons simplifié les paramètres des notifications pour que les options soient plus faciles à trouver.
-
-Certains paramètres personnalisés que vous avez choisis par le passé ne sont pas affichés ici, mais ils sont toujours actifs.
+  <string name="screen_notification_settings_configuration_mismatch_description">"Nous avons simplifié les paramètres des notifications pour que les options soient plus faciles à trouver. Certains paramètres personnalisés que vous avez choisis par le passé ne sont pas affichés ici, mais ils sont toujours actifs.
 
 Si vous continuez, il est possible que certains de vos paramètres soient modifiés."</string>
   <string name="screen_notification_settings_direct_chats">"Discussions directes"</string>

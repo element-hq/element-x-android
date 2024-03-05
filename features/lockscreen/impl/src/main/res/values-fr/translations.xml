@@ -16,7 +16,9 @@
   <string name="screen_app_lock_setup_confirm_pin">"Confirmer le code PIN"</string>
   <string name="screen_app_lock_setup_pin_blacklisted_dialog_content">"Vous ne pouvez pas choisir ce code PIN pour des raisons de sécurité"</string>
   <string name="screen_app_lock_setup_pin_blacklisted_dialog_title">"Choisissez un code PIN différent"</string>
-  <string name="screen_app_lock_setup_pin_context">"Verrouillez %1$s pour ajouter une sécurité supplémentaire à vos discussions. Choisissez un code facile à retenir. Si vous oubliez le code PIN, vous serez déconnecté."</string>
+  <string name="screen_app_lock_setup_pin_context">"Verrouillez %1$s pour ajouter une sécurité supplémentaire à vos discussions.
+
+Choisissez un code facile à retenir. Si vous oubliez le code PIN, vous serez déconnecté."</string>
   <string name="screen_app_lock_setup_pin_mismatch_dialog_content">"Veuillez saisir le même code PIN deux fois"</string>
   <string name="screen_app_lock_setup_pin_mismatch_dialog_title">"Les codes PIN ne correspondent pas"</string>
   <string name="screen_app_lock_signout_alert_message">"Pour continuer, vous devrez vous connecter à nouveau et créer un nouveau code PIN."</string>

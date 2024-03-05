@@ -185,6 +185,7 @@
   <string name="common_room">"Místnost"</string>
   <string name="common_room_name">"Název místnosti"</string>
   <string name="common_room_name_placeholder">"např. název vašeho projektu"</string>
+  <string name="common_saving">"Ukládání"</string>
   <string name="common_screen_lock">"Zámek obrazovky"</string>
   <string name="common_search_for_someone">"Hledat někoho"</string>
   <string name="common_search_results">"Výsledky hledání"</string>

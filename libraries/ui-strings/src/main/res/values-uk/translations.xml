@@ -111,7 +111,7 @@
   <string name="common_acceptable_use_policy">"Політика прийнятного використання"</string>
   <string name="common_advanced_settings">"Додаткові налаштування"</string>
   <string name="common_analytics">"Аналітика"</string>
-  <string name="common_appearance">"Вигляд"</string>
+  <string name="common_appearance">"Тема"</string>
   <string name="common_audio">"Аудіо"</string>
   <string name="common_blocked_users">"Заблоковані користувачі"</string>
   <string name="common_bubbles">"Бульбашки"</string>
@@ -122,7 +122,7 @@
   <string name="common_dark">"Темна"</string>
   <string name="common_decryption_error">"Помилка розшифровки"</string>
   <string name="common_developer_options">"Налаштування розробника"</string>
-  <string name="common_direct_chat">"Прямий чат"</string>
+  <string name="common_direct_chat">"Особистий чат"</string>
   <string name="common_edited_suffix">"(відредаговано)"</string>
   <string name="common_editing">"Редагування"</string>
   <string name="common_emote">"* %1$s %2$s"</string>
@@ -131,7 +131,7 @@
   <string name="common_error">"Помилка"</string>
   <string name="common_everyone">"Усі"</string>
   <string name="common_failed">"Невдало"</string>
-  <string name="common_favourite">"Вибрані"</string>
+  <string name="common_favourite">"Улюблений"</string>
   <string name="common_favourited">"Вибране"</string>
   <string name="common_file">"Файл"</string>
   <string name="common_file_saved_on_disk_android">"Файл збережений у розділі \"Завантаження\""</string>
@@ -153,7 +153,7 @@
   <string name="common_message">"Повідомлення"</string>
   <string name="common_message_actions">"Дії з повідомленнями"</string>
   <string name="common_message_layout">"Макет повідомлень"</string>
-  <string name="common_message_removed">"Повідомлення видалено"</string>
+  <string name="common_message_removed">"Повідомлення вилучено"</string>
   <string name="common_modern">"Модерн"</string>
   <string name="common_mute">"Вимкнути звук"</string>
   <string name="common_no_results">"Немає результатів"</string>
@@ -185,6 +185,7 @@
   <string name="common_room">"Кімната"</string>
   <string name="common_room_name">"Назва кімнати"</string>
   <string name="common_room_name_placeholder">"напр., назва вашого проєкту"</string>
+  <string name="common_saving">"Збереження"</string>
   <string name="common_screen_lock">"Блокування екрану"</string>
   <string name="common_search_for_someone">"Пошук когось"</string>
   <string name="common_search_results">"Результати пошуку"</string>
@@ -203,7 +204,7 @@
   <string name="common_success">"Успіх"</string>
   <string name="common_suggestions">"Пропозиції"</string>
   <string name="common_syncing">"Синхронізація"</string>
-  <string name="common_system">"Системні"</string>
+  <string name="common_system">"Системна"</string>
   <string name="common_text">"Текст"</string>
   <string name="common_third_party_notices">"Повідомлення третіх сторін"</string>
   <string name="common_thread">"Гілка"</string>
@@ -234,7 +235,7 @@
   <string name="error_failed_uploading_voice_message">"Не вдалося завантажити голосове повідомлення."</string>
   <string name="error_missing_location_auth_android">"%1$s не має дозволу на доступ до вашого місцезнаходження. Увімкнути доступ можна в Налаштуваннях."</string>
   <string name="error_missing_location_rationale_android">"%1$s не має дозволу на доступ до вашого місцезнаходження. Увімкніть доступ нижче."</string>
-  <string name="error_missing_microphone_voice_rationale_android">"%1$s не має дозволу на доступ до мікрофона. Увімкнути доступ для запису голосового повідомлення."</string>
+  <string name="error_missing_microphone_voice_rationale_android">"%1$s не має доступу до вашого мікрофона. Надайте доступ, щоб записати голосове повідомлення."</string>
   <string name="error_some_messages_have_not_been_sent">"Деякі повідомлення не були надіслані"</string>
   <string name="error_unknown">"Вибачте, сталася помилка"</string>
   <string name="invite_friends_rich_title">"🔐️ Приєднуйтеся до мене в %1$s"</string>
