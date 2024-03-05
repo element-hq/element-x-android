@@ -47,6 +47,7 @@ import io.element.android.libraries.matrix.api.room.powerlevels.canInvite
 import io.element.android.libraries.matrix.api.room.powerlevels.canSendState
 import io.element.android.libraries.matrix.api.room.roomNotificationSettings
 import io.element.android.libraries.matrix.ui.room.getDirectRoomMember
+import io.element.android.libraries.matrix.ui.room.isOwnUserAdmin
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analyticsproviders.api.trackers.captureInteraction
 import kotlinx.coroutines.CoroutineScope
@@ -71,9 +72,7 @@ class RoomDetailsPresenter @Inject constructor(
         val leaveRoomState = leaveRoomPresenter.present()
         val canShowNotificationSettings = remember { mutableStateOf(false) }
         val roomInfo by room.roomInfoFlow.collectAsState(initial = null)
-        val isUserAdmin by produceState(initialValue = false) {
-            value = room.userRole(room.sessionId).getOrNull() == RoomMember.Role.ADMIN
-        }
+        val isUserAdmin = room.isOwnUserAdmin()
 
         val roomAvatar by remember { derivedStateOf { roomInfo?.avatarUrl ?: room.avatarUrl } }
 

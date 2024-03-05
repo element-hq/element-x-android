@@ -32,24 +32,16 @@ data class RoomMember(
     /**
      * Role of the RoomMember, based on its [powerLevel].
      */
-    enum class Role {
-        ADMIN,
-        MODERATOR,
-        USER;
-
-        fun powerLevel(): Long {
-            return when (this) {
-                ADMIN -> 100
-                MODERATOR -> 50
-                USER -> 0
-            }
-        }
+    enum class Role(val powerLevel: Long) {
+        ADMIN(100L),
+        MODERATOR(50L),
+        USER(0L);
 
         companion object {
             fun forPowerLevel(powerLevel: Long): Role {
                 return when {
-                    powerLevel >= 100 -> ADMIN
-                    powerLevel >= 50 -> MODERATOR
+                    powerLevel >= ADMIN.powerLevel -> ADMIN
+                    powerLevel >= MODERATOR.powerLevel -> MODERATOR
                     else -> USER
                 }
             }

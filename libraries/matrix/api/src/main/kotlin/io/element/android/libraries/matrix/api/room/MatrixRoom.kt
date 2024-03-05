@@ -34,9 +34,14 @@ import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
 import io.element.android.libraries.matrix.api.timeline.ReceiptType
 import io.element.android.libraries.matrix.api.widget.MatrixWidgetDriver
 import io.element.android.libraries.matrix.api.widget.MatrixWidgetSettings
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
 import java.io.Closeable
 import java.io.File
 
@@ -149,6 +154,18 @@ interface MatrixRoom : Closeable {
 
     suspend fun canUserJoinCall(userId: UserId): Result<Boolean> =
         canUserSendState(userId, StateEventType.CALL_MEMBER)
+
+    fun usersWithRole(role: RoomMember.Role): Flow<ImmutableList<RoomMember>> {
+        return roomInfoFlow
+            .map { it.userPowerLevels.filter { (_, powerLevel) -> RoomMember.Role.forPowerLevel(powerLevel) == role } }
+            .distinctUntilChanged()
+            .combine(membersStateFlow) { powerLevels, membersState ->
+                membersState.roomMembers()
+                    .orEmpty()
+                    .filter { powerLevels.containsKey(it.userId) }
+                    .toPersistentList()
+            }
+    }
 
     suspend fun updateAvatar(mimeType: String, data: ByteArray): Result<Unit>
 

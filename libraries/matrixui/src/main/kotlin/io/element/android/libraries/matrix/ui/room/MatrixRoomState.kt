@@ -18,9 +18,12 @@ package io.element.android.libraries.matrix.ui.room
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.produceState
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MessageEventType
+import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.powerlevels.canRedactOther
 import io.element.android.libraries.matrix.api.room.powerlevels.canRedactOwn
 import io.element.android.libraries.matrix.api.room.powerlevels.canSendMessage
@@ -44,4 +47,11 @@ fun MatrixRoom.canRedactOtherAsState(updateKey: Long): State<Boolean> {
     return produceState(initialValue = false, key1 = updateKey) {
         value = canRedactOther().getOrElse { false }
     }
+}
+
+@Composable
+fun MatrixRoom.isOwnUserAdmin(): Boolean {
+    val roomInfo by roomInfoFlow.collectAsState(initial = null)
+    val powerLevel = roomInfo?.userPowerLevels?.get(sessionId) ?: 0L
+    return RoomMember.Role.forPowerLevel(powerLevel) == RoomMember.Role.ADMIN
 }

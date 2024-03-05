@@ -23,5 +23,5 @@ data class UserRoleChange(
     val userId: UserId,
     val role: RoomMember.Role,
 ) {
-    val powerLevel: Long = role.powerLevel()
+    val powerLevel: Long = role.powerLevel
 }

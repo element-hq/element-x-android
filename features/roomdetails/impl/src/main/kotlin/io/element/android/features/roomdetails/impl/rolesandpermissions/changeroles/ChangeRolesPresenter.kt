@@ -40,7 +40,6 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.powerlevels.UserRoleChange
-import io.element.android.libraries.matrix.api.room.roomMembers
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.PersistentList
@@ -48,8 +47,6 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -80,15 +77,8 @@ class ChangeRolesPresenter @AssistedInject constructor(
         val exitState: MutableState<AsyncAction<Unit>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
         val saveState: MutableState<AsyncAction<Unit>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
         val usersWithRole = produceState(initialValue = persistentListOf()) {
-            room.roomInfoFlow
-                .map { it.userPowerLevels.filter { (_, powerLevel) -> RoomMember.Role.forPowerLevel(powerLevel) == role } }
-                .distinctUntilChanged()
-                .combine(room.membersStateFlow) { powerLevels, membersState ->
-                    membersState.roomMembers()
-                        .orEmpty()
-                        .filter { powerLevels.containsKey(it.userId) }
-                        .map { it.toMatrixUser() }
-                }
+            room.usersWithRole(role)
+                .map { members -> members.map { it.toMatrixUser() } }
                 .onEach { users ->
                     val previous: PersistentList<MatrixUser> = value
                     value = users.toPersistentList()
