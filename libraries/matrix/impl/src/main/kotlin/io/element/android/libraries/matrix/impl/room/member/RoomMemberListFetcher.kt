@@ -40,7 +40,7 @@ import kotlin.coroutines.coroutineContext
 internal class RoomMemberListFetcher(
     private val room: RoomInterface,
     private val dispatcher: CoroutineDispatcher,
-    private val pageSize: Int = 1000,
+    private val pageSize: Int = 10_000,
 ) {
     private val updatedRoomMemberMutex = Mutex()
     private val roomId = room.id()
@@ -108,6 +108,7 @@ internal class RoomMemberListFetcher(
                     // We should probably implement some sort of paging in the future.
                     coroutineContext.ensureActive()
                     val chunk = iterator.nextChunk(pageSize.toUInt())
+                    // Load next chunk. If null (no more items), exit the loop
                     val members = chunk?.parallelMap(RoomMemberMapper::map) ?: break
                     addAll(members)
                     Timber.i("Emitting first $size members for room $roomId")
