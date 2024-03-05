@@ -20,12 +20,11 @@ import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.element.android.features.roomlist.impl.R
+import io.element.android.features.roomlist.impl.filters.selection.FilterSelectionState
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.tests.testutils.EventsRecorder
 import io.element.android.tests.testutils.clickOn
 import io.element.android.tests.testutils.pressTag
-import kotlinx.collections.immutable.persistentListOf
-import kotlinx.collections.immutable.toImmutableList
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -56,8 +55,7 @@ class RoomListFiltersViewTests {
         rule.setContent {
             RoomListFiltersView(
                 state = aRoomListFiltersState(
-                    unselectedFilters = persistentListOf(),
-                    selectedFilters = RoomListFilter.entries.toImmutableList(),
+                    filterSelectionStates = RoomListFilter.entries.map { FilterSelectionState(it, isSelected = true) },
                     eventSink = eventsRecorder
                 ),
             )

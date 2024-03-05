@@ -20,9 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
+import io.element.android.features.roomlist.impl.filters.selection.FilterSelectionStrategy
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
@@ -34,50 +32,39 @@ import io.element.android.libraries.matrix.api.roomlist.RoomListFilter as Matrix
 class RoomListFiltersPresenter @Inject constructor(
     private val roomListService: RoomListService,
     private val featureFlagService: FeatureFlagService,
+    private val filterSelectionStrategy: FilterSelectionStrategy,
 ) : Presenter<RoomListFiltersState> {
+
     @Composable
     override fun present(): RoomListFiltersState {
-        val isFeatureEnabled by featureFlagService.isFeatureEnabledFlow(FeatureFlags.RoomListFilters).collectAsState(false)
-        var unselectedFilters: Set<RoomListFilter> by rememberSaveable {
-            mutableStateOf(RoomListFilter.entries.toSet())
-        }
-        var selectedFilters: Set<RoomListFilter> by rememberSaveable {
-            mutableStateOf(emptySet())
-        }
 
-        fun updateFilters(newSelectedFilters: Set<RoomListFilter>) {
-            selectedFilters = newSelectedFilters
-            unselectedFilters = RoomListFilter.entries.toSet() -
-                selectedFilters -
-                selectedFilters.mapNotNull { it.oppositeFilter }.toSet()
-        }
+        val isFeatureEnabled by featureFlagService.isFeatureEnabledFlow(FeatureFlags.RoomListFilters).collectAsState(false)
+        val filters by filterSelectionStrategy.filterSelectionStates.collectAsState()
+
 
         fun handleEvents(event: RoomListFiltersEvents) {
             when (event) {
-                is RoomListFiltersEvents.ToggleFilter -> {
-                    val newSelectedFilters = if (selectedFilters.contains(event.filter)) {
-                        selectedFilters - event.filter
-                    } else {
-                        selectedFilters + event.filter
-                    }
-                    updateFilters(newSelectedFilters)
-                }
                 RoomListFiltersEvents.ClearSelectedFilters -> {
-                    updateFilters(newSelectedFilters = emptySet())
+                    filterSelectionStrategy.clear()
+                }
+                is RoomListFiltersEvents.ToggleFilter -> {
+                    filterSelectionStrategy.toggle(event.filter)
                 }
             }
         }
 
         LaunchedEffect(isFeatureEnabled) {
             if (!isFeatureEnabled) {
-                updateFilters(emptySet())
+                filterSelectionStrategy.clear()
             }
         }
 
-        LaunchedEffect(selectedFilters) {
+        LaunchedEffect(filters) {
             val allRoomsFilter = MatrixRoomListFilter.All(
-                selectedFilters.map { roomListFilter ->
-                    when (roomListFilter) {
+                filters
+                    .filter { it.isSelected }
+                    .map { roomListFilter ->
+                    when (roomListFilter.filter) {
                         RoomListFilter.Rooms -> MatrixRoomListFilter.Category.Group
                         RoomListFilter.People -> MatrixRoomListFilter.Category.People
                         RoomListFilter.Unread -> MatrixRoomListFilter.Unread
@@ -88,9 +75,9 @@ class RoomListFiltersPresenter @Inject constructor(
             roomListService.allRooms.updateFilter(allRoomsFilter)
         }
 
+
         return RoomListFiltersState(
-            unselectedFilters = unselectedFilters.toPersistentList(),
-            selectedFilters = selectedFilters.toPersistentList(),
+            filterSelectionStates = filters.toPersistentList(),
             isFeatureEnabled = isFeatureEnabled,
             eventSink = ::handleEvents
         )

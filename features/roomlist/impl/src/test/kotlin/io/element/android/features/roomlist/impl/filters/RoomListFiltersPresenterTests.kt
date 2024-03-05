@@ -20,6 +20,8 @@ import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import io.element.android.features.roomlist.impl.filters.selection.DefaultFilterSelectionStrategy
+import io.element.android.features.roomlist.impl.filters.selection.FilterSelectionState
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
@@ -37,13 +39,12 @@ class RoomListFiltersPresenterTests {
             presenter.present()
         }.test {
             awaitItem().let { state ->
-                assertThat(state.selectedFilters).isEmpty()
                 assertThat(state.hasAnyFilterSelected).isFalse()
-                assertThat(state.unselectedFilters).containsExactly(
-                    RoomListFilter.Rooms,
-                    RoomListFilter.People,
-                    RoomListFilter.Unread,
-                    RoomListFilter.Favourites,
+                assertThat(state.filterSelectionStates).containsExactly(
+                    filterSelectionState(RoomListFilter.Unread, false),
+                    filterSelectionState(RoomListFilter.People, false),
+                    filterSelectionState(RoomListFilter.Rooms, false),
+                    filterSelectionState(RoomListFilter.Favourites, false),
                 )
             }
             cancelAndIgnoreRemainingEvents()
@@ -58,32 +59,29 @@ class RoomListFiltersPresenterTests {
             presenter.present()
         }.test {
             awaitItem().eventSink.invoke(RoomListFiltersEvents.ToggleFilter(RoomListFilter.Rooms))
-
             awaitLastSequentialItem().let { state ->
 
-                assertThat(state.selectedFilters).containsExactly(RoomListFilter.Rooms)
                 assertThat(state.hasAnyFilterSelected).isTrue()
-                assertThat(state.unselectedFilters).containsExactly(
-                    RoomListFilter.Unread,
-                    RoomListFilter.Favourites,
-                )
+                assertThat(state.filterSelectionStates).containsExactly(
+                    filterSelectionState(RoomListFilter.Rooms, true),
+                    filterSelectionState(RoomListFilter.Unread, false),
+                    filterSelectionState(RoomListFilter.Favourites, false),
+                ).inOrder()
+
                 val roomListCurrentFilter = roomListService.allRooms.currentFilter.value as MatrixRoomListFilter.All
                 assertThat(roomListCurrentFilter.filters).containsExactly(
                     MatrixRoomListFilter.Category.Group,
                 )
-
                 state.eventSink.invoke(RoomListFiltersEvents.ToggleFilter(RoomListFilter.Rooms))
             }
-
             awaitLastSequentialItem().let { state ->
-                assertThat(state.selectedFilters).isEmpty()
                 assertThat(state.hasAnyFilterSelected).isFalse()
-                assertThat(state.unselectedFilters).containsExactly(
-                    RoomListFilter.Rooms,
-                    RoomListFilter.People,
-                    RoomListFilter.Unread,
-                    RoomListFilter.Favourites,
-                )
+                assertThat(state.filterSelectionStates).containsExactly(
+                    filterSelectionState(RoomListFilter.Unread, false),
+                    filterSelectionState(RoomListFilter.People, false),
+                    filterSelectionState(RoomListFilter.Rooms, false),
+                    filterSelectionState(RoomListFilter.Favourites, false),
+                ).inOrder()
                 val roomListCurrentFilter = roomListService.allRooms.currentFilter.value as MatrixRoomListFilter.All
                 assertThat(roomListCurrentFilter.filters).isEmpty()
             }
@@ -99,24 +97,28 @@ class RoomListFiltersPresenterTests {
         }.test {
             awaitItem().eventSink.invoke(RoomListFiltersEvents.ToggleFilter(RoomListFilter.Rooms))
             awaitLastSequentialItem().let { state ->
-                assertThat(state.selectedFilters).isNotEmpty()
                 assertThat(state.hasAnyFilterSelected).isTrue()
                 state.eventSink.invoke(RoomListFiltersEvents.ClearSelectedFilters)
             }
             awaitLastSequentialItem().let { state ->
-                assertThat(state.selectedFilters).isEmpty()
                 assertThat(state.hasAnyFilterSelected).isFalse()
             }
         }
     }
 }
 
-fun createRoomListFiltersPresenter(
+private fun filterSelectionState(filter: RoomListFilter, selected: Boolean) = FilterSelectionState(
+    filter = filter,
+    isSelected = selected,
+)
+
+private fun createRoomListFiltersPresenter(
     roomListService: RoomListService = FakeRoomListService(),
     featureFlagService: FeatureFlagService = FakeFeatureFlagService(),
 ): RoomListFiltersPresenter {
     return RoomListFiltersPresenter(
         roomListService = roomListService,
         featureFlagService = featureFlagService,
+        filterSelectionStrategy = DefaultFilterSelectionStrategy(),
     )
 }

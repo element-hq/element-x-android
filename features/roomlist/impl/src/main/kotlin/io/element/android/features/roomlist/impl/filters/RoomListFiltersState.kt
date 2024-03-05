@@ -16,13 +16,13 @@
 
 package io.element.android.features.roomlist.impl.filters
 
+import io.element.android.features.roomlist.impl.filters.selection.FilterSelectionState
 import kotlinx.collections.immutable.ImmutableList
 
 data class RoomListFiltersState(
-    val unselectedFilters: ImmutableList<RoomListFilter>,
-    val selectedFilters: ImmutableList<RoomListFilter>,
+    val filterSelectionStates: ImmutableList<FilterSelectionState>,
     val isFeatureEnabled: Boolean,
     val eventSink: (RoomListFiltersEvents) -> Unit,
 ) {
-    val hasAnyFilterSelected = selectedFilters.isNotEmpty()
+    val hasAnyFilterSelected = filterSelectionStates.any { it.isSelected }
 }
