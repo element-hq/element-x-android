@@ -59,7 +59,7 @@ import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.ui.components.AvatarActionBottomSheet
-import io.element.android.libraries.matrix.ui.components.SelectedUsersList
+import io.element.android.libraries.matrix.ui.components.SelectedUsersRowList
 import io.element.android.libraries.matrix.ui.components.UnsavedAvatar
 import io.element.android.libraries.permissions.api.PermissionsView
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -120,7 +120,7 @@ fun ConfigureRoomView(
                 onTopicChanged = { state.eventSink(ConfigureRoomEvents.TopicChanged(it)) },
             )
             if (state.config.invites.isNotEmpty()) {
-                SelectedUsersList(
+                SelectedUsersRowList(
                     modifier = Modifier.padding(bottom = 16.dp),
                     contentPadding = PaddingValues(horizontal = 24.dp),
                     selectedUsers = state.config.invites,

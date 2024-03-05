@@ -97,6 +97,7 @@ fun RoomDetailsView(
     invitePeople: () -> Unit,
     openAvatarPreview: (name: String, url: String) -> Unit,
     openPollHistory: () -> Unit,
+    openAdminSettings: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     fun onShareMember() {
@@ -160,30 +161,45 @@ fun RoomDetailsView(
                 )
             }
 
-            if (state.canShowNotificationSettings && state.roomNotificationSettings != null) {
-                NotificationSection(
-                    isDefaultMode = state.roomNotificationSettings.isDefault,
-                    openRoomNotificationSettings = openRoomNotificationSettings
+            PreferenceCategory {
+                if (state.canShowNotificationSettings && state.roomNotificationSettings != null) {
+                    NotificationItem(
+                        isDefaultMode = state.roomNotificationSettings.isDefault,
+                        openRoomNotificationSettings = openRoomNotificationSettings
+                    )
+                }
+
+                FavoriteItem(
+                    isFavorite = state.isFavorite,
+                    onFavoriteChanges = {
+                        state.eventSink(RoomDetailsEvent.SetFavorite(it))
+                    }
                 )
+
+                if (state.displayAdminSettings) {
+                    ListItem(
+                        headlineContent = { Text("Roles and permissions") },
+                        leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Admin())),
+                        onClick = openAdminSettings,
+                    )
+                }
             }
 
-            FavoriteSection(
-                isFavorite = state.isFavorite,
-                onFavoriteChanges = {
-                    state.eventSink(RoomDetailsEvent.SetFavorite(it))
-                }
-            )
-
-            if (state.roomType is RoomDetailsType.Room) {
-                MembersSection(
-                    memberCount = state.memberCount,
-                    openRoomMemberList = openRoomMemberList,
-                )
-
-                if (state.canInvite) {
-                    InviteSection(
-                        invitePeople = invitePeople
-                    )
+            val displayMemberListItem = state.roomType is RoomDetailsType.Room
+            val displayInviteMembersItem = state.canInvite
+            if (displayMemberListItem || displayInviteMembersItem) {
+                PreferenceCategory {
+                    if (displayMemberListItem) {
+                        MembersItem(
+                            memberCount = state.memberCount,
+                            openRoomMemberList = openRoomMemberList,
+                        )
+                    }
+                    if (displayInviteMembersItem) {
+                        InviteItem(
+                            invitePeople = invitePeople
+                        )
+                    }
                 }
             }
 
@@ -349,7 +365,7 @@ private fun TopicSection(
 }
 
 @Composable
-private fun NotificationSection(
+private fun NotificationItem(
     isDefaultMode: Boolean,
     openRoomNotificationSettings: () -> Unit,
 ) {
@@ -358,58 +374,49 @@ private fun NotificationSection(
     } else {
         stringResource(R.string.screen_room_details_notification_mode_custom)
     }
-    PreferenceCategory {
-        ListItem(
-            headlineContent = { Text(text = stringResource(R.string.screen_room_details_notification_title)) },
-            supportingContent = { Text(text = subtitle) },
-            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Notifications())),
-            onClick = openRoomNotificationSettings,
-        )
-    }
+    ListItem(
+        headlineContent = { Text(text = stringResource(R.string.screen_room_details_notification_title)) },
+        supportingContent = { Text(text = subtitle) },
+        leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Notifications())),
+        onClick = openRoomNotificationSettings,
+    )
 }
 
 @Composable
-private fun FavoriteSection(
+private fun FavoriteItem(
     isFavorite: Boolean,
     onFavoriteChanges: (Boolean) -> Unit,
-    modifier: Modifier = Modifier
 ) {
-    PreferenceCategory(modifier = modifier) {
-        PreferenceSwitch(
-            icon = CompoundIcons.Favourite(),
-            title = stringResource(id = CommonStrings.common_favourite),
-            isChecked = isFavorite,
-            onCheckedChange = onFavoriteChanges
-        )
-    }
+    PreferenceSwitch(
+        icon = CompoundIcons.Favourite(),
+        title = stringResource(id = CommonStrings.common_favourite),
+        isChecked = isFavorite,
+        onCheckedChange = onFavoriteChanges
+    )
 }
 
 @Composable
-private fun MembersSection(
+private fun MembersItem(
     memberCount: Long,
     openRoomMemberList: () -> Unit,
 ) {
-    PreferenceCategory {
-        ListItem(
-            headlineContent = { Text(stringResource(CommonStrings.common_people)) },
-            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.User())),
-            trailingContent = ListItemContent.Text(memberCount.toString()),
-            onClick = openRoomMemberList,
-        )
-    }
+    ListItem(
+        headlineContent = { Text(stringResource(CommonStrings.common_people)) },
+        leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.User())),
+        trailingContent = ListItemContent.Text(memberCount.toString()),
+        onClick = openRoomMemberList,
+    )
 }
 
 @Composable
-private fun InviteSection(
+private fun InviteItem(
     invitePeople: () -> Unit,
 ) {
-    PreferenceCategory {
-        ListItem(
-            headlineContent = { Text(stringResource(R.string.screen_room_details_invite_people_title)) },
-            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.UserAdd())),
-            onClick = invitePeople,
-        )
-    }
+    ListItem(
+        headlineContent = { Text(stringResource(R.string.screen_room_details_invite_people_title)) },
+        leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.UserAdd())),
+        onClick = invitePeople,
+    )
 }
 
 @Composable
@@ -481,5 +488,6 @@ private fun ContentToPreview(state: RoomDetailsState) {
         invitePeople = {},
         openAvatarPreview = { _, _ -> },
         openPollHistory = {},
+        openAdminSettings = {},
     )
 }

@@ -51,6 +51,7 @@ import io.element.android.libraries.ui.strings.CommonStrings
 @Composable
 fun SelectedUser(
     matrixUser: MatrixUser,
+    canRemove: Boolean,
     onUserRemoved: (MatrixUser) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -70,24 +71,26 @@ fun SelectedUser(
                 style = MaterialTheme.typography.bodyLarge,
             )
         }
-        Surface(
-            color = MaterialTheme.colorScheme.primary,
-            modifier = Modifier
-                .clip(CircleShape)
-                .size(20.dp)
-                .align(Alignment.TopEnd)
-                .clickable(
-                    indication = rememberRipple(),
-                    interactionSource = remember { MutableInteractionSource() },
-                    onClick = { onUserRemoved(matrixUser) }
-                ),
-        ) {
-            Icon(
-                imageVector = CompoundIcons.Close(),
-                contentDescription = stringResource(id = CommonStrings.action_remove),
-                tint = MaterialTheme.colorScheme.onPrimary,
-                modifier = Modifier.padding(2.dp)
-            )
+        if (canRemove) {
+            Surface(
+                color = MaterialTheme.colorScheme.primary,
+                modifier = Modifier
+                    .clip(CircleShape)
+                    .size(20.dp)
+                    .align(Alignment.TopEnd)
+                    .clickable(
+                        indication = rememberRipple(),
+                        interactionSource = remember { MutableInteractionSource() },
+                        onClick = { onUserRemoved(matrixUser) }
+                    ),
+            ) {
+                Icon(
+                    imageVector = CompoundIcons.Close(),
+                    contentDescription = stringResource(id = CommonStrings.action_remove),
+                    tint = MaterialTheme.colorScheme.onPrimary,
+                    modifier = Modifier.padding(2.dp)
+                )
+            }
         }
     }
 }
@@ -97,6 +100,17 @@ fun SelectedUser(
 internal fun SelectedUserPreview() = ElementPreview {
     SelectedUser(
         aMatrixUser(),
+        canRemove = true,
+        onUserRemoved = {},
+    )
+}
+
+@PreviewsDayNight
+@Composable
+internal fun SelectedUserCannotRemovePreview() = ElementPreview {
+    SelectedUser(
+        aMatrixUser(),
+        canRemove = false,
         onUserRemoved = {},
     )
 }

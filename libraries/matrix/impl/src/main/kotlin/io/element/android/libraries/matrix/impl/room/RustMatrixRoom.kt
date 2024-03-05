@@ -36,8 +36,10 @@ import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.api.room.MatrixRoomNotificationSettingsState
 import io.element.android.libraries.matrix.api.room.Mention
 import io.element.android.libraries.matrix.api.room.MessageEventType
+import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.StateEventType
 import io.element.android.libraries.matrix.api.room.location.AssetType
+import io.element.android.libraries.matrix.api.room.powerlevels.UserRoleChange
 import io.element.android.libraries.matrix.api.room.roomNotificationSettings
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
 import io.element.android.libraries.matrix.api.timeline.ReceiptType
@@ -51,6 +53,7 @@ import io.element.android.libraries.matrix.impl.notificationsettings.RustNotific
 import io.element.android.libraries.matrix.impl.poll.toInner
 import io.element.android.libraries.matrix.impl.room.location.toInner
 import io.element.android.libraries.matrix.impl.room.member.RoomMemberListFetcher
+import io.element.android.libraries.matrix.impl.room.member.RoomMemberMapper
 import io.element.android.libraries.matrix.impl.timeline.RustMatrixTimeline
 import io.element.android.libraries.matrix.impl.timeline.toRustReceiptType
 import io.element.android.libraries.matrix.impl.util.mxCallbackFlow
@@ -63,8 +66,11 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.EventTimelineItem
@@ -74,6 +80,7 @@ import org.matrix.rustcomponents.sdk.RoomListItem
 import org.matrix.rustcomponents.sdk.RoomMessageEventContentWithoutRelation
 import org.matrix.rustcomponents.sdk.SendAttachmentJoinHandle
 import org.matrix.rustcomponents.sdk.TypingNotificationsListener
+import org.matrix.rustcomponents.sdk.UserPowerLevelUpdate
 import org.matrix.rustcomponents.sdk.WidgetCapabilities
 import org.matrix.rustcomponents.sdk.WidgetCapabilitiesProvider
 import org.matrix.rustcomponents.sdk.messageEventContentFromHtml
@@ -102,7 +109,7 @@ class RustMatrixRoom(
 ) : MatrixRoom {
     override val roomId = RoomId(innerRoom.id())
 
-    override val roomInfoFlow: Flow<MatrixRoomInfo> = mxCallbackFlow {
+    override val roomInfoFlow: SharedFlow<MatrixRoomInfo> = mxCallbackFlow {
         launch {
             val initial = innerRoom.roomInfo().use(matrixRoomInfoMapper::map)
             channel.trySend(initial)
@@ -113,6 +120,7 @@ class RustMatrixRoom(
             }
         })
     }
+        .shareIn(sessionCoroutineScope, SharingStarted.Eagerly, replay = 1)
 
     override val roomTypingMembersFlow: Flow<List<UserId>> = mxCallbackFlow {
         launch {
@@ -225,6 +233,19 @@ class RustMatrixRoom(
                 prevRoomNotificationSettings = currentRoomNotificationSettings,
                 failure = it
             )
+        }
+    }
+
+    override suspend fun userRole(userId: UserId): Result<RoomMember.Role> = withContext(coroutineDispatchers.io) {
+        runCatching {
+            RoomMemberMapper.mapRole(innerRoom.suggestedRoleForUser(userId.value))
+        }
+    }
+
+    override suspend fun updateUsersRoles(changes: List<UserRoleChange>): Result<Unit> {
+        return runCatching {
+            val powerLevelChanges = changes.map { UserPowerLevelUpdate(it.userId.value, it.powerLevel) }
+            innerRoom.updatePowerLevelsForUsers(powerLevelChanges)
         }
     }
 

@@ -19,7 +19,6 @@ package io.element.android.features.createroom.impl.userlist
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
 import io.element.android.libraries.matrix.ui.components.aMatrixUserList
-import io.element.android.libraries.usersearch.api.UserSearchResult
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 
@@ -38,15 +37,15 @@ open class UserListStateProvider : PreviewParameterProvider<UserListState> {
             aUserListState().copy(
                 isSearchActive = true,
                 searchQuery = "@someone:matrix.org",
-                selectedUsers = aListOfSelectedUsers(),
-                searchResults = SearchBarResultState.Results(aMatrixUserList().map { UserSearchResult(it) }.toImmutableList()),
+                selectedUsers = aMatrixUserList().toImmutableList(),
+                searchResults = SearchBarResultState.Results(aListOfSelectedUsers()),
             ),
             aUserListState().copy(
                 isSearchActive = true,
                 searchQuery = "@someone:matrix.org",
                 selectionMode = SelectionMode.Multiple,
-                selectedUsers = aListOfSelectedUsers(),
-                searchResults = SearchBarResultState.Results(aMatrixUserList().map { UserSearchResult(it) }.toImmutableList()),
+                selectedUsers = aMatrixUserList().toImmutableList(),
+                searchResults = SearchBarResultState.Results(aListOfSelectedUsers()),
             ),
             aUserListState().copy(
                 isSearchActive = true,

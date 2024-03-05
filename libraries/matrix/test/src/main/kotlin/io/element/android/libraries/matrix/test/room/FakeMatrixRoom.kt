@@ -40,6 +40,7 @@ import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.api.room.StateEventType
 import io.element.android.libraries.matrix.api.room.location.AssetType
+import io.element.android.libraries.matrix.api.room.powerlevels.UserRoleChange
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
 import io.element.android.libraries.matrix.api.timeline.ReceiptType
 import io.element.android.libraries.matrix.api.timeline.item.event.EventTimelineItem
@@ -54,11 +55,14 @@ import io.element.android.libraries.matrix.test.notificationsettings.FakeNotific
 import io.element.android.libraries.matrix.test.timeline.FakeMatrixTimeline
 import io.element.android.libraries.matrix.test.widget.FakeWidgetDriver
 import io.element.android.tests.testutils.simulateLongTask
+import kotlinx.collections.immutable.ImmutableMap
+import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import java.io.File
 
@@ -86,6 +90,7 @@ class FakeMatrixRoom(
     private var unignoreResult: Result<Unit> = Result.success(Unit)
     private var userDisplayNameResult = Result.success<String?>(null)
     private var userAvatarUrlResult = Result.success<String?>(null)
+    private var userRoleResult = Result.success(RoomMember.Role.USER)
     private var updateMembersResult: Result<Unit> = Result.success(Unit)
     private var joinRoomResult = Result.success(Unit)
     private var inviteUserResult = Result.success(Unit)
@@ -100,6 +105,7 @@ class FakeMatrixRoom(
     private var setTopicResult = Result.success(Unit)
     private var updateAvatarResult = Result.success(Unit)
     private var removeAvatarResult = Result.success(Unit)
+    private var updateUserRoleResult = Result.success(Unit)
     private var toggleReactionResult = Result.success(Unit)
     private var retrySendMessageResult = Result.success(Unit)
     private var cancelSendResult = Result.success(Unit)
@@ -170,7 +176,7 @@ class FakeMatrixRoom(
     private var leaveRoomError: Throwable? = null
 
     private val _roomInfoFlow: MutableSharedFlow<MatrixRoomInfo> = MutableSharedFlow(replay = 1)
-    override val roomInfoFlow: Flow<MatrixRoomInfo> = _roomInfoFlow
+    override val roomInfoFlow: SharedFlow<MatrixRoomInfo> = _roomInfoFlow
 
     private val _roomTypingMembersFlow: MutableSharedFlow<List<UserId>> = MutableSharedFlow(replay = 1)
     override val roomTypingMembersFlow: Flow<List<UserId>> = _roomTypingMembersFlow
@@ -204,6 +210,14 @@ class FakeMatrixRoom(
 
     override suspend fun userAvatarUrl(userId: UserId): Result<String?> = simulateLongTask {
         userAvatarUrlResult
+    }
+
+    override suspend fun userRole(userId: UserId): Result<RoomMember.Role> {
+        return userRoleResult
+    }
+
+    override suspend fun updateUsersRoles(changes: List<UserRoleChange>): Result<Unit> {
+        return updateUserRoleResult
     }
 
     override suspend fun sendMessage(body: String, htmlBody: String?, mentions: List<Mention>) = simulateLongTask {
@@ -496,6 +510,14 @@ class FakeMatrixRoom(
         userAvatarUrlResult = avatarUrl
     }
 
+    fun givenUserRoleResult(role: Result<RoomMember.Role>) {
+        userRoleResult = role
+    }
+
+    fun givenUpdateUserRoleResult(result: Result<Unit>) {
+        updateUserRoleResult = result
+    }
+
     fun givenJoinRoomResult(result: Result<Unit>) {
         joinRoomResult = result
     }
@@ -668,6 +690,7 @@ fun aRoomInfo(
     notificationCount: Long = 0,
     userDefinedNotificationMode: RoomNotificationMode? = null,
     hasRoomCall: Boolean = false,
+    userPowerLevels: ImmutableMap<UserId, Long> = persistentMapOf(),
     activeRoomCallParticipants: List<String> = emptyList()
 ) = MatrixRoomInfo(
     id = id,
@@ -691,5 +714,6 @@ fun aRoomInfo(
     notificationCount = notificationCount,
     userDefinedNotificationMode = userDefinedNotificationMode,
     hasRoomCall = hasRoomCall,
+    userPowerLevels = userPowerLevels,
     activeRoomCallParticipants = activeRoomCallParticipants.toImmutableList(),
 )

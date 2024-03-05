@@ -40,7 +40,7 @@ import io.element.android.libraries.designsystem.theme.components.HorizontalDivi
 import io.element.android.libraries.designsystem.theme.components.SearchBar
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
 import io.element.android.libraries.matrix.api.user.MatrixUser
-import io.element.android.libraries.matrix.ui.components.SelectedUsersList
+import io.element.android.libraries.matrix.ui.components.SelectedUsersRowList
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.libraries.usersearch.api.UserSearchResult
 import kotlinx.collections.immutable.ImmutableList
@@ -92,7 +92,7 @@ fun SearchUserBar(
                     animationSpec = spring(stiffness = Spring.StiffnessMediumLow)
                 )
 
-                SelectedUsersList(
+                SelectedUsersRowList(
                     contentPadding = PaddingValues(16.dp),
                     selectedUsers = selectedUsers,
                     autoScroll = true,
@@ -114,7 +114,7 @@ fun SearchUserBar(
                         SearchMultipleUsersResultItem(
                             modifier = Modifier.fillMaxWidth(),
                             searchResult = searchResult,
-                            isUserSelected = selectedUsers.find { it.userId == searchResult.matrixUser.userId } != null,
+                            isUserSelected = selectedUsers.contains(searchResult.matrixUser),
                             onCheckedChange = { checked ->
                                 if (checked) {
                                     onUserSelected(searchResult.matrixUser)

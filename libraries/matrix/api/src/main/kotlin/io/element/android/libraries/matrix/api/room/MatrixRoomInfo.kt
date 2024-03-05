@@ -17,8 +17,10 @@
 package io.element.android.libraries.matrix.api.room
 
 import androidx.compose.runtime.Immutable
+import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.item.event.EventTimelineItem
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.ImmutableMap
 
 @Immutable
 data class MatrixRoomInfo(
@@ -39,6 +41,7 @@ data class MatrixRoomInfo(
     val activeMembersCount: Long,
     val invitedMembersCount: Long,
     val joinedMembersCount: Long,
+    val userPowerLevels: ImmutableMap<UserId, Long>,
     val highlightCount: Long,
     val notificationCount: Long,
     val userDefinedNotificationMode: RoomNotificationMode?,
