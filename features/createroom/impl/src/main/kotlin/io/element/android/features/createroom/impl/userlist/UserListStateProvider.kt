@@ -19,7 +19,6 @@ package io.element.android.features.createroom.impl.userlist
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
 import io.element.android.libraries.matrix.ui.components.aMatrixUserList
-import io.element.android.libraries.usersearch.api.UserSearchResult
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 
@@ -29,7 +28,7 @@ open class UserListStateProvider : PreviewParameterProvider<UserListState> {
             aUserListState(),
             aUserListState().copy(
                 isSearchActive = false,
-                selectedUsers = aMatrixUserList().toImmutableList(),
+                selectedUsers = aListOfSelectedUsers(),
                 selectionMode = SelectionMode.Multiple,
             ),
             aUserListState().copy(isSearchActive = true),
@@ -39,14 +38,14 @@ open class UserListStateProvider : PreviewParameterProvider<UserListState> {
                 isSearchActive = true,
                 searchQuery = "@someone:matrix.org",
                 selectedUsers = aMatrixUserList().toImmutableList(),
-                searchResults = SearchBarResultState.Results(aMatrixUserList().map { UserSearchResult(it) }.toImmutableList()),
+                searchResults = SearchBarResultState.Results(aListOfSelectedUsers()),
             ),
             aUserListState().copy(
                 isSearchActive = true,
                 searchQuery = "@someone:matrix.org",
                 selectionMode = SelectionMode.Multiple,
                 selectedUsers = aMatrixUserList().toImmutableList(),
-                searchResults = SearchBarResultState.Results(aMatrixUserList().map { UserSearchResult(it) }.toImmutableList()),
+                searchResults = SearchBarResultState.Results(aListOfSelectedUsers()),
             ),
             aUserListState().copy(
                 isSearchActive = true,
@@ -66,3 +65,5 @@ fun aUserListState() = UserListState(
     showSearchLoader = false,
     eventSink = {}
 )
+
+fun aListOfSelectedUsers() = aMatrixUserList().take(6).toImmutableList()
