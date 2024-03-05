@@ -20,6 +20,7 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.features.rageshake.api.reporter.BugReporterListener
 import io.element.android.features.rageshake.test.crash.FakeCrashDataStore
 import io.element.android.features.rageshake.test.screenshot.FakeScreenshotHolder
+import io.element.android.libraries.matrix.test.FakeSdkMetadata
 import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.network.useragent.DefaultUserAgentProvider
 import io.element.android.libraries.sessionstorage.impl.memory.InMemorySessionStore
@@ -150,11 +151,12 @@ class DefaultBugReporterTest {
             userAgentProvider = DefaultUserAgentProvider(buildMeta),
             sessionStore = InMemorySessionStore(),
             buildMeta = buildMeta,
-            bugReporterUrlProvider = { server.url("/") }
+            bugReporterUrlProvider = { server.url("/") },
+            sdkMetadata = FakeSdkMetadata("123456789"),
         )
     }
 
     companion object {
-        private const val EXPECTED_NUMBER_OF_PROGRESS_VALUE = 12
+        private const val EXPECTED_NUMBER_OF_PROGRESS_VALUE = 15
     }
 }
