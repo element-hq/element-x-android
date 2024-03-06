@@ -62,7 +62,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import java.io.File
 
@@ -180,7 +179,7 @@ class FakeMatrixRoom(
     private var leaveRoomError: Throwable? = null
 
     private val _roomInfoFlow: MutableSharedFlow<MatrixRoomInfo> = MutableSharedFlow(replay = 1)
-    override val roomInfoFlow: SharedFlow<MatrixRoomInfo> = _roomInfoFlow
+    override val roomInfoFlow: Flow<MatrixRoomInfo> = _roomInfoFlow
 
     private val _roomTypingMembersFlow: MutableSharedFlow<List<UserId>> = MutableSharedFlow(replay = 1)
     override val roomTypingMembersFlow: Flow<List<UserId>> = _roomTypingMembersFlow

@@ -37,7 +37,6 @@ import io.element.android.libraries.matrix.api.widget.MatrixWidgetSettings
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -63,7 +62,7 @@ interface MatrixRoom : Closeable {
     /** Whether the room is a direct message. */
     val isDm: Boolean get() = isDirect && isOneToOne
 
-    val roomInfoFlow: SharedFlow<MatrixRoomInfo>
+    val roomInfoFlow: Flow<MatrixRoomInfo>
     val roomTypingMembersFlow: Flow<List<UserId>>
 
     /**
