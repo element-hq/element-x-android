@@ -37,7 +37,7 @@ data class RoomDetailsState(
     val leaveRoomState: LeaveRoomState,
     val roomNotificationSettings: RoomNotificationSettings?,
     val isFavorite: Boolean,
-    val displayAdminSettings: Boolean,
+    val displayRolesAndPermissionsSettings: Boolean,
     val eventSink: (RoomDetailsEvent) -> Unit
 )
 
