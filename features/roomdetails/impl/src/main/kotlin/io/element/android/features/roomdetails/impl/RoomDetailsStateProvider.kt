@@ -110,7 +110,7 @@ fun aRoomDetailsState(
     leaveRoomState = leaveRoomState,
     roomNotificationSettings = roomNotificationSettings,
     isFavorite = isFavorite,
-    displayAdminSettings = displayAdminSettings,
+    displayRolesAndPermissionsSettings = displayAdminSettings,
     eventSink = eventSink
 )
 

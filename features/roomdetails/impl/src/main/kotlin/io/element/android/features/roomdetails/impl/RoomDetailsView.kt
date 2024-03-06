@@ -176,7 +176,7 @@ fun RoomDetailsView(
                     }
                 )
 
-                if (state.displayAdminSettings) {
+                if (state.displayRolesAndPermissionsSettings) {
                     ListItem(
                         headlineContent = { Text("Roles and permissions") },
                         leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Admin())),
