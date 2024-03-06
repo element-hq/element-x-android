@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright (c) 2024 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,12 +14,14 @@
  * limitations under the License.
  */
 
-package io.element.android.features.roomdetails.impl.members
+package io.element.android.features.roomdetails.impl.members.moderation
 
 import io.element.android.libraries.matrix.api.room.RoomMember
 
-sealed interface RoomMemberListEvents {
-    data class UpdateSearchQuery(val query: String) : RoomMemberListEvents
-    data class OnSearchActiveChanged(val active: Boolean) : RoomMemberListEvents
-    data class RoomMemberSelected(val roomMember: RoomMember) : RoomMemberListEvents
+sealed interface RoomMembersModerationEvents {
+    data class SelectRoomMember(val roomMember: RoomMember) : RoomMembersModerationEvents
+    data object KickUser : RoomMembersModerationEvents
+    data object BanUser : RoomMembersModerationEvents
+    data object UnbanUser : RoomMembersModerationEvents
+    data object Reset : RoomMembersModerationEvents
 }

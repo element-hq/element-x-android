@@ -24,6 +24,7 @@ import io.element.android.tests.testutils.simulateLongTask
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.getAndUpdate
@@ -59,6 +60,8 @@ class FakeMatrixTimeline(
     override suspend fun paginateBackwards(requestSize: Int) = paginateBackwards()
     override suspend fun paginateBackwards(requestSize: Int, untilNumberOfItems: Int) = paginateBackwards()
 
+    override val membershipChangeEventReceived = MutableSharedFlow<Unit>()
+
     private suspend fun paginateBackwards(): Result<Unit> {
         updatePaginationState {
             copy(isBackPaginating = true)
@@ -71,6 +74,10 @@ class FakeMatrixTimeline(
             timelineItems
         }
         return Result.success(Unit)
+    }
+
+    fun givenMembershipChangeEventReceived() {
+        membershipChangeEventReceived.tryEmit(Unit)
     }
 
     override suspend fun fetchDetailsForEvent(eventId: EventId): Result<Unit> = simulateLongTask {

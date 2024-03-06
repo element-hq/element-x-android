@@ -47,6 +47,7 @@ enum class AvatarSize(val dp: Dp) {
     InviteSender(16.dp),
 
     EditRoomDetails(70.dp),
+    RoomListManageUser(70.dp),
 
     NotificationsOptIn(32.dp),
 

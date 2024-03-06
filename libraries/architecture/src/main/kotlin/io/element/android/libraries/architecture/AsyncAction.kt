@@ -79,9 +79,9 @@ sealed interface AsyncAction<out T> {
 
     fun isUninitialized(): Boolean = this == Uninitialized
 
-    fun isConfirming(): Boolean = this is Confirming
+    fun isConfirming(): Boolean = this == Confirming
 
-    fun isLoading(): Boolean = this is Loading
+    fun isLoading(): Boolean = this == Loading
 
     fun isFailure(): Boolean = this is Failure
 

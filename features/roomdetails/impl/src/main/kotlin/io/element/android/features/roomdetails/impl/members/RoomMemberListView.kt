@@ -34,6 +34,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -46,6 +47,8 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.roomdetails.impl.R
+import io.element.android.features.roomdetails.impl.members.moderation.RoomMembersModerationView
+import io.element.android.features.roomdetails.impl.members.moderation.aRoomMembersModerationState
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.button.BackButton
@@ -76,14 +79,12 @@ private enum class SelectedSection {
 @Composable
 fun RoomMemberListView(
     state: RoomMemberListState,
-    onBackPressed: () -> Unit,
-    onInvitePressed: () -> Unit,
-    onMemberSelected: (UserId) -> Unit,
+    navigator: RoomMemberListNavigator,
     modifier: Modifier = Modifier,
     initialSelectedSectionIndex: Int = 0,
 ) {
     fun onUserSelected(roomMember: RoomMember) {
-        onMemberSelected(roomMember.userId)
+        state.eventSink(RoomMemberListEvents.RoomMemberSelected(roomMember))
     }
 
     Scaffold(
@@ -92,13 +93,18 @@ fun RoomMemberListView(
             if (!state.isSearchActive) {
                 RoomMemberListTopBar(
                     canInvite = state.canInvite,
-                    onBackPressed = onBackPressed,
-                    onInvitePressed = onInvitePressed,
+                    onBackPressed = navigator::exitRoomMemberList,
+                    onInvitePressed = navigator::openInviteMembers,
                 )
             }
         }
     ) { padding ->
         var selectedSection by remember { mutableStateOf(SelectedSection.entries[initialSelectedSectionIndex]) }
+        if (!state.moderationState.canDisplayBannedUsers && selectedSection == SelectedSection.BANNED) {
+            SideEffect {
+                selectedSection = SelectedSection.MEMBERS
+            }
+        }
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -123,7 +129,7 @@ fun RoomMemberListView(
                     RoomMemberList(
                         roomMembers = state.roomMembers.data,
                         showMembersCount = true,
-                        canDisplayBannedUsersControls = state.canDisplayBannedUsers,
+                        canDisplayBannedUsersControls = state.moderationState.canDisplayBannedUsers,
                         selectedSection = selectedSection,
                         onSelectedSectionChanged = { selectedSection = it },
                         onUserSelected = ::onUserSelected,
@@ -136,6 +142,11 @@ fun RoomMemberListView(
             }
         }
     }
+
+    RoomMembersModerationView(
+        state = state.moderationState,
+        onDisplayMemberProfile = navigator::openRoomMemberDetails
+    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
@@ -328,9 +339,7 @@ private fun RoomMemberSearchBar(
 internal fun RoomMemberListPreview(@PreviewParameter(RoomMemberListStateProvider::class) state: RoomMemberListState) = ElementPreview {
     RoomMemberListView(
         state = state,
-        onBackPressed = {},
-        onMemberSelected = {},
-        onInvitePressed = {},
+        navigator = object : RoomMemberListNavigator {},
     )
 }
 
@@ -351,10 +360,8 @@ internal fun RoomMemberBannedListPreview() = ElementPreview {
                     ),
                 )
             ),
-            canDisplayBannedUsers = true,
+            moderationState = aRoomMembersModerationState(canDisplayBannedUsers = true),
         ),
-        onBackPressed = {},
-        onMemberSelected = {},
-        onInvitePressed = {},
+        navigator = object : RoomMemberListNavigator {},
     )
 }

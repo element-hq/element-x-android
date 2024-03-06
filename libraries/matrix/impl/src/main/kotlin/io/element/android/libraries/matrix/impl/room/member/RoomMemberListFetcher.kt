@@ -65,7 +65,7 @@ internal class RoomMemberListFetcher(
                     if (_membersFlow.value !is MatrixRoomMembersState.Ready) {
                         fetchCachedRoomMembers()
                     } else {
-                        Timber.i("No need to load cached members found for room $roomId")
+                        Timber.i("Cached members not found for $roomId")
                     }
                 }
 

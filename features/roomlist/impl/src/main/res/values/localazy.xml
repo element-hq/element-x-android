@@ -20,7 +20,7 @@ For now, you can deselect filters in order to see your other chats"</string>
   <string name="screen_roomlist_filter_rooms_empty_state_title">"You’re not in any room yet"</string>
   <string name="screen_roomlist_filter_unreads">"Unreads"</string>
   <string name="screen_roomlist_filter_unreads_empty_state_title">"Congrats!
-You don’t have any unread message!"</string>
+You don’t have any unread messages!"</string>
   <string name="screen_roomlist_main_space_title">"Chats"</string>
   <string name="screen_roomlist_mark_as_read">"Mark as read"</string>
   <string name="screen_roomlist_mark_as_unread">"Mark as unread"</string>

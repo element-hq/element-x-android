@@ -114,6 +114,8 @@ class RustMatrixTimeline(
             )
         }
 
+    override val membershipChangeEventReceived: Flow<Unit> = timelineDiffProcessor.membershipChangeEventReceived
+
     init {
         Timber.d("Initialize timeline for room ${matrixRoom.roomId}")
 

@@ -193,7 +193,7 @@ class AsyncIndicatorTests {
                 currentAnimationState = TransitionStateSnapshot(transitionState),
             )
         }.test {
-            var firstItem: Any? = null
+            var firstItem: Any?
             skipItems(1)
             state.enqueue(composable = {})
             state.enqueue(composable = {})

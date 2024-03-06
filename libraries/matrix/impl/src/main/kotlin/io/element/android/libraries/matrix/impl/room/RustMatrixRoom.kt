@@ -70,6 +70,8 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -158,6 +160,12 @@ class RustMatrixRoom(
     override val membersStateFlow: StateFlow<MatrixRoomMembersState> = roomMemberListFetcher.membersFlow
 
     override val syncUpdateFlow: StateFlow<Long> = _syncUpdateFlow.asStateFlow()
+
+    init {
+        timeline.membershipChangeEventReceived
+            .onEach { roomMemberListFetcher.fetchRoomMembers() }
+            .launchIn(roomCoroutineScope)
+    }
 
     override suspend fun subscribeToSync() = roomSyncSubscriber.subscribe(roomId)
 
@@ -340,6 +348,12 @@ class RustMatrixRoom(
         }
     }
 
+    override suspend fun canUserKick(userId: UserId): Result<Boolean> {
+        return runCatching {
+            innerRoom.canUserKick(userId.value)
+        }
+    }
+
     override suspend fun canUserBan(userId: UserId): Result<Boolean> {
         return runCatching {
             innerRoom.canUserBan(userId.value)
@@ -466,6 +480,24 @@ class RustMatrixRoom(
             if (blockUserId != null) {
                 innerRoom.ignoreUser(blockUserId.value)
             }
+        }
+    }
+
+    override suspend fun kickUser(userId: UserId, reason: String?): Result<Unit> = withContext(roomDispatcher) {
+        runCatching {
+            innerRoom.kickUser(userId.value, reason)
+        }
+    }
+
+    override suspend fun banUser(userId: UserId, reason: String?): Result<Unit> = withContext(roomDispatcher) {
+        runCatching {
+            innerRoom.banUser(userId.value, reason)
+        }
+    }
+
+    override suspend fun unbanUser(userId: UserId, reason: String?): Result<Unit> = withContext(roomDispatcher) {
+        runCatching {
+            innerRoom.unbanUser(userId.value, reason)
         }
     }
 
