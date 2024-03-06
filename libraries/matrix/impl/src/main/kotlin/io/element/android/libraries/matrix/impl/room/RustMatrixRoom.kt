@@ -66,13 +66,10 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.EventTimelineItem
@@ -111,7 +108,7 @@ class RustMatrixRoom(
 ) : MatrixRoom {
     override val roomId = RoomId(innerRoom.id())
 
-    override val roomInfoFlow: SharedFlow<MatrixRoomInfo> = mxCallbackFlow {
+    override val roomInfoFlow: Flow<MatrixRoomInfo> = mxCallbackFlow {
         launch {
             val initial = innerRoom.roomInfo().use(matrixRoomInfoMapper::map)
             channel.trySend(initial)
@@ -122,7 +119,6 @@ class RustMatrixRoom(
             }
         })
     }
-        .shareIn(sessionCoroutineScope, SharingStarted.Eagerly, replay = 1)
 
     override val roomTypingMembersFlow: Flow<List<UserId>> = mxCallbackFlow {
         launch {
