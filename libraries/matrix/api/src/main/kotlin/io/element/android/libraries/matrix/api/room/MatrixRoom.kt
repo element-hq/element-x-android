@@ -140,6 +140,8 @@ interface MatrixRoom : Closeable {
 
     suspend fun canUserInvite(userId: UserId): Result<Boolean>
 
+    suspend fun canUserKick(userId: UserId): Result<Boolean>
+
     suspend fun canUserBan(userId: UserId): Result<Boolean>
 
     suspend fun canUserRedactOwn(userId: UserId): Result<Boolean>
@@ -176,6 +178,12 @@ interface MatrixRoom : Closeable {
     suspend fun setTopic(topic: String): Result<Unit>
 
     suspend fun reportContent(eventId: EventId, reason: String, blockUserId: UserId?): Result<Unit>
+
+    suspend fun kickUser(userId: UserId, reason: String? = null): Result<Unit>
+
+    suspend fun banUser(userId: UserId, reason: String? = null): Result<Unit>
+
+    suspend fun unbanUser(userId: UserId, reason: String? = null): Result<Unit>
 
     suspend fun setIsFavorite(isFavorite: Boolean): Result<Unit>
 

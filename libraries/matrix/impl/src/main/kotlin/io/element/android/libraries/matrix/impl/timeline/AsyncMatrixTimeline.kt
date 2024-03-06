@@ -27,6 +27,7 @@ import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.launchIn
@@ -55,6 +56,8 @@ class AsyncMatrixTimeline(
     }
     private val closeSignal = CompletableDeferred<Unit>()
 
+    override val membershipChangeEventReceived = MutableSharedFlow<Unit>(extraBufferCapacity = 1)
+
     init {
         coroutineScope.launch {
             val delegateTimeline = timeline.await()
@@ -63,6 +66,9 @@ class AsyncMatrixTimeline(
                 .launchIn(this)
             delegateTimeline.paginationState
                 .onEach { _paginationState.value = it }
+                .launchIn(this)
+            delegateTimeline.membershipChangeEventReceived
+                .onEach { membershipChangeEventReceived.emit(it) }
                 .launchIn(this)
 
             launch {

@@ -26,6 +26,11 @@ import io.element.android.libraries.matrix.api.room.StateEventType
 suspend fun MatrixRoom.canInvite(): Result<Boolean> = canUserInvite(sessionId)
 
 /**
+ * Shortcut for calling [MatrixRoom.canUserKick] with our own user.
+ */
+suspend fun MatrixRoom.canKick(): Result<Boolean> = canUserKick(sessionId)
+
+/**
  * Shortcut for calling [MatrixRoom.canBanUser] with our own user.
  */
 suspend fun MatrixRoom.canBan(): Result<Boolean> = canUserBan(sessionId)

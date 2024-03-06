@@ -17,6 +17,9 @@
 package io.element.android.libraries.matrix.impl.timeline
 
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
+import io.element.android.libraries.matrix.api.timeline.item.event.RoomMembershipContent
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -30,6 +33,9 @@ internal class MatrixTimelineDiffProcessor(
     private val timelineItemFactory: MatrixTimelineItemMapper,
 ) {
     private val mutex = Mutex()
+
+    private val _membershipChangeEventReceived = MutableSharedFlow<Unit>(extraBufferCapacity = 1)
+    val membershipChangeEventReceived: Flow<Unit> = _membershipChangeEventReceived
 
     suspend fun postItems(items: List<TimelineItem>) {
         updateTimelineItems {
@@ -63,6 +69,11 @@ internal class MatrixTimelineDiffProcessor(
             }
             TimelineChange.PUSH_BACK -> {
                 val item = diff.pushBack()?.asMatrixTimelineItem() ?: return
+                if (item is MatrixTimelineItem.Event && item.event.content is RoomMembershipContent) {
+                    // TODO - This is a temporary solution to notify the room screen about membership changes
+                    // Ideally, this should be implemented by the Rust SDK
+                    _membershipChangeEventReceived.tryEmit(Unit)
+                }
                 add(item)
             }
             TimelineChange.PUSH_FRONT -> {

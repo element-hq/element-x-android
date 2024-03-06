@@ -47,3 +47,9 @@ inline fun <R, T> Result<T>.flatMapCatching(transform: (T) -> Result<R>): Result
         onFailure = { Result.failure(it) }
     )
 }
+
+inline fun <T> Result<T>.finally(block: (exception: Throwable?) -> Unit): Result<T> {
+    onSuccess { block(null) }
+    onFailure(block)
+    return this
+}

@@ -95,6 +95,7 @@ class FakeMatrixRoom(
     private var joinRoomResult = Result.success(Unit)
     private var inviteUserResult = Result.success(Unit)
     private var canInviteResult = Result.success(true)
+    private var canKickResult = Result.success(false)
     private var canBanResult = Result.success(false)
     private var canRedactOwnResult = Result.success(canRedactOwn)
     private var canRedactOtherResult = Result.success(canRedactOther)
@@ -111,6 +112,9 @@ class FakeMatrixRoom(
     private var cancelSendResult = Result.success(Unit)
     private var forwardEventResult = Result.success(Unit)
     private var reportContentResult = Result.success(Unit)
+    private var kickUserResult = Result.success(Unit)
+    private var banUserResult = Result.success(Unit)
+    private var unBanUserResult = Result.success(Unit)
     private var sendLocationResult = Result.success(Unit)
     private var createPollResult = Result.success(Unit)
     private var editPollResult = Result.success(Unit)
@@ -299,6 +303,10 @@ class FakeMatrixRoom(
         return canBanResult
     }
 
+    override suspend fun canUserKick(userId: UserId): Result<Boolean> {
+        return canKickResult
+    }
+
     override suspend fun canUserInvite(userId: UserId): Result<Boolean> {
         return canInviteResult
     }
@@ -396,6 +404,18 @@ class FakeMatrixRoom(
     ): Result<Unit> = simulateLongTask {
         reportedContentCount++
         return reportContentResult
+    }
+
+    override suspend fun kickUser(userId: UserId, reason: String?): Result<Unit> {
+        return kickUserResult
+    }
+
+    override suspend fun banUser(userId: UserId, reason: String?): Result<Unit> {
+        return banUserResult
+    }
+
+    override suspend fun unbanUser(userId: UserId, reason: String?): Result<Unit> {
+        return unBanUserResult
     }
 
     val setIsFavoriteCalls = mutableListOf<Boolean>()
@@ -522,6 +542,10 @@ class FakeMatrixRoom(
         joinRoomResult = result
     }
 
+    fun givenCanKickResult(result: Result<Boolean>) {
+        canKickResult = result
+    }
+
     fun givenCanBanResult(result: Result<Boolean>) {
         canBanResult = result
     }
@@ -596,6 +620,18 @@ class FakeMatrixRoom(
 
     fun givenReportContentResult(result: Result<Unit>) {
         reportContentResult = result
+    }
+
+    fun givenKickUserResult(result: Result<Unit>) {
+        kickUserResult = result
+    }
+
+    fun givenBanUserResult(result: Result<Unit>) {
+        banUserResult = result
+    }
+
+    fun givenUnbanUserResult(result: Result<Unit>) {
+        unBanUserResult = result
     }
 
     fun givenSendLocationResult(result: Result<Unit>) {
