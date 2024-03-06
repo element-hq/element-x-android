@@ -35,6 +35,7 @@ import io.element.android.libraries.matrix.api.room.RoomMembershipState
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.A_USER_ID_2
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
+import io.element.android.libraries.matrix.test.room.aRoomInfo
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.test.TestScope
@@ -42,6 +43,40 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
 class DefaultRoomMembersModerationPresenterTests {
+    @Test
+    fun `canDisplayModerationActions - when feature flag is disabled returns false`() = runTest {
+        val featureFlagService = FakeFeatureFlagService(initialState = mapOf(FeatureFlags.RoomModeration.key to false))
+        val presenter = createDefaultRoomMembersModerationPresenter(featureFlagService = featureFlagService)
+        assertThat(presenter.canDisplayModerationActions()).isFalse()
+    }
+
+    @Test
+    fun `canDisplayModerationActions - when room is DM is false`() = runTest {
+        val room = FakeMatrixRoom(isDirect = true, isPublic = true, isOneToOne = true).apply {
+            givenRoomInfo(aRoomInfo(isDirect = true, isPublic = false, activeMembersCount = 2))
+        }
+        val presenter = createDefaultRoomMembersModerationPresenter(matrixRoom = room)
+        assertThat(presenter.canDisplayModerationActions()).isFalse()
+    }
+
+    @Test
+    fun `canDisplayModerationActions - when user can kick other users, FF is enabled and room is not a DM returns true`() = runTest {
+        val room = FakeMatrixRoom(isDirect = false, isOneToOne = false).apply {
+            givenCanKickResult(Result.success(true))
+        }
+        val presenter = createDefaultRoomMembersModerationPresenter(matrixRoom = room)
+        assertThat(presenter.canDisplayModerationActions()).isTrue()
+    }
+
+    @Test
+    fun `canDisplayModerationActions - when user can ban other users, FF is enabled and room is not a DM returns true`() = runTest {
+        val room = FakeMatrixRoom(isDirect = false, isOneToOne = false).apply {
+            givenCanBanResult(Result.success(true))
+        }
+        val presenter = createDefaultRoomMembersModerationPresenter(matrixRoom = room)
+        assertThat(presenter.canDisplayModerationActions()).isTrue()
+    }
+
     @Test
     fun `present - SelectRoomMember when the current user has permissions displays member actions`() = runTest {
         val room = FakeMatrixRoom().apply {

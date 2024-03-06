@@ -64,6 +64,19 @@ class RoomMembersModerationStatePreviewProvider : PreviewParameterProvider<RoomM
                 banUserAsyncAction = AsyncAction.Failure(Exception("Failed to ban user")),
                 unbanUserAsyncAction = AsyncAction.Failure(Exception("Failed to unban user")),
             ),
+            aRoomMembersModerationState(
+                selectedRoomMember = anAlice(),
+                banUserAsyncAction = AsyncAction.Confirming,
+            ),
+            aRoomMembersModerationState(
+                selectedRoomMember = anAlice(),
+                unbanUserAsyncAction = AsyncAction.Confirming,
+            ),
+            aRoomMembersModerationState(
+                kickUserAsyncAction = AsyncAction.Success(Unit),
+                banUserAsyncAction = AsyncAction.Success(Unit),
+                unbanUserAsyncAction = AsyncAction.Success(Unit),
+            ),
         )
 }
 
