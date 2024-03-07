@@ -3,6 +3,7 @@
 import os
 import re
 import sys
+from util import compare
 
 # Read all arguments and return a list of them, this are the languages list.
 def readArguments():
@@ -38,20 +39,6 @@ def detectLanguages():
     languages = [lang for lang in languages if re.match("[a-z]", lang) and lang != "en"]
     print("Detected languages: %s" % languages)
     return languages
-
-
-def compare(file1, file2):
-    __doc__ = "Compare two files, return True if different, False if identical."
-    # Compare file size
-    file1_stats = os.stat(file1)
-    file2_stats = os.stat(file2)
-    if file1_stats.st_size != file2_stats.st_size:
-        return True
-    # Compare file content
-    with open(file1, "rb") as f1, open(file2, "rb") as f2:
-        content1 = f1.read()
-        content2 = f2.read()
-        return content1 != content2
 
 
 def deleteDuplicatedScreenshots(lang):
