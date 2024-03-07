@@ -49,6 +49,7 @@ import io.element.android.features.roomdetails.impl.R
 import io.element.android.features.roomdetails.impl.members.aRoomMember
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.designsystem.components.ProgressDialog
+import io.element.android.libraries.designsystem.components.async.AsyncActionView
 import io.element.android.libraries.designsystem.components.async.AsyncIndicator
 import io.element.android.libraries.designsystem.components.async.AsyncIndicatorHost
 import io.element.android.libraries.designsystem.components.async.rememberAsyncIndicatorState
@@ -178,20 +179,19 @@ fun ChangeRolesView(
         val asyncIndicatorState = rememberAsyncIndicatorState()
         AsyncIndicatorHost(modifier = Modifier.statusBarsPadding(), asyncIndicatorState)
 
-        when (val action = state.exitState) {
-            is AsyncAction.Confirming -> {
+        AsyncActionView(
+            async = state.exitState,
+            onSuccess = { updatedOnBackPressed() },
+            confirmationDialog = {
                 ConfirmationDialog(
                     title = stringResource(CommonStrings.dialog_unsaved_changes_title),
                     content = stringResource(CommonStrings.dialog_unsaved_changes_description_android),
                     onSubmitClicked = { state.eventSink(ChangeRolesEvent.Exit) },
                     onDismiss = { state.eventSink(ChangeRolesEvent.CancelExit) }
                 )
-            }
-            is AsyncAction.Success -> {
-                LaunchedEffect(action) { updatedOnBackPressed() }
-            }
-            else -> Unit
-        }
+            },
+            onErrorDismiss = { /* Cannot happen */ },
+        )
 
         when (state.savingState) {
             is AsyncAction.Confirming -> {
