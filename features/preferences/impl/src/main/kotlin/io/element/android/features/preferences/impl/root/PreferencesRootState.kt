@@ -33,6 +33,7 @@ data class PreferencesRootState(
     val showDeveloperSettings: Boolean,
     val showLockScreenSettings: Boolean,
     val showNotificationSettings: Boolean,
+    val showBlockedUsersItem: Boolean,
     val directLogoutState: DirectLogoutState,
     val snackbarMessage: SnackbarMessage?,
 )

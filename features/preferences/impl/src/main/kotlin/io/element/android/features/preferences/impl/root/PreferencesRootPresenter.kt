@@ -22,6 +22,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import io.element.android.features.logout.api.direct.DirectLogoutPresenter
@@ -39,6 +40,8 @@ import io.element.android.libraries.matrix.api.user.getCurrentUser
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -86,6 +89,12 @@ class PreferencesRootPresenter @Inject constructor(
             mutableStateOf(null)
         }
 
+        val showBlockedUsersItem by produceState(initialValue = false) {
+            matrixClient.ignoredUsersFlow
+                .onEach { value = it.isNotEmpty() }
+                .launchIn(this)
+        }
+
         val directLogoutState = directLogoutPresenter.present()
 
         LaunchedEffect(Unit) {
@@ -106,6 +115,7 @@ class PreferencesRootPresenter @Inject constructor(
             showDeveloperSettings = showDeveloperSettings,
             showNotificationSettings = showNotificationSettings.value,
             showLockScreenSettings = showLockScreenSettings.value,
+            showBlockedUsersItem = showBlockedUsersItem,
             directLogoutState = directLogoutState,
             snackbarMessage = snackbarMessage,
         )
