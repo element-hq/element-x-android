@@ -31,7 +31,6 @@ def generateAllScreenshots(languages):
     # If languages is empty, generate all screenshots
     if len(languages) == 0:
         print("Generating all screenshots...")
-        os.system("./gradlew --stop")
         os.system("./gradlew recordPaparazziDebug -PallLanguages")
     else:
         tFile = "tests/uitests/src/test/kotlin/ui/T.kt"
