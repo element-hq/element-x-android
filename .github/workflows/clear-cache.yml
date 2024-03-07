@@ -27,7 +27,6 @@ jobs:
       - name: Configure gradle
         uses: gradle/actions/setup-gradle@v3
         with:
-          cache-read-only: ${{ github.ref != 'refs/heads/develop' }}
           gradle-home-cache-cleanup: true
 
         # This should build the project and run the tests, and the build files will be used to diff with the cache
