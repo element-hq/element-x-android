@@ -31,6 +31,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -58,10 +59,11 @@ fun ModalBottomSheet(
     windowInsets: WindowInsets = BottomSheetDefaults.windowInsets,
     content: @Composable ColumnScope.() -> Unit,
 ) {
+    val safeSheetState = if (LocalInspectionMode.current) sheetStateForPreview() else sheetState
     androidx.compose.material3.ModalBottomSheet(
         onDismissRequest = onDismissRequest,
         modifier = modifier,
-        sheetState = sheetState,
+        sheetState = safeSheetState,
         shape = shape,
         containerColor = containerColor,
         contentColor = contentColor,
@@ -102,7 +104,6 @@ private fun ContentToPreview() {
     ) {
         ModalBottomSheet(
             onDismissRequest = {},
-            sheetState = sheetStateForPreview(),
         ) {
             Text(
                 text = "Sheet Content",
