@@ -1,0 +1,167 @@
+/*
+ * Copyright (c) 2024 New Vector Ltd
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+html {
+    width: 100%;
+}
+
+body {
+  font-family: InterHosted, sans-serif;
+  margin: 0px;
+  background: #F0F0F0;
+}
+
+table, td, th {
+  border: 2px solid white;
+}
+
+table {
+  margin: 0 auto;
+  border-collapse: collapse;
+}
+
+td {
+  padding: 0px;
+  background: #DDD;
+}
+
+td.view-header {
+  background: #0DBD8B;
+  text-align: center;
+  padding: 10px;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+img {
+  padding: 2px;
+  display: block;
+}
+
+.missing {
+    text-align: center;
+}
+
+th {
+    background: #0DBD8B;
+}
+
+br {
+   display: block;
+   margin: 4px 0;
+}
+
+#form_container {
+    margin: 0px auto;
+}
+
+form {
+}
+
+label {
+    margin-left: 10px;
+    margin-right: 6px;
+}
+
+input {
+    margin-right: 8px;
+}
+
+#width_input {
+    width: 80px;
+}
+
+#screenshots_container {
+    margin-top: 80px;
+    margin-bottom: 56px;
+}
+
+.screenshot {
+    margin: 0 auto;
+    display: block;
+}
+
+#header, #footer {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    position: fixed;
+    background: #101318;
+    color: #FFF;
+    padding: 0px;
+}
+#header {
+    top: 0;
+    height: 64px;
+}
+
+.element-logo {
+    display: flex;
+    margin-left: 20px;
+}
+
+.main-title {
+    margin-left: 48px;
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-top: 5px;
+}
+
+.fullstop--green {
+    margin-left: -2px;
+    color: #0DBD8B;
+    font-family: Extratype eina02;
+}
+
+.issue-links {
+    display: flex;
+    gap: 20px;
+    margin: 0 auto;
+}
+
+.issue-link {
+    display: flex;
+    align-items: center;
+}
+
+#footer {
+    bottom: 0;
+    text-align: center;
+    height: 40px;
+}
+
+a:link {
+  color: white;
+  font-size: 14px;
+  text-decoration: none;
+  font-size: 13px;
+}
+
+a:visited {
+  color: white;
+}
+
+.img-link {
+    width: 20px;
+    height: 20px;
+}
+
+a {
+    color: white;
+    margin-left: 4px;
+    float: left;
+    text-align: center;
+    vertical-align: middle;
+}
