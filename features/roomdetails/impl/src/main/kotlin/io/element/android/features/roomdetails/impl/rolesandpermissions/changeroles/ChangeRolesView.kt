@@ -38,7 +38,6 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
@@ -50,6 +49,7 @@ import io.element.android.features.roomdetails.impl.R
 import io.element.android.features.roomdetails.impl.members.aRoomMember
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.designsystem.components.ProgressDialog
+import io.element.android.libraries.designsystem.components.async.AsyncActionView
 import io.element.android.libraries.designsystem.components.async.AsyncIndicator
 import io.element.android.libraries.designsystem.components.async.AsyncIndicatorHost
 import io.element.android.libraries.designsystem.components.async.rememberAsyncIndicatorState
@@ -179,20 +179,19 @@ fun ChangeRolesView(
         val asyncIndicatorState = rememberAsyncIndicatorState()
         AsyncIndicatorHost(modifier = Modifier.statusBarsPadding(), asyncIndicatorState)
 
-        when (state.exitState) {
-            is AsyncAction.Confirming -> {
+        AsyncActionView(
+            async = state.exitState,
+            onSuccess = { updatedOnBackPressed() },
+            confirmationDialog = {
                 ConfirmationDialog(
                     title = stringResource(CommonStrings.dialog_unsaved_changes_title),
                     content = stringResource(CommonStrings.dialog_unsaved_changes_description_android),
                     onSubmitClicked = { state.eventSink(ChangeRolesEvent.Exit) },
                     onDismiss = { state.eventSink(ChangeRolesEvent.CancelExit) }
                 )
-            }
-            is AsyncAction.Success -> {
-                SideEffect { updatedOnBackPressed() }
-            }
-            else -> Unit
-        }
+            },
+            onErrorDismiss = { /* Cannot happen */ },
+        )
 
         when (state.savingState) {
             is AsyncAction.Confirming -> {
