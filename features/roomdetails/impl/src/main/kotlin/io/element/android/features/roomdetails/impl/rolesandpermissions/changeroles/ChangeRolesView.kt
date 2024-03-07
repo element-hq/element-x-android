@@ -38,7 +38,6 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
@@ -179,7 +178,7 @@ fun ChangeRolesView(
         val asyncIndicatorState = rememberAsyncIndicatorState()
         AsyncIndicatorHost(modifier = Modifier.statusBarsPadding(), asyncIndicatorState)
 
-        when (state.exitState) {
+        when (val action = state.exitState) {
             is AsyncAction.Confirming -> {
                 ConfirmationDialog(
                     title = stringResource(CommonStrings.dialog_unsaved_changes_title),
@@ -189,7 +188,7 @@ fun ChangeRolesView(
                 )
             }
             is AsyncAction.Success -> {
-                SideEffect { updatedOnBackPressed() }
+                LaunchedEffect(action) { updatedOnBackPressed() }
             }
             else -> Unit
         }
