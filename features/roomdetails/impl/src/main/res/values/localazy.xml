@@ -32,6 +32,9 @@
   <string name="screen_room_details_share_room_title">"Share room"</string>
   <string name="screen_room_details_topic_title">"Topic"</string>
   <string name="screen_room_details_updating_room">"Updating room…"</string>
+  <string name="screen_room_member_list_ban_member_confirmation_action">"Ban"</string>
+  <string name="screen_room_member_list_ban_member_confirmation_description">"They won’t be able to join this room again if invited."</string>
+  <string name="screen_room_member_list_ban_member_confirmation_title">"Are you sure you want to ban this member?"</string>
   <string name="screen_room_member_list_banning_user">"Banning %1$s"</string>
   <plurals name="screen_room_member_list_header_title">
     <item quantity="one">"%1$d person"</item>

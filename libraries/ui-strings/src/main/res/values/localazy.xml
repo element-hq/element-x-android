@@ -57,6 +57,7 @@
   <string name="action_enter_pin">"Enter PIN"</string>
   <string name="action_forgot_password">"Forgot password?"</string>
   <string name="action_forward">"Forward"</string>
+  <string name="action_go_back">"Go back"</string>
   <string name="action_invite">"Invite"</string>
   <string name="action_invite_friends">"Invite people"</string>
   <string name="action_invite_friends_to_app">"Invite people to %1$s"</string>
@@ -113,6 +114,7 @@
   <string name="common_audio">"Audio"</string>
   <string name="common_blocked_users">"Blocked users"</string>
   <string name="common_bubbles">"Bubbles"</string>
+  <string name="common_call_invite">"Call in progress (unsupported)"</string>
   <string name="common_chat_backup">"Chat backup"</string>
   <string name="common_copyright">"Copyright"</string>
   <string name="common_creating_room">"Creating room…"</string>
@@ -181,6 +183,8 @@
   <string name="common_room">"Room"</string>
   <string name="common_room_name">"Room name"</string>
   <string name="common_room_name_placeholder">"e.g. your project name"</string>
+  <string name="common_saved_changes">"Saved changes"</string>
+  <string name="common_saving">"Saving"</string>
   <string name="common_screen_lock">"Screen lock"</string>
   <string name="common_search_for_someone">"Search for someone"</string>
   <string name="common_search_results">"Search results"</string>
@@ -223,6 +227,8 @@
   <string name="dialog_title_error">"Error"</string>
   <string name="dialog_title_success">"Success"</string>
   <string name="dialog_title_warning">"Warning"</string>
+  <string name="dialog_unsaved_changes_description_android">"Your changes have not been saved. Are you sure you want to go back?"</string>
+  <string name="dialog_unsaved_changes_title">"Save changes?"</string>
   <string name="error_failed_creating_the_permalink">"Failed creating the permalink"</string>
   <string name="error_failed_loading_map">"%1$s could not load the map. Please try again later."</string>
   <string name="error_failed_loading_messages">"Failed loading messages"</string>
