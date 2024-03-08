@@ -110,6 +110,23 @@ function getNiceName(name) {
   return name.substring(indices[2] + 1, indices[3]);
 }
 
+function createMissingImageElement() {
+    const text = document.createElement('p');
+    text.className = "missing";
+    text.textContent = 'No image';
+    return text;
+}
+
+function createImageElement(fullFile) {
+    const img = document.createElement('img');
+    img.className = "screenshot";
+    img.src = `${baseUrl}/${fullFile}`;
+    img.title = fullFile;
+    img.alt = "Missing image";
+    img.width = imageWidth;
+    return img;
+}
+
 function addTable() {
   // Remove any previous table
   document.getElementById('screenshots_container').innerHTML = '';
@@ -143,33 +160,26 @@ function addTable() {
       }
       const td = document.createElement('td');
       if (languageIndex == 0) {
-        const fullFile = `${englishBasePath}/${englishFile}.png`;
-        const img = document.createElement('img');
-        img.className = "screenshot";
-        img.src = `${baseUrl}/${fullFile}`;
-        img.title = fullFile;
-        img.alt = "Missing image";
-        img.width = imageWidth;
-        td.appendChild(img);
+        // English file
+        td.appendChild(createImageElement(`${englishBasePath}/${englishFile}.png`));
+      } else if (languageIndex == 1) {
+        // Dark English file
+        if (screenshots[screenshotIndex][1].length > 0) {
+          hasTranslatedFiles = true;
+          td.appendChild(createImageElement(`${englishBasePath}/${screenshots[screenshotIndex][1]}.png`));
+        } else {
+          td.appendChild(createMissingImageElement());
+        }
       } else {
         let hasFile = screenshots[screenshotIndex][languageIndex];
         if (hasFile === 0) {
-          const text = document.createElement('p');
-          text.className = "missing";
-          text.textContent = 'No image';
-          td.appendChild(text);
+          td.appendChild(createMissingImageElement());
         } else {
           hasTranslatedFiles = true;
           // Foreign file is the same as the english file, replacing the language
           const foreignFile = englishFile.replace("en]", `${dataLanguages[languageIndex]}]`).replace("_S_", "_T_")
           const fullForeignFile = `${dataLanguages[languageIndex]}/${foreignFile}.png`;
-          const img = document.createElement('img');
-          img.className = "screenshot";
-          img.src = `${baseUrl}/${fullForeignFile}`;
-          img.title = fullForeignFile;
-          img.alt = "Missing image";
-          img.width = imageWidth;
-          td.appendChild(img);
+          td.appendChild(createImageElement(fullForeignFile));
         }
       }
       tr.appendChild(td);
