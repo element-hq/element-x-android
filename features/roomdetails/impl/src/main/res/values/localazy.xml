@@ -102,6 +102,8 @@
   <string name="screen_room_roles_and_permissions_moderators">"Moderators"</string>
   <string name="screen_room_roles_and_permissions_permissions_header">"Permissions"</string>
   <string name="screen_room_roles_and_permissions_reset">"Reset permissions"</string>
+  <string name="screen_room_roles_and_permissions_reset_confirm_description">"Once you reset permissions, you will lose your current settings."</string>
+  <string name="screen_room_roles_and_permissions_reset_confirm_title">"Reset permissions?"</string>
   <string name="screen_room_roles_and_permissions_roles_header">"Roles"</string>
   <string name="screen_room_roles_and_permissions_room_details">"Room details"</string>
   <string name="screen_room_roles_and_permissions_title">"Roles and permissions"</string>

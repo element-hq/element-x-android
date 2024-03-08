@@ -40,6 +40,7 @@ import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.api.room.StateEventType
 import io.element.android.libraries.matrix.api.room.location.AssetType
+import io.element.android.libraries.matrix.api.room.powerlevels.MatrixRoomPowerLevels
 import io.element.android.libraries.matrix.api.room.powerlevels.UserRoleChange
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
 import io.element.android.libraries.matrix.api.timeline.ReceiptType
@@ -125,6 +126,9 @@ class FakeMatrixRoom(
     private var canUserTriggerRoomNotificationResult: Result<Boolean> = Result.success(true)
     private var canUserJoinCallResult: Result<Boolean> = Result.success(true)
     private var setIsFavoriteResult = Result.success(Unit)
+    private var powerLevelsResult = Result.success(defaultPowerLevels)
+    private var updatePowerLevelsResult = Result.success(Unit)
+    private var resetPowerLevelsResult = Result.success(defaultPowerLevels)
     var sendMessageMentions = emptyList<Mention>()
     val editMessageCalls = mutableListOf<Pair<String, String?>>()
     private val _typingRecord = mutableListOf<Boolean>()
@@ -204,6 +208,17 @@ class FakeMatrixRoom(
     override suspend fun subscribeToSync() = Unit
 
     override suspend fun unsubscribeFromSync() = Unit
+    override suspend fun powerLevels(): Result<MatrixRoomPowerLevels> {
+        return powerLevelsResult
+    }
+
+    override suspend fun updatePowerLevels(matrixRoomPowerLevels: MatrixRoomPowerLevels): Result<Unit> {
+        return updatePowerLevelsResult
+    }
+
+    override suspend fun resetPowerLevels(): Result<MatrixRoomPowerLevels> {
+        return resetPowerLevelsResult
+    }
 
     override fun destroy() = Unit
 
@@ -676,6 +691,18 @@ class FakeMatrixRoom(
     fun givenRoomTypingMembers(typingMembers: List<UserId>) {
         _roomTypingMembersFlow.tryEmit(typingMembers)
     }
+
+    fun givenPowerLevelsResult(result: Result<MatrixRoomPowerLevels>) {
+        powerLevelsResult = result
+    }
+
+    fun givenUpdatePowerLevelsResult(result: Result<Unit>) {
+        updatePowerLevelsResult = result
+    }
+
+    fun givenResetPowerLevelsResult(result: Result<MatrixRoomPowerLevels>) {
+        resetPowerLevelsResult = result
+    }
 }
 
 data class SendLocationInvocation(
@@ -751,4 +778,15 @@ fun aRoomInfo(
     hasRoomCall = hasRoomCall,
     userPowerLevels = userPowerLevels,
     activeRoomCallParticipants = activeRoomCallParticipants.toImmutableList(),
+)
+
+private val defaultPowerLevels = MatrixRoomPowerLevels(
+    ban = 50,
+    invite = 0,
+    kick = 50,
+    sendEvents = 0,
+    redactEvents = 50,
+    roomName = 100,
+    roomAvatar = 100,
+    roomTopic = 100
 )

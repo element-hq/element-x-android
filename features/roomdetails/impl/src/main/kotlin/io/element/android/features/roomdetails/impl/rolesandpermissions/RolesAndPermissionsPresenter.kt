@@ -55,6 +55,7 @@ class RolesAndPermissionsPresenter @Inject constructor(
             }
         }
         val changeOwnRoleAction = remember { mutableStateOf<AsyncAction<Unit>>(AsyncAction.Uninitialized) }
+        val resetPermissionsAction = remember { mutableStateOf<AsyncAction<Unit>>(AsyncAction.Uninitialized) }
 
         fun handleEvent(event: RolesAndPermissionsEvents) {
             when (event) {
@@ -63,11 +64,17 @@ class RolesAndPermissionsPresenter @Inject constructor(
                 }
                 is RolesAndPermissionsEvents.CancelPendingAction -> {
                     changeOwnRoleAction.value = AsyncAction.Uninitialized
+                    resetPermissionsAction.value = AsyncAction.Uninitialized
                 }
                 is RolesAndPermissionsEvents.DemoteSelfTo -> coroutineScope.demoteSelfTo(
                     role = event.role,
                     changeOwnRoleAction = changeOwnRoleAction,
                 )
+                is RolesAndPermissionsEvents.ResetPermissions -> if (resetPermissionsAction.value.isConfirming()) {
+                    coroutineScope.resetPermissions(resetPermissionsAction)
+                } else {
+                    resetPermissionsAction.value = AsyncAction.Confirming
+                }
             }
         }
 
@@ -75,6 +82,7 @@ class RolesAndPermissionsPresenter @Inject constructor(
             adminCount = adminCount,
             moderatorCount = moderatorCount,
             changeOwnRoleAction = changeOwnRoleAction.value,
+            resetPermissionsAction = resetPermissionsAction.value,
             eventSink = { handleEvent(it) },
         )
     }
@@ -85,6 +93,14 @@ class RolesAndPermissionsPresenter @Inject constructor(
     ) = launch(dispatchers.io) {
         runUpdatingState(changeOwnRoleAction) {
             room.updateUsersRoles(listOf(UserRoleChange(room.sessionId, role)))
+        }
+    }
+
+    private fun CoroutineScope.resetPermissions(
+        resetPermissionsAction: MutableState<AsyncAction<Unit>>,
+    ) = launch(dispatchers.io) {
+        runUpdatingState(resetPermissionsAction) {
+            room.resetPowerLevels().map {}
         }
     }
 

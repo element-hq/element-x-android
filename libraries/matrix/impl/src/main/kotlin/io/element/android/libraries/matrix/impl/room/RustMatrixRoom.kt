@@ -39,6 +39,7 @@ import io.element.android.libraries.matrix.api.room.MessageEventType
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.StateEventType
 import io.element.android.libraries.matrix.api.room.location.AssetType
+import io.element.android.libraries.matrix.api.room.powerlevels.MatrixRoomPowerLevels
 import io.element.android.libraries.matrix.api.room.powerlevels.UserRoleChange
 import io.element.android.libraries.matrix.api.room.roomNotificationSettings
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
@@ -54,6 +55,7 @@ import io.element.android.libraries.matrix.impl.poll.toInner
 import io.element.android.libraries.matrix.impl.room.location.toInner
 import io.element.android.libraries.matrix.impl.room.member.RoomMemberListFetcher
 import io.element.android.libraries.matrix.impl.room.member.RoomMemberMapper
+import io.element.android.libraries.matrix.impl.room.powerlevels.RoomPowerLevelsMapper
 import io.element.android.libraries.matrix.impl.timeline.RustMatrixTimeline
 import io.element.android.libraries.matrix.impl.timeline.toRustReceiptType
 import io.element.android.libraries.matrix.impl.util.mxCallbackFlow
@@ -86,6 +88,7 @@ import org.matrix.rustcomponents.sdk.messageEventContentFromHtml
 import org.matrix.rustcomponents.sdk.messageEventContentFromMarkdown
 import org.matrix.rustcomponents.sdk.use
 import timber.log.Timber
+import uniffi.matrix_sdk.RoomPowerLevelChanges
 import java.io.File
 import org.matrix.rustcomponents.sdk.Room as InnerRoom
 import org.matrix.rustcomponents.sdk.Timeline as InnerTimeline
@@ -250,6 +253,34 @@ class RustMatrixRoom(
         return runCatching {
             val powerLevelChanges = changes.map { UserPowerLevelUpdate(it.userId.value, it.powerLevel) }
             innerRoom.updatePowerLevelsForUsers(powerLevelChanges)
+        }
+    }
+
+    override suspend fun powerLevels(): Result<MatrixRoomPowerLevels> = withContext(roomDispatcher) {
+        runCatching {
+            RoomPowerLevelsMapper.map(innerRoom.getPowerLevels())
+        }
+    }
+
+    override suspend fun updatePowerLevels(matrixRoomPowerLevels: MatrixRoomPowerLevels): Result<Unit> = withContext(roomDispatcher) {
+        runCatching {
+            val changes = RoomPowerLevelChanges(
+                ban = matrixRoomPowerLevels.ban,
+                invite = matrixRoomPowerLevels.invite,
+                kick = matrixRoomPowerLevels.kick,
+                redact = matrixRoomPowerLevels.redactEvents,
+                eventsDefault = matrixRoomPowerLevels.sendEvents,
+                roomName = matrixRoomPowerLevels.roomName,
+                roomAvatar = matrixRoomPowerLevels.roomAvatar,
+                roomTopic = matrixRoomPowerLevels.roomTopic,
+            )
+            innerRoom.applyPowerLevelChanges(changes)
+        }
+    }
+
+    override suspend fun resetPowerLevels(): Result<MatrixRoomPowerLevels> = withContext(roomDispatcher) {
+        runCatching {
+            RoomPowerLevelsMapper.map(innerRoom.resetPowerLevels())
         }
     }
 

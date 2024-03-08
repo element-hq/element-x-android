@@ -650,7 +650,7 @@ class DefaultRoomLastMessageFormatterTest {
             OtherState.RoomHistoryVisibility,
             OtherState.RoomJoinRules,
             OtherState.RoomPinnedEvents,
-            OtherState.RoomPowerLevels(emptyMap()),
+            OtherState.RoomUserPowerLevels(emptyMap()),
             OtherState.RoomServerAcl,
             OtherState.RoomTombstone,
             OtherState.SpaceChild,

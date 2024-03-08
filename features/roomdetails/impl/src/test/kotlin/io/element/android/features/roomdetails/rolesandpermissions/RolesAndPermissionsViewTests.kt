@@ -21,9 +21,9 @@ import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.element.android.features.roomdetails.impl.R
+import io.element.android.features.roomdetails.impl.rolesandpermissions.RolesAndPermissionsNavigator
 import io.element.android.features.roomdetails.impl.rolesandpermissions.RolesAndPermissionsState
 import io.element.android.features.roomdetails.impl.rolesandpermissions.RolesAndPermissionsView
-import io.element.android.features.roomdetails.impl.rolesandpermissions.RoomDetailsAdminSettingsNavigator
 import io.element.android.features.roomdetails.impl.rolesandpermissions.aRolesAndPermissionsState
 import io.element.android.tests.testutils.EnsureNeverCalled
 import io.element.android.tests.testutils.EventsRecorder
@@ -81,7 +81,7 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setRoles
     setContent {
         RolesAndPermissionsView(
             state = state,
-            roomDetailsAdminSettingsNavigator = object : RoomDetailsAdminSettingsNavigator {
+            rolesAndPermissionsNavigator = object : RolesAndPermissionsNavigator {
                 override fun onBackPressed() = goBack()
                 override fun openAdminList() = openAdminList()
                 override fun openModeratorList() = openModeratorList()

@@ -33,6 +33,8 @@ import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.roomdetails.impl.R
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.designsystem.components.ProgressDialog
+import io.element.android.libraries.designsystem.components.async.AsyncActionView
+import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
 import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
 import io.element.android.libraries.designsystem.components.list.ListItemContent
 import io.element.android.libraries.designsystem.components.preferences.PreferencePage
@@ -53,34 +55,71 @@ import io.element.android.libraries.ui.strings.CommonStrings
 @Composable
 fun RolesAndPermissionsView(
     state: RolesAndPermissionsState,
-    roomDetailsAdminSettingsNavigator: RoomDetailsAdminSettingsNavigator,
+    rolesAndPermissionsNavigator: RolesAndPermissionsNavigator,
     modifier: Modifier = Modifier,
 ) {
     PreferencePage(
         modifier = modifier,
         title = stringResource(R.string.screen_room_roles_and_permissions_title),
-        onBackPressed = roomDetailsAdminSettingsNavigator::onBackPressed,
+        onBackPressed = rolesAndPermissionsNavigator::onBackPressed,
     ) {
         ListSectionHeader(title = stringResource(R.string.screen_room_roles_and_permissions_roles_header), hasDivider = false)
         ListItem(
             headlineContent = { Text(stringResource(R.string.screen_room_roles_and_permissions_admins)) },
             leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Admin())),
             trailingContent = ListItemContent.Text("${state.adminCount}"),
-            onClick = { roomDetailsAdminSettingsNavigator.openAdminList() },
+            onClick = { rolesAndPermissionsNavigator.openAdminList() },
         )
         ListItem(
             headlineContent = { Text(stringResource(R.string.screen_room_roles_and_permissions_moderators)) },
             leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.ChatProblem())),
             trailingContent = ListItemContent.Text("${state.moderatorCount}"),
-            onClick = { roomDetailsAdminSettingsNavigator.openModeratorList() },
+            onClick = { rolesAndPermissionsNavigator.openModeratorList() },
         )
         ListItem(
             headlineContent = { Text(stringResource(R.string.screen_room_roles_and_permissions_change_my_role)) },
             onClick = { state.eventSink(RolesAndPermissionsEvents.ChangeOwnRole) },
             leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Edit()))
         )
+        ListSectionHeader(title = stringResource(R.string.screen_room_roles_and_permissions_permissions_header), hasDivider = true)
+        ListItem(
+            headlineContent = { Text(stringResource(R.string.screen_room_roles_and_permissions_room_details)) },
+            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Info())),
+            onClick = { rolesAndPermissionsNavigator.openEditRoomDetailsPermissions() },
+        )
+        ListItem(
+            headlineContent = { Text(stringResource(R.string.screen_room_roles_and_permissions_messages_and_content)) },
+            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Chat())),
+            onClick = { rolesAndPermissionsNavigator.openMessagesAndContentPermissions() },
+        )
+        ListItem(
+            headlineContent = { Text(stringResource(R.string.screen_room_roles_and_permissions_member_moderation)) },
+            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.User())),
+            onClick = { rolesAndPermissionsNavigator.openModerationPermissions() },
+        )
         HorizontalDivider()
+        ListItem(
+            headlineContent = { Text(stringResource(R.string.screen_room_roles_and_permissions_reset)) },
+            onClick = { state.eventSink(RolesAndPermissionsEvents.ResetPermissions) },
+            style = ListItemStyle.Destructive,
+        )
     }
+
+    AsyncActionView(
+        async = state.resetPermissionsAction,
+        confirmationDialog = {
+            ConfirmationDialog(
+                title = stringResource(R.string.screen_room_roles_and_permissions_reset_confirm_title),
+                content = stringResource(R.string.screen_room_roles_and_permissions_reset_confirm_description),
+                submitText = stringResource(CommonStrings.action_reset),
+                destructiveSubmit = true,
+                onSubmitClicked = { state.eventSink(RolesAndPermissionsEvents.ResetPermissions) },
+                onDismiss = { state.eventSink(RolesAndPermissionsEvents.CancelPendingAction) },
+            )
+        },
+        onSuccess = { state.eventSink(RolesAndPermissionsEvents.CancelPendingAction) },
+        onErrorDismiss = { state.eventSink(RolesAndPermissionsEvents.CancelPendingAction) }
+    )
 
     when (state.changeOwnRoleAction) {
         is AsyncAction.Confirming -> {
@@ -168,11 +207,11 @@ private fun ChangeOwnRoleBottomSheet(
 
 @PreviewsDayNight
 @Composable
-internal fun RoomDetailsAdminSettingsViewPreview(@PreviewParameter(RolesAndPermissionsStateProvider::class) state: RolesAndPermissionsState) {
+internal fun RolesAndPermissionViewPreview(@PreviewParameter(RolesAndPermissionsStateProvider::class) state: RolesAndPermissionsState) {
     ElementPreview {
         RolesAndPermissionsView(
             state = state,
-            roomDetailsAdminSettingsNavigator = object : RoomDetailsAdminSettingsNavigator {},
+            rolesAndPermissionsNavigator = object : RolesAndPermissionsNavigator {},
         )
     }
 }
