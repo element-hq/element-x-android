@@ -102,7 +102,7 @@ fun aPollContentState(
     question = question,
     answerItems = answerItems,
     pollKind = pollKind,
-    isPollEditable = (isMine && !isEnded) && isPollEditable,
+    isPollEditable = isMine && !isEnded && isPollEditable,
     isPollEnded = isEnded,
     isMine = isMine,
 )
