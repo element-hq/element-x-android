@@ -15,8 +15,18 @@
  */
  import { screenshots } from './data.js';
 
+// Get the base url of the current page
+const baseUrl = window.location.href.split('/').slice(0, -1).join('/');
+// On localhost, get the English screenshots from the location `../tests/uitests/src/test/snapshots/images`
+const isLocalHost = window.location.hostname === "localhost"
+let englishBasePath
+if (isLocalHost) {
+  englishBasePath = `../tests/uitests/src/test/snapshots/images`
+} else {
+  englishBasePath = `en`
+}
+
 const dataLanguages = screenshots[0];
-const dataPaths = screenshots[1];
 
 // Read default visible languages from the fragment
 const fragment = new URLSearchParams(window.location.hash.substring(1));
@@ -100,6 +110,23 @@ function getNiceName(name) {
   return name.substring(indices[2] + 1, indices[3]);
 }
 
+function createMissingImageElement() {
+    const text = document.createElement('p');
+    text.className = "missing";
+    text.textContent = 'No image';
+    return text;
+}
+
+function createImageElement(fullFile) {
+    const img = document.createElement('img');
+    img.className = "screenshot";
+    img.src = `${baseUrl}/${fullFile}`;
+    img.title = fullFile;
+    img.alt = "Missing image";
+    img.width = imageWidth;
+    return img;
+}
+
 function addTable() {
   // Remove any previous table
   document.getElementById('screenshots_container').innerHTML = '';
@@ -121,10 +148,9 @@ function addTable() {
     languagesHeaderRow.appendChild(th);
   }
   const numVisibleLanguages = languagesHeaderRow.childElementCount
-  // Second item contains the paths
   // Next items are the data
   var currentHeaderValue = "";
-  for (let screenshotIndex = 2; screenshotIndex < screenshots.length; screenshotIndex++) {
+  for (let screenshotIndex = 1; screenshotIndex < screenshots.length; screenshotIndex++) {
     let englishFile = screenshots[screenshotIndex][0];
     const tr = document.createElement('tr');
     let hasTranslatedFiles = false;
@@ -134,33 +160,26 @@ function addTable() {
       }
       const td = document.createElement('td');
       if (languageIndex == 0) {
-        const fullFile = `${dataPaths[0]}/${englishFile}.png`;
-        const img = document.createElement('img');
-        img.className = "screenshot";
-        img.src = `../${fullFile}`;
-        img.title = fullFile;
-        img.alt = "Missing image";
-        img.width = imageWidth;
-        td.appendChild(img);
+        // English file
+        td.appendChild(createImageElement(`${englishBasePath}/${englishFile}.png`));
+      } else if (languageIndex == 1) {
+        // Dark English file
+        if (screenshots[screenshotIndex][1].length > 0) {
+          hasTranslatedFiles = true;
+          td.appendChild(createImageElement(`${englishBasePath}/${screenshots[screenshotIndex][1]}.png`));
+        } else {
+          td.appendChild(createMissingImageElement());
+        }
       } else {
         let hasFile = screenshots[screenshotIndex][languageIndex];
         if (hasFile === 0) {
-          const text = document.createElement('p');
-          text.className = "missing";
-          text.textContent = 'No image';
-          td.appendChild(text);
+          td.appendChild(createMissingImageElement());
         } else {
           hasTranslatedFiles = true;
           // Foreign file is the same as the english file, replacing the language
           const foreignFile = englishFile.replace("en]", `${dataLanguages[languageIndex]}]`).replace("_S_", "_T_")
-          const fullForeignFile = `${dataPaths[languageIndex]}/${foreignFile}.png`;
-          const img = document.createElement('img');
-          img.className = "screenshot";
-          img.src = `../${fullForeignFile}`;
-          img.title = fullForeignFile;
-          img.alt = "Missing image";
-          img.width = imageWidth;
-          td.appendChild(img);
+          const fullForeignFile = `${dataLanguages[languageIndex]}/${foreignFile}.png`;
+          td.appendChild(createImageElement(fullForeignFile));
         }
       }
       tr.appendChild(td);
