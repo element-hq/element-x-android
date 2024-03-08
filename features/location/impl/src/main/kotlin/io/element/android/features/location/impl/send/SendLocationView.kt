@@ -142,7 +142,7 @@ fun SendLocationView(
                                 lon = cameraPositionState.position.target!!.longitude,
                                 zoom = cameraPositionState.position.zoom,
                             ),
-                            cameraPositionState.location?.let {
+                            location = cameraPositionState.location?.let {
                                 Location(
                                     lat = it.latitude,
                                     lon = it.longitude,
