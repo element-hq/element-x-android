@@ -44,13 +44,14 @@ class PollHistoryStateProvider : PreviewParameterProvider<PollHistoryState> {
         )
 }
 
-private fun aPollHistoryState(
+internal fun aPollHistoryState(
     isLoading: Boolean = false,
     hasMoreToLoad: Boolean = false,
     activeFilter: PollHistoryFilter = PollHistoryFilter.ONGOING,
     currentItems: List<PollHistoryItem> = listOf(
         aPollHistoryItem(),
     ),
+    eventSink: (PollHistoryEvents) -> Unit = {},
 ) = PollHistoryState(
     isLoading = isLoading,
     hasMoreToLoad = hasMoreToLoad,
@@ -59,10 +60,10 @@ private fun aPollHistoryState(
         ongoing = currentItems.toPersistentList(),
         past = currentItems.toPersistentList(),
     ),
-    eventSink = {},
+    eventSink = eventSink,
 )
 
-private fun aPollHistoryItem(
+internal fun aPollHistoryItem(
     formattedDate: String = "01/12/2023",
     state: PollContentState = aPollContentState(),
 ) = PollHistoryItem(
