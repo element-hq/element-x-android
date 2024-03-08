@@ -106,8 +106,6 @@ def generateJavascriptFile():
     languages = detectRecordedLanguages()
     # First item is the list of languages, adding "en" at the beginning
     data = [["en"] + languages]
-    # Second item is the path of the containing file
-    data.append(["./tests/uitests/src/test/snapshots/images"] + ["./screenshots/" + l for l in languages])
     files = sorted(
         os.listdir("tests/uitests/src/test/snapshots/images/"),
         key=lambda file: file[file.find("_", 6):],

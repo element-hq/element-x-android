@@ -1,7 +1,6 @@
 // Generated file, do not edit
 export const screenshots = [
 ["en","de",],
-["./tests/uitests/src/test/snapshots/images","./screenshots/de",],
 ["ui_S_t[f.preferences.impl.about_AboutView_null_AboutView-Day-0_1_null_0,NEXUS_5,1.0,en]",1,],
 ["ui_S_t[f.login.impl.accountprovider_AccountProviderView_null_AccountProviderView-Day-0_1_null_0,NEXUS_5,1.0,en]",0,],
 ["ui_S_t[f.login.impl.accountprovider_AccountProviderView_null_AccountProviderView-Day-0_1_null_1,NEXUS_5,1.0,en]",0,],
