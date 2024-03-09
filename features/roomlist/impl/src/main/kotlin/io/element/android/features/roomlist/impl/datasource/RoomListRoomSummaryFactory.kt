@@ -53,11 +53,6 @@ class RoomListRoomSummaryFactory @Inject constructor(
             )
         }
 
-        fun createFakeList(): ImmutableList<RoomListRoomSummary> {
-            return List(16) {
-                createPlaceholder("!fakeRoom$it:domain")
-            }.toImmutableList()
-        }
     }
 
     fun create(roomSummary: RoomSummary.Filled): RoomListRoomSummary {

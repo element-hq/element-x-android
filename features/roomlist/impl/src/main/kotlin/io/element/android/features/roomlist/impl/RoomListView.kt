@@ -53,6 +53,7 @@ import io.element.android.features.leaveroom.api.LeaveRoomView
 import io.element.android.features.networkmonitor.api.ui.ConnectivityIndicatorContainer
 import io.element.android.features.roomlist.impl.components.ConfirmRecoveryKeyBanner
 import io.element.android.features.roomlist.impl.components.RequestVerificationHeader
+import io.element.android.features.roomlist.impl.components.RoomListContentView
 import io.element.android.features.roomlist.impl.components.RoomListMenuAction
 import io.element.android.features.roomlist.impl.components.RoomListTopBar
 import io.element.android.features.roomlist.impl.components.RoomSummaryRow
@@ -108,7 +109,7 @@ fun RoomListView(
 
             LeaveRoomView(state = state.leaveRoomState)
 
-            RoomListContent(
+            RoomListScaffold(
                 modifier = Modifier.padding(top = topPadding),
                 state = state,
                 onVerifyClicked = onVerifyClicked,
@@ -135,43 +136,9 @@ fun RoomListView(
     }
 }
 
-@Composable
-private fun EmptyRoomListView(
-    onCreateRoomClicked: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .padding(horizontal = 16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        Text(
-            text = stringResource(R.string.screen_roomlist_empty_title),
-            style = ElementTheme.typography.fontBodyLgRegular,
-            color = ElementTheme.colors.textSecondary,
-            textAlign = TextAlign.Center,
-        )
-        Spacer(modifier = Modifier.height(4.dp))
-        Text(
-            text = stringResource(R.string.screen_roomlist_empty_message),
-            style = ElementTheme.typography.fontBodyLgRegular,
-            color = ElementTheme.colors.textSecondary,
-            textAlign = TextAlign.Center,
-        )
-        Spacer(modifier = Modifier.height(16.dp))
-        Button(
-            text = stringResource(CommonStrings.action_start_chat),
-            leadingIcon = IconSource.Vector(CompoundIcons.Compose()),
-            onClick = onCreateRoomClicked,
-        )
-    }
-}
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun RoomListContent(
+private fun RoomListScaffold(
     state: RoomListState,
     onVerifyClicked: () -> Unit,
     onConfirmRecoveryKeyClicked: () -> Unit,
@@ -188,26 +155,7 @@ private fun RoomListContent(
     }
 
     val appBarState = rememberTopAppBarState()
-    val lazyListState = rememberLazyListState()
-
-    val visibleRange by remember {
-        derivedStateOf {
-            val layoutInfo = lazyListState.layoutInfo
-            val firstItemIndex = layoutInfo.visibleItemsInfo.firstOrNull()?.index ?: 0
-            val size = layoutInfo.visibleItemsInfo.size
-            firstItemIndex until firstItemIndex + size
-        }
-    }
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(appBarState)
-    val nestedScrollConnection = remember {
-        object : NestedScrollConnection {
-            override suspend fun onPostFling(consumed: Velocity, available: Velocity): Velocity {
-                state.eventSink(RoomListEvents.UpdateVisibleRange(visibleRange))
-                return super.onPostFling(consumed, available)
-            }
-        }
-    }
-
     val snackbarHostState = rememberSnackbarHostState(snackbarMessage = state.snackbarMessage)
 
     Scaffold(
@@ -222,7 +170,7 @@ private fun RoomListContent(
                     onMenuActionClicked = onMenuActionClicked,
                     onOpenSettings = onOpenSettings,
                     scrollBehavior = scrollBehavior,
-                    displayMenuItems = !state.displayMigrationStatus,
+                    displayMenuItems = !state.displayActions,
                 )
                 if (state.displayFilters) {
                     RoomListFiltersView(state = state.filtersState)
@@ -230,69 +178,22 @@ private fun RoomListContent(
             }
         },
         content = { padding ->
-            LazyColumn(
+            RoomListContentView(
+                contentState = state.contentState,
+                eventSink = state.eventSink,
+                onVerifyClicked = onVerifyClicked,
+                onConfirmRecoveryKeyClicked = onConfirmRecoveryKeyClicked,
+                onRoomClicked = ::onRoomClicked,
+                onRoomLongClicked = onRoomLongClicked,
+                onCreateRoomClicked = onCreateRoomClicked,
+                onInvitesClicked = onInvitesClicked,
                 modifier = Modifier
                     .padding(padding)
                     .consumeWindowInsets(padding)
-                    .nestedScroll(nestedScrollConnection),
-                state = lazyListState,
-                // FAB height is 56dp, bottom padding is 16dp, we add 8dp as extra margin -> 56+16+8 = 80
-                contentPadding = PaddingValues(bottom = 80.dp)
-            ) {
-                when {
-                    state.displayEmptyState -> Unit
-                    state.securityBannerState == SecurityBannerState.SessionVerification -> {
-                        item {
-                            RequestVerificationHeader(
-                                onVerifyClicked = onVerifyClicked,
-                                onDismissClicked = { state.eventSink(RoomListEvents.DismissRequestVerificationPrompt) }
-                            )
-                        }
-                    }
-                    state.securityBannerState == SecurityBannerState.RecoveryKeyConfirmation -> {
-                        item {
-                            ConfirmRecoveryKeyBanner(
-                                onContinueClicked = onConfirmRecoveryKeyClicked,
-                                onDismissClicked = { state.eventSink(RoomListEvents.DismissRecoveryKeyPrompt) }
-                            )
-                        }
-                    }
-                }
-
-                if (state.invitesState != InvitesState.NoInvites) {
-                    item {
-                        InvitesEntryPointView(onInvitesClicked, state.invitesState)
-                    }
-                }
-
-                val roomList = state.roomList.dataOrNull().orEmpty()
-                // Note: do not use a key for the LazyColumn, or the scroll will not behave as expected if a room
-                // is moved to the top of the list.
-                itemsIndexed(
-                    items = roomList,
-                    contentType = { _, room -> room.contentType() },
-                ) { index, room ->
-                    RoomSummaryRow(
-                        room = room,
-                        onClick = ::onRoomClicked,
-                        onLongClick = onRoomLongClicked,
-                    )
-                    if (index != roomList.lastIndex) {
-                        HorizontalDivider()
-                    }
-                }
-            }
-            if (state.displayEmptyState) {
-                if (state.filtersState.hasAnyFilterSelected) {
-                    // TODO add empty state for filtered rooms
-                } else {
-                    EmptyRoomListView(onCreateRoomClicked)
-                }
-            }
-            MigrationScreenView(isMigrating = state.displayMigrationStatus)
+            )
         },
         floatingActionButton = {
-            if (!state.displayMigrationStatus) {
+            if (state.displayActions) {
                 FloatingActionButton(
                     // FIXME align on Design system theme
                     containerColor = MaterialTheme.colorScheme.primary,

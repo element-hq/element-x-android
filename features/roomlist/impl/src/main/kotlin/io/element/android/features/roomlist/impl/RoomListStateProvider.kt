@@ -19,7 +19,6 @@ package io.element.android.features.roomlist.impl
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.leaveroom.api.LeaveRoomState
 import io.element.android.features.leaveroom.api.aLeaveRoomState
-import io.element.android.features.roomlist.impl.datasource.RoomListRoomSummaryFactory
 import io.element.android.features.roomlist.impl.filters.RoomListFiltersState
 import io.element.android.features.roomlist.impl.filters.aRoomListFiltersState
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
@@ -36,6 +35,7 @@ import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toPersistentList
 
 open class RoomListStateProvider : PreviewParameterProvider<RoomListState> {
     override val values: Sequence<RoomListState>
@@ -50,7 +50,7 @@ open class RoomListStateProvider : PreviewParameterProvider<RoomListState> {
             aRoomListState(securityBannerState = SecurityBannerState.SessionVerification),
             aRoomListState(securityBannerState = SecurityBannerState.RecoveryKeyConfirmation),
             aRoomListState(roomList = AsyncData.Success(persistentListOf())),
-            aRoomListState(roomList = AsyncData.Loading(prevData = RoomListRoomSummaryFactory.createFakeList())),
+            //aRoomListState(roomList = AsyncData.Loading(prevData = RoomListRoomSummaryFactory.createFakeList())),
             aRoomListState(matrixUser = null, displayMigrationStatus = true),
             aRoomListState(searchState = aRoomListSearchState(isSearchActive = true, query = "Test")),
             aRoomListState(filtersState = aRoomListFiltersState(isFeatureEnabled = true)),
@@ -74,16 +74,17 @@ internal fun aRoomListState(
 ) = RoomListState(
     matrixUser = matrixUser,
     showAvatarIndicator = showAvatarIndicator,
-    roomList = roomList,
     hasNetworkConnection = hasNetworkConnection,
     snackbarMessage = snackbarMessage,
-    securityBannerState = securityBannerState,
-    invitesState = invitesState,
     contextMenu = contextMenu,
     leaveRoomState = leaveRoomState,
-    searchState = searchState,
     filtersState = filtersState,
-    displayMigrationStatus = displayMigrationStatus,
+    searchState = searchState,
+    contentState = RoomListContentState.Rooms(
+        invitesState = invitesState,
+        securityBannerState = securityBannerState,
+        summaries = roomList.dataOrNull().orEmpty().toPersistentList(),
+    ),
     eventSink = eventSink,
 )
 
