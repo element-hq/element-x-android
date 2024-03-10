@@ -18,9 +18,12 @@ package io.element.android.features.messages.impl.timeline.model.event
 
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.matrix.api.media.MediaSource
+import io.element.android.libraries.matrix.api.timeline.item.event.FormattedBody
 
 data class TimelineItemImageContent(
     val body: String,
+    val formatted: FormattedBody?,
+    val filename: String?,
     val mediaSource: MediaSource,
     val thumbnailSource: MediaSource?,
     val formattedFileSize: String,
@@ -32,6 +35,9 @@ data class TimelineItemImageContent(
     val aspectRatio: Float?
 ) : TimelineItemEventContent {
     override val type: String = "TimelineItemImageContent"
+
+    val showCaption = filename != null && filename != body;
+    val caption = if (showCaption) body else "";
 
     val preferredMediaSource = if (mimeType == MimeTypes.Gif) {
         mediaSource

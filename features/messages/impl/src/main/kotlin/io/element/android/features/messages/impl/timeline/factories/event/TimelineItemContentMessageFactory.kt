@@ -83,6 +83,8 @@ class TimelineItemContentMessageFactory @Inject constructor(
                 val aspectRatio = aspectRatioOf(messageType.info?.width, messageType.info?.height)
                 TimelineItemImageContent(
                     body = messageType.body.trimEnd(),
+                    formatted = messageType.formatted,
+                    filename = messageType.filename,
                     mediaSource = messageType.source,
                     thumbnailSource = messageType.info?.thumbnailSource,
                     mimeType = messageType.info?.mimetype ?: MimeTypes.OctetStream,

@@ -98,7 +98,7 @@ class EventMessageMapper {
             FileMessageType(type.content.body, type.content.source.map(), type.content.info?.map())
         }
         is RustMessageType.Image -> {
-            ImageMessageType(type.content.body, type.content.source.map(), type.content.info?.map())
+            ImageMessageType(type.content.body, type.content.formatted?.map(), type.content.filename, type.content.source.map(), type.content.info?.map())
         }
         is RustMessageType.Notice -> {
             NoticeMessageType(type.content.body, type.content.formatted?.map())
