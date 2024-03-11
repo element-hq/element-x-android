@@ -102,6 +102,7 @@
   <string name="common_analytics">"Статистика"</string>
   <string name="common_appearance">"Облик"</string>
   <string name="common_audio">"Аудио"</string>
+  <string name="common_blocked_users">"Блокирани потребители"</string>
   <string name="common_chat_backup">"Резервно копие на чатовете"</string>
   <string name="common_creating_room">"Създаване на стая…"</string>
   <string name="common_dark">"Тъмен"</string>
@@ -114,6 +115,7 @@
   <string name="common_encryption_enabled">"Шифроването е включено"</string>
   <string name="common_enter_your_pin">"Въведете своя PIN"</string>
   <string name="common_error">"Грешка"</string>
+  <string name="common_favourite">"Фаворизиране"</string>
   <string name="common_file">"Файл"</string>
   <string name="common_forward_message">"Препращане на съобщението"</string>
   <string name="common_gif">"GIF"</string>
@@ -134,6 +136,7 @@
   <string name="common_mute">"Заглушаване"</string>
   <string name="common_no_results">"Няма резултати"</string>
   <string name="common_offline">"Офлайн"</string>
+  <string name="common_or">"или"</string>
   <string name="common_password">"Парола"</string>
   <string name="common_people">"Хора"</string>
   <string name="common_permalink">"Постоянна връзка"</string>
@@ -185,6 +188,7 @@
   <string name="common_username">"Потребителско име"</string>
   <string name="common_verification_cancelled">"Потвърждаването е отменено"</string>
   <string name="common_verification_complete">"Потвърждаването е завършено"</string>
+  <string name="common_verify_device">"Потвърждаване на устройството"</string>
   <string name="common_video">"Видео"</string>
   <string name="common_voice_message">"Гласово съобщение"</string>
   <string name="common_waiting_for_decryption_key">"В очакване на това съобщение"</string>

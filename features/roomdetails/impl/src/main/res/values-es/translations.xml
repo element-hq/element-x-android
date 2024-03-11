@@ -9,6 +9,7 @@
   <string name="screen_notification_settings_edit_failed_updating_default_mode">"Se ha producido un error al actualizar la configuración de notificaciones."</string>
   <string name="screen_notification_settings_mentions_only_disclaimer">"Tu servidor principal no admite esta opción en salas cifradas, puede que no recibas notificaciones en algunas salas."</string>
   <string name="screen_polls_history_title">"Encuestas"</string>
+  <string name="screen_room_change_permissions_everyone">"Todos"</string>
   <string name="screen_room_details_add_topic_title">"Añadir tema"</string>
   <string name="screen_room_details_already_a_member">"Ya eres miembro"</string>
   <string name="screen_room_details_already_invited">"Ya estás invitado"</string>

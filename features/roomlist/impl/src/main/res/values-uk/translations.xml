@@ -8,10 +8,19 @@
   <string name="screen_roomlist_empty_message">"Почніть з обміну повідомленнями з кимось."</string>
   <string name="screen_roomlist_empty_title">"Ще немає чатів."</string>
   <string name="screen_roomlist_filter_favourites">"Улюблені"</string>
+  <string name="screen_roomlist_filter_favourites_empty_state_subtitle">"Ви можете додати чат до улюблених у налаштуваннях чату.
+Наразі ви можете зняти фільтри, щоб побачити інші ваші чати"</string>
+  <string name="screen_roomlist_filter_favourites_empty_state_title">"Ви ще не маєте улюблених чатів"</string>
   <string name="screen_roomlist_filter_low_priority">"Низький пріоритет"</string>
+  <string name="screen_roomlist_filter_mixed_empty_state_subtitle">"Ви можете зняти фільтри, щоб побачити інші ваші чати"</string>
+  <string name="screen_roomlist_filter_mixed_empty_state_title">"Ви не маєте чатів для цієї категорії"</string>
   <string name="screen_roomlist_filter_people">"Люди"</string>
+  <string name="screen_roomlist_filter_people_empty_state_title">"У вас ще немає жодного особистого чату"</string>
   <string name="screen_roomlist_filter_rooms">"Кімнати"</string>
+  <string name="screen_roomlist_filter_rooms_empty_state_title">"Ви ще не учасник жодної кімнати"</string>
   <string name="screen_roomlist_filter_unreads">"Непрочитані"</string>
+  <string name="screen_roomlist_filter_unreads_empty_state_title">"Вітаємо!
+У вас немає непрочитаних повідомлень!"</string>
   <string name="screen_roomlist_main_space_title">"Усі чати"</string>
   <string name="screen_roomlist_mark_as_read">"Позначити як прочитане"</string>
   <string name="screen_roomlist_mark_as_unread">"Позначити як непрочитане"</string>
