@@ -126,9 +126,9 @@ class FakeMatrixRoom(
     private var canUserTriggerRoomNotificationResult: Result<Boolean> = Result.success(true)
     private var canUserJoinCallResult: Result<Boolean> = Result.success(true)
     private var setIsFavoriteResult = Result.success(Unit)
-    private var powerLevelsResult = Result.success(defaultPowerLevels)
+    private var powerLevelsResult = Result.success(defaultRoomPowerLevels())
     private var updatePowerLevelsResult = Result.success(Unit)
-    private var resetPowerLevelsResult = Result.success(defaultPowerLevels)
+    private var resetPowerLevelsResult = Result.success(defaultRoomPowerLevels())
     var sendMessageMentions = emptyList<Mention>()
     val editMessageCalls = mutableListOf<Pair<String, String?>>()
     private val _typingRecord = mutableListOf<Boolean>()
@@ -212,12 +212,12 @@ class FakeMatrixRoom(
         return powerLevelsResult
     }
 
-    override suspend fun updatePowerLevels(matrixRoomPowerLevels: MatrixRoomPowerLevels): Result<Unit> {
-        return updatePowerLevelsResult
+    override suspend fun updatePowerLevels(matrixRoomPowerLevels: MatrixRoomPowerLevels): Result<Unit> = simulateLongTask {
+        updatePowerLevelsResult
     }
 
-    override suspend fun resetPowerLevels(): Result<MatrixRoomPowerLevels> {
-        return resetPowerLevelsResult
+    override suspend fun resetPowerLevels(): Result<MatrixRoomPowerLevels> = simulateLongTask {
+        resetPowerLevelsResult
     }
 
     override fun destroy() = Unit
@@ -780,7 +780,7 @@ fun aRoomInfo(
     activeRoomCallParticipants = activeRoomCallParticipants.toImmutableList(),
 )
 
-private val defaultPowerLevels = MatrixRoomPowerLevels(
+fun defaultRoomPowerLevels() = MatrixRoomPowerLevels(
     ban = 50,
     invite = 0,
     kick = 50,
