@@ -85,6 +85,7 @@
   <string name="action_reply_in_thread">"Reply in thread"</string>
   <string name="action_report_bug">"Report bug"</string>
   <string name="action_report_content">"Report content"</string>
+  <string name="action_reset">"Reset"</string>
   <string name="action_retry">"Retry"</string>
   <string name="action_retry_decryption">"Retry decryption"</string>
   <string name="action_save">"Save"</string>

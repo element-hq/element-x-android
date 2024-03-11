@@ -9,6 +9,15 @@
   <string name="screen_notification_settings_edit_failed_updating_default_mode">"Beim Aktualisieren der Benachrichtigungseinstellungen ist ein Fehler aufgetreten."</string>
   <string name="screen_notification_settings_mentions_only_disclaimer">"Dein Homeserver unterstützt diese Option in verschlüsselten Räumen nicht. In einigen Räumen wirst du möglicherweise nicht benachrichtigt."</string>
   <string name="screen_polls_history_title">"Umfragen"</string>
+  <string name="screen_room_change_permissions_everyone">"Alle"</string>
+  <string name="screen_room_change_permissions_member_moderation">"Moderation der Mitglieder"</string>
+  <string name="screen_room_change_permissions_messages_and_content">"Nachrichten und Inhalte"</string>
+  <string name="screen_room_change_permissions_room_details">"Raumdetails"</string>
+  <string name="screen_room_change_role_confirm_add_admin_description">"Du vergibst das selbe Rolle, die auch Du hast. Diese Aktion kann daher nicht mehr rückgängig gemacht werden."</string>
+  <string name="screen_room_change_role_confirm_add_admin_title">"Als Administrator hinzufügen?"</string>
+  <string name="screen_room_change_role_confirm_demote_self_action">"Zurückstufen"</string>
+  <string name="screen_room_change_role_confirm_demote_self_description">"Du stufst dich selbst herab. Diese Änderung kann nicht rückgängig gemacht werden. Wenn du der letzte Benutzer mit dieser Rolle bist, ist es nicht möglich, diese Rolle wiederzuerlangen."</string>
+  <string name="screen_room_change_role_confirm_demote_self_title">"Möchtest Du Dich selbst herabstufen?"</string>
   <string name="screen_room_details_add_topic_title">"Thema hinzufügen"</string>
   <string name="screen_room_details_already_a_member">"Bereits Mitglied"</string>
   <string name="screen_room_details_already_invited">"Bereits eingeladen"</string>
@@ -67,5 +76,14 @@
   <string name="screen_room_notification_settings_mode_all_messages">"Alle Nachrichten"</string>
   <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Nur Erwähnungen und Schlüsselwörter"</string>
   <string name="screen_room_notification_settings_room_custom_settings_title">"Benachrichtige mich in diesem Raum bei"</string>
+  <string name="screen_room_roles_and_permissions_admins">"Administratoren"</string>
+  <string name="screen_room_roles_and_permissions_member_moderation">"Moderation der Mitglieder"</string>
+  <string name="screen_room_roles_and_permissions_messages_and_content">"Nachrichten und Inhalte"</string>
+  <string name="screen_room_roles_and_permissions_moderators">"Moderatoren"</string>
+  <string name="screen_room_roles_and_permissions_permissions_header">"Berechtigungen"</string>
+  <string name="screen_room_roles_and_permissions_reset">"Rollen und Berechtigungen zurücksetzen"</string>
+  <string name="screen_room_roles_and_permissions_roles_header">"Rollen"</string>
+  <string name="screen_room_roles_and_permissions_room_details">"Raumdetails"</string>
+  <string name="screen_room_roles_and_permissions_title">"Rollen und Berechtigungen"</string>
   <string name="screen_start_chat_error_starting_chat">"Beim Versuch, einen Chat zu starten, ist ein Fehler aufgetreten"</string>
 </resources>

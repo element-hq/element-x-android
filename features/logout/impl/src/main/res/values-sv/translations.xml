@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_signout_confirmation_dialog_content">"Är du säker på att du vill logga ut?"</string>
+  <string name="screen_signout_confirmation_dialog_submit">"Logga ut"</string>
+  <string name="screen_signout_confirmation_dialog_title">"Logga ut"</string>
   <string name="screen_signout_in_progress_dialog_content">"Loggar ut …"</string>
+  <string name="screen_signout_preference_item">"Logga ut"</string>
 </resources>

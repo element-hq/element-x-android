@@ -6,6 +6,7 @@
   <string name="screen_dm_details_unblock_user">"解除封鎖使用者"</string>
   <string name="screen_notification_settings_edit_failed_updating_default_mode">"更新通知設定時發生錯誤。"</string>
   <string name="screen_polls_history_title">"所有投票"</string>
+  <string name="screen_room_change_permissions_everyone">"所有人"</string>
   <string name="screen_room_details_add_topic_title">"新增主題"</string>
   <string name="screen_room_details_already_a_member">"已是成員"</string>
   <string name="screen_room_details_already_invited">"已邀請"</string>

@@ -2,8 +2,8 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="a11y_delete">"Удалить"</string>
   <plurals name="a11y_digits_entered">
-    <item quantity="one">"Введена цифра %1$d"</item>
-    <item quantity="few">"Ведено %1$d цифр"</item>
+    <item quantity="one">"Введена %1$d цифра"</item>
+    <item quantity="few">"Ведено %1$d цифры"</item>
     <item quantity="many">"Введено много цифр"</item>
   </plurals>
   <string name="a11y_hide_password">"Скрыть пароль"</string>
@@ -59,6 +59,7 @@
   <string name="action_enter_pin">"Введите PIN-код"</string>
   <string name="action_forgot_password">"Забыли пароль?"</string>
   <string name="action_forward">"Переслать"</string>
+  <string name="action_go_back">"Вернуться"</string>
   <string name="action_invite">"Пригласить"</string>
   <string name="action_invite_friends">"Пригласить друзей"</string>
   <string name="action_invite_friends_to_app">"Пригласить друзей в %1$s"</string>
@@ -86,6 +87,7 @@
   <string name="action_reply_in_thread">"Ответить в теме"</string>
   <string name="action_report_bug">"Сообщить об ошибке"</string>
   <string name="action_report_content">"Пожаловаться на содержание"</string>
+  <string name="action_reset">"Сбросить"</string>
   <string name="action_retry">"Повторить"</string>
   <string name="action_retry_decryption">"Повторите расшифровку"</string>
   <string name="action_save">"Сохранить"</string>
@@ -115,6 +117,7 @@
   <string name="common_audio">"Аудио"</string>
   <string name="common_blocked_users">"Заблокированные пользователи"</string>
   <string name="common_bubbles">"Пузыри"</string>
+  <string name="common_call_invite">"Выполняется звонок (не поддерживается)"</string>
   <string name="common_chat_backup">"Резервная копия чатов"</string>
   <string name="common_copyright">"Авторское право"</string>
   <string name="common_creating_room">"Создание комнаты…"</string>
@@ -122,7 +125,7 @@
   <string name="common_dark">"Темная"</string>
   <string name="common_decryption_error">"Ошибка расшифровки"</string>
   <string name="common_developer_options">"Для разработчика"</string>
-  <string name="common_direct_chat">"Прямой чат"</string>
+  <string name="common_direct_chat">"Личный чат"</string>
   <string name="common_edited_suffix">"(изменено)"</string>
   <string name="common_editing">"Редактирование"</string>
   <string name="common_emote">"%1$s%2$s"</string>
@@ -185,6 +188,8 @@
   <string name="common_room">"Комната"</string>
   <string name="common_room_name">"Название комнаты"</string>
   <string name="common_room_name_placeholder">"например, название вашего проекта"</string>
+  <string name="common_saved_changes">"Сохраненные изменения"</string>
+  <string name="common_saving">"Сохранение"</string>
   <string name="common_screen_lock">"Блокировка экрана"</string>
   <string name="common_search_for_someone">"Поиск человека"</string>
   <string name="common_search_results">"Результаты поиска"</string>
@@ -227,6 +232,8 @@
   <string name="dialog_title_error">"Ошибка"</string>
   <string name="dialog_title_success">"Успешно"</string>
   <string name="dialog_title_warning">"Предупреждение"</string>
+  <string name="dialog_unsaved_changes_description_android">"Изменения не сохранены. Вы действительно хотите вернуться?"</string>
+  <string name="dialog_unsaved_changes_title">"Сохранить изменения?"</string>
   <string name="error_failed_creating_the_permalink">"Не удалось создать постоянную ссылку"</string>
   <string name="error_failed_loading_map">"Не удалось загрузить карту %1$s. Пожалуйста, повторите попытку позже."</string>
   <string name="error_failed_loading_messages">"Не удалось загрузить сообщения"</string>
@@ -252,5 +259,5 @@
   <string name="screen_share_this_location_action">"Поделиться этим местоположением"</string>
   <string name="screen_view_location_title">"Местоположение"</string>
   <string name="settings_version_number">"Версия: %1$s (%2$s)"</string>
-  <string name="test_language_identifier">"en"</string>
+  <string name="test_language_identifier">"ru"</string>
 </resources>
