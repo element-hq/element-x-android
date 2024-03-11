@@ -172,7 +172,7 @@ fun TextComposer(
         }
     }
 
-    val canSendMessage by remember { derivedStateOf { state.messageHtml.isNotEmpty() } }
+    val canSendMessage by remember { derivedStateOf { state.messageMarkdown.isNotBlank() } }
     val sendButton = @Composable {
         SendButton(
             canSendMessage = canSendMessage,
