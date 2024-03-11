@@ -7,6 +7,7 @@
   <string name="screen_dm_details_unblock_alert_description">"Du kommer att kunna se alla meddelanden från dem igen."</string>
   <string name="screen_dm_details_unblock_user">"Avblockera användare"</string>
   <string name="screen_notification_settings_edit_failed_updating_default_mode">"Ett fel uppstod vid uppdatering av aviseringsinställningen."</string>
+  <string name="screen_room_change_permissions_everyone">"Alla"</string>
   <string name="screen_room_details_add_topic_title">"Lägg till ämne"</string>
   <string name="screen_room_details_already_a_member">"Redan medlem"</string>
   <string name="screen_room_details_already_invited">"Redan inbjuden"</string>

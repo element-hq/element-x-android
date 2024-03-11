@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="confirm_recovery_key_banner_title">"輸入您的復原金鑰"</string>
   <string name="screen_migration_message">"這是一次性的程序，感謝您耐心等候。"</string>
   <string name="screen_migration_title">"正在設定您的帳號。"</string>
   <string name="screen_roomlist_a11y_create_message">"建立新的對話或聊天室"</string>

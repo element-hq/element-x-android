@@ -3,6 +3,7 @@
   <string name="screen_session_verification_cancelled_subtitle">"Нещо не изглежда наред. Или времето за изчакване на заявката е изтекло, или заявката е отхвърлена."</string>
   <string name="screen_session_verification_compare_emojis_subtitle">"Потвърдете, че емоджитата по-долу съвпадат с показаните в другата ви сесия."</string>
   <string name="screen_session_verification_compare_emojis_title">"Сравнете емоджита"</string>
+  <string name="screen_session_verification_enter_recovery_key">"Въвеждане на ключ за възстановяване"</string>
   <string name="screen_session_verification_open_existing_session_subtitle">"Докажете, че сте вие, за да получите достъп до хронологията на шифрованите си съобщения."</string>
   <string name="screen_session_verification_open_existing_session_title">"Отворете съществуваща сесия"</string>
   <string name="screen_session_verification_positive_button_canceled">"Повторен опит за потвърждаване"</string>

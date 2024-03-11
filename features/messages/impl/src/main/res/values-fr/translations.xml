@@ -28,6 +28,10 @@
   <string name="screen_room_attachment_source_poll">"Sondage"</string>
   <string name="screen_room_attachment_text_formatting">"Formatage du texte"</string>
   <string name="screen_room_change_permissions_everyone">"Tout le monde"</string>
+  <string name="screen_room_change_permissions_room_avatar">"Changer l’avatar du salon"</string>
+  <string name="screen_room_change_permissions_room_details">"Détails du salon"</string>
+  <string name="screen_room_change_permissions_room_name">"Changer le nom du salon"</string>
+  <string name="screen_room_change_permissions_room_topic">"Changer le sujet du salon"</string>
   <string name="screen_room_change_role_confirm_add_admin_description">"Vous ne pourrez pas annuler cette action. Vous êtes en train de promouvoir l’utilisateur pour qu’il ait le même niveau que vous."</string>
   <string name="screen_room_change_role_confirm_add_admin_title">"Ajouter un administrateur ?"</string>
   <string name="screen_room_change_role_confirm_demote_self_action">"Rétrograder"</string>
@@ -61,6 +65,12 @@
   <string name="screen_room_reactions_show_more">"Afficher plus"</string>
   <string name="screen_room_retry_send_menu_send_again_action">"Envoyer à nouveau"</string>
   <string name="screen_room_retry_send_menu_title">"Votre message n’a pas pu être envoyé"</string>
+  <string name="screen_room_roles_and_permissions_admins">"Administrateurs"</string>
+  <string name="screen_room_roles_and_permissions_moderators">"Modérateurs"</string>
+  <string name="screen_room_roles_and_permissions_permissions_header">"Autorisations"</string>
+  <string name="screen_room_roles_and_permissions_roles_header">"Rôles"</string>
+  <string name="screen_room_roles_and_permissions_room_details">"Détails du salon"</string>
+  <string name="screen_room_roles_and_permissions_title">"Rôles et autorisations"</string>
   <string name="screen_room_timeline_add_reaction">"Ajouter un émoji"</string>
   <string name="screen_room_timeline_less_reactions">"Afficher moins"</string>
   <plurals name="screen_room_typing_many_members">

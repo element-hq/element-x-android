@@ -8,10 +8,19 @@
   <string name="screen_roomlist_empty_message">"Začnite tým, že niekomu pošlete správu."</string>
   <string name="screen_roomlist_empty_title">"Zatiaľ žiadne konverzácie."</string>
   <string name="screen_roomlist_filter_favourites">"Obľúbené"</string>
+  <string name="screen_roomlist_filter_favourites_empty_state_subtitle">"Môžete pridať konverzáciu medzi obľúbené v nastaveniach konverzácie.
+Zatiaľ môžete zrušiť výber filtrov, aby ste videli ostatné konverzácie"</string>
+  <string name="screen_roomlist_filter_favourites_empty_state_title">"Zatiaľ nemáte obľúbené konverzácie"</string>
   <string name="screen_roomlist_filter_low_priority">"Nízka priorita"</string>
+  <string name="screen_roomlist_filter_mixed_empty_state_subtitle">"Môžete zrušiť výber filtrov, aby ste videli svoje ostatné konverzácie"</string>
+  <string name="screen_roomlist_filter_mixed_empty_state_title">"Nemáte konverzácie pre tento výber"</string>
   <string name="screen_roomlist_filter_people">"Ľudia"</string>
+  <string name="screen_roomlist_filter_people_empty_state_title">"Zatiaľ nemáte žiadne priame správy"</string>
   <string name="screen_roomlist_filter_rooms">"Miestnosti"</string>
+  <string name="screen_roomlist_filter_rooms_empty_state_title">"Zatiaľ ešte nie ste v žiadnej miestnosti"</string>
   <string name="screen_roomlist_filter_unreads">"Neprečítané"</string>
+  <string name="screen_roomlist_filter_unreads_empty_state_title">"Gratulujeme!
+Nemáte žiadne neprečítané správy!"</string>
   <string name="screen_roomlist_main_space_title">"Všetky konverzácie"</string>
   <string name="screen_roomlist_mark_as_read">"Označiť ako prečítané"</string>
   <string name="screen_roomlist_mark_as_unread">"Označiť ako neprečítané"</string>

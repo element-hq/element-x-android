@@ -22,44 +22,48 @@ import io.element.android.features.poll.api.pollcontent.aPollContentState
 import io.element.android.features.poll.impl.history.model.PollHistoryFilter
 import io.element.android.features.poll.impl.history.model.PollHistoryItem
 import io.element.android.features.poll.impl.history.model.PollHistoryItems
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toPersistentList
 
 class PollHistoryStateProvider : PreviewParameterProvider<PollHistoryState> {
     override val values: Sequence<PollHistoryState>
         get() = sequenceOf(
-            aPollHistoryState(
-                isLoading = false,
-                hasMoreToLoad = false,
-                activeFilter = PollHistoryFilter.ONGOING,
-            ),
+            aPollHistoryState(),
             aPollHistoryState(
                 isLoading = true,
                 hasMoreToLoad = true,
                 activeFilter = PollHistoryFilter.PAST,
             ),
+            aPollHistoryState(
+                activeFilter = PollHistoryFilter.ONGOING,
+                currentItems = emptyList(),
+            ),
+            aPollHistoryState(
+                activeFilter = PollHistoryFilter.PAST,
+                currentItems = emptyList(),
+            ),
         )
 }
 
-private fun aPollHistoryState(
+internal fun aPollHistoryState(
     isLoading: Boolean = false,
     hasMoreToLoad: Boolean = false,
     activeFilter: PollHistoryFilter = PollHistoryFilter.ONGOING,
-    currentItems: ImmutableList<PollHistoryItem> = persistentListOf(
+    currentItems: List<PollHistoryItem> = listOf(
         aPollHistoryItem(),
     ),
+    eventSink: (PollHistoryEvents) -> Unit = {},
 ) = PollHistoryState(
     isLoading = isLoading,
     hasMoreToLoad = hasMoreToLoad,
     activeFilter = activeFilter,
     pollHistoryItems = PollHistoryItems(
-        ongoing = currentItems,
-        past = currentItems,
+        ongoing = currentItems.toPersistentList(),
+        past = currentItems.toPersistentList(),
     ),
-    eventSink = {},
+    eventSink = eventSink,
 )
 
-private fun aPollHistoryItem(
+internal fun aPollHistoryItem(
     formattedDate: String = "01/12/2023",
     state: PollContentState = aPollContentState(),
 ) = PollHistoryItem(

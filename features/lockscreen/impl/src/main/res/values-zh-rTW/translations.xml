@@ -19,6 +19,9 @@
   <string name="screen_app_lock_setup_pin_mismatch_dialog_title">"PIN 碼不一樣"</string>
   <string name="screen_app_lock_signout_alert_message">"您需要重新登入並建立新的 PIN 碼才能繼續"</string>
   <string name="screen_app_lock_signout_alert_title">"您即將登出"</string>
+  <plurals name="screen_app_lock_subtitle">
+    <item quantity="other">"您有 %1$d 次解鎖的機會"</item>
+  </plurals>
   <plurals name="screen_app_lock_subtitle_wrong_pin">
     <item quantity="other">"PIN 碼錯誤。您還有 %1$d 次機會"</item>
   </plurals>

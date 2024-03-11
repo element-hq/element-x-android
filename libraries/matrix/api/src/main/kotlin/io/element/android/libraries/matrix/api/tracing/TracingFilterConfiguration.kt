@@ -30,7 +30,6 @@ data class TracingFilterConfiguration(
         Target.MATRIX_SDK_SLIDING_SYNC to LogLevel.TRACE,
         Target.MATRIX_SDK_BASE_SLIDING_SYNC to LogLevel.TRACE,
         Target.MATRIX_SDK_UI_TIMELINE to LogLevel.TRACE,
-        Target.MATRIX_SDK_BASE_READ_RECEIPTS to LogLevel.TRACE,
     )
 
     fun getLogLevel(target: Target): LogLevel {
@@ -87,7 +86,6 @@ object TracingFilterConfigurations {
     val nightly = TracingFilterConfiguration(
         overrides = mapOf(
             Target.ELEMENT to LogLevel.TRACE,
-            Target.MATRIX_SDK_BASE_READ_RECEIPTS to LogLevel.TRACE,
         ),
     )
     val debug = TracingFilterConfiguration(

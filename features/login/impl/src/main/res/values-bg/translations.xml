@@ -2,7 +2,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_account_provider_change">"Промяна на доставчика на акаунт"</string>
   <string name="screen_account_provider_form_notice">"Въведете термин за търсене или адрес на домейн."</string>
-  <string name="screen_account_provider_form_subtitle">"Търсене на компания, общност или частен сървър."</string>
+  <string name="screen_account_provider_form_subtitle">"Потърсете компания, общност или частен сървър."</string>
   <string name="screen_account_provider_form_title">"Намерете доставчик на акаунт"</string>
   <string name="screen_account_provider_signin_subtitle">"Това е мястото, където ще живеят вашите разговори — точно както бихте използвали имейл доставчик, за да съхранявате вашите имейли."</string>
   <string name="screen_account_provider_signin_title">"На път сте да влезете в %s"</string>

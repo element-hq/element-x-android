@@ -18,6 +18,7 @@
   <string name="screen_change_server_form_header">"Hemserverns URL"</string>
   <string name="screen_change_server_form_notice">"Du kan bara ansluta till en befintlig server som stöder sliding sync. Din hemserveradministratör måste konfigurera det. %1$s"</string>
   <string name="screen_change_server_subtitle">"Vad är adressen till din server?"</string>
+  <string name="screen_change_server_title">"Välj din server"</string>
   <string name="screen_login_error_deactivated_account">"Detta konto har avaktiverats."</string>
   <string name="screen_login_error_invalid_credentials">"Felaktigt användarnamn och/eller lösenord"</string>
   <string name="screen_login_error_invalid_user_id">"Detta är inte en giltig användaridentifierare. Förväntat format: \'@användare:hemserver.org\'"</string>
