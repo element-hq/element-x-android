@@ -180,6 +180,7 @@ private fun RoomListScaffold(
         content = { padding ->
             RoomListContentView(
                 contentState = state.contentState,
+                filtersState = state.filtersState,
                 eventSink = state.eventSink,
                 onVerifyClicked = onVerifyClicked,
                 onConfirmRecoveryKeyClicked = onConfirmRecoveryKeyClicked,

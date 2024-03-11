@@ -25,4 +25,8 @@ data class RoomListFiltersState(
     val eventSink: (RoomListFiltersEvents) -> Unit,
 ) {
     val hasAnyFilterSelected = filterSelectionStates.any { it.isSelected }
+
+    fun selectedFilters(): List<RoomListFilter> {
+        return filterSelectionStates.filter { it.isSelected }.map { it.filter }
+    }
 }

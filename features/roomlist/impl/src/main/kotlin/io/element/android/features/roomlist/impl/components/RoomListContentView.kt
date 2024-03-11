@@ -16,9 +16,13 @@
 
 package io.element.android.features.roomlist.impl.components
 
+import androidx.annotation.StringRes
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -47,6 +51,9 @@ import io.element.android.features.roomlist.impl.RoomListContentState
 import io.element.android.features.roomlist.impl.RoomListEvents
 import io.element.android.features.roomlist.impl.SecurityBannerState
 import io.element.android.features.roomlist.impl.contentType
+import io.element.android.features.roomlist.impl.filters.RoomListFilter
+import io.element.android.features.roomlist.impl.filters.RoomListFiltersEmptyStateResources
+import io.element.android.features.roomlist.impl.filters.RoomListFiltersState
 import io.element.android.features.roomlist.impl.migration.MigrationScreenView
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
 import io.element.android.libraries.designsystem.theme.components.Button
@@ -58,6 +65,7 @@ import io.element.android.libraries.ui.strings.CommonStrings
 @Composable
 fun RoomListContentView(
     contentState: RoomListContentState,
+    filtersState: RoomListFiltersState,
     eventSink: (RoomListEvents) -> Unit,
     onVerifyClicked: () -> Unit,
     onConfirmRecoveryKeyClicked: () -> Unit,
@@ -87,6 +95,7 @@ fun RoomListContentView(
             is RoomListContentState.Rooms -> {
                 RoomsView(
                     state = contentState,
+                    filtersState = filtersState,
                     eventSink = eventSink,
                     onVerifyClicked = onVerifyClicked,
                     onConfirmRecoveryKeyClicked = onConfirmRecoveryKeyClicked,
@@ -127,22 +136,8 @@ private fun EmptyView(
             InvitesEntryPointView(onInvitesClicked, state.invitesState)
         }
         EmptyScaffold(
-            title = {
-                Text(
-                    text = stringResource(R.string.screen_roomlist_empty_title),
-                    style = ElementTheme.typography.fontBodyLgRegular,
-                    color = ElementTheme.colors.textSecondary,
-                    textAlign = TextAlign.Center,
-                )
-            },
-            subtitle = {
-                Text(
-                    text = stringResource(R.string.screen_roomlist_empty_message),
-                    style = ElementTheme.typography.fontBodyLgRegular,
-                    color = ElementTheme.colors.textSecondary,
-                    textAlign = TextAlign.Center,
-                )
-            },
+            title = R.string.screen_roomlist_empty_title,
+            subtitle = R.string.screen_roomlist_empty_message,
             action = {
                 Button(
                     text = stringResource(CommonStrings.action_start_chat),
@@ -150,13 +145,44 @@ private fun EmptyView(
                     onClick = onCreateRoomClicked,
                 )
             },
-            modifier = Modifier,
+            modifier = Modifier.fillMaxSize(),
         )
     }
 }
 
 @Composable
 private fun RoomsView(
+    state: RoomListContentState.Rooms,
+    filtersState: RoomListFiltersState,
+    eventSink: (RoomListEvents) -> Unit,
+    onVerifyClicked: () -> Unit,
+    onConfirmRecoveryKeyClicked: () -> Unit,
+    onRoomClicked: (RoomListRoomSummary) -> Unit,
+    onRoomLongClicked: (RoomListRoomSummary) -> Unit,
+    onInvitesClicked: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    if (state.summaries.isEmpty() && filtersState.hasAnyFilterSelected) {
+        EmptyViewForFilterStates(
+            selectedFilters = filtersState.selectedFilters(),
+            modifier = modifier.fillMaxSize()
+        )
+    } else {
+        RoomsViewList(
+            state = state,
+            eventSink = eventSink,
+            onVerifyClicked = onVerifyClicked,
+            onConfirmRecoveryKeyClicked = onConfirmRecoveryKeyClicked,
+            onRoomClicked = onRoomClicked,
+            onRoomLongClicked = onRoomLongClicked,
+            onInvitesClicked = onInvitesClicked,
+            modifier = modifier.fillMaxSize(),
+        )
+    }
+}
+
+@Composable
+private fun RoomsViewList(
     state: RoomListContentState.Rooms,
     eventSink: (RoomListEvents) -> Unit,
     onVerifyClicked: () -> Unit,
@@ -186,7 +212,9 @@ private fun RoomsView(
     LazyColumn(
         state = lazyListState,
         modifier = modifier.nestedScroll(nestedScrollConnection),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
+        // FAB height is 56dp, bottom padding is 16dp, we add 8dp as extra margin -> 56+16+8 = 80
+        contentPadding = PaddingValues(bottom = 80.dp)
+
     ) {
         when (state.securityBannerState) {
             SecurityBannerState.SessionVerification -> {
@@ -232,24 +260,44 @@ private fun RoomsView(
 }
 
 @Composable
-private fun EmptyScaffold(
-    title: @Composable () -> Unit,
+private fun EmptyViewForFilterStates(
+    selectedFilters: List<RoomListFilter>,
     modifier: Modifier = Modifier,
-    subtitle: @Composable (() -> Unit)? = null,
-    action: @Composable (() -> Unit)? = null,
+) {
+    val emptyStateResources = RoomListFiltersEmptyStateResources.fromSelectedFilters(selectedFilters) ?: return
+    EmptyScaffold(
+        title = emptyStateResources.title,
+        subtitle = emptyStateResources.subtitle,
+        modifier = modifier,
+    )
+}
+
+@Composable
+private fun EmptyScaffold(
+    @StringRes title: Int,
+    @StringRes subtitle: Int,
+    modifier: Modifier = Modifier,
+    action: @Composable (ColumnScope.() -> Unit)? = null,
 ) {
     Column(
-        modifier = modifier
-            .fillMaxSize()
-            .padding(horizontal = 60.dp),
+        modifier = modifier.padding(horizontal = 60.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        title()
-        Spacer(modifier = Modifier.height(4.dp))
-        subtitle?.invoke()
+        Text(
+            text = stringResource(title),
+            style = ElementTheme.typography.fontHeadingMdBold,
+            color = ElementTheme.colors.textPrimary,
+            textAlign = TextAlign.Center,
+        )
         Spacer(modifier = Modifier.height(16.dp))
-        action?.invoke()
+        Text(
+            text = stringResource(subtitle),
+            style = ElementTheme.typography.fontBodyLgRegular,
+            color = ElementTheme.colors.textSecondary,
+            textAlign = TextAlign.Center,
+        )
+        Spacer(modifier = Modifier.height(32.dp))
+        action?.invoke(this)
     }
 }
-
