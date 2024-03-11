@@ -32,7 +32,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -52,7 +51,6 @@ import io.element.android.libraries.designsystem.components.dialogs.Confirmation
 import io.element.android.libraries.designsystem.components.list.ListItemContent
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.designsystem.preview.sheetStateForPreview
 import io.element.android.libraries.designsystem.theme.components.IconSource
 import io.element.android.libraries.designsystem.theme.components.ListItem
 import io.element.android.libraries.designsystem.theme.components.ListItemStyle
@@ -204,11 +202,7 @@ private fun RoomMemberActionsBottomSheet(
 ) {
     val coroutineScope = rememberCoroutineScope()
     if (roomMember != null && actions.isNotEmpty()) {
-        val bottomSheetState = if (LocalInspectionMode.current) {
-            sheetStateForPreview()
-        } else {
-            rememberModalBottomSheetState(skipPartiallyExpanded = true)
-        }
+        val bottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
         ModalBottomSheet(
             modifier = Modifier.systemBarsPadding(),
             sheetState = bottomSheetState,
@@ -308,7 +302,9 @@ private fun RoomMemberActionsBottomSheet(
 @Composable
 internal fun RoomMembersModerationViewPreview(@PreviewParameter(RoomMembersModerationStatePreviewProvider::class) state: RoomMembersModerationState) {
     ElementPreview {
-        Box(modifier = Modifier.fillMaxWidth().heightIn(min = 64.dp)) {
+        Box(modifier = Modifier
+            .fillMaxWidth()
+            .heightIn(min = 64.dp)) {
             RoomMembersModerationView(
                 state = state,
                 onDisplayMemberProfile = {},
