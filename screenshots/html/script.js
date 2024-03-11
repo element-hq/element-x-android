@@ -192,9 +192,15 @@ function addTable() {
   const numVisibleLanguages = languagesHeaderRow.childElementCount
   // Next items are the data
   var currentHeaderValue = "";
+  var screenshotCounter = 0;
   for (let screenshotIndex = 1; screenshotIndex < screenshots.length; screenshotIndex++) {
     let englishFile = screenshots[screenshotIndex][0];
+    let niceName = getNiceName(englishFile);
+    if (niceName != currentHeaderValue) {
+        screenshotCounter = 0;
+    }
     const tr = document.createElement('tr');
+    tr.id = niceName + screenshotCounter;
     let hasTranslatedFiles = false;
     for (let languageIndex = 0; languageIndex < dataLanguages.length; languageIndex++) {
       if (visibleLanguages[languageIndex] == 0) {
@@ -228,20 +234,21 @@ function addTable() {
     }
     if (showAllScreenshots || hasTranslatedFiles) {
       // Add a header for row, if different from previous
-      let name = getNiceName(englishFile);
-      if (name != currentHeaderValue) {
-        currentHeaderValue = name;
+      if (niceName != currentHeaderValue) {
+        currentHeaderValue = niceName;
         const trHead = document.createElement('tr');
+        trHead.id = niceName;
         const tdHead = document.createElement('td');
         tdHead.colSpan = numVisibleLanguages;
         tdHead.className = "view-header";
-        tdHead.textContent = name;
+        tdHead.textContent = niceName;
         trHead.appendChild(tdHead);
         tbody.appendChild(trHead);
         tbody.appendChild(languagesHeaderRow.cloneNode(true));
       }
       tbody.appendChild(tr);
     }
+    screenshotCounter++;
   }
   table.appendChild(thead);
   table.appendChild(tbody);
