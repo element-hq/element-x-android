@@ -302,9 +302,11 @@ private fun RoomMemberActionsBottomSheet(
 @Composable
 internal fun RoomMembersModerationViewPreview(@PreviewParameter(RoomMembersModerationStatePreviewProvider::class) state: RoomMembersModerationState) {
     ElementPreview {
-        Box(modifier = Modifier
-            .fillMaxWidth()
-            .heightIn(min = 64.dp)) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .heightIn(min = 64.dp)
+        ) {
             RoomMembersModerationView(
                 state = state,
                 onDisplayMemberProfile = {},
