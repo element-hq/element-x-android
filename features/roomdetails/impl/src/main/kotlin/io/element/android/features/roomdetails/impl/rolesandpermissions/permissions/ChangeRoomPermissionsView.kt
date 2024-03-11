@@ -27,6 +27,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.roomdetails.impl.R
+import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.designsystem.components.async.AsyncActionView
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
@@ -43,8 +44,8 @@ import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.matrix.api.room.RoomMember
+import io.element.android.libraries.matrix.api.room.powerlevels.MatrixRoomPowerLevels
 import io.element.android.libraries.ui.strings.CommonStrings
-import kotlinx.collections.immutable.ImmutableMap
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -87,21 +88,21 @@ fun ChangeRoomPermissionsView(
                     role = RoomMember.Role.ADMIN,
                     currentPermissions = state.currentPermissions
                 ) { item, role ->
-                    state.eventSink(ChangeRoomPermissionsEvent.ChangeRole(item, role))
+                    state.eventSink(ChangeRoomPermissionsEvent.ChangeMinimumRoleForAction(item, role))
                 }
                 SelectRoleItem(
                     permissionsItem = permissionItem,
                     role = RoomMember.Role.MODERATOR,
                     currentPermissions = state.currentPermissions
                 ) { item, role ->
-                    state.eventSink(ChangeRoomPermissionsEvent.ChangeRole(item, role))
+                    state.eventSink(ChangeRoomPermissionsEvent.ChangeMinimumRoleForAction(item, role))
                 }
                 SelectRoleItem(
                     permissionsItem = permissionItem,
                     role = RoomMember.Role.USER,
                     currentPermissions = state.currentPermissions
                 ) { item, role ->
-                    state.eventSink(ChangeRoomPermissionsEvent.ChangeRole(item, role))
+                    state.eventSink(ChangeRoomPermissionsEvent.ChangeMinimumRoleForAction(item, role))
                 }
             }
         }
@@ -133,10 +134,10 @@ fun ChangeRoomPermissionsView(
 
 @Composable
 private fun SelectRoleItem(
-    permissionsItem: RoomPermissionsItem,
+    permissionsItem: RoomPermissionType,
     role: RoomMember.Role,
-    currentPermissions: ImmutableMap<RoomPermissionsItem, RoomMember.Role>,
-    onClick: (RoomPermissionsItem, RoomMember.Role) -> Unit
+    currentPermissions: MatrixRoomPowerLevels?,
+    onClick: (RoomPermissionType, RoomMember.Role) -> Unit
 ) {
     val title = when (role) {
         RoomMember.Role.ADMIN -> stringResource(R.string.screen_room_change_permissions_administrators)
@@ -145,7 +146,7 @@ private fun SelectRoleItem(
     }
     ListItem(
         headlineContent = { Text(text = title) },
-        trailingContent = if (currentPermissions[permissionsItem] == role) {
+        trailingContent = if (currentPermissions?.isSelected(permissionsItem, role).orFalse()) {
             ListItemContent.Icon(IconSource.Vector(CompoundIcons.Check()))
         } else {
             null
@@ -155,16 +156,29 @@ private fun SelectRoleItem(
     )
 }
 
+private fun MatrixRoomPowerLevels.isSelected(item: RoomPermissionType, role: RoomMember.Role): Boolean {
+    return when (item) {
+        RoomPermissionType.BAN -> RoomMember.Role.forPowerLevel(ban) == role
+        RoomPermissionType.INVITE -> RoomMember.Role.forPowerLevel(invite) == role
+        RoomPermissionType.KICK -> RoomMember.Role.forPowerLevel(kick) == role
+        RoomPermissionType.SEND_EVENTS -> RoomMember.Role.forPowerLevel(sendEvents) == role
+        RoomPermissionType.REDACT_EVENTS -> RoomMember.Role.forPowerLevel(redactEvents) == role
+        RoomPermissionType.ROOM_NAME -> RoomMember.Role.forPowerLevel(roomName) == role
+        RoomPermissionType.ROOM_AVATAR -> RoomMember.Role.forPowerLevel(roomAvatar) == role
+        RoomPermissionType.ROOM_TOPIC -> RoomMember.Role.forPowerLevel(roomTopic) == role
+    }
+}
+
 @Composable
-private fun titleForSection(item: RoomPermissionsItem): String = when (item) {
-    RoomPermissionsItem.INVITE -> stringResource(R.string.screen_room_change_permissions_invite_people)
-    RoomPermissionsItem.KICK -> stringResource(R.string.screen_room_change_permissions_remove_people)
-    RoomPermissionsItem.BAN -> stringResource(R.string.screen_room_change_permissions_ban_people)
-    RoomPermissionsItem.SEND_EVENTS -> stringResource(R.string.screen_room_change_permissions_send_messages)
-    RoomPermissionsItem.REDACT_EVENTS -> stringResource(R.string.screen_room_change_permissions_delete_messages)
-    RoomPermissionsItem.ROOM_NAME -> stringResource(R.string.screen_room_change_permissions_room_name)
-    RoomPermissionsItem.ROOM_AVATAR -> stringResource(R.string.screen_room_change_permissions_room_avatar)
-    RoomPermissionsItem.ROOM_TOPIC -> stringResource(R.string.screen_room_change_permissions_room_topic)
+private fun titleForSection(item: RoomPermissionType): String = when (item) {
+    RoomPermissionType.INVITE -> stringResource(R.string.screen_room_change_permissions_invite_people)
+    RoomPermissionType.KICK -> stringResource(R.string.screen_room_change_permissions_remove_people)
+    RoomPermissionType.BAN -> stringResource(R.string.screen_room_change_permissions_ban_people)
+    RoomPermissionType.SEND_EVENTS -> stringResource(R.string.screen_room_change_permissions_send_messages)
+    RoomPermissionType.REDACT_EVENTS -> stringResource(R.string.screen_room_change_permissions_delete_messages)
+    RoomPermissionType.ROOM_NAME -> stringResource(R.string.screen_room_change_permissions_room_name)
+    RoomPermissionType.ROOM_AVATAR -> stringResource(R.string.screen_room_change_permissions_room_avatar)
+    RoomPermissionType.ROOM_TOPIC -> stringResource(R.string.screen_room_change_permissions_room_topic)
 }
 
 @PreviewsDayNight

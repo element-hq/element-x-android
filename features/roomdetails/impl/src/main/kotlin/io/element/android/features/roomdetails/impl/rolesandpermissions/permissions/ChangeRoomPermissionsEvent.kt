@@ -19,7 +19,7 @@ package io.element.android.features.roomdetails.impl.rolesandpermissions.permiss
 import io.element.android.libraries.matrix.api.room.RoomMember
 
 interface ChangeRoomPermissionsEvent {
-    data class ChangeRole(val item: RoomPermissionsItem, val role: RoomMember.Role) : ChangeRoomPermissionsEvent
+    data class ChangeMinimumRoleForAction(val action: RoomPermissionType, val role: RoomMember.Role) : ChangeRoomPermissionsEvent
     data object Save : ChangeRoomPermissionsEvent
     data object Exit : ChangeRoomPermissionsEvent
     data object ResetPendingActions : ChangeRoomPermissionsEvent

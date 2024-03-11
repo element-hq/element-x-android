@@ -19,12 +19,8 @@ package io.element.android.features.roomdetails.impl.rolesandpermissions.permiss
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.api.room.RoomMember
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.ImmutableMap
-import kotlinx.collections.immutable.persistentListOf
-import kotlinx.collections.immutable.persistentMapOf
+import io.element.android.libraries.matrix.api.room.powerlevels.MatrixRoomPowerLevels
 import kotlinx.collections.immutable.toPersistentList
-import kotlinx.collections.immutable.toPersistentMap
 
 class ChangeRoomPermissionsStatePreviewProvider : PreviewParameterProvider<ChangeRoomPermissionsState> {
     override val values: Sequence<ChangeRoomPermissionsState>
@@ -45,15 +41,15 @@ class ChangeRoomPermissionsStatePreviewProvider : PreviewParameterProvider<Chang
 
 internal fun aChangeRoomPermissionsState(
     section: ChangeRoomPermissionsSection,
-    currentPermissions: Map<RoomPermissionsItem, RoomMember.Role> = permissionsForSection(section),
-    items: List<RoomPermissionsItem> = itemsForSection(section),
+    currentPermissions: MatrixRoomPowerLevels = previewPermissions(),
+    items: List<RoomPermissionType> = ChangeRoomPermissionsPresenter.itemsForSection(section),
     hasChanges: Boolean = false,
     saveAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
     confirmExitAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
     eventSink: (ChangeRoomPermissionsEvent) -> Unit = {},
 ) = ChangeRoomPermissionsState(
     section = section,
-    currentPermissions = currentPermissions.toPersistentMap(),
+    currentPermissions = currentPermissions,
     items = items.toPersistentList(),
     hasChanges = hasChanges,
     saveAction = saveAction,
@@ -61,40 +57,18 @@ internal fun aChangeRoomPermissionsState(
     eventSink = eventSink,
 )
 
-private fun itemsForSection(section: ChangeRoomPermissionsSection): ImmutableList<RoomPermissionsItem> {
-    return when (section) {
-        ChangeRoomPermissionsSection.RoomDetails -> persistentListOf(
-            RoomPermissionsItem.ROOM_NAME,
-            RoomPermissionsItem.ROOM_AVATAR,
-            RoomPermissionsItem.ROOM_TOPIC,
-        )
-        ChangeRoomPermissionsSection.MessagesAndContent -> persistentListOf(
-            RoomPermissionsItem.SEND_EVENTS,
-            RoomPermissionsItem.REDACT_EVENTS,
-        )
-        ChangeRoomPermissionsSection.MembershipModeration -> persistentListOf(
-            RoomPermissionsItem.INVITE,
-            RoomPermissionsItem.KICK,
-            RoomPermissionsItem.BAN,
-        )
-    }
-}
-
-private fun permissionsForSection(section: ChangeRoomPermissionsSection): ImmutableMap<RoomPermissionsItem, RoomMember.Role> {
-    return when (section) {
-        ChangeRoomPermissionsSection.RoomDetails -> persistentMapOf(
-            RoomPermissionsItem.ROOM_NAME to RoomMember.Role.ADMIN,
-            RoomPermissionsItem.ROOM_AVATAR to RoomMember.Role.MODERATOR,
-            RoomPermissionsItem.ROOM_TOPIC to RoomMember.Role.USER,
-        )
-        ChangeRoomPermissionsSection.MessagesAndContent -> persistentMapOf(
-            RoomPermissionsItem.SEND_EVENTS to RoomMember.Role.ADMIN,
-            RoomPermissionsItem.REDACT_EVENTS to RoomMember.Role.MODERATOR,
-        )
-        ChangeRoomPermissionsSection.MembershipModeration -> persistentMapOf(
-            RoomPermissionsItem.INVITE to RoomMember.Role.ADMIN,
-            RoomPermissionsItem.KICK to RoomMember.Role.MODERATOR,
-            RoomPermissionsItem.BAN to RoomMember.Role.USER,
-        )
-    }
+private fun previewPermissions(): MatrixRoomPowerLevels {
+    return MatrixRoomPowerLevels(
+        // MembershipModeration section
+        invite = RoomMember.Role.ADMIN.powerLevel,
+        kick = RoomMember.Role.MODERATOR.powerLevel,
+        ban = RoomMember.Role.USER.powerLevel,
+        // MessagesAndContent section
+        redactEvents = RoomMember.Role.MODERATOR.powerLevel,
+        sendEvents = RoomMember.Role.ADMIN.powerLevel,
+        // RoomDetails section
+        roomName = RoomMember.Role.ADMIN.powerLevel,
+        roomAvatar = RoomMember.Role.MODERATOR.powerLevel,
+        roomTopic = RoomMember.Role.USER.powerLevel,
+    )
 }

@@ -30,11 +30,9 @@ import dagger.assisted.AssistedInject
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.api.room.MatrixRoom
-import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.powerlevels.MatrixRoomPowerLevels
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
-import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -42,31 +40,33 @@ class ChangeRoomPermissionsPresenter @AssistedInject constructor(
     @Assisted private val section: ChangeRoomPermissionsSection,
     private val room: MatrixRoom,
 ) : Presenter<ChangeRoomPermissionsState> {
+    companion object {
+        internal fun itemsForSection(section: ChangeRoomPermissionsSection) = when (section) {
+            ChangeRoomPermissionsSection.RoomDetails -> persistentListOf(
+                RoomPermissionType.ROOM_NAME,
+                RoomPermissionType.ROOM_AVATAR,
+                RoomPermissionType.ROOM_TOPIC,
+            )
+            ChangeRoomPermissionsSection.MessagesAndContent -> persistentListOf(
+                RoomPermissionType.SEND_EVENTS,
+                RoomPermissionType.REDACT_EVENTS,
+            )
+            ChangeRoomPermissionsSection.MembershipModeration -> persistentListOf(
+                RoomPermissionType.INVITE,
+                RoomPermissionType.KICK,
+                RoomPermissionType.BAN,
+            )
+        }
+    }
     @AssistedFactory
     interface Factory {
         fun create(section: ChangeRoomPermissionsSection): ChangeRoomPermissionsPresenter
     }
 
-    private val items: ImmutableList<RoomPermissionsItem> =
-        when (section) {
-            ChangeRoomPermissionsSection.RoomDetails -> persistentListOf(
-                RoomPermissionsItem.ROOM_NAME,
-                RoomPermissionsItem.ROOM_AVATAR,
-                RoomPermissionsItem.ROOM_TOPIC,
-            )
-            ChangeRoomPermissionsSection.MessagesAndContent -> persistentListOf(
-                RoomPermissionsItem.SEND_EVENTS,
-                RoomPermissionsItem.REDACT_EVENTS,
-            )
-            ChangeRoomPermissionsSection.MembershipModeration -> persistentListOf(
-                RoomPermissionsItem.INVITE,
-                RoomPermissionsItem.KICK,
-                RoomPermissionsItem.BAN,
-            )
-        }
+    private val items: ImmutableList<RoomPermissionType> = itemsForSection(section)
 
-    private var initialPermissions by mutableStateOf(persistentMapOf<RoomPermissionsItem, RoomMember.Role>())
-    private var currentPermissions by mutableStateOf(persistentMapOf<RoomPermissionsItem, RoomMember.Role>())
+    private var initialPermissions by mutableStateOf<MatrixRoomPowerLevels?>(null)
+    private var currentPermissions by mutableStateOf<MatrixRoomPowerLevels?>(null)
     private var saveAction by mutableStateOf<AsyncAction<Unit>>(AsyncAction.Uninitialized)
     private var confirmExitAction by mutableStateOf<AsyncAction<Unit>>(AsyncAction.Uninitialized)
 
@@ -84,8 +84,17 @@ class ChangeRoomPermissionsPresenter @AssistedInject constructor(
 
         fun handleEvent(event: ChangeRoomPermissionsEvent) {
             when (event) {
-                is ChangeRoomPermissionsEvent.ChangeRole -> {
-                    currentPermissions = currentPermissions.put(event.item, event.role)
+                is ChangeRoomPermissionsEvent.ChangeMinimumRoleForAction -> {
+                    currentPermissions = when (event.action) {
+                        RoomPermissionType.BAN -> currentPermissions?.copy(ban = event.role.powerLevel)
+                        RoomPermissionType.INVITE -> currentPermissions?.copy(invite = event.role.powerLevel)
+                        RoomPermissionType.KICK -> currentPermissions?.copy(kick = event.role.powerLevel)
+                        RoomPermissionType.SEND_EVENTS -> currentPermissions?.copy(sendEvents = event.role.powerLevel)
+                        RoomPermissionType.REDACT_EVENTS -> currentPermissions?.copy(redactEvents = event.role.powerLevel)
+                        RoomPermissionType.ROOM_NAME -> currentPermissions?.copy(roomName = event.role.powerLevel)
+                        RoomPermissionType.ROOM_AVATAR -> currentPermissions?.copy(roomAvatar = event.role.powerLevel)
+                        RoomPermissionType.ROOM_TOPIC -> currentPermissions?.copy(roomTopic = event.role.powerLevel)
+                    }
                 }
                 is ChangeRoomPermissionsEvent.Save -> coroutineScope.save()
                 is ChangeRoomPermissionsEvent.Exit -> {
@@ -114,31 +123,16 @@ class ChangeRoomPermissionsPresenter @AssistedInject constructor(
 
     private suspend fun updatePermissions() {
         val powerLevels = room.powerLevels().getOrNull() ?: return
-        initialPermissions = persistentMapOf(
-            RoomPermissionsItem.BAN to RoomMember.Role.forPowerLevel(powerLevels.ban),
-            RoomPermissionsItem.INVITE to RoomMember.Role.forPowerLevel(powerLevels.invite),
-            RoomPermissionsItem.KICK to RoomMember.Role.forPowerLevel(powerLevels.kick),
-            RoomPermissionsItem.SEND_EVENTS to RoomMember.Role.forPowerLevel(powerLevels.sendEvents),
-            RoomPermissionsItem.REDACT_EVENTS to RoomMember.Role.forPowerLevel(powerLevels.redactEvents),
-            RoomPermissionsItem.ROOM_NAME to RoomMember.Role.forPowerLevel(powerLevels.roomName),
-            RoomPermissionsItem.ROOM_AVATAR to RoomMember.Role.forPowerLevel(powerLevels.roomAvatar),
-            RoomPermissionsItem.ROOM_TOPIC to RoomMember.Role.forPowerLevel(powerLevels.roomTopic),
-        )
+        initialPermissions = powerLevels
         currentPermissions = initialPermissions
     }
 
     private fun CoroutineScope.save() = launch {
         saveAction = AsyncAction.Loading
-        val updatedRoomPowerLevels = MatrixRoomPowerLevels(
-            ban = currentPermissions[RoomPermissionsItem.BAN]?.powerLevel ?: 0,
-            invite = currentPermissions[RoomPermissionsItem.INVITE]?.powerLevel ?: 0,
-            kick = currentPermissions[RoomPermissionsItem.KICK]?.powerLevel ?: 0,
-            sendEvents = currentPermissions[RoomPermissionsItem.SEND_EVENTS]?.powerLevel ?: 0,
-            redactEvents = currentPermissions[RoomPermissionsItem.REDACT_EVENTS]?.powerLevel ?: 0,
-            roomName = currentPermissions[RoomPermissionsItem.ROOM_NAME]?.powerLevel ?: 0,
-            roomAvatar = currentPermissions[RoomPermissionsItem.ROOM_AVATAR]?.powerLevel ?: 0,
-            roomTopic = currentPermissions[RoomPermissionsItem.ROOM_TOPIC]?.powerLevel ?: 0,
-        )
+        val updatedRoomPowerLevels = currentPermissions ?: run {
+            saveAction = AsyncAction.Failure(IllegalStateException("Failed to set room power levels"))
+            return@launch
+        }
         room.updatePowerLevels(updatedRoomPowerLevels)
             .onSuccess {
                 initialPermissions = currentPermissions

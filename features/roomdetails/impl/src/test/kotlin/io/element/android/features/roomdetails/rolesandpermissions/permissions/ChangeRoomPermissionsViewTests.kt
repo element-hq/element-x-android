@@ -28,7 +28,7 @@ import io.element.android.features.roomdetails.impl.rolesandpermissions.permissi
 import io.element.android.features.roomdetails.impl.rolesandpermissions.permissions.ChangeRoomPermissionsSection
 import io.element.android.features.roomdetails.impl.rolesandpermissions.permissions.ChangeRoomPermissionsState
 import io.element.android.features.roomdetails.impl.rolesandpermissions.permissions.ChangeRoomPermissionsView
-import io.element.android.features.roomdetails.impl.rolesandpermissions.permissions.RoomPermissionsItem
+import io.element.android.features.roomdetails.impl.rolesandpermissions.permissions.RoomPermissionType
 import io.element.android.features.roomdetails.impl.rolesandpermissions.permissions.aChangeRoomPermissionsState
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.api.room.RoomMember
@@ -37,7 +37,6 @@ import io.element.android.tests.testutils.EnsureNeverCalled
 import io.element.android.tests.testutils.EventsRecorder
 import io.element.android.tests.testutils.clickOn
 import io.element.android.tests.testutils.pressBack
-import kotlinx.collections.immutable.persistentMapOf
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
@@ -65,7 +64,6 @@ class ChangeRoomPermissionsViewTests {
         rule.setChangeRoomPermissionsRule(
             state = aChangeRoomPermissionsState(
                 section = ChangeRoomPermissionsSection.RoomDetails,
-                currentPermissions = persistentMapOf(RoomPermissionsItem.ROOM_NAME to RoomMember.Role.MODERATOR),
                 hasChanges = true,
                 confirmExitAction = AsyncAction.Confirming,
                 eventSink = recorder,
@@ -82,7 +80,6 @@ class ChangeRoomPermissionsViewTests {
         rule.setChangeRoomPermissionsRule(
             state = aChangeRoomPermissionsState(
                 section = ChangeRoomPermissionsSection.RoomDetails,
-                currentPermissions = persistentMapOf(RoomPermissionsItem.ROOM_NAME to RoomMember.Role.MODERATOR),
                 hasChanges = true,
                 eventSink = recorder,
             ),
@@ -102,7 +99,7 @@ class ChangeRoomPermissionsViewTests {
         )
         val text = rule.activity.getText(R.string.screen_room_change_permissions_moderators).toString()
         rule.onAllNodesWithText(text).onFirst().performClick()
-        recorder.assertSingle(ChangeRoomPermissionsEvent.ChangeRole(RoomPermissionsItem.ROOM_NAME, RoomMember.Role.MODERATOR))
+        recorder.assertSingle(ChangeRoomPermissionsEvent.ChangeMinimumRoleForAction(RoomPermissionType.ROOM_NAME, RoomMember.Role.MODERATOR))
     }
 
     @Test
@@ -111,7 +108,6 @@ class ChangeRoomPermissionsViewTests {
         rule.setChangeRoomPermissionsRule(
             state = aChangeRoomPermissionsState(
                 section = ChangeRoomPermissionsSection.RoomDetails,
-                currentPermissions = persistentMapOf(RoomPermissionsItem.ROOM_NAME to RoomMember.Role.MODERATOR),
                 hasChanges = true,
                 eventSink = recorder,
             ),
