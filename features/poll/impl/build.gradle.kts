@@ -23,6 +23,11 @@ plugins {
 
 android {
     namespace = "io.element.android.features.poll.impl"
+    testOptions {
+        unitTests {
+            isIncludeAndroidResources = true
+        }
+    }
 }
 
 anvil {
@@ -48,12 +53,15 @@ dependencies {
     testImplementation(libs.molecule.runtime)
     testImplementation(libs.test.truth)
     testImplementation(libs.test.turbine)
+    testImplementation(libs.test.robolectric)
     testImplementation(projects.libraries.matrix.test)
     testImplementation(projects.services.analytics.test)
     testImplementation(projects.features.messages.test)
     testImplementation(projects.tests.testutils)
     testImplementation(projects.libraries.dateformatter.test)
     testImplementation(projects.features.poll.test)
+    testImplementation(libs.androidx.compose.ui.test.junit)
+    testReleaseImplementation(libs.androidx.compose.ui.test.manifest)
 
     ksp(libs.showkase.processor)
 }
