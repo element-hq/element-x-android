@@ -17,63 +17,36 @@
 package io.element.android.features.roomlist.impl
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewParameter
-import androidx.compose.ui.unit.Velocity
-import androidx.compose.ui.unit.dp
-import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.leaveroom.api.LeaveRoomView
 import io.element.android.features.networkmonitor.api.ui.ConnectivityIndicatorContainer
-import io.element.android.features.roomlist.impl.components.ConfirmRecoveryKeyBanner
-import io.element.android.features.roomlist.impl.components.RequestVerificationHeader
 import io.element.android.features.roomlist.impl.components.RoomListContentView
 import io.element.android.features.roomlist.impl.components.RoomListMenuAction
 import io.element.android.features.roomlist.impl.components.RoomListTopBar
-import io.element.android.features.roomlist.impl.components.RoomSummaryRow
-import io.element.android.features.roomlist.impl.filters.RoomListFiltersView
-import io.element.android.features.roomlist.impl.migration.MigrationScreenView
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
 import io.element.android.features.roomlist.impl.search.RoomListSearchView
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.FloatingActionButton
-import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
 import io.element.android.libraries.designsystem.theme.components.Icon
-import io.element.android.libraries.designsystem.theme.components.IconSource
 import io.element.android.libraries.designsystem.theme.components.Scaffold
-import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarHost
 import io.element.android.libraries.designsystem.utils.snackbar.rememberSnackbarHostState
 import io.element.android.libraries.matrix.api.core.RoomId
-import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
 fun RoomListView(
@@ -161,21 +134,18 @@ private fun RoomListScaffold(
     Scaffold(
         modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
-            Column {
-                RoomListTopBar(
-                    matrixUser = state.matrixUser,
-                    showAvatarIndicator = state.showAvatarIndicator,
-                    areSearchResultsDisplayed = state.searchState.isSearchActive,
-                    onToggleSearch = { state.eventSink(RoomListEvents.ToggleSearchResults) },
-                    onMenuActionClicked = onMenuActionClicked,
-                    onOpenSettings = onOpenSettings,
-                    scrollBehavior = scrollBehavior,
-                    displayMenuItems = !state.displayActions,
-                )
-                if (state.displayFilters) {
-                    RoomListFiltersView(state = state.filtersState)
-                }
-            }
+            RoomListTopBar(
+                matrixUser = state.matrixUser,
+                showAvatarIndicator = state.showAvatarIndicator,
+                areSearchResultsDisplayed = state.searchState.isSearchActive,
+                onToggleSearch = { state.eventSink(RoomListEvents.ToggleSearchResults) },
+                onMenuActionClicked = onMenuActionClicked,
+                onOpenSettings = onOpenSettings,
+                scrollBehavior = scrollBehavior,
+                displayMenuItems = state.displayActions,
+                displayFilters = state.displayFilters,
+                filtersState = state.filtersState,
+            )
         },
         content = { padding ->
             RoomListContentView(
