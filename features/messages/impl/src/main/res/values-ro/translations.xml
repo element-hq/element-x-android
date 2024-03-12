@@ -28,31 +28,14 @@
   <string name="screen_room_attachment_source_location">"Locație"</string>
   <string name="screen_room_attachment_source_poll">"Sondaj"</string>
   <string name="screen_room_attachment_text_formatting">"Formatarea textului"</string>
-  <string name="screen_room_change_permissions_everyone">"Toți"</string>
   <string name="screen_room_encrypted_history_banner">"Istoricul mesajelor este momentan indisponibil în această cameră"</string>
   <string name="screen_room_encrypted_history_banner_unverified">"Istoricul mesajelor nu este disponibil în această cameră. Verificați acest dispozitiv pentru a vedea istoricul mesajelor."</string>
-  <string name="screen_room_error_failed_processing_media">"Procesarea datelor media a eșuat, vă rugăm să încercați din nou."</string>
-  <string name="screen_room_error_failed_retrieving_user_details">"Nu am putut găsi detaliile utilizatorului"</string>
   <string name="screen_room_invite_again_alert_message">"Doriți să îi invitați înapoi?"</string>
   <string name="screen_room_invite_again_alert_title">"Sunteți singur în această cameră"</string>
   <string name="screen_room_mentions_at_room_subtitle">"Notificați întreaga cameră"</string>
   <string name="screen_room_mentions_at_room_title">"Toți"</string>
   <string name="screen_room_message_copied">"Mesaj copiat"</string>
   <string name="screen_room_no_permission_to_post">"Nu aveți permisiunea de a posta în această cameră"</string>
-  <string name="screen_room_notification_settings_allow_custom">"Permiteți setări personalizate"</string>
-  <string name="screen_room_notification_settings_allow_custom_footnote">"Activarea acestei opțiuni va anula setările implicite."</string>
-  <string name="screen_room_notification_settings_custom_settings_title">"Anunțați-mă în acestă cameră pentru"</string>
-  <string name="screen_room_notification_settings_default_setting_footnote">"Îl puteți schimba în %1$s."</string>
-  <string name="screen_room_notification_settings_default_setting_footnote_content_link">"Setări generale"</string>
-  <string name="screen_room_notification_settings_default_setting_title">"Setare implicită"</string>
-  <string name="screen_room_notification_settings_edit_remove_setting">"Stergeți setarea personalizată"</string>
-  <string name="screen_room_notification_settings_error_loading_settings">"A apărut o eroare la încărcarea setărilor pentry notificari."</string>
-  <string name="screen_room_notification_settings_error_restoring_default">"Nu s-a reușit restaurarea modului implicit, vă rugăm să încercați din nou."</string>
-  <string name="screen_room_notification_settings_error_setting_mode">"Nu s-a reușit setarea modului, vă rugăm să încercați din nou."</string>
-  <string name="screen_room_notification_settings_mentions_only_disclaimer">"Serverul dumneavoastră nu acceptă această opțiune în camerele criptate, nu veți primi notificări în această cameră."</string>
-  <string name="screen_room_notification_settings_mode_all_messages">"Toate mesajele"</string>
-  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Numai mențiuni și cuvinte cheie"</string>
-  <string name="screen_room_notification_settings_room_custom_settings_title">"În această cameră, anunțați-mă pentru"</string>
   <string name="screen_room_reactions_show_less">"Afișați mai puțin"</string>
   <string name="screen_room_reactions_show_more">"Afișați mai mult"</string>
   <string name="screen_room_retry_send_menu_send_again_action">"Trimiteți din nou"</string>
@@ -70,5 +53,4 @@
     <item quantity="other">"%1$s scriu"</item>
   </plurals>
   <string name="screen_room_typing_two_members">"%1$s și %2$s"</string>
-  <string name="screen_room_voice_message_tooltip">"Țineți apăsat pentru a înregistra"</string>
 </resources>

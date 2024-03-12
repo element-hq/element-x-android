@@ -245,6 +245,14 @@
   <string name="screen_media_picker_error_failed_selection">"Не ўдалося выбраць носьбіт, паўтарыце спробу."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Не атрымалася апрацаваць медыяфайл для загрузкі, паспрабуйце яшчэ раз."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Не атрымалася загрузіць медыяфайлы, паспрабуйце яшчэ раз."</string>
+  <string name="screen_room_error_failed_processing_media">"Не атрымалася апрацаваць медыяфайл для загрузкі, паспрабуйце яшчэ раз."</string>
+  <string name="screen_room_error_failed_retrieving_user_details">"Не ўдалося атрымаць інфармацыю пра карыстальніка"</string>
+  <string name="screen_room_member_details_block_alert_action">"Заблакіраваць"</string>
+  <string name="screen_room_member_details_block_alert_description">"Заблакіраваныя карыстальнікі не змогуць адпраўляць вам паведамленні, і ўсе іх паведамленні будуць схаваны. Вы можаце разблакіраваць іх у любы час."</string>
+  <string name="screen_room_member_details_block_user">"Заблакіраваць карыстальніка"</string>
+  <string name="screen_room_member_details_unblock_alert_action">"Разблакіраваць"</string>
+  <string name="screen_room_member_details_unblock_alert_description">"Вы зноў зможаце ўбачыць усе паведамленні."</string>
+  <string name="screen_room_member_details_unblock_user">"Разблакіраваць карыстальніка"</string>
   <string name="screen_share_location_title">"Падзяліцца месцазнаходжаннем"</string>
   <string name="screen_share_my_location_action">"Падзяліцца маім месцазнаходжаннем"</string>
   <string name="screen_share_open_apple_maps">"Адкрыць у Apple Maps"</string>

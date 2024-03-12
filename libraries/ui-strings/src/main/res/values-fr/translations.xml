@@ -248,6 +248,14 @@
   <string name="screen_media_picker_error_failed_selection">"Échec de la sélection du média, veuillez réessayer."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Échec du traitement des médias à télécharger, veuillez réessayer."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Échec du téléchargement du média, veuillez réessayer."</string>
+  <string name="screen_room_error_failed_processing_media">"Échec du traitement des médias à télécharger, veuillez réessayer."</string>
+  <string name="screen_room_error_failed_retrieving_user_details">"Impossible de récupérer les détails de l’utilisateur"</string>
+  <string name="screen_room_member_details_block_alert_action">"Bloquer"</string>
+  <string name="screen_room_member_details_block_alert_description">"Les utilisateurs bloqués ne pourront pas vous envoyer de messages et tous leurs messages seront masqués. Vous pouvez les débloquer à tout moment."</string>
+  <string name="screen_room_member_details_block_user">"Bloquer l’utilisateur"</string>
+  <string name="screen_room_member_details_unblock_alert_action">"Débloquer"</string>
+  <string name="screen_room_member_details_unblock_alert_description">"Vous pourrez à nouveau voir tous ses messages."</string>
+  <string name="screen_room_member_details_unblock_user">"Débloquer l’utilisateur"</string>
   <string name="screen_share_location_title">"Partage de position"</string>
   <string name="screen_share_my_location_action">"Partager ma position"</string>
   <string name="screen_share_open_apple_maps">"Ouvrir dans Apple Maps"</string>
