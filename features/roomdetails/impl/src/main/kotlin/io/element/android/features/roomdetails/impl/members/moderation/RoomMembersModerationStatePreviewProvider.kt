@@ -20,7 +20,6 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.roomdetails.impl.members.anAlice
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.api.room.RoomMember
-import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
 
 class RoomMembersModerationStatePreviewProvider : PreviewParameterProvider<RoomMembersModerationState> {
@@ -28,20 +27,20 @@ class RoomMembersModerationStatePreviewProvider : PreviewParameterProvider<RoomM
         get() = sequenceOf(
             aRoomMembersModerationState(
                 selectedRoomMember = anAlice(),
-                actions = persistentListOf(
+                actions = listOf(
                     ModerationAction.DisplayProfile(anAlice().userId),
                 ),
             ),
             aRoomMembersModerationState(
                 selectedRoomMember = anAlice(),
-                actions = persistentListOf(
+                actions = listOf(
                     ModerationAction.DisplayProfile(anAlice().userId),
                     ModerationAction.KickUser(userId = anAlice().userId),
                 ),
             ),
             aRoomMembersModerationState(
                 selectedRoomMember = anAlice(),
-                actions = persistentListOf(
+                actions = listOf(
                     ModerationAction.DisplayProfile(anAlice().userId),
                     ModerationAction.KickUser(userId = anAlice().userId),
                     ModerationAction.BanUser(userId = anAlice().userId),

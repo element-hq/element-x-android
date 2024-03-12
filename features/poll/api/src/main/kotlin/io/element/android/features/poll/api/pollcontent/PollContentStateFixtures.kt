@@ -16,6 +16,7 @@
 
 package io.element.android.features.poll.api.pollcontent
 
+import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.poll.PollAnswer
 import io.element.android.libraries.matrix.api.poll.PollKind
 import kotlinx.collections.immutable.ImmutableList
@@ -83,9 +84,11 @@ fun aPollAnswerItem(
 )
 
 fun aPollContentState(
+    eventId: EventId? = null,
     isMine: Boolean = false,
     isEnded: Boolean = false,
     isDisclosed: Boolean = true,
+    isPollEditable: Boolean = true,
     hasVotes: Boolean = true,
     question: String = aPollQuestion(),
     pollKind: PollKind = PollKind.Disclosed,
@@ -95,11 +98,11 @@ fun aPollContentState(
         hasVotes = hasVotes
     ),
 ) = PollContentState(
-    eventId = null,
+    eventId = eventId,
     question = question,
     answerItems = answerItems,
     pollKind = pollKind,
-    isPollEditable = isMine && !isEnded,
+    isPollEditable = isMine && !isEnded && isPollEditable,
     isPollEnded = isEnded,
     isMine = isMine,
 )
