@@ -39,6 +39,8 @@
   <string name="state_event_room_name_changed_by_you">"Вы змянілі назву пакоя на: %1$s"</string>
   <string name="state_event_room_name_removed">"%1$s выдаліў(-ла) назву пакоя"</string>
   <string name="state_event_room_name_removed_by_you">"Вы выдалілі назву пакоя"</string>
+  <string name="state_event_room_none">"%1$s не зрабіў ніякіх змен"</string>
+  <string name="state_event_room_none_by_you">"Вы не зрабілі ніякіх змен"</string>
   <string name="state_event_room_reject">"%1$s адхіліў запрашэнне"</string>
   <string name="state_event_room_reject_by_you">"Вы адхілілі запрашэнне"</string>
   <string name="state_event_room_remove">"%1$s выдаліў %2$s"</string>

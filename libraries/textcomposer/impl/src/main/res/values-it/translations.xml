@@ -7,13 +7,13 @@
   <string name="rich_text_editor_composer_placeholder">"Messaggio…"</string>
   <string name="rich_text_editor_create_link">"Crea un collegamento"</string>
   <string name="rich_text_editor_edit_link">"Modifica collegamento"</string>
-  <string name="rich_text_editor_format_bold">"Applica il formato in grassetto"</string>
+  <string name="rich_text_editor_format_bold">"Applica il formato grassetto"</string>
   <string name="rich_text_editor_format_italic">"Applicare il formato corsivo"</string>
   <string name="rich_text_editor_format_strikethrough">"Applica il formato barrato"</string>
   <string name="rich_text_editor_format_underline">"Applicare il formato di sottolineatura"</string>
   <string name="rich_text_editor_full_screen_toggle">"Attiva/disattiva la modalità a schermo intero"</string>
   <string name="rich_text_editor_indent">"Rientro a destra"</string>
-  <string name="rich_text_editor_inline_code">"Applicare il formato del codice in linea"</string>
+  <string name="rich_text_editor_inline_code">"Applicare il formato codice inline"</string>
   <string name="rich_text_editor_link">"Imposta collegamento"</string>
   <string name="rich_text_editor_numbered_list">"Attiva/disattiva elenco numerato"</string>
   <string name="rich_text_editor_open_compose_options">"Apri le opzioni di composizione"</string>
