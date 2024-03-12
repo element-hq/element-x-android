@@ -94,6 +94,7 @@ class TimelinePresenter @AssistedInject constructor(
         val timelineItems by timelineItemsFactory.collectItemsAsState()
         val paginationState by timeline.paginationState.collectAsState()
         val syncUpdateFlow = room.syncUpdateFlow.collectAsState()
+
         val userHasPermissionToSendMessage by room.canSendMessageAsState(type = MessageEventType.ROOM_MESSAGE, updateKey = syncUpdateFlow.value)
         val userHasPermissionToSendReaction by room.canSendMessageAsState(type = MessageEventType.REACTION, updateKey = syncUpdateFlow.value)
 
@@ -170,7 +171,7 @@ class TimelinePresenter @AssistedInject constructor(
         val timelineRoomInfo by remember {
             derivedStateOf {
                 TimelineRoomInfo(
-                    isDirect = room.isDirect,
+                    isDM = room.isDm,
                     userHasPermissionToSendMessage = userHasPermissionToSendMessage,
                     userHasPermissionToSendReaction = userHasPermissionToSendReaction,
                 )

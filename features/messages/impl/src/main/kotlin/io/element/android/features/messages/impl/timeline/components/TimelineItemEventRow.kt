@@ -301,7 +301,7 @@ private fun TimelineItemEventRowContent(
 
         // Sender
         val avatarStrokeSize = 3.dp
-        if (event.showSenderInformation && !timelineRoomInfo.isDirect) {
+        if (event.showSenderInformation && !timelineRoomInfo.isDM) {
             MessageSenderInformation(
                 event.safeSenderName,
                 event.senderAvatar,
@@ -371,7 +371,7 @@ private fun TimelineItemEventRowContent(
                         // In design we want a offset of 6.dp compare to the bubble, so start is 22.dp (16 + 6)
                         start = when {
                             event.isMine -> 22.dp
-                            timelineRoomInfo.isDirect -> 22.dp
+                            timelineRoomInfo.isDM -> 22.dp
                             else -> 22.dp + BUBBLE_INCOMING_OFFSET
                         },
                         end = 16.dp

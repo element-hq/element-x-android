@@ -38,7 +38,7 @@ data class TimelineState(
 
 @Immutable
 data class TimelineRoomInfo(
-    val isDirect: Boolean,
+    val isDM: Boolean,
     val userHasPermissionToSendMessage: Boolean,
     val userHasPermissionToSendReaction: Boolean,
 )

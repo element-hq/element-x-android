@@ -235,10 +235,10 @@ internal fun aGroupedEvents(
 }
 
 internal fun aTimelineRoomInfo(
-    isDirect: Boolean = false,
+    isDM: Boolean = false,
     userHasPermissionToSendMessage: Boolean = true,
 ) = TimelineRoomInfo(
-    isDirect = isDirect,
+    isDM = isDM,
     userHasPermissionToSendMessage = userHasPermissionToSendMessage,
     userHasPermissionToSendReaction = true,
 )
