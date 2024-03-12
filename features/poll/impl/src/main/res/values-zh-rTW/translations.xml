@@ -4,10 +4,16 @@
   <string name="screen_create_poll_anonymous_desc">"只在投票結束後顯示結果"</string>
   <string name="screen_create_poll_anonymous_headline">"隱藏票數"</string>
   <string name="screen_create_poll_answer_hint">"選項 %1$d"</string>
+  <string name="screen_create_poll_cancel_confirmation_content_android">"變更尚未儲存，您確定要返回嗎？"</string>
   <string name="screen_create_poll_question_desc">"問題或主題"</string>
   <string name="screen_create_poll_question_hint">"投什麼？"</string>
   <string name="screen_create_poll_title">"建立投票"</string>
   <string name="screen_edit_poll_delete_confirmation">"您確定要刪除投票嗎？"</string>
   <string name="screen_edit_poll_delete_confirmation_title">"刪除投票"</string>
   <string name="screen_edit_poll_title">"編輯投票"</string>
+  <string name="screen_polls_history_empty_ongoing">"沒有進行中的投票。"</string>
+  <string name="screen_polls_history_empty_past">"沒有已結束的投票。"</string>
+  <string name="screen_polls_history_filter_ongoing">"進行中"</string>
+  <string name="screen_polls_history_filter_past">"已結束"</string>
+  <string name="screen_polls_history_title">"所有投票"</string>
 </resources>

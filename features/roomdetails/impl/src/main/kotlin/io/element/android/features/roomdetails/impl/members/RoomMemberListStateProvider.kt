@@ -17,6 +17,8 @@
 package io.element.android.features.roomdetails.impl.members
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import io.element.android.features.roomdetails.impl.members.moderation.RoomMembersModerationState
+import io.element.android.features.roomdetails.impl.members.moderation.aRoomMembersModerationState
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
 import io.element.android.libraries.matrix.api.core.UserId
@@ -57,30 +59,20 @@ internal class RoomMemberListStateProvider : PreviewParameterProvider<RoomMember
                 searchQuery = "something-with-no-results",
                 searchResults = SearchBarResultState.NoResultsFound()
             ),
-            aRoomMemberListState().copy(
-                roomMembers = AsyncData.Success(
-                    RoomMembers(
-                        invited = persistentListOf(aVictor(), aWalter()),
-                        joined = persistentListOf(anAlice(), aBob(), aWalter()),
-                        banned = persistentListOf(),
-                    )
-                ),
-                canDisplayBannedUsers = true,
-            ),
         )
 }
 
 internal fun aRoomMemberListState(
     roomMembers: AsyncData<RoomMembers> = AsyncData.Uninitialized,
     searchResults: SearchBarResultState<RoomMembers> = SearchBarResultState.Initial(),
-    canDisplayBannedUsers: Boolean = false,
+    moderationState: RoomMembersModerationState = aRoomMembersModerationState(),
 ) = RoomMemberListState(
     roomMembers = roomMembers,
     searchQuery = "",
     searchResults = searchResults,
     isSearchActive = false,
     canInvite = false,
-    canDisplayBannedUsers = canDisplayBannedUsers,
+    moderationState = moderationState,
     eventSink = {}
 )
 

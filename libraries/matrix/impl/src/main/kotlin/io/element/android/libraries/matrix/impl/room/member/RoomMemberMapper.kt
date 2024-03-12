@@ -24,19 +24,17 @@ import org.matrix.rustcomponents.sdk.MembershipState as RustMembershipState
 import org.matrix.rustcomponents.sdk.RoomMember as RustRoomMember
 
 object RoomMemberMapper {
-    fun map(roomMember: RustRoomMember): RoomMember = roomMember.use {
-        RoomMember(
-            UserId(it.userId()),
-            it.displayName(),
-            it.avatarUrl(),
-            mapMembership(it.membership()),
-            it.isNameAmbiguous(),
-            it.powerLevel(),
-            it.normalizedPowerLevel(),
-            it.isIgnored(),
-            mapRole(it.suggestedRoleForPowerLevel())
+    fun map(roomMember: RustRoomMember): RoomMember = RoomMember(
+            UserId(roomMember.userId),
+            roomMember.displayName,
+            roomMember.avatarUrl,
+            mapMembership(roomMember.membership),
+            roomMember.isNameAmbiguous,
+            roomMember.powerLevel,
+            roomMember.normalizedPowerLevel,
+            roomMember.isIgnored,
+            mapRole(roomMember.suggestedRoleForPowerLevel),
         )
-    }
 
     fun mapRole(role: RoomMemberRole): RoomMember.Role =
         when (role) {

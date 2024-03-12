@@ -19,7 +19,6 @@ package io.element.android.libraries.matrix.impl.room.member
 import io.element.android.libraries.core.coroutine.parallelMap
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.api.room.roomMembers
-import io.element.android.libraries.matrix.impl.util.destroyAll
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ensureActive
@@ -41,7 +40,7 @@ import kotlin.coroutines.coroutineContext
 internal class RoomMemberListFetcher(
     private val room: RoomInterface,
     private val dispatcher: CoroutineDispatcher,
-    private val pageSize: Int = 1000,
+    private val pageSize: Int = 10_000,
 ) {
     private val updatedRoomMemberMutex = Mutex()
     private val roomId = room.id()
@@ -66,7 +65,7 @@ internal class RoomMemberListFetcher(
                     if (_membersFlow.value !is MatrixRoomMembersState.Ready) {
                         fetchCachedRoomMembers()
                     } else {
-                        Timber.i("No need to load cached members found for room $roomId")
+                        Timber.i("Cached members not found for $roomId")
                     }
                 }
 
@@ -109,13 +108,8 @@ internal class RoomMemberListFetcher(
                     // We should probably implement some sort of paging in the future.
                     coroutineContext.ensureActive()
                     val chunk = iterator.nextChunk(pageSize.toUInt())
-                    val members = try {
-                        // Load next chunk. If null (no more items), exit the loop
-                        chunk?.parallelMap(RoomMemberMapper::map) ?: break
-                    } finally {
-                        // Make sure we clear all member references
-                        chunk?.destroyAll()
-                    }
+                    // Load next chunk. If null (no more items), exit the loop
+                    val members = chunk?.parallelMap(RoomMemberMapper::map) ?: break
                     addAll(members)
                     Timber.i("Emitting first $size members for room $roomId")
                     _membersFlow.value = MatrixRoomMembersState.Ready(toImmutableList())

@@ -9,6 +9,7 @@
   <string name="screen_notification_settings_edit_failed_updating_default_mode">"A apărut o eroare în timpul actualizării setărilor pentru notificari."</string>
   <string name="screen_notification_settings_mentions_only_disclaimer">"Serverul dumneavoastră nu acceptă această opțiune în camerele criptate, este posibil să nu primiți notificări în unele camere."</string>
   <string name="screen_polls_history_title">"Sondaje"</string>
+  <string name="screen_room_change_permissions_everyone">"Toți"</string>
   <string name="screen_room_details_add_topic_title">"Adăugare subiect"</string>
   <string name="screen_room_details_already_a_member">"Deja membru"</string>
   <string name="screen_room_details_already_invited">"Deja invitat"</string>

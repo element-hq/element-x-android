@@ -27,11 +27,13 @@
   <string name="screen_room_attachment_source_location">"Plats"</string>
   <string name="screen_room_attachment_source_poll">"Omröstning"</string>
   <string name="screen_room_attachment_text_formatting">"Textformatering"</string>
+  <string name="screen_room_change_permissions_everyone">"Alla"</string>
   <string name="screen_room_encrypted_history_banner">"Meddelandehistoriken är för närvarande otillgänglig."</string>
   <string name="screen_room_error_failed_processing_media">"Misslyckades att bearbeta media för uppladdning, vänligen pröva igen."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Kunde inte hämta användarinformation"</string>
   <string name="screen_room_invite_again_alert_message">"Vill du bjuda tillbaka dem?"</string>
   <string name="screen_room_invite_again_alert_title">"Du är ensam i den här chatten"</string>
+  <string name="screen_room_mentions_at_room_title">"Alla"</string>
   <string name="screen_room_message_copied">"Meddelande kopierat"</string>
   <string name="screen_room_no_permission_to_post">"Du är inte behörig att göra inlägg i det här rummet"</string>
   <string name="screen_room_notification_settings_allow_custom">"Tillåt anpassad inställning"</string>
@@ -53,4 +55,5 @@
   <string name="screen_room_retry_send_menu_title">"Ditt meddelande kunde inte skickas"</string>
   <string name="screen_room_timeline_add_reaction">"Lägg till emoji"</string>
   <string name="screen_room_timeline_less_reactions">"Visa mindre"</string>
+  <string name="screen_room_voice_message_tooltip">"Håll för att spela in"</string>
 </resources>

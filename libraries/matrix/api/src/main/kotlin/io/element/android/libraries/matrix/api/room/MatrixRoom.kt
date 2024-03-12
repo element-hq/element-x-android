@@ -29,12 +29,18 @@ import io.element.android.libraries.matrix.api.media.MediaUploadHandler
 import io.element.android.libraries.matrix.api.media.VideoInfo
 import io.element.android.libraries.matrix.api.poll.PollKind
 import io.element.android.libraries.matrix.api.room.location.AssetType
+import io.element.android.libraries.matrix.api.room.powerlevels.UserRoleChange
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
 import io.element.android.libraries.matrix.api.timeline.ReceiptType
 import io.element.android.libraries.matrix.api.widget.MatrixWidgetDriver
 import io.element.android.libraries.matrix.api.widget.MatrixWidgetSettings
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
 import java.io.Closeable
 import java.io.File
 
@@ -91,6 +97,10 @@ interface MatrixRoom : Closeable {
 
     suspend fun unsubscribeFromSync()
 
+    suspend fun userRole(userId: UserId): Result<RoomMember.Role>
+
+    suspend fun updateUsersRoles(changes: List<UserRoleChange>): Result<Unit>
+
     suspend fun userDisplayName(userId: UserId): Result<String?>
 
     suspend fun userAvatarUrl(userId: UserId): Result<String?>
@@ -129,6 +139,8 @@ interface MatrixRoom : Closeable {
 
     suspend fun canUserInvite(userId: UserId): Result<Boolean>
 
+    suspend fun canUserKick(userId: UserId): Result<Boolean>
+
     suspend fun canUserBan(userId: UserId): Result<Boolean>
 
     suspend fun canUserRedactOwn(userId: UserId): Result<Boolean>
@@ -144,6 +156,18 @@ interface MatrixRoom : Closeable {
     suspend fun canUserJoinCall(userId: UserId): Result<Boolean> =
         canUserSendState(userId, StateEventType.CALL_MEMBER)
 
+    fun usersWithRole(role: RoomMember.Role): Flow<ImmutableList<RoomMember>> {
+        return roomInfoFlow
+            .map { it.userPowerLevels.filter { (_, powerLevel) -> RoomMember.Role.forPowerLevel(powerLevel) == role } }
+            .distinctUntilChanged()
+            .combine(membersStateFlow) { powerLevels, membersState ->
+                membersState.roomMembers()
+                    .orEmpty()
+                    .filter { powerLevels.containsKey(it.userId) }
+                    .toPersistentList()
+            }
+    }
+
     suspend fun updateAvatar(mimeType: String, data: ByteArray): Result<Unit>
 
     suspend fun removeAvatar(): Result<Unit>
@@ -153,6 +177,12 @@ interface MatrixRoom : Closeable {
     suspend fun setTopic(topic: String): Result<Unit>
 
     suspend fun reportContent(eventId: EventId, reason: String, blockUserId: UserId?): Result<Unit>
+
+    suspend fun kickUser(userId: UserId, reason: String? = null): Result<Unit>
+
+    suspend fun banUser(userId: UserId, reason: String? = null): Result<Unit>
+
+    suspend fun unbanUser(userId: UserId, reason: String? = null): Result<Unit>
 
     suspend fun setIsFavorite(isFavorite: Boolean): Result<Unit>
 

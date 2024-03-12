@@ -54,7 +54,7 @@ class RoomInviteMembersPresenter @Inject constructor(
         val searchResults = remember { mutableStateOf<SearchBarResultState<ImmutableList<InvitableUser>>>(SearchBarResultState.Initial()) }
         var searchQuery by rememberSaveable { mutableStateOf("") }
         var searchActive by rememberSaveable { mutableStateOf(false) }
-        var showSearchLoader = rememberSaveable { mutableStateOf(false) }
+        val showSearchLoader = rememberSaveable { mutableStateOf(false) }
 
         LaunchedEffect(Unit) {
             fetchMembers(roomMembers)
@@ -99,7 +99,7 @@ class RoomInviteMembersPresenter @Inject constructor(
     @JvmName("toggleUserInSelectedUsers")
     private fun MutableState<ImmutableList<MatrixUser>>.toggleUser(user: MatrixUser) {
         value = if (value.contains(user)) {
-            value.filterNot { it == user }
+            value.filterNot { it.userId == user.userId }
         } else {
             value + user
         }.toImmutableList()

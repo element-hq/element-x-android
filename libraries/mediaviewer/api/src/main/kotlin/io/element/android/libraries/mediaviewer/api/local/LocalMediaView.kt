@@ -31,6 +31,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.GraphicEq
@@ -57,7 +58,6 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.Lifecycle
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
-import androidx.media3.common.util.UnstableApi
 import androidx.media3.ui.AspectRatioFrameLayout
 import androidx.media3.ui.PlayerView
 import io.element.android.compound.theme.ElementTheme
@@ -80,7 +80,6 @@ import io.element.android.libraries.ui.strings.CommonStrings
 import me.saket.telephoto.zoomable.coil.ZoomableAsyncImage
 import me.saket.telephoto.zoomable.rememberZoomableImageState
 
-@SuppressLint("UnsafeOptInUsageError")
 @Composable
 fun LocalMediaView(
     localMedia: LocalMedia?,
@@ -147,9 +146,33 @@ private fun MediaImageView(
     }
 }
 
-@UnstableApi
 @Composable
 private fun MediaVideoView(
+    localMediaViewState: LocalMediaViewState,
+    localMedia: LocalMedia?,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    if (LocalInspectionMode.current) {
+        Text(
+            modifier = modifier
+                .background(ElementTheme.colors.bgSubtlePrimary)
+                .wrapContentSize(),
+            text = "A Video Player will render here",
+        )
+    } else {
+        ExoPlayerMediaVideoView(
+            localMediaViewState = localMediaViewState,
+            localMedia = localMedia,
+            onClick = onClick,
+            modifier = modifier,
+        )
+    }
+}
+
+@SuppressLint("UnsafeOptInUsageError")
+@Composable
+private fun ExoPlayerMediaVideoView(
     localMediaViewState: LocalMediaViewState,
     localMedia: LocalMedia?,
     onClick: () -> Unit,

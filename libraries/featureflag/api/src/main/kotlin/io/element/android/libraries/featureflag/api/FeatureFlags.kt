@@ -82,4 +82,11 @@ enum class FeatureFlags(
         defaultValue = true,
         isFinished = false,
     ),
+    RoomModeration(
+        key = "feature.roomModeration",
+        title = "Room moderation",
+        description = "Add moderation features to the room for users with permissions",
+        defaultValue = true,
+        isFinished = false,
+    ),
 }

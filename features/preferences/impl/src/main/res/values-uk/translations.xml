@@ -9,7 +9,7 @@
   <string name="screen_advanced_settings_send_read_receipts">"Читати журнали"</string>
   <string name="screen_advanced_settings_send_read_receipts_description">"Якщо вимкнено, ваші сповіщення про прочитання нікому не надсилатимуться. Ви все одно отримуватимете сповіщення про прочитання від інших користувачів."</string>
   <string name="screen_advanced_settings_share_presence">"Поділіться присутністю"</string>
-  <string name="screen_advanced_settings_share_presence_description">"Якщо вимкнено, ви не зможете надсилати або отримувати сповіщення про прочитання або сповіщення про введення тексту"</string>
+  <string name="screen_advanced_settings_share_presence_description">"Якщо вимкнено, ви не зможете надсилати та отримувати сповіщення про прочитання або введення тексту"</string>
   <string name="screen_advanced_settings_view_source_description">"Увімкнути опцію для перегляду коду повідомлення в стрічці"</string>
   <string name="screen_blocked_users_empty">"У вас немає заблокованих користувачів."</string>
   <string name="screen_blocked_users_unblock_alert_action">"Розблокувати"</string>
@@ -28,12 +28,12 @@
   <string name="screen_notification_settings_configuration_mismatch_description">"Ми спростили налаштування сповіщень, щоб полегшити пошук параметрів. Деякі користувацькі налаштування, які ви вибрали раніше, тут не відображаються, але вони все ще активні.
 
 Якщо ви продовжите, деякі з ваших налаштувань можуть змінитися."</string>
-  <string name="screen_notification_settings_direct_chats">"Прямі чати"</string>
+  <string name="screen_notification_settings_direct_chats">"Особисті чати"</string>
   <string name="screen_notification_settings_edit_custom_settings_section_title">"Користувальницькі налаштування для чату"</string>
   <string name="screen_notification_settings_edit_failed_updating_default_mode">"Під час оновлення налаштувань сповіщень сталася помилка."</string>
   <string name="screen_notification_settings_edit_mode_all_messages">"Всі повідомлення"</string>
   <string name="screen_notification_settings_edit_mode_mentions_and_keywords">"Тільки згадки та ключові слова"</string>
-  <string name="screen_notification_settings_edit_screen_direct_section_header">"У прямих чатах повідомляти мене про"</string>
+  <string name="screen_notification_settings_edit_screen_direct_section_header">"В особистих чатах сповіщати про"</string>
   <string name="screen_notification_settings_edit_screen_group_section_header">"У групових чатах повідомляти мене про"</string>
   <string name="screen_notification_settings_enable_notifications">"Увімкнути сповіщення на цьому пристрої"</string>
   <string name="screen_notification_settings_failed_fixing_configuration">"Конфігурацію не виправлено, спробуйте ще раз."</string>
@@ -44,7 +44,7 @@
   <string name="screen_notification_settings_mode_all">"Усі"</string>
   <string name="screen_notification_settings_mode_mentions">"Згадки"</string>
   <string name="screen_notification_settings_notification_section_title">"Повідомляти мене про"</string>
-  <string name="screen_notification_settings_room_mention_label">"Згадки про мене в @room"</string>
+  <string name="screen_notification_settings_room_mention_label">"Сповіщати про @room"</string>
   <string name="screen_notification_settings_system_notifications_action_required">"Щоб отримувати сповіщення, будь ласка, змініть свої %1$s."</string>
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"системні налаштування"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"Системні сповіщення вимкнені"</string>

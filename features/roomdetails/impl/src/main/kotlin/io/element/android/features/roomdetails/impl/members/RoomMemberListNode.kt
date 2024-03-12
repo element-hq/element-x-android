@@ -35,15 +35,16 @@ import io.element.android.services.analytics.api.AnalyticsService
 class RoomMemberListNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
-    private val presenter: RoomMemberListPresenter,
+    presenterFactory: RoomMemberListPresenter.Factory,
     private val analyticsService: AnalyticsService,
-) : Node(buildContext, plugins = plugins) {
+) : Node(buildContext, plugins = plugins), RoomMemberListNavigator {
     interface Callback : Plugin {
         fun openRoomMemberDetails(roomMemberId: UserId)
         fun openInviteMembers()
     }
 
     private val callbacks = plugins<Callback>()
+    private val presenter = presenterFactory.create(this)
 
     init {
         lifecycle.subscribe(
@@ -53,16 +54,20 @@ class RoomMemberListNode @AssistedInject constructor(
         )
     }
 
-    private fun openRoomMemberDetails(roomMemberId: UserId) {
+    override fun openRoomMemberDetails(roomMemberId: UserId) {
         callbacks.forEach {
             it.openRoomMemberDetails(roomMemberId)
         }
     }
 
-    private fun openInviteMembers() {
+    override fun openInviteMembers() {
         callbacks.forEach {
             it.openInviteMembers()
         }
+    }
+
+    override fun exitRoomMemberList() {
+        navigateUp()
     }
 
     @Composable
@@ -71,9 +76,13 @@ class RoomMemberListNode @AssistedInject constructor(
         RoomMemberListView(
             state = state,
             modifier = modifier,
-            onBackPressed = { navigateUp() },
-            onMemberSelected = this::openRoomMemberDetails,
-            onInvitePressed = this::openInviteMembers,
+            navigator = this,
         )
     }
+}
+
+interface RoomMemberListNavigator {
+    fun exitRoomMemberList() {}
+    fun openRoomMemberDetails(roomMemberId: UserId) {}
+    fun openInviteMembers() {}
 }

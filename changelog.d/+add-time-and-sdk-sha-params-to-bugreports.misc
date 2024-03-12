@@ -1,0 +1,1 @@
+Add `local_time`, `utc_time` and `sdk_sha` params to bug reports so they're easier to investigate.

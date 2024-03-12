@@ -30,7 +30,7 @@ import io.element.android.libraries.matrix.api.room.RoomNotificationSettings
 open class RoomDetailsStateProvider : PreviewParameterProvider<RoomDetailsState> {
     override val values: Sequence<RoomDetailsState>
         get() = sequenceOf(
-            aRoomDetailsState(),
+            aRoomDetailsState(displayAdminSettings = true),
             aRoomDetailsState(roomTopic = RoomTopicState.Hidden),
             aRoomDetailsState(roomTopic = RoomTopicState.CanAddTopic),
             aRoomDetailsState(isEncrypted = false),
@@ -92,6 +92,7 @@ fun aRoomDetailsState(
     leaveRoomState: LeaveRoomState = aLeaveRoomState(),
     roomNotificationSettings: RoomNotificationSettings = aRoomNotificationSettings(),
     isFavorite: Boolean = false,
+    displayAdminSettings: Boolean = false,
     eventSink: (RoomDetailsEvent) -> Unit = {},
 ) = RoomDetailsState(
     roomId = roomId,
@@ -109,6 +110,7 @@ fun aRoomDetailsState(
     leaveRoomState = leaveRoomState,
     roomNotificationSettings = roomNotificationSettings,
     isFavorite = isFavorite,
+    displayRolesAndPermissionsSettings = displayAdminSettings,
     eventSink = eventSink
 )
 

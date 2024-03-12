@@ -49,6 +49,7 @@
   <string name="action_decline">"Decline"</string>
   <string name="action_delete_poll">"Delete Poll"</string>
   <string name="action_disable">"Disable"</string>
+  <string name="action_discard">"Discard"</string>
   <string name="action_done">"Done"</string>
   <string name="action_edit">"Edit"</string>
   <string name="action_edit_poll">"Edit poll"</string>
@@ -85,6 +86,7 @@
   <string name="action_reply_in_thread">"Reply in thread"</string>
   <string name="action_report_bug">"Report bug"</string>
   <string name="action_report_content">"Report content"</string>
+  <string name="action_reset">"Reset"</string>
   <string name="action_retry">"Retry"</string>
   <string name="action_retry_decryption">"Retry decryption"</string>
   <string name="action_save">"Save"</string>

@@ -36,6 +36,7 @@ import io.element.android.features.roomdetails.impl.members.RoomMemberListNode
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsNode
 import io.element.android.features.roomdetails.impl.members.details.avatar.AvatarPreviewNode
 import io.element.android.features.roomdetails.impl.notificationsettings.RoomNotificationSettingsNode
+import io.element.android.features.roomdetails.impl.rolesandpermissions.RolesAndPermissionsFlowNode
 import io.element.android.libraries.architecture.BackstackView
 import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.architecture.createNode
@@ -91,6 +92,9 @@ class RoomDetailsFlowNode @AssistedInject constructor(
 
         @Parcelize
         data object PollHistory : NavTarget
+
+        @Parcelize
+        data object AdminSettings : NavTarget
     }
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
@@ -119,6 +123,10 @@ class RoomDetailsFlowNode @AssistedInject constructor(
 
                     override fun openPollHistory() {
                         backstack.push(NavTarget.PollHistory)
+                    }
+
+                    override fun openAdminSettings() {
+                        backstack.push(NavTarget.AdminSettings)
                     }
                 }
                 createNode<RoomDetailsNode>(buildContext, listOf(roomDetailsCallback))
@@ -188,6 +196,10 @@ class RoomDetailsFlowNode @AssistedInject constructor(
 
             is NavTarget.PollHistory -> {
                 pollHistoryEntryPoint.createNode(this, buildContext)
+            }
+
+            is NavTarget.AdminSettings -> {
+                createNode<RolesAndPermissionsFlowNode>(buildContext)
             }
         }
     }

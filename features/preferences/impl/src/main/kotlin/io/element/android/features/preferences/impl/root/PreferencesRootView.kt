@@ -122,11 +122,13 @@ fun PreferencesRootView(
                 onClick = onOpenNotificationSettings,
             )
         }
-        ListItem(
-            headlineContent = { Text(stringResource(id = CommonStrings.common_blocked_users)) },
-            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Block())),
-            onClick = onOpenBlockedUsers,
-        )
+        if (state.showBlockedUsersItem) {
+            ListItem(
+                headlineContent = { Text(stringResource(id = CommonStrings.common_blocked_users)) },
+                leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Block())),
+                onClick = onOpenBlockedUsers,
+            )
+        }
         ListItem(
             headlineContent = { Text(stringResource(id = CommonStrings.common_report_a_problem)) },
             leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.ChatProblem())),

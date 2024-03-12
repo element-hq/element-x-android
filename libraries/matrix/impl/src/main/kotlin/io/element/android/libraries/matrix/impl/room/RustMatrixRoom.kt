@@ -36,8 +36,10 @@ import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.api.room.MatrixRoomNotificationSettingsState
 import io.element.android.libraries.matrix.api.room.Mention
 import io.element.android.libraries.matrix.api.room.MessageEventType
+import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.StateEventType
 import io.element.android.libraries.matrix.api.room.location.AssetType
+import io.element.android.libraries.matrix.api.room.powerlevels.UserRoleChange
 import io.element.android.libraries.matrix.api.room.roomNotificationSettings
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
 import io.element.android.libraries.matrix.api.timeline.ReceiptType
@@ -51,6 +53,7 @@ import io.element.android.libraries.matrix.impl.notificationsettings.RustNotific
 import io.element.android.libraries.matrix.impl.poll.toInner
 import io.element.android.libraries.matrix.impl.room.location.toInner
 import io.element.android.libraries.matrix.impl.room.member.RoomMemberListFetcher
+import io.element.android.libraries.matrix.impl.room.member.RoomMemberMapper
 import io.element.android.libraries.matrix.impl.timeline.RustMatrixTimeline
 import io.element.android.libraries.matrix.impl.timeline.toRustReceiptType
 import io.element.android.libraries.matrix.impl.util.mxCallbackFlow
@@ -65,6 +68,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.EventTimelineItem
@@ -74,6 +79,7 @@ import org.matrix.rustcomponents.sdk.RoomListItem
 import org.matrix.rustcomponents.sdk.RoomMessageEventContentWithoutRelation
 import org.matrix.rustcomponents.sdk.SendAttachmentJoinHandle
 import org.matrix.rustcomponents.sdk.TypingNotificationsListener
+import org.matrix.rustcomponents.sdk.UserPowerLevelUpdate
 import org.matrix.rustcomponents.sdk.WidgetCapabilities
 import org.matrix.rustcomponents.sdk.WidgetCapabilitiesProvider
 import org.matrix.rustcomponents.sdk.messageEventContentFromHtml
@@ -151,6 +157,12 @@ class RustMatrixRoom(
 
     override val syncUpdateFlow: StateFlow<Long> = _syncUpdateFlow.asStateFlow()
 
+    init {
+        timeline.membershipChangeEventReceived
+            .onEach { roomMemberListFetcher.fetchRoomMembers() }
+            .launchIn(roomCoroutineScope)
+    }
+
     override suspend fun subscribeToSync() = roomSyncSubscriber.subscribe(roomId)
 
     override suspend fun unsubscribeFromSync() = roomSyncSubscriber.unsubscribe(roomId)
@@ -225,6 +237,19 @@ class RustMatrixRoom(
                 prevRoomNotificationSettings = currentRoomNotificationSettings,
                 failure = it
             )
+        }
+    }
+
+    override suspend fun userRole(userId: UserId): Result<RoomMember.Role> = withContext(coroutineDispatchers.io) {
+        runCatching {
+            RoomMemberMapper.mapRole(innerRoom.suggestedRoleForUser(userId.value))
+        }
+    }
+
+    override suspend fun updateUsersRoles(changes: List<UserRoleChange>): Result<Unit> {
+        return runCatching {
+            val powerLevelChanges = changes.map { UserPowerLevelUpdate(it.userId.value, it.powerLevel) }
+            innerRoom.updatePowerLevelsForUsers(powerLevelChanges)
         }
     }
 
@@ -316,6 +341,12 @@ class RustMatrixRoom(
     override suspend fun canUserInvite(userId: UserId): Result<Boolean> {
         return runCatching {
             innerRoom.canUserInvite(userId.value)
+        }
+    }
+
+    override suspend fun canUserKick(userId: UserId): Result<Boolean> {
+        return runCatching {
+            innerRoom.canUserKick(userId.value)
         }
     }
 
@@ -445,6 +476,24 @@ class RustMatrixRoom(
             if (blockUserId != null) {
                 innerRoom.ignoreUser(blockUserId.value)
             }
+        }
+    }
+
+    override suspend fun kickUser(userId: UserId, reason: String?): Result<Unit> = withContext(roomDispatcher) {
+        runCatching {
+            innerRoom.kickUser(userId.value, reason)
+        }
+    }
+
+    override suspend fun banUser(userId: UserId, reason: String?): Result<Unit> = withContext(roomDispatcher) {
+        runCatching {
+            innerRoom.banUser(userId.value, reason)
+        }
+    }
+
+    override suspend fun unbanUser(userId: UserId, reason: String?): Result<Unit> = withContext(roomDispatcher) {
+        runCatching {
+            innerRoom.unbanUser(userId.value, reason)
         }
     }
 

@@ -50,8 +50,17 @@ img {
   display: block;
 }
 
+.missing {
+    text-align: center;
+}
+
 th {
     background: #0DBD8B;
+}
+
+br {
+   display: block;
+   margin: 4px 0;
 }
 
 #form_container {

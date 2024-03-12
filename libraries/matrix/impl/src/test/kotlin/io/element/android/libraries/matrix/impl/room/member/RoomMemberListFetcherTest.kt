@@ -42,9 +42,9 @@ class RoomMemberListFetcherTest {
         val room = FakeRustRoom(getMembersNoSync = {
             FakeRoomMembersIterator(
                 listOf(
-                    FakeRustRoomMember(A_USER_ID),
-                    FakeRustRoomMember(A_USER_ID_2),
-                    FakeRustRoomMember(A_USER_ID_3),
+                    fakeRustRoomMember(A_USER_ID),
+                    fakeRustRoomMember(A_USER_ID_2),
+                    fakeRustRoomMember(A_USER_ID_3),
                 )
             )
         })
@@ -94,9 +94,9 @@ class RoomMemberListFetcherTest {
         val room = FakeRustRoom(getMembersNoSync = {
             FakeRoomMembersIterator(
                 listOf(
-                    FakeRustRoomMember(A_USER_ID),
-                    FakeRustRoomMember(A_USER_ID_2),
-                    FakeRustRoomMember(A_USER_ID_3),
+                    fakeRustRoomMember(A_USER_ID),
+                    fakeRustRoomMember(A_USER_ID_2),
+                    fakeRustRoomMember(A_USER_ID_3),
                 )
             )
         })
@@ -118,9 +118,9 @@ class RoomMemberListFetcherTest {
         val room = FakeRustRoom(getMembers = {
             FakeRoomMembersIterator(
                 listOf(
-                    FakeRustRoomMember(A_USER_ID),
-                    FakeRustRoomMember(A_USER_ID_2),
-                    FakeRustRoomMember(A_USER_ID_3),
+                    fakeRustRoomMember(A_USER_ID),
+                    fakeRustRoomMember(A_USER_ID_2),
+                    fakeRustRoomMember(A_USER_ID_3),
                 )
             )
         })
@@ -153,14 +153,14 @@ class RoomMemberListFetcherTest {
     fun `fetchRoomMembers - with 'withCache' returns cached items first, then new ones`() = runTest {
         val room = FakeRustRoom(
             getMembersNoSync = {
-                FakeRoomMembersIterator(listOf(FakeRustRoomMember(A_USER_ID_4)))
+                FakeRoomMembersIterator(listOf(fakeRustRoomMember(A_USER_ID_4)))
             },
             getMembers = {
                 FakeRoomMembersIterator(
                     listOf(
-                        FakeRustRoomMember(A_USER_ID),
-                        FakeRustRoomMember(A_USER_ID_2),
-                        FakeRustRoomMember(A_USER_ID_3),
+                        fakeRustRoomMember(A_USER_ID),
+                        fakeRustRoomMember(A_USER_ID_2),
+                        fakeRustRoomMember(A_USER_ID_3),
                     )
                 )
             }
@@ -189,14 +189,14 @@ class RoomMemberListFetcherTest {
     fun `fetchRoomMembers - with 'withCache' skips cache if there is already a ready state`() = runTest {
         val room = FakeRustRoom(
             getMembersNoSync = {
-                FakeRoomMembersIterator(listOf(FakeRustRoomMember(A_USER_ID_4)))
+                FakeRoomMembersIterator(listOf(fakeRustRoomMember(A_USER_ID_4)))
             },
             getMembers = {
                 FakeRoomMembersIterator(
                     listOf(
-                        FakeRustRoomMember(A_USER_ID),
-                        FakeRustRoomMember(A_USER_ID_2),
-                        FakeRustRoomMember(A_USER_ID_3),
+                        fakeRustRoomMember(A_USER_ID),
+                        fakeRustRoomMember(A_USER_ID_2),
+                        fakeRustRoomMember(A_USER_ID_3),
                     )
                 )
             }
@@ -262,48 +262,23 @@ class FakeRoomMembersIterator(
     }
 }
 
-class FakeRustRoomMember(
-    private val userId: UserId,
-    private val displayName: String? = null,
-    private val avatarUrl: String? = null,
-    private val membership: MembershipState = MembershipState.JOIN,
-    private val isNameAmbiguous: Boolean = false,
-    private val powerLevel: Long = 0L,
-    private val role: RoomMemberRole = RoomMemberRole.USER,
-) : RoomMember(NoPointer) {
-    override fun userId(): String {
-        return userId.value
-    }
-
-    override fun displayName(): String? {
-        return displayName
-    }
-
-    override fun avatarUrl(): String? {
-        return avatarUrl
-    }
-
-    override fun membership(): MembershipState {
-        return membership
-    }
-
-    override fun isNameAmbiguous(): Boolean {
-        return isNameAmbiguous
-    }
-
-    override fun powerLevel(): Long {
-        return powerLevel
-    }
-
-    override fun normalizedPowerLevel(): Long {
-        return powerLevel
-    }
-
-    override fun isIgnored(): Boolean {
-        return false
-    }
-
-    override fun suggestedRoleForPowerLevel(): RoomMemberRole {
-        return role
-    }
-}
+private fun fakeRustRoomMember(
+    userId: UserId,
+    displayName: String? = null,
+    avatarUrl: String? = null,
+    membership: MembershipState = MembershipState.JOIN,
+    isNameAmbiguous: Boolean = false,
+    powerLevel: Long = 0L,
+    isIgnored: Boolean = false,
+    role: RoomMemberRole = RoomMemberRole.USER,
+) = RoomMember(
+    userId = userId.value,
+    displayName = displayName,
+    avatarUrl = avatarUrl,
+    membership = membership,
+    isNameAmbiguous = isNameAmbiguous,
+    powerLevel = powerLevel,
+    normalizedPowerLevel = powerLevel,
+    isIgnored = isIgnored,
+    suggestedRoleForPowerLevel = role,
+)

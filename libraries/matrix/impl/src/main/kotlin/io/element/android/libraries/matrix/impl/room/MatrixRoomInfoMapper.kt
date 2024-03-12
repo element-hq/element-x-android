@@ -16,12 +16,15 @@
 
 package io.element.android.libraries.matrix.impl.room
 
+import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.room.MatrixRoomInfo
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.impl.room.member.RoomMemberMapper
 import io.element.android.libraries.matrix.impl.timeline.item.event.EventTimelineItemMapper
+import kotlinx.collections.immutable.ImmutableMap
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.collections.immutable.toPersistentMap
 import org.matrix.rustcomponents.sdk.use
 import org.matrix.rustcomponents.sdk.Membership as RustMembership
 import org.matrix.rustcomponents.sdk.RoomInfo as RustRoomInfo
@@ -45,10 +48,11 @@ class MatrixRoomInfoMapper(
             alternativeAliases = it.alternativeAliases.toImmutableList(),
             currentUserMembership = it.membership.map(),
             latestEvent = it.latestEvent?.use(timelineItemMapper::map),
-            inviter = it.inviter?.use(RoomMemberMapper::map),
+            inviter = it.inviter?.let(RoomMemberMapper::map),
             activeMembersCount = it.activeMembersCount.toLong(),
             invitedMembersCount = it.invitedMembersCount.toLong(),
             joinedMembersCount = it.joinedMembersCount.toLong(),
+            userPowerLevels = mapPowerLevels(it.userPowerLevels),
             highlightCount = it.highlightCount.toLong(),
             notificationCount = it.notificationCount.toLong(),
             userDefinedNotificationMode = it.userDefinedNotificationMode?.map(),
@@ -68,4 +72,8 @@ fun RustRoomNotificationMode.map(): RoomNotificationMode = when (this) {
     RustRoomNotificationMode.ALL_MESSAGES -> RoomNotificationMode.ALL_MESSAGES
     RustRoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY -> RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY
     RustRoomNotificationMode.MUTE -> RoomNotificationMode.MUTE
+}
+
+fun mapPowerLevels(powerLevels: Map<String, Long>): ImmutableMap<UserId, Long> {
+    return powerLevels.mapKeys { (key, _) -> UserId(key) }.toPersistentMap()
 }

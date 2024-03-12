@@ -38,6 +38,8 @@ class RustTracingService @Inject constructor(private val buildMeta: BuildMeta) :
                 is WriteToFilesConfiguration.Enabled -> TracingFileConfiguration(
                     path = writeToFilesConfiguration.directory,
                     filePrefix = writeToFilesConfiguration.filenamePrefix,
+                    fileSuffix = null,
+                    maxFiles = null,
                 )
             },
         )

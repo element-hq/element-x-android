@@ -19,7 +19,6 @@ package io.element.android.features.createroom.impl.addpeople
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.createroom.impl.userlist.SelectionMode
 import io.element.android.features.createroom.impl.userlist.UserListState
-import io.element.android.features.createroom.impl.userlist.aListOfSelectedUsers
 import io.element.android.features.createroom.impl.userlist.aUserListState
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
 import io.element.android.libraries.matrix.ui.components.aMatrixUserList
@@ -32,7 +31,7 @@ open class AddPeopleUserListStateProvider : PreviewParameterProvider<UserListSta
             aUserListState(),
             aUserListState().copy(
                 searchResults = SearchBarResultState.Results(aMatrixUserList().toImmutableList()),
-                selectedUsers = aListOfSelectedUsers(),
+                selectedUsers = aMatrixUserList().toImmutableList(),
                 isSearchActive = false,
                 selectionMode = SelectionMode.Multiple,
             ),
@@ -44,7 +43,7 @@ open class AddPeopleUserListStateProvider : PreviewParameterProvider<UserListSta
                         }
                         .toImmutableList()
                 ),
-                selectedUsers = aListOfSelectedUsers(),
+                selectedUsers = aMatrixUserList().toImmutableList(),
                 isSearchActive = true,
                 selectionMode = SelectionMode.Multiple,
             )

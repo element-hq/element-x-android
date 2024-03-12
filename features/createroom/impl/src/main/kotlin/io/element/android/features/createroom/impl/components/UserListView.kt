@@ -29,7 +29,7 @@ import io.element.android.features.createroom.impl.userlist.UserListStateProvide
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.matrix.api.user.MatrixUser
-import io.element.android.libraries.matrix.ui.components.SelectedUsersList
+import io.element.android.libraries.matrix.ui.components.SelectedUsersRowList
 
 @Composable
 fun UserListView(
@@ -64,7 +64,7 @@ fun UserListView(
         )
 
         if (state.isMultiSelectionEnabled && !state.isSearchActive && state.selectedUsers.isNotEmpty()) {
-            SelectedUsersList(
+            SelectedUsersRowList(
                 contentPadding = PaddingValues(16.dp),
                 selectedUsers = state.selectedUsers,
                 autoScroll = true,

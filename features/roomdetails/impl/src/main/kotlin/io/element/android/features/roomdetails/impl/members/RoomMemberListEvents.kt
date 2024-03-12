@@ -16,7 +16,10 @@
 
 package io.element.android.features.roomdetails.impl.members
 
+import io.element.android.libraries.matrix.api.room.RoomMember
+
 sealed interface RoomMemberListEvents {
     data class UpdateSearchQuery(val query: String) : RoomMemberListEvents
     data class OnSearchActiveChanged(val active: Boolean) : RoomMemberListEvents
+    data class RoomMemberSelected(val roomMember: RoomMember) : RoomMemberListEvents
 }

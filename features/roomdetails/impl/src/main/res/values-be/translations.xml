@@ -9,6 +9,7 @@
   <string name="screen_notification_settings_edit_failed_updating_default_mode">"Пры абнаўленні налад апавяшчэнняў адбылася памылка."</string>
   <string name="screen_notification_settings_mentions_only_disclaimer">"Ваш хатні сервер не падтрымлівае гэтую опцыю ў зашыфраваных пакоях, вы можаце не атрымаць апавяшчэнне ў некаторых пакоях."</string>
   <string name="screen_polls_history_title">"Апытанні"</string>
+  <string name="screen_room_change_permissions_everyone">"Усе"</string>
   <string name="screen_room_details_add_topic_title">"Дадаць тэму"</string>
   <string name="screen_room_details_already_a_member">"Ужо ўдзельнік"</string>
   <string name="screen_room_details_already_invited">"Ужо запрасілі"</string>

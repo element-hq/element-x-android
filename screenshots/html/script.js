@@ -15,10 +15,29 @@
  */
  import { screenshots } from './data.js';
 
-const header = screenshots[0];
+// Get the base url of the current page
+const baseUrl = window.location.href.split('/').slice(0, -1).join('/');
+// On localhost, get the English screenshots from the location `../tests/uitests/src/test/snapshots/images`
+const isLocalHost = window.location.hostname === "localhost"
+let englishBasePath
+if (isLocalHost) {
+  englishBasePath = `../tests/uitests/src/test/snapshots/images`
+} else {
+  englishBasePath = `en`
+}
 
-let visibleLanguages = header.map((x) => 1);
+const dataLanguages = screenshots[0];
+
+// Read default visible languages from the fragment
+const fragment = new URLSearchParams(window.location.hash.substring(1));
+// Get the wanted languages from the fragment, or default to "de" and "fr", and ensure "en" is always there
+const wantedLanguages = (fragment.get('languages') ? fragment.get('languages').split(',') : ['de', 'fr']) + ["en"];
+
+// Map dataLanguages to visibleLanguages, set to 1 if the language is in wantedLanguages, 0 otherwise
+let visibleLanguages = dataLanguages.map((language) => wantedLanguages.includes(language) ? 1 : 0);
+
 let imageWidth = 300;
+let showAllScreenshots = false;
 
 function addForm() {
   // Insert the form into the div with id form_container
@@ -26,14 +45,14 @@ function addForm() {
   const languageLabel = document.createElement('label');
   languageLabel.textContent = 'Languages:';
   form.appendChild(languageLabel);
-  // Add a check box per entry in the header
-  for (let i = 0; i < header.length; i++){
+  // Add a check box per entry in the dataLanguages
+  for (let i = 0; i < dataLanguages.length; i++){
     const label = document.createElement('label');
-    const text = document.createTextNode(header[i]);
+    const text = document.createTextNode(dataLanguages[i]);
     const input = document.createElement('input');
     input.type = 'checkbox';
     input.disabled = i == 0;
-    input.name = header[i];
+    input.name = dataLanguages[i];
     input.checked = visibleLanguages[i] == 1;
     input.onchange = (e) => {
       if (e.target.checked) {
@@ -47,6 +66,8 @@ function addForm() {
     label.appendChild(text);
     form.appendChild(label);
   }
+  // Add a break line
+  form.appendChild(document.createElement('br'));
   // Add a label with the text "Width"
   const label = document.createElement('label');
   label.textContent = 'Screenshots width:';
@@ -64,6 +85,20 @@ function addForm() {
       addTable();
   };
   form.appendChild(widthInput);
+  // Add a label with the text "Show all screenshots"
+  const label2 = document.createElement('label');
+  label2.textContent = 'Show all screenshots:';
+  label2.title = 'Show all screenshots, including those with no translated versions.';
+  const input2 = document.createElement('input');
+  input2.type = 'checkbox';
+  input2.name = "test";
+  input2.checked = showAllScreenshots;
+  input2.onchange = (e) => {
+    showAllScreenshots = e.target.checked;
+    addTable();
+  };
+  label2.appendChild(input2);
+  form.appendChild(label2);
   document.getElementById('form_container').appendChild(form);
 }
 
@@ -73,6 +108,23 @@ function getNiceName(name) {
       if (name[i] === "_") indices.push(i);
   }
   return name.substring(indices[2] + 1, indices[3]);
+}
+
+function createMissingImageElement() {
+    const text = document.createElement('p');
+    text.className = "missing";
+    text.textContent = 'No image';
+    return text;
+}
+
+function createImageElement(fullFile) {
+    const img = document.createElement('img');
+    img.className = "screenshot";
+    img.src = `${baseUrl}/${fullFile}`;
+    img.title = fullFile;
+    img.alt = "Missing image";
+    img.width = imageWidth;
+    return img;
 }
 
 function addTable() {
@@ -86,55 +138,68 @@ function addTable() {
   // First item of screenshots contains the languages
   // Build the languages row
   const languagesHeaderRow = document.createElement('tr');
-  for (let i = 0; i < header.length; i++) {
+  for (let languageIndex = 0; languageIndex < dataLanguages.length; languageIndex++) {
     // Do not add the language if it is hidden
-    if (visibleLanguages[i] == 0) {
+    if (visibleLanguages[languageIndex] == 0) {
         continue;
     }
     const th = document.createElement('th');
-    th.textContent = header[i];
+    th.textContent = dataLanguages[languageIndex];
     languagesHeaderRow.appendChild(th);
   }
   const numVisibleLanguages = languagesHeaderRow.childElementCount
   // Next items are the data
   var currentHeaderValue = "";
-  for (let i = 1; i < screenshots.length; i++) {
-    // Add a header for row, if different from previous
-    let name = getNiceName(screenshots[i][0]);
-    if(name != currentHeaderValue) {
-      currentHeaderValue = name;
-      const trHead = document.createElement('tr');
-      const tdHead = document.createElement('td');
-      tdHead.colSpan = numVisibleLanguages;
-      tdHead.className = "view-header";
-      tdHead.textContent = name;
-      trHead.appendChild(tdHead);
-      tbody.appendChild(trHead);
-      tbody.appendChild(languagesHeaderRow.cloneNode(true));
-    }
+  for (let screenshotIndex = 1; screenshotIndex < screenshots.length; screenshotIndex++) {
+    let englishFile = screenshots[screenshotIndex][0];
     const tr = document.createElement('tr');
-    for (let j = 0; j < screenshots[i].length; j++) {
-      if (visibleLanguages[j] == 0) {
+    let hasTranslatedFiles = false;
+    for (let languageIndex = 0; languageIndex < dataLanguages.length; languageIndex++) {
+      if (visibleLanguages[languageIndex] == 0) {
         continue;
       }
       const td = document.createElement('td');
-      let imageFile = screenshots[i][j];
-      if (imageFile === '') {
-        const text = document.createElement('p');
-        text.textContent = 'No image';
-        td.appendChild(text);
+      if (languageIndex == 0) {
+        // English file
+        td.appendChild(createImageElement(`${englishBasePath}/${englishFile}.png`));
+      } else if (languageIndex == 1) {
+        // Dark English file
+        if (screenshots[screenshotIndex][1].length > 0) {
+          hasTranslatedFiles = true;
+          td.appendChild(createImageElement(`${englishBasePath}/${screenshots[screenshotIndex][1]}.png`));
+        } else {
+          td.appendChild(createMissingImageElement());
+        }
       } else {
-        const img = document.createElement('img');
-        img.className = "screenshot";
-        img.src = `../${imageFile}`;
-        img.title = imageFile;
-        img.alt = "Missing image";
-        img.width = imageWidth;
-        td.appendChild(img);
+        let hasFile = screenshots[screenshotIndex][languageIndex];
+        if (hasFile === 0) {
+          td.appendChild(createMissingImageElement());
+        } else {
+          hasTranslatedFiles = true;
+          // Foreign file is the same as the english file, replacing the language
+          const foreignFile = englishFile.replace("en]", `${dataLanguages[languageIndex]}]`).replace("_S_", "_T_")
+          const fullForeignFile = `${dataLanguages[languageIndex]}/${foreignFile}.png`;
+          td.appendChild(createImageElement(fullForeignFile));
+        }
       }
       tr.appendChild(td);
     }
-    tbody.appendChild(tr);
+    if (showAllScreenshots || hasTranslatedFiles) {
+      // Add a header for row, if different from previous
+      let name = getNiceName(englishFile);
+      if (name != currentHeaderValue) {
+        currentHeaderValue = name;
+        const trHead = document.createElement('tr');
+        const tdHead = document.createElement('td');
+        tdHead.colSpan = numVisibleLanguages;
+        tdHead.className = "view-header";
+        tdHead.textContent = name;
+        trHead.appendChild(tdHead);
+        tbody.appendChild(trHead);
+        tbody.appendChild(languagesHeaderRow.cloneNode(true));
+      }
+      tbody.appendChild(tr);
+    }
   }
   table.appendChild(thead);
   table.appendChild(tbody);

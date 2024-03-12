@@ -36,6 +36,7 @@ import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.di.SingleIn
+import io.element.android.libraries.matrix.api.SdkMetadata
 import io.element.android.libraries.network.useragent.UserAgentProvider
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import io.element.android.services.toolbox.api.systemclock.SystemClock
@@ -57,6 +58,10 @@ import java.io.File
 import java.io.IOException
 import java.io.OutputStreamWriter
 import java.net.HttpURLConnection
+import java.time.Instant
+import java.time.LocalDateTime
+import java.time.ZoneOffset
+import java.time.format.DateTimeFormatter
 import java.util.Locale
 import javax.inject.Inject
 import javax.inject.Provider
@@ -78,6 +83,7 @@ class DefaultBugReporter @Inject constructor(
     private val sessionStore: SessionStore,
     private val buildMeta: BuildMeta,
     private val bugReporterUrlProvider: BugReporterUrlProvider,
+    private val sdkMetadata: SdkMetadata,
 ) : BugReporter {
     companion object {
         // filenames
@@ -158,6 +164,9 @@ class DefaultBugReporter @Inject constructor(
                         .addFormDataPart("device_id", deviceId)
                         .addFormDataPart("device", Build.MODEL.trim())
                         .addFormDataPart("locale", Locale.getDefault().toString())
+                        .addFormDataPart("sdk_sha", sdkMetadata.sdkGitSha)
+                        .addFormDataPart("local_time", LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME))
+                        .addFormDataPart("utc_time", LocalDateTime.ofInstant(Instant.now(), ZoneOffset.UTC).format(DateTimeFormatter.ISO_DATE_TIME))
                     currentTracingFilter?.let {
                         builder.addFormDataPart("tracing_filter", it)
                     }

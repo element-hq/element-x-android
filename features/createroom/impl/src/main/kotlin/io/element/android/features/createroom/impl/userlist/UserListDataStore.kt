@@ -25,7 +25,7 @@ class UserListDataStore @Inject constructor() {
     private val selectedUsers: MutableStateFlow<List<MatrixUser>> = MutableStateFlow(emptyList())
 
     fun selectUser(user: MatrixUser) {
-        if (user !in selectedUsers.value) {
+        if (!selectedUsers.value.contains(user)) {
             selectedUsers.tryEmit(selectedUsers.value.plus(user))
         }
     }

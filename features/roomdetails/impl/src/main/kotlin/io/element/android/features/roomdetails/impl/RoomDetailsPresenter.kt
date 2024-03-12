@@ -47,6 +47,7 @@ import io.element.android.libraries.matrix.api.room.powerlevels.canInvite
 import io.element.android.libraries.matrix.api.room.powerlevels.canSendState
 import io.element.android.libraries.matrix.api.room.roomNotificationSettings
 import io.element.android.libraries.matrix.ui.room.getDirectRoomMember
+import io.element.android.libraries.matrix.ui.room.isOwnUserAdmin
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analyticsproviders.api.trackers.captureInteraction
 import kotlinx.coroutines.CoroutineScope
@@ -71,12 +72,17 @@ class RoomDetailsPresenter @Inject constructor(
         val leaveRoomState = leaveRoomPresenter.present()
         val canShowNotificationSettings = remember { mutableStateOf(false) }
         val roomInfo by room.roomInfoFlow.collectAsState(initial = null)
+        val isUserAdmin = room.isOwnUserAdmin()
 
         val roomAvatar by remember { derivedStateOf { roomInfo?.avatarUrl ?: room.avatarUrl } }
 
         val roomName by remember { derivedStateOf { (roomInfo?.name ?: room.name ?: room.displayName).trim() } }
         val roomTopic by remember { derivedStateOf { roomInfo?.topic ?: room.topic } }
         val isFavorite by remember { derivedStateOf { roomInfo?.isFavorite.orFalse() } }
+
+        val isRoomModerationEnabled by produceState(initialValue = false) {
+            value = featureFlagService.isFeatureEnabled(FeatureFlags.RoomModeration)
+        }
 
         LaunchedEffect(Unit) {
             canShowNotificationSettings.value = featureFlagService.isFeatureEnabled(FeatureFlags.NotificationSettings)
@@ -150,6 +156,7 @@ class RoomDetailsPresenter @Inject constructor(
             leaveRoomState = leaveRoomState,
             roomNotificationSettings = roomNotificationSettingsState.roomNotificationSettings(),
             isFavorite = isFavorite,
+            displayRolesAndPermissionsSettings = isRoomModerationEnabled && !room.isDm && isUserAdmin,
             eventSink = ::handleEvents,
         )
     }

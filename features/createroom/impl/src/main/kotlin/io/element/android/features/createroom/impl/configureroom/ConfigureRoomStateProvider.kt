@@ -18,10 +18,11 @@ package io.element.android.features.createroom.impl.configureroom
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.createroom.impl.CreateRoomConfig
-import io.element.android.features.createroom.impl.userlist.aListOfSelectedUsers
 import io.element.android.libraries.architecture.AsyncAction
+import io.element.android.libraries.matrix.ui.components.aMatrixUserList
 import io.element.android.libraries.permissions.api.aPermissionsState
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 
 open class ConfigureRoomStateProvider : PreviewParameterProvider<ConfigureRoomState> {
     override val values: Sequence<ConfigureRoomState>
@@ -31,7 +32,7 @@ open class ConfigureRoomStateProvider : PreviewParameterProvider<ConfigureRoomSt
                 config = CreateRoomConfig(
                     roomName = "Room 101",
                     topic = "Room topic for this room when the text goes onto multiple lines and is really long, there shouldn’t be more than 3 lines",
-                    invites = aListOfSelectedUsers(),
+                    invites = aMatrixUserList().toImmutableList(),
                     privacy = RoomPrivacy.Public,
                 ),
             ),

@@ -2,6 +2,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_advanced_settings_developer_mode">"Utvecklarläge"</string>
   <string name="screen_advanced_settings_developer_mode_description">"Aktivera för att ha tillgång till funktionalitet för utvecklare."</string>
+  <string name="screen_advanced_settings_rich_text_editor_description">"Inaktivera rik-text-redigeraren för att skriva Markdown manuellt."</string>
   <string name="screen_blocked_users_unblock_alert_action">"Avblockera"</string>
   <string name="screen_blocked_users_unblock_alert_description">"Du kommer att kunna se alla meddelanden från dem igen."</string>
   <string name="screen_blocked_users_unblock_alert_title">"Avblockera användare"</string>

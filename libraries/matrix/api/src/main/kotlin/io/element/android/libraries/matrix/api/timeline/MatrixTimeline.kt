@@ -39,6 +39,7 @@ interface MatrixTimeline : AutoCloseable {
 
     val paginationState: StateFlow<PaginationState>
     val timelineItems: Flow<List<MatrixTimelineItem>>
+    val membershipChangeEventReceived: Flow<Unit>
 
     suspend fun paginateBackwards(requestSize: Int): Result<Unit>
     suspend fun paginateBackwards(requestSize: Int, untilNumberOfItems: Int): Result<Unit>

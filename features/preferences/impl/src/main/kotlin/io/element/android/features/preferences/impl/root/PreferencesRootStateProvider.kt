@@ -33,6 +33,7 @@ fun aPreferencesRootState() = PreferencesRootState(
     showDeveloperSettings = true,
     showNotificationSettings = true,
     showLockScreenSettings = true,
+    showBlockedUsersItem = true,
     snackbarMessage = SnackbarMessage(CommonStrings.common_verification_complete),
     directLogoutState = aDirectLogoutState(),
 )

@@ -43,8 +43,8 @@ import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.textcomposer.aRichTextEditorState
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
-import io.element.android.wysiwyg.compose.RichTextEditorState
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentSetOf
 
@@ -99,7 +99,7 @@ fun aMessagesState(
     userHasPermissionToRedactOther: Boolean = false,
     userHasPermissionToSendReaction: Boolean = true,
     composerState: MessageComposerState = aMessageComposerState(
-        richTextEditorState = RichTextEditorState("Hello", initialFocus = true),
+        richTextEditorState = aRichTextEditorState(initialText = "Hello", initialFocus = true),
         isFullScreen = false,
         mode = MessageComposerMode.Normal,
     ),
