@@ -668,9 +668,8 @@ internal fun TextComposerFormattingPreview() = ElementPreview {
         )
     }, {
         ATextComposer(
-            RichTextEditorState(
-                initialHtml = "A message\nWith several lines\nTo preview larger textfields and long lines with overflow",
-                initialMarkdown = "A message\nWith several lines\nTo preview larger textfields and long lines with overflow",
+            aRichTextEditorState(
+                initialText = "A message\nWith several lines\nTo preview larger textfields and long lines with overflow",
                 initialFocus = false
             ),
             voiceMessageState = VoiceMessageState.Idle,
