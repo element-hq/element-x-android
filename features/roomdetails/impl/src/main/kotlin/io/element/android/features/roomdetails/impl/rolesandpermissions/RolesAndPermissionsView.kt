@@ -195,11 +195,7 @@ private fun ChangeOwnRoleBottomSheet(
         )
         ListItem(
             headlineContent = { Text(stringResource(CommonStrings.action_cancel)) },
-            onClick = {
-                sheetState.hide(coroutineScope) {
-                    eventSink(RolesAndPermissionsEvents.CancelPendingAction)
-                }
-            },
+            onClick = ::dismiss,
             style = ListItemStyle.Primary,
         )
     }

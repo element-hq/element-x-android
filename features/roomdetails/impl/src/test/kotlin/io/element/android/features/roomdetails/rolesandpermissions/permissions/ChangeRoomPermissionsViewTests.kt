@@ -36,7 +36,7 @@ import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.tests.testutils.EnsureNeverCalled
 import io.element.android.tests.testutils.EventsRecorder
 import io.element.android.tests.testutils.clickOn
-import io.element.android.tests.testutils.clickOnLast
+import io.element.android.tests.testutils.clickOnFirst
 import io.element.android.tests.testutils.ensureCalledOnce
 import io.element.android.tests.testutils.pressBack
 import io.element.android.tests.testutils.pressBackKey
@@ -44,7 +44,6 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
 import org.junit.runner.RunWith
-import java.lang.IllegalStateException
 
 @RunWith(AndroidJUnit4::class)
 class ChangeRoomPermissionsViewTests {
@@ -113,10 +112,9 @@ class ChangeRoomPermissionsViewTests {
             ),
             eventsRecorder = recorder,
         )
-        rule.clickOnLast(CommonStrings.action_save)
+        rule.clickOnFirst(CommonStrings.action_save)
         recorder.assertSingle(ChangeRoomPermissionsEvent.Save)
     }
-
 
     @Test
     fun `click on a role item triggers ChangeRole event`() {

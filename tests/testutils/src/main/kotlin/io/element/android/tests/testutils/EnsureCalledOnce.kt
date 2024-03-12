@@ -29,8 +29,27 @@ class EnsureCalledOnce : () -> Unit {
     }
 }
 
+class EnsureCalledTimes(val times: Int) : () -> Unit {
+    private var counter = 0
+    override fun invoke() {
+        counter++
+    }
+
+    fun assertSuccess() {
+        if (counter != times) {
+            throw AssertionError("Expected to be called $times, but was called $counter times")
+        }
+    }
+}
+
 fun ensureCalledOnce(block: (callback: () -> Unit) -> Unit) {
     val callback = EnsureCalledOnce()
+    block(callback)
+    callback.assertSuccess()
+}
+
+fun ensureCalledTimes(times: Int, block: (callback: () -> Unit) -> Unit) {
+    val callback = EnsureCalledTimes(times)
     block(callback)
     callback.assertSuccess()
 }

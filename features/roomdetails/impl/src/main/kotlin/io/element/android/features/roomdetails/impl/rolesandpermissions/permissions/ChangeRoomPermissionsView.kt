@@ -127,7 +127,7 @@ fun ChangeRoomPermissionsView(
                 onDismiss = { state.eventSink(ChangeRoomPermissionsEvent.Exit) }
             )
         },
-        onErrorDismiss = {}
+        onErrorDismiss = {},
     )
 }
 
