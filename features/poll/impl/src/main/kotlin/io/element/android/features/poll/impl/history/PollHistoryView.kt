@@ -39,6 +39,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
@@ -195,7 +196,8 @@ private fun PollHistoryList(
                     text = emptyStringResource,
                     style = ElementTheme.typography.fontBodyLgRegular,
                     color = ElementTheme.colors.textSecondary,
-                    modifier = Modifier.padding(vertical = 24.dp, horizontal = 16.dp)
+                    modifier = Modifier.padding(vertical = 24.dp, horizontal = 16.dp),
+                    textAlign = TextAlign.Center,
                 )
             }
         }
