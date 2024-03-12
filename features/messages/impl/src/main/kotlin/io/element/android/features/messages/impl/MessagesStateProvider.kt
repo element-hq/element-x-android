@@ -99,7 +99,7 @@ fun aMessagesState(
     userHasPermissionToRedactOther: Boolean = false,
     userHasPermissionToSendReaction: Boolean = true,
     composerState: MessageComposerState = aMessageComposerState(
-        richTextEditorState = RichTextEditorState("Hello", initialFocus = true),
+        richTextEditorState = RichTextEditorState(initialHtml = "Hello", initialMarkdown = "Hello", initialFocus = true),
         isFullScreen = false,
         mode = MessageComposerMode.Normal,
     ),
