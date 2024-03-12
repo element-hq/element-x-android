@@ -18,6 +18,7 @@ package io.element.android.features.roomlist.impl.filters
 
 import io.element.android.features.roomlist.impl.filters.selection.FilterSelectionState
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toPersistentList
 
 data class RoomListFiltersState(
     val filterSelectionStates: ImmutableList<FilterSelectionState>,
@@ -26,7 +27,10 @@ data class RoomListFiltersState(
 ) {
     val hasAnyFilterSelected = filterSelectionStates.any { it.isSelected }
 
-    fun selectedFilters(): List<RoomListFilter> {
-        return filterSelectionStates.filter { it.isSelected }.map { it.filter }
+    fun selectedFilters(): ImmutableList<RoomListFilter> {
+        return filterSelectionStates
+            .filter { it.isSelected }
+            .map { it.filter }
+            .toPersistentList()
     }
 }

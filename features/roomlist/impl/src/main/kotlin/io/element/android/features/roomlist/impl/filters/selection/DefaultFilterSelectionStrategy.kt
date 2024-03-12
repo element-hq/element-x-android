@@ -24,7 +24,6 @@ import javax.inject.Inject
 
 @ContributesBinding(SessionScope::class)
 class DefaultFilterSelectionStrategy @Inject constructor() : FilterSelectionStrategy {
-
     private val selectedFilters = LinkedHashSet<RoomListFilter>()
 
     override val filterSelectionStates = MutableStateFlow(buildFilters())

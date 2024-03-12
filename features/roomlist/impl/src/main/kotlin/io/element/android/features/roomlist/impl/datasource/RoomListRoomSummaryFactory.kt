@@ -24,8 +24,6 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.eventformatter.api.RoomLastMessageFormatter
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.roomlist.RoomSummary
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.toImmutableList
 import javax.inject.Inject
 
 class RoomListRoomSummaryFactory @Inject constructor(
@@ -52,7 +50,6 @@ class RoomListRoomSummaryFactory @Inject constructor(
                 isFavorite = false,
             )
         }
-
     }
 
     fun create(roomSummary: RoomSummary.Filled): RoomListRoomSummary {

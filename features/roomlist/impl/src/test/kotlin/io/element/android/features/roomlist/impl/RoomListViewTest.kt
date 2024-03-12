@@ -26,7 +26,6 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTouchInput
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.element.android.features.roomlist.impl.components.RoomListMenuAction
-import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.tests.testutils.EnsureNeverCalled
@@ -35,7 +34,6 @@ import io.element.android.tests.testutils.EventsRecorder
 import io.element.android.tests.testutils.clickOn
 import io.element.android.tests.testutils.ensureCalledOnce
 import io.element.android.tests.testutils.ensureCalledOnceWithParam
-import kotlinx.collections.immutable.persistentListOf
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
@@ -50,7 +48,7 @@ class RoomListViewTest {
         val eventsRecorder = EventsRecorder<RoomListEvents>()
         rule.setRoomListView(
             state = aRoomListState(
-                securityBannerState = SecurityBannerState.SessionVerification,
+                contentState = aRoomsContentState(securityBannerState = SecurityBannerState.SessionVerification),
                 eventSink = eventsRecorder,
             )
         )
@@ -65,7 +63,7 @@ class RoomListViewTest {
         ensureCalledOnce { callback ->
             rule.setRoomListView(
                 state = aRoomListState(
-                    securityBannerState = SecurityBannerState.SessionVerification,
+                    contentState = aRoomsContentState(securityBannerState = SecurityBannerState.SessionVerification),
                     eventSink = eventsRecorder,
                 ),
                 onVerifyClicked = callback,
@@ -79,7 +77,7 @@ class RoomListViewTest {
         val eventsRecorder = EventsRecorder<RoomListEvents>()
         rule.setRoomListView(
             state = aRoomListState(
-                securityBannerState = SecurityBannerState.RecoveryKeyConfirmation,
+                contentState = aRoomsContentState(securityBannerState = SecurityBannerState.RecoveryKeyConfirmation),
                 eventSink = eventsRecorder,
             )
         )
@@ -94,7 +92,7 @@ class RoomListViewTest {
         ensureCalledOnce { callback ->
             rule.setRoomListView(
                 state = aRoomListState(
-                    securityBannerState = SecurityBannerState.RecoveryKeyConfirmation,
+                    contentState = aRoomsContentState(securityBannerState = SecurityBannerState.RecoveryKeyConfirmation),
                     eventSink = eventsRecorder,
                 ),
                 onConfirmRecoveryKeyClicked = callback,
@@ -110,7 +108,7 @@ class RoomListViewTest {
             rule.setRoomListView(
                 state = aRoomListState(
                     eventSink = eventsRecorder,
-                    roomList = AsyncData.Success(persistentListOf()),
+                    contentState = anEmptyContentState(),
                 ),
                 onCreateRoomClicked = callback,
             )
@@ -124,7 +122,7 @@ class RoomListViewTest {
         val state = aRoomListState(
             eventSink = eventsRecorder,
         )
-        val room0 = state.roomList.dataOrNull()!!.first()
+        val room0 = state.contentAsRooms().summaries.first()
         ensureCalledOnceWithParam(room0.roomId) { callback ->
             rule.setRoomListView(
                 state = state,
@@ -140,7 +138,7 @@ class RoomListViewTest {
         val state = aRoomListState(
             eventSink = eventsRecorder,
         )
-        val room0 = state.roomList.dataOrNull()!!.first()
+        val room0 = state.contentAsRooms().summaries.first()
         rule.setRoomListView(
             state = state,
         )
@@ -170,7 +168,7 @@ class RoomListViewTest {
     fun `clicking on invites invokes the expected callback`() {
         val eventsRecorder = EventsRecorder<RoomListEvents>()
         val state = aRoomListState(
-            invitesState = InvitesState.NewInvites,
+            contentState = aRoomsContentState(invitesState = InvitesState.NewInvites),
             eventSink = eventsRecorder,
         )
         ensureCalledOnce { callback ->

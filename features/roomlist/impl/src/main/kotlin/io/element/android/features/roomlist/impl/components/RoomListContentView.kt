@@ -17,7 +17,6 @@
 package io.element.android.features.roomlist.impl.components
 
 import androidx.annotation.StringRes
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -40,6 +39,7 @@ import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.Velocity
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
@@ -48,19 +48,24 @@ import io.element.android.features.roomlist.impl.InvitesEntryPointView
 import io.element.android.features.roomlist.impl.InvitesState
 import io.element.android.features.roomlist.impl.R
 import io.element.android.features.roomlist.impl.RoomListContentState
+import io.element.android.features.roomlist.impl.RoomListContentStateProvider
 import io.element.android.features.roomlist.impl.RoomListEvents
 import io.element.android.features.roomlist.impl.SecurityBannerState
 import io.element.android.features.roomlist.impl.contentType
 import io.element.android.features.roomlist.impl.filters.RoomListFilter
 import io.element.android.features.roomlist.impl.filters.RoomListFiltersEmptyStateResources
 import io.element.android.features.roomlist.impl.filters.RoomListFiltersState
+import io.element.android.features.roomlist.impl.filters.aRoomListFiltersState
 import io.element.android.features.roomlist.impl.migration.MigrationScreenView
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
+import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
 import io.element.android.libraries.designsystem.theme.components.IconSource
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.ui.strings.CommonStrings
+import kotlinx.collections.immutable.ImmutableList
 
 @Composable
 fun RoomListContentView(
@@ -214,7 +219,6 @@ private fun RoomsViewList(
         modifier = modifier.nestedScroll(nestedScrollConnection),
         // FAB height is 56dp, bottom padding is 16dp, we add 8dp as extra margin -> 56+16+8 = 80
         contentPadding = PaddingValues(bottom = 80.dp)
-
     ) {
         when (state.securityBannerState) {
             SecurityBannerState.SessionVerification -> {
@@ -261,7 +265,7 @@ private fun RoomsViewList(
 
 @Composable
 private fun EmptyViewForFilterStates(
-    selectedFilters: List<RoomListFilter>,
+    selectedFilters: ImmutableList<RoomListFilter>,
     modifier: Modifier = Modifier,
 ) {
     val emptyStateResources = RoomListFiltersEmptyStateResources.fromSelectedFilters(selectedFilters) ?: return
@@ -300,4 +304,19 @@ private fun EmptyScaffold(
         Spacer(modifier = Modifier.height(32.dp))
         action?.invoke(this)
     }
+}
+
+@PreviewsDayNight
+@Composable
+internal fun RoomListContentViewPreview(@PreviewParameter(RoomListContentStateProvider::class) state: RoomListContentState) = ElementPreview {
+    RoomListContentView(
+        contentState = state,
+        filtersState = aRoomListFiltersState(),
+        eventSink = {},
+        onVerifyClicked = { },
+        onConfirmRecoveryKeyClicked = { },
+        onRoomClicked = {},
+        onRoomLongClicked = {},
+        onCreateRoomClicked = { },
+        onInvitesClicked = { })
 }

@@ -33,8 +33,7 @@ import io.element.android.features.roomlist.impl.datasource.RoomListDataSource
 import io.element.android.features.roomlist.impl.datasource.RoomListRoomSummaryFactory
 import io.element.android.features.roomlist.impl.filters.RoomListFiltersState
 import io.element.android.features.roomlist.impl.filters.aRoomListFiltersState
-import io.element.android.features.roomlist.impl.migration.InMemoryMigrationScreenStore
-import io.element.android.features.roomlist.impl.migration.MigrationScreenPresenter
+import io.element.android.features.roomlist.impl.migration.MigrationScreenState
 import io.element.android.features.roomlist.impl.model.createRoomListRoomSummary
 import io.element.android.features.roomlist.impl.search.RoomListSearchEvents
 import io.element.android.features.roomlist.impl.search.RoomListSearchState
@@ -54,13 +53,12 @@ import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.encryption.BackupState
 import io.element.android.libraries.matrix.api.encryption.RecoveryState
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
-import io.element.android.libraries.matrix.api.roomlist.RoomListService
+import io.element.android.libraries.matrix.api.roomlist.RoomList
 import io.element.android.libraries.matrix.api.sync.SyncState
 import io.element.android.libraries.matrix.api.timeline.ReceiptType
 import io.element.android.libraries.matrix.test.AN_AVATAR_URL
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.matrix.test.A_ROOM_ID
-import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.A_USER_NAME
 import io.element.android.libraries.matrix.test.FakeMatrixClient
@@ -75,6 +73,7 @@ import io.element.android.libraries.matrix.test.verification.FakeSessionVerifica
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.tests.testutils.EventsRecorder
+import io.element.android.tests.testutils.MutablePresenter
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.consumeItemsUntilPredicate
 import io.element.android.tests.testutils.testCoroutineDispatchers
@@ -127,7 +126,6 @@ class RoomListPresenterTests {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            skipItems(1)
             val initialState = awaitItem()
             assertThat(initialState.showAvatarIndicator).isTrue()
             sessionVerificationService.givenCanVerifySession(false)
@@ -169,11 +167,9 @@ class RoomListPresenterTests {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            val initialState = consumeItemsUntilPredicate(timeout = 3.seconds) { state -> state.roomList.dataOrNull()?.size == 16 }.last()
-            // Room list is loaded with 16 placeholders
-            val initialItems = initialState.roomList.dataOrNull().orEmpty()
-            assertThat(initialItems.size).isEqualTo(16)
-            assertThat(initialItems.all { it.isPlaceholder }).isTrue()
+            val initialState = consumeItemsUntilPredicate(timeout = 3.seconds) { state -> state.contentState is RoomListContentState.Skeleton }.last()
+            assertThat(initialState.contentState).isInstanceOf(RoomListContentState.Skeleton::class.java)
+            roomListService.postAllRoomsLoadingState(RoomList.LoadingState.Loaded(1))
             roomListService.postAllRooms(
                 listOf(
                     aRoomSummaryFilled(
@@ -182,10 +178,10 @@ class RoomListPresenterTests {
                     )
                 )
             )
-            val withRoomState = consumeItemsUntilPredicate { state -> state.roomList.dataOrNull()?.size == 1 }.last()
-            val withRoomStateItems = withRoomState.roomList.dataOrNull().orEmpty()
-            assertThat(withRoomStateItems.size).isEqualTo(1)
-            assertThat(withRoomStateItems.first()).isEqualTo(
+            val withRoomsState =
+                consumeItemsUntilPredicate { state -> state.contentState is RoomListContentState.Rooms && state.contentAsRooms().summaries.isNotEmpty() }.last()
+            assertThat(withRoomsState.contentAsRooms().summaries).hasSize(1)
+            assertThat(withRoomsState.contentAsRooms().summaries.first()).isEqualTo(
                 createRoomListRoomSummary(
                     numberOfUnreadMentions = 1,
                     numberOfUnreadMessages = 2,
@@ -241,23 +237,28 @@ class RoomListPresenterTests {
     @Test
     fun `present - handle RecoveryKeyConfirmation last session`() = runTest {
         val scope = CoroutineScope(context = coroutineContext + SupervisorJob())
+        val roomListService = FakeRoomListService().apply {
+            postAllRoomsLoadingState(RoomList.LoadingState.Loaded(1))
+        }
         val presenter = createRoomListPresenter(
             coroutineScope = scope,
             client = FakeMatrixClient(
                 encryptionService = FakeEncryptionService().apply {
                     emitIsLastDevice(true)
-                }
+                },
+                roomListService = roomListService
             ),
         )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            skipItems(1)
-            val eventSink = awaitItem().eventSink
+            val eventSink = consumeItemsUntilPredicate {
+                it.contentState is RoomListContentState.Rooms
+            }.last().eventSink
             // For the last session, the state is not SessionVerification, but RecoveryKeyConfirmation
-            assertThat(awaitItem().securityBannerState).isEqualTo(SecurityBannerState.RecoveryKeyConfirmation)
+            assertThat(awaitItem().contentAsRooms().securityBannerState).isEqualTo(SecurityBannerState.RecoveryKeyConfirmation)
             eventSink(RoomListEvents.DismissRequestVerificationPrompt)
-            assertThat(awaitItem().securityBannerState).isEqualTo(SecurityBannerState.None)
+            assertThat(awaitItem().contentAsRooms().securityBannerState).isEqualTo(SecurityBannerState.None)
             scope.cancel()
         }
     }
@@ -265,16 +266,22 @@ class RoomListPresenterTests {
     @Test
     fun `present - handle DismissRequestVerificationPrompt`() = runTest {
         val scope = CoroutineScope(context = coroutineContext + SupervisorJob())
+        val roomListService = FakeRoomListService().apply {
+            postAllRoomsLoadingState(RoomList.LoadingState.Loaded(1))
+        }
         val presenter = createRoomListPresenter(
+            client = FakeMatrixClient(roomListService = roomListService),
             coroutineScope = scope,
         )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            val eventSink = awaitItem().eventSink
-            assertThat(awaitItem().securityBannerState).isEqualTo(SecurityBannerState.SessionVerification)
+            val eventSink = consumeItemsUntilPredicate {
+                it.contentState is RoomListContentState.Rooms
+            }.last().eventSink
+            assertThat(awaitItem().contentAsRooms().securityBannerState).isEqualTo(SecurityBannerState.SessionVerification)
             eventSink(RoomListEvents.DismissRequestVerificationPrompt)
-            assertThat(awaitItem().securityBannerState).isEqualTo(SecurityBannerState.None)
+            assertThat(awaitItem().contentAsRooms().securityBannerState).isEqualTo(SecurityBannerState.None)
             scope.cancel()
         }
     }
@@ -282,7 +289,11 @@ class RoomListPresenterTests {
     @Test
     fun `present - handle DismissRecoveryKeyPrompt`() = runTest {
         val encryptionService = FakeEncryptionService()
+        val roomListService = FakeRoomListService().apply {
+            postAllRoomsLoadingState(RoomList.LoadingState.Loaded(1))
+        }
         val matrixClient = FakeMatrixClient(
+            roomListService = roomListService,
             encryptionService = encryptionService,
             sessionVerificationService = FakeSessionVerificationService().apply {
                 givenCanVerifySession(false)
@@ -297,15 +308,16 @@ class RoomListPresenterTests {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            skipItems(1)
-            val initialState = awaitItem()
-            assertThat(initialState.securityBannerState).isEqualTo(SecurityBannerState.None)
+            val initialState = consumeItemsUntilPredicate {
+                it.contentState is RoomListContentState.Rooms
+            }.last()
+            assertThat(initialState.contentAsRooms().securityBannerState).isEqualTo(SecurityBannerState.None)
             encryptionService.emitRecoveryState(RecoveryState.INCOMPLETE)
             val nextState = awaitItem()
-            assertThat(nextState.securityBannerState).isEqualTo(SecurityBannerState.RecoveryKeyConfirmation)
+            assertThat(nextState.contentAsRooms().securityBannerState).isEqualTo(SecurityBannerState.RecoveryKeyConfirmation)
             nextState.eventSink(RoomListEvents.DismissRecoveryKeyPrompt)
             val finalState = awaitItem()
-            assertThat(finalState.securityBannerState).isEqualTo(SecurityBannerState.None)
+            assertThat(finalState.contentAsRooms().securityBannerState).isEqualTo(SecurityBannerState.None)
             scope.cancel()
         }
     }
@@ -314,22 +326,30 @@ class RoomListPresenterTests {
     fun `present - sets invite state`() = runTest {
         val inviteStateFlow = MutableStateFlow(InvitesState.NoInvites)
         val inviteStateDataSource = FakeInviteDataSource(inviteStateFlow)
+        val roomListService = FakeRoomListService()
         val scope = CoroutineScope(coroutineContext + SupervisorJob())
-        val presenter = createRoomListPresenter(inviteStateDataSource = inviteStateDataSource, coroutineScope = scope)
+        val presenter = createRoomListPresenter(
+            inviteStateDataSource = inviteStateDataSource,
+            coroutineScope = scope,
+            client = FakeMatrixClient(roomListService = roomListService),
+        )
+        roomListService.postAllRoomsLoadingState(RoomList.LoadingState.Loaded(1))
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            skipItems(1)
-            assertThat(awaitItem().invitesState).isEqualTo(InvitesState.NoInvites)
+            consumeItemsUntilPredicate {
+                it.contentState is RoomListContentState.Rooms
+            }
+            assertThat(awaitItem().contentAsRooms().invitesState).isEqualTo(InvitesState.NoInvites)
 
             inviteStateFlow.value = InvitesState.SeenInvites
-            assertThat(awaitItem().invitesState).isEqualTo(InvitesState.SeenInvites)
+            assertThat(awaitItem().contentAsRooms().invitesState).isEqualTo(InvitesState.SeenInvites)
 
             inviteStateFlow.value = InvitesState.NewInvites
-            assertThat(awaitItem().invitesState).isEqualTo(InvitesState.NewInvites)
+            assertThat(awaitItem().contentAsRooms().invitesState).isEqualTo(InvitesState.NewInvites)
 
             inviteStateFlow.value = InvitesState.NoInvites
-            assertThat(awaitItem().invitesState).isEqualTo(InvitesState.NoInvites)
+            assertThat(awaitItem().contentAsRooms().invitesState).isEqualTo(InvitesState.NoInvites)
             scope.cancel()
         }
     }
@@ -477,6 +497,7 @@ class RoomListPresenterTests {
         val userDefinedMode = RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY
         val notificationSettingsService = FakeNotificationSettingsService()
         val roomListService = FakeRoomListService()
+        roomListService.postAllRoomsLoadingState(RoomList.LoadingState.Loaded(1))
         roomListService.postAllRooms(listOf(aRoomSummaryFilled(notificationMode = userDefinedMode)))
         val matrixClient = FakeMatrixClient(
             roomListService = roomListService,
@@ -488,12 +509,13 @@ class RoomListPresenterTests {
             presenter.present()
         }.test {
             notificationSettingsService.setRoomNotificationMode(A_ROOM_ID, userDefinedMode)
-
             val updatedState = consumeItemsUntilPredicate { state ->
-                state.roomList.dataOrNull().orEmpty().any { it.id == A_ROOM_ID.value && it.userDefinedNotificationMode == userDefinedMode }
+                (state.contentState as? RoomListContentState.Rooms)?.summaries.orEmpty().any { summary ->
+                    summary.id == A_ROOM_ID.value && summary.userDefinedNotificationMode == userDefinedMode
+                }
             }.last()
 
-            val room = updatedState.roomList.dataOrNull()?.find { it.id == A_ROOM_ID.value }
+            val room = updatedState.contentAsRooms().summaries.find { it.id == A_ROOM_ID.value }
             assertThat(room?.userDefinedNotificationMode).isEqualTo(userDefinedMode)
             cancelAndIgnoreRemainingEvents()
             scope.cancel()
@@ -526,30 +548,46 @@ class RoomListPresenterTests {
         }
     }
 
-    fun `present - change in migration presenter state modifies isMigrating`() = runTest {
-        val client = FakeMatrixClient(sessionId = A_SESSION_ID)
-        val migrationStore = InMemoryMigrationScreenStore()
-        val migrationScreenPresenter = MigrationScreenPresenter(client, migrationStore)
+    @Test
+    fun `present - change in migration presenter state modifies contentState`() = runTest {
+        val migrationScreenPresenter = MutablePresenter(MigrationScreenState(true))
         val scope = CoroutineScope(coroutineContext + SupervisorJob())
         val presenter = createRoomListPresenter(
-            client = client,
             coroutineScope = scope,
             migrationScreenPresenter = migrationScreenPresenter,
         )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
+            skipItems(1)
             val initialState = awaitItem()
             // The migration screen is shown if the migration screen has not been shown before
-            assertThat(initialState.displayMigrationStatus).isTrue()
-            skipItems(2)
-
+            assertThat(initialState.contentState).isInstanceOf(RoomListContentState.Migration::class.java)
             // Set migration as done and set the room list service as running to trigger a refresh of the presenter value
-            (client.roomListService as FakeRoomListService).postState(RoomListService.State.Running)
-            migrationStore.setMigrationScreenShown(A_SESSION_ID)
-
+            migrationScreenPresenter.updateState(MigrationScreenState(false))
             // The migration screen is not shown anymore
-            assertThat(awaitItem().displayMigrationStatus).isFalse()
+            assertThat(awaitItem().contentState).isInstanceOf(RoomListContentState.Skeleton::class.java)
+            scope.cancel()
+        }
+    }
+
+    @Test
+    fun `present - when room service returns no room, then contentState is Empty `() = runTest {
+        val scope = CoroutineScope(coroutineContext + SupervisorJob())
+        val roomListService = FakeRoomListService()
+        roomListService.postAllRoomsLoadingState(RoomList.LoadingState.Loaded(0))
+        val matrixClient = FakeMatrixClient(
+            roomListService = roomListService,
+        )
+        val presenter = createRoomListPresenter(
+            client = matrixClient,
+            coroutineScope = scope,
+        )
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            skipItems(1)
+            assertThat(awaitItem().contentState).isInstanceOf(RoomListContentState.Empty::class.java)
             scope.cancel()
         }
     }
@@ -609,10 +647,7 @@ class RoomListPresenterTests {
         sessionPreferencesStore: SessionPreferencesStore = InMemorySessionPreferencesStore(),
         featureFlagService: FeatureFlagService = FakeFeatureFlagService(),
         coroutineScope: CoroutineScope,
-        migrationScreenPresenter: MigrationScreenPresenter = MigrationScreenPresenter(
-            matrixClient = client,
-            migrationScreenStore = InMemoryMigrationScreenStore(),
-        ),
+        migrationScreenPresenter: Presenter<MigrationScreenState> = Presenter { MigrationScreenState(false) },
         analyticsService: AnalyticsService = FakeAnalyticsService(),
         filtersPresenter: Presenter<RoomListFiltersState> = Presenter { aRoomListFiltersState() },
         searchPresenter: Presenter<RoomListSearchState> = Presenter { aRoomListSearchState() },

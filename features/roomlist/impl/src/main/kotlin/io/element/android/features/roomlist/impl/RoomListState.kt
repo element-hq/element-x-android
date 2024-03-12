@@ -67,6 +67,7 @@ enum class SecurityBannerState {
     RecoveryKeyConfirmation,
 }
 
+@Immutable
 sealed interface RoomListContentState {
     data object Migration : RoomListContentState
     data class Skeleton(val count: Int) : RoomListContentState

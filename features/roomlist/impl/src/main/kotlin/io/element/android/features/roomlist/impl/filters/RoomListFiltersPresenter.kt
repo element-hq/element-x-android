@@ -34,13 +34,10 @@ class RoomListFiltersPresenter @Inject constructor(
     private val featureFlagService: FeatureFlagService,
     private val filterSelectionStrategy: FilterSelectionStrategy,
 ) : Presenter<RoomListFiltersState> {
-
     @Composable
     override fun present(): RoomListFiltersState {
-
         val isFeatureEnabled by featureFlagService.isFeatureEnabledFlow(FeatureFlags.RoomListFilters).collectAsState(false)
         val filters by filterSelectionStrategy.filterSelectionStates.collectAsState()
-
 
         fun handleEvents(event: RoomListFiltersEvents) {
             when (event) {
@@ -74,7 +71,6 @@ class RoomListFiltersPresenter @Inject constructor(
             )
             roomListService.allRooms.updateFilter(allRoomsFilter)
         }
-
 
         return RoomListFiltersState(
             filterSelectionStates = filters.toPersistentList(),

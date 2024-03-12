@@ -40,7 +40,7 @@ import io.element.android.features.preferences.api.store.SessionPreferencesStore
 import io.element.android.features.roomlist.impl.datasource.InviteStateDataSource
 import io.element.android.features.roomlist.impl.datasource.RoomListDataSource
 import io.element.android.features.roomlist.impl.filters.RoomListFiltersState
-import io.element.android.features.roomlist.impl.migration.MigrationScreenPresenter
+import io.element.android.features.roomlist.impl.migration.MigrationScreenState
 import io.element.android.features.roomlist.impl.search.RoomListSearchEvents
 import io.element.android.features.roomlist.impl.search.RoomListSearchState
 import io.element.android.libraries.architecture.AsyncData
@@ -89,7 +89,7 @@ class RoomListPresenter @Inject constructor(
     private val indicatorService: IndicatorService,
     private val filtersPresenter: Presenter<RoomListFiltersState>,
     private val searchPresenter: Presenter<RoomListSearchState>,
-    private val migrationScreenPresenter: MigrationScreenPresenter,
+    private val migrationScreenPresenter: Presenter<MigrationScreenState>,
     private val sessionPreferencesStore: SessionPreferencesStore,
     private val analyticsService: AnalyticsService,
 ) : Presenter<RoomListState> {
@@ -196,23 +196,23 @@ class RoomListPresenter @Inject constructor(
         }
         val loadingState by roomListDataSource.loadingState.collectAsState()
         val showMigration = migrationScreenPresenter.present().isMigrating
-        val showSkeleton by remember {
-            derivedStateOf {
-                loadingState == RoomList.LoadingState.NotLoaded || roomSummaries is AsyncData.Loading
-            }
-        }
         val showEmpty by remember {
             derivedStateOf {
                 (loadingState as? RoomList.LoadingState.Loaded)?.numberOfRooms == 0
             }
         }
+        val showSkeleton by remember {
+            derivedStateOf {
+                loadingState == RoomList.LoadingState.NotLoaded || roomSummaries is AsyncData.Loading
+            }
+        }
         return when {
             showMigration -> RoomListContentState.Migration
-            showSkeleton -> RoomListContentState.Skeleton(count = 16)
             showEmpty -> {
                 val invitesState = inviteStateDataSource.inviteState()
                 RoomListContentState.Empty(invitesState)
             }
+            showSkeleton -> RoomListContentState.Skeleton(count = 16)
             else -> {
                 val invitesState = inviteStateDataSource.inviteState()
                 val securityBannerState by securityBannerState(securityBannerDismissed)

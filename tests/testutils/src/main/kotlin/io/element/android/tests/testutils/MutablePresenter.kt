@@ -14,24 +14,22 @@
  * limitations under the License.
  */
 
-package io.element.android.features.roomlist.impl.filters.selection
+package io.element.android.tests.testutils
 
-import io.element.android.features.roomlist.impl.filters.RoomListFilter
-import kotlinx.coroutines.flow.StateFlow
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import io.element.android.libraries.architecture.Presenter
+import kotlinx.coroutines.flow.MutableStateFlow
 
-interface FilterSelectionStrategy {
-    val filterSelectionStates: StateFlow<Set<FilterSelectionState>>
+class MutablePresenter<State>(initialState: State) : Presenter<State> {
+    private val stateFlow = MutableStateFlow(initialState)
 
-    fun select(filter: RoomListFilter)
-    fun deselect(filter: RoomListFilter)
-    fun isSelected(filter: RoomListFilter): Boolean
-    fun clear()
+    fun updateState(state: State) {
+        stateFlow.value = state
+    }
 
-    fun toggle(filter: RoomListFilter) {
-        if (isSelected(filter)) {
-            deselect(filter)
-        } else {
-            select(filter)
-        }
+    @Composable
+    override fun present(): State {
+        return stateFlow.collectAsState().value
     }
 }

@@ -14,24 +14,6 @@
  * limitations under the License.
  */
 
-package io.element.android.features.roomlist.impl.filters.selection
+package io.element.android.features.roomlist.impl
 
-import io.element.android.features.roomlist.impl.filters.RoomListFilter
-import kotlinx.coroutines.flow.StateFlow
-
-interface FilterSelectionStrategy {
-    val filterSelectionStates: StateFlow<Set<FilterSelectionState>>
-
-    fun select(filter: RoomListFilter)
-    fun deselect(filter: RoomListFilter)
-    fun isSelected(filter: RoomListFilter): Boolean
-    fun clear()
-
-    fun toggle(filter: RoomListFilter) {
-        if (isSelected(filter)) {
-            deselect(filter)
-        } else {
-            select(filter)
-        }
-    }
-}
+internal fun RoomListState.contentAsRooms() = contentState as RoomListContentState.Rooms

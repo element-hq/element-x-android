@@ -28,7 +28,6 @@ data class RoomListFiltersEmptyStateResources(
     @StringRes val title: Int,
     @StringRes val subtitle: Int,
 ) {
-
     companion object {
         /**
          * Create a [RoomListFiltersEmptyStateResources] from a list of selected filters.

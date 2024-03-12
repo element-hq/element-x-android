@@ -53,7 +53,6 @@ fun RoomListFiltersView(
     state: RoomListFiltersState,
     modifier: Modifier = Modifier
 ) {
-
     fun onClearFiltersClicked() {
         state.eventSink(RoomListFiltersEvents.ClearSelectedFilters)
     }
