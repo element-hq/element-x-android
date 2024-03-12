@@ -18,6 +18,7 @@ package io.element.android.features.roomdetails.rolesandpermissions.permissions
 
 import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
+import app.cash.turbine.Event
 import app.cash.turbine.TurbineTestContext
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
@@ -122,6 +123,42 @@ class ChangeRoomPermissionsPresenterTests {
     }
 
     @Test
+    fun `present - ChangeMinimumRoleForAction works for all actions`() = runTest {
+        val presenter = createChangeRoomPermissionsPresenter()
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val state = awaitUpdatedItem()
+
+            state.eventSink(ChangeRoomPermissionsEvent.ChangeMinimumRoleForAction(RoomPermissionType.INVITE, MODERATOR))
+            state.eventSink(ChangeRoomPermissionsEvent.ChangeMinimumRoleForAction(RoomPermissionType.KICK, MODERATOR))
+            state.eventSink(ChangeRoomPermissionsEvent.ChangeMinimumRoleForAction(RoomPermissionType.BAN, MODERATOR))
+            state.eventSink(ChangeRoomPermissionsEvent.ChangeMinimumRoleForAction(RoomPermissionType.SEND_EVENTS, MODERATOR))
+            state.eventSink(ChangeRoomPermissionsEvent.ChangeMinimumRoleForAction(RoomPermissionType.REDACT_EVENTS, MODERATOR))
+            state.eventSink(ChangeRoomPermissionsEvent.ChangeMinimumRoleForAction(RoomPermissionType.ROOM_NAME, MODERATOR))
+            state.eventSink(ChangeRoomPermissionsEvent.ChangeMinimumRoleForAction(RoomPermissionType.ROOM_AVATAR, MODERATOR))
+            state.eventSink(ChangeRoomPermissionsEvent.ChangeMinimumRoleForAction(RoomPermissionType.ROOM_TOPIC, MODERATOR))
+
+            val items = cancelAndConsumeRemainingEvents()
+
+            (items.last() as? Event.Item<ChangeRoomPermissionsState>)?.value?.run {
+                assertThat(currentPermissions).isEqualTo(
+                    MatrixRoomPowerLevels(
+                        invite = MODERATOR.powerLevel,
+                        kick = MODERATOR.powerLevel,
+                        ban = MODERATOR.powerLevel,
+                        redactEvents = MODERATOR.powerLevel,
+                        sendEvents = MODERATOR.powerLevel,
+                        roomName = MODERATOR.powerLevel,
+                        roomAvatar = MODERATOR.powerLevel,
+                        roomTopic = MODERATOR.powerLevel,
+                    )
+                )
+            }
+        }
+    }
+
+    @Test
     fun `present - Save updates the current permissions and resets hasChanges`() = runTest {
         val presenter = createChangeRoomPermissionsPresenter()
         moleculeFlow(RecompositionMode.Immediate) {
@@ -142,6 +179,23 @@ class ChangeRoomPermissionsPresenterTests {
                 assertThat(currentPermissions?.roomName).isEqualTo(MODERATOR.powerLevel)
                 assertThat(saveAction).isEqualTo(AsyncAction.Success(Unit))
             }
+        }
+    }
+
+    @Test
+    fun `present - Save will fail if there are not current permissions`() = runTest {
+        val room = FakeMatrixRoom().apply {
+            givenPowerLevelsResult(Result.failure(IllegalStateException("Failed to load power levels")))
+        }
+        val presenter = createChangeRoomPermissionsPresenter(room = room)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val state = awaitItem()
+            assertThat(state.currentPermissions).isNull()
+
+            state.eventSink(ChangeRoomPermissionsEvent.Save)
+            assertThat(awaitItem().saveAction).isInstanceOf(AsyncAction.Failure::class.java)
         }
     }
 
