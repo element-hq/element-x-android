@@ -28,6 +28,8 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.features.roomdetails.impl.rolesandpermissions.changeroles.ChangeRolesNode
+import io.element.android.features.roomdetails.impl.rolesandpermissions.permissions.ChangeRoomPermissionsNode
+import io.element.android.features.roomdetails.impl.rolesandpermissions.permissions.ChangeRoomPermissionsSection
 import io.element.android.libraries.architecture.BackstackView
 import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.architecture.createNode
@@ -55,6 +57,9 @@ class RolesAndPermissionsFlowNode @AssistedInject constructor(
 
         @Parcelize
         data object ModeratorList : NavTarget
+
+        @Parcelize
+        data class ChangeRoomPermissions(val section: ChangeRoomPermissionsSection) : NavTarget
     }
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
@@ -67,6 +72,18 @@ class RolesAndPermissionsFlowNode @AssistedInject constructor(
 
                     override fun openModeratorList() {
                         backstack.push(NavTarget.ModeratorList)
+                    }
+
+                    override fun openEditRoomDetailsPermissions() {
+                        backstack.push(NavTarget.ChangeRoomPermissions(ChangeRoomPermissionsSection.RoomDetails))
+                    }
+
+                    override fun openMessagesAndContentPermissions() {
+                        backstack.push(NavTarget.ChangeRoomPermissions(ChangeRoomPermissionsSection.MessagesAndContent))
+                    }
+
+                    override fun openModerationPermissions() {
+                        backstack.push(NavTarget.ChangeRoomPermissions(ChangeRoomPermissionsSection.MembershipModeration))
                     }
                 }
                 createNode<RolesAndPermissionsNode>(
@@ -84,6 +101,13 @@ class RolesAndPermissionsFlowNode @AssistedInject constructor(
             is NavTarget.ModeratorList -> {
                 val inputs = ChangeRolesNode.Inputs(ChangeRolesNode.ListType.Moderators)
                 createNode<ChangeRolesNode>(
+                    buildContext = buildContext,
+                    plugins = listOf(inputs),
+                )
+            }
+            is NavTarget.ChangeRoomPermissions -> {
+                val inputs = ChangeRoomPermissionsNode.Inputs(navTarget.section)
+                createNode<ChangeRoomPermissionsNode>(
                     buildContext = buildContext,
                     plugins = listOf(inputs),
                 )

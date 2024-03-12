@@ -17,6 +17,7 @@
 package io.element.android.features.roomdetails.impl.rolesandpermissions
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Stable
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
@@ -46,17 +47,24 @@ class RolesAndPermissionsNode @AssistedInject constructor(
     @Assisted plugins: List<Plugin>,
     private val presenter: RolesAndPermissionsPresenter,
     private val room: MatrixRoom,
-) : Node(buildContext, plugins = plugins), RoomDetailsAdminSettingsNavigator {
-    interface Callback : Plugin {
-        fun openAdminList()
-        fun openModeratorList()
+) : Node(buildContext, plugins = plugins), RolesAndPermissionsNavigator {
+    interface Callback : Plugin, RolesAndPermissionsNavigator {
+        override fun openAdminList()
+        override fun openModeratorList()
+        override fun openEditRoomDetailsPermissions()
+        override fun openMessagesAndContentPermissions()
+        override fun openModerationPermissions()
+        override fun onBackPressed() {}
     }
 
     private val callback = plugins<Callback>().first()
 
-    override fun onBackPressed() = navigateUp()
-    override fun openAdminList() = callback.openAdminList()
-    override fun openModeratorList() = callback.openModeratorList()
+    @Stable
+    private val navigator = object : RolesAndPermissionsNavigator by callback {
+        override fun onBackPressed() {
+            navigateUp()
+        }
+    }
 
     override fun onBuilt() {
         super.onBuilt()
@@ -88,14 +96,17 @@ class RolesAndPermissionsNode @AssistedInject constructor(
         val state = presenter.present()
         RolesAndPermissionsView(
             state = state,
-            roomDetailsAdminSettingsNavigator = this,
+            rolesAndPermissionsNavigator = navigator,
             modifier = modifier,
         )
     }
 }
 
-interface RoomDetailsAdminSettingsNavigator {
+interface RolesAndPermissionsNavigator {
     fun onBackPressed() {}
     fun openAdminList() {}
     fun openModeratorList() {}
+    fun openEditRoomDetailsPermissions() {}
+    fun openMessagesAndContentPermissions() {}
+    fun openModerationPermissions() {}
 }

@@ -14,14 +14,13 @@
  * limitations under the License.
  */
 
-package io.element.android.features.roomdetails.impl.rolesandpermissions
+package io.element.android.features.roomdetails.impl.rolesandpermissions.permissions
 
-import io.element.android.libraries.architecture.AsyncAction
+import io.element.android.libraries.matrix.api.room.RoomMember
 
-data class RolesAndPermissionsState(
-    val adminCount: Int,
-    val moderatorCount: Int,
-    val changeOwnRoleAction: AsyncAction<Unit>,
-    val resetPermissionsAction: AsyncAction<Unit>,
-    val eventSink: (RolesAndPermissionsEvents) -> Unit,
-)
+interface ChangeRoomPermissionsEvent {
+    data class ChangeMinimumRoleForAction(val action: RoomPermissionType, val role: RoomMember.Role) : ChangeRoomPermissionsEvent
+    data object Save : ChangeRoomPermissionsEvent
+    data object Exit : ChangeRoomPermissionsEvent
+    data object ResetPendingActions : ChangeRoomPermissionsEvent
+}

@@ -20,6 +20,17 @@ import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MessageEventType
 import io.element.android.libraries.matrix.api.room.StateEventType
 
+data class MatrixRoomPowerLevels(
+    val ban: Long,
+    val invite: Long,
+    val kick: Long,
+    val sendEvents: Long,
+    val redactEvents: Long,
+    val roomName: Long,
+    val roomAvatar: Long,
+    val roomTopic: Long,
+)
+
 /**
  * Shortcut for calling [MatrixRoom.canUserInvite] with our own user.
  */
