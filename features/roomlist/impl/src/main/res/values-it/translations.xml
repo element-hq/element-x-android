@@ -1,17 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="confirm_recovery_key_banner_message">"Il backup della chat non è attualmente sincronizzato. Devi confermare la chiave di recupero per mantenere l\'accesso al backup della chat."</string>
-  <string name="confirm_recovery_key_banner_title">"Conferma la chiave di recupero"</string>
+  <string name="confirm_recovery_key_banner_title">"Inserisci la chiave di recupero"</string>
   <string name="screen_migration_message">"Si tratta di una procedura che si effettua una sola volta, grazie per l\'attesa."</string>
   <string name="screen_migration_title">"Configurazione del tuo account."</string>
   <string name="screen_roomlist_a11y_create_message">"Crea una nuova conversazione o stanza"</string>
   <string name="screen_roomlist_empty_message">"Inizia inviando un messaggio a qualcuno."</string>
-  <string name="screen_roomlist_empty_title">"Ancora nessuna chat."</string>
+  <string name="screen_roomlist_empty_title">"Ancora nessuna conversazione."</string>
   <string name="screen_roomlist_filter_favourites">"Preferiti"</string>
+  <string name="screen_roomlist_filter_favourites_empty_state_subtitle">"Puoi aggiungere una conversazione ai tuoi preferiti nelle impostazioni della stessa.
+Per il momento, puoi deselezionare i filtri per vedere le altre conversazioni."</string>
+  <string name="screen_roomlist_filter_favourites_empty_state_title">"Non hai ancora conversazioni preferite"</string>
   <string name="screen_roomlist_filter_low_priority">"Bassa priorità"</string>
+  <string name="screen_roomlist_filter_mixed_empty_state_subtitle">"Puoi deselezionare i filtri per vedere le altre conversazioni."</string>
+  <string name="screen_roomlist_filter_mixed_empty_state_title">"Non hai conversazioni per questa selezione"</string>
   <string name="screen_roomlist_filter_people">"Persone"</string>
+  <string name="screen_roomlist_filter_people_empty_state_title">"Non hai ancora nessuna conversazione diretta"</string>
   <string name="screen_roomlist_filter_rooms">"Stanze"</string>
+  <string name="screen_roomlist_filter_rooms_empty_state_title">"Non sei ancora in nessuna stanza"</string>
   <string name="screen_roomlist_filter_unreads">"Non letti"</string>
+  <string name="screen_roomlist_filter_unreads_empty_state_title">"Congratulazioni!
+Non hai messaggi non letti!"</string>
   <string name="screen_roomlist_main_space_title">"Tutte le conversazioni"</string>
   <string name="screen_roomlist_mark_as_read">"Segna come letto"</string>
   <string name="screen_roomlist_mark_as_unread">"Segna come non letto"</string>

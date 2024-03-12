@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_signed_out_reason_1">"Hai cambiato la password in un\'altra sessione"</string>
-  <string name="screen_signed_out_reason_2">"Hai eliminato la sessione da un\'altra sessione"</string>
+  <string name="screen_signed_out_reason_2">"Hai eliminato la sessione da un\'altra"</string>
   <string name="screen_signed_out_reason_3">"L\'amministratore del tuo server ha invalidato il tuo accesso"</string>
   <string name="screen_signed_out_subtitle">"Potresti essere stato disconnesso per uno dei motivi elencati di seguito. Accedi di nuovo per continuare a usare %s."</string>
   <string name="screen_signed_out_title">"Sei disconnesso"</string>

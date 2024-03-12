@@ -32,6 +32,7 @@
     <item quantity="many">"%d новых паведамленняў"</item>
   </plurals>
   <string name="notification_reaction_body">"Адрэагаваў на %1$s"</string>
+  <string name="notification_room_action_mark_as_read">"Пазначыць як прачытанае"</string>
   <string name="notification_room_action_quick_reply">"Хуткі адказ"</string>
   <string name="notification_room_invite_body">"Запрасіў вас далучыцца да пакоя"</string>
   <string name="notification_sender_me">"Я"</string>

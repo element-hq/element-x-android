@@ -8,7 +8,7 @@
   <string name="screen_session_verification_complete_subtitle">"Ваш новий сеанс підтверджено. Він матиме доступ до ваших зашифрованих повідомлень, й інші користувачі вважатимуть його надійним."</string>
   <string name="screen_session_verification_enter_recovery_key">"Введіть ключ відновлення"</string>
   <string name="screen_session_verification_open_existing_session_subtitle">"Доведіть, що це Ви, щоб отримати доступ до історії зашифрованих повідомлень."</string>
-  <string name="screen_session_verification_open_existing_session_title">"Відкрити існуючий сеанс"</string>
+  <string name="screen_session_verification_open_existing_session_title">"Відкрийте існуючий сеанс"</string>
   <string name="screen_session_verification_positive_button_canceled">"Повторити перевірку"</string>
   <string name="screen_session_verification_positive_button_initial">"Я готовий"</string>
   <string name="screen_session_verification_positive_button_verifying_ongoing">"Очікування збігу"</string>

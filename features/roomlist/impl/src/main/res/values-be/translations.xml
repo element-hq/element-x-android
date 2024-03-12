@@ -7,8 +7,14 @@
   <string name="screen_roomlist_a11y_create_message">"Стварыце новую размову або пакой"</string>
   <string name="screen_roomlist_empty_message">"Пачніце з паведамлення каму-небудзь."</string>
   <string name="screen_roomlist_empty_title">"Пакуль няма чатаў."</string>
+  <string name="screen_roomlist_filter_favourites">"Абранае"</string>
+  <string name="screen_roomlist_filter_low_priority">"Нізкі прыярытэт"</string>
   <string name="screen_roomlist_filter_people">"Людзі"</string>
+  <string name="screen_roomlist_filter_rooms">"Пакоі"</string>
+  <string name="screen_roomlist_filter_unreads">"Непрачытаныя"</string>
   <string name="screen_roomlist_main_space_title">"Усе чаты"</string>
+  <string name="screen_roomlist_mark_as_read">"Пазначыць як прачытанае"</string>
+  <string name="screen_roomlist_mark_as_unread">"Пазначыць як непрачытанае"</string>
   <string name="session_verification_banner_message">"Здаецца, вы карыстаецеся новай прыладай. Праверце з дапамогай іншай прылады, каб атрымаць доступ да зашыфраваных паведамленняў."</string>
   <string name="session_verification_banner_title">"Пацвердзіце, што гэта вы"</string>
 </resources>
