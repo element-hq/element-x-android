@@ -110,7 +110,7 @@ fun ChangeRoomPermissionsView(
 
     AsyncActionView(
         async = state.saveAction,
-        onSuccess = { state.eventSink(ChangeRoomPermissionsEvent.ResetPendingActions) },
+        onSuccess = { onBackPressed() },
         onErrorDismiss = { state.eventSink(ChangeRoomPermissionsEvent.ResetPendingActions) }
     )
 
@@ -122,10 +122,9 @@ fun ChangeRoomPermissionsView(
                 title = stringResource(R.string.screen_room_change_role_unsaved_changes_title),
                 content = stringResource(R.string.screen_room_change_role_unsaved_changes_description),
                 submitText = stringResource(CommonStrings.action_save),
-                cancelText = stringResource(CommonStrings.action_go_back),
+                cancelText = stringResource(CommonStrings.action_discard),
                 onSubmitClicked = { state.eventSink(ChangeRoomPermissionsEvent.Save) },
-                onCancelClicked = { state.eventSink(ChangeRoomPermissionsEvent.Exit) },
-                onDismiss = { state.eventSink(ChangeRoomPermissionsEvent.ResetPendingActions) }
+                onDismiss = { state.eventSink(ChangeRoomPermissionsEvent.Exit) }
             )
         },
         onErrorDismiss = {}

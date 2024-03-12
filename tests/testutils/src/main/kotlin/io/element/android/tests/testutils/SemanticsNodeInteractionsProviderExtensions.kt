@@ -24,6 +24,7 @@ import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.AndroidComposeTestRule
+import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.performClick
 import io.element.android.libraries.ui.strings.CommonStrings
 import org.junit.rules.TestRule
@@ -32,6 +33,16 @@ fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.clickOn(@StringR
     val text = activity.getString(res)
     onNode(hasText(text) and hasClickAction())
         .performClick()
+}
+
+fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.clickOnFirst(@StringRes res: Int) {
+    val text = activity.getString(res)
+    onAllNodes(hasText(text) and hasClickAction()).onFirst().performClick()
+}
+
+fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.clickOnLast(@StringRes res: Int) {
+    val text = activity.getString(res)
+    onAllNodes(hasText(text) and hasClickAction()).onFirst().performClick()
 }
 
 /**

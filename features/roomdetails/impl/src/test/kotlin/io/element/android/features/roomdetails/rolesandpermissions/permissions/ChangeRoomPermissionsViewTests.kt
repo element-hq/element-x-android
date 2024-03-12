@@ -36,30 +36,57 @@ import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.tests.testutils.EnsureNeverCalled
 import io.element.android.tests.testutils.EventsRecorder
 import io.element.android.tests.testutils.clickOn
+import io.element.android.tests.testutils.clickOnLast
+import io.element.android.tests.testutils.ensureCalledOnce
 import io.element.android.tests.testutils.pressBack
+import io.element.android.tests.testutils.pressBackKey
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
 import org.junit.runner.RunWith
+import java.lang.IllegalStateException
 
 @RunWith(AndroidJUnit4::class)
 class ChangeRoomPermissionsViewTests {
     @get:Rule val rule = createAndroidComposeRule<ComponentActivity>()
 
     @Test
-    fun `click on back invokes Exit`() {
+    fun `click on back icon invokes Exit`() {
         val recorder = EventsRecorder<ChangeRoomPermissionsEvent>()
         rule.setChangeRoomPermissionsRule(
             eventsRecorder = recorder,
         )
         rule.pressBack()
         recorder.assertSingle(ChangeRoomPermissionsEvent.Exit)
-        rule.pressBack()
-        recorder.assertList(listOf(ChangeRoomPermissionsEvent.Exit, ChangeRoomPermissionsEvent.Exit))
     }
 
     @Test
-    fun `when confirming exit with pending changes, clicking on 'go back' button in the dialog actually exits`() {
+    fun `click on back key invokes Exit`() {
+        val recorder = EventsRecorder<ChangeRoomPermissionsEvent>()
+        rule.setChangeRoomPermissionsRule(
+            eventsRecorder = recorder,
+        )
+        rule.pressBackKey()
+        recorder.assertSingle(ChangeRoomPermissionsEvent.Exit)
+    }
+
+    @Test
+    fun `when confirming exit with pending changes, using the back key actually exits`() {
+        val recorder = EventsRecorder<ChangeRoomPermissionsEvent>()
+        rule.setChangeRoomPermissionsRule(
+            state = aChangeRoomPermissionsState(
+                section = ChangeRoomPermissionsSection.RoomDetails,
+                hasChanges = true,
+                eventSink = recorder,
+            ),
+            eventsRecorder = recorder,
+        )
+        rule.pressBackKey()
+        recorder.assertSingle(ChangeRoomPermissionsEvent.Exit)
+    }
+
+    @Test
+    fun `when confirming exit with pending changes, clicking on 'discard' button in the dialog actually exits`() {
         val recorder = EventsRecorder<ChangeRoomPermissionsEvent>()
         rule.setChangeRoomPermissionsRule(
             state = aChangeRoomPermissionsState(
@@ -70,26 +97,26 @@ class ChangeRoomPermissionsViewTests {
             ),
             eventsRecorder = recorder,
         )
-        rule.clickOn(CommonStrings.action_go_back)
+        rule.clickOn(CommonStrings.action_discard)
         recorder.assertSingle(ChangeRoomPermissionsEvent.Exit)
     }
 
     @Test
-    fun `click on back with pending changes invokes Exit and displays a dialog, then clicking 'save' button in the dialog invokes Save`() {
+    fun `when confirming exit with pending changes, clicking on 'save' button in the dialog saves the changes`() {
         val recorder = EventsRecorder<ChangeRoomPermissionsEvent>()
         rule.setChangeRoomPermissionsRule(
             state = aChangeRoomPermissionsState(
                 section = ChangeRoomPermissionsSection.RoomDetails,
                 hasChanges = true,
+                confirmExitAction = AsyncAction.Confirming,
                 eventSink = recorder,
             ),
             eventsRecorder = recorder,
         )
-        rule.pressBack()
-        recorder.assertSingle(ChangeRoomPermissionsEvent.Exit)
-        rule.clickOn(CommonStrings.action_save)
-        recorder.assertList(listOf(ChangeRoomPermissionsEvent.Exit, ChangeRoomPermissionsEvent.Save))
+        rule.clickOnLast(CommonStrings.action_save)
+        recorder.assertSingle(ChangeRoomPermissionsEvent.Save)
     }
+
 
     @Test
     fun `click on a role item triggers ChangeRole event`() {
@@ -97,9 +124,19 @@ class ChangeRoomPermissionsViewTests {
         rule.setChangeRoomPermissionsRule(
             eventsRecorder = recorder,
         )
-        val text = rule.activity.getText(R.string.screen_room_change_permissions_moderators).toString()
-        rule.onAllNodesWithText(text).onFirst().performClick()
-        recorder.assertSingle(ChangeRoomPermissionsEvent.ChangeMinimumRoleForAction(RoomPermissionType.ROOM_NAME, RoomMember.Role.MODERATOR))
+        val admins = rule.activity.getText(R.string.screen_room_change_permissions_administrators).toString()
+        val moderators = rule.activity.getText(R.string.screen_room_change_permissions_moderators).toString()
+        val users = rule.activity.getText(R.string.screen_room_change_permissions_everyone).toString()
+        rule.onAllNodesWithText(admins).onFirst().performClick()
+        rule.onAllNodesWithText(moderators).onFirst().performClick()
+        rule.onAllNodesWithText(users).onFirst().performClick()
+        recorder.assertList(
+            listOf(
+                ChangeRoomPermissionsEvent.ChangeMinimumRoleForAction(RoomPermissionType.ROOM_NAME, RoomMember.Role.ADMIN),
+                ChangeRoomPermissionsEvent.ChangeMinimumRoleForAction(RoomPermissionType.ROOM_NAME, RoomMember.Role.MODERATOR),
+                ChangeRoomPermissionsEvent.ChangeMinimumRoleForAction(RoomPermissionType.ROOM_NAME, RoomMember.Role.USER),
+            )
+        )
     }
 
     @Test
@@ -115,6 +152,37 @@ class ChangeRoomPermissionsViewTests {
         )
         rule.clickOn(CommonStrings.action_save)
         recorder.assertSingle(ChangeRoomPermissionsEvent.Save)
+    }
+
+    @Test
+    fun `a successful save exits the screen`() {
+        ensureCalledOnce { callback ->
+            rule.setChangeRoomPermissionsRule(
+                state = aChangeRoomPermissionsState(
+                    section = ChangeRoomPermissionsSection.RoomDetails,
+                    hasChanges = true,
+                    saveAction = AsyncAction.Success(Unit),
+                ),
+                onBackPressed = callback
+            )
+            rule.clickOn(CommonStrings.action_save)
+        }
+    }
+
+    @Test
+    fun `click on the Ok option in save error dialog triggers ResetPendingAction event`() {
+        val recorder = EventsRecorder<ChangeRoomPermissionsEvent>()
+        rule.setChangeRoomPermissionsRule(
+            state = aChangeRoomPermissionsState(
+                section = ChangeRoomPermissionsSection.RoomDetails,
+                hasChanges = true,
+                saveAction = AsyncAction.Failure(IllegalStateException("Failed to set room power levels")),
+                eventSink = recorder,
+            ),
+            eventsRecorder = recorder,
+        )
+        rule.clickOn(CommonStrings.action_ok)
+        recorder.assertSingle(ChangeRoomPermissionsEvent.ResetPendingActions)
     }
 }
 
