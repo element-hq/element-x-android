@@ -97,7 +97,7 @@ class DefaultRoomLastMessageFormatter @Inject constructor(
                 roomMembershipContentFormatter.format(content, senderDisplayName, isOutgoing)
             }
             is ProfileChangeContent -> {
-                profileChangeContentFormatter.format(content, senderDisplayName, isOutgoing)
+                profileChangeContentFormatter.format(event.sender, content, senderDisplayName, isOutgoing)
             }
             is StateContent -> {
                 stateContentFormatter.format(content, senderDisplayName, isOutgoing, RenderingMode.RoomList)
