@@ -160,7 +160,7 @@ fun TimelineView(
                         }
                     }
                 }
-                if (state.paginationState.beginningOfRoomReached && !state.timelineRoomInfo.isDM) {
+                if (state.paginationState.beginningOfRoomReached && !state.timelineRoomInfo.isDm) {
                     item(contentType = "BeginningOfRoomReached") {
                         TimelineItemRoomBeginningView(roomName = roomName)
                     }

@@ -95,7 +95,7 @@ fun MessageEventBubble(
     fun Modifier.offsetForItem(): Modifier {
         return when {
             state.isMine -> this
-            state.timelineRoomInfo.isDM -> this
+            state.timelineRoomInfo.isDm -> this
             else -> offset(x = BUBBLE_INCOMING_OFFSET)
         }
     }
