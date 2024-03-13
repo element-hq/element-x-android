@@ -41,6 +41,7 @@ import io.element.android.libraries.matrix.api.room.StateEventType
 import io.element.android.libraries.matrix.api.room.location.AssetType
 import io.element.android.libraries.matrix.api.room.powerlevels.MatrixRoomPowerLevels
 import io.element.android.libraries.matrix.api.room.powerlevels.UserRoleChange
+import io.element.android.libraries.matrix.api.room.roomMembers
 import io.element.android.libraries.matrix.api.room.roomNotificationSettings
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
 import io.element.android.libraries.matrix.api.timeline.ReceiptType
@@ -162,7 +163,8 @@ class RustMatrixRoom(
 
     init {
         timeline.membershipChangeEventReceived
-            .onEach { roomMemberListFetcher.fetchRoomMembers() }
+            // The new events should already be in the SDK cache, no need to fetch them from the server
+            .onEach { roomMemberListFetcher.fetchCachedRoomMembers() }
             .launchIn(roomCoroutineScope)
     }
 
@@ -219,7 +221,10 @@ class RustMatrixRoom(
     override val activeMemberCount: Long
         get() = innerRoom.activeMembersCount().toLong()
 
-    override suspend fun updateMembers() = roomMemberListFetcher.fetchRoomMembers()
+    override suspend fun updateMembers() {
+        val useCache = membersStateFlow.value.roomMembers().isNullOrEmpty()
+        roomMemberListFetcher.fetchRoomMembers(withCache = useCache)
+    }
 
     override suspend fun userDisplayName(userId: UserId): Result<String?> = withContext(roomDispatcher) {
         runCatching {

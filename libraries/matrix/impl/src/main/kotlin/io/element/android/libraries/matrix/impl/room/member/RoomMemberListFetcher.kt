@@ -66,11 +66,7 @@ internal class RoomMemberListFetcher(
                 _membersFlow.value = MatrixRoomMembersState.Pending(_membersFlow.value.roomMembers().orEmpty().toImmutableList())
                 // Load cached members as fallback and to get faster results
                 if (withCache) {
-                    if (_membersFlow.value !is MatrixRoomMembersState.Ready) {
-                        fetchCachedRoomMembers()
-                    } else {
-                        Timber.i("Cached members not found for $roomId")
-                    }
+                    fetchCachedRoomMembers()
                 }
 
                 try {

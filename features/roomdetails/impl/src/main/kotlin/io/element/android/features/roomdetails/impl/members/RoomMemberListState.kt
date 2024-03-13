@@ -38,10 +38,6 @@ data class RoomMembers(
     val banned: ImmutableList<RoomMember>,
     val isLoading: Boolean,
 ) {
-    fun isNotEmpty(): Boolean {
-        return invited.isNotEmpty() || joined.isNotEmpty() || banned.isNotEmpty()
-    }
-
     companion object {
         fun loading() = RoomMembers(
             invited = persistentListOf(),
