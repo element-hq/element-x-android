@@ -22,6 +22,7 @@ import app.cash.turbine.withTurbineTimeout
 import io.element.android.libraries.core.bool.orFalse
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Duration.Companion.seconds
 
 /**
  * Consume all items until timeout is reached waiting for an event or we receive terminal event.
@@ -48,7 +49,7 @@ suspend fun <T : Any> ReceiveTurbine<T>.awaitLastSequentialItem(): T {
  * @return the list of consumed items.
  */
 suspend fun <T : Any> ReceiveTurbine<T>.consumeItemsUntilPredicate(
-    timeout: Duration = 100.milliseconds,
+    timeout: Duration = 3.seconds,
     ignoreTimeoutError: Boolean = false,
     predicate: (T) -> Boolean,
 ): List<T> {

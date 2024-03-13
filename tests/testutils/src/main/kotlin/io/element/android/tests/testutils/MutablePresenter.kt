@@ -14,9 +14,22 @@
  * limitations under the License.
  */
 
-package io.element.android.features.roomlist.impl.filters
+package io.element.android.tests.testutils
 
-sealed interface RoomListFiltersEvents {
-    data class ToggleFilter(val filter: RoomListFilter) : RoomListFiltersEvents
-    data object ClearSelectedFilters : RoomListFiltersEvents
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import io.element.android.libraries.architecture.Presenter
+import kotlinx.coroutines.flow.MutableStateFlow
+
+class MutablePresenter<State>(initialState: State) : Presenter<State> {
+    private val stateFlow = MutableStateFlow(initialState)
+
+    fun updateState(state: State) {
+        stateFlow.value = state
+    }
+
+    @Composable
+    override fun present(): State {
+        return stateFlow.collectAsState().value
+    }
 }

@@ -20,12 +20,12 @@ import io.element.android.features.roomlist.impl.R
 
 /**
  * Enum class representing the different filters that can be applied to the room list.
- * Order is important.
+ * Order is important, it'll be used as initial order in the UI.
  */
 enum class RoomListFilter(val stringResource: Int) {
-    Rooms(R.string.screen_roomlist_filter_rooms),
-    People(R.string.screen_roomlist_filter_people),
     Unread(R.string.screen_roomlist_filter_unreads),
+    People(R.string.screen_roomlist_filter_people),
+    Rooms(R.string.screen_roomlist_filter_rooms),
     Favourites(R.string.screen_roomlist_filter_favourites);
 
     val oppositeFilter: RoomListFilter?

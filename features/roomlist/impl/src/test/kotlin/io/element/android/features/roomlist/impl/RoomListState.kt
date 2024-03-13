@@ -14,9 +14,6 @@
  * limitations under the License.
  */
 
-package io.element.android.features.roomlist.impl.filters
+package io.element.android.features.roomlist.impl
 
-sealed interface RoomListFiltersEvents {
-    data class ToggleFilter(val filter: RoomListFilter) : RoomListFiltersEvents
-    data object ClearSelectedFilters : RoomListFiltersEvents
-}
+internal fun RoomListState.contentAsRooms() = contentState as RoomListContentState.Rooms

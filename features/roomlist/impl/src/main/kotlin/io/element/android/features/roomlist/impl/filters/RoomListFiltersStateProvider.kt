@@ -17,8 +17,7 @@
 package io.element.android.features.roomlist.impl.filters
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.persistentListOf
+import io.element.android.features.roomlist.impl.filters.selection.FilterSelectionState
 import kotlinx.collections.immutable.toImmutableList
 
 class RoomListFiltersStateProvider : PreviewParameterProvider<RoomListFiltersState> {
@@ -26,20 +25,17 @@ class RoomListFiltersStateProvider : PreviewParameterProvider<RoomListFiltersSta
         get() = sequenceOf(
             aRoomListFiltersState(),
             aRoomListFiltersState(
-                selectedFilters = persistentListOf(RoomListFilter.Rooms, RoomListFilter.Favourites),
-                unselectedFilters = persistentListOf(RoomListFilter.Unread),
+                filterSelectionStates = RoomListFilter.entries.map { FilterSelectionState(it, isSelected = true) }
             ),
         )
 }
 
 fun aRoomListFiltersState(
-    unselectedFilters: ImmutableList<RoomListFilter> = RoomListFilter.entries.toImmutableList(),
-    selectedFilters: ImmutableList<RoomListFilter> = persistentListOf(),
+    filterSelectionStates: List<FilterSelectionState> = RoomListFilter.entries.map { FilterSelectionState(it, isSelected = false) },
     isFeatureEnabled: Boolean = true,
     eventSink: (RoomListFiltersEvents) -> Unit = {},
 ) = RoomListFiltersState(
-    unselectedFilters = unselectedFilters,
-    selectedFilters = selectedFilters,
+    filterSelectionStates = filterSelectionStates.toImmutableList(),
     isFeatureEnabled = isFeatureEnabled,
     eventSink = eventSink,
 )
