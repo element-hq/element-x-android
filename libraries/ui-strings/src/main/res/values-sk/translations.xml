@@ -51,6 +51,7 @@
   <string name="action_decline">"Odmietnuť"</string>
   <string name="action_delete_poll">"Odstrániť anketu"</string>
   <string name="action_disable">"Vypnúť"</string>
+  <string name="action_discard">"Zahodiť"</string>
   <string name="action_done">"Hotovo"</string>
   <string name="action_edit">"Upraviť"</string>
   <string name="action_edit_poll">"Upraviť anketu"</string>
