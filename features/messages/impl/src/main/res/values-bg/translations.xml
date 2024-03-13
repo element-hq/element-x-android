@@ -25,10 +25,6 @@
   <string name="screen_room_attachment_text_formatting">"Форматиране на текст"</string>
   <string name="screen_room_encrypted_history_banner">"Хронологията на съобщенията не е налична в момента."</string>
   <string name="screen_room_message_copied">"Съобщението е копирано"</string>
-  <string name="screen_room_notification_settings_custom_settings_title">"Да бъда известяван в този чат за"</string>
-  <string name="screen_room_notification_settings_mode_all_messages">"Всички съобщения"</string>
-  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Само споменавания и ключови думи"</string>
-  <string name="screen_room_notification_settings_room_custom_settings_title">"В тази стая, да бъда известяван за"</string>
   <string name="screen_room_reactions_show_less">"Показване на по-малко"</string>
   <string name="screen_room_reactions_show_more">"Показване на повече"</string>
   <string name="screen_room_timeline_add_reaction">"Добавяне на емоджи"</string>

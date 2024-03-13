@@ -247,6 +247,14 @@
   <string name="screen_media_picker_error_failed_selection">"Medienauswahl fehlgeschlagen, bitte versuche es erneut."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Fehler beim Verarbeiten des hochgeladenen Mediums. Bitte versuche es erneut."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Das Hochladen der Medien ist fehlgeschlagen. Bitte versuche es erneut."</string>
+  <string name="screen_room_error_failed_processing_media">"Fehler beim Verarbeiten des hochgeladenen Mediums. Bitte versuche es erneut."</string>
+  <string name="screen_room_error_failed_retrieving_user_details">"Benutzerdetails konnten nicht abgerufen werden"</string>
+  <string name="screen_room_member_details_block_alert_action">"Blockieren"</string>
+  <string name="screen_room_member_details_block_alert_description">"Blockierte Benutzer können Dir keine Nachrichten senden und alle ihre alten Nachrichten werden ausgeblendet. Die Blockierung kann jederzeit aufgehoben werden."</string>
+  <string name="screen_room_member_details_block_user">"Benutzer blockieren"</string>
+  <string name="screen_room_member_details_unblock_alert_action">"Blockierung aufheben"</string>
+  <string name="screen_room_member_details_unblock_alert_description">"Du kannst dann wieder alle Nachrichten von ihnen sehen."</string>
+  <string name="screen_room_member_details_unblock_user">"Blockierung aufheben"</string>
   <string name="screen_share_location_title">"Standort teilen"</string>
   <string name="screen_share_my_location_action">"Meinen Standort teilen"</string>
   <string name="screen_share_open_apple_maps">"In Apple Maps öffnen"</string>

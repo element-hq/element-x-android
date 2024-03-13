@@ -247,6 +247,14 @@
   <string name="screen_media_picker_error_failed_selection">"Selezione del file multimediale fallita, riprova."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Elaborazione del file multimediale da caricare fallita, riprova."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Caricamento del file multimediale fallito, riprova."</string>
+  <string name="screen_room_error_failed_processing_media">"Elaborazione del file multimediale da caricare fallita, riprova."</string>
+  <string name="screen_room_error_failed_retrieving_user_details">"Impossibile recuperare i dettagli dell\'utente"</string>
+  <string name="screen_room_member_details_block_alert_action">"Blocca"</string>
+  <string name="screen_room_member_details_block_alert_description">"Gli utenti bloccati non saranno in grado di inviarti messaggi e tutti quelli già ricevuti saranno nascosti. Puoi sbloccarli in qualsiasi momento."</string>
+  <string name="screen_room_member_details_block_user">"Blocca utente"</string>
+  <string name="screen_room_member_details_unblock_alert_action">"Sblocca"</string>
+  <string name="screen_room_member_details_unblock_alert_description">"Potrai vedere di nuovo tutti i suoi messaggi."</string>
+  <string name="screen_room_member_details_unblock_user">"Sblocca utente"</string>
   <string name="screen_share_location_title">"Condividi posizione"</string>
   <string name="screen_share_my_location_action">"Condividi la mia posizione"</string>
   <string name="screen_share_open_apple_maps">"Apri in Apple Maps"</string>
