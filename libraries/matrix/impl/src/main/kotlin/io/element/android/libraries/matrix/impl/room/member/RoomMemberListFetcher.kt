@@ -18,7 +18,9 @@ package io.element.android.libraries.matrix.impl.room.member
 
 import io.element.android.libraries.core.coroutine.parallelMap
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
+import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.roomMembers
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ensureActive
@@ -60,6 +62,8 @@ internal class RoomMemberListFetcher(
         }
         updatedRoomMemberMutex.withLock {
             withContext(dispatcher) {
+                // Send current member list with pending state to notify the UI that we are loading new members
+                _membersFlow.value = MatrixRoomMembersState.Pending(_membersFlow.value.roomMembers().orEmpty().toImmutableList())
                 // Load cached members as fallback and to get faster results
                 if (withCache) {
                     if (_membersFlow.value !is MatrixRoomMembersState.Ready) {
@@ -69,18 +73,15 @@ internal class RoomMemberListFetcher(
                     }
                 }
 
-                val prevRoomMembers = (_membersFlow.value as? MatrixRoomMembersState.Ready)?.roomMembers?.toImmutableList()
-                _membersFlow.value = MatrixRoomMembersState.Pending(prevRoomMembers = prevRoomMembers)
-
                 try {
                     // Start loading new members
-                    parseAndEmitMembers(room.members())
+                    _membersFlow.value = MatrixRoomMembersState.Ready(parseAndEmitMembers(room.members()))
                 } catch (exception: CancellationException) {
                     Timber.d("Cancelled loading updated members for room $roomId")
                     throw exception
                 } catch (exception: Exception) {
                     Timber.e(exception, "Failed to load updated members for room $roomId")
-                    _membersFlow.value = MatrixRoomMembersState.Error(exception, prevRoomMembers)
+                    _membersFlow.value = MatrixRoomMembersState.Error(exception, _membersFlow.value.roomMembers()?.toImmutableList())
                 }
             }
         }
@@ -90,7 +91,7 @@ internal class RoomMemberListFetcher(
         Timber.i("Loading cached members for room $roomId")
         try {
             val iterator = room.membersNoSync()
-            parseAndEmitMembers(iterator)
+            _membersFlow.value = MatrixRoomMembersState.Pending(prevRoomMembers = parseAndEmitMembers(iterator))
         } catch (exception: CancellationException) {
             Timber.d("Cancelled loading cached members for room $roomId")
             throw exception
@@ -100,9 +101,9 @@ internal class RoomMemberListFetcher(
         }
     }
 
-    private suspend fun parseAndEmitMembers(roomMembersIterator: RoomMembersIterator) {
-        roomMembersIterator.use { iterator ->
-            val results = buildList {
+    private suspend fun parseAndEmitMembers(roomMembersIterator: RoomMembersIterator): ImmutableList<RoomMember> {
+        return roomMembersIterator.use { iterator ->
+            val results = buildList(capacity = roomMembersIterator.len().toInt()) {
                 while (true) {
                     // Loading the whole membersIterator as a stop-gap measure.
                     // We should probably implement some sort of paging in the future.
@@ -111,13 +112,10 @@ internal class RoomMemberListFetcher(
                     // Load next chunk. If null (no more items), exit the loop
                     val members = chunk?.parallelMap(RoomMemberMapper::map) ?: break
                     addAll(members)
-                    Timber.i("Emitting first $size members for room $roomId")
-                    _membersFlow.value = MatrixRoomMembersState.Ready(toImmutableList())
+                    Timber.i("Loaded first $size members for room $roomId")
                 }
             }
-            if (results.isEmpty()) {
-                _membersFlow.value = MatrixRoomMembersState.Ready(results.toImmutableList())
-            }
+            results.toImmutableList()
         }
     }
 }

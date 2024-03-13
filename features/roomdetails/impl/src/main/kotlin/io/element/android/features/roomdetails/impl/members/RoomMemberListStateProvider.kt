@@ -19,7 +19,6 @@ package io.element.android.features.roomdetails.impl.members
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.roomdetails.impl.members.moderation.RoomMembersModerationState
 import io.element.android.features.roomdetails.impl.members.moderation.aRoomMembersModerationState
-import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.RoomMember
@@ -30,15 +29,14 @@ internal class RoomMemberListStateProvider : PreviewParameterProvider<RoomMember
     override val values: Sequence<RoomMemberListState>
         get() = sequenceOf(
             aRoomMemberListState(
-                roomMembers = AsyncData.Success(
-                    RoomMembers(
-                        invited = persistentListOf(aVictor(), aWalter()),
-                        joined = persistentListOf(anAlice(), aBob(), aWalter()),
-                        banned = persistentListOf(),
-                    )
+                roomMembers = RoomMembers(
+                    invited = persistentListOf(aVictor(), aWalter()),
+                    joined = persistentListOf(anAlice(), aBob(), aWalter()),
+                    banned = persistentListOf(),
+                    isLoading = false,
                 )
             ),
-            aRoomMemberListState(roomMembers = AsyncData.Loading()),
+            aRoomMemberListState(roomMembers = RoomMembers.loading()),
             aRoomMemberListState().copy(canInvite = true),
             aRoomMemberListState().copy(isSearchActive = false),
             aRoomMemberListState().copy(isSearchActive = true),
@@ -51,6 +49,7 @@ internal class RoomMemberListStateProvider : PreviewParameterProvider<RoomMember
                         invited = persistentListOf(aVictor()),
                         joined = persistentListOf(anAlice()),
                         banned = persistentListOf(),
+                        isLoading = false,
                     )
                 ),
             ),
@@ -63,7 +62,7 @@ internal class RoomMemberListStateProvider : PreviewParameterProvider<RoomMember
 }
 
 internal fun aRoomMemberListState(
-    roomMembers: AsyncData<RoomMembers> = AsyncData.Uninitialized,
+    roomMembers: RoomMembers = RoomMembers.loading(),
     searchResults: SearchBarResultState<RoomMembers> = SearchBarResultState.Initial(),
     moderationState: RoomMembersModerationState = aRoomMembersModerationState(),
 ) = RoomMemberListState(
