@@ -190,6 +190,14 @@
   <string name="screen_media_picker_error_failed_selection">"Misslyckades att välja media, vänligen pröva igen."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Misslyckades att bearbeta media för uppladdning, vänligen pröva igen."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Misslyckades att ladda upp media, vänligen pröva igen."</string>
+  <string name="screen_room_error_failed_processing_media">"Misslyckades att bearbeta media för uppladdning, vänligen pröva igen."</string>
+  <string name="screen_room_error_failed_retrieving_user_details">"Kunde inte hämta användarinformation"</string>
+  <string name="screen_room_member_details_block_alert_action">"Blockera"</string>
+  <string name="screen_room_member_details_block_alert_description">"Blockerade användare kommer inte att kunna skicka meddelanden till dig och alla deras meddelanden kommer att döljas. Du kan avblockera dem när som helst."</string>
+  <string name="screen_room_member_details_block_user">"Blockera användare"</string>
+  <string name="screen_room_member_details_unblock_alert_action">"Avblockera"</string>
+  <string name="screen_room_member_details_unblock_alert_description">"Du kommer att kunna se alla meddelanden från dem igen."</string>
+  <string name="screen_room_member_details_unblock_user">"Avblockera användare"</string>
   <string name="screen_share_location_title">"Dela plats"</string>
   <string name="screen_share_my_location_action">"Dela min plats"</string>
   <string name="screen_share_open_apple_maps">"Öppna i Apple Maps"</string>

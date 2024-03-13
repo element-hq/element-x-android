@@ -3,12 +3,16 @@
   <string name="state_event_avatar_changed_too">"(аватар тоже был изменен)"</string>
   <string name="state_event_avatar_url_changed">"%1$s сменили свой аватар"</string>
   <string name="state_event_avatar_url_changed_by_you">"Вы сменили изображение"</string>
+  <string name="state_event_demoted_to_member">"%1$s был понижен в должности до участника"</string>
+  <string name="state_event_demoted_to_moderator">"%1$s был понижен в должности до модератора"</string>
   <string name="state_event_display_name_changed_from">"%1$s изменил свое отображаемое имя с %2$s на %3$s"</string>
   <string name="state_event_display_name_changed_from_by_you">"Вы изменили свое отображаемое имя с %1$s на %2$s"</string>
   <string name="state_event_display_name_removed">"%1$s удалил свое отображаемое имя (оно было %2$s)"</string>
   <string name="state_event_display_name_removed_by_you">"Вы удалили свое отображаемое имя (оно было %1$s)"</string>
   <string name="state_event_display_name_set">"%1$s установили свое отображаемое имя на %2$s"</string>
   <string name="state_event_display_name_set_by_you">"Вы установили отображаемое имя на %1$s"</string>
+  <string name="state_event_promoted_to_administrator">"%1$s был повышен до уровня администратора"</string>
+  <string name="state_event_promoted_to_moderator">"%1$s был повышен до модератора"</string>
   <string name="state_event_room_avatar_changed">"%1$s изменил аватар комнаты"</string>
   <string name="state_event_room_avatar_changed_by_you">"Вы изменили аватар комнаты"</string>
   <string name="state_event_room_avatar_removed">"%1$s удалил аватар комнаты"</string>

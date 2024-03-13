@@ -41,7 +41,7 @@ internal fun TimelineItemEventRowForDirectRoomPreview() = ElementPreview {
                     groupPosition = TimelineItemGroupPosition.First,
                 ),
                 timelineRoomInfo = aTimelineRoomInfo(
-                    isDirect = true,
+                    isDm = true,
                 ),
             )
             ATimelineItemEventRow(
@@ -53,7 +53,7 @@ internal fun TimelineItemEventRowForDirectRoomPreview() = ElementPreview {
                     groupPosition = TimelineItemGroupPosition.Last,
                 ),
                 timelineRoomInfo = aTimelineRoomInfo(
-                    isDirect = true,
+                    isDm = true,
                 ),
             )
         }

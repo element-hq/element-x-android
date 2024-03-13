@@ -465,6 +465,8 @@ export const screenshots = [
 ["ui_S_t[f.poll.api.pollcontent_PollContentUndisclosed_null_PollContentUndisclosed-Day-7_8_null,NEXUS_5,1.0,en]","ui_S_t[f.poll.api.pollcontent_PollContentUndisclosed_null_PollContentUndisclosed-Night-7_9_null,NEXUS_5,1.0,en]",1,],
 ["ui_S_t[f.poll.impl.history_PollHistoryView_null_PollHistoryView-Day-1_2_null_0,NEXUS_5,1.0,en]","ui_S_t[f.poll.impl.history_PollHistoryView_null_PollHistoryView-Night-1_3_null_0,NEXUS_5,1.0,en]",1,],
 ["ui_S_t[f.poll.impl.history_PollHistoryView_null_PollHistoryView-Day-1_2_null_1,NEXUS_5,1.0,en]","ui_S_t[f.poll.impl.history_PollHistoryView_null_PollHistoryView-Night-1_3_null_1,NEXUS_5,1.0,en]",1,],
+["ui_S_t[f.poll.impl.history_PollHistoryView_null_PollHistoryView-Day-1_2_null_2,NEXUS_5,1.0,en]","ui_S_t[f.poll.impl.history_PollHistoryView_null_PollHistoryView-Night-1_3_null_2,NEXUS_5,1.0,en]",1,],
+["ui_S_t[f.poll.impl.history_PollHistoryView_null_PollHistoryView-Day-1_2_null_3,NEXUS_5,1.0,en]","ui_S_t[f.poll.impl.history_PollHistoryView_null_PollHistoryView-Night-1_3_null_3,NEXUS_5,1.0,en]",1,],
 ["ui_S_t[l.designsystem.components.preferences_PreferenceCategory_null_Preferences_PreferenceCategory_0_null,NEXUS_5,1.0,en]","",0,],
 ["ui_S_t[l.designsystem.components.preferences_PreferenceCheckbox_null_Preferences_PreferenceCheckbox_0_null,NEXUS_5,1.0,en]","",0,],
 ["ui_S_t[l.designsystem.components.preferences_PreferenceDivider_null_Preferences_PreferenceDivider_0_null,NEXUS_5,1.0,en]","",0,],

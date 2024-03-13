@@ -113,6 +113,7 @@
   <string name="common_analytics">"Аналітыка"</string>
   <string name="common_appearance">"Знешні выгляд"</string>
   <string name="common_audio">"Аўдыё"</string>
+  <string name="common_blocked_users">"Заблакіраваныя карыстальнікі"</string>
   <string name="common_bubbles">"Бурбалкі"</string>
   <string name="common_chat_backup">"Рэзервовае капіраванне чата"</string>
   <string name="common_copyright">"Аўтарскае права"</string>
@@ -129,7 +130,9 @@
   <string name="common_enter_your_pin">"Увядзіце свой PIN-код"</string>
   <string name="common_error">"Памылка"</string>
   <string name="common_everyone">"Усе"</string>
+  <string name="common_failed">"Памылка"</string>
   <string name="common_favourite">"Захаванае"</string>
+  <string name="common_favourited">"Абранае"</string>
   <string name="common_file">"Файл"</string>
   <string name="common_file_saved_on_disk_android">"Файл захаваны ў папку Спампоўкі"</string>
   <string name="common_forward_message">"Перасылка паведамлення"</string>
@@ -155,6 +158,7 @@
   <string name="common_mute">"Адключыць гук"</string>
   <string name="common_no_results">"Вынікаў няма"</string>
   <string name="common_offline">"Па-за сеткай"</string>
+  <string name="common_or">"або"</string>
   <string name="common_password">"Пароль"</string>
   <string name="common_people">"Людзі"</string>
   <string name="common_permalink">"Пастаянная спасылка"</string>
@@ -181,6 +185,7 @@
   <string name="common_room">"Пакой"</string>
   <string name="common_room_name">"Назва пакоя"</string>
   <string name="common_room_name_placeholder">"напрыклад, назва вашага праекта"</string>
+  <string name="common_saving">"Захаванне"</string>
   <string name="common_screen_lock">"Блакіроўка экрана"</string>
   <string name="common_search_for_someone">"Шукаць карыстальніка"</string>
   <string name="common_search_results">"Вынікі пошуку"</string>
@@ -192,6 +197,7 @@
   <string name="common_server_not_supported">"Сервер не падтрымліваецца"</string>
   <string name="common_server_url">"URL-адрас сервера"</string>
   <string name="common_settings">"Налады"</string>
+  <string name="common_shared_location">"Абагуленыя геаданыя"</string>
   <string name="common_signing_out">"Выхад"</string>
   <string name="common_starting_chat">"Пачатак чата…"</string>
   <string name="common_sticker">"Стыкер"</string>
@@ -239,6 +245,14 @@
   <string name="screen_media_picker_error_failed_selection">"Не ўдалося выбраць носьбіт, паўтарыце спробу."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Не атрымалася апрацаваць медыяфайл для загрузкі, паспрабуйце яшчэ раз."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Не атрымалася загрузіць медыяфайлы, паспрабуйце яшчэ раз."</string>
+  <string name="screen_room_error_failed_processing_media">"Не атрымалася апрацаваць медыяфайл для загрузкі, паспрабуйце яшчэ раз."</string>
+  <string name="screen_room_error_failed_retrieving_user_details">"Не ўдалося атрымаць інфармацыю пра карыстальніка"</string>
+  <string name="screen_room_member_details_block_alert_action">"Заблакіраваць"</string>
+  <string name="screen_room_member_details_block_alert_description">"Заблакіраваныя карыстальнікі не змогуць адпраўляць вам паведамленні, і ўсе іх паведамленні будуць схаваны. Вы можаце разблакіраваць іх у любы час."</string>
+  <string name="screen_room_member_details_block_user">"Заблакіраваць карыстальніка"</string>
+  <string name="screen_room_member_details_unblock_alert_action">"Разблакіраваць"</string>
+  <string name="screen_room_member_details_unblock_alert_description">"Вы зноў зможаце ўбачыць усе паведамленні."</string>
+  <string name="screen_room_member_details_unblock_user">"Разблакіраваць карыстальніка"</string>
   <string name="screen_share_location_title">"Падзяліцца месцазнаходжаннем"</string>
   <string name="screen_share_my_location_action">"Падзяліцца маім месцазнаходжаннем"</string>
   <string name="screen_share_open_apple_maps">"Адкрыць у Apple Maps"</string>

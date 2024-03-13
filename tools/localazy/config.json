@@ -128,17 +128,16 @@
     {
       "name" : ":features:messages:impl",
       "includeRegex" : [
-        "room_timeline_.*",
-        "screen_room_.*",
-        "screen\\.room\\..*",
-        "screen_dm_details_.*",
         "emoji_picker_category_.*",
-        ".*report_content_.*"
-      ],
-      "excludeRegex" : [
-        "screen_room_details_.*",
-        "screen_room_member.*",
-        "screen_dm_.*"
+        "screen_report_content_.*",
+        "screen_room_attachment.*",
+        "screen_room_encrypted.*",
+        "screen_room_invite.*",
+        "screen\\.room\\.mention.*",
+        "screen_room_message.*",
+        "screen_room_retry.*",
+        "screen_room_timeline.*",
+        "screen_room_typing.*"
       ]
     },
     {

@@ -445,7 +445,7 @@ class MessagesPresenter @AssistedInject constructor(
         clipboardHelper.copyPlainText(content)
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
-            snackbarDispatcher.post(SnackbarMessage(R.string.screen_room_message_copied))
+            snackbarDispatcher.post(SnackbarMessage(R.string.screen_room_timeline_message_copied))
         }
     }
 }

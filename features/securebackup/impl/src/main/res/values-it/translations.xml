@@ -6,7 +6,7 @@
   <string name="screen_chat_backup_key_backup_title">"Backup"</string>
   <string name="screen_chat_backup_recovery_action_change">"Cambia la chiave di recupero"</string>
   <string name="screen_chat_backup_recovery_action_confirm">"Conferma la chiave di recupero"</string>
-  <string name="screen_chat_backup_recovery_action_confirm_description">"Il backup della chat attualmente non è sincronizzato."</string>
+  <string name="screen_chat_backup_recovery_action_confirm_description">"Il backup delle conversazioni non è attualmente sincronizzato."</string>
   <string name="screen_chat_backup_recovery_action_setup">"Configura il recupero"</string>
   <string name="screen_chat_backup_recovery_action_setup_description">"Ottieni l\'accesso ai tuoi messaggi cifrati se perdi tutti i tuoi dispositivi o se sei disconnesso da %1$s ovunque."</string>
   <string name="screen_key_backup_disable_confirmation_action_turn_off">"Disattiva"</string>

@@ -251,6 +251,14 @@
   <string name="screen_media_picker_error_failed_selection">"Výběr média se nezdařil, zkuste to prosím znovu."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Nahrání média se nezdařilo, zkuste to prosím znovu."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Nahrání média se nezdařilo, zkuste to prosím znovu."</string>
+  <string name="screen_room_error_failed_processing_media">"Nahrání média se nezdařilo, zkuste to prosím znovu."</string>
+  <string name="screen_room_error_failed_retrieving_user_details">"Nepodařilo se načíst údaje o uživateli"</string>
+  <string name="screen_room_member_details_block_alert_action">"Zablokovat"</string>
+  <string name="screen_room_member_details_block_alert_description">"Blokovaní uživatelé vám nebudou moci posílat zprávy a všechny jejich zprávy budou skryty. Můžete je kdykoli odblokovat."</string>
+  <string name="screen_room_member_details_block_user">"Zablokovat uživatele"</string>
+  <string name="screen_room_member_details_unblock_alert_action">"Odblokovat"</string>
+  <string name="screen_room_member_details_unblock_alert_description">"Znovu uvidíte všechny zprávy od nich."</string>
+  <string name="screen_room_member_details_unblock_user">"Odblokovat uživatele"</string>
   <string name="screen_share_location_title">"Sdílet polohu"</string>
   <string name="screen_share_my_location_action">"Sdílet moji polohu"</string>
   <string name="screen_share_open_apple_maps">"Otevřít v Mapách Apple"</string>

@@ -21,5 +21,6 @@ import io.element.android.libraries.matrix.api.room.RoomMember
 sealed interface RolesAndPermissionsEvents {
     data object ChangeOwnRole : RolesAndPermissionsEvents
     data class DemoteSelfTo(val role: RoomMember.Role) : RolesAndPermissionsEvents
+    data object ResetPermissions : RolesAndPermissionsEvents
     data object CancelPendingAction : RolesAndPermissionsEvents
 }

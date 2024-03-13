@@ -90,7 +90,13 @@ private fun TimelineItemReactionsView(
             expandButton = {
                 MessagesReactionButton(
                     content = MessagesReactionsButtonContent.Text(
-                        text = stringResource(id = if (expanded) R.string.screen_room_reactions_show_less else R.string.screen_room_reactions_show_more)
+                        text = stringResource(
+                            id = if (expanded) {
+                                R.string.screen_room_timeline_reactions_show_less
+                            } else {
+                                R.string.screen_room_timeline_reactions_show_more
+                            }
+                        )
                     ),
                     onClick = onToggleExpandClick,
                     onLongClick = {}

@@ -22,5 +22,6 @@ data class RolesAndPermissionsState(
     val adminCount: Int,
     val moderatorCount: Int,
     val changeOwnRoleAction: AsyncAction<Unit>,
+    val resetPermissionsAction: AsyncAction<Unit>,
     val eventSink: (RolesAndPermissionsEvents) -> Unit,
 )

@@ -3,12 +3,16 @@
   <string name="state_event_avatar_changed_too">"(obrázok bol tiež zmenený)"</string>
   <string name="state_event_avatar_url_changed">"%1$s zmenili svoj obrázok"</string>
   <string name="state_event_avatar_url_changed_by_you">"Zmenili ste svoj obrázok"</string>
+  <string name="state_event_demoted_to_member">"Používateľovi %1$s bola znížená úroveň na člena"</string>
+  <string name="state_event_demoted_to_moderator">"Používateľovi %1$s bola znížená úroveň na moderátora"</string>
   <string name="state_event_display_name_changed_from">"%1$s zmenili svoje zobrazované meno z %2$s na %3$s"</string>
   <string name="state_event_display_name_changed_from_by_you">"Zmenili ste si zobrazované meno z %1$s na %2$s"</string>
   <string name="state_event_display_name_removed">"%1$s odstránili svoje zobrazované meno (predtým bolo %2$s)"</string>
   <string name="state_event_display_name_removed_by_you">"Odstránili ste svoje zobrazované meno (predtým bolo %1$s)"</string>
   <string name="state_event_display_name_set">"%1$s nastavili svoje zobrazované meno na %2$s"</string>
   <string name="state_event_display_name_set_by_you">"Svoje zobrazované meno ste nastavili na %1$s"</string>
+  <string name="state_event_promoted_to_administrator">"%1$s bol/a povýšený/á na správcu"</string>
+  <string name="state_event_promoted_to_moderator">"%1$s bol/a povýšený/á na moderátora"</string>
   <string name="state_event_room_avatar_changed">"%1$s zmenil/a obrázok miestnosti"</string>
   <string name="state_event_room_avatar_changed_by_you">"Zmenili ste obrázok miestnosti"</string>
   <string name="state_event_room_avatar_removed">"%1$s odstránil/a obrázok miestnosti"</string>

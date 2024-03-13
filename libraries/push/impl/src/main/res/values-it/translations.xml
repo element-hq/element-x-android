@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="notification_channel_call">"Chiamata"</string>
-  <string name="notification_channel_listening_for_events">"Ascolto degli eventi"</string>
+  <string name="notification_channel_listening_for_events">"Eventi in ascolto"</string>
   <string name="notification_channel_noisy">"Notifiche con suono"</string>
   <string name="notification_channel_silent">"Notifiche silenziose"</string>
   <plurals name="notification_compat_summary_line_for_room">
@@ -20,7 +20,7 @@
     <item quantity="one">"%d invito"</item>
     <item quantity="other">"%d inviti"</item>
   </plurals>
-  <string name="notification_invite_body">"Ti ha invitato a chattare"</string>
+  <string name="notification_invite_body">"Ti ha invitato ad una conversazione"</string>
   <string name="notification_mentioned_you_body">"Ti ha menzionato: %1$s"</string>
   <string name="notification_new_messages">"Nuovi messaggi"</string>
   <plurals name="notification_new_messages_for_room">

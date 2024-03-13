@@ -6,10 +6,16 @@
   <string name="screen_advanced_settings_element_call_base_url_description">"Задайце свой сервер Element Call."</string>
   <string name="screen_advanced_settings_element_call_base_url_validation_error">"Адрас пазначаны няправільна, пераканайцеся, што вы ўказалі пратакол (http/https) і правільны адрас."</string>
   <string name="screen_advanced_settings_rich_text_editor_description">"Адключыць рэдактар фарматаванага тэксту і ўключыць Markdown."</string>
+  <string name="screen_advanced_settings_send_read_receipts">"Апавяшчэнні аб чытанні"</string>
+  <string name="screen_advanced_settings_send_read_receipts_description">"Калі выключыць, вашы пасведчанні аб прачытанні нікому не будуць адпраўляцца. Вы па-ранейшаму будзеце атрымліваць пасведчанні аб прачытанні ад іншых карыстальнікаў."</string>
+  <string name="screen_advanced_settings_share_presence">"Падзяліцеся прысутнасцю"</string>
+  <string name="screen_advanced_settings_share_presence_description">"Калі гэта выключана, вы не зможаце адпраўляць або атрымліваць апавяшчэнні аб прачытанні або апавяшчэнні аб наборы тэксту"</string>
   <string name="screen_advanced_settings_view_source_description">"Уключыце опцыю для прагляду крыніцы паведамлення на часовай шкале."</string>
+  <string name="screen_blocked_users_empty">"У вас няма заблакіраваных карыстальнікаў"</string>
   <string name="screen_blocked_users_unblock_alert_action">"Разблакіраваць"</string>
   <string name="screen_blocked_users_unblock_alert_description">"Вы зноў зможаце ўбачыць усе паведамленні."</string>
   <string name="screen_blocked_users_unblock_alert_title">"Разблакіраваць карыстальніка"</string>
+  <string name="screen_blocked_users_unblocking">"Разблакіроўка…"</string>
   <string name="screen_edit_profile_display_name">"Бачнае імя"</string>
   <string name="screen_edit_profile_display_name_placeholder">"Ваша бачнае імя"</string>
   <string name="screen_edit_profile_error">"Узнікла невядомая памылка, і інфармацыю не ўдалося змяніць."</string>

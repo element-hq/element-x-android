@@ -251,6 +251,14 @@
   <string name="screen_media_picker_error_failed_selection">"Не удалось выбрать носитель, попробуйте еще раз."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Не удалось обработать медиафайл для загрузки, попробуйте еще раз."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Не удалось загрузить медиафайлы, попробуйте еще раз."</string>
+  <string name="screen_room_error_failed_processing_media">"Не удалось обработать медиафайл для загрузки, попробуйте еще раз."</string>
+  <string name="screen_room_error_failed_retrieving_user_details">"Не удалось получить данные о пользователе"</string>
+  <string name="screen_room_member_details_block_alert_action">"Заблокировать"</string>
+  <string name="screen_room_member_details_block_alert_description">"Заблокированные пользователи не смогут отправлять вам сообщения, а все их сообщения будут скрыты. Вы можете разблокировать их в любое время."</string>
+  <string name="screen_room_member_details_block_user">"Заблокировать пользователя"</string>
+  <string name="screen_room_member_details_unblock_alert_action">"Разблокировать"</string>
+  <string name="screen_room_member_details_unblock_alert_description">"Вы снова сможете увидеть все сообщения."</string>
+  <string name="screen_room_member_details_unblock_user">"Разблокировать пользователя"</string>
   <string name="screen_share_location_title">"Поделиться местоположением"</string>
   <string name="screen_share_my_location_action">"Поделиться моим местоположением"</string>
   <string name="screen_share_open_apple_maps">"Открыть в Apple Maps"</string>

@@ -86,6 +86,7 @@
   <string name="action_reply_in_thread">"Відповісти в темі"</string>
   <string name="action_report_bug">"Повідомити про помилку"</string>
   <string name="action_report_content">"Повідомити про вміст"</string>
+  <string name="action_reset">"Скинути"</string>
   <string name="action_retry">"Спробувати ще раз"</string>
   <string name="action_retry_decryption">"Повторити спробу розшифрування"</string>
   <string name="action_save">"Зберегти"</string>
@@ -115,6 +116,7 @@
   <string name="common_audio">"Аудіо"</string>
   <string name="common_blocked_users">"Заблоковані користувачі"</string>
   <string name="common_bubbles">"Бульбашки"</string>
+  <string name="common_call_invite">"Триває виклик (не підтримується)"</string>
   <string name="common_chat_backup">"Резервне копіювання чату"</string>
   <string name="common_copyright">"Авторське право"</string>
   <string name="common_creating_room">"Створення кімнати…"</string>
@@ -185,6 +187,7 @@
   <string name="common_room">"Кімната"</string>
   <string name="common_room_name">"Назва кімнати"</string>
   <string name="common_room_name_placeholder">"напр., назва вашого проєкту"</string>
+  <string name="common_saved_changes">"Збережені зміни"</string>
   <string name="common_saving">"Збереження"</string>
   <string name="common_screen_lock">"Блокування екрану"</string>
   <string name="common_search_for_someone">"Пошук когось"</string>
@@ -228,6 +231,8 @@
   <string name="dialog_title_error">"Помилка"</string>
   <string name="dialog_title_success">"Успіх"</string>
   <string name="dialog_title_warning">"Попередження"</string>
+  <string name="dialog_unsaved_changes_description_android">"Внесені зміни не збережено. Ви впевнені, що хочете повернутися?"</string>
+  <string name="dialog_unsaved_changes_title">"Зберегти зміни?"</string>
   <string name="error_failed_creating_the_permalink">"Не вдалося створити постійне посилання"</string>
   <string name="error_failed_loading_map">"%1$s Не вдалося завантажити карту. Будь ласка, спробуйте ще раз пізніше."</string>
   <string name="error_failed_loading_messages">"Не вдалося завантажити повідомлення"</string>
@@ -245,6 +250,14 @@
   <string name="screen_media_picker_error_failed_selection">"Не вдалося вибрати медіафайл, спробуйте ще раз."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Не вдалося обробити медіафайл для завантаження, спробуйте ще раз."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Не вдалося завантажити медіафайл, спробуйте ще раз."</string>
+  <string name="screen_room_error_failed_processing_media">"Не вдалося обробити медіафайл для завантаження, спробуйте ще раз."</string>
+  <string name="screen_room_error_failed_retrieving_user_details">"Не вдалося отримати дані користувача"</string>
+  <string name="screen_room_member_details_block_alert_action">"Заблокувати"</string>
+  <string name="screen_room_member_details_block_alert_description">"Заблоковані користувачі не зможуть надсилати Вам повідомлення, і всі їхні повідомлення будуть приховані. Ви можете розблокувати їх у будь-який час."</string>
+  <string name="screen_room_member_details_block_user">"Заблокувати користувача"</string>
+  <string name="screen_room_member_details_unblock_alert_action">"Розблокувати"</string>
+  <string name="screen_room_member_details_unblock_alert_description">"Ви знову зможете бачити всі повідомлення від них."</string>
+  <string name="screen_room_member_details_unblock_user">"Розблокувати користувача"</string>
   <string name="screen_share_location_title">"Поділитися розташуванням"</string>
   <string name="screen_share_my_location_action">"Поділитися моїм розташуванням"</string>
   <string name="screen_share_open_apple_maps">"Відкрити в Apple Maps"</string>

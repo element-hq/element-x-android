@@ -29,6 +29,7 @@ import io.element.android.libraries.matrix.api.media.MediaUploadHandler
 import io.element.android.libraries.matrix.api.media.VideoInfo
 import io.element.android.libraries.matrix.api.poll.PollKind
 import io.element.android.libraries.matrix.api.room.location.AssetType
+import io.element.android.libraries.matrix.api.room.powerlevels.MatrixRoomPowerLevels
 import io.element.android.libraries.matrix.api.room.powerlevels.UserRoleChange
 import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
 import io.element.android.libraries.matrix.api.timeline.ReceiptType
@@ -96,6 +97,12 @@ interface MatrixRoom : Closeable {
     suspend fun subscribeToSync()
 
     suspend fun unsubscribeFromSync()
+
+    suspend fun powerLevels(): Result<MatrixRoomPowerLevels>
+
+    suspend fun updatePowerLevels(matrixRoomPowerLevels: MatrixRoomPowerLevels): Result<Unit>
+
+    suspend fun resetPowerLevels(): Result<MatrixRoomPowerLevels>
 
     suspend fun userRole(userId: UserId): Result<RoomMember.Role>
 
