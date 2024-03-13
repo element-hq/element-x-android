@@ -164,7 +164,7 @@ class RustMatrixRoom(
     init {
         timeline.membershipChangeEventReceived
             // The new events should already be in the SDK cache, no need to fetch them from the server
-            .onEach { roomMemberListFetcher.fetchCachedRoomMembers() }
+            .onEach { roomMemberListFetcher.fetchCachedRoomMembers(asPending = false) }
             .launchIn(roomCoroutineScope)
     }
 

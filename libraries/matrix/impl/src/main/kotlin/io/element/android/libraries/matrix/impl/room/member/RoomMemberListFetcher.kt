@@ -66,7 +66,8 @@ internal class RoomMemberListFetcher(
                 _membersFlow.value = MatrixRoomMembersState.Pending(_membersFlow.value.roomMembers().orEmpty().toImmutableList())
                 // Load cached members as fallback and to get faster results
                 if (withCache) {
-                    fetchCachedRoomMembers()
+                    // Use asPending = true to emit the cached members as a pending state
+                    fetchCachedRoomMembers(asPending = true)
                 }
 
                 try {
@@ -83,11 +84,16 @@ internal class RoomMemberListFetcher(
         }
     }
 
-    internal suspend fun fetchCachedRoomMembers() = withContext(dispatcher) {
+    internal suspend fun fetchCachedRoomMembers(asPending: Boolean = true) = withContext(dispatcher) {
         Timber.i("Loading cached members for room $roomId")
         try {
             val iterator = room.membersNoSync()
-            _membersFlow.value = MatrixRoomMembersState.Pending(prevRoomMembers = parseAndEmitMembers(iterator))
+            val members = parseAndEmitMembers(iterator)
+            _membersFlow.value = if (asPending) {
+                MatrixRoomMembersState.Pending(prevRoomMembers = members)
+            } else {
+                MatrixRoomMembersState.Ready(members)
+            }
         } catch (exception: CancellationException) {
             Timber.d("Cancelled loading cached members for room $roomId")
             throw exception
