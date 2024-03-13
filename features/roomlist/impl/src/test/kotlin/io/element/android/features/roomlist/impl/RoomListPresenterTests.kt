@@ -85,7 +85,6 @@ import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
-import kotlin.time.Duration.Companion.seconds
 
 class RoomListPresenterTests {
     @get:Rule
@@ -167,7 +166,7 @@ class RoomListPresenterTests {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            val initialState = consumeItemsUntilPredicate(timeout = 3.seconds) { state -> state.contentState is RoomListContentState.Skeleton }.last()
+            val initialState = consumeItemsUntilPredicate { state -> state.contentState is RoomListContentState.Skeleton }.last()
             assertThat(initialState.contentState).isInstanceOf(RoomListContentState.Skeleton::class.java)
             roomListService.postAllRoomsLoadingState(RoomList.LoadingState.Loaded(1))
             roomListService.postAllRooms(
