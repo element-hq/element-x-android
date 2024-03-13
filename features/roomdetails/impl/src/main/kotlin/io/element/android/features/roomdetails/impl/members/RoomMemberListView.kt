@@ -216,12 +216,14 @@ private fun RoomMemberList(
                     )
                 } else {
                     item {
-                        Text(
-                            modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 100.dp),
-                            text = stringResource(id = R.string.screen_room_member_list_banned_empty),
-                            color = ElementTheme.colors.textSecondary,
-                            textAlign = TextAlign.Center,
-                        )
+                        Box(Modifier.fillParentMaxSize().padding(horizontal = 16.dp)) {
+                            Text(
+                                modifier = Modifier.padding(bottom = 56.dp).align(Alignment.Center),
+                                text = stringResource(id = R.string.screen_room_member_list_banned_empty),
+                                color = ElementTheme.colors.textSecondary,
+                                textAlign = TextAlign.Center,
+                            )
+                        }
                     }
                 }
             }

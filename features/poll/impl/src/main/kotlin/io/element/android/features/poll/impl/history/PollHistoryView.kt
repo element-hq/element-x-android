@@ -18,6 +18,7 @@ package io.element.android.features.poll.impl.history
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.consumeWindowInsets
@@ -187,31 +188,44 @@ private fun PollHistoryList(
         }
         if (pollHistoryItems.isEmpty()) {
             item {
-                val emptyStringResource = if (filter == PollHistoryFilter.PAST) {
-                    stringResource(R.string.screen_polls_history_empty_past)
-                } else {
-                    stringResource(R.string.screen_polls_history_empty_ongoing)
+                Column(
+                    modifier = Modifier.fillParentMaxSize().padding(bottom = 24.dp),
+                    verticalArrangement = Arrangement.Center,
+                ) {
+                    val emptyStringResource = if (filter == PollHistoryFilter.PAST) {
+                        stringResource(R.string.screen_polls_history_empty_past)
+                    } else {
+                        stringResource(R.string.screen_polls_history_empty_ongoing)
+                    }
+                    Text(
+                        text = emptyStringResource,
+                        style = ElementTheme.typography.fontBodyLgRegular,
+                        color = ElementTheme.colors.textSecondary,
+                        modifier = Modifier.fillMaxWidth().padding(vertical = 24.dp, horizontal = 16.dp),
+                        textAlign = TextAlign.Center,
+                    )
+
+                    if (hasMoreToLoad) {
+                        LoadMoreButton(isLoading = isLoading, onClick = onLoadMore)
+                    }
                 }
-                Text(
-                    text = emptyStringResource,
-                    style = ElementTheme.typography.fontBodyLgRegular,
-                    color = ElementTheme.colors.textSecondary,
-                    modifier = Modifier.padding(vertical = 24.dp, horizontal = 16.dp),
-                    textAlign = TextAlign.Center,
-                )
             }
-        }
-        if (hasMoreToLoad) {
+        } else if (hasMoreToLoad) {
             item {
-                Button(
-                    text = stringResource(CommonStrings.action_load_more),
-                    showProgress = isLoading,
-                    onClick = onLoadMore,
-                    modifier = Modifier.padding(vertical = 24.dp),
-                )
+                LoadMoreButton(isLoading = isLoading, onClick = onLoadMore)
             }
         }
     }
+}
+
+@Composable
+private fun LoadMoreButton(isLoading: Boolean, onClick: () -> Unit) {
+    Button(
+        text = stringResource(CommonStrings.action_load_more),
+        showProgress = isLoading,
+        onClick = onClick,
+        modifier = Modifier.padding(vertical = 24.dp),
+    )
 }
 
 @Composable
