@@ -129,16 +129,12 @@
       "name" : ":features:messages:impl",
       "includeRegex" : [
         "emoji_picker_category_.*",
-        "report_content_.*",
-        "room_timeline_.*",
         "screen_report_content_.*",
         "screen_room_attachment.*",
         "screen_room_encrypted.*",
         "screen_room_invite.*",
         "screen\\.room\\.mention.*",
         "screen_room_message.*",
-        "screen_room_no_permission.*",
-        "screen_room_reactions.*",
         "screen_room_retry.*",
         "screen_room_timeline.*",
         "screen_room_typing.*"

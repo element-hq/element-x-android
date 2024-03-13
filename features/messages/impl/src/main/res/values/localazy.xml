@@ -8,17 +8,10 @@
   <string name="emoji_picker_category_people">"Smileys &amp; People"</string>
   <string name="emoji_picker_category_places">"Travel &amp; Places"</string>
   <string name="emoji_picker_category_symbols">"Symbols"</string>
-  <string name="report_content_explanation">"This message will be reported to your homeserver’s administrator. They will not be able to read any encrypted messages."</string>
-  <string name="report_content_hint">"Reason for reporting this content"</string>
-  <string name="room_timeline_beginning_of_room">"This is the beginning of %1$s."</string>
-  <string name="room_timeline_beginning_of_room_no_name">"This is the beginning of this conversation."</string>
-  <string name="room_timeline_read_marker_title">"New"</string>
-  <plurals name="room_timeline_state_changes">
-    <item quantity="one">"%1$d room change"</item>
-    <item quantity="other">"%1$d room changes"</item>
-  </plurals>
   <string name="screen_report_content_block_user">"Block user"</string>
   <string name="screen_report_content_block_user_hint">"Check if you want to hide all current and future messages from this user"</string>
+  <string name="screen_report_content_explanation">"This message will be reported to your homeserver’s administrator. They will not be able to read any encrypted messages."</string>
+  <string name="screen_report_content_hint">"Reason for reporting this content"</string>
   <string name="screen_room_attachment_source_camera">"Camera"</string>
   <string name="screen_room_attachment_source_camera_photo">"Take photo"</string>
   <string name="screen_room_attachment_source_camera_video">"Record video"</string>
@@ -33,14 +26,21 @@
   <string name="screen_room_invite_again_alert_title">"You are alone in this chat"</string>
   <string name="screen_room_mentions_at_room_subtitle">"Notify the whole room"</string>
   <string name="screen_room_mentions_at_room_title">"Everyone"</string>
-  <string name="screen_room_message_copied">"Message copied"</string>
-  <string name="screen_room_no_permission_to_post">"You do not have permission to post to this room"</string>
-  <string name="screen_room_reactions_show_less">"Show less"</string>
-  <string name="screen_room_reactions_show_more">"Show more"</string>
   <string name="screen_room_retry_send_menu_send_again_action">"Send again"</string>
   <string name="screen_room_retry_send_menu_title">"Your message failed to send"</string>
   <string name="screen_room_timeline_add_reaction">"Add emoji"</string>
+  <string name="screen_room_timeline_beginning_of_room">"This is the beginning of %1$s."</string>
+  <string name="screen_room_timeline_beginning_of_room_no_name">"This is the beginning of this conversation."</string>
   <string name="screen_room_timeline_less_reactions">"Show less"</string>
+  <string name="screen_room_timeline_message_copied">"Message copied"</string>
+  <string name="screen_room_timeline_no_permission_to_post">"You do not have permission to post to this room"</string>
+  <string name="screen_room_timeline_reactions_show_less">"Show less"</string>
+  <string name="screen_room_timeline_reactions_show_more">"Show more"</string>
+  <string name="screen_room_timeline_read_marker_title">"New"</string>
+  <plurals name="screen_room_timeline_state_changes">
+    <item quantity="one">"%1$d room change"</item>
+    <item quantity="other">"%1$d room changes"</item>
+  </plurals>
   <plurals name="screen_room_typing_many_members">
     <item quantity="one">"%1$s, %2$s and %3$d other"</item>
     <item quantity="other">"%1$s, %2$s and %3$d others"</item>
