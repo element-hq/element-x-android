@@ -43,12 +43,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.roomdetails.impl.R
 import io.element.android.features.roomdetails.impl.members.moderation.RoomMembersModerationView
-import io.element.android.features.roomdetails.impl.members.moderation.aRoomMembersModerationState
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.button.BackButton
@@ -63,7 +63,6 @@ import io.element.android.libraries.designsystem.theme.components.SegmentedButto
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
-import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.components.MatrixUserRow
@@ -209,11 +208,24 @@ private fun RoomMemberList(
                 }
             }
             SelectedSection.BANNED -> { // Banned users
-                roomMemberListSection(
-                    headerText = null,
-                    members = roomMembers.banned,
-                    onMemberSelected = { onUserSelected(it) }
-                )
+                if (roomMembers.banned.isNotEmpty()) {
+                    roomMemberListSection(
+                        headerText = null,
+                        members = roomMembers.banned,
+                        onMemberSelected = { onUserSelected(it) }
+                    )
+                } else {
+                    item {
+                        Box(Modifier.fillParentMaxSize().padding(horizontal = 16.dp)) {
+                            Text(
+                                modifier = Modifier.padding(bottom = 56.dp).align(Alignment.Center),
+                                text = stringResource(id = R.string.screen_room_member_list_banned_empty),
+                                color = ElementTheme.colors.textSecondary,
+                                textAlign = TextAlign.Center,
+                            )
+                        }
+                    }
+                }
             }
         }
     }
@@ -345,23 +357,10 @@ internal fun RoomMemberListPreview(@PreviewParameter(RoomMemberListStateProvider
 
 @PreviewsDayNight
 @Composable
-internal fun RoomMemberBannedListPreview() = ElementPreview {
+internal fun RoomMemberBannedListPreview(@PreviewParameter(RoomMemberListStateBannedProvider::class) state: RoomMemberListState) = ElementPreview {
     RoomMemberListView(
         initialSelectedSectionIndex = 1,
-        state = aRoomMemberListState(
-            roomMembers = AsyncData.Success(
-                RoomMembers(
-                    invited = persistentListOf(),
-                    joined = persistentListOf(),
-                    banned = persistentListOf(
-                        aRoomMember(userId = UserId("@alice:example.com"), displayName = "Alice"),
-                        aRoomMember(userId = UserId("@bob:example.com"), displayName = "Bob"),
-                        aRoomMember(userId = UserId("@charlie:example.com"), displayName = "Charlie"),
-                    ),
-                )
-            ),
-            moderationState = aRoomMembersModerationState(canDisplayBannedUsers = true),
-        ),
+        state = state,
         navigator = object : RoomMemberListNavigator {},
     )
 }
