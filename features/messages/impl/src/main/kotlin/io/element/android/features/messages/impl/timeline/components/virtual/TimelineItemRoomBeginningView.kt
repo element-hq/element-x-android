@@ -45,9 +45,9 @@ fun TimelineItemRoomBeginningView(
         contentAlignment = Alignment.Center,
     ) {
         val text = if (roomName == null) {
-            stringResource(id = R.string.room_timeline_beginning_of_room_no_name)
+            stringResource(id = R.string.screen_room_timeline_beginning_of_room_no_name)
         } else {
-            stringResource(id = R.string.room_timeline_beginning_of_room, roomName)
+            stringResource(id = R.string.screen_room_timeline_beginning_of_room, roomName)
         }
         Text(
             color = MaterialTheme.colorScheme.secondary,
