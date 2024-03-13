@@ -62,6 +62,36 @@ internal class RoomMemberListStateProvider : PreviewParameterProvider<RoomMember
         )
 }
 
+internal class RoomMemberListStateBannedProvider : PreviewParameterProvider<RoomMemberListState> {
+    override val values: Sequence<RoomMemberListState>
+        get() = sequenceOf(
+            aRoomMemberListState(
+                roomMembers = AsyncData.Success(
+                    RoomMembers(
+                        invited = persistentListOf(),
+                        joined = persistentListOf(),
+                        banned = persistentListOf(
+                            aRoomMember(userId = UserId("@alice:example.com"), displayName = "Alice"),
+                            aRoomMember(userId = UserId("@bob:example.com"), displayName = "Bob"),
+                            aRoomMember(userId = UserId("@charlie:example.com"), displayName = "Charlie"),
+                        ),
+                    )
+                ),
+                moderationState = aRoomMembersModerationState(canDisplayBannedUsers = true),
+            ),
+            aRoomMemberListState(
+                roomMembers = AsyncData.Success(
+                    RoomMembers(
+                        invited = persistentListOf(),
+                        joined = persistentListOf(),
+                        banned = persistentListOf(),
+                    )
+                ),
+                moderationState = aRoomMembersModerationState(canDisplayBannedUsers = true),
+            )
+        )
+}
+
 internal fun aRoomMemberListState(
     roomMembers: AsyncData<RoomMembers> = AsyncData.Uninitialized,
     searchResults: SearchBarResultState<RoomMembers> = SearchBarResultState.Initial(),
