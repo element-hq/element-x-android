@@ -90,7 +90,7 @@ internal class RoomMemberListFetcher(
             // Send current member list with pending state to notify the UI that we are loading new members
             emit(pendingWithCurrentMembers())
             val members = parseAndEmitMembers(room.membersNoSync())
-            val newState= if (asPendingState) {
+            val newState = if (asPendingState) {
                 MatrixRoomMembersState.Pending(prevRoomMembers = members)
             } else {
                 MatrixRoomMembersState.Ready(members)
