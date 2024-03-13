@@ -19,11 +19,13 @@ package io.element.android.features.roomlist.impl
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 
 open class RoomListContentStateProvider : PreviewParameterProvider<RoomListContentState> {
     override val values: Sequence<RoomListContentState>
         get() = sequenceOf(
             aRoomsContentState(),
+            aRoomsContentState(summaries = persistentListOf()),
             aSkeletonContentState(),
             anEmptyContentState(),
             aMigrationContentState(),

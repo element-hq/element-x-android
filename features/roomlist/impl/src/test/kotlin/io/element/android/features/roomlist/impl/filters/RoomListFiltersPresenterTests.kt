@@ -68,6 +68,9 @@ class RoomListFiltersPresenterTests {
                     filterSelectionState(RoomListFilter.Favourites, false),
                 ).inOrder()
 
+                assertThat(state.selectedFilters()).containsExactly(
+                    RoomListFilter.Rooms,
+                )
                 val roomListCurrentFilter = roomListService.allRooms.currentFilter.value as MatrixRoomListFilter.All
                 assertThat(roomListCurrentFilter.filters).containsExactly(
                     MatrixRoomListFilter.Category.Group,
@@ -82,6 +85,7 @@ class RoomListFiltersPresenterTests {
                     filterSelectionState(RoomListFilter.Rooms, false),
                     filterSelectionState(RoomListFilter.Favourites, false),
                 ).inOrder()
+                assertThat(state.selectedFilters()).isEmpty()
                 val roomListCurrentFilter = roomListService.allRooms.currentFilter.value as MatrixRoomListFilter.All
                 assertThat(roomListCurrentFilter.filters).isEmpty()
             }

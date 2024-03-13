@@ -56,6 +56,7 @@ import io.element.android.features.roomlist.impl.filters.RoomListFilter
 import io.element.android.features.roomlist.impl.filters.RoomListFiltersEmptyStateResources
 import io.element.android.features.roomlist.impl.filters.RoomListFiltersState
 import io.element.android.features.roomlist.impl.filters.aRoomListFiltersState
+import io.element.android.features.roomlist.impl.filters.selection.FilterSelectionState
 import io.element.android.features.roomlist.impl.migration.MigrationScreenView
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -311,7 +312,9 @@ private fun EmptyScaffold(
 internal fun RoomListContentViewPreview(@PreviewParameter(RoomListContentStateProvider::class) state: RoomListContentState) = ElementPreview {
     RoomListContentView(
         contentState = state,
-        filtersState = aRoomListFiltersState(),
+        filtersState = aRoomListFiltersState(
+            filterSelectionStates = RoomListFilter.entries.map { FilterSelectionState(it, isSelected = true) }
+        ),
         eventSink = {},
         onVerifyClicked = { },
         onConfirmRecoveryKeyClicked = { },
