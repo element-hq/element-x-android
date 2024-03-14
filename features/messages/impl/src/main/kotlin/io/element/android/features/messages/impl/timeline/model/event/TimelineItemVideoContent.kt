@@ -37,7 +37,7 @@ data class TimelineItemVideoContent(
 ) : TimelineItemEventContent {
     override val type: String = "TimelineItemImageContent"
 
-    val showCaption = filename != null && filename != body;
-    val caption = if (showCaption) body else "";
+    val showCaption = filename != null && filename != body
+    val caption = if (showCaption) body else ""
 
 }
