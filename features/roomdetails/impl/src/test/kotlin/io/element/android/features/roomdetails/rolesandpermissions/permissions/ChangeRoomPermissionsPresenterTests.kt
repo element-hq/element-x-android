@@ -22,6 +22,7 @@ import app.cash.turbine.Event
 import app.cash.turbine.TurbineTestContext
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import im.vector.app.features.analytics.plan.RoomModeration
 import io.element.android.features.roomdetails.impl.rolesandpermissions.permissions.ChangeRoomPermissionsEvent
 import io.element.android.features.roomdetails.impl.rolesandpermissions.permissions.ChangeRoomPermissionsPresenter
 import io.element.android.features.roomdetails.impl.rolesandpermissions.permissions.ChangeRoomPermissionsSection
@@ -30,9 +31,11 @@ import io.element.android.features.roomdetails.impl.rolesandpermissions.permissi
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.api.room.RoomMember.Role.ADMIN
 import io.element.android.libraries.matrix.api.room.RoomMember.Role.MODERATOR
+import io.element.android.libraries.matrix.api.room.RoomMember.Role.USER
 import io.element.android.libraries.matrix.api.room.powerlevels.MatrixRoomPowerLevels
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.matrix.test.room.defaultRoomPowerLevels
+import io.element.android.services.analytics.test.FakeAnalyticsService
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
@@ -160,7 +163,8 @@ class ChangeRoomPermissionsPresenterTests {
 
     @Test
     fun `present - Save updates the current permissions and resets hasChanges`() = runTest {
-        val presenter = createChangeRoomPermissionsPresenter()
+        val analyticsService = FakeAnalyticsService()
+        val presenter = createChangeRoomPermissionsPresenter(analyticsService = analyticsService)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -169,6 +173,14 @@ class ChangeRoomPermissionsPresenterTests {
             assertThat(state.hasChanges).isFalse()
 
             state.eventSink(ChangeRoomPermissionsEvent.ChangeMinimumRoleForAction(RoomPermissionType.ROOM_NAME, MODERATOR))
+            state.eventSink(ChangeRoomPermissionsEvent.ChangeMinimumRoleForAction(RoomPermissionType.ROOM_AVATAR, MODERATOR))
+            state.eventSink(ChangeRoomPermissionsEvent.ChangeMinimumRoleForAction(RoomPermissionType.ROOM_TOPIC, MODERATOR))
+            state.eventSink(ChangeRoomPermissionsEvent.ChangeMinimumRoleForAction(RoomPermissionType.SEND_EVENTS, MODERATOR))
+            state.eventSink(ChangeRoomPermissionsEvent.ChangeMinimumRoleForAction(RoomPermissionType.REDACT_EVENTS, USER))
+            state.eventSink(ChangeRoomPermissionsEvent.ChangeMinimumRoleForAction(RoomPermissionType.KICK, ADMIN))
+            state.eventSink(ChangeRoomPermissionsEvent.ChangeMinimumRoleForAction(RoomPermissionType.BAN, ADMIN))
+            state.eventSink(ChangeRoomPermissionsEvent.ChangeMinimumRoleForAction(RoomPermissionType.INVITE, ADMIN))
+            skipItems(7)
             assertThat(awaitItem().hasChanges).isTrue()
 
             state.eventSink(ChangeRoomPermissionsEvent.Save)
@@ -179,6 +191,8 @@ class ChangeRoomPermissionsPresenterTests {
                 assertThat(currentPermissions?.roomName).isEqualTo(MODERATOR.powerLevel)
                 assertThat(saveAction).isEqualTo(AsyncAction.Success(Unit))
             }
+            assertThat(analyticsService.capturedEvents).hasSize(8)
+            assertThat(analyticsService.capturedEvents.all { it is RoomModeration }).isTrue()
         }
     }
 
@@ -269,9 +283,11 @@ class ChangeRoomPermissionsPresenterTests {
     private fun createChangeRoomPermissionsPresenter(
         section: ChangeRoomPermissionsSection = ChangeRoomPermissionsSection.RoomDetails,
         room: FakeMatrixRoom = FakeMatrixRoom(),
+        analyticsService: FakeAnalyticsService = FakeAnalyticsService(),
     ) = ChangeRoomPermissionsPresenter(
         section = section,
         room = room,
+        analyticsService = analyticsService,
     )
 
     private fun defaultPermissions() = defaultRoomPowerLevels().run {

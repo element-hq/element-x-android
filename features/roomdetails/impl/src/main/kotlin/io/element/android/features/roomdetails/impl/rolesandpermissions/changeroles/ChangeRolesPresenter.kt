@@ -30,6 +30,8 @@ import androidx.compose.runtime.setValue
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import im.vector.app.features.analytics.plan.RoomModeration
+import io.element.android.features.roomdetails.impl.analytics.toAnalyticsMemberRole
 import io.element.android.features.roomdetails.impl.members.PowerLevelRoomMemberComparator
 import io.element.android.features.roomdetails.impl.members.RoomMemberListDataSource
 import io.element.android.libraries.architecture.AsyncAction
@@ -41,6 +43,7 @@ import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.powerlevels.UserRoleChange
 import io.element.android.libraries.matrix.api.user.MatrixUser
+import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.persistentListOf
@@ -56,6 +59,7 @@ class ChangeRolesPresenter @AssistedInject constructor(
     @Assisted private val role: RoomMember.Role,
     private val room: MatrixRoom,
     private val dispatchers: CoroutineDispatchers,
+    private val analyticsService: AnalyticsService,
 ) : Presenter<ChangeRolesState> {
     @AssistedFactory
     interface Factory {
@@ -197,9 +201,11 @@ class ChangeRolesPresenter @AssistedInject constructor(
 
         val changes: List<UserRoleChange> = buildList {
             for (selectedUser in toAdd) {
+                analyticsService.capture(RoomModeration(RoomModeration.Action.ChangeMemberRole, role.toAnalyticsMemberRole()))
                 add(UserRoleChange(selectedUser.userId, role))
             }
             for (selectedUser in toRemove) {
+                analyticsService.capture(RoomModeration(RoomModeration.Action.ChangeMemberRole, RoomModeration.Role.User))
                 add(UserRoleChange(selectedUser.userId, RoomMember.Role.USER))
             }
         }
