@@ -21,12 +21,14 @@ import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.SingleIn
+import io.element.android.libraries.matrix.api.SdkMetadata
 import javax.inject.Inject
 
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
 class DefaultUserAgentProvider @Inject constructor(
     private val buildMeta: BuildMeta,
+    private val sdkMeta: SdkMetadata,
 ) : UserAgentProvider {
     private val userAgent: String by lazy { buildUserAgent() }
 
@@ -34,7 +36,7 @@ class DefaultUserAgentProvider @Inject constructor(
 
     /**
      * Create an user agent with the application version.
-     * Ex: Element X/1.5.0 (Xiaomi Mi 9T; Android 11; RKQ1.200826.002; Sdk 0.1.0)
+     * Ex: Element X/1.5.0 (Xiaomi Mi 9T; Android 11; RKQ1.200826.002; Sdk c344b155c)
      */
     private fun buildUserAgent(): String {
         val appName = buildMeta.applicationName
@@ -43,7 +45,7 @@ class DefaultUserAgentProvider @Inject constructor(
         val deviceModel = Build.MODEL
         val androidVersion = Build.VERSION.RELEASE
         val deviceBuildId = Build.DISPLAY
-        val matrixSdkVersion = "TODO"
+        val matrixSdkVersion = sdkMeta.sdkGitSha
 
         return buildString {
             append(appName)
