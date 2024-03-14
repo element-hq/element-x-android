@@ -36,8 +36,8 @@ data class TimelineItemImageContent(
 ) : TimelineItemEventContent {
     override val type: String = "TimelineItemImageContent"
 
-    val showCaption = filename != null && filename != body;
-    val caption = if (showCaption) body else "";
+    val showCaption = filename != null && filename != body
+    val caption = if (showCaption) body else ""
 
     val preferredMediaSource = if (mimeType == MimeTypes.Gif) {
         mediaSource

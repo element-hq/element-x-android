@@ -39,5 +39,4 @@ data class TimelineItemVideoContent(
 
     val showCaption = filename != null && filename != body
     val caption = if (showCaption) body else ""
-
 }

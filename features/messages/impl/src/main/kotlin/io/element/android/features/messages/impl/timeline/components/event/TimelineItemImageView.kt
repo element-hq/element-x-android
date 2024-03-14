@@ -44,7 +44,7 @@ fun TimelineItemImageView(
     modifier: Modifier = Modifier,
 ) {
     val description = stringResource(CommonStrings.common_image)
-    Column (
+    Column(
         modifier = modifier.semantics { contentDescription = description },
     ) {
         TimelineItemAspectRatioBox(
@@ -58,8 +58,7 @@ fun TimelineItemImageView(
 
         if (content.showCaption) {
             Spacer(modifier = Modifier.height(8.dp))
-            Box ( )
-            {
+            Box() {
                 EditorStyledText(
                     modifier = Modifier
                         .widthIn(min = MIN_HEIGHT_IN_DP.dp * content.aspectRatio!!, max = MAX_HEIGHT_IN_DP.dp * content.aspectRatio),
