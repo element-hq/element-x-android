@@ -22,7 +22,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
@@ -45,18 +44,16 @@ fun TimelineItemImageView(
     modifier: Modifier = Modifier,
 ) {
     val description = stringResource(CommonStrings.common_image)
-    Column ( ) {
-        Box (contentAlignment = Alignment.Center)
-        {
-            TimelineItemAspectRatioBox(
-                aspectRatio = content.aspectRatio,
-                modifier = modifier.semantics { contentDescription = description },
-            ) {
-                BlurHashAsyncImage(
-                    model = MediaRequestData(content.preferredMediaSource, MediaRequestData.Kind.File(content.body, content.mimeType)),
-                    blurHash = content.blurhash,
-                )
-            }
+    Column (
+        modifier = modifier.semantics { contentDescription = description },
+    ) {
+        TimelineItemAspectRatioBox(
+            aspectRatio = content.aspectRatio,
+        ) {
+            BlurHashAsyncImage(
+                model = MediaRequestData(content.preferredMediaSource, MediaRequestData.Kind.File(content.body, content.mimeType)),
+                blurHash = content.blurhash,
+            )
         }
 
         if (content.showCaption) {
@@ -64,8 +61,8 @@ fun TimelineItemImageView(
             Box ( )
             {
                 EditorStyledText(
-                    modifier = modifier
-                        .widthIn(min = MIN_HEIGHT_IN_DP.dp * content.aspectRatio!!, max = MAX_HEIGHT_IN_DP.dp * content.aspectRatio!!),
+                    modifier = Modifier
+                        .widthIn(min = MIN_HEIGHT_IN_DP.dp * content.aspectRatio!!, max = MAX_HEIGHT_IN_DP.dp * content.aspectRatio),
                     text = content.caption,
                     style = ElementRichTextEditorStyle.textStyle(),
                     releaseOnDetach = false

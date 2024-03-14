@@ -67,6 +67,8 @@ data class VoiceMessageType(
 
 data class VideoMessageType(
     val body: String,
+    val formatted: FormattedBody?,
+    val filename: String?,
     val source: MediaSource,
     val info: VideoInfo?
 ) : MessageType

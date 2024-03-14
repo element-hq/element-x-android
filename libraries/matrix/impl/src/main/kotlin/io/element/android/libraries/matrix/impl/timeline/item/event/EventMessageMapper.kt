@@ -110,7 +110,7 @@ class EventMessageMapper {
             EmoteMessageType(type.content.body, type.content.formatted?.map())
         }
         is RustMessageType.Video -> {
-            VideoMessageType(type.content.body, type.content.source.map(), type.content.info?.map())
+            VideoMessageType(type.content.body, type.content.formatted?.map(), type.content.filename, type.content.source.map(), type.content.info?.map())
         }
         is RustMessageType.Location -> {
             LocationMessageType(type.content.body, type.content.geoUri, type.content.description)
