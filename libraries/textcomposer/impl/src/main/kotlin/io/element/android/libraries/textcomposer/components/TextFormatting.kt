@@ -35,6 +35,7 @@ import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.textcomposer.R
 import io.element.android.libraries.textcomposer.TextComposerLinkDialog
+import io.element.android.libraries.textcomposer.aRichTextEditorState
 import io.element.android.wysiwyg.compose.RichTextEditorState
 import io.element.android.wysiwyg.view.models.InlineFormat
 import io.element.android.wysiwyg.view.models.LinkAction
@@ -209,5 +210,5 @@ private fun ActionState?.toButtonState(): FormattingOptionState =
 @PreviewsDayNight
 @Composable
 internal fun TextFormattingPreview() = ElementPreview {
-    TextFormatting(state = RichTextEditorState())
+    TextFormatting(state = aRichTextEditorState())
 }
