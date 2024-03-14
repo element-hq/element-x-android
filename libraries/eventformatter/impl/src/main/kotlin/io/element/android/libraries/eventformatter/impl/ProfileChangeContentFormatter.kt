@@ -25,8 +25,8 @@ class ProfileChangeContentFormatter @Inject constructor(
     private val sp: StringProvider,
 ) {
     fun format(
-        senderId: UserId,
         profileChangeContent: ProfileChangeContent,
+        senderId: UserId,
         senderDisplayName: String,
         senderIsYou: Boolean,
     ): String? = profileChangeContent.run {
@@ -34,7 +34,7 @@ class ProfileChangeContentFormatter @Inject constructor(
         val avatarChanged = avatarUrl != prevAvatarUrl
         return when {
             avatarChanged && displayNameChanged -> {
-                val message = format(senderId, profileChangeContent.copy(avatarUrl = null, prevAvatarUrl = null), senderDisplayName, senderIsYou)
+                val message = format(profileChangeContent.copy(avatarUrl = null, prevAvatarUrl = null), senderId, senderDisplayName, senderIsYou)
                 val avatarChangedToo = sp.getString(R.string.state_event_avatar_changed_too)
                 "$message\n$avatarChangedToo"
             }

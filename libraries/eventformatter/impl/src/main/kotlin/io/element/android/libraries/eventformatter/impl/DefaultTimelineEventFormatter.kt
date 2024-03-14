@@ -54,7 +54,7 @@ class DefaultTimelineEventFormatter @Inject constructor(
                 roomMembershipContentFormatter.format(content, senderDisplayName, isOutgoing)
             }
             is ProfileChangeContent -> {
-                profileChangeContentFormatter.format(event.sender, content, senderDisplayName, isOutgoing)
+                profileChangeContentFormatter.format(content, event.sender, senderDisplayName, isOutgoing)
             }
             is StateContent -> {
                 stateContentFormatter.format(content, senderDisplayName, isOutgoing, RenderingMode.Timeline)
