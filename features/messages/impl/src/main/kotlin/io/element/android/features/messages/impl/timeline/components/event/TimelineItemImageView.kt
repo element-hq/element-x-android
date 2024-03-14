@@ -18,7 +18,9 @@ package io.element.android.features.messages.impl.timeline.components.event
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -58,9 +60,12 @@ fun TimelineItemImageView(
         }
 
         if (content.showCaption) {
-            Box ( modifier = modifier.padding(8.dp))
+            Spacer(modifier = Modifier.height(8.dp))
+            Box ( )
             {
                 EditorStyledText(
+                    modifier = modifier
+                        .widthIn(min = MIN_HEIGHT_IN_DP.dp * content.aspectRatio!!, max = MAX_HEIGHT_IN_DP.dp * content.aspectRatio!!),
                     text = content.caption,
                     style = ElementRichTextEditorStyle.textStyle(),
                     releaseOnDetach = false
