@@ -3,7 +3,7 @@
   <string name="screen_signout_confirmation_dialog_content">"Sei sicuro di voler uscire?"</string>
   <string name="screen_signout_confirmation_dialog_submit">"Disconnetti"</string>
   <string name="screen_signout_confirmation_dialog_title">"Disconnetti"</string>
-  <string name="screen_signout_in_progress_dialog_content">"Uscita in corso…"</string>
+  <string name="screen_signout_in_progress_dialog_content">"Disconnessione in corso…"</string>
   <string name="screen_signout_key_backup_disabled_subtitle">"Stai per disconnettere la tua ultima sessione. Se esci ora, perderai l\'accesso ai tuoi messaggi cifrati."</string>
   <string name="screen_signout_key_backup_disabled_title">"Hai disattivato il backup"</string>
   <string name="screen_signout_key_backup_offline_subtitle">"Il backup delle chiavi era ancora in corso quando sei andato offline. Riconnettiti per eseguire il backup delle chiavi prima di uscire."</string>

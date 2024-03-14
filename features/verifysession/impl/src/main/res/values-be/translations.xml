@@ -6,6 +6,7 @@
   <string name="screen_session_verification_compare_numbers_subtitle">"Пераканайцеся, што прыведзеныя ніжэй лічбы супадаюць з лічбамі, паказанымі ў іншым сеансе."</string>
   <string name="screen_session_verification_compare_numbers_title">"Параўнайце лічбы"</string>
   <string name="screen_session_verification_complete_subtitle">"Ваш новы сеанс пацверджаны. Ён мае доступ да вашых зашыфраваных паведамленняў, і іншыя карыстальнікі будуць лічыць яго давераным."</string>
+  <string name="screen_session_verification_enter_recovery_key">"Увядзіце ключ аднаўлення"</string>
   <string name="screen_session_verification_open_existing_session_subtitle">"Дакажыце, што гэта вы, каб атрымаць доступ да вашай зашыфраванай гісторыі паведамленняў."</string>
   <string name="screen_session_verification_open_existing_session_title">"Адкрыйце існуючы сеанс"</string>
   <string name="screen_session_verification_positive_button_canceled">"Паўтарыце праверку"</string>

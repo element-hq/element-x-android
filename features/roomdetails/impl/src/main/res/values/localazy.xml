@@ -18,10 +18,10 @@
   <string name="screen_room_change_permissions_messages_and_content">"Messages and content"</string>
   <string name="screen_room_change_permissions_moderators">"Admins and moderators"</string>
   <string name="screen_room_change_permissions_remove_people">"Remove people"</string>
-  <string name="screen_room_change_permissions_room_avatar">"Change Room Avatar"</string>
+  <string name="screen_room_change_permissions_room_avatar">"Change room avatar"</string>
   <string name="screen_room_change_permissions_room_details">"Room details"</string>
-  <string name="screen_room_change_permissions_room_name">"Change Room Name"</string>
-  <string name="screen_room_change_permissions_room_topic">"Change Room Topic"</string>
+  <string name="screen_room_change_permissions_room_name">"Change room name"</string>
+  <string name="screen_room_change_permissions_room_topic">"Change room topic"</string>
   <string name="screen_room_change_permissions_send_messages">"Send messages"</string>
   <string name="screen_room_change_role_administrators_title">"Edit Admins"</string>
   <string name="screen_room_change_role_confirm_add_admin_description">"You will not be able to undo this action. You are promoting the user to have the same power level as you."</string>
@@ -58,19 +58,21 @@
   <string name="screen_room_member_list_ban_member_confirmation_action">"Ban"</string>
   <string name="screen_room_member_list_ban_member_confirmation_description">"They won’t be able to join this room again if invited."</string>
   <string name="screen_room_member_list_ban_member_confirmation_title">"Are you sure you want to ban this member?"</string>
+  <string name="screen_room_member_list_banned_empty">"There are no banned users in this room."</string>
   <string name="screen_room_member_list_banning_user">"Banning %1$s"</string>
   <plurals name="screen_room_member_list_header_title">
     <item quantity="one">"%1$d person"</item>
     <item quantity="other">"%1$d people"</item>
   </plurals>
-  <string name="screen_room_member_list_manage_member_remove">"Remove member"</string>
+  <string name="screen_room_member_list_manage_member_ban">"Remove and ban member"</string>
+  <string name="screen_room_member_list_manage_member_remove">"Remove from room"</string>
   <string name="screen_room_member_list_manage_member_remove_confirmation_ban">"Remove and ban member"</string>
   <string name="screen_room_member_list_manage_member_remove_confirmation_kick">"Only remove member"</string>
   <string name="screen_room_member_list_manage_member_remove_confirmation_title">"Remove member and ban from joining in the future?"</string>
   <string name="screen_room_member_list_manage_member_unban_action">"Unban"</string>
   <string name="screen_room_member_list_manage_member_unban_message">"They will be able to join this room again if invited."</string>
   <string name="screen_room_member_list_manage_member_unban_title">"Unban user"</string>
-  <string name="screen_room_member_list_manage_member_user_info">"See user info"</string>
+  <string name="screen_room_member_list_manage_member_user_info">"View profile"</string>
   <string name="screen_room_member_list_mode_banned">"Banned"</string>
   <string name="screen_room_member_list_mode_members">"Members"</string>
   <string name="screen_room_member_list_pending_header_title">"Pending"</string>
@@ -102,6 +104,8 @@
   <string name="screen_room_roles_and_permissions_moderators">"Moderators"</string>
   <string name="screen_room_roles_and_permissions_permissions_header">"Permissions"</string>
   <string name="screen_room_roles_and_permissions_reset">"Reset permissions"</string>
+  <string name="screen_room_roles_and_permissions_reset_confirm_description">"Once you reset permissions, you will lose the current settings."</string>
+  <string name="screen_room_roles_and_permissions_reset_confirm_title">"Reset permissions?"</string>
   <string name="screen_room_roles_and_permissions_roles_header">"Roles"</string>
   <string name="screen_room_roles_and_permissions_room_details">"Room details"</string>
   <string name="screen_room_roles_and_permissions_title">"Roles and permissions"</string>

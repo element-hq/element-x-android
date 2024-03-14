@@ -118,6 +118,36 @@ class RolesAndPermissionPresenterTests {
         }
     }
 
+    @Test
+    fun `present - ResetPermissions needs confirmation, then resets permissions`() = runTest {
+        val presenter = createRolesAndPermissionsPresenter()
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            initialState.eventSink(RolesAndPermissionsEvents.ResetPermissions)
+            // Confirmation
+            awaitItem().eventSink(RolesAndPermissionsEvents.ResetPermissions)
+
+            assertThat(awaitItem().resetPermissionsAction).isEqualTo(AsyncAction.Loading)
+            assertThat(awaitItem().resetPermissionsAction).isEqualTo(AsyncAction.Success(Unit))
+        }
+    }
+
+    @Test
+    fun `present - ResetPermissions confirmation can be cancelled`() = runTest {
+        val presenter = createRolesAndPermissionsPresenter()
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            initialState.eventSink(RolesAndPermissionsEvents.ResetPermissions)
+            awaitItem().eventSink(RolesAndPermissionsEvents.CancelPendingAction)
+
+            assertThat(awaitItem().resetPermissionsAction).isEqualTo(AsyncAction.Uninitialized)
+        }
+    }
+
     private fun TestScope.createRolesAndPermissionsPresenter(
         room: FakeMatrixRoom = FakeMatrixRoom(),
         dispatchers: CoroutineDispatchers = testCoroutineDispatchers(),

@@ -17,13 +17,13 @@
 package io.element.android.features.roomdetails.impl.members
 
 import io.element.android.features.roomdetails.impl.members.moderation.RoomMembersModerationState
-import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
 import io.element.android.libraries.matrix.api.room.RoomMember
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 
 data class RoomMemberListState(
-    val roomMembers: AsyncData<RoomMembers>,
+    val roomMembers: RoomMembers,
     val searchQuery: String,
     val searchResults: SearchBarResultState<RoomMembers>,
     val isSearchActive: Boolean,
@@ -36,4 +36,14 @@ data class RoomMembers(
     val invited: ImmutableList<RoomMember>,
     val joined: ImmutableList<RoomMember>,
     val banned: ImmutableList<RoomMember>,
-)
+    val isLoading: Boolean,
+) {
+    companion object {
+        fun loading() = RoomMembers(
+            invited = persistentListOf(),
+            joined = persistentListOf(),
+            banned = persistentListOf(),
+            isLoading = true,
+        )
+    }
+}

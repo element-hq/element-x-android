@@ -1,0 +1,1 @@
+Use the display name only once in display name change events. The user should be referenced by `userId` instead.

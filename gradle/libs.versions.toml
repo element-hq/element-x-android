@@ -38,7 +38,7 @@ serialization_json = "1.6.3"
 showkase = "1.0.2"
 appyx = "1.4.0"
 sqldelight = "2.0.1"
-wysiwyg = "2.30.0"
+wysiwyg = "2.33.0"
 telephoto = "0.8.0"
 
 # DI
@@ -153,7 +153,7 @@ jsoup = "org.jsoup:jsoup:1.17.2"
 appyx_core = { module = "com.bumble.appyx:core", version.ref = "appyx" }
 molecule-runtime = "app.cash.molecule:molecule-runtime:1.4.1"
 timber = "com.jakewharton.timber:timber:5.0.1"
-matrix_sdk = "org.matrix.rustcomponents:sdk-android:0.2.6"
+matrix_sdk = "org.matrix.rustcomponents:sdk-android:0.2.9"
 matrix_richtexteditor = { module = "io.element.android:wysiwyg", version.ref = "wysiwyg" }
 matrix_richtexteditor_compose = { module = "io.element.android:wysiwyg-compose", version.ref = "wysiwyg" }
 sqldelight-driver-android = { module = "app.cash.sqldelight:android-driver", version.ref = "sqldelight" }
@@ -167,14 +167,14 @@ vanniktech_blurhash = "com.vanniktech:blurhash:0.2.0"
 telephoto_zoomableimage = { module = "me.saket.telephoto:zoomable-image-coil", version.ref = "telephoto" }
 telephoto_flick = { module = "me.saket.telephoto:flick-android", version.ref = "telephoto" }
 statemachine = "com.freeletics.flowredux:compose:1.2.1"
-maplibre = "org.maplibre.gl:android-sdk:10.2.0"
+maplibre = "org.maplibre.gl:android-sdk:10.3.0"
 maplibre_ktx = "org.maplibre.gl:android-sdk-ktx-v7:2.0.2"
 maplibre_annotation = "org.maplibre.gl:android-plugin-annotation-v9:2.0.2"
 opusencoder = "io.element.android:opusencoder:1.1.0"
 kotlinpoet = "com.squareup:kotlinpoet:1.16.0"
 
 # Analytics
-posthog = "com.posthog:posthog-android:3.1.14"
+posthog = "com.posthog:posthog-android:3.1.15"
 sentry = "io.sentry:sentry-android:7.6.0"
 matrix_analytics_events = "com.github.matrix-org:matrix-analytics-events:0.11.0"
 

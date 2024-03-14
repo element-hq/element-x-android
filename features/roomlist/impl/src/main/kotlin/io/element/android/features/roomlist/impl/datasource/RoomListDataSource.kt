@@ -27,12 +27,11 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
@@ -62,19 +61,15 @@ class RoomListDataSource @Inject constructor(
         roomListService
             .allRooms
             .summaries
-            .onStart {
-                // If we have no cached results, display a placeholder loading state
-                if (diffCache.isEmpty()) {
-                    _allRooms.emit(RoomListRoomSummaryFactory.createFakeList())
-                }
-            }
             .onEach { roomSummaries ->
                 replaceWith(roomSummaries)
             }
             .launchIn(coroutineScope)
     }
 
-    val allRooms: SharedFlow<ImmutableList<RoomListRoomSummary>> = _allRooms
+    val allRooms: Flow<ImmutableList<RoomListRoomSummary>> = _allRooms
+
+    val loadingState = roomListService.allRooms.loadingState
 
     @OptIn(FlowPreview::class)
     private fun observeNotificationSettings() {

@@ -443,9 +443,44 @@ class NotifiableEventResolverTest {
     }
 
     @Test
+    fun `resolve CallInvite`() = runTest {
+        val sut = createNotifiableEventResolver(
+            notificationResult = Result.success(
+                createNotificationData(
+                    content = NotificationContent.MessageLike.CallInvite(A_USER_ID_2)
+                )
+            )
+        )
+        val result = sut.resolveEvent(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID)
+        val expectedResult = NotifiableMessageEvent(
+            sessionId = A_SESSION_ID,
+            roomId = A_ROOM_ID,
+            eventId = AN_EVENT_ID,
+            editedEventId = null,
+            canBeReplaced = false,
+            senderId = A_USER_ID_2,
+            noisy = false,
+            timestamp = A_TIMESTAMP,
+            senderName = null,
+            body = "Call in progress (unsupported)",
+            imageUriString = null,
+            threadId = null,
+            roomName = null,
+            roomIsDirect = false,
+            roomAvatarPath = null,
+            senderAvatarPath = null,
+            soundName = null,
+            outGoingMessage = false,
+            outGoingMessageFailed = false,
+            isRedacted = false,
+            isUpdated = false
+        )
+        assertThat(result).isEqualTo(expectedResult)
+    }
+
+    @Test
     fun `resolve null cases`() {
         testNull(NotificationContent.MessageLike.CallAnswer)
-        testNull(NotificationContent.MessageLike.CallInvite)
         testNull(NotificationContent.MessageLike.CallHangup)
         testNull(NotificationContent.MessageLike.CallCandidates)
         testNull(NotificationContent.MessageLike.KeyVerificationReady)

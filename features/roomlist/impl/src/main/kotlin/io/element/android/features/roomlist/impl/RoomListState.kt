@@ -21,7 +21,6 @@ import io.element.android.features.leaveroom.api.LeaveRoomState
 import io.element.android.features.roomlist.impl.filters.RoomListFiltersState
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
 import io.element.android.features.roomlist.impl.search.RoomListSearchState
-import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.user.MatrixUser
@@ -31,20 +30,17 @@ import kotlinx.collections.immutable.ImmutableList
 data class RoomListState(
     val matrixUser: MatrixUser?,
     val showAvatarIndicator: Boolean,
-    val roomList: AsyncData<ImmutableList<RoomListRoomSummary>>,
-    val securityBannerState: SecurityBannerState,
     val hasNetworkConnection: Boolean,
     val snackbarMessage: SnackbarMessage?,
-    val invitesState: InvitesState,
     val contextMenu: ContextMenu,
     val leaveRoomState: LeaveRoomState,
     val filtersState: RoomListFiltersState,
     val searchState: RoomListSearchState,
-    val displayMigrationStatus: Boolean,
+    val contentState: RoomListContentState,
     val eventSink: (RoomListEvents) -> Unit,
 ) {
-    val displayFilters = filtersState.isFeatureEnabled && !displayMigrationStatus
-    val displayEmptyState = roomList is AsyncData.Success && roomList.data.isEmpty()
+    val displayFilters = filtersState.isFeatureEnabled && contentState is RoomListContentState.Rooms
+    val displayActions = contentState !is RoomListContentState.Migration
 
     sealed interface ContextMenu {
         data object Hidden : ContextMenu
@@ -69,4 +65,16 @@ enum class SecurityBannerState {
     None,
     SessionVerification,
     RecoveryKeyConfirmation,
+}
+
+@Immutable
+sealed interface RoomListContentState {
+    data object Migration : RoomListContentState
+    data class Skeleton(val count: Int) : RoomListContentState
+    data class Empty(val invitesState: InvitesState) : RoomListContentState
+    data class Rooms(
+        val invitesState: InvitesState,
+        val securityBannerState: SecurityBannerState,
+        val summaries: ImmutableList<RoomListRoomSummary>,
+    ) : RoomListContentState
 }

@@ -49,6 +49,7 @@
   <string name="action_decline">"Decline"</string>
   <string name="action_delete_poll">"Delete Poll"</string>
   <string name="action_disable">"Disable"</string>
+  <string name="action_discard">"Discard"</string>
   <string name="action_done">"Done"</string>
   <string name="action_edit">"Edit"</string>
   <string name="action_edit_poll">"Edit poll"</string>
@@ -85,6 +86,7 @@
   <string name="action_reply_in_thread">"Reply in thread"</string>
   <string name="action_report_bug">"Report bug"</string>
   <string name="action_report_content">"Report content"</string>
+  <string name="action_reset">"Reset"</string>
   <string name="action_retry">"Retry"</string>
   <string name="action_retry_decryption">"Retry decryption"</string>
   <string name="action_save">"Save"</string>
@@ -246,6 +248,14 @@
   <string name="screen_media_picker_error_failed_selection">"Failed selecting media, please try again."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Failed processing media to upload, please try again."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Failed uploading media, please try again."</string>
+  <string name="screen_room_error_failed_processing_media">"Failed processing media to upload, please try again."</string>
+  <string name="screen_room_error_failed_retrieving_user_details">"Could not retrieve user details"</string>
+  <string name="screen_room_member_details_block_alert_action">"Block"</string>
+  <string name="screen_room_member_details_block_alert_description">"Blocked users won\'t be able to send you messages and all their messages will be hidden. You can unblock them anytime."</string>
+  <string name="screen_room_member_details_block_user">"Block user"</string>
+  <string name="screen_room_member_details_unblock_alert_action">"Unblock"</string>
+  <string name="screen_room_member_details_unblock_alert_description">"You\'ll be able to see all messages from them again."</string>
+  <string name="screen_room_member_details_unblock_user">"Unblock user"</string>
   <string name="screen_share_location_title">"Share location"</string>
   <string name="screen_share_my_location_action">"Share my location"</string>
   <string name="screen_share_open_apple_maps">"Open in Apple Maps"</string>

@@ -21,6 +21,8 @@ import dagger.Binds
 import dagger.Module
 import io.element.android.features.roomlist.impl.filters.RoomListFiltersPresenter
 import io.element.android.features.roomlist.impl.filters.RoomListFiltersState
+import io.element.android.features.roomlist.impl.migration.MigrationScreenPresenter
+import io.element.android.features.roomlist.impl.migration.MigrationScreenState
 import io.element.android.features.roomlist.impl.search.RoomListSearchPresenter
 import io.element.android.features.roomlist.impl.search.RoomListSearchState
 import io.element.android.libraries.architecture.Presenter
@@ -34,4 +36,7 @@ interface RoomListModule {
 
     @Binds
     fun bindFiltersPresenter(presenter: RoomListFiltersPresenter): Presenter<RoomListFiltersState>
+
+    @Binds
+    fun bindMigrationScreenPresenter(presenter: MigrationScreenPresenter): Presenter<MigrationScreenState>
 }

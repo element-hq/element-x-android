@@ -13,7 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- import { screenshots } from './data.js';
+import { screenshots } from './data.js';
+
+const URL_PARAM_LANGUAGES = "l";
+const URL_PARAM_IMAGE_WIDTH = "w";
+const URL_PARAM_ALL_SCREENSHOTS = "a";
 
 // Get the base url of the current page
 const baseUrl = window.location.href.split('/').slice(0, -1).join('/');
@@ -28,16 +32,51 @@ if (isLocalHost) {
 
 const dataLanguages = screenshots[0];
 
-// Read default visible languages from the fragment
-const fragment = new URLSearchParams(window.location.hash.substring(1));
-// Get the wanted languages from the fragment, or default to "de" and "fr", and ensure "en" is always there
-const wantedLanguages = (fragment.get('languages') ? fragment.get('languages').split(',') : ['de', 'fr']) + ["en"];
+// Read the URL params
+const urlParams = new URLSearchParams(window.location.search);
 
+// Get the wanted languages from the url params, or default to "de" and "fr", and ensure "en" is always there
+const wantedLanguages = (urlParams.get(URL_PARAM_LANGUAGES) ? urlParams.get(URL_PARAM_LANGUAGES).split(',') : ['de', 'fr']) + ["en"];
 // Map dataLanguages to visibleLanguages, set to 1 if the language is in wantedLanguages, 0 otherwise
 let visibleLanguages = dataLanguages.map((language) => wantedLanguages.includes(language) ? 1 : 0);
+// Read width from the url params, and ensure it's a multiple of 25 and is between 75 and 500
+const DEFAULT_WIDTH = 300;
+const MIN_WIDTH = 75;
+const MAX_WIDTH = 500;
+const WIDTH_STEP = 25;
+let imageWidth = DEFAULT_WIDTH
+let width = urlParams.get(URL_PARAM_IMAGE_WIDTH);
+if (width) {
+    // Ensure width is an integer, if not use the default value
+    width = parseInt(width) || DEFAULT_WIDTH;
+    imageWidth = Math.max(MIN_WIDTH, Math.min(MAX_WIDTH, Math.round(width / WIDTH_STEP) * WIDTH_STEP));
+}
+// Read showAllScreenshots from the url params
+let showAllScreenshots = urlParams.get(URL_PARAM_ALL_SCREENSHOTS) === 1;
 
-let imageWidth = 300;
-let showAllScreenshots = false;
+function updatePageUrl() {
+    // Update the URL displayed in the browser without loading again the page
+    var queryParams = new URLSearchParams(window.location.search);
+    // Add the languages to the url params, without "en"
+    const lg = dataLanguages.filter((language, i) => visibleLanguages[i] == 1).filter(l => l != "en").join(',');
+    if (lg) {
+        queryParams.set(URL_PARAM_LANGUAGES, lg);
+    } else {
+        queryParams.delete(URL_PARAM_LANGUAGES);
+    }
+    if (imageWidth != DEFAULT_WIDTH) {
+        queryParams.set(URL_PARAM_IMAGE_WIDTH, imageWidth);
+    } else {
+        queryParams.delete(URL_PARAM_IMAGE_WIDTH);
+    }
+    if (showAllScreenshots) {
+        queryParams.set(URL_PARAM_ALL_SCREENSHOTS, showAllScreenshots ? 1 : 0);
+    } else {
+        queryParams.delete(URL_PARAM_ALL_SCREENSHOTS);
+    }
+    // Replace the current URL with the new one, including the fragment
+    history.replaceState(null, '', `${window.location.pathname}?${queryParams}${window.location.hash}`);
+}
 
 function addForm() {
   // Insert the form into the div with id form_container
@@ -60,6 +99,7 @@ function addForm() {
       } else {
         visibleLanguages[i] = 0;
       }
+      updatePageUrl()
       addTable();
     };
     label.appendChild(input);
@@ -76,12 +116,13 @@ function addForm() {
   const widthInput = document.createElement('input');
   widthInput.id = 'width_input';
   widthInput.type = 'number';
-  widthInput.min = 75;
-  widthInput.max = 500;
-  widthInput.step = 25;
+  widthInput.min = MIN_WIDTH;
+  widthInput.max = MAX_WIDTH;
+  widthInput.step = WIDTH_STEP;
   widthInput.value = imageWidth;
   widthInput.onchange = (e) => {
       imageWidth = e.target.value;
+      updatePageUrl();
       addTable();
   };
   form.appendChild(widthInput);
@@ -95,6 +136,7 @@ function addForm() {
   input2.checked = showAllScreenshots;
   input2.onchange = (e) => {
     showAllScreenshots = e.target.checked;
+    updatePageUrl()
     addTable();
   };
   label2.appendChild(input2);
@@ -150,9 +192,15 @@ function addTable() {
   const numVisibleLanguages = languagesHeaderRow.childElementCount
   // Next items are the data
   var currentHeaderValue = "";
+  var screenshotCounter = 0;
   for (let screenshotIndex = 1; screenshotIndex < screenshots.length; screenshotIndex++) {
     let englishFile = screenshots[screenshotIndex][0];
+    let niceName = getNiceName(englishFile);
+    if (niceName != currentHeaderValue) {
+        screenshotCounter = 0;
+    }
     const tr = document.createElement('tr');
+    tr.id = niceName + screenshotCounter;
     let hasTranslatedFiles = false;
     for (let languageIndex = 0; languageIndex < dataLanguages.length; languageIndex++) {
       if (visibleLanguages[languageIndex] == 0) {
@@ -186,20 +234,21 @@ function addTable() {
     }
     if (showAllScreenshots || hasTranslatedFiles) {
       // Add a header for row, if different from previous
-      let name = getNiceName(englishFile);
-      if (name != currentHeaderValue) {
-        currentHeaderValue = name;
+      if (niceName != currentHeaderValue) {
+        currentHeaderValue = niceName;
         const trHead = document.createElement('tr');
+        trHead.id = niceName;
         const tdHead = document.createElement('td');
         tdHead.colSpan = numVisibleLanguages;
         tdHead.className = "view-header";
-        tdHead.textContent = name;
+        tdHead.textContent = niceName;
         trHead.appendChild(tdHead);
         tbody.appendChild(trHead);
         tbody.appendChild(languagesHeaderRow.cloneNode(true));
       }
       tbody.appendChild(tr);
     }
+    screenshotCounter++;
   }
   table.appendChild(thead);
   table.appendChild(tbody);

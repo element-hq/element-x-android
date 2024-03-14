@@ -6,6 +6,7 @@
   <string name="screen_session_verification_compare_numbers_subtitle">"Conferma che i numeri seguenti corrispondano a quelli mostrati nell\'altra sessione."</string>
   <string name="screen_session_verification_compare_numbers_title">"Confronta i numeri"</string>
   <string name="screen_session_verification_complete_subtitle">"La tua nuova sessione è ora verificata. Ha accesso ai tuoi messaggi crittografati e gli altri utenti la vedranno come attendibile."</string>
+  <string name="screen_session_verification_enter_recovery_key">"Inserisci la chiave di recupero"</string>
   <string name="screen_session_verification_open_existing_session_subtitle">"Dimostra la tua identità per accedere alla cronologia dei messaggi crittografati."</string>
   <string name="screen_session_verification_open_existing_session_title">"Apri una sessione esistente"</string>
   <string name="screen_session_verification_positive_button_canceled">"Riprova la verifica"</string>

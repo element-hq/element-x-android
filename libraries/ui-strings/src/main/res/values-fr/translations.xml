@@ -49,6 +49,7 @@
   <string name="action_decline">"Refuser"</string>
   <string name="action_delete_poll">"Supprimer le sondage"</string>
   <string name="action_disable">"Désactiver"</string>
+  <string name="action_discard">"Annuler"</string>
   <string name="action_done">"Terminé"</string>
   <string name="action_edit">"Modifier"</string>
   <string name="action_edit_poll">"Modifier le sondage"</string>
@@ -57,6 +58,7 @@
   <string name="action_enter_pin">"Saisir le code PIN"</string>
   <string name="action_forgot_password">"Mot de passe oublié ?"</string>
   <string name="action_forward">"Transférer"</string>
+  <string name="action_go_back">"Retour"</string>
   <string name="action_invite">"Inviter"</string>
   <string name="action_invite_friends">"Inviter des amis"</string>
   <string name="action_invite_friends_to_app">"Inviter des amis à %1$s"</string>
@@ -84,6 +86,7 @@
   <string name="action_reply_in_thread">"Répondre dans le fil de discussion"</string>
   <string name="action_report_bug">"Signaler un problème"</string>
   <string name="action_report_content">"Signaler le contenu"</string>
+  <string name="action_reset">"Réinitialiser"</string>
   <string name="action_retry">"Réessayer"</string>
   <string name="action_retry_decryption">"Réessayer le déchiffrement"</string>
   <string name="action_save">"Enregistrer"</string>
@@ -113,6 +116,7 @@
   <string name="common_audio">"Audio"</string>
   <string name="common_blocked_users">"Utilisateurs bloqués"</string>
   <string name="common_bubbles">"Bulles"</string>
+  <string name="common_call_invite">"Appel en cours (non supporté)"</string>
   <string name="common_chat_backup">"Sauvegarde des discussions"</string>
   <string name="common_copyright">"Droits d’auteur"</string>
   <string name="common_creating_room">"Création du salon…"</string>
@@ -181,6 +185,8 @@
   <string name="common_room">"Salon"</string>
   <string name="common_room_name">"Nom du salon"</string>
   <string name="common_room_name_placeholder">"par exemple, le nom de votre projet"</string>
+  <string name="common_saved_changes">"Modifications enregistrées"</string>
+  <string name="common_saving">"Enregistrement"</string>
   <string name="common_screen_lock">"Verrouillage d’écran"</string>
   <string name="common_search_for_someone">"Rechercher quelqu’un"</string>
   <string name="common_search_results">"Résultats de la recherche"</string>
@@ -223,6 +229,8 @@
   <string name="dialog_title_error">"Erreur"</string>
   <string name="dialog_title_success">"Succès"</string>
   <string name="dialog_title_warning">"Attention"</string>
+  <string name="dialog_unsaved_changes_description_android">"Vos modifications n’ont pas été enregistrées. Êtes-vous certain de vouloir quitter?"</string>
+  <string name="dialog_unsaved_changes_title">"Enregistrer les changements?"</string>
   <string name="error_failed_creating_the_permalink">"Échec de la création du permalien"</string>
   <string name="error_failed_loading_map">"%1$s n’a pas pu charger la carte. Veuillez réessayer ultérieurement."</string>
   <string name="error_failed_loading_messages">"Échec du chargement des messages"</string>
@@ -240,6 +248,14 @@
   <string name="screen_media_picker_error_failed_selection">"Échec de la sélection du média, veuillez réessayer."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Échec du traitement des médias à télécharger, veuillez réessayer."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Échec du téléchargement du média, veuillez réessayer."</string>
+  <string name="screen_room_error_failed_processing_media">"Échec du traitement des médias à télécharger, veuillez réessayer."</string>
+  <string name="screen_room_error_failed_retrieving_user_details">"Impossible de récupérer les détails de l’utilisateur"</string>
+  <string name="screen_room_member_details_block_alert_action">"Bloquer"</string>
+  <string name="screen_room_member_details_block_alert_description">"Les utilisateurs bloqués ne pourront pas vous envoyer de messages et tous leurs messages seront masqués. Vous pouvez les débloquer à tout moment."</string>
+  <string name="screen_room_member_details_block_user">"Bloquer l’utilisateur"</string>
+  <string name="screen_room_member_details_unblock_alert_action">"Débloquer"</string>
+  <string name="screen_room_member_details_unblock_alert_description">"Vous pourrez à nouveau voir tous ses messages."</string>
+  <string name="screen_room_member_details_unblock_user">"Débloquer l’utilisateur"</string>
   <string name="screen_share_location_title">"Partage de position"</string>
   <string name="screen_share_my_location_action">"Partager ma position"</string>
   <string name="screen_share_open_apple_maps">"Ouvrir dans Apple Maps"</string>

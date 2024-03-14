@@ -11,6 +11,7 @@
   <string name="screen_advanced_settings_share_presence">"Partager la présence"</string>
   <string name="screen_advanced_settings_share_presence_description">"Si cette option est désactivée, vous ne pourrez ni envoyer ni recevoir de confirmations de lecture ni de notifications de saisie"</string>
   <string name="screen_advanced_settings_view_source_description">"Activer cette option pour pouvoir voir la source des messages dans la discussion."</string>
+  <string name="screen_blocked_users_empty">"Vous n’avez bloqué personne"</string>
   <string name="screen_blocked_users_unblock_alert_action">"Débloquer"</string>
   <string name="screen_blocked_users_unblock_alert_description">"Vous pourrez à nouveau voir tous ses messages."</string>
   <string name="screen_blocked_users_unblock_alert_title">"Débloquer l’utilisateur"</string>

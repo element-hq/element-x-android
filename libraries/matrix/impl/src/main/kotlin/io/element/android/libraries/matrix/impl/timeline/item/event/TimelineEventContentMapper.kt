@@ -20,6 +20,7 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.item.event.EventContent
 import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParseMessageLikeContent
 import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParseStateContent
+import io.element.android.libraries.matrix.api.timeline.item.event.LegacyCallInviteContent
 import io.element.android.libraries.matrix.api.timeline.item.event.MembershipChange
 import io.element.android.libraries.matrix.api.timeline.item.event.OtherState
 import io.element.android.libraries.matrix.api.timeline.item.event.PollContent
@@ -120,6 +121,7 @@ class TimelineEventContentMapper(private val eventMessageMapper: EventMessageMap
                 data = kind.msg.map()
             )
         }
+        is TimelineItemContentKind.CallInvite -> LegacyCallInviteContent
         else -> UnknownContent
     }
 }
@@ -163,7 +165,7 @@ private fun RustOtherState.map(): OtherState {
         RustOtherState.RoomJoinRules -> OtherState.RoomJoinRules
         is RustOtherState.RoomName -> OtherState.RoomName(name)
         RustOtherState.RoomPinnedEvents -> OtherState.RoomPinnedEvents
-        is RustOtherState.RoomPowerLevels -> OtherState.RoomPowerLevels(users)
+        is RustOtherState.RoomPowerLevels -> OtherState.RoomUserPowerLevels(users)
         RustOtherState.RoomServerAcl -> OtherState.RoomServerAcl
         is RustOtherState.RoomThirdPartyInvite -> OtherState.RoomThirdPartyInvite(displayName)
         RustOtherState.RoomTombstone -> OtherState.RoomTombstone

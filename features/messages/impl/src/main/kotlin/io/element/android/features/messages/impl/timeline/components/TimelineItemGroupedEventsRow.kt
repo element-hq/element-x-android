@@ -113,7 +113,7 @@ private fun TimelineItemGroupedEventsRowContent(
     Column(modifier = modifier.animateContentSize()) {
         GroupHeaderView(
             text = pluralStringResource(
-                id = R.plurals.room_timeline_state_changes,
+                id = R.plurals.screen_room_timeline_state_changes,
                 count = timelineItem.events.size,
                 timelineItem.events.size
             ),

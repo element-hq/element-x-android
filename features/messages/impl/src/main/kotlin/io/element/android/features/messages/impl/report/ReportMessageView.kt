@@ -101,14 +101,14 @@ fun ReportMessageView(
             OutlinedTextField(
                 value = state.reason,
                 onValueChange = { state.eventSink(ReportMessageEvents.UpdateReason(it)) },
-                placeholder = { Text(stringResource(R.string.report_content_hint)) },
+                placeholder = { Text(stringResource(R.string.screen_report_content_hint)) },
                 enabled = !isSending,
                 modifier = Modifier
                     .fillMaxWidth()
                     .heightIn(min = 90.dp)
             )
             Text(
-                text = stringResource(R.string.report_content_explanation),
+                text = stringResource(R.string.screen_report_content_explanation),
                 style = ElementTheme.typography.fontBodySmRegular,
                 color = MaterialTheme.colorScheme.secondary,
                 textAlign = TextAlign.Start,

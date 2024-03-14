@@ -21,6 +21,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEncryptedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemFileContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemLegacyCallInviteContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemLocationContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemPollContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemProfileChangeContent
@@ -35,6 +36,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParseMessageLikeContent
 import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParseStateContent
+import io.element.android.libraries.matrix.api.timeline.item.event.LegacyCallInviteContent
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageContent
 import io.element.android.libraries.matrix.api.timeline.item.event.PollContent
 import io.element.android.libraries.matrix.api.timeline.item.event.ProfileChangeContent
@@ -63,7 +65,8 @@ internal fun TimelineItem.Event.canBeGrouped(): Boolean {
         is TimelineItemPollContent,
         is TimelineItemVoiceContent,
         TimelineItemRedactedContent,
-        TimelineItemUnknownContent -> false
+        TimelineItemUnknownContent,
+        is TimelineItemLegacyCallInviteContent -> false
         is TimelineItemProfileChangeContent,
         is TimelineItemRoomMembershipContent,
         is TimelineItemStateEventContent -> true
@@ -77,16 +80,19 @@ internal fun TimelineItem.Event.canBeGrouped(): Boolean {
  */
 internal fun MatrixTimelineItem.Event.canBeDisplayedInBubbleBlock(): Boolean {
     return when (event.content) {
+        // Can be grouped
         is FailedToParseMessageLikeContent,
         is MessageContent,
         RedactedContent,
         is StickerContent,
         is PollContent,
         is UnableToDecryptContent -> true
+        // Can't be grouped
         is FailedToParseStateContent,
         is ProfileChangeContent,
         is RoomMembershipContent,
         UnknownContent,
+        is LegacyCallInviteContent,
         is StateContent -> false
     }
 }

@@ -3,12 +3,16 @@
   <string name="state_event_avatar_changed_too">"(l’avatar a aussi été modifié)"</string>
   <string name="state_event_avatar_url_changed">"%1$s a changé son avatar"</string>
   <string name="state_event_avatar_url_changed_by_you">"Vous avez changé d’avatar"</string>
+  <string name="state_event_demoted_to_member">"%1$s a été rétrogradé vers simple utilisateur"</string>
+  <string name="state_event_demoted_to_moderator">"%1$s a été rétrogradé vers modérateur"</string>
   <string name="state_event_display_name_changed_from">"%1$s a changé son pseudonyme de %2$s à %3$s"</string>
   <string name="state_event_display_name_changed_from_by_you">"Vous avez changé votre pseudonyme de %1$s à %2$s"</string>
   <string name="state_event_display_name_removed">"%1$s a supprimé son pseudonyme (c’était %2$s)"</string>
   <string name="state_event_display_name_removed_by_you">"Vous avez supprimé votre pseudonyme (c’était %1$s)"</string>
   <string name="state_event_display_name_set">"%1$s a défini son pseudonyme en tant que %2$s"</string>
   <string name="state_event_display_name_set_by_you">"Vous avez défini votre pseudonyme comme %1$s"</string>
+  <string name="state_event_promoted_to_administrator">"%1$s a été promu administrateur"</string>
+  <string name="state_event_promoted_to_moderator">"%1$s a été promu modérateur"</string>
   <string name="state_event_room_avatar_changed">"%1$s a changé l’avatar du salon"</string>
   <string name="state_event_room_avatar_changed_by_you">"Vous avez changé l’avatar du salon"</string>
   <string name="state_event_room_avatar_removed">"%1$s a supprimé l’avatar du salon"</string>

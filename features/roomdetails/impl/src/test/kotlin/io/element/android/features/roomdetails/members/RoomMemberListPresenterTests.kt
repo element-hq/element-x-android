@@ -30,7 +30,6 @@ import io.element.android.features.roomdetails.impl.members.aWalter
 import io.element.android.features.roomdetails.impl.members.moderation.RoomMembersModerationEvents
 import io.element.android.features.roomdetails.impl.members.moderation.aRoomMembersModerationState
 import io.element.android.features.roomdetails.members.moderation.FakeRoomMembersModerationPresenter
-import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
 import io.element.android.libraries.featureflag.api.FeatureFlagService
@@ -40,6 +39,7 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
+import io.element.android.libraries.matrix.test.room.aRoomInfo
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -54,25 +54,28 @@ class RoomMemberListPresenterTests {
     val warmUpRule = WarmUpRule()
 
     @Test
-    fun `search is done automatically on start, but is async`() = runTest {
-        val room = FakeMatrixRoom()
+    fun `member loading is done automatically on start, but is async`() = runTest {
+        val room = FakeMatrixRoom().apply {
+            // Needed to avoid discarding the loaded members as a partial and invalid result
+            givenRoomInfo(aRoomInfo(joinedMembersCount = 2))
+        }
         val presenter = createPresenter(matrixRoom = room)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             skipItems(1)
             val initialState = awaitItem()
-            assertThat(initialState.roomMembers).isInstanceOf(AsyncData.Loading::class.java)
+            assertThat(initialState.roomMembers.isLoading).isTrue()
             assertThat(initialState.searchQuery).isEmpty()
             assertThat(initialState.searchResults).isInstanceOf(SearchBarResultState.Initial::class.java)
             assertThat(initialState.isSearchActive).isFalse()
             room.givenRoomMembersState(MatrixRoomMembersState.Ready(aRoomMemberList()))
             // Skip item while the new members state is processed
             skipItems(1)
-            val loadedState = awaitItem()
-            assertThat(loadedState.roomMembers).isInstanceOf(AsyncData.Success::class.java)
-            assertThat((loadedState.roomMembers as AsyncData.Success).data.invited).isEqualTo(listOf(aVictor(), aWalter()))
-            assertThat((loadedState.roomMembers as AsyncData.Success).data.joined).isNotEmpty()
+            val loadedMembersState = awaitItem()
+            assertThat(loadedMembersState.roomMembers.isLoading).isFalse()
+            assertThat(loadedMembersState.roomMembers.invited).isEqualTo(listOf(aVictor(), aWalter()))
+            assertThat(loadedMembersState.roomMembers.joined).isNotEmpty()
         }
     }
 
@@ -85,6 +88,7 @@ class RoomMemberListPresenterTests {
             skipItems(1)
             val loadedState = awaitItem()
             loadedState.eventSink(RoomMemberListEvents.OnSearchActiveChanged(true))
+            skipItems(1)
             val searchActiveState = awaitItem()
             assertThat(searchActiveState.isSearchActive).isTrue()
         }
@@ -101,6 +105,7 @@ class RoomMemberListPresenterTests {
             loadedState.eventSink(RoomMemberListEvents.OnSearchActiveChanged(true))
             val searchActiveState = awaitItem()
             searchActiveState.eventSink(RoomMemberListEvents.UpdateSearchQuery("something"))
+            skipItems(1)
             val searchQueryUpdatedState = awaitItem()
             assertThat(searchQueryUpdatedState.searchQuery).isEqualTo("something")
             val searchSearchResultDelivered = awaitItem()
@@ -119,6 +124,7 @@ class RoomMemberListPresenterTests {
             loadedState.eventSink(RoomMemberListEvents.OnSearchActiveChanged(true))
             val searchActiveState = awaitItem()
             searchActiveState.eventSink(RoomMemberListEvents.UpdateSearchQuery("Alice"))
+            skipItems(1)
             val searchQueryUpdatedState = awaitItem()
             assertThat(searchQueryUpdatedState.searchQuery).isEqualTo("Alice")
             val searchSearchResultDelivered = awaitItem()

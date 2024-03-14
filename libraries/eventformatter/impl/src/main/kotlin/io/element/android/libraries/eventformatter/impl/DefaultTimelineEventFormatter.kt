@@ -24,6 +24,7 @@ import io.element.android.libraries.eventformatter.impl.mode.RenderingMode
 import io.element.android.libraries.matrix.api.timeline.item.event.EventTimelineItem
 import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParseMessageLikeContent
 import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParseStateContent
+import io.element.android.libraries.matrix.api.timeline.item.event.LegacyCallInviteContent
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageContent
 import io.element.android.libraries.matrix.api.timeline.item.event.PollContent
 import io.element.android.libraries.matrix.api.timeline.item.event.ProfileChangeContent
@@ -54,10 +55,13 @@ class DefaultTimelineEventFormatter @Inject constructor(
                 roomMembershipContentFormatter.format(content, senderDisplayName, isOutgoing)
             }
             is ProfileChangeContent -> {
-                profileChangeContentFormatter.format(content, senderDisplayName, isOutgoing)
+                profileChangeContentFormatter.format(content, event.sender, senderDisplayName, isOutgoing)
             }
             is StateContent -> {
                 stateContentFormatter.format(content, senderDisplayName, isOutgoing, RenderingMode.Timeline)
+            }
+            is LegacyCallInviteContent -> {
+                sp.getString(CommonStrings.common_call_invite)
             }
             RedactedContent,
             is StickerContent,

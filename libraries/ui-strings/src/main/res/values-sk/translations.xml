@@ -51,6 +51,7 @@
   <string name="action_decline">"Odmietnuť"</string>
   <string name="action_delete_poll">"Odstrániť anketu"</string>
   <string name="action_disable">"Vypnúť"</string>
+  <string name="action_discard">"Zahodiť"</string>
   <string name="action_done">"Hotovo"</string>
   <string name="action_edit">"Upraviť"</string>
   <string name="action_edit_poll">"Upraviť anketu"</string>
@@ -59,6 +60,7 @@
   <string name="action_enter_pin">"Zadajte PIN"</string>
   <string name="action_forgot_password">"Zabudnuté heslo?"</string>
   <string name="action_forward">"Preposlať"</string>
+  <string name="action_go_back">"Ísť späť"</string>
   <string name="action_invite">"Pozvať"</string>
   <string name="action_invite_friends">"Pozvať ľudí"</string>
   <string name="action_invite_friends_to_app">"Pozvať ľudí do %1$s"</string>
@@ -86,6 +88,7 @@
   <string name="action_reply_in_thread">"Odpovedať vo vlákne"</string>
   <string name="action_report_bug">"Nahlásiť chybu"</string>
   <string name="action_report_content">"Nahlásiť obsah"</string>
+  <string name="action_reset">"Obnoviť"</string>
   <string name="action_retry">"Skúsiť znova"</string>
   <string name="action_retry_decryption">"Opakovať dešifrovanie"</string>
   <string name="action_save">"Uložiť"</string>
@@ -115,6 +118,7 @@
   <string name="common_audio">"Zvuk"</string>
   <string name="common_blocked_users">"Blokovaní používatelia"</string>
   <string name="common_bubbles">"Bubliny"</string>
+  <string name="common_call_invite">"Prebieha hovor (nepodporované)"</string>
   <string name="common_chat_backup">"Záloha konverzácie"</string>
   <string name="common_copyright">"Autorské práva"</string>
   <string name="common_creating_room">"Vytváranie miestnosti…"</string>
@@ -184,6 +188,7 @@
   <string name="common_room">"Miestnosť"</string>
   <string name="common_room_name">"Názov miestnosti"</string>
   <string name="common_room_name_placeholder">"napr. názov vášho projektu"</string>
+  <string name="common_saved_changes">"Uložené zmeny"</string>
   <string name="common_saving">"Ukladá sa"</string>
   <string name="common_screen_lock">"Zámok obrazovky"</string>
   <string name="common_search_for_someone">"Vyhľadať niekoho"</string>
@@ -227,6 +232,8 @@
   <string name="dialog_title_error">"Chyba"</string>
   <string name="dialog_title_success">"Úspech"</string>
   <string name="dialog_title_warning">"Upozornenie"</string>
+  <string name="dialog_unsaved_changes_description_android">"Vaše zmeny neboli uložené. Naozaj sa chcete vrátiť?"</string>
+  <string name="dialog_unsaved_changes_title">"Uložiť zmeny?"</string>
   <string name="error_failed_creating_the_permalink">"Nepodarilo sa vytvoriť trvalý odkaz"</string>
   <string name="error_failed_loading_map">"%1$s nedokázal načítať mapu. Skúste to prosím neskôr."</string>
   <string name="error_failed_loading_messages">"Načítanie správ zlyhalo"</string>
@@ -244,6 +251,14 @@
   <string name="screen_media_picker_error_failed_selection">"Nepodarilo sa vybrať médium, skúste to prosím znova."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Nepodarilo sa spracovať médiá na odoslanie, skúste to prosím znova."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Nepodarilo sa nahrať médiá, skúste to prosím znova."</string>
+  <string name="screen_room_error_failed_processing_media">"Nepodarilo sa spracovať médiá na odoslanie, skúste to prosím znova."</string>
+  <string name="screen_room_error_failed_retrieving_user_details">"Nepodarilo sa získať údaje o používateľovi"</string>
+  <string name="screen_room_member_details_block_alert_action">"Zablokovať"</string>
+  <string name="screen_room_member_details_block_alert_description">"Blokovaní používatelia vám nebudú môcť posielať správy a všetky ich správy budú skryté. Môžete ich kedykoľvek odblokovať."</string>
+  <string name="screen_room_member_details_block_user">"Zablokovať používateľa"</string>
+  <string name="screen_room_member_details_unblock_alert_action">"Odblokovať"</string>
+  <string name="screen_room_member_details_unblock_alert_description">"Všetky správy od nich budete môcť opäť vidieť."</string>
+  <string name="screen_room_member_details_unblock_user">"Odblokovať používateľa"</string>
   <string name="screen_share_location_title">"Zdieľať polohu"</string>
   <string name="screen_share_my_location_action">"Zdieľať moju polohu"</string>
   <string name="screen_share_open_apple_maps">"Otvoriť v Apple Maps"</string>

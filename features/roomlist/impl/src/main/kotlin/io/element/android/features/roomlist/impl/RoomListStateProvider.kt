@@ -19,14 +19,12 @@ package io.element.android.features.roomlist.impl
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.leaveroom.api.LeaveRoomState
 import io.element.android.features.leaveroom.api.aLeaveRoomState
-import io.element.android.features.roomlist.impl.datasource.RoomListRoomSummaryFactory
 import io.element.android.features.roomlist.impl.filters.RoomListFiltersState
 import io.element.android.features.roomlist.impl.filters.aRoomListFiltersState
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
 import io.element.android.features.roomlist.impl.model.aRoomListRoomSummary
 import io.element.android.features.roomlist.impl.search.RoomListSearchState
 import io.element.android.features.roomlist.impl.search.aRoomListSearchState
-import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
@@ -43,15 +41,15 @@ open class RoomListStateProvider : PreviewParameterProvider<RoomListState> {
             aRoomListState(),
             aRoomListState(snackbarMessage = SnackbarMessage(CommonStrings.common_verification_complete)),
             aRoomListState(hasNetworkConnection = false),
-            aRoomListState(invitesState = InvitesState.SeenInvites),
-            aRoomListState(invitesState = InvitesState.NewInvites),
+            aRoomListState(contentState = aRoomsContentState(invitesState = InvitesState.SeenInvites)),
+            aRoomListState(contentState = aRoomsContentState(invitesState = InvitesState.NewInvites)),
             aRoomListState(contextMenu = aContextMenuShown(roomName = "A nice room name")),
             aRoomListState(contextMenu = aContextMenuShown(isFavorite = true)),
-            aRoomListState(securityBannerState = SecurityBannerState.SessionVerification),
-            aRoomListState(securityBannerState = SecurityBannerState.RecoveryKeyConfirmation),
-            aRoomListState(roomList = AsyncData.Success(persistentListOf())),
-            aRoomListState(roomList = AsyncData.Loading(prevData = RoomListRoomSummaryFactory.createFakeList())),
-            aRoomListState(matrixUser = null, displayMigrationStatus = true),
+            aRoomListState(contentState = aRoomsContentState(securityBannerState = SecurityBannerState.SessionVerification)),
+            aRoomListState(contentState = aRoomsContentState(securityBannerState = SecurityBannerState.RecoveryKeyConfirmation)),
+            aRoomListState(contentState = anEmptyContentState()),
+            aRoomListState(contentState = aSkeletonContentState()),
+            aRoomListState(matrixUser = null, contentState = aMigrationContentState()),
             aRoomListState(searchState = aRoomListSearchState(isSearchActive = true, query = "Test")),
             aRoomListState(filtersState = aRoomListFiltersState(isFeatureEnabled = true)),
         )
@@ -60,30 +58,24 @@ open class RoomListStateProvider : PreviewParameterProvider<RoomListState> {
 internal fun aRoomListState(
     matrixUser: MatrixUser? = MatrixUser(userId = UserId("@id:domain"), displayName = "User#1"),
     showAvatarIndicator: Boolean = false,
-    roomList: AsyncData<ImmutableList<RoomListRoomSummary>> = AsyncData.Success(aRoomListRoomSummaryList()),
     hasNetworkConnection: Boolean = true,
     snackbarMessage: SnackbarMessage? = null,
-    securityBannerState: SecurityBannerState = SecurityBannerState.None,
-    invitesState: InvitesState = InvitesState.NoInvites,
     contextMenu: RoomListState.ContextMenu = RoomListState.ContextMenu.Hidden,
     leaveRoomState: LeaveRoomState = aLeaveRoomState(),
     searchState: RoomListSearchState = aRoomListSearchState(),
     filtersState: RoomListFiltersState = aRoomListFiltersState(isFeatureEnabled = false),
-    displayMigrationStatus: Boolean = false,
+    contentState: RoomListContentState = aRoomsContentState(),
     eventSink: (RoomListEvents) -> Unit = {}
 ) = RoomListState(
     matrixUser = matrixUser,
     showAvatarIndicator = showAvatarIndicator,
-    roomList = roomList,
     hasNetworkConnection = hasNetworkConnection,
     snackbarMessage = snackbarMessage,
-    securityBannerState = securityBannerState,
-    invitesState = invitesState,
     contextMenu = contextMenu,
     leaveRoomState = leaveRoomState,
-    searchState = searchState,
     filtersState = filtersState,
-    displayMigrationStatus = displayMigrationStatus,
+    searchState = searchState,
+    contentState = contentState,
     eventSink = eventSink,
 )
 

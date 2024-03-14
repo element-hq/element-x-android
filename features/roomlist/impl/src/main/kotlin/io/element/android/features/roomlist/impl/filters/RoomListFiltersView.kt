@@ -16,24 +16,22 @@
 
 package io.element.android.features.roomlist.impl.filters
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
-import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -42,17 +40,14 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
-import io.element.android.libraries.designsystem.modifiers.fadingEdge
-import io.element.android.libraries.designsystem.modifiers.horizontalFadingEdgesBrush
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Icon
-import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
-import kotlinx.collections.immutable.ImmutableList
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun RoomListFiltersView(
     state: RoomListFiltersState,
@@ -62,53 +57,45 @@ fun RoomListFiltersView(
         state.eventSink(RoomListFiltersEvents.ClearSelectedFilters)
     }
 
-    fun onFilterClicked(filter: RoomListFilter) {
+    fun onToggleFilter(filter: RoomListFilter) {
         state.eventSink(RoomListFiltersEvents.ToggleFilter(filter))
     }
 
-    val startPadding = if (state.hasAnyFilterSelected) 4.dp else 16.dp
-    Row(
-        modifier = modifier.padding(start = startPadding, end = 16.dp),
+    val lazyListState = rememberLazyListState()
+    LazyRow(
+        contentPadding = PaddingValues(start = 8.dp, end = 16.dp),
+        modifier = modifier.fillMaxWidth(),
+        state = lazyListState,
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        AnimatedVisibility(visible = state.hasAnyFilterSelected) {
-            RoomListClearFiltersButton(
-                modifier = Modifier.testTag(TestTags.homeScreenClearFilters),
-                onClick = ::onClearFiltersClicked
-            )
+        item("clear_filters") {
+            if (state.hasAnyFilterSelected) {
+                RoomListClearFiltersButton(
+                    modifier = Modifier
+                        .padding(start = 8.dp)
+                        .testTag(TestTags.homeScreenClearFilters),
+                    onClick = ::onClearFiltersClicked
+                )
+            }
         }
-        val lazyListState = rememberLazyListState()
-        val fadingEdgesBrush = horizontalFadingEdgesBrush(
-            showLeft = lazyListState.canScrollBackward,
-            showRight = lazyListState.canScrollForward
-        )
-        LazyRow(
-            modifier = Modifier
-                .fillMaxWidth()
-                .fadingEdge(fadingEdgesBrush),
-            state = lazyListState,
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            roomListFilters(state.selectedFilters, selected = true, onClick = ::onFilterClicked)
-            roomListFilters(state.unselectedFilters, selected = false, onClick = ::onFilterClicked)
+        for (filterWithSelection in state.filterSelectionStates) {
+            item(filterWithSelection.filter) {
+                RoomListFilterView(
+                    modifier = Modifier.animateItemPlacement(),
+                    roomListFilter = filterWithSelection.filter,
+                    selected = filterWithSelection.isSelected,
+                    onClick = ::onToggleFilter,
+                )
+            }
         }
     }
-}
-
-@OptIn(ExperimentalFoundationApi::class)
-private fun LazyListScope.roomListFilters(
-    filters: ImmutableList<RoomListFilter>,
-    selected: Boolean,
-    onClick: (RoomListFilter) -> Unit,
-) {
-    items(
-        items = filters,
-    ) { filter ->
-        RoomListFilterView(
-            roomListFilter = filter,
-            selected = selected,
-            onClick = onClick,
-        )
+    LaunchedEffect(state.filterSelectionStates) {
+        // Checking for canScrollBackward is necessary for the itemPlacementAnimation to work correctly.
+        // We don't want the itemPlacementAnimation to be triggered when clearing the filters.
+        if (!state.hasAnyFilterSelected || lazyListState.canScrollBackward) {
+            lazyListState.animateScrollToItem(0)
+        }
     }
 }
 
@@ -117,22 +104,18 @@ private fun RoomListClearFiltersButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    IconButton(
-        modifier = modifier,
-        onClick = onClick,
+    Box(
+        modifier = modifier
+            .clip(CircleShape)
+            .background(ElementTheme.colors.bgActionPrimaryRest)
+            .clickable(onClick = onClick)
     ) {
-        Box(
-            modifier = Modifier
-                .clip(CircleShape)
-                .background(ElementTheme.colors.bgActionPrimaryRest)
-        ) {
-            Icon(
-                modifier = Modifier.align(Alignment.Center),
-                imageVector = CompoundIcons.Close(),
-                tint = ElementTheme.colors.iconOnSolidPrimary,
-                contentDescription = stringResource(id = io.element.android.libraries.ui.strings.R.string.action_clear),
-            )
-        }
+        Icon(
+            modifier = Modifier.align(Alignment.Center),
+            imageVector = CompoundIcons.Close(),
+            tint = ElementTheme.colors.iconOnSolidPrimary,
+            contentDescription = stringResource(id = io.element.android.libraries.ui.strings.R.string.action_clear),
+        )
     }
 }
 
@@ -146,9 +129,7 @@ private fun RoomListFilterView(
     FilterChip(
         selected = selected,
         onClick = { onClick(roomListFilter) },
-        modifier = modifier
-            .minimumInteractiveComponentSize()
-            .height(36.dp),
+        modifier = modifier.height(36.dp),
         shape = CircleShape,
         colors = FilterChipDefaults.filterChipColors(
             containerColor = ElementTheme.colors.bgCanvasDefault,

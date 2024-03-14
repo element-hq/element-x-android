@@ -148,7 +148,7 @@ class DefaultBugReporterTest {
             systemClock = FakeSystemClock(),
             coroutineDispatchers = testCoroutineDispatchers(),
             okHttpClient = { OkHttpClient.Builder().build() },
-            userAgentProvider = DefaultUserAgentProvider(buildMeta),
+            userAgentProvider = DefaultUserAgentProvider(buildMeta, FakeSdkMetadata("123456789")),
             sessionStore = InMemorySessionStore(),
             buildMeta = buildMeta,
             bugReporterUrlProvider = { server.url("/") },

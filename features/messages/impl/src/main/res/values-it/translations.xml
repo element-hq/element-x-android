@@ -8,17 +8,10 @@
   <string name="emoji_picker_category_people">"Faccine &amp; Persone"</string>
   <string name="emoji_picker_category_places">"Viaggi &amp; Luoghi"</string>
   <string name="emoji_picker_category_symbols">"Simboli"</string>
-  <string name="report_content_explanation">"Questo messaggio verrà segnalato all\'amministratore dell\'homeserver. Questi non sarà in grado di leggere i messaggi criptati."</string>
-  <string name="report_content_hint">"Motivo della segnalazione di questo contenuto"</string>
-  <string name="room_timeline_beginning_of_room">"Questo è l\'inizio di %1$s."</string>
-  <string name="room_timeline_beginning_of_room_no_name">"Questo è l\'inizio della conversazione."</string>
-  <string name="room_timeline_read_marker_title">"Nuovo"</string>
-  <plurals name="room_timeline_state_changes">
-    <item quantity="one">"%1$d modifica alla stanza"</item>
-    <item quantity="other">"%1$d modifiche alla stanza"</item>
-  </plurals>
   <string name="screen_report_content_block_user">"Blocca utente"</string>
   <string name="screen_report_content_block_user_hint">"Seleziona se vuoi nascondere tutti i messaggi attuali e futuri di questo utente"</string>
+  <string name="screen_report_content_explanation">"Questo messaggio verrà segnalato all\'amministratore dell\'homeserver. Questi non sarà in grado di leggere i messaggi cifrati."</string>
+  <string name="screen_report_content_hint">"Motivo della segnalazione di questo contenuto"</string>
   <string name="screen_room_attachment_source_camera">"Fotocamera"</string>
   <string name="screen_room_attachment_source_camera_photo">"Scatta foto"</string>
   <string name="screen_room_attachment_source_camera_video">"Registra video"</string>
@@ -27,37 +20,27 @@
   <string name="screen_room_attachment_source_location">"Posizione"</string>
   <string name="screen_room_attachment_source_poll">"Sondaggio"</string>
   <string name="screen_room_attachment_text_formatting">"Formattazione del testo"</string>
-  <string name="screen_room_change_permissions_everyone">"Tutti"</string>
   <string name="screen_room_encrypted_history_banner">"La cronologia dei messaggi non è attualmente disponibile."</string>
   <string name="screen_room_encrypted_history_banner_unverified">"La cronologia dei messaggi non è disponibile in questa stanza. Verifica questo dispositivo per vedere la cronologia dei messaggi."</string>
-  <string name="screen_room_error_failed_processing_media">"Elaborazione del file multimediale da caricare fallita, riprova."</string>
-  <string name="screen_room_error_failed_retrieving_user_details">"Impossibile recuperare i dettagli dell\'utente"</string>
   <string name="screen_room_invite_again_alert_message">"Vorresti invitarli di nuovo?"</string>
   <string name="screen_room_invite_again_alert_title">"Ci sei solo tu in questa chat"</string>
-  <string name="screen_room_mentions_at_room_subtitle">"Avvisa l\'intera stanza"</string>
+  <string name="screen_room_mentions_at_room_subtitle">"Notifica l\'intera stanza"</string>
   <string name="screen_room_mentions_at_room_title">"Tutti"</string>
-  <string name="screen_room_message_copied">"Messaggio copiato"</string>
-  <string name="screen_room_no_permission_to_post">"Non sei autorizzato a postare in questa stanza"</string>
-  <string name="screen_room_notification_settings_allow_custom">"Consenti impostazione personalizzata"</string>
-  <string name="screen_room_notification_settings_allow_custom_footnote">"L\'attivazione di questa opzione sovrascriverà l\'impostazione predefinita"</string>
-  <string name="screen_room_notification_settings_custom_settings_title">"Avvisami in questa chat per"</string>
-  <string name="screen_room_notification_settings_default_setting_footnote">"Puoi cambiarlo nelle tue %1$s."</string>
-  <string name="screen_room_notification_settings_default_setting_footnote_content_link">"impostazioni globali"</string>
-  <string name="screen_room_notification_settings_default_setting_title">"Impostazione predefinita"</string>
-  <string name="screen_room_notification_settings_edit_remove_setting">"Rimuovi l\'impostazione personalizzata"</string>
-  <string name="screen_room_notification_settings_error_loading_settings">"Si è verificato un errore durante il caricamento delle impostazioni di notifica."</string>
-  <string name="screen_room_notification_settings_error_restoring_default">"Ripristino della modalità predefinita fallito, riprova."</string>
-  <string name="screen_room_notification_settings_error_setting_mode">"Impossibile impostare la modalità, riprova."</string>
-  <string name="screen_room_notification_settings_mentions_only_disclaimer">"Il tuo homeserver non supporta questa opzione nelle stanze criptate, quindi non riceverai notifiche in questa stanza."</string>
-  <string name="screen_room_notification_settings_mode_all_messages">"Tutti i messaggi"</string>
-  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Solo menzioni e parole chiave"</string>
-  <string name="screen_room_notification_settings_room_custom_settings_title">"In questa stanza, avvisami per"</string>
-  <string name="screen_room_reactions_show_less">"Mostra meno"</string>
-  <string name="screen_room_reactions_show_more">"Mostra di più"</string>
   <string name="screen_room_retry_send_menu_send_again_action">"Invia di nuovo"</string>
   <string name="screen_room_retry_send_menu_title">"Il tuo messaggio non è stato inviato"</string>
   <string name="screen_room_timeline_add_reaction">"Aggiungi emoji"</string>
+  <string name="screen_room_timeline_beginning_of_room">"Questo è l\'inizio di %1$s."</string>
+  <string name="screen_room_timeline_beginning_of_room_no_name">"Questo è l\'inizio della conversazione."</string>
   <string name="screen_room_timeline_less_reactions">"Mostra meno"</string>
+  <string name="screen_room_timeline_message_copied">"Messaggio copiato"</string>
+  <string name="screen_room_timeline_no_permission_to_post">"Non sei autorizzato a postare in questa stanza"</string>
+  <string name="screen_room_timeline_reactions_show_less">"Mostra meno"</string>
+  <string name="screen_room_timeline_reactions_show_more">"Mostra di più"</string>
+  <string name="screen_room_timeline_read_marker_title">"Nuovo"</string>
+  <plurals name="screen_room_timeline_state_changes">
+    <item quantity="one">"%1$d modifica alla stanza"</item>
+    <item quantity="other">"%1$d modifiche alla stanza"</item>
+  </plurals>
   <plurals name="screen_room_typing_many_members">
     <item quantity="one">"%1$s, %2$s e %3$d altro"</item>
     <item quantity="other">"%1$s, %2$s e altri %3$d"</item>
@@ -67,5 +50,4 @@
     <item quantity="other">"%1$s stanno scrivendo"</item>
   </plurals>
   <string name="screen_room_typing_two_members">"%1$s e %2$s"</string>
-  <string name="screen_room_voice_message_tooltip">"Tieni premuto per registrare"</string>
 </resources>

@@ -50,6 +50,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEncryptedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemFileContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemLegacyCallInviteContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemLocationContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemPollContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemRedactedContent
@@ -400,6 +401,7 @@ class MessagesPresenter @AssistedInject constructor(
             is TimelineItemRedactedContent,
             is TimelineItemStateContent,
             is TimelineItemEncryptedContent,
+            is TimelineItemLegacyCallInviteContent,
             is TimelineItemUnknownContent -> null
         }
         val composerMode = MessageComposerMode.Reply(
@@ -445,7 +447,7 @@ class MessagesPresenter @AssistedInject constructor(
         clipboardHelper.copyPlainText(content)
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
-            snackbarDispatcher.post(SnackbarMessage(R.string.screen_room_message_copied))
+            snackbarDispatcher.post(SnackbarMessage(R.string.screen_room_timeline_message_copied))
         }
     }
 }

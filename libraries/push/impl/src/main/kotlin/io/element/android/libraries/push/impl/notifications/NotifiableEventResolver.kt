@@ -141,9 +141,25 @@ class NotifiableEventResolver @Inject constructor(
             }
             NotificationContent.MessageLike.CallAnswer,
             NotificationContent.MessageLike.CallCandidates,
-            NotificationContent.MessageLike.CallHangup,
-            NotificationContent.MessageLike.CallInvite -> null.also {
+            NotificationContent.MessageLike.CallHangup -> null.also {
                 Timber.tag(loggerTag.value).d("Ignoring notification for call ${content.javaClass.simpleName}")
+            }
+            is NotificationContent.MessageLike.CallInvite -> {
+                buildNotifiableMessageEvent(
+                    sessionId = userId,
+                    senderId = content.senderId,
+                    roomId = roomId,
+                    eventId = eventId,
+                    noisy = isNoisy,
+                    timestamp = this.timestamp,
+                    senderName = null,
+                    body = stringProvider.getString(CommonStrings.common_call_invite),
+                    imageUriString = fetchImageIfPresent(client)?.toString(),
+                    roomName = roomDisplayName,
+                    roomIsDirect = isDirect,
+                    roomAvatarPath = roomAvatarUrl,
+                    senderAvatarPath = senderAvatarUrl,
+                )
             }
             NotificationContent.MessageLike.KeyVerificationAccept,
             NotificationContent.MessageLike.KeyVerificationCancel,
