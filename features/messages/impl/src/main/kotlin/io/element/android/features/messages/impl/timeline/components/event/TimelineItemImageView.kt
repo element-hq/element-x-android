@@ -58,7 +58,7 @@ fun TimelineItemImageView(
 
         if (content.showCaption) {
             Spacer(modifier = Modifier.height(8.dp))
-            Box() {
+            Box {
                 EditorStyledText(
                     modifier = Modifier
                         .widthIn(min = MIN_HEIGHT_IN_DP.dp * content.aspectRatio!!, max = MAX_HEIGHT_IN_DP.dp * content.aspectRatio),
