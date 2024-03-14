@@ -18,9 +18,7 @@ package io.element.android.features.messages.impl.timeline.model.event
 
 import io.element.android.libraries.matrix.api.timeline.item.event.EventType
 
-data class TimelineItemLegacyCallInviteContent(
-    val body: String,
-) : TimelineItemEventContent {
+data object TimelineItemLegacyCallInviteContent : TimelineItemEventContent {
     override val type: String
         get() = EventType.CALL_INVITE
 }

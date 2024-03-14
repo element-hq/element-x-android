@@ -17,6 +17,7 @@
 package io.element.android.features.messages.impl.timeline.factories.event
 
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemLegacyCallInviteContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemUnknownContent
 import io.element.android.libraries.matrix.api.timeline.item.event.EventTimelineItem
 import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParseMessageLikeContent
@@ -45,7 +46,6 @@ class TimelineItemContentFactory @Inject constructor(
     private val stateFactory: TimelineItemContentStateFactory,
     private val failedToParseMessageFactory: TimelineItemContentFailedToParseMessageFactory,
     private val failedToParseStateFactory: TimelineItemContentFailedToParseStateFactory,
-    private val legacyCallInviteFactory: TimelineItemContentLegacyCallInviteFactory,
 ) {
     suspend fun create(eventTimelineItem: EventTimelineItem): TimelineItemEventContent {
         return when (val itemContent = eventTimelineItem.content) {
@@ -58,7 +58,7 @@ class TimelineItemContentFactory @Inject constructor(
             is ProfileChangeContent -> profileChangeFactory.create(eventTimelineItem)
             is RedactedContent -> redactedMessageFactory.create(itemContent)
             is RoomMembershipContent -> roomMembershipFactory.create(eventTimelineItem)
-            is LegacyCallInviteContent -> legacyCallInviteFactory.create()
+            is LegacyCallInviteContent -> TimelineItemLegacyCallInviteContent
             is StateContent -> stateFactory.create(eventTimelineItem)
             is StickerContent -> stickerFactory.create(itemContent)
             is PollContent -> pollFactory.create(eventTimelineItem, itemContent)

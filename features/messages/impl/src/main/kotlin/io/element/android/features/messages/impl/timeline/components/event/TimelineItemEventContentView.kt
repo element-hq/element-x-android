@@ -97,10 +97,7 @@ fun TimelineItemEventContentView(
             onContentLayoutChanged = onContentLayoutChanged,
             modifier = modifier
         )
-        is TimelineItemLegacyCallInviteContent -> TimelineItemLegacyCallInviteView(
-            content = content,
-            modifier = modifier,
-        )
+        is TimelineItemLegacyCallInviteContent -> TimelineItemLegacyCallInviteView(modifier = modifier)
         is TimelineItemStateContent -> TimelineItemStateView(
             content = content,
             modifier = modifier

@@ -29,7 +29,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
-import io.element.android.features.messages.impl.timeline.model.event.TimelineItemLegacyCallInviteContent
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Icon
@@ -38,7 +37,6 @@ import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
 fun TimelineItemLegacyCallInviteView(
-    content: TimelineItemLegacyCallInviteContent,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -55,7 +53,7 @@ fun TimelineItemLegacyCallInviteView(
         Text(
             color = MaterialTheme.colorScheme.secondary,
             style = ElementTheme.typography.fontBodyMdRegular,
-            text = content.body,
+            text = stringResource(CommonStrings.common_call_invite),
             textAlign = TextAlign.Center,
         )
     }
@@ -64,5 +62,5 @@ fun TimelineItemLegacyCallInviteView(
 @PreviewsDayNight
 @Composable
 internal fun TimelineItemLegacyCallInviteViewPreview() = ElementPreview {
-    TimelineItemLegacyCallInviteView(content = TimelineItemLegacyCallInviteContent(stringResource(CommonStrings.common_call_invite)))
+    TimelineItemLegacyCallInviteView()
 }

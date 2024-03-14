@@ -20,7 +20,6 @@ import io.element.android.features.messages.impl.timeline.factories.TimelineItem
 import io.element.android.features.messages.impl.timeline.factories.event.TimelineItemContentFactory
 import io.element.android.features.messages.impl.timeline.factories.event.TimelineItemContentFailedToParseMessageFactory
 import io.element.android.features.messages.impl.timeline.factories.event.TimelineItemContentFailedToParseStateFactory
-import io.element.android.features.messages.impl.timeline.factories.event.TimelineItemContentLegacyCallInviteFactory
 import io.element.android.features.messages.impl.timeline.factories.event.TimelineItemContentMessageFactory
 import io.element.android.features.messages.impl.timeline.factories.event.TimelineItemContentPollFactory
 import io.element.android.features.messages.impl.timeline.factories.event.TimelineItemContentProfileChangeFactory
@@ -43,7 +42,6 @@ import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.timeline.item.event.EventTimelineItem
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.mediaviewer.api.util.FileExtensionExtractorWithoutValidation
-import io.element.android.services.toolbox.test.strings.FakeStringProvider
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.test.TestScope
 
@@ -72,7 +70,6 @@ internal fun TestScope.aTimelineItemsFactory(): TimelineItemsFactory {
                 stateFactory = TimelineItemContentStateFactory(timelineEventFormatter),
                 failedToParseMessageFactory = TimelineItemContentFailedToParseMessageFactory(),
                 failedToParseStateFactory = TimelineItemContentFailedToParseStateFactory(),
-                legacyCallInviteFactory = TimelineItemContentLegacyCallInviteFactory(FakeStringProvider()),
             ),
             matrixClient = matrixClient,
             lastMessageTimestampFormatter = FakeLastMessageTimestampFormatter(),
