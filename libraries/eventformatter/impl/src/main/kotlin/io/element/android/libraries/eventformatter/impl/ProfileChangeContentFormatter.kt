@@ -16,6 +16,7 @@
 
 package io.element.android.libraries.eventformatter.impl
 
+import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.item.event.ProfileChangeContent
 import io.element.android.services.toolbox.api.strings.StringProvider
 import javax.inject.Inject
@@ -25,6 +26,7 @@ class ProfileChangeContentFormatter @Inject constructor(
 ) {
     fun format(
         profileChangeContent: ProfileChangeContent,
+        senderId: UserId,
         senderDisplayName: String,
         senderIsYou: Boolean,
     ): String? = profileChangeContent.run {
@@ -32,7 +34,7 @@ class ProfileChangeContentFormatter @Inject constructor(
         val avatarChanged = avatarUrl != prevAvatarUrl
         return when {
             avatarChanged && displayNameChanged -> {
-                val message = format(profileChangeContent.copy(avatarUrl = null, prevAvatarUrl = null), senderDisplayName, senderIsYou)
+                val message = format(profileChangeContent.copy(avatarUrl = null, prevAvatarUrl = null), senderId, senderDisplayName, senderIsYou)
                 val avatarChangedToo = sp.getString(R.string.state_event_avatar_changed_too)
                 "$message\n$avatarChangedToo"
             }
@@ -41,19 +43,19 @@ class ProfileChangeContentFormatter @Inject constructor(
                     if (senderIsYou) {
                         sp.getString(R.string.state_event_display_name_changed_from_by_you, prevDisplayName, displayName)
                     } else {
-                        sp.getString(R.string.state_event_display_name_changed_from, senderDisplayName, prevDisplayName, displayName)
+                        sp.getString(R.string.state_event_display_name_changed_from, senderId.value, prevDisplayName, displayName)
                     }
                 } else if (displayName != null) {
                     if (senderIsYou) {
                         sp.getString(R.string.state_event_display_name_set_by_you, displayName)
                     } else {
-                        sp.getString(R.string.state_event_display_name_set, senderDisplayName, displayName)
+                        sp.getString(R.string.state_event_display_name_set, senderId.value, displayName)
                     }
                 } else {
                     if (senderIsYou) {
                         sp.getString(R.string.state_event_display_name_removed_by_you, prevDisplayName)
                     } else {
-                        sp.getString(R.string.state_event_display_name_removed, senderDisplayName, prevDisplayName)
+                        sp.getString(R.string.state_event_display_name_removed, senderId.value, prevDisplayName)
                     }
                 }
             }

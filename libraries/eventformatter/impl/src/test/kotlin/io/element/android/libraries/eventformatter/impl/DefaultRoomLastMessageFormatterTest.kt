@@ -733,7 +733,7 @@ class DefaultRoomLastMessageFormatterTest {
 
         val someoneChangedDisplayNameEvent = createRoomEvent(sentByYou = false, senderDisplayName = otherName, content = changedContent)
         val someoneChangedDisplayName = formatter.format(someoneChangedDisplayNameEvent, false)
-        assertThat(someoneChangedDisplayName).isEqualTo("$otherName changed their display name from $oldDisplayName to $newDisplayName")
+        assertThat(someoneChangedDisplayName).isEqualTo("$someoneElseId changed their display name from $oldDisplayName to $newDisplayName")
 
         val youSetDisplayNameEvent = createRoomEvent(sentByYou = true, senderDisplayName = null, content = setContent)
         val youSetDisplayName = formatter.format(youSetDisplayNameEvent, false)
@@ -741,7 +741,7 @@ class DefaultRoomLastMessageFormatterTest {
 
         val someoneSetDisplayNameEvent = createRoomEvent(sentByYou = false, senderDisplayName = otherName, content = setContent)
         val someoneSetDisplayName = formatter.format(someoneSetDisplayNameEvent, false)
-        assertThat(someoneSetDisplayName).isEqualTo("$otherName set their display name to $newDisplayName")
+        assertThat(someoneSetDisplayName).isEqualTo("$someoneElseId set their display name to $newDisplayName")
 
         val youRemovedDisplayNameEvent = createRoomEvent(sentByYou = true, senderDisplayName = null, content = removedContent)
         val youRemovedDisplayName = formatter.format(youRemovedDisplayNameEvent, false)
@@ -749,7 +749,7 @@ class DefaultRoomLastMessageFormatterTest {
 
         val someoneRemovedDisplayNameEvent = createRoomEvent(sentByYou = false, senderDisplayName = otherName, content = removedContent)
         val someoneRemovedDisplayName = formatter.format(someoneRemovedDisplayNameEvent, false)
-        assertThat(someoneRemovedDisplayName).isEqualTo("$otherName removed their display name (it was $oldDisplayName)")
+        assertThat(someoneRemovedDisplayName).isEqualTo("$someoneElseId removed their display name (it was $oldDisplayName)")
 
         val unchangedEvent = createRoomEvent(sentByYou = true, senderDisplayName = otherName, content = sameContent)
         val unchangedResult = formatter.format(unchangedEvent, false)
@@ -828,7 +828,7 @@ class DefaultRoomLastMessageFormatterTest {
     // endregion
 
     private fun createRoomEvent(sentByYou: Boolean, senderDisplayName: String?, content: EventContent): EventTimelineItem {
-        val sender = if (sentByYou) A_USER_ID else UserId("@someone_else:domain")
+        val sender = if (sentByYou) A_USER_ID else someoneElseId
         val profile = ProfileTimelineDetails.Ready(senderDisplayName, false, null)
         return anEventTimelineItem(
             content = content,
@@ -837,4 +837,6 @@ class DefaultRoomLastMessageFormatterTest {
             isOwn = sentByYou,
         )
     }
+
+    private val someoneElseId = UserId("@someone_else:domain")
 }
