@@ -47,7 +47,6 @@ jobs:
         uses: gradle/actions/setup-gradle@v3
         with:
           cache-read-only: ${{ github.ref != 'refs/heads/develop' }}
-          gradle-home-cache-cleanup: ${{ github.ref == 'refs/heads/develop' }}
 
       - name: ⚙️ Run unit tests, debug and release
         run: ./gradlew test $CI_GRADLE_ARG_PROPERTIES
