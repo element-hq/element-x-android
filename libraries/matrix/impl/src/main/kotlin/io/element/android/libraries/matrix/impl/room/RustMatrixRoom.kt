@@ -162,7 +162,8 @@ class RustMatrixRoom(
 
     init {
         timeline.membershipChangeEventReceived
-            .onEach { roomMemberListFetcher.fetchRoomMembers() }
+            // The new events should already be in the SDK cache, no need to fetch them from the server
+            .onEach { roomMemberListFetcher.fetchRoomMembers(source = RoomMemberListFetcher.Source.CACHE) }
             .launchIn(roomCoroutineScope)
     }
 
@@ -219,7 +220,15 @@ class RustMatrixRoom(
     override val activeMemberCount: Long
         get() = innerRoom.activeMembersCount().toLong()
 
-    override suspend fun updateMembers() = roomMemberListFetcher.fetchRoomMembers()
+    override suspend fun updateMembers() {
+        val useCache = membersStateFlow.value is MatrixRoomMembersState.Unknown
+        val source = if (useCache) {
+            RoomMemberListFetcher.Source.CACHE_AND_SERVER
+        } else {
+            RoomMemberListFetcher.Source.SERVER
+        }
+        roomMemberListFetcher.fetchRoomMembers(source = source)
+    }
 
     override suspend fun userDisplayName(userId: UserId): Result<String?> = withContext(roomDispatcher) {
         runCatching {
