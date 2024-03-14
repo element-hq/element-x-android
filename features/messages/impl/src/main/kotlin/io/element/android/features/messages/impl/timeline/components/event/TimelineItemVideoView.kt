@@ -52,11 +52,11 @@ fun TimelineItemVideoView(
     modifier: Modifier = Modifier,
 ) {
     val description = stringResource(CommonStrings.common_image)
-    Column()
-    {
+    Column(
+        modifier = modifier.semantics { contentDescription = description }
+    ) {
         TimelineItemAspectRatioBox(
             aspectRatio = content.aspectRatio,
-            modifier = modifier.semantics { contentDescription = description },
             contentAlignment = Alignment.Center,
         ) {
             BlurHashAsyncImage(
