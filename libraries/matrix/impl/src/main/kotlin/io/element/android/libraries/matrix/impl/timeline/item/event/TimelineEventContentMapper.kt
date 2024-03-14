@@ -20,6 +20,7 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.item.event.EventContent
 import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParseMessageLikeContent
 import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParseStateContent
+import io.element.android.libraries.matrix.api.timeline.item.event.LegacyCallInviteContent
 import io.element.android.libraries.matrix.api.timeline.item.event.MembershipChange
 import io.element.android.libraries.matrix.api.timeline.item.event.OtherState
 import io.element.android.libraries.matrix.api.timeline.item.event.PollContent
@@ -120,6 +121,7 @@ class TimelineEventContentMapper(private val eventMessageMapper: EventMessageMap
                 data = kind.msg.map()
             )
         }
+        is TimelineItemContentKind.CallInvite -> LegacyCallInviteContent
         else -> UnknownContent
     }
 }

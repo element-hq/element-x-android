@@ -152,9 +152,11 @@ class RoomGroupMessageCreator @Inject constructor(
     private fun createFirstMessageSummaryLine(event: NotifiableMessageEvent, roomName: String, roomIsDirect: Boolean): CharSequence {
         return if (roomIsDirect) {
             buildSpannedString {
-                inSpans(StyleSpan(Typeface.BOLD)) {
-                    append(event.senderName)
-                    append(": ")
+                event.senderName?.let {
+                    inSpans(StyleSpan(Typeface.BOLD)) {
+                        append(it)
+                        append(": ")
+                    }
                 }
                 append(event.description)
             }
@@ -163,8 +165,10 @@ class RoomGroupMessageCreator @Inject constructor(
                 inSpans(StyleSpan(Typeface.BOLD)) {
                     append(roomName)
                     append(": ")
-                    append(event.senderName)
-                    append(" ")
+                    event.senderName?.let {
+                        append(it)
+                        append(" ")
+                    }
                 }
                 append(event.description)
             }

@@ -49,7 +49,9 @@ data class NotificationData(
 sealed interface NotificationContent {
     sealed interface MessageLike : NotificationContent {
         data object CallAnswer : MessageLike
-        data object CallInvite : MessageLike
+        data class CallInvite(
+            val senderId: UserId,
+        ) : MessageLike
         data object CallHangup : MessageLike
         data object CallCandidates : MessageLike
         data object KeyVerificationReady : MessageLike

@@ -78,7 +78,7 @@ private fun MessageLikeEventContent.toContent(senderId: UserId): NotificationCon
             MessageLikeEventContent.CallAnswer -> NotificationContent.MessageLike.CallAnswer
             MessageLikeEventContent.CallCandidates -> NotificationContent.MessageLike.CallCandidates
             MessageLikeEventContent.CallHangup -> NotificationContent.MessageLike.CallHangup
-            MessageLikeEventContent.CallInvite -> NotificationContent.MessageLike.CallInvite
+            MessageLikeEventContent.CallInvite -> NotificationContent.MessageLike.CallInvite(senderId)
             MessageLikeEventContent.KeyVerificationAccept -> NotificationContent.MessageLike.KeyVerificationAccept
             MessageLikeEventContent.KeyVerificationCancel -> NotificationContent.MessageLike.KeyVerificationCancel
             MessageLikeEventContent.KeyVerificationDone -> NotificationContent.MessageLike.KeyVerificationDone

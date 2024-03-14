@@ -21,6 +21,7 @@ import androidx.compose.ui.Modifier
 import io.element.android.features.messages.impl.timeline.TimelineEvents
 import io.element.android.features.messages.impl.timeline.TimelineRoomInfo
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemLegacyCallInviteContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStateContent
 import io.element.android.features.messages.impl.timeline.session.SessionState
 import io.element.android.libraries.matrix.api.core.EventId
@@ -56,7 +57,7 @@ internal fun TimelineItemRow(
             )
         }
         is TimelineItem.Event -> {
-            if (timelineItem.content is TimelineItemStateContent) {
+            if (timelineItem.content is TimelineItemStateContent || timelineItem.content is TimelineItemLegacyCallInviteContent) {
                 TimelineItemStateEventRow(
                     event = timelineItem,
                     renderReadReceipts = renderReadReceipts,

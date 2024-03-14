@@ -98,4 +98,6 @@ data class FailedToParseStateContent(
     val error: String
 ) : EventContent
 
+data object LegacyCallInviteContent : EventContent
+
 data object UnknownContent : EventContent
