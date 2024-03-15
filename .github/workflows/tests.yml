@@ -48,7 +48,7 @@ jobs:
         with:
           cache-read-only: ${{ github.ref != 'refs/heads/develop' }}
 
-      - name: ⚙️ Run unit tests, debug and release
+      - name: ⚙️ Run unit tests for debug variant
         run: ./gradlew testDebugUnitTest $CI_GRADLE_ARG_PROPERTIES
 
       - name: 📸 Run screenshot tests
