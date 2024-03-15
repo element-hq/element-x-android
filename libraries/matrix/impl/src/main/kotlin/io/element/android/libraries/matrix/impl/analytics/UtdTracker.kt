@@ -28,10 +28,12 @@ class UtdTracker @Inject constructor(
 ) : UnableToDecryptDelegate {
     override fun onUtd(info: UnableToDecryptInfo) {
         Timber.d("onUtd for event ${info.eventId}, timeToDecryptMs: ${info.timeToDecryptMs}")
-        // TODO info will contain more information in the future, so that the app can report more precise data to the analytics.
         val event = Error(
             context = null,
+            // Keep cryptoModule for compatibility.
             cryptoModule = Error.CryptoModule.Rust,
+            cryptoSDK = Error.CryptoSDK.Rust,
+            timeToDecryptMillis = info.timeToDecryptMs?.toInt() ?: -1,
             domain = Error.Domain.E2EE,
             // TODO get a more specific error name from `info`
             name = Error.Name.OlmKeysNotSentError,
