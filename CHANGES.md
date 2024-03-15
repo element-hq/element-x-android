@@ -1,3 +1,30 @@
+Changes in Element X v0.4.6 (2024-03-15)
+========================================
+
+Features ✨
+----------
+ - Admins can now change user roles in rooms. ([#2257](https://github.com/element-hq/element-x-android/issues/2257))
+ - Room member moderation: remove, ban and unban users from a room. ([#2258](https://github.com/element-hq/element-x-android/issues/2258))
+ - Change a room's permissions power levels. ([#2259](https://github.com/element-hq/element-x-android/issues/2259))
+ - Add state timeline events and notifications for legacy call invites. ([#2485](https://github.com/element-hq/element-x-android/issues/2485))
+
+Bugfixes 🐛
+----------
+ - Added empty state to banned member list. ([#+add-empty-state-to-banned-members-list](https://github.com/element-hq/element-x-android/issues/+add-empty-state-to-banned-members-list))
+ - Prevent sending empty messages. ([#995](https://github.com/element-hq/element-x-android/issues/995))
+ - Use the display name only once in display name change events. The user should be referenced by `userId` instead. ([#2125](https://github.com/element-hq/element-x-android/issues/2125))
+ - Hide blocked users list when there are no blocked users. ([#2198](https://github.com/element-hq/element-x-android/issues/2198))
+ - Fix timeline not showing sender info when room is marked as direct but not a 1:1 room. ([#2530](https://github.com/element-hq/element-x-android/issues/2530))
+
+Other changes
+-------------
+ - Add `local_time`, `utc_time` and `sdk_sha` params to bug reports so they're easier to investigate. ([#+add-time-and-sdk-sha-params-to-bugreports](https://github.com/element-hq/element-x-android/issues/+add-time-and-sdk-sha-params-to-bugreports))
+ - Improve room member list loading times, increase chunk size ([#2322](https://github.com/element-hq/element-x-android/issues/2322))
+ - Improve room member list loading UX. ([#2452](https://github.com/element-hq/element-x-android/issues/2452))
+ - Remove the special log level for the Rust SDK read receipts. ([#2511](https://github.com/element-hq/element-x-android/issues/2511))
+ - Track UTD errors. ([#2544](https://github.com/element-hq/element-x-android/issues/2544))
+
+
 Changes in Element X v0.4.5 (2024-02-28)
 ========================================
 
