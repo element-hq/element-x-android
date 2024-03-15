@@ -49,6 +49,7 @@
   <string name="action_decline">"Rifiuta"</string>
   <string name="action_delete_poll">"Elimina sondaggio"</string>
   <string name="action_disable">"Disabilita"</string>
+  <string name="action_discard">"Annulla"</string>
   <string name="action_done">"Fine"</string>
   <string name="action_edit">"Modifica"</string>
   <string name="action_edit_poll">"Modifica sondaggio"</string>
@@ -142,7 +143,7 @@
   <string name="common_in_reply_to">"In risposta a %1$s"</string>
   <string name="common_install_apk_android">"Installa APK"</string>
   <string name="common_invite_unknown_profile">"Questo ID Matrix non può essere trovato, quindi l\'invito potrebbe non essere ricevuto."</string>
-  <string name="common_leaving_room">"Lasciando la stanza"</string>
+  <string name="common_leaving_room">"Lascio la stanza"</string>
   <string name="common_light">"Chiaro"</string>
   <string name="common_link_copied_to_clipboard">"Collegamento copiato negli appunti"</string>
   <string name="common_loading">"Caricamento…"</string>

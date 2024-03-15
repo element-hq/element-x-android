@@ -13,7 +13,7 @@
   <string name="screen_advanced_settings_view_source_description">"Option aktiveren, um Nachrichtenquelle in der Zeitleiste anzuzeigen."</string>
   <string name="screen_blocked_users_empty">"Du hast keine blockierten Nutzer"</string>
   <string name="screen_blocked_users_unblock_alert_action">"Blockierung aufheben"</string>
-  <string name="screen_blocked_users_unblock_alert_description">"Du kannst dann wieder alle Nachrichten von ihnen sehen."</string>
+  <string name="screen_blocked_users_unblock_alert_description">"Der Nutzer kann dir wieder Nachrichten senden &amp; alle Nachrichten des Nutzers werden wieder angezeigt."</string>
   <string name="screen_blocked_users_unblock_alert_title">"Blockierung aufheben"</string>
   <string name="screen_blocked_users_unblocking">"Blockierung wird aufgehoben…"</string>
   <string name="screen_edit_profile_display_name">"Anzeigename"</string>
