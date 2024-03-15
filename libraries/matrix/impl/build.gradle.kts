@@ -53,6 +53,7 @@ dependencies {
     testImplementation(libs.test.junit)
     testImplementation(libs.test.truth)
     testImplementation(projects.libraries.matrix.test)
+    testImplementation(projects.services.analytics.test)
     testImplementation(libs.coroutines.test)
     testImplementation(libs.test.turbine)
 }
