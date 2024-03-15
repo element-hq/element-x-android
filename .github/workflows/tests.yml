@@ -49,13 +49,13 @@ jobs:
           cache-read-only: ${{ github.ref != 'refs/heads/develop' }}
 
       - name: ⚙️ Run unit tests, debug and release
-        run: ./gradlew test $CI_GRADLE_ARG_PROPERTIES
+        run: ./gradlew testDebugUnitTest $CI_GRADLE_ARG_PROPERTIES
 
       - name: 📸 Run screenshot tests
         run: ./gradlew verifyPaparazziDebug $CI_GRADLE_ARG_PROPERTIES
 
       - name: 📈Generate kover report and verify coverage
-        run: ./gradlew :app:koverHtmlReport :app:koverXmlReport :app:koverVerify $CI_GRADLE_ARG_PROPERTIES -Pci-build=true
+        run: ./gradlew :app:koverHtmlReportGplayDebug :app:koverXmlReportGplayDebug :app:koverVerifyGplayDebug $CI_GRADLE_ARG_PROPERTIES
 
       - name: 🚫 Upload kover failed coverage reports
         if: failure()
