@@ -16,6 +16,7 @@
 
 package io.element.android.libraries.matrix.api.core
 
+import io.element.android.libraries.androidutils.metadata.isInDebug
 import io.element.android.libraries.matrix.api.BuildConfig
 import timber.log.Timber
 
@@ -217,7 +218,7 @@ object MatrixPatterns {
      * - "@bob:domain.org:3455".getDomain() will return "domain.org:3455"
      */
     fun String.getServerName(): String {
-        if (BuildConfig.DEBUG && !isUserId(this)) {
+        if (isInDebug.get() == true && !isUserId(this)) {
             // They are some invalid userId localpart in the wild, but the domain part should be there anyway
             Timber.w("Not a valid user ID: $this")
         }

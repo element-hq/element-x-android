@@ -30,6 +30,7 @@ dependencies {
     implementation(libs.test.junit)
     implementation(libs.test.truth)
     implementation(libs.coroutines.test)
+    implementation(projects.libraries.androidutils)
     implementation(projects.libraries.architecture)
     implementation(projects.libraries.core)
     implementation(projects.libraries.uiStrings)

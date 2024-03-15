@@ -20,6 +20,10 @@ plugins {
 
 android {
     namespace = "io.element.android.libraries.androidutils"
+
+    buildFeatures {
+        buildConfig = true
+    }
 }
 
 anvil {
