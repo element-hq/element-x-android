@@ -100,6 +100,11 @@ fun BlockedUsersView(
                     }
                 }
             }
+            is AsyncAction.Success -> {
+                LaunchedEffect(state.unblockUserAction) {
+                    asyncIndicatorState.clear()
+                }
+            }
             is AsyncAction.Confirming -> {
                 ConfirmationDialog(
                     title = stringResource(R.string.screen_blocked_users_unblock_alert_title),
