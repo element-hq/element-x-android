@@ -63,7 +63,7 @@ jobs:
         with:
           name: linting-report
           path: |
-            */build/reports/**/*.*
+            **/build/reports/**/*.*
       - name: Prepare Danger
         if: always()
         run: |
