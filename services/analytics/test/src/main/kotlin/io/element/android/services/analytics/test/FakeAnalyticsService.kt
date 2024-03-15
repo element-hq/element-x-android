@@ -31,6 +31,7 @@ class FakeAnalyticsService(
     private val isEnabledFlow = MutableStateFlow(isEnabled)
     private val didAskUserConsentFlow = MutableStateFlow(didAskUserConsent)
     val capturedEvents = mutableListOf<VectorAnalyticsEvent>()
+    val screenEvents = mutableListOf<VectorAnalyticsScreen>()
     val trackedErrors = mutableListOf<Throwable>()
 
     override fun getAvailableAnalyticsProviders(): Set<AnalyticsProvider> = emptySet()
@@ -60,6 +61,7 @@ class FakeAnalyticsService(
     }
 
     override fun screen(screen: VectorAnalyticsScreen) {
+        screenEvents += screen
     }
 
     override fun updateUserProperties(userProperties: UserProperties) {

@@ -39,6 +39,8 @@ class UtdTrackerTest {
                 name = Error.Name.OlmKeysNotSentError
             )
         )
+        assertThat(fakeAnalyticsService.screenEvents).isEmpty()
+        assertThat(fakeAnalyticsService.trackedErrors).isEmpty()
     }
 
     @Test
@@ -56,5 +58,7 @@ class UtdTrackerTest {
                 name = Error.Name.OlmKeysNotSentError
             )
         )
+        assertThat(fakeAnalyticsService.screenEvents).isEmpty()
+        assertThat(fakeAnalyticsService.trackedErrors).isEmpty()
     }
 }
