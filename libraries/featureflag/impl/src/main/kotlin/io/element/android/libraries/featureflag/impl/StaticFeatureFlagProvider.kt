@@ -39,7 +39,7 @@ class StaticFeatureFlagProvider @Inject constructor() :
                 FeatureFlags.VoiceMessages -> true
                 FeatureFlags.PinUnlock -> true
                 FeatureFlags.Mentions -> true
-                FeatureFlags.MarkAsUnread -> false
+                FeatureFlags.MarkAsUnread -> true
                 FeatureFlags.RoomListFilters -> false
                 FeatureFlags.RoomModeration -> false
             }
