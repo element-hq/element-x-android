@@ -18,6 +18,7 @@ package io.element.android.libraries.matrix.impl
 
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.di.CacheDirectory
+import io.element.android.libraries.matrix.impl.analytics.UtdTracker
 import io.element.android.libraries.matrix.impl.certificates.UserCertificatesProvider
 import io.element.android.libraries.matrix.impl.proxy.ProxyProvider
 import io.element.android.libraries.network.useragent.UserAgentProvider
@@ -42,6 +43,7 @@ class RustMatrixClientFactory @Inject constructor(
     private val userCertificatesProvider: UserCertificatesProvider,
     private val proxyProvider: ProxyProvider,
     private val clock: SystemClock,
+    private val utdTracker: UtdTracker,
 ) {
     suspend fun create(sessionData: SessionData): RustMatrixClient = withContext(coroutineDispatchers.io) {
         val client = ClientBuilder()
@@ -68,6 +70,7 @@ class RustMatrixClientFactory @Inject constructor(
         client.restoreSession(sessionData.toSession())
 
         val syncService = client.syncService()
+            .withUtdHook(utdTracker)
             .finish()
 
         RustMatrixClient(
