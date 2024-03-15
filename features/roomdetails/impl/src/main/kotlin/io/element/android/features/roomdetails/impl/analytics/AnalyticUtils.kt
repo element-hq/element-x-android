@@ -51,7 +51,7 @@ internal fun AnalyticsService.trackPermissionChangeAnalytics(initial: MatrixRoom
         capture(RoomModeration(RoomModeration.Action.ChangePermissionsRoomName, analyticsMemberRoleForPowerLevel(updated.roomName)))
     }
     if (updated.roomAvatar != initial?.roomAvatar) {
-        capture(RoomModeration(RoomModeration.Action.ChangePermissionsRoomAvatar, analyticsMemberRoleForPowerLevel(updated.roomTopic)))
+        capture(RoomModeration(RoomModeration.Action.ChangePermissionsRoomAvatar, analyticsMemberRoleForPowerLevel(updated.roomAvatar)))
     }
     if (updated.roomTopic != initial?.roomTopic) {
         capture(RoomModeration(RoomModeration.Action.ChangePermissionsRoomTopic, analyticsMemberRoleForPowerLevel(updated.roomTopic)))

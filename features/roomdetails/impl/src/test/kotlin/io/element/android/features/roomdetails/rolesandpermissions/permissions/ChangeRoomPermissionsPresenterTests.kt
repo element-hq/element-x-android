@@ -191,8 +191,18 @@ class ChangeRoomPermissionsPresenterTests {
                 assertThat(currentPermissions?.roomName).isEqualTo(MODERATOR.powerLevel)
                 assertThat(saveAction).isEqualTo(AsyncAction.Success(Unit))
             }
-            assertThat(analyticsService.capturedEvents).hasSize(8)
-            assertThat(analyticsService.capturedEvents.all { it is RoomModeration }).isTrue()
+            assertThat(analyticsService.capturedEvents).containsExactlyElementsIn(
+                listOf(
+                    RoomModeration(RoomModeration.Action.ChangePermissionsRoomName, RoomModeration.Role.Moderator),
+                    RoomModeration(RoomModeration.Action.ChangePermissionsRoomAvatar, RoomModeration.Role.Moderator),
+                    RoomModeration(RoomModeration.Action.ChangePermissionsRoomTopic, RoomModeration.Role.Moderator),
+                    RoomModeration(RoomModeration.Action.ChangePermissionsSendMessages, RoomModeration.Role.Moderator),
+                    RoomModeration(RoomModeration.Action.ChangePermissionsRedactMessages, RoomModeration.Role.User),
+                    RoomModeration(RoomModeration.Action.ChangePermissionsKickMembers, RoomModeration.Role.Administrator),
+                    RoomModeration(RoomModeration.Action.ChangePermissionsBanMembers, RoomModeration.Role.Administrator),
+                    RoomModeration(RoomModeration.Action.ChangePermissionsInviteUsers, RoomModeration.Role.Administrator),
+                )
+            )
         }
     }
 
