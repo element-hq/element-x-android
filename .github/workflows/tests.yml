@@ -55,7 +55,7 @@ jobs:
         run: ./gradlew verifyPaparazziDebug $CI_GRADLE_ARG_PROPERTIES
 
       - name: 📈Generate kover report and verify coverage
-        run: ./gradlew :app:koverHtmlReportGplayDebug :app:koverXmlReportGplayDebug :app:koverVerifyGplayDebug $CI_GRADLE_ARG_PROPERTIES
+        run: ./gradlew :app:koverXmlReportGplayDebug :app:koverHtmlReportGplayDebug  :app:koverVerifyGplayDebug $CI_GRADLE_ARG_PROPERTIES
 
       - name: 🚫 Upload kover failed coverage reports
         if: failure()
@@ -63,7 +63,7 @@ jobs:
         with:
           name: kover-error-report
           path: |
-            app/build/reports/kover/verify.err
+            app/build/reports/kover/verifyGplayDebug.err
 
       - name: ✅ Upload kover report (disabled)
         if: always()
@@ -85,5 +85,5 @@ jobs:
         with:
           fail_ci_if_error: true
           token: ${{ secrets.CODECOV_TOKEN }}
-#        with:
-#          files: build/reports/kover/xml/report.xml
+          files: app/build/reports/kover/reportGplayDebug.xml
+          verbose: true
