@@ -92,13 +92,6 @@ class RoomDetailsPresenter @Inject constructor(
             }
         }
 
-        // Update room members only when first presenting the node
-        OnLifecycleEvent { _, event ->
-            if (event == Lifecycle.Event.ON_CREATE) {
-                scope.launch { room.updateMembers() }
-            }
-        }
-
         val membersState by room.membersStateFlow.collectAsState()
         val canInvite by getCanInvite(membersState)
         val canEditName by getCanSendState(membersState, StateEventType.ROOM_NAME)
