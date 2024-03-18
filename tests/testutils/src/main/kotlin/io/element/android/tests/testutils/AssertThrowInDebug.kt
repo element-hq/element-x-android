@@ -23,7 +23,7 @@ import org.junit.Assert.assertThrows
  * Assert that the lambda throws only on debug mode.
  */
 fun assertThrowsInDebug(lambda: () -> Any?) {
-    if (isInDebug.get() == true) {
+    if (isInDebug) {
         assertThrows(IllegalStateException::class.java) {
             lambda()
         }

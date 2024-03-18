@@ -22,7 +22,7 @@ import java.io.Serializable
 @JvmInline
 value class SpaceId(val value: String) : Serializable {
     init {
-        if (isInDebug.get() == true && !MatrixPatterns.isSpaceId(value)) {
+        if (isInDebug && !MatrixPatterns.isSpaceId(value)) {
             error(
                 "`$value` is not a valid space id.\n" +
                     "Space ids are the same as room ids.\n" +

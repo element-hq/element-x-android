@@ -22,7 +22,7 @@ import java.io.Serializable
 @JvmInline
 value class ThreadId(val value: String) : Serializable {
     init {
-        if (isInDebug.get() == true && !MatrixPatterns.isThreadId(value)) {
+        if (isInDebug && !MatrixPatterns.isThreadId(value)) {
             error(
                 "`$value` is not a valid thread id.\n" +
                     "Thread ids are the same as event ids.\n" +

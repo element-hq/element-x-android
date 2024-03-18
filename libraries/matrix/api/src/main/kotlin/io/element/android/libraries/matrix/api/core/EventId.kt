@@ -22,7 +22,7 @@ import java.io.Serializable
 @JvmInline
 value class EventId(val value: String) : Serializable {
     init {
-        if (isInDebug.get() == true && !MatrixPatterns.isEventId(value)) {
+        if (isInDebug && !MatrixPatterns.isEventId(value)) {
             error("`$value` is not a valid event id.\nExample event id: `\$Rqnc-F-dvnEYJTyHq_iKxU2bZ1CI92-kuZq3a5lr5Zg`.")
         }
     }

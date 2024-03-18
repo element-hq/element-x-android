@@ -19,6 +19,14 @@ package io.element.android.libraries.androidutils.metadata
 import io.element.android.libraries.androidutils.BuildConfig
 
 /**
- * Returns true if the app is in debug mode.
+ * true if the app is built in debug mode.
+ * For testing purpose, this can be changed with [withReleaseBehavior].
  */
-val isInDebug: ThreadLocal<Boolean> = ThreadLocal.withInitial { BuildConfig.DEBUG }
+var isInDebug: Boolean = BuildConfig.DEBUG
+    private set
+
+fun withReleaseBehavior(lambda: () -> Unit) {
+    isInDebug = false
+    lambda()
+    isInDebug = BuildConfig.DEBUG
+}
