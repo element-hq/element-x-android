@@ -51,6 +51,7 @@
   <string name="action_decline">"Отклонить"</string>
   <string name="action_delete_poll">"Удалить опрос"</string>
   <string name="action_disable">"Отключить"</string>
+  <string name="action_discard">"Отменить"</string>
   <string name="action_done">"Готово"</string>
   <string name="action_edit">"Редактировать"</string>
   <string name="action_edit_poll">"Редактировать опрос"</string>
