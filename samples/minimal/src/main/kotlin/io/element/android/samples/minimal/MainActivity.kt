@@ -29,10 +29,12 @@ import androidx.core.view.WindowCompat
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import io.element.android.libraries.matrix.impl.RustMatrixClientFactory
+import io.element.android.libraries.matrix.impl.analytics.UtdTracker
 import io.element.android.libraries.matrix.impl.auth.RustMatrixAuthenticationService
 import io.element.android.libraries.network.useragent.SimpleUserAgentProvider
 import io.element.android.libraries.sessionstorage.api.LoggedInState
 import io.element.android.libraries.sessionstorage.impl.memory.InMemorySessionStore
+import io.element.android.services.analytics.noop.NoopAnalyticsService
 import io.element.android.services.toolbox.impl.systemclock.DefaultSystemClock
 import kotlinx.coroutines.runBlocking
 import java.io.File
@@ -59,6 +61,7 @@ class MainActivity : ComponentActivity() {
                 userCertificatesProvider = userCertificatesProvider,
                 proxyProvider = proxyProvider,
                 clock = DefaultSystemClock(),
+                utdTracker = UtdTracker(NoopAnalyticsService()),
             ),
             passphraseGenerator = NullPassphraseGenerator(),
             buildMeta = Singleton.buildMeta,

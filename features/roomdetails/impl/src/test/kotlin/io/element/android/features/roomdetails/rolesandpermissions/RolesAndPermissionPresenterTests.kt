@@ -20,12 +20,14 @@ import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import im.vector.app.features.analytics.plan.RoomModeration
 import io.element.android.features.roomdetails.impl.rolesandpermissions.RolesAndPermissionsEvents
 import io.element.android.features.roomdetails.impl.rolesandpermissions.RolesAndPermissionsPresenter
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
+import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher
@@ -120,7 +122,8 @@ class RolesAndPermissionPresenterTests {
 
     @Test
     fun `present - ResetPermissions needs confirmation, then resets permissions`() = runTest {
-        val presenter = createRolesAndPermissionsPresenter()
+        val analyticsService = FakeAnalyticsService()
+        val presenter = createRolesAndPermissionsPresenter(analyticsService = analyticsService)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -131,6 +134,7 @@ class RolesAndPermissionPresenterTests {
 
             assertThat(awaitItem().resetPermissionsAction).isEqualTo(AsyncAction.Loading)
             assertThat(awaitItem().resetPermissionsAction).isEqualTo(AsyncAction.Success(Unit))
+            assertThat(analyticsService.capturedEvents.last()).isEqualTo(RoomModeration(RoomModeration.Action.ResetPermissions))
         }
     }
 
@@ -151,7 +155,12 @@ class RolesAndPermissionPresenterTests {
     private fun TestScope.createRolesAndPermissionsPresenter(
         room: FakeMatrixRoom = FakeMatrixRoom(),
         dispatchers: CoroutineDispatchers = testCoroutineDispatchers(),
+        analyticsService: FakeAnalyticsService = FakeAnalyticsService()
     ): RolesAndPermissionsPresenter {
-        return RolesAndPermissionsPresenter(room = room, dispatchers = dispatchers)
+        return RolesAndPermissionsPresenter(
+            room = room,
+            dispatchers = dispatchers,
+            analyticsService = analyticsService
+        )
     }
 }

@@ -67,7 +67,9 @@ class RoomMemberDetailsPresenter @AssistedInject constructor(
             }
         }
         LaunchedEffect(Unit) {
-            room.updateMembers()
+            // Update room member info when opening this screen
+            // We don't need to assign the result as it will be automatically propagated by `room.getRoomMemberAsState`
+            room.getUpdatedMember(roomMemberId)
         }
 
         fun handleEvents(event: RoomMemberDetailsEvents) {
@@ -133,7 +135,7 @@ class RoomMemberDetailsPresenter @AssistedInject constructor(
             .fold(
                 onSuccess = {
                     isBlockedState.value = AsyncData.Success(true)
-                    room.updateMembers()
+                    room.getUpdatedMember(userId)
                 },
                 onFailure = {
                     isBlockedState.value = AsyncData.Failure(it, false)
@@ -147,7 +149,7 @@ class RoomMemberDetailsPresenter @AssistedInject constructor(
             .fold(
                 onSuccess = {
                     isBlockedState.value = AsyncData.Success(false)
-                    room.updateMembers()
+                    room.getUpdatedMember(userId)
                 },
                 onFailure = {
                     isBlockedState.value = AsyncData.Failure(it, true)

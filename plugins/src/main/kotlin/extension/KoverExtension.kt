@@ -100,7 +100,6 @@ fun Project.setupKover() {
         defaults {
             // add reports of both 'debug' and 'release' Android build variants to default reports
             mergeWith("gplayDebug")
-            mergeWith("gplayRelease")
 
             verify {
                 onCheck = true
@@ -203,8 +202,6 @@ fun Project.setupKover() {
                 }
             }
         }
-
-        androidReports("gplayRelease") {}
     }
 }
 

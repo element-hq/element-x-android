@@ -230,6 +230,12 @@ class RustMatrixRoom(
         roomMemberListFetcher.fetchRoomMembers(source = source)
     }
 
+    override suspend fun getUpdatedMember(userId: UserId): Result<RoomMember> = withContext(roomDispatcher) {
+        runCatching {
+            RoomMemberMapper.map(innerRoom.member(userId.value))
+        }
+    }
+
     override suspend fun userDisplayName(userId: UserId): Result<String?> = withContext(roomDispatcher) {
         runCatching {
             innerRoom.memberDisplayName(userId.value)
