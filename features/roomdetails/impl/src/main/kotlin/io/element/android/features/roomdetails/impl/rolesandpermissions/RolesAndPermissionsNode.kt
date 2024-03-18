@@ -19,9 +19,6 @@ package io.element.android.features.roomdetails.impl.rolesandpermissions
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleEventObserver
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
@@ -33,10 +30,8 @@ import io.element.android.anvilannotations.ContributesNode
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.RoomMember
-import io.element.android.libraries.matrix.api.room.roomMembers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.launch
@@ -69,22 +64,12 @@ class RolesAndPermissionsNode @AssistedInject constructor(
     override fun onBuilt() {
         super.onBuilt()
 
-        // Reload members when the user sees this screen
-        lifecycle.addObserver(object : LifecycleEventObserver {
-            override fun onStateChanged(source: LifecycleOwner, event: Lifecycle.Event) {
-                if (event == Lifecycle.Event.ON_RESUME) {
-                    lifecycleScope.launch { room.updateMembers() }
-                }
-            }
-        })
-
         // If the user is not an admin anymore, exit this section since they won't have permissions to use it
         lifecycleScope.launch {
-            room.membersStateFlow
-                .map { state ->
-                    state.roomMembers().orEmpty().find { it.userId == room.sessionId }
+            room.roomInfoFlow
+                .filter { info ->
+                    info.userPowerLevels[room.sessionId] != RoomMember.Role.ADMIN.powerLevel
                 }
-                .filter { it?.role != RoomMember.Role.ADMIN }
                 .take(1)
                 .onEach { navigateUp() }
                 .collect()

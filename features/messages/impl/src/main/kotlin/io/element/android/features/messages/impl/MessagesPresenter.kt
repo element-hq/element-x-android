@@ -295,8 +295,6 @@ class MessagesPresenter @AssistedInject constructor(
     private fun CoroutineScope.reinviteOtherUser(inviteProgress: MutableState<AsyncData<Unit>>) = launch(dispatchers.io) {
         inviteProgress.value = AsyncData.Loading()
         runCatching {
-            room.updateMembers()
-
             val memberList = when (val memberState = room.membersStateFlow.value) {
                 is MatrixRoomMembersState.Ready -> memberState.roomMembers
                 is MatrixRoomMembersState.Error -> memberState.prevRoomMembers.orEmpty()

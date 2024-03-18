@@ -86,6 +86,11 @@ interface MatrixRoom : Closeable {
      */
     suspend fun updateMembers()
 
+    /**
+     * Will return an updated member or an error.
+     */
+    suspend fun getUpdatedMember(userId: UserId): Result<RoomMember>
+
     suspend fun updateRoomNotificationSettings(): Result<Unit>
 
     val syncUpdateFlow: StateFlow<Long>
