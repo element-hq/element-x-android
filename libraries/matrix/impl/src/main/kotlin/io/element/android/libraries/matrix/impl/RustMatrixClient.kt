@@ -73,7 +73,9 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.buffer
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
@@ -249,6 +251,17 @@ class RustMatrixClient(
 
     private val clientDelegateTaskHandle: TaskHandle? = client.setDelegate(clientDelegate)
 
+    private val _userProfile: MutableStateFlow<MatrixUser> = MutableStateFlow(
+        MatrixUser(
+            userId = sessionId,
+            // TODO cache for displayName?
+            displayName = null,
+            avatarUrl = client.cachedAvatarUrl(),
+        )
+    )
+
+    override val userProfile: StateFlow<MatrixUser> = _userProfile
+
     override val ignoredUsersFlow = mxCallbackFlow<ImmutableList<UserId>> {
         client.subscribeToIgnoredUsers(object : IgnoredUsersListener {
             override fun call(ignoredUserIds: List<String>) {
@@ -265,6 +278,10 @@ class RustMatrixClient(
                 setupVerificationControllerIfNeeded()
             }
         }.launchIn(sessionCoroutineScope)
+        sessionCoroutineScope.launch {
+            // Force a refresh of the profile
+            getUserProfile()
+        }
     }
 
     override suspend fun getRoom(roomId: RoomId): MatrixRoom? = withContext(sessionDispatcher) {
@@ -374,6 +391,9 @@ class RustMatrixClient(
         }
     }
 
+    override suspend fun getUserProfile(): Result<MatrixUser> = getProfile(sessionId)
+        .onSuccess { _userProfile.tryEmit(it) }
+
     override suspend fun searchUsers(searchTerm: String, limit: Long): Result<MatrixSearchUserResults> =
         withContext(sessionDispatcher) {
             runCatching {
@@ -468,18 +488,6 @@ class RustMatrixClient(
         val rustAction = action?.toRustAction()
         runCatching {
             client.accountUrl(rustAction)
-        }
-    }
-
-    override suspend fun loadUserDisplayName(): Result<String> = withContext(sessionDispatcher) {
-        runCatching {
-            client.displayName()
-        }
-    }
-
-    override suspend fun loadUserAvatarUrl(): Result<String?> = withContext(sessionDispatcher) {
-        runCatching {
-            client.avatarUrl()
         }
     }
 

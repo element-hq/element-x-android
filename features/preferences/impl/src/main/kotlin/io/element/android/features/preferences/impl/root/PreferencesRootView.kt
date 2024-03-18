@@ -77,7 +77,7 @@ fun PreferencesRootView(
     ) {
         UserPreferences(
             modifier = Modifier.clickable {
-                state.myUser?.let(onOpenUserProfile)
+                onOpenUserProfile(state.myUser)
             },
             user = state.myUser,
         )
@@ -225,7 +225,7 @@ internal fun PreferencesRootViewDarkPreview(@PreviewParameter(MatrixUserProvider
 @Composable
 private fun ContentToPreview(matrixUser: MatrixUser) {
     PreferencesRootView(
-        state = aPreferencesRootState().copy(myUser = matrixUser),
+        state = aPreferencesRootState(myUser = matrixUser),
         onBackPressed = {},
         onOpenAnalytics = {},
         onOpenRageShake = {},

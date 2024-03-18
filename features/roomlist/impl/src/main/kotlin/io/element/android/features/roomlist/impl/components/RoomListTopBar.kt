@@ -87,7 +87,7 @@ private val avatarBloomSize = 430.dp
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RoomListTopBar(
-    matrixUser: MatrixUser?,
+    matrixUser: MatrixUser,
     showAvatarIndicator: Boolean,
     areSearchResultsDisplayed: Boolean,
     onToggleSearch: () -> Unit,
@@ -117,7 +117,7 @@ fun RoomListTopBar(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun DefaultRoomListTopBar(
-    matrixUser: MatrixUser?,
+    matrixUser: MatrixUser,
     showAvatarIndicator: Boolean,
     areSearchResultsDisplayed: Boolean,
     scrollBehavior: TopAppBarScrollBehavior,
@@ -142,7 +142,7 @@ private fun DefaultRoomListTopBar(
 
     val avatarData by remember(matrixUser) {
         derivedStateOf {
-            matrixUser?.getAvatarData(size = AvatarSize.CurrentUserTopBar)
+            matrixUser.getAvatarData(size = AvatarSize.CurrentUserTopBar)
         }
     }
 
