@@ -223,7 +223,7 @@ private class FakeRoomMemberListNavigator : RoomMemberListNavigator {
     var openRoomMemberDetailsCallCount = 0
         private set
 
-    override fun openRoomMemberDetails(userId: UserId) {
+    override fun openRoomMemberDetails(roomMemberId: UserId) {
         openRoomMemberDetailsCallCount++
     }
 }
