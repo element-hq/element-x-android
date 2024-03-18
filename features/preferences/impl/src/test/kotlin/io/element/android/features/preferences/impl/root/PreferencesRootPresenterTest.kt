@@ -75,7 +75,13 @@ class PreferencesRootPresenterTest {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            assertThat(initialState.myUser).isNull()
+            assertThat(initialState.myUser).isEqualTo(
+                MatrixUser(
+                    userId = matrixClient.sessionId,
+                    displayName = A_USER_NAME,
+                    avatarUrl = AN_AVATAR_URL
+                )
+            )
             assertThat(initialState.version).isEqualTo("A Version")
             val loadedState = awaitItem()
             assertThat(loadedState.myUser).isEqualTo(

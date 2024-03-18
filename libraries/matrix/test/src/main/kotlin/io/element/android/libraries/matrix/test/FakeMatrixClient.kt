@@ -48,14 +48,15 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.test.TestScope
 
 class FakeMatrixClient(
     override val sessionId: SessionId = A_SESSION_ID,
     override val deviceId: String = "A_DEVICE_ID",
     override val sessionCoroutineScope: CoroutineScope = TestScope(),
-    private val userDisplayName: Result<String> = Result.success(A_USER_NAME),
-    private val userAvatarUrl: Result<String> = Result.success(AN_AVATAR_URL),
+    private val userDisplayName: String? = A_USER_NAME,
+    private val userAvatarUrl: String? = AN_AVATAR_URL,
     override val roomListService: RoomListService = FakeRoomListService(),
     override val mediaLoader: MatrixMediaLoader = FakeMediaLoader(),
     private val sessionVerificationService: FakeSessionVerificationService = FakeSessionVerificationService(),
@@ -73,6 +74,8 @@ class FakeMatrixClient(
     var removeAvatarCalled: Boolean = false
         private set
 
+    private val _userProfile: MutableStateFlow<MatrixUser> = MutableStateFlow(MatrixUser(sessionId, userDisplayName, userAvatarUrl))
+    override val userProfile: StateFlow<MatrixUser> = _userProfile
     override val ignoredUsersFlow: MutableStateFlow<ImmutableList<UserId>> = MutableStateFlow(persistentListOf())
 
     private var ignoreUserResult: Result<Unit> = Result.success(Unit)
@@ -140,12 +143,10 @@ class FakeMatrixClient(
 
     override fun close() = Unit
 
-    override suspend fun loadUserDisplayName(): Result<String> {
-        return userDisplayName
-    }
-
-    override suspend fun loadUserAvatarUrl(): Result<String?> {
-        return userAvatarUrl
+    override suspend fun getUserProfile(): Result<MatrixUser> = simulateLongTask {
+        val result = getProfileResults[sessionId]?.getOrNull() ?: MatrixUser(sessionId, userDisplayName, userAvatarUrl)
+        _userProfile.tryEmit(result)
+        return Result.success(result)
     }
 
     override suspend fun getAccountManagementUrl(action: AccountManagementAction?): Result<String?> {
