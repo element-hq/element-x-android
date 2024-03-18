@@ -25,6 +25,11 @@ import io.element.android.libraries.androidutils.BuildConfig
 var isInDebug: Boolean = BuildConfig.DEBUG
     private set
 
+/**
+ * Run the lambda simulating the app is in release mode.
+ *
+ * **IMPORTANT**: this should **ONLY** be used for testing purposes.
+ */
 fun withReleaseBehavior(lambda: () -> Unit) {
     isInDebug = false
     lambda()
