@@ -615,8 +615,8 @@ private fun MessageEventBubbleContent(
     }
 
     val timestampPosition = when (event.content) {
-        is TimelineItemImageContent -> if (event.content.showCaption) TimestampPosition.Below else TimestampPosition.Overlay
-        is TimelineItemVideoContent -> if (event.content.showCaption) TimestampPosition.Below else TimestampPosition.Overlay
+        is TimelineItemImageContent -> if (event.content.showCaption) TimestampPosition.Aligned else TimestampPosition.Overlay
+        is TimelineItemVideoContent -> if (event.content.showCaption) TimestampPosition.Aligned else TimestampPosition.Overlay
         is TimelineItemStickerContent,
         is TimelineItemLocationContent -> TimestampPosition.Overlay
         is TimelineItemPollContent -> TimestampPosition.Below
