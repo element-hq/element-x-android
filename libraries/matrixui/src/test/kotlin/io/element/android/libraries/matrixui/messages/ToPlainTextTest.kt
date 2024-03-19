@@ -129,7 +129,8 @@ class ToPlainTextTest {
             body = "> <@user:matrix.org> message\n\nreply",
             formatted = FormattedBody(
                 format = MessageFormat.HTML,
-                body = "<mx-reply><blockquote><a href=\"https://matrix.to/#/!roomId:matrix.org/\$eventId\">In reply to</a> <a href=\"https://matrix.to/#/@user:matrix.org\">@user:matrix.org</a><br>message</blockquote></mx-reply>reply"
+                body = "<mx-reply><blockquote><a href=\"https://matrix.to/#/!roomId:matrix.org/\$eventId\">In reply to</a> " +
+                    "<a href=\"https://matrix.to/#/@user:matrix.org\">@user:matrix.org</a><br>message</blockquote></mx-reply>reply"
             )
         )
         // toPlainText() will not include the content of the message being replied to
@@ -142,7 +143,8 @@ class ToPlainTextTest {
             body = "> <@user:matrix.org> message\n\nreply",
             formatted = FormattedBody(
                 format = MessageFormat.HTML,
-                body = "<mx-reply><blockquote><a href=\"https://matrix.to/#/!roomId:matrix.org/\$eventId\">In reply to</a> <a href=\"https://matrix.to/#/@user:matrix.org\">@user:matrix.org</a><br>message</blockquote></mx-reply>reply"
+                body = "<mx-reply><blockquote><a href=\"https://matrix.to/#/!roomId:matrix.org/\$eventId\">In reply to</a> " +
+                    "<a href=\"https://matrix.to/#/@user:matrix.org\">@user:matrix.org</a><br>message</blockquote></mx-reply>reply"
             )
         )
         val stringProvider = FakeStringProvider("En réponse à @user:matrix.org")
