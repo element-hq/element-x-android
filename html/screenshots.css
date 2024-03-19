@@ -84,8 +84,13 @@ input {
 }
 
 #screenshots_container {
-    margin-top: 80px;
-    margin-bottom: 56px;
+    overflow: scroll;
+    position: absolute;
+    top: 64px;
+    bottom: 40px;
+    width: 100%;
+    padding-top: 16px;
+    padding-bottom: 16px;
 }
 
 .screenshot {
