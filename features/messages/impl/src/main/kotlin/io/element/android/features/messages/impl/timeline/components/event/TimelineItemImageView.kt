@@ -52,7 +52,7 @@ import io.element.android.features.messages.impl.timeline.model.TimelineItemGrou
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContentProvider
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemImageContent
-import io.element.android.libraries.designsystem.components.blurHashBackground
+import io.element.android.libraries.designsystem.components.blurhash.blurHashBackground
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageFormat
@@ -78,7 +78,7 @@ fun TimelineItemImageView(
         }
         TimelineItemAspectRatioBox(
             modifier = containerModifier.blurHashBackground(content.blurhash, alpha = 0.9f),
-            aspectRatio =  content.aspectRatio,
+            aspectRatio = content.aspectRatio,
         ) {
             var isLoaded by remember { mutableStateOf(false) }
             AsyncImage(

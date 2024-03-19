@@ -93,7 +93,7 @@ class TimelineItemContentMessageFactory @Inject constructor(
                     height = messageType.info?.height?.toInt(),
                     aspectRatio = aspectRatio,
                     formattedFileSize = fileSizeFormatter.format(messageType.info?.size ?: 0),
-                    fileExtension = fileExtensionExtractor.extractFromName(messageType.body)
+                    fileExtension = messageType.filename?.let { fileExtensionExtractor.extractFromName(it) }.orEmpty()
                 )
             }
             is StickerMessageType -> {
@@ -145,7 +145,7 @@ class TimelineItemContentMessageFactory @Inject constructor(
                     blurHash = messageType.info?.blurhash,
                     aspectRatio = aspectRatio,
                     formattedFileSize = fileSizeFormatter.format(messageType.info?.size ?: 0),
-                    fileExtension = fileExtensionExtractor.extractFromName(messageType.body)
+                    fileExtension = messageType.filename?.let { fileExtensionExtractor.extractFromName(it) }.orEmpty(),
                 )
             }
             is AudioMessageType -> {
