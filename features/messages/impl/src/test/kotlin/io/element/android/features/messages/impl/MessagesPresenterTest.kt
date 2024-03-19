@@ -270,6 +270,8 @@ class MessagesPresenterTest {
             val mediaMessage = aMessageEvent(
                 content = TimelineItemImageContent(
                     body = "image.jpg",
+                    formatted = null,
+                    filename = null,
                     mediaSource = MediaSource(AN_AVATAR_URL),
                     thumbnailSource = null,
                     mimeType = MimeTypes.Jpeg,
@@ -300,6 +302,8 @@ class MessagesPresenterTest {
             val mediaMessage = aMessageEvent(
                 content = TimelineItemVideoContent(
                     body = "video.mp4",
+                    formatted = null,
+                    filename = null,
                     duration = 10.milliseconds,
                     videoSource = MediaSource(AN_AVATAR_URL),
                     thumbnailSource = MediaSource(AN_AVATAR_URL),

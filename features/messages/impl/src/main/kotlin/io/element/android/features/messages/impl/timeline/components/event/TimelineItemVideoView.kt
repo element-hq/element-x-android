@@ -18,6 +18,10 @@ package io.element.android.features.messages.impl.timeline.components.event
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.runtime.Composable
@@ -30,6 +34,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.unit.dp
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContentProvider
 import io.element.android.libraries.designsystem.components.BlurHashAsyncImage
@@ -37,7 +42,9 @@ import io.element.android.libraries.designsystem.modifiers.roundedBackground
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.matrix.ui.media.MediaRequestData
+import io.element.android.libraries.textcomposer.ElementRichTextEditorStyle
 import io.element.android.libraries.ui.strings.CommonStrings
+import io.element.android.wysiwyg.compose.EditorStyledText
 
 @Composable
 fun TimelineItemVideoView(
@@ -45,25 +52,41 @@ fun TimelineItemVideoView(
     modifier: Modifier = Modifier,
 ) {
     val description = stringResource(CommonStrings.common_image)
-    TimelineItemAspectRatioBox(
-        aspectRatio = content.aspectRatio,
-        modifier = modifier.semantics { contentDescription = description },
-        contentAlignment = Alignment.Center,
+    Column(
+        modifier = modifier.semantics { contentDescription = description }
     ) {
-        BlurHashAsyncImage(
-            model = MediaRequestData(content.thumbnailSource, MediaRequestData.Kind.File(content.body, content.mimeType)),
-            blurHash = content.blurHash,
-            contentScale = ContentScale.Crop,
-        )
-        Box(
-            modifier = Modifier.roundedBackground(),
+        TimelineItemAspectRatioBox(
+            aspectRatio = content.aspectRatio,
             contentAlignment = Alignment.Center,
         ) {
-            Image(
-                Icons.Default.PlayArrow,
-                contentDescription = stringResource(id = CommonStrings.a11y_play),
-                colorFilter = ColorFilter.tint(Color.White),
+            BlurHashAsyncImage(
+                model = MediaRequestData(content.thumbnailSource, MediaRequestData.Kind.File(content.body, content.mimeType)),
+                blurHash = content.blurHash,
+                contentScale = ContentScale.Crop,
             )
+            Box(
+                modifier = Modifier.roundedBackground(),
+                contentAlignment = Alignment.Center,
+            ) {
+                Image(
+                    Icons.Default.PlayArrow,
+                    contentDescription = stringResource(id = CommonStrings.a11y_play),
+                    colorFilter = ColorFilter.tint(Color.White),
+                )
+            }
+        }
+
+        if (content.showCaption) {
+            Spacer(modifier = Modifier.height(8.dp))
+            Box {
+                EditorStyledText(
+                    modifier = Modifier
+                        .widthIn(min = MIN_HEIGHT_IN_DP.dp * content.aspectRatio!!, max = MAX_HEIGHT_IN_DP.dp * content.aspectRatio),
+                    text = content.caption,
+                    style = ElementRichTextEditorStyle.textStyle(),
+                    releaseOnDetach = false
+                )
+            }
         }
     }
 }

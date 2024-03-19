@@ -32,6 +32,8 @@ open class TimelineItemImageContentProvider : PreviewParameterProvider<TimelineI
 
 fun aTimelineItemImageContent() = TimelineItemImageContent(
     body = "a body",
+    formatted = null,
+    filename = null,
     mediaSource = MediaSource(""),
     thumbnailSource = null,
     mimeType = MimeTypes.IMAGE_JPEG,

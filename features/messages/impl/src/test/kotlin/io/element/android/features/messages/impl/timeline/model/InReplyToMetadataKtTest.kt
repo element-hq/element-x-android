@@ -83,6 +83,8 @@ class InReplyToMetadataKtTest {
                 eventContent = aMessageContent(
                     messageType = ImageMessageType(
                         body = "body",
+                        formatted = null,
+                        filename = null,
                         source = aMediaSource(),
                         info = anImageInfo(),
                     )
@@ -137,6 +139,8 @@ class InReplyToMetadataKtTest {
                 eventContent = aMessageContent(
                     messageType = VideoMessageType(
                         body = "body",
+                        formatted = null,
+                        filename = null,
                         source = aMediaSource(),
                         info = aVideoInfo(),
                     )

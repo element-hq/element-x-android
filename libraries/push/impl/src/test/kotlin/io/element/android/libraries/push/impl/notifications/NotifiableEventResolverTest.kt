@@ -190,7 +190,7 @@ class NotifiableEventResolverTest {
                 createNotificationData(
                     content = NotificationContent.MessageLike.RoomMessage(
                         senderId = A_USER_ID_2,
-                        messageType = VideoMessageType(body = "Video", MediaSource("url"), null)
+                        messageType = VideoMessageType(body = "Video", null, null, MediaSource("url"), null)
                     )
                 )
             )
@@ -224,7 +224,7 @@ class NotifiableEventResolverTest {
                 createNotificationData(
                     content = NotificationContent.MessageLike.RoomMessage(
                         senderId = A_USER_ID_2,
-                        messageType = ImageMessageType("Image", MediaSource("url"), null),
+                        messageType = ImageMessageType("Image", null, null, MediaSource("url"), null),
                     )
                 )
             )
