@@ -252,7 +252,7 @@ class NotifiableEventResolver @Inject constructor(
             is ImageMessageType -> messageType.body
             is StickerMessageType -> messageType.body
             is NoticeMessageType -> messageType.body
-            is TextMessageType -> messageType.toPlainText()
+            is TextMessageType -> messageType.toPlainText(stringProvider)
             is VideoMessageType -> messageType.body
             is LocationMessageType -> messageType.body
             is OtherMessageType -> messageType.body

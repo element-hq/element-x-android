@@ -21,6 +21,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.FormattedBody
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageFormat
 import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageType
 import io.element.android.libraries.matrix.ui.messages.toPlainText
+import io.element.android.services.toolbox.test.strings.FakeStringProvider
 import org.jsoup.Jsoup
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -120,5 +121,31 @@ class ToPlainTextTest {
             )
         )
         assertThat(messageType.toPlainText()).isEqualTo("This is the fallback text")
+    }
+
+    @Test
+    fun `TextMessageType toPlainText - returns the correct content for reply in thread`() {
+        val messageType = TextMessageType(
+            body = "> <@user:matrix.org> message\n\nreply",
+            formatted = FormattedBody(
+                format = MessageFormat.HTML,
+                body = "<mx-reply><blockquote><a href=\"https://matrix.to/#/!roomId:matrix.org/\$eventId\">In reply to</a> <a href=\"https://matrix.to/#/@user:matrix.org\">@user:matrix.org</a><br>message</blockquote></mx-reply>reply"
+            )
+        )
+        // toPlainText() will not include the content of the message being replied to
+        assertThat(messageType.toPlainText()).isEqualTo("In reply to @user:matrix.org: reply")
+    }
+
+    @Test
+    fun `TextMessageType toPlainText - returns the correct i18n content for reply in thread`() {
+        val messageType = TextMessageType(
+            body = "> <@user:matrix.org> message\n\nreply",
+            formatted = FormattedBody(
+                format = MessageFormat.HTML,
+                body = "<mx-reply><blockquote><a href=\"https://matrix.to/#/!roomId:matrix.org/\$eventId\">In reply to</a> <a href=\"https://matrix.to/#/@user:matrix.org\">@user:matrix.org</a><br>message</blockquote></mx-reply>reply"
+            )
+        )
+        val stringProvider = FakeStringProvider("En réponse à @user:matrix.org")
+        assertThat(messageType.toPlainText(stringProvider = stringProvider)).isEqualTo("En réponse à @user:matrix.org: reply")
     }
 }
