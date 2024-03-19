@@ -292,23 +292,30 @@ class DefaultNotificationDrawerManager @Inject constructor(
         eventsForSessions.forEach { (sessionId, notifiableEvents) ->
             val client = matrixClientProvider.getOrRestore(sessionId).getOrThrow()
             val imageLoader = imageLoaderHolder.get(client)
-            val currentUser = tryOrNull(
-                onError = { Timber.tag(loggerTag.value).e(it, "Unable to retrieve info for user ${sessionId.value}") },
-                operation = {
-                    // myUserDisplayName cannot be empty else NotificationCompat.MessagingStyle() will crash
-                    val myUserDisplayName = client.loadUserDisplayName().getOrNull() ?: sessionId.value
-                    val userAvatarUrl = client.loadUserAvatarUrl().getOrNull()
-                    MatrixUser(
-                        userId = sessionId,
-                        displayName = myUserDisplayName,
-                        avatarUrl = userAvatarUrl
-                    )
-                }
-            ) ?: MatrixUser(
-                userId = sessionId,
-                displayName = sessionId.value,
-                avatarUrl = null
-            )
+            val userFromCache = client.userProfile.value
+            val currentUser = if (userFromCache.avatarUrl != null && userFromCache.displayName.isNullOrEmpty().not()) {
+                // We have an avatar and a display name, use it
+                userFromCache
+            } else {
+                tryOrNull(
+                    onError = { Timber.tag(loggerTag.value).e(it, "Unable to retrieve info for user ${sessionId.value}") },
+                    operation = {
+                        client.getUserProfile().getOrNull()
+                            ?.let {
+                                // displayName cannot be empty else NotificationCompat.MessagingStyle() will crash
+                                if (it.displayName.isNullOrEmpty()) {
+                                    it.copy(displayName = sessionId.value)
+                                } else {
+                                    it
+                                }
+                            }
+                    }
+                ) ?: MatrixUser(
+                    userId = sessionId,
+                    displayName = sessionId.value,
+                    avatarUrl = null
+                )
+            }
 
             notificationRenderer.render(currentUser, useCompleteNotificationFormat, notifiableEvents, imageLoader)
         }

@@ -20,6 +20,7 @@ import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import im.vector.app.features.analytics.plan.RoomModeration
 import io.element.android.features.roomdetails.impl.members.aRoomMember
 import io.element.android.features.roomdetails.impl.members.aRoomMemberList
 import io.element.android.features.roomdetails.impl.rolesandpermissions.changeroles.ChangeRolesEvent
@@ -33,6 +34,7 @@ import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.A_USER_ID_2
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.matrix.test.room.aRoomInfo
+import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.collections.immutable.toPersistentList
@@ -315,11 +317,16 @@ class ChangeRolesPresenterTests {
 
     @Test
     fun `present - Save will just save the data for moderators`() = runTest {
+        val analyticsService = FakeAnalyticsService()
         val room = FakeMatrixRoom().apply {
             givenRoomMembersState(MatrixRoomMembersState.Ready(aRoomMemberList()))
             givenRoomInfo(aRoomInfo(userPowerLevels = persistentMapOf(A_USER_ID to 50)))
         }
-        val presenter = createChangeRolesPresenter(role = RoomMember.Role.MODERATOR, room = room)
+        val presenter = createChangeRolesPresenter(
+            role = RoomMember.Role.MODERATOR,
+            room = room,
+            analyticsService = analyticsService
+        )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -331,6 +338,7 @@ class ChangeRolesPresenterTests {
 
             awaitItem().eventSink(ChangeRolesEvent.Save)
             assertThat(awaitItem().savingState).isEqualTo(AsyncAction.Success(Unit))
+            assertThat(analyticsService.capturedEvents.last()).isEqualTo(RoomModeration(RoomModeration.Action.ChangeMemberRole, RoomModeration.Role.Moderator))
         }
     }
 
@@ -364,11 +372,13 @@ class ChangeRolesPresenterTests {
         role: RoomMember.Role = RoomMember.Role.ADMIN,
         room: FakeMatrixRoom = FakeMatrixRoom(),
         dispatchers: CoroutineDispatchers = testCoroutineDispatchers(),
+        analyticsService: FakeAnalyticsService = FakeAnalyticsService(),
     ): ChangeRolesPresenter {
         return ChangeRolesPresenter(
             role = role,
             room = room,
             dispatchers = dispatchers,
+            analyticsService = analyticsService,
         )
     }
 }

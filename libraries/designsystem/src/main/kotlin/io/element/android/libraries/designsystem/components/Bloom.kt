@@ -302,7 +302,7 @@ fun Modifier.bloom(
 /**
  * Bloom effect modifier for avatars. Applies a bloom effect to the component.
  * @param avatarData The avatar data to use as the bloom source.
- *  If the avatar data has a URL it will be used as the bloom source, otherwise the initials will be used. If `null` is passed, no bloom effect will be applied.
+ *  If the avatar data has a URL it will be used as the bloom source, otherwise the initials will be used.
  * @param background The background color to use for the bloom effect. Since we use blend modes it must be non-transparent.
  * @param blurSize The size of the bloom effect. If not specified the bloom effect will be the size of the component.
  * @param offset The offset to use for the bloom effect. If not specified the bloom effect will be centered on the component.
@@ -313,7 +313,7 @@ fun Modifier.bloom(
  * @param alpha The alpha value to apply to the bloom effect.
  */
 fun Modifier.avatarBloom(
-    avatarData: AvatarData?,
+    avatarData: AvatarData,
     background: Color,
     blurSize: DpSize = DpSize.Unspecified,
     offset: DpOffset = DpOffset.Unspecified,
@@ -327,7 +327,6 @@ fun Modifier.avatarBloom(
 ) = composed {
     // Bloom only works on API 29+
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) return@composed this
-    avatarData ?: return@composed this
 
     // Request the avatar contents to use as the bloom source
     val context = LocalContext.current

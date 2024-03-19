@@ -11,6 +11,7 @@
   <string name="screen_advanced_settings_share_presence">"Jelenlét megosztása"</string>
   <string name="screen_advanced_settings_share_presence_description">"Ha ki van kapcsolva, nem tud olvasási visszaigazolást vagy írási értesítést küldeni és fogadni"</string>
   <string name="screen_advanced_settings_view_source_description">"Engedélyezd a beállítást az üzenet forrásának megjelenítéséhez az idővonalon."</string>
+  <string name="screen_blocked_users_empty">"Nincsenek letiltott felhasználók"</string>
   <string name="screen_blocked_users_unblock_alert_action">"Letiltás feloldása"</string>
   <string name="screen_blocked_users_unblock_alert_description">"Újra láthatja az összes üzenetét."</string>
   <string name="screen_blocked_users_unblock_alert_title">"Felhasználó kitiltásának feloldása"</string>

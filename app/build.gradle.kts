@@ -24,7 +24,6 @@ import extension.gitBranchName
 import extension.gitRevision
 import extension.koverDependencies
 import extension.setupKover
-import org.jetbrains.kotlin.cli.common.toBooleanLenient
 
 plugins {
     id("io.element.android-compose-application")
@@ -189,7 +188,7 @@ androidComponents {
             val abiCode = abiVersionCodes[name] ?: 0
             // Assigns the new version code to output.versionCode, which changes the version code
             // for only the output APK, not for the variant itself.
-            output.versionCode.set((output.versionCode.get() ?: 0) * 10 + abiCode)
+            output.versionCode.set((output.versionCode.orNull ?: 0) * 10 + abiCode)
         }
     }
 }
@@ -212,26 +211,6 @@ knit {
             "*/towncrier/template.md",
             "**/CHANGES.md",
         )
-    }
-}
-
-val ciBuildProperty = "ci-build"
-val isCiBuild = if (project.hasProperty(ciBuildProperty)) {
-    val raw = project.property(ciBuildProperty) as? String
-    raw?.toBooleanLenient() == true || raw?.toIntOrNull() == 1
-} else {
-    false
-}
-
-kover {
-    // When running on the CI, run only debug test variants
-    if (isCiBuild) {
-        excludeTests {
-            // Disable instrumentation for debug test tasks
-            tasks(
-                "testDebugUnitTest",
-            )
-        }
     }
 }
 

@@ -16,13 +16,13 @@
 
 package io.element.android.libraries.matrix.api.core
 
-import io.element.android.libraries.matrix.api.BuildConfig
+import io.element.android.libraries.androidutils.metadata.isInDebug
 import java.io.Serializable
 
 @JvmInline
 value class SpaceId(val value: String) : Serializable {
     init {
-        if (BuildConfig.DEBUG && !MatrixPatterns.isSpaceId(value)) {
+        if (isInDebug && !MatrixPatterns.isSpaceId(value)) {
             error(
                 "`$value` is not a valid space id.\n" +
                     "Space ids are the same as room ids.\n" +

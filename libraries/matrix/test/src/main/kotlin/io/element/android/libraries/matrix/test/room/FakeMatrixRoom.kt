@@ -91,7 +91,7 @@ class FakeMatrixRoom(
     private var userDisplayNameResult = Result.success<String?>(null)
     private var userAvatarUrlResult = Result.success<String?>(null)
     private var userRoleResult = Result.success(RoomMember.Role.USER)
-    private var updateMembersResult: Result<Unit> = Result.success(Unit)
+    private var getRoomMemberResult = Result.failure<RoomMember>(IllegalStateException("Member not found"))
     private var joinRoomResult = Result.success(Unit)
     private var inviteUserResult = Result.success(Unit)
     private var canInviteResult = Result.success(true)
@@ -194,6 +194,10 @@ class FakeMatrixRoom(
         MutableStateFlow(MatrixRoomNotificationSettingsState.Unknown)
 
     override suspend fun updateMembers() = Unit
+
+    override suspend fun getUpdatedMember(userId: UserId): Result<RoomMember> {
+        return getRoomMemberResult
+    }
 
     override suspend fun updateRoomNotificationSettings(): Result<Unit> = simulateLongTask {
         val notificationSettings = notificationSettingsService.getRoomNotificationSettings(roomId, isEncrypted, isOneToOne).getOrThrow()
@@ -532,8 +536,8 @@ class FakeMatrixRoom(
         membersStateFlow.value = state
     }
 
-    fun givenUpdateMembersResult(result: Result<Unit>) {
-        updateMembersResult = result
+    fun givenGetRoomMemberResult(result: Result<RoomMember>) {
+        getRoomMemberResult = result
     }
 
     fun givenUserDisplayNameResult(displayName: Result<String?>) {

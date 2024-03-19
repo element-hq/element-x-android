@@ -56,6 +56,7 @@ import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.api.roomlist.RoomList
 import io.element.android.libraries.matrix.api.sync.SyncState
 import io.element.android.libraries.matrix.api.timeline.ReceiptType
+import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.test.AN_AVATAR_URL
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.matrix.test.A_ROOM_ID
@@ -93,17 +94,24 @@ class RoomListPresenterTests {
     @Test
     fun `present - should start with no user and then load user with success`() = runTest {
         val scope = CoroutineScope(coroutineContext + SupervisorJob())
-        val presenter = createRoomListPresenter(coroutineScope = scope)
+        val matrixClient = FakeMatrixClient(
+            userDisplayName = null,
+            userAvatarUrl = null,
+        )
+        matrixClient.givenGetProfileResult(matrixClient.sessionId, Result.success(MatrixUser(matrixClient.sessionId, A_USER_NAME, AN_AVATAR_URL)))
+        val presenter = createRoomListPresenter(
+            client = matrixClient,
+            coroutineScope = scope,
+        )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            assertThat(initialState.matrixUser).isNull()
+            assertThat(initialState.matrixUser).isEqualTo(MatrixUser(A_USER_ID))
             val withUserState = awaitItem()
-            assertThat(withUserState.matrixUser).isNotNull()
-            assertThat(withUserState.matrixUser!!.userId).isEqualTo(A_USER_ID)
-            assertThat(withUserState.matrixUser!!.displayName).isEqualTo(A_USER_NAME)
-            assertThat(withUserState.matrixUser!!.avatarUrl).isEqualTo(AN_AVATAR_URL)
+            assertThat(withUserState.matrixUser.userId).isEqualTo(A_USER_ID)
+            assertThat(withUserState.matrixUser.displayName).isEqualTo(A_USER_NAME)
+            assertThat(withUserState.matrixUser.avatarUrl).isEqualTo(AN_AVATAR_URL)
             assertThat(withUserState.showAvatarIndicator).isTrue()
             scope.cancel()
         }
@@ -128,7 +136,6 @@ class RoomListPresenterTests {
             val initialState = awaitItem()
             assertThat(initialState.showAvatarIndicator).isTrue()
             sessionVerificationService.givenCanVerifySession(false)
-            assertThat(awaitItem().showAvatarIndicator).isTrue()
             encryptionService.emitBackupState(BackupState.ENABLED)
             val finalState = awaitItem()
             assertThat(finalState.showAvatarIndicator).isFalse()
@@ -139,19 +146,18 @@ class RoomListPresenterTests {
     @Test
     fun `present - should start with no user and then load user with error`() = runTest {
         val matrixClient = FakeMatrixClient(
-            userDisplayName = Result.failure(AN_EXCEPTION),
-            userAvatarUrl = Result.failure(AN_EXCEPTION),
+            userDisplayName = null,
+            userAvatarUrl = null,
         )
+        matrixClient.givenGetProfileResult(matrixClient.sessionId, Result.failure(AN_EXCEPTION))
         val scope = CoroutineScope(coroutineContext + SupervisorJob())
         val presenter = createRoomListPresenter(client = matrixClient, coroutineScope = scope)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            assertThat(initialState.matrixUser).isNull()
-            val withUserState = awaitItem()
-            assertThat(withUserState.matrixUser).isNotNull()
-            scope.cancel()
+            assertThat(initialState.matrixUser).isEqualTo(MatrixUser(matrixClient.sessionId))
+            // No new state is coming
         }
     }
 
@@ -364,7 +370,6 @@ class RoomListPresenterTests {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            skipItems(1)
             val initialState = awaitItem()
             val summary = createRoomListRoomSummary()
             initialState.eventSink(RoomListEvents.ShowContextMenu(summary))
@@ -414,8 +419,6 @@ class RoomListPresenterTests {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            skipItems(1)
-
             val initialState = awaitItem()
             val summary = createRoomListRoomSummary()
             initialState.eventSink(RoomListEvents.ShowContextMenu(summary))
@@ -473,7 +476,6 @@ class RoomListPresenterTests {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            skipItems(1)
             val initialState = awaitItem()
             eventRecorder.assertEmpty()
             initialState.eventSink(RoomListEvents.ToggleSearchResults)
@@ -558,7 +560,6 @@ class RoomListPresenterTests {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            skipItems(1)
             val initialState = awaitItem()
             // The migration screen is shown if the migration screen has not been shown before
             assertThat(initialState.contentState).isInstanceOf(RoomListContentState.Migration::class.java)
@@ -585,7 +586,6 @@ class RoomListPresenterTests {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            skipItems(1)
             assertThat(awaitItem().contentState).isInstanceOf(RoomListContentState.Empty::class.java)
             scope.cancel()
         }

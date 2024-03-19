@@ -49,14 +49,14 @@ open class RoomListStateProvider : PreviewParameterProvider<RoomListState> {
             aRoomListState(contentState = aRoomsContentState(securityBannerState = SecurityBannerState.RecoveryKeyConfirmation)),
             aRoomListState(contentState = anEmptyContentState()),
             aRoomListState(contentState = aSkeletonContentState()),
-            aRoomListState(matrixUser = null, contentState = aMigrationContentState()),
+            aRoomListState(matrixUser = MatrixUser(userId = UserId("@id:domain")), contentState = aMigrationContentState()),
             aRoomListState(searchState = aRoomListSearchState(isSearchActive = true, query = "Test")),
             aRoomListState(filtersState = aRoomListFiltersState(isFeatureEnabled = true)),
         )
 }
 
 internal fun aRoomListState(
-    matrixUser: MatrixUser? = MatrixUser(userId = UserId("@id:domain"), displayName = "User#1"),
+    matrixUser: MatrixUser = MatrixUser(userId = UserId("@id:domain"), displayName = "User#1"),
     showAvatarIndicator: Boolean = false,
     hasNetworkConnection: Boolean = true,
     snackbarMessage: SnackbarMessage? = null,
