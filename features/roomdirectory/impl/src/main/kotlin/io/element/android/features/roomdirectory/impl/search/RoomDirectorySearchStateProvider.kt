@@ -17,15 +17,54 @@
 package io.element.android.features.roomdirectory.impl.search
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import io.element.android.features.roomdirectory.impl.search.model.RoomDirectorySearchResult
+import io.element.android.libraries.designsystem.components.avatar.AvatarData
+import io.element.android.libraries.designsystem.components.avatar.AvatarSize
+import io.element.android.libraries.matrix.api.core.RoomId
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 
 open class RoomDirectorySearchStateProvider : PreviewParameterProvider<RoomDirectorySearchState> {
     override val values: Sequence<RoomDirectorySearchState>
         get() = sequenceOf(
             aRoomDirectorySearchState(),
-            // Add other states here
+            aRoomDirectorySearchState(
+                query = "Element",
+                results = persistentListOf(
+                    RoomDirectorySearchResult(
+                        roomId = RoomId("@exa:matrix.org"),
+                        name = "Element X Android",
+                        description = "Element X is a secure, private and decentralized messenger.",
+                        avatarData = AvatarData(
+                            id = "@exa:matrix.org",
+                            name = "Element X Android",
+                            url = null,
+                            size = AvatarSize.RoomDirectorySearchItem
+                        ),
+                        canBeJoined = true,
+                    ),
+                    RoomDirectorySearchResult(
+                        roomId = RoomId("@exi:matrix.org"),
+                        name = "Element X iOS",
+                        description = "Element X is a secure, private and decentralized messenger.",
+                        avatarData = AvatarData(
+                            id = "@exi:matrix.org",
+                            name = "Element X iOS",
+                            url = null,
+                            size = AvatarSize.RoomDirectorySearchItem
+                        ),
+                        canBeJoined = false,
+                    )
+                )
+            ),
         )
 }
 
-fun aRoomDirectorySearchState() = RoomDirectorySearchState(
-    eventSink = {}
+fun aRoomDirectorySearchState(
+    query: String = "",
+    results: ImmutableList<RoomDirectorySearchResult> = persistentListOf(),
+) = RoomDirectorySearchState(
+    query = query,
+    results = results,
+    eventSink = { }
 )

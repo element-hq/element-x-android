@@ -14,13 +14,15 @@
  * limitations under the License.
  */
 
-package io.element.android.features.roomdirectory.impl.search
+package io.element.android.features.roomdirectory.impl.search.model
 
-import io.element.android.features.roomdirectory.impl.search.model.RoomDirectorySearchResult
-import kotlinx.collections.immutable.ImmutableList
+import io.element.android.libraries.designsystem.components.avatar.AvatarData
+import io.element.android.libraries.matrix.api.core.RoomId
 
-data class RoomDirectorySearchState(
-    val query: String,
-    val results: ImmutableList<RoomDirectorySearchResult>,
-    val eventSink: (RoomDirectorySearchEvents) -> Unit
+data class RoomDirectorySearchResult(
+    val roomId: RoomId,
+    val name: String,
+    val description: String,
+    val avatarData: AvatarData,
+    val canBeJoined: Boolean,
 )

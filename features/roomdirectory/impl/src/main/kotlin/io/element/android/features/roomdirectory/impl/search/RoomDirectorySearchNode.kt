@@ -38,6 +38,7 @@ class RoomDirectorySearchNode @AssistedInject constructor(
         val state = presenter.present()
         RoomDirectorySearchView(
             state = state,
+            onBackPressed = ::navigateUp,
             modifier = modifier
         )
     }
