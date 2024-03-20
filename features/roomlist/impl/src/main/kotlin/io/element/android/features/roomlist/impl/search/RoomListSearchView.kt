@@ -26,6 +26,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.QrCode
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TextFieldDefaults
@@ -50,8 +52,10 @@ import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.modifiers.applyIf
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
+import io.element.android.libraries.designsystem.theme.components.IconSource
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.TextField
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
@@ -64,6 +68,7 @@ internal fun RoomListSearchView(
     state: RoomListSearchState,
     onRoomClicked: (RoomId) -> Unit,
     onRoomLongClicked: (RoomListRoomSummary) -> Unit,
+    onRoomDirectorySearchClicked: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     BackHandler(enabled = state.isSearchActive) {
@@ -87,6 +92,7 @@ internal fun RoomListSearchView(
                     state = state,
                     onRoomClicked = onRoomClicked,
                     onRoomLongClicked = onRoomLongClicked,
+                    onRoomDirectorySearchClicked = onRoomDirectorySearchClicked,
                 )
             }
         }
@@ -99,6 +105,7 @@ private fun RoomListSearchContent(
     state: RoomListSearchState,
     onRoomClicked: (RoomId) -> Unit,
     onRoomLongClicked: (RoomListRoomSummary) -> Unit,
+    onRoomDirectorySearchClicked: () -> Unit,
 ) {
     val borderColor = MaterialTheme.colorScheme.tertiary
     val strokeWidth = 1.dp
@@ -169,6 +176,14 @@ private fun RoomListSearchContent(
                 .padding(padding)
                 .consumeWindowInsets(padding)
         ) {
+            if(state.query.isEmpty()){
+                RoomDirectorySearchButton(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 24.dp, horizontal = 16.dp),
+                    onClick = onRoomDirectorySearchClicked
+                )
+            }
             LazyColumn(
                 modifier = Modifier.weight(1f),
             ) {
@@ -187,12 +202,26 @@ private fun RoomListSearchContent(
     }
 }
 
+@Composable
+private fun RoomDirectorySearchButton(
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Button(
+        text = "Room directory",
+        leadingIcon = IconSource.Vector(CompoundIcons.ListBulleted()),
+        onClick = onClick,
+        modifier = modifier,
+    )
+}
+
 @PreviewsDayNight
 @Composable
 internal fun RoomListSearchResultContentPreview(@PreviewParameter(RoomListSearchStateProvider::class) state: RoomListSearchState) = ElementPreview {
     RoomListSearchContent(
         state = state,
         onRoomClicked = {},
-        onRoomLongClicked = {}
+        onRoomLongClicked = {},
+        onRoomDirectorySearchClicked = {},
     )
 }

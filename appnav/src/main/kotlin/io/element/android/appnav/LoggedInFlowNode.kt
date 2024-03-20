@@ -53,6 +53,7 @@ import io.element.android.features.lockscreen.api.LockScreenService
 import io.element.android.features.networkmonitor.api.NetworkMonitor
 import io.element.android.features.networkmonitor.api.NetworkStatus
 import io.element.android.features.preferences.api.PreferencesEntryPoint
+import io.element.android.features.roomdirectory.api.RoomDirectoryEntryPoint
 import io.element.android.features.roomlist.api.RoomListEntryPoint
 import io.element.android.features.securebackup.api.SecureBackupEntryPoint
 import io.element.android.features.verifysession.api.VerifySessionEntryPoint
@@ -97,6 +98,7 @@ class LoggedInFlowNode @AssistedInject constructor(
     private val ftueState: FtueState,
     private val lockScreenEntryPoint: LockScreenEntryPoint,
     private val lockScreenStateService: LockScreenService,
+    private val roomDirectoryEntryPoint: RoomDirectoryEntryPoint,
     private val matrixClient: MatrixClient,
     snackbarDispatcher: SnackbarDispatcher,
 ) : BaseFlowNode<LoggedInFlowNode.NavTarget>(
@@ -225,6 +227,9 @@ class LoggedInFlowNode @AssistedInject constructor(
 
         @Parcelize
         data object Ftue : NavTarget
+
+        @Parcelize
+        data object RoomDirectorySearch : NavTarget
     }
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
@@ -269,6 +274,10 @@ class LoggedInFlowNode @AssistedInject constructor(
 
                     override fun onReportBugClicked() {
                         plugins<Callback>().forEach { it.onOpenBugReport() }
+                    }
+
+                    override fun onRoomDirectorySearchClicked() {
+                        backstack.push(NavTarget.RoomDirectorySearch)
                     }
                 }
                 roomListEntryPoint
@@ -373,6 +382,15 @@ class LoggedInFlowNode @AssistedInject constructor(
                     .callback(object : FtueEntryPoint.Callback {
                         override fun onFtueFlowFinished() {
                             backstack.pop()
+                        }
+                    })
+                    .build()
+            }
+            NavTarget.RoomDirectorySearch -> {
+                roomDirectoryEntryPoint.nodeBuilder(this, buildContext)
+                    .callback(object : RoomDirectoryEntryPoint.Callback {
+                        override fun onRoomJoined(roomId: RoomId) {
+                            coroutineScope.launch { attachRoom(roomId) }
                         }
                     })
                     .build()

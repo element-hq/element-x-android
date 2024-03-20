@@ -91,6 +91,10 @@ class RoomListNode @AssistedInject constructor(
         }
     }
 
+    private fun onRoomDirectorySearchClicked() {
+        plugins<RoomListEntryPoint.Callback>().forEach { it.onRoomDirectorySearchClicked() }
+    }
+
     @Composable
     override fun View(modifier: Modifier) {
         val state = presenter.present()
@@ -105,6 +109,7 @@ class RoomListNode @AssistedInject constructor(
             onInvitesClicked = this::onInvitesClicked,
             onRoomSettingsClicked = this::onRoomSettingsClicked,
             onMenuActionClicked = { onMenuActionClicked(activity, it) },
+            onRoomDirectorySearchClicked = this::onRoomDirectorySearchClicked,
             modifier = modifier,
         )
     }
