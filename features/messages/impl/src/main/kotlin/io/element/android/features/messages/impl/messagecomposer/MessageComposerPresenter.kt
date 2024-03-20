@@ -463,7 +463,12 @@ class MessageComposerPresenter @Inject constructor(
                 }
             }
         }
-        mediaSender.sendMedia(uri, mimeType, compressIfPossible = false, progressCallback).getOrThrow()
+        mediaSender.sendMedia(
+            uri = uri,
+            mimeType = mimeType,
+            compressIfPossible = false,
+            progressCallback = progressCallback
+        ).getOrThrow()
     }
         .onSuccess {
             attachmentState.value = AttachmentsState.None

@@ -37,6 +37,8 @@ class MediaSender @Inject constructor(
         uri: Uri,
         mimeType: String,
         compressIfPossible: Boolean,
+        caption: String? = null,
+        formattedCaption: String? = null,
         progressCallback: ProgressCallback? = null
     ): Result<Unit> {
         return preProcessor
@@ -44,10 +46,15 @@ class MediaSender @Inject constructor(
                 uri = uri,
                 mimeType = mimeType,
                 deleteOriginal = true,
-                compressIfPossible = compressIfPossible
+                compressIfPossible = compressIfPossible,
             )
             .flatMapCatching { info ->
-                room.sendMedia(info, progressCallback)
+                room.sendMedia(
+                    uploadInfo = info,
+                    progressCallback = progressCallback,
+                    caption = caption,
+                    formattedCaption = formattedCaption
+                )
             }
             .handleSendResult()
     }
@@ -71,7 +78,12 @@ class MediaSender @Inject constructor(
                     audioInfo = audioInfo,
                     waveform = waveForm,
                 )
-                room.sendMedia(newInfo, progressCallback)
+                room.sendMedia(
+                    uploadInfo = newInfo,
+                    progressCallback = progressCallback,
+                    caption = null,
+                    formattedCaption = null
+                )
             }
             .handleSendResult()
     }
@@ -90,6 +102,8 @@ class MediaSender @Inject constructor(
     private suspend fun MatrixRoom.sendMedia(
         uploadInfo: MediaUploadInfo,
         progressCallback: ProgressCallback?,
+        caption: String?,
+        formattedCaption: String?,
     ): Result<Unit> {
         val handler = when (uploadInfo) {
             is MediaUploadInfo.Image -> {
@@ -97,6 +111,8 @@ class MediaSender @Inject constructor(
                     file = uploadInfo.file,
                     thumbnailFile = uploadInfo.thumbnailFile,
                     imageInfo = uploadInfo.imageInfo,
+                    body = caption,
+                    formattedBody = formattedCaption,
                     progressCallback = progressCallback
                 )
             }
@@ -105,6 +121,8 @@ class MediaSender @Inject constructor(
                     file = uploadInfo.file,
                     thumbnailFile = uploadInfo.thumbnailFile,
                     videoInfo = uploadInfo.videoInfo,
+                    body = caption,
+                    formattedBody = formattedCaption,
                     progressCallback = progressCallback
                 )
             }

@@ -357,6 +357,8 @@ class FakeMatrixRoom(
         file: File,
         thumbnailFile: File?,
         imageInfo: ImageInfo,
+        body: String?,
+        formattedBody: String?,
         progressCallback: ProgressCallback?
     ): Result<MediaUploadHandler> = fakeSendMedia(progressCallback)
 
@@ -364,6 +366,8 @@ class FakeMatrixRoom(
         file: File,
         thumbnailFile: File?,
         videoInfo: VideoInfo,
+        body: String?,
+        formattedBody: String?,
         progressCallback: ProgressCallback?
     ): Result<MediaUploadHandler> = fakeSendMedia(
         progressCallback
