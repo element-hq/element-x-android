@@ -148,10 +148,10 @@ internal fun TimelineItemVideoViewPreview(@PreviewParameter(TimelineItemVideoCon
 @Composable
 internal fun TimelineVideoWithCaptionRowPreview() = ElementPreview {
     Column {
-        sequenceOf(false, true).forEach {
+        sequenceOf(false, true).forEach { isMine ->
             ATimelineItemEventRow(
                 event = aTimelineItemEvent(
-                    isMine = it,
+                    isMine = isMine,
                     content = aTimelineItemVideoContent().copy(
                         filename = "video.mp4",
                         body = "A long caption that may wrap into several lines",

@@ -133,10 +133,10 @@ internal fun TimelineItemImageViewPreview(@PreviewParameter(TimelineItemImageCon
 @Composable
 internal fun TimelineImageWithCaptionRowPreview() = ElementPreview {
     Column {
-        sequenceOf(false, true).forEach {
+        sequenceOf(false, true).forEach { isMine ->
             ATimelineItemEventRow(
                 event = aTimelineItemEvent(
-                    isMine = it,
+                    isMine = isMine,
                     content = aTimelineItemImageContent().copy(
                         filename = "image.jpg",
                         body = "A long caption that may wrap into several lines",
