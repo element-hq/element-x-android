@@ -26,7 +26,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -44,6 +47,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.compose.AsyncImagePainter
+import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.messages.impl.timeline.aTimelineItemEvent
 import io.element.android.features.messages.impl.timeline.components.ATimelineItemEventRow
 import io.element.android.features.messages.impl.timeline.components.layout.ContentAvoidingLayout
@@ -72,7 +76,9 @@ fun TimelineItemImageView(
         modifier = modifier.semantics { contentDescription = description },
     ) {
         val containerModifier = if (content.showCaption) {
-            Modifier.padding(top = 6.dp).clip(RoundedCornerShape(6.dp))
+            Modifier
+                .padding(top = 6.dp)
+                .clip(RoundedCornerShape(6.dp))
         } else {
             Modifier
         }
@@ -100,7 +106,10 @@ fun TimelineItemImageView(
             } else {
                 content.formatted?.body?.takeIf { content.formatted.format == MessageFormat.HTML } ?: SpannedString(content.caption)
             }
-            Box {
+            CompositionLocalProvider(
+                LocalContentColor provides ElementTheme.colors.textPrimary,
+                LocalTextStyle provides ElementTheme.typography.fontBodyLgRegular
+            ) {
                 EditorStyledText(
                     modifier = Modifier
                         .widthIn(min = MIN_HEIGHT_IN_DP.dp * content.aspectRatio!!, max = MAX_HEIGHT_IN_DP.dp * content.aspectRatio),
