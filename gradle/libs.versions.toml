@@ -4,8 +4,8 @@
 [versions]
 # Project
 android_gradle_plugin = "8.2.2"
-kotlin = "1.9.22"
-ksp = "1.9.22-1.0.17"
+kotlin = "1.9.23"
+ksp = "1.9.23-1.0.19"
 firebaseAppDistribution = "4.2.0"
 
 # AndroidX
@@ -19,7 +19,7 @@ media3 = "1.3.0"
 
 # Compose
 compose_bom = "2024.02.02"
-composecompiler = "1.5.10"
+composecompiler = "1.5.11"
 
 # Coroutines
 coroutines = "1.8.0"
