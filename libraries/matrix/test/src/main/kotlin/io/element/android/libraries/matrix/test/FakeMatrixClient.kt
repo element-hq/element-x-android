@@ -30,6 +30,7 @@ import io.element.android.libraries.matrix.api.oidc.AccountManagementAction
 import io.element.android.libraries.matrix.api.pusher.PushersService
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
+import io.element.android.libraries.matrix.api.roomdirectory.RoomDirectoryService
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.api.user.MatrixSearchUserResults
 import io.element.android.libraries.matrix.api.user.MatrixUser
@@ -39,6 +40,7 @@ import io.element.android.libraries.matrix.test.media.FakeMediaLoader
 import io.element.android.libraries.matrix.test.notification.FakeNotificationService
 import io.element.android.libraries.matrix.test.notificationsettings.FakeNotificationSettingsService
 import io.element.android.libraries.matrix.test.pushers.FakePushersService
+import io.element.android.libraries.matrix.test.roomdirectory.FakeRoomDirectoryService
 import io.element.android.libraries.matrix.test.roomlist.FakeRoomListService
 import io.element.android.libraries.matrix.test.sync.FakeSyncService
 import io.element.android.libraries.matrix.test.verification.FakeSessionVerificationService
@@ -65,6 +67,7 @@ class FakeMatrixClient(
     private val notificationSettingsService: FakeNotificationSettingsService = FakeNotificationSettingsService(),
     private val syncService: FakeSyncService = FakeSyncService(),
     private val encryptionService: FakeEncryptionService = FakeEncryptionService(),
+    private val roomDirectoryService: RoomDirectoryService = FakeRoomDirectoryService(),
     private val accountManagementUrlString: Result<String?> = Result.success(null),
 ) : MatrixClient {
     var setDisplayNameCalled: Boolean = false
@@ -125,6 +128,8 @@ class FakeMatrixClient(
     }
 
     override fun syncService() = syncService
+
+    override fun roomDirectoryService() = roomDirectoryService
 
     override suspend fun getCacheSize(): Long {
         return 0

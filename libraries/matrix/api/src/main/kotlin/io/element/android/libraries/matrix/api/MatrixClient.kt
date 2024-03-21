@@ -29,6 +29,7 @@ import io.element.android.libraries.matrix.api.oidc.AccountManagementAction
 import io.element.android.libraries.matrix.api.pusher.PushersService
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
+import io.element.android.libraries.matrix.api.roomdirectory.RoomDirectoryService
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.api.sync.SyncService
 import io.element.android.libraries.matrix.api.user.MatrixSearchUserResults
@@ -64,6 +65,7 @@ interface MatrixClient : Closeable {
     fun notificationService(): NotificationService
     fun notificationSettingsService(): NotificationSettingsService
     fun encryptionService(): EncryptionService
+    fun roomDirectoryService(): RoomDirectoryService
     suspend fun getCacheSize(): Long
 
     /**
