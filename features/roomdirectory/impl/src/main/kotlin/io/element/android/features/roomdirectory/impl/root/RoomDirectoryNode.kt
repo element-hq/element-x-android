@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.features.roomdirectory.impl.search
+package io.element.android.features.roomdirectory.impl.root
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -27,16 +27,16 @@ import io.element.android.anvilannotations.ContributesNode
 import io.element.android.libraries.di.SessionScope
 
 @ContributesNode(SessionScope::class)
-class RoomDirectorySearchNode @AssistedInject constructor(
+class RoomDirectoryNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
-    private val presenter: RoomDirectorySearchPresenter,
+    private val presenter: RoomDirectoryPresenter,
 ) : Node(buildContext, plugins = plugins) {
 
     @Composable
     override fun View(modifier: Modifier) {
         val state = presenter.present()
-        RoomDirectorySearchView(
+        RoomDirectoryView(
             state = state,
             onBackPressed = ::navigateUp,
             modifier = modifier

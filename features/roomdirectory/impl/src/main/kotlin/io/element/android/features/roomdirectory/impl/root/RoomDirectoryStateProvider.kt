@@ -14,24 +14,25 @@
  * limitations under the License.
  */
 
-package io.element.android.features.roomdirectory.impl.search
+package io.element.android.features.roomdirectory.impl.root
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import io.element.android.features.roomdirectory.impl.search.model.RoomDirectorySearchResult
+import io.element.android.features.roomdirectory.impl.root.model.RoomDirectoryRoomSummary
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
+import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
 import io.element.android.libraries.matrix.api.core.RoomId
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
-open class RoomDirectorySearchStateProvider : PreviewParameterProvider<RoomDirectorySearchState> {
-    override val values: Sequence<RoomDirectorySearchState>
+open class RoomDirectorySearchStateProvider : PreviewParameterProvider<RoomDirectoryState> {
+    override val values: Sequence<RoomDirectoryState>
         get() = sequenceOf(
-            aRoomDirectorySearchState(),
-            aRoomDirectorySearchState(
+            aRoomDirectoryState(),
+            aRoomDirectoryState(
                 query = "Element",
-                results = persistentListOf(
-                    RoomDirectorySearchResult(
+                roomSummaries = persistentListOf(
+                    RoomDirectoryRoomSummary(
                         roomId = RoomId("@exa:matrix.org"),
                         name = "Element X Android",
                         description = "Element X is a secure, private and decentralized messenger.",
@@ -43,7 +44,7 @@ open class RoomDirectorySearchStateProvider : PreviewParameterProvider<RoomDirec
                         ),
                         canBeJoined = true,
                     ),
-                    RoomDirectorySearchResult(
+                    RoomDirectoryRoomSummary(
                         roomId = RoomId("@exi:matrix.org"),
                         name = "Element X iOS",
                         description = "Element X is a secure, private and decentralized messenger.",
@@ -60,11 +61,15 @@ open class RoomDirectorySearchStateProvider : PreviewParameterProvider<RoomDirec
         )
 }
 
-fun aRoomDirectorySearchState(
+fun aRoomDirectoryState(
     query: String = "",
-    results: ImmutableList<RoomDirectorySearchResult> = persistentListOf(),
-) = RoomDirectorySearchState(
+    isSearchActive: Boolean = false,
+    roomSummaries: ImmutableList<RoomDirectoryRoomSummary> = persistentListOf(),
+    searchResults: SearchBarResultState<ImmutableList<RoomDirectoryRoomSummary>> = SearchBarResultState.Initial(),
+) = RoomDirectoryState(
     query = query,
-    results = results,
-    eventSink = { }
+    isSearchActive = isSearchActive,
+    roomSummaries = roomSummaries,
+    searchResults = searchResults,
+    eventSink = {},
 )

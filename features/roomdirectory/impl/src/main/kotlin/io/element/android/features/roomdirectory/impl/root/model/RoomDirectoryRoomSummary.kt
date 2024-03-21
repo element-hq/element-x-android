@@ -14,12 +14,15 @@
  * limitations under the License.
  */
 
-package io.element.android.features.roomdirectory.impl.search
+package io.element.android.features.roomdirectory.impl.root.model
 
+import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.matrix.api.core.RoomId
 
-sealed interface RoomDirectorySearchEvents {
-    data class Search(val query: String) : RoomDirectorySearchEvents
-    data object LoadMore : RoomDirectorySearchEvents
-    data class JoinRoom(val roomId: RoomId) : RoomDirectorySearchEvents
-}
+data class RoomDirectoryRoomSummary(
+    val roomId: RoomId,
+    val name: String,
+    val description: String,
+    val avatarData: AvatarData,
+    val canBeJoined: Boolean,
+)

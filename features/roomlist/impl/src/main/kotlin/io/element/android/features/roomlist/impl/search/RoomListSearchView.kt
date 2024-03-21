@@ -208,7 +208,7 @@ private fun RoomDirectorySearchButton(
     modifier: Modifier = Modifier
 ) {
     Button(
-        text = "Room directory",
+        text = "Browse all rooms",
         leadingIcon = IconSource.Vector(CompoundIcons.ListBulleted()),
         onClick = onClick,
         modifier = modifier,

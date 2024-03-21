@@ -14,24 +14,23 @@
  * limitations under the License.
  */
 
-package io.element.android.features.roomdirectory.impl.search.datasource
+package io.element.android.features.roomdirectory.impl.root.datasource
 
-import io.element.android.features.roomdirectory.impl.search.model.RoomDirectorySearchResult
+import io.element.android.features.roomdirectory.impl.root.model.RoomDirectoryRoomSummary
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.core.RoomId
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.flowOf
 import javax.inject.Inject
 
-class RoomDirectorySearchDataSource @Inject constructor(
-
-) {
-
-    private val _searchResults = MutableStateFlow<ImmutableList<RoomDirectorySearchResult>>(persistentListOf())
+class RoomDirectoryDataSource @Inject constructor() {
+    private val _searchResults = MutableStateFlow<ImmutableList<RoomDirectoryRoomSummary>>(persistentListOf())
 
     suspend fun updateSearchQuery(searchQuery: String) {
         //TODO branch to matrix sdk
@@ -39,7 +38,9 @@ class RoomDirectorySearchDataSource @Inject constructor(
             _searchResults.value = persistentListOf()
         } else {
             delay(100)
-            emitFakeResults()
+            _searchResults.value = all.value.filter {
+                it.name.contains(searchQuery)
+            }.toImmutableList()
         }
     }
 
@@ -47,9 +48,10 @@ class RoomDirectorySearchDataSource @Inject constructor(
         //TODO branch to matrix sdk
     }
 
-    private fun emitFakeResults() {
-        _searchResults.value = persistentListOf(
-            RoomDirectorySearchResult(
+
+    val all: StateFlow<ImmutableList<RoomDirectoryRoomSummary>> = MutableStateFlow(
+        persistentListOf(
+            RoomDirectoryRoomSummary(
                 roomId = RoomId("!exa:matrix.org"),
                 name = "Element X Android",
                 description = "Element X is a secure, private and decentralized messenger.",
@@ -61,7 +63,7 @@ class RoomDirectorySearchDataSource @Inject constructor(
                 ),
                 canBeJoined = true,
             ),
-            RoomDirectorySearchResult(
+            RoomDirectoryRoomSummary(
                 roomId = RoomId("!exi:matrix.org"),
                 name = "Element X iOS",
                 description = "Element X is a secure, private and decentralized messenger.",
@@ -74,7 +76,6 @@ class RoomDirectorySearchDataSource @Inject constructor(
                 canBeJoined = false,
             )
         )
-    }
-
-    val searchResults: StateFlow<ImmutableList<RoomDirectorySearchResult>> = _searchResults
+    )
+    val searchResults: StateFlow<ImmutableList<RoomDirectoryRoomSummary>> = _searchResults
 }

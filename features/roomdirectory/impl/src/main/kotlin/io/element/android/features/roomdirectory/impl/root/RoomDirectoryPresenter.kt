@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.features.roomdirectory.impl.search
+package io.element.android.features.roomdirectory.impl.root
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -24,27 +24,31 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import io.element.android.features.roomdirectory.impl.search.datasource.RoomDirectorySearchDataSource
+import io.element.android.features.roomdirectory.impl.root.datasource.RoomDirectoryDataSource
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class RoomDirectorySearchPresenter @Inject constructor(
+class RoomDirectoryPresenter @Inject constructor(
     private val client: MatrixClient,
-    private val dataSource: RoomDirectorySearchDataSource,
-) : Presenter<RoomDirectorySearchState> {
+    private val dataSource: RoomDirectoryDataSource,
+) : Presenter<RoomDirectoryState> {
 
     @Composable
-    override fun present(): RoomDirectorySearchState {
+    override fun present(): RoomDirectoryState {
 
         var searchQuery by rememberSaveable {
             mutableStateOf("")
         }
+        var isSearchActive by rememberSaveable {
+            mutableStateOf(false)
+        }
 
-        val results by dataSource.searchResults.collectAsState()
+        val roomSummaries by dataSource.all.collectAsState()
 
         val coroutineScope = rememberCoroutineScope()
 
@@ -52,25 +56,33 @@ class RoomDirectorySearchPresenter @Inject constructor(
             dataSource.updateSearchQuery(searchQuery)
         }
 
-        fun handleEvents(event: RoomDirectorySearchEvents) {
+        fun handleEvents(event: RoomDirectoryEvents) {
             when (event) {
-                is RoomDirectorySearchEvents.JoinRoom -> {
+                is RoomDirectoryEvents.JoinRoom -> {
                     coroutineScope.joinRoom(event.roomId)
                 }
-                RoomDirectorySearchEvents.LoadMore -> {
+                RoomDirectoryEvents.LoadMore -> {
                     coroutineScope.launch {
                         dataSource.loadMore()
                     }
                 }
-                is RoomDirectorySearchEvents.Search -> {
+                is RoomDirectoryEvents.Search -> {
                     searchQuery = event.query
+                }
+                is RoomDirectoryEvents.SearchActiveChange -> {
+                    isSearchActive = event.isActive
+                    if (!isSearchActive) {
+                        searchQuery = ""
+                    }
                 }
             }
         }
 
-        return RoomDirectorySearchState(
+        return RoomDirectoryState(
             query = searchQuery,
-            results = results,
+            isSearchActive = isSearchActive,
+            roomSummaries = roomSummaries,
+            searchResults = SearchBarResultState.Initial(),
             eventSink = ::handleEvents
         )
     }

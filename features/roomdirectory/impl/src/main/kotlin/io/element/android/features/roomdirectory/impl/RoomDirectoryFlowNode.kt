@@ -26,7 +26,7 @@ import com.bumble.appyx.navmodel.backstack.BackStack
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
-import io.element.android.features.roomdirectory.impl.search.RoomDirectorySearchNode
+import io.element.android.features.roomdirectory.impl.root.RoomDirectoryNode
 import io.element.android.libraries.architecture.BackstackView
 import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.architecture.createNode
@@ -54,7 +54,7 @@ class RoomDirectoryFlowNode @AssistedInject constructor(
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
         return when (navTarget) {
             NavTarget.Root -> {
-                createNode<RoomDirectorySearchNode>(buildContext)
+                createNode<RoomDirectoryNode>(buildContext)
             }
         }
     }
