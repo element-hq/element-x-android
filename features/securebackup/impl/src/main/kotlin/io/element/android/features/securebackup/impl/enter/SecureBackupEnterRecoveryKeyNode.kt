@@ -22,6 +22,7 @@ import androidx.compose.ui.Modifier
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
+import com.bumble.appyx.core.plugin.plugins
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
@@ -39,6 +40,12 @@ class SecureBackupEnterRecoveryKeyNode @AssistedInject constructor(
     private val presenter: SecureBackupEnterRecoveryKeyPresenter,
     private val snackbarDispatcher: SnackbarDispatcher,
 ) : Node(buildContext, plugins = plugins) {
+    interface Callback : Plugin {
+        fun onEnterRecoveryKeySuccess()
+    }
+
+    private val callback = plugins<Callback>().first()
+
     @Composable
     override fun View(modifier: Modifier) {
         val coroutineScope = rememberCoroutineScope()
@@ -48,7 +55,7 @@ class SecureBackupEnterRecoveryKeyNode @AssistedInject constructor(
             modifier = modifier,
             onDone = {
                 coroutineScope.postSuccessSnackbar()
-                navigateUp()
+                callback.onEnterRecoveryKeySuccess()
             },
             onBackClicked = ::navigateUp,
         )
