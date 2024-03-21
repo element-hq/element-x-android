@@ -615,9 +615,9 @@ private fun MessageEventBubbleContent(
     }
 
     val timestampPosition = when (event.content) {
-        is TimelineItemImageContent,
+        is TimelineItemImageContent -> if (event.content.showCaption) TimestampPosition.Aligned else TimestampPosition.Overlay
+        is TimelineItemVideoContent -> if (event.content.showCaption) TimestampPosition.Aligned else TimestampPosition.Overlay
         is TimelineItemStickerContent,
-        is TimelineItemVideoContent,
         is TimelineItemLocationContent -> TimestampPosition.Overlay
         is TimelineItemPollContent -> TimestampPosition.Below
         else -> TimestampPosition.Default
@@ -723,10 +723,10 @@ private fun ReplyToContentText(metadata: InReplyToMetadata?) {
 @Composable
 internal fun TimelineItemEventRowPreview() = ElementPreview {
     Column {
-        sequenceOf(false, true).forEach {
+        sequenceOf(false, true).forEach { isMine ->
             ATimelineItemEventRow(
                 event = aTimelineItemEvent(
-                    isMine = it,
+                    isMine = isMine,
                     content = aTimelineItemTextContent().copy(
                         body = "A long text which will be displayed on several lines and" +
                             " hopefully can be manually adjusted to test different behaviors."
@@ -736,7 +736,7 @@ internal fun TimelineItemEventRowPreview() = ElementPreview {
             )
             ATimelineItemEventRow(
                 event = aTimelineItemEvent(
-                    isMine = it,
+                    isMine = isMine,
                     content = aTimelineItemImageContent().copy(
                         aspectRatio = 2.5f
                     ),

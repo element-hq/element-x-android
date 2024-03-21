@@ -19,9 +19,12 @@ package io.element.android.libraries.designsystem.theme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
+import io.element.android.compound.annotations.CoreColorToken
 import io.element.android.compound.previews.ColorListPreview
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.SemanticColors
+import io.element.android.compound.tokens.generated.internal.DarkColorTokens
+import io.element.android.compound.tokens.generated.internal.LightColorTokens
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import kotlinx.collections.immutable.persistentMapOf
@@ -138,6 +141,14 @@ val SemanticColors.mentionPillBackground
         Color(0x26f4f7fa)
     }
 
+@OptIn(CoreColorToken::class)
+val SemanticColors.bigIconDefaultBackgroundColor
+    get() = if (isLight) LightColorTokens.colorAlphaGray300 else DarkColorTokens.colorAlphaGray300
+
+@OptIn(CoreColorToken::class)
+val SemanticColors.bigCheckmarkBorderColor
+    get() = if (isLight) LightColorTokens.colorGray400 else DarkColorTokens.colorGray400
+
 @PreviewsDayNight
 @Composable
 internal fun ColorAliasesPreview() = ElementPreview {
@@ -155,6 +166,7 @@ internal fun ColorAliasesPreview() = ElementPreview {
             "progressIndicatorTrackColor" to ElementTheme.colors.progressIndicatorTrackColor,
             "temporaryColorBgSpecial" to ElementTheme.colors.temporaryColorBgSpecial,
             "iconSuccessPrimaryBackground" to ElementTheme.colors.iconSuccessPrimaryBackground,
+            "bigIconBackgroundColor" to ElementTheme.colors.bigIconDefaultBackgroundColor,
         )
     )
 }

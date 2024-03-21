@@ -83,6 +83,8 @@ class TimelineItemContentMessageFactory @Inject constructor(
                 val aspectRatio = aspectRatioOf(messageType.info?.width, messageType.info?.height)
                 TimelineItemImageContent(
                     body = messageType.body.trimEnd(),
+                    formatted = messageType.formatted,
+                    filename = messageType.filename,
                     mediaSource = messageType.source,
                     thumbnailSource = messageType.info?.thumbnailSource,
                     mimeType = messageType.info?.mimetype ?: MimeTypes.OctetStream,
@@ -91,7 +93,7 @@ class TimelineItemContentMessageFactory @Inject constructor(
                     height = messageType.info?.height?.toInt(),
                     aspectRatio = aspectRatio,
                     formattedFileSize = fileSizeFormatter.format(messageType.info?.size ?: 0),
-                    fileExtension = fileExtensionExtractor.extractFromName(messageType.body)
+                    fileExtension = messageType.filename?.let { fileExtensionExtractor.extractFromName(it) }.orEmpty()
                 )
             }
             is StickerMessageType -> {
@@ -132,6 +134,8 @@ class TimelineItemContentMessageFactory @Inject constructor(
                 val aspectRatio = aspectRatioOf(messageType.info?.width, messageType.info?.height)
                 TimelineItemVideoContent(
                     body = messageType.body.trimEnd(),
+                    formatted = messageType.formatted,
+                    filename = messageType.filename,
                     thumbnailSource = messageType.info?.thumbnailSource,
                     videoSource = messageType.source,
                     mimeType = messageType.info?.mimetype ?: MimeTypes.OctetStream,
@@ -141,7 +145,7 @@ class TimelineItemContentMessageFactory @Inject constructor(
                     blurHash = messageType.info?.blurhash,
                     aspectRatio = aspectRatio,
                     formattedFileSize = fileSizeFormatter.format(messageType.info?.size ?: 0),
-                    fileExtension = fileExtensionExtractor.extractFromName(messageType.body)
+                    fileExtension = messageType.filename?.let { fileExtensionExtractor.extractFromName(it) }.orEmpty(),
                 )
             }
             is AudioMessageType -> {

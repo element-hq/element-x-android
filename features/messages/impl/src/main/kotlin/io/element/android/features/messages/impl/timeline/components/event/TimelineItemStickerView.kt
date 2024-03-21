@@ -26,7 +26,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStickerContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStickerContentProvider
-import io.element.android.libraries.designsystem.components.BlurHashAsyncImage
+import io.element.android.libraries.designsystem.components.blurhash.BlurHashAsyncImage
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.matrix.ui.media.MediaRequestData
