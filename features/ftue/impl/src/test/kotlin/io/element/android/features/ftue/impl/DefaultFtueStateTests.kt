@@ -20,7 +20,6 @@ import android.os.Build
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.ftue.impl.state.DefaultFtueState
 import io.element.android.features.ftue.impl.state.FtueStep
-import io.element.android.features.ftue.impl.welcome.state.FakeWelcomeState
 import io.element.android.features.lockscreen.api.LockScreenService
 import io.element.android.features.lockscreen.test.FakeLockScreenService
 import io.element.android.libraries.permissions.impl.FakePermissionStateProvider
@@ -47,7 +46,6 @@ class DefaultFtueStateTests {
 
     @Test
     fun `given all checks being true, should display flow is false`() = runTest {
-        val welcomeState = FakeWelcomeState()
         val analyticsService = FakeAnalyticsService()
         val permissionStateProvider = FakePermissionStateProvider(permissionGranted = true)
         val lockScreenService = FakeLockScreenService()
@@ -55,13 +53,11 @@ class DefaultFtueStateTests {
 
         val state = createState(
             coroutineScope = coroutineScope,
-            welcomeState = welcomeState,
             analyticsService = analyticsService,
             permissionStateProvider = permissionStateProvider,
             lockScreenService = lockScreenService,
         )
 
-        welcomeState.setWelcomeScreenShown()
         analyticsService.setDidAskUserConsent()
         permissionStateProvider.setPermissionGranted()
         lockScreenService.setIsPinSetup(true)
@@ -75,7 +71,6 @@ class DefaultFtueStateTests {
 
     @Test
     fun `traverse flow`() = runTest {
-        val welcomeState = FakeWelcomeState()
         val analyticsService = FakeAnalyticsService()
         val permissionStateProvider = FakePermissionStateProvider(permissionGranted = false)
         val lockScreenService = FakeLockScreenService()
@@ -83,26 +78,21 @@ class DefaultFtueStateTests {
 
         val state = createState(
             coroutineScope = coroutineScope,
-            welcomeState = welcomeState,
             analyticsService = analyticsService,
             permissionStateProvider = permissionStateProvider,
             lockScreenService = lockScreenService,
         )
         val steps = mutableListOf<FtueStep?>()
 
-        // First step, welcome screen
-        steps.add(state.getNextStep(steps.lastOrNull()))
-        welcomeState.setWelcomeScreenShown()
-
-        // Second step, notifications opt in
+        // Notifications opt in
         steps.add(state.getNextStep(steps.lastOrNull()))
         permissionStateProvider.setPermissionGranted()
 
-        // Third step, entering PIN code
+        // Entering PIN code
         steps.add(state.getNextStep(steps.lastOrNull()))
         lockScreenService.setIsPinSetup(true)
 
-        // Fourth step, analytics opt in
+        // Analytics opt in
         steps.add(state.getNextStep(steps.lastOrNull()))
         analyticsService.setDidAskUserConsent()
 
@@ -110,7 +100,6 @@ class DefaultFtueStateTests {
         steps.add(state.getNextStep(steps.lastOrNull()))
 
         assertThat(steps).containsExactly(
-            FtueStep.WelcomeScreen,
             FtueStep.NotificationsOptIn,
             FtueStep.LockscreenSetup,
             FtueStep.AnalyticsOptIn,
@@ -135,15 +124,14 @@ class DefaultFtueStateTests {
             lockScreenService = lockScreenService,
         )
 
-        // Skip first 3 steps
-        state.setWelcomeScreenShown()
+        // Skip first 2 steps
         permissionStateProvider.setPermissionGranted()
         lockScreenService.setIsPinSetup(true)
 
         assertThat(state.getNextStep()).isEqualTo(FtueStep.AnalyticsOptIn)
 
         analyticsService.setDidAskUserConsent()
-        assertThat(state.getNextStep(FtueStep.WelcomeScreen)).isNull()
+        assertThat(state.getNextStep(null)).isNull()
 
         // Cleanup
         coroutineScope.cancel()
@@ -162,14 +150,12 @@ class DefaultFtueStateTests {
             lockScreenService = lockScreenService,
         )
 
-        assertThat(state.getNextStep()).isEqualTo(FtueStep.WelcomeScreen)
-        state.setWelcomeScreenShown()
         lockScreenService.setIsPinSetup(true)
 
         assertThat(state.getNextStep()).isEqualTo(FtueStep.AnalyticsOptIn)
 
         analyticsService.setDidAskUserConsent()
-        assertThat(state.getNextStep(FtueStep.WelcomeScreen)).isNull()
+        assertThat(state.getNextStep(null)).isNull()
 
         // Cleanup
         coroutineScope.cancel()
@@ -177,7 +163,6 @@ class DefaultFtueStateTests {
 
     private fun createState(
         coroutineScope: CoroutineScope,
-        welcomeState: FakeWelcomeState = FakeWelcomeState(),
         analyticsService: AnalyticsService = FakeAnalyticsService(),
         permissionStateProvider: FakePermissionStateProvider = FakePermissionStateProvider(permissionGranted = false),
         lockScreenService: LockScreenService = FakeLockScreenService(),
@@ -187,7 +172,6 @@ class DefaultFtueStateTests {
         sdkVersionProvider = FakeBuildVersionSdkIntProvider(sdkIntVersion),
         coroutineScope = coroutineScope,
         analyticsService = analyticsService,
-        welcomeScreenState = welcomeState,
         permissionStateProvider = permissionStateProvider,
         lockScreenService = lockScreenService,
     )
