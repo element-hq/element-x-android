@@ -23,8 +23,6 @@ appId: ${MAESTRO_APP_ID}
 - inputText: ${MAESTRO_PASSWORD}
 - pressKey: Enter
 - tapOn: "Continue"
-- runFlow: ../assertions/assertWelcomeScreenDisplayed.yaml
-- tapOn: "Continue"
 - runFlow: ../assertions/assertAnalyticsDisplayed.yaml
 - tapOn: "Not now"
 - runFlow: ../assertions/assertHomeDisplayed.yaml
