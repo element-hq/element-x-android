@@ -191,6 +191,7 @@ private fun PollHistoryList(
                 Column(
                     modifier = Modifier.fillParentMaxSize().padding(bottom = 24.dp),
                     verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
                     val emptyStringResource = if (filter == PollHistoryFilter.PAST) {
                         stringResource(R.string.screen_polls_history_empty_past)

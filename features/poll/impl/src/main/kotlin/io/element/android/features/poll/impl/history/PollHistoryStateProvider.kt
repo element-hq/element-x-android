@@ -41,6 +41,11 @@ class PollHistoryStateProvider : PreviewParameterProvider<PollHistoryState> {
                 activeFilter = PollHistoryFilter.PAST,
                 currentItems = emptyList(),
             ),
+            aPollHistoryState(
+                activeFilter = PollHistoryFilter.PAST,
+                currentItems = emptyList(),
+                hasMoreToLoad = true,
+            ),
         )
 }
 
