@@ -30,6 +30,7 @@ import androidx.compose.runtime.Immutable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
@@ -60,22 +61,22 @@ object BigIcon {
         data class Default(val vectorIcon: ImageVector, val contentDescription: String? = null) : Style
 
         /**
-         * An alert style with a tinted background.
+         * An alert style with a transparent background.
          */
         data object Alert : Style
 
         /**
-         * An alert style with the default background color.
+         * An alert style with a tinted background.
          */
         data object AlertSolid : Style
 
         /**
-         * A success style with a tinted background.
+         * A success style with a transparent background.
          */
         data object Success : Style
 
         /**
-         * A success style with the default background color.
+         * A success style with a tinted background.
          */
         data object SuccessSolid : Style
     }
@@ -93,9 +94,9 @@ object BigIcon {
     ) {
         val backgroundColor = when (style) {
             is Style.Default -> ElementTheme.colors.bigIconDefaultBackgroundColor
-            Style.AlertSolid, Style.SuccessSolid -> ElementTheme.colors.bgCanvasDefault
-            Style.Alert -> ElementTheme.colors.bgCriticalSubtle
-            Style.Success -> ElementTheme.colors.bgSuccessSubtle
+            Style.Alert, Style.Success -> Color.Transparent
+            Style.AlertSolid -> ElementTheme.colors.bgCriticalSubtle
+            Style.SuccessSolid -> ElementTheme.colors.bgSuccessSubtle
         }
         val icon = when (style) {
             is Style.Default -> style.vectorIcon
