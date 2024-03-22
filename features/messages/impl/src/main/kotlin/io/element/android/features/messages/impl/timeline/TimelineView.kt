@@ -146,7 +146,6 @@ fun TimelineView(
                         onMoreReactionsClick = onMoreReactionsClicked,
                         onReadReceiptClick = onReadReceiptClick,
                         onTimestampClicked = onTimestampClicked,
-                        sessionState = state.sessionState,
                         eventSink = state.eventSink,
                         onSwipeToReply = onSwipeToReply,
                     )
