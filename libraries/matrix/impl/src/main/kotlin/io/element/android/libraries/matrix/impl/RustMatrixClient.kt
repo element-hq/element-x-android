@@ -132,7 +132,6 @@ class RustMatrixClient(
     private val verificationService = RustSessionVerificationService(
         client = client,
         syncService = rustSyncService,
-        sessionCoroutineScope = sessionCoroutineScope,
     ).apply { start() }
     private val pushersService = RustPushersService(
         client = client,
@@ -282,7 +281,6 @@ class RustMatrixClient(
         .stateIn(sessionCoroutineScope, started = SharingStarted.Eagerly, initialValue = persistentListOf())
 
     init {
-        setupVerificationControllerIfNeeded()
         sessionCoroutineScope.launch {
             // Force a refresh of the profile
             getUserProfile()
@@ -494,6 +492,7 @@ class RustMatrixClient(
         ignoreSdkError: Boolean,
     ): String? {
         var result: String? = null
+        syncService.stop()
         withContext(sessionDispatcher) {
             if (doRequest) {
                 try {
@@ -526,16 +525,6 @@ class RustMatrixClient(
     override suspend fun uploadMedia(mimeType: String, data: ByteArray, progressCallback: ProgressCallback?): Result<String> = withContext(sessionDispatcher) {
         runCatching {
             client.uploadMedia(mimeType, data, progressCallback?.toProgressWatcher())
-        }
-    }
-
-    private fun setupVerificationControllerIfNeeded() {
-        if (verificationService.verificationController == null) {
-            try {
-                verificationService.verificationController = client.getSessionVerificationController()
-            } catch (e: Throwable) {
-                Timber.e(e, "Could not start verification service. Will try again on the next sliding sync update.")
-            }
         }
     }
 

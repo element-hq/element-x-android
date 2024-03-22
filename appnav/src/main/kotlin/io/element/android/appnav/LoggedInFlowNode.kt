@@ -147,11 +147,17 @@ class LoggedInFlowNode @AssistedInject constructor(
                     }
                     .launchIn(lifecycleScope)
 
-                // Attach the root node as soon as we know the first session verification status
+                // Attach the root node as soon as we know the first session verification status and the FTUE shouldn't be displayed.
                 // This prevents the room list from being displayed while the session is not verified.
-                sessionVerificationService.sessionVerifiedStatus
-                    .filter { it != SessionVerifiedStatus.Unknown }
-                    .take(1)
+                combine(
+                    sessionVerificationService.sessionVerifiedStatus,
+                    ftueState.shouldDisplayFlow,
+                ) { sessionVerifiedStatus, shouldDisplayFtue ->
+                        sessionVerifiedStatus to shouldDisplayFtue
+                    }
+                    .filter { (sessionVerifiedStatus, shouldDisplayFtue) ->
+                        sessionVerifiedStatus.isVerified() && !shouldDisplayFtue
+                    }
                     .onEach { attachRoot() }
                     .launchIn(lifecycleScope)
             },
@@ -403,7 +409,7 @@ class LoggedInFlowNode @AssistedInject constructor(
                 ftueEntryPoint.nodeBuilder(this, buildContext)
                     .callback(object : FtueEntryPoint.Callback {
                         override fun onFtueFlowFinished() {
-                            backstack.pop()
+                            lifecycleScope.launch { attachRoot() }
                         }
                     })
                     .build()
@@ -421,14 +427,14 @@ class LoggedInFlowNode @AssistedInject constructor(
     }
 
     suspend fun attachRoot() {
-        if (!sessionVerificationService.sessionVerifiedStatus.value.isVerified()) return
+        if (!canShowRoot(ftueState, sessionVerificationService.sessionVerifiedStatus.value)) return
         attachChild<Node> {
             backstack.singleTop(NavTarget.RoomList)
         }
     }
 
     suspend fun attachRoom(roomId: RoomId) {
-        if (!sessionVerificationService.sessionVerifiedStatus.value.isVerified()) return
+        if (!canShowRoot(ftueState, sessionVerificationService.sessionVerifiedStatus.value)) return
         attachChild<RoomFlowNode> {
             backstack.singleTop(NavTarget.RoomList)
             backstack.push(NavTarget.Room(roomId))
@@ -436,7 +442,7 @@ class LoggedInFlowNode @AssistedInject constructor(
     }
 
     internal suspend fun attachInviteList(deeplinkData: DeeplinkData.InviteList) = withContext(lifecycleScope.coroutineContext) {
-        if (!sessionVerificationService.sessionVerifiedStatus.value.isVerified()) return@withContext
+        if (!canShowRoot(ftueState, sessionVerificationService.sessionVerifiedStatus.value)) return@withContext
         notificationDrawerManager.clearMembershipNotificationForSession(deeplinkData.sessionId)
         backstack.singleTop(NavTarget.RoomList)
         backstack.push(NavTarget.InviteList)
@@ -444,6 +450,10 @@ class LoggedInFlowNode @AssistedInject constructor(
             navTarget is NavTarget.InviteList
         }
         Unit
+    }
+
+    private fun canShowRoot(ftueState: FtueState, sessionVerifiedStatus: SessionVerifiedStatus): Boolean {
+        return !ftueState.shouldDisplayFlow.value && sessionVerifiedStatus.isVerified()
     }
 
     @Composable

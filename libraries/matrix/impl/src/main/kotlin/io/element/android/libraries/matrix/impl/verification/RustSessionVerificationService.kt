@@ -39,21 +39,16 @@ import org.matrix.rustcomponents.sdk.TaskHandle
 import org.matrix.rustcomponents.sdk.VerificationState
 import org.matrix.rustcomponents.sdk.VerificationStateListener
 import org.matrix.rustcomponents.sdk.use
+import timber.log.Timber
 import org.matrix.rustcomponents.sdk.SessionVerificationData as RustSessionVerificationData
 
 class RustSessionVerificationService(
     client: Client,
-    private val syncService: RustSyncService,
-    private val sessionCoroutineScope: CoroutineScope,
+    syncService: RustSyncService,
 ) : SessionVerificationService, SessionVerificationControllerDelegate {
     private var recoveryStateListenerTaskHandle: TaskHandle? = null
     private val encryptionService: Encryption = client.encryption()
-    var verificationController: SessionVerificationControllerInterface? = null
-        set(value) {
-            field = value
-            _isReady.value = value != null
-            value?.setDelegate(this)
-        }
+    private val verificationController = client.getSessionVerificationController()
 
     private val _verificationFlowState = MutableStateFlow<VerificationFlowState>(VerificationFlowState.Initial)
     override val verificationFlowState = _verificationFlowState.asStateFlow()
@@ -68,6 +63,11 @@ class RustSessionVerificationService(
         syncState == SyncState.Running && verificationStatus == SessionVerifiedStatus.NotVerified
     }
 
+    init {
+        verificationController.setDelegate(this)
+        _isReady.value = true
+    }
+
     fun start() {
         // Initial status update
         updateVerificationStatus(encryptionService.verificationState())
@@ -80,23 +80,26 @@ class RustSessionVerificationService(
     }
 
     override suspend fun requestVerification() = tryOrFail {
-        verificationController?.requestVerification()
+        verificationController.requestVerification()
     }
 
-    override suspend fun cancelVerification() = tryOrFail { verificationController?.cancelVerification() }
+    override suspend fun cancelVerification() = tryOrFail { verificationController.cancelVerification() }
 
-    override suspend fun approveVerification() = tryOrFail { verificationController?.approveVerification() }
+    override suspend fun approveVerification() = tryOrFail { verificationController.approveVerification() }
 
-    override suspend fun declineVerification() = tryOrFail { verificationController?.declineVerification() }
+    override suspend fun declineVerification() = tryOrFail { verificationController.declineVerification() }
 
     override suspend fun startVerification() = tryOrFail {
-        verificationController?.startSasVerification()
+        verificationController.startSasVerification()
     }
 
     private suspend fun tryOrFail(block: suspend () -> Unit) {
         runCatching {
             block()
-        }.onFailure { didFail() }
+        }.onFailure {
+            Timber.e(it, "Failed to verify session")
+            didFail()
+        }
     }
 
     // region Delegate implementation
@@ -111,6 +114,7 @@ class RustSessionVerificationService(
     }
 
     override fun didFail() {
+        Timber.e("Session verification failed with an unknown error")
         _verificationFlowState.value = VerificationFlowState.Failed
     }
 
@@ -134,16 +138,15 @@ class RustSessionVerificationService(
     override suspend fun reset() {
         if (isReady.value) {
             // Cancel any pending verification attempt
-            tryOrNull { verificationController?.cancelVerification() }
+            tryOrNull { verificationController.cancelVerification() }
         }
         _verificationFlowState.value = VerificationFlowState.Initial
     }
 
     fun destroy() {
         recoveryStateListenerTaskHandle?.cancelAndDestroy()
-        verificationController?.setDelegate(null)
+        verificationController.setDelegate(null)
         (verificationController as? SessionVerificationController)?.destroy()
-        verificationController = null
     }
 
     private fun updateVerificationStatus(verificationState: VerificationState) {
