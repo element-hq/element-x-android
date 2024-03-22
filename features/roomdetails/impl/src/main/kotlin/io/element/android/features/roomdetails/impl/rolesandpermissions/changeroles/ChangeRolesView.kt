@@ -26,8 +26,10 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.systemBarsPadding
@@ -36,12 +38,16 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
@@ -53,6 +59,9 @@ import io.element.android.libraries.designsystem.components.async.AsyncActionVie
 import io.element.android.libraries.designsystem.components.async.AsyncIndicator
 import io.element.android.libraries.designsystem.components.async.AsyncIndicatorHost
 import io.element.android.libraries.designsystem.components.async.rememberAsyncIndicatorState
+import io.element.android.libraries.designsystem.components.avatar.Avatar
+import io.element.android.libraries.designsystem.components.avatar.AvatarData
+import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
 import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
@@ -68,8 +77,9 @@ import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.RoomMember
+import io.element.android.libraries.matrix.api.room.RoomMembershipState
+import io.element.android.libraries.matrix.api.room.getBestName
 import io.element.android.libraries.matrix.api.user.MatrixUser
-import io.element.android.libraries.matrix.ui.components.MatrixUserRow
 import io.element.android.libraries.matrix.ui.components.SelectedUsersRowList
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
@@ -302,15 +312,70 @@ private fun ListMemberItem(
             enabled = canToggle,
         )
     }
-    MatrixUserRow(
+    MemberRow(
         modifier = Modifier.clickable(enabled = canToggle, onClick = { onSelectionToggled(roomMember) }),
-        matrixUser = MatrixUser(
-            userId = roomMember.userId,
-            displayName = roomMember.displayName,
-            avatarUrl = roomMember.avatarUrl,
-        ),
+        avatarData = AvatarData(roomMember.userId.value, roomMember.displayName, roomMember.avatarUrl, AvatarSize.UserListItem),
+        name = roomMember.getBestName(),
+        userId = roomMember.userId.value.takeIf { roomMember.displayName?.isNotBlank() == true },
+        isPending = roomMember.membership == RoomMembershipState.INVITE,
         trailingContent = trailingContent,
     )
+}
+
+@Composable
+internal fun MemberRow(
+    avatarData: AvatarData,
+    name: String,
+    userId: String?,
+    isPending: Boolean,
+    modifier: Modifier = Modifier,
+    trailingContent: @Composable (() -> Unit)? = null,
+) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .heightIn(min = 56.dp)
+            .padding(start = 16.dp, top = 4.dp, end = 16.dp, bottom = 4.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Avatar(avatarData)
+        Column(
+            modifier = Modifier
+                .padding(start = 12.dp)
+                .weight(1f),
+        ) {
+            Row (verticalAlignment = Alignment.CenterVertically) {
+                // Name
+                Text(
+                    modifier = Modifier.clipToBounds(),
+                    text = name,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    color = MaterialTheme.colorScheme.primary,
+                    style = ElementTheme.typography.fontBodyLgRegular,
+                )
+                if (isPending) {
+                    Text(
+                        modifier = Modifier.weight(1f),
+                        text = " - Pending",
+                        style = ElementTheme.typography.fontBodySmRegular,
+                        color = MaterialTheme.colorScheme.secondary
+                    )
+                }
+            }
+            // Id
+            userId?.let {
+                Text(
+                    text = userId,
+                    color = MaterialTheme.colorScheme.secondary,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    style = ElementTheme.typography.fontBodySmRegular,
+                )
+            }
+        }
+        trailingContent?.invoke()
+    }
 }
 
 @PreviewsDayNight
