@@ -27,6 +27,8 @@ import io.element.android.features.networkmonitor.api.NetworkStatus
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
+import io.element.android.libraries.matrix.api.verification.SessionVerificationService
+import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatus
 import io.element.android.libraries.push.api.PushService
 import javax.inject.Inject
 
@@ -34,15 +36,19 @@ class LoggedInPresenter @Inject constructor(
     private val matrixClient: MatrixClient,
     private val networkMonitor: NetworkMonitor,
     private val pushService: PushService,
+    private val sessionVerificationService: SessionVerificationService,
 ) : Presenter<LoggedInState> {
     @Composable
     override fun present(): LoggedInState {
-        LaunchedEffect(Unit) {
-            // Ensure pusher is registered
-            // TODO Manually select push provider for now
-            val pushProvider = pushService.getAvailablePushProviders().firstOrNull() ?: return@LaunchedEffect
-            val distributor = pushProvider.getDistributors().firstOrNull() ?: return@LaunchedEffect
-            pushService.registerWith(matrixClient, pushProvider, distributor)
+        val verifiedStatus by sessionVerificationService.sessionVerifiedStatus.collectAsState()
+        LaunchedEffect(verifiedStatus) {
+            if (verifiedStatus == SessionVerifiedStatus.Verified) {
+                // Ensure pusher is registered
+                // TODO Manually select push provider for now
+                val pushProvider = pushService.getAvailablePushProviders().firstOrNull() ?: return@LaunchedEffect
+                val distributor = pushProvider.getDistributors().firstOrNull() ?: return@LaunchedEffect
+                pushService.registerWith(matrixClient, pushProvider, distributor)
+            }
         }
 
         val syncIndicator by matrixClient.roomListService.syncIndicator.collectAsState()
