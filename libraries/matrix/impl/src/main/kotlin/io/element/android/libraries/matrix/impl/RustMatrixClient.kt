@@ -282,11 +282,7 @@ class RustMatrixClient(
         .stateIn(sessionCoroutineScope, started = SharingStarted.Eagerly, initialValue = persistentListOf())
 
     init {
-        roomListService.state.onEach { state ->
-            if (state == RoomListService.State.Running) {
-                setupVerificationControllerIfNeeded()
-            }
-        }.launchIn(sessionCoroutineScope)
+        setupVerificationControllerIfNeeded()
         sessionCoroutineScope.launch {
             // Force a refresh of the profile
             getUserProfile()

@@ -75,6 +75,10 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.parcelize.Parcelize
@@ -133,9 +137,13 @@ class LoggedInFlowNode @AssistedInject constructor(
                 appNavigationStateService.onNavigateToSpace(id, MAIN_SPACE)
                 loggedInFlowProcessor.observeEvents(coroutineScope)
 
-                if (ftueState.shouldDisplayFlow.value) {
-                    backstack.push(NavTarget.Ftue)
-                }
+                ftueState.shouldDisplayFlow
+                    .distinctUntilChanged { a, b -> a == b }
+                    .filter { it }
+                    .onEach {
+                        backstack.push(NavTarget.Ftue)
+                    }
+                    .launchIn(lifecycleScope)
             },
             onStop = {
                 coroutineScope.launch {

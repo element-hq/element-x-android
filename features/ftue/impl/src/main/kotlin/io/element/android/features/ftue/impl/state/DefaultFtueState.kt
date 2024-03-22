@@ -45,7 +45,7 @@ class DefaultFtueState @Inject constructor(
     private val lockScreenService: LockScreenService,
     private val sessionVerificationService: SessionVerificationService,
 ) : FtueState {
-    override val shouldDisplayFlow = MutableStateFlow(isAnyStepIncomplete())
+    override val shouldDisplayFlow = MutableStateFlow(isSessionVerificationServiceReady() && isAnyStepIncomplete())
 
     override suspend fun reset() {
         analyticsService.reset()
@@ -55,6 +55,10 @@ class DefaultFtueState @Inject constructor(
     }
 
     init {
+        sessionVerificationService.sessionVerifiedStatus
+            .onEach { updateState() }
+            .launchIn(coroutineScope)
+
         analyticsService.didAskUserConsent()
             .onEach { updateState() }
             .launchIn(coroutineScope)
@@ -62,7 +66,7 @@ class DefaultFtueState @Inject constructor(
 
     fun getNextStep(currentStep: FtueStep? = null): FtueStep? =
         when (currentStep) {
-            null -> if (!isSessionVerified()) {
+            null -> if (isSessionNotVerified()) {
                 FtueStep.SessionVerification
             } else {
                 getNextStep(FtueStep.SessionVerification)
@@ -87,15 +91,19 @@ class DefaultFtueState @Inject constructor(
 
     private fun isAnyStepIncomplete(): Boolean {
         return listOf(
-            { !isSessionVerified() },
+            { isSessionNotVerified() },
             { shouldAskNotificationPermissions() },
             { needsAnalyticsOptIn() },
             { shouldDisplayLockscreenSetup() },
         ).any { it() }
     }
 
-    private fun isSessionVerified(): Boolean {
-        return sessionVerificationService.sessionVerifiedStatus.value == SessionVerifiedStatus.Verified
+    private fun isSessionVerificationServiceReady(): Boolean {
+        return sessionVerificationService.sessionVerifiedStatus.value != SessionVerifiedStatus.Unknown
+    }
+
+    private fun isSessionNotVerified(): Boolean {
+        return sessionVerificationService.sessionVerifiedStatus.value == SessionVerifiedStatus.NotVerified
     }
 
     private fun needsAnalyticsOptIn(): Boolean {
@@ -122,7 +130,7 @@ class DefaultFtueState @Inject constructor(
 
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     internal fun updateState() {
-        shouldDisplayFlow.value = isAnyStepIncomplete()
+        shouldDisplayFlow.value = isSessionVerificationServiceReady() && isAnyStepIncomplete()
     }
 }
 
