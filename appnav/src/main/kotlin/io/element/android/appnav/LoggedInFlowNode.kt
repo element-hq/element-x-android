@@ -78,7 +78,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -421,26 +420,30 @@ class LoggedInFlowNode @AssistedInject constructor(
         }
     }
 
-    suspend fun attachRoot(): Node {
-        return attachChild {
+    suspend fun attachRoot() {
+        if (!sessionVerificationService.sessionVerifiedStatus.value.isVerified()) return
+        attachChild<Node> {
             backstack.singleTop(NavTarget.RoomList)
         }
     }
 
-    suspend fun attachRoom(roomId: RoomId): RoomFlowNode {
-        return attachChild {
+    suspend fun attachRoom(roomId: RoomId) {
+        if (!sessionVerificationService.sessionVerifiedStatus.value.isVerified()) return
+        attachChild<RoomFlowNode> {
             backstack.singleTop(NavTarget.RoomList)
             backstack.push(NavTarget.Room(roomId))
         }
     }
 
     internal suspend fun attachInviteList(deeplinkData: DeeplinkData.InviteList) = withContext(lifecycleScope.coroutineContext) {
+        if (!sessionVerificationService.sessionVerifiedStatus.value.isVerified()) return@withContext
         notificationDrawerManager.clearMembershipNotificationForSession(deeplinkData.sessionId)
         backstack.singleTop(NavTarget.RoomList)
         backstack.push(NavTarget.InviteList)
         waitForChildAttached<Node, NavTarget> { navTarget ->
             navTarget is NavTarget.InviteList
         }
+        Unit
     }
 
     @Composable
