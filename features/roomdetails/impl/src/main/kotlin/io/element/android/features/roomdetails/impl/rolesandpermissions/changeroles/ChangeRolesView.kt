@@ -73,7 +73,6 @@ import io.element.android.libraries.matrix.ui.components.MatrixUserRow
 import io.element.android.libraries.matrix.ui.components.SelectedUsersRowList
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.persistentListOf
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -138,7 +137,6 @@ fun ChangeRolesView(
                     resultState = state.searchResults,
                 ) { members ->
                     SearchResultsList(
-                        isSearchActive = true,
                         lazyListState = lazyListState,
                         searchResults = members,
                         selectedUsers = state.selectedUsers,
@@ -154,9 +152,8 @@ fun ChangeRolesView(
                 ) {
                     Column {
                         SearchResultsList(
-                            isSearchActive = false,
                             lazyListState = lazyListState,
-                            searchResults = (state.searchResults as? SearchBarResultState.Results)?.results ?: persistentListOf(),
+                            searchResults = (state.searchResults as? SearchBarResultState.Results)?.results ?: MembersByRole(emptyList()),
                             selectedUsers = state.selectedUsers,
                             canRemoveMember = state.canChangeMemberRole,
                             onSelectionToggled = { state.eventSink(ChangeRolesEvent.UserSelectionToggled(it)) },
@@ -229,8 +226,7 @@ fun ChangeRolesView(
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun SearchResultsList(
-    isSearchActive: Boolean,
-    searchResults: ImmutableList<RoomMember>,
+    searchResults: MembersByRole,
     selectedUsers: ImmutableList<MatrixUser>,
     canRemoveMember: (UserId) -> Boolean,
     onSelectionToggled: (RoomMember) -> Unit,
@@ -243,44 +239,81 @@ private fun SearchResultsList(
         item {
             selectedUsersList(selectedUsers)
         }
-        stickyHeader {
-            val textResId = if (isSearchActive) {
-                CommonStrings.common_search_results
-            } else {
-                R.string.screen_room_member_list_room_members_header_title
+        if (searchResults.admins.isNotEmpty()) {
+            stickyHeader { ListSectionHeader(text = stringResource(R.string.screen_room_roles_and_permissions_admins)) }
+            items(searchResults.admins, key = { it.userId }) { roomMember ->
+                ListMemberItem(
+                    roomMember = roomMember,
+                    canRemoveMember = canRemoveMember,
+                    onSelectionToggled = onSelectionToggled,
+                    selectedUsers = selectedUsers
+                )
             }
-            Text(
-                modifier = Modifier
-                    .background(ElementTheme.colors.bgCanvasDefault)
-                    .padding(horizontal = 16.dp, vertical = 8.dp)
-                    .fillMaxWidth(),
-                text = stringResource(textResId),
-                style = ElementTheme.typography.fontBodyLgMedium,
-            )
         }
-        items(searchResults, key = { it.userId }) { roomMember ->
-            val canToggle = canRemoveMember(roomMember.userId)
-            val trailingContent: @Composable (() -> Unit)? = if (canToggle) {
-                {
-                    Checkbox(
-                        checked = selectedUsers.any { it.userId == roomMember.userId },
-                        onCheckedChange = { onSelectionToggled(roomMember) },
-                    )
-                }
-            } else {
-                null
+        if (searchResults.moderators.isNotEmpty()) {
+            stickyHeader { ListSectionHeader(text = stringResource(R.string.screen_room_roles_and_permissions_moderators)) }
+            items(searchResults.moderators, key = { it.userId }) { roomMember ->
+                ListMemberItem(
+                    roomMember = roomMember,
+                    canRemoveMember = canRemoveMember,
+                    onSelectionToggled = onSelectionToggled,
+                    selectedUsers = selectedUsers
+                )
             }
-            MatrixUserRow(
-                modifier = Modifier.clickable(enabled = canToggle, onClick = { onSelectionToggled(roomMember) }),
-                matrixUser = MatrixUser(
-                    userId = roomMember.userId,
-                    displayName = roomMember.displayName,
-                    avatarUrl = roomMember.avatarUrl,
-                ),
-                trailingContent = trailingContent,
-            )
+        }
+        if (searchResults.admins.isNotEmpty()) {
+            stickyHeader { ListSectionHeader(text = stringResource(R.string.screen_room_member_list_mode_members)) }
+            items(searchResults.members, key = { it.userId }) { roomMember ->
+                ListMemberItem(
+                    roomMember = roomMember,
+                    canRemoveMember = canRemoveMember,
+                    onSelectionToggled = onSelectionToggled,
+                    selectedUsers = selectedUsers
+                )
+            }
         }
     }
+}
+
+@Composable
+private fun ListSectionHeader(text: String) {
+    Text(
+        modifier = Modifier
+            .background(ElementTheme.colors.bgCanvasDefault)
+            .padding(horizontal = 16.dp, vertical = 8.dp)
+            .fillMaxWidth(),
+        text = text,
+        style = ElementTheme.typography.fontBodyLgMedium,
+    )
+}
+
+@Composable
+private fun ListMemberItem(
+    roomMember: RoomMember,
+    canRemoveMember: (UserId) -> Boolean,
+    onSelectionToggled: (RoomMember) -> Unit,
+    selectedUsers: ImmutableList<MatrixUser>,
+) {
+    val canToggle = canRemoveMember(roomMember.userId)
+    val trailingContent: @Composable (() -> Unit)? = if (canToggle) {
+        {
+            Checkbox(
+                checked = selectedUsers.any { it.userId == roomMember.userId },
+                onCheckedChange = { onSelectionToggled(roomMember) },
+            )
+        }
+    } else {
+        null
+    }
+    MatrixUserRow(
+        modifier = Modifier.clickable(enabled = canToggle, onClick = { onSelectionToggled(roomMember) }),
+        matrixUser = MatrixUser(
+            userId = roomMember.userId,
+            displayName = roomMember.displayName,
+            avatarUrl = roomMember.avatarUrl,
+        ),
+        trailingContent = trailingContent,
+    )
 }
 
 @PreviewsDayNight

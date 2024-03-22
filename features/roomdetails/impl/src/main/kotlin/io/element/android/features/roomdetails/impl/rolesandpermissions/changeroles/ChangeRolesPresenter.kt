@@ -73,7 +73,7 @@ class ChangeRolesPresenter @AssistedInject constructor(
         var query by rememberSaveable { mutableStateOf<String?>(null) }
         var searchActive by rememberSaveable { mutableStateOf(false) }
         var searchResults by remember {
-            mutableStateOf<SearchBarResultState<ImmutableList<RoomMember>>>(SearchBarResultState.Initial())
+            mutableStateOf<SearchBarResultState<MembersByRole>>(SearchBarResultState.Initial())
         }
         val selectedUsers = remember {
             mutableStateOf<ImmutableList<MatrixUser>>(persistentListOf())
@@ -101,8 +101,9 @@ class ChangeRolesPresenter @AssistedInject constructor(
         LaunchedEffect(query, roomMemberState) {
             val results = dataSource
                 .search(query.orEmpty())
-                .sorted()
+                .groupedByRole()
 
+            println(results)
             searchResults = if (results.isEmpty()) {
                 SearchBarResultState.NoResultsFound()
             } else {
@@ -176,6 +177,14 @@ class ChangeRolesPresenter @AssistedInject constructor(
             savingState = saveState.value,
             canChangeMemberRole = ::canChangeMemberRole,
             eventSink = ::handleEvent,
+        )
+    }
+
+    private fun List<RoomMember>.groupedByRole(): MembersByRole {
+        return MembersByRole(
+            admins = filter { it.role == RoomMember.Role.ADMIN }.sorted(),
+            moderators = filter { it.role == RoomMember.Role.MODERATOR }.sorted(),
+            members = filter { it.role == RoomMember.Role.USER }.sorted(),
         )
     }
 
