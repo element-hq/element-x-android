@@ -216,6 +216,8 @@ class ChangeRolesPresenter @AssistedInject constructor(
             }
             .onSuccess {
                 saveState.value = AsyncAction.Success(Unit)
+                // Asynchronously reload the room members
+                launch { room.updateMembers() }
             }
     }
 }
