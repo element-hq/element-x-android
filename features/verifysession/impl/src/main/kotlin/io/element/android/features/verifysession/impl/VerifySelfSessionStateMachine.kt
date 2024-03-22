@@ -96,6 +96,7 @@ class VerifySelfSessionStateMachine @Inject constructor(
                 }
             }
             inState<State.Canceling> {
+                // TODO The 'Canceling' -> 'Canceled' transitions doesn't seem to work anymore, check if something changed in the Rust SDK
                 onEnterEffect {
                     sessionVerificationService.cancelVerification()
                 }
@@ -105,14 +106,14 @@ class VerifySelfSessionStateMachine @Inject constructor(
                     state.override { State.SasVerificationStarted }
                 }
                 on { _: Event.Cancel, state: MachineState<State> ->
-                    if (state.snapshot in sequenceOf(
-                            State.Initial,
-                            State.Completed,
-                            State.Canceled
-                        )) {
-                        state.noChange()
-                    } else {
-                        state.override { State.Canceling }
+                    when (state.snapshot) {
+                        State.Initial, State.Completed, State.Canceled -> state.noChange()
+                        // For some reason `cancelVerification` is not calling its delegate `didCancel` method so we don't pass from
+                        // `Canceling` state to `Canceled` automatically anymore
+                        else -> {
+                            sessionVerificationService.cancelVerification()
+                            state.override { State.Canceled }
+                        }
                     }
                 }
                 on { _: Event.DidCancel, state: MachineState<State> ->

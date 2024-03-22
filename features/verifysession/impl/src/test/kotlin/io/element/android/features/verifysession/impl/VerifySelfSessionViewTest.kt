@@ -51,7 +51,7 @@ class VerifySelfSessionViewTest {
             }
             rule.clickOn(CommonStrings.action_cancel)
         }
-        eventsRecorder.assertSingle(VerifySelfSessionViewEvents.CancelAndClose)
+        eventsRecorder.assertSingle(VerifySelfSessionViewEvents.Cancel)
     }
 
     @Test
@@ -70,7 +70,7 @@ class VerifySelfSessionViewTest {
             }
             rule.pressBackKey()
         }
-        eventsRecorder.assertSingle(VerifySelfSessionViewEvents.CancelAndClose)
+        eventsRecorder.assertSingle(VerifySelfSessionViewEvents.Cancel)
     }
 
     @Test

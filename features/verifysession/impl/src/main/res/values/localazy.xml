@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_identity_confirmation_subtitle">"Verify this device to set up secure messaging."</string>
+  <string name="screen_identity_confirmation_title">"Confirm that it\'s you"</string>
+  <string name="screen_identity_confirmed_subtitle">"Now you can read or send messages securely, and anyone you chat with can also trust this device."</string>
+  <string name="screen_identity_confirmed_title">"Device verified"</string>
+  <string name="screen_identity_use_another_device">"Use another device"</string>
+  <string name="screen_identity_waiting_on_other_device">"Waiting on other device…"</string>
   <string name="screen_session_verification_cancelled_subtitle">"Something doesn’t seem right. Either the request timed out or the request was denied."</string>
   <string name="screen_session_verification_compare_emojis_subtitle">"Confirm that the emojis below match those shown on your other session."</string>
   <string name="screen_session_verification_compare_emojis_title">"Compare emojis"</string>

@@ -21,6 +21,6 @@ sealed interface VerifySelfSessionViewEvents {
     data object StartSasVerification : VerifySelfSessionViewEvents
     data object ConfirmVerification : VerifySelfSessionViewEvents
     data object DeclineVerification : VerifySelfSessionViewEvents
-    data object CancelAndClose : VerifySelfSessionViewEvents
+    data object Cancel : VerifySelfSessionViewEvents
     data object Reset : VerifySelfSessionViewEvents
 }
