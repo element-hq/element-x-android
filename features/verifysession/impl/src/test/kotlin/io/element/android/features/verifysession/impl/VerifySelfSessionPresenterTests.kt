@@ -165,7 +165,7 @@ class VerifySelfSessionPresenterTests {
             val state = requestVerificationAndAwaitVerifyingState(service)
             service.givenVerificationFlowState(VerificationFlowState.Canceled)
             assertThat(awaitItem().verificationFlowStep).isEqualTo(VerificationStep.Canceled)
-            state.eventSink(VerifySelfSessionViewEvents.Restart)
+            state.eventSink(VerifySelfSessionViewEvents.RestartVerification)
             // Went back to requesting verification
             assertThat(awaitItem().verificationFlowStep).isEqualTo(VerificationStep.AwaitingOtherDeviceResponse)
             cancelAndIgnoreRemainingEvents()

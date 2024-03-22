@@ -68,10 +68,10 @@ class VerifySelfSessionPresenter @Inject constructor(
             when (event) {
                 VerifySelfSessionViewEvents.RequestVerification -> stateAndDispatch.dispatchAction(StateMachineEvent.RequestVerification)
                 VerifySelfSessionViewEvents.StartSasVerification -> stateAndDispatch.dispatchAction(StateMachineEvent.StartSasVerification)
-                VerifySelfSessionViewEvents.Restart -> stateAndDispatch.dispatchAction(StateMachineEvent.Restart)
                 VerifySelfSessionViewEvents.ConfirmVerification -> stateAndDispatch.dispatchAction(StateMachineEvent.AcceptChallenge)
                 VerifySelfSessionViewEvents.DeclineVerification -> stateAndDispatch.dispatchAction(StateMachineEvent.DeclineChallenge)
                 VerifySelfSessionViewEvents.CancelAndClose -> stateAndDispatch.dispatchAction(StateMachineEvent.Cancel)
+                VerifySelfSessionViewEvents.Reset -> stateAndDispatch.dispatchAction(StateMachineEvent.Reset)
             }
         }
         return VerifySelfSessionState(
@@ -118,7 +118,7 @@ class VerifySelfSessionPresenter @Inject constructor(
     private fun CoroutineScope.observeVerificationService() {
         sessionVerificationService.verificationFlowState.onEach { verificationAttemptState ->
             when (verificationAttemptState) {
-                VerificationFlowState.Initial -> stateMachine.dispatch(VerifySelfSessionStateMachine.Event.Restart)
+                VerificationFlowState.Initial -> stateMachine.dispatch(VerifySelfSessionStateMachine.Event.Reset)
                 VerificationFlowState.AcceptedVerificationRequest -> {
                     stateMachine.dispatch(VerifySelfSessionStateMachine.Event.DidAcceptVerificationRequest)
                 }

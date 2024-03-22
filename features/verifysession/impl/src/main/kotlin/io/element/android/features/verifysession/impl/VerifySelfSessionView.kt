@@ -62,18 +62,19 @@ import io.element.android.features.verifysession.impl.VerifySelfSessionState.Ver
 fun VerifySelfSessionView(
     state: VerifySelfSessionState,
     onEnterRecoveryKey: () -> Unit,
-    goBack: () -> Unit,
+    onFinished: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    fun goBackAndCancelIfNeeded() {
-        state.eventSink(VerifySelfSessionViewEvents.CancelAndClose)
-        goBack()
+    fun resetFlow() {
+        state.eventSink(VerifySelfSessionViewEvents.Reset)
     }
     if (state.verificationFlowStep is FlowStep.Completed) {
-        goBack()
+        onFinished()
     }
     BackHandler {
-        goBackAndCancelIfNeeded()
+        if (state.verificationFlowStep is FlowStep.Canceled) {
+            resetFlow()
+        }
     }
     val verificationFlowStep = state.verificationFlowStep
     val buttonsVisible by remember(verificationFlowStep) {
@@ -88,7 +89,7 @@ fun VerifySelfSessionView(
             if (buttonsVisible) {
                 BottomMenu(
                     screenState = state,
-                    goBack = ::goBackAndCancelIfNeeded,
+                    goBack = ::resetFlow,
                     onEnterRecoveryKey = onEnterRecoveryKey
                 )
             }
@@ -231,7 +232,7 @@ private fun BottomMenu(
         else -> null
     }
     val negativeButtonTitle = when (verificationViewState) {
-        is FlowStep.Initial -> CommonStrings.action_cancel
+        is FlowStep.Initial -> null
         FlowStep.Canceled -> CommonStrings.action_cancel
         is FlowStep.Verifying -> R.string.screen_session_verification_they_dont_match
         else -> null
@@ -242,7 +243,7 @@ private fun BottomMenu(
         is FlowStep.Initial -> VerifySelfSessionViewEvents.RequestVerification
         FlowStep.Ready -> VerifySelfSessionViewEvents.StartSasVerification
         is FlowStep.Verifying -> if (!isVerifying) VerifySelfSessionViewEvents.ConfirmVerification else null
-        FlowStep.Canceled -> VerifySelfSessionViewEvents.Restart
+        FlowStep.Canceled -> VerifySelfSessionViewEvents.RequestVerification
         else -> null
     }
 
@@ -292,6 +293,6 @@ internal fun VerifySelfSessionViewPreview(@PreviewParameter(VerifySelfSessionSta
     VerifySelfSessionView(
         state = state,
         onEnterRecoveryKey = {},
-        goBack = {},
+        onFinished = {},
     )
 }

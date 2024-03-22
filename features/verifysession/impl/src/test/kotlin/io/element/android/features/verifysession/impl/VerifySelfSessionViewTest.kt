@@ -46,7 +46,7 @@ class VerifySelfSessionViewTest {
                         eventSink = eventsRecorder
                     ),
                     onEnterRecoveryKey = EnsureNeverCalled(),
-                    goBack = callback,
+                    onFinished = callback,
                 )
             }
             rule.clickOn(CommonStrings.action_cancel)
@@ -65,7 +65,7 @@ class VerifySelfSessionViewTest {
                         eventSink = eventsRecorder
                     ),
                     onEnterRecoveryKey = EnsureNeverCalled(),
-                    goBack = callback,
+                    onFinished = callback,
                 )
             }
             rule.pressBackKey()
@@ -84,7 +84,7 @@ class VerifySelfSessionViewTest {
                         eventSink = eventsRecorder
                     ),
                     onEnterRecoveryKey = EnsureNeverCalled(),
-                    goBack = callback,
+                    onFinished = callback,
                 )
             }
         }
@@ -102,7 +102,7 @@ class VerifySelfSessionViewTest {
                         eventSink = eventsRecorder
                     ),
                     onEnterRecoveryKey = callback,
-                    goBack = EnsureNeverCalled(),
+                    onFinished = EnsureNeverCalled(),
                 )
             }
             rule.clickOn(R.string.screen_session_verification_enter_recovery_key)
@@ -122,7 +122,7 @@ class VerifySelfSessionViewTest {
                     eventSink = eventsRecorder
                 ),
                 onEnterRecoveryKey = EnsureNeverCalled(),
-                goBack = EnsureNeverCalled(),
+                onFinished = EnsureNeverCalled(),
             )
         }
         rule.clickOn(R.string.screen_session_verification_they_match)
@@ -142,7 +142,7 @@ class VerifySelfSessionViewTest {
                     eventSink = eventsRecorder
                 ),
                 onEnterRecoveryKey = EnsureNeverCalled(),
-                goBack = EnsureNeverCalled(),
+                onFinished = EnsureNeverCalled(),
             )
         }
         rule.clickOn(R.string.screen_session_verification_they_dont_match)

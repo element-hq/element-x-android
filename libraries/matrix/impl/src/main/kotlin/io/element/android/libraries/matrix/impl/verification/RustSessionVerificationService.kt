@@ -16,7 +16,6 @@
 
 package io.element.android.libraries.matrix.impl.verification
 
-import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.core.data.tryOrNull
 import io.element.android.libraries.matrix.api.sync.SyncState
 import io.element.android.libraries.matrix.api.verification.SessionVerificationData
@@ -31,15 +30,14 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.launch
 import org.matrix.rustcomponents.sdk.Client
 import org.matrix.rustcomponents.sdk.Encryption
-import org.matrix.rustcomponents.sdk.RecoveryState
-import org.matrix.rustcomponents.sdk.RecoveryStateListener
 import org.matrix.rustcomponents.sdk.SessionVerificationController
 import org.matrix.rustcomponents.sdk.SessionVerificationControllerDelegate
 import org.matrix.rustcomponents.sdk.SessionVerificationControllerInterface
 import org.matrix.rustcomponents.sdk.TaskHandle
+import org.matrix.rustcomponents.sdk.VerificationState
+import org.matrix.rustcomponents.sdk.VerificationStateListener
 import org.matrix.rustcomponents.sdk.use
 import org.matrix.rustcomponents.sdk.SessionVerificationData as RustSessionVerificationData
 
@@ -54,11 +52,7 @@ class RustSessionVerificationService(
         set(value) {
             field = value
             _isReady.value = value != null
-            // If status was 'Unknown', move it to either 'Verified' or 'NotVerified'
-            if (value != null) {
-                value.setDelegate(this)
-                sessionCoroutineScope.launch { updateVerificationStatus(value.isVerified()) }
-            }
+            value?.setDelegate(this)
         }
 
     private val _verificationFlowState = MutableStateFlow<VerificationFlowState>(VerificationFlowState.Initial)
@@ -75,11 +69,12 @@ class RustSessionVerificationService(
     }
 
     fun start() {
-        recoveryStateListenerTaskHandle = encryptionService.recoveryStateListener(object : RecoveryStateListener {
-            override fun onUpdate(status: RecoveryState) {
-                sessionCoroutineScope.launch {
-                    updateVerificationStatus(verificationController?.isVerified().orFalse())
-                }
+        // Initial status update
+        updateVerificationStatus(encryptionService.verificationState())
+        // Listen for changes in status and update accordingly
+        encryptionService.verificationStateListener(object : VerificationStateListener {
+            override fun onUpdate(status: VerificationState) {
+                updateVerificationStatus(status)
             }
         })
     }
@@ -122,7 +117,7 @@ class RustSessionVerificationService(
     override fun didFinish() {
         _verificationFlowState.value = VerificationFlowState.Finished
         // Ideally this should be `verificationController?.isVerified().orFalse()` but for some reason it always returns false
-        updateVerificationStatus(isVerified = true)
+        updateVerificationStatus(VerificationState.VERIFIED)
     }
 
     override fun didReceiveVerificationData(data: RustSessionVerificationData) {
@@ -151,13 +146,12 @@ class RustSessionVerificationService(
         verificationController = null
     }
 
-    private fun updateVerificationStatus(isVerified: Boolean) {
-        val newValue = when {
-            !isReady.value -> SessionVerifiedStatus.Unknown
-            !isVerified -> SessionVerifiedStatus.NotVerified
-            else -> SessionVerifiedStatus.Verified
+    private fun updateVerificationStatus(verificationState: VerificationState) {
+        _sessionVerifiedStatus.value = when (verificationState) {
+            VerificationState.UNKNOWN -> SessionVerifiedStatus.Unknown
+            VerificationState.VERIFIED -> SessionVerifiedStatus.Verified
+            VerificationState.UNVERIFIED -> SessionVerifiedStatus.NotVerified
         }
-        _sessionVerifiedStatus.value = newValue
     }
 }
 

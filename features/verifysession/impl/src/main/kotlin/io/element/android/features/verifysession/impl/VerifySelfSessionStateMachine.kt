@@ -34,10 +34,10 @@ class VerifySelfSessionStateMachine @Inject constructor(
     init {
         spec {
             inState<State.Initial> {
-                on { _: Event.RequestVerification, state: MachineState<State.Initial> ->
+                on { _: Event.RequestVerification, state ->
                     state.override { State.RequestingVerification }
                 }
-                on { _: Event.StartSasVerification, state: MachineState<State.Initial> ->
+                on { _: Event.StartSasVerification, state ->
                     state.override { State.StartingSasVerification }
                 }
             }
@@ -45,10 +45,10 @@ class VerifySelfSessionStateMachine @Inject constructor(
                 onEnterEffect {
                     sessionVerificationService.requestVerification()
                 }
-                on { _: Event.DidAcceptVerificationRequest, state: MachineState<State.RequestingVerification> ->
+                on { _: Event.DidAcceptVerificationRequest, state ->
                     state.override { State.VerificationRequestAccepted }
                 }
-                on { _: Event.DidFail, state: MachineState<State.RequestingVerification> ->
+                on { _: Event.DidFail, state ->
                     state.override { State.Initial }
                 }
             }
@@ -58,25 +58,28 @@ class VerifySelfSessionStateMachine @Inject constructor(
                 }
             }
             inState<State.VerificationRequestAccepted> {
-                on { _: Event.StartSasVerification, state: MachineState<State.VerificationRequestAccepted> ->
+                on { _: Event.StartSasVerification, state ->
                     state.override { State.StartingSasVerification }
                 }
             }
             inState<State.Canceled> {
-                on { _: Event.Restart, state: MachineState<State.Canceled> ->
+                on { _: Event.RequestVerification, state ->
                     state.override { State.RequestingVerification }
+                }
+                on { _: Event.Reset, state ->
+                    state.override { State.Initial }
                 }
             }
             inState<State.SasVerificationStarted> {
-                on { event: Event.DidReceiveChallenge, state: MachineState<State.SasVerificationStarted> ->
+                on { event: Event.DidReceiveChallenge, state ->
                     state.override { State.Verifying.ChallengeReceived(event.data) }
                 }
             }
             inState<State.Verifying.ChallengeReceived> {
-                on { _: Event.AcceptChallenge, state: MachineState<State.Verifying.ChallengeReceived> ->
+                on { _: Event.AcceptChallenge, state ->
                     state.override { State.Verifying.Replying(state.snapshot.data, accept = true) }
                 }
-                on { _: Event.DeclineChallenge, state: MachineState<State.Verifying.ChallengeReceived> ->
+                on { _: Event.DeclineChallenge, state ->
                     state.override { State.Verifying.Replying(state.snapshot.data, accept = false) }
                 }
             }
@@ -88,7 +91,7 @@ class VerifySelfSessionStateMachine @Inject constructor(
                         sessionVerificationService.declineVerification()
                     }
                 }
-                on { _: Event.DidAcceptChallenge, state: MachineState<State.Verifying.Replying> ->
+                on { _: Event.DidAcceptChallenge, state ->
                     state.override { State.Completed }
                 }
             }
@@ -190,7 +193,7 @@ class VerifySelfSessionStateMachine @Inject constructor(
         /** Request failed. */
         data object DidFail : Event
 
-        /** Restart the verification flow. */
-        data object Restart : Event
+        /** Reset the verification flow to the initial state. */
+        data object Reset : Event
     }
 }
