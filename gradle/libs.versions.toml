@@ -163,7 +163,7 @@ sqlcipher = "net.zetetic:android-database-sqlcipher:4.5.4"
 sqlite = "androidx.sqlite:sqlite-ktx:2.4.0"
 unifiedpush = "com.github.UnifiedPush:android-connector:2.1.1"
 otaliastudios_transcoder = "com.otaliastudios:transcoder:0.10.5"
-vanniktech_blurhash = "com.vanniktech:blurhash:0.2.0"
+vanniktech_blurhash = "com.vanniktech:blurhash:0.3.0"
 telephoto_zoomableimage = { module = "me.saket.telephoto:zoomable-image-coil", version.ref = "telephoto" }
 telephoto_flick = { module = "me.saket.telephoto:flick-android", version.ref = "telephoto" }
 statemachine = "com.freeletics.flowredux:compose:1.2.1"
