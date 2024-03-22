@@ -295,15 +295,12 @@ private fun ListMemberItem(
     selectedUsers: ImmutableList<MatrixUser>,
 ) {
     val canToggle = canRemoveMember(roomMember.userId)
-    val trailingContent: @Composable (() -> Unit)? = if (canToggle) {
-        {
-            Checkbox(
-                checked = selectedUsers.any { it.userId == roomMember.userId },
-                onCheckedChange = { onSelectionToggled(roomMember) },
-            )
-        }
-    } else {
-        null
+    val trailingContent: @Composable (() -> Unit) = {
+        Checkbox(
+            checked = selectedUsers.any { it.userId == roomMember.userId },
+            onCheckedChange = { onSelectionToggled(roomMember) },
+            enabled = canToggle,
+        )
     }
     MatrixUserRow(
         modifier = Modifier.clickable(enabled = canToggle, onClick = { onSelectionToggled(roomMember) }),
