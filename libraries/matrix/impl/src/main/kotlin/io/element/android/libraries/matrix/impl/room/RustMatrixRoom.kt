@@ -70,8 +70,13 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.EventTimelineItem
@@ -163,7 +168,11 @@ class RustMatrixRoom(
     override val syncUpdateFlow: StateFlow<Long> = _syncUpdateFlow.asStateFlow()
 
     init {
-        timeline.membershipChangeEventReceived
+        val powerLevelChanges = roomInfoFlow.map { it.userPowerLevels }.distinctUntilChanged()
+        val membershipChanges = timeline.membershipChangeEventReceived.onStart { emit(Unit) }
+        combine(membershipChanges, powerLevelChanges) { _, _ -> }
+            // Skip initial one
+            .drop(1)
             // The new events should already be in the SDK cache, no need to fetch them from the server
             .onEach { roomMemberListFetcher.fetchRoomMembers(source = RoomMemberListFetcher.Source.CACHE) }
             .launchIn(roomCoroutineScope)
