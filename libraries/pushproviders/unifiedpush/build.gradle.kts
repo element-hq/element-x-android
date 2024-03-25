@@ -42,6 +42,7 @@ dependencies {
     implementation(projects.libraries.network)
     implementation(platform(libs.network.okhttp.bom))
     implementation(libs.network.okhttp.okhttp)
+    implementation(platform(libs.network.retrofit.bom))
     implementation(libs.network.retrofit)
 
     implementation(libs.serialization.json)
