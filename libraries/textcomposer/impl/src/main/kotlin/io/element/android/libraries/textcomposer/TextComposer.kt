@@ -111,6 +111,7 @@ fun TextComposer(
     modifier: Modifier = Modifier,
     showTextFormatting: Boolean = false,
     subcomposing: Boolean = false,
+    hasAttachments: Boolean = false,
 ) {
     val markdown = when (state) {
         is TextEditorState.Markdown -> state.state.text.value()
@@ -148,6 +149,8 @@ fun TextComposer(
 
     val placeholder = if (composerMode.inThread) {
         stringResource(id = CommonStrings.action_reply_in_thread)
+    } else if (hasAttachments) {
+        stringResource(id = R.string.rich_text_editor_composer_caption_placeholder)
     } else {
         stringResource(id = R.string.rich_text_editor_composer_placeholder)
     }
@@ -200,7 +203,7 @@ fun TextComposer(
     val canSendMessage = markdown.isNotBlank()
     val sendButton = @Composable {
         SendButton(
-            canSendMessage = canSendMessage,
+            canSendMessage = canSendMessage || hasAttachments,
             onClick = onSendClicked,
             composerMode = composerMode,
         )
@@ -229,7 +232,7 @@ fun TextComposer(
     }
 
     val sendOrRecordButton = when {
-        enableVoiceMessages && !canSendMessage ->
+        enableVoiceMessages && !canSendMessage && !hasAttachments ->
             when (voiceMessageState) {
                 VoiceMessageState.Idle,
                 is VoiceMessageState.Recording -> recordVoiceButton

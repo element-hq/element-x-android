@@ -58,6 +58,7 @@ import io.element.android.libraries.matrix.api.room.alias.matches
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
 import io.element.android.libraries.mediaplayer.api.MediaPlayer
 import io.element.android.services.analytics.api.AnalyticsService
+import io.element.android.services.analytics.api.extensions.toAnalyticsViewRoom
 import kotlinx.collections.immutable.ImmutableList
 
 @ContributesNode(RoomScope::class)
@@ -84,7 +85,6 @@ class MessagesNode @AssistedInject constructor(
     interface Callback : Plugin {
         fun onRoomDetailsClicked()
         fun onEventClicked(event: TimelineItem.Event): Boolean
-        fun onPreviewAttachments(attachments: ImmutableList<Attachment>)
         fun onUserDataClicked(userId: UserId)
         fun onPermalinkClicked(data: PermalinkData)
         fun onShowEventDebugInfoClicked(eventId: EventId?, debugInfo: TimelineItemDebugInfo)
@@ -115,10 +115,6 @@ class MessagesNode @AssistedInject constructor(
 
     private fun onEventClicked(event: TimelineItem.Event): Boolean {
         return callback?.onEventClicked(event).orFalse()
-    }
-
-    private fun onPreviewAttachments(attachments: ImmutableList<Attachment>) {
-        callback?.onPreviewAttachments(attachments)
     }
 
     private fun onUserDataClicked(userId: UserId) {
@@ -200,7 +196,6 @@ class MessagesNode @AssistedInject constructor(
                 onBackPressed = this::navigateUp,
                 onRoomDetailsClicked = this::onRoomDetailsClicked,
                 onEventClicked = this::onEventClicked,
-                onPreviewAttachments = this::onPreviewAttachments,
                 onUserDataClicked = this::onUserDataClicked,
                 onLinkClicked = { onLinkClicked(context, it, state.timelineState.eventSink) },
                 onSendLocationClicked = this::onSendLocationClicked,
