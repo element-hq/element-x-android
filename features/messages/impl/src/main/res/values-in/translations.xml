@@ -40,4 +40,11 @@
   <plurals name="screen_room_timeline_state_changes">
     <item quantity="other">"%1$d perubahan ruangan"</item>
   </plurals>
+  <plurals name="screen_room_typing_many_members">
+    <item quantity="other">"%1$s, %2$s, dan %3$d lainnya"</item>
+  </plurals>
+  <plurals name="screen_room_typing_notification">
+    <item quantity="other">"%1$s sedang mengetik"</item>
+  </plurals>
+  <string name="screen_room_typing_two_members">"%1$s dan %2$s"</string>
 </resources>

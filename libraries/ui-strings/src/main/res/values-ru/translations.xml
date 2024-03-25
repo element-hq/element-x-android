@@ -188,7 +188,7 @@
   <string name="common_rich_text_editor">"Редактор форматированного текста"</string>
   <string name="common_room">"Комната"</string>
   <string name="common_room_name">"Название комнаты"</string>
-  <string name="common_room_name_placeholder">"например, название вашего проекта"</string>
+  <string name="common_room_name_placeholder">"напр., название вашего проекта"</string>
   <string name="common_saved_changes">"Сохраненные изменения"</string>
   <string name="common_saving">"Сохранение"</string>
   <string name="common_screen_lock">"Блокировка экрана"</string>
@@ -249,9 +249,15 @@
   <string name="invite_friends_text">"Привет, поговори со мной по %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Встряхните устройство, чтобы сообщить об ошибке"</string>
+  <string name="screen_identity_confirmation_subtitle">"Подтвердите это устройство, чтобы настроить безопасный обмен сообщениями."</string>
+  <string name="screen_identity_confirmation_title">"Подтвердите, что это вы"</string>
+  <string name="screen_identity_confirmed_subtitle">"Теперь вы можете безопасно читать и отправлять сообщения, и все, с кем вы общаетесь в чате, также могут доверять этому устройству."</string>
+  <string name="screen_identity_confirmed_title">"Устройство проверено"</string>
   <string name="screen_media_picker_error_failed_selection">"Не удалось выбрать носитель, попробуйте еще раз."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Не удалось обработать медиафайл для загрузки, попробуйте еще раз."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Не удалось загрузить медиафайлы, попробуйте еще раз."</string>
+  <string name="screen_room_directory_search_loading_error">"Сбой загрузки"</string>
+  <string name="screen_room_directory_search_title">"Каталог комнат"</string>
   <string name="screen_room_error_failed_processing_media">"Не удалось обработать медиафайл для загрузки, попробуйте еще раз."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Не удалось получить данные о пользователе"</string>
   <string name="screen_room_member_details_block_alert_action">"Заблокировать"</string>

@@ -103,9 +103,9 @@
   <string name="screen_room_roles_and_permissions_messages_and_content">"Messages et contenus"</string>
   <string name="screen_room_roles_and_permissions_moderators">"Modérateurs"</string>
   <string name="screen_room_roles_and_permissions_permissions_header">"Autorisations"</string>
-  <string name="screen_room_roles_and_permissions_reset">"Réinitialisation des permissions"</string>
-  <string name="screen_room_roles_and_permissions_reset_confirm_description">"La réinitialisation des permissions entraîne la perte des réglages actuels."</string>
-  <string name="screen_room_roles_and_permissions_reset_confirm_title">"Réinitialisation des permissions?"</string>
+  <string name="screen_room_roles_and_permissions_reset">"Réinitialisation des autorisations"</string>
+  <string name="screen_room_roles_and_permissions_reset_confirm_description">"La réinitialisation des autorisations entraîne la perte des réglages actuels."</string>
+  <string name="screen_room_roles_and_permissions_reset_confirm_title">"Réinitialisation des autorisations?"</string>
   <string name="screen_room_roles_and_permissions_roles_header">"Rôles"</string>
   <string name="screen_room_roles_and_permissions_room_details">"Détails du salon"</string>
   <string name="screen_room_roles_and_permissions_title">"Rôles et autorisations"</string>

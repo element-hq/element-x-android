@@ -17,6 +17,7 @@
   <string name="screen_room_details_error_muting">"無法關閉聊天室通知，請再試一次。"</string>
   <string name="screen_room_details_error_unmuting">"無法開啟聊天室通知，請再試一次。"</string>
   <string name="screen_room_details_invite_people_title">"邀請夥伴"</string>
+  <string name="screen_room_details_leave_conversation_title">"離開對話"</string>
   <string name="screen_room_details_leave_room_title">"離開聊天室"</string>
   <string name="screen_room_details_notification_mode_custom">"自訂"</string>
   <string name="screen_room_details_notification_mode_default">"預設"</string>
