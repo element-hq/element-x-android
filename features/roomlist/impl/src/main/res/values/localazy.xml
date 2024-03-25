@@ -24,6 +24,7 @@ You don’t have any unread messages!"</string>
   <string name="screen_roomlist_main_space_title">"Chats"</string>
   <string name="screen_roomlist_mark_as_read">"Mark as read"</string>
   <string name="screen_roomlist_mark_as_unread">"Mark as unread"</string>
+  <string name="screen_roomlist_room_directory_button_title">"Browse all rooms"</string>
   <string name="session_verification_banner_message">"Looks like you’re using a new device. Verify with another device to access your encrypted messages."</string>
   <string name="session_verification_banner_title">"Verify it’s you"</string>
 </resources>

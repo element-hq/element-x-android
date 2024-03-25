@@ -86,6 +86,7 @@
   <string name="common_analytics">"Analysdata"</string>
   <string name="common_audio">"Ljud"</string>
   <string name="common_bubbles">"Bubblor"</string>
+  <string name="common_chat_backup">"Chattsäkerhetskopia"</string>
   <string name="common_copyright">"Upphovsrätt"</string>
   <string name="common_creating_room">"Skapar rum …"</string>
   <string name="common_current_user_left_room">"Lämnade rummet"</string>

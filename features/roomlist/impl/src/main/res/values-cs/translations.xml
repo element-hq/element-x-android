@@ -24,6 +24,7 @@ Nemáte žádné nepřečtené zprávy!"</string>
   <string name="screen_roomlist_main_space_title">"Všechny chaty"</string>
   <string name="screen_roomlist_mark_as_read">"Označit jako přečtené"</string>
   <string name="screen_roomlist_mark_as_unread">"Označit jako nepřečtené"</string>
+  <string name="screen_roomlist_room_directory_button_title">"Procházet všechny místnosti"</string>
   <string name="session_verification_banner_message">"Zdá se, že používáte nové zařízení. Ověřte přihlášení, abyste měli přístup k zašifrovaným zprávám."</string>
   <string name="session_verification_banner_title">"Ověřte, že jste to vy"</string>
 </resources>

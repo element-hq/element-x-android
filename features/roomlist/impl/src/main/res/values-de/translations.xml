@@ -24,6 +24,7 @@ Du hast keine ungelesenen Nachrichten!"</string>
   <string name="screen_roomlist_main_space_title">"Chats"</string>
   <string name="screen_roomlist_mark_as_read">"Als gelesen markieren"</string>
   <string name="screen_roomlist_mark_as_unread">"Als ungelesen markieren"</string>
+  <string name="screen_roomlist_room_directory_button_title">"Alle Räume durchsuchen"</string>
   <string name="session_verification_banner_message">"Es sieht aus, als würdest du ein neues Gerät verwenden. Verifiziere es mit einem anderen Gerät, damit du auf deine verschlüsselten Nachrichten zugreifen kannst."</string>
   <string name="session_verification_banner_title">"Bestätige deine Identität"</string>
 </resources>
