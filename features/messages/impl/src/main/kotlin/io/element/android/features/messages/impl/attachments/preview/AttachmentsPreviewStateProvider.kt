@@ -10,29 +10,24 @@ package io.element.android.features.messages.impl.attachments.preview
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.core.net.toUri
 import io.element.android.features.messages.impl.attachments.Attachment
+import io.element.android.features.messages.impl.messagecomposer.AttachmentsState
 import io.element.android.libraries.mediaviewer.api.local.LocalMedia
-import io.element.android.libraries.mediaviewer.api.local.MediaInfo
 import io.element.android.libraries.mediaviewer.api.local.anApkMediaInfo
-import io.element.android.libraries.mediaviewer.api.local.anImageMediaInfo
+import kotlinx.collections.immutable.toImmutableList
 
-open class AttachmentsPreviewStateProvider : PreviewParameterProvider<AttachmentsPreviewState> {
-    override val values: Sequence<AttachmentsPreviewState>
+open class AttachmentsPreviewStateProvider : PreviewParameterProvider<AttachmentsState> {
+    val attachmentList =
+        mutableListOf(
+            Attachment.Media(
+                localMedia = LocalMedia("file://path".toUri(), anApkMediaInfo()),
+                compressIfPossible = true)
+        ).toImmutableList()
+    override val values: Sequence<AttachmentsState>
         get() = sequenceOf(
-            anAttachmentsPreviewState(),
-            anAttachmentsPreviewState(mediaInfo = anApkMediaInfo()),
-            anAttachmentsPreviewState(sendActionState = SendActionState.Sending.Uploading(0.5f)),
-            anAttachmentsPreviewState(sendActionState = SendActionState.Failure(RuntimeException("error"))),
+            AttachmentsState.None,
+            AttachmentsState.Previewing(attachmentList),
+            AttachmentsState.Sending.Processing(attachmentList),
+            AttachmentsState.Sending.Uploading(25.0F)
         )
 }
 
-fun anAttachmentsPreviewState(
-    mediaInfo: MediaInfo = anImageMediaInfo(),
-    sendActionState: SendActionState = SendActionState.Idle
-) = AttachmentsPreviewState(
-    attachment = Attachment.Media(
-        localMedia = LocalMedia("file://path".toUri(), mediaInfo),
-        compressIfPossible = true
-    ),
-    sendActionState = sendActionState,
-    eventSink = {}
-)

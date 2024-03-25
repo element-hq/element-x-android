@@ -32,6 +32,7 @@ sealed interface MessageComposerEvents {
     }
     data class ToggleTextFormatting(val enabled: Boolean) : MessageComposerEvents
     data object CancelSendAttachment : MessageComposerEvents
+    data object ClearAttachments : MessageComposerEvents
     data class Error(val error: Throwable) : MessageComposerEvents
     data class TypingNotice(val isTyping: Boolean) : MessageComposerEvents
     data class SuggestionReceived(val suggestion: Suggestion?) : MessageComposerEvents
