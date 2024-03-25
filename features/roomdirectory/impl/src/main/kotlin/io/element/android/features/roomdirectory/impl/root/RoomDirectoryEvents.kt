@@ -22,5 +22,4 @@ sealed interface RoomDirectoryEvents {
     data class Search(val query: String) : RoomDirectoryEvents
     data object LoadMore : RoomDirectoryEvents
     data class JoinRoom(val roomId: RoomId) : RoomDirectoryEvents
-    data class SearchActiveChange(val isActive: Boolean) : RoomDirectoryEvents
 }

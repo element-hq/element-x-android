@@ -26,14 +26,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import io.element.android.features.roomdirectory.impl.root.model.RoomDescriptionUiModel
 import io.element.android.features.roomdirectory.impl.root.model.toUiModel
 import io.element.android.libraries.architecture.Presenter
-import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.roomdirectory.RoomDirectoryList
 import io.element.android.libraries.matrix.api.roomdirectory.RoomDirectoryService
-import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.Dispatchers
@@ -76,9 +73,6 @@ class RoomDirectoryPresenter @Inject constructor(
                 is RoomDirectoryEvents.Search -> {
                     searchQuery = event.query
                 }
-                is RoomDirectoryEvents.SearchActiveChange -> {
-
-                }
             }
         }
 
@@ -88,23 +82,6 @@ class RoomDirectoryPresenter @Inject constructor(
             displayLoadMoreIndicator = hasMoreToLoad,
             eventSink = ::handleEvents
         )
-    }
-
-    @Composable
-    private fun searchResults(
-        filteredRooms: ImmutableList<RoomDescriptionUiModel>,
-        hasMoreToLoad: Boolean,
-        isSearchActive: Boolean,
-    ): SearchBarResultState<ImmutableList<RoomDescriptionUiModel>> {
-        return if (!isSearchActive) {
-            SearchBarResultState.Initial()
-        } else {
-            if (filteredRooms.isEmpty() && !hasMoreToLoad) {
-                SearchBarResultState.NoResultsFound()
-            } else {
-                SearchBarResultState.Results(filteredRooms)
-            }
-        }
     }
 
     @Composable

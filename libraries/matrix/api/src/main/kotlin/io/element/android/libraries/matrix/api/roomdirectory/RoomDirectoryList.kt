@@ -19,8 +19,8 @@ package io.element.android.libraries.matrix.api.roomdirectory
 import kotlinx.coroutines.flow.Flow
 
 interface RoomDirectoryList {
-    suspend fun filter(filter: String?, batchSize: Int)
-    suspend fun loadMore()
+    suspend fun filter(filter: String?, batchSize: Int): Result<Unit>
+    suspend fun loadMore(): Result<Unit>
     suspend fun hasMoreToLoad(): Boolean
     val items: Flow<List<RoomDescription>>
 }

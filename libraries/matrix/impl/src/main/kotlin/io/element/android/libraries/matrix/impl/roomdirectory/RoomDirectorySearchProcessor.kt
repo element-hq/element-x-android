@@ -42,27 +42,27 @@ class RoomDirectorySearchProcessor(
         }
     }
 
-    private suspend fun MutableList<RoomDescription>.applyUpdate(update: RoomDirectorySearchEntryUpdate) {
+    private fun MutableList<RoomDescription>.applyUpdate(update: RoomDirectorySearchEntryUpdate) {
         when (update) {
             is RoomDirectorySearchEntryUpdate.Append -> {
                 val roomSummaries = update.values.map(roomDescriptionMapper::map)
                 addAll(roomSummaries)
             }
             is RoomDirectorySearchEntryUpdate.PushBack -> {
-                val roomSummary = roomDescriptionMapper.map(update.value)
-                add(roomSummary)
+                val roomDescription = roomDescriptionMapper.map(update.value)
+                add(roomDescription)
             }
             is RoomDirectorySearchEntryUpdate.PushFront -> {
-                val roomSummary = roomDescriptionMapper.map(update.value)
-                add(0, roomSummary)
+                val roomDescription = roomDescriptionMapper.map(update.value)
+                add(0, roomDescription)
             }
             is RoomDirectorySearchEntryUpdate.Set -> {
-                val roomSummary = roomDescriptionMapper.map(update.value)
-                this[update.index.toInt()] = roomSummary
+                val roomDescription = roomDescriptionMapper.map(update.value)
+                this[update.index.toInt()] = roomDescription
             }
             is RoomDirectorySearchEntryUpdate.Insert -> {
-                val roomSummary = roomDescriptionMapper.map(update.value)
-                add(update.index.toInt(), roomSummary)
+                val roomDescription = roomDescriptionMapper.map(update.value)
+                add(update.index.toInt(), roomDescription)
             }
             is RoomDirectorySearchEntryUpdate.Remove -> {
                 removeAt(update.index.toInt())

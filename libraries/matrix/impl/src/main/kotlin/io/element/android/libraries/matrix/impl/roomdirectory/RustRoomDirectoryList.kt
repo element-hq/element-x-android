@@ -18,6 +18,7 @@ package io.element.android.libraries.matrix.impl.roomdirectory
 
 import io.element.android.libraries.matrix.api.roomdirectory.RoomDescription
 import io.element.android.libraries.matrix.api.roomdirectory.RoomDirectoryList
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.FlowPreview
@@ -32,12 +33,11 @@ import org.matrix.rustcomponents.sdk.RoomDirectorySearch as InnerRoomDirectorySe
 
 class RustRoomDirectoryList(
     private val inner: InnerRoomDirectorySearch,
-    private val sessionCoroutineScope: CoroutineScope,
-    private val sessionDispatcher: CoroutineDispatcher,
+    sessionCoroutineScope: CoroutineScope,
+    sessionDispatcher: CoroutineDispatcher,
 ) : RoomDirectoryList {
 
-    private val _items = MutableSharedFlow<List<RoomDescription>>()
-
+    private val _items = MutableSharedFlow<List<RoomDescription>>(replay = 1)
     private val processor = RoomDirectorySearchProcessor(_items, sessionDispatcher, RoomDescriptionMapper())
 
     init {
@@ -51,12 +51,26 @@ class RustRoomDirectoryList(
         }
     }
 
-    override suspend fun filter(filter: String?, batchSize: Int) {
-        inner.search(filter, batchSize.toUInt())
+    override suspend fun filter(filter: String?, batchSize: Int): Result<Unit> {
+        return try {
+            inner.search(filter = filter, batchSize = batchSize.toUInt())
+            Result.success(Unit)
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
     }
 
-    override suspend fun loadMore() {
-        inner.nextPage()
+    override suspend fun loadMore(): Result<Unit> {
+        return try {
+            inner.nextPage()
+            Result.success(Unit)
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
     }
 
     override suspend fun hasMoreToLoad(): Boolean {
