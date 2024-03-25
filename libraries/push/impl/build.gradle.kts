@@ -38,6 +38,7 @@ dependencies {
     implementation(libs.androidx.corektx)
     implementation(libs.androidx.datastore.preferences)
     implementation(libs.androidx.security.crypto)
+    implementation(platform(libs.network.retrofit.bom))
     implementation(libs.network.retrofit)
     implementation(libs.serialization.json)
     implementation(libs.coil)

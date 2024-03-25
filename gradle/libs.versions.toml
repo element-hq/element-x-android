@@ -120,8 +120,9 @@ network_okhttp_logging = { module = "com.squareup.okhttp3:logging-interceptor" }
 network_okhttp_okhttp = { module = "com.squareup.okhttp3:okhttp" }
 network_okhttp = { module = "com.squareup.okhttp3:okhttp" }
 network_mockwebserver = { module = "com.squareup.okhttp3:mockwebserver" }
-network_retrofit = "com.squareup.retrofit2:retrofit:2.9.0"
-network_retrofit_converter_serialization = "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:1.0.0"
+network_retrofit_bom = "com.squareup.retrofit2:retrofit-bom:2.10.0"
+network_retrofit = { module = "com.squareup.retrofit2:retrofit" }
+network_retrofit_converter_serialization = { module = "com.squareup.retrofit2:converter-kotlinx-serialization" }
 
 # Test
 test_core = { module = "androidx.test:core", version.ref = "test_core" }
