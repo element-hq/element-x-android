@@ -32,7 +32,7 @@ interface RoomDirectoryEntryPoint : FeatureEntryPoint {
     }
 
     interface Callback : Plugin {
-        fun onRoomJoined(roomId: RoomId)
+        fun onJoinRoom(roomId: RoomId)
     }
 }
 

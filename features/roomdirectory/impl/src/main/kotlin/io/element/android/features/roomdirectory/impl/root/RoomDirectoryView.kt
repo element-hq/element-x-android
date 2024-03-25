@@ -67,6 +67,7 @@ import kotlinx.collections.immutable.ImmutableList
 fun RoomDirectoryView(
     state: RoomDirectoryState,
     onBackPressed: () -> Unit,
+    onJoinRoom: (RoomId) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Scaffold(
@@ -77,12 +78,10 @@ fun RoomDirectoryView(
         content = { padding ->
             RoomDirectoryContent(
                 state = state,
-                onResultClicked = { roomId ->
-                    state.eventSink(RoomDirectoryEvents.JoinRoom(roomId))
-                },
+                onResultClicked = onJoinRoom,
                 modifier = Modifier
-                        .padding(padding)
-                        .consumeWindowInsets(padding)
+                    .padding(padding)
+                    .consumeWindowInsets(padding)
             )
         }
     )
@@ -171,10 +170,10 @@ private fun RoomDirectoryRoomList(
 @Composable
 private fun LoadMoreIndicator(modifier: Modifier = Modifier) {
     Box(
-            modifier
-                    .fillMaxWidth()
-                    .wrapContentHeight()
-                    .padding(8.dp),
+        modifier
+            .fillMaxWidth()
+            .wrapContentHeight()
+            .padding(8.dp),
         contentAlignment = Alignment.Center,
     ) {
         CircularProgressIndicator(
@@ -244,14 +243,14 @@ private fun RoomDirectoryRoomRow(
 ) {
     Row(
         modifier = modifier
-                .fillMaxWidth()
-                .clickable { onClick(roomDescription.roomId) }
-                .padding(
-                        top = 12.dp,
-                        bottom = 12.dp,
-                        start = 16.dp,
-                )
-                .height(IntrinsicSize.Min),
+            .fillMaxWidth()
+            .clickable { onClick(roomDescription.roomId) }
+            .padding(
+                top = 12.dp,
+                bottom = 12.dp,
+                start = 16.dp,
+            )
+            .height(IntrinsicSize.Min),
     ) {
         Avatar(
             avatarData = roomDescription.avatarData,
@@ -259,8 +258,8 @@ private fun RoomDirectoryRoomRow(
         )
         Column(
             modifier = Modifier
-                    .weight(1f)
-                    .padding(start = 16.dp)
+                .weight(1f)
+                .padding(start = 16.dp)
         ) {
             Text(
                 text = roomDescription.name,
@@ -282,8 +281,8 @@ private fun RoomDirectoryRoomRow(
                 text = stringResource(id = CommonStrings.action_join),
                 color = ElementTheme.colors.textSuccessPrimary,
                 modifier = Modifier
-                        .align(Alignment.CenterVertically)
-                        .padding(start = 4.dp, end = 12.dp)
+                    .align(Alignment.CenterVertically)
+                    .padding(start = 4.dp, end = 12.dp)
             )
         } else {
             Spacer(modifier = Modifier.width(24.dp))
@@ -296,6 +295,7 @@ private fun RoomDirectoryRoomRow(
 fun RoomDirectorySearchViewLightPreview(@PreviewParameter(RoomDirectorySearchStateProvider::class) state: RoomDirectoryState) = ElementPreview {
     RoomDirectoryView(
         state = state,
+        onJoinRoom = {},
         onBackPressed = {},
     )
 }

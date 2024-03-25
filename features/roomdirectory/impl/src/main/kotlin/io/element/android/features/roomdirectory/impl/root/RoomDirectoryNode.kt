@@ -21,10 +21,13 @@ import androidx.compose.ui.Modifier
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
+import com.bumble.appyx.core.plugin.plugins
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
+import io.element.android.features.roomdirectory.api.RoomDirectoryEntryPoint
 import io.element.android.libraries.di.SessionScope
+import io.element.android.libraries.matrix.api.core.RoomId
 
 @ContributesNode(SessionScope::class)
 class RoomDirectoryNode @AssistedInject constructor(
@@ -33,11 +36,18 @@ class RoomDirectoryNode @AssistedInject constructor(
     private val presenter: RoomDirectoryPresenter,
 ) : Node(buildContext, plugins = plugins) {
 
+    private fun onJoinRoom(roomId: RoomId) {
+        plugins<RoomDirectoryEntryPoint.Callback>().forEach {
+            it.onJoinRoom(roomId)
+        }
+    }
+
     @Composable
     override fun View(modifier: Modifier) {
         val state = presenter.present()
         RoomDirectoryView(
             state = state,
+            onJoinRoom = ::onJoinRoom,
             onBackPressed = ::navigateUp,
             modifier = modifier
         )

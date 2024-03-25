@@ -28,20 +28,20 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import io.element.android.features.roomdirectory.impl.root.model.toUiModel
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.roomdirectory.RoomDirectoryList
 import io.element.android.libraries.matrix.api.roomdirectory.RoomDirectoryService
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class RoomDirectoryPresenter @Inject constructor(
-    private val client: MatrixClient,
-    private val roomDirectoryService: RoomDirectoryService,
+    private val dispatchers: CoroutineDispatchers,
+    roomDirectoryService: RoomDirectoryService,
 ) : Presenter<RoomDirectoryState> {
 
     private val roomDirectoryList = roomDirectoryService.createRoomDirectoryList()
@@ -62,9 +62,6 @@ class RoomDirectoryPresenter @Inject constructor(
         }
         fun handleEvents(event: RoomDirectoryEvents) {
             when (event) {
-                is RoomDirectoryEvents.JoinRoom -> {
-                    //coroutineScope.joinRoom(event.roomId)
-                }
                 RoomDirectoryEvents.LoadMore -> {
                     coroutineScope.launch {
                         roomDirectoryList.loadMore()
@@ -90,6 +87,6 @@ class RoomDirectoryPresenter @Inject constructor(
             list
                 .map { roomDescription -> roomDescription.toUiModel() }
                 .toImmutableList()
-        }.flowOn(Dispatchers.Default)
+        }.flowOn(dispatchers.computation)
     }.collectAsState(persistentListOf())
 }
