@@ -27,7 +27,6 @@ import com.bumble.appyx.core.plugin.plugins
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
-import io.element.android.features.messages.impl.attachments.Attachment
 import io.element.android.features.messages.impl.timeline.di.LocalTimelineItemPresenterFactories
 import io.element.android.features.messages.impl.timeline.di.TimelineItemPresenterFactories
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
@@ -41,7 +40,6 @@ import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugIn
 import io.element.android.libraries.mediaplayer.api.MediaPlayer
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analytics.api.extensions.toAnalyticsViewRoom
-import kotlinx.collections.immutable.ImmutableList
 
 @ContributesNode(RoomScope::class)
 class MessagesNode @AssistedInject constructor(
@@ -59,7 +57,6 @@ class MessagesNode @AssistedInject constructor(
     interface Callback : Plugin {
         fun onRoomDetailsClicked()
         fun onEventClicked(event: TimelineItem.Event): Boolean
-        fun onPreviewAttachments(attachments: ImmutableList<Attachment>)
         fun onUserDataClicked(userId: UserId)
         fun onShowEventDebugInfoClicked(eventId: EventId?, debugInfo: TimelineItemDebugInfo)
         fun onForwardEventClicked(eventId: EventId)
@@ -87,10 +84,6 @@ class MessagesNode @AssistedInject constructor(
 
     private fun onEventClicked(event: TimelineItem.Event): Boolean {
         return callback?.onEventClicked(event).orFalse()
-    }
-
-    private fun onPreviewAttachments(attachments: ImmutableList<Attachment>) {
-        callback?.onPreviewAttachments(attachments)
     }
 
     private fun onUserDataClicked(userId: UserId) {
@@ -135,7 +128,6 @@ class MessagesNode @AssistedInject constructor(
                 onBackPressed = this::navigateUp,
                 onRoomDetailsClicked = this::onRoomDetailsClicked,
                 onEventClicked = this::onEventClicked,
-                onPreviewAttachments = this::onPreviewAttachments,
                 onUserDataClicked = this::onUserDataClicked,
                 onSendLocationClicked = this::onSendLocationClicked,
                 onCreatePollClicked = this::onCreatePollClicked,

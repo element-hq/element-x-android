@@ -33,7 +33,7 @@ internal fun MessagesViewWithTypingPreview(
         onBackPressed = {},
         onRoomDetailsClicked = {},
         onEventClicked = { false },
-        onPreviewAttachments = {},
+        //onPreviewAttachments = {},
         onUserDataClicked = {},
         onSendLocationClicked = {},
         onCreatePollClicked = {},
