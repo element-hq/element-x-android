@@ -40,7 +40,7 @@ class StaticFeatureFlagProvider @Inject constructor() :
                 FeatureFlags.PinUnlock -> true
                 FeatureFlags.Mentions -> true
                 FeatureFlags.MarkAsUnread -> true
-                FeatureFlags.RoomListFilters -> false
+                FeatureFlags.RoomListFilters -> true
                 FeatureFlags.RoomModeration -> false
             }
         } else {
