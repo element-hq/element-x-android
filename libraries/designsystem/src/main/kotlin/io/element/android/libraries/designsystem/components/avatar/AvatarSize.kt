@@ -53,5 +53,5 @@ enum class AvatarSize(val dp: Dp) {
 
     CustomRoomNotificationSetting(36.dp),
 
-    RoomDirectorySearchItem(36.dp),
+    RoomDirectoryItem(36.dp),
 }

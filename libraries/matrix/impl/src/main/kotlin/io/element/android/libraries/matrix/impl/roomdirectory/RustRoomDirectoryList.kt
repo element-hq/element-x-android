@@ -17,26 +17,28 @@
 package io.element.android.libraries.matrix.impl.roomdirectory
 
 import io.element.android.libraries.matrix.api.roomdirectory.RoomDescription
-import io.element.android.libraries.matrix.api.roomdirectory.RoomDirectorySearch
+import io.element.android.libraries.matrix.api.roomdirectory.RoomDirectoryList
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import kotlin.time.Duration.Companion.milliseconds
 import org.matrix.rustcomponents.sdk.RoomDirectorySearch as InnerRoomDirectorySearch
 
-class RustRoomDirectorySearch(
+class RustRoomDirectoryList(
     private val inner: InnerRoomDirectorySearch,
     private val sessionCoroutineScope: CoroutineScope,
     private val sessionDispatcher: CoroutineDispatcher,
-) : RoomDirectorySearch {
+) : RoomDirectoryList {
 
-    private val _results: MutableStateFlow<List<RoomDescription>> =
-        MutableStateFlow(emptyList())
+    private val _items = MutableSharedFlow<List<RoomDescription>>()
 
-    private val processor = RoomDirectorySearchProcessor(_results, sessionDispatcher, RoomDescriptionMapper())
+    private val processor = RoomDirectorySearchProcessor(_items, sessionDispatcher, RoomDescriptionMapper())
 
     init {
         sessionCoroutineScope.launch(sessionDispatcher) {
@@ -49,8 +51,8 @@ class RustRoomDirectorySearch(
         }
     }
 
-    override suspend fun updateQuery(query: String?, batchSize: Int) {
-        inner.search(query, batchSize.toUInt())
+    override suspend fun filter(filter: String?, batchSize: Int) {
+        inner.search(filter, batchSize.toUInt())
     }
 
     override suspend fun loadMore() {
@@ -61,5 +63,6 @@ class RustRoomDirectorySearch(
         return !inner.isAtLastPage()
     }
 
-    override val results: SharedFlow<List<RoomDescription>> = _results
+    @OptIn(FlowPreview::class)
+    override val items: Flow<List<RoomDescription>> = _items.debounce(200.milliseconds)
 }

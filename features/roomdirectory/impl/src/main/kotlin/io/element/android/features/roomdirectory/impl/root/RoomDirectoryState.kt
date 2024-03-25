@@ -16,14 +16,14 @@
 
 package io.element.android.features.roomdirectory.impl.root
 
-import io.element.android.features.roomdirectory.impl.root.model.RoomDirectoryRoomSummary
-import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
+import io.element.android.features.roomdirectory.impl.root.model.RoomDescriptionUiModel
 import kotlinx.collections.immutable.ImmutableList
 
 data class RoomDirectoryState(
     val query: String,
-    val roomSummaries: ImmutableList<RoomDirectoryRoomSummary>,
-    val searchResults: SearchBarResultState<ImmutableList<RoomDirectoryRoomSummary>>,
-    val isSearchActive: Boolean,
+    val roomDescriptions: ImmutableList<RoomDescriptionUiModel>,
+    val displayLoadMoreIndicator: Boolean,
     val eventSink: (RoomDirectoryEvents) -> Unit
-)
+) {
+    val displayEmptyState = roomDescriptions.isEmpty() && !displayLoadMoreIndicator
+}

@@ -21,22 +21,33 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.produceState
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import io.element.android.features.roomdirectory.impl.root.datasource.RoomDirectoryDataSource
+import io.element.android.features.roomdirectory.impl.root.model.RoomDescriptionUiModel
+import io.element.android.features.roomdirectory.impl.root.model.toUiModel
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
 import io.element.android.libraries.matrix.api.MatrixClient
-import io.element.android.libraries.matrix.api.core.RoomId
-import kotlinx.coroutines.CoroutineScope
+import io.element.android.libraries.matrix.api.roomdirectory.RoomDirectoryList
+import io.element.android.libraries.matrix.api.roomdirectory.RoomDirectoryService
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class RoomDirectoryPresenter @Inject constructor(
     private val client: MatrixClient,
-    private val dataSource: RoomDirectoryDataSource,
+    private val roomDirectoryService: RoomDirectoryService,
 ) : Presenter<RoomDirectoryState> {
+
+    private val roomDirectoryList = roomDirectoryService.createRoomDirectoryList()
 
     @Composable
     override fun present(): RoomDirectoryState {
@@ -44,50 +55,64 @@ class RoomDirectoryPresenter @Inject constructor(
         var searchQuery by rememberSaveable {
             mutableStateOf("")
         }
-        var isSearchActive by rememberSaveable {
-            mutableStateOf(false)
+        val allRooms by roomDirectoryList.collectItemsAsState()
+        val hasMoreToLoad by produceState(initialValue = true, allRooms) {
+            value = roomDirectoryList.hasMoreToLoad()
         }
-
-        val roomSummaries by dataSource.all.collectAsState()
-
         val coroutineScope = rememberCoroutineScope()
-
         LaunchedEffect(searchQuery) {
-            dataSource.updateSearchQuery(searchQuery)
+            roomDirectoryList.filter(searchQuery, 20)
         }
-
         fun handleEvents(event: RoomDirectoryEvents) {
             when (event) {
                 is RoomDirectoryEvents.JoinRoom -> {
-                    coroutineScope.joinRoom(event.roomId)
+                    //coroutineScope.joinRoom(event.roomId)
                 }
                 RoomDirectoryEvents.LoadMore -> {
                     coroutineScope.launch {
-                        dataSource.loadMore()
+                        roomDirectoryList.loadMore()
                     }
                 }
                 is RoomDirectoryEvents.Search -> {
                     searchQuery = event.query
                 }
                 is RoomDirectoryEvents.SearchActiveChange -> {
-                    isSearchActive = event.isActive
-                    if (!isSearchActive) {
-                        searchQuery = ""
-                    }
+
                 }
             }
         }
 
         return RoomDirectoryState(
             query = searchQuery,
-            isSearchActive = isSearchActive,
-            roomSummaries = roomSummaries,
-            searchResults = SearchBarResultState.Initial(),
+            roomDescriptions = allRooms,
+            displayLoadMoreIndicator = hasMoreToLoad,
             eventSink = ::handleEvents
         )
     }
 
-    private fun CoroutineScope.joinRoom(roomId: RoomId) = launch {
-        client.getRoom(roomId)?.join()
+    @Composable
+    private fun searchResults(
+        filteredRooms: ImmutableList<RoomDescriptionUiModel>,
+        hasMoreToLoad: Boolean,
+        isSearchActive: Boolean,
+    ): SearchBarResultState<ImmutableList<RoomDescriptionUiModel>> {
+        return if (!isSearchActive) {
+            SearchBarResultState.Initial()
+        } else {
+            if (filteredRooms.isEmpty() && !hasMoreToLoad) {
+                SearchBarResultState.NoResultsFound()
+            } else {
+                SearchBarResultState.Results(filteredRooms)
+            }
+        }
     }
+
+    @Composable
+    private fun RoomDirectoryList.collectItemsAsState() = remember {
+        items.map { list ->
+            list
+                .map { roomDescription -> roomDescription.toUiModel() }
+                .toImmutableList()
+        }.flowOn(Dispatchers.Default)
+    }.collectAsState(persistentListOf())
 }

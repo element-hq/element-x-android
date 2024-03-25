@@ -17,37 +17,33 @@
 package io.element.android.features.roomdirectory.impl.root
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.consumeWindowInsets
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.TextFieldColors
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
-import io.element.android.features.roomdirectory.impl.root.model.RoomDirectoryRoomSummary
+import io.element.android.features.roomdirectory.impl.root.model.RoomDescriptionUiModel
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -56,7 +52,6 @@ import io.element.android.libraries.designsystem.theme.aliasScreenTitle
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.Scaffold
-import io.element.android.libraries.designsystem.theme.components.SearchBar
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextField
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
@@ -109,55 +104,38 @@ private fun RoomDirectoryTopBar(
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun RoomDirectoryContent(
     state: RoomDirectoryState,
     onResultClicked: (RoomId) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Column(
-        modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(16.dp),
-    ) {
-        SearchBar(
+    Column(modifier = modifier) {
+        SearchTextField(
             query = state.query,
-            onQueryChange = { query ->
-                state.eventSink(RoomDirectoryEvents.Search(query))
-            },
-            active = state.isSearchActive,
-            onActiveChange = {
-                state.eventSink(RoomDirectoryEvents.SearchActiveChange(it))
-            },
-            resultState = state.searchResults,
-            placeHolderTitle = stringResource(id = CommonStrings.action_search),
-        ) { results ->
-            RoomDirectoryRoomList(
-                rooms = results,
-                onResultClicked = onResultClicked,
-            )
-        }
-        if (!state.isSearchActive) {
-            RoomDirectoryRoomList(
-                rooms = state.roomSummaries,
-                onResultClicked = onResultClicked,
-            )
-        }
+            onQueryChange = { state.eventSink(RoomDirectoryEvents.Search(it)) },
+            placeholder = stringResource(id = CommonStrings.action_search),
+            modifier = Modifier.fillMaxWidth(),
+        )
+        RoomDirectoryRoomList(
+            roomDescriptions = state.roomDescriptions,
+            onResultClicked = onResultClicked,
+        )
     }
 }
 
 @Composable
 private fun RoomDirectoryRoomList(
-    rooms: ImmutableList<RoomDirectoryRoomSummary>,
+    roomDescriptions: ImmutableList<RoomDescriptionUiModel>,
     onResultClicked: (RoomId) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     LazyColumn(
         modifier = modifier,
     ) {
-        items(rooms) { room ->
+        items(roomDescriptions) { roomDescription ->
             RoomDirectoryRoomRow(
-                room = room,
+                roomDescription = roomDescription,
                 onClick = onResultClicked,
             )
         }
@@ -165,15 +143,68 @@ private fun RoomDirectoryRoomList(
 }
 
 @Composable
+private fun SearchTextField(
+    query: String,
+    onQueryChange: (String) -> Unit,
+    placeholder: String,
+    modifier: Modifier = Modifier,
+    colors: TextFieldColors = TextFieldDefaults.colors(
+        focusedContainerColor = Color.Transparent,
+        unfocusedContainerColor = Color.Transparent,
+        unfocusedPlaceholderColor = ElementTheme.colors.textPlaceholder,
+        focusedPlaceholderColor = ElementTheme.colors.textPlaceholder,
+        focusedTextColor = ElementTheme.colors.textPrimary,
+        unfocusedTextColor = ElementTheme.colors.textPrimary,
+        focusedIndicatorColor = ElementTheme.colors.borderInteractiveSecondary,
+        unfocusedIndicatorColor = ElementTheme.colors.borderInteractiveSecondary,
+    ),
+) {
+    val focusManager = LocalFocusManager.current
+    TextField(
+        modifier = modifier,
+        textStyle = ElementTheme.typography.fontBodyLgRegular,
+        singleLine = true,
+        value = query,
+        onValueChange = onQueryChange,
+        keyboardActions = KeyboardActions(
+            onSearch = {
+                focusManager.clearFocus()
+            }
+        ),
+        colors = colors,
+        placeholder = { Text(placeholder) },
+        trailingIcon = {
+            if (query.isNotEmpty()) {
+                IconButton(
+                    onClick = {
+                        onQueryChange("")
+                    }
+                ) {
+                    Icon(
+                        imageVector = CompoundIcons.Close(),
+                        contentDescription = stringResource(CommonStrings.action_clear),
+                    )
+                }
+            } else {
+                Icon(
+                    imageVector = CompoundIcons.Search(),
+                    contentDescription = stringResource(CommonStrings.action_search),
+                )
+            }
+        },
+    )
+}
+
+@Composable
 private fun RoomDirectoryRoomRow(
-    room: RoomDirectoryRoomSummary,
+    roomDescription: RoomDescriptionUiModel,
     onClick: (RoomId) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .clickable { onClick(room.roomId) }
+            .clickable { onClick(roomDescription.roomId) }
             .padding(
                 top = 12.dp,
                 bottom = 12.dp,
@@ -182,7 +213,7 @@ private fun RoomDirectoryRoomRow(
             .height(IntrinsicSize.Min),
     ) {
         Avatar(
-            avatarData = room.avatarData,
+            avatarData = roomDescription.avatarData,
             modifier = Modifier.align(Alignment.CenterVertically)
         )
         Column(
@@ -191,21 +222,21 @@ private fun RoomDirectoryRoomRow(
                 .padding(start = 16.dp)
         ) {
             Text(
-                text = room.name,
+                text = roomDescription.name,
                 maxLines = 1,
                 style = ElementTheme.typography.fontBodyLgRegular,
                 color = ElementTheme.colors.textPrimary,
                 overflow = TextOverflow.Ellipsis,
             )
             Text(
-                text = room.description,
+                text = roomDescription.description,
                 maxLines = 1,
                 style = ElementTheme.typography.fontBodyMdRegular,
                 color = ElementTheme.colors.textSecondary,
                 overflow = TextOverflow.Ellipsis,
             )
         }
-        if (room.canBeJoined) {
+        if (roomDescription.canBeJoined) {
             Text(
                 text = stringResource(id = CommonStrings.action_join),
                 color = ElementTheme.colors.textSuccessPrimary,
@@ -217,64 +248,6 @@ private fun RoomDirectoryRoomRow(
             Spacer(modifier = Modifier.width(24.dp))
         }
     }
-}
-
-@Composable
-@OptIn(ExperimentalMaterial3Api::class)
-private fun RoomDirectorySearchTopBar(
-    query: String,
-    onQueryChanged: (String) -> Unit,
-    onBackPressed: () -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    val borderColor = ElementTheme.colors.borderInteractivePrimary
-    val borderStroke = 1.dp
-    TopAppBar(
-        modifier = modifier.drawBehind {
-            drawLine(
-                color = borderColor,
-                start = Offset(0f, size.height),
-                end = Offset(size.width, size.height),
-                strokeWidth = borderStroke.value
-            )
-        },
-        title = {
-            val focusRequester = FocusRequester()
-            TextField(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .focusRequester(focusRequester),
-                value = query,
-                singleLine = true,
-                onValueChange = onQueryChanged,
-                colors = TextFieldDefaults.colors(
-                    focusedContainerColor = Color.Transparent,
-                    unfocusedContainerColor = Color.Transparent,
-                    disabledContainerColor = Color.Transparent,
-                    focusedIndicatorColor = Color.Transparent,
-                    unfocusedIndicatorColor = Color.Transparent,
-                    disabledIndicatorColor = Color.Transparent,
-                    errorIndicatorColor = Color.Transparent,
-                ),
-                trailingIcon = {
-                    if (query.isNotEmpty()) {
-                        IconButton(onClick = {
-                            onQueryChanged("")
-                        }) {
-                            Icon(
-                                imageVector = CompoundIcons.Close(),
-                                contentDescription = stringResource(CommonStrings.action_cancel),
-                            )
-                        }
-                    }
-                }
-            )
-            LaunchedEffect(Unit) {
-                focusRequester.requestFocus()
-            }
-        },
-        navigationIcon = { BackButton(onClick = onBackPressed) },
-    )
 }
 
 @PreviewsDayNight

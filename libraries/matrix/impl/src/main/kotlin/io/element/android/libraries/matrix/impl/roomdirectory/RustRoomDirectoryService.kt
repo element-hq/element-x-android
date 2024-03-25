@@ -16,7 +16,7 @@
 
 package io.element.android.libraries.matrix.impl.roomdirectory
 
-import io.element.android.libraries.matrix.api.roomdirectory.RoomDirectorySearch
+import io.element.android.libraries.matrix.api.roomdirectory.RoomDirectoryList
 import io.element.android.libraries.matrix.api.roomdirectory.RoomDirectoryService
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
@@ -28,8 +28,8 @@ class RustRoomDirectoryService(
     private val sessionDispatcher: CoroutineDispatcher,
 ) : RoomDirectoryService {
 
-    override fun search(): RoomDirectorySearch {
-        return RustRoomDirectorySearch(client.roomDirectorySearch(), sessionCoroutineScope, sessionDispatcher)
+    override fun createRoomDirectoryList(): RoomDirectoryList {
+        return RustRoomDirectoryList(client.roomDirectorySearch(), sessionCoroutineScope, sessionDispatcher)
     }
 
 }

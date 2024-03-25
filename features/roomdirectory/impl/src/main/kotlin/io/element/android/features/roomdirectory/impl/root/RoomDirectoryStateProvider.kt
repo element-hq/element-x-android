@@ -17,7 +17,7 @@
 package io.element.android.features.roomdirectory.impl.root
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import io.element.android.features.roomdirectory.impl.root.model.RoomDirectoryRoomSummary
+import io.element.android.features.roomdirectory.impl.root.model.RoomDescriptionUiModel
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
@@ -31,8 +31,8 @@ open class RoomDirectorySearchStateProvider : PreviewParameterProvider<RoomDirec
             aRoomDirectoryState(),
             aRoomDirectoryState(
                 query = "Element",
-                roomSummaries = persistentListOf(
-                    RoomDirectoryRoomSummary(
+                roomDescriptions = persistentListOf(
+                    RoomDescriptionUiModel(
                         roomId = RoomId("@exa:matrix.org"),
                         name = "Element X Android",
                         description = "Element X is a secure, private and decentralized messenger.",
@@ -40,11 +40,11 @@ open class RoomDirectorySearchStateProvider : PreviewParameterProvider<RoomDirec
                             id = "@exa:matrix.org",
                             name = "Element X Android",
                             url = null,
-                            size = AvatarSize.RoomDirectorySearchItem
+                            size = AvatarSize.RoomDirectoryItem
                         ),
                         canBeJoined = true,
                     ),
-                    RoomDirectoryRoomSummary(
+                    RoomDescriptionUiModel(
                         roomId = RoomId("@exi:matrix.org"),
                         name = "Element X iOS",
                         description = "Element X is a secure, private and decentralized messenger.",
@@ -52,7 +52,7 @@ open class RoomDirectorySearchStateProvider : PreviewParameterProvider<RoomDirec
                             id = "@exi:matrix.org",
                             name = "Element X iOS",
                             url = null,
-                            size = AvatarSize.RoomDirectorySearchItem
+                            size = AvatarSize.RoomDirectoryItem
                         ),
                         canBeJoined = false,
                     )
@@ -64,12 +64,12 @@ open class RoomDirectorySearchStateProvider : PreviewParameterProvider<RoomDirec
 fun aRoomDirectoryState(
     query: String = "",
     isSearchActive: Boolean = false,
-    roomSummaries: ImmutableList<RoomDirectoryRoomSummary> = persistentListOf(),
-    searchResults: SearchBarResultState<ImmutableList<RoomDirectoryRoomSummary>> = SearchBarResultState.Initial(),
+    displayLoadMoreIndicator: Boolean = false,
+    roomDescriptions: ImmutableList<RoomDescriptionUiModel> = persistentListOf(),
+    searchResults: SearchBarResultState<ImmutableList<RoomDescriptionUiModel>> = SearchBarResultState.Initial(),
 ) = RoomDirectoryState(
     query = query,
-    isSearchActive = isSearchActive,
-    roomSummaries = roomSummaries,
-    searchResults = searchResults,
+    roomDescriptions = roomDescriptions,
+    displayLoadMoreIndicator = displayLoadMoreIndicator,
     eventSink = {},
 )

@@ -16,11 +16,11 @@
 
 package io.element.android.libraries.matrix.api.roomdirectory
 
-import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.Flow
 
-interface RoomDirectorySearch {
-    suspend fun updateQuery(query: String?, batchSize: Int)
+interface RoomDirectoryList {
+    suspend fun filter(filter: String?, batchSize: Int)
     suspend fun loadMore()
     suspend fun hasMoreToLoad(): Boolean
-    val results: SharedFlow<List<RoomDescription>>
+    val items: Flow<List<RoomDescription>>
 }

@@ -17,5 +17,5 @@
 package io.element.android.libraries.matrix.api.roomdirectory
 
 interface RoomDirectoryService {
-    fun search(): RoomDirectorySearch
+    fun createRoomDirectoryList(): RoomDirectoryList
 }

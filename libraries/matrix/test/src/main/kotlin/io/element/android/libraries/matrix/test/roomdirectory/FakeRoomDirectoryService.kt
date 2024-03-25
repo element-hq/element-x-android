@@ -16,11 +16,11 @@
 
 package io.element.android.libraries.matrix.test.roomdirectory
 
-import io.element.android.libraries.matrix.api.roomdirectory.RoomDirectorySearch
+import io.element.android.libraries.matrix.api.roomdirectory.RoomDirectoryList
 import io.element.android.libraries.matrix.api.roomdirectory.RoomDirectoryService
 
 class FakeRoomDirectoryService : RoomDirectoryService {
-    override fun search(): RoomDirectorySearch {
+    override fun createRoomDirectoryList(): RoomDirectoryList {
         TODO("Not yet implemented")
     }
 }

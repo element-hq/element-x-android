@@ -17,12 +17,29 @@
 package io.element.android.features.roomdirectory.impl.root.model
 
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
+import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.roomdirectory.RoomDescription
 
-data class RoomDirectoryRoomSummary(
+data class RoomDescriptionUiModel(
     val roomId: RoomId,
     val name: String,
     val description: String,
     val avatarData: AvatarData,
     val canBeJoined: Boolean,
 )
+
+fun RoomDescription.toUiModel(): RoomDescriptionUiModel {
+    return RoomDescriptionUiModel(
+        roomId = roomId,
+        name = name ?: "",
+        description = topic ?: "",
+        avatarData = AvatarData(
+            id = roomId.value,
+            name = name ?: "",
+            url = avatarUrl,
+            size = AvatarSize.RoomDirectoryItem,
+        ),
+        canBeJoined = joinRule == RoomDescription.JoinRule.PUBLIC,
+    )
+}
