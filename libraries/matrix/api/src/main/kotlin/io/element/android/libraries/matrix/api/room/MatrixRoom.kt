@@ -86,6 +86,11 @@ interface MatrixRoom : Closeable {
      */
     suspend fun updateMembers()
 
+    /**
+     * Will return an updated member or an error.
+     */
+    suspend fun getUpdatedMember(userId: UserId): Result<RoomMember>
+
     suspend fun updateRoomNotificationSettings(): Result<Unit>
 
     val syncUpdateFlow: StateFlow<Long>
@@ -122,9 +127,23 @@ interface MatrixRoom : Closeable {
 
     suspend fun redactEvent(eventId: EventId, reason: String? = null): Result<Unit>
 
-    suspend fun sendImage(file: File, thumbnailFile: File?, imageInfo: ImageInfo, progressCallback: ProgressCallback?): Result<MediaUploadHandler>
+    suspend fun sendImage(
+        file: File,
+        thumbnailFile: File?,
+        imageInfo: ImageInfo,
+        body: String?,
+        formattedBody: String?,
+        progressCallback: ProgressCallback?
+    ): Result<MediaUploadHandler>
 
-    suspend fun sendVideo(file: File, thumbnailFile: File?, videoInfo: VideoInfo, progressCallback: ProgressCallback?): Result<MediaUploadHandler>
+    suspend fun sendVideo(
+        file: File,
+        thumbnailFile: File?,
+        videoInfo: VideoInfo,
+        body: String?,
+        formattedBody: String?,
+        progressCallback: ProgressCallback?
+    ): Result<MediaUploadHandler>
 
     suspend fun sendAudio(file: File, audioInfo: AudioInfo, progressCallback: ProgressCallback?): Result<MediaUploadHandler>
 

@@ -7,8 +7,23 @@
   <string name="screen_roomlist_a11y_create_message">"Buat percakapan atau ruangan baru"</string>
   <string name="screen_roomlist_empty_message">"Mulailah dengan mengirim pesan kepada seseorang."</string>
   <string name="screen_roomlist_empty_title">"Belum ada obrolan."</string>
+  <string name="screen_roomlist_filter_favourites">"Favorit"</string>
+  <string name="screen_roomlist_filter_favourites_empty_state_subtitle">"Anda dapat menambahkan percakapan ke favorit Anda dalam pengaturan percakapan.
+Untuk sementara, Anda dapat membatalkan pilihan saringan untuk melihat percakapan Anda yang lain"</string>
+  <string name="screen_roomlist_filter_favourites_empty_state_title">"Anda belum memiliki percakapan favorit"</string>
+  <string name="screen_roomlist_filter_low_priority">"Prioritas Rendah"</string>
+  <string name="screen_roomlist_filter_mixed_empty_state_subtitle">"Anda dapat membatalkan pilihan saringan untuk melihat percakapan Anda yang lain"</string>
+  <string name="screen_roomlist_filter_mixed_empty_state_title">"Anda tidak memiliki percakapan untuk pemilihan ini"</string>
   <string name="screen_roomlist_filter_people">"Orang"</string>
+  <string name="screen_roomlist_filter_people_empty_state_title">"Anda belum memiliki percakapan langsung"</string>
+  <string name="screen_roomlist_filter_rooms">"Ruangan"</string>
+  <string name="screen_roomlist_filter_rooms_empty_state_title">"Anda belum berada dalam ruangan"</string>
+  <string name="screen_roomlist_filter_unreads">"Belum dibaca"</string>
+  <string name="screen_roomlist_filter_unreads_empty_state_title">"Selamat!
+Anda tidak memiliki pesan yang belum dibaca!"</string>
   <string name="screen_roomlist_main_space_title">"Semua Obrolan"</string>
+  <string name="screen_roomlist_mark_as_read">"Tandai sebagai dibaca"</string>
+  <string name="screen_roomlist_mark_as_unread">"Tandai sebagai belum dibaca"</string>
   <string name="session_verification_banner_message">"Sepertinya Anda menggunakan perangkat baru. Verifikasi dengan perangkat lain untuk mengakses pesan terenkripsi Anda selanjutnya."</string>
   <string name="session_verification_banner_title">"Verifikasi bahwa ini Anda"</string>
 </resources>

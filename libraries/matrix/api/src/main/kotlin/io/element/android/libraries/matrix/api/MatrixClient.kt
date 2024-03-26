@@ -42,6 +42,7 @@ import java.io.Closeable
 interface MatrixClient : Closeable {
     val sessionId: SessionId
     val deviceId: String
+    val userProfile: StateFlow<MatrixUser>
     val roomListService: RoomListService
     val mediaLoader: MatrixMediaLoader
     val sessionCoroutineScope: CoroutineScope
@@ -77,8 +78,11 @@ interface MatrixClient : Closeable {
      * @param ignoreSdkError if true, the SDK will ignore any error and delete the session data anyway.
      */
     suspend fun logout(ignoreSdkError: Boolean): String?
-    suspend fun loadUserDisplayName(): Result<String>
-    suspend fun loadUserAvatarUrl(): Result<String?>
+
+    /**
+     * Retrieve the user profile, will also eventually emit a new value to [userProfile].
+     */
+    suspend fun getUserProfile(): Result<MatrixUser>
     suspend fun getAccountManagementUrl(action: AccountManagementAction?): Result<String?>
     suspend fun uploadMedia(mimeType: String, data: ByteArray, progressCallback: ProgressCallback?): Result<String>
     fun roomMembershipObserver(): RoomMembershipObserver

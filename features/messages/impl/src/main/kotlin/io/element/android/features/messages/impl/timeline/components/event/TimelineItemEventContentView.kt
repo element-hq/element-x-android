@@ -77,6 +77,7 @@ fun TimelineItemEventContentView(
         )
         is TimelineItemImageContent -> TimelineItemImageView(
             content = content,
+            onContentLayoutChanged = onContentLayoutChanged,
             modifier = modifier,
         )
         is TimelineItemStickerContent -> TimelineItemStickerView(
@@ -85,6 +86,7 @@ fun TimelineItemEventContentView(
         )
         is TimelineItemVideoContent -> TimelineItemVideoView(
             content = content,
+            onContentLayoutChanged = onContentLayoutChanged,
             modifier = modifier
         )
         is TimelineItemFileContent -> TimelineItemFileView(

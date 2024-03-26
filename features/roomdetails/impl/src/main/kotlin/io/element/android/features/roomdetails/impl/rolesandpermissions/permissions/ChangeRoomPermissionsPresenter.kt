@@ -27,10 +27,12 @@ import androidx.compose.runtime.setValue
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import io.element.android.features.roomdetails.impl.analytics.trackPermissionChangeAnalytics
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.powerlevels.MatrixRoomPowerLevels
+import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.CoroutineScope
@@ -39,6 +41,7 @@ import kotlinx.coroutines.launch
 class ChangeRoomPermissionsPresenter @AssistedInject constructor(
     @Assisted private val section: ChangeRoomPermissionsSection,
     private val room: MatrixRoom,
+    private val analyticsService: AnalyticsService,
 ) : Presenter<ChangeRoomPermissionsState> {
     companion object {
         internal fun itemsForSection(section: ChangeRoomPermissionsSection) = when (section) {
@@ -135,6 +138,7 @@ class ChangeRoomPermissionsPresenter @AssistedInject constructor(
         }
         room.updatePowerLevels(updatedRoomPowerLevels)
             .onSuccess {
+                analyticsService.trackPermissionChangeAnalytics(initialPermissions, updatedRoomPowerLevels)
                 initialPermissions = currentPermissions
                 saveAction = AsyncAction.Success(Unit)
             }

@@ -25,8 +25,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
-private const val MIN_HEIGHT_IN_DP = 100
-private const val MAX_HEIGHT_IN_DP = 360
+const val MIN_HEIGHT_IN_DP = 100
+const val MAX_HEIGHT_IN_DP = 360
 private const val DEFAULT_ASPECT_RATIO = 1.33f
 
 @Composable

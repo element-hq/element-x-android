@@ -25,6 +25,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import com.squareup.anvil.annotations.ContributesBinding
+import im.vector.app.features.analytics.plan.RoomModeration
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.runUpdatingState
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
@@ -38,6 +39,7 @@ import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
 import io.element.android.libraries.matrix.api.room.powerlevels.canBan
 import io.element.android.libraries.matrix.api.room.powerlevels.canKick
+import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.CoroutineScope
@@ -51,6 +53,7 @@ class DefaultRoomMembersModerationPresenter @Inject constructor(
     private val room: MatrixRoom,
     private val featureFlagService: FeatureFlagService,
     private val dispatchers: CoroutineDispatchers,
+    private val analyticsService: AnalyticsService,
 ) : RoomMembersModerationPresenter {
     private var selectedMember by mutableStateOf<RoomMember?>(null)
 
@@ -150,6 +153,7 @@ class DefaultRoomMembersModerationPresenter @Inject constructor(
         userId: UserId,
         kickUserAction: MutableState<AsyncAction<Unit>>,
     ) = runActionAndWaitForMembershipChange(kickUserAction) {
+        analyticsService.capture(RoomModeration(RoomModeration.Action.KickMember))
         room.kickUser(userId).finally { selectedMember = null }
     }
 
@@ -157,6 +161,7 @@ class DefaultRoomMembersModerationPresenter @Inject constructor(
         userId: UserId,
         banUserAction: MutableState<AsyncAction<Unit>>,
     ) = runActionAndWaitForMembershipChange(banUserAction) {
+        analyticsService.capture(RoomModeration(RoomModeration.Action.BanMember))
         room.banUser(userId).finally { selectedMember = null }
     }
 
@@ -164,6 +169,7 @@ class DefaultRoomMembersModerationPresenter @Inject constructor(
         userId: UserId,
         unbanUserAction: MutableState<AsyncAction<Unit>>,
     ) = runActionAndWaitForMembershipChange(unbanUserAction) {
+        analyticsService.capture(RoomModeration(RoomModeration.Action.UnbanMember))
         room.unbanUser(userId).finally { selectedMember = null }
     }
 

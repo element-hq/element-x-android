@@ -48,14 +48,14 @@ jobs:
         with:
           cache-read-only: ${{ github.ref != 'refs/heads/develop' }}
 
-      - name: ⚙️ Run unit tests, debug and release
-        run: ./gradlew test $CI_GRADLE_ARG_PROPERTIES
+      - name: ⚙️ Run unit tests for debug variant
+        run: ./gradlew testDebugUnitTest $CI_GRADLE_ARG_PROPERTIES
 
       - name: 📸 Run screenshot tests
         run: ./gradlew verifyPaparazziDebug $CI_GRADLE_ARG_PROPERTIES
 
       - name: 📈Generate kover report and verify coverage
-        run: ./gradlew :app:koverHtmlReport :app:koverXmlReport :app:koverVerify $CI_GRADLE_ARG_PROPERTIES -Pci-build=true
+        run: ./gradlew :app:koverXmlReportGplayDebug :app:koverHtmlReportGplayDebug :app:koverVerifyGplayDebug $CI_GRADLE_ARG_PROPERTIES
 
       - name: 🚫 Upload kover failed coverage reports
         if: failure()
@@ -63,7 +63,7 @@ jobs:
         with:
           name: kover-error-report
           path: |
-            app/build/reports/kover/verify.err
+            app/build/reports/kover/verifyGplayDebug.err
 
       - name: ✅ Upload kover report (disabled)
         if: always()
@@ -85,5 +85,5 @@ jobs:
         with:
           fail_ci_if_error: true
           token: ${{ secrets.CODECOV_TOKEN }}
-#        with:
-#          files: build/reports/kover/xml/report.xml
+          files: app/build/reports/kover/reportGplayDebug.xml
+          verbose: true

@@ -161,10 +161,10 @@ class DefaultRoomLastMessageFormatterTest {
 
         val sharedContentMessagesTypes = arrayOf(
             TextMessageType(body, null),
-            VideoMessageType(body, MediaSource("url"), null),
+            VideoMessageType(body, null, null, MediaSource("url"), null),
             AudioMessageType(body, MediaSource("url"), null),
             VoiceMessageType(body, MediaSource("url"), null, null),
-            ImageMessageType(body, MediaSource("url"), null),
+            ImageMessageType(body, null, null, MediaSource("url"), null),
             StickerMessageType(body, MediaSource("url"), null),
             FileMessageType(body, MediaSource("url"), null),
             LocationMessageType(body, "geo:1,2", null),

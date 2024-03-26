@@ -75,6 +75,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.EventTimelineItem
+import org.matrix.rustcomponents.sdk.MessageFormat
 import org.matrix.rustcomponents.sdk.RoomInfo
 import org.matrix.rustcomponents.sdk.RoomInfoListener
 import org.matrix.rustcomponents.sdk.RoomListItem
@@ -90,6 +91,7 @@ import org.matrix.rustcomponents.sdk.use
 import timber.log.Timber
 import uniffi.matrix_sdk.RoomPowerLevelChanges
 import java.io.File
+import org.matrix.rustcomponents.sdk.FormattedBody as RustFormattedBody
 import org.matrix.rustcomponents.sdk.Room as InnerRoom
 import org.matrix.rustcomponents.sdk.Timeline as InnerTimeline
 
@@ -228,6 +230,12 @@ class RustMatrixRoom(
             RoomMemberListFetcher.Source.SERVER
         }
         roomMemberListFetcher.fetchRoomMembers(source = source)
+    }
+
+    override suspend fun getUpdatedMember(userId: UserId): Result<RoomMember> = withContext(roomDispatcher) {
+        runCatching {
+            RoomMemberMapper.map(innerRoom.member(userId.value))
+        }
     }
 
     override suspend fun userDisplayName(userId: UserId): Result<String?> = withContext(roomDispatcher) {
@@ -430,10 +438,21 @@ class RustMatrixRoom(
         file: File,
         thumbnailFile: File?,
         imageInfo: ImageInfo,
+        body: String?,
+        formattedBody: String?,
         progressCallback: ProgressCallback?,
     ): Result<MediaUploadHandler> {
         return sendAttachment(listOfNotNull(file, thumbnailFile)) {
-            innerTimeline.sendImage(file.path, thumbnailFile?.path, imageInfo.map(), progressCallback?.toProgressWatcher())
+            innerTimeline.sendImage(
+                url = file.path,
+                thumbnailUrl = thumbnailFile?.path,
+                imageInfo = imageInfo.map(),
+                caption = body,
+                formattedCaption = formattedBody?.let {
+                    RustFormattedBody(body = it, format = MessageFormat.Html)
+                },
+                progressWatcher = progressCallback?.toProgressWatcher()
+            )
         }
     }
 
@@ -441,16 +460,34 @@ class RustMatrixRoom(
         file: File,
         thumbnailFile: File?,
         videoInfo: VideoInfo,
+        body: String?,
+        formattedBody: String?,
         progressCallback: ProgressCallback?,
     ): Result<MediaUploadHandler> {
         return sendAttachment(listOfNotNull(file, thumbnailFile)) {
-            innerTimeline.sendVideo(file.path, thumbnailFile?.path, videoInfo.map(), progressCallback?.toProgressWatcher())
+            innerTimeline.sendVideo(
+                url = file.path,
+                thumbnailUrl = thumbnailFile?.path,
+                videoInfo = videoInfo.map(),
+                caption = body,
+                formattedCaption = formattedBody?.let {
+                    RustFormattedBody(body = it, format = MessageFormat.Html)
+                },
+                progressWatcher = progressCallback?.toProgressWatcher()
+            )
         }
     }
 
     override suspend fun sendAudio(file: File, audioInfo: AudioInfo, progressCallback: ProgressCallback?): Result<MediaUploadHandler> {
         return sendAttachment(listOf(file)) {
-            innerTimeline.sendAudio(file.path, audioInfo.map(), progressCallback?.toProgressWatcher())
+            innerTimeline.sendAudio(
+                url = file.path,
+                audioInfo = audioInfo.map(),
+                // Maybe allow a caption in the future?
+                caption = null,
+                formattedCaption = null,
+                progressWatcher = progressCallback?.toProgressWatcher()
+            )
         }
     }
 
@@ -647,6 +684,9 @@ class RustMatrixRoom(
             url = file.path,
             audioInfo = audioInfo.map(),
             waveform = waveform.toMSC3246range(),
+            // Maybe allow a caption in the future?
+            caption = null,
+            formattedCaption = null,
             progressWatcher = progressCallback?.toProgressWatcher(),
         )
     }

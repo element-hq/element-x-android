@@ -17,10 +17,10 @@
 package io.element.android.libraries.matrix.api.permalink
 
 import com.google.common.truth.Truth.assertThat
+import io.element.android.libraries.androidutils.metadata.withReleaseBehavior
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.tests.testutils.assertThrowsInDebug
-import io.element.android.tests.testutils.isInDebug
 import org.junit.Test
 
 class PermalinkBuilderTest {
@@ -40,7 +40,7 @@ class PermalinkBuilderTest {
 
     @Test
     fun `building a permalink for an invalid user id returns failure when not verifying the id`() {
-        if (!isInDebug()) {
+        withReleaseBehavior {
             val userId = UserId("some invalid user id")
             assertThat(PermalinkBuilder.permalinkForUser(userId).isFailure).isTrue()
         }
@@ -48,7 +48,7 @@ class PermalinkBuilderTest {
 
     @Test
     fun `building a permalink for an invalid room id returns failure when not verifying the id`() {
-        if (!isInDebug()) {
+        withReleaseBehavior {
             val roomId = RoomId("some invalid room id")
             assertThat(PermalinkBuilder.permalinkForRoomId(roomId).isFailure).isTrue()
         }

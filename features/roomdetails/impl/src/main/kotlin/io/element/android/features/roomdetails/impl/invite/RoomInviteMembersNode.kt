@@ -80,8 +80,6 @@ class RoomInviteMembersNode @AssistedInject constructor(
                             body = context.getString(CommonStrings.common_unable_to_invite_message),
                         )
                     }
-
-                    room.updateMembers()
                 }
             }
         )

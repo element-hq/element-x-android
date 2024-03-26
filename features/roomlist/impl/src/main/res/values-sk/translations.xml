@@ -24,6 +24,7 @@ Nemáte žiadne neprečítané správy!"</string>
   <string name="screen_roomlist_main_space_title">"Všetky konverzácie"</string>
   <string name="screen_roomlist_mark_as_read">"Označiť ako prečítané"</string>
   <string name="screen_roomlist_mark_as_unread">"Označiť ako neprečítané"</string>
+  <string name="screen_roomlist_room_directory_button_title">"Prehliadať všetky miestnosti"</string>
   <string name="session_verification_banner_message">"Vyzerá to tak, že používate nové zariadenie. Overte svoj prístup k zašifrovaným správam pomocou vášho druhého zariadenia."</string>
   <string name="session_verification_banner_title">"Overte, že ste to vy"</string>
 </resources>

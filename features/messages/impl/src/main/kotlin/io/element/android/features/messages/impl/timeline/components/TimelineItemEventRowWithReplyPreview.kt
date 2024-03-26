@@ -101,7 +101,7 @@ open class InReplyToDetailsProvider : PreviewParameterProvider<InReplyToDetails>
             ),
             aMessageContent(
                 body = "Video",
-                type = VideoMessageType("Video", MediaSource("url"), null),
+                type = VideoMessageType("Video", null, null, MediaSource("url"), null),
             ),
             aMessageContent(
                 body = "Audio",
@@ -113,7 +113,7 @@ open class InReplyToDetailsProvider : PreviewParameterProvider<InReplyToDetails>
             ),
             aMessageContent(
                 body = "Image",
-                type = ImageMessageType("Image", MediaSource("url"), null),
+                type = ImageMessageType("Image", null, null, MediaSource("url"), null),
             ),
             aMessageContent(
                 body = "Sticker",

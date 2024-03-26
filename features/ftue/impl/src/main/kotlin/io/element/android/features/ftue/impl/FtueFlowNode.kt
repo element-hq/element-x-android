@@ -36,7 +36,6 @@ import io.element.android.features.ftue.api.FtueEntryPoint
 import io.element.android.features.ftue.impl.notifications.NotificationsOptInNode
 import io.element.android.features.ftue.impl.state.DefaultFtueState
 import io.element.android.features.ftue.impl.state.FtueStep
-import io.element.android.features.ftue.impl.welcome.WelcomeNode
 import io.element.android.features.lockscreen.api.LockScreenEntryPoint
 import io.element.android.libraries.architecture.BackstackView
 import io.element.android.libraries.architecture.BaseFlowNode
@@ -74,9 +73,6 @@ class FtueFlowNode @AssistedInject constructor(
         data object Placeholder : NavTarget
 
         @Parcelize
-        data object WelcomeScreen : NavTarget
-
-        @Parcelize
         data object NotificationsOptIn : NavTarget
 
         @Parcelize
@@ -110,15 +106,6 @@ class FtueFlowNode @AssistedInject constructor(
             NavTarget.Placeholder -> {
                 createNode<PlaceholderNode>(buildContext)
             }
-            NavTarget.WelcomeScreen -> {
-                val callback = object : WelcomeNode.Callback {
-                    override fun onContinueClicked() {
-                        ftueState.setWelcomeScreenShown()
-                        lifecycleScope.launch { moveToNextStep() }
-                    }
-                }
-                createNode<WelcomeNode>(buildContext, listOf(callback))
-            }
             NavTarget.NotificationsOptIn -> {
                 val callback = object : NotificationsOptInNode.Callback {
                     override fun onNotificationsOptInFinished() {
@@ -146,9 +133,6 @@ class FtueFlowNode @AssistedInject constructor(
 
     private fun moveToNextStep() {
         when (ftueState.getNextStep()) {
-            FtueStep.WelcomeScreen -> {
-                backstack.newRoot(NavTarget.WelcomeScreen)
-            }
             FtueStep.NotificationsOptIn -> {
                 backstack.newRoot(NavTarget.NotificationsOptIn)
             }

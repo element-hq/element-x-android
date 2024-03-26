@@ -45,6 +45,7 @@
   <string name="action_decline">"拒絕"</string>
   <string name="action_delete_poll">"刪除投票"</string>
   <string name="action_disable">"停用"</string>
+  <string name="action_discard">"捨棄"</string>
   <string name="action_done">"完成"</string>
   <string name="action_edit">"編輯"</string>
   <string name="action_edit_poll">"編輯投票"</string>
@@ -53,6 +54,7 @@
   <string name="action_enter_pin">"輸入 PIN 碼"</string>
   <string name="action_forgot_password">"忘記密碼？"</string>
   <string name="action_forward">"轉寄"</string>
+  <string name="action_go_back">"返回"</string>
   <string name="action_invite">"邀請"</string>
   <string name="action_invite_friends">"邀請夥伴"</string>
   <string name="action_invite_friends_to_app">"邀請朋友使用 %1$s"</string>
@@ -61,6 +63,7 @@
   <string name="action_join">"加入"</string>
   <string name="action_learn_more">"了解更多"</string>
   <string name="action_leave">"離開"</string>
+  <string name="action_leave_conversation">"離開對話"</string>
   <string name="action_leave_room">"離開聊天室"</string>
   <string name="action_load_more">"載入更多"</string>
   <string name="action_manage_account">"管理帳號"</string>
@@ -79,6 +82,7 @@
   <string name="action_reply_in_thread">"在討論串中回覆"</string>
   <string name="action_report_bug">"回報程式錯誤"</string>
   <string name="action_report_content">"檢舉內容"</string>
+  <string name="action_reset">"重設"</string>
   <string name="action_retry">"再試一次"</string>
   <string name="action_retry_decryption">"再次嘗試解密"</string>
   <string name="action_save">"儲存"</string>
@@ -105,6 +109,7 @@
   <string name="common_analytics">"分析"</string>
   <string name="common_appearance">"外觀"</string>
   <string name="common_audio">"音訊"</string>
+  <string name="common_blocked_users">"封鎖的使用者"</string>
   <string name="common_bubbles">"泡泡"</string>
   <string name="common_chat_backup">"聊天室備份"</string>
   <string name="common_copyright">"著作權"</string>
@@ -121,6 +126,7 @@
   <string name="common_enter_your_pin">"輸入您的 PIN 碼"</string>
   <string name="common_error">"錯誤"</string>
   <string name="common_everyone">"所有人"</string>
+  <string name="common_failed">"失敗"</string>
   <string name="common_favourite">"我的最愛"</string>
   <string name="common_favourited">"我的最愛"</string>
   <string name="common_file">"檔案"</string>
@@ -169,6 +175,7 @@
   <string name="common_room">"聊天室"</string>
   <string name="common_room_name">"聊天室名稱"</string>
   <string name="common_room_name_placeholder">"範例：您的計畫名稱"</string>
+  <string name="common_saving">"儲存中"</string>
   <string name="common_screen_lock">"螢幕鎖定"</string>
   <string name="common_search_for_someone">"搜尋使用者"</string>
   <string name="common_search_results">"搜尋結果"</string>
@@ -207,16 +214,22 @@
   <string name="dialog_title_error">"錯誤"</string>
   <string name="dialog_title_success">"成功"</string>
   <string name="dialog_title_warning">"警告"</string>
+  <string name="dialog_unsaved_changes_description_android">"變更尚未儲存，您確定要返回嗎？"</string>
+  <string name="dialog_unsaved_changes_title">"是否儲存變更？"</string>
   <string name="error_failed_creating_the_permalink">"無法建立永久連結"</string>
   <string name="error_failed_loading_map">"%1$s無法載入地圖。請稍後再試。"</string>
   <string name="error_failed_loading_messages">"無法載入訊息"</string>
-  <string name="error_failed_locating_user">"%1$s無法取得您的位置。請稍後再試。"</string>
+  <string name="error_failed_locating_user">"%1$s 無法取得您的位置。請稍後再試。"</string>
   <string name="error_failed_uploading_voice_message">"無法上傳語音訊息。"</string>
   <string name="error_missing_location_auth_android">"%1$s 沒有權限存取您的位置。您可以到設定中開啟權限。"</string>
   <string name="error_missing_location_rationale_android">"%1$s 沒有權限存取您的位置。請在下方開啟權限。"</string>
+  <string name="error_missing_microphone_voice_rationale_android">"%1$s 沒有權限存取您的麥克風。您需要開啟權限才能錄製語音訊息。"</string>
   <string name="error_some_messages_have_not_been_sent">"有些訊息尚未傳送"</string>
   <string name="invite_friends_text">"嘿，來 %1$s 和我聊天：%2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
+  <string name="screen_identity_confirmed_title">"裝置已認證"</string>
+  <string name="screen_identity_use_another_device">"使用另一個裝置"</string>
+  <string name="screen_identity_waiting_on_other_device">"正在等待其他裝置……"</string>
   <string name="screen_media_upload_preview_error_failed_sending">"無法上傳媒體檔案，請稍後再試。"</string>
   <string name="screen_room_member_details_block_alert_action">"封鎖"</string>
   <string name="screen_room_member_details_block_user">"封鎖使用者"</string>

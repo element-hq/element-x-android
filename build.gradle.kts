@@ -172,6 +172,7 @@ allprojects {
 
 // Register quality check tasks.
 tasks.register("runQualityChecks") {
+    dependsOn(":tests:konsist:testDebugUnitTest")
     project.subprojects {
         // For some reason `findByName("lint")` doesn't work
         tasks.findByPath("$path:lint")?.let { dependsOn(it) }

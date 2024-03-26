@@ -8,13 +8,23 @@
   <string name="screen_roomlist_empty_message">"Пачніце з паведамлення каму-небудзь."</string>
   <string name="screen_roomlist_empty_title">"Пакуль няма чатаў."</string>
   <string name="screen_roomlist_filter_favourites">"Абранае"</string>
+  <string name="screen_roomlist_filter_favourites_empty_state_subtitle">"Дадаць чат у абранае можна ў наладах чата.
+На дадзены момант вы можаце прыбраць фільтры, каб убачыць іншыя вашыя чаты."</string>
+  <string name="screen_roomlist_filter_favourites_empty_state_title">"У вас пакуль няма абраных чатаў"</string>
   <string name="screen_roomlist_filter_low_priority">"Нізкі прыярытэт"</string>
+  <string name="screen_roomlist_filter_mixed_empty_state_subtitle">"Вы можаце прыбраць фільтры, каб убачыць іншыя вашыя чаты."</string>
+  <string name="screen_roomlist_filter_mixed_empty_state_title">"У вас няма чатаў для гэтай катэгорыі"</string>
   <string name="screen_roomlist_filter_people">"Людзі"</string>
+  <string name="screen_roomlist_filter_people_empty_state_title">"У вас пакуль няма асабістых паведамленняў"</string>
   <string name="screen_roomlist_filter_rooms">"Пакоі"</string>
+  <string name="screen_roomlist_filter_rooms_empty_state_title">"Вас пакуль няма ў ніводным пакоі"</string>
   <string name="screen_roomlist_filter_unreads">"Непрачытаныя"</string>
+  <string name="screen_roomlist_filter_unreads_empty_state_title">"Віншуем!
+У вас няма непрачытаных паведамленняў!"</string>
   <string name="screen_roomlist_main_space_title">"Усе чаты"</string>
   <string name="screen_roomlist_mark_as_read">"Пазначыць як прачытанае"</string>
   <string name="screen_roomlist_mark_as_unread">"Пазначыць як непрачытанае"</string>
+  <string name="screen_roomlist_room_directory_button_title">"Праглядзець усе пакоі"</string>
   <string name="session_verification_banner_message">"Здаецца, вы карыстаецеся новай прыладай. Праверце з дапамогай іншай прылады, каб атрымаць доступ да зашыфраваных паведамленняў."</string>
   <string name="session_verification_banner_title">"Пацвердзіце, што гэта вы"</string>
 </resources>

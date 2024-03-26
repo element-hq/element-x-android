@@ -20,6 +20,7 @@ import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import im.vector.app.features.analytics.plan.RoomModeration
 import io.element.android.features.roomdetails.impl.members.aRoomMember
 import io.element.android.features.roomdetails.impl.members.aVictor
 import io.element.android.features.roomdetails.impl.members.moderation.DefaultRoomMembersModerationPresenter
@@ -36,6 +37,7 @@ import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.A_USER_ID_2
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.matrix.test.room.aRoomInfo
+import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.test.TestScope
@@ -150,13 +152,14 @@ class DefaultRoomMembersModerationPresenterTests {
 
     @Test
     fun `present - Kick removes the user`() = runTest {
+        val analyticsService = FakeAnalyticsService()
         val room = FakeMatrixRoom().apply {
             givenCanKickResult(Result.success(true))
             givenCanBanResult(Result.success(true))
             givenUserRoleResult(Result.success(RoomMember.Role.ADMIN))
         }
         val selectedMember = aVictor()
-        val presenter = createDefaultRoomMembersModerationPresenter(matrixRoom = room)
+        val presenter = createDefaultRoomMembersModerationPresenter(matrixRoom = room, analyticsService = analyticsService)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -170,18 +173,20 @@ class DefaultRoomMembersModerationPresenterTests {
                 assertThat(kickUserAsyncAction).isEqualTo(AsyncAction.Success(Unit))
                 assertThat(selectedRoomMember).isNull()
             }
+            assertThat(analyticsService.capturedEvents.last()).isEqualTo(RoomModeration(RoomModeration.Action.KickMember))
         }
     }
 
     @Test
     fun `present - BanUser requires confirmation and then bans the user`() = runTest {
+        val analyticsService = FakeAnalyticsService()
         val room = FakeMatrixRoom().apply {
             givenCanKickResult(Result.success(true))
             givenCanBanResult(Result.success(true))
             givenUserRoleResult(Result.success(RoomMember.Role.ADMIN))
         }
         val selectedMember = aVictor()
-        val presenter = createDefaultRoomMembersModerationPresenter(matrixRoom = room)
+        val presenter = createDefaultRoomMembersModerationPresenter(matrixRoom = room, analyticsService = analyticsService)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -200,11 +205,13 @@ class DefaultRoomMembersModerationPresenterTests {
                 assertThat(banUserAsyncAction).isEqualTo(AsyncAction.Success(Unit))
                 assertThat(selectedRoomMember).isNull()
             }
+            assertThat(analyticsService.capturedEvents.last()).isEqualTo(RoomModeration(RoomModeration.Action.BanMember))
         }
     }
 
     @Test
     fun `present - UnbanUser requires confirmation and then unbans the user`() = runTest {
+        val analyticsService = FakeAnalyticsService()
         val selectedMember = aRoomMember(A_USER_ID_2, membership = RoomMembershipState.BAN)
         val room = FakeMatrixRoom().apply {
             givenCanKickResult(Result.success(true))
@@ -212,7 +219,7 @@ class DefaultRoomMembersModerationPresenterTests {
             givenRoomMembersState(MatrixRoomMembersState.Ready(persistentListOf(selectedMember)))
             givenUserRoleResult(Result.success(RoomMember.Role.ADMIN))
         }
-        val presenter = createDefaultRoomMembersModerationPresenter(matrixRoom = room)
+        val presenter = createDefaultRoomMembersModerationPresenter(matrixRoom = room, analyticsService = analyticsService)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -227,6 +234,7 @@ class DefaultRoomMembersModerationPresenterTests {
                 assertThat(unbanUserAsyncAction).isEqualTo(AsyncAction.Success(Unit))
                 assertThat(selectedRoomMember).isNull()
             }
+            assertThat(analyticsService.capturedEvents.last()).isEqualTo(RoomModeration(RoomModeration.Action.UnbanMember))
         }
     }
 
@@ -303,11 +311,13 @@ class DefaultRoomMembersModerationPresenterTests {
         matrixRoom: FakeMatrixRoom = FakeMatrixRoom(),
         featureFlagService: FakeFeatureFlagService = FakeFeatureFlagService(initialState = mapOf(FeatureFlags.RoomModeration.key to true)),
         dispatchers: CoroutineDispatchers = testCoroutineDispatchers(),
+        analyticsService: FakeAnalyticsService = FakeAnalyticsService(),
     ): DefaultRoomMembersModerationPresenter {
         return DefaultRoomMembersModerationPresenter(
             room = matrixRoom,
             featureFlagService = featureFlagService,
             dispatchers = dispatchers,
+            analyticsService = analyticsService,
         )
     }
 }

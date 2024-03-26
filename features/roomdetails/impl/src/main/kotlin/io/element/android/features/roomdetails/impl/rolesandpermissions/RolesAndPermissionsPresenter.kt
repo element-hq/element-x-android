@@ -24,6 +24,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import im.vector.app.features.analytics.plan.RoomModeration
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runUpdatingState
@@ -32,6 +33,7 @@ import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomInfo
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.powerlevels.UserRoleChange
+import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -39,6 +41,7 @@ import javax.inject.Inject
 class RolesAndPermissionsPresenter @Inject constructor(
     private val room: MatrixRoom,
     private val dispatchers: CoroutineDispatchers,
+    private val analyticsService: AnalyticsService,
 ) : Presenter<RolesAndPermissionsState> {
     @Composable
     override fun present(): RolesAndPermissionsState {
@@ -100,6 +103,7 @@ class RolesAndPermissionsPresenter @Inject constructor(
         resetPermissionsAction: MutableState<AsyncAction<Unit>>,
     ) = launch(dispatchers.io) {
         runUpdatingState(resetPermissionsAction) {
+            analyticsService.capture(RoomModeration(RoomModeration.Action.ResetPermissions))
             room.resetPowerLevels().map {}
         }
     }

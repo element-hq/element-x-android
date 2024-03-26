@@ -30,11 +30,13 @@ class RoomMemberListDataSource @Inject constructor(
 ) {
     suspend fun search(query: String): List<RoomMember> = withContext(coroutineDispatchers.io) {
         val roomMembersState = room.membersStateFlow.value
-        val roomMembers = roomMembersState.roomMembers().orEmpty()
+        val activeRoomMembers = roomMembersState.roomMembers()
+            ?.filter { it.membership.isActive() }
+            .orEmpty()
         val filteredMembers = if (query.isBlank()) {
-            roomMembers
+            activeRoomMembers
         } else {
-            roomMembers.filter { member ->
+            activeRoomMembers.filter { member ->
                 member.userId.value.contains(query, ignoreCase = true) ||
                     member.displayName?.contains(query, ignoreCase = true).orFalse()
             }

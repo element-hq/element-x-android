@@ -24,7 +24,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import io.element.android.features.logout.api.direct.DirectLogoutPresenter
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.meta.BuildType
@@ -35,8 +34,6 @@ import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.indicator.api.IndicatorService
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.oidc.AccountManagementAction
-import io.element.android.libraries.matrix.api.user.MatrixUser
-import io.element.android.libraries.matrix.api.user.getCurrentUser
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.coroutines.CoroutineScope
@@ -58,11 +55,10 @@ class PreferencesRootPresenter @Inject constructor(
 ) : Presenter<PreferencesRootState> {
     @Composable
     override fun present(): PreferencesRootState {
-        val matrixUser: MutableState<MatrixUser?> = rememberSaveable {
-            mutableStateOf(null)
-        }
+        val matrixUser = matrixClient.userProfile.collectAsState()
         LaunchedEffect(Unit) {
-            initialLoad(matrixUser)
+            // Force a refresh of the profile
+            matrixClient.getUserProfile()
         }
 
         val snackbarMessage by snackbarDispatcher.collectSnackbarMessageAsState()
@@ -119,10 +115,6 @@ class PreferencesRootPresenter @Inject constructor(
             directLogoutState = directLogoutState,
             snackbarMessage = snackbarMessage,
         )
-    }
-
-    private fun CoroutineScope.initialLoad(matrixUser: MutableState<MatrixUser?>) = launch {
-        matrixUser.value = matrixClient.getCurrentUser()
     }
 
     private fun CoroutineScope.initAccountManagementUrl(

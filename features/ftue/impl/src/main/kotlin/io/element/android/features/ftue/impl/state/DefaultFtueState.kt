@@ -21,7 +21,6 @@ import android.os.Build
 import androidx.annotation.VisibleForTesting
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.features.ftue.api.state.FtueState
-import io.element.android.features.ftue.impl.welcome.state.WelcomeScreenState
 import io.element.android.features.lockscreen.api.LockScreenService
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.permissions.api.PermissionStateProvider
@@ -40,14 +39,12 @@ class DefaultFtueState @Inject constructor(
     private val sdkVersionProvider: BuildVersionSdkIntProvider,
     coroutineScope: CoroutineScope,
     private val analyticsService: AnalyticsService,
-    private val welcomeScreenState: WelcomeScreenState,
     private val permissionStateProvider: PermissionStateProvider,
     private val lockScreenService: LockScreenService,
 ) : FtueState {
     override val shouldDisplayFlow = MutableStateFlow(isAnyStepIncomplete())
 
     override suspend fun reset() {
-        welcomeScreenState.reset()
         analyticsService.reset()
         if (sdkVersionProvider.isAtLeast(Build.VERSION_CODES.TIRAMISU)) {
             permissionStateProvider.resetPermission(Manifest.permission.POST_NOTIFICATIONS)
@@ -62,12 +59,7 @@ class DefaultFtueState @Inject constructor(
 
     fun getNextStep(currentStep: FtueStep? = null): FtueStep? =
         when (currentStep) {
-            null -> if (shouldDisplayWelcomeScreen()) {
-                FtueStep.WelcomeScreen
-            } else {
-                getNextStep(FtueStep.WelcomeScreen)
-            }
-            FtueStep.WelcomeScreen -> if (shouldAskNotificationPermissions()) {
+            null -> if (shouldAskNotificationPermissions()) {
                 FtueStep.NotificationsOptIn
             } else {
                 getNextStep(FtueStep.NotificationsOptIn)
@@ -87,7 +79,6 @@ class DefaultFtueState @Inject constructor(
 
     private fun isAnyStepIncomplete(): Boolean {
         return listOf(
-            { shouldDisplayWelcomeScreen() },
             { shouldAskNotificationPermissions() },
             { needsAnalyticsOptIn() },
             { shouldDisplayLockscreenSetup() },
@@ -97,10 +88,6 @@ class DefaultFtueState @Inject constructor(
     private fun needsAnalyticsOptIn(): Boolean {
         // We need this function to not be suspend, so we need to load the value through runBlocking
         return runBlocking { analyticsService.didAskUserConsent().first().not() }
-    }
-
-    private fun shouldDisplayWelcomeScreen(): Boolean {
-        return welcomeScreenState.isWelcomeScreenNeeded()
     }
 
     private fun shouldAskNotificationPermissions(): Boolean {
@@ -120,11 +107,6 @@ class DefaultFtueState @Inject constructor(
         }
     }
 
-    fun setWelcomeScreenShown() {
-        welcomeScreenState.setWelcomeScreenShown()
-        updateState()
-    }
-
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     internal fun updateState() {
         shouldDisplayFlow.value = isAnyStepIncomplete()
@@ -132,7 +114,6 @@ class DefaultFtueState @Inject constructor(
 }
 
 sealed interface FtueStep {
-    data object WelcomeScreen : FtueStep
     data object NotificationsOptIn : FtueStep
     data object AnalyticsOptIn : FtueStep
     data object LockscreenSetup : FtueStep

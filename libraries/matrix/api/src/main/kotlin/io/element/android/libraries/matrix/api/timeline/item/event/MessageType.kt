@@ -34,6 +34,8 @@ data class EmoteMessageType(
 
 data class ImageMessageType(
     val body: String,
+    val formatted: FormattedBody?,
+    val filename: String?,
     val source: MediaSource,
     val info: ImageInfo?
 ) : MessageType
@@ -65,6 +67,8 @@ data class VoiceMessageType(
 
 data class VideoMessageType(
     val body: String,
+    val formatted: FormattedBody?,
+    val filename: String?,
     val source: MediaSource,
     val info: VideoInfo?
 ) : MessageType

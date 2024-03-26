@@ -245,9 +245,17 @@
   <string name="invite_friends_text">"Hey, talk to me on %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Rageshake to report bug"</string>
+  <string name="screen_identity_confirmation_subtitle">"Verify this device to set up secure messaging."</string>
+  <string name="screen_identity_confirmation_title">"Confirm that it\'s you"</string>
+  <string name="screen_identity_confirmed_subtitle">"Now you can read or send messages securely, and anyone you chat with can also trust this device."</string>
+  <string name="screen_identity_confirmed_title">"Device verified"</string>
+  <string name="screen_identity_use_another_device">"Use another device"</string>
+  <string name="screen_identity_waiting_on_other_device">"Waiting on other device…"</string>
   <string name="screen_media_picker_error_failed_selection">"Failed selecting media, please try again."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Failed processing media to upload, please try again."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Failed uploading media, please try again."</string>
+  <string name="screen_room_directory_search_loading_error">"Failed loading"</string>
+  <string name="screen_room_directory_search_title">"Room directory"</string>
   <string name="screen_room_error_failed_processing_media">"Failed processing media to upload, please try again."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Could not retrieve user details"</string>
   <string name="screen_room_member_details_block_alert_action">"Block"</string>

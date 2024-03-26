@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_chat_backup_key_backup_action_disable">"Stäng av säkerhetskopiering"</string>
+  <string name="screen_chat_backup_key_backup_action_enable">"Slå på säkerhetskopiering"</string>
+  <string name="screen_chat_backup_key_backup_description">"Säkerhetskopior ser till att du inte blir av med din meddelandehistorik. %1$s."</string>
+  <string name="screen_chat_backup_key_backup_title">"Säkerhetskopia"</string>
+  <string name="screen_chat_backup_recovery_action_setup">"Ställ in återställning"</string>
+</resources>
