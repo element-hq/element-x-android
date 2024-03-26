@@ -48,30 +48,30 @@ class FakeNotificationTroubleshootTest(
         }
     }
 
-    override fun reset() {
+    override suspend fun reset() {
         updateState(
             name = defaultName,
             description = defaultDescription,
             status = firstStatus,
         )
         resetAction()?.let {
-            _state.tryEmit(it)
+            _state.emit(it)
         }
     }
 
     override suspend fun quickFix(coroutineScope: CoroutineScope) {
         updateState(NotificationTroubleshootTestState.Status.InProgress)
         quickFixAction()?.let {
-            _state.tryEmit(it)
+            _state.emit(it)
         }
     }
 
-    fun updateState(
+    suspend fun updateState(
         status: NotificationTroubleshootTestState.Status,
         name: String = defaultName,
         description: String = defaultDescription,
     ) {
-        _state.tryEmit(
+        _state.emit(
             NotificationTroubleshootTestState(
                 name = name,
                 description = description,

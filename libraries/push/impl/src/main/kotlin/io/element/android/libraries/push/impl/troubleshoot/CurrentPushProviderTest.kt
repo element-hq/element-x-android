@@ -54,5 +54,5 @@ class CurrentPushProviderTest @Inject constructor(
         }
     }
 
-    override fun reset() = delegate.reset()
+    override suspend fun reset() = delegate.reset()
 }

@@ -57,7 +57,7 @@ class NotificationTroubleshootCheckPermissionTest @Inject constructor(
         delegate.done(result)
     }
 
-    override fun reset() = delegate.reset()
+    override suspend fun reset() = delegate.reset()
 
     override suspend fun quickFix(coroutineScope: CoroutineScope) {
         // Do not bother about asking the permission inline, just lead the user to the settings

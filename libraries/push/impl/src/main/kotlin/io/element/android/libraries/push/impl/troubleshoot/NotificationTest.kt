@@ -90,5 +90,5 @@ class NotificationTest @Inject constructor(
         notificationDisplayer.dismissDiagnosticNotification()
     }
 
-    override fun reset() = delegate.reset()
+    override suspend fun reset() = delegate.reset()
 }

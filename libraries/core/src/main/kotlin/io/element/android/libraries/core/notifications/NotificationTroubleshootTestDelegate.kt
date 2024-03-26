@@ -41,12 +41,12 @@ class NotificationTroubleshootTestDelegate(
 
     val state: StateFlow<NotificationTroubleshootTestState> = _state.asStateFlow()
 
-    fun updateState(
+    suspend fun updateState(
         status: NotificationTroubleshootTestState.Status,
         name: String = defaultName,
         description: String = defaultDescription,
     ) {
-        _state.tryEmit(
+        _state.emit(
             NotificationTroubleshootTestState(
                 name = name,
                 description = description,
@@ -55,7 +55,7 @@ class NotificationTroubleshootTestDelegate(
         )
     }
 
-    fun reset() {
+    suspend fun reset() {
         updateState(NotificationTroubleshootTestState.Status.Idle(visibleWhenIdle))
     }
 
@@ -64,7 +64,7 @@ class NotificationTroubleshootTestDelegate(
         delay(fakeDelay)
     }
 
-    fun done(isSuccess: Boolean = true) {
+    suspend fun done(isSuccess: Boolean = true) {
         updateState(
             if (isSuccess) {
                 NotificationTroubleshootTestState.Status.Success
