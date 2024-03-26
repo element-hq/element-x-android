@@ -60,7 +60,7 @@ class DefaultPollContentStateFactory @Inject constructor(
                 isSelected = isSelected,
                 isEnabled = !isPollEnded,
                 isWinner = isWinner,
-                isDisclosed = content.kind.isDisclosed || isPollEnded,
+                showVotes = content.kind.isDisclosed || isPollEnded,
                 votesCount = answerVoteCount,
                 percentage = percentage,
             )

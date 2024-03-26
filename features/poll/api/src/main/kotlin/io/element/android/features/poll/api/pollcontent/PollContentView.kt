@@ -245,7 +245,7 @@ internal fun PollContentUndisclosedPreview() = ElementPreview {
     PollContentView(
         eventId = EventId("\$anEventId"),
         question = "What type of food should we have at the party?",
-        answerItems = aPollAnswerItemList(isDisclosed = false),
+        answerItems = aPollAnswerItemList(showVotes = false),
         pollKind = PollKind.Undisclosed,
         isPollEnded = false,
         isPollEditable = false,
