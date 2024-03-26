@@ -74,7 +74,7 @@ class PreferencesRootPresenter @Inject constructor(
         }
 
         // We should display the 'complete verification' option if the current session can be verified
-        val showCompleteVerification by sessionVerificationService.canVerifySessionFlow.collectAsState(false)
+        val canVerifyUserSession by sessionVerificationService.canVerifySessionFlow.collectAsState(false)
 
         val showSecureBackupIndicator by indicatorService.showSettingChatBackupIndicator()
 
@@ -102,8 +102,7 @@ class PreferencesRootPresenter @Inject constructor(
             myUser = matrixUser.value,
             version = versionFormatter.get(),
             deviceId = matrixClient.deviceId,
-            showCompleteVerification = showCompleteVerification,
-            showSecureBackup = !showCompleteVerification,
+            showSecureBackup = !canVerifyUserSession,
             showSecureBackupBadge = showSecureBackupIndicator,
             accountManagementUrl = accountManagementUrl.value,
             devicesManagementUrl = devicesManagementUrl.value,

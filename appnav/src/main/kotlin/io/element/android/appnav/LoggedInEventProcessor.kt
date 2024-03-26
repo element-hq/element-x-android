@@ -19,8 +19,6 @@ package io.element.android.appnav
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
-import io.element.android.libraries.matrix.api.verification.SessionVerificationService
-import io.element.android.libraries.matrix.api.verification.VerificationFlowState
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
@@ -34,15 +32,11 @@ import javax.inject.Inject
 class LoggedInEventProcessor @Inject constructor(
     private val snackbarDispatcher: SnackbarDispatcher,
     roomMembershipObserver: RoomMembershipObserver,
-    sessionVerificationService: SessionVerificationService,
 ) {
     private var observingJob: Job? = null
 
     private val displayLeftRoomMessage = roomMembershipObserver.updates
         .map { !it.isUserInRoom }
-
-    private val displayVerificationSuccessfulMessage = sessionVerificationService.verificationFlowState
-        .map { it == VerificationFlowState.Finished }
 
     fun observeEvents(coroutineScope: CoroutineScope) {
         observingJob = coroutineScope.launch {
@@ -50,13 +44,6 @@ class LoggedInEventProcessor @Inject constructor(
                 .filter { it }
                 .onEach {
                     displayMessage(CommonStrings.common_current_user_left_room)
-                }
-                .launchIn(this)
-
-            displayVerificationSuccessfulMessage
-                .filter { it }
-                .onEach {
-                    displayMessage(CommonStrings.common_verification_complete)
                 }
                 .launchIn(this)
         }

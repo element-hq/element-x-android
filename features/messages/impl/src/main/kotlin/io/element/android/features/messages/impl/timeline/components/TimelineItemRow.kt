@@ -23,7 +23,6 @@ import io.element.android.features.messages.impl.timeline.TimelineRoomInfo
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemLegacyCallInviteContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStateContent
-import io.element.android.features.messages.impl.timeline.session.SessionState
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
 
@@ -34,7 +33,6 @@ internal fun TimelineItemRow(
     renderReadReceipts: Boolean,
     isLastOutgoingMessage: Boolean,
     highlightedItem: String?,
-    sessionState: SessionState,
     onUserDataClick: (UserId) -> Unit,
     onClick: (TimelineItem.Event) -> Unit,
     onLongClick: (TimelineItem.Event) -> Unit,
@@ -52,7 +50,6 @@ internal fun TimelineItemRow(
         is TimelineItem.Virtual -> {
             TimelineItemVirtualRow(
                 virtual = timelineItem,
-                sessionState = sessionState,
                 modifier = modifier,
             )
         }
@@ -98,7 +95,6 @@ internal fun TimelineItemRow(
                 renderReadReceipts = renderReadReceipts,
                 isLastOutgoingMessage = isLastOutgoingMessage,
                 highlightedItem = highlightedItem,
-                sessionState = sessionState,
                 onClick = onClick,
                 onLongClick = onLongClick,
                 inReplyToClick = inReplyToClick,

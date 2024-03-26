@@ -36,6 +36,11 @@ class DefaultSecureBackupEntryPoint @Inject constructor() : SecureBackupEntryPoi
                 return this
             }
 
+            override fun callback(callback: SecureBackupEntryPoint.Callback): SecureBackupEntryPoint.NodeBuilder {
+                plugins += callback
+                return this
+            }
+
             override fun build(): Node {
                 return parentNode.createNode<SecureBackupFlowNode>(buildContext, plugins)
             }

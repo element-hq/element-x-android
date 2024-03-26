@@ -85,6 +85,9 @@ sealed interface SessionVerifiedStatus {
 
     /** Verified session status. */
     data object Verified : SessionVerifiedStatus
+
+    /** Returns whether the session is [Verified]. */
+    fun isVerified(): Boolean = this is Verified
 }
 
 /** States produced by the [SessionVerificationService]. */

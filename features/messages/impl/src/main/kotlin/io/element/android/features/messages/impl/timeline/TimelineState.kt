@@ -32,7 +32,6 @@ data class TimelineState(
     val highlightedEventId: EventId?,
     val paginationState: MatrixTimeline.PaginationState,
     val newEventState: NewEventState,
-    val sessionState: SessionState,
     val eventSink: (TimelineEvents) -> Unit
 )
 

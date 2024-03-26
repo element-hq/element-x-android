@@ -23,6 +23,8 @@ import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.features.ftue.api.state.FtueState
 import io.element.android.features.lockscreen.api.LockScreenService
 import io.element.android.libraries.di.SessionScope
+import io.element.android.libraries.matrix.api.verification.SessionVerificationService
+import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatus
 import io.element.android.libraries.permissions.api.PermissionStateProvider
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.toolbox.api.sdk.BuildVersionSdkIntProvider
@@ -41,8 +43,9 @@ class DefaultFtueState @Inject constructor(
     private val analyticsService: AnalyticsService,
     private val permissionStateProvider: PermissionStateProvider,
     private val lockScreenService: LockScreenService,
+    private val sessionVerificationService: SessionVerificationService,
 ) : FtueState {
-    override val shouldDisplayFlow = MutableStateFlow(isAnyStepIncomplete())
+    override val shouldDisplayFlow = MutableStateFlow(isSessionVerificationServiceReady() && isAnyStepIncomplete())
 
     override suspend fun reset() {
         analyticsService.reset()
@@ -52,6 +55,10 @@ class DefaultFtueState @Inject constructor(
     }
 
     init {
+        sessionVerificationService.sessionVerifiedStatus
+            .onEach { updateState() }
+            .launchIn(coroutineScope)
+
         analyticsService.didAskUserConsent()
             .onEach { updateState() }
             .launchIn(coroutineScope)
@@ -59,7 +66,12 @@ class DefaultFtueState @Inject constructor(
 
     fun getNextStep(currentStep: FtueStep? = null): FtueStep? =
         when (currentStep) {
-            null -> if (shouldAskNotificationPermissions()) {
+            null -> if (isSessionNotVerified()) {
+                FtueStep.SessionVerification
+            } else {
+                getNextStep(FtueStep.SessionVerification)
+            }
+            FtueStep.SessionVerification -> if (shouldAskNotificationPermissions()) {
                 FtueStep.NotificationsOptIn
             } else {
                 getNextStep(FtueStep.NotificationsOptIn)
@@ -79,10 +91,19 @@ class DefaultFtueState @Inject constructor(
 
     private fun isAnyStepIncomplete(): Boolean {
         return listOf(
+            { isSessionNotVerified() },
             { shouldAskNotificationPermissions() },
             { needsAnalyticsOptIn() },
             { shouldDisplayLockscreenSetup() },
         ).any { it() }
+    }
+
+    private fun isSessionVerificationServiceReady(): Boolean {
+        return sessionVerificationService.sessionVerifiedStatus.value != SessionVerifiedStatus.Unknown
+    }
+
+    private fun isSessionNotVerified(): Boolean {
+        return sessionVerificationService.sessionVerifiedStatus.value == SessionVerifiedStatus.NotVerified
     }
 
     private fun needsAnalyticsOptIn(): Boolean {
@@ -109,11 +130,12 @@ class DefaultFtueState @Inject constructor(
 
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     internal fun updateState() {
-        shouldDisplayFlow.value = isAnyStepIncomplete()
+        shouldDisplayFlow.value = isSessionVerificationServiceReady() && isAnyStepIncomplete()
     }
 }
 
 sealed interface FtueStep {
+    data object SessionVerification : FtueStep
     data object NotificationsOptIn : FtueStep
     data object AnalyticsOptIn : FtueStep
     data object LockscreenSetup : FtueStep

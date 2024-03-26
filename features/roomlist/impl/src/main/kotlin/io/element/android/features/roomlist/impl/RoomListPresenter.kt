@@ -58,7 +58,6 @@ import io.element.android.libraries.matrix.api.roomlist.RoomList
 import io.element.android.libraries.matrix.api.sync.SyncService
 import io.element.android.libraries.matrix.api.sync.SyncState
 import io.element.android.libraries.matrix.api.timeline.ReceiptType
-import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analyticsproviders.api.trackers.captureInteraction
 import kotlinx.collections.immutable.toPersistentList
@@ -92,7 +91,6 @@ class RoomListPresenter @Inject constructor(
     private val analyticsService: AnalyticsService,
 ) : Presenter<RoomListState> {
     private val encryptionService: EncryptionService = client.encryptionService()
-    private val sessionVerificationService: SessionVerificationService = client.sessionVerificationService()
     private val syncService: SyncService = client.syncService()
 
     @Composable
@@ -159,19 +157,12 @@ class RoomListPresenter @Inject constructor(
         securityBannerDismissed: Boolean,
     ): State<SecurityBannerState> {
         val currentSecurityBannerDismissed by rememberUpdatedState(securityBannerDismissed)
-        val canVerifySession by sessionVerificationService.canVerifySessionFlow.collectAsState(initial = false)
-        val isLastDevice by encryptionService.isLastDevice.collectAsState()
         val recoveryState by encryptionService.recoveryStateStateFlow.collectAsState()
         val syncState by syncService.syncState.collectAsState()
         return remember {
             derivedStateOf {
                 when {
                     currentSecurityBannerDismissed -> SecurityBannerState.None
-                    canVerifySession -> if (isLastDevice) {
-                        SecurityBannerState.RecoveryKeyConfirmation
-                    } else {
-                        SecurityBannerState.SessionVerification
-                    }
                     recoveryState == RecoveryState.INCOMPLETE &&
                         syncState == SyncState.Running -> SecurityBannerState.RecoveryKeyConfirmation
                     else -> SecurityBannerState.None

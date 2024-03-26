@@ -222,14 +222,6 @@ private fun RoomsViewList(
         contentPadding = PaddingValues(bottom = 80.dp)
     ) {
         when (state.securityBannerState) {
-            SecurityBannerState.SessionVerification -> {
-                item {
-                    RequestVerificationHeader(
-                        onVerifyClicked = onVerifyClicked,
-                        onDismissClicked = { eventSink(RoomListEvents.DismissRequestVerificationPrompt) }
-                    )
-                }
-            }
             SecurityBannerState.RecoveryKeyConfirmation -> {
                 item {
                     ConfirmRecoveryKeyBanner(

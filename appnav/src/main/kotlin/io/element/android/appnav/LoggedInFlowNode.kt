@@ -62,18 +62,25 @@ import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.architecture.waitForChildAttached
 import io.element.android.libraries.deeplink.DeeplinkData
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
+import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.MAIN_SPACE
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.roomlist.RoomList
 import io.element.android.libraries.matrix.api.sync.SyncState
+import io.element.android.libraries.matrix.api.verification.SessionVerificationService
+import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatus
 import io.element.android.libraries.push.api.notifications.NotificationDrawerManager
 import io.element.android.services.appnavstate.api.AppNavigationStateService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.parcelize.Parcelize
@@ -98,10 +105,11 @@ class LoggedInFlowNode @AssistedInject constructor(
     private val lockScreenEntryPoint: LockScreenEntryPoint,
     private val lockScreenStateService: LockScreenService,
     private val matrixClient: MatrixClient,
+    private val sessionVerificationService: SessionVerificationService,
     snackbarDispatcher: SnackbarDispatcher,
 ) : BaseFlowNode<LoggedInFlowNode.NavTarget>(
     backstack = BackStack(
-        initialElement = NavTarget.RoomList,
+        initialElement = NavTarget.Placeholder,
         savedStateMap = buildContext.savedStateMap,
     ),
     permanentNavModel = PermanentNavModel(
@@ -119,7 +127,6 @@ class LoggedInFlowNode @AssistedInject constructor(
     private val loggedInFlowProcessor = LoggedInEventProcessor(
         snackbarDispatcher,
         matrixClient.roomMembershipObserver(),
-        matrixClient.sessionVerificationService(),
     )
 
     override fun onBuilt() {
@@ -131,9 +138,26 @@ class LoggedInFlowNode @AssistedInject constructor(
                 appNavigationStateService.onNavigateToSpace(id, MAIN_SPACE)
                 loggedInFlowProcessor.observeEvents(coroutineScope)
 
-                if (ftueState.shouldDisplayFlow.value) {
-                    backstack.push(NavTarget.Ftue)
-                }
+                ftueState.shouldDisplayFlow
+                    .filter { it }
+                    .onEach {
+                        backstack.push(NavTarget.Ftue)
+                    }
+                    .launchIn(lifecycleScope)
+
+                // Attach the root node as soon as we know the first session verification status and the FTUE shouldn't be displayed.
+                // This prevents the room list from being displayed while the session is not verified.
+                combine(
+                    sessionVerificationService.sessionVerifiedStatus,
+                    ftueState.shouldDisplayFlow,
+                ) { sessionVerifiedStatus, shouldDisplayFtue ->
+                        sessionVerifiedStatus to shouldDisplayFtue
+                    }
+                    .filter { (sessionVerifiedStatus, shouldDisplayFtue) ->
+                        sessionVerifiedStatus.isVerified() && !shouldDisplayFtue
+                    }
+                    .onEach { attachRoot() }
+                    .launchIn(lifecycleScope)
             },
             onStop = {
                 coroutineScope.launch {
@@ -190,6 +214,9 @@ class LoggedInFlowNode @AssistedInject constructor(
 
     sealed interface NavTarget : Parcelable {
         @Parcelize
+        data object Placeholder: NavTarget
+
+        @Parcelize
         data object LoggedInPermanent : NavTarget
 
         @Parcelize
@@ -229,6 +256,7 @@ class LoggedInFlowNode @AssistedInject constructor(
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
         return when (navTarget) {
+            NavTarget.Placeholder -> createNode<PlaceholderNode>(buildContext)
             NavTarget.LoggedInPermanent -> {
                 createNode<LoggedInNode>(buildContext)
             }
@@ -372,7 +400,7 @@ class LoggedInFlowNode @AssistedInject constructor(
                 ftueEntryPoint.nodeBuilder(this, buildContext)
                     .callback(object : FtueEntryPoint.Callback {
                         override fun onFtueFlowFinished() {
-                            backstack.pop()
+                            lifecycleScope.launch { attachRoot() }
                         }
                     })
                     .build()
@@ -380,34 +408,42 @@ class LoggedInFlowNode @AssistedInject constructor(
         }
     }
 
-    suspend fun attachRoot(): Node {
-        return attachChild {
+    suspend fun attachRoot() {
+        if (!canShowRoot(ftueState, sessionVerificationService.sessionVerifiedStatus.value)) return
+        attachChild<Node> {
             backstack.singleTop(NavTarget.RoomList)
         }
     }
 
-    suspend fun attachRoom(roomId: RoomId): RoomFlowNode {
-        return attachChild {
+    suspend fun attachRoom(roomId: RoomId) {
+        if (!canShowRoot(ftueState, sessionVerificationService.sessionVerifiedStatus.value)) return
+        attachChild<RoomFlowNode> {
             backstack.singleTop(NavTarget.RoomList)
             backstack.push(NavTarget.Room(roomId))
         }
     }
 
     internal suspend fun attachInviteList(deeplinkData: DeeplinkData.InviteList) = withContext(lifecycleScope.coroutineContext) {
+        if (!canShowRoot(ftueState, sessionVerificationService.sessionVerifiedStatus.value)) return@withContext
         notificationDrawerManager.clearMembershipNotificationForSession(deeplinkData.sessionId)
         backstack.singleTop(NavTarget.RoomList)
         backstack.push(NavTarget.InviteList)
         waitForChildAttached<Node, NavTarget> { navTarget ->
             navTarget is NavTarget.InviteList
         }
+        Unit
+    }
+
+    private fun canShowRoot(ftueState: FtueState, sessionVerifiedStatus: SessionVerifiedStatus): Boolean {
+        return !ftueState.shouldDisplayFlow.value && sessionVerifiedStatus.isVerified()
     }
 
     @Composable
     override fun View(modifier: Modifier) {
         Box(modifier = modifier) {
             val lockScreenState by lockScreenStateService.lockState.collectAsState()
-            BackstackView()
             val isFtueDisplayed by ftueState.shouldDisplayFlow.collectAsState()
+            BackstackView()
             if (!isFtueDisplayed) {
                 PermanentChild(permanentNavModel = permanentNavModel, navTarget = NavTarget.LoggedInPermanent)
             }
@@ -416,4 +452,10 @@ class LoggedInFlowNode @AssistedInject constructor(
             }
         }
     }
+
+    @ContributesNode(AppScope::class)
+    class PlaceholderNode @AssistedInject constructor(
+        @Assisted buildContext: BuildContext,
+        @Assisted plugins: List<Plugin>,
+    ) : Node(buildContext, plugins = plugins)
 }

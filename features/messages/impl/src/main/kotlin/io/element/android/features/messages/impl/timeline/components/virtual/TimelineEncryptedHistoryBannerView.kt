@@ -16,7 +16,6 @@
 
 package io.element.android.features.messages.impl.timeline.components.virtual
 
-import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -42,7 +41,6 @@ import io.element.android.libraries.designsystem.theme.components.Icon
 
 @Composable
 fun TimelineEncryptedHistoryBannerView(
-    sessionState: SessionState,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -61,19 +59,10 @@ fun TimelineEncryptedHistoryBannerView(
             tint = ElementTheme.colors.iconInfoPrimary
         )
         Text(
-            text = stringResource(sessionState.toStringResId()),
+            text = stringResource(R.string.screen_room_encrypted_history_banner),
             style = ElementTheme.typography.fontBodyMdMedium,
             color = ElementTheme.colors.textInfoPrimary
         )
-    }
-}
-
-@StringRes
-private fun SessionState.toStringResId(): Int {
-    return when {
-        isSessionVerified.not() -> R.string.screen_room_encrypted_history_banner_unverified
-        isKeyBackupEnabled.not() -> R.string.screen_room_encrypted_history_banner
-        else -> R.string.screen_room_encrypted_history_banner // TODO strings need to be updated
     }
 }
 
@@ -82,5 +71,5 @@ private fun SessionState.toStringResId(): Int {
 internal fun EncryptedHistoryBannerViewPreview(
     @PreviewParameter(SessionStateProvider::class) sessionState: SessionState,
 ) = ElementPreview {
-    TimelineEncryptedHistoryBannerView(sessionState = sessionState)
+    TimelineEncryptedHistoryBannerView()
 }

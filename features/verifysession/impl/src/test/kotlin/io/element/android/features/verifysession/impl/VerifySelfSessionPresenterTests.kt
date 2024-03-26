@@ -106,7 +106,7 @@ class VerifySelfSessionPresenterTests {
             val initialState = awaitItem()
             assertThat(initialState.verificationFlowStep).isEqualTo(VerificationStep.Initial(false))
             val eventSink = initialState.eventSink
-            eventSink(VerifySelfSessionViewEvents.CancelAndClose)
+            eventSink(VerifySelfSessionViewEvents.Cancel)
             expectNoEvents()
         }
     }
@@ -136,7 +136,7 @@ class VerifySelfSessionPresenterTests {
             presenter.present()
         }.test {
             val state = requestVerificationAndAwaitVerifyingState(service)
-            state.eventSink(VerifySelfSessionViewEvents.CancelAndClose)
+            state.eventSink(VerifySelfSessionViewEvents.Cancel)
             assertThat(awaitItem().verificationFlowStep).isEqualTo(VerificationStep.AwaitingOtherDeviceResponse)
             assertThat(awaitItem().verificationFlowStep).isEqualTo(VerificationStep.Canceled)
         }
@@ -165,7 +165,7 @@ class VerifySelfSessionPresenterTests {
             val state = requestVerificationAndAwaitVerifyingState(service)
             service.givenVerificationFlowState(VerificationFlowState.Canceled)
             assertThat(awaitItem().verificationFlowStep).isEqualTo(VerificationStep.Canceled)
-            state.eventSink(VerifySelfSessionViewEvents.Restart)
+            state.eventSink(VerifySelfSessionViewEvents.RestartVerification)
             // Went back to requesting verification
             assertThat(awaitItem().verificationFlowStep).isEqualTo(VerificationStep.AwaitingOtherDeviceResponse)
             cancelAndIgnoreRemainingEvents()

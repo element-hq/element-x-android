@@ -27,7 +27,6 @@ fun aPreferencesRootState(
     myUser = myUser,
     version = "Version 1.1 (1)",
     deviceId = "ILAKNDNASDLK",
-    showCompleteVerification = true,
     showSecureBackup = true,
     showSecureBackupBadge = true,
     accountManagementUrl = "aUrl",
