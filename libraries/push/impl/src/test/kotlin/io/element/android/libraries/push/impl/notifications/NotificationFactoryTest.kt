@@ -22,10 +22,10 @@ import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID
-import io.element.android.libraries.push.impl.notifications.fake.FakeNotificationCreator
 import io.element.android.libraries.push.impl.notifications.fake.FakeImageLoader
-import io.element.android.libraries.push.impl.notifications.fake.FakeRoomGroupMessageCreator
-import io.element.android.libraries.push.impl.notifications.fake.FakeSummaryGroupMessageCreator
+import io.element.android.libraries.push.impl.notifications.fake.MockkNotificationCreator
+import io.element.android.libraries.push.impl.notifications.fake.MockkRoomGroupMessageCreator
+import io.element.android.libraries.push.impl.notifications.fake.MockkSummaryGroupMessageCreator
 import io.element.android.libraries.push.impl.notifications.fixtures.aNotifiableMessageEvent
 import io.element.android.libraries.push.impl.notifications.fixtures.aSimpleNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.fixtures.anInviteNotifiableEvent
@@ -41,19 +41,19 @@ private val A_MESSAGE_EVENT = aNotifiableMessageEvent(eventId = AN_EVENT_ID, roo
 
 @RunWith(RobolectricTestRunner::class)
 class NotificationFactoryTest {
-    private val androidNotificationFactory = FakeNotificationCreator()
-    private val roomGroupMessageCreator = FakeRoomGroupMessageCreator()
-    private val summaryGroupMessageCreator = FakeSummaryGroupMessageCreator()
+    private val mockkNotificationCreator = MockkNotificationCreator()
+    private val mockkRoomGroupMessageCreator = MockkRoomGroupMessageCreator()
+    private val mockkSummaryGroupMessageCreator = MockkSummaryGroupMessageCreator()
 
     private val notificationFactory = NotificationFactory(
-        androidNotificationFactory.instance,
-        roomGroupMessageCreator.instance,
-        summaryGroupMessageCreator.instance
+        notificationCreator = mockkNotificationCreator.instance,
+        roomGroupMessageCreator = mockkRoomGroupMessageCreator.instance,
+        summaryGroupMessageCreator = mockkSummaryGroupMessageCreator.instance
     )
 
     @Test
     fun `given a room invitation when mapping to notification then is Append`() = testWith(notificationFactory) {
-        val expectedNotification = androidNotificationFactory.givenCreateRoomInvitationNotificationFor(AN_INVITATION_EVENT)
+        val expectedNotification = mockkNotificationCreator.givenCreateRoomInvitationNotificationFor(AN_INVITATION_EVENT)
         val roomInvitation = listOf(ProcessedEvent(ProcessedEvent.Type.KEEP, AN_INVITATION_EVENT))
 
         val result = roomInvitation.toNotifications()
@@ -90,7 +90,7 @@ class NotificationFactoryTest {
 
     @Test
     fun `given a simple event when mapping to notification then is Append`() = testWith(notificationFactory) {
-        val expectedNotification = androidNotificationFactory.givenCreateSimpleInvitationNotificationFor(A_SIMPLE_EVENT)
+        val expectedNotification = mockkNotificationCreator.givenCreateSimpleInvitationNotificationFor(A_SIMPLE_EVENT)
         val roomInvitation = listOf(ProcessedEvent(ProcessedEvent.Type.KEEP, A_SIMPLE_EVENT))
 
         val result = roomInvitation.toNotifications()
@@ -128,7 +128,7 @@ class NotificationFactoryTest {
     @Test
     fun `given room with message when mapping to notification then delegates to room group message creator`() = testWith(notificationFactory) {
         val events = listOf(A_MESSAGE_EVENT)
-        val expectedNotification = roomGroupMessageCreator.givenCreatesRoomMessageFor(
+        val expectedNotification = mockkRoomGroupMessageCreator.givenCreatesRoomMessageFor(
             MatrixUser(A_SESSION_ID, A_SESSION_ID.value, MY_AVATAR_URL),
             events,
             A_ROOM_ID
@@ -197,7 +197,7 @@ class NotificationFactoryTest {
             )
         )
         val withRedactedRemoved = listOf(A_MESSAGE_EVENT.copy(eventId = EventId("\$not-redacted")))
-        val expectedNotification = roomGroupMessageCreator.givenCreatesRoomMessageFor(
+        val expectedNotification = mockkRoomGroupMessageCreator.givenCreatesRoomMessageFor(
             MatrixUser(A_SESSION_ID, A_SESSION_ID.value, MY_AVATAR_URL),
             withRedactedRemoved,
             A_ROOM_ID,

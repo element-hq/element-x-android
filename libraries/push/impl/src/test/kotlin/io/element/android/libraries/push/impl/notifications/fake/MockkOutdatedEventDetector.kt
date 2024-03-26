@@ -21,7 +21,7 @@ import io.element.android.libraries.push.impl.notifications.model.NotifiableEven
 import io.mockk.every
 import io.mockk.mockk
 
-class FakeOutdatedEventDetector {
+class MockkOutdatedEventDetector {
     val instance = mockk<OutdatedEventDetector>()
 
     fun givenEventIsOutOfDate(notifiableEvent: NotifiableEvent) {

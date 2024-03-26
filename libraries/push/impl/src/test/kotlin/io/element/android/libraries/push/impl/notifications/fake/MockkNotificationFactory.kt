@@ -26,7 +26,7 @@ import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
 
-class FakeNotificationFactory {
+class MockkNotificationFactory {
     val instance = mockk<NotificationFactory>()
 
     fun givenNotificationsFor(

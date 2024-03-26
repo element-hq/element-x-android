@@ -19,17 +19,17 @@ package io.element.android.libraries.push.impl.troubleshoot
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.core.notifications.NotificationTroubleshootTestState
-import io.element.android.libraries.push.impl.notifications.fake.FakeNotificationCreator
-import io.element.android.libraries.push.impl.notifications.fake.FakeNotificationDisplayer
+import io.element.android.libraries.push.impl.notifications.fake.MockkNotificationCreator
+import io.element.android.libraries.push.impl.notifications.fake.MockkNotificationDisplayer
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
 class NotificationTestTest {
-    private val fakeNotificationCreator = FakeNotificationCreator().apply {
+    private val mockkNotificationCreator = MockkNotificationCreator().apply {
         givenCreateDiagnosticNotification()
     }
-    private val fakeNotificationDisplayer = FakeNotificationDisplayer().apply {
+    private val mockkNotificationDisplayer = MockkNotificationDisplayer().apply {
         givenDisplayDiagnosticNotificationResult(true)
     }
 
@@ -37,7 +37,7 @@ class NotificationTestTest {
 
     @Test
     fun `test NotificationTest notification cannot be displayed`() = runTest {
-        fakeNotificationDisplayer.givenDisplayDiagnosticNotificationResult(false)
+        mockkNotificationDisplayer.givenDisplayDiagnosticNotificationResult(false)
         val sut = createNotificationTest()
         launch {
             sut.run(this)
@@ -80,8 +80,8 @@ class NotificationTestTest {
 
     private fun createNotificationTest(): NotificationTest {
         return NotificationTest(
-            notificationCreator = fakeNotificationCreator.instance,
-            notificationDisplayer = fakeNotificationDisplayer.instance,
+            notificationCreator = mockkNotificationCreator.instance,
+            notificationDisplayer = mockkNotificationDisplayer.instance,
             notificationClickHandler = notificationClickHandler
         )
     }

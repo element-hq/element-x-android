@@ -23,7 +23,7 @@ import io.element.android.libraries.push.impl.notifications.model.SimpleNotifiab
 import io.mockk.every
 import io.mockk.mockk
 
-class FakeNotificationCreator {
+class MockkNotificationCreator {
     val instance = mockk<NotificationCreator>()
 
     fun givenCreateRoomInvitationNotificationFor(event: InviteNotifiableEvent): Notification {

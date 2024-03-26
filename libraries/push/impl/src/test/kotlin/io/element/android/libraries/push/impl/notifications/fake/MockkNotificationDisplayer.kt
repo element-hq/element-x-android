@@ -25,7 +25,7 @@ import io.mockk.mockk
 import io.mockk.verify
 import io.mockk.verifyOrder
 
-class FakeNotificationDisplayer {
+class MockkNotificationDisplayer {
     val instance = mockk<NotificationDisplayer>(relaxed = true)
 
     fun givenDisplayDiagnosticNotificationResult(result: Boolean) {

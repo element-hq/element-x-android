@@ -23,10 +23,10 @@ import io.element.android.libraries.matrix.test.A_SPACE_ID
 import io.element.android.libraries.matrix.test.A_THREAD_ID
 import io.element.android.libraries.matrix.test.FakeMatrixClientProvider
 import io.element.android.libraries.matrix.test.core.aBuildMeta
-import io.element.android.libraries.push.impl.notifications.fake.FakeNotificationCreator
 import io.element.android.libraries.push.impl.notifications.fake.FakeImageLoaderHolder
-import io.element.android.libraries.push.impl.notifications.fake.FakeRoomGroupMessageCreator
-import io.element.android.libraries.push.impl.notifications.fake.FakeSummaryGroupMessageCreator
+import io.element.android.libraries.push.impl.notifications.fake.MockkNotificationCreator
+import io.element.android.libraries.push.impl.notifications.fake.MockkRoomGroupMessageCreator
+import io.element.android.libraries.push.impl.notifications.fake.MockkSummaryGroupMessageCreator
 import io.element.android.libraries.push.impl.notifications.fixtures.aNotifiableMessageEvent
 import io.element.android.libraries.push.impl.notifications.model.NotifiableEvent
 import io.element.android.services.appnavstate.api.AppNavigationState
@@ -115,12 +115,12 @@ class DefaultNotificationDrawerManagerTest {
                 appNavigationStateService = appNavigationStateService
             ),
             notificationRenderer = NotificationRenderer(
-                NotificationIdProvider(),
-                NotificationDisplayer(context),
-                NotificationFactory(
-                    FakeNotificationCreator().instance,
-                    FakeRoomGroupMessageCreator().instance,
-                    FakeSummaryGroupMessageCreator().instance,
+                notificationIdProvider = NotificationIdProvider(),
+                notificationDisplayer = NotificationDisplayer(context),
+                notificationFactory = NotificationFactory(
+                    notificationCreator = MockkNotificationCreator().instance,
+                    roomGroupMessageCreator = MockkRoomGroupMessageCreator().instance,
+                    summaryGroupMessageCreator = MockkSummaryGroupMessageCreator().instance,
                 )
             ),
             notificationEventPersistence = InMemoryNotificationEventPersistence(initialData = initialData),
