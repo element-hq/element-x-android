@@ -224,4 +224,4 @@ kover = { id = "org.jetbrains.kotlinx.kover", version.ref = "kover" }
 sqldelight = { id = "app.cash.sqldelight", version.ref = "sqldelight" }
 firebaseAppDistribution = { id = "com.google.firebase.appdistribution", version.ref = "firebaseAppDistribution" }
 knit = { id = "org.jetbrains.kotlinx.knit", version = "0.5.0" }
-sonarqube = "org.sonarqube:4.4.1.3373"
+sonarqube = "org.sonarqube:5.0.0.4638"
