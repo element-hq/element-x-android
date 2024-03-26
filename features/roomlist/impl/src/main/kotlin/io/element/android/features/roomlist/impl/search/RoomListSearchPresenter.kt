@@ -21,7 +21,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import io.element.android.libraries.architecture.Presenter
 import kotlinx.collections.immutable.persistentListOf
@@ -32,10 +32,11 @@ class RoomListSearchPresenter @Inject constructor(
 ) : Presenter<RoomListSearchState> {
     @Composable
     override fun present(): RoomListSearchState {
-        var isSearchActive by rememberSaveable {
+        // Do not use rememberSaveable so that search is not active when the user navigates back to the screen
+        var isSearchActive by remember {
             mutableStateOf(false)
         }
-        var searchQuery by rememberSaveable {
+        var searchQuery by remember {
             mutableStateOf("")
         }
 
