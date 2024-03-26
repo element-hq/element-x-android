@@ -69,6 +69,8 @@ dependencies {
     testImplementation(libs.coil.test)
     testImplementation(libs.coroutines.test)
     testImplementation(projects.libraries.matrix.test)
+    testImplementation(projects.libraries.push.test)
+    testImplementation(projects.libraries.pushproviders.test)
     testImplementation(projects.tests.testutils)
     testImplementation(projects.services.appnavstate.test)
     testImplementation(projects.services.toolbox.impl)

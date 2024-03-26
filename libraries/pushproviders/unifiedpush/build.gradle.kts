@@ -37,6 +37,7 @@ dependencies {
     implementation(projects.libraries.pushproviders.api)
     implementation(projects.libraries.architecture)
     implementation(projects.libraries.core)
+    implementation(projects.services.appnavstate.api)
     implementation(projects.services.toolbox.api)
 
     implementation(projects.libraries.network)
@@ -50,8 +51,10 @@ dependencies {
     // UnifiedPush library
     api(libs.unifiedpush)
 
+    testImplementation(libs.coroutines.test)
     testImplementation(libs.test.junit)
     testImplementation(libs.test.truth)
+    testImplementation(libs.test.turbine)
     testImplementation(projects.libraries.matrix.test)
     testImplementation(projects.tests.testutils)
 }

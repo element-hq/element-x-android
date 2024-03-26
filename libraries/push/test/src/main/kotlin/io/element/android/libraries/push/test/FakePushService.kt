@@ -20,8 +20,11 @@ import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.push.api.PushService
 import io.element.android.libraries.pushproviders.api.Distributor
 import io.element.android.libraries.pushproviders.api.PushProvider
+import io.element.android.tests.testutils.simulateLongTask
 
-class FakePushService : PushService {
+class FakePushService(
+    private val testPushBlock: suspend () -> Boolean = { true }
+) : PushService {
     override fun notificationStyleChanged() {
     }
 
@@ -32,6 +35,7 @@ class FakePushService : PushService {
     override suspend fun registerWith(matrixClient: MatrixClient, pushProvider: PushProvider, distributor: Distributor) {
     }
 
-    override suspend fun testPush() {
+    override suspend fun testPush(): Boolean = simulateLongTask {
+        testPushBlock()
     }
 }

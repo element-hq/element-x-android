@@ -46,6 +46,7 @@ import io.element.android.libraries.ui.strings.CommonStrings
 fun NotificationSettingsView(
     state: NotificationSettingsState,
     onOpenEditDefault: (isOneToOne: Boolean) -> Unit,
+    onTroubleshootNotificationsClicked: () -> Unit,
     onBackPressed: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -77,6 +78,7 @@ fun NotificationSettingsView(
                 // TODO We are removing the call notification toggle until support for call notifications has been added
 //                onCallsNotificationsChanged = { state.eventSink(NotificationSettingsEvents.SetCallNotificationsEnabled(it)) },
                 onInviteForMeNotificationsChanged = { state.eventSink(NotificationSettingsEvents.SetInviteForMeNotificationsEnabled(it)) },
+                onTroubleshootNotificationsClicked = onTroubleshootNotificationsClicked,
             )
         }
         AsyncActionView(
@@ -99,6 +101,7 @@ private fun NotificationSettingsContentView(
     // TODO We are removing the call notification toggle until support for call notifications has been added
 //    onCallsNotificationsChanged: (Boolean) -> Unit,
     onInviteForMeNotificationsChanged: (Boolean) -> Unit,
+    onTroubleshootNotificationsClicked: () -> Unit,
 ) {
     val context = LocalContext.current
     if (systemSettings.appNotificationsEnabled && !systemSettings.systemNotificationsEnabled) {
@@ -163,6 +166,13 @@ private fun NotificationSettingsContentView(
                 onCheckedChange = onInviteForMeNotificationsChanged
             )
         }
+        PreferenceCategory(title = "Troubleshoot") {
+            PreferenceText(
+                modifier = Modifier,
+                title = "Troubleshoot notifications",
+                onClick = onTroubleshootNotificationsClicked
+            )
+        }
     }
 }
 
@@ -204,6 +214,7 @@ internal fun NotificationSettingsViewPreview(@PreviewParameter(NotificationSetti
         state = state,
         onBackPressed = {},
         onOpenEditDefault = {},
+        onTroubleshootNotificationsClicked = {},
     )
 }
 

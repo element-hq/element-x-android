@@ -23,6 +23,11 @@ plugins {
 
 android {
     namespace = "io.element.android.features.preferences.impl"
+    testOptions {
+        unitTests {
+            isIncludeAndroidResources = true
+        }
+    }
 }
 
 anvil {
@@ -50,6 +55,7 @@ dependencies {
     implementation(projects.libraries.mediapickers.api)
     implementation(projects.libraries.mediaupload.api)
     implementation(projects.libraries.permissions.api)
+    implementation(projects.libraries.push.api)
     implementation(projects.features.rageshake.api)
     implementation(projects.features.lockscreen.api)
     implementation(projects.features.analytics.api)
@@ -71,12 +77,14 @@ dependencies {
     testImplementation(libs.test.truth)
     testImplementation(libs.test.turbine)
     testImplementation(libs.test.mockk)
+    testImplementation(libs.test.robolectric)
     testImplementation(projects.libraries.matrix.test)
     testImplementation(projects.libraries.featureflag.test)
     testImplementation(projects.libraries.mediapickers.test)
     testImplementation(projects.libraries.mediaupload.test)
     testImplementation(projects.libraries.permissions.test)
     testImplementation(projects.libraries.preferences.test)
+    testImplementation(projects.libraries.push.test)
     testImplementation(projects.libraries.pushstore.test)
     testImplementation(projects.features.rageshake.test)
     testImplementation(projects.features.rageshake.impl)
@@ -86,4 +94,6 @@ dependencies {
     testImplementation(projects.services.toolbox.test)
     testImplementation(projects.features.analytics.impl)
     testImplementation(projects.tests.testutils)
+    testImplementation(libs.androidx.compose.ui.test.junit)
+    testReleaseImplementation(libs.androidx.compose.ui.test.manifest)
 }

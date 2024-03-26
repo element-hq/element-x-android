@@ -51,8 +51,10 @@ dependencies {
         exclude(group = "com.google.firebase", module = "firebase-measurement-connector")
     }
 
+    testImplementation(libs.coroutines.test)
     testImplementation(libs.test.junit)
     testImplementation(libs.test.truth)
+    testImplementation(libs.test.turbine)
     testImplementation(projects.libraries.matrix.test)
     testImplementation(projects.tests.testutils)
 }

@@ -27,6 +27,7 @@ import io.element.android.libraries.push.impl.PushersManager
 import io.element.android.libraries.push.impl.notifications.DefaultNotificationDrawerManager
 import io.element.android.libraries.push.impl.notifications.NotifiableEventResolver
 import io.element.android.libraries.push.impl.store.DefaultPushDataStore
+import io.element.android.libraries.push.impl.troubleshoot.DiagnosticPushHandler
 import io.element.android.libraries.pushproviders.api.PushData
 import io.element.android.libraries.pushproviders.api.PushHandler
 import io.element.android.libraries.pushstore.api.UserPushStoreFactory
@@ -51,6 +52,7 @@ class DefaultPushHandler @Inject constructor(
     // private val actionIds: NotificationActionIds,
     private val buildMeta: BuildMeta,
     private val matrixAuthenticationService: MatrixAuthenticationService,
+    private val diagnosticPushHandler: DiagnosticPushHandler,
 ) : PushHandler {
     private val coroutineScope = CoroutineScope(SupervisorJob())
 
@@ -75,8 +77,7 @@ class DefaultPushHandler @Inject constructor(
 
         // Diagnostic Push
         if (pushData.eventId == PushersManager.TEST_EVENT_ID) {
-            // val intent = Intent(actionIds.push)
-            // TODO The test push has been received, notify the ui
+            diagnosticPushHandler.handlePush()
             return
         }
 

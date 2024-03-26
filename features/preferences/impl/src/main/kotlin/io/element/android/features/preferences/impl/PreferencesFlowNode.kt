@@ -39,6 +39,7 @@ import io.element.android.features.preferences.impl.developer.DeveloperSettingsN
 import io.element.android.features.preferences.impl.developer.tracing.ConfigureTracingNode
 import io.element.android.features.preferences.impl.notifications.NotificationSettingsNode
 import io.element.android.features.preferences.impl.notifications.edit.EditDefaultNotificationSettingNode
+import io.element.android.features.preferences.impl.notifications.troubleshoot.TroubleshootNotificationsNode
 import io.element.android.features.preferences.impl.root.PreferencesRootNode
 import io.element.android.features.preferences.impl.user.editprofile.EditUserProfileNode
 import io.element.android.libraries.architecture.BackstackView
@@ -84,6 +85,9 @@ class PreferencesFlowNode @AssistedInject constructor(
 
         @Parcelize
         data object NotificationSettings : NavTarget
+
+        @Parcelize
+        data object TroubleshootNotifications : NavTarget
 
         @Parcelize
         data object LockScreenSettings : NavTarget
@@ -177,8 +181,15 @@ class PreferencesFlowNode @AssistedInject constructor(
                     override fun editDefaultNotificationMode(isOneToOne: Boolean) {
                         backstack.push(NavTarget.EditDefaultNotificationSetting(isOneToOne))
                     }
+
+                    override fun onTroubleshootNotificationsClicked() {
+                        backstack.push(NavTarget.TroubleshootNotifications)
+                    }
                 }
                 createNode<NotificationSettingsNode>(buildContext, listOf(notificationSettingsCallback))
+            }
+            NavTarget.TroubleshootNotifications -> {
+                createNode<TroubleshootNotificationsNode>(buildContext)
             }
             is NavTarget.EditDefaultNotificationSetting -> {
                 val callback = object : EditDefaultNotificationSettingNode.Callback {

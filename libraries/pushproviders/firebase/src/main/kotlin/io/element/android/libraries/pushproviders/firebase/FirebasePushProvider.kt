@@ -16,14 +16,11 @@
 
 package io.element.android.libraries.pushproviders.firebase
 
-import android.content.Context
-import com.google.android.gms.common.ConnectionResult
-import com.google.android.gms.common.GoogleApiAvailability
 import com.squareup.anvil.annotations.ContributesMultibinding
 import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.di.AppScope
-import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.pushproviders.api.CurrentUserPushConfig
 import io.element.android.libraries.pushproviders.api.Distributor
 import io.element.android.libraries.pushproviders.api.PushProvider
 import io.element.android.libraries.pushproviders.api.PusherSubscriber
@@ -34,25 +31,15 @@ private val loggerTag = LoggerTag("FirebasePushProvider", LoggerTag.PushLoggerTa
 
 @ContributesMultibinding(AppScope::class)
 class FirebasePushProvider @Inject constructor(
-    @ApplicationContext private val context: Context,
     private val firebaseStore: FirebaseStore,
-    private val firebaseTroubleshooter: FirebaseTroubleshooter,
     private val pusherSubscriber: PusherSubscriber,
+    private val isPlayServiceAvailable: IsPlayServiceAvailable,
 ) : PushProvider {
     override val index = FirebaseConfig.INDEX
     override val name = FirebaseConfig.NAME
 
     override fun isAvailable(): Boolean {
-        // The PlayServices has to be available
-        val apiAvailability = GoogleApiAvailability.getInstance()
-        val resultCode = apiAvailability.isGooglePlayServicesAvailable(context)
-        return if (resultCode == ConnectionResult.SUCCESS) {
-            Timber.tag(loggerTag.value).d("Google Play Services is available")
-            true
-        } else {
-            Timber.tag(loggerTag.value).w("Google Play Services is not available")
-            false
-        }
+        return isPlayServiceAvailable.isAvailable()
     }
 
     override fun getDistributors(): List<Distributor> {
@@ -73,7 +60,12 @@ class FirebasePushProvider @Inject constructor(
         pusherSubscriber.unregisterPusher(matrixClient, pushKey, FirebaseConfig.PUSHER_HTTP_URL)
     }
 
-    override suspend fun troubleshoot(): Result<Unit> {
-        return firebaseTroubleshooter.troubleshoot()
+    override suspend fun getCurrentUserPushConfig(): CurrentUserPushConfig? {
+        return firebaseStore.getFcmToken()?.let { fcmToken ->
+            CurrentUserPushConfig(
+                url = FirebaseConfig.PUSHER_HTTP_URL,
+                pushKey = fcmToken
+            )
+        }
     }
 }

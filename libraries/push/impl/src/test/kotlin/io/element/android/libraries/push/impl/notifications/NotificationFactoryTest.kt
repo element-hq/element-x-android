@@ -22,7 +22,7 @@ import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID
-import io.element.android.libraries.push.impl.notifications.fake.FakeAndroidNotificationFactory
+import io.element.android.libraries.push.impl.notifications.fake.FakeNotificationCreator
 import io.element.android.libraries.push.impl.notifications.fake.FakeImageLoader
 import io.element.android.libraries.push.impl.notifications.fake.FakeRoomGroupMessageCreator
 import io.element.android.libraries.push.impl.notifications.fake.FakeSummaryGroupMessageCreator
@@ -41,7 +41,7 @@ private val A_MESSAGE_EVENT = aNotifiableMessageEvent(eventId = AN_EVENT_ID, roo
 
 @RunWith(RobolectricTestRunner::class)
 class NotificationFactoryTest {
-    private val androidNotificationFactory = FakeAndroidNotificationFactory()
+    private val androidNotificationFactory = FakeNotificationCreator()
     private val roomGroupMessageCreator = FakeRoomGroupMessageCreator()
     private val summaryGroupMessageCreator = FakeSummaryGroupMessageCreator()
 

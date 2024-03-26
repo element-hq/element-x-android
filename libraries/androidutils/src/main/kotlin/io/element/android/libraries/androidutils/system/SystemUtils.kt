@@ -16,6 +16,7 @@
 
 package io.element.android.libraries.androidutils.system
 
+import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
@@ -73,6 +74,9 @@ fun Context.startNotificationSettingsIntent(activityResultLauncher: ActivityResu
     val intent = Intent()
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
         intent.action = Settings.ACTION_APP_NOTIFICATION_SETTINGS
+        if (this !is Activity && activityResultLauncher == null) {
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        }
         intent.putExtra(Settings.EXTRA_APP_PACKAGE, packageName)
     } else {
         intent.action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
@@ -152,8 +156,12 @@ fun Context.startSharePlainTextIntent(
 fun Context.openUrlInExternalApp(
     url: String,
     errorMessage: String = getString(R.string.error_no_compatible_app_found),
+    inNewTask: Boolean = false,
 ) {
     val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+    if (inNewTask) {
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+    }
     try {
         startActivity(intent)
     } catch (activityNotFoundException: ActivityNotFoundException) {

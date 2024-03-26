@@ -20,12 +20,17 @@ import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.push.impl.notifications.NotificationDisplayer
 import io.element.android.libraries.push.impl.notifications.NotificationIdProvider
 import io.mockk.confirmVerified
+import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import io.mockk.verifyOrder
 
 class FakeNotificationDisplayer {
     val instance = mockk<NotificationDisplayer>(relaxed = true)
+
+    fun givenDisplayDiagnosticNotificationResult(result: Boolean) {
+        every { instance.displayDiagnosticNotification(any()) } returns result
+    }
 
     fun verifySummaryCancelled() {
         verify { instance.cancelNotificationMessage(tag = null, NotificationIdProvider().getSummaryNotificationId(A_SESSION_ID)) }
