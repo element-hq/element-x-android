@@ -47,6 +47,7 @@ import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.roomdirectory.impl.root.model.RoomDescriptionUiModel
+import io.element.android.libraries.designsystem.components.async.AsyncActionView
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -66,10 +67,15 @@ import kotlinx.collections.immutable.ImmutableList
 @Composable
 fun RoomDirectoryView(
     state: RoomDirectoryState,
+    onRoomJoined: (RoomId) -> Unit,
     onBackPressed: () -> Unit,
-    onJoinRoom: (RoomId) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+
+    fun joinRoom(roomId: RoomId) {
+        state.eventSink(RoomDirectoryEvents.JoinRoom(roomId))
+    }
+
     Scaffold(
         modifier = modifier,
         topBar = {
@@ -78,13 +84,19 @@ fun RoomDirectoryView(
         content = { padding ->
             RoomDirectoryContent(
                 state = state,
-                onResultClicked = onJoinRoom,
+                onResultClicked = ::joinRoom,
                 modifier = Modifier
                     .padding(padding)
                     .consumeWindowInsets(padding)
             )
         }
     )
+    AsyncActionView(
+        async = state.joinRoomAction,
+        onSuccess = onRoomJoined,
+        onErrorDismiss = {
+            state.eventSink(RoomDirectoryEvents.JoinRoomDismissError)
+        })
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -295,7 +307,7 @@ private fun RoomDirectoryRoomRow(
 fun RoomDirectorySearchViewLightPreview(@PreviewParameter(RoomDirectorySearchStateProvider::class) state: RoomDirectoryState) = ElementPreview {
     RoomDirectoryView(
         state = state,
-        onJoinRoom = {},
+        onRoomJoined = {},
         onBackPressed = {},
     )
 }

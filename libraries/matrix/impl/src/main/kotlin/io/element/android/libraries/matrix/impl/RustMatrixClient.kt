@@ -73,6 +73,7 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -103,6 +104,8 @@ import org.matrix.rustcomponents.sdk.use
 import timber.log.Timber
 import java.io.File
 import java.util.concurrent.atomic.AtomicBoolean
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.seconds
 import org.matrix.rustcomponents.sdk.CreateRoomParameters as RustCreateRoomParameters
 import org.matrix.rustcomponents.sdk.RoomPreset as RustRoomPreset
 import org.matrix.rustcomponents.sdk.RoomVisibility as RustRoomVisibility
@@ -320,6 +323,22 @@ class RustMatrixClient(
         }
     }
 
+    /**
+     * Wait for the room to be available in the room list.
+     * @param roomId the room id to wait for
+     * @param timeout the timeout to wait for the room to be available
+     * @throws TimeoutCancellationException if the room is not available after the timeout
+     */
+    private suspend fun awaitRoom(roomId: RoomId, timeout: Duration) {
+        withTimeout(timeout) {
+            roomListService.allRooms.summaries
+                .filter { roomSummaries ->
+                    roomSummaries.map { it.identifier() }.contains(roomId.value)
+                }
+                .first()
+        }
+    }
+
     private suspend fun pairOfRoom(roomId: RoomId): Pair<RoomListItem, Room>? {
         val cachedRoomListItem = innerRoomListService.roomOrNull(roomId.value)
         val fullRoom = cachedRoomListItem?.fullRoomWithTimeline(filter = eventFilters)
@@ -369,14 +388,11 @@ class RustMatrixClient(
                 powerLevelContentOverride = defaultRoomCreationPowerLevels,
             )
             val roomId = RoomId(client.createRoom(rustParams))
-
-            // Wait to receive the room back from the sync
-            withTimeout(30_000L) {
-                roomListService.allRooms.summaries
-                    .filter { roomSummaries ->
-                        roomSummaries.map { it.identifier() }.contains(roomId.value)
-                    }
-                    .first()
+            // Wait to receive the room back from the sync but do not returns failure if it fails.
+            try {
+                awaitRoom(roomId, 30.seconds)
+            } catch (e: Exception) {
+                Timber.e(e, "Timeout waiting for the room to be available in the room list")
             }
             roomId
         }
@@ -424,6 +440,18 @@ class RustMatrixClient(
         withContext(sessionDispatcher) {
             runCatching { client.removeAvatar() }
         }
+
+    override suspend fun joinRoom(roomId: RoomId): Result<RoomId> = withContext(sessionDispatcher) {
+        runCatching {
+            client.joinRoomById(roomId.value).destroy()
+            try {
+                awaitRoom(roomId, 10.seconds)
+            } catch (e: Exception) {
+                Timber.e(e, "Timeout waiting for the room to be available in the room list")
+            }
+            roomId
+        }
+    }
 
     override fun syncService(): SyncService = rustSyncService
 

@@ -389,7 +389,7 @@ class LoggedInFlowNode @AssistedInject constructor(
             NavTarget.RoomDirectorySearch -> {
                 roomDirectoryEntryPoint.nodeBuilder(this, buildContext)
                     .callback(object : RoomDirectoryEntryPoint.Callback {
-                        override fun onJoinRoom(roomId: RoomId) {
+                        override fun onOpenRoom(roomId: RoomId) {
                             coroutineScope.launch { attachRoom(roomId) }
                         }
                     })

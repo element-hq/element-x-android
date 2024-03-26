@@ -16,7 +16,11 @@
 
 package io.element.android.features.roomdirectory.impl.root
 
+import io.element.android.libraries.matrix.api.core.RoomId
+
 sealed interface RoomDirectoryEvents {
+    data class JoinRoom(val roomId: RoomId) : RoomDirectoryEvents
     data class Search(val query: String) : RoomDirectoryEvents
     data object LoadMore : RoomDirectoryEvents
+    data object JoinRoomDismissError : RoomDirectoryEvents
 }

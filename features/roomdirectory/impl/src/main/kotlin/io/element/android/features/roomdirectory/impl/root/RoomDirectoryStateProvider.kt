@@ -18,9 +18,9 @@ package io.element.android.features.roomdirectory.impl.root
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.roomdirectory.impl.root.model.RoomDescriptionUiModel
+import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
-import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
 import io.element.android.libraries.matrix.api.core.RoomId
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -63,13 +63,13 @@ open class RoomDirectorySearchStateProvider : PreviewParameterProvider<RoomDirec
 
 fun aRoomDirectoryState(
     query: String = "",
-    isSearchActive: Boolean = false,
     displayLoadMoreIndicator: Boolean = false,
     roomDescriptions: ImmutableList<RoomDescriptionUiModel> = persistentListOf(),
-    searchResults: SearchBarResultState<ImmutableList<RoomDescriptionUiModel>> = SearchBarResultState.Initial(),
+    joinRoomAction: AsyncAction<RoomId> = AsyncAction.Uninitialized,
 ) = RoomDirectoryState(
     query = query,
     roomDescriptions = roomDescriptions,
     displayLoadMoreIndicator = displayLoadMoreIndicator,
+    joinRoomAction = joinRoomAction,
     eventSink = {},
 )

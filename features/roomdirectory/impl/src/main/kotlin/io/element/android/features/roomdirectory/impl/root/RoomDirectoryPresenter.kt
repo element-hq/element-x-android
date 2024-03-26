@@ -18,6 +18,7 @@ package io.element.android.features.roomdirectory.impl.root
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -27,13 +28,17 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import io.element.android.features.roomdirectory.impl.root.model.toUiModel
+import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.runUpdatingState
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.roomdirectory.RoomDirectoryList
 import io.element.android.libraries.matrix.api.roomdirectory.RoomDirectoryService
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
@@ -41,6 +46,7 @@ import javax.inject.Inject
 
 class RoomDirectoryPresenter @Inject constructor(
     private val dispatchers: CoroutineDispatchers,
+    private val matrixClient: MatrixClient,
     roomDirectoryService: RoomDirectoryService,
 ) : Presenter<RoomDirectoryState> {
 
@@ -56,6 +62,9 @@ class RoomDirectoryPresenter @Inject constructor(
         val hasMoreToLoad by produceState(initialValue = true, allRooms) {
             value = roomDirectoryList.hasMoreToLoad()
         }
+        val joinRoomAction: MutableState<AsyncAction<RoomId>> = remember {
+            mutableStateOf(AsyncAction.Uninitialized)
+        }
         val coroutineScope = rememberCoroutineScope()
         LaunchedEffect(searchQuery) {
             roomDirectoryList.filter(searchQuery, 20)
@@ -70,6 +79,12 @@ class RoomDirectoryPresenter @Inject constructor(
                 is RoomDirectoryEvents.Search -> {
                     searchQuery = event.query
                 }
+                is RoomDirectoryEvents.JoinRoom -> {
+                    coroutineScope.joinRoom(joinRoomAction, event.roomId)
+                }
+                RoomDirectoryEvents.JoinRoomDismissError -> {
+                    joinRoomAction.value = AsyncAction.Uninitialized
+                }
             }
         }
 
@@ -77,8 +92,15 @@ class RoomDirectoryPresenter @Inject constructor(
             query = searchQuery,
             roomDescriptions = allRooms,
             displayLoadMoreIndicator = hasMoreToLoad,
+            joinRoomAction = joinRoomAction.value,
             eventSink = ::handleEvents
         )
+    }
+
+    private fun CoroutineScope.joinRoom(state: MutableState<AsyncAction<RoomId>>, roomId: RoomId) = launch {
+        state.runUpdatingState {
+            matrixClient.joinRoom(roomId)
+        }
     }
 
     @Composable
