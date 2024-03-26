@@ -41,6 +41,7 @@ import io.element.android.libraries.designsystem.theme.components.LinearProgress
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.progressIndicatorTrackColor
 import io.element.android.libraries.designsystem.toEnabledColor
+import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.ui.strings.CommonPlurals
 
 @Composable
@@ -80,16 +81,35 @@ internal fun PollAnswerView(
                     style = if (answerItem.isWinner) ElementTheme.typography.fontBodyLgMedium else ElementTheme.typography.fontBodyLgRegular,
                 )
                 if (answerItem.showVotes) {
-                    Text(
-                        modifier = Modifier.align(Alignment.Bottom),
-                        text = pluralStringResource(
-                            id = CommonPlurals.common_poll_votes_count,
-                            count = answerItem.votesCount,
-                            answerItem.votesCount
-                        ),
-                        style = if (answerItem.isWinner) ElementTheme.typography.fontBodySmMedium else ElementTheme.typography.fontBodySmRegular,
-                        color = if (answerItem.isWinner) ElementTheme.colors.textPrimary else ElementTheme.colors.textSecondary,
+                    val text = pluralStringResource(
+                        id = CommonPlurals.common_poll_votes_count,
+                        count = answerItem.votesCount,
+                        answerItem.votesCount
                     )
+                    Row(
+                        modifier = Modifier.align(Alignment.Bottom),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        if (answerItem.isWinner) {
+                            Icon(
+                                resourceId = CommonDrawables.ic_winner,
+                                contentDescription = null,
+                                tint = ElementTheme.colors.iconAccentTertiary,
+                            )
+                            Spacer(modifier = Modifier.width(2.dp))
+                            Text(
+                                text = text,
+                                style = ElementTheme.typography.fontBodySmMedium,
+                                color = ElementTheme.colors.textPrimary,
+                            )
+                        } else {
+                            Text(
+                                text = text,
+                                style = ElementTheme.typography.fontBodySmRegular,
+                                color = ElementTheme.colors.textSecondary,
+                            )
+                        }
+                    }
                 }
             }
             Spacer(modifier = Modifier.height(10.dp))
