@@ -1,3 +1,23 @@
+Changes in Element X v0.4.7 (2024-03-26)
+========================================
+
+Features ✨
+----------
+ - Enable the feature "RoomList filters". ([#2603](https://github.com/element-hq/element-x-android/issues/2603))
+ - Enable the feature "Mark as unread" ([#2261](https://github.com/element-hq/element-x-android/issues/2261))
+ - Implement MSC2530 (Body field as media caption) ([#2521](https://github.com/element-hq/element-x-android/issues/2521))
+
+Bugfixes 🐛
+----------
+ - Use user avatar from cache if available. ([#2488](https://github.com/element-hq/element-x-android/issues/2488))
+ - Update member list after changing member roles and when the room member list is opened. ([#2590](https://github.com/element-hq/element-x-android/issues/2590))
+
+Other changes
+-------------
+ - Compound: add `BigIcon`, `BigCheckmark` and `PageTitle` components. ([#2574](https://github.com/element-hq/element-x-android/issues/2574))
+ - Remove Welcome screen from the FTUE. ([#2584](https://github.com/element-hq/element-x-android/issues/2584))
+
+
 Changes in Element X v0.4.6 (2024-03-15)
 ========================================
 
