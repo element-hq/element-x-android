@@ -1,0 +1,28 @@
+<!--
+  ~ Copyright (c) 2024 New Vector Ltd
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="16dp"
+    android:height="16dp"
+    android:viewportWidth="16"
+    android:viewportHeight="16">
+    <group>
+        <clip-path android:pathData="M0,0h16v16h-16z" />
+        <path
+            android:fillColor="@android:color/white"
+            android:pathData="M12.667,3.333H11.333V2.667C11.333,2.3 11.033,2 10.667,2H5.333C4.967,2 4.667,2.3 4.667,2.667V3.333H3.333C2.6,3.333 2,3.933 2,4.667V5.333C2,7.033 3.28,8.42 4.927,8.627C5.347,9.627 6.247,10.38 7.333,10.6V12.667H5.333C4.967,12.667 4.667,12.967 4.667,13.333C4.667,13.7 4.967,14 5.333,14H10.667C11.033,14 11.333,13.7 11.333,13.333C11.333,12.967 11.033,12.667 10.667,12.667H8.667V10.6C9.753,10.38 10.653,9.627 11.073,8.627C12.72,8.42 14,7.033 14,5.333V4.667C14,3.933 13.4,3.333 12.667,3.333ZM3.333,5.333V4.667H4.667V7.213C3.893,6.933 3.333,6.2 3.333,5.333ZM12.667,5.333C12.667,6.2 12.107,6.933 11.333,7.213V4.667H12.667V5.333Z" />
+    </group>
+</vector>

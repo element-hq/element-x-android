@@ -25,7 +25,7 @@ import io.element.android.libraries.matrix.api.poll.PollAnswer
  * @property isSelected whether the user has selected this answer.
  * @property isEnabled whether the answer can be voted.
  * @property isWinner whether this is the winner answer in the poll.
- * @property isDisclosed whether the votes for this answer should be disclosed.
+ * @property showVotes whether the votes for this answer should be displayed.
  * @property votesCount the number of votes for this answer.
  * @property percentage the percentage of votes for this answer.
  */
@@ -34,7 +34,7 @@ data class PollAnswerItem(
     val isSelected: Boolean,
     val isEnabled: Boolean,
     val isWinner: Boolean,
-    val isDisclosed: Boolean,
+    val showVotes: Boolean,
     val votesCount: Int,
     val percentage: Float,
 )
