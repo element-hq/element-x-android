@@ -78,7 +78,7 @@ class TroubleshootTestSuite @Inject constructor(
             }
     }
 
-    private fun emitState() {
+    private suspend fun emitState() {
         val states = tests.map { it.state.value }
         val mainState = states.computeMainState()
         when (mainState) {
@@ -90,7 +90,7 @@ class TroubleshootTestSuite @Inject constructor(
             }
             else -> Unit
         }
-        _state.tryEmit(
+        _state.emit(
             TroubleshootTestSuiteState(
                 mainState = states.computeMainState(),
                 tests = states.toImmutableList()
