@@ -185,10 +185,11 @@ private fun RunTestButton(state: TroubleshootNotificationsState) {
         headlineContent = {
             Button(
                 text = stringResource(
-                    id = if (state.testSuiteState.mainState is AsyncAction.Failure)
+                    id = if (state.testSuiteState.mainState is AsyncAction.Failure) {
                         R.string.troubleshoot_notifications_screen_action_again
-                    else
+                    } else {
                         R.string.troubleshoot_notifications_screen_action
+                    }
                 ),
                 onClick = {
                     state.eventSink(TroubleshootNotificationsEvents.StartTests)
