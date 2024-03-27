@@ -217,13 +217,3 @@ internal fun NotificationSettingsViewPreview(@PreviewParameter(NotificationSetti
         onTroubleshootNotificationsClicked = {},
     )
 }
-
-@PreviewsDayNight
-@Composable
-internal fun InvalidNotificationSettingsViewPreview() = ElementPreview {
-    InvalidNotificationSettingsView(
-        showError = false,
-        onContinueClicked = {},
-        onDismissError = {},
-    )
-}

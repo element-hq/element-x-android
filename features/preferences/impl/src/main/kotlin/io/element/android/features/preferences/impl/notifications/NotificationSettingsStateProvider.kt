@@ -23,13 +23,15 @@ import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 open class NotificationSettingsStateProvider : PreviewParameterProvider<NotificationSettingsState> {
     override val values: Sequence<NotificationSettingsState>
         get() = sequenceOf(
-            aNotificationSettingsState(),
-            aNotificationSettingsState(changeNotificationSettingAction = AsyncAction.Loading),
-            aNotificationSettingsState(changeNotificationSettingAction = AsyncAction.Failure(Throwable("error"))),
+            aValidNotificationSettingsState(),
+            aValidNotificationSettingsState(changeNotificationSettingAction = AsyncAction.Loading),
+            aValidNotificationSettingsState(changeNotificationSettingAction = AsyncAction.Failure(Throwable("error"))),
+            aInvalidNotificationSettingsState(),
+            aInvalidNotificationSettingsState(fixFailed = true),
         )
 }
 
-fun aNotificationSettingsState(
+fun aValidNotificationSettingsState(
     changeNotificationSettingAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
     atRoomNotificationsEnabled: Boolean = true,
     callNotificationsEnabled: Boolean = true,
@@ -49,5 +51,20 @@ fun aNotificationSettingsState(
         appNotificationsEnabled = appNotificationEnabled,
     ),
     changeNotificationSettingAction = changeNotificationSettingAction,
+    eventSink = eventSink,
+)
+
+fun aInvalidNotificationSettingsState(
+    fixFailed: Boolean = false,
+    eventSink: (NotificationSettingsEvents) -> Unit = {},
+) = NotificationSettingsState(
+    matrixSettings = NotificationSettingsState.MatrixSettings.Invalid(
+        fixFailed = fixFailed,
+    ),
+    appSettings = NotificationSettingsState.AppSettings(
+        systemNotificationsEnabled = false,
+        appNotificationsEnabled = true,
+    ),
+    changeNotificationSettingAction = AsyncAction.Uninitialized,
     eventSink = eventSink,
 )

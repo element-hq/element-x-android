@@ -44,7 +44,7 @@ class NotificationSettingsViewTest {
         val eventsRecorder = EventsRecorder<NotificationSettingsEvents>()
         ensureCalledOnce {
             rule.setNotificationSettingsView(
-                state = aNotificationSettingsState(
+                state = aValidNotificationSettingsState(
                     eventSink = eventsRecorder
                 ),
                 onBackPressed = it
@@ -60,7 +60,7 @@ class NotificationSettingsViewTest {
         val eventsRecorder = EventsRecorder<NotificationSettingsEvents>()
         ensureCalledOnce {
             rule.setNotificationSettingsView(
-                state = aNotificationSettingsState(
+                state = aValidNotificationSettingsState(
                     eventSink = eventsRecorder
                 ),
                 onTroubleshootNotificationsClicked = it
@@ -76,7 +76,7 @@ class NotificationSettingsViewTest {
         val eventsRecorder = EventsRecorder<NotificationSettingsEvents>()
         ensureCalledOnceWithParam(false) {
             rule.setNotificationSettingsView(
-                state = aNotificationSettingsState(
+                state = aValidNotificationSettingsState(
                     eventSink = eventsRecorder
                 ),
                 onOpenEditDefault = it
@@ -92,7 +92,7 @@ class NotificationSettingsViewTest {
         val eventsRecorder = EventsRecorder<NotificationSettingsEvents>()
         ensureCalledOnceWithParam(true) {
             rule.setNotificationSettingsView(
-                state = aNotificationSettingsState(
+                state = aValidNotificationSettingsState(
                     eventSink = eventsRecorder
                 ),
                 onOpenEditDefault = it
@@ -117,7 +117,7 @@ class NotificationSettingsViewTest {
     private fun testNotificationToggle(initialState: Boolean) {
         val eventsRecorder = EventsRecorder<NotificationSettingsEvents>()
         rule.setNotificationSettingsView(
-            state = aNotificationSettingsState(
+            state = aValidNotificationSettingsState(
                 appNotificationEnabled = initialState,
                 eventSink = eventsRecorder
             ),
@@ -146,7 +146,7 @@ class NotificationSettingsViewTest {
     private fun testAtRoomToggle(initialState: Boolean) {
         val eventsRecorder = EventsRecorder<NotificationSettingsEvents>()
         rule.setNotificationSettingsView(
-            state = aNotificationSettingsState(
+            state = aValidNotificationSettingsState(
                 atRoomNotificationsEnabled = initialState,
                 eventSink = eventsRecorder
             ),
@@ -175,7 +175,7 @@ class NotificationSettingsViewTest {
     private fun testInvitationToggle(initialState: Boolean) {
         val eventsRecorder = EventsRecorder<NotificationSettingsEvents>()
         rule.setNotificationSettingsView(
-            state = aNotificationSettingsState(
+            state = aValidNotificationSettingsState(
                 inviteForMeNotificationsEnabled = initialState,
                 eventSink = eventsRecorder
             ),
