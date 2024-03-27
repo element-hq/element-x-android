@@ -20,6 +20,7 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.core.notifications.NotificationTroubleshootTestState
 import io.element.android.libraries.pushproviders.firebase.IsPlayServiceAvailable
+import io.element.android.services.toolbox.test.strings.FakeStringProvider
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -32,7 +33,8 @@ class FirebaseAvailabilityTestTest {
                 override fun isAvailable(): Boolean {
                     return true
                 }
-            }
+            },
+            stringProvider = FakeStringProvider(),
         )
         launch {
             sut.run(this)
@@ -52,7 +54,8 @@ class FirebaseAvailabilityTestTest {
                 override fun isAvailable(): Boolean {
                     return false
                 }
-            }
+            },
+            stringProvider = FakeStringProvider(),
         )
         launch {
             sut.run(this)

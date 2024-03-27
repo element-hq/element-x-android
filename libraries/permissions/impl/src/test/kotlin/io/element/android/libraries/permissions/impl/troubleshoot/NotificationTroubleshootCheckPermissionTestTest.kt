@@ -23,6 +23,7 @@ import io.element.android.libraries.core.notifications.NotificationTroubleshootT
 import io.element.android.libraries.permissions.impl.FakePermissionStateProvider
 import io.element.android.libraries.permissions.impl.action.FakePermissionActions
 import io.element.android.services.toolbox.test.sdk.FakeBuildVersionSdkIntProvider
+import io.element.android.services.toolbox.test.strings.FakeStringProvider
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -33,7 +34,8 @@ class NotificationTroubleshootCheckPermissionTestTest {
         val sut = NotificationTroubleshootCheckPermissionTest(
             permissionStateProvider = FakePermissionStateProvider(),
             sdkVersionProvider = FakeBuildVersionSdkIntProvider(sdkInt = Build.VERSION_CODES.TIRAMISU - 1),
-            permissionActions = FakePermissionActions()
+            permissionActions = FakePermissionActions(),
+            stringProvider = FakeStringProvider(),
         )
         launch {
             sut.run(this)
@@ -51,7 +53,8 @@ class NotificationTroubleshootCheckPermissionTestTest {
         val sut = NotificationTroubleshootCheckPermissionTest(
             permissionStateProvider = FakePermissionStateProvider(),
             sdkVersionProvider = FakeBuildVersionSdkIntProvider(sdkInt = Build.VERSION_CODES.TIRAMISU),
-            permissionActions = FakePermissionActions()
+            permissionActions = FakePermissionActions(),
+            stringProvider = FakeStringProvider(),
         )
         launch {
             sut.run(this)
@@ -77,7 +80,8 @@ class NotificationTroubleshootCheckPermissionTestTest {
         val sut = NotificationTroubleshootCheckPermissionTest(
             permissionStateProvider = permissionStateProvider,
             sdkVersionProvider = FakeBuildVersionSdkIntProvider(sdkInt = Build.VERSION_CODES.TIRAMISU),
-            permissionActions = actions
+            permissionActions = actions,
+            stringProvider = FakeStringProvider(),
         )
         launch {
             sut.run(this)

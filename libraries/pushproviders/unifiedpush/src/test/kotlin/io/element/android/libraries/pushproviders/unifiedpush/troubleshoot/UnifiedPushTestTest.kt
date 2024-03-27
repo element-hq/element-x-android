@@ -20,6 +20,7 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.core.notifications.NotificationTroubleshootTestState
 import io.element.android.libraries.pushproviders.api.Distributor
+import io.element.android.services.toolbox.test.strings.FakeStringProvider
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -34,6 +35,7 @@ class UnifiedPushTestTest {
                 )
             ),
             openDistributorWebPageAction = FakeOpenDistributorWebPageAction(),
+            stringProvider = FakeStringProvider(),
         )
         launch {
             sut.run(this)
@@ -60,6 +62,7 @@ class UnifiedPushTestTest {
                     )
                 }
             ),
+            stringProvider = FakeStringProvider(),
         )
         launch {
             sut.run(this)

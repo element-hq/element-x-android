@@ -22,6 +22,8 @@ import io.element.android.libraries.core.notifications.NotificationTroubleshootT
 import io.element.android.libraries.core.notifications.NotificationTroubleshootTestState
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.push.api.GetCurrentPushProvider
+import io.element.android.libraries.push.impl.R
+import io.element.android.services.toolbox.api.strings.StringProvider
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
 import javax.inject.Inject
@@ -29,11 +31,12 @@ import javax.inject.Inject
 @ContributesMultibinding(AppScope::class)
 class CurrentPushProviderTest @Inject constructor(
     private val getCurrentPushProvider: GetCurrentPushProvider,
+    private val stringProvider: StringProvider,
 ) : NotificationTroubleshootTest {
     override val order = 110
     private val delegate = NotificationTroubleshootTestDelegate(
-        defaultName = "Current push provider",
-        defaultDescription = "Get the name of the current provider.",
+        defaultName = stringProvider.getString(R.string.troubleshoot_notifications_test_current_push_provider_title),
+        defaultDescription = stringProvider.getString(R.string.troubleshoot_notifications_test_current_push_provider_description),
         fakeDelay = NotificationTroubleshootTestDelegate.SHORT_DELAY,
     )
     override val state: StateFlow<NotificationTroubleshootTestState> = delegate.state
@@ -43,12 +46,12 @@ class CurrentPushProviderTest @Inject constructor(
         val provider = getCurrentPushProvider.getCurrentPushProvider()
         if (provider != null) {
             delegate.updateState(
-                description = "Current push provider: $provider",
+                description = stringProvider.getString(R.string.troubleshoot_notifications_test_current_push_provider_success, provider),
                 status = NotificationTroubleshootTestState.Status.Success
             )
         } else {
             delegate.updateState(
-                description = "No push providers selected",
+                description = stringProvider.getString(R.string.troubleshoot_notifications_test_current_push_provider_failure),
                 status = NotificationTroubleshootTestState.Status.Failure(false)
             )
         }

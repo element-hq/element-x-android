@@ -166,10 +166,10 @@ private fun NotificationSettingsContentView(
                 onCheckedChange = onInviteForMeNotificationsChanged
             )
         }
-        PreferenceCategory(title = "Troubleshoot") {
+        PreferenceCategory(title = stringResource(id = R.string.troubleshoot_notifications_entry_point_section)) {
             PreferenceText(
                 modifier = Modifier,
-                title = "Troubleshoot notifications",
+                title = stringResource(id = R.string.troubleshoot_notifications_entry_point_title),
                 onClick = onTroubleshootNotificationsClicked
             )
         }

@@ -25,6 +25,8 @@ import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.pushproviders.firebase.FirebaseConfig
 import io.element.android.libraries.pushproviders.firebase.FirebaseStore
 import io.element.android.libraries.pushproviders.firebase.FirebaseTroubleshooter
+import io.element.android.libraries.pushproviders.firebase.R
+import io.element.android.services.toolbox.api.strings.StringProvider
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
 import javax.inject.Inject
@@ -33,11 +35,12 @@ import javax.inject.Inject
 class FirebaseTokenTest @Inject constructor(
     private val firebaseStore: FirebaseStore,
     private val firebaseTroubleshooter: FirebaseTroubleshooter,
+    private val stringProvider: StringProvider,
 ) : NotificationTroubleshootTest {
     override val order = 310
     private val delegate = NotificationTroubleshootTestDelegate(
-        defaultName = "Check Firebase token",
-        defaultDescription = "Ensure that Firebase token is available.",
+        defaultName = stringProvider.getString(R.string.troubleshoot_notifications_test_firebase_token_title),
+        defaultDescription = stringProvider.getString(R.string.troubleshoot_notifications_test_firebase_token_description),
         visibleWhenIdle = false,
         fakeDelay = NotificationTroubleshootTestDelegate.LONG_DELAY,
     )
@@ -52,12 +55,15 @@ class FirebaseTokenTest @Inject constructor(
         val token = firebaseStore.getFcmToken()
         if (token != null) {
             delegate.updateState(
-                description = "Firebase token: ${token.take(8)}*****",
+                description = stringProvider.getString(
+                    R.string.troubleshoot_notifications_test_firebase_token_success,
+                    "${token.take(8)}*****"
+                ),
                 status = NotificationTroubleshootTestState.Status.Success
             )
         } else {
             delegate.updateState(
-                description = "Firebase token is not known",
+                description = stringProvider.getString(R.string.troubleshoot_notifications_test_firebase_token_failure),
                 status = NotificationTroubleshootTestState.Status.Failure(true)
             )
         }

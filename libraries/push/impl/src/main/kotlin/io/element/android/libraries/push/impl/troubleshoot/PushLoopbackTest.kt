@@ -23,6 +23,8 @@ import io.element.android.libraries.core.notifications.NotificationTroubleshootT
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.push.api.PushService
 import io.element.android.libraries.push.api.gateway.PushGatewayFailure
+import io.element.android.libraries.push.impl.R
+import io.element.android.services.toolbox.api.strings.StringProvider
 import io.element.android.services.toolbox.api.systemclock.SystemClock
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
@@ -39,11 +41,12 @@ class PushLoopbackTest @Inject constructor(
     private val pushService: PushService,
     private val diagnosticPushHandler: DiagnosticPushHandler,
     private val clock: SystemClock,
+    private val stringProvider: StringProvider,
 ) : NotificationTroubleshootTest {
     override val order = 500
     private val delegate = NotificationTroubleshootTestDelegate(
-        defaultName = "Test Push loopback",
-        defaultDescription = "Ensure that the application is receiving push.",
+        defaultName = stringProvider.getString(R.string.troubleshoot_notifications_test_push_loop_back_title),
+        defaultDescription = stringProvider.getString(R.string.troubleshoot_notifications_test_push_loop_back_description),
     )
     override val state: StateFlow<NotificationTroubleshootTestState> = delegate.state
 
@@ -59,7 +62,7 @@ class PushLoopbackTest @Inject constructor(
             pushService.testPush()
         } catch (pusherRejected: PushGatewayFailure.PusherRejected) {
             delegate.updateState(
-                description = "Error: pusher has rejected the request.",
+                description = stringProvider.getString(R.string.troubleshoot_notifications_test_push_loop_back_failure_1),
                 status = NotificationTroubleshootTestState.Status.Failure(false)
             )
             job.cancel()
@@ -67,7 +70,7 @@ class PushLoopbackTest @Inject constructor(
         } catch (e: Exception) {
             Timber.e(e, "Failed to test push")
             delegate.updateState(
-                description = "Error: ${e.message}.",
+                description = stringProvider.getString(R.string.troubleshoot_notifications_test_push_loop_back_failure_2, e.message),
                 status = NotificationTroubleshootTestState.Status.Failure(false)
             )
             job.cancel()
@@ -75,7 +78,7 @@ class PushLoopbackTest @Inject constructor(
         }
         if (!testPushResult) {
             delegate.updateState(
-                description = "Error, cannot test push.",
+                description = stringProvider.getString(R.string.troubleshoot_notifications_test_push_loop_back_failure_3),
                 status = NotificationTroubleshootTestState.Status.Failure(false)
             )
             job.cancel()
@@ -87,12 +90,12 @@ class PushLoopbackTest @Inject constructor(
         job.cancel()
         if (result == null) {
             delegate.updateState(
-                description = "Error, timeout waiting for push.",
+                description = stringProvider.getString(R.string.troubleshoot_notifications_test_push_loop_back_failure_4),
                 status = NotificationTroubleshootTestState.Status.Failure(false)
             )
         } else {
             delegate.updateState(
-                description = "Push loopback took $result ms",
+                description = stringProvider.getString(R.string.troubleshoot_notifications_test_push_loop_back_success, result),
                 status = NotificationTroubleshootTestState.Status.Success
             )
         }

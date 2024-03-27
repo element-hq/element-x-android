@@ -23,6 +23,7 @@ import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.matrix.test.A_FAILURE_REASON
 import io.element.android.libraries.push.api.gateway.PushGatewayFailure
 import io.element.android.libraries.push.test.FakePushService
+import io.element.android.services.toolbox.test.strings.FakeStringProvider
 import io.element.android.services.toolbox.test.systemclock.FakeSystemClock
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runTest
@@ -35,7 +36,8 @@ class PushLoopbackTestTest {
         val sut = PushLoopbackTest(
             pushService = FakePushService(),
             diagnosticPushHandler = diagnosticPushHandler,
-            clock = FakeSystemClock()
+            clock = FakeSystemClock(),
+            stringProvider = FakeStringProvider(),
         )
         launch {
             sut.run(this)
@@ -45,7 +47,6 @@ class PushLoopbackTestTest {
             assertThat(awaitItem().status).isEqualTo(NotificationTroubleshootTestState.Status.InProgress)
             val lastItem = awaitItem()
             assertThat(lastItem.status).isEqualTo(NotificationTroubleshootTestState.Status.Failure(false))
-            assertThat(lastItem.description).contains("timeout")
         }
     }
 
@@ -59,7 +60,8 @@ class PushLoopbackTestTest {
                 }
             ),
             diagnosticPushHandler = diagnosticPushHandler,
-            clock = FakeSystemClock()
+            clock = FakeSystemClock(),
+            stringProvider = FakeStringProvider(),
         )
         launch {
             sut.run(this)
@@ -69,7 +71,6 @@ class PushLoopbackTestTest {
             assertThat(awaitItem().status).isEqualTo(NotificationTroubleshootTestState.Status.InProgress)
             val lastItem = awaitItem()
             assertThat(lastItem.status).isEqualTo(NotificationTroubleshootTestState.Status.Failure(false))
-            assertThat(lastItem.description).contains("rejected")
         }
     }
 
@@ -81,7 +82,8 @@ class PushLoopbackTestTest {
                 testPushBlock = { false }
             ),
             diagnosticPushHandler = diagnosticPushHandler,
-            clock = FakeSystemClock()
+            clock = FakeSystemClock(),
+            stringProvider = FakeStringProvider(),
         )
         launch {
             sut.run(this)
@@ -91,7 +93,6 @@ class PushLoopbackTestTest {
             assertThat(awaitItem().status).isEqualTo(NotificationTroubleshootTestState.Status.InProgress)
             val lastItem = awaitItem()
             assertThat(lastItem.status).isEqualTo(NotificationTroubleshootTestState.Status.Failure(false))
-            assertThat(lastItem.description).contains("cannot test push")
         }
     }
 
@@ -105,7 +106,8 @@ class PushLoopbackTestTest {
                 }
             ),
             diagnosticPushHandler = diagnosticPushHandler,
-            clock = FakeSystemClock()
+            clock = FakeSystemClock(),
+            stringProvider = FakeStringProvider(),
         )
         launch {
             sut.run(this)
@@ -128,7 +130,8 @@ class PushLoopbackTestTest {
                 true
             }),
             diagnosticPushHandler = diagnosticPushHandler,
-            clock = FakeSystemClock()
+            clock = FakeSystemClock(),
+            stringProvider = FakeStringProvider(),
         )
         launch {
             sut.run(this)

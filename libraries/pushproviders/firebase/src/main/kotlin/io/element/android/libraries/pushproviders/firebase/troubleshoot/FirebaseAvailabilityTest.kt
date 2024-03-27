@@ -24,6 +24,8 @@ import io.element.android.libraries.core.notifications.TestFilterData
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.pushproviders.firebase.FirebaseConfig
 import io.element.android.libraries.pushproviders.firebase.IsPlayServiceAvailable
+import io.element.android.libraries.pushproviders.firebase.R
+import io.element.android.services.toolbox.api.strings.StringProvider
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
 import javax.inject.Inject
@@ -31,11 +33,12 @@ import javax.inject.Inject
 @ContributesMultibinding(AppScope::class)
 class FirebaseAvailabilityTest @Inject constructor(
     private val isPlayServiceAvailable: IsPlayServiceAvailable,
+    private val stringProvider: StringProvider,
 ) : NotificationTroubleshootTest {
     override val order = 300
     private val delegate = NotificationTroubleshootTestDelegate(
-        defaultName = "Check Firebase",
-        defaultDescription = "Ensure that Firebase is available.",
+        defaultName = stringProvider.getString(R.string.troubleshoot_notifications_test_firebase_availability_title),
+        defaultDescription = stringProvider.getString(R.string.troubleshoot_notifications_test_firebase_availability_description),
         visibleWhenIdle = false,
         fakeDelay = NotificationTroubleshootTestDelegate.LONG_DELAY,
     )
@@ -50,12 +53,12 @@ class FirebaseAvailabilityTest @Inject constructor(
         val result = isPlayServiceAvailable.isAvailable()
         if (result) {
             delegate.updateState(
-                description = "Firebase is available",
+                description = stringProvider.getString(R.string.troubleshoot_notifications_test_firebase_availability_success),
                 status = NotificationTroubleshootTestState.Status.Success
             )
         } else {
             delegate.updateState(
-                description = "Firebase is not available",
+                description = stringProvider.getString(R.string.troubleshoot_notifications_test_firebase_availability_failure),
                 status = NotificationTroubleshootTestState.Status.Failure(false)
             )
         }

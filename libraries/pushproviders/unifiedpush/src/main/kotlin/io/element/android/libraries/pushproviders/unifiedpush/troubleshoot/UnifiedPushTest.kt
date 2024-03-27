@@ -22,8 +22,10 @@ import io.element.android.libraries.core.notifications.NotificationTroubleshootT
 import io.element.android.libraries.core.notifications.NotificationTroubleshootTestState
 import io.element.android.libraries.core.notifications.TestFilterData
 import io.element.android.libraries.di.AppScope
+import io.element.android.libraries.pushproviders.unifiedpush.R
 import io.element.android.libraries.pushproviders.unifiedpush.UnifiedPushConfig
 import io.element.android.libraries.pushproviders.unifiedpush.UnifiedPushDistributorProvider
+import io.element.android.services.toolbox.api.strings.StringProvider
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
 import javax.inject.Inject
@@ -32,11 +34,12 @@ import javax.inject.Inject
 class UnifiedPushTest @Inject constructor(
     private val unifiedPushDistributorProvider: UnifiedPushDistributorProvider,
     private val openDistributorWebPageAction: OpenDistributorWebPageAction,
+    private val stringProvider: StringProvider,
 ) : NotificationTroubleshootTest {
     override val order = 400
     private val delegate = NotificationTroubleshootTestDelegate(
-        defaultName = "Check UnifiedPush",
-        defaultDescription = "Ensure that UnifiedPush distributors are available.",
+        defaultName = stringProvider.getString(R.string.troubleshoot_notifications_test_unified_push_title),
+        defaultDescription = stringProvider.getString(R.string.troubleshoot_notifications_test_unified_push_description),
         visibleWhenIdle = false,
         fakeDelay = NotificationTroubleshootTestDelegate.SHORT_DELAY,
     )
@@ -51,12 +54,17 @@ class UnifiedPushTest @Inject constructor(
         val distributors = unifiedPushDistributorProvider.getDistributors()
         if (distributors.isNotEmpty()) {
             delegate.updateState(
-                description = "Distributors found: ${distributors.joinToString { it.name }}",
+                description = stringProvider.getQuantityString(
+                    resId = R.plurals.troubleshoot_notifications_test_unified_push_success,
+                    quantity = distributors.size,
+                    distributors.size,
+                    distributors.joinToString { it.name }
+                ),
                 status = NotificationTroubleshootTestState.Status.Success
             )
         } else {
             delegate.updateState(
-                description = "No push distributors found",
+                description = stringProvider.getString(R.string.troubleshoot_notifications_test_unified_push_failure),
                 status = NotificationTroubleshootTestState.Status.Failure(true)
             )
         }

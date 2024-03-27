@@ -20,6 +20,7 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.core.notifications.NotificationTroubleshootTestState
 import io.element.android.libraries.pushproviders.test.FakePushProvider
+import io.element.android.services.toolbox.test.strings.FakeStringProvider
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -29,6 +30,7 @@ class PushProvidersTestTest {
     fun `test PushProvidersTest with empty list`() = runTest {
         val sut = PushProvidersTest(
             pushProviders = emptySet(),
+            stringProvider = FakeStringProvider(),
         )
         launch {
             sut.run(this)
@@ -48,6 +50,7 @@ class PushProvidersTestTest {
                 FakePushProvider(name = "foo"),
                 FakePushProvider(name = "bar"),
             ),
+            stringProvider = FakeStringProvider(),
         )
         launch {
             sut.run(this)
@@ -57,6 +60,7 @@ class PushProvidersTestTest {
             assertThat(awaitItem().status).isEqualTo(NotificationTroubleshootTestState.Status.InProgress)
             val lastItem = awaitItem()
             assertThat(lastItem.status).isEqualTo(NotificationTroubleshootTestState.Status.Success)
+            assertThat(lastItem.description).contains("2")
             assertThat(lastItem.description).contains("foo")
             assertThat(lastItem.description).contains("bar")
         }

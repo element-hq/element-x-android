@@ -21,8 +21,10 @@ import io.element.android.libraries.core.notifications.NotificationTroubleshootT
 import io.element.android.libraries.core.notifications.NotificationTroubleshootTestDelegate
 import io.element.android.libraries.core.notifications.NotificationTroubleshootTestState
 import io.element.android.libraries.di.AppScope
+import io.element.android.libraries.push.impl.R
 import io.element.android.libraries.push.impl.notifications.NotificationDisplayer
 import io.element.android.libraries.push.impl.notifications.factories.NotificationCreator
+import io.element.android.services.toolbox.api.strings.StringProvider
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
@@ -36,12 +38,13 @@ import kotlin.time.Duration.Companion.seconds
 class NotificationTest @Inject constructor(
     private val notificationCreator: NotificationCreator,
     private val notificationDisplayer: NotificationDisplayer,
-    private val notificationClickHandler: NotificationClickHandler
+    private val notificationClickHandler: NotificationClickHandler,
+    private val stringProvider: StringProvider,
 ) : NotificationTroubleshootTest {
     override val order = 50
     private val delegate = NotificationTroubleshootTestDelegate(
-        defaultName = "Display notification",
-        defaultDescription = "Check that the application can display notification",
+        defaultName = stringProvider.getString(R.string.troubleshoot_notifications_test_display_notification_title),
+        defaultDescription = stringProvider.getString(R.string.troubleshoot_notifications_test_display_notification_description),
         fakeDelay = NotificationTroubleshootTestDelegate.SHORT_DELAY,
     )
     override val state: StateFlow<NotificationTroubleshootTestState> = delegate.state
@@ -53,12 +56,12 @@ class NotificationTest @Inject constructor(
         if (result) {
             coroutineScope.listenToNotificationClick()
             delegate.updateState(
-                description = "Please click on the notification to continue the test.",
+                description = stringProvider.getString(R.string.troubleshoot_notifications_test_display_notification_waiting),
                 status = NotificationTroubleshootTestState.Status.WaitingForUser
             )
         } else {
             delegate.updateState(
-                description = "Cannot display the notification.",
+                description = stringProvider.getString(R.string.troubleshoot_notifications_test_display_notification_permission_failure),
                 status = NotificationTroubleshootTestState.Status.Failure(false)
             )
         }
@@ -76,12 +79,12 @@ class NotificationTest @Inject constructor(
         if (s == null) {
             notificationDisplayer.dismissDiagnosticNotification()
             delegate.updateState(
-                description = "The notification has not been clicked.",
+                description = stringProvider.getString(R.string.troubleshoot_notifications_test_display_notification_failure),
                 status = NotificationTroubleshootTestState.Status.Failure(false)
             )
         } else {
             delegate.updateState(
-                description = "The notification has been clicked!",
+                description = stringProvider.getString(R.string.troubleshoot_notifications_test_display_notification_success),
                 status = NotificationTroubleshootTestState.Status.Success
             )
         }

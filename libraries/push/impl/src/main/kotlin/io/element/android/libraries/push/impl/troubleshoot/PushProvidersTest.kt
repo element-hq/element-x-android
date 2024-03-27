@@ -21,7 +21,9 @@ import io.element.android.libraries.core.notifications.NotificationTroubleshootT
 import io.element.android.libraries.core.notifications.NotificationTroubleshootTestDelegate
 import io.element.android.libraries.core.notifications.NotificationTroubleshootTestState
 import io.element.android.libraries.di.AppScope
+import io.element.android.libraries.push.impl.R
 import io.element.android.libraries.pushproviders.api.PushProvider
+import io.element.android.services.toolbox.api.strings.StringProvider
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
 import javax.inject.Inject
@@ -29,12 +31,13 @@ import javax.inject.Inject
 @ContributesMultibinding(AppScope::class)
 class PushProvidersTest @Inject constructor(
     pushProviders: Set<@JvmSuppressWildcards PushProvider>,
+    private val stringProvider: StringProvider,
 ) : NotificationTroubleshootTest {
     private val sortedPushProvider = pushProviders.sortedBy { it.index }
     override val order = 100
     private val delegate = NotificationTroubleshootTestDelegate(
-        defaultName = "Detect push providers",
-        defaultDescription = "Ensure that the application has at least one push provider.",
+        defaultName = stringProvider.getString(R.string.troubleshoot_notifications_test_detect_push_provider_title),
+        defaultDescription = stringProvider.getString(R.string.troubleshoot_notifications_test_detect_push_provider_description),
         fakeDelay = NotificationTroubleshootTestDelegate.SHORT_DELAY,
     )
     override val state: StateFlow<NotificationTroubleshootTestState> = delegate.state
@@ -44,12 +47,17 @@ class PushProvidersTest @Inject constructor(
         val result = sortedPushProvider.isNotEmpty()
         if (result) {
             delegate.updateState(
-                description = "Found ${sortedPushProvider.size} push providers: ${sortedPushProvider.joinToString { it.name }}",
+                description = stringProvider.getQuantityString(
+                    resId = R.plurals.troubleshoot_notifications_test_detect_push_provider_success,
+                    quantity = sortedPushProvider.size,
+                    sortedPushProvider.size,
+                    sortedPushProvider.joinToString { it.name }
+                ),
                 status = NotificationTroubleshootTestState.Status.Success
             )
         } else {
             delegate.updateState(
-                description = "No push providers found",
+                description = stringProvider.getString(R.string.troubleshoot_notifications_test_detect_push_provider_failure),
                 status = NotificationTroubleshootTestState.Status.Failure(false)
             )
         }

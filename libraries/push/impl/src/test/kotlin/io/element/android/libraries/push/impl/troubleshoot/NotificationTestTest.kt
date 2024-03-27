@@ -21,6 +21,7 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.core.notifications.NotificationTroubleshootTestState
 import io.element.android.libraries.push.impl.notifications.fake.MockkNotificationCreator
 import io.element.android.libraries.push.impl.notifications.fake.MockkNotificationDisplayer
+import io.element.android.services.toolbox.test.strings.FakeStringProvider
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -82,7 +83,8 @@ class NotificationTestTest {
         return NotificationTest(
             notificationCreator = mockkNotificationCreator.instance,
             notificationDisplayer = mockkNotificationDisplayer.instance,
-            notificationClickHandler = notificationClickHandler
+            notificationClickHandler = notificationClickHandler,
+            stringProvider = FakeStringProvider(),
         )
     }
 }

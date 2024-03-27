@@ -21,6 +21,7 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.core.notifications.NotificationTroubleshootTestState
 import io.element.android.libraries.pushproviders.firebase.FakeFirebaseTroubleshooter
 import io.element.android.libraries.pushproviders.firebase.InMemoryFirebaseStore
+import io.element.android.services.toolbox.test.strings.FakeStringProvider
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -31,6 +32,7 @@ class FirebaseTokenTestTest {
         val sut = FirebaseTokenTest(
             firebaseStore = InMemoryFirebaseStore(FAKE_TOKEN),
             firebaseTroubleshooter = FakeFirebaseTroubleshooter(),
+            stringProvider = FakeStringProvider(),
         )
         launch {
             sut.run(this)
@@ -56,6 +58,7 @@ class FirebaseTokenTestTest {
                     Result.success(Unit)
                 }
             ),
+            stringProvider = FakeStringProvider(),
         )
         launch {
             sut.run(this)

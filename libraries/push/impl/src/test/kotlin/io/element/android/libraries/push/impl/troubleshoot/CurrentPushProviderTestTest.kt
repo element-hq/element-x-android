@@ -20,6 +20,7 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.core.notifications.NotificationTroubleshootTestState
 import io.element.android.libraries.push.test.FakeGetCurrentPushProvider
+import io.element.android.services.toolbox.test.strings.FakeStringProvider
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -28,7 +29,8 @@ class CurrentPushProviderTestTest {
     @Test
     fun `test CurrentPushProviderTest with a push provider`() = runTest {
         val sut = CurrentPushProviderTest(
-            getCurrentPushProvider = FakeGetCurrentPushProvider("foo")
+            getCurrentPushProvider = FakeGetCurrentPushProvider("foo"),
+            stringProvider = FakeStringProvider(),
         )
         launch {
             sut.run(this)
@@ -45,7 +47,8 @@ class CurrentPushProviderTestTest {
     @Test
     fun `test CurrentPushProviderTest without push provider`() = runTest {
         val sut = CurrentPushProviderTest(
-            getCurrentPushProvider = FakeGetCurrentPushProvider(null)
+            getCurrentPushProvider = FakeGetCurrentPushProvider(null),
+            stringProvider = FakeStringProvider(),
         )
         launch {
             sut.run(this)

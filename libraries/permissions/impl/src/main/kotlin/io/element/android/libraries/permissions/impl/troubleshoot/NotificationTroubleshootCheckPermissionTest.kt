@@ -24,8 +24,10 @@ import io.element.android.libraries.core.notifications.NotificationTroubleshootT
 import io.element.android.libraries.core.notifications.NotificationTroubleshootTestState
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.permissions.api.PermissionStateProvider
+import io.element.android.libraries.permissions.impl.R
 import io.element.android.libraries.permissions.impl.action.PermissionActions
 import io.element.android.services.toolbox.api.sdk.BuildVersionSdkIntProvider
+import io.element.android.services.toolbox.api.strings.StringProvider
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
 import javax.inject.Inject
@@ -35,12 +37,13 @@ class NotificationTroubleshootCheckPermissionTest @Inject constructor(
     private val permissionStateProvider: PermissionStateProvider,
     private val sdkVersionProvider: BuildVersionSdkIntProvider,
     private val permissionActions: PermissionActions,
+    private val stringProvider: StringProvider,
 ) : NotificationTroubleshootTest {
     override val order: Int = 0
 
     private val delegate = NotificationTroubleshootTestDelegate(
-        defaultName = "Check permissions",
-        defaultDescription = "Ensure that the application can show notifications.",
+        defaultName = stringProvider.getString(R.string.troubleshoot_notifications_test_check_permission_title),
+        defaultDescription = stringProvider.getString(R.string.troubleshoot_notifications_test_check_permission_description),
         hasQuickFix = true,
         fakeDelay = NotificationTroubleshootTestDelegate.SHORT_DELAY,
     )

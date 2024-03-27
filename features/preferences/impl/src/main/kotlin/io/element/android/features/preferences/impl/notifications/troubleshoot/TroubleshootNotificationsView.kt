@@ -21,11 +21,13 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.progressSemantics
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
+import io.element.android.features.preferences.impl.R
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.core.notifications.NotificationTroubleshootTestState
 import io.element.android.libraries.core.notifications.NotificationTroubleshootTestState.Status
@@ -63,7 +65,7 @@ fun TroubleshootNotificationsView(
     PreferencePage(
         modifier = modifier,
         onBackPressed = onBackPressed,
-        title = "Troubleshoot notifications",
+        title = stringResource(id = R.string.troubleshoot_notifications_screen_title),
     ) {
         TroubleshootNotificationsContent(state)
     }
@@ -120,7 +122,7 @@ private fun TroubleshootTestView(
             },
             trailingContent = ListItemContent.Custom {
                 Button(
-                    text = "Attempt to fix",
+                    text = stringResource(id = R.string.troubleshoot_notifications_screen_quick_fix_action),
                     onClick = onQuickFixClicked
                 )
             }
@@ -148,8 +150,7 @@ private fun TroubleshootNotificationsContent(state: TroubleshootNotificationsSta
         AsyncAction.Uninitialized -> {
             ListItem(headlineContent = {
                 Text(
-                    text = "Run the tests to detect any issue in your configuration " +
-                        "that may make notifications not behave as expected."
+                    text = stringResource(id = R.string.troubleshoot_notifications_screen_notice)
                 )
             })
             RunTestButton(state = state)
@@ -157,21 +158,21 @@ private fun TroubleshootNotificationsContent(state: TroubleshootNotificationsSta
         AsyncAction.Loading -> Unit
         is AsyncAction.Failure -> {
             ListItem(headlineContent = {
-                Text(text = "Some tests failed, please check the details.")
+                Text(text = stringResource(id = R.string.troubleshoot_notifications_screen_failure))
             })
             RunTestButton(state = state)
         }
         AsyncAction.Confirming -> {
             ListItem(headlineContent = {
                 Text(
-                    text = "Some tests require your attention. Please check the details."
+                    text = stringResource(id = R.string.troubleshoot_notifications_screen_waiting)
                 )
             })
         }
         is AsyncAction.Success -> {
             ListItem(headlineContent = {
                 Text(
-                    text = "All tests passed successfully."
+                    text = stringResource(id = R.string.troubleshoot_notifications_screen_success)
                 )
             })
         }
@@ -183,7 +184,12 @@ private fun RunTestButton(state: TroubleshootNotificationsState) {
     ListItem(
         headlineContent = {
             Button(
-                text = if (state.testSuiteState.mainState is AsyncAction.Failure) "Run tests again" else "Run tests",
+                text = stringResource(
+                    id = if (state.testSuiteState.mainState is AsyncAction.Failure)
+                        R.string.troubleshoot_notifications_screen_action_again
+                    else
+                        R.string.troubleshoot_notifications_screen_action
+                ),
                 onClick = {
                     state.eventSink(TroubleshootNotificationsEvents.StartTests)
                 },
