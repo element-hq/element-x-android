@@ -26,8 +26,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.QrCode
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TextFieldDefaults
@@ -133,8 +131,8 @@ private fun RoomListSearchContent(
                     val focusRequester = FocusRequester()
                     TextField(
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .focusRequester(focusRequester),
+                                .fillMaxWidth()
+                                .focusRequester(focusRequester),
                         value = filter,
                         singleLine = true,
                         onValueChange = { state.eventSink(RoomListSearchEvents.QueryChanged(it)) },
@@ -173,14 +171,14 @@ private fun RoomListSearchContent(
     ) { padding ->
         Column(
             modifier = Modifier
-                .padding(padding)
-                .consumeWindowInsets(padding)
+                    .padding(padding)
+                    .consumeWindowInsets(padding)
         ) {
-            if(state.query.isEmpty()){
+            if (state.displayRoomDirectorySearch) {
                 RoomDirectorySearchButton(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 24.dp, horizontal = 16.dp),
+                            .fillMaxWidth()
+                            .padding(vertical = 24.dp, horizontal = 16.dp),
                     onClick = onRoomDirectorySearchClicked
                 )
             }
