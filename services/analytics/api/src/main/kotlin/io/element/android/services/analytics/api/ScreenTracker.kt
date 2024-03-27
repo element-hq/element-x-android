@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright (c) 2024 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,19 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-plugins {
-    id("io.element.android-compose-library")
-}
 
-android {
-    namespace = "io.element.android.services.analytics.api"
-}
+package io.element.android.services.analytics.api
 
-dependencies {
-    api(projects.services.analyticsproviders.api)
-    api(projects.services.toolbox.api)
-    api(libs.appyx.core)
-    implementation(libs.coroutines.core)
-    implementation(projects.libraries.matrix.api)
-    implementation(projects.libraries.core)
+import androidx.compose.runtime.Composable
+import com.bumble.appyx.core.node.Node
+import im.vector.app.features.analytics.plan.MobileScreen
+
+interface ScreenTracker {
+    @Composable
+    fun TrackScreen(
+        node: Node,
+        screen: MobileScreen.ScreenName,
+    )
 }

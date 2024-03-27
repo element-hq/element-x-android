@@ -23,17 +23,21 @@ import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
+import im.vector.app.features.analytics.plan.MobileScreen
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.libraries.di.SessionScope
+import io.element.android.services.analytics.api.ScreenTracker
 
 @ContributesNode(SessionScope::class)
 class TroubleshootNotificationsNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     private val presenter: TroubleshootNotificationsPresenter,
+    private val screenTracker: ScreenTracker,
 ) : Node(buildContext, plugins = plugins) {
     @Composable
     override fun View(modifier: Modifier) {
+        screenTracker.TrackScreen(this, MobileScreen.ScreenName.NotificationTroubleshoot)
         val state = presenter.present()
         TroubleshootNotificationsView(
             state = state,
