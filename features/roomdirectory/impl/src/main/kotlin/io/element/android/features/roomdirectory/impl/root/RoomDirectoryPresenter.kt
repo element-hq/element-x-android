@@ -22,12 +22,12 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import io.element.android.features.roomdirectory.impl.root.model.toUiModel
+import io.element.android.features.roomdirectory.impl.root.model.RoomDirectoryListState
+import io.element.android.features.roomdirectory.impl.root.model.toFeatureModel
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runUpdatingState
@@ -36,9 +36,9 @@ import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.roomdirectory.RoomDirectoryList
 import io.element.android.libraries.matrix.api.roomdirectory.RoomDirectoryService
-import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
@@ -47,34 +47,43 @@ import javax.inject.Inject
 class RoomDirectoryPresenter @Inject constructor(
     private val dispatchers: CoroutineDispatchers,
     private val matrixClient: MatrixClient,
-    roomDirectoryService: RoomDirectoryService,
+    private val roomDirectoryService: RoomDirectoryService,
 ) : Presenter<RoomDirectoryState> {
-
-    private val roomDirectoryList = roomDirectoryService.createRoomDirectoryList()
 
     @Composable
     override fun present(): RoomDirectoryState {
-
+        var loadingMore by remember {
+            mutableStateOf(false)
+        }
         var searchQuery by rememberSaveable {
-            mutableStateOf("")
+            mutableStateOf<String?>(null)
         }
-        val allRooms by roomDirectoryList.collectItemsAsState()
-        val hasMoreToLoad by produceState(initialValue = true, allRooms) {
-            value = roomDirectoryList.hasMoreToLoad()
+        val coroutineScope = rememberCoroutineScope()
+        val roomDirectoryList = remember {
+            roomDirectoryService.createRoomDirectoryList(coroutineScope)
         }
+        val listState by roomDirectoryList.collectState()
         val joinRoomAction: MutableState<AsyncAction<RoomId>> = remember {
             mutableStateOf(AsyncAction.Uninitialized)
         }
-        val coroutineScope = rememberCoroutineScope()
         LaunchedEffect(searchQuery) {
+            if (searchQuery == null) return@LaunchedEffect
+            //debounce search query
+            delay(300)
+            //cancel load more right away
+            loadingMore = false
             roomDirectoryList.filter(searchQuery, 20)
+        }
+        LaunchedEffect(loadingMore) {
+            if (loadingMore) {
+                roomDirectoryList.loadMore()
+                loadingMore = false
+            }
         }
         fun handleEvents(event: RoomDirectoryEvents) {
             when (event) {
                 RoomDirectoryEvents.LoadMore -> {
-                    coroutineScope.launch {
-                        roomDirectoryList.loadMore()
-                    }
+                    loadingMore = true
                 }
                 is RoomDirectoryEvents.Search -> {
                     searchQuery = event.query
@@ -89,9 +98,9 @@ class RoomDirectoryPresenter @Inject constructor(
         }
 
         return RoomDirectoryState(
-            query = searchQuery,
-            roomDescriptions = allRooms,
-            displayLoadMoreIndicator = hasMoreToLoad,
+            query = searchQuery.orEmpty(),
+            roomDescriptions = listState.items,
+            displayLoadMoreIndicator = listState.hasMoreToLoad,
             joinRoomAction = joinRoomAction.value,
             eventSink = ::handleEvents
         )
@@ -104,11 +113,12 @@ class RoomDirectoryPresenter @Inject constructor(
     }
 
     @Composable
-    private fun RoomDirectoryList.collectItemsAsState() = remember {
-        items.map { list ->
-            list
-                .map { roomDescription -> roomDescription.toUiModel() }
+    private fun RoomDirectoryList.collectState() = remember {
+        state.map {
+            val items = it.items
+                .map { roomDescription -> roomDescription.toFeatureModel() }
                 .toImmutableList()
+            RoomDirectoryListState(items = items, hasMoreToLoad = it.hasMoreToLoad)
         }.flowOn(dispatchers.computation)
-    }.collectAsState(persistentListOf())
+    }.collectAsState(RoomDirectoryListState.Default)
 }

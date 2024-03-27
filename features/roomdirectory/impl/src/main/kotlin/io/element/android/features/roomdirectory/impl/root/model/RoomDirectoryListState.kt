@@ -14,16 +14,21 @@
  * limitations under the License.
  */
 
-plugins {
-    id("io.element.android-library")
-}
+package io.element.android.features.roomdirectory.impl.root.model
 
-android {
-    namespace = "io.element.android.features.roomdirectory.api"
-}
+import io.element.android.features.roomdirectory.api.RoomDescription
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 
-dependencies {
-    implementation(projects.libraries.architecture)
-    implementation(projects.libraries.matrix.api)
-    implementation(projects.libraries.designsystem)
+internal data class RoomDirectoryListState(
+    val hasMoreToLoad: Boolean,
+    val items: ImmutableList<RoomDescription>,
+) {
+
+    companion object {
+        val Default = RoomDirectoryListState(
+            hasMoreToLoad = true,
+            items = persistentListOf()
+        )
+    }
 }

@@ -24,12 +24,10 @@ import org.matrix.rustcomponents.sdk.Client
 
 class RustRoomDirectoryService(
     private val client: Client,
-    private val sessionCoroutineScope: CoroutineScope,
     private val sessionDispatcher: CoroutineDispatcher,
 ) : RoomDirectoryService {
 
-    override fun createRoomDirectoryList(): RoomDirectoryList {
-        return RustRoomDirectoryList(client.roomDirectorySearch(), sessionCoroutineScope, sessionDispatcher)
+    override fun createRoomDirectoryList(scope: CoroutineScope): RoomDirectoryList {
+        return RustRoomDirectoryList(client.roomDirectorySearch(), scope, sessionDispatcher)
     }
-
 }

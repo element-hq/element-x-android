@@ -17,7 +17,7 @@
 package io.element.android.features.roomdirectory.impl.root
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import io.element.android.features.roomdirectory.impl.root.model.RoomDescriptionUiModel
+import io.element.android.features.roomdirectory.api.RoomDescription
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
@@ -32,7 +32,7 @@ open class RoomDirectorySearchStateProvider : PreviewParameterProvider<RoomDirec
             aRoomDirectoryState(
                 query = "Element",
                 roomDescriptions = persistentListOf(
-                    RoomDescriptionUiModel(
+                    RoomDescription(
                         roomId = RoomId("@exa:matrix.org"),
                         name = "Element X Android",
                         description = "Element X is a secure, private and decentralized messenger.",
@@ -44,7 +44,7 @@ open class RoomDirectorySearchStateProvider : PreviewParameterProvider<RoomDirec
                         ),
                         canBeJoined = true,
                     ),
-                    RoomDescriptionUiModel(
+                    RoomDescription(
                         roomId = RoomId("@exi:matrix.org"),
                         name = "Element X iOS",
                         description = "Element X is a secure, private and decentralized messenger.",
@@ -64,7 +64,7 @@ open class RoomDirectorySearchStateProvider : PreviewParameterProvider<RoomDirec
 fun aRoomDirectoryState(
     query: String = "",
     displayLoadMoreIndicator: Boolean = false,
-    roomDescriptions: ImmutableList<RoomDescriptionUiModel> = persistentListOf(),
+    roomDescriptions: ImmutableList<RoomDescription> = persistentListOf(),
     joinRoomAction: AsyncAction<RoomId> = AsyncAction.Uninitialized,
 ) = RoomDirectoryState(
     query = query,

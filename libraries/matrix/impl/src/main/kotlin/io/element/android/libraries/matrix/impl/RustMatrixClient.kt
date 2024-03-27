@@ -76,6 +76,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -158,7 +159,6 @@ class RustMatrixClient(
 
     private val roomDirectoryService = RustRoomDirectoryService(
         client = client,
-        sessionCoroutineScope = sessionCoroutineScope,
         sessionDispatcher = sessionDispatcher,
     )
 
@@ -441,7 +441,7 @@ class RustMatrixClient(
             runCatching { client.removeAvatar() }
         }
 
-    override suspend fun joinRoom(roomId: RoomId): Result<RoomId> = withContext(sessionDispatcher) {
+    override suspend fun joinRoom(roomId: RoomId): Result<RoomId> = withContext(sessionDispatcher)  {
         runCatching {
             client.joinRoomById(roomId.value).destroy()
             try {

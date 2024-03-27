@@ -46,7 +46,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
-import io.element.android.features.roomdirectory.impl.root.model.RoomDescriptionUiModel
+import io.element.android.features.roomdirectory.api.RoomDescription
 import io.element.android.libraries.designsystem.components.async.AsyncActionView
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.button.BackButton
@@ -144,7 +144,7 @@ private fun RoomDirectoryContent(
 
 @Composable
 private fun RoomDirectoryRoomList(
-    roomDescriptions: ImmutableList<RoomDescriptionUiModel>,
+    roomDescriptions: ImmutableList<RoomDescription>,
     displayLoadMoreIndicator: Boolean,
     displayEmptyState: Boolean,
     onResultClicked: (RoomId) -> Unit,
@@ -185,7 +185,7 @@ private fun LoadMoreIndicator(modifier: Modifier = Modifier) {
         modifier
             .fillMaxWidth()
             .wrapContentHeight()
-            .padding(8.dp),
+            .padding(24.dp),
         contentAlignment = Alignment.Center,
     ) {
         CircularProgressIndicator(
@@ -249,7 +249,7 @@ private fun SearchTextField(
 
 @Composable
 private fun RoomDirectoryRoomRow(
-    roomDescription: RoomDescriptionUiModel,
+    roomDescription: RoomDescription,
     onClick: (RoomId) -> Unit,
     modifier: Modifier = Modifier,
 ) {

@@ -14,16 +14,15 @@
  * limitations under the License.
  */
 
-plugins {
-    id("io.element.android-library")
-}
+package io.element.android.features.roomdirectory.api
 
-android {
-    namespace = "io.element.android.features.roomdirectory.api"
-}
+import io.element.android.libraries.designsystem.components.avatar.AvatarData
+import io.element.android.libraries.matrix.api.core.RoomId
 
-dependencies {
-    implementation(projects.libraries.architecture)
-    implementation(projects.libraries.matrix.api)
-    implementation(projects.libraries.designsystem)
-}
+data class RoomDescription(
+    val roomId: RoomId,
+    val name: String,
+    val description: String,
+    val avatarData: AvatarData,
+    val canBeJoined: Boolean,
+)

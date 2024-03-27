@@ -18,9 +18,10 @@ package io.element.android.libraries.matrix.test.roomdirectory
 
 import io.element.android.libraries.matrix.api.roomdirectory.RoomDirectoryList
 import io.element.android.libraries.matrix.api.roomdirectory.RoomDirectoryService
+import kotlinx.coroutines.CoroutineScope
 
 class FakeRoomDirectoryService : RoomDirectoryService {
-    override fun createRoomDirectoryList(): RoomDirectoryList {
+    override fun createRoomDirectoryList(scope: CoroutineScope): RoomDirectoryList {
         TODO("Not yet implemented")
     }
 }

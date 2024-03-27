@@ -16,6 +16,8 @@
 
 package io.element.android.libraries.matrix.api.roomdirectory
 
+import kotlinx.coroutines.CoroutineScope
+
 interface RoomDirectoryService {
-    fun createRoomDirectoryList(): RoomDirectoryList
+    fun createRoomDirectoryList(scope: CoroutineScope): RoomDirectoryList
 }
