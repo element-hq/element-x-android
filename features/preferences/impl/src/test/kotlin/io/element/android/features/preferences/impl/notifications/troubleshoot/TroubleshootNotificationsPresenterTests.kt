@@ -24,6 +24,7 @@ import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.core.notifications.NotificationTroubleshootTest
 import io.element.android.libraries.core.notifications.NotificationTroubleshootTestState
 import io.element.android.libraries.push.test.FakeGetCurrentPushProvider
+import io.element.android.services.analytics.test.FakeAnalyticsService
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
@@ -113,6 +114,7 @@ class TroubleshootNotificationsPresenterTests {
         return TroubleshootTestSuite(
             notificationTroubleshootTests = tests,
             getCurrentPushProvider = FakeGetCurrentPushProvider(currentPushProvider),
+            analyticsService = FakeAnalyticsService(),
         )
     }
 

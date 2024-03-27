@@ -16,11 +16,13 @@
 
 package io.element.android.features.preferences.impl.notifications.troubleshoot
 
+import im.vector.app.features.analytics.plan.NotificationTroubleshoot
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.core.notifications.NotificationTroubleshootTest
 import io.element.android.libraries.core.notifications.NotificationTroubleshootTestState
 import io.element.android.libraries.core.notifications.TestFilterData
 import io.element.android.libraries.push.api.GetCurrentPushProvider
+import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -32,6 +34,7 @@ import javax.inject.Inject
 class TroubleshootTestSuite @Inject constructor(
     private val notificationTroubleshootTests: Set<@JvmSuppressWildcards NotificationTroubleshootTest>,
     private val getCurrentPushProvider: GetCurrentPushProvider,
+    private val analyticsService: AnalyticsService,
 ) {
     lateinit var tests: List<NotificationTroubleshootTest>
 
@@ -77,6 +80,16 @@ class TroubleshootTestSuite @Inject constructor(
 
     private fun emitState() {
         val states = tests.map { it.state.value }
+        val mainState = states.computeMainState()
+        when (mainState) {
+            is AsyncAction.Success -> {
+                analyticsService.capture(NotificationTroubleshoot(hasError = false))
+            }
+            is AsyncAction.Failure -> {
+                analyticsService.capture(NotificationTroubleshoot(hasError = true))
+            }
+            else -> Unit
+        }
         _state.tryEmit(
             TroubleshootTestSuiteState(
                 mainState = states.computeMainState(),
