@@ -31,18 +31,23 @@ open class NotificationSettingsStateProvider : PreviewParameterProvider<Notifica
 
 fun aNotificationSettingsState(
     changeNotificationSettingAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
+    atRoomNotificationsEnabled: Boolean = true,
+    callNotificationsEnabled: Boolean = true,
+    inviteForMeNotificationsEnabled: Boolean = true,
+    appNotificationEnabled: Boolean = true,
+    eventSink: (NotificationSettingsEvents) -> Unit = {},
 ) = NotificationSettingsState(
     matrixSettings = NotificationSettingsState.MatrixSettings.Valid(
-        atRoomNotificationsEnabled = true,
-        callNotificationsEnabled = true,
-        inviteForMeNotificationsEnabled = true,
+        atRoomNotificationsEnabled = atRoomNotificationsEnabled,
+        callNotificationsEnabled = callNotificationsEnabled,
+        inviteForMeNotificationsEnabled = inviteForMeNotificationsEnabled,
         defaultGroupNotificationMode = RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY,
         defaultOneToOneNotificationMode = RoomNotificationMode.ALL_MESSAGES,
     ),
     appSettings = NotificationSettingsState.AppSettings(
         systemNotificationsEnabled = false,
-        appNotificationsEnabled = true,
+        appNotificationsEnabled = appNotificationEnabled,
     ),
     changeNotificationSettingAction = changeNotificationSettingAction,
-    eventSink = {}
+    eventSink = eventSink,
 )
