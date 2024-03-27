@@ -21,6 +21,9 @@ import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.element.android.features.preferences.impl.R
+import io.element.android.libraries.architecture.AsyncAction
+import io.element.android.libraries.matrix.test.AN_EXCEPTION
+import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.tests.testutils.EnsureNeverCalled
 import io.element.android.tests.testutils.EnsureNeverCalledWithParam
 import io.element.android.tests.testutils.EventsRecorder
@@ -185,6 +188,63 @@ class NotificationSettingsViewTest {
             listOf(
                 NotificationSettingsEvents.RefreshSystemNotificationsEnabled,
                 NotificationSettingsEvents.SetInviteForMeNotificationsEnabled(!initialState)
+            )
+        )
+    }
+
+    @Config(qualifiers = "h1024dp")
+    @Test
+    fun `with an error configuration, clicking on continue emits the expected events`() {
+        val eventsRecorder = EventsRecorder<NotificationSettingsEvents>()
+        rule.setNotificationSettingsView(
+            state = aValidNotificationSettingsState(
+                changeNotificationSettingAction = AsyncAction.Failure(AN_EXCEPTION),
+                eventSink = eventsRecorder
+            ),
+        )
+        rule.clickOn(CommonStrings.action_ok)
+        eventsRecorder.assertList(
+            listOf(
+                NotificationSettingsEvents.RefreshSystemNotificationsEnabled,
+                NotificationSettingsEvents.ClearNotificationChangeError
+            )
+        )
+    }
+
+    @Config(qualifiers = "h1024dp")
+    @Test
+    fun `with invalid configuration, clicking on continue emits the expected events`() {
+        val eventsRecorder = EventsRecorder<NotificationSettingsEvents>()
+        rule.setNotificationSettingsView(
+            state = aInvalidNotificationSettingsState(
+                fixFailed = false,
+                eventSink = eventsRecorder
+            ),
+        )
+        rule.clickOn(CommonStrings.action_continue)
+        eventsRecorder.assertList(
+            listOf(
+                NotificationSettingsEvents.RefreshSystemNotificationsEnabled,
+                NotificationSettingsEvents.FixConfigurationMismatch
+            )
+        )
+    }
+
+    @Config(qualifiers = "h1024dp")
+    @Test
+    fun `with invalid configuration and error, clicking on OK emits the expected events`() {
+        val eventsRecorder = EventsRecorder<NotificationSettingsEvents>()
+        rule.setNotificationSettingsView(
+            state = aInvalidNotificationSettingsState(
+                fixFailed = true,
+                eventSink = eventsRecorder
+            ),
+        )
+        rule.clickOn(CommonStrings.action_ok)
+        eventsRecorder.assertList(
+            listOf(
+                NotificationSettingsEvents.RefreshSystemNotificationsEnabled,
+                NotificationSettingsEvents.ClearConfigurationMismatchError
             )
         )
     }
