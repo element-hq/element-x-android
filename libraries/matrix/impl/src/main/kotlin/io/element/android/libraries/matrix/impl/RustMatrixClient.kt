@@ -208,16 +208,15 @@ class RustMatrixClient(
         }
     }
 
-    private val rustRoomListService: RoomListService =
-        RustRoomListService(
+    override val roomListService: RoomListService = RustRoomListService(
+        innerRoomListService = innerRoomListService,
+        sessionCoroutineScope = sessionCoroutineScope,
+        sessionDispatcher = sessionDispatcher,
+        roomListFactory = RoomListFactory(
             innerRoomListService = innerRoomListService,
             sessionCoroutineScope = sessionCoroutineScope,
-            sessionDispatcher = sessionDispatcher,
-            roomListFactory = RoomListFactory(
-                innerRoomListService = innerRoomListService,
-                sessionCoroutineScope = sessionCoroutineScope,
-            ),
-        )
+        ),
+    )
 
     private val eventFilters = TimelineEventTypeFilter.exclude(
         listOf(
@@ -238,12 +237,11 @@ class RustMatrixClient(
         ).map(FilterTimelineEventType::State)
     )
 
-    override val roomListService: RoomListService
-        get() = rustRoomListService
-
-    private val rustMediaLoader = RustMediaLoader(baseCacheDirectory, dispatchers, client)
-    override val mediaLoader: MatrixMediaLoader
-        get() = rustMediaLoader
+    override val mediaLoader: MatrixMediaLoader = RustMediaLoader(
+        baseCacheDirectory = baseCacheDirectory,
+        dispatchers = dispatchers,
+        innerClient = client,
+    )
 
     private val roomMembershipObserver = RoomMembershipObserver()
 
