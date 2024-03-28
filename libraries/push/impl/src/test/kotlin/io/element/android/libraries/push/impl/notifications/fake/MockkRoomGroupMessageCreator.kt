@@ -24,7 +24,7 @@ import io.element.android.libraries.push.impl.notifications.model.NotifiableMess
 import io.mockk.coEvery
 import io.mockk.mockk
 
-class FakeRoomGroupMessageCreator {
+class MockkRoomGroupMessageCreator {
     val instance = mockk<RoomGroupMessageCreator>()
 
     fun givenCreatesRoomMessageFor(

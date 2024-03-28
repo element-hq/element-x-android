@@ -37,6 +37,8 @@ interface PushService {
      */
     suspend fun registerWith(matrixClient: MatrixClient, pushProvider: PushProvider, distributor: Distributor)
 
-    // TODO Move away
-    suspend fun testPush()
+    /**
+     * Return false in case of early error.
+     */
+    suspend fun testPush(): Boolean
 }

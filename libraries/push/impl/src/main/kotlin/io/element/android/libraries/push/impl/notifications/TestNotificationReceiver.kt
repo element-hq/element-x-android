@@ -19,9 +19,15 @@ package io.element.android.libraries.push.impl.notifications
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import io.element.android.libraries.architecture.bindings
+import io.element.android.libraries.push.impl.troubleshoot.NotificationClickHandler
+import javax.inject.Inject
 
 class TestNotificationReceiver : BroadcastReceiver() {
+    @Inject lateinit var notificationClickHandler: NotificationClickHandler
+
     override fun onReceive(context: Context, intent: Intent) {
-        // TODO The test notification has been clicked, notify the ui
+        context.bindings<TestNotificationReceiverBinding>().inject(this)
+        notificationClickHandler.handleNotificationClick()
     }
 }

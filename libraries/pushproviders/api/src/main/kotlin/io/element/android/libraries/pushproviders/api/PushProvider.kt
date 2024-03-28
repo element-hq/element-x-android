@@ -49,8 +49,5 @@ interface PushProvider {
      */
     suspend fun unregister(matrixClient: MatrixClient)
 
-    /**
-     * Attempt to troubleshoot the push provider.
-     */
-    suspend fun troubleshoot(): Result<Unit>
+    suspend fun getCurrentUserPushConfig(): CurrentUserPushConfig?
 }

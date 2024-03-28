@@ -22,13 +22,10 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.networkmonitor.api.NetworkStatus
 import io.element.android.features.networkmonitor.test.FakeNetworkMonitor
-import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.roomlist.FakeRoomListService
-import io.element.android.libraries.push.api.PushService
-import io.element.android.libraries.pushproviders.api.Distributor
-import io.element.android.libraries.pushproviders.api.PushProvider
+import io.element.android.libraries.push.test.FakePushService
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.consumeItemsUntilPredicate
 import kotlinx.coroutines.test.runTest
@@ -73,20 +70,7 @@ class LoggedInPresenterTest {
         return LoggedInPresenter(
             matrixClient = FakeMatrixClient(roomListService = roomListService),
             networkMonitor = FakeNetworkMonitor(networkStatus),
-            pushService = object : PushService {
-                override fun notificationStyleChanged() {
-                }
-
-                override fun getAvailablePushProviders(): List<PushProvider> {
-                    return emptyList()
-                }
-
-                override suspend fun registerWith(matrixClient: MatrixClient, pushProvider: PushProvider, distributor: Distributor) {
-                }
-
-                override suspend fun testPush() {
-                }
-            }
+            pushService = FakePushService(),
         )
     }
 }

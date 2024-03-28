@@ -22,8 +22,8 @@ import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.push.impl.notifications.fake.FakeImageLoader
-import io.element.android.libraries.push.impl.notifications.fake.FakeNotificationDisplayer
-import io.element.android.libraries.push.impl.notifications.fake.FakeNotificationFactory
+import io.element.android.libraries.push.impl.notifications.fake.MockkNotificationDisplayer
+import io.element.android.libraries.push.impl.notifications.fake.MockkNotificationFactory
 import io.element.android.libraries.push.impl.notifications.model.NotifiableEvent
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
@@ -51,14 +51,14 @@ private val ONE_SHOT_META = OneShotNotification.Append.Meta(key = "ignored", sum
 
 @RunWith(RobolectricTestRunner::class)
 class NotificationRendererTest {
-    private val notificationDisplayer = FakeNotificationDisplayer()
-    private val notificationFactory = FakeNotificationFactory()
+    private val mockkNotificationDisplayer = MockkNotificationDisplayer()
+    private val mockkNotificationFactory = MockkNotificationFactory()
     private val notificationIdProvider = NotificationIdProvider()
 
     private val notificationRenderer = NotificationRenderer(
         notificationIdProvider = notificationIdProvider,
-        notificationDisplayer = notificationDisplayer.instance,
-        notificationFactory = notificationFactory.instance,
+        notificationDisplayer = mockkNotificationDisplayer.instance,
+        notificationFactory = mockkNotificationFactory.instance,
     )
 
     @Test
@@ -67,8 +67,8 @@ class NotificationRendererTest {
 
         renderEventsAsNotifications()
 
-        notificationDisplayer.verifySummaryCancelled()
-        notificationDisplayer.verifyNoOtherInteractions()
+        mockkNotificationDisplayer.verifySummaryCancelled()
+        mockkNotificationDisplayer.verifyNoOtherInteractions()
     }
 
     @Test
@@ -77,7 +77,7 @@ class NotificationRendererTest {
 
         renderEventsAsNotifications()
 
-        notificationDisplayer.verifyInOrder {
+        mockkNotificationDisplayer.verifyInOrder {
             cancelNotificationMessage(tag = null, notificationIdProvider.getSummaryNotificationId(A_SESSION_ID))
             cancelNotificationMessage(tag = A_ROOM_ID.value, notificationIdProvider.getRoomMessagesNotificationId(A_SESSION_ID))
         }
@@ -89,7 +89,7 @@ class NotificationRendererTest {
 
         renderEventsAsNotifications()
 
-        notificationDisplayer.verifyInOrder {
+        mockkNotificationDisplayer.verifyInOrder {
             cancelNotificationMessage(tag = A_ROOM_ID.value, notificationIdProvider.getRoomMessagesNotificationId(A_SESSION_ID))
             showNotificationMessage(tag = null, notificationIdProvider.getSummaryNotificationId(A_SESSION_ID), A_SUMMARY_NOTIFICATION.notification)
         }
@@ -108,7 +108,7 @@ class NotificationRendererTest {
 
         renderEventsAsNotifications()
 
-        notificationDisplayer.verifyInOrder {
+        mockkNotificationDisplayer.verifyInOrder {
             showNotificationMessage(tag = A_ROOM_ID.value, notificationIdProvider.getRoomMessagesNotificationId(A_SESSION_ID), A_NOTIFICATION)
             showNotificationMessage(tag = null, notificationIdProvider.getSummaryNotificationId(A_SESSION_ID), A_SUMMARY_NOTIFICATION.notification)
         }
@@ -120,7 +120,7 @@ class NotificationRendererTest {
 
         renderEventsAsNotifications()
 
-        notificationDisplayer.verifyInOrder {
+        mockkNotificationDisplayer.verifyInOrder {
             cancelNotificationMessage(tag = null, notificationIdProvider.getSummaryNotificationId(A_SESSION_ID))
             cancelNotificationMessage(tag = AN_EVENT_ID.value, notificationIdProvider.getRoomEventNotificationId(A_SESSION_ID))
         }
@@ -132,7 +132,7 @@ class NotificationRendererTest {
 
         renderEventsAsNotifications()
 
-        notificationDisplayer.verifyInOrder {
+        mockkNotificationDisplayer.verifyInOrder {
             cancelNotificationMessage(tag = AN_EVENT_ID.value, notificationIdProvider.getRoomEventNotificationId(A_SESSION_ID))
             showNotificationMessage(tag = null, notificationIdProvider.getSummaryNotificationId(A_SESSION_ID), A_SUMMARY_NOTIFICATION.notification)
         }
@@ -151,7 +151,7 @@ class NotificationRendererTest {
 
         renderEventsAsNotifications()
 
-        notificationDisplayer.verifyInOrder {
+        mockkNotificationDisplayer.verifyInOrder {
             showNotificationMessage(tag = AN_EVENT_ID.value, notificationIdProvider.getRoomEventNotificationId(A_SESSION_ID), A_NOTIFICATION)
             showNotificationMessage(tag = null, notificationIdProvider.getSummaryNotificationId(A_SESSION_ID), A_SUMMARY_NOTIFICATION.notification)
         }
@@ -163,7 +163,7 @@ class NotificationRendererTest {
 
         renderEventsAsNotifications()
 
-        notificationDisplayer.verifyInOrder {
+        mockkNotificationDisplayer.verifyInOrder {
             cancelNotificationMessage(tag = null, notificationIdProvider.getSummaryNotificationId(A_SESSION_ID))
             cancelNotificationMessage(tag = A_ROOM_ID.value, notificationIdProvider.getRoomInvitationNotificationId(A_SESSION_ID))
         }
@@ -175,7 +175,7 @@ class NotificationRendererTest {
 
         renderEventsAsNotifications()
 
-        notificationDisplayer.verifyInOrder {
+        mockkNotificationDisplayer.verifyInOrder {
             cancelNotificationMessage(tag = A_ROOM_ID.value, notificationIdProvider.getRoomInvitationNotificationId(A_SESSION_ID))
             showNotificationMessage(tag = null, notificationIdProvider.getSummaryNotificationId(A_SESSION_ID), A_SUMMARY_NOTIFICATION.notification)
         }
@@ -194,7 +194,7 @@ class NotificationRendererTest {
 
         renderEventsAsNotifications()
 
-        notificationDisplayer.verifyInOrder {
+        mockkNotificationDisplayer.verifyInOrder {
             showNotificationMessage(tag = A_ROOM_ID.value, notificationIdProvider.getRoomEventNotificationId(A_SESSION_ID), A_NOTIFICATION)
             showNotificationMessage(tag = null, notificationIdProvider.getSummaryNotificationId(A_SESSION_ID), A_SUMMARY_NOTIFICATION.notification)
         }
@@ -221,7 +221,7 @@ class NotificationRendererTest {
         useCompleteNotificationFormat: Boolean = USE_COMPLETE_NOTIFICATION_FORMAT,
         summaryNotification: SummaryNotification = A_SUMMARY_NOTIFICATION
     ) {
-        notificationFactory.givenNotificationsFor(
+        mockkNotificationFactory.givenNotificationsFor(
             groupedEvents = A_PROCESSED_EVENTS,
             matrixUser = MatrixUser(A_SESSION_ID, MY_USER_DISPLAY_NAME, MY_USER_AVATAR_URL),
             useCompleteNotificationFormat = useCompleteNotificationFormat,

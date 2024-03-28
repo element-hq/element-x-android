@@ -23,6 +23,8 @@ import kotlinx.serialization.Serializable
 internal data class PushGatewayNotification(
     @SerialName("event_id")
     val eventId: String,
+    @SerialName("room_id")
+    val roomId: String,
     /**
      * Required. This is an array of devices that the notification should be sent to.
      */

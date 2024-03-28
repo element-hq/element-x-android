@@ -49,4 +49,14 @@ If you proceed, some of your settings may change."</string>
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"system settings"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"System notifications turned off"</string>
   <string name="screen_notification_settings_title">"Notifications"</string>
+  <string name="troubleshoot_notifications_entry_point_section">"Troubleshoot"</string>
+  <string name="troubleshoot_notifications_entry_point_title">"Troubleshoot notifications"</string>
+  <string name="troubleshoot_notifications_screen_action">"Run tests"</string>
+  <string name="troubleshoot_notifications_screen_action_again">"Run tests again"</string>
+  <string name="troubleshoot_notifications_screen_failure">"Some tests failed. Please check the details."</string>
+  <string name="troubleshoot_notifications_screen_notice">"Run the tests to detect any issue in your configuration that may make notifications not behave as expected."</string>
+  <string name="troubleshoot_notifications_screen_quick_fix_action">"Attempt to fix"</string>
+  <string name="troubleshoot_notifications_screen_success">"All tests passed successfully."</string>
+  <string name="troubleshoot_notifications_screen_title">"Troubleshoot notifications"</string>
+  <string name="troubleshoot_notifications_screen_waiting">"Some tests require your attention. Please check the details."</string>
 </resources>

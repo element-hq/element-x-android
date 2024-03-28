@@ -16,6 +16,7 @@
 package io.element.android.libraries.push.impl.pushgateway
 
 import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.network.RetrofitFactory
 import io.element.android.libraries.push.api.gateway.PushGatewayFailure
 import javax.inject.Inject
@@ -27,7 +28,8 @@ class PushGatewayNotifyRequest @Inject constructor(
         val url: String,
         val appId: String,
         val pushKey: String,
-        val eventId: EventId
+        val eventId: EventId,
+        val roomId: RoomId,
     )
 
     suspend fun execute(params: Params) {
@@ -40,6 +42,7 @@ class PushGatewayNotifyRequest @Inject constructor(
             PushGatewayNotifyBody(
                 PushGatewayNotification(
                     eventId = params.eventId.value,
+                    roomId = params.roomId.value,
                     devices = listOf(
                         PushGatewayDevice(
                             params.appId,
@@ -51,7 +54,7 @@ class PushGatewayNotifyRequest @Inject constructor(
         )
 
         if (response.rejectedPushKeys.contains(params.pushKey)) {
-            throw PushGatewayFailure.PusherRejected
+            throw PushGatewayFailure.PusherRejected()
         }
     }
 }

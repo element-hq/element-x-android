@@ -25,7 +25,7 @@ import io.element.android.libraries.matrix.test.A_ROOM_ID_2
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_SPACE_ID
 import io.element.android.libraries.matrix.test.A_THREAD_ID
-import io.element.android.libraries.push.impl.notifications.fake.FakeOutdatedEventDetector
+import io.element.android.libraries.push.impl.notifications.fake.MockkOutdatedEventDetector
 import io.element.android.libraries.push.impl.notifications.fixtures.aNotifiableMessageEvent
 import io.element.android.libraries.push.impl.notifications.fixtures.aSimpleNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.fixtures.anInviteNotifiableEvent
@@ -42,7 +42,7 @@ private val VIEWING_A_ROOM = aNavigationState(A_SESSION_ID, A_SPACE_ID, A_ROOM_I
 private val VIEWING_A_THREAD = aNavigationState(A_SESSION_ID, A_SPACE_ID, A_ROOM_ID, A_THREAD_ID)
 
 class NotifiableEventProcessorTest {
-    private val outdatedDetector = FakeOutdatedEventDetector()
+    private val mockkOutdatedDetector = MockkOutdatedEventDetector()
 
     @Test
     fun `given simple events when processing then keep simple events`() {
@@ -97,7 +97,7 @@ class NotifiableEventProcessorTest {
     @Test
     fun `given out of date message event when processing then removes message event`() {
         val events = listOf(aNotifiableMessageEvent(eventId = AN_EVENT_ID, roomId = A_ROOM_ID))
-        outdatedDetector.givenEventIsOutOfDate(events[0])
+        mockkOutdatedDetector.givenEventIsOutOfDate(events[0])
 
         val eventProcessor = createProcessor(navigationState = NOT_VIEWING_A_ROOM)
 
@@ -113,7 +113,7 @@ class NotifiableEventProcessorTest {
     @Test
     fun `given in date message event when processing then keep message event`() {
         val events = listOf(aNotifiableMessageEvent(eventId = AN_EVENT_ID, roomId = A_ROOM_ID))
-        outdatedDetector.givenEventIsInDate(events[0])
+        mockkOutdatedDetector.givenEventIsInDate(events[0])
         val eventProcessor = createProcessor(navigationState = NOT_VIEWING_A_ROOM)
 
         val result = eventProcessor.process(events, renderedEvents = emptyList())
@@ -128,7 +128,7 @@ class NotifiableEventProcessorTest {
     @Test
     fun `given viewing the same room main timeline when processing main timeline message event then removes message`() {
         val events = listOf(aNotifiableMessageEvent(eventId = AN_EVENT_ID, roomId = A_ROOM_ID, threadId = null))
-        events.forEach { outdatedDetector.givenEventIsOutOfDate(it) }
+        events.forEach { mockkOutdatedDetector.givenEventIsOutOfDate(it) }
         val eventProcessor = createProcessor(isInForeground = true, navigationState = VIEWING_A_ROOM)
 
         val result = eventProcessor.process(events, renderedEvents = emptyList())
@@ -143,7 +143,7 @@ class NotifiableEventProcessorTest {
     @Test
     fun `given viewing the same thread timeline when processing thread message event then removes message`() {
         val events = listOf(aNotifiableMessageEvent(eventId = AN_EVENT_ID, roomId = A_ROOM_ID, threadId = A_THREAD_ID))
-        events.forEach { outdatedDetector.givenEventIsOutOfDate(it) }
+        events.forEach { mockkOutdatedDetector.givenEventIsOutOfDate(it) }
         val eventProcessor = createProcessor(isInForeground = true, navigationState = VIEWING_A_THREAD)
 
         val result = eventProcessor.process(events, renderedEvents = emptyList())
@@ -158,7 +158,7 @@ class NotifiableEventProcessorTest {
     @Test
     fun `given viewing main timeline of the same room when processing thread timeline message event then keep message`() {
         val events = listOf(aNotifiableMessageEvent(eventId = AN_EVENT_ID, roomId = A_ROOM_ID, threadId = A_THREAD_ID))
-        outdatedDetector.givenEventIsInDate(events[0])
+        mockkOutdatedDetector.givenEventIsInDate(events[0])
         val eventProcessor = createProcessor(isInForeground = true, navigationState = VIEWING_A_ROOM)
 
         val result = eventProcessor.process(events, renderedEvents = emptyList())
@@ -173,7 +173,7 @@ class NotifiableEventProcessorTest {
     @Test
     fun `given viewing thread timeline of the same room when processing main timeline message event then keep message`() {
         val events = listOf(aNotifiableMessageEvent(eventId = AN_EVENT_ID, roomId = A_ROOM_ID))
-        outdatedDetector.givenEventIsInDate(events[0])
+        mockkOutdatedDetector.givenEventIsInDate(events[0])
         val eventProcessor = createProcessor(isInForeground = true, navigationState = VIEWING_A_THREAD)
 
         val result = eventProcessor.process(events, renderedEvents = emptyList())
@@ -213,8 +213,8 @@ class NotifiableEventProcessorTest {
         navigationState: NavigationState
     ): NotifiableEventProcessor {
         return NotifiableEventProcessor(
-            outdatedDetector.instance,
-            FakeAppNavigationStateService(MutableStateFlow(AppNavigationState(navigationState, isInForeground))),
+            outdatedDetector = mockkOutdatedDetector.instance,
+            appNavigationStateService = FakeAppNavigationStateService(MutableStateFlow(AppNavigationState(navigationState, isInForeground))),
         )
     }
 }

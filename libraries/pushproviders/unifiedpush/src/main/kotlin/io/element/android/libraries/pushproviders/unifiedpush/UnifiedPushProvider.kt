@@ -16,17 +16,16 @@
 
 package io.element.android.libraries.pushproviders.unifiedpush
 
-import android.content.Context
 import com.squareup.anvil.annotations.ContributesMultibinding
-import io.element.android.libraries.androidutils.system.getApplicationLabel
 import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.di.AppScope
-import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.pushproviders.api.CurrentUserPushConfig
 import io.element.android.libraries.pushproviders.api.Distributor
 import io.element.android.libraries.pushproviders.api.PushProvider
 import io.element.android.libraries.pushstore.api.clientsecret.PushClientSecret
-import org.unifiedpush.android.connector.UnifiedPush
+import io.element.android.services.appnavstate.api.AppNavigationStateService
+import io.element.android.services.appnavstate.api.currentSessionId
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -34,10 +33,12 @@ private val loggerTag = LoggerTag("UnifiedPushProvider", LoggerTag.PushLoggerTag
 
 @ContributesMultibinding(AppScope::class)
 class UnifiedPushProvider @Inject constructor(
-    @ApplicationContext private val context: Context,
+    private val unifiedPushDistributorProvider: UnifiedPushDistributorProvider,
     private val registerUnifiedPushUseCase: RegisterUnifiedPushUseCase,
     private val unRegisterUnifiedPushUseCase: UnregisterUnifiedPushUseCase,
     private val pushClientSecret: PushClientSecret,
+    private val unifiedPushStore: UnifiedPushStore,
+    private val appNavigationStateService: AppNavigationStateService,
 ) : PushProvider {
     override val index = UnifiedPushConfig.INDEX
     override val name = UnifiedPushConfig.NAME
@@ -54,15 +55,7 @@ class UnifiedPushProvider @Inject constructor(
     }
 
     override fun getDistributors(): List<Distributor> {
-        val distributors = UnifiedPush.getDistributors(context)
-        return distributors.mapNotNull {
-            if (it == context.packageName) {
-                // Exclude self
-                null
-            } else {
-                Distributor(it, context.getApplicationLabel(it))
-            }
-        }
+        return unifiedPushDistributorProvider.getDistributors()
     }
 
     override suspend fun registerWith(matrixClient: MatrixClient, distributor: Distributor) {
@@ -75,7 +68,14 @@ class UnifiedPushProvider @Inject constructor(
         unRegisterUnifiedPushUseCase.execute(clientSecret)
     }
 
-    override suspend fun troubleshoot(): Result<Unit> {
-        TODO("Not yet implemented")
+    override suspend fun getCurrentUserPushConfig(): CurrentUserPushConfig? {
+        val currentSession = appNavigationStateService.appNavigationState.value.navigationState.currentSessionId() ?: return null
+        val clientSecret = pushClientSecret.getSecretForUser(currentSession)
+        val url = unifiedPushStore.getPushGateway(clientSecret) ?: return null
+        val pushKey = unifiedPushStore.getEndpoint(clientSecret) ?: return null
+        return CurrentUserPushConfig(
+            url = url,
+            pushKey = pushKey,
+        )
     }
 }

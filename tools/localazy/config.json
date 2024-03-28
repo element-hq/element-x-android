@@ -80,7 +80,29 @@
       "name" : ":libraries:push:impl",
       "includeRegex" : [
         "push_.*",
-        "notification_.*"
+        "notification_.*",
+        "troubleshoot_notifications_test_current_push_provider.*",
+        "troubleshoot_notifications_test_detect_push_provider.*",
+        "troubleshoot_notifications_test_display_notification_.*",
+        "troubleshoot_notifications_test_push_loop_back_.*"
+      ]
+    },
+    {
+      "name" : ":libraries:permissions:impl",
+      "includeRegex" : [
+        "troubleshoot_notifications_test_check_permission_.*"
+      ]
+    },
+    {
+      "name" : ":libraries:pushproviders:firebase",
+      "includeRegex" : [
+        "troubleshoot_notifications_test_firebase_.*"
+      ]
+    },
+    {
+      "name" : ":libraries:pushproviders:unifiedpush",
+      "includeRegex" : [
+        "troubleshoot_notifications_test_unified_push_.*"
       ]
     },
     {
@@ -182,7 +204,9 @@
         "screen\\.advanced_settings\\..*",
         "screen_edit_profile_.*",
         "screen_notification_settings_.*",
-        "screen_blocked_users_.*"
+        "screen_blocked_users_.*",
+        "troubleshoot_notifications_entry_point_.*",
+        "troubleshoot_notifications_screen_.*"
       ]
     },
     {

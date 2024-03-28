@@ -16,6 +16,6 @@
 
 package io.element.android.libraries.push.api.gateway
 
-sealed class PushGatewayFailure : Throwable(cause = null) {
-    data object PusherRejected : PushGatewayFailure()
+sealed class PushGatewayFailure : Exception() {
+    class PusherRejected : PushGatewayFailure()
 }

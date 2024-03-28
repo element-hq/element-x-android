@@ -17,6 +17,8 @@
 package io.element.android.libraries.permissions.impl
 
 import android.content.Context
+import android.content.pm.PackageManager
+import androidx.core.content.ContextCompat
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
@@ -33,7 +35,10 @@ class DefaultPermissionStateProvider @Inject constructor(
     private val permissionsStore: PermissionsStore,
 ) : PermissionStateProvider {
     override fun isPermissionGranted(permission: String): Boolean {
-        return context.checkSelfPermission(permission) == android.content.pm.PackageManager.PERMISSION_GRANTED
+        return ContextCompat.checkSelfPermission(
+            context,
+            permission,
+        ) == PackageManager.PERMISSION_GRANTED
     }
 
     override suspend fun setPermissionDenied(permission: String, value: Boolean) = permissionsStore.setPermissionDenied(permission, value)
