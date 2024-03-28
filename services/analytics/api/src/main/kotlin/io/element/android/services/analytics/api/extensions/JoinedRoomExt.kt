@@ -17,8 +17,6 @@
 package io.element.android.services.analytics.api.extensions
 
 import im.vector.app.features.analytics.plan.JoinedRoom
-import io.element.android.libraries.core.bool.orFalse
-import io.element.android.libraries.matrix.api.core.MatrixPatterns
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 
 fun Long?.toAnalyticsRoomSize(): JoinedRoom.RoomSize {
@@ -34,9 +32,9 @@ fun Long?.toAnalyticsRoomSize(): JoinedRoom.RoomSize {
 
 fun MatrixRoom.toAnalyticsJoinedRoom(trigger: JoinedRoom.Trigger?): JoinedRoom {
     return JoinedRoom(
-        isDM = this.isDirect.orFalse(),
-        isSpace = MatrixPatterns.isSpaceId(this.roomId.value),
-        roomSize = this.joinedMemberCount.toAnalyticsRoomSize(),
+        isDM = isDirect,
+        isSpace = isSpace,
+        roomSize = joinedMemberCount.toAnalyticsRoomSize(),
         trigger = trigger
     )
 }
