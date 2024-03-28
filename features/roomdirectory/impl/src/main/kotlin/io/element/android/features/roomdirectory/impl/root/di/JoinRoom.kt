@@ -14,23 +14,19 @@
  * limitations under the License.
  */
 
-package io.element.android.features.roomdirectory.api
+package io.element.android.features.roomdirectory.impl.root.di
 
-import com.bumble.appyx.core.modality.BuildContext
-import com.bumble.appyx.core.node.Node
-import com.bumble.appyx.core.plugin.Plugin
-import io.element.android.libraries.architecture.FeatureEntryPoint
+import com.squareup.anvil.annotations.ContributesBinding
+import io.element.android.libraries.di.SessionScope
+import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
+import javax.inject.Inject
 
-interface RoomDirectoryEntryPoint : FeatureEntryPoint {
-    fun nodeBuilder(parentNode: Node, buildContext: BuildContext): NodeBuilder
+interface JoinRoom {
+    suspend operator fun invoke(roomId: RoomId): Result<RoomId>
+}
 
-    interface NodeBuilder {
-        fun callback(callback: Callback): NodeBuilder
-        fun build(): Node
-    }
-
-    interface Callback : Plugin {
-        fun onOpenRoom(roomId: RoomId)
-    }
+@ContributesBinding(SessionScope::class)
+class DefaultJoinRoom @Inject constructor(private val client: MatrixClient) : JoinRoom {
+    override suspend fun invoke(roomId: RoomId) = client.joinRoom(roomId)
 }

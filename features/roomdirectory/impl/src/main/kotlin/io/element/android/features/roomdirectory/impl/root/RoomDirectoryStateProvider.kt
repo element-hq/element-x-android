@@ -25,39 +25,14 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
-open class RoomDirectorySearchStateProvider : PreviewParameterProvider<RoomDirectoryState> {
+open class RoomDirectoryStateProvider : PreviewParameterProvider<RoomDirectoryState> {
     override val values: Sequence<RoomDirectoryState>
         get() = sequenceOf(
             aRoomDirectoryState(),
             aRoomDirectoryState(
                 query = "Element",
-                roomDescriptions = persistentListOf(
-                    RoomDescription(
-                        roomId = RoomId("@exa:matrix.org"),
-                        name = "Element X Android",
-                        description = "Element X is a secure, private and decentralized messenger.",
-                        avatarData = AvatarData(
-                            id = "@exa:matrix.org",
-                            name = "Element X Android",
-                            url = null,
-                            size = AvatarSize.RoomDirectoryItem
-                        ),
-                        canBeJoined = true,
-                    ),
-                    RoomDescription(
-                        roomId = RoomId("@exi:matrix.org"),
-                        name = "Element X iOS",
-                        description = "Element X is a secure, private and decentralized messenger.",
-                        avatarData = AvatarData(
-                            id = "@exi:matrix.org",
-                            name = "Element X iOS",
-                            url = null,
-                            size = AvatarSize.RoomDirectoryItem
-                        ),
-                        canBeJoined = false,
-                    )
-                )
-            ),
+                roomDescriptions = aRoomDescriptionList(),
+            )
         )
 }
 
@@ -66,10 +41,40 @@ fun aRoomDirectoryState(
     displayLoadMoreIndicator: Boolean = false,
     roomDescriptions: ImmutableList<RoomDescription> = persistentListOf(),
     joinRoomAction: AsyncAction<RoomId> = AsyncAction.Uninitialized,
+    eventSink: (RoomDirectoryEvents) -> Unit = {},
 ) = RoomDirectoryState(
     query = query,
     roomDescriptions = roomDescriptions,
     displayLoadMoreIndicator = displayLoadMoreIndicator,
     joinRoomAction = joinRoomAction,
-    eventSink = {},
+    eventSink = eventSink,
 )
+
+fun aRoomDescriptionList(): ImmutableList<RoomDescription> {
+    return persistentListOf(
+        RoomDescription(
+            roomId = RoomId("!exa:matrix.org"),
+            name = "Element X Android",
+            description = "Element X is a secure, private and decentralized messenger.",
+            avatarData = AvatarData(
+                id = "!exa:matrix.org",
+                name = "Element X Android",
+                url = null,
+                size = AvatarSize.RoomDirectoryItem
+            ),
+            canBeJoined = true,
+        ),
+        RoomDescription(
+            roomId = RoomId("!exi:matrix.org"),
+            name = "Element X iOS",
+            description = "Element X is a secure, private and decentralized messenger.",
+            avatarData = AvatarData(
+                id = "!exi:matrix.org",
+                name = "Element X iOS",
+                url = null,
+                size = AvatarSize.RoomDirectoryItem
+            ),
+            canBeJoined = false,
+        )
+    )
+}

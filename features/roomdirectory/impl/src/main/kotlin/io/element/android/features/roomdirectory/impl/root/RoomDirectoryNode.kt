@@ -35,7 +35,6 @@ class RoomDirectoryNode @AssistedInject constructor(
     @Assisted plugins: List<Plugin>,
     private val presenter: RoomDirectoryPresenter,
 ) : Node(buildContext, plugins = plugins) {
-
     private fun onRoomJoined(roomId: RoomId) {
         plugins<RoomDirectoryEntryPoint.Callback>().forEach {
             it.onOpenRoom(roomId)

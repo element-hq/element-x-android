@@ -40,6 +40,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -61,6 +62,7 @@ import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextField
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
 
@@ -71,7 +73,6 @@ fun RoomDirectoryView(
     onBackPressed: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-
     fun joinRoom(roomId: RoomId) {
         state.eventSink(RoomDirectoryEvents.JoinRoom(roomId))
     }
@@ -86,8 +87,8 @@ fun RoomDirectoryView(
                 state = state,
                 onResultClicked = ::joinRoom,
                 modifier = Modifier
-                    .padding(padding)
-                    .consumeWindowInsets(padding)
+                        .padding(padding)
+                        .consumeWindowInsets(padding)
             )
         }
     )
@@ -96,7 +97,8 @@ fun RoomDirectoryView(
         onSuccess = onRoomJoined,
         onErrorDismiss = {
             state.eventSink(RoomDirectoryEvents.JoinRoomDismissError)
-        })
+        }
+    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -171,7 +173,7 @@ private fun RoomDirectoryRoomList(
         if (displayLoadMoreIndicator) {
             item {
                 LoadMoreIndicator(modifier = Modifier.fillMaxWidth())
-                LaunchedEffect(Unit) {
+                LaunchedEffect(onReachedLoadMore) {
                     onReachedLoadMore()
                 }
             }
@@ -182,10 +184,10 @@ private fun RoomDirectoryRoomList(
 @Composable
 private fun LoadMoreIndicator(modifier: Modifier = Modifier) {
     Box(
-        modifier
-            .fillMaxWidth()
-            .wrapContentHeight()
-            .padding(24.dp),
+            modifier
+                    .fillMaxWidth()
+                    .wrapContentHeight()
+                    .padding(24.dp),
         contentAlignment = Alignment.Center,
     ) {
         CircularProgressIndicator(
@@ -213,7 +215,7 @@ private fun SearchTextField(
 ) {
     val focusManager = LocalFocusManager.current
     TextField(
-        modifier = modifier,
+        modifier = modifier.testTag(TestTags.searchTextField.value),
         textStyle = ElementTheme.typography.fontBodyLgRegular,
         singleLine = true,
         value = query,
@@ -255,14 +257,14 @@ private fun RoomDirectoryRoomRow(
 ) {
     Row(
         modifier = modifier
-            .fillMaxWidth()
-            .clickable { onClick(roomDescription.roomId) }
-            .padding(
-                top = 12.dp,
-                bottom = 12.dp,
-                start = 16.dp,
-            )
-            .height(IntrinsicSize.Min),
+                .fillMaxWidth()
+                .clickable { onClick(roomDescription.roomId) }
+                .padding(
+                        top = 12.dp,
+                        bottom = 12.dp,
+                        start = 16.dp,
+                )
+                .height(IntrinsicSize.Min),
     ) {
         Avatar(
             avatarData = roomDescription.avatarData,
@@ -270,8 +272,8 @@ private fun RoomDirectoryRoomRow(
         )
         Column(
             modifier = Modifier
-                .weight(1f)
-                .padding(start = 16.dp)
+                    .weight(1f)
+                    .padding(start = 16.dp)
         ) {
             Text(
                 text = roomDescription.name,
@@ -293,8 +295,8 @@ private fun RoomDirectoryRoomRow(
                 text = stringResource(id = CommonStrings.action_join),
                 color = ElementTheme.colors.textSuccessPrimary,
                 modifier = Modifier
-                    .align(Alignment.CenterVertically)
-                    .padding(start = 4.dp, end = 12.dp)
+                        .align(Alignment.CenterVertically)
+                        .padding(start = 4.dp, end = 12.dp)
             )
         } else {
             Spacer(modifier = Modifier.width(24.dp))
@@ -304,7 +306,7 @@ private fun RoomDirectoryRoomRow(
 
 @PreviewsDayNight
 @Composable
-fun RoomDirectorySearchViewLightPreview(@PreviewParameter(RoomDirectorySearchStateProvider::class) state: RoomDirectoryState) = ElementPreview {
+internal fun RoomDirectoryViewPreview(@PreviewParameter(RoomDirectoryStateProvider::class) state: RoomDirectoryState) = ElementPreview {
     RoomDirectoryView(
         state = state,
         onRoomJoined = {},

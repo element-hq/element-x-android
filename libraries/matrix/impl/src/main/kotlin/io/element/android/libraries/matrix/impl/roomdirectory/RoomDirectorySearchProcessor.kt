@@ -30,7 +30,6 @@ class RoomDirectorySearchProcessor(
     private val coroutineContext: CoroutineContext,
     private val roomDescriptionMapper: RoomDescriptionMapper,
 ) {
-
     private val mutex = Mutex()
 
     suspend fun postUpdates(updates: List<RoomDirectorySearchEntryUpdate>) {

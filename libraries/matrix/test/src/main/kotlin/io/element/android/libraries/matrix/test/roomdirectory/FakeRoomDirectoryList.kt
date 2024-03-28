@@ -14,19 +14,18 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.matrix.impl.roomdirectory
+package io.element.android.libraries.matrix.test.roomdirectory
 
 import io.element.android.libraries.matrix.api.roomdirectory.RoomDirectoryList
-import io.element.android.libraries.matrix.api.roomdirectory.RoomDirectoryService
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.CoroutineScope
-import org.matrix.rustcomponents.sdk.Client
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.emptyFlow
 
-class RustRoomDirectoryService(
-    private val client: Client,
-    private val sessionDispatcher: CoroutineDispatcher,
-) : RoomDirectoryService {
-    override fun createRoomDirectoryList(scope: CoroutineScope): RoomDirectoryList {
-        return RustRoomDirectoryList(client.roomDirectorySearch(), scope, sessionDispatcher)
-    }
+class FakeRoomDirectoryList(
+    override val state: Flow<RoomDirectoryList.State> = emptyFlow(),
+    val filterLambda: (String?, Int) -> Result<Unit> = { _, _ -> Result.success(Unit) },
+    val loadMoreLambda: () -> Result<Unit> = { Result.success(Unit) }
+) : RoomDirectoryList {
+    override suspend fun filter(filter: String?, batchSize: Int) = filterLambda(filter, batchSize)
+
+    override suspend fun loadMore(): Result<Unit> = loadMoreLambda()
 }

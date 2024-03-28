@@ -94,6 +94,9 @@ class FakeMatrixClient(
     private var setDisplayNameResult: Result<Unit> = Result.success(Unit)
     private var uploadAvatarResult: Result<Unit> = Result.success(Unit)
     private var removeAvatarResult: Result<Unit> = Result.success(Unit)
+    var joinRoomLambda: suspend (RoomId) -> Result<RoomId> = {
+        Result.success(it)
+    }
 
     override suspend fun getRoom(roomId: RoomId): MatrixRoom? {
         return getRoomResults[roomId]
@@ -180,6 +183,8 @@ class FakeMatrixClient(
         removeAvatarCalled = true
         return removeAvatarResult
     }
+
+    override suspend fun joinRoom(roomId: RoomId): Result<RoomId> = joinRoomLambda(roomId)
 
     override fun sessionVerificationService(): SessionVerificationService = sessionVerificationService
 

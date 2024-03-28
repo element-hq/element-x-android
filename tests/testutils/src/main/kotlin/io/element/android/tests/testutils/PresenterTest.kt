@@ -14,20 +14,21 @@
  * limitations under the License.
  */
 
-package io.element.android.features.roomdirectory.impl.root.model
+package io.element.android.tests.testutils
 
-import io.element.android.features.roomdirectory.api.RoomDescription
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.persistentListOf
+import app.cash.molecule.RecompositionMode
+import app.cash.molecule.moleculeFlow
+import app.cash.turbine.TurbineTestContext
+import app.cash.turbine.test
+import io.element.android.libraries.architecture.Presenter
+import kotlin.time.Duration
 
-internal data class RoomDirectoryListState(
-    val hasMoreToLoad: Boolean,
-    val items: ImmutableList<RoomDescription>,
+suspend fun <State> Presenter<State>.test(
+    timeout: Duration? = null,
+    name: String? = null,
+    validate: suspend TurbineTestContext<State>.() -> Unit,
 ) {
-    companion object {
-        val Default = RoomDirectoryListState(
-            hasMoreToLoad = true,
-            items = persistentListOf()
-        )
-    }
+    moleculeFlow(RecompositionMode.Immediate) {
+        present()
+    }.test(timeout, name, validate)
 }

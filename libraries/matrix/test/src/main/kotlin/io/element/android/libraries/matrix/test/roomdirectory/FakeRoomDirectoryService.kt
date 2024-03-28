@@ -20,8 +20,8 @@ import io.element.android.libraries.matrix.api.roomdirectory.RoomDirectoryList
 import io.element.android.libraries.matrix.api.roomdirectory.RoomDirectoryService
 import kotlinx.coroutines.CoroutineScope
 
-class FakeRoomDirectoryService : RoomDirectoryService {
-    override fun createRoomDirectoryList(scope: CoroutineScope): RoomDirectoryList {
-        TODO("Not yet implemented")
-    }
+class FakeRoomDirectoryService(
+    private val createRoomDirectoryListFactory: (CoroutineScope) -> RoomDirectoryList = { throw AssertionError("Configure a proper factory.") }
+) : RoomDirectoryService {
+    override fun createRoomDirectoryList(scope: CoroutineScope) = createRoomDirectoryListFactory(scope)
 }

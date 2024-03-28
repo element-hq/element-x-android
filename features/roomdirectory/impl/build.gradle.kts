@@ -25,6 +25,11 @@ plugins {
 
 android {
     namespace = "io.element.android.features.roomdirectory.impl"
+    testOptions {
+        unitTests {
+            isIncludeAndroidResources = true
+        }
+    }
 }
 
 anvil {
@@ -41,13 +46,17 @@ dependencies {
     implementation(projects.libraries.matrixui)
     implementation(projects.libraries.designsystem)
     implementation(projects.libraries.uiStrings)
+    implementation(projects.libraries.testtags)
 
     testImplementation(libs.test.junit)
+    testImplementation(libs.androidx.compose.ui.test.junit)
+    testImplementation(libs.test.robolectric)
     testImplementation(libs.coroutines.test)
     testImplementation(libs.molecule.runtime)
     testImplementation(libs.test.truth)
     testImplementation(libs.test.turbine)
     testImplementation(projects.libraries.matrix.test)
+    testImplementation(projects.tests.testutils)
 
     ksp(libs.showkase.processor)
 }

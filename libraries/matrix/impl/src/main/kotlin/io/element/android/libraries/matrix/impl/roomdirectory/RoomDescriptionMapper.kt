@@ -22,7 +22,6 @@ import org.matrix.rustcomponents.sdk.PublicRoomJoinRule
 import org.matrix.rustcomponents.sdk.RoomDescription as RustRoomDescription
 
 class RoomDescriptionMapper {
-
     fun map(roomDescription: RustRoomDescription): RoomDescription {
         return RoomDescription(
             roomId = RoomId(roomDescription.roomId),

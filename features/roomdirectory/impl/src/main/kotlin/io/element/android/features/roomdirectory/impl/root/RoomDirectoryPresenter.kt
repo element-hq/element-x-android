@@ -26,13 +26,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import io.element.android.features.roomdirectory.impl.root.di.JoinRoom
 import io.element.android.features.roomdirectory.impl.root.model.RoomDirectoryListState
 import io.element.android.features.roomdirectory.impl.root.model.toFeatureModel
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runUpdatingState
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
-import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.roomdirectory.RoomDirectoryList
 import io.element.android.libraries.matrix.api.roomdirectory.RoomDirectoryService
@@ -46,10 +46,9 @@ import javax.inject.Inject
 
 class RoomDirectoryPresenter @Inject constructor(
     private val dispatchers: CoroutineDispatchers,
-    private val matrixClient: MatrixClient,
+    private val joinRoom: JoinRoom,
     private val roomDirectoryService: RoomDirectoryService,
 ) : Presenter<RoomDirectoryState> {
-
     @Composable
     override fun present(): RoomDirectoryState {
         var loadingMore by remember {
@@ -68,9 +67,9 @@ class RoomDirectoryPresenter @Inject constructor(
         }
         LaunchedEffect(searchQuery) {
             if (searchQuery == null) return@LaunchedEffect
-            //debounce search query
+            // debounce search query
             delay(300)
-            //cancel load more right away
+            // cancel load more right away
             loadingMore = false
             roomDirectoryList.filter(searchQuery, 20)
         }
@@ -108,7 +107,7 @@ class RoomDirectoryPresenter @Inject constructor(
 
     private fun CoroutineScope.joinRoom(state: MutableState<AsyncAction<RoomId>>, roomId: RoomId) = launch {
         state.runUpdatingState {
-            matrixClient.joinRoom(roomId)
+            joinRoom(roomId)
         }
     }
 
