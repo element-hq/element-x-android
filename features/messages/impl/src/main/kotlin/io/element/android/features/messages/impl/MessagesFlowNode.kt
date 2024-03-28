@@ -36,8 +36,6 @@ import io.element.android.features.location.api.Location
 import io.element.android.features.location.api.SendLocationEntryPoint
 import io.element.android.features.location.api.ShowLocationEntryPoint
 import io.element.android.features.messages.api.MessagesEntryPoint
-import io.element.android.features.messages.impl.attachments.Attachment
-import io.element.android.features.messages.impl.attachments.preview.AttachmentsPreviewNode
 import io.element.android.features.messages.impl.forward.ForwardMessagesNode
 import io.element.android.features.messages.impl.report.ReportMessageNode
 import io.element.android.features.messages.impl.timeline.debug.EventDebugInfoNode
@@ -65,7 +63,6 @@ import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
 import io.element.android.libraries.mediaviewer.api.local.MediaInfo
 import io.element.android.libraries.mediaviewer.api.viewer.MediaViewerNode
-import kotlinx.collections.immutable.ImmutableList
 import kotlinx.parcelize.Parcelize
 
 @ContributesNode(RoomScope::class)
@@ -103,9 +100,6 @@ class MessagesFlowNode @AssistedInject constructor(
         ) : NavTarget
 
         @Parcelize
-        data class AttachmentPreview(val attachment: Attachment) : NavTarget
-
-        @Parcelize
         data class LocationViewer(val location: Location, val description: String?) : NavTarget
 
         @Parcelize
@@ -139,10 +133,6 @@ class MessagesFlowNode @AssistedInject constructor(
 
                     override fun onEventClicked(event: TimelineItem.Event): Boolean {
                         return processEventClicked(event)
-                    }
-
-                    override fun onPreviewAttachments(attachments: ImmutableList<Attachment>) {
-                        backstack.push(NavTarget.AttachmentPreview(attachments.first()))
                     }
 
                     override fun onUserDataClicked(userId: UserId) {
@@ -192,10 +182,6 @@ class MessagesFlowNode @AssistedInject constructor(
                     canShare = true,
                 )
                 createNode<MediaViewerNode>(buildContext, listOf(inputs))
-            }
-            is NavTarget.AttachmentPreview -> {
-                val inputs = AttachmentsPreviewNode.Inputs(navTarget.attachment)
-                createNode<AttachmentsPreviewNode>(buildContext, listOf(inputs))
             }
             is NavTarget.LocationViewer -> {
                 val inputs = ShowLocationEntryPoint.Inputs(navTarget.location, navTarget.description)

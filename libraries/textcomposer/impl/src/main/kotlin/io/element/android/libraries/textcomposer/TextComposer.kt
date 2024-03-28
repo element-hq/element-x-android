@@ -118,6 +118,7 @@ fun TextComposer(
     modifier: Modifier = Modifier,
     showTextFormatting: Boolean = false,
     subcomposing: Boolean = false,
+    hasAttachments: Boolean = false,
 ) {
     val onSendClicked = {
         val html = if (enableTextFormatting) state.messageHtml else null
@@ -158,6 +159,8 @@ fun TextComposer(
                 subcomposing = subcomposing,
                 placeholder = if (composerMode.inThread) {
                     stringResource(id = CommonStrings.action_reply_in_thread)
+                } else if (hasAttachments) {
+                    stringResource(id = R.string.rich_text_editor_composer_caption_placeholder)
                 } else {
                     stringResource(id = R.string.rich_text_editor_composer_placeholder)
                 },
@@ -175,7 +178,7 @@ fun TextComposer(
     val canSendMessage by remember { derivedStateOf { state.messageMarkdown.isNotBlank() } }
     val sendButton = @Composable {
         SendButton(
-            canSendMessage = canSendMessage,
+            canSendMessage = canSendMessage || hasAttachments,
             onClick = onSendClicked,
             composerMode = composerMode,
         )
@@ -202,7 +205,7 @@ fun TextComposer(
     val textFormattingOptions = @Composable { TextFormatting(state = state) }
 
     val sendOrRecordButton = when {
-        enableVoiceMessages && !canSendMessage ->
+        enableVoiceMessages && !canSendMessage && !hasAttachments ->
             when (voiceMessageState) {
                 VoiceMessageState.Idle,
                 is VoiceMessageState.Recording -> recordVoiceButton

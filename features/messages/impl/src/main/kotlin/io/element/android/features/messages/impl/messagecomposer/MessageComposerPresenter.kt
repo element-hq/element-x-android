@@ -164,8 +164,10 @@ class MessageComposerPresenter @Inject constructor(
             when (val attachmentStateValue = attachmentsState.value) {
                 is AttachmentsState.Sending.Processing -> {
                     ongoingSendAttachmentJob.value = localCoroutineScope.sendAttachment(
-                        attachmentStateValue.attachments.first(),
-                        attachmentsState,
+                        attachment = attachmentStateValue.attachments.first(),
+                        message = null,
+                        attachmentState = attachmentsState,
+                        richTextEditorState = richTextEditorState,
                     )
                 }
                 else -> Unit
@@ -235,11 +237,27 @@ class MessageComposerPresenter @Inject constructor(
                     }
                     messageComposerContext.composerMode = MessageComposerMode.Normal
                 }
-                is MessageComposerEvents.SendMessage -> appCoroutineScope.sendMessage(
-                    message = event.message,
-                    updateComposerMode = { messageComposerContext.composerMode = it },
-                    richTextEditorState = richTextEditorState,
-                )
+                is MessageComposerEvents.SendMessage -> {
+                    when (val attachmentState = attachmentsState.value) {
+                        // Are we sending media?
+                        is AttachmentsState.Previewing -> {
+                            appCoroutineScope.sendAttachment(
+                                attachmentState.attachments.first(),
+                                event.message,
+                                attachmentState = attachmentsState,
+                                richTextEditorState = richTextEditorState,
+                            )
+                        }
+                        // Send normal message
+                        else -> {
+                            appCoroutineScope.sendMessage(
+                                message = event.message,
+                                updateComposerMode = { messageComposerContext.composerMode = it },
+                                richTextEditorState = richTextEditorState,
+                            )
+                        }
+                    }
+                }
                 is MessageComposerEvents.SendUri -> appCoroutineScope.sendAttachment(
                     attachment = Attachment.Media(
                         localMedia = localMediaFactory.createFromUri(
@@ -250,7 +268,9 @@ class MessageComposerPresenter @Inject constructor(
                         ),
                         compressIfPossible = true
                     ),
+                    message = null,
                     attachmentState = attachmentsState,
+                    richTextEditorState = richTextEditorState,
                 )
                 is MessageComposerEvents.SetMode -> {
                     messageComposerContext.composerMode = event.composerMode
@@ -302,6 +322,9 @@ class MessageComposerPresenter @Inject constructor(
                 MessageComposerEvents.PickAttachmentSource.Poll -> {
                     showAttachmentSourcePicker = false
                     // Navigation to the create poll screen is done at the view layer
+                }
+                is MessageComposerEvents.ClearAttachments -> {
+                    attachmentsState.value = AttachmentsState.None
                 }
                 is MessageComposerEvents.CancelSendAttachment -> {
                     ongoingSendAttachmentJob.value?.let {
@@ -406,18 +429,31 @@ class MessageComposerPresenter @Inject constructor(
 
     private fun CoroutineScope.sendAttachment(
         attachment: Attachment,
+        message: Message?,
         attachmentState: MutableState<AttachmentsState>,
-    ) = when (attachment) {
-        is Attachment.Media -> {
-            launch {
+        richTextEditorState: RichTextEditorState,
+    ) = launch {
+        when (attachment) {
+            is Attachment.Media -> {
+                richTextEditorState.setHtml("")
                 sendMedia(
-                    uri = attachment.localMedia.uri,
-                    mimeType = attachment.localMedia.info.mimeType,
-                    attachmentState = attachmentState,
-                )
+                        uri = attachment.localMedia.uri,
+                        mimeType = attachment.localMedia.info.mimeType,
+                        caption = when (message?.markdown.isNullOrEmpty()) {
+                            true -> null
+                            false -> message?.markdown
+                        },
+                        formattedCaption = when (message?.html.isNullOrEmpty()) {
+                            true -> null
+                            false -> message?.html
+                        },
+                        attachmentState = attachmentState,
+                        compressIfPossible = attachment.compressIfPossible,
+                    )
             }
         }
     }
+
 
     @UnstableApi
     private fun handlePickedMedia(
@@ -453,7 +489,10 @@ class MessageComposerPresenter @Inject constructor(
     private suspend fun sendMedia(
         uri: Uri,
         mimeType: String,
+        caption: String?,
+        formattedCaption: String?,
         attachmentState: MutableState<AttachmentsState>,
+        compressIfPossible: Boolean = false,
     ) = runCatching {
         val context = coroutineContext
         val progressCallback = object : ProgressCallback {
@@ -466,7 +505,9 @@ class MessageComposerPresenter @Inject constructor(
         mediaSender.sendMedia(
             uri = uri,
             mimeType = mimeType,
-            compressIfPossible = false,
+            compressIfPossible = compressIfPossible,
+            caption,
+            formattedCaption,
             progressCallback = progressCallback
         ).getOrThrow()
     }
