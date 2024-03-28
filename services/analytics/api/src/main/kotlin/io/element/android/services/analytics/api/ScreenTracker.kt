@@ -17,13 +17,11 @@
 package io.element.android.services.analytics.api
 
 import androidx.compose.runtime.Composable
-import com.bumble.appyx.core.node.Node
 import im.vector.app.features.analytics.plan.MobileScreen
 
 interface ScreenTracker {
     @Composable
     fun TrackScreen(
-        node: Node,
         screen: MobileScreen.ScreenName,
     )
 }

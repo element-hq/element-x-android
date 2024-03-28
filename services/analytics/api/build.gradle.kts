@@ -24,7 +24,6 @@ android {
 dependencies {
     api(projects.services.analyticsproviders.api)
     api(projects.services.toolbox.api)
-    api(libs.appyx.core)
     implementation(libs.coroutines.core)
     implementation(projects.libraries.matrix.api)
     implementation(projects.libraries.core)

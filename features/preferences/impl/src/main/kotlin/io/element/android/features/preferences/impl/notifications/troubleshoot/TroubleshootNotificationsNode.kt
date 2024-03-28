@@ -37,7 +37,7 @@ class TroubleshootNotificationsNode @AssistedInject constructor(
 ) : Node(buildContext, plugins = plugins) {
     @Composable
     override fun View(modifier: Modifier) {
-        screenTracker.TrackScreen(this, MobileScreen.ScreenName.NotificationTroubleshoot)
+        screenTracker.TrackScreen(MobileScreen.ScreenName.NotificationTroubleshoot)
         val state = presenter.present()
         TroubleshootNotificationsView(
             state = state,
