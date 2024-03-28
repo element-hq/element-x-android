@@ -89,4 +89,11 @@ enum class FeatureFlags(
         defaultValue = true,
         isFinished = false,
     ),
+    RoomDirectorySearch(
+        key = "feature.roomdirectorysearch",
+        title = "Room directory search",
+        description = "Allow user to search for public rooms in his homeserver",
+        defaultValue = true,
+        isFinished = false,
+    )
 }

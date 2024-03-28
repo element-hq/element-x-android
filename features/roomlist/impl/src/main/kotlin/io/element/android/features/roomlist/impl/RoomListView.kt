@@ -59,6 +59,7 @@ fun RoomListView(
     onInvitesClicked: () -> Unit,
     onRoomSettingsClicked: (roomId: RoomId) -> Unit,
     onMenuActionClicked: (RoomListMenuAction) -> Unit,
+    onRoomDirectorySearchClicked: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     ConnectivityIndicatorContainer(
@@ -99,6 +100,7 @@ fun RoomListView(
                 state = state.searchState,
                 onRoomClicked = onRoomClicked,
                 onRoomLongClicked = { onRoomLongClicked(it) },
+                onRoomDirectorySearchClicked = onRoomDirectorySearchClicked,
                 modifier = Modifier
                     .statusBarsPadding()
                     .padding(top = topPadding)
@@ -197,5 +199,6 @@ internal fun RoomListViewPreview(@PreviewParameter(RoomListStateProvider::class)
         onInvitesClicked = {},
         onRoomSettingsClicked = {},
         onMenuActionClicked = {},
+        onRoomDirectorySearchClicked = {},
     )
 }

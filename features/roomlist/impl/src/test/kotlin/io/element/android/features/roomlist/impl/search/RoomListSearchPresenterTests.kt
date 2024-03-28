@@ -23,6 +23,9 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.features.roomlist.impl.datasource.RoomListRoomSummaryFactory
 import io.element.android.libraries.dateformatter.test.FakeLastMessageTimestampFormatter
 import io.element.android.libraries.eventformatter.test.FakeRoomLastMessageFormatter
+import io.element.android.libraries.featureflag.api.FeatureFlagService
+import io.element.android.libraries.featureflag.api.FeatureFlags
+import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.roomlist.RoomListFilter
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.api.roomlist.RoomSummary
@@ -128,10 +131,26 @@ class RoomListSearchPresenterTests {
             }
         }
     }
+
+    @Test
+    fun `present - room directory search`() = runTest {
+        val featureFlagService = FakeFeatureFlagService()
+        featureFlagService.setFeatureEnabled(FeatureFlags.RoomDirectorySearch, true)
+        val presenter = createRoomListSearchPresenter(featureFlagService = featureFlagService)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            skipItems(1)
+            awaitItem().let { state ->
+                assertThat(state.isRoomDirectorySearchEnabled).isTrue()
+            }
+        }
+    }
 }
 
 fun TestScope.createRoomListSearchPresenter(
     roomListService: RoomListService = FakeRoomListService(),
+    featureFlagService: FeatureFlagService = FakeFeatureFlagService(),
 ): RoomListSearchPresenter {
     return RoomListSearchPresenter(
         dataSource = RoomListSearchDataSource(
@@ -141,6 +160,7 @@ fun TestScope.createRoomListSearchPresenter(
                 roomLastMessageFormatter = FakeRoomLastMessageFormatter(),
             ),
             coroutineDispatchers = testCoroutineDispatchers(),
-        )
+        ),
+        featureFlagService = featureFlagService,
     )
 }

@@ -29,7 +29,11 @@
   <string name="screen_room_change_role_confirm_demote_self_action">"Demote"</string>
   <string name="screen_room_change_role_confirm_demote_self_description">"You will not be able to undo this change as you are demoting yourself, if you are the last privileged user in the room it will be impossible to regain privileges."</string>
   <string name="screen_room_change_role_confirm_demote_self_title">"Demote yourself?"</string>
+  <string name="screen_room_change_role_invited_member_name">"%1$s (Pending)"</string>
   <string name="screen_room_change_role_moderators_title">"Edit Moderators"</string>
+  <string name="screen_room_change_role_section_administrators">"Admins"</string>
+  <string name="screen_room_change_role_section_moderators">"Moderators"</string>
+  <string name="screen_room_change_role_section_users">"Members"</string>
   <string name="screen_room_change_role_unsaved_changes_description">"You have unsaved changes."</string>
   <string name="screen_room_change_role_unsaved_changes_title">"Save changes?"</string>
   <string name="screen_room_details_add_topic_title">"Add topic"</string>

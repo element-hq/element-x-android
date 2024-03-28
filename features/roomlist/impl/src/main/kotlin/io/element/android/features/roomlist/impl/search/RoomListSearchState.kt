@@ -23,5 +23,8 @@ data class RoomListSearchState(
     val isSearchActive: Boolean,
     val query: String,
     val results: ImmutableList<RoomListRoomSummary>,
+    val isRoomDirectorySearchEnabled: Boolean,
     val eventSink: (RoomListSearchEvents) -> Unit
-)
+) {
+    val displayRoomDirectorySearch = query.isEmpty() && isRoomDirectorySearchEnabled
+}
