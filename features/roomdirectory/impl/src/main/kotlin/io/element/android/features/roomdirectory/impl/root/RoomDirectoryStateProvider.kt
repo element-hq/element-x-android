@@ -32,7 +32,22 @@ open class RoomDirectoryStateProvider : PreviewParameterProvider<RoomDirectorySt
             aRoomDirectoryState(
                 query = "Element",
                 roomDescriptions = aRoomDescriptionList(),
-            )
+            ),
+            aRoomDirectoryState(
+                query = "Element",
+                roomDescriptions = aRoomDescriptionList(),
+                displayLoadMoreIndicator = true,
+            ),
+            aRoomDirectoryState(
+                query = "Element",
+                roomDescriptions = aRoomDescriptionList(),
+                joinRoomAction = AsyncAction.Loading,
+            ),
+            aRoomDirectoryState(
+                query = "Element",
+                roomDescriptions = aRoomDescriptionList(),
+                joinRoomAction = AsyncAction.Failure(Exception("Failed to join room")),
+            ),
         )
 }
 

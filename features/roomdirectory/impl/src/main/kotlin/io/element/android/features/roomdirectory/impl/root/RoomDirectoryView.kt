@@ -48,6 +48,7 @@ import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.roomdirectory.api.RoomDescription
+import io.element.android.features.roomdirectory.impl.R
 import io.element.android.libraries.designsystem.components.async.AsyncActionView
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.button.BackButton
@@ -87,8 +88,8 @@ fun RoomDirectoryView(
                 state = state,
                 onResultClicked = ::joinRoom,
                 modifier = Modifier
-                        .padding(padding)
-                        .consumeWindowInsets(padding)
+                    .padding(padding)
+                    .consumeWindowInsets(padding)
             )
         }
     )
@@ -97,6 +98,9 @@ fun RoomDirectoryView(
         onSuccess = onRoomJoined,
         onErrorDismiss = {
             state.eventSink(RoomDirectoryEvents.JoinRoomDismissError)
+        },
+        errorMessage = {
+            stringResource(id = CommonStrings.error_unknown)
         }
     )
 }
@@ -114,7 +118,7 @@ private fun RoomDirectoryTopBar(
         },
         title = {
             Text(
-                text = "Room directory",
+                text = stringResource(id = R.string.screen_room_directory_search_title),
                 style = ElementTheme.typography.aliasScreenTitle,
             )
         }
@@ -184,10 +188,10 @@ private fun RoomDirectoryRoomList(
 @Composable
 private fun LoadMoreIndicator(modifier: Modifier = Modifier) {
     Box(
-            modifier
-                    .fillMaxWidth()
-                    .wrapContentHeight()
-                    .padding(24.dp),
+        modifier
+            .fillMaxWidth()
+            .wrapContentHeight()
+            .padding(24.dp),
         contentAlignment = Alignment.Center,
     ) {
         CircularProgressIndicator(
@@ -257,14 +261,16 @@ private fun RoomDirectoryRoomRow(
 ) {
     Row(
         modifier = modifier
-                .fillMaxWidth()
-                .clickable { onClick(roomDescription.roomId) }
-                .padding(
-                        top = 12.dp,
-                        bottom = 12.dp,
-                        start = 16.dp,
-                )
-                .height(IntrinsicSize.Min),
+            .fillMaxWidth()
+            .clickable(enabled = roomDescription.canBeJoined) {
+                onClick(roomDescription.roomId)
+            }
+            .padding(
+                top = 12.dp,
+                bottom = 12.dp,
+                start = 16.dp,
+            )
+            .height(IntrinsicSize.Min),
     ) {
         Avatar(
             avatarData = roomDescription.avatarData,
@@ -272,8 +278,8 @@ private fun RoomDirectoryRoomRow(
         )
         Column(
             modifier = Modifier
-                    .weight(1f)
-                    .padding(start = 16.dp)
+                .weight(1f)
+                .padding(start = 16.dp)
         ) {
             Text(
                 text = roomDescription.name,
@@ -295,8 +301,8 @@ private fun RoomDirectoryRoomRow(
                 text = stringResource(id = CommonStrings.action_join),
                 color = ElementTheme.colors.textSuccessPrimary,
                 modifier = Modifier
-                        .align(Alignment.CenterVertically)
-                        .padding(start = 4.dp, end = 12.dp)
+                    .align(Alignment.CenterVertically)
+                    .padding(start = 4.dp, end = 12.dp)
             )
         } else {
             Spacer(modifier = Modifier.width(24.dp))

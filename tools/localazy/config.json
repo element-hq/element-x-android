@@ -197,6 +197,12 @@
         "screen_app_lock_.*",
         "screen_signout_in_progress_dialog_content"
       ]
+    },
+    {
+      "name" : ":features:roomdirectory:impl",
+      "includeRegex" : [
+        "screen_room_directory_.*"
+      ]
     }
   ]
 }

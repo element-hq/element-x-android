@@ -43,6 +43,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.tokens.generated.CompoundIcons
+import io.element.android.features.roomlist.impl.R
 import io.element.android.features.roomlist.impl.components.RoomSummaryRow
 import io.element.android.features.roomlist.impl.contentType
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
@@ -131,8 +132,8 @@ private fun RoomListSearchContent(
                     val focusRequester = FocusRequester()
                     TextField(
                         modifier = Modifier
-                                .fillMaxWidth()
-                                .focusRequester(focusRequester),
+                            .fillMaxWidth()
+                            .focusRequester(focusRequester),
                         value = filter,
                         singleLine = true,
                         onValueChange = { state.eventSink(RoomListSearchEvents.QueryChanged(it)) },
@@ -171,8 +172,8 @@ private fun RoomListSearchContent(
     ) { padding ->
         Column(
             modifier = Modifier
-                    .padding(padding)
-                    .consumeWindowInsets(padding)
+                .padding(padding)
+                .consumeWindowInsets(padding)
         ) {
             if (state.displayRoomDirectorySearch) {
                 RoomDirectorySearchButton(
@@ -206,7 +207,7 @@ private fun RoomDirectorySearchButton(
     modifier: Modifier = Modifier
 ) {
     Button(
-        text = "Browse all rooms",
+        text = stringResource(id = R.string.screen_roomlist_room_directory_button_title),
         leadingIcon = IconSource.Vector(CompoundIcons.ListBulleted()),
         onClick = onClick,
         modifier = modifier,
