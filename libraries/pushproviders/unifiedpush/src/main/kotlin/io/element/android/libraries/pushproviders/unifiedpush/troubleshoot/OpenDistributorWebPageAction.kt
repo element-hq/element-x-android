@@ -21,6 +21,7 @@ import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.androidutils.system.openUrlInExternalApp
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
+import io.element.android.libraries.pushproviders.unifiedpush.UnifiedPushConfig
 import javax.inject.Inject
 
 interface OpenDistributorWebPageAction {
@@ -34,8 +35,7 @@ class DefaultOpenDistributorWebPageAction @Inject constructor(
     override fun execute() {
         // Open the distributor download page
         context.openUrlInExternalApp(
-            url = "https://unifiedpush.org/users/distributors/",
-            inNewTask = true
+            url = UnifiedPushConfig.UNIFIED_PUSH_DISTRIBUTORS_URL,
         )
     }
 }

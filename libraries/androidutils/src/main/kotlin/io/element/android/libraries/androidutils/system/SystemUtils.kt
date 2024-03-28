@@ -156,10 +156,9 @@ fun Context.startSharePlainTextIntent(
 fun Context.openUrlInExternalApp(
     url: String,
     errorMessage: String = getString(R.string.error_no_compatible_app_found),
-    inNewTask: Boolean = false,
 ) {
     val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-    if (inNewTask) {
+    if (this !is Activity) {
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
     }
     try {
