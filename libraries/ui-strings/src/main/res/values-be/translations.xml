@@ -51,6 +51,7 @@
   <string name="action_decline">"Адхіліць"</string>
   <string name="action_delete_poll">"Выдаліць апытанне"</string>
   <string name="action_disable">"Адключыць"</string>
+  <string name="action_discard">"Адмяніць"</string>
   <string name="action_done">"Гатова"</string>
   <string name="action_edit">"Рэдагаваць"</string>
   <string name="action_edit_poll">"Рэдагаваць апытанне"</string>
@@ -59,6 +60,7 @@
   <string name="action_enter_pin">"Увядзіце PIN-код"</string>
   <string name="action_forgot_password">"Забылі пароль?"</string>
   <string name="action_forward">"Пераслаць"</string>
+  <string name="action_go_back">"Вярнуцца"</string>
   <string name="action_invite">"Запрасіць"</string>
   <string name="action_invite_friends">"Запрасіць карыстальникаў"</string>
   <string name="action_invite_friends_to_app">"Запрасіць карыстальнікаў у %1$s"</string>
@@ -86,6 +88,7 @@
   <string name="action_reply_in_thread">"Адказаць у гутаркі"</string>
   <string name="action_report_bug">"Паведаміць пра памылку"</string>
   <string name="action_report_content">"Паскардзіцца на змест"</string>
+  <string name="action_reset">"Скінуць"</string>
   <string name="action_retry">"Паўтарыць"</string>
   <string name="action_retry_decryption">"Паўтарыце расшыфроўку"</string>
   <string name="action_save">"Захаваць"</string>
@@ -115,6 +118,7 @@
   <string name="common_audio">"Аўдыё"</string>
   <string name="common_blocked_users">"Заблакіраваныя карыстальнікі"</string>
   <string name="common_bubbles">"Бурбалкі"</string>
+  <string name="common_call_invite">"Ідзе выклік (не падтрымліваецца)"</string>
   <string name="common_chat_backup">"Рэзервовае капіраванне чата"</string>
   <string name="common_copyright">"Аўтарскае права"</string>
   <string name="common_creating_room">"Стварэнне пакоя…"</string>
@@ -131,7 +135,7 @@
   <string name="common_error">"Памылка"</string>
   <string name="common_everyone">"Усе"</string>
   <string name="common_failed">"Памылка"</string>
-  <string name="common_favourite">"Захаванае"</string>
+  <string name="common_favourite">"Абраць"</string>
   <string name="common_favourited">"Абранае"</string>
   <string name="common_file">"Файл"</string>
   <string name="common_file_saved_on_disk_android">"Файл захаваны ў папку Спампоўкі"</string>
@@ -185,6 +189,7 @@
   <string name="common_room">"Пакой"</string>
   <string name="common_room_name">"Назва пакоя"</string>
   <string name="common_room_name_placeholder">"напрыклад, назва вашага праекта"</string>
+  <string name="common_saved_changes">"Захаваныя змены"</string>
   <string name="common_saving">"Захаванне"</string>
   <string name="common_screen_lock">"Блакіроўка экрана"</string>
   <string name="common_search_for_someone">"Шукаць карыстальніка"</string>
@@ -228,6 +233,8 @@
   <string name="dialog_title_error">"Памылка"</string>
   <string name="dialog_title_success">"Поспех"</string>
   <string name="dialog_title_warning">"Папярэджанне"</string>
+  <string name="dialog_unsaved_changes_description_android">"Вашы змены не былі захаваны. Вы ўпэўнены, што хочаце вярнуцца?"</string>
+  <string name="dialog_unsaved_changes_title">"Захаваць змены?"</string>
   <string name="error_failed_creating_the_permalink">"Не атрымалася стварыць пастаянную спасылку"</string>
   <string name="error_failed_loading_map">"%1$s не атрымалася загрузіць карту. Калі ласка паспрабуйце зноў пазней."</string>
   <string name="error_failed_loading_messages">"Не ўдалося загрузіць паведамленні"</string>
@@ -242,9 +249,17 @@
   <string name="invite_friends_text">"Гэй, пагавары са мной у %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Rageshake паведаміць пра памылку"</string>
+  <string name="screen_identity_confirmation_subtitle">"Пацвердзіце гэтую прыладу, каб наладзіць бяспечны абмен паведамленнямі."</string>
+  <string name="screen_identity_confirmation_title">"Пацвердзіце, што гэта вы"</string>
+  <string name="screen_identity_confirmed_subtitle">"Цяпер вы можаце бяспечна чытаць і адпраўляць паведамленні, і ўсе, з кім вы маеце зносіны ў чаце, таксама могуць давяраць гэтай прыладзе."</string>
+  <string name="screen_identity_confirmed_title">"Прылада праверана"</string>
+  <string name="screen_identity_use_another_device">"Выкарыстоўвайце іншую прыладу"</string>
+  <string name="screen_identity_waiting_on_other_device">"Чакаем іншую прыладу…"</string>
   <string name="screen_media_picker_error_failed_selection">"Не ўдалося выбраць носьбіт, паўтарыце спробу."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Не атрымалася апрацаваць медыяфайл для загрузкі, паспрабуйце яшчэ раз."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Не атрымалася загрузіць медыяфайлы, паспрабуйце яшчэ раз."</string>
+  <string name="screen_room_directory_search_loading_error">"Памылка загрузкі"</string>
+  <string name="screen_room_directory_search_title">"Каталог пакояў"</string>
   <string name="screen_room_error_failed_processing_media">"Не атрымалася апрацаваць медыяфайл для загрузкі, паспрабуйце яшчэ раз."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Не ўдалося атрымаць інфармацыю пра карыстальніка"</string>
   <string name="screen_room_member_details_block_alert_action">"Заблакіраваць"</string>

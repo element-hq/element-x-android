@@ -3,12 +3,16 @@
   <string name="state_event_avatar_changed_too">"(avatar juga diubah)"</string>
   <string name="state_event_avatar_url_changed">"%1$s mengubah avatarnya"</string>
   <string name="state_event_avatar_url_changed_by_you">"Anda mengubah avatar sendiri"</string>
+  <string name="state_event_demoted_to_member">"%1$s telah diturunkan menjadi anggota"</string>
+  <string name="state_event_demoted_to_moderator">"%1$s telah diturunkan menjadi moderator"</string>
   <string name="state_event_display_name_changed_from">"%1$s mengubah nama tampilannya dari %2$s menjadi %3$s"</string>
   <string name="state_event_display_name_changed_from_by_you">"Anda mengubah nama tampilan sendiri dari %1$s menjadi %2$s"</string>
   <string name="state_event_display_name_removed">"%1$s menghapus nama tampilannya (sebelumnya %2$s)"</string>
   <string name="state_event_display_name_removed_by_you">"Anda menghapus nama tampilan sendiri (sebelumnya %1$s)"</string>
   <string name="state_event_display_name_set">"%1$s menetapkan nama tampilannya menjadi %2$s"</string>
   <string name="state_event_display_name_set_by_you">"Anda menetapkan nama tampilan sendiri menjadi %1$s"</string>
+  <string name="state_event_promoted_to_administrator">"%1$s telah dipromosikan menjadi admin"</string>
+  <string name="state_event_promoted_to_moderator">"%1$s telah dipromosikan menjadi moderator"</string>
   <string name="state_event_room_avatar_changed">"%1$s mengubah avatar ruangan"</string>
   <string name="state_event_room_avatar_changed_by_you">"Anda mengubah avatar ruangan"</string>
   <string name="state_event_room_avatar_removed">"%1$s menghapus avatar ruangan"</string>
@@ -39,6 +43,8 @@
   <string name="state_event_room_name_changed_by_you">"Anda mengubah nama ruangan menjadi: %1$s"</string>
   <string name="state_event_room_name_removed">"%1$s menghapus nama ruangan"</string>
   <string name="state_event_room_name_removed_by_you">"Anda menghapus nama ruangan"</string>
+  <string name="state_event_room_none">"%1$s tidak membuat perubahan"</string>
+  <string name="state_event_room_none_by_you">"Anda tidak membuat perubahan"</string>
   <string name="state_event_room_reject">"%1$s menolak undangan"</string>
   <string name="state_event_room_reject_by_you">"Anda menolak undangan"</string>
   <string name="state_event_room_remove">"%1$s mengeluarkan %2$s"</string>

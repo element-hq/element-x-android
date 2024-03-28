@@ -24,6 +24,7 @@ Vous n’avez plus de messages non-lus!"</string>
   <string name="screen_roomlist_main_space_title">"Conversations"</string>
   <string name="screen_roomlist_mark_as_read">"Marquer comme lu"</string>
   <string name="screen_roomlist_mark_as_unread">"Marquer comme non lu"</string>
+  <string name="screen_roomlist_room_directory_button_title">"Parcourir tous les salons"</string>
   <string name="session_verification_banner_message">"Il semblerait que vous utilisiez un nouvel appareil. Vérifiez la session avec un autre de vos appareils pour accéder à vos messages chiffrés."</string>
   <string name="session_verification_banner_title">"Vérifier que c’est bien vous"</string>
 </resources>

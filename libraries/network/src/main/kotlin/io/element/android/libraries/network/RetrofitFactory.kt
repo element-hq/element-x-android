@@ -16,12 +16,12 @@
 
 package io.element.android.libraries.network
 
-import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import io.element.android.libraries.core.uri.ensureTrailingSlash
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
+import retrofit2.converter.kotlinx.serialization.asConverterFactory
 import javax.inject.Inject
 import javax.inject.Provider
 

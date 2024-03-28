@@ -6,6 +6,7 @@
   <string name="screen_session_verification_compare_numbers_subtitle">"Konfirmasikan bahwa angka-angka di bawah ini sesuai dengan yang ditampilkan pada sesi Anda yang lain."</string>
   <string name="screen_session_verification_compare_numbers_title">"Bandingkan angka"</string>
   <string name="screen_session_verification_complete_subtitle">"Sesi baru Anda sekarang diverifikasi. Ini memiliki akses ke pesan terenkripsi Anda, dan pengguna lain akan melihatnya sebagai tepercaya."</string>
+  <string name="screen_session_verification_enter_recovery_key">"Masukkan kunci pemulihan"</string>
   <string name="screen_session_verification_open_existing_session_subtitle">"Buktikan bahwa ini memang Anda untuk mengakses riwayat pesan terenkripsi Anda."</string>
   <string name="screen_session_verification_open_existing_session_title">"Buka sesi yang sudah ada"</string>
   <string name="screen_session_verification_positive_button_canceled">"Verifikasi ulang"</string>

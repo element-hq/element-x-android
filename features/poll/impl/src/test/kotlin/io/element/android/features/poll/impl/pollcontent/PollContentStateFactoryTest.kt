@@ -131,7 +131,7 @@ class PollContentStateFactoryTest {
         val state = factory.create(eventTimelineItem, aPollContent(PollKind.Undisclosed))
         val expectedState = aPollContentState(pollKind = PollKind.Undisclosed).let {
             it.copy(
-                answerItems = it.answerItems.map { answerItem -> answerItem.copy(isDisclosed = false) }.toImmutableList()
+                answerItems = it.answerItems.map { answerItem -> answerItem.copy(showVotes = false) }.toImmutableList()
             )
         }
         assertThat(state).isEqualTo(expectedState)
@@ -147,10 +147,10 @@ class PollContentStateFactoryTest {
         val expectedState = aPollContentState(
             pollKind = PollKind.Undisclosed,
             answerItems = listOf(
-                aPollAnswerItem(answer = A_POLL_ANSWER_1, isDisclosed = false, votesCount = 3, percentage = 0.3f),
-                aPollAnswerItem(answer = A_POLL_ANSWER_2, isDisclosed = false, isSelected = true, votesCount = 6, percentage = 0.6f),
-                aPollAnswerItem(answer = A_POLL_ANSWER_3, isDisclosed = false),
-                aPollAnswerItem(answer = A_POLL_ANSWER_4, isDisclosed = false, votesCount = 1, percentage = 0.1f),
+                aPollAnswerItem(answer = A_POLL_ANSWER_1, showVotes = false, votesCount = 3, percentage = 0.3f),
+                aPollAnswerItem(answer = A_POLL_ANSWER_2, showVotes = false, isSelected = true, votesCount = 6, percentage = 0.6f),
+                aPollAnswerItem(answer = A_POLL_ANSWER_3, showVotes = false),
+                aPollAnswerItem(answer = A_POLL_ANSWER_4, showVotes = false, votesCount = 1, percentage = 0.1f),
             ),
         )
         assertThat(state).isEqualTo(expectedState)
@@ -164,7 +164,7 @@ class PollContentStateFactoryTest {
             pollKind = PollKind.Undisclosed
         ).let {
             it.copy(
-                answerItems = it.answerItems.map { answerItem -> answerItem.copy(isDisclosed = true, isEnabled = false) }.toImmutableList(),
+                answerItems = it.answerItems.map { answerItem -> answerItem.copy(showVotes = true, isEnabled = false) }.toImmutableList(),
             )
         }
         assertThat(state).isEqualTo(expectedState)
@@ -258,7 +258,7 @@ class PollContentStateFactoryTest {
         isSelected: Boolean = false,
         isEnabled: Boolean = true,
         isWinner: Boolean = false,
-        isDisclosed: Boolean = true,
+        showVotes: Boolean = true,
         votesCount: Int = 0,
         percentage: Float = 0f,
     ) = PollAnswerItem(
@@ -266,7 +266,7 @@ class PollContentStateFactoryTest {
         isSelected = isSelected,
         isEnabled = isEnabled,
         isWinner = isWinner,
-        isDisclosed = isDisclosed,
+        showVotes = showVotes,
         votesCount = votesCount,
         percentage = percentage,
     )

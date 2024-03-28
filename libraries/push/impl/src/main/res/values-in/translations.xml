@@ -24,6 +24,7 @@
     <item quantity="other">"%d pesan baru"</item>
   </plurals>
   <string name="notification_reaction_body">"Menghapus dengan %1$s"</string>
+  <string name="notification_room_action_mark_as_read">"Tandai sebagai dibaca"</string>
   <string name="notification_room_action_quick_reply">"Balas cepat"</string>
   <string name="notification_room_invite_body">"Mengundang Anda untuk bergabung ke ruangan"</string>
   <string name="notification_sender_me">"Saya"</string>

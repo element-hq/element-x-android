@@ -17,16 +17,14 @@
 package io.element.android.services.analytics.api.extensions
 
 import im.vector.app.features.analytics.plan.ViewRoom
-import io.element.android.libraries.core.bool.orFalse
-import io.element.android.libraries.matrix.api.core.MatrixPatterns
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 
 fun MatrixRoom.toAnalyticsViewRoom(trigger: ViewRoom.Trigger? = null, selectedSpace: MatrixRoom? = null, viaKeyboard: Boolean? = null): ViewRoom {
     val activeSpace = selectedSpace?.toActiveSpace() ?: ViewRoom.ActiveSpace.Home
 
     return ViewRoom(
-        isDM = this.isDirect.orFalse(),
-        isSpace = MatrixPatterns.isSpaceId(this.roomId.value),
+        isDM = isDirect,
+        isSpace = isSpace,
         trigger = trigger,
         activeSpace = activeSpace,
         viaKeyboard = viaKeyboard

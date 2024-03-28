@@ -41,6 +41,7 @@ import io.element.android.libraries.designsystem.theme.components.LinearProgress
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.progressIndicatorTrackColor
 import io.element.android.libraries.designsystem.toEnabledColor
+import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.ui.strings.CommonPlurals
 
 @Composable
@@ -79,17 +80,36 @@ internal fun PollAnswerView(
                     text = answerItem.answer.text,
                     style = if (answerItem.isWinner) ElementTheme.typography.fontBodyLgMedium else ElementTheme.typography.fontBodyLgRegular,
                 )
-                if (answerItem.isDisclosed) {
-                    Text(
-                        modifier = Modifier.align(Alignment.Bottom),
-                        text = pluralStringResource(
-                            id = CommonPlurals.common_poll_votes_count,
-                            count = answerItem.votesCount,
-                            answerItem.votesCount
-                        ),
-                        style = if (answerItem.isWinner) ElementTheme.typography.fontBodySmMedium else ElementTheme.typography.fontBodySmRegular,
-                        color = if (answerItem.isWinner) ElementTheme.colors.textPrimary else ElementTheme.colors.textSecondary,
+                if (answerItem.showVotes) {
+                    val text = pluralStringResource(
+                        id = CommonPlurals.common_poll_votes_count,
+                        count = answerItem.votesCount,
+                        answerItem.votesCount
                     )
+                    Row(
+                        modifier = Modifier.align(Alignment.Bottom),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        if (answerItem.isWinner) {
+                            Icon(
+                                resourceId = CommonDrawables.ic_winner,
+                                contentDescription = null,
+                                tint = ElementTheme.colors.iconAccentTertiary,
+                            )
+                            Spacer(modifier = Modifier.width(2.dp))
+                            Text(
+                                text = text,
+                                style = ElementTheme.typography.fontBodySmMedium,
+                                color = ElementTheme.colors.textPrimary,
+                            )
+                        } else {
+                            Text(
+                                text = text,
+                                style = ElementTheme.typography.fontBodySmRegular,
+                                color = ElementTheme.colors.textSecondary,
+                            )
+                        }
+                    }
                 }
             }
             Spacer(modifier = Modifier.height(10.dp))
@@ -98,7 +118,7 @@ internal fun PollAnswerView(
                 color = if (answerItem.isWinner) ElementTheme.colors.textSuccessPrimary else answerItem.isEnabled.toEnabledColor(),
                 progress = {
                     when {
-                        answerItem.isDisclosed -> answerItem.percentage
+                        answerItem.showVotes -> answerItem.percentage
                         answerItem.isSelected -> 1f
                         else -> 0f
                     }
@@ -114,7 +134,7 @@ internal fun PollAnswerView(
 @Composable
 internal fun PollAnswerDisclosedNotSelectedPreview() = ElementPreview {
     PollAnswerView(
-        answerItem = aPollAnswerItem(isDisclosed = true, isSelected = false),
+        answerItem = aPollAnswerItem(showVotes = true, isSelected = false),
     )
 }
 
@@ -122,7 +142,7 @@ internal fun PollAnswerDisclosedNotSelectedPreview() = ElementPreview {
 @Composable
 internal fun PollAnswerDisclosedSelectedPreview() = ElementPreview {
     PollAnswerView(
-        answerItem = aPollAnswerItem(isDisclosed = true, isSelected = true),
+        answerItem = aPollAnswerItem(showVotes = true, isSelected = true),
     )
 }
 
@@ -130,7 +150,7 @@ internal fun PollAnswerDisclosedSelectedPreview() = ElementPreview {
 @Composable
 internal fun PollAnswerUndisclosedNotSelectedPreview() = ElementPreview {
     PollAnswerView(
-        answerItem = aPollAnswerItem(isDisclosed = false, isSelected = false),
+        answerItem = aPollAnswerItem(showVotes = false, isSelected = false),
     )
 }
 
@@ -138,7 +158,7 @@ internal fun PollAnswerUndisclosedNotSelectedPreview() = ElementPreview {
 @Composable
 internal fun PollAnswerUndisclosedSelectedPreview() = ElementPreview {
     PollAnswerView(
-        answerItem = aPollAnswerItem(isDisclosed = false, isSelected = true),
+        answerItem = aPollAnswerItem(showVotes = false, isSelected = true),
     )
 }
 
@@ -146,7 +166,7 @@ internal fun PollAnswerUndisclosedSelectedPreview() = ElementPreview {
 @Composable
 internal fun PollAnswerEndedWinnerNotSelectedPreview() = ElementPreview {
     PollAnswerView(
-        answerItem = aPollAnswerItem(isDisclosed = true, isSelected = false, isEnabled = false, isWinner = true),
+        answerItem = aPollAnswerItem(showVotes = true, isSelected = false, isEnabled = false, isWinner = true),
     )
 }
 
@@ -154,7 +174,7 @@ internal fun PollAnswerEndedWinnerNotSelectedPreview() = ElementPreview {
 @Composable
 internal fun PollAnswerEndedWinnerSelectedPreview() = ElementPreview {
     PollAnswerView(
-        answerItem = aPollAnswerItem(isDisclosed = true, isSelected = true, isEnabled = false, isWinner = true),
+        answerItem = aPollAnswerItem(showVotes = true, isSelected = true, isEnabled = false, isWinner = true),
     )
 }
 
@@ -162,6 +182,6 @@ internal fun PollAnswerEndedWinnerSelectedPreview() = ElementPreview {
 @Composable
 internal fun PollAnswerEndedSelectedPreview() = ElementPreview {
     PollAnswerView(
-        answerItem = aPollAnswerItem(isDisclosed = true, isSelected = true, isEnabled = false, isWinner = false),
+        answerItem = aPollAnswerItem(showVotes = true, isSelected = true, isEnabled = false, isWinner = false),
     )
 }

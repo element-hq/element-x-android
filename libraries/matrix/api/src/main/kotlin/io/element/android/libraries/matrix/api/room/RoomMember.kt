@@ -66,7 +66,9 @@ enum class RoomMembershipState {
     INVITE,
     JOIN,
     KNOCK,
-    LEAVE
+    LEAVE;
+
+    fun isActive(): Boolean = this == JOIN || this == INVITE
 }
 
 /**

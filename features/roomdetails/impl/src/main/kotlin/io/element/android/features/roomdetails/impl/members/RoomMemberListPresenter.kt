@@ -84,6 +84,11 @@ class RoomMemberListPresenter @AssistedInject constructor(
             remember { roomMembersModerationPresenter.dummyState() }
         }
 
+        // Ensure we load the latest data when entering this screen
+        LaunchedEffect(Unit) {
+            room.updateMembers()
+        }
+
         LaunchedEffect(membersState) {
             if (membersState is MatrixRoomMembersState.Unknown) {
                 return@LaunchedEffect
