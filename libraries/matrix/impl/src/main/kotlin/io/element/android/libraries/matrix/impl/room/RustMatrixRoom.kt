@@ -182,48 +182,40 @@ class RustMatrixRoom(
     }
 
     override val name: String?
-        get() {
-            return roomListItem.name()
-        }
+        get() = runCatching { roomListItem.name() }.getOrDefault(null)
 
     override val displayName: String
-        get() {
-            return innerRoom.displayName()
-        }
+        get() = runCatching { innerRoom.displayName() }.getOrDefault("")
 
     override val topic: String?
-        get() {
-            return innerRoom.topic()
-        }
+        get() = runCatching { innerRoom.topic() }.getOrDefault(null)
 
     override val avatarUrl: String?
-        get() {
-            return roomListItem.avatarUrl() ?: innerRoom.avatarUrl()
-        }
+        get() = runCatching { roomListItem.avatarUrl() ?: innerRoom.avatarUrl() }.getOrDefault(null)
 
     override val isEncrypted: Boolean
         get() = runCatching { innerRoom.isEncrypted() }.getOrDefault(false)
 
     override val alias: String?
-        get() = innerRoom.canonicalAlias()
+        get() = runCatching { innerRoom.canonicalAlias() }.getOrDefault(null)
 
     override val alternativeAliases: List<String>
-        get() = innerRoom.alternativeAliases()
+        get() = runCatching { innerRoom.alternativeAliases() }.getOrDefault(emptyList())
 
     override val isPublic: Boolean
-        get() = innerRoom.isPublic()
+        get() = runCatching { innerRoom.isPublic() }.getOrDefault(false)
 
     override val isSpace: Boolean
-        get() = innerRoom.isSpace()
+        get() = runCatching { innerRoom.isSpace() }.getOrDefault(false)
 
     override val isDirect: Boolean
-        get() = innerRoom.isDirect()
+        get() = runCatching { innerRoom.isDirect() }.getOrDefault(false)
 
     override val joinedMemberCount: Long
-        get() = innerRoom.joinedMembersCount().toLong()
+        get() = runCatching { innerRoom.joinedMembersCount().toLong() }.getOrDefault(0)
 
     override val activeMemberCount: Long
-        get() = innerRoom.activeMembersCount().toLong()
+        get() = runCatching { innerRoom.activeMembersCount().toLong() }.getOrDefault(0)
 
     override suspend fun updateMembers() {
         val useCache = membersStateFlow.value is MatrixRoomMembersState.Unknown
