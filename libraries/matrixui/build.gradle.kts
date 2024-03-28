@@ -37,6 +37,7 @@ dependencies {
     implementation(projects.libraries.matrix.api)
     implementation(projects.libraries.designsystem)
     implementation(projects.libraries.core)
+    implementation(projects.services.toolbox.api)
     implementation(projects.libraries.uiStrings)
     implementation(libs.coil.compose)
     implementation(libs.coil.gif)
@@ -47,4 +48,5 @@ dependencies {
     testImplementation(libs.test.junit)
     testImplementation(libs.test.truth)
     testImplementation(libs.test.robolectric)
+    testImplementation(projects.services.toolbox.test)
 }

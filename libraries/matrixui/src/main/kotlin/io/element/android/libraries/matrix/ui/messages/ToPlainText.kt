@@ -16,9 +16,12 @@
 
 package io.element.android.libraries.matrix.ui.messages
 
+import io.element.android.libraries.matrix.api.core.MatrixPatterns
 import io.element.android.libraries.matrix.api.timeline.item.event.FormattedBody
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageFormat
 import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageType
+import io.element.android.libraries.ui.strings.CommonStrings
+import io.element.android.services.toolbox.api.strings.StringProvider
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
 import org.jsoup.nodes.Node
@@ -29,50 +32,87 @@ import org.jsoup.select.NodeVisitor
  * Converts the HTML string in [TextMessageType.formatted] to a plain text representation by parsing it and removing all formatting.
  * If the message is not formatted or the format is not [MessageFormat.HTML], the [TextMessageType.body] is returned instead.
  */
-fun TextMessageType.toPlainText() = formatted?.toPlainText() ?: body
+fun TextMessageType.toPlainText(stringProvider: StringProvider? = null) =
+    formatted?.toPlainText(stringProvider = stringProvider) ?: body
 
 /**
  * Converts the HTML string in [FormattedBody.body] to a plain text representation by parsing it and removing all formatting.
  * If the message is not formatted or the format is not [MessageFormat.HTML] we return `null`.
  * @param prefix if not null, the prefix will be inserted at the beginning of the message.
+ * @param stringProvider if not null, the string provider will be used to resolve [CommonStrings].common_in_reply_to string.
  */
-fun FormattedBody.toPlainText(prefix: String? = null): String? {
-    return this.toHtmlDocument(prefix)?.toPlainText()
+fun FormattedBody.toPlainText(
+    prefix: String? = null,
+    stringProvider: StringProvider? = null,
+): String? {
+    return this.toHtmlDocument(prefix)?.toPlainText(stringProvider)
 }
 
 /**
  * Converts the HTML [Document] to a plain text representation by parsing it and removing all formatting.
  */
-fun Document.toPlainText(): String {
-    val visitor = PlainTextNodeVisitor()
+fun Document.toPlainText(
+    stringProvider: StringProvider? = null,
+): String {
+    val visitor = PlainTextNodeVisitor(stringProvider)
     traverse(visitor)
     return visitor.build()
 }
 
-private class PlainTextNodeVisitor : NodeVisitor {
+private class PlainTextNodeVisitor(
+    private val stringProvider: StringProvider?
+) : NodeVisitor {
     private val builder = StringBuilder()
+    private var isInInMxReply = false
 
     override fun head(node: Node, depth: Int) {
-        if (node is TextNode && node.text().isNotBlank()) {
-            builder.append(node.text())
-        } else if (node is Element && node.tagName() == "li") {
-            val index = node.elementSiblingIndex()
-            val isOrdered = node.parent()?.nodeName()?.lowercase() == "ol"
-            if (isOrdered) {
-                builder.append("${index + 1}. ")
-            } else {
-                builder.append("• ")
+        when {
+            node is TextNode && node.text().isNotBlank() -> {
+                val text = node.text()
+                if (isInInMxReply) {
+                    when {
+                        MatrixPatterns.isUserId(text) -> {
+                            builder.append(stringProvider?.getString(CommonStrings.common_in_reply_to, text) ?: "In reply to $text")
+                        }
+                    }
+                } else {
+                    builder.append(text)
+                }
             }
-        } else if (node is Element && node.isBlock && builder.lastOrNull() != '\n') {
-            builder.append("\n")
+            node is Element && node.tagName() == "li" -> {
+                val index = node.elementSiblingIndex()
+                val isOrdered = node.parent()?.nodeName()?.lowercase() == "ol"
+                if (isOrdered) {
+                    builder.append("${index + 1}. ")
+                } else {
+                    builder.append("• ")
+                }
+            }
+            node is Element && node.isBlock && builder.lastOrNull() != '\n' -> {
+                builder.append("\n")
+            }
+            node is Element && node.tagName() == "mx-reply" -> {
+                isInInMxReply = true
+            }
         }
     }
 
     override fun tail(node: Node, depth: Int) {
-        fun nodeIsBlockButNotLastOne(node: Node) = node is Element && node.isBlock && node.lastElementSibling() !== node
-        fun nodeIsLineBreak(node: Node) = node.nodeName().lowercase() == "br"
-        if (nodeIsBlockButNotLastOne(node) || nodeIsLineBreak(node)) {
-            builder.append("\n")
+        when {
+            isInInMxReply -> {
+                if (node is Element && node.tagName() == "mx-reply") {
+                    isInInMxReply = false
+                    builder.append(": ")
+                }
+            }
+            // Node is block but not last one
+            node is Element && node.isBlock && node.lastElementSibling() !== node -> {
+                builder.append("\n")
+            }
+            // Node is line break
+            node.nodeName().lowercase() == "br" -> {
+                builder.append("\n")
+            }
         }
     }
 
