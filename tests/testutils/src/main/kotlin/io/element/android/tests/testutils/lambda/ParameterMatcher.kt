@@ -30,6 +30,7 @@ interface ParameterMatcher {
  */
 fun <T> value(expectedValue: T) = object : ParameterMatcher {
     override fun match(param: Any?) = param == expectedValue
+    override fun toString(): String = "value($expectedValue)"
 }
 
 /**
@@ -38,4 +39,5 @@ fun <T> value(expectedValue: T) = object : ParameterMatcher {
  */
 fun any() = object : ParameterMatcher {
     override fun match(param: Any?) = true
+    override fun toString(): String = "any()"
 }

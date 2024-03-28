@@ -56,29 +56,17 @@ class ParametersAssertions internal constructor(
 ) {
     fun withSequence(vararg matchersSequence: List<ParameterMatcher>) {
         if (parametersSequence.size != matchersSequence.size) {
-            throw AssertionError("Expected ${matchersSequence.size} parameters, but got ${parametersSequence.size} parameters")
+            throw AssertionError("Lambda was called ${parametersSequence.size} times, but only ${matchersSequence.size} assertions were provided")
         }
-        parametersSequence.zip(matchersSequence).forEach { (parameters, matchers) ->
+        parametersSequence.zip(matchersSequence).forEachIndexed { invocationIndex, (parameters, matchers) ->
             if (parameters.size != matchers.size) {
-                throw AssertionError("Expected ${matchers.size} parameters, but got ${parameters.size} parameters")
+                throw AssertionError("Expected ${matchers.size} parameters, but got ${parameters.size} parameters during invocation #$invocationIndex")
             }
-            parameters.zip(matchers).forEachIndexed { j, (param, matcher) ->
+            parameters.zip(matchers).forEachIndexed { paramIndex, (param, matcher) ->
                 if (!matcher.match(param)) {
-                    throw AssertionError("Parameter $j does not match the expected value")
-                }
-            }
-        }
-        for (i in parametersSequence.indices) {
-            val params = parametersSequence[i]
-            val checker = matchersSequence[i]
-            if (params.size != checker.size) {
-                throw AssertionError("Expected ${checker.size} parameters, but got ${params.size} parameters")
-            }
-            for (j in params.indices) {
-                val param = params[j]
-                val check = checker[j]
-                if (!check.match(param)) {
-                    throw AssertionError("Parameter $j does not match the expected value")
+                    throw AssertionError(
+                        "Parameter #$paramIndex does not match the expected value (actual=$param,expected=$matcher) during invocation #$invocationIndex"
+                    )
                 }
             }
         }
