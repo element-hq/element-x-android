@@ -22,13 +22,29 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.roomdirectory.RoomDescription as MatrixRoomDescription
 
 fun MatrixRoomDescription.toFeatureModel(): RoomDescription {
+    fun name(): String {
+        return name ?: alias ?: roomId.value
+    }
+
+    fun description(): String {
+        val topic = topic
+        val alias = alias
+        val name = name
+        return when {
+            topic != null -> topic
+            name != null && alias != null -> alias
+            name == null && alias == null -> ""
+            else -> roomId.value
+        }
+    }
+
     return RoomDescription(
         roomId = roomId,
-        name = name ?: "",
-        description = topic ?: alias ?: roomId.value,
+        name = name(),
+        description = description(),
         avatarData = AvatarData(
             id = roomId.value,
-            name = name ?: "",
+            name = name,
             url = avatarUrl,
             size = AvatarSize.RoomDirectoryItem,
         ),
