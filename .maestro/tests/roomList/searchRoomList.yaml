@@ -7,8 +7,4 @@ appId: ${MAESTRO_APP_ID}
 - tapOn: ${MAESTRO_ROOM_NAME}
 # Back from timeline
 - back
-- assertVisible: "MyR"
-- hideKeyboard
-# Back from search
-- back
 - runFlow: ../assertions/assertHomeDisplayed.yaml
