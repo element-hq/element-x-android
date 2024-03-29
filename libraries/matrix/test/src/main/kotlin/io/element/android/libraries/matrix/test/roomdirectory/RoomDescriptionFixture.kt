@@ -37,5 +37,5 @@ fun aRoomDescription(
     avatarUrl = avatarUrl,
     joinRule = joinRule,
     isWorldReadable = isWorldReadable,
-    joinedMembers = joinedMembers
+    numberOfMembers = joinedMembers
 )

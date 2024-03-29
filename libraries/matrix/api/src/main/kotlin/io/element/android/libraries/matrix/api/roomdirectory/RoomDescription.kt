@@ -26,7 +26,7 @@ data class RoomDescription(
     val avatarUrl: String?,
     val joinRule: JoinRule,
     val isWorldReadable: Boolean,
-    val joinedMembers: Long
+    val numberOfMembers: Long
 ) {
     enum class JoinRule {
         PUBLIC,

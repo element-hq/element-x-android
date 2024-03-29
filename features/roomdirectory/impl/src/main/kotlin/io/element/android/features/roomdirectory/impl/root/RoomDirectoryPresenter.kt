@@ -67,10 +67,10 @@ class RoomDirectoryPresenter @Inject constructor(
         }
         LaunchedEffect(searchQuery) {
             if (searchQuery == null) return@LaunchedEffect
-            // debounce search query
-            delay(300)
             // cancel load more right away
             loadingMore = false
+            // debounce search query
+            delay(300)
             roomDirectoryList.filter(searchQuery, 20)
         }
         LaunchedEffect(loadingMore) {

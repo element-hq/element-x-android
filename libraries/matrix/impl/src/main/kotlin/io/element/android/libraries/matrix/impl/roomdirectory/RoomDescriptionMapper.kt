@@ -35,7 +35,7 @@ class RoomDescriptionMapper {
                 null -> RoomDescription.JoinRule.UNKNOWN
             },
             isWorldReadable = roomDescription.isWorldReadable,
-            joinedMembers = roomDescription.joinedMembers.toLong(),
+            numberOfMembers = roomDescription.joinedMembers.toLong(),
         )
     }
 }
