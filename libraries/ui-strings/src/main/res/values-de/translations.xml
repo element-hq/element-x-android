@@ -254,8 +254,6 @@
   <string name="screen_media_picker_error_failed_selection">"Medienauswahl fehlgeschlagen, bitte versuche es erneut."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Fehler beim Verarbeiten des hochgeladenen Mediums. Bitte versuche es erneut."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Das Hochladen der Medien ist fehlgeschlagen. Bitte versuche es erneut."</string>
-  <string name="screen_room_directory_search_loading_error">"Fehler beim Laden"</string>
-  <string name="screen_room_directory_search_title">"Raumverzeichnis"</string>
   <string name="screen_room_error_failed_processing_media">"Fehler beim Verarbeiten des hochgeladenen Mediums. Bitte versuche es erneut."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Benutzerdetails konnten nicht abgerufen werden"</string>
   <string name="screen_room_member_details_block_alert_action">"Blockieren"</string>

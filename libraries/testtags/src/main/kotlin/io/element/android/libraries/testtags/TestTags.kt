@@ -100,4 +100,9 @@ object TestTags {
      * Timeline item.
      */
     val timelineItemSenderInfo = TestTag("timeline_item-sender_info")
+
+    /**
+     * Search field.
+     */
+    val searchTextField = TestTag("search_text_field")
 }

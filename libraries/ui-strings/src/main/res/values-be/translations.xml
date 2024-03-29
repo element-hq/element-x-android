@@ -258,8 +258,6 @@
   <string name="screen_media_picker_error_failed_selection">"Не ўдалося выбраць носьбіт, паўтарыце спробу."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Не атрымалася апрацаваць медыяфайл для загрузкі, паспрабуйце яшчэ раз."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Не атрымалася загрузіць медыяфайлы, паспрабуйце яшчэ раз."</string>
-  <string name="screen_room_directory_search_loading_error">"Памылка загрузкі"</string>
-  <string name="screen_room_directory_search_title">"Каталог пакояў"</string>
   <string name="screen_room_error_failed_processing_media">"Не атрымалася апрацаваць медыяфайл для загрузкі, паспрабуйце яшчэ раз."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Не ўдалося атрымаць інфармацыю пра карыстальніка"</string>
   <string name="screen_room_member_details_block_alert_action">"Заблакіраваць"</string>

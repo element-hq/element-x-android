@@ -256,8 +256,6 @@
   <string name="screen_media_picker_error_failed_selection">"Не вдалося вибрати медіафайл, спробуйте ще раз."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Не вдалося обробити медіафайл для завантаження, спробуйте ще раз."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Не вдалося завантажити медіафайл, спробуйте ще раз."</string>
-  <string name="screen_room_directory_search_loading_error">"Не вдалося завантажити"</string>
-  <string name="screen_room_directory_search_title">"Каталог кімнат"</string>
   <string name="screen_room_error_failed_processing_media">"Не вдалося обробити медіафайл для завантаження, спробуйте ще раз."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Не вдалося отримати дані користувача"</string>
   <string name="screen_room_member_details_block_alert_action">"Заблокувати"</string>
