@@ -347,7 +347,7 @@ private fun MemberRow(
             Row(verticalAlignment = Alignment.CenterVertically) {
                 // Name
                 Text(
-                    modifier = Modifier.clipToBounds(),
+                    modifier = Modifier.weight(1f, fill = false),
                     text = name,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
@@ -357,7 +357,7 @@ private fun MemberRow(
                 // Invitation pending marker
                 if (isPending) {
                     Text(
-                        modifier = Modifier.weight(1f),
+                        modifier = Modifier.padding(start = 4.dp),
                         text = stringResource(id = R.string.screen_room_change_role_invited_member_name_android),
                         style = ElementTheme.typography.fontBodySmRegular,
                         color = MaterialTheme.colorScheme.secondary
@@ -386,6 +386,26 @@ internal fun ChangeRolesViewPreview(@PreviewParameter(ChangeRolesStateProvider::
         ChangeRolesView(
             state = state,
             onBackPressed = {},
+        )
+    }
+}
+
+@PreviewsDayNight
+@Composable
+internal fun PendingMemberRowWithLongName() {
+    ElementPreview {
+        MemberRow(
+            avatarData = AvatarData("userId", "A very long name that should be truncated", "https://example.com/avatar.png", AvatarSize.UserListItem),
+            name = "A very long name that should be truncated",
+            userId = "@alice:matrix.org",
+            isPending = true,
+            trailingContent = {
+                Checkbox(
+                    checked = true,
+                    onCheckedChange = {},
+                    enabled = true,
+                )
+            }
         )
     }
 }

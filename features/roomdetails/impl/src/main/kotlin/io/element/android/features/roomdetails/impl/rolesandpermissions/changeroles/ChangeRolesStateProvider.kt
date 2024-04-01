@@ -22,6 +22,7 @@ import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.RoomMember
+import io.element.android.libraries.matrix.api.room.RoomMembershipState
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.components.aMatrixUserList
 import kotlinx.collections.immutable.ImmutableList
@@ -77,7 +78,16 @@ internal fun aChangeRolesState(
 
 internal fun aChangeRolesStateWithSelectedUsers() = aChangeRolesState(
     selectedUsers = aMatrixUserList().toImmutableList(),
-    searchResults = SearchBarResultState.Results(MembersByRole(members = aRoomMemberList())),
+    searchResults = SearchBarResultState.Results(
+        MembersByRole(
+            members = aRoomMemberList().mapIndexed { index, roomMember -> if (index % 2 == 0) {
+                    roomMember.copy(membership = RoomMembershipState.INVITE)
+                } else {
+                    roomMember
+                }
+            }
+        )
+    ),
     hasPendingChanges = true,
     canRemoveMember = { it != UserId("@alice:server.org") },
 )
