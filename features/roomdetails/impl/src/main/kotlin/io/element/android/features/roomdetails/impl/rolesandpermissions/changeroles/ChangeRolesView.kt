@@ -391,7 +391,7 @@ internal fun ChangeRolesViewPreview(@PreviewParameter(ChangeRolesStateProvider::
 
 @PreviewsDayNight
 @Composable
-internal fun PendingMemberRowWithLongName() {
+internal fun PendingMemberRowWithLongNamePreview() {
     ElementPreview {
         MemberRow(
             avatarData = AvatarData("userId", "A very long name that should be truncated", "https://example.com/avatar.png", AvatarSize.UserListItem),

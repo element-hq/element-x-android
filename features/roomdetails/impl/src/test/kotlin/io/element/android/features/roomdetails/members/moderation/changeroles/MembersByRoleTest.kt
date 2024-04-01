@@ -28,7 +28,7 @@ import io.element.android.libraries.matrix.test.room.aRoomMember
 import kotlinx.collections.immutable.persistentListOf
 import org.junit.Test
 
-class MembersByRoleTests {
+class MembersByRoleTest {
     @Test
     fun `constructor - with single member list categorizes and sorts members`() {
         val members = listOf(

@@ -81,7 +81,8 @@ internal fun aChangeRolesStateWithSelectedUsers() = aChangeRolesState(
     selectedUsers = aMatrixUserList().toImmutableList(),
     searchResults = SearchBarResultState.Results(
         MembersByRole(
-            members = aRoomMemberList().mapIndexed { index, roomMember -> if (index % 2 == 0) {
+            members = aRoomMemberList().mapIndexed { index, roomMember ->
+                if (index % 2 == 0) {
                     roomMember.copy(membership = RoomMembershipState.INVITE)
                 } else {
                     roomMember
