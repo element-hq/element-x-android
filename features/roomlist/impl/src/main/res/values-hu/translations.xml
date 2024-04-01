@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="confirm_recovery_key_banner_message">"A csevegés biztonsági mentése nincs szinkronban. Meg kell erősítened a helyreállítási kulcsát, hogy továbbra is hozzáférj a csevegés biztonsági mentéséhez."</string>
+  <string name="confirm_recovery_key_banner_message">"A csevegés biztonsági mentése nincs szinkronban. Meg kell erősítenie a helyreállítási kulcsát, hogy továbbra is hozzáférjen a csevegés biztonsági mentéséhez."</string>
   <string name="confirm_recovery_key_banner_title">"Helyreállítási kulcs megerősítése"</string>
   <string name="screen_migration_message">"Ez egy egyszeri folyamat, köszönjük a türelmét."</string>
   <string name="screen_migration_title">"A fiók beállítása."</string>
@@ -24,6 +24,7 @@ Nincs olvasatlan üzenete!"</string>
   <string name="screen_roomlist_main_space_title">"Összes csevegés"</string>
   <string name="screen_roomlist_mark_as_read">"Megjelölés olvasottként"</string>
   <string name="screen_roomlist_mark_as_unread">"Megjelölés olvasatlanként"</string>
+  <string name="screen_roomlist_room_directory_button_title">"Összes szoba böngészése"</string>
   <string name="session_verification_banner_message">"Úgy tűnik, hogy új eszközt használ. Ellenőrizze egy másik eszközzel, hogy a továbbiakban elérje a titkosított üzeneteket."</string>
   <string name="session_verification_banner_title">"Ellenőrizze, hogy Ön az"</string>
 </resources>

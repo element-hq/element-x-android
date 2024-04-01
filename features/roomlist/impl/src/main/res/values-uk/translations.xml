@@ -15,7 +15,7 @@
   <string name="screen_roomlist_filter_mixed_empty_state_subtitle">"Ви можете зняти фільтри, щоб побачити інші ваші чати"</string>
   <string name="screen_roomlist_filter_mixed_empty_state_title">"Ви не маєте чатів для цієї категорії"</string>
   <string name="screen_roomlist_filter_people">"Люди"</string>
-  <string name="screen_roomlist_filter_people_empty_state_title">"У вас ще немає жодного особистого чату"</string>
+  <string name="screen_roomlist_filter_people_empty_state_title">"Ви ще не маєте жодного особистого чату"</string>
   <string name="screen_roomlist_filter_rooms">"Кімнати"</string>
   <string name="screen_roomlist_filter_rooms_empty_state_title">"Ви ще не учасник жодної кімнати"</string>
   <string name="screen_roomlist_filter_unreads">"Непрочитані"</string>

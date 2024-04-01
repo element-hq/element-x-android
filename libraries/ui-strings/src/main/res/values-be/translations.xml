@@ -34,13 +34,13 @@
   <string name="a11y_voice_message_record">"Запісаць галасавое паведамленне."</string>
   <string name="a11y_voice_message_stop_recording">"Спыніць запіс"</string>
   <string name="action_accept">"Прыняць"</string>
-  <string name="action_add_to_timeline">"Дадаць на часовую шкалу"</string>
+  <string name="action_add_to_timeline">"Дадаць у хроніку"</string>
   <string name="action_back">"Назад"</string>
   <string name="action_cancel">"Скасаваць"</string>
   <string name="action_choose_photo">"Выбраць фота"</string>
   <string name="action_clear">"Ачысціць"</string>
   <string name="action_close">"Закрыць"</string>
-  <string name="action_complete_verification">"Поўная праверка"</string>
+  <string name="action_complete_verification">"Праверка завершана"</string>
   <string name="action_confirm">"Пацвердзіць"</string>
   <string name="action_continue">"Працягнуць"</string>
   <string name="action_copy">"Капіраваць"</string>
@@ -90,7 +90,7 @@
   <string name="action_report_content">"Паскардзіцца на змест"</string>
   <string name="action_reset">"Скінуць"</string>
   <string name="action_retry">"Паўтарыць"</string>
-  <string name="action_retry_decryption">"Паўтарыце расшыфроўку"</string>
+  <string name="action_retry_decryption">"Паўтарыць расшыфроўку"</string>
   <string name="action_save">"Захаваць"</string>
   <string name="action_search">"Пошук"</string>
   <string name="action_send">"Адправіць"</string>
@@ -108,7 +108,7 @@
   <string name="action_take_photo">"Зрабіць фота"</string>
   <string name="action_tap_for_options">"Дакраніцеся, каб убачыць параметры"</string>
   <string name="action_try_again">"Паўтарыць спробу"</string>
-  <string name="action_view_source">"Паказаць крыніцу"</string>
+  <string name="action_view_source">"Прагляд зыходнага кода"</string>
   <string name="action_yes">"Так"</string>
   <string name="common_about">"Аб праграме"</string>
   <string name="common_acceptable_use_policy">"Палітыка дапушчальнага выкарыстання"</string>
@@ -119,7 +119,7 @@
   <string name="common_blocked_users">"Заблакіраваныя карыстальнікі"</string>
   <string name="common_bubbles">"Бурбалкі"</string>
   <string name="common_call_invite">"Ідзе выклік (не падтрымліваецца)"</string>
-  <string name="common_chat_backup">"Рэзервовае капіраванне чата"</string>
+  <string name="common_chat_backup">"Рэзервовае капіраванне чатаў"</string>
   <string name="common_copyright">"Аўтарскае права"</string>
   <string name="common_creating_room">"Стварэнне пакоя…"</string>
   <string name="common_current_user_left_room">"Выйшаў з пакоя"</string>
@@ -150,9 +150,9 @@
   <string name="common_link_copied_to_clipboard">"Спасылка скапіравана ў буфер абмену"</string>
   <string name="common_loading">"Загрузка…"</string>
   <plurals name="common_member_count">
-    <item quantity="one">"%1$d карыстальнік"</item>
-    <item quantity="few">"%1$d карыстальнікаў"</item>
-    <item quantity="many">"%1$d карыстальнікаў"</item>
+    <item quantity="one">"%1$d удзельнік"</item>
+    <item quantity="few">"%1$d удзельніка"</item>
+    <item quantity="many">"%1$d удзельнікаў"</item>
   </plurals>
   <string name="common_message">"Паведамленне"</string>
   <string name="common_message_actions">"Дзеянні з паведамленням"</string>
@@ -164,7 +164,7 @@
   <string name="common_offline">"Па-за сеткай"</string>
   <string name="common_or">"або"</string>
   <string name="common_password">"Пароль"</string>
-  <string name="common_people">"Людзі"</string>
+  <string name="common_people">"Удзельнікі"</string>
   <string name="common_permalink">"Пастаянная спасылка"</string>
   <string name="common_permission">"Дазвол"</string>
   <string name="common_poll_end_confirmation">"Вы ўпэўнены, што хочаце скончыць гэтае апытанне?"</string>
@@ -173,7 +173,7 @@
   <string name="common_poll_undisclosed_text">"Вынікі будуць паказаны пасля завяршэння апытання"</string>
   <plurals name="common_poll_votes_count">
     <item quantity="one">"%d голас"</item>
-    <item quantity="few">"%d галасоў"</item>
+    <item quantity="few">"%d галасы"</item>
     <item quantity="many">"%d галасоў"</item>
   </plurals>
   <string name="common_privacy_policy">"Палітыка прыватнасці"</string>
@@ -248,13 +248,13 @@
   <string name="invite_friends_rich_title">"🔐️ Далучайцеся да мяне %1$s"</string>
   <string name="invite_friends_text">"Гэй, пагавары са мной у %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
-  <string name="preference_rageshake">"Rageshake паведаміць пра памылку"</string>
+  <string name="preference_rageshake">"Паведаміць аб памылцы з дапамогай Rageshake"</string>
   <string name="screen_identity_confirmation_subtitle">"Пацвердзіце гэтую прыладу, каб наладзіць бяспечны абмен паведамленнямі."</string>
   <string name="screen_identity_confirmation_title">"Пацвердзіце, што гэта вы"</string>
   <string name="screen_identity_confirmed_subtitle">"Цяпер вы можаце бяспечна чытаць і адпраўляць паведамленні, і ўсе, з кім вы маеце зносіны ў чаце, таксама могуць давяраць гэтай прыладзе."</string>
   <string name="screen_identity_confirmed_title">"Прылада праверана"</string>
   <string name="screen_identity_use_another_device">"Выкарыстоўвайце іншую прыладу"</string>
-  <string name="screen_identity_waiting_on_other_device">"Чакаем іншую прыладу…"</string>
+  <string name="screen_identity_waiting_on_other_device">"Чаканне на іншай прыладзе…"</string>
   <string name="screen_media_picker_error_failed_selection">"Не ўдалося выбраць носьбіт, паўтарыце спробу."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Не атрымалася апрацаваць медыяфайл для загрузкі, паспрабуйце яшчэ раз."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Не атрымалася загрузіць медыяфайлы, паспрабуйце яшчэ раз."</string>
@@ -275,4 +275,57 @@
   <string name="screen_view_location_title">"Месцазнаходжанне"</string>
   <string name="settings_version_number">"Версія: %1$s (%2$s)"</string>
   <string name="test_language_identifier">"be"</string>
+  <string name="troubleshoot_notifications_entry_point_section">"Выпраўленне непаладак"</string>
+  <string name="troubleshoot_notifications_entry_point_title">"Выпраўленне непаладак з апавяшчэннямі"</string>
+  <string name="troubleshoot_notifications_screen_action">"Запусціць тэсты"</string>
+  <string name="troubleshoot_notifications_screen_action_again">"Запусціце тэсты яшчэ раз"</string>
+  <string name="troubleshoot_notifications_screen_failure">"Некаторыя тэсты не ўдаліся. Калі ласка, праглядзіце дэталі."</string>
+  <string name="troubleshoot_notifications_screen_notice">"Запусціце тэсты, каб выявіць праблемы ў вашай канфігурацыі, з-за якіх апавяшчэння могуць паводзіць сябе не так, як чакалася."</string>
+  <string name="troubleshoot_notifications_screen_quick_fix_action">"Спроба выпраўлення"</string>
+  <string name="troubleshoot_notifications_screen_success">"Усе тэсты паспяхова пройдзены."</string>
+  <string name="troubleshoot_notifications_screen_title">"Выпраўленне непаладак з апавяшчэннямі"</string>
+  <string name="troubleshoot_notifications_screen_waiting">"Некаторыя тэсты патрабуюць вашай увагі. Калі ласка, праглядзіце дэталі."</string>
+  <string name="troubleshoot_notifications_test_check_permission_description">"Пераканайцеся, што праграма можа паказваць апавяшчэнні."</string>
+  <string name="troubleshoot_notifications_test_check_permission_title">"Праверце дазволы"</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_description">"Атрымаць назву бягучага пастаўшчыка."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_failure">"Пастаўшчыкі push-апавяшчэнняў не выбраны."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_success">"Бягучы пастаўшчык push-апавяшчэнняў: %1$s."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_title">"Бягучы пастаўшчык push-апавяшчэнняў"</string>
+  <string name="troubleshoot_notifications_test_detect_push_provider_description">"Пераканайцеся, што ў праграме ёсць хаця б адзін пастаўшчык push-апавяшчэнняў."</string>
+  <string name="troubleshoot_notifications_test_detect_push_provider_failure">"Пастаўшчыкі push-апавяшчэнняў не знойдзены."</string>
+  <plurals name="troubleshoot_notifications_test_detect_push_provider_success">
+    <item quantity="one">"Знайшлі %1$d пастаўшчыка push-апавяшчэнняў: %2$s"</item>
+    <item quantity="few">"Знайшлі %1$d пастаўшчыкоў push-апавяшчэнняў: %2$s"</item>
+    <item quantity="many">"Знайшлі %1$d пастаўшчыкоў push-апавяшчэнняў: %2$s"</item>
+  </plurals>
+  <string name="troubleshoot_notifications_test_detect_push_provider_title">"Выяўленне пастаўшчыкоў push-паслуг"</string>
+  <string name="troubleshoot_notifications_test_display_notification_description">"Праверце, ці можа праграма паказваць апавяшчэнні."</string>
+  <string name="troubleshoot_notifications_test_display_notification_failure">"Апавяшчэнне не было націснута."</string>
+  <string name="troubleshoot_notifications_test_display_notification_permission_failure">"Немагчыма паказаць апавяшчэнне."</string>
+  <string name="troubleshoot_notifications_test_display_notification_success">"Апавяшчэнне было націснута!"</string>
+  <string name="troubleshoot_notifications_test_display_notification_title">"Паказаць апавяшчэнне"</string>
+  <string name="troubleshoot_notifications_test_display_notification_waiting">"Націсніце на апавяшчэнне, каб працягнуць тэст."</string>
+  <string name="troubleshoot_notifications_test_firebase_availability_description">"Пераканайцеся, што Firebase даступны."</string>
+  <string name="troubleshoot_notifications_test_firebase_availability_failure">"Firebase недаступны."</string>
+  <string name="troubleshoot_notifications_test_firebase_availability_success">"Firebase даступны."</string>
+  <string name="troubleshoot_notifications_test_firebase_availability_title">"Праверыць Firebase"</string>
+  <string name="troubleshoot_notifications_test_firebase_token_description">"Пераканайцеся, што маркер Firebase даступны."</string>
+  <string name="troubleshoot_notifications_test_firebase_token_failure">"Маркер Firebase невядомы."</string>
+  <string name="troubleshoot_notifications_test_firebase_token_success">"Маркер Firebase: %1$s."</string>
+  <string name="troubleshoot_notifications_test_firebase_token_title">"Праверце маркер Firebase"</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_description">"Пераканайцеся, што праграма атрымлівае push-апавяшчэнні."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_1">"Памылка: pusher адхіліў запыт."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_2">"Памылка: %1$s."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_3">"Памылка, немагчыма праверыць push-апавяшчэнне."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_4">"Памылка, тайм-аўт у чаканні push-апавяшчэння."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_success">"Зварот цыклу назад заняў %1$d мс."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_title">"Тэст Націсніце кнопку вярнуцца"</string>
+  <string name="troubleshoot_notifications_test_unified_push_description">"Пераканайцеся, што размеркавальнікі UnifiedPush даступныя."</string>
+  <string name="troubleshoot_notifications_test_unified_push_failure">"Размеркавальнікі не знойдзены."</string>
+  <plurals name="troubleshoot_notifications_test_unified_push_success">
+    <item quantity="one">"%1$d знойдзены размеркавальнік: %2$s."</item>
+    <item quantity="few">"%1$d знойдзена размеркавальніка: %2$s."</item>
+    <item quantity="many">"%1$d знойдзена размеркавальнікаў: %2$s."</item>
+  </plurals>
+  <string name="troubleshoot_notifications_test_unified_push_title">"Праверыць UnifiedPush"</string>
 </resources>
