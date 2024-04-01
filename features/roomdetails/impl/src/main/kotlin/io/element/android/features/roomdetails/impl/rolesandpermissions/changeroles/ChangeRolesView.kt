@@ -323,7 +323,7 @@ private fun ListMemberItem(
 }
 
 @Composable
-internal fun MemberRow(
+private fun MemberRow(
     avatarData: AvatarData,
     name: String,
     userId: String?,
@@ -344,7 +344,7 @@ internal fun MemberRow(
                 .padding(start = 12.dp)
                 .weight(1f),
         ) {
-            Row (verticalAlignment = Alignment.CenterVertically) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
                 // Name
                 Text(
                     modifier = Modifier.clipToBounds(),
@@ -354,10 +354,11 @@ internal fun MemberRow(
                     color = MaterialTheme.colorScheme.primary,
                     style = ElementTheme.typography.fontBodyLgRegular,
                 )
+                // Invitation pending marker
                 if (isPending) {
                     Text(
                         modifier = Modifier.weight(1f),
-                        text = " - Pending",
+                        text = stringResource(id = R.string.screen_room_change_role_invited_member_name_android),
                         style = ElementTheme.typography.fontBodySmRegular,
                         color = MaterialTheme.colorScheme.secondary
                     )

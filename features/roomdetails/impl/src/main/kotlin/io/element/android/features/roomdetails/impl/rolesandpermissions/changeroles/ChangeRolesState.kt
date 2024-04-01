@@ -43,7 +43,7 @@ data class MembersByRole(
     val moderators: ImmutableList<RoomMember>,
     val members: ImmutableList<RoomMember>,
 ) {
-    constructor(members: List<RoomMember>): this(
+    constructor(members: List<RoomMember>) : this(
             admins = members.filter { it.role == RoomMember.Role.ADMIN }.sorted(),
             moderators = members.filter { it.role == RoomMember.Role.MODERATOR }.sorted(),
             members = members.filter { it.role == RoomMember.Role.USER }.sorted(),
