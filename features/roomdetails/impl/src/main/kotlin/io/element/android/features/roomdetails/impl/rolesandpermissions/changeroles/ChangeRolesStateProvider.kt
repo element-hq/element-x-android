@@ -41,7 +41,7 @@ class ChangeRolesStateProvider : PreviewParameterProvider<ChangeRolesState> {
             aChangeRolesStateWithSelectedUsers().copy(
                 query = "Alice",
                 isSearchActive = true,
-                searchResults = SearchBarResultState.Results(aRoomMemberList().take(1).toImmutableList()),
+                searchResults = SearchBarResultState.Results(MembersByRole(aRoomMemberList().take(1).toImmutableList())),
                 selectedUsers = aMatrixUserList().take(1).toImmutableList(),
             ),
             aChangeRolesStateWithSelectedUsers().copy(exitState = AsyncAction.Confirming),
@@ -77,7 +77,7 @@ internal fun aChangeRolesState(
 
 internal fun aChangeRolesStateWithSelectedUsers() = aChangeRolesState(
     selectedUsers = aMatrixUserList().toImmutableList(),
-    searchResults = SearchBarResultState.Results(aRoomMemberList().toImmutableList()),
+    searchResults = SearchBarResultState.Results(MembersByRole(members = aRoomMemberList())),
     hasPendingChanges = true,
     canRemoveMember = { it != UserId("@alice:server.org") },
 )
