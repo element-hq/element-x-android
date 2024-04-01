@@ -43,6 +43,7 @@ import io.element.android.libraries.designsystem.theme.components.ListItem
 import io.element.android.libraries.designsystem.theme.components.ListItemStyle
 import io.element.android.libraries.designsystem.theme.components.ModalBottomSheet
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.textcomposer.model.MessageComposerMode
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -106,7 +107,8 @@ private fun AttachmentSourcePickerMenu(
             .navigationBarsPadding()
             .imePadding()
     ) {
-        if (state.attachmentsState == AttachmentsState.None) {
+        if (state.attachmentsState == AttachmentsState.None &&
+            state.mode == MessageComposerMode.Normal) {
             ListItem(
                 modifier = Modifier.clickable { state.eventSink(MessageComposerEvents.PickAttachmentSource.PhotoFromCamera) },
                 leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.TakePhoto())),
