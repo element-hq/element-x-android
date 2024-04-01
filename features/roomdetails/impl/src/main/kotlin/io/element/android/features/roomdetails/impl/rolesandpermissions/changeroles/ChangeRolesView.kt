@@ -45,7 +45,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -88,10 +87,10 @@ import kotlinx.collections.immutable.ImmutableList
 @Composable
 fun ChangeRolesView(
     state: ChangeRolesState,
-    onBackPressed: () -> Unit,
+    navigateUp: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val updatedOnBackPressed by rememberUpdatedState(newValue = onBackPressed)
+    val updatedNavigateUp by rememberUpdatedState(newValue = navigateUp)
     BackHandler {
         if (state.isSearchActive) {
             state.eventSink(ChangeRolesEvent.ToggleSearchActive)
@@ -188,7 +187,7 @@ fun ChangeRolesView(
 
         AsyncActionView(
             async = state.exitState,
-            onSuccess = { updatedOnBackPressed() },
+            onSuccess = { updatedNavigateUp() },
             confirmationDialog = {
                 ConfirmationDialog(
                     title = stringResource(CommonStrings.dialog_unsaved_changes_title),
@@ -385,7 +384,7 @@ internal fun ChangeRolesViewPreview(@PreviewParameter(ChangeRolesStateProvider::
     ElementPreview {
         ChangeRolesView(
             state = state,
-            onBackPressed = {},
+            navigateUp = {},
         )
     }
 }

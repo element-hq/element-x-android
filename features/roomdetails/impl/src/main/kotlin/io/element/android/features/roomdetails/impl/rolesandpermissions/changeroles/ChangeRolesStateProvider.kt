@@ -63,6 +63,7 @@ internal fun aChangeRolesState(
     exitState: AsyncAction<Unit> = AsyncAction.Uninitialized,
     savingState: AsyncAction<Unit> = AsyncAction.Uninitialized,
     canRemoveMember: (UserId) -> Boolean = { true },
+    eventSink: (ChangeRolesEvent) -> Unit = {},
 ) = ChangeRolesState(
     role = role,
     query = query,
@@ -73,7 +74,7 @@ internal fun aChangeRolesState(
     exitState = exitState,
     savingState = savingState,
     canChangeMemberRole = canRemoveMember,
-    eventSink = {},
+    eventSink = eventSink,
 )
 
 internal fun aChangeRolesStateWithSelectedUsers() = aChangeRolesState(
