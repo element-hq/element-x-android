@@ -143,6 +143,7 @@ sonar {
         // exclude source code from analyses separated by a colon (:)
         // Exclude Java source
         property("sonar.exclusions", "**/BugReporterMultipartBody.java")
+        property("sonar.gradle.skipCompile", "true")
     }
 }
 
