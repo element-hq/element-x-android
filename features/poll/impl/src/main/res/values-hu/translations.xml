@@ -4,7 +4,7 @@
   <string name="screen_create_poll_anonymous_desc">"Eredmények megjelenítése csak a szavazás befejezése után"</string>
   <string name="screen_create_poll_anonymous_headline">"Szavazatok elrejtése"</string>
   <string name="screen_create_poll_answer_hint">"%1$d. lehetőség"</string>
-  <string name="screen_create_poll_cancel_confirmation_content_android">"A módosítások nem lettek mentve. Biztos, hogy vissza akar lépni?"</string>
+  <string name="screen_create_poll_cancel_confirmation_content_android">"A módosítások nem lettek mentve. Biztos, hogy visszalép?"</string>
   <string name="screen_create_poll_question_desc">"Kérdés vagy téma"</string>
   <string name="screen_create_poll_question_hint">"Miről szól ez a szavazás?"</string>
   <string name="screen_create_poll_title">"Szavazás létrehozása"</string>

@@ -25,12 +25,12 @@
   <string name="screen_app_lock_signout_alert_title">"Вы выходзіце з сістэмы"</string>
   <plurals name="screen_app_lock_subtitle">
     <item quantity="one">"У вас %1$d спроба разблакіроўкі"</item>
-    <item quantity="few">"У вас %1$d спроб разблакіроўкі"</item>
+    <item quantity="few">"У вас %1$d спробы разблакіроўкі"</item>
     <item quantity="many">"У вас %1$d спроб разблакіроўкі"</item>
   </plurals>
   <plurals name="screen_app_lock_subtitle_wrong_pin">
     <item quantity="one">"Няправільны PIN-код. У вас застаўся %1$d шанец"</item>
-    <item quantity="few">"Няправільны PIN-код. У вас застаўася %1$d шанцаў"</item>
+    <item quantity="few">"Няправільны PIN-код. У вас застаўася %1$d шанца"</item>
     <item quantity="many">"Няправільны PIN-код. У вас застаўася %1$d шанцаў"</item>
   </plurals>
   <string name="screen_app_lock_use_biometric_android">"Выкарыстоўваць біяметрыю"</string>

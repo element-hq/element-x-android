@@ -5,7 +5,7 @@
   <string name="emoji_picker_category_foods">"Ежа &amp; Напоі"</string>
   <string name="emoji_picker_category_nature">"Жывёлы &amp; Прырода"</string>
   <string name="emoji_picker_category_objects">"Аб\'екты"</string>
-  <string name="emoji_picker_category_people">"Усмешкі &amp; Людзі"</string>
+  <string name="emoji_picker_category_people">"Усмешкі &amp; Удзельнікі"</string>
   <string name="emoji_picker_category_places">"Падарожжы &amp; Месцы"</string>
   <string name="emoji_picker_category_symbols">"Сімвалы"</string>
   <string name="screen_report_content_block_user">"Заблакіраваць карыстальніка"</string>
@@ -16,13 +16,13 @@
   <string name="screen_room_attachment_source_camera_photo">"Зрабіць фота"</string>
   <string name="screen_room_attachment_source_camera_video">"Запісаць відэа"</string>
   <string name="screen_room_attachment_source_files">"Далучэнне"</string>
-  <string name="screen_room_attachment_source_gallery">"Фота &amp; Відэа Бібліятэка"</string>
+  <string name="screen_room_attachment_source_gallery">"Бібліятэка фота &amp; відэа"</string>
   <string name="screen_room_attachment_source_location">"Месцазнаходжанне"</string>
   <string name="screen_room_attachment_source_poll">"Апытанне"</string>
   <string name="screen_room_attachment_text_formatting">"Фармаціраванне тэксту"</string>
   <string name="screen_room_encrypted_history_banner">"Гісторыя паведамленняў зараз недаступна."</string>
   <string name="screen_room_encrypted_history_banner_unverified">"Гісторыя паведамленняў у гэтым пакоі недаступная. Праверце гэтую прыладу, каб убачыць гісторыю паведамленняў."</string>
-  <string name="screen_room_invite_again_alert_message">"Вы жадаеце запрасіць іх назад?"</string>
+  <string name="screen_room_invite_again_alert_message">"Вы хочаце запрасіць іх назад?"</string>
   <string name="screen_room_invite_again_alert_title">"Вы адзін у гэтым чаце"</string>
   <string name="screen_room_mentions_at_room_subtitle">"Апавясціць увесь пакой"</string>
   <string name="screen_room_mentions_at_room_title">"Усе"</string>
@@ -39,7 +39,7 @@
   <string name="screen_room_timeline_read_marker_title">"Новы"</string>
   <plurals name="screen_room_timeline_state_changes">
     <item quantity="one">"%1$d змена ў пакоі"</item>
-    <item quantity="few">"%1$d змен у пакоі"</item>
+    <item quantity="few">"%1$d змены ў пакоі"</item>
     <item quantity="many">"%1$d змен у пакоі"</item>
   </plurals>
   <plurals name="screen_room_typing_many_members">
