@@ -49,4 +49,6 @@
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"налады сістэмы"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"Сістэмныя апавяшчэнні выключаны"</string>
   <string name="screen_notification_settings_title">"Апавяшчэнні"</string>
+  <string name="troubleshoot_notifications_entry_point_section">"Выпраўленне непаладак"</string>
+  <string name="troubleshoot_notifications_entry_point_title">"Выпраўленне непаладак з апавяшчэннямі"</string>
 </resources>

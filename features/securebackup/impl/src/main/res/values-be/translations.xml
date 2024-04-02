@@ -15,7 +15,7 @@
   <string name="screen_key_backup_disable_description">"Адключэнне рэзервовага капіравання прывядзе да выдалення бягучай рэзервовай копіі ключа шыфравання і адключэння іншых функцый бяспекі. У гэтым выпадку вы:"</string>
   <string name="screen_key_backup_disable_description_point_1">"Няма зашыфраванай гісторыі паведамленняў на новых прыладах"</string>
   <string name="screen_key_backup_disable_description_point_2">"Калі вы выходзіце з сістэмы, то губляеце доступ да зашыфраваных паведамленняў %1$s усюды"</string>
-  <string name="screen_key_backup_disable_title">"Вы ўпэўнены, што жадаеце адключыць рэзервовае капіраванне?"</string>
+  <string name="screen_key_backup_disable_title">"Вы ўпэўнены, што хочаце адключыць рэзервовае капіраванне?"</string>
   <string name="screen_recovery_key_change_description">"Атрымайце новы ключ аднаўлення, калі вы страцілі існуючы. Пасля змены ключа аднаўлення ваш стары больш не будзе працаваць."</string>
   <string name="screen_recovery_key_change_generate_key">"Стварыць новы ключ аднаўлення"</string>
   <string name="screen_recovery_key_change_generate_key_description">"Пераканайцеся, што вы можаце захаваць ключ аднаўлення ў бяспечным месцы"</string>

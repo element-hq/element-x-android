@@ -44,4 +44,27 @@
   <string name="push_distributor_background_sync_android">"Sinkronisasi latar belakang"</string>
   <string name="push_distributor_firebase_android">"Layanan Google"</string>
   <string name="push_no_valid_google_play_services_apk_android">"Tidak ditemukan Layanan Google Play yang valid. Pemberitahuan mungkin tidak berfungsi dengan baik."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_description">"Dapatkan nama penyedia saat ini."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_failure">"Tidak ada penyedia notifikasi dorongan yang dipilih."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_success">"Penyedia notifikasi dorongan saat ini: %1$s."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_title">"Penyedia notifikasi dorongan saat ini"</string>
+  <string name="troubleshoot_notifications_test_detect_push_provider_description">"Pastikan aplikasi memiliki setidaknya satu penyedia notifikasi dorongan."</string>
+  <string name="troubleshoot_notifications_test_detect_push_provider_failure">"Tidak ada penyedia notifikasi dorongan yang ditemukan."</string>
+  <plurals name="troubleshoot_notifications_test_detect_push_provider_success">
+    <item quantity="other">"Ditemukan %1$d penyedia notifikasi dorongan: %2$s"</item>
+  </plurals>
+  <string name="troubleshoot_notifications_test_detect_push_provider_title">"Deteksi penyedia notifikasi dorongan"</string>
+  <string name="troubleshoot_notifications_test_display_notification_description">"Periksa apakah aplikasi dapat menampilkan notifikasi."</string>
+  <string name="troubleshoot_notifications_test_display_notification_failure">"Notifikasi belum diklik."</string>
+  <string name="troubleshoot_notifications_test_display_notification_permission_failure">"Tidak dapat menampilkan notifikasi."</string>
+  <string name="troubleshoot_notifications_test_display_notification_success">"Notifikasi telah diklik!"</string>
+  <string name="troubleshoot_notifications_test_display_notification_title">"Tampilan notifikasi"</string>
+  <string name="troubleshoot_notifications_test_display_notification_waiting">"Silakan klik pada notifikasi untuk melanjutkan tes."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_description">"Pastikan aplikasi menerima notifikasi dorongan."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_1">"Kesalahan: pendorong telah menolak permintaan."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_2">"Kesalahan: %1$s."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_3">"Terjadi kesalahan, tidak dapat menguji notifikasi dorongan."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_4">"Terjadi kesalahan, melebihi batas waktu menunggu notifikasi dorongan."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_success">"Ulangan notifikasi dorongan membutuhkan %1$d ms."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_title">"Uji ulangan notifikasi dorongan lagi"</string>
 </resources>

@@ -24,6 +24,7 @@ import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
 import com.bumble.appyx.core.plugin.plugins
 import com.bumble.appyx.navmodel.backstack.BackStack
+import com.bumble.appyx.navmodel.backstack.operation.pop
 import com.bumble.appyx.navmodel.backstack.operation.push
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
@@ -47,6 +48,7 @@ import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.user.MatrixUser
+import io.element.android.libraries.troubleshoot.api.NotificationTroubleShootEntryPoint
 import kotlinx.parcelize.Parcelize
 
 @ContributesNode(SessionScope::class)
@@ -54,6 +56,7 @@ class PreferencesFlowNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     private val lockScreenEntryPoint: LockScreenEntryPoint,
+    private val notificationTroubleShootEntryPoint: NotificationTroubleShootEntryPoint,
     private val logoutEntryPoint: LogoutEntryPoint,
 ) : BaseFlowNode<PreferencesFlowNode.NavTarget>(
     backstack = BackStack(
@@ -84,6 +87,9 @@ class PreferencesFlowNode @AssistedInject constructor(
 
         @Parcelize
         data object NotificationSettings : NavTarget
+
+        @Parcelize
+        data object TroubleshootNotifications : NavTarget
 
         @Parcelize
         data object LockScreenSettings : NavTarget
@@ -177,8 +183,21 @@ class PreferencesFlowNode @AssistedInject constructor(
                     override fun editDefaultNotificationMode(isOneToOne: Boolean) {
                         backstack.push(NavTarget.EditDefaultNotificationSetting(isOneToOne))
                     }
+
+                    override fun onTroubleshootNotificationsClicked() {
+                        backstack.push(NavTarget.TroubleshootNotifications)
+                    }
                 }
                 createNode<NotificationSettingsNode>(buildContext, listOf(notificationSettingsCallback))
+            }
+            NavTarget.TroubleshootNotifications -> {
+                notificationTroubleShootEntryPoint.nodeBuilder(this, buildContext)
+                    .callback(object : NotificationTroubleShootEntryPoint.Callback {
+                        override fun onDone() {
+                            backstack.pop()
+                        }
+                    })
+                    .build()
             }
             is NavTarget.EditDefaultNotificationSetting -> {
                 val callback = object : EditDefaultNotificationSettingNode.Callback {

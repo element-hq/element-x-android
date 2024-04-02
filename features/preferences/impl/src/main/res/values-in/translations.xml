@@ -51,4 +51,6 @@ Jika Anda melanjutkan, beberapa pengaturan Anda dapat berubah."</string>
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"pengaturan sistem"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"Pemberitahuan sistem dimatikan"</string>
   <string name="screen_notification_settings_title">"Notifikasi"</string>
+  <string name="troubleshoot_notifications_entry_point_section">"Pemecahan masalah"</string>
+  <string name="troubleshoot_notifications_entry_point_title">"Pecahkan masalah notifikasi"</string>
 </resources>

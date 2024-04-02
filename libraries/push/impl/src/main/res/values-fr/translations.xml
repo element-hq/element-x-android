@@ -50,4 +50,28 @@
   <string name="push_distributor_background_sync_android">"Synchronisation en arrière-plan"</string>
   <string name="push_distributor_firebase_android">"Services Google"</string>
   <string name="push_no_valid_google_play_services_apk_android">"Aucun service Google Play valide n’a été trouvé. Les notifications peuvent ne pas fonctionner correctement."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_description">"Obtenir le nom du fournisseur de Push actuel."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_failure">"Aucun fournisseur de Push n’est sélectionné."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_success">"Fournisseur de Push actuel : %1$s."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_title">"Fournisseur de Push actuel"</string>
+  <string name="troubleshoot_notifications_test_detect_push_provider_description">"Vérifier que l’application possède au moins un fournisseur de Push."</string>
+  <string name="troubleshoot_notifications_test_detect_push_provider_failure">"Aucun fournisseur de Push n’a été trouvé."</string>
+  <plurals name="troubleshoot_notifications_test_detect_push_provider_success">
+    <item quantity="one">"%1$d fournisseur de Push détecté : %2$s"</item>
+    <item quantity="other">"%1$d fournisseurs de Push détectés : %2$s"</item>
+  </plurals>
+  <string name="troubleshoot_notifications_test_detect_push_provider_title">"Détecter les fournisseurs de Push"</string>
+  <string name="troubleshoot_notifications_test_display_notification_description">"Vérifier que l’application peut afficher des notifications."</string>
+  <string name="troubleshoot_notifications_test_display_notification_failure">"Vous n’avez pas cliqué sur la notification."</string>
+  <string name="troubleshoot_notifications_test_display_notification_permission_failure">"Impossible d’afficher la notification."</string>
+  <string name="troubleshoot_notifications_test_display_notification_success">"Vous avez cliqué sur la notification!"</string>
+  <string name="troubleshoot_notifications_test_display_notification_title">"Affichage des notifications"</string>
+  <string name="troubleshoot_notifications_test_display_notification_waiting">"Veuillez cliquer sur la notification pour continuer le test."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_description">"Vérifier que l’application reçoit les Push."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_1">"Erreur : le Pusher a rejeté la demande."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_2">"Erreur :%1$s."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_3">"Erreur, impossible de tester les Push."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_4">"Erreur, le délai d’attente du Push est dépassé."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_success">"La demande d’envoi de Push et sa réception ont pris %1$d ms."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_title">"Tester la réception des Push"</string>
 </resources>

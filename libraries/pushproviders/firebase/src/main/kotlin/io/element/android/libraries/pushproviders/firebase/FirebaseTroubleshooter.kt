@@ -16,25 +16,28 @@
 
 package io.element.android.libraries.pushproviders.firebase
 
-import android.content.Context
-import com.google.android.gms.common.ConnectionResult
-import com.google.android.gms.common.GoogleApiAvailability
 import com.google.firebase.messaging.FirebaseMessaging
-import io.element.android.libraries.di.ApplicationContext
+import com.squareup.anvil.annotations.ContributesBinding
+import io.element.android.libraries.di.AppScope
 import timber.log.Timber
 import javax.inject.Inject
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
+interface FirebaseTroubleshooter {
+    suspend fun troubleshoot(): Result<Unit>
+}
+
 /**
  * This class force retrieving and storage of the Firebase token.
  */
-class FirebaseTroubleshooter @Inject constructor(
-    @ApplicationContext private val context: Context,
+@ContributesBinding(AppScope::class)
+class DefaultFirebaseTroubleshooter @Inject constructor(
     private val newTokenHandler: FirebaseNewTokenHandler,
-) {
-    suspend fun troubleshoot(): Result<Unit> {
+    private val isPlayServiceAvailable: IsPlayServiceAvailable,
+) : FirebaseTroubleshooter {
+    override suspend fun troubleshoot(): Result<Unit> {
         return runCatching {
             val token = retrievedFirebaseToken()
             newTokenHandler.handle(token)
@@ -44,7 +47,7 @@ class FirebaseTroubleshooter @Inject constructor(
     private suspend fun retrievedFirebaseToken(): String {
         return suspendCoroutine { continuation ->
             // 'app should always check the device for a compatible Google Play services APK before accessing Google Play services features'
-            if (checkPlayServices(context)) {
+            if (isPlayServiceAvailable.isAvailable()) {
                 try {
                     FirebaseMessaging.getInstance().token
                         .addOnSuccessListener { token ->
@@ -64,16 +67,5 @@ class FirebaseTroubleshooter @Inject constructor(
                 continuation.resumeWithException(e)
             }
         }
-    }
-
-    /**
-     * Check the device to make sure it has the Google Play Services APK. If
-     * it doesn't, display a dialog that allows users to download the APK from
-     * the Google Play Store or enable it in the device's system settings.
-     */
-    private fun checkPlayServices(context: Context): Boolean {
-        val apiAvailability = GoogleApiAvailability.getInstance()
-        val resultCode = apiAvailability.isGooglePlayServicesAvailable(context)
-        return resultCode == ConnectionResult.SUCCESS
     }
 }
