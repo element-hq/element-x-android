@@ -31,9 +31,10 @@ class InviteFriendsUseCase @Inject constructor(
     private val stringProvider: StringProvider,
     private val matrixClient: MatrixClient,
     private val buildMeta: BuildMeta,
+    private val permalinkBuilder: PermalinkBuilder,
 ) {
     fun execute(activity: Activity) {
-        val permalinkResult = PermalinkBuilder.permalinkForUser(matrixClient.sessionId)
+        val permalinkResult = permalinkBuilder.permalinkForUser(matrixClient.sessionId)
         permalinkResult.fold(
             onSuccess = { permalink ->
                 val appName = buildMeta.applicationName

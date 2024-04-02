@@ -119,6 +119,7 @@ fun MessagesView(
     onRoomDetailsClicked: () -> Unit,
     onEventClicked: (event: TimelineItem.Event) -> Boolean,
     onUserDataClicked: (UserId) -> Unit,
+    onLinkClicked: (String) -> Unit,
     onPreviewAttachments: (ImmutableList<Attachment>) -> Unit,
     onSendLocationClicked: () -> Unit,
     onCreatePollClicked: () -> Unit,
@@ -213,6 +214,7 @@ fun MessagesView(
                 onMessageClicked = ::onMessageClicked,
                 onMessageLongClicked = ::onMessageLongClicked,
                 onUserDataClicked = onUserDataClicked,
+                onLinkClicked = onLinkClicked,
                 onTimestampClicked = { event ->
                     if (event.localSendState is LocalEventSendState.SendingFailed) {
                         state.retrySendMenuState.eventSink(RetrySendMenuEvents.EventSelected(event))
@@ -313,6 +315,7 @@ private fun MessagesViewContent(
     state: MessagesState,
     onMessageClicked: (TimelineItem.Event) -> Unit,
     onUserDataClicked: (UserId) -> Unit,
+    onLinkClicked: (String) -> Unit,
     onReactionClicked: (key: String, TimelineItem.Event) -> Unit,
     onReactionLongClicked: (key: String, TimelineItem.Event) -> Unit,
     onMoreReactionsClicked: (TimelineItem.Event) -> Unit,
@@ -386,6 +389,7 @@ private fun MessagesViewContent(
                     onMessageClicked = onMessageClicked,
                     onMessageLongClicked = onMessageLongClicked,
                     onUserDataClicked = onUserDataClicked,
+                    onLinkClicked = onLinkClicked,
                     onTimestampClicked = onTimestampClicked,
                     onReactionClicked = onReactionClicked,
                     onReactionLongClicked = onReactionLongClicked,
@@ -570,6 +574,7 @@ internal fun MessagesViewPreview(@PreviewParameter(MessagesStateProvider::class)
         onEventClicked = { false },
         onPreviewAttachments = {},
         onUserDataClicked = {},
+        onLinkClicked = {},
         onSendLocationClicked = {},
         onCreatePollClicked = {},
         onJoinCallClicked = {},

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright (c) 2024 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,22 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-plugins {
-    id("io.element.android-library")
-    alias(libs.plugins.anvil)
-    alias(libs.plugins.ksp)
-}
 
-android {
-    namespace = "io.element.android.appconfig"
-}
+package io.element.android.samples.minimal
 
-anvil {
-    generateDaggerFactories.set(true)
-}
+import android.net.Uri
+import io.element.android.libraries.matrix.api.permalink.PermalinkData
+import io.element.android.libraries.matrix.api.permalink.PermalinkParser
 
-dependencies {
-    implementation(libs.dagger)
-    implementation(projects.libraries.di)
-    implementation(projects.libraries.matrix.api)
+class OnlyFallbackPermalinkParser : PermalinkParser {
+    override fun parse(uriString: String): PermalinkData {
+        return PermalinkData.FallbackLink(Uri.parse(uriString))
+    }
+
+    override fun parse(uri: Uri): PermalinkData {
+        return PermalinkData.FallbackLink(uri)
+    }
 }

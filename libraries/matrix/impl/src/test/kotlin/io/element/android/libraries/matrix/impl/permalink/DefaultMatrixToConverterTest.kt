@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright (c) 2024 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.matrix.api.permalink
+package io.element.android.libraries.matrix.impl.permalink
 
 import android.net.Uri
 import com.google.common.truth.Truth.assertThat
@@ -23,34 +23,34 @@ import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class MatrixToConverterTest {
+class DefaultMatrixToConverterTest {
     @Test
     fun `converting a matrix-to url does nothing`() {
         val url = Uri.parse("https://matrix.to/#/#element-android:matrix.org")
-        assertThat(MatrixToConverter.convert(url)).isEqualTo(url)
+        assertThat(DefaultMatrixToConverter().convert(url)).isEqualTo(url)
     }
 
     @Test
     fun `converting a url with a supported room path returns a matrix-to url`() {
         val url = Uri.parse("https://riot.im/develop/#/room/#element-android:matrix.org")
-        assertThat(MatrixToConverter.convert(url)).isEqualTo(Uri.parse("https://matrix.to/#/#element-android:matrix.org"))
+        assertThat(DefaultMatrixToConverter().convert(url)).isEqualTo(Uri.parse("https://matrix.to/#/#element-android:matrix.org"))
     }
 
     @Test
     fun `converting a url with a supported user path returns a matrix-to url`() {
         val url = Uri.parse("https://riot.im/develop/#/user/@test:matrix.org")
-        assertThat(MatrixToConverter.convert(url)).isEqualTo(Uri.parse("https://matrix.to/#/@test:matrix.org"))
+        assertThat(DefaultMatrixToConverter().convert(url)).isEqualTo(Uri.parse("https://matrix.to/#/@test:matrix.org"))
     }
 
     @Test
     fun `converting a url with a supported group path returns a matrix-to url`() {
         val url = Uri.parse("https://riot.im/develop/#/group/+group:matrix.org")
-        assertThat(MatrixToConverter.convert(url)).isEqualTo(Uri.parse("https://matrix.to/#/+group:matrix.org"))
+        assertThat(DefaultMatrixToConverter().convert(url)).isEqualTo(Uri.parse("https://matrix.to/#/+group:matrix.org"))
     }
 
     @Test
     fun `converting an unsupported url returns null`() {
         val url = Uri.parse("https://element.io/")
-        assertThat(MatrixToConverter.convert(url)).isNull()
+        assertThat(DefaultMatrixToConverter().convert(url)).isNull()
     }
 }

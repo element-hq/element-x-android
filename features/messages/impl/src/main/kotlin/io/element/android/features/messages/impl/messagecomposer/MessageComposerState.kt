@@ -21,6 +21,7 @@ import androidx.compose.runtime.Stable
 import io.element.android.features.messages.impl.attachments.Attachment
 import io.element.android.features.messages.impl.mentions.MentionSuggestion
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.permalink.PermalinkParser
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
 import io.element.android.wysiwyg.compose.RichTextEditorState
 import kotlinx.collections.immutable.ImmutableList
@@ -28,6 +29,7 @@ import kotlinx.collections.immutable.ImmutableList
 @Stable
 data class MessageComposerState(
     val richTextEditorState: RichTextEditorState,
+    val permalinkParser: PermalinkParser,
     val isFullScreen: Boolean,
     val mode: MessageComposerMode,
     val showAttachmentSourcePicker: Boolean,

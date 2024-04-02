@@ -16,6 +16,7 @@
 
 package io.element.android.libraries.matrix.impl
 
+import io.element.android.appconfig.TimelineConfig
 import io.element.android.libraries.androidutils.file.getSizeOfFiles
 import io.element.android.libraries.androidutils.file.safeDelete
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
@@ -54,6 +55,7 @@ import io.element.android.libraries.matrix.impl.room.MatrixRoomInfoMapper
 import io.element.android.libraries.matrix.impl.room.RoomContentForwarder
 import io.element.android.libraries.matrix.impl.room.RoomSyncSubscriber
 import io.element.android.libraries.matrix.impl.room.RustMatrixRoom
+import io.element.android.libraries.matrix.impl.room.map
 import io.element.android.libraries.matrix.impl.roomdirectory.RustRoomDirectoryService
 import io.element.android.libraries.matrix.impl.roomlist.RoomListFactory
 import io.element.android.libraries.matrix.impl.roomlist.RustRoomListService
@@ -97,7 +99,6 @@ import org.matrix.rustcomponents.sdk.NotificationProcessSetup
 import org.matrix.rustcomponents.sdk.PowerLevels
 import org.matrix.rustcomponents.sdk.Room
 import org.matrix.rustcomponents.sdk.RoomListItem
-import org.matrix.rustcomponents.sdk.StateEventType
 import org.matrix.rustcomponents.sdk.TaskHandle
 import org.matrix.rustcomponents.sdk.TimelineEventTypeFilter
 import org.matrix.rustcomponents.sdk.use
@@ -229,24 +230,15 @@ class RustMatrixClient(
         ),
     )
 
-    private val eventFilters = TimelineEventTypeFilter.exclude(
-        listOf(
-            StateEventType.ROOM_ALIASES,
-            StateEventType.ROOM_CANONICAL_ALIAS,
-            StateEventType.ROOM_GUEST_ACCESS,
-            StateEventType.ROOM_HISTORY_VISIBILITY,
-            StateEventType.ROOM_JOIN_RULES,
-            StateEventType.ROOM_PINNED_EVENTS,
-            StateEventType.ROOM_POWER_LEVELS,
-            StateEventType.ROOM_SERVER_ACL,
-            StateEventType.ROOM_TOMBSTONE,
-            StateEventType.SPACE_CHILD,
-            StateEventType.SPACE_PARENT,
-            StateEventType.POLICY_RULE_ROOM,
-            StateEventType.POLICY_RULE_SERVER,
-            StateEventType.POLICY_RULE_USER,
-        ).map(FilterTimelineEventType::State)
-    )
+    private val eventFilters = TimelineConfig.excludedEvents
+        .takeIf { it.isNotEmpty() }
+        ?.let { listStateEventType ->
+            TimelineEventTypeFilter.exclude(
+                listStateEventType.map { stateEventType ->
+                    FilterTimelineEventType.State(stateEventType.map())
+                }
+            )
+        }
 
     override val mediaLoader: MatrixMediaLoader = RustMediaLoader(
         baseCacheDirectory = baseCacheDirectory,
