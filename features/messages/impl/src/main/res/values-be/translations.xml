@@ -9,7 +9,7 @@
   <string name="emoji_picker_category_places">"Падарожжы &amp; Месцы"</string>
   <string name="emoji_picker_category_symbols">"Сімвалы"</string>
   <string name="screen_report_content_block_user">"Заблакіраваць карыстальніка"</string>
-  <string name="screen_report_content_block_user_hint">"Адзначце, ці жадаеце вы схаваць усе бягучыя і будучыя паведамленні ад гэтага карыстальніка"</string>
+  <string name="screen_report_content_block_user_hint">"Адзначце, ці хочаце вы схаваць усе бягучыя і будучыя паведамленні ад гэтага карыстальніка"</string>
   <string name="screen_report_content_explanation">"Гэтае паведамленне будзе перададзена адміністратару вашага хатняга сервера. Яны не змогуць прачытаць зашыфраваныя паведамленні."</string>
   <string name="screen_report_content_hint">"Прычына, па якой вы паскардзіліся на гэты змест"</string>
   <string name="screen_room_attachment_source_camera">"Камера"</string>

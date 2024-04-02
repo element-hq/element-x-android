@@ -51,4 +51,14 @@ Ak budete pokračovať, niektoré z vašich nastavení sa môžu zmeniť."</stri
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"nastavenia systému"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"Systémové oznámenia sú vypnuté"</string>
   <string name="screen_notification_settings_title">"Oznámenia"</string>
+  <string name="troubleshoot_notifications_entry_point_section">"Riešenie problémov"</string>
+  <string name="troubleshoot_notifications_entry_point_title">"Oznámenia riešení problémov"</string>
+  <string name="troubleshoot_notifications_screen_action">"Spustiť testy"</string>
+  <string name="troubleshoot_notifications_screen_action_again">"Spustiť testy znova"</string>
+  <string name="troubleshoot_notifications_screen_failure">"Niektoré testy zlyhali. Skontrolujte prosím podrobnosti."</string>
+  <string name="troubleshoot_notifications_screen_notice">"Spustite testy, aby ste zistili akýkoľvek problém vo vašej konfigurácii, ktorý môže spôsobiť, že sa upozornenia nebudú správať podľa očakávania."</string>
+  <string name="troubleshoot_notifications_screen_quick_fix_action">"Pokus o opravu"</string>
+  <string name="troubleshoot_notifications_screen_success">"Všetky testy prebehli úspešne."</string>
+  <string name="troubleshoot_notifications_screen_title">"Oznámenia riešení problémov"</string>
+  <string name="troubleshoot_notifications_screen_waiting">"Niektoré testy si vyžadujú vašu pozornosť. Prosím skontrolujte podrobnosti."</string>
 </resources>

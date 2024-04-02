@@ -211,5 +211,4 @@
   <string name="screen_view_location_title">"Местоположение"</string>
   <string name="settings_version_number">"Версия: %1$s (%2$s)"</string>
   <string name="test_language_identifier">"bg"</string>
-  <string name="troubleshoot_notifications_test_push_loop_back_failure_2">"Грешка: %1$s"</string>
 </resources>

@@ -30,6 +30,7 @@
   <string name="screen_room_change_role_confirm_demote_self_description">"Вы не зможаце адмяніць гэтае змяненне, бо паніжаеце сябе. Калі вы апошні адміністратар у пакоі, вярнуць права будзе немагчыма."</string>
   <string name="screen_room_change_role_confirm_demote_self_title">"Панізіць сябе?"</string>
   <string name="screen_room_change_role_invited_member_name">"%1$s (У чаканні)"</string>
+  <string name="screen_room_change_role_invited_member_name_android">"(У чаканні)"</string>
   <string name="screen_room_change_role_moderators_title">"Рэдагаваць мадэратараў"</string>
   <string name="screen_room_change_role_section_administrators">"Адміністратары"</string>
   <string name="screen_room_change_role_section_moderators">"Мадэратары"</string>

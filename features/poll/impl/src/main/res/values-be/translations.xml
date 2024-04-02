@@ -4,7 +4,7 @@
   <string name="screen_create_poll_anonymous_desc">"Паказаць вынікі толькі пасля заканчэння апытання"</string>
   <string name="screen_create_poll_anonymous_headline">"Схаваць галасы"</string>
   <string name="screen_create_poll_answer_hint">"Варыянт %1$d"</string>
-  <string name="screen_create_poll_cancel_confirmation_content_android">"Вашы змены не былі захаваны. Вы ўпэўнены, што жадаеце вярнуцца?"</string>
+  <string name="screen_create_poll_cancel_confirmation_content_android">"Вашы змены не былі захаваны. Вы ўпэўнены, што хочаце вярнуцца?"</string>
   <string name="screen_create_poll_question_desc">"Пытанне або тэма"</string>
   <string name="screen_create_poll_question_hint">"Пра што апытанне?"</string>
   <string name="screen_create_poll_title">"Стварэнне апытання"</string>

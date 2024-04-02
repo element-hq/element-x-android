@@ -56,4 +56,29 @@
   <string name="push_distributor_background_sync_android">"Фонавая сінхранізацыя"</string>
   <string name="push_distributor_firebase_android">"Сэрвісы Google"</string>
   <string name="push_no_valid_google_play_services_apk_android">"Службы Google Play не знойдзены. Апавяшчэнні могуць не працаваць належным чынам."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_description">"Атрымаць назву бягучага пастаўшчыка."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_failure">"Пастаўшчыкі push-апавяшчэнняў не выбраны."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_success">"Бягучы пастаўшчык push-апавяшчэнняў: %1$s."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_title">"Бягучы пастаўшчык push-апавяшчэнняў"</string>
+  <string name="troubleshoot_notifications_test_detect_push_provider_description">"Пераканайцеся, што ў праграме ёсць хаця б адзін пастаўшчык push-апавяшчэнняў."</string>
+  <string name="troubleshoot_notifications_test_detect_push_provider_failure">"Пастаўшчыкі push-апавяшчэнняў не знойдзены."</string>
+  <plurals name="troubleshoot_notifications_test_detect_push_provider_success">
+    <item quantity="one">"Знайшлі %1$d пастаўшчыка push-апавяшчэнняў: %2$s"</item>
+    <item quantity="few">"Знайшлі %1$d пастаўшчыкоў push-апавяшчэнняў: %2$s"</item>
+    <item quantity="many">"Знайшлі %1$d пастаўшчыкоў push-апавяшчэнняў: %2$s"</item>
+  </plurals>
+  <string name="troubleshoot_notifications_test_detect_push_provider_title">"Выяўленне пастаўшчыкоў push-паслуг"</string>
+  <string name="troubleshoot_notifications_test_display_notification_description">"Праверце, ці можа праграма паказваць апавяшчэнні."</string>
+  <string name="troubleshoot_notifications_test_display_notification_failure">"Апавяшчэнне не было націснута."</string>
+  <string name="troubleshoot_notifications_test_display_notification_permission_failure">"Немагчыма паказаць апавяшчэнне."</string>
+  <string name="troubleshoot_notifications_test_display_notification_success">"Апавяшчэнне было націснута!"</string>
+  <string name="troubleshoot_notifications_test_display_notification_title">"Паказаць апавяшчэнне"</string>
+  <string name="troubleshoot_notifications_test_display_notification_waiting">"Націсніце на апавяшчэнне, каб працягнуць тэст."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_description">"Пераканайцеся, што праграма атрымлівае push-апавяшчэнні."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_1">"Памылка: pusher адхіліў запыт."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_2">"Памылка: %1$s."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_3">"Памылка, немагчыма праверыць push-апавяшчэнне."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_4">"Памылка, тайм-аўт у чаканні push-апавяшчэння."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_success">"Зварот цыклу назад заняў %1$d мс."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_title">"Тэст Націсніце кнопку вярнуцца"</string>
 </resources>

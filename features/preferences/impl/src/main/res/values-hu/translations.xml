@@ -49,4 +49,14 @@ Ha folytatja, egyes beállítások megváltozhatnak."</string>
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"rendszerbeállításokat"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"A rendszerértesítések ki vannak kapcsolva"</string>
   <string name="screen_notification_settings_title">"Értesítések"</string>
+  <string name="troubleshoot_notifications_entry_point_section">"Hibaelhárítás"</string>
+  <string name="troubleshoot_notifications_entry_point_title">"Értesítések hibaelhárítása"</string>
+  <string name="troubleshoot_notifications_screen_action">"Tesztek futtatása"</string>
+  <string name="troubleshoot_notifications_screen_action_again">"Tesztek újbóli futtatása"</string>
+  <string name="troubleshoot_notifications_screen_failure">"Egyes tesztek sikertelenek voltak. Ellenőrizze a részleteket."</string>
+  <string name="troubleshoot_notifications_screen_notice">"A tesztek futtatása, hogy észlelje a konfigurációban felmerülő olyan problémákat, amelyek miatt az értesítések nem az elvárt módon viselkednek."</string>
+  <string name="troubleshoot_notifications_screen_quick_fix_action">"Kísérlet a javításra"</string>
+  <string name="troubleshoot_notifications_screen_success">"Minden teszt sikeresen lezajlott."</string>
+  <string name="troubleshoot_notifications_screen_title">"Értesítések hibaelhárítása"</string>
+  <string name="troubleshoot_notifications_screen_waiting">"Egyes tesztek a figyelmét igénylik. Ellenőrizze a részleteket."</string>
 </resources>

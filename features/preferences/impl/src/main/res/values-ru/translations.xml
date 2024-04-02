@@ -49,4 +49,14 @@
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"настройки системы"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"Системные уведомления выключены"</string>
   <string name="screen_notification_settings_title">"Уведомления"</string>
+  <string name="troubleshoot_notifications_entry_point_section">"Устранение неполадок"</string>
+  <string name="troubleshoot_notifications_entry_point_title">"Уведомления об устранении неполадок"</string>
+  <string name="troubleshoot_notifications_screen_action">"Выполнение тестов"</string>
+  <string name="troubleshoot_notifications_screen_action_again">"Повторное выполнение тестов"</string>
+  <string name="troubleshoot_notifications_screen_failure">"Некоторые тесты провалились. Пожалуйста, проверьте детали."</string>
+  <string name="troubleshoot_notifications_screen_notice">"Выполните тесты, чтобы обнаружить любую проблему в конфигурации, из-за которой уведомления могут работать не так, как ожидалось."</string>
+  <string name="troubleshoot_notifications_screen_quick_fix_action">"Попытка исправить"</string>
+  <string name="troubleshoot_notifications_screen_success">"Все тесты прошли успешно."</string>
+  <string name="troubleshoot_notifications_screen_title">"Уведомления об устранении неполадок"</string>
+  <string name="troubleshoot_notifications_screen_waiting">"Некоторые тесты требуют вашего внимания. Пожалуйста, проверьте детали."</string>
 </resources>

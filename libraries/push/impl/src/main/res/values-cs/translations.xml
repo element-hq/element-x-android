@@ -56,4 +56,29 @@
   <string name="push_distributor_background_sync_android">"Synchronizace na pozadí"</string>
   <string name="push_distributor_firebase_android">"Služby Google"</string>
   <string name="push_no_valid_google_play_services_apk_android">"Nebyly nalezeny žádné funkční služby Google Play. Oznámení nemusí fungovat správně."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_description">"Získat název aktuálního poskytovatele."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_failure">"Nebyli vybráni žádní push poskytovatelé."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_success">"Aktuální push poskytovatel: %1$s."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_title">"Aktuální push poskytovatel"</string>
+  <string name="troubleshoot_notifications_test_detect_push_provider_description">"Ujistěte se, že aplikace má alespoň jednoho push poskytovatele."</string>
+  <string name="troubleshoot_notifications_test_detect_push_provider_failure">"Nebyli nalezeni žádní push poskytovatelé."</string>
+  <plurals name="troubleshoot_notifications_test_detect_push_provider_success">
+    <item quantity="one">"Nalezen %1$d push poskytovatel: %2$s"</item>
+    <item quantity="few">"Nalezeni %1$d push poskytovatelé: %2$s"</item>
+    <item quantity="other">"Nalezeno %1$d push poskytovatelů: %2$s"</item>
+  </plurals>
+  <string name="troubleshoot_notifications_test_detect_push_provider_title">"Zjistit push poskytovatele"</string>
+  <string name="troubleshoot_notifications_test_display_notification_description">"Zkontrolujte, zda aplikace může zobrazit oznámení."</string>
+  <string name="troubleshoot_notifications_test_display_notification_failure">"Na oznámení nebylo kliknuto."</string>
+  <string name="troubleshoot_notifications_test_display_notification_permission_failure">"Oznámení nelze zobrazit."</string>
+  <string name="troubleshoot_notifications_test_display_notification_success">"Na oznámení bylo kliknuto!"</string>
+  <string name="troubleshoot_notifications_test_display_notification_title">"Zobrazit oznámení"</string>
+  <string name="troubleshoot_notifications_test_display_notification_waiting">"Kliknutím na oznámení pokračujte v testu."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_description">"Ujistěte se, že aplikace přijímá push."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_1">"Chyba: pusher odmítl požadavek."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_2">"Chyba: %1$s."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_3">"Chyba, nelze otestovat push."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_4">"Chyba, časový limit čekání na push."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_success">"Push zpětná smyčka trvala %1$d ms."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_title">"Otestovat push zpětnou smyčku"</string>
 </resources>

@@ -56,4 +56,29 @@
   <string name="push_distributor_background_sync_android">"Фоновая синхронизация"</string>
   <string name="push_distributor_firebase_android">"Сервисы Google"</string>
   <string name="push_no_valid_google_play_services_apk_android">"Не найдены действующие службы Google Play. Уведомления могут работать некорректно."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_description">"Получение имени текущего поставщика."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_failure">"Поставщики push-уведомлений не выбраны."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_success">"Текущий поставщик push-уведомлений: %1$s."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_title">"Текущий поставщик push-уведомлений"</string>
+  <string name="troubleshoot_notifications_test_detect_push_provider_description">"Убедитесь, что у приложения есть хотя бы один поставщик push-сообщений."</string>
+  <string name="troubleshoot_notifications_test_detect_push_provider_failure">"Поставщики push-уведомлений не найдены."</string>
+  <plurals name="troubleshoot_notifications_test_detect_push_provider_success">
+    <item quantity="one">"Найден %1$d push-провайдер: %2$s"</item>
+    <item quantity="few">"Найдено %1$d push-провайдеров: %2$s"</item>
+    <item quantity="many">"Найдено %1$d push-провайдеров: %2$s"</item>
+  </plurals>
+  <string name="troubleshoot_notifications_test_detect_push_provider_title">"Обнаружение поставщиков push-уведомлений"</string>
+  <string name="troubleshoot_notifications_test_display_notification_description">"Убедитесь, что приложение может отображать уведомление."</string>
+  <string name="troubleshoot_notifications_test_display_notification_failure">"Уведомление не было нажато."</string>
+  <string name="troubleshoot_notifications_test_display_notification_permission_failure">"Невозможно отобразить уведомление."</string>
+  <string name="troubleshoot_notifications_test_display_notification_success">"Уведомление было нажато!"</string>
+  <string name="troubleshoot_notifications_test_display_notification_title">"Отобразить уведомление"</string>
+  <string name="troubleshoot_notifications_test_display_notification_waiting">"Нажмите на уведомление, чтобы продолжить тест."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_description">"Убедитесь, что приложение получает push-сообщение."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_1">"Ошибка: pusher отклонил запрос."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_2">"Ошибка: %1$s."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_3">"Ошибка, невозможно протестировать отправку."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_4">"Ошибка, тайм-аут ожидания push-уведомления."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_success">"Обратная отправка push-уведомления, заняла %1$d мс."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_title">"Тест обратной отправки push-уведомления"</string>
 </resources>
