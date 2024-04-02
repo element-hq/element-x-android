@@ -17,14 +17,14 @@
 package io.element.android.libraries.pushproviders.unifiedpush.troubleshoot
 
 import com.squareup.anvil.annotations.ContributesMultibinding
-import io.element.android.libraries.core.notifications.NotificationTroubleshootTest
-import io.element.android.libraries.core.notifications.NotificationTroubleshootTestDelegate
-import io.element.android.libraries.core.notifications.NotificationTroubleshootTestState
-import io.element.android.libraries.core.notifications.TestFilterData
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.pushproviders.unifiedpush.R
 import io.element.android.libraries.pushproviders.unifiedpush.UnifiedPushConfig
 import io.element.android.libraries.pushproviders.unifiedpush.UnifiedPushDistributorProvider
+import io.element.android.libraries.troubleshoot.api.test.NotificationTroubleshootTest
+import io.element.android.libraries.troubleshoot.api.test.NotificationTroubleshootTestDelegate
+import io.element.android.libraries.troubleshoot.api.test.NotificationTroubleshootTestState
+import io.element.android.libraries.troubleshoot.api.test.TestFilterData
 import io.element.android.services.toolbox.api.strings.StringProvider
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow

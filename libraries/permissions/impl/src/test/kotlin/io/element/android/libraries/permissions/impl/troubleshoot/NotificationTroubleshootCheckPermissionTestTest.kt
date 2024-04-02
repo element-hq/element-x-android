@@ -19,7 +19,6 @@ package io.element.android.libraries.permissions.impl.troubleshoot
 import android.os.Build
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import io.element.android.libraries.core.notifications.NotificationTroubleshootTestState
 import io.element.android.libraries.permissions.impl.FakePermissionStateProvider
 import io.element.android.libraries.permissions.impl.action.FakePermissionActions
 import io.element.android.services.toolbox.test.sdk.FakeBuildVersionSdkIntProvider

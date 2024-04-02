@@ -53,12 +53,4 @@ Pokud budete pokračovat, některá nastavení se mohou změnit."</string>
   <string name="screen_notification_settings_title">"Oznámení"</string>
   <string name="troubleshoot_notifications_entry_point_section">"Odstraňování problémů"</string>
   <string name="troubleshoot_notifications_entry_point_title">"Odstraňování problémů s upozorněními"</string>
-  <string name="troubleshoot_notifications_screen_action">"Spustit testy"</string>
-  <string name="troubleshoot_notifications_screen_action_again">"Spustit testy znovu"</string>
-  <string name="troubleshoot_notifications_screen_failure">"Některé testy selhaly. Zkontrolujte prosím podrobnosti."</string>
-  <string name="troubleshoot_notifications_screen_notice">"Spusťte testy, abyste zjistili jakýkoli problém ve vaší konfiguraci, který může způsobit, že se oznámení nebudou chovat podle očekávání."</string>
-  <string name="troubleshoot_notifications_screen_quick_fix_action">"Pokus o opravu"</string>
-  <string name="troubleshoot_notifications_screen_success">"Všechny testy proběhly úspěšně."</string>
-  <string name="troubleshoot_notifications_screen_title">"Odstraňování problémů s upozorněními"</string>
-  <string name="troubleshoot_notifications_screen_waiting">"Některé testy vyžadují vaši pozornost. Zkontrolujte prosím podrobnosti."</string>
 </resources>

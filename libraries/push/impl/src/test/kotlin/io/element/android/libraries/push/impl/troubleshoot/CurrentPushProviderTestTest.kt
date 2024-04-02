@@ -18,8 +18,8 @@ package io.element.android.libraries.push.impl.troubleshoot
 
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import io.element.android.libraries.core.notifications.NotificationTroubleshootTestState
 import io.element.android.libraries.push.test.FakeGetCurrentPushProvider
+import io.element.android.libraries.troubleshoot.api.test.NotificationTroubleshootTestState
 import io.element.android.services.toolbox.test.strings.FakeStringProvider
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runTest

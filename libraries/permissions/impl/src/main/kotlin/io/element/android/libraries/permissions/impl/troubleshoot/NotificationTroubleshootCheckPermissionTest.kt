@@ -19,13 +19,13 @@ package io.element.android.libraries.permissions.impl.troubleshoot
 import android.Manifest
 import android.os.Build
 import com.squareup.anvil.annotations.ContributesMultibinding
-import io.element.android.libraries.core.notifications.NotificationTroubleshootTest
-import io.element.android.libraries.core.notifications.NotificationTroubleshootTestDelegate
-import io.element.android.libraries.core.notifications.NotificationTroubleshootTestState
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.permissions.api.PermissionStateProvider
 import io.element.android.libraries.permissions.impl.R
 import io.element.android.libraries.permissions.impl.action.PermissionActions
+import io.element.android.libraries.troubleshoot.api.test.NotificationTroubleshootTest
+import io.element.android.libraries.troubleshoot.api.test.NotificationTroubleshootTestDelegate
+import io.element.android.libraries.troubleshoot.api.test.NotificationTroubleshootTestState
 import io.element.android.services.toolbox.api.sdk.BuildVersionSdkIntProvider
 import io.element.android.services.toolbox.api.strings.StringProvider
 import kotlinx.coroutines.CoroutineScope

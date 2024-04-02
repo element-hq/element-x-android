@@ -53,6 +53,7 @@ dependencies {
     implementation(projects.libraries.matrix.api)
     implementation(projects.libraries.matrixui)
     implementation(projects.libraries.uiStrings)
+    implementation(projects.libraries.troubleshoot.api)
     api(projects.libraries.pushproviders.api)
     api(projects.libraries.pushstore.api)
     api(projects.libraries.push.api)

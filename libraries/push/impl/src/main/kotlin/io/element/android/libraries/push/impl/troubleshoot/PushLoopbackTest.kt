@@ -17,13 +17,13 @@
 package io.element.android.libraries.push.impl.troubleshoot
 
 import com.squareup.anvil.annotations.ContributesMultibinding
-import io.element.android.libraries.core.notifications.NotificationTroubleshootTest
-import io.element.android.libraries.core.notifications.NotificationTroubleshootTestDelegate
-import io.element.android.libraries.core.notifications.NotificationTroubleshootTestState
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.push.api.PushService
 import io.element.android.libraries.push.api.gateway.PushGatewayFailure
 import io.element.android.libraries.push.impl.R
+import io.element.android.libraries.troubleshoot.api.test.NotificationTroubleshootTest
+import io.element.android.libraries.troubleshoot.api.test.NotificationTroubleshootTestDelegate
+import io.element.android.libraries.troubleshoot.api.test.NotificationTroubleshootTestState
 import io.element.android.services.toolbox.api.strings.StringProvider
 import io.element.android.services.toolbox.api.systemclock.SystemClock
 import kotlinx.coroutines.CompletableDeferred

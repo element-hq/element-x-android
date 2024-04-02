@@ -205,7 +205,12 @@
         "screen_edit_profile_.*",
         "screen_notification_settings_.*",
         "screen_blocked_users_.*",
-        "troubleshoot_notifications_entry_point_.*",
+        "troubleshoot_notifications_entry_point_.*"
+      ]
+    },
+    {
+      "name" : ":libraries:troubleshoot:impl",
+      "includeRegex" : [
         "troubleshoot_notifications_screen_.*"
       ]
     },

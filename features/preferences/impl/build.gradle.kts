@@ -49,6 +49,7 @@ dependencies {
     implementation(projects.libraries.pushstore.api)
     implementation(projects.libraries.indicator.api)
     implementation(projects.libraries.preferences.api)
+    implementation(projects.libraries.troubleshoot.api)
     implementation(projects.libraries.testtags)
     implementation(projects.libraries.uiStrings)
     implementation(projects.libraries.matrixui)
