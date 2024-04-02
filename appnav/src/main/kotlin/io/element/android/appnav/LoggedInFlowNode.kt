@@ -56,7 +56,6 @@ import io.element.android.features.preferences.api.PreferencesEntryPoint
 import io.element.android.features.roomdirectory.api.RoomDirectoryEntryPoint
 import io.element.android.features.roomlist.api.RoomListEntryPoint
 import io.element.android.features.securebackup.api.SecureBackupEntryPoint
-import io.element.android.features.verifysession.api.VerifySessionEntryPoint
 import io.element.android.libraries.architecture.BackstackView
 import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.architecture.createNode
@@ -81,7 +80,6 @@ import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.parcelize.Parcelize
@@ -95,7 +93,6 @@ class LoggedInFlowNode @AssistedInject constructor(
     private val preferencesEntryPoint: PreferencesEntryPoint,
     private val createRoomEntryPoint: CreateRoomEntryPoint,
     private val appNavigationStateService: AppNavigationStateService,
-    private val verifySessionEntryPoint: VerifySessionEntryPoint,
     private val secureBackupEntryPoint: SecureBackupEntryPoint,
     private val inviteListEntryPoint: InviteListEntryPoint,
     private val ftueEntryPoint: FtueEntryPoint,
@@ -216,7 +213,7 @@ class LoggedInFlowNode @AssistedInject constructor(
 
     sealed interface NavTarget : Parcelable {
         @Parcelize
-        data object Placeholder: NavTarget
+        data object Placeholder : NavTarget
 
         @Parcelize
         data object LoggedInPermanent : NavTarget
@@ -240,9 +237,6 @@ class LoggedInFlowNode @AssistedInject constructor(
 
         @Parcelize
         data object CreateRoom : NavTarget
-
-        @Parcelize
-        data object VerifySession : NavTarget
 
         @Parcelize
         data class SecureBackup(
@@ -282,10 +276,6 @@ class LoggedInFlowNode @AssistedInject constructor(
 
                     override fun onCreateRoomClicked() {
                         backstack.push(NavTarget.CreateRoom)
-                    }
-
-                    override fun onSessionVerificationClicked() {
-                        backstack.push(NavTarget.VerifySession)
                     }
 
                     override fun onSessionConfirmRecoveryKeyClicked() {
@@ -336,10 +326,6 @@ class LoggedInFlowNode @AssistedInject constructor(
                         plugins<Callback>().forEach { it.onOpenBugReport() }
                     }
 
-                    override fun onVerifyClicked() {
-                        backstack.push(NavTarget.VerifySession)
-                    }
-
                     override fun onSecureBackupClicked() {
                         backstack.push(NavTarget.SecureBackup())
                     }
@@ -362,25 +348,6 @@ class LoggedInFlowNode @AssistedInject constructor(
                 }
 
                 createRoomEntryPoint
-                    .nodeBuilder(this, buildContext)
-                    .callback(callback)
-                    .build()
-            }
-            NavTarget.VerifySession -> {
-                val callback = object : VerifySessionEntryPoint.Callback {
-                    override fun onEnterRecoveryKey() {
-                        backstack.replace(
-                            NavTarget.SecureBackup(
-                                initialElement = SecureBackupEntryPoint.InitialTarget.EnterRecoveryKey
-                            )
-                        )
-                    }
-
-                    override fun onDone() {
-                        backstack.pop()
-                    }
-                }
-                verifySessionEntryPoint
                     .nodeBuilder(this, buildContext)
                     .callback(callback)
                     .build()
@@ -449,7 +416,6 @@ class LoggedInFlowNode @AssistedInject constructor(
         waitForChildAttached<Node, NavTarget> { navTarget ->
             navTarget is NavTarget.InviteList
         }
-        Unit
     }
 
     private fun canShowRoot(ftueState: FtueState, sessionVerifiedStatus: SessionVerifiedStatus): Boolean {

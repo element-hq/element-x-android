@@ -51,7 +51,6 @@ import io.element.android.libraries.ui.strings.CommonStrings
 fun PreferencesRootView(
     state: PreferencesRootState,
     onBackPressed: () -> Unit,
-    onVerifyClicked: () -> Unit,
     onSecureBackupClicked: () -> Unit,
     onManageAccountClicked: (url: String) -> Unit,
     onOpenAnalytics: () -> Unit,
@@ -223,7 +222,6 @@ private fun ContentToPreview(matrixUser: MatrixUser) {
         onOpenDeveloperSettings = {},
         onOpenAdvancedSettings = {},
         onOpenAbout = {},
-        onVerifyClicked = {},
         onSecureBackupClicked = {},
         onManageAccountClicked = {},
         onOpenNotificationSettings = {},

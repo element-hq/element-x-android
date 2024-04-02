@@ -70,7 +70,11 @@ fun VerifySelfSessionView(
         when (state.verificationFlowStep) {
             is FlowStep.Canceled -> resetFlow()
             is FlowStep.AwaitingOtherDeviceResponse, FlowStep.Ready -> state.eventSink(VerifySelfSessionViewEvents.Cancel)
-            is FlowStep.Verifying -> if (!state.verificationFlowStep.state.isLoading()) { state.eventSink(VerifySelfSessionViewEvents.DeclineVerification) }
+            is FlowStep.Verifying -> {
+                if (!state.verificationFlowStep.state.isLoading()) {
+                    state.eventSink(VerifySelfSessionViewEvents.DeclineVerification)
+                }
+            }
             else -> Unit
         }
     }
@@ -239,7 +243,11 @@ private fun BottomMenu(
         is FlowStep.Verifying -> {
             BottomMenu(
                 positiveButtonTitle = stringResource(R.string.screen_session_verification_they_match),
-                onPositiveButtonClicked = { if (!isVerifying) { eventSink(VerifySelfSessionViewEvents.ConfirmVerification) } },
+                onPositiveButtonClicked = {
+                    if (!isVerifying) {
+                        eventSink(VerifySelfSessionViewEvents.ConfirmVerification)
+                    }
+                },
                 negativeButtonTitle = stringResource(R.string.screen_session_verification_they_dont_match),
                 onNegativeButtonClicked = { eventSink(VerifySelfSessionViewEvents.DeclineVerification) },
                 isLoading = isVerifying,
@@ -251,7 +259,6 @@ private fun BottomMenu(
                 onPositiveButtonClicked = onFinished,
             )
         }
-        else -> Unit
     }
 }
 
