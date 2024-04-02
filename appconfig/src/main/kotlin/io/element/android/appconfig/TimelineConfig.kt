@@ -25,6 +25,7 @@ object TimelineConfig {
      * Event types that will be filtered out from the timeline (i.e. not displayed).
      */
     val excludedEvents = listOf(
+        StateEventType.CALL_MEMBER,
         StateEventType.ROOM_ALIASES,
         StateEventType.ROOM_CANONICAL_ALIAS,
         StateEventType.ROOM_GUEST_ACCESS,
