@@ -41,4 +41,4 @@ jobs:
           ORG_GRADLE_PROJECT_SONAR_LOGIN: ${{ secrets.SONAR_TOKEN }}
         if: ${{ always() && env.SONAR_TOKEN != '' && env.ORG_GRADLE_PROJECT_SONAR_LOGIN != '' }}
         # We need to disable configuration cache errors for Sonar to work properly
-        run: ./gradlew :app:lintDebug sonar $CI_GRADLE_ARG_PROPERTIES
+        run: ./gradlew lintDebug sonar $CI_GRADLE_ARG_PROPERTIES
