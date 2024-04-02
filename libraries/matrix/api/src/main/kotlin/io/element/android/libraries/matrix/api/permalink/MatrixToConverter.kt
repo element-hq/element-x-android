@@ -24,7 +24,6 @@ import android.net.Uri
 interface MatrixToConverter {
     /**
      * Try to convert a URL from an element web instance or from a client permalink to a matrix.to url.
-     * To be successfully converted, URL path should contain one of the [DefaultMatrixToConverter.SUPPORTED_PATHS].
      * Examples:
      * - https://riot.im/develop/#/room/#element-android:matrix.org  ->  https://matrix.to/#/#element-android:matrix.org
      * - https://app.element.io/#/room/#element-android:matrix.org   ->  https://matrix.to/#/#element-android:matrix.org

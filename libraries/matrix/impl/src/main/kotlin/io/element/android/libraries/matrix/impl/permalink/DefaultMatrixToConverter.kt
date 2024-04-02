@@ -53,9 +53,11 @@ class DefaultMatrixToConverter @Inject constructor() : MatrixToConverter {
         }
     }
 
-    private val SUPPORTED_PATHS = listOf(
-        "/#/room/",
-        "/#/user/",
-        "/#/group/"
-    )
+    companion object {
+        val SUPPORTED_PATHS = listOf(
+            "/#/room/",
+            "/#/user/",
+            "/#/group/"
+        )
+    }
 }

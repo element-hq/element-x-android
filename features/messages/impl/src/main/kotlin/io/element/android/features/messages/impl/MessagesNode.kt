@@ -110,10 +110,10 @@ class MessagesNode @AssistedInject constructor(
     ) {
         when (val permalink = permalinkParser.parse(Uri.parse(url))) {
             is PermalinkData.UserLink -> {
-                onUserDataClicked(UserId(permalink.userId))
+                callback?.onUserDataClicked(UserId(permalink.userId))
             }
             is PermalinkData.RoomLink -> {
-                // TODO: Implement room link handling
+                // TODO Implement room link handling
             }
             is PermalinkData.FallbackLink,
             is PermalinkData.RoomEmailInviteLink -> {

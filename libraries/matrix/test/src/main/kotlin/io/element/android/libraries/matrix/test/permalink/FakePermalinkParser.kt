@@ -21,7 +21,7 @@ import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
 
 class FakePermalinkParser(
-    private var result: () -> PermalinkData = { throw Exception("Not implemented") }
+    private var result: () -> PermalinkData = { TODO("Not implemented") }
 ) : PermalinkParser {
     fun givenResult(result: PermalinkData) {
         this.result = { result }
