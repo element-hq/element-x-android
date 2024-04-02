@@ -16,6 +16,7 @@
 plugins {
     id("io.element.android-compose-library")
     alias(libs.plugins.anvil)
+    alias(libs.plugins.ksp)
     alias(libs.plugins.kotlin.serialization)
 }
 
@@ -43,6 +44,7 @@ dependencies {
     api(projects.libraries.troubleshoot.api)
     api(projects.libraries.push.api)
     implementation(projects.services.analytics.api)
+    ksp(libs.showkase.processor)
 
     testImplementation(libs.test.junit)
     testImplementation(libs.test.robolectric)
