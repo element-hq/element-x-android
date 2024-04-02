@@ -26,7 +26,6 @@ import io.element.android.features.messages.impl.fixtures.aTimelineItemsFactory
 import io.element.android.features.messages.impl.timeline.factories.TimelineItemsFactory
 import io.element.android.features.messages.impl.timeline.model.NewEventState
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
-import io.element.android.features.messages.impl.timeline.session.SessionState
 import io.element.android.features.messages.impl.voicemessages.timeline.FakeRedactedVoiceMessageManager
 import io.element.android.features.messages.impl.voicemessages.timeline.RedactedVoiceMessageManager
 import io.element.android.features.messages.impl.voicemessages.timeline.aRedactedMatrixTimeline
@@ -47,13 +46,11 @@ import io.element.android.libraries.matrix.api.timeline.item.virtual.VirtualTime
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.AN_EVENT_ID_2
 import io.element.android.libraries.matrix.test.A_USER_ID
-import io.element.android.libraries.matrix.test.encryption.FakeEncryptionService
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.matrix.test.room.aRoomMember
 import io.element.android.libraries.matrix.test.timeline.FakeMatrixTimeline
 import io.element.android.libraries.matrix.test.timeline.aMessageContent
 import io.element.android.libraries.matrix.test.timeline.anEventTimelineItem
-import io.element.android.libraries.matrix.test.verification.FakeSessionVerificationService
 import io.element.android.libraries.matrix.ui.components.aMatrixUserList
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.awaitLastSequentialItem
@@ -89,7 +86,6 @@ class TimelinePresenterTest {
             assertThat(initialState.timelineItems).isEmpty()
             val loadedNoTimelineState = awaitItem()
             assertThat(loadedNoTimelineState.timelineItems).isEmpty()
-            assertThat(loadedNoTimelineState.sessionState).isEqualTo(SessionState(isSessionVerified = false, isKeyBackupEnabled = false))
         }
     }
 
@@ -512,8 +508,6 @@ class TimelinePresenterTest {
             dispatchers = testCoroutineDispatchers(),
             appScope = this,
             navigator = messagesNavigator,
-            encryptionService = FakeEncryptionService(),
-            verificationService = FakeSessionVerificationService(),
             redactedVoiceMessageManager = redactedVoiceMessageManager,
             endPollAction = endPollAction,
             sendPollResponseAction = sendPollResponseAction,

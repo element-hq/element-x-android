@@ -26,6 +26,7 @@ import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.roomlist.FakeRoomListService
+import io.element.android.libraries.matrix.test.verification.FakeSessionVerificationService
 import io.element.android.libraries.push.api.PushService
 import io.element.android.libraries.pushproviders.api.Distributor
 import io.element.android.libraries.pushproviders.api.PushProvider
@@ -68,7 +69,8 @@ class LoggedInPresenterTest {
 
     private fun createLoggedInPresenter(
         roomListService: RoomListService = FakeRoomListService(),
-        networkStatus: NetworkStatus = NetworkStatus.Offline
+        networkStatus: NetworkStatus = NetworkStatus.Offline,
+        sessionVerificationService: FakeSessionVerificationService = FakeSessionVerificationService(),
     ): LoggedInPresenter {
         return LoggedInPresenter(
             matrixClient = FakeMatrixClient(roomListService = roomListService),
@@ -86,7 +88,8 @@ class LoggedInPresenterTest {
 
                 override suspend fun testPush() {
                 }
-            }
+            },
+            sessionVerificationService = sessionVerificationService,
         )
     }
 }

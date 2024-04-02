@@ -36,45 +36,7 @@ class VerifySelfSessionViewTest {
     @get:Rule val rule = createAndroidComposeRule<ComponentActivity>()
 
     @Test
-    fun `clicking on cancel calls the expected callback and emits the expected Event`() {
-        val eventsRecorder = EventsRecorder<VerifySelfSessionViewEvents>()
-        ensureCalledOnce { callback ->
-            rule.setContent {
-                VerifySelfSessionView(
-                    aVerifySelfSessionState(
-                        verificationFlowStep = VerifySelfSessionState.VerificationStep.Initial(true),
-                        eventSink = eventsRecorder
-                    ),
-                    onEnterRecoveryKey = EnsureNeverCalled(),
-                    onFinished = callback,
-                )
-            }
-            rule.clickOn(CommonStrings.action_cancel)
-        }
-        eventsRecorder.assertSingle(VerifySelfSessionViewEvents.Cancel)
-    }
-
-    @Test
-    fun `clicking on back key calls the expected callback and emits the expected Event`() {
-        val eventsRecorder = EventsRecorder<VerifySelfSessionViewEvents>()
-        ensureCalledOnce { callback ->
-            rule.setContent {
-                VerifySelfSessionView(
-                    aVerifySelfSessionState(
-                        verificationFlowStep = VerifySelfSessionState.VerificationStep.Initial(true),
-                        eventSink = eventsRecorder
-                    ),
-                    onEnterRecoveryKey = EnsureNeverCalled(),
-                    onFinished = callback,
-                )
-            }
-            rule.pressBackKey()
-        }
-        eventsRecorder.assertSingle(VerifySelfSessionViewEvents.Cancel)
-    }
-
-    @Test
-    fun `when flow is completed, the expected callback is invoked`() {
+    fun `when flow is completed and the user clicks on the continue button, the expected callback is invoked`() {
         val eventsRecorder = EventsRecorder<VerifySelfSessionViewEvents>(expectEvents = false)
         ensureCalledOnce { callback ->
             rule.setContent {
@@ -87,6 +49,7 @@ class VerifySelfSessionViewTest {
                     onFinished = callback,
                 )
             }
+            rule.clickOn(CommonStrings.action_continue)
         }
     }
 

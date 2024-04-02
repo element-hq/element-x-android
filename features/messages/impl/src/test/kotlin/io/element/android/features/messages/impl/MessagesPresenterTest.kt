@@ -76,11 +76,9 @@ import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID_2
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.core.aBuildMeta
-import io.element.android.libraries.matrix.test.encryption.FakeEncryptionService
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.matrix.test.room.aRoomInfo
 import io.element.android.libraries.matrix.test.room.aRoomMember
-import io.element.android.libraries.matrix.test.verification.FakeSessionVerificationService
 import io.element.android.libraries.mediapickers.test.FakePickerProvider
 import io.element.android.libraries.mediaplayer.test.FakeMediaPlayer
 import io.element.android.libraries.mediaupload.api.MediaSender
@@ -741,8 +739,6 @@ class MessagesPresenterTest {
             dispatchers = coroutineDispatchers,
             appScope = this,
             navigator = navigator,
-            encryptionService = FakeEncryptionService(),
-            verificationService = FakeSessionVerificationService(),
             redactedVoiceMessageManager = FakeRedactedVoiceMessageManager(),
             endPollAction = endPollAction,
             sendPollResponseAction = FakeSendPollResponseAction(),

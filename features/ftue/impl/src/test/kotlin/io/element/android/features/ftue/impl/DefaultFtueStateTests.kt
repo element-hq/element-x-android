@@ -17,6 +17,7 @@
 package io.element.android.features.ftue.impl
 
 import android.os.Build
+import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.ftue.impl.state.DefaultFtueState
 import io.element.android.features.ftue.impl.state.FtueStep
@@ -36,11 +37,21 @@ import org.junit.Test
 
 class DefaultFtueStateTests {
     @Test
-    fun `given any check being false, should display flow is true`() = runTest {
+    fun `given any check being false and session verification state being loaded, should display flow is true`() = runTest {
+        val sessionVerificationService = FakeSessionVerificationService().apply {
+            givenVerifiedStatus(SessionVerifiedStatus.Unknown)
+        }
         val coroutineScope = CoroutineScope(coroutineContext + SupervisorJob())
-        val state = createState(coroutineScope)
+        val state = createState(coroutineScope, sessionVerificationService)
 
-        assertThat(state.shouldDisplayFlow.value).isTrue()
+        state.shouldDisplayFlow.test {
+            // Verification state is unknown, we don't display the flow yet
+            assertThat(awaitItem()).isFalse()
+
+            // Verification state is known, we should display the flow if any check is false
+            sessionVerificationService.givenVerifiedStatus(SessionVerifiedStatus.NotVerified)
+            assertThat(awaitItem()).isTrue()
+        }
 
         // Cleanup
         coroutineScope.cancel()
@@ -76,7 +87,9 @@ class DefaultFtueStateTests {
 
     @Test
     fun `traverse flow`() = runTest {
-        val sessionVerificationService = FakeSessionVerificationService()
+        val sessionVerificationService = FakeSessionVerificationService().apply {
+            givenVerifiedStatus(SessionVerifiedStatus.NotVerified)
+        }
         val analyticsService = FakeAnalyticsService()
         val permissionStateProvider = FakePermissionStateProvider(permissionGranted = false)
         val lockScreenService = FakeLockScreenService()
