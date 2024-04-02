@@ -31,7 +31,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withTimeoutOrNull
+import kotlinx.coroutines.withTimeout
 import timber.log.Timber
 import javax.inject.Inject
 import kotlin.time.Duration.Companion.seconds
@@ -84,21 +84,25 @@ class PushLoopbackTest @Inject constructor(
             job.cancel()
             return
         }
-        val result = withTimeoutOrNull(10.seconds) {
-            completable.await()
-        }
-        job.cancel()
-        if (result == null) {
-            delegate.updateState(
-                description = stringProvider.getString(R.string.troubleshoot_notifications_test_push_loop_back_failure_4),
-                status = NotificationTroubleshootTestState.Status.Failure(false)
-            )
-        } else {
-            delegate.updateState(
-                description = stringProvider.getString(R.string.troubleshoot_notifications_test_push_loop_back_success, result),
-                status = NotificationTroubleshootTestState.Status.Success
-            )
-        }
+        runCatching {
+            withTimeout(10.seconds) {
+                completable.await()
+            }
+        }.fold(
+            onSuccess = { duration ->
+                delegate.updateState(
+                    description = stringProvider.getString(R.string.troubleshoot_notifications_test_push_loop_back_success, duration),
+                    status = NotificationTroubleshootTestState.Status.Success
+                )
+            },
+            onFailure = {
+                job.cancel()
+                delegate.updateState(
+                    description = stringProvider.getString(R.string.troubleshoot_notifications_test_push_loop_back_failure_4),
+                    status = NotificationTroubleshootTestState.Status.Failure(false)
+                )
+            }
+        )
     }
 
     override suspend fun reset() = delegate.reset()

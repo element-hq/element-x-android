@@ -29,7 +29,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withTimeoutOrNull
+import kotlinx.coroutines.withTimeout
 import timber.log.Timber
 import javax.inject.Inject
 import kotlin.time.Duration.Companion.seconds
@@ -72,22 +72,26 @@ class NotificationTest @Inject constructor(
             notificationClickHandler.state.first()
             Timber.d("Notification clicked!")
         }
-        val s = withTimeoutOrNull(30.seconds) {
-            job.join()
-        }
-        job.cancel()
-        if (s == null) {
-            notificationDisplayer.dismissDiagnosticNotification()
-            delegate.updateState(
-                description = stringProvider.getString(R.string.troubleshoot_notifications_test_display_notification_failure),
-                status = NotificationTroubleshootTestState.Status.Failure(false)
-            )
-        } else {
-            delegate.updateState(
-                description = stringProvider.getString(R.string.troubleshoot_notifications_test_display_notification_success),
-                status = NotificationTroubleshootTestState.Status.Success
-            )
-        }
+        runCatching {
+            withTimeout(30.seconds) {
+                job.join()
+            }
+        }.fold(
+            onSuccess = {
+                delegate.updateState(
+                    description = stringProvider.getString(R.string.troubleshoot_notifications_test_display_notification_success),
+                    status = NotificationTroubleshootTestState.Status.Success
+                )
+            },
+            onFailure = {
+                job.cancel()
+                notificationDisplayer.dismissDiagnosticNotification()
+                delegate.updateState(
+                    description = stringProvider.getString(R.string.troubleshoot_notifications_test_display_notification_failure),
+                    status = NotificationTroubleshootTestState.Status.Failure(false)
+                )
+            }
+        )
     }.invokeOnCompletion {
         // Ensure that the notification is cancelled when the screen is left
         notificationDisplayer.dismissDiagnosticNotification()
