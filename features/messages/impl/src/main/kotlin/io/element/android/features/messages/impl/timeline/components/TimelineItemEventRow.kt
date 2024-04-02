@@ -17,7 +17,6 @@
 package io.element.android.features.messages.impl.timeline.components
 
 import android.annotation.SuppressLint
-import android.net.Uri
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -50,7 +49,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalViewConfiguration
 import androidx.compose.ui.platform.ViewConfiguration
 import androidx.compose.ui.res.stringResource
@@ -94,7 +92,6 @@ import io.element.android.features.messages.impl.timeline.model.event.aTimelineI
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
 import io.element.android.features.messages.impl.timeline.model.event.canBeRepliedTo
 import io.element.android.features.messages.impl.timeline.model.metadata
-import io.element.android.libraries.androidutils.system.openUrlInExternalApp
 import io.element.android.libraries.designsystem.colors.AvatarColorsProvider
 import io.element.android.libraries.designsystem.components.EqualWidthColumn
 import io.element.android.libraries.designsystem.components.avatar.Avatar
@@ -109,9 +106,6 @@ import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
-import io.element.android.libraries.matrix.api.permalink.PermalinkData
-import io.element.android.libraries.matrix.api.permalink.PermalinkParser
-import io.element.android.libraries.matrix.api.room.Mention
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnail
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -128,6 +122,7 @@ fun TimelineItemEventRow(
     isHighlighted: Boolean,
     onClick: () -> Unit,
     onLongClick: () -> Unit,
+    onLinkClicked: (String) -> Unit,
     onUserDataClick: (UserId) -> Unit,
     inReplyToClick: (EventId) -> Unit,
     onTimestampClicked: (TimelineItem.Event) -> Unit,
@@ -149,13 +144,6 @@ fun TimelineItemEventRow(
     fun inReplyToClicked() {
         val inReplyToEventId = event.inReplyTo?.eventId ?: return
         inReplyToClick(inReplyToEventId)
-    }
-
-    fun onMentionClicked(mention: Mention) {
-        when (mention) {
-            is Mention.User -> onUserDataClick(mention.userId)
-            else -> Unit // TODO implement actions for other mentions being clicked
-        }
     }
 
     Column(modifier = modifier.fillMaxWidth()) {
@@ -203,7 +191,7 @@ fun TimelineItemEventRow(
                         onReactionClicked = { emoji -> onReactionClick(emoji, event) },
                         onReactionLongClicked = { emoji -> onReactionLongClick(emoji, event) },
                         onMoreReactionsClicked = { onMoreReactionsClick(event) },
-                        onMentionClicked = ::onMentionClicked,
+                        onLinkClicked = onLinkClicked,
                         eventSink = eventSink,
                     )
                 }
@@ -222,7 +210,7 @@ fun TimelineItemEventRow(
                 onReactionClicked = { emoji -> onReactionClick(emoji, event) },
                 onReactionLongClicked = { emoji -> onReactionLongClick(emoji, event) },
                 onMoreReactionsClicked = { onMoreReactionsClick(event) },
-                onMentionClicked = ::onMentionClicked,
+                onLinkClicked = onLinkClicked,
                 eventSink = eventSink,
             )
         }
@@ -278,7 +266,7 @@ private fun TimelineItemEventRowContent(
     onReactionClicked: (emoji: String) -> Unit,
     onReactionLongClicked: (emoji: String) -> Unit,
     onMoreReactionsClicked: (event: TimelineItem.Event) -> Unit,
-    onMentionClicked: (Mention) -> Unit,
+    onLinkClicked: (String) -> Unit,
     eventSink: (TimelineEvents.EventFromTimelineItem) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -346,7 +334,7 @@ private fun TimelineItemEventRowContent(
                 onTimestampClicked = {
                     onTimestampClicked(event)
                 },
-                onMentionClicked = onMentionClicked,
+                onLinkClicked = onLinkClicked,
                 eventSink = eventSink,
             )
         }
@@ -429,7 +417,7 @@ private fun MessageEventBubbleContent(
     @Suppress("UNUSED_PARAMETER")
     inReplyToClick: () -> Unit,
     onTimestampClicked: () -> Unit,
-    onMentionClicked: (Mention) -> Unit,
+    onLinkClicked: (String) -> Unit,
     eventSink: (TimelineEvents.EventFromTimelineItem) -> Unit,
     @SuppressLint("ModifierParameter")
     // need to rename this modifier to prevent linter false positives
@@ -530,7 +518,6 @@ private fun MessageEventBubbleContent(
         modifier: Modifier = Modifier,
         canShrinkContent: Boolean = false,
     ) {
-        val context = LocalContext.current
         val timestampLayoutModifier: Modifier
         val contentModifier: Modifier
         when {
@@ -566,20 +553,7 @@ private fun MessageEventBubbleContent(
             ) { onContentLayoutChanged ->
                 TimelineItemEventContentView(
                     content = event.content,
-                    onLinkClicked = { url ->
-                        when (val permalink = PermalinkParser.parse(Uri.parse(url))) {
-                            is PermalinkData.UserLink -> {
-                                onMentionClicked(Mention.User(UserId(permalink.userId)))
-                            }
-                            is PermalinkData.RoomLink -> {
-                                onMentionClicked(Mention.Room(permalink.getRoomId(), permalink.getRoomAlias()))
-                            }
-                            is PermalinkData.FallbackLink,
-                            is PermalinkData.RoomEmailInviteLink -> {
-                                context.openUrlInExternalApp(url)
-                            }
-                        }
-                    },
+                    onLinkClicked = onLinkClicked,
                     eventSink = eventSink,
                     onContentLayoutChanged = onContentLayoutChanged,
                     modifier = contentModifier

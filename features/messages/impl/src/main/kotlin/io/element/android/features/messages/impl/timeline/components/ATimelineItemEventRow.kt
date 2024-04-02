@@ -38,6 +38,7 @@ internal fun ATimelineItemEventRow(
     onClick = {},
     onLongClick = {},
     onUserDataClick = {},
+    onLinkClicked = {},
     inReplyToClick = {},
     onReactionClick = { _, _ -> },
     onReactionLongClick = { _, _ -> },

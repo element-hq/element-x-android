@@ -43,6 +43,7 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.TransactionId
 import io.element.android.libraries.matrix.api.media.ImageInfo
 import io.element.android.libraries.matrix.api.media.VideoInfo
+import io.element.android.libraries.matrix.api.permalink.PermalinkBuilder
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.api.room.Mention
@@ -60,6 +61,8 @@ import io.element.android.libraries.matrix.test.A_USER_ID_3
 import io.element.android.libraries.matrix.test.A_USER_ID_4
 import io.element.android.libraries.matrix.test.A_USER_NAME
 import io.element.android.libraries.matrix.test.FakeMatrixClient
+import io.element.android.libraries.matrix.test.permalink.FakePermalinkBuilder
+import io.element.android.libraries.matrix.test.permalink.FakePermalinkParser
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.matrix.test.room.aRoomMember
 import io.element.android.libraries.mediapickers.api.PickerProvider
@@ -805,7 +808,14 @@ class MessageComposerPresenterTest {
 
     @Test
     fun `present - insertMention`() = runTest {
-        val presenter = createPresenter(this)
+        val presenter = createPresenter(
+            coroutineScope = this,
+            permalinkBuilder = FakePermalinkBuilder(
+                result = {
+                    Result.success("https://matrix.to/#/${A_USER_ID_2.value}")
+                }
+            )
+        )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -941,6 +951,7 @@ class MessageComposerPresenterTest {
         mediaPreProcessor: MediaPreProcessor = this.mediaPreProcessor,
         snackbarDispatcher: SnackbarDispatcher = this.snackbarDispatcher,
         permissionPresenter: PermissionsPresenter = FakePermissionsPresenter(),
+        permalinkBuilder: PermalinkBuilder = FakePermalinkBuilder()
     ) = MessageComposerPresenter(
         coroutineScope,
         room,
@@ -955,6 +966,8 @@ class MessageComposerPresenterTest {
         TestRichTextEditorStateFactory(),
         currentSessionIdHolder = CurrentSessionIdHolder(FakeMatrixClient(A_SESSION_ID)),
         permissionsPresenterFactory = FakePermissionsPresenterFactory(permissionPresenter),
+        permalinkParser = FakePermalinkParser(),
+        permalinkBuilder = permalinkBuilder,
     )
 
     private suspend fun <T> ReceiveTurbine<T>.awaitFirstItem(): T {
