@@ -63,7 +63,7 @@ class PushersManager @Inject constructor(
      * Register a pusher to the server if not done yet.
      */
     override suspend fun registerPusher(matrixClient: MatrixClient, pushKey: String, gateway: String) {
-        val userDataStore = userPushStoreFactory.create(matrixClient.sessionId)
+        val userDataStore = userPushStoreFactory.getOrCreate(matrixClient.sessionId)
         if (userDataStore.getCurrentRegisteredPushKey() == pushKey) {
             Timber.tag(loggerTag.value)
                 .d("Unnecessary to register again the same pusher, but do it in case the pusher has been removed from the server")

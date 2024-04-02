@@ -35,7 +35,7 @@ class DefaultGetCurrentPushProvider @Inject constructor(
             .value
             .navigationState
             .currentSessionId()
-            ?.let { pushStoreFactory.create(it) }
+            ?.let { pushStoreFactory.getOrCreate(it) }
             ?.getPushProviderName()
     }
 }

@@ -122,7 +122,7 @@ class DefaultPushHandler @Inject constructor(
                 return
             }
 
-            val userPushStore = userPushStoreFactory.create(userId)
+            val userPushStore = userPushStoreFactory.getOrCreate(userId)
             if (!userPushStore.getNotificationEnabledForDevice().first()) {
                 // TODO We need to check if this is an incoming call
                 Timber.tag(loggerTag.value).i("Notification are disabled for this device, ignore push.")
