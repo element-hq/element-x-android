@@ -32,6 +32,7 @@ import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.designsystem.atomic.atoms.RoundedIconAtom
 import io.element.android.libraries.designsystem.atomic.atoms.RoundedIconAtomSize
+import io.element.android.libraries.designsystem.icons.CompoundDrawables
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Text
@@ -91,6 +92,17 @@ fun IconTitleSubtitleMolecule(
 internal fun IconTitleSubtitleMoleculePreview() = ElementPreview {
     IconTitleSubtitleMolecule(
         iconImageVector = CompoundIcons.Chat(),
+        title = "Title",
+        subTitle = "Subtitle",
+    )
+}
+
+@PreviewsDayNight
+@Composable
+internal fun IconTitleSubtitleMoleculeWithResIconPreview() = ElementPreview {
+    IconTitleSubtitleMolecule(
+        iconResourceId = CompoundDrawables.ic_compound_admin,
+        iconTint = Color.Black,
         title = "Title",
         subTitle = "Subtitle",
     )

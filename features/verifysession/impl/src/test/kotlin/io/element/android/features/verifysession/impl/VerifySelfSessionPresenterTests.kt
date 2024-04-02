@@ -112,7 +112,7 @@ class VerifySelfSessionPresenterTests {
     }
 
     @Test
-    fun `present - A fail in the flow cancels it`() = runTest {
+    fun `present - A failure when verifying cancels it`() = runTest {
         val service = FakeSessionVerificationService()
         val presenter = createVerifySelfSessionPresenter(service)
         moleculeFlow(RecompositionMode.Immediate) {
@@ -125,6 +125,21 @@ class VerifySelfSessionPresenterTests {
             assertThat(awaitItem().verificationFlowStep).isInstanceOf(VerificationStep.Verifying::class.java)
             // Cancelled
             assertThat(awaitItem().verificationFlowStep).isEqualTo(VerificationStep.Canceled)
+        }
+    }
+
+    @Test
+    fun `present - A fail when requesting verification resets the state to the initial one`() = runTest {
+        val service = FakeSessionVerificationService()
+        val presenter = createVerifySelfSessionPresenter(service)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            service.shouldFail = true
+            awaitItem().eventSink(VerifySelfSessionViewEvents.RequestVerification)
+            service.shouldFail = false
+            assertThat(awaitItem().verificationFlowStep).isInstanceOf(VerificationStep.AwaitingOtherDeviceResponse::class.java)
+            assertThat(awaitItem().verificationFlowStep).isEqualTo(VerificationStep.Initial(false))
         }
     }
 
@@ -167,6 +182,23 @@ class VerifySelfSessionPresenterTests {
             state.eventSink(VerifySelfSessionViewEvents.RequestVerification)
             // Went back to requesting verification
             assertThat(awaitItem().verificationFlowStep).isEqualTo(VerificationStep.AwaitingOtherDeviceResponse)
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - Go back after cancelation returns to initial state`() = runTest {
+        val service = FakeSessionVerificationService()
+        val presenter = createVerifySelfSessionPresenter(service)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val state = requestVerificationAndAwaitVerifyingState(service)
+            service.givenVerificationFlowState(VerificationFlowState.Canceled)
+            assertThat(awaitItem().verificationFlowStep).isEqualTo(VerificationStep.Canceled)
+            state.eventSink(VerifySelfSessionViewEvents.Reset)
+            // Went back to initial state
+            assertThat(awaitItem().verificationFlowStep).isEqualTo(VerificationStep.Initial(false))
             cancelAndIgnoreRemainingEvents()
         }
     }

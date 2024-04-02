@@ -48,9 +48,6 @@ class VerifySelfSessionStateMachine @Inject constructor(
                 on { _: Event.DidAcceptVerificationRequest, state ->
                     state.override { State.VerificationRequestAccepted }
                 }
-                on { _: Event.DidFail, state ->
-                    state.override { State.Initial }
-                }
             }
             inState<State.StartingSasVerification> {
                 onEnterEffect {
@@ -120,7 +117,10 @@ class VerifySelfSessionStateMachine @Inject constructor(
                     state.override { State.Canceled }
                 }
                 on { _: Event.DidFail, state: MachineState<State> ->
-                    state.override { State.Canceled }
+                    when (state.snapshot) {
+                        is State.RequestingVerification -> state.override { State.Initial }
+                        else -> state.override { State.Canceled }
+                    }
                 }
             }
         }
