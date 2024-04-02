@@ -241,8 +241,13 @@ private fun BottomMenu(
             )
         }
         is FlowStep.Verifying -> {
+            val positiveButtonTitle = if (isVerifying) {
+                stringResource(R.string.screen_session_verification_positive_button_verifying_ongoing)
+            } else {
+                stringResource(R.string.screen_session_verification_they_match)
+            }
             BottomMenu(
-                positiveButtonTitle = stringResource(R.string.screen_session_verification_they_match),
+                positiveButtonTitle = positiveButtonTitle,
                 onPositiveButtonClicked = {
                     if (!isVerifying) {
                         eventSink(VerifySelfSessionViewEvents.ConfirmVerification)
