@@ -328,5 +328,12 @@ interface MatrixRoom : Closeable {
      */
     fun getWidgetDriver(widgetSettings: MatrixWidgetSettings): Result<MatrixWidgetDriver>
 
+    /**
+     * Get the permalink for the provided [eventId].
+     * @param eventId The event id to get the permalink for.
+     * @return The permalink, or a failure.
+     */
+    suspend fun getPermalinkFor(eventId: EventId): Result<String>
+
     override fun close() = destroy()
 }

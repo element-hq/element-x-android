@@ -153,6 +153,7 @@ class ActionListPresenterTest {
                         TimelineItemAction.Reply,
                         TimelineItemAction.Forward,
                         TimelineItemAction.Copy,
+                        TimelineItemAction.CopyLink,
                         TimelineItemAction.ViewSource,
                         TimelineItemAction.ReportContent,
                     )
@@ -193,6 +194,7 @@ class ActionListPresenterTest {
                     actions = persistentListOf(
                         TimelineItemAction.Forward,
                         TimelineItemAction.Copy,
+                        TimelineItemAction.CopyLink,
                         TimelineItemAction.ViewSource,
                         TimelineItemAction.ReportContent,
                     )
@@ -232,6 +234,7 @@ class ActionListPresenterTest {
                         TimelineItemAction.Reply,
                         TimelineItemAction.Forward,
                         TimelineItemAction.Copy,
+                        TimelineItemAction.CopyLink,
                         TimelineItemAction.ViewSource,
                         TimelineItemAction.ReportContent,
                         TimelineItemAction.Redact,
@@ -272,6 +275,7 @@ class ActionListPresenterTest {
                         TimelineItemAction.Reply,
                         TimelineItemAction.Forward,
                         TimelineItemAction.Copy,
+                        TimelineItemAction.CopyLink,
                         TimelineItemAction.ViewSource,
                         TimelineItemAction.ReportContent,
                         TimelineItemAction.Redact,
@@ -315,6 +319,7 @@ class ActionListPresenterTest {
                         TimelineItemAction.Forward,
                         TimelineItemAction.Edit,
                         TimelineItemAction.Copy,
+                        TimelineItemAction.CopyLink,
                         TimelineItemAction.ViewSource,
                         TimelineItemAction.Redact,
                     )
@@ -357,6 +362,7 @@ class ActionListPresenterTest {
                         TimelineItemAction.Forward,
                         TimelineItemAction.Edit,
                         TimelineItemAction.Copy,
+                        TimelineItemAction.CopyLink,
                         TimelineItemAction.ViewSource,
                     )
                 )
@@ -396,6 +402,7 @@ class ActionListPresenterTest {
                     actions = persistentListOf(
                         TimelineItemAction.Reply,
                         TimelineItemAction.Forward,
+                        TimelineItemAction.CopyLink,
                         TimelineItemAction.ViewSource,
                         TimelineItemAction.Redact,
                     )
@@ -435,6 +442,7 @@ class ActionListPresenterTest {
                     displayEmojiReactions = false,
                     actions = persistentListOf(
                         TimelineItemAction.Copy,
+                        TimelineItemAction.CopyLink,
                         TimelineItemAction.ViewSource,
                     )
                 )
@@ -473,6 +481,7 @@ class ActionListPresenterTest {
                     displayEmojiReactions = false,
                     actions = persistentListOf(
                         TimelineItemAction.Copy,
+                        TimelineItemAction.CopyLink,
                     )
                 )
             )
@@ -513,6 +522,7 @@ class ActionListPresenterTest {
                         TimelineItemAction.Forward,
                         TimelineItemAction.Edit,
                         TimelineItemAction.Copy,
+                        TimelineItemAction.CopyLink,
                         TimelineItemAction.Redact,
                     )
                 )
@@ -595,6 +605,7 @@ class ActionListPresenterTest {
                     actions = persistentListOf(
                         TimelineItemAction.Edit,
                         TimelineItemAction.Copy,
+                        TimelineItemAction.CopyLink,
                         TimelineItemAction.Redact,
                     )
                 )
@@ -632,6 +643,7 @@ class ActionListPresenterTest {
                         TimelineItemAction.Reply,
                         TimelineItemAction.Edit,
                         TimelineItemAction.EndPoll,
+                        TimelineItemAction.CopyLink,
                         TimelineItemAction.Redact,
                     )
                 )
@@ -668,6 +680,7 @@ class ActionListPresenterTest {
                     actions = persistentListOf(
                         TimelineItemAction.Reply,
                         TimelineItemAction.EndPoll,
+                        TimelineItemAction.CopyLink,
                         TimelineItemAction.Redact,
                     )
                 )
@@ -703,6 +716,7 @@ class ActionListPresenterTest {
                     displayEmojiReactions = true,
                     actions = persistentListOf(
                         TimelineItemAction.Reply,
+                        TimelineItemAction.CopyLink,
                         TimelineItemAction.Redact,
                     )
                 )
@@ -738,6 +752,7 @@ class ActionListPresenterTest {
                     actions = persistentListOf(
                         TimelineItemAction.Reply,
                         TimelineItemAction.Forward,
+                        TimelineItemAction.CopyLink,
                         TimelineItemAction.Redact,
                     )
                 )

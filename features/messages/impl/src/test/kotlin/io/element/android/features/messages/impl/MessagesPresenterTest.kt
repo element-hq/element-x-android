@@ -232,6 +232,27 @@ class MessagesPresenterTest {
     }
 
     @Test
+    fun `present - handle action copy link`() = runTest {
+        val clipboardHelper = FakeClipboardHelper()
+        val event = aMessageEvent()
+        val matrixRoom = FakeMatrixRoom(
+            permalinkResult = { Result.success("a link") },
+        )
+        val presenter = createMessagesPresenter(
+            clipboardHelper = clipboardHelper,
+            matrixRoom = matrixRoom,
+        )
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitFirstItem()
+            initialState.eventSink.invoke(MessagesEvents.HandleAction(TimelineItemAction.CopyLink, event))
+            assertThat(awaitItem().actionListState.target).isEqualTo(ActionListState.Target.None)
+            assertThat(clipboardHelper.clipboardContents).isEqualTo("a link")
+        }
+    }
+
+    @Test
     fun `present - handle action reply`() = runTest {
         val presenter = createMessagesPresenter()
         moleculeFlow(RecompositionMode.Immediate) {
