@@ -51,7 +51,6 @@ import io.element.android.libraries.ui.strings.CommonStrings
 fun PreferencesRootView(
     state: PreferencesRootState,
     onBackPressed: () -> Unit,
-    onVerifyClicked: () -> Unit,
     onSecureBackupClicked: () -> Unit,
     onManageAccountClicked: (url: String) -> Unit,
     onOpenAnalytics: () -> Unit,
@@ -81,13 +80,6 @@ fun PreferencesRootView(
             },
             user = state.myUser,
         )
-        if (state.showCompleteVerification) {
-            ListItem(
-                headlineContent = { Text(text = stringResource(CommonStrings.common_verify_device)) },
-                leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.CheckCircle())),
-                onClick = onVerifyClicked
-            )
-        }
         if (state.showSecureBackup) {
             ListItem(
                 headlineContent = { Text(stringResource(id = CommonStrings.common_chat_backup)) },
@@ -95,8 +87,6 @@ fun PreferencesRootView(
                 trailingContent = ListItemContent.Badge.takeIf { state.showSecureBackupBadge },
                 onClick = onSecureBackupClicked,
             )
-        }
-        if (state.showCompleteVerification || state.showSecureBackup) {
             HorizontalDivider()
         }
         if (state.accountManagementUrl != null) {
@@ -232,7 +222,6 @@ private fun ContentToPreview(matrixUser: MatrixUser) {
         onOpenDeveloperSettings = {},
         onOpenAdvancedSettings = {},
         onOpenAbout = {},
-        onVerifyClicked = {},
         onSecureBackupClicked = {},
         onManageAccountClicked = {},
         onOpenNotificationSettings = {},

@@ -24,7 +24,6 @@ data class PreferencesRootState(
     val myUser: MatrixUser,
     val version: String,
     val deviceId: String?,
-    val showCompleteVerification: Boolean,
     val showSecureBackup: Boolean,
     val showSecureBackupBadge: Boolean,
     val accountManagementUrl: String?,

@@ -32,8 +32,6 @@ import io.element.android.features.messages.impl.timeline.components.group.Group
 import io.element.android.features.messages.impl.timeline.components.receipt.ReadReceiptViewState
 import io.element.android.features.messages.impl.timeline.components.receipt.TimelineItemReadReceiptView
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
-import io.element.android.features.messages.impl.timeline.session.SessionState
-import io.element.android.features.messages.impl.timeline.session.aSessionState
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.matrix.api.core.EventId
@@ -46,7 +44,6 @@ fun TimelineItemGroupedEventsRow(
     renderReadReceipts: Boolean,
     isLastOutgoingMessage: Boolean,
     highlightedItem: String?,
-    sessionState: SessionState,
     onClick: (TimelineItem.Event) -> Unit,
     onLongClick: (TimelineItem.Event) -> Unit,
     inReplyToClick: (EventId) -> Unit,
@@ -74,7 +71,6 @@ fun TimelineItemGroupedEventsRow(
         highlightedItem = highlightedItem,
         renderReadReceipts = renderReadReceipts,
         isLastOutgoingMessage = isLastOutgoingMessage,
-        sessionState = sessionState,
         onClick = onClick,
         onLongClick = onLongClick,
         inReplyToClick = inReplyToClick,
@@ -99,7 +95,6 @@ private fun TimelineItemGroupedEventsRowContent(
     highlightedItem: String?,
     renderReadReceipts: Boolean,
     isLastOutgoingMessage: Boolean,
-    sessionState: SessionState,
     onClick: (TimelineItem.Event) -> Unit,
     onLongClick: (TimelineItem.Event) -> Unit,
     inReplyToClick: (EventId) -> Unit,
@@ -133,7 +128,6 @@ private fun TimelineItemGroupedEventsRowContent(
                         renderReadReceipts = renderReadReceipts,
                         isLastOutgoingMessage = isLastOutgoingMessage,
                         highlightedItem = highlightedItem,
-                        sessionState = sessionState,
                         onClick = onClick,
                         onLongClick = onLongClick,
                         inReplyToClick = inReplyToClick,
@@ -174,7 +168,6 @@ internal fun TimelineItemGroupedEventsRowContentExpandedPreview() = ElementPrevi
         highlightedItem = null,
         renderReadReceipts = true,
         isLastOutgoingMessage = false,
-        sessionState = aSessionState(),
         onClick = {},
         onLongClick = {},
         inReplyToClick = {},
@@ -200,7 +193,6 @@ internal fun TimelineItemGroupedEventsRowContentCollapsePreview() = ElementPrevi
         highlightedItem = null,
         renderReadReceipts = true,
         isLastOutgoingMessage = false,
-        sessionState = aSessionState(),
         onClick = {},
         onLongClick = {},
         inReplyToClick = {},

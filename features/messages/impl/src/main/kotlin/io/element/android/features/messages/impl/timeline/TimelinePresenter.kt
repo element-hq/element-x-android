@@ -33,7 +33,6 @@ import io.element.android.features.messages.impl.MessagesNavigator
 import io.element.android.features.messages.impl.timeline.factories.TimelineItemsFactory
 import io.element.android.features.messages.impl.timeline.model.NewEventState
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
-import io.element.android.features.messages.impl.timeline.session.SessionState
 import io.element.android.features.messages.impl.voicemessages.timeline.RedactedVoiceMessageManager
 import io.element.android.features.poll.api.actions.EndPollAction
 import io.element.android.features.poll.api.actions.SendPollResponseAction
@@ -41,15 +40,11 @@ import io.element.android.features.preferences.api.store.SessionPreferencesStore
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.api.core.EventId
-import io.element.android.libraries.matrix.api.encryption.BackupState
-import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MessageEventType
 import io.element.android.libraries.matrix.api.room.roomMembers
 import io.element.android.libraries.matrix.api.timeline.ReceiptType
 import io.element.android.libraries.matrix.api.timeline.item.event.TimelineItemEventOrigin
-import io.element.android.libraries.matrix.api.verification.SessionVerificationService
-import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatus
 import io.element.android.libraries.matrix.ui.room.canSendMessageAsState
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.CoroutineScope
@@ -68,8 +63,6 @@ class TimelinePresenter @AssistedInject constructor(
     private val dispatchers: CoroutineDispatchers,
     private val appScope: CoroutineScope,
     @Assisted private val navigator: MessagesNavigator,
-    private val verificationService: SessionVerificationService,
-    private val encryptionService: EncryptionService,
     private val redactedVoiceMessageManager: RedactedVoiceMessageManager,
     private val sendPollResponseAction: SendPollResponseAction,
     private val endPollAction: EndPollAction,
@@ -101,20 +94,8 @@ class TimelinePresenter @AssistedInject constructor(
         val prevMostRecentItemId = rememberSaveable { mutableStateOf<String?>(null) }
         val newItemState = remember { mutableStateOf(NewEventState.None) }
 
-        val sessionVerifiedStatus by verificationService.sessionVerifiedStatus.collectAsState()
-        val keyBackupState by encryptionService.backupStateStateFlow.collectAsState()
-
         val isSendPublicReadReceiptsEnabled by sessionPreferencesStore.isSendPublicReadReceiptsEnabled().collectAsState(initial = true)
         val renderReadReceipts by sessionPreferencesStore.isRenderReadReceiptsEnabled().collectAsState(initial = true)
-
-        val sessionState by remember {
-            derivedStateOf {
-                SessionState(
-                    isSessionVerified = sessionVerifiedStatus == SessionVerifiedStatus.Verified,
-                    isKeyBackupEnabled = keyBackupState == BackupState.ENABLED
-                )
-            }
-        }
 
         fun handleEvents(event: TimelineEvents) {
             when (event) {
@@ -184,7 +165,6 @@ class TimelinePresenter @AssistedInject constructor(
             timelineItems = timelineItems,
             renderReadReceipts = renderReadReceipts,
             newEventState = newItemState.value,
-            sessionState = sessionState,
             eventSink = { handleEvents(it) }
         )
     }

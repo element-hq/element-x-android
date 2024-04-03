@@ -25,6 +25,7 @@ import io.element.android.features.networkmonitor.test.FakeNetworkMonitor
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.roomlist.FakeRoomListService
+import io.element.android.libraries.matrix.test.verification.FakeSessionVerificationService
 import io.element.android.libraries.push.test.FakePushService
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.consumeItemsUntilPredicate
@@ -71,6 +72,7 @@ class LoggedInPresenterTest {
             matrixClient = FakeMatrixClient(roomListService = roomListService),
             networkMonitor = FakeNetworkMonitor(networkStatus),
             pushService = FakePushService(),
+            sessionVerificationService = FakeSessionVerificationService(),
         )
     }
 }

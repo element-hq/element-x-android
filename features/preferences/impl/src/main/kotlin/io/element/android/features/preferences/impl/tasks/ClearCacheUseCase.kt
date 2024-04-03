@@ -22,7 +22,7 @@ import android.content.Context
 import coil.Coil
 import coil.annotation.ExperimentalCoilApi
 import com.squareup.anvil.annotations.ContributesBinding
-import io.element.android.features.ftue.api.state.FtueState
+import io.element.android.features.ftue.api.state.FtueService
 import io.element.android.features.preferences.impl.DefaultCacheService
 import io.element.android.features.roomlist.api.migration.MigrationScreenStore
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
@@ -45,7 +45,7 @@ class DefaultClearCacheUseCase @Inject constructor(
     private val coroutineDispatchers: CoroutineDispatchers,
     private val defaultCacheIndexProvider: DefaultCacheService,
     private val okHttpClient: Provider<OkHttpClient>,
-    private val ftueState: FtueState,
+    private val ftueService: FtueService,
     private val migrationScreenStore: MigrationScreenStore,
 ) : ClearCacheUseCase {
     override suspend fun invoke() = withContext(coroutineDispatchers.io) {
@@ -61,7 +61,7 @@ class DefaultClearCacheUseCase @Inject constructor(
         // Clear app cache
         context.cacheDir.deleteRecursively()
         // Clear some settings
-        ftueState.reset()
+        ftueService.reset()
         // Clear migration screen store
         migrationScreenStore.reset()
         // Ensure the app is restarted

@@ -40,6 +40,7 @@ import io.element.android.libraries.matrix.api.roomdirectory.RoomDirectoryServic
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.api.roomlist.awaitLoaded
 import io.element.android.libraries.matrix.api.sync.SyncService
+import io.element.android.libraries.matrix.api.sync.SyncState
 import io.element.android.libraries.matrix.api.user.MatrixSearchUserResults
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
@@ -84,8 +85,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.buffer
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -130,11 +130,6 @@ class RustMatrixClient(
     private val innerRoomListService = syncService.roomListService()
     private val sessionDispatcher = dispatchers.io.limitedParallelism(64)
     private val rustSyncService = RustSyncService(syncService, sessionCoroutineScope)
-    private val verificationService = RustSessionVerificationService(
-        client = client,
-        syncService = rustSyncService,
-        sessionCoroutineScope = sessionCoroutineScope,
-    ).apply { start() }
     private val pushersService = RustPushersService(
         client = client,
         dispatchers = dispatchers,
@@ -230,6 +225,12 @@ class RustMatrixClient(
         ),
     )
 
+    private val verificationService = RustSessionVerificationService(
+        client = client,
+        isSyncServiceReady = rustSyncService.syncState.map { it == SyncState.Running },
+        sessionCoroutineScope = sessionCoroutineScope,
+    )
+
     private val eventFilters = TimelineConfig.excludedEvents
         .takeIf { it.isNotEmpty() }
         ?.let { listStateEventType ->
@@ -274,11 +275,6 @@ class RustMatrixClient(
         .stateIn(sessionCoroutineScope, started = SharingStarted.Eagerly, initialValue = persistentListOf())
 
     init {
-        roomListService.state.onEach { state ->
-            if (state == RoomListService.State.Running) {
-                setupVerificationControllerIfNeeded()
-            }
-        }.launchIn(sessionCoroutineScope)
         sessionCoroutineScope.launch {
             // Force a refresh of the profile
             getUserProfile()
@@ -490,6 +486,7 @@ class RustMatrixClient(
         ignoreSdkError: Boolean,
     ): String? {
         var result: String? = null
+        syncService.stop()
         withContext(sessionDispatcher) {
             if (doRequest) {
                 try {
@@ -522,16 +519,6 @@ class RustMatrixClient(
     override suspend fun uploadMedia(mimeType: String, data: ByteArray, progressCallback: ProgressCallback?): Result<String> = withContext(sessionDispatcher) {
         runCatching {
             client.uploadMedia(mimeType, data, progressCallback?.toProgressWatcher())
-        }
-    }
-
-    private fun setupVerificationControllerIfNeeded() {
-        if (verificationService.verificationController == null) {
-            try {
-                verificationService.verificationController = client.getSessionVerificationController()
-            } catch (e: Throwable) {
-                Timber.e(e, "Could not start verification service. Will try again on the next sliding sync update.")
-            }
         }
     }
 

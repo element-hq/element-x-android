@@ -92,7 +92,6 @@ class PreferencesRootPresenterTest {
                 )
             )
             assertThat(initialState.version).isEqualTo("A Version")
-            assertThat(loadedState.showCompleteVerification).isTrue()
             assertThat(loadedState.showSecureBackup).isFalse()
             assertThat(loadedState.showSecureBackupBadge).isTrue()
             assertThat(loadedState.accountManagementUrl).isNull()

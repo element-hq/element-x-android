@@ -53,7 +53,7 @@ class VerifySelfSessionNode @AssistedInject constructor(
             state = state,
             modifier = modifier,
             onEnterRecoveryKey = ::onEnterRecoveryKey,
-            goBack = ::onDone,
+            onFinished = ::onDone,
         )
     }
 }

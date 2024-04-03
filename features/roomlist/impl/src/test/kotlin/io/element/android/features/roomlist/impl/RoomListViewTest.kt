@@ -44,35 +44,6 @@ class RoomListViewTest {
     @get:Rule val rule = createAndroidComposeRule<ComponentActivity>()
 
     @Test
-    fun `clicking on close verification banner emits the expected Event`() {
-        val eventsRecorder = EventsRecorder<RoomListEvents>()
-        rule.setRoomListView(
-            state = aRoomListState(
-                contentState = aRoomsContentState(securityBannerState = SecurityBannerState.SessionVerification),
-                eventSink = eventsRecorder,
-            )
-        )
-        val close = rule.activity.getString(CommonStrings.action_close)
-        rule.onNodeWithContentDescription(close).performClick()
-        eventsRecorder.assertSingle(RoomListEvents.DismissRequestVerificationPrompt)
-    }
-
-    @Test
-    fun `clicking on continue verification banner invokes the expected callback`() {
-        val eventsRecorder = EventsRecorder<RoomListEvents>(expectEvents = false)
-        ensureCalledOnce { callback ->
-            rule.setRoomListView(
-                state = aRoomListState(
-                    contentState = aRoomsContentState(securityBannerState = SecurityBannerState.SessionVerification),
-                    eventSink = eventsRecorder,
-                ),
-                onVerifyClicked = callback,
-            )
-            rule.clickOn(CommonStrings.action_continue)
-        }
-    }
-
-    @Test
     fun `clicking on close recovery key banner emits the expected Event`() {
         val eventsRecorder = EventsRecorder<RoomListEvents>()
         rule.setRoomListView(
@@ -185,7 +156,6 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setRoomL
     state: RoomListState,
     onRoomClicked: (RoomId) -> Unit = EnsureNeverCalledWithParam(),
     onSettingsClicked: () -> Unit = EnsureNeverCalled(),
-    onVerifyClicked: () -> Unit = EnsureNeverCalled(),
     onConfirmRecoveryKeyClicked: () -> Unit = EnsureNeverCalled(),
     onCreateRoomClicked: () -> Unit = EnsureNeverCalled(),
     onInvitesClicked: () -> Unit = EnsureNeverCalled(),
@@ -198,7 +168,6 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setRoomL
             state = state,
             onRoomClicked = onRoomClicked,
             onSettingsClicked = onSettingsClicked,
-            onVerifyClicked = onVerifyClicked,
             onConfirmRecoveryKeyClicked = onConfirmRecoveryKeyClicked,
             onCreateRoomClicked = onCreateRoomClicked,
             onInvitesClicked = onInvitesClicked,

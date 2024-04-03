@@ -106,13 +106,13 @@ class VerifySelfSessionPresenterTests {
             val initialState = awaitItem()
             assertThat(initialState.verificationFlowStep).isEqualTo(VerificationStep.Initial(false))
             val eventSink = initialState.eventSink
-            eventSink(VerifySelfSessionViewEvents.CancelAndClose)
+            eventSink(VerifySelfSessionViewEvents.Cancel)
             expectNoEvents()
         }
     }
 
     @Test
-    fun `present - A fail in the flow cancels it`() = runTest {
+    fun `present - A failure when verifying cancels it`() = runTest {
         val service = FakeSessionVerificationService()
         val presenter = createVerifySelfSessionPresenter(service)
         moleculeFlow(RecompositionMode.Immediate) {
@@ -129,6 +129,21 @@ class VerifySelfSessionPresenterTests {
     }
 
     @Test
+    fun `present - A fail when requesting verification resets the state to the initial one`() = runTest {
+        val service = FakeSessionVerificationService()
+        val presenter = createVerifySelfSessionPresenter(service)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            service.shouldFail = true
+            awaitItem().eventSink(VerifySelfSessionViewEvents.RequestVerification)
+            service.shouldFail = false
+            assertThat(awaitItem().verificationFlowStep).isInstanceOf(VerificationStep.AwaitingOtherDeviceResponse::class.java)
+            assertThat(awaitItem().verificationFlowStep).isEqualTo(VerificationStep.Initial(false))
+        }
+    }
+
+    @Test
     fun `present - Canceling the flow once it's verifying cancels it`() = runTest {
         val service = FakeSessionVerificationService()
         val presenter = createVerifySelfSessionPresenter(service)
@@ -136,8 +151,7 @@ class VerifySelfSessionPresenterTests {
             presenter.present()
         }.test {
             val state = requestVerificationAndAwaitVerifyingState(service)
-            state.eventSink(VerifySelfSessionViewEvents.CancelAndClose)
-            assertThat(awaitItem().verificationFlowStep).isEqualTo(VerificationStep.AwaitingOtherDeviceResponse)
+            state.eventSink(VerifySelfSessionViewEvents.Cancel)
             assertThat(awaitItem().verificationFlowStep).isEqualTo(VerificationStep.Canceled)
         }
     }
@@ -165,9 +179,26 @@ class VerifySelfSessionPresenterTests {
             val state = requestVerificationAndAwaitVerifyingState(service)
             service.givenVerificationFlowState(VerificationFlowState.Canceled)
             assertThat(awaitItem().verificationFlowStep).isEqualTo(VerificationStep.Canceled)
-            state.eventSink(VerifySelfSessionViewEvents.Restart)
+            state.eventSink(VerifySelfSessionViewEvents.RequestVerification)
             // Went back to requesting verification
             assertThat(awaitItem().verificationFlowStep).isEqualTo(VerificationStep.AwaitingOtherDeviceResponse)
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - Go back after cancelation returns to initial state`() = runTest {
+        val service = FakeSessionVerificationService()
+        val presenter = createVerifySelfSessionPresenter(service)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val state = requestVerificationAndAwaitVerifyingState(service)
+            service.givenVerificationFlowState(VerificationFlowState.Canceled)
+            assertThat(awaitItem().verificationFlowStep).isEqualTo(VerificationStep.Canceled)
+            state.eventSink(VerifySelfSessionViewEvents.Reset)
+            // Went back to initial state
+            assertThat(awaitItem().verificationFlowStep).isEqualTo(VerificationStep.Initial(false))
             cancelAndIgnoreRemainingEvents()
         }
     }
@@ -247,7 +278,7 @@ class VerifySelfSessionPresenterTests {
         return VerifySelfSessionPresenter(
             sessionVerificationService = service,
             encryptionService = encryptionService,
-            stateMachine = VerifySelfSessionStateMachine(service),
+            stateMachine = VerifySelfSessionStateMachine(service, encryptionService),
         )
     }
 }
