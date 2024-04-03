@@ -89,6 +89,7 @@ import io.element.android.libraries.matrix.ui.room.canRedactOtherAsState
 import io.element.android.libraries.matrix.ui.room.canRedactOwnAsState
 import io.element.android.libraries.matrix.ui.room.canSendMessageAsState
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
+import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -273,6 +274,7 @@ class MessagesPresenter @AssistedInject constructor(
     ) = launch {
         when (action) {
             TimelineItemAction.Copy -> handleCopyContents(targetEvent)
+            TimelineItemAction.CopyLink -> handleCopyLink(targetEvent)
             TimelineItemAction.Redact -> handleActionRedact(targetEvent)
             TimelineItemAction.Edit -> handleActionEdit(targetEvent, composerState, enableTextFormatting)
             TimelineItemAction.Reply,
@@ -433,6 +435,20 @@ class MessagesPresenter @AssistedInject constructor(
         timelineState: TimelineState,
     ) {
         event.eventId?.let { timelineState.eventSink(TimelineEvents.PollEndClicked(it)) }
+    }
+
+    private suspend fun handleCopyLink(event: TimelineItem.Event) {
+        event.eventId ?: return
+        room.getPermalinkFor(event.eventId).fold(
+            onSuccess = { permalink ->
+                clipboardHelper.copyPlainText(permalink)
+                snackbarDispatcher.post(SnackbarMessage(CommonStrings.common_link_copied_to_clipboard))
+            },
+            onFailure = {
+                Timber.e(it, "Failed to get permalink for event ${event.eventId}")
+                snackbarDispatcher.post(SnackbarMessage(CommonStrings.common_error))
+            }
+        )
     }
 
     private suspend fun handleCopyContents(event: TimelineItem.Event) {
