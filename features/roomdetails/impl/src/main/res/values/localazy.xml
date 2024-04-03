@@ -58,6 +58,7 @@
   <string name="screen_room_details_room_name_label">"Room name"</string>
   <string name="screen_room_details_security_title">"Security"</string>
   <string name="screen_room_details_share_room_title">"Share room"</string>
+  <string name="screen_room_details_title">"Room info"</string>
   <string name="screen_room_details_topic_title">"Topic"</string>
   <string name="screen_room_details_updating_room">"Updating room…"</string>
   <string name="screen_room_member_list_ban_member_confirmation_action">"Ban"</string>

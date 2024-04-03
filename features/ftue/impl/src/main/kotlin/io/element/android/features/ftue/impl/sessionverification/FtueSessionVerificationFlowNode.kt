@@ -55,6 +55,9 @@ class FtueSessionVerificationFlowNode @AssistedInject constructor(
 
         @Parcelize
         data object EnterRecoveryKey : NavTarget
+
+        @Parcelize
+        data object CreateNewRecoveryKey : NavTarget
     }
 
     interface Callback : Plugin {
@@ -63,6 +66,16 @@ class FtueSessionVerificationFlowNode @AssistedInject constructor(
 
     private val callback = plugins<Callback>().first()
 
+    private val secureBackupEntryPointCallback = object : SecureBackupEntryPoint.Callback {
+        override fun onCreateNewRecoveryKey() {
+            backstack.push(NavTarget.CreateNewRecoveryKey)
+        }
+
+        override fun onDone() {
+            callback.onDone()
+        }
+    }
+
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
         return when (navTarget) {
             is NavTarget.Root -> {
@@ -70,6 +83,10 @@ class FtueSessionVerificationFlowNode @AssistedInject constructor(
                     .callback(object : VerifySessionEntryPoint.Callback {
                         override fun onEnterRecoveryKey() {
                             backstack.push(NavTarget.EnterRecoveryKey)
+                        }
+
+                        override fun onCreateNewRecoveryKey() {
+                            backstack.push(NavTarget.CreateNewRecoveryKey)
                         }
 
                         override fun onDone() {
@@ -81,11 +98,13 @@ class FtueSessionVerificationFlowNode @AssistedInject constructor(
             is NavTarget.EnterRecoveryKey -> {
                 secureBackupEntryPoint.nodeBuilder(this, buildContext)
                     .params(SecureBackupEntryPoint.Params(SecureBackupEntryPoint.InitialTarget.EnterRecoveryKey))
-                    .callback(object : SecureBackupEntryPoint.Callback {
-                        override fun onDone() {
-                            callback.onDone()
-                        }
-                    })
+                    .callback(secureBackupEntryPointCallback)
+                    .build()
+            }
+            is NavTarget.CreateNewRecoveryKey -> {
+                secureBackupEntryPoint.nodeBuilder(this, buildContext)
+                    .params(SecureBackupEntryPoint.Params(SecureBackupEntryPoint.InitialTarget.CreateNewRecoveryKey))
+                    .callback(secureBackupEntryPointCallback)
                     .build()
             }
         }

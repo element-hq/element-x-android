@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright (c) 2024 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,37 +14,28 @@
  * limitations under the License.
  */
 
-package io.element.android.features.verifysession.impl
+package io.element.android.features.securebackup.impl.create_new_key
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
-import com.bumble.appyx.core.plugin.plugins
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
-import io.element.android.features.verifysession.api.VerifySessionEntryPoint
 import io.element.android.libraries.di.SessionScope
 
 @ContributesNode(SessionScope::class)
-class VerifySelfSessionNode @AssistedInject constructor(
+class CreateNewRecoveryKeyNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
-    private val presenter: VerifySelfSessionPresenter,
 ) : Node(buildContext, plugins = plugins) {
-    private val callback = plugins<VerifySessionEntryPoint.Callback>().first()
-
     @Composable
     override fun View(modifier: Modifier) {
-        val state = presenter.present()
-        VerifySelfSessionView(
-            state = state,
+        CreateNewRecoveryKeyView(
             modifier = modifier,
-            onEnterRecoveryKey = callback::onEnterRecoveryKey,
-            onCreateNewRecoveryKey = callback::onCreateNewRecoveryKey,
-            onFinished = callback::onDone,
+            onBackClicked = ::navigateUp,
         )
     }
 }

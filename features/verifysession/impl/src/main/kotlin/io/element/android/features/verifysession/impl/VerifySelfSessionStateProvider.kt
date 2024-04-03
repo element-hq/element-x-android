@@ -17,6 +17,7 @@
 package io.element.android.features.verifysession.impl
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import io.element.android.features.verifysession.impl.VerifySelfSessionState.VerificationStep
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.verification.SessionVerificationData
 import io.element.android.libraries.matrix.api.verification.VerificationEmoji
@@ -26,25 +27,28 @@ open class VerifySelfSessionStateProvider : PreviewParameterProvider<VerifySelfS
         get() = sequenceOf(
             aVerifySelfSessionState(),
             aVerifySelfSessionState(
-                verificationFlowStep = VerifySelfSessionState.VerificationStep.AwaitingOtherDeviceResponse
+                verificationFlowStep = VerificationStep.AwaitingOtherDeviceResponse
             ),
             aVerifySelfSessionState(
-                verificationFlowStep = VerifySelfSessionState.VerificationStep.Verifying(aEmojisSessionVerificationData(), AsyncData.Uninitialized)
+                verificationFlowStep = VerificationStep.Verifying(aEmojisSessionVerificationData(), AsyncData.Uninitialized)
             ),
             aVerifySelfSessionState(
-                verificationFlowStep = VerifySelfSessionState.VerificationStep.Verifying(aEmojisSessionVerificationData(), AsyncData.Loading())
+                verificationFlowStep = VerificationStep.Verifying(aEmojisSessionVerificationData(), AsyncData.Loading())
             ),
             aVerifySelfSessionState(
-                verificationFlowStep = VerifySelfSessionState.VerificationStep.Canceled
+                verificationFlowStep = VerificationStep.Canceled
             ),
             aVerifySelfSessionState(
-                verificationFlowStep = VerifySelfSessionState.VerificationStep.Ready
+                verificationFlowStep = VerificationStep.Ready
             ),
             aVerifySelfSessionState(
-                verificationFlowStep = VerifySelfSessionState.VerificationStep.Verifying(aDecimalsSessionVerificationData(), AsyncData.Uninitialized)
+                verificationFlowStep = VerificationStep.Verifying(aDecimalsSessionVerificationData(), AsyncData.Uninitialized)
             ),
             aVerifySelfSessionState(
-                verificationFlowStep = VerifySelfSessionState.VerificationStep.Initial(true)
+                verificationFlowStep = VerificationStep.Initial(canEnterRecoveryKey = true, isLastDevice = false)
+            ),
+            aVerifySelfSessionState(
+                verificationFlowStep = VerificationStep.Initial(canEnterRecoveryKey = true, isLastDevice = true)
             ),
             // Add other state here
         )
@@ -63,7 +67,7 @@ private fun aDecimalsSessionVerificationData(
 }
 
 internal fun aVerifySelfSessionState(
-    verificationFlowStep: VerifySelfSessionState.VerificationStep = VerifySelfSessionState.VerificationStep.Initial(false),
+    verificationFlowStep: VerificationStep = VerificationStep.Initial(canEnterRecoveryKey = false, isLastDevice = false),
     eventSink: (VerifySelfSessionViewEvents) -> Unit = {},
 ) = VerifySelfSessionState(
     verificationFlowStep = verificationFlowStep,
