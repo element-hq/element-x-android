@@ -30,6 +30,7 @@ import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatus
 import io.element.android.libraries.push.api.PushService
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class LoggedInPresenter @Inject constructor(
@@ -40,9 +41,12 @@ class LoggedInPresenter @Inject constructor(
 ) : Presenter<LoggedInState> {
     @Composable
     override fun present(): LoggedInState {
-        val verifiedStatus by sessionVerificationService.sessionVerifiedStatus.collectAsState()
-        LaunchedEffect(verifiedStatus) {
-            if (verifiedStatus == SessionVerifiedStatus.Verified) {
+        val isVerified by remember {
+            sessionVerificationService.sessionVerifiedStatus.map { it == SessionVerifiedStatus.Verified }
+        }.collectAsState(initial = false)
+
+        LaunchedEffect(isVerified) {
+            if (isVerified) {
                 // Ensure pusher is registered
                 // TODO Manually select push provider for now
                 val pushProvider = pushService.getAvailablePushProviders().firstOrNull() ?: return@LaunchedEffect

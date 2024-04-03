@@ -45,6 +45,7 @@ import io.element.android.appnav.room.RoomFlowNode
 import io.element.android.appnav.room.RoomLoadedFlowNode
 import io.element.android.features.createroom.api.CreateRoomEntryPoint
 import io.element.android.features.ftue.api.FtueEntryPoint
+import io.element.android.features.ftue.api.state.FtueService
 import io.element.android.features.ftue.api.state.FtueState
 import io.element.android.features.invitelist.api.InviteListEntryPoint
 import io.element.android.features.lockscreen.api.LockScreenEntryPoint
@@ -69,15 +70,12 @@ import io.element.android.libraries.matrix.api.core.MAIN_SPACE
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.roomlist.RoomList
 import io.element.android.libraries.matrix.api.sync.SyncState
-import io.element.android.libraries.matrix.api.verification.SessionVerificationService
-import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatus
 import io.element.android.libraries.push.api.notifications.NotificationDrawerManager
 import io.element.android.services.appnavstate.api.AppNavigationStateService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
-import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -99,12 +97,11 @@ class LoggedInFlowNode @AssistedInject constructor(
     private val coroutineScope: CoroutineScope,
     private val networkMonitor: NetworkMonitor,
     private val notificationDrawerManager: NotificationDrawerManager,
-    private val ftueState: FtueState,
+    private val ftueService: FtueService,
     private val lockScreenEntryPoint: LockScreenEntryPoint,
     private val lockScreenStateService: LockScreenService,
     private val roomDirectoryEntryPoint: RoomDirectoryEntryPoint,
     private val matrixClient: MatrixClient,
-    private val sessionVerificationService: SessionVerificationService,
     snackbarDispatcher: SnackbarDispatcher,
 ) : BaseFlowNode<LoggedInFlowNode.NavTarget>(
     backstack = BackStack(
@@ -137,25 +134,14 @@ class LoggedInFlowNode @AssistedInject constructor(
                 appNavigationStateService.onNavigateToSpace(id, MAIN_SPACE)
                 loggedInFlowProcessor.observeEvents(coroutineScope)
 
-                ftueState.shouldDisplayFlow
-                    .filter { it }
-                    .onEach {
-                        backstack.push(NavTarget.Ftue)
+                ftueService.state
+                    .onEach { ftueState ->
+                        when (ftueState) {
+                            is FtueState.Unknown -> Unit // Nothing to do
+                            is FtueState.Incomplete -> backstack.safeRoot(NavTarget.Ftue)
+                            is FtueState.Complete -> backstack.safeRoot(NavTarget.RoomList)
+                        }
                     }
-                    .launchIn(lifecycleScope)
-
-                // Attach the root node as soon as we know the first session verification status and the FTUE shouldn't be displayed.
-                // This prevents the room list from being displayed while the session is not verified.
-                combine(
-                    sessionVerificationService.sessionVerifiedStatus,
-                    ftueState.shouldDisplayFlow,
-                ) { sessionVerifiedStatus, shouldDisplayFtue ->
-                        sessionVerifiedStatus to shouldDisplayFtue
-                    }
-                    .filter { (sessionVerifiedStatus, shouldDisplayFtue) ->
-                        sessionVerifiedStatus.isVerified() && !shouldDisplayFtue
-                    }
-                    .onEach { attachRoot() }
                     .launchIn(lifecycleScope)
             },
             onStop = {
@@ -376,7 +362,7 @@ class LoggedInFlowNode @AssistedInject constructor(
                 ftueEntryPoint.nodeBuilder(this, buildContext)
                     .callback(object : FtueEntryPoint.Callback {
                         override fun onFtueFlowFinished() {
-                            lifecycleScope.launch { attachRoot() }
+                            lifecycleScope.launch { attachRoomList() }
                         }
                     })
                     .build()
@@ -393,15 +379,15 @@ class LoggedInFlowNode @AssistedInject constructor(
         }
     }
 
-    suspend fun attachRoot() {
-        if (!canShowRoot(ftueState, sessionVerificationService.sessionVerifiedStatus.value)) return
+    suspend fun attachRoomList() {
+        if (!canShowRoomList()) return
         attachChild<Node> {
             backstack.singleTop(NavTarget.RoomList)
         }
     }
 
     suspend fun attachRoom(roomId: RoomId) {
-        if (!canShowRoot(ftueState, sessionVerificationService.sessionVerifiedStatus.value)) return
+        if (!canShowRoomList()) return
         attachChild<RoomFlowNode> {
             backstack.singleTop(NavTarget.RoomList)
             backstack.push(NavTarget.Room(roomId))
@@ -409,7 +395,7 @@ class LoggedInFlowNode @AssistedInject constructor(
     }
 
     internal suspend fun attachInviteList(deeplinkData: DeeplinkData.InviteList) = withContext(lifecycleScope.coroutineContext) {
-        if (!canShowRoot(ftueState, sessionVerificationService.sessionVerifiedStatus.value)) return@withContext
+        if (!canShowRoomList()) return@withContext
         notificationDrawerManager.clearMembershipNotificationForSession(deeplinkData.sessionId)
         backstack.singleTop(NavTarget.RoomList)
         backstack.push(NavTarget.InviteList)
@@ -418,17 +404,17 @@ class LoggedInFlowNode @AssistedInject constructor(
         }
     }
 
-    private fun canShowRoot(ftueState: FtueState, sessionVerifiedStatus: SessionVerifiedStatus): Boolean {
-        return !ftueState.shouldDisplayFlow.value && sessionVerifiedStatus.isVerified()
+    private fun canShowRoomList(): Boolean {
+        return ftueService.state.value is FtueState.Complete
     }
 
     @Composable
     override fun View(modifier: Modifier) {
         Box(modifier = modifier) {
             val lockScreenState by lockScreenStateService.lockState.collectAsState()
-            val isFtueDisplayed by ftueState.shouldDisplayFlow.collectAsState()
+            val isFtueDisplayed by ftueService.state.collectAsState()
             BackstackView()
-            if (!isFtueDisplayed) {
+            if (isFtueDisplayed is FtueState.Complete) {
                 PermanentChild(permanentNavModel = permanentNavModel, navTarget = NavTarget.LoggedInPermanent)
             }
             if (lockScreenState == LockScreenLockState.Locked) {

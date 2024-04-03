@@ -20,6 +20,7 @@ import android.Manifest
 import android.os.Build
 import androidx.annotation.VisibleForTesting
 import com.squareup.anvil.annotations.ContributesBinding
+import io.element.android.features.ftue.api.state.FtueService
 import io.element.android.features.ftue.api.state.FtueState
 import io.element.android.features.lockscreen.api.LockScreenService
 import io.element.android.libraries.di.SessionScope
@@ -37,15 +38,15 @@ import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 @ContributesBinding(SessionScope::class)
-class DefaultFtueState @Inject constructor(
+class DefaultFtueService @Inject constructor(
     private val sdkVersionProvider: BuildVersionSdkIntProvider,
     coroutineScope: CoroutineScope,
     private val analyticsService: AnalyticsService,
     private val permissionStateProvider: PermissionStateProvider,
     private val lockScreenService: LockScreenService,
     private val sessionVerificationService: SessionVerificationService,
-) : FtueState {
-    override val shouldDisplayFlow = MutableStateFlow(isSessionVerificationServiceReady() && isAnyStepIncomplete())
+) : FtueService {
+    override val state = MutableStateFlow<FtueState>(FtueState.Unknown)
 
     override suspend fun reset() {
         analyticsService.reset()
@@ -130,7 +131,11 @@ class DefaultFtueState @Inject constructor(
 
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     internal fun updateState() {
-        shouldDisplayFlow.value = isSessionVerificationServiceReady() && isAnyStepIncomplete()
+        state.value = when {
+            !isSessionVerificationServiceReady() -> FtueState.Unknown
+            isAnyStepIncomplete() -> FtueState.Incomplete
+            else -> FtueState.Complete
+        }
     }
 }
 

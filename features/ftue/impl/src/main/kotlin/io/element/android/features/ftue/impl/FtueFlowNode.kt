@@ -35,7 +35,7 @@ import io.element.android.features.analytics.api.AnalyticsEntryPoint
 import io.element.android.features.ftue.api.FtueEntryPoint
 import io.element.android.features.ftue.impl.notifications.NotificationsOptInNode
 import io.element.android.features.ftue.impl.sessionverification.FtueSessionVerificationFlowNode
-import io.element.android.features.ftue.impl.state.DefaultFtueState
+import io.element.android.features.ftue.impl.state.DefaultFtueService
 import io.element.android.features.ftue.impl.state.FtueStep
 import io.element.android.features.lockscreen.api.LockScreenEntryPoint
 import io.element.android.libraries.architecture.BackstackView
@@ -56,7 +56,7 @@ import kotlinx.parcelize.Parcelize
 class FtueFlowNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
-    private val ftueState: DefaultFtueState,
+    private val ftueState: DefaultFtueService,
     private val analyticsEntryPoint: AnalyticsEntryPoint,
     private val analyticsService: AnalyticsService,
     private val lockScreenEntryPoint: LockScreenEntryPoint,

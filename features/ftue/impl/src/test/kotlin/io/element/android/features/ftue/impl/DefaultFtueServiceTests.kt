@@ -19,7 +19,8 @@ package io.element.android.features.ftue.impl
 import android.os.Build
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import io.element.android.features.ftue.impl.state.DefaultFtueState
+import io.element.android.features.ftue.api.state.FtueState
+import io.element.android.features.ftue.impl.state.DefaultFtueService
 import io.element.android.features.ftue.impl.state.FtueStep
 import io.element.android.features.lockscreen.api.LockScreenService
 import io.element.android.features.lockscreen.test.FakeLockScreenService
@@ -35,22 +36,22 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
-class DefaultFtueStateTests {
+class DefaultFtueServiceTests {
     @Test
-    fun `given any check being false and session verification state being loaded, should display flow is true`() = runTest {
+    fun `given any check being false and session verification state being loaded, FtueState is Incomplete`() = runTest {
         val sessionVerificationService = FakeSessionVerificationService().apply {
             givenVerifiedStatus(SessionVerifiedStatus.Unknown)
         }
         val coroutineScope = CoroutineScope(coroutineContext + SupervisorJob())
         val state = createState(coroutineScope, sessionVerificationService)
 
-        state.shouldDisplayFlow.test {
+        state.state.test {
             // Verification state is unknown, we don't display the flow yet
-            assertThat(awaitItem()).isFalse()
+            assertThat(awaitItem()).isEqualTo(FtueState.Unknown)
 
             // Verification state is known, we should display the flow if any check is false
             sessionVerificationService.givenVerifiedStatus(SessionVerifiedStatus.NotVerified)
-            assertThat(awaitItem()).isTrue()
+            assertThat(awaitItem()).isEqualTo(FtueState.Incomplete)
         }
 
         // Cleanup
@@ -58,7 +59,7 @@ class DefaultFtueStateTests {
     }
 
     @Test
-    fun `given all checks being true, should display flow is false`() = runTest {
+    fun `given all checks being true, FtueState is Complete`() = runTest {
         val analyticsService = FakeAnalyticsService()
         val sessionVerificationService = FakeSessionVerificationService()
         val permissionStateProvider = FakePermissionStateProvider(permissionGranted = true)
@@ -79,7 +80,7 @@ class DefaultFtueStateTests {
         lockScreenService.setIsPinSetup(true)
         state.updateState()
 
-        assertThat(state.shouldDisplayFlow.value).isFalse()
+        assertThat(state.state.value).isEqualTo(FtueState.Complete)
 
         // Cleanup
         coroutineScope.cancel()
@@ -200,7 +201,7 @@ class DefaultFtueStateTests {
         lockScreenService: LockScreenService = FakeLockScreenService(),
         // First version where notification permission is required
         sdkIntVersion: Int = Build.VERSION_CODES.TIRAMISU,
-    ) = DefaultFtueState(
+    ) = DefaultFtueService(
         coroutineScope = coroutineScope,
         sessionVerificationService = sessionVerificationService,
         sdkVersionProvider = FakeBuildVersionSdkIntProvider(sdkIntVersion),
