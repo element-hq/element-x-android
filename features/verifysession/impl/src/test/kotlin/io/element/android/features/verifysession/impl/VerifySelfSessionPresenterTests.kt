@@ -278,7 +278,7 @@ class VerifySelfSessionPresenterTests {
         return VerifySelfSessionPresenter(
             sessionVerificationService = service,
             encryptionService = encryptionService,
-            stateMachine = VerifySelfSessionStateMachine(service),
+            stateMachine = VerifySelfSessionStateMachine(service, encryptionService),
         )
     }
 }

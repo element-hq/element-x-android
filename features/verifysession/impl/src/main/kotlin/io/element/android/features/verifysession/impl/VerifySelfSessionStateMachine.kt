@@ -20,14 +20,25 @@
 package io.element.android.features.verifysession.impl
 
 import com.freeletics.flowredux.dsl.FlowReduxStateMachine
+import io.element.android.libraries.core.bool.orFalse
+import io.element.android.libraries.core.data.tryOrNull
+import io.element.android.libraries.matrix.api.encryption.EncryptionService
+import io.element.android.libraries.matrix.api.encryption.RecoveryState
 import io.element.android.libraries.matrix.api.verification.SessionVerificationData
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.timeout
 import javax.inject.Inject
+import kotlin.time.Duration.Companion.seconds
 import com.freeletics.flowredux.dsl.State as MachineState
 
+@OptIn(FlowPreview::class)
 class VerifySelfSessionStateMachine @Inject constructor(
     private val sessionVerificationService: SessionVerificationService,
+    private val encryptionService: EncryptionService,
 ) : FlowReduxStateMachine<VerifySelfSessionStateMachine.State, VerifySelfSessionStateMachine.Event>(
     initialState = State.Initial
 ) {
@@ -89,6 +100,15 @@ class VerifySelfSessionStateMachine @Inject constructor(
                     }
                 }
                 on { _: Event.DidAcceptChallenge, state ->
+                    // If a key backup exists, wait until it's restored or a timeout happens
+                    val hasBackup = encryptionService.doesBackupExistOnServer().getOrNull().orFalse()
+                    if (hasBackup) {
+                        tryOrNull {
+                            encryptionService.recoveryStateStateFlow.filter { it == RecoveryState.ENABLED }
+                                .timeout(10.seconds)
+                                .first()
+                        }
+                    }
                     state.override { State.Completed }
                 }
             }

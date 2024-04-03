@@ -40,6 +40,7 @@ import io.element.android.libraries.matrix.api.roomdirectory.RoomDirectoryServic
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.api.roomlist.awaitLoaded
 import io.element.android.libraries.matrix.api.sync.SyncService
+import io.element.android.libraries.matrix.api.sync.SyncState
 import io.element.android.libraries.matrix.api.user.MatrixSearchUserResults
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
@@ -84,6 +85,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.buffer
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -128,10 +130,6 @@ class RustMatrixClient(
     private val innerRoomListService = syncService.roomListService()
     private val sessionDispatcher = dispatchers.io.limitedParallelism(64)
     private val rustSyncService = RustSyncService(syncService, sessionCoroutineScope)
-    private val verificationService = RustSessionVerificationService(
-        client = client,
-        syncService = rustSyncService,
-    ).apply { start() }
     private val pushersService = RustPushersService(
         client = client,
         dispatchers = dispatchers,
@@ -225,6 +223,12 @@ class RustMatrixClient(
             innerRoomListService = innerRoomListService,
             sessionCoroutineScope = sessionCoroutineScope,
         ),
+    )
+
+    private val verificationService = RustSessionVerificationService(
+        client = client,
+        isSyncServiceReady = rustSyncService.syncState.map { it == SyncState.Running },
+        sessionCoroutineScope = sessionCoroutineScope,
     )
 
     private val eventFilters = TimelineConfig.excludedEvents
