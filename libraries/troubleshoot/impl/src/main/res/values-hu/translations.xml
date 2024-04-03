@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="troubleshoot_notifications_screen_action">"Tesztek futtatása"</string>
+  <string name="troubleshoot_notifications_screen_action_again">"Tesztek újbóli futtatása"</string>
+  <string name="troubleshoot_notifications_screen_failure">"Egyes tesztek sikertelenek voltak. Ellenőrizze a részleteket."</string>
+  <string name="troubleshoot_notifications_screen_notice">"A tesztek futtatása, hogy észlelje a konfigurációban felmerülő olyan problémákat, amelyek miatt az értesítések nem az elvárt módon viselkednek."</string>
+  <string name="troubleshoot_notifications_screen_quick_fix_action">"Kísérlet a javításra"</string>
+  <string name="troubleshoot_notifications_screen_success">"Minden teszt sikeresen lezajlott."</string>
+  <string name="troubleshoot_notifications_screen_title">"Értesítések hibaelhárítása"</string>
+  <string name="troubleshoot_notifications_screen_waiting">"Egyes tesztek a figyelmét igénylik. Ellenőrizze a részleteket."</string>
+</resources>

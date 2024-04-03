@@ -14,16 +14,13 @@
  * limitations under the License.
  */
 plugins {
-    id("java-library")
-    id("com.android.lint")
-    alias(libs.plugins.kotlin.jvm)
+    id("io.element.android-library")
     alias(libs.plugins.anvil)
     alias(libs.plugins.ksp)
 }
 
-java {
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
+android {
+    namespace = "io.element.android.appconfig"
 }
 
 anvil {
@@ -33,4 +30,5 @@ anvil {
 dependencies {
     implementation(libs.dagger)
     implementation(projects.libraries.di)
+    implementation(projects.libraries.matrix.api)
 }

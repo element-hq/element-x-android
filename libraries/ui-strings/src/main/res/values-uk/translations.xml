@@ -51,7 +51,7 @@
   <string name="action_decline">"Відхилити"</string>
   <string name="action_delete_poll">"Видалити опитування"</string>
   <string name="action_disable">"Вимкнути"</string>
-  <string name="action_discard">"Скасувати"</string>
+  <string name="action_discard">"Відкинути"</string>
   <string name="action_done">"Готово"</string>
   <string name="action_edit">"Редагувати"</string>
   <string name="action_edit_poll">"Редагувати опитування"</string>
@@ -60,7 +60,7 @@
   <string name="action_enter_pin">"Введіть PIN-код"</string>
   <string name="action_forgot_password">"Забули пароль?"</string>
   <string name="action_forward">"Переслати"</string>
-  <string name="action_go_back">"Повернутися назад"</string>
+  <string name="action_go_back">"Повернутися"</string>
   <string name="action_invite">"Запросити"</string>
   <string name="action_invite_friends">"Запросити людей"</string>
   <string name="action_invite_friends_to_app">"Запросити людей до %1$s"</string>

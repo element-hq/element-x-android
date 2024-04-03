@@ -36,6 +36,7 @@ dependencies {
     } else {
         debugImplementation(libs.matrix.sdk)
     }
+    implementation(projects.appconfig)
     implementation(projects.libraries.di)
     implementation(projects.libraries.androidutils)
     implementation(projects.libraries.network)
@@ -52,8 +53,10 @@ dependencies {
 
     testImplementation(libs.test.junit)
     testImplementation(libs.test.truth)
+    testImplementation(libs.test.robolectric)
     testImplementation(projects.libraries.matrix.test)
     testImplementation(projects.services.analytics.test)
+    testImplementation(projects.tests.testutils)
     testImplementation(libs.coroutines.test)
     testImplementation(libs.test.turbine)
 }

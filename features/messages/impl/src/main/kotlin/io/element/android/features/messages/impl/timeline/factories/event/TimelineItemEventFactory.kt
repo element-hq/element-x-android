@@ -30,6 +30,7 @@ import io.element.android.libraries.dateformatter.api.LastMessageTimestampFormat
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.permalink.PermalinkParser
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.item.event.ProfileTimelineDetails
@@ -43,6 +44,7 @@ class TimelineItemEventFactory @Inject constructor(
     private val contentFactory: TimelineItemContentFactory,
     private val matrixClient: MatrixClient,
     private val lastMessageTimestampFormatter: LastMessageTimestampFormatter,
+    private val permalinkParser: PermalinkParser,
 ) {
     suspend fun create(
         currentTimelineItem: MatrixTimelineItem.Event,
@@ -80,7 +82,7 @@ class TimelineItemEventFactory @Inject constructor(
             reactionsState = currentTimelineItem.computeReactionsState(),
             readReceiptState = currentTimelineItem.computeReadReceiptState(roomMembers),
             localSendState = currentTimelineItem.event.localSendState,
-            inReplyTo = currentTimelineItem.event.inReplyTo()?.map(),
+            inReplyTo = currentTimelineItem.event.inReplyTo()?.map(permalinkParser = permalinkParser),
             isThreaded = currentTimelineItem.event.isThreaded(),
             debugInfo = currentTimelineItem.event.debugInfo,
             origin = currentTimelineItem.event.origin,

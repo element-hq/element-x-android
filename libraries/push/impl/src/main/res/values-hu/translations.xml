@@ -13,7 +13,7 @@
     <item quantity="other">"%d értesítés"</item>
   </plurals>
   <string name="notification_fallback_content">"Értesítés"</string>
-  <string name="notification_inline_reply_failed">"** Nem sikerült elküldeni – kérlek nyisd meg a szobát"</string>
+  <string name="notification_inline_reply_failed">"** Nem sikerült elküldeni – nyissa meg a szobát"</string>
   <string name="notification_invitation_action_join">"Csatlakozás"</string>
   <string name="notification_invitation_action_reject">"Elutasítás"</string>
   <plurals name="notification_invitations">
@@ -30,9 +30,9 @@
   <string name="notification_reaction_body">"Ezzel reagált: %1$s"</string>
   <string name="notification_room_action_mark_as_read">"Megjelölés olvasottként"</string>
   <string name="notification_room_action_quick_reply">"Gyors válasz"</string>
-  <string name="notification_room_invite_body">"Meghívott, hogy csatlakozz a szobához"</string>
+  <string name="notification_room_invite_body">"Meghívta, hogy csatlakozzon a szobához"</string>
   <string name="notification_sender_me">"Én"</string>
-  <string name="notification_test_push_notification_content">"Az értesítést nézed! Kattints ide!"</string>
+  <string name="notification_test_push_notification_content">"Az értesítést nézi! Kattintson ide!"</string>
   <string name="notification_ticker_text_dm">"%1$s: %2$s"</string>
   <string name="notification_ticker_text_group">"%1$s: %2$s %3$s"</string>
   <plurals name="notification_unread_notified_messages">
@@ -46,8 +46,32 @@
     <item quantity="one">"%d szoba"</item>
     <item quantity="other">"%d szoba"</item>
   </plurals>
-  <string name="push_choose_distributor_dialog_title_android">"Válaszd ki az értesítések fogadásának módját"</string>
+  <string name="push_choose_distributor_dialog_title_android">"Válassza ki az értesítések fogadási módját"</string>
   <string name="push_distributor_background_sync_android">"Háttérszinkronizálás"</string>
   <string name="push_distributor_firebase_android">"Google szolgáltatások"</string>
   <string name="push_no_valid_google_play_services_apk_android">"A Google Play szolgáltatások nem találhatók. Előfordulhat, hogy az értesítések nem működnek megfelelően."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_description">"A jelenlegi szolgáltató nevének lekérdezése."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_failure">"Nincs kiválasztva leküldéses értesítési szolgáltató."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_success">"Jelenlegi leküldéses értesítési szolgáltató: %1$s."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_title">"Jelenlegi leküldéses értesítési szolgáltató"</string>
+  <string name="troubleshoot_notifications_test_detect_push_provider_description">"Győződjön meg arról, hogy az alkalmazás legalább egy leküldéses értesítési szolgáltatóval rendelkezik."</string>
+  <string name="troubleshoot_notifications_test_detect_push_provider_failure">"Nem található leküldéses értesítési szolgáltató."</string>
+  <plurals name="troubleshoot_notifications_test_detect_push_provider_success">
+    <item quantity="one">"%1$d leküldéses szolgáltató találva: %2$s"</item>
+    <item quantity="other">"%1$d leküldéses szolgáltató találva: %2$s"</item>
+  </plurals>
+  <string name="troubleshoot_notifications_test_detect_push_provider_title">"Leküldéses értesítési szolgáltatók észlelése"</string>
+  <string name="troubleshoot_notifications_test_display_notification_description">"Ellenőrizze, hogy az alkalmazás képes-e megjeleníteni az értesítést."</string>
+  <string name="troubleshoot_notifications_test_display_notification_failure">"Az értesítésre nem kattintottak rá."</string>
+  <string name="troubleshoot_notifications_test_display_notification_permission_failure">"Az értesítés nem jeleníthető meg."</string>
+  <string name="troubleshoot_notifications_test_display_notification_success">"Az értesítésre rákattintottak!"</string>
+  <string name="troubleshoot_notifications_test_display_notification_title">"Értesítés megjelenítése"</string>
+  <string name="troubleshoot_notifications_test_display_notification_waiting">"A teszt folytatásához kattintson az értesítésre."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_description">"Győződjön meg arról, hogy az alkalmazás megkapja-e a leküldéses értesítést."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_1">"Hiba: a leküldő elutasította a kérést."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_2">"Hiba: %1$s."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_3">"Hiba, nem lehet tesztelni a leküldéses értesítést."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_4">"Hiba, időtúllépés a leküldéses értesítésre való várakozás során."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_success">"A leküldéses értesítés folyamata %1$d ezredmásodpercig tartott."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_title">"Tesztelje a leküldéses értesítés folyamatát"</string>
 </resources>

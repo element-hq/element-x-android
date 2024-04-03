@@ -89,6 +89,7 @@ class RoomListScreen(
             ),
             profileChangeContentFormatter = ProfileChangeContentFormatter(stringProvider),
             stateContentFormatter = StateContentFormatter(stringProvider),
+            permalinkParser = OnlyFallbackPermalinkParser(),
         ),
     )
     private val presenter = RoomListPresenter(

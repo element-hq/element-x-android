@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="crash_detection_dialog_content">"Пры апошнім выкарыстанні %1$s адбыўся збой. Жадаеце падзяліцца справаздачай аб збоі?"</string>
-  <string name="rageshake_detection_dialog_content">"Падобна, што вы трасеце тэлефон. Жадаеце адкрыць экран паведамлення пра памылку?"</string>
+  <string name="crash_detection_dialog_content">"Пры апошнім выкарыстанні %1$s адбыўся збой. Хочаце падзяліцца справаздачай аб збоі?"</string>
+  <string name="rageshake_detection_dialog_content">"Падобна, што вы трасеце тэлефон. Хочаце адкрыць экран паведамлення пра памылку?"</string>
   <string name="settings_rageshake">"Rageshake"</string>
   <string name="settings_rageshake_detection_threshold">"Парог выяўлення"</string>
 </resources>

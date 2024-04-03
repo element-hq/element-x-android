@@ -12,6 +12,6 @@
   <string name="screen_bug_report_include_logs">"Naplók engedélyezése"</string>
   <string name="screen_bug_report_include_screenshot">"Képernyőkép küldése"</string>
   <string name="screen_bug_report_logs_description">"A naplók szerepelni fognak az üzenetben, hogy megbizonyosodhassunk arról, hogy minden megfelelően működik-e. Ha naplók nélkül szeretné elküldeni az üzenetet, akkor kapcsolja ki ezt a beállítást."</string>
-  <string name="screen_bug_report_rash_logs_alert_title">"Az %1$s összeomlott a legutóbbi használata óta. Megosztod velünk az összeomlás-jelentést?"</string>
+  <string name="screen_bug_report_rash_logs_alert_title">"Az %1$s összeomlott a legutóbbi használata óta. Megosztja velünk az összeomlás-jelentést?"</string>
   <string name="screen_bug_report_view_logs">"Naplók megtekintése"</string>
 </resources>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="troubleshoot_notifications_test_firebase_availability_description">"Ujistěte se, že je k dispozici Firebase."</string>
+  <string name="troubleshoot_notifications_test_firebase_availability_failure">"Firebase není k dispozici."</string>
+  <string name="troubleshoot_notifications_test_firebase_availability_success">"Firebase je k dispozici."</string>
+  <string name="troubleshoot_notifications_test_firebase_availability_title">"Zkontrolovat Firebase"</string>
+  <string name="troubleshoot_notifications_test_firebase_token_description">"Ujistěte se, že je k dispozici Firebase token."</string>
+  <string name="troubleshoot_notifications_test_firebase_token_failure">"Firebase token není znám."</string>
+  <string name="troubleshoot_notifications_test_firebase_token_success">"Firebase token: %1$s."</string>
+  <string name="troubleshoot_notifications_test_firebase_token_title">"Zkontrolovat Firebase token"</string>
+</resources>

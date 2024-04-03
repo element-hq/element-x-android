@@ -29,7 +29,12 @@
   <string name="screen_room_change_role_confirm_demote_self_action">"Паніжэнне ўзроўню"</string>
   <string name="screen_room_change_role_confirm_demote_self_description">"Вы не зможаце адмяніць гэтае змяненне, бо паніжаеце сябе. Калі вы апошні адміністратар у пакоі, вярнуць права будзе немагчыма."</string>
   <string name="screen_room_change_role_confirm_demote_self_title">"Панізіць сябе?"</string>
+  <string name="screen_room_change_role_invited_member_name">"%1$s (У чаканні)"</string>
+  <string name="screen_room_change_role_invited_member_name_android">"(У чаканні)"</string>
   <string name="screen_room_change_role_moderators_title">"Рэдагаваць мадэратараў"</string>
+  <string name="screen_room_change_role_section_administrators">"Адміністратары"</string>
+  <string name="screen_room_change_role_section_moderators">"Мадэратары"</string>
+  <string name="screen_room_change_role_section_users">"Удзельнікі"</string>
   <string name="screen_room_change_role_unsaved_changes_description">"У вас ёсць незахаваныя змены."</string>
   <string name="screen_room_change_role_unsaved_changes_title">"Захаваць змены?"</string>
   <string name="screen_room_details_add_topic_title">"Дадаць тэму"</string>
@@ -46,8 +51,8 @@
   <string name="screen_room_details_invite_people_title">"Запрасіць карыстальникаў"</string>
   <string name="screen_room_details_leave_conversation_title">"Пакінуць размову"</string>
   <string name="screen_room_details_leave_room_title">"Пакінуць пакой"</string>
-  <string name="screen_room_details_notification_mode_custom">"Карыстальніцкі"</string>
-  <string name="screen_room_details_notification_mode_default">"Па змаўчанні"</string>
+  <string name="screen_room_details_notification_mode_custom">"Уласныя"</string>
+  <string name="screen_room_details_notification_mode_default">"Стандартныя"</string>
   <string name="screen_room_details_notification_title">"Апавяшчэнні"</string>
   <string name="screen_room_details_roles_and_permissions">"Ролі і дазволы"</string>
   <string name="screen_room_details_room_name_label">"Назва пакоя"</string>
@@ -62,7 +67,7 @@
   <string name="screen_room_member_list_banning_user">"Блакіроўка %1$s"</string>
   <plurals name="screen_room_member_list_header_title">
     <item quantity="one">"%1$d карыстальнік"</item>
-    <item quantity="few">"%1$d карыстальнікаў"</item>
+    <item quantity="few">"%1$d карыстальніка"</item>
     <item quantity="many">"%1$d карыстальнікаў"</item>
   </plurals>
   <string name="screen_room_member_list_manage_member_ban">"Выдаліць і заблакіраваць удзельніка"</string>
@@ -83,14 +88,14 @@
   <string name="screen_room_member_list_room_members_header_title">"Удзельнікі пакоя"</string>
   <string name="screen_room_member_list_unbanning_user">"Разблакіроўка %1$s"</string>
   <string name="screen_room_notification_settings_allow_custom">"Дазволіць карыстальніцкую наладу"</string>
-  <string name="screen_room_notification_settings_allow_custom_footnote">"Калі гэта ўключыць, ваша налада па змаўчанні будзе адменена"</string>
+  <string name="screen_room_notification_settings_allow_custom_footnote">"Калі гэта ўключыць, ваша налада прадвызначана будзе адменена"</string>
   <string name="screen_room_notification_settings_custom_settings_title">"Апавяшчаць мяне ў гэтым чаце для"</string>
-  <string name="screen_room_notification_settings_default_setting_footnote">"Вы можаце змяніць яго ў сваім %1$s."</string>
-  <string name="screen_room_notification_settings_default_setting_footnote_content_link">"глабальныя налады"</string>
-  <string name="screen_room_notification_settings_default_setting_title">"Налада па змаўчанні"</string>
+  <string name="screen_room_notification_settings_default_setting_footnote">"Вы можаце змяніць гэта ў %1$s."</string>
+  <string name="screen_room_notification_settings_default_setting_footnote_content_link">"асноўных наладах"</string>
+  <string name="screen_room_notification_settings_default_setting_title">"Стандартная налада"</string>
   <string name="screen_room_notification_settings_edit_remove_setting">"Выдаліць карыстальніцкую наладу"</string>
   <string name="screen_room_notification_settings_error_loading_settings">"Падчас загрузкі налад апавяшчэнняў адбылася памылка."</string>
-  <string name="screen_room_notification_settings_error_restoring_default">"Не атрымалася аднавіць рэжым па змаўчанні, паспрабуйце яшчэ раз."</string>
+  <string name="screen_room_notification_settings_error_restoring_default">"Не атрымалася аднавіць прадвызначаны рэжым, паспрабуйце яшчэ раз."</string>
   <string name="screen_room_notification_settings_error_setting_mode">"Не ўдалося наладзіць рэжым, паспрабуйце яшчэ раз."</string>
   <string name="screen_room_notification_settings_mentions_only_disclaimer">"Ваш хатні сервер не падтрымлівае гэту опцыю ў зашыфраваных пакоях, вы не атрымаеце апавяшчэнне ў гэтым пакоі."</string>
   <string name="screen_room_notification_settings_mode_all_messages">"Усе паведамленні"</string>

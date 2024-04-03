@@ -245,6 +245,8 @@
   <string name="screen_identity_confirmation_title">"Konfirmasi bahwa ini Anda"</string>
   <string name="screen_identity_confirmed_subtitle">"Sekarang Anda dapat membaca atau mengirim pesan dengan aman, dan siapa pun yang mengobrol dengan Anda juga dapat mempercayai perangkat ini."</string>
   <string name="screen_identity_confirmed_title">"Perangkat terverifikasi"</string>
+  <string name="screen_identity_use_another_device">"Gunakan perangkat lain"</string>
+  <string name="screen_identity_waiting_on_other_device">"Menunggu di perangkat lain…"</string>
   <string name="screen_media_picker_error_failed_selection">"Gagal memilih media, silakan coba lagi."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Gagal memproses media untuk diunggah, silakan coba lagi."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Gagal mengunggah media, silakan coba lagi."</string>

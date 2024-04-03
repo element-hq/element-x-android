@@ -8,7 +8,7 @@
   <string name="screen_account_provider_signin_subtitle">"Itt lesznek a beszélgetései – ahogyan egy e-mail-szolgáltatást is használna a levelei kezeléséhez."</string>
   <string name="screen_account_provider_signin_title">"Hamarosan bejelentkezik ide: %s"</string>
   <string name="screen_account_provider_signup_subtitle">"Itt lesznek a beszélgetései – ahogyan egy e-mail-szolgáltatást is használna a levelei kezeléséhez."</string>
-  <string name="screen_account_provider_signup_title">"Hamarosan létrehozol egy fiókot itt: %s"</string>
+  <string name="screen_account_provider_signup_title">"Hamarosan létrehoz egy fiókot itt: %s"</string>
   <string name="screen_change_account_provider_matrix_org_subtitle">"A Matrix.org egy nagy, ingyenes kiszolgáló a nyilvános Matrix-hálózaton, a biztonságos, decentralizált kommunikáció érdekében, amelyet a Matrix.org Alapítvány üzemeltet."</string>
   <string name="screen_change_account_provider_other">"Egyéb"</string>
   <string name="screen_change_account_provider_subtitle">"Másik fiókszolgáltató, például a saját privát kiszolgáló vagy egy munkahelyi fiók használata."</string>

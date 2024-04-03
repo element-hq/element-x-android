@@ -29,9 +29,13 @@ import org.jsoup.nodes.Document
  *
  * This will also make sure mentions are prefixed with `@`.
  *
+ * @param permalinkParser the parser to use to parse the mentions.
  * @param prefix if not null, the prefix will be inserted at the beginning of the message.
  */
-fun FormattedBody.toHtmlDocument(prefix: String? = null): Document? {
+fun FormattedBody.toHtmlDocument(
+    permalinkParser: PermalinkParser,
+    prefix: String? = null,
+): Document? {
     return takeIf { it.format == MessageFormat.HTML }?.body
         // Trim whitespace at the end to avoid having wrong rendering of the message.
         // We don't trim the start in case it's used as indentation.
@@ -44,17 +48,20 @@ fun FormattedBody.toHtmlDocument(prefix: String? = null): Document? {
             }
 
             // Prepend `@` to mentions
-            fixMentions(dom)
+            fixMentions(dom, permalinkParser)
 
             dom
         }
 }
 
-private fun fixMentions(dom: Document) {
+private fun fixMentions(
+    dom: Document,
+    permalinkParser: PermalinkParser,
+) {
     val links = dom.getElementsByTag("a")
     links.forEach {
         if (it.hasAttr("href")) {
-            val link = PermalinkParser.parse(it.attr("href"))
+            val link = permalinkParser.parse(it.attr("href"))
             if (link is PermalinkData.UserLink && !it.text().startsWith("@")) {
                 it.prependText("@")
             }

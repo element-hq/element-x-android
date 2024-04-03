@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="troubleshoot_notifications_test_unified_push_description">"Győződjön meg arról, hogy a UnifiedPush forgalmazói elérhetők."</string>
+  <string name="troubleshoot_notifications_test_unified_push_failure">"Nem található forgalmazó a leküldéses értesítésekhez."</string>
+  <plurals name="troubleshoot_notifications_test_unified_push_success">
+    <item quantity="one">"%1$d forgalmazó található: %2$s."</item>
+    <item quantity="other">"%1$d forgalmazó található: %2$s."</item>
+  </plurals>
+  <string name="troubleshoot_notifications_test_unified_push_title">"Ellenőrizze a UnifiedPush szolgáltatást"</string>
+</resources>

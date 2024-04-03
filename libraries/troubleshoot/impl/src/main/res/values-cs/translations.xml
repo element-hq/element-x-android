@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="troubleshoot_notifications_screen_action">"Spustit testy"</string>
+  <string name="troubleshoot_notifications_screen_action_again">"Spustit testy znovu"</string>
+  <string name="troubleshoot_notifications_screen_failure">"Některé testy selhaly. Zkontrolujte prosím podrobnosti."</string>
+  <string name="troubleshoot_notifications_screen_notice">"Spusťte testy, abyste zjistili jakýkoli problém ve vaší konfiguraci, který může způsobit, že se oznámení nebudou chovat podle očekávání."</string>
+  <string name="troubleshoot_notifications_screen_quick_fix_action">"Pokus o opravu"</string>
+  <string name="troubleshoot_notifications_screen_success">"Všechny testy proběhly úspěšně."</string>
+  <string name="troubleshoot_notifications_screen_title">"Odstraňování problémů s upozorněními"</string>
+  <string name="troubleshoot_notifications_screen_waiting">"Některé testy vyžadují vaši pozornost. Zkontrolujte prosím podrobnosti."</string>
+</resources>

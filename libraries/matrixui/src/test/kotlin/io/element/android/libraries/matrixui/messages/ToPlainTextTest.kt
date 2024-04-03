@@ -20,6 +20,7 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.api.timeline.item.event.FormattedBody
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageFormat
 import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageType
+import io.element.android.libraries.matrix.test.permalink.FakePermalinkParser
 import io.element.android.libraries.matrix.ui.messages.toPlainText
 import org.jsoup.Jsoup
 import org.junit.Test
@@ -59,7 +60,7 @@ class ToPlainTextTest {
                 <br />
             """.trimIndent()
         )
-        assertThat(formattedBody.toPlainText()).isEqualTo(
+        assertThat(formattedBody.toPlainText(permalinkParser = FakePermalinkParser())).isEqualTo(
             """
             Hello world 
             • This is an unordered list.
@@ -79,7 +80,7 @@ class ToPlainTextTest {
                 <br />
             """.trimIndent()
         )
-        assertThat(formattedBody.toPlainText()).isNull()
+        assertThat(formattedBody.toPlainText(permalinkParser = FakePermalinkParser())).isNull()
     }
 
     @Test
@@ -96,7 +97,7 @@ class ToPlainTextTest {
                 """.trimIndent()
             )
         )
-        assertThat(messageType.toPlainText()).isEqualTo(
+        assertThat(messageType.toPlainText(permalinkParser = FakePermalinkParser())).isEqualTo(
             """
             Hello world 
             • This is an unordered list.
@@ -119,6 +120,6 @@ class ToPlainTextTest {
                 """.trimIndent()
             )
         )
-        assertThat(messageType.toPlainText()).isEqualTo("This is the fallback text")
+        assertThat(messageType.toPlainText(permalinkParser = FakePermalinkParser())).isEqualTo("This is the fallback text")
     }
 }

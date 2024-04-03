@@ -18,6 +18,7 @@ package io.element.android.features.messages.impl.timeline.model
 
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.permalink.PermalinkParser
 import io.element.android.libraries.matrix.api.timeline.item.event.EventContent
 import io.element.android.libraries.matrix.api.timeline.item.event.InReplyTo
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageContent
@@ -34,7 +35,9 @@ data class InReplyToDetails(
     val textContent: String?,
 )
 
-fun InReplyTo.map() = when (this) {
+fun InReplyTo.map(
+    permalinkParser: PermalinkParser,
+) = when (this) {
     is InReplyTo.Ready -> InReplyToDetails(
         eventId = eventId,
         senderId = senderId,
@@ -44,7 +47,7 @@ fun InReplyTo.map() = when (this) {
         textContent = when (content) {
             is MessageContent -> {
                 val messageContent = content as MessageContent
-                (messageContent.type as? TextMessageType)?.toPlainText() ?: messageContent.body
+                (messageContent.type as? TextMessageType)?.toPlainText(permalinkParser = permalinkParser) ?: messageContent.body
             }
             is StickerContent -> {
                 val stickerContent = content as StickerContent

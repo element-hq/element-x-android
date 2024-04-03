@@ -17,7 +17,6 @@
 package io.element.android.libraries.push.impl.notifications
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.app.Notification
 import android.content.Context
 import android.content.pm.PackageManager
@@ -32,12 +31,13 @@ class NotificationDisplayer @Inject constructor(
 ) {
     private val notificationManager = NotificationManagerCompat.from(context)
 
-    fun showNotificationMessage(tag: String?, id: Int, notification: Notification) {
+    fun showNotificationMessage(tag: String?, id: Int, notification: Notification): Boolean {
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
             Timber.w("Not allowed to notify.")
-            return
+            return false
         }
         notificationManager.notify(tag, id, notification)
+        return true
     }
 
     fun cancelNotificationMessage(tag: String?, id: Int) {
@@ -53,12 +53,18 @@ class NotificationDisplayer @Inject constructor(
         }
     }
 
-    @SuppressLint("LaunchActivityFromNotification")
-    fun displayDiagnosticNotification(notification: Notification) {
-        showNotificationMessage(
+    fun displayDiagnosticNotification(notification: Notification): Boolean {
+        return showNotificationMessage(
             tag = "DIAGNOSTIC",
             id = NOTIFICATION_ID_DIAGNOSTIC,
             notification = notification
+        )
+    }
+
+    fun dismissDiagnosticNotification() {
+        cancelNotificationMessage(
+            tag = "DIAGNOSTIC",
+            id = NOTIFICATION_ID_DIAGNOSTIC
         )
     }
 

@@ -41,7 +41,7 @@ class DefaultUserPushStoreFactory @Inject constructor(
 
     // We can have only one class accessing a single data store, so keep a cache of them.
     private val cache = ConcurrentHashMap<SessionId, UserPushStore>()
-    override fun create(userId: SessionId): UserPushStore {
+    override fun getOrCreate(userId: SessionId): UserPushStore {
         return cache.getOrPut(userId) {
             UserPushStoreDataStore(
                 context = context,
@@ -60,6 +60,6 @@ class DefaultUserPushStoreFactory @Inject constructor(
 
     override suspend fun onSessionDeleted(userId: String) {
         // Delete the store
-        create(SessionId(userId)).reset()
+        getOrCreate(SessionId(userId)).reset()
     }
 }

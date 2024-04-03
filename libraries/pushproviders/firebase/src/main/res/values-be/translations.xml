@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="troubleshoot_notifications_test_firebase_availability_description">"Пераканайцеся, што Firebase даступны."</string>
+  <string name="troubleshoot_notifications_test_firebase_availability_failure">"Firebase недаступны."</string>
+  <string name="troubleshoot_notifications_test_firebase_availability_success">"Firebase даступны."</string>
+  <string name="troubleshoot_notifications_test_firebase_availability_title">"Праверыць Firebase"</string>
+  <string name="troubleshoot_notifications_test_firebase_token_description">"Пераканайцеся, што маркер Firebase даступны."</string>
+  <string name="troubleshoot_notifications_test_firebase_token_failure">"Маркер Firebase невядомы."</string>
+  <string name="troubleshoot_notifications_test_firebase_token_success">"Маркер Firebase: %1$s."</string>
+  <string name="troubleshoot_notifications_test_firebase_token_title">"Праверце маркер Firebase"</string>
+</resources>
