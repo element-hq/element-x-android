@@ -45,6 +45,7 @@ class VerifySelfSessionViewTest {
                     eventSink = eventsRecorder
                 ),
                 onEnterRecoveryKey = EnsureNeverCalled(),
+                onCreateNewRecoveryKey = EnsureNeverCalled(),
                 onFinished = EnsureNeverCalled(),
             )
         }
@@ -62,6 +63,7 @@ class VerifySelfSessionViewTest {
                     eventSink = eventsRecorder
                 ),
                 onEnterRecoveryKey = EnsureNeverCalled(),
+                onCreateNewRecoveryKey = EnsureNeverCalled(),
                 onFinished = EnsureNeverCalled(),
             )
         }
@@ -79,6 +81,7 @@ class VerifySelfSessionViewTest {
                     eventSink = eventsRecorder
                 ),
                 onEnterRecoveryKey = EnsureNeverCalled(),
+                onCreateNewRecoveryKey = EnsureNeverCalled(),
                 onFinished = EnsureNeverCalled(),
             )
         }
@@ -99,6 +102,7 @@ class VerifySelfSessionViewTest {
                     eventSink = eventsRecorder
                 ),
                 onEnterRecoveryKey = EnsureNeverCalled(),
+                onCreateNewRecoveryKey = EnsureNeverCalled(),
                 onFinished = EnsureNeverCalled(),
             )
         }
@@ -119,6 +123,7 @@ class VerifySelfSessionViewTest {
                     eventSink = eventsRecorder
                 ),
                 onEnterRecoveryKey = EnsureNeverCalled(),
+                onCreateNewRecoveryKey = EnsureNeverCalled(),
                 onFinished = EnsureNeverCalled(),
             )
         }
@@ -137,6 +142,7 @@ class VerifySelfSessionViewTest {
                         eventSink = eventsRecorder
                     ),
                     onEnterRecoveryKey = EnsureNeverCalled(),
+                    onCreateNewRecoveryKey = EnsureNeverCalled(),
                     onFinished = callback,
                 )
             }
@@ -152,14 +158,35 @@ class VerifySelfSessionViewTest {
             rule.setContent {
                 VerifySelfSessionView(
                     aVerifySelfSessionState(
-                        verificationFlowStep = VerifySelfSessionState.VerificationStep.Initial(true),
+                        verificationFlowStep = VerifySelfSessionState.VerificationStep.Initial(true, false),
                         eventSink = eventsRecorder
                     ),
                     onEnterRecoveryKey = callback,
+                    onCreateNewRecoveryKey = EnsureNeverCalled(),
                     onFinished = EnsureNeverCalled(),
                 )
             }
             rule.clickOn(R.string.screen_session_verification_enter_recovery_key)
+        }
+    }
+
+    @Config(qualifiers = "h1024dp")
+    @Test
+    fun `clicking on create new recovery key calls the expected callback`() {
+        val eventsRecorder = EventsRecorder<VerifySelfSessionViewEvents>(expectEvents = false)
+        ensureCalledOnce { callback ->
+            rule.setContent {
+                VerifySelfSessionView(
+                    aVerifySelfSessionState(
+                        verificationFlowStep = VerifySelfSessionState.VerificationStep.Initial(true, true),
+                        eventSink = eventsRecorder
+                    ),
+                    onEnterRecoveryKey = EnsureNeverCalled(),
+                    onCreateNewRecoveryKey = callback,
+                    onFinished = EnsureNeverCalled(),
+                )
+            }
+            rule.clickOn(R.string.screen_identity_confirmation_create_new_recovery_key)
         }
     }
 
@@ -176,6 +203,7 @@ class VerifySelfSessionViewTest {
                     eventSink = eventsRecorder
                 ),
                 onEnterRecoveryKey = EnsureNeverCalled(),
+                onCreateNewRecoveryKey = EnsureNeverCalled(),
                 onFinished = EnsureNeverCalled(),
             )
         }
@@ -196,6 +224,7 @@ class VerifySelfSessionViewTest {
                     eventSink = eventsRecorder
                 ),
                 onEnterRecoveryKey = EnsureNeverCalled(),
+                onCreateNewRecoveryKey = EnsureNeverCalled(),
                 onFinished = EnsureNeverCalled(),
             )
         }

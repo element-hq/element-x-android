@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.features.securebackup.impl.create_new_key
+package io.element.android.features.securebackup.impl.createkey
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier

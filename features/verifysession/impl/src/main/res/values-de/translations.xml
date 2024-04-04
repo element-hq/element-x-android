@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_identity_confirmation_subtitle">"Verifiziere dieses Gerät, um sicheres Messaging einzurichten."</string>
+  <string name="screen_identity_confirmation_title">"Bestätige, dass du es bist"</string>
+  <string name="screen_identity_confirmed_subtitle">"Du kannst nun verschlüsselte Nachrichten lesen oder versenden."</string>
+  <string name="screen_identity_confirmed_title">"Gerät verifiziert"</string>
+  <string name="screen_identity_use_another_device">"Ein anderes Gerät verwenden"</string>
+  <string name="screen_identity_waiting_on_other_device">"Bitte warten bis das andere Gerät bereit ist."</string>
   <string name="screen_session_verification_cancelled_subtitle">"Etwas scheint nicht zu stimmen. Entweder ist das Zeitlimit für die Anfrage abgelaufen oder die Anfrage wurde abgelehnt."</string>
   <string name="screen_session_verification_compare_emojis_subtitle">"Vergewissere dich dass die folgenden Emojis mit denen in deiner anderen Session übereinstimmen."</string>
   <string name="screen_session_verification_compare_emojis_title">"Emojis vergleichen"</string>

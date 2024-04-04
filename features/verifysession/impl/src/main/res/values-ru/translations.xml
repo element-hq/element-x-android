@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_identity_confirmation_subtitle">"Подтвердите это устройство, чтобы настроить безопасный обмен сообщениями."</string>
+  <string name="screen_identity_confirmation_title">"Подтвердите, что это вы"</string>
+  <string name="screen_identity_confirmed_subtitle">"Теперь вы можете безопасно читать и отправлять сообщения, и все, с кем вы общаетесь в чате, также могут доверять этому устройству."</string>
+  <string name="screen_identity_confirmed_title">"Устройство проверено"</string>
+  <string name="screen_identity_use_another_device">"Используйте другое устройство"</string>
+  <string name="screen_identity_waiting_on_other_device">"Ожидание на другом устройстве…"</string>
   <string name="screen_session_verification_cancelled_subtitle">"Похоже, что-то не так. Время ожидания запроса либо истекло, либо запрос был отклонен."</string>
   <string name="screen_session_verification_compare_emojis_subtitle">"Убедитесь, что приведенные ниже емоджи совпадают с емоджи показанными во время другого сеанса."</string>
   <string name="screen_session_verification_compare_emojis_title">"Сравните емодзи"</string>

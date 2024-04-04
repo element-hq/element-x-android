@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_identity_confirmation_subtitle">"Ak chcete nastaviť zabezpečené správy, overte toto zariadenie."</string>
+  <string name="screen_identity_confirmation_title">"Potvrďte, že ste to vy"</string>
+  <string name="screen_identity_confirmed_subtitle">"Teraz môžete bezpečne čítať alebo odosielať správy a tomuto zariadeniu môže dôverovať aj ktokoľvek, s kým konverzujete."</string>
+  <string name="screen_identity_confirmed_title">"Zariadenie overené"</string>
+  <string name="screen_identity_use_another_device">"Použiť iné zariadenie"</string>
+  <string name="screen_identity_waiting_on_other_device">"Čaká sa na druhom zariadení…"</string>
   <string name="screen_session_verification_cancelled_subtitle">"Zdá sa, že niečo nie je v poriadku. Časový limit žiadosti vypršal alebo bola žiadosť zamietnutá."</string>
   <string name="screen_session_verification_compare_emojis_subtitle">"Skontrolujte, či sa emotikony uvedené nižšie zhodujú s emotikonmi zobrazenými vo vašej druhej relácii."</string>
   <string name="screen_session_verification_compare_emojis_title">"Porovnajte emotikony"</string>

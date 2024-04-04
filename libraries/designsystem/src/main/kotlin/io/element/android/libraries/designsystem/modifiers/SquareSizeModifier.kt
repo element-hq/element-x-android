@@ -62,14 +62,13 @@ private class SquareSizeModifier(
     private val position: Float,
     inspectorInfo: InspectorInfo.() -> Unit,
 ) : LayoutModifier, InspectorValueInfo(inspectorInfo) {
-
     override fun MeasureScope.measure(
         measurable: Measurable,
         constraints: Constraints,
     ): MeasureResult {
         val maxSquare = min(constraints.maxWidth, constraints.maxHeight)
         val minSquare = max(constraints.minWidth, constraints.minHeight)
-        val squareExists = (minSquare <= maxSquare)
+        val squareExists = minSquare <= maxSquare
 
         val resolvedConstraints = constraints
             .takeUnless { squareExists }

@@ -249,12 +249,6 @@
   <string name="invite_friends_text">"Гэй, пагавары са мной у %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Паведаміць аб памылцы з дапамогай Rageshake"</string>
-  <string name="screen_identity_confirmation_subtitle">"Пацвердзіце гэтую прыладу, каб наладзіць бяспечны абмен паведамленнямі."</string>
-  <string name="screen_identity_confirmation_title">"Пацвердзіце, што гэта вы"</string>
-  <string name="screen_identity_confirmed_subtitle">"Цяпер вы можаце бяспечна чытаць і адпраўляць паведамленні, і ўсе, з кім вы маеце зносіны ў чаце, таксама могуць давяраць гэтай прыладзе."</string>
-  <string name="screen_identity_confirmed_title">"Прылада праверана"</string>
-  <string name="screen_identity_use_another_device">"Выкарыстоўвайце іншую прыладу"</string>
-  <string name="screen_identity_waiting_on_other_device">"Чаканне на іншай прыладзе…"</string>
   <string name="screen_media_picker_error_failed_selection">"Не ўдалося выбраць носьбіт, паўтарыце спробу."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Не атрымалася апрацаваць медыяфайл для загрузкі, паспрабуйце яшчэ раз."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Не атрымалася загрузіць медыяфайлы, паспрабуйце яшчэ раз."</string>

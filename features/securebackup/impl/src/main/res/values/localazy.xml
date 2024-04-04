@@ -32,7 +32,7 @@
   <string name="screen_recovery_key_confirm_description">"Make sure nobody can see this screen!"</string>
   <string name="screen_recovery_key_confirm_error_content">"Please try again to confirm access to your chat backup."</string>
   <string name="screen_recovery_key_confirm_error_title">"Incorrect recovery key"</string>
-  <string name="screen_recovery_key_confirm_key_description">"Enter the 48 character code."</string>
+  <string name="screen_recovery_key_confirm_key_description">"If you have a recovery passphrase or secret passphrase/key, this will work too."</string>
   <string name="screen_recovery_key_confirm_key_placeholder">"Enter…"</string>
   <string name="screen_recovery_key_confirm_success">"Recovery key confirmed"</string>
   <string name="screen_recovery_key_confirm_title">"Enter your recovery key or passcode"</string>

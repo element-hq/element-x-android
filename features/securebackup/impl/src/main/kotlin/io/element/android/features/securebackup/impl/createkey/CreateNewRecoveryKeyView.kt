@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.features.securebackup.impl.create_new_key
+package io.element.android.features.securebackup.impl.createkey
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -32,7 +32,6 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
@@ -92,7 +91,6 @@ private fun Content() {
         )
         Item(index = 4, text = AnnotatedString(stringResource(R.string.screen_create_new_recovery_key_list_item_4)))
         Item(index = 5, text = AnnotatedString(stringResource(R.string.screen_create_new_recovery_key_list_item_5)))
-
     }
 }
 

@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_identity_confirmation_subtitle">"A biztonságos üzenetkezelés beállításához ellenőrizze ezt az eszközt."</string>
+  <string name="screen_identity_confirmation_title">"Erősítse meg, hogy Ön az"</string>
+  <string name="screen_identity_confirmed_subtitle">"Mostantól biztonságosan olvashat vagy küldhet üzeneteket, és bármelyik csevegőpartnere megbízhat ebben az eszközben."</string>
+  <string name="screen_identity_confirmed_title">"Eszköz ellenőrizve"</string>
+  <string name="screen_identity_use_another_device">"Másik eszköz használata"</string>
+  <string name="screen_identity_waiting_on_other_device">"Várakozás a másik eszközre…"</string>
   <string name="screen_session_verification_cancelled_subtitle">"Valami hibásnak tűnik. A kérés vagy időtúllépésre futott, vagy elutasították."</string>
   <string name="screen_session_verification_compare_emojis_subtitle">"Erősítse meg, hogy a lenti emodzsik egyeznek-e a másik munkamenetben megjelenítettekkel."</string>
   <string name="screen_session_verification_compare_emojis_title">"Emodzsik összehasonlítása"</string>

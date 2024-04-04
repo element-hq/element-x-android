@@ -30,7 +30,7 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.features.securebackup.api.SecureBackupEntryPoint
-import io.element.android.features.securebackup.impl.create_new_key.CreateNewRecoveryKeyNode
+import io.element.android.features.securebackup.impl.createkey.CreateNewRecoveryKeyNode
 import io.element.android.features.securebackup.impl.disable.SecureBackupDisableNode
 import io.element.android.features.securebackup.impl.enable.SecureBackupEnableNode
 import io.element.android.features.securebackup.impl.enter.SecureBackupEnterRecoveryKeyNode
