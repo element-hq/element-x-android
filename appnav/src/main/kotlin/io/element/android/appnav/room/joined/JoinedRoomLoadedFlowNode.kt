@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright (c) 2024 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.appnav.room
+package io.element.android.appnav.room.joined
 
 import android.os.Parcelable
 import androidx.compose.runtime.Composable
@@ -32,6 +32,7 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.appnav.di.RoomComponentFactory
+import io.element.android.appnav.room.RoomNavigationTarget
 import io.element.android.features.messages.api.MessagesEntryPoint
 import io.element.android.features.roomdetails.api.RoomDetailsEntryPoint
 import io.element.android.libraries.architecture.BackstackView
@@ -46,15 +47,12 @@ import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
 import io.element.android.services.appnavstate.api.AppNavigationStateService
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import timber.log.Timber
 
 @ContributesNode(SessionScope::class)
-class RoomLoadedFlowNode @AssistedInject constructor(
+class JoinedRoomLoadedFlowNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     private val messagesEntryPoint: MessagesEntryPoint,
@@ -63,9 +61,13 @@ class RoomLoadedFlowNode @AssistedInject constructor(
     private val appCoroutineScope: CoroutineScope,
     roomComponentFactory: RoomComponentFactory,
     roomMembershipObserver: RoomMembershipObserver,
-) : BaseFlowNode<RoomLoadedFlowNode.NavTarget>(
+) : BaseFlowNode<JoinedRoomLoadedFlowNode.NavTarget>(
     backstack = BackStack(
-        initialElement = plugins.filterIsInstance(Inputs::class.java).first().initialElement,
+        initialElement = when(plugins.filterIsInstance(Inputs::class.java).first().initialElement){
+            RoomNavigationTarget.Messages -> NavTarget.Messages
+            RoomNavigationTarget.Details -> NavTarget.RoomDetails
+            RoomNavigationTarget.NotificationSettings -> NavTarget.RoomNotificationSettings
+        },
         savedStateMap = buildContext.savedStateMap,
     ),
     buildContext = buildContext,
@@ -79,7 +81,7 @@ class RoomLoadedFlowNode @AssistedInject constructor(
 
     data class Inputs(
         val room: MatrixRoom,
-        val initialElement: NavTarget = NavTarget.Messages,
+        val initialElement: RoomNavigationTarget = RoomNavigationTarget.Messages,
     ) : NodeInputs
 
     private val inputs: Inputs = inputs()
@@ -108,13 +110,6 @@ class RoomLoadedFlowNode @AssistedInject constructor(
                 appNavigationStateService.onLeavingRoom(id)
             }
         )
-        roomMembershipObserver.updates
-            .filter { update -> update.roomId == inputs.room.roomId && !update.isUserInRoom }
-            .onEach {
-                navigateUp()
-            }
-            .launchIn(lifecycleScope)
-        inputs<Inputs>()
     }
 
     private fun fetchRoomMembers() = lifecycleScope.launch {

@@ -14,13 +14,15 @@
  * limitations under the License.
  */
 
-package io.element.android.appnav.room
+@file:OptIn(ExperimentalMaterial3Api::class)
+
+package io.element.android.appnav.room.joined
 
 import android.os.Parcelable
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.lifecycleScope
 import com.bumble.appyx.core.modality.BuildContext
@@ -34,39 +36,30 @@ import com.bumble.appyx.navmodel.backstack.operation.newRoot
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
-import io.element.android.appnav.room.joined.JoinedRoomFlowNode
-import io.element.android.appnav.room.joined.JoinedRoomLoadedFlowNode
+import io.element.android.appnav.room.RoomNavigationTarget
 import io.element.android.features.networkmonitor.api.NetworkMonitor
+import io.element.android.features.networkmonitor.api.NetworkStatus
 import io.element.android.libraries.architecture.BackstackView
 import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.architecture.inputs
-import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
-import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.core.RoomId
-import io.element.android.libraries.matrix.api.room.CurrentUserMembership
-import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
-import io.element.android.libraries.matrix.api.roomlist.RoomListService
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.parcelize.Parcelize
-import timber.log.Timber
-import kotlin.jvm.optionals.getOrNull
 
 @ContributesNode(SessionScope::class)
-class RoomFlowNode @AssistedInject constructor(
+class JoinedRoomFlowNode @AssistedInject constructor(
     @Assisted val buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
-    private val roomListService: RoomListService,
-    private val roomMembershipObserver: RoomMembershipObserver,
+    loadingRoomStateFlowFactory: LoadingRoomStateFlowFactory,
     private val networkMonitor: NetworkMonitor,
 ) :
-    BaseFlowNode<RoomFlowNode.NavTarget>(
+    BaseFlowNode<JoinedRoomFlowNode.NavTarget>(
         backstack = BackStack(
             initialElement = NavTarget.Loading,
             savedStateMap = buildContext.savedStateMap,
@@ -80,66 +73,60 @@ class RoomFlowNode @AssistedInject constructor(
     ) : NodeInputs
 
     private val inputs: Inputs = inputs()
+    private val loadingRoomStateStateFlow = loadingRoomStateFlowFactory.create(lifecycleScope, inputs.roomId)
 
     sealed interface NavTarget : Parcelable {
         @Parcelize
         data object Loading : NavTarget
 
         @Parcelize
-        data object JoinRoom : NavTarget
-
-        @Parcelize
-        data object JoinedRoom : NavTarget
+        data object Loaded : NavTarget
     }
 
     override fun onBuilt() {
         super.onBuilt()
-        roomListService.getUserMembershipForRoom(
-            inputs.roomId
-        ).onEach { membership ->
-            Timber.d("RoomMembership = $membership")
-            when {
-                membership.getOrNull() == CurrentUserMembership.JOINED -> {
-                    backstack.newRoot(NavTarget.JoinedRoom)
-                }
-                else -> {
-                    backstack.newRoot(NavTarget.JoinRoom)
-                }
+        loadingRoomStateStateFlow
+            .map {
+                it is LoadingRoomState.Loaded
             }
-        }
-            .flowOn(Dispatchers.Default)
-            .launchIn(lifecycleScope)
-
-        roomMembershipObserver.updates
-            .filter { update -> update.roomId == inputs.roomId && !update.isUserInRoom }
-            .onEach {
-                navigateUp()
+            .distinctUntilChanged()
+            .onEach { isLoaded ->
+                if (isLoaded) {
+                    backstack.newRoot(NavTarget.Loaded)
+                } else {
+                    backstack.newRoot(NavTarget.Loading)
+                }
             }
             .launchIn(lifecycleScope)
     }
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
         return when (navTarget) {
-            NavTarget.Loading -> loadingNode(buildContext)
-            NavTarget.JoinRoom -> joinRoomNode(buildContext)
-            NavTarget.JoinedRoom -> {
+            NavTarget.Loaded -> {
                 val roomFlowNodeCallback = plugins<JoinedRoomLoadedFlowNode.Callback>()
-                val inputs = JoinedRoomFlowNode.Inputs(inputs.roomId, initialElement = inputs.initialElement)
-                createNode<JoinedRoomFlowNode>(buildContext, plugins = listOf(inputs) + roomFlowNodeCallback)
+                val awaitRoomState = loadingRoomStateStateFlow.value
+                if (awaitRoomState is LoadingRoomState.Loaded) {
+                    val inputs = JoinedRoomLoadedFlowNode.Inputs(awaitRoomState.room, initialElement = inputs.initialElement)
+                    createNode<JoinedRoomLoadedFlowNode>(buildContext, plugins = listOf(inputs) + roomFlowNodeCallback)
+                } else {
+                    loadingNode(buildContext, this::navigateUp)
+                }
+            }
+            NavTarget.Loading -> {
+                loadingNode(buildContext, this::navigateUp)
             }
         }
     }
 
-    private fun loadingNode(buildContext: BuildContext) = node(buildContext) {
-        Box(modifier = it.fillMaxSize(), contentAlignment = Alignment.Center) {
-            CircularProgressIndicator()
-        }
-    }
-
-    private fun joinRoomNode(buildContext: BuildContext) = node(buildContext) {
-        Box(modifier = it.fillMaxSize(), contentAlignment = Alignment.Center) {
-            Text("Unknown Room")
-        }
+    private fun loadingNode(buildContext: BuildContext, onBackClicked: () -> Unit) = node(buildContext) { modifier ->
+        val loadingRoomState by loadingRoomStateStateFlow.collectAsState()
+        val networkStatus by networkMonitor.connectivity.collectAsState()
+        LoadingRoomNodeView(
+            state = loadingRoomState,
+            hasNetworkConnection = networkStatus == NetworkStatus.Online,
+            modifier = modifier,
+            onBackClicked = onBackClicked
+        )
     }
 
     @Composable

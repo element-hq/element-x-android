@@ -42,7 +42,8 @@ import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.appnav.loggedin.LoggedInNode
 import io.element.android.appnav.room.RoomFlowNode
-import io.element.android.appnav.room.RoomLoadedFlowNode
+import io.element.android.appnav.room.joined.JoinedRoomLoadedFlowNode
+import io.element.android.appnav.room.RoomNavigationTarget
 import io.element.android.features.createroom.api.CreateRoomEntryPoint
 import io.element.android.features.ftue.api.FtueEntryPoint
 import io.element.android.features.ftue.api.state.FtueService
@@ -213,7 +214,7 @@ class LoggedInFlowNode @AssistedInject constructor(
         @Parcelize
         data class Room(
             val roomId: RoomId,
-            val initialElement: RoomLoadedFlowNode.NavTarget = RoomLoadedFlowNode.NavTarget.Messages
+            val initialElement: RoomNavigationTarget = RoomNavigationTarget.Messages
         ) : NavTarget
 
         @Parcelize
@@ -273,7 +274,7 @@ class LoggedInFlowNode @AssistedInject constructor(
                     }
 
                     override fun onRoomSettingsClicked(roomId: RoomId) {
-                        backstack.push(NavTarget.Room(roomId, initialElement = RoomLoadedFlowNode.NavTarget.RoomDetails))
+                        backstack.push(NavTarget.Room(roomId, initialElement = RoomNavigationTarget.Details))
                     }
 
                     override fun onReportBugClicked() {
@@ -290,7 +291,7 @@ class LoggedInFlowNode @AssistedInject constructor(
                     .build()
             }
             is NavTarget.Room -> {
-                val callback = object : RoomLoadedFlowNode.Callback {
+                val callback = object : JoinedRoomLoadedFlowNode.Callback {
                     override fun onOpenRoom(roomId: RoomId) {
                         backstack.push(NavTarget.Room(roomId))
                     }
@@ -317,7 +318,7 @@ class LoggedInFlowNode @AssistedInject constructor(
                     }
 
                     override fun onOpenRoomNotificationSettings(roomId: RoomId) {
-                        backstack.push(NavTarget.Room(roomId, initialElement = RoomLoadedFlowNode.NavTarget.RoomNotificationSettings))
+                        backstack.push(NavTarget.Room(roomId, initialElement = RoomNavigationTarget.NotificationSettings))
                     }
                 }
                 val inputs = PreferencesEntryPoint.Params(navTarget.initialElement)
@@ -347,6 +348,10 @@ class LoggedInFlowNode @AssistedInject constructor(
                 val callback = object : InviteListEntryPoint.Callback {
                     override fun onBackClicked() {
                         backstack.pop()
+                    }
+
+                    override fun onInviteClicked(roomId: RoomId) {
+                        backstack.push(NavTarget.Room(roomId))
                     }
 
                     override fun onInviteAccepted(roomId: RoomId) {

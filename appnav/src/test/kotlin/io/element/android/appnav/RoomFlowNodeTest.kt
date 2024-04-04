@@ -27,7 +27,7 @@ import com.bumble.appyx.testing.junit4.util.MainDispatcherRule
 import com.bumble.appyx.testing.unit.common.helper.parentNodeTestHelper
 import com.google.common.truth.Truth.assertThat
 import io.element.android.appnav.di.RoomComponentFactory
-import io.element.android.appnav.room.RoomLoadedFlowNode
+import io.element.android.appnav.room.joined.JoinedRoomLoadedFlowNode
 import io.element.android.features.messages.api.MessagesEntryPoint
 import io.element.android.features.roomdetails.api.RoomDetailsEntryPoint
 import io.element.android.libraries.architecture.childNode
@@ -92,7 +92,7 @@ class RoomFlowNodeTest {
         messagesEntryPoint: MessagesEntryPoint = FakeMessagesEntryPoint(),
         roomDetailsEntryPoint: RoomDetailsEntryPoint = FakeRoomDetailsEntryPoint(),
         coroutineScope: CoroutineScope,
-    ) = RoomLoadedFlowNode(
+    ) = JoinedRoomLoadedFlowNode(
         buildContext = BuildContext.root(savedStateMap = null),
         plugins = plugins,
         messagesEntryPoint = messagesEntryPoint,
@@ -108,7 +108,7 @@ class RoomFlowNodeTest {
         // GIVEN
         val room = FakeMatrixRoom()
         val fakeMessagesEntryPoint = FakeMessagesEntryPoint()
-        val inputs = RoomLoadedFlowNode.Inputs(room)
+        val inputs = JoinedRoomLoadedFlowNode.Inputs(room)
         val roomFlowNode = aRoomFlowNode(
             plugins = listOf(inputs),
             messagesEntryPoint = fakeMessagesEntryPoint,
@@ -118,9 +118,9 @@ class RoomFlowNodeTest {
         val roomFlowNodeTestHelper = roomFlowNode.parentNodeTestHelper()
 
         // THEN
-        assertThat(roomFlowNode.backstack.activeElement).isEqualTo(RoomLoadedFlowNode.NavTarget.Messages)
-        roomFlowNodeTestHelper.assertChildHasLifecycle(RoomLoadedFlowNode.NavTarget.Messages, Lifecycle.State.CREATED)
-        val messagesNode = roomFlowNode.childNode(RoomLoadedFlowNode.NavTarget.Messages)!!
+        assertThat(roomFlowNode.backstack.activeElement).isEqualTo(JoinedRoomLoadedFlowNode.NavTarget.Messages)
+        roomFlowNodeTestHelper.assertChildHasLifecycle(JoinedRoomLoadedFlowNode.NavTarget.Messages, Lifecycle.State.CREATED)
+        val messagesNode = roomFlowNode.childNode(JoinedRoomLoadedFlowNode.NavTarget.Messages)!!
         assertThat(messagesNode.id).isEqualTo(fakeMessagesEntryPoint.nodeId)
     }
 
@@ -130,7 +130,7 @@ class RoomFlowNodeTest {
         val room = FakeMatrixRoom()
         val fakeMessagesEntryPoint = FakeMessagesEntryPoint()
         val fakeRoomDetailsEntryPoint = FakeRoomDetailsEntryPoint()
-        val inputs = RoomLoadedFlowNode.Inputs(room)
+        val inputs = JoinedRoomLoadedFlowNode.Inputs(room)
         val roomFlowNode = aRoomFlowNode(
             plugins = listOf(inputs),
             messagesEntryPoint = fakeMessagesEntryPoint,
@@ -141,8 +141,8 @@ class RoomFlowNodeTest {
         // WHEN
         fakeMessagesEntryPoint.callback?.onRoomDetailsClicked()
         // THEN
-        roomFlowNodeTestHelper.assertChildHasLifecycle(RoomLoadedFlowNode.NavTarget.RoomDetails, Lifecycle.State.CREATED)
-        val roomDetailsNode = roomFlowNode.childNode(RoomLoadedFlowNode.NavTarget.RoomDetails)!!
+        roomFlowNodeTestHelper.assertChildHasLifecycle(JoinedRoomLoadedFlowNode.NavTarget.RoomDetails, Lifecycle.State.CREATED)
+        val roomDetailsNode = roomFlowNode.childNode(JoinedRoomLoadedFlowNode.NavTarget.RoomDetails)!!
         assertThat(roomDetailsNode.id).isEqualTo(fakeRoomDetailsEntryPoint.nodeId)
     }
 }
