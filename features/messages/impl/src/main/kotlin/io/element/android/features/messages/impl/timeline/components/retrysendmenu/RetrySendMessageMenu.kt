@@ -17,7 +17,6 @@
 package io.element.android.features.messages.impl.timeline.components.retrysendmenu
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
@@ -148,16 +147,10 @@ private fun ColumnScope.RetrySendMenuContents(
     )
 }
 
-@Suppress("UNUSED_PARAMETER")
-@OptIn(ExperimentalMaterial3Api::class)
 @PreviewsDayNight
 @Composable
 internal fun RetrySendMessageMenuPreview(@PreviewParameter(RetrySendMenuStateProvider::class) state: RetrySendMenuState) = ElementPreview {
-    // TODO restore RetrySendMessageMenuBottomSheet once the issue with bottom sheet not being previewable is fixed
-    Column {
-        RetrySendMenuContents(
-            onRetry = {},
-            onRemoveFailed = {},
-        )
-    }
+    RetrySendMessageMenu(
+        state = state,
+    )
 }
