@@ -16,8 +16,16 @@
 
 package io.element.android.libraries.designsystem.modifiers
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.LayoutModifier
 import androidx.compose.ui.layout.Measurable
 import androidx.compose.ui.layout.MeasureResult
@@ -25,7 +33,10 @@ import androidx.compose.ui.layout.MeasureScope
 import androidx.compose.ui.platform.InspectorInfo
 import androidx.compose.ui.platform.InspectorValueInfo
 import androidx.compose.ui.platform.debugInspectorInfo
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Constraints
+import androidx.compose.ui.unit.dp
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import kotlin.math.max
 import kotlin.math.min
 
@@ -116,3 +127,62 @@ private fun createSquareSizeModifier(
             properties["position"] = position
         },
     )
+
+@Preview
+@Composable
+internal fun SquareSizeModifierLargeWidthPreview() {
+    ElementPreview {
+        Box(
+            modifier = Modifier
+                .padding(32.dp)
+                .background(Color.Gray)
+                .squareSize(position = 0.25f)
+        ) {
+            Box(
+                modifier = Modifier
+                    .background(Color.Black)
+                    .size(100.dp, 10.dp)
+            )
+        }
+    }
+}
+
+@Preview
+@Composable
+internal fun SquareSizeModifierLargeHeightPreview() {
+    ElementPreview {
+        Box(
+            modifier = Modifier
+                .padding(32.dp)
+                .background(Color.Gray)
+                .squareSize(position = 0.75f)
+        ) {
+            Box(
+                modifier = Modifier
+                    .background(Color.Black)
+                    .size(10.dp, 100.dp)
+            )
+        }
+    }
+}
+
+@Preview
+@Composable
+internal fun SquareSizeModifierInsideSquarePreview() {
+    ElementPreview {
+        Box(
+            modifier = Modifier
+                .padding(32.dp)
+                .size(120.dp)
+                .background(Color.Gray),
+            contentAlignment = Alignment.Center,
+        ) {
+            Box(
+                modifier = Modifier
+                    .background(Color.Black)
+                    .width(100.dp)
+                    .squareSize(position = 0.75f)
+            )
+        }
+    }
+}
