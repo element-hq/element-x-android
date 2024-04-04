@@ -28,7 +28,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
@@ -73,7 +77,19 @@ private fun Content() {
     Column(modifier = Modifier.padding(horizontal = 16.dp), verticalArrangement = Arrangement.spacedBy(24.dp)) {
         Item(index = 1, text = AnnotatedString(stringResource(R.string.screen_create_new_recovery_key_list_item_1)))
         Item(index = 2, text = AnnotatedString(stringResource(R.string.screen_create_new_recovery_key_list_item_2)))
-        Item(index = 3, text = AnnotatedString(stringResource(R.string.screen_create_new_recovery_key_list_item_3)))
+        Item(
+            index = 3,
+            text = buildAnnotatedString {
+                val resetAllAction = stringResource(R.string.screen_create_new_recovery_key_list_item_3_reset_all)
+                val text = stringResource(R.string.screen_create_new_recovery_key_list_item_3, resetAllAction)
+                append(text)
+                val start = text.indexOf(resetAllAction)
+                val end = start + resetAllAction.length
+                if (start in text.indices && end in text.indices) {
+                    addStyle(SpanStyle(fontWeight = FontWeight.Bold), start, end)
+                }
+            }
+        )
         Item(index = 4, text = AnnotatedString(stringResource(R.string.screen_create_new_recovery_key_list_item_4)))
         Item(index = 5, text = AnnotatedString(stringResource(R.string.screen_create_new_recovery_key_list_item_5)))
 
