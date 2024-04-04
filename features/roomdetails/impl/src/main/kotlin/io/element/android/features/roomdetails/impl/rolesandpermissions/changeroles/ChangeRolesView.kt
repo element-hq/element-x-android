@@ -129,7 +129,9 @@ fun ChangeRolesView(
             ) {
                 val lazyListState = rememberLazyListState()
                 SearchBar(
-                    modifier = Modifier.padding(bottom = 16.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 16.dp),
                     placeHolderTitle = stringResource(CommonStrings.common_search_for_someone),
                     query = state.query.orEmpty(),
                     onQueryChange = { state.eventSink(ChangeRolesEvent.QueryChanged(it)) },
