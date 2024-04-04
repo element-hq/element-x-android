@@ -38,7 +38,7 @@ serialization_json = "1.6.3"
 showkase = "1.0.2"
 appyx = "1.4.0"
 sqldelight = "2.0.1"
-wysiwyg = "2.35.0"
+wysiwyg = "2.36.0"
 telephoto = "0.9.0"
 
 # DI
