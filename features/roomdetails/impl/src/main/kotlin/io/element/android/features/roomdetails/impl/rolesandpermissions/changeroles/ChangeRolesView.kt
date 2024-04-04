@@ -46,7 +46,6 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.roomdetails.impl.R
-import io.element.android.features.roomdetails.impl.members.aRoomMember
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.designsystem.components.ProgressDialog
 import io.element.android.libraries.designsystem.components.async.AsyncActionView
@@ -68,6 +67,7 @@ import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.RoomMember
+import io.element.android.libraries.matrix.api.room.toMatrixUser
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.components.MatrixUserRow
 import io.element.android.libraries.matrix.ui.components.SelectedUsersRowList
@@ -143,7 +143,7 @@ fun ChangeRolesView(
                         searchResults = members,
                         selectedUsers = state.selectedUsers,
                         canRemoveMember = state.canChangeMemberRole,
-                        onSelectionToggled = { state.eventSink(ChangeRolesEvent.UserSelectionToggled(it)) },
+                        onSelectionToggled = { state.eventSink(ChangeRolesEvent.UserSelectionToggled(it.toMatrixUser())) },
                         selectedUsersList = {},
                     )
                 }
@@ -159,13 +159,13 @@ fun ChangeRolesView(
                             searchResults = (state.searchResults as? SearchBarResultState.Results)?.results ?: persistentListOf(),
                             selectedUsers = state.selectedUsers,
                             canRemoveMember = state.canChangeMemberRole,
-                            onSelectionToggled = { state.eventSink(ChangeRolesEvent.UserSelectionToggled(it)) },
+                            onSelectionToggled = { state.eventSink(ChangeRolesEvent.UserSelectionToggled(it.toMatrixUser())) },
                             selectedUsersList = { users ->
                                 SelectedUsersRowList(
                                     contentPadding = PaddingValues(start = 16.dp, end = 16.dp, bottom = 16.dp),
                                     selectedUsers = users,
                                     onUserRemoved = {
-                                        state.eventSink(ChangeRolesEvent.UserSelectionToggled(aRoomMember(it.userId)))
+                                        state.eventSink(ChangeRolesEvent.UserSelectionToggled(it))
                                     },
                                     canDeselect = { state.canChangeMemberRole(it.userId) },
                                 )

@@ -21,7 +21,6 @@ import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import im.vector.app.features.analytics.plan.RoomModeration
-import io.element.android.features.roomdetails.impl.members.aRoomMember
 import io.element.android.features.roomdetails.impl.members.aRoomMemberList
 import io.element.android.features.roomdetails.impl.rolesandpermissions.changeroles.ChangeRolesEvent
 import io.element.android.features.roomdetails.impl.rolesandpermissions.changeroles.ChangeRolesPresenter
@@ -30,6 +29,7 @@ import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.api.room.RoomMember
+import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.A_USER_ID_2
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
@@ -154,10 +154,10 @@ class ChangeRolesPresenterTests {
             val initialState = awaitItem()
             assertThat(initialState.selectedUsers).hasSize(1)
 
-            initialState.eventSink(ChangeRolesEvent.UserSelectionToggled(aRoomMember(A_USER_ID_2)))
+            initialState.eventSink(ChangeRolesEvent.UserSelectionToggled(MatrixUser(A_USER_ID_2)))
             assertThat(awaitItem().selectedUsers).hasSize(2)
 
-            initialState.eventSink(ChangeRolesEvent.UserSelectionToggled(aRoomMember(A_USER_ID_2)))
+            initialState.eventSink(ChangeRolesEvent.UserSelectionToggled(MatrixUser(A_USER_ID_2)))
             assertThat(awaitItem().selectedUsers).hasSize(1)
         }
     }
@@ -177,13 +177,13 @@ class ChangeRolesPresenterTests {
             assertThat(initialState.hasPendingChanges).isFalse()
             assertThat(initialState.selectedUsers).hasSize(1)
 
-            initialState.eventSink(ChangeRolesEvent.UserSelectionToggled(aRoomMember(A_USER_ID_2)))
+            initialState.eventSink(ChangeRolesEvent.UserSelectionToggled(MatrixUser(A_USER_ID_2)))
             with(awaitItem()) {
                 assertThat(selectedUsers).hasSize(2)
                 assertThat(hasPendingChanges).isTrue()
             }
 
-            initialState.eventSink(ChangeRolesEvent.UserSelectionToggled(aRoomMember(A_USER_ID_2)))
+            initialState.eventSink(ChangeRolesEvent.UserSelectionToggled(MatrixUser(A_USER_ID_2)))
             with(awaitItem()) {
                 assertThat(selectedUsers).hasSize(1)
                 assertThat(hasPendingChanges).isFalse()
@@ -226,7 +226,7 @@ class ChangeRolesPresenterTests {
             assertThat(initialState.hasPendingChanges).isFalse()
             assertThat(initialState.exitState).isEqualTo(AsyncAction.Uninitialized)
 
-            initialState.eventSink(ChangeRolesEvent.UserSelectionToggled(aRoomMember(A_USER_ID_2)))
+            initialState.eventSink(ChangeRolesEvent.UserSelectionToggled(MatrixUser(A_USER_ID_2)))
 
             awaitItem().eventSink(ChangeRolesEvent.Exit)
             val confirmingState = awaitItem()
@@ -252,7 +252,7 @@ class ChangeRolesPresenterTests {
             assertThat(initialState.hasPendingChanges).isFalse()
             assertThat(initialState.exitState).isEqualTo(AsyncAction.Uninitialized)
 
-            initialState.eventSink(ChangeRolesEvent.UserSelectionToggled(aRoomMember(A_USER_ID_2)))
+            initialState.eventSink(ChangeRolesEvent.UserSelectionToggled(MatrixUser(A_USER_ID_2)))
             val updatedState = awaitItem()
             assertThat(updatedState.hasPendingChanges).isTrue()
             skipItems(1)
@@ -279,8 +279,7 @@ class ChangeRolesPresenterTests {
             val initialState = awaitItem()
             assertThat(initialState.selectedUsers).hasSize(1)
 
-            initialState.eventSink(ChangeRolesEvent.UserSelectionToggled(aRoomMember(A_USER_ID_2)))
-
+            initialState.eventSink(ChangeRolesEvent.UserSelectionToggled(MatrixUser(A_USER_ID_2)))
             awaitItem().eventSink(ChangeRolesEvent.Save)
             val confirmingState = awaitItem()
             assertThat(confirmingState.savingState).isEqualTo(AsyncAction.Confirming)
@@ -304,7 +303,7 @@ class ChangeRolesPresenterTests {
             val initialState = awaitItem()
             assertThat(initialState.selectedUsers).hasSize(1)
 
-            initialState.eventSink(ChangeRolesEvent.UserSelectionToggled(aRoomMember(A_USER_ID_2)))
+            initialState.eventSink(ChangeRolesEvent.UserSelectionToggled(MatrixUser(A_USER_ID_2)))
 
             awaitItem().eventSink(ChangeRolesEvent.Save)
             val confirmingState = awaitItem()
@@ -334,7 +333,7 @@ class ChangeRolesPresenterTests {
             val initialState = awaitItem()
             assertThat(initialState.selectedUsers).hasSize(1)
 
-            initialState.eventSink(ChangeRolesEvent.UserSelectionToggled(aRoomMember(A_USER_ID_2)))
+            initialState.eventSink(ChangeRolesEvent.UserSelectionToggled(MatrixUser(A_USER_ID_2)))
 
             awaitItem().eventSink(ChangeRolesEvent.Save)
             assertThat(awaitItem().savingState).isEqualTo(AsyncAction.Success(Unit))
@@ -357,7 +356,7 @@ class ChangeRolesPresenterTests {
             val initialState = awaitItem()
             assertThat(initialState.selectedUsers).hasSize(1)
 
-            initialState.eventSink(ChangeRolesEvent.UserSelectionToggled(aRoomMember(A_USER_ID_2)))
+            initialState.eventSink(ChangeRolesEvent.UserSelectionToggled(MatrixUser(A_USER_ID_2)))
 
             awaitItem().eventSink(ChangeRolesEvent.Save)
             val failedState = awaitItem()
