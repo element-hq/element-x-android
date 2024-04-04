@@ -73,7 +73,7 @@ class RetrySendMenuPresenterTests {
             initialState.eventSink(RetrySendMenuEvents.EventSelected(selectedEvent))
             skipItems(1)
 
-            initialState.eventSink(RetrySendMenuEvents.RetrySend)
+            initialState.eventSink(RetrySendMenuEvents.Retry)
             assertThat(room.retrySendMessageCount).isEqualTo(1)
             assertThat(awaitItem().selectedEvent).isNull()
         }
@@ -89,7 +89,7 @@ class RetrySendMenuPresenterTests {
             initialState.eventSink(RetrySendMenuEvents.EventSelected(selectedEvent))
             skipItems(1)
 
-            initialState.eventSink(RetrySendMenuEvents.RetrySend)
+            initialState.eventSink(RetrySendMenuEvents.Retry)
             assertThat(room.retrySendMessageCount).isEqualTo(0)
             assertThat(awaitItem().selectedEvent).isNull()
         }
@@ -106,7 +106,7 @@ class RetrySendMenuPresenterTests {
             initialState.eventSink(RetrySendMenuEvents.EventSelected(selectedEvent))
             skipItems(1)
 
-            initialState.eventSink(RetrySendMenuEvents.RetrySend)
+            initialState.eventSink(RetrySendMenuEvents.Retry)
             assertThat(room.retrySendMessageCount).isEqualTo(1)
             assertThat(awaitItem().selectedEvent).isNull()
         }
@@ -122,7 +122,7 @@ class RetrySendMenuPresenterTests {
             initialState.eventSink(RetrySendMenuEvents.EventSelected(selectedEvent))
             skipItems(1)
 
-            initialState.eventSink(RetrySendMenuEvents.RemoveFailed)
+            initialState.eventSink(RetrySendMenuEvents.Remove)
             assertThat(room.cancelSendCount).isEqualTo(1)
             assertThat(awaitItem().selectedEvent).isNull()
         }
@@ -138,7 +138,7 @@ class RetrySendMenuPresenterTests {
             initialState.eventSink(RetrySendMenuEvents.EventSelected(selectedEvent))
             skipItems(1)
 
-            initialState.eventSink(RetrySendMenuEvents.RemoveFailed)
+            initialState.eventSink(RetrySendMenuEvents.Remove)
             assertThat(room.cancelSendCount).isEqualTo(0)
             assertThat(awaitItem().selectedEvent).isNull()
         }
@@ -155,7 +155,7 @@ class RetrySendMenuPresenterTests {
             initialState.eventSink(RetrySendMenuEvents.EventSelected(selectedEvent))
             skipItems(1)
 
-            initialState.eventSink(RetrySendMenuEvents.RemoveFailed)
+            initialState.eventSink(RetrySendMenuEvents.Remove)
             assertThat(room.cancelSendCount).isEqualTo(1)
             assertThat(awaitItem().selectedEvent).isNull()
         }
