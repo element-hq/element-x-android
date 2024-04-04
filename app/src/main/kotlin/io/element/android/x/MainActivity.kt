@@ -17,6 +17,7 @@
 package io.element.android.x
 
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
@@ -32,8 +33,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.bumble.appyx.core.integration.NodeHost
@@ -102,11 +101,15 @@ class MainActivity : NodeActivity() {
                 DisposableEffect(darkTheme) {
                     enableEdgeToEdge(
                         statusBarStyle = SystemBarStyle.auto(
-                            Color.Transparent.toArgb(), Color.Transparent.toArgb(),
-                        ) { darkTheme },
+                            lightScrim = Color.TRANSPARENT,
+                            darkScrim = Color.TRANSPARENT,
+                            detectDarkMode = { darkTheme },
+                        ),
                         navigationBarStyle = SystemBarStyle.auto(
-                            Color.Transparent.toArgb(), Color.Transparent.toArgb(),
-                        ) { darkTheme }
+                            lightScrim = Color.TRANSPARENT,
+                            darkScrim = Color.TRANSPARENT,
+                            detectDarkMode = { darkTheme },
+                        )
                     )
                     onDispose {}
                 }

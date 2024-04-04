@@ -53,7 +53,7 @@ fun HeaderFooterPage(
         modifier = modifier,
         topBar = topBar,
     ) { padding ->
-        Box{
+        Box {
             background()
             Column(
                 modifier = Modifier

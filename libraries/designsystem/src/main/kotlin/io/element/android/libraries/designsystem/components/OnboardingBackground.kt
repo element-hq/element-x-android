@@ -31,19 +31,23 @@ import androidx.compose.ui.graphics.LinearGradientShader
 import androidx.compose.ui.graphics.ShaderBrush
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
+import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 
 /**
  * Gradient background for FTUE (onboarding) screens.
  */
+@Suppress("ModifierMissing")
 @Composable
 fun OnboardingBackground() {
     Box(modifier = Modifier.fillMaxSize()) {
         val isLightTheme = ElementTheme.isLightTheme
-        Canvas(modifier = Modifier
+        Canvas(
+            modifier = Modifier
             .fillMaxWidth()
             .height(220.dp)
-            .align(Alignment.BottomCenter)) {
+            .align(Alignment.BottomCenter)
+        ) {
             val gradientBrush = ShaderBrush(
                 LinearGradientShader(
                     from = Offset(0f, size.height / 2f),
@@ -57,7 +61,7 @@ fun OnboardingBackground() {
             val eraseBrush = ShaderBrush(
                 LinearGradientShader(
                     from = Offset(size.width / 2f, 0f),
-                    to = Offset(size.width / 2f, size.height*2f),
+                    to = Offset(size.width / 2f, size.height * 2f),
                     colors = listOf(
                         Color(0xFF000000),
                         Color(0x00000000),
@@ -76,7 +80,7 @@ fun OnboardingBackground() {
 @PreviewsDayNight
 @Composable
 internal fun OnboardingBackgroundPreview() {
-    ElementTheme {
+    ElementPreview {
         OnboardingBackground()
     }
 }
