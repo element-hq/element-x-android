@@ -186,13 +186,12 @@ interface MatrixRoom : Closeable {
     fun usersWithRole(role: RoomMember.Role): Flow<ImmutableList<RoomMember>> {
         return roomInfoFlow
             .map { it.userPowerLevels.filter { (_, powerLevel) -> RoomMember.Role.forPowerLevel(powerLevel) == role } }
-            .distinctUntilChanged()
             .combine(membersStateFlow) { powerLevels, membersState ->
-                membersState.roomMembers()
-                    .orEmpty()
+                membersState.joinedRoomMembers()
                     .filter { powerLevels.containsKey(it.userId) }
                     .toPersistentList()
             }
+            .distinctUntilChanged()
     }
 
     suspend fun updateAvatar(mimeType: String, data: ByteArray): Result<Unit>
