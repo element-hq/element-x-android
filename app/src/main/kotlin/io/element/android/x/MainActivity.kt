@@ -18,20 +18,24 @@ package io.element.android.x
 
 import android.content.Intent
 import android.os.Bundle
+import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.core.view.WindowCompat
 import com.bumble.appyx.core.integration.NodeHost
 import com.bumble.appyx.core.integrationpoint.NodeActivity
 import com.bumble.appyx.core.plugin.NodeReadyObserver
@@ -60,7 +64,7 @@ class MainActivity : NodeActivity() {
         super.onCreate(savedInstanceState)
         appBindings = bindings()
         appBindings.lockScreenService().handleSecureFlag(this)
-        WindowCompat.setDecorFitsSystemWindows(window, false)
+        enableEdgeToEdge()
         setContent {
             MainContent(appBindings)
         }
@@ -93,6 +97,19 @@ class MainActivity : NodeActivity() {
                 LocalSnackbarDispatcher provides appBindings.snackbarDispatcher(),
                 LocalUriHandler provides SafeUriHandler(this),
             ) {
+                // TODO ideally this should be handled in the Compound library
+                val darkTheme = theme.isDark()
+                DisposableEffect(darkTheme) {
+                    enableEdgeToEdge(
+                        statusBarStyle = SystemBarStyle.auto(
+                            Color.Transparent.toArgb(), Color.Transparent.toArgb(),
+                        ) { darkTheme },
+                        navigationBarStyle = SystemBarStyle.auto(
+                            Color.Transparent.toArgb(), Color.Transparent.toArgb(),
+                        ) { darkTheme }
+                    )
+                    onDispose {}
+                }
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
