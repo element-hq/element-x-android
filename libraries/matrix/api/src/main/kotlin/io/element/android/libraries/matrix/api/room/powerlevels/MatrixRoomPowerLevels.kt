@@ -42,7 +42,7 @@ suspend fun MatrixRoom.canInvite(): Result<Boolean> = canUserInvite(sessionId)
 suspend fun MatrixRoom.canKick(): Result<Boolean> = canUserKick(sessionId)
 
 /**
- * Shortcut for calling [MatrixRoom.canBanUser] with our own user.
+ * Shortcut for calling [MatrixRoom.canUserBan] with our own user.
  */
 suspend fun MatrixRoom.canBan(): Result<Boolean> = canUserBan(sessionId)
 
