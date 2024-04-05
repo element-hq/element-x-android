@@ -50,6 +50,8 @@ class RolesAndPermissionsPresenter @Inject constructor(
         val coroutineScope = rememberCoroutineScope()
         val roomInfo by room.roomInfoFlow.collectAsState(initial = null)
         val roomMembers by room.membersStateFlow.collectAsState()
+        // Get the list of joined room members, in order to filter members present in the power
+        // level state Event, but not member of the room anymore.
         val joinedRoomMemberIds by remember {
             derivedStateOf {
                 roomMembers.joinedRoomMembers().map { it.userId }
