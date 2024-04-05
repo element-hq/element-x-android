@@ -83,12 +83,8 @@ fun ChangeRolesView(
     modifier: Modifier = Modifier,
 ) {
     val updatedOnBackPressed by rememberUpdatedState(newValue = onBackPressed)
-    BackHandler {
-        if (state.isSearchActive) {
-            state.eventSink(ChangeRolesEvent.ToggleSearchActive)
-        } else {
-            state.eventSink(ChangeRolesEvent.Exit)
-        }
+    BackHandler(enabled = !state.isSearchActive) {
+        state.eventSink(ChangeRolesEvent.Exit)
     }
 
     Box(modifier = modifier) {
