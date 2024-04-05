@@ -357,7 +357,7 @@ private fun MemberRow(
                 if (isPending) {
                     Text(
                         modifier = Modifier.padding(start = 4.dp),
-                        text = stringResource(id = R.string.screen_room_change_role_invited_member_name_android),
+                        text = stringResource(id = R.string.screen_room_member_list_pending_header_title),
                         style = ElementTheme.typography.fontBodySmRegular,
                         color = MaterialTheme.colorScheme.secondary
                     )

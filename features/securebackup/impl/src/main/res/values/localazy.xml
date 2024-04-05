@@ -21,13 +21,14 @@
   <string name="screen_recovery_key_change_generate_key_description">"Make sure you can store your recovery key somewhere safe"</string>
   <string name="screen_recovery_key_change_success">"Recovery key changed"</string>
   <string name="screen_recovery_key_change_title">"Change recovery key?"</string>
-  <string name="screen_recovery_key_confirm_description">"Enter your recovery key to confirm access to your chat backup."</string>
+  <string name="screen_recovery_key_confirm_create_new_recovery_key">"Create new recovery key"</string>
+  <string name="screen_recovery_key_confirm_description">"Make sure nobody can see this screen!"</string>
   <string name="screen_recovery_key_confirm_error_content">"Please try again to confirm access to your chat backup."</string>
   <string name="screen_recovery_key_confirm_error_title">"Incorrect recovery key"</string>
-  <string name="screen_recovery_key_confirm_key_description">"Enter the 48 character code."</string>
+  <string name="screen_recovery_key_confirm_key_description">"If you have a recovery passphrase or secret passphrase/key, this will work too."</string>
   <string name="screen_recovery_key_confirm_key_placeholder">"Enter…"</string>
   <string name="screen_recovery_key_confirm_success">"Recovery key confirmed"</string>
-  <string name="screen_recovery_key_confirm_title">"Enter your recovery key"</string>
+  <string name="screen_recovery_key_confirm_title">"Enter your recovery key or passcode"</string>
   <string name="screen_recovery_key_copied_to_clipboard">"Copied recovery key"</string>
   <string name="screen_recovery_key_generating_key">"Generating…"</string>
   <string name="screen_recovery_key_save_action">"Save recovery key"</string>
