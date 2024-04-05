@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.features.roomdetails.members.moderation.changeroles
+package io.element.android.features.roomdetails.rolesandpermissions.changeroles
 
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.roomdetails.impl.rolesandpermissions.changeroles.MembersByRole

@@ -227,9 +227,6 @@
   <string name="error_some_messages_have_not_been_sent">"有些訊息尚未傳送"</string>
   <string name="invite_friends_text">"嘿，來 %1$s 和我聊天：%2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
-  <string name="screen_identity_confirmed_title">"裝置已認證"</string>
-  <string name="screen_identity_use_another_device">"使用另一個裝置"</string>
-  <string name="screen_identity_waiting_on_other_device">"正在等待其他裝置……"</string>
   <string name="screen_media_upload_preview_error_failed_sending">"無法上傳媒體檔案，請稍後再試。"</string>
   <string name="screen_room_member_details_block_alert_action">"封鎖"</string>
   <string name="screen_room_member_details_block_user">"封鎖使用者"</string>
