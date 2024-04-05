@@ -70,7 +70,10 @@ internal fun RecoveryKeyView(
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         Text(
-            text = stringResource(id = CommonStrings.common_recovery_key),
+            text = when (state.recoveryKeyUserStory) {
+                RecoveryKeyUserStory.Enter -> stringResource(R.string.screen_recovery_key_confirm_key_label)
+                else -> stringResource(id = CommonStrings.common_recovery_key)
+            },
             modifier = Modifier.padding(start = 16.dp),
             style = ElementTheme.typography.fontBodyMdRegular,
         )
