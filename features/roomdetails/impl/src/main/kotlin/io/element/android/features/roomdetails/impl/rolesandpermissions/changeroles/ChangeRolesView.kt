@@ -46,6 +46,7 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -94,13 +95,6 @@ fun ChangeRolesView(
     BackHandler(enabled = !state.isSearchActive) {
         state.eventSink(ChangeRolesEvent.Exit)
     }
-//    BackHandler {
-//        if (state.isSearchActive) {
-//            state.eventSink(ChangeRolesEvent.ToggleSearchActive)
-//        } else {
-//            state.eventSink(ChangeRolesEvent.Exit)
-//        }
-//    }
 
     Box(modifier = modifier) {
         Scaffold(
@@ -151,6 +145,7 @@ fun ChangeRolesView(
                     resultState = state.searchResults,
                 ) { members ->
                     SearchResultsList(
+                        currentRole = state.role,
                         lazyListState = lazyListState,
                         searchResults = members,
                         selectedUsers = state.selectedUsers,
@@ -166,6 +161,7 @@ fun ChangeRolesView(
                 ) {
                     Column {
                         SearchResultsList(
+                            currentRole = state.role,
                             lazyListState = lazyListState,
                             searchResults = (state.searchResults as? SearchBarResultState.Results)?.results ?: MembersByRole(emptyList()),
                             selectedUsers = state.selectedUsers,
@@ -240,6 +236,7 @@ fun ChangeRolesView(
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun SearchResultsList(
+    currentRole: RoomMember.Role,
     searchResults: MembersByRole,
     selectedUsers: ImmutableList<MatrixUser>,
     canRemoveMember: (UserId) -> Boolean,
@@ -255,6 +252,18 @@ private fun SearchResultsList(
         }
         if (searchResults.admins.isNotEmpty()) {
             stickyHeader { ListSectionHeader(text = stringResource(R.string.screen_room_roles_and_permissions_admins)) }
+            // Add a footer for the admin section in change role to moderator screen
+            if (currentRole == RoomMember.Role.MODERATOR) {
+                item {
+                    Text(
+                        modifier = Modifier
+                            .padding(start = 16.dp, end = 16.dp, bottom = 8.dp),
+                        text = stringResource(R.string.screen_room_change_role_moderators_admin_section_footer),
+                        color = ElementTheme.colors.textSecondary,
+                        style = ElementTheme.typography.fontBodySmRegular,
+                    )
+                }
+            }
             items(searchResults.admins, key = { it.userId }) { roomMember ->
                 ListMemberItem(
                     roomMember = roomMember,
@@ -361,9 +370,9 @@ private fun MemberRow(
                 // Invitation pending marker
                 if (isPending) {
                     Text(
-                        modifier = Modifier.padding(start = 4.dp),
+                        modifier = Modifier.padding(start = 8.dp),
                         text = stringResource(id = R.string.screen_room_member_list_pending_header_title),
-                        style = ElementTheme.typography.fontBodySmRegular,
+                        style = ElementTheme.typography.fontBodySmRegular.copy(fontStyle = FontStyle.Italic),
                         color = MaterialTheme.colorScheme.secondary
                     )
                 }

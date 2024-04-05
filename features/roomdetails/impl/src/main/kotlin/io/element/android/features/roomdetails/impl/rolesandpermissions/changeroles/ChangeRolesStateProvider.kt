@@ -33,7 +33,7 @@ class ChangeRolesStateProvider : PreviewParameterProvider<ChangeRolesState> {
     override val values: Sequence<ChangeRolesState>
         get() = sequenceOf(
             aChangeRolesState(),
-            aChangeRolesState(role = RoomMember.Role.MODERATOR),
+            aChangeRolesStateWithSelectedUsers().copy(role = RoomMember.Role.MODERATOR),
             aChangeRolesStateWithSelectedUsers().copy(hasPendingChanges = false),
             aChangeRolesStateWithSelectedUsers(),
             aChangeRolesStateWithSelectedUsers().copy(

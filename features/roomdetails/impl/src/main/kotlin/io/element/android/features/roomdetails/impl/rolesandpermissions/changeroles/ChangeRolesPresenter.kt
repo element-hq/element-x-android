@@ -91,7 +91,7 @@ class ChangeRolesPresenter @AssistedInject constructor(
                     // Users who were selected but didn't have the role, so their role change was pending
                     val toAdd = selectedUsers.value.filter { user -> users.none { it.userId == user.userId } && previous.none { it.userId == user.userId } }
                     // Users who no longer have the role
-                    val toRemove = previous.filter { user -> users.none { it.userId == user.userId } }
+                    val toRemove = previous.filter { user -> users.none { it.userId == user.userId } }.toSet()
                     selectedUsers.value = (users + toAdd - toRemove).toImmutableList()
                 }
                 .launchIn(this)
