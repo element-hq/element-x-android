@@ -438,6 +438,18 @@ class RustMatrixClient(
         }
     }
 
+    override suspend fun trackRecentlyVisitedRoom(roomId: RoomId): Result<Unit> = withContext(sessionDispatcher) {
+        runCatching {
+            client.trackRecentlyVisitedRoom(roomId.value)
+        }
+    }
+
+    override suspend fun getRecentlyVisitedRooms(): Result<List<RoomId>> = withContext(sessionDispatcher) {
+        runCatching {
+            client.getRecentlyVisitedRooms().map(::RoomId)
+        }
+    }
+
     override fun syncService(): SyncService = rustSyncService
 
     override fun sessionVerificationService(): SessionVerificationService = verificationService
