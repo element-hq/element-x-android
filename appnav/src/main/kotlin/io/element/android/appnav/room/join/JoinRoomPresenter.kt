@@ -50,7 +50,7 @@ class JoinRoomPresenter @AssistedInject constructor(
         val roomInfo by produceState<AsyncData<RoomInfo>>(initialValue = AsyncData.Uninitialized, key1 = userMembership) {
             when {
                 userMembership.isPresent -> {
-                    val roomInfo = matrixClient.getRoom(roomId)?.let {
+                    val roomInfo = matrixClient.getRoom(roomId)?.use {
                         RoomInfo(
                             roomId = it.roomId,
                             roomName = it.displayName,

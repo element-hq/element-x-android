@@ -16,14 +16,18 @@
 
 package io.element.android.appnav.room.join
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -35,6 +39,7 @@ import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
+import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.atomic.atoms.PlaceholderAtom
 import io.element.android.libraries.designsystem.atomic.molecules.ButtonRowMolecule
@@ -47,6 +52,7 @@ import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.ButtonSize
+import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.OutlinedButton
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
@@ -129,7 +135,6 @@ private fun JoinRoomContent(
         modifier = modifier.padding(all = 16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Spacer(modifier = Modifier.height(80.dp))
         when (state.roomInfo) {
             is AsyncData.Success -> {
                 val roomInfo = state.roomInfo.data
@@ -153,6 +158,28 @@ private fun JoinRoomContent(
             textAlign = TextAlign.Center,
             color = ElementTheme.colors.textSecondary,
         )
+        if (state.showMemberCount) {
+            Spacer(modifier = Modifier.height(8.dp))
+            Row(
+                modifier = Modifier
+                    .background(color = ElementTheme.colors.bgSubtleSecondary, shape = CircleShape)
+                    .widthIn(min = 48.dp)
+                    .padding(all = 2.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(4.dp)
+            ) {
+                Icon(
+                    imageVector = CompoundIcons.UserProfile(),
+                    contentDescription = null,
+                    tint = ElementTheme.colors.iconSecondary,
+                )
+                Text(
+                    text = "${state.roomInfo.dataOrNull()?.memberCount}",
+                    style = ElementTheme.typography.fontBodySmMedium,
+                    color = ElementTheme.colors.textSecondary,
+                )
+            }
+        }
     }
 }
 

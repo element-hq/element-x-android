@@ -28,7 +28,9 @@ data class JoinRoomState(
     val joinAuthorisationStatus: JoinAuthorisationStatus,
     val currentAction: CurrentAction,
     val eventSink: (JoinRoomEvents) -> Unit
-)
+){
+    val showMemberCount = roomInfo.dataOrNull()?.memberCount != null
+}
 
 data class RoomInfo(
     val roomId: RoomId,
