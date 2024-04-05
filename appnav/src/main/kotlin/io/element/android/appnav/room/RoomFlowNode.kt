@@ -34,9 +34,9 @@ import com.bumble.appyx.navmodel.backstack.operation.newRoot
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
+import io.element.android.appnav.room.join.JoinRoomNode
 import io.element.android.appnav.room.joined.JoinedRoomFlowNode
 import io.element.android.appnav.room.joined.JoinedRoomLoadedFlowNode
-import io.element.android.features.networkmonitor.api.NetworkMonitor
 import io.element.android.libraries.architecture.BackstackView
 import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.architecture.NodeInputs
@@ -64,16 +64,14 @@ class RoomFlowNode @AssistedInject constructor(
     @Assisted plugins: List<Plugin>,
     private val roomListService: RoomListService,
     private val roomMembershipObserver: RoomMembershipObserver,
-    private val networkMonitor: NetworkMonitor,
-) :
-    BaseFlowNode<RoomFlowNode.NavTarget>(
-        backstack = BackStack(
-            initialElement = NavTarget.Loading,
-            savedStateMap = buildContext.savedStateMap,
-        ),
-        buildContext = buildContext,
-        plugins = plugins
-    ) {
+) : BaseFlowNode<RoomFlowNode.NavTarget>(
+    backstack = BackStack(
+        initialElement = NavTarget.Loading,
+        savedStateMap = buildContext.savedStateMap,
+    ),
+    buildContext = buildContext,
+    plugins = plugins
+) {
     data class Inputs(
         val roomId: RoomId,
         val initialElement: RoomNavigationTarget = RoomNavigationTarget.Messages,
@@ -96,18 +94,16 @@ class RoomFlowNode @AssistedInject constructor(
         super.onBuilt()
         roomListService.getUserMembershipForRoom(
             inputs.roomId
-        ).onEach { membership ->
-            Timber.d("RoomMembership = $membership")
-            when {
-                membership.getOrNull() == CurrentUserMembership.JOINED -> {
+        ).flowOn(Dispatchers.Default)
+            .onEach { membership ->
+                Timber.d("RoomMembership = $membership")
+                if (membership.getOrNull() == CurrentUserMembership.JOINED) {
                     backstack.newRoot(NavTarget.JoinedRoom)
-                }
-                else -> {
+                } else {
                     backstack.newRoot(NavTarget.JoinRoom)
                 }
             }
-        }
-            .flowOn(Dispatchers.Default)
+            .flowOn(Dispatchers.Main)
             .launchIn(lifecycleScope)
 
         roomMembershipObserver.updates
@@ -121,7 +117,10 @@ class RoomFlowNode @AssistedInject constructor(
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
         return when (navTarget) {
             NavTarget.Loading -> loadingNode(buildContext)
-            NavTarget.JoinRoom -> joinRoomNode(buildContext)
+            NavTarget.JoinRoom -> {
+                val inputs = JoinRoomNode.Inputs(inputs.roomId)
+                createNode<JoinRoomNode>(buildContext, plugins = listOf(inputs))
+            }
             NavTarget.JoinedRoom -> {
                 val roomFlowNodeCallback = plugins<JoinedRoomLoadedFlowNode.Callback>()
                 val inputs = JoinedRoomFlowNode.Inputs(inputs.roomId, initialElement = inputs.initialElement)
@@ -136,16 +135,8 @@ class RoomFlowNode @AssistedInject constructor(
         }
     }
 
-    private fun joinRoomNode(buildContext: BuildContext) = node(buildContext) {
-        Box(modifier = it.fillMaxSize(), contentAlignment = Alignment.Center) {
-            Text("Unknown Room")
-        }
-    }
-
     @Composable
     override fun View(modifier: Modifier) {
-        BackstackView(
-            transitionHandler = JumpToEndTransitionHandler(),
-        )
+        BackstackView(transitionHandler = JumpToEndTransitionHandler())
     }
 }
