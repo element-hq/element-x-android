@@ -49,4 +49,6 @@ If you proceed, some of your settings may change."</string>
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"system settings"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"System notifications turned off"</string>
   <string name="screen_notification_settings_title">"Notifications"</string>
+  <string name="troubleshoot_notifications_entry_point_section">"Troubleshoot"</string>
+  <string name="troubleshoot_notifications_entry_point_title">"Troubleshoot notifications"</string>
 </resources>

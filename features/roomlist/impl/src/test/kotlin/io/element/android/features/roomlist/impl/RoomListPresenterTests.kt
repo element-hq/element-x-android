@@ -240,51 +240,27 @@ class RoomListPresenterTests {
     }
 
     @Test
-    fun `present - handle RecoveryKeyConfirmation last session`() = runTest {
-        val scope = CoroutineScope(context = coroutineContext + SupervisorJob())
-        val roomListService = FakeRoomListService().apply {
-            postAllRoomsLoadingState(RoomList.LoadingState.Loaded(1))
-        }
-        val presenter = createRoomListPresenter(
-            coroutineScope = scope,
-            client = FakeMatrixClient(
-                encryptionService = FakeEncryptionService().apply {
-                    emitIsLastDevice(true)
-                },
-                roomListService = roomListService
-            ),
-        )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
-            val eventSink = consumeItemsUntilPredicate {
-                it.contentState is RoomListContentState.Rooms
-            }.last().eventSink
-            // For the last session, the state is not SessionVerification, but RecoveryKeyConfirmation
-            assertThat(awaitItem().contentAsRooms().securityBannerState).isEqualTo(SecurityBannerState.RecoveryKeyConfirmation)
-            eventSink(RoomListEvents.DismissRequestVerificationPrompt)
-            assertThat(awaitItem().contentAsRooms().securityBannerState).isEqualTo(SecurityBannerState.None)
-            scope.cancel()
-        }
-    }
-
-    @Test
     fun `present - handle DismissRequestVerificationPrompt`() = runTest {
         val scope = CoroutineScope(context = coroutineContext + SupervisorJob())
         val roomListService = FakeRoomListService().apply {
             postAllRoomsLoadingState(RoomList.LoadingState.Loaded(1))
         }
+        val encryptionService = FakeEncryptionService().apply {
+            emitRecoveryState(RecoveryState.INCOMPLETE)
+        }
+        val syncService = FakeSyncService(initialState = SyncState.Running)
         val presenter = createRoomListPresenter(
-            client = FakeMatrixClient(roomListService = roomListService),
+            client = FakeMatrixClient(roomListService = roomListService, encryptionService = encryptionService, syncService = syncService),
             coroutineScope = scope,
         )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            val eventSink = consumeItemsUntilPredicate {
+            val eventWithContentAsRooms = consumeItemsUntilPredicate {
                 it.contentState is RoomListContentState.Rooms
-            }.last().eventSink
-            assertThat(awaitItem().contentAsRooms().securityBannerState).isEqualTo(SecurityBannerState.SessionVerification)
+            }.last()
+            val eventSink = eventWithContentAsRooms.eventSink
+            assertThat(eventWithContentAsRooms.contentAsRooms().securityBannerState).isEqualTo(SecurityBannerState.RecoveryKeyConfirmation)
             eventSink(RoomListEvents.DismissRequestVerificationPrompt)
             assertThat(awaitItem().contentAsRooms().securityBannerState).isEqualTo(SecurityBannerState.None)
             scope.cancel()
@@ -342,10 +318,10 @@ class RoomListPresenterTests {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            consumeItemsUntilPredicate {
+            val firstItem = consumeItemsUntilPredicate {
                 it.contentState is RoomListContentState.Rooms
-            }
-            assertThat(awaitItem().contentAsRooms().invitesState).isEqualTo(InvitesState.NoInvites)
+            }.last()
+            assertThat(firstItem.contentAsRooms().invitesState).isEqualTo(InvitesState.NoInvites)
 
             inviteStateFlow.value = InvitesState.SeenInvites
             assertThat(awaitItem().contentAsRooms().invitesState).isEqualTo(InvitesState.SeenInvites)

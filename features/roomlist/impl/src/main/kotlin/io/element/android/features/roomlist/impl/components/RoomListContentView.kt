@@ -73,7 +73,6 @@ fun RoomListContentView(
     contentState: RoomListContentState,
     filtersState: RoomListFiltersState,
     eventSink: (RoomListEvents) -> Unit,
-    onVerifyClicked: () -> Unit,
     onConfirmRecoveryKeyClicked: () -> Unit,
     onRoomClicked: (RoomListRoomSummary) -> Unit,
     onRoomLongClicked: (RoomListRoomSummary) -> Unit,
@@ -103,7 +102,6 @@ fun RoomListContentView(
                     state = contentState,
                     filtersState = filtersState,
                     eventSink = eventSink,
-                    onVerifyClicked = onVerifyClicked,
                     onConfirmRecoveryKeyClicked = onConfirmRecoveryKeyClicked,
                     onRoomClicked = onRoomClicked,
                     onRoomLongClicked = onRoomLongClicked,
@@ -161,7 +159,6 @@ private fun RoomsView(
     state: RoomListContentState.Rooms,
     filtersState: RoomListFiltersState,
     eventSink: (RoomListEvents) -> Unit,
-    onVerifyClicked: () -> Unit,
     onConfirmRecoveryKeyClicked: () -> Unit,
     onRoomClicked: (RoomListRoomSummary) -> Unit,
     onRoomLongClicked: (RoomListRoomSummary) -> Unit,
@@ -177,7 +174,6 @@ private fun RoomsView(
         RoomsViewList(
             state = state,
             eventSink = eventSink,
-            onVerifyClicked = onVerifyClicked,
             onConfirmRecoveryKeyClicked = onConfirmRecoveryKeyClicked,
             onRoomClicked = onRoomClicked,
             onRoomLongClicked = onRoomLongClicked,
@@ -191,7 +187,6 @@ private fun RoomsView(
 private fun RoomsViewList(
     state: RoomListContentState.Rooms,
     eventSink: (RoomListEvents) -> Unit,
-    onVerifyClicked: () -> Unit,
     onConfirmRecoveryKeyClicked: () -> Unit,
     onRoomClicked: (RoomListRoomSummary) -> Unit,
     onRoomLongClicked: (RoomListRoomSummary) -> Unit,
@@ -222,14 +217,6 @@ private fun RoomsViewList(
         contentPadding = PaddingValues(bottom = 80.dp)
     ) {
         when (state.securityBannerState) {
-            SecurityBannerState.SessionVerification -> {
-                item {
-                    RequestVerificationHeader(
-                        onVerifyClicked = onVerifyClicked,
-                        onDismissClicked = { eventSink(RoomListEvents.DismissRequestVerificationPrompt) }
-                    )
-                }
-            }
             SecurityBannerState.RecoveryKeyConfirmation -> {
                 item {
                     ConfirmRecoveryKeyBanner(
@@ -316,10 +303,10 @@ internal fun RoomListContentViewPreview(@PreviewParameter(RoomListContentStatePr
             filterSelectionStates = RoomListFilter.entries.map { FilterSelectionState(it, isSelected = true) }
         ),
         eventSink = {},
-        onVerifyClicked = { },
-        onConfirmRecoveryKeyClicked = { },
+        onConfirmRecoveryKeyClicked = {},
         onRoomClicked = {},
         onRoomLongClicked = {},
-        onCreateRoomClicked = { },
-        onInvitesClicked = { })
+        onCreateRoomClicked = {},
+        onInvitesClicked = {}
+    )
 }

@@ -5,6 +5,7 @@
   <string name="screen_dm_details_unblock_alert_action">"Отблокиране"</string>
   <string name="screen_dm_details_unblock_user">"Отблокиране на потребителя"</string>
   <string name="screen_polls_history_title">"Анкети"</string>
+  <string name="screen_room_change_role_section_users">"Членове"</string>
   <string name="screen_room_details_add_topic_title">"Добавяне на тема"</string>
   <string name="screen_room_details_already_a_member">"Вече е член"</string>
   <string name="screen_room_details_already_invited">"Вече е бил поканен"</string>

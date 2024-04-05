@@ -44,7 +44,6 @@ class PreferencesRootNode @AssistedInject constructor(
 ) : Node(buildContext, plugins = plugins) {
     interface Callback : Plugin {
         fun onOpenBugReport()
-        fun onVerifyClicked()
         fun onSecureBackupClicked()
         fun onOpenAnalytics()
         fun onOpenAbout()
@@ -59,10 +58,6 @@ class PreferencesRootNode @AssistedInject constructor(
 
     private fun onOpenBugReport() {
         plugins<Callback>().forEach { it.onOpenBugReport() }
-    }
-
-    private fun onVerifyClicked() {
-        plugins<Callback>().forEach { it.onVerifyClicked() }
     }
 
     private fun onSecureBackupClicked() {
@@ -138,7 +133,6 @@ class PreferencesRootNode @AssistedInject constructor(
             onOpenRageShake = this::onOpenBugReport,
             onOpenAnalytics = this::onOpenAnalytics,
             onOpenAbout = this::onOpenAbout,
-            onVerifyClicked = this::onVerifyClicked,
             onSecureBackupClicked = this::onSecureBackupClicked,
             onOpenDeveloperSettings = this::onOpenDeveloperSettings,
             onOpenAdvancedSettings = this::onOpenAdvancedSettings,

@@ -29,7 +29,11 @@
   <string name="screen_room_change_role_confirm_demote_self_action">"Degradovat"</string>
   <string name="screen_room_change_role_confirm_demote_self_description">"Tuto změnu nebudete moci vrátit zpět, protože sami degradujete, pokud jste posledním privilegovaným uživatelem v místnosti, nebude možné znovu získat oprávnění."</string>
   <string name="screen_room_change_role_confirm_demote_self_title">"Degradovat se?"</string>
+  <string name="screen_room_change_role_invited_member_name">"%1$s (čekající)"</string>
   <string name="screen_room_change_role_moderators_title">"Upravit moderátory"</string>
+  <string name="screen_room_change_role_section_administrators">"Správci"</string>
+  <string name="screen_room_change_role_section_moderators">"Moderátoři"</string>
+  <string name="screen_room_change_role_section_users">"Členové"</string>
   <string name="screen_room_change_role_unsaved_changes_description">"Máte neuložené změny."</string>
   <string name="screen_room_change_role_unsaved_changes_title">"Uložit změny?"</string>
   <string name="screen_room_details_add_topic_title">"Přidat téma"</string>

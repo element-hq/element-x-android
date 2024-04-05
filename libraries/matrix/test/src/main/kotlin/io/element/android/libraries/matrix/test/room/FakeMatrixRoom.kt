@@ -84,6 +84,7 @@ class FakeMatrixRoom(
     override val activeMemberCount: Long = 234L,
     val notificationSettingsService: NotificationSettingsService = FakeNotificationSettingsService(),
     private val matrixTimeline: MatrixTimeline = FakeMatrixTimeline(),
+    private var permalinkResult: () -> Result<String> = { Result.success("link") },
     canRedactOwn: Boolean = false,
     canRedactOther: Boolean = false,
 ) : MatrixRoom {
@@ -271,6 +272,10 @@ class FakeMatrixRoom(
     override suspend fun cancelSend(transactionId: TransactionId): Result<Unit> {
         cancelSendCount++
         return cancelSendResult
+    }
+
+    override suspend fun getPermalinkFor(eventId: EventId): Result<String> {
+        return permalinkResult()
     }
 
     override suspend fun editMessage(

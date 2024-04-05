@@ -53,7 +53,6 @@ fun RoomListView(
     state: RoomListState,
     onRoomClicked: (RoomId) -> Unit,
     onSettingsClicked: () -> Unit,
-    onVerifyClicked: () -> Unit,
     onConfirmRecoveryKeyClicked: () -> Unit,
     onCreateRoomClicked: () -> Unit,
     onInvitesClicked: () -> Unit,
@@ -86,7 +85,6 @@ fun RoomListView(
             RoomListScaffold(
                 modifier = Modifier.padding(top = topPadding),
                 state = state,
-                onVerifyClicked = onVerifyClicked,
                 onConfirmRecoveryKeyClicked = onConfirmRecoveryKeyClicked,
                 onRoomClicked = onRoomClicked,
                 onRoomLongClicked = { onRoomLongClicked(it) },
@@ -115,7 +113,6 @@ fun RoomListView(
 @Composable
 private fun RoomListScaffold(
     state: RoomListState,
-    onVerifyClicked: () -> Unit,
     onConfirmRecoveryKeyClicked: () -> Unit,
     onRoomClicked: (RoomId) -> Unit,
     onRoomLongClicked: (RoomListRoomSummary) -> Unit,
@@ -154,7 +151,6 @@ private fun RoomListScaffold(
                 contentState = state.contentState,
                 filtersState = state.filtersState,
                 eventSink = state.eventSink,
-                onVerifyClicked = onVerifyClicked,
                 onConfirmRecoveryKeyClicked = onConfirmRecoveryKeyClicked,
                 onRoomClicked = ::onRoomClicked,
                 onRoomLongClicked = onRoomLongClicked,
@@ -193,7 +189,6 @@ internal fun RoomListViewPreview(@PreviewParameter(RoomListStateProvider::class)
         state = state,
         onRoomClicked = {},
         onSettingsClicked = {},
-        onVerifyClicked = {},
         onConfirmRecoveryKeyClicked = {},
         onCreateRoomClicked = {},
         onInvitesClicked = {},

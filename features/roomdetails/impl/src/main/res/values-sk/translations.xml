@@ -29,7 +29,11 @@
   <string name="screen_room_change_role_confirm_demote_self_action">"Znížiť"</string>
   <string name="screen_room_change_role_confirm_demote_self_description">"Túto zmenu nebudete môcť vrátiť späť, pretože znižujete svoju úroveň. Ak ste posledným privilegovaným používateľom v miestnosti, nebude možné získať znova oprávnenia."</string>
   <string name="screen_room_change_role_confirm_demote_self_title">"Znížiť svoju úroveň?"</string>
+  <string name="screen_room_change_role_invited_member_name">"%1$s (Čaká sa)"</string>
   <string name="screen_room_change_role_moderators_title">"Upraviť moderátorov"</string>
+  <string name="screen_room_change_role_section_administrators">"Správcovia"</string>
+  <string name="screen_room_change_role_section_moderators">"Moderátori"</string>
+  <string name="screen_room_change_role_section_users">"Členovia"</string>
   <string name="screen_room_change_role_unsaved_changes_description">"Máte neuložené zmeny."</string>
   <string name="screen_room_change_role_unsaved_changes_title">"Uložiť zmeny?"</string>
   <string name="screen_room_details_add_topic_title">"Pridať tému"</string>

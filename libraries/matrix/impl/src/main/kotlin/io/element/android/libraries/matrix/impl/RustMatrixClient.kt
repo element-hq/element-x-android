@@ -16,6 +16,7 @@
 
 package io.element.android.libraries.matrix.impl
 
+import io.element.android.appconfig.TimelineConfig
 import io.element.android.libraries.androidutils.file.getSizeOfFiles
 import io.element.android.libraries.androidutils.file.safeDelete
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
@@ -39,6 +40,7 @@ import io.element.android.libraries.matrix.api.roomdirectory.RoomDirectoryServic
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.api.roomlist.awaitLoaded
 import io.element.android.libraries.matrix.api.sync.SyncService
+import io.element.android.libraries.matrix.api.sync.SyncState
 import io.element.android.libraries.matrix.api.user.MatrixSearchUserResults
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
@@ -54,6 +56,7 @@ import io.element.android.libraries.matrix.impl.room.MatrixRoomInfoMapper
 import io.element.android.libraries.matrix.impl.room.RoomContentForwarder
 import io.element.android.libraries.matrix.impl.room.RoomSyncSubscriber
 import io.element.android.libraries.matrix.impl.room.RustMatrixRoom
+import io.element.android.libraries.matrix.impl.room.map
 import io.element.android.libraries.matrix.impl.roomdirectory.RustRoomDirectoryService
 import io.element.android.libraries.matrix.impl.roomlist.RoomListFactory
 import io.element.android.libraries.matrix.impl.roomlist.RustRoomListService
@@ -82,8 +85,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.buffer
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -97,7 +99,6 @@ import org.matrix.rustcomponents.sdk.NotificationProcessSetup
 import org.matrix.rustcomponents.sdk.PowerLevels
 import org.matrix.rustcomponents.sdk.Room
 import org.matrix.rustcomponents.sdk.RoomListItem
-import org.matrix.rustcomponents.sdk.StateEventType
 import org.matrix.rustcomponents.sdk.TaskHandle
 import org.matrix.rustcomponents.sdk.TimelineEventTypeFilter
 import org.matrix.rustcomponents.sdk.use
@@ -129,11 +130,6 @@ class RustMatrixClient(
     private val innerRoomListService = syncService.roomListService()
     private val sessionDispatcher = dispatchers.io.limitedParallelism(64)
     private val rustSyncService = RustSyncService(syncService, sessionCoroutineScope)
-    private val verificationService = RustSessionVerificationService(
-        client = client,
-        syncService = rustSyncService,
-        sessionCoroutineScope = sessionCoroutineScope,
-    ).apply { start() }
     private val pushersService = RustPushersService(
         client = client,
         dispatchers = dispatchers,
@@ -229,24 +225,21 @@ class RustMatrixClient(
         ),
     )
 
-    private val eventFilters = TimelineEventTypeFilter.exclude(
-        listOf(
-            StateEventType.ROOM_ALIASES,
-            StateEventType.ROOM_CANONICAL_ALIAS,
-            StateEventType.ROOM_GUEST_ACCESS,
-            StateEventType.ROOM_HISTORY_VISIBILITY,
-            StateEventType.ROOM_JOIN_RULES,
-            StateEventType.ROOM_PINNED_EVENTS,
-            StateEventType.ROOM_POWER_LEVELS,
-            StateEventType.ROOM_SERVER_ACL,
-            StateEventType.ROOM_TOMBSTONE,
-            StateEventType.SPACE_CHILD,
-            StateEventType.SPACE_PARENT,
-            StateEventType.POLICY_RULE_ROOM,
-            StateEventType.POLICY_RULE_SERVER,
-            StateEventType.POLICY_RULE_USER,
-        ).map(FilterTimelineEventType::State)
+    private val verificationService = RustSessionVerificationService(
+        client = client,
+        isSyncServiceReady = rustSyncService.syncState.map { it == SyncState.Running },
+        sessionCoroutineScope = sessionCoroutineScope,
     )
+
+    private val eventFilters = TimelineConfig.excludedEvents
+        .takeIf { it.isNotEmpty() }
+        ?.let { listStateEventType ->
+            TimelineEventTypeFilter.exclude(
+                listStateEventType.map { stateEventType ->
+                    FilterTimelineEventType.State(stateEventType.map())
+                }
+            )
+        }
 
     override val mediaLoader: MatrixMediaLoader = RustMediaLoader(
         baseCacheDirectory = baseCacheDirectory,
@@ -282,11 +275,6 @@ class RustMatrixClient(
         .stateIn(sessionCoroutineScope, started = SharingStarted.Eagerly, initialValue = persistentListOf())
 
     init {
-        roomListService.state.onEach { state ->
-            if (state == RoomListService.State.Running) {
-                setupVerificationControllerIfNeeded()
-            }
-        }.launchIn(sessionCoroutineScope)
         sessionCoroutineScope.launch {
             // Force a refresh of the profile
             getUserProfile()
@@ -498,6 +486,7 @@ class RustMatrixClient(
         ignoreSdkError: Boolean,
     ): String? {
         var result: String? = null
+        syncService.stop()
         withContext(sessionDispatcher) {
             if (doRequest) {
                 try {
@@ -530,16 +519,6 @@ class RustMatrixClient(
     override suspend fun uploadMedia(mimeType: String, data: ByteArray, progressCallback: ProgressCallback?): Result<String> = withContext(sessionDispatcher) {
         runCatching {
             client.uploadMedia(mimeType, data, progressCallback?.toProgressWatcher())
-        }
-    }
-
-    private fun setupVerificationControllerIfNeeded() {
-        if (verificationService.verificationController == null) {
-            try {
-                verificationService.verificationController = client.getSessionVerificationController()
-            } catch (e: Throwable) {
-                Timber.e(e, "Could not start verification service. Will try again on the next sliding sync update.")
-            }
         }
     }
 

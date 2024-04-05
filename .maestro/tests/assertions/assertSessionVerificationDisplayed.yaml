@@ -1,0 +1,5 @@
+appId: ${MAESTRO_APP_ID}
+---
+- extendedWaitUntil:
+    visible: "Confirm that it's you"
+    timeout: 10000

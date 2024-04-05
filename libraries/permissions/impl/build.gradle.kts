@@ -46,8 +46,10 @@ dependencies {
     implementation(projects.libraries.architecture)
     implementation(projects.libraries.matrix.api)
     implementation(projects.libraries.matrixui)
+    implementation(projects.libraries.troubleshoot.api)
     implementation(projects.libraries.designsystem)
     implementation(projects.libraries.uiStrings)
+    implementation(projects.services.toolbox.api)
     api(projects.libraries.permissions.api)
 
     testImplementation(libs.test.junit)
@@ -57,6 +59,7 @@ dependencies {
     testImplementation(libs.test.turbine)
     testImplementation(projects.libraries.matrix.test)
     testImplementation(projects.libraries.permissions.test)
+    testImplementation(projects.services.toolbox.test)
     testImplementation(projects.tests.testutils)
 
     ksp(libs.showkase.processor)

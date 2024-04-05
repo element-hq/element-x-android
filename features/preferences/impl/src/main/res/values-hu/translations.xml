@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_advanced_settings_developer_mode">"Fejlesztői mód"</string>
-  <string name="screen_advanced_settings_developer_mode_description">"Engedélyezd, hogy elérd a fejlesztőknek szánt funkciókat."</string>
+  <string name="screen_advanced_settings_developer_mode_description">"Engedélyezze, hogy elérje a fejlesztőknek szánt funkciókat."</string>
   <string name="screen_advanced_settings_element_call_base_url">"Egyéni Element Call alapwebcím"</string>
   <string name="screen_advanced_settings_element_call_base_url_description">"Egyéni alapwebcím beállítása az Element Callhoz."</string>
-  <string name="screen_advanced_settings_element_call_base_url_validation_error">"Érvénytelen webcím, győződj meg arról, hogy szerepel-e benne a protokoll (http/https), és hogy helyes-e a cím."</string>
-  <string name="screen_advanced_settings_rich_text_editor_description">"A formázott szöveges szerkesztő letiltása, hogy kézzel írhass Markdownt."</string>
+  <string name="screen_advanced_settings_element_call_base_url_validation_error">"Érvénytelen webcím, győződjön meg arról, hogy szerepel-e benne a protokoll (http/https), és hogy helyes-e a cím."</string>
+  <string name="screen_advanced_settings_rich_text_editor_description">"A formázott szöveges szerkesztő letiltása, hogy kézzel írhasson Markdownt."</string>
   <string name="screen_advanced_settings_send_read_receipts">"Olvasási visszaigazolások"</string>
   <string name="screen_advanced_settings_send_read_receipts_description">"Ha ki van kapcsolva, az olvasási visszaigazolások nem lesznek elküldve senkinek. A többi felhasználó olvasási visszaigazolását továbbra is meg fogja kapni."</string>
   <string name="screen_advanced_settings_share_presence">"Jelenlét megosztása"</string>
   <string name="screen_advanced_settings_share_presence_description">"Ha ki van kapcsolva, nem tud olvasási visszaigazolást vagy írási értesítést küldeni és fogadni"</string>
-  <string name="screen_advanced_settings_view_source_description">"Engedélyezd a beállítást az üzenet forrásának megjelenítéséhez az idővonalon."</string>
+  <string name="screen_advanced_settings_view_source_description">"Engedélyezze a beállítást az üzenet forrásának megjelenítéséhez az idővonalon."</string>
   <string name="screen_blocked_users_empty">"Nincsenek letiltott felhasználók"</string>
   <string name="screen_blocked_users_unblock_alert_action">"Letiltás feloldása"</string>
   <string name="screen_blocked_users_unblock_alert_description">"Újra láthatja az összes üzenetét."</string>
@@ -49,4 +49,6 @@ Ha folytatja, egyes beállítások megváltozhatnak."</string>
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"rendszerbeállításokat"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"A rendszerértesítések ki vannak kapcsolva"</string>
   <string name="screen_notification_settings_title">"Értesítések"</string>
+  <string name="troubleshoot_notifications_entry_point_section">"Hibaelhárítás"</string>
+  <string name="troubleshoot_notifications_entry_point_title">"Értesítések hibaelhárítása"</string>
 </resources>

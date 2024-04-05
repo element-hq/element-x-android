@@ -43,7 +43,6 @@ class RetrySendMenuPresenterTests {
             val initialState = awaitItem()
             val selectedEvent = aTimelineItemEvent()
             initialState.eventSink(RetrySendMenuEvents.EventSelected(selectedEvent))
-
             assertThat(awaitItem().selectedEvent).isSameInstanceAs(selectedEvent)
         }
     }
@@ -57,8 +56,9 @@ class RetrySendMenuPresenterTests {
             val selectedEvent = aTimelineItemEvent()
             initialState.eventSink(RetrySendMenuEvents.EventSelected(selectedEvent))
             skipItems(1)
-
             initialState.eventSink(RetrySendMenuEvents.Dismiss)
+            assertThat(room.cancelSendCount).isEqualTo(0)
+            assertThat(room.retrySendMessageCount).isEqualTo(0)
             assertThat(awaitItem().selectedEvent).isNull()
         }
     }
@@ -72,8 +72,8 @@ class RetrySendMenuPresenterTests {
             val selectedEvent = aTimelineItemEvent(transactionId = A_TRANSACTION_ID)
             initialState.eventSink(RetrySendMenuEvents.EventSelected(selectedEvent))
             skipItems(1)
-
-            initialState.eventSink(RetrySendMenuEvents.RetrySend)
+            initialState.eventSink(RetrySendMenuEvents.Retry)
+            assertThat(room.cancelSendCount).isEqualTo(0)
             assertThat(room.retrySendMessageCount).isEqualTo(1)
             assertThat(awaitItem().selectedEvent).isNull()
         }
@@ -88,8 +88,8 @@ class RetrySendMenuPresenterTests {
             val selectedEvent = aTimelineItemEvent(transactionId = null)
             initialState.eventSink(RetrySendMenuEvents.EventSelected(selectedEvent))
             skipItems(1)
-
-            initialState.eventSink(RetrySendMenuEvents.RetrySend)
+            initialState.eventSink(RetrySendMenuEvents.Retry)
+            assertThat(room.cancelSendCount).isEqualTo(0)
             assertThat(room.retrySendMessageCount).isEqualTo(0)
             assertThat(awaitItem().selectedEvent).isNull()
         }
@@ -105,8 +105,8 @@ class RetrySendMenuPresenterTests {
             val selectedEvent = aTimelineItemEvent(transactionId = A_TRANSACTION_ID)
             initialState.eventSink(RetrySendMenuEvents.EventSelected(selectedEvent))
             skipItems(1)
-
-            initialState.eventSink(RetrySendMenuEvents.RetrySend)
+            initialState.eventSink(RetrySendMenuEvents.Retry)
+            assertThat(room.cancelSendCount).isEqualTo(0)
             assertThat(room.retrySendMessageCount).isEqualTo(1)
             assertThat(awaitItem().selectedEvent).isNull()
         }
@@ -121,9 +121,9 @@ class RetrySendMenuPresenterTests {
             val selectedEvent = aTimelineItemEvent(transactionId = A_TRANSACTION_ID)
             initialState.eventSink(RetrySendMenuEvents.EventSelected(selectedEvent))
             skipItems(1)
-
-            initialState.eventSink(RetrySendMenuEvents.RemoveFailed)
+            initialState.eventSink(RetrySendMenuEvents.Remove)
             assertThat(room.cancelSendCount).isEqualTo(1)
+            assertThat(room.retrySendMessageCount).isEqualTo(0)
             assertThat(awaitItem().selectedEvent).isNull()
         }
     }
@@ -137,9 +137,9 @@ class RetrySendMenuPresenterTests {
             val selectedEvent = aTimelineItemEvent(transactionId = null)
             initialState.eventSink(RetrySendMenuEvents.EventSelected(selectedEvent))
             skipItems(1)
-
-            initialState.eventSink(RetrySendMenuEvents.RemoveFailed)
+            initialState.eventSink(RetrySendMenuEvents.Remove)
             assertThat(room.cancelSendCount).isEqualTo(0)
+            assertThat(room.retrySendMessageCount).isEqualTo(0)
             assertThat(awaitItem().selectedEvent).isNull()
         }
     }
@@ -154,9 +154,9 @@ class RetrySendMenuPresenterTests {
             val selectedEvent = aTimelineItemEvent(transactionId = A_TRANSACTION_ID)
             initialState.eventSink(RetrySendMenuEvents.EventSelected(selectedEvent))
             skipItems(1)
-
-            initialState.eventSink(RetrySendMenuEvents.RemoveFailed)
+            initialState.eventSink(RetrySendMenuEvents.Remove)
             assertThat(room.cancelSendCount).isEqualTo(1)
+            assertThat(room.retrySendMessageCount).isEqualTo(0)
             assertThat(awaitItem().selectedEvent).isNull()
         }
     }

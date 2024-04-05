@@ -16,9 +16,13 @@
 
 package io.element.android.libraries.matrixui.messages
 
+import android.net.Uri
 import com.google.common.truth.Truth.assertThat
+import io.element.android.libraries.matrix.api.permalink.PermalinkData
+import io.element.android.libraries.matrix.api.permalink.PermalinkParser
 import io.element.android.libraries.matrix.api.timeline.item.event.FormattedBody
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageFormat
+import io.element.android.libraries.matrix.test.permalink.FakePermalinkParser
 import io.element.android.libraries.matrix.ui.messages.toHtmlDocument
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -33,7 +37,7 @@ class ToHtmlDocumentTest {
             body = "Hello world"
         )
 
-        val document = body.toHtmlDocument()
+        val document = body.toHtmlDocument(permalinkParser = FakePermalinkParser())
 
         assertThat(document).isNull()
     }
@@ -45,7 +49,7 @@ class ToHtmlDocumentTest {
             body = "<p>Hello world</p>"
         )
 
-        val document = body.toHtmlDocument()
+        val document = body.toHtmlDocument(permalinkParser = FakePermalinkParser())
         assertThat(document).isNotNull()
         assertThat(document?.text()).isEqualTo("Hello world")
     }
@@ -57,7 +61,10 @@ class ToHtmlDocumentTest {
             body = "<p>Hello world</p>"
         )
 
-        val document = body.toHtmlDocument(prefix = "@Jorge:")
+        val document = body.toHtmlDocument(
+            permalinkParser = FakePermalinkParser(),
+            prefix = "@Jorge:"
+        )
         assertThat(document).isNotNull()
         assertThat(document?.text()).isEqualTo("@Jorge: Hello world")
     }
@@ -69,7 +76,13 @@ class ToHtmlDocumentTest {
             body = "Hey <a href='https://matrix.to/#/@alice:matrix.org'>Alice</a>!"
         )
 
-        val document = body.toHtmlDocument()
+        val document = body.toHtmlDocument(permalinkParser = object : PermalinkParser {
+            override fun parse(uriString: String): PermalinkData {
+                return PermalinkData.UserLink("@alice:matrix.org")
+            }
+
+            override fun parse(uri: Uri): PermalinkData = TODO("Not yet implemented")
+        })
         assertThat(document?.text()).isEqualTo("Hey @Alice!")
     }
 
@@ -80,7 +93,13 @@ class ToHtmlDocumentTest {
             body = "Hey <a href='https://matrix.to/#/@alice:matrix.org'>@Alice</a>!"
         )
 
-        val document = body.toHtmlDocument()
+        val document = body.toHtmlDocument(permalinkParser = object : PermalinkParser {
+            override fun parse(uriString: String): PermalinkData {
+                return PermalinkData.UserLink("@alice:matrix.org")
+            }
+
+            override fun parse(uri: Uri): PermalinkData = TODO("Not yet implemented")
+        })
         assertThat(document?.text()).isEqualTo("Hey @Alice!")
     }
 
@@ -91,7 +110,13 @@ class ToHtmlDocumentTest {
             body = "Hey <a href='https://matrix.org'>Alice</a>!"
         )
 
-        val document = body.toHtmlDocument()
+        val document = body.toHtmlDocument(permalinkParser = object : PermalinkParser {
+            override fun parse(uriString: String): PermalinkData {
+                return PermalinkData.FallbackLink(uri = Uri.parse("https://matrix.org"))
+            }
+
+            override fun parse(uri: Uri): PermalinkData = TODO("Not yet implemented")
+        })
         assertThat(document?.text()).isEqualTo("Hey Alice!")
     }
 }

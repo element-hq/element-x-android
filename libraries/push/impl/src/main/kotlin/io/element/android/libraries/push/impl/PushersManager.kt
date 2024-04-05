@@ -23,9 +23,11 @@ import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.pusher.SetHttpPusherData
 import io.element.android.libraries.push.impl.pushgateway.PushGatewayNotifyRequest
+import io.element.android.libraries.pushproviders.api.CurrentUserPushConfig
 import io.element.android.libraries.pushproviders.api.PusherSubscriber
 import io.element.android.libraries.pushstore.api.UserPushStoreFactory
 import io.element.android.libraries.pushstore.api.clientsecret.PushClientSecret
@@ -45,16 +47,14 @@ class PushersManager @Inject constructor(
     private val pushClientSecret: PushClientSecret,
     private val userPushStoreFactory: UserPushStoreFactory,
 ) : PusherSubscriber {
-    // TODO Move this to the PushProvider API
-    suspend fun testPush() {
+    suspend fun testPush(config: CurrentUserPushConfig) {
         pushGatewayNotifyRequest.execute(
             PushGatewayNotifyRequest.Params(
-                // unifiedPushHelper.getPushGateway() ?: return
-                url = "TODO",
+                url = config.url,
                 appId = PushConfig.PUSHER_APP_ID,
-                // unifiedPushHelper.getEndpointOrToken().orEmpty()
-                pushKey = "TODO",
-                eventId = TEST_EVENT_ID
+                pushKey = config.pushKey,
+                eventId = TEST_EVENT_ID,
+                roomId = TEST_ROOM_ID,
             )
         )
     }
@@ -63,7 +63,7 @@ class PushersManager @Inject constructor(
      * Register a pusher to the server if not done yet.
      */
     override suspend fun registerPusher(matrixClient: MatrixClient, pushKey: String, gateway: String) {
-        val userDataStore = userPushStoreFactory.create(matrixClient.sessionId)
+        val userDataStore = userPushStoreFactory.getOrCreate(matrixClient.sessionId)
         if (userDataStore.getCurrentRegisteredPushKey() == pushKey) {
             Timber.tag(loggerTag.value)
                 .d("Unnecessary to register again the same pusher, but do it in case the pusher has been removed from the server")
@@ -112,5 +112,6 @@ class PushersManager @Inject constructor(
 
     companion object {
         val TEST_EVENT_ID = EventId("\$THIS_IS_A_FAKE_EVENT_ID")
+        val TEST_ROOM_ID = RoomId("!room:domain")
     }
 }

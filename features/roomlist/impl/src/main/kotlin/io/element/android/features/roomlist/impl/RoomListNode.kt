@@ -64,10 +64,6 @@ class RoomListNode @AssistedInject constructor(
         plugins<RoomListEntryPoint.Callback>().forEach { it.onCreateRoomClicked() }
     }
 
-    private fun onSessionVerificationClicked() {
-        plugins<RoomListEntryPoint.Callback>().forEach { it.onSessionVerificationClicked() }
-    }
-
     private fun onSessionConfirmRecoveryKeyClicked() {
         plugins<RoomListEntryPoint.Callback>().forEach { it.onSessionConfirmRecoveryKeyClicked() }
     }
@@ -104,7 +100,6 @@ class RoomListNode @AssistedInject constructor(
             onRoomClicked = this::onRoomClicked,
             onSettingsClicked = this::onOpenSettings,
             onCreateRoomClicked = this::onCreateRoomClicked,
-            onVerifyClicked = this::onSessionVerificationClicked,
             onConfirmRecoveryKeyClicked = this::onSessionConfirmRecoveryKeyClicked,
             onInvitesClicked = this::onInvitesClicked,
             onRoomSettingsClicked = this::onRoomSettingsClicked,

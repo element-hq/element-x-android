@@ -29,7 +29,12 @@
   <string name="screen_room_change_role_confirm_demote_self_action">"Rétrograder"</string>
   <string name="screen_room_change_role_confirm_demote_self_description">"Vous ne pourrez pas annuler ce changement car vous vous rétrogradez, si vous êtes le dernier utilisateur privilégié du salon il sera impossible de retrouver les privilèges."</string>
   <string name="screen_room_change_role_confirm_demote_self_title">"Vous rétrograder ?"</string>
+  <string name="screen_room_change_role_invited_member_name">"%1$s (En attente)"</string>
+  <string name="screen_room_change_role_invited_member_name_android">"(En attente)"</string>
   <string name="screen_room_change_role_moderators_title">"Modifier les modérateurs"</string>
+  <string name="screen_room_change_role_section_administrators">"Administrateurs"</string>
+  <string name="screen_room_change_role_section_moderators">"Modérateurs"</string>
+  <string name="screen_room_change_role_section_users">"Membres"</string>
   <string name="screen_room_change_role_unsaved_changes_description">"Vous avez des modifications non-enregistrées."</string>
   <string name="screen_room_change_role_unsaved_changes_title">"Enregistrer les modifications?"</string>
   <string name="screen_room_details_add_topic_title">"Ajouter un sujet"</string>

@@ -41,7 +41,7 @@ class RetrySendMenuPresenter @Inject constructor(
                 is RetrySendMenuEvents.EventSelected -> {
                     selectedEvent = event.event
                 }
-                RetrySendMenuEvents.RetrySend -> {
+                RetrySendMenuEvents.Retry -> {
                     coroutineScope.launch {
                         selectedEvent?.transactionId?.let { transactionId ->
                             room.retrySendMessage(transactionId)
@@ -49,7 +49,7 @@ class RetrySendMenuPresenter @Inject constructor(
                         selectedEvent = null
                     }
                 }
-                RetrySendMenuEvents.RemoveFailed -> {
+                RetrySendMenuEvents.Remove -> {
                     coroutineScope.launch {
                         selectedEvent?.transactionId?.let { transactionId ->
                             room.cancelSend(transactionId)

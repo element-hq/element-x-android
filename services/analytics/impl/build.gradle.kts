@@ -35,6 +35,7 @@ dependencies {
     implementation(projects.libraries.androidutils)
     implementation(projects.libraries.core)
     implementation(projects.libraries.architecture)
+    implementation(projects.libraries.designsystem)
     implementation(projects.libraries.sessionStorage.api)
 
     api(projects.services.analyticsproviders.api)

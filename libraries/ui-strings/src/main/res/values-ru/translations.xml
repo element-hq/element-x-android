@@ -253,6 +253,8 @@
   <string name="screen_identity_confirmation_title">"Подтвердите, что это вы"</string>
   <string name="screen_identity_confirmed_subtitle">"Теперь вы можете безопасно читать и отправлять сообщения, и все, с кем вы общаетесь в чате, также могут доверять этому устройству."</string>
   <string name="screen_identity_confirmed_title">"Устройство проверено"</string>
+  <string name="screen_identity_use_another_device">"Используйте другое устройство"</string>
+  <string name="screen_identity_waiting_on_other_device">"Ожидание на другом устройстве…"</string>
   <string name="screen_media_picker_error_failed_selection">"Не удалось выбрать носитель, попробуйте еще раз."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Не удалось обработать медиафайл для загрузки, попробуйте еще раз."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Не удалось загрузить медиафайлы, попробуйте еще раз."</string>

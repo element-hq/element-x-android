@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="troubleshoot_notifications_test_unified_push_description">"Ujistěte se, že jsou k dispozici distributoři UnifiedPush."</string>
+  <string name="troubleshoot_notifications_test_unified_push_failure">"Nebyli nalezeni žádní push distributoři."</string>
+  <plurals name="troubleshoot_notifications_test_unified_push_success">
+    <item quantity="one">"Nalezen %1$d distributor: %2$s."</item>
+    <item quantity="few">"Nalezeni %1$d distributoři: %2$s."</item>
+    <item quantity="other">"Nalezeno %1$d distributorů: %2$s."</item>
+  </plurals>
+  <string name="troubleshoot_notifications_test_unified_push_title">"Zkontrolovat UnifiedPush"</string>
+</resources>

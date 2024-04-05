@@ -24,6 +24,7 @@ Anda tidak memiliki pesan yang belum dibaca!"</string>
   <string name="screen_roomlist_main_space_title">"Semua Obrolan"</string>
   <string name="screen_roomlist_mark_as_read">"Tandai sebagai dibaca"</string>
   <string name="screen_roomlist_mark_as_unread">"Tandai sebagai belum dibaca"</string>
+  <string name="screen_roomlist_room_directory_button_title">"Cari semua ruangan"</string>
   <string name="session_verification_banner_message">"Sepertinya Anda menggunakan perangkat baru. Verifikasi dengan perangkat lain untuk mengakses pesan terenkripsi Anda selanjutnya."</string>
   <string name="session_verification_banner_title">"Verifikasi bahwa ini Anda"</string>
 </resources>

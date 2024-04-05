@@ -36,4 +36,5 @@
     <item quantity="one">"%d стая"</item>
     <item quantity="other">"%d стаи"</item>
   </plurals>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_2">"Грешка: %1$s"</string>
 </resources>

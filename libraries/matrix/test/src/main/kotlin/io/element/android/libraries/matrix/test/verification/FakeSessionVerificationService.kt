@@ -38,7 +38,11 @@ class FakeSessionVerificationService : SessionVerificationService {
     override val isReady: StateFlow<Boolean> = _isReady
 
     override suspend fun requestVerification() {
-        _verificationFlowState.value = VerificationFlowState.AcceptedVerificationRequest
+        if (!shouldFail) {
+            _verificationFlowState.value = VerificationFlowState.AcceptedVerificationRequest
+        } else {
+            _verificationFlowState.value = VerificationFlowState.Failed
+        }
     }
 
     override suspend fun cancelVerification() {

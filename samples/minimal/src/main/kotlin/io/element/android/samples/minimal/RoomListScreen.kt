@@ -89,6 +89,7 @@ class RoomListScreen(
             ),
             profileChangeContentFormatter = ProfileChangeContentFormatter(stringProvider),
             stateContentFormatter = StateContentFormatter(stringProvider),
+            permalinkParser = OnlyFallbackPermalinkParser(),
         ),
     )
     private val presenter = RoomListPresenter(
@@ -151,7 +152,6 @@ class RoomListScreen(
             state = state,
             onRoomClicked = ::onRoomClicked,
             onSettingsClicked = {},
-            onVerifyClicked = {},
             onConfirmRecoveryKeyClicked = {},
             onCreateRoomClicked = {},
             onInvitesClicked = {},

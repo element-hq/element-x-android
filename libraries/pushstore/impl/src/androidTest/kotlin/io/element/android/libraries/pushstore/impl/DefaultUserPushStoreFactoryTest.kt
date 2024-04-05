@@ -40,11 +40,11 @@ class DefaultUserPushStoreFactoryTest {
         val userPushStoreFactory = DefaultUserPushStoreFactory(context, NoOpSessionObserver())
         var userPushStore1: UserPushStore? = null
         val thread1 = thread {
-            userPushStore1 = userPushStoreFactory.create(sessionId)
+            userPushStore1 = userPushStoreFactory.getOrCreate(sessionId)
         }
         var userPushStore2: UserPushStore? = null
         val thread2 = thread {
-            userPushStore2 = userPushStoreFactory.create(sessionId)
+            userPushStore2 = userPushStoreFactory.getOrCreate(sessionId)
         }
         thread1.join()
         thread2.join()

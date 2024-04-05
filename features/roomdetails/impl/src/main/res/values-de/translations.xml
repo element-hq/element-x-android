@@ -29,7 +29,11 @@
   <string name="screen_room_change_role_confirm_demote_self_action">"Zurückstufen"</string>
   <string name="screen_room_change_role_confirm_demote_self_description">"Du stufst dich selbst herab. Diese Änderung kann nicht rückgängig gemacht werden. Wenn du der letzte Benutzer mit dieser Rolle bist, ist es nicht möglich, diese Rolle wiederzuerlangen."</string>
   <string name="screen_room_change_role_confirm_demote_self_title">"Möchtest Du Dich selbst herabstufen?"</string>
+  <string name="screen_room_change_role_invited_member_name">"%1$s (Ausstehend)"</string>
   <string name="screen_room_change_role_moderators_title">"Moderatoren bearbeiten"</string>
+  <string name="screen_room_change_role_section_administrators">"Administratoren"</string>
+  <string name="screen_room_change_role_section_moderators">"Moderatoren"</string>
+  <string name="screen_room_change_role_section_users">"Mitglieder"</string>
   <string name="screen_room_change_role_unsaved_changes_description">"Du hast nicht gespeicherte Änderungen."</string>
   <string name="screen_room_change_role_unsaved_changes_title">"Änderungen speichern?"</string>
   <string name="screen_room_details_add_topic_title">"Thema hinzufügen"</string>
@@ -76,7 +80,7 @@
   <string name="screen_room_member_list_mode_banned">"Gesperrt"</string>
   <string name="screen_room_member_list_mode_members">"Mitglieder"</string>
   <string name="screen_room_member_list_pending_header_title">"Ausstehend"</string>
-  <string name="screen_room_member_list_removing_user">"%1$s wird entfernt"</string>
+  <string name="screen_room_member_list_removing_user">"%1$s wird entfernt."</string>
   <string name="screen_room_member_list_role_administrator">"Administrator"</string>
   <string name="screen_room_member_list_role_moderator">"Moderator"</string>
   <string name="screen_room_member_list_room_members_header_title">"Raummitglieder"</string>

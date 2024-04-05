@@ -18,9 +18,12 @@ package io.element.android.libraries.textcomposer.impl.mentions
 
 import android.graphics.Color
 import com.google.common.truth.Truth.assertThat
+import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import io.element.android.libraries.matrix.test.A_SESSION_ID
+import io.element.android.libraries.matrix.test.permalink.FakePermalinkParser
 import io.element.android.libraries.textcomposer.mentions.MentionSpanProvider
 import io.element.android.tests.testutils.WarmUpRule
+import kotlinx.collections.immutable.persistentListOf
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -35,8 +38,10 @@ class MentionSpanProviderTest {
     private val otherColor = Color.BLUE
     private val currentUserId = A_SESSION_ID
 
+    private val permalinkParser = FakePermalinkParser()
     private val mentionSpanProvider = MentionSpanProvider(
         currentSessionId = currentUserId,
+        permalinkParser = permalinkParser,
         currentUserBackgroundColor = myUserColor,
         currentUserTextColor = myUserColor,
         otherBackgroundColor = otherColor,
@@ -45,6 +50,7 @@ class MentionSpanProviderTest {
 
     @Test
     fun `getting mention span for current user should return a MentionSpan with custom colors`() {
+        permalinkParser.givenResult(PermalinkData.UserLink(currentUserId.value))
         val mentionSpan = mentionSpanProvider.getMentionSpanFor("@me:matrix.org", "https://matrix.to/#/${currentUserId.value}")
         assertThat(mentionSpan.backgroundColor).isEqualTo(myUserColor)
         assertThat(mentionSpan.textColor).isEqualTo(myUserColor)
@@ -52,6 +58,7 @@ class MentionSpanProviderTest {
 
     @Test
     fun `getting mention span for other user should return a MentionSpan with normal colors`() {
+        permalinkParser.givenResult(PermalinkData.UserLink("@other:matrix.org"))
         val mentionSpan = mentionSpanProvider.getMentionSpanFor("@other:matrix.org", "https://matrix.to/#/@other:matrix.org")
         assertThat(mentionSpan.backgroundColor).isEqualTo(otherColor)
         assertThat(mentionSpan.textColor).isEqualTo(otherColor)
@@ -59,6 +66,14 @@ class MentionSpanProviderTest {
 
     @Test
     fun `getting mention span for a room should return a MentionSpan with normal colors`() {
+        permalinkParser.givenResult(
+            PermalinkData.RoomLink(
+                roomIdOrAlias = "#room:matrix.org",
+                isRoomAlias = true,
+                eventId = null,
+                viaParameters = persistentListOf(),
+            )
+        )
         val mentionSpan = mentionSpanProvider.getMentionSpanFor("#room:matrix.org", "https://matrix.to/#/#room:matrix.org")
         assertThat(mentionSpan.backgroundColor).isEqualTo(otherColor)
         assertThat(mentionSpan.textColor).isEqualTo(otherColor)
@@ -66,6 +81,14 @@ class MentionSpanProviderTest {
 
     @Test
     fun `getting mention span for @room should return a MentionSpan with normal colors`() {
+        permalinkParser.givenResult(
+            PermalinkData.RoomLink(
+                roomIdOrAlias = "#",
+                isRoomAlias = true,
+                eventId = null,
+                viaParameters = persistentListOf(),
+            )
+        )
         val mentionSpan = mentionSpanProvider.getMentionSpanFor("@room", "#")
         assertThat(mentionSpan.backgroundColor).isEqualTo(otherColor)
         assertThat(mentionSpan.textColor).isEqualTo(otherColor)
