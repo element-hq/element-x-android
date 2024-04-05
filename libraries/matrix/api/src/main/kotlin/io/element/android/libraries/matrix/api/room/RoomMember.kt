@@ -17,6 +17,7 @@
 package io.element.android.libraries.matrix.api.room
 
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.user.MatrixUser
 
 data class RoomMember(
     val userId: UserId,
@@ -78,3 +79,9 @@ enum class RoomMembershipState {
 fun RoomMember.getBestName(): String {
     return displayName?.takeIf { it.isNotEmpty() } ?: userId.value
 }
+
+fun RoomMember.toMatrixUser() = MatrixUser(
+    userId = userId,
+    displayName = displayName,
+    avatarUrl = avatarUrl,
+)
