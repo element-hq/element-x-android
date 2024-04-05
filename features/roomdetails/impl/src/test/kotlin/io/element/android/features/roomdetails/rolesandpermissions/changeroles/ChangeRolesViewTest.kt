@@ -17,8 +17,6 @@
 package io.element.android.features.roomdetails.rolesandpermissions.changeroles
 
 import androidx.activity.ComponentActivity
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onAllNodesWithText
@@ -288,11 +286,9 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setChang
     onBackPressed: () -> Unit = EnsureNeverCalled(),
 ) {
     setContent {
-        CompositionLocalProvider(LocalInspectionMode provides true) {
-            ChangeRolesView(
-                state = state,
-                onBackPressed = onBackPressed,
-            )
-        }
+        ChangeRolesView(
+            state = state,
+            onBackPressed = onBackPressed,
+        )
     }
 }
