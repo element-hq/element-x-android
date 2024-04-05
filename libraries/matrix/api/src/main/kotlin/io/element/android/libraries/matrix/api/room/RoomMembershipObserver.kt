@@ -28,10 +28,10 @@ class RoomMembershipObserver {
         val change: MembershipChange,
     )
 
-    private val _updates = MutableSharedFlow<RoomMembershipUpdate>(replay = 1)
+    private val _updates = MutableSharedFlow<RoomMembershipUpdate>(extraBufferCapacity = 10)
     val updates = _updates.asSharedFlow()
 
-    fun notifyUserLeftRoom(roomId: RoomId) {
-        _updates.tryEmit(RoomMembershipUpdate(roomId, false, MembershipChange.LEFT))
+    suspend fun notifyUserLeftRoom(roomId: RoomId) {
+        _updates.emit(RoomMembershipUpdate(roomId, false, MembershipChange.LEFT))
     }
 }
