@@ -42,6 +42,8 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.powerlevels.UserRoleChange
+import io.element.android.libraries.matrix.api.room.powerlevels.usersWithRole
+import io.element.android.libraries.matrix.api.room.toMatrixUser
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.collections.immutable.ImmutableList
@@ -130,11 +132,11 @@ class ChangeRolesPresenter @AssistedInject constructor(
                 }
                 is ChangeRolesEvent.UserSelectionToggled -> {
                     val newList = selectedUsers.value.toMutableList()
-                    val index = newList.indexOfFirst { it.userId == event.roomMember.userId }
+                    val index = newList.indexOfFirst { it.userId == event.matrixUser.userId }
                     if (index >= 0) {
                         newList.removeAt(index)
                     } else {
-                        newList.add(event.roomMember.toMatrixUser())
+                        newList.add(event.matrixUser)
                     }
                     selectedUsers.value = newList.toImmutableList()
                 }
@@ -191,12 +193,6 @@ class ChangeRolesPresenter @AssistedInject constructor(
     private fun Iterable<RoomMember>.sorted(): ImmutableList<RoomMember> {
         return sortedWith(PowerLevelRoomMemberComparator()).toImmutableList()
     }
-
-    private fun RoomMember.toMatrixUser() = MatrixUser(
-        userId = userId,
-        displayName = displayName,
-        avatarUrl = avatarUrl,
-    )
 
     private fun CoroutineScope.save(
         usersWithRole: ImmutableList<MatrixUser>,

@@ -51,7 +51,6 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.roomdetails.impl.R
-import io.element.android.features.roomdetails.impl.members.aRoomMember
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.designsystem.components.ProgressDialog
 import io.element.android.libraries.designsystem.components.async.AsyncActionView
@@ -78,6 +77,7 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
 import io.element.android.libraries.matrix.api.room.getBestName
+import io.element.android.libraries.matrix.api.room.toMatrixUser
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.components.SelectedUsersRowList
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -91,13 +91,16 @@ fun ChangeRolesView(
     modifier: Modifier = Modifier,
 ) {
     val updatedNavigateUp by rememberUpdatedState(newValue = navigateUp)
-    BackHandler {
-        if (state.isSearchActive) {
-            state.eventSink(ChangeRolesEvent.ToggleSearchActive)
-        } else {
-            state.eventSink(ChangeRolesEvent.Exit)
-        }
+    BackHandler(enabled = !state.isSearchActive) {
+        state.eventSink(ChangeRolesEvent.Exit)
     }
+//    BackHandler {
+//        if (state.isSearchActive) {
+//            state.eventSink(ChangeRolesEvent.ToggleSearchActive)
+//        } else {
+//            state.eventSink(ChangeRolesEvent.Exit)
+//        }
+//    }
 
     Box(modifier = modifier) {
         Scaffold(
@@ -137,7 +140,9 @@ fun ChangeRolesView(
             ) {
                 val lazyListState = rememberLazyListState()
                 SearchBar(
-                    modifier = Modifier.padding(bottom = 16.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 16.dp),
                     placeHolderTitle = stringResource(CommonStrings.common_search_for_someone),
                     query = state.query.orEmpty(),
                     onQueryChange = { state.eventSink(ChangeRolesEvent.QueryChanged(it)) },
@@ -150,7 +155,7 @@ fun ChangeRolesView(
                         searchResults = members,
                         selectedUsers = state.selectedUsers,
                         canRemoveMember = state.canChangeMemberRole,
-                        onSelectionToggled = { state.eventSink(ChangeRolesEvent.UserSelectionToggled(it)) },
+                        onSelectionToggled = { state.eventSink(ChangeRolesEvent.UserSelectionToggled(it.toMatrixUser())) },
                         selectedUsersList = {},
                     )
                 }
@@ -165,13 +170,13 @@ fun ChangeRolesView(
                             searchResults = (state.searchResults as? SearchBarResultState.Results)?.results ?: MembersByRole(emptyList()),
                             selectedUsers = state.selectedUsers,
                             canRemoveMember = state.canChangeMemberRole,
-                            onSelectionToggled = { state.eventSink(ChangeRolesEvent.UserSelectionToggled(it)) },
+                            onSelectionToggled = { state.eventSink(ChangeRolesEvent.UserSelectionToggled(it.toMatrixUser())) },
                             selectedUsersList = { users ->
                                 SelectedUsersRowList(
                                     contentPadding = PaddingValues(start = 16.dp, end = 16.dp, bottom = 16.dp),
                                     selectedUsers = users,
                                     onUserRemoved = {
-                                        state.eventSink(ChangeRolesEvent.UserSelectionToggled(aRoomMember(it.userId)))
+                                        state.eventSink(ChangeRolesEvent.UserSelectionToggled(it))
                                     },
                                     canDeselect = { state.canChangeMemberRole(it.userId) },
                                 )

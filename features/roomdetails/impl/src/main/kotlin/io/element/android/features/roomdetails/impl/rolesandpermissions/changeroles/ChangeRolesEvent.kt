@@ -16,12 +16,12 @@
 
 package io.element.android.features.roomdetails.impl.rolesandpermissions.changeroles
 
-import io.element.android.libraries.matrix.api.room.RoomMember
+import io.element.android.libraries.matrix.api.user.MatrixUser
 
 sealed interface ChangeRolesEvent {
     data object ToggleSearchActive : ChangeRolesEvent
     data class QueryChanged(val query: String?) : ChangeRolesEvent
-    data class UserSelectionToggled(val roomMember: RoomMember) : ChangeRolesEvent
+    data class UserSelectionToggled(val matrixUser: MatrixUser) : ChangeRolesEvent
     data object Save : ChangeRolesEvent
     data object Exit : ChangeRolesEvent
     data object CancelExit : ChangeRolesEvent
