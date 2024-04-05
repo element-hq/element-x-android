@@ -85,4 +85,3 @@ fun RoomMember.toMatrixUser() = MatrixUser(
     displayName = displayName,
     avatarUrl = avatarUrl,
 )
-
