@@ -83,6 +83,12 @@ interface MatrixRoom : Closeable {
     suspend fun updateMembers()
 
     /**
+     * Get the members of the room. Note: generally this should not be used, please use
+     * [membersStateFlow] and [updateMembers] instead.
+     */
+    suspend fun getMembers(limit: Int = 5): Result<List<RoomMember>>
+
+    /**
      * Will return an updated member or an error.
      */
     suspend fun getUpdatedMember(userId: UserId): Result<RoomMember>

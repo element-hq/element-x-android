@@ -30,6 +30,7 @@ import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.preferences.impl.R
 import io.element.android.features.preferences.impl.user.UserPreferences
+import io.element.android.libraries.architecture.coverage.ExcludeFromCoverage
 import io.element.android.libraries.designsystem.components.list.ListItemContent
 import io.element.android.libraries.designsystem.components.preferences.PreferencePage
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
@@ -212,6 +213,7 @@ internal fun PreferencesRootViewLightPreview(@PreviewParameter(MatrixUserProvide
 internal fun PreferencesRootViewDarkPreview(@PreviewParameter(MatrixUserProvider::class) matrixUser: MatrixUser) =
     ElementPreviewDark { ContentToPreview(matrixUser) }
 
+@ExcludeFromCoverage
 @Composable
 private fun ContentToPreview(matrixUser: MatrixUser) {
     PreferencesRootView(

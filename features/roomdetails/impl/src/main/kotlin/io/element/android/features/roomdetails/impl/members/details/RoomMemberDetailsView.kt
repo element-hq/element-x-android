@@ -33,6 +33,7 @@ import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.roomdetails.impl.R
 import io.element.android.features.roomdetails.impl.blockuser.BlockUserDialogs
 import io.element.android.features.roomdetails.impl.blockuser.BlockUserSection
+import io.element.android.libraries.architecture.coverage.ExcludeFromCoverage
 import io.element.android.libraries.designsystem.components.async.AsyncActionView
 import io.element.android.libraries.designsystem.components.async.AsyncActionViewDefaults
 import io.element.android.libraries.designsystem.components.button.BackButton
@@ -127,6 +128,7 @@ internal fun RoomMemberDetailsViewLightPreview(@PreviewParameter(RoomMemberDetai
 internal fun RoomMemberDetailsViewDarkPreview(@PreviewParameter(RoomMemberDetailsStateProvider::class) state: RoomMemberDetailsState) =
     ElementPreviewDark { ContentToPreview(state) }
 
+@ExcludeFromCoverage
 @Composable
 private fun ContentToPreview(state: RoomMemberDetailsState) {
     RoomMemberDetailsView(

@@ -21,6 +21,7 @@ import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
+import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.ui.components.aMatrixUser
 import io.element.android.libraries.matrix.ui.components.aMatrixUserList
 import io.element.android.libraries.usersearch.api.UserSearchResult
@@ -45,6 +46,7 @@ class DefaultUserListPresenterTests {
                 UserListPresenterArgs(selectionMode = SelectionMode.Single),
                 userRepository,
                 UserListDataStore(),
+                FakeMatrixClient(),
             )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -66,6 +68,7 @@ class DefaultUserListPresenterTests {
                 UserListPresenterArgs(selectionMode = SelectionMode.Multiple),
                 userRepository,
                 UserListDataStore(),
+                FakeMatrixClient(),
             )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -87,6 +90,7 @@ class DefaultUserListPresenterTests {
                 UserListPresenterArgs(selectionMode = SelectionMode.Single),
                 userRepository,
                 UserListDataStore(),
+                FakeMatrixClient(),
             )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -123,6 +127,7 @@ class DefaultUserListPresenterTests {
                 ),
                 userRepository,
                 UserListDataStore(),
+                FakeMatrixClient(),
             )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -175,6 +180,7 @@ class DefaultUserListPresenterTests {
                 ),
                 userRepository,
                 UserListDataStore(),
+                FakeMatrixClient(),
             )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -200,6 +206,7 @@ class DefaultUserListPresenterTests {
                 UserListPresenterArgs(selectionMode = SelectionMode.Single),
                 userRepository,
                 UserListDataStore(),
+                FakeMatrixClient(),
             )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
