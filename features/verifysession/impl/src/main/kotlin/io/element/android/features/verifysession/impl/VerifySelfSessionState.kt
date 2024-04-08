@@ -35,5 +35,6 @@ data class VerifySelfSessionState(
         data object Ready : VerificationStep
         data class Verifying(val data: SessionVerificationData, val state: AsyncData<Unit>) : VerificationStep
         data object Completed : VerificationStep
+        data object Skipped : VerificationStep
     }
 }

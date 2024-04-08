@@ -35,6 +35,7 @@ import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.matrix.test.encryption.FakeEncryptionService
 import io.element.android.libraries.matrix.test.verification.FakeSessionVerificationService
 import io.element.android.tests.testutils.WarmUpRule
+import io.element.android.tests.testutils.lambda.value
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
@@ -273,7 +274,8 @@ class VerifySelfSessionPresenterTests {
         }.test {
             val state = requestVerificationAndAwaitVerifyingState(service)
             state.eventSink(VerifySelfSessionViewEvents.SkipVerification)
-            service.skipVerificationResult.assertions().isCalledOnce()
+            service.saveVerifiedStateResult.assertions().isCalledOnce().with(value(true))
+            assertThat(awaitItem().verificationFlowStep).isEqualTo(VerificationStep.Skipped)
         }
     }
 

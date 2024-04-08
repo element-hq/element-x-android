@@ -23,8 +23,10 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import com.freeletics.flowredux.compose.rememberStateAndDispatch
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
@@ -57,16 +59,16 @@ class VerifySelfSessionPresenter @Inject constructor(
         }
         val recoveryState by encryptionService.recoveryStateStateFlow.collectAsState()
         val stateAndDispatch = stateMachine.rememberStateAndDispatch()
+        var skipVerification by remember { mutableStateOf(false) }
         val needsVerification by sessionVerificationService.needsVerificationFlow.collectAsState()
         val verificationFlowStep by remember {
             derivedStateOf {
-                if (!needsVerification) {
-                    // If we don't need verification anymore, we can skip the whole process until the completed step
-                    VerifySelfSessionState.VerificationStep.Completed
-                } else {
-                    stateAndDispatch.state.value.toVerificationStep(
+                when {
+                    skipVerification -> VerifySelfSessionState.VerificationStep.Skipped
+                    needsVerification -> stateAndDispatch.state.value.toVerificationStep(
                         canEnterRecoveryKey = recoveryState == RecoveryState.INCOMPLETE
                     )
+                    else -> VerifySelfSessionState.VerificationStep.Completed
                 }
             }
         }
@@ -83,7 +85,10 @@ class VerifySelfSessionPresenter @Inject constructor(
                 VerifySelfSessionViewEvents.DeclineVerification -> stateAndDispatch.dispatchAction(StateMachineEvent.DeclineChallenge)
                 VerifySelfSessionViewEvents.Cancel -> stateAndDispatch.dispatchAction(StateMachineEvent.Cancel)
                 VerifySelfSessionViewEvents.Reset -> stateAndDispatch.dispatchAction(StateMachineEvent.Reset)
-                VerifySelfSessionViewEvents.SkipVerification -> coroutineScope.launch { sessionVerificationService.skipVerification() }
+                VerifySelfSessionViewEvents.SkipVerification -> coroutineScope.launch {
+                    sessionVerificationService.saveVerifiedState(true)
+                    skipVerification = true
+                }
             }
         }
         return VerifySelfSessionState(

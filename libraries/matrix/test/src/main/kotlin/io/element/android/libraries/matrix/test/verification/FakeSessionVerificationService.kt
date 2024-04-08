@@ -20,14 +20,14 @@ import io.element.android.libraries.matrix.api.verification.SessionVerificationD
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatus
 import io.element.android.libraries.matrix.api.verification.VerificationFlowState
-import io.element.android.tests.testutils.lambda.LambdaNoParamRecorder
+import io.element.android.tests.testutils.lambda.LambdaOneParamRecorder
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
 class FakeSessionVerificationService(
-    var skipVerificationResult: LambdaNoParamRecorder<Boolean> = lambdaRecorder<Boolean>(ensureNeverCalled = false, block = { false })
+    var saveVerifiedStateResult: LambdaOneParamRecorder<Boolean, Unit> = lambdaRecorder<Boolean, Unit> {}
 ) : SessionVerificationService {
     private val _isReady = MutableStateFlow(false)
     private val _sessionVerifiedStatus = MutableStateFlow<SessionVerifiedStatus>(SessionVerifiedStatus.Unknown)
@@ -102,7 +102,7 @@ class FakeSessionVerificationService(
         _verificationFlowState.value = VerificationFlowState.Initial
     }
 
-    override suspend fun skipVerification(): Boolean {
-        return skipVerificationResult()
+    override suspend fun saveVerifiedState(verified: Boolean) {
+        saveVerifiedStateResult(verified)
     }
 }

@@ -25,9 +25,12 @@ import io.element.android.features.securebackup.impl.setup.views.RecoveryKeyView
 import io.element.android.features.securebackup.impl.tools.RecoveryKeyTools
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
+import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.matrix.test.encryption.FakeEncryptionService
+import io.element.android.libraries.matrix.test.verification.FakeSessionVerificationService
 import io.element.android.tests.testutils.WarmUpRule
+import io.element.android.tests.testutils.lambda.value
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
@@ -58,7 +61,8 @@ class SecureBackupEnterRecoveryKeyPresenterTest {
     @Test
     fun `present - enter recovery key`() = runTest {
         val encryptionService = FakeEncryptionService()
-        val presenter = createPresenter(encryptionService)
+        val sessionVerificationService = FakeSessionVerificationService()
+        val presenter = createPresenter(encryptionService, sessionVerificationService)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -93,13 +97,18 @@ class SecureBackupEnterRecoveryKeyPresenterTest {
             val finalState = awaitItem()
             assertThat(finalState.submitAction).isEqualTo(AsyncAction.Success(Unit))
             assertThat(finalState.isSubmitEnabled).isFalse()
+
+            // Verification state is saved too
+            sessionVerificationService.saveVerifiedStateResult.assertions().isCalledOnce().with(value(true))
         }
     }
 
     private fun createPresenter(
         encryptionService: EncryptionService = FakeEncryptionService(),
+        sessionVerificationService: SessionVerificationService = FakeSessionVerificationService(),
     ) = SecureBackupEnterRecoveryKeyPresenter(
         encryptionService = encryptionService,
         recoveryKeyTools = RecoveryKeyTools(),
+        sessionVerificationService = sessionVerificationService,
     )
 }

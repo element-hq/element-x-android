@@ -31,6 +31,9 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -68,6 +71,12 @@ fun VerifySelfSessionView(
 ) {
     fun resetFlow() {
         state.eventSink(VerifySelfSessionViewEvents.Reset)
+    }
+    val updatedOnFinished by rememberUpdatedState(newValue = onFinished)
+    LaunchedEffect(state.verificationFlowStep, updatedOnFinished) {
+        if (state.verificationFlowStep is FlowStep.Skipped) {
+            updatedOnFinished()
+        }
     }
     BackHandler {
         when (state.verificationFlowStep) {
@@ -120,6 +129,7 @@ private fun HeaderContent(verificationFlowStep: FlowStep) {
         FlowStep.Canceled -> BigIcon.Style.AlertSolid
         FlowStep.Ready, is FlowStep.Verifying -> BigIcon.Style.Default(CompoundIcons.Reaction())
         FlowStep.Completed -> BigIcon.Style.SuccessSolid
+        is FlowStep.Skipped -> return
     }
     val titleTextId = when (verificationFlowStep) {
         is FlowStep.Initial, FlowStep.AwaitingOtherDeviceResponse -> R.string.screen_identity_confirmation_title
@@ -130,6 +140,7 @@ private fun HeaderContent(verificationFlowStep: FlowStep) {
             is SessionVerificationData.Decimals -> R.string.screen_session_verification_compare_numbers_title
             is SessionVerificationData.Emojis -> R.string.screen_session_verification_compare_emojis_title
         }
+        is FlowStep.Skipped -> return
     }
     val subtitleTextId = when (verificationFlowStep) {
         is FlowStep.Initial, FlowStep.AwaitingOtherDeviceResponse -> R.string.screen_identity_confirmation_subtitle
@@ -140,6 +151,7 @@ private fun HeaderContent(verificationFlowStep: FlowStep) {
             is SessionVerificationData.Decimals -> R.string.screen_session_verification_compare_numbers_subtitle
             is SessionVerificationData.Emojis -> R.string.screen_session_verification_compare_emojis_subtitle
         }
+        is FlowStep.Skipped -> return
     }
 
     PageTitle(
@@ -152,9 +164,8 @@ private fun HeaderContent(verificationFlowStep: FlowStep) {
 @Composable
 private fun Content(flowState: FlowStep) {
     Column(Modifier.fillMaxHeight(), verticalArrangement = Arrangement.Center) {
-        when (flowState) {
-            is FlowStep.Initial, FlowStep.AwaitingOtherDeviceResponse, FlowStep.Ready, FlowStep.Canceled, FlowStep.Completed -> Unit
-            is FlowStep.Verifying -> ContentVerifying(flowState)
+        if (flowState is FlowStep.Verifying) {
+            ContentVerifying(flowState)
         }
     }
 }
@@ -279,6 +290,7 @@ private fun BottomMenu(
                 onPositiveButtonClicked = onFinished,
             )
         }
+        is FlowStep.Skipped -> return
     }
 }
 

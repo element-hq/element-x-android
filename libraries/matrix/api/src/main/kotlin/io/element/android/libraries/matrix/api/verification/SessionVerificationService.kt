@@ -85,9 +85,9 @@ interface SessionVerificationService {
     suspend fun reset()
 
     /**
-     * Skips the verification of the current session and marks the session as verified.
+     * Saves the current session state as [verified].
      */
-    suspend fun skipVerification(): Boolean
+    suspend fun saveVerifiedState(verified: Boolean)
 }
 
 /** Verification status of the current session. */
