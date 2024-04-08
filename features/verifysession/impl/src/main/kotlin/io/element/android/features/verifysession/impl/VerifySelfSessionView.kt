@@ -143,7 +143,6 @@ private fun HeaderContent(verificationFlowStep: FlowStep) {
     }
 
     PageTitle(
-        modifier = Modifier.padding(top = 60.dp),
         iconStyle = iconStyle,
         title = stringResource(id = titleTextId),
         subtitle = stringResource(id = subtitleTextId)
