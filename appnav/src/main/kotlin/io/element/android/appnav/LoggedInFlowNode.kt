@@ -48,7 +48,7 @@ import io.element.android.features.createroom.api.CreateRoomEntryPoint
 import io.element.android.features.ftue.api.FtueEntryPoint
 import io.element.android.features.ftue.api.state.FtueService
 import io.element.android.features.ftue.api.state.FtueState
-import io.element.android.features.invitelist.api.InviteListEntryPoint
+import io.element.android.features.invite.api.InviteListEntryPoint
 import io.element.android.features.lockscreen.api.LockScreenEntryPoint
 import io.element.android.features.lockscreen.api.LockScreenLockState
 import io.element.android.features.lockscreen.api.LockScreenService
@@ -348,10 +348,6 @@ class LoggedInFlowNode @AssistedInject constructor(
                 val callback = object : InviteListEntryPoint.Callback {
                     override fun onBackClicked() {
                         backstack.pop()
-                    }
-
-                    override fun onInviteClicked(roomId: RoomId) {
-                        backstack.push(NavTarget.Room(roomId))
                     }
 
                     override fun onInviteAccepted(roomId: RoomId) {

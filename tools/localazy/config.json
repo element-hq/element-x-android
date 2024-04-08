@@ -33,7 +33,7 @@
       ]
     },
     {
-      "name" : ":features:invitelist:impl",
+      "name" : ":features:invite:impl",
       "includeRegex" : [
         "screen_invites_.*"
       ]

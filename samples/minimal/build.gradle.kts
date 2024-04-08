@@ -56,7 +56,7 @@ dependencies {
     implementation(projects.libraries.eventformatter.impl)
     implementation(projects.libraries.preferences.impl)
     implementation(projects.libraries.indicator.impl)
-    implementation(projects.features.invitelist.impl)
+    implementation(projects.features.invite.impl)
     implementation(projects.features.roomlist.impl)
     implementation(projects.features.leaveroom.impl)
     implementation(projects.features.login.impl)

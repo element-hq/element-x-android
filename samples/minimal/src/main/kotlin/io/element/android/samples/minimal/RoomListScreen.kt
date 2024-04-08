@@ -20,7 +20,7 @@ import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Modifier
-import io.element.android.features.invitelist.impl.DefaultSeenInvitesStore
+import io.element.android.features.invite.impl.DefaultSeenInvitesStore
 import io.element.android.features.leaveroom.impl.LeaveRoomPresenterImpl
 import io.element.android.features.networkmonitor.impl.NetworkMonitorImpl
 import io.element.android.features.roomlist.impl.RoomListPresenter
