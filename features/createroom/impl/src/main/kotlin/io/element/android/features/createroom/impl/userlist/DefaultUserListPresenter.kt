@@ -30,6 +30,9 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
 import io.element.android.libraries.di.SessionScope
+import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.room.recent.RecentDirectRoom
+import io.element.android.libraries.matrix.api.room.recent.getRecentDirectRooms
 import io.element.android.libraries.usersearch.api.UserRepository
 import io.element.android.libraries.usersearch.api.UserSearchResult
 import kotlinx.collections.immutable.ImmutableList
@@ -41,6 +44,7 @@ class DefaultUserListPresenter @AssistedInject constructor(
     @Assisted val args: UserListPresenterArgs,
     @Assisted val userRepository: UserRepository,
     @Assisted val userListDataStore: UserListDataStore,
+    private val matrixClient: MatrixClient,
 ) : UserListPresenter {
     @AssistedFactory
     @ContributesBinding(SessionScope::class)
@@ -54,6 +58,10 @@ class DefaultUserListPresenter @AssistedInject constructor(
 
     @Composable
     override fun present(): UserListState {
+        var recentDirectRooms by remember { mutableStateOf(emptyList<RecentDirectRoom>()) }
+        LaunchedEffect(Unit) {
+            recentDirectRooms = matrixClient.getRecentDirectRooms()
+        }
         var isSearchActive by rememberSaveable { mutableStateOf(false) }
         val selectedUsers by userListDataStore.selectedUsers().collectAsState(emptyList())
         var searchQuery by rememberSaveable { mutableStateOf("") }
@@ -82,6 +90,7 @@ class DefaultUserListPresenter @AssistedInject constructor(
             isSearchActive = isSearchActive,
             showSearchLoader = showSearchLoader,
             selectionMode = args.selectionMode,
+            recentDirectRooms = recentDirectRooms.toImmutableList(),
             eventSink = { event ->
                 when (event) {
                     is UserListEvents.OnSearchActiveChanged -> isSearchActive = event.active
