@@ -11,6 +11,8 @@
   <string name="screen_roomlist_filter_favourites_empty_state_subtitle">"In den Chat-Einstellungen kannst du einen Chat als Favorit hinzufügen.
 Um deine anderen Chats zu sehen wähle diesen Filter ab."</string>
   <string name="screen_roomlist_filter_favourites_empty_state_title">"Du hast noch keine Chats als Favorit markiert."</string>
+  <string name="screen_roomlist_filter_invites">"Einladungen"</string>
+  <string name="screen_roomlist_filter_invites_empty_state_title">"Du hast keine ausstehenden Einladungen."</string>
   <string name="screen_roomlist_filter_low_priority">"Niedrige Priorität"</string>
   <string name="screen_roomlist_filter_mixed_empty_state_subtitle">"Wähle Filter ab, um Deine Chats zu sehen."</string>
   <string name="screen_roomlist_filter_mixed_empty_state_title">"Du hast keine Chats für diese Auswahl"</string>

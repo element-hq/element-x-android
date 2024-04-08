@@ -175,7 +175,9 @@
   <string name="common_privacy_policy">"Datenschutz­erklärung"</string>
   <string name="common_reaction">"Reaktion"</string>
   <string name="common_reactions">"Reaktionen"</string>
-  <string name="common_recovery_key">"Wiederherstellungsschlüssel oder Passcode"</string>
+  <string name="common_recovery_key">
+    <b>"Wiederherstellungsschlüssel"</b>
+  </string>
   <string name="common_refreshing">"Wird erneuert…"</string>
   <string name="common_replying_to">"%1$s antworten"</string>
   <string name="common_report_a_bug">"Einen Fehler melden"</string>

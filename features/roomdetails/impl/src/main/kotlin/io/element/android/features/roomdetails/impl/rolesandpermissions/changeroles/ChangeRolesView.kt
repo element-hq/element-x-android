@@ -26,8 +26,10 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.systemBarsPadding
@@ -36,12 +38,16 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
@@ -52,6 +58,9 @@ import io.element.android.libraries.designsystem.components.async.AsyncActionVie
 import io.element.android.libraries.designsystem.components.async.AsyncIndicator
 import io.element.android.libraries.designsystem.components.async.AsyncIndicatorHost
 import io.element.android.libraries.designsystem.components.async.rememberAsyncIndicatorState
+import io.element.android.libraries.designsystem.components.avatar.Avatar
+import io.element.android.libraries.designsystem.components.avatar.AvatarData
+import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
 import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
@@ -67,22 +76,22 @@ import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.RoomMember
+import io.element.android.libraries.matrix.api.room.RoomMembershipState
+import io.element.android.libraries.matrix.api.room.getBestName
 import io.element.android.libraries.matrix.api.room.toMatrixUser
 import io.element.android.libraries.matrix.api.user.MatrixUser
-import io.element.android.libraries.matrix.ui.components.MatrixUserRow
 import io.element.android.libraries.matrix.ui.components.SelectedUsersRowList
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.persistentListOf
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ChangeRolesView(
     state: ChangeRolesState,
-    onBackPressed: () -> Unit,
+    navigateUp: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val updatedOnBackPressed by rememberUpdatedState(newValue = onBackPressed)
+    val updatedNavigateUp by rememberUpdatedState(newValue = navigateUp)
     BackHandler(enabled = !state.isSearchActive) {
         state.eventSink(ChangeRolesEvent.Exit)
     }
@@ -136,7 +145,7 @@ fun ChangeRolesView(
                     resultState = state.searchResults,
                 ) { members ->
                     SearchResultsList(
-                        isSearchActive = true,
+                        currentRole = state.role,
                         lazyListState = lazyListState,
                         searchResults = members,
                         selectedUsers = state.selectedUsers,
@@ -152,9 +161,9 @@ fun ChangeRolesView(
                 ) {
                     Column {
                         SearchResultsList(
-                            isSearchActive = false,
+                            currentRole = state.role,
                             lazyListState = lazyListState,
-                            searchResults = (state.searchResults as? SearchBarResultState.Results)?.results ?: persistentListOf(),
+                            searchResults = (state.searchResults as? SearchBarResultState.Results)?.results ?: MembersByRole(emptyList()),
                             selectedUsers = state.selectedUsers,
                             canRemoveMember = state.canChangeMemberRole,
                             onSelectionToggled = { state.eventSink(ChangeRolesEvent.UserSelectionToggled(it.toMatrixUser())) },
@@ -179,7 +188,7 @@ fun ChangeRolesView(
 
         AsyncActionView(
             async = state.exitState,
-            onSuccess = { updatedOnBackPressed() },
+            onSuccess = { updatedNavigateUp() },
             confirmationDialog = {
                 ConfirmationDialog(
                     title = stringResource(CommonStrings.dialog_unsaved_changes_title),
@@ -227,8 +236,8 @@ fun ChangeRolesView(
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun SearchResultsList(
-    isSearchActive: Boolean,
-    searchResults: ImmutableList<RoomMember>,
+    currentRole: RoomMember.Role,
+    searchResults: MembersByRole,
     selectedUsers: ImmutableList<MatrixUser>,
     canRemoveMember: (UserId) -> Boolean,
     onSelectionToggled: (RoomMember) -> Unit,
@@ -241,43 +250,145 @@ private fun SearchResultsList(
         item {
             selectedUsersList(selectedUsers)
         }
-        stickyHeader {
-            val textResId = if (isSearchActive) {
-                CommonStrings.common_search_results
-            } else {
-                R.string.screen_room_member_list_room_members_header_title
-            }
-            Text(
-                modifier = Modifier
-                    .background(ElementTheme.colors.bgCanvasDefault)
-                    .padding(horizontal = 16.dp, vertical = 8.dp)
-                    .fillMaxWidth(),
-                text = stringResource(textResId),
-                style = ElementTheme.typography.fontBodyLgMedium,
-            )
-        }
-        items(searchResults, key = { it.userId }) { roomMember ->
-            val canToggle = canRemoveMember(roomMember.userId)
-            val trailingContent: @Composable (() -> Unit)? = if (canToggle) {
-                {
-                    Checkbox(
-                        checked = selectedUsers.any { it.userId == roomMember.userId },
-                        onCheckedChange = { onSelectionToggled(roomMember) },
+        if (searchResults.admins.isNotEmpty()) {
+            stickyHeader { ListSectionHeader(text = stringResource(R.string.screen_room_roles_and_permissions_admins)) }
+            // Add a footer for the admin section in change role to moderator screen
+            if (currentRole == RoomMember.Role.MODERATOR) {
+                item {
+                    Text(
+                        modifier = Modifier
+                            .padding(start = 16.dp, end = 16.dp, bottom = 8.dp),
+                        text = stringResource(R.string.screen_room_change_role_moderators_admin_section_footer),
+                        color = ElementTheme.colors.textSecondary,
+                        style = ElementTheme.typography.fontBodySmRegular,
                     )
                 }
-            } else {
-                null
             }
-            MatrixUserRow(
-                modifier = Modifier.clickable(enabled = canToggle, onClick = { onSelectionToggled(roomMember) }),
-                matrixUser = MatrixUser(
-                    userId = roomMember.userId,
-                    displayName = roomMember.displayName,
-                    avatarUrl = roomMember.avatarUrl,
-                ),
-                trailingContent = trailingContent,
-            )
+            items(searchResults.admins, key = { it.userId }) { roomMember ->
+                ListMemberItem(
+                    roomMember = roomMember,
+                    canRemoveMember = canRemoveMember,
+                    onSelectionToggled = onSelectionToggled,
+                    selectedUsers = selectedUsers
+                )
+            }
         }
+        if (searchResults.moderators.isNotEmpty()) {
+            stickyHeader { ListSectionHeader(text = stringResource(R.string.screen_room_roles_and_permissions_moderators)) }
+            items(searchResults.moderators, key = { it.userId }) { roomMember ->
+                ListMemberItem(
+                    roomMember = roomMember,
+                    canRemoveMember = canRemoveMember,
+                    onSelectionToggled = onSelectionToggled,
+                    selectedUsers = selectedUsers
+                )
+            }
+        }
+        if (searchResults.admins.isNotEmpty()) {
+            stickyHeader { ListSectionHeader(text = stringResource(R.string.screen_room_member_list_mode_members)) }
+            items(searchResults.members, key = { it.userId }) { roomMember ->
+                ListMemberItem(
+                    roomMember = roomMember,
+                    canRemoveMember = canRemoveMember,
+                    onSelectionToggled = onSelectionToggled,
+                    selectedUsers = selectedUsers
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun ListSectionHeader(text: String) {
+    Text(
+        modifier = Modifier
+            .background(ElementTheme.colors.bgCanvasDefault)
+            .padding(horizontal = 16.dp, vertical = 8.dp)
+            .fillMaxWidth(),
+        text = text,
+        style = ElementTheme.typography.fontBodyLgMedium,
+    )
+}
+
+@Composable
+private fun ListMemberItem(
+    roomMember: RoomMember,
+    canRemoveMember: (UserId) -> Boolean,
+    onSelectionToggled: (RoomMember) -> Unit,
+    selectedUsers: ImmutableList<MatrixUser>,
+) {
+    val canToggle = canRemoveMember(roomMember.userId)
+    val trailingContent: @Composable (() -> Unit) = {
+        Checkbox(
+            checked = selectedUsers.any { it.userId == roomMember.userId },
+            onCheckedChange = { onSelectionToggled(roomMember) },
+            enabled = canToggle,
+        )
+    }
+    MemberRow(
+        modifier = Modifier.clickable(enabled = canToggle, onClick = { onSelectionToggled(roomMember) }),
+        avatarData = AvatarData(roomMember.userId.value, roomMember.displayName, roomMember.avatarUrl, AvatarSize.UserListItem),
+        name = roomMember.getBestName(),
+        userId = roomMember.userId.value.takeIf { roomMember.displayName?.isNotBlank() == true },
+        isPending = roomMember.membership == RoomMembershipState.INVITE,
+        trailingContent = trailingContent,
+    )
+}
+
+@Composable
+private fun MemberRow(
+    avatarData: AvatarData,
+    name: String,
+    userId: String?,
+    isPending: Boolean,
+    modifier: Modifier = Modifier,
+    trailingContent: @Composable (() -> Unit)? = null,
+) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .heightIn(min = 56.dp)
+            .padding(start = 16.dp, top = 4.dp, end = 16.dp, bottom = 4.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Avatar(avatarData)
+        Column(
+            modifier = Modifier
+                .padding(start = 12.dp)
+                .weight(1f),
+        ) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                // Name
+                Text(
+                    modifier = Modifier.weight(1f, fill = false),
+                    text = name,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    color = MaterialTheme.colorScheme.primary,
+                    style = ElementTheme.typography.fontBodyLgRegular,
+                )
+                // Invitation pending marker
+                if (isPending) {
+                    Text(
+                        modifier = Modifier.padding(start = 8.dp),
+                        text = stringResource(id = R.string.screen_room_member_list_pending_header_title),
+                        style = ElementTheme.typography.fontBodySmRegular.copy(fontStyle = FontStyle.Italic),
+                        color = MaterialTheme.colorScheme.secondary
+                    )
+                }
+            }
+            // Id
+            userId?.let {
+                Text(
+                    text = userId,
+                    color = MaterialTheme.colorScheme.secondary,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    style = ElementTheme.typography.fontBodySmRegular,
+                )
+            }
+        }
+        trailingContent?.invoke()
     }
 }
 
@@ -287,7 +398,27 @@ internal fun ChangeRolesViewPreview(@PreviewParameter(ChangeRolesStateProvider::
     ElementPreview {
         ChangeRolesView(
             state = state,
-            onBackPressed = {},
+            navigateUp = {},
+        )
+    }
+}
+
+@PreviewsDayNight
+@Composable
+internal fun PendingMemberRowWithLongNamePreview() {
+    ElementPreview {
+        MemberRow(
+            avatarData = AvatarData("userId", "A very long name that should be truncated", "https://example.com/avatar.png", AvatarSize.UserListItem),
+            name = "A very long name that should be truncated",
+            userId = "@alice:matrix.org",
+            isPending = true,
+            trailingContent = {
+                Checkbox(
+                    checked = true,
+                    onCheckedChange = {},
+                    enabled = true,
+                )
+            }
         )
     }
 }

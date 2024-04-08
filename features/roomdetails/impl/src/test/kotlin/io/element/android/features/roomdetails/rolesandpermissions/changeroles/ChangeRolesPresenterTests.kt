@@ -106,15 +106,19 @@ class ChangeRolesPresenterTests {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            val initialResults = (awaitItem().searchResults as? SearchBarResultState.Results)?.results.orEmpty()
-            assertThat(initialResults).hasSize(10)
+            val initialResults = (awaitItem().searchResults as? SearchBarResultState.Results)?.results
+            assertThat(initialResults?.members).hasSize(8)
+            assertThat(initialResults?.moderators).hasSize(1)
+            assertThat(initialResults?.admins).hasSize(1)
 
             initialState.eventSink(ChangeRolesEvent.QueryChanged("Alice"))
             skipItems(1)
 
-            val searchResults = (awaitItem().searchResults as? SearchBarResultState.Results)?.results.orEmpty()
-            assertThat(searchResults).hasSize(1)
-            assertThat(searchResults.firstOrNull()?.userId).isEqualTo(A_USER_ID)
+            val searchResults = (awaitItem().searchResults as? SearchBarResultState.Results)?.results
+            assertThat(searchResults?.admins).hasSize(1)
+            assertThat(searchResults?.moderators).isEmpty()
+            assertThat(searchResults?.members).isEmpty()
+            assertThat(searchResults?.admins?.firstOrNull()?.userId).isEqualTo(A_USER_ID)
         }
     }
 
@@ -128,15 +132,19 @@ class ChangeRolesPresenterTests {
             presenter.present()
         }.test {
             skipItems(1)
-            val initialResults = (awaitItem().searchResults as? SearchBarResultState.Results)?.results.orEmpty()
-            assertThat(initialResults).hasSize(10)
+            val initialResults = (awaitItem().searchResults as? SearchBarResultState.Results)?.results
+            assertThat(initialResults?.members).hasSize(8)
+            assertThat(initialResults?.moderators).hasSize(1)
+            assertThat(initialResults?.admins).hasSize(1)
 
             room.givenRoomMembersState(MatrixRoomMembersState.Ready(aRoomMemberList().take(1).toPersistentList()))
             skipItems(1)
 
-            val searchResults = (awaitItem().searchResults as? SearchBarResultState.Results)?.results.orEmpty()
-            assertThat(searchResults).hasSize(1)
-            assertThat(searchResults.firstOrNull()?.userId).isEqualTo(A_USER_ID)
+            val searchResults = (awaitItem().searchResults as? SearchBarResultState.Results)?.results
+            assertThat(searchResults?.admins).hasSize(1)
+            assertThat(searchResults?.moderators).isEmpty()
+            assertThat(searchResults?.members).isEmpty()
+            assertThat(searchResults?.admins?.firstOrNull()?.userId).isEqualTo(A_USER_ID)
         }
     }
 
