@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_identity_confirmation_subtitle">"Vérifier cette session pour configurer votre messagerie sécurisée."</string>
+  <string name="screen_identity_confirmation_title">"Confirmez votre identité"</string>
+  <string name="screen_identity_confirmed_subtitle">"Vous pouvez désormais lire ou envoyer des messages en toute sécurité, et toute personne avec qui vous discutez peut également faire confiance à cette session."</string>
+  <string name="screen_identity_confirmed_title">"Session vérifiée"</string>
+  <string name="screen_identity_use_another_device">"Utiliser une autre session"</string>
+  <string name="screen_identity_waiting_on_other_device">"En attente d’une autre session…"</string>
   <string name="screen_session_verification_cancelled_subtitle">"Quelque chose ne va pas. Soit la demande a expiré, soit elle a été refusée."</string>
   <string name="screen_session_verification_compare_emojis_subtitle">"Confirmez que les emojis ci-dessous correspondent à ceux affichés sur votre autre session."</string>
   <string name="screen_session_verification_compare_emojis_title">"Comparez les émojis"</string>

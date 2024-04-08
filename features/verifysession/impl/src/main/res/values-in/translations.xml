@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_identity_confirmation_create_new_recovery_key">"Buat kunci pemulihan baru"</string>
+  <string name="screen_identity_confirmation_subtitle">"Verifikasi perangkat ini untuk menyiapkan perpesanan aman."</string>
+  <string name="screen_identity_confirmation_title">"Konfirmasi bahwa ini Anda"</string>
+  <string name="screen_identity_confirmed_subtitle">"Sekarang Anda dapat membaca atau mengirim pesan dengan aman, dan siapa pun yang mengobrol dengan Anda juga dapat mempercayai perangkat ini."</string>
+  <string name="screen_identity_confirmed_title">"Perangkat terverifikasi"</string>
+  <string name="screen_identity_use_another_device">"Gunakan perangkat lain"</string>
+  <string name="screen_identity_waiting_on_other_device">"Menunggu di perangkat lain…"</string>
   <string name="screen_session_verification_cancelled_subtitle">"Sepertinya ada yang tidak beres. Entah permintaan sudah habis masa berlakunya atau permintaan ditolak."</string>
   <string name="screen_session_verification_compare_emojis_subtitle">"Konfirmasikan bahwa emoji di bawah ini sesuai dengan yang ditampilkan pada sesi Anda yang lain."</string>
   <string name="screen_session_verification_compare_emojis_title">"Bandingkan emoji"</string>

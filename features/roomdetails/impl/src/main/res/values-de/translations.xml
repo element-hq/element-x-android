@@ -30,6 +30,8 @@
   <string name="screen_room_change_role_confirm_demote_self_description">"Du stufst dich selbst herab. Diese Änderung kann nicht rückgängig gemacht werden. Wenn du der letzte Benutzer mit dieser Rolle bist, ist es nicht möglich, diese Rolle wiederzuerlangen."</string>
   <string name="screen_room_change_role_confirm_demote_self_title">"Möchtest Du Dich selbst herabstufen?"</string>
   <string name="screen_room_change_role_invited_member_name">"%1$s (Ausstehend)"</string>
+  <string name="screen_room_change_role_invited_member_name_android">"(Ausstehend)"</string>
+  <string name="screen_room_change_role_moderators_admin_section_footer">"Administratoren haben automatisch Moderatorenrechte"</string>
   <string name="screen_room_change_role_moderators_title">"Moderatoren bearbeiten"</string>
   <string name="screen_room_change_role_section_administrators">"Administratoren"</string>
   <string name="screen_room_change_role_section_moderators">"Moderatoren"</string>
@@ -57,6 +59,7 @@
   <string name="screen_room_details_room_name_label">"Raumname"</string>
   <string name="screen_room_details_security_title">"Sicherheit"</string>
   <string name="screen_room_details_share_room_title">"Raum teilen"</string>
+  <string name="screen_room_details_title">"Raum Informationen"</string>
   <string name="screen_room_details_topic_title">"Thema"</string>
   <string name="screen_room_details_updating_room">"Raum wird aktualisiert…"</string>
   <string name="screen_room_member_list_ban_member_confirmation_action">"Sperren"</string>

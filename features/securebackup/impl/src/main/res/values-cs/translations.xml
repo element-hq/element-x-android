@@ -21,10 +21,12 @@
   <string name="screen_recovery_key_change_generate_key_description">"Ujistěte se, že můžete klíč pro obnovení uložit někde v bezpečí"</string>
   <string name="screen_recovery_key_change_success">"Klíč pro obnovení byl změněn"</string>
   <string name="screen_recovery_key_change_title">"Změnit klíč pro obnovení?"</string>
-  <string name="screen_recovery_key_confirm_description">"Zadejte klíč pro obnovení a potvrďte přístup k záloze chatu."</string>
+  <string name="screen_recovery_key_confirm_create_new_recovery_key">"Vytvořit nový klíč pro obnovení"</string>
+  <string name="screen_recovery_key_confirm_description">"Ujistěte se, že tuto obrazovku nikdo nevidí!"</string>
   <string name="screen_recovery_key_confirm_error_content">"Zkuste prosím znovu potvrdit přístup k záloze chatu."</string>
   <string name="screen_recovery_key_confirm_error_title">"Nesprávný klíč pro obnovení"</string>
-  <string name="screen_recovery_key_confirm_key_description">"Zadejte kód o délce 48 znaků."</string>
+  <string name="screen_recovery_key_confirm_key_description">"Pokud máte frázi pro obnovení nebo tajnou přístupovou frázi/klíč, bude to fungovat také."</string>
+  <string name="screen_recovery_key_confirm_key_label">"Klíč pro obnovení nebo přístupový kód"</string>
   <string name="screen_recovery_key_confirm_key_placeholder">"Zadejte…"</string>
   <string name="screen_recovery_key_confirm_success">"Klíč pro obnovení potvrzen"</string>
   <string name="screen_recovery_key_confirm_title">"Potvrďte klíč pro obnovení"</string>
