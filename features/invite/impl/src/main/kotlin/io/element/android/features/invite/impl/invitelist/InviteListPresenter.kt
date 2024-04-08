@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright (c) 2024 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,43 +14,35 @@
  * limitations under the License.
  */
 
-package io.element.android.features.invite.impl
+package io.element.android.features.invite.impl.invitelist
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import im.vector.app.features.analytics.plan.JoinedRoom
 import io.element.android.features.invite.api.SeenInvitesStore
 import io.element.android.features.invite.impl.model.InviteListInviteSummary
 import io.element.android.features.invite.impl.model.InviteSender
-import io.element.android.libraries.architecture.AsyncData
+import io.element.android.features.invite.impl.response.AcceptDeclineInviteEvents
+import io.element.android.features.invite.impl.response.AcceptDeclineInvitePresenter
+import io.element.android.features.invite.impl.response.InviteData
 import io.element.android.libraries.architecture.Presenter
-import io.element.android.libraries.architecture.runCatchingUpdatingState
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.roomlist.RoomSummary
-import io.element.android.libraries.push.api.notifications.NotificationDrawerManager
-import io.element.android.services.analytics.api.AnalyticsService
-import io.element.android.services.analytics.api.extensions.toAnalyticsJoinedRoom
 import kotlinx.collections.immutable.toPersistentList
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class InviteListPresenter @Inject constructor(
     private val client: MatrixClient,
     private val store: SeenInvitesStore,
-    private val analyticsService: AnalyticsService,
-    private val notificationDrawerManager: NotificationDrawerManager,
+    private val acceptDeclineInvitePresenter: AcceptDeclineInvitePresenter,
 ) : Presenter<InviteListState> {
     @Composable
     override fun present(): InviteListState {
@@ -75,40 +67,20 @@ class InviteListPresenter @Inject constructor(
             )
         }
 
-        val localCoroutineScope = rememberCoroutineScope()
-        val acceptedAction: MutableState<AsyncData<RoomId>> = remember { mutableStateOf(AsyncData.Uninitialized) }
-        val declinedAction: MutableState<AsyncData<Unit>> = remember { mutableStateOf(AsyncData.Uninitialized) }
-        val decliningInvite: MutableState<InviteListInviteSummary?> = remember { mutableStateOf(null) }
+        val acceptDeclineInviteState = acceptDeclineInvitePresenter.present()
 
         fun handleEvent(event: InviteListEvents) {
             when (event) {
                 is InviteListEvents.AcceptInvite -> {
-                    acceptedAction.value = AsyncData.Uninitialized
-                    localCoroutineScope.acceptInvite(event.invite.roomId, acceptedAction)
+                    acceptDeclineInviteState.eventSink(
+                        AcceptDeclineInviteEvents.AcceptInvite(event.invite.toInviteData())
+                    )
                 }
 
                 is InviteListEvents.DeclineInvite -> {
-                    decliningInvite.value = event.invite
-                }
-
-                is InviteListEvents.ConfirmDeclineInvite -> {
-                    declinedAction.value = AsyncData.Uninitialized
-                    decliningInvite.value?.let {
-                        localCoroutineScope.declineInvite(it.roomId, declinedAction)
-                    }
-                    decliningInvite.value = null
-                }
-
-                is InviteListEvents.CancelDeclineInvite -> {
-                    decliningInvite.value = null
-                }
-
-                is InviteListEvents.DismissAcceptError -> {
-                    acceptedAction.value = AsyncData.Uninitialized
-                }
-
-                is InviteListEvents.DismissDeclineError -> {
-                    declinedAction.value = AsyncData.Uninitialized
+                    acceptDeclineInviteState.eventSink(
+                        AcceptDeclineInviteEvents.DeclineInvite(event.invite.toInviteData())
+                    )
                 }
             }
         }
@@ -124,36 +96,9 @@ class InviteListPresenter @Inject constructor(
 
         return InviteListState(
             inviteList = inviteList,
-            declineConfirmationDialog = decliningInvite.value?.let {
-                InviteDeclineConfirmationDialog.Visible(
-                    isDirect = it.isDirect,
-                    name = it.roomName,
-                )
-            } ?: InviteDeclineConfirmationDialog.Hidden,
-            acceptedAction = acceptedAction.value,
-            declinedAction = declinedAction.value,
+            acceptDeclineInviteState = acceptDeclineInviteState,
             eventSink = ::handleEvent
         )
-    }
-
-    private fun CoroutineScope.acceptInvite(roomId: RoomId, acceptedAction: MutableState<AsyncData<RoomId>>) = launch {
-        suspend {
-            client.getRoom(roomId)?.use {
-                it.join().getOrThrow()
-                notificationDrawerManager.clearMembershipNotificationForRoom(client.sessionId, roomId, doRender = true)
-                analyticsService.capture(it.toAnalyticsJoinedRoom(JoinedRoom.Trigger.Invite))
-            }
-            roomId
-        }.runCatchingUpdatingState(acceptedAction)
-    }
-
-    private fun CoroutineScope.declineInvite(roomId: RoomId, declinedAction: MutableState<AsyncData<Unit>>) = launch {
-        suspend {
-            client.getRoom(roomId)?.use {
-                it.leave().getOrThrow()
-                notificationDrawerManager.clearMembershipNotificationForRoom(client.sessionId, roomId, doRender = true)
-            }.let { }
-        }.runCatchingUpdatingState(declinedAction)
     }
 
     private fun RoomSummary.Filled.toInviteSummary(seen: Boolean) = details.run {
@@ -203,4 +148,10 @@ class InviteListPresenter @Inject constructor(
                 },
         )
     }
+
+    private fun InviteListInviteSummary.toInviteData() = InviteData(
+        roomId = roomId,
+        roomName = roomName,
+        isDirect = isDirect,
+    )
 }

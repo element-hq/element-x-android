@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright (c) 2024 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,24 +14,16 @@
  * limitations under the License.
  */
 
-package io.element.android.features.invite.impl
+package io.element.android.features.invite.impl.invitelist
 
 import androidx.compose.runtime.Immutable
+import io.element.android.features.invite.impl.response.AcceptDeclineInviteState
 import io.element.android.features.invite.impl.model.InviteListInviteSummary
-import io.element.android.libraries.architecture.AsyncData
-import io.element.android.libraries.matrix.api.core.RoomId
 import kotlinx.collections.immutable.ImmutableList
 
 @Immutable
 data class InviteListState(
     val inviteList: ImmutableList<InviteListInviteSummary>,
-    val declineConfirmationDialog: InviteDeclineConfirmationDialog,
-    val acceptedAction: AsyncData<RoomId>,
-    val declinedAction: AsyncData<Unit>,
+    val acceptDeclineInviteState: AcceptDeclineInviteState,
     val eventSink: (InviteListEvents) -> Unit
 )
-
-sealed interface InviteDeclineConfirmationDialog {
-    data object Hidden : InviteDeclineConfirmationDialog
-    data class Visible(val isDirect: Boolean, val name: String) : InviteDeclineConfirmationDialog
-}

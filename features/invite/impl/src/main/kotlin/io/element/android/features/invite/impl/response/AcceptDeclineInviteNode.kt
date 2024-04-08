@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright (c) 2024 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,42 +14,33 @@
  * limitations under the License.
  */
 
-package io.element.android.features.invite.impl
+package io.element.android.features.invite.impl.response
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
-import com.bumble.appyx.core.plugin.plugins
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
-import io.element.android.features.invite.api.InviteListEntryPoint
 import io.element.android.libraries.di.SessionScope
-import io.element.android.libraries.matrix.api.core.RoomId
 
 @ContributesNode(SessionScope::class)
-class InviteListNode @AssistedInject constructor(
+class AcceptDeclineInviteNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
-    private val presenter: InviteListPresenter,
+    private val presenter: AcceptDeclineInvitePresenter,
 ) : Node(buildContext, plugins = plugins) {
-    private fun onBackClicked() {
-        plugins<InviteListEntryPoint.Callback>().forEach { it.onBackClicked() }
-    }
-
-    private fun onInviteAccepted(roomId: RoomId) {
-        plugins<InviteListEntryPoint.Callback>().forEach { it.onInviteAccepted(roomId) }
-    }
 
     @Composable
     override fun View(modifier: Modifier) {
         val state = presenter.present()
-        InviteListView(
+        AcceptDeclineInviteView(
             state = state,
-            onBackClicked = ::onBackClicked,
-            onInviteAccepted = ::onInviteAccepted,
+            onInviteAccepted = {},
+            onInviteDeclined = {},
+            modifier = modifier
         )
     }
 }

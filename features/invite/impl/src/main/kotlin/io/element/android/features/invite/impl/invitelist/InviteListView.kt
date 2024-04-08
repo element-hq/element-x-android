@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright (c) 2024 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.features.invite.impl
+package io.element.android.features.invite.impl.invitelist
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -27,20 +27,16 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
+import io.element.android.features.invite.impl.R
 import io.element.android.features.invite.impl.components.InviteSummaryRow
-import io.element.android.libraries.architecture.AsyncData
+import io.element.android.features.invite.impl.response.AcceptDeclineInviteView
 import io.element.android.libraries.designsystem.components.button.BackButton
-import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
-import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.aliasScreenTitle
@@ -56,61 +52,19 @@ fun InviteListView(
     state: InviteListState,
     onBackClicked: () -> Unit,
     onInviteAccepted: (RoomId) -> Unit,
+    onInviteDeclined: (RoomId) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    if (state.acceptedAction is AsyncData.Success) {
-        val latestOnInviteAccepted by rememberUpdatedState(onInviteAccepted)
-        LaunchedEffect(state.acceptedAction) {
-            latestOnInviteAccepted(state.acceptedAction.data)
-        }
-    }
-
     InviteListContent(
         state = state,
         modifier = modifier,
         onBackClicked = onBackClicked,
     )
-
-    if (state.declineConfirmationDialog is InviteDeclineConfirmationDialog.Visible) {
-        val contentResource = if (state.declineConfirmationDialog.isDirect) {
-            R.string.screen_invites_decline_direct_chat_message
-        } else {
-            R.string.screen_invites_decline_chat_message
-        }
-
-        val titleResource = if (state.declineConfirmationDialog.isDirect) {
-            R.string.screen_invites_decline_direct_chat_title
-        } else {
-            R.string.screen_invites_decline_chat_title
-        }
-
-        ConfirmationDialog(
-            content = stringResource(contentResource, state.declineConfirmationDialog.name),
-            title = stringResource(titleResource),
-            submitText = stringResource(CommonStrings.action_decline),
-            cancelText = stringResource(CommonStrings.action_cancel),
-            onSubmitClicked = { state.eventSink(InviteListEvents.ConfirmDeclineInvite) },
-            onDismiss = { state.eventSink(InviteListEvents.CancelDeclineInvite) }
-        )
-    }
-
-    if (state.acceptedAction is AsyncData.Failure) {
-        ErrorDialog(
-            content = stringResource(CommonStrings.error_unknown),
-            title = stringResource(CommonStrings.common_error),
-            submitText = stringResource(CommonStrings.action_ok),
-            onDismiss = { state.eventSink(InviteListEvents.DismissAcceptError) }
-        )
-    }
-
-    if (state.declinedAction is AsyncData.Failure) {
-        ErrorDialog(
-            content = stringResource(CommonStrings.error_unknown),
-            title = stringResource(CommonStrings.common_error),
-            submitText = stringResource(CommonStrings.action_ok),
-            onDismiss = { state.eventSink(InviteListEvents.DismissDeclineError) }
-        )
-    }
+    AcceptDeclineInviteView(
+        state = state.acceptDeclineInviteState,
+        onInviteAccepted = onInviteAccepted,
+        onInviteDeclined = onInviteDeclined,
+    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -138,8 +92,8 @@ private fun InviteListContent(
         content = { padding ->
             Column(
                 modifier = Modifier
-                    .padding(padding)
-                    .consumeWindowInsets(padding)
+                        .padding(padding)
+                        .consumeWindowInsets(padding)
             ) {
                 if (state.inviteList.isEmpty()) {
                     Spacer(Modifier.size(80.dp))
@@ -181,5 +135,6 @@ internal fun InviteListViewPreview(@PreviewParameter(InviteListStateProvider::cl
         state = state,
         onBackClicked = {},
         onInviteAccepted = {},
+        onInviteDeclined = {},
     )
 }
