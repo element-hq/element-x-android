@@ -69,6 +69,8 @@ dependencies {
     testImplementation(projects.libraries.usersearch.test)
     testImplementation(projects.features.createroom.test)
     testImplementation(projects.tests.testutils)
+    testImplementation(libs.androidx.compose.ui.test.junit)
+    testReleaseImplementation(libs.androidx.compose.ui.test.manifest)
 
     ksp(libs.showkase.processor)
 }
