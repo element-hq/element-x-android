@@ -142,9 +142,6 @@ class VerifySelfSessionStateMachine @Inject constructor(
                         else -> state.override { State.Canceled }
                     }
                 }
-                on { _: Event.Skip, state: MachineState<State> ->
-                    state.override { State.Completed }
-                }
             }
         }
     }
@@ -219,8 +216,5 @@ class VerifySelfSessionStateMachine @Inject constructor(
 
         /** Reset the verification flow to the initial state. */
         data object Reset : Event
-
-        /** Skip the verification flow. */
-        data object Skip : Event
     }
 }
