@@ -48,7 +48,7 @@ class JoinRoomPresenter @AssistedInject constructor(
         val userMembership by roomListService.getUserMembershipForRoom(roomId).collectAsState(initial = Optional.empty())
         val joinAuthorisationStatus = joinAuthorisationStatus(userMembership)
         val roomInfo by produceState<AsyncData<RoomInfo>>(initialValue = AsyncData.Uninitialized, key1 = userMembership) {
-            when {
+            value = when {
                 userMembership.isPresent -> {
                     val roomInfo = matrixClient.getRoom(roomId)?.use {
                         RoomInfo(
@@ -59,11 +59,9 @@ class JoinRoomPresenter @AssistedInject constructor(
                             roomAvatarUrl = it.avatarUrl
                         )
                     }
-                    value = roomInfo?.let { AsyncData.Success(it) } ?: AsyncData.Failure(Exception("Failed to load room info"))
+                    roomInfo?.let { AsyncData.Success(it) } ?: AsyncData.Failure(Exception("Failed to load room info"))
                 }
-                else -> {
-                    value = AsyncData.Uninitialized
-                }
+                else -> AsyncData.Uninitialized
             }
         }
 

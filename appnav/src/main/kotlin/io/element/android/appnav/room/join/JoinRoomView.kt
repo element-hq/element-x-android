@@ -23,7 +23,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
@@ -132,7 +131,9 @@ private fun JoinRoomContent(
     modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = modifier.padding(all = 16.dp),
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(all = 16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         when (state.roomInfo) {
@@ -159,27 +160,32 @@ private fun JoinRoomContent(
             color = ElementTheme.colors.textSecondary,
         )
         if (state.showMemberCount) {
-            Spacer(modifier = Modifier.height(8.dp))
-            Row(
-                modifier = Modifier
-                    .background(color = ElementTheme.colors.bgSubtleSecondary, shape = CircleShape)
-                    .widthIn(min = 48.dp)
-                    .padding(all = 2.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(4.dp)
-            ) {
-                Icon(
-                    imageVector = CompoundIcons.UserProfile(),
-                    contentDescription = null,
-                    tint = ElementTheme.colors.iconSecondary,
-                )
-                Text(
-                    text = "${state.roomInfo.dataOrNull()?.memberCount}",
-                    style = ElementTheme.typography.fontBodySmMedium,
-                    color = ElementTheme.colors.textSecondary,
-                )
-            }
+            JoinRoomMembersCount(memberCount = state.roomInfo.dataOrNull()?.memberCount ?: 0)
         }
+    }
+}
+
+@Composable
+fun JoinRoomMembersCount(memberCount: Long) {
+    Spacer(modifier = Modifier.height(8.dp))
+    Row(
+        modifier = Modifier
+            .background(color = ElementTheme.colors.bgSubtleSecondary, shape = CircleShape)
+            .widthIn(min = 48.dp)
+            .padding(all = 2.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(4.dp)
+    ) {
+        Icon(
+            imageVector = CompoundIcons.UserProfile(),
+            contentDescription = null,
+            tint = ElementTheme.colors.iconSecondary,
+        )
+        Text(
+            text = "$memberCount",
+            style = ElementTheme.typography.fontBodySmMedium,
+            color = ElementTheme.colors.textSecondary,
+        )
     }
 }
 
