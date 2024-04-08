@@ -1,12 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_identity_confirmation_create_new_recovery_key">
+    "Создайте новый "
+    <b>"ключ восстановления"</b>
+  </string>
+  <string name="screen_identity_confirmation_subtitle">"Подтвердите это устройство, чтобы настроить безопасный обмен сообщениями."</string>
+  <string name="screen_identity_confirmation_title">"Подтвердите, что это вы"</string>
+  <string name="screen_identity_confirmed_subtitle">"Теперь вы можете безопасно читать и отправлять сообщения, и все, с кем вы общаетесь в чате, также могут доверять этому устройству."</string>
+  <string name="screen_identity_confirmed_title">"Устройство проверено"</string>
+  <string name="screen_identity_use_another_device">"Используйте другое устройство"</string>
+  <string name="screen_identity_waiting_on_other_device">"Ожидание на другом устройстве…"</string>
   <string name="screen_session_verification_cancelled_subtitle">"Похоже, что-то не так. Время ожидания запроса либо истекло, либо запрос был отклонен."</string>
   <string name="screen_session_verification_compare_emojis_subtitle">"Убедитесь, что приведенные ниже емоджи совпадают с емоджи показанными во время другого сеанса."</string>
   <string name="screen_session_verification_compare_emojis_title">"Сравните емодзи"</string>
   <string name="screen_session_verification_compare_numbers_subtitle">"Убедитесь, что приведенные ниже числа совпадают с цифрами, показанными в другом сеансе."</string>
   <string name="screen_session_verification_compare_numbers_title">"Сравните числа"</string>
   <string name="screen_session_verification_complete_subtitle">"Ваш новый сеанс подтвержден. У него есть доступ к вашим зашифрованным сообщениям, и другие пользователи увидят его как доверенное."</string>
-  <string name="screen_session_verification_enter_recovery_key">"Введите ключ восстановления"</string>
+  <string name="screen_session_verification_enter_recovery_key">
+    "Введите "
+    <b>"ключ восстановления"</b>
+  </string>
   <string name="screen_session_verification_open_existing_session_subtitle">"Чтобы получить доступ к зашифрованной истории сообщений, докажите, что это вы."</string>
   <string name="screen_session_verification_open_existing_session_title">"Открыть существующий сеанс"</string>
   <string name="screen_session_verification_positive_button_canceled">"Повторить проверку"</string>

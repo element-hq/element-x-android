@@ -21,13 +21,18 @@
   <string name="screen_recovery_key_change_generate_key_description">"Stelle sicher, dass du deinen Wiederherstellungsschlüssel an einem sicheren Ort aufbewahren kannst"</string>
   <string name="screen_recovery_key_change_success">"Wiederherstellungsschlüssel geändert"</string>
   <string name="screen_recovery_key_change_title">"Wiederherstellungsschlüssel ändern?"</string>
-  <string name="screen_recovery_key_confirm_description">"Gib deinen Wiederherstellungsschlüssel ein, um den Zugriff auf dein Chat-Backup zu bestätigen."</string>
+  <string name="screen_recovery_key_confirm_create_new_recovery_key">
+    "Neuen "
+    <b>"Wiederherstellungsschlüssel"</b>
+    " erstellen"
+  </string>
+  <string name="screen_recovery_key_confirm_description">"Sorge dafür, dass niemand diesen Bildschirm sehen kann!"</string>
   <string name="screen_recovery_key_confirm_error_content">"Bitte versuche es noch einmal, um den Zugriff auf dein Chat-Backup zu bestätigen."</string>
   <string name="screen_recovery_key_confirm_error_title">"Falscher Wiederherstellungsschlüssel"</string>
-  <string name="screen_recovery_key_confirm_key_description">"Gib den 48-stelligen Code ein."</string>
+  <string name="screen_recovery_key_confirm_key_description">"Dies funktioniert auch mit einer Wiederherstellungspassphrase oder einer geheime Passphrase/einem geheimen Schlüssel."</string>
   <string name="screen_recovery_key_confirm_key_placeholder">"Eingeben…"</string>
   <string name="screen_recovery_key_confirm_success">"Wiederherstellungsschlüssel bestätigt"</string>
-  <string name="screen_recovery_key_confirm_title">"Wiederherstellungsschlüssel bestätigen."</string>
+  <string name="screen_recovery_key_confirm_title">"Wiederherstellungsschlüssel oder Passcode bestätigen"</string>
   <string name="screen_recovery_key_copied_to_clipboard">"Wiederherstellungsschlüssel kopiert"</string>
   <string name="screen_recovery_key_generating_key">"Generieren…"</string>
   <string name="screen_recovery_key_save_action">"Wiederherstellungsschlüssel speichern"</string>

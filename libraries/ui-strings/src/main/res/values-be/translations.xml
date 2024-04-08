@@ -202,7 +202,7 @@
   <string name="common_server_not_supported">"Сервер не падтрымліваецца"</string>
   <string name="common_server_url">"URL-адрас сервера"</string>
   <string name="common_settings">"Налады"</string>
-  <string name="common_shared_location">"Абагуленыя геаданыя"</string>
+  <string name="common_shared_location">"Абагуліць месцазнаходжанне"</string>
   <string name="common_signing_out">"Выхад"</string>
   <string name="common_starting_chat">"Пачатак чата…"</string>
   <string name="common_sticker">"Стыкер"</string>
@@ -249,12 +249,13 @@
   <string name="invite_friends_text">"Гэй, пагавары са мной у %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Паведаміць аб памылцы з дапамогай Rageshake"</string>
-  <string name="screen_identity_confirmation_subtitle">"Пацвердзіце гэтую прыладу, каб наладзіць бяспечны абмен паведамленнямі."</string>
-  <string name="screen_identity_confirmation_title">"Пацвердзіце, што гэта вы"</string>
-  <string name="screen_identity_confirmed_subtitle">"Цяпер вы можаце бяспечна чытаць і адпраўляць паведамленні, і ўсе, з кім вы маеце зносіны ў чаце, таксама могуць давяраць гэтай прыладзе."</string>
-  <string name="screen_identity_confirmed_title">"Прылада праверана"</string>
-  <string name="screen_identity_use_another_device">"Выкарыстоўвайце іншую прыладу"</string>
-  <string name="screen_identity_waiting_on_other_device">"Чаканне на іншай прыладзе…"</string>
+  <string name="screen_create_new_recovery_key_list_item_1">"Адкрыйце Element на настольнай прыладзе"</string>
+  <string name="screen_create_new_recovery_key_list_item_2">"Увайдзіце ў свой уліковы запіс яшчэ раз"</string>
+  <string name="screen_create_new_recovery_key_list_item_3">"Калі будзе прапанавана пацвердзіць вашу прыладу, выберыце %1$s"</string>
+  <string name="screen_create_new_recovery_key_list_item_3_reset_all">"“Скінуць усе”"</string>
+  <string name="screen_create_new_recovery_key_list_item_4">"Выконвайце інструкцыі, каб стварыць новы ключ аднаўлення"</string>
+  <string name="screen_create_new_recovery_key_list_item_5">"Захавайце новы ключ аднаўлення ў ме́неджэры пароляў або ў зашыфраванай нататке"</string>
+  <string name="screen_create_new_recovery_key_title">"Скіньце шыфраванне для вашага ўліковага запісу з дапамогай іншай прылады"</string>
   <string name="screen_media_picker_error_failed_selection">"Не ўдалося выбраць носьбіт, паўтарыце спробу."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Не атрымалася апрацаваць медыяфайл для загрузкі, паспрабуйце яшчэ раз."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Не атрымалася загрузіць медыяфайлы, паспрабуйце яшчэ раз."</string>
@@ -263,6 +264,7 @@
   <string name="screen_room_member_details_block_alert_action">"Заблакіраваць"</string>
   <string name="screen_room_member_details_block_alert_description">"Заблакіраваныя карыстальнікі не змогуць адпраўляць вам паведамленні, і ўсе іх паведамленні будуць схаваны. Вы можаце разблакіраваць іх у любы час."</string>
   <string name="screen_room_member_details_block_user">"Заблакіраваць карыстальніка"</string>
+  <string name="screen_room_member_details_title">"Профіль"</string>
   <string name="screen_room_member_details_unblock_alert_action">"Разблакіраваць"</string>
   <string name="screen_room_member_details_unblock_alert_description">"Вы зноў зможаце ўбачыць усе паведамленні."</string>
   <string name="screen_room_member_details_unblock_user">"Разблакіраваць карыстальніка"</string>
