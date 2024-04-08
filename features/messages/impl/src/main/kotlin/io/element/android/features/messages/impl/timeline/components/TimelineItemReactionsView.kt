@@ -31,6 +31,7 @@ import io.element.android.features.messages.impl.R
 import io.element.android.features.messages.impl.timeline.aTimelineItemReactions
 import io.element.android.features.messages.impl.timeline.model.AggregatedReaction
 import io.element.android.features.messages.impl.timeline.model.TimelineItemReactions
+import io.element.android.libraries.architecture.coverage.ExcludeFromCoverage
 import io.element.android.libraries.designsystem.icons.CompoundDrawables
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -166,6 +167,7 @@ internal fun TimelineItemReactionsViewOutgoingPreview() = ElementPreview {
     )
 }
 
+@ExcludeFromCoverage
 @Composable
 private fun ContentToPreview(
     reactions: ImmutableList<AggregatedReaction>,

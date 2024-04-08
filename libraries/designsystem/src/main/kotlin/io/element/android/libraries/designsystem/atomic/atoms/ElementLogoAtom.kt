@@ -34,6 +34,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
+import io.element.android.libraries.architecture.coverage.ExcludeFromCoverage
 import io.element.android.libraries.designsystem.R
 import io.element.android.libraries.designsystem.modifiers.blurCompat
 import io.element.android.libraries.designsystem.modifiers.blurredShapeShadow
@@ -171,6 +172,7 @@ internal fun ElementLogoAtomLargeNoBlurShadowPreview() = ElementPreview {
     ContentToPreview(ElementLogoAtomSize.Large, useBlurredShadow = false)
 }
 
+@ExcludeFromCoverage
 @Composable
 private fun ContentToPreview(elementLogoAtomSize: ElementLogoAtomSize, useBlurredShadow: Boolean = true) {
     Box(
