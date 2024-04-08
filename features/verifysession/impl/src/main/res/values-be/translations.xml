@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_identity_confirmation_create_new_recovery_key">"Стварыць новы ключ аднаўлення"</string>
+  <string name="screen_identity_confirmation_subtitle">"Пацвердзіце гэтую прыладу, каб наладзіць бяспечны абмен паведамленнямі."</string>
+  <string name="screen_identity_confirmation_title">"Пацвердзіце, што гэта вы"</string>
+  <string name="screen_identity_confirmed_subtitle">"Цяпер вы можаце бяспечна чытаць і адпраўляць паведамленні, і ўсе, з кім вы маеце зносіны ў чаце, таксама могуць давяраць гэтай прыладзе."</string>
+  <string name="screen_identity_confirmed_title">"Прылада праверана"</string>
+  <string name="screen_identity_use_another_device">"Выкарыстоўвайце іншую прыладу"</string>
+  <string name="screen_identity_waiting_on_other_device">"Чаканне на іншай прыладзе…"</string>
   <string name="screen_session_verification_cancelled_subtitle">"Здаецца, нешта не так. Альбо час чакання запыту скончыўся, альбо запыт быў адхілены."</string>
   <string name="screen_session_verification_compare_emojis_subtitle">"Пераканайцеся, што прыведзеныя ніжэй эмодзі супадаюць з эмодзі, паказанымі ў вашым іншым сеансе."</string>
   <string name="screen_session_verification_compare_emojis_title">"Параўнайце эмодзі"</string>

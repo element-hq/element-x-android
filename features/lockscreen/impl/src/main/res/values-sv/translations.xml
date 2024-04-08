@@ -3,6 +3,7 @@
   <string name="screen_app_lock_settings_change_pin">"Byt PIN-kod"</string>
   <string name="screen_app_lock_settings_enable_biometric_unlock">"Tillåt biometrisk upplåsning"</string>
   <string name="screen_app_lock_settings_remove_pin">"Ta bort PIN-kod"</string>
+  <string name="screen_app_lock_settings_remove_pin_alert_message">"Är du säker på att du vill ta bort PIN-koden?"</string>
   <string name="screen_app_lock_settings_remove_pin_alert_title">"Ta bort PIN-koden?"</string>
   <string name="screen_signout_in_progress_dialog_content">"Loggar ut …"</string>
 </resources>
