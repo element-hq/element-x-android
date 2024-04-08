@@ -23,12 +23,15 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.verifysession.impl.VerifySelfSessionState.VerificationStep
 import io.element.android.libraries.architecture.AsyncData
+import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import io.element.android.libraries.matrix.api.encryption.RecoveryState
 import io.element.android.libraries.matrix.api.verification.SessionVerificationData
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
+import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatus
 import io.element.android.libraries.matrix.api.verification.VerificationEmoji
 import io.element.android.libraries.matrix.api.verification.VerificationFlowState
+import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.matrix.test.encryption.FakeEncryptionService
 import io.element.android.libraries.matrix.test.verification.FakeSessionVerificationService
 import io.element.android.tests.testutils.WarmUpRule
@@ -48,7 +51,21 @@ class VerifySelfSessionPresenterTests {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            assertThat(awaitItem().verificationFlowStep).isEqualTo(VerificationStep.Initial(false))
+            awaitItem().run {
+                assertThat(verificationFlowStep).isEqualTo(VerificationStep.Initial(false))
+                assertThat(displaySkipButton).isTrue()
+            }
+        }
+    }
+
+    @Test
+    fun `present - hides skip verification button on non-debuggable builds`() = runTest {
+        val buildMeta = aBuildMeta(isDebuggable = false)
+        val presenter = createVerifySelfSessionPresenter(buildMeta = buildMeta)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            assertThat(awaitItem().displaySkipButton).isFalse()
         }
     }
 
@@ -68,7 +85,7 @@ class VerifySelfSessionPresenterTests {
 
     @Test
     fun `present - Handles requestVerification`() = runTest {
-        val service = FakeSessionVerificationService()
+        val service = unverifiedSessionService()
         val presenter = createVerifySelfSessionPresenter(service)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -79,7 +96,7 @@ class VerifySelfSessionPresenterTests {
 
     @Test
     fun `present - Handles startSasVerification`() = runTest {
-        val service = FakeSessionVerificationService()
+        val service = unverifiedSessionService()
         val presenter = createVerifySelfSessionPresenter(service)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -113,7 +130,7 @@ class VerifySelfSessionPresenterTests {
 
     @Test
     fun `present - A failure when verifying cancels it`() = runTest {
-        val service = FakeSessionVerificationService()
+        val service = unverifiedSessionService()
         val presenter = createVerifySelfSessionPresenter(service)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -130,7 +147,7 @@ class VerifySelfSessionPresenterTests {
 
     @Test
     fun `present - A fail when requesting verification resets the state to the initial one`() = runTest {
-        val service = FakeSessionVerificationService()
+        val service = unverifiedSessionService()
         val presenter = createVerifySelfSessionPresenter(service)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -145,7 +162,7 @@ class VerifySelfSessionPresenterTests {
 
     @Test
     fun `present - Canceling the flow once it's verifying cancels it`() = runTest {
-        val service = FakeSessionVerificationService()
+        val service = unverifiedSessionService()
         val presenter = createVerifySelfSessionPresenter(service)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -158,7 +175,7 @@ class VerifySelfSessionPresenterTests {
 
     @Test
     fun `present - When verifying, if we receive another challenge we ignore it`() = runTest {
-        val service = FakeSessionVerificationService()
+        val service = unverifiedSessionService()
         val presenter = createVerifySelfSessionPresenter(service)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -171,7 +188,7 @@ class VerifySelfSessionPresenterTests {
 
     @Test
     fun `present - Restart after cancelation returns to requesting verification`() = runTest {
-        val service = FakeSessionVerificationService()
+        val service = unverifiedSessionService()
         val presenter = createVerifySelfSessionPresenter(service)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -188,7 +205,7 @@ class VerifySelfSessionPresenterTests {
 
     @Test
     fun `present - Go back after cancelation returns to initial state`() = runTest {
-        val service = FakeSessionVerificationService()
+        val service = unverifiedSessionService()
         val presenter = createVerifySelfSessionPresenter(service)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -208,7 +225,7 @@ class VerifySelfSessionPresenterTests {
         val emojis = listOf(
             VerificationEmoji(number = 30, emoji = "😀", description = "Smiley")
         )
-        val service = FakeSessionVerificationService()
+        val service = unverifiedSessionService()
         val presenter = createVerifySelfSessionPresenter(service)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -230,7 +247,7 @@ class VerifySelfSessionPresenterTests {
 
     @Test
     fun `present - When verification is declined, the flow is canceled`() = runTest {
-        val service = FakeSessionVerificationService()
+        val service = unverifiedSessionService()
         val presenter = createVerifySelfSessionPresenter(service)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -244,6 +261,32 @@ class VerifySelfSessionPresenterTests {
                 )
             )
             assertThat(awaitItem().verificationFlowStep).isEqualTo(VerificationStep.Canceled)
+        }
+    }
+
+    @Test
+    fun `present - Skip event skips the flow`() = runTest {
+        val service = unverifiedSessionService()
+        val presenter = createVerifySelfSessionPresenter(service)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val state = requestVerificationAndAwaitVerifyingState(service)
+            state.eventSink(VerifySelfSessionViewEvents.SkipVerification)
+            service.skipVerificationResult.assertions().isCalledOnce()
+        }
+    }
+
+    @Test
+    fun `present - When verification is not needed, the flow is completed`() = runTest {
+        val service = FakeSessionVerificationService().apply {
+            givenNeedsVerification(false)
+        }
+        val presenter = createVerifySelfSessionPresenter(service)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            assertThat(awaitItem().verificationFlowStep).isEqualTo(VerificationStep.Completed)
         }
     }
 
@@ -271,14 +314,23 @@ class VerifySelfSessionPresenterTests {
         return state
     }
 
+    private fun unverifiedSessionService(): FakeSessionVerificationService {
+        return FakeSessionVerificationService().apply {
+            givenVerifiedStatus(SessionVerifiedStatus.NotVerified)
+            givenNeedsVerification(true)
+        }
+    }
+
     private fun createVerifySelfSessionPresenter(
-        service: SessionVerificationService = FakeSessionVerificationService(),
+        service: SessionVerificationService = unverifiedSessionService(),
         encryptionService: EncryptionService = FakeEncryptionService(),
+        buildMeta: BuildMeta = aBuildMeta(),
     ): VerifySelfSessionPresenter {
         return VerifySelfSessionPresenter(
             sessionVerificationService = service,
             encryptionService = encryptionService,
             stateMachine = VerifySelfSessionStateMachine(service, encryptionService),
+            buildMeta = buildMeta,
         )
     }
 }

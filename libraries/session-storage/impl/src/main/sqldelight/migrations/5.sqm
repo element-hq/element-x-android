@@ -1,0 +1,3 @@
+-- Migrate DB from version 5
+
+ALTER TABLE SessionData ADD COLUMN needsVerification INTEGER NOT NULL DEFAULT 0;

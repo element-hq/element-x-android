@@ -28,6 +28,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -51,11 +52,13 @@ import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
+import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.matrix.api.verification.SessionVerificationData
 import io.element.android.libraries.matrix.api.verification.VerificationEmoji
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.features.verifysession.impl.VerifySelfSessionState.VerificationStep as FlowStep
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun VerifySelfSessionView(
     state: VerifySelfSessionState,
@@ -81,6 +84,19 @@ fun VerifySelfSessionView(
     val verificationFlowStep = state.verificationFlowStep
     HeaderFooterPage(
         modifier = modifier,
+        topBar = {
+             TopAppBar(
+                 title = {},
+                 actions = {
+                     if (state.displaySkipButton && state.verificationFlowStep != FlowStep.Completed) {
+                         TextButton(
+                             text = stringResource(CommonStrings.action_skip),
+                             onClick = { state.eventSink(VerifySelfSessionViewEvents.SkipVerification) }
+                         )
+                     }
+                 }
+             )
+        },
         header = {
             HeaderContent(verificationFlowStep = verificationFlowStep)
         },

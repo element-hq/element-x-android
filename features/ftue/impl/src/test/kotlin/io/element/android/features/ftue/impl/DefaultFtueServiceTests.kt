@@ -90,6 +90,7 @@ class DefaultFtueServiceTests {
     fun `traverse flow`() = runTest {
         val sessionVerificationService = FakeSessionVerificationService().apply {
             givenVerifiedStatus(SessionVerifiedStatus.NotVerified)
+            givenNeedsVerification(true)
         }
         val analyticsService = FakeAnalyticsService()
         val permissionStateProvider = FakePermissionStateProvider(permissionGranted = false)
@@ -107,7 +108,7 @@ class DefaultFtueServiceTests {
 
         // Session verification
         steps.add(state.getNextStep(steps.lastOrNull()))
-        sessionVerificationService.givenVerifiedStatus(SessionVerifiedStatus.Verified)
+        sessionVerificationService.givenNeedsVerification(false)
 
         // Notifications opt in
         steps.add(state.getNextStep(steps.lastOrNull()))

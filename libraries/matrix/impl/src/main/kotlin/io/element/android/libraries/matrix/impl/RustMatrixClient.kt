@@ -177,6 +177,7 @@ class RustMatrixClient(
                             isTokenValid = false,
                             loginType = existingData.loginType,
                             passphrase = existingData.passphrase,
+                            needsVerification = existingData.needsVerification,
                         )
                         sessionStore.updateData(newData)
                         Timber.d("Removed session data with token: '...$anonymizedToken'.")
@@ -204,6 +205,7 @@ class RustMatrixClient(
                     isTokenValid = true,
                     loginType = existingData.loginType,
                     passphrase = existingData.passphrase,
+                    needsVerification = existingData.needsVerification,
                 )
                 sessionStore.updateData(newData)
                 Timber.d("Saved new session data with token: '...$anonymizedToken'.")
@@ -229,6 +231,7 @@ class RustMatrixClient(
         client = client,
         isSyncServiceReady = rustSyncService.syncState.map { it == SyncState.Running },
         sessionCoroutineScope = sessionCoroutineScope,
+        sessionStore = sessionStore,
     )
 
     private val eventFilters = TimelineConfig.excludedEvents

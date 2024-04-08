@@ -24,7 +24,7 @@ import io.element.android.libraries.matrix.api.verification.VerificationEmoji
 open class VerifySelfSessionStateProvider : PreviewParameterProvider<VerifySelfSessionState> {
     override val values: Sequence<VerifySelfSessionState>
         get() = sequenceOf(
-            aVerifySelfSessionState(),
+            aVerifySelfSessionState(displaySkipButton = true),
             aVerifySelfSessionState(
                 verificationFlowStep = VerifySelfSessionState.VerificationStep.AwaitingOtherDeviceResponse
             ),
@@ -64,9 +64,11 @@ private fun aDecimalsSessionVerificationData(
 
 internal fun aVerifySelfSessionState(
     verificationFlowStep: VerifySelfSessionState.VerificationStep = VerifySelfSessionState.VerificationStep.Initial(false),
+    displaySkipButton: Boolean = false,
     eventSink: (VerifySelfSessionViewEvents) -> Unit = {},
 ) = VerifySelfSessionState(
     verificationFlowStep = verificationFlowStep,
+    displaySkipButton = displaySkipButton,
     eventSink = eventSink,
 )
 

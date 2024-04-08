@@ -202,4 +202,22 @@ class VerifySelfSessionViewTest {
         rule.clickOn(R.string.screen_session_verification_they_dont_match)
         eventsRecorder.assertSingle(VerifySelfSessionViewEvents.DeclineVerification)
     }
+
+    @Test
+    fun `clicking on 'Skip' emits the expected event`() {
+        val eventsRecorder = EventsRecorder<VerifySelfSessionViewEvents>()
+        rule.setContent {
+            VerifySelfSessionView(
+                aVerifySelfSessionState(
+                    verificationFlowStep = VerifySelfSessionState.VerificationStep.Initial(canEnterRecoveryKey = true),
+                    displaySkipButton = true,
+                    eventSink = eventsRecorder
+                ),
+                onEnterRecoveryKey = EnsureNeverCalled(),
+                onFinished = EnsureNeverCalled(),
+            )
+        }
+        rule.clickOn(CommonStrings.action_skip)
+        eventsRecorder.assertSingle(VerifySelfSessionViewEvents.SkipVerification)
+    }
 }

@@ -19,11 +19,13 @@ package io.element.android.features.ftue.impl.sessionverification
 import android.os.Parcelable
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.lifecycleScope
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
 import com.bumble.appyx.core.plugin.plugins
 import com.bumble.appyx.navmodel.backstack.BackStack
+import com.bumble.appyx.navmodel.backstack.operation.newRoot
 import com.bumble.appyx.navmodel.backstack.operation.push
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
@@ -33,6 +35,8 @@ import io.element.android.features.verifysession.api.VerifySessionEntryPoint
 import io.element.android.libraries.architecture.BackstackView
 import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.di.SessionScope
+import io.element.android.libraries.matrix.api.verification.SessionVerificationService
+import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 
 @ContributesNode(SessionScope::class)
@@ -41,6 +45,7 @@ class FtueSessionVerificationFlowNode @AssistedInject constructor(
     @Assisted plugins: List<Plugin>,
     private val verifySessionEntryPoint: VerifySessionEntryPoint,
     private val secureBackupEntryPoint: SecureBackupEntryPoint,
+    private val sessionVerificationService: SessionVerificationService,
 ) : BaseFlowNode<FtueSessionVerificationFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = NavTarget.Root,
@@ -83,7 +88,12 @@ class FtueSessionVerificationFlowNode @AssistedInject constructor(
                     .params(SecureBackupEntryPoint.Params(SecureBackupEntryPoint.InitialTarget.EnterRecoveryKey))
                     .callback(object : SecureBackupEntryPoint.Callback {
                         override fun onDone() {
-                            callback.onDone()
+                            lifecycleScope.launch {
+                                // Mark the session as verified
+                                sessionVerificationService.skipVerification()
+                                // Move to the completed state view
+                                backstack.newRoot(NavTarget.Root)
+                            }
                         }
                     })
                     .build()
