@@ -146,7 +146,7 @@ private fun HeaderContent(verificationFlowStep: FlowStep) {
         is FlowStep.Initial, FlowStep.AwaitingOtherDeviceResponse -> R.string.screen_identity_confirmation_subtitle
         FlowStep.Canceled -> R.string.screen_session_verification_cancelled_subtitle
         FlowStep.Ready -> R.string.screen_session_verification_ready_subtitle
-        FlowStep.Completed -> R.string.screen_identity_confirmation_subtitle
+        FlowStep.Completed -> R.string.screen_identity_confirmed_subtitle
         is FlowStep.Verifying -> when (verificationFlowStep.data) {
             is SessionVerificationData.Decimals -> R.string.screen_session_verification_compare_numbers_subtitle
             is SessionVerificationData.Emojis -> R.string.screen_session_verification_compare_emojis_subtitle
