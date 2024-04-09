@@ -28,8 +28,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.ClickableText
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Poll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -45,10 +43,12 @@ import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.analytics.api.AnalyticsOptInEvents
 import io.element.android.libraries.designsystem.atomic.molecules.ButtonColumnMolecule
-import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
 import io.element.android.libraries.designsystem.atomic.organisms.InfoListItem
 import io.element.android.libraries.designsystem.atomic.organisms.InfoListOrganism
 import io.element.android.libraries.designsystem.atomic.pages.HeaderFooterPage
+import io.element.android.libraries.designsystem.components.BigIcon
+import io.element.android.libraries.designsystem.components.OnboardingBackground
+import io.element.android.libraries.designsystem.components.PageTitle
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.text.buildAnnotatedStringWithStyledPart
@@ -82,6 +82,7 @@ fun AnalyticsOptInView(
             .fillMaxSize()
             .systemBarsPadding()
             .imePadding(),
+        background = { OnboardingBackground() },
         header = { AnalyticsOptInHeader(state, onClickTerms) },
         content = { AnalyticsOptInContent() },
         footer = {
@@ -103,11 +104,11 @@ private fun AnalyticsOptInHeader(
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        IconTitleSubtitleMolecule(
+        PageTitle(
             modifier = Modifier.padding(top = 60.dp, bottom = 12.dp),
             title = stringResource(id = R.string.screen_analytics_prompt_title, state.applicationName),
-            subTitle = stringResource(id = R.string.screen_analytics_prompt_help_us_improve),
-            iconImageVector = Icons.Filled.Poll
+            subtitle = stringResource(id = R.string.screen_analytics_prompt_help_us_improve),
+            iconStyle = BigIcon.Style.Default(CompoundIcons.Chart())
         )
         val text = buildAnnotatedStringWithStyledPart(
             R.string.screen_analytics_prompt_read_terms,
@@ -137,19 +138,6 @@ private fun AnalyticsOptInHeader(
 }
 
 @Composable
-private fun CheckIcon() {
-    Icon(
-        modifier = Modifier
-            .size(20.dp)
-            .background(color = MaterialTheme.colorScheme.background, shape = CircleShape)
-            .padding(2.dp),
-        imageVector = CompoundIcons.Check(),
-        contentDescription = null,
-        tint = ElementTheme.colors.textActionAccent,
-    )
-}
-
-@Composable
 private fun AnalyticsOptInContent() {
     Box(
         modifier = Modifier.fillMaxSize(),
@@ -162,20 +150,20 @@ private fun AnalyticsOptInContent() {
             items = persistentListOf(
                 InfoListItem(
                     message = stringResource(id = R.string.screen_analytics_prompt_data_usage),
-                    iconComposable = { CheckIcon() },
+                    iconVector = CompoundIcons.CheckCircle(),
                 ),
                 InfoListItem(
                     message = stringResource(id = R.string.screen_analytics_prompt_third_party_sharing),
-                    iconComposable = { CheckIcon() },
+                    iconVector = CompoundIcons.CheckCircle(),
                 ),
                 InfoListItem(
                     message = stringResource(id = R.string.screen_analytics_prompt_settings),
-                    iconComposable = { CheckIcon() },
+                    iconVector = CompoundIcons.CheckCircle(),
                 ),
             ),
-            textStyle = ElementTheme.typography.fontBodyMdMedium,
-            iconTint = ElementTheme.colors.textPrimary,
-            backgroundColor = ElementTheme.colors.temporaryColorBgSpecial
+            textStyle = ElementTheme.typography.fontBodyLgMedium,
+            iconTint = ElementTheme.colors.iconSuccessPrimary,
+            backgroundColor = ElementTheme.colors.bgActionSecondaryHovered,
         )
     }
 }
