@@ -9,6 +9,13 @@
   <string name="screen_chat_backup_recovery_action_confirm_description">"Ваша рэзервовая копія чата зараз не сінхранізавана."</string>
   <string name="screen_chat_backup_recovery_action_setup">"Наладзьце аднаўленне"</string>
   <string name="screen_chat_backup_recovery_action_setup_description">"Атрымайце доступ да зашыфраваных паведамленняў, калі вы страціце ўсе свае прылады або выйдзеце з сістэмы %1$s усюды."</string>
+  <string name="screen_create_new_recovery_key_list_item_1">"Адкрыйце Element на настольнай прыладзе"</string>
+  <string name="screen_create_new_recovery_key_list_item_2">"Увайдзіце ў свой уліковы запіс яшчэ раз"</string>
+  <string name="screen_create_new_recovery_key_list_item_3">"Калі будзе прапанавана пацвердзіць вашу прыладу, выберыце %1$s"</string>
+  <string name="screen_create_new_recovery_key_list_item_3_reset_all">"“Скінуць усе”"</string>
+  <string name="screen_create_new_recovery_key_list_item_4">"Выконвайце інструкцыі, каб стварыць новы ключ аднаўлення"</string>
+  <string name="screen_create_new_recovery_key_list_item_5">"Захавайце новы ключ аднаўлення ў ме́неджэры пароляў або ў зашыфраванай нататке"</string>
+  <string name="screen_create_new_recovery_key_title">"Скіньце шыфраванне для вашага ўліковага запісу з дапамогай іншай прылады"</string>
   <string name="screen_key_backup_disable_confirmation_action_turn_off">"Адключыць"</string>
   <string name="screen_key_backup_disable_confirmation_description">"Вы страціце зашыфраваныя паведамленні, калі выйдзеце з усіх прылад."</string>
   <string name="screen_key_backup_disable_confirmation_title">"Вы ўпэўнены, што хочаце адключыць рэзервовае капіраванне?"</string>
@@ -25,7 +32,7 @@
   <string name="screen_recovery_key_confirm_description">"Пераканайцеся, што ніхто не бачыць гэты экран!"</string>
   <string name="screen_recovery_key_confirm_error_content">"Паўтарыце спробу, каб пацвердзіць доступ да рэзервовай копіі чата."</string>
   <string name="screen_recovery_key_confirm_error_title">"Няправільны ключ аднаўлення"</string>
-  <string name="screen_recovery_key_confirm_key_description">"Калі ў вас ёсць ключ аднаўлення або парольная фраза/ключ, гэта таксама будзе працаваць."</string>
+  <string name="screen_recovery_key_confirm_key_description">"Калі ў вас ёсць ключ аднаўлення або парольная фраза, гэта таксама будзе працаваць."</string>
   <string name="screen_recovery_key_confirm_key_label">"Ключ аднаўлення або код доступу"</string>
   <string name="screen_recovery_key_confirm_key_placeholder">"Увесці…"</string>
   <string name="screen_recovery_key_confirm_success">"Ключ аднаўлення пацверджаны"</string>

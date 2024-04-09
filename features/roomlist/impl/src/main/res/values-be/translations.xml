@@ -11,8 +11,6 @@
   <string name="screen_roomlist_filter_favourites_empty_state_subtitle">"Дадаць чат у абранае можна ў наладах чата.
 На дадзены момант вы можаце прыбраць фільтры, каб убачыць іншыя вашыя чаты."</string>
   <string name="screen_roomlist_filter_favourites_empty_state_title">"У вас пакуль няма абраных чатаў"</string>
-  <string name="screen_roomlist_filter_invites">"Запрашэнні"</string>
-  <string name="screen_roomlist_filter_invites_empty_state_title">"У вас няма непрынятых запрашэнняў."</string>
   <string name="screen_roomlist_filter_low_priority">"Нізкі прыярытэт"</string>
   <string name="screen_roomlist_filter_mixed_empty_state_subtitle">"Вы можаце прыбраць фільтры, каб убачыць іншыя вашыя чаты."</string>
   <string name="screen_roomlist_filter_mixed_empty_state_title">"У вас няма чатаў для гэтай катэгорыі"</string>

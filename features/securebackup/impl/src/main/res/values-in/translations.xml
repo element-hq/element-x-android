@@ -9,6 +9,13 @@
   <string name="screen_chat_backup_recovery_action_confirm_description">"Pencadangan percakapan Anda saat ini tidak tersinkron."</string>
   <string name="screen_chat_backup_recovery_action_setup">"Siapkan pemulihan"</string>
   <string name="screen_chat_backup_recovery_action_setup_description">"Dapatkan akses ke pesan terenkripsi Anda jika Anda kehilangan semua perangkat Anda atau keluar dari %1$s di mana pun."</string>
+  <string name="screen_create_new_recovery_key_list_item_1">"Buka Element di perangkat desktop"</string>
+  <string name="screen_create_new_recovery_key_list_item_2">"Masuk ke akun Anda lagi"</string>
+  <string name="screen_create_new_recovery_key_list_item_3">"Saat diminta untuk memverifikasi perangkat Anda, pilih %1$s"</string>
+  <string name="screen_create_new_recovery_key_list_item_3_reset_all">"“Atur ulang semua”"</string>
+  <string name="screen_create_new_recovery_key_list_item_4">"Ikuti petunjuk untuk membuat kunci pemulihan baru"</string>
+  <string name="screen_create_new_recovery_key_list_item_5">"Simpan kunci pemulihan baru Anda dalam pengelola kata sandi atau catatan terenkripsi"</string>
+  <string name="screen_create_new_recovery_key_title">"Atur ulang enkripsi untuk akun Anda menggunakan perangkat lain"</string>
   <string name="screen_key_backup_disable_confirmation_action_turn_off">"Matikan"</string>
   <string name="screen_key_backup_disable_confirmation_description">"Anda akan kehilangan pesan terenkripsi jika Anda keluar dari semua perangkat."</string>
   <string name="screen_key_backup_disable_confirmation_title">"Apakah Anda yakin ingin mematikan pencadangan?"</string>

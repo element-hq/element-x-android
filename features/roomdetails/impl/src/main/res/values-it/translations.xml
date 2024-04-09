@@ -11,7 +11,7 @@
   <string name="screen_polls_history_title">"Sondaggi"</string>
   <string name="screen_room_change_permissions_administrators">"Solo amministratori"</string>
   <string name="screen_room_change_permissions_ban_people">"Escludi membri"</string>
-  <string name="screen_room_change_permissions_delete_messages">"Rimuovi messaggi"</string>
+  <string name="screen_room_change_permissions_delete_messages">"Eliminare messaggi"</string>
   <string name="screen_room_change_permissions_everyone">"Tutti"</string>
   <string name="screen_room_change_permissions_invite_people">"Invitare persone"</string>
   <string name="screen_room_change_permissions_member_moderation">"Moderazione dei membri"</string>

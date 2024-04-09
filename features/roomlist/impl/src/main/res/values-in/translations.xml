@@ -11,8 +11,6 @@
   <string name="screen_roomlist_filter_favourites_empty_state_subtitle">"Anda dapat menambahkan percakapan ke favorit Anda dalam pengaturan percakapan.
 Untuk sementara, Anda dapat membatalkan pilihan saringan untuk melihat percakapan Anda yang lain"</string>
   <string name="screen_roomlist_filter_favourites_empty_state_title">"Anda belum memiliki percakapan favorit"</string>
-  <string name="screen_roomlist_filter_invites">"Undangan"</string>
-  <string name="screen_roomlist_filter_invites_empty_state_title">"Anda tidak memiliki undangan yang tertunda."</string>
   <string name="screen_roomlist_filter_low_priority">"Prioritas Rendah"</string>
   <string name="screen_roomlist_filter_mixed_empty_state_subtitle">"Anda dapat membatalkan pilihan saringan untuk melihat percakapan Anda yang lain"</string>
   <string name="screen_roomlist_filter_mixed_empty_state_title">"Anda tidak memiliki percakapan untuk pemilihan ini"</string>

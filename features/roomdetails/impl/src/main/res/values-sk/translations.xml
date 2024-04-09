@@ -30,8 +30,6 @@
   <string name="screen_room_change_role_confirm_demote_self_description">"Túto zmenu nebudete môcť vrátiť späť, pretože znižujete svoju úroveň. Ak ste posledným privilegovaným používateľom v miestnosti, nebude možné získať znova oprávnenia."</string>
   <string name="screen_room_change_role_confirm_demote_self_title">"Znížiť svoju úroveň?"</string>
   <string name="screen_room_change_role_invited_member_name">"%1$s (Čaká sa)"</string>
-  <string name="screen_room_change_role_invited_member_name_android">"(Čaká sa)"</string>
-  <string name="screen_room_change_role_moderators_admin_section_footer">"Správcovia majú automaticky oprávnenia moderátora"</string>
   <string name="screen_room_change_role_moderators_title">"Upraviť moderátorov"</string>
   <string name="screen_room_change_role_section_administrators">"Správcovia"</string>
   <string name="screen_room_change_role_section_moderators">"Moderátori"</string>
@@ -59,7 +57,6 @@
   <string name="screen_room_details_room_name_label">"Názov miestnosti"</string>
   <string name="screen_room_details_security_title">"Bezpečnosť"</string>
   <string name="screen_room_details_share_room_title">"Zdieľať miestnosť"</string>
-  <string name="screen_room_details_title">"Informácie o miestnosti"</string>
   <string name="screen_room_details_topic_title">"Téma"</string>
   <string name="screen_room_details_updating_room">"Aktualizácia miestnosti…"</string>
   <string name="screen_room_member_list_ban_member_confirmation_action">"Zakázať"</string>

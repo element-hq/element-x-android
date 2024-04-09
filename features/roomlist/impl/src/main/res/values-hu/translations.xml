@@ -11,8 +11,6 @@
   <string name="screen_roomlist_filter_favourites_empty_state_subtitle">"A csevegési beállításokban csevegéseket adhat hozzá a kedvencekhez.
 Egyelőre törölheti a szűrőket a többi csevegés megtekintéséhez."</string>
   <string name="screen_roomlist_filter_favourites_empty_state_title">"Még nincsenek kedvenc csevegései"</string>
-  <string name="screen_roomlist_filter_invites">"Meghívások"</string>
-  <string name="screen_roomlist_filter_invites_empty_state_title">"Nincsenek függőben lévő meghívásai."</string>
   <string name="screen_roomlist_filter_low_priority">"Alacsony prioritás"</string>
   <string name="screen_roomlist_filter_mixed_empty_state_subtitle">"Kikapcsolhatja a szűrőket a többi csevegés megtekintéséhez"</string>
   <string name="screen_roomlist_filter_mixed_empty_state_title">"Ehhez a kiválasztáshoz nem tartoznak csevegések"</string>

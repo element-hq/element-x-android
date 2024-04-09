@@ -9,6 +9,13 @@
   <string name="screen_chat_backup_recovery_action_confirm_description">"A csevegéselőzményei nincsenek szinkronban."</string>
   <string name="screen_chat_backup_recovery_action_setup">"Helyreállítás beállítása"</string>
   <string name="screen_chat_backup_recovery_action_setup_description">"Szerezzen hozzáférést a titkosított üzeneteihez, ha elvesztette az összes eszközét, vagy ha mindenütt kijelentkezett az %1$sből."</string>
+  <string name="screen_create_new_recovery_key_list_item_1">"Nyissa meg az Elementet egy asztali eszközön"</string>
+  <string name="screen_create_new_recovery_key_list_item_2">"Jelentkezzen be újra a fiókjába"</string>
+  <string name="screen_create_new_recovery_key_list_item_3">"Amikor az eszköz ellenőrzését kéri, válassza ezt a lehetőséget: %1$s"</string>
+  <string name="screen_create_new_recovery_key_list_item_3_reset_all">"„Minden visszaállítása”"</string>
+  <string name="screen_create_new_recovery_key_list_item_4">"Kövesse az utasításokat egy új helyreállítási kulcs létrehozásához"</string>
+  <string name="screen_create_new_recovery_key_list_item_5">"Mentse az új helyreállítási kulcsot egy jelszókezelőbe vagy egy titkosított jegyzetbe."</string>
+  <string name="screen_create_new_recovery_key_title">"A fiók titkosításának visszaállítása egy másik eszköz használatával"</string>
   <string name="screen_key_backup_disable_confirmation_action_turn_off">"Kikapcsolás"</string>
   <string name="screen_key_backup_disable_confirmation_description">"Ha kijelentkezik az összes eszközéről, akkor elveszti a titkosított üzeneteit."</string>
   <string name="screen_key_backup_disable_confirmation_title">"Biztos, hogy kikapcsolja a biztonsági mentéseket?"</string>

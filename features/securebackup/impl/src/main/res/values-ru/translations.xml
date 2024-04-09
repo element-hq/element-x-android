@@ -15,6 +15,17 @@
   <string name="screen_chat_backup_recovery_action_confirm_description">"Резервная копия чата в настоящее время не синхронизирована."</string>
   <string name="screen_chat_backup_recovery_action_setup">"Настроить восстановление"</string>
   <string name="screen_chat_backup_recovery_action_setup_description">"Получите доступ к зашифрованным сообщениям, если вы потеряете все свои устройства или выйдете из системы %1$s отовсюду."</string>
+  <string name="screen_create_new_recovery_key_list_item_1">"Откройте Element на настольном устройстве"</string>
+  <string name="screen_create_new_recovery_key_list_item_2">"Войдите в свой аккаунт еще раз"</string>
+  <string name="screen_create_new_recovery_key_list_item_3">"Когда вас попросят подтвердить устройство, выберите %1$s"</string>
+  <string name="screen_create_new_recovery_key_list_item_3_reset_all">"“Сбросить все”"</string>
+  <string name="screen_create_new_recovery_key_list_item_4">"Следуйте инструкциям, чтобы создать новый ключ восстановления"</string>
+  <string name="screen_create_new_recovery_key_list_item_5">
+    "Сохраните новый "
+    <b>"ключ восстановления"</b>
+    " в менеджере паролей или зашифрованной заметке"
+  </string>
+  <string name="screen_create_new_recovery_key_title">"Сбросьте шифрование вашей учетной записи с помощью другого устройства."</string>
   <string name="screen_key_backup_disable_confirmation_action_turn_off">"Выключить"</string>
   <string name="screen_key_backup_disable_confirmation_description">"Вы потеряете зашифрованные сообщения, если выйдете из всех устройств."</string>
   <string name="screen_key_backup_disable_confirmation_title">"Вы действительно хотите отключить резервное копирование?"</string>
@@ -43,7 +54,7 @@
     "Неверный "
     <b>"ключ восстановления"</b>
   </string>
-  <string name="screen_recovery_key_confirm_key_description">"Если у вас есть пароль для восстановления или секретная пароль/ключ, это тоже сработает."</string>
+  <string name="screen_recovery_key_confirm_key_description">"Если у вас есть пароль для восстановления или секретный пароль/ключ, это тоже сработает."</string>
   <string name="screen_recovery_key_confirm_key_label">
     <b>"Ключ восстановления"</b>
     " или пароль"

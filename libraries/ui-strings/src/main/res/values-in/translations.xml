@@ -241,13 +241,6 @@
   <string name="invite_friends_text">"Hai, bicaralah dengan saya di %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Rageshake untuk melaporkan kutu"</string>
-  <string name="screen_create_new_recovery_key_list_item_1">"Buka Element di perangkat desktop"</string>
-  <string name="screen_create_new_recovery_key_list_item_2">"Masuk ke akun Anda lagi"</string>
-  <string name="screen_create_new_recovery_key_list_item_3">"Saat diminta untuk memverifikasi perangkat Anda, pilih %1$s"</string>
-  <string name="screen_create_new_recovery_key_list_item_3_reset_all">"“Atur ulang semua”"</string>
-  <string name="screen_create_new_recovery_key_list_item_4">"Ikuti petunjuk untuk membuat kunci pemulihan baru"</string>
-  <string name="screen_create_new_recovery_key_list_item_5">"Simpan kunci pemulihan baru Anda dalam pengelola kata sandi atau catatan terenkripsi"</string>
-  <string name="screen_create_new_recovery_key_title">"Atur ulang enkripsi untuk akun Anda menggunakan perangkat lain"</string>
   <string name="screen_media_picker_error_failed_selection">"Gagal memilih media, silakan coba lagi."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Gagal memproses media untuk diunggah, silakan coba lagi."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Gagal mengunggah media, silakan coba lagi."</string>

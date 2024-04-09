@@ -103,7 +103,7 @@ class VerifySelfSessionPresenter @Inject constructor(
     ): VerifySelfSessionState.VerificationStep =
         when (val machineState = this) {
             StateMachineState.Initial, null -> {
-                VerifySelfSessionState.VerificationStep.Initial(canEnterRecoveryKey = canEnterRecoveryKey)
+                VerifySelfSessionState.VerificationStep.Initial(canEnterRecoveryKey = canEnterRecoveryKey, isLastDevice = encryptionService.isLastDevice.value)
             }
             StateMachineState.RequestingVerification,
             StateMachineState.StartingSasVerification,

@@ -11,8 +11,6 @@
   <string name="screen_roomlist_filter_favourites_empty_state_subtitle">"V nastavení chatu můžete přidat chat k oblíbeným.
 Prozatím můžete zrušit výběr filtrů, abyste viděli své další chaty"</string>
   <string name="screen_roomlist_filter_favourites_empty_state_title">"Zatím nemáte oblíbené chaty"</string>
-  <string name="screen_roomlist_filter_invites">"Pozvánky"</string>
-  <string name="screen_roomlist_filter_invites_empty_state_title">"Nemáte žádné nevyřízené pozvánky."</string>
   <string name="screen_roomlist_filter_low_priority">"Nízká priorita"</string>
   <string name="screen_roomlist_filter_mixed_empty_state_subtitle">"Můžete zrušit výběr filtrů, abyste viděli své další chaty"</string>
   <string name="screen_roomlist_filter_mixed_empty_state_title">"Nemáte chaty pro tento výběr"</string>

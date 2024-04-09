@@ -30,8 +30,6 @@
   <string name="screen_room_change_role_confirm_demote_self_description">"Anda tidak akan dapat mengurungkan perubahan ini karena Anda sedang menurunkan Anda sendiri, jika Anda merupakan pengguna dengan hak khusus dalam ruangan maka tidak akan memungkinkan untuk mendapatkan hak tersebut lagi."</string>
   <string name="screen_room_change_role_confirm_demote_self_title">"Turunkan Anda sendiri?"</string>
   <string name="screen_room_change_role_invited_member_name">"%1$s (Tertunda)"</string>
-  <string name="screen_room_change_role_invited_member_name_android">"(Tertunda)"</string>
-  <string name="screen_room_change_role_moderators_admin_section_footer">"Admin secara otomatis memiliki hak moderator"</string>
   <string name="screen_room_change_role_moderators_title">"Sunting Moderator"</string>
   <string name="screen_room_change_role_section_administrators">"Admin"</string>
   <string name="screen_room_change_role_section_moderators">"Moderator"</string>
@@ -59,7 +57,6 @@
   <string name="screen_room_details_room_name_label">"Nama ruangan"</string>
   <string name="screen_room_details_security_title">"Keamanan"</string>
   <string name="screen_room_details_share_room_title">"Bagikan ruangan"</string>
-  <string name="screen_room_details_title">"Info ruangan"</string>
   <string name="screen_room_details_topic_title">"Topik"</string>
   <string name="screen_room_details_updating_room">"Memperbarui ruangan…"</string>
   <string name="screen_room_member_list_ban_member_confirmation_action">"Cekal"</string>

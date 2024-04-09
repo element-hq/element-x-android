@@ -9,6 +9,13 @@
   <string name="screen_chat_backup_recovery_action_confirm_description">"Vaše záloha chatu není aktuálně synchronizována."</string>
   <string name="screen_chat_backup_recovery_action_setup">"Nastavení obnovy"</string>
   <string name="screen_chat_backup_recovery_action_setup_description">"Získejte přístup ke svým zašifrovaným zprávám, pokud ztratíte všechna zařízení nebo jste všude odhlášeni z %1$s."</string>
+  <string name="screen_create_new_recovery_key_list_item_1">"Otevřít Element na stolním počítači"</string>
+  <string name="screen_create_new_recovery_key_list_item_2">"Znovu se přihlaste ke svému účtu"</string>
+  <string name="screen_create_new_recovery_key_list_item_3">"Když budete vyzváni k ověření vašeho zařízení, vyberte %1$s"</string>
+  <string name="screen_create_new_recovery_key_list_item_3_reset_all">"\"Resetovat vše\""</string>
+  <string name="screen_create_new_recovery_key_list_item_4">"Postupujte podle pokynů k vytvoření nového obnovovacího klíče"</string>
+  <string name="screen_create_new_recovery_key_list_item_5">"Uložte nový klíč pro obnovení do správce hesel nebo do zašifrované poznámky"</string>
+  <string name="screen_create_new_recovery_key_title">"Obnovte šifrování účtu pomocí jiného zařízení"</string>
   <string name="screen_key_backup_disable_confirmation_action_turn_off">"Vypnout"</string>
   <string name="screen_key_backup_disable_confirmation_description">"Pokud se odhlásíte ze všech zařízení, přijdete o zašifrované zprávy."</string>
   <string name="screen_key_backup_disable_confirmation_title">"Opravdu chcete vypnout zálohování?"</string>
@@ -25,7 +32,7 @@
   <string name="screen_recovery_key_confirm_description">"Ujistěte se, že tuto obrazovku nikdo nevidí!"</string>
   <string name="screen_recovery_key_confirm_error_content">"Zkuste prosím znovu potvrdit přístup k záloze chatu."</string>
   <string name="screen_recovery_key_confirm_error_title">"Nesprávný klíč pro obnovení"</string>
-  <string name="screen_recovery_key_confirm_key_description">"Pokud máte frázi pro obnovení nebo tajnou přístupovou frázi/klíč, bude to fungovat také."</string>
+  <string name="screen_recovery_key_confirm_key_description">"Pokud máte bezpečnostní klíč nebo bezpečnostní frázi, bude to fungovat také."</string>
   <string name="screen_recovery_key_confirm_key_label">"Klíč pro obnovení nebo přístupový kód"</string>
   <string name="screen_recovery_key_confirm_key_placeholder">"Zadejte…"</string>
   <string name="screen_recovery_key_confirm_success">"Klíč pro obnovení potvrzen"</string>

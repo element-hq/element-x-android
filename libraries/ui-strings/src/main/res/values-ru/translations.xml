@@ -251,17 +251,6 @@
   <string name="invite_friends_text">"Привет, поговори со мной по %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Встряхните устройство, чтобы сообщить об ошибке"</string>
-  <string name="screen_create_new_recovery_key_list_item_1">"Откройте Element на настольном устройстве"</string>
-  <string name="screen_create_new_recovery_key_list_item_2">"Войдите в свой аккаунт еще раз"</string>
-  <string name="screen_create_new_recovery_key_list_item_3">"Когда вас попросят подтвердить устройство, выберите %1$s"</string>
-  <string name="screen_create_new_recovery_key_list_item_3_reset_all">"“Сбросить все”"</string>
-  <string name="screen_create_new_recovery_key_list_item_4">"Следуйте инструкциям, чтобы создать новый ключ восстановления"</string>
-  <string name="screen_create_new_recovery_key_list_item_5">
-    "Сохраните новый "
-    <b>"ключ восстановления"</b>
-    " в менеджере паролей или зашифрованной заметке"
-  </string>
-  <string name="screen_create_new_recovery_key_title">"Сбросьте шифрование вашей учетной записи с помощью другого устройства."</string>
   <string name="screen_media_picker_error_failed_selection">"Не удалось выбрать носитель, попробуйте еще раз."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Не удалось обработать медиафайл для загрузки, попробуйте еще раз."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Не удалось загрузить медиафайлы, попробуйте еще раз."</string>

@@ -179,7 +179,8 @@
       "name" : ":features:ftue:impl",
       "includeRegex" : [
         "screen_welcome_.*",
-        "screen_notification_optin_.*"
+        "screen_notification_optin_.*",
+        "screen_qr_code_login_.+"
       ]
     },
     {
@@ -195,7 +196,8 @@
       "includeRegex" : [
         "screen_chat_backup_.*",
         "screen_key_backup_disable_.*",
-        "screen_recovery_key_.*"
+        "screen_recovery_key_.*",
+        "screen_create_new_recovery_key_.*"
       ]
     },
     {

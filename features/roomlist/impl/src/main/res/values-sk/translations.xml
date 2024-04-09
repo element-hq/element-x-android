@@ -11,8 +11,6 @@
   <string name="screen_roomlist_filter_favourites_empty_state_subtitle">"Môžete pridať konverzáciu medzi obľúbené v nastaveniach konverzácie.
 Zatiaľ môžete zrušiť výber filtrov, aby ste videli ostatné konverzácie"</string>
   <string name="screen_roomlist_filter_favourites_empty_state_title">"Zatiaľ nemáte obľúbené konverzácie"</string>
-  <string name="screen_roomlist_filter_invites">"Pozvánky"</string>
-  <string name="screen_roomlist_filter_invites_empty_state_title">"Nemáte žiadne čakajúce pozvánky."</string>
   <string name="screen_roomlist_filter_low_priority">"Nízka priorita"</string>
   <string name="screen_roomlist_filter_mixed_empty_state_subtitle">"Môžete zrušiť výber filtrov, aby ste videli svoje ostatné konverzácie"</string>
   <string name="screen_roomlist_filter_mixed_empty_state_title">"Nemáte konverzácie pre tento výber"</string>

@@ -9,6 +9,26 @@
   <string name="screen_chat_backup_recovery_action_confirm_description">"Dein Chat-Backup ist derzeit nicht synchronisiert."</string>
   <string name="screen_chat_backup_recovery_action_setup">"Wiederherstellung einrichten"</string>
   <string name="screen_chat_backup_recovery_action_setup_description">"Erhalte Zugriff auf deine verschlüsselten Nachrichten, wenn du alle deine Geräte verlierst oder von %1$s überall abgemeldet bist."</string>
+  <string name="screen_create_new_recovery_key_list_item_1">
+    "Öffne "
+    <b>"Element"</b>
+    " auf einem "
+    <b>"Desktop-Gerät"</b>
+  </string>
+  <string name="screen_create_new_recovery_key_list_item_2">"Melde dich erneut bei deinem Konto an"</string>
+  <string name="screen_create_new_recovery_key_list_item_3">"Wenn du aufgefordert wirst dein Gerät zu verifizieren, wähle \"%1$s\"."</string>
+  <string name="screen_create_new_recovery_key_list_item_3_reset_all">"Alles zurücksetzen"</string>
+  <string name="screen_create_new_recovery_key_list_item_4">"Folge den Anweisungen, um einen neuen Wiederherstellungsschlüssel zu erstellen"</string>
+  <string name="screen_create_new_recovery_key_list_item_5">
+    "Speichere deinen neuen "
+    <b>"Wiederherstellungsschlüssel"</b>
+    " in einem Passwortmanager oder einer verschlüsselten Notiz"
+  </string>
+  <string name="screen_create_new_recovery_key_title">
+    "Erstelle einen neuen "
+    <b>"Wiederherstellungsschlüssel"</b>
+    " mit einem anderen Gerät"
+  </string>
   <string name="screen_key_backup_disable_confirmation_action_turn_off">"Ausschalten"</string>
   <string name="screen_key_backup_disable_confirmation_description">"Du verlierst deine verschlüsselten Nachrichten, wenn du auf allen Geräten abgemeldet bist."</string>
   <string name="screen_key_backup_disable_confirmation_title">"Bist du sicher, dass du das Backup ausschalten willst?"</string>
@@ -29,7 +49,7 @@
   <string name="screen_recovery_key_confirm_description">"Sorge dafür, dass niemand diesen Bildschirm sehen kann!"</string>
   <string name="screen_recovery_key_confirm_error_content">"Bitte versuche es noch einmal, um den Zugriff auf dein Chat-Backup zu bestätigen."</string>
   <string name="screen_recovery_key_confirm_error_title">"Falscher Wiederherstellungsschlüssel"</string>
-  <string name="screen_recovery_key_confirm_key_description">"Dies funktioniert auch mit einer Wiederherstellungspassphrase oder einer geheime Passphrase/einem geheimen Schlüssel."</string>
+  <string name="screen_recovery_key_confirm_key_description">"Dies funktioniert auch mit einem Sicherheitsschlüssel oder Sicherheitsphrase."</string>
   <string name="screen_recovery_key_confirm_key_label">
     <b>"Wiederherstellungsschlüssel"</b>
     " oder Passcode"

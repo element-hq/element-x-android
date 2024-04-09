@@ -9,6 +9,13 @@
   <string name="screen_chat_backup_recovery_action_confirm_description">"Vaša záloha konverzácie nie je momentálne synchronizovaná."</string>
   <string name="screen_chat_backup_recovery_action_setup">"Nastaviť obnovovanie"</string>
   <string name="screen_chat_backup_recovery_action_setup_description">"Získajte prístup k vašim šifrovaným správam aj keď stratíte všetky svoje zariadenia alebo sa odhlásite zo všetkých %1$s zariadení."</string>
+  <string name="screen_create_new_recovery_key_list_item_1">"Otvoriť Element v stolnom počítači"</string>
+  <string name="screen_create_new_recovery_key_list_item_2">"Znova sa prihláste do svojho účtu"</string>
+  <string name="screen_create_new_recovery_key_list_item_3">"Keď sa zobrazí výzva na overenie vášho zariadenia, vyberte %1$s"</string>
+  <string name="screen_create_new_recovery_key_list_item_3_reset_all">"\"Obnoviť všetko\""</string>
+  <string name="screen_create_new_recovery_key_list_item_4">"Postupujte podľa pokynov na vytvorenie nového kľúča na obnovenie"</string>
+  <string name="screen_create_new_recovery_key_list_item_5">"Uložte si nový kľúč na obnovenie do správcu hesiel alebo do zašifrovanej poznámky"</string>
+  <string name="screen_create_new_recovery_key_title">"Obnovte šifrovanie vášho účtu pomocou iného zariadenia"</string>
   <string name="screen_key_backup_disable_confirmation_action_turn_off">"Vypnúť"</string>
   <string name="screen_key_backup_disable_confirmation_description">"Stratíte prístup k svojim zašifrovaným správam, ak sa odhlásite zo všetkých zariadení"</string>
   <string name="screen_key_backup_disable_confirmation_title">"Ste si istí, že chcete vypnúť zálohovanie?"</string>
