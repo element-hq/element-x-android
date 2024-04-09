@@ -34,16 +34,15 @@ import com.bumble.appyx.navmodel.backstack.operation.newRoot
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
-import io.element.android.appnav.room.join.JoinRoomNode
 import io.element.android.appnav.room.joined.JoinedRoomFlowNode
 import io.element.android.appnav.room.joined.JoinedRoomLoadedFlowNode
+import io.element.android.features.joinroom.api.JoinRoomEntryPoint
 import io.element.android.libraries.architecture.BackstackView
 import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
-import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
@@ -64,6 +63,7 @@ class RoomFlowNode @AssistedInject constructor(
     @Assisted plugins: List<Plugin>,
     private val roomListService: RoomListService,
     private val roomMembershipObserver: RoomMembershipObserver,
+    private val joinRoomEntryPoint: JoinRoomEntryPoint,
 ) : BaseFlowNode<RoomFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = NavTarget.Loading,
@@ -118,8 +118,8 @@ class RoomFlowNode @AssistedInject constructor(
         return when (navTarget) {
             NavTarget.Loading -> loadingNode(buildContext)
             NavTarget.JoinRoom -> {
-                val inputs = JoinRoomNode.Inputs(inputs.roomId)
-                createNode<JoinRoomNode>(buildContext, plugins = listOf(inputs))
+                val inputs = JoinRoomEntryPoint.Inputs(inputs.roomId)
+                joinRoomEntryPoint.createNode(this, buildContext, inputs)
             }
             NavTarget.JoinedRoom -> {
                 val roomFlowNodeCallback = plugins<JoinedRoomLoadedFlowNode.Callback>()

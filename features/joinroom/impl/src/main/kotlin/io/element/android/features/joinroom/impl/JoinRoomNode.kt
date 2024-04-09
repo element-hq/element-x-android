@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.appnav.room.join
+package io.element.android.features.joinroom.impl
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -25,10 +25,9 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.features.invite.api.response.AcceptDeclineInviteView
-import io.element.android.libraries.architecture.NodeInputs
+import io.element.android.features.joinroom.api.JoinRoomEntryPoint
 import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.di.SessionScope
-import io.element.android.libraries.matrix.api.core.RoomId
 
 @ContributesNode(SessionScope::class)
 class JoinRoomNode @AssistedInject constructor(
@@ -38,11 +37,7 @@ class JoinRoomNode @AssistedInject constructor(
     private val acceptDeclineInviteView: AcceptDeclineInviteView,
 ) : Node(buildContext, plugins = plugins) {
 
-    data class Inputs(
-        val roomId: RoomId,
-    ) : NodeInputs
-
-    private val inputs: Inputs = inputs()
+    private val inputs: JoinRoomEntryPoint.Inputs = inputs()
     private val presenter = presenterFactory.create(inputs.roomId)
 
     @Composable

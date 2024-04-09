@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package io.element.android.appnav.room.join.di
+package io.element.android.features.joinroom.impl.di
 
 import com.squareup.anvil.annotations.ContributesTo
 import dagger.Module
 import dagger.Provides
-import io.element.android.appnav.room.join.JoinRoomPresenter
 import io.element.android.features.invite.api.response.AcceptDeclineInvitePresenter
+import io.element.android.features.joinroom.impl.JoinRoomPresenter
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId

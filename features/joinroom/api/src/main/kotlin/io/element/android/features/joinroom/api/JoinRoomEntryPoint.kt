@@ -14,10 +14,20 @@
  * limitations under the License.
  */
 
-package io.element.android.appnav.room.join
+package io.element.android.features.joinroom.api
 
-sealed interface JoinRoomEvents {
-    data object JoinRoom: JoinRoomEvents
-    data object AcceptInvite : JoinRoomEvents
-    data object DeclineInvite : JoinRoomEvents
+import com.bumble.appyx.core.modality.BuildContext
+import com.bumble.appyx.core.node.Node
+import io.element.android.libraries.architecture.FeatureEntryPoint
+import io.element.android.libraries.architecture.NodeInputs
+import io.element.android.libraries.matrix.api.core.RoomId
+
+interface JoinRoomEntryPoint : FeatureEntryPoint {
+
+    fun createNode(parentNode: Node, buildContext: BuildContext, inputs: Inputs): Node
+
+    data class Inputs(
+        val roomId: RoomId,
+    ) : NodeInputs
 }
+

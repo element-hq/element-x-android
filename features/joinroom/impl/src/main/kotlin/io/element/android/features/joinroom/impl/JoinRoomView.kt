@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.appnav.room.join
+package io.element.android.features.joinroom.impl
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
