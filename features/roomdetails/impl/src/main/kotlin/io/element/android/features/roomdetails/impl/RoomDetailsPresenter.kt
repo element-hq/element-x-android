@@ -78,10 +78,6 @@ class RoomDetailsPresenter @Inject constructor(
         val roomTopic by remember { derivedStateOf { roomInfo?.topic ?: room.topic } }
         val isFavorite by remember { derivedStateOf { roomInfo?.isFavorite.orFalse() } }
 
-        val isRoomModerationEnabled by produceState(initialValue = false) {
-            value = featureFlagService.isFeatureEnabled(FeatureFlags.RoomModeration)
-        }
-
         LaunchedEffect(Unit) {
             canShowNotificationSettings.value = featureFlagService.isFeatureEnabled(FeatureFlags.NotificationSettings)
             if (canShowNotificationSettings.value) {
@@ -147,7 +143,7 @@ class RoomDetailsPresenter @Inject constructor(
             leaveRoomState = leaveRoomState,
             roomNotificationSettings = roomNotificationSettingsState.roomNotificationSettings(),
             isFavorite = isFavorite,
-            displayRolesAndPermissionsSettings = isRoomModerationEnabled && !room.isDm && isUserAdmin,
+            displayRolesAndPermissionsSettings = !room.isDm && isUserAdmin,
             eventSink = ::handleEvents,
         )
     }
