@@ -1,4 +1,4 @@
 -- Migrate DB from version 5
--- For users migrating previously logged in sessions we don't force them to verify it
+-- For users migrating previously logged in sessions, we force them to verify them too
 
-ALTER TABLE SessionData ADD COLUMN needsVerification INTEGER NOT NULL DEFAULT 0;
+ALTER TABLE SessionData ADD COLUMN needsVerification INTEGER NOT NULL DEFAULT 1;
