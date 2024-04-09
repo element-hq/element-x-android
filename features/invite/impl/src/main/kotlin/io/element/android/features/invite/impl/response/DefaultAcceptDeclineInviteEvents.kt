@@ -16,11 +16,11 @@
 
 package io.element.android.features.invite.impl.response
 
-sealed interface AcceptDeclineInviteEvents {
-    data class AcceptInvite(val invite: InviteData) : AcceptDeclineInviteEvents
-    data class DeclineInvite(val invite: InviteData) : AcceptDeclineInviteEvents
-    data object ConfirmDeclineInvite : AcceptDeclineInviteEvents
-    data object CancelDeclineInvite : AcceptDeclineInviteEvents
-    data object DismissAcceptError : AcceptDeclineInviteEvents
-    data object DismissDeclineError : AcceptDeclineInviteEvents
+import io.element.android.features.invite.api.response.AcceptDeclineInviteEvents
+
+sealed interface DefaultAcceptDeclineInviteEvents: AcceptDeclineInviteEvents {
+    data object ConfirmDeclineInvite : DefaultAcceptDeclineInviteEvents
+    data object CancelDeclineInvite : DefaultAcceptDeclineInviteEvents
+    data object DismissAcceptError : DefaultAcceptDeclineInviteEvents
+    data object DismissDeclineError : DefaultAcceptDeclineInviteEvents
 }

@@ -17,6 +17,7 @@
 package io.element.android.appnav.room.join
 
 import androidx.compose.runtime.Immutable
+import io.element.android.features.invite.api.response.AcceptDeclineInviteState
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
@@ -26,7 +27,7 @@ import io.element.android.libraries.matrix.api.core.RoomId
 data class JoinRoomState(
     val roomInfo: AsyncData<RoomInfo>,
     val joinAuthorisationStatus: JoinAuthorisationStatus,
-    val currentAction: CurrentAction,
+    val acceptDeclineInviteState: AcceptDeclineInviteState,
     val eventSink: (JoinRoomEvents) -> Unit
 ){
     val showMemberCount = roomInfo.dataOrNull()?.memberCount != null
@@ -37,6 +38,7 @@ data class RoomInfo(
     val roomName: String,
     val roomAlias: String?,
     val memberCount: Long?,
+    val isDirect: Boolean,
     val roomAvatarUrl: String?,
 ) {
     fun avatarData(size: AvatarSize): AvatarData {
@@ -54,8 +56,4 @@ enum class JoinAuthorisationStatus {
     CanKnock,
     CanJoin,
     Unknown,
-}
-
-sealed interface CurrentAction {
-    data object None : CurrentAction
 }

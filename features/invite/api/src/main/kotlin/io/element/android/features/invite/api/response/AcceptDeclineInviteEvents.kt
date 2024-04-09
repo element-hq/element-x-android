@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright (c) 2024 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,15 +14,9 @@
  * limitations under the License.
  */
 
-plugins {
-    id("io.element.android-compose-library")
-}
+package io.element.android.features.invite.api.response
 
-android {
-    namespace = "io.element.android.features.invite.api"
-}
-
-dependencies {
-    implementation(projects.libraries.architecture)
-    implementation(projects.libraries.matrix.api)
+interface AcceptDeclineInviteEvents {
+    data class AcceptInvite(val invite: InviteData) : AcceptDeclineInviteEvents
+    data class DeclineInvite(val invite: InviteData) : AcceptDeclineInviteEvents
 }

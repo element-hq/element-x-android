@@ -17,6 +17,8 @@
 package io.element.android.appnav.room.join
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import io.element.android.features.invite.api.response.AcceptDeclineInviteState
+import io.element.android.features.invite.api.response.anAcceptDeclineInviteState
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.core.RoomId
 
@@ -45,16 +47,17 @@ fun aJoinRoomState(
             roomName = "Element x android",
             roomAlias = "#exa:matrix.org",
             memberCount = null,
+            isDirect = false,
             roomAvatarUrl = null
         )
     ),
     joinAuthorisationStatus: JoinAuthorisationStatus = JoinAuthorisationStatus.Unknown,
-    currentAction: CurrentAction = CurrentAction.None,
+    acceptDeclineInviteState: AcceptDeclineInviteState = anAcceptDeclineInviteState(),
     eventSink: (JoinRoomEvents) -> Unit = {}
 ) = JoinRoomState(
     roomInfo = roomInfo,
     joinAuthorisationStatus = joinAuthorisationStatus,
-    currentAction = currentAction,
+    acceptDeclineInviteState = acceptDeclineInviteState,
     eventSink = eventSink
 )
 

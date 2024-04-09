@@ -18,28 +18,27 @@ package io.element.android.features.invite.impl.response
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.bumble.appyx.core.modality.BuildContext
-import com.bumble.appyx.core.node.Node
-import com.bumble.appyx.core.plugin.Plugin
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
-import io.element.android.anvilannotations.ContributesNode
+import com.squareup.anvil.annotations.ContributesBinding
+import io.element.android.features.invite.api.response.AcceptDeclineInviteState
+import io.element.android.features.invite.api.response.AcceptDeclineInviteView
 import io.element.android.libraries.di.SessionScope
+import io.element.android.libraries.matrix.api.core.RoomId
+import javax.inject.Inject
 
-@ContributesNode(SessionScope::class)
-class AcceptDeclineInviteNode @AssistedInject constructor(
-    @Assisted buildContext: BuildContext,
-    @Assisted plugins: List<Plugin>,
-    private val presenter: AcceptDeclineInvitePresenter,
-) : Node(buildContext, plugins = plugins) {
+@ContributesBinding(SessionScope::class)
+class DefaultAcceptDeclineInviteView @Inject constructor() : AcceptDeclineInviteView {
 
     @Composable
-    override fun View(modifier: Modifier) {
-        val state = presenter.present()
+    override fun Render(
+        state: AcceptDeclineInviteState,
+        onInviteAccepted: (RoomId) -> Unit,
+        onInviteDeclined: (RoomId) -> Unit,
+        modifier: Modifier,
+    ) {
         AcceptDeclineInviteView(
             state = state,
-            onInviteAccepted = {},
-            onInviteDeclined = {},
+            onInviteAccepted = onInviteAccepted,
+            onInviteDeclined = onInviteDeclined,
             modifier = modifier
         )
     }

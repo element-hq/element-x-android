@@ -20,6 +20,7 @@ import com.squareup.anvil.annotations.ContributesTo
 import dagger.Module
 import dagger.Provides
 import io.element.android.appnav.room.join.JoinRoomPresenter
+import io.element.android.features.invite.api.response.AcceptDeclineInvitePresenter
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -32,13 +33,15 @@ object JoinRoomModule {
     fun providesJoinRoomPresenterFactory(
         roomListService: RoomListService,
         client: MatrixClient,
+        acceptDeclineInvitePresenter: AcceptDeclineInvitePresenter,
     ): JoinRoomPresenter.Factory {
         return object : JoinRoomPresenter.Factory {
             override fun create(roomId: RoomId): JoinRoomPresenter {
                 return JoinRoomPresenter(
                     roomId = roomId,
                     matrixClient = client,
-                    roomListService = roomListService
+                    roomListService = roomListService,
+                    acceptDeclineInvitePresenter = acceptDeclineInvitePresenter,
                 )
             }
         }

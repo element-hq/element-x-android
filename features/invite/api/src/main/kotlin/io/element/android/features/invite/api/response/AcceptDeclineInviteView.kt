@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright (c) 2024 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,15 +14,18 @@
  * limitations under the License.
  */
 
-plugins {
-    id("io.element.android-compose-library")
-}
+package io.element.android.features.invite.api.response
 
-android {
-    namespace = "io.element.android.features.invite.api"
-}
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import io.element.android.libraries.matrix.api.core.RoomId
 
-dependencies {
-    implementation(projects.libraries.architecture)
-    implementation(projects.libraries.matrix.api)
+interface AcceptDeclineInviteView {
+    @Composable
+    fun Render(
+        state: AcceptDeclineInviteState,
+        onInviteAccepted: (RoomId) -> Unit,
+        onInviteDeclined: (RoomId) -> Unit,
+        modifier: Modifier,
+    )
 }

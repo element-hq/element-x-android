@@ -20,16 +20,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.produceState
-import androidx.compose.runtime.rememberCoroutineScope
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
+import io.element.android.features.invite.api.response.AcceptDeclineInviteEvents
+import io.element.android.features.invite.api.response.AcceptDeclineInvitePresenter
+import io.element.android.features.invite.api.response.InviteData
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
-import kotlinx.coroutines.launch
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
@@ -37,6 +38,7 @@ class JoinRoomPresenter @AssistedInject constructor(
     @Assisted private val roomId: RoomId,
     private val matrixClient: MatrixClient,
     private val roomListService: RoomListService,
+    private val acceptDeclineInvitePresenter: AcceptDeclineInvitePresenter,
 ) : Presenter<JoinRoomState> {
 
     interface Factory {
@@ -47,6 +49,7 @@ class JoinRoomPresenter @AssistedInject constructor(
     override fun present(): JoinRoomState {
         val userMembership by roomListService.getUserMembershipForRoom(roomId).collectAsState(initial = Optional.empty())
         val joinAuthorisationStatus = joinAuthorisationStatus(userMembership)
+        val acceptDeclineInviteState = acceptDeclineInvitePresenter.present()
         val roomInfo by produceState<AsyncData<RoomInfo>>(initialValue = AsyncData.Uninitialized, key1 = userMembership) {
             value = when {
                 userMembership.isPresent -> {
@@ -56,6 +59,7 @@ class JoinRoomPresenter @AssistedInject constructor(
                             roomName = it.displayName,
                             roomAlias = it.alias,
                             memberCount = it.activeMemberCount,
+                            isDirect = it.isDirect,
                             roomAvatarUrl = it.avatarUrl
                         )
                     }
@@ -65,21 +69,17 @@ class JoinRoomPresenter @AssistedInject constructor(
             }
         }
 
-        val coroutineScope = rememberCoroutineScope()
-
         fun handleEvents(event: JoinRoomEvents) {
             when (event) {
                 JoinRoomEvents.AcceptInvite, JoinRoomEvents.JoinRoom -> {
-                    coroutineScope.launch {
-                        matrixClient.joinRoom(roomId)
-                    }
+                    acceptDeclineInviteState.eventSink(
+                        AcceptDeclineInviteEvents.AcceptInvite(roomInfo.toInviteData())
+                    )
                 }
                 JoinRoomEvents.DeclineInvite -> {
-                    coroutineScope.launch {
-                        matrixClient.getRoom(roomId)?.use {
-                            it.leave()
-                        }
-                    }
+                    acceptDeclineInviteState.eventSink(
+                        AcceptDeclineInviteEvents.DeclineInvite(roomInfo.toInviteData())
+                    )
                 }
             }
         }
@@ -87,9 +87,19 @@ class JoinRoomPresenter @AssistedInject constructor(
         return JoinRoomState(
             roomInfo = roomInfo,
             joinAuthorisationStatus = joinAuthorisationStatus,
-            currentAction = CurrentAction.None,
+            acceptDeclineInviteState = acceptDeclineInviteState,
             eventSink = ::handleEvents
         )
+    }
+
+    private fun AsyncData<RoomInfo>.toInviteData(): InviteData {
+        return dataOrNull().let {
+            InviteData(
+                roomId = roomId,
+                roomName = it?.roomName ?: "",
+                isDirect = it?.isDirect ?: false
+            )
+        }
     }
 
     @Composable

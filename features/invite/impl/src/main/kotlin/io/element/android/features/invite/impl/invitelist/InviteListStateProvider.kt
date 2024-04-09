@@ -17,11 +17,11 @@
 package io.element.android.features.invite.impl.invitelist
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import io.element.android.features.invite.api.response.AcceptDeclineInviteState
 import io.element.android.features.invite.impl.model.InviteListInviteSummary
 import io.element.android.features.invite.impl.model.InviteSender
-import io.element.android.features.invite.impl.response.AcceptDeclineInviteState
-import io.element.android.features.invite.impl.response.AcceptDeclineInviteStateProvider
-import io.element.android.features.invite.impl.response.anAcceptDeclineInviteState
+import io.element.android.features.invite.api.response.AcceptDeclineInviteStateProvider
+import io.element.android.features.invite.api.response.anAcceptDeclineInviteState
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
 import kotlinx.collections.immutable.ImmutableList

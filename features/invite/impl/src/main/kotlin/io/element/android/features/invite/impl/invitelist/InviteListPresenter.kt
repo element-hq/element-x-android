@@ -24,11 +24,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import io.element.android.features.invite.api.SeenInvitesStore
+import io.element.android.features.invite.api.response.AcceptDeclineInviteEvents
+import io.element.android.features.invite.api.response.AcceptDeclineInvitePresenter
+import io.element.android.features.invite.api.response.InviteData
 import io.element.android.features.invite.impl.model.InviteListInviteSummary
 import io.element.android.features.invite.impl.model.InviteSender
-import io.element.android.features.invite.impl.response.AcceptDeclineInviteEvents
-import io.element.android.features.invite.impl.response.AcceptDeclineInvitePresenter
-import io.element.android.features.invite.impl.response.InviteData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize

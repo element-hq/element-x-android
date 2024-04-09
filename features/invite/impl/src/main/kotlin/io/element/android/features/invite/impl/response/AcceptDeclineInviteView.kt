@@ -22,6 +22,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import io.element.android.features.invite.api.response.AcceptDeclineInviteState
+import io.element.android.features.invite.api.response.AcceptDeclineInviteStateProvider
+import io.element.android.features.invite.api.response.InviteData
 import io.element.android.features.invite.impl.R
 import io.element.android.libraries.designsystem.components.async.AsyncActionView
 import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
@@ -42,14 +45,14 @@ fun AcceptDeclineInviteView(
             async = state.acceptAction,
             onSuccess = onInviteAccepted,
             onErrorDismiss = {
-                state.eventSink(AcceptDeclineInviteEvents.DismissAcceptError)
+                state.eventSink(DefaultAcceptDeclineInviteEvents.DismissAcceptError)
             },
         )
         AsyncActionView(
             async = state.declineAction,
             onSuccess = onInviteDeclined,
             onErrorDismiss = {
-                state.eventSink(AcceptDeclineInviteEvents.DismissDeclineError)
+                state.eventSink(DefaultAcceptDeclineInviteEvents.DismissDeclineError)
             },
             confirmationDialog = {
                 val invite = state.invite.getOrNull()
@@ -57,10 +60,10 @@ fun AcceptDeclineInviteView(
                     DeclineConfirmationDialog(
                         invite = invite,
                         onConfirmClicked = {
-                            state.eventSink(AcceptDeclineInviteEvents.ConfirmDeclineInvite)
+                            state.eventSink(DefaultAcceptDeclineInviteEvents.ConfirmDeclineInvite)
                         },
                         onDismissClicked = {
-                            state.eventSink(AcceptDeclineInviteEvents.CancelDeclineInvite)
+                            state.eventSink(DefaultAcceptDeclineInviteEvents.CancelDeclineInvite)
                         }
                     )
                 }

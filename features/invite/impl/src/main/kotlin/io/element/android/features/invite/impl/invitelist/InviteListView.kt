@@ -16,6 +16,7 @@
 
 package io.element.android.features.invite.impl.invitelist
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.consumeWindowInsets
@@ -53,11 +54,13 @@ fun InviteListView(
     onBackClicked: () -> Unit,
     onInviteAccepted: (RoomId) -> Unit,
     onInviteDeclined: (RoomId) -> Unit,
+    onInviteClicked: (RoomId) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     InviteListContent(
         state = state,
         modifier = modifier,
+        onInviteClicked = onInviteClicked,
         onBackClicked = onBackClicked,
     )
     AcceptDeclineInviteView(
@@ -72,6 +75,7 @@ fun InviteListView(
 private fun InviteListContent(
     state: InviteListState,
     onBackClicked: () -> Unit,
+    onInviteClicked: (RoomId) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Scaffold(
@@ -112,6 +116,9 @@ private fun InviteListContent(
                             items = state.inviteList,
                         ) { index, invite ->
                             InviteSummaryRow(
+                                modifier = Modifier.clickable(
+                                    onClick = { onInviteClicked(invite.roomId) }
+                                ),
                                 invite = invite,
                                 onAcceptClicked = { state.eventSink(InviteListEvents.AcceptInvite(invite)) },
                                 onDeclineClicked = { state.eventSink(InviteListEvents.DeclineInvite(invite)) },
@@ -136,5 +143,6 @@ internal fun InviteListViewPreview(@PreviewParameter(InviteListStateProvider::cl
         onBackClicked = {},
         onInviteAccepted = {},
         onInviteDeclined = {},
+        onInviteClicked = {},
     )
 }

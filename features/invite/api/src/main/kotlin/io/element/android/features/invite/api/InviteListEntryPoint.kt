@@ -32,7 +32,7 @@ interface InviteListEntryPoint : FeatureEntryPoint {
 
     interface Callback : Plugin {
         fun onBackClicked()
-
+        fun onInviteClicked(roomId: RoomId)
         fun onInviteAccepted(roomId: RoomId)
     }
 }

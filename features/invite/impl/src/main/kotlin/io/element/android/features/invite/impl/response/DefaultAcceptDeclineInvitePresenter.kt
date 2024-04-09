@@ -23,10 +23,16 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import com.squareup.anvil.annotations.ContributesBinding
 import im.vector.app.features.analytics.plan.JoinedRoom
+import io.element.android.features.invite.api.response.AcceptDeclineInviteEvents
+import io.element.android.features.invite.api.response.AcceptDeclineInvitePresenter
+import io.element.android.features.invite.api.response.AcceptDeclineInviteState
+import io.element.android.features.invite.api.response.InviteData
 import io.element.android.libraries.architecture.AsyncAction
-import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runCatchingUpdatingState
+import io.element.android.libraries.architecture.runUpdatingState
+import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.push.api.notifications.NotificationDrawerManager
@@ -38,11 +44,12 @@ import java.util.Optional
 import javax.inject.Inject
 import kotlin.jvm.optionals.getOrNull
 
-class AcceptDeclineInvitePresenter @Inject constructor(
+@ContributesBinding(SessionScope::class)
+class DefaultAcceptDeclineInvitePresenter @Inject constructor(
     private val client: MatrixClient,
     private val analyticsService: AnalyticsService,
     private val notificationDrawerManager: NotificationDrawerManager,
-) : Presenter<AcceptDeclineInviteState> {
+) : AcceptDeclineInvitePresenter {
 
     @Composable
     override fun present(): AcceptDeclineInviteState {
@@ -66,7 +73,7 @@ class AcceptDeclineInvitePresenter @Inject constructor(
                     declinedAction.value = AsyncAction.Confirming
                 }
 
-                is AcceptDeclineInviteEvents.ConfirmDeclineInvite -> {
+                is DefaultAcceptDeclineInviteEvents.ConfirmDeclineInvite -> {
                     declinedAction.value = AsyncAction.Uninitialized
                     currentInvite.getOrNull()?.let {
                         localCoroutineScope.declineInvite(it.roomId, declinedAction)
@@ -74,16 +81,16 @@ class AcceptDeclineInvitePresenter @Inject constructor(
                     currentInvite = Optional.empty()
                 }
 
-                is AcceptDeclineInviteEvents.CancelDeclineInvite -> {
+                is DefaultAcceptDeclineInviteEvents.CancelDeclineInvite -> {
                     currentInvite = Optional.empty()
                     declinedAction.value = AsyncAction.Uninitialized
                 }
 
-                is AcceptDeclineInviteEvents.DismissAcceptError -> {
+                is DefaultAcceptDeclineInviteEvents.DismissAcceptError -> {
                     acceptedAction.value = AsyncAction.Uninitialized
                 }
 
-                is AcceptDeclineInviteEvents.DismissDeclineError -> {
+                is DefaultAcceptDeclineInviteEvents.DismissDeclineError -> {
                     declinedAction.value = AsyncAction.Uninitialized
                 }
             }
@@ -98,14 +105,14 @@ class AcceptDeclineInvitePresenter @Inject constructor(
     }
 
     private fun CoroutineScope.acceptInvite(roomId: RoomId, acceptedAction: MutableState<AsyncAction<RoomId>>) = launch {
-        suspend {
-            client.getRoom(roomId)?.use {
-                it.join().getOrThrow()
+        acceptedAction.runUpdatingState {
+            client.joinRoom(roomId).onSuccess {
                 notificationDrawerManager.clearMembershipNotificationForRoom(client.sessionId, roomId, doRender = true)
-                analyticsService.capture(it.toAnalyticsJoinedRoom(JoinedRoom.Trigger.Invite))
+                client.getRoom(roomId)?.use { room ->
+                    analyticsService.capture(room.toAnalyticsJoinedRoom(JoinedRoom.Trigger.Invite))
+                }
             }
-            roomId
-        }.runCatchingUpdatingState(acceptedAction)
+        }
     }
 
     private fun CoroutineScope.declineInvite(roomId: RoomId, declinedAction: MutableState<AsyncAction<RoomId>>) = launch {

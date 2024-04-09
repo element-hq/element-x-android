@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.features.invite.impl.response
+package io.element.android.features.invite.api.response
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.architecture.AsyncAction

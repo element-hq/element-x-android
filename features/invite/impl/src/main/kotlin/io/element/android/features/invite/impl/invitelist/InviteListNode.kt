@@ -43,6 +43,10 @@ class InviteListNode @AssistedInject constructor(
         plugins<InviteListEntryPoint.Callback>().forEach { it.onInviteAccepted(roomId) }
     }
 
+    private fun onInviteClicked(roomId: RoomId) {
+        plugins<InviteListEntryPoint.Callback>().forEach { it.onInviteClicked(roomId) }
+    }
+
     @Composable
     override fun View(modifier: Modifier) {
         val state = presenter.present()
@@ -50,7 +54,8 @@ class InviteListNode @AssistedInject constructor(
             state = state,
             onBackClicked = ::onBackClicked,
             onInviteAccepted = ::onInviteAccepted,
-            onInviteDeclined = {}
+            onInviteDeclined = {},
+            onInviteClicked = ::onInviteClicked,
         )
     }
 }

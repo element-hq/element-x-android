@@ -17,7 +17,7 @@
 package io.element.android.features.invite.impl.invitelist
 
 import androidx.compose.runtime.Immutable
-import io.element.android.features.invite.impl.response.AcceptDeclineInviteState
+import io.element.android.features.invite.api.response.AcceptDeclineInviteState
 import io.element.android.features.invite.impl.model.InviteListInviteSummary
 import kotlinx.collections.immutable.ImmutableList
 
