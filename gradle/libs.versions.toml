@@ -176,7 +176,7 @@ kotlinpoet = "com.squareup:kotlinpoet:1.16.0"
 
 # Analytics
 posthog = "com.posthog:posthog-android:3.1.16"
-sentry = "io.sentry:sentry-android:7.6.0"
+sentry = "io.sentry:sentry-android:7.8.0"
 # Note: only 0.19.0 will compile properly
 # main branch can be tested replacing the version with main-SNAPSHOT
 matrix_analytics_events = "com.github.matrix-org:matrix-analytics-events:0.15.0"

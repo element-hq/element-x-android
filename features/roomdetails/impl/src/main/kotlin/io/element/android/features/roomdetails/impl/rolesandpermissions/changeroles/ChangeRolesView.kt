@@ -284,7 +284,7 @@ private fun SearchResultsList(
                 )
             }
         }
-        if (searchResults.admins.isNotEmpty()) {
+        if (searchResults.members.isNotEmpty()) {
             stickyHeader { ListSectionHeader(text = stringResource(R.string.screen_room_member_list_mode_members)) }
             items(searchResults.members, key = { it.userId }) { roomMember ->
                 ListMemberItem(

@@ -25,6 +25,7 @@ import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import io.element.android.libraries.matrix.api.encryption.RecoveryState
 import io.element.android.libraries.matrix.api.sync.SyncState
 import io.element.android.libraries.matrix.impl.sync.RustSyncService
+import io.element.android.libraries.sessionstorage.api.SessionStore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.currentCoroutineContext
@@ -48,10 +49,11 @@ import org.matrix.rustcomponents.sdk.EnableRecoveryProgress as RustEnableRecover
 import org.matrix.rustcomponents.sdk.SteadyStateException as RustSteadyStateException
 
 internal class RustEncryptionService(
-    client: Client,
+    private val client: Client,
     syncService: RustSyncService,
     sessionCoroutineScope: CoroutineScope,
     private val dispatchers: CoroutineDispatchers,
+    private val sessionStore: SessionStore,
 ) : EncryptionService {
     private val service: Encryption = client.encryption()
 
@@ -186,6 +188,9 @@ internal class RustEncryptionService(
     override suspend fun recover(recoveryKey: String): Result<Unit> = withContext(dispatchers.io) {
         runCatching {
             service.recover(recoveryKey)
+            val existingSession = sessionStore.getSession(client.userId())
+                ?: error("Failed to save verification state. No session with id ${client.userId()}")
+            sessionStore.updateData(existingSession.copy(needsVerification = false))
         }.mapFailure {
             it.mapRecoveryException()
         }

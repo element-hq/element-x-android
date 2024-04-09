@@ -23,10 +23,14 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import com.freeletics.flowredux.compose.rememberStateAndDispatch
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import io.element.android.libraries.matrix.api.encryption.RecoveryState
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
@@ -35,6 +39,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 import io.element.android.features.verifysession.impl.VerifySelfSessionStateMachine.Event as StateMachineEvent
 import io.element.android.features.verifysession.impl.VerifySelfSessionStateMachine.State as StateMachineState
@@ -43,20 +48,28 @@ class VerifySelfSessionPresenter @Inject constructor(
     private val sessionVerificationService: SessionVerificationService,
     private val encryptionService: EncryptionService,
     private val stateMachine: VerifySelfSessionStateMachine,
+    private val buildMeta: BuildMeta,
 ) : Presenter<VerifySelfSessionState> {
     @Composable
     override fun present(): VerifySelfSessionState {
+        val coroutineScope = rememberCoroutineScope()
         LaunchedEffect(Unit) {
             // Force reset, just in case the service was left in a broken state
             sessionVerificationService.reset()
         }
         val recoveryState by encryptionService.recoveryStateStateFlow.collectAsState()
         val stateAndDispatch = stateMachine.rememberStateAndDispatch()
+        var skipVerification by remember { mutableStateOf(false) }
+        val needsVerification by sessionVerificationService.needsVerificationFlow.collectAsState()
         val verificationFlowStep by remember {
             derivedStateOf {
-                stateAndDispatch.state.value.toVerificationStep(
-                    canEnterRecoveryKey = recoveryState == RecoveryState.INCOMPLETE
-                )
+                when {
+                    skipVerification -> VerifySelfSessionState.VerificationStep.Skipped
+                    needsVerification -> stateAndDispatch.state.value.toVerificationStep(
+                        canEnterRecoveryKey = recoveryState == RecoveryState.INCOMPLETE
+                    )
+                    else -> VerifySelfSessionState.VerificationStep.Completed
+                }
             }
         }
         // Start this after observing state machine
@@ -72,10 +85,15 @@ class VerifySelfSessionPresenter @Inject constructor(
                 VerifySelfSessionViewEvents.DeclineVerification -> stateAndDispatch.dispatchAction(StateMachineEvent.DeclineChallenge)
                 VerifySelfSessionViewEvents.Cancel -> stateAndDispatch.dispatchAction(StateMachineEvent.Cancel)
                 VerifySelfSessionViewEvents.Reset -> stateAndDispatch.dispatchAction(StateMachineEvent.Reset)
+                VerifySelfSessionViewEvents.SkipVerification -> coroutineScope.launch {
+                    sessionVerificationService.saveVerifiedState(true)
+                    skipVerification = true
+                }
             }
         }
         return VerifySelfSessionState(
             verificationFlowStep = verificationFlowStep,
+            displaySkipButton = buildMeta.isDebuggable,
             eventSink = ::handleEvents,
         )
     }

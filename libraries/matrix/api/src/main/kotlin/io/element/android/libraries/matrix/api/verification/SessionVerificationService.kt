@@ -22,6 +22,17 @@ import kotlinx.coroutines.flow.StateFlow
 
 interface SessionVerificationService {
     /**
+     * This flow stores the local verification status of the current session.
+     *
+     * We should ideally base the verified status in the Rust SDK info, but there are several issues with that approach:
+     *
+     * - The SDK takes a while to report this value, resulting in a delay of 1-2s in displaying the UI.
+     * - We need to add a 'Skip' option for testing purposes, which would not be possible if we relied only on the SDK.
+     * - The SDK sometimes doesn't report the verification state if there is no network connection when the app boots.
+     */
+    val needsVerificationFlow: StateFlow<Boolean>
+
+    /**
      * State of the current verification flow ([VerificationFlowState.Initial] if not started).
      */
     val verificationFlowState: StateFlow<VerificationFlowState>
@@ -72,6 +83,11 @@ interface SessionVerificationService {
      * Returns the verification service state to the initial step.
      */
     suspend fun reset()
+
+    /**
+     * Saves the current session state as [verified].
+     */
+    suspend fun saveVerifiedState(verified: Boolean)
 }
 
 /** Verification status of the current session. */
