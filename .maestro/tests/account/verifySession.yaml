@@ -7,3 +7,7 @@ appId: ${MAESTRO_APP_ID}
 - inputText: ${MAESTRO_RECOVERY_KEY}
 - hideKeyboard
 - tapOn: "Confirm"
+- extendedWaitUntil:
+    visible: "Device verified"
+    timeout: 10000
+- tapOn: "Continue"

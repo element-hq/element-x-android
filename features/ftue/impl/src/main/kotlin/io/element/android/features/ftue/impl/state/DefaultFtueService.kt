@@ -25,7 +25,6 @@ import io.element.android.features.ftue.api.state.FtueState
 import io.element.android.features.lockscreen.api.LockScreenService
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
-import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatus
 import io.element.android.libraries.permissions.api.PermissionStateProvider
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.toolbox.api.sdk.BuildVersionSdkIntProvider
@@ -56,7 +55,7 @@ class DefaultFtueService @Inject constructor(
     }
 
     init {
-        sessionVerificationService.sessionVerifiedStatus
+        sessionVerificationService.needsVerificationFlow
             .onEach { updateState() }
             .launchIn(coroutineScope)
 
@@ -99,12 +98,8 @@ class DefaultFtueService @Inject constructor(
         ).any { it() }
     }
 
-    private fun isSessionVerificationServiceReady(): Boolean {
-        return sessionVerificationService.sessionVerifiedStatus.value != SessionVerifiedStatus.Unknown
-    }
-
     private fun isSessionNotVerified(): Boolean {
-        return sessionVerificationService.sessionVerifiedStatus.value == SessionVerifiedStatus.NotVerified
+        return sessionVerificationService.needsVerificationFlow.value
     }
 
     private fun needsAnalyticsOptIn(): Boolean {
@@ -132,7 +127,6 @@ class DefaultFtueService @Inject constructor(
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     internal fun updateState() {
         state.value = when {
-            !isSessionVerificationServiceReady() -> FtueState.Unknown
             isAnyStepIncomplete() -> FtueState.Incomplete
             else -> FtueState.Complete
         }
