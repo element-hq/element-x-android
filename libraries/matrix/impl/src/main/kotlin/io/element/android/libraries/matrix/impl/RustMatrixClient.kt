@@ -150,6 +150,7 @@ class RustMatrixClient(
         syncService = rustSyncService,
         sessionCoroutineScope = sessionCoroutineScope,
         dispatchers = dispatchers,
+        sessionStore = sessionStore,
     )
 
     private val roomDirectoryService = RustRoomDirectoryService(

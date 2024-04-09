@@ -31,7 +31,6 @@ import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runCatchingUpdatingState
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
-import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -39,7 +38,6 @@ import javax.inject.Inject
 class SecureBackupEnterRecoveryKeyPresenter @Inject constructor(
     private val encryptionService: EncryptionService,
     private val recoveryKeyTools: RecoveryKeyTools,
-    private val sessionVerificationService: SessionVerificationService,
 ) : Presenter<SecureBackupEnterRecoveryKeyState> {
     @Composable
     override fun present(): SecureBackupEnterRecoveryKeyState {
@@ -91,7 +89,6 @@ class SecureBackupEnterRecoveryKeyPresenter @Inject constructor(
     ) = launch {
         suspend {
             encryptionService.recover(recoveryKey).getOrThrow()
-            sessionVerificationService.saveVerifiedState(true)
         }.runCatchingUpdatingState(action)
     }
 }
