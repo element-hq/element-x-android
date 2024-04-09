@@ -147,14 +147,14 @@ private fun JoinRoomContent(
         }
         Spacer(modifier = Modifier.height(16.dp))
         Text(
-            text = "Preview is not available",
+            text = stringResource(id = R.string.screen_join_room_title_no_preview),
             style = ElementTheme.typography.fontHeadingMdBold,
             textAlign = TextAlign.Center,
             color = ElementTheme.colors.textPrimary,
         )
         Spacer(modifier = Modifier.height(8.dp))
         Text(
-            text = "You must be a member of this room to view the message history.",
+            text = stringResource(id = R.string.screen_join_room_subtitle_no_preview),
             style = ElementTheme.typography.fontBodyMdRegular,
             textAlign = TextAlign.Center,
             color = ElementTheme.colors.textSecondary,
