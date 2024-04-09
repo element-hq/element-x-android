@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_identity_confirmation_create_new_recovery_key">"Erstelle einen neuen Wiederherstellungsschlüssel"</string>
   <string name="screen_identity_confirmation_subtitle">"Verifiziere dieses Gerät, um sicheres Messaging einzurichten."</string>
   <string name="screen_identity_confirmation_title">"Bestätige, dass du es bist"</string>
   <string name="screen_identity_confirmed_subtitle">"Du kannst nun verschlüsselte Nachrichten lesen oder versenden."</string>

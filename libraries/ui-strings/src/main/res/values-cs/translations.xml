@@ -179,7 +179,7 @@
   <string name="common_privacy_policy">"Zásady ochrany osobních údajů"</string>
   <string name="common_reaction">"Reakce"</string>
   <string name="common_reactions">"Reakce"</string>
-  <string name="common_recovery_key">"Klíč pro obnovu"</string>
+  <string name="common_recovery_key">"Klíč pro obnovení"</string>
   <string name="common_refreshing">"Obnovování…"</string>
   <string name="common_replying_to">"Odpověď na %1$s"</string>
   <string name="common_report_a_bug">"Nahlásit chybu"</string>
@@ -257,6 +257,7 @@
   <string name="screen_room_member_details_block_alert_action">"Zablokovat"</string>
   <string name="screen_room_member_details_block_alert_description">"Blokovaní uživatelé vám nebudou moci posílat zprávy a všechny jejich zprávy budou skryty. Můžete je kdykoli odblokovat."</string>
   <string name="screen_room_member_details_block_user">"Zablokovat uživatele"</string>
+  <string name="screen_room_member_details_title">"Profil"</string>
   <string name="screen_room_member_details_unblock_alert_action">"Odblokovat"</string>
   <string name="screen_room_member_details_unblock_alert_description">"Znovu uvidíte všechny zprávy od nich."</string>
   <string name="screen_room_member_details_unblock_user">"Odblokovat uživatele"</string>

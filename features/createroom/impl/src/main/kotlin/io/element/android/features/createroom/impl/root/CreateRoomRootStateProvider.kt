@@ -17,9 +17,12 @@
 package io.element.android.features.createroom.impl.root
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import io.element.android.features.createroom.impl.userlist.UserListState
+import io.element.android.features.createroom.impl.userlist.aRecentDirectRoomList
 import io.element.android.features.createroom.impl.userlist.aUserListState
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
+import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.ui.components.aMatrixUser
 import io.element.android.libraries.usersearch.api.UserSearchResult
 import kotlinx.collections.immutable.persistentListOf
@@ -28,7 +31,7 @@ open class CreateRoomRootStateProvider : PreviewParameterProvider<CreateRoomRoot
     override val values: Sequence<CreateRoomRootState>
         get() = sequenceOf(
             aCreateRoomRootState(),
-            aCreateRoomRootState().copy(
+            aCreateRoomRootState(
                 startDmAction = AsyncAction.Loading,
                 userListState = aMatrixUser().let {
                     aUserListState().copy(
@@ -39,7 +42,7 @@ open class CreateRoomRootStateProvider : PreviewParameterProvider<CreateRoomRoot
                     )
                 }
             ),
-            aCreateRoomRootState().copy(
+            aCreateRoomRootState(
                 startDmAction = AsyncAction.Failure(Throwable("error")),
                 userListState = aMatrixUser().let {
                     aUserListState().copy(
@@ -50,12 +53,22 @@ open class CreateRoomRootStateProvider : PreviewParameterProvider<CreateRoomRoot
                     )
                 }
             ),
+            aCreateRoomRootState(
+                userListState = aUserListState(
+                    recentDirectRooms = aRecentDirectRoomList()
+                )
+            ),
         )
 }
 
-fun aCreateRoomRootState() = CreateRoomRootState(
-    eventSink = {},
-    applicationName = "Element X Preview",
-    startDmAction = AsyncAction.Uninitialized,
-    userListState = aUserListState(),
+fun aCreateRoomRootState(
+    applicationName: String = "Element X Preview",
+    userListState: UserListState = aUserListState(),
+    startDmAction: AsyncAction<RoomId> = AsyncAction.Uninitialized,
+    eventSink: (CreateRoomRootEvents) -> Unit = {},
+) = CreateRoomRootState(
+    applicationName = applicationName,
+    userListState = userListState,
+    startDmAction = startDmAction,
+    eventSink = eventSink,
 )

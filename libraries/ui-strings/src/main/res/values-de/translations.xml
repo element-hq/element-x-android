@@ -175,7 +175,9 @@
   <string name="common_privacy_policy">"Datenschutz­erklärung"</string>
   <string name="common_reaction">"Reaktion"</string>
   <string name="common_reactions">"Reaktionen"</string>
-  <string name="common_recovery_key">"Wiederherstellungsschlüssel"</string>
+  <string name="common_recovery_key">
+    <b>"Wiederherstellungsschlüssel"</b>
+  </string>
   <string name="common_refreshing">"Wird erneuert…"</string>
   <string name="common_replying_to">"%1$s antworten"</string>
   <string name="common_report_a_bug">"Einen Fehler melden"</string>
@@ -253,6 +255,7 @@
   <string name="screen_room_member_details_block_alert_action">"Blockieren"</string>
   <string name="screen_room_member_details_block_alert_description">"Blockierte Benutzer können Dir keine Nachrichten senden und alle ihre alten Nachrichten werden ausgeblendet. Die Blockierung kann jederzeit aufgehoben werden."</string>
   <string name="screen_room_member_details_block_user">"Benutzer blockieren"</string>
+  <string name="screen_room_member_details_title">"Profil"</string>
   <string name="screen_room_member_details_unblock_alert_action">"Blockierung aufheben"</string>
   <string name="screen_room_member_details_unblock_alert_description">"Der Nutzer kann dir wieder Nachrichten senden &amp; alle Nachrichten des Nutzers werden wieder angezeigt."</string>
   <string name="screen_room_member_details_unblock_user">"Blockierung aufheben"</string>

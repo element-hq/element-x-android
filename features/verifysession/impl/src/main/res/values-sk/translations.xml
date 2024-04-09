@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_identity_confirmation_create_new_recovery_key">"Vytvoriť nový kľúč na obnovenie"</string>
   <string name="screen_identity_confirmation_subtitle">"Ak chcete nastaviť zabezpečené správy, overte toto zariadenie."</string>
   <string name="screen_identity_confirmation_title">"Potvrďte, že ste to vy"</string>
   <string name="screen_identity_confirmed_subtitle">"Teraz môžete bezpečne čítať alebo odosielať správy a tomuto zariadeniu môže dôverovať aj ktokoľvek, s kým konverzujete."</string>

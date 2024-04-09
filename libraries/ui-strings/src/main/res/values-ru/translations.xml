@@ -179,7 +179,9 @@
   <string name="common_privacy_policy">"Политика конфиденциальности"</string>
   <string name="common_reaction">"Реакция"</string>
   <string name="common_reactions">"Реакции"</string>
-  <string name="common_recovery_key">"Ключ восстановления"</string>
+  <string name="common_recovery_key">
+    <b>"Ключ восстановления"</b>
+  </string>
   <string name="common_refreshing">"Обновление…"</string>
   <string name="common_replying_to">"Отвечает на %1$s"</string>
   <string name="common_report_a_bug">"Сообщить об ошибке"</string>
@@ -257,6 +259,7 @@
   <string name="screen_room_member_details_block_alert_action">"Заблокировать"</string>
   <string name="screen_room_member_details_block_alert_description">"Заблокированные пользователи не смогут отправлять вам сообщения, а все их сообщения будут скрыты. Вы можете разблокировать их в любое время."</string>
   <string name="screen_room_member_details_block_user">"Заблокировать пользователя"</string>
+  <string name="screen_room_member_details_title">"Профиль"</string>
   <string name="screen_room_member_details_unblock_alert_action">"Разблокировать"</string>
   <string name="screen_room_member_details_unblock_alert_description">"Вы снова сможете увидеть все сообщения."</string>
   <string name="screen_room_member_details_unblock_user">"Разблокировать пользователя"</string>

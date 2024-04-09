@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_identity_confirmation_create_new_recovery_key">"Buat kunci pemulihan baru"</string>
   <string name="screen_identity_confirmation_subtitle">"Verifikasi perangkat ini untuk menyiapkan perpesanan aman."</string>
   <string name="screen_identity_confirmation_title">"Konfirmasi bahwa ini Anda"</string>
   <string name="screen_identity_confirmed_subtitle">"Sekarang Anda dapat membaca atau mengirim pesan dengan aman, dan siapa pun yang mengobrol dengan Anda juga dapat mempercayai perangkat ini."</string>

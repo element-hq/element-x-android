@@ -202,7 +202,7 @@
   <string name="common_server_not_supported">"Сервер не падтрымліваецца"</string>
   <string name="common_server_url">"URL-адрас сервера"</string>
   <string name="common_settings">"Налады"</string>
-  <string name="common_shared_location">"Абагуленыя геаданыя"</string>
+  <string name="common_shared_location">"Абагуленае месцазнаходжанне"</string>
   <string name="common_signing_out">"Выхад"</string>
   <string name="common_starting_chat">"Пачатак чата…"</string>
   <string name="common_sticker">"Стыкер"</string>
@@ -257,6 +257,7 @@
   <string name="screen_room_member_details_block_alert_action">"Заблакіраваць"</string>
   <string name="screen_room_member_details_block_alert_description">"Заблакіраваныя карыстальнікі не змогуць адпраўляць вам паведамленні, і ўсе іх паведамленні будуць схаваны. Вы можаце разблакіраваць іх у любы час."</string>
   <string name="screen_room_member_details_block_user">"Заблакіраваць карыстальніка"</string>
+  <string name="screen_room_member_details_title">"Профіль"</string>
   <string name="screen_room_member_details_unblock_alert_action">"Разблакіраваць"</string>
   <string name="screen_room_member_details_unblock_alert_description">"Вы зноў зможаце ўбачыць усе паведамленні."</string>
   <string name="screen_room_member_details_unblock_user">"Разблакіраваць карыстальніка"</string>

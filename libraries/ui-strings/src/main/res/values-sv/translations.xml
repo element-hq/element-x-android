@@ -96,6 +96,7 @@
   <string name="common_editing">"Redigerar"</string>
   <string name="common_emote">"* %1$s %2$s"</string>
   <string name="common_encryption_enabled">"Kryptering aktiverad"</string>
+  <string name="common_enter_your_pin">"Ange din PIN-kod"</string>
   <string name="common_error">"Fel"</string>
   <string name="common_everyone">"Alla"</string>
   <string name="common_file">"Fil"</string>
@@ -143,6 +144,7 @@
   <string name="common_rich_text_editor">"Riktextredigerare"</string>
   <string name="common_room_name">"Rumsnamn"</string>
   <string name="common_room_name_placeholder">"t.ex. ditt projektnamn"</string>
+  <string name="common_screen_lock">"Skärmlås"</string>
   <string name="common_search_for_someone">"Sök efter någon"</string>
   <string name="common_search_results">"Sökresultat"</string>
   <string name="common_security">"Säkerhet"</string>
@@ -164,6 +166,7 @@
   <string name="common_unable_to_decrypt">"Kan inte avkryptera"</string>
   <string name="common_unable_to_invite_message">"Inbjudan kunde inte skickas till en eller flera användare."</string>
   <string name="common_unable_to_invite_title">"Kunde inte skicka inbjudningar"</string>
+  <string name="common_unlock">"Lås upp"</string>
   <string name="common_unmute">"Avtysta"</string>
   <string name="common_unsupported_event">"Händelse som inte stöds"</string>
   <string name="common_username">"Användarnamn"</string>

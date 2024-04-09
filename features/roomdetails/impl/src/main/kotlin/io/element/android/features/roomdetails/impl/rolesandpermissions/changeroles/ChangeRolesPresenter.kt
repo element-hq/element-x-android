@@ -42,6 +42,8 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.powerlevels.UserRoleChange
+import io.element.android.libraries.matrix.api.room.powerlevels.usersWithRole
+import io.element.android.libraries.matrix.api.room.toMatrixUser
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.collections.immutable.ImmutableList
@@ -73,7 +75,7 @@ class ChangeRolesPresenter @AssistedInject constructor(
         var query by rememberSaveable { mutableStateOf<String?>(null) }
         var searchActive by rememberSaveable { mutableStateOf(false) }
         var searchResults by remember {
-            mutableStateOf<SearchBarResultState<ImmutableList<RoomMember>>>(SearchBarResultState.Initial())
+            mutableStateOf<SearchBarResultState<MembersByRole>>(SearchBarResultState.Initial())
         }
         val selectedUsers = remember {
             mutableStateOf<ImmutableList<MatrixUser>>(persistentListOf())
@@ -89,7 +91,7 @@ class ChangeRolesPresenter @AssistedInject constructor(
                     // Users who were selected but didn't have the role, so their role change was pending
                     val toAdd = selectedUsers.value.filter { user -> users.none { it.userId == user.userId } && previous.none { it.userId == user.userId } }
                     // Users who no longer have the role
-                    val toRemove = previous.filter { user -> users.none { it.userId == user.userId } }
+                    val toRemove = previous.filter { user -> users.none { it.userId == user.userId } }.toSet()
                     selectedUsers.value = (users + toAdd - toRemove).toImmutableList()
                 }
                 .launchIn(this)
@@ -101,8 +103,9 @@ class ChangeRolesPresenter @AssistedInject constructor(
         LaunchedEffect(query, roomMemberState) {
             val results = dataSource
                 .search(query.orEmpty())
-                .sorted()
+                .groupedByRole()
 
+            println(results)
             searchResults = if (results.isEmpty()) {
                 SearchBarResultState.NoResultsFound()
             } else {
@@ -129,11 +132,11 @@ class ChangeRolesPresenter @AssistedInject constructor(
                 }
                 is ChangeRolesEvent.UserSelectionToggled -> {
                     val newList = selectedUsers.value.toMutableList()
-                    val index = newList.indexOfFirst { it.userId == event.roomMember.userId }
+                    val index = newList.indexOfFirst { it.userId == event.matrixUser.userId }
                     if (index >= 0) {
                         newList.removeAt(index)
                     } else {
-                        newList.add(event.roomMember.toMatrixUser())
+                        newList.add(event.matrixUser)
                     }
                     selectedUsers.value = newList.toImmutableList()
                 }
@@ -179,15 +182,17 @@ class ChangeRolesPresenter @AssistedInject constructor(
         )
     }
 
+    private fun List<RoomMember>.groupedByRole(): MembersByRole {
+        return MembersByRole(
+            admins = filter { it.role == RoomMember.Role.ADMIN }.sorted(),
+            moderators = filter { it.role == RoomMember.Role.MODERATOR }.sorted(),
+            members = filter { it.role == RoomMember.Role.USER }.sorted(),
+        )
+    }
+
     private fun Iterable<RoomMember>.sorted(): ImmutableList<RoomMember> {
         return sortedWith(PowerLevelRoomMemberComparator()).toImmutableList()
     }
-
-    private fun RoomMember.toMatrixUser() = MatrixUser(
-        userId = userId,
-        displayName = displayName,
-        avatarUrl = avatarUrl,
-    )
 
     private fun CoroutineScope.save(
         usersWithRole: ImmutableList<MatrixUser>,

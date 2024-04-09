@@ -22,6 +22,7 @@ import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.RoomMember
+import io.element.android.libraries.matrix.api.room.RoomMembershipState
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.components.aMatrixUserList
 import kotlinx.collections.immutable.ImmutableList
@@ -32,7 +33,7 @@ class ChangeRolesStateProvider : PreviewParameterProvider<ChangeRolesState> {
     override val values: Sequence<ChangeRolesState>
         get() = sequenceOf(
             aChangeRolesState(),
-            aChangeRolesState(role = RoomMember.Role.MODERATOR),
+            aChangeRolesStateWithSelectedUsers().copy(role = RoomMember.Role.MODERATOR),
             aChangeRolesStateWithSelectedUsers().copy(hasPendingChanges = false),
             aChangeRolesStateWithSelectedUsers(),
             aChangeRolesStateWithSelectedUsers().copy(
@@ -41,7 +42,7 @@ class ChangeRolesStateProvider : PreviewParameterProvider<ChangeRolesState> {
             aChangeRolesStateWithSelectedUsers().copy(
                 query = "Alice",
                 isSearchActive = true,
-                searchResults = SearchBarResultState.Results(aRoomMemberList().take(1).toImmutableList()),
+                searchResults = SearchBarResultState.Results(MembersByRole(aRoomMemberList().take(1).toImmutableList())),
                 selectedUsers = aMatrixUserList().take(1).toImmutableList(),
             ),
             aChangeRolesStateWithSelectedUsers().copy(exitState = AsyncAction.Confirming),
@@ -56,12 +57,13 @@ internal fun aChangeRolesState(
     role: RoomMember.Role = RoomMember.Role.ADMIN,
     query: String? = null,
     isSearchActive: Boolean = false,
-    searchResults: SearchBarResultState<ImmutableList<RoomMember>> = SearchBarResultState.NoResultsFound(),
+    searchResults: SearchBarResultState<MembersByRole> = SearchBarResultState.NoResultsFound(),
     selectedUsers: ImmutableList<MatrixUser> = persistentListOf(),
     hasPendingChanges: Boolean = false,
     exitState: AsyncAction<Unit> = AsyncAction.Uninitialized,
     savingState: AsyncAction<Unit> = AsyncAction.Uninitialized,
     canRemoveMember: (UserId) -> Boolean = { true },
+    eventSink: (ChangeRolesEvent) -> Unit = {},
 ) = ChangeRolesState(
     role = role,
     query = query,
@@ -72,12 +74,22 @@ internal fun aChangeRolesState(
     exitState = exitState,
     savingState = savingState,
     canChangeMemberRole = canRemoveMember,
-    eventSink = {},
+    eventSink = eventSink,
 )
 
 internal fun aChangeRolesStateWithSelectedUsers() = aChangeRolesState(
     selectedUsers = aMatrixUserList().toImmutableList(),
-    searchResults = SearchBarResultState.Results(aRoomMemberList().toImmutableList()),
+    searchResults = SearchBarResultState.Results(
+        MembersByRole(
+            members = aRoomMemberList().mapIndexed { index, roomMember ->
+                if (index % 2 == 0) {
+                    roomMember.copy(membership = RoomMembershipState.INVITE)
+                } else {
+                    roomMember
+                }
+            }
+        )
+    ),
     hasPendingChanges = true,
     canRemoveMember = { it != UserId("@alice:server.org") },
 )

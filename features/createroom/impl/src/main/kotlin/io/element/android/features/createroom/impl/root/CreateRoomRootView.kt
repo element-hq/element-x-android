@@ -26,6 +26,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -46,11 +47,14 @@ import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.aliasScreenTitle
 import io.element.android.libraries.designsystem.theme.components.Icon
+import io.element.android.libraries.designsystem.theme.components.ListSectionHeader
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.ui.components.MatrixUserRow
 import io.element.android.libraries.ui.strings.CommonStrings
+import kotlinx.collections.immutable.persistentListOf
 
 @Composable
 fun CreateRoomRootView(
@@ -77,7 +81,11 @@ fun CreateRoomRootView(
         ) {
             UserListView(
                 modifier = Modifier.fillMaxWidth(),
-                state = state.userListState,
+                // Do not render suggestions in this case, the suggestion will be rendered
+                // by CreateRoomActionButtonsList
+                state = state.userListState.copy(
+                    recentDirectRooms = persistentListOf(),
+                ),
                 onUserSelected = {
                     state.eventSink(CreateRoomRootEvents.StartDM(it))
                 },
@@ -89,6 +97,7 @@ fun CreateRoomRootView(
                     state = state,
                     onNewRoomClicked = onNewRoomClicked,
                     onInvitePeopleClicked = onInviteFriendsClicked,
+                    onDmClicked = onOpenDM,
                 )
             }
         }
@@ -106,7 +115,7 @@ fun CreateRoomRootView(
         onRetry = {
             state.userListState.selectedUsers.firstOrNull()
                 ?.let { state.eventSink(CreateRoomRootEvents.StartDM(it)) }
-                // Cancel start DM if there is no more selected user (should not happen)
+            // Cancel start DM if there is no more selected user (should not happen)
                 ?: state.eventSink(CreateRoomRootEvents.CancelStartDM)
         },
         onErrorDismiss = { state.eventSink(CreateRoomRootEvents.CancelStartDM) },
@@ -139,18 +148,43 @@ private fun CreateRoomActionButtonsList(
     state: CreateRoomRootState,
     onNewRoomClicked: () -> Unit,
     onInvitePeopleClicked: () -> Unit,
+    onDmClicked: (RoomId) -> Unit,
 ) {
-    Column {
-        CreateRoomActionButton(
-            iconRes = CompoundDrawables.ic_compound_plus,
-            text = stringResource(id = R.string.screen_create_room_action_create_room),
-            onClick = onNewRoomClicked,
-        )
-        CreateRoomActionButton(
-            iconRes = CompoundDrawables.ic_compound_share_android,
-            text = stringResource(id = CommonStrings.action_invite_friends_to_app, state.applicationName),
-            onClick = onInvitePeopleClicked,
-        )
+    LazyColumn {
+        item {
+            CreateRoomActionButton(
+                iconRes = CompoundDrawables.ic_compound_plus,
+                text = stringResource(id = R.string.screen_create_room_action_create_room),
+                onClick = onNewRoomClicked,
+            )
+        }
+        item {
+            CreateRoomActionButton(
+                iconRes = CompoundDrawables.ic_compound_share_android,
+                text = stringResource(id = CommonStrings.action_invite_friends_to_app, state.applicationName),
+                onClick = onInvitePeopleClicked,
+            )
+        }
+        if (state.userListState.recentDirectRooms.isNotEmpty()) {
+            item {
+                ListSectionHeader(
+                    title = stringResource(id = CommonStrings.common_suggestions),
+                    hasDivider = false,
+                )
+            }
+            state.userListState.recentDirectRooms.forEach { recentDirectRoom ->
+                item {
+                    MatrixUserRow(
+                        modifier = Modifier.clickable(
+                            onClick = {
+                                onDmClicked(recentDirectRoom.roomId)
+                            }
+                        ),
+                        matrixUser = recentDirectRoom.matrixUser,
+                    )
+                }
+            }
+        }
     }
 }
 
