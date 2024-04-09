@@ -46,6 +46,10 @@ open class VerifySelfSessionStateProvider : PreviewParameterProvider<VerifySelfS
             aVerifySelfSessionState(
                 verificationFlowStep = VerifySelfSessionState.VerificationStep.Initial(true)
             ),
+            aVerifySelfSessionState(
+                verificationFlowStep = VerifySelfSessionState.VerificationStep.Completed,
+                displaySkipButton = true,
+            ),
             // Add other state here
         )
 }

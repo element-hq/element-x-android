@@ -22,6 +22,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.tests.testutils.EnsureNeverCalled
+import io.element.android.tests.testutils.EnsureNeverCalledWithParam
 import io.element.android.tests.testutils.EventsRecorder
 import io.element.android.tests.testutils.clickOn
 import io.element.android.tests.testutils.ensureCalledOnce
@@ -127,6 +128,23 @@ class VerifySelfSessionViewTest {
     }
 
     @Test
+    fun `back key pressed - on Completed step does nothing`() {
+        val eventsRecorder = EventsRecorder<VerifySelfSessionViewEvents>()
+        rule.setContent {
+            VerifySelfSessionView(
+                aVerifySelfSessionState(
+                    verificationFlowStep = VerifySelfSessionState.VerificationStep.Completed,
+                    eventSink = eventsRecorder
+                ),
+                onEnterRecoveryKey = EnsureNeverCalled(),
+                onFinished = EnsureNeverCalled(),
+            )
+        }
+        rule.pressBackKey()
+        eventsRecorder.assertEmpty()
+    }
+
+    @Test
     fun `when flow is completed and the user clicks on the continue button, the expected callback is invoked`() {
         val eventsRecorder = EventsRecorder<VerifySelfSessionViewEvents>(expectEvents = false)
         ensureCalledOnce { callback ->
@@ -219,5 +237,22 @@ class VerifySelfSessionViewTest {
         }
         rule.clickOn(CommonStrings.action_skip)
         eventsRecorder.assertSingle(VerifySelfSessionViewEvents.SkipVerification)
+    }
+
+    @Test
+    fun `on Skipped step - onFinished callback is called immediately`() {
+        ensureCalledOnce { callback ->
+            rule.setContent {
+                VerifySelfSessionView(
+                    aVerifySelfSessionState(
+                        verificationFlowStep = VerifySelfSessionState.VerificationStep.Skipped,
+                        displaySkipButton = true,
+                        eventSink = EnsureNeverCalledWithParam(),
+                    ),
+                    onEnterRecoveryKey = EnsureNeverCalled(),
+                    onFinished = callback,
+                )
+            }
+        }
     }
 }
