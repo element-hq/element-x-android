@@ -112,16 +112,12 @@ class VerifySelfSessionViewTest {
     @Test
     fun `back key pressed - on Completed step does nothing`() {
         val eventsRecorder = EventsRecorder<VerifySelfSessionViewEvents>()
-        rule.setContent {
-            VerifySelfSessionView(
-                aVerifySelfSessionState(
-                    verificationFlowStep = VerifySelfSessionState.VerificationStep.Completed,
-                    eventSink = eventsRecorder
-                ),
-                onEnterRecoveryKey = EnsureNeverCalled(),
-                onFinished = EnsureNeverCalled(),
-            )
-        }
+        rule.setVerifySelfSessionView(
+            aVerifySelfSessionState(
+                verificationFlowStep = VerifySelfSessionState.VerificationStep.Completed,
+                eventSink = eventsRecorder
+            ),
+        )
         rule.pressBackKey()
         eventsRecorder.assertEmpty()
     }
@@ -210,7 +206,7 @@ class VerifySelfSessionViewTest {
         val eventsRecorder = EventsRecorder<VerifySelfSessionViewEvents>()
         rule.setVerifySelfSessionView(
             aVerifySelfSessionState(
-                verificationFlowStep = VerifySelfSessionState.VerificationStep.Initial(canEnterRecoveryKey = true),
+                verificationFlowStep = VerifySelfSessionState.VerificationStep.Initial(canEnterRecoveryKey = true, isLastDevice = false),
                 displaySkipButton = true,
                 eventSink = eventsRecorder
             ),
@@ -233,11 +229,11 @@ class VerifySelfSessionViewTest {
         }
     }
 
-    private fun <R: TestRule> AndroidComposeTestRule<R, ComponentActivity>.setVerifySelfSessionView(
+    private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setVerifySelfSessionView(
         state: VerifySelfSessionState,
         onEnterRecoveryKey: () -> Unit = EnsureNeverCalled(),
-        onCreateNewRecoveryKey: () -> Unit  = EnsureNeverCalled(),
-        onFinished: () -> Unit  = EnsureNeverCalled(),
+        onCreateNewRecoveryKey: () -> Unit = EnsureNeverCalled(),
+        onFinished: () -> Unit = EnsureNeverCalled(),
     ) {
         rule.setContent {
             VerifySelfSessionView(
