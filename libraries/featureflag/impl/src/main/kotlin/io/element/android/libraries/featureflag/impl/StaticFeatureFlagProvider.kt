@@ -41,7 +41,7 @@ class StaticFeatureFlagProvider @Inject constructor() :
                 FeatureFlags.Mentions -> true
                 FeatureFlags.MarkAsUnread -> true
                 FeatureFlags.RoomListFilters -> true
-                FeatureFlags.RoomModeration -> false
+                FeatureFlags.RoomModeration -> true
                 FeatureFlags.RoomDirectorySearch -> false
             }
         } else {

@@ -87,7 +87,7 @@ enum class FeatureFlags(
         title = "Room moderation",
         description = "Add moderation features to the room for users with permissions",
         defaultValue = true,
-        isFinished = false,
+        isFinished = true,
     ),
     RoomDirectorySearch(
         key = "feature.roomdirectorysearch",
