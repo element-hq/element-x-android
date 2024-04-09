@@ -16,7 +16,6 @@
 
 package io.element.android.libraries.matrix.impl.room
 
-import io.element.android.appconfig.MatrixConfiguration
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.coroutine.childScope
 import io.element.android.libraries.matrix.api.core.EventId
@@ -731,17 +730,12 @@ class RustMatrixRoom(
         )
     }
 
-    override suspend fun getPermalinkFor(eventId: EventId): Result<String> {
-        // FIXME Use the SDK API once https://github.com/matrix-org/matrix-rust-sdk/issues/3259 has been done
-        // Now use a simple builder
-        return runCatching {
-            buildString {
-                append(MatrixConfiguration.MATRIX_TO_PERMALINK_BASE_URL)
-                append(roomId.value)
-                append("/")
-                append(eventId.value)
-            }
-        }
+    override suspend fun getPermalink(): Result<String> = runCatching {
+        innerRoom.matrixToPermalink()
+    }
+
+    override suspend fun getPermalinkFor(eventId: EventId): Result<String> = runCatching {
+        innerRoom.matrixToEventPermalink(eventId.value)
     }
 
     private fun sendAttachment(files: List<File>, handle: () -> SendAttachmentJoinHandle): Result<MediaUploadHandler> {

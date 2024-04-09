@@ -18,23 +18,16 @@ package io.element.android.libraries.matrix.impl.permalink
 
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.androidutils.metadata.withReleaseBehavior
-import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.tests.testutils.assertThrowsInDebug
 import org.junit.Test
 
 class DefaultPermalinkBuilderTest {
+    @Test
     fun `building a permalink for an invalid user id throws when verifying the id`() {
         assertThrowsInDebug {
             val userId = UserId("some invalid user id")
             DefaultPermalinkBuilder().permalinkForUser(userId)
-        }
-    }
-
-    fun `building a permalink for an invalid room id throws when verifying the id`() {
-        assertThrowsInDebug {
-            val roomId = RoomId("some invalid room id")
-            DefaultPermalinkBuilder().permalinkForRoomId(roomId)
         }
     }
 
@@ -47,34 +40,8 @@ class DefaultPermalinkBuilderTest {
     }
 
     @Test
-    fun `building a permalink for an invalid room id returns failure when not verifying the id`() {
-        withReleaseBehavior {
-            val roomId = RoomId("some invalid room id")
-            assertThat(DefaultPermalinkBuilder().permalinkForRoomId(roomId).isFailure).isTrue()
-        }
-    }
-
-    @Test
-    fun `building a permalink for an invalid room alias returns failure`() {
-        val roomAlias = "an invalid room alias"
-        assertThat(DefaultPermalinkBuilder().permalinkForRoomAlias(roomAlias).isFailure).isTrue()
-    }
-
-    @Test
     fun `building a permalink for a valid user id returns a matrix-to url`() {
         val userId = UserId("@user:matrix.org")
         assertThat(DefaultPermalinkBuilder().permalinkForUser(userId).getOrNull()).isEqualTo("https://matrix.to/#/@user:matrix.org")
-    }
-
-    @Test
-    fun `building a permalink for a valid room id returns a matrix-to url`() {
-        val roomId = RoomId("!aBCdEFG1234:matrix.org")
-        assertThat(DefaultPermalinkBuilder().permalinkForRoomId(roomId).getOrNull()).isEqualTo("https://matrix.to/#/!aBCdEFG1234:matrix.org")
-    }
-
-    @Test
-    fun `building a permalink for a valid room alias returns a matrix-to url`() {
-        val roomAlias = "#room:matrix.org"
-        assertThat(DefaultPermalinkBuilder().permalinkForRoomAlias(roomAlias).getOrNull()).isEqualTo("https://matrix.to/#/#room:matrix.org")
     }
 }

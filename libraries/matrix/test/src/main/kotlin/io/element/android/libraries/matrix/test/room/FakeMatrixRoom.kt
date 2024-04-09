@@ -84,7 +84,8 @@ class FakeMatrixRoom(
     override val activeMemberCount: Long = 234L,
     val notificationSettingsService: NotificationSettingsService = FakeNotificationSettingsService(),
     private val matrixTimeline: MatrixTimeline = FakeMatrixTimeline(),
-    private var permalinkResult: () -> Result<String> = { Result.success("link") },
+    private var roomPermalinkResult: () -> Result<String> = { Result.success("room link") },
+    private var eventPermalinkResult: (EventId) -> Result<String> = { Result.success("event link") },
     canRedactOwn: Boolean = false,
     canRedactOther: Boolean = false,
 ) : MatrixRoom {
@@ -278,8 +279,12 @@ class FakeMatrixRoom(
         return cancelSendResult
     }
 
+    override suspend fun getPermalink(): Result<String> {
+        return roomPermalinkResult()
+    }
+
     override suspend fun getPermalinkFor(eventId: EventId): Result<String> {
-        return permalinkResult()
+        return eventPermalinkResult(eventId)
     }
 
     override suspend fun editMessage(
