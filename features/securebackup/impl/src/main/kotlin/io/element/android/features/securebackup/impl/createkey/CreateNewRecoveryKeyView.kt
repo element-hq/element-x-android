@@ -126,7 +126,7 @@ private fun ItemNumber(
 
 @PreviewsDayNight
 @Composable
-internal fun ItemNumberPreview() {
+internal fun CreateNewRecoveryKeyViewPreview() {
     ElementPreview {
         CreateNewRecoveryKeyView(
             onBackClicked = {},

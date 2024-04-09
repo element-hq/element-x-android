@@ -32,6 +32,7 @@ import io.element.android.features.securebackup.api.SecureBackupEntryPoint
 import io.element.android.features.verifysession.api.VerifySessionEntryPoint
 import io.element.android.libraries.architecture.BackstackView
 import io.element.android.libraries.architecture.BaseFlowNode
+import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.di.SessionScope
 import kotlinx.parcelize.Parcelize
 
@@ -64,15 +65,13 @@ class FtueSessionVerificationFlowNode @AssistedInject constructor(
         fun onDone()
     }
 
-    private val callback = plugins<Callback>().first()
-
     private val secureBackupEntryPointCallback = object : SecureBackupEntryPoint.Callback {
         override fun onCreateNewRecoveryKey() {
             backstack.push(NavTarget.CreateNewRecoveryKey)
         }
 
         override fun onDone() {
-            callback.onDone()
+            plugins<Callback>().forEach { it.onDone() }
         }
     }
 
@@ -90,7 +89,7 @@ class FtueSessionVerificationFlowNode @AssistedInject constructor(
                         }
 
                         override fun onDone() {
-                            callback.onDone()
+                            plugins<Callback>().forEach { it.onDone() }
                         }
                     })
                     .build()
