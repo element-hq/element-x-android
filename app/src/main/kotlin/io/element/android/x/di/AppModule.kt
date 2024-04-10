@@ -80,6 +80,7 @@ object AppModule {
         isDebuggable = BuildConfig.DEBUG,
         buildType = buildType,
         applicationName = context.getString(R.string.app_name),
+        productionApplicationName = "Element",
         // Use the same name for desktop and mobile for now
         desktopApplicationName = context.getString(R.string.app_name),
         applicationId = BuildConfig.APPLICATION_ID,

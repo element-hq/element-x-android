@@ -33,7 +33,7 @@ class OnBoardingPresenter @Inject constructor(
     override fun present(): OnBoardingState {
         return OnBoardingState(
             isDebugBuild = buildMeta.buildType != BuildType.RELEASE,
-            applicationName = buildMeta.applicationName,
+            productionApplicationName = buildMeta.productionApplicationName,
             canLoginWithQrCode = OnBoardingConfig.CAN_LOGIN_WITH_QR_CODE,
             canCreateAccount = OnBoardingConfig.CAN_CREATE_ACCOUNT,
         )
