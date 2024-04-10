@@ -24,19 +24,19 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
-import io.element.android.libraries.designsystem.atomic.organisms.InfoListItem
-import io.element.android.libraries.designsystem.atomic.organisms.InfoListOrganism
+import io.element.android.features.login.impl.R
+import io.element.android.libraries.designsystem.atomic.organisms.NumberedListOrganism
 import io.element.android.libraries.designsystem.atomic.pages.FlowStepPage
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
-import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.designsystem.theme.components.Icon
+import io.element.android.libraries.designsystem.utils.annotatedTextWithBold
 import io.element.android.libraries.permissions.api.PermissionsView
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.persistentListOf
@@ -58,51 +58,34 @@ fun QrCodeIntroView(
         modifier = modifier,
         onBackClicked = onBackClicked,
         iconVector = CompoundIcons.Computer(),
-        title = "Open ${state.appName} to another device to get the QR code", // TODO Localazy
+        title = stringResource(id = R.string.screen_qr_code_login_initial_state_title, state.desktopAppName),
         content = { Content(state = state) },
         buttons = { Buttons(state = state) }
     )
 
     PermissionsView(
+        // TODO: localazy
+        title = "Allow camera access to scan the QR code",
+        icon = { Icon(imageVector = CompoundIcons.TakePhotoSolid(), contentDescription = null) },
         state = state.cameraPermissionState,
     )
 }
 
 @Composable
-private fun Content(
-    state: QrCodeIntroState,
-) {
-    // TODO integrate final design
-    InfoListOrganism(
-        modifier = Modifier.padding(top = 50.dp),
+private fun Content(state: QrCodeIntroState) {
+    NumberedListOrganism(
+        modifier = Modifier.padding(top = 50.dp, start = 20.dp, end = 20.dp),
         items = persistentListOf(
-            InfoListItem(
-                message = "Open ${state.appName} on a desktop device",
-                iconComposable = { NumberIcon(1) },
-            ),
-            InfoListItem(
-                message = "Click on your avatar",
-                iconComposable = { NumberIcon(2) },
-            ),
-            InfoListItem(
-                message = "Select ”Link new device”",
-                iconComposable = { NumberIcon(3) },
-            ),
-            InfoListItem(
-                message = "Select ”Show QR code”",
-                iconComposable = { NumberIcon(4) },
+            AnnotatedString(stringResource(R.string.screen_qr_code_login_initial_state_item_1, state.desktopAppName)),
+            AnnotatedString(stringResource(R.string.screen_qr_code_login_initial_state_item_2)),
+            annotatedTextWithBold(
+                text = stringResource(R.string.screen_qr_code_login_initial_state_item_3, stringResource(R.string.screen_qr_code_login_initial_state_item_3_action)),
+                boldText = stringResource(R.string.screen_qr_code_login_initial_state_item_3_action)),
+            annotatedTextWithBold(
+                text = stringResource(R.string.screen_qr_code_login_initial_state_item_4, stringResource(R.string.screen_qr_code_login_initial_state_item_4_action)),
+                boldText = stringResource(R.string.screen_qr_code_login_initial_state_item_4_action)
             ),
         ),
-        textStyle = ElementTheme.typography.fontBodyMdRegular,
-        iconTint = ElementTheme.colors.textPrimary,
-        backgroundColor = Color.Transparent
-    )
-}
-
-@Composable
-private fun NumberIcon(i: Int) {
-    Text(
-        text = i.toString(),
     )
 }
 

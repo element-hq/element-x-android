@@ -25,12 +25,13 @@ open class QrCodeIntroStateProvider : PreviewParameterProvider<QrCodeIntroState>
     override val values: Sequence<QrCodeIntroState>
         get() = sequenceOf(
             aQrCodeIntroState(),
+            aQrCodeIntroState(cameraPermissionState = aPermissionsState(showDialog = true, permission = Manifest.permission.CAMERA)),
             // Add other state here
         )
 }
 
 fun aQrCodeIntroState(
-    appName: String = "Element X",
+    desktopAppName: String = "Element",
     cameraPermissionState: PermissionsState = aPermissionsState(
         showDialog = false,
         permission = Manifest.permission.CAMERA,
@@ -38,7 +39,7 @@ fun aQrCodeIntroState(
     canContinue: Boolean = false,
     eventSink: (QrCodeIntroEvents) -> Unit = {},
 ) = QrCodeIntroState(
-    appName = appName,
+    desktopAppName = desktopAppName,
     cameraPermissionState = cameraPermissionState,
     canContinue = canContinue,
     eventSink = eventSink

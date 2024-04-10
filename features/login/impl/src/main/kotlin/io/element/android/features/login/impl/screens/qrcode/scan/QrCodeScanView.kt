@@ -16,15 +16,18 @@
 
 package io.element.android.features.login.impl.screens.qrcode.scan
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -39,9 +42,11 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
+import io.element.android.features.login.impl.R
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.designsystem.atomic.pages.FlowStepPage
 import io.element.android.libraries.designsystem.modifiers.cornerBorder
+import io.element.android.libraries.designsystem.modifiers.squareSize
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
@@ -55,13 +60,14 @@ import io.element.android.libraries.ui.strings.CommonStrings
 fun QrCodeScanView(
     state: QrCodeScanState,
     onBackClicked: () -> Unit,
+    onSecureConnectionReady: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     FlowStepPage(
         modifier = modifier,
         onBackClicked = onBackClicked,
         iconVector = CompoundIcons.Computer(),
-        title = "Scan the QR code", // TODO Localazy
+        title = stringResource(R.string.screen_qr_code_login_scanning_state_title),
         content = { Content(state = state) },
         buttons = { Buttons(state = state) }
     )
@@ -71,32 +77,35 @@ fun QrCodeScanView(
 private fun Content(
     state: QrCodeScanState,
 ) {
-    val modifier = Modifier
-        .fillMaxWidth()
-        .padding(start = 16.dp, end = 16.dp, top = 50.dp)
-        .aspectRatio(1f)
-        .cornerBorder(
-            strokeWidth = 4.dp,
-            color = ElementTheme.colors.textPrimary,
-            cornerSizeDp = 42.dp,
-        )
-    Box(
-        modifier = modifier,
+    BoxWithConstraints(
+        modifier = Modifier.fillMaxWidth(),
         contentAlignment = Alignment.Center,
     ) {
-        if (state.isScanning) {
-            QrCodeCameraView(
-                modifier = Modifier.fillMaxSize(),
-                onQrCodeScanned = { state.eventSink.invoke(QrCodeScanEvents.QrCodeScanned(it)) }
-            )
+        val modifier = if (constraints.maxWidth > constraints.maxHeight) {
+            Modifier.fillMaxHeight()
         } else {
-            Icon(
+            Modifier.fillMaxWidth()
+        }.then(
+            Modifier
+                .padding(start = 20.dp, end = 20.dp, top = 50.dp)
+                .squareSize()
+                .cornerBorder(
+                    strokeWidth = 4.dp,
+                    color = ElementTheme.colors.textPrimary,
+                    cornerSizeDp = 42.dp,
+                )
+        )
+        Box(
+            modifier = modifier,
+            contentAlignment = Alignment.Center,
+        ) {
+            QrCodeCameraView(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(32.dp),
-                imageVector = CompoundIcons.QrCode(),
-                contentDescription = null,
-                tint = ElementTheme.colors.textPrimary,
+                    // TODO: FOR TESTING ONLY, REMOVE THIS
+                    .clickable { state.eventSink.invoke(QrCodeScanEvents.QrCodeScanned("ASDA")) },
+                onQrCodeScanned = { state.eventSink.invoke(QrCodeScanEvents.QrCodeScanned(it)) },
+                renderPreview = state.isScanning,
             )
         }
     }
@@ -106,66 +115,72 @@ private fun Content(
 private fun ColumnScope.Buttons(
     state: QrCodeScanState,
 ) {
-    when (state.authenticationAction) {
-        is AsyncAction.Failure -> {
-            Button(
-                text = stringResource(id = CommonStrings.action_try_again),
-                modifier = Modifier.fillMaxWidth(),
-                onClick = {
-                    state.eventSink.invoke(QrCodeScanEvents.TryAgain)
-                }
-            )
-            Column(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(2.dp),
-            ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Icon(
-                        imageVector = CompoundIcons.Error(),
-                        tint = MaterialTheme.colorScheme.error,
-                        contentDescription = null,
-                        modifier = Modifier.size(24.dp)
-                    )
-                    Spacer(modifier = Modifier.width(4.dp))
-                    Text(
-                        text = "Wrong QR code", // TODO Localazy
-                        textAlign = TextAlign.Center,
-                        color = MaterialTheme.colorScheme.error,
-                        style = ElementTheme.typography.fontBodySmMedium,
-                    )
-                }
-                Text(
-                    text = "Use the QR code shown on the other device", // TODO Localazy
-                    textAlign = TextAlign.Center,
-                    style = ElementTheme.typography.fontBodySmRegular,
-                    color = ElementTheme.colors.textSecondary,
-                )
-            }
-        }
-        AsyncAction.Loading -> {
-            Column(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(8.dp),
-            ) {
-                CircularProgressIndicator(
+    Column(Modifier.heightIn(min = 130.dp)) {
+        when (state.authenticationAction) {
+            is AsyncAction.Failure -> {
+                Button(
+                    text = stringResource(id = R.string.screen_qr_code_login_invalid_scan_state_retry_button),
                     modifier = Modifier
-                        .progressSemantics()
-                        .size(20.dp),
-                    strokeWidth = 2.dp
+                        .fillMaxWidth()
+                        .padding(bottom = 16.dp),
+                    onClick = {
+                        state.eventSink.invoke(QrCodeScanEvents.TryAgain)
+                    }
                 )
-                Text(
-                    text = "Establishing a secure connection", // TODO Localazy
-                    textAlign = TextAlign.Center,
-                )
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(2.dp),
+                ) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Icon(
+                            imageVector = CompoundIcons.Error(),
+                            tint = MaterialTheme.colorScheme.error,
+                            contentDescription = null,
+                            modifier = Modifier.size(24.dp)
+                        )
+                        Spacer(modifier = Modifier.width(4.dp))
+                        Text(
+                            text = stringResource(R.string.screen_qr_code_login_invalid_scan_state_subtitle),
+                            textAlign = TextAlign.Center,
+                            color = MaterialTheme.colorScheme.error,
+                            style = ElementTheme.typography.fontBodySmMedium,
+                        )
+                    }
+                    Text(
+                        text = stringResource(R.string.screen_qr_code_login_invalid_scan_state_description),
+                        textAlign = TextAlign.Center,
+                        style = ElementTheme.typography.fontBodySmRegular,
+                        color = ElementTheme.colors.textSecondary,
+                    )
+                }
             }
+            AsyncAction.Loading -> {
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                ) {
+                    CircularProgressIndicator(
+                        modifier = Modifier
+                            .progressSemantics()
+                            .size(20.dp),
+                        strokeWidth = 2.dp
+                    )
+                    Text(
+                        text = "Establishing a secure connection", // TODO Localazy
+                        textAlign = TextAlign.Center,
+                        style = ElementTheme.typography.fontBodySmRegular,
+                        color = ElementTheme.colors.textSecondary,
+                    )
+                }
+            }
+            AsyncAction.Uninitialized,
+            AsyncAction.Confirming,
+            is AsyncAction.Success -> Unit
         }
-        AsyncAction.Uninitialized,
-        AsyncAction.Confirming,
-        is AsyncAction.Success -> Unit
     }
 }
 
@@ -174,6 +189,7 @@ private fun ColumnScope.Buttons(
 internal fun QrCodeScanViewPreview(@PreviewParameter(QrCodeScanStateProvider::class) state: QrCodeScanState) = ElementPreview {
     QrCodeScanView(
         state = state,
+        onSecureConnectionReady = {},
         onBackClicked = {},
     )
 }

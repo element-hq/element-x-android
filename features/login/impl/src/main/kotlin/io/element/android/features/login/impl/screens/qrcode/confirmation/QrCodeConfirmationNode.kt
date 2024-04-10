@@ -14,46 +14,19 @@
  * limitations under the License.
  */
 
-package io.element.android.features.login.impl.screens.qrcode.scan
+package io.element.android.features.login.impl.screens.qrcode.confirmation
 
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
-import com.bumble.appyx.core.plugin.plugins
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.libraries.di.AppScope
 
 @ContributesNode(AppScope::class)
-class QrCodeScanNode @AssistedInject constructor(
+class QrCodeConfirmationNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
-    private val presenter: QrCodeScanPresenter,
-) : Node(buildContext, plugins = plugins) {
-    interface Callback : Plugin {
-        fun onScannedCode()
-        fun onCancelClicked()
-    }
-
-    private fun onScannedCode() {
-        plugins<Callback>().forEach { it.onScannedCode() }
-    }
-
-    private fun onCancelClicked() {
-        plugins<Callback>().forEach { it.onCancelClicked() }
-    }
-
-    @Composable
-    override fun View(modifier: Modifier) {
-        val state = presenter.present()
-        QrCodeScanView(
-            state = state,
-            onSecureConnectionReady = ::onScannedCode,
-            onBackClicked = ::onCancelClicked,
-            modifier = modifier
-        )
-    }
+) : Node(buildContext = buildContext, plugins = plugins) {
 }

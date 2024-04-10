@@ -59,7 +59,7 @@ class QrCodeIntroPresenter @Inject constructor(
         }
 
         return QrCodeIntroState(
-            appName = buildMeta.applicationName,
+            desktopAppName = buildMeta.desktopApplicationName,
             cameraPermissionState = cameraPermissionState,
             canContinue = canContinue,
             eventSink = ::handleEvents

@@ -47,6 +47,7 @@ import io.element.android.features.login.impl.screens.changeaccountprovider.Chan
 import io.element.android.features.login.impl.screens.confirmaccountprovider.ConfirmAccountProviderNode
 import io.element.android.features.login.impl.screens.loginpassword.LoginFormState
 import io.element.android.features.login.impl.screens.loginpassword.LoginPasswordNode
+import io.element.android.features.login.impl.screens.qrcode.confirmation.QrCodeConfirmationNode
 import io.element.android.features.login.impl.screens.qrcode.intro.QrCodeIntroNode
 import io.element.android.features.login.impl.screens.qrcode.scan.QrCodeScanNode
 import io.element.android.features.login.impl.screens.searchaccountprovider.SearchAccountProviderNode
@@ -120,6 +121,9 @@ class LoginFlowNode @AssistedInject constructor(
 
         @Parcelize
         data object QrCodeScan : NavTarget
+
+        @Parcelize
+        data object QrCodeConfirmation : NavTarget
 
         @Parcelize
         data object ConfirmAccountProvider : NavTarget
@@ -238,11 +242,18 @@ class LoginFlowNode @AssistedInject constructor(
             }
             NavTarget.QrCodeScan -> {
                 val callback = object : QrCodeScanNode.Callback {
+                    override fun onScannedCode() {
+                        backstack.push(NavTarget.QrCodeConfirmation)
+                    }
+
                     override fun onCancelClicked() {
                         backstack.pop()
                     }
                 }
                 createNode<QrCodeScanNode>(buildContext, plugins = listOf(callback))
+            }
+            NavTarget.QrCodeConfirmation -> {
+                createNode<QrCodeConfirmationNode>(buildContext)
             }
         }
     }

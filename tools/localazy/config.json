@@ -114,7 +114,8 @@
         "screen_change_server_.*",
         "screen_change_account_provider_.*",
         "screen_account_provider_.*",
-        "screen_waitlist_.*"
+        "screen_waitlist_.*",
+        "screen_qr_code_login_.*"
       ]
     },
     {

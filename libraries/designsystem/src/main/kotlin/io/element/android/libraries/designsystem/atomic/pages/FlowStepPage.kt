@@ -31,6 +31,8 @@ import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.designsystem.atomic.molecules.ButtonColumnMolecule
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
+import io.element.android.libraries.designsystem.components.BigIcon
+import io.element.android.libraries.designsystem.components.PageTitle
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -49,7 +51,7 @@ import io.element.android.libraries.designsystem.theme.components.TopAppBar
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FlowStepPage(
-    iconVector: ImageVector?,
+    iconVector: ImageVector,
     title: String,
     modifier: Modifier = Modifier,
     onBackClicked: (() -> Unit)? = null,
@@ -73,10 +75,10 @@ fun FlowStepPage(
             )
         },
         header = {
-            IconTitleSubtitleMolecule(
-                iconImageVector = iconVector,
+            PageTitle(
                 title = title,
-                subTitle = subTitle,
+                subtitle = subTitle,
+                iconStyle = BigIcon.Style.Default(iconVector) ,
             )
         },
         content = content,

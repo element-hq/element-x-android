@@ -65,8 +65,8 @@ class QrCodeScanPresenter @Inject constructor(
     private fun CoroutineScope.authenticateWithCode(authenticationAction: MutableState<AsyncAction<Unit>>, code: String) = launch {
         suspend {
             // TODO Call the SDK API, for now, just simulate an error
-            delay(1000)
-            throw Exception("Simulated error $code")
+            delay(3000)
+//            throw Exception("Simulated error $code")
         }.runCatchingUpdatingState(authenticationAction)
     }
 }

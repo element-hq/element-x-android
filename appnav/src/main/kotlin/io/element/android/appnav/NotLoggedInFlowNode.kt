@@ -35,6 +35,8 @@ import io.element.android.features.onboarding.api.OnBoardingEntryPoint
 import io.element.android.features.preferences.api.ConfigureTracingEntryPoint
 import io.element.android.libraries.architecture.BackstackView
 import io.element.android.libraries.architecture.BaseFlowNode
+import io.element.android.libraries.designsystem.utils.ForceOrientationInMobileDevices
+import io.element.android.libraries.designsystem.utils.ScreenOrientation
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.matrix.ui.media.NotLoggedInImageLoaderFactory
 import kotlinx.parcelize.Parcelize
@@ -124,6 +126,9 @@ class NotLoggedInFlowNode @AssistedInject constructor(
 
     @Composable
     override fun View(modifier: Modifier) {
+        // The login flow doesn't support landscape mode on mobile devices yet
+        ForceOrientationInMobileDevices(orientation = ScreenOrientation.PORTRAIT)
+
         BackstackView()
     }
 }

@@ -30,18 +30,21 @@ import io.element.android.libraries.ui.strings.CommonStrings
 fun PermissionsView(
     state: PermissionsState,
     modifier: Modifier = Modifier,
+    title: String = stringResource(id = CommonStrings.common_permission),
+    icon: @Composable (() -> Unit)? = null,
 ) {
     if (state.showDialog.not()) return
 
     ConfirmationDialog(
         modifier = modifier,
-        title = stringResource(id = CommonStrings.common_permission),
+        title = title,
         content = state.permission.toDialogContent(),
         submitText = stringResource(id = CommonStrings.action_open_settings),
         onSubmitClicked = {
             state.eventSink.invoke(PermissionsEvents.OpenSystemSettingAndCloseDialog)
         },
         onDismiss = { state.eventSink.invoke(PermissionsEvents.CloseDialog) },
+        icon = icon,
     )
 }
 
