@@ -33,12 +33,14 @@ class OnBoardingPresenterTest {
 
     @Test
     fun `present - initial state`() = runTest {
-        val presenter = OnBoardingPresenter(aBuildMeta())
+        val appName = "Name"
+        val presenter = OnBoardingPresenter(aBuildMeta(applicationName = appName))
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
             assertThat(initialState.isDebugBuild).isTrue()
+            assertThat(initialState.applicationName).isEqualTo(appName)
             assertThat(initialState.canLoginWithQrCode).isFalse()
             assertThat(initialState.canCreateAccount).isFalse()
         }
