@@ -54,6 +54,12 @@ echo "Deleting all the folders values-id..."
 find . -type d -name 'values-id' -exec rm -rf {} 2> /dev/null \;
 set -e
 
+echo "Checking forbidden terms..."
+find . -name 'localazy.xml' -exec ./tools/localazy/checkForbiddenTerms.py {} \;
+if [[ $allFiles == 1 ]]; then
+  find . -name 'translations.xml' -exec ./tools/localazy/checkForbiddenTerms.py {} \;
+fi
+
 echo "Removing the generated config"
 rm ./tools/localazy/localazy.json
 
