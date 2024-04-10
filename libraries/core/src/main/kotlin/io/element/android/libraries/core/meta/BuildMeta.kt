@@ -20,6 +20,7 @@ data class BuildMeta(
     val buildType: BuildType,
     val isDebuggable: Boolean,
     val applicationName: String,
+    val desktopApplicationName: String,
     val applicationId: String,
     val lowPrivacyLoggingEnabled: Boolean,
     val versionName: String,

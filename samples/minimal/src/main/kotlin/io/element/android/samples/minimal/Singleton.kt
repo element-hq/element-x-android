@@ -33,6 +33,7 @@ object Singleton {
         isDebuggable = true,
         buildType = BuildType.DEBUG,
         applicationName = "EAX-Minimal",
+        desktopApplicationName = "EAX-Minimal-Desktop",
         applicationId = "io.element.android.samples.minimal",
         lowPrivacyLoggingEnabled = false,
         versionName = "0.1.0",
