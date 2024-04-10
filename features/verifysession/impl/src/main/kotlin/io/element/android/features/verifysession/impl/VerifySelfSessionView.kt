@@ -28,8 +28,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -51,20 +55,29 @@ import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
+import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.matrix.api.verification.SessionVerificationData
 import io.element.android.libraries.matrix.api.verification.VerificationEmoji
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.features.verifysession.impl.VerifySelfSessionState.VerificationStep as FlowStep
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun VerifySelfSessionView(
     state: VerifySelfSessionState,
     onEnterRecoveryKey: () -> Unit,
+    onCreateNewRecoveryKey: () -> Unit,
     onFinished: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     fun resetFlow() {
         state.eventSink(VerifySelfSessionViewEvents.Reset)
+    }
+    val updatedOnFinished by rememberUpdatedState(newValue = onFinished)
+    LaunchedEffect(state.verificationFlowStep, updatedOnFinished) {
+        if (state.verificationFlowStep is FlowStep.Skipped) {
+            updatedOnFinished()
+        }
     }
     BackHandler {
         when (state.verificationFlowStep) {
@@ -81,6 +94,19 @@ fun VerifySelfSessionView(
     val verificationFlowStep = state.verificationFlowStep
     HeaderFooterPage(
         modifier = modifier,
+        topBar = {
+             TopAppBar(
+                 title = {},
+                 actions = {
+                     if (state.displaySkipButton && state.verificationFlowStep != FlowStep.Completed) {
+                         TextButton(
+                             text = stringResource(CommonStrings.action_skip),
+                             onClick = { state.eventSink(VerifySelfSessionViewEvents.SkipVerification) }
+                         )
+                     }
+                 }
+             )
+        },
         header = {
             HeaderContent(verificationFlowStep = verificationFlowStep)
         },
@@ -89,6 +115,7 @@ fun VerifySelfSessionView(
                 screenState = state,
                 goBack = ::resetFlow,
                 onEnterRecoveryKey = onEnterRecoveryKey,
+                onCreateNewRecoveryKey = onCreateNewRecoveryKey,
                 onFinished = onFinished,
             )
         }
@@ -104,6 +131,7 @@ private fun HeaderContent(verificationFlowStep: FlowStep) {
         FlowStep.Canceled -> BigIcon.Style.AlertSolid
         FlowStep.Ready, is FlowStep.Verifying -> BigIcon.Style.Default(CompoundIcons.Reaction())
         FlowStep.Completed -> BigIcon.Style.SuccessSolid
+        is FlowStep.Skipped -> return
     }
     val titleTextId = when (verificationFlowStep) {
         is FlowStep.Initial, FlowStep.AwaitingOtherDeviceResponse -> R.string.screen_identity_confirmation_title
@@ -114,20 +142,21 @@ private fun HeaderContent(verificationFlowStep: FlowStep) {
             is SessionVerificationData.Decimals -> R.string.screen_session_verification_compare_numbers_title
             is SessionVerificationData.Emojis -> R.string.screen_session_verification_compare_emojis_title
         }
+        is FlowStep.Skipped -> return
     }
     val subtitleTextId = when (verificationFlowStep) {
         is FlowStep.Initial, FlowStep.AwaitingOtherDeviceResponse -> R.string.screen_identity_confirmation_subtitle
         FlowStep.Canceled -> R.string.screen_session_verification_cancelled_subtitle
         FlowStep.Ready -> R.string.screen_session_verification_ready_subtitle
-        FlowStep.Completed -> R.string.screen_identity_confirmation_subtitle
+        FlowStep.Completed -> R.string.screen_identity_confirmed_subtitle
         is FlowStep.Verifying -> when (verificationFlowStep.data) {
             is SessionVerificationData.Decimals -> R.string.screen_session_verification_compare_numbers_subtitle
             is SessionVerificationData.Emojis -> R.string.screen_session_verification_compare_emojis_subtitle
         }
+        is FlowStep.Skipped -> return
     }
 
     PageTitle(
-        modifier = Modifier.padding(top = 60.dp),
         iconStyle = iconStyle,
         title = stringResource(id = titleTextId),
         subtitle = stringResource(id = subtitleTextId)
@@ -137,9 +166,8 @@ private fun HeaderContent(verificationFlowStep: FlowStep) {
 @Composable
 private fun Content(flowState: FlowStep) {
     Column(Modifier.fillMaxHeight(), verticalArrangement = Arrangement.Center) {
-        when (flowState) {
-            is FlowStep.Initial, FlowStep.AwaitingOtherDeviceResponse, FlowStep.Ready, FlowStep.Canceled, FlowStep.Completed -> Unit
-            is FlowStep.Verifying -> ContentVerifying(flowState)
+        if (flowState is FlowStep.Verifying) {
+            ContentVerifying(flowState)
         }
     }
 }
@@ -200,6 +228,7 @@ private fun EmojiItemView(emoji: VerificationEmoji, modifier: Modifier = Modifie
 private fun BottomMenu(
     screenState: VerifySelfSessionState,
     onEnterRecoveryKey: () -> Unit,
+    onCreateNewRecoveryKey: () -> Unit,
     goBack: () -> Unit,
     onFinished: () -> Unit,
 ) {
@@ -210,12 +239,21 @@ private fun BottomMenu(
 
     when (verificationViewState) {
         is FlowStep.Initial -> {
-            BottomMenu(
-                positiveButtonTitle = stringResource(R.string.screen_identity_use_another_device),
-                onPositiveButtonClicked = { eventSink(VerifySelfSessionViewEvents.RequestVerification) },
-                negativeButtonTitle = stringResource(R.string.screen_session_verification_enter_recovery_key),
-                onNegativeButtonClicked = onEnterRecoveryKey,
-            )
+            if (verificationViewState.isLastDevice) {
+                BottomMenu(
+                    positiveButtonTitle = stringResource(R.string.screen_session_verification_enter_recovery_key),
+                    onPositiveButtonClicked = onEnterRecoveryKey,
+                    negativeButtonTitle = stringResource(R.string.screen_identity_confirmation_create_new_recovery_key),
+                    onNegativeButtonClicked = onCreateNewRecoveryKey,
+                )
+            } else {
+                BottomMenu(
+                    positiveButtonTitle = stringResource(R.string.screen_identity_use_another_device),
+                    onPositiveButtonClicked = { eventSink(VerifySelfSessionViewEvents.RequestVerification) },
+                    negativeButtonTitle = stringResource(R.string.screen_session_verification_enter_recovery_key),
+                    onNegativeButtonClicked = onEnterRecoveryKey,
+                )
+            }
         }
         is FlowStep.Canceled -> {
             BottomMenu(
@@ -264,6 +302,7 @@ private fun BottomMenu(
                 onPositiveButtonClicked = onFinished,
             )
         }
+        is FlowStep.Skipped -> return
     }
 }
 
@@ -307,6 +346,7 @@ internal fun VerifySelfSessionViewPreview(@PreviewParameter(VerifySelfSessionSta
     VerifySelfSessionView(
         state = state,
         onEnterRecoveryKey = {},
+        onCreateNewRecoveryKey = {},
         onFinished = {},
     )
 }

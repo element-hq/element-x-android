@@ -156,6 +156,7 @@ class RustMatrixClient(
         syncService = rustSyncService,
         sessionCoroutineScope = sessionCoroutineScope,
         dispatchers = dispatchers,
+        sessionStore = sessionStore,
     )
 
     private val roomDirectoryService = RustRoomDirectoryService(
@@ -183,6 +184,7 @@ class RustMatrixClient(
                             isTokenValid = false,
                             loginType = existingData.loginType,
                             passphrase = existingData.passphrase,
+                            needsVerification = existingData.needsVerification,
                         )
                         sessionStore.updateData(newData)
                         Timber.d("Removed session data with token: '...$anonymizedToken'.")
@@ -210,6 +212,7 @@ class RustMatrixClient(
                     isTokenValid = true,
                     loginType = existingData.loginType,
                     passphrase = existingData.passphrase,
+                    needsVerification = existingData.needsVerification,
                 )
                 sessionStore.updateData(newData)
                 Timber.d("Saved new session data with token: '...$anonymizedToken'.")
@@ -235,6 +238,7 @@ class RustMatrixClient(
         client = client,
         isSyncServiceReady = rustSyncService.syncState.map { it == SyncState.Running },
         sessionCoroutineScope = sessionCoroutineScope,
+        sessionStore = sessionStore,
     )
 
     private val eventFilters = TimelineConfig.excludedEvents
@@ -441,6 +445,18 @@ class RustMatrixClient(
                 Timber.e(e, "Timeout waiting for the room to be available in the room list")
             }
             roomId
+        }
+    }
+
+    override suspend fun trackRecentlyVisitedRoom(roomId: RoomId): Result<Unit> = withContext(sessionDispatcher) {
+        runCatching {
+            client.trackRecentlyVisitedRoom(roomId.value)
+        }
+    }
+
+    override suspend fun getRecentlyVisitedRooms(): Result<List<RoomId>> = withContext(sessionDispatcher) {
+        runCatching {
+            client.getRecentlyVisitedRooms().map(::RoomId)
         }
     }
 

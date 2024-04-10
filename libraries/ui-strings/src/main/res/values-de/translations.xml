@@ -175,7 +175,9 @@
   <string name="common_privacy_policy">"Datenschutz­erklärung"</string>
   <string name="common_reaction">"Reaktion"</string>
   <string name="common_reactions">"Reaktionen"</string>
-  <string name="common_recovery_key">"Wiederherstellungsschlüssel"</string>
+  <string name="common_recovery_key">
+    <b>"Wiederherstellungsschlüssel"</b>
+  </string>
   <string name="common_refreshing">"Wird erneuert…"</string>
   <string name="common_replying_to">"%1$s antworten"</string>
   <string name="common_report_a_bug">"Einen Fehler melden"</string>
@@ -245,12 +247,6 @@
   <string name="invite_friends_text">"Hey, sprich mit mir auf %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Schüttel heftig zum Melden von Fehlern"</string>
-  <string name="screen_identity_confirmation_subtitle">"Verifiziere dieses Gerät, um sicheres Messaging einzurichten."</string>
-  <string name="screen_identity_confirmation_title">"Bestätige, dass du es bist"</string>
-  <string name="screen_identity_confirmed_subtitle">"Du kannst nun verschlüsselte Nachrichten lesen oder versenden."</string>
-  <string name="screen_identity_confirmed_title">"Gerät verifiziert"</string>
-  <string name="screen_identity_use_another_device">"Ein anderes Gerät verwenden"</string>
-  <string name="screen_identity_waiting_on_other_device">"Bitte warten bis das andere Gerät bereit ist."</string>
   <string name="screen_media_picker_error_failed_selection">"Medienauswahl fehlgeschlagen, bitte versuche es erneut."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Fehler beim Verarbeiten des hochgeladenen Mediums. Bitte versuche es erneut."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Das Hochladen der Medien ist fehlgeschlagen. Bitte versuche es erneut."</string>
@@ -259,6 +255,7 @@
   <string name="screen_room_member_details_block_alert_action">"Blockieren"</string>
   <string name="screen_room_member_details_block_alert_description">"Blockierte Benutzer können Dir keine Nachrichten senden und alle ihre alten Nachrichten werden ausgeblendet. Die Blockierung kann jederzeit aufgehoben werden."</string>
   <string name="screen_room_member_details_block_user">"Benutzer blockieren"</string>
+  <string name="screen_room_member_details_title">"Profil"</string>
   <string name="screen_room_member_details_unblock_alert_action">"Blockierung aufheben"</string>
   <string name="screen_room_member_details_unblock_alert_description">"Der Nutzer kann dir wieder Nachrichten senden &amp; alle Nachrichten des Nutzers werden wieder angezeigt."</string>
   <string name="screen_room_member_details_unblock_user">"Blockierung aufheben"</string>

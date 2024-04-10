@@ -36,6 +36,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
+import io.element.android.libraries.architecture.coverage.ExcludeFromCoverage
 import io.element.android.libraries.designsystem.atomic.atoms.RedIndicatorAtom
 import io.element.android.libraries.designsystem.components.preferences.components.PreferenceIcon
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
@@ -162,6 +163,7 @@ internal fun PreferenceTextWithEndBadgeDarkPreview() = ElementPreviewDark {
     ContentToPreview(showEndBadge = true)
 }
 
+@ExcludeFromCoverage
 @Composable
 private fun ContentToPreview(showEndBadge: Boolean) {
     Column(

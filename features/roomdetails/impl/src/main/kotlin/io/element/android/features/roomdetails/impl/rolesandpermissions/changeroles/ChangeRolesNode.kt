@@ -65,7 +65,7 @@ class ChangeRolesNode @AssistedInject constructor(
         ChangeRolesView(
             modifier = modifier,
             state = state,
-            onBackPressed = this::navigateUp,
+            navigateUp = this::navigateUp,
         )
     }
 }

@@ -255,4 +255,16 @@ class FakeMatrixClient(
     fun givenRemoveAvatarResult(result: Result<Unit>) {
         removeAvatarResult = result
     }
+
+    private val visitedRoomsId: MutableList<RoomId> = mutableListOf()
+
+    override suspend fun trackRecentlyVisitedRoom(roomId: RoomId): Result<Unit> {
+        visitedRoomsId.removeAll { it == roomId }
+        visitedRoomsId.add(0, roomId)
+        return Result.success(Unit)
+    }
+
+    override suspend fun getRecentlyVisitedRooms(): Result<List<RoomId>> {
+        return Result.success(visitedRoomsId)
+    }
 }

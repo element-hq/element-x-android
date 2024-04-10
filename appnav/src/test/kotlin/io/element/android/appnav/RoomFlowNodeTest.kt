@@ -33,6 +33,7 @@ import io.element.android.features.roomdetails.api.RoomDetailsEntryPoint
 import io.element.android.libraries.architecture.childNode
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
+import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.services.appnavstate.test.FakeAppNavigationStateService
 import kotlinx.coroutines.CoroutineScope
@@ -101,6 +102,7 @@ class RoomFlowNodeTest {
         roomMembershipObserver = RoomMembershipObserver(),
         appCoroutineScope = coroutineScope,
         roomComponentFactory = FakeRoomComponentFactory(),
+        matrixClient = FakeMatrixClient(),
     )
 
     @Test

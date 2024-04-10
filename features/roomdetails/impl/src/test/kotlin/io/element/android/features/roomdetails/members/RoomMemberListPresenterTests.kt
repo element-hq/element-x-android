@@ -32,9 +32,6 @@ import io.element.android.features.roomdetails.impl.members.moderation.aRoomMemb
 import io.element.android.features.roomdetails.members.moderation.FakeRoomMembersModerationPresenter
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
-import io.element.android.libraries.featureflag.api.FeatureFlagService
-import io.element.android.libraries.featureflag.api.FeatureFlags
-import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
@@ -241,14 +238,12 @@ private fun TestScope.createPresenter(
     coroutineDispatchers: CoroutineDispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true),
     matrixRoom: MatrixRoom = FakeMatrixRoom(),
     roomMemberListDataSource: RoomMemberListDataSource = createDataSource(coroutineDispatchers = coroutineDispatchers),
-    featureFlagService: FeatureFlagService = FakeFeatureFlagService(initialState = mapOf(FeatureFlags.RoomModeration.key to true)),
     moderationPresenter: FakeRoomMembersModerationPresenter = FakeRoomMembersModerationPresenter(),
     navigator: RoomMemberListNavigator = object : RoomMemberListNavigator { }
 ) = RoomMemberListPresenter(
     room = matrixRoom,
     roomMemberListDataSource = roomMemberListDataSource,
     coroutineDispatchers = coroutineDispatchers,
-    featureFlagService = featureFlagService,
     roomMembersModerationPresenter = moderationPresenter,
     navigator = navigator
 )

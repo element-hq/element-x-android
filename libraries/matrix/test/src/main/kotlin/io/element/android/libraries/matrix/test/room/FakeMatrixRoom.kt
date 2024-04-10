@@ -201,6 +201,10 @@ class FakeMatrixRoom(
         return getRoomMemberResult
     }
 
+    override suspend fun getMembers(limit: Int): Result<List<RoomMember>> {
+        return Result.success(emptyList())
+    }
+
     override suspend fun updateRoomNotificationSettings(): Result<Unit> = simulateLongTask {
         val notificationSettings = notificationSettingsService.getRoomNotificationSettings(roomId, isEncrypted, isOneToOne).getOrThrow()
         roomNotificationSettingsStateFlow.value = MatrixRoomNotificationSettingsState.Ready(notificationSettings)

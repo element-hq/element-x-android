@@ -24,15 +24,17 @@ import io.element.android.libraries.matrix.api.verification.SessionVerificationD
 @Immutable
 data class VerifySelfSessionState(
     val verificationFlowStep: VerificationStep,
+    val displaySkipButton: Boolean,
     val eventSink: (VerifySelfSessionViewEvents) -> Unit,
 ) {
     @Stable
     sealed interface VerificationStep {
-        data class Initial(val canEnterRecoveryKey: Boolean) : VerificationStep
+        data class Initial(val canEnterRecoveryKey: Boolean, val isLastDevice: Boolean) : VerificationStep
         data object Canceled : VerificationStep
         data object AwaitingOtherDeviceResponse : VerificationStep
         data object Ready : VerificationStep
         data class Verifying(val data: SessionVerificationData, val state: AsyncData<Unit>) : VerificationStep
         data object Completed : VerificationStep
+        data object Skipped : VerificationStep
     }
 }

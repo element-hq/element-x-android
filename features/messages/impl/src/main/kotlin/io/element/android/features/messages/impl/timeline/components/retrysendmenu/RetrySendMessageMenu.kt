@@ -17,7 +17,6 @@
 package io.element.android.features.messages.impl.timeline.components.retrysendmenu
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
@@ -54,18 +53,18 @@ internal fun RetrySendMessageMenu(
     }
 
     fun onRetry() {
-        state.eventSink(RetrySendMenuEvents.RetrySend)
+        state.eventSink(RetrySendMenuEvents.Retry)
     }
 
-    fun onRemoveFailed() {
-        state.eventSink(RetrySendMenuEvents.RemoveFailed)
+    fun onRemove() {
+        state.eventSink(RetrySendMenuEvents.Remove)
     }
 
     RetrySendMessageMenuBottomSheet(
         modifier = modifier,
         isVisible = isVisible,
         onRetry = ::onRetry,
-        onRemoveFailed = ::onRemoveFailed,
+        onRemove = ::onRemove,
         onDismiss = ::onDismiss
     )
 }
@@ -75,7 +74,7 @@ internal fun RetrySendMessageMenu(
 private fun RetrySendMessageMenuBottomSheet(
     isVisible: Boolean,
     onRetry: () -> Unit,
-    onRemoveFailed: () -> Unit,
+    onRemove: () -> Unit,
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -95,7 +94,10 @@ private fun RetrySendMessageMenuBottomSheet(
                 }
             }
         ) {
-            RetrySendMenuContents(onRetry = onRetry, onRemoveFailed = onRemoveFailed)
+            RetrySendMenuContents(
+                onRetry = onRetry,
+                onRemove = onRemove,
+            )
             // FIXME remove after https://issuetracker.google.com/issues/275849044
             Spacer(modifier = Modifier.height(32.dp))
         }
@@ -106,7 +108,7 @@ private fun RetrySendMessageMenuBottomSheet(
 @Composable
 private fun ColumnScope.RetrySendMenuContents(
     onRetry: () -> Unit,
-    onRemoveFailed: () -> Unit,
+    onRemove: () -> Unit,
     sheetState: SheetState = rememberModalBottomSheetState(),
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -142,22 +144,16 @@ private fun ColumnScope.RetrySendMenuContents(
         modifier = Modifier.clickable {
             coroutineScope.launch {
                 sheetState.hide()
-                onRemoveFailed()
+                onRemove()
             }
         }
     )
 }
 
-@Suppress("UNUSED_PARAMETER")
-@OptIn(ExperimentalMaterial3Api::class)
 @PreviewsDayNight
 @Composable
 internal fun RetrySendMessageMenuPreview(@PreviewParameter(RetrySendMenuStateProvider::class) state: RetrySendMenuState) = ElementPreview {
-    // TODO restore RetrySendMessageMenuBottomSheet once the issue with bottom sheet not being previewable is fixed
-    Column {
-        RetrySendMenuContents(
-            onRetry = {},
-            onRemoveFailed = {},
-        )
-    }
+    RetrySendMessageMenu(
+        state = state,
+    )
 }

@@ -28,8 +28,6 @@ import io.element.android.features.roomdetails.impl.members.moderation.Moderatio
 import io.element.android.features.roomdetails.impl.members.moderation.RoomMembersModerationEvents
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
-import io.element.android.libraries.featureflag.api.FeatureFlags
-import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
@@ -45,13 +43,6 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
 class DefaultRoomMembersModerationPresenterTests {
-    @Test
-    fun `canDisplayModerationActions - when feature flag is disabled returns false`() = runTest {
-        val featureFlagService = FakeFeatureFlagService(initialState = mapOf(FeatureFlags.RoomModeration.key to false))
-        val presenter = createDefaultRoomMembersModerationPresenter(featureFlagService = featureFlagService)
-        assertThat(presenter.canDisplayModerationActions()).isFalse()
-    }
-
     @Test
     fun `canDisplayModerationActions - when room is DM is false`() = runTest {
         val room = FakeMatrixRoom(isDirect = true, isPublic = true, isOneToOne = true).apply {
@@ -309,13 +300,11 @@ class DefaultRoomMembersModerationPresenterTests {
 
     private fun TestScope.createDefaultRoomMembersModerationPresenter(
         matrixRoom: FakeMatrixRoom = FakeMatrixRoom(),
-        featureFlagService: FakeFeatureFlagService = FakeFeatureFlagService(initialState = mapOf(FeatureFlags.RoomModeration.key to true)),
         dispatchers: CoroutineDispatchers = testCoroutineDispatchers(),
         analyticsService: FakeAnalyticsService = FakeAnalyticsService(),
     ): DefaultRoomMembersModerationPresenter {
         return DefaultRoomMembersModerationPresenter(
             room = matrixRoom,
-            featureFlagService = featureFlagService,
             dispatchers = dispatchers,
             analyticsService = analyticsService,
         )

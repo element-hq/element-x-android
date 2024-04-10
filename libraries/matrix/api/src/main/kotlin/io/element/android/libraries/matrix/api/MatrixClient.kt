@@ -96,4 +96,7 @@ interface MatrixClient : Closeable {
     fun getRoomInfoFlow(roomId: RoomId): Flow<Optional<MatrixRoomInfo>>
 
     fun isMe(userId: UserId?) = userId == sessionId
+
+    suspend fun trackRecentlyVisitedRoom(roomId: RoomId): Result<Unit>
+    suspend fun getRecentlyVisitedRooms(): Result<List<RoomId>>
 }

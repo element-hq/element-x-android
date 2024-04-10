@@ -31,6 +31,9 @@ interface SecureBackupEntryPoint : FeatureEntryPoint {
 
         @Parcelize
         data object EnterRecoveryKey : InitialTarget
+
+        @Parcelize
+        data object CreateNewRecoveryKey : InitialTarget
     }
 
     data class Params(val initialElement: InitialTarget) : NodeInputs
@@ -38,6 +41,7 @@ interface SecureBackupEntryPoint : FeatureEntryPoint {
     fun nodeBuilder(parentNode: Node, buildContext: BuildContext): NodeBuilder
 
     interface Callback : Plugin {
+        fun onCreateNewRecoveryKey()
         fun onDone()
     }
 
