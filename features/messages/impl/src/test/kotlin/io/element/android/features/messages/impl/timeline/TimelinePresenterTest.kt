@@ -29,6 +29,7 @@ import io.element.android.features.poll.test.actions.FakeEndPollAction
 import io.element.android.features.poll.test.actions.FakeSendPollResponseAction
 import io.element.android.features.roomcall.api.aStandByCallState
 import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.matrix.api.room.RoomMembersState
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
@@ -40,6 +41,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.Receipt
 import io.element.android.libraries.matrix.api.timeline.item.virtual.VirtualTimelineItem
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.AN_EVENT_ID_2
+import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_UNIQUE_ID
 import io.element.android.libraries.matrix.test.A_UNIQUE_ID_2
 import io.element.android.libraries.matrix.test.A_USER_ID
@@ -58,6 +60,7 @@ import io.element.android.tests.testutils.lambda.any
 import io.element.android.tests.testutils.lambda.assert
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
+import io.element.android.tests.testutils.test
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -76,7 +79,9 @@ import java.util.Date
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 
-@OptIn(ExperimentalCoroutinesApi::class) class TimelinePresenterTest {
+@Suppress("LargeClass")
+@OptIn(ExperimentalCoroutinesApi::class)
+class TimelinePresenterTest {
     @get:Rule
     val warmUpRule = WarmUpRule()
 
@@ -171,6 +176,25 @@ import kotlin.time.Duration.Companion.seconds
                 .with(value(expectedReceiptType))
             cancelAndIgnoreRemainingEvents()
         }
+    }
+
+    @Test
+    fun `present - once presenter is disposed, room is marked as fully read`() = runTest {
+        val invokeResult = lambdaRecorder<RoomId, Unit> { }
+        val presenter = createTimelinePresenter(
+            room = FakeJoinedRoom(
+                baseRoom = FakeBaseRoom(
+                    canUserSendMessageResult = { _, _ -> Result.success(true) },
+                )
+            ),
+            markAsFullyRead = FakeMarkAsFullyRead(
+                invokeResult = invokeResult,
+            )
+        )
+        presenter.test {
+            awaitFirstItem()
+        }
+        invokeResult.assertions().isCalledOnce().with(value(A_ROOM_ID))
     }
 
     @Test
@@ -697,6 +721,7 @@ import kotlin.time.Duration.Companion.seconds
         sendPollResponseAction: SendPollResponseAction = FakeSendPollResponseAction(),
         sessionPreferencesStore: InMemorySessionPreferencesStore = InMemorySessionPreferencesStore(),
         timelineItemIndexer: TimelineItemIndexer = TimelineItemIndexer(),
+        markAsFullyRead: MarkAsFullyRead = FakeMarkAsFullyRead(),
     ): TimelinePresenter {
         return TimelinePresenter(
             timelineItemsFactoryCreator = aTimelineItemsFactoryCreator(),
@@ -713,6 +738,7 @@ import kotlin.time.Duration.Companion.seconds
             resolveVerifiedUserSendFailurePresenter = { aResolveVerifiedUserSendFailureState() },
             typingNotificationPresenter = { aTypingNotificationState() },
             roomCallStatePresenter = { aStandByCallState() },
+            markAsFullyRead = markAsFullyRead,
         )
     }
 }
