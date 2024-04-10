@@ -44,13 +44,11 @@ import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.di.SessionScope
+import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
-import io.element.android.libraries.matrix.api.roomlist.RoomListService
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.parcelize.Parcelize
@@ -61,7 +59,7 @@ import kotlin.jvm.optionals.getOrNull
 class RoomFlowNode @AssistedInject constructor(
     @Assisted val buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
-    private val roomListService: RoomListService,
+    private val client: MatrixClient,
     private val roomMembershipObserver: RoomMembershipObserver,
     private val joinRoomEntryPoint: JoinRoomEntryPoint,
 ) : BaseFlowNode<RoomFlowNode.NavTarget>(
@@ -92,18 +90,16 @@ class RoomFlowNode @AssistedInject constructor(
 
     override fun onBuilt() {
         super.onBuilt()
-        roomListService.getUserMembershipForRoom(
+        client.getRoomInfoFlow(
             inputs.roomId
-        ).flowOn(Dispatchers.Default)
-            .onEach { membership ->
-                Timber.d("RoomMembership = $membership")
-                if (membership.getOrNull() == CurrentUserMembership.JOINED) {
-                    backstack.newRoot(NavTarget.JoinedRoom)
-                } else {
-                    backstack.newRoot(NavTarget.JoinRoom)
-                }
+        ).onEach { roomInfo ->
+            Timber.d("Room membership: ${roomInfo.map { it.currentUserMembership }}")
+            if (roomInfo.getOrNull()?.currentUserMembership == CurrentUserMembership.JOINED) {
+                backstack.newRoot(NavTarget.JoinedRoom)
+            } else {
+                backstack.newRoot(NavTarget.JoinRoom)
             }
-            .flowOn(Dispatchers.Main)
+        }
             .launchIn(lifecycleScope)
 
         roomMembershipObserver.updates

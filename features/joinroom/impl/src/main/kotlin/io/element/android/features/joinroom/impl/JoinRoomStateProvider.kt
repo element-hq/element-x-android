@@ -48,6 +48,7 @@ fun aJoinRoomState(
             roomAlias = "#exa:matrix.org",
             memberCount = null,
             isDirect = false,
+            topic = null,
             roomAvatarUrl = null
         )
     ),

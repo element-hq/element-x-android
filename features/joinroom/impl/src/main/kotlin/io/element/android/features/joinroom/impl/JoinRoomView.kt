@@ -203,7 +203,11 @@ private fun JoinRoomTopBar(
             when (asyncRoomInfo) {
                 is AsyncData.Success -> {
                     val roomInfo = asyncRoomInfo.data
-                    RoomAvatarAndNameRow(roomName = roomInfo.roomName, roomAvatar = roomInfo.avatarData(AvatarSize.TimelineRoom))
+                    if(roomInfo.roomName == null){
+                        IconTitlePlaceholdersRowMolecule(iconSize = AvatarSize.TimelineRoom.dp)
+                    }else {
+                        RoomAvatarAndNameRow(roomName = roomInfo.roomName, roomAvatar = roomInfo.avatarData(AvatarSize.TimelineRoom))
+                    }
                 }
                 else -> {
                     IconTitlePlaceholdersRowMolecule(iconSize = AvatarSize.TimelineRoom.dp)

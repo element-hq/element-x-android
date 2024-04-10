@@ -17,15 +17,9 @@
 package io.element.android.libraries.matrix.api.roomlist
 
 import androidx.compose.runtime.Immutable
-import io.element.android.libraries.matrix.api.core.RoomId
-import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.map
-import java.util.Optional
+import kotlinx.coroutines.flow.filterIsInstance
 
 /**
  * Entry point for the room list api.
@@ -86,10 +80,10 @@ interface RoomListService {
      */
     val state: StateFlow<State>
 
-    /**
-     * Get a flow of the room summary for a given room id.
-     */
-    fun getUserMembershipForRoom(roomId: RoomId): Flow<Optional<CurrentUserMembership>>
+}
+
+fun RoomList.loadedStateFlow(): Flow<RoomList.LoadingState.Loaded> {
+    return loadingState.filterIsInstance()
 }
 
 

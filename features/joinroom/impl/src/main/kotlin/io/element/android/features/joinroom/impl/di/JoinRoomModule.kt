@@ -40,7 +40,6 @@ object JoinRoomModule {
                 return JoinRoomPresenter(
                     roomId = roomId,
                     matrixClient = client,
-                    roomListService = roomListService,
                     acceptDeclineInvitePresenter = acceptDeclineInvitePresenter,
                 )
             }

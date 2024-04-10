@@ -30,14 +30,13 @@ import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
-import io.element.android.libraries.matrix.api.roomlist.RoomListService
+import io.element.android.libraries.matrix.api.room.MatrixRoomInfo
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 class JoinRoomPresenter @AssistedInject constructor(
     @Assisted private val roomId: RoomId,
     private val matrixClient: MatrixClient,
-    private val roomListService: RoomListService,
     private val acceptDeclineInvitePresenter: AcceptDeclineInvitePresenter,
 ) : Presenter<JoinRoomState> {
 
@@ -47,23 +46,24 @@ class JoinRoomPresenter @AssistedInject constructor(
 
     @Composable
     override fun present(): JoinRoomState {
-        val userMembership by roomListService.getUserMembershipForRoom(roomId).collectAsState(initial = Optional.empty())
-        val joinAuthorisationStatus = joinAuthorisationStatus(userMembership)
+        val mxRoomInfo by matrixClient.getRoomInfoFlow(roomId).collectAsState(initial = Optional.empty())
+        val joinAuthorisationStatus = joinAuthorisationStatus(mxRoomInfo)
         val acceptDeclineInviteState = acceptDeclineInvitePresenter.present()
-        val roomInfo by produceState<AsyncData<RoomInfo>>(initialValue = AsyncData.Uninitialized, key1 = userMembership) {
+        val roomInfo by produceState<AsyncData<RoomInfo>>(initialValue = AsyncData.Uninitialized, key1 = mxRoomInfo) {
             value = when {
-                userMembership.isPresent -> {
-                    val roomInfo = matrixClient.getRoom(roomId)?.use {
+                mxRoomInfo.isPresent -> {
+                    val roomInfo = mxRoomInfo.get().let {
                         RoomInfo(
-                            roomId = it.roomId,
-                            roomName = it.displayName,
-                            roomAlias = it.alias,
-                            memberCount = it.activeMemberCount,
+                            roomId = roomId,
+                            roomName = it.name,
+                            roomAlias = it.canonicalAlias,
+                            memberCount = it.activeMembersCount,
                             isDirect = it.isDirect,
+                            topic = it.topic,
                             roomAvatarUrl = it.avatarUrl
                         )
                     }
-                    roomInfo?.let { AsyncData.Success(it) } ?: AsyncData.Failure(Exception("Failed to load room info"))
+                    AsyncData.Success(roomInfo)
                 }
                 else -> AsyncData.Uninitialized
             }
@@ -103,9 +103,10 @@ class JoinRoomPresenter @AssistedInject constructor(
     }
 
     @Composable
-    private fun joinAuthorisationStatus(userMembership: Optional<CurrentUserMembership>): JoinAuthorisationStatus {
+    private fun joinAuthorisationStatus(roomInfo: Optional<MatrixRoomInfo>): JoinAuthorisationStatus {
+        val userMembership = roomInfo.getOrNull()?.currentUserMembership
         return when {
-            userMembership.getOrNull() == CurrentUserMembership.INVITED -> return JoinAuthorisationStatus.IsInvited
+            userMembership == CurrentUserMembership.INVITED -> return JoinAuthorisationStatus.IsInvited
             else -> JoinAuthorisationStatus.Unknown
         }
     }

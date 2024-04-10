@@ -16,24 +16,16 @@
 
 package io.element.android.libraries.matrix.impl.roomlist
 
-import io.element.android.libraries.matrix.api.core.RoomId
-import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.roomlist.DynamicRoomList
 import io.element.android.libraries.matrix.api.roomlist.RoomList
 import io.element.android.libraries.matrix.api.roomlist.RoomListFilter
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
-import io.element.android.libraries.matrix.api.roomlist.awaitLoaded
 import io.element.android.libraries.matrix.api.roomlist.loadAllIncrementally
-import io.element.android.libraries.matrix.impl.room.map
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
@@ -43,9 +35,7 @@ import org.matrix.rustcomponents.sdk.RoomListInput
 import org.matrix.rustcomponents.sdk.RoomListRange
 import org.matrix.rustcomponents.sdk.RoomListServiceState
 import org.matrix.rustcomponents.sdk.RoomListServiceSyncIndicator
-import org.matrix.rustcomponents.sdk.use
 import timber.log.Timber
-import java.util.Optional
 import org.matrix.rustcomponents.sdk.RoomListService as InnerRustRoomListService
 
 private const val DEFAULT_PAGE_SIZE = 20
@@ -122,24 +112,6 @@ internal class RustRoomListService(
             }
             .distinctUntilChanged()
             .stateIn(sessionCoroutineScope, SharingStarted.Eagerly, RoomListService.State.Idle)
-
-    override fun getUserMembershipForRoom(roomId: RoomId): Flow<Optional<CurrentUserMembership>> {
-        return combine(
-            allRooms.loadedStateFlow(),
-            invites.loadedStateFlow(),
-        ) { _, _ ->
-            val membership = innerRoomListService.roomOrNull(roomId.value)?.use {
-                it.roomInfo().use { roomInfo ->
-                    roomInfo.membership.map()
-                }
-            }
-            Optional.ofNullable(membership)
-        }.distinctUntilChanged()
-    }
-
-    private fun RoomList.loadedStateFlow(): Flow<RoomList.LoadingState.Loaded> {
-        return loadingState.filterIsInstance()
-    }
 }
 
 private fun RoomListServiceState.toRoomListState(): RoomListService.State {

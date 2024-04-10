@@ -29,15 +29,16 @@ data class JoinRoomState(
     val joinAuthorisationStatus: JoinAuthorisationStatus,
     val acceptDeclineInviteState: AcceptDeclineInviteState,
     val eventSink: (JoinRoomEvents) -> Unit
-){
+) {
     val showMemberCount = roomInfo.dataOrNull()?.memberCount != null
 }
 
 data class RoomInfo(
     val roomId: RoomId,
-    val roomName: String,
+    val roomName: String?,
     val roomAlias: String?,
     val memberCount: Long?,
+    val topic: String?,
     val isDirect: Boolean,
     val roomAvatarUrl: String?,
 ) {
