@@ -40,6 +40,9 @@ fi
 echo "Importing the strings..."
 localazy download --config ./tools/localazy/localazy.json
 
+echo "Removing the generated config"
+rm ./tools/localazy/localazy.json
+
 echo "Formatting the resources files..."
 find . -name 'localazy.xml' -exec ./tools/localazy/formatXmlResourcesFile.py {} \;
 if [[ $allFiles == 1 ]]; then
@@ -59,8 +62,5 @@ find . -name 'localazy.xml' -exec ./tools/localazy/checkForbiddenTerms.py {} \;
 if [[ $allFiles == 1 ]]; then
   find . -name 'translations.xml' -exec ./tools/localazy/checkForbiddenTerms.py {} \;
 fi
-
-echo "Removing the generated config"
-rm ./tools/localazy/localazy.json
 
 echo "Success!"
