@@ -6,12 +6,12 @@
   <string name="notification_channel_silent">"Ціхія апавяшчэнні"</string>
   <plurals name="notification_compat_summary_line_for_room">
     <item quantity="one">"%1$s: %2$d паведамленне"</item>
-    <item quantity="few">"%1$s: %2$d паведамленняў"</item>
+    <item quantity="few">"%1$s: %2$d паведамлення"</item>
     <item quantity="many">"%1$s: %2$d паведамленняў"</item>
   </plurals>
   <plurals name="notification_compat_summary_title">
     <item quantity="one">"%d апавяшчэнне"</item>
-    <item quantity="few">"%d апавяшчэнняў"</item>
+    <item quantity="few">"%d апавяшчэння"</item>
     <item quantity="many">"%d апавяшчэнняў"</item>
   </plurals>
   <string name="notification_fallback_content">"Апавяшчэнне"</string>
@@ -20,28 +20,28 @@
   <string name="notification_invitation_action_reject">"Адхіліць"</string>
   <plurals name="notification_invitations">
     <item quantity="one">"%d запрашэнне"</item>
-    <item quantity="few">"%d запрашэнняў"</item>
+    <item quantity="few">"%d запрашэння"</item>
     <item quantity="many">"%d запрашэнняў"</item>
   </plurals>
-  <string name="notification_invite_body">"Запрасіў вас у чат"</string>
-  <string name="notification_mentioned_you_body">"Згадаў вас: %1$s"</string>
+  <string name="notification_invite_body">"Запрасіў(-ла) вас у чат"</string>
+  <string name="notification_mentioned_you_body">"Згадаў(-ла) вас: %1$s"</string>
   <string name="notification_new_messages">"Новыя паведамленні"</string>
   <plurals name="notification_new_messages_for_room">
     <item quantity="one">"%d новае паведамленне"</item>
-    <item quantity="few">"%d новых паведамленняў"</item>
+    <item quantity="few">"%d новых паведамлення"</item>
     <item quantity="many">"%d новых паведамленняў"</item>
   </plurals>
-  <string name="notification_reaction_body">"Адрэагаваў на %1$s"</string>
+  <string name="notification_reaction_body">"Адрэагаваў(-ла) на %1$s"</string>
   <string name="notification_room_action_mark_as_read">"Пазначыць як прачытанае"</string>
   <string name="notification_room_action_quick_reply">"Хуткі адказ"</string>
-  <string name="notification_room_invite_body">"Запрасіў вас далучыцца да пакоя"</string>
+  <string name="notification_room_invite_body">"Запрасіў(-ла) вас далучыцца да пакоя"</string>
   <string name="notification_sender_me">"Я"</string>
   <string name="notification_test_push_notification_content">"Вы праглядаеце апавяшчэнне! Націсніце мяне!"</string>
   <string name="notification_ticker_text_dm">"%1$s: %2$s"</string>
   <string name="notification_ticker_text_group">"%1$s: %2$s %3$s"</string>
   <plurals name="notification_unread_notified_messages">
     <item quantity="one">"%d непрачытанае апавяшчэнне"</item>
-    <item quantity="few">"%d непрачытаных апавяшчэнняў"</item>
+    <item quantity="few">"%d непрачытаных апавяшчэння"</item>
     <item quantity="many">"%d непрачытаных апавяшчэнняў"</item>
   </plurals>
   <string name="notification_unread_notified_messages_and_invitation">"%1$s і %2$s"</string>
@@ -49,11 +49,36 @@
   <string name="notification_unread_notified_messages_in_room_and_invitation">"%1$s у %2$s і %3$s"</string>
   <plurals name="notification_unread_notified_messages_in_room_rooms">
     <item quantity="one">"%d пакой"</item>
-    <item quantity="few">"%d пакояў"</item>
+    <item quantity="few">"%d пакоя"</item>
     <item quantity="many">"%d пакояў"</item>
   </plurals>
   <string name="push_choose_distributor_dialog_title_android">"Выберыце спосаб атрымання апавяшчэнняў"</string>
   <string name="push_distributor_background_sync_android">"Фонавая сінхранізацыя"</string>
   <string name="push_distributor_firebase_android">"Сэрвісы Google"</string>
   <string name="push_no_valid_google_play_services_apk_android">"Службы Google Play не знойдзены. Апавяшчэнні могуць не працаваць належным чынам."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_description">"Атрымаць назву бягучага пастаўшчыка."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_failure">"Пастаўшчыкі push-апавяшчэнняў не выбраны."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_success">"Бягучы пастаўшчык push-апавяшчэнняў: %1$s."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_title">"Бягучы пастаўшчык push-апавяшчэнняў"</string>
+  <string name="troubleshoot_notifications_test_detect_push_provider_description">"Пераканайцеся, што ў праграме ёсць хаця б адзін пастаўшчык push-апавяшчэнняў."</string>
+  <string name="troubleshoot_notifications_test_detect_push_provider_failure">"Пастаўшчыкі push-апавяшчэнняў не знойдзены."</string>
+  <plurals name="troubleshoot_notifications_test_detect_push_provider_success">
+    <item quantity="one">"Знайшлі %1$d пастаўшчыка push-апавяшчэнняў: %2$s"</item>
+    <item quantity="few">"Знайшлі %1$d пастаўшчыкоў push-апавяшчэнняў: %2$s"</item>
+    <item quantity="many">"Знайшлі %1$d пастаўшчыкоў push-апавяшчэнняў: %2$s"</item>
+  </plurals>
+  <string name="troubleshoot_notifications_test_detect_push_provider_title">"Выяўленне пастаўшчыкоў push-паслуг"</string>
+  <string name="troubleshoot_notifications_test_display_notification_description">"Праверце, ці можа праграма паказваць апавяшчэнні."</string>
+  <string name="troubleshoot_notifications_test_display_notification_failure">"Апавяшчэнне не было націснута."</string>
+  <string name="troubleshoot_notifications_test_display_notification_permission_failure">"Немагчыма паказаць апавяшчэнне."</string>
+  <string name="troubleshoot_notifications_test_display_notification_success">"Апавяшчэнне было націснута!"</string>
+  <string name="troubleshoot_notifications_test_display_notification_title">"Паказаць апавяшчэнне"</string>
+  <string name="troubleshoot_notifications_test_display_notification_waiting">"Націсніце на апавяшчэнне, каб працягнуць тэст."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_description">"Пераканайцеся, што праграма атрымлівае push-апавяшчэнні."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_1">"Памылка: pusher адхіліў запыт."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_2">"Памылка: %1$s."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_3">"Памылка, немагчыма праверыць push-апавяшчэнне."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_4">"Памылка, тайм-аўт у чаканні push-апавяшчэння."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_success">"Зварот цыклу назад заняў %1$d мс."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_title">"Тэст Націсніце кнопку вярнуцца"</string>
 </resources>

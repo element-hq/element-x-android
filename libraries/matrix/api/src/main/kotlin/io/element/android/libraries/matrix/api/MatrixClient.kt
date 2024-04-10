@@ -29,6 +29,7 @@ import io.element.android.libraries.matrix.api.oidc.AccountManagementAction
 import io.element.android.libraries.matrix.api.pusher.PushersService
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
+import io.element.android.libraries.matrix.api.roomdirectory.RoomDirectoryService
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.api.sync.SyncService
 import io.element.android.libraries.matrix.api.user.MatrixSearchUserResults
@@ -58,12 +59,14 @@ interface MatrixClient : Closeable {
     suspend fun setDisplayName(displayName: String): Result<Unit>
     suspend fun uploadAvatar(mimeType: String, data: ByteArray): Result<Unit>
     suspend fun removeAvatar(): Result<Unit>
+    suspend fun joinRoom(roomId: RoomId): Result<RoomId>
     fun syncService(): SyncService
     fun sessionVerificationService(): SessionVerificationService
     fun pushersService(): PushersService
     fun notificationService(): NotificationService
     fun notificationSettingsService(): NotificationSettingsService
     fun encryptionService(): EncryptionService
+    fun roomDirectoryService(): RoomDirectoryService
     suspend fun getCacheSize(): Long
 
     /**
@@ -88,4 +91,7 @@ interface MatrixClient : Closeable {
     fun roomMembershipObserver(): RoomMembershipObserver
 
     fun isMe(userId: UserId?) = userId == sessionId
+
+    suspend fun trackRecentlyVisitedRoom(roomId: RoomId): Result<Unit>
+    suspend fun getRecentlyVisitedRooms(): Result<List<RoomId>>
 }

@@ -44,7 +44,7 @@ class FirebaseNewTokenHandler @Inject constructor(
         sessionStore.getAllSessions().toUserList()
             .map { SessionId(it) }
             .forEach { userId ->
-                val userDataStore = userPushStoreFactory.create(userId)
+                val userDataStore = userPushStoreFactory.getOrCreate(userId)
                 if (userDataStore.getPushProviderName() == FirebaseConfig.NAME) {
                     matrixAuthenticationService.restoreSession(userId).getOrNull()?.use { client ->
                         pusherSubscriber.registerPusher(client, firebaseToken, FirebaseConfig.PUSHER_HTTP_URL)

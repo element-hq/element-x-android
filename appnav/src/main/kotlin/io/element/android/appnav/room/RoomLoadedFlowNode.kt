@@ -40,6 +40,7 @@ import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.di.DaggerComponentOwner
 import io.element.android.libraries.di.SessionScope
+import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
@@ -61,6 +62,7 @@ class RoomLoadedFlowNode @AssistedInject constructor(
     private val roomDetailsEntryPoint: RoomDetailsEntryPoint,
     private val appNavigationStateService: AppNavigationStateService,
     private val appCoroutineScope: CoroutineScope,
+    private val matrixClient: MatrixClient,
     roomComponentFactory: RoomComponentFactory,
     roomMembershipObserver: RoomMembershipObserver,
 ) : BaseFlowNode<RoomLoadedFlowNode.NavTarget>(
@@ -92,6 +94,7 @@ class RoomLoadedFlowNode @AssistedInject constructor(
                 Timber.v("OnCreate => ${inputs.room.roomId}")
                 appNavigationStateService.onNavigateToRoom(id, inputs.room.roomId)
                 fetchRoomMembers()
+                trackVisitedRoom()
             },
             onResume = {
                 appCoroutineScope.launch {
@@ -115,6 +118,10 @@ class RoomLoadedFlowNode @AssistedInject constructor(
             }
             .launchIn(lifecycleScope)
         inputs<Inputs>()
+    }
+
+    private fun trackVisitedRoom() = lifecycleScope.launch {
+        matrixClient.trackRecentlyVisitedRoom(inputs.room.roomId)
     }
 
     private fun fetchRoomMembers() = lifecycleScope.launch {

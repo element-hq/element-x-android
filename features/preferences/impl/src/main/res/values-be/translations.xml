@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_advanced_settings_developer_mode">"Рэжым распрацоўніка"</string>
+  <string name="screen_advanced_settings_developer_mode">"Рэжым распрацоўшчыка"</string>
   <string name="screen_advanced_settings_developer_mode_description">"Падайце распрацоўнікам доступ да функцый і функцыянальным магчымасцям."</string>
   <string name="screen_advanced_settings_element_call_base_url">"Базавы URL сервера званкоў Element"</string>
   <string name="screen_advanced_settings_element_call_base_url_description">"Задайце свой сервер Element Call."</string>
@@ -10,7 +10,7 @@
   <string name="screen_advanced_settings_send_read_receipts_description">"Калі выключыць, вашы пасведчанні аб прачытанні нікому не будуць адпраўляцца. Вы па-ранейшаму будзеце атрымліваць пасведчанні аб прачытанні ад іншых карыстальнікаў."</string>
   <string name="screen_advanced_settings_share_presence">"Падзяліцеся прысутнасцю"</string>
   <string name="screen_advanced_settings_share_presence_description">"Калі гэта выключана, вы не зможаце адпраўляць або атрымліваць апавяшчэнні аб прачытанні або апавяшчэнні аб наборы тэксту"</string>
-  <string name="screen_advanced_settings_view_source_description">"Уключыце опцыю для прагляду крыніцы паведамлення на часовай шкале."</string>
+  <string name="screen_advanced_settings_view_source_description">"Уключыце опцыю для прагляду паведамленняў у хроніцы."</string>
   <string name="screen_blocked_users_empty">"У вас няма заблакіраваных карыстальнікаў"</string>
   <string name="screen_blocked_users_unblock_alert_action">"Разблакіраваць"</string>
   <string name="screen_blocked_users_unblock_alert_description">"Вы зноў зможаце ўбачыць усе паведамленні."</string>
@@ -44,9 +44,11 @@
   <string name="screen_notification_settings_mode_all">"Усе"</string>
   <string name="screen_notification_settings_mode_mentions">"Згадванні"</string>
   <string name="screen_notification_settings_notification_section_title">"Апавясціць мяне"</string>
-  <string name="screen_notification_settings_room_mention_label">"Апавясціць мяне ў @room"</string>
+  <string name="screen_notification_settings_room_mention_label">"Апавясціць пра @room"</string>
   <string name="screen_notification_settings_system_notifications_action_required">"Каб атрымліваць апавяшчэнні, змяніце свой %1$s."</string>
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"налады сістэмы"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"Сістэмныя апавяшчэнні выключаны"</string>
   <string name="screen_notification_settings_title">"Апавяшчэнні"</string>
+  <string name="troubleshoot_notifications_entry_point_section">"Выпраўленне непаладак"</string>
+  <string name="troubleshoot_notifications_entry_point_title">"Выпраўленне непаладак з апавяшчэннямі"</string>
 </resources>

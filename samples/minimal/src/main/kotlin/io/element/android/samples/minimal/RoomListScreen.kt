@@ -89,6 +89,7 @@ class RoomListScreen(
             ),
             profileChangeContentFormatter = ProfileChangeContentFormatter(stringProvider),
             stateContentFormatter = StateContentFormatter(stringProvider),
+            permalinkParser = OnlyFallbackPermalinkParser(),
         ),
     )
     private val presenter = RoomListPresenter(
@@ -118,7 +119,8 @@ class RoomListScreen(
                 roomListService = matrixClient.roomListService,
                 roomSummaryFactory = roomListRoomSummaryFactory,
                 coroutineDispatchers = coroutineDispatchers,
-            )
+            ),
+            featureFlagService = featureFlagService,
         ),
         sessionPreferencesStore = DefaultSessionPreferencesStore(
             context = context,
@@ -150,12 +152,12 @@ class RoomListScreen(
             state = state,
             onRoomClicked = ::onRoomClicked,
             onSettingsClicked = {},
-            onVerifyClicked = {},
             onConfirmRecoveryKeyClicked = {},
             onCreateRoomClicked = {},
             onInvitesClicked = {},
             onRoomSettingsClicked = {},
             onMenuActionClicked = {},
+            onRoomDirectorySearchClicked = {},
             modifier = modifier,
         )
 

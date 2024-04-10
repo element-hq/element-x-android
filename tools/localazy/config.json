@@ -48,7 +48,8 @@
     {
       "name" : ":features:verifysession:impl",
       "includeRegex" : [
-        "screen_session_verification_.*"
+        "screen_session_verification_.*",
+        "screen_identity_.*"
       ]
     },
     {
@@ -80,7 +81,29 @@
       "name" : ":libraries:push:impl",
       "includeRegex" : [
         "push_.*",
-        "notification_.*"
+        "notification_.*",
+        "troubleshoot_notifications_test_current_push_provider.*",
+        "troubleshoot_notifications_test_detect_push_provider.*",
+        "troubleshoot_notifications_test_display_notification_.*",
+        "troubleshoot_notifications_test_push_loop_back_.*"
+      ]
+    },
+    {
+      "name" : ":libraries:permissions:impl",
+      "includeRegex" : [
+        "troubleshoot_notifications_test_check_permission_.*"
+      ]
+    },
+    {
+      "name" : ":libraries:pushproviders:firebase",
+      "includeRegex" : [
+        "troubleshoot_notifications_test_firebase_.*"
+      ]
+    },
+    {
+      "name" : ":libraries:pushproviders:unifiedpush",
+      "includeRegex" : [
+        "troubleshoot_notifications_test_unified_push_.*"
       ]
     },
     {
@@ -156,7 +179,8 @@
       "name" : ":features:ftue:impl",
       "includeRegex" : [
         "screen_welcome_.*",
-        "screen_notification_optin_.*"
+        "screen_notification_optin_.*",
+        "screen_qr_code_login_.+"
       ]
     },
     {
@@ -172,7 +196,8 @@
       "includeRegex" : [
         "screen_chat_backup_.*",
         "screen_key_backup_disable_.*",
-        "screen_recovery_key_.*"
+        "screen_recovery_key_.*",
+        "screen_create_new_recovery_key_.*"
       ]
     },
     {
@@ -182,7 +207,14 @@
         "screen\\.advanced_settings\\..*",
         "screen_edit_profile_.*",
         "screen_notification_settings_.*",
-        "screen_blocked_users_.*"
+        "screen_blocked_users_.*",
+        "troubleshoot_notifications_entry_point_.*"
+      ]
+    },
+    {
+      "name" : ":libraries:troubleshoot:impl",
+      "includeRegex" : [
+        "troubleshoot_notifications_screen_.*"
       ]
     },
     {
@@ -196,6 +228,12 @@
       "includeRegex" : [
         "screen_app_lock_.*",
         "screen_signout_in_progress_dialog_content"
+      ]
+    },
+    {
+      "name" : ":features:roomdirectory:impl",
+      "includeRegex" : [
+        "screen_room_directory_.*"
       ]
     }
   ]

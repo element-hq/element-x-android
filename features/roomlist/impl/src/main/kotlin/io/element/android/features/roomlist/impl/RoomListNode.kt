@@ -64,10 +64,6 @@ class RoomListNode @AssistedInject constructor(
         plugins<RoomListEntryPoint.Callback>().forEach { it.onCreateRoomClicked() }
     }
 
-    private fun onSessionVerificationClicked() {
-        plugins<RoomListEntryPoint.Callback>().forEach { it.onSessionVerificationClicked() }
-    }
-
     private fun onSessionConfirmRecoveryKeyClicked() {
         plugins<RoomListEntryPoint.Callback>().forEach { it.onSessionConfirmRecoveryKeyClicked() }
     }
@@ -91,6 +87,10 @@ class RoomListNode @AssistedInject constructor(
         }
     }
 
+    private fun onRoomDirectorySearchClicked() {
+        plugins<RoomListEntryPoint.Callback>().forEach { it.onRoomDirectorySearchClicked() }
+    }
+
     @Composable
     override fun View(modifier: Modifier) {
         val state = presenter.present()
@@ -100,11 +100,11 @@ class RoomListNode @AssistedInject constructor(
             onRoomClicked = this::onRoomClicked,
             onSettingsClicked = this::onOpenSettings,
             onCreateRoomClicked = this::onCreateRoomClicked,
-            onVerifyClicked = this::onSessionVerificationClicked,
             onConfirmRecoveryKeyClicked = this::onSessionConfirmRecoveryKeyClicked,
             onInvitesClicked = this::onInvitesClicked,
             onRoomSettingsClicked = this::onRoomSettingsClicked,
             onMenuActionClicked = { onMenuActionClicked(activity, it) },
+            onRoomDirectorySearchClicked = this::onRoomDirectorySearchClicked,
             modifier = modifier,
         )
     }

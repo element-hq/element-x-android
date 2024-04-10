@@ -25,6 +25,7 @@ internal fun Session.toSessionData(
     isTokenValid: Boolean,
     loginType: LoginType,
     passphrase: String?,
+    needsVerification: Boolean,
 ) = SessionData(
     userId = userId,
     deviceId = deviceId,
@@ -37,4 +38,5 @@ internal fun Session.toSessionData(
     isTokenValid = isTokenValid,
     loginType = loginType,
     passphrase = passphrase,
+    needsVerification = needsVerification,
 )

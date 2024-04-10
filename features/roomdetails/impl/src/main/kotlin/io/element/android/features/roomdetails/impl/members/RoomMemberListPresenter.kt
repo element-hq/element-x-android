@@ -34,8 +34,6 @@ import io.element.android.features.roomdetails.impl.members.moderation.RoomMembe
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
-import io.element.android.libraries.featureflag.api.FeatureFlagService
-import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
@@ -50,7 +48,6 @@ class RoomMemberListPresenter @AssistedInject constructor(
     private val room: MatrixRoom,
     private val roomMemberListDataSource: RoomMemberListDataSource,
     private val coroutineDispatchers: CoroutineDispatchers,
-    private val featureFlagService: FeatureFlagService,
     private val roomMembersModerationPresenter: RoomMembersModerationPresenter,
     @Assisted private val navigator: RoomMemberListNavigator,
 ) : Presenter<RoomMemberListState> {
@@ -74,15 +71,7 @@ class RoomMemberListPresenter @AssistedInject constructor(
             value = room.canInvite().getOrElse { false }
         }
 
-        val isRoomModerationEnabled by produceState(initialValue = false) {
-            value = featureFlagService.isFeatureEnabled(FeatureFlags.RoomModeration)
-        }
-
-        val roomModerationState = if (isRoomModerationEnabled) {
-            roomMembersModerationPresenter.present()
-        } else {
-            remember { roomMembersModerationPresenter.dummyState() }
-        }
+        val roomModerationState = roomMembersModerationPresenter.present()
 
         // Ensure we load the latest data when entering this screen
         LaunchedEffect(Unit) {

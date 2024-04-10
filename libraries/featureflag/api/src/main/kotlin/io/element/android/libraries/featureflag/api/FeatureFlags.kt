@@ -82,11 +82,11 @@ enum class FeatureFlags(
         defaultValue = true,
         isFinished = false,
     ),
-    RoomModeration(
-        key = "feature.roomModeration",
-        title = "Room moderation",
-        description = "Add moderation features to the room for users with permissions",
-        defaultValue = true,
+    RoomDirectorySearch(
+        key = "feature.roomdirectorysearch",
+        title = "Room directory search",
+        description = "Allow user to search for public rooms in their homeserver",
+        defaultValue = false,
         isFinished = false,
-    ),
+    )
 }

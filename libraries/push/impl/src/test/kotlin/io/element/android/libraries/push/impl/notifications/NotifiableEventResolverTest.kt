@@ -43,6 +43,7 @@ import io.element.android.libraries.matrix.test.A_USER_ID_2
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.FakeMatrixClientProvider
 import io.element.android.libraries.matrix.test.notification.FakeNotificationService
+import io.element.android.libraries.matrix.test.permalink.FakePermalinkParser
 import io.element.android.libraries.push.impl.notifications.fake.FakeNotificationMediaRepo
 import io.element.android.libraries.push.impl.notifications.model.FallbackNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.InviteNotifiableEvent
@@ -549,6 +550,7 @@ class NotifiableEventResolverTest {
             matrixClientProvider = matrixClientProvider,
             notificationMediaRepoFactory = notificationMediaRepoFactory,
             context = context,
+            permalinkParser = FakePermalinkParser(),
         )
     }
 

@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_identity_confirmation_subtitle">"Verifica questo dispositivo per segnare i tuoi messaggi come sicuri."</string>
+  <string name="screen_identity_confirmation_title">"Conferma la tua identità"</string>
+  <string name="screen_identity_confirmed_subtitle">"Ora puoi leggere o inviare messaggi in tutta sicurezza e anche chi chatta con te può fidarsi di questo dispositivo."</string>
+  <string name="screen_identity_confirmed_title">"Dispositivo verificato"</string>
+  <string name="screen_identity_use_another_device">"Usa un altro dispositivo"</string>
+  <string name="screen_identity_waiting_on_other_device">"In attesa sull\'altro dispositivo…"</string>
   <string name="screen_session_verification_cancelled_subtitle">"C\'è qualcosa che non va. La richiesta è scaduta o è stata rifiutata."</string>
   <string name="screen_session_verification_compare_emojis_subtitle">"Verifica che gli emoji sottostanti corrispondano a quelli mostrati nell\'altra sessione."</string>
   <string name="screen_session_verification_compare_emojis_title">"Confronta le emoji"</string>

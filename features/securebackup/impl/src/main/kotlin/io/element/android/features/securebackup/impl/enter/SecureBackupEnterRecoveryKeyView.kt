@@ -83,7 +83,7 @@ private fun ColumnScope.Buttons(
     state: SecureBackupEnterRecoveryKeyState,
 ) {
     Button(
-        text = stringResource(id = CommonStrings.action_confirm),
+        text = stringResource(id = CommonStrings.action_continue),
         enabled = state.isSubmitEnabled,
         showProgress = state.submitAction.isLoading(),
         modifier = Modifier.fillMaxWidth(),

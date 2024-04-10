@@ -34,17 +34,7 @@ class VerifySelfSessionNode @AssistedInject constructor(
     @Assisted plugins: List<Plugin>,
     private val presenter: VerifySelfSessionPresenter,
 ) : Node(buildContext, plugins = plugins) {
-    private fun onEnterRecoveryKey() {
-        plugins<VerifySessionEntryPoint.Callback>().forEach {
-            it.onEnterRecoveryKey()
-        }
-    }
-
-    private fun onDone() {
-        plugins<VerifySessionEntryPoint.Callback>().forEach {
-            it.onDone()
-        }
-    }
+    private val callback = plugins<VerifySessionEntryPoint.Callback>().first()
 
     @Composable
     override fun View(modifier: Modifier) {
@@ -52,8 +42,9 @@ class VerifySelfSessionNode @AssistedInject constructor(
         VerifySelfSessionView(
             state = state,
             modifier = modifier,
-            onEnterRecoveryKey = ::onEnterRecoveryKey,
-            goBack = ::onDone,
+            onEnterRecoveryKey = callback::onEnterRecoveryKey,
+            onCreateNewRecoveryKey = callback::onCreateNewRecoveryKey,
+            onFinished = callback::onDone,
         )
     }
 }

@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_identity_confirmed_title">"裝置已認證"</string>
+  <string name="screen_identity_use_another_device">"使用另一個裝置"</string>
+  <string name="screen_identity_waiting_on_other_device">"正在等待其他裝置……"</string>
   <string name="screen_session_verification_cancelled_subtitle">"似乎出了一點問題。有可能是因為等候逾時，或是請求被拒絕。"</string>
   <string name="screen_session_verification_compare_emojis_subtitle">"確認顯示在其他工作階段上的表情符號是否和下方的相同。"</string>
   <string name="screen_session_verification_compare_emojis_title">"比對表情符號"</string>

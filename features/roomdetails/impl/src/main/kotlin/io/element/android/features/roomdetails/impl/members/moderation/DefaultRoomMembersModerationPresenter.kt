@@ -31,8 +31,6 @@ import io.element.android.libraries.architecture.runUpdatingState
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.extensions.finally
 import io.element.android.libraries.di.RoomScope
-import io.element.android.libraries.featureflag.api.FeatureFlagService
-import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.RoomMember
@@ -51,7 +49,6 @@ import javax.inject.Inject
 @ContributesBinding(RoomScope::class)
 class DefaultRoomMembersModerationPresenter @Inject constructor(
     private val room: MatrixRoom,
-    private val featureFlagService: FeatureFlagService,
     private val dispatchers: CoroutineDispatchers,
     private val analyticsService: AnalyticsService,
 ) : RoomMembersModerationPresenter {
@@ -61,9 +58,8 @@ class DefaultRoomMembersModerationPresenter @Inject constructor(
     private suspend fun canKick() = room.canKick().getOrDefault(false)
 
     override suspend fun canDisplayModerationActions(): Boolean {
-        val isRoomModerationEnabled = featureFlagService.isFeatureEnabled(FeatureFlags.RoomModeration)
         val isDm = room.isDm && room.isEncrypted
-        return isRoomModerationEnabled && !isDm && (canBan() || canKick())
+        return !isDm && (canBan() || canKick())
     }
 
     @Composable
@@ -76,7 +72,7 @@ class DefaultRoomMembersModerationPresenter @Inject constructor(
         val unbanUserAsyncAction = remember { mutableStateOf(AsyncAction.Uninitialized as AsyncAction<Unit>) }
 
         val canDisplayBannedUsers by produceState(initialValue = false) {
-            value = featureFlagService.isFeatureEnabled(FeatureFlags.RoomModeration) && !room.isDm && canBan()
+            value = !room.isDm && canBan()
         }
 
         fun handleEvent(event: RoomMembersModerationEvents) {

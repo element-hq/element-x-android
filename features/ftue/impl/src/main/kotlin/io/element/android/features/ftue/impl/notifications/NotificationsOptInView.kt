@@ -26,7 +26,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.systemBarsPadding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
@@ -40,8 +40,10 @@ import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.ftue.impl.R
 import io.element.android.libraries.designsystem.atomic.molecules.ButtonColumnMolecule
-import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
 import io.element.android.libraries.designsystem.atomic.pages.HeaderFooterPage
+import io.element.android.libraries.designsystem.components.BigIcon
+import io.element.android.libraries.designsystem.components.OnboardingBackground
+import io.element.android.libraries.designsystem.components.PageTitle
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
@@ -62,8 +64,9 @@ fun NotificationsOptInView(
 
     HeaderFooterPage(
         modifier = modifier
-            .systemBarsPadding()
+            .statusBarsPadding()
             .fillMaxSize(),
+        background = { OnboardingBackground() },
         header = { NotificationsOptInHeader(modifier = Modifier.padding(top = 60.dp, bottom = 12.dp)) },
         footer = { NotificationsOptInFooter(state) },
     ) {
@@ -75,11 +78,11 @@ fun NotificationsOptInView(
 private fun NotificationsOptInHeader(
     modifier: Modifier = Modifier,
 ) {
-    IconTitleSubtitleMolecule(
+    PageTitle(
         modifier = modifier,
         title = stringResource(R.string.screen_notification_optin_title),
-        subTitle = stringResource(R.string.screen_notification_optin_subtitle),
-        iconImageVector = CompoundIcons.NotificationsSolid(),
+        subtitle = stringResource(R.string.screen_notification_optin_subtitle),
+        iconStyle = BigIcon.Style.Default(CompoundIcons.NotificationsSolid()),
     )
 }
 

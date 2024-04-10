@@ -52,9 +52,7 @@ fun PageTitle(
     callToAction: @Composable (() -> Unit)? = null,
 ) {
     Column(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(bottom = 40.dp),
+        modifier = modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         BigIcon(style = iconStyle)

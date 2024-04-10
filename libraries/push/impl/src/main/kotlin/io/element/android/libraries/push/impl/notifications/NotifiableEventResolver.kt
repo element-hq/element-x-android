@@ -30,6 +30,7 @@ import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.notification.NotificationContent
 import io.element.android.libraries.matrix.api.notification.NotificationData
+import io.element.android.libraries.matrix.api.permalink.PermalinkParser
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
 import io.element.android.libraries.matrix.api.timeline.item.event.AudioMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.EmoteMessageType
@@ -68,6 +69,7 @@ class NotifiableEventResolver @Inject constructor(
     private val matrixClientProvider: MatrixClientProvider,
     private val notificationMediaRepoFactory: NotificationMediaRepo.Factory,
     @ApplicationContext private val context: Context,
+    private val permalinkParser: PermalinkParser,
 ) {
     suspend fun resolveEvent(sessionId: SessionId, roomId: RoomId, eventId: EventId): NotifiableEvent? {
         // Restore session
@@ -252,7 +254,7 @@ class NotifiableEventResolver @Inject constructor(
             is ImageMessageType -> messageType.body
             is StickerMessageType -> messageType.body
             is NoticeMessageType -> messageType.body
-            is TextMessageType -> messageType.toPlainText()
+            is TextMessageType -> messageType.toPlainText(permalinkParser = permalinkParser)
             is VideoMessageType -> messageType.body
             is LocationMessageType -> messageType.body
             is OtherMessageType -> messageType.body

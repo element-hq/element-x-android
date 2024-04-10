@@ -29,7 +29,11 @@
   <string name="screen_room_change_role_confirm_demote_self_action">"Понизить уровень"</string>
   <string name="screen_room_change_role_confirm_demote_self_description">"Вы не сможете отменить это изменение, так как понижаете себя статус. Если вы являетесь последним привилегированным пользователем в комнате, восстановить привилегии будет невозможно."</string>
   <string name="screen_room_change_role_confirm_demote_self_title">"Понизить свой уровень?"</string>
+  <string name="screen_room_change_role_invited_member_name">"%1$s (Ожидание)"</string>
   <string name="screen_room_change_role_moderators_title">"Редактировать роль модераторов"</string>
+  <string name="screen_room_change_role_section_administrators">"Администраторы"</string>
+  <string name="screen_room_change_role_section_moderators">"Модераторы"</string>
+  <string name="screen_room_change_role_section_users">"Участники"</string>
   <string name="screen_room_change_role_unsaved_changes_description">"У вас есть несохраненные изменения."</string>
   <string name="screen_room_change_role_unsaved_changes_title">"Сохранить изменения?"</string>
   <string name="screen_room_details_add_topic_title">"Добавить тему"</string>

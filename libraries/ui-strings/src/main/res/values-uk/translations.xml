@@ -51,7 +51,7 @@
   <string name="action_decline">"Відхилити"</string>
   <string name="action_delete_poll">"Видалити опитування"</string>
   <string name="action_disable">"Вимкнути"</string>
-  <string name="action_discard">"Скасувати"</string>
+  <string name="action_discard">"Відкинути"</string>
   <string name="action_done">"Готово"</string>
   <string name="action_edit">"Редагувати"</string>
   <string name="action_edit_poll">"Редагувати опитування"</string>
@@ -60,7 +60,7 @@
   <string name="action_enter_pin">"Введіть PIN-код"</string>
   <string name="action_forgot_password">"Забули пароль?"</string>
   <string name="action_forward">"Переслати"</string>
-  <string name="action_go_back">"Повернутися назад"</string>
+  <string name="action_go_back">"Повернутися"</string>
   <string name="action_invite">"Запросити"</string>
   <string name="action_invite_friends">"Запросити людей"</string>
   <string name="action_invite_friends_to_app">"Запросити людей до %1$s"</string>
@@ -249,15 +249,9 @@
   <string name="invite_friends_text">"Привіт, пишіть мені за адресою %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Повідомити про ваду за допомогою Rageshake"</string>
-  <string name="screen_identity_confirmation_subtitle">"Перевірте цей пристрій, щоб налаштувати безпечний обмін повідомленнями."</string>
-  <string name="screen_identity_confirmation_title">"Підтвердіть, що це ви"</string>
-  <string name="screen_identity_confirmed_subtitle">"Тепер ви можете безпечно читати або надсилати повідомлення, і кожен, з ким ви спілкуєтесь, також може довіряти цьому пристрою."</string>
-  <string name="screen_identity_confirmed_title">"Пристрій перевірено"</string>
   <string name="screen_media_picker_error_failed_selection">"Не вдалося вибрати медіафайл, спробуйте ще раз."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Не вдалося обробити медіафайл для завантаження, спробуйте ще раз."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Не вдалося завантажити медіафайл, спробуйте ще раз."</string>
-  <string name="screen_room_directory_search_loading_error">"Не вдалося завантажити"</string>
-  <string name="screen_room_directory_search_title">"Каталог кімнат"</string>
   <string name="screen_room_error_failed_processing_media">"Не вдалося обробити медіафайл для завантаження, спробуйте ще раз."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Не вдалося отримати дані користувача"</string>
   <string name="screen_room_member_details_block_alert_action">"Заблокувати"</string>

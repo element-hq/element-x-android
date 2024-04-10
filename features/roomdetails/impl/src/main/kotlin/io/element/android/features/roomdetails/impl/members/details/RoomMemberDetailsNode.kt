@@ -46,6 +46,7 @@ class RoomMemberDetailsNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     private val analyticsService: AnalyticsService,
+    private val permalinkBuilder: PermalinkBuilder,
     presenterFactory: RoomMemberDetailsPresenter.Factory,
 ) : Node(buildContext, plugins = plugins) {
     interface Callback : NodeInputs {
@@ -74,7 +75,7 @@ class RoomMemberDetailsNode @AssistedInject constructor(
         val context = LocalContext.current
 
         fun onShareUser() {
-            val permalinkResult = PermalinkBuilder.permalinkForUser(inputs.roomMemberId)
+            val permalinkResult = permalinkBuilder.permalinkForUser(inputs.roomMemberId)
             permalinkResult.onSuccess { permalink ->
                 context.startSharePlainTextIntent(
                     activityResultLauncher = null,

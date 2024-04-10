@@ -17,8 +17,9 @@
 package io.element.android.features.roomdetails.impl.rolesandpermissions.permissions
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -80,29 +81,35 @@ fun ChangeRoomPermissionsView(
             )
         }
     ) { padding ->
-        Column(modifier = Modifier.padding(padding)) {
+        LazyColumn(
+            modifier = Modifier
+                .padding(padding)
+                .fillMaxSize()
+        ) {
             for ((index, permissionItem) in state.items.withIndex()) {
-                ListSectionHeader(titleForSection(item = permissionItem), hasDivider = index > 0)
-                SelectRoleItem(
-                    permissionsItem = permissionItem,
-                    role = RoomMember.Role.ADMIN,
-                    currentPermissions = state.currentPermissions
-                ) { item, role ->
-                    state.eventSink(ChangeRoomPermissionsEvent.ChangeMinimumRoleForAction(item, role))
-                }
-                SelectRoleItem(
-                    permissionsItem = permissionItem,
-                    role = RoomMember.Role.MODERATOR,
-                    currentPermissions = state.currentPermissions
-                ) { item, role ->
-                    state.eventSink(ChangeRoomPermissionsEvent.ChangeMinimumRoleForAction(item, role))
-                }
-                SelectRoleItem(
-                    permissionsItem = permissionItem,
-                    role = RoomMember.Role.USER,
-                    currentPermissions = state.currentPermissions
-                ) { item, role ->
-                    state.eventSink(ChangeRoomPermissionsEvent.ChangeMinimumRoleForAction(item, role))
+                item {
+                    ListSectionHeader(titleForSection(item = permissionItem), hasDivider = index > 0)
+                    SelectRoleItem(
+                        permissionsItem = permissionItem,
+                        role = RoomMember.Role.ADMIN,
+                        currentPermissions = state.currentPermissions
+                    ) { item, role ->
+                        state.eventSink(ChangeRoomPermissionsEvent.ChangeMinimumRoleForAction(item, role))
+                    }
+                    SelectRoleItem(
+                        permissionsItem = permissionItem,
+                        role = RoomMember.Role.MODERATOR,
+                        currentPermissions = state.currentPermissions
+                    ) { item, role ->
+                        state.eventSink(ChangeRoomPermissionsEvent.ChangeMinimumRoleForAction(item, role))
+                    }
+                    SelectRoleItem(
+                        permissionsItem = permissionItem,
+                        role = RoomMember.Role.USER,
+                        currentPermissions = state.currentPermissions
+                    ) { item, role ->
+                        state.eventSink(ChangeRoomPermissionsEvent.ChangeMinimumRoleForAction(item, role))
+                    }
                 }
             }
         }

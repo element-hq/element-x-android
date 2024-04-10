@@ -16,6 +16,7 @@
 
 package io.element.android.libraries.matrix.impl
 
+import io.element.android.appconfig.TimelineConfig
 import io.element.android.libraries.androidutils.file.getSizeOfFiles
 import io.element.android.libraries.androidutils.file.safeDelete
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
@@ -35,9 +36,11 @@ import io.element.android.libraries.matrix.api.oidc.AccountManagementAction
 import io.element.android.libraries.matrix.api.pusher.PushersService
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
+import io.element.android.libraries.matrix.api.roomdirectory.RoomDirectoryService
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.api.roomlist.awaitLoaded
 import io.element.android.libraries.matrix.api.sync.SyncService
+import io.element.android.libraries.matrix.api.sync.SyncState
 import io.element.android.libraries.matrix.api.user.MatrixSearchUserResults
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
@@ -53,6 +56,8 @@ import io.element.android.libraries.matrix.impl.room.MatrixRoomInfoMapper
 import io.element.android.libraries.matrix.impl.room.RoomContentForwarder
 import io.element.android.libraries.matrix.impl.room.RoomSyncSubscriber
 import io.element.android.libraries.matrix.impl.room.RustMatrixRoom
+import io.element.android.libraries.matrix.impl.room.map
+import io.element.android.libraries.matrix.impl.roomdirectory.RustRoomDirectoryService
 import io.element.android.libraries.matrix.impl.roomlist.RoomListFactory
 import io.element.android.libraries.matrix.impl.roomlist.RustRoomListService
 import io.element.android.libraries.matrix.impl.roomlist.fullRoomWithTimeline
@@ -71,6 +76,7 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -79,8 +85,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.buffer
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -94,13 +99,14 @@ import org.matrix.rustcomponents.sdk.NotificationProcessSetup
 import org.matrix.rustcomponents.sdk.PowerLevels
 import org.matrix.rustcomponents.sdk.Room
 import org.matrix.rustcomponents.sdk.RoomListItem
-import org.matrix.rustcomponents.sdk.StateEventType
 import org.matrix.rustcomponents.sdk.TaskHandle
 import org.matrix.rustcomponents.sdk.TimelineEventTypeFilter
 import org.matrix.rustcomponents.sdk.use
 import timber.log.Timber
 import java.io.File
 import java.util.concurrent.atomic.AtomicBoolean
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.seconds
 import org.matrix.rustcomponents.sdk.CreateRoomParameters as RustCreateRoomParameters
 import org.matrix.rustcomponents.sdk.RoomPreset as RustRoomPreset
 import org.matrix.rustcomponents.sdk.RoomVisibility as RustRoomVisibility
@@ -124,11 +130,6 @@ class RustMatrixClient(
     private val innerRoomListService = syncService.roomListService()
     private val sessionDispatcher = dispatchers.io.limitedParallelism(64)
     private val rustSyncService = RustSyncService(syncService, sessionCoroutineScope)
-    private val verificationService = RustSessionVerificationService(
-        client = client,
-        syncService = rustSyncService,
-        sessionCoroutineScope = sessionCoroutineScope,
-    ).apply { start() }
     private val pushersService = RustPushersService(
         client = client,
         dispatchers = dispatchers,
@@ -149,7 +150,14 @@ class RustMatrixClient(
         syncService = rustSyncService,
         sessionCoroutineScope = sessionCoroutineScope,
         dispatchers = dispatchers,
+        sessionStore = sessionStore,
     )
+
+    private val roomDirectoryService = RustRoomDirectoryService(
+        client = client,
+        sessionDispatcher = sessionDispatcher,
+    )
+
     private val sessionDirectoryNameProvider = SessionDirectoryNameProvider()
 
     private val isLoggingOut = AtomicBoolean(false)
@@ -170,6 +178,7 @@ class RustMatrixClient(
                             isTokenValid = false,
                             loginType = existingData.loginType,
                             passphrase = existingData.passphrase,
+                            needsVerification = existingData.needsVerification,
                         )
                         sessionStore.updateData(newData)
                         Timber.d("Removed session data with token: '...$anonymizedToken'.")
@@ -197,6 +206,7 @@ class RustMatrixClient(
                     isTokenValid = true,
                     loginType = existingData.loginType,
                     passphrase = existingData.passphrase,
+                    needsVerification = existingData.needsVerification,
                 )
                 sessionStore.updateData(newData)
                 Timber.d("Saved new session data with token: '...$anonymizedToken'.")
@@ -208,42 +218,38 @@ class RustMatrixClient(
         }
     }
 
-    private val rustRoomListService: RoomListService =
-        RustRoomListService(
+    override val roomListService: RoomListService = RustRoomListService(
+        innerRoomListService = innerRoomListService,
+        sessionCoroutineScope = sessionCoroutineScope,
+        sessionDispatcher = sessionDispatcher,
+        roomListFactory = RoomListFactory(
             innerRoomListService = innerRoomListService,
             sessionCoroutineScope = sessionCoroutineScope,
-            sessionDispatcher = sessionDispatcher,
-            roomListFactory = RoomListFactory(
-                innerRoomListService = innerRoomListService,
-                sessionCoroutineScope = sessionCoroutineScope,
-            ),
-        )
-
-    private val eventFilters = TimelineEventTypeFilter.exclude(
-        listOf(
-            StateEventType.ROOM_ALIASES,
-            StateEventType.ROOM_CANONICAL_ALIAS,
-            StateEventType.ROOM_GUEST_ACCESS,
-            StateEventType.ROOM_HISTORY_VISIBILITY,
-            StateEventType.ROOM_JOIN_RULES,
-            StateEventType.ROOM_PINNED_EVENTS,
-            StateEventType.ROOM_POWER_LEVELS,
-            StateEventType.ROOM_SERVER_ACL,
-            StateEventType.ROOM_TOMBSTONE,
-            StateEventType.SPACE_CHILD,
-            StateEventType.SPACE_PARENT,
-            StateEventType.POLICY_RULE_ROOM,
-            StateEventType.POLICY_RULE_SERVER,
-            StateEventType.POLICY_RULE_USER,
-        ).map(FilterTimelineEventType::State)
+        ),
     )
 
-    override val roomListService: RoomListService
-        get() = rustRoomListService
+    private val verificationService = RustSessionVerificationService(
+        client = client,
+        isSyncServiceReady = rustSyncService.syncState.map { it == SyncState.Running },
+        sessionCoroutineScope = sessionCoroutineScope,
+        sessionStore = sessionStore,
+    )
 
-    private val rustMediaLoader = RustMediaLoader(baseCacheDirectory, dispatchers, client)
-    override val mediaLoader: MatrixMediaLoader
-        get() = rustMediaLoader
+    private val eventFilters = TimelineConfig.excludedEvents
+        .takeIf { it.isNotEmpty() }
+        ?.let { listStateEventType ->
+            TimelineEventTypeFilter.exclude(
+                listStateEventType.map { stateEventType ->
+                    FilterTimelineEventType.State(stateEventType.map())
+                }
+            )
+        }
+
+    override val mediaLoader: MatrixMediaLoader = RustMediaLoader(
+        baseCacheDirectory = baseCacheDirectory,
+        dispatchers = dispatchers,
+        innerClient = client,
+    )
 
     private val roomMembershipObserver = RoomMembershipObserver()
 
@@ -273,11 +279,6 @@ class RustMatrixClient(
         .stateIn(sessionCoroutineScope, started = SharingStarted.Eagerly, initialValue = persistentListOf())
 
     init {
-        roomListService.state.onEach { state ->
-            if (state == RoomListService.State.Running) {
-                setupVerificationControllerIfNeeded()
-            }
-        }.launchIn(sessionCoroutineScope)
         sessionCoroutineScope.launch {
             // Force a refresh of the profile
             getUserProfile()
@@ -308,6 +309,22 @@ class RustMatrixClient(
                 roomSyncSubscriber = roomSyncSubscriber,
                 matrixRoomInfoMapper = MatrixRoomInfoMapper(),
             )
+        }
+    }
+
+    /**
+     * Wait for the room to be available in the room list.
+     * @param roomId the room id to wait for
+     * @param timeout the timeout to wait for the room to be available
+     * @throws TimeoutCancellationException if the room is not available after the timeout
+     */
+    private suspend fun awaitRoom(roomId: RoomId, timeout: Duration) {
+        withTimeout(timeout) {
+            roomListService.allRooms.summaries
+                .filter { roomSummaries ->
+                    roomSummaries.map { it.identifier() }.contains(roomId.value)
+                }
+                .first()
         }
     }
 
@@ -360,14 +377,11 @@ class RustMatrixClient(
                 powerLevelContentOverride = defaultRoomCreationPowerLevels,
             )
             val roomId = RoomId(client.createRoom(rustParams))
-
-            // Wait to receive the room back from the sync
-            withTimeout(30_000L) {
-                roomListService.allRooms.summaries
-                    .filter { roomSummaries ->
-                        roomSummaries.map { it.identifier() }.contains(roomId.value)
-                    }
-                    .first()
+            // Wait to receive the room back from the sync but do not returns failure if it fails.
+            try {
+                awaitRoom(roomId, 30.seconds)
+            } catch (e: Exception) {
+                Timber.e(e, "Timeout waiting for the room to be available in the room list")
             }
             roomId
         }
@@ -416,6 +430,30 @@ class RustMatrixClient(
             runCatching { client.removeAvatar() }
         }
 
+    override suspend fun joinRoom(roomId: RoomId): Result<RoomId> = withContext(sessionDispatcher) {
+        runCatching {
+            client.joinRoomById(roomId.value).destroy()
+            try {
+                awaitRoom(roomId, 10.seconds)
+            } catch (e: Exception) {
+                Timber.e(e, "Timeout waiting for the room to be available in the room list")
+            }
+            roomId
+        }
+    }
+
+    override suspend fun trackRecentlyVisitedRoom(roomId: RoomId): Result<Unit> = withContext(sessionDispatcher) {
+        runCatching {
+            client.trackRecentlyVisitedRoom(roomId.value)
+        }
+    }
+
+    override suspend fun getRecentlyVisitedRooms(): Result<List<RoomId>> = withContext(sessionDispatcher) {
+        runCatching {
+            client.getRecentlyVisitedRooms().map(::RoomId)
+        }
+    }
+
     override fun syncService(): SyncService = rustSyncService
 
     override fun sessionVerificationService(): SessionVerificationService = verificationService
@@ -427,6 +465,8 @@ class RustMatrixClient(
     override fun encryptionService(): EncryptionService = encryptionService
 
     override fun notificationSettingsService(): NotificationSettingsService = notificationSettingsService
+
+    override fun roomDirectoryService(): RoomDirectoryService = roomDirectoryService
 
     override fun close() {
         sessionCoroutineScope.cancel()
@@ -462,6 +502,7 @@ class RustMatrixClient(
         ignoreSdkError: Boolean,
     ): String? {
         var result: String? = null
+        syncService.stop()
         withContext(sessionDispatcher) {
             if (doRequest) {
                 try {
@@ -494,16 +535,6 @@ class RustMatrixClient(
     override suspend fun uploadMedia(mimeType: String, data: ByteArray, progressCallback: ProgressCallback?): Result<String> = withContext(sessionDispatcher) {
         runCatching {
             client.uploadMedia(mimeType, data, progressCallback?.toProgressWatcher())
-        }
-    }
-
-    private fun setupVerificationControllerIfNeeded() {
-        if (verificationService.verificationController == null) {
-            try {
-                verificationService.verificationController = client.getSessionVerificationController()
-            } catch (e: Throwable) {
-                Timber.e(e, "Could not start verification service. Will try again on the next sliding sync update.")
-            }
         }
     }
 

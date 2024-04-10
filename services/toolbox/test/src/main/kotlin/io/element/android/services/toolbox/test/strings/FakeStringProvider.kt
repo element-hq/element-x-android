@@ -26,10 +26,10 @@ class FakeStringProvider(
     }
 
     override fun getString(resId: Int, vararg formatArgs: Any?): String {
-        return defaultResult
+        return defaultResult + formatArgs.joinToString()
     }
 
     override fun getQuantityString(resId: Int, quantity: Int, vararg formatArgs: Any?): String {
-        return defaultResult
+        return defaultResult + " ($quantity) " + formatArgs.joinToString()
     }
 }

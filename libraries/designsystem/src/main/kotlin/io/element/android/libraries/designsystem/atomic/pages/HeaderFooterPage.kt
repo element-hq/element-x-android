@@ -34,6 +34,7 @@ import io.element.android.libraries.designsystem.theme.components.Text
 
 /**
  * @param modifier Classical modifier.
+ * @param background optional background component.
  * @param topBar optional topBar.
  * @param header optional header.
  * @param footer optional footer.
@@ -42,6 +43,7 @@ import io.element.android.libraries.designsystem.theme.components.Text
 @Composable
 fun HeaderFooterPage(
     modifier: Modifier = Modifier,
+    background: @Composable () -> Unit = {},
     topBar: @Composable () -> Unit = {},
     header: @Composable () -> Unit = {},
     footer: @Composable () -> Unit = {},
@@ -51,25 +53,28 @@ fun HeaderFooterPage(
         modifier = modifier,
         topBar = topBar,
     ) { padding ->
-        Column(
-            modifier = Modifier
-                .padding(padding)
-                .consumeWindowInsets(padding)
-                .padding(all = 20.dp),
-        ) {
-            // Header
-            header()
-            // Content
+        Box {
+            background()
             Column(
                 modifier = Modifier
-                    .weight(1f)
-                    .fillMaxWidth(),
+                    .padding(all = 20.dp)
+                    .padding(padding)
+                    .consumeWindowInsets(padding)
             ) {
-                content()
-            }
-            // Footer
-            Box(modifier = Modifier.padding(horizontal = 16.dp)) {
-                footer()
+                // Header
+                header()
+                // Content
+                Column(
+                    modifier = Modifier
+                        .weight(1f)
+                        .fillMaxWidth(),
+                ) {
+                    content()
+                }
+                // Footer
+                Box(modifier = Modifier.padding(horizontal = 16.dp)) {
+                    footer()
+                }
             }
         }
     }

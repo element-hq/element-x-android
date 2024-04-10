@@ -30,6 +30,7 @@ import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.preferences.impl.R
 import io.element.android.features.preferences.impl.user.UserPreferences
+import io.element.android.libraries.architecture.coverage.ExcludeFromCoverage
 import io.element.android.libraries.designsystem.components.list.ListItemContent
 import io.element.android.libraries.designsystem.components.preferences.PreferencePage
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
@@ -51,7 +52,6 @@ import io.element.android.libraries.ui.strings.CommonStrings
 fun PreferencesRootView(
     state: PreferencesRootState,
     onBackPressed: () -> Unit,
-    onVerifyClicked: () -> Unit,
     onSecureBackupClicked: () -> Unit,
     onManageAccountClicked: (url: String) -> Unit,
     onOpenAnalytics: () -> Unit,
@@ -81,13 +81,6 @@ fun PreferencesRootView(
             },
             user = state.myUser,
         )
-        if (state.showCompleteVerification) {
-            ListItem(
-                headlineContent = { Text(text = stringResource(CommonStrings.common_verify_device)) },
-                leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.CheckCircle())),
-                onClick = onVerifyClicked
-            )
-        }
         if (state.showSecureBackup) {
             ListItem(
                 headlineContent = { Text(stringResource(id = CommonStrings.common_chat_backup)) },
@@ -95,8 +88,6 @@ fun PreferencesRootView(
                 trailingContent = ListItemContent.Badge.takeIf { state.showSecureBackupBadge },
                 onClick = onSecureBackupClicked,
             )
-        }
-        if (state.showCompleteVerification || state.showSecureBackup) {
             HorizontalDivider()
         }
         if (state.accountManagementUrl != null) {
@@ -222,6 +213,7 @@ internal fun PreferencesRootViewLightPreview(@PreviewParameter(MatrixUserProvide
 internal fun PreferencesRootViewDarkPreview(@PreviewParameter(MatrixUserProvider::class) matrixUser: MatrixUser) =
     ElementPreviewDark { ContentToPreview(matrixUser) }
 
+@ExcludeFromCoverage
 @Composable
 private fun ContentToPreview(matrixUser: MatrixUser) {
     PreferencesRootView(
@@ -232,7 +224,6 @@ private fun ContentToPreview(matrixUser: MatrixUser) {
         onOpenDeveloperSettings = {},
         onOpenAdvancedSettings = {},
         onOpenAbout = {},
-        onVerifyClicked = {},
         onSecureBackupClicked = {},
         onManageAccountClicked = {},
         onOpenNotificationSettings = {},

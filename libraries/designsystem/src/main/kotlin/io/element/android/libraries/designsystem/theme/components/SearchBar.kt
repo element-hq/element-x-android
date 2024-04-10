@@ -43,6 +43,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
+import io.element.android.libraries.architecture.coverage.ExcludeFromCoverage
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
@@ -269,6 +270,7 @@ internal fun SearchBarActiveWithContentPreview() = ElementThemedPreview {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
+@ExcludeFromCoverage
 private fun ContentToPreview(
     query: String = "",
     active: Boolean = false,

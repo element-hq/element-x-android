@@ -45,6 +45,7 @@ class RoomDetailsNode @AssistedInject constructor(
     private val presenter: RoomDetailsPresenter,
     private val room: MatrixRoom,
     private val analyticsService: AnalyticsService,
+    private val permalinkBuilder: PermalinkBuilder,
 ) : Node(buildContext, plugins = plugins) {
     interface Callback : Plugin {
         fun openRoomMemberList()
@@ -84,8 +85,8 @@ class RoomDetailsNode @AssistedInject constructor(
 
     private fun onShareRoom(context: Context) {
         val alias = room.alias ?: room.alternativeAliases.firstOrNull()
-        val permalinkResult = alias?.let { PermalinkBuilder.permalinkForRoomAlias(it) }
-            ?: PermalinkBuilder.permalinkForRoomId(room.roomId)
+        val permalinkResult = alias?.let { permalinkBuilder.permalinkForRoomAlias(it) }
+            ?: permalinkBuilder.permalinkForRoomId(room.roomId)
         permalinkResult.onSuccess { permalink ->
             context.startSharePlainTextIntent(
                 activityResultLauncher = null,
@@ -99,7 +100,7 @@ class RoomDetailsNode @AssistedInject constructor(
     }
 
     private fun onShareMember(context: Context, member: RoomMember) {
-        val permalinkResult = PermalinkBuilder.permalinkForUser(member.userId)
+        val permalinkResult = permalinkBuilder.permalinkForUser(member.userId)
         permalinkResult.onSuccess { permalink ->
             context.startSharePlainTextIntent(
                 activityResultLauncher = null,

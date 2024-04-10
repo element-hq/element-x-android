@@ -49,6 +49,7 @@ import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.permalink.PermalinkBuilder
+import io.element.android.libraries.matrix.api.permalink.PermalinkParser
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.Mention
 import io.element.android.libraries.matrix.api.user.CurrentSessionIdHolder
@@ -96,6 +97,8 @@ class MessageComposerPresenter @Inject constructor(
     private val messageComposerContext: MessageComposerContextImpl,
     private val richTextEditorStateFactory: RichTextEditorStateFactory,
     private val currentSessionIdHolder: CurrentSessionIdHolder,
+    private val permalinkParser: PermalinkParser,
+    private val permalinkBuilder: PermalinkBuilder,
     permissionsPresenterFactory: PermissionsPresenter.Factory,
 ) : Presenter<MessageComposerState> {
     private val cameraPermissionPresenter = permissionsPresenterFactory.create(Manifest.permission.CAMERA)
@@ -334,7 +337,7 @@ class MessageComposerPresenter @Inject constructor(
                             }
                             is MentionSuggestion.Member -> {
                                 val text = mention.roomMember.displayName?.prependIndent("@") ?: mention.roomMember.userId.value
-                                val link = PermalinkBuilder.permalinkForUser(mention.roomMember.userId).getOrNull() ?: return@launch
+                                val link = permalinkBuilder.permalinkForUser(mention.roomMember.userId).getOrNull() ?: return@launch
                                 richTextEditorState.insertMentionAtSuggestion(text = text, link = link)
                             }
                         }
@@ -345,6 +348,7 @@ class MessageComposerPresenter @Inject constructor(
 
         return MessageComposerState(
             richTextEditorState = richTextEditorState,
+            permalinkParser = permalinkParser,
             isFullScreen = isFullScreen.value,
             mode = messageComposerContext.composerMode,
             showAttachmentSourcePicker = showAttachmentSourcePicker,

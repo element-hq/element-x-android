@@ -245,17 +245,9 @@
   <string name="invite_friends_text">"Salut, parle-moi sur %1$s : %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Rageshake pour signaler un problème"</string>
-  <string name="screen_identity_confirmation_subtitle">"Vérifier cette session pour configurer votre messagerie sécurisée."</string>
-  <string name="screen_identity_confirmation_title">"Confirmez votre identité"</string>
-  <string name="screen_identity_confirmed_subtitle">"Vous pouvez désormais lire ou envoyer des messages en toute sécurité, et toute personne avec qui vous discutez peut également faire confiance à cette session."</string>
-  <string name="screen_identity_confirmed_title">"Session vérifiée"</string>
-  <string name="screen_identity_use_another_device">"Utiliser une autre session"</string>
-  <string name="screen_identity_waiting_on_other_device">"En attente d’une autre session…"</string>
   <string name="screen_media_picker_error_failed_selection">"Échec de la sélection du média, veuillez réessayer."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Échec du traitement des médias à télécharger, veuillez réessayer."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Échec du téléchargement du média, veuillez réessayer."</string>
-  <string name="screen_room_directory_search_loading_error">"Échec du chargement"</string>
-  <string name="screen_room_directory_search_title">"Annuaire des salons"</string>
   <string name="screen_room_error_failed_processing_media">"Échec du traitement des médias à télécharger, veuillez réessayer."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Impossible de récupérer les détails de l’utilisateur"</string>
   <string name="screen_room_member_details_block_alert_action">"Bloquer"</string>

@@ -40,6 +40,9 @@ dependencies {
     implementation(projects.libraries.core)
     implementation(projects.libraries.di)
     implementation(projects.libraries.matrix.api)
+    implementation(projects.libraries.uiStrings)
+    implementation(projects.libraries.troubleshoot.api)
+    implementation(projects.services.toolbox.api)
 
     implementation(projects.libraries.pushstore.api)
     implementation(projects.libraries.pushproviders.api)
@@ -51,8 +54,11 @@ dependencies {
         exclude(group = "com.google.firebase", module = "firebase-measurement-connector")
     }
 
+    testImplementation(libs.coroutines.test)
     testImplementation(libs.test.junit)
     testImplementation(libs.test.truth)
+    testImplementation(libs.test.turbine)
     testImplementation(projects.libraries.matrix.test)
     testImplementation(projects.tests.testutils)
+    testImplementation(projects.services.toolbox.test)
 }

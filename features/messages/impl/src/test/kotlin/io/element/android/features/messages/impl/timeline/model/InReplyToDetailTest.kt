@@ -26,14 +26,27 @@ import io.element.android.libraries.matrix.api.timeline.item.event.RoomMembershi
 import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageType
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_USER_ID
+import io.element.android.libraries.matrix.test.permalink.FakePermalinkParser
 import org.junit.Test
 
 class InReplyToDetailTest {
     @Test
     fun `map - with a not ready InReplyTo does not work`() {
-        assertThat(InReplyTo.Pending.map()).isNull()
-        assertThat(InReplyTo.NotLoaded(AN_EVENT_ID).map()).isNull()
-        assertThat(InReplyTo.Error.map()).isNull()
+        assertThat(
+            InReplyTo.Pending.map(
+                permalinkParser = FakePermalinkParser()
+            )
+        ).isNull()
+        assertThat(
+            InReplyTo.NotLoaded(AN_EVENT_ID).map(
+                permalinkParser = FakePermalinkParser()
+            )
+        ).isNull()
+        assertThat(
+            InReplyTo.Error.map(
+                permalinkParser = FakePermalinkParser()
+            )
+        ).isNull()
     }
 
     @Test
@@ -48,7 +61,9 @@ class InReplyToDetailTest {
                 change = MembershipChange.INVITED,
             )
         )
-        val inReplyToDetails = inReplyTo.map()
+        val inReplyToDetails = inReplyTo.map(
+            permalinkParser = FakePermalinkParser()
+        )
         assertThat(inReplyToDetails).isNotNull()
         assertThat(inReplyToDetails?.textContent).isNull()
     }
@@ -74,7 +89,11 @@ class InReplyToDetailTest {
                 )
             )
         )
-        assertThat(inReplyTo.map()?.textContent).isEqualTo("Hello!")
+        assertThat(
+            inReplyTo.map(
+                permalinkParser = FakePermalinkParser()
+            )?.textContent
+        ).isEqualTo("Hello!")
     }
 
     @Test
@@ -95,6 +114,10 @@ class InReplyToDetailTest {
                 )
             )
         )
-        assertThat(inReplyTo.map()?.textContent).isEqualTo("**Hello!**")
+        assertThat(
+            inReplyTo.map(
+                permalinkParser = FakePermalinkParser()
+            )?.textContent
+        ).isEqualTo("**Hello!**")
     }
 }

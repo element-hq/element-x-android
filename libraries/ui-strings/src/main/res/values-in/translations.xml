@@ -194,7 +194,7 @@
   <string name="common_server_not_supported">"Server tidak didukung"</string>
   <string name="common_server_url">"URL Server"</string>
   <string name="common_settings">"Pengaturan"</string>
-  <string name="common_shared_location">"Membagikan lokasi"</string>
+  <string name="common_shared_location">"Lokasi terbagi"</string>
   <string name="common_signing_out">"Mengeluarkan dari akun"</string>
   <string name="common_starting_chat">"Memulai obrolan…"</string>
   <string name="common_sticker">"Stiker"</string>
@@ -241,10 +241,6 @@
   <string name="invite_friends_text">"Hai, bicaralah dengan saya di %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Rageshake untuk melaporkan kutu"</string>
-  <string name="screen_identity_confirmation_subtitle">"Verifikasi perangkat ini untuk menyiapkan perpesanan aman."</string>
-  <string name="screen_identity_confirmation_title">"Konfirmasi bahwa ini Anda"</string>
-  <string name="screen_identity_confirmed_subtitle">"Sekarang Anda dapat membaca atau mengirim pesan dengan aman, dan siapa pun yang mengobrol dengan Anda juga dapat mempercayai perangkat ini."</string>
-  <string name="screen_identity_confirmed_title">"Perangkat terverifikasi"</string>
   <string name="screen_media_picker_error_failed_selection">"Gagal memilih media, silakan coba lagi."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Gagal memproses media untuk diunggah, silakan coba lagi."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Gagal mengunggah media, silakan coba lagi."</string>
@@ -253,6 +249,7 @@
   <string name="screen_room_member_details_block_alert_action">"Blokir"</string>
   <string name="screen_room_member_details_block_alert_description">"Pengguna yang diblokir tidak akan dapat mengirim Anda pesan dan semua pesan mereka akan disembunyikan. Anda dapat membuka blokirnya kapan saja."</string>
   <string name="screen_room_member_details_block_user">"Blokir pengguna"</string>
+  <string name="screen_room_member_details_title">"Profil"</string>
   <string name="screen_room_member_details_unblock_alert_action">"Buka blokir"</string>
   <string name="screen_room_member_details_unblock_alert_description">"Anda akan dapat melihat semua pesan dari mereka lagi."</string>
   <string name="screen_room_member_details_unblock_user">"Buka blokir pengguna"</string>

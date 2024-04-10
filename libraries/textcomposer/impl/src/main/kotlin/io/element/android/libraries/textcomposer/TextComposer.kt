@@ -63,6 +63,8 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.TransactionId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.media.MediaSource
+import io.element.android.libraries.matrix.api.permalink.PermalinkData
+import io.element.android.libraries.matrix.api.permalink.PermalinkParser
 import io.element.android.libraries.matrix.ui.components.A_BLUR_HASH
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnail
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailInfo
@@ -98,6 +100,7 @@ import kotlin.time.Duration.Companion.seconds
 fun TextComposer(
     state: RichTextEditorState,
     voiceMessageState: VoiceMessageState,
+    permalinkParser: PermalinkParser,
     composerMode: MessageComposerMode,
     enableTextFormatting: Boolean,
     enableVoiceMessages: Boolean,
@@ -152,7 +155,10 @@ fun TextComposer(
 
     val textInput: @Composable () -> Unit = remember(state, subcomposing, composerMode, onResetComposerMode, onError) {
         @Composable {
-            val mentionSpanProvider = rememberMentionSpanProvider(currentUserId)
+            val mentionSpanProvider = rememberMentionSpanProvider(
+                currentUserId = currentUserId,
+                permalinkParser = permalinkParser,
+            )
             TextInput(
                 state = state,
                 subcomposing = subcomposing,
@@ -907,6 +913,10 @@ private fun ATextComposer(
         state = richTextEditorState,
         showTextFormatting = showTextFormatting,
         voiceMessageState = voiceMessageState,
+        permalinkParser = object : PermalinkParser {
+            override fun parse(uriString: String): PermalinkData = TODO("Not yet implemented")
+            override fun parse(uri: Uri): PermalinkData = TODO("Not yet implemented")
+        },
         composerMode = composerMode,
         enableTextFormatting = enableTextFormatting,
         enableVoiceMessages = enableVoiceMessages,

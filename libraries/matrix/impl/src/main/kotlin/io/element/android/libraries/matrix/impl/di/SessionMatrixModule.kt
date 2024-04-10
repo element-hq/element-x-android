@@ -26,6 +26,7 @@ import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import io.element.android.libraries.matrix.api.media.MatrixMediaLoader
 import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsService
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
+import io.element.android.libraries.matrix.api.roomdirectory.RoomDirectoryService
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import kotlinx.coroutines.CoroutineScope
@@ -67,5 +68,10 @@ object SessionMatrixModule {
     @Provides
     fun provideSessionCoroutineScope(matrixClient: MatrixClient): CoroutineScope {
         return matrixClient.sessionCoroutineScope
+    }
+
+    @Provides
+    fun providesRoomDirectoryService(matrixClient: MatrixClient): RoomDirectoryService {
+        return matrixClient.roomDirectoryService()
     }
 }

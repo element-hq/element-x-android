@@ -35,12 +35,17 @@ class NotificationSettingsNode @AssistedInject constructor(
 ) : Node(buildContext, plugins = plugins) {
     interface Callback : Plugin {
         fun editDefaultNotificationMode(isOneToOne: Boolean)
+        fun onTroubleshootNotificationsClicked()
     }
 
     private val callbacks = plugins<Callback>()
 
     private fun openEditDefault(isOneToOne: Boolean) {
         callbacks.forEach { it.editDefaultNotificationMode(isOneToOne) }
+    }
+
+    private fun onTroubleshootNotificationsClicked() {
+        callbacks.forEach { it.onTroubleshootNotificationsClicked() }
     }
 
     @Composable
@@ -50,6 +55,7 @@ class NotificationSettingsNode @AssistedInject constructor(
             state = state,
             onOpenEditDefault = { openEditDefault(isOneToOne = it) },
             onBackPressed = ::navigateUp,
+            onTroubleshootNotificationsClicked = ::onTroubleshootNotificationsClicked,
             modifier = modifier,
         )
     }

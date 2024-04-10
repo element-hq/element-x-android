@@ -51,6 +51,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.VideoMessageT
 import io.element.android.libraries.matrix.api.timeline.item.event.VoiceMessageType
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.FakeMatrixClient
+import io.element.android.libraries.matrix.test.permalink.FakePermalinkParser
 import io.element.android.libraries.matrix.test.timeline.aPollContent
 import io.element.android.libraries.matrix.test.timeline.aProfileChangeMessageContent
 import io.element.android.libraries.matrix.test.timeline.anEventTimelineItem
@@ -78,7 +79,8 @@ class DefaultRoomLastMessageFormatterTest {
             sp = AndroidStringProvider(context.resources),
             roomMembershipContentFormatter = RoomMembershipContentFormatter(fakeMatrixClient, stringProvider),
             profileChangeContentFormatter = ProfileChangeContentFormatter(stringProvider),
-            stateContentFormatter = StateContentFormatter(stringProvider)
+            stateContentFormatter = StateContentFormatter(stringProvider),
+            permalinkParser = FakePermalinkParser(),
         )
     }
 

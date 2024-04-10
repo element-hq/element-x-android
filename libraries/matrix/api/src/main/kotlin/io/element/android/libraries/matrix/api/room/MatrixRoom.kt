@@ -35,13 +35,8 @@ import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
 import io.element.android.libraries.matrix.api.timeline.ReceiptType
 import io.element.android.libraries.matrix.api.widget.MatrixWidgetDriver
 import io.element.android.libraries.matrix.api.widget.MatrixWidgetSettings
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.map
 import java.io.Closeable
 import java.io.File
 
@@ -55,6 +50,7 @@ interface MatrixRoom : Closeable {
     val topic: String?
     val avatarUrl: String?
     val isEncrypted: Boolean
+    val isSpace: Boolean
     val isDirect: Boolean
     val isPublic: Boolean
     val activeMemberCount: Long
@@ -85,6 +81,12 @@ interface MatrixRoom : Closeable {
      * Try to load the room members and update the membersFlow.
      */
     suspend fun updateMembers()
+
+    /**
+     * Get the members of the room. Note: generally this should not be used, please use
+     * [membersStateFlow] and [updateMembers] instead.
+     */
+    suspend fun getMembers(limit: Int = 5): Result<List<RoomMember>>
 
     /**
      * Will return an updated member or an error.
@@ -181,18 +183,6 @@ interface MatrixRoom : Closeable {
 
     suspend fun canUserJoinCall(userId: UserId): Result<Boolean> =
         canUserSendState(userId, StateEventType.CALL_MEMBER)
-
-    fun usersWithRole(role: RoomMember.Role): Flow<ImmutableList<RoomMember>> {
-        return roomInfoFlow
-            .map { it.userPowerLevels.filter { (_, powerLevel) -> RoomMember.Role.forPowerLevel(powerLevel) == role } }
-            .distinctUntilChanged()
-            .combine(membersStateFlow) { powerLevels, membersState ->
-                membersState.roomMembers()
-                    .orEmpty()
-                    .filter { powerLevels.containsKey(it.userId) }
-                    .toPersistentList()
-            }
-    }
 
     suspend fun updateAvatar(mimeType: String, data: ByteArray): Result<Unit>
 
@@ -326,6 +316,13 @@ interface MatrixRoom : Closeable {
      * @return The resulting [MatrixWidgetDriver], or a failure.
      */
     fun getWidgetDriver(widgetSettings: MatrixWidgetSettings): Result<MatrixWidgetDriver>
+
+    /**
+     * Get the permalink for the provided [eventId].
+     * @param eventId The event id to get the permalink for.
+     * @return The permalink, or a failure.
+     */
+    suspend fun getPermalinkFor(eventId: EventId): Result<String>
 
     override fun close() = destroy()
 }

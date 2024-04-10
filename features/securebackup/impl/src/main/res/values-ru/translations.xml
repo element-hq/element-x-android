@@ -4,11 +4,28 @@
   <string name="screen_chat_backup_key_backup_action_enable">"Включить резервное копирование"</string>
   <string name="screen_chat_backup_key_backup_description">"Резервное копирование гарантирует, что вы не потеряете историю сообщений. %1$s."</string>
   <string name="screen_chat_backup_key_backup_title">"Резервное копирование"</string>
-  <string name="screen_chat_backup_recovery_action_change">"Изменить ключ восстановления"</string>
-  <string name="screen_chat_backup_recovery_action_confirm">"Подтвердить ключ восстановления"</string>
+  <string name="screen_chat_backup_recovery_action_change">
+    "Изменить "
+    <b>"ключ восстановления"</b>
+  </string>
+  <string name="screen_chat_backup_recovery_action_confirm">
+    "Ввести "
+    <b>"ключ восстановления"</b>
+  </string>
   <string name="screen_chat_backup_recovery_action_confirm_description">"Резервная копия чата в настоящее время не синхронизирована."</string>
   <string name="screen_chat_backup_recovery_action_setup">"Настроить восстановление"</string>
   <string name="screen_chat_backup_recovery_action_setup_description">"Получите доступ к зашифрованным сообщениям, если вы потеряете все свои устройства или выйдете из системы %1$s отовсюду."</string>
+  <string name="screen_create_new_recovery_key_list_item_1">"Откройте Element на настольном устройстве"</string>
+  <string name="screen_create_new_recovery_key_list_item_2">"Войдите в свой аккаунт еще раз"</string>
+  <string name="screen_create_new_recovery_key_list_item_3">"Когда вас попросят подтвердить устройство, выберите %1$s"</string>
+  <string name="screen_create_new_recovery_key_list_item_3_reset_all">"“Сбросить все”"</string>
+  <string name="screen_create_new_recovery_key_list_item_4">"Следуйте инструкциям, чтобы создать новый ключ восстановления"</string>
+  <string name="screen_create_new_recovery_key_list_item_5">
+    "Сохраните новый "
+    <b>"ключ восстановления"</b>
+    " в менеджере паролей или зашифрованной заметке"
+  </string>
+  <string name="screen_create_new_recovery_key_title">"Сбросьте шифрование вашей учетной записи с помощью другого устройства."</string>
   <string name="screen_key_backup_disable_confirmation_action_turn_off">"Выключить"</string>
   <string name="screen_key_backup_disable_confirmation_description">"Вы потеряете зашифрованные сообщения, если выйдете из всех устройств."</string>
   <string name="screen_key_backup_disable_confirmation_title">"Вы действительно хотите отключить резервное копирование?"</string>
@@ -17,27 +34,62 @@
   <string name="screen_key_backup_disable_description_point_2">"Потерять доступ к зашифрованным сообщениям, если вы вышли из %1$s любой точки мира"</string>
   <string name="screen_key_backup_disable_title">"Вы действительно хотите отключить резервное копирование?"</string>
   <string name="screen_recovery_key_change_description">"Получите новый ключ восстановления, если вы потеряли существующий. После смены ключа восстановления старый ключ больше не будет работать."</string>
-  <string name="screen_recovery_key_change_generate_key">"Создать новый ключ восстановления"</string>
+  <string name="screen_recovery_key_change_generate_key">
+    "Создать новый "
+    <b>"ключ восстановления"</b>
+  </string>
   <string name="screen_recovery_key_change_generate_key_description">"Убедитесь, что вы можете хранить ключ восстановления в безопасном месте"</string>
-  <string name="screen_recovery_key_change_success">"Ключ восстановления изменен"</string>
+  <string name="screen_recovery_key_change_success">
+    <b>"Ключ восстановления"</b>
+    " изменен"
+  </string>
   <string name="screen_recovery_key_change_title">"Изменить ключ восстановления?"</string>
-  <string name="screen_recovery_key_confirm_description">"Введите ключ восстановления, чтобы подтвердить доступ к резервной копии чата."</string>
+  <string name="screen_recovery_key_confirm_create_new_recovery_key">
+    "Создать новый "
+    <b>"ключ восстановления"</b>
+  </string>
+  <string name="screen_recovery_key_confirm_description">"Убедитесь, что никто не видит этот экран!"</string>
   <string name="screen_recovery_key_confirm_error_content">"Пожалуйста, попробуйте еще раз, чтобы подтвердить доступ к резервной копии чата."</string>
-  <string name="screen_recovery_key_confirm_error_title">"Неверный ключ восстановления"</string>
-  <string name="screen_recovery_key_confirm_key_description">"Введите 48 значный код."</string>
+  <string name="screen_recovery_key_confirm_error_title">
+    "Неверный "
+    <b>"ключ восстановления"</b>
+  </string>
+  <string name="screen_recovery_key_confirm_key_description">"Если у вас есть пароль для восстановления или секретный пароль/ключ, это тоже сработает."</string>
+  <string name="screen_recovery_key_confirm_key_label">
+    <b>"Ключ восстановления"</b>
+    " или пароль"
+  </string>
   <string name="screen_recovery_key_confirm_key_placeholder">"Вход…"</string>
-  <string name="screen_recovery_key_confirm_success">"Ключ восстановления подтвержден"</string>
-  <string name="screen_recovery_key_confirm_title">"Подтвердите ключ восстановления"</string>
-  <string name="screen_recovery_key_copied_to_clipboard">"Ключ восстановления скопирован"</string>
+  <string name="screen_recovery_key_confirm_success">
+    <b>"Ключ восстановления"</b>
+    " подтвержден"
+  </string>
+  <string name="screen_recovery_key_confirm_title">
+    "Подтвердите "
+    <b>"ключ восстановления"</b>
+  </string>
+  <string name="screen_recovery_key_copied_to_clipboard">
+    <b>"Ключ восстановления"</b>
+    " скопирован"
+  </string>
   <string name="screen_recovery_key_generating_key">"Генерация…"</string>
-  <string name="screen_recovery_key_save_action">"Сохранить ключ восстановления"</string>
+  <string name="screen_recovery_key_save_action">
+    "Сохранить "
+    <b>"ключ восстановления"</b>
+  </string>
   <string name="screen_recovery_key_save_description">"Запишите ключ восстановления в безопасном месте или сохраните его в менеджере паролей."</string>
   <string name="screen_recovery_key_save_key_description">"Нажмите, чтобы скопировать ключ восстановления"</string>
-  <string name="screen_recovery_key_save_title">"Сохраните ключ восстановления"</string>
+  <string name="screen_recovery_key_save_title">
+    "Сохраните "
+    <b>"ключ восстановления"</b>
+  </string>
   <string name="screen_recovery_key_setup_confirmation_description">"После этого шага вы не сможете получить доступ к новому ключу восстановления."</string>
   <string name="screen_recovery_key_setup_confirmation_title">"Вы сохранили ключ восстановления?"</string>
   <string name="screen_recovery_key_setup_description">"Резервная копия чата защищена ключом восстановления. Если после настройки вам понадобится новый ключ восстановления, вы можете создать его заново, выбрав «Изменить ключ восстановления»."</string>
-  <string name="screen_recovery_key_setup_generate_key">"Сгенерируйте свой ключ восстановления"</string>
+  <string name="screen_recovery_key_setup_generate_key">
+    "Создайте "
+    <b>"ключ восстановления"</b>
+  </string>
   <string name="screen_recovery_key_setup_generate_key_description">"Убедитесь, что вы можете хранить ключ восстановления в безопасном месте"</string>
   <string name="screen_recovery_key_setup_success">"Настройка восстановления выполнена успешно"</string>
   <string name="screen_recovery_key_setup_title">"Настроить восстановление"</string>

@@ -29,7 +29,11 @@
   <string name="screen_room_change_role_confirm_demote_self_action">"Lefokozás"</string>
   <string name="screen_room_change_role_confirm_demote_self_description">"Ezt a változtatást nem fogja tudni visszavonni, mivel lefokozza magát, ha Ön az utolsó jogosultságokkal rendelkező felhasználó a szobában, akkor lehetetlen lesz visszaszerezni a jogosultságokat."</string>
   <string name="screen_room_change_role_confirm_demote_self_title">"Lefokozza magát?"</string>
+  <string name="screen_room_change_role_invited_member_name">"%1$s (függőben)"</string>
   <string name="screen_room_change_role_moderators_title">"Moderátorok szerkesztése"</string>
+  <string name="screen_room_change_role_section_administrators">"Rendszergazdák"</string>
+  <string name="screen_room_change_role_section_moderators">"Moderátorok"</string>
+  <string name="screen_room_change_role_section_users">"Tagok"</string>
   <string name="screen_room_change_role_unsaved_changes_description">"Mentetlen módosításai vannak."</string>
   <string name="screen_room_change_role_unsaved_changes_title">"Menti a változtatásokat?"</string>
   <string name="screen_room_details_add_topic_title">"Téma hozzáadása"</string>

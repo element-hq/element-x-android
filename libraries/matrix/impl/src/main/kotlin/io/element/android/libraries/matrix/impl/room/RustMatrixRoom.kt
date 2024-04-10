@@ -16,6 +16,7 @@
 
 package io.element.android.libraries.matrix.impl.room
 
+import io.element.android.appconfig.MatrixConfiguration
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.coroutine.childScope
 import io.element.android.libraries.matrix.api.core.EventId
@@ -70,8 +71,13 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.EventTimelineItem
@@ -163,7 +169,11 @@ class RustMatrixRoom(
     override val syncUpdateFlow: StateFlow<Long> = _syncUpdateFlow.asStateFlow()
 
     init {
-        timeline.membershipChangeEventReceived
+        val powerLevelChanges = roomInfoFlow.map { it.userPowerLevels }.distinctUntilChanged()
+        val membershipChanges = timeline.membershipChangeEventReceived.onStart { emit(Unit) }
+        combine(membershipChanges, powerLevelChanges) { _, _ -> }
+            // Skip initial one
+            .drop(1)
             // The new events should already be in the SDK cache, no need to fetch them from the server
             .onEach { roomMemberListFetcher.fetchRoomMembers(source = RoomMemberListFetcher.Source.CACHE) }
             .launchIn(roomCoroutineScope)
@@ -182,45 +192,40 @@ class RustMatrixRoom(
     }
 
     override val name: String?
-        get() {
-            return roomListItem.name()
-        }
+        get() = runCatching { roomListItem.name() }.getOrDefault(null)
 
     override val displayName: String
-        get() {
-            return innerRoom.displayName()
-        }
+        get() = runCatching { innerRoom.displayName() }.getOrDefault("")
 
     override val topic: String?
-        get() {
-            return innerRoom.topic()
-        }
+        get() = runCatching { innerRoom.topic() }.getOrDefault(null)
 
     override val avatarUrl: String?
-        get() {
-            return roomListItem.avatarUrl() ?: innerRoom.avatarUrl()
-        }
+        get() = runCatching { roomListItem.avatarUrl() ?: innerRoom.avatarUrl() }.getOrDefault(null)
 
     override val isEncrypted: Boolean
         get() = runCatching { innerRoom.isEncrypted() }.getOrDefault(false)
 
     override val alias: String?
-        get() = innerRoom.canonicalAlias()
+        get() = runCatching { innerRoom.canonicalAlias() }.getOrDefault(null)
 
     override val alternativeAliases: List<String>
-        get() = innerRoom.alternativeAliases()
+        get() = runCatching { innerRoom.alternativeAliases() }.getOrDefault(emptyList())
 
     override val isPublic: Boolean
-        get() = innerRoom.isPublic()
+        get() = runCatching { innerRoom.isPublic() }.getOrDefault(false)
+
+    override val isSpace: Boolean
+        get() = runCatching { innerRoom.isSpace() }.getOrDefault(false)
 
     override val isDirect: Boolean
-        get() = innerRoom.isDirect()
+        get() = runCatching { innerRoom.isDirect() }.getOrDefault(false)
 
     override val joinedMemberCount: Long
-        get() = innerRoom.joinedMembersCount().toLong()
+        get() = runCatching { innerRoom.joinedMembersCount().toLong() }.getOrDefault(0)
 
     override val activeMemberCount: Long
-        get() = innerRoom.activeMembersCount().toLong()
+        get() = runCatching { innerRoom.activeMembersCount().toLong() }.getOrDefault(0)
 
     override suspend fun updateMembers() {
         val useCache = membersStateFlow.value is MatrixRoomMembersState.Unknown
@@ -230,6 +235,16 @@ class RustMatrixRoom(
             RoomMemberListFetcher.Source.SERVER
         }
         roomMemberListFetcher.fetchRoomMembers(source = source)
+    }
+
+    override suspend fun getMembers(limit: Int) = withContext(roomDispatcher) {
+        runCatching {
+            innerRoom.members().use {
+                it.nextChunk(limit.toUInt()).orEmpty().map { roomMember ->
+                    RoomMemberMapper.map(roomMember)
+                }
+            }
+        }
     }
 
     override suspend fun getUpdatedMember(userId: UserId): Result<RoomMember> = withContext(roomDispatcher) {
@@ -714,6 +729,19 @@ class RustMatrixRoom(
                 }
             },
         )
+    }
+
+    override suspend fun getPermalinkFor(eventId: EventId): Result<String> {
+        // FIXME Use the SDK API once https://github.com/matrix-org/matrix-rust-sdk/issues/3259 has been done
+        // Now use a simple builder
+        return runCatching {
+            buildString {
+                append(MatrixConfiguration.MATRIX_TO_PERMALINK_BASE_URL)
+                append(roomId.value)
+                append("/")
+                append(eventId.value)
+            }
+        }
     }
 
     private fun sendAttachment(files: List<File>, handle: () -> SendAttachmentJoinHandle): Result<MediaUploadHandler> {

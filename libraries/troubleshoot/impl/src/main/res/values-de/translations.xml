@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="troubleshoot_notifications_screen_action">"Tests durchführen"</string>
+  <string name="troubleshoot_notifications_screen_action_again">"Tests erneut durchführen"</string>
+  <string name="troubleshoot_notifications_screen_failure">"Einige Tests sind fehlgeschlagen. Bitte überprüfe die Details."</string>
+  <string name="troubleshoot_notifications_screen_notice">"Führe die Tests durch, um Probleme zu erkennen, die dazu führen können, dass sich die Benachrichtigungen nicht wie erwartet verhalten."</string>
+  <string name="troubleshoot_notifications_screen_quick_fix_action">"Versuche das Problem zu beheben"</string>
+  <string name="troubleshoot_notifications_screen_success">"Alle Tests wurden erfolgreich bestanden."</string>
+  <string name="troubleshoot_notifications_screen_title">"Fehlerbehebung für Benachrichtigungen"</string>
+  <string name="troubleshoot_notifications_screen_waiting">"Einige Tests erfordern deine Aufmerksamkeit. Bitte überprüfe die Details."</string>
+</resources>

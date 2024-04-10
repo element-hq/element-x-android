@@ -59,8 +59,8 @@ fun InfoListItemMolecule(
                 color = backgroundColor,
                 shape = backgroundShape,
             )
-            .padding(vertical = 12.dp, horizontal = 20.dp),
-        horizontalArrangement = Arrangement.spacedBy(16.dp),
+            .padding(vertical = 12.dp, horizontal = 18.dp),
+        horizontalArrangement = Arrangement.spacedBy(12.dp),
     ) {
         icon()
         message()
