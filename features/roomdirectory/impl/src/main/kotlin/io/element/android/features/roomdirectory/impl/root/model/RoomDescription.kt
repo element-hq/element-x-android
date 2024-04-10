@@ -42,12 +42,8 @@ fun MatrixRoomDescription.toFeatureModel(): RoomDescription {
         roomId = roomId,
         name = name(),
         description = description(),
-        avatarData = AvatarData(
-            id = roomId.value,
-            name = name,
-            url = avatarUrl,
-            size = AvatarSize.RoomDirectoryItem,
-        ),
+        avatarUrl = avatarUrl,
+        numberOfMembers = numberOfMembers,
         canBeJoined = joinRule == MatrixRoomDescription.JoinRule.PUBLIC,
     )
 }

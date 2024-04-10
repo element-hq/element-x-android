@@ -40,6 +40,7 @@ dependencies {
     implementation(projects.libraries.matrixui)
     implementation(projects.libraries.designsystem)
     implementation(projects.features.invite.api)
+    implementation(projects.features.roomdirectory.api)
     implementation(projects.libraries.uiStrings)
 
 

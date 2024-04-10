@@ -16,13 +16,26 @@
 
 package io.element.android.features.roomdirectory.api
 
+import android.os.Parcelable
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
+import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.core.RoomId
+import kotlinx.parcelize.Parcelize
 
+@Parcelize
 data class RoomDescription(
     val roomId: RoomId,
     val name: String,
     val description: String,
-    val avatarData: AvatarData,
+    val avatarUrl: String?,
     val canBeJoined: Boolean,
-)
+    val numberOfMembers: Long,
+) : Parcelable {
+
+    fun avatarData(size: AvatarSize) = AvatarData(
+        id = roomId.value,
+        name = name,
+        url = avatarUrl,
+        size = size,
+    )
+}

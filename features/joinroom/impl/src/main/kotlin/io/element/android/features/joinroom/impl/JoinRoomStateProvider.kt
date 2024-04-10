@@ -26,7 +26,7 @@ open class JoinRoomStateProvider : PreviewParameterProvider<JoinRoomState> {
     override val values: Sequence<JoinRoomState>
         get() = sequenceOf(
             aJoinRoomState(
-                roomInfo = AsyncData.Uninitialized
+                contentState = AsyncData.Uninitialized
             ),
             aJoinRoomState(
                 joinAuthorisationStatus = JoinAuthorisationStatus.CanJoin
@@ -41,14 +41,13 @@ open class JoinRoomStateProvider : PreviewParameterProvider<JoinRoomState> {
 }
 
 fun aJoinRoomState(
-    roomInfo: AsyncData<RoomInfo> = AsyncData.Success(
-        RoomInfo(
+    contentState: AsyncData<ContentState> = AsyncData.Success(
+        ContentState(
             roomId = RoomId("@exa:matrix.org"),
-            roomName = "Element x android",
-            roomAlias = "#exa:matrix.org",
-            memberCount = null,
+            name = "Element x android",
+            description  = "#exa:matrix.org",
+            numberOfMembers = null,
             isDirect = false,
-            topic = null,
             roomAvatarUrl = null
         )
     ),
@@ -56,7 +55,7 @@ fun aJoinRoomState(
     acceptDeclineInviteState: AcceptDeclineInviteState = anAcceptDeclineInviteState(),
     eventSink: (JoinRoomEvents) -> Unit = {}
 ) = JoinRoomState(
-    roomInfo = roomInfo,
+    contentState = contentState,
     joinAuthorisationStatus = joinAuthorisationStatus,
     acceptDeclineInviteState = acceptDeclineInviteState,
     eventSink = eventSink

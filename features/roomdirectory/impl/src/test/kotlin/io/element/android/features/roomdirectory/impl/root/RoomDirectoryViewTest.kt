@@ -105,7 +105,7 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setRoomD
     setContent {
         RoomDirectoryView(
             state = state,
-            onRoomJoined = onRoomJoined,
+            onRoomClicked = onRoomJoined,
             onBackPressed = onBackPressed,
         )
     }

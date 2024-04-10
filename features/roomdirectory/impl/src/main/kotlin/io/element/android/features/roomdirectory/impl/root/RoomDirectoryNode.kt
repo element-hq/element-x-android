@@ -25,6 +25,7 @@ import com.bumble.appyx.core.plugin.plugins
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
+import io.element.android.features.roomdirectory.api.RoomDescription
 import io.element.android.features.roomdirectory.api.RoomDirectoryEntryPoint
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -35,9 +36,16 @@ class RoomDirectoryNode @AssistedInject constructor(
     @Assisted plugins: List<Plugin>,
     private val presenter: RoomDirectoryPresenter,
 ) : Node(buildContext, plugins = plugins) {
+
+    private fun onResultClicked(roomDescription: RoomDescription) {
+        plugins<RoomDirectoryEntryPoint.Callback>().forEach {
+            it.onResultClicked(roomDescription)
+        }
+    }
+
     private fun onRoomJoined(roomId: RoomId) {
         plugins<RoomDirectoryEntryPoint.Callback>().forEach {
-            it.onOpenRoom(roomId)
+            it.onRoomJoined(roomId)
         }
     }
 
@@ -47,6 +55,7 @@ class RoomDirectoryNode @AssistedInject constructor(
         RoomDirectoryView(
             state = state,
             onRoomJoined = ::onRoomJoined,
+            onResultClicked = ::onResultClicked,
             onBackPressed = ::navigateUp,
             modifier = modifier
         )

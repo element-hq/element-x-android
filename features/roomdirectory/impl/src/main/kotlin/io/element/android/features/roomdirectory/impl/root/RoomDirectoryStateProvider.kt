@@ -19,8 +19,6 @@ package io.element.android.features.roomdirectory.impl.root
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.roomdirectory.api.RoomDescription
 import io.element.android.libraries.architecture.AsyncAction
-import io.element.android.libraries.designsystem.components.avatar.AvatarData
-import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.core.RoomId
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -71,25 +69,17 @@ fun aRoomDescriptionList(): ImmutableList<RoomDescription> {
             roomId = RoomId("!exa:matrix.org"),
             name = "Element X Android",
             description = "Element X is a secure, private and decentralized messenger.",
-            avatarData = AvatarData(
-                id = "!exa:matrix.org",
-                name = "Element X Android",
-                url = null,
-                size = AvatarSize.RoomDirectoryItem
-            ),
+            avatarUrl = null,
             canBeJoined = true,
+            numberOfMembers = 2765,
         ),
         RoomDescription(
             roomId = RoomId("!exi:matrix.org"),
             name = "Element X iOS",
             description = "Element X is a secure, private and decentralized messenger.",
-            avatarData = AvatarData(
-                id = "!exi:matrix.org",
-                name = "Element X iOS",
-                url = null,
-                size = AvatarSize.RoomDirectoryItem
-            ),
+            avatarUrl = null,
             canBeJoined = false,
+            numberOfMembers = 356,
         )
     )
 }

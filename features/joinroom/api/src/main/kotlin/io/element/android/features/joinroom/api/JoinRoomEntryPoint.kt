@@ -18,9 +18,11 @@ package io.element.android.features.joinroom.api
 
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
+import io.element.android.features.roomdirectory.api.RoomDescription
 import io.element.android.libraries.architecture.FeatureEntryPoint
 import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.matrix.api.core.RoomId
+import java.util.Optional
 
 interface JoinRoomEntryPoint : FeatureEntryPoint {
 
@@ -28,6 +30,7 @@ interface JoinRoomEntryPoint : FeatureEntryPoint {
 
     data class Inputs(
         val roomId: RoomId,
+        val roomDescription: Optional<RoomDescription>,
     ) : NodeInputs
 }
 

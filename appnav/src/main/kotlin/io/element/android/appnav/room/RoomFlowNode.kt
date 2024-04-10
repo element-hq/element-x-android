@@ -37,6 +37,7 @@ import io.element.android.anvilannotations.ContributesNode
 import io.element.android.appnav.room.joined.JoinedRoomFlowNode
 import io.element.android.appnav.room.joined.JoinedRoomLoadedFlowNode
 import io.element.android.features.joinroom.api.JoinRoomEntryPoint
+import io.element.android.features.roomdirectory.api.RoomDescription
 import io.element.android.libraries.architecture.BackstackView
 import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.architecture.NodeInputs
@@ -53,6 +54,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.parcelize.Parcelize
 import timber.log.Timber
+import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 @ContributesNode(SessionScope::class)
@@ -72,6 +74,7 @@ class RoomFlowNode @AssistedInject constructor(
 ) {
     data class Inputs(
         val roomId: RoomId,
+        val roomDescription: Optional<RoomDescription>,
         val initialElement: RoomNavigationTarget = RoomNavigationTarget.Messages,
     ) : NodeInputs
 
@@ -102,6 +105,7 @@ class RoomFlowNode @AssistedInject constructor(
         }
             .launchIn(lifecycleScope)
 
+        // When leaving the room from this session only, navigate up.
         roomMembershipObserver.updates
             .filter { update -> update.roomId == inputs.roomId && !update.isUserInRoom }
             .onEach {
@@ -114,7 +118,7 @@ class RoomFlowNode @AssistedInject constructor(
         return when (navTarget) {
             NavTarget.Loading -> loadingNode(buildContext)
             NavTarget.JoinRoom -> {
-                val inputs = JoinRoomEntryPoint.Inputs(inputs.roomId)
+                val inputs = JoinRoomEntryPoint.Inputs(inputs.roomId, roomDescription = inputs.roomDescription)
                 joinRoomEntryPoint.createNode(this, buildContext, inputs)
             }
             NavTarget.JoinedRoom -> {

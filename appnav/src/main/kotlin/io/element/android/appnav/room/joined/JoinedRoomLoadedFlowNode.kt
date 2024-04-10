@@ -44,7 +44,6 @@ import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
-import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
 import io.element.android.services.appnavstate.api.AppNavigationStateService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -60,10 +59,9 @@ class JoinedRoomLoadedFlowNode @AssistedInject constructor(
     private val appNavigationStateService: AppNavigationStateService,
     private val appCoroutineScope: CoroutineScope,
     roomComponentFactory: RoomComponentFactory,
-    roomMembershipObserver: RoomMembershipObserver,
 ) : BaseFlowNode<JoinedRoomLoadedFlowNode.NavTarget>(
     backstack = BackStack(
-        initialElement = when(plugins.filterIsInstance(Inputs::class.java).first().initialElement){
+        initialElement = when (plugins.filterIsInstance(Inputs::class.java).first().initialElement) {
             RoomNavigationTarget.Messages -> NavTarget.Messages
             RoomNavigationTarget.Details -> NavTarget.RoomDetails
             RoomNavigationTarget.NotificationSettings -> NavTarget.RoomNotificationSettings

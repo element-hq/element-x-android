@@ -51,6 +51,7 @@ import io.element.android.features.roomdirectory.api.RoomDescription
 import io.element.android.features.roomdirectory.impl.R
 import io.element.android.libraries.designsystem.components.async.AsyncActionView
 import io.element.android.libraries.designsystem.components.avatar.Avatar
+import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -70,12 +71,13 @@ import kotlinx.collections.immutable.ImmutableList
 @Composable
 fun RoomDirectoryView(
     state: RoomDirectoryState,
+    onResultClicked: (RoomDescription) -> Unit,
     onRoomJoined: (RoomId) -> Unit,
     onBackPressed: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    fun joinRoom(roomId: RoomId) {
-        state.eventSink(RoomDirectoryEvents.JoinRoom(roomId))
+    fun joinRoom(roomDescription: RoomDescription) {
+        state.eventSink(RoomDirectoryEvents.JoinRoom(roomDescription.roomId))
     }
 
     Scaffold(
@@ -86,10 +88,11 @@ fun RoomDirectoryView(
         content = { padding ->
             RoomDirectoryContent(
                 state = state,
-                onResultClicked = ::joinRoom,
+                onResultClicked = onResultClicked,
+                onJoinClicked = ::joinRoom,
                 modifier = Modifier
-                    .padding(padding)
-                    .consumeWindowInsets(padding)
+                        .padding(padding)
+                        .consumeWindowInsets(padding)
             )
         }
     )
@@ -128,7 +131,8 @@ private fun RoomDirectoryTopBar(
 @Composable
 private fun RoomDirectoryContent(
     state: RoomDirectoryState,
-    onResultClicked: (RoomId) -> Unit,
+    onResultClicked: (RoomDescription) -> Unit,
+    onJoinClicked: (RoomDescription) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(modifier = modifier) {
@@ -143,6 +147,7 @@ private fun RoomDirectoryContent(
             displayLoadMoreIndicator = state.displayLoadMoreIndicator,
             displayEmptyState = state.displayEmptyState,
             onResultClicked = onResultClicked,
+            onJoinClicked = onJoinClicked,
             onReachedLoadMore = { state.eventSink(RoomDirectoryEvents.LoadMore) },
         )
     }
@@ -153,7 +158,8 @@ private fun RoomDirectoryRoomList(
     roomDescriptions: ImmutableList<RoomDescription>,
     displayLoadMoreIndicator: Boolean,
     displayEmptyState: Boolean,
-    onResultClicked: (RoomId) -> Unit,
+    onResultClicked: (RoomDescription) -> Unit,
+    onJoinClicked: (RoomDescription) -> Unit,
     onReachedLoadMore: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -161,7 +167,12 @@ private fun RoomDirectoryRoomList(
         items(roomDescriptions) { roomDescription ->
             RoomDirectoryRoomRow(
                 roomDescription = roomDescription,
-                onClick = onResultClicked,
+                onClick = {
+                    onResultClicked(roomDescription)
+                },
+                onJoinClick = {
+                    onJoinClicked(roomDescription)
+                },
             )
         }
         if (displayEmptyState) {
@@ -188,10 +199,10 @@ private fun RoomDirectoryRoomList(
 @Composable
 private fun LoadMoreIndicator(modifier: Modifier = Modifier) {
     Box(
-        modifier
-            .fillMaxWidth()
-            .wrapContentHeight()
-            .padding(24.dp),
+            modifier
+                    .fillMaxWidth()
+                    .wrapContentHeight()
+                    .padding(24.dp),
         contentAlignment = Alignment.Center,
     ) {
         CircularProgressIndicator(
@@ -256,30 +267,29 @@ private fun SearchTextField(
 @Composable
 private fun RoomDirectoryRoomRow(
     roomDescription: RoomDescription,
-    onClick: (RoomId) -> Unit,
+    onClick: () -> Unit,
+    onJoinClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Row(
         modifier = modifier
-            .fillMaxWidth()
-            .clickable(enabled = roomDescription.canBeJoined) {
-                onClick(roomDescription.roomId)
-            }
-            .padding(
-                top = 12.dp,
-                bottom = 12.dp,
-                start = 16.dp,
-            )
-            .height(IntrinsicSize.Min),
+                .fillMaxWidth()
+                .clickable(enabled = roomDescription.canBeJoined, onClick = onClick)
+                .padding(
+                        top = 12.dp,
+                        bottom = 12.dp,
+                        start = 16.dp,
+                )
+                .height(IntrinsicSize.Min),
     ) {
         Avatar(
-            avatarData = roomDescription.avatarData,
+            avatarData = roomDescription.avatarData(AvatarSize.RoomDirectoryItem),
             modifier = Modifier.align(Alignment.CenterVertically)
         )
         Column(
             modifier = Modifier
-                .weight(1f)
-                .padding(start = 16.dp)
+                    .weight(1f)
+                    .padding(start = 16.dp)
         ) {
             Text(
                 text = roomDescription.name,
@@ -301,8 +311,9 @@ private fun RoomDirectoryRoomRow(
                 text = stringResource(id = CommonStrings.action_join),
                 color = ElementTheme.colors.textSuccessPrimary,
                 modifier = Modifier
-                    .align(Alignment.CenterVertically)
-                    .padding(start = 4.dp, end = 12.dp)
+                        .align(Alignment.CenterVertically)
+                        .clickable(onClick = onJoinClick)
+                        .padding(start = 4.dp, end = 12.dp)
             )
         } else {
             Spacer(modifier = Modifier.width(24.dp))
@@ -315,6 +326,7 @@ private fun RoomDirectoryRoomRow(
 internal fun RoomDirectoryViewPreview(@PreviewParameter(RoomDirectoryStateProvider::class) state: RoomDirectoryState) = ElementPreview {
     RoomDirectoryView(
         state = state,
+        onResultClicked = {},
         onRoomJoined = {},
         onBackPressed = {},
     )
