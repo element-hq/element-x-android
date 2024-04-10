@@ -11,7 +11,7 @@
   <string name="screen_chat_backup_recovery_action_setup_description">"Erhalte Zugriff auf deine verschlüsselten Nachrichten, wenn du alle deine Geräte verlierst oder von %1$s überall abgemeldet bist."</string>
   <string name="screen_create_new_recovery_key_list_item_1">
     "Öffne "
-    <b>"Element"</b>
+    <b>"%1$s"</b>
     " auf einem "
     <b>"Desktop-Gerät"</b>
   </string>

@@ -3,7 +3,7 @@
   <string name="screen_onboarding_sign_in_manually">"Ruční přihlášení"</string>
   <string name="screen_onboarding_sign_in_with_qr_code">"Přihlásit se pomocí QR kódu"</string>
   <string name="screen_onboarding_sign_up">"Vytvořit účet"</string>
-  <string name="screen_onboarding_welcome_message">"Vítejte u dosud nejrychlejšího Elementu. Vylepšený pro rychlost a jednoduchost."</string>
+  <string name="screen_onboarding_welcome_message">"Vítejte u dosud nejrychlejšího %1$su. Vylepšený pro rychlost a jednoduchost."</string>
   <string name="screen_onboarding_welcome_subtitle">"Vítejte v %1$s. Vylepšený, pro rychlost a jednoduchost."</string>
   <string name="screen_onboarding_welcome_title">"Buďte ve svém živlu"</string>
 </resources>

@@ -3,7 +3,7 @@
   <string name="screen_onboarding_sign_in_manually">"Prihlásiť sa manuálne"</string>
   <string name="screen_onboarding_sign_in_with_qr_code">"Prihlásiť sa pomocou QR kódu"</string>
   <string name="screen_onboarding_sign_up">"Vytvoriť účet"</string>
-  <string name="screen_onboarding_welcome_message">"Vitajte v najrýchlejšom Element vôbec. Nadupaný pre rýchlosť a jednoduchosť."</string>
+  <string name="screen_onboarding_welcome_message">"Vitajte v najrýchlejšom %1$s vôbec. Nadupaný pre rýchlosť a jednoduchosť."</string>
   <string name="screen_onboarding_welcome_subtitle">"Vitajte v %1$s. Nadupaný, pre rýchlosť a jednoduchosť."</string>
   <string name="screen_onboarding_welcome_title">"Buďte vo svojom elemente"</string>
 </resources>

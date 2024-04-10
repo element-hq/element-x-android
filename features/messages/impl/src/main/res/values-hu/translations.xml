@@ -10,7 +10,7 @@
   <string name="emoji_picker_category_symbols">"Szimbólumok"</string>
   <string name="screen_report_content_block_user">"Felhasználó letiltása"</string>
   <string name="screen_report_content_block_user_hint">"Jelölje be, ha el akarja rejteni az összes jelenlegi és jövőbeli üzenetet ettől a felhasználótól"</string>
-  <string name="screen_report_content_explanation">"Ez az üzenet jelentve lesz a Matrix-kiszolgáló rendszergazdájának. Nem fogja tudni elolvasni a titkosított üzeneteket."</string>
+  <string name="screen_report_content_explanation">"Ez az üzenet jelentve lesz a Matrix-kiszolgáló adminisztrátorának. Nem fogja tudni elolvasni a titkosított üzeneteket."</string>
   <string name="screen_report_content_hint">"A tartalom jelentésének oka"</string>
   <string name="screen_room_attachment_source_camera">"Kamera"</string>
   <string name="screen_room_attachment_source_camera_photo">"Fénykép készítése"</string>

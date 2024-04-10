@@ -3,7 +3,7 @@
   <string name="screen_onboarding_sign_in_manually">"Logga in manuellt"</string>
   <string name="screen_onboarding_sign_in_with_qr_code">"Logga in med QR-kod"</string>
   <string name="screen_onboarding_sign_up">"Skapa konto"</string>
-  <string name="screen_onboarding_welcome_message">"Välkommen till den snabbaste Element någonsin. Superladdad för snabbhet och enkelhet."</string>
+  <string name="screen_onboarding_welcome_message">"Välkommen till den snabbaste %1$s någonsin. Superladdad för snabbhet och enkelhet."</string>
   <string name="screen_onboarding_welcome_subtitle">"Välkommen till %1$s. Superladdad, för snabbhet och enkelhet."</string>
   <string name="screen_onboarding_welcome_title">"Var i ditt rätta element"</string>
 </resources>

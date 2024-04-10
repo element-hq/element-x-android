@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_create_room_action_create_room">"Nytt rum"</string>
-  <string name="screen_create_room_action_invite_people">"Bjud in personer till Element"</string>
   <string name="screen_create_room_add_people_title">"Bjud in personer"</string>
   <string name="screen_create_room_error_creating_room">"Ett fel uppstod när rummet skapades"</string>
   <string name="screen_create_room_private_option_description">"Meddelanden i det här rummet är krypterade. Kryptering kan inte inaktiveras efteråt."</string>
