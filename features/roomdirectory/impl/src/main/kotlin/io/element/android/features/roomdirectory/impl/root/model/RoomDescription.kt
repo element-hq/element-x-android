@@ -44,6 +44,10 @@ fun MatrixRoomDescription.toFeatureModel(): RoomDescription {
         description = description(),
         avatarUrl = avatarUrl,
         numberOfMembers = numberOfMembers,
-        canBeJoined = joinRule == MatrixRoomDescription.JoinRule.PUBLIC,
+        joinRule = when (joinRule) {
+            MatrixRoomDescription.JoinRule.PUBLIC -> RoomDescription.JoinRule.PUBLIC
+            MatrixRoomDescription.JoinRule.KNOCK -> RoomDescription.JoinRule.KNOCK
+            MatrixRoomDescription.JoinRule.UNKNOWN -> RoomDescription.JoinRule.UNKNOWN
+        }
     )
 }

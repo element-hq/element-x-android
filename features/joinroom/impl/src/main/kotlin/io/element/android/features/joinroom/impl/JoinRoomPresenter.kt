@@ -32,8 +32,8 @@ import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.room.MatrixRoomInfo
+import org.jetbrains.annotations.VisibleForTesting
 import java.util.Optional
-import kotlin.jvm.optionals.getOrNull
 
 class JoinRoomPresenter @AssistedInject constructor(
     @Assisted private val roomId: RoomId,
@@ -49,8 +49,6 @@ class JoinRoomPresenter @AssistedInject constructor(
     @Composable
     override fun present(): JoinRoomState {
         val roomInfo by matrixClient.getRoomInfoFlow(roomId).collectAsState(initial = Optional.empty())
-        val joinAuthorisationStatus = joinAuthorisationStatus(roomInfo)
-        val acceptDeclineInviteState = acceptDeclineInvitePresenter.present()
         val contentState by produceState<AsyncData<ContentState>>(initialValue = AsyncData.Uninitialized, key1 = roomInfo) {
             value = when {
                 roomInfo.isPresent -> {
@@ -61,20 +59,25 @@ class JoinRoomPresenter @AssistedInject constructor(
                     val contentState = roomDescription.get().toContentState()
                     AsyncData.Success(contentState)
                 }
-                else -> AsyncData.Uninitialized
+                else -> {
+                    AsyncData.Uninitialized
+                }
             }
         }
+        val acceptDeclineInviteState = acceptDeclineInvitePresenter.present()
 
         fun handleEvents(event: JoinRoomEvents) {
             when (event) {
                 JoinRoomEvents.AcceptInvite, JoinRoomEvents.JoinRoom -> {
+                    val inviteData = contentState.toInviteData() ?: return
                     acceptDeclineInviteState.eventSink(
-                        AcceptDeclineInviteEvents.AcceptInvite(contentState.toInviteData())
+                        AcceptDeclineInviteEvents.AcceptInvite(inviteData)
                     )
                 }
                 JoinRoomEvents.DeclineInvite -> {
+                    val inviteData = contentState.toInviteData() ?: return
                     acceptDeclineInviteState.eventSink(
-                        AcceptDeclineInviteEvents.DeclineInvite(contentState.toInviteData())
+                        AcceptDeclineInviteEvents.DeclineInvite(inviteData)
                     )
                 }
             }
@@ -82,66 +85,69 @@ class JoinRoomPresenter @AssistedInject constructor(
 
         return JoinRoomState(
             contentState = contentState,
-            joinAuthorisationStatus = joinAuthorisationStatus,
             acceptDeclineInviteState = acceptDeclineInviteState,
             eventSink = ::handleEvents
         )
     }
+}
 
-    private fun RoomDescription.toContentState(): ContentState {
-        return ContentState(
-            roomId = roomId,
-            name = name,
-            description = description,
-            numberOfMembers = numberOfMembers,
-            isDirect = false,
-            roomAvatarUrl = avatarUrl
-        )
-    }
-
-    private fun MatrixRoomInfo.toContentState(): ContentState {
-        fun title(): String {
-            return name ?: canonicalAlias ?: roomId.value
-        }
-
-        fun description(): String? {
-            val topic = topic
-            val alias = canonicalAlias
-            val name = name
-            return when {
-                topic != null -> topic
-                name != null && alias != null -> alias
-                name == null && alias == null -> null
-                else -> roomId.value
-            }
-        }
-
-        return ContentState(
-            roomId = roomId,
-            name = title(),
-            description = description(),
-            numberOfMembers = activeMembersCount,
-            isDirect = isDirect,
-            roomAvatarUrl = avatarUrl
-        )
-    }
-
-    private fun AsyncData<ContentState>.toInviteData(): InviteData {
-        return dataOrNull().let {
-            InviteData(
-                roomId = roomId,
-                roomName = it?.name ?: "",
-                isDirect = it?.isDirect ?: false
-            )
-        }
-    }
-
-    @Composable
-    private fun joinAuthorisationStatus(roomInfo: Optional<MatrixRoomInfo>): JoinAuthorisationStatus {
-        val userMembership = roomInfo.getOrNull()?.currentUserMembership
-        return when {
-            userMembership == CurrentUserMembership.INVITED -> return JoinAuthorisationStatus.IsInvited
+@VisibleForTesting
+internal fun RoomDescription.toContentState(): ContentState {
+    return ContentState(
+        roomId = roomId,
+        name = name,
+        description = description,
+        numberOfMembers = numberOfMembers,
+        isDirect = false,
+        roomAvatarUrl = avatarUrl,
+        joinAuthorisationStatus = when (joinRule) {
+            RoomDescription.JoinRule.KNOCK -> JoinAuthorisationStatus.CanKnock
+            RoomDescription.JoinRule.PUBLIC -> JoinAuthorisationStatus.CanJoin
             else -> JoinAuthorisationStatus.Unknown
         }
+    )
+}
+
+@VisibleForTesting
+internal fun MatrixRoomInfo.toContentState(): ContentState {
+    fun title(): String {
+        return name ?: canonicalAlias ?: id
+    }
+
+    fun description(): String? {
+        val topic = topic
+        val alias = canonicalAlias
+        val name = name
+        return when {
+            topic != null -> topic
+            name != null && alias != null -> alias
+            name == null && alias == null -> null
+            else -> id
+        }
+    }
+
+    return ContentState(
+        roomId = RoomId(id),
+        name = title(),
+        description = description(),
+        numberOfMembers = activeMembersCount,
+        isDirect = isDirect,
+        roomAvatarUrl = avatarUrl,
+        joinAuthorisationStatus = when {
+            currentUserMembership == CurrentUserMembership.INVITED -> JoinAuthorisationStatus.IsInvited
+            isPublic -> JoinAuthorisationStatus.CanJoin
+            else -> JoinAuthorisationStatus.Unknown
+        }
+    )
+}
+
+@VisibleForTesting
+internal fun AsyncData<ContentState>.toInviteData(): InviteData? {
+    return dataOrNull()?.let { contentState ->
+        InviteData(
+            roomId = contentState.roomId,
+            roomName = contentState.name,
+            isDirect = contentState.isDirect
+        )
     }
 }

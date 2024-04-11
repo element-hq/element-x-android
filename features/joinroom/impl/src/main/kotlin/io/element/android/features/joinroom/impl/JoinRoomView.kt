@@ -109,8 +109,7 @@ private fun JoinRoomFooter(
                 )
             }
         }
-        // TODO handle all cases properly
-        else -> {
+        JoinAuthorisationStatus.CanJoin -> {
             Button(
                 text = stringResource(CommonStrings.action_join),
                 onClick = onJoinRoom,
@@ -118,6 +117,18 @@ private fun JoinRoomFooter(
                 size = ButtonSize.Medium,
             )
         }
+        JoinAuthorisationStatus.CanKnock -> {
+            //TODO knock
+            /*
+            Button(
+                text = stringResource(CommonStrings.action_knock),
+                onClick = onJoinRoom,
+                modifier = modifier.fillMaxWidth(),
+                size = ButtonSize.Medium,
+            )
+             */
+        }
+        JoinAuthorisationStatus.Unknown -> Unit
     }
 }
 
@@ -154,8 +165,8 @@ private fun JoinRoomContent(
 
     Column(
         modifier = modifier
-            .fillMaxWidth()
-            .padding(all = 16.dp),
+                .fillMaxWidth()
+                .padding(all = 16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         when (asyncContentState) {
@@ -191,9 +202,9 @@ private fun JoinRoomMembersCount(memberCount: Long) {
     Spacer(modifier = Modifier.height(8.dp))
     Row(
         modifier = Modifier
-            .background(color = ElementTheme.colors.bgSubtleSecondary, shape = CircleShape)
-            .widthIn(min = 48.dp)
-            .padding(all = 2.dp),
+                .background(color = ElementTheme.colors.bgSubtleSecondary, shape = CircleShape)
+                .widthIn(min = 48.dp)
+                .padding(all = 2.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(4.dp)
     ) {

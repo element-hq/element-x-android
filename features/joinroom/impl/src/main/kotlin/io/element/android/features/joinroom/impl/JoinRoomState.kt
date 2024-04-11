@@ -26,10 +26,11 @@ import io.element.android.libraries.matrix.api.core.RoomId
 @Immutable
 data class JoinRoomState(
     val contentState: AsyncData<ContentState>,
-    val joinAuthorisationStatus: JoinAuthorisationStatus,
     val acceptDeclineInviteState: AcceptDeclineInviteState,
     val eventSink: (JoinRoomEvents) -> Unit
-)
+) {
+    val joinAuthorisationStatus = contentState.dataOrNull()?.joinAuthorisationStatus ?: JoinAuthorisationStatus.Unknown
+}
 
 data class ContentState(
     val roomId: RoomId,
@@ -38,6 +39,7 @@ data class ContentState(
     val numberOfMembers: Long?,
     val isDirect: Boolean,
     val roomAvatarUrl: String?,
+    val joinAuthorisationStatus: JoinAuthorisationStatus,
 ) {
 
     val showMemberCount = numberOfMembers != null

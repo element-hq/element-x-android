@@ -29,34 +29,49 @@ open class JoinRoomStateProvider : PreviewParameterProvider<JoinRoomState> {
                 contentState = AsyncData.Uninitialized
             ),
             aJoinRoomState(
-                joinAuthorisationStatus = JoinAuthorisationStatus.CanJoin
+                contentState = AsyncData.Success(
+                    aContentState(joinAuthorisationStatus = JoinAuthorisationStatus.CanJoin)
+                )
             ),
             aJoinRoomState(
-                joinAuthorisationStatus = JoinAuthorisationStatus.CanKnock
+                contentState = AsyncData.Success(
+                    aContentState(joinAuthorisationStatus = JoinAuthorisationStatus.CanKnock)
+                )
             ),
             aJoinRoomState(
-                joinAuthorisationStatus = JoinAuthorisationStatus.IsInvited
+                contentState = AsyncData.Success(
+                    aContentState(joinAuthorisationStatus = JoinAuthorisationStatus.IsInvited)
+                )
             ),
         )
 }
 
+fun aContentState(
+    roomId: RoomId = RoomId("@exa:matrix.org"),
+    name: String = "Element x android",
+    description: String? = "#exa:matrix.org",
+    numberOfMembers: Long? = null,
+    isDirect: Boolean = false,
+    roomAvatarUrl: String? = null,
+    joinAuthorisationStatus: JoinAuthorisationStatus = JoinAuthorisationStatus.Unknown
+) = ContentState(
+    roomId = roomId,
+    name = name,
+    description = description,
+    numberOfMembers = numberOfMembers,
+    isDirect = isDirect,
+    roomAvatarUrl = roomAvatarUrl,
+    joinAuthorisationStatus = joinAuthorisationStatus
+)
+
 fun aJoinRoomState(
     contentState: AsyncData<ContentState> = AsyncData.Success(
-        ContentState(
-            roomId = RoomId("@exa:matrix.org"),
-            name = "Element x android",
-            description  = "#exa:matrix.org",
-            numberOfMembers = null,
-            isDirect = false,
-            roomAvatarUrl = null
-        )
+        aContentState()
     ),
-    joinAuthorisationStatus: JoinAuthorisationStatus = JoinAuthorisationStatus.Unknown,
     acceptDeclineInviteState: AcceptDeclineInviteState = anAcceptDeclineInviteState(),
     eventSink: (JoinRoomEvents) -> Unit = {}
 ) = JoinRoomState(
     contentState = contentState,
-    joinAuthorisationStatus = joinAuthorisationStatus,
     acceptDeclineInviteState = acceptDeclineInviteState,
     eventSink = eventSink
 )

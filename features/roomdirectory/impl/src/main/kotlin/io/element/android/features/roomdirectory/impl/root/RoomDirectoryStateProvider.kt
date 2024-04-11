@@ -70,7 +70,7 @@ fun aRoomDescriptionList(): ImmutableList<RoomDescription> {
             name = "Element X Android",
             description = "Element X is a secure, private and decentralized messenger.",
             avatarUrl = null,
-            canBeJoined = true,
+            joinRule = RoomDescription.JoinRule.PUBLIC,
             numberOfMembers = 2765,
         ),
         RoomDescription(
@@ -78,7 +78,7 @@ fun aRoomDescriptionList(): ImmutableList<RoomDescription> {
             name = "Element X iOS",
             description = "Element X is a secure, private and decentralized messenger.",
             avatarUrl = null,
-            canBeJoined = false,
+            joinRule = RoomDescription.JoinRule.UNKNOWN,
             numberOfMembers = 356,
         )
     )

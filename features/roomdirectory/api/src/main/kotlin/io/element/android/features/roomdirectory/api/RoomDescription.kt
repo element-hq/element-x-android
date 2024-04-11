@@ -28,9 +28,17 @@ data class RoomDescription(
     val name: String,
     val description: String,
     val avatarUrl: String?,
-    val canBeJoined: Boolean,
+    val joinRule: JoinRule,
     val numberOfMembers: Long,
 ) : Parcelable {
+
+    enum class JoinRule {
+        PUBLIC,
+        KNOCK,
+        UNKNOWN
+    }
+
+    fun canBeJoined() = joinRule == JoinRule.PUBLIC || joinRule == JoinRule.KNOCK
 
     fun avatarData(size: AvatarSize) = AvatarData(
         id = roomId.value,

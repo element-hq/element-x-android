@@ -274,7 +274,7 @@ private fun RoomDirectoryRoomRow(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .clickable(enabled = roomDescription.canBeJoined, onClick = onClick)
+            .clickable(onClick = onClick)
             .padding(
                 top = 12.dp,
                 bottom = 12.dp,
@@ -306,7 +306,7 @@ private fun RoomDirectoryRoomRow(
                 overflow = TextOverflow.Ellipsis,
             )
         }
-        if (roomDescription.canBeJoined) {
+        if (roomDescription.canBeJoined()) {
             Text(
                 text = stringResource(id = CommonStrings.action_join),
                 color = ElementTheme.colors.textSuccessPrimary,
