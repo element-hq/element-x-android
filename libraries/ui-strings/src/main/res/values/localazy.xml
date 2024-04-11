@@ -200,6 +200,7 @@
   <string name="common_settings">"Settings"</string>
   <string name="common_shared_location">"Shared location"</string>
   <string name="common_signing_out">"Signing out"</string>
+  <string name="common_something_went_wrong">"Something went wrong"</string>
   <string name="common_starting_chat">"Starting chat…"</string>
   <string name="common_sticker">"Sticker"</string>
   <string name="common_success">"Success"</string>

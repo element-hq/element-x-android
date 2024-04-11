@@ -25,6 +25,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.securebackup.impl.R
 import io.element.android.libraries.designsystem.atomic.pages.FlowStepPage
+import io.element.android.libraries.designsystem.components.BigIcon
 import io.element.android.libraries.designsystem.components.async.AsyncActionView
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -41,7 +42,7 @@ fun SecureBackupEnableView(
         modifier = modifier,
         onBackClicked = onBackClicked,
         title = stringResource(id = R.string.screen_chat_backup_key_backup_action_enable),
-        iconVector = CompoundIcons.KeySolid(),
+        iconStyle = BigIcon.Style.Default(CompoundIcons.KeySolid()),
         buttons = { Buttons(state = state) }
     )
     AsyncActionView(

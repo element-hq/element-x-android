@@ -31,6 +31,7 @@ fun PermissionsView(
     state: PermissionsState,
     modifier: Modifier = Modifier,
     title: String = stringResource(id = CommonStrings.common_permission),
+    content: String? = null,
     icon: @Composable (() -> Unit)? = null,
 ) {
     if (state.showDialog.not()) return
@@ -38,7 +39,7 @@ fun PermissionsView(
     ConfirmationDialog(
         modifier = modifier,
         title = title,
-        content = state.permission.toDialogContent(),
+        content = content ?: state.permission.toDialogContent(),
         submitText = stringResource(id = CommonStrings.action_open_settings),
         onSubmitClicked = {
             state.eventSink.invoke(PermissionsEvents.OpenSystemSettingAndCloseDialog)

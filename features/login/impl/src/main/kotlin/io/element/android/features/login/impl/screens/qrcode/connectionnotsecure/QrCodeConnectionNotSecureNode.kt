@@ -14,10 +14,8 @@
  * limitations under the License.
  */
 
-package io.element.android.features.login.impl.screens.qrcode.confirmation
+package io.element.android.features.login.impl.screens.qrcode.connectionnotsecure
 
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
@@ -27,15 +25,10 @@ import io.element.android.anvilannotations.ContributesNode
 import io.element.android.libraries.di.AppScope
 
 @ContributesNode(AppScope::class)
-class QrCodeConfirmationNode @AssistedInject constructor(
+class QrCodeConnectionNotSecureNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
-    private val presenter: QrCodeConfirmationPresenter,
-) : Node(buildContext = buildContext, plugins = plugins) {
+) : Node(buildContext = buildContext, plugins = plugins
+) {
 
-    @Composable
-    override fun View(modifier: Modifier) {
-        val state = presenter.present()
-        QrCodeConfirmationView(state = state)
-    }
 }

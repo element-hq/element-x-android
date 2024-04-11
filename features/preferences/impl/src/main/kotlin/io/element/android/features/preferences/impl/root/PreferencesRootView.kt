@@ -81,15 +81,21 @@ fun PreferencesRootView(
             },
             user = state.myUser,
         )
+        ListItem(
+            // TODO: localazy
+            headlineContent = { Text("Link new device") },
+            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.QrCode())),
+            onClick = { TODO() }
+        )
         if (state.showSecureBackup) {
             ListItem(
                 headlineContent = { Text(stringResource(id = CommonStrings.common_chat_backup)) },
-                leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.KeySolid())),
+                leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Key())),
                 trailingContent = ListItemContent.Badge.takeIf { state.showSecureBackupBadge },
                 onClick = onSecureBackupClicked,
             )
-            HorizontalDivider()
         }
+        HorizontalDivider()
         if (state.accountManagementUrl != null) {
             ListItem(
                 headlineContent = { Text(stringResource(id = CommonStrings.action_manage_account)) },

@@ -32,6 +32,7 @@ import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.securebackup.impl.R
 import io.element.android.libraries.designsystem.atomic.pages.FlowStepPage
+import io.element.android.libraries.designsystem.components.BigIcon
 import io.element.android.libraries.designsystem.components.async.AsyncActionView
 import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -52,7 +53,7 @@ fun SecureBackupDisableView(
         onBackClicked = onBackClicked,
         title = stringResource(id = R.string.screen_key_backup_disable_title),
         subTitle = stringResource(id = R.string.screen_key_backup_disable_description),
-        iconVector = CompoundIcons.KeyOffSolid(),
+        iconStyle = BigIcon.Style.Default(CompoundIcons.KeyOffSolid()),
         content = { Content(state = state) },
         buttons = { Buttons(state = state) },
     )

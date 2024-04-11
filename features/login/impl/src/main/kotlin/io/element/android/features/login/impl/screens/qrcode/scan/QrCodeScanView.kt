@@ -45,6 +45,7 @@ import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.login.impl.R
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.designsystem.atomic.pages.FlowStepPage
+import io.element.android.libraries.designsystem.components.BigIcon
 import io.element.android.libraries.designsystem.modifiers.cornerBorder
 import io.element.android.libraries.designsystem.modifiers.squareSize
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -66,7 +67,7 @@ fun QrCodeScanView(
     FlowStepPage(
         modifier = modifier,
         onBackClicked = onBackClicked,
-        iconVector = CompoundIcons.Computer(),
+        iconStyle = BigIcon.Style.Default(CompoundIcons.Computer()),
         title = stringResource(R.string.screen_qr_code_login_scanning_state_title),
         content = { Content(state = state) },
         buttons = { Buttons(state = state) }

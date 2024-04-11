@@ -51,7 +51,7 @@ import io.element.android.libraries.designsystem.theme.components.TopAppBar
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FlowStepPage(
-    iconVector: ImageVector,
+    iconStyle: BigIcon.Style,
     title: String,
     modifier: Modifier = Modifier,
     onBackClicked: (() -> Unit)? = null,
@@ -78,7 +78,7 @@ fun FlowStepPage(
             PageTitle(
                 title = title,
                 subtitle = subTitle,
-                iconStyle = BigIcon.Style.Default(iconVector) ,
+                iconStyle = iconStyle,
             )
         },
         content = content,
@@ -99,7 +99,7 @@ internal fun FlowStepPagePreview() = ElementPreview {
         onBackClicked = {},
         title = "Title",
         subTitle = "Subtitle",
-        iconVector = CompoundIcons.Computer(),
+        iconStyle = BigIcon.Style.Default(CompoundIcons.Computer()),
         content = {
             Box(
                 Modifier
