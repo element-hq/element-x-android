@@ -2,6 +2,13 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_notification_optin_subtitle">"Svoje nastavenia môžete neskôr zmeniť."</string>
   <string name="screen_notification_optin_title">"Povoľte oznámenia a nikdy nezmeškajte žiadnu správu"</string>
+  <string name="screen_qr_code_login_initial_state_item_1">"Otvorte %1$s na stolnom zariadení"</string>
+  <string name="screen_qr_code_login_initial_state_item_2">"Kliknite na svoj obrázok"</string>
+  <string name="screen_qr_code_login_initial_state_item_3">"Vyberte %1$s"</string>
+  <string name="screen_qr_code_login_initial_state_item_3_action">"„Prepojiť nové zariadenie“"</string>
+  <string name="screen_qr_code_login_initial_state_item_4">"Vyberte %1$s"</string>
+  <string name="screen_qr_code_login_initial_state_item_4_action">"„Zobraziť QR kód“"</string>
+  <string name="screen_qr_code_login_initial_state_title">"Ak chcete získať QR kód, otvorte %1$s na inom zariadení"</string>
   <string name="screen_welcome_bullet_1">"Hovory, ankety, vyhľadávanie a ďalšie funkcie pribudnú neskôr v tomto roku."</string>
   <string name="screen_welcome_bullet_2">"História správ pre zašifrované miestnosti nebude v tejto aktualizácii k dispozícii."</string>
   <string name="screen_welcome_bullet_3">"Radi by sme od vás počuli, dajte nám vedieť, čo si myslíte, prostredníctvom stránky nastavení."</string>

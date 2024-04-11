@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_create_room_action_create_room">"Новая комната"</string>
-  <string name="screen_create_room_action_invite_people">"Пригласите друзей в Element"</string>
   <string name="screen_create_room_add_people_title">"Пригласить друзей"</string>
   <string name="screen_create_room_error_creating_room">"Произошла ошибка при создании комнаты"</string>
   <string name="screen_create_room_private_option_description">"Сообщения в этой комнате зашифрованы. Отключить шифрование позже будет невозможно."</string>

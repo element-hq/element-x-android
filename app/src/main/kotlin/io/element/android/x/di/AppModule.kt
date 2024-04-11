@@ -23,6 +23,7 @@ import androidx.preference.PreferenceManager
 import com.squareup.anvil.annotations.ContributesTo
 import dagger.Module
 import dagger.Provides
+import io.element.android.appconfig.ApplicationConfig
 import io.element.android.features.messages.impl.timeline.components.customreaction.DefaultEmojibaseProvider
 import io.element.android.features.messages.impl.timeline.components.customreaction.EmojibaseProvider
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
@@ -79,7 +80,9 @@ object AppModule {
     fun providesBuildMeta(@ApplicationContext context: Context, buildType: BuildType) = BuildMeta(
         isDebuggable = BuildConfig.DEBUG,
         buildType = buildType,
-        applicationName = context.getString(R.string.app_name),
+        applicationName = ApplicationConfig.APPLICATION_NAME.takeIf { it.isNotEmpty() } ?: context.getString(R.string.app_name),
+        productionApplicationName = ApplicationConfig.PRODUCTION_APPLICATION_NAME,
+        desktopApplicationName = ApplicationConfig.DESKTOP_APPLICATION_NAME,
         applicationId = BuildConfig.APPLICATION_ID,
         // TODO EAx Config.LOW_PRIVACY_LOG_ENABLE,
         lowPrivacyLoggingEnabled = false,

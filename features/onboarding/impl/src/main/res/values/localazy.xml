@@ -3,7 +3,7 @@
   <string name="screen_onboarding_sign_in_manually">"Sign in manually"</string>
   <string name="screen_onboarding_sign_in_with_qr_code">"Sign in with QR code"</string>
   <string name="screen_onboarding_sign_up">"Create account"</string>
-  <string name="screen_onboarding_welcome_message">"Welcome to the fastest Element ever. Supercharged for speed and simplicity."</string>
+  <string name="screen_onboarding_welcome_message">"Welcome to the fastest %1$s ever. Supercharged for speed and simplicity."</string>
   <string name="screen_onboarding_welcome_subtitle">"Welcome to %1$s. Supercharged, for speed and simplicity."</string>
   <string name="screen_onboarding_welcome_title">"Be in your element"</string>
 </resources>

@@ -49,6 +49,7 @@ import io.element.android.libraries.designsystem.theme.components.TopAppBar
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CreateNewRecoveryKeyView(
+    desktopApplicationName: String,
     onBackClicked: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -66,15 +67,15 @@ fun CreateNewRecoveryKeyView(
                 title = stringResource(R.string.screen_create_new_recovery_key_title),
                 iconStyle = BigIcon.Style.Default(CompoundIcons.Computer())
             )
-            Content()
+            Content(desktopApplicationName = desktopApplicationName)
         }
     }
 }
 
 @Composable
-private fun Content() {
+private fun Content(desktopApplicationName: String) {
     Column(modifier = Modifier.padding(horizontal = 16.dp), verticalArrangement = Arrangement.spacedBy(24.dp)) {
-        Item(index = 1, text = AnnotatedString(stringResource(R.string.screen_create_new_recovery_key_list_item_1)))
+        Item(index = 1, text = AnnotatedString(stringResource(R.string.screen_create_new_recovery_key_list_item_1, desktopApplicationName)))
         Item(index = 2, text = AnnotatedString(stringResource(R.string.screen_create_new_recovery_key_list_item_2)))
         Item(
             index = 3,
@@ -129,6 +130,7 @@ private fun ItemNumber(
 internal fun CreateNewRecoveryKeyViewPreview() {
     ElementPreview {
         CreateNewRecoveryKeyView(
+            desktopApplicationName = "Element",
             onBackClicked = {},
         )
     }

@@ -11,6 +11,8 @@
   <string name="screen_roomlist_filter_favourites_empty_state_subtitle">"Vous pouvez ajouter une discussion aux favoris depuis les paramètres de la discussion.
 En attendant, vous pouvez désélectionner des filtres pour voir vos autres salons."</string>
   <string name="screen_roomlist_filter_favourites_empty_state_title">"Vous n’avez pas encore de discussions favorites"</string>
+  <string name="screen_roomlist_filter_invites">"Invitations"</string>
+  <string name="screen_roomlist_filter_invites_empty_state_title">"Vous n’avez aucune invitation en attente."</string>
   <string name="screen_roomlist_filter_low_priority">"Priorité basse"</string>
   <string name="screen_roomlist_filter_mixed_empty_state_subtitle">"Veuillez désélectionner des filtres pour voir vos discussions"</string>
   <string name="screen_roomlist_filter_mixed_empty_state_title">"Vous n’avez pas de discussions pour cette sélection"</string>
