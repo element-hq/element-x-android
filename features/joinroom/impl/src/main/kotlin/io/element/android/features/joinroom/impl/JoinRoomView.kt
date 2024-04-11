@@ -187,7 +187,7 @@ private fun JoinRoomContent(
 }
 
 @Composable
-fun JoinRoomMembersCount(memberCount: Long) {
+private fun JoinRoomMembersCount(memberCount: Long) {
     Spacer(modifier = Modifier.height(8.dp))
     Row(
         modifier = Modifier
@@ -227,7 +227,7 @@ private fun JoinRoomTopBar(
 
 @PreviewLightDark
 @Composable
-fun JoinRoomViewPreview(@PreviewParameter(JoinRoomStateProvider::class) state: JoinRoomState) = ElementPreview {
+internal fun JoinRoomViewPreview(@PreviewParameter(JoinRoomStateProvider::class) state: JoinRoomState) = ElementPreview {
     JoinRoomView(
         state = state,
         onBackPressed = { }

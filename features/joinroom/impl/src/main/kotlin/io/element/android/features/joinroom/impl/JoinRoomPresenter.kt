@@ -23,7 +23,7 @@ import androidx.compose.runtime.produceState
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.features.invite.api.response.AcceptDeclineInviteEvents
-import io.element.android.features.invite.api.response.AcceptDeclineInvitePresenter
+import io.element.android.features.invite.api.response.AcceptDeclineInviteState
 import io.element.android.features.invite.api.response.InviteData
 import io.element.android.features.roomdirectory.api.RoomDescription
 import io.element.android.libraries.architecture.AsyncData
@@ -39,7 +39,7 @@ class JoinRoomPresenter @AssistedInject constructor(
     @Assisted private val roomId: RoomId,
     @Assisted private val roomDescription: Optional<RoomDescription>,
     private val matrixClient: MatrixClient,
-    private val acceptDeclineInvitePresenter: AcceptDeclineInvitePresenter,
+    private val acceptDeclineInvitePresenter: Presenter<AcceptDeclineInviteState>,
 ) : Presenter<JoinRoomState> {
 
     interface Factory {

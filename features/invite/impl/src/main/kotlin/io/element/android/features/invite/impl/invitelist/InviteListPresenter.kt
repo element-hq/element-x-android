@@ -25,7 +25,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import io.element.android.features.invite.api.SeenInvitesStore
 import io.element.android.features.invite.api.response.AcceptDeclineInviteEvents
-import io.element.android.features.invite.api.response.AcceptDeclineInvitePresenter
+import io.element.android.features.invite.api.response.AcceptDeclineInviteState
 import io.element.android.features.invite.api.response.InviteData
 import io.element.android.features.invite.impl.model.InviteListInviteSummary
 import io.element.android.features.invite.impl.model.InviteSender
@@ -42,7 +42,7 @@ import javax.inject.Inject
 class InviteListPresenter @Inject constructor(
     private val client: MatrixClient,
     private val store: SeenInvitesStore,
-    private val acceptDeclineInvitePresenter: AcceptDeclineInvitePresenter,
+    private val acceptDeclineInvitePresenter: Presenter<AcceptDeclineInviteState>,
 ) : Presenter<InviteListState> {
     @Composable
     override fun present(): InviteListState {

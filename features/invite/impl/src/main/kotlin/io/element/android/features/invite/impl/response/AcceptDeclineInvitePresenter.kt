@@ -26,10 +26,10 @@ import androidx.compose.runtime.setValue
 import com.squareup.anvil.annotations.ContributesBinding
 import im.vector.app.features.analytics.plan.JoinedRoom
 import io.element.android.features.invite.api.response.AcceptDeclineInviteEvents
-import io.element.android.features.invite.api.response.AcceptDeclineInvitePresenter
 import io.element.android.features.invite.api.response.AcceptDeclineInviteState
 import io.element.android.features.invite.api.response.InviteData
 import io.element.android.libraries.architecture.AsyncAction
+import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runCatchingUpdatingState
 import io.element.android.libraries.architecture.runUpdatingState
 import io.element.android.libraries.di.SessionScope
@@ -44,12 +44,11 @@ import java.util.Optional
 import javax.inject.Inject
 import kotlin.jvm.optionals.getOrNull
 
-@ContributesBinding(SessionScope::class)
-class DefaultAcceptDeclineInvitePresenter @Inject constructor(
+class AcceptDeclineInvitePresenter @Inject constructor(
     private val client: MatrixClient,
     private val analyticsService: AnalyticsService,
     private val notificationDrawerManager: NotificationDrawerManager,
-) : AcceptDeclineInvitePresenter {
+) : Presenter<AcceptDeclineInviteState> {
 
     @Composable
     override fun present(): AcceptDeclineInviteState {
@@ -66,6 +65,7 @@ class DefaultAcceptDeclineInvitePresenter @Inject constructor(
                 is AcceptDeclineInviteEvents.AcceptInvite -> {
                     currentInvite = Optional.of(event.invite)
                     localCoroutineScope.acceptInvite(event.invite.roomId, acceptedAction)
+                    currentInvite = Optional.empty()
                 }
 
                 is AcceptDeclineInviteEvents.DeclineInvite -> {
@@ -73,7 +73,7 @@ class DefaultAcceptDeclineInvitePresenter @Inject constructor(
                     declinedAction.value = AsyncAction.Confirming
                 }
 
-                is DefaultAcceptDeclineInviteEvents.ConfirmDeclineInvite -> {
+                is InternalAcceptDeclineInviteEvents.ConfirmDeclineInvite -> {
                     declinedAction.value = AsyncAction.Uninitialized
                     currentInvite.getOrNull()?.let {
                         localCoroutineScope.declineInvite(it.roomId, declinedAction)
@@ -81,16 +81,16 @@ class DefaultAcceptDeclineInvitePresenter @Inject constructor(
                     currentInvite = Optional.empty()
                 }
 
-                is DefaultAcceptDeclineInviteEvents.CancelDeclineInvite -> {
+                is InternalAcceptDeclineInviteEvents.CancelDeclineInvite -> {
                     currentInvite = Optional.empty()
                     declinedAction.value = AsyncAction.Uninitialized
                 }
 
-                is DefaultAcceptDeclineInviteEvents.DismissAcceptError -> {
+                is InternalAcceptDeclineInviteEvents.DismissAcceptError -> {
                     acceptedAction.value = AsyncAction.Uninitialized
                 }
 
-                is DefaultAcceptDeclineInviteEvents.DismissDeclineError -> {
+                is InternalAcceptDeclineInviteEvents.DismissDeclineError -> {
                     declinedAction.value = AsyncAction.Uninitialized
                 }
             }

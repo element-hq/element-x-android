@@ -182,7 +182,7 @@ class FakeMatrixRoom(
     var removedAvatar: Boolean = false
         private set
 
-    private var leaveRoomError: Throwable? = null
+    var leaveRoomLambda: (() -> Result<Unit>) = { Result.success(Unit) }
 
     private val _roomInfoFlow: MutableSharedFlow<MatrixRoomInfo> = MutableSharedFlow(replay = 1)
     override val roomInfoFlow: Flow<MatrixRoomInfo> = _roomInfoFlow
@@ -315,8 +315,9 @@ class FakeMatrixRoom(
         return Result.success(Unit)
     }
 
-    override suspend fun leave(): Result<Unit> =
-        leaveRoomError?.let { Result.failure(it) } ?: Result.success(Unit)
+    override suspend fun leave(): Result<Unit> {
+        return leaveRoomLambda()
+    }
 
     override suspend fun join(): Result<Unit> {
         return joinRoomResult
@@ -541,10 +542,6 @@ class FakeMatrixRoom(
     ): Result<String> = generateWidgetWebViewUrlResult
 
     override fun getWidgetDriver(widgetSettings: MatrixWidgetSettings): Result<MatrixWidgetDriver> = getWidgetDriverResult
-
-    fun givenLeaveRoomError(throwable: Throwable?) {
-        this.leaveRoomError = throwable
-    }
 
     fun givenRoomMembersState(state: MatrixRoomMembersState) {
         membersStateFlow.value = state

@@ -14,8 +14,19 @@
  * limitations under the License.
  */
 
-package io.element.android.features.invite.api.response
+package io.element.android.features.invite.impl.di
 
+import com.squareup.anvil.annotations.ContributesTo
+import dagger.Binds
+import dagger.Module
+import io.element.android.features.invite.api.response.AcceptDeclineInviteState
+import io.element.android.features.invite.impl.response.AcceptDeclineInvitePresenter
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.di.SessionScope
 
-interface AcceptDeclineInvitePresenter: Presenter<AcceptDeclineInviteState>
+@ContributesTo(SessionScope::class)
+@Module
+interface InviteModule {
+    @Binds
+    fun bindAcceptDeclinePresenter(presenter: AcceptDeclineInvitePresenter): Presenter<AcceptDeclineInviteState>
+}

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.features.invite.impl
+package io.element.android.features.invite.impl.invitelist
 
 import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
@@ -22,11 +22,14 @@ import app.cash.turbine.TurbineTestContext
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.invite.api.SeenInvitesStore
+import io.element.android.features.invite.api.response.AcceptDeclineInviteState
+import io.element.android.features.invite.api.response.anAcceptDeclineInviteState
 import io.element.android.features.invite.impl.invitelist.InviteListEvents
 import io.element.android.features.invite.impl.invitelist.InviteListPresenter
 import io.element.android.features.invite.impl.invitelist.InviteListState
 import io.element.android.features.invite.test.FakeSeenInvitesStore
 import io.element.android.libraries.architecture.AsyncData
+import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.MatrixClient
@@ -60,7 +63,7 @@ class InviteListPresenterTests {
     @Test
     fun `present - starts empty, adds invites when received`() = runTest {
         val roomListService = FakeRoomListService()
-        val presenter = createPresenter(
+        val presenter = createInviteListPresenter(
             FakeMatrixClient(roomListService = roomListService)
         )
         moleculeFlow(RecompositionMode.Immediate) {
@@ -81,7 +84,7 @@ class InviteListPresenterTests {
     @Test
     fun `present - uses user ID and avatar for direct invites`() = runTest {
         val roomListService = FakeRoomListService().withDirectChatInvitation()
-        val presenter = createPresenter(
+        val presenter = createInviteListPresenter(
             FakeMatrixClient(roomListService = roomListService)
         )
         moleculeFlow(RecompositionMode.Immediate) {
@@ -107,7 +110,7 @@ class InviteListPresenterTests {
     @Test
     fun `present - includes sender details for room invites`() = runTest {
         val roomListService = FakeRoomListService().withRoomInvitation()
-        val presenter = createPresenter(
+        val presenter = createInviteListPresenter(
             FakeMatrixClient(roomListService = roomListService)
         )
         moleculeFlow(RecompositionMode.Immediate) {
@@ -129,246 +132,14 @@ class InviteListPresenterTests {
     }
 
     @Test
-    fun `present - shows confirm dialog for declining direct chat invites`() = runTest {
-        val roomListService = FakeRoomListService().withDirectChatInvitation()
-        val presenter = InviteListPresenter(
-            FakeMatrixClient(
-                roomListService = roomListService,
-            ),
-            FakeSeenInvitesStore(),
-            FakeAnalyticsService(),
-            FakeNotificationDrawerManager()
-        )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
-            val originalState = awaitInitialItem()
-            originalState.eventSink(InviteListEvents.DeclineInvite(originalState.inviteList[0]))
-
-            val newState = awaitItem()
-            assertThat(newState.declineConfirmationDialog).isInstanceOf(InviteDeclineConfirmationDialog.Visible::class.java)
-
-            val confirmDialog = newState.declineConfirmationDialog as InviteDeclineConfirmationDialog.Visible
-            assertThat(confirmDialog.isDirect).isTrue()
-            assertThat(confirmDialog.name).isEqualTo(A_ROOM_NAME)
-        }
-    }
-
-    @Test
-    fun `present - shows confirm dialog for declining room invites`() = runTest {
-        val roomListService = FakeRoomListService().withRoomInvitation()
-        val presenter = createPresenter(
-            FakeMatrixClient(roomListService = roomListService)
-        )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
-            val originalState = awaitInitialItem()
-            originalState.eventSink(InviteListEvents.DeclineInvite(originalState.inviteList[0]))
-
-            val newState = awaitItem()
-            assertThat(newState.declineConfirmationDialog).isInstanceOf(InviteDeclineConfirmationDialog.Visible::class.java)
-
-            val confirmDialog = newState.declineConfirmationDialog as InviteDeclineConfirmationDialog.Visible
-            assertThat(confirmDialog.isDirect).isFalse()
-            assertThat(confirmDialog.name).isEqualTo(A_ROOM_NAME)
-        }
-    }
-
-    @Test
-    fun `present - hides confirm dialog when cancelling`() = runTest {
-        val roomListService = FakeRoomListService().withRoomInvitation()
-        val presenter = createPresenter(
-            FakeMatrixClient(roomListService = roomListService)
-        )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
-            val originalState = awaitInitialItem()
-            originalState.eventSink(InviteListEvents.DeclineInvite(originalState.inviteList[0]))
-
-            skipItems(1)
-
-            originalState.eventSink(InviteListEvents.CancelDeclineInvite)
-
-            val newState = awaitItem()
-            assertThat(newState.declineConfirmationDialog).isInstanceOf(InviteDeclineConfirmationDialog.Hidden::class.java)
-        }
-    }
-
-    @Test
-    fun `present - declines invite after confirming`() = runTest {
-        val roomListService = FakeRoomListService().withRoomInvitation()
-        val fakeNotificationDrawerManager = FakeNotificationDrawerManager()
-        val client = FakeMatrixClient(
-            roomListService = roomListService,
-        )
-        val room = FakeMatrixRoom()
-        val presenter = createPresenter(client = client, notificationDrawerManager = fakeNotificationDrawerManager)
-        client.givenGetRoomResult(A_ROOM_ID, room)
-
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
-            val originalState = awaitInitialItem()
-            originalState.eventSink(InviteListEvents.DeclineInvite(originalState.inviteList[0]))
-
-            skipItems(1)
-
-            originalState.eventSink(InviteListEvents.ConfirmDeclineInvite)
-
-            skipItems(2)
-
-            assertThat(fakeNotificationDrawerManager.getClearMembershipNotificationForRoomCount(client.sessionId, A_ROOM_ID)).isEqualTo(1)
-        }
-    }
-
-    @Test
-    fun `present - declines invite after confirming and sets state on error`() = runTest {
-        val roomListService = FakeRoomListService().withRoomInvitation()
-        val client = FakeMatrixClient(
-            roomListService = roomListService,
-        )
-        val room = FakeMatrixRoom()
-        val presenter = createPresenter(client)
-        val ex = Throwable("Ruh roh!")
-        room.givenLeaveRoomError(ex)
-        client.givenGetRoomResult(A_ROOM_ID, room)
-
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
-            val originalState = awaitInitialItem()
-            originalState.eventSink(InviteListEvents.DeclineInvite(originalState.inviteList[0]))
-
-            skipItems(1)
-
-            originalState.eventSink(InviteListEvents.ConfirmDeclineInvite)
-
-            skipItems(1)
-
-            val newState = awaitItem()
-
-            assertThat(newState.declinedAction).isEqualTo(AsyncData.Failure<Unit>(ex))
-        }
-    }
-
-    @Test
-    fun `present - dismisses declining error state`() = runTest {
-        val roomListService = FakeRoomListService().withRoomInvitation()
-        val client = FakeMatrixClient(
-            roomListService = roomListService,
-        )
-        val room = FakeMatrixRoom()
-        val presenter = createPresenter(client)
-        val ex = Throwable("Ruh roh!")
-        room.givenLeaveRoomError(ex)
-        client.givenGetRoomResult(A_ROOM_ID, room)
-
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
-            val originalState = awaitInitialItem()
-            originalState.eventSink(InviteListEvents.DeclineInvite(originalState.inviteList[0]))
-
-            skipItems(1)
-
-            originalState.eventSink(InviteListEvents.ConfirmDeclineInvite)
-
-            skipItems(2)
-
-            originalState.eventSink(InviteListEvents.DismissDeclineError)
-
-            val newState = awaitItem()
-
-            assertThat(newState.declinedAction).isEqualTo(AsyncData.Uninitialized)
-        }
-    }
-
-    @Test
-    fun `present - accepts invites and sets state on success`() = runTest {
-        val roomListService = FakeRoomListService().withRoomInvitation()
-        val fakeNotificationDrawerManager = FakeNotificationDrawerManager()
-        val client = FakeMatrixClient(
-            roomListService = roomListService,
-        )
-        val room = FakeMatrixRoom()
-        val presenter = createPresenter(client = client, notificationDrawerManager = fakeNotificationDrawerManager)
-        client.givenGetRoomResult(A_ROOM_ID, room)
-
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
-            val originalState = awaitInitialItem()
-            originalState.eventSink(InviteListEvents.AcceptInvite(originalState.inviteList[0]))
-
-            val newState = awaitItem()
-
-            assertThat(newState.acceptedAction).isEqualTo(AsyncData.Success(A_ROOM_ID))
-            assertThat(fakeNotificationDrawerManager.getClearMembershipNotificationForRoomCount(client.sessionId, A_ROOM_ID)).isEqualTo(1)
-        }
-    }
-
-    @Test
-    fun `present - accepts invites and sets state on error`() = runTest {
-        val roomListService = FakeRoomListService().withRoomInvitation()
-        val client = FakeMatrixClient(
-            roomListService = roomListService,
-        )
-        val room = FakeMatrixRoom()
-        val presenter = createPresenter(client)
-        val ex = Throwable("Ruh roh!")
-        room.givenJoinRoomResult(Result.failure(ex))
-        client.givenGetRoomResult(A_ROOM_ID, room)
-
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
-            val originalState = awaitInitialItem()
-            originalState.eventSink(InviteListEvents.AcceptInvite(originalState.inviteList[0]))
-
-            assertThat(awaitItem().acceptedAction).isEqualTo(AsyncData.Failure<RoomId>(ex))
-        }
-    }
-
-    @Test
-    fun `present - dismisses accepting error state`() = runTest {
-        val roomListService = FakeRoomListService().withRoomInvitation()
-        val client = FakeMatrixClient(
-            roomListService = roomListService,
-        )
-        val room = FakeMatrixRoom()
-        val presenter = createPresenter(client)
-        val ex = Throwable("Ruh roh!")
-        room.givenJoinRoomResult(Result.failure(ex))
-        client.givenGetRoomResult(A_ROOM_ID, room)
-
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
-            val originalState = awaitInitialItem()
-            originalState.eventSink(InviteListEvents.AcceptInvite(originalState.inviteList[0]))
-
-            skipItems(1)
-
-            originalState.eventSink(InviteListEvents.DismissAcceptError)
-
-            val newState = awaitItem()
-            assertThat(newState.acceptedAction).isEqualTo(AsyncData.Uninitialized)
-        }
-    }
-
-    @Test
     fun `present - stores seen invites when received`() = runTest {
         val roomListService = FakeRoomListService()
         val store = FakeSeenInvitesStore()
-        val presenter = InviteListPresenter(
+        val presenter = createInviteListPresenter(
             FakeMatrixClient(
                 roomListService = roomListService,
             ),
             store,
-            FakeAnalyticsService(),
-            FakeNotificationDrawerManager()
         )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -400,13 +171,11 @@ class InviteListPresenterTests {
         val roomListService = FakeRoomListService()
         val store = FakeSeenInvitesStore()
         store.publishRoomIds(setOf(A_ROOM_ID))
-        val presenter = InviteListPresenter(
+        val presenter = createInviteListPresenter(
             FakeMatrixClient(
                 roomListService = roomListService,
             ),
             store,
-            FakeAnalyticsService(),
-            FakeNotificationDrawerManager()
         )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -494,15 +263,13 @@ class InviteListPresenterTests {
         return awaitItem()
     }
 
-    private fun createPresenter(
+    private fun createInviteListPresenter(
         client: MatrixClient,
         seenInvitesStore: SeenInvitesStore = FakeSeenInvitesStore(),
-        fakeAnalyticsService: AnalyticsService = FakeAnalyticsService(),
-        notificationDrawerManager: NotificationDrawerManager = FakeNotificationDrawerManager()
+        acceptDeclineInvitePresenter: Presenter<AcceptDeclineInviteState> = Presenter { anAcceptDeclineInviteState() },
     ) = InviteListPresenter(
         client,
         seenInvitesStore,
-        fakeAnalyticsService,
-        notificationDrawerManager
+        acceptDeclineInvitePresenter = acceptDeclineInvitePresenter,
     )
 }

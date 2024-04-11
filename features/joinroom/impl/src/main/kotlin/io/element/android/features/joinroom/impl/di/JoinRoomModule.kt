@@ -19,13 +19,13 @@ package io.element.android.features.joinroom.impl.di
 import com.squareup.anvil.annotations.ContributesTo
 import dagger.Module
 import dagger.Provides
-import io.element.android.features.invite.api.response.AcceptDeclineInvitePresenter
+import io.element.android.features.invite.api.response.AcceptDeclineInviteState
 import io.element.android.features.joinroom.impl.JoinRoomPresenter
 import io.element.android.features.roomdirectory.api.RoomDescription
+import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
-import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import java.util.Optional
 
 @Module
@@ -33,9 +33,8 @@ import java.util.Optional
 object JoinRoomModule {
     @Provides
     fun providesJoinRoomPresenterFactory(
-        roomListService: RoomListService,
         client: MatrixClient,
-        acceptDeclineInvitePresenter: AcceptDeclineInvitePresenter,
+        acceptDeclineInvitePresenter: Presenter<AcceptDeclineInviteState>,
     ): JoinRoomPresenter.Factory {
         return object : JoinRoomPresenter.Factory {
             override fun create(roomId: RoomId, roomDescription: Optional<RoomDescription>): JoinRoomPresenter {

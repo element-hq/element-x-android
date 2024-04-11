@@ -45,14 +45,14 @@ fun AcceptDeclineInviteView(
             async = state.acceptAction,
             onSuccess = onInviteAccepted,
             onErrorDismiss = {
-                state.eventSink(DefaultAcceptDeclineInviteEvents.DismissAcceptError)
+                state.eventSink(InternalAcceptDeclineInviteEvents.DismissAcceptError)
             },
         )
         AsyncActionView(
             async = state.declineAction,
             onSuccess = onInviteDeclined,
             onErrorDismiss = {
-                state.eventSink(DefaultAcceptDeclineInviteEvents.DismissDeclineError)
+                state.eventSink(InternalAcceptDeclineInviteEvents.DismissDeclineError)
             },
             confirmationDialog = {
                 val invite = state.invite.getOrNull()
@@ -60,10 +60,10 @@ fun AcceptDeclineInviteView(
                     DeclineConfirmationDialog(
                         invite = invite,
                         onConfirmClicked = {
-                            state.eventSink(DefaultAcceptDeclineInviteEvents.ConfirmDeclineInvite)
+                            state.eventSink(InternalAcceptDeclineInviteEvents.ConfirmDeclineInvite)
                         },
                         onDismissClicked = {
-                            state.eventSink(DefaultAcceptDeclineInviteEvents.CancelDeclineInvite)
+                            state.eventSink(InternalAcceptDeclineInviteEvents.CancelDeclineInvite)
                         }
                     )
                 }
