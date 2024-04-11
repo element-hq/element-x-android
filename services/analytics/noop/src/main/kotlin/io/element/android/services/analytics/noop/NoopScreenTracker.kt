@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright (c) 2024 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,22 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-plugins {
-    id("io.element.android-compose-library")
-    alias(libs.plugins.anvil)
-}
 
-android {
-    namespace = "io.element.android.services.analytics.noop"
-}
+package io.element.android.services.analytics.noop
 
-anvil {
-    generateDaggerFactories.set(true)
-}
+import androidx.compose.runtime.Composable
+import com.squareup.anvil.annotations.ContributesBinding
+import im.vector.app.features.analytics.plan.MobileScreen
+import io.element.android.libraries.di.AppScope
+import io.element.android.services.analytics.api.ScreenTracker
+import javax.inject.Inject
 
-dependencies {
-    implementation(libs.dagger)
-    implementation(projects.libraries.architecture)
-    implementation(projects.libraries.di)
-    api(projects.services.analytics.api)
+@ContributesBinding(AppScope::class)
+class NoopScreenTracker @Inject constructor() : ScreenTracker {
+    @Composable
+    override fun TrackScreen(screen: MobileScreen.ScreenName) = Unit
 }
