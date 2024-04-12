@@ -75,4 +75,3 @@ fun aJoinRoomState(
     acceptDeclineInviteState = acceptDeclineInviteState,
     eventSink = eventSink
 )
-

@@ -16,7 +16,6 @@
 
 package io.element.android.features.joinroom.impl
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -32,7 +31,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -138,59 +136,56 @@ private fun JoinRoomContent(
     contentState: ContentState,
     modifier: Modifier = Modifier,
 ) {
-
-    Column(
-        modifier = modifier.fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        when (contentState) {
-            is ContentState.Loaded -> {
-                ContentScaffold(
-                    avatar = {
-                        Avatar(contentState.avatarData(AvatarSize.RoomHeader))
-                    },
-                    title = {
-                        Title(contentState.computedTitle)
-                    },
-                    subtitle = {
-                        Subtitle(contentState.computedSubtitle)
-                    },
-                    description = {
-                        Description(contentState.topic ?: "")
-                    },
-                    memberCount = {
-                        if (contentState.showMemberCount) {
-                            MembersCount(memberCount = contentState.numberOfMembers ?: 0)
-                        }
+    when (contentState) {
+        is ContentState.Loaded -> {
+            ContentScaffold(
+                modifier = modifier,
+                avatar = {
+                    Avatar(contentState.avatarData(AvatarSize.RoomHeader))
+                },
+                title = {
+                    Title(contentState.computedTitle)
+                },
+                subtitle = {
+                    Subtitle(contentState.computedSubtitle)
+                },
+                description = {
+                    Description(contentState.topic ?: "")
+                },
+                memberCount = {
+                    if (contentState.showMemberCount) {
+                        MembersCount(memberCount = contentState.numberOfMembers ?: 0)
                     }
-                )
-            }
-            is ContentState.UnknownRoom -> {
-                ContentScaffold(
-                    avatar = {
-                        PlaceholderAtom(width = AvatarSize.RoomHeader.dp, height = AvatarSize.RoomHeader.dp)
-                    },
-                    title = {
-                        Title(stringResource(R.string.screen_join_room_title_no_preview))
-                    },
-                    subtitle = {
-                        Subtitle(stringResource(R.string.screen_join_room_subtitle_no_preview))
-                    },
-                )
-            }
-            is ContentState.Loading -> {
-                ContentScaffold(
-                    avatar = {
-                        PlaceholderAtom(width = AvatarSize.RoomHeader.dp, height = AvatarSize.RoomHeader.dp)
-                    },
-                    title = {
-                        PlaceholderAtom(width = 200.dp, height = 22.dp)
-                    },
-                    subtitle = {
-                        PlaceholderAtom(width = 140.dp, height = 20.dp)
-                    },
-                )
-            }
+                }
+            )
+        }
+        is ContentState.UnknownRoom -> {
+            ContentScaffold(
+                modifier = modifier,
+                avatar = {
+                    PlaceholderAtom(width = AvatarSize.RoomHeader.dp, height = AvatarSize.RoomHeader.dp)
+                },
+                title = {
+                    Title(stringResource(R.string.screen_join_room_title_no_preview))
+                },
+                subtitle = {
+                    Subtitle(stringResource(R.string.screen_join_room_subtitle_no_preview))
+                },
+            )
+        }
+        is ContentState.Loading -> {
+            ContentScaffold(
+                modifier = modifier,
+                avatar = {
+                    PlaceholderAtom(width = AvatarSize.RoomHeader.dp, height = AvatarSize.RoomHeader.dp)
+                },
+                title = {
+                    PlaceholderAtom(width = 200.dp, height = 22.dp)
+                },
+                subtitle = {
+                    PlaceholderAtom(width = 140.dp, height = 20.dp)
+                },
+            )
         }
     }
 }
@@ -200,23 +195,29 @@ private fun ContentScaffold(
     avatar: @Composable () -> Unit,
     title: @Composable () -> Unit,
     subtitle: @Composable () -> Unit,
+    modifier: Modifier = Modifier,
     description: @Composable (() -> Unit)? = null,
     memberCount: @Composable (() -> Unit)? = null,
 ) {
-    avatar()
-    Spacer(modifier = Modifier.height(16.dp))
-    title()
-    Spacer(modifier = Modifier.height(8.dp))
-    subtitle()
-    Spacer(modifier = Modifier.height(8.dp))
-    if (memberCount != null) {
-        memberCount()
+    Column(
+        modifier = modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        avatar()
+        Spacer(modifier = Modifier.height(16.dp))
+        title()
+        Spacer(modifier = Modifier.height(8.dp))
+        subtitle()
+        Spacer(modifier = Modifier.height(8.dp))
+        if (memberCount != null) {
+            memberCount()
+        }
+        Spacer(modifier = Modifier.height(8.dp))
+        if (description != null) {
+            description()
+        }
+        Spacer(modifier = Modifier.height(24.dp))
     }
-    Spacer(modifier = Modifier.height(8.dp))
-    if (description != null) {
-        description()
-    }
-    Spacer(modifier = Modifier.height(24.dp))
 }
 
 @Composable
@@ -256,12 +257,11 @@ private fun Description(description: String, modifier: Modifier = Modifier) {
 
 @Composable
 private fun MembersCount(memberCount: Long) {
-    Spacer(modifier = Modifier.height(8.dp))
     Row(
         modifier = Modifier
-            .background(color = ElementTheme.colors.bgSubtleSecondary, shape = CircleShape)
-            .widthIn(min = 48.dp)
-            .padding(all = 2.dp),
+                .background(color = ElementTheme.colors.bgSubtleSecondary, shape = CircleShape)
+                .widthIn(min = 48.dp)
+                .padding(all = 2.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(4.dp)
     ) {

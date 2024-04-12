@@ -25,7 +25,6 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import java.util.Optional
 
 interface JoinRoomEntryPoint : FeatureEntryPoint {
-
     fun createNode(parentNode: Node, buildContext: BuildContext, inputs: Inputs): Node
 
     data class Inputs(
@@ -33,4 +32,3 @@ interface JoinRoomEntryPoint : FeatureEntryPoint {
         val roomDescription: Optional<RoomDescription>,
     ) : NodeInputs
 }
-

@@ -26,7 +26,6 @@ import javax.inject.Inject
 
 @ContributesBinding(AppScope::class)
 class DefaultJoinRoomEntryPoint @Inject constructor() : JoinRoomEntryPoint {
-
     override fun createNode(parentNode: Node, buildContext: BuildContext, inputs: JoinRoomEntryPoint.Inputs): Node {
         return parentNode.createNode<JoinRoomNode>(
             buildContext = buildContext,

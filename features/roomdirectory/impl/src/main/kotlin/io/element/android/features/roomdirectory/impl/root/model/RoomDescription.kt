@@ -20,7 +20,6 @@ import io.element.android.features.roomdirectory.api.RoomDescription
 import io.element.android.libraries.matrix.api.roomdirectory.RoomDescription as MatrixRoomDescription
 
 fun MatrixRoomDescription.toFeatureModel(): RoomDescription {
-
     return RoomDescription(
         roomId = roomId,
         name = name,

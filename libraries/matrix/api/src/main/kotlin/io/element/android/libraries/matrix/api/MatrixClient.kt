@@ -27,7 +27,6 @@ import io.element.android.libraries.matrix.api.notification.NotificationService
 import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsService
 import io.element.android.libraries.matrix.api.oidc.AccountManagementAction
 import io.element.android.libraries.matrix.api.pusher.PushersService
-import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomInfo
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
@@ -100,4 +99,3 @@ interface MatrixClient : Closeable {
     suspend fun trackRecentlyVisitedRoom(roomId: RoomId): Result<Unit>
     suspend fun getRecentlyVisitedRooms(): Result<List<RoomId>>
 }
-

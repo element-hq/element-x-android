@@ -276,5 +276,4 @@ class FakeMatrixClient(
     }
 
     override fun getRoomInfoFlow(roomId: RoomId) = getRoomInfoFlowLambda(roomId)
-
 }

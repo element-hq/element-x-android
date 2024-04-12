@@ -36,7 +36,6 @@ class JoinRoomNode @AssistedInject constructor(
     presenterFactory: JoinRoomPresenter.Factory,
     private val acceptDeclineInviteView: AcceptDeclineInviteView,
 ) : Node(buildContext, plugins = plugins) {
-
     private val inputs: JoinRoomEntryPoint.Inputs = inputs()
     private val presenter = presenterFactory.create(inputs.roomId, inputs.roomDescription)
 

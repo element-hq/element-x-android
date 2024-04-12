@@ -28,7 +28,7 @@ data class JoinRoomState(
     val acceptDeclineInviteState: AcceptDeclineInviteState,
     val eventSink: (JoinRoomEvents) -> Unit
 ) {
-    val joinAuthorisationStatus = when(contentState) {
+    val joinAuthorisationStatus = when (contentState) {
         is ContentState.Loaded -> contentState.joinAuthorisationStatus
         else -> JoinAuthorisationStatus.Unknown
     }

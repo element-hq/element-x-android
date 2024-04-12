@@ -17,12 +17,9 @@
 package io.element.android.features.roomdirectory.impl.root
 
 import androidx.activity.ComponentActivity
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onAllNodesWithTag
-import androidx.compose.ui.test.onAllNodesWithText
-import androidx.compose.ui.test.onChild
 import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
@@ -33,7 +30,6 @@ import io.element.android.features.roomdirectory.api.RoomDescription
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.testtags.TestTags
-import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.tests.testutils.EnsureNeverCalled
 import io.element.android.tests.testutils.EnsureNeverCalledWithParam
 import io.element.android.tests.testutils.EventsRecorder
@@ -74,7 +70,7 @@ class RoomDirectoryViewTest {
                 state = state,
                 onResultClicked = callback,
             )
-            rule.onNodeWithText(clickedRoom.name).performClick()
+            rule.onNodeWithText(clickedRoom.computedName).performClick()
         }
     }
 

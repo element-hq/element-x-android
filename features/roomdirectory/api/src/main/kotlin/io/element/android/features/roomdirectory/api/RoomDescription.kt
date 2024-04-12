@@ -21,6 +21,7 @@ import androidx.compose.runtime.Immutable
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.core.RoomId
+import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
@@ -34,15 +35,16 @@ data class RoomDescription(
     val joinRule: JoinRule,
     val numberOfMembers: Long,
 ) : Parcelable {
-
     enum class JoinRule {
         PUBLIC,
         KNOCK,
         UNKNOWN
     }
 
+    @IgnoredOnParcel
     val computedName = name ?: alias ?: roomId.value
 
+    @IgnoredOnParcel
     val computedDescription: String
         get() {
             return when {
@@ -53,7 +55,8 @@ data class RoomDescription(
             }
         }
 
-    fun canBeJoined() = joinRule == JoinRule.PUBLIC || joinRule == JoinRule.KNOCK
+    @IgnoredOnParcel
+    val canJoinOrKnock = joinRule == JoinRule.PUBLIC || joinRule == JoinRule.KNOCK
 
     fun avatarData(size: AvatarSize) = AvatarData(
         id = roomId.value,

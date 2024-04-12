@@ -35,6 +35,7 @@ import io.element.android.libraries.designsystem.theme.components.Text
 
 /**
  * @param modifier Classical modifier.
+ * @param paddingValues padding values to apply to the content.
  * @param background optional background component.
  * @param topBar optional topBar.
  * @param header optional header.

@@ -23,7 +23,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import com.squareup.anvil.annotations.ContributesBinding
 import im.vector.app.features.analytics.plan.JoinedRoom
 import io.element.android.features.invite.api.response.AcceptDeclineInviteEvents
 import io.element.android.features.invite.api.response.AcceptDeclineInviteState
@@ -32,7 +31,6 @@ import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runCatchingUpdatingState
 import io.element.android.libraries.architecture.runUpdatingState
-import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.push.api.notifications.NotificationDrawerManager
@@ -49,10 +47,8 @@ class AcceptDeclineInvitePresenter @Inject constructor(
     private val analyticsService: AnalyticsService,
     private val notificationDrawerManager: NotificationDrawerManager,
 ) : Presenter<AcceptDeclineInviteState> {
-
     @Composable
     override fun present(): AcceptDeclineInviteState {
-
         val localCoroutineScope = rememberCoroutineScope()
         val acceptedAction: MutableState<AsyncAction<RoomId>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
         val declinedAction: MutableState<AsyncAction<RoomId>> = remember { mutableStateOf(AsyncAction.Uninitialized) }

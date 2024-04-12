@@ -79,11 +79,8 @@ interface RoomListService {
      * The state of the service as a flow.
      */
     val state: StateFlow<State>
-
 }
 
 fun RoomList.loadedStateFlow(): Flow<RoomList.LoadingState.Loaded> {
     return loadingState.filterIsInstance()
 }
-
-

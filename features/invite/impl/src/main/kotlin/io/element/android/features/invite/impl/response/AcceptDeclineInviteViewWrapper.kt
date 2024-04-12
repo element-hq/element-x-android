@@ -27,7 +27,6 @@ import javax.inject.Inject
 
 @ContributesBinding(SessionScope::class)
 class AcceptDeclineInviteViewWrapper @Inject constructor() : AcceptDeclineInviteView {
-
     @Composable
     override fun Render(
         state: AcceptDeclineInviteState,

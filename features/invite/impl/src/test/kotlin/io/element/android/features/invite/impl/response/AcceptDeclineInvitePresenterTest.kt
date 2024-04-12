@@ -40,7 +40,6 @@ import org.junit.Test
 import java.util.Optional
 
 class AcceptDeclineInvitePresenterTest {
-
     @get:Rule
     val warmUpRule = WarmUpRule()
 

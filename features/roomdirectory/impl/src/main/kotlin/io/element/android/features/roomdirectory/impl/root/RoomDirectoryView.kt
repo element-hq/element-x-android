@@ -91,8 +91,8 @@ fun RoomDirectoryView(
                 onResultClicked = onResultClicked,
                 onJoinClicked = ::joinRoom,
                 modifier = Modifier
-                    .padding(padding)
-                    .consumeWindowInsets(padding)
+                        .padding(padding)
+                        .consumeWindowInsets(padding)
             )
         }
     )
@@ -199,10 +199,10 @@ private fun RoomDirectoryRoomList(
 @Composable
 private fun LoadMoreIndicator(modifier: Modifier = Modifier) {
     Box(
-        modifier
-            .fillMaxWidth()
-            .wrapContentHeight()
-            .padding(24.dp),
+            modifier
+                    .fillMaxWidth()
+                    .wrapContentHeight()
+                    .padding(24.dp),
         contentAlignment = Alignment.Center,
     ) {
         CircularProgressIndicator(
@@ -273,14 +273,14 @@ private fun RoomDirectoryRoomRow(
 ) {
     Row(
         modifier = modifier
-            .fillMaxWidth()
-            .clickable(onClick = onClick)
-            .padding(
-                top = 12.dp,
-                bottom = 12.dp,
-                start = 16.dp,
-            )
-            .height(IntrinsicSize.Min),
+                .fillMaxWidth()
+                .clickable(onClick = onClick)
+                .padding(
+                        top = 12.dp,
+                        bottom = 12.dp,
+                        start = 16.dp,
+                )
+                .height(IntrinsicSize.Min),
     ) {
         Avatar(
             avatarData = roomDescription.avatarData(AvatarSize.RoomDirectoryItem),
@@ -288,8 +288,8 @@ private fun RoomDirectoryRoomRow(
         )
         Column(
             modifier = Modifier
-                .weight(1f)
-                .padding(start = 16.dp)
+                    .weight(1f)
+                    .padding(start = 16.dp)
         ) {
             Text(
                 text = roomDescription.computedName,
@@ -306,15 +306,15 @@ private fun RoomDirectoryRoomRow(
                 overflow = TextOverflow.Ellipsis,
             )
         }
-        if (roomDescription.canBeJoined()) {
+        if (roomDescription.canJoinOrKnock) {
             Text(
                 text = stringResource(id = CommonStrings.action_join),
                 color = ElementTheme.colors.textSuccessPrimary,
                 modifier = Modifier
-                    .align(Alignment.CenterVertically)
-                    .clickable(onClick = onJoinClick)
-                    .padding(start = 4.dp, end = 12.dp)
-                    .testTag(TestTags.callToAction.value)
+                        .align(Alignment.CenterVertically)
+                        .clickable(onClick = onJoinClick)
+                        .padding(start = 4.dp, end = 12.dp)
+                        .testTag(TestTags.callToAction.value)
             )
         } else {
             Spacer(modifier = Modifier.width(24.dp))

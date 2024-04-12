@@ -41,7 +41,6 @@ import org.junit.Test
 import java.util.Optional
 
 class JoinRoomPresenterTest {
-
     @get:Rule
     val warmUpRule = WarmUpRule()
 
@@ -136,7 +135,6 @@ class JoinRoomPresenterTest {
                         listOf(value(AcceptDeclineInviteEvents.AcceptInvite(inviteData))),
                         listOf(value(AcceptDeclineInviteEvents.DeclineInvite(inviteData))),
                     )
-
             }
         }
     }

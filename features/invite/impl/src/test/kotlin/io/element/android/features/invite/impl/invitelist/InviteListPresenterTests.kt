@@ -24,11 +24,7 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.features.invite.api.SeenInvitesStore
 import io.element.android.features.invite.api.response.AcceptDeclineInviteState
 import io.element.android.features.invite.api.response.anAcceptDeclineInviteState
-import io.element.android.features.invite.impl.invitelist.InviteListEvents
-import io.element.android.features.invite.impl.invitelist.InviteListPresenter
-import io.element.android.features.invite.impl.invitelist.InviteListState
 import io.element.android.features.invite.test.FakeSeenInvitesStore
-import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
@@ -43,14 +39,9 @@ import io.element.android.libraries.matrix.test.A_ROOM_NAME
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.A_USER_NAME
 import io.element.android.libraries.matrix.test.FakeMatrixClient
-import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.matrix.test.room.aRoomMember
 import io.element.android.libraries.matrix.test.room.aRoomSummaryDetails
 import io.element.android.libraries.matrix.test.roomlist.FakeRoomListService
-import io.element.android.libraries.push.api.notifications.NotificationDrawerManager
-import io.element.android.libraries.push.test.notifications.FakeNotificationDrawerManager
-import io.element.android.services.analytics.api.AnalyticsService
-import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.tests.testutils.WarmUpRule
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule

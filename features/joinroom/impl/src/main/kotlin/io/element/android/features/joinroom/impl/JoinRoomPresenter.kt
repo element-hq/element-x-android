@@ -40,7 +40,6 @@ class JoinRoomPresenter @AssistedInject constructor(
     private val matrixClient: MatrixClient,
     private val acceptDeclineInvitePresenter: Presenter<AcceptDeclineInviteState>,
 ) : Presenter<JoinRoomState> {
-
     interface Factory {
         fun create(roomId: RoomId, roomDescription: Optional<RoomDescription>): JoinRoomPresenter
     }
