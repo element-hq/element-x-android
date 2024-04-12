@@ -168,6 +168,11 @@ function addForm() {
       addTable();
   };
   form.appendChild(dateInput);
+  // Add a span with id result to display the number of lines
+  const lines = document.createElement('span');
+  lines.id = 'lines';
+  lines.textContent = "...";
+  form.appendChild(lines);
   document.getElementById('form_container').appendChild(form);
 }
 
@@ -206,6 +211,7 @@ function createImageElement(fullFile, modifiedDayTime) {
 }
 
 function addTable() {
+  var linesCounter = 0;
   // Remove any previous table
   document.getElementById('screenshots_container').innerHTML = '';
   // screenshots contains a table of screenshots, lets convert to an html table
@@ -269,6 +275,7 @@ function addTable() {
       tr.appendChild(td);
     }
     if (showAllScreenshots || hasTranslatedFiles) {
+      linesCounter++;
       // Add a header for row, if different from previous
       if (niceName != currentHeaderValue) {
         currentHeaderValue = niceName;
@@ -291,6 +298,8 @@ function addTable() {
 
   // Add the table to the div with id screenshots_container
   document.getElementById('screenshots_container').appendChild(table);
+  // Update the number of lines
+  document.getElementById('lines').textContent = `${linesCounter} lines`;
 }
 
 addForm();
