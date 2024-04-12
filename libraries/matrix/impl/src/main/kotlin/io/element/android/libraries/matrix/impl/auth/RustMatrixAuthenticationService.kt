@@ -42,7 +42,12 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.withContext
+import org.matrix.rustcomponents.sdk.ClientBuilder
 import org.matrix.rustcomponents.sdk.OidcAuthenticationData
+import org.matrix.rustcomponents.sdk.OidcConfiguration
+import org.matrix.rustcomponents.sdk.QrCodeData
+import org.matrix.rustcomponents.sdk.QrLoginProgress
+import org.matrix.rustcomponents.sdk.QrLoginProgressListener
 import org.matrix.rustcomponents.sdk.use
 import timber.log.Timber
 import java.io.File
@@ -208,5 +213,32 @@ class RustMatrixAuthenticationService @Inject constructor(
                 failure.mapAuthenticationException()
             }
         }
+    }
+
+    override suspend fun loginWithQrCode(qrCodeBytes: ByteArray) = runCatching {
+        val decodedQrData = QrCodeData.fromBytes(qrCodeBytes)
+        val client = ClientBuilder().buildWithQrCode(
+            qrCodeData = decodedQrData,
+            oidcConfiguration = oidcConfiguration,
+            progressListener = object : QrLoginProgressListener {
+                override fun onUpdate(state: QrLoginProgress) {
+                    println("QR Code login progress: $state")
+                }
+            }
+        )
+        val sessionData = client.use {
+            it.session().toSessionData(
+                isTokenValid = true,
+                loginType = LoginType.OIDC,
+                passphrase = pendingPassphrase,
+                needsVerification = true,
+            )
+        }
+        pendingOidcAuthenticationData?.close()
+        pendingOidcAuthenticationData = null
+        sessionStore.storeData(sessionData)
+        SessionId(sessionData.userId)
+    }.onFailure {
+        it.printStackTrace()
     }
 }

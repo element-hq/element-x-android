@@ -20,15 +20,17 @@ import android.graphics.ImageFormat
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageProxy
 import com.google.zxing.BinaryBitmap
+import com.google.zxing.DecodeHintType
 import com.google.zxing.NotFoundException
 import com.google.zxing.PlanarYUVLuminanceSource
+import com.google.zxing.ResultMetadataType
 import com.google.zxing.common.HybridBinarizer
 import com.google.zxing.qrcode.QRCodeReader
 import timber.log.Timber
 import java.nio.ByteBuffer
 
 internal class QRCodeAnalyzer(
-    private val onQrCodeScanned: (result: String?) -> Unit
+    private val onQrCodeScanned: (result: ByteArray?) -> Unit
 ) : ImageAnalysis.Analyzer {
     private val reader = QRCodeReader()
 
@@ -48,7 +50,9 @@ internal class QRCodeAnalyzer(
             val binaryBitmap = BinaryBitmap(HybridBinarizer(source))
             try {
                 val result = reader.decode(binaryBitmap)
-                onQrCodeScanned(result.text)
+                val byteSegments = result.resultMetadata[ResultMetadataType.BYTE_SEGMENTS] as? List<*>
+                val contents = byteSegments?.first() as? ByteArray ?: error("No byte segments found")
+                onQrCodeScanned(contents)
             } catch (_: NotFoundException) {
                 // No QR code found in the image
             } catch (e: Exception) {

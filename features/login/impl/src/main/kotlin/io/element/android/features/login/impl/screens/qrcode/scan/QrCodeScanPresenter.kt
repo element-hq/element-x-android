@@ -36,10 +36,11 @@ class QrCodeScanPresenter @Inject constructor(
     private val authenticationService: MatrixAuthenticationService,
 ) : Presenter<QrCodeScanState> {
 
+    private var isScanning by mutableStateOf(true)
+
     @Composable
     override fun present(): QrCodeScanState {
         val coroutineScope = rememberCoroutineScope()
-        var isScanning by remember { mutableStateOf(true) }
         val authenticationAction: MutableState<AsyncAction<Unit>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
 
         fun handleEvents(event: QrCodeScanEvents) {
@@ -62,10 +63,14 @@ class QrCodeScanPresenter @Inject constructor(
         )
     }
 
-    private fun CoroutineScope.authenticateWithCode(authenticationAction: MutableState<AsyncAction<Unit>>, code: String) = launch {
+    private fun CoroutineScope.authenticateWithCode(authenticationAction: MutableState<AsyncAction<Unit>>, code: ByteArray) = launch {
         suspend {
             // TODO Call the SDK API, for now, just simulate an error
-            delay(3000)
+            val result = authenticationService.loginWithQrCode(code)
+                .onFailure {
+                    isScanning = true
+                }
+//            delay(3000)
 //            throw Exception("Simulated error $code")
         }.runCatchingUpdatingState(authenticationAction)
     }

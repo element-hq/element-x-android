@@ -46,7 +46,7 @@ import timber.log.Timber
 
 @Composable
 fun QrCodeCameraView(
-    onQrCodeScanned: (String) -> Unit,
+    onQrCodeScanned: (ByteArray) -> Unit,
     modifier: Modifier = Modifier,
     renderPreview: Boolean = true,
 ) {
@@ -83,6 +83,7 @@ fun QrCodeCameraView(
                         imageAnalysis.setAnalyzer(
                             ContextCompat.getMainExecutor(previewView.context),
                             QRCodeAnalyzer { result ->
+                                // TODO: This probably needs a Mutex or some AtomicBoolean to prevent several onQrCodeScanned calls
                                 result?.let {
                                     Timber.d("QR code scanned!")
                                     onQrCodeScanned(it)
@@ -106,7 +107,11 @@ fun QrCodeCameraView(
                             lastFrame = previewView.bitmap
                             Timber.d("Saving last frame. Is null? ${lastFrame == null}")
                         }
-                        cameraProviderFuture.get().unbind(previewUseCase)
+                        cameraProviderFuture.get().let { cameraProvider ->
+                            if (cameraProvider.isBound(previewUseCase)) {
+                                cameraProvider.unbind(previewUseCase)
+                            }
+                        }
                     }
                 },
                 onRelease = {

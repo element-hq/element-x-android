@@ -53,4 +53,6 @@ interface MatrixAuthenticationService {
      * Attempt to login using the [callbackUrl] provided by the Oidc page.
      */
     suspend fun loginWithOidc(callbackUrl: String): Result<SessionId>
+
+    suspend fun loginWithQrCode(qrCodeBytes: ByteArray): Result<SessionId>
 }

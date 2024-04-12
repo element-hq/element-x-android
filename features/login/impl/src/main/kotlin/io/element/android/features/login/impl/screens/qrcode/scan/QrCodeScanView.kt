@@ -104,7 +104,7 @@ private fun Content(
                 modifier = Modifier
                     .fillMaxSize()
                     // TODO: FOR TESTING ONLY, REMOVE THIS
-                    .clickable { state.eventSink.invoke(QrCodeScanEvents.QrCodeScanned("ASDA")) },
+                    .clickable { state.eventSink.invoke(QrCodeScanEvents.QrCodeScanned(byteArrayOf(1))) },
                 onQrCodeScanned = { state.eventSink.invoke(QrCodeScanEvents.QrCodeScanned(it)) },
                 renderPreview = state.isScanning,
             )
