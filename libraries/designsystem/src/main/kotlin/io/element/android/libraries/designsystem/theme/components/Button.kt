@@ -138,6 +138,7 @@ private fun ButtonInternal(
     leadingIcon: IconSource? = null,
 ) {
     val minHeight = when (size) {
+        ButtonSize.Small -> 32.dp
         ButtonSize.Medium -> 40.dp
         ButtonSize.Large -> 48.dp
     }
@@ -145,6 +146,13 @@ private fun ButtonInternal(
     val hasStartDrawable = showProgress || leadingIcon != null
 
     val contentPadding = when (size) {
+        ButtonSize.Small -> {
+            if (hasStartDrawable) {
+                PaddingValues(start = 8.dp, top = 5.dp, end = 16.dp, bottom = 5.dp)
+            } else {
+                PaddingValues(start = 16.dp, top = 5.dp, end = 16.dp, bottom = 5.dp)
+            }
+        }
         ButtonSize.Medium -> when (style) {
             ButtonStyle.Filled,
             ButtonStyle.Outlined -> if (hasStartDrawable) {
@@ -195,7 +203,7 @@ private fun ButtonInternal(
     }
 
     val textStyle = when (size) {
-        ButtonSize.Medium -> MaterialTheme.typography.labelLarge
+        ButtonSize.Small, ButtonSize.Medium -> MaterialTheme.typography.labelLarge
         ButtonSize.Large -> ElementTheme.typography.fontBodyLgMedium
     }
 
@@ -259,6 +267,7 @@ sealed interface IconSource {
 }
 
 enum class ButtonSize {
+    Small,
     Medium,
     Large
 }
@@ -319,6 +328,15 @@ internal enum class ButtonStyle {
 
 @Preview(group = PreviewGroup.Buttons)
 @Composable
+internal fun FilledButtonSmallPreview() {
+    ButtonCombinationPreview(
+        style = ButtonStyle.Filled,
+        size = ButtonSize.Small,
+    )
+}
+
+@Preview(group = PreviewGroup.Buttons)
+@Composable
 internal fun FilledButtonMediumPreview() {
     ButtonCombinationPreview(
         style = ButtonStyle.Filled,
@@ -337,6 +355,15 @@ internal fun FilledButtonLargePreview() {
 
 @Preview(group = PreviewGroup.Buttons)
 @Composable
+internal fun OutlinedButtonSmallPreview() {
+    ButtonCombinationPreview(
+        style = ButtonStyle.Outlined,
+        size = ButtonSize.Small,
+    )
+}
+
+@Preview(group = PreviewGroup.Buttons)
+@Composable
 internal fun OutlinedButtonMediumPreview() {
     ButtonCombinationPreview(
         style = ButtonStyle.Outlined,
@@ -350,6 +377,15 @@ internal fun OutlinedButtonLargePreview() {
     ButtonCombinationPreview(
         style = ButtonStyle.Outlined,
         size = ButtonSize.Large,
+    )
+}
+
+@Preview(group = PreviewGroup.Buttons)
+@Composable
+internal fun TextButtonSmallPreview() {
+    ButtonCombinationPreview(
+        style = ButtonStyle.Text,
+        size = ButtonSize.Small,
     )
 }
 
