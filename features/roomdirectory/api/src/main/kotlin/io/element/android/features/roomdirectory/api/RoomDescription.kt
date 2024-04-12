@@ -17,16 +17,19 @@
 package io.element.android.features.roomdirectory.api
 
 import android.os.Parcelable
+import androidx.compose.runtime.Immutable
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.core.RoomId
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
+@Immutable
 data class RoomDescription(
     val roomId: RoomId,
-    val name: String,
-    val description: String,
+    val name: String?,
+    val alias: String?,
+    val topic: String?,
     val avatarUrl: String?,
     val joinRule: JoinRule,
     val numberOfMembers: Long,
@@ -37,6 +40,18 @@ data class RoomDescription(
         KNOCK,
         UNKNOWN
     }
+
+    val computedName = name ?: alias ?: roomId.value
+
+    val computedDescription: String
+        get() {
+            return when {
+                topic != null -> topic
+                name != null && alias != null -> alias
+                name == null && alias == null -> ""
+                else -> roomId.value
+            }
+        }
 
     fun canBeJoined() = joinRule == JoinRule.PUBLIC || joinRule == JoinRule.KNOCK
 

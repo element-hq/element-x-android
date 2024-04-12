@@ -26,7 +26,6 @@ import io.element.android.features.invite.api.response.AcceptDeclineInviteEvents
 import io.element.android.features.invite.api.response.AcceptDeclineInviteState
 import io.element.android.features.invite.api.response.InviteData
 import io.element.android.features.roomdirectory.api.RoomDescription
-import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -49,18 +48,16 @@ class JoinRoomPresenter @AssistedInject constructor(
     @Composable
     override fun present(): JoinRoomState {
         val roomInfo by matrixClient.getRoomInfoFlow(roomId).collectAsState(initial = Optional.empty())
-        val contentState by produceState<AsyncData<ContentState>>(initialValue = AsyncData.Uninitialized, key1 = roomInfo) {
+        val contentState by produceState<ContentState>(initialValue = ContentState.Loading(roomId), key1 = roomInfo) {
             value = when {
                 roomInfo.isPresent -> {
-                    val contentState = roomInfo.get().toContentState()
-                    AsyncData.Success(contentState)
+                    roomInfo.get().toContentState()
                 }
                 roomDescription.isPresent -> {
-                    val contentState = roomDescription.get().toContentState()
-                    AsyncData.Success(contentState)
+                    roomDescription.get().toContentState()
                 }
                 else -> {
-                    AsyncData.Uninitialized
+                    ContentState.UnknownRoom(roomId)
                 }
             }
         }
@@ -93,10 +90,11 @@ class JoinRoomPresenter @AssistedInject constructor(
 
 @VisibleForTesting
 internal fun RoomDescription.toContentState(): ContentState {
-    return ContentState(
+    return ContentState.Loaded(
         roomId = roomId,
         name = name,
-        description = description,
+        topic = topic,
+        alias = alias,
         numberOfMembers = numberOfMembers,
         isDirect = false,
         roomAvatarUrl = avatarUrl,
@@ -110,26 +108,11 @@ internal fun RoomDescription.toContentState(): ContentState {
 
 @VisibleForTesting
 internal fun MatrixRoomInfo.toContentState(): ContentState {
-    fun title(): String {
-        return name ?: canonicalAlias ?: id
-    }
-
-    fun description(): String? {
-        val topic = topic
-        val alias = canonicalAlias
-        val name = name
-        return when {
-            topic != null -> topic
-            name != null && alias != null -> alias
-            name == null && alias == null -> null
-            else -> id
-        }
-    }
-
-    return ContentState(
+    return ContentState.Loaded(
         roomId = RoomId(id),
-        name = title(),
-        description = description(),
+        name = name,
+        topic = topic,
+        alias = canonicalAlias,
         numberOfMembers = activeMembersCount,
         isDirect = isDirect,
         roomAvatarUrl = avatarUrl,
@@ -142,12 +125,13 @@ internal fun MatrixRoomInfo.toContentState(): ContentState {
 }
 
 @VisibleForTesting
-internal fun AsyncData<ContentState>.toInviteData(): InviteData? {
-    return dataOrNull()?.let { contentState ->
-        InviteData(
-            roomId = contentState.roomId,
-            roomName = contentState.name,
-            isDirect = contentState.isDirect
+internal fun ContentState.toInviteData(): InviteData? {
+    return when (this) {
+        is ContentState.Loaded -> InviteData(
+            roomId = roomId,
+            roomName = computedTitle,
+            isDirect = isDirect
         )
+        else -> null
     }
 }

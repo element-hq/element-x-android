@@ -19,45 +19,47 @@ package io.element.android.features.joinroom.impl
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.invite.api.response.AcceptDeclineInviteState
 import io.element.android.features.invite.api.response.anAcceptDeclineInviteState
-import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.core.RoomId
 
 open class JoinRoomStateProvider : PreviewParameterProvider<JoinRoomState> {
     override val values: Sequence<JoinRoomState>
         get() = sequenceOf(
             aJoinRoomState(
-                contentState = AsyncData.Uninitialized
+                contentState = anUninitializedContentState()
             ),
             aJoinRoomState(
-                contentState = AsyncData.Success(
-                    aContentState(joinAuthorisationStatus = JoinAuthorisationStatus.CanJoin)
-                )
+                contentState = anUnknownContentState()
             ),
             aJoinRoomState(
-                contentState = AsyncData.Success(
-                    aContentState(joinAuthorisationStatus = JoinAuthorisationStatus.CanKnock)
-                )
+                contentState = aLoadedContentState(joinAuthorisationStatus = JoinAuthorisationStatus.CanJoin)
             ),
             aJoinRoomState(
-                contentState = AsyncData.Success(
-                    aContentState(joinAuthorisationStatus = JoinAuthorisationStatus.IsInvited)
-                )
+                contentState = aLoadedContentState(joinAuthorisationStatus = JoinAuthorisationStatus.CanKnock)
+            ),
+            aJoinRoomState(
+                contentState = aLoadedContentState(joinAuthorisationStatus = JoinAuthorisationStatus.IsInvited)
             ),
         )
 }
 
-fun aContentState(
+fun anUnknownContentState(roomId: RoomId = RoomId("@exa:matrix.org")) = ContentState.UnknownRoom(roomId)
+
+fun anUninitializedContentState(roomId: RoomId = RoomId("@exa:matrix.org")) = ContentState.Loading(roomId)
+
+fun aLoadedContentState(
     roomId: RoomId = RoomId("@exa:matrix.org"),
     name: String = "Element x android",
-    description: String? = "#exa:matrix.org",
+    alias: String? = "#exa:matrix.org",
+    topic: String? = "Element X is a secure, private and decentralized messenger.",
     numberOfMembers: Long? = null,
     isDirect: Boolean = false,
     roomAvatarUrl: String? = null,
     joinAuthorisationStatus: JoinAuthorisationStatus = JoinAuthorisationStatus.Unknown
-) = ContentState(
+) = ContentState.Loaded(
     roomId = roomId,
     name = name,
-    description = description,
+    alias = alias,
+    topic = topic,
     numberOfMembers = numberOfMembers,
     isDirect = isDirect,
     roomAvatarUrl = roomAvatarUrl,
@@ -65,9 +67,7 @@ fun aContentState(
 )
 
 fun aJoinRoomState(
-    contentState: AsyncData<ContentState> = AsyncData.Success(
-        aContentState()
-    ),
+    contentState: ContentState = aLoadedContentState(),
     acceptDeclineInviteState: AcceptDeclineInviteState = anAcceptDeclineInviteState(),
     eventSink: (JoinRoomEvents) -> Unit = {}
 ) = JoinRoomState(

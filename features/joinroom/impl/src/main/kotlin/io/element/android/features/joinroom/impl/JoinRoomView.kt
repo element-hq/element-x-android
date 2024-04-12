@@ -16,9 +16,11 @@
 
 package io.element.android.features.joinroom.impl
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -30,14 +32,15 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
-import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.atomic.atoms.PlaceholderAtom
 import io.element.android.libraries.designsystem.atomic.molecules.ButtonRowMolecule
 import io.element.android.libraries.designsystem.atomic.pages.HeaderFooterPage
@@ -61,11 +64,12 @@ fun JoinRoomView(
 ) {
     HeaderFooterPage(
         modifier = modifier,
+        paddingValues = PaddingValues(16.dp),
         topBar = {
             JoinRoomTopBar(onBackClicked = onBackPressed)
         },
         content = {
-            JoinRoomContent(asyncContentState = state.contentState)
+            JoinRoomContent(contentState = state.contentState)
         },
         footer = {
             JoinRoomFooter(
@@ -111,22 +115,19 @@ private fun JoinRoomFooter(
         }
         JoinAuthorisationStatus.CanJoin -> {
             Button(
-                text = stringResource(CommonStrings.action_join),
+                text = stringResource(R.string.screen_join_room_join_action),
                 onClick = onJoinRoom,
                 modifier = modifier.fillMaxWidth(),
                 size = ButtonSize.Medium,
             )
         }
         JoinAuthorisationStatus.CanKnock -> {
-            //TODO knock
-            /*
             Button(
-                text = stringResource(CommonStrings.action_knock),
+                text = stringResource(R.string.screen_join_room_knock_action),
                 onClick = onJoinRoom,
                 modifier = modifier.fillMaxWidth(),
                 size = ButtonSize.Medium,
             )
-             */
         }
         JoinAuthorisationStatus.Unknown -> Unit
     }
@@ -134,63 +135,60 @@ private fun JoinRoomFooter(
 
 @Composable
 private fun JoinRoomContent(
-    asyncContentState: AsyncData<ContentState>,
+    contentState: ContentState,
     modifier: Modifier = Modifier,
 ) {
 
-    @Composable
-    fun ContentScaffold(
-        avatar: @Composable () -> Unit,
-        title: String,
-        description: String,
-        memberCount: @Composable (() -> Unit)? = null
-    ) {
-        avatar()
-        Spacer(modifier = Modifier.height(16.dp))
-        Text(
-            text = title,
-            style = ElementTheme.typography.fontHeadingMdBold,
-            textAlign = TextAlign.Center,
-            color = ElementTheme.colors.textPrimary,
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-        Text(
-            text = description,
-            style = ElementTheme.typography.fontBodyMdRegular,
-            textAlign = TextAlign.Center,
-            color = ElementTheme.colors.textSecondary,
-        )
-        memberCount?.invoke()
-    }
-
     Column(
-        modifier = modifier
-                .fillMaxWidth()
-                .padding(all = 16.dp),
+        modifier = modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        when (asyncContentState) {
-            is AsyncData.Success -> {
-                val contentState = asyncContentState.data
+        when (contentState) {
+            is ContentState.Loaded -> {
                 ContentScaffold(
                     avatar = {
                         Avatar(contentState.avatarData(AvatarSize.RoomHeader))
                     },
-                    title = contentState.name,
-                    description = contentState.description ?: stringResource(R.string.screen_join_room_subtitle_no_preview)
-                ) {
-                    if (contentState.showMemberCount) {
-                        JoinRoomMembersCount(memberCount = contentState.numberOfMembers ?: 0)
+                    title = {
+                        Title(contentState.computedTitle)
+                    },
+                    subtitle = {
+                        Subtitle(contentState.computedSubtitle)
+                    },
+                    description = {
+                        Description(contentState.topic ?: "")
+                    },
+                    memberCount = {
+                        if (contentState.showMemberCount) {
+                            MembersCount(memberCount = contentState.numberOfMembers ?: 0)
+                        }
                     }
-                }
+                )
             }
-            else -> {
+            is ContentState.UnknownRoom -> {
                 ContentScaffold(
                     avatar = {
                         PlaceholderAtom(width = AvatarSize.RoomHeader.dp, height = AvatarSize.RoomHeader.dp)
                     },
-                    title = stringResource(R.string.screen_join_room_title_no_preview),
-                    description = stringResource(R.string.screen_join_room_subtitle_no_preview),
+                    title = {
+                        Title(stringResource(R.string.screen_join_room_title_no_preview))
+                    },
+                    subtitle = {
+                        Subtitle(stringResource(R.string.screen_join_room_subtitle_no_preview))
+                    },
+                )
+            }
+            is ContentState.Loading -> {
+                ContentScaffold(
+                    avatar = {
+                        PlaceholderAtom(width = AvatarSize.RoomHeader.dp, height = AvatarSize.RoomHeader.dp)
+                    },
+                    title = {
+                        PlaceholderAtom(width = 200.dp, height = 22.dp)
+                    },
+                    subtitle = {
+                        PlaceholderAtom(width = 140.dp, height = 20.dp)
+                    },
                 )
             }
         }
@@ -198,13 +196,72 @@ private fun JoinRoomContent(
 }
 
 @Composable
-private fun JoinRoomMembersCount(memberCount: Long) {
+private fun ContentScaffold(
+    avatar: @Composable () -> Unit,
+    title: @Composable () -> Unit,
+    subtitle: @Composable () -> Unit,
+    description: @Composable (() -> Unit)? = null,
+    memberCount: @Composable (() -> Unit)? = null,
+) {
+    avatar()
+    Spacer(modifier = Modifier.height(16.dp))
+    title()
+    Spacer(modifier = Modifier.height(8.dp))
+    subtitle()
+    Spacer(modifier = Modifier.height(8.dp))
+    if (memberCount != null) {
+        memberCount()
+    }
+    Spacer(modifier = Modifier.height(8.dp))
+    if (description != null) {
+        description()
+    }
+    Spacer(modifier = Modifier.height(24.dp))
+}
+
+@Composable
+private fun Title(title: String, modifier: Modifier = Modifier) {
+    Text(
+        modifier = modifier,
+        text = title,
+        style = ElementTheme.typography.fontHeadingMdBold,
+        textAlign = TextAlign.Center,
+        color = ElementTheme.colors.textPrimary,
+    )
+}
+
+@Composable
+private fun Subtitle(subtitle: String, modifier: Modifier = Modifier) {
+    Text(
+        modifier = modifier,
+        text = subtitle,
+        style = ElementTheme.typography.fontBodyLgRegular,
+        textAlign = TextAlign.Center,
+        color = ElementTheme.colors.textSecondary,
+    )
+}
+
+@Composable
+private fun Description(description: String, modifier: Modifier = Modifier) {
+    Text(
+        modifier = modifier,
+        text = description,
+        style = ElementTheme.typography.fontBodySmRegular,
+        textAlign = TextAlign.Center,
+        color = ElementTheme.colors.textSecondary,
+        maxLines = 3,
+        overflow = TextOverflow.Ellipsis,
+    )
+}
+
+@Composable
+private fun MembersCount(memberCount: Long) {
     Spacer(modifier = Modifier.height(8.dp))
     Row(
         modifier = Modifier
-                .background(color = ElementTheme.colors.bgSubtleSecondary, shape = CircleShape)
-                .widthIn(min = 48.dp)
-                .padding(all = 2.dp),
+            .background(color = ElementTheme.colors.bgSubtleSecondary, shape = CircleShape)
+            .widthIn(min = 48.dp)
+            .padding(all = 2.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(4.dp)
     ) {
@@ -230,9 +287,7 @@ private fun JoinRoomTopBar(
         navigationIcon = {
             BackButton(onClick = onBackClicked)
         },
-        title = {
-
-        },
+        title = {},
     )
 }
 

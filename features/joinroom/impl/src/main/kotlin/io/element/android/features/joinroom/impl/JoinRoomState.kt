@@ -18,39 +18,53 @@ package io.element.android.features.joinroom.impl
 
 import androidx.compose.runtime.Immutable
 import io.element.android.features.invite.api.response.AcceptDeclineInviteState
-import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.core.RoomId
 
 @Immutable
 data class JoinRoomState(
-    val contentState: AsyncData<ContentState>,
+    val contentState: ContentState,
     val acceptDeclineInviteState: AcceptDeclineInviteState,
     val eventSink: (JoinRoomEvents) -> Unit
 ) {
-    val joinAuthorisationStatus = contentState.dataOrNull()?.joinAuthorisationStatus ?: JoinAuthorisationStatus.Unknown
+    val joinAuthorisationStatus = when(contentState) {
+        is ContentState.Loaded -> contentState.joinAuthorisationStatus
+        else -> JoinAuthorisationStatus.Unknown
+    }
 }
 
-data class ContentState(
-    val roomId: RoomId,
-    val name: String,
-    val description: String?,
-    val numberOfMembers: Long?,
-    val isDirect: Boolean,
-    val roomAvatarUrl: String?,
-    val joinAuthorisationStatus: JoinAuthorisationStatus,
-) {
+sealed interface ContentState {
+    data class Loading(val roomId: RoomId) : ContentState
+    data class UnknownRoom(val roomId: RoomId) : ContentState
+    data class Loaded(
+        val roomId: RoomId,
+        val name: String?,
+        val topic: String?,
+        val alias: String?,
+        val numberOfMembers: Long?,
+        val isDirect: Boolean,
+        val roomAvatarUrl: String?,
+        val joinAuthorisationStatus: JoinAuthorisationStatus,
+    ) : ContentState {
+        val computedTitle = name ?: roomId.value
 
-    val showMemberCount = numberOfMembers != null
+        val computedSubtitle = when {
+            alias != null -> alias
+            name == null -> ""
+            else -> roomId.value
+        }
 
-    fun avatarData(size: AvatarSize): AvatarData {
-        return AvatarData(
-            id = roomId.value,
-            name = name,
-            url = roomAvatarUrl,
-            size = size,
-        )
+        val showMemberCount = numberOfMembers != null
+
+        fun avatarData(size: AvatarSize): AvatarData {
+            return AvatarData(
+                id = roomId.value,
+                name = name,
+                url = roomAvatarUrl,
+                size = size,
+            )
+        }
     }
 }
 

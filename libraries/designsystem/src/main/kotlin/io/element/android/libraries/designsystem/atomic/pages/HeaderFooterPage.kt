@@ -18,6 +18,7 @@ package io.element.android.libraries.designsystem.atomic.pages
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -43,6 +44,7 @@ import io.element.android.libraries.designsystem.theme.components.Text
 @Composable
 fun HeaderFooterPage(
     modifier: Modifier = Modifier,
+    paddingValues: PaddingValues = PaddingValues(20.dp),
     background: @Composable () -> Unit = {},
     topBar: @Composable () -> Unit = {},
     header: @Composable () -> Unit = {},
@@ -57,7 +59,7 @@ fun HeaderFooterPage(
             background()
             Column(
                 modifier = Modifier
-                    .padding(all = 20.dp)
+                    .padding(paddingValues = paddingValues)
                     .padding(padding)
                     .consumeWindowInsets(padding)
             ) {

@@ -292,14 +292,14 @@ private fun RoomDirectoryRoomRow(
                 .padding(start = 16.dp)
         ) {
             Text(
-                text = roomDescription.name,
+                text = roomDescription.computedName,
                 maxLines = 1,
                 style = ElementTheme.typography.fontBodyLgRegular,
                 color = ElementTheme.colors.textPrimary,
                 overflow = TextOverflow.Ellipsis,
             )
             Text(
-                text = roomDescription.description,
+                text = roomDescription.computedDescription,
                 maxLines = 1,
                 style = ElementTheme.typography.fontBodyMdRegular,
                 color = ElementTheme.colors.textSecondary,

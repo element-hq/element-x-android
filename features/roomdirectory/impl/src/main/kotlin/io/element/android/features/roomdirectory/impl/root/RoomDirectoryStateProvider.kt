@@ -68,7 +68,8 @@ fun aRoomDescriptionList(): ImmutableList<RoomDescription> {
         RoomDescription(
             roomId = RoomId("!exa:matrix.org"),
             name = "Element X Android",
-            description = "Element X is a secure, private and decentralized messenger.",
+            topic = "Element X is a secure, private and decentralized messenger.",
+            alias = "#element-x-android:matrix.org",
             avatarUrl = null,
             joinRule = RoomDescription.JoinRule.PUBLIC,
             numberOfMembers = 2765,
@@ -76,7 +77,8 @@ fun aRoomDescriptionList(): ImmutableList<RoomDescription> {
         RoomDescription(
             roomId = RoomId("!exi:matrix.org"),
             name = "Element X iOS",
-            description = "Element X is a secure, private and decentralized messenger.",
+            topic = "Element X is a secure, private and decentralized messenger.",
+            alias = "#element-x-ios:matrix.org",
             avatarUrl = null,
             joinRule = RoomDescription.JoinRule.UNKNOWN,
             numberOfMembers = 356,

@@ -21,7 +21,6 @@ import io.element.android.features.invite.api.response.AcceptDeclineInviteEvents
 import io.element.android.features.invite.api.response.AcceptDeclineInviteState
 import io.element.android.features.invite.api.response.anAcceptDeclineInviteState
 import io.element.android.features.roomdirectory.api.RoomDescription
-import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -51,9 +50,12 @@ class JoinRoomPresenterTest {
         val presenter = createJoinRoomPresenter()
         presenter.test {
             awaitItem().also { state ->
-                assertThat(state.contentState).isInstanceOf(AsyncData.Uninitialized::class.java)
+                assertThat(state.contentState).isEqualTo(ContentState.Loading(A_ROOM_ID))
                 assertThat(state.joinAuthorisationStatus).isEqualTo(JoinAuthorisationStatus.Unknown)
                 assertThat(state.acceptDeclineInviteState).isEqualTo(anAcceptDeclineInviteState())
+            }
+            awaitItem().also { state ->
+                assertThat(state.contentState).isEqualTo(ContentState.UnknownRoom(A_ROOM_ID))
             }
         }
     }
@@ -72,11 +74,11 @@ class JoinRoomPresenterTest {
         presenter.test {
             skipItems(1)
             awaitItem().also { state ->
-                assertThat(state.contentState).isInstanceOf(AsyncData.Success::class.java)
-                val contentState = state.contentState.dataOrNull()!!
+                val contentState = state.contentState as ContentState.Loaded
                 assertThat(contentState.roomId).isEqualTo(A_ROOM_ID)
                 assertThat(contentState.name).isEqualTo(roomInfo.name)
-                assertThat(contentState.description).isEqualTo(roomInfo.topic)
+                assertThat(contentState.topic).isEqualTo(roomInfo.topic)
+                assertThat(contentState.alias).isEqualTo(roomInfo.canonicalAlias)
                 assertThat(contentState.numberOfMembers).isEqualTo(roomInfo.activeMembersCount)
                 assertThat(contentState.isDirect).isEqualTo(roomInfo.isDirect)
                 assertThat(contentState.roomAvatarUrl).isEqualTo(roomInfo.avatarUrl)
@@ -186,11 +188,11 @@ class JoinRoomPresenterTest {
         presenter.test {
             skipItems(1)
             awaitItem().also { state ->
-                assertThat(state.contentState).isInstanceOf(AsyncData.Success::class.java)
-                val contentState = state.contentState.dataOrNull()!!
+                val contentState = state.contentState as ContentState.Loaded
                 assertThat(contentState.roomId).isEqualTo(A_ROOM_ID)
                 assertThat(contentState.name).isEqualTo(roomDescription.name)
-                assertThat(contentState.description).isEqualTo(roomDescription.description)
+                assertThat(contentState.topic).isEqualTo(roomDescription.topic)
+                assertThat(contentState.alias).isEqualTo(roomDescription.alias)
                 assertThat(contentState.numberOfMembers).isEqualTo(roomDescription.numberOfMembers)
                 assertThat(contentState.isDirect).isFalse()
                 assertThat(contentState.roomAvatarUrl).isEqualTo(roomDescription.avatarUrl)
@@ -256,8 +258,9 @@ class JoinRoomPresenterTest {
 
     private fun aRoomDescription(
         roomId: RoomId = A_ROOM_ID,
-        name: String = A_ROOM_NAME,
-        description: String = "A room about something",
+        name: String? = A_ROOM_NAME,
+        topic: String? = "A room about something",
+        alias: String? = "#alias:matrix.org",
         avatarUrl: String? = null,
         joinRule: RoomDescription.JoinRule = RoomDescription.JoinRule.UNKNOWN,
         numberOfMembers: Long = 2L
@@ -265,7 +268,8 @@ class JoinRoomPresenterTest {
         return RoomDescription(
             roomId = roomId,
             name = name,
-            description = description,
+            topic = topic,
+            alias = alias,
             avatarUrl = avatarUrl,
             joinRule = joinRule,
             numberOfMembers = numberOfMembers
