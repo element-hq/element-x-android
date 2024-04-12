@@ -103,7 +103,7 @@ def detectRecordedLanguages():
 def computeDarkFileName(lightFileName):
     if "-Day_0" in lightFileName:
         return lightFileName.replace("-Day_0", "-Night_1")
-    match = re.match("(.*)-Day-(\d+)_(\d+)(.*)", lightFileName, flags=re.ASCII)
+    match = re.match("(.*)-Day-(\\d+)_(\\d+)(.*)", lightFileName, flags=re.ASCII)
     if match:
         return match.group(1) + "-Night-" + match.group(2) + "_" + str((int(match.group(3)) + 1)) + match.group(4)
     return ""
