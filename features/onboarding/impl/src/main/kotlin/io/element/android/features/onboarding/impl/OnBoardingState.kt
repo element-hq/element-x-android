@@ -18,6 +18,7 @@ package io.element.android.features.onboarding.impl
 
 data class OnBoardingState(
     val isDebugBuild: Boolean,
+    val productionApplicationName: String,
     val canLoginWithQrCode: Boolean,
     val canCreateAccount: Boolean,
 )

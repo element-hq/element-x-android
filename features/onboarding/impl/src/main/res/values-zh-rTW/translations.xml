@@ -3,6 +3,6 @@
   <string name="screen_onboarding_sign_in_manually">"手動登入"</string>
   <string name="screen_onboarding_sign_in_with_qr_code">"使用 QR code 登入"</string>
   <string name="screen_onboarding_sign_up">"建立帳號"</string>
-  <string name="screen_onboarding_welcome_message">"歡迎使用有史以來最快的 Element。速度超快，操作簡便。"</string>
+  <string name="screen_onboarding_welcome_message">"歡迎使用有史以來最快的 %1$s。速度超快，操作簡便。"</string>
   <string name="screen_onboarding_welcome_title">"Be in your element"</string>
 </resources>

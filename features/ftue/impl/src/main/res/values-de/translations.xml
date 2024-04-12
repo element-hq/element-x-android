@@ -2,6 +2,13 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_notification_optin_subtitle">"Du kannst deine Einstellungen später ändern."</string>
   <string name="screen_notification_optin_title">"Erlaube Benachrichtigungen und verpasse keine Nachricht"</string>
+  <string name="screen_qr_code_login_initial_state_item_1">"%1$s auf einem Desktop-Gerät öffnen"</string>
+  <string name="screen_qr_code_login_initial_state_item_2">"Klick auf deinen Avatar"</string>
+  <string name="screen_qr_code_login_initial_state_item_3">"Wähle %1$s"</string>
+  <string name="screen_qr_code_login_initial_state_item_3_action">"\"Neues Gerät verknüpfen\""</string>
+  <string name="screen_qr_code_login_initial_state_item_4">"Wähle %1$s"</string>
+  <string name="screen_qr_code_login_initial_state_item_4_action">"\"QR-Code anzeigen\""</string>
+  <string name="screen_qr_code_login_initial_state_title">"Öffne %1$s auf einem anderen Gerät, um den QR-Code zu erhalten"</string>
   <string name="screen_welcome_bullet_1">"Anrufe, Umfragen, Suchfunktionen und mehr werden im Laufe des Jahres hinzugefügt."</string>
   <string name="screen_welcome_bullet_2">"Der Nachrichtenverlauf für verschlüsselte Räume wird in diesem Update nicht verfügbar sein."</string>
   <string name="screen_welcome_bullet_3">"Wir würden uns freuen, von dir zu hören. Teile uns deine Meinung über die Einstellungsseite mit."</string>

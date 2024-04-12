@@ -247,6 +247,12 @@
   <string name="invite_friends_text">"Hey, sprich mit mir auf %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Schüttel heftig zum Melden von Fehlern"</string>
+  <string name="screen_join_room_join_action">"Raum beitreten"</string>
+  <string name="screen_join_room_knock_action">"Anklopfen"</string>
+  <string name="screen_join_room_subtitle_knock">"Klopfe an um einen Raumadministrator zu benachrichtigen. Nach der Freigabe kannst du dich an der Unterhaltung beteiligen."</string>
+  <string name="screen_join_room_subtitle_no_preview">"Du musst Mitglied in diesem Raum sein, um den Nachrichtenverlauf zu sehen."</string>
+  <string name="screen_join_room_title_knock">"Willst du diesem Raum beitreten?"</string>
+  <string name="screen_join_room_title_no_preview">"Vorschau nicht verfügbar"</string>
   <string name="screen_media_picker_error_failed_selection">"Medienauswahl fehlgeschlagen, bitte versuche es erneut."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Fehler beim Verarbeiten des hochgeladenen Mediums. Bitte versuche es erneut."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Das Hochladen der Medien ist fehlgeschlagen. Bitte versuche es erneut."</string>

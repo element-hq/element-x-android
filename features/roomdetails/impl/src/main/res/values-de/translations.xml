@@ -24,12 +24,14 @@
   <string name="screen_room_change_permissions_room_topic">"Raumthema ändern"</string>
   <string name="screen_room_change_permissions_send_messages">"Nachrichten senden"</string>
   <string name="screen_room_change_role_administrators_title">"Admins bearbeiten"</string>
-  <string name="screen_room_change_role_confirm_add_admin_description">"Du vergibst das selbe Rolle, die auch Du hast. Diese Aktion kann daher nicht mehr rückgängig gemacht werden."</string>
+  <string name="screen_room_change_role_confirm_add_admin_description">"Du kannst diese Aktion nicht mehr rückgängig machen. Du vergibst dieselbe Rolle, wie auch Du sie hast."</string>
   <string name="screen_room_change_role_confirm_add_admin_title">"Als Administrator hinzufügen?"</string>
   <string name="screen_room_change_role_confirm_demote_self_action">"Zurückstufen"</string>
   <string name="screen_room_change_role_confirm_demote_self_description">"Du stufst dich selbst herab. Diese Änderung kann nicht rückgängig gemacht werden. Wenn du der letzte Benutzer mit dieser Rolle bist, ist es nicht möglich, diese Rolle wiederzuerlangen."</string>
   <string name="screen_room_change_role_confirm_demote_self_title">"Möchtest Du Dich selbst herabstufen?"</string>
   <string name="screen_room_change_role_invited_member_name">"%1$s (Ausstehend)"</string>
+  <string name="screen_room_change_role_invited_member_name_android">"(Ausstehend)"</string>
+  <string name="screen_room_change_role_moderators_admin_section_footer">"Administratoren haben automatisch Moderatorenrechte"</string>
   <string name="screen_room_change_role_moderators_title">"Moderatoren bearbeiten"</string>
   <string name="screen_room_change_role_section_administrators">"Administratoren"</string>
   <string name="screen_room_change_role_section_moderators">"Moderatoren"</string>
@@ -57,6 +59,7 @@
   <string name="screen_room_details_room_name_label">"Raumname"</string>
   <string name="screen_room_details_security_title">"Sicherheit"</string>
   <string name="screen_room_details_share_room_title">"Raum teilen"</string>
+  <string name="screen_room_details_title">"Raum Informationen"</string>
   <string name="screen_room_details_topic_title">"Thema"</string>
   <string name="screen_room_details_updating_room">"Raum wird aktualisiert…"</string>
   <string name="screen_room_member_list_ban_member_confirmation_action">"Sperren"</string>

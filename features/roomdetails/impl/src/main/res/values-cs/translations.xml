@@ -30,6 +30,8 @@
   <string name="screen_room_change_role_confirm_demote_self_description">"Tuto změnu nebudete moci vrátit zpět, protože sami degradujete, pokud jste posledním privilegovaným uživatelem v místnosti, nebude možné znovu získat oprávnění."</string>
   <string name="screen_room_change_role_confirm_demote_self_title">"Degradovat se?"</string>
   <string name="screen_room_change_role_invited_member_name">"%1$s (čekající)"</string>
+  <string name="screen_room_change_role_invited_member_name_android">"(Čeká na vyřízení)"</string>
+  <string name="screen_room_change_role_moderators_admin_section_footer">"Správci mají automaticky oprávnění moderátora"</string>
   <string name="screen_room_change_role_moderators_title">"Upravit moderátory"</string>
   <string name="screen_room_change_role_section_administrators">"Správci"</string>
   <string name="screen_room_change_role_section_moderators">"Moderátoři"</string>
@@ -57,6 +59,7 @@
   <string name="screen_room_details_room_name_label">"Název místnosti"</string>
   <string name="screen_room_details_security_title">"Zabezpečení"</string>
   <string name="screen_room_details_share_room_title">"Sdílet místnost"</string>
+  <string name="screen_room_details_title">"Informace o místnosti"</string>
   <string name="screen_room_details_topic_title">"Téma"</string>
   <string name="screen_room_details_updating_room">"Aktualizace místnosti…"</string>
   <string name="screen_room_member_list_ban_member_confirmation_action">"Vykázat"</string>

@@ -245,6 +245,12 @@
   <string name="invite_friends_text">"Salut, parle-moi sur %1$s : %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Rageshake pour signaler un problème"</string>
+  <string name="screen_join_room_join_action">"Rejoindre"</string>
+  <string name="screen_join_room_knock_action">"Demander à joindre"</string>
+  <string name="screen_join_room_subtitle_knock">"Cliquez ci-dessous et un administrateur sera prévenu. Une fois votre demande approuvée, pour pourrez rejoindre la discussion."</string>
+  <string name="screen_join_room_subtitle_no_preview">"Vous devez être un membre du salon pour pouvoir lire l’historique des messages."</string>
+  <string name="screen_join_room_title_knock">"Vous souhaitez rejoindre ce salon?"</string>
+  <string name="screen_join_room_title_no_preview">"La prévisualisation n’est pas disponible"</string>
   <string name="screen_media_picker_error_failed_selection">"Échec de la sélection du média, veuillez réessayer."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Échec du traitement des médias à télécharger, veuillez réessayer."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Échec du téléchargement du média, veuillez réessayer."</string>
@@ -253,6 +259,7 @@
   <string name="screen_room_member_details_block_alert_action">"Bloquer"</string>
   <string name="screen_room_member_details_block_alert_description">"Les utilisateurs bloqués ne pourront pas vous envoyer de messages et tous leurs messages seront masqués. Vous pouvez les débloquer à tout moment."</string>
   <string name="screen_room_member_details_block_user">"Bloquer l’utilisateur"</string>
+  <string name="screen_room_member_details_title">"Profil"</string>
   <string name="screen_room_member_details_unblock_alert_action">"Débloquer"</string>
   <string name="screen_room_member_details_unblock_alert_description">"Vous pourrez à nouveau voir tous ses messages."</string>
   <string name="screen_room_member_details_unblock_user">"Débloquer l’utilisateur"</string>

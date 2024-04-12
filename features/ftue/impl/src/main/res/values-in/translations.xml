@@ -2,6 +2,13 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_notification_optin_subtitle">"Anda dapat mengubah pengaturan Anda nanti."</string>
   <string name="screen_notification_optin_title">"Izinkan pemberitahuan dan jangan pernah melewatkan pesan"</string>
+  <string name="screen_qr_code_login_initial_state_item_1">"Buka %1$s di perangkat desktop"</string>
+  <string name="screen_qr_code_login_initial_state_item_2">"Klik pada avatar Anda"</string>
+  <string name="screen_qr_code_login_initial_state_item_3">"Pilih %1$s"</string>
+  <string name="screen_qr_code_login_initial_state_item_3_action">"“Tautkan perangkat baru”"</string>
+  <string name="screen_qr_code_login_initial_state_item_4">"Pilih %1$s"</string>
+  <string name="screen_qr_code_login_initial_state_item_4_action">"“Tampilkan kode QR”"</string>
+  <string name="screen_qr_code_login_initial_state_title">"Buka %1$s di perangkat lain untuk mendapatkan kode QR"</string>
   <string name="screen_welcome_bullet_1">"Panggilan, pemungutan suara, pencarian, dan lainnya akan ditambahkan di tahun ini."</string>
   <string name="screen_welcome_bullet_2">"Riwayat pesan untuk ruangan terenkripsi tidak akan tersedia dalam pembaruan ini."</string>
   <string name="screen_welcome_bullet_3">"Kami ingin mendengar dari Anda, beri tahu kami pendapat Anda melalui halaman pengaturan."</string>
