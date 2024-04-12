@@ -25,7 +25,7 @@ open class JoinRoomStateProvider : PreviewParameterProvider<JoinRoomState> {
     override val values: Sequence<JoinRoomState>
         get() = sequenceOf(
             aJoinRoomState(
-                contentState = anUninitializedContentState()
+                contentState = aLoadingContentState()
             ),
             aJoinRoomState(
                 contentState = anUnknownContentState()
@@ -42,13 +42,13 @@ open class JoinRoomStateProvider : PreviewParameterProvider<JoinRoomState> {
         )
 }
 
-fun anUnknownContentState(roomId: RoomId = RoomId("@exa:matrix.org")) = ContentState.UnknownRoom(roomId)
+fun anUnknownContentState(roomId: RoomId = A_ROOM_ID) = ContentState.UnknownRoom(roomId)
 
-fun anUninitializedContentState(roomId: RoomId = RoomId("@exa:matrix.org")) = ContentState.Loading(roomId)
+fun aLoadingContentState(roomId: RoomId = A_ROOM_ID) = ContentState.Loading(roomId)
 
 fun aLoadedContentState(
-    roomId: RoomId = RoomId("@exa:matrix.org"),
-    name: String = "Element x android",
+    roomId: RoomId = A_ROOM_ID,
+    name: String = "Element X android",
     alias: String? = "#exa:matrix.org",
     topic: String? = "Element X is a secure, private and decentralized messenger.",
     numberOfMembers: Long? = null,
@@ -75,3 +75,5 @@ fun aJoinRoomState(
     acceptDeclineInviteState = acceptDeclineInviteState,
     eventSink = eventSink
 )
+
+private val A_ROOM_ID = RoomId("!exa:matrix.org")
