@@ -18,6 +18,7 @@ import { screenshots } from './data.js';
 const URL_PARAM_LANGUAGES = "l";
 const URL_PARAM_IMAGE_WIDTH = "w";
 const URL_PARAM_ALL_SCREENSHOTS = "a";
+const URL_PARAM_IF_MODIFIED_AFTER = "d";
 
 // Get the base url of the current page
 const baseUrl = window.location.href.split('/').slice(0, -1).join('/');
@@ -53,6 +54,8 @@ if (width) {
 }
 // Read showAllScreenshots from the url params
 let showAllScreenshots = urlParams.get(URL_PARAM_ALL_SCREENSHOTS) === 1;
+// Read the minimum date of modification from the url params
+let minModifiedDayTime = urlParams.get(URL_PARAM_IF_MODIFIED_AFTER);
 
 function updatePageUrl() {
     // Update the URL displayed in the browser without loading again the page
@@ -73,6 +76,11 @@ function updatePageUrl() {
         queryParams.set(URL_PARAM_ALL_SCREENSHOTS, showAllScreenshots ? 1 : 0);
     } else {
         queryParams.delete(URL_PARAM_ALL_SCREENSHOTS);
+    }
+    if (minModifiedDayTime > 0) {
+        queryParams.set(URL_PARAM_IF_MODIFIED_AFTER, minModifiedDayTime);
+    } else {
+        queryParams.delete(URL_PARAM_IF_MODIFIED_AFTER);
     }
     // Replace the current URL with the new one, including the fragment
     history.replaceState(null, '', `${window.location.pathname}?${queryParams}${window.location.hash}`);
@@ -141,6 +149,25 @@ function addForm() {
   };
   label2.appendChild(input2);
   form.appendChild(label2);
+  // Add a date picker to input the minimum date of modification
+  const label3 = document.createElement('label');
+  label3.textContent = 'If modified since:';
+  form.appendChild(label3);
+  const dateInput = document.createElement('input');
+  dateInput.type = 'date';
+  if (minModifiedDayTime > 0) {
+    dateInput.value = new Date(minModifiedDayTime * 86400000).toISOString().split('T')[0];
+  }
+  dateInput.onchange = (e) => {
+      if (e.target.value === "") {
+          minModifiedDayTime = 0;
+      } else {
+          minModifiedDayTime = new Date(e.target.value).getTime() / 86400000;
+      }
+      updatePageUrl();
+      addTable();
+  };
+  form.appendChild(dateInput);
   document.getElementById('form_container').appendChild(form);
 }
 
@@ -159,11 +186,20 @@ function createMissingImageElement() {
     return text;
 }
 
-function createImageElement(fullFile) {
+function convertToHumanReadableDate(modifiedDayTime) {
+    var date = new Date(modifiedDayTime * 86400000);
+    return date.toLocaleDateString();
+}
+
+function createImageElement(fullFile, modifiedDayTime) {
     const img = document.createElement('img');
     img.className = "screenshot";
     img.src = `${baseUrl}/${fullFile}`;
-    img.title = fullFile;
+    if(modifiedDayTime > 0) {
+        img.title = fullFile + "\n\nModified on " + convertToHumanReadableDate(modifiedDayTime);
+    } else {
+        img.title = fullFile;
+    }
     img.alt = "Missing image";
     img.width = imageWidth;
     return img;
@@ -209,25 +245,25 @@ function addTable() {
       const td = document.createElement('td');
       if (languageIndex == 0) {
         // English file
-        td.appendChild(createImageElement(`${englishBasePath}/${englishFile}.png`));
+        td.appendChild(createImageElement(`${englishBasePath}/${englishFile}.png`, 0));
       } else if (languageIndex == 1) {
         // Dark English file
         if (screenshots[screenshotIndex][1].length > 0) {
           hasTranslatedFiles = true;
-          td.appendChild(createImageElement(`${englishBasePath}/${screenshots[screenshotIndex][1]}.png`));
+          td.appendChild(createImageElement(`${englishBasePath}/${screenshots[screenshotIndex][1]}.png`, 0));
         } else {
           td.appendChild(createMissingImageElement());
         }
       } else {
-        let hasFile = screenshots[screenshotIndex][languageIndex];
-        if (hasFile === 0) {
+        let modifiedDayTime = screenshots[screenshotIndex][languageIndex];
+        if (modifiedDayTime === 0) {
           td.appendChild(createMissingImageElement());
-        } else {
+        } else if(modifiedDayTime >= minModifiedDayTime) {
           hasTranslatedFiles = true;
           // Foreign file is the same as the english file, replacing the language
           const foreignFile = englishFile.replace("en]", `${dataLanguages[languageIndex]}]`).replace("_S_", "_T_")
           const fullForeignFile = `${dataLanguages[languageIndex]}/${foreignFile}.png`;
-          td.appendChild(createImageElement(fullForeignFile));
+          td.appendChild(createImageElement(fullForeignFile, modifiedDayTime));
         }
       }
       tr.appendChild(td);

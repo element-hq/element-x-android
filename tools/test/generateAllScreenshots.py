@@ -132,7 +132,10 @@ def generateJavascriptFile():
             simpleFile = file[:3] + "T" + file[4:-7] + l + file[-5:-4]
             translatedFile = "./screenshots/" + l + "/" + simpleFile + ".png"
             if os.path.exists(translatedFile):
-                dataForFile.append(1)
+                # Get the last modified date of the file in seconds and round to days
+                date = os.popen("git log -1 --format=%ct -- \"" + translatedFile + "\"").read().strip()
+                dateDay = int(date) // 86400
+                dataForFile.append(dateDay)
             else:
                 dataForFile.append(0)
         data.append(dataForFile)
