@@ -56,7 +56,7 @@ class JoinRoomPresenter @AssistedInject constructor(
                     roomDescription.get().toContentState()
                 }
                 else -> {
-                    ContentState.UnknownRoom(roomId)
+                    ContentState.Loading(roomId)
                 }
             }
         }
