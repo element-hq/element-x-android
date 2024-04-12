@@ -9,6 +9,7 @@
 * [Strings](#strings)
   * [I want to add new strings to the project](#i-want-to-add-new-strings-to-the-project)
   * [I want to help translating Element](#i-want-to-help-translating-element)
+  * [Element X Android Gallery](#element-x-android-gallery)
 * [I want to submit a PR to fix an issue](#i-want-to-submit-a-pr-to-fix-an-issue)
   * [Kotlin](#kotlin)
   * [Changelog](#changelog)
@@ -68,6 +69,14 @@ To help translating, please go to [https://localazy.com/p/element](https://local
 - If you want to fix an issue in other languages, or add a missing translation, or even add a new language, please go to [https://localazy.com/p/element](https://localazy.com/p/element).
 
 More information can be found [in this README.md](./tools/localazy/README.md).
+
+Once a language is sufficiently translated, it will be added to the app. The core team will decide when a language is sufficiently translated.
+
+### Element X Android Gallery
+
+Once added to Localazy, translations can be checked screen per screen using our tool Element X Android Gallery, available at https://element-hq.github.io/element-x-android/.
+
+Localazy syncs occur every Monday and the screenshots on this page are generated every Tuesday, so you'll have to wait to see your change appearing on Element X Android Gallery.
 
 ## I want to submit a PR to fix an issue
 
