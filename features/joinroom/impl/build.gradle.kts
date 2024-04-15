@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-@Suppress("DSL_SCOPE_VIOLATION")
 plugins {
     id("io.element.android-compose-library")
     alias(libs.plugins.anvil)
