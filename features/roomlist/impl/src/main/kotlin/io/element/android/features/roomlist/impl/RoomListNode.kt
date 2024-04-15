@@ -29,6 +29,7 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import im.vector.app.features.analytics.plan.MobileScreen
 import io.element.android.anvilannotations.ContributesNode
+import io.element.android.features.invite.api.response.AcceptDeclineInviteView
 import io.element.android.features.roomlist.api.RoomListEntryPoint
 import io.element.android.features.roomlist.impl.components.RoomListMenuAction
 import io.element.android.libraries.deeplink.usecase.InviteFriendsUseCase
@@ -43,6 +44,7 @@ class RoomListNode @AssistedInject constructor(
     private val presenter: RoomListPresenter,
     private val inviteFriendsUseCase: InviteFriendsUseCase,
     private val analyticsService: AnalyticsService,
+    private val acceptDeclineInviteView: AcceptDeclineInviteView,
 ) : Node(buildContext, plugins = plugins) {
     init {
         lifecycle.subscribe(
@@ -106,6 +108,13 @@ class RoomListNode @AssistedInject constructor(
             onMenuActionClicked = { onMenuActionClicked(activity, it) },
             onRoomDirectorySearchClicked = this::onRoomDirectorySearchClicked,
             modifier = modifier,
-        )
+        ) {
+            acceptDeclineInviteView.Render(
+                state = state.acceptDeclineInviteState,
+                onInviteAccepted = this::onRoomClicked,
+                onInviteDeclined = { },
+                modifier = Modifier
+            )
+        }
     }
 }

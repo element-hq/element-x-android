@@ -46,6 +46,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
+import io.element.android.features.roomlist.impl.RoomListEvents
 import io.element.android.features.roomlist.impl.model.DisplayType
 import io.element.android.features.roomlist.impl.model.InviteSender
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
@@ -66,6 +67,7 @@ import io.element.android.libraries.designsystem.theme.roomListRoomName
 import io.element.android.libraries.designsystem.theme.unreadIndicator
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.ui.strings.CommonStrings
+import timber.log.Timber
 
 internal val minHeight = 84.dp
 
@@ -73,7 +75,7 @@ internal val minHeight = 84.dp
 internal fun RoomSummaryRow(
     room: RoomListRoomSummary,
     onClick: (RoomListRoomSummary) -> Unit,
-    onLongClick: (RoomListRoomSummary) -> Unit,
+    eventSink: (RoomListEvents) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     when (room.type) {
@@ -84,7 +86,9 @@ internal fun RoomSummaryRow(
             RoomSummaryScaffoldRow(
                 room = room,
                 onClick = onClick,
-                onLongClick = onLongClick,
+                onLongClick = {
+                    Timber.d("Long click on invite room")
+                },
                 modifier = modifier
             ) {
                 InviteNameAndIndicatorRow(name = room.name)
@@ -94,14 +98,22 @@ internal fun RoomSummaryRow(
                     InviteSenderRow(sender = room.inviteSender)
                 }
                 Spacer(modifier = Modifier.height(12.dp))
-                InviteButtonsRow(onAcceptClicked = { }, onDeclineClicked = { })
+                InviteButtonsRow(
+                    onAcceptClicked = {
+                        eventSink(RoomListEvents.AcceptInvite(room))
+                    },
+                    onDeclineClicked = {
+                        eventSink(RoomListEvents.DeclineInvite(room))
+                    })
             }
         }
         DisplayType.ROOM -> {
             RoomSummaryScaffoldRow(
                 room = room,
                 onClick = onClick,
-                onLongClick = onLongClick,
+                onLongClick = {
+                    eventSink(RoomListEvents.ShowContextMenu(room))
+                },
                 modifier = modifier
             ) {
                 NameAndTimestampRow(
@@ -133,11 +145,11 @@ private fun RoomSummaryScaffoldRow(
 
     Row(
         modifier = modifier
-                .fillMaxWidth()
-                .heightIn(min = minHeight)
-                .then(clickModifier)
-                .padding(horizontal = 16.dp, vertical = 11.dp)
-                .height(IntrinsicSize.Min),
+            .fillMaxWidth()
+            .heightIn(min = minHeight)
+            .then(clickModifier)
+            .padding(horizontal = 16.dp, vertical = 11.dp)
+            .height(IntrinsicSize.Min),
     ) {
         Avatar(room.avatarData)
         Spacer(modifier = Modifier.width(16.dp))
@@ -357,6 +369,6 @@ internal fun RoomSummaryRowPreview(@PreviewParameter(RoomListRoomSummaryProvider
     RoomSummaryRow(
         room = data,
         onClick = {},
-        onLongClick = {}
+        eventSink = {},
     )
 }

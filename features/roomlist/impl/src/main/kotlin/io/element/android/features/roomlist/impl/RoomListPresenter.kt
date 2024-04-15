@@ -32,6 +32,9 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import im.vector.app.features.analytics.plan.Interaction
+import io.element.android.features.invite.api.response.AcceptDeclineInviteEvents
+import io.element.android.features.invite.api.response.AcceptDeclineInviteState
+import io.element.android.features.invite.api.response.InviteData
 import io.element.android.features.leaveroom.api.LeaveRoomEvent
 import io.element.android.features.leaveroom.api.LeaveRoomPresenter
 import io.element.android.features.networkmonitor.api.NetworkMonitor
@@ -41,6 +44,7 @@ import io.element.android.features.roomlist.impl.datasource.InviteStateDataSourc
 import io.element.android.features.roomlist.impl.datasource.RoomListDataSource
 import io.element.android.features.roomlist.impl.filters.RoomListFiltersState
 import io.element.android.features.roomlist.impl.migration.MigrationScreenState
+import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
 import io.element.android.features.roomlist.impl.search.RoomListSearchEvents
 import io.element.android.features.roomlist.impl.search.RoomListSearchState
 import io.element.android.libraries.architecture.AsyncData
@@ -89,6 +93,7 @@ class RoomListPresenter @Inject constructor(
     private val migrationScreenPresenter: Presenter<MigrationScreenState>,
     private val sessionPreferencesStore: SessionPreferencesStore,
     private val analyticsService: AnalyticsService,
+    private val acceptDeclineInvitePresenter: Presenter<AcceptDeclineInviteState>,
 ) : Presenter<RoomListState> {
     private val encryptionService: EncryptionService = client.encryptionService()
     private val syncService: SyncService = client.syncService()
@@ -101,6 +106,7 @@ class RoomListPresenter @Inject constructor(
         val networkConnectionStatus by networkMonitor.connectivity.collectAsState()
         val filtersState = filtersPresenter.present()
         val searchState = searchPresenter.present()
+        val acceptDeclineInviteState = acceptDeclineInvitePresenter.present()
 
         LaunchedEffect(Unit) {
             roomListDataSource.launchIn(this)
@@ -131,6 +137,16 @@ class RoomListPresenter @Inject constructor(
                 is RoomListEvents.SetRoomIsFavorite -> coroutineScope.setRoomIsFavorite(event.roomId, event.isFavorite)
                 is RoomListEvents.MarkAsRead -> coroutineScope.markAsRead(event.roomId)
                 is RoomListEvents.MarkAsUnread -> coroutineScope.markAsUnread(event.roomId)
+                is RoomListEvents.AcceptInvite -> {
+                    acceptDeclineInviteState.eventSink(
+                        AcceptDeclineInviteEvents.AcceptInvite(event.roomListRoomSummary.toInviteData())
+                    )
+                }
+                is RoomListEvents.DeclineInvite -> {
+                    acceptDeclineInviteState.eventSink(
+                        AcceptDeclineInviteEvents.DeclineInvite(event.roomListRoomSummary.toInviteData())
+                    )
+                }
             }
         }
 
@@ -148,6 +164,7 @@ class RoomListPresenter @Inject constructor(
             filtersState = filtersState,
             searchState = searchState,
             contentState = contentState,
+            acceptDeclineInviteState = acceptDeclineInviteState,
             eventSink = ::handleEvents,
         )
     }
@@ -282,4 +299,10 @@ class RoomListPresenter @Inject constructor(
         val extendedRange = IntRange(extendedRangeStart, extendedRangeEnd)
         client.roomListService.updateAllRoomsVisibleRange(extendedRange)
     }
+
+    private fun RoomListRoomSummary.toInviteData() = InviteData(
+        roomId = roomId,
+        roomName = name,
+        isDirect = isDirect,
+    )
 }

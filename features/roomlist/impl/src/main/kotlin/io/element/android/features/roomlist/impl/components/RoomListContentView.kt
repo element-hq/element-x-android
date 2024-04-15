@@ -75,7 +75,6 @@ fun RoomListContentView(
     eventSink: (RoomListEvents) -> Unit,
     onConfirmRecoveryKeyClicked: () -> Unit,
     onRoomClicked: (RoomListRoomSummary) -> Unit,
-    onRoomLongClicked: (RoomListRoomSummary) -> Unit,
     onCreateRoomClicked: () -> Unit,
     onInvitesClicked: () -> Unit,
     modifier: Modifier = Modifier,
@@ -104,7 +103,6 @@ fun RoomListContentView(
                     eventSink = eventSink,
                     onConfirmRecoveryKeyClicked = onConfirmRecoveryKeyClicked,
                     onRoomClicked = onRoomClicked,
-                    onRoomLongClicked = onRoomLongClicked,
                     onInvitesClicked = onInvitesClicked,
                 )
             }
@@ -161,7 +159,6 @@ private fun RoomsView(
     eventSink: (RoomListEvents) -> Unit,
     onConfirmRecoveryKeyClicked: () -> Unit,
     onRoomClicked: (RoomListRoomSummary) -> Unit,
-    onRoomLongClicked: (RoomListRoomSummary) -> Unit,
     onInvitesClicked: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -176,7 +173,6 @@ private fun RoomsView(
             eventSink = eventSink,
             onConfirmRecoveryKeyClicked = onConfirmRecoveryKeyClicked,
             onRoomClicked = onRoomClicked,
-            onRoomLongClicked = onRoomLongClicked,
             onInvitesClicked = onInvitesClicked,
             modifier = modifier.fillMaxSize(),
         )
@@ -189,7 +185,6 @@ private fun RoomsViewList(
     eventSink: (RoomListEvents) -> Unit,
     onConfirmRecoveryKeyClicked: () -> Unit,
     onRoomClicked: (RoomListRoomSummary) -> Unit,
-    onRoomLongClicked: (RoomListRoomSummary) -> Unit,
     onInvitesClicked: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -242,7 +237,7 @@ private fun RoomsViewList(
             RoomSummaryRow(
                 room = room,
                 onClick = onRoomClicked,
-                onLongClick = onRoomLongClicked,
+                eventSink = eventSink,
             )
             if (index != state.summaries.lastIndex) {
                 HorizontalDivider()
@@ -305,7 +300,6 @@ internal fun RoomListContentViewPreview(@PreviewParameter(RoomListContentStatePr
         eventSink = {},
         onConfirmRecoveryKeyClicked = {},
         onRoomClicked = {},
-        onRoomLongClicked = {},
         onCreateRoomClicked = {},
         onInvitesClicked = {}
     )

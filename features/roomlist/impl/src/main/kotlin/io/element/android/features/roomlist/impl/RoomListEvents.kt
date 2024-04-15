@@ -24,6 +24,8 @@ sealed interface RoomListEvents {
     data object DismissRequestVerificationPrompt : RoomListEvents
     data object DismissRecoveryKeyPrompt : RoomListEvents
     data object ToggleSearchResults : RoomListEvents
+    data class AcceptInvite(val roomListRoomSummary: RoomListRoomSummary) : RoomListEvents
+    data class DeclineInvite(val roomListRoomSummary: RoomListRoomSummary) : RoomListEvents
     data class ShowContextMenu(val roomListRoomSummary: RoomListRoomSummary) : RoomListEvents
 
     sealed interface ContextMenuEvents : RoomListEvents

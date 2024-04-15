@@ -17,6 +17,7 @@
 package io.element.android.features.roomlist.impl
 
 import androidx.compose.runtime.Immutable
+import io.element.android.features.invite.api.response.AcceptDeclineInviteState
 import io.element.android.features.leaveroom.api.LeaveRoomState
 import io.element.android.features.roomlist.impl.filters.RoomListFiltersState
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
@@ -37,6 +38,7 @@ data class RoomListState(
     val filtersState: RoomListFiltersState,
     val searchState: RoomListSearchState,
     val contentState: RoomListContentState,
+    val acceptDeclineInviteState: AcceptDeclineInviteState,
     val eventSink: (RoomListEvents) -> Unit,
 ) {
     val displayFilters = filtersState.isFeatureEnabled && contentState is RoomListContentState.Rooms

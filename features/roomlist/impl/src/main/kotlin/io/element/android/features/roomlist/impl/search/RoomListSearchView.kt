@@ -44,6 +44,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.roomlist.impl.R
+import io.element.android.features.roomlist.impl.RoomListEvents
 import io.element.android.features.roomlist.impl.components.RoomSummaryRow
 import io.element.android.features.roomlist.impl.contentType
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
@@ -65,8 +66,8 @@ import io.element.android.libraries.ui.strings.CommonStrings
 @Composable
 internal fun RoomListSearchView(
     state: RoomListSearchState,
+    eventSink: (RoomListEvents) -> Unit,
     onRoomClicked: (RoomId) -> Unit,
-    onRoomLongClicked: (RoomListRoomSummary) -> Unit,
     onRoomDirectorySearchClicked: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -90,7 +91,7 @@ internal fun RoomListSearchView(
                 RoomListSearchContent(
                     state = state,
                     onRoomClicked = onRoomClicked,
-                    onRoomLongClicked = onRoomLongClicked,
+                    eventSink = eventSink,
                     onRoomDirectorySearchClicked = onRoomDirectorySearchClicked,
                 )
             }
@@ -102,8 +103,8 @@ internal fun RoomListSearchView(
 @Composable
 private fun RoomListSearchContent(
     state: RoomListSearchState,
+    eventSink: (RoomListEvents) -> Unit,
     onRoomClicked: (RoomId) -> Unit,
-    onRoomLongClicked: (RoomListRoomSummary) -> Unit,
     onRoomDirectorySearchClicked: () -> Unit,
 ) {
     val borderColor = MaterialTheme.colorScheme.tertiary
@@ -193,7 +194,7 @@ private fun RoomListSearchContent(
                     RoomSummaryRow(
                         room = room,
                         onClick = ::onRoomClicked,
-                        onLongClick = onRoomLongClicked,
+                        eventSink = eventSink,
                     )
                 }
             }
@@ -220,7 +221,7 @@ internal fun RoomListSearchResultContentPreview(@PreviewParameter(RoomListSearch
     RoomListSearchContent(
         state = state,
         onRoomClicked = {},
-        onRoomLongClicked = {},
+        eventSink = {},
         onRoomDirectorySearchClicked = {},
     )
 }

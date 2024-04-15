@@ -17,6 +17,8 @@
 package io.element.android.features.roomlist.impl
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import io.element.android.features.invite.api.response.AcceptDeclineInviteState
+import io.element.android.features.invite.api.response.anAcceptDeclineInviteState
 import io.element.android.features.leaveroom.api.LeaveRoomState
 import io.element.android.features.leaveroom.api.aLeaveRoomState
 import io.element.android.features.roomlist.impl.filters.RoomListFiltersState
@@ -65,6 +67,7 @@ internal fun aRoomListState(
     searchState: RoomListSearchState = aRoomListSearchState(),
     filtersState: RoomListFiltersState = aRoomListFiltersState(isFeatureEnabled = false),
     contentState: RoomListContentState = aRoomsContentState(),
+    acceptDeclineInviteState: AcceptDeclineInviteState = anAcceptDeclineInviteState(),
     eventSink: (RoomListEvents) -> Unit = {}
 ) = RoomListState(
     matrixUser = matrixUser,
@@ -76,6 +79,7 @@ internal fun aRoomListState(
     filtersState = filtersState,
     searchState = searchState,
     contentState = contentState,
+    acceptDeclineInviteState = acceptDeclineInviteState,
     eventSink = eventSink,
 )
 
