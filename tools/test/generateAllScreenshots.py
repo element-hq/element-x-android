@@ -18,6 +18,7 @@
 import os
 import re
 import sys
+import time
 from util import compare
 
 
@@ -134,6 +135,9 @@ def generateJavascriptFile():
             if os.path.exists(translatedFile):
                 # Get the last modified date of the file in seconds and round to days
                 date = os.popen("git log -1 --format=%ct -- \"" + translatedFile + "\"").read().strip()
+                # if date is empty, use today's date
+                if date == "":
+                    date = time.time()
                 dateDay = int(date) // 86400
                 dataForFile.append(dateDay)
             else:
