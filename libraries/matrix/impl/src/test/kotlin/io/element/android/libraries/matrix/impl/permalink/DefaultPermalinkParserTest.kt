@@ -17,6 +17,9 @@
 package io.element.android.libraries.matrix.impl.permalink
 
 import com.google.common.truth.Truth.assertThat
+import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import kotlinx.collections.immutable.persistentListOf
 import org.junit.Test
@@ -69,7 +72,7 @@ class DefaultPermalinkParserTest {
         val url = "https://app.element.io/#/user/@test:matrix.org"
         assertThat(sut.parse(url)).isEqualTo(
             PermalinkData.UserLink(
-                userId = "@test:matrix.org"
+                userId = UserId("@test:matrix.org")
             )
         )
     }
@@ -81,10 +84,8 @@ class DefaultPermalinkParserTest {
         )
         val url = "https://app.element.io/#/room/!aBCD1234:matrix.org"
         assertThat(sut.parse(url)).isEqualTo(
-            PermalinkData.RoomLink(
-                roomIdOrAlias = "!aBCD1234:matrix.org",
-                isRoomAlias = false,
-                eventId = null,
+            PermalinkData.RoomIdLink(
+                roomId = RoomId("!aBCD1234:matrix.org"),
                 viaParameters = persistentListOf(),
             )
         )
@@ -97,10 +98,9 @@ class DefaultPermalinkParserTest {
         )
         val url = "https://app.element.io/#/room/!aBCD1234:matrix.org/$1234567890abcdef:matrix.org"
         assertThat(sut.parse(url)).isEqualTo(
-            PermalinkData.RoomLink(
-                roomIdOrAlias = "!aBCD1234:matrix.org",
-                isRoomAlias = false,
-                eventId = "\$1234567890abcdef:matrix.org",
+            PermalinkData.EventIdLink(
+                roomId = RoomId("!aBCD1234:matrix.org"),
+                eventId = EventId("$1234567890abcdef:matrix.org"),
                 viaParameters = persistentListOf(),
             )
         )
@@ -113,10 +113,8 @@ class DefaultPermalinkParserTest {
         )
         val url = "https://app.element.io/#/room/!aBCD1234:matrix.org/1234567890abcdef:matrix.org"
         assertThat(sut.parse(url)).isEqualTo(
-            PermalinkData.RoomLink(
-                roomIdOrAlias = "!aBCD1234:matrix.org",
-                isRoomAlias = false,
-                eventId = null,
+            PermalinkData.RoomIdLink(
+                roomId = RoomId("!aBCD1234:matrix.org"),
                 viaParameters = persistentListOf(),
             )
         )
@@ -129,10 +127,9 @@ class DefaultPermalinkParserTest {
         )
         val url = "https://app.element.io/#/room/!aBCD1234:matrix.org/$1234567890abcdef:matrix.org?via=matrix.org&via=matrix.com"
         assertThat(sut.parse(url)).isEqualTo(
-            PermalinkData.RoomLink(
-                roomIdOrAlias = "!aBCD1234:matrix.org",
-                isRoomAlias = false,
-                eventId = "\$1234567890abcdef:matrix.org",
+            PermalinkData.EventIdLink(
+                roomId = RoomId("!aBCD1234:matrix.org"),
+                eventId = EventId("$1234567890abcdef:matrix.org"),
                 viaParameters = persistentListOf("matrix.org", "matrix.com"),
             )
         )
@@ -145,10 +142,23 @@ class DefaultPermalinkParserTest {
         )
         val url = "https://app.element.io/#/room/#element-android:matrix.org"
         assertThat(sut.parse(url)).isEqualTo(
-            PermalinkData.RoomLink(
-                roomIdOrAlias = "#element-android:matrix.org",
-                isRoomAlias = true,
-                eventId = null,
+            PermalinkData.RoomAliasLink(
+                roomAlias = "#element-android:matrix.org",
+                viaParameters = persistentListOf(),
+            )
+        )
+    }
+
+    @Test
+    fun `parsing a valid room alias with eventId url returns a room link`() {
+        val sut = DefaultPermalinkParser(
+            matrixToConverter = DefaultMatrixToConverter(),
+        )
+        val url = "https://app.element.io/#/room/#element-android:matrix.org/$1234567890abcdef:matrix.org"
+        assertThat(sut.parse(url)).isEqualTo(
+            PermalinkData.EventIdAliasLink(
+                roomAlias = "#element-android:matrix.org",
+                eventId = EventId("$1234567890abcdef:matrix.org"),
                 viaParameters = persistentListOf(),
             )
         )
@@ -188,7 +198,7 @@ class DefaultPermalinkParserTest {
             "&room_type="
         assertThat(sut.parse(url)).isEqualTo(
             PermalinkData.RoomEmailInviteLink(
-                roomId = "!aBCDEF12345:matrix.org",
+                roomId = RoomId("!aBCDEF12345:matrix.org"),
                 email = "testuser@element.io",
                 signUrl = "https://vector.im/_matrix/identity/api/v1/sign-ed25519?token=a_token&private_key=a_private_key",
                 roomName = "TestRoom",

@@ -16,7 +16,6 @@
 
 package io.element.android.libraries.matrix.test.permalink
 
-import android.net.Uri
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
 
@@ -29,9 +28,5 @@ class FakePermalinkParser(
 
     override fun parse(uriString: String): PermalinkData {
         return result()
-    }
-
-    override fun parse(uri: Uri): PermalinkData {
-        TODO("Not yet implemented")
     }
 }

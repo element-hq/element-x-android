@@ -18,6 +18,7 @@ package io.element.android.libraries.matrixui.messages
 
 import android.net.Uri
 import com.google.common.truth.Truth.assertThat
+import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
 import io.element.android.libraries.matrix.api.timeline.item.event.FormattedBody
@@ -78,10 +79,8 @@ class ToHtmlDocumentTest {
 
         val document = body.toHtmlDocument(permalinkParser = object : PermalinkParser {
             override fun parse(uriString: String): PermalinkData {
-                return PermalinkData.UserLink("@alice:matrix.org")
+                return PermalinkData.UserLink(UserId("@alice:matrix.org"))
             }
-
-            override fun parse(uri: Uri): PermalinkData = TODO("Not yet implemented")
         })
         assertThat(document?.text()).isEqualTo("Hey @Alice!")
     }
@@ -95,10 +94,8 @@ class ToHtmlDocumentTest {
 
         val document = body.toHtmlDocument(permalinkParser = object : PermalinkParser {
             override fun parse(uriString: String): PermalinkData {
-                return PermalinkData.UserLink("@alice:matrix.org")
+                return PermalinkData.UserLink(UserId("@alice:matrix.org"))
             }
-
-            override fun parse(uri: Uri): PermalinkData = TODO("Not yet implemented")
         })
         assertThat(document?.text()).isEqualTo("Hey @Alice!")
     }
@@ -114,8 +111,6 @@ class ToHtmlDocumentTest {
             override fun parse(uriString: String): PermalinkData {
                 return PermalinkData.FallbackLink(uri = Uri.parse("https://matrix.org"))
             }
-
-            override fun parse(uri: Uri): PermalinkData = TODO("Not yet implemented")
         })
         assertThat(document?.text()).isEqualTo("Hey Alice!")
     }

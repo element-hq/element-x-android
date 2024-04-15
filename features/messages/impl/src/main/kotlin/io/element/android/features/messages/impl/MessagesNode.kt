@@ -17,7 +17,6 @@
 package io.element.android.features.messages.impl
 
 import android.content.Context
-import android.net.Uri
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
@@ -108,12 +107,18 @@ class MessagesNode @AssistedInject constructor(
         context: Context,
         url: String,
     ) {
-        when (val permalink = permalinkParser.parse(Uri.parse(url))) {
+        when (val permalink = permalinkParser.parse(url)) {
             is PermalinkData.UserLink -> {
-                callback?.onUserDataClicked(UserId(permalink.userId))
+                callback?.onUserDataClicked(permalink.userId)
             }
             is PermalinkData.RoomLink -> {
                 // TODO Implement room link handling
+            }
+            is PermalinkData.EventIdAliasLink -> {
+                // TODO Implement room and Event link handling
+            }
+            is PermalinkData.EventIdLink -> {
+                // TODO Implement room and Event link handling
             }
             is PermalinkData.FallbackLink,
             is PermalinkData.RoomEmailInviteLink -> {

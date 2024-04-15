@@ -914,7 +914,6 @@ private fun ATextComposer(
         voiceMessageState = voiceMessageState,
         permalinkParser = object : PermalinkParser {
             override fun parse(uriString: String): PermalinkData = TODO("Not yet implemented")
-            override fun parse(uri: Uri): PermalinkData = TODO("Not yet implemented")
         },
         composerMode = composerMode,
         enableTextFormatting = enableTextFormatting,

@@ -18,7 +18,6 @@ package io.element.android.libraries.textcomposer.mentions
 
 import android.graphics.Color
 import android.graphics.Typeface
-import android.net.Uri
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.compose.foundation.layout.PaddingValues
@@ -41,6 +40,7 @@ import io.element.android.libraries.designsystem.theme.currentUserMentionPillTex
 import io.element.android.libraries.designsystem.theme.mentionPillBackground
 import io.element.android.libraries.designsystem.theme.mentionPillText
 import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
 import kotlinx.collections.immutable.persistentListOf
@@ -80,7 +80,7 @@ class MentionSpanProvider(
         val (startPaddingPx, endPaddingPx) = paddingValuesPx.value
         return when {
             permalinkData is PermalinkData.UserLink -> {
-                val isCurrentUser = permalinkData.userId == currentSessionId.value
+                val isCurrentUser = permalinkData.userId == currentSessionId
                 MentionSpan(
                     type = MentionSpan.Type.USER,
                     backgroundColor = if (isCurrentUser) currentUserBackgroundColor else otherBackgroundColor,
@@ -137,19 +137,15 @@ internal fun MentionSpanPreview() {
         permalinkParser = object : PermalinkParser {
             override fun parse(uriString: String): PermalinkData {
                 return when (uriString) {
-                    "https://matrix.to/#/@me:matrix.org" -> PermalinkData.UserLink("@me:matrix.org")
-                    "https://matrix.to/#/@other:matrix.org" -> PermalinkData.UserLink("@other:matrix.org")
-                    "https://matrix.to/#/#room:matrix.org" -> PermalinkData.RoomLink(
-                        roomIdOrAlias = "#room:matrix.org",
-                        isRoomAlias = true,
-                        eventId = null,
+                    "https://matrix.to/#/@me:matrix.org" -> PermalinkData.UserLink(UserId("@me:matrix.org"))
+                    "https://matrix.to/#/@other:matrix.org" -> PermalinkData.UserLink(UserId("@other:matrix.org"))
+                    "https://matrix.to/#/#room:matrix.org" -> PermalinkData.RoomAliasLink(
+                        roomAlias = "#room:matrix.org",
                         viaParameters = persistentListOf(),
                     )
                     else -> TODO()
                 }
             }
-
-            override fun parse(uri: Uri): PermalinkData = TODO()
         },
     )
     ElementPreview {

@@ -16,8 +16,6 @@
 
 package io.element.android.libraries.matrix.api.permalink
 
-import android.net.Uri
-
 /**
  * This class turns a uri to a [PermalinkData].
  * element-based domains (e.g. https://app.element.io/#/user/@chagai95:matrix.org) permalinks
@@ -27,12 +25,7 @@ import android.net.Uri
 interface PermalinkParser {
     /**
      * Turns a uri string to a [PermalinkData].
-     */
-    fun parse(uriString: String): PermalinkData
-
-    /**
-     * Turns a uri to a [PermalinkData].
      * https://github.com/matrix-org/matrix-doc/blob/master/proposals/1704-matrix.to-permalinks.md
      */
-    fun parse(uri: Uri): PermalinkData
+    fun parse(uriString: String): PermalinkData
 }

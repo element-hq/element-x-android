@@ -24,8 +24,4 @@ class OnlyFallbackPermalinkParser : PermalinkParser {
     override fun parse(uriString: String): PermalinkData {
         return PermalinkData.FallbackLink(Uri.parse(uriString))
     }
-
-    override fun parse(uri: Uri): PermalinkData {
-        return PermalinkData.FallbackLink(uri)
-    }
 }
