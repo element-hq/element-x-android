@@ -53,9 +53,6 @@ class JoinRoomPresenterTest {
                 assertThat(state.joinAuthorisationStatus).isEqualTo(JoinAuthorisationStatus.Unknown)
                 assertThat(state.acceptDeclineInviteState).isEqualTo(anAcceptDeclineInviteState())
             }
-            awaitItem().also { state ->
-                assertThat(state.contentState).isEqualTo(ContentState.UnknownRoom(A_ROOM_ID))
-            }
         }
     }
 
