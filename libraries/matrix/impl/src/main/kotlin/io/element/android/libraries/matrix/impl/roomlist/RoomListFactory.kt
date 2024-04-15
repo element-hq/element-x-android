@@ -23,6 +23,7 @@ import io.element.android.libraries.matrix.api.roomlist.RoomSummary
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.getAndUpdate
 import kotlinx.coroutines.flow.launchIn
@@ -92,7 +93,8 @@ internal class RoomListFactory(
             innerRoomList?.destroy()
         }
         return RustDynamicRoomList(
-            summaries = filteredSummariesFlow,
+            summaries = summariesFlow,
+            filteredSummaries = filteredSummariesFlow,
             loadingState = loadingStateFlow,
             currentFilter = currentFilter,
             loadedPages = loadedPages,
@@ -105,6 +107,7 @@ internal class RoomListFactory(
 
 private class RustDynamicRoomList(
     override val summaries: MutableSharedFlow<List<RoomSummary>>,
+    override val filteredSummaries: SharedFlow<List<RoomSummary>>,
     override val loadingState: MutableStateFlow<RoomList.LoadingState>,
     override val currentFilter: MutableStateFlow<RoomListFilter>,
     override val loadedPages: MutableStateFlow<Int>,

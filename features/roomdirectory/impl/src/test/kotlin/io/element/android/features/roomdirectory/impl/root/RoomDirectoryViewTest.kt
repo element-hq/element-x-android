@@ -19,11 +19,14 @@ package io.element.android.features.roomdirectory.impl.root
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.onAllNodesWithTag
+import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import io.element.android.features.roomdirectory.api.RoomDescription
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.testtags.TestTags
@@ -55,7 +58,24 @@ class RoomDirectoryViewTest {
     }
 
     @Test
-    fun `clicking on room item emits the expected Event`() {
+    fun `clicking on room item then onResultClicked lambda is called once`() {
+        val eventsRecorder = EventsRecorder<RoomDirectoryEvents>()
+        val state = aRoomDirectoryState(
+            roomDescriptions = aRoomDescriptionList(),
+            eventSink = eventsRecorder,
+        )
+        val clickedRoom = state.roomDescriptions.first()
+        ensureCalledOnceWithParam(clickedRoom) { callback ->
+            rule.setRoomDirectoryView(
+                state = state,
+                onResultClicked = callback,
+            )
+            rule.onNodeWithText(clickedRoom.computedName).performClick()
+        }
+    }
+
+    @Test
+    fun `clicking on room item join cta emits the expected Event`() {
         val eventsRecorder = EventsRecorder<RoomDirectoryEvents>()
         val state = aRoomDirectoryState(
             roomDescriptions = aRoomDescriptionList(),
@@ -63,7 +83,7 @@ class RoomDirectoryViewTest {
         )
         rule.setRoomDirectoryView(state = state)
         val clickedRoom = state.roomDescriptions.first()
-        rule.onNodeWithText(clickedRoom.name).performClick()
+        rule.onAllNodesWithTag(TestTags.callToAction.value).onFirst().performClick()
         eventsRecorder.assertSingle(RoomDirectoryEvents.JoinRoom(clickedRoom.roomId))
     }
 
@@ -100,11 +120,13 @@ class RoomDirectoryViewTest {
 private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setRoomDirectoryView(
     state: RoomDirectoryState,
     onBackPressed: () -> Unit = EnsureNeverCalled(),
+    onResultClicked: (RoomDescription) -> Unit = EnsureNeverCalledWithParam(),
     onRoomJoined: (RoomId) -> Unit = EnsureNeverCalledWithParam(),
 ) {
     setContent {
         RoomDirectoryView(
             state = state,
+            onResultClicked = onResultClicked,
             onRoomJoined = onRoomJoined,
             onBackPressed = onBackPressed,
         )

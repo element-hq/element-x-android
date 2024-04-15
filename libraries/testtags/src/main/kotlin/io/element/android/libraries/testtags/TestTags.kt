@@ -105,4 +105,9 @@ object TestTags {
      * Search field.
      */
     val searchTextField = TestTag("search_text_field")
+
+    /**
+     * Generic call to action.
+     */
+    val callToAction = TestTag("call_to_action")
 }

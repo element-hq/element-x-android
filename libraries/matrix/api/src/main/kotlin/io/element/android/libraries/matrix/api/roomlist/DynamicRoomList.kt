@@ -17,6 +17,7 @@
 package io.element.android.libraries.matrix.api.roomlist
 
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
@@ -31,6 +32,8 @@ interface DynamicRoomList : RoomList {
     val currentFilter: StateFlow<RoomListFilter>
     val loadedPages: StateFlow<Int>
     val pageSize: Int
+
+    val filteredSummaries: SharedFlow<List<RoomSummary>>
 
     /**
      * Load more rooms into the list if possible.
