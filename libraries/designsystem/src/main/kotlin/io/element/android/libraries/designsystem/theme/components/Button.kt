@@ -203,7 +203,8 @@ private fun ButtonInternal(
     }
 
     val textStyle = when (size) {
-        ButtonSize.Small, ButtonSize.Medium -> MaterialTheme.typography.labelLarge
+        ButtonSize.Small,
+        ButtonSize.Medium -> MaterialTheme.typography.labelLarge
         ButtonSize.Large -> ElementTheme.typography.fontBodyLgMedium
     }
 
