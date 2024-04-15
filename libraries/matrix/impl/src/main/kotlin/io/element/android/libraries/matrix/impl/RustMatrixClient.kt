@@ -460,6 +460,12 @@ class RustMatrixClient(
         }
     }
 
+    override suspend fun resolveRoomAlias(roomAlias: String): Result<RoomId> = withContext(sessionDispatcher) {
+        runCatching {
+            client.resolveRoomAlias(roomAlias).let(::RoomId)
+        }
+    }
+
     override fun syncService(): SyncService = rustSyncService
 
     override fun sessionVerificationService(): SessionVerificationService = verificationService

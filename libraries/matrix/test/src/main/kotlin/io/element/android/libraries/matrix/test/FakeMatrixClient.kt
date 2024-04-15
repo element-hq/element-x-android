@@ -73,6 +73,7 @@ class FakeMatrixClient(
     private val encryptionService: FakeEncryptionService = FakeEncryptionService(),
     private val roomDirectoryService: RoomDirectoryService = FakeRoomDirectoryService(),
     private val accountManagementUrlString: Result<String?> = Result.success(null),
+    private val resolveRoomAliasResult: (String) -> Result<RoomId> = { Result.success(A_ROOM_ID) },
 ) : MatrixClient {
     var setDisplayNameCalled: Boolean = false
         private set
@@ -274,6 +275,10 @@ class FakeMatrixClient(
         visitedRoomsId.removeAll { it == roomId }
         visitedRoomsId.add(0, roomId)
         return Result.success(Unit)
+    }
+
+    override suspend fun resolveRoomAlias(roomAlias: String): Result<RoomId> {
+        return resolveRoomAliasResult(roomAlias)
     }
 
     override suspend fun getRecentlyVisitedRooms(): Result<List<RoomId>> {

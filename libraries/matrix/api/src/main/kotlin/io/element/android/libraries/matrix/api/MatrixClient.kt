@@ -98,4 +98,5 @@ interface MatrixClient : Closeable {
 
     suspend fun trackRecentlyVisitedRoom(roomId: RoomId): Result<Unit>
     suspend fun getRecentlyVisitedRooms(): Result<List<RoomId>>
+    suspend fun resolveRoomAlias(roomAlias: String): Result<RoomId>
 }
