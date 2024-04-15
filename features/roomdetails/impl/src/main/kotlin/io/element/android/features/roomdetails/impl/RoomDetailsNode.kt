@@ -18,9 +18,9 @@ package io.element.android.features.roomdetails.impl
 
 import android.content.Context
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.lifecycleScope
 import com.bumble.appyx.core.lifecycle.subscribe
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
@@ -130,10 +130,9 @@ class RoomDetailsNode @AssistedInject constructor(
     override fun View(modifier: Modifier) {
         val context = LocalContext.current
         val state = presenter.present()
-        val coroutineScope = rememberCoroutineScope()
 
         fun onShareRoom() {
-            coroutineScope.onShareRoom(context)
+            lifecycleScope.onShareRoom(context)
         }
 
         fun onShareMember(roomMember: RoomMember) {
