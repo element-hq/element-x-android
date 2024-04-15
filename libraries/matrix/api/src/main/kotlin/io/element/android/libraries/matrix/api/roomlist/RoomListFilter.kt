@@ -58,6 +58,11 @@ sealed interface RoomListFilter {
     data object Favorite : RoomListFilter
 
     /**
+     * A filter that matches rooms that with Invited membership.
+     */
+    data object Invite : RoomListFilter
+
+    /**
      * A filter that matches either Group or People rooms.
      */
     sealed interface Category : RoomListFilter {

@@ -16,6 +16,7 @@
 
 package io.element.android.libraries.matrix.impl.roomlist
 
+import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.roomlist.RoomListFilter
 import io.element.android.libraries.matrix.api.roomlist.RoomSummary
 
@@ -39,6 +40,9 @@ val RoomListFilter.predicate
         }
         is RoomListFilter.NormalizedMatchRoomName -> { roomSummary: RoomSummary ->
             roomSummary is RoomSummary.Filled && roomSummary.details.name.contains(pattern, ignoreCase = true)
+        }
+        RoomListFilter.Invite -> { roomSummary: RoomSummary ->
+            roomSummary is RoomSummary.Filled && roomSummary.details.currentUserMembership == CurrentUserMembership.INVITED
         }
     }
 
