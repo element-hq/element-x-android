@@ -62,8 +62,8 @@
   <string name="action_forward">"Переслать"</string>
   <string name="action_go_back">"Вернуться"</string>
   <string name="action_invite">"Пригласить"</string>
-  <string name="action_invite_friends">"Пригласить друзей"</string>
-  <string name="action_invite_friends_to_app">"Пригласить друзей в %1$s"</string>
+  <string name="action_invite_friends">"Пригласить в комнату"</string>
+  <string name="action_invite_friends_to_app">"Пригласить в %1$s"</string>
   <string name="action_invite_people_to_app">"Пригласите пользователей в %1$s"</string>
   <string name="action_invites_list">"Приглашения"</string>
   <string name="action_join">"Присоединиться"</string>
@@ -206,6 +206,7 @@
   <string name="common_settings">"Настройки"</string>
   <string name="common_shared_location">"Делится местонахождением"</string>
   <string name="common_signing_out">"Выход…"</string>
+  <string name="common_something_went_wrong">"Что-то пошло не так"</string>
   <string name="common_starting_chat">"Начало чата…"</string>
   <string name="common_sticker">"Стикер"</string>
   <string name="common_success">"Успешно"</string>

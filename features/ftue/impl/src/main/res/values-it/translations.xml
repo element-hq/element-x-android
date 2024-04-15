@@ -2,6 +2,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_notification_optin_subtitle">"Potrai modificare le tue impostazioni in seguito."</string>
   <string name="screen_notification_optin_title">"Consenti le notifiche e non perdere mai un messaggio"</string>
+  <string name="screen_qr_code_login_invalid_scan_state_retry_button">"Riprova"</string>
   <string name="screen_welcome_bullet_1">"Chiamate, sondaggi, ricerche e altro ancora saranno aggiunti nel corso dell\'anno."</string>
   <string name="screen_welcome_bullet_2">"La cronologia dei messaggi per le stanze crittografate non è ancora disponibile."</string>
   <string name="screen_welcome_bullet_3">"Ci piacerebbe sentire il tuo parere, facci sapere cosa ne pensi tramite la pagina delle impostazioni."</string>
