@@ -130,7 +130,8 @@
         "screen_roomlist_.*",
         "session_verification_banner_.*",
         "confirm_recovery_key_banner_.*",
-        "screen_migration_.*"
+        "screen_migration_.*",
+        "screen_invites_.*"
       ]
     },
     {

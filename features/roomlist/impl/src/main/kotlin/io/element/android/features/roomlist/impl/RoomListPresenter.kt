@@ -214,7 +214,7 @@ class RoomListPresenter @Inject constructor(
         val initialState = RoomListState.ContextMenu.Shown(
             roomId = event.roomListRoomSummary.roomId,
             roomName = event.roomListRoomSummary.name,
-            isDm = event.roomListRoomSummary.isDm,
+            isDm = event.roomListRoomSummary.isDirect,
             isFavorite = event.roomListRoomSummary.isFavorite,
             markAsUnreadFeatureFlagEnabled = featureFlagService.isFeatureEnabled(FeatureFlags.MarkAsUnread),
             hasNewContent = event.roomListRoomSummary.hasNewContent

@@ -21,6 +21,7 @@ import io.element.android.features.leaveroom.api.LeaveRoomState
 import io.element.android.features.leaveroom.api.aLeaveRoomState
 import io.element.android.features.roomlist.impl.filters.RoomListFiltersState
 import io.element.android.features.roomlist.impl.filters.aRoomListFiltersState
+import io.element.android.features.roomlist.impl.model.DisplayType
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
 import io.element.android.features.roomlist.impl.model.aRoomListRoomSummary
 import io.element.android.features.roomlist.impl.search.RoomListSearchState
@@ -98,11 +99,11 @@ internal fun aRoomListRoomSummaryList(): ImmutableList<RoomListRoomSummary> {
         ),
         aRoomListRoomSummary(
             id = "!roomId3:domain",
-            isPlaceholder = true,
+             displayType = DisplayType.PLACEHOLDER,
         ),
         aRoomListRoomSummary(
             id = "!roomId4:domain",
-            isPlaceholder = true,
+            displayType = DisplayType.PLACEHOLDER,
         ),
     )
 }

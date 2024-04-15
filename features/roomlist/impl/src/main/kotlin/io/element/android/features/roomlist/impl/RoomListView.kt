@@ -180,7 +180,7 @@ private fun RoomListScaffold(
     )
 }
 
-internal fun RoomListRoomSummary.contentType() = isPlaceholder
+internal fun RoomListRoomSummary.contentType() = type.ordinal
 
 @PreviewsDayNight
 @Composable

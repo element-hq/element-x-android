@@ -16,13 +16,16 @@
 
 package io.element.android.features.roomlist.impl.datasource
 
+import io.element.android.features.roomlist.impl.model.InviteSender
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
+import io.element.android.features.roomlist.impl.model.DisplayType
 import io.element.android.libraries.core.extensions.orEmpty
 import io.element.android.libraries.dateformatter.api.LastMessageTimestampFormatter
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.eventformatter.api.RoomLastMessageFormatter
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.roomlist.RoomSummary
 import javax.inject.Inject
 
@@ -35,7 +38,7 @@ class RoomListRoomSummaryFactory @Inject constructor(
             return RoomListRoomSummary(
                 id = id,
                 roomId = RoomId(id),
-                isPlaceholder = true,
+                type = DisplayType.PLACEHOLDER,
                 name = "Short name",
                 timestamp = "hh:mm",
                 lastMessage = "Last message for placeholder",
@@ -46,8 +49,10 @@ class RoomListRoomSummaryFactory @Inject constructor(
                 isMarkedUnread = false,
                 userDefinedNotificationMode = null,
                 hasRoomCall = false,
-                isDm = false,
+                isDirect = false,
                 isFavorite = false,
+                inviteSender = null,
+                canonicalAlias = null,
             )
         }
     }
@@ -73,11 +78,28 @@ class RoomListRoomSummaryFactory @Inject constructor(
                 roomLastMessageFormatter.format(message.event, roomSummary.details.isDirect)
             }.orEmpty(),
             avatarData = avatarData,
-            isPlaceholder = false,
             userDefinedNotificationMode = roomSummary.details.userDefinedNotificationMode,
             hasRoomCall = roomSummary.details.hasRoomCall,
-            isDm = roomSummary.details.isDm,
+            isDirect = roomSummary.details.isDirect,
             isFavorite = roomSummary.details.isFavorite,
+            inviteSender = roomSummary.details.inviter?.run {
+                InviteSender(
+                    userId = userId,
+                    displayName = displayName ?: "",
+                    avatarData = AvatarData(
+                        id = userId.value,
+                        name = displayName,
+                        url = avatarUrl,
+                        size = AvatarSize.InviteSender,
+                    ),
+                )
+            },
+            canonicalAlias = roomSummary.details.canonicalAlias,
+            type = if (roomSummary.details.currentUserMembership == CurrentUserMembership.INVITED) {
+                DisplayType.INVITE
+            } else {
+                DisplayType.ROOM
+            }
         )
     }
 }

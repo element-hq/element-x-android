@@ -24,8 +24,10 @@ import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 @Immutable
 data class RoomListRoomSummary(
     val id: String,
+    val type: DisplayType,
     val roomId: RoomId,
     val name: String,
+    val canonicalAlias: String?,
     val numberOfUnreadMessages: Int,
     val numberOfUnreadMentions: Int,
     val numberOfUnreadNotifications: Int,
@@ -33,18 +35,21 @@ data class RoomListRoomSummary(
     val timestamp: String?,
     val lastMessage: CharSequence?,
     val avatarData: AvatarData,
-    val isPlaceholder: Boolean,
     val userDefinedNotificationMode: RoomNotificationMode?,
     val hasRoomCall: Boolean,
-    val isDm: Boolean,
+    val isDirect: Boolean,
     val isFavorite: Boolean,
-) {
+    val inviteSender: InviteSender?,
+
+    ) {
     val isHighlighted = userDefinedNotificationMode != RoomNotificationMode.MUTE &&
         (numberOfUnreadNotifications > 0 || numberOfUnreadMentions > 0) ||
-        isMarkedUnread
+        isMarkedUnread ||
+        type == DisplayType.INVITE
 
     val hasNewContent = numberOfUnreadMessages > 0 ||
         numberOfUnreadMentions > 0 ||
         numberOfUnreadNotifications > 0 ||
-        isMarkedUnread
+        isMarkedUnread ||
+        type == DisplayType.INVITE
 }

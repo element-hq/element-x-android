@@ -20,13 +20,14 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 
 open class RoomListRoomSummaryProvider : PreviewParameterProvider<RoomListRoomSummary> {
     override val values: Sequence<RoomListRoomSummary>
         get() = sequenceOf(
             listOf(
-                aRoomListRoomSummary(isPlaceholder = true),
+                aRoomListRoomSummary(displayType = DisplayType.PLACEHOLDER),
                 aRoomListRoomSummary(),
                 aRoomListRoomSummary(lastMessage = null),
                 aRoomListRoomSummary(
@@ -80,6 +81,27 @@ open class RoomListRoomSummaryProvider : PreviewParameterProvider<RoomListRoomSu
                     )
                 }.flatten()
             }.flatten(),
+            listOf(
+                aRoomListRoomSummary(
+                    displayType = DisplayType.INVITE,
+                    inviteSender = InviteSender(
+                        userId = UserId("@alice:matrix.org"),
+                        displayName = "Alice",
+                        avatarData = AvatarData("@alice:matrix.org", "Alice", size = AvatarSize.InviteSender),
+                    ),
+                    canonicalAlias = "#alias:matrix.org",
+                ),
+                aRoomListRoomSummary(
+                    name = "Bob",
+                    displayType = DisplayType.INVITE,
+                    inviteSender = InviteSender(
+                        userId = UserId("@bob:matrix.org"),
+                        displayName = "Bob",
+                        avatarData = AvatarData("@bob:matrix.org", "Bob", size = AvatarSize.InviteSender),
+                    ),
+                    isDirect = true,
+                )
+            ),
         ).flatten()
 }
 
@@ -92,12 +114,14 @@ internal fun aRoomListRoomSummary(
     isMarkedUnread: Boolean = false,
     lastMessage: String? = "Last message",
     timestamp: String? = lastMessage?.let { "88:88" },
-    isPlaceholder: Boolean = false,
     notificationMode: RoomNotificationMode? = null,
     hasRoomCall: Boolean = false,
     avatarData: AvatarData = AvatarData(id, name, size = AvatarSize.RoomListItem),
-    isDm: Boolean = false,
+    isDirect: Boolean = false,
     isFavorite: Boolean = false,
+    inviteSender: InviteSender? = null,
+    displayType: DisplayType = DisplayType.ROOM,
+    canonicalAlias: String? = null,
 ) = RoomListRoomSummary(
     id = id,
     roomId = RoomId(id),
@@ -109,9 +133,11 @@ internal fun aRoomListRoomSummary(
     timestamp = timestamp,
     lastMessage = lastMessage,
     avatarData = avatarData,
-    isPlaceholder = isPlaceholder,
     userDefinedNotificationMode = notificationMode,
     hasRoomCall = hasRoomCall,
-    isDm = isDm,
+    isDirect = isDirect,
     isFavorite = isFavorite,
+    inviteSender = inviteSender,
+    type = displayType,
+    canonicalAlias = canonicalAlias,
 )
