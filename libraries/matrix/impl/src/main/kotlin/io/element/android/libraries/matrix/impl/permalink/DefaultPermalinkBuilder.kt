@@ -17,45 +17,22 @@
 package io.element.android.libraries.matrix.impl.permalink
 
 import com.squareup.anvil.annotations.ContributesBinding
-import io.element.android.appconfig.MatrixConfiguration
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.matrix.api.core.MatrixPatterns
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.permalink.PermalinkBuilder
 import io.element.android.libraries.matrix.api.permalink.PermalinkBuilderError
+import org.matrix.rustcomponents.sdk.matrixToUserPermalink
 import javax.inject.Inject
 
 @ContributesBinding(AppScope::class)
 class DefaultPermalinkBuilder @Inject constructor() : PermalinkBuilder {
-    private val permalinkBaseUrl
-        get() = (MatrixConfiguration.clientPermalinkBaseUrl ?: MatrixConfiguration.MATRIX_TO_PERMALINK_BASE_URL).also {
-            var baseUrl = it
-            if (!baseUrl.endsWith("/")) {
-                baseUrl += "/"
-            }
-            if (!baseUrl.endsWith("/#/")) {
-                baseUrl += "/#/"
-            }
-        }
-
     override fun permalinkForUser(userId: UserId): Result<String> {
-        return if (MatrixPatterns.isUserId(userId.value)) {
-            val url = buildString {
-                append(permalinkBaseUrl)
-                if (!isMatrixTo()) {
-                    append(USER_PATH)
-                }
-                append(userId.value)
-            }
-            Result.success(url)
-        } else {
-            Result.failure(PermalinkBuilderError.InvalidUserId)
+        if (!MatrixPatterns.isUserId(userId.value)) {
+            return Result.failure(PermalinkBuilderError.InvalidUserId)
         }
-    }
-
-    private fun isMatrixTo(): Boolean = permalinkBaseUrl.startsWith(MatrixConfiguration.MATRIX_TO_PERMALINK_BASE_URL)
-
-    companion object {
-        private const val USER_PATH = "user/"
+        return runCatching {
+            matrixToUserPermalink(userId.value)
+        }
     }
 }
