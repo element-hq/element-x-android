@@ -95,23 +95,26 @@ class RoomDetailsNode @AssistedInject constructor(
                     text = permalink,
                     noActivityFoundMessage = context.getString(AndroidUtilsR.string.error_no_compatible_app_found)
                 )
-            }.onFailure {
+            }
+            .onFailure {
                 Timber.e(it)
             }
     }
 
     private fun onShareMember(context: Context, member: RoomMember) {
         val permalinkResult = permalinkBuilder.permalinkForUser(member.userId)
-        permalinkResult.onSuccess { permalink ->
-            context.startSharePlainTextIntent(
-                activityResultLauncher = null,
-                chooserTitle = context.getString(R.string.screen_room_details_share_room_title),
-                text = permalink,
-                noActivityFoundMessage = context.getString(AndroidUtilsR.string.error_no_compatible_app_found)
-            )
-        }.onFailure {
-            Timber.e(it)
-        }
+        permalinkResult
+            .onSuccess { permalink ->
+                context.startSharePlainTextIntent(
+                    activityResultLauncher = null,
+                    chooserTitle = context.getString(R.string.screen_room_details_share_room_title),
+                    text = permalink,
+                    noActivityFoundMessage = context.getString(AndroidUtilsR.string.error_no_compatible_app_found)
+                )
+            }
+            .onFailure {
+                Timber.e(it)
+            }
     }
 
     private fun onEditRoomDetails() {
