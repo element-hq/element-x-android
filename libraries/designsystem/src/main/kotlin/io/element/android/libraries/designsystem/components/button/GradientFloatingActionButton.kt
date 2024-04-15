@@ -59,56 +59,54 @@ fun GradientFloatingActionButton(
     shape: Shape = RoundedCornerShape(25),
     content: @Composable () -> Unit,
 ) {
-    Box {
-        val linearShaderBrush = remember {
-            object : ShaderBrush() {
-                override fun createShader(size: Size): Shader {
-                    return LinearGradientShader(
-                        from = Offset(size.width, size.height),
-                        to = Offset(size.width, 0f),
-                        colors = listOf(
-                            LightColorTokens.colorBlue900,
-                            LightColorTokens.colorGreen700,
-                        ),
-                    )
-                }
+    val linearShaderBrush = remember {
+        object : ShaderBrush() {
+            override fun createShader(size: Size): Shader {
+                return LinearGradientShader(
+                    from = Offset(size.width, size.height),
+                    to = Offset(size.width, 0f),
+                    colors = listOf(
+                        LightColorTokens.colorBlue900,
+                        LightColorTokens.colorGreen700,
+                    ),
+                )
             }
         }
-        val radialShaderBrush = remember {
-            object : ShaderBrush() {
-                override fun createShader(size: Size): Shader {
-                    return RadialGradientShader(
-                        center = size.center,
-                        radius = size.width / 2,
-                        colors = listOf(
-                            LightColorTokens.colorGreen700,
-                            LightColorTokens.colorBlue900,
-                        )
+    }
+    val radialShaderBrush = remember {
+        object : ShaderBrush() {
+            override fun createShader(size: Size): Shader {
+                return RadialGradientShader(
+                    center = size.center,
+                    radius = size.width / 2,
+                    colors = listOf(
+                        LightColorTokens.colorGreen700,
+                        LightColorTokens.colorBlue900,
                     )
-                }
+                )
             }
         }
+    }
 
-        Box(
-            modifier = modifier
-                .minimumInteractiveComponentSize()
-                .graphicsLayer(shape = shape, clip = false)
-                .clip(shape)
-                .drawBehind {
-                    drawRect(brush = radialShaderBrush, alpha = 0.4f)
-                    drawRect(brush = linearShaderBrush)
-                }
-                .clickable(
-                    enabled = true,
-                    onClick = onClick,
-                    interactionSource = remember { MutableInteractionSource() },
-                    indication = rememberRipple(color = Color.White)
-                ),
-            contentAlignment = Alignment.Center
-        ) {
-            CompositionLocalProvider(LocalContentColor provides Color.White) {
-                content()
+    Box(
+        modifier = modifier
+            .minimumInteractiveComponentSize()
+            .graphicsLayer(shape = shape, clip = false)
+            .clip(shape)
+            .drawBehind {
+                drawRect(brush = radialShaderBrush, alpha = 0.4f)
+                drawRect(brush = linearShaderBrush)
             }
+            .clickable(
+                enabled = true,
+                onClick = onClick,
+                interactionSource = remember { MutableInteractionSource() },
+                indication = rememberRipple(color = Color.White)
+            ),
+        contentAlignment = Alignment.Center
+    ) {
+        CompositionLocalProvider(LocalContentColor provides Color.White) {
+            content()
         }
     }
 }

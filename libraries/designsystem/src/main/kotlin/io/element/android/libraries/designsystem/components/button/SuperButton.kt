@@ -71,64 +71,62 @@ fun SuperButton(
             ButtonSize.Small -> PaddingValues(horizontal = 16.dp, vertical = 5.dp)
         }
     }
-    Box {
-        val isLightTheme = ElementTheme.isLightTheme
-        val colors = remember(isLightTheme) {
-            if (isLightTheme) {
-                listOf(
-                    LightColorTokens.colorBlue900,
-                    LightColorTokens.colorGreen1100,
-                )
-            } else {
-                listOf(
-                    DarkColorTokens.colorBlue900,
-                    DarkColorTokens.colorGreen1100,
-                )
-            }
-        }
-
-        val shaderBrush = remember(colors) {
-            object : ShaderBrush() {
-                override fun createShader(size: Size): Shader {
-                    return LinearGradientShader(
-                        from = Offset(0f, size.height),
-                        to = Offset(size.width, 0f),
-                        colors = colors,
-                    )
-                }
-            }
-        }
-        val border = if (enabled) {
-            BorderStroke(1.dp, shaderBrush)
+    val isLightTheme = ElementTheme.isLightTheme
+    val colors = remember(isLightTheme) {
+        if (isLightTheme) {
+            listOf(
+                LightColorTokens.colorBlue900,
+                LightColorTokens.colorGreen1100,
+            )
         } else {
-            BorderStroke(1.dp, ElementTheme.colors.borderDisabled)
+            listOf(
+                DarkColorTokens.colorBlue900,
+                DarkColorTokens.colorGreen1100,
+            )
         }
-        val backgroundColor = ElementTheme.colors.bgCanvasDefault
-        Box(
-            modifier = modifier
-                .minimumInteractiveComponentSize()
-                .graphicsLayer(shape = shape, clip = false)
-                .clip(shape)
-                .border(border, shape)
-                .drawBehind {
-                    drawRect(backgroundColor)
-                    drawRect(brush = shaderBrush, alpha = 0.04f)
-                }
-                .clickable(
-                    enabled = enabled,
-                    onClick = onClick,
-                    interactionSource = remember { MutableInteractionSource() },
-                    indication = rememberRipple()
+    }
+
+    val shaderBrush = remember(colors) {
+        object : ShaderBrush() {
+            override fun createShader(size: Size): Shader {
+                return LinearGradientShader(
+                    from = Offset(0f, size.height),
+                    to = Offset(size.width, 0f),
+                    colors = colors,
                 )
-                .padding(contentPadding),
-            contentAlignment = Alignment.Center
-        ) {
-            CompositionLocalProvider(
-                LocalContentColor provides if (enabled) ElementTheme.colors.textPrimary else ElementTheme.colors.textDisabled,
-                LocalTextStyle provides ElementTheme.typography.fontBodyLgMedium,
-            ) {
-                content()
             }
+        }
+    }
+    val border = if (enabled) {
+        BorderStroke(1.dp, shaderBrush)
+    } else {
+        BorderStroke(1.dp, ElementTheme.colors.borderDisabled)
+    }
+    val backgroundColor = ElementTheme.colors.bgCanvasDefault
+    Box(
+        modifier = modifier
+            .minimumInteractiveComponentSize()
+            .graphicsLayer(shape = shape, clip = false)
+            .clip(shape)
+            .border(border, shape)
+            .drawBehind {
+                drawRect(backgroundColor)
+                drawRect(brush = shaderBrush, alpha = 0.04f)
+            }
+            .clickable(
+                enabled = enabled,
+                onClick = onClick,
+                interactionSource = remember { MutableInteractionSource() },
+                indication = rememberRipple()
+            )
+            .padding(contentPadding),
+        contentAlignment = Alignment.Center
+    ) {
+        CompositionLocalProvider(
+            LocalContentColor provides if (enabled) ElementTheme.colors.textPrimary else ElementTheme.colors.textDisabled,
+            LocalTextStyle provides ElementTheme.typography.fontBodyLgMedium,
+        ) {
+            content()
         }
     }
 }
