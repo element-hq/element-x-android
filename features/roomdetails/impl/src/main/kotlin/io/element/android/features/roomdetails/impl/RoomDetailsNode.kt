@@ -20,6 +20,7 @@ import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.lifecycleScope
 import com.bumble.appyx.core.lifecycle.subscribe
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
@@ -35,6 +36,8 @@ import io.element.android.libraries.matrix.api.permalink.PermalinkBuilder
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.services.analytics.api.AnalyticsService
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import io.element.android.libraries.androidutils.R as AndroidUtilsR
 
@@ -83,34 +86,35 @@ class RoomDetailsNode @AssistedInject constructor(
         callbacks.forEach { it.openPollHistory() }
     }
 
-    private fun onShareRoom(context: Context) {
-        val alias = room.alias ?: room.alternativeAliases.firstOrNull()
-        val permalinkResult = alias?.let { permalinkBuilder.permalinkForRoomAlias(it) }
-            ?: permalinkBuilder.permalinkForRoomId(room.roomId)
-        permalinkResult.onSuccess { permalink ->
-            context.startSharePlainTextIntent(
-                activityResultLauncher = null,
-                chooserTitle = context.getString(R.string.screen_room_details_share_room_title),
-                text = permalink,
-                noActivityFoundMessage = context.getString(AndroidUtilsR.string.error_no_compatible_app_found)
-            )
-        }.onFailure {
-            Timber.e(it)
-        }
+    private fun CoroutineScope.onShareRoom(context: Context) = launch {
+        room.getPermalink()
+            .onSuccess { permalink ->
+                context.startSharePlainTextIntent(
+                    activityResultLauncher = null,
+                    chooserTitle = context.getString(R.string.screen_room_details_share_room_title),
+                    text = permalink,
+                    noActivityFoundMessage = context.getString(AndroidUtilsR.string.error_no_compatible_app_found)
+                )
+            }
+            .onFailure {
+                Timber.e(it)
+            }
     }
 
     private fun onShareMember(context: Context, member: RoomMember) {
         val permalinkResult = permalinkBuilder.permalinkForUser(member.userId)
-        permalinkResult.onSuccess { permalink ->
-            context.startSharePlainTextIntent(
-                activityResultLauncher = null,
-                chooserTitle = context.getString(R.string.screen_room_details_share_room_title),
-                text = permalink,
-                noActivityFoundMessage = context.getString(AndroidUtilsR.string.error_no_compatible_app_found)
-            )
-        }.onFailure {
-            Timber.e(it)
-        }
+        permalinkResult
+            .onSuccess { permalink ->
+                context.startSharePlainTextIntent(
+                    activityResultLauncher = null,
+                    chooserTitle = context.getString(R.string.screen_room_details_share_room_title),
+                    text = permalink,
+                    noActivityFoundMessage = context.getString(AndroidUtilsR.string.error_no_compatible_app_found)
+                )
+            }
+            .onFailure {
+                Timber.e(it)
+            }
     }
 
     private fun onEditRoomDetails() {
@@ -131,7 +135,7 @@ class RoomDetailsNode @AssistedInject constructor(
         val state = presenter.present()
 
         fun onShareRoom() {
-            this.onShareRoom(context)
+            lifecycleScope.onShareRoom(context)
         }
 
         fun onShareMember(roomMember: RoomMember) {

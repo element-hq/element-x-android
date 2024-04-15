@@ -16,17 +16,12 @@
 
 package io.element.android.libraries.matrix.api.permalink
 
-import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
 
 interface PermalinkBuilder {
     fun permalinkForUser(userId: UserId): Result<String>
-    fun permalinkForRoomAlias(roomAlias: String): Result<String>
-    fun permalinkForRoomId(roomId: RoomId): Result<String>
 }
 
 sealed class PermalinkBuilderError : Throwable() {
-    data object InvalidRoomAlias : PermalinkBuilderError()
-    data object InvalidRoomId : PermalinkBuilderError()
     data object InvalidUserId : PermalinkBuilderError()
 }
