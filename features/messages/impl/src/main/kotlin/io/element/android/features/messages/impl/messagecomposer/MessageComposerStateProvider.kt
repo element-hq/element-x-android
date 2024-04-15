@@ -16,7 +16,6 @@
 
 package io.element.android.features.messages.impl.messagecomposer
 
-import android.net.Uri
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.messages.impl.mentions.MentionSuggestion
 import io.element.android.libraries.matrix.api.core.UserId
@@ -49,7 +48,6 @@ fun aMessageComposerState(
     richTextEditorState = richTextEditorState,
     permalinkParser = object : PermalinkParser {
         override fun parse(uriString: String): PermalinkData = TODO()
-        override fun parse(uri: Uri): PermalinkData = TODO()
     },
     isFullScreen = isFullScreen,
     mode = mode,
