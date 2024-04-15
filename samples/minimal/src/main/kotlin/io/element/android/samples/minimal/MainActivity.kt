@@ -64,7 +64,6 @@ class MainActivity : ComponentActivity() {
                 utdTracker = UtdTracker(NoopAnalyticsService()),
             ),
             passphraseGenerator = NullPassphraseGenerator(),
-            buildMeta = Singleton.buildMeta,
             userCertificatesProvider = userCertificatesProvider,
             proxyProvider = proxyProvider,
         )
