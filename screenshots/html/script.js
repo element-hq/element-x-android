@@ -149,6 +149,7 @@ function addForm() {
   };
   label2.appendChild(input2);
   form.appendChild(label2);
+  /*
   // Add a date picker to input the minimum date of modification
   const label3 = document.createElement('label');
   label3.textContent = 'If modified since:';
@@ -168,6 +169,7 @@ function addForm() {
       addTable();
   };
   form.appendChild(dateInput);
+  */
   // Add a span with id result to display the number of lines
   const lines = document.createElement('span');
   lines.id = 'lines';
