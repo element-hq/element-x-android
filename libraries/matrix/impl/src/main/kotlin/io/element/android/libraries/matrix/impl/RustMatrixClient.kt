@@ -37,6 +37,7 @@ import io.element.android.libraries.matrix.api.pusher.PushersService
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomInfo
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
+import io.element.android.libraries.matrix.api.room.preview.RoomPreview
 import io.element.android.libraries.matrix.api.roomdirectory.RoomDirectoryService
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.api.roomlist.awaitLoaded
@@ -58,6 +59,7 @@ import io.element.android.libraries.matrix.impl.room.RoomContentForwarder
 import io.element.android.libraries.matrix.impl.room.RoomSyncSubscriber
 import io.element.android.libraries.matrix.impl.room.RustMatrixRoom
 import io.element.android.libraries.matrix.impl.room.map
+import io.element.android.libraries.matrix.impl.room.preview.RoomPreviewMapper
 import io.element.android.libraries.matrix.impl.roomdirectory.RustRoomDirectoryService
 import io.element.android.libraries.matrix.impl.roomlist.RoomListFactory
 import io.element.android.libraries.matrix.impl.roomlist.RustRoomListService
@@ -463,6 +465,12 @@ class RustMatrixClient(
     override suspend fun resolveRoomAlias(roomAlias: String): Result<RoomId> = withContext(sessionDispatcher) {
         runCatching {
             client.resolveRoomAlias(roomAlias).let(::RoomId)
+        }
+    }
+
+    override suspend fun getRoomPreview(roomIdOrAlias: String): Result<RoomPreview> = withContext(sessionDispatcher) {
+        runCatching {
+            client.getRoomPreview(roomIdOrAlias).let(RoomPreviewMapper::map)
         }
     }
 

@@ -31,6 +31,7 @@ import io.element.android.libraries.matrix.api.pusher.PushersService
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomInfo
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
+import io.element.android.libraries.matrix.api.room.preview.RoomPreview
 import io.element.android.libraries.matrix.api.roomdirectory.RoomDirectoryService
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.api.user.MatrixSearchUserResults
@@ -74,6 +75,7 @@ class FakeMatrixClient(
     private val roomDirectoryService: RoomDirectoryService = FakeRoomDirectoryService(),
     private val accountManagementUrlString: Result<String?> = Result.success(null),
     private val resolveRoomAliasResult: (String) -> Result<RoomId> = { Result.success(A_ROOM_ID) },
+    private val getRoomPreviewResult: (String) -> Result<RoomPreview> = { TODO("Not implemented") },
 ) : MatrixClient {
     var setDisplayNameCalled: Boolean = false
         private set
@@ -279,6 +281,10 @@ class FakeMatrixClient(
 
     override suspend fun resolveRoomAlias(roomAlias: String): Result<RoomId> {
         return resolveRoomAliasResult(roomAlias)
+    }
+
+    override suspend fun getRoomPreview(roomIdOrAlias: String): Result<RoomPreview> {
+        return getRoomPreviewResult(roomIdOrAlias)
     }
 
     override suspend fun getRecentlyVisitedRooms(): Result<List<RoomId>> {
