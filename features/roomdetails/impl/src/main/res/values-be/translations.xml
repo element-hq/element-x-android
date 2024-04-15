@@ -9,7 +9,7 @@
   <string name="screen_notification_settings_edit_failed_updating_default_mode">"Пры абнаўленні налад апавяшчэнняў адбылася памылка."</string>
   <string name="screen_notification_settings_mentions_only_disclaimer">"Ваш хатні сервер не падтрымлівае гэтую опцыю ў зашыфраваных пакоях, вы можаце не атрымаць апавяшчэнне ў некаторых пакоях."</string>
   <string name="screen_polls_history_title">"Апытанні"</string>
-  <string name="screen_room_change_permissions_administrators">"Толькі для адміністратараў"</string>
+  <string name="screen_room_change_permissions_administrators">"Толькі адміністратары"</string>
   <string name="screen_room_change_permissions_ban_people">"Заблакіраваць людзей"</string>
   <string name="screen_room_change_permissions_delete_messages">"Выдаліць паведамленні"</string>
   <string name="screen_room_change_permissions_everyone">"Усе"</string>
@@ -44,7 +44,7 @@
   <string name="screen_room_details_edit_room_title">"Рэдагаваць пакой"</string>
   <string name="screen_room_details_edition_error">"Адбылася невядомая памылка, і інфармацыю нельга было змяніць."</string>
   <string name="screen_room_details_edition_error_title">"Немагчыма абнавіць пакой"</string>
-  <string name="screen_room_details_encryption_enabled_subtitle">"Паведамленні абаронены замкамі. Толькі ў вас і атрымальнікаў ёсць унікальныя ключы, каб разблакіраваць іх."</string>
+  <string name="screen_room_details_encryption_enabled_subtitle">"Паведамленні зашыфраваны. Толькі ў вас і ў атрымальнікаў ёсць унікальныя ключы для іх разблакіроўкі."</string>
   <string name="screen_room_details_encryption_enabled_title">"Шыфраванне паведамленняў уключана"</string>
   <string name="screen_room_details_error_loading_notification_settings">"Пры загрузцы налад апавяшчэнняў адбылася памылка."</string>
   <string name="screen_room_details_error_muting">"Не атрымалася адключыць гук у гэтым пакоі, паўтарыце спробу."</string>
@@ -89,7 +89,7 @@
   <string name="screen_room_member_list_role_moderator">"Мадэратар"</string>
   <string name="screen_room_member_list_room_members_header_title">"Удзельнікі пакоя"</string>
   <string name="screen_room_member_list_unbanning_user">"Разблакіроўка %1$s"</string>
-  <string name="screen_room_notification_settings_allow_custom">"Дазволіць карыстальніцкую наладу"</string>
+  <string name="screen_room_notification_settings_allow_custom">"Дазволіць уласную наладу"</string>
   <string name="screen_room_notification_settings_allow_custom_footnote">"Калі гэта ўключыць, ваша налада прадвызначана будзе адменена"</string>
   <string name="screen_room_notification_settings_custom_settings_title">"Апавяшчаць мяне ў гэтым чаце для"</string>
   <string name="screen_room_notification_settings_default_setting_footnote">"Вы можаце змяніць гэта ў %1$s."</string>

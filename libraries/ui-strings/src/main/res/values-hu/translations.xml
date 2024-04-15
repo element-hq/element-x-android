@@ -200,6 +200,7 @@
   <string name="common_settings">"Beállítások"</string>
   <string name="common_shared_location">"Megosztott tartózkodási hely"</string>
   <string name="common_signing_out">"Kijelentkezés"</string>
+  <string name="common_something_went_wrong">"Valamilyen hiba történt"</string>
   <string name="common_starting_chat">"Csevegés megkezdése…"</string>
   <string name="common_sticker">"Matrica"</string>
   <string name="common_success">"Sikeres"</string>

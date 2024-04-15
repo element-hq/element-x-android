@@ -200,6 +200,7 @@
   <string name="common_settings">"Settings"</string>
   <string name="common_shared_location">"Shared location"</string>
   <string name="common_signing_out">"Signing out"</string>
+  <string name="common_something_went_wrong">"Something went wrong"</string>
   <string name="common_starting_chat">"Starting chat…"</string>
   <string name="common_sticker">"Sticker"</string>
   <string name="common_success">"Success"</string>
@@ -245,12 +246,6 @@
   <string name="invite_friends_text">"Hey, talk to me on %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Rageshake to report bug"</string>
-  <string name="screen_join_room_join_action">"Join room"</string>
-  <string name="screen_join_room_knock_action">"Knock to join"</string>
-  <string name="screen_join_room_subtitle_knock">"Click the button below and a room administrator will be notified. You’ll be able to join the conversation once approved."</string>
-  <string name="screen_join_room_subtitle_no_preview">"You must be a member of this room to view the message history."</string>
-  <string name="screen_join_room_title_knock">"Want to join this room?"</string>
-  <string name="screen_join_room_title_no_preview">"Preview is not available"</string>
   <string name="screen_media_picker_error_failed_selection">"Failed selecting media, please try again."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Failed processing media to upload, please try again."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Failed uploading media, please try again."</string>

@@ -11,7 +11,7 @@
   <string name="screen_qr_code_login_initial_state_item_4_action">"“Afficher le QR code”"</string>
   <string name="screen_qr_code_login_initial_state_title">"Ouvrez %1$s sur un autre appareil pour obtenir le QR code"</string>
   <string name="screen_qr_code_login_invalid_scan_state_description">"Scannez le QR code affiché sur l’autre appareil."</string>
-  <string name="screen_qr_code_login_invalid_scan_state_retry_button">"Réessayer"</string>
+  <string name="screen_qr_code_login_invalid_scan_state_retry_button">"Essayer à nouveau"</string>
   <string name="screen_qr_code_login_invalid_scan_state_subtitle">"QR code erroné"</string>
   <string name="screen_qr_code_login_scanning_state_title">"Scannez le QR code"</string>
   <string name="screen_welcome_bullet_1">"Les appels, les sondages, les recherches et plus encore seront ajoutés plus tard cette année."</string>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_join_room_join_action">"Raum beitreten"</string>
+  <string name="screen_join_room_knock_action">"Anklopfen"</string>
+  <string name="screen_join_room_subtitle_knock">"Klopfe an um einen Raumadministrator zu benachrichtigen. Nach der Freigabe kannst du dich an der Unterhaltung beteiligen."</string>
+  <string name="screen_join_room_subtitle_no_preview">"Du musst Mitglied in diesem Raum sein, um den Nachrichtenverlauf zu sehen."</string>
+  <string name="screen_join_room_title_knock">"Willst du diesem Raum beitreten?"</string>
+  <string name="screen_join_room_title_no_preview">"Vorschau nicht verfügbar"</string>
+</resources>

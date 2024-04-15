@@ -32,7 +32,7 @@
   <string name="screen_recovery_key_confirm_description">"Győződjön meg arról, hogy senki sem látja ezt a képernyőt!"</string>
   <string name="screen_recovery_key_confirm_error_content">"Próbálja meg újra megerősíteni a csevegés biztonsági mentéséhez való hozzáférését."</string>
   <string name="screen_recovery_key_confirm_error_title">"Helytelen helyreállítási kulcs"</string>
-  <string name="screen_recovery_key_confirm_key_description">"Ha van helyreállítási kulcsa vagy titkos jelmondata/kulcsa, akkor ez is fog működni."</string>
+  <string name="screen_recovery_key_confirm_key_description">"Ha van biztonsági kulcsa vagy biztonsági jelmondata, akkor ez is fog működni."</string>
   <string name="screen_recovery_key_confirm_key_label">"Helyreállítási kulcs vagy jelkód"</string>
   <string name="screen_recovery_key_confirm_key_placeholder">"Megadás…"</string>
   <string name="screen_recovery_key_confirm_success">"Helyreállítási kulcs megerősítve"</string>
