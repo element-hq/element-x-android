@@ -191,6 +191,13 @@ function createMissingImageElement() {
     return text;
 }
 
+function createUpToDateImageElement() {
+    const text = document.createElement('p');
+    text.className = "missing";
+    text.textContent = 'Image not updated';
+    return text;
+}
+
 function convertToHumanReadableDate(modifiedDayTime) {
     var date = new Date(modifiedDayTime * 86400000);
     return date.toLocaleDateString();
@@ -270,6 +277,8 @@ function addTable() {
           const foreignFile = englishFile.replace("en]", `${dataLanguages[languageIndex]}]`).replace("_S_", "_T_")
           const fullForeignFile = `${dataLanguages[languageIndex]}/${foreignFile}.png`;
           td.appendChild(createImageElement(fullForeignFile, modifiedDayTime));
+        } else {
+          td.appendChild(createUpToDateImageElement());
         }
       }
       tr.appendChild(td);
