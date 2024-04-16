@@ -17,6 +17,7 @@
 package io.element.android.libraries.matrix.api
 
 import io.element.android.libraries.matrix.api.core.ProgressCallback
+import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.UserId
@@ -99,6 +100,6 @@ interface MatrixClient : Closeable {
 
     suspend fun trackRecentlyVisitedRoom(roomId: RoomId): Result<Unit>
     suspend fun getRecentlyVisitedRooms(): Result<List<RoomId>>
-    suspend fun resolveRoomAlias(roomAlias: String): Result<RoomId>
+    suspend fun resolveRoomAlias(roomAlias: RoomAlias): Result<RoomId>
     suspend fun getRoomPreview(roomIdOrAlias: String): Result<RoomPreview>
 }

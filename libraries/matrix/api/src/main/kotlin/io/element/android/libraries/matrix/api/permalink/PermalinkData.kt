@@ -19,6 +19,7 @@ package io.element.android.libraries.matrix.api.permalink
 import android.net.Uri
 import androidx.compose.runtime.Immutable
 import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
 import kotlinx.collections.immutable.ImmutableList
@@ -39,7 +40,7 @@ sealed interface PermalinkData {
     ) : RoomLink
 
     data class RoomAliasLink(
-        val roomAlias: String,
+        val roomAlias: RoomAlias,
         override val viaParameters: ImmutableList<String>
     ) : RoomLink
 
@@ -55,7 +56,7 @@ sealed interface PermalinkData {
     ) : EventLink
 
     data class EventIdAliasLink(
-        val roomAlias: String,
+        val roomAlias: RoomAlias,
         override val eventId: EventId,
         override val viaParameters: ImmutableList<String>
     ) : EventLink

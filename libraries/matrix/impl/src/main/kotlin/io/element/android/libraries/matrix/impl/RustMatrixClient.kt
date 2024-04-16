@@ -23,6 +23,7 @@ import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.coroutine.childScope
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.ProgressCallback
+import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.createroom.CreateRoomParameters
@@ -462,9 +463,9 @@ class RustMatrixClient(
         }
     }
 
-    override suspend fun resolveRoomAlias(roomAlias: String): Result<RoomId> = withContext(sessionDispatcher) {
+    override suspend fun resolveRoomAlias(roomAlias: RoomAlias): Result<RoomId> = withContext(sessionDispatcher) {
         runCatching {
-            client.resolveRoomAlias(roomAlias).let(::RoomId)
+            client.resolveRoomAlias(roomAlias.value).let(::RoomId)
         }
     }
 

@@ -18,6 +18,7 @@ package io.element.android.libraries.textcomposer.impl.mentions
 
 import android.graphics.Color
 import com.google.common.truth.Truth.assertThat
+import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import io.element.android.libraries.matrix.test.A_SESSION_ID
@@ -69,7 +70,7 @@ class MentionSpanProviderTest {
     fun `getting mention span for a room should return a MentionSpan with normal colors`() {
         permalinkParser.givenResult(
             PermalinkData.RoomAliasLink(
-                roomAlias = "#room:matrix.org",
+                roomAlias = RoomAlias("#room:matrix.org"),
                 viaParameters = persistentListOf(),
             )
         )
@@ -82,7 +83,7 @@ class MentionSpanProviderTest {
     fun `getting mention span for @room should return a MentionSpan with normal colors`() {
         permalinkParser.givenResult(
             PermalinkData.RoomAliasLink(
-                roomAlias = "#",
+                roomAlias = RoomAlias("#"),
                 viaParameters = persistentListOf(),
             )
         )

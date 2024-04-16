@@ -20,6 +20,7 @@ import android.net.Uri
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.permalink.MatrixToConverter
@@ -67,7 +68,7 @@ class DefaultPermalinkParser @Inject constructor(
                     userId = UserId(id.id),
                 )
                 is MatrixId.RoomAlias -> PermalinkData.RoomAliasLink(
-                    roomAlias = id.alias,
+                    roomAlias = RoomAlias(id.alias),
                     viaParameters = viaParameters,
                 )
                 is MatrixId.EventOnRoomId -> PermalinkData.EventIdLink(
@@ -76,7 +77,7 @@ class DefaultPermalinkParser @Inject constructor(
                     viaParameters = viaParameters,
                 )
                 is MatrixId.EventOnRoomAlias -> PermalinkData.EventIdAliasLink(
-                    roomAlias = id.alias,
+                    roomAlias = RoomAlias(id.alias),
                     eventId = EventId(id.eventId),
                     viaParameters = viaParameters,
                 )

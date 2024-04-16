@@ -18,6 +18,7 @@ package io.element.android.libraries.matrix.test
 
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.ProgressCallback
+import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.UserId
@@ -74,7 +75,7 @@ class FakeMatrixClient(
     private val encryptionService: FakeEncryptionService = FakeEncryptionService(),
     private val roomDirectoryService: RoomDirectoryService = FakeRoomDirectoryService(),
     private val accountManagementUrlString: Result<String?> = Result.success(null),
-    private val resolveRoomAliasResult: (String) -> Result<RoomId> = { Result.success(A_ROOM_ID) },
+    private val resolveRoomAliasResult: (RoomAlias) -> Result<RoomId> = { Result.success(A_ROOM_ID) },
     private val getRoomPreviewResult: (String) -> Result<RoomPreview> = { TODO("Not implemented") },
 ) : MatrixClient {
     var setDisplayNameCalled: Boolean = false
@@ -279,7 +280,7 @@ class FakeMatrixClient(
         return Result.success(Unit)
     }
 
-    override suspend fun resolveRoomAlias(roomAlias: String): Result<RoomId> {
+    override suspend fun resolveRoomAlias(roomAlias: RoomAlias): Result<RoomId> {
         return resolveRoomAliasResult(roomAlias)
     }
 
