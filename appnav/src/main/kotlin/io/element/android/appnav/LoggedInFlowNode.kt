@@ -277,7 +277,7 @@ class LoggedInFlowNode @AssistedInject constructor(
                         coroutineScope.launch {
                             when (data) {
                                 is PermalinkData.UserLink -> {
-                                    // FIXME: Add a user profile screen.
+                                    // FIXME Add a user profile screen.
                                     Timber.e("User link clicked: ${data.userId}. TODO Add a user profile screen")
                                 }
                                 is PermalinkData.RoomLink -> {
