@@ -27,13 +27,14 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.buffer
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.catch
-import org.matrix.rustcomponents.sdk.BackPaginationStatusListener
+import org.matrix.rustcomponents.sdk.PaginationStatusListener
+import org.matrix.rustcomponents.sdk.TaskHandle
 import org.matrix.rustcomponents.sdk.Timeline
 import org.matrix.rustcomponents.sdk.TimelineDiff
 import org.matrix.rustcomponents.sdk.TimelineItem
 import org.matrix.rustcomponents.sdk.TimelineListener
 import timber.log.Timber
-import uniffi.matrix_sdk_ui.BackPaginationStatus
+import uniffi.matrix_sdk_ui.PaginationStatus
 
 internal fun Timeline.timelineDiffFlow(onInitialList: suspend (List<TimelineItem>) -> Unit): Flow<List<TimelineDiff>> =
     callbackFlow {
@@ -58,17 +59,28 @@ internal fun Timeline.timelineDiffFlow(onInitialList: suspend (List<TimelineItem
         Timber.d(it, "timelineDiffFlow() failed")
     }.buffer(Channel.UNLIMITED)
 
-internal fun Timeline.backPaginationStatusFlow(): Flow<BackPaginationStatus> =
-    mxCallbackFlow {
-        val listener = object : BackPaginationStatusListener {
-            override fun onUpdate(status: BackPaginationStatus) {
+internal fun Timeline.backPaginationStatusFlow(): Flow<PaginationStatus> =
+    paginationStatusFlow { listener ->
+        subscribeToBackPaginationStatus(listener)
+    }
+
+internal fun Timeline.forwardPaginationStatusFlow(): Flow<PaginationStatus> =
+    paginationStatusFlow { listener ->
+        subscribeToForwardPaginationStatus(listener)
+    }
+
+private fun paginationStatusFlow(subscriber: suspend (PaginationStatusListener)->TaskHandle): Flow<PaginationStatus>{
+    return mxCallbackFlow {
+        val listener = object : PaginationStatusListener {
+            override fun onUpdate(status: PaginationStatus) {
                 trySendBlocking(status)
             }
         }
         tryOrNull {
-            subscribeToBackPaginationStatus(listener)
+            subscriber(listener)
         }
     }.buffer(Channel.UNLIMITED)
+}
 
 internal suspend fun Timeline.runWithTimelineListenerRegistered(action: suspend () -> Unit) {
     val result = addListener(NoOpTimelineListener)
