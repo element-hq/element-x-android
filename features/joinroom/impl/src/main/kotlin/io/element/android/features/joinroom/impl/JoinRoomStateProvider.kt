@@ -19,6 +19,7 @@ package io.element.android.features.joinroom.impl
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.invite.api.response.AcceptDeclineInviteState
 import io.element.android.features.invite.api.response.anAcceptDeclineInviteState
+import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
 
 open class JoinRoomStateProvider : PreviewParameterProvider<JoinRoomState> {
@@ -49,7 +50,7 @@ fun aLoadingContentState(roomId: RoomId = A_ROOM_ID) = ContentState.Loading(room
 fun aLoadedContentState(
     roomId: RoomId = A_ROOM_ID,
     name: String = "Element X android",
-    alias: String? = "#exa:matrix.org",
+    alias: RoomAlias? = RoomAlias("#exa:matrix.org"),
     topic: String? = "Element X is a secure, private and decentralized messenger.",
     numberOfMembers: Long? = null,
     isDirect: Boolean = false,

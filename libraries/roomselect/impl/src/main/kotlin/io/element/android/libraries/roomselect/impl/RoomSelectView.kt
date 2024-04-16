@@ -243,7 +243,7 @@ private fun RoomSummaryView(
             // Alias
             summary.canonicalAlias?.let { alias ->
                 Text(
-                    text = alias,
+                    text = alias.value,
                     color = ElementTheme.colors.textSecondary,
                     style = ElementTheme.typography.fontBodySmRegular,
                     maxLines = 1,

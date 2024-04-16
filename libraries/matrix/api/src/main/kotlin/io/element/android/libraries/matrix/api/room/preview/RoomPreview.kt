@@ -16,13 +16,14 @@
 
 package io.element.android.libraries.matrix.api.room.preview
 
+import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
 
 data class RoomPreview(
     /** The room id for this room. */
     val roomId: RoomId,
     /** The canonical alias for the room. */
-    val canonicalAlias: String?,
+    val canonicalAlias : RoomAlias?,
     /** The room's name, if set. */
     val name: String?,
     /** The room's topic, if set. */

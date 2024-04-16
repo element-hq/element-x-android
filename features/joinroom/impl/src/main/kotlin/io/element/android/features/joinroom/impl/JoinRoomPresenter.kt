@@ -137,7 +137,7 @@ internal fun RoomDescription.toContentState(): ContentState {
 @VisibleForTesting
 internal fun MatrixRoomInfo.toContentState(): ContentState {
     return ContentState.Loaded(
-        roomId = RoomId(id),
+        roomId = id,
         name = name,
         topic = topic,
         alias = canonicalAlias,

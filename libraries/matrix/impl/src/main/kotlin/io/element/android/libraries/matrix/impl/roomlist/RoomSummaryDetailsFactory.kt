@@ -16,6 +16,7 @@
 
 package io.element.android.libraries.matrix.impl.roomlist
 
+import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.roomlist.RoomSummaryDetails
 import io.element.android.libraries.matrix.impl.notificationsettings.RoomNotificationSettingsMapper
@@ -33,7 +34,7 @@ class RoomSummaryDetailsFactory(private val roomMessageFactory: RoomMessageFacto
         return RoomSummaryDetails(
             roomId = RoomId(roomInfo.id),
             name = roomInfo.name ?: roomInfo.id,
-            canonicalAlias = roomInfo.canonicalAlias,
+            canonicalAlias = roomInfo.canonicalAlias?.let(::RoomAlias),
             isDirect = roomInfo.isDirect,
             avatarUrl = roomInfo.avatarUrl,
             numUnreadMentions = roomInfo.numUnreadMentions.toInt(),

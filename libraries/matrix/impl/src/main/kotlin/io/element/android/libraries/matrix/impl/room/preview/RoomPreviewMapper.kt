@@ -16,6 +16,7 @@
 
 package io.element.android.libraries.matrix.impl.room.preview
 
+import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.preview.RoomPreview
 import org.matrix.rustcomponents.sdk.RoomPreview as RustRoomPreview
@@ -24,7 +25,7 @@ object RoomPreviewMapper {
     fun map(roomPreview: RustRoomPreview): RoomPreview {
         return RoomPreview(
             roomId = RoomId(roomPreview.roomId),
-            canonicalAlias = roomPreview.canonicalAlias,
+            canonicalAlias = roomPreview.canonicalAlias?.let(::RoomAlias),
             name = roomPreview.name,
             topic = roomPreview.topic,
             avatarUrl = roomPreview.avatarUrl,

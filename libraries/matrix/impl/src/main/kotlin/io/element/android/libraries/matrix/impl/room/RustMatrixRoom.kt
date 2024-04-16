@@ -20,6 +20,7 @@ import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.coroutine.childScope
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.ProgressCallback
+import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.TransactionId
@@ -205,11 +206,11 @@ class RustMatrixRoom(
     override val isEncrypted: Boolean
         get() = runCatching { innerRoom.isEncrypted() }.getOrDefault(false)
 
-    override val alias: String?
-        get() = runCatching { innerRoom.canonicalAlias() }.getOrDefault(null)
+    override val alias: RoomAlias?
+        get() = runCatching { innerRoom.canonicalAlias()?.let(::RoomAlias) }.getOrDefault(null)
 
-    override val alternativeAliases: List<String>
-        get() = runCatching { innerRoom.alternativeAliases() }.getOrDefault(emptyList())
+    override val alternativeAliases: List<RoomAlias>
+        get() = runCatching { innerRoom.alternativeAliases().map { RoomAlias(it) } }.getOrDefault(emptyList())
 
     override val isPublic: Boolean
         get() = runCatching { innerRoom.isPublic() }.getOrDefault(false)

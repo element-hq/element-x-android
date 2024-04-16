@@ -20,6 +20,7 @@ import androidx.compose.runtime.Immutable
 import io.element.android.features.invite.api.response.AcceptDeclineInviteState
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
+import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
 
 @Immutable
@@ -41,7 +42,7 @@ sealed interface ContentState {
         val roomId: RoomId,
         val name: String?,
         val topic: String?,
-        val alias: String?,
+        val alias: RoomAlias?,
         val numberOfMembers: Long?,
         val isDirect: Boolean,
         val roomAvatarUrl: String?,
@@ -50,7 +51,7 @@ sealed interface ContentState {
         val computedTitle = name ?: roomId.value
 
         val computedSubtitle = when {
-            alias != null -> alias
+            alias != null -> alias.value
             name == null -> ""
             else -> roomId.value
         }

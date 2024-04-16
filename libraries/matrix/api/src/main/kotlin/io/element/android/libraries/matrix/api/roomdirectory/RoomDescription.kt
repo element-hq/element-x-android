@@ -16,13 +16,14 @@
 
 package io.element.android.libraries.matrix.api.roomdirectory
 
+import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
 
 data class RoomDescription(
     val roomId: RoomId,
     val name: String?,
     val topic: String?,
-    val alias: String?,
+    val alias: RoomAlias?,
     val avatarUrl: String?,
     val joinRule: JoinRule,
     val isWorldReadable: Boolean,
