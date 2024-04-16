@@ -66,6 +66,7 @@ import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.MAIN_SPACE
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import io.element.android.libraries.matrix.api.sync.SyncState
 import io.element.android.services.appnavstate.api.AppNavigationStateService
 import kotlinx.coroutines.CoroutineScope
@@ -191,7 +192,7 @@ class LoggedInFlowNode @AssistedInject constructor(
         data class Room(
             val roomId: RoomId,
             val roomDescription: RoomDescription? = null,
-            val initialElement: RoomNavigationTarget = RoomNavigationTarget.Messages
+            val initialElement: RoomNavigationTarget = RoomNavigationTarget.Messages(null)
         ) : NavTarget
 
         @Parcelize
@@ -268,6 +269,40 @@ class LoggedInFlowNode @AssistedInject constructor(
 
                     override fun onForwardedToSingleRoom(roomId: RoomId) {
                         coroutineScope.launch { attachRoom(roomId) }
+                    }
+
+                    override fun onPermalinkClicked(data: PermalinkData) {
+                        coroutineScope.launch {
+                            when (data) {
+                                is PermalinkData.UserLink -> {
+                                    // FIXME: Add a user profile screen.
+                                    Timber.e("User link clicked: ${data.userId}. TODO Add a user profile screen")
+                                }
+                                is PermalinkData.RoomIdLink -> {
+                                    backstack.push(NavTarget.Room(data.roomId))
+                                }
+                                is PermalinkData.RoomAliasLink -> {
+                                    // FIXME Implement room alias navigation
+                                    Timber.e("Room alias link clicked: ${data.roomAlias}. TODO Handle a room alias navigation")
+                                }
+                                is PermalinkData.EventIdAliasLink -> {
+                                    // FIXME Implement event alias navigation
+                                    Timber.e("Event with room alias link clicked: ${data.eventId}. TODO Handle an event with room alias navigation")
+                                }
+                                is PermalinkData.EventIdLink -> {
+                                    backstack.push(
+                                        NavTarget.Room(
+                                            data.roomId,
+                                            initialElement = RoomNavigationTarget.Messages(data.eventId)
+                                        )
+                                    )
+                                }
+                                is PermalinkData.FallbackLink,
+                                is PermalinkData.RoomEmailInviteLink -> {
+                                    // Should not happen (handled by MessagesNode)
+                                }
+                            }
+                        }
                     }
 
                     override fun onOpenGlobalNotificationSettings() {

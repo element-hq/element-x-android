@@ -21,6 +21,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.produceState
+import androidx.compose.runtime.rememberCoroutineScope
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.features.invite.api.response.AcceptDeclineInviteEvents
@@ -32,6 +33,8 @@ import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.room.MatrixRoomInfo
+import io.element.android.libraries.matrix.api.room.preview.RoomPreview
+import kotlinx.coroutines.launch
 import java.util.Optional
 
 class JoinRoomPresenter @AssistedInject constructor(
@@ -46,6 +49,7 @@ class JoinRoomPresenter @AssistedInject constructor(
 
     @Composable
     override fun present(): JoinRoomState {
+        val coroutineScope = rememberCoroutineScope()
         val roomInfo by matrixClient.getRoomInfoFlow(roomId).collectAsState(initial = Optional.empty())
         val contentState by produceState<ContentState>(initialValue = ContentState.Loading(roomId), key1 = roomInfo) {
             value = when {
@@ -56,6 +60,12 @@ class JoinRoomPresenter @AssistedInject constructor(
                     roomDescription.get().toContentState()
                 }
                 else -> {
+                    coroutineScope.launch {
+                        val result = matrixClient.getRoomPreview(roomId.value)
+                        value = result.getOrNull()
+                            ?.toContentState()
+                            ?: ContentState.UnknownRoom(roomId)
+                    }
                     ContentState.Loading(roomId)
                 }
             }
@@ -64,7 +74,8 @@ class JoinRoomPresenter @AssistedInject constructor(
 
         fun handleEvents(event: JoinRoomEvents) {
             when (event) {
-                JoinRoomEvents.AcceptInvite, JoinRoomEvents.JoinRoom -> {
+                JoinRoomEvents.AcceptInvite,
+                JoinRoomEvents.JoinRoom -> {
                     val inviteData = contentState.toInviteData() ?: return
                     acceptDeclineInviteState.eventSink(
                         AcceptDeclineInviteEvents.AcceptInvite(inviteData)
@@ -85,6 +96,24 @@ class JoinRoomPresenter @AssistedInject constructor(
             eventSink = ::handleEvents
         )
     }
+}
+
+private fun RoomPreview.toContentState(): ContentState {
+    return ContentState.Loaded(
+        roomId = roomId,
+        name = name,
+        topic = topic,
+        alias = canonicalAlias,
+        numberOfMembers = numberOfJoinedMembers,
+        isDirect = false,
+        roomAvatarUrl = avatarUrl,
+        joinAuthorisationStatus = when {
+            isInvited -> JoinAuthorisationStatus.IsInvited
+            canKnock -> JoinAuthorisationStatus.CanKnock
+            isPublic -> JoinAuthorisationStatus.CanJoin
+            else -> JoinAuthorisationStatus.Unknown
+        }
+    )
 }
 
 @VisibleForTesting
