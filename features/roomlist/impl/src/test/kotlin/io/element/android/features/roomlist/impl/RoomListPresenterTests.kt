@@ -21,13 +21,15 @@ import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import im.vector.app.features.analytics.plan.Interaction
+import io.element.android.features.invite.api.response.AcceptDeclineInviteEvents
+import io.element.android.features.invite.api.response.AcceptDeclineInviteState
+import io.element.android.features.invite.api.response.anAcceptDeclineInviteState
 import io.element.android.features.leaveroom.api.LeaveRoomEvent
 import io.element.android.features.leaveroom.api.LeaveRoomPresenter
 import io.element.android.features.leaveroom.fake.FakeLeaveRoomPresenter
 import io.element.android.features.networkmonitor.api.NetworkMonitor
 import io.element.android.features.networkmonitor.test.FakeNetworkMonitor
 import io.element.android.features.preferences.api.store.SessionPreferencesStore
-import io.element.android.features.roomlist.impl.datasource.FakeInviteDataSource
 import io.element.android.features.roomlist.impl.datasource.RoomListDataSource
 import io.element.android.features.roomlist.impl.datasource.RoomListRoomSummaryFactory
 import io.element.android.features.roomlist.impl.filters.RoomListFiltersState
@@ -51,6 +53,7 @@ import io.element.android.libraries.indicator.impl.DefaultIndicatorService
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.encryption.BackupState
 import io.element.android.libraries.matrix.api.encryption.RecoveryState
+import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.api.roomlist.RoomList
 import io.element.android.libraries.matrix.api.sync.SyncState
@@ -76,15 +79,20 @@ import io.element.android.tests.testutils.EventsRecorder
 import io.element.android.tests.testutils.MutablePresenter
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.consumeItemsUntilPredicate
+import io.element.android.tests.testutils.lambda.assert
+import io.element.android.tests.testutils.lambda.lambdaRecorder
+import io.element.android.tests.testutils.lambda.value
+import io.element.android.tests.testutils.test
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
-import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
+import java.util.Optional
 
 class RoomListPresenterTests {
     @get:Rule
@@ -298,38 +306,6 @@ class RoomListPresenterTests {
             nextState.eventSink(RoomListEvents.DismissRecoveryKeyPrompt)
             val finalState = awaitItem()
             assertThat(finalState.contentAsRooms().securityBannerState).isEqualTo(SecurityBannerState.None)
-            scope.cancel()
-        }
-    }
-
-    @Test
-    fun `present - sets invite state`() = runTest {
-        val inviteStateFlow = MutableStateFlow(InvitesState.NoInvites)
-        val inviteStateDataSource = FakeInviteDataSource(inviteStateFlow)
-        val roomListService = FakeRoomListService()
-        val scope = CoroutineScope(coroutineContext + SupervisorJob())
-        val presenter = createRoomListPresenter(
-            inviteStateDataSource = inviteStateDataSource,
-            coroutineScope = scope,
-            client = FakeMatrixClient(roomListService = roomListService),
-        )
-        roomListService.postAllRoomsLoadingState(RoomList.LoadingState.Loaded(1))
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
-            val firstItem = consumeItemsUntilPredicate {
-                it.contentState is RoomListContentState.Rooms
-            }.last()
-            assertThat(firstItem.contentAsRooms().invitesState).isEqualTo(InvitesState.NoInvites)
-
-            inviteStateFlow.value = InvitesState.SeenInvites
-            assertThat(awaitItem().contentAsRooms().invitesState).isEqualTo(InvitesState.SeenInvites)
-
-            inviteStateFlow.value = InvitesState.NewInvites
-            assertThat(awaitItem().contentAsRooms().invitesState).isEqualTo(InvitesState.NewInvites)
-
-            inviteStateFlow.value = InvitesState.NoInvites
-            assertThat(awaitItem().contentAsRooms().invitesState).isEqualTo(InvitesState.NoInvites)
             scope.cancel()
         }
     }
@@ -608,11 +584,53 @@ class RoomListPresenterTests {
         }
     }
 
+    @Test
+    fun `present - when a room is invited then accept and decline events are sent to acceptDeclinePresenter`() = runTest {
+        val eventSinkRecorder = lambdaRecorder { _: AcceptDeclineInviteEvents -> }
+        val acceptDeclinePresenter = Presenter {
+            anAcceptDeclineInviteState(eventSink = eventSinkRecorder)
+        }
+        val roomListService = FakeRoomListService()
+        val scope = CoroutineScope(coroutineContext + SupervisorJob())
+        val matrixClient = FakeMatrixClient(
+            roomListService = roomListService,
+        )
+        val roomSummary = aRoomSummaryFilled(
+            currentUserMembership = CurrentUserMembership.INVITED
+        )
+        roomListService.postAllRoomsLoadingState(RoomList.LoadingState.Loaded(1))
+        roomListService.postAllRooms(listOf(roomSummary))
+        val presenter = createRoomListPresenter(
+            coroutineScope = scope,
+            client = matrixClient,
+            acceptDeclineInvitePresenter = acceptDeclinePresenter
+        )
+        presenter.test {
+            val state = consumeItemsUntilPredicate {
+                it.contentState is RoomListContentState.Rooms
+            }.last()
+
+            val roomListRoomSummary = state.contentAsRooms().summaries.first {
+                it.id == roomSummary.identifier()
+            }
+            state.eventSink(RoomListEvents.AcceptInvite(roomListRoomSummary))
+            state.eventSink(RoomListEvents.DeclineInvite(roomListRoomSummary))
+
+            val inviteData = roomListRoomSummary.toInviteData()
+
+            assert(eventSinkRecorder)
+                .isCalledExactly(2)
+                .withSequence(
+                    listOf(value(AcceptDeclineInviteEvents.AcceptInvite(inviteData))),
+                    listOf(value(AcceptDeclineInviteEvents.DeclineInvite(inviteData))),
+                )
+        }
+    }
+
     private fun TestScope.createRoomListPresenter(
         client: MatrixClient = FakeMatrixClient(),
         networkMonitor: NetworkMonitor = FakeNetworkMonitor(),
         snackbarDispatcher: SnackbarDispatcher = SnackbarDispatcher(),
-        inviteStateDataSource: InviteStateDataSource = FakeInviteDataSource(),
         leaveRoomPresenter: LeaveRoomPresenter = FakeLeaveRoomPresenter(),
         lastMessageTimestampFormatter: LastMessageTimestampFormatter = FakeLastMessageTimestampFormatter().apply {
             givenFormat(A_FORMATTED_DATE)
@@ -625,11 +643,11 @@ class RoomListPresenterTests {
         analyticsService: AnalyticsService = FakeAnalyticsService(),
         filtersPresenter: Presenter<RoomListFiltersState> = Presenter { aRoomListFiltersState() },
         searchPresenter: Presenter<RoomListSearchState> = Presenter { aRoomListSearchState() },
+        acceptDeclineInvitePresenter: Presenter<AcceptDeclineInviteState> = Presenter { anAcceptDeclineInviteState() },
     ) = RoomListPresenter(
         client = client,
         networkMonitor = networkMonitor,
         snackbarDispatcher = snackbarDispatcher,
-        inviteStateDataSource = inviteStateDataSource,
         leaveRoomPresenter = leaveRoomPresenter,
         roomListDataSource = RoomListDataSource(
             roomListService = client.roomListService,
@@ -651,5 +669,6 @@ class RoomListPresenterTests {
         sessionPreferencesStore = sessionPreferencesStore,
         filtersPresenter = filtersPresenter,
         analyticsService = analyticsService,
+        acceptDeclineInvitePresenter = acceptDeclineInvitePresenter,
     )
 }

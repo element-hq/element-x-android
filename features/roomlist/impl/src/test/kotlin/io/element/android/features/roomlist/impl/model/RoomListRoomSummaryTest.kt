@@ -72,6 +72,15 @@ class RoomListRoomSummaryTest {
         assertThat(sut.isHighlighted).isTrue()
         assertThat(sut.hasNewContent).isTrue()
     }
+
+    @Test
+    fun `when display type is invite then isHighlighted and hasNewContent are true`() {
+        val sut = createRoomListRoomSummary(
+            displayType = RoomSummaryDisplayType.INVITE,
+        )
+        assertThat(sut.isHighlighted).isTrue()
+        assertThat(sut.hasNewContent).isTrue()
+    }
 }
 
 internal fun createRoomListRoomSummary(
@@ -81,6 +90,7 @@ internal fun createRoomListRoomSummary(
     isMarkedUnread: Boolean = false,
     userDefinedNotificationMode: RoomNotificationMode? = null,
     isFavorite: Boolean = false,
+    displayType: RoomSummaryDisplayType = RoomSummaryDisplayType.ROOM,
 ) = RoomListRoomSummary(
     id = A_ROOM_ID.value,
     roomId = A_ROOM_ID,
@@ -92,9 +102,11 @@ internal fun createRoomListRoomSummary(
     timestamp = A_FORMATTED_DATE,
     lastMessage = "",
     avatarData = AvatarData(id = A_ROOM_ID.value, name = A_ROOM_NAME, size = AvatarSize.RoomListItem),
-    isPlaceholder = false,
+    displayType = displayType,
     userDefinedNotificationMode = userDefinedNotificationMode,
     hasRoomCall = false,
     isDirect = false,
     isFavorite = isFavorite,
+    canonicalAlias = null,
+    inviteSender = null,
 )

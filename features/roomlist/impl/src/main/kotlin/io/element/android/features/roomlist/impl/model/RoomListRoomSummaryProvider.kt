@@ -27,7 +27,7 @@ open class RoomListRoomSummaryProvider : PreviewParameterProvider<RoomListRoomSu
     override val values: Sequence<RoomListRoomSummary>
         get() = sequenceOf(
             listOf(
-                aRoomListRoomSummary(displayType = DisplayType.PLACEHOLDER),
+                aRoomListRoomSummary(displayType = RoomSummaryDisplayType.PLACEHOLDER),
                 aRoomListRoomSummary(),
                 aRoomListRoomSummary(lastMessage = null),
                 aRoomListRoomSummary(
@@ -83,7 +83,7 @@ open class RoomListRoomSummaryProvider : PreviewParameterProvider<RoomListRoomSu
             }.flatten(),
             listOf(
                 aRoomListRoomSummary(
-                    displayType = DisplayType.INVITE,
+                    displayType = RoomSummaryDisplayType.INVITE,
                     inviteSender = InviteSender(
                         userId = UserId("@alice:matrix.org"),
                         displayName = "Alice",
@@ -93,7 +93,7 @@ open class RoomListRoomSummaryProvider : PreviewParameterProvider<RoomListRoomSu
                 ),
                 aRoomListRoomSummary(
                     name = "Bob",
-                    displayType = DisplayType.INVITE,
+                    displayType = RoomSummaryDisplayType.INVITE,
                     inviteSender = InviteSender(
                         userId = UserId("@bob:matrix.org"),
                         displayName = "Bob",
@@ -120,7 +120,7 @@ internal fun aRoomListRoomSummary(
     isDirect: Boolean = false,
     isFavorite: Boolean = false,
     inviteSender: InviteSender? = null,
-    displayType: DisplayType = DisplayType.ROOM,
+    displayType: RoomSummaryDisplayType = RoomSummaryDisplayType.ROOM,
     canonicalAlias: String? = null,
 ) = RoomListRoomSummary(
     id = id,
@@ -138,6 +138,6 @@ internal fun aRoomListRoomSummary(
     isDirect = isDirect,
     isFavorite = isFavorite,
     inviteSender = inviteSender,
-    type = displayType,
+    displayType = displayType,
     canonicalAlias = canonicalAlias,
 )

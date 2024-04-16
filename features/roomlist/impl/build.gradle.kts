@@ -75,7 +75,6 @@ dependencies {
     testImplementation(projects.libraries.indicator.impl)
     testImplementation(projects.libraries.permissions.noop)
     testImplementation(projects.libraries.preferences.test)
-    testImplementation(projects.features.invite.test)
     testImplementation(projects.services.analytics.test)
     testImplementation(projects.features.networkmonitor.test)
     testImplementation(projects.tests.testutils)

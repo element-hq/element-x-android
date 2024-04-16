@@ -74,6 +74,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.takeWhile
 import kotlinx.coroutines.launch
+import org.jetbrains.annotations.VisibleForTesting
 import javax.inject.Inject
 
 private const val EXTENDED_RANGE_SIZE = 40
@@ -292,10 +293,11 @@ class RoomListPresenter @Inject constructor(
         val extendedRange = IntRange(extendedRangeStart, extendedRangeEnd)
         client.roomListService.updateAllRoomsVisibleRange(extendedRange)
     }
-
-    private fun RoomListRoomSummary.toInviteData() = InviteData(
-        roomId = roomId,
-        roomName = name,
-        isDirect = isDirect,
-    )
 }
+
+@VisibleForTesting
+internal fun RoomListRoomSummary.toInviteData() = InviteData(
+    roomId = roomId,
+    roomName = name,
+    isDirect = isDirect,
+)

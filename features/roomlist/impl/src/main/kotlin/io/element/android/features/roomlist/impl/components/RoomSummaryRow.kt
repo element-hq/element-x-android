@@ -47,7 +47,7 @@ import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.roomlist.impl.RoomListEvents
-import io.element.android.features.roomlist.impl.model.DisplayType
+import io.element.android.features.roomlist.impl.model.RoomSummaryDisplayType
 import io.element.android.features.roomlist.impl.model.InviteSender
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummaryProvider
@@ -78,11 +78,11 @@ internal fun RoomSummaryRow(
     eventSink: (RoomListEvents) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    when (room.type) {
-        DisplayType.PLACEHOLDER -> {
+    when (room.displayType) {
+        RoomSummaryDisplayType.PLACEHOLDER -> {
             RoomSummaryPlaceholderRow(modifier = modifier)
         }
-        DisplayType.INVITE -> {
+        RoomSummaryDisplayType.INVITE -> {
             RoomSummaryScaffoldRow(
                 room = room,
                 onClick = onClick,
@@ -107,7 +107,7 @@ internal fun RoomSummaryRow(
                     })
             }
         }
-        DisplayType.ROOM -> {
+        RoomSummaryDisplayType.ROOM -> {
             RoomSummaryScaffoldRow(
                 room = room,
                 onClick = onClick,

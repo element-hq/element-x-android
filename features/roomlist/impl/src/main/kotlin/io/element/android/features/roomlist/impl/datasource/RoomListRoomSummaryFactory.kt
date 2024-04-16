@@ -18,7 +18,7 @@ package io.element.android.features.roomlist.impl.datasource
 
 import io.element.android.features.roomlist.impl.model.InviteSender
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
-import io.element.android.features.roomlist.impl.model.DisplayType
+import io.element.android.features.roomlist.impl.model.RoomSummaryDisplayType
 import io.element.android.libraries.core.extensions.orEmpty
 import io.element.android.libraries.dateformatter.api.LastMessageTimestampFormatter
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
@@ -38,7 +38,7 @@ class RoomListRoomSummaryFactory @Inject constructor(
             return RoomListRoomSummary(
                 id = id,
                 roomId = RoomId(id),
-                type = DisplayType.PLACEHOLDER,
+                displayType = RoomSummaryDisplayType.PLACEHOLDER,
                 name = "Short name",
                 timestamp = "hh:mm",
                 lastMessage = "Last message for placeholder",
@@ -95,10 +95,10 @@ class RoomListRoomSummaryFactory @Inject constructor(
                 )
             },
             canonicalAlias = roomSummary.details.canonicalAlias,
-            type = if (roomSummary.details.currentUserMembership == CurrentUserMembership.INVITED) {
-                DisplayType.INVITE
+            displayType = if (roomSummary.details.currentUserMembership == CurrentUserMembership.INVITED) {
+                RoomSummaryDisplayType.INVITE
             } else {
-                DisplayType.ROOM
+                RoomSummaryDisplayType.ROOM
             }
         )
     }

@@ -23,7 +23,8 @@ import io.element.android.features.leaveroom.api.LeaveRoomState
 import io.element.android.features.leaveroom.api.aLeaveRoomState
 import io.element.android.features.roomlist.impl.filters.RoomListFiltersState
 import io.element.android.features.roomlist.impl.filters.aRoomListFiltersState
-import io.element.android.features.roomlist.impl.model.DisplayType
+import io.element.android.features.roomlist.impl.model.RoomSummaryDisplayType
+import io.element.android.features.roomlist.impl.model.InviteSender
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
 import io.element.android.features.roomlist.impl.model.aRoomListRoomSummary
 import io.element.android.features.roomlist.impl.search.RoomListSearchState
@@ -84,6 +85,17 @@ internal fun aRoomListState(
 internal fun aRoomListRoomSummaryList(): ImmutableList<RoomListRoomSummary> {
     return persistentListOf(
         aRoomListRoomSummary(
+            name = "Room Invited",
+            avatarData = AvatarData("!roomId", "Room with Alice and Bob", size = AvatarSize.RoomListItem),
+            id = "!roomId:domain",
+            inviteSender = InviteSender(
+                userId = UserId("@bob:domain"),
+                displayName = "Bob",
+                avatarData = AvatarData("@bob:domain", "Bob", size = AvatarSize.InviteSender),
+            ),
+            displayType = RoomSummaryDisplayType.INVITE,
+        ),
+        aRoomListRoomSummary(
             name = "Room",
             numberOfUnreadMessages = 1,
             timestamp = "14:18",
@@ -101,11 +113,11 @@ internal fun aRoomListRoomSummaryList(): ImmutableList<RoomListRoomSummary> {
         ),
         aRoomListRoomSummary(
             id = "!roomId3:domain",
-             displayType = DisplayType.PLACEHOLDER,
+             displayType = RoomSummaryDisplayType.PLACEHOLDER,
         ),
         aRoomListRoomSummary(
             id = "!roomId4:domain",
-            displayType = DisplayType.PLACEHOLDER,
+            displayType = RoomSummaryDisplayType.PLACEHOLDER,
         ),
     )
 }

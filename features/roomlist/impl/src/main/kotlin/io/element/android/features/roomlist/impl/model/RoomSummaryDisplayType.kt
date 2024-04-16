@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright (c) 2024 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,16 +14,13 @@
  * limitations under the License.
  */
 
-plugins {
-    id("io.element.android-library")
-}
+package io.element.android.features.roomlist.impl.model
 
-android {
-    namespace = "io.element.android.features.invite.test"
-}
-
-dependencies {
-    implementation(libs.coroutines.core)
-    implementation(projects.libraries.matrix.api)
-    api(projects.features.invite.api)
+/**
+ * Represents the type of display for a room list item.
+ */
+enum class RoomSummaryDisplayType {
+    PLACEHOLDER,
+    ROOM,
+    INVITE
 }

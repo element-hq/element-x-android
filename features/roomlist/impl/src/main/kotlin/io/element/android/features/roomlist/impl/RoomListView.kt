@@ -170,7 +170,7 @@ private fun RoomListScaffold(
     )
 }
 
-internal fun RoomListRoomSummary.contentType() = type.ordinal
+internal fun RoomListRoomSummary.contentType() = displayType.ordinal
 
 @PreviewsDayNight
 @Composable
