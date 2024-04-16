@@ -30,6 +30,7 @@ import io.element.android.features.invite.api.response.InviteData
 import io.element.android.features.roomdirectory.api.RoomDescription
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.room.MatrixRoomInfo
@@ -38,19 +39,24 @@ import kotlinx.coroutines.launch
 import java.util.Optional
 
 class JoinRoomPresenter @AssistedInject constructor(
+    @Assisted private val roomId: RoomId,
     @Assisted private val roomIdOrAlias: RoomIdOrAlias,
     @Assisted private val roomDescription: Optional<RoomDescription>,
     private val matrixClient: MatrixClient,
     private val acceptDeclineInvitePresenter: Presenter<AcceptDeclineInviteState>,
 ) : Presenter<JoinRoomState> {
     interface Factory {
-        fun create(roomIdOrAlias: RoomIdOrAlias, roomDescription: Optional<RoomDescription>): JoinRoomPresenter
+        fun create(
+            roomId: RoomId,
+            roomIdOrAlias: RoomIdOrAlias,
+            roomDescription: Optional<RoomDescription>,
+        ): JoinRoomPresenter
     }
 
     @Composable
     override fun present(): JoinRoomState {
         val coroutineScope = rememberCoroutineScope()
-        val roomInfo by matrixClient.getRoomInfoFlow(roomIdOrAlias).collectAsState(initial = Optional.empty())
+        val roomInfo by matrixClient.getRoomInfoFlow(roomId).collectAsState(initial = Optional.empty())
         val contentState by produceState<ContentState>(initialValue = ContentState.Loading(roomIdOrAlias), key1 = roomInfo) {
             value = when {
                 roomInfo.isPresent -> {

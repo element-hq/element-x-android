@@ -107,7 +107,7 @@ class FakeMatrixClient(
         Result.success(it)
     }
 
-    var getRoomInfoFlowLambda = { _: RoomIdOrAlias ->
+    var getRoomInfoFlowLambda = { _: RoomId ->
         flowOf<Optional<MatrixRoomInfo>>(Optional.empty())
     }
 
@@ -293,5 +293,5 @@ class FakeMatrixClient(
         return Result.success(visitedRoomsId)
     }
 
-    override fun getRoomInfoFlow(roomIdOrAlias: RoomIdOrAlias) = getRoomInfoFlowLambda(roomIdOrAlias)
+    override fun getRoomInfoFlow(roomId: RoomId) = getRoomInfoFlowLambda(roomId)
 }

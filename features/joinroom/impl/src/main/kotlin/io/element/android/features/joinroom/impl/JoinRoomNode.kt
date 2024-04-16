@@ -37,7 +37,11 @@ class JoinRoomNode @AssistedInject constructor(
     private val acceptDeclineInviteView: AcceptDeclineInviteView,
 ) : Node(buildContext, plugins = plugins) {
     private val inputs: JoinRoomEntryPoint.Inputs = inputs()
-    private val presenter = presenterFactory.create(inputs.roomIdOrAlias, inputs.roomDescription)
+    private val presenter = presenterFactory.create(
+        inputs.roomId,
+        inputs.roomIdOrAlias,
+        inputs.roomDescription,
+    )
 
     @Composable
     override fun View(modifier: Modifier) {

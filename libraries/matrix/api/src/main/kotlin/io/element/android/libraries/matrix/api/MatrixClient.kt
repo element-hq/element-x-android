@@ -95,7 +95,7 @@ interface MatrixClient : Closeable {
     suspend fun getAccountManagementUrl(action: AccountManagementAction?): Result<String?>
     suspend fun uploadMedia(mimeType: String, data: ByteArray, progressCallback: ProgressCallback?): Result<String>
     fun roomMembershipObserver(): RoomMembershipObserver
-    fun getRoomInfoFlow(roomIdOrAlias: RoomIdOrAlias): Flow<Optional<MatrixRoomInfo>>
+    fun getRoomInfoFlow(roomId: RoomId): Flow<Optional<MatrixRoomInfo>>
 
     fun isMe(userId: UserId?) = userId == sessionId
 

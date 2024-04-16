@@ -562,33 +562,18 @@ class RustMatrixClient(
 
     override fun roomMembershipObserver(): RoomMembershipObserver = roomMembershipObserver
 
-    override fun getRoomInfoFlow(roomIdOrAlias: RoomIdOrAlias): Flow<Optional<MatrixRoomInfo>> {
+    override fun getRoomInfoFlow(roomId: RoomId): Flow<Optional<MatrixRoomInfo>> {
         return flow {
-            val roomId = when (roomIdOrAlias) {
-                is RoomIdOrAlias.Alias -> {
-                    resolveRoomAlias(roomIdOrAlias.roomAlias)
-                        .onFailure {
-                            // TODO Get a way to emit an error
-                            Timber.e("Unable to resolve room alias ${roomIdOrAlias.roomAlias}")
-                            emit(Optional.empty())
-                            return@flow
-                        }
-                        .getOrNull()
-                }
-                is RoomIdOrAlias.Id -> roomIdOrAlias.roomId
+            var room = getRoom(roomId)
+            if (room == null) {
+                emit(Optional.empty())
+                awaitRoom(roomId, INFINITE)
+                room = getRoom(roomId)
             }
-            if (roomId != null) {
-                var room = getRoom(roomId)
-                if (room == null) {
-                    emit(Optional.empty())
-                    awaitRoom(roomId, INFINITE)
-                    room = getRoom(roomId)
-                }
-                room?.use {
-                    room.roomInfoFlow
-                        .map { roomInfo -> Optional.of(roomInfo) }
-                        .collect(this)
-                }
+            room?.use {
+                room.roomInfoFlow
+                    .map { roomInfo -> Optional.of(roomInfo) }
+                    .collect(this)
             }
         }.distinctUntilChanged()
     }

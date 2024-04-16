@@ -43,17 +43,19 @@ import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.architecture.inputs
+import io.element.android.libraries.designsystem.components.async.AsyncFailure
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import timber.log.Timber
 import java.util.Optional
@@ -87,43 +89,72 @@ class RoomFlowNode @AssistedInject constructor(
         data object Loading : NavTarget
 
         @Parcelize
-        data object JoinRoom : NavTarget
+        data class JoinRoom(val roomId: RoomId) : NavTarget
+
+        @Parcelize
+        data class RoomAliasError(val roomAlias: RoomAlias) : NavTarget
 
         @Parcelize
         data class JoinedRoom(val roomId: RoomId) : NavTarget
     }
 
-    private var roomMembershipJob: Job? = null
-
     override fun onBuilt() {
         super.onBuilt()
+        resolveRoomId()
+    }
+
+    private fun resolveRoomId() {
+        lifecycleScope.launch {
+            when (val i = inputs.roomIdOrAlias) {
+                is RoomIdOrAlias.Alias -> {
+                    client.resolveRoomAlias(i.roomAlias)
+                        .onFailure {
+                            Timber.e(it, "Failed to resolve room alias")
+                            backstack.newRoot(NavTarget.RoomAliasError(i.roomAlias))
+                        }
+                        .onSuccess {
+                            subscribeToRoomInfoFlow(it)
+                        }
+                }
+                is RoomIdOrAlias.Id -> {
+                    subscribeToRoomInfoFlow(i.roomId)
+                }
+            }
+        }
+    }
+
+    private fun subscribeToRoomInfoFlow(roomId: RoomId) {
         client.getRoomInfoFlow(
-            inputs.roomIdOrAlias
+            roomId
         ).onEach { roomInfo ->
             Timber.d("Room membership: ${roomInfo.map { it.currentUserMembership }}")
             val info = roomInfo.getOrNull()
             if (info?.currentUserMembership == CurrentUserMembership.JOINED) {
-                backstack.newRoot(NavTarget.JoinedRoom(info.id))
-                // When leaving the room from this session only, navigate up.
-                roomMembershipJob?.cancel()
-                roomMembershipJob = roomMembershipObserver.updates
-                    .filter { update -> update.roomId == info.id && !update.isUserInRoom }
-                    .onEach {
-                        navigateUp()
-                    }
-                    .launchIn(lifecycleScope)
+                backstack.newRoot(NavTarget.JoinedRoom(roomId))
             } else {
-                backstack.newRoot(NavTarget.JoinRoom)
+                backstack.newRoot(NavTarget.JoinRoom(roomId))
             }
         }
+            .launchIn(lifecycleScope)
+
+        // When leaving the room from this session only, navigate up.
+        roomMembershipObserver.updates
+            .filter { update -> update.roomId == roomId && !update.isUserInRoom }
+            .onEach {
+                navigateUp()
+            }
             .launchIn(lifecycleScope)
     }
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
         return when (navTarget) {
             NavTarget.Loading -> loadingNode(buildContext)
-            NavTarget.JoinRoom -> {
-                val inputs = JoinRoomEntryPoint.Inputs(inputs.roomIdOrAlias, roomDescription = inputs.roomDescription)
+            is NavTarget.JoinRoom -> {
+                val inputs = JoinRoomEntryPoint.Inputs(
+                    roomId = navTarget.roomId,
+                    roomIdOrAlias = inputs.roomIdOrAlias,
+                    roomDescription = inputs.roomDescription,
+                )
                 joinRoomEntryPoint.createNode(this, buildContext, inputs)
             }
             is NavTarget.JoinedRoom -> {
@@ -131,12 +162,22 @@ class RoomFlowNode @AssistedInject constructor(
                 val inputs = JoinedRoomFlowNode.Inputs(navTarget.roomId, initialElement = inputs.initialElement)
                 createNode<JoinedRoomFlowNode>(buildContext, plugins = listOf(inputs) + roomFlowNodeCallback)
             }
+            is NavTarget.RoomAliasError -> roomAliasErrorNode(buildContext, navTarget.roomAlias)
         }
     }
 
     private fun loadingNode(buildContext: BuildContext) = node(buildContext) {
         Box(modifier = it.fillMaxSize(), contentAlignment = Alignment.Center) {
             CircularProgressIndicator()
+        }
+    }
+
+    private fun roomAliasErrorNode(buildContext: BuildContext, roomAlias: RoomAlias) = node(buildContext) {
+        Box(modifier = it.fillMaxSize(), contentAlignment = Alignment.Center) {
+            AsyncFailure(
+                throwable = Exception("Unable to resolve alias ${roomAlias.value}"),
+                onRetry = { resolveRoomId() },
+            )
         }
     }
 

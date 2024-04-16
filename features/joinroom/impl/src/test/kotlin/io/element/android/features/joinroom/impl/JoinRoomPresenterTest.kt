@@ -23,7 +23,9 @@ import io.element.android.features.invite.api.response.anAcceptDeclineInviteStat
 import io.element.android.features.roomdirectory.api.RoomDescription
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_ROOM_NAME
@@ -49,7 +51,7 @@ class JoinRoomPresenterTest {
         val presenter = createJoinRoomPresenter()
         presenter.test {
             awaitItem().also { state ->
-                assertThat(state.contentState).isEqualTo(ContentState.Loading(A_ROOM_ID))
+                assertThat(state.contentState).isEqualTo(ContentState.Loading(A_ROOM_ID.toRoomIdOrAlias()))
                 assertThat(state.joinAuthorisationStatus).isEqualTo(JoinAuthorisationStatus.Unknown)
                 assertThat(state.acceptDeclineInviteState).isEqualTo(anAcceptDeclineInviteState())
             }
@@ -245,6 +247,7 @@ class JoinRoomPresenterTest {
     ): JoinRoomPresenter {
         return JoinRoomPresenter(
             roomId = roomId,
+            roomIdOrAlias = roomId.toRoomIdOrAlias(),
             roomDescription = roomDescription,
             matrixClient = matrixClient,
             acceptDeclineInvitePresenter = acceptDeclineInvitePresenter
@@ -255,7 +258,7 @@ class JoinRoomPresenterTest {
         roomId: RoomId = A_ROOM_ID,
         name: String? = A_ROOM_NAME,
         topic: String? = "A room about something",
-        alias: String? = "#alias:matrix.org",
+        alias: RoomAlias? = RoomAlias("#alias:matrix.org"),
         avatarUrl: String? = null,
         joinRule: RoomDescription.JoinRule = RoomDescription.JoinRule.UNKNOWN,
         numberOfMembers: Long = 2L
