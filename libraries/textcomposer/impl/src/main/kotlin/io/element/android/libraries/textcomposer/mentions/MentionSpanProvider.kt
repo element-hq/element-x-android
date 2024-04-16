@@ -42,6 +42,7 @@ import io.element.android.libraries.designsystem.theme.mentionPillText
 import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
 import kotlinx.collections.immutable.persistentListOf
@@ -140,8 +141,9 @@ internal fun MentionSpanPreview() {
                 return when (uriString) {
                     "https://matrix.to/#/@me:matrix.org" -> PermalinkData.UserLink(UserId("@me:matrix.org"))
                     "https://matrix.to/#/@other:matrix.org" -> PermalinkData.UserLink(UserId("@other:matrix.org"))
-                    "https://matrix.to/#/#room:matrix.org" -> PermalinkData.RoomAliasLink(
-                        roomAlias = RoomAlias("#room:matrix.org"),
+                    "https://matrix.to/#/#room:matrix.org" -> PermalinkData.RoomLink(
+                        roomIdOrAlias = RoomAlias("#room:matrix.org").toRoomIdOrAlias(),
+                        eventId = null,
                         viaParameters = persistentListOf(),
                     )
                     else -> TODO()

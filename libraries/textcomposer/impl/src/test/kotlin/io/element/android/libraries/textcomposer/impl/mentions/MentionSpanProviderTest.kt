@@ -20,12 +20,12 @@ import android.graphics.Color
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.permalink.FakePermalinkParser
 import io.element.android.libraries.textcomposer.mentions.MentionSpanProvider
 import io.element.android.tests.testutils.WarmUpRule
-import kotlinx.collections.immutable.persistentListOf
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -69,9 +69,8 @@ class MentionSpanProviderTest {
     @Test
     fun `getting mention span for a room should return a MentionSpan with normal colors`() {
         permalinkParser.givenResult(
-            PermalinkData.RoomAliasLink(
-                roomAlias = RoomAlias("#room:matrix.org"),
-                viaParameters = persistentListOf(),
+            PermalinkData.RoomLink(
+                roomIdOrAlias = RoomAlias("#room:matrix.org").toRoomIdOrAlias(),
             )
         )
         val mentionSpan = mentionSpanProvider.getMentionSpanFor("#room:matrix.org", "https://matrix.to/#/#room:matrix.org")
@@ -82,9 +81,8 @@ class MentionSpanProviderTest {
     @Test
     fun `getting mention span for @room should return a MentionSpan with normal colors`() {
         permalinkParser.givenResult(
-            PermalinkData.RoomAliasLink(
-                roomAlias = RoomAlias("#"),
-                viaParameters = persistentListOf(),
+            PermalinkData.RoomLink(
+                roomIdOrAlias = RoomAlias("#").toRoomIdOrAlias(),
             )
         )
         val mentionSpan = mentionSpanProvider.getMentionSpanFor("@room", "#")

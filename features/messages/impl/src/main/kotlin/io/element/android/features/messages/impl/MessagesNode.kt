@@ -123,10 +123,7 @@ class MessagesNode @AssistedInject constructor(
                     callback?.onPermalinkClicked(permalink)
                 }
             }
-            is PermalinkData.RoomIdLink,
-            is PermalinkData.RoomAliasLink,
-            is PermalinkData.EventIdAliasLink,
-            is PermalinkData.EventIdLink -> {
+            is PermalinkData.RoomLink -> {
                 callback?.onPermalinkClicked(permalink)
             }
             is PermalinkData.FallbackLink,

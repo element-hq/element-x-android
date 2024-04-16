@@ -19,10 +19,11 @@ package io.element.android.libraries.matrix.api.permalink
 import android.net.Uri
 import androidx.compose.runtime.Immutable
 import io.element.android.libraries.matrix.api.core.EventId
-import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
 import io.element.android.libraries.matrix.api.core.UserId
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 
 /**
  * This sealed class represents all the permalink cases.
@@ -30,36 +31,11 @@ import kotlinx.collections.immutable.ImmutableList
  */
 @Immutable
 sealed interface PermalinkData {
-    sealed interface RoomLink : PermalinkData {
-        val viaParameters: ImmutableList<String>
-    }
-
-    data class RoomIdLink(
-        val roomId: RoomId,
-        override val viaParameters: ImmutableList<String>
-    ) : RoomLink
-
-    data class RoomAliasLink(
-        val roomAlias: RoomAlias,
-        override val viaParameters: ImmutableList<String>
-    ) : RoomLink
-
-    sealed interface EventLink : PermalinkData {
-        val eventId: EventId
-        val viaParameters: ImmutableList<String>
-    }
-
-    data class EventIdLink(
-        val roomId: RoomId,
-        override val eventId: EventId,
-        override val viaParameters: ImmutableList<String>
-    ) : EventLink
-
-    data class EventIdAliasLink(
-        val roomAlias: RoomAlias,
-        override val eventId: EventId,
-        override val viaParameters: ImmutableList<String>
-    ) : EventLink
+    data class RoomLink(
+        val roomIdOrAlias: RoomIdOrAlias,
+        val eventId: EventId? = null,
+        val viaParameters: ImmutableList<String> = persistentListOf()
+    ) : PermalinkData
 
     /*
      * &room_name=Team2

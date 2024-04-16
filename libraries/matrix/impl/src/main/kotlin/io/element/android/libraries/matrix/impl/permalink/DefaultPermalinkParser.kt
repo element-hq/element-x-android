@@ -23,6 +23,7 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
 import io.element.android.libraries.matrix.api.permalink.MatrixToConverter
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
@@ -60,24 +61,24 @@ class DefaultPermalinkParser @Inject constructor(
         } else {
             val viaParameters = result.via.toImmutableList()
             when (val id = result.id) {
-                is MatrixId.Room -> PermalinkData.RoomIdLink(
-                    roomId = RoomId(id.id),
-                    viaParameters = viaParameters,
-                )
                 is MatrixId.User -> PermalinkData.UserLink(
                     userId = UserId(id.id),
                 )
-                is MatrixId.RoomAlias -> PermalinkData.RoomAliasLink(
-                    roomAlias = RoomAlias(id.alias),
+                is MatrixId.Room -> PermalinkData.RoomLink(
+                    roomIdOrAlias = RoomId(id.id).toRoomIdOrAlias(),
                     viaParameters = viaParameters,
                 )
-                is MatrixId.EventOnRoomId -> PermalinkData.EventIdLink(
-                    roomId = RoomId(id.roomId),
+                is MatrixId.RoomAlias -> PermalinkData.RoomLink(
+                    roomIdOrAlias = RoomAlias(id.alias).toRoomIdOrAlias(),
+                    viaParameters = viaParameters,
+                )
+                is MatrixId.EventOnRoomId -> PermalinkData.RoomLink(
+                    roomIdOrAlias = RoomId(id.roomId).toRoomIdOrAlias(),
                     eventId = EventId(id.eventId),
                     viaParameters = viaParameters,
                 )
-                is MatrixId.EventOnRoomAlias -> PermalinkData.EventIdAliasLink(
-                    roomAlias = RoomAlias(id.alias),
+                is MatrixId.EventOnRoomAlias -> PermalinkData.RoomLink(
+                    roomIdOrAlias = RoomAlias(id.alias).toRoomIdOrAlias(),
                     eventId = EventId(id.eventId),
                     viaParameters = viaParameters,
                 )

@@ -280,25 +280,12 @@ class LoggedInFlowNode @AssistedInject constructor(
                                     // FIXME: Add a user profile screen.
                                     Timber.e("User link clicked: ${data.userId}. TODO Add a user profile screen")
                                 }
-                                is PermalinkData.RoomIdLink -> {
-                                    backstack.push(NavTarget.Room(data.roomId.toRoomIdOrAlias()))
-                                }
-                                is PermalinkData.RoomAliasLink -> {
-                                    backstack.push(NavTarget.Room(data.roomAlias.toRoomIdOrAlias()))
-                                }
-                                is PermalinkData.EventIdAliasLink -> {
+                                is PermalinkData.RoomLink -> {
                                     backstack.push(
                                         NavTarget.Room(
-                                            data.roomAlias.toRoomIdOrAlias(),
-                                            initialElement = RoomNavigationTarget.Messages(data.eventId)
-                                        )
-                                    )
-                                }
-                                is PermalinkData.EventIdLink -> {
-                                    backstack.push(
-                                        NavTarget.Room(
-                                            data.roomId.toRoomIdOrAlias(),
-                                            initialElement = RoomNavigationTarget.Messages(data.eventId)
+                                            data.roomIdOrAlias,
+                                            initialElement = RoomNavigationTarget.Messages(data.eventId),
+                                            // TODO Use the viaParameters
                                         )
                                     )
                                 }
