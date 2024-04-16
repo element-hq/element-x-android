@@ -720,7 +720,7 @@ class MessagesPresenterTest {
     private fun TestScope.createMessagesPresenter(
         coroutineDispatchers: CoroutineDispatchers = testCoroutineDispatchers(),
         matrixRoom: MatrixRoom = FakeMatrixRoom().apply {
-            givenRoomInfo(aRoomInfo(id = roomId.value, name = ""))
+            givenRoomInfo(aRoomInfo(id = roomId, name = ""))
         },
         navigator: FakeMessagesNavigator = FakeMessagesNavigator(),
         clipboardHelper: FakeClipboardHelper = FakeClipboardHelper(),
