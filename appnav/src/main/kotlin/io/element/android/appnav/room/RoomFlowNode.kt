@@ -47,8 +47,10 @@ import io.element.android.libraries.designsystem.theme.components.CircularProgre
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -73,7 +75,7 @@ class RoomFlowNode @AssistedInject constructor(
     plugins = plugins
 ) {
     data class Inputs(
-        val roomId: RoomId,
+        val roomIdOrAlias: RoomIdOrAlias,
         val roomDescription: Optional<RoomDescription>,
         val initialElement: RoomNavigationTarget = RoomNavigationTarget.Messages(),
     ) : NodeInputs
@@ -88,29 +90,32 @@ class RoomFlowNode @AssistedInject constructor(
         data object JoinRoom : NavTarget
 
         @Parcelize
-        data object JoinedRoom : NavTarget
+        data class JoinedRoom(val roomId: RoomId) : NavTarget
     }
+
+    private var roomMembershipJob: Job? = null
 
     override fun onBuilt() {
         super.onBuilt()
         client.getRoomInfoFlow(
-            inputs.roomId
+            inputs.roomIdOrAlias
         ).onEach { roomInfo ->
             Timber.d("Room membership: ${roomInfo.map { it.currentUserMembership }}")
-            if (roomInfo.getOrNull()?.currentUserMembership == CurrentUserMembership.JOINED) {
-                backstack.newRoot(NavTarget.JoinedRoom)
+            val info = roomInfo.getOrNull()
+            if (info?.currentUserMembership == CurrentUserMembership.JOINED) {
+                backstack.newRoot(NavTarget.JoinedRoom(info.id))
+                // When leaving the room from this session only, navigate up.
+                roomMembershipJob?.cancel()
+                roomMembershipJob = roomMembershipObserver.updates
+                    .filter { update -> update.roomId == info.id && !update.isUserInRoom }
+                    .onEach {
+                        navigateUp()
+                    }
+                    .launchIn(lifecycleScope)
             } else {
                 backstack.newRoot(NavTarget.JoinRoom)
             }
         }
-            .launchIn(lifecycleScope)
-
-        // When leaving the room from this session only, navigate up.
-        roomMembershipObserver.updates
-            .filter { update -> update.roomId == inputs.roomId && !update.isUserInRoom }
-            .onEach {
-                navigateUp()
-            }
             .launchIn(lifecycleScope)
     }
 
@@ -118,12 +123,12 @@ class RoomFlowNode @AssistedInject constructor(
         return when (navTarget) {
             NavTarget.Loading -> loadingNode(buildContext)
             NavTarget.JoinRoom -> {
-                val inputs = JoinRoomEntryPoint.Inputs(inputs.roomId, roomDescription = inputs.roomDescription)
+                val inputs = JoinRoomEntryPoint.Inputs(inputs.roomIdOrAlias, roomDescription = inputs.roomDescription)
                 joinRoomEntryPoint.createNode(this, buildContext, inputs)
             }
-            NavTarget.JoinedRoom -> {
+            is NavTarget.JoinedRoom -> {
                 val roomFlowNodeCallback = plugins<JoinedRoomLoadedFlowNode.Callback>()
-                val inputs = JoinedRoomFlowNode.Inputs(inputs.roomId, initialElement = inputs.initialElement)
+                val inputs = JoinedRoomFlowNode.Inputs(navTarget.roomId, initialElement = inputs.initialElement)
                 createNode<JoinedRoomFlowNode>(buildContext, plugins = listOf(inputs) + roomFlowNodeCallback)
             }
         }

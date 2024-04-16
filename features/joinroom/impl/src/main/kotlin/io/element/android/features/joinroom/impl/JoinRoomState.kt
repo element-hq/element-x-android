@@ -22,6 +22,7 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
 
 @Immutable
 data class JoinRoomState(
@@ -36,8 +37,8 @@ data class JoinRoomState(
 }
 
 sealed interface ContentState {
-    data class Loading(val roomId: RoomId) : ContentState
-    data class UnknownRoom(val roomId: RoomId) : ContentState
+    data class Loading(val roomIdOrAlias: RoomIdOrAlias) : ContentState
+    data class UnknownRoom(val roomIdOrAlias: RoomIdOrAlias) : ContentState
     data class Loaded(
         val roomId: RoomId,
         val name: String?,

@@ -19,6 +19,7 @@ package io.element.android.libraries.matrix.api
 import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.createroom.CreateRoomParameters
@@ -94,12 +95,12 @@ interface MatrixClient : Closeable {
     suspend fun getAccountManagementUrl(action: AccountManagementAction?): Result<String?>
     suspend fun uploadMedia(mimeType: String, data: ByteArray, progressCallback: ProgressCallback?): Result<String>
     fun roomMembershipObserver(): RoomMembershipObserver
-    fun getRoomInfoFlow(roomId: RoomId): Flow<Optional<MatrixRoomInfo>>
+    fun getRoomInfoFlow(roomIdOrAlias: RoomIdOrAlias): Flow<Optional<MatrixRoomInfo>>
 
     fun isMe(userId: UserId?) = userId == sessionId
 
     suspend fun trackRecentlyVisitedRoom(roomId: RoomId): Result<Unit>
     suspend fun getRecentlyVisitedRooms(): Result<List<RoomId>>
     suspend fun resolveRoomAlias(roomAlias: RoomAlias): Result<RoomId>
-    suspend fun getRoomPreview(roomIdOrAlias: String): Result<RoomPreview>
+    suspend fun getRoomPreview(roomIdOrAlias: RoomIdOrAlias): Result<RoomPreview>
 }

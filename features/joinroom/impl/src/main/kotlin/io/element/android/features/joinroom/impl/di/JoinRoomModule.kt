@@ -25,7 +25,7 @@ import io.element.android.features.roomdirectory.api.RoomDescription
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.MatrixClient
-import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
 import java.util.Optional
 
 @Module
@@ -37,9 +37,9 @@ object JoinRoomModule {
         acceptDeclineInvitePresenter: Presenter<AcceptDeclineInviteState>,
     ): JoinRoomPresenter.Factory {
         return object : JoinRoomPresenter.Factory {
-            override fun create(roomId: RoomId, roomDescription: Optional<RoomDescription>): JoinRoomPresenter {
+            override fun create(roomIdOrAlias: RoomIdOrAlias, roomDescription: Optional<RoomDescription>): JoinRoomPresenter {
                 return JoinRoomPresenter(
-                    roomId = roomId,
+                    roomIdOrAlias = roomIdOrAlias,
                     roomDescription = roomDescription,
                     matrixClient = client,
                     acceptDeclineInvitePresenter = acceptDeclineInvitePresenter,

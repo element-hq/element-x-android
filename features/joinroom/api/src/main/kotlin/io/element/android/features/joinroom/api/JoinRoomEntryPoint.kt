@@ -21,14 +21,14 @@ import com.bumble.appyx.core.node.Node
 import io.element.android.features.roomdirectory.api.RoomDescription
 import io.element.android.libraries.architecture.FeatureEntryPoint
 import io.element.android.libraries.architecture.NodeInputs
-import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
 import java.util.Optional
 
 interface JoinRoomEntryPoint : FeatureEntryPoint {
     fun createNode(parentNode: Node, buildContext: BuildContext, inputs: Inputs): Node
 
     data class Inputs(
-        val roomId: RoomId,
+        val roomIdOrAlias: RoomIdOrAlias,
         val roomDescription: Optional<RoomDescription>,
     ) : NodeInputs
 }

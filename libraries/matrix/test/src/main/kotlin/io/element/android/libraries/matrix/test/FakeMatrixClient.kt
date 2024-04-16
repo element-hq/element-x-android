@@ -20,6 +20,7 @@ import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.createroom.CreateRoomParameters
@@ -76,7 +77,7 @@ class FakeMatrixClient(
     private val roomDirectoryService: RoomDirectoryService = FakeRoomDirectoryService(),
     private val accountManagementUrlString: Result<String?> = Result.success(null),
     private val resolveRoomAliasResult: (RoomAlias) -> Result<RoomId> = { Result.success(A_ROOM_ID) },
-    private val getRoomPreviewResult: (String) -> Result<RoomPreview> = { TODO("Not implemented") },
+    private val getRoomPreviewResult: (RoomIdOrAlias) -> Result<RoomPreview> = { TODO("Not implemented") },
 ) : MatrixClient {
     var setDisplayNameCalled: Boolean = false
         private set
@@ -106,7 +107,7 @@ class FakeMatrixClient(
         Result.success(it)
     }
 
-    var getRoomInfoFlowLambda = { _: RoomId ->
+    var getRoomInfoFlowLambda = { _: RoomIdOrAlias ->
         flowOf<Optional<MatrixRoomInfo>>(Optional.empty())
     }
 
@@ -284,7 +285,7 @@ class FakeMatrixClient(
         return resolveRoomAliasResult(roomAlias)
     }
 
-    override suspend fun getRoomPreview(roomIdOrAlias: String): Result<RoomPreview> {
+    override suspend fun getRoomPreview(roomIdOrAlias: RoomIdOrAlias): Result<RoomPreview> {
         return getRoomPreviewResult(roomIdOrAlias)
     }
 
@@ -292,5 +293,5 @@ class FakeMatrixClient(
         return Result.success(visitedRoomsId)
     }
 
-    override fun getRoomInfoFlow(roomId: RoomId) = getRoomInfoFlowLambda(roomId)
+    override fun getRoomInfoFlow(roomIdOrAlias: RoomIdOrAlias) = getRoomInfoFlowLambda(roomIdOrAlias)
 }

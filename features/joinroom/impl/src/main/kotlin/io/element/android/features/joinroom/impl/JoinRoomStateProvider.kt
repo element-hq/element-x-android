@@ -21,6 +21,7 @@ import io.element.android.features.invite.api.response.AcceptDeclineInviteState
 import io.element.android.features.invite.api.response.anAcceptDeclineInviteState
 import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
 
 open class JoinRoomStateProvider : PreviewParameterProvider<JoinRoomState> {
     override val values: Sequence<JoinRoomState>
@@ -43,9 +44,9 @@ open class JoinRoomStateProvider : PreviewParameterProvider<JoinRoomState> {
         )
 }
 
-fun anUnknownContentState(roomId: RoomId = A_ROOM_ID) = ContentState.UnknownRoom(roomId)
+fun anUnknownContentState(roomId: RoomId = A_ROOM_ID) = ContentState.UnknownRoom(roomId.toRoomIdOrAlias())
 
-fun aLoadingContentState(roomId: RoomId = A_ROOM_ID) = ContentState.Loading(roomId)
+fun aLoadingContentState(roomId: RoomId = A_ROOM_ID) = ContentState.Loading(roomId.toRoomIdOrAlias())
 
 fun aLoadedContentState(
     roomId: RoomId = A_ROOM_ID,

@@ -66,6 +66,8 @@ import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.MAIN_SPACE
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
+import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import io.element.android.libraries.matrix.api.sync.SyncState
 import io.element.android.services.appnavstate.api.AppNavigationStateService
@@ -190,7 +192,7 @@ class LoggedInFlowNode @AssistedInject constructor(
 
         @Parcelize
         data class Room(
-            val roomId: RoomId,
+            val roomIdOrAlias: RoomIdOrAlias,
             val roomDescription: RoomDescription? = null,
             val initialElement: RoomNavigationTarget = RoomNavigationTarget.Messages(null)
         ) : NavTarget
@@ -229,7 +231,7 @@ class LoggedInFlowNode @AssistedInject constructor(
             NavTarget.RoomList -> {
                 val callback = object : RoomListEntryPoint.Callback {
                     override fun onRoomClicked(roomId: RoomId) {
-                        backstack.push(NavTarget.Room(roomId))
+                        backstack.push(NavTarget.Room(roomId.toRoomIdOrAlias()))
                     }
 
                     override fun onSettingsClicked() {
@@ -245,7 +247,7 @@ class LoggedInFlowNode @AssistedInject constructor(
                     }
 
                     override fun onRoomSettingsClicked(roomId: RoomId) {
-                        backstack.push(NavTarget.Room(roomId, initialElement = RoomNavigationTarget.Details))
+                        backstack.push(NavTarget.Room(roomId.toRoomIdOrAlias(), initialElement = RoomNavigationTarget.Details))
                     }
 
                     override fun onReportBugClicked() {
@@ -264,7 +266,7 @@ class LoggedInFlowNode @AssistedInject constructor(
             is NavTarget.Room -> {
                 val callback = object : JoinedRoomLoadedFlowNode.Callback {
                     override fun onOpenRoom(roomId: RoomId) {
-                        backstack.push(NavTarget.Room(roomId))
+                        backstack.push(NavTarget.Room(roomId.toRoomIdOrAlias()))
                     }
 
                     override fun onForwardedToSingleRoom(roomId: RoomId) {
@@ -279,20 +281,23 @@ class LoggedInFlowNode @AssistedInject constructor(
                                     Timber.e("User link clicked: ${data.userId}. TODO Add a user profile screen")
                                 }
                                 is PermalinkData.RoomIdLink -> {
-                                    backstack.push(NavTarget.Room(data.roomId))
+                                    backstack.push(NavTarget.Room(data.roomId.toRoomIdOrAlias()))
                                 }
                                 is PermalinkData.RoomAliasLink -> {
-                                    // FIXME Implement room alias navigation
-                                    Timber.e("Room alias link clicked: ${data.roomAlias}. TODO Handle a room alias navigation")
+                                    backstack.push(NavTarget.Room(data.roomAlias.toRoomIdOrAlias()))
                                 }
                                 is PermalinkData.EventIdAliasLink -> {
-                                    // FIXME Implement event alias navigation
-                                    Timber.e("Event with room alias link clicked: ${data.eventId}. TODO Handle an event with room alias navigation")
+                                    backstack.push(
+                                        NavTarget.Room(
+                                            data.roomAlias.toRoomIdOrAlias(),
+                                            initialElement = RoomNavigationTarget.Messages(data.eventId)
+                                        )
+                                    )
                                 }
                                 is PermalinkData.EventIdLink -> {
                                     backstack.push(
                                         NavTarget.Room(
-                                            data.roomId,
+                                            data.roomId.toRoomIdOrAlias(),
                                             initialElement = RoomNavigationTarget.Messages(data.eventId)
                                         )
                                     )
@@ -310,7 +315,7 @@ class LoggedInFlowNode @AssistedInject constructor(
                     }
                 }
                 val inputs = RoomFlowNode.Inputs(
-                    roomId = navTarget.roomId,
+                    roomIdOrAlias = navTarget.roomIdOrAlias,
                     roomDescription = Optional.ofNullable(navTarget.roomDescription),
                     initialElement = navTarget.initialElement
                 )
@@ -327,7 +332,7 @@ class LoggedInFlowNode @AssistedInject constructor(
                     }
 
                     override fun onOpenRoomNotificationSettings(roomId: RoomId) {
-                        backstack.push(NavTarget.Room(roomId, initialElement = RoomNavigationTarget.NotificationSettings))
+                        backstack.push(NavTarget.Room(roomId.toRoomIdOrAlias(), initialElement = RoomNavigationTarget.NotificationSettings))
                     }
                 }
                 val inputs = PreferencesEntryPoint.Params(navTarget.initialElement)
@@ -339,7 +344,7 @@ class LoggedInFlowNode @AssistedInject constructor(
             NavTarget.CreateRoom -> {
                 val callback = object : CreateRoomEntryPoint.Callback {
                     override fun onSuccess(roomId: RoomId) {
-                        backstack.replace(NavTarget.Room(roomId))
+                        backstack.replace(NavTarget.Room(roomId.toRoomIdOrAlias()))
                     }
                 }
 
@@ -366,11 +371,11 @@ class LoggedInFlowNode @AssistedInject constructor(
                 roomDirectoryEntryPoint.nodeBuilder(this, buildContext)
                     .callback(object : RoomDirectoryEntryPoint.Callback {
                         override fun onRoomJoined(roomId: RoomId) {
-                            backstack.push(NavTarget.Room(roomId))
+                            backstack.push(NavTarget.Room(roomId.toRoomIdOrAlias()))
                         }
 
                         override fun onResultClicked(roomDescription: RoomDescription) {
-                            backstack.push(NavTarget.Room(roomDescription.roomId, roomDescription))
+                            backstack.push(NavTarget.Room(roomDescription.roomId.toRoomIdOrAlias(), roomDescription))
                         }
                     })
                     .build()
@@ -389,7 +394,7 @@ class LoggedInFlowNode @AssistedInject constructor(
         if (!canShowRoomList()) return
         attachChild<RoomFlowNode> {
             backstack.singleTop(NavTarget.RoomList)
-            backstack.push(NavTarget.Room(roomId))
+            backstack.push(NavTarget.Room(roomId.toRoomIdOrAlias()))
         }
     }
 

@@ -25,6 +25,7 @@ import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.createroom.CreateRoomParameters
 import io.element.android.libraries.matrix.api.createroom.RoomPreset
@@ -469,9 +470,9 @@ class RustMatrixClient(
         }
     }
 
-    override suspend fun getRoomPreview(roomIdOrAlias: String): Result<RoomPreview> = withContext(sessionDispatcher) {
+    override suspend fun getRoomPreview(roomIdOrAlias: RoomIdOrAlias): Result<RoomPreview> = withContext(sessionDispatcher) {
         runCatching {
-            client.getRoomPreview(roomIdOrAlias).let(RoomPreviewMapper::map)
+            client.getRoomPreview(roomIdOrAlias.identifier).let(RoomPreviewMapper::map)
         }
     }
 
@@ -561,18 +562,33 @@ class RustMatrixClient(
 
     override fun roomMembershipObserver(): RoomMembershipObserver = roomMembershipObserver
 
-    override fun getRoomInfoFlow(roomId: RoomId): Flow<Optional<MatrixRoomInfo>> {
+    override fun getRoomInfoFlow(roomIdOrAlias: RoomIdOrAlias): Flow<Optional<MatrixRoomInfo>> {
         return flow {
-            var room = getRoom(roomId)
-            if (room == null) {
-                emit(Optional.empty())
-                awaitRoom(roomId, INFINITE)
-                room = getRoom(roomId)
+            val roomId = when (roomIdOrAlias) {
+                is RoomIdOrAlias.Alias -> {
+                    resolveRoomAlias(roomIdOrAlias.roomAlias)
+                        .onFailure {
+                            // TODO Get a way to emit an error
+                            Timber.e("Unable to resolve room alias ${roomIdOrAlias.roomAlias}")
+                            emit(Optional.empty())
+                            return@flow
+                        }
+                        .getOrNull()
+                }
+                is RoomIdOrAlias.Id -> roomIdOrAlias.roomId
             }
-            room?.use {
-                room.roomInfoFlow
-                    .map { roomInfo -> Optional.of(roomInfo) }
-                    .collect(this)
+            if (roomId != null) {
+                var room = getRoom(roomId)
+                if (room == null) {
+                    emit(Optional.empty())
+                    awaitRoom(roomId, INFINITE)
+                    room = getRoom(roomId)
+                }
+                room?.use {
+                    room.roomInfoFlow
+                        .map { roomInfo -> Optional.of(roomInfo) }
+                        .collect(this)
+                }
             }
         }.distinctUntilChanged()
     }
