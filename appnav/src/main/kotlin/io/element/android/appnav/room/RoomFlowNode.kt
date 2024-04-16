@@ -36,6 +36,7 @@ import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.appnav.room.joined.JoinedRoomFlowNode
 import io.element.android.appnav.room.joined.JoinedRoomLoadedFlowNode
+import io.element.android.appnav.room.resolver.RoomAliasResolverNode
 import io.element.android.features.joinroom.api.JoinRoomEntryPoint
 import io.element.android.features.roomdirectory.api.RoomDescription
 import io.element.android.libraries.architecture.BackstackView
@@ -43,7 +44,6 @@ import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.architecture.inputs
-import io.element.android.libraries.designsystem.components.async.AsyncFailure
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.MatrixClient
@@ -89,10 +89,10 @@ class RoomFlowNode @AssistedInject constructor(
         data object Loading : NavTarget
 
         @Parcelize
-        data class JoinRoom(val roomId: RoomId) : NavTarget
+        data class Resolving(val roomAlias: RoomAlias) : NavTarget
 
         @Parcelize
-        data class RoomAliasError(val roomAlias: RoomAlias) : NavTarget
+        data class JoinRoom(val roomId: RoomId) : NavTarget
 
         @Parcelize
         data class JoinedRoom(val roomId: RoomId) : NavTarget
@@ -107,14 +107,7 @@ class RoomFlowNode @AssistedInject constructor(
         lifecycleScope.launch {
             when (val i = inputs.roomIdOrAlias) {
                 is RoomIdOrAlias.Alias -> {
-                    client.resolveRoomAlias(i.roomAlias)
-                        .onFailure {
-                            Timber.e(it, "Failed to resolve room alias")
-                            backstack.newRoot(NavTarget.RoomAliasError(i.roomAlias))
-                        }
-                        .onSuccess {
-                            subscribeToRoomInfoFlow(it)
-                        }
+                    backstack.newRoot(NavTarget.Resolving(i.roomAlias))
                 }
                 is RoomIdOrAlias.Id -> {
                     subscribeToRoomInfoFlow(i.roomId)
@@ -125,16 +118,17 @@ class RoomFlowNode @AssistedInject constructor(
 
     private fun subscribeToRoomInfoFlow(roomId: RoomId) {
         client.getRoomInfoFlow(
-            roomId
-        ).onEach { roomInfo ->
-            Timber.d("Room membership: ${roomInfo.map { it.currentUserMembership }}")
-            val info = roomInfo.getOrNull()
-            if (info?.currentUserMembership == CurrentUserMembership.JOINED) {
-                backstack.newRoot(NavTarget.JoinedRoom(roomId))
-            } else {
-                backstack.newRoot(NavTarget.JoinRoom(roomId))
+            roomId = roomId
+        )
+            .onEach { roomInfo ->
+                Timber.d("Room membership: ${roomInfo.map { it.currentUserMembership }}")
+                val info = roomInfo.getOrNull()
+                if (info?.currentUserMembership == CurrentUserMembership.JOINED) {
+                    backstack.newRoot(NavTarget.JoinedRoom(roomId))
+                } else {
+                    backstack.newRoot(NavTarget.JoinRoom(roomId))
+                }
             }
-        }
             .launchIn(lifecycleScope)
 
         // When leaving the room from this session only, navigate up.
@@ -148,7 +142,16 @@ class RoomFlowNode @AssistedInject constructor(
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
         return when (navTarget) {
-            NavTarget.Loading -> loadingNode(buildContext)
+            is NavTarget.Loading -> loadingNode(buildContext)
+            is NavTarget.Resolving -> {
+                val callback = object : RoomAliasResolverNode.Callback {
+                    override fun onAliasResolved(roomId: RoomId) {
+                        backstack.newRoot(NavTarget.JoinRoom(roomId))
+                    }
+                }
+                val params = RoomAliasResolverNode.Inputs(navTarget.roomAlias)
+                createNode<RoomAliasResolverNode>(buildContext, listOf(callback, params))
+            }
             is NavTarget.JoinRoom -> {
                 val inputs = JoinRoomEntryPoint.Inputs(
                     roomId = navTarget.roomId,
@@ -162,22 +165,12 @@ class RoomFlowNode @AssistedInject constructor(
                 val inputs = JoinedRoomFlowNode.Inputs(navTarget.roomId, initialElement = inputs.initialElement)
                 createNode<JoinedRoomFlowNode>(buildContext, plugins = listOf(inputs) + roomFlowNodeCallback)
             }
-            is NavTarget.RoomAliasError -> roomAliasErrorNode(buildContext, navTarget.roomAlias)
         }
     }
 
     private fun loadingNode(buildContext: BuildContext) = node(buildContext) {
         Box(modifier = it.fillMaxSize(), contentAlignment = Alignment.Center) {
             CircularProgressIndicator()
-        }
-    }
-
-    private fun roomAliasErrorNode(buildContext: BuildContext, roomAlias: RoomAlias) = node(buildContext) {
-        Box(modifier = it.fillMaxSize(), contentAlignment = Alignment.Center) {
-            AsyncFailure(
-                throwable = Exception("Unable to resolve alias ${roomAlias.value}"),
-                onRetry = { resolveRoomId() },
-            )
         }
     }
 

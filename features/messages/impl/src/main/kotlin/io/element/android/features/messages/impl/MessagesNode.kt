@@ -124,6 +124,7 @@ class MessagesNode @AssistedInject constructor(
                 }
             }
             is PermalinkData.RoomLink -> {
+                // TODO Handle click on current Room
                 callback?.onPermalinkClicked(permalink)
             }
             is PermalinkData.FallbackLink,
