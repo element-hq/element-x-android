@@ -21,6 +21,7 @@ import io.element.android.features.invite.api.response.AcceptDeclineInviteState
 import io.element.android.features.invite.api.response.anAcceptDeclineInviteState
 import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
 import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
 
 open class JoinRoomStateProvider : PreviewParameterProvider<JoinRoomState> {
@@ -41,7 +42,22 @@ open class JoinRoomStateProvider : PreviewParameterProvider<JoinRoomState> {
             aJoinRoomState(
                 contentState = aLoadedContentState(joinAuthorisationStatus = JoinAuthorisationStatus.IsInvited)
             ),
+            aJoinRoomState(
+                contentState = aFailureContentState()
+            ),
+            aJoinRoomState(
+                contentState = aFailureContentState(roomIdOrAlias = A_ROOM_ALIAS.toRoomIdOrAlias())
+            ),
         )
+}
+
+fun aFailureContentState(
+    roomIdOrAlias: RoomIdOrAlias = A_ROOM_ID.toRoomIdOrAlias()
+): ContentState {
+    return ContentState.Failure(
+        roomIdOrAlias = roomIdOrAlias,
+        error = Exception("Error"),
+    )
 }
 
 fun anUnknownContentState(roomId: RoomId = A_ROOM_ID) = ContentState.UnknownRoom(roomId.toRoomIdOrAlias())
@@ -79,3 +95,4 @@ fun aJoinRoomState(
 )
 
 private val A_ROOM_ID = RoomId("!exa:matrix.org")
+private val A_ROOM_ALIAS = RoomAlias("#exa:matrix.org")

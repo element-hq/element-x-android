@@ -28,6 +28,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -52,6 +53,7 @@ import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.OutlinedButton
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
+import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
@@ -71,7 +73,7 @@ fun JoinRoomView(
         },
         footer = {
             JoinRoomFooter(
-                joinAuthorisationStatus = state.joinAuthorisationStatus,
+                state = state,
                 onAcceptInvite = {
                     state.eventSink(JoinRoomEvents.AcceptInvite)
                 },
@@ -81,6 +83,9 @@ fun JoinRoomView(
                 onJoinRoom = {
                     state.eventSink(JoinRoomEvents.JoinRoom)
                 },
+                onRetry = {
+                    state.eventSink(JoinRoomEvents.Retry)
+                }
             )
         }
     )
@@ -88,46 +93,57 @@ fun JoinRoomView(
 
 @Composable
 private fun JoinRoomFooter(
-    joinAuthorisationStatus: JoinAuthorisationStatus,
+    state: JoinRoomState,
     onAcceptInvite: () -> Unit,
     onDeclineInvite: () -> Unit,
     onJoinRoom: () -> Unit,
+    onRetry: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    when (joinAuthorisationStatus) {
-        JoinAuthorisationStatus.IsInvited -> {
-            ButtonRowMolecule(modifier = modifier, horizontalArrangement = Arrangement.spacedBy(20.dp)) {
-                OutlinedButton(
-                    text = stringResource(CommonStrings.action_decline),
-                    onClick = onDeclineInvite,
-                    modifier = Modifier.weight(1f),
-                    size = ButtonSize.Medium,
-                )
+    if (state.contentState is ContentState.Failure) {
+        Button(
+            text = stringResource(CommonStrings.action_retry),
+            onClick = onRetry,
+            modifier = modifier.fillMaxWidth(),
+            size = ButtonSize.Medium,
+        )
+    } else {
+        val joinAuthorisationStatus = state.joinAuthorisationStatus
+        when (joinAuthorisationStatus) {
+            JoinAuthorisationStatus.IsInvited -> {
+                ButtonRowMolecule(modifier = modifier, horizontalArrangement = Arrangement.spacedBy(20.dp)) {
+                    OutlinedButton(
+                        text = stringResource(CommonStrings.action_decline),
+                        onClick = onDeclineInvite,
+                        modifier = Modifier.weight(1f),
+                        size = ButtonSize.Medium,
+                    )
+                    Button(
+                        text = stringResource(CommonStrings.action_accept),
+                        onClick = onAcceptInvite,
+                        modifier = Modifier.weight(1f),
+                        size = ButtonSize.Medium,
+                    )
+                }
+            }
+            JoinAuthorisationStatus.CanJoin -> {
                 Button(
-                    text = stringResource(CommonStrings.action_accept),
-                    onClick = onAcceptInvite,
-                    modifier = Modifier.weight(1f),
+                    text = stringResource(R.string.screen_join_room_join_action),
+                    onClick = onJoinRoom,
+                    modifier = modifier.fillMaxWidth(),
                     size = ButtonSize.Medium,
                 )
             }
+            JoinAuthorisationStatus.CanKnock -> {
+                Button(
+                    text = stringResource(R.string.screen_join_room_knock_action),
+                    onClick = onJoinRoom,
+                    modifier = modifier.fillMaxWidth(),
+                    size = ButtonSize.Medium,
+                )
+            }
+            JoinAuthorisationStatus.Unknown -> Unit
         }
-        JoinAuthorisationStatus.CanJoin -> {
-            Button(
-                text = stringResource(R.string.screen_join_room_join_action),
-                onClick = onJoinRoom,
-                modifier = modifier.fillMaxWidth(),
-                size = ButtonSize.Medium,
-            )
-        }
-        JoinAuthorisationStatus.CanKnock -> {
-            Button(
-                text = stringResource(R.string.screen_join_room_knock_action),
-                onClick = onJoinRoom,
-                modifier = modifier.fillMaxWidth(),
-                size = ButtonSize.Medium,
-            )
-        }
-        JoinAuthorisationStatus.Unknown -> Unit
     }
 }
 
@@ -187,6 +203,32 @@ private fun JoinRoomContent(
                 },
             )
         }
+        is ContentState.Failure -> {
+            ContentScaffold(
+                modifier = modifier,
+                avatar = {
+                    PlaceholderAtom(width = AvatarSize.RoomHeader.dp, height = AvatarSize.RoomHeader.dp)
+                },
+                title = {
+                    when (contentState.roomIdOrAlias) {
+                        is RoomIdOrAlias.Alias -> {
+                            Title(contentState.roomIdOrAlias.identifier)
+                        }
+                        is RoomIdOrAlias.Id -> {
+                            PlaceholderAtom(width = 200.dp, height = 22.dp)
+                        }
+                    }
+                },
+                subtitle = {
+                    Text(
+                        text = "Failed to get information about the room",
+                        textAlign = TextAlign.Center,
+                        color = MaterialTheme.colorScheme.error,
+                    )
+                },
+            )
+        }
+
     }
 }
 

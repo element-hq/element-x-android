@@ -38,6 +38,7 @@ data class JoinRoomState(
 
 sealed interface ContentState {
     data class Loading(val roomIdOrAlias: RoomIdOrAlias) : ContentState
+    data class Failure(val roomIdOrAlias: RoomIdOrAlias, val error: Throwable) : ContentState
     data class UnknownRoom(val roomIdOrAlias: RoomIdOrAlias) : ContentState
     data class Loaded(
         val roomId: RoomId,
