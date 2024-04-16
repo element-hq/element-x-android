@@ -21,7 +21,6 @@ import app.cash.molecule.moleculeFlow
 import app.cash.turbine.TurbineTestContext
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import io.element.android.features.invite.api.SeenInvitesStore
 import io.element.android.features.invite.api.response.AcceptDeclineInviteState
 import io.element.android.features.invite.api.response.anAcceptDeclineInviteState
 import io.element.android.features.invite.test.FakeSeenInvitesStore

@@ -33,11 +33,9 @@ open class RoomListContentStateProvider : PreviewParameterProvider<RoomListConte
 }
 
 internal fun aRoomsContentState(
-    invitesState: InvitesState = InvitesState.NoInvites,
     securityBannerState: SecurityBannerState = SecurityBannerState.None,
     summaries: ImmutableList<RoomListRoomSummary> = aRoomListRoomSummaryList(),
 ) = RoomListContentState.Rooms(
-    invitesState = invitesState,
     securityBannerState = securityBannerState,
     summaries = summaries,
 )
@@ -46,6 +44,4 @@ internal fun aMigrationContentState() = RoomListContentState.Migration
 
 internal fun aSkeletonContentState() = RoomListContentState.Skeleton(16)
 
-internal fun anEmptyContentState(
-    invitesState: InvitesState = InvitesState.NoInvites,
-) = RoomListContentState.Empty(invitesState)
+internal fun anEmptyContentState() = RoomListContentState.Empty

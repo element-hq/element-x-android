@@ -32,7 +32,6 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import io.element.android.compound.tokens.generated.CompoundIcons
-import io.element.android.features.invite.api.response.AcceptDeclineInviteView
 import io.element.android.features.leaveroom.api.LeaveRoomView
 import io.element.android.features.networkmonitor.api.ui.ConnectivityIndicatorContainer
 import io.element.android.features.roomlist.impl.components.RoomListContentView
@@ -56,12 +55,11 @@ fun RoomListView(
     onSettingsClicked: () -> Unit,
     onConfirmRecoveryKeyClicked: () -> Unit,
     onCreateRoomClicked: () -> Unit,
-    onInvitesClicked: () -> Unit,
     onRoomSettingsClicked: (roomId: RoomId) -> Unit,
     onMenuActionClicked: (RoomListMenuAction) -> Unit,
     onRoomDirectorySearchClicked: () -> Unit,
     modifier: Modifier = Modifier,
-    acceptDeclineInviteView: @Composable ()->Unit,
+    acceptDeclineInviteView: @Composable () -> Unit,
 ) {
     ConnectivityIndicatorContainer(
         modifier = modifier,
@@ -80,14 +78,13 @@ fun RoomListView(
             LeaveRoomView(state = state.leaveRoomState)
 
             RoomListScaffold(
-                modifier = Modifier.padding(top = topPadding),
                 state = state,
                 onConfirmRecoveryKeyClicked = onConfirmRecoveryKeyClicked,
                 onRoomClicked = onRoomClicked,
                 onOpenSettings = onSettingsClicked,
                 onCreateRoomClicked = onCreateRoomClicked,
-                onInvitesClicked = onInvitesClicked,
                 onMenuActionClicked = onMenuActionClicked,
+                modifier = Modifier.padding(top = topPadding),
             )
             // This overlaid view will only be visible when state.displaySearchResults is true
             RoomListSearchView(
@@ -114,7 +111,6 @@ private fun RoomListScaffold(
     onRoomClicked: (RoomId) -> Unit,
     onOpenSettings: () -> Unit,
     onCreateRoomClicked: () -> Unit,
-    onInvitesClicked: () -> Unit,
     onMenuActionClicked: (RoomListMenuAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -150,7 +146,6 @@ private fun RoomListScaffold(
                 onConfirmRecoveryKeyClicked = onConfirmRecoveryKeyClicked,
                 onRoomClicked = ::onRoomClicked,
                 onCreateRoomClicked = onCreateRoomClicked,
-                onInvitesClicked = onInvitesClicked,
                 modifier = Modifier
                     .padding(padding)
                     .consumeWindowInsets(padding)
@@ -186,7 +181,6 @@ internal fun RoomListViewPreview(@PreviewParameter(RoomListStateProvider::class)
         onSettingsClicked = {},
         onConfirmRecoveryKeyClicked = {},
         onCreateRoomClicked = {},
-        onInvitesClicked = {},
         onRoomSettingsClicked = {},
         onMenuActionClicked = {},
         onRoomDirectorySearchClicked = {},

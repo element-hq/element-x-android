@@ -28,7 +28,6 @@ import io.element.android.features.networkmonitor.api.NetworkMonitor
 import io.element.android.features.networkmonitor.test.FakeNetworkMonitor
 import io.element.android.features.preferences.api.store.SessionPreferencesStore
 import io.element.android.features.roomlist.impl.datasource.FakeInviteDataSource
-import io.element.android.features.roomlist.impl.datasource.InviteStateDataSource
 import io.element.android.features.roomlist.impl.datasource.RoomListDataSource
 import io.element.android.features.roomlist.impl.datasource.RoomListRoomSummaryFactory
 import io.element.android.features.roomlist.impl.filters.RoomListFiltersState

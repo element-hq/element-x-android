@@ -16,7 +16,6 @@
 
 package io.element.android.features.invite.test
 
-import io.element.android.features.invite.api.SeenInvitesStore
 import io.element.android.libraries.matrix.api.core.RoomId
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow

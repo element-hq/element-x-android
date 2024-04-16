@@ -44,8 +44,6 @@ open class RoomListStateProvider : PreviewParameterProvider<RoomListState> {
             aRoomListState(),
             aRoomListState(snackbarMessage = SnackbarMessage(CommonStrings.common_verification_complete)),
             aRoomListState(hasNetworkConnection = false),
-            aRoomListState(contentState = aRoomsContentState(invitesState = InvitesState.SeenInvites)),
-            aRoomListState(contentState = aRoomsContentState(invitesState = InvitesState.NewInvites)),
             aRoomListState(contextMenu = aContextMenuShown(roomName = "A nice room name")),
             aRoomListState(contextMenu = aContextMenuShown(isFavorite = true)),
             aRoomListState(contentState = aRoomsContentState(securityBannerState = SecurityBannerState.RecoveryKeyConfirmation)),

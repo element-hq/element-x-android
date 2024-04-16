@@ -40,7 +40,6 @@ import io.element.android.features.leaveroom.api.LeaveRoomPresenter
 import io.element.android.features.networkmonitor.api.NetworkMonitor
 import io.element.android.features.networkmonitor.api.NetworkStatus
 import io.element.android.features.preferences.api.store.SessionPreferencesStore
-import io.element.android.features.roomlist.impl.datasource.InviteStateDataSource
 import io.element.android.features.roomlist.impl.datasource.RoomListDataSource
 import io.element.android.features.roomlist.impl.filters.RoomListFiltersState
 import io.element.android.features.roomlist.impl.migration.MigrationScreenState
@@ -83,7 +82,6 @@ class RoomListPresenter @Inject constructor(
     private val client: MatrixClient,
     private val networkMonitor: NetworkMonitor,
     private val snackbarDispatcher: SnackbarDispatcher,
-    private val inviteStateDataSource: InviteStateDataSource,
     private val leaveRoomPresenter: LeaveRoomPresenter,
     private val roomListDataSource: RoomListDataSource,
     private val featureFlagService: FeatureFlagService,
@@ -209,16 +207,11 @@ class RoomListPresenter @Inject constructor(
         }
         return when {
             showMigration -> RoomListContentState.Migration
-            showEmpty -> {
-                val invitesState = inviteStateDataSource.inviteState()
-                RoomListContentState.Empty(invitesState)
-            }
+            showEmpty -> RoomListContentState.Empty
             showSkeleton -> RoomListContentState.Skeleton(count = 16)
             else -> {
-                val invitesState = inviteStateDataSource.inviteState()
                 val securityBannerState by securityBannerState(securityBannerDismissed)
                 RoomListContentState.Rooms(
-                    invitesState = invitesState,
                     securityBannerState = securityBannerState,
                     summaries = roomSummaries.dataOrNull().orEmpty().toPersistentList()
                 )

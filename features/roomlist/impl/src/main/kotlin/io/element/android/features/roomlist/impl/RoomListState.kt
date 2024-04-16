@@ -72,9 +72,8 @@ enum class SecurityBannerState {
 sealed interface RoomListContentState {
     data object Migration : RoomListContentState
     data class Skeleton(val count: Int) : RoomListContentState
-    data class Empty(val invitesState: InvitesState) : RoomListContentState
+    data object Empty : RoomListContentState
     data class Rooms(
-        val invitesState: InvitesState,
         val securityBannerState: SecurityBannerState,
         val summaries: ImmutableList<RoomListRoomSummary>,
     ) : RoomListContentState
