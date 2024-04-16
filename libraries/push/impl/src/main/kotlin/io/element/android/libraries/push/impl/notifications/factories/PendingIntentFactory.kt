@@ -128,9 +128,4 @@ class PendingIntentFactory @Inject constructor(
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
     }
-
-    fun createInviteListPendingIntent(sessionId: SessionId): PendingIntent {
-        val intent = intentProvider.getInviteListIntent(sessionId)
-        return PendingIntentCompat.getActivity(context, 0, intent, 0, false)!!
-    }
 }

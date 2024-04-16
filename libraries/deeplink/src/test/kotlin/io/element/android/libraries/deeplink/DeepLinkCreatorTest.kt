@@ -34,10 +34,4 @@ class DeepLinkCreatorTest {
             .isEqualTo("elementx://open/@alice:server.org/!aRoomId:domain/\$aThreadId")
     }
 
-    @Test
-    fun inviteList() {
-        val sut = DeepLinkCreator()
-        assertThat(sut.inviteList(A_SESSION_ID))
-            .isEqualTo("elementx://open/@alice:server.org/invites")
-    }
 }

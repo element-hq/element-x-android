@@ -362,12 +362,6 @@ class LoggedInFlowNode @AssistedInject constructor(
         }
     }
 
-    internal suspend fun attachInviteList(deeplinkData: DeeplinkData.InviteList) = withContext(lifecycleScope.coroutineContext) {
-        if (!canShowRoomList()) return@withContext
-        notificationDrawerManager.clearMembershipNotificationForSession(deeplinkData.sessionId)
-        backstack.singleTop(NavTarget.RoomList)
-    }
-
     private fun canShowRoomList(): Boolean {
         return ftueService.state.value is FtueState.Complete
     }

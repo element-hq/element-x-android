@@ -31,8 +31,4 @@ interface IntentProvider {
         threadId: ThreadId?,
     ): Intent
 
-    /**
-     * Provide an intent to start the application on the invite list.
-     */
-    fun getInviteListIntent(sessionId: SessionId): Intent
 }
