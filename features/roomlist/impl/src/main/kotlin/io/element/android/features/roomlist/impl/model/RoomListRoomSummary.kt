@@ -40,7 +40,6 @@ data class RoomListRoomSummary(
     val isDirect: Boolean,
     val isFavorite: Boolean,
     val inviteSender: InviteSender?,
-
     ) {
     val isHighlighted = userDefinedNotificationMode != RoomNotificationMode.MUTE &&
         (numberOfUnreadNotifications > 0 || numberOfUnreadMentions > 0) ||

@@ -94,7 +94,7 @@ class RoomListViewTest {
         val state = aRoomListState(
             eventSink = eventsRecorder,
         )
-        val room0 = state.contentAsRooms().summaries.first{
+        val room0 = state.contentAsRooms().summaries.first {
             it.displayType == RoomSummaryDisplayType.ROOM
         }
         ensureCalledOnceWithParam(room0.roomId) { callback ->
@@ -112,7 +112,7 @@ class RoomListViewTest {
         val state = aRoomListState(
             eventSink = eventsRecorder,
         )
-        val room0 = state.contentAsRooms().summaries.first{
+        val room0 = state.contentAsRooms().summaries.first {
             it.displayType == RoomSummaryDisplayType.ROOM
         }
         rule.setRoomListView(
@@ -153,7 +153,7 @@ class RoomListViewTest {
         rule.clickOn(CommonStrings.action_accept)
         rule.clickOn(CommonStrings.action_decline)
         eventsRecorder.assertList(
-            listOf(RoomListEvents.AcceptInvite(invitedRoom),RoomListEvents.DeclineInvite(invitedRoom)),
+            listOf(RoomListEvents.AcceptInvite(invitedRoom), RoomListEvents.DeclineInvite(invitedRoom)),
         )
     }
 }

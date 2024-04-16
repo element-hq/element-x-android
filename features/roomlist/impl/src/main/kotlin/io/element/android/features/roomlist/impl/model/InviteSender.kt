@@ -34,7 +34,6 @@ data class InviteSender(
     val displayName: String,
     val avatarData: AvatarData,
 ) {
-
     @Composable
     fun annotatedString(): AnnotatedString {
         return stringResource(R.string.screen_invites_invited_you, displayName, userId.value).let { text ->

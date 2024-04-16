@@ -33,5 +33,4 @@ class DeepLinkCreatorTest {
         assertThat(sut.room(A_SESSION_ID, A_ROOM_ID, A_THREAD_ID))
             .isEqualTo("elementx://open/@alice:server.org/!aRoomId:domain/\$aThreadId")
     }
-
 }

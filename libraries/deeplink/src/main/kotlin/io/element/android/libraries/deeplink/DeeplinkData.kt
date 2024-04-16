@@ -29,5 +29,4 @@ sealed interface DeeplinkData {
 
     /** The target is a room, with the given [sessionId], [roomId] and optionally a [threadId]. */
     data class Room(override val sessionId: SessionId, val roomId: RoomId, val threadId: ThreadId?) : DeeplinkData
-
 }

@@ -45,5 +45,4 @@ class IntentProviderImpl @Inject constructor(
             data = deepLinkCreator.room(sessionId, roomId, threadId).toUri()
         }
     }
-
 }

@@ -66,7 +66,6 @@ fun RoomListView(
         isOnline = state.hasNetworkConnection,
     ) { topPadding ->
         Box {
-
             if (state.contextMenu is RoomListState.ContextMenu.Shown) {
                 RoomListContextMenu(
                     contextMenu = state.contextMenu,

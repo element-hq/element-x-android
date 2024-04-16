@@ -30,5 +30,4 @@ interface IntentProvider {
         roomId: RoomId?,
         threadId: ThreadId?,
     ): Intent
-
 }
