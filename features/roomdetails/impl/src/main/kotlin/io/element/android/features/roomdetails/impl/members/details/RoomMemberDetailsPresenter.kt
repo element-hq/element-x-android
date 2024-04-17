@@ -120,7 +120,8 @@ class RoomMemberDetailsPresenter @AssistedInject constructor(
                     onFailure = {
                         // Fallback to user profile
                         userProfile?.displayName
-                    })
+                    }
+                )
         }
 
         var userAvatar: String? by remember { mutableStateOf(roomMember?.avatarUrl ?: userProfile?.avatarUrl) }
@@ -131,7 +132,8 @@ class RoomMemberDetailsPresenter @AssistedInject constructor(
                     onFailure = {
                         // Fallback to user profile
                         userProfile?.avatarUrl
-                    })
+                    }
+                )
         }
 
         return RoomMemberDetailsState(
