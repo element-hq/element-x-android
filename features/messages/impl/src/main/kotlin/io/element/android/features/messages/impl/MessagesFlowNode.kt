@@ -81,7 +81,7 @@ class MessagesFlowNode @AssistedInject constructor(
     private val createPollEntryPoint: CreatePollEntryPoint,
 ) : BaseFlowNode<MessagesFlowNode.NavTarget>(
     backstack = BackStack(
-        initialElement = NavTarget.Messages(plugins.filterIsInstance<Inputs>().firstOrNull()?.eventId),
+        initialElement = NavTarget.Messages(plugins.filterIsInstance<Inputs>().firstOrNull()?.focusedEventId),
         savedStateMap = buildContext.savedStateMap,
     ),
     overlay = Overlay(
@@ -90,7 +90,7 @@ class MessagesFlowNode @AssistedInject constructor(
     buildContext = buildContext,
     plugins = plugins
 ) {
-    data class Inputs(val eventId: EventId?) : NodeInputs
+    data class Inputs(val focusedEventId: EventId?) : NodeInputs
 
     sealed interface NavTarget : Parcelable {
         @Parcelize
@@ -98,7 +98,7 @@ class MessagesFlowNode @AssistedInject constructor(
 
         @Parcelize
         data class Messages(
-            val eventId: EventId? = null,
+            val focusedEventId: EventId? = null,
         ) : NavTarget
 
         @Parcelize
@@ -192,7 +192,7 @@ class MessagesFlowNode @AssistedInject constructor(
                     }
                 }
                 val params = MessagesNode.Inputs(
-                    eventId = navTarget.eventId,
+                    focusedEventId = navTarget.focusedEventId,
                 )
                 createNode<MessagesNode>(buildContext, listOf(callback, params))
             }

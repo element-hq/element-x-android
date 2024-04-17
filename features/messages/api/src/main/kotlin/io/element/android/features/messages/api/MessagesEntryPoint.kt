@@ -35,7 +35,7 @@ interface MessagesEntryPoint : FeatureEntryPoint {
     }
 
     data class Params(
-        val eventId: EventId?,
+        val focusedEventId: EventId?,
     )
 
     interface Callback : Plugin {

@@ -22,7 +22,7 @@ import kotlinx.parcelize.Parcelize
 
 sealed interface RoomNavigationTarget : Parcelable {
     @Parcelize
-    data class Messages(val eventId: EventId? = null) : RoomNavigationTarget
+    data class Messages(val focusedEventId: EventId? = null) : RoomNavigationTarget
 
     @Parcelize
     data object Details : RoomNavigationTarget

@@ -66,7 +66,7 @@ class JoinedRoomLoadedFlowNode @AssistedInject constructor(
 ) : BaseFlowNode<JoinedRoomLoadedFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = when (val input = plugins.filterIsInstance(Inputs::class.java).first().initialElement) {
-            is RoomNavigationTarget.Messages -> NavTarget.Messages(input.eventId)
+            is RoomNavigationTarget.Messages -> NavTarget.Messages(input.focusedEventId)
             RoomNavigationTarget.Details -> NavTarget.RoomDetails
             RoomNavigationTarget.NotificationSettings -> NavTarget.RoomNotificationSettings
         },
@@ -161,7 +161,7 @@ class JoinedRoomLoadedFlowNode @AssistedInject constructor(
                     }
                 }
                 messagesEntryPoint.nodeBuilder(this, buildContext)
-                    .params(MessagesEntryPoint.Params(navTarget.eventId))
+                    .params(MessagesEntryPoint.Params(navTarget.focusedEventId))
                     .callback(callback)
                     .build()
             }
@@ -179,7 +179,7 @@ class JoinedRoomLoadedFlowNode @AssistedInject constructor(
 
     sealed interface NavTarget : Parcelable {
         @Parcelize
-        data class Messages(val eventId: EventId? = null) : NavTarget
+        data class Messages(val focusedEventId: EventId? = null) : NavTarget
 
         @Parcelize
         data object RoomDetails : NavTarget

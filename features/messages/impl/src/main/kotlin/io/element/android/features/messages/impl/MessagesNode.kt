@@ -69,7 +69,7 @@ class MessagesNode @AssistedInject constructor(
     private val callback = plugins<Callback>().firstOrNull()
 
     // TODO Handle navigation to the Event
-    data class Inputs(val eventId: EventId?) : NodeInputs
+    data class Inputs(val focusedEventId: EventId?) : NodeInputs
 
     interface Callback : Plugin {
         fun onRoomDetailsClicked()

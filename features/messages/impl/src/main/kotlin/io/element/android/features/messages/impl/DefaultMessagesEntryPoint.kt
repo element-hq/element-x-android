@@ -32,7 +32,7 @@ class DefaultMessagesEntryPoint @Inject constructor() : MessagesEntryPoint {
 
         return object : MessagesEntryPoint.NodeBuilder {
             override fun params(params: MessagesEntryPoint.Params): MessagesEntryPoint.NodeBuilder {
-                plugins += MessagesNode.Inputs(eventId = params.eventId)
+                plugins += MessagesNode.Inputs(focusedEventId = params.focusedEventId)
                 return this
             }
 
