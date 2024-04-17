@@ -194,7 +194,7 @@ class LoggedInFlowNode @AssistedInject constructor(
         data class Room(
             val roomIdOrAlias: RoomIdOrAlias,
             val roomDescription: RoomDescription? = null,
-            val initialElement: RoomNavigationTarget = RoomNavigationTarget.Messages(null)
+            val initialElement: RoomNavigationTarget = RoomNavigationTarget.Messages()
         ) : NavTarget
 
         @Parcelize
