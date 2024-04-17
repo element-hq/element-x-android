@@ -23,7 +23,7 @@ data class RoomPreview(
     /** The room id for this room. */
     val roomId: RoomId,
     /** The canonical alias for the room. */
-    val canonicalAlias : RoomAlias?,
+    val canonicalAlias: RoomAlias?,
     /** The room's name, if set. */
     val name: String?,
     /** The room's topic, if set. */
