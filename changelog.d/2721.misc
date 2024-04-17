@@ -1,0 +1,1 @@
+RoomMember screen: fallback to userProfile data, if the member is not a user of the room.
