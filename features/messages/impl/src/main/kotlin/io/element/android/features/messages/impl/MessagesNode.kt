@@ -34,8 +34,10 @@ import io.element.android.features.messages.impl.timeline.di.LocalTimelineItemPr
 import io.element.android.features.messages.impl.timeline.di.TimelineItemPresenterFactories
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.libraries.androidutils.system.openUrlInExternalApp
+import io.element.android.libraries.androidutils.system.toast
 import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.core.bool.orFalse
+import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -43,6 +45,7 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
 import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.navigation.isSameRoom
 import io.element.android.libraries.matrix.api.room.roomMembers
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
 import io.element.android.libraries.mediaplayer.api.MediaPlayer
@@ -60,6 +63,8 @@ class MessagesNode @AssistedInject constructor(
     private val timelineItemPresenterFactories: TimelineItemPresenterFactories,
     private val mediaPlayer: MediaPlayer,
     private val permalinkParser: PermalinkParser,
+    @ApplicationContext
+    private val context: Context,
 ) : Node(buildContext, plugins = plugins), MessagesNavigator {
     private val presenter = presenterFactory.create(this)
     private val callback = plugins<Callback>().firstOrNull()
@@ -124,13 +129,26 @@ class MessagesNode @AssistedInject constructor(
                 }
             }
             is PermalinkData.RoomLink -> {
-                // TODO Handle click on current Room
-                callback?.onPermalinkClicked(permalink)
+                handleRoomLinkClicked(permalink)
             }
             is PermalinkData.FallbackLink,
             is PermalinkData.RoomEmailInviteLink -> {
                 context.openUrlInExternalApp(url)
             }
+        }
+    }
+
+    private fun handleRoomLinkClicked(roomLink: PermalinkData.RoomLink) {
+        if (room.isSameRoom(roomLink.roomIdOrAlias)) {
+            if (roomLink.eventId != null) {
+                // TODO Handle navigation to the Event
+                context.toast("TODO Handle navigation to the Event ${roomLink.eventId}")
+            } else {
+                // Click on the same room, ignore
+                context.toast("Already viewing this room!")
+            }
+        } else {
+            callback?.onPermalinkClicked(roomLink)
         }
     }
 
