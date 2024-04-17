@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.appnav.room.resolver
+package io.element.android.features.roomaliasresolver.impl
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

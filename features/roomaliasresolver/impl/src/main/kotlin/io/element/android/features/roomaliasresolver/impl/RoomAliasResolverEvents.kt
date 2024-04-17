@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.appnav.room.resolver
+package io.element.android.features.roomaliasresolver.impl
 
 sealed interface RoomAliasResolverEvents {
     data object Retry : RoomAliasResolverEvents

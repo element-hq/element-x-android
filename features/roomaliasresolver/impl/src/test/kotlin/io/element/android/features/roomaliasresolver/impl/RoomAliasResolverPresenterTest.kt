@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.appnav.room.resolver
+package io.element.android.features.roomaliasresolver.impl
 
 import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow

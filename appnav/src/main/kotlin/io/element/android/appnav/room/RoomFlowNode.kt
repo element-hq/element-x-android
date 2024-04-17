@@ -36,8 +36,8 @@ import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.appnav.room.joined.JoinedRoomFlowNode
 import io.element.android.appnav.room.joined.JoinedRoomLoadedFlowNode
-import io.element.android.appnav.room.resolver.RoomAliasResolverNode
 import io.element.android.features.joinroom.api.JoinRoomEntryPoint
+import io.element.android.features.roomaliasesolver.api.RoomAliasResolverEntryPoint
 import io.element.android.features.roomdirectory.api.RoomDescription
 import io.element.android.libraries.architecture.BackstackView
 import io.element.android.libraries.architecture.BaseFlowNode
@@ -68,6 +68,7 @@ class RoomFlowNode @AssistedInject constructor(
     private val client: MatrixClient,
     private val roomMembershipObserver: RoomMembershipObserver,
     private val joinRoomEntryPoint: JoinRoomEntryPoint,
+    private val roomAliasResolverEntryPoint: RoomAliasResolverEntryPoint,
 ) : BaseFlowNode<RoomFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = NavTarget.Loading,
@@ -144,13 +145,16 @@ class RoomFlowNode @AssistedInject constructor(
         return when (navTarget) {
             is NavTarget.Loading -> loadingNode(buildContext)
             is NavTarget.Resolving -> {
-                val callback = object : RoomAliasResolverNode.Callback {
+                val callback = object : RoomAliasResolverEntryPoint.Callback {
                     override fun onAliasResolved(roomId: RoomId) {
                         backstack.newRoot(NavTarget.JoinRoom(roomId))
                     }
                 }
-                val params = RoomAliasResolverNode.Inputs(navTarget.roomAlias)
-                createNode<RoomAliasResolverNode>(buildContext, listOf(callback, params))
+                val params = RoomAliasResolverEntryPoint.Params(navTarget.roomAlias)
+                roomAliasResolverEntryPoint.nodeBuilder(this, buildContext)
+                    .callback(callback)
+                    .params(params)
+                    .build()
             }
             is NavTarget.JoinRoom -> {
                 val inputs = JoinRoomEntryPoint.Inputs(

@@ -14,16 +14,15 @@
  * limitations under the License.
  */
 
-package io.element.android.appnav.room.resolver
+plugins {
+    id("io.element.android-library")
+}
 
-import androidx.compose.runtime.Immutable
-import io.element.android.libraries.architecture.AsyncData
-import io.element.android.libraries.matrix.api.core.RoomAlias
-import io.element.android.libraries.matrix.api.core.RoomId
+android {
+    namespace = "io.element.android.features.roomaliasresolver.api"
+}
 
-@Immutable
-data class RoomAliasResolverState(
-    val roomAlias: RoomAlias,
-    val resolveState: AsyncData<RoomId>,
-    val eventSink: (RoomAliasResolverEvents) -> Unit
-)
+dependencies {
+    implementation(projects.libraries.architecture)
+    implementation(projects.libraries.matrix.api)
+}

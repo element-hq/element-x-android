@@ -14,18 +14,19 @@
  * limitations under the License.
  */
 
-package io.element.android.appnav.room.resolver
+package io.element.android.features.roomaliasresolver.impl.di
 
 import com.squareup.anvil.annotations.ContributesTo
 import dagger.Module
 import dagger.Provides
+import io.element.android.features.roomaliasresolver.impl.RoomAliasResolverPresenter
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomAlias
 
 @Module
 @ContributesTo(SessionScope::class)
-object ResolveRoomModule {
+object RoomAliasResolverModule {
     @Provides
     fun providesJoinRoomPresenterFactory(
         client: MatrixClient,
