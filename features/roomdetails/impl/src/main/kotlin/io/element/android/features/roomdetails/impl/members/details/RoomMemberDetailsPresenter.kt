@@ -21,6 +21,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
@@ -74,9 +75,10 @@ class RoomMemberDetailsPresenter @AssistedInject constructor(
             // Update room member info when opening this screen
             // We don't need to assign the result as it will be automatically propagated by `room.getRoomMemberAsState`
             room.getUpdatedMember(roomMemberId)
-        }
-        LaunchedEffect(Unit) {
-            userProfile = client.getProfile(roomMemberId).getOrNull()
+                .onFailure {
+                    // Not a member of the room, try to get the user profile
+                    userProfile = client.getProfile(roomMemberId).getOrNull()
+                }
         }
 
         fun handleEvents(event: RoomMemberDetailsEvents) {
@@ -112,9 +114,12 @@ class RoomMemberDetailsPresenter @AssistedInject constructor(
             }
         }
 
-        var userName: String? by remember { mutableStateOf(roomMember?.displayName ?: userProfile?.displayName) }
-        LaunchedEffect(roomMember, userProfile) {
-            userName = room.userDisplayName(roomMemberId)
+        val userName: String? by produceState(
+            initialValue = roomMember?.displayName ?: userProfile?.displayName,
+            key1 = roomMember,
+            key2 = userProfile,
+        ) {
+            value = room.userDisplayName(roomMemberId)
                 .fold(
                     onSuccess = { it },
                     onFailure = {
@@ -124,9 +129,12 @@ class RoomMemberDetailsPresenter @AssistedInject constructor(
                 )
         }
 
-        var userAvatar: String? by remember { mutableStateOf(roomMember?.avatarUrl ?: userProfile?.avatarUrl) }
-        LaunchedEffect(roomMember, userProfile) {
-            userAvatar = room.userAvatarUrl(roomMemberId)
+        val userAvatar: String? by produceState(
+            initialValue = roomMember?.avatarUrl ?: userProfile?.avatarUrl,
+            key1 = roomMember,
+            key2 = userProfile,
+        ) {
+            value = room.userAvatarUrl(roomMemberId)
                 .fold(
                     onSuccess = { it },
                     onFailure = {
