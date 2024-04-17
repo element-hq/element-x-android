@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright (c) 2024 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,21 +14,21 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.matrix.api.timeline.item.virtual
+package io.element.android.libraries.matrix.api.timeline
 
-sealed interface VirtualTimelineItem {
-    data class DayDivider(
-        val timestamp: Long
-    ) : VirtualTimelineItem
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.StateFlow
 
-    data object ReadMarker : VirtualTimelineItem
+interface Timeline : AutoCloseable {
 
-    data object EncryptedHistoryBanner : VirtualTimelineItem
+    data class PaginationStatus(
+        val isPaginating: Boolean,
+        val hasMoreToLoad: Boolean,
+    ) {
+        val canPaginate: Boolean = !isPaginating && hasMoreToLoad
+    }
 
-    data object RoomBeginning: VirtualTimelineItem
-
-    data class LoadingIndicator(
-        val backwards: Boolean,
-        val timestamp: Long,
-    ): VirtualTimelineItem
+    suspend fun paginateBackwards(): Result<Boolean>
+    val backPaginationStatus: StateFlow<PaginationStatus>
+    val timelineItems: Flow<List<MatrixTimelineItem>>
 }

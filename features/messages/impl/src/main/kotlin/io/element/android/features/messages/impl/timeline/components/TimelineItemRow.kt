@@ -51,6 +51,8 @@ internal fun TimelineItemRow(
         is TimelineItem.Virtual -> {
             TimelineItemVirtualRow(
                 virtual = timelineItem,
+                timelineRoomInfo = timelineRoomInfo,
+                eventSink = eventSink,
                 modifier = modifier,
             )
         }

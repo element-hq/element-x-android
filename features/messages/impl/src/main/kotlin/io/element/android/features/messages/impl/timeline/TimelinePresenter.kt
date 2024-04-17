@@ -54,9 +54,6 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-private const val BACK_PAGINATION_EVENT_LIMIT = 20
-private const val BACK_PAGINATION_PAGE_SIZE = 50
-
 class TimelinePresenter @AssistedInject constructor(
     private val timelineItemsFactory: TimelineItemsFactory,
     private val room: MatrixRoom,
@@ -73,7 +70,7 @@ class TimelinePresenter @AssistedInject constructor(
         fun create(navigator: MessagesNavigator): TimelinePresenter
     }
 
-    private val timeline = room.timeline
+    private val timeline = room.liveTimeline
 
     @Composable
     override fun present(): TimelineState {
@@ -85,7 +82,7 @@ class TimelinePresenter @AssistedInject constructor(
         val lastReadReceiptId = rememberSaveable { mutableStateOf<EventId?>(null) }
 
         val timelineItems by timelineItemsFactory.collectItemsAsState()
-        val paginationState by timeline.paginationState.collectAsState()
+        val paginationState by timeline.backPaginationStatus.collectAsState()
         val syncUpdateFlow = room.syncUpdateFlow.collectAsState()
 
         val userHasPermissionToSendMessage by room.canSendMessageAsState(type = MessageEventType.ROOM_MESSAGE, updateKey = syncUpdateFlow.value)
@@ -99,7 +96,13 @@ class TimelinePresenter @AssistedInject constructor(
 
         fun handleEvents(event: TimelineEvents) {
             when (event) {
-                TimelineEvents.LoadMore -> localScope.paginateBackwards()
+                is TimelineEvents.LoadMore -> {
+                    if(event.backwards) {
+                        localScope.paginateBackwards()
+                    }else{
+                        //TODO implement pagination forward
+                    }
+                }
                 is TimelineEvents.SetHighlightedEvent -> highlightedEventId.value = event.eventId
                 is TimelineEvents.OnScrollFinished -> {
                     if (event.firstIndex == 0) {
@@ -152,6 +155,7 @@ class TimelinePresenter @AssistedInject constructor(
         val timelineRoomInfo by remember {
             derivedStateOf {
                 TimelineRoomInfo(
+                    name = room.displayName,
                     isDm = room.isDm,
                     userHasPermissionToSendMessage = userHasPermissionToSendMessage,
                     userHasPermissionToSendReaction = userHasPermissionToSendReaction,
@@ -161,7 +165,7 @@ class TimelinePresenter @AssistedInject constructor(
         return TimelineState(
             timelineRoomInfo = timelineRoomInfo,
             highlightedEventId = highlightedEventId.value,
-            paginationState = paginationState,
+            backPaginationStatus = paginationState,
             timelineItems = timelineItems,
             renderReadReceipts = renderReadReceipts,
             newEventState = newItemState.value,
@@ -233,6 +237,6 @@ class TimelinePresenter @AssistedInject constructor(
     }
 
     private fun CoroutineScope.paginateBackwards() = launch {
-        timeline.paginateBackwards(BACK_PAGINATION_EVENT_LIMIT, BACK_PAGINATION_PAGE_SIZE)
+        timeline.paginateBackwards()
     }
 }

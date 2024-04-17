@@ -42,7 +42,7 @@ import io.element.android.libraries.matrix.api.room.location.AssetType
 import io.element.android.libraries.matrix.api.room.powerlevels.MatrixRoomPowerLevels
 import io.element.android.libraries.matrix.api.room.powerlevels.UserRoleChange
 import io.element.android.libraries.matrix.api.room.roomNotificationSettings
-import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
+import io.element.android.libraries.matrix.api.timeline.LiveTimeline
 import io.element.android.libraries.matrix.api.timeline.ReceiptType
 import io.element.android.libraries.matrix.api.widget.MatrixWidgetDriver
 import io.element.android.libraries.matrix.api.widget.MatrixWidgetSettings
@@ -56,7 +56,7 @@ import io.element.android.libraries.matrix.impl.room.location.toInner
 import io.element.android.libraries.matrix.impl.room.member.RoomMemberListFetcher
 import io.element.android.libraries.matrix.impl.room.member.RoomMemberMapper
 import io.element.android.libraries.matrix.impl.room.powerlevels.RoomPowerLevelsMapper
-import io.element.android.libraries.matrix.impl.timeline.RustMatrixTimeline
+import io.element.android.libraries.matrix.impl.timeline.RustLiveTimeline
 import io.element.android.libraries.matrix.impl.timeline.toRustReceiptType
 import io.element.android.libraries.matrix.impl.util.mxCallbackFlow
 import io.element.android.libraries.matrix.impl.widget.RustWidgetDriver
@@ -159,7 +159,7 @@ class RustMatrixRoom(
     private val _roomNotificationSettingsStateFlow = MutableStateFlow<MatrixRoomNotificationSettingsState>(MatrixRoomNotificationSettingsState.Unknown)
     override val roomNotificationSettingsStateFlow: StateFlow<MatrixRoomNotificationSettingsState> = _roomNotificationSettingsStateFlow
 
-    override val timeline = createMatrixTimeline(innerTimeline) {
+    override val liveTimeline = createLiveTimeline(innerTimeline){
         _syncUpdateFlow.value = systemClock.epochMillis()
     }
 
@@ -169,7 +169,7 @@ class RustMatrixRoom(
 
     init {
         val powerLevelChanges = roomInfoFlow.map { it.userPowerLevels }.distinctUntilChanged()
-        val membershipChanges = timeline.membershipChangeEventReceived.onStart { emit(Unit) }
+        val membershipChanges = liveTimeline.membershipChangeEventReceived.onStart { emit(Unit) }
         combine(membershipChanges, powerLevelChanges) { _, _ -> }
             // Skip initial one
             .drop(1)
@@ -184,7 +184,7 @@ class RustMatrixRoom(
 
     override fun destroy() {
         roomCoroutineScope.cancel()
-        timeline.close()
+        liveTimeline.close()
         innerRoom.destroy()
         roomListItem.destroy()
         specialModeEventTimelineItem?.destroy()
@@ -744,18 +744,24 @@ class RustMatrixRoom(
         }
     }
 
-    private fun createMatrixTimeline(
+    private fun createLiveTimeline(
         timeline: InnerTimeline,
         onNewSyncedEvent: () -> Unit = {},
-    ): MatrixTimeline {
-        return RustMatrixTimeline(
+    ): LiveTimeline {
+        return RustLiveTimeline(
             isKeyBackupEnabled = isKeyBackupEnabled,
             matrixRoom = this,
+            systemClock = systemClock,
             roomCoroutineScope = roomCoroutineScope,
             dispatcher = roomDispatcher,
             lastLoginTimestamp = sessionData.loginTimestamp,
             onNewSyncedEvent = onNewSyncedEvent,
-            innerTimeline = timeline,
+            inner = timeline,
+            fetchDetailsForEvent = { eventId ->
+                runCatching {
+                    innerTimeline.getEventTimelineItemByEventId(eventId.value)
+                }
+            }
         )
     }
 

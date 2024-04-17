@@ -33,7 +33,7 @@ import io.element.android.features.poll.impl.history.model.PollHistoryItems
 import io.element.android.features.poll.impl.history.model.PollHistoryItemsFactory
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.api.room.MatrixRoom
-import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
+import io.element.android.libraries.matrix.api.timeline.Timeline
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
@@ -49,8 +49,8 @@ class PollHistoryPresenter @Inject constructor(
     @Composable
     override fun present(): PollHistoryState {
         // TODO use room.rememberPollHistory() when working properly?
-        val timeline = room.timeline
-        val paginationState by timeline.paginationState.collectAsState()
+        val timeline = room.liveTimeline
+        val paginationState by timeline.backPaginationStatus.collectAsState()
         val pollHistoryItemsFlow = remember {
             timeline.timelineItems.map { items ->
                 pollHistoryItemFactory.create(items)
@@ -61,11 +61,11 @@ class PollHistoryPresenter @Inject constructor(
         }
         val pollHistoryItems by pollHistoryItemsFlow.collectAsState(initial = PollHistoryItems())
         LaunchedEffect(paginationState, pollHistoryItems.size) {
-            if (pollHistoryItems.size == 0 && paginationState.canBackPaginate) loadMore(timeline)
+            if (pollHistoryItems.size == 0 && paginationState.canPaginate) loadMore(timeline)
         }
         val isLoading by remember {
             derivedStateOf {
-                pollHistoryItems.size == 0 || paginationState.isBackPaginating
+                pollHistoryItems.size == 0 || paginationState.isPaginating
             }
         }
         val coroutineScope = rememberCoroutineScope()
@@ -88,14 +88,14 @@ class PollHistoryPresenter @Inject constructor(
 
         return PollHistoryState(
             isLoading = isLoading,
-            hasMoreToLoad = paginationState.hasMoreToLoadBackwards,
+            hasMoreToLoad = paginationState.hasMoreToLoad,
             pollHistoryItems = pollHistoryItems,
             activeFilter = activeFilter,
             eventSink = ::handleEvents,
         )
     }
 
-    private fun CoroutineScope.loadMore(pollHistory: MatrixTimeline) = launch {
-        pollHistory.paginateBackwards(200)
+    private fun CoroutineScope.loadMore(pollHistory: Timeline) = launch {
+        pollHistory.paginateBackwards()
     }
 }

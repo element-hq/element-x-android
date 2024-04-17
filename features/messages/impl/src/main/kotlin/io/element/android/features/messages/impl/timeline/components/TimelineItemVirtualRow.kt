@@ -17,23 +17,39 @@
 package io.element.android.features.messages.impl.timeline.components
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import io.element.android.features.messages.impl.timeline.TimelineEvents
+import io.element.android.features.messages.impl.timeline.TimelineRoomInfo
 import io.element.android.features.messages.impl.timeline.components.virtual.TimelineEncryptedHistoryBannerView
 import io.element.android.features.messages.impl.timeline.components.virtual.TimelineItemDaySeparatorView
 import io.element.android.features.messages.impl.timeline.components.virtual.TimelineItemReadMarkerView
+import io.element.android.features.messages.impl.timeline.components.virtual.TimelineItemRoomBeginningView
+import io.element.android.features.messages.impl.timeline.components.virtual.TimelineLoadingMoreIndicator
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemDaySeparatorModel
 import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemEncryptedHistoryBannerVirtualModel
+import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemLoadingIndicatorModel
 import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemReadMarkerModel
+import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemRoomBeginningModel
 
 @Composable
 fun TimelineItemVirtualRow(
     virtual: TimelineItem.Virtual,
+    timelineRoomInfo: TimelineRoomInfo,
+    eventSink: (TimelineEvents.EventFromTimelineItem) -> Unit,
     modifier: Modifier = Modifier
 ) {
     when (virtual.model) {
         is TimelineItemDaySeparatorModel -> TimelineItemDaySeparatorView(virtual.model, modifier)
         TimelineItemReadMarkerModel -> TimelineItemReadMarkerView()
         is TimelineItemEncryptedHistoryBannerVirtualModel -> TimelineEncryptedHistoryBannerView(modifier)
+        TimelineItemRoomBeginningModel -> TimelineItemRoomBeginningView(roomName = timelineRoomInfo.name, modifier = modifier)
+        is TimelineItemLoadingIndicatorModel -> {
+            TimelineLoadingMoreIndicator()
+            LaunchedEffect(key1 = virtual.model.timestamp) {
+                eventSink(TimelineEvents.LoadMore(virtual.model.backwards))
+            }
+        }
     }
 }

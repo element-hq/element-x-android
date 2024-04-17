@@ -43,7 +43,6 @@ class TimelineViewTest {
                     )
                 ),
                 typingNotificationState = aTypingNotificationState(),
-                roomName = null,
                 onUserDataClicked = EnsureNeverCalledWithParam(),
                 onLinkClicked = EnsureNeverCalledWithParam(),
                 onMessageClicked = EnsureNeverCalledWithParam(),
@@ -71,7 +70,6 @@ class TimelineViewTest {
                     )
                 ),
                 typingNotificationState = aTypingNotificationState(),
-                roomName = null,
                 onUserDataClicked = EnsureNeverCalledWithParam(),
                 onLinkClicked = EnsureNeverCalledWithParam(),
                 onMessageClicked = EnsureNeverCalledWithParam(),

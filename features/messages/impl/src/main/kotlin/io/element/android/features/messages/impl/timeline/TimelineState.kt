@@ -20,7 +20,7 @@ import androidx.compose.runtime.Immutable
 import io.element.android.features.messages.impl.timeline.model.NewEventState
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.libraries.matrix.api.core.EventId
-import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
+import io.element.android.libraries.matrix.api.timeline.Timeline
 import kotlinx.collections.immutable.ImmutableList
 
 @Immutable
@@ -29,7 +29,7 @@ data class TimelineState(
     val timelineRoomInfo: TimelineRoomInfo,
     val renderReadReceipts: Boolean,
     val highlightedEventId: EventId?,
-    val paginationState: MatrixTimeline.PaginationState,
+    val backPaginationStatus: Timeline.PaginationStatus,
     val newEventState: NewEventState,
     val eventSink: (TimelineEvents) -> Unit
 )
@@ -37,6 +37,7 @@ data class TimelineState(
 @Immutable
 data class TimelineRoomInfo(
     val isDm: Boolean,
+    val name: String?,
     val userHasPermissionToSendMessage: Boolean,
     val userHasPermissionToSendReaction: Boolean,
 )

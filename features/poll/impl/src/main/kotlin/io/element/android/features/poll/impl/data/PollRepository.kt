@@ -28,7 +28,7 @@ class PollRepository @Inject constructor(
     private val room: MatrixRoom,
 ) {
     suspend fun getPoll(eventId: EventId): Result<PollContent> = runCatching {
-        room.timeline
+        room.liveTimeline
             .timelineItems
             .first()
             .asSequence()

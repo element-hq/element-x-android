@@ -19,7 +19,6 @@ package io.element.android.features.messages.impl.timeline
 import io.element.android.libraries.matrix.api.core.EventId
 
 sealed interface TimelineEvents {
-    data object LoadMore : TimelineEvents
     data class SetHighlightedEvent(val eventId: EventId?) : TimelineEvents
     data class OnScrollFinished(val firstIndex: Int) : TimelineEvents
 
@@ -27,6 +26,8 @@ sealed interface TimelineEvents {
      * Events coming from a timeline item.
      */
     sealed interface EventFromTimelineItem : TimelineEvents
+
+    data class LoadMore(val backwards: Boolean) : EventFromTimelineItem
 
     /**
      * Events coming from a poll item.

@@ -34,7 +34,7 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.TransactionId
 import io.element.android.libraries.matrix.api.core.UserId
-import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
+import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
 import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
 import kotlinx.collections.immutable.ImmutableList
@@ -46,31 +46,30 @@ import kotlin.random.Random
 
 fun aTimelineState(
     timelineItems: ImmutableList<TimelineItem> = persistentListOf(),
-    paginationState: MatrixTimeline.PaginationState = aPaginationState(),
+    paginationState: Timeline.PaginationStatus = aPaginationStatus(),
     renderReadReceipts: Boolean = false,
     timelineRoomInfo: TimelineRoomInfo = aTimelineRoomInfo(),
     eventSink: (TimelineEvents) -> Unit = {},
 ) = TimelineState(
     timelineItems = timelineItems,
     timelineRoomInfo = timelineRoomInfo,
-    paginationState = paginationState,
+    backPaginationStatus = paginationState,
     renderReadReceipts = renderReadReceipts,
     highlightedEventId = null,
     newEventState = NewEventState.None,
     eventSink = eventSink,
 )
 
-fun aPaginationState(
-    isBackPaginating: Boolean = false,
-    hasMoreToLoadBackwards: Boolean = true,
-    beginningOfRoomReached: Boolean = false,
-): MatrixTimeline.PaginationState {
-    return MatrixTimeline.PaginationState(
-        isBackPaginating = isBackPaginating,
-        hasMoreToLoadBackwards = hasMoreToLoadBackwards,
-        beginningOfRoomReached = beginningOfRoomReached,
+fun aPaginationStatus(
+    isPaginating: Boolean = false,
+    hasMoreToLoad: Boolean = true,
+): Timeline.PaginationStatus {
+    return Timeline.PaginationStatus(
+        isPaginating = isPaginating,
+        hasMoreToLoad = hasMoreToLoad,
     )
 }
+
 
 internal fun aTimelineItemList(content: TimelineItemEventContent): ImmutableList<TimelineItem> {
     return persistentListOf(
@@ -230,10 +229,12 @@ internal fun aGroupedEvents(
 }
 
 internal fun aTimelineRoomInfo(
+    name: String = "Room name",
     isDm: Boolean = false,
     userHasPermissionToSendMessage: Boolean = true,
 ) = TimelineRoomInfo(
     isDm = isDm,
+    name = name,
     userHasPermissionToSendMessage = userHasPermissionToSendMessage,
     userHasPermissionToSendReaction = true,
 )

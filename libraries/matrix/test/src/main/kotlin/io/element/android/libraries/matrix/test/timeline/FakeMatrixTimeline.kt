@@ -17,7 +17,6 @@
 package io.element.android.libraries.matrix.test.timeline
 
 import io.element.android.libraries.matrix.api.core.EventId
-import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.ReceiptType
 import io.element.android.tests.testutils.simulateLongTask

@@ -36,7 +36,6 @@ import io.element.android.features.poll.test.actions.FakeSendPollResponseAction
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.featureflag.test.InMemorySessionPreferencesStore
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
-import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.ReceiptType
 import io.element.android.libraries.matrix.api.timeline.item.event.EventReaction
@@ -96,15 +95,15 @@ class TimelinePresenterTest {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            assertThat(initialState.paginationState.hasMoreToLoadBackwards).isTrue()
-            assertThat(initialState.paginationState.isBackPaginating).isFalse()
+            assertThat(initialState.backPaginationStatus.hasMoreToLoadBackwards).isTrue()
+            assertThat(initialState.backPaginationStatus.isBackPaginating).isFalse()
             initialState.eventSink.invoke(TimelineEvents.LoadMore)
             val inPaginationState = awaitItem()
-            assertThat(inPaginationState.paginationState.isBackPaginating).isTrue()
-            assertThat(inPaginationState.paginationState.hasMoreToLoadBackwards).isTrue()
+            assertThat(inPaginationState.backPaginationStatus.isBackPaginating).isTrue()
+            assertThat(inPaginationState.backPaginationStatus.hasMoreToLoadBackwards).isTrue()
             val postPaginationState = awaitItem()
-            assertThat(postPaginationState.paginationState.hasMoreToLoadBackwards).isTrue()
-            assertThat(postPaginationState.paginationState.isBackPaginating).isFalse()
+            assertThat(postPaginationState.backPaginationStatus.hasMoreToLoadBackwards).isTrue()
+            assertThat(postPaginationState.backPaginationStatus.isBackPaginating).isFalse()
         }
     }
 

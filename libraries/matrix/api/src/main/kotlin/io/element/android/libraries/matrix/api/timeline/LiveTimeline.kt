@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright (c) 2024 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,21 +14,12 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.matrix.api.timeline.item.virtual
+package io.element.android.libraries.matrix.api.timeline
 
-sealed interface VirtualTimelineItem {
-    data class DayDivider(
-        val timestamp: Long
-    ) : VirtualTimelineItem
+import io.element.android.libraries.matrix.api.core.EventId
+import kotlinx.coroutines.flow.Flow
 
-    data object ReadMarker : VirtualTimelineItem
-
-    data object EncryptedHistoryBanner : VirtualTimelineItem
-
-    data object RoomBeginning: VirtualTimelineItem
-
-    data class LoadingIndicator(
-        val backwards: Boolean,
-        val timestamp: Long,
-    ): VirtualTimelineItem
+interface LiveTimeline: Timeline {
+    val membershipChangeEventReceived: Flow<Unit>
+    suspend fun sendReadReceipt(eventId: EventId, receiptType: ReceiptType): Result<Unit>
 }

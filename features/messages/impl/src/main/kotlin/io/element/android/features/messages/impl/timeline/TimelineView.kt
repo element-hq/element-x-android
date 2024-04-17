@@ -55,7 +55,6 @@ import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.messages.impl.timeline.components.TimelineItemRow
-import io.element.android.features.messages.impl.timeline.components.virtual.TimelineItemRoomBeginningView
 import io.element.android.features.messages.impl.timeline.components.virtual.TimelineLoadingMoreIndicator
 import io.element.android.features.messages.impl.timeline.di.LocalTimelineItemPresenterFactories
 import io.element.android.features.messages.impl.timeline.di.aFakeTimelineItemPresenterFactories
@@ -79,7 +78,6 @@ import kotlinx.coroutines.launch
 fun TimelineView(
     state: TimelineState,
     typingNotificationState: TypingNotificationState,
-    roomName: String?,
     onUserDataClicked: (UserId) -> Unit,
     onLinkClicked: (String) -> Unit,
     onMessageClicked: (TimelineItem.Event) -> Unit,
@@ -93,9 +91,6 @@ fun TimelineView(
     modifier: Modifier = Modifier,
     forceJumpToBottomVisibility: Boolean = false
 ) {
-    fun onReachedLoadMore() {
-        state.eventSink(TimelineEvents.LoadMore)
-    }
 
     fun onScrollFinishedAt(firstVisibleIndex: Int) {
         state.eventSink(TimelineEvents.OnScrollFinished(firstVisibleIndex))
@@ -151,20 +146,6 @@ fun TimelineView(
                         eventSink = state.eventSink,
                         onSwipeToReply = onSwipeToReply,
                     )
-                }
-                if (state.paginationState.hasMoreToLoadBackwards) {
-                    // Do not use key parameter to avoid wrong positioning
-                    item(contentType = "TimelineLoadingMoreIndicator") {
-                        TimelineLoadingMoreIndicator()
-                        LaunchedEffect(Unit) {
-                            onReachedLoadMore()
-                        }
-                    }
-                }
-                if (state.paginationState.beginningOfRoomReached && !state.timelineRoomInfo.isDm) {
-                    item(contentType = "BeginningOfRoomReached") {
-                        TimelineItemRoomBeginningView(roomName = roomName)
-                    }
                 }
             }
 
@@ -272,17 +253,16 @@ internal fun TimelineViewPreview(
     ) {
         TimelineView(
             state = aTimelineState(timelineItems),
-            roomName = null,
             typingNotificationState = aTypingNotificationState(),
-            onMessageClicked = {},
-            onTimestampClicked = {},
             onUserDataClicked = {},
             onLinkClicked = {},
+            onMessageClicked = {},
             onMessageLongClicked = {},
+            onTimestampClicked = {},
+            onSwipeToReply = {},
             onReactionClicked = { _, _ -> },
             onReactionLongClicked = { _, _ -> },
             onMoreReactionsClicked = {},
-            onSwipeToReply = {},
             onReadReceiptClick = {},
             forceJumpToBottomVisibility = true,
         )
