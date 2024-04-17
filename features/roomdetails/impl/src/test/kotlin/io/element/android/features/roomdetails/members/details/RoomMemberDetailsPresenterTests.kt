@@ -37,6 +37,7 @@ import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_THROWABLE
 import io.element.android.libraries.matrix.test.FakeMatrixClient
+import io.element.android.libraries.matrix.ui.components.aMatrixUser
 import io.element.android.tests.testutils.WarmUpRule
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -117,6 +118,33 @@ class RoomMemberDetailsPresenterTests {
             val initialState = awaitFirstItem()
             assertThat(initialState.userName).isEqualTo(roomMember.displayName)
             assertThat(initialState.avatarUrl).isEqualTo(roomMember.avatarUrl)
+
+            ensureAllEventsConsumed()
+        }
+    }
+
+    @Test
+    fun `present - will fallback to user profile if user is not a member of the room`() = runTest {
+        val bobProfile = aMatrixUser("@bob:server.org", "Bob", avatarUrl = "anAvatarUrl")
+        val room = aMatrixRoom().apply {
+            givenUserDisplayNameResult(Result.failure(Exception("Not a member!")))
+            givenUserAvatarUrlResult(Result.failure(Exception("Not a member!")))
+        }
+        val client = FakeMatrixClient().apply {
+            givenGetProfileResult(bobProfile.userId, Result.success(bobProfile))
+        }
+        val presenter = createRoomMemberDetailsPresenter(
+            client = client,
+            room = room,
+            roomMemberId = UserId("@bob:server.org")
+        )
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            skipItems(2)
+            val initialState = awaitFirstItem()
+            assertThat(initialState.userName).isEqualTo("Bob")
+            assertThat(initialState.avatarUrl).isEqualTo("anAvatarUrl")
 
             ensureAllEventsConsumed()
         }
