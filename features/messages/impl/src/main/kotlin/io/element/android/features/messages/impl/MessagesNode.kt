@@ -46,7 +46,6 @@ import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.alias.matches
-import io.element.android.libraries.matrix.api.room.roomMembers
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
 import io.element.android.libraries.mediaplayer.api.MediaPlayer
 import io.element.android.services.analytics.api.AnalyticsService
@@ -120,13 +119,9 @@ class MessagesNode @AssistedInject constructor(
     ) {
         when (val permalink = permalinkParser.parse(url)) {
             is PermalinkData.UserLink -> {
-                if (permalink.userId in room.membersStateFlow.value.roomMembers().orEmpty().map { it.userId }) {
-                    // Open the room member profile
-                    callback?.onUserDataClicked(permalink.userId)
-                } else {
-                    // The user is not a member of the room
-                    callback?.onPermalinkClicked(permalink)
-                }
+                // Open the room member profile, it will fallback to
+                // the user profile if the user is not in the room
+                callback?.onUserDataClicked(permalink.userId)
             }
             is PermalinkData.RoomLink -> {
                 handleRoomLinkClicked(permalink)
