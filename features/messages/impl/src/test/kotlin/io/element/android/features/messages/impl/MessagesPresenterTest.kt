@@ -236,7 +236,7 @@ class MessagesPresenterTest {
         val clipboardHelper = FakeClipboardHelper()
         val event = aMessageEvent()
         val matrixRoom = FakeMatrixRoom(
-            permalinkResult = { Result.success("a link") },
+            eventPermalinkResult = { Result.success("a link") },
         )
         val presenter = createMessagesPresenter(
             clipboardHelper = clipboardHelper,

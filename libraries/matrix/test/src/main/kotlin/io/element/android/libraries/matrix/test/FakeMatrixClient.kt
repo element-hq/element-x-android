@@ -29,6 +29,7 @@ import io.element.android.libraries.matrix.api.notificationsettings.Notification
 import io.element.android.libraries.matrix.api.oidc.AccountManagementAction
 import io.element.android.libraries.matrix.api.pusher.PushersService
 import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.MatrixRoomInfo
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
 import io.element.android.libraries.matrix.api.roomdirectory.RoomDirectoryService
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
@@ -51,7 +52,9 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.TestScope
+import java.util.Optional
 
 class FakeMatrixClient(
     override val sessionId: SessionId = A_SESSION_ID,
@@ -94,8 +97,12 @@ class FakeMatrixClient(
     private var setDisplayNameResult: Result<Unit> = Result.success(Unit)
     private var uploadAvatarResult: Result<Unit> = Result.success(Unit)
     private var removeAvatarResult: Result<Unit> = Result.success(Unit)
-    var joinRoomLambda: suspend (RoomId) -> Result<RoomId> = {
+    var joinRoomLambda: (RoomId) -> Result<RoomId> = {
         Result.success(it)
+    }
+
+    var getRoomInfoFlowLambda = { _: RoomId ->
+        flowOf<Optional<MatrixRoomInfo>>(Optional.empty())
     }
 
     override suspend fun getRoom(roomId: RoomId): MatrixRoom? {
@@ -267,4 +274,6 @@ class FakeMatrixClient(
     override suspend fun getRecentlyVisitedRooms(): Result<List<RoomId>> {
         return Result.success(visitedRoomsId)
     }
+
+    override fun getRoomInfoFlow(roomId: RoomId) = getRoomInfoFlowLambda(roomId)
 }

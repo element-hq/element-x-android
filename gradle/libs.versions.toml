@@ -5,7 +5,7 @@
 # Project
 android_gradle_plugin = "8.3.2"
 kotlin = "1.9.23"
-ksp = "1.9.23-1.0.19"
+ksp = "1.9.23-1.0.20"
 firebaseAppDistribution = "4.2.0"
 
 # AndroidX
@@ -15,7 +15,7 @@ constraintlayout = "2.1.4"
 constraintlayout_compose = "1.0.1"
 lifecycle = "2.7.0"
 activity = "1.8.2"
-media3 = "1.3.0"
+media3 = "1.3.1"
 
 # Compose
 compose_bom = "2024.04.00"
@@ -39,7 +39,7 @@ showkase = "1.0.2"
 appyx = "1.4.0"
 sqldelight = "2.0.2"
 wysiwyg = "2.37.0"
-telephoto = "0.9.0"
+telephoto = "0.10.0"
 
 # DI
 dagger = "2.51.1"
@@ -63,7 +63,7 @@ kotlin_gradle_plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", v
 kover_gradle_plugin = { module = "org.jetbrains.kotlinx:kover-gradle-plugin", version.ref = "kover" }
 gms_google_services = "com.google.gms:google-services:4.4.1"
 # https://firebase.google.com/docs/android/setup#available-libraries
-google_firebase_bom = "com.google.firebase:firebase-bom:32.8.0"
+google_firebase_bom = "com.google.firebase:firebase-bom:32.8.1"
 firebase_appdistribution_gradle = { module = "com.google.firebase:firebase-appdistribution-gradle", version.ref = "firebaseAppDistribution" }
 autonomousapps_dependencyanalysis_plugin = { module = "com.autonomousapps:dependency-analysis-gradle-plugin", version.ref = "dependencyAnalysis" }
 
@@ -154,7 +154,7 @@ jsoup = "org.jsoup:jsoup:1.17.2"
 appyx_core = { module = "com.bumble.appyx:core", version.ref = "appyx" }
 molecule-runtime = "app.cash.molecule:molecule-runtime:1.4.2"
 timber = "com.jakewharton.timber:timber:5.0.1"
-matrix_sdk = "org.matrix.rustcomponents:sdk-android:0.2.13"
+matrix_sdk = "org.matrix.rustcomponents:sdk-android:0.2.14"
 matrix_richtexteditor = { module = "io.element.android:wysiwyg", version.ref = "wysiwyg" }
 matrix_richtexteditor_compose = { module = "io.element.android:wysiwyg-compose", version.ref = "wysiwyg" }
 sqldelight-driver-android = { module = "app.cash.sqldelight:android-driver", version.ref = "sqldelight" }

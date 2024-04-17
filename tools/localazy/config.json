@@ -33,7 +33,7 @@
       ]
     },
     {
-      "name" : ":features:invitelist:impl",
+      "name" : ":features:invite:impl",
       "includeRegex" : [
         "screen_invites_.*"
       ]
@@ -234,6 +234,12 @@
       "name" : ":features:roomdirectory:impl",
       "includeRegex" : [
         "screen_room_directory_.*"
+      ]
+    },
+    {
+      "name" : ":features:joinroom:impl",
+      "includeRegex" : [
+        "screen_join_room_.*"
       ]
     }
   ]

@@ -241,12 +241,6 @@
   <string name="invite_friends_text">"Hai, bicaralah dengan saya di %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Rageshake untuk melaporkan kutu"</string>
-  <string name="screen_join_room_join_action">"Gabung dengan ruangan"</string>
-  <string name="screen_join_room_knock_action">"Ketuk untuk bergabung"</string>
-  <string name="screen_join_room_subtitle_knock">"Klik tombol di bawah ini dan administrator kamar akan diberi tahu. Anda akan dapat bergabung dengan percakapan setelah disetujui."</string>
-  <string name="screen_join_room_subtitle_no_preview">"Anda harus menjadi anggota ruangan ini untuk melihat riwayat pesan."</string>
-  <string name="screen_join_room_title_knock">"Ingin bergabung dengan ruangan ini?"</string>
-  <string name="screen_join_room_title_no_preview">"Pratinjau tidak tersedia"</string>
   <string name="screen_media_picker_error_failed_selection">"Gagal memilih media, silakan coba lagi."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Gagal memproses media untuk diunggah, silakan coba lagi."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Gagal mengunggah media, silakan coba lagi."</string>

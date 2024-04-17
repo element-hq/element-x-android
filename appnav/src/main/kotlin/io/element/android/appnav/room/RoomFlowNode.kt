@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright (c) 2024 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,15 +14,13 @@
  * limitations under the License.
  */
 
-@file:OptIn(ExperimentalMaterial3Api::class)
-
 package io.element.android.appnav.room
 
 import android.os.Parcelable
-import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.lifecycleScope
 import com.bumble.appyx.core.modality.BuildContext
@@ -36,102 +34,109 @@ import com.bumble.appyx.navmodel.backstack.operation.newRoot
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
-import io.element.android.features.networkmonitor.api.NetworkMonitor
-import io.element.android.features.networkmonitor.api.NetworkStatus
+import io.element.android.appnav.room.joined.JoinedRoomFlowNode
+import io.element.android.appnav.room.joined.JoinedRoomLoadedFlowNode
+import io.element.android.features.joinroom.api.JoinRoomEntryPoint
+import io.element.android.features.roomdirectory.api.RoomDescription
 import io.element.android.libraries.architecture.BackstackView
 import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.architecture.inputs
+import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.di.SessionScope
+import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
-import kotlinx.coroutines.flow.distinctUntilChanged
+import io.element.android.libraries.matrix.api.room.CurrentUserMembership
+import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.parcelize.Parcelize
+import timber.log.Timber
+import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 @ContributesNode(SessionScope::class)
 class RoomFlowNode @AssistedInject constructor(
     @Assisted val buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
-    loadingRoomStateFlowFactory: LoadingRoomStateFlowFactory,
-    private val networkMonitor: NetworkMonitor,
-) :
-    BaseFlowNode<RoomFlowNode.NavTarget>(
-        backstack = BackStack(
-            initialElement = NavTarget.Loading,
-            savedStateMap = buildContext.savedStateMap,
-        ),
-        buildContext = buildContext,
-        plugins = plugins
-    ) {
+    private val client: MatrixClient,
+    private val roomMembershipObserver: RoomMembershipObserver,
+    private val joinRoomEntryPoint: JoinRoomEntryPoint,
+) : BaseFlowNode<RoomFlowNode.NavTarget>(
+    backstack = BackStack(
+        initialElement = NavTarget.Loading,
+        savedStateMap = buildContext.savedStateMap,
+    ),
+    buildContext = buildContext,
+    plugins = plugins
+) {
     data class Inputs(
         val roomId: RoomId,
-        val initialElement: RoomLoadedFlowNode.NavTarget = RoomLoadedFlowNode.NavTarget.Messages,
+        val roomDescription: Optional<RoomDescription>,
+        val initialElement: RoomNavigationTarget = RoomNavigationTarget.Messages,
     ) : NodeInputs
 
     private val inputs: Inputs = inputs()
-    private val loadingRoomStateStateFlow = loadingRoomStateFlowFactory.create(lifecycleScope, inputs.roomId)
 
     sealed interface NavTarget : Parcelable {
         @Parcelize
         data object Loading : NavTarget
 
         @Parcelize
-        data object Loaded : NavTarget
+        data object JoinRoom : NavTarget
+
+        @Parcelize
+        data object JoinedRoom : NavTarget
     }
 
     override fun onBuilt() {
         super.onBuilt()
-        loadingRoomStateStateFlow
-            .map {
-                it is LoadingRoomState.Loaded
+        client.getRoomInfoFlow(
+            inputs.roomId
+        ).onEach { roomInfo ->
+            Timber.d("Room membership: ${roomInfo.map { it.currentUserMembership }}")
+            if (roomInfo.getOrNull()?.currentUserMembership == CurrentUserMembership.JOINED) {
+                backstack.newRoot(NavTarget.JoinedRoom)
+            } else {
+                backstack.newRoot(NavTarget.JoinRoom)
             }
-            .distinctUntilChanged()
-            .onEach { isLoaded ->
-                if (isLoaded) {
-                    backstack.newRoot(NavTarget.Loaded)
-                } else {
-                    backstack.newRoot(NavTarget.Loading)
-                }
+        }
+            .launchIn(lifecycleScope)
+
+        // When leaving the room from this session only, navigate up.
+        roomMembershipObserver.updates
+            .filter { update -> update.roomId == inputs.roomId && !update.isUserInRoom }
+            .onEach {
+                navigateUp()
             }
             .launchIn(lifecycleScope)
     }
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
         return when (navTarget) {
-            NavTarget.Loaded -> {
-                val roomFlowNodeCallback = plugins<RoomLoadedFlowNode.Callback>()
-                val awaitRoomState = loadingRoomStateStateFlow.value
-                if (awaitRoomState is LoadingRoomState.Loaded) {
-                    val inputs = RoomLoadedFlowNode.Inputs(awaitRoomState.room, initialElement = inputs.initialElement)
-                    createNode<RoomLoadedFlowNode>(buildContext, plugins = listOf(inputs) + roomFlowNodeCallback)
-                } else {
-                    loadingNode(buildContext, this::navigateUp)
-                }
+            NavTarget.Loading -> loadingNode(buildContext)
+            NavTarget.JoinRoom -> {
+                val inputs = JoinRoomEntryPoint.Inputs(inputs.roomId, roomDescription = inputs.roomDescription)
+                joinRoomEntryPoint.createNode(this, buildContext, inputs)
             }
-            NavTarget.Loading -> {
-                loadingNode(buildContext, this::navigateUp)
+            NavTarget.JoinedRoom -> {
+                val roomFlowNodeCallback = plugins<JoinedRoomLoadedFlowNode.Callback>()
+                val inputs = JoinedRoomFlowNode.Inputs(inputs.roomId, initialElement = inputs.initialElement)
+                createNode<JoinedRoomFlowNode>(buildContext, plugins = listOf(inputs) + roomFlowNodeCallback)
             }
         }
     }
 
-    private fun loadingNode(buildContext: BuildContext, onBackClicked: () -> Unit) = node(buildContext) { modifier ->
-        val loadingRoomState by loadingRoomStateStateFlow.collectAsState()
-        val networkStatus by networkMonitor.connectivity.collectAsState()
-        LoadingRoomNodeView(
-            state = loadingRoomState,
-            hasNetworkConnection = networkStatus == NetworkStatus.Online,
-            modifier = modifier,
-            onBackClicked = onBackClicked
-        )
+    private fun loadingNode(buildContext: BuildContext) = node(buildContext) {
+        Box(modifier = it.fillMaxSize(), contentAlignment = Alignment.Center) {
+            CircularProgressIndicator()
+        }
     }
 
     @Composable
     override fun View(modifier: Modifier) {
-        BackstackView(
-            transitionHandler = JumpToEndTransitionHandler(),
-        )
+        BackstackView(transitionHandler = JumpToEndTransitionHandler())
     }
 }

@@ -31,6 +31,7 @@ interface RoomDirectoryEntryPoint : FeatureEntryPoint {
     }
 
     interface Callback : Plugin {
-        fun onOpenRoom(roomId: RoomId)
+        fun onRoomJoined(roomId: RoomId)
+        fun onResultClicked(roomDescription: RoomDescription)
     }
 }

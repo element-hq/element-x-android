@@ -84,7 +84,8 @@ class FakeMatrixRoom(
     override val activeMemberCount: Long = 234L,
     val notificationSettingsService: NotificationSettingsService = FakeNotificationSettingsService(),
     private val matrixTimeline: MatrixTimeline = FakeMatrixTimeline(),
-    private var permalinkResult: () -> Result<String> = { Result.success("link") },
+    private var roomPermalinkResult: () -> Result<String> = { Result.success("room link") },
+    private var eventPermalinkResult: (EventId) -> Result<String> = { Result.success("event link") },
     canRedactOwn: Boolean = false,
     canRedactOther: Boolean = false,
 ) : MatrixRoom {
@@ -182,7 +183,7 @@ class FakeMatrixRoom(
     var removedAvatar: Boolean = false
         private set
 
-    private var leaveRoomError: Throwable? = null
+    var leaveRoomLambda: (() -> Result<Unit>) = { Result.success(Unit) }
 
     private val _roomInfoFlow: MutableSharedFlow<MatrixRoomInfo> = MutableSharedFlow(replay = 1)
     override val roomInfoFlow: Flow<MatrixRoomInfo> = _roomInfoFlow
@@ -278,8 +279,12 @@ class FakeMatrixRoom(
         return cancelSendResult
     }
 
+    override suspend fun getPermalink(): Result<String> {
+        return roomPermalinkResult()
+    }
+
     override suspend fun getPermalinkFor(eventId: EventId): Result<String> {
-        return permalinkResult()
+        return eventPermalinkResult(eventId)
     }
 
     override suspend fun editMessage(
@@ -315,8 +320,9 @@ class FakeMatrixRoom(
         return Result.success(Unit)
     }
 
-    override suspend fun leave(): Result<Unit> =
-        leaveRoomError?.let { Result.failure(it) } ?: Result.success(Unit)
+    override suspend fun leave(): Result<Unit> {
+        return leaveRoomLambda()
+    }
 
     override suspend fun join(): Result<Unit> {
         return joinRoomResult
@@ -541,10 +547,6 @@ class FakeMatrixRoom(
     ): Result<String> = generateWidgetWebViewUrlResult
 
     override fun getWidgetDriver(widgetSettings: MatrixWidgetSettings): Result<MatrixWidgetDriver> = getWidgetDriverResult
-
-    fun givenLeaveRoomError(throwable: Throwable?) {
-        this.leaveRoomError = throwable
-    }
 
     fun givenRoomMembersState(state: MatrixRoomMembersState) {
         membersStateFlow.value = state

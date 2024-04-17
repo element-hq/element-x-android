@@ -49,7 +49,7 @@
   <string name="screen_room_details_error_loading_notification_settings">"При загрузке настроек уведомлений произошла ошибка."</string>
   <string name="screen_room_details_error_muting">"Не удалось отключить звук в этой комнате, попробуйте еще раз."</string>
   <string name="screen_room_details_error_unmuting">"Не удалось включить звук в эту комнату, попробуйте еще раз."</string>
-  <string name="screen_room_details_invite_people_title">"Пригласить друзей"</string>
+  <string name="screen_room_details_invite_people_title">"Пригласить в комнату"</string>
   <string name="screen_room_details_leave_conversation_title">"Покинуть беседу"</string>
   <string name="screen_room_details_leave_room_title">"Покинуть комнату"</string>
   <string name="screen_room_details_notification_mode_custom">"Пользовательский"</string>

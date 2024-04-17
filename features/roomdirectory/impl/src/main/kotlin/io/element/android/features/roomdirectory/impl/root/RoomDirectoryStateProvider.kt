@@ -19,8 +19,6 @@ package io.element.android.features.roomdirectory.impl.root
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.roomdirectory.api.RoomDescription
 import io.element.android.libraries.architecture.AsyncAction
-import io.element.android.libraries.designsystem.components.avatar.AvatarData
-import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.core.RoomId
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -70,26 +68,20 @@ fun aRoomDescriptionList(): ImmutableList<RoomDescription> {
         RoomDescription(
             roomId = RoomId("!exa:matrix.org"),
             name = "Element X Android",
-            description = "Element X is a secure, private and decentralized messenger.",
-            avatarData = AvatarData(
-                id = "!exa:matrix.org",
-                name = "Element X Android",
-                url = null,
-                size = AvatarSize.RoomDirectoryItem
-            ),
-            canBeJoined = true,
+            topic = "Element X is a secure, private and decentralized messenger.",
+            alias = "#element-x-android:matrix.org",
+            avatarUrl = null,
+            joinRule = RoomDescription.JoinRule.PUBLIC,
+            numberOfMembers = 2765,
         ),
         RoomDescription(
             roomId = RoomId("!exi:matrix.org"),
             name = "Element X iOS",
-            description = "Element X is a secure, private and decentralized messenger.",
-            avatarData = AvatarData(
-                id = "!exi:matrix.org",
-                name = "Element X iOS",
-                url = null,
-                size = AvatarSize.RoomDirectoryItem
-            ),
-            canBeJoined = false,
+            topic = "Element X is a secure, private and decentralized messenger.",
+            alias = "#element-x-ios:matrix.org",
+            avatarUrl = null,
+            joinRule = RoomDescription.JoinRule.UNKNOWN,
+            numberOfMembers = 356,
         )
     )
 }

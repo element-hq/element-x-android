@@ -203,6 +203,7 @@
   <string name="common_settings">"Nastavenia"</string>
   <string name="common_shared_location">"Zdieľaná poloha"</string>
   <string name="common_signing_out">"Odhlasovanie"</string>
+  <string name="common_something_went_wrong">"Niečo sa pokazilo"</string>
   <string name="common_starting_chat">"Spustenie konverzácie…"</string>
   <string name="common_sticker">"Nálepka"</string>
   <string name="common_success">"Úspech"</string>
@@ -248,12 +249,6 @@
   <string name="invite_friends_text">"Ahoj, porozprávajte sa so mnou na %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Zúrivo potriasť pre nahlásenie chyby"</string>
-  <string name="screen_join_room_join_action">"Pripojiť sa do miestnosti"</string>
-  <string name="screen_join_room_knock_action">"Zaklopaním sa pripojíte"</string>
-  <string name="screen_join_room_subtitle_knock">"Kliknite na tlačidlo nižšie a správca miestnosti bude informovaný. Po schválení sa budete môcť pripojiť ku konverzácii."</string>
-  <string name="screen_join_room_subtitle_no_preview">"Ak chcete zobraziť históriu správ, musíte byť členom tejto miestnosti."</string>
-  <string name="screen_join_room_title_knock">"Chcete sa pripojiť do tejto miestnosti?"</string>
-  <string name="screen_join_room_title_no_preview">"Náhľad nie je k dispozícii"</string>
   <string name="screen_media_picker_error_failed_selection">"Nepodarilo sa vybrať médium, skúste to prosím znova."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Nepodarilo sa spracovať médiá na odoslanie, skúste to prosím znova."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Nepodarilo sa nahrať médiá, skúste to prosím znova."</string>

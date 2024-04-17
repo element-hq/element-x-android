@@ -22,5 +22,6 @@ import io.element.android.libraries.matrix.api.core.UserId
 sealed interface Mention {
     data class User(val userId: UserId) : Mention
     data object AtRoom : Mention
-    data class Room(val roomId: RoomId?, val roomAlias: String?) : Mention
+    data class Room(val roomId: RoomId) : Mention
+    data class RoomAlias(val roomAlias: String?) : Mention
 }

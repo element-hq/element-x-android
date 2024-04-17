@@ -20,7 +20,7 @@ import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import io.element.android.features.invitelist.test.FakeSeenInvitesStore
+import io.element.android.features.invite.test.FakeSeenInvitesStore
 import io.element.android.features.roomlist.impl.InvitesState
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID_2
