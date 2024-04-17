@@ -16,6 +16,7 @@
 
 package io.element.android.features.roomlist.impl
 
+import androidx.annotation.VisibleForTesting
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
@@ -74,7 +75,6 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.takeWhile
 import kotlinx.coroutines.launch
-import org.jetbrains.annotations.VisibleForTesting
 import javax.inject.Inject
 
 private const val EXTENDED_RANGE_SIZE = 40
@@ -225,7 +225,7 @@ class RoomListPresenter @Inject constructor(
         val initialState = RoomListState.ContextMenu.Shown(
             roomId = event.roomListRoomSummary.roomId,
             roomName = event.roomListRoomSummary.name,
-            isDm = event.roomListRoomSummary.isDirect,
+            isDm = event.roomListRoomSummary.isDm,
             isFavorite = event.roomListRoomSummary.isFavorite,
             markAsUnreadFeatureFlagEnabled = featureFlagService.isFeatureEnabled(FeatureFlags.MarkAsUnread),
             hasNewContent = event.roomListRoomSummary.hasNewContent

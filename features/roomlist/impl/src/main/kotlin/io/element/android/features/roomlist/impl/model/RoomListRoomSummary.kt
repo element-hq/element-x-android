@@ -38,6 +38,7 @@ data class RoomListRoomSummary(
     val userDefinedNotificationMode: RoomNotificationMode?,
     val hasRoomCall: Boolean,
     val isDirect: Boolean,
+    val isDm: Boolean,
     val isFavorite: Boolean,
     val inviteSender: InviteSender?,
     ) {

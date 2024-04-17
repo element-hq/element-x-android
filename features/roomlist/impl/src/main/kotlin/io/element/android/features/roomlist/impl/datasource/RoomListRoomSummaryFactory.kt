@@ -52,6 +52,7 @@ class RoomListRoomSummaryFactory @Inject constructor(
                 isDirect = false,
                 isFavorite = false,
                 inviteSender = null,
+                isDm = false,
                 canonicalAlias = null,
             )
         }
@@ -94,6 +95,7 @@ class RoomListRoomSummaryFactory @Inject constructor(
                     ),
                 )
             },
+            isDm = roomSummary.details.isDm,
             canonicalAlias = roomSummary.details.canonicalAlias,
             displayType = if (roomSummary.details.currentUserMembership == CurrentUserMembership.INVITED) {
                 RoomSummaryDisplayType.INVITE

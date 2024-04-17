@@ -84,26 +84,33 @@ open class RoomListRoomSummaryProvider : PreviewParameterProvider<RoomListRoomSu
             listOf(
                 aRoomListRoomSummary(
                     displayType = RoomSummaryDisplayType.INVITE,
-                    inviteSender = InviteSender(
-                        userId = UserId("@alice:matrix.org"),
+                    inviteSender = anInviteSender(
+                        userId = "@alice:matrix.org",
                         displayName = "Alice",
-                        avatarData = AvatarData("@alice:matrix.org", "Alice", size = AvatarSize.InviteSender),
                     ),
                     canonicalAlias = "#alias:matrix.org",
                 ),
                 aRoomListRoomSummary(
                     name = "Bob",
                     displayType = RoomSummaryDisplayType.INVITE,
-                    inviteSender = InviteSender(
-                        userId = UserId("@bob:matrix.org"),
+                    inviteSender = anInviteSender(
+                        userId = "@bob:matrix.org",
                         displayName = "Bob",
-                        avatarData = AvatarData("@bob:matrix.org", "Bob", size = AvatarSize.InviteSender),
                     ),
                     isDirect = true,
                 )
             ),
         ).flatten()
 }
+
+internal fun anInviteSender(
+    userId: String,
+    displayName: String,
+) = InviteSender(
+    userId = UserId(userId),
+    displayName = displayName,
+    avatarData = AvatarData(userId, displayName, size = AvatarSize.InviteSender),
+)
 
 internal fun aRoomListRoomSummary(
     id: String = "!roomId:domain",
@@ -118,6 +125,7 @@ internal fun aRoomListRoomSummary(
     hasRoomCall: Boolean = false,
     avatarData: AvatarData = AvatarData(id, name, size = AvatarSize.RoomListItem),
     isDirect: Boolean = false,
+    isDm: Boolean = false,
     isFavorite: Boolean = false,
     inviteSender: InviteSender? = null,
     displayType: RoomSummaryDisplayType = RoomSummaryDisplayType.ROOM,
@@ -136,6 +144,7 @@ internal fun aRoomListRoomSummary(
     userDefinedNotificationMode = notificationMode,
     hasRoomCall = hasRoomCall,
     isDirect = isDirect,
+    isDm = isDm,
     isFavorite = isFavorite,
     inviteSender = inviteSender,
     displayType = displayType,
