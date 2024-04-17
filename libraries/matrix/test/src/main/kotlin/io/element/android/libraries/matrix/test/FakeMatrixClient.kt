@@ -281,7 +281,7 @@ class FakeMatrixClient(
         return Result.success(Unit)
     }
 
-    override suspend fun resolveRoomAlias(roomAlias: RoomAlias): Result<RoomId> {
+    override suspend fun resolveRoomAlias(roomAlias: RoomAlias): Result<RoomId> = simulateLongTask {
         return resolveRoomAliasResult(roomAlias)
     }
 

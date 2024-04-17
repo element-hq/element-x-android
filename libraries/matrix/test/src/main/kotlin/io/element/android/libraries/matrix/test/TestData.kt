@@ -18,6 +18,7 @@ package io.element.android.libraries.matrix.test
 
 import io.element.android.libraries.matrix.api.auth.MatrixHomeServerDetails
 import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.SpaceId
@@ -50,6 +51,7 @@ val A_THREAD_ID = ThreadId("\$aThreadId")
 val A_THREAD_ID_2 = ThreadId("\$aThreadId2")
 val AN_EVENT_ID = EventId("\$anEventId")
 val AN_EVENT_ID_2 = EventId("\$anEventId2")
+val A_ROOM_ALIAS = RoomAlias("#alias1:domain")
 val A_TRANSACTION_ID = TransactionId("aTransactionId")
 const val A_UNIQUE_ID = "aUniqueId"
 
