@@ -19,6 +19,7 @@ package io.element.android.features.roomlist.impl.model
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
+import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
@@ -88,7 +89,7 @@ open class RoomListRoomSummaryProvider : PreviewParameterProvider<RoomListRoomSu
                         userId = "@alice:matrix.org",
                         displayName = "Alice",
                     ),
-                    canonicalAlias = "#alias:matrix.org",
+                    canonicalAlias = RoomAlias("#alias:matrix.org"),
                 ),
                 aRoomListRoomSummary(
                     name = "Bob",
@@ -129,7 +130,7 @@ internal fun aRoomListRoomSummary(
     isFavorite: Boolean = false,
     inviteSender: InviteSender? = null,
     displayType: RoomSummaryDisplayType = RoomSummaryDisplayType.ROOM,
-    canonicalAlias: String? = null,
+    canonicalAlias: RoomAlias? = null,
 ) = RoomListRoomSummary(
     id = id,
     roomId = RoomId(id),
