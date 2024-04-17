@@ -147,7 +147,7 @@ class RoomFlowNode @AssistedInject constructor(
             is NavTarget.Resolving -> {
                 val callback = object : RoomAliasResolverEntryPoint.Callback {
                     override fun onAliasResolved(roomId: RoomId) {
-                        backstack.newRoot(NavTarget.JoinRoom(roomId))
+                        subscribeToRoomInfoFlow(roomId)
                     }
                 }
                 val params = RoomAliasResolverEntryPoint.Params(navTarget.roomAlias)
