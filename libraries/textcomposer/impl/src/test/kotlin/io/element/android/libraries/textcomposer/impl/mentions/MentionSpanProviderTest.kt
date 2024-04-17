@@ -82,10 +82,10 @@ class MentionSpanProviderTest {
     fun `getting mention span for @room should return a MentionSpan with normal colors`() {
         permalinkParser.givenResult(
             PermalinkData.RoomLink(
-                roomIdOrAlias = RoomAlias("#").toRoomIdOrAlias(),
+                roomIdOrAlias = RoomAlias("#room:matrix.org").toRoomIdOrAlias(),
             )
         )
-        val mentionSpan = mentionSpanProvider.getMentionSpanFor("@room", "#")
+        val mentionSpan = mentionSpanProvider.getMentionSpanFor("@room", "#room:matrix.org")
         assertThat(mentionSpan.backgroundColor).isEqualTo(otherColor)
         assertThat(mentionSpan.textColor).isEqualTo(otherColor)
     }
