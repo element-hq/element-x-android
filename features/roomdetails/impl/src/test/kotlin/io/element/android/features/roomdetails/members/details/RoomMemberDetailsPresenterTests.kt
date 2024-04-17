@@ -31,9 +31,9 @@ import io.element.android.features.roomdetails.impl.members.details.RoomMemberDe
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
-import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_THROWABLE
 import io.element.android.libraries.matrix.test.FakeMatrixClient
@@ -59,7 +59,7 @@ class RoomMemberDetailsPresenterTests {
         }
         val presenter = createRoomMemberDetailsPresenter(
             room = room,
-            roomMember = roomMember
+            roomMemberId = roomMember.userId
         )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -86,7 +86,7 @@ class RoomMemberDetailsPresenterTests {
         }
         val presenter = createRoomMemberDetailsPresenter(
             room = room,
-            roomMember = roomMember
+            roomMemberId = roomMember.userId
         )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -109,7 +109,7 @@ class RoomMemberDetailsPresenterTests {
         }
         val presenter = createRoomMemberDetailsPresenter(
             room = room,
-            roomMember = roomMember
+            roomMemberId = roomMember.userId
         )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -147,7 +147,7 @@ class RoomMemberDetailsPresenterTests {
         val roomMember = aRoomMember()
         val presenter = createRoomMemberDetailsPresenter(
             client = client,
-            roomMember = roomMember,
+            roomMemberId = roomMember.userId
         )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -245,11 +245,11 @@ class RoomMemberDetailsPresenterTests {
     private fun createRoomMemberDetailsPresenter(
         client: MatrixClient = FakeMatrixClient(),
         room: MatrixRoom = aMatrixRoom(),
-        roomMember: RoomMember = aRoomMember(),
+        roomMemberId: UserId = UserId("@alice:server.org"),
         startDMAction: StartDMAction = FakeStartDMAction()
     ): RoomMemberDetailsPresenter {
         return RoomMemberDetailsPresenter(
-            roomMemberId = roomMember.userId,
+            roomMemberId = roomMemberId,
             client = client,
             room = room,
             startDMAction = startDMAction
