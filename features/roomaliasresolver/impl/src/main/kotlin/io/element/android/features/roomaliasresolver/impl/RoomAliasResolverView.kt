@@ -32,9 +32,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import io.element.android.compound.theme.ElementTheme
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.atomic.atoms.PlaceholderAtom
+import io.element.android.libraries.designsystem.atomic.atoms.RoomPreviewTitleAtom
 import io.element.android.libraries.designsystem.atomic.organisms.RoomPreviewOrganism
 import io.element.android.libraries.designsystem.atomic.pages.HeaderFooterPage
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
@@ -119,9 +119,9 @@ private fun RoomAliasResolverContent(
             PlaceholderAtom(width = AvatarSize.RoomHeader.dp, height = AvatarSize.RoomHeader.dp)
         },
         title = {
+            RoomPreviewTitleAtom(state.roomAlias.value)
         },
         subtitle = {
-            Title(state.roomAlias.value)
         },
         description = {
             if (state.resolveState.isFailure()) {
@@ -134,17 +134,6 @@ private fun RoomAliasResolverContent(
         },
         memberCount = {
         }
-    )
-}
-
-@Composable
-private fun Title(title: String, modifier: Modifier = Modifier) {
-    Text(
-        modifier = modifier,
-        text = title,
-        style = ElementTheme.typography.fontHeadingMdBold,
-        textAlign = TextAlign.Center,
-        color = ElementTheme.colors.textPrimary,
     )
 }
 
