@@ -18,6 +18,7 @@ package io.element.android.libraries.designsystem.atomic.molecules
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
@@ -28,16 +29,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
+import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
 
 @Composable
-fun RoomPreviewMembersCountMolecule(memberCount: Long) {
+fun RoomPreviewMembersCountMolecule(
+    memberCount: Long,
+    modifier: Modifier = Modifier,
+) {
     Row(
-        modifier = Modifier
+        modifier = modifier
             .background(color = ElementTheme.colors.bgSubtleSecondary, shape = CircleShape)
             .widthIn(min = 48.dp)
-            .padding(all = 2.dp),
+            .padding(start = 2.dp, end = 6.dp, top = 2.dp, bottom = 2.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(4.dp)
     ) {
@@ -51,5 +57,18 @@ fun RoomPreviewMembersCountMolecule(memberCount: Long) {
             style = ElementTheme.typography.fontBodySmMedium,
             color = ElementTheme.colors.textSecondary,
         )
+    }
+}
+
+@PreviewsDayNight
+@Composable
+internal fun RoomPreviewMembersCountMoleculePreview() = ElementPreview {
+    Column(
+        modifier = Modifier.padding(8.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+    ) {
+        RoomPreviewMembersCountMolecule(memberCount = 1)
+        RoomPreviewMembersCountMolecule(memberCount = 888)
+        RoomPreviewMembersCountMolecule(memberCount = 123456)
     }
 }
