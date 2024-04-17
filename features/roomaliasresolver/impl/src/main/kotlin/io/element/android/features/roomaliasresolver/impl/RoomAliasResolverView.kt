@@ -126,7 +126,7 @@ private fun RoomAliasResolverContent(
         description = {
             if (state.resolveState.isFailure()) {
                 Text(
-                    text = "Failed to resolve room alias",
+                    text = stringResource(id = R.string.screen_room_alias_resolver_resolve_alias_failure),
                     textAlign = TextAlign.Center,
                     color = MaterialTheme.colorScheme.error,
                 )
