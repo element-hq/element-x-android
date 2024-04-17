@@ -23,7 +23,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
@@ -39,7 +38,6 @@ import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.room.MatrixRoomInfo
 import io.element.android.libraries.matrix.api.room.preview.RoomPreview
-import kotlinx.coroutines.launch
 import java.util.Optional
 
 class JoinRoomPresenter @AssistedInject constructor(
@@ -59,7 +57,6 @@ class JoinRoomPresenter @AssistedInject constructor(
 
     @Composable
     override fun present(): JoinRoomState {
-        val coroutineScope = rememberCoroutineScope()
         var retryCount by remember { mutableIntStateOf(0) }
         val roomInfo by matrixClient.getRoomInfoFlow(roomId).collectAsState(initial = Optional.empty())
         val contentState by produceState<ContentState>(
@@ -67,28 +64,26 @@ class JoinRoomPresenter @AssistedInject constructor(
             key1 = roomInfo,
             key2 = retryCount,
         ) {
-            value = when {
+            when {
                 roomInfo.isPresent -> {
-                    roomInfo.get().toContentState()
+                    value = roomInfo.get().toContentState()
                 }
                 roomDescription.isPresent -> {
-                    roomDescription.get().toContentState()
+                    value = roomDescription.get().toContentState()
                 }
                 else -> {
-                    coroutineScope.launch {
-                        val result = matrixClient.getRoomPreview(roomId.toRoomIdOrAlias())
-                        value = result.fold(
-                            onSuccess = { it.toContentState() },
-                            onFailure = { throwable ->
-                                if (throwable.message?.contains("403") == true) {
-                                    ContentState.UnknownRoom(roomIdOrAlias)
-                                } else {
-                                    ContentState.Failure(roomIdOrAlias, throwable)
-                                }
+                    value = ContentState.Loading(roomIdOrAlias)
+                    val result = matrixClient.getRoomPreview(roomId.toRoomIdOrAlias())
+                    value = result.fold(
+                        onSuccess = { it.toContentState() },
+                        onFailure = { throwable ->
+                            if (throwable.message?.contains("403") == true) {
+                                ContentState.UnknownRoom(roomIdOrAlias)
+                            } else {
+                                ContentState.Failure(roomIdOrAlias, throwable)
                             }
-                        )
-                    }
-                    ContentState.Loading(roomIdOrAlias)
+                        }
+                    )
                 }
             }
         }
