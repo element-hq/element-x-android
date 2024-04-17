@@ -1,3 +1,20 @@
+Changes in Element X v0.4.10 (2024-04-17)
+=========================================
+
+Matrix Rust SDK 0.2.14
+
+Features ✨
+----------
+ - Rework room navigation to handle unknown room and prepare work on permalink. ([#2695](https://github.com/element-hq/element-x-android/issues/2695))
+
+Other changes
+-------------
+ - Encrypt new session data with a passphrase ([#2703](https://github.com/element-hq/element-x-android/issues/2703))
+ - Use sdk API to build permalinks ([#2708](https://github.com/element-hq/element-x-android/issues/2708))
+ - Parse permalink using parseMatrixEntityFrom from the SDK ([#2709](https://github.com/element-hq/element-x-android/issues/2709))
+ - Fix compile for forks that use the `noop` analytics module ([#2698](https://github.com/element-hq/element-x-android/issues/2698))
+
+
 Changes in Element X v0.4.9 (2024-04-12)
 ========================================
 
