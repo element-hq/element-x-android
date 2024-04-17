@@ -282,11 +282,11 @@ class FakeMatrixClient(
     }
 
     override suspend fun resolveRoomAlias(roomAlias: RoomAlias): Result<RoomId> = simulateLongTask {
-        return resolveRoomAliasResult(roomAlias)
+        resolveRoomAliasResult(roomAlias)
     }
 
-    override suspend fun getRoomPreview(roomIdOrAlias: RoomIdOrAlias): Result<RoomPreview> {
-        return getRoomPreviewResult(roomIdOrAlias)
+    override suspend fun getRoomPreview(roomIdOrAlias: RoomIdOrAlias): Result<RoomPreview> = simulateLongTask {
+        getRoomPreviewResult(roomIdOrAlias)
     }
 
     override suspend fun getRecentlyVisitedRooms(): Result<List<RoomId>> {
