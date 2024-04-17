@@ -21,7 +21,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
@@ -37,6 +36,7 @@ import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.room.getRoomMemberAsState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -60,6 +60,7 @@ class RoomMemberDetailsPresenter @AssistedInject constructor(
         val coroutineScope = rememberCoroutineScope()
         var confirmationDialog by remember { mutableStateOf<ConfirmationDialog?>(null) }
         val roomMember by room.getRoomMemberAsState(roomMemberId)
+        var userProfile by remember { mutableStateOf<MatrixUser?>(null) }
         val startDmActionState: MutableState<AsyncAction<RoomId>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
         val isBlocked: MutableState<AsyncData<Boolean>> = remember { mutableStateOf(AsyncData.Uninitialized) }
         LaunchedEffect(Unit) {
@@ -73,6 +74,9 @@ class RoomMemberDetailsPresenter @AssistedInject constructor(
             // Update room member info when opening this screen
             // We don't need to assign the result as it will be automatically propagated by `room.getRoomMemberAsState`
             room.getUpdatedMember(roomMemberId)
+        }
+        LaunchedEffect(Unit) {
+            userProfile = client.getProfile(roomMemberId).getOrNull()
         }
 
         fun handleEvents(event: RoomMemberDetailsEvents) {
@@ -108,16 +112,26 @@ class RoomMemberDetailsPresenter @AssistedInject constructor(
             }
         }
 
-        val userName by produceState(initialValue = roomMember?.displayName) {
-            room.userDisplayName(roomMemberId).onSuccess { displayName ->
-                if (displayName != null) value = displayName
-            }
+        var userName: String? by remember { mutableStateOf(roomMember?.displayName ?: userProfile?.displayName) }
+        LaunchedEffect(roomMember, userProfile) {
+            userName = room.userDisplayName(roomMemberId)
+                .fold(
+                    onSuccess = { it },
+                    onFailure = {
+                        // Fallback to user profile
+                        userProfile?.displayName
+                    })
         }
 
-        val userAvatar by produceState(initialValue = roomMember?.avatarUrl) {
-            room.userAvatarUrl(roomMemberId).onSuccess { avatarUrl ->
-                if (avatarUrl != null) value = avatarUrl
-            }
+        var userAvatar: String? by remember { mutableStateOf(roomMember?.avatarUrl ?: userProfile?.avatarUrl) }
+        LaunchedEffect(roomMember, userProfile) {
+            userAvatar = room.userAvatarUrl(roomMemberId)
+                .fold(
+                    onSuccess = { it },
+                    onFailure = {
+                        // Fallback to user profile
+                        userProfile?.avatarUrl
+                    })
         }
 
         return RoomMemberDetailsState(
@@ -127,7 +141,7 @@ class RoomMemberDetailsPresenter @AssistedInject constructor(
             isBlocked = isBlocked.value,
             startDmActionState = startDmActionState.value,
             displayConfirmationDialog = confirmationDialog,
-            isCurrentUser = client.isMe(roomMember?.userId),
+            isCurrentUser = client.isMe(roomMemberId),
             eventSink = ::handleEvents
         )
     }
