@@ -213,6 +213,25 @@ class RoomMemberDetailsPresenterTests {
     }
 
     @Test
+    fun `present - UnblockUser with error`() = runTest {
+        val matrixClient = FakeMatrixClient()
+        matrixClient.givenUnignoreUserResult(Result.failure(A_THROWABLE))
+        val presenter = createRoomMemberDetailsPresenter(client = matrixClient)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitFirstItem()
+            initialState.eventSink(RoomMemberDetailsEvents.UnblockUser(needsConfirmation = false))
+            assertThat(awaitItem().isBlocked.isLoading()).isTrue()
+            val errorState = awaitItem()
+            assertThat(errorState.isBlocked.errorOrNull()).isEqualTo(A_THROWABLE)
+            // Clear error
+            initialState.eventSink(RoomMemberDetailsEvents.ClearBlockUserError)
+            assertThat(awaitItem().isBlocked).isEqualTo(AsyncData.Success(true))
+        }
+    }
+
+    @Test
     fun `present - UnblockUser needing confirmation displays confirmation dialog`() = runTest {
         val presenter = createRoomMemberDetailsPresenter()
         moleculeFlow(RecompositionMode.Immediate) {
