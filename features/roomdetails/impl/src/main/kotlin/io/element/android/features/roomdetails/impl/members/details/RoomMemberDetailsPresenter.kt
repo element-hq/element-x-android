@@ -39,6 +39,10 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.ui.room.getRoomMemberAsState
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 class RoomMemberDetailsPresenter @AssistedInject constructor(
@@ -57,14 +61,13 @@ class RoomMemberDetailsPresenter @AssistedInject constructor(
         var confirmationDialog by remember { mutableStateOf<ConfirmationDialog?>(null) }
         val roomMember by room.getRoomMemberAsState(roomMemberId)
         val startDmActionState: MutableState<AsyncAction<RoomId>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
-        // the room member is not really live...
-        val isBlocked: MutableState<AsyncData<Boolean>> = remember(roomMember) {
-            val isIgnored = roomMember?.isIgnored
-            if (isIgnored == null) {
-                mutableStateOf(AsyncData.Uninitialized)
-            } else {
-                mutableStateOf(AsyncData.Success(isIgnored))
-            }
+        val isBlocked: MutableState<AsyncData<Boolean>> = remember { mutableStateOf(AsyncData.Uninitialized) }
+        LaunchedEffect(Unit) {
+            client.ignoredUsersFlow
+                .map { ignoredUsers -> roomMemberId in ignoredUsers }
+                .distinctUntilChanged()
+                .onEach { isBlocked.value = AsyncData.Success(it) }
+                .launchIn(this)
         }
         LaunchedEffect(Unit) {
             // Update room member info when opening this screen
@@ -132,28 +135,18 @@ class RoomMemberDetailsPresenter @AssistedInject constructor(
     private fun CoroutineScope.blockUser(userId: UserId, isBlockedState: MutableState<AsyncData<Boolean>>) = launch {
         isBlockedState.value = AsyncData.Loading(false)
         client.ignoreUser(userId)
-            .fold(
-                onSuccess = {
-                    isBlockedState.value = AsyncData.Success(true)
-                    room.getUpdatedMember(userId)
-                },
-                onFailure = {
-                    isBlockedState.value = AsyncData.Failure(it, false)
-                }
-            )
+            .onFailure {
+                isBlockedState.value = AsyncData.Failure(it, false)
+            }
+        // Note: on success, ignoredUserList will be updated.
     }
 
     private fun CoroutineScope.unblockUser(userId: UserId, isBlockedState: MutableState<AsyncData<Boolean>>) = launch {
         isBlockedState.value = AsyncData.Loading(true)
         client.unignoreUser(userId)
-            .fold(
-                onSuccess = {
-                    isBlockedState.value = AsyncData.Success(false)
-                    room.getUpdatedMember(userId)
-                },
-                onFailure = {
-                    isBlockedState.value = AsyncData.Failure(it, true)
-                }
-            )
+            .onFailure {
+                isBlockedState.value = AsyncData.Failure(it, true)
+            }
+        // Note: on success, ignoredUserList will be updated.
     }
 }
