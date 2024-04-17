@@ -9,7 +9,7 @@ ksp = "1.9.23-1.0.20"
 firebaseAppDistribution = "4.2.0"
 
 # AndroidX
-core = "1.12.0"
+core = "1.13.0"
 datastore = "1.0.0"
 constraintlayout = "2.1.4"
 constraintlayout_compose = "1.0.1"
