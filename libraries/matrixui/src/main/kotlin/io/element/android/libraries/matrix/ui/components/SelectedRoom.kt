@@ -44,6 +44,7 @@ import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Surface
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.api.room.message.RoomMessage
@@ -118,6 +119,7 @@ fun aRoomSummaryDetails(
     numUnreadNotifications: Int = 0,
     isMarkedUnread: Boolean = false,
     isFavorite: Boolean = false,
+    currentUserMembership: CurrentUserMembership = CurrentUserMembership.JOINED,
 ) = RoomSummaryDetails(
     roomId = roomId,
     name = name,
@@ -134,4 +136,5 @@ fun aRoomSummaryDetails(
     numUnreadNotifications = numUnreadNotifications,
     isMarkedUnread = isMarkedUnread,
     isFavorite = isFavorite,
+    currentUserMembership = currentUserMembership,
 )

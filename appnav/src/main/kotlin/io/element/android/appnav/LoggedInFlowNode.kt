@@ -33,7 +33,6 @@ import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
 import com.bumble.appyx.core.plugin.plugins
 import com.bumble.appyx.navmodel.backstack.BackStack
-import com.bumble.appyx.navmodel.backstack.operation.pop
 import com.bumble.appyx.navmodel.backstack.operation.push
 import com.bumble.appyx.navmodel.backstack.operation.replace
 import com.bumble.appyx.navmodel.backstack.operation.singleTop
@@ -48,7 +47,6 @@ import io.element.android.features.createroom.api.CreateRoomEntryPoint
 import io.element.android.features.ftue.api.FtueEntryPoint
 import io.element.android.features.ftue.api.state.FtueService
 import io.element.android.features.ftue.api.state.FtueState
-import io.element.android.features.invite.api.InviteListEntryPoint
 import io.element.android.features.lockscreen.api.LockScreenEntryPoint
 import io.element.android.features.lockscreen.api.LockScreenLockState
 import io.element.android.features.lockscreen.api.LockScreenService
@@ -62,17 +60,13 @@ import io.element.android.features.securebackup.api.SecureBackupEntryPoint
 import io.element.android.libraries.architecture.BackstackView
 import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.architecture.createNode
-import io.element.android.libraries.architecture.waitForChildAttached
-import io.element.android.libraries.deeplink.DeeplinkData
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.MAIN_SPACE
 import io.element.android.libraries.matrix.api.core.RoomId
-import io.element.android.libraries.matrix.api.roomlist.RoomList
 import io.element.android.libraries.matrix.api.sync.SyncState
-import io.element.android.libraries.push.api.notifications.NotificationDrawerManager
 import io.element.android.services.appnavstate.api.AppNavigationStateService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.FlowPreview
@@ -81,7 +75,6 @@ import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import kotlinx.parcelize.Parcelize
 import timber.log.Timber
 import java.util.Optional
@@ -95,11 +88,9 @@ class LoggedInFlowNode @AssistedInject constructor(
     private val createRoomEntryPoint: CreateRoomEntryPoint,
     private val appNavigationStateService: AppNavigationStateService,
     private val secureBackupEntryPoint: SecureBackupEntryPoint,
-    private val inviteListEntryPoint: InviteListEntryPoint,
     private val ftueEntryPoint: FtueEntryPoint,
     private val coroutineScope: CoroutineScope,
     private val networkMonitor: NetworkMonitor,
-    private val notificationDrawerManager: NotificationDrawerManager,
     private val ftueService: FtueService,
     private val lockScreenEntryPoint: LockScreenEntryPoint,
     private val lockScreenStateService: LockScreenService,
@@ -160,23 +151,6 @@ class LoggedInFlowNode @AssistedInject constructor(
             }
         )
         observeSyncStateAndNetworkStatus()
-        observeInvitesLoadingState()
-    }
-
-    private fun observeInvitesLoadingState() {
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                matrixClient.roomListService.invites.loadingState
-                    .collect { inviteState ->
-                        when (inviteState) {
-                            is RoomList.LoadingState.Loaded -> if (inviteState.numberOfRooms == 0) {
-                                backstack.removeLast(NavTarget.InviteList)
-                            }
-                            RoomList.LoadingState.NotLoaded -> Unit
-                        }
-                    }
-            }
-        }
     }
 
     @OptIn(FlowPreview::class)
@@ -234,9 +208,6 @@ class LoggedInFlowNode @AssistedInject constructor(
         ) : NavTarget
 
         @Parcelize
-        data object InviteList : NavTarget
-
-        @Parcelize
         data object Ftue : NavTarget
 
         @Parcelize
@@ -270,10 +241,6 @@ class LoggedInFlowNode @AssistedInject constructor(
 
                     override fun onSessionConfirmRecoveryKeyClicked() {
                         backstack.push(NavTarget.SecureBackup(initialElement = SecureBackupEntryPoint.InitialTarget.EnterRecoveryKey))
-                    }
-
-                    override fun onInvitesClicked() {
-                        backstack.push(NavTarget.InviteList)
                     }
 
                     override fun onRoomSettingsClicked(roomId: RoomId) {
@@ -351,25 +318,6 @@ class LoggedInFlowNode @AssistedInject constructor(
                     .params(SecureBackupEntryPoint.Params(initialElement = navTarget.initialElement))
                     .build()
             }
-            NavTarget.InviteList -> {
-                val callback = object : InviteListEntryPoint.Callback {
-                    override fun onBackClicked() {
-                        backstack.pop()
-                    }
-
-                    override fun onInviteClicked(roomId: RoomId) {
-                        backstack.push(NavTarget.Room(roomId))
-                    }
-
-                    override fun onInviteAccepted(roomId: RoomId) {
-                        backstack.push(NavTarget.Room(roomId))
-                    }
-                }
-
-                inviteListEntryPoint.nodeBuilder(this, buildContext)
-                    .callback(callback)
-                    .build()
-            }
             NavTarget.Ftue -> {
                 ftueEntryPoint.nodeBuilder(this, buildContext)
                     .callback(object : FtueEntryPoint.Callback {
@@ -407,16 +355,6 @@ class LoggedInFlowNode @AssistedInject constructor(
         attachChild<RoomFlowNode> {
             backstack.singleTop(NavTarget.RoomList)
             backstack.push(NavTarget.Room(roomId))
-        }
-    }
-
-    internal suspend fun attachInviteList(deeplinkData: DeeplinkData.InviteList) = withContext(lifecycleScope.coroutineContext) {
-        if (!canShowRoomList()) return@withContext
-        notificationDrawerManager.clearMembershipNotificationForSession(deeplinkData.sessionId)
-        backstack.singleTop(NavTarget.RoomList)
-        backstack.push(NavTarget.InviteList)
-        waitForChildAttached<Node, NavTarget> { navTarget ->
-            navTarget is NavTarget.InviteList
         }
     }
 

@@ -45,6 +45,7 @@ class RoomListFiltersPresenterTests {
                     filterSelectionState(RoomListFilter.People, false),
                     filterSelectionState(RoomListFilter.Rooms, false),
                     filterSelectionState(RoomListFilter.Favourites, false),
+                    filterSelectionState(RoomListFilter.Invites, false),
                 )
             }
             cancelAndIgnoreRemainingEvents()
@@ -84,6 +85,7 @@ class RoomListFiltersPresenterTests {
                     filterSelectionState(RoomListFilter.People, false),
                     filterSelectionState(RoomListFilter.Rooms, false),
                     filterSelectionState(RoomListFilter.Favourites, false),
+                    filterSelectionState(RoomListFilter.Invites, false),
                 ).inOrder()
                 assertThat(state.selectedFilters()).isEmpty()
                 val roomListCurrentFilter = roomListService.allRooms.currentFilter.value as MatrixRoomListFilter.All

@@ -20,12 +20,12 @@ import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Modifier
-import io.element.android.features.invite.impl.DefaultSeenInvitesStore
+import io.element.android.features.invite.impl.response.AcceptDeclineInvitePresenter
+import io.element.android.features.invite.impl.response.AcceptDeclineInviteView
 import io.element.android.features.leaveroom.impl.LeaveRoomPresenterImpl
 import io.element.android.features.networkmonitor.impl.NetworkMonitorImpl
 import io.element.android.features.roomlist.impl.RoomListPresenter
 import io.element.android.features.roomlist.impl.RoomListView
-import io.element.android.features.roomlist.impl.datasource.DefaultInviteStateDataSource
 import io.element.android.features.roomlist.impl.datasource.RoomListDataSource
 import io.element.android.features.roomlist.impl.datasource.RoomListRoomSummaryFactory
 import io.element.android.features.roomlist.impl.filters.RoomListFiltersPresenter
@@ -50,6 +50,7 @@ import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
 import io.element.android.libraries.preferences.impl.store.DefaultSessionPreferencesStore
+import io.element.android.libraries.push.test.notifications.FakeNotificationDrawerManager
 import io.element.android.services.analytics.noop.NoopAnalyticsService
 import io.element.android.services.toolbox.impl.strings.AndroidStringProvider
 import kotlinx.coroutines.launch
@@ -96,7 +97,6 @@ class RoomListScreen(
         client = matrixClient,
         networkMonitor = NetworkMonitorImpl(context, Singleton.appScope),
         snackbarDispatcher = SnackbarDispatcher(),
-        inviteStateDataSource = DefaultInviteStateDataSource(matrixClient, DefaultSeenInvitesStore(context), coroutineDispatchers),
         leaveRoomPresenter = LeaveRoomPresenterImpl(matrixClient, RoomMembershipObserver(), coroutineDispatchers),
         roomListDataSource = RoomListDataSource(
             roomListService = matrixClient.roomListService,
@@ -132,6 +132,11 @@ class RoomListScreen(
             featureFlagService = featureFlagService,
             filterSelectionStrategy = DefaultFilterSelectionStrategy(),
         ),
+        acceptDeclineInvitePresenter = AcceptDeclineInvitePresenter(
+            client = matrixClient,
+            analyticsService = NoopAnalyticsService(),
+            notificationDrawerManager = FakeNotificationDrawerManager(),
+        ),
         analyticsService = NoopAnalyticsService(),
     )
 
@@ -154,11 +159,13 @@ class RoomListScreen(
             onSettingsClicked = {},
             onConfirmRecoveryKeyClicked = {},
             onCreateRoomClicked = {},
-            onInvitesClicked = {},
             onRoomSettingsClicked = {},
             onMenuActionClicked = {},
             onRoomDirectorySearchClicked = {},
             modifier = modifier,
+            acceptDeclineInviteView = {
+                AcceptDeclineInviteView(state = state.acceptDeclineInviteState, onInviteAccepted = {}, onInviteDeclined = {})
+            }
         )
 
         DisposableEffect(Unit) {

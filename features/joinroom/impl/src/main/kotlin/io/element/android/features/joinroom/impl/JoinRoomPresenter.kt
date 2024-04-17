@@ -16,6 +16,7 @@
 
 package io.element.android.features.joinroom.impl
 
+import androidx.annotation.VisibleForTesting
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -31,7 +32,6 @@ import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.room.MatrixRoomInfo
-import org.jetbrains.annotations.VisibleForTesting
 import java.util.Optional
 
 class JoinRoomPresenter @AssistedInject constructor(

@@ -17,6 +17,7 @@
 package io.element.android.libraries.matrix.impl.roomlist
 
 import com.google.common.truth.Truth.assertThat
+import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.roomlist.RoomListFilter
 import io.element.android.libraries.matrix.test.room.aRoomSummaryDetails
 import io.element.android.libraries.matrix.test.room.aRoomSummaryFilled
@@ -54,6 +55,11 @@ class RoomListFilterTests {
             name = "Room to search"
         )
     )
+    private val invitedRoom = aRoomSummaryFilled(
+        aRoomSummaryDetails(
+            currentUserMembership = CurrentUserMembership.INVITED
+        )
+    )
 
     private val roomSummaries = listOf(
         regularRoom,
@@ -61,7 +67,8 @@ class RoomListFilterTests {
         favoriteRoom,
         markedAsUnreadRoom,
         unreadNotificationRoom,
-        roomToSearch
+        roomToSearch,
+        invitedRoom
     )
 
     @Test
@@ -98,6 +105,12 @@ class RoomListFilterTests {
     fun `Room list filter unread`() = runTest {
         val filter = RoomListFilter.Unread
         assertThat(roomSummaries.filter(filter)).containsExactly(markedAsUnreadRoom, unreadNotificationRoom)
+    }
+
+    @Test
+    fun `Room list filter invites`() = runTest {
+        val filter = RoomListFilter.Invite
+        assertThat(roomSummaries.filter(filter)).containsExactly(invitedRoom)
     }
 
     @Test
