@@ -77,7 +77,7 @@ class FakeMatrixClient(
     private val roomDirectoryService: RoomDirectoryService = FakeRoomDirectoryService(),
     private val accountManagementUrlString: Result<String?> = Result.success(null),
     private val resolveRoomAliasResult: (RoomAlias) -> Result<RoomId> = { Result.success(A_ROOM_ID) },
-    private val getRoomPreviewResult: (RoomIdOrAlias) -> Result<RoomPreview> = { TODO("Not implemented") },
+    private val getRoomPreviewResult: (RoomIdOrAlias) -> Result<RoomPreview> = { Result.failure(AN_EXCEPTION) },
 ) : MatrixClient {
     var setDisplayNameCalled: Boolean = false
         private set
