@@ -45,7 +45,7 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
 import io.element.android.libraries.matrix.api.room.MatrixRoom
-import io.element.android.libraries.matrix.api.room.navigation.isSameRoom
+import io.element.android.libraries.matrix.api.room.alias.matches
 import io.element.android.libraries.matrix.api.room.roomMembers
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
 import io.element.android.libraries.mediaplayer.api.MediaPlayer
@@ -139,7 +139,7 @@ class MessagesNode @AssistedInject constructor(
     }
 
     private fun handleRoomLinkClicked(roomLink: PermalinkData.RoomLink) {
-        if (room.isSameRoom(roomLink.roomIdOrAlias)) {
+        if (room.matches(roomLink.roomIdOrAlias)) {
             if (roomLink.eventId != null) {
                 // TODO Handle navigation to the Event
                 context.toast("TODO Handle navigation to the Event ${roomLink.eventId}")
