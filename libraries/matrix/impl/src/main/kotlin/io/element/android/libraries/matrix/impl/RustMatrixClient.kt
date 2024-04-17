@@ -464,6 +464,7 @@ class RustMatrixClient(
         }
     }
 
+    @Suppress("TooGenericExceptionThrown")
     override suspend fun resolveRoomAlias(roomAlias: RoomAlias): Result<RoomId> = withContext(sessionDispatcher) {
         runCatching {
             // TODO Waiting for SDK to be released
@@ -472,6 +473,7 @@ class RustMatrixClient(
         }
     }
 
+    @Suppress("TooGenericExceptionThrown")
     override suspend fun getRoomPreview(roomIdOrAlias: RoomIdOrAlias): Result<RoomPreview> = withContext(sessionDispatcher) {
         runCatching {
             // TODO Waiting for SDK to be released
