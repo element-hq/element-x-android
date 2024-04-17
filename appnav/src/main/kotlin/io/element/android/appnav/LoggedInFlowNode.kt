@@ -274,25 +274,23 @@ class LoggedInFlowNode @AssistedInject constructor(
                     }
 
                     override fun onPermalinkClicked(data: PermalinkData) {
-                        coroutineScope.launch {
-                            when (data) {
-                                is PermalinkData.UserLink -> {
-                                    // FIXME Add a user profile screen.
-                                    Timber.e("User link clicked: ${data.userId}. TODO Add a user profile screen")
-                                }
-                                is PermalinkData.RoomLink -> {
-                                    backstack.push(
-                                        NavTarget.Room(
-                                            data.roomIdOrAlias,
-                                            initialElement = RoomNavigationTarget.Messages(data.eventId),
-                                            // TODO Use the viaParameters
-                                        )
+                        when (data) {
+                            is PermalinkData.UserLink -> {
+                                // FIXME Add a user profile screen.
+                                Timber.e("User link clicked: ${data.userId}. TODO Add a user profile screen")
+                            }
+                            is PermalinkData.RoomLink -> {
+                                backstack.push(
+                                    NavTarget.Room(
+                                        data.roomIdOrAlias,
+                                        initialElement = RoomNavigationTarget.Messages(data.eventId),
+                                        // TODO Use the viaParameters
                                     )
-                                }
-                                is PermalinkData.FallbackLink,
-                                is PermalinkData.RoomEmailInviteLink -> {
-                                    // Should not happen (handled by MessagesNode)
-                                }
+                                )
+                            }
+                            is PermalinkData.FallbackLink,
+                            is PermalinkData.RoomEmailInviteLink -> {
+                                // Should not happen (handled by MessagesNode)
                             }
                         }
                     }
