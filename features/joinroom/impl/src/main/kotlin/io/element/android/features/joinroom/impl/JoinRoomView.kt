@@ -84,7 +84,7 @@ fun JoinRoomView(
                     state.eventSink(JoinRoomEvents.JoinRoom)
                 },
                 onRetry = {
-                    state.eventSink(JoinRoomEvents.Retry)
+                    state.eventSink(JoinRoomEvents.RetryFetchingContent)
                 }
             )
         }

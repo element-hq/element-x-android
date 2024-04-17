@@ -305,7 +305,7 @@ class JoinRoomPresenterTest {
                         error = AN_EXCEPTION
                     )
                 )
-                state.eventSink(JoinRoomEvents.Retry)
+                state.eventSink(JoinRoomEvents.RetryFetchingContent)
             }
             skipItems(1)
             awaitItem().also { state ->

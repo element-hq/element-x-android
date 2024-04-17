@@ -109,7 +109,7 @@ class JoinRoomPresenter @AssistedInject constructor(
                         AcceptDeclineInviteEvents.DeclineInvite(inviteData)
                     )
                 }
-                JoinRoomEvents.Retry -> {
+                JoinRoomEvents.RetryFetchingContent -> {
                     retryCount++
                 }
             }
