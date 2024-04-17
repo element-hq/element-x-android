@@ -228,7 +228,6 @@ private fun JoinRoomContent(
                 },
             )
         }
-
     }
 }
 
@@ -301,9 +300,9 @@ private fun Description(description: String, modifier: Modifier = Modifier) {
 private fun MembersCount(memberCount: Long) {
     Row(
         modifier = Modifier
-            .background(color = ElementTheme.colors.bgSubtleSecondary, shape = CircleShape)
-            .widthIn(min = 48.dp)
-            .padding(all = 2.dp),
+                .background(color = ElementTheme.colors.bgSubtleSecondary, shape = CircleShape)
+                .widthIn(min = 48.dp)
+                .padding(all = 2.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(4.dp)
     ) {
