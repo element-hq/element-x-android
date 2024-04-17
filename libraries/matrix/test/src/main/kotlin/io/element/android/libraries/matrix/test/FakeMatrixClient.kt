@@ -48,6 +48,7 @@ import io.element.android.libraries.matrix.test.verification.FakeSessionVerifica
 import io.element.android.tests.testutils.simulateLongTask
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -203,6 +204,10 @@ class FakeMatrixClient(
 
     override fun roomMembershipObserver(): RoomMembershipObserver {
         return RoomMembershipObserver()
+    }
+
+    suspend fun emitIgnoreUserList(users: List<UserId>) {
+        ignoredUsersFlow.emit(users.toImmutableList())
     }
 
     // Mocks
