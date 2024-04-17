@@ -18,12 +18,9 @@ package io.element.android.features.joinroom.impl
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.CircleShape
@@ -42,6 +39,7 @@ import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.designsystem.atomic.atoms.PlaceholderAtom
 import io.element.android.libraries.designsystem.atomic.molecules.ButtonRowMolecule
+import io.element.android.libraries.designsystem.atomic.organisms.RoomPreviewOrganism
 import io.element.android.libraries.designsystem.atomic.pages.HeaderFooterPage
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
@@ -154,7 +152,7 @@ private fun JoinRoomContent(
 ) {
     when (contentState) {
         is ContentState.Loaded -> {
-            ContentScaffold(
+            RoomPreviewOrganism(
                 modifier = modifier,
                 avatar = {
                     Avatar(contentState.avatarData(AvatarSize.RoomHeader))
@@ -176,7 +174,7 @@ private fun JoinRoomContent(
             )
         }
         is ContentState.UnknownRoom -> {
-            ContentScaffold(
+            RoomPreviewOrganism(
                 modifier = modifier,
                 avatar = {
                     PlaceholderAtom(width = AvatarSize.RoomHeader.dp, height = AvatarSize.RoomHeader.dp)
@@ -190,7 +188,7 @@ private fun JoinRoomContent(
             )
         }
         is ContentState.Loading -> {
-            ContentScaffold(
+            RoomPreviewOrganism(
                 modifier = modifier,
                 avatar = {
                     PlaceholderAtom(width = AvatarSize.RoomHeader.dp, height = AvatarSize.RoomHeader.dp)
@@ -204,7 +202,7 @@ private fun JoinRoomContent(
             )
         }
         is ContentState.Failure -> {
-            ContentScaffold(
+            RoomPreviewOrganism(
                 modifier = modifier,
                 avatar = {
                     PlaceholderAtom(width = AvatarSize.RoomHeader.dp, height = AvatarSize.RoomHeader.dp)
@@ -228,36 +226,6 @@ private fun JoinRoomContent(
                 },
             )
         }
-    }
-}
-
-@Composable
-private fun ContentScaffold(
-    avatar: @Composable () -> Unit,
-    title: @Composable () -> Unit,
-    subtitle: @Composable () -> Unit,
-    modifier: Modifier = Modifier,
-    description: @Composable (() -> Unit)? = null,
-    memberCount: @Composable (() -> Unit)? = null,
-) {
-    Column(
-        modifier = modifier.fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        avatar()
-        Spacer(modifier = Modifier.height(16.dp))
-        title()
-        Spacer(modifier = Modifier.height(8.dp))
-        subtitle()
-        Spacer(modifier = Modifier.height(8.dp))
-        if (memberCount != null) {
-            memberCount()
-        }
-        Spacer(modifier = Modifier.height(8.dp))
-        if (description != null) {
-            description()
-        }
-        Spacer(modifier = Modifier.height(24.dp))
     }
 }
 
@@ -300,9 +268,9 @@ private fun Description(description: String, modifier: Modifier = Modifier) {
 private fun MembersCount(memberCount: Long) {
     Row(
         modifier = Modifier
-                .background(color = ElementTheme.colors.bgSubtleSecondary, shape = CircleShape)
-                .widthIn(min = 48.dp)
-                .padding(all = 2.dp),
+            .background(color = ElementTheme.colors.bgSubtleSecondary, shape = CircleShape)
+            .widthIn(min = 48.dp)
+            .padding(all = 2.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(4.dp)
     ) {

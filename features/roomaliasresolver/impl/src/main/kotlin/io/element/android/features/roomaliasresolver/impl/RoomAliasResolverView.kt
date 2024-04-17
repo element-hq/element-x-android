@@ -17,19 +17,15 @@
 package io.element.android.features.roomaliasresolver.impl
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberUpdatedState
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -39,6 +35,7 @@ import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.atomic.atoms.PlaceholderAtom
+import io.element.android.libraries.designsystem.atomic.organisms.RoomPreviewOrganism
 import io.element.android.libraries.designsystem.atomic.pages.HeaderFooterPage
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.button.BackButton
@@ -116,7 +113,7 @@ private fun RoomAliasResolverContent(
     state: RoomAliasResolverState,
     modifier: Modifier = Modifier,
 ) {
-    ContentScaffold(
+    RoomPreviewOrganism(
         modifier = modifier,
         avatar = {
             PlaceholderAtom(width = AvatarSize.RoomHeader.dp, height = AvatarSize.RoomHeader.dp)
@@ -138,36 +135,6 @@ private fun RoomAliasResolverContent(
         memberCount = {
         }
     )
-}
-
-@Composable
-private fun ContentScaffold(
-    avatar: @Composable () -> Unit,
-    title: @Composable () -> Unit,
-    subtitle: @Composable () -> Unit,
-    modifier: Modifier = Modifier,
-    description: @Composable (() -> Unit)? = null,
-    memberCount: @Composable (() -> Unit)? = null,
-) {
-    Column(
-        modifier = modifier.fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        avatar()
-        Spacer(modifier = Modifier.height(16.dp))
-        title()
-        Spacer(modifier = Modifier.height(8.dp))
-        subtitle()
-        Spacer(modifier = Modifier.height(8.dp))
-        if (memberCount != null) {
-            memberCount()
-        }
-        Spacer(modifier = Modifier.height(8.dp))
-        if (description != null) {
-            description()
-        }
-        Spacer(modifier = Modifier.height(24.dp))
-    }
 }
 
 @Composable
