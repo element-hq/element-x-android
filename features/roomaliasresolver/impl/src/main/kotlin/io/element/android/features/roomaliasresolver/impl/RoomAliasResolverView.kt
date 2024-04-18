@@ -92,7 +92,7 @@ private fun RoomAliasResolverFooter(
                     state.eventSink(RoomAliasResolverEvents.Retry)
                 },
                 modifier = modifier.fillMaxWidth(),
-                size = ButtonSize.Medium,
+                size = ButtonSize.Large,
             )
         }
         is AsyncData.Loading -> {
