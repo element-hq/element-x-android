@@ -86,7 +86,7 @@ open class RoomListRoomSummaryProvider : PreviewParameterProvider<RoomListRoomSu
                 aRoomListRoomSummary(
                     displayType = RoomSummaryDisplayType.INVITE,
                     inviteSender = anInviteSender(
-                        userId = "@alice:matrix.org",
+                        userId = UserId("@alice:matrix.org"),
                         displayName = "Alice",
                     ),
                     canonicalAlias = RoomAlias("#alias:matrix.org"),
@@ -95,7 +95,7 @@ open class RoomListRoomSummaryProvider : PreviewParameterProvider<RoomListRoomSu
                     name = "Bob",
                     displayType = RoomSummaryDisplayType.INVITE,
                     inviteSender = anInviteSender(
-                        userId = "@bob:matrix.org",
+                        userId = UserId("@bob:matrix.org"),
                         displayName = "Bob",
                     ),
                     isDirect = true,
@@ -105,12 +105,13 @@ open class RoomListRoomSummaryProvider : PreviewParameterProvider<RoomListRoomSu
 }
 
 internal fun anInviteSender(
-    userId: String,
-    displayName: String,
+    userId: UserId = UserId("@bob:domain"),
+    displayName: String = "Bob",
+    avatarData: AvatarData = AvatarData(userId.value, displayName, size = AvatarSize.InviteSender),
 ) = InviteSender(
-    userId = UserId(userId),
+    userId = userId,
     displayName = displayName,
-    avatarData = AvatarData(userId, displayName, size = AvatarSize.InviteSender),
+    avatarData = avatarData,
 )
 
 internal fun aRoomListRoomSummary(

@@ -23,10 +23,10 @@ import io.element.android.features.leaveroom.api.LeaveRoomState
 import io.element.android.features.leaveroom.api.aLeaveRoomState
 import io.element.android.features.roomlist.impl.filters.RoomListFiltersState
 import io.element.android.features.roomlist.impl.filters.aRoomListFiltersState
-import io.element.android.features.roomlist.impl.model.InviteSender
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
 import io.element.android.features.roomlist.impl.model.RoomSummaryDisplayType
 import io.element.android.features.roomlist.impl.model.aRoomListRoomSummary
+import io.element.android.features.roomlist.impl.model.anInviteSender
 import io.element.android.features.roomlist.impl.search.RoomListSearchState
 import io.element.android.features.roomlist.impl.search.aRoomListSearchState
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
@@ -88,11 +88,7 @@ internal fun aRoomListRoomSummaryList(): ImmutableList<RoomListRoomSummary> {
             name = "Room Invited",
             avatarData = AvatarData("!roomId", "Room with Alice and Bob", size = AvatarSize.RoomListItem),
             id = "!roomId:domain",
-            inviteSender = InviteSender(
-                userId = UserId("@bob:domain"),
-                displayName = "Bob",
-                avatarData = AvatarData("@bob:domain", "Bob", size = AvatarSize.InviteSender),
-            ),
+            inviteSender = anInviteSender(),
             displayType = RoomSummaryDisplayType.INVITE,
         ),
         aRoomListRoomSummary(
