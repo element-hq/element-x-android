@@ -21,7 +21,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -42,8 +41,7 @@ fun RoomPreviewMembersCountMolecule(
     Row(
         modifier = modifier
             .background(color = ElementTheme.colors.bgSubtleSecondary, shape = CircleShape)
-            .widthIn(min = 48.dp)
-            .padding(start = 2.dp, end = 6.dp, top = 2.dp, bottom = 2.dp),
+            .padding(start = 2.dp, end = 8.dp, top = 2.dp, bottom = 2.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(4.dp)
     ) {
