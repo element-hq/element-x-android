@@ -28,12 +28,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.atomic.atoms.PlaceholderAtom
-import io.element.android.libraries.designsystem.atomic.molecules.ButtonRowMolecule
 import io.element.android.libraries.designsystem.atomic.atoms.RoomPreviewDescriptionAtom
-import io.element.android.libraries.designsystem.atomic.molecules.RoomPreviewMembersCountMolecule
-import io.element.android.libraries.designsystem.atomic.organisms.RoomPreviewOrganism
 import io.element.android.libraries.designsystem.atomic.atoms.RoomPreviewSubtitleAtom
 import io.element.android.libraries.designsystem.atomic.atoms.RoomPreviewTitleAtom
+import io.element.android.libraries.designsystem.atomic.molecules.ButtonRowMolecule
+import io.element.android.libraries.designsystem.atomic.molecules.RoomPreviewMembersCountMolecule
+import io.element.android.libraries.designsystem.atomic.organisms.RoomPreviewOrganism
 import io.element.android.libraries.designsystem.atomic.pages.HeaderFooterPage
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
