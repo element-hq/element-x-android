@@ -61,6 +61,7 @@ import io.element.android.libraries.matrix.impl.room.RoomContentForwarder
 import io.element.android.libraries.matrix.impl.room.RoomSyncSubscriber
 import io.element.android.libraries.matrix.impl.room.RustMatrixRoom
 import io.element.android.libraries.matrix.impl.room.map
+import io.element.android.libraries.matrix.impl.room.preview.RoomPreviewMapper
 import io.element.android.libraries.matrix.impl.roomdirectory.RustRoomDirectoryService
 import io.element.android.libraries.matrix.impl.roomlist.RoomListFactory
 import io.element.android.libraries.matrix.impl.roomlist.RustRoomListService
@@ -463,21 +464,15 @@ class RustMatrixClient(
         }
     }
 
-    @Suppress("TooGenericExceptionThrown")
     override suspend fun resolveRoomAlias(roomAlias: RoomAlias): Result<RoomId> = withContext(sessionDispatcher) {
         runCatching {
-            // TODO Waiting for SDK to be released
-            throw Exception("Not implemented")
-            // client.resolveRoomAlias(roomAlias.value).let(::RoomId)
+            client.resolveRoomAlias(roomAlias.value).let(::RoomId)
         }
     }
 
-    @Suppress("TooGenericExceptionThrown")
     override suspend fun getRoomPreview(roomIdOrAlias: RoomIdOrAlias): Result<RoomPreview> = withContext(sessionDispatcher) {
         runCatching {
-            // TODO Waiting for SDK to be released
-            throw Exception("Not implemented")
-            // client.getRoomPreview(roomIdOrAlias.identifier).let(RoomPreviewMapper::map)
+            client.getRoomPreview(roomIdOrAlias.identifier).let(RoomPreviewMapper::map)
         }
     }
 
