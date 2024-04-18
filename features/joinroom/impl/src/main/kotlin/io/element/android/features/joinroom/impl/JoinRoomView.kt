@@ -38,6 +38,7 @@ import io.element.android.libraries.designsystem.atomic.pages.HeaderFooterPage
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.button.BackButton
+import io.element.android.libraries.designsystem.components.button.SuperButton
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
@@ -97,7 +98,7 @@ private fun JoinRoomFooter(
             text = stringResource(CommonStrings.action_retry),
             onClick = onRetry,
             modifier = modifier.fillMaxWidth(),
-            size = ButtonSize.Medium,
+            size = ButtonSize.Large,
         )
     } else {
         val joinAuthorisationStatus = state.joinAuthorisationStatus
@@ -108,30 +109,33 @@ private fun JoinRoomFooter(
                         text = stringResource(CommonStrings.action_decline),
                         onClick = onDeclineInvite,
                         modifier = Modifier.weight(1f),
-                        size = ButtonSize.Medium,
+                        size = ButtonSize.Large,
                     )
                     Button(
                         text = stringResource(CommonStrings.action_accept),
                         onClick = onAcceptInvite,
                         modifier = Modifier.weight(1f),
-                        size = ButtonSize.Medium,
+                        size = ButtonSize.Large,
                     )
                 }
             }
             JoinAuthorisationStatus.CanJoin -> {
-                Button(
-                    text = stringResource(R.string.screen_join_room_join_action),
+                SuperButton(
                     onClick = onJoinRoom,
                     modifier = modifier.fillMaxWidth(),
-                    size = ButtonSize.Medium,
-                )
+                    buttonSize = ButtonSize.Large,
+                ) {
+                    Text(
+                        text = stringResource(R.string.screen_join_room_join_action),
+                    )
+                }
             }
             JoinAuthorisationStatus.CanKnock -> {
                 Button(
                     text = stringResource(R.string.screen_join_room_knock_action),
                     onClick = onJoinRoom,
                     modifier = modifier.fillMaxWidth(),
-                    size = ButtonSize.Medium,
+                    size = ButtonSize.Large,
                 )
             }
             JoinAuthorisationStatus.Unknown -> Unit
