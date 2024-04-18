@@ -69,6 +69,6 @@ internal fun RoomPreviewMembersCountMoleculePreview() = ElementPreview {
     ) {
         RoomPreviewMembersCountMolecule(memberCount = 1)
         RoomPreviewMembersCountMolecule(memberCount = 888)
-        RoomPreviewMembersCountMolecule(memberCount = 123456)
+        RoomPreviewMembersCountMolecule(memberCount = 123_456)
     }
 }
