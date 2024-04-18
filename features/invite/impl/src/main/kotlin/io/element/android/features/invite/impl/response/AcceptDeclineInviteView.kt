@@ -104,7 +104,7 @@ private fun DeclineConfirmationDialog(
 
 @PreviewsDayNight
 @Composable
-internal fun AcceptDeclineInviteViewLightPreview(@PreviewParameter(AcceptDeclineInviteStateProvider::class) state: AcceptDeclineInviteState) =
+internal fun AcceptDeclineInviteViewPreview(@PreviewParameter(AcceptDeclineInviteStateProvider::class) state: AcceptDeclineInviteState) =
     ElementPreview {
         AcceptDeclineInviteView(
             state = state,
