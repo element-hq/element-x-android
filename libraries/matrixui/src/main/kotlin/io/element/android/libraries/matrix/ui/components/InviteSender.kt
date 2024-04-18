@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.features.roomlist.impl.model
+package io.element.android.libraries.matrix.ui.components
 
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -24,9 +24,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.font.FontWeight
-import io.element.android.features.roomlist.impl.R
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.ui.R
 
 @Immutable
 data class InviteSender(

@@ -23,6 +23,7 @@ import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
+import io.element.android.libraries.matrix.ui.components.InviteSender
 
 open class RoomListRoomSummaryProvider : PreviewParameterProvider<RoomListRoomSummary> {
     override val values: Sequence<RoomListRoomSummary>

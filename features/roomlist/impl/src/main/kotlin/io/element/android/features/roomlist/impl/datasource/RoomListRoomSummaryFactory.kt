@@ -16,7 +16,6 @@
 
 package io.element.android.features.roomlist.impl.datasource
 
-import io.element.android.features.roomlist.impl.model.InviteSender
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
 import io.element.android.features.roomlist.impl.model.RoomSummaryDisplayType
 import io.element.android.libraries.core.extensions.orEmpty
@@ -27,6 +26,7 @@ import io.element.android.libraries.eventformatter.api.RoomLastMessageFormatter
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.roomlist.RoomSummary
+import io.element.android.libraries.matrix.ui.components.InviteSender
 import javax.inject.Inject
 
 class RoomListRoomSummaryFactory @Inject constructor(

@@ -47,7 +47,6 @@ import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.roomlist.impl.RoomListEvents
-import io.element.android.features.roomlist.impl.model.InviteSender
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummaryProvider
 import io.element.android.features.roomlist.impl.model.RoomSummaryDisplayType
@@ -67,6 +66,7 @@ import io.element.android.libraries.designsystem.theme.roomListRoomName
 import io.element.android.libraries.designsystem.theme.unreadIndicator
 import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
+import io.element.android.libraries.matrix.ui.components.InviteSender
 import io.element.android.libraries.ui.strings.CommonStrings
 import timber.log.Timber
 
