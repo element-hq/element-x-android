@@ -38,7 +38,11 @@ import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.room.MatrixRoomInfo
 import io.element.android.libraries.matrix.api.room.preview.RoomPreview
+import io.element.android.libraries.matrix.ui.model.InviteSender
+import io.element.android.libraries.matrix.ui.model.toInviteSender
+import kotlinx.coroutines.flow.first
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 class JoinRoomPresenter @AssistedInject constructor(
     @Assisted private val roomId: RoomId,
@@ -74,10 +78,22 @@ class JoinRoomPresenter @AssistedInject constructor(
                 else -> {
                     value = ContentState.Loading(roomIdOrAlias)
                     val result = matrixClient.getRoomPreview(roomId.toRoomIdOrAlias())
-                    value = result.fold(
-                        onSuccess = { it.toContentState() },
+                    result.fold(
+                        onSuccess = {
+                            value = it.toContentState(null)
+                            if (it.isInvited) {
+                                // Get the inviteSender
+                                matrixClient.getRoomInfoFlow(roomId).first()
+                                    .getOrNull()
+                                    ?.inviter
+                                    ?.toInviteSender()
+                                    ?.let { inviteSender ->
+                                        value = it.toContentState(inviteSender)
+                                    }
+                            }
+                        },
                         onFailure = { throwable ->
-                            if (throwable.message?.contains("403") == true) {
+                            value = if (throwable.message?.contains("403") == true) {
                                 ContentState.UnknownRoom(roomIdOrAlias)
                             } else {
                                 ContentState.Failure(roomIdOrAlias, throwable)
@@ -118,7 +134,9 @@ class JoinRoomPresenter @AssistedInject constructor(
     }
 }
 
-private fun RoomPreview.toContentState(): ContentState {
+private fun RoomPreview.toContentState(
+    inviteSender: InviteSender?
+): ContentState {
     return ContentState.Loaded(
         roomId = roomId,
         name = name,
@@ -128,7 +146,7 @@ private fun RoomPreview.toContentState(): ContentState {
         isDirect = false,
         roomAvatarUrl = avatarUrl,
         joinAuthorisationStatus = when {
-            isInvited -> JoinAuthorisationStatus.IsInvited
+            isInvited -> JoinAuthorisationStatus.IsInvited(inviteSender)
             canKnock -> JoinAuthorisationStatus.CanKnock
             isPublic -> JoinAuthorisationStatus.CanJoin
             else -> JoinAuthorisationStatus.Unknown
@@ -165,7 +183,9 @@ internal fun MatrixRoomInfo.toContentState(): ContentState {
         isDirect = isDirect,
         roomAvatarUrl = avatarUrl,
         joinAuthorisationStatus = when {
-            currentUserMembership == CurrentUserMembership.INVITED -> JoinAuthorisationStatus.IsInvited
+            currentUserMembership == CurrentUserMembership.INVITED -> JoinAuthorisationStatus.IsInvited(
+                inviteSender = inviter?.toInviteSender()
+            )
             isPublic -> JoinAuthorisationStatus.CanJoin
             else -> JoinAuthorisationStatus.Unknown
         }

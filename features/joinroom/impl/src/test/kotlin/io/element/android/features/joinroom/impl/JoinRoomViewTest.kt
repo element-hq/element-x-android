@@ -80,7 +80,7 @@ class JoinRoomViewTest {
         val eventsRecorder = EventsRecorder<JoinRoomEvents>()
         rule.setJoinRoomView(
             aJoinRoomState(
-                contentState = aLoadedContentState(joinAuthorisationStatus = JoinAuthorisationStatus.IsInvited),
+                contentState = aLoadedContentState(joinAuthorisationStatus = JoinAuthorisationStatus.IsInvited(null)),
                 eventSink = eventsRecorder,
             ),
         )
@@ -93,7 +93,7 @@ class JoinRoomViewTest {
         val eventsRecorder = EventsRecorder<JoinRoomEvents>()
         rule.setJoinRoomView(
             aJoinRoomState(
-                contentState = aLoadedContentState(joinAuthorisationStatus = JoinAuthorisationStatus.IsInvited),
+                contentState = aLoadedContentState(joinAuthorisationStatus = JoinAuthorisationStatus.IsInvited(null)),
                 eventSink = eventsRecorder,
             ),
         )

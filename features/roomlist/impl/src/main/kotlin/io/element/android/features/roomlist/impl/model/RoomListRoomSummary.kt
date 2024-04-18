@@ -21,7 +21,7 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
-import io.element.android.libraries.matrix.ui.components.InviteSender
+import io.element.android.libraries.matrix.ui.model.InviteSender
 
 @Immutable
 data class RoomListRoomSummary(

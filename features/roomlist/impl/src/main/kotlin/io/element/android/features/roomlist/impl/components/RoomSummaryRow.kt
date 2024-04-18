@@ -66,7 +66,8 @@ import io.element.android.libraries.designsystem.theme.roomListRoomName
 import io.element.android.libraries.designsystem.theme.unreadIndicator
 import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
-import io.element.android.libraries.matrix.ui.components.InviteSender
+import io.element.android.libraries.matrix.ui.components.InviteSenderView
+import io.element.android.libraries.matrix.ui.model.InviteSender
 import io.element.android.libraries.ui.strings.CommonStrings
 import timber.log.Timber
 
@@ -96,7 +97,10 @@ internal fun RoomSummaryRow(
                 InviteSubtitle(isDirect = room.isDirect, inviteSender = room.inviteSender, canonicalAlias = room.canonicalAlias)
                 if (!room.isDirect && room.inviteSender != null) {
                     Spacer(modifier = Modifier.height(4.dp))
-                    InviteSenderRow(sender = room.inviteSender)
+                    InviteSenderView(
+                        modifier = Modifier.fillMaxWidth(),
+                        inviteSender = room.inviteSender,
+                    )
                 }
                 Spacer(modifier = Modifier.height(12.dp))
                 InviteButtonsRow(
@@ -286,24 +290,6 @@ private fun InviteNameAndIndicatorRow(
         )
         UnreadIndicatorAtom(
             color = ElementTheme.colors.unreadIndicator
-        )
-    }
-}
-
-@Composable
-private fun InviteSenderRow(
-    sender: InviteSender,
-    modifier: Modifier = Modifier
-) {
-    Row(
-        horizontalArrangement = Arrangement.spacedBy(4.dp),
-        modifier = modifier.fillMaxWidth(),
-    ) {
-        Avatar(avatarData = sender.avatarData)
-        Text(
-            text = sender.annotatedString(),
-            style = ElementTheme.typography.fontBodyMdRegular,
-            color = MaterialTheme.colorScheme.secondary,
         )
     }
 }

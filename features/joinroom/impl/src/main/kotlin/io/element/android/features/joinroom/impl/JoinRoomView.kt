@@ -17,11 +17,13 @@
 package io.element.android.features.joinroom.impl
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -47,6 +49,7 @@ import io.element.android.libraries.designsystem.theme.components.OutlinedButton
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
+import io.element.android.libraries.matrix.ui.components.InviteSenderView
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
@@ -103,7 +106,7 @@ private fun JoinRoomFooter(
     } else {
         val joinAuthorisationStatus = state.joinAuthorisationStatus
         when (joinAuthorisationStatus) {
-            JoinAuthorisationStatus.IsInvited -> {
+            is JoinAuthorisationStatus.IsInvited -> {
                 ButtonRowMolecule(modifier = modifier, horizontalArrangement = Arrangement.spacedBy(20.dp)) {
                     OutlinedButton(
                         text = stringResource(CommonStrings.action_decline),
@@ -159,7 +162,16 @@ private fun JoinRoomContent(
                     RoomPreviewTitleAtom(contentState.computedTitle)
                 },
                 subtitle = {
-                    RoomPreviewSubtitleAtom(contentState.computedSubtitle)
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.spacedBy(8.dp),
+                    ) {
+                        RoomPreviewSubtitleAtom(contentState.computedSubtitle)
+                        val inviteSender = (contentState.joinAuthorisationStatus as? JoinAuthorisationStatus.IsInvited)?.inviteSender
+                        if (inviteSender != null) {
+                            InviteSenderView(inviteSender = inviteSender)
+                        }
+                    }
                 },
                 description = {
                     RoomPreviewDescriptionAtom(contentState.topic ?: "")
