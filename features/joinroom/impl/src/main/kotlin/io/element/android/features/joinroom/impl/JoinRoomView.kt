@@ -162,19 +162,19 @@ private fun JoinRoomContent(
                     RoomPreviewTitleAtom(contentState.computedTitle)
                 },
                 subtitle = {
+                    RoomPreviewSubtitleAtom(contentState.computedSubtitle)
+                },
+                description = {
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.spacedBy(8.dp),
                     ) {
-                        RoomPreviewSubtitleAtom(contentState.computedSubtitle)
                         val inviteSender = (contentState.joinAuthorisationStatus as? JoinAuthorisationStatus.IsInvited)?.inviteSender
                         if (inviteSender != null) {
                             InviteSenderView(inviteSender = inviteSender)
                         }
+                        RoomPreviewDescriptionAtom(contentState.topic ?: "")
                     }
-                },
-                description = {
-                    RoomPreviewDescriptionAtom(contentState.topic ?: "")
                 },
                 memberCount = {
                     if (contentState.showMemberCount) {

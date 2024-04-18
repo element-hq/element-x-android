@@ -55,7 +55,10 @@ open class JoinRoomStateProvider : PreviewParameterProvider<JoinRoomState> {
                 contentState = aLoadedContentState(joinAuthorisationStatus = JoinAuthorisationStatus.IsInvited(null))
             ),
             aJoinRoomState(
-                contentState = aLoadedContentState(joinAuthorisationStatus = JoinAuthorisationStatus.IsInvited(anInviteSender()))
+                contentState = aLoadedContentState(
+                    numberOfMembers = 123,
+                    joinAuthorisationStatus = JoinAuthorisationStatus.IsInvited(anInviteSender()),
+                )
             ),
             aJoinRoomState(
                 contentState = aFailureContentState()
