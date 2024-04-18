@@ -126,4 +126,3 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setJoinR
         )
     }
 }
-
