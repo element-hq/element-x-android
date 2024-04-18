@@ -128,7 +128,7 @@ class RoomDetailsPresenter @Inject constructor(
         val roomMemberDetailsState = roomMemberDetailsPresenter?.present()
 
         return RoomDetailsState(
-            roomId = room.roomId.value,
+            roomId = room.roomId,
             roomName = roomName,
             roomAlias = room.alias,
             roomAvatarUrl = roomAvatar,

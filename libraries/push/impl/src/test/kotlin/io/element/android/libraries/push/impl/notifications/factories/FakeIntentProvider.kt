@@ -24,6 +24,4 @@ import io.element.android.libraries.push.impl.intent.IntentProvider
 
 class FakeIntentProvider : IntentProvider {
     override fun getViewRoomIntent(sessionId: SessionId, roomId: RoomId?, threadId: ThreadId?) = Intent()
-
-    override fun getInviteListIntent(sessionId: SessionId) = Intent()
 }

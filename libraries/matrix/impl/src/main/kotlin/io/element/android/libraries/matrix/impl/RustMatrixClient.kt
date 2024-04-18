@@ -23,7 +23,9 @@ import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.coroutine.childScope
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.ProgressCallback
+import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.createroom.CreateRoomParameters
 import io.element.android.libraries.matrix.api.createroom.RoomPreset
@@ -37,6 +39,7 @@ import io.element.android.libraries.matrix.api.pusher.PushersService
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomInfo
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
+import io.element.android.libraries.matrix.api.room.preview.RoomPreview
 import io.element.android.libraries.matrix.api.roomdirectory.RoomDirectoryService
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.api.roomlist.awaitLoaded
@@ -457,6 +460,24 @@ class RustMatrixClient(
     override suspend fun getRecentlyVisitedRooms(): Result<List<RoomId>> = withContext(sessionDispatcher) {
         runCatching {
             client.getRecentlyVisitedRooms().map(::RoomId)
+        }
+    }
+
+    @Suppress("TooGenericExceptionThrown")
+    override suspend fun resolveRoomAlias(roomAlias: RoomAlias): Result<RoomId> = withContext(sessionDispatcher) {
+        runCatching {
+            // TODO Waiting for SDK to be released
+            throw Exception("Not implemented")
+            // client.resolveRoomAlias(roomAlias.value).let(::RoomId)
+        }
+    }
+
+    @Suppress("TooGenericExceptionThrown")
+    override suspend fun getRoomPreview(roomIdOrAlias: RoomIdOrAlias): Result<RoomPreview> = withContext(sessionDispatcher) {
+        runCatching {
+            // TODO Waiting for SDK to be released
+            throw Exception("Not implemented")
+            // client.getRoomPreview(roomIdOrAlias.identifier).let(RoomPreviewMapper::map)
         }
     }
 

@@ -16,6 +16,7 @@
 
 package io.element.android.libraries.matrix.impl.roomlist
 
+import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.roomlist.RoomListFilter
 import io.element.android.libraries.matrix.api.roomlist.RoomSummary
 
@@ -25,20 +26,24 @@ val RoomListFilter.predicate
         is RoomListFilter.Any -> { _: RoomSummary -> true }
         RoomListFilter.None -> { _: RoomSummary -> false }
         RoomListFilter.Category.Group -> { roomSummary: RoomSummary ->
-            roomSummary is RoomSummary.Filled && !roomSummary.details.isDirect
+            roomSummary is RoomSummary.Filled && !roomSummary.details.isDirect && !roomSummary.isInvited()
         }
         RoomListFilter.Category.People -> { roomSummary: RoomSummary ->
-            roomSummary is RoomSummary.Filled && roomSummary.details.isDirect
+            roomSummary is RoomSummary.Filled && roomSummary.details.isDirect && !roomSummary.isInvited()
         }
         RoomListFilter.Favorite -> { roomSummary: RoomSummary ->
-            roomSummary is RoomSummary.Filled && roomSummary.details.isFavorite
+            roomSummary is RoomSummary.Filled && roomSummary.details.isFavorite && !roomSummary.isInvited()
         }
         RoomListFilter.Unread -> { roomSummary: RoomSummary ->
             roomSummary is RoomSummary.Filled &&
+                !roomSummary.isInvited() &&
                 (roomSummary.details.numUnreadNotifications > 0 || roomSummary.details.isMarkedUnread)
         }
         is RoomListFilter.NormalizedMatchRoomName -> { roomSummary: RoomSummary ->
             roomSummary is RoomSummary.Filled && roomSummary.details.name.contains(pattern, ignoreCase = true)
+        }
+        RoomListFilter.Invite -> { roomSummary: RoomSummary ->
+            roomSummary.isInvited()
         }
     }
 
@@ -55,3 +60,5 @@ fun List<RoomSummary>.filter(filter: RoomListFilter): List<RoomSummary> {
         else -> filter(filter.predicate)
     }
 }
+
+private fun RoomSummary.isInvited() = this is RoomSummary.Filled && this.details.currentUserMembership == CurrentUserMembership.INVITED

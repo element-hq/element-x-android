@@ -47,14 +47,30 @@ class JoinRoomLoadedFlowNodeTest {
     @get:Rule
     val mainDispatcherRule = MainDispatcherRule()
 
-    private class FakeMessagesEntryPoint : MessagesEntryPoint {
+    private class FakeMessagesEntryPoint : MessagesEntryPoint, MessagesEntryPoint.NodeBuilder {
+        var buildContext: BuildContext? = null
         var nodeId: String? = null
+        var parameters: MessagesEntryPoint.Params? = null
         var callback: MessagesEntryPoint.Callback? = null
 
-        override fun createNode(parentNode: Node, buildContext: BuildContext, callback: MessagesEntryPoint.Callback): Node {
-            return node(buildContext) {}.also {
+        override fun nodeBuilder(parentNode: Node, buildContext: BuildContext): MessagesEntryPoint.NodeBuilder {
+            this.buildContext = buildContext
+            return this
+        }
+
+        override fun params(params: MessagesEntryPoint.Params): MessagesEntryPoint.NodeBuilder {
+            parameters = params
+            return this
+        }
+
+        override fun callback(callback: MessagesEntryPoint.Callback): MessagesEntryPoint.NodeBuilder {
+            this.callback = callback
+            return this
+        }
+
+        override fun build(): Node {
+            return node(buildContext!!) {}.also {
                 nodeId = it.id
-                this.callback = callback
             }
         }
     }
@@ -118,9 +134,9 @@ class JoinRoomLoadedFlowNodeTest {
         val roomFlowNodeTestHelper = roomFlowNode.parentNodeTestHelper()
 
         // THEN
-        assertThat(roomFlowNode.backstack.activeElement).isEqualTo(JoinedRoomLoadedFlowNode.NavTarget.Messages)
-        roomFlowNodeTestHelper.assertChildHasLifecycle(JoinedRoomLoadedFlowNode.NavTarget.Messages, Lifecycle.State.CREATED)
-        val messagesNode = roomFlowNode.childNode(JoinedRoomLoadedFlowNode.NavTarget.Messages)!!
+        assertThat(roomFlowNode.backstack.activeElement).isEqualTo(JoinedRoomLoadedFlowNode.NavTarget.Messages())
+        roomFlowNodeTestHelper.assertChildHasLifecycle(JoinedRoomLoadedFlowNode.NavTarget.Messages(), Lifecycle.State.CREATED)
+        val messagesNode = roomFlowNode.childNode(JoinedRoomLoadedFlowNode.NavTarget.Messages())!!
         assertThat(messagesNode.id).isEqualTo(fakeMessagesEntryPoint.nodeId)
     }
 

@@ -18,14 +18,17 @@ package io.element.android.features.roomlist.impl.model
 
 import androidx.compose.runtime.Immutable
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
+import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 
 @Immutable
 data class RoomListRoomSummary(
     val id: String,
+    val displayType: RoomSummaryDisplayType,
     val roomId: RoomId,
     val name: String,
+    val canonicalAlias: RoomAlias?,
     val numberOfUnreadMessages: Int,
     val numberOfUnreadMentions: Int,
     val numberOfUnreadNotifications: Int,
@@ -33,18 +36,21 @@ data class RoomListRoomSummary(
     val timestamp: String?,
     val lastMessage: CharSequence?,
     val avatarData: AvatarData,
-    val isPlaceholder: Boolean,
     val userDefinedNotificationMode: RoomNotificationMode?,
     val hasRoomCall: Boolean,
+    val isDirect: Boolean,
     val isDm: Boolean,
     val isFavorite: Boolean,
-) {
+    val inviteSender: InviteSender?,
+    ) {
     val isHighlighted = userDefinedNotificationMode != RoomNotificationMode.MUTE &&
         (numberOfUnreadNotifications > 0 || numberOfUnreadMentions > 0) ||
-        isMarkedUnread
+        isMarkedUnread ||
+        displayType == RoomSummaryDisplayType.INVITE
 
     val hasNewContent = numberOfUnreadMessages > 0 ||
         numberOfUnreadMentions > 0 ||
         numberOfUnreadNotifications > 0 ||
-        isMarkedUnread
+        isMarkedUnread ||
+        displayType == RoomSummaryDisplayType.INVITE
 }

@@ -39,7 +39,6 @@ class DeeplinkParser @Inject constructor() {
 
         return when (val screenPathComponent = pathBits.elementAtOrNull(1)) {
             null -> DeeplinkData.Root(sessionId)
-            DeepLinkPaths.INVITE_LIST -> DeeplinkData.InviteList(sessionId)
             else -> {
                 val roomId = screenPathComponent.let(::RoomId)
                 val threadId = pathBits.elementAtOrNull(2)?.let(::ThreadId)

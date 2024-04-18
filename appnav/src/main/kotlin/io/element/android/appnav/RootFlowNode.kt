@@ -290,7 +290,6 @@ class RootFlowNode @AssistedInject constructor(
                 when (deeplinkData) {
                     is DeeplinkData.Root -> attachRoomList()
                     is DeeplinkData.Room -> attachRoom(deeplinkData.roomId)
-                    is DeeplinkData.InviteList -> attachInviteList(deeplinkData)
                 }
             }
     }

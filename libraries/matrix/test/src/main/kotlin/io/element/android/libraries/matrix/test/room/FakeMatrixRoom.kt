@@ -18,6 +18,7 @@ package io.element.android.libraries.matrix.test.room
 
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.ProgressCallback
+import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.TransactionId
@@ -73,8 +74,8 @@ class FakeMatrixRoom(
     override val topic: String? = null,
     override val avatarUrl: String? = null,
     override val isEncrypted: Boolean = false,
-    override val alias: String? = null,
-    override val alternativeAliases: List<String> = emptyList(),
+    override val alias: RoomAlias? = null,
+    override val alternativeAliases: List<RoomAlias> = emptyList(),
     override val isPublic: Boolean = true,
     override val isSpace: Boolean = false,
     override val isDirect: Boolean = false,
@@ -750,7 +751,7 @@ data class EndPollInvocation(
 )
 
 fun aRoomInfo(
-    id: String = A_ROOM_ID.value,
+    id: RoomId = A_ROOM_ID,
     name: String? = A_ROOM_NAME,
     topic: String? = "A topic",
     avatarUrl: String? = AN_AVATAR_URL,
@@ -759,7 +760,7 @@ fun aRoomInfo(
     isSpace: Boolean = false,
     isTombstoned: Boolean = false,
     isFavorite: Boolean = false,
-    canonicalAlias: String? = null,
+    canonicalAlias: RoomAlias? = null,
     alternativeAliases: List<String> = emptyList(),
     currentUserMembership: CurrentUserMembership = CurrentUserMembership.JOINED,
     latestEvent: EventTimelineItem? = null,

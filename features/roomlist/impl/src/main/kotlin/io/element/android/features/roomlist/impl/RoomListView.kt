@@ -55,23 +55,17 @@ fun RoomListView(
     onSettingsClicked: () -> Unit,
     onConfirmRecoveryKeyClicked: () -> Unit,
     onCreateRoomClicked: () -> Unit,
-    onInvitesClicked: () -> Unit,
     onRoomSettingsClicked: (roomId: RoomId) -> Unit,
     onMenuActionClicked: (RoomListMenuAction) -> Unit,
     onRoomDirectorySearchClicked: () -> Unit,
     modifier: Modifier = Modifier,
+    acceptDeclineInviteView: @Composable () -> Unit,
 ) {
     ConnectivityIndicatorContainer(
         modifier = modifier,
         isOnline = state.hasNetworkConnection,
     ) { topPadding ->
         Box {
-            fun onRoomLongClicked(
-                roomListRoomSummary: RoomListRoomSummary
-            ) {
-                state.eventSink(RoomListEvents.ShowContextMenu(roomListRoomSummary))
-            }
-
             if (state.contextMenu is RoomListState.ContextMenu.Shown) {
                 RoomListContextMenu(
                     contextMenu = state.contextMenu,
@@ -83,21 +77,19 @@ fun RoomListView(
             LeaveRoomView(state = state.leaveRoomState)
 
             RoomListScaffold(
-                modifier = Modifier.padding(top = topPadding),
                 state = state,
                 onConfirmRecoveryKeyClicked = onConfirmRecoveryKeyClicked,
                 onRoomClicked = onRoomClicked,
-                onRoomLongClicked = { onRoomLongClicked(it) },
                 onOpenSettings = onSettingsClicked,
                 onCreateRoomClicked = onCreateRoomClicked,
-                onInvitesClicked = onInvitesClicked,
                 onMenuActionClicked = onMenuActionClicked,
+                modifier = Modifier.padding(top = topPadding),
             )
             // This overlaid view will only be visible when state.displaySearchResults is true
             RoomListSearchView(
                 state = state.searchState,
+                eventSink = state.eventSink,
                 onRoomClicked = onRoomClicked,
-                onRoomLongClicked = { onRoomLongClicked(it) },
                 onRoomDirectorySearchClicked = onRoomDirectorySearchClicked,
                 modifier = Modifier
                     .statusBarsPadding()
@@ -105,6 +97,7 @@ fun RoomListView(
                     .fillMaxSize()
                     .background(MaterialTheme.colorScheme.background)
             )
+            acceptDeclineInviteView()
         }
     }
 }
@@ -115,10 +108,8 @@ private fun RoomListScaffold(
     state: RoomListState,
     onConfirmRecoveryKeyClicked: () -> Unit,
     onRoomClicked: (RoomId) -> Unit,
-    onRoomLongClicked: (RoomListRoomSummary) -> Unit,
     onOpenSettings: () -> Unit,
     onCreateRoomClicked: () -> Unit,
-    onInvitesClicked: () -> Unit,
     onMenuActionClicked: (RoomListMenuAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -153,9 +144,7 @@ private fun RoomListScaffold(
                 eventSink = state.eventSink,
                 onConfirmRecoveryKeyClicked = onConfirmRecoveryKeyClicked,
                 onRoomClicked = ::onRoomClicked,
-                onRoomLongClicked = onRoomLongClicked,
                 onCreateRoomClicked = onCreateRoomClicked,
-                onInvitesClicked = onInvitesClicked,
                 modifier = Modifier
                     .padding(padding)
                     .consumeWindowInsets(padding)
@@ -180,7 +169,7 @@ private fun RoomListScaffold(
     )
 }
 
-internal fun RoomListRoomSummary.contentType() = isPlaceholder
+internal fun RoomListRoomSummary.contentType() = displayType.ordinal
 
 @PreviewsDayNight
 @Composable
@@ -191,9 +180,9 @@ internal fun RoomListViewPreview(@PreviewParameter(RoomListStateProvider::class)
         onSettingsClicked = {},
         onConfirmRecoveryKeyClicked = {},
         onCreateRoomClicked = {},
-        onInvitesClicked = {},
         onRoomSettingsClicked = {},
         onMenuActionClicked = {},
         onRoomDirectorySearchClicked = {},
+        acceptDeclineInviteView = {},
     )
 }

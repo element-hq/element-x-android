@@ -78,6 +78,8 @@ import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.designsystem.utils.CommonDrawables
+import io.element.android.libraries.matrix.api.core.RoomAlias
+import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.api.room.getBestName
@@ -302,9 +304,9 @@ private fun MainActionsSection(
 @Composable
 private fun RoomHeaderSection(
     avatarUrl: String?,
-    roomId: String,
+    roomId: RoomId,
     roomName: String,
-    roomAlias: String?,
+    roomAlias: RoomAlias?,
     openAvatarPreview: (url: String) -> Unit,
 ) {
     Column(
@@ -314,7 +316,7 @@ private fun RoomHeaderSection(
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Avatar(
-            avatarData = AvatarData(roomId, roomName, avatarUrl, AvatarSize.RoomHeader),
+            avatarData = AvatarData(roomId.value, roomName, avatarUrl, AvatarSize.RoomHeader),
             modifier = Modifier
                 .size(70.dp)
                 .clickable(enabled = avatarUrl != null) { openAvatarPreview(avatarUrl!!) }
@@ -329,7 +331,7 @@ private fun RoomHeaderSection(
         if (roomAlias != null) {
             Spacer(modifier = Modifier.height(6.dp))
             Text(
-                text = roomAlias,
+                text = roomAlias.value,
                 style = ElementTheme.typography.fontBodyLgRegular,
                 color = MaterialTheme.colorScheme.secondary,
                 textAlign = TextAlign.Center,

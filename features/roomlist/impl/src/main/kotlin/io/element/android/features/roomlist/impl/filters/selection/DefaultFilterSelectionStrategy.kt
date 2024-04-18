@@ -54,7 +54,7 @@ class DefaultFilterSelectionStrategy @Inject constructor() : FilterSelectionStra
                 isSelected = true
             )
         }
-        val unselectedFilters = RoomListFilter.entries - selectedFilters - selectedFilters.mapNotNull { it.oppositeFilter }.toSet()
+        val unselectedFilters = RoomListFilter.entries - selectedFilters - selectedFilters.flatMap { it.incompatibleFilters }.toSet()
         val unselectedFilterStates = unselectedFilters.map {
             FilterSelectionState(
                 filter = it,

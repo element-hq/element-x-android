@@ -52,6 +52,7 @@ import io.element.android.features.poll.api.create.CreatePollEntryPoint
 import io.element.android.features.poll.api.create.CreatePollMode
 import io.element.android.libraries.architecture.BackstackWithOverlayBox
 import io.element.android.libraries.architecture.BaseFlowNode
+import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.architecture.overlay.Overlay
 import io.element.android.libraries.architecture.overlay.operation.show
@@ -62,6 +63,7 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.media.MediaSource
+import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
 import io.element.android.libraries.mediaviewer.api.local.MediaInfo
 import io.element.android.libraries.mediaviewer.api.viewer.MediaViewerNode
@@ -79,7 +81,7 @@ class MessagesFlowNode @AssistedInject constructor(
     private val createPollEntryPoint: CreatePollEntryPoint,
 ) : BaseFlowNode<MessagesFlowNode.NavTarget>(
     backstack = BackStack(
-        initialElement = NavTarget.Messages,
+        initialElement = NavTarget.Messages(plugins.filterIsInstance<Inputs>().firstOrNull()?.focusedEventId),
         savedStateMap = buildContext.savedStateMap,
     ),
     overlay = Overlay(
@@ -88,12 +90,16 @@ class MessagesFlowNode @AssistedInject constructor(
     buildContext = buildContext,
     plugins = plugins
 ) {
+    data class Inputs(val focusedEventId: EventId?) : NodeInputs
+
     sealed interface NavTarget : Parcelable {
         @Parcelize
         data object Empty : NavTarget
 
         @Parcelize
-        data object Messages : NavTarget
+        data class Messages(
+            val focusedEventId: EventId? = null,
+        ) : NavTarget
 
         @Parcelize
         data class MediaViewer(
@@ -149,6 +155,10 @@ class MessagesFlowNode @AssistedInject constructor(
                         callback?.onUserDataClicked(userId)
                     }
 
+                    override fun onPermalinkClicked(data: PermalinkData) {
+                        callback?.onPermalinkClicked(data)
+                    }
+
                     override fun onShowEventDebugInfoClicked(eventId: EventId?, debugInfo: TimelineItemDebugInfo) {
                         backstack.push(NavTarget.EventDebugInfo(eventId, debugInfo))
                     }
@@ -181,7 +191,10 @@ class MessagesFlowNode @AssistedInject constructor(
                         ElementCallActivity.start(context, inputs)
                     }
                 }
-                createNode<MessagesNode>(buildContext, listOf(callback))
+                val params = MessagesNode.Inputs(
+                    focusedEventId = navTarget.focusedEventId,
+                )
+                createNode<MessagesNode>(buildContext, listOf(callback, params))
             }
             is NavTarget.MediaViewer -> {
                 val inputs = MediaViewerNode.Inputs(

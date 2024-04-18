@@ -36,13 +36,4 @@ class DeepLinkCreator @Inject constructor() {
             }
         }
     }
-
-    fun inviteList(sessionId: SessionId): String {
-        return buildString {
-            append("$SCHEME://$HOST/")
-            append(sessionId.value)
-            append("/")
-            append(DeepLinkPaths.INVITE_LIST)
-        }
-    }
 }

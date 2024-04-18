@@ -18,6 +18,7 @@ package io.element.android.libraries.matrix.api.room
 
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.ProgressCallback
+import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.TransactionId
@@ -45,8 +46,8 @@ interface MatrixRoom : Closeable {
     val roomId: RoomId
     val name: String?
     val displayName: String
-    val alias: String?
-    val alternativeAliases: List<String>
+    val alias: RoomAlias?
+    val alternativeAliases: List<RoomAlias>
     val topic: String?
     val avatarUrl: String?
     val isEncrypted: Boolean

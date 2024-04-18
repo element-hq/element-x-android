@@ -20,15 +20,18 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Arrangement.Absolute.spacedBy
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -36,26 +39,36 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
+import io.element.android.features.roomlist.impl.RoomListEvents
+import io.element.android.features.roomlist.impl.model.InviteSender
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummaryProvider
+import io.element.android.features.roomlist.impl.model.RoomSummaryDisplayType
 import io.element.android.libraries.core.extensions.orEmpty
 import io.element.android.libraries.designsystem.atomic.atoms.UnreadIndicatorAtom
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.theme.components.Button
+import io.element.android.libraries.designsystem.theme.components.ButtonSize
 import io.element.android.libraries.designsystem.theme.components.Icon
+import io.element.android.libraries.designsystem.theme.components.OutlinedButton
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.roomListRoomMessage
 import io.element.android.libraries.designsystem.theme.roomListRoomMessageDate
 import io.element.android.libraries.designsystem.theme.roomListRoomName
 import io.element.android.libraries.designsystem.theme.unreadIndicator
+import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
+import io.element.android.libraries.ui.strings.CommonStrings
+import timber.log.Timber
 
 internal val minHeight = 84.dp
 
@@ -63,30 +76,67 @@ internal val minHeight = 84.dp
 internal fun RoomSummaryRow(
     room: RoomListRoomSummary,
     onClick: (RoomListRoomSummary) -> Unit,
-    onLongClick: (RoomListRoomSummary) -> Unit,
+    eventSink: (RoomListEvents) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    if (room.isPlaceholder) {
-        RoomSummaryPlaceholderRow(
-            modifier = modifier,
-        )
-    } else {
-        RoomSummaryRealRow(
-            room = room,
-            onClick = onClick,
-            onLongClick = onLongClick,
-            modifier = modifier
-        )
+    when (room.displayType) {
+        RoomSummaryDisplayType.PLACEHOLDER -> {
+            RoomSummaryPlaceholderRow(modifier = modifier)
+        }
+        RoomSummaryDisplayType.INVITE -> {
+            RoomSummaryScaffoldRow(
+                room = room,
+                onClick = onClick,
+                onLongClick = {
+                    Timber.d("Long click on invite room")
+                },
+                modifier = modifier
+            ) {
+                InviteNameAndIndicatorRow(name = room.name)
+                InviteSubtitle(isDirect = room.isDirect, inviteSender = room.inviteSender, canonicalAlias = room.canonicalAlias)
+                if (!room.isDirect && room.inviteSender != null) {
+                    Spacer(modifier = Modifier.height(4.dp))
+                    InviteSenderRow(sender = room.inviteSender)
+                }
+                Spacer(modifier = Modifier.height(12.dp))
+                InviteButtonsRow(
+                    onAcceptClicked = {
+                        eventSink(RoomListEvents.AcceptInvite(room))
+                    },
+                    onDeclineClicked = {
+                        eventSink(RoomListEvents.DeclineInvite(room))
+                    }
+                )
+            }
+        }
+        RoomSummaryDisplayType.ROOM -> {
+            RoomSummaryScaffoldRow(
+                room = room,
+                onClick = onClick,
+                onLongClick = {
+                    eventSink(RoomListEvents.ShowContextMenu(room))
+                },
+                modifier = modifier
+            ) {
+                NameAndTimestampRow(
+                    name = room.name,
+                    timestamp = room.timestamp,
+                    isHighlighted = room.isHighlighted
+                )
+                LastMessageAndIndicatorRow(room = room)
+            }
+        }
     }
 }
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-private fun RoomSummaryRealRow(
+private fun RoomSummaryScaffoldRow(
     room: RoomListRoomSummary,
     onClick: (RoomListRoomSummary) -> Unit,
     onLongClick: (RoomListRoomSummary) -> Unit,
     modifier: Modifier = Modifier,
+    content: @Composable ColumnScope.() -> Unit
 ) {
     val clickModifier = Modifier.combinedClickable(
         onClick = { onClick(room) },
@@ -100,94 +150,186 @@ private fun RoomSummaryRealRow(
             .fillMaxWidth()
             .heightIn(min = minHeight)
             .then(clickModifier)
-            .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 11.dp)
             .height(IntrinsicSize.Min),
     ) {
-        Avatar(
-            room
-                .avatarData,
-            modifier = Modifier
-                .align(Alignment.CenterVertically)
-        )
+        Avatar(room.avatarData)
+        Spacer(modifier = Modifier.width(16.dp))
         Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 16.dp)
+            modifier = Modifier.fillMaxWidth(),
+            content = content,
+        )
+    }
+}
+
+@Composable
+private fun NameAndTimestampRow(
+    name: String,
+    timestamp: String?,
+    isHighlighted: Boolean,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = modifier.fillMaxWidth(),
+        horizontalArrangement = spacedBy(16.dp)
+    ) {
+        // Name
+        Text(
+            modifier = Modifier.weight(1f),
+            style = ElementTheme.typography.fontBodyLgMedium,
+            text = name,
+            color = MaterialTheme.roomListRoomName(),
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
+        )
+        // Timestamp
+        Text(
+            text = timestamp ?: "",
+            style = ElementTheme.typography.fontBodySmMedium,
+            color = if (isHighlighted) {
+                ElementTheme.colors.unreadIndicator
+            } else {
+                MaterialTheme.roomListRoomMessageDate()
+            },
+        )
+    }
+}
+
+@Composable
+private fun InviteSubtitle(
+    isDirect: Boolean,
+    inviteSender: InviteSender?,
+    canonicalAlias: RoomAlias?,
+    modifier: Modifier = Modifier
+) {
+    val subtitle = if (isDirect) {
+        inviteSender?.userId?.value
+    } else {
+        canonicalAlias?.value
+    }
+    if (subtitle != null) {
+        Text(
+            text = subtitle,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            style = ElementTheme.typography.fontBodyMdRegular,
+            color = MaterialTheme.roomListRoomMessage(),
+            modifier = modifier,
+        )
+    }
+}
+
+@Composable
+private fun LastMessageAndIndicatorRow(
+    room: RoomListRoomSummary,
+    modifier: Modifier = Modifier,
+) {
+    Row(
+        modifier = modifier.fillMaxWidth(),
+        horizontalArrangement = spacedBy(28.dp)
+    ) {
+        // Last Message
+        val attributedLastMessage = room.lastMessage as? AnnotatedString
+            ?: AnnotatedString(room.lastMessage.orEmpty().toString())
+        Text(
+            modifier = Modifier.weight(1f),
+            text = attributedLastMessage,
+            color = MaterialTheme.roomListRoomMessage(),
+            style = ElementTheme.typography.fontBodyMdRegular,
+            minLines = 2,
+            maxLines = 2,
+            overflow = TextOverflow.Ellipsis
+        )
+        // Call and unread
+        Row(
+            modifier = Modifier.height(16.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            verticalAlignment = Alignment.CenterVertically,
         ) {
-            Row(modifier = Modifier.fillMaxWidth()) {
-                NameAndTimestampRow(room = room)
+            val tint = if (room.isHighlighted) ElementTheme.colors.unreadIndicator else ElementTheme.colors.iconQuaternary
+            if (room.hasRoomCall) {
+                OnGoingCallIcon(
+                    color = tint,
+                )
             }
-            Row(modifier = Modifier.fillMaxWidth()) {
-                LastMessageAndIndicatorRow(room = room)
+            if (room.userDefinedNotificationMode == RoomNotificationMode.MUTE) {
+                NotificationOffIndicatorAtom()
+            } else if (room.numberOfUnreadMentions > 0) {
+                MentionIndicatorAtom()
+            }
+            if (room.hasNewContent) {
+                UnreadIndicatorAtom(
+                    color = tint
+                )
             }
         }
     }
 }
 
 @Composable
-private fun RowScope.NameAndTimestampRow(room: RoomListRoomSummary) {
-    // Name
-    Text(
-        modifier = Modifier
-            .weight(1f)
-            .padding(end = 16.dp),
-        style = ElementTheme.typography.fontBodyLgMedium,
-        text = room.name,
-        color = MaterialTheme.roomListRoomName(),
-        maxLines = 1,
-        overflow = TextOverflow.Ellipsis
-    )
-    // Timestamp
-    Text(
-        text = room.timestamp ?: "",
-        style = ElementTheme.typography.fontBodySmMedium,
-        color = if (room.isHighlighted) {
-            ElementTheme.colors.unreadIndicator
-        } else {
-            MaterialTheme.roomListRoomMessageDate()
-        },
-    )
+private fun InviteNameAndIndicatorRow(
+    name: String,
+    modifier: Modifier = Modifier,
+) {
+    Row(
+        modifier = modifier.fillMaxWidth(),
+        horizontalArrangement = spacedBy(16.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Text(
+            modifier = Modifier.weight(1f),
+            style = ElementTheme.typography.fontBodyLgMedium,
+            text = name,
+            color = MaterialTheme.roomListRoomName(),
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
+        )
+        UnreadIndicatorAtom(
+            color = ElementTheme.colors.unreadIndicator
+        )
+    }
 }
 
 @Composable
-private fun RowScope.LastMessageAndIndicatorRow(room: RoomListRoomSummary) {
-    // Last Message
-    val attributedLastMessage = room.lastMessage as? AnnotatedString
-        ?: AnnotatedString(room.lastMessage.orEmpty().toString())
-    Text(
-        modifier = Modifier
-            .weight(1f)
-            .padding(end = 28.dp),
-        text = attributedLastMessage,
-        color = MaterialTheme.roomListRoomMessage(),
-        style = ElementTheme.typography.fontBodyMdRegular,
-        minLines = 2,
-        maxLines = 2,
-        overflow = TextOverflow.Ellipsis
-    )
-    // Call and unread
+private fun InviteSenderRow(
+    sender: InviteSender,
+    modifier: Modifier = Modifier
+) {
     Row(
-        modifier = Modifier.height(16.dp),
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
-        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(4.dp),
+        modifier = modifier.fillMaxWidth(),
     ) {
-        val tint = if (room.isHighlighted) ElementTheme.colors.unreadIndicator else ElementTheme.colors.iconQuaternary
-        if (room.hasRoomCall) {
-            OnGoingCallIcon(
-                color = tint,
-            )
-        }
-        if (room.userDefinedNotificationMode == RoomNotificationMode.MUTE) {
-            NotificationOffIndicatorAtom()
-        } else if (room.numberOfUnreadMentions > 0) {
-            MentionIndicatorAtom()
-        }
-        if (room.hasNewContent) {
-            UnreadIndicatorAtom(
-                color = tint
-            )
-        }
+        Avatar(avatarData = sender.avatarData)
+        Text(
+            text = sender.annotatedString(),
+            style = ElementTheme.typography.fontBodyMdRegular,
+            color = MaterialTheme.colorScheme.secondary,
+        )
+    }
+}
+
+@Composable
+private fun InviteButtonsRow(
+    onAcceptClicked: () -> Unit,
+    onDeclineClicked: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = modifier.padding(),
+        horizontalArrangement = spacedBy(12.dp)
+    ) {
+        OutlinedButton(
+            text = stringResource(CommonStrings.action_decline),
+            onClick = onDeclineClicked,
+            size = ButtonSize.Medium,
+            modifier = Modifier.weight(1f),
+        )
+        Button(
+            text = stringResource(CommonStrings.action_accept),
+            onClick = onAcceptClicked,
+            size = ButtonSize.Medium,
+            modifier = Modifier.weight(1f),
+        )
     }
 }
 
@@ -229,6 +371,6 @@ internal fun RoomSummaryRowPreview(@PreviewParameter(RoomListRoomSummaryProvider
     RoomSummaryRow(
         room = data,
         onClick = {},
-        onLongClick = {}
+        eventSink = {},
     )
 }

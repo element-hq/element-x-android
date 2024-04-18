@@ -17,6 +17,8 @@
 package io.element.android.libraries.matrix.api.room
 
 import androidx.compose.runtime.Immutable
+import io.element.android.libraries.matrix.api.core.RoomAlias
+import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.item.event.EventTimelineItem
 import kotlinx.collections.immutable.ImmutableList
@@ -24,7 +26,7 @@ import kotlinx.collections.immutable.ImmutableMap
 
 @Immutable
 data class MatrixRoomInfo(
-    val id: String,
+    val id: RoomId,
     val name: String?,
     val topic: String?,
     val avatarUrl: String?,
@@ -33,7 +35,7 @@ data class MatrixRoomInfo(
     val isSpace: Boolean,
     val isTombstoned: Boolean,
     val isFavorite: Boolean,
-    val canonicalAlias: String?,
+    val canonicalAlias: RoomAlias?,
     val alternativeAliases: ImmutableList<String>,
     val currentUserMembership: CurrentUserMembership,
     val latestEvent: EventTimelineItem?,

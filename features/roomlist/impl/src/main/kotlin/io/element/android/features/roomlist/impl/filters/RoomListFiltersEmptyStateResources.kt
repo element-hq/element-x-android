@@ -53,6 +53,10 @@ data class RoomListFiltersEmptyStateResources(
                             title = R.string.screen_roomlist_filter_favourites_empty_state_title,
                             subtitle = R.string.screen_roomlist_filter_favourites_empty_state_subtitle
                         )
+                        RoomListFilter.Invites -> RoomListFiltersEmptyStateResources(
+                            title = R.string.screen_roomlist_filter_invites_empty_state_title,
+                            subtitle = R.string.screen_roomlist_filter_mixed_empty_state_subtitle
+                        )
                     }
                 }
                 else -> RoomListFiltersEmptyStateResources(

@@ -72,7 +72,7 @@ jobs:
           yarn add danger-plugin-lint-report --dev
       - name: Danger lint
         if: always()
-        uses: danger/danger-js@11.3.1
+        uses: danger/danger-js@12.1.0
         with:
           args: "--dangerfile ./tools/danger/dangerfile-lint.js"
         env:

@@ -17,11 +17,15 @@
 package io.element.android.features.roomlist.impl
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import io.element.android.features.invite.api.response.AcceptDeclineInviteState
+import io.element.android.features.invite.api.response.anAcceptDeclineInviteState
 import io.element.android.features.leaveroom.api.LeaveRoomState
 import io.element.android.features.leaveroom.api.aLeaveRoomState
 import io.element.android.features.roomlist.impl.filters.RoomListFiltersState
 import io.element.android.features.roomlist.impl.filters.aRoomListFiltersState
+import io.element.android.features.roomlist.impl.model.InviteSender
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
+import io.element.android.features.roomlist.impl.model.RoomSummaryDisplayType
 import io.element.android.features.roomlist.impl.model.aRoomListRoomSummary
 import io.element.android.features.roomlist.impl.search.RoomListSearchState
 import io.element.android.features.roomlist.impl.search.aRoomListSearchState
@@ -41,8 +45,6 @@ open class RoomListStateProvider : PreviewParameterProvider<RoomListState> {
             aRoomListState(),
             aRoomListState(snackbarMessage = SnackbarMessage(CommonStrings.common_verification_complete)),
             aRoomListState(hasNetworkConnection = false),
-            aRoomListState(contentState = aRoomsContentState(invitesState = InvitesState.SeenInvites)),
-            aRoomListState(contentState = aRoomsContentState(invitesState = InvitesState.NewInvites)),
             aRoomListState(contextMenu = aContextMenuShown(roomName = "A nice room name")),
             aRoomListState(contextMenu = aContextMenuShown(isFavorite = true)),
             aRoomListState(contentState = aRoomsContentState(securityBannerState = SecurityBannerState.RecoveryKeyConfirmation)),
@@ -64,6 +66,7 @@ internal fun aRoomListState(
     searchState: RoomListSearchState = aRoomListSearchState(),
     filtersState: RoomListFiltersState = aRoomListFiltersState(isFeatureEnabled = false),
     contentState: RoomListContentState = aRoomsContentState(),
+    acceptDeclineInviteState: AcceptDeclineInviteState = anAcceptDeclineInviteState(),
     eventSink: (RoomListEvents) -> Unit = {}
 ) = RoomListState(
     matrixUser = matrixUser,
@@ -75,11 +78,23 @@ internal fun aRoomListState(
     filtersState = filtersState,
     searchState = searchState,
     contentState = contentState,
+    acceptDeclineInviteState = acceptDeclineInviteState,
     eventSink = eventSink,
 )
 
 internal fun aRoomListRoomSummaryList(): ImmutableList<RoomListRoomSummary> {
     return persistentListOf(
+        aRoomListRoomSummary(
+            name = "Room Invited",
+            avatarData = AvatarData("!roomId", "Room with Alice and Bob", size = AvatarSize.RoomListItem),
+            id = "!roomId:domain",
+            inviteSender = InviteSender(
+                userId = UserId("@bob:domain"),
+                displayName = "Bob",
+                avatarData = AvatarData("@bob:domain", "Bob", size = AvatarSize.InviteSender),
+            ),
+            displayType = RoomSummaryDisplayType.INVITE,
+        ),
         aRoomListRoomSummary(
             name = "Room",
             numberOfUnreadMessages = 1,
@@ -98,11 +113,11 @@ internal fun aRoomListRoomSummaryList(): ImmutableList<RoomListRoomSummary> {
         ),
         aRoomListRoomSummary(
             id = "!roomId3:domain",
-            isPlaceholder = true,
+             displayType = RoomSummaryDisplayType.PLACEHOLDER,
         ),
         aRoomListRoomSummary(
             id = "!roomId4:domain",
-            isPlaceholder = true,
+            displayType = RoomSummaryDisplayType.PLACEHOLDER,
         ),
     )
 }

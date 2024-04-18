@@ -18,6 +18,7 @@ package io.element.android.libraries.roomselect.impl
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
+import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.roomlist.RoomSummaryDetails
 import io.element.android.libraries.matrix.ui.components.aRoomSummaryDetails
@@ -65,6 +66,6 @@ private fun aForwardMessagesRoomList() = persistentListOf(
     aRoomSummaryDetails(
         roomId = RoomId("!room2:domain"),
         name = "Room with alias",
-        canonicalAlias = "#alias:example.org",
+        canonicalAlias = RoomAlias("#alias:example.org"),
     ),
 )

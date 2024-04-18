@@ -16,10 +16,14 @@
 
 package io.element.android.features.joinroom.impl
 
+import androidx.annotation.VisibleForTesting
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.produceState
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.features.invite.api.response.AcceptDeclineInviteEvents
@@ -29,34 +33,57 @@ import io.element.android.features.roomdirectory.api.RoomDescription
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
+import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.room.MatrixRoomInfo
-import org.jetbrains.annotations.VisibleForTesting
+import io.element.android.libraries.matrix.api.room.preview.RoomPreview
 import java.util.Optional
 
 class JoinRoomPresenter @AssistedInject constructor(
     @Assisted private val roomId: RoomId,
+    @Assisted private val roomIdOrAlias: RoomIdOrAlias,
     @Assisted private val roomDescription: Optional<RoomDescription>,
     private val matrixClient: MatrixClient,
     private val acceptDeclineInvitePresenter: Presenter<AcceptDeclineInviteState>,
 ) : Presenter<JoinRoomState> {
     interface Factory {
-        fun create(roomId: RoomId, roomDescription: Optional<RoomDescription>): JoinRoomPresenter
+        fun create(
+            roomId: RoomId,
+            roomIdOrAlias: RoomIdOrAlias,
+            roomDescription: Optional<RoomDescription>,
+        ): JoinRoomPresenter
     }
 
     @Composable
     override fun present(): JoinRoomState {
+        var retryCount by remember { mutableIntStateOf(0) }
         val roomInfo by matrixClient.getRoomInfoFlow(roomId).collectAsState(initial = Optional.empty())
-        val contentState by produceState<ContentState>(initialValue = ContentState.Loading(roomId), key1 = roomInfo) {
-            value = when {
+        val contentState by produceState<ContentState>(
+            initialValue = ContentState.Loading(roomIdOrAlias),
+            key1 = roomInfo,
+            key2 = retryCount,
+        ) {
+            when {
                 roomInfo.isPresent -> {
-                    roomInfo.get().toContentState()
+                    value = roomInfo.get().toContentState()
                 }
                 roomDescription.isPresent -> {
-                    roomDescription.get().toContentState()
+                    value = roomDescription.get().toContentState()
                 }
                 else -> {
-                    ContentState.Loading(roomId)
+                    value = ContentState.Loading(roomIdOrAlias)
+                    val result = matrixClient.getRoomPreview(roomId.toRoomIdOrAlias())
+                    value = result.fold(
+                        onSuccess = { it.toContentState() },
+                        onFailure = { throwable ->
+                            if (throwable.message?.contains("403") == true) {
+                                ContentState.UnknownRoom(roomIdOrAlias)
+                            } else {
+                                ContentState.Failure(roomIdOrAlias, throwable)
+                            }
+                        }
+                    )
                 }
             }
         }
@@ -64,7 +91,8 @@ class JoinRoomPresenter @AssistedInject constructor(
 
         fun handleEvents(event: JoinRoomEvents) {
             when (event) {
-                JoinRoomEvents.AcceptInvite, JoinRoomEvents.JoinRoom -> {
+                JoinRoomEvents.AcceptInvite,
+                JoinRoomEvents.JoinRoom -> {
                     val inviteData = contentState.toInviteData() ?: return
                     acceptDeclineInviteState.eventSink(
                         AcceptDeclineInviteEvents.AcceptInvite(inviteData)
@@ -76,6 +104,9 @@ class JoinRoomPresenter @AssistedInject constructor(
                         AcceptDeclineInviteEvents.DeclineInvite(inviteData)
                     )
                 }
+                JoinRoomEvents.RetryFetchingContent -> {
+                    retryCount++
+                }
             }
         }
 
@@ -85,6 +116,24 @@ class JoinRoomPresenter @AssistedInject constructor(
             eventSink = ::handleEvents
         )
     }
+}
+
+private fun RoomPreview.toContentState(): ContentState {
+    return ContentState.Loaded(
+        roomId = roomId,
+        name = name,
+        topic = topic,
+        alias = canonicalAlias,
+        numberOfMembers = numberOfJoinedMembers,
+        isDirect = false,
+        roomAvatarUrl = avatarUrl,
+        joinAuthorisationStatus = when {
+            isInvited -> JoinAuthorisationStatus.IsInvited
+            canKnock -> JoinAuthorisationStatus.CanKnock
+            isPublic -> JoinAuthorisationStatus.CanJoin
+            else -> JoinAuthorisationStatus.Unknown
+        }
+    )
 }
 
 @VisibleForTesting
@@ -108,7 +157,7 @@ internal fun RoomDescription.toContentState(): ContentState {
 @VisibleForTesting
 internal fun MatrixRoomInfo.toContentState(): ContentState {
     return ContentState.Loaded(
-        roomId = RoomId(id),
+        roomId = id,
         name = name,
         topic = topic,
         alias = canonicalAlias,
