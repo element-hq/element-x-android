@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
@@ -39,6 +40,7 @@ fun InviteSenderView(
 ) {
     Row(
         horizontalArrangement = Arrangement.spacedBy(4.dp),
+        verticalAlignment = Alignment.CenterVertically,
         modifier = modifier,
     ) {
         Avatar(avatarData = inviteSender.avatarData)
