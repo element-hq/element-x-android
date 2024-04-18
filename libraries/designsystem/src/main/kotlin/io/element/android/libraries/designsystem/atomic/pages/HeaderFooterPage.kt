@@ -38,6 +38,7 @@ import io.element.android.libraries.designsystem.theme.components.Text
 /**
  * @param modifier Classical modifier.
  * @param paddingValues padding values to apply to the content.
+ * @param containerColor color of the container. Set to [Color.Transparent] if you provide a background in the [modifier].
  * @param background optional background component.
  * @param topBar optional topBar.
  * @param header optional header.
