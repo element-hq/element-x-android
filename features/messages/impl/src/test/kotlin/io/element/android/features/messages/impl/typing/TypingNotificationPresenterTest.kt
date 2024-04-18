@@ -201,7 +201,7 @@ class TypingNotificationPresenterTest {
 
     private fun createPresenter(
         matrixRoom: MatrixRoom = FakeMatrixRoom().apply {
-            givenRoomInfo(aRoomInfo(id = roomId.value, name = ""))
+            givenRoomInfo(aRoomInfo(id = roomId, name = ""))
         },
         sessionPreferencesStore: SessionPreferencesStore = InMemorySessionPreferencesStore(
             isRenderTypingNotificationsEnabled = true

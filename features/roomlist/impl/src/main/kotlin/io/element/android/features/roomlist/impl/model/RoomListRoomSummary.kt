@@ -18,6 +18,7 @@ package io.element.android.features.roomlist.impl.model
 
 import androidx.compose.runtime.Immutable
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
+import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 
@@ -27,7 +28,7 @@ data class RoomListRoomSummary(
     val displayType: RoomSummaryDisplayType,
     val roomId: RoomId,
     val name: String,
-    val canonicalAlias: String?,
+    val canonicalAlias: RoomAlias?,
     val numberOfUnreadMessages: Int,
     val numberOfUnreadMentions: Int,
     val numberOfUnreadNotifications: Int,

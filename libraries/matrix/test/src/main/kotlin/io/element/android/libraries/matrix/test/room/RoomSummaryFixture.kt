@@ -17,6 +17,7 @@
 package io.element.android.libraries.matrix.test.room
 
 import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
@@ -72,7 +73,7 @@ fun aRoomSummaryDetails(
     isMarkedUnread: Boolean = false,
     notificationMode: RoomNotificationMode? = null,
     inviter: RoomMember? = null,
-    canonicalAlias: String? = null,
+    canonicalAlias: RoomAlias? = null,
     hasRoomCall: Boolean = false,
     isDm: Boolean = false,
     isFavorite: Boolean = false,

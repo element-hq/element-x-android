@@ -34,7 +34,10 @@ import io.element.android.features.messages.impl.timeline.di.LocalTimelineItemPr
 import io.element.android.features.messages.impl.timeline.di.TimelineItemPresenterFactories
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.libraries.androidutils.system.openUrlInExternalApp
+import io.element.android.libraries.androidutils.system.toast
+import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.core.bool.orFalse
+import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -42,6 +45,7 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
 import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.alias.matches
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
 import io.element.android.libraries.mediaplayer.api.MediaPlayer
 import io.element.android.services.analytics.api.AnalyticsService
@@ -58,15 +62,21 @@ class MessagesNode @AssistedInject constructor(
     private val timelineItemPresenterFactories: TimelineItemPresenterFactories,
     private val mediaPlayer: MediaPlayer,
     private val permalinkParser: PermalinkParser,
+    @ApplicationContext
+    private val context: Context,
 ) : Node(buildContext, plugins = plugins), MessagesNavigator {
     private val presenter = presenterFactory.create(this)
     private val callback = plugins<Callback>().firstOrNull()
+
+    // TODO Handle navigation to the Event
+    data class Inputs(val focusedEventId: EventId?) : NodeInputs
 
     interface Callback : Plugin {
         fun onRoomDetailsClicked()
         fun onEventClicked(event: TimelineItem.Event): Boolean
         fun onPreviewAttachments(attachments: ImmutableList<Attachment>)
         fun onUserDataClicked(userId: UserId)
+        fun onPermalinkClicked(data: PermalinkData)
         fun onShowEventDebugInfoClicked(eventId: EventId?, debugInfo: TimelineItemDebugInfo)
         fun onForwardEventClicked(eventId: EventId)
         fun onReportMessage(eventId: EventId, senderId: UserId)
@@ -109,21 +119,31 @@ class MessagesNode @AssistedInject constructor(
     ) {
         when (val permalink = permalinkParser.parse(url)) {
             is PermalinkData.UserLink -> {
+                // Open the room member profile, it will fallback to
+                // the user profile if the user is not in the room
                 callback?.onUserDataClicked(permalink.userId)
             }
             is PermalinkData.RoomLink -> {
-                // TODO Implement room link handling
-            }
-            is PermalinkData.EventIdAliasLink -> {
-                // TODO Implement room and Event link handling
-            }
-            is PermalinkData.EventIdLink -> {
-                // TODO Implement room and Event link handling
+                handleRoomLinkClicked(permalink)
             }
             is PermalinkData.FallbackLink,
             is PermalinkData.RoomEmailInviteLink -> {
                 context.openUrlInExternalApp(url)
             }
+        }
+    }
+
+    private fun handleRoomLinkClicked(roomLink: PermalinkData.RoomLink) {
+        if (room.matches(roomLink.roomIdOrAlias)) {
+            if (roomLink.eventId != null) {
+                // TODO Handle navigation to the Event
+                context.toast("TODO Handle navigation to the Event ${roomLink.eventId}")
+            } else {
+                // Click on the same room, ignore
+                context.toast("Already viewing this room!")
+            }
+        } else {
+            callback?.onPermalinkClicked(roomLink)
         }
     }
 

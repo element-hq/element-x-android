@@ -65,6 +65,7 @@ import io.element.android.libraries.designsystem.theme.roomListRoomMessage
 import io.element.android.libraries.designsystem.theme.roomListRoomMessageDate
 import io.element.android.libraries.designsystem.theme.roomListRoomName
 import io.element.android.libraries.designsystem.theme.unreadIndicator
+import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.ui.strings.CommonStrings
 import timber.log.Timber
@@ -198,13 +199,13 @@ private fun NameAndTimestampRow(
 private fun InviteSubtitle(
     isDirect: Boolean,
     inviteSender: InviteSender?,
-    canonicalAlias: String?,
+    canonicalAlias: RoomAlias?,
     modifier: Modifier = Modifier
 ) {
     val subtitle = if (isDirect) {
         inviteSender?.userId?.value
     } else {
-        canonicalAlias
+        canonicalAlias?.value
     }
     if (subtitle != null) {
         Text(

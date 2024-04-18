@@ -19,7 +19,10 @@ package io.element.android.features.joinroom.impl
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.invite.api.response.AcceptDeclineInviteState
 import io.element.android.features.invite.api.response.anAcceptDeclineInviteState
+import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
+import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
 
 open class JoinRoomStateProvider : PreviewParameterProvider<JoinRoomState> {
     override val values: Sequence<JoinRoomState>
@@ -34,22 +37,45 @@ open class JoinRoomStateProvider : PreviewParameterProvider<JoinRoomState> {
                 contentState = aLoadedContentState(joinAuthorisationStatus = JoinAuthorisationStatus.CanJoin)
             ),
             aJoinRoomState(
-                contentState = aLoadedContentState(joinAuthorisationStatus = JoinAuthorisationStatus.CanKnock)
+                contentState = aLoadedContentState(
+                    joinAuthorisationStatus = JoinAuthorisationStatus.CanKnock,
+                    topic = "lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt" +
+                        " ut labore et dolore magna aliqua ut enim ad minim veniam quis nostrud exercitation ullamco" +
+                        " laboris nisi ut aliquip ex ea commodo consequat duis aute irure dolor in reprehenderit in" +
+                        " voluptate velit esse cillum dolore eu fugiat nulla pariatur excepteur sint occaecat cupidatat" +
+                        " non proident sunt in culpa qui officia deserunt mollit anim id est laborum",
+                    numberOfMembers = 888,
+                )
             ),
             aJoinRoomState(
                 contentState = aLoadedContentState(joinAuthorisationStatus = JoinAuthorisationStatus.IsInvited)
             ),
+            aJoinRoomState(
+                contentState = aFailureContentState()
+            ),
+            aJoinRoomState(
+                contentState = aFailureContentState(roomIdOrAlias = A_ROOM_ALIAS.toRoomIdOrAlias())
+            ),
         )
 }
 
-fun anUnknownContentState(roomId: RoomId = A_ROOM_ID) = ContentState.UnknownRoom(roomId)
+fun aFailureContentState(
+    roomIdOrAlias: RoomIdOrAlias = A_ROOM_ID.toRoomIdOrAlias()
+): ContentState {
+    return ContentState.Failure(
+        roomIdOrAlias = roomIdOrAlias,
+        error = Exception("Error"),
+    )
+}
 
-fun aLoadingContentState(roomId: RoomId = A_ROOM_ID) = ContentState.Loading(roomId)
+fun anUnknownContentState(roomId: RoomId = A_ROOM_ID) = ContentState.UnknownRoom(roomId.toRoomIdOrAlias())
+
+fun aLoadingContentState(roomId: RoomId = A_ROOM_ID) = ContentState.Loading(roomId.toRoomIdOrAlias())
 
 fun aLoadedContentState(
     roomId: RoomId = A_ROOM_ID,
     name: String = "Element X android",
-    alias: String? = "#exa:matrix.org",
+    alias: RoomAlias? = RoomAlias("#exa:matrix.org"),
     topic: String? = "Element X is a secure, private and decentralized messenger.",
     numberOfMembers: Long? = null,
     isDirect: Boolean = false,
@@ -77,3 +103,4 @@ fun aJoinRoomState(
 )
 
 private val A_ROOM_ID = RoomId("!exa:matrix.org")
+private val A_ROOM_ALIAS = RoomAlias("#exa:matrix.org")

@@ -37,6 +37,7 @@ import io.element.android.anvilannotations.ContributesNode
 import io.element.android.appnav.room.joined.JoinedRoomFlowNode
 import io.element.android.appnav.room.joined.JoinedRoomLoadedFlowNode
 import io.element.android.features.joinroom.api.JoinRoomEntryPoint
+import io.element.android.features.roomaliasesolver.api.RoomAliasResolverEntryPoint
 import io.element.android.features.roomdirectory.api.RoomDescription
 import io.element.android.libraries.architecture.BackstackView
 import io.element.android.libraries.architecture.BaseFlowNode
@@ -46,12 +47,15 @@ import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import timber.log.Timber
 import java.util.Optional
@@ -64,6 +68,7 @@ class RoomFlowNode @AssistedInject constructor(
     private val client: MatrixClient,
     private val roomMembershipObserver: RoomMembershipObserver,
     private val joinRoomEntryPoint: JoinRoomEntryPoint,
+    private val roomAliasResolverEntryPoint: RoomAliasResolverEntryPoint,
 ) : BaseFlowNode<RoomFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = NavTarget.Loading,
@@ -73,9 +78,9 @@ class RoomFlowNode @AssistedInject constructor(
     plugins = plugins
 ) {
     data class Inputs(
-        val roomId: RoomId,
+        val roomIdOrAlias: RoomIdOrAlias,
         val roomDescription: Optional<RoomDescription>,
-        val initialElement: RoomNavigationTarget = RoomNavigationTarget.Messages,
+        val initialElement: RoomNavigationTarget = RoomNavigationTarget.Messages(),
     ) : NodeInputs
 
     private val inputs: Inputs = inputs()
@@ -85,29 +90,51 @@ class RoomFlowNode @AssistedInject constructor(
         data object Loading : NavTarget
 
         @Parcelize
-        data object JoinRoom : NavTarget
+        data class Resolving(val roomAlias: RoomAlias) : NavTarget
 
         @Parcelize
-        data object JoinedRoom : NavTarget
+        data class JoinRoom(val roomId: RoomId) : NavTarget
+
+        @Parcelize
+        data class JoinedRoom(val roomId: RoomId) : NavTarget
     }
 
     override fun onBuilt() {
         super.onBuilt()
-        client.getRoomInfoFlow(
-            inputs.roomId
-        ).onEach { roomInfo ->
-            Timber.d("Room membership: ${roomInfo.map { it.currentUserMembership }}")
-            if (roomInfo.getOrNull()?.currentUserMembership == CurrentUserMembership.JOINED) {
-                backstack.newRoot(NavTarget.JoinedRoom)
-            } else {
-                backstack.newRoot(NavTarget.JoinRoom)
+        resolveRoomId()
+    }
+
+    private fun resolveRoomId() {
+        lifecycleScope.launch {
+            when (val i = inputs.roomIdOrAlias) {
+                is RoomIdOrAlias.Alias -> {
+                    backstack.newRoot(NavTarget.Resolving(i.roomAlias))
+                }
+                is RoomIdOrAlias.Id -> {
+                    subscribeToRoomInfoFlow(i.roomId)
+                }
             }
         }
+    }
+
+    private fun subscribeToRoomInfoFlow(roomId: RoomId) {
+        client.getRoomInfoFlow(
+            roomId = roomId
+        )
+            .onEach { roomInfo ->
+                Timber.d("Room membership: ${roomInfo.map { it.currentUserMembership }}")
+                val info = roomInfo.getOrNull()
+                if (info?.currentUserMembership == CurrentUserMembership.JOINED) {
+                    backstack.newRoot(NavTarget.JoinedRoom(roomId))
+                } else {
+                    backstack.newRoot(NavTarget.JoinRoom(roomId))
+                }
+            }
             .launchIn(lifecycleScope)
 
         // When leaving the room from this session only, navigate up.
         roomMembershipObserver.updates
-            .filter { update -> update.roomId == inputs.roomId && !update.isUserInRoom }
+            .filter { update -> update.roomId == roomId && !update.isUserInRoom }
             .onEach {
                 navigateUp()
             }
@@ -116,14 +143,30 @@ class RoomFlowNode @AssistedInject constructor(
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
         return when (navTarget) {
-            NavTarget.Loading -> loadingNode(buildContext)
-            NavTarget.JoinRoom -> {
-                val inputs = JoinRoomEntryPoint.Inputs(inputs.roomId, roomDescription = inputs.roomDescription)
+            is NavTarget.Loading -> loadingNode(buildContext)
+            is NavTarget.Resolving -> {
+                val callback = object : RoomAliasResolverEntryPoint.Callback {
+                    override fun onAliasResolved(roomId: RoomId) {
+                        subscribeToRoomInfoFlow(roomId)
+                    }
+                }
+                val params = RoomAliasResolverEntryPoint.Params(navTarget.roomAlias)
+                roomAliasResolverEntryPoint.nodeBuilder(this, buildContext)
+                    .callback(callback)
+                    .params(params)
+                    .build()
+            }
+            is NavTarget.JoinRoom -> {
+                val inputs = JoinRoomEntryPoint.Inputs(
+                    roomId = navTarget.roomId,
+                    roomIdOrAlias = inputs.roomIdOrAlias,
+                    roomDescription = inputs.roomDescription,
+                )
                 joinRoomEntryPoint.createNode(this, buildContext, inputs)
             }
-            NavTarget.JoinedRoom -> {
+            is NavTarget.JoinedRoom -> {
                 val roomFlowNodeCallback = plugins<JoinedRoomLoadedFlowNode.Callback>()
-                val inputs = JoinedRoomFlowNode.Inputs(inputs.roomId, initialElement = inputs.initialElement)
+                val inputs = JoinedRoomFlowNode.Inputs(navTarget.roomId, initialElement = inputs.initialElement)
                 createNode<JoinedRoomFlowNode>(buildContext, plugins = listOf(inputs) + roomFlowNodeCallback)
             }
         }

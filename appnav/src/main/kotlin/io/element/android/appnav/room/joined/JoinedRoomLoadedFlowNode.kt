@@ -42,8 +42,10 @@ import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.di.DaggerComponentOwner
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.services.appnavstate.api.AppNavigationStateService
 import kotlinx.coroutines.CoroutineScope
@@ -63,8 +65,8 @@ class JoinedRoomLoadedFlowNode @AssistedInject constructor(
     roomComponentFactory: RoomComponentFactory,
 ) : BaseFlowNode<JoinedRoomLoadedFlowNode.NavTarget>(
     backstack = BackStack(
-        initialElement = when (plugins.filterIsInstance(Inputs::class.java).first().initialElement) {
-            RoomNavigationTarget.Messages -> NavTarget.Messages
+        initialElement = when (val input = plugins.filterIsInstance(Inputs::class.java).first().initialElement) {
+            is RoomNavigationTarget.Messages -> NavTarget.Messages(input.focusedEventId)
             RoomNavigationTarget.Details -> NavTarget.RoomDetails
             RoomNavigationTarget.NotificationSettings -> NavTarget.RoomNotificationSettings
         },
@@ -75,13 +77,14 @@ class JoinedRoomLoadedFlowNode @AssistedInject constructor(
 ), DaggerComponentOwner {
     interface Callback : Plugin {
         fun onOpenRoom(roomId: RoomId)
+        fun onPermalinkClicked(data: PermalinkData)
         fun onForwardedToSingleRoom(roomId: RoomId)
         fun onOpenGlobalNotificationSettings()
     }
 
     data class Inputs(
         val room: MatrixRoom,
-        val initialElement: RoomNavigationTarget = RoomNavigationTarget.Messages,
+        val initialElement: RoomNavigationTarget = RoomNavigationTarget.Messages(),
     ) : NodeInputs
 
     private val inputs: Inputs = inputs()
@@ -139,7 +142,7 @@ class JoinedRoomLoadedFlowNode @AssistedInject constructor(
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
         return when (navTarget) {
-            NavTarget.Messages -> {
+            is NavTarget.Messages -> {
                 val callback = object : MessagesEntryPoint.Callback {
                     override fun onRoomDetailsClicked() {
                         backstack.push(NavTarget.RoomDetails)
@@ -149,11 +152,18 @@ class JoinedRoomLoadedFlowNode @AssistedInject constructor(
                         backstack.push(NavTarget.RoomMemberDetails(userId))
                     }
 
+                    override fun onPermalinkClicked(data: PermalinkData) {
+                        callbacks.forEach { it.onPermalinkClicked(data) }
+                    }
+
                     override fun onForwardedToSingleRoom(roomId: RoomId) {
                         callbacks.forEach { it.onForwardedToSingleRoom(roomId) }
                     }
                 }
-                messagesEntryPoint.createNode(this, buildContext, callback)
+                messagesEntryPoint.nodeBuilder(this, buildContext)
+                    .params(MessagesEntryPoint.Params(navTarget.focusedEventId))
+                    .callback(callback)
+                    .build()
             }
             NavTarget.RoomDetails -> {
                 createRoomDetailsNode(buildContext, RoomDetailsEntryPoint.InitialTarget.RoomDetails)
@@ -169,7 +179,7 @@ class JoinedRoomLoadedFlowNode @AssistedInject constructor(
 
     sealed interface NavTarget : Parcelable {
         @Parcelize
-        data object Messages : NavTarget
+        data class Messages(val focusedEventId: EventId? = null) : NavTarget
 
         @Parcelize
         data object RoomDetails : NavTarget

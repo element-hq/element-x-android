@@ -16,6 +16,7 @@
 
 package io.element.android.libraries.matrix.api.roomlist
 
+import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.room.RoomMember
@@ -37,7 +38,7 @@ sealed interface RoomSummary {
 data class RoomSummaryDetails(
     val roomId: RoomId,
     val name: String,
-    val canonicalAlias: String?,
+    val canonicalAlias: RoomAlias?,
     val isDirect: Boolean,
     val avatarUrl: String?,
     val lastMessage: RoomMessage?,

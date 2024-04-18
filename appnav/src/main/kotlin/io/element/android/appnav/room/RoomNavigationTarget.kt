@@ -16,8 +16,17 @@
 
 package io.element.android.appnav.room
 
-enum class RoomNavigationTarget {
-    Messages,
-    Details,
-    NotificationSettings,
+import android.os.Parcelable
+import io.element.android.libraries.matrix.api.core.EventId
+import kotlinx.parcelize.Parcelize
+
+sealed interface RoomNavigationTarget : Parcelable {
+    @Parcelize
+    data class Messages(val focusedEventId: EventId? = null) : RoomNavigationTarget
+
+    @Parcelize
+    data object Details : RoomNavigationTarget
+
+    @Parcelize
+    data object NotificationSettings : RoomNavigationTarget
 }

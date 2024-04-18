@@ -43,6 +43,7 @@ import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Surface
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.room.RoomMember
@@ -106,7 +107,7 @@ internal fun SelectedRoomPreview() = ElementPreview {
 fun aRoomSummaryDetails(
     roomId: RoomId = RoomId("!room:domain"),
     name: String = "roomName",
-    canonicalAlias: String? = null,
+    canonicalAlias: RoomAlias? = null,
     isDirect: Boolean = true,
     avatarUrl: String? = null,
     lastMessage: RoomMessage? = null,

@@ -20,7 +20,9 @@ import androidx.compose.runtime.Immutable
 import io.element.android.features.invite.api.response.AcceptDeclineInviteState
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
+import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
 
 @Immutable
 data class JoinRoomState(
@@ -35,13 +37,14 @@ data class JoinRoomState(
 }
 
 sealed interface ContentState {
-    data class Loading(val roomId: RoomId) : ContentState
-    data class UnknownRoom(val roomId: RoomId) : ContentState
+    data class Loading(val roomIdOrAlias: RoomIdOrAlias) : ContentState
+    data class Failure(val roomIdOrAlias: RoomIdOrAlias, val error: Throwable) : ContentState
+    data class UnknownRoom(val roomIdOrAlias: RoomIdOrAlias) : ContentState
     data class Loaded(
         val roomId: RoomId,
         val name: String?,
         val topic: String?,
-        val alias: String?,
+        val alias: RoomAlias?,
         val numberOfMembers: Long?,
         val isDirect: Boolean,
         val roomAvatarUrl: String?,
@@ -50,7 +53,7 @@ sealed interface ContentState {
         val computedTitle = name ?: roomId.value
 
         val computedSubtitle = when {
-            alias != null -> alias
+            alias != null -> alias.value
             name == null -> ""
             else -> roomId.value
         }

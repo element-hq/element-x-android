@@ -20,6 +20,7 @@ import android.os.Parcelable
 import androidx.compose.runtime.Immutable
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
+import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
 import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
@@ -29,7 +30,7 @@ import kotlinx.parcelize.Parcelize
 data class RoomDescription(
     val roomId: RoomId,
     val name: String?,
-    val alias: String?,
+    val alias: RoomAlias?,
     val topic: String?,
     val avatarUrl: String?,
     val joinRule: JoinRule,
@@ -42,14 +43,14 @@ data class RoomDescription(
     }
 
     @IgnoredOnParcel
-    val computedName = name ?: alias ?: roomId.value
+    val computedName = name ?: alias?.value ?: roomId.value
 
     @IgnoredOnParcel
     val computedDescription: String
         get() {
             return when {
                 topic != null -> topic
-                name != null && alias != null -> alias
+                name != null && alias != null -> alias.value
                 name == null && alias == null -> ""
                 else -> roomId.value
             }

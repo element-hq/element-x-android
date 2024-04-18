@@ -21,6 +21,12 @@
       ]
     },
     {
+      "name" : ":features:roomaliasresolver:impl",
+      "includeRegex" : [
+        "screen_room_alias_resolver_.*"
+      ]
+    },
+    {
       "name" : ":features:onboarding:impl",
       "includeRegex" : [
         "screen_onboarding_.*"

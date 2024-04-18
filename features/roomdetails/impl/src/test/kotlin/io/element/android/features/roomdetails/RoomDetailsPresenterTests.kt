@@ -117,7 +117,7 @@ class RoomDetailsPresenterTests {
         val presenter = createRoomDetailsPresenter(room)
         presenter.test {
             val initialState = awaitItem()
-            assertThat(initialState.roomId).isEqualTo(room.roomId.value)
+            assertThat(initialState.roomId).isEqualTo(room.roomId)
             assertThat(initialState.roomName).isEqualTo(room.name)
             assertThat(initialState.roomAvatarUrl).isEqualTo(room.avatarUrl)
             assertThat(initialState.roomTopic).isEqualTo(RoomTopicState.ExistingTopic(room.topic!!))
