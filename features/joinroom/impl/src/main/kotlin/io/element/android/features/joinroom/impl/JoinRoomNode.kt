@@ -49,6 +49,7 @@ class JoinRoomNode @AssistedInject constructor(
         JoinRoomView(
             state = state,
             onBackPressed = ::navigateUp,
+            onKnockSuccess = ::navigateUp,
             modifier = modifier
         )
         acceptDeclineInviteView.Render(

@@ -35,6 +35,7 @@ object JoinRoomModule {
     @Provides
     fun providesJoinRoomPresenterFactory(
         client: MatrixClient,
+        knockRoom: KnockRoom,
         acceptDeclineInvitePresenter: Presenter<AcceptDeclineInviteState>,
     ): JoinRoomPresenter.Factory {
         return object : JoinRoomPresenter.Factory {
@@ -48,6 +49,7 @@ object JoinRoomModule {
                     roomIdOrAlias = roomIdOrAlias,
                     roomDescription = roomDescription,
                     matrixClient = client,
+                    knockRoom = knockRoom,
                     acceptDeclineInvitePresenter = acceptDeclineInvitePresenter,
                 )
             }

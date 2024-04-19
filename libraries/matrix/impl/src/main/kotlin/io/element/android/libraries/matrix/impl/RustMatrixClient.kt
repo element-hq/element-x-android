@@ -451,6 +451,10 @@ class RustMatrixClient(
         }
     }
 
+    override suspend fun knockRoom(roomId: RoomId): Result<Unit> {
+        return Result.failure(NotImplementedError("Not yet implemented"))
+    }
+
     override suspend fun trackRecentlyVisitedRoom(roomId: RoomId): Result<Unit> = withContext(sessionDispatcher) {
         runCatching {
             client.trackRecentlyVisitedRoom(roomId.value)

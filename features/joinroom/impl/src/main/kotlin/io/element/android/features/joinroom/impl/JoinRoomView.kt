@@ -41,6 +41,7 @@ import io.element.android.libraries.designsystem.atomic.molecules.RoomPreviewMem
 import io.element.android.libraries.designsystem.atomic.organisms.RoomPreviewOrganism
 import io.element.android.libraries.designsystem.atomic.pages.HeaderFooterPage
 import io.element.android.libraries.designsystem.background.LightGradientBackground
+import io.element.android.libraries.designsystem.components.async.AsyncActionView
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.button.BackButton
@@ -60,6 +61,7 @@ import io.element.android.libraries.ui.strings.CommonStrings
 fun JoinRoomView(
     state: JoinRoomState,
     onBackPressed: () -> Unit,
+    onKnockSuccess: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val gradientBackground = remember { LightGradientBackground() }
@@ -85,11 +87,20 @@ fun JoinRoomView(
                 onJoinRoom = {
                     state.eventSink(JoinRoomEvents.JoinRoom)
                 },
+                onKnockRoom = {
+                    state.eventSink(JoinRoomEvents.KnockRoom)
+                },
                 onRetry = {
                     state.eventSink(JoinRoomEvents.RetryFetchingContent)
                 }
             )
         }
+    )
+
+    AsyncActionView(
+        async = state.knockAction,
+        onSuccess = { onKnockSuccess() },
+        onErrorDismiss = { state.eventSink(JoinRoomEvents.ClearError) },
     )
 }
 
@@ -99,6 +110,7 @@ private fun JoinRoomFooter(
     onAcceptInvite: () -> Unit,
     onDeclineInvite: () -> Unit,
     onJoinRoom: () -> Unit,
+    onKnockRoom: () -> Unit,
     onRetry: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -142,7 +154,7 @@ private fun JoinRoomFooter(
             JoinAuthorisationStatus.CanKnock -> {
                 Button(
                     text = stringResource(R.string.screen_join_room_knock_action),
-                    onClick = onJoinRoom,
+                    onClick = onKnockRoom,
                     modifier = modifier.fillMaxWidth(),
                     size = ButtonSize.Large,
                 )
@@ -263,6 +275,7 @@ private fun JoinRoomTopBar(
 internal fun JoinRoomViewPreview(@PreviewParameter(JoinRoomStateProvider::class) state: JoinRoomState) = ElementPreview {
     JoinRoomView(
         state = state,
-        onBackPressed = { }
+        onBackPressed = { },
+        onKnockSuccess = { },
     )
 }

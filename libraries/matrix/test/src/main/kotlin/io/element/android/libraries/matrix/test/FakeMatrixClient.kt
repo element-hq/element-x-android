@@ -106,7 +106,9 @@ class FakeMatrixClient(
     var joinRoomLambda: (RoomId) -> Result<Unit> = {
         Result.success(Unit)
     }
-
+    var knockRoomLambda: (RoomId) -> Result<Unit> = {
+        Result.success(Unit)
+    }
     var getRoomInfoFlowLambda = { _: RoomId ->
         flowOf<Optional<MatrixRoomInfo>>(Optional.empty())
     }
@@ -198,6 +200,8 @@ class FakeMatrixClient(
     }
 
     override suspend fun joinRoom(roomId: RoomId): Result<Unit> = joinRoomLambda(roomId)
+
+    override suspend fun knockRoom(roomId: RoomId): Result<Unit> = knockRoomLambda(roomId)
 
     override fun sessionVerificationService(): SessionVerificationService = sessionVerificationService
 

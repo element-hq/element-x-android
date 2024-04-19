@@ -18,19 +18,25 @@ package io.element.android.features.joinroom.impl
 
 import androidx.annotation.VisibleForTesting
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.features.invite.api.response.AcceptDeclineInviteEvents
 import io.element.android.features.invite.api.response.AcceptDeclineInviteState
 import io.element.android.features.invite.api.response.InviteData
+import io.element.android.features.joinroom.impl.di.KnockRoom
 import io.element.android.features.roomdirectory.api.RoomDescription
+import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.runUpdatingState
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
@@ -39,6 +45,8 @@ import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.room.MatrixRoomInfo
 import io.element.android.libraries.matrix.api.room.preview.RoomPreview
 import io.element.android.libraries.matrix.ui.model.toInviteSender
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import java.util.Optional
 
 class JoinRoomPresenter @AssistedInject constructor(
@@ -46,6 +54,7 @@ class JoinRoomPresenter @AssistedInject constructor(
     @Assisted private val roomIdOrAlias: RoomIdOrAlias,
     @Assisted private val roomDescription: Optional<RoomDescription>,
     private val matrixClient: MatrixClient,
+    private val knockRoom: KnockRoom,
     private val acceptDeclineInvitePresenter: Presenter<AcceptDeclineInviteState>,
 ) : Presenter<JoinRoomState> {
     interface Factory {
@@ -58,8 +67,10 @@ class JoinRoomPresenter @AssistedInject constructor(
 
     @Composable
     override fun present(): JoinRoomState {
+        val coroutineScope = rememberCoroutineScope()
         var retryCount by remember { mutableIntStateOf(0) }
         val roomInfo by matrixClient.getRoomInfoFlow(roomId).collectAsState(initial = Optional.empty())
+        val knockAction: MutableState<AsyncAction<Unit>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
         val contentState by produceState<ContentState>(
             initialValue = ContentState.Loading(roomIdOrAlias),
             key1 = roomInfo,
@@ -101,6 +112,9 @@ class JoinRoomPresenter @AssistedInject constructor(
                         AcceptDeclineInviteEvents.AcceptInvite(inviteData)
                     )
                 }
+                JoinRoomEvents.KnockRoom -> {
+                    coroutineScope.knockRoom(roomId, knockAction)
+                }
                 JoinRoomEvents.DeclineInvite -> {
                     val inviteData = contentState.toInviteData() ?: return
                     acceptDeclineInviteState.eventSink(
@@ -110,14 +124,24 @@ class JoinRoomPresenter @AssistedInject constructor(
                 JoinRoomEvents.RetryFetchingContent -> {
                     retryCount++
                 }
+                JoinRoomEvents.ClearError -> {
+                    knockAction.value = AsyncAction.Uninitialized
+                }
             }
         }
 
         return JoinRoomState(
             contentState = contentState,
             acceptDeclineInviteState = acceptDeclineInviteState,
+            knockAction = knockAction.value,
             eventSink = ::handleEvents
         )
+    }
+
+    private fun CoroutineScope.knockRoom(roomId: RoomId, knockAction: MutableState<AsyncAction<Unit>>) = launch {
+        knockAction.runUpdatingState {
+            knockRoom(roomId)
+        }
     }
 }
 

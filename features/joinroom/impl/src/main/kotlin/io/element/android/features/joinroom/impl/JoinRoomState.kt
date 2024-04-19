@@ -18,6 +18,7 @@ package io.element.android.features.joinroom.impl
 
 import androidx.compose.runtime.Immutable
 import io.element.android.features.invite.api.response.AcceptDeclineInviteState
+import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.core.RoomAlias
@@ -29,6 +30,7 @@ import io.element.android.libraries.matrix.ui.model.InviteSender
 data class JoinRoomState(
     val contentState: ContentState,
     val acceptDeclineInviteState: AcceptDeclineInviteState,
+    val knockAction: AsyncAction<Unit>,
     val eventSink: (JoinRoomEvents) -> Unit
 ) {
     val joinAuthorisationStatus = when (contentState) {

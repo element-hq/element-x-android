@@ -20,6 +20,7 @@ import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.tests.testutils.EnsureNeverCalled
 import io.element.android.tests.testutils.EventsRecorder
@@ -72,11 +73,25 @@ class JoinRoomViewTest {
             ),
         )
         rule.clickOn(R.string.screen_join_room_knock_action)
-        eventsRecorder.assertSingle(JoinRoomEvents.JoinRoom)
+        eventsRecorder.assertSingle(JoinRoomEvents.KnockRoom)
     }
 
     @Test
-    fun `clicking on Accept invitationon IsInvited room emits the expected Event`() {
+    fun `clicking on closing Knock error emits the expected Event`() {
+        val eventsRecorder = EventsRecorder<JoinRoomEvents>()
+        rule.setJoinRoomView(
+            aJoinRoomState(
+                contentState = aLoadedContentState(joinAuthorisationStatus = JoinAuthorisationStatus.CanKnock),
+                knockAction = AsyncAction.Failure(Exception("Error")),
+                eventSink = eventsRecorder,
+            ),
+        )
+        rule.clickOn(CommonStrings.action_ok)
+        eventsRecorder.assertSingle(JoinRoomEvents.ClearError)
+    }
+
+    @Test
+    fun `clicking on Accept invitation IsInvited room emits the expected Event`() {
         val eventsRecorder = EventsRecorder<JoinRoomEvents>()
         rule.setJoinRoomView(
             aJoinRoomState(
@@ -118,11 +133,13 @@ class JoinRoomViewTest {
 private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setJoinRoomView(
     state: JoinRoomState,
     onBackPressed: () -> Unit = EnsureNeverCalled(),
+    onKnockSuccess: () -> Unit = EnsureNeverCalled(),
 ) {
     setContent {
         JoinRoomView(
             state = state,
             onBackPressed = onBackPressed,
+            onKnockSuccess = onKnockSuccess,
         )
     }
 }
