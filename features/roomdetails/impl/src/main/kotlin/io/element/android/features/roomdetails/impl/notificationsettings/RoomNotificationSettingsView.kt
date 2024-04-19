@@ -190,7 +190,7 @@ private fun RoomNotificationSettingsTopBar(
 
 @PreviewsDayNight
 @Composable
-internal fun RoomNotificationSettingsPreview(
+internal fun RoomNotificationSettingsViewPreview(
     @PreviewParameter(RoomNotificationSettingsStateProvider::class) state: RoomNotificationSettingsState
 ) = ElementPreview {
     RoomNotificationSettingsView(

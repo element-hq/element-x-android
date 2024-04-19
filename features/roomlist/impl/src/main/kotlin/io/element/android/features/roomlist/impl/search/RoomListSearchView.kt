@@ -234,7 +234,7 @@ private fun RoomDirectorySearchButton(
 
 @PreviewsDayNight
 @Composable
-internal fun RoomListSearchResultContentPreview(@PreviewParameter(RoomListSearchStateProvider::class) state: RoomListSearchState) = ElementPreview {
+internal fun RoomListSearchContentPreview(@PreviewParameter(RoomListSearchStateProvider::class) state: RoomListSearchState) = ElementPreview {
     RoomListSearchContent(
         state = state,
         onRoomClicked = {},
