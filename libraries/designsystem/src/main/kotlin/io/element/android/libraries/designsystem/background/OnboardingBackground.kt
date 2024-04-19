@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.designsystem.components
+package io.element.android.libraries.designsystem.background
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Box
@@ -31,6 +31,7 @@ import androidx.compose.ui.graphics.LinearGradientShader
 import androidx.compose.ui.graphics.ShaderBrush
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
+import io.element.android.libraries.designsystem.components.drawWithLayer
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 
