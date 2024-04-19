@@ -75,7 +75,7 @@ internal fun AsyncIndicatorView(
 
 @PreviewsDayNight
 @Composable
-internal fun AsyncIndicatorView_Loading_Preview() {
+internal fun AsyncIndicatorLoadingPreview() {
     ElementPreview {
         AsyncIndicator.Loading(text = "Loading")
     }
@@ -83,7 +83,7 @@ internal fun AsyncIndicatorView_Loading_Preview() {
 
 @PreviewsDayNight
 @Composable
-internal fun AsyncIndicatorView_Failed_Preview() {
+internal fun AsyncIndicatorFailurePreview() {
     ElementPreview {
         AsyncIndicator.Failure(text = "Failed")
     }

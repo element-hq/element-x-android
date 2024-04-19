@@ -128,7 +128,7 @@ internal fun GradientFloatingActionButtonPreview() {
 
 @PreviewsDayNight
 @Composable
-internal fun GradientSendButtonPreview() {
+internal fun GradientFloatingActionButtonCircleShapePreview() {
     ElementPreview {
         Box(modifier = Modifier.padding(20.dp)) {
             GradientFloatingActionButton(

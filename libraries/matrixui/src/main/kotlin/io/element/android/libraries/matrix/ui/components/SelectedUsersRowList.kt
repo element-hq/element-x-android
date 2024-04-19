@@ -132,7 +132,7 @@ fun SelectedUsersRowList(
 
 @PreviewsDayNight
 @Composable
-internal fun SelectedUsersListPreview() = ElementPreview {
+internal fun SelectedUsersRowListPreview() = ElementPreview {
     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
         // Two users that will be visible with no scrolling
         SelectedUsersRowList(

@@ -132,7 +132,7 @@ internal fun PollAnswerView(
 
 @PreviewsDayNight
 @Composable
-internal fun PollAnswerDisclosedNotSelectedPreview() = ElementPreview {
+internal fun PollAnswerViewDisclosedNotSelectedPreview() = ElementPreview {
     PollAnswerView(
         answerItem = aPollAnswerItem(showVotes = true, isSelected = false),
     )
@@ -140,7 +140,7 @@ internal fun PollAnswerDisclosedNotSelectedPreview() = ElementPreview {
 
 @PreviewsDayNight
 @Composable
-internal fun PollAnswerDisclosedSelectedPreview() = ElementPreview {
+internal fun PollAnswerViewDisclosedSelectedPreview() = ElementPreview {
     PollAnswerView(
         answerItem = aPollAnswerItem(showVotes = true, isSelected = true),
     )
@@ -148,7 +148,7 @@ internal fun PollAnswerDisclosedSelectedPreview() = ElementPreview {
 
 @PreviewsDayNight
 @Composable
-internal fun PollAnswerUndisclosedNotSelectedPreview() = ElementPreview {
+internal fun PollAnswerViewUndisclosedNotSelectedPreview() = ElementPreview {
     PollAnswerView(
         answerItem = aPollAnswerItem(showVotes = false, isSelected = false),
     )
@@ -156,7 +156,7 @@ internal fun PollAnswerUndisclosedNotSelectedPreview() = ElementPreview {
 
 @PreviewsDayNight
 @Composable
-internal fun PollAnswerUndisclosedSelectedPreview() = ElementPreview {
+internal fun PollAnswerViewUndisclosedSelectedPreview() = ElementPreview {
     PollAnswerView(
         answerItem = aPollAnswerItem(showVotes = false, isSelected = true),
     )
@@ -164,7 +164,7 @@ internal fun PollAnswerUndisclosedSelectedPreview() = ElementPreview {
 
 @PreviewsDayNight
 @Composable
-internal fun PollAnswerEndedWinnerNotSelectedPreview() = ElementPreview {
+internal fun PollAnswerViewEndedWinnerNotSelectedPreview() = ElementPreview {
     PollAnswerView(
         answerItem = aPollAnswerItem(showVotes = true, isSelected = false, isEnabled = false, isWinner = true),
     )
@@ -172,7 +172,7 @@ internal fun PollAnswerEndedWinnerNotSelectedPreview() = ElementPreview {
 
 @PreviewsDayNight
 @Composable
-internal fun PollAnswerEndedWinnerSelectedPreview() = ElementPreview {
+internal fun PollAnswerViewEndedWinnerSelectedPreview() = ElementPreview {
     PollAnswerView(
         answerItem = aPollAnswerItem(showVotes = true, isSelected = true, isEnabled = false, isWinner = true),
     )
@@ -180,7 +180,7 @@ internal fun PollAnswerEndedWinnerSelectedPreview() = ElementPreview {
 
 @PreviewsDayNight
 @Composable
-internal fun PollAnswerEndedSelectedPreview() = ElementPreview {
+internal fun PollAnswerViewEndedSelectedPreview() = ElementPreview {
     PollAnswerView(
         answerItem = aPollAnswerItem(showVotes = true, isSelected = true, isEnabled = false, isWinner = false),
     )

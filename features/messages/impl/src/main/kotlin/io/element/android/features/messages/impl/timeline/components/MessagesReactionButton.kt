@@ -191,7 +191,7 @@ internal fun MessagesReactionButtonPreview(@PreviewParameter(AggregatedReactionP
 
 @PreviewsDayNight
 @Composable
-internal fun MessagesAddReactionButtonPreview() = ElementPreview {
+internal fun MessagesReactionButtonAddPreview() = ElementPreview {
     MessagesReactionButton(
         content = MessagesReactionsButtonContent.Icon(CompoundDrawables.ic_compound_reaction_add),
         onClick = {},
@@ -201,7 +201,7 @@ internal fun MessagesAddReactionButtonPreview() = ElementPreview {
 
 @PreviewsDayNight
 @Composable
-internal fun MessagesReactionExtraButtonsPreview() = ElementPreview {
+internal fun MessagesReactionButtonExtraPreview() = ElementPreview {
     Row {
         MessagesReactionButton(
             content = MessagesReactionsButtonContent.Text("12 more"),
