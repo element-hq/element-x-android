@@ -16,15 +16,15 @@
 
 package io.element.android.features.joinroom.impl
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -64,38 +64,41 @@ fun JoinRoomView(
     onKnockSuccess: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val gradientBackground = remember { LightGradientBackground() }
-    HeaderFooterPage(
-        modifier = modifier.background(gradientBackground),
-        containerColor = Color.Transparent,
-        paddingValues = PaddingValues(16.dp),
-        topBar = {
-            JoinRoomTopBar(onBackClicked = onBackPressed)
-        },
-        content = {
-            JoinRoomContent(contentState = state.contentState)
-        },
-        footer = {
-            JoinRoomFooter(
-                state = state,
-                onAcceptInvite = {
-                    state.eventSink(JoinRoomEvents.AcceptInvite)
-                },
-                onDeclineInvite = {
-                    state.eventSink(JoinRoomEvents.DeclineInvite)
-                },
-                onJoinRoom = {
-                    state.eventSink(JoinRoomEvents.JoinRoom)
-                },
-                onKnockRoom = {
-                    state.eventSink(JoinRoomEvents.KnockRoom)
-                },
-                onRetry = {
-                    state.eventSink(JoinRoomEvents.RetryFetchingContent)
-                }
-            )
-        }
-    )
+    Box(
+        modifier = modifier.fillMaxSize(),
+    ) {
+        LightGradientBackground()
+        HeaderFooterPage(
+            containerColor = Color.Transparent,
+            paddingValues = PaddingValues(16.dp),
+            topBar = {
+                JoinRoomTopBar(onBackClicked = onBackPressed)
+            },
+            content = {
+                JoinRoomContent(contentState = state.contentState)
+            },
+            footer = {
+                JoinRoomFooter(
+                    state = state,
+                    onAcceptInvite = {
+                        state.eventSink(JoinRoomEvents.AcceptInvite)
+                    },
+                    onDeclineInvite = {
+                        state.eventSink(JoinRoomEvents.DeclineInvite)
+                    },
+                    onJoinRoom = {
+                        state.eventSink(JoinRoomEvents.JoinRoom)
+                    },
+                    onKnockRoom = {
+                        state.eventSink(JoinRoomEvents.KnockRoom)
+                    },
+                    onRetry = {
+                        state.eventSink(JoinRoomEvents.RetryFetchingContent)
+                    }
+                )
+            }
+        )
+    }
 
     AsyncActionView(
         async = state.knockAction,

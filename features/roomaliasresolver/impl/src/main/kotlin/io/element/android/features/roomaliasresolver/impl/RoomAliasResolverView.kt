@@ -16,17 +16,17 @@
 
 package io.element.android.features.roomaliasresolver.impl
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -65,23 +65,26 @@ fun RoomAliasResolverView(
             latestOnAliasResolved(state.resolveState.data)
         }
     }
-    val gradientBackground = remember { LightGradientBackground() }
-    HeaderFooterPage(
-        modifier = modifier.background(gradientBackground),
-        containerColor = Color.Transparent,
-        paddingValues = PaddingValues(16.dp),
-        topBar = {
-            RoomAliasResolverTopBar(onBackClicked = onBackPressed)
-        },
-        content = {
-            RoomAliasResolverContent(state = state)
-        },
-        footer = {
-            RoomAliasResolverFooter(
-                state = state,
-            )
-        }
-    )
+    Box(
+        modifier = modifier.fillMaxSize(),
+    ) {
+        LightGradientBackground()
+        HeaderFooterPage(
+            containerColor = Color.Transparent,
+            paddingValues = PaddingValues(16.dp),
+            topBar = {
+                RoomAliasResolverTopBar(onBackClicked = onBackPressed)
+            },
+            content = {
+                RoomAliasResolverContent(state = state)
+            },
+            footer = {
+                RoomAliasResolverFooter(
+                    state = state,
+                )
+            }
+        )
+    }
 }
 
 @Composable
