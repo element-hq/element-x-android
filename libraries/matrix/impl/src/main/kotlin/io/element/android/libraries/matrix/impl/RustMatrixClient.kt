@@ -440,7 +440,7 @@ class RustMatrixClient(
             runCatching { client.removeAvatar() }
         }
 
-    override suspend fun joinRoom(roomId: RoomId): Result<RoomId> = withContext(sessionDispatcher) {
+    override suspend fun joinRoom(roomId: RoomId): Result<Unit> = withContext(sessionDispatcher) {
         runCatching {
             client.joinRoomById(roomId.value).destroy()
             try {
@@ -448,7 +448,6 @@ class RustMatrixClient(
             } catch (e: Exception) {
                 Timber.e(e, "Timeout waiting for the room to be available in the room list")
             }
-            roomId
         }
     }
 

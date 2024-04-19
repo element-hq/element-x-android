@@ -20,7 +20,7 @@ import io.element.android.features.roomdirectory.impl.root.di.JoinRoom
 import io.element.android.libraries.matrix.api.core.RoomId
 
 class FakeJoinRoom(
-    var lambda: (RoomId) -> Result<RoomId> = { Result.success(it) }
+    var lambda: (RoomId) -> Result<Unit> = { Result.success(Unit) }
 ) : JoinRoom {
     override suspend fun invoke(roomId: RoomId) = lambda(roomId)
 }

@@ -23,7 +23,7 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import javax.inject.Inject
 
 interface JoinRoom {
-    suspend operator fun invoke(roomId: RoomId): Result<RoomId>
+    suspend operator fun invoke(roomId: RoomId): Result<Unit>
 }
 
 @ContributesBinding(SessionScope::class)
