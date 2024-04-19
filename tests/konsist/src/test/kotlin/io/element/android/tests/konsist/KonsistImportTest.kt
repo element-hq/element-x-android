@@ -27,7 +27,8 @@ class KonsistImportTest {
             .scopeFromProject()
             .imports
             .assertFalse(
-                additionalMessage = "Please use 'androidx.annotation.VisibleForTesting' instead of 'org.jetbrains.annotations.VisibleForTesting' (project convention).",
+                additionalMessage = "Please use 'androidx.annotation.VisibleForTesting' instead of " +
+                    "'org.jetbrains.annotations.VisibleForTesting' (project convention).",
             ) {
                 it.name == "org.jetbrains.annotations.VisibleForTesting"
             }
