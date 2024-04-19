@@ -40,7 +40,6 @@ import io.element.android.libraries.matrix.api.room.MatrixRoomInfo
 import io.element.android.libraries.matrix.api.room.preview.RoomPreview
 import io.element.android.libraries.matrix.ui.model.InviteSender
 import io.element.android.libraries.matrix.ui.model.toInviteSender
-import kotlinx.coroutines.flow.first
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
@@ -78,22 +77,16 @@ class JoinRoomPresenter @AssistedInject constructor(
                 else -> {
                     value = ContentState.Loading(roomIdOrAlias)
                     val result = matrixClient.getRoomPreview(roomId.toRoomIdOrAlias())
-                    result.fold(
-                        onSuccess = {
-                            value = it.toContentState(null)
-                            if (it.isInvited) {
-                                // Get the inviteSender
-                                matrixClient.getRoomInfoFlow(roomId).first()
-                                    .getOrNull()
-                                    ?.inviter
-                                    ?.toInviteSender()
-                                    ?.let { inviteSender ->
-                                        value = it.toContentState(inviteSender)
-                                    }
-                            }
+                    value = result.fold(
+                        onSuccess = { roomPreview ->
+                            val inviteSender = roomInfo.getOrNull()
+                                ?.takeIf { roomPreview.isInvited }
+                                ?.inviter
+                                ?.toInviteSender()
+                            roomPreview.toContentState(inviteSender)
                         },
                         onFailure = { throwable ->
-                            value = if (throwable.message?.contains("403") == true) {
+                            if (throwable.message?.contains("403") == true) {
                                 ContentState.UnknownRoom(roomIdOrAlias)
                             } else {
                                 ContentState.Failure(roomIdOrAlias, throwable)
