@@ -25,6 +25,9 @@ set -e
 # First run the quickest script
 ./tools/check/check_code_quality.sh
 
+# Check ktlint first
+./gradlew ktlintCheck
+
 # Build, test and check the project, with warning as errors
 # It also check that the minimal app is compiling.
 ./gradlew check -PallWarningsAsErrors=true
