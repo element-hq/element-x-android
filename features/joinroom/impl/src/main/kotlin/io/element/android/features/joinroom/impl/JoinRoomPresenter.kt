@@ -38,6 +38,7 @@ import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.room.MatrixRoomInfo
 import io.element.android.libraries.matrix.api.room.preview.RoomPreview
+import io.element.android.libraries.matrix.ui.model.toInviteSender
 import java.util.Optional
 
 class JoinRoomPresenter @AssistedInject constructor(
@@ -75,7 +76,9 @@ class JoinRoomPresenter @AssistedInject constructor(
                     value = ContentState.Loading(roomIdOrAlias)
                     val result = matrixClient.getRoomPreview(roomId.toRoomIdOrAlias())
                     value = result.fold(
-                        onSuccess = { it.toContentState() },
+                        onSuccess = { roomPreview ->
+                            roomPreview.toContentState()
+                        },
                         onFailure = { throwable ->
                             if (throwable.message?.contains("403") == true) {
                                 ContentState.UnknownRoom(roomIdOrAlias)
@@ -128,7 +131,8 @@ private fun RoomPreview.toContentState(): ContentState {
         isDirect = false,
         roomAvatarUrl = avatarUrl,
         joinAuthorisationStatus = when {
-            isInvited -> JoinAuthorisationStatus.IsInvited
+            // Note when isInvited, roomInfo will be used, so if this happen, it will be temporary.
+            isInvited -> JoinAuthorisationStatus.IsInvited(null)
             canKnock -> JoinAuthorisationStatus.CanKnock
             isPublic -> JoinAuthorisationStatus.CanJoin
             else -> JoinAuthorisationStatus.Unknown
@@ -165,7 +169,9 @@ internal fun MatrixRoomInfo.toContentState(): ContentState {
         isDirect = isDirect,
         roomAvatarUrl = avatarUrl,
         joinAuthorisationStatus = when {
-            currentUserMembership == CurrentUserMembership.INVITED -> JoinAuthorisationStatus.IsInvited
+            currentUserMembership == CurrentUserMembership.INVITED -> JoinAuthorisationStatus.IsInvited(
+                inviteSender = inviter?.toInviteSender()
+            )
             isPublic -> JoinAuthorisationStatus.CanJoin
             else -> JoinAuthorisationStatus.Unknown
         }

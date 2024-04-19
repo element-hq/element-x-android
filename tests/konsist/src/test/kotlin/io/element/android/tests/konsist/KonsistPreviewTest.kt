@@ -16,8 +16,10 @@
 
 package io.element.android.tests.konsist
 
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import com.lemonappdev.konsist.api.Konsist
 import com.lemonappdev.konsist.api.ext.list.withAllAnnotationsOf
+import com.lemonappdev.konsist.api.verify.assertEmpty
 import com.lemonappdev.konsist.api.verify.assertTrue
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import org.junit.Test
@@ -56,5 +58,16 @@ class KonsistPreviewTest {
             .assertTrue {
                 it.hasInternalModifier
             }
+    }
+
+    @Test
+    fun `Ensure that '@PreviewLightDark' is not used`() {
+        Konsist
+            .scopeFromProject()
+            .functions()
+            .withAllAnnotationsOf(PreviewLightDark::class)
+            .assertEmpty(
+                additionalMessage = "Use '@PreviewsDayNight' instead of '@PreviewLightDark', or else screenshot(s) will not be generated.",
+            )
     }
 }

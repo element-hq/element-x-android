@@ -19,10 +19,14 @@ package io.element.android.features.joinroom.impl
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.invite.api.response.AcceptDeclineInviteState
 import io.element.android.features.invite.api.response.anAcceptDeclineInviteState
+import io.element.android.libraries.designsystem.components.avatar.AvatarData
+import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
+import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
+import io.element.android.libraries.matrix.ui.model.InviteSender
 
 open class JoinRoomStateProvider : PreviewParameterProvider<JoinRoomState> {
     override val values: Sequence<JoinRoomState>
@@ -48,7 +52,13 @@ open class JoinRoomStateProvider : PreviewParameterProvider<JoinRoomState> {
                 )
             ),
             aJoinRoomState(
-                contentState = aLoadedContentState(joinAuthorisationStatus = JoinAuthorisationStatus.IsInvited)
+                contentState = aLoadedContentState(joinAuthorisationStatus = JoinAuthorisationStatus.IsInvited(null))
+            ),
+            aJoinRoomState(
+                contentState = aLoadedContentState(
+                    numberOfMembers = 123,
+                    joinAuthorisationStatus = JoinAuthorisationStatus.IsInvited(anInviteSender()),
+                )
             ),
             aJoinRoomState(
                 contentState = aFailureContentState()
@@ -100,6 +110,16 @@ fun aJoinRoomState(
     contentState = contentState,
     acceptDeclineInviteState = acceptDeclineInviteState,
     eventSink = eventSink
+)
+
+internal fun anInviteSender(
+    userId: UserId = UserId("@bob:domain"),
+    displayName: String = "Bob",
+    avatarData: AvatarData = AvatarData(userId.value, displayName, size = AvatarSize.InviteSender),
+) = InviteSender(
+    userId = userId,
+    displayName = displayName,
+    avatarData = avatarData,
 )
 
 private val A_ROOM_ID = RoomId("!exa:matrix.org")

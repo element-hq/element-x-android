@@ -16,6 +16,7 @@
 
 package io.element.android.features.roomaliasresolver.impl
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -25,8 +26,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -36,6 +39,7 @@ import io.element.android.libraries.designsystem.atomic.atoms.PlaceholderAtom
 import io.element.android.libraries.designsystem.atomic.atoms.RoomPreviewTitleAtom
 import io.element.android.libraries.designsystem.atomic.organisms.RoomPreviewOrganism
 import io.element.android.libraries.designsystem.atomic.pages.HeaderFooterPage
+import io.element.android.libraries.designsystem.background.LightGradientBackground
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -61,9 +65,10 @@ fun RoomAliasResolverView(
             latestOnAliasResolved(state.resolveState.data)
         }
     }
-
+    val gradientBackground = remember { LightGradientBackground() }
     HeaderFooterPage(
-        modifier = modifier,
+        modifier = modifier.background(gradientBackground),
+        containerColor = Color.Transparent,
         paddingValues = PaddingValues(16.dp),
         topBar = {
             RoomAliasResolverTopBar(onBackClicked = onBackPressed)
@@ -92,7 +97,7 @@ private fun RoomAliasResolverFooter(
                     state.eventSink(RoomAliasResolverEvents.Retry)
                 },
                 modifier = modifier.fillMaxWidth(),
-                size = ButtonSize.Medium,
+                size = ButtonSize.Large,
             )
         }
         is AsyncData.Loading -> {

@@ -23,6 +23,7 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
+import io.element.android.libraries.matrix.ui.model.InviteSender
 
 @Immutable
 data class JoinRoomState(
@@ -71,9 +72,9 @@ sealed interface ContentState {
     }
 }
 
-enum class JoinAuthorisationStatus {
-    IsInvited,
-    CanKnock,
-    CanJoin,
-    Unknown,
+sealed interface JoinAuthorisationStatus {
+    data class IsInvited(val inviteSender: InviteSender?) : JoinAuthorisationStatus
+    data object CanKnock : JoinAuthorisationStatus
+    data object CanJoin : JoinAuthorisationStatus
+    data object Unknown : JoinAuthorisationStatus
 }

@@ -25,6 +25,7 @@ import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.room.preview.RoomPreview
@@ -33,6 +34,8 @@ import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_ROOM_NAME
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.room.aRoomInfo
+import io.element.android.libraries.matrix.test.room.aRoomMember
+import io.element.android.libraries.matrix.ui.model.toInviteSender
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.lambda.assert
 import io.element.android.tests.testutils.lambda.lambdaRecorder
@@ -101,7 +104,31 @@ class JoinRoomPresenterTest {
         presenter.test {
             skipItems(1)
             awaitItem().also { state ->
-                assertThat(state.joinAuthorisationStatus).isEqualTo(JoinAuthorisationStatus.IsInvited)
+                assertThat(state.joinAuthorisationStatus).isEqualTo(JoinAuthorisationStatus.IsInvited(null))
+            }
+        }
+    }
+
+    @Test
+    fun `present - when room is invited then join authorization is equal to invited, an inviter is provided`() = runTest {
+        val inviter = aRoomMember(userId = UserId("@bob:example.com"), displayName = "Bob")
+        val expectedInviteSender = inviter.toInviteSender()
+        val roomInfo = aRoomInfo(
+            currentUserMembership = CurrentUserMembership.INVITED,
+            inviter = inviter,
+        )
+        val matrixClient = FakeMatrixClient().apply {
+            getRoomInfoFlowLambda = { _ ->
+                flowOf(Optional.of(roomInfo))
+            }
+        }
+        val presenter = createJoinRoomPresenter(
+            matrixClient = matrixClient
+        )
+        presenter.test {
+            skipItems(1)
+            awaitItem().also { state ->
+                assertThat(state.joinAuthorisationStatus).isEqualTo(JoinAuthorisationStatus.IsInvited(expectedInviteSender))
             }
         }
     }

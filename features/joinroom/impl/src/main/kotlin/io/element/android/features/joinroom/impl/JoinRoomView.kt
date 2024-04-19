@@ -16,13 +16,18 @@
 
 package io.element.android.features.joinroom.impl
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -35,9 +40,11 @@ import io.element.android.libraries.designsystem.atomic.molecules.ButtonRowMolec
 import io.element.android.libraries.designsystem.atomic.molecules.RoomPreviewMembersCountMolecule
 import io.element.android.libraries.designsystem.atomic.organisms.RoomPreviewOrganism
 import io.element.android.libraries.designsystem.atomic.pages.HeaderFooterPage
+import io.element.android.libraries.designsystem.background.LightGradientBackground
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.button.BackButton
+import io.element.android.libraries.designsystem.components.button.SuperButton
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
@@ -46,6 +53,7 @@ import io.element.android.libraries.designsystem.theme.components.OutlinedButton
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
+import io.element.android.libraries.matrix.ui.components.InviteSenderView
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
@@ -54,8 +62,10 @@ fun JoinRoomView(
     onBackPressed: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val gradientBackground = remember { LightGradientBackground() }
     HeaderFooterPage(
-        modifier = modifier,
+        modifier = modifier.background(gradientBackground),
+        containerColor = Color.Transparent,
         paddingValues = PaddingValues(16.dp),
         topBar = {
             JoinRoomTopBar(onBackClicked = onBackPressed)
@@ -97,41 +107,44 @@ private fun JoinRoomFooter(
             text = stringResource(CommonStrings.action_retry),
             onClick = onRetry,
             modifier = modifier.fillMaxWidth(),
-            size = ButtonSize.Medium,
+            size = ButtonSize.Large,
         )
     } else {
         val joinAuthorisationStatus = state.joinAuthorisationStatus
         when (joinAuthorisationStatus) {
-            JoinAuthorisationStatus.IsInvited -> {
+            is JoinAuthorisationStatus.IsInvited -> {
                 ButtonRowMolecule(modifier = modifier, horizontalArrangement = Arrangement.spacedBy(20.dp)) {
                     OutlinedButton(
                         text = stringResource(CommonStrings.action_decline),
                         onClick = onDeclineInvite,
                         modifier = Modifier.weight(1f),
-                        size = ButtonSize.Medium,
+                        size = ButtonSize.Large,
                     )
                     Button(
                         text = stringResource(CommonStrings.action_accept),
                         onClick = onAcceptInvite,
                         modifier = Modifier.weight(1f),
-                        size = ButtonSize.Medium,
+                        size = ButtonSize.Large,
                     )
                 }
             }
             JoinAuthorisationStatus.CanJoin -> {
-                Button(
-                    text = stringResource(R.string.screen_join_room_join_action),
+                SuperButton(
                     onClick = onJoinRoom,
                     modifier = modifier.fillMaxWidth(),
-                    size = ButtonSize.Medium,
-                )
+                    buttonSize = ButtonSize.Large,
+                ) {
+                    Text(
+                        text = stringResource(R.string.screen_join_room_join_action),
+                    )
+                }
             }
             JoinAuthorisationStatus.CanKnock -> {
                 Button(
                     text = stringResource(R.string.screen_join_room_knock_action),
                     onClick = onJoinRoom,
                     modifier = modifier.fillMaxWidth(),
-                    size = ButtonSize.Medium,
+                    size = ButtonSize.Large,
                 )
             }
             JoinAuthorisationStatus.Unknown -> Unit
@@ -158,7 +171,16 @@ private fun JoinRoomContent(
                     RoomPreviewSubtitleAtom(contentState.computedSubtitle)
                 },
                 description = {
-                    RoomPreviewDescriptionAtom(contentState.topic ?: "")
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.spacedBy(8.dp),
+                    ) {
+                        val inviteSender = (contentState.joinAuthorisationStatus as? JoinAuthorisationStatus.IsInvited)?.inviteSender
+                        if (inviteSender != null) {
+                            InviteSenderView(inviteSender = inviteSender)
+                        }
+                        RoomPreviewDescriptionAtom(contentState.topic ?: "")
+                    }
                 },
                 memberCount = {
                     if (contentState.showMemberCount) {
