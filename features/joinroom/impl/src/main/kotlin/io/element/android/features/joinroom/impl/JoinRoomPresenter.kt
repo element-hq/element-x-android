@@ -38,10 +38,8 @@ import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.room.MatrixRoomInfo
 import io.element.android.libraries.matrix.api.room.preview.RoomPreview
-import io.element.android.libraries.matrix.ui.model.InviteSender
 import io.element.android.libraries.matrix.ui.model.toInviteSender
 import java.util.Optional
-import kotlin.jvm.optionals.getOrNull
 
 class JoinRoomPresenter @AssistedInject constructor(
     @Assisted private val roomId: RoomId,
@@ -79,11 +77,7 @@ class JoinRoomPresenter @AssistedInject constructor(
                     val result = matrixClient.getRoomPreview(roomId.toRoomIdOrAlias())
                     value = result.fold(
                         onSuccess = { roomPreview ->
-                            val inviteSender = roomInfo.getOrNull()
-                                ?.takeIf { roomPreview.isInvited }
-                                ?.inviter
-                                ?.toInviteSender()
-                            roomPreview.toContentState(inviteSender)
+                            roomPreview.toContentState()
                         },
                         onFailure = { throwable ->
                             if (throwable.message?.contains("403") == true) {
@@ -127,9 +121,7 @@ class JoinRoomPresenter @AssistedInject constructor(
     }
 }
 
-private fun RoomPreview.toContentState(
-    inviteSender: InviteSender?
-): ContentState {
+private fun RoomPreview.toContentState(): ContentState {
     return ContentState.Loaded(
         roomId = roomId,
         name = name,
@@ -139,7 +131,8 @@ private fun RoomPreview.toContentState(
         isDirect = false,
         roomAvatarUrl = avatarUrl,
         joinAuthorisationStatus = when {
-            isInvited -> JoinAuthorisationStatus.IsInvited(inviteSender)
+            // Note when isInvited, roomInfo will be used, so if this happen, it will be temporary.
+            isInvited -> JoinAuthorisationStatus.IsInvited(null)
             canKnock -> JoinAuthorisationStatus.CanKnock
             isPublic -> JoinAuthorisationStatus.CanJoin
             else -> JoinAuthorisationStatus.Unknown
