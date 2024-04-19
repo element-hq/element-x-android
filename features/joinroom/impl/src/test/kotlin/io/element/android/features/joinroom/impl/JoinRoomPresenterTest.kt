@@ -110,7 +110,7 @@ class JoinRoomPresenterTest {
     }
 
     @Test
-    fun `present - when room is invited then join authorization is equal to invited, and inviter is provided`() = runTest {
+    fun `present - when room is invited then join authorization is equal to invited, an inviter is provided`() = runTest {
         val inviter = aRoomMember(userId = UserId("@bob:example.com"), displayName = "Bob")
         val expectedInviteSender = inviter.toInviteSender()
         val roomInfo = aRoomInfo(
