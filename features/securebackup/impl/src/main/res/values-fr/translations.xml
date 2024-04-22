@@ -19,7 +19,7 @@
   <string name="screen_key_backup_disable_confirmation_action_turn_off">"Désactiver"</string>
   <string name="screen_key_backup_disable_confirmation_description">"Vous perdrez vos messages chiffrés si vous vous déconnectez de toutes vos sessions."</string>
   <string name="screen_key_backup_disable_confirmation_title">"Êtes-vous certain de vouloir désactiver la sauvegarde?"</string>
-  <string name="screen_key_backup_disable_description">"Désactiver la sauvegarde supprimera votre clé de récupération actuelle et désactivera d’autres mesures de sécurité. Dans ce cas, vous:"</string>
+  <string name="screen_key_backup_disable_description">"Désactiver la sauvegarde supprimera votre clé de récupération actuelle et désactivera d’autres mesures de sécurité. Dans ce cas:"</string>
   <string name="screen_key_backup_disable_description_point_1">"Pas d’accès à l’historique des discussions chiffrées sur vos nouveaux appareils"</string>
   <string name="screen_key_backup_disable_description_point_2">"Perte de l’accès à vos messages chiffrés si vous êtes déconnectés de %1$s partout"</string>
   <string name="screen_key_backup_disable_title">"Êtes-vous certain de vouloir désactiver la sauvegarde?"</string>
