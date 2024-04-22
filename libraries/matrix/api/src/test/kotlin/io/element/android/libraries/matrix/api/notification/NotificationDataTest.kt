@@ -29,7 +29,7 @@ class NotificationDataTest {
             senderDisplayName = null,
             senderIsNameAmbiguous = false,
         )
-        assertThat(sut.getSenderName(A_USER_ID)).isEqualTo("@alice:server.org")
+        assertThat(sut.getDisambiguatedDisplayName(A_USER_ID)).isEqualTo("@alice:server.org")
     }
 
     @Test
@@ -38,7 +38,7 @@ class NotificationDataTest {
             senderDisplayName = "Alice",
             senderIsNameAmbiguous = false,
         )
-        assertThat(sut.getSenderName(A_USER_ID)).isEqualTo("Alice")
+        assertThat(sut.getDisambiguatedDisplayName(A_USER_ID)).isEqualTo("Alice")
     }
 
     @Test
@@ -47,7 +47,7 @@ class NotificationDataTest {
             senderDisplayName = "Alice",
             senderIsNameAmbiguous = true,
         )
-        assertThat(sut.getSenderName(A_USER_ID)).isEqualTo("Alice (@alice:server.org)")
+        assertThat(sut.getDisambiguatedDisplayName(A_USER_ID)).isEqualTo("Alice (@alice:server.org)")
     }
 
     private fun aNotificationData(
