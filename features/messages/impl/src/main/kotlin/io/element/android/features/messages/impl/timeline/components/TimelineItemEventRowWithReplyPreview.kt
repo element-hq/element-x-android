@@ -151,7 +151,7 @@ open class InReplyToDetailsProvider : PreviewParameterProvider<InReplyToDetails>
             )
         }
 
-    private fun aMessageContent(
+    protected fun aMessageContent(
         body: String,
         type: MessageType,
     ) = MessageContent(
@@ -164,13 +164,14 @@ open class InReplyToDetailsProvider : PreviewParameterProvider<InReplyToDetails>
 
     protected fun aInReplyToDetails(
         eventContent: EventContent,
+        displayNameAmbiguous: Boolean = false,
     ) = InReplyToDetails(
         eventId = EventId("\$event"),
         eventContent = eventContent,
         senderId = UserId("@Sender:domain"),
         senderProfile = ProfileTimelineDetails.Ready(
             displayName = "Sender",
-            displayNameAmbiguous = false,
+            displayNameAmbiguous = displayNameAmbiguous,
             avatarUrl = null,
         ),
         textContent = (eventContent as? MessageContent)?.body.orEmpty(),
