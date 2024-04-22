@@ -38,12 +38,12 @@ class RoomMembershipContentFormatter @Inject constructor(
             MembershipChange.JOINED -> if (memberIsYou) {
                 sp.getString(R.string.state_event_room_join_by_you)
             } else {
-                sp.getString(R.string.state_event_room_join, userId.value)
+                sp.getString(R.string.state_event_room_join, senderDisambiguatedDisplayName)
             }
             MembershipChange.LEFT -> if (memberIsYou) {
                 sp.getString(R.string.state_event_room_leave_by_you)
             } else {
-                sp.getString(R.string.state_event_room_leave, userId.value)
+                sp.getString(R.string.state_event_room_leave, senderDisambiguatedDisplayName)
             }
             MembershipChange.BANNED, MembershipChange.KICKED_AND_BANNED -> if (senderIsYou) {
                 sp.getString(R.string.state_event_room_ban_by_you, userId.value)
@@ -85,7 +85,7 @@ class RoomMembershipContentFormatter @Inject constructor(
             MembershipChange.KNOCKED -> if (memberIsYou) {
                 sp.getString(R.string.state_event_room_knock_by_you)
             } else {
-                sp.getString(R.string.state_event_room_knock, userId.value)
+                sp.getString(R.string.state_event_room_knock, senderDisambiguatedDisplayName)
             }
             MembershipChange.KNOCK_ACCEPTED -> if (senderIsYou) {
                 sp.getString(R.string.state_event_room_knock_accepted_by_you, userId.value)
@@ -95,7 +95,7 @@ class RoomMembershipContentFormatter @Inject constructor(
             MembershipChange.KNOCK_RETRACTED -> if (memberIsYou) {
                 sp.getString(R.string.state_event_room_knock_retracted_by_you)
             } else {
-                sp.getString(R.string.state_event_room_knock_retracted, userId.value)
+                sp.getString(R.string.state_event_room_knock_retracted, senderDisambiguatedDisplayName)
             }
             MembershipChange.KNOCK_DENIED -> if (senderIsYou) {
                 sp.getString(R.string.state_event_room_knock_denied_by_you, userId.value)

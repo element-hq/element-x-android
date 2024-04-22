@@ -264,7 +264,7 @@ class DefaultRoomLastMessageFormatterTest {
 
         val someoneJoinedRoomEvent = createRoomEvent(sentByYou = false, senderDisplayName = otherName, content = someoneContent)
         val someoneJoinedRoom = formatter.format(someoneJoinedRoomEvent, false)
-        assertThat(someoneJoinedRoom).isEqualTo("${someoneContent.userId} joined the room")
+        assertThat(someoneJoinedRoom).isEqualTo("$otherName joined the room")
     }
 
     @Test
@@ -280,7 +280,7 @@ class DefaultRoomLastMessageFormatterTest {
 
         val someoneLeftRoomEvent = createRoomEvent(sentByYou = false, senderDisplayName = otherName, content = someoneContent)
         val someoneLeftRoom = formatter.format(someoneLeftRoomEvent, false)
-        assertThat(someoneLeftRoom).isEqualTo("${someoneContent.userId} left the room")
+        assertThat(someoneLeftRoom).isEqualTo("$otherName left the room")
     }
 
     @Test
@@ -421,7 +421,7 @@ class DefaultRoomLastMessageFormatterTest {
 
         val someoneKnockedEvent = createRoomEvent(sentByYou = false, senderDisplayName = otherName, content = someoneContent)
         val someoneKnocked = formatter.format(someoneKnockedEvent, false)
-        assertThat(someoneKnocked).isEqualTo("${someoneContent.userId} requested to join")
+        assertThat(someoneKnocked).isEqualTo("$otherName requested to join")
     }
 
     @Test
@@ -452,7 +452,7 @@ class DefaultRoomLastMessageFormatterTest {
 
         val someoneRetractedKnockEvent = createRoomEvent(sentByYou = false, senderDisplayName = otherName, content = someoneContent)
         val someoneRetractedKnock = formatter.format(someoneRetractedKnockEvent, false)
-        assertThat(someoneRetractedKnock).isEqualTo("${someoneContent.userId} is no longer interested in joining")
+        assertThat(someoneRetractedKnock).isEqualTo("$otherName is no longer interested in joining")
     }
 
     @Test
