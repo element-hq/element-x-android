@@ -28,7 +28,10 @@ import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageTy
 internal fun TimelineItemEventRowDisambiguatedPreview(
     @PreviewParameter(InReplyToDetailsDisambiguatedProvider::class) inReplyToDetails: InReplyToDetails,
 ) = ElementPreview {
-    TimelineItemEventRowWithReplyContentToPreview(inReplyToDetails)
+    TimelineItemEventRowWithReplyContentToPreview(
+        inReplyToDetails = inReplyToDetails,
+        displayNameAmbiguous = true,
+    )
 }
 
 class InReplyToDetailsDisambiguatedProvider : InReplyToDetailsProvider() {

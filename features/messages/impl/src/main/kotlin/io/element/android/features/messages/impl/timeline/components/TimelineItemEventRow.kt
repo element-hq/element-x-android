@@ -69,6 +69,8 @@ import androidx.constraintlayout.compose.ConstrainScope
 import androidx.constraintlayout.compose.ConstraintLayout
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
+import io.element.android.features.messages.impl.sender.SenderName
+import io.element.android.features.messages.impl.sender.SenderNameMode
 import io.element.android.features.messages.impl.timeline.TimelineEvents
 import io.element.android.features.messages.impl.timeline.TimelineRoomInfo
 import io.element.android.features.messages.impl.timeline.aTimelineItemEvent
@@ -106,6 +108,7 @@ import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.timeline.item.event.ProfileTimelineDetails
 import io.element.android.libraries.matrix.api.timeline.item.event.getDisambiguatedDisplayName
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnail
 import io.element.android.libraries.testtags.TestTags
@@ -292,7 +295,8 @@ private fun TimelineItemEventRowContent(
         val avatarStrokeSize = 3.dp
         if (event.showSenderInformation && !timelineRoomInfo.isDm) {
             MessageSenderInformation(
-                event.safeSenderName,
+                event.senderId,
+                event.senderProfile,
                 event.senderAvatar,
                 avatarStrokeSize,
                 Modifier
@@ -372,7 +376,8 @@ private fun TimelineItemEventRowContent(
 
 @Composable
 private fun MessageSenderInformation(
-    sender: String,
+    senderId: UserId,
+    senderProfile: ProfileTimelineDetails,
     senderAvatar: AvatarData,
     avatarStrokeSize: Dp,
     modifier: Modifier = Modifier
@@ -399,13 +404,10 @@ private fun MessageSenderInformation(
         Row {
             Avatar(senderAvatar)
             Spacer(modifier = Modifier.width(4.dp))
-            Text(
-                modifier = Modifier.clipToBounds(),
-                text = sender,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-                color = avatarColors.foreground,
-                style = ElementTheme.typography.fontBodyMdMedium,
+            SenderName(
+                senderId = senderId,
+                senderProfile = senderProfile,
+                senderNameMode = SenderNameMode.Timeline(avatarColors.foreground),
             )
         }
     }
@@ -562,10 +564,10 @@ private fun MessageEventBubbleContent(
             }
         }
         val inReplyTo = @Composable { inReplyTo: InReplyToDetails ->
-            val senderDisambiguatedDisplayName = inReplyTo.senderProfile.getDisambiguatedDisplayName(inReplyTo.senderId)
             val topPadding = if (showThreadDecoration) 0.dp else 8.dp
             ReplyToContent(
-                senderDisambiguatedDisplayName = senderDisambiguatedDisplayName,
+                senderId = inReplyTo.senderId,
+                senderProfile = inReplyTo.senderProfile,
                 metadata = inReplyTo.metadata(),
                 modifier = Modifier
                     .padding(top = topPadding, start = 8.dp, end = 8.dp)
@@ -610,7 +612,8 @@ private fun MessageEventBubbleContent(
 
 @Composable
 private fun ReplyToContent(
-    senderDisambiguatedDisplayName: String,
+    senderId: UserId,
+    senderProfile: ProfileTimelineDetails,
     metadata: InReplyToMetadata?,
     modifier: Modifier = Modifier,
 ) {
@@ -634,18 +637,15 @@ private fun ReplyToContent(
             )
             Spacer(modifier = Modifier.width(8.dp))
         }
-        val a11InReplyToText = stringResource(CommonStrings.common_in_reply_to, senderDisambiguatedDisplayName)
+        val a11InReplyToText = stringResource(CommonStrings.common_in_reply_to, senderProfile.getDisambiguatedDisplayName(senderId))
         Column(verticalArrangement = Arrangement.SpaceBetween) {
-            Text(
+            SenderName(
+                senderId = senderId,
+                senderProfile = senderProfile,
+                senderNameMode = SenderNameMode.Reply,
                 modifier = Modifier.semantics {
                     contentDescription = a11InReplyToText
                 },
-                text = senderDisambiguatedDisplayName,
-                style = ElementTheme.typography.fontBodySmMedium,
-                textAlign = TextAlign.Start,
-                color = ElementTheme.materialColors.primary,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
             )
             ReplyToContentText(metadata)
         }

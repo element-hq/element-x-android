@@ -59,7 +59,10 @@ internal fun TimelineItemEventRowWithReplyPreview(
 }
 
 @Composable
-internal fun TimelineItemEventRowWithReplyContentToPreview(inReplyToDetails: InReplyToDetails) {
+internal fun TimelineItemEventRowWithReplyContentToPreview(
+    inReplyToDetails: InReplyToDetails,
+    displayNameAmbiguous: Boolean = false,
+) {
     Column {
         sequenceOf(false, true).forEach {
             ATimelineItemEventRow(
@@ -70,6 +73,7 @@ internal fun TimelineItemEventRowWithReplyContentToPreview(inReplyToDetails: InR
                         body = "A reply."
                     ),
                     inReplyTo = inReplyToDetails,
+                    displayNameAmbiguous = displayNameAmbiguous,
                     groupPosition = TimelineItemGroupPosition.First,
                 ),
             )
@@ -81,6 +85,7 @@ internal fun TimelineItemEventRowWithReplyContentToPreview(inReplyToDetails: InR
                         aspectRatio = 2.5f
                     ),
                     inReplyTo = inReplyToDetails,
+                    displayNameAmbiguous = displayNameAmbiguous,
                     isThreaded = true,
                     groupPosition = TimelineItemGroupPosition.Last,
                 ),
@@ -169,11 +174,19 @@ open class InReplyToDetailsProvider : PreviewParameterProvider<InReplyToDetails>
         eventId = EventId("\$event"),
         eventContent = eventContent,
         senderId = UserId("@Sender:domain"),
-        senderProfile = ProfileTimelineDetails.Ready(
-            displayName = "Sender",
+        senderProfile = aProfileTimelineDetailsReady(
             displayNameAmbiguous = displayNameAmbiguous,
-            avatarUrl = null,
         ),
         textContent = (eventContent as? MessageContent)?.body.orEmpty(),
     )
 }
+
+internal fun aProfileTimelineDetailsReady(
+    displayName: String? = "Sender",
+    displayNameAmbiguous: Boolean = false,
+    avatarUrl: String? = null,
+) = ProfileTimelineDetails.Ready(
+    displayName = displayName,
+    displayNameAmbiguous = displayNameAmbiguous,
+    avatarUrl = avatarUrl,
+)

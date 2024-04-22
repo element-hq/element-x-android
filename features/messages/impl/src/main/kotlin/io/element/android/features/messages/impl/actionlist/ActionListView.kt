@@ -55,6 +55,8 @@ import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
+import io.element.android.features.messages.impl.sender.SenderName
+import io.element.android.features.messages.impl.sender.SenderNameMode
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemAudioContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEncryptedContent
@@ -143,8 +145,8 @@ fun ActionListView(
                 onEmojiReactionClicked = ::onEmojiReactionClicked,
                 onCustomReactionClicked = ::onCustomReactionClicked,
                 modifier = Modifier
-                    .navigationBarsPadding()
-                    .imePadding()
+                        .navigationBarsPadding()
+                        .imePadding()
             )
         }
     }
@@ -175,8 +177,8 @@ private fun SheetContent(
                         MessageSummary(
                             event = target.event,
                             modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 16.dp)
+                                    .fillMaxWidth()
+                                    .padding(horizontal = 16.dp)
                         )
                         Spacer(modifier = Modifier.height(14.dp))
                         HorizontalDivider()
@@ -268,15 +270,11 @@ private fun MessageSummary(event: TimelineItem.Event, modifier: Modifier = Modif
         icon()
         Spacer(modifier = Modifier.width(8.dp))
         Column(modifier = Modifier.weight(1f)) {
-            Row {
-                if (event.senderDisambiguatedDisplayName != null) {
-                    Text(
-                        text = event.senderDisambiguatedDisplayName,
-                        style = ElementTheme.typography.fontBodySmMedium,
-                        color = MaterialTheme.colorScheme.primary
-                    )
-                }
-            }
+            SenderName(
+                senderId = event.senderId,
+                senderProfile = event.senderProfile,
+                senderNameMode = SenderNameMode.ActionList,
+            )
             content()
         }
         Spacer(modifier = Modifier.width(16.dp))
@@ -324,13 +322,13 @@ private fun EmojiReactionsRow(
                 contentDescription = stringResource(id = CommonStrings.a11y_react_with_other_emojis),
                 tint = MaterialTheme.colorScheme.secondary,
                 modifier = Modifier
-                    .size(24.dp)
-                    .clickable(
-                        enabled = true,
-                        onClick = onCustomReactionClicked,
-                        indication = rememberRipple(bounded = false, radius = emojiRippleRadius),
-                        interactionSource = remember { MutableInteractionSource() }
-                    )
+                        .size(24.dp)
+                        .clickable(
+                                enabled = true,
+                                onClick = onCustomReactionClicked,
+                                indication = rememberRipple(bounded = false, radius = emojiRippleRadius),
+                                interactionSource = remember { MutableInteractionSource() }
+                        )
             )
         }
     }
@@ -354,11 +352,11 @@ private fun EmojiButton(
     }
     Box(
         modifier = Modifier
-            .size(48.dp)
-            .background(backgroundColor, CircleShape)
-            .clearAndSetSemantics {
-                contentDescription = description
-            },
+                .size(48.dp)
+                .background(backgroundColor, CircleShape)
+                .clearAndSetSemantics {
+                    contentDescription = description
+                },
         contentAlignment = Alignment.Center
     ) {
         Text(
