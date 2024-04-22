@@ -48,7 +48,7 @@ internal fun aMessageEvent(
     id = eventId?.value.orEmpty(),
     eventId = eventId,
     senderId = A_USER_ID,
-    senderDisplayName = A_USER_NAME,
+    senderDisambiguatedDisplayName = A_USER_NAME,
     senderAvatar = AvatarData(A_USER_ID.value, A_USER_NAME, size = AvatarSize.TimelineSender),
     content = content,
     sentTime = "",

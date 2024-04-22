@@ -57,7 +57,7 @@ sealed interface TimelineItem {
         val eventId: EventId? = null,
         val transactionId: TransactionId? = null,
         val senderId: UserId,
-        val senderDisplayName: String?,
+        val senderDisambiguatedDisplayName: String?,
         val senderAvatar: AvatarData,
         val content: TimelineItemEventContent,
         val sentTime: String = "",
@@ -74,7 +74,7 @@ sealed interface TimelineItem {
     ) : TimelineItem {
         val showSenderInformation = groupPosition.isNew() && !isMine
 
-        val safeSenderName: String = senderDisplayName ?: senderId.value
+        val safeSenderName: String = senderDisambiguatedDisplayName ?: senderId.value
 
         val failedToSend: Boolean = localSendState is LocalEventSendState.SendingFailed
 

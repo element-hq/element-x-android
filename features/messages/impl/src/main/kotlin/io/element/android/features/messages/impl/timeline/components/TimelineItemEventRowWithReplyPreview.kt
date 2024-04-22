@@ -42,6 +42,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.MessageConten
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.NoticeMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.PollContent
+import io.element.android.libraries.matrix.api.timeline.item.event.ProfileTimelineDetails
 import io.element.android.libraries.matrix.api.timeline.item.event.StickerMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.VideoMessageType
@@ -167,8 +168,11 @@ open class InReplyToDetailsProvider : PreviewParameterProvider<InReplyToDetails>
         eventId = EventId("\$event"),
         eventContent = eventContent,
         senderId = UserId("@Sender:domain"),
-        senderDisplayName = "Sender",
-        senderAvatarUrl = null,
+        senderProfile = ProfileTimelineDetails.Ready(
+            displayName = "Sender",
+            displayNameAmbiguous = false,
+            avatarUrl = null,
+        ),
         textContent = (eventContent as? MessageContent)?.body.orEmpty(),
     )
 }

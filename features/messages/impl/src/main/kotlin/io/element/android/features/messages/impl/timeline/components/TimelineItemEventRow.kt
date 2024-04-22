@@ -106,6 +106,7 @@ import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.timeline.item.event.getDisambiguatedDisplayName
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnail
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -561,10 +562,10 @@ private fun MessageEventBubbleContent(
             }
         }
         val inReplyTo = @Composable { inReplyTo: InReplyToDetails ->
-            val senderName = inReplyTo.senderDisplayName ?: inReplyTo.senderId.value
+            val senderDisambiguatedDisplayName = inReplyTo.senderProfile.getDisambiguatedDisplayName(inReplyTo.senderId)
             val topPadding = if (showThreadDecoration) 0.dp else 8.dp
             ReplyToContent(
-                senderName = senderName,
+                senderDisambiguatedDisplayName = senderDisambiguatedDisplayName,
                 metadata = inReplyTo.metadata(),
                 modifier = Modifier
                     .padding(top = topPadding, start = 8.dp, end = 8.dp)
@@ -609,7 +610,7 @@ private fun MessageEventBubbleContent(
 
 @Composable
 private fun ReplyToContent(
-    senderName: String,
+    senderDisambiguatedDisplayName: String,
     metadata: InReplyToMetadata?,
     modifier: Modifier = Modifier,
 ) {
@@ -633,13 +634,13 @@ private fun ReplyToContent(
             )
             Spacer(modifier = Modifier.width(8.dp))
         }
-        val a11InReplyToText = stringResource(CommonStrings.common_in_reply_to, senderName)
+        val a11InReplyToText = stringResource(CommonStrings.common_in_reply_to, senderDisambiguatedDisplayName)
         Column(verticalArrangement = Arrangement.SpaceBetween) {
             Text(
                 modifier = Modifier.semantics {
                     contentDescription = a11InReplyToText
                 },
-                text = senderName,
+                text = senderDisambiguatedDisplayName,
                 style = ElementTheme.typography.fontBodySmMedium,
                 textAlign = TextAlign.Start,
                 color = ElementTheme.materialColors.primary,

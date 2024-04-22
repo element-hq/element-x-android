@@ -39,7 +39,7 @@ class TimelineItemGrouperTest {
         id = "0",
         senderId = A_USER_ID,
         senderAvatar = anAvatarData(),
-        senderDisplayName = "",
+        senderDisambiguatedDisplayName = "",
         content = TimelineItemStateEventContent(body = "a state event"),
         reactionsState = aTimelineItemReactions(count = 0),
         readReceiptState = TimelineItemReadReceipts(emptyList<ReadReceiptData>().toImmutableList()),

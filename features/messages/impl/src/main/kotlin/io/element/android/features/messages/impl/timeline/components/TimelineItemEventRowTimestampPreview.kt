@@ -43,7 +43,7 @@ internal fun TimelineItemEventRowTimestampPreview(
                         body = str,
                     ),
                     reactionsState = aTimelineItemReactions(count = 0),
-                    senderDisplayName = "A sender",
+                    senderDisambiguatedDisplayName = "A sender",
                 ),
             )
         }

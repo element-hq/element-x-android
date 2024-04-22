@@ -42,6 +42,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.ImageMessageT
 import io.element.android.libraries.matrix.api.timeline.item.event.LocationMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.OtherState
 import io.element.android.libraries.matrix.api.timeline.item.event.ProfileChangeContent
+import io.element.android.libraries.matrix.api.timeline.item.event.ProfileTimelineDetails
 import io.element.android.libraries.matrix.api.timeline.item.event.RedactedContent
 import io.element.android.libraries.matrix.api.timeline.item.event.RoomMembershipContent
 import io.element.android.libraries.matrix.api.timeline.item.event.StateContent
@@ -55,6 +56,7 @@ import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.media.aMediaSource
 import io.element.android.libraries.matrix.test.timeline.aMessageContent
 import io.element.android.libraries.matrix.test.timeline.aPollContent
+import io.element.android.libraries.matrix.test.timeline.aProfileTimelineDetails
 import io.element.android.libraries.matrix.ui.components.A_BLUR_HASH
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailInfo
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailType
@@ -430,15 +432,13 @@ class InReplyToMetadataKtTest {
 fun anInReplyToDetails(
     eventId: EventId = AN_EVENT_ID,
     senderId: UserId = A_USER_ID,
-    senderDisplayName: String? = "senderDisplayName",
-    senderAvatarUrl: String? = "senderAvatarUrl",
+    senderProfile: ProfileTimelineDetails = aProfileTimelineDetails(),
     eventContent: EventContent? = aMessageContent(),
     textContent: String? = "textContent",
 ) = InReplyToDetails(
     eventId = eventId,
     senderId = senderId,
-    senderDisplayName = senderDisplayName,
-    senderAvatarUrl = senderAvatarUrl,
+    senderProfile = senderProfile,
     eventContent = eventContent,
     textContent = textContent,
 )

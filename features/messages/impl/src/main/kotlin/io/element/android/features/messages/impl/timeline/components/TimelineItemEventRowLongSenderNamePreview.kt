@@ -27,7 +27,7 @@ import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 internal fun TimelineItemEventRowLongSenderNamePreview() = ElementPreviewLight {
     ATimelineItemEventRow(
         event = aTimelineItemEvent(
-            senderDisplayName = "a long sender display name to test single line and ellipsis at the end of the line",
+            senderDisambiguatedDisplayName = "a long sender display name to test single line and ellipsis at the end of the line",
         ),
     )
 }

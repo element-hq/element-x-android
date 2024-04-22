@@ -29,7 +29,7 @@ class RoomMembershipContentFormatter @Inject constructor(
 ) {
     fun format(
         membershipContent: RoomMembershipContent,
-        senderDisplayName: String,
+        senderDisambiguatedDisplayName: String,
         senderIsYou: Boolean,
     ): CharSequence? {
         val userId = membershipContent.userId
@@ -48,24 +48,24 @@ class RoomMembershipContentFormatter @Inject constructor(
             MembershipChange.BANNED, MembershipChange.KICKED_AND_BANNED -> if (senderIsYou) {
                 sp.getString(R.string.state_event_room_ban_by_you, userId.value)
             } else {
-                sp.getString(R.string.state_event_room_ban, senderDisplayName, userId.value)
+                sp.getString(R.string.state_event_room_ban, senderDisambiguatedDisplayName, userId.value)
             }
             MembershipChange.UNBANNED -> if (senderIsYou) {
                 sp.getString(R.string.state_event_room_unban_by_you, userId.value)
             } else {
-                sp.getString(R.string.state_event_room_unban, senderDisplayName, userId.value)
+                sp.getString(R.string.state_event_room_unban, senderDisambiguatedDisplayName, userId.value)
             }
             MembershipChange.KICKED -> if (senderIsYou) {
                 sp.getString(R.string.state_event_room_remove_by_you, userId.value)
             } else {
-                sp.getString(R.string.state_event_room_remove, senderDisplayName, userId.value)
+                sp.getString(R.string.state_event_room_remove, senderDisambiguatedDisplayName, userId.value)
             }
             MembershipChange.INVITED -> if (senderIsYou) {
                 sp.getString(R.string.state_event_room_invite_by_you, userId.value)
             } else if (memberIsYou) {
-                sp.getString(R.string.state_event_room_invite_you, senderDisplayName)
+                sp.getString(R.string.state_event_room_invite_you, senderDisambiguatedDisplayName)
             } else {
-                sp.getString(R.string.state_event_room_invite, senderDisplayName, userId.value)
+                sp.getString(R.string.state_event_room_invite, senderDisambiguatedDisplayName, userId.value)
             }
             MembershipChange.INVITATION_ACCEPTED -> if (memberIsYou) {
                 sp.getString(R.string.state_event_room_invite_accepted_by_you)
@@ -80,7 +80,7 @@ class RoomMembershipContentFormatter @Inject constructor(
             MembershipChange.INVITATION_REVOKED -> if (senderIsYou) {
                 sp.getString(R.string.state_event_room_third_party_revoked_invite_by_you, userId.value)
             } else {
-                sp.getString(R.string.state_event_room_third_party_revoked_invite, senderDisplayName, userId.value)
+                sp.getString(R.string.state_event_room_third_party_revoked_invite, senderDisambiguatedDisplayName, userId.value)
             }
             MembershipChange.KNOCKED -> if (memberIsYou) {
                 sp.getString(R.string.state_event_room_knock_by_you)
@@ -90,7 +90,7 @@ class RoomMembershipContentFormatter @Inject constructor(
             MembershipChange.KNOCK_ACCEPTED -> if (senderIsYou) {
                 sp.getString(R.string.state_event_room_knock_accepted_by_you, userId.value)
             } else {
-                sp.getString(R.string.state_event_room_knock_accepted, senderDisplayName, userId.value)
+                sp.getString(R.string.state_event_room_knock_accepted, senderDisambiguatedDisplayName, userId.value)
             }
             MembershipChange.KNOCK_RETRACTED -> if (memberIsYou) {
                 sp.getString(R.string.state_event_room_knock_retracted_by_you)
@@ -100,14 +100,14 @@ class RoomMembershipContentFormatter @Inject constructor(
             MembershipChange.KNOCK_DENIED -> if (senderIsYou) {
                 sp.getString(R.string.state_event_room_knock_denied_by_you, userId.value)
             } else if (memberIsYou) {
-                sp.getString(R.string.state_event_room_knock_denied_you, senderDisplayName)
+                sp.getString(R.string.state_event_room_knock_denied_you, senderDisambiguatedDisplayName)
             } else {
-                sp.getString(R.string.state_event_room_knock_denied, senderDisplayName, userId.value)
+                sp.getString(R.string.state_event_room_knock_denied, senderDisambiguatedDisplayName, userId.value)
             }
             MembershipChange.NONE -> if (senderIsYou) {
                 sp.getString(R.string.state_event_room_none_by_you)
             } else {
-                sp.getString(R.string.state_event_room_none, senderDisplayName)
+                sp.getString(R.string.state_event_room_none, senderDisambiguatedDisplayName)
             }
             MembershipChange.ERROR -> {
                 Timber.v("Filtering timeline item for room membership: $membershipContent")

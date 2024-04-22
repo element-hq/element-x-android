@@ -22,6 +22,7 @@ import io.element.android.libraries.matrix.api.permalink.PermalinkParser
 import io.element.android.libraries.matrix.api.timeline.item.event.EventContent
 import io.element.android.libraries.matrix.api.timeline.item.event.InReplyTo
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageContent
+import io.element.android.libraries.matrix.api.timeline.item.event.ProfileTimelineDetails
 import io.element.android.libraries.matrix.api.timeline.item.event.StickerContent
 import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageType
 import io.element.android.libraries.matrix.ui.messages.toPlainText
@@ -29,8 +30,7 @@ import io.element.android.libraries.matrix.ui.messages.toPlainText
 data class InReplyToDetails(
     val eventId: EventId,
     val senderId: UserId,
-    val senderDisplayName: String?,
-    val senderAvatarUrl: String?,
+    val senderProfile: ProfileTimelineDetails,
     val eventContent: EventContent?,
     val textContent: String?,
 )
@@ -41,8 +41,7 @@ fun InReplyTo.map(
     is InReplyTo.Ready -> InReplyToDetails(
         eventId = eventId,
         senderId = senderId,
-        senderDisplayName = senderDisplayName,
-        senderAvatarUrl = senderAvatarUrl,
+        senderProfile = senderProfile,
         eventContent = content,
         textContent = when (content) {
             is MessageContent -> {

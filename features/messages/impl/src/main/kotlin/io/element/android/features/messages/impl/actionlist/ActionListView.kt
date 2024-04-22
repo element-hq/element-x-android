@@ -269,9 +269,9 @@ private fun MessageSummary(event: TimelineItem.Event, modifier: Modifier = Modif
         Spacer(modifier = Modifier.width(8.dp))
         Column(modifier = Modifier.weight(1f)) {
             Row {
-                if (event.senderDisplayName != null) {
+                if (event.senderDisambiguatedDisplayName != null) {
                     Text(
-                        text = event.senderDisplayName,
+                        text = event.senderDisambiguatedDisplayName,
                         style = ElementTheme.typography.fontBodySmMedium,
                         color = MaterialTheme.colorScheme.primary
                     )

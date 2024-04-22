@@ -49,16 +49,16 @@ class DefaultTimelineEventFormatter @Inject constructor(
 ) : TimelineEventFormatter {
     override fun format(event: EventTimelineItem): CharSequence? {
         val isOutgoing = event.isOwn
-        val senderDisplayName = event.senderProfile.getDisambiguatedDisplayName(event.sender)
+        val senderDisambiguatedDisplayName = event.senderProfile.getDisambiguatedDisplayName(event.sender)
         return when (val content = event.content) {
             is RoomMembershipContent -> {
-                roomMembershipContentFormatter.format(content, senderDisplayName, isOutgoing)
+                roomMembershipContentFormatter.format(content, senderDisambiguatedDisplayName, isOutgoing)
             }
             is ProfileChangeContent -> {
-                profileChangeContentFormatter.format(content, event.sender, senderDisplayName, isOutgoing)
+                profileChangeContentFormatter.format(content, event.sender, senderDisambiguatedDisplayName, isOutgoing)
             }
             is StateContent -> {
-                stateContentFormatter.format(content, senderDisplayName, isOutgoing, RenderingMode.Timeline)
+                stateContentFormatter.format(content, senderDisambiguatedDisplayName, isOutgoing, RenderingMode.Timeline)
             }
             is LegacyCallInviteContent -> {
                 sp.getString(CommonStrings.common_call_invite)
