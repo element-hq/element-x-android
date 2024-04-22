@@ -164,7 +164,7 @@ class AcceptDeclineInvitePresenterTest {
     @Test
     fun `present - accepting invite error flow`() = runTest {
         val joinRoomFailure = lambdaRecorder { roomId: RoomId ->
-            Result.failure<RoomId>(RuntimeException("Failed to join room $roomId"))
+            Result.failure<Unit>(RuntimeException("Failed to join room $roomId"))
         }
         val client = FakeMatrixClient().apply {
             joinRoomLambda = joinRoomFailure
@@ -197,8 +197,8 @@ class AcceptDeclineInvitePresenterTest {
 
     @Test
     fun `present - accepting invite success flow`() = runTest {
-        val joinRoomSuccess = lambdaRecorder { roomId: RoomId ->
-            Result.success(roomId)
+        val joinRoomSuccess = lambdaRecorder { _: RoomId ->
+            Result.success(Unit)
         }
         val client = FakeMatrixClient().apply {
             joinRoomLambda = joinRoomSuccess

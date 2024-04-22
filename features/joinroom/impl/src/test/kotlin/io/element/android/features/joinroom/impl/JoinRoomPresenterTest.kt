@@ -20,7 +20,9 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.features.invite.api.response.AcceptDeclineInviteEvents
 import io.element.android.features.invite.api.response.AcceptDeclineInviteState
 import io.element.android.features.invite.api.response.anAcceptDeclineInviteState
+import io.element.android.features.joinroom.impl.di.KnockRoom
 import io.element.android.features.roomdirectory.api.RoomDescription
+import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomAlias
@@ -270,6 +272,38 @@ class JoinRoomPresenterTest {
     }
 
     @Test
+    fun `present - emit knock room event`() = runTest {
+        val knockRoomSuccess = lambdaRecorder { _: RoomId ->
+            Result.success(Unit)
+        }
+        val knockRoomFailure = lambdaRecorder { roomId: RoomId ->
+            Result.failure<Unit>(RuntimeException("Failed to knock room $roomId"))
+        }
+        val fakeKnockRoom = FakeKnockRoom(knockRoomSuccess)
+        val presenter = createJoinRoomPresenter(knockRoom = fakeKnockRoom)
+        presenter.test {
+            skipItems(1)
+            awaitItem().also { state ->
+                state.eventSink(JoinRoomEvents.KnockRoom)
+            }
+            awaitItem().also { state ->
+                assertThat(state.knockAction).isEqualTo(AsyncAction.Success(Unit))
+                fakeKnockRoom.lambda = knockRoomFailure
+                state.eventSink(JoinRoomEvents.KnockRoom)
+            }
+            awaitItem().also { state ->
+                assertThat(state.knockAction).isInstanceOf(AsyncAction.Failure::class.java)
+            }
+        }
+        assert(knockRoomSuccess)
+            .isCalledOnce()
+            .with(value(A_ROOM_ID))
+        assert(knockRoomFailure)
+            .isCalledOnce()
+            .with(value(A_ROOM_ID))
+    }
+
+    @Test
     fun `present - when room is not known RoomPreview is loaded`() = runTest {
         val client = FakeMatrixClient(
             getRoomPreviewResult = {
@@ -377,6 +411,7 @@ class JoinRoomPresenterTest {
         roomId: RoomId = A_ROOM_ID,
         roomDescription: Optional<RoomDescription> = Optional.empty(),
         matrixClient: MatrixClient = FakeMatrixClient(),
+        knockRoom: KnockRoom = FakeKnockRoom(),
         acceptDeclineInvitePresenter: Presenter<AcceptDeclineInviteState> = Presenter { anAcceptDeclineInviteState() }
     ): JoinRoomPresenter {
         return JoinRoomPresenter(
@@ -384,6 +419,7 @@ class JoinRoomPresenterTest {
             roomIdOrAlias = roomId.toRoomIdOrAlias(),
             roomDescription = roomDescription,
             matrixClient = matrixClient,
+            knockRoom = knockRoom,
             acceptDeclineInvitePresenter = acceptDeclineInvitePresenter
         )
     }

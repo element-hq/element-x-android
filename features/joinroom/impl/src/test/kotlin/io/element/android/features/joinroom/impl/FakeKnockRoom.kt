@@ -16,11 +16,11 @@
 
 package io.element.android.features.joinroom.impl
 
-sealed interface JoinRoomEvents {
-    data object RetryFetchingContent : JoinRoomEvents
-    data object JoinRoom : JoinRoomEvents
-    data object KnockRoom : JoinRoomEvents
-    data object ClearError : JoinRoomEvents
-    data object AcceptInvite : JoinRoomEvents
-    data object DeclineInvite : JoinRoomEvents
+import io.element.android.features.joinroom.impl.di.KnockRoom
+import io.element.android.libraries.matrix.api.core.RoomId
+
+class FakeKnockRoom(
+    var lambda: (RoomId) -> Result<Unit> = { Result.success(Unit) }
+) : KnockRoom {
+    override suspend fun invoke(roomId: RoomId) = lambda(roomId)
 }

@@ -41,8 +41,8 @@ import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.ftue.impl.R
 import io.element.android.libraries.designsystem.atomic.molecules.ButtonColumnMolecule
 import io.element.android.libraries.designsystem.atomic.pages.HeaderFooterPage
+import io.element.android.libraries.designsystem.background.OnboardingBackground
 import io.element.android.libraries.designsystem.components.BigIcon
-import io.element.android.libraries.designsystem.components.OnboardingBackground
 import io.element.android.libraries.designsystem.components.PageTitle
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData

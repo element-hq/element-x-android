@@ -19,6 +19,7 @@ package io.element.android.features.joinroom.impl
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.invite.api.response.AcceptDeclineInviteState
 import io.element.android.features.invite.api.response.anAcceptDeclineInviteState
+import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.core.RoomAlias
@@ -105,10 +106,12 @@ fun aLoadedContentState(
 fun aJoinRoomState(
     contentState: ContentState = aLoadedContentState(),
     acceptDeclineInviteState: AcceptDeclineInviteState = anAcceptDeclineInviteState(),
+    knockAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
     eventSink: (JoinRoomEvents) -> Unit = {}
 ) = JoinRoomState(
     contentState = contentState,
     acceptDeclineInviteState = acceptDeclineInviteState,
+    knockAction = knockAction,
     eventSink = eventSink
 )
 
