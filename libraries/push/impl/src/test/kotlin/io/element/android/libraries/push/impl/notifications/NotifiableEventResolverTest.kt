@@ -462,7 +462,7 @@ class NotifiableEventResolverTest {
             senderId = A_USER_ID_2,
             noisy = false,
             timestamp = A_TIMESTAMP,
-            senderDisambiguatedDisplayName = null,
+            senderDisambiguatedDisplayName = "Bob",
             body = "Call in progress (unsupported)",
             imageUriString = null,
             threadId = null,
