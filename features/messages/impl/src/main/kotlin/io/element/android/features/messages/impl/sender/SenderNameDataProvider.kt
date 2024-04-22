@@ -53,7 +53,7 @@ open class SenderNameDataProvider : PreviewParameterProvider<SenderNameData> {
             }
 }
 
-fun aSenderNameData(
+private fun aSenderNameData(
     senderNameMode: SenderNameMode,
     displayNameAmbiguous: Boolean = false,
 ) = SenderNameData(
