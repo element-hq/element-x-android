@@ -18,6 +18,7 @@ package io.element.android.features.messages.impl.fixtures
 
 import io.element.android.features.messages.impl.timeline.aTimelineItemDebugInfo
 import io.element.android.features.messages.impl.timeline.aTimelineItemReactions
+import io.element.android.features.messages.impl.timeline.components.aProfileTimelineDetailsReady
 import io.element.android.features.messages.impl.timeline.model.InReplyToDetails
 import io.element.android.features.messages.impl.timeline.model.ReadReceiptData
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
@@ -48,7 +49,7 @@ internal fun aMessageEvent(
     id = eventId?.value.orEmpty(),
     eventId = eventId,
     senderId = A_USER_ID,
-    senderDisambiguatedDisplayName = A_USER_NAME,
+    senderProfile = aProfileTimelineDetailsReady(displayName = A_USER_NAME),
     senderAvatar = AvatarData(A_USER_ID.value, A_USER_NAME, size = AvatarSize.TimelineSender),
     content = content,
     sentTime = "",

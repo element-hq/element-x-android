@@ -20,6 +20,7 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.features.messages.impl.fixtures.aMessageEvent
 import io.element.android.features.messages.impl.timeline.aTimelineItemDebugInfo
 import io.element.android.features.messages.impl.timeline.aTimelineItemReactions
+import io.element.android.features.messages.impl.timeline.components.aProfileTimelineDetailsReady
 import io.element.android.features.messages.impl.timeline.model.ReadReceiptData
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.TimelineItemReadReceipts
@@ -39,7 +40,7 @@ class TimelineItemGrouperTest {
         id = "0",
         senderId = A_USER_ID,
         senderAvatar = anAvatarData(),
-        senderDisambiguatedDisplayName = "",
+        senderProfile = aProfileTimelineDetailsReady(displayName = ""),
         content = TimelineItemStateEventContent(body = "a state event"),
         reactionsState = aTimelineItemReactions(count = 0),
         readReceiptState = TimelineItemReadReceipts(emptyList<ReadReceiptData>().toImmutableList()),
