@@ -46,7 +46,7 @@ open class SenderNameDataProvider : PreviewParameterProvider<SenderNameData> {
                     ),
                     SenderNameData(
                         senderNameMode = senderNameMode,
-                        userId = UserId("@alice:${senderNameMode.javaClass.name.lowercase()}"),
+                        userId = UserId("@alice:${senderNameMode.javaClass.simpleName.lowercase()}"),
                         profileTimelineDetails = ProfileTimelineDetails.Unavailable,
                     ),
                 )
@@ -57,9 +57,9 @@ private fun aSenderNameData(
     senderNameMode: SenderNameMode,
     displayNameAmbiguous: Boolean = false,
 ) = SenderNameData(
-    userId = UserId("@alice:${senderNameMode.javaClass.name.lowercase()}"),
+    userId = UserId("@alice:${senderNameMode.javaClass.simpleName.lowercase()}"),
     profileTimelineDetails = aProfileTimelineDetailsReady(
-        displayName = "Alice ${senderNameMode.javaClass.name}",
+        displayName = "Alice ${senderNameMode.javaClass.simpleName}",
         displayNameAmbiguous = displayNameAmbiguous,
     ),
     senderNameMode = senderNameMode,
