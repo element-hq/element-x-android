@@ -9,6 +9,8 @@
   <string name="screen_qr_code_login_connection_note_secure_state_list_item_2">"Если вы столкнулись с той же проблемой, попробуйте сменить точку доступа Wi-Fi или используйте мобильные данные"</string>
   <string name="screen_qr_code_login_connection_note_secure_state_list_item_3">"Если это не помогло, войдите вручную"</string>
   <string name="screen_qr_code_login_connection_note_secure_state_title">"Соединение не защищено"</string>
+  <string name="screen_qr_code_login_device_code_subtitle">"Вам будет предложено ввести две цифры, показанные ниже."</string>
+  <string name="screen_qr_code_login_device_code_title">"Введите номер на своем устройстве"</string>
   <string name="screen_qr_code_login_initial_state_item_1">"Откройте %1$s на настольном устройстве"</string>
   <string name="screen_qr_code_login_initial_state_item_2">"Нажмите на свое изображение"</string>
   <string name="screen_qr_code_login_initial_state_item_3">"Выбрать %1$s"</string>
@@ -20,11 +22,14 @@
   <string name="screen_qr_code_login_invalid_scan_state_retry_button">"Повторить попытку"</string>
   <string name="screen_qr_code_login_invalid_scan_state_subtitle">"Неверный QR-код"</string>
   <string name="screen_qr_code_login_no_camera_permission_button">"Перейдите в настройки камеры"</string>
-  <string name="screen_qr_code_login_no_camera_permission_state_description">"Чтобы продолжить, вам необходимо разрешить Element использовать камеру вашего устройства."</string>
+  <string name="screen_qr_code_login_no_camera_permission_state_description">"Чтобы продолжить, вам необходимо разрешить %1$s использовать камеру вашего устройства."</string>
   <string name="screen_qr_code_login_no_camera_permission_state_title">"Разрешите доступ к камере для сканирования QR-кода"</string>
   <string name="screen_qr_code_login_scanning_state_title">"Сканировать QR-код"</string>
   <string name="screen_qr_code_login_start_over_button">"Начать заново"</string>
   <string name="screen_qr_code_login_unknown_error_description">"Произошла непредвиденная ошибка. Пожалуйста, попробуйте еще раз."</string>
+  <string name="screen_qr_code_login_verify_code_loading">"В ожидании другого устройства"</string>
+  <string name="screen_qr_code_login_verify_code_subtitle">"Поставщик учетной записи может запросить следующий код для подтверждения входа."</string>
+  <string name="screen_qr_code_login_verify_code_title">"Ваш код подтверждения"</string>
   <string name="screen_welcome_bullet_1">"Звонки, опросы, поиск и многое другое будут добавлены позже в этом году."</string>
   <string name="screen_welcome_bullet_2">"История сообщений для зашифрованных комнат в этом обновлении будет недоступна."</string>
   <string name="screen_welcome_bullet_3">"Мы будем рады услышать ваше мнение, сообщите нам об этом через страницу настроек."</string>

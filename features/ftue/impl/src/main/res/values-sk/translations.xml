@@ -22,7 +22,7 @@
   <string name="screen_qr_code_login_invalid_scan_state_retry_button">"Skúste to znova"</string>
   <string name="screen_qr_code_login_invalid_scan_state_subtitle">"Nesprávny QR kód"</string>
   <string name="screen_qr_code_login_no_camera_permission_button">"Prejsť na nastavenia fotoaparátu"</string>
-  <string name="screen_qr_code_login_no_camera_permission_state_description">"Ak chcete pokračovať, musíte udeliť povolenie aplikácii Element používať fotoaparát vášho zariadenia."</string>
+  <string name="screen_qr_code_login_no_camera_permission_state_description">"Ak chcete pokračovať, musíte udeliť povolenie aplikácii %1$s používať fotoaparát vášho zariadenia."</string>
   <string name="screen_qr_code_login_no_camera_permission_state_title">"Povoľte prístup k fotoaparátu na naskenovanie QR kódu"</string>
   <string name="screen_qr_code_login_scanning_state_title">"Naskenovať QR kód"</string>
   <string name="screen_qr_code_login_start_over_button">"Začať odznova"</string>

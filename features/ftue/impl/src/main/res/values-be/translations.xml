@@ -22,7 +22,7 @@
   <string name="screen_qr_code_login_invalid_scan_state_retry_button">"Паўтарыць спробу"</string>
   <string name="screen_qr_code_login_invalid_scan_state_subtitle">"Няправільны QR-код"</string>
   <string name="screen_qr_code_login_no_camera_permission_button">"Перайсці ў налады камеры"</string>
-  <string name="screen_qr_code_login_no_camera_permission_state_description">"Каб працягнуць, вам неабходна дазволіць Element выкарыстоўваць камеру вашай прылады."</string>
+  <string name="screen_qr_code_login_no_camera_permission_state_description">"Каб працягнуць, вам неабходна дазволіць %1$s выкарыстоўваць камеру вашай прылады."</string>
   <string name="screen_qr_code_login_no_camera_permission_state_title">"Дазвольце доступ да камеры для сканавання QR-кода"</string>
   <string name="screen_qr_code_login_scanning_state_title">"Сканаваць QR-код"</string>
   <string name="screen_qr_code_login_start_over_button">"Пачаць спачатку"</string>

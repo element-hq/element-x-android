@@ -22,7 +22,7 @@
   <string name="screen_qr_code_login_invalid_scan_state_retry_button">"Try again"</string>
   <string name="screen_qr_code_login_invalid_scan_state_subtitle">"Wrong QR code"</string>
   <string name="screen_qr_code_login_no_camera_permission_button">"Go to camera settings"</string>
-  <string name="screen_qr_code_login_no_camera_permission_state_description">"You need to give permission for Element to use your device’s camera in order to continue."</string>
+  <string name="screen_qr_code_login_no_camera_permission_state_description">"You need to give permission for %1$s to use your device’s camera in order to continue."</string>
   <string name="screen_qr_code_login_no_camera_permission_state_title">"Allow camera access to scan the QR code"</string>
   <string name="screen_qr_code_login_scanning_state_title">"Scan the QR code"</string>
   <string name="screen_qr_code_login_start_over_button">"Start over"</string>
