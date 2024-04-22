@@ -37,16 +37,25 @@ open class SenderNameDataProvider : PreviewParameterProvider<SenderNameData> {
         )
             .flatMap { senderNameMode ->
                 sequenceOf(
-                    aSenderNameData(senderNameMode = senderNameMode),
-                    aSenderNameData(displayNameAmbiguous = true, senderNameMode = senderNameMode),
-                    SenderNameData(UserId("@alice:${senderNameMode.javaClass.name.lowercase()}"), ProfileTimelineDetails.Unavailable, senderNameMode = senderNameMode),
+                    aSenderNameData(
+                        senderNameMode = senderNameMode,
+                    ),
+                    aSenderNameData(
+                        senderNameMode = senderNameMode,
+                        displayNameAmbiguous = true,
+                    ),
+                    SenderNameData(
+                        senderNameMode = senderNameMode,
+                        userId = UserId("@alice:${senderNameMode.javaClass.name.lowercase()}"),
+                        profileTimelineDetails = ProfileTimelineDetails.Unavailable,
+                    ),
                 )
             }
 }
 
 fun aSenderNameData(
-    displayNameAmbiguous: Boolean = false,
     senderNameMode: SenderNameMode,
+    displayNameAmbiguous: Boolean = false,
 ) = SenderNameData(
     userId = UserId("@alice:${senderNameMode.javaClass.name.lowercase()}"),
     profileTimelineDetails = aProfileTimelineDetailsReady(
