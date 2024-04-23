@@ -20,6 +20,8 @@ import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import io.element.android.features.securebackup.impl.R
+import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.tests.testutils.EnsureNeverCalled
 import io.element.android.tests.testutils.EventsRecorder
@@ -27,8 +29,6 @@ import io.element.android.tests.testutils.clickOn
 import io.element.android.tests.testutils.ensureCalledOnce
 import io.element.android.tests.testutils.pressBack
 import io.element.android.tests.testutils.pressBackKey
-import io.element.android.features.securebackup.impl.R
-import io.element.android.libraries.architecture.AsyncAction
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
