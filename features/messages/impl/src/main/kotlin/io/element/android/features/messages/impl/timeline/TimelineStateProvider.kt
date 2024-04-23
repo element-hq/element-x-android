@@ -53,7 +53,6 @@ fun aTimelineState(
     timelineItems = timelineItems,
     timelineRoomInfo = timelineRoomInfo,
     renderReadReceipts = renderReadReceipts,
-    highlightedEventId = null,
     newEventState = NewEventState.None,
     isLive = true,
     focusedEventId = null,

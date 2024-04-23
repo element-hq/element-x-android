@@ -146,7 +146,7 @@ fun TimelineView(
                         renderReadReceipts = state.renderReadReceipts,
                         isLastOutgoingMessage = (timelineItem as? TimelineItem.Event)?.isMine == true &&
                             state.timelineItems.first().identifier() == timelineItem.identifier(),
-                        highlightedItem = state.highlightedEventId?.value,
+                        highlightedItem = state.focusedEventId?.value,
                         onClick = onMessageClicked,
                         onLongClick = onMessageLongClicked,
                         onUserDataClick = onUserDataClicked,

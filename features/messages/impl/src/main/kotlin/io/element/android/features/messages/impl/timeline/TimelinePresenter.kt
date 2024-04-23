@@ -75,10 +75,6 @@ class TimelinePresenter @AssistedInject constructor(
     @Composable
     override fun present(): TimelineState {
         val localScope = rememberCoroutineScope()
-        val highlightedEventId: MutableState<EventId?> = rememberSaveable {
-            mutableStateOf(null)
-        }
-
         val focusedEventId: MutableState<EventId?> = rememberSaveable {
             mutableStateOf(null)
         }
@@ -110,7 +106,6 @@ class TimelinePresenter @AssistedInject constructor(
                         timelineController.paginate(direction = event.direction)
                     }
                 }
-                is TimelineEvents.SetHighlightedEvent -> highlightedEventId.value = event.eventId
                 is TimelineEvents.OnScrollFinished -> {
                     if (isLive) {
                         if (event.firstIndex == 0) {
@@ -202,7 +197,6 @@ class TimelinePresenter @AssistedInject constructor(
         }
         return TimelineState(
             timelineRoomInfo = timelineRoomInfo,
-            highlightedEventId = highlightedEventId.value,
             timelineItems = timelineItems,
             renderReadReceipts = renderReadReceipts,
             newEventState = newEventState.value,

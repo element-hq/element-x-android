@@ -20,7 +20,6 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.timeline.Timeline
 
 sealed interface TimelineEvents {
-    data class SetHighlightedEvent(val eventId: EventId?) : TimelineEvents
     data class OnScrollFinished(val firstIndex: Int) : TimelineEvents
     data class FocusOnEvent(val eventId: EventId) : TimelineEvents
     data object ClearFocusRequestState: TimelineEvents

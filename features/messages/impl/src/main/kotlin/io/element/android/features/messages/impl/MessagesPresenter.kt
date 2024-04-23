@@ -185,10 +185,6 @@ class MessagesPresenter @AssistedInject constructor(
 
         val snackbarMessage by snackbarDispatcher.collectSnackbarMessageAsState()
 
-        LaunchedEffect(composerState.mode.relatedEventId) {
-            timelineState.eventSink(TimelineEvents.SetHighlightedEvent(composerState.mode.relatedEventId))
-        }
-
         val enableTextFormatting by appPreferencesStore.isRichTextEditorEnabledFlow().collectAsState(initial = true)
 
         var enableVoiceMessages by remember { mutableStateOf(false) }
