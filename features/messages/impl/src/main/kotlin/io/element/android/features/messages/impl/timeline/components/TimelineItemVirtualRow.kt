@@ -16,6 +16,7 @@
 
 package io.element.android.features.messages.impl.timeline.components
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -42,17 +43,19 @@ fun TimelineItemVirtualRow(
     eventSink: (TimelineEvents.EventFromTimelineItem) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    when (virtual.model) {
-        is TimelineItemDaySeparatorModel -> TimelineItemDaySeparatorView(virtual.model, modifier)
-        TimelineItemReadMarkerModel -> TimelineItemReadMarkerView()
-        is TimelineItemEncryptedHistoryBannerVirtualModel -> TimelineEncryptedHistoryBannerView(modifier)
-        TimelineItemRoomBeginningModel -> TimelineItemRoomBeginningView(roomName = timelineRoomInfo.name, modifier = modifier)
-        is TimelineItemLoadingIndicatorModel -> {
-            TimelineLoadingMoreIndicator(modifier)
-            LaunchedEffect(key1 = virtual.model.timestamp) {
-                eventSink(TimelineEvents.LoadMore(virtual.model.direction))
+    Box(modifier = modifier) {
+        when (virtual.model) {
+            is TimelineItemDaySeparatorModel -> TimelineItemDaySeparatorView(virtual.model)
+            TimelineItemReadMarkerModel -> TimelineItemReadMarkerView()
+            is TimelineItemEncryptedHistoryBannerVirtualModel -> TimelineEncryptedHistoryBannerView()
+            TimelineItemRoomBeginningModel -> TimelineItemRoomBeginningView(roomName = timelineRoomInfo.name)
+            is TimelineItemLoadingIndicatorModel -> {
+                TimelineLoadingMoreIndicator()
+                LaunchedEffect(key1 = virtual.model.timestamp) {
+                    eventSink(TimelineEvents.LoadMore(virtual.model.direction))
+                }
             }
+            TimelineItemInvisibleIndicatorModel -> Spacer(Modifier)
         }
-        TimelineItemInvisibleIndicatorModel -> Spacer(modifier = modifier)
     }
 }
