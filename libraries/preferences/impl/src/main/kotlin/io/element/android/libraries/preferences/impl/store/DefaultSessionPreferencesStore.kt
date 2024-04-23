@@ -29,9 +29,7 @@ import io.element.android.libraries.di.annotations.SessionCoroutineScope
 import io.element.android.libraries.matrix.api.core.SessionId
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.runBlocking
 import java.io.File
 
 class DefaultSessionPreferencesStore(
@@ -53,7 +51,15 @@ class DefaultSessionPreferencesStore(
     private val renderTypingNotificationsKey = booleanPreferencesKey("renderTypingNotifications")
 
     private val dataStoreFile = storeFile(context, sessionId)
-    private val store = PreferenceDataStoreFactory.create(scope = sessionCoroutineScope) { dataStoreFile }
+    private val store = PreferenceDataStoreFactory.create(
+        scope = sessionCoroutineScope,
+        migrations = listOf(
+            SessionPreferencesStoreMigration(
+                sharePresenceKey,
+                sendPublicReadReceiptsKey,
+            )
+        ),
+    ) { dataStoreFile }
 
     override suspend fun setSharePresence(enabled: Boolean) {
         update(sharePresenceKey, enabled)
@@ -65,8 +71,7 @@ class DefaultSessionPreferencesStore(
     }
 
     override fun isSharePresenceEnabled(): Flow<Boolean> {
-        // Migration, if sendPublicReadReceiptsKey was false, consider that sharing presence is false.
-        return get(sharePresenceKey) { runBlocking { isSendPublicReadReceiptsEnabled().first() } }
+        return get(sharePresenceKey) { true }
     }
 
     override suspend fun setSendPublicReadReceipts(enabled: Boolean) = update(sendPublicReadReceiptsKey, enabled)
