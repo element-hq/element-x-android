@@ -16,6 +16,8 @@
 
 package io.element.android.libraries.matrix.api.timeline.item.virtual
 
+import io.element.android.libraries.matrix.api.timeline.Timeline
+
 sealed interface VirtualTimelineItem {
     data class DayDivider(
         val timestamp: Long
@@ -27,8 +29,10 @@ sealed interface VirtualTimelineItem {
 
     data object RoomBeginning: VirtualTimelineItem
 
+    data object LatestKnownEventIndicator: VirtualTimelineItem
+
     data class LoadingIndicator(
-        val backwards: Boolean,
+        val direction: Timeline.PaginationDirection,
         val timestamp: Long,
     ): VirtualTimelineItem
 }

@@ -17,6 +17,7 @@
 package io.element.android.libraries.matrix.impl.timeline.postprocessor
 
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
+import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.item.virtual.VirtualTimelineItem
 import io.element.android.services.toolbox.api.systemclock.SystemClock
 
@@ -24,21 +25,34 @@ class LoadingIndicatorsPostProcessor(private val systemClock: SystemClock) {
 
     fun process(
         items: List<MatrixTimelineItem>,
-        hasMoreToLoadBackwards: Boolean,
+        hasMoreToLoadBackward: Boolean,
+        hasMoreToLoadForward: Boolean,
     ): List<MatrixTimelineItem> {
-       return if (hasMoreToLoadBackwards && !items.hasEncryptionHistoryBanner()){
-           listOf(
-                MatrixTimelineItem.Virtual(
-                     uniqueId = "BackwardLoadingIndicator",
-                     virtual = VirtualTimelineItem.LoadingIndicator(
-                         backwards = true,
-                         timestamp = systemClock.epochMillis()
-                     )
+        val shouldAddBackwardLoadingIndicator = hasMoreToLoadBackward && !items.hasEncryptionHistoryBanner()
+        val shouldAddForwardLoadingIndicator = hasMoreToLoadForward && items.isNotEmpty()
+        val currentTimestamp = systemClock.epochMillis()
+        return buildList {
+            if (shouldAddBackwardLoadingIndicator) {
+                val backwardLoadingIndicator = MatrixTimelineItem.Virtual(
+                    uniqueId = "BackwardLoadingIndicator",
+                    virtual = VirtualTimelineItem.LoadingIndicator(
+                        direction = Timeline.PaginationDirection.BACKWARDS,
+                        timestamp = currentTimestamp
+                    )
                 )
-           ) + items
-       }else {
-           items
-       }
+                add(backwardLoadingIndicator)
+            }
+            addAll(items)
+            if (shouldAddForwardLoadingIndicator) {
+                val forwardLoadingIndicator = MatrixTimelineItem.Virtual(
+                    uniqueId = "ForwardLoadingIndicator",
+                    virtual = VirtualTimelineItem.LoadingIndicator(
+                        direction = Timeline.PaginationDirection.FORWARDS,
+                        timestamp = currentTimestamp
+                    )
+                )
+                add(forwardLoadingIndicator)
+            }
+        }
     }
-
 }

@@ -14,7 +14,8 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.matrix.impl.timeline
+package io.element.android.features.messages.impl.timeline.model.virtual
 
-class RustDetachedTimeline {
+data object TimelineItemInvisibleIndicatorModel : TimelineItemVirtualModel {
+    override val type: String = "TimelineItemInvisibleIndicatorModel"
 }

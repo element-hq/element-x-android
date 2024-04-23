@@ -30,6 +30,7 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.features.messages.impl.attachments.Attachment
+import io.element.android.features.messages.impl.timeline.TimelineEvents
 import io.element.android.features.messages.impl.timeline.di.LocalTimelineItemPresenterFactories
 import io.element.android.features.messages.impl.timeline.di.TimelineItemPresenterFactories
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
@@ -116,6 +117,7 @@ class MessagesNode @AssistedInject constructor(
     private fun onLinkClicked(
         context: Context,
         url: String,
+        eventSink: (TimelineEvents) -> Unit,
     ) {
         when (val permalink = permalinkParser.parse(url)) {
             is PermalinkData.UserLink -> {
@@ -124,7 +126,7 @@ class MessagesNode @AssistedInject constructor(
                 callback?.onUserDataClicked(permalink.userId)
             }
             is PermalinkData.RoomLink -> {
-                handleRoomLinkClicked(permalink)
+                handleRoomLinkClicked(permalink, eventSink)
             }
             is PermalinkData.FallbackLink,
             is PermalinkData.RoomEmailInviteLink -> {
@@ -133,11 +135,11 @@ class MessagesNode @AssistedInject constructor(
         }
     }
 
-    private fun handleRoomLinkClicked(roomLink: PermalinkData.RoomLink) {
+    private fun handleRoomLinkClicked(roomLink: PermalinkData.RoomLink, eventSink: (TimelineEvents) -> Unit) {
         if (room.matches(roomLink.roomIdOrAlias)) {
-            if (roomLink.eventId != null) {
-                // TODO Handle navigation to the Event
-                context.toast("TODO Handle navigation to the Event ${roomLink.eventId}")
+            val eventId = roomLink.eventId
+            if (eventId != null) {
+                eventSink(TimelineEvents.FocusOnEvent(eventId))
             } else {
                 // Click on the same room, ignore
                 context.toast("Already viewing this room!")
@@ -189,7 +191,7 @@ class MessagesNode @AssistedInject constructor(
                 onEventClicked = this::onEventClicked,
                 onPreviewAttachments = this::onPreviewAttachments,
                 onUserDataClicked = this::onUserDataClicked,
-                onLinkClicked = { onLinkClicked(context, it) },
+                onLinkClicked = { onLinkClicked(context, it, state.timelineState.eventSink) },
                 onSendLocationClicked = this::onSendLocationClicked,
                 onCreatePollClicked = this::onCreatePollClicked,
                 onJoinCallClicked = this::onJoinCallClicked,

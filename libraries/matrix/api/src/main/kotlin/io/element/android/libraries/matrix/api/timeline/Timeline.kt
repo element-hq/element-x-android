@@ -16,6 +16,7 @@
 
 package io.element.android.libraries.matrix.api.timeline
 
+import io.element.android.libraries.matrix.api.core.EventId
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 
@@ -28,7 +29,14 @@ interface Timeline : AutoCloseable {
         val canPaginate: Boolean = !isPaginating && hasMoreToLoad
     }
 
-    suspend fun paginateBackwards(): Result<Boolean>
-    val backPaginationStatus: StateFlow<PaginationStatus>
+    enum class PaginationDirection {
+        BACKWARDS,
+        FORWARDS
+    }
+
+    val membershipChangeEventReceived: Flow<Unit>
+    suspend fun sendReadReceipt(eventId: EventId, receiptType: ReceiptType): Result<Unit>
+    suspend fun paginate(direction: PaginationDirection): Result<Boolean>
+    fun paginationStatus(direction: PaginationDirection): StateFlow<PaginationStatus>
     val timelineItems: Flow<List<MatrixTimelineItem>>
 }

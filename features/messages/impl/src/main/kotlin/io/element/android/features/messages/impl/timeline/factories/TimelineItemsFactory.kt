@@ -19,6 +19,7 @@ package io.element.android.features.messages.impl.timeline.factories
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
+import io.element.android.features.messages.impl.timeline.TimelineItemIndexer
 import io.element.android.features.messages.impl.timeline.diff.TimelineItemsCacheInvalidator
 import io.element.android.features.messages.impl.timeline.factories.event.TimelineItemEventFactory
 import io.element.android.features.messages.impl.timeline.factories.virtual.TimelineItemVirtualFactory
@@ -33,6 +34,7 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
@@ -43,9 +45,9 @@ class TimelineItemsFactory @Inject constructor(
     private val eventItemFactory: TimelineItemEventFactory,
     private val virtualItemFactory: TimelineItemVirtualFactory,
     private val timelineItemGrouper: TimelineItemGrouper,
+    private val timelineItemIndexer: TimelineItemIndexer,
 ) {
     private val timelineItems = MutableStateFlow(persistentListOf<TimelineItem>())
-
     private val lock = Mutex()
     private val diffCache = MutableListDiffCache<TimelineItem>()
     private val diffCacheUpdater = DiffCacheUpdater<MatrixTimelineItem, TimelineItem>(
@@ -58,6 +60,10 @@ class TimelineItemsFactory @Inject constructor(
         } else {
             false
         }
+    }
+
+    fun items(): StateFlow<ImmutableList<TimelineItem>> {
+        return timelineItems
     }
 
     @Composable
@@ -80,6 +86,7 @@ class TimelineItemsFactory @Inject constructor(
         roomMembers: List<RoomMember>,
     ) {
         val newTimelineItemStates = ArrayList<TimelineItem>()
+        val newTimelineById = mutableMapOf<String, TimelineItem>()
         for (index in diffCache.indices().reversed()) {
             val cacheItem = diffCache.get(index)
             if (cacheItem == null) {
@@ -96,10 +103,12 @@ class TimelineItemsFactory @Inject constructor(
                 } else {
                     cacheItem
                 }
+                newTimelineById[updatedItem.identifier()] = updatedItem
                 newTimelineItemStates.add(updatedItem)
             }
         }
         val result = timelineItemGrouper.group(newTimelineItemStates).toPersistentList()
+        timelineItemIndexer.process(result)
         this.timelineItems.emit(result)
     }
 
@@ -108,13 +117,13 @@ class TimelineItemsFactory @Inject constructor(
         index: Int,
         roomMembers: List<RoomMember>,
     ): TimelineItem? {
-        val timelineItemState =
+        val timelineItem =
             when (val currentTimelineItem = timelineItems[index]) {
                 is MatrixTimelineItem.Event -> eventItemFactory.create(currentTimelineItem, index, timelineItems, roomMembers)
                 is MatrixTimelineItem.Virtual -> virtualItemFactory.create(currentTimelineItem)
                 MatrixTimelineItem.Other -> null
             }
-        diffCache[index] = timelineItemState
-        return timelineItemState
+        diffCache[index] = timelineItem
+        return timelineItem
     }
 }

@@ -18,7 +18,6 @@ package io.element.android.libraries.matrix.impl.timeline
 
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
-import io.element.android.libraries.matrix.api.timeline.LiveTimeline
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.ReceiptType
 import io.element.android.libraries.matrix.api.timeline.Timeline
@@ -27,6 +26,7 @@ import io.element.android.libraries.matrix.impl.timeline.item.event.EventMessage
 import io.element.android.libraries.matrix.impl.timeline.item.event.EventTimelineItemMapper
 import io.element.android.libraries.matrix.impl.timeline.item.event.TimelineEventContentMapper
 import io.element.android.libraries.matrix.impl.timeline.item.virtual.VirtualTimelineItemMapper
+import io.element.android.libraries.matrix.impl.timeline.postprocessor.InvisibleIndicatorPostProcessor
 import io.element.android.libraries.matrix.impl.timeline.postprocessor.LoadingIndicatorsPostProcessor
 import io.element.android.libraries.matrix.impl.timeline.postprocessor.RoomBeginningPostProcessor
 import io.element.android.libraries.matrix.impl.timeline.postprocessor.TimelineEncryptedHistoryPostProcessor
@@ -42,6 +42,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -58,8 +59,9 @@ import org.matrix.rustcomponents.sdk.Timeline as InnerTimeline
 
 private const val INITIAL_MAX_SIZE = 50
 
-class RustLiveTimeline(
+class RustTimeline(
     private val inner: InnerTimeline,
+    private val isLive: Boolean,
     private val systemClock: SystemClock,
     private val roomCoroutineScope: CoroutineScope,
     private val isKeyBackupEnabled: Boolean,
@@ -68,7 +70,7 @@ class RustLiveTimeline(
     private val lastLoginTimestamp: Date?,
     private val fetchDetailsForEvent: suspend (EventId) -> Result<Unit>,
     private val onNewSyncedEvent: () -> Unit,
-) : LiveTimeline {
+) : Timeline {
 
     private val initLatch = CompletableDeferred<Unit>()
     private val isInit = AtomicBoolean(false)
@@ -85,6 +87,7 @@ class RustLiveTimeline(
 
     private val roomBeginningPostProcessor = RoomBeginningPostProcessor()
     private val loadingIndicatorsPostProcessor = LoadingIndicatorsPostProcessor(systemClock)
+    private val invisibleIndicatorPostProcessor = InvisibleIndicatorPostProcessor(isLive)
 
     private val timelineItemFactory = MatrixTimelineItemMapper(
         fetchDetailsForEvent = fetchDetailsForEvent,
@@ -127,35 +130,59 @@ class RustLiveTimeline(
         }
     }
 
-    override suspend fun paginateBackwards(): Result<Boolean> {
+    override suspend fun paginate(direction: Timeline.PaginationDirection): Result<Boolean> {
         initLatch.await()
         return runCatching {
-            if (!canBackPaginate()) throw TimelineException.CannotPaginate
-            inner.paginateBackwards()
+            if (!canPaginate(direction)) throw TimelineException.CannotPaginate
+            when (direction) {
+                Timeline.PaginationDirection.BACKWARDS -> inner.paginateBackwards(50u)
+                Timeline.PaginationDirection.FORWARDS -> inner.paginateForwards(50u)
+            }
         }.onFailure { error ->
             if (error is TimelineException.CannotPaginate) {
-                Timber.d("Can't paginate backwards on room ${matrixRoom.roomId} with backPaginationStatus: ${backPaginationStatus.value}")
+                Timber.d("Can't paginate $direction on room ${matrixRoom.roomId} with paginationStatus: ${backPaginationStatus.value}")
             } else {
-                Timber.e(error, "Error paginating backwards on room ${matrixRoom.roomId}")
+                Timber.e(error, "Error paginating $direction on room ${matrixRoom.roomId}")
             }
         }.onSuccess {
-            Timber.v("Success back paginating for room ${matrixRoom.roomId}")
+            Timber.v("Success paginating $direction for room ${matrixRoom.roomId}")
         }
     }
 
-    private fun canBackPaginate(): Boolean {
-        return isInit.get() && backPaginationStatus.value.canPaginate
+    private fun canPaginate(direction: Timeline.PaginationDirection): Boolean {
+        if (!isInit.get()) return false
+        return when (direction) {
+            Timeline.PaginationDirection.BACKWARDS -> backPaginationStatus.value.canPaginate
+            Timeline.PaginationDirection.FORWARDS -> forwardPaginationStatus.value.canPaginate
+        }
     }
 
-    override val backPaginationStatus: StateFlow<Timeline.PaginationStatus> = inner
+    override fun paginationStatus(direction: Timeline.PaginationDirection): StateFlow<Timeline.PaginationStatus> {
+        return when (direction) {
+            Timeline.PaginationDirection.BACKWARDS -> backPaginationStatus
+            Timeline.PaginationDirection.FORWARDS -> forwardPaginationStatus
+        }
+    }
+
+    private val backPaginationStatus: StateFlow<Timeline.PaginationStatus> = inner
         .backPaginationStatusFlow()
         .map()
         .stateIn(roomCoroutineScope, SharingStarted.Eagerly, Timeline.PaginationStatus(isPaginating = false, hasMoreToLoad = true))
 
+    private val forwardPaginationStatus: StateFlow<Timeline.PaginationStatus> =
+        when (isLive) {
+            true -> MutableStateFlow(Timeline.PaginationStatus(isPaginating = false, hasMoreToLoad = false))
+            false -> inner
+                .forwardPaginationStatusFlow()
+                .map()
+                .stateIn(roomCoroutineScope, SharingStarted.Eagerly, Timeline.PaginationStatus(isPaginating = false, hasMoreToLoad = true))
+        }
+
     override val timelineItems: Flow<List<MatrixTimelineItem>> = combine(
         _timelineItems,
-        backPaginationStatus.map { it.hasMoreToLoad }.distinctUntilChanged()
-    ) { timelineItems, hasMoreToLoadBackward ->
+        backPaginationStatus.map { it.hasMoreToLoad }.distinctUntilChanged(),
+        forwardPaginationStatus.map { it.hasMoreToLoad }.distinctUntilChanged(),
+    ) { timelineItems, hasMoreToLoadBackward, hasMoreToLoadForward ->
         timelineItems
             .let { items -> encryptedHistoryPostProcessor.process(items) }
             .let { items ->
@@ -164,7 +191,8 @@ class RustLiveTimeline(
                     isDm = matrixRoom.isDm,
                     hasMoreToLoadBackwards = hasMoreToLoadBackward
                 )
-            }.let {items -> loadingIndicatorsPostProcessor.process(items, hasMoreToLoadBackward)}
+            }.let { items -> loadingIndicatorsPostProcessor.process(items, hasMoreToLoadBackward, hasMoreToLoadForward) }
+            .let { items -> invisibleIndicatorPostProcessor.process(items) }
 
     }
 

@@ -56,6 +56,7 @@ import kotlinx.coroutines.withContext
 
 class TimelinePresenter @AssistedInject constructor(
     private val timelineItemsFactory: TimelineItemsFactory,
+    private val timelineItemIndexer: TimelineItemIndexer,
     private val room: MatrixRoom,
     private val dispatchers: CoroutineDispatchers,
     private val appScope: CoroutineScope,
@@ -64,13 +65,12 @@ class TimelinePresenter @AssistedInject constructor(
     private val sendPollResponseAction: SendPollResponseAction,
     private val endPollAction: EndPollAction,
     private val sessionPreferencesStore: SessionPreferencesStore,
+    private val timelineController: TimelineController,
 ) : Presenter<TimelineState> {
     @AssistedFactory
     interface Factory {
         fun create(navigator: MessagesNavigator): TimelinePresenter
     }
-
-    private val timeline = room.liveTimeline
 
     @Composable
     override fun present(): TimelineState {
@@ -79,41 +79,52 @@ class TimelinePresenter @AssistedInject constructor(
             mutableStateOf(null)
         }
 
+        val focusedEventId: MutableState<EventId?> = rememberSaveable {
+            mutableStateOf(null)
+        }
+        val focusRequestState: MutableState<FocusRequestState> = remember {
+            mutableStateOf(FocusRequestState.None)
+        }
+
         val lastReadReceiptId = rememberSaveable { mutableStateOf<EventId?>(null) }
 
         val timelineItems by timelineItemsFactory.collectItemsAsState()
-        val paginationState by timeline.backPaginationStatus.collectAsState()
+
         val syncUpdateFlow = room.syncUpdateFlow.collectAsState()
 
         val userHasPermissionToSendMessage by room.canSendMessageAsState(type = MessageEventType.ROOM_MESSAGE, updateKey = syncUpdateFlow.value)
         val userHasPermissionToSendReaction by room.canSendMessageAsState(type = MessageEventType.REACTION, updateKey = syncUpdateFlow.value)
 
         val prevMostRecentItemId = rememberSaveable { mutableStateOf<String?>(null) }
-        val newItemState = remember { mutableStateOf(NewEventState.None) }
+
+        val newEventState = remember { mutableStateOf(NewEventState.None) }
 
         val isSendPublicReadReceiptsEnabled by sessionPreferencesStore.isSendPublicReadReceiptsEnabled().collectAsState(initial = true)
         val renderReadReceipts by sessionPreferencesStore.isRenderReadReceiptsEnabled().collectAsState(initial = true)
+        val isLive by timelineController.isLive().collectAsState(initial = true)
 
         fun handleEvents(event: TimelineEvents) {
             when (event) {
                 is TimelineEvents.LoadMore -> {
-                    if(event.backwards) {
-                        localScope.paginateBackwards()
-                    }else{
-                        //TODO implement pagination forward
+                    localScope.launch {
+                        timelineController.paginate(direction = event.direction)
                     }
                 }
                 is TimelineEvents.SetHighlightedEvent -> highlightedEventId.value = event.eventId
                 is TimelineEvents.OnScrollFinished -> {
-                    if (event.firstIndex == 0) {
-                        newItemState.value = NewEventState.None
+                    if (isLive) {
+                        if (event.firstIndex == 0) {
+                            newEventState.value = NewEventState.None
+                        }
+                        appScope.sendReadReceiptIfNeeded(
+                            firstVisibleIndex = event.firstIndex,
+                            timelineItems = timelineItems,
+                            lastReadReceiptId = lastReadReceiptId,
+                            readReceiptType = if (isSendPublicReadReceiptsEnabled) ReceiptType.READ else ReceiptType.READ_PRIVATE,
+                        )
+                    } else {
+                        newEventState.value = NewEventState.None
                     }
-                    appScope.sendReadReceiptIfNeeded(
-                        firstVisibleIndex = event.firstIndex,
-                        timelineItems = timelineItems,
-                        lastReadReceiptId = lastReadReceiptId,
-                        readReceiptType = if (isSendPublicReadReceiptsEnabled) ReceiptType.READ else ReceiptType.READ_PRIVATE,
-                    )
                 }
                 is TimelineEvents.PollAnswerSelected -> appScope.launch {
                     sendPollResponseAction.execute(
@@ -126,28 +137,55 @@ class TimelinePresenter @AssistedInject constructor(
                         pollStartId = event.pollStartId,
                     )
                 }
-                is TimelineEvents.PollEditClicked ->
+                is TimelineEvents.PollEditClicked -> {
                     navigator.onEditPollClicked(event.pollStartId)
+                }
+                is TimelineEvents.FocusOnEvent -> localScope.launch {
+                    focusedEventId.value = event.eventId
+                    if (timelineItemIndexer.isKnown(event.eventId)) {
+                        val index = timelineItemIndexer.indexOf(event.eventId)
+                        focusRequestState.value = FocusRequestState.Cached(index)
+                    } else {
+                        focusRequestState.value = FocusRequestState.Fetching
+                        timelineController.focusOnEvent(event.eventId)
+                            .fold(
+                                onSuccess = {
+                                    focusRequestState.value = FocusRequestState.None
+                                },
+                                onFailure = {
+                                    focusRequestState.value = FocusRequestState.Failure(it)
+                                }
+                            )
+                    }
+                }
+                is TimelineEvents.ClearFocusRequestState -> {
+                    focusRequestState.value = FocusRequestState.None
+                }
+                is TimelineEvents.JumpToLive -> {
+                    localScope.launch {
+                        timelineController.focusOnLive()
+                    }
+                }
             }
         }
 
+        // Makes sure to get back to live when there is nothing more to load forwards
+        LaunchedEffect(isLive) {
+
+        }
+
         LaunchedEffect(timelineItems.size) {
-            computeNewItemState(timelineItems, prevMostRecentItemId, newItemState)
+            computeNewItemState(timelineItems, prevMostRecentItemId, newEventState)
         }
 
         LaunchedEffect(Unit) {
-            combine(timeline.timelineItems, room.membersStateFlow) { items, membersState ->
+            combine(timelineController.timelineItems(), room.membersStateFlow) { items, membersState ->
                 timelineItemsFactory.replaceWith(
                     timelineItems = items,
                     roomMembers = membersState.roomMembers().orEmpty()
                 )
                 items
             }
-                .onEach { timelineItems ->
-                    if (timelineItems.isEmpty()) {
-                        paginateBackwards()
-                    }
-                }
                 .onEach(redactedVoiceMessageManager::onEachMatrixTimelineItem)
                 .launchIn(this)
         }
@@ -165,10 +203,12 @@ class TimelinePresenter @AssistedInject constructor(
         return TimelineState(
             timelineRoomInfo = timelineRoomInfo,
             highlightedEventId = highlightedEventId.value,
-            backPaginationStatus = paginationState,
             timelineItems = timelineItems,
             renderReadReceipts = renderReadReceipts,
-            newEventState = newItemState.value,
+            newEventState = newEventState.value,
+            isLive = isLive,
+            focusedEventId = focusedEventId.value,
+            focusRequestState = focusRequestState.value,
             eventSink = { handleEvents(it) }
         )
     }
@@ -194,6 +234,7 @@ class TimelinePresenter @AssistedInject constructor(
             newMostRecentItem is TimelineItem.Event &&
             newMostRecentItem.origin != TimelineItemEventOrigin.PAGINATION &&
             newMostRecentItemId != prevMostRecentItemIdValue
+
         if (hasNewEvent) {
             val newMostRecentEvent = newMostRecentItem as? TimelineItem.Event
             // Scroll to bottom if the new event is from me, even if sent from another device
@@ -221,7 +262,7 @@ class TimelinePresenter @AssistedInject constructor(
             val eventId = getLastEventIdBeforeOrAt(firstVisibleIndex, timelineItems)
             if (eventId != null && eventId != lastReadReceiptId.value) {
                 lastReadReceiptId.value = eventId
-                timeline.sendReadReceipt(eventId = eventId, receiptType = readReceiptType)
+                //timeline.sendReadReceipt(eventId = eventId, receiptType = readReceiptType)
             }
         }
     }
@@ -234,9 +275,5 @@ class TimelinePresenter @AssistedInject constructor(
             }
         }
         return null
-    }
-
-    private fun CoroutineScope.paginateBackwards() = launch {
-        timeline.paginateBackwards()
     }
 }

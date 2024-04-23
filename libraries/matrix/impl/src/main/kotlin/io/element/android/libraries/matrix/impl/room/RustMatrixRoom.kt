@@ -43,7 +43,7 @@ import io.element.android.libraries.matrix.api.room.location.AssetType
 import io.element.android.libraries.matrix.api.room.powerlevels.MatrixRoomPowerLevels
 import io.element.android.libraries.matrix.api.room.powerlevels.UserRoleChange
 import io.element.android.libraries.matrix.api.room.roomNotificationSettings
-import io.element.android.libraries.matrix.api.timeline.LiveTimeline
+import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.ReceiptType
 import io.element.android.libraries.matrix.api.widget.MatrixWidgetDriver
 import io.element.android.libraries.matrix.api.widget.MatrixWidgetSettings
@@ -57,7 +57,7 @@ import io.element.android.libraries.matrix.impl.room.location.toInner
 import io.element.android.libraries.matrix.impl.room.member.RoomMemberListFetcher
 import io.element.android.libraries.matrix.impl.room.member.RoomMemberMapper
 import io.element.android.libraries.matrix.impl.room.powerlevels.RoomPowerLevelsMapper
-import io.element.android.libraries.matrix.impl.timeline.RustLiveTimeline
+import io.element.android.libraries.matrix.impl.timeline.RustTimeline
 import io.element.android.libraries.matrix.impl.timeline.toRustReceiptType
 import io.element.android.libraries.matrix.impl.util.mxCallbackFlow
 import io.element.android.libraries.matrix.impl.widget.RustWidgetDriver
@@ -160,7 +160,7 @@ class RustMatrixRoom(
     private val _roomNotificationSettingsStateFlow = MutableStateFlow<MatrixRoomNotificationSettingsState>(MatrixRoomNotificationSettingsState.Unknown)
     override val roomNotificationSettingsStateFlow: StateFlow<MatrixRoomNotificationSettingsState> = _roomNotificationSettingsStateFlow
 
-    override val liveTimeline = createLiveTimeline(innerTimeline){
+    override val liveTimeline = createTimeline(innerTimeline, isLive = true){
         _syncUpdateFlow.value = systemClock.epochMillis()
     }
 
@@ -182,6 +182,12 @@ class RustMatrixRoom(
     override suspend fun subscribeToSync() = roomSyncSubscriber.subscribe(roomId)
 
     override suspend fun unsubscribeFromSync() = roomSyncSubscriber.unsubscribe(roomId)
+
+    override suspend fun timelineFocusedOnEvent(eventId: EventId): Timeline {
+        return innerRoom.timelineFocusedOnEvent(eventId.value, numContextEvents = 50u).let {inner ->
+            createTimeline(inner, isLive = false){}
+        }
+    }
 
     override fun destroy() {
         roomCoroutineScope.cancel()
@@ -745,12 +751,14 @@ class RustMatrixRoom(
         }
     }
 
-    private fun createLiveTimeline(
+    private fun createTimeline(
         timeline: InnerTimeline,
+        isLive: Boolean = true,
         onNewSyncedEvent: () -> Unit = {},
-    ): LiveTimeline {
-        return RustLiveTimeline(
+    ): Timeline {
+        return RustTimeline(
             isKeyBackupEnabled = isKeyBackupEnabled,
+            isLive = isLive,
             matrixRoom = this,
             systemClock = systemClock,
             roomCoroutineScope = roomCoroutineScope,

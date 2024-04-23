@@ -16,6 +16,7 @@
 
 package io.element.android.features.messages.impl.timeline.components
 
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
@@ -29,6 +30,7 @@ import io.element.android.features.messages.impl.timeline.components.virtual.Tim
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemDaySeparatorModel
 import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemEncryptedHistoryBannerVirtualModel
+import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemInvisibleIndicatorModel
 import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemLoadingIndicatorModel
 import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemReadMarkerModel
 import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemRoomBeginningModel
@@ -46,10 +48,11 @@ fun TimelineItemVirtualRow(
         is TimelineItemEncryptedHistoryBannerVirtualModel -> TimelineEncryptedHistoryBannerView(modifier)
         TimelineItemRoomBeginningModel -> TimelineItemRoomBeginningView(roomName = timelineRoomInfo.name, modifier = modifier)
         is TimelineItemLoadingIndicatorModel -> {
-            TimelineLoadingMoreIndicator()
+            TimelineLoadingMoreIndicator(modifier)
             LaunchedEffect(key1 = virtual.model.timestamp) {
-                eventSink(TimelineEvents.LoadMore(virtual.model.backwards))
+                eventSink(TimelineEvents.LoadMore(virtual.model.direction))
             }
         }
+        TimelineItemInvisibleIndicatorModel -> Spacer(modifier = modifier)
     }
 }

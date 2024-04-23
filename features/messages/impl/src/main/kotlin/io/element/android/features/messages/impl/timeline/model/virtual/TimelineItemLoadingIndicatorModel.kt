@@ -16,8 +16,10 @@
 
 package io.element.android.features.messages.impl.timeline.model.virtual
 
+import io.element.android.libraries.matrix.api.timeline.Timeline
+
 data class TimelineItemLoadingIndicatorModel(
-    val backwards: Boolean,
+    val direction: Timeline.PaginationDirection,
     val timestamp: Long,
 ) : TimelineItemVirtualModel {
     override val type: String = "TimelineItemLoadingIndicatorModel"

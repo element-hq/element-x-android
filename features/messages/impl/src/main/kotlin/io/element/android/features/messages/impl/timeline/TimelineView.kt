@@ -19,6 +19,7 @@
 package io.element.android.features.messages.impl.timeline
 
 import android.view.accessibility.AccessibilityManager
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.tween
@@ -55,7 +56,6 @@ import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.messages.impl.timeline.components.TimelineItemRow
-import io.element.android.features.messages.impl.timeline.components.virtual.TimelineLoadingMoreIndicator
 import io.element.android.features.messages.impl.timeline.di.LocalTimelineItemPresenterFactories
 import io.element.android.features.messages.impl.timeline.di.aFakeTimelineItemPresenterFactories
 import io.element.android.features.messages.impl.timeline.model.NewEventState
@@ -63,8 +63,9 @@ import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContentProvider
 import io.element.android.features.messages.impl.typing.TypingNotificationState
-import io.element.android.features.messages.impl.typing.TypingNotificationView
 import io.element.android.features.messages.impl.typing.aTypingNotificationState
+import io.element.android.libraries.designsystem.components.ProgressDialog
+import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.FloatingActionButton
@@ -73,6 +74,8 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.coroutines.launch
+import timber.log.Timber
+import kotlin.math.abs
 
 @Composable
 fun TimelineView(
@@ -92,6 +95,10 @@ fun TimelineView(
     forceJumpToBottomVisibility: Boolean = false
 ) {
 
+    fun clearFocusRequestState() {
+        state.eventSink(TimelineEvents.ClearFocusRequestState)
+    }
+
     fun onScrollFinishedAt(firstVisibleIndex: Int) {
         state.eventSink(TimelineEvents.OnScrollFinished(firstVisibleIndex))
     }
@@ -109,6 +116,10 @@ fun TimelineView(
         // TODO implement this logic once we have support to 'jump to event X' in sliding sync
     }
 
+    LaunchedEffect(key1 = state.timelineItems) {
+        Timber.d("TimelineView - timelineItem identifiers: ${state.timelineItems.joinToString(", ") { it.identifier() }}")
+    }
+
     // Animate alpha when timeline is first displayed, to avoid flashes or glitching when viewing rooms
     AnimatedVisibility(visible = true, enter = fadeIn()) {
         Box(modifier) {
@@ -118,9 +129,12 @@ fun TimelineView(
                 reverseLayout = useReverseLayout,
                 contentPadding = PaddingValues(vertical = 8.dp),
             ) {
-                item {
+                /*
+                item(key = UUID.randomUUID()) {
                     TypingNotificationView(state = typingNotificationState)
                 }
+
+                 */
                 items(
                     items = state.timelineItems,
                     contentType = { timelineItem -> timelineItem.contentType() },
@@ -149,14 +163,48 @@ fun TimelineView(
                 }
             }
 
+            FocusRequestStateView(
+                focusRequestState = state.focusRequestState,
+                onClearFocusRequestState = ::clearFocusRequestState
+            )
+
             TimelineScrollHelper(
                 isTimelineEmpty = state.timelineItems.isEmpty(),
                 lazyListState = lazyListState,
                 forceJumpToBottomVisibility = forceJumpToBottomVisibility,
                 newEventState = state.newEventState,
-                onScrollFinishedAt = ::onScrollFinishedAt
+                isLive = state.isLive,
+                focusRequestState = state.focusRequestState,
+                onScrollFinishedAt = ::onScrollFinishedAt,
+                onClearFocusRequestState = ::clearFocusRequestState,
+                onJumpToLive = { state.eventSink(TimelineEvents.JumpToLive) },
             )
         }
+    }
+}
+
+@Composable
+private fun FocusRequestStateView(
+    focusRequestState: FocusRequestState,
+    onClearFocusRequestState: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    BackHandler(enabled = focusRequestState is FocusRequestState.Fetching) {
+        onClearFocusRequestState()
+    }
+
+    when (focusRequestState) {
+        is FocusRequestState.Failure -> {
+            ErrorDialog(
+                content = stringResource(id = CommonStrings.common_failed),
+                onDismiss = onClearFocusRequestState,
+                modifier = modifier,
+            )
+        }
+        FocusRequestState.Fetching -> {
+            ProgressDialog(modifier = modifier)
+        }
+        is FocusRequestState.Cached, FocusRequestState.None -> Unit
     }
 }
 
@@ -165,14 +213,18 @@ private fun BoxScope.TimelineScrollHelper(
     isTimelineEmpty: Boolean,
     lazyListState: LazyListState,
     newEventState: NewEventState,
+    isLive: Boolean,
     forceJumpToBottomVisibility: Boolean,
+    focusRequestState: FocusRequestState,
+    onClearFocusRequestState: () -> Unit,
     onScrollFinishedAt: (Int) -> Unit,
+    onJumpToLive: () -> Unit,
 ) {
     val coroutineScope = rememberCoroutineScope()
     val isScrollFinished by remember { derivedStateOf { !lazyListState.isScrollInProgress } }
     val canAutoScroll by remember {
         derivedStateOf {
-            lazyListState.firstVisibleItemIndex < 3
+            lazyListState.firstVisibleItemIndex < 3 && isLive
         }
     }
 
@@ -186,9 +238,29 @@ private fun BoxScope.TimelineScrollHelper(
         }
     }
 
+    fun jumpToBottom() {
+        if (isLive) {
+            scrollToBottom()
+        } else {
+            onJumpToLive()
+        }
+    }
+
+    LaunchedEffect(key1 = focusRequestState) {
+        if (focusRequestState is FocusRequestState.Cached) {
+            if (abs(lazyListState.firstVisibleItemIndex - focusRequestState.index) < 10) {
+                lazyListState.animateScrollToItem(focusRequestState.index)
+            } else {
+                lazyListState.scrollToItem(focusRequestState.index)
+            }
+            onClearFocusRequestState()
+        }
+    }
+
     LaunchedEffect(canAutoScroll, newEventState) {
-        val shouldAutoScroll = isScrollFinished && (canAutoScroll || newEventState == NewEventState.FromMe)
-        if (shouldAutoScroll) {
+        Timber.d("TimelineScrollHelper - canAutoScroll: $canAutoScroll, newEventState: $newEventState")
+        val shouldScrollToBottom = isScrollFinished && (canAutoScroll || newEventState == NewEventState.FromMe)
+        if (shouldScrollToBottom) {
             scrollToBottom()
         }
     }
@@ -203,11 +275,11 @@ private fun BoxScope.TimelineScrollHelper(
 
     JumpToBottomButton(
         // Use inverse of canAutoScroll otherwise we might briefly see the before the scroll animation is triggered
-        isVisible = !canAutoScroll || forceJumpToBottomVisibility,
+        isVisible = !canAutoScroll || forceJumpToBottomVisibility || !isLive,
         modifier = Modifier
-            .align(Alignment.BottomEnd)
-            .padding(end = 24.dp, bottom = 12.dp),
-        onClick = ::scrollToBottom,
+                .align(Alignment.BottomEnd)
+                .padding(end = 24.dp, bottom = 12.dp),
+        onClick = { jumpToBottom() },
     )
 }
 
@@ -233,8 +305,8 @@ private fun JumpToBottomButton(
         ) {
             Icon(
                 modifier = Modifier
-                    .size(24.dp)
-                    .rotate(90f),
+                        .size(24.dp)
+                        .rotate(90f),
                 imageVector = CompoundIcons.ArrowRight(),
                 contentDescription = stringResource(id = CommonStrings.a11y_jump_to_bottom)
             )

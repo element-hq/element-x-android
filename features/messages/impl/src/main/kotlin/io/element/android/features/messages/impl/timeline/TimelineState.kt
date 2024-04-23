@@ -20,7 +20,6 @@ import androidx.compose.runtime.Immutable
 import io.element.android.features.messages.impl.timeline.model.NewEventState
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.libraries.matrix.api.core.EventId
-import io.element.android.libraries.matrix.api.timeline.Timeline
 import kotlinx.collections.immutable.ImmutableList
 
 @Immutable
@@ -29,10 +28,19 @@ data class TimelineState(
     val timelineRoomInfo: TimelineRoomInfo,
     val renderReadReceipts: Boolean,
     val highlightedEventId: EventId?,
-    val backPaginationStatus: Timeline.PaginationStatus,
     val newEventState: NewEventState,
-    val eventSink: (TimelineEvents) -> Unit
+    val isLive: Boolean,
+    val focusedEventId : EventId?,
+    val focusRequestState: FocusRequestState,
+    val eventSink: (TimelineEvents) -> Unit,
 )
+
+sealed interface FocusRequestState {
+    data object None : FocusRequestState
+    data class Cached(val index: Int): FocusRequestState
+    data object Fetching : FocusRequestState
+    data class Failure(val throwable: Throwable) : FocusRequestState
+}
 
 @Immutable
 data class TimelineRoomInfo(

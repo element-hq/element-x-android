@@ -50,7 +50,7 @@ class PollHistoryPresenter @Inject constructor(
     override fun present(): PollHistoryState {
         // TODO use room.rememberPollHistory() when working properly?
         val timeline = room.liveTimeline
-        val paginationState by timeline.backPaginationStatus.collectAsState()
+        val paginationState by timeline.paginationStatus(Timeline.PaginationDirection.BACKWARDS).collectAsState()
         val pollHistoryItemsFlow = remember {
             timeline.timelineItems.map { items ->
                 pollHistoryItemFactory.create(items)
@@ -96,6 +96,6 @@ class PollHistoryPresenter @Inject constructor(
     }
 
     private fun CoroutineScope.loadMore(pollHistory: Timeline) = launch {
-        pollHistory.paginateBackwards()
+        pollHistory.paginate(Timeline.PaginationDirection.BACKWARDS)
     }
 }
