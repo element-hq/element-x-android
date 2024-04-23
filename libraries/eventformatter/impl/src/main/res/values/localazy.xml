@@ -30,7 +30,7 @@
   <string name="state_event_room_join_by_you">"You joined the room"</string>
   <string name="state_event_room_knock">"%1$s requested to join"</string>
   <string name="state_event_room_knock_accepted">"%1$s allowed %2$s to join"</string>
-  <string name="state_event_room_knock_accepted_by_you">"%1$s allowed you to join"</string>
+  <string name="state_event_room_knock_accepted_by_you">"You allowed %1$s to join"</string>
   <string name="state_event_room_knock_by_you">"You requested to join"</string>
   <string name="state_event_room_knock_denied">"%1$s rejected %2$s\'s request to join"</string>
   <string name="state_event_room_knock_denied_by_you">"You rejected %1$s\'s request to join"</string>

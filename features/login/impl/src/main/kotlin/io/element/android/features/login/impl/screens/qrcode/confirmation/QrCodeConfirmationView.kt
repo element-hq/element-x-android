@@ -37,6 +37,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
+import io.element.android.features.login.impl.R
 import io.element.android.libraries.designsystem.atomic.pages.FlowStepPage
 import io.element.android.libraries.designsystem.components.BigIcon
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -56,15 +57,13 @@ fun QrCodeConfirmationView(
         is QrCodeConfirmationStep.DisplayCheckCode -> CompoundIcons.Computer()
         is QrCodeConfirmationStep.DisplayVerificationCode -> CompoundIcons.LockSolid()
     }
-    // TODO: localazy
     val title = when (step) {
-        is QrCodeConfirmationStep.DisplayCheckCode -> "Enter the number below on your device"
-        is QrCodeConfirmationStep.DisplayVerificationCode -> "Your verification code"
+        is QrCodeConfirmationStep.DisplayCheckCode -> stringResource(R.string.screen_qr_code_login_device_code_title)
+        is QrCodeConfirmationStep.DisplayVerificationCode -> stringResource(R.string.screen_qr_code_login_verify_code_title)
     }
-    // TODO: localazy
     val subtitle = when (step) {
-        is QrCodeConfirmationStep.DisplayCheckCode -> "You’ll be asked to enter the two digits shown below."
-        is QrCodeConfirmationStep.DisplayVerificationCode -> "Your account provider may ask for the following code to verify the sign in."
+        is QrCodeConfirmationStep.DisplayCheckCode -> stringResource(R.string.screen_qr_code_login_device_code_subtitle)
+        is QrCodeConfirmationStep.DisplayVerificationCode -> stringResource(R.string.screen_qr_code_login_verify_code_subtitle)
     }
     FlowStepPage(
         modifier = modifier,
@@ -130,9 +129,8 @@ private fun WaitingForOtherDevice() {
                 .padding(2.dp),
             strokeWidth = 2.dp,
         )
-        // TODO: localazy
         Text(
-            text = "Waiting for your other device",
+            text = stringResource(R.string.screen_qr_code_login_verify_code_loading),
             style = ElementTheme.typography.fontBodySmRegular,
             color = ElementTheme.colors.textSecondary,
             textAlign = TextAlign.Center,

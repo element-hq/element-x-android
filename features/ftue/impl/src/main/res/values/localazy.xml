@@ -9,6 +9,8 @@
   <string name="screen_qr_code_login_connection_note_secure_state_list_item_2">"If you encounter the same problem, try a different wifi network or use your mobile data instead of wifi"</string>
   <string name="screen_qr_code_login_connection_note_secure_state_list_item_3">"If that doesn’t work, sign in manually"</string>
   <string name="screen_qr_code_login_connection_note_secure_state_title">"Connection not secure"</string>
+  <string name="screen_qr_code_login_device_code_subtitle">"You’ll be asked to enter the two digits shown below."</string>
+  <string name="screen_qr_code_login_device_code_title">"Enter the number on your other device"</string>
   <string name="screen_qr_code_login_initial_state_item_1">"Open %1$s on a desktop device"</string>
   <string name="screen_qr_code_login_initial_state_item_2">"Click on your avatar"</string>
   <string name="screen_qr_code_login_initial_state_item_3">"Select %1$s"</string>
@@ -20,11 +22,14 @@
   <string name="screen_qr_code_login_invalid_scan_state_retry_button">"Try again"</string>
   <string name="screen_qr_code_login_invalid_scan_state_subtitle">"Wrong QR code"</string>
   <string name="screen_qr_code_login_no_camera_permission_button">"Go to camera settings"</string>
-  <string name="screen_qr_code_login_no_camera_permission_state_description">"You need to give permission for Element to use your device’s camera in order to continue."</string>
+  <string name="screen_qr_code_login_no_camera_permission_state_description">"You need to give permission for %1$s to use your device’s camera in order to continue."</string>
   <string name="screen_qr_code_login_no_camera_permission_state_title">"Allow camera access to scan the QR code"</string>
   <string name="screen_qr_code_login_scanning_state_title">"Scan the QR code"</string>
   <string name="screen_qr_code_login_start_over_button">"Start over"</string>
   <string name="screen_qr_code_login_unknown_error_description">"An unexpected error occurred. Please try again."</string>
+  <string name="screen_qr_code_login_verify_code_loading">"Waiting for your other device"</string>
+  <string name="screen_qr_code_login_verify_code_subtitle">"Your account provider may ask for the following code to verify the sign in."</string>
+  <string name="screen_qr_code_login_verify_code_title">"Your verification code"</string>
   <string name="screen_welcome_bullet_1">"Calls, polls, search and more will be added later this year."</string>
   <string name="screen_welcome_bullet_2">"Message history for encrypted rooms isn’t available yet."</string>
   <string name="screen_welcome_bullet_3">"We’d love to hear from you, let us know what you think via the settings page."</string>
