@@ -21,7 +21,7 @@ import org.matrix.rustcomponents.sdk.QrLoginProgress
 
 fun QrLoginProgress.toStep(): QrCodeLoginStep {
     return when (this) {
-        is QrLoginProgress.EstablishingSecureChannel -> QrCodeLoginStep.EstablishingSecureChannel(checkCode.toString())
+        is QrLoginProgress.EstablishingSecureChannel -> QrCodeLoginStep.EstablishingSecureChannel(checkCodeString)
         is QrLoginProgress.Starting -> QrCodeLoginStep.Starting
         is QrLoginProgress.WaitingForToken -> QrCodeLoginStep.WaitingForToken(userCode)
         is QrLoginProgress.Done -> QrCodeLoginStep.Finished
