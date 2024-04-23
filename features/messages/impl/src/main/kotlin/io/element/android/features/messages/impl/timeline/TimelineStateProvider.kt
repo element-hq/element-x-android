@@ -16,6 +16,7 @@
 
 package io.element.android.features.messages.impl.timeline
 
+import io.element.android.features.messages.impl.timeline.components.aProfileTimelineDetailsReady
 import io.element.android.features.messages.impl.timeline.components.receipt.aReadReceiptData
 import io.element.android.features.messages.impl.timeline.model.InReplyToDetails
 import io.element.android.features.messages.impl.timeline.model.NewEventState
@@ -131,6 +132,7 @@ internal fun aTimelineItemEvent(
     isMine: Boolean = false,
     isEditable: Boolean = false,
     senderDisplayName: String = "Sender",
+    displayNameAmbiguous: Boolean = false,
     content: TimelineItemEventContent = aTimelineItemTextContent(),
     groupPosition: TimelineItemGroupPosition = TimelineItemGroupPosition.None,
     sendState: LocalEventSendState? = null,
@@ -152,7 +154,10 @@ internal fun aTimelineItemEvent(
         sentTime = "12:34",
         isMine = isMine,
         isEditable = isEditable,
-        senderDisplayName = senderDisplayName,
+        senderProfile = aProfileTimelineDetailsReady(
+            displayName = senderDisplayName,
+            displayNameAmbiguous = displayNameAmbiguous,
+        ),
         groupPosition = groupPosition,
         localSendState = sendState,
         inReplyTo = inReplyTo,

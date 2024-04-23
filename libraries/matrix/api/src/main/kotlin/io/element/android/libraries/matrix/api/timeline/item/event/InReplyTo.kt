@@ -33,8 +33,7 @@ sealed interface InReplyTo {
         val eventId: EventId,
         val content: EventContent,
         val senderId: UserId,
-        val senderDisplayName: String?,
-        val senderAvatarUrl: String?,
+        val senderProfile: ProfileTimelineDetails,
     ) : InReplyTo
 
     /**

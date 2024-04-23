@@ -82,7 +82,7 @@ class TimelineItemContentMessageFactoryTest {
         val sut = createTimelineItemContentMessageFactory()
         val result = sut.create(
             content = createMessageContent(type = OtherMessageType(msgType = "a_type", body = "body")),
-            senderDisplayName = "Bob",
+            senderDisambiguatedDisplayName = "Bob",
             eventId = AN_EVENT_ID,
         )
         val expected = TimelineItemTextContent(
@@ -100,7 +100,7 @@ class TimelineItemContentMessageFactoryTest {
         val sut = createTimelineItemContentMessageFactory()
         val result = sut.create(
             content = createMessageContent(type = LocationMessageType("body", "geo:1,2", "description")),
-            senderDisplayName = "Bob",
+            senderDisambiguatedDisplayName = "Bob",
             eventId = AN_EVENT_ID,
         )
         val expected = TimelineItemLocationContent(
@@ -116,7 +116,7 @@ class TimelineItemContentMessageFactoryTest {
         val sut = createTimelineItemContentMessageFactory()
         val result = sut.create(
             content = createMessageContent(type = LocationMessageType("body", "", null)),
-            senderDisplayName = "Bob",
+            senderDisambiguatedDisplayName = "Bob",
             eventId = AN_EVENT_ID,
         )
         val expected = TimelineItemTextContent(
@@ -134,7 +134,7 @@ class TimelineItemContentMessageFactoryTest {
         val sut = createTimelineItemContentMessageFactory()
         val result = sut.create(
             content = createMessageContent(type = TextMessageType("body", null)),
-            senderDisplayName = "Bob",
+            senderDisambiguatedDisplayName = "Bob",
             eventId = AN_EVENT_ID,
         )
         val expected = TimelineItemTextContent(
@@ -152,7 +152,7 @@ class TimelineItemContentMessageFactoryTest {
         val sut = createTimelineItemContentMessageFactory()
         val result = sut.create(
             content = createMessageContent(type = TextMessageType("https://www.example.org", null)),
-            senderDisplayName = "Bob",
+            senderDisambiguatedDisplayName = "Bob",
             eventId = AN_EVENT_ID,
         ) as TimelineItemTextContent
         val expected = TimelineItemTextContent(
@@ -200,7 +200,7 @@ class TimelineItemContentMessageFactoryTest {
                     formatted = FormattedBody(MessageFormat.HTML, expected.toString())
                 )
             ),
-            senderDisplayName = "Bob",
+            senderDisambiguatedDisplayName = "Bob",
             eventId = AN_EVENT_ID,
         )
         assertThat((result as TimelineItemTextContent).formattedBody).isEqualTo(expected)
@@ -218,7 +218,7 @@ class TimelineItemContentMessageFactoryTest {
                     formatted = FormattedBody(MessageFormat.UNKNOWN, "formatted")
                 )
             ),
-            senderDisplayName = "Bob",
+            senderDisambiguatedDisplayName = "Bob",
             eventId = AN_EVENT_ID,
         )
         assertThat((result as TimelineItemTextContent).formattedBody).isNull()
@@ -229,7 +229,7 @@ class TimelineItemContentMessageFactoryTest {
         val sut = createTimelineItemContentMessageFactory()
         val result = sut.create(
             content = createMessageContent(type = VideoMessageType("body", null, null, MediaSource("url"), null)),
-            senderDisplayName = "Bob",
+            senderDisambiguatedDisplayName = "Bob",
             eventId = AN_EVENT_ID,
         )
         val expected = TimelineItemVideoContent(
@@ -277,7 +277,7 @@ class TimelineItemContentMessageFactoryTest {
                     ),
                 )
             ),
-            senderDisplayName = "Bob",
+            senderDisambiguatedDisplayName = "Bob",
             eventId = AN_EVENT_ID,
         )
         val expected = TimelineItemVideoContent(
@@ -303,7 +303,7 @@ class TimelineItemContentMessageFactoryTest {
         val sut = createTimelineItemContentMessageFactory()
         val result = sut.create(
             content = createMessageContent(type = AudioMessageType("body", MediaSource("url"), null)),
-            senderDisplayName = "Bob",
+            senderDisambiguatedDisplayName = "Bob",
             eventId = AN_EVENT_ID,
         )
         val expected = TimelineItemAudioContent(
@@ -332,7 +332,7 @@ class TimelineItemContentMessageFactoryTest {
                     )
                 )
             ),
-            senderDisplayName = "Bob",
+            senderDisambiguatedDisplayName = "Bob",
             eventId = AN_EVENT_ID,
         )
         val expected = TimelineItemAudioContent(
@@ -351,7 +351,7 @@ class TimelineItemContentMessageFactoryTest {
         val sut = createTimelineItemContentMessageFactory()
         val result = sut.create(
             content = createMessageContent(type = VoiceMessageType("body", MediaSource("url"), null, null)),
-            senderDisplayName = "Bob",
+            senderDisambiguatedDisplayName = "Bob",
             eventId = AN_EVENT_ID,
         )
         val expected = TimelineItemVoiceContent(
@@ -384,7 +384,7 @@ class TimelineItemContentMessageFactoryTest {
                     ),
                 )
             ),
-            senderDisplayName = "Bob",
+            senderDisambiguatedDisplayName = "Bob",
             eventId = AN_EVENT_ID,
         )
         val expected = TimelineItemVoiceContent(
@@ -409,7 +409,7 @@ class TimelineItemContentMessageFactoryTest {
         )
         val result = sut.create(
             content = createMessageContent(type = VoiceMessageType("body", MediaSource("url"), null, null)),
-            senderDisplayName = "Bob",
+            senderDisambiguatedDisplayName = "Bob",
             eventId = AN_EVENT_ID,
         )
         val expected = TimelineItemAudioContent(
@@ -428,7 +428,7 @@ class TimelineItemContentMessageFactoryTest {
         val sut = createTimelineItemContentMessageFactory()
         val result = sut.create(
             content = createMessageContent(type = ImageMessageType("body", null, null, MediaSource("url"), null)),
-            senderDisplayName = "Bob",
+            senderDisambiguatedDisplayName = "Bob",
             eventId = AN_EVENT_ID,
         )
         val expected = TimelineItemImageContent(
@@ -499,7 +499,7 @@ class TimelineItemContentMessageFactoryTest {
                     )
                 )
             ),
-            senderDisplayName = "Bob",
+            senderDisambiguatedDisplayName = "Bob",
             eventId = AN_EVENT_ID,
         )
         val expected = TimelineItemImageContent(
@@ -524,7 +524,7 @@ class TimelineItemContentMessageFactoryTest {
         val sut = createTimelineItemContentMessageFactory()
         val result = sut.create(
             content = createMessageContent(type = FileMessageType("body", MediaSource("url"), null)),
-            senderDisplayName = "Bob",
+            senderDisambiguatedDisplayName = "Bob",
             eventId = AN_EVENT_ID,
         )
         val expected = TimelineItemFileContent(
@@ -559,7 +559,7 @@ class TimelineItemContentMessageFactoryTest {
                     )
                 )
             ),
-            senderDisplayName = "Bob",
+            senderDisambiguatedDisplayName = "Bob",
             eventId = AN_EVENT_ID,
         )
         val expected = TimelineItemFileContent(
@@ -578,7 +578,7 @@ class TimelineItemContentMessageFactoryTest {
         val sut = createTimelineItemContentMessageFactory()
         val result = sut.create(
             content = createMessageContent(type = NoticeMessageType("body", null)),
-            senderDisplayName = "Bob",
+            senderDisambiguatedDisplayName = "Bob",
             eventId = AN_EVENT_ID,
         )
         val expected = TimelineItemNoticeContent(
@@ -601,7 +601,7 @@ class TimelineItemContentMessageFactoryTest {
                     formatted = FormattedBody(MessageFormat.HTML, "formatted")
                 )
             ),
-            senderDisplayName = "Bob",
+            senderDisambiguatedDisplayName = "Bob",
             eventId = AN_EVENT_ID,
         )
         assertThat((result as TimelineItemNoticeContent).formattedBody).isEqualTo("formatted")
@@ -612,7 +612,7 @@ class TimelineItemContentMessageFactoryTest {
         val sut = createTimelineItemContentMessageFactory()
         val result = sut.create(
             content = createMessageContent(type = EmoteMessageType("body", null)),
-            senderDisplayName = "Bob",
+            senderDisambiguatedDisplayName = "Bob",
             eventId = AN_EVENT_ID,
         )
         val expected = TimelineItemEmoteContent(
@@ -635,7 +635,7 @@ class TimelineItemContentMessageFactoryTest {
                     formatted = FormattedBody(MessageFormat.HTML, "formatted")
                 )
             ),
-            senderDisplayName = "Bob",
+            senderDisambiguatedDisplayName = "Bob",
             eventId = AN_EVENT_ID,
         )
         assertThat((result as TimelineItemEmoteContent).formattedBody).isEqualTo(SpannableString("* Bob formatted"))

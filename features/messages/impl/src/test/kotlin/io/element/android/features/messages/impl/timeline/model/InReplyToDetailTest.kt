@@ -27,6 +27,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageTy
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.permalink.FakePermalinkParser
+import io.element.android.libraries.matrix.test.timeline.aProfileTimelineDetails
 import org.junit.Test
 
 class InReplyToDetailTest {
@@ -54,8 +55,7 @@ class InReplyToDetailTest {
         val inReplyTo = InReplyTo.Ready(
             eventId = AN_EVENT_ID,
             senderId = A_USER_ID,
-            senderDisplayName = "senderDisplayName",
-            senderAvatarUrl = "senderAvatarUrl",
+            senderProfile = aProfileTimelineDetails(),
             content = RoomMembershipContent(
                 userId = A_USER_ID,
                 change = MembershipChange.INVITED,
@@ -73,8 +73,7 @@ class InReplyToDetailTest {
         val inReplyTo = InReplyTo.Ready(
             eventId = AN_EVENT_ID,
             senderId = A_USER_ID,
-            senderDisplayName = "senderDisplayName",
-            senderAvatarUrl = "senderAvatarUrl",
+            senderProfile = aProfileTimelineDetails(),
             content = MessageContent(
                 body = "**Hello!**",
                 inReplyTo = null,
@@ -101,8 +100,7 @@ class InReplyToDetailTest {
         val inReplyTo = InReplyTo.Ready(
             eventId = AN_EVENT_ID,
             senderId = A_USER_ID,
-            senderDisplayName = "senderDisplayName",
-            senderAvatarUrl = "senderAvatarUrl",
+            senderProfile = aProfileTimelineDetails(),
             content = MessageContent(
                 body = "**Hello!**",
                 inReplyTo = null,
