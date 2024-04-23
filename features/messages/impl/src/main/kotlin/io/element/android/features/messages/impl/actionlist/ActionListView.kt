@@ -145,8 +145,8 @@ fun ActionListView(
                 onEmojiReactionClicked = ::onEmojiReactionClicked,
                 onCustomReactionClicked = ::onCustomReactionClicked,
                 modifier = Modifier
-                        .navigationBarsPadding()
-                        .imePadding()
+                    .navigationBarsPadding()
+                    .imePadding()
             )
         }
     }
@@ -177,8 +177,8 @@ private fun SheetContent(
                         MessageSummary(
                             event = target.event,
                             modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(horizontal = 16.dp)
+                                .fillMaxWidth()
+                                .padding(horizontal = 16.dp)
                         )
                         Spacer(modifier = Modifier.height(14.dp))
                         HorizontalDivider()
@@ -322,13 +322,13 @@ private fun EmojiReactionsRow(
                 contentDescription = stringResource(id = CommonStrings.a11y_react_with_other_emojis),
                 tint = MaterialTheme.colorScheme.secondary,
                 modifier = Modifier
-                        .size(24.dp)
-                        .clickable(
-                                enabled = true,
-                                onClick = onCustomReactionClicked,
-                                indication = rememberRipple(bounded = false, radius = emojiRippleRadius),
-                                interactionSource = remember { MutableInteractionSource() }
-                        )
+                    .size(24.dp)
+                    .clickable(
+                        enabled = true,
+                        onClick = onCustomReactionClicked,
+                        indication = rememberRipple(bounded = false, radius = emojiRippleRadius),
+                        interactionSource = remember { MutableInteractionSource() }
+                    )
             )
         }
     }
@@ -352,11 +352,11 @@ private fun EmojiButton(
     }
     Box(
         modifier = Modifier
-                .size(48.dp)
-                .background(backgroundColor, CircleShape)
-                .clearAndSetSemantics {
-                    contentDescription = description
-                },
+            .size(48.dp)
+            .background(backgroundColor, CircleShape)
+            .clearAndSetSemantics {
+                contentDescription = description
+            },
         contentAlignment = Alignment.Center
     ) {
         Text(
