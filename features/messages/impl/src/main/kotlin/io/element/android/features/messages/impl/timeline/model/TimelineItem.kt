@@ -38,6 +38,14 @@ sealed interface TimelineItem {
         is GroupedEvents -> id
     }
 
+    fun isEvent(eventId: EventId?): Boolean {
+        if (eventId == null) return false
+        return when (this) {
+            is Event -> this.eventId == eventId
+            else -> false
+        }
+    }
+
     fun contentType(): String = when (this) {
         is Event -> content.type
         is Virtual -> model.type

@@ -16,13 +16,23 @@
 
 package io.element.android.features.messages.impl.timeline.components
 
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawWithCache
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.unit.dp
+import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.messages.impl.timeline.TimelineEvents
 import io.element.android.features.messages.impl.timeline.TimelineRoomInfo
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemLegacyCallInviteContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStateContent
+import io.element.android.libraries.designsystem.text.toPx
+import io.element.android.libraries.designsystem.theme.highlightedMessageBackgroundColor
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
 
@@ -32,7 +42,7 @@ internal fun TimelineItemRow(
     timelineRoomInfo: TimelineRoomInfo,
     renderReadReceipts: Boolean,
     isLastOutgoingMessage: Boolean,
-    highlightedItem: String?,
+    focusedEventId: EventId?,
     onUserDataClick: (UserId) -> Unit,
     onLinkClicked: (String) -> Unit,
     onClick: (TimelineItem.Event) -> Unit,
@@ -47,71 +57,92 @@ internal fun TimelineItemRow(
     eventSink: (TimelineEvents.EventFromTimelineItem) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    when (timelineItem) {
-        is TimelineItem.Virtual -> {
-            TimelineItemVirtualRow(
-                virtual = timelineItem,
-                timelineRoomInfo = timelineRoomInfo,
-                eventSink = eventSink,
-                modifier = modifier,
-            )
-        }
-        is TimelineItem.Event -> {
-            if (timelineItem.content is TimelineItemStateContent || timelineItem.content is TimelineItemLegacyCallInviteContent) {
-                TimelineItemStateEventRow(
-                    event = timelineItem,
-                    renderReadReceipts = renderReadReceipts,
-                    isLastOutgoingMessage = isLastOutgoingMessage,
-                    isHighlighted = highlightedItem == timelineItem.identifier(),
-                    onClick = { onClick(timelineItem) },
-                    onReadReceiptsClick = onReadReceiptClick,
-                    onLongClick = { onLongClick(timelineItem) },
+
+    val backgroundModifier = if (timelineItem.isEvent(focusedEventId)) {
+        Modifier.focusedEvent()
+    } else {
+        Modifier
+    }
+    Box(modifier = modifier.then(backgroundModifier)) {
+        when (timelineItem) {
+            is TimelineItem.Virtual -> {
+                TimelineItemVirtualRow(
+                    virtual = timelineItem,
+                    timelineRoomInfo = timelineRoomInfo,
                     eventSink = eventSink,
-                    modifier = modifier,
                 )
-            } else {
-                TimelineItemEventRow(
-                    event = timelineItem,
+            }
+            is TimelineItem.Event -> {
+                if (timelineItem.content is TimelineItemStateContent || timelineItem.content is TimelineItemLegacyCallInviteContent) {
+                    TimelineItemStateEventRow(
+                        event = timelineItem,
+                        renderReadReceipts = renderReadReceipts,
+                        isLastOutgoingMessage = isLastOutgoingMessage,
+                        isHighlighted = timelineItem.isEvent(focusedEventId),
+                        onClick = { onClick(timelineItem) },
+                        onReadReceiptsClick = onReadReceiptClick,
+                        onLongClick = { onLongClick(timelineItem) },
+                        eventSink = eventSink,
+                    )
+                } else {
+                    TimelineItemEventRow(
+                        event = timelineItem,
+                        timelineRoomInfo = timelineRoomInfo,
+                        renderReadReceipts = renderReadReceipts,
+                        isLastOutgoingMessage = isLastOutgoingMessage,
+                        isHighlighted = timelineItem.isEvent(focusedEventId),
+                        onClick = { onClick(timelineItem) },
+                        onLongClick = { onLongClick(timelineItem) },
+                        onUserDataClick = onUserDataClick,
+                        onLinkClicked = onLinkClicked,
+                        inReplyToClick = inReplyToClick,
+                        onReactionClick = onReactionClick,
+                        onReactionLongClick = onReactionLongClick,
+                        onMoreReactionsClick = onMoreReactionsClick,
+                        onReadReceiptClick = onReadReceiptClick,
+                        onTimestampClicked = onTimestampClicked,
+                        onSwipeToReply = { onSwipeToReply(timelineItem) },
+                        eventSink = eventSink,
+                    )
+                }
+            }
+            is TimelineItem.GroupedEvents -> {
+                TimelineItemGroupedEventsRow(
+                    timelineItem = timelineItem,
                     timelineRoomInfo = timelineRoomInfo,
                     renderReadReceipts = renderReadReceipts,
                     isLastOutgoingMessage = isLastOutgoingMessage,
-                    isHighlighted = highlightedItem == timelineItem.identifier(),
-                    onClick = { onClick(timelineItem) },
-                    onLongClick = { onLongClick(timelineItem) },
+                    focusedEventId = focusedEventId,
+                    onClick = onClick,
+                    onLongClick = onLongClick,
+                    inReplyToClick = inReplyToClick,
                     onUserDataClick = onUserDataClick,
                     onLinkClicked = onLinkClicked,
-                    inReplyToClick = inReplyToClick,
+                    onTimestampClicked = onTimestampClicked,
                     onReactionClick = onReactionClick,
                     onReactionLongClick = onReactionLongClick,
                     onMoreReactionsClick = onMoreReactionsClick,
                     onReadReceiptClick = onReadReceiptClick,
-                    onTimestampClicked = onTimestampClicked,
-                    onSwipeToReply = { onSwipeToReply(timelineItem) },
                     eventSink = eventSink,
-                    modifier = modifier,
                 )
             }
         }
-        is TimelineItem.GroupedEvents -> {
-            TimelineItemGroupedEventsRow(
-                timelineItem = timelineItem,
-                timelineRoomInfo = timelineRoomInfo,
-                renderReadReceipts = renderReadReceipts,
-                isLastOutgoingMessage = isLastOutgoingMessage,
-                highlightedItem = highlightedItem,
-                onClick = onClick,
-                onLongClick = onLongClick,
-                inReplyToClick = inReplyToClick,
-                onUserDataClick = onUserDataClick,
-                onLinkClicked = onLinkClicked,
-                onTimestampClicked = onTimestampClicked,
-                onReactionClick = onReactionClick,
-                onReactionLongClick = onReactionLongClick,
-                onMoreReactionsClick = onMoreReactionsClick,
-                onReadReceiptClick = onReadReceiptClick,
-                eventSink = eventSink,
-                modifier = modifier,
-            )
-        }
     }
+}
+
+@Composable
+private fun Modifier.focusedEvent(): Modifier {
+    val highlightedLineColor = ElementTheme.colors.textActionAccent
+    val gradientColors = listOf(
+        ElementTheme.colors.highlightedMessageBackgroundColor,
+        ElementTheme.materialColors.background
+    )
+    val verticalOffset = 2.dp.toPx()
+    return drawWithCache {
+        val brush = Brush.verticalGradient(gradientColors)
+        onDrawBehind {
+            drawRect(brush, topLeft = Offset(0f, verticalOffset), size = Size(size.width, size.height * 0.7f))
+            drawLine(highlightedLineColor, start = Offset(0f, verticalOffset), end = Offset(size.width, verticalOffset))
+        }
+    }.padding(top = 4.dp)
 }

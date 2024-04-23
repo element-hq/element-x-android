@@ -149,6 +149,11 @@ val SemanticColors.bigIconDefaultBackgroundColor
 val SemanticColors.bigCheckmarkBorderColor
     get() = if (isLight) LightColorTokens.colorGray400 else DarkColorTokens.colorGray400
 
+@OptIn(CoreColorToken::class)
+val SemanticColors.highlightedMessageBackgroundColor
+    get() = if (isLight) LightColorTokens.colorGreen300 else DarkColorTokens.colorGreen300
+
+
 @PreviewsDayNight
 @Composable
 internal fun ColorAliasesPreview() = ElementPreview {
