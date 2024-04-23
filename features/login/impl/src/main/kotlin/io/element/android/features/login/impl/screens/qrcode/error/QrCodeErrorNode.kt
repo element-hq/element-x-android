@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.features.login.impl.screens.qrcode.connectionnotsecure
+package io.element.android.features.login.impl.screens.qrcode.error
 
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
@@ -25,7 +25,7 @@ import io.element.android.anvilannotations.ContributesNode
 import io.element.android.libraries.di.AppScope
 
 @ContributesNode(AppScope::class)
-class QrCodeConnectionNotSecureNode @AssistedInject constructor(
+class QrCodeErrorNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
 ) : Node(buildContext = buildContext, plugins = plugins

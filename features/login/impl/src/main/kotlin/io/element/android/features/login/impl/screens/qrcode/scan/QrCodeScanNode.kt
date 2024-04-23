@@ -26,6 +26,7 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.libraries.di.AppScope
+import io.element.android.libraries.matrix.api.auth.qrlogin.MatrixQrCodeLoginData
 
 @ContributesNode(AppScope::class)
 class QrCodeScanNode @AssistedInject constructor(
@@ -34,12 +35,12 @@ class QrCodeScanNode @AssistedInject constructor(
     private val presenter: QrCodeScanPresenter,
 ) : Node(buildContext, plugins = plugins) {
     interface Callback : Plugin {
-        fun onScannedCode()
+        fun onScannedCode(qrCodeLoginData: MatrixQrCodeLoginData)
         fun onCancelClicked()
     }
 
-    private fun onScannedCode() {
-        plugins<Callback>().forEach { it.onScannedCode() }
+    private fun onQrCodeDataReady(qrCodeLoginData: MatrixQrCodeLoginData) {
+        plugins<Callback>().forEach { it.onScannedCode(qrCodeLoginData) }
     }
 
     private fun onCancelClicked() {
@@ -51,7 +52,7 @@ class QrCodeScanNode @AssistedInject constructor(
         val state = presenter.present()
         QrCodeScanView(
             state = state,
-            onSecureConnectionReady = ::onScannedCode,
+            onQrCodeDataReady = ::onQrCodeDataReady,
             onBackClicked = ::onCancelClicked,
             modifier = modifier
         )

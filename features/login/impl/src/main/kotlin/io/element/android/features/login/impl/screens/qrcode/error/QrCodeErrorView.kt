@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.features.login.impl.screens.qrcode.connectionnotsecure
+package io.element.android.features.login.impl.screens.qrcode.error
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
@@ -42,7 +42,7 @@ import io.element.android.libraries.designsystem.theme.components.Text
 import kotlinx.collections.immutable.persistentListOf
 
 @Composable
-fun QrCodeConnectionNotSecureView(
+fun QrCodeErrorView(
     modifier: Modifier = Modifier,
     onRetry: () -> Unit,
 ) {
@@ -96,9 +96,9 @@ private fun Buttons(onRetry: () -> Unit) {
 
 @PreviewsDayNight
 @Composable
-internal fun QrCodeConnectionNotSecureViewPreview() {
+internal fun QrCodeErrorViewPreview() {
     ElementPreview {
-        QrCodeConnectionNotSecureView(
+        QrCodeErrorView(
             onRetry = {}
         )
     }

@@ -14,13 +14,16 @@
  * limitations under the License.
  */
 
-package io.element.android.features.login.impl.screens.qrcode.scan
+package io.element.android.libraries.matrix.impl.auth.qrlogin
 
-import io.element.android.libraries.architecture.AsyncAction
-import io.element.android.libraries.matrix.api.auth.qrlogin.MatrixQrCodeLoginData
+import io.element.android.libraries.matrix.api.auth.qrlogin.QrCodeLoginStep
+import org.matrix.rustcomponents.sdk.QrLoginProgress
 
-data class QrCodeScanState(
-    val isScanning: Boolean,
-    val authenticationAction: AsyncAction<MatrixQrCodeLoginData>,
-    val eventSink: (QrCodeScanEvents) -> Unit
-)
+fun QrLoginProgress.toStep(): QrCodeLoginStep {
+    return when (this) {
+        is QrLoginProgress.EstablishingSecureChannel -> QrCodeLoginStep.EstablishingSecureChannel(checkCode.toString())
+        is QrLoginProgress.Starting -> QrCodeLoginStep.Starting
+        is QrLoginProgress.WaitingForToken -> QrCodeLoginStep.WaitingForToken(userCode)
+        is QrLoginProgress.Done -> QrCodeLoginStep.Finished
+    }
+}

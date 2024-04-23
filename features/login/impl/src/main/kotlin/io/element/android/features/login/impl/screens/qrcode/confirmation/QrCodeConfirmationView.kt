@@ -48,20 +48,21 @@ import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
 fun QrCodeConfirmationView(
-    state: QrCodeConfirmationState,
+    step: QrCodeConfirmationStep,
+    onCancel: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val icon = when (state.step) {
+    val icon = when (step) {
         is QrCodeConfirmationStep.DisplayCheckCode -> CompoundIcons.Computer()
         is QrCodeConfirmationStep.DisplayVerificationCode -> CompoundIcons.LockSolid()
     }
     // TODO: localazy
-    val title = when (state.step) {
+    val title = when (step) {
         is QrCodeConfirmationStep.DisplayCheckCode -> "Enter the number below on your device"
         is QrCodeConfirmationStep.DisplayVerificationCode -> "Your verification code"
     }
     // TODO: localazy
-    val subtitle = when (state.step) {
+    val subtitle = when (step) {
         is QrCodeConfirmationStep.DisplayCheckCode -> "You’ll be asked to enter the two digits shown below."
         is QrCodeConfirmationStep.DisplayVerificationCode -> "Your account provider may ask for the following code to verify the sign in."
     }
@@ -70,25 +71,25 @@ fun QrCodeConfirmationView(
         iconStyle = BigIcon.Style.Default(icon),
         title = title,
         subTitle = subtitle,
-        content = { Content(state = state) },
-        buttons = { Buttons(state = state) }
+        content = { Content(step = step) },
+        buttons = { Buttons(onCancel = onCancel) }
     )
 }
 
 @Composable
-private fun Content(state: QrCodeConfirmationState) {
+private fun Content(step: QrCodeConfirmationStep) {
     Column(
         modifier = Modifier.padding(top = 16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        when (state.step) {
+        when (step) {
             is QrCodeConfirmationStep.DisplayCheckCode -> {
-                Digits(code = state.step.code)
+                Digits(code = step.code)
                 Spacer(modifier = Modifier.height(32.dp))
                 WaitingForOtherDevice()
             }
             is QrCodeConfirmationStep.DisplayVerificationCode -> {
-                Digits(code = state.step.code)
+                Digits(code = step.code)
                 Spacer(modifier = Modifier.height(32.dp))
                 WaitingForOtherDevice()
             }
@@ -140,11 +141,14 @@ private fun WaitingForOtherDevice() {
 }
 
 @Composable
-private fun Buttons(state: QrCodeConfirmationState) {
+private fun Buttons(
+    onCancel: () -> Unit,
+) {
     Column(modifier = Modifier.fillMaxWidth()) {
         OutlinedButton(
             modifier = Modifier.fillMaxWidth(),
-            text = stringResource(CommonStrings.action_cancel), onClick = { /*TODO*/ }
+            text = stringResource(CommonStrings.action_cancel),
+            onClick = onCancel
         )
     }
 }
@@ -153,6 +157,9 @@ private fun Buttons(state: QrCodeConfirmationState) {
 @Composable
 internal fun QrCodeConfirmationViewPreview(@PreviewParameter(QrConfirmationCodeStatePreviewProvider::class) state: QrCodeConfirmationState) {
     ElementPreview {
-        QrCodeConfirmationView(state = state)
+        QrCodeConfirmationView(
+            step = state.step,
+            onCancel = {},
+        )
     }
 }

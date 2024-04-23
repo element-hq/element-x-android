@@ -18,6 +18,7 @@ package io.element.android.features.login.impl.screens.qrcode.scan
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.architecture.AsyncAction
+import io.element.android.libraries.matrix.api.auth.qrlogin.MatrixQrCodeLoginData
 
 open class QrCodeScanStateProvider : PreviewParameterProvider<QrCodeScanState> {
     override val values: Sequence<QrCodeScanState>
@@ -31,7 +32,7 @@ open class QrCodeScanStateProvider : PreviewParameterProvider<QrCodeScanState> {
 
 fun aQrCodeScanState(
     isScanning: Boolean = true,
-    authenticationAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
+    authenticationAction: AsyncAction<MatrixQrCodeLoginData> = AsyncAction.Uninitialized,
     eventSink: (QrCodeScanEvents) -> Unit = {},
 ) = QrCodeScanState(
     isScanning = isScanning,

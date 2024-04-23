@@ -17,6 +17,8 @@
 package io.element.android.libraries.matrix.api.auth
 
 import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.auth.qrlogin.MatrixQrCodeLoginData
+import io.element.android.libraries.matrix.api.auth.qrlogin.QrCodeLoginStep
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.sessionstorage.api.LoggedInState
 import kotlinx.coroutines.flow.Flow
@@ -54,5 +56,5 @@ interface MatrixAuthenticationService {
      */
     suspend fun loginWithOidc(callbackUrl: String): Result<SessionId>
 
-    suspend fun loginWithQrCode(qrCodeBytes: ByteArray): Result<SessionId>
+    suspend fun loginWithQrCode(qrCodeData: MatrixQrCodeLoginData, progress: (QrCodeLoginStep) -> Unit): Result<SessionId>
 }

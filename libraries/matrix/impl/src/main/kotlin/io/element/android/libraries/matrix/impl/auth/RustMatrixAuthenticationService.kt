@@ -27,8 +27,12 @@ import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import io.element.android.libraries.matrix.api.auth.MatrixHomeServerDetails
 import io.element.android.libraries.matrix.api.auth.OidcDetails
+import io.element.android.libraries.matrix.api.auth.qrlogin.MatrixQrCodeLoginData
+import io.element.android.libraries.matrix.api.auth.qrlogin.QrCodeLoginStep
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.impl.RustMatrixClientFactory
+import io.element.android.libraries.matrix.impl.auth.qrlogin.SdkQrCodeLoginData
+import io.element.android.libraries.matrix.impl.auth.qrlogin.toStep
 import io.element.android.libraries.matrix.impl.certificates.UserCertificatesProvider
 import io.element.android.libraries.matrix.impl.exception.mapClientException
 import io.element.android.libraries.matrix.impl.keys.PassphraseGenerator
@@ -44,8 +48,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.ClientBuilder
 import org.matrix.rustcomponents.sdk.OidcAuthenticationData
-import org.matrix.rustcomponents.sdk.OidcConfiguration
-import org.matrix.rustcomponents.sdk.QrCodeData
 import org.matrix.rustcomponents.sdk.QrLoginProgress
 import org.matrix.rustcomponents.sdk.QrLoginProgressListener
 import org.matrix.rustcomponents.sdk.use
@@ -215,14 +217,14 @@ class RustMatrixAuthenticationService @Inject constructor(
         }
     }
 
-    override suspend fun loginWithQrCode(qrCodeBytes: ByteArray) = runCatching {
-        val decodedQrData = QrCodeData.fromBytes(qrCodeBytes)
+    override suspend fun loginWithQrCode(qrCodeData: MatrixQrCodeLoginData, progress: (QrCodeLoginStep) -> Unit) = runCatching {
         val client = ClientBuilder().buildWithQrCode(
-            qrCodeData = decodedQrData,
+            qrCodeData = (qrCodeData as SdkQrCodeLoginData).rustQrCodeData,
             oidcConfiguration = oidcConfiguration,
             progressListener = object : QrLoginProgressListener {
                 override fun onUpdate(state: QrLoginProgress) {
                     println("QR Code login progress: $state")
+                    progress(state.toStep())
                 }
             }
         )

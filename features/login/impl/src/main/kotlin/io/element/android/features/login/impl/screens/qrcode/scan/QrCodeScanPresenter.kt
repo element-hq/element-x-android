@@ -27,21 +27,27 @@ import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runCatchingUpdatingState
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
+import io.element.android.libraries.matrix.api.auth.qrlogin.MatrixQrCodeLoginData
+import io.element.android.libraries.matrix.api.auth.qrlogin.MatrixQrCodeLoginDataFactory
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import javax.inject.Inject
 
 class QrCodeScanPresenter @Inject constructor(
-    private val authenticationService: MatrixAuthenticationService,
+    private val qrCodeLoginDataFactory: MatrixQrCodeLoginDataFactory,
 ) : Presenter<QrCodeScanState> {
 
     private var isScanning by mutableStateOf(true)
 
+    private val codeScannedMutex = Mutex()
+
     @Composable
     override fun present(): QrCodeScanState {
         val coroutineScope = rememberCoroutineScope()
-        val authenticationAction: MutableState<AsyncAction<Unit>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
+        val authenticationAction: MutableState<AsyncAction<MatrixQrCodeLoginData>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
 
         fun handleEvents(event: QrCodeScanEvents) {
             when (event) {
@@ -49,9 +55,9 @@ class QrCodeScanPresenter @Inject constructor(
                     isScanning = true
                     authenticationAction.value = AsyncAction.Uninitialized
                 }
-                is QrCodeScanEvents.QrCodeScanned -> {
+                is QrCodeScanEvents.QrCodeScanned -> coroutineScope.launch {
                     isScanning = false
-                    coroutineScope.authenticateWithCode(authenticationAction, event.code)
+                    getQrCodeData(authenticationAction, event.code)
                 }
             }
         }
@@ -63,15 +69,13 @@ class QrCodeScanPresenter @Inject constructor(
         )
     }
 
-    private fun CoroutineScope.authenticateWithCode(authenticationAction: MutableState<AsyncAction<Unit>>, code: ByteArray) = launch {
-        suspend {
-            // TODO Call the SDK API, for now, just simulate an error
-            val result = authenticationService.loginWithQrCode(code)
-                .onFailure {
-                    isScanning = true
+    private fun CoroutineScope.getQrCodeData(codeScannedAction: MutableState<AsyncAction<MatrixQrCodeLoginData>>, code: ByteArray) = launch {
+        if (!codeScannedMutex.isLocked) {
+            suspend {
+                codeScannedMutex.withLock {
+                    qrCodeLoginDataFactory.parseQrCodeData(code).getOrThrow()
                 }
-//            delay(3000)
-//            throw Exception("Simulated error $code")
-        }.runCatchingUpdatingState(authenticationAction)
+            }.runCatchingUpdatingState(codeScannedAction)
+        }
     }
 }

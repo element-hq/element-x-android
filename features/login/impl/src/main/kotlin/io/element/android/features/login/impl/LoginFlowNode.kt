@@ -30,7 +30,6 @@ import com.bumble.appyx.core.plugin.Plugin
 import com.bumble.appyx.core.plugin.plugins
 import com.bumble.appyx.navmodel.backstack.BackStack
 import com.bumble.appyx.navmodel.backstack.operation.newRoot
-import com.bumble.appyx.navmodel.backstack.operation.pop
 import com.bumble.appyx.navmodel.backstack.operation.push
 import com.bumble.appyx.navmodel.backstack.operation.singleTop
 import dagger.assisted.Assisted
@@ -43,13 +42,11 @@ import io.element.android.features.login.impl.accountprovider.AccountProviderDat
 import io.element.android.features.login.impl.oidc.CustomTabAvailabilityChecker
 import io.element.android.features.login.impl.oidc.customtab.CustomTabHandler
 import io.element.android.features.login.impl.oidc.webview.OidcNode
+import io.element.android.features.login.impl.qrcode.QrCodeLoginFlowNode
 import io.element.android.features.login.impl.screens.changeaccountprovider.ChangeAccountProviderNode
 import io.element.android.features.login.impl.screens.confirmaccountprovider.ConfirmAccountProviderNode
 import io.element.android.features.login.impl.screens.loginpassword.LoginFormState
 import io.element.android.features.login.impl.screens.loginpassword.LoginPasswordNode
-import io.element.android.features.login.impl.screens.qrcode.confirmation.QrCodeConfirmationNode
-import io.element.android.features.login.impl.screens.qrcode.intro.QrCodeIntroNode
-import io.element.android.features.login.impl.screens.qrcode.scan.QrCodeScanNode
 import io.element.android.features.login.impl.screens.searchaccountprovider.SearchAccountProviderNode
 import io.element.android.features.login.impl.screens.waitlistscreen.WaitListNode
 import io.element.android.libraries.architecture.BackstackView
@@ -117,15 +114,6 @@ class LoginFlowNode @AssistedInject constructor(
         data object Root : NavTarget
 
         @Parcelize
-        data object QrCodeIntro : NavTarget
-
-        @Parcelize
-        data object QrCodeScan : NavTarget
-
-        @Parcelize
-        data object QrCodeConfirmation : NavTarget
-
-        @Parcelize
         data object ConfirmAccountProvider : NavTarget
 
         @Parcelize
@@ -148,7 +136,7 @@ class LoginFlowNode @AssistedInject constructor(
         return when (navTarget) {
             NavTarget.Root -> {
                 if (plugins<Inputs>().first().isQrCode) {
-                    resolve(NavTarget.QrCodeIntro, buildContext)
+                    createNode<QrCodeLoginFlowNode>(buildContext)
                 } else {
                     resolve(NavTarget.ConfirmAccountProvider, buildContext)
                 }
@@ -227,33 +215,6 @@ class LoginFlowNode @AssistedInject constructor(
                     }
                 }
                 createNode<WaitListNode>(buildContext, plugins = listOf(callback, inputs))
-            }
-            NavTarget.QrCodeIntro -> {
-                val callback = object : QrCodeIntroNode.Callback {
-                    override fun onCancelClicked() {
-                        navigateUp()
-                    }
-
-                    override fun onContinue() {
-                        backstack.push(NavTarget.QrCodeScan)
-                    }
-                }
-                createNode<QrCodeIntroNode>(buildContext, plugins = listOf(callback))
-            }
-            NavTarget.QrCodeScan -> {
-                val callback = object : QrCodeScanNode.Callback {
-                    override fun onScannedCode() {
-                        backstack.push(NavTarget.QrCodeConfirmation)
-                    }
-
-                    override fun onCancelClicked() {
-                        backstack.pop()
-                    }
-                }
-                createNode<QrCodeScanNode>(buildContext, plugins = listOf(callback))
-            }
-            NavTarget.QrCodeConfirmation -> {
-                createNode<QrCodeConfirmationNode>(buildContext)
             }
         }
     }

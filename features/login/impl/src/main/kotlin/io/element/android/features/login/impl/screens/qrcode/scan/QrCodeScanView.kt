@@ -34,6 +34,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.progressSemantics
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -54,6 +55,7 @@ import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.matrix.api.auth.qrlogin.MatrixQrCodeLoginData
 import io.element.android.libraries.qrcode.QrCodeCameraView
 import io.element.android.libraries.ui.strings.CommonStrings
 
@@ -61,9 +63,16 @@ import io.element.android.libraries.ui.strings.CommonStrings
 fun QrCodeScanView(
     state: QrCodeScanState,
     onBackClicked: () -> Unit,
-    onSecureConnectionReady: () -> Unit,
+    onQrCodeDataReady: (MatrixQrCodeLoginData) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    // QR code data parsed successfully, notify the parent node
+    if (state.authenticationAction is AsyncAction.Success) {
+        LaunchedEffect(state.authenticationAction) {
+            onQrCodeDataReady(state.authenticationAction.data)
+        }
+    }
+
     FlowStepPage(
         modifier = modifier,
         onBackClicked = onBackClicked,
@@ -190,7 +199,7 @@ private fun ColumnScope.Buttons(
 internal fun QrCodeScanViewPreview(@PreviewParameter(QrCodeScanStateProvider::class) state: QrCodeScanState) = ElementPreview {
     QrCodeScanView(
         state = state,
-        onSecureConnectionReady = {},
+        onQrCodeDataReady = {},
         onBackClicked = {},
     )
 }

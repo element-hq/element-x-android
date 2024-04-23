@@ -14,13 +14,18 @@
  * limitations under the License.
  */
 
-package io.element.android.features.login.impl.screens.qrcode.scan
+package io.element.android.libraries.matrix.impl.auth.qrlogin
 
-import io.element.android.libraries.architecture.AsyncAction
+import com.squareup.anvil.annotations.ContributesBinding
+import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.matrix.api.auth.qrlogin.MatrixQrCodeLoginData
+import io.element.android.libraries.matrix.api.auth.qrlogin.MatrixQrCodeLoginDataFactory
+import org.matrix.rustcomponents.sdk.QrCodeData
+import javax.inject.Inject
 
-data class QrCodeScanState(
-    val isScanning: Boolean,
-    val authenticationAction: AsyncAction<MatrixQrCodeLoginData>,
-    val eventSink: (QrCodeScanEvents) -> Unit
-)
+@ContributesBinding(AppScope::class)
+class RustQrCodeLoginDataFactory @Inject constructor() : MatrixQrCodeLoginDataFactory {
+    override fun parseQrCodeData(data: ByteArray): Result<MatrixQrCodeLoginData> {
+        return runCatching { SdkQrCodeLoginData(QrCodeData.fromBytes(data)) }
+    }
+}

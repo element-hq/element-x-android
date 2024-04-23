@@ -14,13 +14,11 @@
  * limitations under the License.
  */
 
-package io.element.android.features.login.impl.screens.qrcode.scan
+package io.element.android.libraries.matrix.impl.auth.qrlogin
 
-import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.api.auth.qrlogin.MatrixQrCodeLoginData
+import org.matrix.rustcomponents.sdk.QrCodeData as RustQrCodeData
 
-data class QrCodeScanState(
-    val isScanning: Boolean,
-    val authenticationAction: AsyncAction<MatrixQrCodeLoginData>,
-    val eventSink: (QrCodeScanEvents) -> Unit
-)
+class SdkQrCodeLoginData(
+    internal val rustQrCodeData: RustQrCodeData,
+) : MatrixQrCodeLoginData
