@@ -35,11 +35,14 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.getAndUpdate
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEach
 import java.util.Optional
 import javax.inject.Inject
 import kotlin.coroutines.cancellation.CancellationException
 
+/**
+ * This controller is responsible of using the right timeline to display messages.
+ * It can be focused on the live timeline or on a detached timeline (focusing an unknown event).
+ */
 @SingleIn(RoomScope::class)
 class TimelineController @Inject constructor(
     private val room: MatrixRoom,
@@ -92,6 +95,11 @@ class TimelineController @Inject constructor(
 
     suspend fun paginate(direction: Timeline.PaginationDirection): Result<Boolean> {
         return currentTimelineFlow().first().paginate(direction)
+            .onSuccess { hasReachedEnd ->
+                if (direction == Timeline.PaginationDirection.FORWARDS && hasReachedEnd) {
+                    focusOnLive()
+                }
+            }
     }
 
     private fun currentTimelineFlow() = combine(liveTimeline, detachedTimeline) { live, detached ->
