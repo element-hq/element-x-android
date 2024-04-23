@@ -80,7 +80,7 @@ class RoomFlowNode @AssistedInject constructor(
     data class Inputs(
         val roomIdOrAlias: RoomIdOrAlias,
         val roomDescription: Optional<RoomDescription>,
-        val initialElement: RoomNavigationTarget = RoomNavigationTarget.Messages(),
+        val initialElement: RoomNavigationTarget,
     ) : NodeInputs
 
     private val inputs: Inputs = inputs()
@@ -166,7 +166,10 @@ class RoomFlowNode @AssistedInject constructor(
             }
             is NavTarget.JoinedRoom -> {
                 val roomFlowNodeCallback = plugins<JoinedRoomLoadedFlowNode.Callback>()
-                val inputs = JoinedRoomFlowNode.Inputs(navTarget.roomId, initialElement = inputs.initialElement)
+                val inputs = JoinedRoomFlowNode.Inputs(
+                    roomId = navTarget.roomId,
+                    initialElement = inputs.initialElement
+                )
                 createNode<JoinedRoomFlowNode>(buildContext, plugins = listOf(inputs) + roomFlowNodeCallback)
             }
         }

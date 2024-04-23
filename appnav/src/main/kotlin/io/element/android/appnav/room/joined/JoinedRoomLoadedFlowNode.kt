@@ -84,7 +84,7 @@ class JoinedRoomLoadedFlowNode @AssistedInject constructor(
 
     data class Inputs(
         val room: MatrixRoom,
-        val initialElement: RoomNavigationTarget = RoomNavigationTarget.Messages(),
+        val initialElement: RoomNavigationTarget,
     ) : NodeInputs
 
     private val inputs: Inputs = inputs()

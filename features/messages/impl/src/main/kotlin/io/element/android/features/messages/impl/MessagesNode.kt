@@ -19,6 +19,11 @@ package io.element.android.features.messages.impl
 import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import com.bumble.appyx.core.lifecycle.subscribe
@@ -37,6 +42,7 @@ import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.libraries.androidutils.system.openUrlInExternalApp
 import io.element.android.libraries.androidutils.system.toast
 import io.element.android.libraries.architecture.NodeInputs
+import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.di.RoomScope
@@ -69,8 +75,9 @@ class MessagesNode @AssistedInject constructor(
     private val presenter = presenterFactory.create(this)
     private val callback = plugins<Callback>().firstOrNull()
 
-    // TODO Handle navigation to the Event
     data class Inputs(val focusedEventId: EventId?) : NodeInputs
+
+    private val inputs = inputs<Inputs>()
 
     interface Callback : Plugin {
         fun onRoomDetailsClicked()
@@ -87,7 +94,8 @@ class MessagesNode @AssistedInject constructor(
         fun onJoinCallClicked(roomId: RoomId)
     }
 
-    init {
+    override fun onBuilt() {
+        super.onBuilt()
         lifecycle.subscribe(
             onCreate = {
                 analyticsService.capture(room.toAnalyticsViewRoom())
@@ -197,6 +205,17 @@ class MessagesNode @AssistedInject constructor(
                 onJoinCallClicked = this::onJoinCallClicked,
                 modifier = modifier,
             )
+
+            var focusedEventId by rememberSaveable {
+                mutableStateOf(inputs.focusedEventId)
+            }
+            LaunchedEffect(Unit) {
+                focusedEventId?.also { eventId ->
+                    state.timelineState.eventSink(TimelineEvents.FocusOnEvent(eventId))
+                }
+                // Reset the focused event id to null to avoid refocusing when restoring node.
+                focusedEventId = null
+            }
         }
     }
 }

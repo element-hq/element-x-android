@@ -282,7 +282,7 @@ class LoggedInFlowNode @AssistedInject constructor(
                             is PermalinkData.RoomLink -> {
                                 backstack.push(
                                     NavTarget.Room(
-                                        data.roomIdOrAlias,
+                                        roomIdOrAlias = data.roomIdOrAlias,
                                         initialElement = RoomNavigationTarget.Messages(data.eventId),
                                         // TODO Use the viaParameters
                                     )
