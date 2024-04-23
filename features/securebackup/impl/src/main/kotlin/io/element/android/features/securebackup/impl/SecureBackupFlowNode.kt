@@ -136,6 +136,10 @@ class SecureBackupFlowNode @AssistedInject constructor(
                             backstack.pop()
                         }
                     }
+
+                    override fun onCreateNewRecoveryKey() {
+                        backstack.push(NavTarget.CreateNewRecoveryKey)
+                    }
                 }
                 createNode<SecureBackupEnterRecoveryKeyNode>(buildContext, plugins = listOf(callback))
             }

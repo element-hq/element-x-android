@@ -45,10 +45,7 @@ open class VerifySelfSessionStateProvider : PreviewParameterProvider<VerifySelfS
                 verificationFlowStep = VerificationStep.Verifying(aDecimalsSessionVerificationData(), AsyncData.Uninitialized)
             ),
             aVerifySelfSessionState(
-                verificationFlowStep = VerificationStep.Initial(canEnterRecoveryKey = true, isLastDevice = false)
-            ),
-            aVerifySelfSessionState(
-                verificationFlowStep = VerificationStep.Initial(canEnterRecoveryKey = true, isLastDevice = true)
+                verificationFlowStep = VerificationStep.Initial(canEnterRecoveryKey = true)
             ),
             aVerifySelfSessionState(
                 verificationFlowStep = VerificationStep.Completed,
@@ -71,7 +68,7 @@ private fun aDecimalsSessionVerificationData(
 }
 
 internal fun aVerifySelfSessionState(
-    verificationFlowStep: VerificationStep = VerificationStep.Initial(canEnterRecoveryKey = false, isLastDevice = false),
+    verificationFlowStep: VerificationStep = VerificationStep.Initial(canEnterRecoveryKey = false),
     displaySkipButton: Boolean = false,
     eventSink: (VerifySelfSessionViewEvents) -> Unit = {},
 ) = VerifySelfSessionState(

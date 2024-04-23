@@ -66,7 +66,6 @@ import io.element.android.features.verifysession.impl.VerifySelfSessionState.Ver
 fun VerifySelfSessionView(
     state: VerifySelfSessionState,
     onEnterRecoveryKey: () -> Unit,
-    onCreateNewRecoveryKey: () -> Unit,
     onFinished: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -115,7 +114,6 @@ fun VerifySelfSessionView(
                 screenState = state,
                 goBack = ::resetFlow,
                 onEnterRecoveryKey = onEnterRecoveryKey,
-                onCreateNewRecoveryKey = onCreateNewRecoveryKey,
                 onFinished = onFinished,
             )
         }
@@ -228,7 +226,6 @@ private fun EmojiItemView(emoji: VerificationEmoji, modifier: Modifier = Modifie
 private fun BottomMenu(
     screenState: VerifySelfSessionState,
     onEnterRecoveryKey: () -> Unit,
-    onCreateNewRecoveryKey: () -> Unit,
     goBack: () -> Unit,
     onFinished: () -> Unit,
 ) {
@@ -239,21 +236,12 @@ private fun BottomMenu(
 
     when (verificationViewState) {
         is FlowStep.Initial -> {
-            if (verificationViewState.isLastDevice) {
-                BottomMenu(
-                    positiveButtonTitle = stringResource(R.string.screen_session_verification_enter_recovery_key),
-                    onPositiveButtonClicked = onEnterRecoveryKey,
-                    negativeButtonTitle = stringResource(R.string.screen_identity_confirmation_create_new_recovery_key),
-                    onNegativeButtonClicked = onCreateNewRecoveryKey,
-                )
-            } else {
-                BottomMenu(
-                    positiveButtonTitle = stringResource(R.string.screen_identity_use_another_device),
-                    onPositiveButtonClicked = { eventSink(VerifySelfSessionViewEvents.RequestVerification) },
-                    negativeButtonTitle = stringResource(R.string.screen_session_verification_enter_recovery_key),
-                    onNegativeButtonClicked = onEnterRecoveryKey,
-                )
-            }
+            BottomMenu(
+                positiveButtonTitle = stringResource(R.string.screen_identity_use_another_device),
+                onPositiveButtonClicked = { eventSink(VerifySelfSessionViewEvents.RequestVerification) },
+                negativeButtonTitle = stringResource(R.string.screen_session_verification_enter_recovery_key),
+                onNegativeButtonClicked = onEnterRecoveryKey,
+            )
         }
         is FlowStep.Canceled -> {
             BottomMenu(
@@ -346,7 +334,6 @@ internal fun VerifySelfSessionViewPreview(@PreviewParameter(VerifySelfSessionSta
     VerifySelfSessionView(
         state = state,
         onEnterRecoveryKey = {},
-        onCreateNewRecoveryKey = {},
         onFinished = {},
     )
 }

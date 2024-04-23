@@ -53,7 +53,7 @@ class VerifySelfSessionPresenterTests {
             presenter.present()
         }.test {
             awaitItem().run {
-                assertThat(verificationFlowStep).isEqualTo(VerificationStep.Initial(false, false))
+                assertThat(verificationFlowStep).isEqualTo(VerificationStep.Initial(false))
                 assertThat(displaySkipButton).isTrue()
             }
         }
@@ -80,7 +80,7 @@ class VerifySelfSessionPresenterTests {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            assertThat(awaitItem().verificationFlowStep).isEqualTo(VerificationStep.Initial(true, false))
+            assertThat(awaitItem().verificationFlowStep).isEqualTo(VerificationStep.Initial(true))
         }
     }
 
@@ -95,7 +95,7 @@ class VerifySelfSessionPresenterTests {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            assertThat(awaitItem().verificationFlowStep).isEqualTo(VerificationStep.Initial(true, true))
+            assertThat(awaitItem().verificationFlowStep).isEqualTo(VerificationStep.Initial(true))
         }
     }
 
@@ -118,7 +118,7 @@ class VerifySelfSessionPresenterTests {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            assertThat(initialState.verificationFlowStep).isEqualTo(VerificationStep.Initial(false, false))
+            assertThat(initialState.verificationFlowStep).isEqualTo(VerificationStep.Initial(false))
             val eventSink = initialState.eventSink
             eventSink(VerifySelfSessionViewEvents.StartSasVerification)
             // Await for other device response:
@@ -137,7 +137,7 @@ class VerifySelfSessionPresenterTests {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            assertThat(initialState.verificationFlowStep).isEqualTo(VerificationStep.Initial(false, false))
+            assertThat(initialState.verificationFlowStep).isEqualTo(VerificationStep.Initial(false))
             val eventSink = initialState.eventSink
             eventSink(VerifySelfSessionViewEvents.Cancel)
             expectNoEvents()
@@ -172,7 +172,7 @@ class VerifySelfSessionPresenterTests {
             awaitItem().eventSink(VerifySelfSessionViewEvents.RequestVerification)
             service.shouldFail = false
             assertThat(awaitItem().verificationFlowStep).isInstanceOf(VerificationStep.AwaitingOtherDeviceResponse::class.java)
-            assertThat(awaitItem().verificationFlowStep).isEqualTo(VerificationStep.Initial(false, false))
+            assertThat(awaitItem().verificationFlowStep).isEqualTo(VerificationStep.Initial(false))
         }
     }
 
@@ -231,7 +231,7 @@ class VerifySelfSessionPresenterTests {
             assertThat(awaitItem().verificationFlowStep).isEqualTo(VerificationStep.Canceled)
             state.eventSink(VerifySelfSessionViewEvents.Reset)
             // Went back to initial state
-            assertThat(awaitItem().verificationFlowStep).isEqualTo(VerificationStep.Initial(false, false))
+            assertThat(awaitItem().verificationFlowStep).isEqualTo(VerificationStep.Initial(false))
             cancelAndIgnoreRemainingEvents()
         }
     }
@@ -312,7 +312,7 @@ class VerifySelfSessionPresenterTests {
         sessionVerificationData: SessionVerificationData = SessionVerificationData.Emojis(emptyList()),
     ): VerifySelfSessionState {
         var state = awaitItem()
-        assertThat(state.verificationFlowStep).isEqualTo(VerificationStep.Initial(false, false))
+        assertThat(state.verificationFlowStep).isEqualTo(VerificationStep.Initial(false))
         state.eventSink(VerifySelfSessionViewEvents.RequestVerification)
         // Await for other device response:
         state = awaitItem()

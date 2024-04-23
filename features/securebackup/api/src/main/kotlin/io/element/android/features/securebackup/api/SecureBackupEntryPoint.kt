@@ -41,7 +41,6 @@ interface SecureBackupEntryPoint : FeatureEntryPoint {
     fun nodeBuilder(parentNode: Node, buildContext: BuildContext): NodeBuilder
 
     interface Callback : Plugin {
-        fun onCreateNewRecoveryKey()
         fun onDone()
     }
 
