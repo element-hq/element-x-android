@@ -136,12 +136,14 @@ class QrCodeLoginFlowNode @AssistedInject constructor(
     }
 
     private suspend fun startAuthentication(qrCodeLoginData: MatrixQrCodeLoginData) {
-        runCatching {
-            qrCodeLoginPresenter.authenticate(qrCodeLoginData)
-        }.onFailure {
-            // TODO specify the error type
-            backstack.push(NavTarget.Error(it.message ?: "Unknown error"))
-        }
+        qrCodeLoginPresenter.authenticate(qrCodeLoginData)
+            .onSuccess {
+                println("Logged into session $it")
+            }
+            .onFailure {
+                // TODO specify the error type
+                backstack.push(NavTarget.Error(it.message ?: "Unknown error"))
+            }
     }
 
     @Composable

@@ -34,6 +34,7 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import java.util.concurrent.atomic.AtomicBoolean
 import javax.inject.Inject
 
 class QrCodeScanPresenter @Inject constructor(
@@ -42,7 +43,7 @@ class QrCodeScanPresenter @Inject constructor(
 
     private var isScanning by mutableStateOf(true)
 
-    private val codeScannedMutex = Mutex()
+    private val isProcessingCode = AtomicBoolean(false)
 
     @Composable
     override fun present(): QrCodeScanState {
@@ -55,9 +56,9 @@ class QrCodeScanPresenter @Inject constructor(
                     isScanning = true
                     authenticationAction.value = AsyncAction.Uninitialized
                 }
-                is QrCodeScanEvents.QrCodeScanned -> coroutineScope.launch {
+                is QrCodeScanEvents.QrCodeScanned -> {
                     isScanning = false
-                    getQrCodeData(authenticationAction, event.code)
+                    coroutineScope.getQrCodeData(authenticationAction, event.code)
                 }
             }
         }
@@ -69,13 +70,15 @@ class QrCodeScanPresenter @Inject constructor(
         )
     }
 
-    private fun CoroutineScope.getQrCodeData(codeScannedAction: MutableState<AsyncAction<MatrixQrCodeLoginData>>, code: ByteArray) = launch {
-        if (!codeScannedMutex.isLocked) {
+    private fun CoroutineScope.getQrCodeData(codeScannedAction: MutableState<AsyncAction<MatrixQrCodeLoginData>>, code: ByteArray) {
+        if (codeScannedAction.value.isSuccess() || isProcessingCode.compareAndSet(true, true)) return
+
+        launch {
             suspend {
-                codeScannedMutex.withLock {
-                    qrCodeLoginDataFactory.parseQrCodeData(code).getOrThrow()
-                }
+                qrCodeLoginDataFactory.parseQrCodeData(code).getOrThrow()
             }.runCatchingUpdatingState(codeScannedAction)
+        }.invokeOnCompletion {
+            isProcessingCode.set(false)
         }
     }
 }

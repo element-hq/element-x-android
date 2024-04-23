@@ -64,6 +64,9 @@ fun QrCodeCameraView(
         val cameraProviderFuture = remember { ProcessCameraProvider.getInstance(localContext) }
         val previewUseCase = remember { Preview.Builder().build() }
         var lastFrame by remember { mutableStateOf<Bitmap?>(null) }
+        val imageAnalysis = ImageAnalysis.Builder()
+            .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
+            .build()
         Box(modifier.clipToBounds()) {
             AndroidView(
                 factory = { context ->
@@ -77,13 +80,9 @@ fun QrCodeCameraView(
                             .requireLensFacing(CameraSelector.LENS_FACING_BACK)
                             .build()
                         previewUseCase.setSurfaceProvider(previewView.surfaceProvider)
-                        val imageAnalysis = ImageAnalysis.Builder()
-                            .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
-                            .build()
                         imageAnalysis.setAnalyzer(
                             ContextCompat.getMainExecutor(previewView.context),
                             QRCodeAnalyzer { result ->
-                                // TODO: This probably needs a Mutex or some AtomicBoolean to prevent several onQrCodeScanned calls
                                 result?.let {
                                     Timber.d("QR code scanned!")
                                     onQrCodeScanned(it)
@@ -102,6 +101,9 @@ fun QrCodeCameraView(
                             Timber.e(e, "Use case binding failed")
                         }
                     } else {
+                        // Stop analyzer
+                        imageAnalysis.clearAnalyzer()
+
                         // Save last frame to display it as the 'frozen' preview
                         if (lastFrame == null) {
                             lastFrame = previewView.bitmap
