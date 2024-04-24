@@ -38,6 +38,7 @@ import io.element.android.features.messages.impl.attachments.Attachment
 import io.element.android.features.messages.impl.attachments.preview.error.sendAttachmentError
 import io.element.android.features.messages.impl.mentions.MentionSuggestion
 import io.element.android.features.messages.impl.mentions.MentionSuggestionsProcessor
+import io.element.android.features.messages.impl.timeline.TimelineController
 import io.element.android.features.preferences.api.store.SessionPreferencesStore
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
@@ -100,6 +101,7 @@ class MessageComposerPresenter @Inject constructor(
     private val permalinkParser: PermalinkParser,
     private val permalinkBuilder: PermalinkBuilder,
     permissionsPresenterFactory: PermissionsPresenter.Factory,
+    private val timelineController: TimelineController,
 ) : Presenter<MessageComposerState> {
     private val cameraPermissionPresenter = permissionsPresenterFactory.create(Manifest.permission.CAMERA)
     private var pendingEvent: MessageComposerEvents? = null
@@ -264,7 +266,9 @@ class MessageComposerPresenter @Inject constructor(
                         is MessageComposerMode.Quote -> null
                     }.let { relatedEventId ->
                         appCoroutineScope.launch {
-                            room.enterSpecialMode(relatedEventId)
+                            timelineController.invokeOnTimeline {
+                                enterSpecialMode(relatedEventId)
+                            }
                         }
                     }
                 }
@@ -386,16 +390,17 @@ class MessageComposerPresenter @Inject constructor(
             is MessageComposerMode.Edit -> {
                 val eventId = capturedMode.eventId
                 val transactionId = capturedMode.transactionId
-                room.editMessage(eventId, transactionId, message.markdown, message.html, mentions)
+                timelineController.invokeOnTimeline {
+                    editMessage(eventId, transactionId, message.markdown, message.html, mentions)
+                }
             }
 
             is MessageComposerMode.Quote -> TODO()
-            is MessageComposerMode.Reply -> room.replyMessage(
-                capturedMode.eventId,
-                message.markdown,
-                message.html,
-                mentions
-            )
+            is MessageComposerMode.Reply -> {
+                timelineController.invokeOnTimeline {
+                    replyMessage(capturedMode.eventId, message.markdown, message.html, mentions)
+                }
+            }
         }
         analyticsService.capture(
             Composer(

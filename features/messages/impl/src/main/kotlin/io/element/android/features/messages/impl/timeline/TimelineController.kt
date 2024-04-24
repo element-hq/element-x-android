@@ -17,11 +17,14 @@
 package io.element.android.features.messages.impl.timeline
 
 import androidx.compose.runtime.MutableState
+import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.timeline.LiveTimelineProvider
+import io.element.android.libraries.matrix.api.timeline.TimelineProvider
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.ReceiptType
 import io.element.android.libraries.matrix.api.timeline.Timeline
@@ -30,23 +33,25 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.getAndUpdate
 import kotlinx.coroutines.flow.map
+import java.io.Closeable
 import java.util.Optional
 import javax.inject.Inject
 import kotlin.coroutines.cancellation.CancellationException
 
 /**
- * This controller is responsible of using the right timeline to display messages.
+ * This controller is responsible of using the right timeline to display messages and make associated actions.
  * It can be focused on the live timeline or on a detached timeline (focusing an unknown event).
+ * This controller will replace the [LiveTimelineProvider] in the DI.
  */
 @SingleIn(RoomScope::class)
+@ContributesBinding(RoomScope::class, boundType = TimelineProvider::class, replaces = [LiveTimelineProvider::class])
 class TimelineController @Inject constructor(
     private val room: MatrixRoom,
-) {
+) : Closeable, TimelineProvider {
 
     private val liveTimeline = MutableStateFlow(room.liveTimeline)
     private val detachedTimeline = MutableStateFlow<Optional<Timeline>>(Optional.empty())
@@ -58,6 +63,12 @@ class TimelineController @Inject constructor(
 
     fun isLive(): Flow<Boolean> {
         return detachedTimeline.map { !it.isPresent }
+    }
+
+    suspend fun invokeOnTimeline(block: suspend (Timeline.() -> Any)) {
+        currentTimelineFlow().first().run {
+            block(this)
+        }
     }
 
     suspend fun focusOnEvent(eventId: EventId): Result<Unit> {
@@ -93,6 +104,10 @@ class TimelineController @Inject constructor(
         }
     }
 
+    override fun close() {
+        focusOnLive()
+    }
+
     suspend fun paginate(direction: Timeline.PaginationDirection): Result<Boolean> {
         return currentTimelineFlow().first().paginate(direction)
             .onSuccess { hasReachedEnd ->
@@ -124,7 +139,6 @@ class TimelineController @Inject constructor(
             if (eventId != null && eventId != lastReadReceiptId.value) {
                 lastReadReceiptId.value = eventId
                 currentTimelineFlow()
-                    .filterIsInstance(Timeline::class)
                     .first()
                     .sendReadReceipt(eventId = eventId, receiptType = readReceiptType)
             }
@@ -139,5 +153,9 @@ class TimelineController @Inject constructor(
             }
         }
         return null
+    }
+
+    override suspend fun getActiveTimeline(): Timeline {
+        return currentTimelineFlow().first()
     }
 }

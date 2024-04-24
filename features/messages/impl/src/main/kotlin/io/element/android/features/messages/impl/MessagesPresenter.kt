@@ -38,6 +38,7 @@ import io.element.android.features.messages.impl.actionlist.model.TimelineItemAc
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerEvents
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerPresenter
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerState
+import io.element.android.features.messages.impl.timeline.TimelineController
 import io.element.android.features.messages.impl.timeline.TimelineEvents
 import io.element.android.features.messages.impl.timeline.TimelinePresenter
 import io.element.android.features.messages.impl.timeline.TimelineState
@@ -116,6 +117,7 @@ class MessagesPresenter @AssistedInject constructor(
     private val htmlConverterProvider: HtmlConverterProvider,
     @Assisted private val navigator: MessagesNavigator,
     private val buildMeta: BuildMeta,
+    private val timelineController: TimelineController,
 ) : Presenter<MessagesState> {
     private val timelinePresenter = timelinePresenterFactory.create(navigator = navigator)
 
@@ -286,8 +288,10 @@ class MessagesPresenter @AssistedInject constructor(
         emoji: String,
         eventId: EventId,
     ) = launch(dispatchers.io) {
-        room.toggleReaction(emoji, eventId)
-            .onFailure { Timber.e(it) }
+        timelineController.invokeOnTimeline {
+            toggleReaction(emoji, eventId)
+                .onFailure { Timber.e(it) }
+        }
     }
 
     private fun CoroutineScope.reinviteOtherUser(inviteProgress: MutableState<AsyncData<Unit>>) = launch(dispatchers.io) {
