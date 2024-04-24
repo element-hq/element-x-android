@@ -87,8 +87,8 @@ class DefaultSessionPreferencesStore(
     override suspend fun setRenderTypingNotifications(enabled: Boolean) = update(renderTypingNotificationsKey, enabled)
     override fun isRenderTypingNotificationsEnabled(): Flow<Boolean> = get(renderTypingNotificationsKey) { true }
 
-    override suspend fun setSkipSessionVerification(enabled: Boolean) = update(skipSessionVerification, enabled)
-    override fun isSkipSessionVerificationEnabled(): Flow<Boolean> = get(skipSessionVerification) { false }
+    override suspend fun setSkipSessionVerification(skip: Boolean) = update(skipSessionVerification, skip)
+    override fun isSessionVerificationSkipped(): Flow<Boolean> = get(skipSessionVerification) { false }
 
     override suspend fun clear() {
         dataStoreFile.safeDelete()

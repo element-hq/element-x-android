@@ -34,8 +34,8 @@ interface SessionPreferencesStore {
     suspend fun setRenderTypingNotifications(enabled: Boolean)
     fun isRenderTypingNotificationsEnabled(): Flow<Boolean>
 
-    suspend fun setSkipSessionVerification(enabled: Boolean)
-    fun isSkipSessionVerificationEnabled(): Flow<Boolean>
+    suspend fun setSkipSessionVerification(skip: Boolean)
+    fun isSessionVerificationSkipped(): Flow<Boolean>
 
     suspend fun clear()
 }

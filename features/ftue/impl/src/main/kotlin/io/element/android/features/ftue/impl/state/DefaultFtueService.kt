@@ -119,7 +119,7 @@ class DefaultFtueService @Inject constructor(
                 emit(SessionVerifiedStatus.NotVerified)
             }
             .first()
-        val skipVerification = suspend { sessionPreferencesStore.isSkipSessionVerificationEnabled().first() }
+        val skipVerification = suspend { sessionPreferencesStore.isSessionVerificationSkipped().first() }
         return readyVerifiedSessionStatus == SessionVerifiedStatus.NotVerified && !skipVerification()
     }
 

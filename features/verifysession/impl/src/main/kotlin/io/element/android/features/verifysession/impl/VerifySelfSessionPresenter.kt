@@ -60,7 +60,7 @@ class VerifySelfSessionPresenter @Inject constructor(
         }
         val recoveryState by encryptionService.recoveryStateStateFlow.collectAsState()
         val stateAndDispatch = stateMachine.rememberStateAndDispatch()
-        val skipVerification by sessionPreferencesStore.isSkipSessionVerificationEnabled().collectAsState(initial = false)
+        val skipVerification by sessionPreferencesStore.isSessionVerificationSkipped().collectAsState(initial = false)
         val needsVerification by sessionVerificationService.canVerifySessionFlow.collectAsState(initial = true)
         val verificationFlowStep by remember {
             derivedStateOf {
