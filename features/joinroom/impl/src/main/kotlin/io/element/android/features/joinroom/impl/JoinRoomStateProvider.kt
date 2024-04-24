@@ -40,6 +40,13 @@ open class JoinRoomStateProvider : PreviewParameterProvider<JoinRoomState> {
                 contentState = anUnknownContentState()
             ),
             aJoinRoomState(
+                contentState = aLoadedContentState(
+                    name = null,
+                    alias = null,
+                    topic = null,
+                )
+            ),
+            aJoinRoomState(
                 contentState = aLoadedContentState(joinAuthorisationStatus = JoinAuthorisationStatus.CanJoin)
             ),
             aJoinRoomState(
@@ -86,7 +93,7 @@ fun aLoadingContentState(roomId: RoomId = A_ROOM_ID) = ContentState.Loading(room
 
 fun aLoadedContentState(
     roomId: RoomId = A_ROOM_ID,
-    name: String = "Element X android",
+    name: String? = "Element X android",
     alias: RoomAlias? = RoomAlias("#exa:matrix.org"),
     topic: String? = "Element X is a secure, private and decentralized messenger.",
     numberOfMembers: Long? = null,
