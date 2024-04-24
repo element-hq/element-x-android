@@ -62,10 +62,6 @@ class TimelineItemsFactory @Inject constructor(
         }
     }
 
-    fun items(): StateFlow<ImmutableList<TimelineItem>> {
-        return timelineItems
-    }
-
     @Composable
     fun collectItemsAsState(): State<ImmutableList<TimelineItem>> {
         return timelineItems.collectAsState()

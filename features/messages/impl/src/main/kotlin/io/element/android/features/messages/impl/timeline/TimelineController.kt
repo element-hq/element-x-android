@@ -16,9 +16,7 @@
 
 package io.element.android.features.messages.impl.timeline
 
-import androidx.compose.runtime.MutableState
 import com.squareup.anvil.annotations.ContributesBinding
-import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.matrix.api.core.EventId
@@ -26,9 +24,7 @@ import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.timeline.LiveTimelineProvider
 import io.element.android.libraries.matrix.api.timeline.TimelineProvider
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
-import io.element.android.libraries.matrix.api.timeline.ReceiptType
 import io.element.android.libraries.matrix.api.timeline.Timeline
-import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -65,7 +61,7 @@ class TimelineController @Inject constructor(
         return detachedTimeline.map { !it.isPresent }
     }
 
-    suspend fun invokeOnTimeline(block: suspend (Timeline.() -> Any)) {
+    suspend fun invokeOnCurrentTimeline(block: suspend (Timeline.() -> Any)) {
         currentTimelineFlow().first().run {
             block(this)
         }
@@ -122,37 +118,6 @@ class TimelineController @Inject constructor(
             detached.isPresent -> detached.get()
             else -> live
         }
-    }
-
-    suspend fun sendReadReceiptIfNeeded(
-        firstVisibleIndex: Int,
-        timelineItems: ImmutableList<TimelineItem>,
-        lastReadReceiptId: MutableState<EventId?>,
-        readReceiptType: ReceiptType,
-    ) {
-        // If we are at the bottom of timeline, we mark the room as read.
-        if (firstVisibleIndex == 0) {
-            room.markAsRead(receiptType = readReceiptType)
-        } else {
-            // Get last valid EventId seen by the user, as the first index might refer to a Virtual item
-            val eventId = getLastEventIdBeforeOrAt(firstVisibleIndex, timelineItems)
-            if (eventId != null && eventId != lastReadReceiptId.value) {
-                lastReadReceiptId.value = eventId
-                currentTimelineFlow()
-                    .first()
-                    .sendReadReceipt(eventId = eventId, receiptType = readReceiptType)
-            }
-        }
-    }
-
-    private fun getLastEventIdBeforeOrAt(index: Int, items: ImmutableList<TimelineItem>): EventId? {
-        for (i in index until items.count()) {
-            val item = items[i]
-            if (item is TimelineItem.Event) {
-                return item.eventId
-            }
-        }
-        return null
     }
 
     override suspend fun getActiveTimeline(): Timeline {

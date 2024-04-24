@@ -31,6 +31,8 @@ import io.element.android.features.messages.impl.messagecomposer.MessageComposer
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerPresenter
 import io.element.android.features.messages.impl.messagesummary.FakeMessageSummaryFormatter
 import io.element.android.features.messages.impl.textcomposer.TestRichTextEditorStateFactory
+import io.element.android.features.messages.impl.timeline.TimelineController
+import io.element.android.features.messages.impl.timeline.TimelineItemIndexer
 import io.element.android.features.messages.impl.timeline.TimelinePresenter
 import io.element.android.features.messages.impl.timeline.components.customreaction.CustomReactionPresenter
 import io.element.android.features.messages.impl.timeline.components.customreaction.FakeEmojibaseProvider
@@ -748,6 +750,7 @@ class MessagesPresenterTest {
             currentSessionIdHolder = CurrentSessionIdHolder(FakeMatrixClient(A_SESSION_ID)),
             permalinkParser = FakePermalinkParser(),
             permalinkBuilder = FakePermalinkBuilder(),
+            timelineController = TimelineController(matrixRoom),
         )
         val voiceMessageComposerPresenter = VoiceMessageComposerPresenter(
             this,
@@ -768,6 +771,8 @@ class MessagesPresenterTest {
             endPollAction = endPollAction,
             sendPollResponseAction = FakeSendPollResponseAction(),
             sessionPreferencesStore = sessionPreferencesStore,
+            timelineItemIndexer = TimelineItemIndexer(),
+            timelineController = TimelineController(matrixRoom),
         )
         val timelinePresenterFactory = object : TimelinePresenter.Factory {
             override fun create(navigator: MessagesNavigator): TimelinePresenter {
@@ -804,6 +809,7 @@ class MessagesPresenterTest {
             buildMeta = aBuildMeta(),
             dispatchers = coroutineDispatchers,
             htmlConverterProvider = FakeHtmlConverterProvider(),
+            timelineController = TimelineController(matrixRoom),
         )
     }
 }

@@ -49,7 +49,7 @@ class CreatePollPresenterTest {
     private var navUpInvocationsCount = 0
     private val existingPoll = anOngoingPollContent()
     private val fakeMatrixRoom = FakeMatrixRoom(
-        matrixTimeline = aPollTimeline(
+        liveTimeline = aPollTimeline(
             mapOf(pollEventId to existingPoll)
         )
     )
@@ -80,7 +80,7 @@ class CreatePollPresenterTest {
     @Test
     fun `in edit mode, if poll doesn't exist, error is tracked and screen is closed`() = runTest {
         val room = FakeMatrixRoom(
-            matrixTimeline = aPollTimeline()
+            liveTimeline = aPollTimeline()
         )
         val presenter = createCreatePollPresenter(mode = CreatePollMode.EditPoll(AN_EVENT_ID), room = room)
         moleculeFlow(RecompositionMode.Immediate) {

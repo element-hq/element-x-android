@@ -288,7 +288,7 @@ class MessagesPresenter @AssistedInject constructor(
         emoji: String,
         eventId: EventId,
     ) = launch(dispatchers.io) {
-        timelineController.invokeOnTimeline {
+        timelineController.invokeOnCurrentTimeline {
             toggleReaction(emoji, eventId)
                 .onFailure { Timber.e(it) }
         }

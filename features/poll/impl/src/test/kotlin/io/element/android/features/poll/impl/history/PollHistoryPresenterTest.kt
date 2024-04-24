@@ -57,7 +57,7 @@ class PollHistoryPresenterTest {
         )
     )
     private val room = FakeMatrixRoom(
-        matrixTimeline = timeline
+        liveTimeline = timeline
     )
 
     @Test

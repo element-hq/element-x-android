@@ -44,6 +44,7 @@ import io.element.android.libraries.matrix.api.room.location.AssetType
 import io.element.android.libraries.matrix.api.room.powerlevels.MatrixRoomPowerLevels
 import io.element.android.libraries.matrix.api.room.powerlevels.UserRoleChange
 import io.element.android.libraries.matrix.api.timeline.ReceiptType
+import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.item.event.EventTimelineItem
 import io.element.android.libraries.matrix.api.widget.MatrixWidgetDriver
 import io.element.android.libraries.matrix.api.widget.MatrixWidgetSettings
@@ -53,7 +54,7 @@ import io.element.android.libraries.matrix.test.A_ROOM_NAME
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.media.FakeMediaUploadHandler
 import io.element.android.libraries.matrix.test.notificationsettings.FakeNotificationSettingsService
-import io.element.android.libraries.matrix.test.timeline.FakeMatrixTimeline
+import io.element.android.libraries.matrix.test.timeline.FakeTimeline
 import io.element.android.libraries.matrix.test.widget.FakeWidgetDriver
 import io.element.android.tests.testutils.simulateLongTask
 import kotlinx.collections.immutable.ImmutableMap
@@ -83,7 +84,7 @@ class FakeMatrixRoom(
     override val joinedMemberCount: Long = 123L,
     override val activeMemberCount: Long = 234L,
     val notificationSettingsService: NotificationSettingsService = FakeNotificationSettingsService(),
-    private val matrixTimeline: MatrixTimeline = FakeMatrixTimeline(),
+    override val liveTimeline: Timeline = FakeTimeline(),
     private var roomPermalinkResult: () -> Result<String> = { Result.success("room link") },
     private var eventPermalinkResult: (EventId) -> Result<String> = { Result.success("event link") },
     canRedactOwn: Boolean = false,
@@ -214,7 +215,9 @@ class FakeMatrixRoom(
 
     override val syncUpdateFlow: StateFlow<Long> = MutableStateFlow(0L)
 
-    override val timeline: MatrixTimeline = matrixTimeline
+    override suspend fun timelineFocusedOnEvent(eventId: EventId): Timeline {
+        return FakeTimeline()
+    }
 
     override suspend fun subscribeToSync() = Unit
 

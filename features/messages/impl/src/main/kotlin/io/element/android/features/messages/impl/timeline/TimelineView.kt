@@ -116,10 +116,6 @@ fun TimelineView(
         // TODO implement this logic once we have support to 'jump to event X' in sliding sync
     }
 
-    LaunchedEffect(key1 = state.timelineItems) {
-        Timber.d("TimelineView - timelineItem identifiers: ${state.timelineItems.joinToString(", ") { it.identifier() }}")
-    }
-
     // Animate alpha when timeline is first displayed, to avoid flashes or glitching when viewing rooms
     AnimatedVisibility(visible = true, enter = fadeIn()) {
         Box(modifier) {

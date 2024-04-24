@@ -266,7 +266,7 @@ class MessageComposerPresenter @Inject constructor(
                         is MessageComposerMode.Quote -> null
                     }.let { relatedEventId ->
                         appCoroutineScope.launch {
-                            timelineController.invokeOnTimeline {
+                            timelineController.invokeOnCurrentTimeline {
                                 enterSpecialMode(relatedEventId)
                             }
                         }
@@ -390,14 +390,14 @@ class MessageComposerPresenter @Inject constructor(
             is MessageComposerMode.Edit -> {
                 val eventId = capturedMode.eventId
                 val transactionId = capturedMode.transactionId
-                timelineController.invokeOnTimeline {
+                timelineController.invokeOnCurrentTimeline {
                     editMessage(eventId, transactionId, message.markdown, message.html, mentions)
                 }
             }
 
             is MessageComposerMode.Quote -> TODO()
             is MessageComposerMode.Reply -> {
-                timelineController.invokeOnTimeline {
+                timelineController.invokeOnCurrentTimeline {
                     replyMessage(capturedMode.eventId, message.markdown, message.html, mentions)
                 }
             }

@@ -19,10 +19,14 @@ package io.element.android.features.messages.impl.timeline
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import io.element.android.features.messages.impl.timeline.model.TimelineItem
+import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemLoadingIndicatorModel
 import io.element.android.features.messages.impl.typing.aTypingNotificationState
+import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.tests.testutils.EnsureNeverCalledWithParam
 import io.element.android.tests.testutils.EnsureNeverCalledWithTwoParams
 import io.element.android.tests.testutils.EventsRecorder
+import kotlinx.collections.immutable.persistentListOf
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -37,10 +41,13 @@ class TimelineViewTest {
         rule.setContent {
             TimelineView(
                 aTimelineState(
+                    timelineItems = persistentListOf<TimelineItem>(
+                        TimelineItem.Virtual(
+                            id = "backward_pagination",
+                            model = TimelineItemLoadingIndicatorModel(Timeline.PaginationDirection.BACKWARDS, 0)
+                        ),
+                    ),
                     eventSink = eventsRecorder,
-                    paginationState = aPaginationState(
-                        hasMoreToLoadBackwards = true,
-                    )
                 ),
                 typingNotificationState = aTypingNotificationState(),
                 onUserDataClicked = EnsureNeverCalledWithParam(),
@@ -55,7 +62,7 @@ class TimelineViewTest {
                 onReadReceiptClick = EnsureNeverCalledWithParam(),
             )
         }
-        eventsRecorder.assertSingle(TimelineEvents.LoadMore)
+        eventsRecorder.assertSingle(TimelineEvents.LoadMore(Timeline.PaginationDirection.BACKWARDS))
     }
 
     @Test
@@ -65,9 +72,6 @@ class TimelineViewTest {
             TimelineView(
                 aTimelineState(
                     eventSink = eventsRecorder,
-                    paginationState = aPaginationState(
-                        hasMoreToLoadBackwards = false,
-                    )
                 ),
                 typingNotificationState = aTypingNotificationState(),
                 onUserDataClicked = EnsureNeverCalledWithParam(),

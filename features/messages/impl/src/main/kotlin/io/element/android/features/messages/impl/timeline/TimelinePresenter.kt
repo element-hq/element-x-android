@@ -111,6 +111,7 @@ class TimelinePresenter @AssistedInject constructor(
                         if (event.firstIndex == 0) {
                             newEventState.value = NewEventState.None
                         }
+                        println("## sendReadReceiptIfNeeded firstVisibleIndex: ${event.firstIndex}")
                         appScope.sendReadReceiptIfNeeded(
                             firstVisibleIndex = event.firstIndex,
                             timelineItems = timelineItems,
@@ -256,7 +257,7 @@ class TimelinePresenter @AssistedInject constructor(
             val eventId = getLastEventIdBeforeOrAt(firstVisibleIndex, timelineItems)
             if (eventId != null && eventId != lastReadReceiptId.value) {
                 lastReadReceiptId.value = eventId
-                //timeline.sendReadReceipt(eventId = eventId, receiptType = readReceiptType)
+                room.liveTimeline.sendReadReceipt(eventId = eventId, receiptType = readReceiptType)
             }
         }
     }
