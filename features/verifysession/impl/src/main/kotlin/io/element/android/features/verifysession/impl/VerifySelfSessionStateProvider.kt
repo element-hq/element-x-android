@@ -48,6 +48,9 @@ open class VerifySelfSessionStateProvider : PreviewParameterProvider<VerifySelfS
                 verificationFlowStep = VerificationStep.Initial(canEnterRecoveryKey = true)
             ),
             aVerifySelfSessionState(
+                verificationFlowStep = VerificationStep.Initial(canEnterRecoveryKey = true, isLastDevice = true)
+            ),
+            aVerifySelfSessionState(
                 verificationFlowStep = VerificationStep.Completed,
                 displaySkipButton = true,
             ),

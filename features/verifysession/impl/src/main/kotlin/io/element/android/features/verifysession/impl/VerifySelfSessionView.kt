@@ -236,12 +236,19 @@ private fun BottomMenu(
 
     when (verificationViewState) {
         is FlowStep.Initial -> {
-            BottomMenu(
-                positiveButtonTitle = stringResource(R.string.screen_identity_use_another_device),
-                onPositiveButtonClicked = { eventSink(VerifySelfSessionViewEvents.RequestVerification) },
-                negativeButtonTitle = stringResource(R.string.screen_session_verification_enter_recovery_key),
-                onNegativeButtonClicked = onEnterRecoveryKey,
-            )
+            if (verificationViewState.isLastDevice) {
+                BottomMenu(
+                    positiveButtonTitle = stringResource(R.string.screen_session_verification_enter_recovery_key),
+                    onPositiveButtonClicked = onEnterRecoveryKey,
+                )
+            } else {
+                BottomMenu(
+                    positiveButtonTitle = stringResource(R.string.screen_identity_use_another_device),
+                    onPositiveButtonClicked = { eventSink(VerifySelfSessionViewEvents.RequestVerification) },
+                    negativeButtonTitle = stringResource(R.string.screen_session_verification_enter_recovery_key),
+                    onNegativeButtonClicked = onEnterRecoveryKey,
+                )
+            }
         }
         is FlowStep.Canceled -> {
             BottomMenu(
