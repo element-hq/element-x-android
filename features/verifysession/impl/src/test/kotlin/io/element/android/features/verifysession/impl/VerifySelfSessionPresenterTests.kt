@@ -24,6 +24,7 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.features.verifysession.impl.VerifySelfSessionState.VerificationStep
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.core.meta.BuildMeta
+import io.element.android.libraries.featureflag.test.InMemorySessionPreferencesStore
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import io.element.android.libraries.matrix.api.encryption.RecoveryState
 import io.element.android.libraries.matrix.api.verification.SessionVerificationData
@@ -35,7 +36,6 @@ import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.matrix.test.encryption.FakeEncryptionService
 import io.element.android.libraries.matrix.test.verification.FakeSessionVerificationService
 import io.element.android.tests.testutils.WarmUpRule
-import io.element.android.tests.testutils.lambda.value
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
@@ -289,7 +289,6 @@ class VerifySelfSessionPresenterTests {
         }.test {
             val state = requestVerificationAndAwaitVerifyingState(service)
             state.eventSink(VerifySelfSessionViewEvents.SkipVerification)
-            service.saveVerifiedStateResult.assertions().isCalledOnce().with(value(true))
             assertThat(awaitItem().verificationFlowStep).isEqualTo(VerificationStep.Skipped)
         }
     }
@@ -297,12 +296,16 @@ class VerifySelfSessionPresenterTests {
     @Test
     fun `present - When verification is not needed, the flow is completed`() = runTest {
         val service = FakeSessionVerificationService().apply {
-            givenNeedsVerification(false)
+            givenCanVerifySession(false)
+            givenIsReady(true)
+            givenVerifiedStatus(SessionVerifiedStatus.Verified)
+            givenVerificationFlowState(VerificationFlowState.Finished)
         }
         val presenter = createVerifySelfSessionPresenter(service)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
+            skipItems(1)
             assertThat(awaitItem().verificationFlowStep).isEqualTo(VerificationStep.Completed)
         }
     }
@@ -334,7 +337,6 @@ class VerifySelfSessionPresenterTests {
     private fun unverifiedSessionService(): FakeSessionVerificationService {
         return FakeSessionVerificationService().apply {
             givenVerifiedStatus(SessionVerifiedStatus.NotVerified)
-            givenNeedsVerification(true)
         }
     }
 
@@ -342,12 +344,14 @@ class VerifySelfSessionPresenterTests {
         service: SessionVerificationService = unverifiedSessionService(),
         encryptionService: EncryptionService = FakeEncryptionService(),
         buildMeta: BuildMeta = aBuildMeta(),
+        sessionPreferencesStore: InMemorySessionPreferencesStore = InMemorySessionPreferencesStore(),
     ): VerifySelfSessionPresenter {
         return VerifySelfSessionPresenter(
             sessionVerificationService = service,
             encryptionService = encryptionService,
             stateMachine = VerifySelfSessionStateMachine(service, encryptionService),
             buildMeta = buildMeta,
+            sessionPreferencesStore = sessionPreferencesStore,
         )
     }
 }

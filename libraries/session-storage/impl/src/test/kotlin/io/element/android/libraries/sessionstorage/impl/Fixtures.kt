@@ -31,5 +31,4 @@ internal fun aSessionData() = SessionData(
     isTokenValid = 1,
     loginType = LoginType.UNKNOWN.name,
     passphrase = null,
-    needsVerification = 0L,
 )

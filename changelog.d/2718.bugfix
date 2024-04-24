@@ -1,0 +1,1 @@
+Fix session verification being asked again for already verified users.
