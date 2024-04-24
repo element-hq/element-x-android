@@ -19,5 +19,5 @@ package io.element.android.features.api
 import io.element.android.libraries.architecture.AsyncData
 
 data class MigrationState(
-    val migrationAction: AsyncData<Unit> = AsyncData.Uninitialized,
+    val migrationAction: AsyncData<Unit>,
 )

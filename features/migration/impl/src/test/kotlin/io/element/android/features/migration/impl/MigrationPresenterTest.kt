@@ -74,14 +74,12 @@ class MigrationPresenterTest {
             assertThat(store.applicationMigrationVersion().first()).isEqualTo(MigrationPresenter.MIGRATION_VERSION)
         }
     }
-
-    private fun createPresenter(
-        migrationStore: MigrationStore = InMemoryMigrationStore(0),
-        logFilesRemover: LogFilesRemover = FakeLogFilesRemover(lambdaRecorder(ensureNeverCalled = true) { -> }),
-    ): MigrationPresenter {
-        return MigrationPresenter(
-            migrationStore = migrationStore,
-            logFilesRemover = logFilesRemover,
-        )
-    }
 }
+
+private fun createPresenter(
+    migrationStore: MigrationStore = InMemoryMigrationStore(0),
+    logFilesRemover: LogFilesRemover = FakeLogFilesRemover(lambdaRecorder(ensureNeverCalled = true) { -> }),
+) = MigrationPresenter(
+    migrationStore = migrationStore,
+    logFilesRemover = logFilesRemover,
+)
