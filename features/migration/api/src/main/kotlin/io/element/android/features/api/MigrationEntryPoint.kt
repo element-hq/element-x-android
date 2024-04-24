@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright (c) 2024 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,16 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-plugins {
-    id("io.element.android-library")
-}
 
-android {
-    namespace = "io.element.android.features.rageshake.test"
-}
+package io.element.android.features.api
 
-dependencies {
-    implementation(projects.features.rageshake.api)
-    implementation(libs.coroutines.core)
-    implementation(projects.tests.testutils)
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+
+interface MigrationEntryPoint {
+    @Composable
+    fun present(): MigrationState
+
+    @Composable
+    fun Render(
+        state: MigrationState,
+        modifier: Modifier,
+    )
 }
