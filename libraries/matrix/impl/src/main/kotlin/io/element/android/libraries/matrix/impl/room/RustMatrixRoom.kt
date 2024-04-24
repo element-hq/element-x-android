@@ -184,8 +184,12 @@ class RustMatrixRoom(
     override suspend fun unsubscribeFromSync() = roomSyncSubscriber.unsubscribe(roomId)
 
     override suspend fun timelineFocusedOnEvent(eventId: EventId): Timeline {
-        return innerRoom.timelineFocusedOnEvent(eventId.value, numContextEvents = 50u).let {inner ->
-            createTimeline(inner, isLive = false){}
+        return innerRoom.timelineFocusedOnEvent(
+            eventId = eventId.value,
+            numContextEvents = 50u,
+            internalIdPrefix = "focus_$eventId",
+        ).let {inner ->
+            createTimeline(inner, isLive = false)
         }
     }
 
