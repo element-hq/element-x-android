@@ -250,7 +250,7 @@ private fun JoinRoomContent(
                 },
                 subtitle = {
                     Text(
-                        text = "Failed to get information about the room",
+                        text = stringResource(id = CommonStrings.error_unknown),
                         textAlign = TextAlign.Center,
                         color = MaterialTheme.colorScheme.error,
                     )
