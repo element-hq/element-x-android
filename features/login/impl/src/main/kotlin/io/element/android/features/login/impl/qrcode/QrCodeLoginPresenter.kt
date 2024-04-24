@@ -16,6 +16,7 @@
 
 package io.element.android.features.login.impl.qrcode
 
+import io.element.android.features.login.impl.DefaultLoginUserStory
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
@@ -29,6 +30,7 @@ import javax.inject.Inject
 @SingleIn(AppScope::class)
 class QrCodeLoginPresenter @Inject constructor(
     private val authenticationService: MatrixAuthenticationService,
+    private val defaultLoginUserStory: DefaultLoginUserStory,
 ) {
     private val _currentLoginStep = MutableStateFlow<QrCodeLoginStep>(QrCodeLoginStep.Uninitialized)
     val currentLoginStep: StateFlow<QrCodeLoginStep> = _currentLoginStep
@@ -38,6 +40,8 @@ class QrCodeLoginPresenter @Inject constructor(
 
         return authenticationService.loginWithQrCode(qrCodeLoginData) { step ->
             _currentLoginStep.value = step
+        }.onSuccess {
+            defaultLoginUserStory.setLoginFlowIsDone(true)
         }
     }
 }
