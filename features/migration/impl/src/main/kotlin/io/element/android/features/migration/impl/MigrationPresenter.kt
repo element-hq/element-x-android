@@ -38,8 +38,8 @@ class MigrationPresenter @Inject constructor(
         val migrationStoreVersion = migrationStore.applicationMigrationVersion().collectAsState(initial = null)
         var migrationAction: AsyncData<Unit> by remember { mutableStateOf(AsyncData.Uninitialized) }
 
-        // Uncomment this block to run the migration everytime
         /*
+        // Uncomment this block to run the migration everytime
         LaunchedEffect(Unit) {
             migrationStore.setApplicationMigrationVersion(0)
         }
