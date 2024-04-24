@@ -26,12 +26,14 @@ class InMemorySessionPreferencesStore(
     isRenderReadReceiptsEnabled: Boolean = true,
     isSendTypingNotificationsEnabled: Boolean = true,
     isRenderTypingNotificationsEnabled: Boolean = true,
+    skipSessionVerificationEnabled: Boolean = false,
 ) : SessionPreferencesStore {
     private val isSharePresenceEnabled = MutableStateFlow(isSharePresenceEnabled)
     private val isSendPublicReadReceiptsEnabled = MutableStateFlow(isSendPublicReadReceiptsEnabled)
     private val isRenderReadReceiptsEnabled = MutableStateFlow(isRenderReadReceiptsEnabled)
     private val isSendTypingNotificationsEnabled = MutableStateFlow(isSendTypingNotificationsEnabled)
     private val isRenderTypingNotificationsEnabled = MutableStateFlow(isRenderTypingNotificationsEnabled)
+    private val skipSessionVerificationEnabled = MutableStateFlow(skipSessionVerificationEnabled)
     var clearCallCount = 0
         private set
 
@@ -64,6 +66,14 @@ class InMemorySessionPreferencesStore(
     }
 
     override fun isRenderTypingNotificationsEnabled(): Flow<Boolean> = isRenderTypingNotificationsEnabled
+
+    override suspend fun setSkipSessionVerification(enabled: Boolean) {
+        skipSessionVerificationEnabled.tryEmit(enabled)
+    }
+
+    override fun isSkipSessionVerificationEnabled(): Flow<Boolean> {
+        return skipSessionVerificationEnabled
+    }
 
     override suspend fun clear() {
         clearCallCount++

@@ -49,6 +49,7 @@ class DefaultSessionPreferencesStore(
     private val renderReadReceiptsKey = booleanPreferencesKey("renderReadReceipts")
     private val sendTypingNotificationsKey = booleanPreferencesKey("sendTypingNotifications")
     private val renderTypingNotificationsKey = booleanPreferencesKey("renderTypingNotifications")
+    private val skipSessionVerification = booleanPreferencesKey("skipSessionVerification")
 
     private val dataStoreFile = storeFile(context, sessionId)
     private val store = PreferenceDataStoreFactory.create(
@@ -85,6 +86,9 @@ class DefaultSessionPreferencesStore(
 
     override suspend fun setRenderTypingNotifications(enabled: Boolean) = update(renderTypingNotificationsKey, enabled)
     override fun isRenderTypingNotificationsEnabled(): Flow<Boolean> = get(renderTypingNotificationsKey) { true }
+
+    override suspend fun setSkipSessionVerification(enabled: Boolean) = update(skipSessionVerification, enabled)
+    override fun isSkipSessionVerificationEnabled(): Flow<Boolean> = get(skipSessionVerification) { false }
 
     override suspend fun clear() {
         dataStoreFile.safeDelete()
