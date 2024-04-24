@@ -65,7 +65,7 @@ class QrCodeLoginFlowNode @AssistedInject constructor(
                 .collect { step ->
                     when (step) {
                         is QrCodeLoginStep.EstablishingSecureChannel -> {
-                            backstack.push(NavTarget.QrCodeConfirmation(QrCodeConfirmationStep.DisplayCheckCode(step.checkCode)))
+                            backstack.replace(NavTarget.QrCodeConfirmation(QrCodeConfirmationStep.DisplayCheckCode(step.checkCode)))
                         }
                         is QrCodeLoginStep.WaitingForToken -> {
                             backstack.replace(NavTarget.QrCodeConfirmation(QrCodeConfirmationStep.DisplayVerificationCode(step.userCode)))

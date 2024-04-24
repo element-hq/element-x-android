@@ -38,6 +38,7 @@ import io.element.android.libraries.matrix.impl.exception.mapClientException
 import io.element.android.libraries.matrix.impl.keys.PassphraseGenerator
 import io.element.android.libraries.matrix.impl.mapper.toSessionData
 import io.element.android.libraries.matrix.impl.proxy.ProxyProvider
+import io.element.android.libraries.matrix.impl.util.cancelAndDestroy
 import io.element.android.libraries.network.useragent.UserAgentProvider
 import io.element.android.libraries.sessionstorage.api.LoggedInState
 import io.element.android.libraries.sessionstorage.api.LoginType
@@ -45,11 +46,17 @@ import io.element.android.libraries.sessionstorage.api.SessionStore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.ClientBuilder
 import org.matrix.rustcomponents.sdk.OidcAuthenticationData
 import org.matrix.rustcomponents.sdk.QrLoginProgress
 import org.matrix.rustcomponents.sdk.QrLoginProgressListener
+import org.matrix.rustcomponents.sdk.RecoveryState
+import org.matrix.rustcomponents.sdk.RecoveryStateListener
+import org.matrix.rustcomponents.sdk.TaskHandle
+import org.matrix.rustcomponents.sdk.VerificationState
+import org.matrix.rustcomponents.sdk.VerificationStateListener
 import org.matrix.rustcomponents.sdk.use
 import timber.log.Timber
 import java.io.File
@@ -59,14 +66,14 @@ import org.matrix.rustcomponents.sdk.AuthenticationService as RustAuthentication
 @ContributesBinding(AppScope::class)
 @SingleIn(AppScope::class)
 class RustMatrixAuthenticationService @Inject constructor(
-    baseDirectory: File,
+    private val baseDirectory: File,
     private val coroutineDispatchers: CoroutineDispatchers,
     private val sessionStore: SessionStore,
-    userAgentProvider: UserAgentProvider,
+    private val userAgentProvider: UserAgentProvider,
     private val rustMatrixClientFactory: RustMatrixClientFactory,
     private val passphraseGenerator: PassphraseGenerator,
-    userCertificatesProvider: UserCertificatesProvider,
-    proxyProvider: ProxyProvider,
+    private val userCertificatesProvider: UserCertificatesProvider,
+    private val proxyProvider: ProxyProvider,
     private val buildMeta: BuildMeta,
 ) : MatrixAuthenticationService {
     // Passphrase which will be used for new sessions. Existing sessions will use the passphrase
@@ -218,27 +225,76 @@ class RustMatrixAuthenticationService @Inject constructor(
     }
 
     override suspend fun loginWithQrCode(qrCodeData: MatrixQrCodeLoginData, progress: (QrCodeLoginStep) -> Unit) = runCatching {
-        val client = ClientBuilder().buildWithQrCode(
-            qrCodeData = (qrCodeData as SdkQrCodeLoginData).rustQrCodeData,
-            oidcConfiguration = oidcConfiguration,
-            progressListener = object : QrLoginProgressListener {
-                override fun onUpdate(state: QrLoginProgress) {
-                    println("QR Code login progress: $state")
-                    progress(state.toStep())
+        val client = ClientBuilder()
+            .basePath(baseDirectory.absolutePath)
+            .userAgent(userAgentProvider.provide())
+            .serverVersions(listOf("v1.0", "v1.1", "v1.2", "v1.3", "v1.4", "v1.5"))
+            .addRootCertificates(userCertificatesProvider.provides())
+            .let {
+                // Sadly ClientBuilder.proxy() does not accept null :/
+                // Tracked by https://github.com/matrix-org/matrix-rust-sdk/issues/3159
+                val proxy = proxyProvider.provides()
+                if (proxy != null) {
+                    it.proxy(proxy)
+                } else {
+                    it
                 }
             }
-        )
-        val sessionData = client.use {
-            it.session().toSessionData(
+            .buildWithQrCode(
+                qrCodeData = (qrCodeData as SdkQrCodeLoginData).rustQrCodeData,
+                oidcConfiguration = oidcConfiguration,
+                progressListener = object : QrLoginProgressListener {
+                    override fun onUpdate(state: QrLoginProgress) {
+                        println("QR Code login progress: $state")
+                        progress(state.toStep())
+                    }
+                }
+            )
+        val sessionData = client.session()
+            .toSessionData(
                 isTokenValid = true,
                 loginType = LoginType.OIDC,
                 passphrase = pendingPassphrase,
                 needsVerification = true,
             )
-        }
         pendingOidcAuthenticationData?.close()
         pendingOidcAuthenticationData = null
         sessionStore.storeData(sessionData)
+
+        val recoveryMutex = Mutex(locked = true)
+        val verificationMutex = Mutex(locked = true)
+        val encryptionService = client.encryption()
+
+        val syncService = client.syncService().finish()
+        syncService.start()
+
+        var recoveryStateHandle: TaskHandle? = null
+        var verificationStateHandle: TaskHandle? = null
+        recoveryStateHandle = encryptionService.recoveryStateListener(object : RecoveryStateListener {
+            override fun onUpdate(status: RecoveryState) {
+                if (status == RecoveryState.ENABLED) {
+                    Timber.d("Recovery ENABLED")
+                    recoveryMutex.unlock()
+                    recoveryStateHandle?.cancelAndDestroy()
+                }
+            }
+        })
+        verificationStateHandle = encryptionService.verificationStateListener(object : VerificationStateListener {
+            override fun onUpdate(status: VerificationState) {
+                if (status == VerificationState.VERIFIED) {
+                    Timber.d("VERIFIED")
+                    verificationMutex.unlock()
+                    verificationStateHandle?.cancelAndDestroy()
+                }
+            }
+        })
+        verificationMutex.lock()
+        recoveryMutex.lock()
+
+        syncService.stop()
+        syncService.destroy()
+        client.destroy()
+
         SessionId(sessionData.userId)
     }.onFailure {
         it.printStackTrace()
