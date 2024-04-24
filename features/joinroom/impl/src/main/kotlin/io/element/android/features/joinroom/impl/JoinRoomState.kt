@@ -24,6 +24,7 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
+import io.element.android.libraries.matrix.api.room.RoomType
 import io.element.android.libraries.matrix.ui.model.InviteSender
 
 @Immutable
@@ -50,6 +51,7 @@ sealed interface ContentState {
         val alias: RoomAlias?,
         val numberOfMembers: Long?,
         val isDirect: Boolean,
+        val roomType: RoomType,
         val roomAvatarUrl: String?,
         val joinAuthorisationStatus: JoinAuthorisationStatus,
     ) : ContentState {

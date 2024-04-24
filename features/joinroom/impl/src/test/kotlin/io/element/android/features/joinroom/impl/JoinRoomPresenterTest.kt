@@ -30,6 +30,7 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
+import io.element.android.libraries.matrix.api.room.RoomType
 import io.element.android.libraries.matrix.api.room.preview.RoomPreview
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.matrix.test.A_ROOM_ID
@@ -315,7 +316,7 @@ class JoinRoomPresenterTest {
                         topic = "Room topic",
                         avatarUrl = "avatarUrl",
                         numberOfJoinedMembers = 2,
-                        roomType = null,
+                        roomType = RoomType.Room,
                         isHistoryWorldReadable = false,
                         isJoined = false,
                         isInvited = false,
@@ -339,6 +340,7 @@ class JoinRoomPresenterTest {
                         alias = RoomAlias("#alias:matrix.org"),
                         numberOfMembers = 2,
                         isDirect = false,
+                        roomType = RoomType.Room,
                         roomAvatarUrl = "avatarUrl",
                         joinAuthorisationStatus = JoinAuthorisationStatus.CanJoin
                     )

@@ -27,6 +27,7 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
+import io.element.android.libraries.matrix.api.room.RoomType
 import io.element.android.libraries.matrix.ui.model.InviteSender
 
 open class JoinRoomStateProvider : PreviewParameterProvider<JoinRoomState> {
@@ -90,6 +91,7 @@ fun aLoadedContentState(
     topic: String? = "Element X is a secure, private and decentralized messenger.",
     numberOfMembers: Long? = null,
     isDirect: Boolean = false,
+    roomType: RoomType = RoomType.Room,
     roomAvatarUrl: String? = null,
     joinAuthorisationStatus: JoinAuthorisationStatus = JoinAuthorisationStatus.Unknown
 ) = ContentState.Loaded(
@@ -99,6 +101,7 @@ fun aLoadedContentState(
     topic = topic,
     numberOfMembers = numberOfMembers,
     isDirect = isDirect,
+    roomType = roomType,
     roomAvatarUrl = roomAvatarUrl,
     joinAuthorisationStatus = joinAuthorisationStatus
 )

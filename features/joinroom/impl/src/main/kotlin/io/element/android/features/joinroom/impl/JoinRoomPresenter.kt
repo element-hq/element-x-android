@@ -43,6 +43,7 @@ import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
 import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.room.MatrixRoomInfo
+import io.element.android.libraries.matrix.api.room.RoomType
 import io.element.android.libraries.matrix.api.room.preview.RoomPreview
 import io.element.android.libraries.matrix.ui.model.toInviteSender
 import kotlinx.coroutines.CoroutineScope
@@ -153,6 +154,7 @@ private fun RoomPreview.toContentState(): ContentState {
         alias = canonicalAlias,
         numberOfMembers = numberOfJoinedMembers,
         isDirect = false,
+        roomType = roomType,
         roomAvatarUrl = avatarUrl,
         joinAuthorisationStatus = when {
             // Note when isInvited, roomInfo will be used, so if this happen, it will be temporary.
@@ -173,6 +175,7 @@ internal fun RoomDescription.toContentState(): ContentState {
         alias = alias,
         numberOfMembers = numberOfMembers,
         isDirect = false,
+        roomType = RoomType.Room,
         roomAvatarUrl = avatarUrl,
         joinAuthorisationStatus = when (joinRule) {
             RoomDescription.JoinRule.KNOCK -> JoinAuthorisationStatus.CanKnock
@@ -191,6 +194,7 @@ internal fun MatrixRoomInfo.toContentState(): ContentState {
         alias = canonicalAlias,
         numberOfMembers = activeMembersCount,
         isDirect = isDirect,
+        roomType = if (isSpace) RoomType.Space else RoomType.Room,
         roomAvatarUrl = avatarUrl,
         joinAuthorisationStatus = when {
             currentUserMembership == CurrentUserMembership.INVITED -> JoinAuthorisationStatus.IsInvited(
