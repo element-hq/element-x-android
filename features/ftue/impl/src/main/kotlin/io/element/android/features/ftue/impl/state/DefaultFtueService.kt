@@ -115,7 +115,7 @@ class DefaultFtueService @Inject constructor(
             // This is not ideal, but there are some very rare cases when reading the flow seems to get stuck
             .timeout(5.seconds)
             .catch {
-                Timber.e("Failed to get session verification status, assume it's not verified")
+                Timber.e(it, "Failed to get session verification status, assume it's not verified")
                 emit(SessionVerifiedStatus.NotVerified)
             }
             .first()
