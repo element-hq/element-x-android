@@ -24,6 +24,7 @@ import io.element.android.features.joinroom.impl.di.KnockRoom
 import io.element.android.features.roomdirectory.api.RoomDescription
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -36,6 +37,7 @@ import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_ROOM_NAME
 import io.element.android.libraries.matrix.test.FakeMatrixClient
+import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.matrix.test.room.aRoomInfo
 import io.element.android.libraries.matrix.test.room.aRoomMember
 import io.element.android.libraries.matrix.ui.model.toInviteSender
@@ -62,6 +64,7 @@ class JoinRoomPresenterTest {
                 assertThat(state.contentState).isEqualTo(ContentState.Loading(A_ROOM_ID.toRoomIdOrAlias()))
                 assertThat(state.joinAuthorisationStatus).isEqualTo(JoinAuthorisationStatus.Unknown)
                 assertThat(state.acceptDeclineInviteState).isEqualTo(anAcceptDeclineInviteState())
+                assertThat(state.applicationName).isEqualTo("AppName")
                 cancelAndIgnoreRemainingEvents()
             }
         }
@@ -414,6 +417,7 @@ class JoinRoomPresenterTest {
         roomDescription: Optional<RoomDescription> = Optional.empty(),
         matrixClient: MatrixClient = FakeMatrixClient(),
         knockRoom: KnockRoom = FakeKnockRoom(),
+        buildMeta: BuildMeta = aBuildMeta(applicationName = "AppName"),
         acceptDeclineInvitePresenter: Presenter<AcceptDeclineInviteState> = Presenter { anAcceptDeclineInviteState() }
     ): JoinRoomPresenter {
         return JoinRoomPresenter(
@@ -422,6 +426,7 @@ class JoinRoomPresenterTest {
             roomDescription = roomDescription,
             matrixClient = matrixClient,
             knockRoom = knockRoom,
+            buildMeta = buildMeta,
             acceptDeclineInvitePresenter = acceptDeclineInvitePresenter
         )
     }

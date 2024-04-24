@@ -20,8 +20,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -33,6 +35,7 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import io.element.android.compound.theme.ElementTheme
 import io.element.android.libraries.designsystem.atomic.atoms.PlaceholderAtom
 import io.element.android.libraries.designsystem.atomic.atoms.RoomPreviewDescriptionAtom
 import io.element.android.libraries.designsystem.atomic.atoms.RoomPreviewSubtitleAtom
@@ -55,6 +58,7 @@ import io.element.android.libraries.designsystem.theme.components.OutlinedButton
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
+import io.element.android.libraries.matrix.api.room.RoomType
 import io.element.android.libraries.matrix.ui.components.InviteSenderView
 import io.element.android.libraries.ui.strings.CommonStrings
 
@@ -76,7 +80,10 @@ fun JoinRoomView(
                 JoinRoomTopBar(onBackClicked = onBackPressed)
             },
             content = {
-                JoinRoomContent(contentState = state.contentState)
+                JoinRoomContent(
+                    contentState = state.contentState,
+                    applicationName = state.applicationName,
+                )
             },
             footer = {
                 JoinRoomFooter(
@@ -95,7 +102,8 @@ fun JoinRoomView(
                     },
                     onRetry = {
                         state.eventSink(JoinRoomEvents.RetryFetchingContent)
-                    }
+                    },
+                    onGoBack = onBackPressed,
                 )
             }
         )
@@ -116,12 +124,20 @@ private fun JoinRoomFooter(
     onJoinRoom: () -> Unit,
     onKnockRoom: () -> Unit,
     onRetry: () -> Unit,
+    onGoBack: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     if (state.contentState is ContentState.Failure) {
         Button(
             text = stringResource(CommonStrings.action_retry),
             onClick = onRetry,
+            modifier = modifier.fillMaxWidth(),
+            size = ButtonSize.Large,
+        )
+    } else if (state.contentState is ContentState.Loaded && state.contentState.roomType == RoomType.Space) {
+        Button(
+            text = stringResource(CommonStrings.action_go_back),
+            onClick = onGoBack,
             modifier = modifier.fillMaxWidth(),
             size = ButtonSize.Large,
         )
@@ -171,6 +187,7 @@ private fun JoinRoomFooter(
 @Composable
 private fun JoinRoomContent(
     contentState: ContentState,
+    applicationName: String,
     modifier: Modifier = Modifier,
 ) {
     when (contentState) {
@@ -211,6 +228,21 @@ private fun JoinRoomContent(
                             InviteSenderView(inviteSender = inviteSender)
                         }
                         RoomPreviewDescriptionAtom(contentState.topic ?: "")
+                        if (contentState.roomType == RoomType.Space) {
+                            Spacer(modifier = Modifier.height(24.dp))
+                            Text(
+                                text = stringResource(R.string.screen_join_room_space_not_supported_title),
+                                textAlign = TextAlign.Center,
+                                style = ElementTheme.typography.fontBodyLgMedium,
+                                color = MaterialTheme.colorScheme.primary,
+                            )
+                            Text(
+                                text = stringResource(R.string.screen_join_room_space_not_supported_description, applicationName),
+                                textAlign = TextAlign.Center,
+                                style = ElementTheme.typography.fontBodyMdRegular,
+                                color = MaterialTheme.colorScheme.secondary,
+                            )
+                        }
                     }
                 },
                 memberCount = {

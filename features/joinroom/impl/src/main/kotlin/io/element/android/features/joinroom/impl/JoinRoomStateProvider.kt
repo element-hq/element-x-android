@@ -75,6 +75,15 @@ open class JoinRoomStateProvider : PreviewParameterProvider<JoinRoomState> {
             aJoinRoomState(
                 contentState = aFailureContentState(roomIdOrAlias = A_ROOM_ALIAS.toRoomIdOrAlias())
             ),
+            aJoinRoomState(
+                contentState = aLoadedContentState(
+                    roomId = RoomId("!aSpaceId:domain"),
+                    name = "A space",
+                    alias = null,
+                    topic = "This is the topic of a space",
+                    roomType = RoomType.Space,
+                )
+            ),
         )
 }
 
@@ -122,6 +131,7 @@ fun aJoinRoomState(
     contentState = contentState,
     acceptDeclineInviteState = acceptDeclineInviteState,
     knockAction = knockAction,
+    applicationName = "AppName",
     eventSink = eventSink
 )
 

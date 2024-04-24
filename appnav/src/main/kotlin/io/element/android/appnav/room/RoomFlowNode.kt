@@ -128,7 +128,15 @@ class RoomFlowNode @AssistedInject constructor(
                 Timber.d("Room membership: ${roomInfo.map { it.currentUserMembership }}")
                 val info = roomInfo.getOrNull()
                 if (info?.currentUserMembership == CurrentUserMembership.JOINED) {
-                    backstack.newRoot(NavTarget.JoinedRoom(roomId))
+                    if (info.isSpace) {
+                        // It should not happen, but probably due to an issue in the sliding sync,
+                        // we can have a space here in case the space has just been joined.
+                        // So navigate to the JoinRoom target for now, which will
+                        // handle the space not supported screen
+                        backstack.newRoot(NavTarget.JoinRoom(roomId))
+                    } else {
+                        backstack.newRoot(NavTarget.JoinedRoom(roomId))
+                    }
                 } else {
                     backstack.newRoot(NavTarget.JoinRoom(roomId))
                 }
