@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright (c) 2024 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,16 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 plugins {
-    id("io.element.android-library")
+    id("io.element.android-compose-library")
 }
 
 android {
-    namespace = "io.element.android.features.rageshake.test"
+    namespace = "io.element.android.features.migration.api"
 }
 
 dependencies {
-    implementation(projects.features.rageshake.api)
-    implementation(libs.coroutines.core)
-    implementation(projects.tests.testutils)
+    implementation(projects.libraries.architecture)
 }

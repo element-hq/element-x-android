@@ -219,6 +219,7 @@ dependencies {
     allServicesImpl()
     allFeaturesImpl(rootDir, logger)
     implementation(projects.features.call)
+    implementation(projects.features.migration.api)
     implementation(projects.anvilannotations)
     implementation(projects.appnav)
     implementation(projects.appconfig)
