@@ -17,11 +17,30 @@
 package io.element.android.libraries.matrix.impl.timeline
 
 import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.core.ProgressCallback
+import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.TransactionId
+import io.element.android.libraries.matrix.api.media.AudioInfo
+import io.element.android.libraries.matrix.api.media.FileInfo
+import io.element.android.libraries.matrix.api.media.ImageInfo
+import io.element.android.libraries.matrix.api.media.MediaUploadHandler
+import io.element.android.libraries.matrix.api.media.VideoInfo
+import io.element.android.libraries.matrix.api.poll.PollKind
 import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.Mention
+import io.element.android.libraries.matrix.api.room.location.AssetType
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.ReceiptType
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.TimelineException
+import io.element.android.libraries.matrix.impl.core.toProgressWatcher
+import io.element.android.libraries.matrix.impl.media.MediaUploadHandlerImpl
+import io.element.android.libraries.matrix.impl.media.map
+import io.element.android.libraries.matrix.impl.media.toMSC3246range
+import io.element.android.libraries.matrix.impl.poll.toInner
+import io.element.android.libraries.matrix.impl.room.RoomContentForwarder
+import io.element.android.libraries.matrix.impl.room.location.toInner
+import io.element.android.libraries.matrix.impl.room.map
 import io.element.android.libraries.matrix.impl.timeline.item.event.EventMessageMapper
 import io.element.android.libraries.matrix.impl.timeline.item.event.EventTimelineItemMapper
 import io.element.android.libraries.matrix.impl.timeline.item.event.TimelineEventContentMapper
@@ -48,10 +67,19 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.matrix.rustcomponents.sdk.EventTimelineItem
+import org.matrix.rustcomponents.sdk.FormattedBody
+import org.matrix.rustcomponents.sdk.MessageFormat
+import org.matrix.rustcomponents.sdk.RoomMessageEventContentWithoutRelation
+import org.matrix.rustcomponents.sdk.SendAttachmentJoinHandle
 import org.matrix.rustcomponents.sdk.TimelineDiff
 import org.matrix.rustcomponents.sdk.TimelineItem
+import org.matrix.rustcomponents.sdk.messageEventContentFromHtml
+import org.matrix.rustcomponents.sdk.messageEventContentFromMarkdown
+import org.matrix.rustcomponents.sdk.use
 import timber.log.Timber
 import uniffi.matrix_sdk_ui.EventItemOrigin
+import java.io.File
 import java.util.Date
 import java.util.concurrent.atomic.AtomicBoolean
 import org.matrix.rustcomponents.sdk.Timeline as InnerTimeline
@@ -68,7 +96,7 @@ class RustTimeline(
     private val matrixRoom: MatrixRoom,
     private val dispatcher: CoroutineDispatcher,
     private val lastLoginTimestamp: Date?,
-    private val fetchDetailsForEvent: suspend (EventId) -> Result<Unit>,
+    private val roomContentForwarder: RoomContentForwarder,
     private val onNewSyncedEvent: () -> Unit,
 ) : Timeline {
 
@@ -90,7 +118,7 @@ class RustTimeline(
     private val invisibleIndicatorPostProcessor = InvisibleIndicatorPostProcessor(isLive)
 
     private val timelineItemFactory = MatrixTimelineItemMapper(
-        fetchDetailsForEvent = fetchDetailsForEvent,
+        fetchDetailsForEvent = this::fetchDetailsForEvent,
         roomCoroutineScope = roomCoroutineScope,
         virtualTimelineItemMapper = VirtualTimelineItemMapper(),
         eventTimelineItemMapper = EventTimelineItemMapper(
@@ -138,7 +166,7 @@ class RustTimeline(
         }
     }
 
-    private fun updatePaginationStatus(direction: Timeline.PaginationDirection, update: (Timeline.PaginationStatus)->Timeline.PaginationStatus){
+    private fun updatePaginationStatus(direction: Timeline.PaginationDirection, update: (Timeline.PaginationStatus) -> Timeline.PaginationStatus) {
         when (direction) {
             Timeline.PaginationDirection.BACKWARDS -> backPaginationStatus.getAndUpdate(update)
             Timeline.PaginationDirection.FORWARDS -> forwardPaginationStatus.getAndUpdate(update)
@@ -204,6 +232,7 @@ class RustTimeline(
 
     override fun close() {
         inner.close()
+        specialModeEventTimelineItem?.destroy()
     }
 
     private suspend fun fetchMembers() = withContext(dispatcher) {
@@ -228,5 +257,267 @@ class RustTimeline(
     private suspend fun postDiffs(diffs: List<TimelineDiff>) {
         initLatch.await()
         timelineDiffProcessor.postDiffs(diffs)
+    }
+
+    override suspend fun sendMessage(body: String, htmlBody: String?, mentions: List<Mention>): Result<Unit> = withContext(dispatcher) {
+        messageEventContentFromParts(body, htmlBody).withMentions(mentions.map()).use { content ->
+            runCatching {
+                inner.send(content)
+            }
+        }
+    }
+
+    override suspend fun editMessage(
+        originalEventId: EventId?,
+        transactionId: TransactionId?,
+        body: String,
+        htmlBody: String?,
+        mentions: List<Mention>,
+    ): Result<Unit> =
+        withContext(dispatcher) {
+            if (originalEventId != null) {
+                runCatching {
+                    val editedEvent = specialModeEventTimelineItem ?: inner.getEventTimelineItemByEventId(originalEventId.value)
+                    editedEvent.use {
+                        inner.edit(
+                            newContent = messageEventContentFromParts(body, htmlBody).withMentions(mentions.map()),
+                            editItem = it,
+                        )
+                    }
+                    specialModeEventTimelineItem = null
+                }
+            } else {
+                runCatching {
+                    transactionId?.let { cancelSend(it) }
+                    inner.send(messageEventContentFromParts(body, htmlBody))
+                }
+            }
+        }
+
+    private var specialModeEventTimelineItem: EventTimelineItem? = null
+
+    override suspend fun enterSpecialMode(eventId: EventId?): Result<Unit> = withContext(dispatcher) {
+        runCatching {
+            specialModeEventTimelineItem?.destroy()
+            specialModeEventTimelineItem = null
+            specialModeEventTimelineItem = eventId?.let { inner.getEventTimelineItemByEventId(it.value) }
+        }
+    }
+
+    override suspend fun replyMessage(eventId: EventId, body: String, htmlBody: String?, mentions: List<Mention>): Result<Unit> = withContext(dispatcher) {
+        runCatching {
+            val inReplyTo = specialModeEventTimelineItem ?: inner.getEventTimelineItemByEventId(eventId.value)
+            inReplyTo.use { eventTimelineItem ->
+                inner.sendReply(messageEventContentFromParts(body, htmlBody).withMentions(mentions.map()), eventTimelineItem)
+            }
+            specialModeEventTimelineItem = null
+        }
+    }
+
+    override suspend fun sendImage(
+        file: File,
+        thumbnailFile: File?,
+        imageInfo: ImageInfo,
+        body: String?,
+        formattedBody: String?,
+        progressCallback: ProgressCallback?,
+    ): Result<MediaUploadHandler> {
+        return sendAttachment(listOfNotNull(file, thumbnailFile)) {
+            inner.sendImage(
+                url = file.path,
+                thumbnailUrl = thumbnailFile?.path,
+                imageInfo = imageInfo.map(),
+                caption = body,
+                formattedCaption = formattedBody?.let {
+                    FormattedBody(body = it, format = MessageFormat.Html)
+                },
+                progressWatcher = progressCallback?.toProgressWatcher()
+            )
+        }
+    }
+
+    override suspend fun sendVideo(
+        file: File,
+        thumbnailFile: File?,
+        videoInfo: VideoInfo,
+        body: String?,
+        formattedBody: String?,
+        progressCallback: ProgressCallback?,
+    ): Result<MediaUploadHandler> {
+        return sendAttachment(listOfNotNull(file, thumbnailFile)) {
+            inner.sendVideo(
+                url = file.path,
+                thumbnailUrl = thumbnailFile?.path,
+                videoInfo = videoInfo.map(),
+                caption = body,
+                formattedCaption = formattedBody?.let {
+                    FormattedBody(body = it, format = MessageFormat.Html)
+                },
+                progressWatcher = progressCallback?.toProgressWatcher()
+            )
+        }
+    }
+
+    override suspend fun sendAudio(file: File, audioInfo: AudioInfo, progressCallback: ProgressCallback?): Result<MediaUploadHandler> {
+        return sendAttachment(listOf(file)) {
+            inner.sendAudio(
+                url = file.path,
+                audioInfo = audioInfo.map(),
+                // Maybe allow a caption in the future?
+                caption = null,
+                formattedCaption = null,
+                progressWatcher = progressCallback?.toProgressWatcher()
+            )
+        }
+    }
+
+    override suspend fun sendFile(file: File, fileInfo: FileInfo, progressCallback: ProgressCallback?): Result<MediaUploadHandler> {
+        return sendAttachment(listOf(file)) {
+            inner.sendFile(file.path, fileInfo.map(), progressCallback?.toProgressWatcher())
+        }
+    }
+
+    override suspend fun toggleReaction(emoji: String, eventId: EventId): Result<Unit> = withContext(dispatcher) {
+        runCatching {
+            inner.toggleReaction(key = emoji, eventId = eventId.value)
+        }
+    }
+
+    override suspend fun forwardEvent(eventId: EventId, roomIds: List<RoomId>): Result<Unit> = withContext(dispatcher) {
+        runCatching {
+            roomContentForwarder.forward(fromTimeline = inner, eventId = eventId, toRoomIds = roomIds)
+        }.onFailure {
+            Timber.e(it)
+        }
+    }
+
+    override suspend fun retrySendMessage(transactionId: TransactionId): Result<Unit> = withContext(dispatcher) {
+        runCatching {
+            inner.retrySend(transactionId.value)
+        }
+    }
+
+    override suspend fun cancelSend(transactionId: TransactionId): Result<Unit> = withContext(dispatcher) {
+        runCatching {
+            inner.cancelSend(transactionId.value)
+        }
+    }
+
+    override suspend fun sendLocation(
+        body: String,
+        geoUri: String,
+        description: String?,
+        zoomLevel: Int?,
+        assetType: AssetType?,
+    ): Result<Unit> = withContext(dispatcher) {
+        runCatching {
+            inner.sendLocation(
+                body = body,
+                geoUri = geoUri,
+                description = description,
+                zoomLevel = zoomLevel?.toUByte(),
+                assetType = assetType?.toInner(),
+            )
+        }
+    }
+
+    override suspend fun createPoll(
+        question: String,
+        answers: List<String>,
+        maxSelections: Int,
+        pollKind: PollKind,
+    ): Result<Unit> = withContext(dispatcher) {
+        runCatching {
+            inner.createPoll(
+                question = question,
+                answers = answers,
+                maxSelections = maxSelections.toUByte(),
+                pollKind = pollKind.toInner(),
+            )
+        }
+    }
+
+    override suspend fun editPoll(
+        pollStartId: EventId,
+        question: String,
+        answers: List<String>,
+        maxSelections: Int,
+        pollKind: PollKind,
+    ): Result<Unit> = withContext(dispatcher) {
+        runCatching {
+            val pollStartEvent =
+                inner.getEventTimelineItemByEventId(
+                    eventId = pollStartId.value
+                )
+            pollStartEvent.use {
+                inner.editPoll(
+                    question = question,
+                    answers = answers,
+                    maxSelections = maxSelections.toUByte(),
+                    pollKind = pollKind.toInner(),
+                    editItem = pollStartEvent,
+                )
+            }
+        }
+    }
+
+    override suspend fun sendPollResponse(
+        pollStartId: EventId,
+        answers: List<String>
+    ): Result<Unit> = withContext(dispatcher) {
+        runCatching {
+            inner.sendPollResponse(
+                pollStartId = pollStartId.value,
+                answers = answers,
+            )
+        }
+    }
+
+    override suspend fun endPoll(
+        pollStartId: EventId,
+        text: String
+    ): Result<Unit> = withContext(dispatcher) {
+        runCatching {
+            inner.endPoll(
+                pollStartId = pollStartId.value,
+                text = text,
+            )
+        }
+    }
+
+    override suspend fun sendVoiceMessage(
+        file: File,
+        audioInfo: AudioInfo,
+        waveform: List<Float>,
+        progressCallback: ProgressCallback?,
+    ): Result<MediaUploadHandler> = sendAttachment(listOf(file)) {
+        inner.sendVoiceMessage(
+            url = file.path,
+            audioInfo = audioInfo.map(),
+            waveform = waveform.toMSC3246range(),
+            // Maybe allow a caption in the future?
+            caption = null,
+            formattedCaption = null,
+            progressWatcher = progressCallback?.toProgressWatcher(),
+        )
+    }
+
+    private fun messageEventContentFromParts(body: String, htmlBody: String?): RoomMessageEventContentWithoutRelation =
+        if (htmlBody != null) {
+            messageEventContentFromHtml(body, htmlBody)
+        } else {
+            messageEventContentFromMarkdown(body)
+        }
+
+    private fun sendAttachment(files: List<File>, handle: () -> SendAttachmentJoinHandle): Result<MediaUploadHandler> {
+        return runCatching {
+            MediaUploadHandlerImpl(files, handle())
+        }
+    }
+
+    private fun fetchDetailsForEvent(eventId: EventId): Result<Unit> {
+        return runCatching {
+            inner.getEventTimelineItemByEventId(eventId.value)
+        }
     }
 }
