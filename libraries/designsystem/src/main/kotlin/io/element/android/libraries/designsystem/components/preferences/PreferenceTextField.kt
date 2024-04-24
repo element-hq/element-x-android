@@ -98,11 +98,11 @@ private fun TextFieldDialog(
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
 ) {
     val focusRequester = remember { FocusRequester() }
-
     var textFieldContents by rememberSaveable(stateSaver = TextFieldValue.Saver) {
         mutableStateOf(TextFieldValue(value.orEmpty(), selection = TextRange(value.orEmpty().length)))
     }
     var error by rememberSaveable { mutableStateOf<String?>(null) }
+    var canRequestFocus by rememberSaveable { mutableStateOf(false) }
     val canSubmit by remember { derivedStateOf { validation(textFieldContents.text) } }
     ListDialog(
         title = title,
@@ -128,10 +128,11 @@ private fun TextFieldDialog(
                 maxLines = maxLines,
                 modifier = Modifier.focusRequester(focusRequester),
             )
+            canRequestFocus = true
         }
     }
 
-    if (autoSelectOnDisplay) {
+    if (autoSelectOnDisplay && canRequestFocus) {
         LaunchedEffect(Unit) {
             focusRequester.requestFocus()
         }
