@@ -33,6 +33,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.designsystem.components.avatar.Avatar
@@ -43,12 +44,6 @@ import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Surface
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.matrix.api.core.RoomAlias
-import io.element.android.libraries.matrix.api.core.RoomId
-import io.element.android.libraries.matrix.api.room.CurrentUserMembership
-import io.element.android.libraries.matrix.api.room.RoomMember
-import io.element.android.libraries.matrix.api.room.RoomNotificationMode
-import io.element.android.libraries.matrix.api.room.message.RoomMessage
 import io.element.android.libraries.matrix.api.roomlist.RoomSummaryDetails
 import io.element.android.libraries.ui.strings.CommonStrings
 
@@ -97,45 +92,11 @@ fun SelectedRoom(
 
 @PreviewsDayNight
 @Composable
-internal fun SelectedRoomPreview() = ElementPreview {
+internal fun SelectedRoomPreview(
+    @PreviewParameter(RoomSummaryDetailsProvider::class) roomSummaryDetails: RoomSummaryDetails
+) = ElementPreview {
     SelectedRoom(
-        roomSummary = aRoomSummaryDetails(),
+        roomSummary = roomSummaryDetails,
         onRoomRemoved = {},
     )
 }
-
-fun aRoomSummaryDetails(
-    roomId: RoomId = RoomId("!room:domain"),
-    name: String = "roomName",
-    canonicalAlias: RoomAlias? = null,
-    isDirect: Boolean = true,
-    avatarUrl: String? = null,
-    lastMessage: RoomMessage? = null,
-    inviter: RoomMember? = null,
-    notificationMode: RoomNotificationMode? = null,
-    hasRoomCall: Boolean = false,
-    isDm: Boolean = false,
-    numUnreadMentions: Int = 0,
-    numUnreadMessages: Int = 0,
-    numUnreadNotifications: Int = 0,
-    isMarkedUnread: Boolean = false,
-    isFavorite: Boolean = false,
-    currentUserMembership: CurrentUserMembership = CurrentUserMembership.JOINED,
-) = RoomSummaryDetails(
-    roomId = roomId,
-    name = name,
-    canonicalAlias = canonicalAlias,
-    isDirect = isDirect,
-    avatarUrl = avatarUrl,
-    lastMessage = lastMessage,
-    inviter = inviter,
-    userDefinedNotificationMode = notificationMode,
-    hasRoomCall = hasRoomCall,
-    isDm = isDm,
-    numUnreadMentions = numUnreadMentions,
-    numUnreadMessages = numUnreadMessages,
-    numUnreadNotifications = numUnreadNotifications,
-    isMarkedUnread = isMarkedUnread,
-    isFavorite = isFavorite,
-    currentUserMembership = currentUserMembership,
-)
