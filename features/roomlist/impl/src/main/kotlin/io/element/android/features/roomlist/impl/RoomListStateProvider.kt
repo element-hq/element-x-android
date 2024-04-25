@@ -52,7 +52,6 @@ open class RoomListStateProvider : PreviewParameterProvider<RoomListState> {
             aRoomListState(contentState = aSkeletonContentState()),
             aRoomListState(matrixUser = MatrixUser(userId = UserId("@id:domain")), contentState = aMigrationContentState()),
             aRoomListState(searchState = aRoomListSearchState(isSearchActive = true, query = "Test")),
-            aRoomListState(filtersState = aRoomListFiltersState(isFeatureEnabled = true)),
         )
 }
 
@@ -64,7 +63,7 @@ internal fun aRoomListState(
     contextMenu: RoomListState.ContextMenu = RoomListState.ContextMenu.Hidden,
     leaveRoomState: LeaveRoomState = aLeaveRoomState(),
     searchState: RoomListSearchState = aRoomListSearchState(),
-    filtersState: RoomListFiltersState = aRoomListFiltersState(isFeatureEnabled = false),
+    filtersState: RoomListFiltersState = aRoomListFiltersState(),
     contentState: RoomListContentState = aRoomsContentState(),
     acceptDeclineInviteState: AcceptDeclineInviteState = anAcceptDeclineInviteState(),
     eventSink: (RoomListEvents) -> Unit = {}

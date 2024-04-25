@@ -41,7 +41,7 @@ data class RoomListState(
     val acceptDeclineInviteState: AcceptDeclineInviteState,
     val eventSink: (RoomListEvents) -> Unit,
 ) {
-    val displayFilters = filtersState.isFeatureEnabled && contentState is RoomListContentState.Rooms
+    val displayFilters = contentState is RoomListContentState.Rooms
     val displayActions = contentState !is RoomListContentState.Migration
 
     sealed interface ContextMenu {
