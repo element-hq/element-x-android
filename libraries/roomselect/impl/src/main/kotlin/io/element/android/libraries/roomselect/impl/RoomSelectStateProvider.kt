@@ -69,6 +69,7 @@ private fun aForwardMessagesRoomList() = persistentListOf(
         canonicalAlias = RoomAlias("#alias:example.org"),
     ),
     aRoomSummaryDetails(
+        roomId = RoomId("!room3:domain"),
         name = null,
     ),
 )
