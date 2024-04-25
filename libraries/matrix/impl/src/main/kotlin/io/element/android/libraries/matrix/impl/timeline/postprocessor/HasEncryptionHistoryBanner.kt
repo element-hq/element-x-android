@@ -19,7 +19,7 @@ package io.element.android.libraries.matrix.impl.timeline.postprocessor
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.item.virtual.VirtualTimelineItem
 
-fun List<MatrixTimelineItem>.hasEncryptionHistoryBanner(): Boolean {
+internal fun List<MatrixTimelineItem>.hasEncryptionHistoryBanner(): Boolean {
     val firstItem = firstOrNull()
     return firstItem is MatrixTimelineItem.Virtual &&
         firstItem.virtual is VirtualTimelineItem.EncryptedHistoryBanner

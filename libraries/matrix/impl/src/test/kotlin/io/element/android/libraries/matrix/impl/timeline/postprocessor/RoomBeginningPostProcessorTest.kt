@@ -22,13 +22,14 @@ import io.element.android.libraries.matrix.api.timeline.item.event.MembershipCha
 import io.element.android.libraries.matrix.api.timeline.item.event.OtherState
 import io.element.android.libraries.matrix.api.timeline.item.event.RoomMembershipContent
 import io.element.android.libraries.matrix.api.timeline.item.event.StateContent
+import io.element.android.libraries.matrix.api.timeline.item.virtual.VirtualTimelineItem
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.A_USER_ID_2
 import io.element.android.libraries.matrix.test.timeline.aMessageContent
 import io.element.android.libraries.matrix.test.timeline.anEventTimelineItem
 import org.junit.Test
 
-class DmBeginningTimelineProcessorTest {
+class RoomBeginningPostProcessorTest {
     @Test
     fun `processor removes room creation event and self-join event from DM timeline`() {
         val timelineItems = listOf(
@@ -36,7 +37,7 @@ class DmBeginningTimelineProcessorTest {
             MatrixTimelineItem.Event("m.room.member", anEventTimelineItem(content = RoomMembershipContent(A_USER_ID, MembershipChange.JOINED))),
         )
         val processor = RoomBeginningPostProcessor()
-        val processedItems = processor.process(timelineItems, isDm = true, hasMoreToLoadBackwards = true)
+        val processedItems = processor.process(timelineItems, isDm = true, hasMoreToLoadBackwards = false)
         assertThat(processedItems).isEmpty()
     }
 
@@ -53,18 +54,30 @@ class DmBeginningTimelineProcessorTest {
             MatrixTimelineItem.Event("m.room.message", anEventTimelineItem(content = aMessageContent("hi"))),
         )
         val processor = RoomBeginningPostProcessor()
-        val processedItems = processor.process(timelineItems, isDm = true, hasMoreToLoadBackwards = true)
+        val processedItems = processor.process(timelineItems, isDm = true, hasMoreToLoadBackwards = false)
         assertThat(processedItems).isEqualTo(expected)
     }
 
     @Test
-    fun `processor won't remove items if it's not a DM`() {
+    fun `processor will add beginning of room item if it's not a DM`() {
         val timelineItems = listOf(
             MatrixTimelineItem.Event("m.room.create", anEventTimelineItem(sender = A_USER_ID, content = StateContent("", OtherState.RoomCreate))),
             MatrixTimelineItem.Event("m.room.member", anEventTimelineItem(content = RoomMembershipContent(A_USER_ID, MembershipChange.JOINED))),
         )
         val processor = RoomBeginningPostProcessor()
-        val processedItems = processor.process(timelineItems, isDm = false, hasMoreToLoadBackwards = true)
+        val processedItems = processor.process(timelineItems, isDm = false, hasMoreToLoadBackwards = false)
+        assertThat(processedItems).isEqualTo(
+            listOf(processor.createRoomBeginningItem()) + timelineItems
+        )
+    }
+
+    @Test
+    fun `processor will not add beginning of room item if it's not a DM and EncryptedHistoryBanner item is found`() {
+        val timelineItems = listOf(
+            MatrixTimelineItem.Virtual("EncryptedHistoryBanner", VirtualTimelineItem.EncryptedHistoryBanner),
+        )
+        val processor = RoomBeginningPostProcessor()
+        val processedItems = processor.process(timelineItems, isDm = false, hasMoreToLoadBackwards = false)
         assertThat(processedItems).isEqualTo(timelineItems)
     }
 
@@ -75,7 +88,7 @@ class DmBeginningTimelineProcessorTest {
             MatrixTimelineItem.Event("m.room.member", anEventTimelineItem(content = RoomMembershipContent(A_USER_ID, MembershipChange.JOINED))),
         )
         val processor = RoomBeginningPostProcessor()
-        val processedItems = processor.process(timelineItems, isDm = true, hasMoreToLoadBackwards = false)
+        val processedItems = processor.process(timelineItems, isDm = true, hasMoreToLoadBackwards = true)
         assertThat(processedItems).isEqualTo(timelineItems)
     }
 
@@ -85,7 +98,7 @@ class DmBeginningTimelineProcessorTest {
             MatrixTimelineItem.Event("m.room.member", anEventTimelineItem(content = RoomMembershipContent(A_USER_ID, MembershipChange.JOINED))),
         )
         val processor = RoomBeginningPostProcessor()
-        val processedItems = processor.process(timelineItems, isDm = true, hasMoreToLoadBackwards = false)
+        val processedItems = processor.process(timelineItems, isDm = true, hasMoreToLoadBackwards = true)
         assertThat(processedItems).isEqualTo(timelineItems)
     }
 
@@ -96,7 +109,7 @@ class DmBeginningTimelineProcessorTest {
             MatrixTimelineItem.Event("m.room.member", anEventTimelineItem(content = RoomMembershipContent(A_USER_ID_2, MembershipChange.JOINED))),
         )
         val processor = RoomBeginningPostProcessor()
-        val processedItems = processor.process(timelineItems, isDm = true, hasMoreToLoadBackwards = false)
+        val processedItems = processor.process(timelineItems, isDm = true, hasMoreToLoadBackwards = true)
         assertThat(processedItems).isEqualTo(timelineItems)
     }
 }

@@ -21,6 +21,7 @@ import io.element.android.libraries.matrix.api.poll.PollKind
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.TimelineProvider
+import io.element.android.libraries.matrix.api.timeline.getActiveTimeline
 import io.element.android.libraries.matrix.api.timeline.item.event.PollContent
 import kotlinx.coroutines.flow.first
 import javax.inject.Inject

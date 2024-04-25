@@ -32,6 +32,7 @@ import io.element.android.features.poll.test.actions.FakeEndPollAction
 import io.element.android.features.poll.test.actions.FakeSendPollResponseAction
 import io.element.android.libraries.dateformatter.test.FakeDaySeparatorFormatter
 import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.timeline.LiveTimelineProvider
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.AN_EVENT_ID_2
@@ -174,11 +175,11 @@ class PollHistoryPresenterTest {
         ),
     ): PollHistoryPresenter {
         return PollHistoryPresenter(
-            room = room,
             appCoroutineScope = appCoroutineScope,
             sendPollResponseAction = sendPollResponseAction,
             endPollAction = endPollAction,
             pollHistoryItemFactory = pollHistoryItemFactory,
+            timelineProvider = LiveTimelineProvider(room),
         )
     }
 }

@@ -34,22 +34,23 @@ import io.element.android.features.poll.impl.history.model.PollHistoryItemsFacto
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.timeline.Timeline
+import io.element.android.libraries.matrix.api.timeline.TimelineProvider
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class PollHistoryPresenter @Inject constructor(
-    private val room: MatrixRoom,
     private val appCoroutineScope: CoroutineScope,
     private val sendPollResponseAction: SendPollResponseAction,
     private val endPollAction: EndPollAction,
     private val pollHistoryItemFactory: PollHistoryItemsFactory,
+    private val timelineProvider: TimelineProvider,
 ) : Presenter<PollHistoryState> {
     @Composable
     override fun present(): PollHistoryState {
-        // TODO use room.rememberPollHistory() when working properly?
-        val timeline = room.liveTimeline
+        val timeline by timelineProvider.activeTimelineFlow().collectAsState()
         val paginationState by timeline.paginationStatus(Timeline.PaginationDirection.BACKWARDS).collectAsState()
         val pollHistoryItemsFlow = remember {
             timeline.timelineItems.map { items ->

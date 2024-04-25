@@ -63,6 +63,7 @@ import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContentProvider
 import io.element.android.features.messages.impl.typing.TypingNotificationState
+import io.element.android.features.messages.impl.typing.TypingNotificationView
 import io.element.android.features.messages.impl.typing.aTypingNotificationState
 import io.element.android.libraries.designsystem.components.ProgressDialog
 import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
@@ -125,12 +126,12 @@ fun TimelineView(
                 reverseLayout = useReverseLayout,
                 contentPadding = PaddingValues(vertical = 8.dp),
             ) {
-                /*
-                item(key = UUID.randomUUID()) {
-                    TypingNotificationView(state = typingNotificationState)
-                }
 
-                 */
+                if(state.isLive) {
+                    item {
+                        TypingNotificationView(state = typingNotificationState)
+                    }
+                }
                 items(
                     items = state.timelineItems,
                     contentType = { timelineItem -> timelineItem.contentType() },
@@ -165,7 +166,7 @@ fun TimelineView(
             )
 
             TimelineScrollHelper(
-                isTimelineEmpty = state.timelineItems.isEmpty(),
+                isTimelineEmpty = state.isTimelineEmpty,
                 lazyListState = lazyListState,
                 forceJumpToBottomVisibility = forceJumpToBottomVisibility,
                 newEventState = state.newEventState,
@@ -185,10 +186,6 @@ private fun FocusRequestStateView(
     onClearFocusRequestState: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    BackHandler(enabled = focusRequestState is FocusRequestState.Fetching) {
-        onClearFocusRequestState()
-    }
-
     when (focusRequestState) {
         is FocusRequestState.Failure -> {
             ErrorDialog(
@@ -198,7 +195,7 @@ private fun FocusRequestStateView(
             )
         }
         FocusRequestState.Fetching -> {
-            ProgressDialog(modifier = modifier)
+            ProgressDialog(modifier = modifier, onDismissRequest = onClearFocusRequestState)
         }
         is FocusRequestState.Cached, FocusRequestState.None -> Unit
     }
@@ -254,7 +251,6 @@ private fun BoxScope.TimelineScrollHelper(
     }
 
     LaunchedEffect(canAutoScroll, newEventState) {
-        Timber.d("TimelineScrollHelper - canAutoScroll: $canAutoScroll, newEventState: $newEventState")
         val shouldScrollToBottom = isScrollFinished && (canAutoScroll || newEventState == NewEventState.FromMe)
         if (shouldScrollToBottom) {
             scrollToBottom()

@@ -19,6 +19,11 @@ package io.element.android.libraries.matrix.api.timeline
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.room.MatrixRoom
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flowOf
 import javax.inject.Inject
 
 /**
@@ -26,8 +31,10 @@ import javax.inject.Inject
  * It could be the current room timeline, or a timeline for a specific event.
  */
 interface TimelineProvider {
-    suspend fun getActiveTimeline(): Timeline
+    fun activeTimelineFlow(): StateFlow<Timeline>
 }
+
+suspend fun TimelineProvider.getActiveTimeline(): Timeline = activeTimelineFlow().first()
 
 /**
  * Default implementation of [TimelineProvider] that provides the live timeline of a room.
@@ -36,6 +43,6 @@ interface TimelineProvider {
 class LiveTimelineProvider @Inject constructor(
     private val room: MatrixRoom,
 ) : TimelineProvider {
-    override suspend fun getActiveTimeline(): Timeline = room.liveTimeline
+    override fun activeTimelineFlow(): StateFlow<Timeline> = MutableStateFlow(room.liveTimeline)
 }
 
