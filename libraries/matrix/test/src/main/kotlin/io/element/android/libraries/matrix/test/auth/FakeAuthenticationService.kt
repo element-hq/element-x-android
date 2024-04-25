@@ -20,9 +20,13 @@ import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import io.element.android.libraries.matrix.api.auth.MatrixHomeServerDetails
 import io.element.android.libraries.matrix.api.auth.OidcDetails
+import io.element.android.libraries.matrix.api.auth.qrlogin.MatrixQrCodeLoginData
+import io.element.android.libraries.matrix.api.auth.qrlogin.QrCodeLoginStep
 import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.sessionstorage.api.LoggedInState
+import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.simulateLongTask
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -31,7 +35,9 @@ import kotlinx.coroutines.flow.flowOf
 
 val A_OIDC_DATA = OidcDetails(url = "a-url")
 
-class FakeAuthenticationService : MatrixAuthenticationService {
+class FakeAuthenticationService(
+    var loginWithQrCodeResult: () -> Result<SessionId> = lambdaRecorder<Result<SessionId>> { Result.success(A_SESSION_ID) },
+) : MatrixAuthenticationService {
     private val homeserver = MutableStateFlow<MatrixHomeServerDetails?>(null)
     private var oidcError: Throwable? = null
     private var oidcCancelError: Throwable? = null
@@ -81,6 +87,10 @@ class FakeAuthenticationService : MatrixAuthenticationService {
 
     override suspend fun loginWithOidc(callbackUrl: String): Result<SessionId> = simulateLongTask {
         loginError?.let { Result.failure(it) } ?: Result.success(A_USER_ID)
+    }
+
+    override suspend fun loginWithQrCode(qrCodeData: MatrixQrCodeLoginData, progress: (QrCodeLoginStep) -> Unit): Result<SessionId> = simulateLongTask {
+        loginWithQrCodeResult()
     }
 
     fun givenOidcError(throwable: Throwable?) {
