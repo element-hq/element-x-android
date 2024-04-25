@@ -51,7 +51,7 @@ fun TimelineItemVirtualRow(
             TimelineItemRoomBeginningModel -> TimelineItemRoomBeginningView(roomName = timelineRoomInfo.name)
             is TimelineItemLoadingIndicatorModel -> {
                 TimelineLoadingMoreIndicator()
-                LaunchedEffect(key1 = virtual.model.timestamp) {
+                LaunchedEffect(virtual.model.timestamp) {
                     eventSink(TimelineEvents.LoadMore(virtual.model.direction))
                 }
             }

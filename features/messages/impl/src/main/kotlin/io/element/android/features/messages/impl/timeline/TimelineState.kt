@@ -40,6 +40,7 @@ sealed interface FocusRequestState {
     data object None : FocusRequestState
     data class Cached(val index: Int): FocusRequestState
     data object Fetching : FocusRequestState
+    data object Fetched: FocusRequestState
     data class Failure(val throwable: Throwable) : FocusRequestState
 }
 

@@ -195,7 +195,7 @@ private fun FocusRequestStateView(
         FocusRequestState.Fetching -> {
             ProgressDialog(modifier = modifier, onDismissRequest = onClearFocusRequestState)
         }
-        is FocusRequestState.Cached, FocusRequestState.None -> Unit
+        else -> Unit
     }
 }
 
@@ -237,7 +237,7 @@ private fun BoxScope.TimelineScrollHelper(
         }
     }
 
-    LaunchedEffect(key1 = focusRequestState) {
+    LaunchedEffect(focusRequestState) {
         if (focusRequestState is FocusRequestState.Cached) {
             if (abs(lazyListState.firstVisibleItemIndex - focusRequestState.index) < 10) {
                 lazyListState.animateScrollToItem(focusRequestState.index)

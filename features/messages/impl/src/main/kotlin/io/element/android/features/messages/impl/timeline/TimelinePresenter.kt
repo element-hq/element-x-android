@@ -146,7 +146,7 @@ class TimelinePresenter @AssistedInject constructor(
                         timelineController.focusOnEvent(event.eventId)
                             .fold(
                                 onSuccess = {
-                                    focusRequestState.value = FocusRequestState.None
+                                    focusRequestState.value = FocusRequestState.Fetched
                                 },
                                 onFailure = {
                                     focusRequestState.value = FocusRequestState.Failure(it)
@@ -165,13 +165,18 @@ class TimelinePresenter @AssistedInject constructor(
             }
         }
 
-        // Makes sure to get back to live when there is nothing more to load forwards
-        LaunchedEffect(isLive) {
-
-        }
-
         LaunchedEffect(timelineItems.size) {
             computeNewItemState(timelineItems, prevMostRecentItemId, newEventState)
+        }
+
+        LaunchedEffect(timelineItems.size, focusRequestState.value, focusedEventId.value) {
+            val currentFocusedEventId = focusedEventId.value
+            if (focusRequestState.value is FocusRequestState.Fetched && currentFocusedEventId != null) {
+                if (timelineItemIndexer.isKnown(currentFocusedEventId)) {
+                    val index = timelineItemIndexer.indexOf(currentFocusedEventId)
+                    focusRequestState.value = FocusRequestState.Cached(index)
+                }
+            }
         }
 
         LaunchedEffect(Unit) {
