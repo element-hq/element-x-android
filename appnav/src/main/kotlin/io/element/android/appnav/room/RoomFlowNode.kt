@@ -17,10 +17,9 @@
 package io.element.android.appnav.room
 
 import android.os.Parcelable
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.lifecycleScope
 import com.bumble.appyx.core.modality.BuildContext
@@ -36,7 +35,11 @@ import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.appnav.room.joined.JoinedRoomFlowNode
 import io.element.android.appnav.room.joined.JoinedRoomLoadedFlowNode
+import io.element.android.appnav.room.joined.LoadingRoomNodeView
+import io.element.android.appnav.room.joined.LoadingRoomState
 import io.element.android.features.joinroom.api.JoinRoomEntryPoint
+import io.element.android.features.networkmonitor.api.NetworkMonitor
+import io.element.android.features.networkmonitor.api.NetworkStatus
 import io.element.android.features.roomaliasesolver.api.RoomAliasResolverEntryPoint
 import io.element.android.features.roomdirectory.api.RoomDescription
 import io.element.android.libraries.architecture.BackstackView
@@ -44,7 +47,6 @@ import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.architecture.inputs
-import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomAlias
@@ -69,6 +71,7 @@ class RoomFlowNode @AssistedInject constructor(
     private val roomMembershipObserver: RoomMembershipObserver,
     private val joinRoomEntryPoint: JoinRoomEntryPoint,
     private val roomAliasResolverEntryPoint: RoomAliasResolverEntryPoint,
+    private val networkMonitor: NetworkMonitor,
 ) : BaseFlowNode<RoomFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = NavTarget.Loading,
@@ -172,10 +175,14 @@ class RoomFlowNode @AssistedInject constructor(
         }
     }
 
-    private fun loadingNode(buildContext: BuildContext) = node(buildContext) {
-        Box(modifier = it.fillMaxSize(), contentAlignment = Alignment.Center) {
-            CircularProgressIndicator()
-        }
+    private fun loadingNode(buildContext: BuildContext) = node(buildContext) { modifier ->
+        val networkStatus by networkMonitor.connectivity.collectAsState()
+        LoadingRoomNodeView(
+            state = LoadingRoomState.Loading,
+            hasNetworkConnection = networkStatus == NetworkStatus.Online,
+            onBackClicked = { navigateUp() },
+            modifier = modifier,
+        )
     }
 
     @Composable

@@ -346,6 +346,12 @@ class DefaultBugReporter @Inject constructor(
         }
     }
 
+    suspend fun deleteAllFiles() {
+        withContext(coroutineDispatchers.io) {
+            getLogFiles().forEach { it.safeDelete() }
+        }
+    }
+
     override fun setCurrentTracingFilter(tracingFilter: String) {
         currentTracingFilter = tracingFilter
     }
@@ -374,7 +380,6 @@ class DefaultBugReporter @Inject constructor(
 
     /**
      * Delete all the log files except the most recent one.
-     *
      */
     private fun List<File>.deleteAllExceptMostRecent() {
         if (size > 1) {
