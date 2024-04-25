@@ -45,12 +45,11 @@ import io.element.android.libraries.matrix.impl.timeline.item.event.EventMessage
 import io.element.android.libraries.matrix.impl.timeline.item.event.EventTimelineItemMapper
 import io.element.android.libraries.matrix.impl.timeline.item.event.TimelineEventContentMapper
 import io.element.android.libraries.matrix.impl.timeline.item.virtual.VirtualTimelineItemMapper
-import io.element.android.libraries.matrix.impl.timeline.postprocessor.InvisibleIndicatorPostProcessor
+import io.element.android.libraries.matrix.impl.timeline.postprocessor.LastForwardIndicatorsPostProcessor
 import io.element.android.libraries.matrix.impl.timeline.postprocessor.LoadingIndicatorsPostProcessor
 import io.element.android.libraries.matrix.impl.timeline.postprocessor.RoomBeginningPostProcessor
 import io.element.android.libraries.matrix.impl.timeline.postprocessor.TimelineEncryptedHistoryPostProcessor
 import io.element.android.services.toolbox.api.systemclock.SystemClock
-import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
@@ -116,7 +115,7 @@ class RustTimeline(
 
     private val roomBeginningPostProcessor = RoomBeginningPostProcessor()
     private val loadingIndicatorsPostProcessor = LoadingIndicatorsPostProcessor(systemClock)
-    private val invisibleIndicatorPostProcessor = InvisibleIndicatorPostProcessor(isLive)
+    private val lastForwardIndicatorsPostProcessor = LastForwardIndicatorsPostProcessor(isLive)
 
     private val timelineItemFactory = MatrixTimelineItemMapper(
         fetchDetailsForEvent = this::fetchDetailsForEvent,
@@ -225,7 +224,8 @@ class RustTimeline(
                     hasMoreToLoadBackwards = hasMoreToLoadBackward
                 )
             }.let { items -> loadingIndicatorsPostProcessor.process(items, hasMoreToLoadBackward, hasMoreToLoadForward) }
-            .let { items -> invisibleIndicatorPostProcessor.process(items) }
+            // Keep lastForwardIndicatorsPostProcessor last
+            .let { items -> lastForwardIndicatorsPostProcessor.process(items) }
 
     }
 

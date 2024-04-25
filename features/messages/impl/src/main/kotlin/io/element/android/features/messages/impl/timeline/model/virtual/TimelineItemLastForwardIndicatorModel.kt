@@ -16,6 +16,6 @@
 
 package io.element.android.features.messages.impl.timeline.model.virtual
 
-data object TimelineItemInvisibleIndicatorModel : TimelineItemVirtualModel {
-    override val type: String = "TimelineItemInvisibleIndicatorModel"
+data object TimelineItemLastForwardIndicatorModel: TimelineItemVirtualModel {
+    override val type: String = "TimelineItemLastForwardIndicatorModel"
 }

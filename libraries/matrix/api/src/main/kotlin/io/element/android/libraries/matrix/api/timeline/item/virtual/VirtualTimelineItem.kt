@@ -29,7 +29,7 @@ sealed interface VirtualTimelineItem {
 
     data object RoomBeginning: VirtualTimelineItem
 
-    data object LatestKnownEventIndicator: VirtualTimelineItem
+    data object LastForwardIndicator: VirtualTimelineItem
 
     data class LoadingIndicator(
         val direction: Timeline.PaginationDirection,
