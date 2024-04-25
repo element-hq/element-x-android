@@ -95,7 +95,7 @@ class VerifySelfSessionPresenterTests {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            assertThat(awaitItem().verificationFlowStep).isEqualTo(VerificationStep.Initial(true))
+            assertThat(awaitItem().verificationFlowStep).isEqualTo(VerificationStep.Initial(canEnterRecoveryKey = true, isLastDevice = true))
         }
     }
 
