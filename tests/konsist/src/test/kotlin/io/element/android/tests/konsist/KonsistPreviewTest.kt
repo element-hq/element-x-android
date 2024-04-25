@@ -101,7 +101,6 @@ class KonsistPreviewTest {
                 "PollContentViewEndedPreview",
                 "PollContentViewUndisclosedPreview",
                 "ReadReceiptBottomSheetPreview",
-                "RoomListModalBottomSheetContentForDmPreview",
                 "RoomMemberListViewBannedPreview",
                 "SasEmojisPreview",
                 "SecureBackupSetupViewChangePreview",

@@ -41,6 +41,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -168,7 +169,7 @@ private fun RoomSummaryScaffoldRow(
 
 @Composable
 private fun NameAndTimestampRow(
-    name: String,
+    name: String?,
     timestamp: String?,
     isHighlighted: Boolean,
     modifier: Modifier = Modifier
@@ -181,7 +182,8 @@ private fun NameAndTimestampRow(
         Text(
             modifier = Modifier.weight(1f),
             style = ElementTheme.typography.fontBodyLgMedium,
-            text = name,
+            text = name ?: stringResource(id = CommonStrings.common_no_room_name),
+            fontStyle = FontStyle.Italic.takeIf { name == null },
             color = MaterialTheme.roomListRoomName(),
             maxLines = 1,
             overflow = TextOverflow.Ellipsis
@@ -272,7 +274,7 @@ private fun LastMessageAndIndicatorRow(
 
 @Composable
 private fun InviteNameAndIndicatorRow(
-    name: String,
+    name: String?,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -283,7 +285,8 @@ private fun InviteNameAndIndicatorRow(
         Text(
             modifier = Modifier.weight(1f),
             style = ElementTheme.typography.fontBodyLgMedium,
-            text = name,
+            text = name ?: stringResource(id = CommonStrings.common_no_room_name),
+            fontStyle = FontStyle.Italic.takeIf { name == null },
             color = MaterialTheme.roomListRoomName(),
             maxLines = 1,
             overflow = TextOverflow.Ellipsis

@@ -32,7 +32,6 @@ import io.element.android.features.roomlist.impl.search.aRoomListSearchState
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
-import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -45,6 +44,7 @@ open class RoomListStateProvider : PreviewParameterProvider<RoomListState> {
             aRoomListState(),
             aRoomListState(snackbarMessage = SnackbarMessage(CommonStrings.common_verification_complete)),
             aRoomListState(hasNetworkConnection = false),
+            aRoomListState(contextMenu = aContextMenuShown(roomName = null)),
             aRoomListState(contextMenu = aContextMenuShown(roomName = "A nice room name")),
             aRoomListState(contextMenu = aContextMenuShown(isFavorite = true)),
             aRoomListState(contentState = aRoomsContentState(securityBannerState = SecurityBannerState.RecoveryKeyConfirmation)),
@@ -109,7 +109,7 @@ internal fun aRoomListRoomSummaryList(): ImmutableList<RoomListRoomSummary> {
         ),
         aRoomListRoomSummary(
             id = "!roomId3:domain",
-             displayType = RoomSummaryDisplayType.PLACEHOLDER,
+            displayType = RoomSummaryDisplayType.PLACEHOLDER,
         ),
         aRoomListRoomSummary(
             id = "!roomId4:domain",
@@ -117,17 +117,3 @@ internal fun aRoomListRoomSummaryList(): ImmutableList<RoomListRoomSummary> {
         ),
     )
 }
-
-internal fun aContextMenuShown(
-    roomName: String = "aRoom",
-    isDm: Boolean = false,
-    hasNewContent: Boolean = false,
-    isFavorite: Boolean = false,
-) = RoomListState.ContextMenu.Shown(
-    roomId = RoomId("!aRoom:aDomain"),
-    roomName = roomName,
-    isDm = isDm,
-    markAsUnreadFeatureFlagEnabled = true,
-    hasNewContent = hasNewContent,
-    isFavorite = isFavorite,
-)

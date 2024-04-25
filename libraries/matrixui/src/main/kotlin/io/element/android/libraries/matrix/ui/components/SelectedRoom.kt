@@ -62,7 +62,8 @@ fun SelectedRoom(
         ) {
             Avatar(AvatarData(roomSummary.roomId.value, roomSummary.name, roomSummary.avatarUrl, AvatarSize.SelectedRoom))
             Text(
-                text = roomSummary.name,
+                // If name is null, we do not have space to render "No room name", so just use `#` here.
+                text = roomSummary.name ?: "#",
                 overflow = TextOverflow.Ellipsis,
                 maxLines = 1,
                 style = MaterialTheme.typography.bodyLarge,

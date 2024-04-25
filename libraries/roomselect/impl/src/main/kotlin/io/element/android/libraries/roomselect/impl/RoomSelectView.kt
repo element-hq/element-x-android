@@ -235,7 +235,8 @@ private fun RoomSummaryView(
             // Name
             Text(
                 style = ElementTheme.typography.fontBodyLgRegular,
-                text = summary.name,
+                // If name is null, we do not have space to render "No room name", so just use `#` here.
+                text = summary.name ?: "#",
                 color = ElementTheme.colors.textPrimary,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis

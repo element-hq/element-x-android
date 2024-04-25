@@ -47,7 +47,6 @@ import io.element.android.libraries.designsystem.atomic.pages.HeaderFooterPage
 import io.element.android.libraries.designsystem.background.LightGradientBackground
 import io.element.android.libraries.designsystem.components.async.AsyncActionView
 import io.element.android.libraries.designsystem.components.avatar.Avatar
-import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.button.SuperButton
@@ -196,19 +195,7 @@ private fun JoinRoomContent(
             RoomPreviewOrganism(
                 modifier = modifier,
                 avatar = {
-                    if (contentState.name == null && contentState.roomAvatarUrl == null) {
-                        // Use a Dash Avatar
-                        Avatar(
-                            AvatarData(
-                                id = contentState.roomId.value,
-                                name = "#",
-                                url = null,
-                                size = AvatarSize.RoomHeader,
-                            )
-                        )
-                    } else {
-                        Avatar(contentState.avatarData(AvatarSize.RoomHeader))
-                    }
+                    Avatar(contentState.avatarData(AvatarSize.RoomHeader))
                 },
                 title = {
                     if (contentState.name != null) {

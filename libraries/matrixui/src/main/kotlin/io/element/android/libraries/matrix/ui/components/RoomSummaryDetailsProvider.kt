@@ -29,12 +29,13 @@ open class RoomSummaryDetailsProvider : PreviewParameterProvider<RoomSummaryDeta
     override val values: Sequence<RoomSummaryDetails>
         get() = sequenceOf(
             aRoomSummaryDetails(),
+            aRoomSummaryDetails(name = null),
         )
 }
 
 fun aRoomSummaryDetails(
     roomId: RoomId = RoomId("!room:domain"),
-    name: String = "roomName",
+    name: String? = "roomName",
     canonicalAlias: RoomAlias? = null,
     isDirect: Boolean = true,
     avatarUrl: String? = null,
