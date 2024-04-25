@@ -97,7 +97,7 @@ class RoomListScreen(
         client = matrixClient,
         networkMonitor = NetworkMonitorImpl(context, Singleton.appScope),
         snackbarDispatcher = SnackbarDispatcher(),
-        leaveRoomPresenter = LeaveRoomPresenterImpl(matrixClient, RoomMembershipObserver(), coroutineDispatchers),
+        leaveRoomPresenter = LeaveRoomPresenterImpl(matrixClient, matrixClient.roomMembershipObserver(), coroutineDispatchers),
         roomListDataSource = RoomListDataSource(
             roomListService = matrixClient.roomListService,
             roomListRoomSummaryFactory = roomListRoomSummaryFactory,
