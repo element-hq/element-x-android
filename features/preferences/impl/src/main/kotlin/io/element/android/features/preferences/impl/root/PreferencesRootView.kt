@@ -81,12 +81,6 @@ fun PreferencesRootView(
             },
             user = state.myUser,
         )
-        ListItem(
-            // TODO: localazy
-            headlineContent = { Text("Link new device") },
-            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.QrCode())),
-            onClick = { TODO() }
-        )
         if (state.showSecureBackup) {
             ListItem(
                 headlineContent = { Text(stringResource(id = CommonStrings.common_chat_backup)) },
