@@ -16,6 +16,7 @@
 
 package io.element.android.features.messages.impl.timeline.components.event
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -25,6 +26,7 @@ import io.element.android.libraries.designsystem.icons.CompoundDrawables
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.matrix.api.timeline.item.event.UnableToDecryptContent
+import io.element.android.libraries.matrix.api.timeline.item.event.UtdCause
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
@@ -33,10 +35,17 @@ fun TimelineItemEncryptedView(
     onContentLayoutChanged: (ContentAvoidingLayoutData) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    var text = stringResource(id = CommonStrings.common_waiting_for_decryption_key)
+    var iconId = CompoundDrawables.ic_compound_time
+    if (content.data is UnableToDecryptContent.Data.MegolmV1AesSha2 &&
+        content.data.utdCause == UtdCause.Membership) {
+        text = stringResource(id = CommonStrings.common_unable_to_decrypt_no_access)
+        iconId = CompoundDrawables.ic_compound_block
+    }
     TimelineItemInformativeView(
-        text = stringResource(id = CommonStrings.common_waiting_for_decryption_key),
+        text = text,
         iconDescription = stringResource(id = CommonStrings.dialog_title_warning),
-        iconResourceId = CompoundDrawables.ic_compound_time,
+        iconResourceId = iconId,
         onContentLayoutChanged = onContentLayoutChanged,
         modifier = modifier
     )
@@ -45,10 +54,22 @@ fun TimelineItemEncryptedView(
 @PreviewsDayNight
 @Composable
 internal fun TimelineItemEncryptedViewPreview() = ElementPreview {
-    TimelineItemEncryptedView(
-        content = TimelineItemEncryptedContent(
-            data = UnableToDecryptContent.Data.Unknown
-        ),
-        onContentLayoutChanged = {},
-    )
+    Column {
+        TimelineItemEncryptedView(
+            content = TimelineItemEncryptedContent(
+                data = UnableToDecryptContent.Data.Unknown
+            ),
+            onContentLayoutChanged = {},
+        )
+
+        TimelineItemEncryptedView(
+            content = TimelineItemEncryptedContent(
+                data = UnableToDecryptContent.Data.MegolmV1AesSha2(
+                    sessionId = "sessionId",
+                    utdCause = UtdCause.Membership
+                )
+            ),
+            onContentLayoutChanged = {},
+        )
+    }
 }
