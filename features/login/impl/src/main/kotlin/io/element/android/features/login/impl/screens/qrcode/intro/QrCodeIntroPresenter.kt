@@ -34,7 +34,7 @@ class QrCodeIntroPresenter @Inject constructor(
     permissionsPresenterFactory: PermissionsPresenter.Factory,
 ) : Presenter<QrCodeIntroState> {
     private val cameraPermissionPresenter: PermissionsPresenter = permissionsPresenterFactory.create(Manifest.permission.CAMERA)
-    private var pendingPermissionRequest = false
+    private var pendingPermissionRequest by mutableStateOf(false)
 
     @Composable
     override fun present(): QrCodeIntroState {

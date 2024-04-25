@@ -59,10 +59,15 @@ dependencies {
     ksp(libs.showkase.processor)
 
     testImplementation(libs.test.junit)
+    testImplementation(libs.androidx.compose.ui.test.junit)
+    testImplementation(libs.androidx.test.ext.junit)
     testImplementation(libs.coroutines.test)
     testImplementation(libs.molecule.runtime)
+    testImplementation(libs.test.robolectric)
     testImplementation(libs.test.truth)
     testImplementation(libs.test.turbine)
     testImplementation(projects.libraries.matrix.test)
+    testImplementation(projects.libraries.permissions.test)
     testImplementation(projects.tests.testutils)
+    testReleaseImplementation(libs.androidx.compose.ui.test.manifest)
 }
