@@ -33,7 +33,7 @@ data class TimelineState(
     val focusRequestState: FocusRequestState,
     val eventSink: (TimelineEvents) -> Unit,
 ){
-    val isTimelineEmpty = timelineItems.none { it is TimelineItem.Event }
+    val hasAnyEvent = timelineItems.any { it is TimelineItem.Event }
 }
 
 sealed interface FocusRequestState {

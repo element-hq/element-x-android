@@ -19,7 +19,6 @@
 package io.element.android.features.messages.impl.timeline
 
 import android.view.accessibility.AccessibilityManager
-import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.tween
@@ -75,7 +74,6 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import kotlin.math.abs
 
 @Composable
@@ -166,7 +164,7 @@ fun TimelineView(
             )
 
             TimelineScrollHelper(
-                isTimelineEmpty = state.isTimelineEmpty,
+                hasAnyEvent = state.hasAnyEvent,
                 lazyListState = lazyListState,
                 forceJumpToBottomVisibility = forceJumpToBottomVisibility,
                 newEventState = state.newEventState,
@@ -203,7 +201,7 @@ private fun FocusRequestStateView(
 
 @Composable
 private fun BoxScope.TimelineScrollHelper(
-    isTimelineEmpty: Boolean,
+    hasAnyEvent: Boolean,
     lazyListState: LazyListState,
     newEventState: NewEventState,
     isLive: Boolean,
@@ -258,8 +256,8 @@ private fun BoxScope.TimelineScrollHelper(
     }
 
     val latestOnScrollFinishedAt by rememberUpdatedState(onScrollFinishedAt)
-    LaunchedEffect(isScrollFinished, isTimelineEmpty) {
-        if (isScrollFinished && !isTimelineEmpty) {
+    LaunchedEffect(isScrollFinished, hasAnyEvent) {
+        if (isScrollFinished && hasAnyEvent) {
             // Notify the parent composable about the first visible item index when scrolling finishes
             latestOnScrollFinishedAt(lazyListState.firstVisibleItemIndex)
         }
