@@ -54,6 +54,7 @@ import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.flow.Flow
@@ -173,9 +174,10 @@ class RustTimeline(
         }
     }
 
-    override suspend fun paginate(direction: Timeline.PaginationDirection): Result<Boolean> {
+    // Use NonCancellable to avoid breaking the timeline when the coroutine is cancelled. 
+    override suspend fun paginate(direction: Timeline.PaginationDirection): Result<Boolean> = withContext(NonCancellable) {
         initLatch.await()
-        return runCatching {
+        runCatching {
             if (!canPaginate(direction)) throw TimelineException.CannotPaginate
             updatePaginationStatus(direction) { it.copy(isPaginating = true) }
             when (direction) {
@@ -184,9 +186,6 @@ class RustTimeline(
             }
         }.onFailure { error ->
             updatePaginationStatus(direction) { it.copy(isPaginating = false) }
-            if (error is CancellationException) {
-                throw error
-            }
             if (error is TimelineException.CannotPaginate) {
                 Timber.d("Can't paginate $direction on room ${matrixRoom.roomId} with paginationStatus: ${backPaginationStatus.value}")
             } else {
