@@ -55,14 +55,6 @@ sealed interface ContentState {
         val roomAvatarUrl: String?,
         val joinAuthorisationStatus: JoinAuthorisationStatus,
     ) : ContentState {
-        val computedTitle = name ?: roomId.value
-
-        val computedSubtitle = when {
-            alias != null -> alias.value
-            name == null -> ""
-            else -> roomId.value
-        }
-
         val showMemberCount = numberOfMembers != null
 
         fun avatarData(size: AvatarSize): AvatarData {

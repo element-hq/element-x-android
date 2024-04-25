@@ -29,6 +29,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -177,13 +178,28 @@ private fun JoinRoomContent(
             RoomPreviewOrganism(
                 modifier = modifier,
                 avatar = {
-                    Avatar(contentState.avatarData(AvatarSize.RoomHeader))
+                    if (contentState.name == null && contentState.roomAvatarUrl == null) {
+                        PlaceholderAtom(width = AvatarSize.RoomHeader.dp, height = AvatarSize.RoomHeader.dp)
+                    } else {
+                        Avatar(contentState.avatarData(AvatarSize.RoomHeader))
+                    }
                 },
                 title = {
-                    RoomPreviewTitleAtom(contentState.computedTitle)
+                    if (contentState.name != null) {
+                        RoomPreviewTitleAtom(
+                            title = contentState.name,
+                        )
+                    } else {
+                        RoomPreviewTitleAtom(
+                            title = stringResource(id = CommonStrings.common_no_room_name),
+                            fontStyle = FontStyle.Italic
+                        )
+                    }
                 },
                 subtitle = {
-                    RoomPreviewSubtitleAtom(contentState.computedSubtitle)
+                    if (contentState.alias != null) {
+                        RoomPreviewSubtitleAtom(contentState.alias.value)
+                    }
                 },
                 description = {
                     Column(

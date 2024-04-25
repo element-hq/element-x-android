@@ -211,7 +211,7 @@ internal fun ContentState.toInviteData(): InviteData? {
     return when (this) {
         is ContentState.Loaded -> InviteData(
             roomId = roomId,
-            roomName = computedTitle,
+            roomName = name ?: roomId.value,
             isDirect = isDirect
         )
         else -> null

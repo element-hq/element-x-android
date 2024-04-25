@@ -158,6 +158,7 @@
   <string name="common_modern">"Modern"</string>
   <string name="common_mute">"Mute"</string>
   <string name="common_no_results">"No results"</string>
+  <string name="common_no_room_name">"No room name"</string>
   <string name="common_offline">"Offline"</string>
   <string name="common_or">"or"</string>
   <string name="common_password">"Password"</string>
