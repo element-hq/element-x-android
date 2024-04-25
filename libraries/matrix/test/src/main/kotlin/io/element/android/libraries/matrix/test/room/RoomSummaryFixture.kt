@@ -63,7 +63,7 @@ fun aRoomSummaryFilled(
 
 fun aRoomSummaryDetails(
     roomId: RoomId = A_ROOM_ID,
-    name: String = A_ROOM_NAME,
+    name: String? = A_ROOM_NAME,
     isDirect: Boolean = false,
     avatarUrl: String? = null,
     lastMessage: RoomMessage? = aRoomMessage(),

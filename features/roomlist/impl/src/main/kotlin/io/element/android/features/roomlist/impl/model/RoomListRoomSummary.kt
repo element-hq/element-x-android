@@ -28,7 +28,7 @@ data class RoomListRoomSummary(
     val id: String,
     val displayType: RoomSummaryDisplayType,
     val roomId: RoomId,
-    val name: String,
+    val name: String?,
     val canonicalAlias: RoomAlias?,
     val numberOfUnreadMessages: Int,
     val numberOfUnreadMentions: Int,

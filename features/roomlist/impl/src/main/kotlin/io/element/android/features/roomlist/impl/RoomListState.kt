@@ -48,7 +48,7 @@ data class RoomListState(
         data object Hidden : ContextMenu
         data class Shown(
             val roomId: RoomId,
-            val roomName: String,
+            val roomName: String?,
             val isDm: Boolean,
             val isFavorite: Boolean,
             val markAsUnreadFeatureFlagEnabled: Boolean,

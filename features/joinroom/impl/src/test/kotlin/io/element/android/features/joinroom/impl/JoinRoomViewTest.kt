@@ -21,6 +21,7 @@ import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.element.android.libraries.architecture.AsyncAction
+import io.element.android.libraries.matrix.api.room.RoomType
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.tests.testutils.EnsureNeverCalled
 import io.element.android.tests.testutils.EventsRecorder
@@ -127,6 +128,21 @@ class JoinRoomViewTest {
         )
         rule.clickOn(CommonStrings.action_retry)
         eventsRecorder.assertSingle(JoinRoomEvents.RetryFetchingContent)
+    }
+
+    @Test
+    fun `clicking on Go back when a space is displayed invokes the expected callback`() {
+        val eventsRecorder = EventsRecorder<JoinRoomEvents>(expectEvents = false)
+        ensureCalledOnce {
+            rule.setJoinRoomView(
+                aJoinRoomState(
+                    contentState = aLoadedContentState(roomType = RoomType.Space),
+                    eventSink = eventsRecorder,
+                ),
+                onBackPressed = it
+            )
+            rule.clickOn(CommonStrings.action_go_back)
+        }
     }
 }
 

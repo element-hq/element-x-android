@@ -18,6 +18,7 @@ package io.element.android.libraries.matrix.api.room.preview
 
 import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.room.RoomType
 
 data class RoomPreview(
     /** The room id for this room. */
@@ -33,7 +34,7 @@ data class RoomPreview(
     /** The number of joined members. */
     val numberOfJoinedMembers: Long,
     /** The room type (space, custom) or nothing, if it's a regular room. */
-    val roomType: String?,
+    val roomType: RoomType,
     /** Is the history world-readable for this room? */
     val isHistoryWorldReadable: Boolean,
     /** Is the room joined by the current user? */

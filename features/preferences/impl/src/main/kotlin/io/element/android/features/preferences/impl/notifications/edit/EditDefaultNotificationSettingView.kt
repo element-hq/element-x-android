@@ -21,6 +21,7 @@ import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import io.element.android.features.preferences.impl.R
 import io.element.android.libraries.designsystem.components.async.AsyncActionView
@@ -100,7 +101,11 @@ fun EditDefaultNotificationSettingView(
                     )
                     ListItem(
                         headlineContent = {
-                            Text(text = summary.details.name)
+                            val roomName = summary.details.name
+                            Text(
+                                text = roomName ?: stringResource(id = CommonStrings.common_no_room_name),
+                                fontStyle = FontStyle.Italic.takeIf { roomName == null }
+                            )
                         },
                         supportingContent = {
                             Text(text = subtitle)

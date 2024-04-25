@@ -31,6 +31,7 @@ open class RoomListRoomSummaryProvider : PreviewParameterProvider<RoomListRoomSu
             listOf(
                 aRoomListRoomSummary(displayType = RoomSummaryDisplayType.PLACEHOLDER),
                 aRoomListRoomSummary(),
+                aRoomListRoomSummary(name = null),
                 aRoomListRoomSummary(lastMessage = null),
                 aRoomListRoomSummary(
                     name = "A very long room name that should be truncated",
@@ -100,7 +101,15 @@ open class RoomListRoomSummaryProvider : PreviewParameterProvider<RoomListRoomSu
                         displayName = "Bob",
                     ),
                     isDirect = true,
-                )
+                ),
+                aRoomListRoomSummary(
+                    name = null,
+                    displayType = RoomSummaryDisplayType.INVITE,
+                    inviteSender = anInviteSender(
+                        userId = UserId("@bob:matrix.org"),
+                        displayName = "Bob",
+                    ),
+                ),
             ),
         ).flatten()
 }
@@ -117,7 +126,7 @@ internal fun anInviteSender(
 
 internal fun aRoomListRoomSummary(
     id: String = "!roomId:domain",
-    name: String = "Room name",
+    name: String? = "Room name",
     numberOfUnreadMessages: Int = 0,
     numberOfUnreadMentions: Int = 0,
     numberOfUnreadNotifications: Int = 0,
