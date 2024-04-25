@@ -22,8 +22,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import io.element.android.features.roomlist.impl.filters.selection.FilterSelectionStrategy
 import io.element.android.libraries.architecture.Presenter
-import io.element.android.libraries.featureflag.api.FeatureFlagService
-import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import kotlinx.collections.immutable.toPersistentList
 import javax.inject.Inject
@@ -31,12 +29,10 @@ import io.element.android.libraries.matrix.api.roomlist.RoomListFilter as Matrix
 
 class RoomListFiltersPresenter @Inject constructor(
     private val roomListService: RoomListService,
-    private val featureFlagService: FeatureFlagService,
     private val filterSelectionStrategy: FilterSelectionStrategy,
 ) : Presenter<RoomListFiltersState> {
     @Composable
     override fun present(): RoomListFiltersState {
-        val isFeatureEnabled by featureFlagService.isFeatureEnabledFlow(FeatureFlags.RoomListFilters).collectAsState(false)
         val filters by filterSelectionStrategy.filterSelectionStates.collectAsState()
 
         fun handleEvents(event: RoomListFiltersEvents) {
@@ -50,32 +46,25 @@ class RoomListFiltersPresenter @Inject constructor(
             }
         }
 
-        LaunchedEffect(isFeatureEnabled) {
-            if (!isFeatureEnabled) {
-                filterSelectionStrategy.clear()
-            }
-        }
-
         LaunchedEffect(filters) {
             val allRoomsFilter = MatrixRoomListFilter.All(
                 filters
                     .filter { it.isSelected }
                     .map { roomListFilter ->
-                    when (roomListFilter.filter) {
-                        RoomListFilter.Rooms -> MatrixRoomListFilter.Category.Group
-                        RoomListFilter.People -> MatrixRoomListFilter.Category.People
-                        RoomListFilter.Unread -> MatrixRoomListFilter.Unread
-                        RoomListFilter.Favourites -> MatrixRoomListFilter.Favorite
-                        RoomListFilter.Invites -> MatrixRoomListFilter.Invite
+                        when (roomListFilter.filter) {
+                            RoomListFilter.Rooms -> MatrixRoomListFilter.Category.Group
+                            RoomListFilter.People -> MatrixRoomListFilter.Category.People
+                            RoomListFilter.Unread -> MatrixRoomListFilter.Unread
+                            RoomListFilter.Favourites -> MatrixRoomListFilter.Favorite
+                            RoomListFilter.Invites -> MatrixRoomListFilter.Invite
+                        }
                     }
-                }
             )
             roomListService.allRooms.updateFilter(allRoomsFilter)
         }
 
         return RoomListFiltersState(
             filterSelectionStates = filters.toPersistentList(),
-            isFeatureEnabled = isFeatureEnabled,
             eventSink = ::handleEvents
         )
     }
