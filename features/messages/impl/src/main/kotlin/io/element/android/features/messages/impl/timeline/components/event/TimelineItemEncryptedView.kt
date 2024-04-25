@@ -36,15 +36,14 @@ fun TimelineItemEncryptedView(
     onContentLayoutChanged: (ContentAvoidingLayoutData) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    var text = stringResource(id = CommonStrings.common_waiting_for_decryption_key)
-    var iconId = CompoundDrawables.ic_compound_time
-    if (content.data is UnableToDecryptContent.Data.MegolmV1AesSha2 &&
+    val (textId, iconId) = if (content.data is UnableToDecryptContent.Data.MegolmV1AesSha2 &&
         content.data.utdCause == UtdCause.Membership) {
-        text = stringResource(id = CommonStrings.common_unable_to_decrypt_no_access)
-        iconId = CompoundDrawables.ic_compound_block
+        (CommonStrings.common_unable_to_decrypt_no_access to CompoundDrawables.ic_compound_block)
+    } else {
+        (CommonStrings.common_waiting_for_decryption_key to CompoundDrawables.ic_compound_time)
     }
     TimelineItemInformativeView(
-        text = text,
+        text = stringResource(id = textId),
         iconDescription = stringResource(id = CommonStrings.dialog_title_warning),
         iconResourceId = iconId,
         onContentLayoutChanged = onContentLayoutChanged,
