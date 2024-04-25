@@ -110,10 +110,7 @@ private fun Content(
             contentAlignment = Alignment.Center,
         ) {
             QrCodeCameraView(
-                modifier = Modifier
-                    .fillMaxSize()
-                    // TODO: FOR TESTING ONLY, REMOVE THIS
-                    .clickable { state.eventSink.invoke(QrCodeScanEvents.QrCodeScanned(byteArrayOf(1))) },
+                modifier = Modifier.fillMaxSize(),
                 onQrCodeScanned = { state.eventSink.invoke(QrCodeScanEvents.QrCodeScanned(it)) },
                 renderPreview = state.isScanning,
             )
@@ -180,7 +177,7 @@ private fun ColumnScope.Buttons(
                         strokeWidth = 2.dp
                     )
                     Text(
-                        text = "Establishing a secure connection", // TODO Localazy
+                        text = stringResource(R.string.screen_qr_code_login_connecting_subtitle),
                         textAlign = TextAlign.Center,
                         style = ElementTheme.typography.fontBodySmRegular,
                         color = ElementTheme.colors.textSecondary,

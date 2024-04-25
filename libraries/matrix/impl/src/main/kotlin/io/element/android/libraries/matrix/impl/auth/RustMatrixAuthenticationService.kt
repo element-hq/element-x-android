@@ -66,14 +66,14 @@ import org.matrix.rustcomponents.sdk.AuthenticationService as RustAuthentication
 @ContributesBinding(AppScope::class)
 @SingleIn(AppScope::class)
 class RustMatrixAuthenticationService @Inject constructor(
-    private val baseDirectory: File,
+    baseDirectory: File,
     private val coroutineDispatchers: CoroutineDispatchers,
     private val sessionStore: SessionStore,
-    private val userAgentProvider: UserAgentProvider,
+    userAgentProvider: UserAgentProvider,
     private val rustMatrixClientFactory: RustMatrixClientFactory,
     private val passphraseGenerator: PassphraseGenerator,
-    private val userCertificatesProvider: UserCertificatesProvider,
-    private val proxyProvider: ProxyProvider,
+    userCertificatesProvider: UserCertificatesProvider,
+    proxyProvider: ProxyProvider,
     private val buildMeta: BuildMeta,
 ) : MatrixAuthenticationService {
     // Passphrase which will be used for new sessions. Existing sessions will use the passphrase
@@ -225,21 +225,8 @@ class RustMatrixAuthenticationService @Inject constructor(
     }
 
     override suspend fun loginWithQrCode(qrCodeData: MatrixQrCodeLoginData, progress: (QrCodeLoginStep) -> Unit) = runCatching {
-        val client = ClientBuilder()
-            .basePath(baseDirectory.absolutePath)
-            .userAgent(userAgentProvider.provide())
-            .serverVersions(listOf("v1.0", "v1.1", "v1.2", "v1.3", "v1.4", "v1.5"))
-            .addRootCertificates(userCertificatesProvider.provides())
-            .let {
-                // Sadly ClientBuilder.proxy() does not accept null :/
-                // Tracked by https://github.com/matrix-org/matrix-rust-sdk/issues/3159
-                val proxy = proxyProvider.provides()
-                if (proxy != null) {
-                    it.proxy(proxy)
-                } else {
-                    it
-                }
-            }
+        val client = rustMatrixClientFactory.getBaseClientBuilder()
+            .passphrase(pendingPassphrase)
             .buildWithQrCode(
                 qrCodeData = (qrCodeData as SdkQrCodeLoginData).rustQrCodeData,
                 oidcConfiguration = oidcConfiguration,
@@ -272,8 +259,8 @@ class RustMatrixAuthenticationService @Inject constructor(
         var verificationStateHandle: TaskHandle? = null
         recoveryStateHandle = encryptionService.recoveryStateListener(object : RecoveryStateListener {
             override fun onUpdate(status: RecoveryState) {
+                Timber.d("QR Login recovery state: $status")
                 if (status == RecoveryState.ENABLED) {
-                    Timber.d("Recovery ENABLED")
                     recoveryMutex.unlock()
                     recoveryStateHandle?.cancelAndDestroy()
                 }
@@ -281,8 +268,8 @@ class RustMatrixAuthenticationService @Inject constructor(
         })
         verificationStateHandle = encryptionService.verificationStateListener(object : VerificationStateListener {
             override fun onUpdate(status: VerificationState) {
+                Timber.d("QR Login Verification state: $status")
                 if (status == VerificationState.VERIFIED) {
-                    Timber.d("VERIFIED")
                     verificationMutex.unlock()
                     verificationStateHandle?.cancelAndDestroy()
                 }
