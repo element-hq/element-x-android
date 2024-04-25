@@ -96,6 +96,7 @@ private fun ColumnScope.Buttons(
     )
     TextButton(
         text = stringResource(id = R.string.screen_recovery_key_confirm_lost_recovery_key),
+        enabled = !state.submitAction.isLoading(),
         modifier = Modifier.fillMaxWidth(),
         onClick = onCreateRecoveryKey,
     )
