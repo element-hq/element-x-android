@@ -24,6 +24,7 @@ import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
 import com.bumble.appyx.navmodel.backstack.BackStack
+import com.bumble.appyx.navmodel.backstack.operation.newRoot
 import com.bumble.appyx.navmodel.backstack.operation.pop
 import com.bumble.appyx.navmodel.backstack.operation.push
 import com.bumble.appyx.navmodel.backstack.operation.replace
@@ -41,8 +42,12 @@ import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.matrix.api.auth.qrlogin.MatrixQrCodeLoginData
 import io.element.android.libraries.matrix.api.auth.qrlogin.QrCodeLoginStep
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
+import timber.log.Timber
+import kotlin.coroutines.coroutineContext
 
 @ContributesNode(AppScope::class)
 class QrCodeLoginFlowNode @AssistedInject constructor(
@@ -57,6 +62,23 @@ class QrCodeLoginFlowNode @AssistedInject constructor(
     buildContext = buildContext,
     plugins = plugins,
 ) {
+    private var authenticationJob: Job? = null
+
+    sealed interface NavTarget : Parcelable {
+        @Parcelize
+        data object Initial : NavTarget
+
+        @Parcelize
+        data object QrCodeScan : NavTarget
+
+        @Parcelize
+        data class QrCodeConfirmation(val step: QrCodeConfirmationStep) : NavTarget
+
+        @Parcelize
+        // TODO specify the error type
+        data class Error(val message: String) : NavTarget
+    }
+
     override fun onBuilt() {
         super.onBuilt()
 
@@ -74,21 +96,6 @@ class QrCodeLoginFlowNode @AssistedInject constructor(
                     }
                 }
         }
-    }
-
-    sealed interface NavTarget : Parcelable {
-        @Parcelize
-        data object Initial : NavTarget
-
-        @Parcelize
-        data object QrCodeScan : NavTarget
-
-        @Parcelize
-        data class QrCodeConfirmation(val step: QrCodeConfirmationStep) : NavTarget
-
-        @Parcelize
-        // TODO specify the error type
-        data class Error(val message: String) : NavTarget
     }
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
@@ -122,8 +129,9 @@ class QrCodeLoginFlowNode @AssistedInject constructor(
             is NavTarget.QrCodeConfirmation -> {
                 val callback = object : QrCodeConfirmationNode.Callback {
                     override fun onCancel() {
-                        // TODO actually cancel the login attempt
-                        navigateUp()
+                        authenticationJob?.cancel()
+                        authenticationJob = null
+                        backstack.newRoot(NavTarget.Initial)
                     }
                 }
                 createNode<QrCodeConfirmationNode>(buildContext, plugins = listOf(navTarget.step, callback))
@@ -136,14 +144,19 @@ class QrCodeLoginFlowNode @AssistedInject constructor(
     }
 
     private suspend fun startAuthentication(qrCodeLoginData: MatrixQrCodeLoginData) {
-        qrCodeLoginPresenter.authenticate(qrCodeLoginData)
-            .onSuccess {
-                println("Logged into session $it")
-            }
-            .onFailure {
-                // TODO specify the error type
-                backstack.push(NavTarget.Error(it.message ?: "Unknown error"))
-            }
+        authenticationJob = CoroutineScope(coroutineContext).launch {
+            qrCodeLoginPresenter.authenticate(qrCodeLoginData)
+                .onSuccess {
+                    println("Logged into session $it")
+                    authenticationJob = null
+                }
+                .onFailure {
+                    // TODO specify the error type
+                    Timber.e(it, "QR code authentication failed")
+                    backstack.push(NavTarget.Error(it.message ?: "Unknown error"))
+                    authenticationJob = null
+                }
+        }
     }
 
     @Composable

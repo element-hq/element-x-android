@@ -18,6 +18,7 @@ package io.element.android.libraries.matrix.impl.auth
 
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.core.extensions.finally
 import io.element.android.libraries.core.extensions.mapFailure
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.core.meta.BuildType
@@ -43,6 +44,7 @@ import io.element.android.libraries.network.useragent.UserAgentProvider
 import io.element.android.libraries.sessionstorage.api.LoggedInState
 import io.element.android.libraries.sessionstorage.api.LoginType
 import io.element.android.libraries.sessionstorage.api.SessionStore
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -54,6 +56,7 @@ import org.matrix.rustcomponents.sdk.QrLoginProgress
 import org.matrix.rustcomponents.sdk.QrLoginProgressListener
 import org.matrix.rustcomponents.sdk.RecoveryState
 import org.matrix.rustcomponents.sdk.RecoveryStateListener
+import org.matrix.rustcomponents.sdk.SyncService
 import org.matrix.rustcomponents.sdk.TaskHandle
 import org.matrix.rustcomponents.sdk.VerificationState
 import org.matrix.rustcomponents.sdk.VerificationStateListener
@@ -224,66 +227,70 @@ class RustMatrixAuthenticationService @Inject constructor(
         }
     }
 
-    override suspend fun loginWithQrCode(qrCodeData: MatrixQrCodeLoginData, progress: (QrCodeLoginStep) -> Unit) = runCatching {
-        val client = rustMatrixClientFactory.getBaseClientBuilder()
-            .passphrase(pendingPassphrase)
-            .buildWithQrCode(
-                qrCodeData = (qrCodeData as SdkQrCodeLoginData).rustQrCodeData,
-                oidcConfiguration = oidcConfiguration,
-                progressListener = object : QrLoginProgressListener {
-                    override fun onUpdate(state: QrLoginProgress) {
-                        println("QR Code login progress: $state")
-                        progress(state.toStep())
-                    }
+    override suspend fun loginWithQrCode(qrCodeData: MatrixQrCodeLoginData, progress: (QrCodeLoginStep) -> Unit) =
+        withContext(coroutineDispatchers.io) {
+            runCatching {
+                val client = rustMatrixClientFactory.getBaseClientBuilder()
+                    .passphrase(pendingPassphrase)
+                    .buildWithQrCode(
+                        qrCodeData = (qrCodeData as SdkQrCodeLoginData).rustQrCodeData,
+                        oidcConfiguration = oidcConfiguration,
+                        progressListener = object : QrLoginProgressListener {
+                            override fun onUpdate(state: QrLoginProgress) {
+                                Timber.d("QR Code login progress: $state")
+                                progress(state.toStep())
+                            }
+                        }
+                    )
+                client.use { rustClient ->
+                    val sessionData = rustClient.session()
+                        .toSessionData(
+                            isTokenValid = true,
+                            loginType = LoginType.OIDC,
+                            passphrase = pendingPassphrase,
+                            needsVerification = true,
+                        )
+                    sessionStore.storeData(sessionData)
+
+                    val recoveryMutex = Mutex(locked = true)
+                    val verificationMutex = Mutex(locked = true)
+                    val encryptionService = rustClient.encryption()
+
+                    val syncService = rustClient.syncService().finish()
+                    syncService.start()
+
+                    var recoveryStateHandle: TaskHandle? = null
+                    var verificationStateHandle: TaskHandle? = null
+                    recoveryStateHandle = encryptionService.recoveryStateListener(object : RecoveryStateListener {
+                        override fun onUpdate(status: RecoveryState) {
+                            Timber.d("QR Login recovery state: $status")
+                            if (status == RecoveryState.ENABLED) {
+                                recoveryMutex.unlock()
+                                recoveryStateHandle?.cancelAndDestroy()
+                            }
+                        }
+                    })
+                    verificationStateHandle = encryptionService.verificationStateListener(object : VerificationStateListener {
+                        override fun onUpdate(status: VerificationState) {
+                            Timber.d("QR Login Verification state: $status")
+                            if (status == VerificationState.VERIFIED) {
+                                verificationMutex.unlock()
+                                verificationStateHandle?.cancelAndDestroy()
+                            }
+                        }
+                    })
+                    verificationMutex.lock()
+                    recoveryMutex.lock()
+
+                    syncService.stop()
+                    syncService.destroy()
+
+                    SessionId(sessionData.userId)
                 }
-            )
-        val sessionData = client.session()
-            .toSessionData(
-                isTokenValid = true,
-                loginType = LoginType.OIDC,
-                passphrase = pendingPassphrase,
-                needsVerification = true,
-            )
-        pendingOidcAuthenticationData?.close()
-        pendingOidcAuthenticationData = null
-        sessionStore.storeData(sessionData)
-
-        val recoveryMutex = Mutex(locked = true)
-        val verificationMutex = Mutex(locked = true)
-        val encryptionService = client.encryption()
-
-        val syncService = client.syncService().finish()
-        syncService.start()
-
-        var recoveryStateHandle: TaskHandle? = null
-        var verificationStateHandle: TaskHandle? = null
-        recoveryStateHandle = encryptionService.recoveryStateListener(object : RecoveryStateListener {
-            override fun onUpdate(status: RecoveryState) {
-                Timber.d("QR Login recovery state: $status")
-                if (status == RecoveryState.ENABLED) {
-                    recoveryMutex.unlock()
-                    recoveryStateHandle?.cancelAndDestroy()
+            }.onFailure { throwable ->
+                if (throwable is CancellationException) {
+                    throw throwable
                 }
             }
-        })
-        verificationStateHandle = encryptionService.verificationStateListener(object : VerificationStateListener {
-            override fun onUpdate(status: VerificationState) {
-                Timber.d("QR Login Verification state: $status")
-                if (status == VerificationState.VERIFIED) {
-                    verificationMutex.unlock()
-                    verificationStateHandle?.cancelAndDestroy()
-                }
-            }
-        })
-        verificationMutex.lock()
-        recoveryMutex.lock()
-
-        syncService.stop()
-        syncService.destroy()
-        client.destroy()
-
-        SessionId(sessionData.userId)
-    }.onFailure {
-        it.printStackTrace()
     }
 }
