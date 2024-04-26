@@ -235,7 +235,6 @@ class RustMatrixTimeline(
                     is PaginationOptions.UntilNumItems -> paginationOptions.eventLimit
                 }
             )
-            Unit
         }.onFailure { error ->
             if (error is TimelineException.CannotPaginate) {
                 Timber.d("Can't paginate backwards on room ${matrixRoom.roomId}, we're already at the start")
@@ -244,7 +243,7 @@ class RustMatrixTimeline(
             }
         }.onSuccess {
             Timber.v("Success back paginating for room ${matrixRoom.roomId}")
-        }
+        }.map { }
     }
 
     private fun canBackPaginate(): Boolean {
