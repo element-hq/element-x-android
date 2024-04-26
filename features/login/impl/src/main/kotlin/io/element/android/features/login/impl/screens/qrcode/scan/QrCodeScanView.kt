@@ -16,7 +16,6 @@
 
 package io.element.android.features.login.impl.screens.qrcode.scan
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -57,7 +56,6 @@ import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.auth.qrlogin.MatrixQrCodeLoginData
 import io.element.android.libraries.qrcode.QrCodeCameraView
-import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
 fun QrCodeScanView(
