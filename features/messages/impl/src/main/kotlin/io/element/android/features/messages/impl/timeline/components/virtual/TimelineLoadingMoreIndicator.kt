@@ -16,6 +16,7 @@
 
 package io.element.android.features.messages.impl.timeline.components.virtual
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -62,8 +63,11 @@ internal fun TimelineLoadingMoreIndicator(
 @PreviewsDayNight
 @Composable
 internal fun TimelineLoadingMoreIndicatorPreview() = ElementPreview {
-    Column {
-        TimelineLoadingMoreIndicator(Timeline.PaginationDirection.FORWARDS)
+    Column(
+        modifier = Modifier.padding(vertical = 2.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+    ) {
         TimelineLoadingMoreIndicator(Timeline.PaginationDirection.BACKWARDS)
+        TimelineLoadingMoreIndicator(Timeline.PaginationDirection.FORWARDS)
     }
 }
