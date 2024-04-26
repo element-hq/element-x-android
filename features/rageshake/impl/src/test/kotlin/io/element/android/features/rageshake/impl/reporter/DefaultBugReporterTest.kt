@@ -24,7 +24,6 @@ import io.element.android.libraries.matrix.test.FakeSdkMetadata
 import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.network.useragent.DefaultUserAgentProvider
 import io.element.android.libraries.sessionstorage.impl.memory.InMemorySessionStore
-import io.element.android.services.toolbox.test.systemclock.FakeSystemClock
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
@@ -144,8 +143,6 @@ class DefaultBugReporterTest {
             context = RuntimeEnvironment.getApplication(),
             screenshotHolder = FakeScreenshotHolder(),
             crashDataStore = FakeCrashDataStore(),
-            coroutineScope = this,
-            systemClock = FakeSystemClock(),
             coroutineDispatchers = testCoroutineDispatchers(),
             okHttpClient = { OkHttpClient.Builder().build() },
             userAgentProvider = DefaultUserAgentProvider(buildMeta, FakeSdkMetadata("123456789")),
