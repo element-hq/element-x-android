@@ -35,6 +35,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.getAndUpdate
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
@@ -53,7 +54,7 @@ class TimelineController @Inject constructor(
 ) : Closeable, TimelineProvider {
     private val coroutineScope = CoroutineScope(SupervisorJob())
 
-    private val liveTimeline = MutableStateFlow(room.liveTimeline)
+    private val liveTimeline = flowOf(room.liveTimeline)
     private val detachedTimeline = MutableStateFlow<Optional<Timeline>>(Optional.empty())
 
     @OptIn(ExperimentalCoroutinesApi::class)
