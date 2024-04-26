@@ -64,8 +64,7 @@ private fun Content() {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 20.dp)
-            .verticalScroll(rememberScrollState()),
+            .padding(top = 20.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(24.dp)
     ) {
@@ -75,6 +74,7 @@ private fun Content() {
             style = ElementTheme.typography.fontBodyLgMedium,
             textAlign = TextAlign.Center,
         )
+        // TODO make `NumberedListOrganism` not rely on LazyColumn, restore vertical scroll to parent column
         NumberedListOrganism(
             items = persistentListOf(
                 AnnotatedString(stringResource(R.string.screen_qr_code_login_connection_note_secure_state_list_item_1)),
