@@ -14,17 +14,16 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.matrix.api.timeline
+package io.element.android.libraries.matrix.test.timeline
 
+import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.timeline.Timeline
+import io.element.android.libraries.matrix.api.timeline.TimelineProvider
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.first
 
-/**
- * This interface defines a way to get the active timeline.
- * It could be the current room timeline, or a timeline for a specific event.
- */
-interface TimelineProvider {
-    fun activeTimelineFlow(): StateFlow<Timeline>
+class LiveTimelineProvider(
+    private val room: MatrixRoom,
+) : TimelineProvider {
+    override fun activeTimelineFlow(): StateFlow<Timeline> = MutableStateFlow(room.liveTimeline)
 }
-
-suspend fun TimelineProvider.getActiveTimeline(): Timeline = activeTimelineFlow().first()

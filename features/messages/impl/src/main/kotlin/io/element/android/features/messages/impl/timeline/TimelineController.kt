@@ -21,7 +21,6 @@ import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
-import io.element.android.libraries.matrix.api.timeline.LiveTimelineProvider
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.TimelineProvider
@@ -46,10 +45,9 @@ import kotlin.coroutines.cancellation.CancellationException
 /**
  * This controller is responsible of using the right timeline to display messages and make associated actions.
  * It can be focused on the live timeline or on a detached timeline (focusing an unknown event).
- * This controller will replace the [LiveTimelineProvider] in the DI.
  */
 @SingleIn(RoomScope::class)
-@ContributesBinding(RoomScope::class, boundType = TimelineProvider::class, replaces = [LiveTimelineProvider::class])
+@ContributesBinding(RoomScope::class, boundType = TimelineProvider::class)
 class TimelineController @Inject constructor(
     private val room: MatrixRoom,
 ) : Closeable, TimelineProvider {
