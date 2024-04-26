@@ -17,10 +17,10 @@
 package ui
 
 import com.airbnb.android.showkase.models.Showkase
-import com.google.testing.junit.testparameterinjector.TestParameter
+import com.google.testing.junit.testparameterinjector.TestParameterValuesProvider
 
-object PreviewProvider : TestParameter.TestParameterValuesProvider {
-    override fun provideValues(): List<TestPreview> {
+object PreviewProvider : TestParameterValuesProvider() {
+    override fun provideValues(context: Context): List<TestPreview> {
         val metadata = Showkase.getMetadata()
         val components = metadata.componentList.map(::ComponentTestPreview)
         val colors = metadata.colorList.map(::ColorTestPreview)
